@@ -30,17 +30,33 @@ release{
     QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions
 }
 
+#Windows configure
+win32{
+    DESTDIR =../mu
+}
+
 #Add translations
 TRANSLATIONS += locale/Simplified_Chinese.ts \
                 locale/Traditional_Chinese.ts \
                 locale/English.ts
 
+#Add public path
+INCLUDEPATH += public
+#Add plugin and sdk path
+INCLUDEPATH += plugin \
+               plugin/sdk
+
 SOURCES += \
     main.cpp \
     core/knsingleapplication.cpp \
-    core/knpluginmanager.cpp
+    core/knpluginmanager.cpp \
+    public/knglobal.cpp \
+    public/knconfigure.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
-    core/knpluginmanager.h
+    core/knpluginmanager.h \
+    public/knglobal.h \
+    plugin/sdk/knmainwindowplugin.h \
+    public/knconfigure.h
 

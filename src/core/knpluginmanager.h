@@ -21,6 +21,8 @@
 #include <QObject>
 
 class QMainWindow;
+class KNGlobal;
+class KNConfigure;
 class KNPluginManager : public QObject
 {
     Q_OBJECT
@@ -31,16 +33,22 @@ public:
     void loadPlugins();
     void start();
 
-
 signals:
 
 public slots:
     void onActionArgumentReceive(const QString &message);
 
+private slots:
+    void onActionMainWindowDestory();
+
 private:
     static KNPluginManager *m_instance;
     explicit KNPluginManager(QObject *parent = 0);
-    QMainWindow *m_mainWindow;
+    void backupWindowGeometry();
+    void recoverWindowGeometry();
+    QMainWindow *m_mainWindow=nullptr;
+    KNGlobal *m_global;
+    KNConfigure *m_configure;
 };
 
 #endif // KNPLUGINMANAGER_H
