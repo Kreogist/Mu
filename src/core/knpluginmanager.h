@@ -19,15 +19,22 @@
 #define KNPLUGINMANAGER_H
 
 #include <QObject>
+#include <QLinkedList>
 
 class QMainWindow;
 class KNGlobal;
 class KNConfigure;
+class KNMainWindowPlugin;
+class KNMainWindowHeaderPlugin;
+class KNMainWindowCategoryStackPlugin;
+class KNMainWindowCategorySwitcherPlugin;
+class KNPreferencePlugin;
 class KNPluginManager : public QObject
 {
     Q_OBJECT
 public:
     static KNPluginManager *instance();
+    ~KNPluginManager();
     QMainWindow *mainWindow() const;
     void setMainWindow(QMainWindow *mainWindow);
     void loadPlugins();
@@ -42,11 +49,18 @@ private slots:
     void onActionMainWindowDestory();
 
 private:
+    void loadMainWindowPlugin(KNMainWindowPlugin *plugin);
+    void loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin);
+    void loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin);
+    void loadMainWindowCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin);
+    void loadPreference(KNPreferencePlugin *plugin);
     static KNPluginManager *m_instance;
     explicit KNPluginManager(QObject *parent = 0);
     void backupWindowGeometry();
     void recoverWindowGeometry();
     QMainWindow *m_mainWindow=nullptr;
+    KNMainWindowPlugin *m_mainWindowPlugin=nullptr;
+    QLinkedList<QObject *> m_pluginList;
     KNGlobal *m_global;
     KNConfigure *m_configure;
 };

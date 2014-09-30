@@ -22,6 +22,20 @@
 #include "knglobal.h"
 #include "knconfigure.h"
 
+//Ports
+#include "knmainwindowplugin.h"
+#include "knmainwindowheaderplugin.h"
+#include "knmainwindowcategorystackplugin.h"
+#include "knmainwindowcategoryswitcherplugin.h"
+#include "knpreferenceplugin.h"
+
+//Plugins
+#include "plugin/base/knmainwindow/knmainwindow.h"
+#include "plugin/base/knmainwindowheader/knmainwindowheader.h"
+#include "plugin/base/knmainwindowcategoryswitcher/knmainwindowcategoryswitcher.h"
+#include "plugin/base/knmainwindowcategorystack/knmainwindowcategorystack.h"
+#include "plugin/base/knpreference/knpreference.h"
+
 #include "knpluginmanager.h"
 
 #include <QDebug>
@@ -31,6 +45,15 @@ KNPluginManager *KNPluginManager::m_instance=nullptr;
 KNPluginManager *KNPluginManager::instance()
 {
     return m_instance==nullptr?m_instance=new KNPluginManager:m_instance;
+}
+
+KNPluginManager::~KNPluginManager()
+{
+    //Delete all the plugins.
+    while(!m_pluginList.isEmpty())
+    {
+        delete m_pluginList.takeFirst();
+    }
 }
 
 KNPluginManager::KNPluginManager(QObject *parent) :
@@ -123,7 +146,11 @@ void KNPluginManager::setMainWindow(QMainWindow *mainWindow)
 
 void KNPluginManager::loadPlugins()
 {
-    ;
+    loadMainWindowPlugin(new KNMainWindow);
+    loadMainWindowHeader(new KNMainWindowHeader);
+    loadMainWindowCategoryStack(new KNMainWindowCategoryStack);
+    loadMainWindowCategorySwitcher(new KNMainWindowCategorySwitcher);
+    loadPreference(new KNPreference);
 }
 
 void KNPluginManager::start()
@@ -142,4 +169,45 @@ void KNPluginManager::onActionMainWindowDestory()
     backupWindowGeometry();
     //Save configure.
     m_global->saveConfigure();
+}
+
+void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)
+{
+    //Add this plugin to the plugin list.
+    m_pluginList.append(plugin);
+    //Save the plugin.
+    m_mainWindowPlugin=plugin;
+    m_mainWindowPlugin->setMainWindow(m_mainWindow);
+}
+
+void KNPluginManager::loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin)
+{
+    //Add this plugin to the plugin list.
+    m_pluginList.append(plugin);
+    //Set the plugin.
+    m_mainWindowPlugin->setHeader(plugin);
+}
+
+void KNPluginManager::loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin)
+{
+    //Add this plugin to the plugin list.
+    m_pluginList.append(plugin);
+    //Set the plugin.
+    m_mainWindowPlugin->setCategoryStack(plugin);
+}
+
+void KNPluginManager::loadMainWindowCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin)
+{
+    //Add this plugin to the plugin list.
+    m_pluginList.append(plugin);
+    //Set the plugin.
+    m_mainWindowPlugin->setCategorySwitcher(plugin);
+}
+
+void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
+{
+    //Add this to the plugin list.
+    m_pluginList.append(plugin);
+    //Set the plugin.
+    m_mainWindowPlugin->setPreferencePanel(plugin);
 }
