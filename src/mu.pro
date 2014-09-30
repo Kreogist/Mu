@@ -75,7 +75,8 @@ SOURCES += \
     plugin/module/knmusicplugin/knmusicplugin.cpp \
     plugin/sdk/kncategorybutton.cpp \
     plugin/sdk/kncategorytabbar.cpp \
-    plugin/sdk/kncategorytabwidget.cpp
+    plugin/sdk/kncategorytabwidget.cpp \
+    plugin/base/knpreference/knpreferenceheaderbutton.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -112,7 +113,8 @@ HEADERS += \
     plugin/sdk/kncategorybutton.h \
     plugin/sdk/kncategorytabbar.h \
     plugin/sdk/kncategorytabwidget.h \
-    plugin/sdk/knabstractmusicplugin.h
+    plugin/sdk/knabstractmusicplugin.h \
+    plugin/base/knpreference/knpreferenceheaderbutton.h
 
 RESOURCES += \
     resource/res.qrc

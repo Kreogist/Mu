@@ -4,6 +4,7 @@
         <file>public/items/DescendingIndicator.png</file>
         <file>public/messagebox/cancel.png</file>
         <file>public/messagebox/ok.png</file>
+        <file>public/items/Close.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/category/01_musics.png</file>

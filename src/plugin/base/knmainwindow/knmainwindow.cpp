@@ -101,6 +101,9 @@ void KNMainWindow::setPreferencePanel(KNPreferencePlugin *plugin)
     {
         m_preferencePlugin=plugin;
         m_container->setPreferencePanel(m_preferencePlugin->preferencePanel());
+        //Link the plugin.
+        connect(m_preferencePlugin, &KNPreferencePlugin::requireHidePreference,
+                this, &KNMainWindow::hidePreference);
     }
 }
 

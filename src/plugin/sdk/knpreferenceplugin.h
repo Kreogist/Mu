@@ -17,6 +17,7 @@ public:
     virtual QWidget *preferencePanel()=0;
 
 signals:
+    void requireHidePreference();
 
 public slots:
 

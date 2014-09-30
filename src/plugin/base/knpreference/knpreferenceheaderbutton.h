@@ -15,38 +15,46 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNPREFERENCECATEGORY_H
-#define KNPREFERENCECATEGORY_H
+#ifndef KNPREFERENCEHEADERBUTTON_H
+#define KNPREFERENCEHEADERBUTTON_H
 
-#include <QWidget>
+#include <QPainterPath>
 
-class QBoxLayout;
+#include "knabstractbutton.h"
+
 class QTimeLine;
-class KNPreferenceTitle;
-class KNPreferenceCategory : public QWidget
+class KNPreferenceHeaderButton : public KNAbstractButton
 {
     Q_OBJECT
 public:
-    explicit KNPreferenceCategory(QWidget *parent = 0);
+    explicit KNPreferenceHeaderButton(QWidget *parent = 0);
+    QPixmap icon() const;
+    QString text() const;
+    void setIcon(const QPixmap &icon);
+    void setText(const QString &text);
 
 signals:
-    void requireHidePreference();
 
 public slots:
-    void retranslate();
-    void retranslateAndSet();
 
 protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
 
+private slots:
+    void onActionMouseInOut(const int &frame);
+
 private:
-    QColor m_backgroundColor=QColor(51,51,51),
-           m_borderColor=QColor(67,67,67);
-    int m_listWidth=241,
-        m_borderWidth=4;
-    QBoxLayout *m_layout;
-    QString m_configureText;
-    KNPreferenceTitle *m_title;
+    void initialTimeLine(QTimeLine *timeLine);
+    QPainterPath m_border;
+    QTimeLine *m_mouseIn, *m_mouseOut;
+    QPixmap m_icon, m_closeIcon;
+    qreal m_closeIconOpacity=0.0;
+    QPointF m_iconPosition=QPointF(11,7);
+    bool m_pressed=false;
 };
 
-#endif // KNPREFERENCECATEGORY_H
+#endif // KNPREFERENCEHEADERBUTTON_H

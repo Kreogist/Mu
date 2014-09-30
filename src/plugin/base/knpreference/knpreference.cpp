@@ -23,6 +23,8 @@ KNPreference::KNPreference(QObject *parent) :
     KNPreferencePlugin(parent)
 {
     m_preferencePanel=new KNPreferencePanel;
+    connect(m_preferencePanel, &KNPreferencePanel::requireHidePreference,
+            this, &KNPreference::requireHidePreference);
 }
 
 QWidget *KNPreference::preferencePanel()
