@@ -51,6 +51,16 @@ void KNMainWindow::setHeader(KNMainWindowHeaderPlugin *plugin)
     m_container->setHeaderWidget(m_headerPlugin->headerWidget());
 }
 
+void KNMainWindow::setHeaderIcon(const QPixmap &icon)
+{
+    m_headerPlugin->setHeaderIcon(icon);
+}
+
+void KNMainWindow::setHeaderText(const QString &text)
+{
+    m_headerPlugin->setHeaderText(text);
+}
+
 void KNMainWindow::setCategoryStack(KNMainWindowCategoryStackPlugin *plugin)
 {
     m_categoryStackPlugin=plugin;
@@ -77,4 +87,14 @@ void KNMainWindow::showPreference()
 void KNMainWindow::hidePreference()
 {
     m_container->hidePreference();
+}
+
+void KNMainWindow::addHeaderWidget(QWidget *widget)
+{
+    m_headerPlugin->addHeaderWidget(widget);
+}
+
+void KNMainWindow::addCentralWidget(QWidget *widget)
+{
+    m_categoryStackPlugin->addCentralWidget(widget);
 }

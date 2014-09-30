@@ -29,6 +29,7 @@ class KNMainWindowHeaderPlugin;
 class KNMainWindowCategoryStackPlugin;
 class KNMainWindowCategorySwitcherPlugin;
 class KNPreferencePlugin;
+class KNCategoryPlugin;
 class KNPluginManager : public QObject
 {
     Q_OBJECT
@@ -54,6 +55,7 @@ private:
     void loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin);
     void loadMainWindowCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin);
     void loadPreference(KNPreferencePlugin *plugin);
+    void loadCategoryPlugin(KNCategoryPlugin *plugin);
     static KNPluginManager *m_instance;
     explicit KNPluginManager(QObject *parent = 0);
     void backupWindowGeometry();

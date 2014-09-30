@@ -28,6 +28,7 @@
 #include "knmainwindowcategorystackplugin.h"
 #include "knmainwindowcategoryswitcherplugin.h"
 #include "knpreferenceplugin.h"
+#include "kncategoryplugin.h"
 
 //Plugins
 #include "plugin/base/knmainwindow/knmainwindow.h"
@@ -214,4 +215,20 @@ void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
     m_pluginList.append(plugin);
     //Set the plugin.
     m_mainWindowPlugin->setPreferencePanel(plugin);
+}
+
+void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
+{
+    //Add this to the plugin list.
+    m_pluginList.append(plugin);
+    //Add the plugin data to the main window.
+    /*! FIXME: Here we need to add the icon to the category list.
+     *         But now we just need one category, so we don't need to do it now.
+     *         Fix this ASAP.
+     */
+    m_mainWindowPlugin->setHeaderIcon(plugin->icon());
+    m_mainWindowPlugin->setHeaderText(plugin->caption());
+    //Add header widget and central widget.
+    m_mainWindowPlugin->addHeaderWidget(plugin->headerWidget());
+    m_mainWindowPlugin->addCentralWidget(plugin->centralWidget());
 }

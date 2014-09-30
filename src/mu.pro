@@ -101,7 +101,8 @@ HEADERS += \
     plugin/base/knpreference/knpreferencecategory.h \
     plugin/base/knpreference/knpreferencecontents.h \
     plugin/base/knpreference/knpreferencepanel.h \
-    plugin/base/knpreference/knpreferencetitle.h
+    plugin/base/knpreference/knpreferencetitle.h \
+    plugin/sdk/kncategoryplugin.h
 
 RESOURCES += \
     resource/res.qrc

@@ -26,15 +26,19 @@ class KNMainWindow : public KNMainWindowPlugin
     Q_OBJECT
 public:
     explicit KNMainWindow(QObject *parent = 0);
-    void setMainWindow(QMainWindow *mainWindow);
-    void setHeader(KNMainWindowHeaderPlugin *plugin);
-    void setCategoryStack(KNMainWindowCategoryStackPlugin *widget);
-    void setCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin);
-    void setPreferencePanel(KNPreferencePlugin *plugin);
 
 signals:
 
 public slots:
+    void addHeaderWidget(QWidget *widget);
+    void addCentralWidget(QWidget *widget);
+    void setMainWindow(QMainWindow *mainWindow);
+    void setHeader(KNMainWindowHeaderPlugin *plugin);
+    void setHeaderIcon(const QPixmap &icon);
+    void setHeaderText(const QString &text);
+    void setCategoryStack(KNMainWindowCategoryStackPlugin *widget);
+    void setCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin);
+    void setPreferencePanel(KNPreferencePlugin *plugin);
     void showPreference();
     void hidePreference();
 

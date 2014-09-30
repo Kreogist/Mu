@@ -161,9 +161,9 @@ void KNMainWindowContainer::resizeEvent(QResizeEvent *event)
     if(m_header->y()!=0)
     {
         m_header->setGeometry(0,
-                                    -m_header->height(),
-                                    width(),
-                                    m_header->height());
+                              -m_header->height(),
+                              width(),
+                              m_header->height());
         m_categoryStack->setGeometry(0,
                                      height(),
                                      width(),

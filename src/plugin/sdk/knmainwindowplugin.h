@@ -20,17 +20,21 @@ class KNMainWindowPlugin : public QObject
     Q_OBJECT
 public:
     KNMainWindowPlugin(QObject *parent = 0):QObject(parent){}
+
+signals:
+
+public slots:
     virtual void setMainWindow(QMainWindow *mainWindow)=0;
     virtual void setHeader(KNMainWindowHeaderPlugin *plugin)=0;
     virtual void setCategoryStack(KNMainWindowCategoryStackPlugin *widget)=0;
     virtual void setCategorySwitcher(KNMainWindowCategorySwitcherPlugin *widget)=0;
     virtual void setPreferencePanel(KNPreferencePlugin *plugin)=0;
-
-signals:
-
-public slots:
     virtual void showPreference()=0;
     virtual void hidePreference()=0;
+    virtual void setHeaderIcon(const QPixmap &icon)=0;
+    virtual void setHeaderText(const QString &text)=0;
+    virtual void addHeaderWidget(QWidget *widget)=0;
+    virtual void addCentralWidget(QWidget *widget)=0;
 };
 
 #endif // KNMAINWINDOWPLUGIN_H
