@@ -31,6 +31,8 @@ public slots:
     virtual void setPreferencePanel(KNPreferencePlugin *plugin)=0;
     virtual void showPreference()=0;
     virtual void hidePreference()=0;
+    virtual void showCategorySwitcher()=0;
+    virtual void restoreHeaderButton()=0;
     virtual void setHeaderIcon(const QPixmap &icon)=0;
     virtual void setHeaderText(const QString &text)=0;
     virtual void addHeaderWidget(QWidget *widget)=0;

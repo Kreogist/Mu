@@ -41,10 +41,12 @@ public slots:
     void setPreferencePanel(KNPreferencePlugin *plugin);
     void showPreference();
     void hidePreference();
+    void showCategorySwitcher();
+    void restoreHeaderButton();
 
 private:
     QMainWindow *m_mainWindow=nullptr;
-    KNMainWindowContainer *m_container=nullptr;
+    KNMainWindowContainer *m_container;
     KNMainWindowHeaderPlugin *m_headerPlugin=nullptr;
     KNMainWindowCategoryStackPlugin *m_categoryStackPlugin=nullptr;
     KNMainWindowCategorySwitcherPlugin *m_categorySwitcherPlugin=nullptr;

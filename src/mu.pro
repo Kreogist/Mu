@@ -44,7 +44,8 @@ TRANSLATIONS += locale/Simplified_Chinese.ts \
 INCLUDEPATH += public
 #Add plugin and sdk path
 INCLUDEPATH += plugin \
-               plugin/sdk
+               plugin/sdk \
+               plugin/module/knmusicplugin/sdk
 
 SOURCES += \
     main.cpp \
@@ -70,7 +71,11 @@ SOURCES += \
     plugin/base/knpreference/knpreferencecategory.cpp \
     plugin/base/knpreference/knpreferencecontents.cpp \
     plugin/base/knpreference/knpreferencepanel.cpp \
-    plugin/base/knpreference/knpreferencetitle.cpp
+    plugin/base/knpreference/knpreferencetitle.cpp \
+    plugin/module/knmusicplugin/knmusicplugin.cpp \
+    plugin/sdk/kncategorybutton.cpp \
+    plugin/sdk/kncategorytabbar.cpp \
+    plugin/sdk/kncategorytabwidget.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -102,7 +107,12 @@ HEADERS += \
     plugin/base/knpreference/knpreferencecontents.h \
     plugin/base/knpreference/knpreferencepanel.h \
     plugin/base/knpreference/knpreferencetitle.h \
-    plugin/sdk/kncategoryplugin.h
+    plugin/sdk/kncategoryplugin.h \
+    plugin/module/knmusicplugin/knmusicplugin.h \
+    plugin/sdk/kncategorybutton.h \
+    plugin/sdk/kncategorytabbar.h \
+    plugin/sdk/kncategorytabwidget.h \
+    plugin/sdk/knabstractmusicplugin.h
 
 RESOURCES += \
     resource/res.qrc

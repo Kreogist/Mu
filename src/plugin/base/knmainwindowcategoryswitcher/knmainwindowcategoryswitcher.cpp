@@ -23,6 +23,10 @@ KNMainWindowCategorySwitcher::KNMainWindowCategorySwitcher(QObject *parent) :
     KNMainWindowCategorySwitcherPlugin(parent)
 {
     m_categorySwitcher=new KNCategorySwitcherWidget;
+    connect(m_categorySwitcher, &KNCategorySwitcherWidget::requireResetHeaderButton,
+            this, &KNMainWindowCategorySwitcher::requireResetHeaderButton);
+    connect(m_categorySwitcher, &KNCategorySwitcherWidget::requireShowPreference,
+            this, &KNMainWindowCategorySwitcher::requireShowPreference);
 }
 
 QWidget *KNMainWindowCategorySwitcher::switcherWidget()

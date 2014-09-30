@@ -15,7 +15,7 @@ class KNCategoryPlugin : public QObject
 public:
     KNCategoryPlugin(QObject *parent = 0):QObject(parent){}
     virtual QString caption()=0;
-    virtual QString icon()=0;
+    virtual QPixmap icon()=0;
     virtual QWidget *centralWidget()=0;
     virtual QWidget *headerWidget()=0;
 

@@ -17,6 +17,9 @@ public:
     virtual QWidget *switcherWidget()=0;
 
 signals:
+    void requireResetHeaderButton();
+    void requireShowPreference();
+
 
 public slots:
     virtual void showSwitcher()=0;

@@ -30,12 +30,15 @@
 #include "knpreferenceplugin.h"
 #include "kncategoryplugin.h"
 
-//Plugins
+//Basic Plugins
 #include "plugin/base/knmainwindow/knmainwindow.h"
 #include "plugin/base/knmainwindowheader/knmainwindowheader.h"
 #include "plugin/base/knmainwindowcategoryswitcher/knmainwindowcategoryswitcher.h"
 #include "plugin/base/knmainwindowcategorystack/knmainwindowcategorystack.h"
 #include "plugin/base/knpreference/knpreference.h"
+
+//Category Plugins
+#include "plugin/module/knmusicplugin/knmusicplugin.h"
 
 #include "knpluginmanager.h"
 
@@ -155,7 +158,7 @@ void KNPluginManager::loadPlugins()
     loadPreference(new KNPreference);
 
     //Initial category modules.
-    ;
+    loadCategoryPlugin(new KNMusicPlugin);
 }
 
 void KNPluginManager::start()
