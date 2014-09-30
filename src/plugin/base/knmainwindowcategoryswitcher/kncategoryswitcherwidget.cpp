@@ -111,7 +111,11 @@ void KNCategorySwitcherWidget::initialButtons()
     m_settingButton->setIcon(QPixmap(":/plugin/configure/common/icon.png"));
     m_settingButton->setText(tr("Configure"));
     connect(m_settingButton, &KNCategorySettingButton::clicked,
-            this, &KNCategorySwitcherWidget::requireShowPreference);
+            [=]
+            {
+                m_settingButton->setChecked(false);
+                emit requireShowPreference();
+            });
 }
 
 void KNCategorySwitcherWidget::startButtonInAnime()

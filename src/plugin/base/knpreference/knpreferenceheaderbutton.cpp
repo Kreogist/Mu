@@ -102,6 +102,7 @@ void KNPreferenceHeaderButton::mouseReleaseEvent(QMouseEvent *event)
 {
     if(m_pressed && rect().contains(event->pos()))
     {
+        m_pressed=false;
         emit clicked();
     }
     KNAbstractButton::mousePressEvent(event);
