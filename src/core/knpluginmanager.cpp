@@ -146,11 +146,15 @@ void KNPluginManager::setMainWindow(QMainWindow *mainWindow)
 
 void KNPluginManager::loadPlugins()
 {
+    //Initial main window infrastructure.
     loadMainWindowPlugin(new KNMainWindow);
     loadMainWindowHeader(new KNMainWindowHeader);
     loadMainWindowCategoryStack(new KNMainWindowCategoryStack);
     loadMainWindowCategorySwitcher(new KNMainWindowCategorySwitcher);
     loadPreference(new KNPreference);
+
+    //Initial category modules.
+    ;
 }
 
 void KNPluginManager::start()

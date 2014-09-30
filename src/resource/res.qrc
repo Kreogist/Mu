@@ -1,0 +1,42 @@
+<RCC>
+    <qresource prefix="/">
+        <file>public/items/AscendingIndicator.png</file>
+        <file>public/items/DescendingIndicator.png</file>
+        <file>public/messagebox/cancel.png</file>
+        <file>public/messagebox/ok.png</file>
+    </qresource>
+    <qresource prefix="/plugin">
+        <file>music/category/01_musics.png</file>
+        <file>music/category/02_artists.png</file>
+        <file>music/category/03_ablums.png</file>
+        <file>music/category/04_genres.png</file>
+        <file>music/category/05_playlists.png</file>
+        <file>music/player/next.png</file>
+        <file>music/player/pause.png</file>
+        <file>music/player/play.png</file>
+        <file>music/player/previous.png</file>
+        <file>music/playlist/add.png</file>
+        <file>music/playlist/edit.png</file>
+        <file>music/playlist/playlist.png</file>
+        <file>music/playlist/playlist_star.png</file>
+        <file>music/playlist/remove.png</file>
+        <file>music/loopmode/NoRandom.png</file>
+        <file>music/loopmode/NoRepeat.png</file>
+        <file>music/loopmode/Random.png</file>
+        <file>music/loopmode/Repeat.png</file>
+        <file>music/loopmode/RepeatSingle.png</file>
+        <file>music/player/mute.png</file>
+        <file>music/player/nomute.png</file>
+        <file>music/player/fullscreen.png</file>
+        <file>music/player/menu.png</file>
+        <file>music/common/star.png</file>
+        <file>music/common/unstar.png</file>
+        <file>music/common/playingicon.png</file>
+        <file>music/common/icon.png</file>
+        <file>music/playlist/icon.png</file>
+        <file>music/playlist/playlist_add.png</file>
+        <file>music/playlist/playlist_import.png</file>
+        <file>music/common/noalbum.png</file>
+        <file>configure/common/icon.png</file>
+    </qresource>
+</RCC>

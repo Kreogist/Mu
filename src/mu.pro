@@ -103,3 +103,6 @@ HEADERS += \
     plugin/base/knpreference/knpreferencepanel.h \
     plugin/base/knpreference/knpreferencetitle.h
 
+RESOURCES += \
+    resource/res.qrc
+
