@@ -22,6 +22,8 @@
 
 class QBoxLayout;
 class KNCategoryTabWidget;
+class KNMusicBackend;
+class KNMusicGlobal;
 class KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
@@ -31,6 +33,8 @@ public:
     QPixmap icon();
     QWidget *centralWidget();
     QWidget *headerWidget();
+
+    void loadBackend(KNMusicBackend *plugin);
 
 signals:
 
@@ -54,6 +58,8 @@ private:
     KNCategoryTabWidget *m_centralWidget=nullptr;
     QWidget *m_headerWidget=nullptr;
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
+    QThread m_backendThread;
+    KNMusicGlobal *m_musicGlobal;
 };
 
 #endif // KNMUSICPLUGIN_H

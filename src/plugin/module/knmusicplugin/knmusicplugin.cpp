@@ -17,14 +17,27 @@
  */
 #include <QBoxLayout>
 
+//Music Global.
+#include "knmusicglobal.h"
+
+//Ports
+#include "knmusicbackend.h"
+
 #include "kncategorytabwidget.h"
 #include "knmusicplugin.h"
+
+#include <QDebug>
 
 KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     KNAbstractMusicPlugin(parent)
 {
+    //Initial the music global.
+    m_musicGlobal=KNMusicGlobal::instance();
     //Initial infrastructure.
     initialInfrastructure();
+
+    //Load plugins.
+//    loadBackend();
 
     //Do the translation at the last.
     retranslate();
@@ -48,6 +61,11 @@ QWidget *KNMusicPlugin::centralWidget()
 QWidget *KNMusicPlugin::headerWidget()
 {
     return m_headerWidget;
+}
+
+void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
+{
+    ;
 }
 
 void KNMusicPlugin::retranslate()

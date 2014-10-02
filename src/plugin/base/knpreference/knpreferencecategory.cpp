@@ -45,17 +45,12 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     m_layout->addStretch();
 
     //Set translation.
-    retranslateAndSet();
+    retranslate();
 }
 
 void KNPreferenceCategory::retranslate()
 {
-    m_configureText=tr("Configure");
-}
-
-void KNPreferenceCategory::retranslateAndSet()
-{
-    retranslate();
+    m_configureText=tr("Preference");
 }
 
 void KNPreferenceCategory::paintEvent(QPaintEvent *event)
@@ -69,12 +64,8 @@ void KNPreferenceCategory::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::NoPen);
     painter.setBrush(m_backgroundColor);
     painter.drawRect(rect());
-    //Paint the border.
-    painter.setBrush(m_borderColor);
-    painter.drawRect(width()-m_borderWidth,
-                     0,
-                     m_borderWidth,
-                     height());
     //Draw other things.
     QWidget::paintEvent(event);
+    //Paint the shadow here.
+    ;
 }

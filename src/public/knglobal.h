@@ -10,6 +10,7 @@
 #include <QObject>
 
 class KNConfigure;
+class KNFontManager;
 class KNGlobal : public QObject
 {
     Q_OBJECT
@@ -34,6 +35,7 @@ private:
     static QString m_dylibSuffix;
     explicit KNGlobal(QObject *parent = 0);
     KNConfigure *m_configure;
+    KNFontManager *m_fontManager;
 };
 
 #endif // KNGLOBAL_H

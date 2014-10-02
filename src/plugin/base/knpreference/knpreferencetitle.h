@@ -18,9 +18,9 @@
 #ifndef KNPREFERENCETITLE_H
 #define KNPREFERENCETITLE_H
 
-#include <QLabel>
 #include <QWidget>
 
+class QLabel;
 class KNPreferenceHeaderButton;
 class KNPreferenceTitle : public QWidget
 {
@@ -34,9 +34,13 @@ signals:
 public slots:
     void retranslate();
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 private:
     QLabel *m_title;
     KNPreferenceHeaderButton *m_headerButton;
+    int m_titleX=93;
 };
 
 #endif // KNPREFERENCETITLE_H

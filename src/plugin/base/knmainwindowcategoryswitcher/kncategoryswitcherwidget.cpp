@@ -109,7 +109,7 @@ void KNCategorySwitcherWidget::initialButtons()
 {
     m_settingButton=new KNCategorySettingButton(this);
     m_settingButton->setIcon(QPixmap(":/plugin/configure/common/icon.png"));
-    m_settingButton->setText(tr("Configure"));
+    m_settingButton->setText(tr("Preference"));
     connect(m_settingButton, &KNCategorySettingButton::clicked,
             [=]
             {

@@ -7,6 +7,8 @@
 #ifndef KNCATEGORYPLUGIN_H
 #define KNCATEGORYPLUGIN_H
 
+#include <QThread>
+
 #include <QObject>
 
 class KNCategoryPlugin : public QObject

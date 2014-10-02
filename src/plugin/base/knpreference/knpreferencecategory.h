@@ -34,15 +34,14 @@ signals:
 
 public slots:
     void retranslate();
-    void retranslateAndSet();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QColor m_backgroundColor=QColor(51,51,51),
-           m_borderColor=QColor(67,67,67);
-    int m_listWidth=241,
+    QColor m_backgroundColor=QColor(32,32,32),
+           m_borderColor=QColor(255,255,255,67);
+    int m_listWidth=250,
         m_borderWidth=4;
     QBoxLayout *m_layout;
     QString m_configureText;

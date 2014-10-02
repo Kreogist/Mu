@@ -7,6 +7,7 @@
 #include <QApplication>
 
 #include "knconfigure.h"
+#include "knfontmanager.h"
 
 #include "knglobal.h"
 
@@ -68,6 +69,12 @@ void KNGlobal::saveConfigure()
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent)
 {
+    //Initial the fonts.
+    m_fontManager=KNFontManager::instance();
+    m_fontManager->loadCustomFontFolder(QApplication::applicationDirPath() +
+                                        "/Fonts");
+    m_fontManager->initialDefaultFont();
+
     //Initial the configure.
     m_configure=KNConfigure::instance();
     //Set the configure file path.
