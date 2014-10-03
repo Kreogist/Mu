@@ -8,6 +8,7 @@
 #define KNCATEGORYPLUGIN_H
 
 #include <QThread>
+#include <QLinkedList>
 
 #include <QObject>
 

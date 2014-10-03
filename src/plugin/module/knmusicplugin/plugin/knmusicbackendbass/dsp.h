@@ -1,0 +1,15 @@
+#define ID_OPEN                         10
+#define IDC_SLDEQ1						20
+#define IDC_SLDEQ2						21
+#define IDC_SLDEQ3						22
+#define IDC_DXRATE                      30
+#define IDC_SDXRATE                     31
+#define IDC_WETMIX                      32
+#define IDC_DRYMIX                      33
+#define IDC_FEEDBACK                    34
+#define IDC_RATE	                    35
+#define IDC_RANGE	                    36
+#define IDC_FREQ	                    37
+#define IDC_CHKEQ                       40
+#define IDC_CHKPHS                      41
+#define IDC_STATIC						-1

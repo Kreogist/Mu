@@ -33,6 +33,18 @@ release{
 #Windows configure
 win32{
     DESTDIR =../mu
+    CONFIG += libbass
+    libbass{
+        LIBS += -lbass
+    }
+}
+
+libbass{
+    DEFINES += ENABLE_LIBBASS
+    SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.cpp
+    HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
+               plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
 }
 
 #Add translations
@@ -78,7 +90,22 @@ SOURCES += \
     plugin/sdk/kncategorytabwidget.cpp \
     plugin/base/knpreference/knpreferenceheaderbutton.cpp \
     public/knfontmanager.cpp \
-    plugin/module/knmusicplugin/sdk/knmusicglobal.cpp
+    plugin/module/knmusicplugin/sdk/knmusicglobal.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicstandardbackend.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicparser.cpp \
+    plugin/module/knmusicplugin/sdk/knmusictagpraser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp \
+    plugin/sdk/knhighlightlabel.cpp \
+    plugin/sdk/knscrolllabel.cpp \
+    plugin/sdk/kngraphicsgloweffect.cpp \
+    plugin/sdk/knprogressslider.cpp \
+    plugin/sdk/knabstractslider.cpp \
+    plugin/sdk/kneditablelabel.cpp \
+    plugin/sdk/knopacityanimebutton.cpp \
+    plugin/sdk/knopacitybutton.cpp \
+    plugin/sdk/knvolumeslider.cpp \
+    plugin/sdk/kncancellineedit.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -119,7 +146,26 @@ HEADERS += \
     plugin/base/knpreference/knpreferenceheaderbutton.h \
     public/knfontmanager.h \
     plugin/module/knmusicplugin/sdk/knmusicbackend.h \
-    plugin/module/knmusicplugin/sdk/knmusicglobal.h
+    plugin/module/knmusicplugin/sdk/knmusicglobal.h \
+    plugin/module/knmusicplugin/sdk/knmusicbackendthread.h \
+    plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.h \
+    plugin/module/knmusicplugin/sdk/knmusicstandardbackend.h \
+    plugin/module/knmusicplugin/sdk/knmusicparser.h \
+    plugin/module/knmusicplugin/sdk/knmusicanalysiser.h \
+    plugin/module/knmusicplugin/sdk/knmusictagpraser.h \
+    plugin/module/knmusicplugin/sdk/knmusiclistparser.h \
+    plugin/module/knmusicplugin/sdk/knmusicheaderplayerbase.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.h \
+    plugin/sdk/knhighlightlabel.h \
+    plugin/sdk/knscrolllabel.h \
+    plugin/sdk/kngraphicsgloweffect.h \
+    plugin/sdk/knprogressslider.h \
+    plugin/sdk/knabstractslider.h \
+    plugin/sdk/kneditablelabel.h \
+    plugin/sdk/knopacityanimebutton.h \
+    plugin/sdk/knopacitybutton.h \
+    plugin/sdk/knvolumeslider.h \
+    plugin/sdk/kncancellineedit.h
 
 RESOURCES += \
     resource/res.qrc

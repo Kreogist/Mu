@@ -24,17 +24,21 @@ class QBoxLayout;
 class KNCategoryTabWidget;
 class KNMusicBackend;
 class KNMusicGlobal;
+class KNMusicParser;
+class KNMusicHeaderPlayerBase;
 class KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
 public:
     explicit KNMusicPlugin(QObject *parent = 0);
+    ~KNMusicPlugin();
     QString caption();
     QPixmap icon();
     QWidget *centralWidget();
     QWidget *headerWidget();
 
     void loadBackend(KNMusicBackend *plugin);
+    void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
 
 signals:
 
@@ -54,12 +58,19 @@ protected slots:
 
 private:
     void initialInfrastructure();
+    void initialParser();
+    void startThreads();
+    QLinkedList<QObject *> m_pluginList;
     QString m_caption;
     KNCategoryTabWidget *m_centralWidget=nullptr;
     QWidget *m_headerWidget=nullptr;
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
-    QThread m_backendThread;
+    QThread m_parserThread, m_backendThread;
     KNMusicGlobal *m_musicGlobal;
+
+    KNMusicBackend *m_backend=nullptr;
+    KNMusicParser *m_parser=nullptr;
+    KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
 };
 
 #endif // KNMUSICPLUGIN_H

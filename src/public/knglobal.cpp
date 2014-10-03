@@ -21,9 +21,26 @@ KNGlobal *KNGlobal::instance()
 {
     return m_instance==nullptr?m_instance=new KNGlobal:m_instance;
 }
+
+QString KNGlobal::byteToHigherUnit(const qint64 &fileSize)
+{
+    qreal dFileSize=(qreal)fileSize;
+    int unitPointer=0;
+    while(dFileSize>1024.0 && unitPointer<StorageUnitCount)
+    {
+        dFileSize/=1024.0;
+        unitPointer++;
+    }
+    return QString::number(dFileSize, 'f', 2)+" "+m_storageUnit[unitPointer];
+}
 QString KNGlobal::dylibSuffix()
 {
     return m_dylibSuffix;
+}
+
+QString KNGlobal::applicationDirPath()
+{
+    return QApplication::applicationDirPath();
 }
 
 void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
@@ -56,6 +73,12 @@ QVariant KNGlobal::systemData(const QString &key)
     return m_configure->systemData(key);
 }
 
+void KNGlobal::retranslate()
+{
+    //Update the storage unit.
+    m_storageUnit[0]=tr("Byte");
+}
+
 void KNGlobal::loadConfigure()
 {
     m_configure->loadConfigure();
@@ -66,9 +89,26 @@ void KNGlobal::saveConfigure()
     m_configure->saveConfigure();
 }
 
+void KNGlobal::initialStorageUnit()
+{
+    m_storageUnit[KiloByte]="KB";
+    m_storageUnit[MegaByte]="MB";
+    m_storageUnit[GigaByte]="GB";
+    m_storageUnit[TeraByte]="TB";
+    m_storageUnit[PetaByte]="PB";
+    m_storageUnit[ExaByte] ="EB";
+    m_storageUnit[ZetaByte]="ZB";
+    m_storageUnit[YottaByte]="YB";
+    m_storageUnit[NonaByte]="NB";
+    m_storageUnit[DoggaByte]="DB";
+}
+
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent)
 {
+    //Initial the basic strings.
+    initialStorageUnit();
+
     //Initial the fonts.
     m_fontManager=KNFontManager::instance();
     m_fontManager->loadCustomFontFolder(QApplication::applicationDirPath() +
@@ -80,4 +120,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Set the configure file path.
     m_configure->setConfigurePath(QApplication::applicationDirPath() +
                                       "/Configure");
+
+    //Retranslate every thing.
+    retranslate();
 }

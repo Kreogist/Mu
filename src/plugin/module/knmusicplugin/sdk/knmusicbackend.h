@@ -19,13 +19,14 @@ class KNMusicBackend : public QObject
     Q_OBJECT
 public:
     KNMusicBackend(QObject *parent = 0) : QObject(parent){}
+    virtual bool available()=0;
     virtual void loadMusic(const QString &filePath)=0;
     virtual qint64 duration() const=0;
     virtual qint64 position() const=0;
     virtual void playFile(const QString &fileName)=0;
     virtual void playSection(const QString &fileName,
-                             const qint64 &sectionStart,
-                             const qint64 &sectionDuration)=0;
+                             const qint64 &sectionStart=-1,
+                             const qint64 &sectionDuration=-1)=0;
     virtual void play()=0;
     virtual void pause()=0;
     virtual void stop()=0;
@@ -34,9 +35,13 @@ public:
 
     virtual void loadPreview(const QString &filePath)=0;
     virtual qint64 previewDuration() const=0;
+    virtual void playPreviewFile(const QString &fileName)=0;
+    virtual void playPreviewSection(const QString &fileName,
+                                    const qint64 &sectionStart=-1,
+                                    const qint64 &sectionDuration=-1)=0;
     virtual void playPreview()=0;
-    virtual void stopPreview()=0;
     virtual void pausePreview()=0;
+    virtual void stopPreview()=0;
 
     virtual void loadUrl(const QString &url)=0;
 
@@ -58,7 +63,6 @@ signals:
     void previewPlayingStateChanged(int state);
 
 public slots:
-    virtual void setDefaultParameters()=0;
     virtual void changeMuteState()=0;
     virtual void setMute(const bool &mute)=0;
     virtual void setVolume(const int &volumeSize)=0;

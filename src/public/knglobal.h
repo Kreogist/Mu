@@ -16,7 +16,9 @@ class KNGlobal : public QObject
     Q_OBJECT
 public:
     static KNGlobal *instance();
+    QString byteToHigherUnit(const qint64 &fileSize);
     static QString dylibSuffix();
+    static QString applicationDirPath();
     static void setDylibSuffix(const QString &dylibSuffix);
     void setSystemData(const QString &key, const QString &value);
     void setSystemData(const QString &key, const double &value);
@@ -27,12 +29,30 @@ public:
 signals:
 
 public slots:
+    void retranslate();
     void loadConfigure();
     void saveConfigure();
 
 private:
+    void initialStorageUnit();
     static KNGlobal *m_instance;
     static QString m_dylibSuffix;
+    enum StorageUnit
+    {
+        Byte,
+        KiloByte,
+        MegaByte,
+        GigaByte,
+        TeraByte,
+        PetaByte,
+        ExaByte,
+        ZetaByte,
+        YottaByte,
+        NonaByte,
+        DoggaByte,
+        StorageUnitCount
+    };
+    QString m_storageUnit[StorageUnitCount];
     explicit KNGlobal(QObject *parent = 0);
     KNConfigure *m_configure;
     KNFontManager *m_fontManager;

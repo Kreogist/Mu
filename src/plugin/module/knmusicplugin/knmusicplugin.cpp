@@ -22,6 +22,12 @@
 
 //Ports
 #include "knmusicbackend.h"
+#include "knmusicparser.h"
+#include "knmusicheaderplayerbase.h"
+
+//Plugins
+#include "plugin/knmusicbackendbass/knmusicbackendbass.h"
+#include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 
 #include "kncategorytabwidget.h"
 #include "knmusicplugin.h"
@@ -31,16 +37,29 @@
 KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     KNAbstractMusicPlugin(parent)
 {
-    //Initial the music global.
-    m_musicGlobal=KNMusicGlobal::instance();
     //Initial infrastructure.
     initialInfrastructure();
+    //Initial parser.
+    initialParser();
 
     //Load plugins.
-//    loadBackend();
+    loadBackend(new KNMusicBackendBass);
+    loadHeaderPlayer(new KNMusicHeaderPlayer);
 
     //Do the translation at the last.
     retranslate();
+}
+
+KNMusicPlugin::~KNMusicPlugin()
+{
+    //Stop threads.
+    m_parserThread.quit();
+    m_parserThread.wait();
+    //Delete all the plugins.
+    while(!m_pluginList.isEmpty())
+    {
+        delete m_pluginList.takeFirst();
+    }
 }
 
 QString KNMusicPlugin::caption()
@@ -65,7 +84,26 @@ QWidget *KNMusicPlugin::headerWidget()
 
 void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
 {
-    ;
+    if(m_backend==nullptr)
+    {
+        m_backend=plugin;
+        //Add plugin to the list.
+        m_pluginList.append(m_backend);
+    }
+}
+
+void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
+{
+    if(m_headerPlayer==nullptr)
+    {
+        m_headerPlayer=plugin;
+        //Configure the header player.
+        m_headerPlayer->setBackend(m_backend);
+        //Add plugin to the list.
+        m_pluginList.append(m_headerPlayer);
+        //Add to main window.
+        addLeftHeaderWidget(m_headerPlayer);
+    }
 }
 
 void KNMusicPlugin::retranslate()
@@ -96,6 +134,10 @@ void KNMusicPlugin::addRightHeaderWidget(QWidget *widget,
 
 void KNMusicPlugin::initialInfrastructure()
 {
+    //Initial the music global.
+    m_musicGlobal=KNMusicGlobal::instance();
+    m_musicGlobal->setNoAlbumArt(QPixmap(""));
+
     //Initial central widget.
     m_centralWidget=new KNCategoryTabWidget;
 
@@ -121,4 +163,21 @@ void KNMusicPlugin::initialInfrastructure()
     m_headerRightLayout->setContentsMargins(0,0,0,0);
     m_headerRightLayout->setSpacing(0);
     headerLayout->addLayout(m_headerRightLayout);
+}
+
+void KNMusicPlugin::initialParser()
+{
+    //Initial the music parser.
+    m_parser=new KNMusicParser;
+    //Add this to plugin list.
+    m_pluginList.append(m_parser);
+    //Move to working thread.
+    m_parser->moveToThread(&m_parserThread);
+    //Set the parser.
+    KNMusicGlobal::setParser(m_parser);
+}
+
+void KNMusicPlugin::startThreads()
+{
+    m_parserThread.start();
 }

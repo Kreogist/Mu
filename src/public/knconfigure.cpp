@@ -46,6 +46,18 @@ void KNConfigure::setSystemData(const QString &key,
     m_systemConfigure[key]=value;
 }
 
+void KNConfigure::setUserData(const QString &module,
+                              const QString &key,
+                              const QJsonValue &value)
+{
+    QJsonValue currentModuleValue=m_userConfigure[module];
+    QJsonObject currentModule=
+            currentModuleValue.type()==QJsonValue::Object?
+                currentModuleValue.toObject():QJsonObject();
+    currentModule[key]=value;
+    m_userConfigure[module]=currentModule;
+}
+
 QVariant KNConfigure::systemData(const QString &key)
 {
     return QVariant(m_systemConfigure[key]);

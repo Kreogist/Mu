@@ -21,6 +21,9 @@ public:
     void saveConfigure();
     void setSystemData(const QString &key,
                        const QJsonValue &value);
+    void setUserData(const QString &module,
+                     const QString &key,
+                     const QJsonValue &value);
     QVariant systemData(const QString &key);
     QString configurePath() const;
     void setConfigurePath(const QString &configurePath);

@@ -4,16 +4,23 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QUrl>
+#include <QVector>
+#include <QItemSelection>
+#include <QStandardItem>
+
 #include "knmusicglobal.h"
 
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
+
+KNMusicParser *KNMusicGlobal::m_parser=nullptr;
 
 KNMusicGlobal *KNMusicGlobal::instance()
 {
     return m_instance==nullptr?m_instance=new KNMusicGlobal:m_instance;
 }
 
-QString KNMusicGlobal::msecondToTime(const qint64 &msecond)
+QString KNMusicGlobal::msecondToString(const qint64 &msecond)
 {
     qint64 second=msecond/1000;
     //Calculate the second part.
@@ -24,7 +31,151 @@ QString KNMusicGlobal::msecondToTime(const qint64 &msecond)
                 QString::number(second/60)+":"+secondText;
 }
 
+QString KNMusicGlobal::dateTimeToString(const QDateTime &dateTime)
+{
+    return dateTime.toString("yyyy-MM-dd APhh:mm");
+}
+
+QString KNMusicGlobal::dateTimeToDataString(const QDateTime &dateTime)
+{
+    return dateTime.toString("yyyyMMddHHmmss");
+}
+
+QDateTime KNMusicGlobal::dataStringToDateTime(const QString &text)
+{
+    return QDateTime::fromString(text, "yyyyMMddHHmmss");
+}
+
+bool KNMusicGlobal::isMusicFile(const QString &suffix)
+{
+    return (m_suffixs.indexOf(suffix.toLower())!=-1);
+}
+
+QString KNMusicGlobal::typeDescription(const QString &suffix) const
+{
+    int suffixIndex=m_suffixs.indexOf(suffix.toLower());
+    return suffixIndex==-1?QString():m_suffixDescription.at(suffixIndex);
+}
+
+void KNMusicGlobal::retranslate()
+{
+    ;
+}
+
+void KNMusicGlobal::regMetaType()
+{
+    qRegisterMetaType<QVector<int>>("QVector<int>");
+    qRegisterMetaType<QItemSelection>("QItemSelection");
+    qRegisterMetaType<QList<QStandardItem *>>("QList<QStandardItem *>");
+}
+
+void KNMusicGlobal::initialFileType()
+{
+    m_suffixs<<"mp3"
+             <<"m4a"
+             <<"wav"
+             <<"flac"
+             <<"ape"
+             <<"ogg"
+             <<"tta"
+             <<"aiff"
+             <<"aifc"
+             <<"aif"
+             <<"mp4"
+             <<"mpa"
+             <<"mp2"
+             <<"mp1"
+             <<"midi"
+             <<"mid"
+             <<"mp3pro"
+             <<"mpc"
+             <<"aac"
+             <<"wma"
+             <<"fla"
+             <<"tak"
+             <<"mp+"
+             <<"aa"
+             <<"ra"
+             <<"mac"
+             <<"rmi"
+             <<"dtswav"
+             <<"dts"
+             <<"snd"
+             <<"au"
+             <<"ac3"
+             <<"xm"
+             <<"umx";
+    m_listSuffixs<<"cue"
+                 <<"cda";
+
+    m_suffixDescription<<tr("MPEG Audio Layer III (mp3)")
+                           <<tr("MPEG-4 Part 14 (m4a)")
+                           <<tr("Waveform Audio File Format (wav)")
+                           <<tr("Free Lossless Audio Codec (flac)")
+                           <<tr("Monkey's Audio (ape)")
+                           <<tr("Ogg Vorbis Audio (ogg)")
+                           <<tr("True Audio Codec (tta)")
+                           <<tr("Audio Interchange File Format (aiff)")
+                           <<tr("Audio Interchange File Format (aifc)")
+                           <<tr("Audio Interchange File Format (aif)")
+                           <<tr("MPEG-4 Part 14 (mp4)")
+                           <<tr("MPEG Audio Layer II (mpa)")
+                           <<tr("MPEG Audio Layer II (mp2)")
+                           <<tr("MPEG Audio Layer I (mp1)")
+                           <<tr("Musical Instrument Digital Interface (midi)")
+                           <<tr("Musical Instrument Digital Interface (mid)")
+                           <<tr("MPEG Audio Layer III with SBR (mp3pro)")
+                           <<tr("Musepack Lossy Audio Codec (mpc)")
+                           <<tr("Advanced Audio Coding (aac)")
+                           <<tr("Windows Media Audio (wma)")
+                           <<tr("Flash Audio (fla)")
+                           <<tr("Tom's lossless Audio Kompressor (tak)")
+                           <<tr("Musepack Lossy Audio Codec (mp+)")
+                           <<tr("Audible Audio File (aa)")
+                           <<tr("Real Audio (ra)")
+                           <<tr("Monkey's Audio (mac)")
+                           <<tr("Musical Instrument Digital Interface (rmi)")
+                           <<tr("DTS Audio Codec (dtswav)")
+                           <<tr("DTS Audio Codec (dts)")
+                           <<tr("SouND Audio (snd)")
+                           <<tr("Au File Format (au)")
+                           <<tr("Dolby Surround Audio Coding-3 (ac3)")
+                           <<tr("Fast Tracker Module (xm)")
+                           <<tr("Unreal Engine 1 Music Format (umx)");
+
+    m_listSuffixDescription<<tr("Compact Disc Audio track (cda)")
+                           <<tr("Cue sheet (cue)");
+}
+
+KNMusicParser *KNMusicGlobal::parser()
+{
+    return m_parser;
+}
+
+void KNMusicGlobal::setParser(KNMusicParser *parser)
+{
+    m_parser = parser;
+}
+
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     QObject(parent)
 {
+    //Register music metatypes.
+    regMetaType();
+    //Initial music types.
+    initialFileType();
+    //Initial resources.
+
+    //Get the latest translation.
+    retranslate();
+}
+
+QPixmap KNMusicGlobal::noAlbumArt() const
+{
+    return m_noAlbumArt;
+}
+
+void KNMusicGlobal::setNoAlbumArt(const QPixmap &noAlbumArt)
+{
+    m_noAlbumArt = noAlbumArt;
 }

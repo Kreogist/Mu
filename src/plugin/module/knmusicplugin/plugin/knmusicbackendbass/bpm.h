@@ -1,0 +1,15 @@
+#define ID_OPEN				10
+#define IDC_STATIC			-1
+#define IDC_VOL                         100
+#define IDC_POS                         101
+#define IDC_TEMPO                       102
+#define IDC_RATE                        103
+#define IDC_STEMPO                      104
+#define IDC_CHKPERIOD                   105
+#define IDC_EPBPM                       106
+#define IDC_SPOS                        107
+#define IDC_SBPM                        108
+#define IDC_PRGRSBPM                    109
+#define IDC_SRATE                       110
+#define IDC_SBEAT                       111
+#define IDC_CHKBEAT                     112
