@@ -94,7 +94,7 @@ private:
     QRect generateOutPosition();
     QRect generateInPosition();
 
-    bool loadFile(const QString &filePath);
+    bool loadFileInfo(const QString &filePath);
     //Public classes.
     KNMusicGlobal *m_musicGlobal;
     KNMusicParser *m_parser;

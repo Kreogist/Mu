@@ -116,6 +116,9 @@ void KNMusicHeaderPlayer::reset()
 
 void KNMusicHeaderPlayer::playFile(const QString &filePath)
 {
+    //Update file info.
+    loadFileInfo(filePath);
+    //Play the file.
     m_backend->playFile(filePath);
 }
 
@@ -123,6 +126,9 @@ void KNMusicHeaderPlayer::playSection(const QString &filePath,
                                       const qint64 &startPosition,
                                       const qint64 &duration)
 {
+    //Update file info.
+    loadFileInfo(filePath);
+    //Play the file.
     m_backend->playSection(filePath, startPosition, duration);
 }
 
@@ -629,7 +635,7 @@ QRect KNMusicHeaderPlayer::generateInPosition()
                  40);
 }
 
-bool KNMusicHeaderPlayer::loadFile(const QString &filePath)
+bool KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
 {
     //Check is the playing file the current file. If it is, do nothing.
     if(m_currentFilePath==filePath)
