@@ -47,8 +47,8 @@ public:
     qint64 position() const;
     void playFile(const QString &fileName);
     void playSection(const QString &fileName,
-                     const qint64 &sectionStart=-1,
-                     const qint64 &sectionDuration=-1);
+                     const qint64 &start=-1,
+                     const qint64 &duration=-1);
     void play();
     void pause();
     void stop();
@@ -59,8 +59,8 @@ public:
     qint64 previewDuration() const;
     void playPreviewFile(const QString &fileName);
     void playPreviewSection(const QString &fileName,
-                            const qint64 &sectionStart=-1,
-                            const qint64 &sectionDuration=-1);
+                            const qint64 &start=-1,
+                            const qint64 &duration=-1);
     void playPreview();
     void stopPreview();
     void pausePreview();
@@ -76,18 +76,20 @@ public slots:
     void changeMuteState();
     void setMute(const bool &mute);
     void setVolume(const int &volumeSize);
-    void setPosition(const qint64 &msPosition);
+    void setPosition(const qint64 &position);
 
-    void setPreviewPosition(const qint64 &msPosition);
+    void setPreviewPosition(const qint64 &position);
 
 private:
     bool initialBass();
     void initialPlugin(const QString &pluginDirPath);
     void smartVolumeOn();
     void smartVolumeOff();
+    void changeVolume(const int &volumeSize);
     KNMusicBackendBassThread *m_main, *m_preview;
-    int m_originalVolume=-1;
-    bool m_available=false;
+    int m_originalVolume=-1,
+        m_volumeBeforeMute=0.0;
+    bool m_available=false, m_mute=false;
 };
 
 #endif // KNMUSICBACKENDBASS_H

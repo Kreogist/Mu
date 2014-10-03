@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QDir>
+#include <QEasingCurve>
 
 #include "knglobal.h"
 #include "knmusicbassglobal.h"
@@ -81,13 +82,13 @@ void KNMusicBackendBass::playFile(const QString &fileName)
 }
 
 void KNMusicBackendBass::playSection(const QString &fileName,
-                                     const qint64 &sectionStart,
-                                     const qint64 &sectionDuration)
+                                     const qint64 &start,
+                                     const qint64 &duration)
 {
     //Load the music file first.
     loadMusic(fileName);
     //Play the section
-    m_main->playSection(sectionStart, sectionDuration);
+    m_main->playSection(start, duration);
 }
 
 void KNMusicBackendBass::play()
@@ -132,15 +133,15 @@ void KNMusicBackendBass::playPreviewFile(const QString &fileName)
 }
 
 void KNMusicBackendBass::playPreviewSection(const QString &fileName,
-                                            const qint64 &sectionStart,
-                                            const qint64 &sectionDuration)
+                                            const qint64 &start,
+                                            const qint64 &duration)
 {
     //Load the music file first.
     loadPreview(fileName);
     //Turn on the smart volume.
     smartVolumeOn();
     //Play the section
-    m_preview->playSection(sectionStart, sectionDuration);
+    m_preview->playSection(start, duration);
 }
 
 void KNMusicBackendBass::playPreview()
@@ -176,32 +177,56 @@ int KNMusicBackendBass::volumeMinimal()
 
 int KNMusicBackendBass::volumeMaximum()
 {
-    return 50000;
+    return 10000;
 }
 
 void KNMusicBackendBass::changeMuteState()
 {
-    ;
+    setMute(!m_mute);
 }
 
 void KNMusicBackendBass::setMute(const bool &mute)
 {
-    ;
+    //Check the state is the same or not, if is the same, do nothing.
+    if(m_mute==mute)
+    {
+        return;
+    }
+    //Set state.
+    m_mute=mute;
+    if(m_mute)
+    {
+        //Backup the original volume, mute it.
+        m_volumeBeforeMute=volume();
+        changeVolume(0);
+    }
+    else
+    {
+        //Set the volume to the backup volume.
+        changeVolume(m_volumeBeforeMute);
+    }
+    //Emit changed signal.
+    emit muteStateChanged(m_mute);
 }
 
 void KNMusicBackendBass::setVolume(const int &volumeSize)
 {
-    ;
+    if(m_mute)
+    {
+        m_mute=false;
+        emit muteStateChanged(m_mute);
+    }
+    changeVolume(volumeSize);
 }
 
-void KNMusicBackendBass::setPosition(const qint64 &msPosition)
+void KNMusicBackendBass::setPosition(const qint64 &position)
 {
-    ;
+    m_main->setPosition(position);
 }
 
-void KNMusicBackendBass::setPreviewPosition(const qint64 &msPosition)
+void KNMusicBackendBass::setPreviewPosition(const qint64 &position)
 {
-    ;
+    m_preview->setPosition(position);
 }
 
 bool KNMusicBackendBass::initialBass()
@@ -299,4 +324,9 @@ void KNMusicBackendBass::smartVolumeOff()
     m_main->setVolume(m_originalVolume);
     //Reset the original volume.
     m_originalVolume=-1;
+}
+
+void KNMusicBackendBass::changeVolume(const int &volumeSize)
+{
+    BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, volumeSize);
 }

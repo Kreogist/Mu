@@ -25,8 +25,8 @@ public:
     virtual qint64 position() const=0;
     virtual void playFile(const QString &fileName)=0;
     virtual void playSection(const QString &fileName,
-                             const qint64 &sectionStart=-1,
-                             const qint64 &sectionDuration=-1)=0;
+                             const qint64 &start=-1,
+                             const qint64 &duration=-1)=0;
     virtual void play()=0;
     virtual void pause()=0;
     virtual void stop()=0;
@@ -37,8 +37,8 @@ public:
     virtual qint64 previewDuration() const=0;
     virtual void playPreviewFile(const QString &fileName)=0;
     virtual void playPreviewSection(const QString &fileName,
-                                    const qint64 &sectionStart=-1,
-                                    const qint64 &sectionDuration=-1)=0;
+                                    const qint64 &start=-1,
+                                    const qint64 &duration=-1)=0;
     virtual void playPreview()=0;
     virtual void pausePreview()=0;
     virtual void stopPreview()=0;
@@ -66,9 +66,9 @@ public slots:
     virtual void changeMuteState()=0;
     virtual void setMute(const bool &mute)=0;
     virtual void setVolume(const int &volumeSize)=0;
-    virtual void setPosition(const qint64 &msPosition)=0;
+    virtual void setPosition(const qint64 &position)=0;
 
-    virtual void setPreviewPosition(const qint64 &msPosition)=0;
+    virtual void setPreviewPosition(const qint64 &position)=0;
 };
 
 #endif // KNMUSICBACKEND_H

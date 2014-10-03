@@ -45,6 +45,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     //Load plugins.
     loadBackend(new KNMusicBackendBass);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
+    m_headerPlayer->playFile("D:/音乐/Compact Discs/[130724] TVアニメ「ラブライブ！」ユニットシングル 2nd session「Cutie Panther」／BiBi (FLAC+BK)/01. Cutie Panther.flac");
 
     //Do the translation at the last.
     retranslate();
@@ -136,7 +137,7 @@ void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
-    m_musicGlobal->setNoAlbumArt(QPixmap(""));
+    m_musicGlobal->setNoAlbumArt(QPixmap(":/plugin/music/common/noalbum.png"));
 
     //Initial central widget.
     m_centralWidget=new KNCategoryTabWidget;

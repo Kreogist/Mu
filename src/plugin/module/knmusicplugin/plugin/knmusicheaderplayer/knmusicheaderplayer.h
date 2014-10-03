@@ -69,6 +69,9 @@ private slots:
     void onActionVolumeSliderChanged(const qint64 &value);
     void onActionInOutOpacityChange(const QVariant &value);
 
+    void onActionPositionChanged(const qint64 &position);
+    void onActionPlayStateChanged(const int &state);
+
     void setPosition(const qint64 &position);
 
 private:

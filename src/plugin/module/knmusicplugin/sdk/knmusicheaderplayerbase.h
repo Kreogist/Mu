@@ -23,6 +23,11 @@ signals:
 
 public slots:
     virtual void setBackend(KNMusicBackend *backend)=0;
+    virtual void reset()=0;
+    virtual void playFile(const QString &filePath)=0;
+    virtual void playSection(const QString &filePath,
+                             const qint64 &startPosition,
+                             const qint64 &duration)=0;
 
 };
 

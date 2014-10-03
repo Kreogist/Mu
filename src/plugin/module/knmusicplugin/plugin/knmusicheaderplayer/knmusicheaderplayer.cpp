@@ -73,8 +73,28 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     //Set the volume range.
     m_volumeSlider->setRange(m_backend->volumeMinimal(),
                              m_backend->volumeMaximum());
+    //Change the mouse step based on the range.
+    int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
+    m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
     //Set the default volume.
     m_volumeSlider->setValue(m_volumeSlider->maximum());
+    //Reset the player.
+    reset();
+    //Connect requests.
+    connect(m_volumeIndicator, &KNOpacityButton::clicked,
+            m_backend, &KNMusicBackend::changeMuteState);
+    //Connect responds.
+    connect(m_backend, &KNMusicBackend::positionChanged,
+            this, &KNMusicHeaderPlayer::onActionPositionChanged);
+    connect(m_backend, &KNMusicBackend::durationChanged,
+            this, &KNMusicHeaderPlayer::setDuration);
+    connect(m_backend, &KNMusicBackend::playingStateChanged,
+            this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
+    connect(m_backend, &KNMusicBackend::muteStateChanged,
+            [=](const bool &mute)
+            {
+                m_volumeIndicator->setIcon(mute?m_muteIcon:m_noMuteIcon);
+            });
 }
 
 void KNMusicHeaderPlayer::reset()
@@ -96,14 +116,14 @@ void KNMusicHeaderPlayer::reset()
 
 void KNMusicHeaderPlayer::playFile(const QString &filePath)
 {
-    ;
+    m_backend->playFile(filePath);
 }
 
 void KNMusicHeaderPlayer::playSection(const QString &filePath,
                                       const qint64 &startPosition,
                                       const qint64 &duration)
 {
-    ;
+    m_backend->playSection(filePath, startPosition, duration);
 }
 
 void KNMusicHeaderPlayer::onActionLoopStateChanged(const int &state)
@@ -260,6 +280,26 @@ void KNMusicHeaderPlayer::onActionInOutOpacityChange(const QVariant &value)
     m_durationEffect->setOpacity(1-albumOpacity);
 }
 
+void KNMusicHeaderPlayer::onActionPositionChanged(const qint64 &position)
+{
+    if(!m_progressPressed)
+    {
+        m_progressSlider->setValue(position);
+    }
+}
+
+void KNMusicHeaderPlayer::onActionPlayStateChanged(const int &state)
+{
+    //If it's playing, then should display pause icon.
+    if(state==PlayingState)
+    {
+        setPauseIconMode();
+        return;
+    }
+    //Or else, whatever stopped or paused state, should display play icon.
+    setPlayIconMode();
+}
+
 void KNMusicHeaderPlayer::setPosition(const qint64 &position)
 {
     m_backend->setPosition(position);
@@ -283,7 +323,6 @@ void KNMusicHeaderPlayer::initialLabels()
 {
     //Initial the title scroll label.
     m_title=new KNScrollLabel(this);
-    m_title->setText("WTF?! Why this can be so long like this? so re de mo, asldkjf;alskdjf");
     QFont scrollFont=m_title->scrollFont();
     scrollFont.setFamily("Source Han Sans");
     scrollFont.setPixelSize(13);
@@ -296,7 +335,6 @@ void KNMusicHeaderPlayer::initialLabels()
 
     //Initial the artist and album.
     m_artistAndAlbum=new KNScrollLabel(this);
-    m_artistAndAlbum->setText("Album and artist label why it can be here?! WTF?! What's wrong?!");
     m_artistAndAlbum->setScrollFont(scrollFont);
     m_artistAndAlbum->setGeometry(82,
                                   25,
@@ -458,8 +496,6 @@ void KNMusicHeaderPlayer::initialVolume()
     m_volumeIndicator=new KNOpacityButton(this);
     m_volumeIndicator->setIcon(m_noMuteIcon);
     m_volumeIndicator->setFixedSize(13,13);
-//    connect(m_volumeIndicator, &KNOpacityButton::clicked,
-//            this, &KNMusicHeaderPlayer::requireChangeMuteState);
     volumeLayout->addWidget(m_volumeIndicator);
 
     //Volume Slider
