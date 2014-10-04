@@ -21,10 +21,12 @@ public:
     void saveConfigure();
     void setSystemData(const QString &key,
                        const QJsonValue &value);
-    void setUserData(const QString &module,
-                     const QString &key,
-                     const QJsonValue &value);
+    void setCustomData(const QString &module,
+                       const QString &key,
+                       const QJsonValue &value);
     QVariant systemData(const QString &key);
+    QVariant customData(const QString &module,
+                        const QString &key);
     QString configurePath() const;
     void setConfigurePath(const QString &configurePath);
 
@@ -45,7 +47,7 @@ private:
     QString m_configurePath,
             m_systemConfigurePath,
             m_userConfigurePath;
-    QJsonObject m_systemConfigure, m_userConfigure;
+    QJsonObject m_systemConfigure, m_customConfigure;
 };
 
 #endif // KNCONFIGURE_H

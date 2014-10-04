@@ -58,6 +58,8 @@ KNPluginManager::~KNPluginManager()
     {
         delete m_pluginList.takeFirst();
     }
+    //Save the configure.
+    m_global->saveConfigure();
 }
 
 KNPluginManager::KNPluginManager(QObject *parent) :
@@ -175,8 +177,6 @@ void KNPluginManager::onActionMainWindowDestory()
 {
     //Backup geometry.
     backupWindowGeometry();
-    //Save configure.
-    m_global->saveConfigure();
 }
 
 void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)

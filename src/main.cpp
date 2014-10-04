@@ -50,5 +50,8 @@ int main(int argc, char *argv[])
     //Start application.
     pluginManager->start();
     //Spread message loop.
-    return app.exec();
+    int result=app.exec();
+    //Remove the plugin manager and recover the memory.
+    delete pluginManager;
+    return result;
 }

@@ -100,6 +100,8 @@ void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
         m_headerPlayer=plugin;
         //Configure the header player.
         m_headerPlayer->setBackend(m_backend);
+        //Restore configure.
+        m_headerPlayer->restoreConfigure();
         //Add plugin to the list.
         m_pluginList.append(m_headerPlayer);
         //Add to main window.

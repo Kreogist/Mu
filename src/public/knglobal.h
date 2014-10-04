@@ -25,6 +25,11 @@ public:
     void setSystemData(const QString &key, const int &value);
     void setSystemData(const QString &key, const bool &value);
     QVariant systemData(const QString &key);
+    void setCustomData(const QString &module, const QString &key, const QString &value);
+    void setCustomData(const QString &module, const QString &key, const double &value);
+    void setCustomData(const QString &module, const QString &key, const int &value);
+    void setCustomData(const QString &module, const QString &key, const bool &value);
+    QVariant customData(const QString &module, const QString &key);
 
 signals:
 
