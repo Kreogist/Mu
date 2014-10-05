@@ -284,6 +284,9 @@ void KNMusicBackendBass::initialPlugin(const QString &pluginDirPath)
 #ifdef Q_OS_WIN32
                         BASS_PluginLoad(currentInfo.absoluteFilePath().toStdWString().data(), 0);
 #endif
+#ifdef Q_OS_MACX
+                        BASS_PluginLoad(currentInfo.absoluteFilePath().toStdString().data(), 0);
+#endif
                 //If plugin is load complete, read the plugin info.
                 if(plugin)
                 {

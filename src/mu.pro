@@ -39,11 +39,28 @@ win32{
     }
 }
 
+#UNIX common configure
+unix{
+    LIBS += -ldl
+}
+
+#Mac OS X
+macx{
+    CONFIG += libbass
+    libbass{
+        LIBS += /usr/lib/libbass.dylib
+    }
+    QMAKE_LFLAGS += -framework CoreFoundation
+}
+
+
 libbass{
     DEFINES += ENABLE_LIBBASS
-    SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
+    SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.cpp
-    HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
+    HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.h \
+               plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
 }
 
@@ -91,7 +108,6 @@ SOURCES += \
     plugin/base/knpreference/knpreferenceheaderbutton.cpp \
     public/knfontmanager.cpp \
     plugin/module/knmusicplugin/sdk/knmusicglobal.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.cpp \
     plugin/module/knmusicplugin/sdk/knmusicstandardbackend.cpp \
     plugin/module/knmusicplugin/sdk/knmusicparser.cpp \
     plugin/module/knmusicplugin/sdk/knmusictagpraser.cpp \
@@ -148,7 +164,6 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicbackend.h \
     plugin/module/knmusicplugin/sdk/knmusicglobal.h \
     plugin/module/knmusicplugin/sdk/knmusicbackendthread.h \
-    plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.h \
     plugin/module/knmusicplugin/sdk/knmusicstandardbackend.h \
     plugin/module/knmusicplugin/sdk/knmusicparser.h \
     plugin/module/knmusicplugin/sdk/knmusicanalysiser.h \

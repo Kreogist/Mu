@@ -55,17 +55,29 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                          uniPath.data(),
                                          0,
                                          0,
-                                         BASS_SAMPLE_LOOP |
-                                           BASS_UNICODE |
+                                         BASS_UNICODE |
                                            KNMusicBassGlobal::fdps()))
            && !(m_channel=BASS_MusicLoad(FALSE,
                                          uniPath.data(),
                                          0,
                                          0,
-                                         BASS_SAMPLE_LOOP |
-                                           BASS_UNICODE |
+                                         BASS_UNICODE |
                                            BASS_MUSIC_RAMPS |
                                            KNMusicBassGlobal::fdps(),1)))
+#endif
+#ifdef Q_OS_UNIX
+    std::string uniPath=m_filePath.toStdString();
+    if(!(m_channel=BASS_StreamCreateFile(FALSE,
+                                         uniPath.data(),
+                                         0,
+                                         0,
+                                         KNMusicBassGlobal::fdps()))
+            && !(m_channel=BASS_MusicLoad(FALSE,
+                                          uniPath.data(),
+                                          0,
+                                          0,
+                                          BASS_MUSIC_RAMPS |
+                                          KNMusicBassGlobal::fdps(),1)))
 #endif
     {
         qDebug()<<"Cannot load file.";
