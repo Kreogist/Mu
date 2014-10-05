@@ -23,6 +23,7 @@
 class QBoxLayout;
 class QTimeLine;
 class KNPreferenceTitle;
+class KNPreferenceCategoryList;
 class KNPreferenceCategory : public QWidget
 {
     Q_OBJECT
@@ -39,13 +40,13 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QColor m_backgroundColor=QColor(32,32,32),
+    QColor m_backgroundColor=QColor(42,42,42),
            m_borderColor=QColor(255,255,255,67);
-    int m_listWidth=250,
-        m_borderWidth=4;
+    int m_listWidth=250;
     QBoxLayout *m_layout;
     QString m_configureText;
     KNPreferenceTitle *m_title;
+    KNPreferenceCategoryList *m_categoryList;
 };
 
 #endif // KNPREFERENCECATEGORY_H

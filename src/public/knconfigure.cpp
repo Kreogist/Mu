@@ -28,16 +28,16 @@ void KNConfigure::loadConfigure()
     m_userConfigurePath=m_configurePath+"/user.json";
     //Load the configure.
     loadConfigureFromFile(m_systemConfigurePath, m_systemConfigure);
-    loadConfigureFromFile(m_userConfigurePath, m_userConfigure);
+    loadConfigureFromFile(m_userConfigurePath, m_customConfigure);
 }
 
 void KNConfigure::saveConfigure()
 {
     //Do folder check first.
     checkConfigureFolder();
-    //Save the
+    //Save the configure.
     saveConfigureToFile(m_systemConfigurePath, m_systemConfigure);
-    saveConfigureToFile(m_userConfigurePath, m_userConfigure);
+    saveConfigureToFile(m_userConfigurePath, m_customConfigure);
 }
 
 void KNConfigure::setSystemData(const QString &key,
@@ -46,21 +46,28 @@ void KNConfigure::setSystemData(const QString &key,
     m_systemConfigure[key]=value;
 }
 
-void KNConfigure::setUserData(const QString &module,
-                              const QString &key,
-                              const QJsonValue &value)
+void KNConfigure::setCustomData(const QString &module,
+                                const QString &key,
+                                const QJsonValue &value)
 {
-    QJsonValue currentModuleValue=m_userConfigure[module];
+    QJsonValue currentModuleValue=m_customConfigure[module];
     QJsonObject currentModule=
             currentModuleValue.type()==QJsonValue::Object?
                 currentModuleValue.toObject():QJsonObject();
     currentModule[key]=value;
-    m_userConfigure[module]=currentModule;
+    m_customConfigure[module]=currentModule;
 }
 
 QVariant KNConfigure::systemData(const QString &key)
 {
     return QVariant(m_systemConfigure[key]);
+}
+
+QVariant KNConfigure::customData(const QString &module, const QString &key)
+{
+    QJsonValue currentModuleValue=m_customConfigure[module];
+    return currentModuleValue.type()==QJsonValue::Object?
+              QVariant(currentModuleValue.toObject()[key]):QVariant();
 }
 
 KNConfigure::KNConfigure(QObject *parent) :
@@ -125,7 +132,7 @@ void KNConfigure::loadConfigureFromFile(const QString &filePath,
 }
 
 void KNConfigure::saveConfigureToFile(const QString &filePath,
-                                        const QJsonObject &configureObject)
+                                      const QJsonObject &configureObject)
 {
     //Open the file for writing.
     QFile configureFile(filePath);

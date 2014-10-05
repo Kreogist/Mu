@@ -20,10 +20,16 @@ signals:
     void requirePlayPrevious();
     void requirePlayNext();
     void requireChangeLoopState();
+    void requireShowMainPlayer();
+    void requireShowAppendMenu();
+    void finished();
 
 public slots:
+    virtual void restoreConfigure()=0;
     virtual void setBackend(KNMusicBackend *backend)=0;
+    virtual void onActionLoopStateChanged(const int &state)=0;
     virtual void reset()=0;
+    virtual void play()=0;
     virtual void playFile(const QString &filePath)=0;
     virtual void playSection(const QString &filePath,
                              const qint64 &startPosition,

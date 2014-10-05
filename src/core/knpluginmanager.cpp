@@ -58,6 +58,8 @@ KNPluginManager::~KNPluginManager()
     {
         delete m_pluginList.takeFirst();
     }
+    //Save the configure.
+    m_global->saveConfigure();
 }
 
 KNPluginManager::KNPluginManager(QObject *parent) :
@@ -89,10 +91,18 @@ void KNPluginManager::backupWindowGeometry()
     //Desktop size.
     m_global->setSystemData("desktopWidth", QApplication::desktop()->width());
     m_global->setSystemData("desktopHeight", QApplication::desktop()->height());
+
+    qDebug()<<"Here?!";
 }
 
 void KNPluginManager::recoverWindowGeometry()
 {
+    //Check is the value avaliable.
+    //!FIXME: We need a better way to check is the last record is complete.
+    if(m_global->systemData("windowWidth").isNull())
+    {
+        return;
+    }
     //Recover the window state.
     int windowState=m_global->systemData("windowState").toInt();
     switch(windowState)
@@ -143,9 +153,13 @@ void KNPluginManager::setMainWindow(QMainWindow *mainWindow)
         m_mainWindow=mainWindow;
         //Set the basic property.
         m_mainWindow->setMinimumSize(730, 432);
+        //Set the basic palette.
+        QPalette pal=m_mainWindow->palette();
+        pal.setColor(QPalette::WindowText, QColor(255,255,255));
+        m_mainWindow->setPalette(pal);
         //Connect destory signal.
-        connect(m_mainWindow, SIGNAL(destroyed()),
-                this, SLOT(onActionMainWindowDestory()));
+        connect(m_mainWindow, &QMainWindow::destroyed,
+                this, &KNPluginManager::onActionMainWindowDestory);
         //Recover the geometry.
         recoverWindowGeometry();
     }
@@ -176,10 +190,9 @@ void KNPluginManager::onActionArgumentReceive(const QString &message)
 
 void KNPluginManager::onActionMainWindowDestory()
 {
+    qDebug()<<"Here?!";
     //Backup geometry.
     backupWindowGeometry();
-    //Save configure.
-    m_global->saveConfigure();
 }
 
 void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)

@@ -122,6 +122,8 @@ void KNMusicBackendBassThread::stop()
     {
         //Stop the channel, here is what the specific thing.
         BASS_ChannelStop(m_channel);
+        //Reset position.
+        setPosition(0);
         //Reset the state.
         setState(StoppedState);
         emit stopped();

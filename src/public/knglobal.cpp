@@ -73,6 +73,31 @@ QVariant KNGlobal::systemData(const QString &key)
     return m_configure->systemData(key);
 }
 
+void KNGlobal::setCustomData(const QString &module, const QString &key, const QString &value)
+{
+    m_configure->setCustomData(module, key, value);
+}
+
+void KNGlobal::setCustomData(const QString &module, const QString &key, const double &value)
+{
+    m_configure->setCustomData(module, key, value);
+}
+
+void KNGlobal::setCustomData(const QString &module, const QString &key, const int &value)
+{
+    m_configure->setCustomData(module, key, value);
+}
+
+void KNGlobal::setCustomData(const QString &module, const QString &key, const bool &value)
+{
+    m_configure->setCustomData(module, key, value);
+}
+
+QVariant KNGlobal::customData(const QString &module, const QString &key)
+{
+    return m_configure->customData(module, key);
+}
+
 void KNGlobal::retranslate()
 {
     //Update the storage unit.

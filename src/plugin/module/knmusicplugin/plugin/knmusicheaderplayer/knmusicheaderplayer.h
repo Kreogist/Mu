@@ -27,6 +27,7 @@ class QPropertyAnimation;
 class KNOpacityButton;
 class KNOpacityAnimeButton;
 class KNVolumeSlider;
+class KNGlobal;
 class KNMusicParser;
 class KNScrollLabel;
 class KNProgressSlider;
@@ -38,12 +39,16 @@ class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
     Q_OBJECT
 public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
+    ~KNMusicHeaderPlayer();
 
 signals:
 
 public slots:
+    void restoreConfigure();
     void setBackend(KNMusicBackend *backend);
+    void onActionLoopStateChanged(const int &state);
     void reset();
+    void play();
     void playFile(const QString &filePath);
     void playSection(const QString &filePath,
                      const qint64 &startPosition,
@@ -63,7 +68,6 @@ private slots:
     void onActionProgressPressed();
     void onActionProgressReleased();
     void onActionPositionEdited();
-    void onActionLoopStateChanged(const int &state);
     void setPositionText(const qint64 &position);
     void onActionPlayNPauseClicked();
     void onActionVolumeSliderChanged(const qint64 &value);
@@ -94,11 +98,14 @@ private:
     QRect generateOutPosition();
     QRect generateInPosition();
 
+    void saveConfigure();
+
     bool loadFileInfo(const QString &filePath);
     //Public classes.
     KNMusicGlobal *m_musicGlobal;
     KNMusicParser *m_parser;
     KNMusicBackend *m_backend;
+    KNGlobal *m_global;
 
     //Animations
     QParallelAnimationGroup *m_mouseIn, *m_mouseOut;

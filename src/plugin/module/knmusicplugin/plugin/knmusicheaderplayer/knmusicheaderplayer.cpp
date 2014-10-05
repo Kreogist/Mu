@@ -29,20 +29,25 @@
 #include "knopacitybutton.h"
 #include "knopacityanimebutton.h"
 
+#include "knglobal.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
 
 #include "knmusicheaderplayer.h"
 
+#include <QDebug>
+
 KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent)
 {
     //Set properties.
+    setObjectName("MusicHeaderPlayer");
     setContentsMargins(0,0,0,0);
     setFixedSize(302, 66);
 
     //Initial music global.
+    m_global=KNGlobal::instance();
     m_musicGlobal=KNMusicGlobal::instance();
     m_parser=KNMusicGlobal::parser();
 
@@ -65,6 +70,20 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     initialControlPanel();
     initialVolume();
     initialAppendPanel();
+}
+
+KNMusicHeaderPlayer::~KNMusicHeaderPlayer()
+{
+    saveConfigure();
+}
+
+void KNMusicHeaderPlayer::restoreConfigure()
+{
+    //Set the value, calculate by the range percentage.
+    m_volumeSlider->setValue(
+                m_volumeSlider->minimal()+
+                (double)m_volumeSlider->range()*
+                m_global->customData(objectName(), "Volume").toDouble());
 }
 
 void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
@@ -90,6 +109,8 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
             this, &KNMusicHeaderPlayer::setDuration);
     connect(m_backend, &KNMusicBackend::playingStateChanged,
             this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
+    connect(m_backend, &KNMusicBackend::finished,
+            this, &KNMusicHeaderPlayer::finished);
     connect(m_backend, &KNMusicBackend::muteStateChanged,
             [=](const bool &mute)
             {
@@ -112,6 +133,11 @@ void KNMusicHeaderPlayer::reset()
     setPositionText(0);
     //Ask to reset main thread.
     m_backend->resetMainPlayer();
+}
+
+void KNMusicHeaderPlayer::play()
+{
+    m_backend->play();
 }
 
 void KNMusicHeaderPlayer::playFile(const QString &filePath)
@@ -546,15 +572,15 @@ void KNMusicHeaderPlayer::initialAppendPanel()
     m_showMainPlayer->setFixedSize(14,14);
     m_showMainPlayer->setIcon(QPixmap(":/plugin/music/player/fullscreen.png"));
     panelLayout->addWidget(m_showMainPlayer);
-//    connect(m_showMainPlayer, &KNOpacityAnimeButton::clicked,
-//            this, &KNMusicHeaderPlayer::requireShowMainPlayer);
+    connect(m_showMainPlayer, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicHeaderPlayer::requireShowMainPlayer);
     //Show append menu.
     m_showAppendMenu=new KNOpacityAnimeButton(this);
     m_showAppendMenu->setFixedSize(14,14);
     m_showAppendMenu->setIcon(QPixmap(":/plugin/music/player/menu.png"));
     panelLayout->addWidget(m_showAppendMenu);
-//    connect(m_showAppendMenu, &KNOpacityAnimeButton::clicked,
-//            this, &KNMusicHeaderPlayer::requireShowAppendMenu);
+    connect(m_showAppendMenu, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicHeaderPlayer::requireShowAppendMenu);
     panelLayout->addStretch();
 
     //Initial the append panel animation.
@@ -633,6 +659,11 @@ QRect KNMusicHeaderPlayer::generateInPosition()
                  5,
                  width(),
                  40);
+}
+
+void KNMusicHeaderPlayer::saveConfigure()
+{
+    m_global->setCustomData(objectName(), "Volume", (double)m_volumeSlider->percentage());
 }
 
 bool KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)

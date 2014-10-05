@@ -15,34 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNPREFERENCETITLE_H
-#define KNPREFERENCETITLE_H
+#ifndef KNPREFERENCECATEGORYLIST_H
+#define KNPREFERENCECATEGORYLIST_H
 
 #include <QWidget>
 
-class QLabel;
-class KNPreferenceHeaderButton;
-class KNPreferenceTitle : public QWidget
+#include "knpreferencecategoryitem.h"
+
+class QBoxLayout;
+class KNPreferenceCategoryList : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNPreferenceTitle(QWidget *parent = 0);
+    explicit KNPreferenceCategoryList(QWidget *parent = 0);
 
 signals:
-    void requireHidePreference();
 
 public slots:
-    void retranslate();
-
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void paintEvent(QPaintEvent *event);
+    void addCategory(const QString &text, const QPixmap &pixmap);
 
 private:
-    QLabel *m_title;
-    KNPreferenceHeaderButton *m_headerButton;
-    QLinearGradient m_highlightGradient;
-    int m_titleX=93, m_highlightHeight=64;
+    QBoxLayout *m_mainLayout;
+    int m_currentIndex=-1;
 };
 
-#endif // KNPREFERENCETITLE_H
+#endif // KNPREFERENCECATEGORYLIST_H

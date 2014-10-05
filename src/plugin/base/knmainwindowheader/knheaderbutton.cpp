@@ -139,6 +139,10 @@ void KNHeaderButton::initialText()
     //Initial the text displayer.
     m_text=new QLabel(this);
     m_text->move(m_leftMargin, m_textY);
+    //Configure the palette.
+    QPalette pal=m_text->palette();
+    pal.setColor(QPalette::WindowText, QColor(255,255,255));
+    m_text->setPalette(pal);
     //Configure the font.
     m_textFont=m_text->font();
     m_textFont.setBold(true);

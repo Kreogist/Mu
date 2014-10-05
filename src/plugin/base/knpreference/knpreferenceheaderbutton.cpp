@@ -118,7 +118,7 @@ void KNPreferenceHeaderButton::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
     //Draw the background.
     painter.setPen(Qt::NoPen);
-    painter.setBrush(palette().background());
+    painter.setBrush(palette().window());
     painter.drawPath(m_border);
     //Draw the close icon.
     painter.setOpacity(m_closeIconOpacity);
