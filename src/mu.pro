@@ -105,7 +105,10 @@ SOURCES += \
     plugin/sdk/knopacityanimebutton.cpp \
     plugin/sdk/knopacitybutton.cpp \
     plugin/sdk/knvolumeslider.cpp \
-    plugin/sdk/kncancellineedit.cpp
+    plugin/sdk/kncancellineedit.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.cpp \
+    plugin/base/knpreference/knpreferencecategorylist.cpp \
+    plugin/base/knpreference/knpreferencecategoryitem.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -165,7 +168,11 @@ HEADERS += \
     plugin/sdk/knopacityanimebutton.h \
     plugin/sdk/knopacitybutton.h \
     plugin/sdk/knvolumeslider.h \
-    plugin/sdk/kncancellineedit.h
+    plugin/sdk/kncancellineedit.h \
+    plugin/module/knmusicplugin/sdk/knmusicnowplayingbase.h \
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.h \
+    plugin/base/knpreference/knpreferencecategorylist.h \
+    plugin/base/knpreference/knpreferencecategoryitem.h
 
 RESOURCES += \
     resource/res.qrc

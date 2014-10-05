@@ -46,7 +46,9 @@ signals:
 public slots:
     void restoreConfigure();
     void setBackend(KNMusicBackend *backend);
+    void onActionLoopStateChanged(const int &state);
     void reset();
+    void play();
     void playFile(const QString &filePath);
     void playSection(const QString &filePath,
                      const qint64 &startPosition,
@@ -66,7 +68,6 @@ private slots:
     void onActionProgressPressed();
     void onActionProgressReleased();
     void onActionPositionEdited();
-    void onActionLoopStateChanged(const int &state);
     void setPositionText(const qint64 &position);
     void onActionPlayNPauseClicked();
     void onActionVolumeSliderChanged(const qint64 &value);

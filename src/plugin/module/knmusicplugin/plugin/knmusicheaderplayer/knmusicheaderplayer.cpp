@@ -109,6 +109,8 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
             this, &KNMusicHeaderPlayer::setDuration);
     connect(m_backend, &KNMusicBackend::playingStateChanged,
             this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
+    connect(m_backend, &KNMusicBackend::finished,
+            this, &KNMusicHeaderPlayer::finished);
     connect(m_backend, &KNMusicBackend::muteStateChanged,
             [=](const bool &mute)
             {
@@ -131,6 +133,11 @@ void KNMusicHeaderPlayer::reset()
     setPositionText(0);
     //Ask to reset main thread.
     m_backend->resetMainPlayer();
+}
+
+void KNMusicHeaderPlayer::play()
+{
+    m_backend->play();
 }
 
 void KNMusicHeaderPlayer::playFile(const QString &filePath)

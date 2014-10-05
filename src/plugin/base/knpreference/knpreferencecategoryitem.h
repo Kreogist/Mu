@@ -15,34 +15,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNPREFERENCETITLE_H
-#define KNPREFERENCETITLE_H
+#ifndef KNPREFERENCECATEGORYITEM_H
+#define KNPREFERENCECATEGORYITEM_H
 
-#include <QWidget>
+#include <QPixmap>
 
-class QLabel;
-class KNPreferenceHeaderButton;
-class KNPreferenceTitle : public QWidget
+#include "knanimecheckedbutton.h"
+
+class KNPreferenceCategoryItem : public KNAnimeCheckedButton
 {
     Q_OBJECT
 public:
-    explicit KNPreferenceTitle(QWidget *parent = 0);
+    explicit KNPreferenceCategoryItem(QWidget *parent = 0);
+    QPixmap icon() const;
+    void setIcon(const QPixmap &icon);
+    QString text() const;
+    void setText(const QString &text);
 
 signals:
-    void requireHidePreference();
 
 public slots:
-    void retranslate();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    void startMouseInAnime();
+    void startMouseOutAnime();
+    void startMouseDownAnime();
+    void startMouseUpAnime();
+
     void paintEvent(QPaintEvent *event);
 
 private:
-    QLabel *m_title;
-    KNPreferenceHeaderButton *m_headerButton;
-    QLinearGradient m_highlightGradient;
-    int m_titleX=93, m_highlightHeight=64;
+    QPixmap m_icon;
+    QString m_text;
+    qreal m_backgroundOpacity=0.0;
 };
 
-#endif // KNPREFERENCETITLE_H
+#endif // KNPREFERENCECATEGORYITEM_H

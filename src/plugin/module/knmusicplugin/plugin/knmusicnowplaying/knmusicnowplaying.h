@@ -15,34 +15,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNPREFERENCETITLE_H
-#define KNPREFERENCETITLE_H
+#ifndef KNMUSICNOWPLAYING_H
+#define KNMUSICNOWPLAYING_H
 
-#include <QWidget>
+#include "knmusicnowplayingbase.h"
 
-class QLabel;
-class KNPreferenceHeaderButton;
-class KNPreferenceTitle : public QWidget
+class KNMusicNowPlaying : public KNMusicNowPlayingBase
 {
     Q_OBJECT
 public:
-    explicit KNPreferenceTitle(QWidget *parent = 0);
+    explicit KNMusicNowPlaying(QObject *parent = 0);
+    void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
 
 signals:
-    void requireHidePreference();
 
 public slots:
-    void retranslate();
-
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void paintEvent(QPaintEvent *event);
+    void playNext();
+    void playPrevious();
+    void onActionPlayingFinished();
+    void changeLoopState();
 
 private:
-    QLabel *m_title;
-    KNPreferenceHeaderButton *m_headerButton;
-    QLinearGradient m_highlightGradient;
-    int m_titleX=93, m_highlightHeight=64;
+    KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
+    int m_loopMode=NoRepeat;
 };
 
-#endif // KNPREFERENCETITLE_H
+#endif // KNMUSICNOWPLAYING_H

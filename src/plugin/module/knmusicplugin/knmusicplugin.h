@@ -26,6 +26,7 @@ class KNMusicBackend;
 class KNMusicGlobal;
 class KNMusicParser;
 class KNMusicHeaderPlayerBase;
+class KNMusicNowPlayingBase;
 class KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
@@ -39,6 +40,7 @@ public:
 
     void loadBackend(KNMusicBackend *plugin);
     void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
+    void loadNowPlaying(KNMusicNowPlayingBase *plugin);
 
 signals:
 

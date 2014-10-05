@@ -14,6 +14,17 @@ class KNMusicBackendThread : public QObject
     Q_OBJECT
 public:
     KNMusicBackendThread(QObject *parent = 0):QObject(parent){}
+    virtual void loadFromFile(const QString &filePath)=0;
+    virtual void clear()=0;
+    virtual void resetState()=0;
+    virtual void stop()=0;
+    virtual void pause()=0;
+    virtual void play()=0;
+    virtual int volume()=0;
+    virtual qint64 duration()=0;
+    virtual qint64 position()=0;
+    virtual void playSection(const qint64 &sectionStart=-1,
+                             const qint64 &sectionDuration=-1)=0;
 
 signals:
     void durationChanged(qint64 duration);
@@ -23,6 +34,8 @@ signals:
     void stopped();
 
 public slots:
+    virtual void setVolume(const float &volumeSize)=0;
+    virtual void setPosition(const qint64 &position)=0;
 
 };
 

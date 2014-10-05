@@ -24,10 +24,12 @@
 #include "knmusicbackend.h"
 #include "knmusicparser.h"
 #include "knmusicheaderplayerbase.h"
+#include "knmusicnowplayingbase.h"
 
 //Plugins
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
+#include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 
 #include "kncategorytabwidget.h"
 #include "knmusicplugin.h"
@@ -45,7 +47,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     //Load plugins.
     loadBackend(new KNMusicBackendBass);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
-    m_headerPlayer->playFile("D:/音乐/Compact Discs/[130724] TVアニメ「ラブライブ！」ユニットシングル 2nd session「Cutie Panther」／BiBi (FLAC+BK)/01. Cutie Panther.flac");
+    loadNowPlaying(new KNMusicNowPlaying);
 
     //Do the translation at the last.
     retranslate();
@@ -107,6 +109,12 @@ void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
         //Add to main window.
         addLeftHeaderWidget(m_headerPlayer);
     }
+}
+
+void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
+{
+    m_pluginList.append(plugin);
+    plugin->setHeaderPlayer(m_headerPlayer);
 }
 
 void KNMusicPlugin::retranslate()

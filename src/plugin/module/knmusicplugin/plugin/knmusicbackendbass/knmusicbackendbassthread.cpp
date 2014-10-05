@@ -55,15 +55,13 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                          uniPath.data(),
                                          0,
                                          0,
-                                         BASS_SAMPLE_LOOP |
-                                           BASS_UNICODE |
+                                         BASS_UNICODE |
                                            KNMusicBassGlobal::fdps()))
            && !(m_channel=BASS_MusicLoad(FALSE,
                                          uniPath.data(),
                                          0,
                                          0,
-                                         BASS_SAMPLE_LOOP |
-                                           BASS_UNICODE |
+                                         BASS_UNICODE |
                                            BASS_MUSIC_RAMPS |
                                            KNMusicBassGlobal::fdps(),1)))
 #endif
@@ -110,6 +108,8 @@ void KNMusicBackendBassThread::stop()
     {
         //Stop the channel, here is what the specific thing.
         BASS_ChannelStop(m_channel);
+        //Reset position.
+        setPosition(0);
         //Reset the state.
         setState(StoppedState);
         emit stopped();

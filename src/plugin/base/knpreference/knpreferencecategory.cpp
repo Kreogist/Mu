@@ -20,6 +20,7 @@
 #include <QBrush>
 
 #include "knpreferencetitle.h"
+#include "knpreferencecategorylist.h"
 
 #include "knpreferencecategory.h"
 
@@ -42,7 +43,11 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
             this, &KNPreferenceCategory::requireHidePreference);
     m_layout->addWidget(m_title);
 
-    m_layout->addStretch();
+    //Initial the category list.
+    m_categoryList=new KNPreferenceCategoryList(this);
+    m_layout->addWidget(m_categoryList, 1);
+
+    m_categoryList->addCategory("General", QPixmap(":/plugin/configure/common/icon.png"));
 
     //Set translation.
     retranslate();
@@ -66,6 +71,4 @@ void KNPreferenceCategory::paintEvent(QPaintEvent *event)
     painter.drawRect(rect());
     //Draw other things.
     QWidget::paintEvent(event);
-    //Paint the shadow here.
-    ;
 }
