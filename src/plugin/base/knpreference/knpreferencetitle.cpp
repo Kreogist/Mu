@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QLabel>
-#include <QPainter>
 #include <QResizeEvent>
 
 #include "knpreferenceheaderbutton.h"
@@ -30,12 +29,6 @@ KNPreferenceTitle::KNPreferenceTitle(QWidget *parent) :
     setContentsMargins(30,0,0,0);
     //Set the height to fit the button.
     setFixedHeight(64);
-
-    //Set the highlight gradient.
-    m_highlightGradient.setStart(0,0);
-    m_highlightGradient.setFinalStop(0, m_highlightHeight);
-    m_highlightGradient.setColorAt(0, QColor(255,255,255,40));
-    m_highlightGradient.setColorAt(1, QColor(255,255,255,0));
 
     //Initial header button.
     m_headerButton=new KNPreferenceHeaderButton(this);
@@ -74,20 +67,4 @@ void KNPreferenceTitle::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
     //Resize the title.
     m_title->resize(width()-m_titleX, height());
-}
-
-void KNPreferenceTitle::paintEvent(QPaintEvent *event)
-{
-    //Draw other things.
-    QWidget::paintEvent(event);
-    //Initial the antialiasing painter.
-    QPainter painter(this);
-    painter.setRenderHints(QPainter::Antialiasing |
-                           QPainter::TextAntialiasing |
-                           QPainter::SmoothPixmapTransform,
-                           true);
-    //Paint the background.
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(m_highlightGradient);
-    painter.drawRect(0,0,width(),64);
 }

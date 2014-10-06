@@ -42,7 +42,8 @@ protected:
 private:
     QColor m_backgroundColor=QColor(42,42,42),
            m_borderColor=QColor(255,255,255,67);
-    int m_listWidth=250;
+    int m_listWidth=250, m_shadowWidth=20, m_highlightHeight=64;
+    QLinearGradient m_highlightGradient;
     QBoxLayout *m_layout;
     QString m_configureText;
     KNPreferenceTitle *m_title;

@@ -37,6 +37,12 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     m_layout->setSpacing(0);
     setLayout(m_layout);
 
+    //Set the highlight gradient.
+    m_highlightGradient.setStart(0,0);
+    m_highlightGradient.setFinalStop(0, m_highlightHeight);
+    m_highlightGradient.setColorAt(0, QColor(255,255,255,40));
+    m_highlightGradient.setColorAt(1, QColor(255,255,255,0));
+
     //Initial the header button.
     m_title=new KNPreferenceTitle(this);
     connect(m_title, &KNPreferenceTitle::requireHidePreference,
@@ -60,15 +66,27 @@ void KNPreferenceCategory::retranslate()
 
 void KNPreferenceCategory::paintEvent(QPaintEvent *event)
 {
-    //Initial antialiasing painter.
+    //Initial the antialiasing painter.
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform,
+                           true);
     //Paint the background.
     painter.setPen(Qt::NoPen);
     painter.setBrush(m_backgroundColor);
     painter.drawRect(rect());
+    //Paint the highlight.
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(m_highlightGradient);
+    painter.drawRect(0,0,width(),64);
     //Draw other things.
     QWidget::paintEvent(event);
+    //Paint the shadow.
+    QLinearGradient shadowGradient(m_shadowWidth,0,0,0);
+    shadowGradient.setColorAt(0, QColor(0,0,0,100));
+    shadowGradient.setColorAt(1, QColor(0,0,0,0));
+    painter.setBrush(shadowGradient);
+    painter.translate(width()-m_shadowWidth, 0);
+    painter.drawRect(0,0,m_shadowWidth,height());
 }

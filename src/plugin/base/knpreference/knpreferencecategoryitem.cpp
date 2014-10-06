@@ -17,16 +17,31 @@
  */
 #include <QPaintEvent>
 #include <QPainter>
+#include <QTimeLine>
 
 #include "knpreferencecategoryitem.h"
+
+#include <QDebug>
 
 KNPreferenceCategoryItem::KNPreferenceCategoryItem(QWidget *parent) :
     KNAnimeCheckedButton(parent)
 {
+    //Set properties.
+    setFixedHeight(m_itemHeight);
+
+    //Set the font.
+    QFont itemFont=font();
+    itemFont.setPixelSize(15);
+    setFont(itemFont);
+
+    //Set palette.
     QPalette pal=palette();
     pal.setColor(QPalette::WindowText, QColor(255,255,255));
     setPalette(pal);
-    setMinimumHeight(25);
+
+    //Set timeline
+    m_mouseIn=new QTimeLine(200, this);
+    ;
 }
 
 QPixmap KNPreferenceCategoryItem::icon() const
@@ -73,7 +88,7 @@ void KNPreferenceCategoryItem::startMouseUpAnime()
 
 void KNPreferenceCategoryItem::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event)
+    QWidget::paintEvent(event);
     //Initial the painter.
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing |
@@ -86,7 +101,13 @@ void KNPreferenceCategoryItem::paintEvent(QPaintEvent *event)
     painter.setBrush(palette().window());
     painter.drawRect(rect());
     //Draw the text and the icon to the position.
+    painter.setOpacity(1.0);
     painter.setPen(palette().color(QPalette::WindowText));
-    painter.drawText(0,0,m_text);
-    painter.drawText(0,0,"laksdjf;laskdjf;laksdjf");
+    painter.setFont(font());
+    painter.drawText(m_textX,
+                     0,
+                     width()-m_textX,
+                     height(),
+                     Qt::AlignLeft | Qt::AlignVCenter,
+                     m_text);
 }

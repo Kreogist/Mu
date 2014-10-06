@@ -36,13 +36,11 @@ public slots:
 
 protected:
     void resizeEvent(QResizeEvent *event);
-    void paintEvent(QPaintEvent *event);
 
 private:
     QLabel *m_title;
     KNPreferenceHeaderButton *m_headerButton;
-    QLinearGradient m_highlightGradient;
-    int m_titleX=93, m_highlightHeight=64;
+    int m_titleX=93;
 };
 
 #endif // KNPREFERENCETITLE_H
