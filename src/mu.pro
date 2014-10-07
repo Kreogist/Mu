@@ -124,7 +124,10 @@ SOURCES += \
     plugin/sdk/kncancellineedit.cpp \
     plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.cpp \
     plugin/base/knpreference/knpreferencecategorylist.cpp \
-    plugin/base/knpreference/knpreferencecategoryitem.cpp
+    plugin/base/knpreference/knpreferencecategoryitem.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicproxymodel.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicmodel.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicproxymodelpool.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -187,7 +190,10 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicnowplayingbase.h \
     plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.h \
     plugin/base/knpreference/knpreferencecategorylist.h \
-    plugin/base/knpreference/knpreferencecategoryitem.h
+    plugin/base/knpreference/knpreferencecategoryitem.h \
+    plugin/module/knmusicplugin/sdk/knmusicproxymodel.h \
+    plugin/module/knmusicplugin/sdk/knmusicmodel.h \
+    plugin/module/knmusicplugin/sdk/knmusicproxymodelpool.h
 
 RESOURCES += \
     resource/res.qrc
