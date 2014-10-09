@@ -108,7 +108,7 @@ void KNCategorySwitcherWidget::initialTimeLine(QTimeLine *timeline)
 void KNCategorySwitcherWidget::initialButtons()
 {
     m_settingButton=new KNCategorySettingButton(this);
-    m_settingButton->setIcon(QPixmap(":/plugin/configure/common/icon.png"));
+    m_settingButton->setIcon(QPixmap(":/plugin/configure/general/icon.png"));
     m_settingButton->setText(tr("Preference"));
     connect(m_settingButton, &KNCategorySettingButton::clicked,
             [=]

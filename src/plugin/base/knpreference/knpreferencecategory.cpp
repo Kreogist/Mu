@@ -37,6 +37,12 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     m_layout->setSpacing(0);
     setLayout(m_layout);
 
+    //Set the highlight gradient.
+    m_highlightGradient.setStart(0,0);
+    m_highlightGradient.setFinalStop(0, m_highlightHeight);
+    m_highlightGradient.setColorAt(0, QColor(255,255,255,40));
+    m_highlightGradient.setColorAt(1, QColor(255,255,255,0));
+
     //Initial the header button.
     m_title=new KNPreferenceTitle(this);
     connect(m_title, &KNPreferenceTitle::requireHidePreference,
@@ -45,30 +51,90 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
 
     //Initial the category list.
     m_categoryList=new KNPreferenceCategoryList(this);
+    connect(m_categoryList, &KNPreferenceCategoryList::currentIndexChanged,
+            this, &KNPreferenceCategory::onActionIndexChanged);
     m_layout->addWidget(m_categoryList, 1);
 
-    m_categoryList->addCategory("General", QPixmap(":/plugin/configure/common/icon.png"));
+    addCategory("General",
+                QPixmap(":/plugin/configure/general/icon.png"),
+                QPixmap(":/plugin/configure/general/headicon.png"));
 
     //Set translation.
     retranslate();
 }
 
+int KNPreferenceCategory::currentIndex() const
+{
+    return m_categoryList->currentIndex();
+}
+
+void KNPreferenceCategory::addCategory(const QString &title,
+                                       const QPixmap &icon,
+                                       const QPixmap &headerIcon)
+{
+    //Add to the list.
+    m_categoryList->addCategory(title, icon);
+    //Save the header icon.
+    m_headerIcons.append(headerIcon);
+}
+
+void KNPreferenceCategory::setCurrentIndex(const int &index)
+{
+    //Check is the index available.
+    if(index>-1 && index<m_categoryList->itemCount())
+    {
+        //Set to the index.
+        m_categoryList->setCurrentIndex(index);
+    }
+}
+
 void KNPreferenceCategory::retranslate()
 {
-    m_configureText=tr("Preference");
+    m_categoryList->setCategoryText(0, tr("General"));
+}
+
+void KNPreferenceCategory::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    //Check is the index avaliable.
+    //If the index is still -1, but the list is not empty, set it to the first
+    //category.
+    if(currentIndex()==-1)
+    {
+        setCurrentIndex(0);
+    }
 }
 
 void KNPreferenceCategory::paintEvent(QPaintEvent *event)
 {
-    //Initial antialiasing painter.
+    //Initial the antialiasing painter.
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform,
+                           true);
     //Paint the background.
     painter.setPen(Qt::NoPen);
     painter.setBrush(m_backgroundColor);
     painter.drawRect(rect());
+    //Paint the highlight.
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(m_highlightGradient);
+    painter.drawRect(0,0,width(),64);
     //Draw other things.
     QWidget::paintEvent(event);
+    //Paint the shadow.
+    QLinearGradient shadowGradient(m_shadowWidth,0,0,0);
+    shadowGradient.setColorAt(0, QColor(0,0,0,90));
+    shadowGradient.setColorAt(1, QColor(0,0,0,0));
+    painter.setBrush(shadowGradient);
+    painter.translate(width()-m_shadowWidth, 0);
+    painter.drawRect(0,0,m_shadowWidth,height());
+}
+
+void KNPreferenceCategory::onActionIndexChanged(const int &index)
+{
+    //Set the header icon and text.
+    m_title->setTitleIcon(m_headerIcons.at(index));
+    m_title->setTitleText(m_categoryList->categoryText(index));
 }

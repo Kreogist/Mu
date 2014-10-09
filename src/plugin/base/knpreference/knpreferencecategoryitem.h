@@ -22,6 +22,7 @@
 
 #include "knanimecheckedbutton.h"
 
+class QTimeLine;
 class KNPreferenceCategoryItem : public KNAnimeCheckedButton
 {
     Q_OBJECT
@@ -44,10 +45,18 @@ protected:
 
     void paintEvent(QPaintEvent *event);
 
+private slots:
+    void onActionMouseInOut(const int &frame);
+
 private:
+    void configureTimeLine(QTimeLine *timeLine);
     QPixmap m_icon;
     QString m_text;
     qreal m_backgroundOpacity=0.0;
+    int m_itemHeight=40, m_textMinimalX=15, m_textX=m_textMinimalX,
+        m_progress=0, m_iconSize=30, m_shadowHeight=5;
+    QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseDown, *m_mouseUp;
+    QLinearGradient m_shadowGradient;
 };
 
 #endif // KNPREFERENCECATEGORYITEM_H

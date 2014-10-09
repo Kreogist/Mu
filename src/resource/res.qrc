@@ -38,6 +38,7 @@
         <file>music/playlist/playlist_add.png</file>
         <file>music/playlist/playlist_import.png</file>
         <file>music/common/noalbum.png</file>
-        <file>configure/common/icon.png</file>
+        <file>configure/general/icon.png</file>
+        <file>configure/general/headicon.png</file>
     </qresource>
 </RCC>

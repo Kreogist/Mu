@@ -50,7 +50,6 @@ private slots:
 
 private:
     bool m_pressed=false, m_checked=false;
-
 };
 
 #endif // KNANIMECHECKEDBUTTON_H

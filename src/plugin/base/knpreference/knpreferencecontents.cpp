@@ -20,5 +20,11 @@
 KNPreferenceContents::KNPreferenceContents(QWidget *parent) :
     QWidget(parent)
 {
-    ;
+    //Set properties.
+    setAutoFillBackground(true);
+
+    //Set palette.
+    QPalette pal=palette();
+    pal.setColor(QPalette::Window, QColor(100,100,100));
+    setPalette(pal);
 }

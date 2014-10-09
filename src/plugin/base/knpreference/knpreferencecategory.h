@@ -18,6 +18,8 @@
 #ifndef KNPREFERENCECATEGORY_H
 #define KNPREFERENCECATEGORY_H
 
+#include <QList>
+#include <QPixmap>
 #include <QWidget>
 
 class QBoxLayout;
@@ -29,22 +31,34 @@ class KNPreferenceCategory : public QWidget
     Q_OBJECT
 public:
     explicit KNPreferenceCategory(QWidget *parent = 0);
+    int currentIndex() const;
 
 signals:
     void requireHidePreference();
 
 public slots:
+    void addCategory(const QString &title,
+                     const QPixmap &icon,
+                     const QPixmap &headerIcon);
+    void setCurrentIndex(const int &index);
     void retranslate();
 
 protected:
+    void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *event);
 
+private slots:
+    void onActionIndexChanged(const int &index);
+
 private:
+    void syncTitle();
     QColor m_backgroundColor=QColor(42,42,42),
            m_borderColor=QColor(255,255,255,67);
-    int m_listWidth=250;
+    int m_listWidth=250, m_shadowWidth=15, m_highlightHeight=64;
+    QLinearGradient m_highlightGradient;
     QBoxLayout *m_layout;
-    QString m_configureText;
+    QString m_generalText;
+    QList<QPixmap> m_headerIcons;
     KNPreferenceTitle *m_title;
     KNPreferenceCategoryList *m_categoryList;
 };

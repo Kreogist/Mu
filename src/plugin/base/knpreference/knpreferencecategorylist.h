@@ -19,23 +19,35 @@
 #define KNPREFERENCECATEGORYLIST_H
 
 #include <QWidget>
+#include <QList>
 
 #include "knpreferencecategoryitem.h"
 
 class QBoxLayout;
+class QSignalMapper;
 class KNPreferenceCategoryList : public QWidget
 {
     Q_OBJECT
 public:
     explicit KNPreferenceCategoryList(QWidget *parent = 0);
+    QString categoryText(const int &index) const;
+    int currentIndex() const;
+    int itemCount() const;
 
 signals:
+    void currentIndexChanged(const int &index);
 
 public slots:
     void addCategory(const QString &text, const QPixmap &pixmap);
+    void setCategoryText(const int &index, const QString &caption);
+    void setCurrentIndex(const int &index);
+
+private slots:
 
 private:
     QBoxLayout *m_mainLayout;
+    QList<KNPreferenceCategoryItem *> m_itemList;
+    QSignalMapper *m_buttonMapper;
     int m_currentIndex=-1;
 };
 

@@ -34,6 +34,16 @@ void KNAnimeCheckedButton::setChecked(bool checked)
     if(checked!=m_checked)
     {
         m_checked=checked;
+        //If we change the state, so we need to change the UI.
+        if(m_checked)
+        {
+            startMouseUpAnime();
+        }
+        else
+        {
+            startMouseOutAnime();
+        }
+        //Emit toggled signal.
         emit toggled(m_checked);
         onCheckedChanged();
     }
