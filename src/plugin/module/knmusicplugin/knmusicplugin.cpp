@@ -24,11 +24,13 @@
 #include "knmusicbackend.h"
 #include "knmusicparser.h"
 #include "knmusicheaderplayerbase.h"
+#include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
 
 //Plugins
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
+#include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 
 #include "kncategorytabwidget.h"
@@ -47,7 +49,10 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     //Load plugins.
     loadBackend(new KNMusicBackendBass);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
+    loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadNowPlaying(new KNMusicNowPlaying);
+
+    m_headerPlayer->playFile("/Users/Saki/Music/RO-KYU-BU! - SHOOT！.mp3");
 
     //Do the translation at the last.
     retranslate();
@@ -109,6 +114,17 @@ void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
         //Add to main window.
         addLeftHeaderWidget(m_headerPlayer);
     }
+}
+
+void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
+{
+    //Add plugin to the list.
+    m_pluginList.append(plugin);
+    //Link the display to the header player.
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireLoadLyrics,
+            plugin, &KNMusicHeaderLyricsBase::loadLyricsForMusic);
+    //Add widget to the header.
+    addLeftHeaderWidget(plugin, 1);
 }
 
 void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)

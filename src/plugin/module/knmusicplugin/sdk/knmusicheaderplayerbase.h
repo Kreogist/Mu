@@ -22,6 +22,7 @@ signals:
     void requireChangeLoopState();
     void requireShowMainPlayer();
     void requireShowAppendMenu();
+    void requireLoadLyrics(QString musicFilePath);
     void finished();
 
 public slots:

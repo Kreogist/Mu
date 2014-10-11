@@ -673,6 +673,7 @@ bool KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
     {
         return false;
     }
+    //Save the new file path and emit file path changed signal.
     m_currentFilePath=filePath;
     //Create a detail data.
     KNMusicDetailInfo detailInfo;
@@ -686,5 +687,7 @@ bool KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
     QPixmap coverImage=QPixmap::fromImage(detailInfo.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
     //!FIXME: Set the new data.
+    //Ask to load lyrics.
+    emit requireLoadLyrics(m_currentFilePath);
     return true;
 }
