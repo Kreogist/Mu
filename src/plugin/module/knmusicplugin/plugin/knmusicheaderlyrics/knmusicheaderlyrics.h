@@ -20,6 +20,7 @@
 
 #include "knmusicheaderlyricsbase.h"
 
+class QTimeLine;
 class KNMusicLyricsManager;
 class KNMusicHeaderLyrics : public KNMusicHeaderLyricsBase
 {
@@ -27,14 +28,34 @@ class KNMusicHeaderLyrics : public KNMusicHeaderLyricsBase
 public:
     explicit KNMusicHeaderLyrics(QWidget *parent = 0);
     ~KNMusicHeaderLyrics();
+    void setHeaderPlayer(KNMusicHeaderPlayerBase *player);
 
 signals:
 
 public slots:
+    void reset();
     void loadLyricsForMusic(const QString &filePath);
+    void onActionPositionChange(const qint64 &position);
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
+private slots:
+    void onActionLyricsMoved(const int &frame);
 
 private:
+    inline QSize lyricsSize(const QString &lyricsText)
+    {
+        return fontMetrics().size(Qt::TextExpandTabs,
+                                  lyricsText);
+    }
+
     KNMusicLyricsManager *m_lyricsManager;
+    QTimeLine *m_moveToCurrent;
+    int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,
+        m_leftSpacing=15;
+    QColor m_normalText=QColor(100,100,100),
+           m_highlightColor=QColor(0xf7, 0xcf, 0x3d);
 };
 
 #endif // KNMUSICHEADERLYRICS_H

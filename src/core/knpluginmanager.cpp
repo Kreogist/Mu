@@ -91,8 +91,6 @@ void KNPluginManager::backupWindowGeometry()
     //Desktop size.
     m_global->setSystemData("desktopWidth", QApplication::desktop()->width());
     m_global->setSystemData("desktopHeight", QApplication::desktop()->height());
-
-    qDebug()<<"Here?!";
 }
 
 void KNPluginManager::recoverWindowGeometry()
@@ -190,7 +188,6 @@ void KNPluginManager::onActionArgumentReceive(const QString &message)
 
 void KNPluginManager::onActionMainWindowDestory()
 {
-    qDebug()<<"Here?!";
     //Backup geometry.
     backupWindowGeometry();
 }

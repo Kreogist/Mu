@@ -314,6 +314,7 @@ void KNMusicHeaderPlayer::onActionInOutOpacityChange(const QVariant &value)
 
 void KNMusicHeaderPlayer::onActionPositionChanged(const qint64 &position)
 {
+    emit positionChanged(position);
     if(!m_progressPressed)
     {
         m_progressSlider->setValue(position);

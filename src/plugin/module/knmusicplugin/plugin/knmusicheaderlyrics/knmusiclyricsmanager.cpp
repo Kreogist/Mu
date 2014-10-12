@@ -30,6 +30,21 @@ KNMusicLyricsManager *KNMusicLyricsManager::instance()
     return m_instance==nullptr?m_instance=new KNMusicLyricsManager:m_instance;
 }
 
+int KNMusicLyricsManager::lines() const
+{
+    return m_positions.size();
+}
+
+qint64 KNMusicLyricsManager::positionAt(const int &index) const
+{
+    return m_positions.at(index);
+}
+
+QString KNMusicLyricsManager::lyricsAt(const int &index) const
+{
+    return m_lyricsText.at(index);
+}
+
 void KNMusicLyricsManager::loadLyricsForFile(const QString &filePath)
 {
     //Clear the lyrics.

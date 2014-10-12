@@ -43,8 +43,11 @@ void KNMusicLRCParser::parseFile(const QString &filePath,
                                  QList<qint64> &positions,
                                  QStringList &lyricsText)
 {
-    QStringList lyricsRawData;
+    //-------Clear the data---------
+    positions.clear();
+    lyricsText.clear();
     //-------Read the file---------
+    QStringList lyricsRawData;
     //Open the lyric file.
     QFile lyricsFile(filePath);
     if(!lyricsFile.open(QIODevice::ReadOnly))
@@ -149,7 +152,7 @@ void KNMusicLRCParser::parseFrame(const QString &frame,
         return;
     }
     LRCFrame currentFrame;
-    currentFrame.position=testData.toLongLong()*600000+
+    currentFrame.position=testData.toLongLong()*60000+
             frameData.mid(colonPos+1, secondChar-colonPos-1).toLongLong()*1000+
             frameData.mid(secondChar+1).toLongLong()*10;
     currentFrame.text=lineData;

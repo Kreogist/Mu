@@ -24,6 +24,7 @@ signals:
     void requireShowAppendMenu();
     void requireLoadLyrics(QString musicFilePath);
     void finished();
+    void positionChanged(qint64 position);
 
 public slots:
     virtual void restoreConfigure()=0;

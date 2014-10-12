@@ -9,16 +9,19 @@
 
 #include <QWidget>
 
+class KNMusicHeaderPlayerBase;
 class KNMusicHeaderLyricsBase : public QWidget
 {
     Q_OBJECT
 public:
     KNMusicHeaderLyricsBase(QWidget *parent = 0):QWidget(parent){}
+    virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *player)=0;
 
 signals:
 
 public slots:
     virtual void loadLyricsForMusic(const QString &filePath)=0;
+    virtual void onActionPositionChange(const qint64 &position)=0;
 
 };
 

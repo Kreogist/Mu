@@ -180,9 +180,9 @@ qint64 KNMusicBackendBassThread::duration()
 
 qint64 KNMusicBackendBassThread::position()
 {
-    return (qint64)BASS_ChannelBytes2Seconds(m_channel,
+    return (qint64)(BASS_ChannelBytes2Seconds(m_channel,
                                              BASS_ChannelGetPosition(m_channel, BASS_POS_BYTE))
-           *1000-m_startPosition;
+           *1000)-m_startPosition;
 }
 
 void KNMusicBackendBassThread::playSection(const qint64 &sectionStart,

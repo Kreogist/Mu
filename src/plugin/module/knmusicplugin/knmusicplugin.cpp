@@ -52,7 +52,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadNowPlaying(new KNMusicNowPlaying);
 
-    m_headerPlayer->playFile("/Users/Saki/Music/RO-KYU-BU! - SHOOT！.mp3");
+//    m_headerPlayer->playFile("/Users/Saki/Music/RO-KYU-BU! - SHOOT！.mp3");
 
     //Do the translation at the last.
     retranslate();
@@ -121,8 +121,7 @@ void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
     //Add plugin to the list.
     m_pluginList.append(plugin);
     //Link the display to the header player.
-    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireLoadLyrics,
-            plugin, &KNMusicHeaderLyricsBase::loadLyricsForMusic);
+    plugin->setHeaderPlayer(m_headerPlayer);
     //Add widget to the header.
     addLeftHeaderWidget(plugin, 1);
 }
