@@ -52,8 +52,6 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadNowPlaying(new KNMusicNowPlaying);
 
-//    m_headerPlayer->playFile("/Users/Saki/Music/RO-KYU-BU! - SHOOT！.mp3");
-
     //Do the translation at the last.
     retranslate();
 }

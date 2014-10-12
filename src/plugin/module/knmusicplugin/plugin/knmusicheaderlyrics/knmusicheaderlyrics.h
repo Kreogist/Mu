@@ -49,11 +49,15 @@ private:
         return fontMetrics().size(Qt::TextExpandTabs,
                                   lyricsText);
     }
+    int lyricsLineDuration(const int &index);
+
+    void startMovingAnime(const int &durationOffset,
+                          const int &yOffset);
 
     KNMusicLyricsManager *m_lyricsManager;
     QTimeLine *m_moveToCurrent;
     int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,
-        m_leftSpacing=15;
+        m_leftSpacing=15, m_animationDuration=200;
     QColor m_normalText=QColor(100,100,100),
            m_highlightColor=QColor(0xf7, 0xcf, 0x3d);
 };

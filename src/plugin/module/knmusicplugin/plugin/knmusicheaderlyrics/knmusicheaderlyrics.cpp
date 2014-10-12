@@ -33,8 +33,8 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     m_lyricsManager=KNMusicLyricsManager::instance();
 
     //Initial the lyrics moving time line.
-    m_moveToCurrent=new QTimeLine(200, this);
-    m_moveToCurrent->setUpdateInterval(5);
+    m_moveToCurrent=new QTimeLine(m_animationDuration, this);
+    m_moveToCurrent->setUpdateInterval(2);
     m_moveToCurrent->setEasingCurve(QEasingCurve::OutCubic);
     m_moveToCurrent->setEndFrame(0);
     connect(m_moveToCurrent, &QTimeLine::frameChanged,
@@ -74,24 +74,34 @@ void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
 
 void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
 {
+    int yOffset=0;
     //Check the position is previous than the current yet.
     if(position<m_lyricsManager->positionAt(m_currentLyricsLine))
     {
         //Find the matching lyrics.
         while(m_lyricsManager->positionAt(m_currentLyricsLine)>position)
         {
+            yOffset-=lyricsSize(m_lyricsManager->lyricsAt(m_currentLyricsLine)).height();
             m_currentLyricsLine--;
         }
-        //Update and return.
         update();
+        //Start animation.
+        startMovingAnime((lyricsLineDuration(m_currentLyricsLine)>>2),
+                         yOffset);
         return;
     }
     //Find the next specific position.
-    while(m_lyricsManager->positionAt(m_currentLyricsLine+1)<position)
+    while(m_currentLyricsLine<m_lyricsLines-1 &&
+          m_lyricsManager->positionAt(m_currentLyricsLine+1)<position)
     {
+        yOffset+=lyricsSize(m_lyricsManager->lyricsAt(m_currentLyricsLine)).height();
         m_currentLyricsLine++;
     }
-    update();
+    if(yOffset>0)
+    {
+        startMovingAnime((lyricsLineDuration(m_currentLyricsLine)>>2),
+                         yOffset);
+    }
 }
 
 void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
@@ -170,4 +180,32 @@ void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
     m_currentLineOffsetY=frame;
     //Redraw the display.
     update();
+}
+
+int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)
+{
+    if(index==-1)
+    {
+        return 0;
+    }
+    if(index<m_lyricsLines-1)
+    {
+        return m_lyricsManager->positionAt(index+1)-
+                m_lyricsManager->positionAt(index);
+    }
+    return m_animationDuration<<2;
+}
+
+void KNMusicHeaderLyrics::startMovingAnime(const int &durationOffset,
+                                           const int &yOffset)
+{
+    //Stop the time line.
+    m_moveToCurrent->stop();
+    //Reset the duration and the start frame.
+    m_moveToCurrent->setDuration(qMin(durationOffset, m_animationDuration));
+    m_moveToCurrent->setStartFrame(yOffset);
+    //Before we start, set the widget to the start frame state.
+    onActionLyricsMoved(yOffset);
+    //Start the animation.
+    m_moveToCurrent->start();
 }

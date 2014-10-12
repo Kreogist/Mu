@@ -253,9 +253,18 @@ void KNMusicHeaderPlayer::onActionPositionEdited()
     QString positionText=m_positionDisplay->text();
     //Find the colon.
     int colonPosition=positionText.indexOf(':');
-    //If we cannot find the colon, means it's a unavailable time.
+    //If we cannot find the colon, means it's not format as 'xx:xx'.
     if(-1==colonPosition)
     {
+        //This might be a number, we treat it as second time.
+        //Translate it to a number.
+        bool translateSuccess=false;
+        qint64 triedPositon=positionText.toLongLong(&translateSuccess);
+        //If we succeed, set the position to that second.
+        if(translateSuccess)
+        {
+            setPosition(triedPositon*1000);
+        }
         return;
     }
     //Calculate the ms.
