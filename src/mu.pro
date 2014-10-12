@@ -44,7 +44,7 @@ unix{
     LIBS += -ldl
 }
 
-#Mac OS X
+#Mac OS X configure
 macx{
     CONFIG += libbass
     libbass{
@@ -53,6 +53,13 @@ macx{
     QMAKE_LFLAGS += -framework CoreFoundation
 }
 
+#Linux configure
+linux{
+    CONFIG += libbass
+    libbass{
+        LIBS += -lbass
+    }
+}
 
 libbass{
     DEFINES += ENABLE_LIBBASS

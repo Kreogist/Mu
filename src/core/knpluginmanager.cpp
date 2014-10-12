@@ -75,6 +75,9 @@ KNPluginManager::KNPluginManager(QObject *parent) :
 #ifdef Q_OS_MACX
     KNGlobal::setDylibSuffix("dylib");
 #endif
+#ifdef Q_OS_LINUX
+    KNGlobal::setDylibSuffix("so");
+#endif
     //Load the configure.
     m_global->loadConfigure();
 }
