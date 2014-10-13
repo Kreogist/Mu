@@ -17,6 +17,7 @@
  */
 #include <QMainWindow>
 #include <QApplication>
+#include <QStyleFactory>
 #include <QDesktopWidget>
 
 #include "knglobal.h"
@@ -66,6 +67,8 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent)
 {
     //---Initial infrastructure.---
+    //Initial global style.
+    QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial global.
     m_global=KNGlobal::instance();
     //Set dymanic link library suffix.

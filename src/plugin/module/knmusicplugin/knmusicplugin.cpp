@@ -26,12 +26,15 @@
 #include "knmusicheaderplayerbase.h"
 #include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusicplaylistmanagerbase.h"
+#include "knmusictab.h"
 
 //Plugins
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 #include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+#include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
 
 #include "kncategorytabwidget.h"
 #include "knmusicplugin.h"
@@ -51,6 +54,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadNowPlaying(new KNMusicNowPlaying);
+    loadPlaylistManager(new KNMusicPlaylistManager);
 
     //Do the translation at the last.
     retranslate();
@@ -130,6 +134,13 @@ void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
     plugin->setHeaderPlayer(m_headerPlayer);
 }
 
+void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
+{
+    m_pluginList.append(plugin);
+    //Add tabs.
+    addMusicTab(plugin->categoryTab());
+}
+
 void KNMusicPlugin::retranslate()
 {
     m_caption=tr("Music");
@@ -199,6 +210,14 @@ void KNMusicPlugin::initialParser()
     m_parser->moveToThread(&m_parserThread);
     //Set the parser.
     KNMusicGlobal::setParser(m_parser);
+}
+
+void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
+{
+    //Just add them to a new music category.
+    addMusicCategory(musicTab->icon(),
+                     musicTab->caption(),
+                     musicTab->widget());
 }
 
 void KNMusicPlugin::startThreads()

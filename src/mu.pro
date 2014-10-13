@@ -137,7 +137,15 @@ SOURCES += \
     plugin/module/knmusicplugin/sdk/knmusicproxymodelpool.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.cpp
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistdisplay.cpp \
+    plugin/module/knmusicplugin/sdk/knmusiccategorylistviewbase.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistvieweditor.cpp \
+    plugin/sdk/knanimationmenu.cpp \
+    plugin/module/knmusicplugin/sdk/knlinearsensewidget.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -207,7 +215,17 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicheaderlyricsbase.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.h
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.h \
+    plugin/module/knmusicplugin/sdk/knmusictab.h \
+    plugin/module/knmusicplugin/sdk/knmusicplaylistmanagerbase.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttab.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistdisplay.h \
+    plugin/module/knmusicplugin/sdk/knmusiccategorylistviewbase.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistview.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistvieweditor.h \
+    plugin/sdk/knanimationmenu.h \
+    plugin/module/knmusicplugin/sdk/knlinearsensewidget.h
 
 RESOURCES += \
     resource/res.qrc
