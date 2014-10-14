@@ -43,6 +43,23 @@ QString KNGlobal::applicationDirPath()
     return QApplication::applicationDirPath();
 }
 
+QStringList KNGlobal::urlToPathList(const QList<QUrl> urls)
+{
+    QStringList filePathList;
+    for(auto i=urls.begin();
+            i!=urls.end();
+            ++i)
+    {
+        QString currentPath=(*i).path();
+#ifdef Q_OS_WIN32
+        //Remove the very beginning '/' char in Windows.
+        currentPath.remove(0,1);
+#endif
+        filePathList.append(currentPath);
+    }
+    return filePathList;
+}
+
 void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
 {
     m_dylibSuffix = dylibSuffix;

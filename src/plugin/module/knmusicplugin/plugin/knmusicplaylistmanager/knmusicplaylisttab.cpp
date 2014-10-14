@@ -31,6 +31,10 @@ KNMusicPlaylistTab::KNMusicPlaylistTab(QObject *parent) :
 {
     //Initial the viewer.
     m_viewer=new QSplitter();
+    //Set viewer properties.
+    m_viewer->setContentsMargins(0,0,0,0);
+    m_viewer->setHandleWidth(0); //This is beautiful.
+    m_viewer->setChildrenCollapsible(false);
 
     //Initial the playlist list.
     initialPlaylistList();
@@ -38,6 +42,10 @@ KNMusicPlaylistTab::KNMusicPlaylistTab(QObject *parent) :
     //Initial the playlist display.
     m_playlistDisplay=new KNMusicPlaylistDisplay(m_viewer);
     m_viewer->addWidget(m_playlistDisplay);
+
+    //Set viewer properties after add widgets.
+    m_viewer->setCollapsible(1, false);
+    m_viewer->setStretchFactor(1, 1);
 }
 
 KNMusicPlaylistTab::~KNMusicPlaylistTab()

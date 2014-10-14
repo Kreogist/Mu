@@ -7,6 +7,8 @@
 #ifndef KNGLOBAL_H
 #define KNGLOBAL_H
 
+#include <QStringList>
+#include <QUrl>
 #include <QObject>
 
 class KNConfigure;
@@ -19,6 +21,7 @@ public:
     QString byteToHigherUnit(const qint64 &fileSize);
     static QString dylibSuffix();
     static QString applicationDirPath();
+    static QStringList urlToPathList(const QList<QUrl> urls);
     static void setDylibSuffix(const QString &dylibSuffix);
     void setSystemData(const QString &key, const QString &value);
     void setSystemData(const QString &key, const double &value);

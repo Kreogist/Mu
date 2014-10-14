@@ -145,7 +145,15 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistview.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistvieweditor.cpp \
     plugin/sdk/knanimationmenu.cpp \
-    plugin/module/knmusicplugin/sdk/knlinearsensewidget.cpp
+    plugin/sdk/knlinearsensewidget.cpp \
+    plugin/sdk/kndropproxycontainer.cpp \
+    plugin/sdk/knmousesensewidget.cpp \
+    plugin/module/knmusicplugin/sdk/knmusictreeviewbase.cpp \
+    plugin/module/knmusicplugin/sdk/knmusictreeviewheader.cpp \
+    plugin/sdk/knmousesenseheader.cpp \
+    plugin/module/knmusicplugin/sdk/knmusictreeviewheadermenu.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttreeview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistindex.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -225,7 +233,15 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistview.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistvieweditor.h \
     plugin/sdk/knanimationmenu.h \
-    plugin/module/knmusicplugin/sdk/knlinearsensewidget.h
+    plugin/sdk/knlinearsensewidget.h \
+    plugin/sdk/kndropproxycontainer.h \
+    plugin/sdk/knmousesensewidget.h \
+    plugin/module/knmusicplugin/sdk/knmusictreeviewbase.h \
+    plugin/module/knmusicplugin/sdk/knmusictreeviewheader.h \
+    plugin/sdk/knmousesenseheader.h \
+    plugin/module/knmusicplugin/sdk/knmusictreeviewheadermenu.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttreeview.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistindex.h
 
 RESOURCES += \
     resource/res.qrc

@@ -13,28 +13,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef KNMUSICPLAYLISTDISPLAY_H
-#define KNMUSICPLAYLISTDISPLAY_H
+#ifndef KNMUSICPLAYLISTINDEX_H
+#define KNMUSICPLAYLISTINDEX_H
 
-#include "kndropproxycontainer.h"
+#include <QStyledItemDelegate>
 
-class QLabel;
-class KNMusicPlaylistTreeView;
-class KNMusicPlaylistDisplay : public KNDropProxyContainer
+class KNMusicPlaylistIndex : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistDisplay(QWidget *parent = 0);
+    explicit KNMusicPlaylistIndex(QWidget *parent = 0);
+    void paint(QPainter *painter,
+               const QStyleOptionViewItem &option,
+               const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const;
 
 signals:
 
 public slots:
 
-private:
-    QLabel *m_playlistTitle, *m_playlistInfo;
-    KNMusicPlaylistTreeView *m_playlistTreeView;
 };
 
-#endif // KNMUSICPLAYLISTDISPLAY_H
+#endif // KNMUSICPLAYLISTINDEX_H

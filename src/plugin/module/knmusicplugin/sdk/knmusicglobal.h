@@ -134,6 +134,7 @@ public:
     QString typeDescription(const QString &suffix) const;
     QPixmap noAlbumArt() const;
     void setNoAlbumArt(const QPixmap &noAlbumArt);
+    QString treeViewHeaderText(const int &index);
 
 signals:
 
@@ -146,6 +147,7 @@ private:
     static KNMusicGlobal *m_instance;
     static KNMusicParser *m_parser;
     explicit KNMusicGlobal(QObject *parent = 0);
+    QString m_treeViewHeaderText[MusicDataCount];
     QStringList m_suffixs, m_listSuffixs,
                     m_suffixDescription, m_listSuffixDescription,
                     m_indexedGenres;

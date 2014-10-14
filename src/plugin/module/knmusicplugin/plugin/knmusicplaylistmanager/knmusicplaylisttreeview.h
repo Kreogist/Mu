@@ -15,26 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICPLAYLISTDISPLAY_H
-#define KNMUSICPLAYLISTDISPLAY_H
+#ifndef KNMUSICPLAYLISTTREEVIEW_H
+#define KNMUSICPLAYLISTTREEVIEW_H
 
-#include "kndropproxycontainer.h"
+#include "knmusictreeviewbase.h"
 
-class QLabel;
-class KNMusicPlaylistTreeView;
-class KNMusicPlaylistDisplay : public KNDropProxyContainer
+class KNMusicPlaylistTreeView : public KNMusicTreeViewBase
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistDisplay(QWidget *parent = 0);
+    explicit KNMusicPlaylistTreeView(QWidget *parent = 0);
 
 signals:
 
 public slots:
+    void resetHeaderState();
 
-private:
-    QLabel *m_playlistTitle, *m_playlistInfo;
-    KNMusicPlaylistTreeView *m_playlistTreeView;
 };
 
-#endif // KNMUSICPLAYLISTDISPLAY_H
+#endif // KNMUSICPLAYLISTTREEVIEW_H
