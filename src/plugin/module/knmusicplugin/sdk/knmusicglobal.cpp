@@ -6,6 +6,7 @@
  */
 #include <QUrl>
 #include <QVector>
+#include <QThread>
 #include <QItemSelection>
 #include <QStandardItem>
 
@@ -18,6 +19,17 @@ KNMusicParser *KNMusicGlobal::m_parser=nullptr;
 KNMusicGlobal *KNMusicGlobal::instance()
 {
     return m_instance==nullptr?m_instance=new KNMusicGlobal:m_instance;
+}
+
+KNMusicGlobal::~KNMusicGlobal()
+{
+    //Quit all working threads.
+    m_searcherThread->quit();
+    m_analysisThread->quit();
+
+    //Wait.
+    m_searcherThread->wait();
+    m_analysisThread->wait();
 }
 
 QString KNMusicGlobal::msecondToString(const qint64 &msecond)
@@ -49,6 +61,11 @@ QDateTime KNMusicGlobal::dataStringToDateTime(const QString &text)
 bool KNMusicGlobal::isMusicFile(const QString &suffix)
 {
     return (m_suffixs.indexOf(suffix.toLower())!=-1);
+}
+
+bool KNMusicGlobal::isMusicListFile(const QString &suffix)
+{
+    return (m_listSuffixs.indexOf(suffix.toLower())!=-1);
 }
 
 QString KNMusicGlobal::typeDescription(const QString &suffix) const
@@ -170,7 +187,15 @@ void KNMusicGlobal::initialFileType()
                            <<tr("Unreal Engine 1 Music Format (umx)");
 
     m_listSuffixDescription<<tr("Compact Disc Audio track (cda)")
-                           <<tr("Cue sheet (cue)");
+                          <<tr("Cue sheet (cue)");
+}
+
+void KNMusicGlobal::initialThreads()
+{
+    m_searcherThread=new QThread(this);
+    m_analysisThread=new QThread(this);
+    m_searcherThread->start();
+    m_analysisThread->start();
 }
 
 KNMusicParser *KNMusicGlobal::parser()
@@ -190,6 +215,8 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     regMetaType();
     //Initial music types.
     initialFileType();
+    //Initial threads.
+    ;
     //Initial resources.
 
     //Get the latest translation.
@@ -199,6 +226,16 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
 QPixmap KNMusicGlobal::noAlbumArt() const
 {
     return m_noAlbumArt;
+}
+
+QThread *KNMusicGlobal::searchThread()
+{
+    return m_searcherThread;
+}
+
+QThread *KNMusicGlobal::analysisThread()
+{
+    return m_analysisThread;
 }
 
 void KNMusicGlobal::setNoAlbumArt(const QPixmap &noAlbumArt)

@@ -118,12 +118,14 @@ struct KNMusicDetailInfo
 
 using namespace KNMusic;
 
+class QThread;
 class KNMusicParser;
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
 public:
     static KNMusicGlobal *instance();
+    ~KNMusicGlobal();
     static QString msecondToString(const qint64 &msecond);
     static QString dateTimeToString(const QDateTime &dateTime);
     static QString dateTimeToDataString(const QDateTime &dateTime);
@@ -131,8 +133,11 @@ public:
     static KNMusicParser *parser();
     static void setParser(KNMusicParser *parser);
     bool isMusicFile(const QString &suffix);
+    bool isMusicListFile(const QString &suffix);
     QString typeDescription(const QString &suffix) const;
     QPixmap noAlbumArt() const;
+    QThread *searchThread();
+    QThread *analysisThread();
     void setNoAlbumArt(const QPixmap &noAlbumArt);
     QString treeViewHeaderText(const int &index);
 
@@ -144,6 +149,7 @@ public slots:
 private:
     void regMetaType();
     void initialFileType();
+    void initialThreads();
     static KNMusicGlobal *m_instance;
     static KNMusicParser *m_parser;
     explicit KNMusicGlobal(QObject *parent = 0);
@@ -152,6 +158,7 @@ private:
                     m_suffixDescription, m_listSuffixDescription,
                     m_indexedGenres;
     QPixmap m_noAlbumArt;
+    QThread *m_searcherThread, *m_analysisThread;
 };
 
 #endif // KNMUSICGLOBAL_H
