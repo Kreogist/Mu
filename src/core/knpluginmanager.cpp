@@ -233,10 +233,16 @@ void KNPluginManager::loadMainWindowCategorySwitcher(KNMainWindowCategorySwitche
 
 void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
 {
-    //Add this to the plugin list.
-    m_pluginList.append(plugin);
-    //Set the plugin.
-    m_mainWindowPlugin->setPreferencePanel(plugin);
+    //Ensure the preference is null.
+    if(m_preferencePlugin==nullptr)
+    {
+        //Save the preference pointer.
+        m_preferencePlugin=plugin;
+        //Add this to the plugin list.
+        m_pluginList.append(plugin);
+        //Set the plugin.
+        m_mainWindowPlugin->setPreferencePanel(m_preferencePlugin);
+    }
 }
 
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
@@ -253,4 +259,9 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     //Add header widget and central widget.
     m_mainWindowPlugin->addHeaderWidget(plugin->headerWidget());
     m_mainWindowPlugin->addCentralWidget(plugin->centralWidget());
+    //Add preference panel.
+    m_preferencePlugin->addCategory(plugin->caption(),
+                                    plugin->preferenceIcon(),
+                                    plugin->headerIcon(),
+                                    plugin->preferencePanelWidget());
 }

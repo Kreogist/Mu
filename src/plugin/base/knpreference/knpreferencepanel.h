@@ -23,6 +23,7 @@
 class QBoxLayout;
 class KNPreferenceContents;
 class KNPreferenceCategory;
+class KNPreferenceWidgetsPanel;
 class KNPreferencePanel : public QWidget
 {
     Q_OBJECT
@@ -33,11 +34,23 @@ signals:
     void requireHidePreference();
 
 public slots:
+    void addCategory(const QString &title,
+                     const QPixmap &icon,
+                     const QPixmap &headerIcon,
+                     QWidget *contentWidget);
+    void setCategoryText(const int &index,
+                         const QString &title);
+    void setCurrentIndex(const int &index);
+    void retranslate();
+
+private slots:
+    void onActionCategoryIndexChange(const int &index);
 
 private:
     QBoxLayout *m_layout;
     KNPreferenceCategory *m_categoryList;
     KNPreferenceContents *m_contents;
+    KNPreferenceWidgetsPanel *m_generalPanel;
 };
 
 #endif // KNPREFERENCEPANEL_H

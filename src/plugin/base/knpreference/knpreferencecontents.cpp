@@ -15,7 +15,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
+
+#include "knvwidgetswitcher.h"
+
 #include "knpreferencecontents.h"
+
+#include <QDebug>
 
 KNPreferenceContents::KNPreferenceContents(QWidget *parent) :
     QWidget(parent)
@@ -27,4 +33,27 @@ KNPreferenceContents::KNPreferenceContents(QWidget *parent) :
     QPalette pal=palette();
     pal.setColor(QPalette::Window, QColor(100,100,100));
     setPalette(pal);
+
+    //Initial the layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+
+    //Initial the panel swithcer.
+    m_panelSwitcher=new KNVWidgetSwitcher(this);
+    mainLayout->addWidget(m_panelSwitcher);
+}
+
+void KNPreferenceContents::addPanelWidget(QWidget *widget)
+{
+    //Simply add widget to switcher.
+    m_panelSwitcher->addWidget(widget);
+}
+
+void KNPreferenceContents::setCurrentIndex(const int &index)
+{
+    //Change the current index.
+    m_panelSwitcher->setCurrentIndex(index);
 }

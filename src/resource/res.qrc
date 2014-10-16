@@ -40,5 +40,8 @@
         <file>music/common/noalbum.png</file>
         <file>configure/general/icon.png</file>
         <file>configure/general/headicon.png</file>
+        <file>configure/music/headicon.png</file>
+        <file>configure/music/icon.png</file>
+        <file>configure/icon.png</file>
     </qresource>
 </RCC>

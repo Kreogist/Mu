@@ -31,3 +31,16 @@ QWidget *KNPreference::preferencePanel()
 {
     return m_preferencePanel;
 }
+
+void KNPreference::addCategory(const QString &title,
+                               const QPixmap &icon,
+                               const QPixmap &headerIcon,
+                               QWidget *contentWidget)
+{
+    m_preferencePanel->addCategory(title, icon, headerIcon, contentWidget);
+}
+
+void KNPreference::setCurrentIndex(const int &index)
+{
+    m_preferencePanel->setCurrentIndex(index);
+}

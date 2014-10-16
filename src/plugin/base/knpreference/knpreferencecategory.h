@@ -34,6 +34,7 @@ public:
     int currentIndex() const;
 
 signals:
+    void currentIndexChanged(int index);
     void requireHidePreference();
 
 public slots:
@@ -41,7 +42,7 @@ public slots:
                      const QPixmap &icon,
                      const QPixmap &headerIcon);
     void setCurrentIndex(const int &index);
-    void retranslate();
+    void setCategoryText(const int &index, const QString &caption);
 
 protected:
     void showEvent(QShowEvent *event);

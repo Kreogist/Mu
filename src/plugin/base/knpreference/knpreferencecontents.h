@@ -20,6 +20,7 @@
 
 #include <QWidget>
 
+class KNVWidgetSwitcher;
 class KNPreferenceContents : public QWidget
 {
     Q_OBJECT
@@ -29,8 +30,11 @@ public:
 signals:
 
 public slots:
+    void addPanelWidget(QWidget *widget);
+    void setCurrentIndex(const int &index);
 
 private:
+    KNVWidgetSwitcher *m_panelSwitcher;
 };
 
 #endif // KNPREFERENCECONTENTS_H

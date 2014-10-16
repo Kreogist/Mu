@@ -157,7 +157,10 @@ SOURCES += \
     plugin/module/knmusicplugin/sdk/knmusicsearcher.cpp \
     plugin/sdk/knfilesearcher.cpp \
     plugin/module/knmusicplugin/sdk/knmusicmodelassist.cpp \
-    plugin/module/knmusicplugin/sdk/knmusicanalysiscache.cpp
+    plugin/module/knmusicplugin/sdk/knmusicanalysiscache.cpp \
+    plugin/sdk/preference/knpreferencewidgetbase.cpp \
+    plugin/sdk/knpreferencewidgetspanel.cpp \
+    plugin/sdk/knvwidgetswitcher.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -249,7 +252,10 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicsearcher.h \
     plugin/sdk/knfilesearcher.h \
     plugin/module/knmusicplugin/sdk/knmusicmodelassist.h \
-    plugin/module/knmusicplugin/sdk/knmusicanalysiscache.h
+    plugin/module/knmusicplugin/sdk/knmusicanalysiscache.h \
+    plugin/sdk/preference/knpreferencewidgetbase.h \
+    plugin/sdk/knpreferencewidgetspanel.h \
+    plugin/sdk/knvwidgetswitcher.h
 
 RESOURCES += \
     resource/res.qrc

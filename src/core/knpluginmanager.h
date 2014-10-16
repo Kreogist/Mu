@@ -62,6 +62,7 @@ private:
     void recoverWindowGeometry();
     QMainWindow *m_mainWindow=nullptr;
     KNMainWindowPlugin *m_mainWindowPlugin=nullptr;
+    KNPreferencePlugin *m_preferencePlugin=nullptr;
     QLinkedList<QObject *> m_pluginList;
     KNGlobal *m_global;
     KNConfigure *m_configure;

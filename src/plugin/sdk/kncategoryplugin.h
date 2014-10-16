@@ -19,8 +19,11 @@ public:
     KNCategoryPlugin(QObject *parent = 0):QObject(parent){}
     virtual QString caption()=0;
     virtual QPixmap icon()=0;
+    virtual QPixmap headerIcon()=0;
+    virtual QPixmap preferenceIcon()=0;
     virtual QWidget *centralWidget()=0;
     virtual QWidget *headerWidget()=0;
+    virtual QWidget *preferencePanelWidget()=0;
 
 signals:
 

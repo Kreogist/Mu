@@ -58,6 +58,7 @@ QString KNPreferenceHeaderButton::text() const
 void KNPreferenceHeaderButton::setIcon(const QPixmap &icon)
 {
     m_icon=icon;
+    update();
 }
 
 void KNPreferenceHeaderButton::setText(const QString &text)

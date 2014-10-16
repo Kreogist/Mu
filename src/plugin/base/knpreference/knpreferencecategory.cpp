@@ -54,13 +54,6 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     connect(m_categoryList, &KNPreferenceCategoryList::currentIndexChanged,
             this, &KNPreferenceCategory::onActionIndexChanged);
     m_layout->addWidget(m_categoryList, 1);
-
-    addCategory("General",
-                QPixmap(":/plugin/configure/general/icon.png"),
-                QPixmap(":/plugin/configure/general/headicon.png"));
-
-    //Set translation.
-    retranslate();
 }
 
 int KNPreferenceCategory::currentIndex() const
@@ -88,9 +81,10 @@ void KNPreferenceCategory::setCurrentIndex(const int &index)
     }
 }
 
-void KNPreferenceCategory::retranslate()
+void KNPreferenceCategory::setCategoryText(const int &index,
+                                           const QString &caption)
 {
-    m_categoryList->setCategoryText(0, tr("General"));
+    m_categoryList->setCategoryText(index, caption);
 }
 
 void KNPreferenceCategory::showEvent(QShowEvent *event)
@@ -137,4 +131,6 @@ void KNPreferenceCategory::onActionIndexChanged(const int &index)
     //Set the header icon and text.
     m_title->setTitleIcon(m_headerIcons.at(index));
     m_title->setTitleText(m_categoryList->categoryText(index));
+    //Emit the category changed signal.
+    emit currentIndexChanged(index);
 }

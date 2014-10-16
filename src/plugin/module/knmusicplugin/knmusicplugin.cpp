@@ -37,6 +37,7 @@
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
 
 #include "kncategorytabwidget.h"
+#include "knpreferencewidgetspanel.h"
 #include "knmusicplugin.h"
 
 #include <QDebug>
@@ -82,6 +83,16 @@ QPixmap KNMusicPlugin::icon()
     return QPixmap(":/plugin/music/common/icon.png");
 }
 
+QPixmap KNMusicPlugin::headerIcon()
+{
+    return QPixmap(":/plugin/configure/music/headicon.png");
+}
+
+QPixmap KNMusicPlugin::preferenceIcon()
+{
+    return QPixmap(":/plugin/configure/music/icon.png");
+}
+
 QWidget *KNMusicPlugin::centralWidget()
 {
     return m_centralWidget;
@@ -90,6 +101,11 @@ QWidget *KNMusicPlugin::centralWidget()
 QWidget *KNMusicPlugin::headerWidget()
 {
     return m_headerWidget;
+}
+
+QWidget *KNMusicPlugin::preferencePanelWidget()
+{
+    return m_preferencePanel;
 }
 
 void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
@@ -172,6 +188,9 @@ void KNMusicPlugin::initialInfrastructure()
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
     m_musicGlobal->setNoAlbumArt(QPixmap(":/plugin/music/common/noalbum.png"));
+
+    //Initial preference panel.
+    m_preferencePanel=new KNPreferenceWidgetsPanel;
 
     //Initial central widget.
     m_centralWidget=new KNCategoryTabWidget;

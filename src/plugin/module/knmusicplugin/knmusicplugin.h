@@ -30,6 +30,7 @@ class KNMusicHeaderPlayerBase;
 class KNMusicHeaderLyricsBase;
 class KNMusicNowPlayingBase;
 class KNMusicPlaylistManagerBase;
+class KNPreferenceWidgetsPanel;
 class KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
@@ -38,8 +39,11 @@ public:
     ~KNMusicPlugin();
     QString caption();
     QPixmap icon();
+    QPixmap headerIcon();
+    QPixmap preferenceIcon();
     QWidget *centralWidget();
     QWidget *headerWidget();
+    QWidget *preferencePanelWidget();
 
     void loadBackend(KNMusicBackend *plugin);
     void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
@@ -72,6 +76,7 @@ private:
     QString m_caption;
     KNCategoryTabWidget *m_centralWidget=nullptr;
     QWidget *m_headerWidget=nullptr;
+    KNPreferenceWidgetsPanel *m_preferencePanel;
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
     QThread m_parserThread, m_backendThread;
     KNMusicGlobal *m_musicGlobal;
