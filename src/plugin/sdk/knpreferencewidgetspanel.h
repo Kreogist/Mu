@@ -9,9 +9,19 @@
 
 #include <QList>
 
-#include "preference/knpreferencewidgetbase.h"
+#include "preference/knpreferenceitembase.h"
 
 #include <QWidget>
+
+namespace KNPreferenceWidgets
+{
+enum KNPreferenceWidgetIndex
+{
+    Switcher
+};
+}
+
+using namespace KNPreferenceWidgets;
 
 class QBoxLayout;
 class QLabel;
@@ -25,13 +35,21 @@ signals:
     void requireSaveConfigure();
 
 public slots:
-    void addTitle(const QString &title=QString(""));
+    void addTitle(const QString &titleText=QString(""));
+    void addItem(const int &index,
+                 const QString &caption,
+                 const bool &isAdvanced=false,
+                 const QVariant &value=QVariant(),
+                 const QVariant &defaultValue=QVariant());
     void setTitle(const int &index, const QString &title);
 
 private:
-    QList<KNPreferenceWidgetBase *> m_widgets;
+    void addPreferenceWidget(KNPreferenceItemBase *widget);
+    QList<KNPreferenceItemBase *> m_widgets;
     QList<QLabel *> m_titles;
     QBoxLayout *m_mainLayout;
+    QFont m_titleFont;
+    QPalette m_titlePalette;
 };
 
 #endif // KNPREFERENCEWIDGETSPANEL_H

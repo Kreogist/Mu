@@ -57,6 +57,16 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
                 QPixmap(":/plugin/configure/general/headicon.png"),
                 m_generalPanel);
 
+    m_generalPanel->addTitle("Fuck!!!!!");
+    m_generalPanel->addItem(Switcher, "Fuck", false, false, false);
+    m_generalPanel->addItem(Switcher, "Fuck", false, false, false);
+    m_generalPanel->addItem(Switcher, "Fuck", false, false, false);
+    m_generalPanel->addTitle("Fuck!!!!!");
+    m_generalPanel->addTitle("Fuck!!!!!");
+    m_generalPanel->addTitle("Fuck!!!!!");
+    m_generalPanel->addTitle("Fuck!!!!!");
+    m_generalPanel->setTitle(1, "Fuck ?!!!!");
+
     //Retranslate.
     retranslate();
 }
