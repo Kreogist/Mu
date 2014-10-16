@@ -24,7 +24,7 @@ class KNMusicModel : public QStandardItemModel
     Q_OBJECT
 public:
     explicit KNMusicModel(QObject *parent = 0);
-    ~KNMusicGlobal();
+    ~KNMusicModel();
     Qt::DropActions supportedDropActions() const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
 

@@ -30,7 +30,7 @@ KNMusicModel::KNMusicModel(QObject *parent) :
             this, &KNMusicModel::appendMusicRow);
 }
 
-KNMusicModel::~KNMusicGlobal()
+KNMusicModel::~KNMusicModel()
 {
     //Delete objects.
     delete m_searcher;
