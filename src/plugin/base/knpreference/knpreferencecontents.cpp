@@ -31,7 +31,7 @@ KNPreferenceContents::KNPreferenceContents(QWidget *parent) :
 
     //Set palette.
     QPalette pal=palette();
-    pal.setColor(QPalette::Window, QColor(100,100,100));
+    pal.setColor(QPalette::Window, QColor(30,30,30));
     setPalette(pal);
 
     //Initial the layout.

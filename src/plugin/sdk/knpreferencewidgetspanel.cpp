@@ -12,39 +12,54 @@
 
 #include "knpreferencewidgetspanel.h"
 
+#include <QDebug>
+
 KNPreferenceWidgetsPanel::KNPreferenceWidgetsPanel(QWidget *parent) :
-    QWidget(parent)
+    QScrollArea(parent)
 {
     //Set properties.
-    setContentsMargins(20,0,20,20);
+    setContentsMargins(0,0,0,0);
+    setFrameShape(QFrame::NoFrame);
+    setWidgetResizable(true);
+
+    //Initial the container.
+    m_container=new QWidget(this);
+    //Set container properties.
+    m_container->setContentsMargins(0,0,0,0);
+    setWidget(m_container);
 
     //Initial the layout.
     m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                 this);
     m_mainLayout->setContentsMargins(0,0,0,0);
     m_mainLayout->setSpacing(0);
-    setLayout(m_mainLayout);
+    m_container->setLayout(m_mainLayout);
 
     //Add strectch at the end of the layout.
     m_mainLayout->addStretch();
 
     //Initial the title font.
     m_titleFont=font();
-    m_titleFont.setPixelSize(20);
+    m_titleFont.setPixelSize(15);
 
     //Initial the title palette.
     m_titlePalette=palette();
-    m_titlePalette.setColor(QPalette::WindowText, QColor(255,255,255));
+    m_titlePalette.setColor(QPalette::WindowText, QColor(150,150,150));
 }
 
-void KNPreferenceWidgetsPanel::addTitle(const QString &titleText)
+void KNPreferenceWidgetsPanel::addTitle(const QString &titleText,
+                                        const bool &isAdvanced)
 {
     //Initial the title widget.
     QLabel *titleWidget=new QLabel(this);
     //Set properties.
-    titleWidget->setContentsMargins(5,10,0,0);
+    titleWidget->setContentsMargins(25,10,0,5);
     titleWidget->setFont(m_titleFont);
     titleWidget->setPalette(m_titlePalette);
+    if(isAdvanced)
+    {
+        setAdvancedItem(titleWidget);
+    }
     //Set text.
     titleWidget->setText(titleText);
     //Save the title
@@ -56,9 +71,9 @@ void KNPreferenceWidgetsPanel::addTitle(const QString &titleText)
 
 void KNPreferenceWidgetsPanel::addItem(const int &index,
                                        const QString &caption,
-                                       const bool &isAdvanced,
                                        const QVariant &value,
-                                       const QVariant &defaultValue)
+                                       const QVariant &defaultValue,
+                                       const bool &isAdvanced)
 {
     KNPreferenceItemBase *item;
     switch(index)
@@ -70,9 +85,12 @@ void KNPreferenceWidgetsPanel::addItem(const int &index,
     }
     //Set properties.
     item->setCaption(caption);
-    item->setAdvanced(isAdvanced);
     item->setValue(value);
     item->setDefaultValue(defaultValue);
+    if(isAdvanced)
+    {
+        setAdvancedItem(item);
+    }
     //Add the preference widget.
     addPreferenceWidget(item);
 }
@@ -86,7 +104,30 @@ void KNPreferenceWidgetsPanel::addPreferenceWidget(KNPreferenceItemBase *widget)
     m_widgets.append(widget);
 }
 
+bool KNPreferenceWidgetsPanel::advancedMode() const
+{
+    return m_advancedMode;
+}
+
+void KNPreferenceWidgetsPanel::setAdvancedMode(bool advancedMode)
+{
+    m_advancedMode=advancedMode;
+    emit requireSetAdvancedVisible(m_advancedMode);
+}
+
+void KNPreferenceWidgetsPanel::setAdvancedItem(QWidget *item)
+{
+    connect(this, &KNPreferenceWidgetsPanel::requireSetAdvancedVisible,
+            item, &QWidget::setVisible);
+    item->setVisible(m_advancedMode);
+}
+
 void KNPreferenceWidgetsPanel::setTitle(const int &index, const QString &title)
 {
     m_titles.at(index)->setText(title);
+}
+
+void KNPreferenceWidgetsPanel::setNormalMode(bool normalMode)
+{
+    setAdvancedMode(!normalMode);
 }

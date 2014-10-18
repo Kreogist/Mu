@@ -43,7 +43,7 @@ public:
     QPixmap preferenceIcon();
     QWidget *centralWidget();
     QWidget *headerWidget();
-    QWidget *preferencePanelWidget();
+    KNPreferenceWidgetsPanel *preferencePanelWidget();
 
     void loadBackend(KNMusicBackend *plugin);
     void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);

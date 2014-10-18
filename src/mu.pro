@@ -161,7 +161,9 @@ SOURCES += \
     plugin/sdk/knpreferencewidgetspanel.cpp \
     plugin/sdk/knvwidgetswitcher.cpp \
     plugin/sdk/preference/knpreferenceitembase.cpp \
-    plugin/sdk/preference/knpreferenceitemswitcher.cpp
+    plugin/sdk/preference/knpreferenceitemswitcher.cpp \
+    plugin/sdk/knsideshadowwidget.cpp \
+    plugin/sdk/knanimeroundswitcher.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -257,7 +259,9 @@ HEADERS += \
     plugin/sdk/preference/knpreferenceitembase.h \
     plugin/sdk/knpreferencewidgetspanel.h \
     plugin/sdk/knvwidgetswitcher.h \
-    plugin/sdk/preference/knpreferenceitemswitcher.h
+    plugin/sdk/preference/knpreferenceitemswitcher.h \
+    plugin/sdk/knsideshadowwidget.h \
+    plugin/sdk/knanimeroundswitcher.h
 
 RESOURCES += \
     resource/res.qrc

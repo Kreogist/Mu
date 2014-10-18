@@ -20,13 +20,13 @@ class KNMusicTreeViewHeaderMenu : public KNAnimationMenu
     Q_OBJECT
 public:
     explicit KNMusicTreeViewHeaderMenu(QWidget *parent = 0);
-    void syncVisibleState(const int &logicalIndex, const bool &visible);
+    void syncVisibleState(const int &logicalIndex, const bool &ok);
 
 signals:
     void requireResize(const int &index);
     void requireResizeAll();
     void requireSetColumnVisible(const int &column,
-                                 const bool &visible);
+                                 const bool &ok);
 
 public slots:
     void retranslate();

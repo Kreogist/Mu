@@ -11,7 +11,7 @@
 
 #include "preference/knpreferenceitembase.h"
 
-#include <QWidget>
+#include <QScrollArea>
 
 namespace KNPreferenceWidgets
 {
@@ -25,31 +25,41 @@ using namespace KNPreferenceWidgets;
 
 class QBoxLayout;
 class QLabel;
-class KNPreferenceWidgetsPanel : public QWidget
+class KNPreferenceWidgetsPanel : public QScrollArea
 {
     Q_OBJECT
 public:
     explicit KNPreferenceWidgetsPanel(QWidget *parent = 0);
+    bool advancedMode() const;
 
 signals:
     void requireSaveConfigure();
+    void requireSetAdvancedVisible(const bool &ok);
 
 public slots:
-    void addTitle(const QString &titleText=QString(""));
+    void addTitle(const QString &titleText=QString(""),
+                  const bool &isAdvanced=false);
     void addItem(const int &index,
                  const QString &caption,
-                 const bool &isAdvanced=false,
                  const QVariant &value=QVariant(),
-                 const QVariant &defaultValue=QVariant());
+                 const QVariant &defaultValue=QVariant(),
+                 const bool &isAdvanced=false);
     void setTitle(const int &index, const QString &title);
+    void setNormalMode(bool normalMode);
+    void setAdvancedMode(bool advancedMode);
+
+protected:
 
 private:
+    void setAdvancedItem(QWidget *item);
     void addPreferenceWidget(KNPreferenceItemBase *widget);
     QList<KNPreferenceItemBase *> m_widgets;
     QList<QLabel *> m_titles;
     QBoxLayout *m_mainLayout;
+    QWidget *m_container;
     QFont m_titleFont;
     QPalette m_titlePalette;
+    bool m_advancedMode=false;
 };
 
 #endif // KNPREFERENCEWIDGETSPANEL_H

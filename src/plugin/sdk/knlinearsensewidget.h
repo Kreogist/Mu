@@ -35,7 +35,7 @@ private:
     QColor m_backgroundColor=QColor(0x27,0x27,0x27),
            m_linearColor=m_backgroundColor;
     QLinearGradient m_background;
-    int m_inBrightness=0x70, m_outBrightness=m_backgroundColor.value();
+    int m_inBrightness=0x60, m_outBrightness=m_backgroundColor.value();
 };
 
 #endif // KNLINEARSENSEWIDGET_H

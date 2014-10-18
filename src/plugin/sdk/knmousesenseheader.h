@@ -20,7 +20,7 @@ public:
 
 signals:
     void requireChangeVisible(const int &index,
-                              const bool &visible);
+                              const bool &ok);
 
 public slots:
 

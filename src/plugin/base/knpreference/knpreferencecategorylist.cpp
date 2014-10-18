@@ -30,7 +30,7 @@ KNPreferenceCategoryList::KNPreferenceCategoryList(QWidget *parent) :
 
     //Set main layout.
     m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    m_mainLayout->setContentsMargins(0,10,0,10);
+    m_mainLayout->setContentsMargins(0,0,0,0);
     m_mainLayout->setSpacing(0);
     setLayout(m_mainLayout);
 

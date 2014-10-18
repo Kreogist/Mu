@@ -57,15 +57,18 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
                 QPixmap(":/plugin/configure/general/headicon.png"),
                 m_generalPanel);
 
-    m_generalPanel->addTitle("Fuck!!!!!");
-    m_generalPanel->addItem(Switcher, "Fuck", false, false, false);
-    m_generalPanel->addItem(Switcher, "Fuck", false, false, false);
-    m_generalPanel->addItem(Switcher, "Fuck", false, false, false);
-    m_generalPanel->addTitle("Fuck!!!!!");
-    m_generalPanel->addTitle("Fuck!!!!!");
-    m_generalPanel->addTitle("Fuck!!!!!");
-    m_generalPanel->addTitle("Fuck!!!!!");
-    m_generalPanel->setTitle(1, "Fuck ?!!!!");
+    m_generalPanel->addTitle("Normal Title");
+    m_generalPanel->addItem(Switcher, "Normal 1", false, false, false);
+    m_generalPanel->addItem(Switcher, "Advanced 1", false, false, true);
+    m_generalPanel->addItem(Switcher, "Normal 2", false, false, false);
+    m_generalPanel->addItem(Switcher, "Normal 3", false, false, false);
+    m_generalPanel->addItem(Switcher, "Advanced 2", false, false, true);
+    m_generalPanel->addItem(Switcher, "Normal 4", false, false, false);
+    m_generalPanel->addItem(Switcher, "Advanced 3", false, false, true);
+    m_generalPanel->addTitle("Advanced Title", true);
+    m_generalPanel->addItem(Switcher, "Advanced 4", false, false, true);
+    m_generalPanel->addItem(Switcher, "Normal 5", false, false, false);
+    m_generalPanel->addItem(Switcher, "Advanced 6", false, false, true);
 
     //Retranslate.
     retranslate();
@@ -74,11 +77,13 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 void KNPreferencePanel::addCategory(const QString &title,
                                     const QPixmap &icon,
                                     const QPixmap &headerIcon,
-                                    QWidget *contentWidget)
+                                    KNPreferenceWidgetsPanel *contentWidget)
 {
     //Add the info of this category to the category list and content.
     m_categoryList->addCategory(title, icon, headerIcon);
     m_contents->addPanelWidget(contentWidget);
+    connect(m_categoryList, &KNPreferenceCategory::requireShowNormal,
+            contentWidget, &KNPreferenceWidgetsPanel::setNormalMode);
 }
 
 void KNPreferencePanel::setCategoryText(const int &index,

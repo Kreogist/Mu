@@ -18,7 +18,11 @@
 #include <QPainter>
 #include <QBoxLayout>
 #include <QBrush>
+#include <QLabel>
 
+#include "knanimeroundswitcher.h"
+#include "knsideshadowwidget.h"
+#include "knlinearsensewidget.h"
 #include "knpreferencetitle.h"
 #include "knpreferencecategorylist.h"
 
@@ -31,11 +35,11 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     setFixedWidth(m_listWidth);
 
     //Set layout.
-    m_layout=new QBoxLayout(QBoxLayout::TopToBottom,
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                             this);
-    m_layout->setContentsMargins(0,0,0,0);
-    m_layout->setSpacing(0);
-    setLayout(m_layout);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 
     //Set the highlight gradient.
     m_highlightGradient.setStart(0,0);
@@ -47,13 +51,23 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     m_title=new KNPreferenceTitle(this);
     connect(m_title, &KNPreferenceTitle::requireHidePreference,
             this, &KNPreferenceCategory::requireHidePreference);
-    m_layout->addWidget(m_title);
+    mainLayout->addWidget(m_title);
 
     //Initial the category list.
     m_categoryList=new KNPreferenceCategoryList(this);
     connect(m_categoryList, &KNPreferenceCategoryList::currentIndexChanged,
             this, &KNPreferenceCategory::onActionIndexChanged);
-    m_layout->addWidget(m_categoryList, 1);
+    mainLayout->addWidget(m_categoryList, 1);
+
+    //Initial the status bar.
+    initialStatusBar();
+    mainLayout->addWidget(m_statusBar);
+
+    //Initial the shadow.
+    m_rightShadow=new KNSideShadowWidget(RightShadow, this);
+
+    //Do translation.
+    retranslate();
 }
 
 int KNPreferenceCategory::currentIndex() const
@@ -87,6 +101,12 @@ void KNPreferenceCategory::setCategoryText(const int &index,
     m_categoryList->setCategoryText(index, caption);
 }
 
+void KNPreferenceCategory::retranslate()
+{
+    m_normal->setText(tr("Normal"));
+    m_advanced->setText(tr("Advanced"));
+}
+
 void KNPreferenceCategory::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
@@ -117,13 +137,16 @@ void KNPreferenceCategory::paintEvent(QPaintEvent *event)
     painter.drawRect(0,0,width(),64);
     //Draw other things.
     QWidget::paintEvent(event);
-    //Paint the shadow.
-    QLinearGradient shadowGradient(m_shadowWidth,0,0,0);
-    shadowGradient.setColorAt(0, QColor(0,0,0,90));
-    shadowGradient.setColorAt(1, QColor(0,0,0,0));
-    painter.setBrush(shadowGradient);
-    painter.translate(width()-m_shadowWidth, 0);
-    painter.drawRect(0,0,m_shadowWidth,height());
+}
+
+void KNPreferenceCategory::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    //Move the shadow.
+    m_rightShadow->setGeometry(width()-m_shadowWidth,
+                               0,
+                               m_shadowWidth,
+                               height());
 }
 
 void KNPreferenceCategory::onActionIndexChanged(const int &index)
@@ -133,4 +156,37 @@ void KNPreferenceCategory::onActionIndexChanged(const int &index)
     m_title->setTitleText(m_categoryList->categoryText(index));
     //Emit the category changed signal.
     emit currentIndexChanged(index);
+}
+
+void KNPreferenceCategory::initialStatusBar()
+{
+    //Initial the status bar widget.
+    m_statusBar=new KNLinearSenseWidget(this);
+    m_statusBar->setContentsMargins(0,0,0,0);
+    m_statusBar->setFixedHeight(34);
+
+    //Initial layout.
+    QBoxLayout *statusLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            m_statusBar);
+    statusLayout->setContentsMargins(0,0,0,0);
+    statusLayout->setSpacing(0);
+    m_statusBar->setLayout(statusLayout);
+
+    //Initial normal/advanced switcher.
+    m_normal=new QLabel(this);
+    m_normal->setContentsMargins(5,0,5,0);
+    QPalette captionPalette=m_normal->palette();
+    captionPalette.setColor(QPalette::WindowText, QColor(255,255,255));
+    m_normal->setPalette(captionPalette);
+    statusLayout->addWidget(m_normal);
+    KNAnimeRoundSwitcher *advancedSwitcher=new KNAnimeRoundSwitcher(this);
+    connect(advancedSwitcher, &KNAnimeRoundSwitcher::buttonPositionChange,
+            this, &KNPreferenceCategory::requireShowNormal);
+    statusLayout->addWidget(advancedSwitcher);
+    m_advanced=new QLabel(this);
+    m_advanced->setContentsMargins(5,0,5,0);
+    m_advanced->setPalette(captionPalette);
+    statusLayout->addWidget(m_advanced);
+
+    statusLayout->addStretch();
 }

@@ -103,7 +103,7 @@ QWidget *KNMusicPlugin::headerWidget()
     return m_headerWidget;
 }
 
-QWidget *KNMusicPlugin::preferencePanelWidget()
+KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
 {
     return m_preferencePanel;
 }

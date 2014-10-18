@@ -23,6 +23,9 @@ public slots:
     void setDefaultValue(const QVariant &defaultValue);
     void setValue(const QVariant &value);
 
+protected:
+    void generateControls();
+
 private:
     bool m_defaultValue=false, m_value=false;
 };

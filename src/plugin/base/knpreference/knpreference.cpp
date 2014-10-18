@@ -35,7 +35,7 @@ QWidget *KNPreference::preferencePanel()
 void KNPreference::addCategory(const QString &title,
                                const QPixmap &icon,
                                const QPixmap &headerIcon,
-                               QWidget *contentWidget)
+                               KNPreferenceWidgetsPanel *contentWidget)
 {
     m_preferencePanel->addCategory(title, icon, headerIcon, contentWidget);
 }

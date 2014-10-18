@@ -12,6 +12,7 @@
 
 #include <QObject>
 
+class KNPreferenceWidgetsPanel;
 class KNCategoryPlugin : public QObject
 {
     Q_OBJECT
@@ -23,7 +24,7 @@ public:
     virtual QPixmap preferenceIcon()=0;
     virtual QWidget *centralWidget()=0;
     virtual QWidget *headerWidget()=0;
-    virtual QWidget *preferencePanelWidget()=0;
+    virtual KNPreferenceWidgetsPanel *preferencePanelWidget()=0;
 
 signals:
 

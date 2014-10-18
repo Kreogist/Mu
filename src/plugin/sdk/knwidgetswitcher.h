@@ -42,7 +42,7 @@ private slots:
 private:
     void configureAnimation(QPropertyAnimation *animation);
     void setWidgetVisible(const int &index,
-                          const bool &visible);
+                          const bool &ok);
     QList<QWidget *> m_widgets;
     QParallelAnimationGroup *m_movingAnimationGroup;
 };

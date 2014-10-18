@@ -22,8 +22,10 @@
 #include <QPixmap>
 #include <QWidget>
 
-class QBoxLayout;
+class QLabel;
 class QTimeLine;
+class KNLinearSenseWidget;
+class KNSideShadowWidget;
 class KNPreferenceTitle;
 class KNPreferenceCategoryList;
 class KNPreferenceCategory : public QWidget
@@ -36,6 +38,7 @@ public:
 signals:
     void currentIndexChanged(int index);
     void requireHidePreference();
+    void requireShowNormal(bool ok);
 
 public slots:
     void addCategory(const QString &title,
@@ -43,25 +46,30 @@ public slots:
                      const QPixmap &headerIcon);
     void setCurrentIndex(const int &index);
     void setCategoryText(const int &index, const QString &caption);
+    void retranslate();
 
 protected:
     void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
     void onActionIndexChanged(const int &index);
 
 private:
+    void initialStatusBar();
     void syncTitle();
     QColor m_backgroundColor=QColor(42,42,42),
            m_borderColor=QColor(255,255,255,67);
     int m_listWidth=250, m_shadowWidth=15, m_highlightHeight=64;
     QLinearGradient m_highlightGradient;
-    QBoxLayout *m_layout;
     QString m_generalText;
     QList<QPixmap> m_headerIcons;
+    QLabel *m_normal, *m_advanced;
+    KNSideShadowWidget *m_rightShadow;
     KNPreferenceTitle *m_title;
     KNPreferenceCategoryList *m_categoryList;
+    KNLinearSenseWidget *m_statusBar;
 };
 
 #endif // KNPREFERENCECATEGORY_H

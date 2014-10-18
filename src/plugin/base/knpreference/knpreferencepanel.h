@@ -37,7 +37,7 @@ public slots:
     void addCategory(const QString &title,
                      const QPixmap &icon,
                      const QPixmap &headerIcon,
-                     QWidget *contentWidget);
+                     KNPreferenceWidgetsPanel *contentWidget);
     void setCategoryText(const int &index,
                          const QString &title);
     void setCurrentIndex(const int &index);

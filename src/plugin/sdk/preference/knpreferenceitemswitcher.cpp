@@ -4,11 +4,16 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QBoxLayout>
+#include <QLineEdit>
+
 #include "knpreferenceitemswitcher.h"
 
 KNPreferenceItemSwitcher::KNPreferenceItemSwitcher(QWidget *parent) :
     KNPreferenceItemBase(parent)
 {
+    //Add the
+//    controlLayout()->addWidget();
 }
 
 QVariant KNPreferenceItemSwitcher::defaultValue() const

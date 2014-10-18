@@ -11,12 +11,13 @@
 #include <QWidget>
 
 class QLabel;
+class QTimeLine;
+class QBoxLayout;
 class KNPreferenceItemBase : public QWidget
 {
     Q_OBJECT
 public:
     explicit KNPreferenceItemBase(QWidget *parent = 0);
-    bool isAdvanced() const;
     virtual QVariant defaultValue() const=0;
     virtual QVariant value() const=0;
     QString caption() const;
@@ -24,14 +25,26 @@ public:
 signals:
 
 public slots:
-    void setAdvanced(const bool &isAdvanced);
     void setCaption(const QString &caption);
     virtual void setDefaultValue(const QVariant &defaultValue)=0;
     virtual void setValue(const QVariant &value)=0;
 
+protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+    void paintEvent(QPaintEvent *event);
+    QWidget *controlContainer();
+
+private slots:
+    void onActionChangeHighlight(const int &frame);
+
 private:
-    bool m_isAdvanced=false;
+    void configureTimeline(QTimeLine *timeLine);
     QLabel *m_caption;
+    qreal m_highLightOpacity=0.0;
+    QTimeLine *m_mouseIn, *m_mouseOut;
+    QLinearGradient m_highlight;
+    QWidget *m_controlContainer;
 };
 
 #endif // KNPREFERENCEITEMBASE_H
