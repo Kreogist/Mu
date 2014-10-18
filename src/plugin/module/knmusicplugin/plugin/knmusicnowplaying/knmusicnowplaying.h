@@ -18,9 +18,11 @@
 #ifndef KNMUSICNOWPLAYING_H
 #define KNMUSICNOWPLAYING_H
 
+#include <QPersistentModelIndex>
+
 #include "knmusicnowplayingbase.h"
 
-class QStandardItem;
+class KNMusicModel;
 class KNMusicProxyModel;
 class KNMusicProxyModelPool;
 class KNMusicSinglePlaylistModel;
@@ -44,12 +46,14 @@ public slots:
     void playMusic(const QModelIndex &index);
 
 private:
-    void resetCurrentItem();
+    void resetPlayingItem();
+    void resetPlayingModels();
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
     KNMusicSinglePlaylistModel *m_temporaryModel;
+    KNMusicModel *m_playingMusicModel=nullptr;
     KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;
     KNMusicProxyModelPool *m_proxyModelPool;
-    QStandardItem *m_currentPlayingItem=nullptr;
+    QPersistentModelIndex m_currentPlayingIndex;
     int m_loopMode=NoRepeat;
 };
 

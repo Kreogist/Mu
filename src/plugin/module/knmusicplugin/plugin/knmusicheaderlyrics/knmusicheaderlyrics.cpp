@@ -48,14 +48,33 @@ KNMusicHeaderLyrics::~KNMusicHeaderLyrics()
 
 void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 {
+    connect(player, &KNMusicHeaderPlayerBase::playerReset,
+            this, &KNMusicHeaderLyrics::resetStatus);
     connect(player, &KNMusicHeaderPlayerBase::requireLoadLyrics,
-            this, &KNMusicHeaderLyricsBase::loadLyricsForMusic);
+            this, &KNMusicHeaderLyrics::loadLyricsForMusic);
     connect(player, &KNMusicHeaderPlayerBase::positionChanged,
             this, &KNMusicHeaderLyrics::onActionPositionChange);
 }
 
-void KNMusicHeaderLyrics::reset()
+void KNMusicHeaderLyrics::resetStatus()
 {
+    //Clear lines.
+    m_lyricsLines=0;
+    //Set no lyrics as true.
+    m_noLyrics=true;
+    //Reset lines.
+    m_currentLyricsLine=-1;
+    //Update the viewport.
+    update();
+}
+
+void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
+{
+    //Reset the lyrics viewer.
+    resetStatus();
+    //Load the lyrics.
+    m_lyricsManager->loadLyricsForFile(filePath);
+    //Update parameters.
     //Get the lyrics lines.
     m_lyricsLines=m_lyricsManager->lines();
     m_noLyrics=(m_lyricsLines==0);
@@ -72,21 +91,14 @@ void KNMusicHeaderLyrics::reset()
         //Move the first line to center.
         onActionLyricsMoved(0);
     }
-    qDebug()<<"m_currentLyricsLine="<<m_currentLyricsLine;
-}
-
-void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
-{
-    //Load the lyrics.
-    m_lyricsManager->loadLyricsForFile(filePath);
-    //Reset the lyrics viewer.
-    reset();
+    //Update the viewer.
+    update();
 }
 
 void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
 {
     //If no lyrics, do nothing.
-    if(m_noLyrics)
+    if(m_noLyrics || m_currentLyricsLine==-1)
     {
         return;
     }

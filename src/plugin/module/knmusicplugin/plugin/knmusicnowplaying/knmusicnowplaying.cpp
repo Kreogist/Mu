@@ -58,12 +58,82 @@ void KNMusicNowPlaying::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
 
 void KNMusicNowPlaying::playNext()
 {
-    ;
+    //If there's no model or the source model is not the music model,
+    //reset all the model.
+    if(m_playingModel==nullptr)
+    {
+        resetPlayingItem();
+        resetPlayingModels();
+        return;
+    }
+    //If current playing index is invaild, then try to play the first item.
+    if(!m_currentPlayingIndex.isValid())
+    {
+        if(m_playingModel->rowCount()>0)
+        {
+            playMusic(0);
+        }
+        return;
+    }
+    QModelIndex currentIndex=m_playingModel->mapFromSource(m_currentPlayingIndex);
+    //If it's the last one.
+    if(currentIndex.row()==m_playingModel->rowCount()-1)
+    {
+        switch(m_loopMode)
+        {
+        case NoRepeat:
+        case RepeatTrack:
+            //Finished playing.
+            resetPlayingItem();
+            return;
+        case RepeatAll:
+            //Play the first one.
+            playMusic(0);
+            return;
+        }
+    }
+    //Play the next song.
+    playMusic(currentIndex.row()+1);
 }
 
 void KNMusicNowPlaying::playPrevious()
 {
-    ;
+    //If there's no model or the source model is not the music model,
+    //reset all the model.
+    if(m_playingModel==nullptr)
+    {
+        resetPlayingItem();
+        resetPlayingModels();
+        return;
+    }
+    //If current playing index is invaild, then try to play the first item.
+    if(!m_currentPlayingIndex.isValid())
+    {
+        if(m_playingModel->rowCount()>0)
+        {
+            playMusic(m_playingModel->rowCount()-1);
+        }
+        return;
+    }
+    QModelIndex currentIndex=m_playingModel->mapFromSource(m_currentPlayingIndex);
+    //If it's the first one
+    if(currentIndex.row()==0)
+    {
+        switch(m_loopMode)
+        {
+        case NoRepeat:
+        case RepeatTrack:
+            //Finished playing.
+            resetPlayingItem();
+            return;
+        case RepeatAll:
+            //Play the last one.
+            playMusic(m_playingModel->rowCount()-1);
+            return;
+        }
+    }
+    //Play the previous song.
+    playMusic(currentIndex.row()-1);
 }
 
 void KNMusicNowPlaying::onActionPlayingFinished()
@@ -110,17 +180,15 @@ void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model)
     {
         return;
     }
-    //If the old proxy model is not nullptr, we should release it.
-    if(m_playingModel!=nullptr)
-    {
-        m_proxyModelPool->release(m_playingModel);
-    }
+    //Reset music model.
+    resetPlayingModels();
     //Occupy the new proxy model.
     m_playingModel=model;
     //If not null, occupy it.
     if(m_playingModel!=nullptr)
     {
         m_proxyModelPool->occupy(m_playingModel);
+        m_playingMusicModel=m_playingModel->musicModel();
     }
 }
 
@@ -130,7 +198,7 @@ void KNMusicNowPlaying::playMusic(const int &row)
             row>-1 &&
             row<m_playingModel->rowCount());
     //Clear the current item.
-    resetCurrentItem();
+    resetPlayingItem();
     //Get the model index in the proxy model.
     QModelIndex sourceIndex=
             m_playingModel->mapToSource(
@@ -142,21 +210,21 @@ void KNMusicNowPlaying::playMusic(const int &row)
     //Oct 18th, 2014: Actually there's a better way to solve this problem, and
     //                we don't need any pointer, that's QPersistentModelIndex,
     //                Check it ASAP.
-    KNMusicModel *musicModel=m_playingModel->musicModel();
-    m_currentPlayingItem=musicModel->itemFromIndex(sourceIndex);
+    m_currentPlayingIndex=QPersistentModelIndex(sourceIndex);
     //Check the start position role, if it is not -1, means it's a music file,
-    if(m_currentPlayingItem->data(StartPositionRole).toLongLong()==-1)
+    if(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                               StartPositionRole).toLongLong()==-1)
     {
-        m_headerPlayer->playFile(musicModel->rowProperty(m_currentPlayingItem->row(),
-                                                         FilePathRole).toString());
+        m_headerPlayer->playFile(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                                  FilePathRole).toString());
     }
     else
     {
-        m_headerPlayer->playSection(musicModel->rowProperty(m_currentPlayingItem->row(),
-                                                            FilePathRole).toString(),
-                                    musicModel->rowProperty(m_currentPlayingItem->row(),
-                                                            StartPositionRole).toLongLong(),
-                                    musicModel->songDuration(m_currentPlayingItem->row()));
+        m_headerPlayer->playSection(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                                     FilePathRole).toString(),
+                                    m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                                     StartPositionRole).toLongLong(),
+                                    m_playingMusicModel->songDuration(m_currentPlayingIndex.row()));
     }
 }
 
@@ -165,14 +233,28 @@ void KNMusicNowPlaying::playMusic(const QModelIndex &index)
     playMusic(index.row());
 }
 
-void KNMusicNowPlaying::resetCurrentItem()
+void KNMusicNowPlaying::resetPlayingItem()
 {
     //No matter what, reset header player first.
     m_headerPlayer->reset();
     //Check is the current item null, if not, clear the playing icon.
-    if(m_currentPlayingItem!=nullptr)
+    if(m_currentPlayingIndex.isValid())
     {
-//        m_currentPlayingItem->setData(QPixmap(), Qt::DecorationRole);
-        m_currentPlayingItem=nullptr;
+        m_playingMusicModel->setData(m_currentPlayingIndex,
+                                     QPixmap(),
+                                     Qt::DecorationRole);
+        m_currentPlayingIndex=QPersistentModelIndex();
     }
+}
+
+void KNMusicNowPlaying::resetPlayingModels()
+{
+    //If the old proxy model is not nullptr, we should release it.
+    if(m_playingModel!=nullptr)
+    {
+        m_proxyModelPool->release(m_playingModel);
+    }
+    m_playingModel=nullptr;
+    //Clear music model.
+    m_playingMusicModel=nullptr;
 }

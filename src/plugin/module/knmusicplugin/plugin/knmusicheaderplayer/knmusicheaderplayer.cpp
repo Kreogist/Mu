@@ -133,6 +133,8 @@ void KNMusicHeaderPlayer::reset()
     setPositionText(0);
     //Ask to reset main thread.
     m_backend->resetMainPlayer();
+    //Emit reset signal.
+    emit playerReset();
 }
 
 void KNMusicHeaderPlayer::play()

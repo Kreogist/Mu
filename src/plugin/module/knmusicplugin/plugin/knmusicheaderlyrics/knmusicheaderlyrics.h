@@ -33,7 +33,7 @@ public:
 signals:
 
 public slots:
-    void reset();
+    void resetStatus();
     void loadLyricsForMusic(const QString &filePath);
     void onActionPositionChange(const qint64 &position);
 

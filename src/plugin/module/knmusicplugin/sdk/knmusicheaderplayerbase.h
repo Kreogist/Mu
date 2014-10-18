@@ -23,6 +23,7 @@ signals:
     void requireShowMainPlayer();
     void requireShowAppendMenu();
     void requireLoadLyrics(QString musicFilePath);
+    void playerReset();
     void finished();
     void positionChanged(qint64 position);
 
