@@ -17,3 +17,8 @@ KNMusicModel *KNMusicProxyModel::musicModel()
 {
     return (KNMusicModel *)sourceModel();
 }
+
+int KNMusicProxyModel::playingItemColumn()
+{
+    return musicModel()->playingItemColumn();
+}

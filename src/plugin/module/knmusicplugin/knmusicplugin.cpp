@@ -146,8 +146,14 @@ void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
 
 void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
 {
-    m_pluginList.append(plugin);
-    plugin->setHeaderPlayer(m_headerPlayer);
+    if(m_nowPlaying==nullptr)
+    {
+        m_nowPlaying=plugin;
+        //Add plugin to list.
+        m_pluginList.append(plugin);
+        //Set the header player.
+        m_nowPlaying->setHeaderPlayer(m_headerPlayer);
+    }
 }
 
 void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
@@ -160,6 +166,11 @@ void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
 void KNMusicPlugin::retranslate()
 {
     m_caption=tr("Music");
+}
+
+void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
+{
+    m_nowPlaying->playTemporaryFiles(data);
 }
 
 void KNMusicPlugin::addMusicCategory(const QPixmap &icon,

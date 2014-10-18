@@ -45,20 +45,21 @@ QString KNMusicLyricsManager::lyricsAt(const int &index) const
     return m_lyricsText.at(index);
 }
 
-void KNMusicLyricsManager::loadLyricsForFile(const QString &filePath)
+bool KNMusicLyricsManager::loadLyricsForFile(const QString &filePath)
 {
     //Clear the lyrics.
     clear();
     //Find the lyrics.
     if(!findLyricsForFile(filePath))
     {
-        return;
+        return false;
     }
     //Using parser to parse the file.
     m_lrcParser->parseFile(m_currentLyricsPath,
                            m_lyricsProperty,
                            m_positions,
                            m_lyricsText);
+    return !m_positions.isEmpty();
 }
 
 void KNMusicLyricsManager::clear()

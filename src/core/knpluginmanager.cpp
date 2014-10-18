@@ -182,14 +182,28 @@ void KNPluginManager::loadPlugins()
     loadCategoryPlugin(new KNMusicPlugin);
 }
 
+void KNPluginManager::processArguments()
+{
+    //If there's only one item in arguments list, it means no arguments get
+    //from system.
+    QStringList args=QApplication::arguments();
+    if(args.size()==1)
+    {
+        return;
+    }
+    //Ask to process the arguments.
+    args.removeFirst();
+    emit requireProcessArguments(args);
+}
+
 void KNPluginManager::start()
 {
     m_mainWindow->show();
 }
 
-void KNPluginManager::onActionArgumentReceive(const QString &message)
+void KNPluginManager::onActionArgumentReceive(const QStringList &message)
 {
-    ;
+    emit requireProcessArguments(message);
 }
 
 void KNPluginManager::onActionMainWindowDestory()
@@ -249,6 +263,9 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 {
     //Add this to the plugin list.
     m_pluginList.append(plugin);
+    //Connect arguments process.
+    connect(this, &KNPluginManager::requireProcessArguments,
+            plugin, &KNCategoryPlugin::onArgumentsAvailable);
     //Add the plugin data to the main window.
     /*! FIXME: Here we need to add the icon to the category list.
      *         But now we just need one category, so we don't need to do it now.

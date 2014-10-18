@@ -58,10 +58,21 @@ void KNMusicHeaderLyrics::reset()
 {
     //Get the lyrics lines.
     m_lyricsLines=m_lyricsManager->lines();
-    //Initial the current line to the first line.
-    m_currentLyricsLine=(m_lyricsLines>-1)?0:-1;
-    //Move the first line to center.
-    onActionLyricsMoved(0);
+    m_noLyrics=(m_lyricsLines==0);
+    //Check is there lyrics.
+    if(m_noLyrics)
+    {
+        //Reset the lyrics line.
+        m_currentLyricsLine=-1;
+    }
+    else
+    {
+        //Initial the current line to the first line.
+        m_currentLyricsLine=0;
+        //Move the first line to center.
+        onActionLyricsMoved(0);
+    }
+    qDebug()<<"m_currentLyricsLine="<<m_currentLyricsLine;
 }
 
 void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
@@ -74,6 +85,11 @@ void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
 
 void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
 {
+    //If no lyrics, do nothing.
+    if(m_noLyrics)
+    {
+        return;
+    }
     int yOffset=0;
     //Check the position is previous than the current yet.
     if(position<m_lyricsManager->positionAt(m_currentLyricsLine))
@@ -109,7 +125,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     //Paint other things.
     QWidget::paintEvent(event);
     //Check is current line available, if not means no lyrics.
-    if(m_currentLyricsLine==-1)
+    if(m_noLyrics || m_currentLyricsLine==-1)
     {
         return;
     }

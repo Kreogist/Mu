@@ -59,7 +59,7 @@ bool KNSingleApplication::isPatternRunning() const
     return m_isRunning;
 }
 
-bool KNSingleApplication::sendMessage(const QString &message)
+bool KNSingleApplication::sendMessage(const QStringList &message)
 {
     //If I am the only instance, ignore the send request.
     if(!m_isRunning)
@@ -76,8 +76,12 @@ bool KNSingleApplication::sendMessage(const QString &message)
         //!FIXME: show the error string.
         return false;
     }
-    //Write data.
-    poster.write(message.toUtf8()); //I love UTF-8, bite me!
+    //Write data using a datastream.
+    QByteArray messageData;
+    QDataStream dataWriter(&messageData, QIODevice::WriteOnly);
+    dataWriter<<message;
+    //Write the data.
+    poster.write(messageData);
     //Check write successful.
     if(!poster.waitForBytesWritten(m_timeout))
     {
@@ -100,8 +104,12 @@ void KNSingleApplication::messageReceive()
         //!FIXME: show the error string.
         return;
     }
+    //Using a datastream to parse the bytearray.
+    QByteArray rawMessage=client->readAll();
+    QStringList clientMessage;
+    QDataStream dataReader(&rawMessage, QIODevice::ReadOnly);
+    dataReader>>clientMessage;
     //Emit the message.
-    QString clientMessage=QString::fromUtf8(client->readAll().constData());
     emit messageAvailable(clientMessage);
     //Disconnect socket.
     client->disconnectFromServer();

@@ -20,6 +20,9 @@
 
 #include "knmusicnowplayingbase.h"
 
+class QStandardItem;
+class KNMusicProxyModel;
+class KNMusicProxyModelPool;
 class KNMusicSinglePlaylistModel;
 class KNMusicNowPlaying : public KNMusicNowPlayingBase
 {
@@ -35,10 +38,18 @@ public slots:
     void playPrevious();
     void onActionPlayingFinished();
     void changeLoopState();
+    void playTemporaryFiles(const QStringList &filePaths);
+    void setPlayingModel(KNMusicProxyModel *model);
+    void playMusic(const int &row);
+    void playMusic(const QModelIndex &index);
 
 private:
+    void resetCurrentItem();
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
     KNMusicSinglePlaylistModel *m_temporaryModel;
+    KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;
+    KNMusicProxyModelPool *m_proxyModelPool;
+    QStandardItem *m_currentPlayingItem=nullptr;
     int m_loopMode=NoRepeat;
 };
 

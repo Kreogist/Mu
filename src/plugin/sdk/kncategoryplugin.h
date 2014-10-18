@@ -29,6 +29,7 @@ public:
 signals:
 
 public slots:
+    virtual void onArgumentsAvailable(const QStringList &data)=0;
 
 };
 

@@ -170,6 +170,11 @@ qint64 KNMusicModel::songDuration(const int &row)
     return roleData(row, Time, Qt::UserRole).toLongLong();
 }
 
+int KNMusicModel::playingItemColumn()
+{
+    return Name;
+}
+
 void KNMusicModel::addFiles(const QStringList &fileList)
 {
     emit requireAnalysisFiles(fileList);
@@ -204,4 +209,14 @@ void KNMusicModel::clearMusicRow()
     removeRows(0, rowCount());
     //Tell other's to update.
     emit rowCountChanged();
+}
+
+void KNMusicModel::blockAddFile(const QString &filePath)
+{
+    //WARNING: This function is working in a block way to adding file, may cause
+    //performance reduce.
+    if(m_searcher->isFilePathAccept(filePath))
+    {
+        m_analysisCache->analysisFile(filePath);
+    }
 }

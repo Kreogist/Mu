@@ -8,6 +8,7 @@
 #define KNSINGLEAPPLICATION_H
 
 #include <QApplication>
+#include <QStringList>
 #include <QSharedMemory>
 
 class QLocalServer;
@@ -19,10 +20,10 @@ public:
                                  char *argv[],
                                  const QString uniqueKey);
     bool isPatternRunning() const;
-    bool sendMessage(const QString &message);
+    bool sendMessage(const QStringList &message);
 
 signals:
-    void messageAvailable(QString message);
+    void messageAvailable(QStringList message);
 
 public slots:
     void messageReceive();

@@ -30,10 +30,8 @@ int main(int argc, char *argv[])
         //If so, send all the arguments to that pattern.
         QStringList args=KNSingleApplication::arguments();
         //Ignore the first pattern, that's the application path.
-        for(int i=1; i<args.size(); i++)
-        {
-            app.sendMessage(args.at(i));
-        }
+        args.removeFirst();
+        app.sendMessage(args);
         //Exit.
         return EXIT_SUCCESS;
     }
@@ -49,6 +47,8 @@ int main(int argc, char *argv[])
     pluginManager->loadPlugins();
     //Start application.
     pluginManager->start();
+    //Process the arguments.
+    pluginManager->processArguments();
     //Spread message loop.
     int result=app.exec();
     //Remove the plugin manager and recover the memory.

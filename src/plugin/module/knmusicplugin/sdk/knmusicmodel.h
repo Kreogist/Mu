@@ -42,6 +42,7 @@ public:
     QVariant rowProperty(const int &row, const int &propertyRole);
     virtual QPixmap songAlbumArt(const int &row);
     qint64 songDuration(const int &row);
+    virtual int playingItemColumn();
 
 signals:
     void rowCountChanged();
@@ -54,6 +55,7 @@ public slots:
     virtual void clearMusicRow();
 
 protected:
+    virtual void blockAddFile(const QString &filePath);
 
 private:
     KNMusicSearcher *m_searcher;

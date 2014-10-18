@@ -25,10 +25,12 @@ class KNMusicSinglePlaylistModel : public KNMusicModel
     Q_OBJECT
 public:
     explicit KNMusicSinglePlaylistModel(QObject *parent = 0);
+    int playingItemColumn();
 
 signals:
 
 public slots:
+    void setCurrentFiles(QStringList filePaths);
 
 private:
     void initialHeader();

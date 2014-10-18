@@ -19,6 +19,7 @@
 #define KNPLUGINMANAGER_H
 
 #include <QObject>
+#include <QStringList>
 #include <QLinkedList>
 
 class QMainWindow;
@@ -39,12 +40,14 @@ public:
     QMainWindow *mainWindow() const;
     void setMainWindow(QMainWindow *mainWindow);
     void loadPlugins();
+    void processArguments();
     void start();
 
 signals:
+    void requireProcessArguments(QStringList arguments);
 
 public slots:
-    void onActionArgumentReceive(const QString &message);
+    void onActionArgumentReceive(const QStringList &message);
 
 private slots:
     void onActionMainWindowDestory();

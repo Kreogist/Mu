@@ -16,6 +16,7 @@ class KNMusicProxyModel : public QSortFilterProxyModel
 public:
     explicit KNMusicProxyModel(QObject *parent = 0);
     KNMusicModel *musicModel();
+    int playingItemColumn();
 
 signals:
 

@@ -26,6 +26,22 @@ KNMusicSinglePlaylistModel::KNMusicSinglePlaylistModel(QObject *parent) :
     initialHeader();
 }
 
+int KNMusicSinglePlaylistModel::playingItemColumn()
+{
+    return BlankData;
+}
+
+void KNMusicSinglePlaylistModel::setCurrentFiles(QStringList filePaths)
+{
+    //Clear the original files.
+    clearMusicRow();
+    //Add files to temporary model.
+    while(!filePaths.isEmpty())
+    {
+        blockAddFile(filePaths.takeLast());
+    }
+}
+
 void KNMusicSinglePlaylistModel::initialHeader()
 {
     //Set the header text.

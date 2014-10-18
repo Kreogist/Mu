@@ -50,7 +50,7 @@ public:
 signals:
 
 public slots:
-    void loadLyricsForFile(const QString &filePath);
+    bool loadLyricsForFile(const QString &filePath);
 
 private:
     void clear();

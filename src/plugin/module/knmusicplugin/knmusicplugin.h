@@ -55,6 +55,7 @@ signals:
 
 public slots:
     void retranslate();
+    void onArgumentsAvailable(const QStringList &data);
 
 protected slots:
     void addMusicCategory(const QPixmap &icon,
@@ -84,6 +85,7 @@ private:
     KNMusicBackend *m_backend=nullptr;
     KNMusicParser *m_parser=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
+    KNMusicNowPlayingBase *m_nowPlaying=nullptr;
 };
 
 #endif // KNMUSICPLUGIN_H
