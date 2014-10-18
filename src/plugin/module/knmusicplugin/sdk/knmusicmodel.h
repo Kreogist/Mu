@@ -7,7 +7,6 @@
 #ifndef KNMUSICMODEL_H
 #define KNMUSICMODEL_H
 
-#include <QThread>
 #include <QPixmap>
 #include <QStringList>
 
@@ -27,13 +26,34 @@ public:
     ~KNMusicModel();
     Qt::DropActions supportedDropActions() const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    QStringList mimeTypes() const;
+    bool dropMimeData(const QMimeData *data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex &parent);
+    qint64 totalDuration() const;
+    QString filePathFromRow(const int &row);
+    QString filePathFromIndex(const QModelIndex &index);
+    QModelIndexList indexFromFilePath(const QString &filePath);
+    QString itemText(const int &row, const int &column) const;
+    QVariant roleData(int row, int column, int role) const;
+    QList<QStandardItem *> songRow(const int &row) const;
+    QVariant rowProperty(const int &row, const int &propertyRole);
+    virtual QPixmap songAlbumArt(const int &row);
+    qint64 songDuration(const int &row);
 
 signals:
     void rowCountChanged();
     void requireAnalysisFiles(QStringList urls);
 
 public slots:
+    virtual void addFiles(const QStringList &fileList);
     virtual void appendMusicRow(const QList<QStandardItem *> &musicRow);
+    virtual void removeMusicRow(const int &row);
+    virtual void clearMusicRow();
+
+protected:
 
 private:
     KNMusicSearcher *m_searcher;

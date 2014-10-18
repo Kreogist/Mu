@@ -15,31 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICNOWPLAYING_H
-#define KNMUSICNOWPLAYING_H
+#ifndef KNMUSICSINGLEPLAYLISTMODEL_H
+#define KNMUSICSINGLEPLAYLISTMODEL_H
 
-#include "knmusicnowplayingbase.h"
+#include "knmusicmodel.h"
 
-class KNMusicSinglePlaylistModel;
-class KNMusicNowPlaying : public KNMusicNowPlayingBase
+class KNMusicSinglePlaylistModel : public KNMusicModel
 {
     Q_OBJECT
 public:
-    explicit KNMusicNowPlaying(QObject *parent = 0);
-    void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
+    explicit KNMusicSinglePlaylistModel(QObject *parent = 0);
 
 signals:
 
 public slots:
-    void playNext();
-    void playPrevious();
-    void onActionPlayingFinished();
-    void changeLoopState();
 
 private:
-    KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
-    KNMusicSinglePlaylistModel *m_temporaryModel;
-    int m_loopMode=NoRepeat;
+    void initialHeader();
+    KNMusicGlobal *m_musicGlobal;
 };
 
-#endif // KNMUSICNOWPLAYING_H
+#endif // KNMUSICSINGLEPLAYLISTMODEL_H

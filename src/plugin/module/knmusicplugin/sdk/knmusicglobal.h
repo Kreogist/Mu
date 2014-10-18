@@ -150,10 +150,11 @@ private:
     void regMetaType();
     void initialFileType();
     void initialThreads();
+    void initialHeaderText();
     static KNMusicGlobal *m_instance;
     static KNMusicParser *m_parser;
     explicit KNMusicGlobal(QObject *parent = 0);
-    QString m_treeViewHeaderText[MusicDataCount];
+    QString m_treeViewHeaderText[MusicDisplayDataCount];
     QStringList m_suffixs, m_listSuffixs,
                     m_suffixDescription, m_listSuffixDescription,
                     m_indexedGenres;

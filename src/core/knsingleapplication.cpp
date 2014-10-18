@@ -61,7 +61,7 @@ bool KNSingleApplication::isPatternRunning() const
 
 bool KNSingleApplication::sendMessage(const QString &message)
 {
-    //If I am the only instance, send to who?
+    //If I am the only instance, ignore the send request.
     if(!m_isRunning)
     {
         return false;

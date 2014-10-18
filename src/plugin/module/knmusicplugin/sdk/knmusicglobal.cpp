@@ -198,6 +198,11 @@ void KNMusicGlobal::initialThreads()
     m_analysisThread->start();
 }
 
+void KNMusicGlobal::initialHeaderText()
+{
+    m_treeViewHeaderText[BlankData]=" ";
+}
+
 KNMusicParser *KNMusicGlobal::parser()
 {
     return m_parser;
@@ -216,8 +221,9 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     //Initial music types.
     initialFileType();
     //Initial threads.
-    ;
+    initialThreads();
     //Initial resources.
+    initialHeaderText();
 
     //Get the latest translation.
     retranslate();
