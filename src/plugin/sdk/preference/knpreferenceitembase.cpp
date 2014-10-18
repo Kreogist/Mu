@@ -11,18 +11,16 @@
 
 #include "knpreferenceitembase.h"
 
-#define ItemFixedHeight 34
-
 KNPreferenceItemBase::KNPreferenceItemBase(QWidget *parent) :
     QWidget(parent)
 {
     //Set properties.
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
-    setFixedHeight(ItemFixedHeight);
+    setFixedHeight(m_itemHeight);
 
     //Initial highlight.
-    m_highlight=QLinearGradient(0,0,0,ItemFixedHeight);
+    m_highlight=QLinearGradient(0,0,0,m_itemHeight);
     m_highlight.setColorAt(0, QColor(0x79, 0x79, 0x79));
     m_highlight.setColorAt(1, QColor(0x4a, 0x4a, 0x4a));
 
@@ -58,13 +56,13 @@ KNPreferenceItemBase::KNPreferenceItemBase(QWidget *parent) :
     //Add container to main layout.
     mainLayout->addWidget(m_controlContainer, 1);
 
-    //Initial time line.
+    //Initial mouse sense timeline.
     m_mouseIn=new QTimeLine(100, this);
     m_mouseIn->setEndFrame(100);
-    configureTimeline(m_mouseIn);
+    configureMouseInOutTimeline(m_mouseIn);
     m_mouseOut=new QTimeLine(100, this);
     m_mouseOut->setEndFrame(0);
-    configureTimeline(m_mouseOut);
+    configureMouseInOutTimeline(m_mouseOut);
 }
 
 QString KNPreferenceItemBase::caption() const
@@ -135,7 +133,7 @@ void KNPreferenceItemBase::onActionChangeHighlight(const int &frame)
     update();
 }
 
-void KNPreferenceItemBase::configureTimeline(QTimeLine *timeLine)
+void KNPreferenceItemBase::configureMouseInOutTimeline(QTimeLine *timeLine)
 {
     timeLine->setUpdateInterval(5);
     connect(timeLine, &QTimeLine::frameChanged,

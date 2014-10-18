@@ -18,14 +18,15 @@
 #ifndef KNPREFERENCECATEGORYLIST_H
 #define KNPREFERENCECATEGORYLIST_H
 
-#include <QWidget>
 #include <QList>
 
 #include "knpreferencecategoryitem.h"
 
+#include <QScrollArea>
+
 class QBoxLayout;
 class QSignalMapper;
-class KNPreferenceCategoryList : public QWidget
+class KNPreferenceCategoryList : public QScrollArea
 {
     Q_OBJECT
 public:

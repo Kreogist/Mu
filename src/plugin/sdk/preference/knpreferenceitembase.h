@@ -39,7 +39,8 @@ private slots:
     void onActionChangeHighlight(const int &frame);
 
 private:
-    void configureTimeline(QTimeLine *timeLine);
+    void configureMouseInOutTimeline(QTimeLine *timeLine);
+    int m_itemHeight=34;
     QLabel *m_caption;
     qreal m_highLightOpacity=0.0;
     QTimeLine *m_mouseIn, *m_mouseOut;

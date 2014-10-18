@@ -23,16 +23,29 @@
 #include <QDebug>
 
 KNPreferenceCategoryList::KNPreferenceCategoryList(QWidget *parent) :
-    QWidget(parent)
+    QScrollArea(parent)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
+    setWidgetResizable(true);
+    setFrameShape(QFrame::NoFrame);
+
+    //Set background transparent.
+    QPalette pal=palette();
+    pal.setColor(QPalette::Base, QColor(0,0,0,0));
+    pal.setColor(QPalette::Window, QColor(0,0,0,0));
+    setPalette(pal);
+
+    //Initial container.
+    QWidget *contentsContainer=new QWidget(this);
+    contentsContainer->setContentsMargins(0,0,0,0);
+    setWidget(contentsContainer);
 
     //Set main layout.
     m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    m_mainLayout->setContentsMargins(0,0,0,0);
+    m_mainLayout->setContentsMargins(0,5,0,5);
     m_mainLayout->setSpacing(0);
-    setLayout(m_mainLayout);
+    contentsContainer->setLayout(m_mainLayout);
 
     //Initial the signal mapper.
     m_buttonMapper=new QSignalMapper(this);
