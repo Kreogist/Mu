@@ -15,9 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QSplitter>
 #include <QBoxLayout>
+#include <QItemSelectionModel>
+#include <QSplitter>
 
+#include "knmusicplaylistlist.h"
 #include "knmusicplaylistlistview.h"
 #include "knmusicplaylistlistvieweditor.h"
 #include "knmusicplaylistdisplay.h"
@@ -38,7 +40,7 @@ KNMusicPlaylistTab::KNMusicPlaylistTab(QObject *parent) :
 
     //Initial the playlist list.
     initialPlaylistList();
-    m_viewer->addWidget(m_playlistList);
+    m_viewer->addWidget(m_playlistListViewer);
     //Initial the playlist display.
     m_playlistDisplay=new KNMusicPlaylistDisplay(m_viewer);
     m_viewer->addWidget(m_playlistDisplay);
@@ -71,25 +73,54 @@ QWidget *KNMusicPlaylistTab::widget()
     return m_viewer;
 }
 
+void KNMusicPlaylistTab::displayPlaylistItem(KNMusicPlaylistListItem *item)
+{
+    m_playlistDisplay->displayPlaylistItem(item);
+}
+
+void KNMusicPlaylistTab::setPlaylistList(KNMusicPlaylistList *playlistList)
+{
+    m_playlistListView->setModel(playlistList);
+    connect(m_playlistListView->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &KNMusicPlaylistTab::currentPlaylistChanged);
+}
+
+void KNMusicPlaylistTab::setCurrentPlaylist(const QModelIndex &index)
+{
+    m_playlistListView->setCurrentIndex(index);
+}
+
+void KNMusicPlaylistTab::editPlaylistName(const QModelIndex &index)
+{
+    m_playlistListView->edit(index);
+}
+
+void KNMusicPlaylistTab::onActionAddPlaylist()
+{
+    emit requireGeneratePlaylist(tr("New Playlist"));
+}
+
 void KNMusicPlaylistTab::initialPlaylistList()
 {
     //Initial the container.
-    m_playlistList=new QWidget(m_viewer);
+    m_playlistListViewer=new QWidget(m_viewer);
     //Set properties.
-    m_playlistList->setContentsMargins(0,0,0,0);
+    m_playlistListViewer->setContentsMargins(0,0,0,0);
 
     //Initial the layout.
     QBoxLayout *playlistListLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                                  m_playlistList);
+                                                  m_playlistListViewer);
     playlistListLayout->setContentsMargins(0,0,0,0);
     playlistListLayout->setSpacing(0);
-    m_playlistList->setLayout(playlistListLayout);
+    m_playlistListViewer->setLayout(playlistListLayout);
 
     //Initial the list view.
-    m_playlistListView=new KNMusicPlaylistListView(m_playlistList);
+    m_playlistListView=new KNMusicPlaylistListView(m_playlistListViewer);
     playlistListLayout->addWidget(m_playlistListView);
 
     //Initial the list editor.
-    m_playlistListViewEditor=new KNMusicPlaylistListViewEditor(m_playlistList);
+    m_playlistListViewEditor=new KNMusicPlaylistListViewEditor(m_playlistListViewer);
+    connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireAddPlaylist,
+            this, &KNMusicPlaylistTab::onActionAddPlaylist);
     playlistListLayout->addWidget(m_playlistListViewEditor);
 }

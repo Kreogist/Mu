@@ -30,6 +30,9 @@ KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     setMinimumHeight(34);
 
+    //Initial menu.
+    initialMenu();
+
     //Initial layouts.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     mainLayout->setContentsMargins(8,8,8,8);
@@ -39,8 +42,6 @@ KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
     //Initial the add button.
     m_add=new KNOpacityAnimeButton(this);
     m_add->setIcon(QPixmap(":/plugin/music/playlist/add.png"));
-    //Initial add playlist actions.
-    createAddMenu();
     connect(m_add, &KNOpacityAnimeButton::clicked,
             this, &KNMusicPlaylistListViewEditor::showAddMenu);
     mainLayout->addWidget(m_add, 0, Qt::AlignCenter);
@@ -57,6 +58,8 @@ KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
     //Initial the configure button.
     m_configure=new KNOpacityAnimeButton(this);
     m_configure->setIcon(QPixmap(":/plugin/music/playlist/edit.png"));
+    connect(m_configure, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicPlaylistListViewEditor::showConfigureMenu);
     mainLayout->addWidget(m_configure, 0, Qt::AlignCenter);
 
     retranslate();
@@ -65,24 +68,30 @@ KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
 void KNMusicPlaylistListViewEditor::retranslate()
 {
     //Update menu actions.
-    m_addActionTitles[AddPlaylist]=tr("New Playlist");
-    m_addActionTitles[ImportPlaylist]=tr("Import Playlist");
+    m_addActions[AddPlaylist]->setText(tr("New Playlist"));
+    m_addActions[ImportPlaylist]->setText(tr("Import Playlist"));
+
+    m_configureActions[ExportPlaylist]->setText(tr("Export"));
+    m_configureActions[CopyPlaylist]->setText(tr("Copy"));
     //Update filter.
     m_playlistFilter.clear();
     m_playlistFilter<<tr("Mu playlist (*.mplst)");
-    //Set add menu actions.
-    for(int i=0; i<AddMenuActionsCount; i++)
-    {
-        m_addActions[i]->setText(m_addActionTitles[i]);
-    }
 }
 
 void KNMusicPlaylistListViewEditor::showAddMenu()
 {
     //Set position.
     m_addMenu->setMouseDownPos(QCursor::pos());
-    //Show up add menu.
+    //Show add menu.
     m_addMenu->exec(QCursor::pos());
+}
+
+void KNMusicPlaylistListViewEditor::showConfigureMenu()
+{
+    //Set position.
+    m_configureMenu->setMouseDownPos(QCursor::pos());
+    //Show configure menu.
+    m_configureMenu->exec(QCursor::pos());
 }
 
 void KNMusicPlaylistListViewEditor::showImportDialog()
@@ -96,14 +105,17 @@ void KNMusicPlaylistListViewEditor::showImportDialog()
     }
 }
 
-void KNMusicPlaylistListViewEditor::createAddMenu()
+void KNMusicPlaylistListViewEditor::initialMenu()
 {
     m_addMenu=new KNAnimationMenu(this);
+    m_configureMenu=new KNAnimationMenu(this);
     //Set seperator style sheet, I can't solve this bug in coding way.
-    m_addMenu->setStyleSheet("QMenu::separator {height:1px;"
-                             "background: rgba(255, 255, 255, 100);"
-                             "margin-left: 5px;"
-                             "margin-right: 5px;}");
+    QString seperatorStyleSheet="QMenu::separator {height:1px;"
+                                "background: rgba(255, 255, 255, 100);"
+                                "margin-left: 5px;"
+                                "margin-right: 5px;}";
+    m_addMenu->setStyleSheet(seperatorStyleSheet);
+    m_configureMenu->setStyleSheet(seperatorStyleSheet);
     //Set palette.
     QPalette pal=m_addMenu->palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));
@@ -113,20 +125,32 @@ void KNMusicPlaylistListViewEditor::createAddMenu()
     pal.setColor(QPalette::Highlight, QColor(0x60, 0x60, 0x60));
     pal.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     m_addMenu->setPalette(pal);
+    m_configureMenu->setPalette(pal);
 
-    //Initial the actions.
+    //Initial add actions.
     for(int i=0; i<AddMenuActionsCount; i++)
     {
         m_addActions[i]=new QAction(this);
     }
 
+    //Set connections.
     connect(m_addActions[AddPlaylist], SIGNAL(triggered()),
             this, SIGNAL(requireAddPlaylist()));
-    m_addMenu->addAction(m_addActions[AddPlaylist]);
-
-    m_addMenu->addSeparator();
-
     connect(m_addActions[ImportPlaylist], SIGNAL(triggered()),
             this, SLOT(showImportDialog()));
+
+    //Generate menu.
+    m_addMenu->addAction(m_addActions[AddPlaylist]);
+    m_addMenu->addSeparator();
     m_addMenu->addAction(m_addActions[ImportPlaylist]);
+
+    //Initial configure actions.
+    for(int i=0; i<ConfigureMenuActionCount; i++)
+    {
+        m_configureActions[i]=new QAction(this);
+    }
+
+    m_configureMenu->addAction(m_configureActions[ExportPlaylist]);
+    m_configureMenu->addSeparator();
+    m_configureMenu->addAction(m_configureActions[CopyPlaylist]);
 }

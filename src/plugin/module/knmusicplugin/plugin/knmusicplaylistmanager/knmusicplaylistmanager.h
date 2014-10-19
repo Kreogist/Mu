@@ -18,9 +18,13 @@
 #ifndef KNMUSICPLAYLISTMANAGER_H
 #define KNMUSICPLAYLISTMANAGER_H
 
+#include <QIcon>
+
 #include "knmusicplaylistmanagerbase.h"
 
 class KNMusicPlaylistTab;
+class KNMusicPlaylistList;
+class KNMusicPlaylistListItem;
 class KNMusicPlaylistManager : public KNMusicPlaylistManagerBase
 {
     Q_OBJECT
@@ -32,8 +36,16 @@ signals:
 
 public slots:
 
+private slots:
+    void onActionAddPlaylist(const QString &caption);
+    void onActionCurrentPlaylistChanged(const QModelIndex &current,
+                                        const QModelIndex &previous);
+
 private:
+    KNMusicPlaylistListItem *generatePlaylist(const QString &caption);
     KNMusicPlaylistTab *m_playlistTab;
+    KNMusicPlaylistList *m_playlistList;
+    QIcon m_playlistIcon;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H

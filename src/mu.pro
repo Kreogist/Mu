@@ -164,7 +164,11 @@ SOURCES += \
     plugin/sdk/preference/knpreferenceitemswitcher.cpp \
     plugin/sdk/knsideshadowwidget.cpp \
     plugin/sdk/knanimeroundswitcher.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.cpp
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitem.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlist.cpp \
+    plugin/module/knmusicplugin/sdk/knconnectionhandler.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -263,7 +267,11 @@ HEADERS += \
     plugin/sdk/preference/knpreferenceitemswitcher.h \
     plugin/sdk/knsideshadowwidget.h \
     plugin/sdk/knanimeroundswitcher.h \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.h
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmodel.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitem.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlist.h \
+    plugin/module/knmusicplugin/sdk/knconnectionhandler.h
 
 RESOURCES += \
     resource/res.qrc

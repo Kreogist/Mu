@@ -17,7 +17,7 @@ class QTimeLine;
 class KNConnectionHandler;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
-class KNMusicModelBase;
+class KNMusicModel;
 class KNMusicProxyModel;
 class KNMusicProxyModelPool;
 class KNMusicTreeViewBase : public QTreeView
@@ -25,6 +25,8 @@ class KNMusicTreeViewBase : public QTreeView
     Q_OBJECT
 public:
     explicit KNMusicTreeViewBase(QWidget *parent = 0);
+    KNMusicModel *musicModel();
+    void setMusicModel(KNMusicModel *musicModel);
 
 signals:
 
@@ -32,7 +34,12 @@ public slots:
     virtual void resetHeaderState();
 
 protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
     void moveToFirst(const int &logicalIndex);
+
+private slots:
+    void onActionMouseInOut(const int &frame);
 
 private:
     void configureTimeLine(QTimeLine *timeLine);
@@ -46,7 +53,7 @@ private:
     KNConnectionHandler *m_soloConnections, *m_multiConnections;
     QDrag *m_drag;
     QMimeData *m_mimeData;
-    QColor m_alternateColor=QColor(255,255,255),
+    QColor m_alternateColor=QColor(255,255,255,0),
     m_fontColor=QColor(255,255,255),
     m_buttonColor=QColor(255,255,255);
     int m_maxOpacity=0x30,

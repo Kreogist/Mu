@@ -37,25 +37,11 @@ KNMusicProxyModel *KNMusicProxyModelPool::alloct()
         //If so, alloct one.
         KNMusicProxyModel *element=new KNMusicProxyModel;
         //Add to occupation list.
-        m_available.append(element);
+        m_occupation.append(element);
         return element;
     }
     //Return the first one of the avaliable.
     return m_available.first();
-}
-
-bool KNMusicProxyModelPool::occupy(KNMusicProxyModel *model)
-{
-    //Find the model in avaliable list.
-    int modelIndex=m_available.indexOf(model);
-    //If not find, return false.
-    if(modelIndex==-1)
-    {
-        return false;
-    }
-    //Set it occupied.
-    m_occupation.append(m_available.takeAt(modelIndex));
-    return true;
 }
 
 bool KNMusicProxyModelPool::release(KNMusicProxyModel *model)
@@ -67,6 +53,8 @@ bool KNMusicProxyModelPool::release(KNMusicProxyModel *model)
     {
         return false;
     }
+    //Reset the model first.
+    resetProxyModel(model);
     //Set it free.
     m_available.append(m_occupation.takeAt(modelIndex));
     return true;
@@ -81,3 +69,40 @@ KNMusicProxyModelPool::KNMusicProxyModelPool(QObject *parent) :
     QObject(parent)
 {
 }
+
+KNMusicProxyModel *KNMusicProxyModelPool::playing() const
+{
+    return m_playing;
+}
+
+bool KNMusicProxyModelPool::setPlaying(KNMusicProxyModel *playing)
+{
+    int modelIndex=m_occupation.indexOf(playing);
+    //If not find, return false.
+    if(modelIndex==-1)
+    {
+        return false;
+    }
+    //Get that model.
+    m_playing=m_occupation.takeAt(modelIndex);
+}
+
+void KNMusicProxyModelPool::releasePlaying()
+{
+    //If playing model is not null,
+    if(m_playing!=nullptr)
+    {
+        //Reset the proxy model.
+        resetProxyModel(m_playing);
+        //Move it to available list.
+        m_available.append(m_playing);
+        //Clear the pointer.
+        m_playing=nullptr;
+    }
+}
+
+void KNMusicProxyModelPool::resetProxyModel(KNMusicProxyModel *model)
+{
+    model->setSourceModel(nullptr);
+}
+

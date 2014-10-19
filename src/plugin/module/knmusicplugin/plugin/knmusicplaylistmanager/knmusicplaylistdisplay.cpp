@@ -19,6 +19,9 @@
 #include <QLabel>
 
 #include "knmousesensewidget.h"
+#include "knconnectionhandler.h"
+#include "knmusicplaylistmodel.h"
+#include "knmusicplaylistlistitem.h"
 #include "knmusicplaylisttreeview.h"
 
 #include "knmusicplaylistdisplay.h"
@@ -70,4 +73,79 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
 //            this, &KNMusicPlaylistDisplay::requireRemoveItem);
 
     displayLayout->addWidget(m_playlistTreeView, 1);
+
+    //Initial playlist connection handler.
+    m_modelSignalHandler=new KNConnectionHandler(this);
+}
+
+void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
+{
+    //Reset the connection.
+    m_modelSignalHandler->disConnectAll();
+    //Set the model.
+    KNMusicPlaylistModel *musicModel=item->playlistModel();
+    m_playlistTreeView->setMusicModel(musicModel);
+    //When user add or remove file to playlist, should update the detail info.
+    m_modelSignalHandler->addConnectionHandle(
+                connect(musicModel, &KNMusicPlaylistModel::rowCountChanged,
+                        this, &KNMusicPlaylistDisplay::updateDetailInfo));
+    //Analysis file signal.
+    m_modelSignalHandler->addConnectionHandle(
+                connect(this, &KNMusicPlaylistDisplay::requireAnalysisFiles,
+                        musicModel, &KNMusicPlaylistModel::requireAnalysisFiles));
+    //Set the title.
+    m_playlistTitle->setText(item->text());
+
+}
+
+void KNMusicPlaylistDisplay::retranslate()
+{
+    m_songCount[0]=tr("No song, ");
+    m_songCount[1]=tr("1 song, ");
+    m_songCount[2]=tr("%1 songs, ");
+
+    m_minuateCount[0]=tr("0 minuate.");
+    m_minuateCount[1]=tr("1 minuate.");
+    m_minuateCount[2]=tr("%1 minuates.");
+
+    updateDetailInfo();
+}
+
+void KNMusicPlaylistDisplay::updateDetailInfo()
+{
+    KNMusicModel *model=m_playlistTreeView->musicModel();
+    if(model==nullptr)
+    {
+        return;
+    }
+    QString playlistInfoText;
+    //First check the model row count, this will be used as song count.
+    switch(model->rowCount())
+    {
+    case 0:
+        playlistInfoText=m_songCount[0];
+        break;
+    case 1:
+        playlistInfoText=m_songCount[1];
+        break;
+    default:
+        playlistInfoText=m_songCount[2].arg(QString::number(model->rowCount()));
+        break;
+    }
+    //Then calculate the minuates.
+    int minuateCalulate=model->totalDuration()/60000;
+    switch(minuateCalulate)
+    {
+    case 0:
+        playlistInfoText+=m_minuateCount[0];
+        break;
+    case 1:
+        playlistInfoText+=m_minuateCount[1];
+        break;
+    default:
+        playlistInfoText+=m_minuateCount[2].arg(QString::number(minuateCalulate));
+        break;
+    }
+    //Set detail info.
+    m_playlistInfo->setText(playlistInfoText);
 }

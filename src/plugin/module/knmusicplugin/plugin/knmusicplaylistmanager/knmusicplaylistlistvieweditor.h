@@ -40,10 +40,11 @@ public slots:
 
 private slots:
     void showAddMenu();
+    void showConfigureMenu();
     void showImportDialog();
 
 private:
-    void createAddMenu();
+    void initialMenu();
     void updateDialogFilter();
     enum AddMenuAction
     {
@@ -51,10 +52,16 @@ private:
         ImportPlaylist,
         AddMenuActionsCount
     };
+    enum ConfigureMenuAction
+    {
+        ExportPlaylist,
+        CopyPlaylist,
+        ConfigureMenuActionCount
+    };
     QStringList m_playlistFilter;
-    QString m_addActionTitles[AddMenuActionsCount];
-    QAction *m_addActions[AddMenuActionsCount];
-    KNAnimationMenu *m_addMenu;
+    QAction *m_addActions[AddMenuActionsCount],
+            *m_configureActions[ConfigureMenuActionCount];
+    KNAnimationMenu *m_addMenu, *m_configureMenu;
     KNOpacityAnimeButton *m_add, *m_removeCurrent, *m_configure;
 };
 

@@ -22,6 +22,8 @@
 
 class QSplitter;
 class KNMusicPlaylistDisplay;
+class KNMusicPlaylistList;
+class KNMusicPlaylistListItem;
 class KNMusicPlaylistListView;
 class KNMusicPlaylistListViewEditor;
 class KNMusicPlaylistTab : public KNMusicTab
@@ -35,13 +37,23 @@ public:
     QWidget *widget();
 
 signals:
+    void requireGeneratePlaylist(QString caption);
+    void currentPlaylistChanged(const QModelIndex &current,
+                                const QModelIndex &previous);
 
 public slots:
+    void displayPlaylistItem(KNMusicPlaylistListItem *item);
+    void setPlaylistList(KNMusicPlaylistList *playlistList);
+    void setCurrentPlaylist(const QModelIndex &index);
+    void editPlaylistName(const QModelIndex &index);
+
+private slots:
+    void onActionAddPlaylist();
 
 private:
     void initialPlaylistList();
     QSplitter *m_viewer;
-    QWidget *m_playlistList;
+    QWidget *m_playlistListViewer;
     KNMusicPlaylistDisplay *m_playlistDisplay;
     KNMusicPlaylistListView *m_playlistListView;
     KNMusicPlaylistListViewEditor *m_playlistListViewEditor;

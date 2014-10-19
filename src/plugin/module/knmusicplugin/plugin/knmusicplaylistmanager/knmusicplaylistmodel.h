@@ -15,36 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICPLAYLISTDISPLAY_H
-#define KNMUSICPLAYLISTDISPLAY_H
+#ifndef KNMUSICPLAYLISTMODEL_H
+#define KNMUSICPLAYLISTMODEL_H
 
-#include "kndropproxycontainer.h"
+#include "knmusicmodel.h"
 
-class QLabel;
-class KNConnectionHandler;
-class KNMusicPlaylistListItem;
-class KNMusicPlaylistTreeView;
-class KNMusicPlaylistDisplay : public KNDropProxyContainer
+class KNMusicPlaylistModel : public KNMusicModel
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistDisplay(QWidget *parent = 0);
+    explicit KNMusicPlaylistModel(QObject *parent = 0);
+    int playingItemColumn();
 
 signals:
 
 public slots:
-    void displayPlaylistItem(KNMusicPlaylistListItem *item);
-    void retranslate();
-
-private slots:
-    void updateDetailInfo();
 
 private:
-    QLabel *m_playlistTitle, *m_playlistInfo;
-    KNMusicPlaylistTreeView *m_playlistTreeView;
-    KNConnectionHandler *m_modelSignalHandler;
-    QString m_songCount[3];
-    QString m_minuateCount[3];
+    void initialHeader();
+    KNMusicGlobal *m_musicGlobal;
 };
 
-#endif // KNMUSICPLAYLISTDISPLAY_H
+#endif // KNMUSICPLAYLISTMODEL_H

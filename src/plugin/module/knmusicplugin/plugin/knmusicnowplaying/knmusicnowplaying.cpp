@@ -184,10 +184,15 @@ void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model)
     resetPlayingModels();
     //Occupy the new proxy model.
     m_playingModel=model;
+    //Release the current playing model.
+    m_proxyModelPool->releasePlaying();
     //If not null, occupy it.
     if(m_playingModel!=nullptr)
     {
-        m_proxyModelPool->occupy(m_playingModel);
+        if(m_playingModel!=m_temporaryProxyModel)
+        {
+            m_proxyModelPool->setPlaying(m_playingModel);
+        }
         m_playingMusicModel=m_playingModel->musicModel();
     }
 }
