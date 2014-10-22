@@ -15,20 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QLabel>
 #include <QTimeLine>
 #include <QPaintEvent>
 #include <QPainter>
 
+#include "knmusicglobal.h"
 #include "knmusicheaderplayerbase.h"
 #include "knmusiclyricsmanager.h"
+#include "preference/knpreferenceitemglobal.h"
 
 #include "knmusicheaderlyrics.h"
 
 #include <QDebug>
 
+using namespace KNPreferenceItemGlobal;
+
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     KNMusicHeaderLyricsBase(parent)
 {
+    //Initial the music global.
+    m_musicGlobal=KNMusicGlobal::instance();
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicLyricsManager::instance();
 
@@ -39,6 +46,11 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     m_moveToCurrent->setEndFrame(0);
     connect(m_moveToCurrent, &QTimeLine::frameChanged,
             this, &KNMusicHeaderLyrics::onActionLyricsMoved);
+
+    //Initial the preference items.
+    initialPreference();
+    //Retranslate.
+    retranslate();
 }
 
 KNMusicHeaderLyrics::~KNMusicHeaderLyrics()
@@ -54,6 +66,12 @@ void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
             this, &KNMusicHeaderLyrics::loadLyricsForMusic);
     connect(player, &KNMusicHeaderPlayerBase::positionChanged,
             this, &KNMusicHeaderLyrics::onActionPositionChange);
+}
+
+void KNMusicHeaderLyrics::retranslate()
+{
+    m_preferenceCaption->setText(tr("Lyrics"));
+    m_itemBase[LyricsFolderPath]->setCaption(tr("Lyrics Folder"));
 }
 
 void KNMusicHeaderLyrics::resetStatus()
@@ -208,6 +226,20 @@ void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
     m_currentLineOffsetY=frame;
     //Redraw the display.
     update();
+}
+
+void KNMusicHeaderLyrics::initialPreference()
+{
+    //Initial the caption.
+    m_preferenceCaption=
+            m_musicGlobal->generateLabel();
+    m_musicGlobal->addTitle(m_preferenceCaption);
+    //Initial the controls.
+    m_itemBase[LyricsFolderPath]=
+            m_musicGlobal->generateItem(LineEdit,
+                                        "LyricsFolderPath",
+                                        m_lyricsManager->lyricsFolderPath());
+    m_musicGlobal->addItem(m_itemBase[LyricsFolderPath]);
 }
 
 int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)

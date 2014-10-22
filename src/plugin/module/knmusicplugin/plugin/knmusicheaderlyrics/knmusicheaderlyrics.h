@@ -18,9 +18,13 @@
 #ifndef KNMUSICHEADERLYRICS_H
 #define KNMUSICHEADERLYRICS_H
 
+#include "preference/knpreferenceitembase.h"
+
 #include "knmusicheaderlyricsbase.h"
 
+class QLabel;
 class QTimeLine;
+class KNMusicGlobal;
 class KNMusicLyricsManager;
 class KNMusicHeaderLyrics : public KNMusicHeaderLyricsBase
 {
@@ -33,6 +37,7 @@ public:
 signals:
 
 public slots:
+    void retranslate();
     void resetStatus();
     void loadLyricsForMusic(const QString &filePath);
     void onActionPositionChange(const qint64 &position);
@@ -44,6 +49,7 @@ private slots:
     void onActionLyricsMoved(const int &frame);
 
 private:
+    void initialPreference();
     inline QSize lyricsSize(const QString &lyricsText)
     {
         return fontMetrics().size(Qt::TextExpandTabs,
@@ -55,12 +61,21 @@ private:
                           const int &yOffset);
 
     KNMusicLyricsManager *m_lyricsManager;
+    enum LyricsPreference
+    {
+        LyricsFolderPath,
+        LyricsPreferenceCount
+    };
+
+    QLabel *m_preferenceCaption;
+    KNPreferenceItemBase *m_itemBase[LyricsPreferenceCount];
     QTimeLine *m_moveToCurrent;
     int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,
         m_leftSpacing=15, m_animationDuration=200;
     QColor m_normalText=QColor(100,100,100),
            m_highlightColor=QColor(0xf7, 0xcf, 0x3d);
     bool m_noLyrics=true;
+    KNMusicGlobal *m_musicGlobal;
 };
 
 #endif // KNMUSICHEADERLYRICS_H

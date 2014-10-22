@@ -4,16 +4,17 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
-#ifndef KNPREFERENCEITEMSWITCHER_H
-#define KNPREFERENCEITEMSWITCHER_H
+#ifndef KNPREFERENCEITEMLINEEDIT_H
+#define KNPREFERENCEITEMLINEEDIT_H
 
 #include "knpreferenceitembase.h"
 
-class KNPreferenceItemSwitcher : public KNPreferenceItemBase
+class QLineEdit;
+class KNPreferenceItemLineEdit : public KNPreferenceItemBase
 {
     Q_OBJECT
 public:
-    explicit KNPreferenceItemSwitcher(QWidget *parent = 0);
+    explicit KNPreferenceItemLineEdit(QWidget *parent = 0);
     QVariant defaultValue() const;
     QVariant value() const;
 
@@ -23,10 +24,9 @@ public slots:
     void setDefaultValue(const QVariant &defaultValue);
     void setValue(const QVariant &value);
 
-protected:
-
 private:
-    bool m_defaultValue=false, m_value=false;
+    QLineEdit *m_valueEditor;
+    QString m_defaultValue;
 };
 
-#endif // KNPREFERENCEITEMSWITCHER_H
+#endif // KNPREFERENCEITEMLINEEDIT_H

@@ -168,7 +168,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitem.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlist.cpp \
-    plugin/module/knmusicplugin/sdk/knconnectionhandler.cpp
+    plugin/sdk/knconnectionhandler.cpp \
+    plugin/sdk/knanimecolorswitcher.cpp \
+    plugin/sdk/preference/knpreferenceitemlineedit.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -271,7 +273,10 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmodel.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitem.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlist.h \
-    plugin/module/knmusicplugin/sdk/knconnectionhandler.h
+    plugin/sdk/knconnectionhandler.h \
+    plugin/sdk/knanimecolorswitcher.h \
+    plugin/sdk/preference/knpreferenceitemlineedit.h \
+    plugin/sdk/preference/knpreferenceitemglobal.h
 
 RESOURCES += \
     resource/res.qrc

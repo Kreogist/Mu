@@ -17,6 +17,7 @@
  */
 #include <QFileInfo>
 
+#include "knglobal.h"
 #include "knmusiclrcparser.h"
 
 #include "knmusiclyricsmanager.h"
@@ -119,6 +120,10 @@ bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent)
 {
+    //Initial global instance.
+    m_global=KNGlobal::instance();
+    //Set the default lyrics folder path.
+    m_lyricsFolderPath=m_global->applicationDirPath()+"/Lyrics";
     //Set the default loading policy.
     m_policyList.append(SameNameInLyricsDir);
     m_policyList.append(RelateNameInLyricsDir);
@@ -126,4 +131,14 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_policyList.append(RelateNameInMusicDir);
     //Initial the LRC file parser.
     m_lrcParser=new KNMusicLRCParser(this);
+}
+
+QString KNMusicLyricsManager::lyricsFolderPath() const
+{
+    return m_lyricsFolderPath;
+}
+
+void KNMusicLyricsManager::setLyricsFolderPath(const QString &lyricsFolderPath)
+{
+    m_lyricsFolderPath = lyricsFolderPath;
 }

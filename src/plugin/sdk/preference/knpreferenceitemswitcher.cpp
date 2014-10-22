@@ -7,13 +7,16 @@
 #include <QBoxLayout>
 #include <QLineEdit>
 
+#include "knanimecolorswitcher.h"
+
 #include "knpreferenceitemswitcher.h"
 
 KNPreferenceItemSwitcher::KNPreferenceItemSwitcher(QWidget *parent) :
     KNPreferenceItemBase(parent)
 {
-    //Add the
-//    controlLayout()->addWidget();
+    KNAnimeColorSwitcher *switcher=new KNAnimeColorSwitcher(this);
+    //Add the control widget.
+    insertControlWidget(switcher);
 }
 
 QVariant KNPreferenceItemSwitcher::defaultValue() const

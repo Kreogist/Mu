@@ -21,10 +21,12 @@ public:
     virtual QVariant defaultValue() const=0;
     virtual QVariant value() const=0;
     QString caption() const;
+    QString valueName() const;
 
 signals:
 
 public slots:
+    void setValueName(const QString &valueName);
     void setCaption(const QString &caption);
     virtual void setDefaultValue(const QVariant &defaultValue)=0;
     virtual void setValue(const QVariant &value)=0;
@@ -33,7 +35,7 @@ protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
     void paintEvent(QPaintEvent *event);
-    QWidget *controlContainer();
+    void insertControlWidget(QWidget *widget);
 
 private slots:
     void onActionChangeHighlight(const int &frame);
@@ -41,11 +43,12 @@ private slots:
 private:
     void configureMouseInOutTimeline(QTimeLine *timeLine);
     int m_itemHeight=34;
-    QLabel *m_caption;
+    QString m_valueName;
+    QLabel *m_caption, *m_hints;
     qreal m_highLightOpacity=0.0;
     QTimeLine *m_mouseIn, *m_mouseOut;
     QLinearGradient m_highlight;
-    QWidget *m_controlContainer;
+    QBoxLayout *m_mainLayout;
 };
 
 #endif // KNPREFERENCEITEMBASE_H

@@ -76,6 +76,9 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
 
     //Initial playlist connection handler.
     m_modelSignalHandler=new KNConnectionHandler(this);
+
+    //Do retranslate.
+    retranslate();
 }
 
 void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)

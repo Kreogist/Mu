@@ -57,19 +57,6 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
                 QPixmap(":/plugin/configure/general/headicon.png"),
                 m_generalPanel);
 
-    m_generalPanel->addTitle("Normal Title");
-    m_generalPanel->addItem(Switcher, "Normal 1", false, false, false);
-    m_generalPanel->addItem(Switcher, "Advanced 1", false, false, true);
-    m_generalPanel->addItem(Switcher, "Normal 2", false, false, false);
-    m_generalPanel->addItem(Switcher, "Normal 3", false, false, false);
-    m_generalPanel->addItem(Switcher, "Advanced 2", false, false, true);
-    m_generalPanel->addItem(Switcher, "Normal 4", false, false, false);
-    m_generalPanel->addItem(Switcher, "Advanced 3", false, false, true);
-    m_generalPanel->addTitle("Advanced Title", true);
-    m_generalPanel->addItem(Switcher, "Advanced 4", false, false, true);
-    m_generalPanel->addItem(Switcher, "Normal 5", false, false, false);
-    m_generalPanel->addItem(Switcher, "Advanced 6", false, false, true);
-
     //Retranslate.
     retranslate();
 }

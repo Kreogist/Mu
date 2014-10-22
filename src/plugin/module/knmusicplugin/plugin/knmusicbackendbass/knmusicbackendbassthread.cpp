@@ -228,6 +228,8 @@ void KNMusicBackendBassThread::setPosition(const qint64 &position)
                             BASS_ChannelSeconds2Bytes(m_channel,
                                                       (double)(m_startPosition+position)/1000.0),
                             BASS_POS_BYTE);
+    //Do the position check.
+    onActionPositionCheck();
 }
 
 void KNMusicBackendBassThread::onActionPositionCheck()

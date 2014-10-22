@@ -10,6 +10,8 @@
 #include <QItemSelection>
 #include <QStandardItem>
 
+#include "knpreferencewidgetspanel.h"
+
 #include "knmusicglobal.h"
 
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
@@ -227,6 +229,37 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
 
     //Get the latest translation.
     retranslate();
+}
+
+void KNMusicGlobal::setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel)
+{
+    m_preferencePanel=preferencePanel;
+}
+
+KNPreferenceItemBase *KNMusicGlobal::generateItem(const int &itemType,
+                                                  const QString &valueName,
+                                                  const QVariant &value,
+                                                  const QVariant &defaultValue)
+{
+    return m_preferencePanel->generateItem(itemType,
+                                           valueName,
+                                           value,
+                                           defaultValue);
+}
+
+QLabel *KNMusicGlobal::generateLabel(const QString &caption)
+{
+    return m_preferencePanel->generateLabel(caption);
+}
+
+void KNMusicGlobal::addTitle(QLabel *title, const bool &isAdvanced)
+{
+    m_preferencePanel->addTitle(title, isAdvanced);
+}
+
+void KNMusicGlobal::addItem(KNPreferenceItemBase *item, const bool &isAdvanced)
+{
+    m_preferencePanel->addItem(item, isAdvanced);
 }
 
 QPixmap KNMusicGlobal::noAlbumArt() const

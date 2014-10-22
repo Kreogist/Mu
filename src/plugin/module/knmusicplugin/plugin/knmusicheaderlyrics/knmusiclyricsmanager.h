@@ -37,6 +37,7 @@ enum SearchPolicy
 
 using namespace KNMusicLyrics;
 
+class KNGlobal;
 class KNMusicLRCParser;
 class KNMusicLyricsManager : public QObject
 {
@@ -46,6 +47,8 @@ public:
     int lines() const;
     qint64 positionAt(const int &index) const;
     QString lyricsAt(const int &index) const;
+    QString lyricsFolderPath() const;
+    void setLyricsFolderPath(const QString &lyricsFolderPath);
 
 signals:
 
@@ -59,6 +62,7 @@ private:
     static KNMusicLyricsManager *m_instance;
     explicit KNMusicLyricsManager(QObject *parent = 0);
 
+    KNGlobal *m_global;
     KNMusicLRCParser *m_lrcParser;
     QString m_currentLyricsPath, m_lyricsFolderPath;
     QFile m_lyricsFile;

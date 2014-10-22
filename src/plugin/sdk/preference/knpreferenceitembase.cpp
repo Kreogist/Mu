@@ -31,13 +31,14 @@ KNPreferenceItemBase::KNPreferenceItemBase(QWidget *parent) :
     setPalette(pal);
 
     //Initial the layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
-    mainLayout->setContentsMargins(10,0,0,0);
-    mainLayout->setSpacing(0);
-    setLayout(mainLayout);
+    m_mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    m_mainLayout->setContentsMargins(10,0,0,0);
+    m_mainLayout->setSpacing(0);
+    setLayout(m_mainLayout);
 
     //Initial the label.
     m_caption=new QLabel(this);
+    m_caption->setFixedWidth(185);
     QFont captionFont=m_caption->font();
     captionFont.setPixelSize(15);
     m_caption->setFont(captionFont);
@@ -46,15 +47,11 @@ KNPreferenceItemBase::KNPreferenceItemBase(QWidget *parent) :
     m_caption->setPalette(captionPal);
     m_caption->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     //Add widget to layout.
-    mainLayout->addWidget(m_caption);
+    m_mainLayout->addWidget(m_caption);
 
-    //Initial the controls.
-    m_controlContainer=new QWidget(this);
-    //Set properties.
-    m_controlContainer->setContentsMargins(0,0,0,0);
-    m_controlContainer->setFixedWidth(150);
-    //Add container to main layout.
-    mainLayout->addWidget(m_controlContainer, 1);
+    //Initial the hints label.
+    m_hints=new QLabel(this);
+    m_mainLayout->addWidget(m_hints, 1);
 
     //Initial mouse sense timeline.
     m_mouseIn=new QTimeLine(100, this);
@@ -122,9 +119,9 @@ void KNPreferenceItemBase::paintEvent(QPaintEvent *event)
     painter.drawLine(0,0,width(),0);
 }
 
-QWidget *KNPreferenceItemBase::controlContainer()
+void KNPreferenceItemBase::insertControlWidget(QWidget *widget)
 {
-    return m_controlContainer;
+    m_mainLayout->insertWidget(1,widget);
 }
 
 void KNPreferenceItemBase::onActionChangeHighlight(const int &frame)
@@ -138,4 +135,14 @@ void KNPreferenceItemBase::configureMouseInOutTimeline(QTimeLine *timeLine)
     timeLine->setUpdateInterval(5);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNPreferenceItemBase::onActionChangeHighlight);
+}
+
+QString KNPreferenceItemBase::valueName() const
+{
+    return m_valueName;
+}
+
+void KNPreferenceItemBase::setValueName(const QString &valueName)
+{
+    m_valueName = valueName;
 }

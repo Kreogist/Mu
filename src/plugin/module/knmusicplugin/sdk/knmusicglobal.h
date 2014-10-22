@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QMap>
 #include <QDateTime>
+#include <QVariant>
 #include <QStringList>
 
 #include <QObject>
@@ -118,8 +119,11 @@ struct KNMusicDetailInfo
 
 using namespace KNMusic;
 
+class QLabel;
 class QThread;
 class KNMusicParser;
+class KNPreferenceItemBase;
+class KNPreferenceWidgetsPanel;
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
@@ -140,6 +144,16 @@ public:
     QThread *analysisThread();
     void setNoAlbumArt(const QPixmap &noAlbumArt);
     QString treeViewHeaderText(const int &index);
+    void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
+    KNPreferenceItemBase *generateItem(const int &itemType,
+                                              const QString &valueName,
+                                              const QVariant &value=QVariant(),
+                                              const QVariant &defaultValue=QVariant());
+    QLabel *generateLabel(const QString &caption=QString());
+    void addTitle(QLabel *title,
+                  const bool &isAdvanced=false);
+    void addItem(KNPreferenceItemBase *item,
+                 const bool &isAdvanced=false);
 
 signals:
 
@@ -160,6 +174,7 @@ private:
                     m_indexedGenres;
     QPixmap m_noAlbumArt;
     QThread *m_searcherThread, *m_analysisThread;
+    KNPreferenceWidgetsPanel *m_preferencePanel;
 };
 
 #endif // KNMUSICGLOBAL_H
