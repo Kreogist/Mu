@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QLabel>
 #include <QTimeLine>
 #include <QPaintEvent>
 #include <QPainter>
@@ -29,7 +28,7 @@
 
 #include <QDebug>
 
-using namespace KNPreferenceItemGlobal;
+using namespace PreferenceItemGlobal;
 
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     KNMusicHeaderLyricsBase(parent)
@@ -38,6 +37,8 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     m_musicGlobal=KNMusicGlobal::instance();
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicLyricsManager::instance();
+    //Initial the preference item global.
+    m_preferenceItemGlobal=KNPreferenceItemGlobal::instance();
 
     //Initial the lyrics moving time line.
     m_moveToCurrent=new QTimeLine(m_animationDuration, this);
@@ -70,8 +71,8 @@ void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 
 void KNMusicHeaderLyrics::retranslate()
 {
-    m_preferenceCaption->setText(tr("Lyrics"));
-    m_itemBase[LyricsFolderPath]->setCaption(tr("Lyrics Folder"));
+    m_preferenceItemGlobal->updateTitleCaption(m_preferenceCaption, tr("Lyrics"));
+    m_preferenceItemGlobal->updateItemCaption(m_itemBase[LyricsFolderPath], tr("Lyrics Folder"));
 }
 
 void KNMusicHeaderLyrics::resetStatus()
@@ -231,14 +232,13 @@ void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
 void KNMusicHeaderLyrics::initialPreference()
 {
     //Initial the caption.
-    m_preferenceCaption=
-            m_musicGlobal->generateLabel();
+    m_preferenceCaption=m_preferenceItemGlobal->generateLabel();
     m_musicGlobal->addTitle(m_preferenceCaption);
     //Initial the controls.
     m_itemBase[LyricsFolderPath]=
-            m_musicGlobal->generateItem(LineEdit,
-                                        "LyricsFolderPath",
-                                        m_lyricsManager->lyricsFolderPath());
+            m_preferenceItemGlobal->generateItem(PathEdit,
+                                                 "LyricsFolderPath",
+                                                 m_lyricsManager->lyricsFolderPath());
     m_musicGlobal->addItem(m_itemBase[LyricsFolderPath]);
 }
 

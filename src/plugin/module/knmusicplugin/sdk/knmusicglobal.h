@@ -145,11 +145,6 @@ public:
     void setNoAlbumArt(const QPixmap &noAlbumArt);
     QString treeViewHeaderText(const int &index);
     void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
-    KNPreferenceItemBase *generateItem(const int &itemType,
-                                              const QString &valueName,
-                                              const QVariant &value=QVariant(),
-                                              const QVariant &defaultValue=QVariant());
-    QLabel *generateLabel(const QString &caption=QString());
     void addTitle(QLabel *title,
                   const bool &isAdvanced=false);
     void addItem(KNPreferenceItemBase *item,

@@ -267,7 +267,8 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     connect(this, &KNPluginManager::requireProcessArguments,
             plugin, &KNCategoryPlugin::onArgumentsAvailable);
     //Add the plugin data to the main window.
-    /*! FIXME: Here we need to add the icon to the category list.
+    /*!
+     *  FIXME: Here we need to add the icon to the category list.
      *         But now we just need one category, so we don't need to do it now.
      *         Fix this ASAP.
      */

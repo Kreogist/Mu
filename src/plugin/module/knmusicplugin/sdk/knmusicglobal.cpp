@@ -5,11 +5,13 @@
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
 #include <QUrl>
+#include <QLabel>
 #include <QVector>
 #include <QThread>
 #include <QItemSelection>
 #include <QStandardItem>
 
+#include "preference/knpreferenceitembase.h"
 #include "knpreferencewidgetspanel.h"
 
 #include "knmusicglobal.h"
@@ -234,22 +236,6 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
 void KNMusicGlobal::setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel)
 {
     m_preferencePanel=preferencePanel;
-}
-
-KNPreferenceItemBase *KNMusicGlobal::generateItem(const int &itemType,
-                                                  const QString &valueName,
-                                                  const QVariant &value,
-                                                  const QVariant &defaultValue)
-{
-    return m_preferencePanel->generateItem(itemType,
-                                           valueName,
-                                           value,
-                                           defaultValue);
-}
-
-QLabel *KNMusicGlobal::generateLabel(const QString &caption)
-{
-    return m_preferencePanel->generateLabel(caption);
 }
 
 void KNMusicGlobal::addTitle(QLabel *title, const bool &isAdvanced)

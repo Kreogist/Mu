@@ -44,7 +44,7 @@ private:
     void configureMouseInOutTimeline(QTimeLine *timeLine);
     int m_itemHeight=34;
     QString m_valueName;
-    QLabel *m_caption, *m_hints;
+    QLabel *m_caption;
     qreal m_highLightOpacity=0.0;
     QTimeLine *m_mouseIn, *m_mouseOut;
     QLinearGradient m_highlight;

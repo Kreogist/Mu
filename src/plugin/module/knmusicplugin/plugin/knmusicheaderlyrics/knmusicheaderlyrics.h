@@ -18,12 +18,12 @@
 #ifndef KNMUSICHEADERLYRICS_H
 #define KNMUSICHEADERLYRICS_H
 
-#include "preference/knpreferenceitembase.h"
-
 #include "knmusicheaderlyricsbase.h"
 
 class QLabel;
 class QTimeLine;
+class KNPreferenceItemBase;
+class KNPreferenceItemGlobal;
 class KNMusicGlobal;
 class KNMusicLyricsManager;
 class KNMusicHeaderLyrics : public KNMusicHeaderLyricsBase
@@ -76,6 +76,7 @@ private:
            m_highlightColor=QColor(0xf7, 0xcf, 0x3d);
     bool m_noLyrics=true;
     KNMusicGlobal *m_musicGlobal;
+    KNPreferenceItemGlobal *m_preferenceItemGlobal;
 };
 
 #endif // KNMUSICHEADERLYRICS_H

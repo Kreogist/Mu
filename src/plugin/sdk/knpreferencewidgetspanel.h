@@ -9,8 +9,6 @@
 
 #include <QList>
 
-#include "preference/knpreferenceitembase.h"
-
 #include <QScrollArea>
 
 class QBoxLayout;
@@ -22,11 +20,6 @@ class KNPreferenceWidgetsPanel : public QScrollArea
 public:
     explicit KNPreferenceWidgetsPanel(QWidget *parent = 0);
     bool advancedMode() const;
-    KNPreferenceItemBase *generateItem(const int &index,
-                                              const QString &valueName,
-                                              const QVariant &value=QVariant(),
-                                              const QVariant &defaultValue=QVariant());
-    QLabel *generateLabel(const QString &caption=QString());
     QString panelCaption() const;
     void setPanelCaption(const QString &panelCaption);
     void addTitle(QLabel *title,
@@ -49,8 +42,6 @@ private:
     QString m_panelCaption;
     QBoxLayout *m_mainLayout;
     QWidget *m_container;
-    QFont m_titleFont;
-    QPalette m_titlePalette;
     bool m_advancedMode=false;
 };
 

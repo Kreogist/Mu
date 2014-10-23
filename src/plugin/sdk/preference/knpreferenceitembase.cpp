@@ -49,10 +49,6 @@ KNPreferenceItemBase::KNPreferenceItemBase(QWidget *parent) :
     //Add widget to layout.
     m_mainLayout->addWidget(m_caption);
 
-    //Initial the hints label.
-    m_hints=new QLabel(this);
-    m_mainLayout->addWidget(m_hints, 1);
-
     //Initial mouse sense timeline.
     m_mouseIn=new QTimeLine(100, this);
     m_mouseIn->setEndFrame(100);
@@ -121,7 +117,7 @@ void KNPreferenceItemBase::paintEvent(QPaintEvent *event)
 
 void KNPreferenceItemBase::insertControlWidget(QWidget *widget)
 {
-    m_mainLayout->insertWidget(1,widget);
+    m_mainLayout->insertWidget(1, widget, 1);
 }
 
 void KNPreferenceItemBase::onActionChangeHighlight(const int &frame)

@@ -7,16 +7,14 @@
 #include <QLabel>
 #include <QBoxLayout>
 
-//All kinds of items.
 #include "preference/knpreferenceitemglobal.h"
-#include "preference/knpreferenceitemswitcher.h"
-#include "preference/knpreferenceitemlineedit.h"
+#include "preference/knpreferenceitembase.h"
 
 #include "knpreferencewidgetspanel.h"
 
 #include <QDebug>
 
-using namespace KNPreferenceItemGlobal;
+using namespace PreferenceItemGlobal;
 
 KNPreferenceWidgetsPanel::KNPreferenceWidgetsPanel(QWidget *parent) :
     QScrollArea(parent)
@@ -41,14 +39,6 @@ KNPreferenceWidgetsPanel::KNPreferenceWidgetsPanel(QWidget *parent) :
 
     //Add strectch at the end of the layout.
     m_mainLayout->addStretch();
-
-    //Initial the title font.
-    m_titleFont=font();
-    m_titleFont.setPixelSize(15);
-
-    //Initial the title palette.
-    m_titlePalette=palette();
-    m_titlePalette.setColor(QPalette::WindowText, QColor(150,150,150));
 }
 
 void KNPreferenceWidgetsPanel::addTitle(QLabel *titleWidget,
@@ -94,44 +84,6 @@ void KNPreferenceWidgetsPanel::setPanelCaption(const QString &panelCaption)
 bool KNPreferenceWidgetsPanel::advancedMode() const
 {
     return m_advancedMode;
-}
-
-KNPreferenceItemBase *KNPreferenceWidgetsPanel::generateItem(const int &index,
-                                                             const QString &valueName,
-                                                             const QVariant &value,
-                                                             const QVariant &defaultValue)
-{
-    KNPreferenceItemBase *item;
-    switch(index)
-    {
-    case Switcher:
-        //Generate a switcher.
-        item=new KNPreferenceItemSwitcher;
-        break;
-    case LineEdit:
-        //Generate a line editor.
-        item=new KNPreferenceItemLineEdit;
-        break;
-    }
-    //Set properties.
-    item->setValueName(valueName);
-    item->setDefaultValue(defaultValue);
-    item->setValue(value.isNull()?defaultValue:value);
-    //Return the item.
-    return item;
-}
-
-QLabel *KNPreferenceWidgetsPanel::generateLabel(const QString &caption)
-{
-    //Initial the title widget.
-    QLabel *titleWidget=new QLabel;
-    //Set properties.
-    titleWidget->setContentsMargins(25,10,0,5);
-    titleWidget->setFont(m_titleFont);
-    titleWidget->setPalette(m_titlePalette);
-    titleWidget->setText(caption);
-    //Return the widget.
-    return titleWidget;
 }
 
 void KNPreferenceWidgetsPanel::setAdvancedMode(bool advancedMode)
