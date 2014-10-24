@@ -23,15 +23,9 @@ public:
     static QString applicationDirPath();
     static QStringList urlToPathList(const QList<QUrl> urls);
     static void setDylibSuffix(const QString &dylibSuffix);
-    void setSystemData(const QString &key, const QString &value);
-    void setSystemData(const QString &key, const double &value);
-    void setSystemData(const QString &key, const int &value);
-    void setSystemData(const QString &key, const bool &value);
+    void setSystemData(const QString &key, const QVariant &value);
     QVariant systemData(const QString &key);
-    void setCustomData(const QString &module, const QString &key, const QString &value);
-    void setCustomData(const QString &module, const QString &key, const double &value);
-    void setCustomData(const QString &module, const QString &key, const int &value);
-    void setCustomData(const QString &module, const QString &key, const bool &value);
+    void setCustomData(const QString &module, const QString &key, const QVariant &value);
     QVariant customData(const QString &module, const QString &key);
 
 signals:

@@ -65,24 +65,23 @@ void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
     m_dylibSuffix = dylibSuffix;
 }
 
-void KNGlobal::setSystemData(const QString &key, const QString &value)
+void KNGlobal::setSystemData(const QString &key, const QVariant &value)
 {
-    m_configure->setSystemData(key, value);
-}
-
-void KNGlobal::setSystemData(const QString &key, const double &value)
-{
-    m_configure->setSystemData(key, value);
-}
-
-void KNGlobal::setSystemData(const QString &key, const int &value)
-{
-    m_configure->setSystemData(key, value);
-}
-
-void KNGlobal::setSystemData(const QString &key, const bool &value)
-{
-    m_configure->setSystemData(key, value);
+    switch(value.type())
+    {
+    case QVariant::Double:
+        m_configure->setSystemData(key, value.toDouble());
+        break;
+    case QVariant::String:
+        m_configure->setSystemData(key, value.toString());
+        break;
+    case QVariant::Int:
+        m_configure->setSystemData(key, value.toInt());
+        break;
+    case QVariant::Bool:
+        m_configure->setSystemData(key, value.toBool());
+        break;
+    }
 }
 
 QVariant KNGlobal::systemData(const QString &key)
@@ -90,24 +89,25 @@ QVariant KNGlobal::systemData(const QString &key)
     return m_configure->systemData(key);
 }
 
-void KNGlobal::setCustomData(const QString &module, const QString &key, const QString &value)
+void KNGlobal::setCustomData(const QString &module,
+                             const QString &key,
+                             const QVariant &value)
 {
-    m_configure->setCustomData(module, key, value);
-}
-
-void KNGlobal::setCustomData(const QString &module, const QString &key, const double &value)
-{
-    m_configure->setCustomData(module, key, value);
-}
-
-void KNGlobal::setCustomData(const QString &module, const QString &key, const int &value)
-{
-    m_configure->setCustomData(module, key, value);
-}
-
-void KNGlobal::setCustomData(const QString &module, const QString &key, const bool &value)
-{
-    m_configure->setCustomData(module, key, value);
+    switch(value.type())
+    {
+    case QVariant::Double:
+        m_configure->setCustomData(module, key, value.toDouble());
+        break;
+    case QVariant::String:
+        m_configure->setCustomData(module, key, value.toString());
+        break;
+    case QVariant::Int:
+        m_configure->setCustomData(module, key, value.toInt());
+        break;
+    case QVariant::Bool:
+        m_configure->setCustomData(module, key, value.toBool());
+        break;
+    }
 }
 
 QVariant KNGlobal::customData(const QString &module, const QString &key)

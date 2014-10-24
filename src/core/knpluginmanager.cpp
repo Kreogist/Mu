@@ -88,7 +88,7 @@ KNPluginManager::KNPluginManager(QObject *parent) :
 void KNPluginManager::backupWindowGeometry()
 {
     //Backup the window state.
-    m_global->setSystemData("windowState", m_mainWindow->windowState());
+    m_global->setSystemData("windowState", (int)m_mainWindow->windowState());
     //Window position.
     m_global->setSystemData("windowX", m_mainWindow->geometry().x());
     m_global->setSystemData("windowY", m_mainWindow->geometry().y());
