@@ -38,6 +38,7 @@ public slots:
 
 private slots:
     void onActionAddPlaylist(const QString &caption);
+    void onActionRemovePlaylist(const QModelIndex &index);
     void onActionCurrentPlaylistChanged(const QModelIndex &current,
                                         const QModelIndex &previous);
 

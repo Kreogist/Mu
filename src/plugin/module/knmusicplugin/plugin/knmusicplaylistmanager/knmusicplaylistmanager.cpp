@@ -18,6 +18,7 @@
 #include "knmusicplaylistlistitem.h"
 #include "knmusicplaylisttab.h"
 #include "knmusicplaylistlist.h"
+#include "knmusicplaylistmodel.h"
 #include "knmusicnowplayingbase.h"
 
 #include "knmusicplaylistmanager.h"
@@ -39,6 +40,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     //Link the UI's request.
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,
             this, &KNMusicPlaylistManager::onActionAddPlaylist);
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireRemovePlaylist,
+            this, &KNMusicPlaylistManager::onActionRemovePlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::currentPlaylistChanged,
             this, &KNMusicPlaylistManager::onActionCurrentPlaylistChanged);
     //When the data of playlist list has been changed, update the detail.
@@ -59,6 +62,16 @@ void KNMusicPlaylistManager::onActionAddPlaylist(const QString &caption)
     m_playlistTab->setCurrentPlaylist(playlistItem->index());
     //Let user rename it automatically.
     m_playlistTab->editPlaylistName(playlistItem->index());
+}
+
+void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
+{
+    int playlistItemRow=index.row();
+    //Ask now playing to check the model.
+    KNMusicGlobal::nowPlaying()->checkRemovedModel(
+                m_playlistList->playlistModel(playlistItemRow));
+    //Remove that row.
+    m_playlistList->removeRow(playlistItemRow);
 }
 
 void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &current,

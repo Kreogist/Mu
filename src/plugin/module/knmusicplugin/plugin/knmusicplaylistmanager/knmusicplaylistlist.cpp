@@ -24,6 +24,16 @@ KNMusicPlaylistList::KNMusicPlaylistList(QObject *parent) :
 {
 }
 
+KNMusicPlaylistModel *KNMusicPlaylistList::playlistModel(const int &row)
+{
+    return playlistItem(row)->playlistModel();
+}
+
+KNMusicPlaylistListItem *KNMusicPlaylistList::playlistItem(const int &row)
+{
+    return (KNMusicPlaylistListItem *)item(row, 0);
+}
+
 KNMusicPlaylistListItem *KNMusicPlaylistList::playlistItemFromIndex(const QModelIndex &index)
 {
     return (KNMusicPlaylistListItem *)itemFromIndex(index);

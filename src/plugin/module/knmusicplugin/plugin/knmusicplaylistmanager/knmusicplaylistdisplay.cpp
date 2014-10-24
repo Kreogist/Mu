@@ -92,8 +92,10 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
     m_currentItem=item;
     if(m_currentItem==nullptr)
     {
+        //Reset treeview.
+        m_playlistTreeView->setMusicModel(nullptr);
         //Clear the detail info.
-        updateDetailInfo();
+        updatePlaylistInfo();
         return;
     }
     //Set the model.

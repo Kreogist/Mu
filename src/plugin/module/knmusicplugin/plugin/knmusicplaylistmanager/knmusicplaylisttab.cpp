@@ -80,6 +80,14 @@ KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()
     return currentItem==nullptr?nullptr:currentItem->playlistModel();
 }
 
+void KNMusicPlaylistTab::onActionRemoveCurrent()
+{
+    //Set the display to null first.
+    m_playlistDisplay->displayPlaylistItem(nullptr);
+    //Send signal.
+    emit requireRemovePlaylist(m_playlistListView->currentIndex());
+}
+
 void KNMusicPlaylistTab::onActionPlaylistItemChanged(QStandardItem *item)
 {
     KNMusicPlaylistListItem *changedItem=(KNMusicPlaylistListItem *)item;
@@ -138,5 +146,7 @@ void KNMusicPlaylistTab::initialPlaylistList()
     m_playlistListViewEditor=new KNMusicPlaylistListViewEditor(m_playlistListViewer);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireAddPlaylist,
             this, &KNMusicPlaylistTab::onActionAddPlaylist);
+    connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireRemoveCurrentPlaylist,
+            this, &KNMusicPlaylistTab::onActionRemoveCurrent);
     playlistListLayout->addWidget(m_playlistListViewEditor);
 }

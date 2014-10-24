@@ -44,6 +44,7 @@ public slots:
     void setPlayingModel(KNMusicProxyModel *model);
     void playMusic(const int &row);
     void playMusic(const QModelIndex &index);
+    void checkRemovedModel(KNMusicModel *model);
 
 private:
     void resetPlayingItem();

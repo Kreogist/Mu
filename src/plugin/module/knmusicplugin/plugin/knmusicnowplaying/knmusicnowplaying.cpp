@@ -238,6 +238,20 @@ void KNMusicNowPlaying::playMusic(const QModelIndex &index)
     playMusic(index.row());
 }
 
+void KNMusicNowPlaying::checkRemovedModel(KNMusicModel *model)
+{
+    //When a music model is removing, we need to check whether the music model
+    //is the current playing one.
+    if(model==m_playingMusicModel)
+    {
+        //If sure, reset everything first.
+        resetPlayingItem();
+        resetPlayingModels();
+        //Set playing model to nullptr.
+        setPlayingModel(nullptr);
+    }
+}
+
 void KNMusicNowPlaying::resetPlayingItem()
 {
     //No matter what, reset header player first.

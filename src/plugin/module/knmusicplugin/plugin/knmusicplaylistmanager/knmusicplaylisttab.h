@@ -41,10 +41,12 @@ public:
 
 signals:
     void requireGeneratePlaylist(QString caption);
+    void requireRemovePlaylist(const QModelIndex &index);
     void currentPlaylistChanged(const QModelIndex &current,
                                 const QModelIndex &previous);
 
 public slots:
+    void onActionRemoveCurrent();
     void onActionPlaylistItemChanged(QStandardItem *item);
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
     void setPlaylistList(KNMusicPlaylistList *playlistList);

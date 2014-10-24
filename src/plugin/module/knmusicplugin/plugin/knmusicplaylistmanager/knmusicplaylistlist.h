@@ -20,12 +20,15 @@
 
 #include <QStandardItemModel>
 
+class KNMusicPlaylistModel;
 class KNMusicPlaylistListItem;
 class KNMusicPlaylistList : public QStandardItemModel
 {
     Q_OBJECT
 public:
     explicit KNMusicPlaylistList(QObject *parent = 0);
+    KNMusicPlaylistModel *playlistModel(const int &row);
+    KNMusicPlaylistListItem *playlistItem(const int &row);
     KNMusicPlaylistListItem *playlistItemFromIndex(const QModelIndex &index);
 
 signals:

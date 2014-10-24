@@ -15,6 +15,7 @@
 
 using namespace KNMusic;
 
+class KNMusicModel;
 class KNMusicProxyModel;
 class KNMusicNowPlayingBase : public QObject
 {
@@ -35,6 +36,7 @@ public slots:
     virtual void setPlayingModel(KNMusicProxyModel *model)=0;
     virtual void playMusic(const int &row)=0;
     virtual void playMusic(const QModelIndex &index)=0;
+    virtual void checkRemovedModel(KNMusicModel *model)=0;
 };
 
 #endif // KNMUSICNOWPLAYINGBASE_H
