@@ -174,7 +174,9 @@ SOURCES += \
     plugin/sdk/preference/knpreferenceitemglobal.cpp \
     plugin/sdk/preference/knpreferenceitempathbrowser.cpp \
     plugin/sdk/knpathlineedit.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.cpp
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicratingeditor.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicratingdelegate.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -283,7 +285,9 @@ HEADERS += \
     plugin/sdk/preference/knpreferenceitemglobal.h \
     plugin/sdk/preference/knpreferenceitempathbrowser.h \
     plugin/sdk/knpathlineedit.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.h
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.h \
+    plugin/module/knmusicplugin/sdk/knmusicratingeditor.h \
+    plugin/module/knmusicplugin/sdk/knmusicratingdelegate.h
 
 RESOURCES += \
     resource/res.qrc

@@ -11,6 +11,7 @@
 #include "knmusicnowplayingbase.h"
 #include "knmusictreeviewheader.h"
 #include "knmusicproxymodelpool.h"
+#include "knmusicratingdelegate.h"
 
 #include "knmusictreeviewbase.h"
 
@@ -44,6 +45,12 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     connect(header, &KNMusicTreeViewHeader::requireResizeColumnToContents,
             this, &KNMusicTreeViewBase::resizeColumnToContents);
     setHeader(header);
+
+    //Set delegate.
+    setItemDelegateForColumn(Rating,
+                             new KNMusicRatingDelegate(this));
+    setItemDelegateForColumn(AlbumRating,
+                             new KNMusicRatingDelegate(this));
 
     //Initial proxy model pool.
     m_proxyModelPool=KNMusicProxyModelPool::instance();
