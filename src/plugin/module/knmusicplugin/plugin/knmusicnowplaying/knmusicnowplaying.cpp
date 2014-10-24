@@ -25,6 +25,8 @@
 KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     KNMusicNowPlayingBase(parent)
 {
+    //Initial the icon.
+    m_playingIcon=QPixmap(":/plugin/music/common/playingicon.png");
     //Initial temporary model.
     m_temporaryModel=new KNMusicSinglePlaylistModel(this);
     //Initial proxy model pool.
@@ -216,9 +218,14 @@ void KNMusicNowPlaying::playMusic(const int &row)
     //                we don't need any pointer, that's QPersistentModelIndex,
     //                Check it ASAP.
     m_currentPlayingIndex=QPersistentModelIndex(sourceIndex);
+    //Set the current playing icon.
+    m_playingMusicModel->setRoleData(m_currentPlayingIndex.row(),
+                                     BlankData,
+                                     Qt::DecorationRole,
+                                     m_playingIcon);
     //Check the start position role, if it is not -1, means it's a music file,
     if(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
-                               StartPositionRole).toLongLong()==-1)
+                                        StartPositionRole).toLongLong()==-1)
     {
         m_headerPlayer->playFile(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
                                                                   FilePathRole).toString());

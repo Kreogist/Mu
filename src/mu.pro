@@ -176,7 +176,9 @@ SOURCES += \
     plugin/sdk/knpathlineedit.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.cpp \
     plugin/module/knmusicplugin/sdk/knmusicratingeditor.cpp \
-    plugin/module/knmusicplugin/sdk/knmusicratingdelegate.cpp
+    plugin/module/knmusicplugin/sdk/knmusicratingdelegate.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicsolomenubase.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicsolomenu.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -287,7 +289,9 @@ HEADERS += \
     plugin/sdk/knpathlineedit.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.h \
     plugin/module/knmusicplugin/sdk/knmusicratingeditor.h \
-    plugin/module/knmusicplugin/sdk/knmusicratingdelegate.h
+    plugin/module/knmusicplugin/sdk/knmusicratingdelegate.h \
+    plugin/module/knmusicplugin/sdk/knmusicsolomenubase.h \
+    plugin/module/knmusicplugin/plugin/knmusicsolomenu.h
 
 RESOURCES += \
     resource/res.qrc

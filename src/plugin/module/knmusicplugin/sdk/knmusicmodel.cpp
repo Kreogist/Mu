@@ -135,6 +135,16 @@ QVariant KNMusicModel::roleData(int row, int column, int role) const
     return data(index(row, column), role);
 }
 
+void KNMusicModel::setRoleData(const int &row,
+                               const int &column,
+                               const int &role,
+                               const QVariant &value)
+{
+    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
+    //Only for easy access.
+    setData(index(row, column), value, role);
+}
+
 QList<QStandardItem *> KNMusicModel::songRow(const int &row) const
 {
     Q_ASSERT(row>-1 && row<rowCount());

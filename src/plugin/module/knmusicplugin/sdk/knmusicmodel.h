@@ -38,6 +38,10 @@ public:
     QModelIndexList indexFromFilePath(const QString &filePath);
     QString itemText(const int &row, const int &column) const;
     QVariant roleData(int row, int column, int role) const;
+    void setRoleData(const int &row,
+                     const int &column,
+                     const int &role,
+                     const QVariant &value);
     QList<QStandardItem *> songRow(const int &row) const;
     QVariant rowProperty(const int &row, const int &propertyRole);
     virtual QPixmap songAlbumArt(const int &row);

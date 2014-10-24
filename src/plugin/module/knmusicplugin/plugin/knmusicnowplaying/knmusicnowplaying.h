@@ -55,6 +55,7 @@ private:
     KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;
     KNMusicProxyModelPool *m_proxyModelPool;
     QPersistentModelIndex m_currentPlayingIndex;
+    QPixmap m_playingIcon;
     int m_loopMode=NoRepeat;
 };
 
