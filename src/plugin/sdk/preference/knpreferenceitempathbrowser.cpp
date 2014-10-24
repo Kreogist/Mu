@@ -30,7 +30,6 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
 
     //Initial the browse button.
     m_browse=new QPushButton(this);
-    m_browse->setText("Browse");
     //Set palette.
     QPalette pal=m_browse->palette();
     pal.setColor(QPalette::Button, QColor(0x20, 0x20, 0x20));
@@ -67,7 +66,11 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
 
     pathEditorLayout->addSpacing(5);
 
+    //Insert the control widget.
     insertControlWidget(pathEditorWidget);
+
+    //Do translation.
+    retranslate();
 }
 
 QVariant KNPreferenceItemPathBrowser::defaultValue() const
@@ -135,5 +138,10 @@ bool KNPreferenceItemPathBrowser::ensureExist() const
 void KNPreferenceItemPathBrowser::setEnsureExist(bool ensureExist)
 {
     m_ensureExist = ensureExist;
+}
+
+void KNPreferenceItemPathBrowser::retranslate()
+{
+    m_browse->setText(tr("Browse"));
 }
 

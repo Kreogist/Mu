@@ -146,14 +146,12 @@ void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
 
 void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
 {
-    if(m_nowPlaying==nullptr)
-    {
-        m_nowPlaying=plugin;
-        //Add plugin to list.
-        m_pluginList.append(plugin);
-        //Set the header player.
-        m_nowPlaying->setHeaderPlayer(m_headerPlayer);
-    }
+    //Set the header player.
+    plugin->setHeaderPlayer(m_headerPlayer);
+    //Add plugin to list.
+    m_pluginList.append(plugin);
+    //Set global now playing plugin.
+    KNMusicGlobal::setNowPlaying(plugin);
 }
 
 void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
@@ -170,7 +168,7 @@ void KNMusicPlugin::retranslate()
 
 void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
 {
-    m_nowPlaying->playTemporaryFiles(data);
+    KNMusicGlobal::nowPlaying()->playTemporaryFiles(data);
 }
 
 void KNMusicPlugin::addMusicCategory(const QPixmap &icon,

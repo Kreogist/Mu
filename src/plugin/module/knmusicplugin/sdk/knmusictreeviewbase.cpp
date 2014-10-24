@@ -8,6 +8,7 @@
 #include <QTimeLine>
 
 #include "knmusicmodel.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusictreeviewheader.h"
 #include "knmusicproxymodelpool.h"
 
@@ -54,6 +55,10 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     m_mouseOut=new QTimeLine(200, this);
     configureTimeLine(m_mouseOut);
     m_mouseOut->setEndFrame(0);
+
+    //Initial reacts.
+    connect(this, &KNMusicTreeViewBase::activated,
+            this, &KNMusicTreeViewBase::onActionIndexActivated);
 }
 
 KNMusicModel *KNMusicTreeViewBase::musicModel()
@@ -151,6 +156,15 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
     pal.setColor(QPalette::Text, m_fontColor);
     pal.setColor(QPalette::Button, m_buttonColor);
     setPalette(pal);
+}
+
+void KNMusicTreeViewBase::onActionIndexActivated(const QModelIndex &index)
+{
+    if(index.isValid())
+    {
+        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
+        KNMusicGlobal::nowPlaying()->playMusic(index);
+    }
 }
 
 void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)

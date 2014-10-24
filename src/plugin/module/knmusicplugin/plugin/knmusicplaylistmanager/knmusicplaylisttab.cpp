@@ -19,6 +19,7 @@
 #include <QItemSelectionModel>
 #include <QSplitter>
 
+#include "knmusicplaylistlistitem.h"
 #include "knmusicplaylistlist.h"
 #include "knmusicplaylistlistview.h"
 #include "knmusicplaylistlistvieweditor.h"
@@ -71,6 +72,21 @@ QPixmap KNMusicPlaylistTab::icon()
 QWidget *KNMusicPlaylistTab::widget()
 {
     return m_viewer;
+}
+
+KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()
+{
+    KNMusicPlaylistListItem *currentItem=m_playlistDisplay->currentItem();
+    return currentItem==nullptr?nullptr:currentItem->playlistModel();
+}
+
+void KNMusicPlaylistTab::onActionPlaylistItemChanged(QStandardItem *item)
+{
+    KNMusicPlaylistListItem *changedItem=(KNMusicPlaylistListItem *)item;
+    if(m_playlistDisplay->currentItem()==changedItem)
+    {
+        m_playlistDisplay->updatePlaylistInfo();
+    }
 }
 
 void KNMusicPlaylistTab::displayPlaylistItem(KNMusicPlaylistListItem *item)

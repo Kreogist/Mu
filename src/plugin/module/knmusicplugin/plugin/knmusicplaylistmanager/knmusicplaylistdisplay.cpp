@@ -67,8 +67,6 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
 
     //Initial the tree view.
     m_playlistTreeView=new KNMusicPlaylistTreeView(this);
-//    connect(m_playlistTreeView, &KNMusicPlaylistTreeView::requirePlayIndex,
-//            this, &KNMusicPlaylistDisplay::requirePlayIndex);
 //    connect(m_playlistTreeView, &KNMusicPlaylistTreeView::requireRemoveItem,
 //            this, &KNMusicPlaylistDisplay::requireRemoveItem);
 
@@ -81,12 +79,25 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
     retranslate();
 }
 
+KNMusicPlaylistListItem *KNMusicPlaylistDisplay::currentItem()
+{
+    return m_currentItem;
+}
+
 void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
 {
     //Reset the connection.
     m_modelSignalHandler->disConnectAll();
+    //Backup the item.
+    m_currentItem=item;
+    if(m_currentItem==nullptr)
+    {
+        //Clear the detail info.
+        updateDetailInfo();
+        return;
+    }
     //Set the model.
-    KNMusicPlaylistModel *musicModel=item->playlistModel();
+    KNMusicPlaylistModel *musicModel=m_currentItem->playlistModel();
     m_playlistTreeView->setMusicModel(musicModel);
     //When user add or remove file to playlist, should update the detail info.
     m_modelSignalHandler->addConnectionHandle(
@@ -96,9 +107,8 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
     m_modelSignalHandler->addConnectionHandle(
                 connect(this, &KNMusicPlaylistDisplay::requireAnalysisFiles,
                         musicModel, &KNMusicPlaylistModel::requireAnalysisFiles));
-    //Set the title.
-    m_playlistTitle->setText(item->text());
-
+    //Update the informations.
+    updatePlaylistInfo();
 }
 
 void KNMusicPlaylistDisplay::retranslate()
@@ -114,9 +124,33 @@ void KNMusicPlaylistDisplay::retranslate()
     updateDetailInfo();
 }
 
+void KNMusicPlaylistDisplay::updatePlaylistInfo()
+{
+    //Clear the original data first.
+    m_playlistTitle->clear();
+    m_playlistInfo->clear();
+    //If the current item is null, then ignore it.
+    if(m_currentItem==nullptr)
+    {
+        return;
+    }
+    //Set the title.
+    m_playlistTitle->setText(m_currentItem->text());
+    //Update the detail.
+    updateDetailInfo();
+}
+
 void KNMusicPlaylistDisplay::updateDetailInfo()
 {
-    KNMusicModel *model=m_playlistTreeView->musicModel();
+    //Reset the detail info label text.
+    m_playlistInfo->clear();
+    //Check is the item usable.
+    if(m_currentItem==nullptr)
+    {
+        return;
+    }
+    //Get the playlist model.
+    KNMusicPlaylistModel *model=m_currentItem->playlistModel();
     if(model==nullptr)
     {
         return;

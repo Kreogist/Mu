@@ -121,9 +121,10 @@ using namespace KNMusic;
 
 class QLabel;
 class QThread;
-class KNMusicParser;
 class KNPreferenceItemBase;
 class KNPreferenceWidgetsPanel;
+class KNMusicParser;
+class KNMusicNowPlayingBase;
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
@@ -136,6 +137,8 @@ public:
     static QDateTime dataStringToDateTime(const QString &text);
     static KNMusicParser *parser();
     static void setParser(KNMusicParser *parser);
+    static KNMusicNowPlayingBase *nowPlaying();
+    static void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     bool isMusicFile(const QString &suffix);
     bool isMusicListFile(const QString &suffix);
     QString typeDescription(const QString &suffix) const;
@@ -162,6 +165,7 @@ private:
     void initialHeaderText();
     static KNMusicGlobal *m_instance;
     static KNMusicParser *m_parser;
+    static KNMusicNowPlayingBase *m_nowPlaying;
     explicit KNMusicGlobal(QObject *parent = 0);
     QString m_treeViewHeaderText[MusicDisplayDataCount];
     QStringList m_suffixs, m_listSuffixs,

@@ -29,6 +29,7 @@ public:
     void setMusicModel(KNMusicModel *musicModel);
 
 signals:
+    void requirePlayIndex(const QModelIndex &index);
 
 public slots:
     virtual void resetHeaderState();
@@ -40,6 +41,7 @@ protected:
 
 private slots:
     void onActionMouseInOut(const int &frame);
+    void onActionIndexActivated(const QModelIndex &index);
 
 private:
     void configureTimeLine(QTimeLine *timeLine);

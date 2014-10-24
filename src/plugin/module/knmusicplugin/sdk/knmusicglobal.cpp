@@ -17,8 +17,8 @@
 #include "knmusicglobal.h"
 
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
-
 KNMusicParser *KNMusicGlobal::m_parser=nullptr;
+KNMusicNowPlayingBase *KNMusicGlobal::m_nowPlaying=nullptr;
 
 KNMusicGlobal *KNMusicGlobal::instance()
 {
@@ -215,6 +215,16 @@ KNMusicParser *KNMusicGlobal::parser()
 void KNMusicGlobal::setParser(KNMusicParser *parser)
 {
     m_parser = parser;
+}
+
+KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying()
+{
+    return m_nowPlaying;
+}
+
+void KNMusicGlobal::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
+{
+    m_nowPlaying = nowPlaying;
 }
 
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :

@@ -21,6 +21,8 @@
 #include "knmusictab.h"
 
 class QSplitter;
+class QStandardItem;
+class KNMusicPlaylistModel;
 class KNMusicPlaylistDisplay;
 class KNMusicPlaylistList;
 class KNMusicPlaylistListItem;
@@ -35,6 +37,7 @@ public:
     QString caption();
     QPixmap icon();
     QWidget *widget();
+    KNMusicPlaylistModel *currentPlaylistModel();
 
 signals:
     void requireGeneratePlaylist(QString caption);
@@ -42,6 +45,7 @@ signals:
                                 const QModelIndex &previous);
 
 public slots:
+    void onActionPlaylistItemChanged(QStandardItem *item);
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
     void setPlaylistList(KNMusicPlaylistList *playlistList);
     void setCurrentPlaylist(const QModelIndex &index);

@@ -29,18 +29,21 @@ class KNMusicPlaylistDisplay : public KNDropProxyContainer
     Q_OBJECT
 public:
     explicit KNMusicPlaylistDisplay(QWidget *parent = 0);
+    KNMusicPlaylistListItem *currentItem();
 
 signals:
 
 public slots:
-    void displayPlaylistItem(KNMusicPlaylistListItem *item);
     void retranslate();
+    void updatePlaylistInfo();
+    void displayPlaylistItem(KNMusicPlaylistListItem *item);
 
 private slots:
     void updateDetailInfo();
 
 private:
     QLabel *m_playlistTitle, *m_playlistInfo;
+    KNMusicPlaylistListItem *m_currentItem=nullptr;
     KNMusicPlaylistTreeView *m_playlistTreeView;
     KNConnectionHandler *m_modelSignalHandler;
     QString m_songCount[3];

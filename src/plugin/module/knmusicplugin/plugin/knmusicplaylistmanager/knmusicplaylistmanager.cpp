@@ -18,6 +18,7 @@
 #include "knmusicplaylistlistitem.h"
 #include "knmusicplaylisttab.h"
 #include "knmusicplaylistlist.h"
+#include "knmusicnowplayingbase.h"
 
 #include "knmusicplaylistmanager.h"
 
@@ -40,6 +41,9 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
             this, &KNMusicPlaylistManager::onActionAddPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::currentPlaylistChanged,
             this, &KNMusicPlaylistManager::onActionCurrentPlaylistChanged);
+    //When the data of playlist list has been changed, update the detail.
+    connect(m_playlistList, &KNMusicPlaylistList::itemChanged,
+            m_playlistTab, &KNMusicPlaylistTab::onActionPlaylistItemChanged);
 }
 
 KNMusicTab *KNMusicPlaylistManager::categoryTab()

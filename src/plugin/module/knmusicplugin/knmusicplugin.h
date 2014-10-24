@@ -85,7 +85,6 @@ private:
     KNMusicBackend *m_backend=nullptr;
     KNMusicParser *m_parser=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
-    KNMusicNowPlayingBase *m_nowPlaying=nullptr;
 };
 
 #endif // KNMUSICPLUGIN_H

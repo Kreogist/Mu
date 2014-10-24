@@ -45,6 +45,7 @@ private:
     KNMusicPlaylistListItem *generatePlaylist(const QString &caption);
     KNMusicPlaylistTab *m_playlistTab;
     KNMusicPlaylistList *m_playlistList;
+    KNMusicNowPlayingBase *m_nowPlaying;
     QIcon m_playlistIcon;
 };
 

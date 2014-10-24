@@ -24,6 +24,7 @@ public:
 signals:
 
 public slots:
+    void retranslate();
     void setDefaultValue(const QVariant &defaultValue);
     void setValue(const QVariant &value);
 
