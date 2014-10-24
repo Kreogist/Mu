@@ -85,6 +85,8 @@ bool KNMusicProxyModelPool::setPlaying(KNMusicProxyModel *playing)
     }
     //Get that model.
     m_playing=m_occupation.takeAt(modelIndex);
+    //Means taken success.
+    return true;
 }
 
 void KNMusicProxyModelPool::releasePlaying()

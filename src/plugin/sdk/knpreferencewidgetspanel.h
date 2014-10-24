@@ -28,7 +28,6 @@ public:
                  const bool &isAdvanced=false);
 
 signals:
-    void requireSaveConfigure();
     void requireSetAdvancedVisible(const bool &ok);
 
 public slots:

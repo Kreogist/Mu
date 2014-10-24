@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#include "knmusicplaylistlistdelegate.h"
+
 #include "knmusicplaylistlistview.h"
 
 KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
@@ -25,4 +27,6 @@ KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
     //Set properties.
     setIconSize(QSize(40, 40));
     setDragDropMode(QAbstractItemView::DropOnly);
+    //Initial the delegate.
+    setItemDelegate(new KNMusicPlaylistListDelegate(this));
 }

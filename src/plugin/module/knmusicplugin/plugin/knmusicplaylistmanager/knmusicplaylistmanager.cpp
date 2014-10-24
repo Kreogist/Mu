@@ -77,6 +77,7 @@ void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
 void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &current,
                                                             const QModelIndex &previous)
 {
+    Q_UNUSED(previous)
     //Ask UI to display the playlist item.
     m_playlistTab->displayPlaylistItem(m_playlistList->playlistItemFromIndex(current));
 }
