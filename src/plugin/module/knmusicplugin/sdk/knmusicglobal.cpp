@@ -19,6 +19,7 @@
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
 KNMusicParser *KNMusicGlobal::m_parser=nullptr;
 KNMusicNowPlayingBase *KNMusicGlobal::m_nowPlaying=nullptr;
+KNMusicSoloMenuBase *KNMusicGlobal::m_soloMenu=nullptr;
 
 KNMusicGlobal *KNMusicGlobal::instance()
 {
@@ -225,6 +226,16 @@ KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying()
 void KNMusicGlobal::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
     m_nowPlaying = nowPlaying;
+}
+
+KNMusicSoloMenuBase *KNMusicGlobal::soloMenu()
+{
+    return m_soloMenu;
+}
+
+void KNMusicGlobal::setSoloMenu(KNMusicSoloMenuBase *soloMenu)
+{
+    m_soloMenu = soloMenu;
 }
 
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :

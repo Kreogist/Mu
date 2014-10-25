@@ -6,8 +6,11 @@
  */
 #include <QScrollBar>
 #include <QTimeLine>
+#include <QMouseEvent>
 
+#include "knconnectionhandler.h"
 #include "knmusicmodel.h"
+#include "knmusicsolomenubase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusictreeviewheader.h"
 #include "knmusicproxymodelpool.h"
@@ -52,6 +55,10 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     setItemDelegateForColumn(AlbumRating,
                              new KNMusicRatingDelegate(this));
 
+    //Initial menu connections.
+    m_soloConnections=new KNConnectionHandler(this);
+    m_multiConnections=new KNConnectionHandler(this);
+
     //Initial proxy model pool.
     m_proxyModelPool=KNMusicProxyModelPool::instance();
 
@@ -65,7 +72,7 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
 
     //Initial reacts.
     connect(this, &KNMusicTreeViewBase::activated,
-            this, &KNMusicTreeViewBase::onActionIndexActivated);
+            this, &KNMusicTreeViewBase::playIndex);
 }
 
 KNMusicModel *KNMusicTreeViewBase::musicModel()
@@ -145,6 +152,38 @@ void KNMusicTreeViewBase::leaveEvent(QEvent *event)
     m_mouseOut->start();
 }
 
+void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
+{
+    QTreeView::mousePressEvent(event);
+    //Set pressed flag.
+    m_pressed=true;
+}
+
+void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
+{
+    QTreeView::mouseReleaseEvent(event);
+    //Check we has been pressed on this widget before.
+    if(m_pressed)
+    {
+        m_pressed=false;
+        //Check is button right button and position is in the treeview.
+        if(event->button()==Qt::RightButton && rect().contains(event->pos()))
+        {
+            switch(selectionModel()->selectedRows().size())
+            {
+            case 0:
+                break;
+            case 1:
+                showSoloMenu(event);
+                break;
+            default:
+                showMultiMenu(event);
+                break;
+            }
+        }
+    }
+}
+
 void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
 {
     //The reorder function: move section!
@@ -165,13 +204,14 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
     setPalette(pal);
 }
 
-void KNMusicTreeViewBase::onActionIndexActivated(const QModelIndex &index)
+void KNMusicTreeViewBase::playCurrent()
 {
-    if(index.isValid())
-    {
-        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
-        KNMusicGlobal::nowPlaying()->playMusic(index);
-    }
+    playIndex(currentIndex());
+}
+
+void KNMusicTreeViewBase::removeCurrent()
+{
+    ;
 }
 
 void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)
@@ -180,4 +220,43 @@ void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)
     timeLine->setUpdateInterval(5);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNMusicTreeViewBase::onActionMouseInOut);
+}
+
+void KNMusicTreeViewBase::showSoloMenu(QMouseEvent *event)
+{
+    //Get the index of the position where mouse pressed.
+    QModelIndex pressedIndex=indexAt(event->pos());
+    if(pressedIndex.isValid())
+    {
+        KNMusicSoloMenuBase *soloMenu=KNMusicGlobal::instance()->soloMenu();
+        m_soloConnections->addConnectionHandle(
+                    connect(soloMenu, &KNMusicSoloMenuBase::requirePlayCurrent,
+                            this, &KNMusicTreeViewBase::playCurrent));
+        m_soloConnections->addConnectionHandle(
+                    connect(soloMenu, &KNMusicSoloMenuBase::requireRemoveCurrent,
+                            this, &KNMusicTreeViewBase::removeCurrent));
+        //Set proxy model and current index.
+        soloMenu->setProxyModel(m_proxyModel);
+        soloMenu->setCurrentIndex(pressedIndex);
+        //Set position.
+        soloMenu->setMouseDownPos(event->globalPos());
+        //Launch it.
+        soloMenu->exec(event->globalPos());
+        //Disconnect all the signals.
+        m_soloConnections->disConnectAll();
+    }
+}
+
+void KNMusicTreeViewBase::showMultiMenu(QMouseEvent *event)
+{
+    ;
+}
+
+void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
+{
+    if(index.isValid())
+    {
+        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
+        KNMusicGlobal::nowPlaying()->playMusic(index);
+    }
 }

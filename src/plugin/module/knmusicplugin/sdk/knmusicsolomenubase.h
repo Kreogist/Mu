@@ -16,14 +16,12 @@ class KNMusicSoloMenuBase : public KNAnimationMenu
 {
     Q_OBJECT
 public:
-    explicit KNMusicSoloMenuBase(QWidget *parent = 0);
+    KNMusicSoloMenuBase(QWidget *parent = 0):KNAnimationMenu(parent){}
     virtual void setProxyModel(KNMusicProxyModel *model)=0;
     virtual void setCurrentIndex(const QModelIndex &itemIndex)=0;
 
 signals:
     void requirePlayCurrent();
-    void requireOpenCurrentFile();
-    void requireShowInGraphicsShell();
     void requireRemoveCurrent();
 
 public slots:

@@ -78,6 +78,8 @@ QWidget *KNMusicPlaylistListDelegate::createEditor(QWidget *parent,
     Q_UNUSED(index)
     //Generate the caption editor.
     QLineEdit *captionEditor=new QLineEdit(parent);
+
+    captionEditor->setPalette(option.palette);
     //Set the size of the editor.
     /*
      * This resize is meant to fixed this bug:
@@ -107,7 +109,10 @@ void KNMusicPlaylistListDelegate::setModelData(QWidget *editor,
 {
     //Set model data to editor's text.
     QLineEdit *captionEditor=static_cast<QLineEdit *>(editor);
-    model->setData(index, captionEditor->text(), Qt::DisplayRole);
+    if(!captionEditor->text().isEmpty())
+    {
+        model->setData(index, captionEditor->text(), Qt::DisplayRole);
+    }
 }
 
 void KNMusicPlaylistListDelegate::commitAndCloseEditor()

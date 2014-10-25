@@ -23,6 +23,9 @@ public:
     static QString applicationDirPath();
     static QStringList urlToPathList(const QList<QUrl> urls);
     static void setDylibSuffix(const QString &dylibSuffix);
+    static void showInGraphicalShell(const QString &filePath);
+    static void openLocalFile(const QString &filePath);
+    static void setClipboardText(const QString &text);
     void setSystemData(const QString &key, const QVariant &value);
     QVariant systemData(const QString &key);
     void setCustomData(const QString &module, const QString &key, const QVariant &value);

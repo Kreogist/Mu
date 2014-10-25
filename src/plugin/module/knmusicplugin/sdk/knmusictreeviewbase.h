@@ -29,7 +29,6 @@ public:
     void setMusicModel(KNMusicModel *musicModel);
 
 signals:
-    void requirePlayIndex(const QModelIndex &index);
 
 public slots:
     virtual void resetHeaderState();
@@ -37,11 +36,16 @@ public slots:
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
 
 private slots:
     void onActionMouseInOut(const int &frame);
-    void onActionIndexActivated(const QModelIndex &index);
+    void playIndex(const QModelIndex &index);
+
+    void playCurrent();
+    void removeCurrent();
 
 private:
     void configureTimeLine(QTimeLine *timeLine);
@@ -50,9 +54,9 @@ private:
     QTimeLine *m_mouseIn, *m_mouseOut;
     KNMusicProxyModel *m_proxyModel=nullptr;
     KNMusicProxyModelPool *m_proxyModelPool;
-    KNMusicSoloMenuBase *m_soloMenu=nullptr;
     KNMusicMultiMenuBase *m_multiMenu=nullptr;
-    KNConnectionHandler *m_soloConnections, *m_multiConnections;
+    KNConnectionHandler *m_soloConnections,
+                        *m_multiConnections;
     QDrag *m_drag;
     QMimeData *m_mimeData;
     QColor m_alternateColor=QColor(255,255,255,0),
@@ -61,7 +65,7 @@ private:
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;
-    bool m_pressed=true;
+    bool m_pressed=false;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

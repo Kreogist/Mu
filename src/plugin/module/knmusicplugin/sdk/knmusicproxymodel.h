@@ -17,6 +17,10 @@ public:
     explicit KNMusicProxyModel(QObject *parent = 0);
     KNMusicModel *musicModel();
     int playingItemColumn();
+    QString itemText(const int &row, const int &column) const;
+    QVariant roleData(int row, int column, int role) const;
+    QString filePathFromRow(const int &row);
+    QString fileNameFromRow(const int &row);
 
 signals:
 

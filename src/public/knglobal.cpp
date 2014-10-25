@@ -5,6 +5,9 @@
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
 #include <QApplication>
+#include <QClipboard>
+#include <QDesktopServices>
+#include <QProcess>
 
 #include "knconfigure.h"
 #include "knfontmanager.h"
@@ -63,6 +66,50 @@ QStringList KNGlobal::urlToPathList(const QList<QUrl> urls)
 void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
 {
     m_dylibSuffix = dylibSuffix;
+}
+
+void KNGlobal::showInGraphicalShell(const QString &filePath)
+{
+#ifdef Q_OS_WIN32
+    QStringList args;
+    QFileInfo pathInfo(filePath);
+    if(!pathInfo.isDir())
+    {
+        args<<"/select,";
+    }
+    args<<QDir::toNativeSeparators(filePath);
+    QProcess::startDetached("explorer.exe", args);
+    return;
+#endif
+#ifdef Q_OS_MACX
+    QStringList scriptArgs;
+    scriptArgs << QLatin1String("-e")
+               << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
+               .arg(filePath);
+    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    scriptArgs.clear();
+    scriptArgs << QLatin1String("-e")
+               << QLatin1String("tell application \"Finder\" to activate");
+    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    return;
+#endif
+#ifdef Q_OS_LINUX
+    QFileInfo fileInfo(filePath);
+    QString folder = fileInfo.isDir() ? fileInfo.absoluteFilePath() : fileInfo.filePath();
+    QString app = QLatin1String("xdg-open %d");
+    QString browserArgs = substituteFileBrowserParameters(app, folder);
+    QProcess::startDetached(browserArgs);
+#endif
+}
+
+void KNGlobal::openLocalFile(const QString &filePath)
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+}
+
+void KNGlobal::setClipboardText(const QString &text)
+{
+    QApplication::clipboard()->setText(text, QClipboard::Clipboard);
 }
 
 void KNGlobal::setSystemData(const QString &key, const QVariant &value)

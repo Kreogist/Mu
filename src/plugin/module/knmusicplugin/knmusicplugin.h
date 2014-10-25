@@ -71,6 +71,7 @@ protected slots:
 private:
     void initialInfrastructure();
     void initialParser();
+    void initialSoloMenu();
     void addMusicTab(KNMusicTab *musicTab);
     void startThreads();
     QLinkedList<QObject *> m_pluginList;
@@ -83,7 +84,6 @@ private:
     KNMusicGlobal *m_musicGlobal;
 
     KNMusicBackend *m_backend=nullptr;
-    KNMusicParser *m_parser=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
 };
 
