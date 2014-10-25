@@ -77,6 +77,11 @@ void KNPreferenceItemGlobal::updateItemCaption(KNPreferenceItemBase *item,
     item->setCaption(caption);
 }
 
+QVariant KNPreferenceItemGlobal::itemData(KNPreferenceItemBase *item)
+{
+    return item->value();
+}
+
 KNPreferenceItemGlobal::KNPreferenceItemGlobal(QObject *parent) :
     QObject(parent)
 {

@@ -44,6 +44,9 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     verticalScrollBar()->setSingleStep(4);
     verticalScrollBar()->setPageStep(4);
 
+    //Using frame updater to set palette.
+    onActionMouseInOut(0);
+
     //Set animation header.
     KNMusicTreeViewHeader *header=new KNMusicTreeViewHeader(this);
     connect(header, &KNMusicTreeViewHeader::requireResizeColumnToContents,

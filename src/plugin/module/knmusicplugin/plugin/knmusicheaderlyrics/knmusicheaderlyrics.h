@@ -22,7 +22,6 @@
 
 class QLabel;
 class QTimeLine;
-class KNPreferenceItemBase;
 class KNPreferenceItemGlobal;
 class KNMusicGlobal;
 class KNMusicLyricsManager;
@@ -61,14 +60,8 @@ private:
                           const int &yOffset);
 
     KNMusicLyricsManager *m_lyricsManager;
-    enum LyricsPreference
-    {
-        LyricsFolderPath,
-        LyricsPreferenceCount
-    };
 
     QLabel *m_preferenceCaption;
-    KNPreferenceItemBase *m_itemBase[LyricsPreferenceCount];
     QTimeLine *m_moveToCurrent;
     int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,
         m_leftSpacing=15, m_animationDuration=200;

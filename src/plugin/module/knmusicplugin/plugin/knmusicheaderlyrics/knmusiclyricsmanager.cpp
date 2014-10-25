@@ -16,9 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QFileInfo>
+#include <QDir>
 
 #include "knglobal.h"
 #include "knmusiclrcparser.h"
+#include "knmusicglobal.h"
+#include "preference/knpreferenceitemglobal.h"
 
 #include "knmusiclyricsmanager.h"
 
@@ -63,8 +66,31 @@ bool KNMusicLyricsManager::loadLyricsForFile(const QString &filePath)
     return !m_positions.isEmpty();
 }
 
+void KNMusicLyricsManager::retranslate()
+{
+    m_preferenceItemGlobal->updateItemCaption(m_itemBase[LyricsFolderPath], tr("Lyrics Folder"));
+}
+
+void KNMusicLyricsManager::applyPreference()
+{
+    setLyricsFolderPath(
+                m_preferenceItemGlobal->itemData(m_itemBase[LyricsFolderPath]).toString());
+}
+
+void KNMusicLyricsManager::initialPreference()
+{
+    //Initial the controls.
+    m_itemBase[LyricsFolderPath]=
+            m_preferenceItemGlobal->generateItem(PathEdit,
+                                                 "LyricsFolderPath",
+                                                 m_lyricsFolderPath);
+    m_musicGlobal->addItem(m_itemBase[LyricsFolderPath]);
+}
+
 void KNMusicLyricsManager::clear()
 {
+    //Remove the file path.
+    m_currentLyricsPath.clear();
     //Remove the old properties.
     m_lyricsProperty.clear();
     //Remove all the positions and the texts.
@@ -122,6 +148,9 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
 {
     //Initial global instance.
     m_global=KNGlobal::instance();
+    //Initial music global instance.
+    m_musicGlobal=KNMusicGlobal::instance();
+
     //Set the default lyrics folder path.
     m_lyricsFolderPath=m_global->applicationDirPath()+"/Lyrics";
     //Set the default loading policy.
@@ -129,8 +158,19 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_policyList.append(RelateNameInLyricsDir);
     m_policyList.append(SameNameInMusicDir);
     m_policyList.append(RelateNameInMusicDir);
+
+    //Initial the preference item global.
+    m_preferenceItemGlobal=KNPreferenceItemGlobal::instance();
+    connect(m_preferenceItemGlobal, &KNPreferenceItemGlobal::requireApplyPreference,
+            this, &KNMusicLyricsManager::applyPreference);
+    //Initial the preference items.
+    initialPreference();
+
     //Initial the LRC file parser.
     m_lrcParser=new KNMusicLRCParser(this);
+
+    //Retranslate.
+    retranslate();
 }
 
 QString KNMusicLyricsManager::lyricsFolderPath() const
@@ -140,5 +180,21 @@ QString KNMusicLyricsManager::lyricsFolderPath() const
 
 void KNMusicLyricsManager::setLyricsFolderPath(const QString &lyricsFolderPath)
 {
-    m_lyricsFolderPath = lyricsFolderPath;
+    QFileInfo lyricsFolderInfo(lyricsFolderPath);
+    if(lyricsFolderInfo.exists())
+    {
+        if(lyricsFolderInfo.isDir())
+        {
+            m_lyricsFolderPath = lyricsFolderInfo.absoluteFilePath() + "/";
+        }
+    }
+    else
+    {
+        QDir lyricsFolder(lyricsFolderInfo.absoluteFilePath());
+        lyricsFolder.mkpath(lyricsFolder.absolutePath());
+        if(lyricsFolder.exists())
+        {
+            m_lyricsFolderPath=lyricsFolder.absolutePath() + "/";
+        }
+    }
 }

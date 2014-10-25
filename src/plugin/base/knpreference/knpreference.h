@@ -20,6 +20,7 @@
 
 #include "knpreferenceplugin.h"
 
+class KNPreferenceItemGlobal;
 class KNPreferencePanel;
 class KNPreference : public KNPreferencePlugin
 {
@@ -36,8 +37,10 @@ public slots:
                      const QPixmap &headerIcon,
                      KNPreferenceWidgetsPanel *contentWidget);
     void setCurrentIndex(const int &index);
+    void onActionHidePreference();
 
 private:
+    KNPreferenceItemGlobal *m_preferenceGlobal;
     KNPreferencePanel *m_preferencePanel;
 };
 

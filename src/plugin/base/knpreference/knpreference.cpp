@@ -16,15 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knpreferencepanel.h"
+#include "preference/knpreferenceitemglobal.h"
 
 #include "knpreference.h"
 
 KNPreference::KNPreference(QObject *parent) :
     KNPreferencePlugin(parent)
 {
+    //Initial the preference global.
+    m_preferenceGlobal=KNPreferenceItemGlobal::instance();
+    //Initial the preference panel.
     m_preferencePanel=new KNPreferencePanel;
     connect(m_preferencePanel, &KNPreferencePanel::requireHidePreference,
-            this, &KNPreference::requireHidePreference);
+            this, &KNPreference::onActionHidePreference);
 }
 
 QWidget *KNPreference::preferencePanel()
@@ -43,4 +47,11 @@ void KNPreference::addCategory(const QString &title,
 void KNPreference::setCurrentIndex(const int &index)
 {
     m_preferencePanel->setCurrentIndex(index);
+}
+
+void KNPreference::onActionHidePreference()
+{
+    m_preferenceGlobal->requireApplyPreference();
+    //Ask to hide preference.
+    emit requireHidePreference();
 }

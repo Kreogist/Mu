@@ -35,10 +35,13 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 {
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
-    //Initial the lyrics manager.
-    m_lyricsManager=KNMusicLyricsManager::instance();
     //Initial the preference item global.
     m_preferenceItemGlobal=KNPreferenceItemGlobal::instance();
+    //Initial the preference items.
+    initialPreference();
+
+    //Initial the lyrics manager.
+    m_lyricsManager=KNMusicLyricsManager::instance();
 
     //Initial the lyrics moving time line.
     m_moveToCurrent=new QTimeLine(m_animationDuration, this);
@@ -48,8 +51,6 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     connect(m_moveToCurrent, &QTimeLine::frameChanged,
             this, &KNMusicHeaderLyrics::onActionLyricsMoved);
 
-    //Initial the preference items.
-    initialPreference();
     //Retranslate.
     retranslate();
 }
@@ -72,7 +73,6 @@ void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 void KNMusicHeaderLyrics::retranslate()
 {
     m_preferenceItemGlobal->updateTitleCaption(m_preferenceCaption, tr("Lyrics"));
-    m_preferenceItemGlobal->updateItemCaption(m_itemBase[LyricsFolderPath], tr("Lyrics Folder"));
 }
 
 void KNMusicHeaderLyrics::resetStatus()
@@ -83,6 +83,8 @@ void KNMusicHeaderLyrics::resetStatus()
     m_noLyrics=true;
     //Reset lines.
     m_currentLyricsLine=-1;
+    //Clear lyrics manager.
+    m_lyricsManager->clear();
     //Update the viewport.
     update();
 }
@@ -98,12 +100,7 @@ void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
     m_lyricsLines=m_lyricsManager->lines();
     m_noLyrics=(m_lyricsLines==0);
     //Check is there lyrics.
-    if(m_noLyrics)
-    {
-        //Reset the lyrics line.
-        m_currentLyricsLine=-1;
-    }
-    else
+    if(!m_noLyrics)
     {
         //Initial the current line to the first line.
         m_currentLyricsLine=0;
@@ -117,7 +114,7 @@ void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
 void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
 {
     //If no lyrics, do nothing.
-    if(m_noLyrics || m_currentLyricsLine==-1)
+    if(m_currentLyricsLine==-1 || m_noLyrics)
     {
         return;
     }
@@ -126,7 +123,8 @@ void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
     if(position<m_lyricsManager->positionAt(m_currentLyricsLine))
     {
         //Find the matching lyrics.
-        while(m_lyricsManager->positionAt(m_currentLyricsLine)>position)
+        while(m_currentLyricsLine>-1 &&
+              m_lyricsManager->positionAt(m_currentLyricsLine)>position)
         {
             yOffset-=lyricsSize(m_lyricsManager->lyricsAt(m_currentLyricsLine)).height();
             m_currentLyricsLine--;
@@ -234,12 +232,6 @@ void KNMusicHeaderLyrics::initialPreference()
     //Initial the caption.
     m_preferenceCaption=m_preferenceItemGlobal->generateLabel();
     m_musicGlobal->addTitle(m_preferenceCaption);
-    //Initial the controls.
-    m_itemBase[LyricsFolderPath]=
-            m_preferenceItemGlobal->generateItem(PathEdit,
-                                                 "LyricsFolderPath",
-                                                 m_lyricsManager->lyricsFolderPath());
-    m_musicGlobal->addItem(m_itemBase[LyricsFolderPath]);
 }
 
 int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)
@@ -262,7 +254,7 @@ void KNMusicHeaderLyrics::startMovingAnime(const int &durationOffset,
     //Stop the time line.
     m_moveToCurrent->stop();
     //Reset the duration and the start frame.
-    m_moveToCurrent->setDuration(qMin(durationOffset, m_animationDuration));
+    m_moveToCurrent->setDuration(qMin(qAbs(durationOffset), m_animationDuration));
     m_moveToCurrent->setStartFrame(yOffset);
     //Before we start, set the widget to the start frame state.
     onActionLyricsMoved(yOffset);

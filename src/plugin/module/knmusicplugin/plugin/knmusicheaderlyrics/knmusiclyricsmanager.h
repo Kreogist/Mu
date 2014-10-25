@@ -38,6 +38,9 @@ enum SearchPolicy
 using namespace KNMusicLyrics;
 
 class KNGlobal;
+class KNPreferenceItemBase;
+class KNPreferenceItemGlobal;
+class KNMusicGlobal;
 class KNMusicLRCParser;
 class KNMusicLyricsManager : public QObject
 {
@@ -49,21 +52,34 @@ public:
     QString lyricsAt(const int &index) const;
     QString lyricsFolderPath() const;
     void setLyricsFolderPath(const QString &lyricsFolderPath);
+    void clear();
 
 signals:
 
 public slots:
     bool loadLyricsForFile(const QString &filePath);
 
+private slots:
+    void retranslate();
+    void applyPreference();
+
 private:
-    void clear();
+    void initialPreference();
+    enum LyricsPreference
+    {
+        LyricsFolderPath,
+        LyricsPreferenceCount
+    };
+    KNPreferenceItemBase *m_itemBase[LyricsPreferenceCount];
     bool findLyricsForFile(const QString &filePath);
     bool checkLyricsFile(const QString &lyricsPath);
     static KNMusicLyricsManager *m_instance;
     explicit KNMusicLyricsManager(QObject *parent = 0);
 
     KNGlobal *m_global;
+    KNMusicGlobal *m_musicGlobal;
     KNMusicLRCParser *m_lrcParser;
+    KNPreferenceItemGlobal *m_preferenceItemGlobal;
     QString m_currentLyricsPath, m_lyricsFolderPath;
     QFile m_lyricsFile;
     QList<int> m_policyList;

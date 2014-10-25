@@ -40,8 +40,10 @@ public:
                             const QString &caption);
     void updateItemCaption(KNPreferenceItemBase *item,
                            const QString &caption);
+    QVariant itemData(KNPreferenceItemBase *item);
 
 signals:
+    void requireApplyPreference();
 
 public slots:
 

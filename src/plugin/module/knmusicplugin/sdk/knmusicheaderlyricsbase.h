@@ -20,7 +20,6 @@ public:
 signals:
 
 public slots:
-    virtual void retranslate()=0;
     virtual void resetStatus()=0;
     virtual void loadLyricsForMusic(const QString &filePath)=0;
     virtual void onActionPositionChange(const qint64 &position)=0;
