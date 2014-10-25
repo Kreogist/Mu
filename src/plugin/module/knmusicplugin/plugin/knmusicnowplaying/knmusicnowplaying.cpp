@@ -270,8 +270,8 @@ void KNMusicNowPlaying::checkRemovedIndex(const QModelIndex &index)
     //current playing one.
     if(m_currentPlayingIndex.row()==index.row())
     {
-        //We need to play the next one.
-        playNext();
+        //Reset the playing item.
+        resetPlayingItem();
     }
 }
 

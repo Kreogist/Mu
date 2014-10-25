@@ -20,6 +20,7 @@ KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
 KNMusicParser *KNMusicGlobal::m_parser=nullptr;
 KNMusicNowPlayingBase *KNMusicGlobal::m_nowPlaying=nullptr;
 KNMusicSoloMenuBase *KNMusicGlobal::m_soloMenu=nullptr;
+KNMusicMultiMenuBase *KNMusicGlobal::m_multiMenu=nullptr;
 
 KNMusicGlobal *KNMusicGlobal::instance()
 {
@@ -206,6 +207,16 @@ void KNMusicGlobal::initialThreads()
 void KNMusicGlobal::initialHeaderText()
 {
     m_treeViewHeaderText[BlankData]=" ";
+}
+
+KNMusicMultiMenuBase *KNMusicGlobal::multiMenu()
+{
+    return m_multiMenu;
+}
+
+void KNMusicGlobal::setMultiMenu(KNMusicMultiMenuBase *multiMenu)
+{
+    m_multiMenu = multiMenu;
 }
 
 KNMusicParser *KNMusicGlobal::parser()

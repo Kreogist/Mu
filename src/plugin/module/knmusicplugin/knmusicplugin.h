@@ -22,6 +22,7 @@
 
 class QBoxLayout;
 class KNCategoryTabWidget;
+class KNPreferenceWidgetsPanel;
 class KNMusicTab;
 class KNMusicBackend;
 class KNMusicGlobal;
@@ -30,7 +31,8 @@ class KNMusicHeaderPlayerBase;
 class KNMusicHeaderLyricsBase;
 class KNMusicNowPlayingBase;
 class KNMusicPlaylistManagerBase;
-class KNPreferenceWidgetsPanel;
+class KNMusicSoloMenuBase;
+class KNMusicMultiMenuBase;
 class KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
@@ -71,7 +73,8 @@ protected slots:
 private:
     void initialInfrastructure();
     void initialParser();
-    void initialSoloMenu();
+    void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
+    void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
     void addMusicTab(KNMusicTab *musicTab);
     void startThreads();
     QLinkedList<QObject *> m_pluginList;

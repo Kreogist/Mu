@@ -35,6 +35,7 @@
 #include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
+#include "plugin/knmusicmultimenu/knmusicmultimenu.h"
 #include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
@@ -53,7 +54,8 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     //Initial parser.
     initialParser();
     //Initial menus.
-    initialSoloMenu();
+    initialSoloMenu(new KNMusicSoloMenu);
+    initialMultiMenu(new KNMusicMultiMenu);
 
     //Load plugins.
     loadBackend(new KNMusicBackendBass);
@@ -251,14 +253,20 @@ void KNMusicPlugin::initialParser()
     KNMusicGlobal::setParser(parser);
 }
 
-void KNMusicPlugin::initialSoloMenu()
+void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
 {
-    //Initial the solo music menu.
-    KNMusicSoloMenuBase *soloMenu=new KNMusicSoloMenu;
     //Add this to plugin list.
     m_pluginList.append(soloMenu);
     //Set the solo menu.
     KNMusicGlobal::setSoloMenu(soloMenu);
+}
+
+void KNMusicPlugin::initialMultiMenu(KNMusicMultiMenuBase *multiMenu)
+{
+    //Add this to plugin list.
+    m_pluginList.append(multiMenu);
+    //Set the multi menu.
+    KNMusicGlobal::setMultiMenu(multiMenu);
 }
 
 void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)

@@ -11,6 +11,7 @@
 #include "knconnectionhandler.h"
 #include "knmusicmodel.h"
 #include "knmusicsolomenubase.h"
+#include "knmusicmultimenubase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusictreeviewheader.h"
 #include "knmusicproxymodelpool.h"
@@ -249,7 +250,19 @@ void KNMusicTreeViewBase::showSoloMenu(QMouseEvent *event)
 
 void KNMusicTreeViewBase::showMultiMenu(QMouseEvent *event)
 {
-    ;
+    if(indexAt(event->pos()).isValid())
+    {
+        KNMusicMultiMenuBase *multiMenu=KNMusicGlobal::instance()->multiMenu();
+        m_multiConnections->addConnectionHandle(
+                            connect(multiMenu, &KNMusicMultiMenuBase::requireDeleteSelection,
+                                    this, &KNMusicTreeViewBase::removeSelections));
+        //Set position.
+        multiMenu->setMouseDownPos(event->globalPos());
+        //Launch it.
+        multiMenu->exec(event->globalPos());
+        //Disconnect all the signals.
+        m_multiConnections->disConnectAll();
+    }
 }
 
 void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
@@ -271,4 +284,24 @@ void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
     }
     //Remove the row right in the proxy model.
     m_proxyModel->removeMusicRow(index.row());
+}
+
+void KNMusicTreeViewBase::removeSelections()
+{
+    //Get the current indexes.
+    QModelIndexList selectionList=selectionModel()->selectedRows(Name);
+    QList<QPersistentModelIndex> persistentList;
+    while(!selectionList.isEmpty())
+    {
+        persistentList.append(QPersistentModelIndex(selectionList.takeLast()));
+    }
+    //Remove all the indexes.
+    while(!persistentList.isEmpty())
+    {
+        QPersistentModelIndex currentRemovedIndex=persistentList.takeLast();
+        if(currentRemovedIndex.isValid())
+        {
+            removeIndex(currentRemovedIndex);
+        }
+    }
 }

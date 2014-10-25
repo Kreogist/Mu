@@ -15,8 +15,6 @@ using namespace KNMusic;
 
 class QTimeLine;
 class KNConnectionHandler;
-class KNMusicSoloMenuBase;
-class KNMusicMultiMenuBase;
 class KNMusicModel;
 class KNMusicProxyModel;
 class KNMusicProxyModelPool;
@@ -44,6 +42,7 @@ private slots:
     void onActionMouseInOut(const int &frame);
     void playIndex(const QModelIndex &index);
     void removeIndex(const QModelIndex &index);
+    void removeSelections();
 
     void playCurrent();
     void removeCurrent();
@@ -55,7 +54,6 @@ private:
     QTimeLine *m_mouseIn, *m_mouseOut;
     KNMusicProxyModel *m_proxyModel=nullptr;
     KNMusicProxyModelPool *m_proxyModelPool;
-    KNMusicMultiMenuBase *m_multiMenu=nullptr;
     KNConnectionHandler *m_soloConnections,
                         *m_multiConnections;
     QDrag *m_drag;

@@ -126,6 +126,7 @@ class KNPreferenceWidgetsPanel;
 class KNMusicParser;
 class KNMusicNowPlayingBase;
 class KNMusicSoloMenuBase;
+class KNMusicMultiMenuBase;
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
@@ -142,6 +143,8 @@ public:
     static void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     static KNMusicSoloMenuBase *soloMenu();
     static void setSoloMenu(KNMusicSoloMenuBase *soloMenu);
+    static KNMusicMultiMenuBase *multiMenu();
+    static void setMultiMenu(KNMusicMultiMenuBase *multiMenu);
     bool isMusicFile(const QString &suffix);
     bool isMusicListFile(const QString &suffix);
     QString typeDescription(const QString &suffix) const;
@@ -170,6 +173,7 @@ private:
     static KNMusicParser *m_parser;
     static KNMusicNowPlayingBase *m_nowPlaying;
     static KNMusicSoloMenuBase *m_soloMenu;
+    static KNMusicMultiMenuBase *m_multiMenu;
     explicit KNMusicGlobal(QObject *parent = 0);
     QString m_treeViewHeaderText[MusicDisplayDataCount];
     QStringList m_suffixs, m_listSuffixs,

@@ -26,7 +26,6 @@ signals:
 
 public slots:
     void removeMusicRow(const int &row);
-
 };
 
 #endif // KNMUSICPROXYMODEL_H
