@@ -211,7 +211,7 @@ void KNMusicTreeViewBase::playCurrent()
 
 void KNMusicTreeViewBase::removeCurrent()
 {
-    ;
+    removeIndex(currentIndex());
 }
 
 void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)
@@ -259,4 +259,16 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
         KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
         KNMusicGlobal::nowPlaying()->playMusic(index);
     }
+}
+
+void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
+{
+    //Check is the current model playing.
+    if(KNMusicGlobal::nowPlaying()->playingModel()==m_proxyModel)
+    {
+        //If so, ask now playing to check the index.
+        KNMusicGlobal::nowPlaying()->checkRemovedIndex(index);
+    }
+    //Remove the row right in the proxy model.
+    m_proxyModel->removeMusicRow(index.row());
 }

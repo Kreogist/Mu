@@ -25,6 +25,7 @@ public:
 signals:
 
 public slots:
+    void removeMusicRow(const int &row);
 
 };
 

@@ -32,6 +32,7 @@
 
 //Plugins
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
+#include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 #include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
@@ -238,6 +239,10 @@ void KNMusicPlugin::initialParser()
 {
     //Initial the music parser.
     KNMusicParser *parser=new KNMusicParser;
+
+    //Install all plugins here.
+    parser->installAnalysiser(new KNMusicBassAnalysiser);
+
     //Add this to plugin list.
     m_pluginList.append(parser);
     //Move to working thread.

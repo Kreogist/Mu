@@ -43,6 +43,7 @@ protected:
 private slots:
     void onActionMouseInOut(const int &frame);
     void playIndex(const QModelIndex &index);
+    void removeIndex(const QModelIndex &index);
 
     void playCurrent();
     void removeCurrent();

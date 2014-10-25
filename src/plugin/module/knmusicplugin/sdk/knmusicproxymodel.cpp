@@ -50,3 +50,8 @@ QString KNMusicProxyModel::fileNameFromRow(const int &row)
     //Return the file path role data.
     return data(index(row, Name), FileNameRole).toString();
 }
+
+void KNMusicProxyModel::removeMusicRow(const int &row)
+{
+    musicModel()->removeMusicRow(row);
+}

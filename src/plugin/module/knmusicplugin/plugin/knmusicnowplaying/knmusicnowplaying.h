@@ -32,6 +32,7 @@ class KNMusicNowPlaying : public KNMusicNowPlayingBase
 public:
     explicit KNMusicNowPlaying(QObject *parent = 0);
     void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
+    KNMusicProxyModel *playingModel();
 
 signals:
 
@@ -45,6 +46,7 @@ public slots:
     void playMusic(const int &row);
     void playMusic(const QModelIndex &index);
     void checkRemovedModel(KNMusicModel *model);
+    void checkRemovedIndex(const QModelIndex &index);
 
 private:
     void resetPlayingItem();

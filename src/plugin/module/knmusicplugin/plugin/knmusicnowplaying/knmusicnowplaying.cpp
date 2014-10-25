@@ -58,6 +58,11 @@ void KNMusicNowPlaying::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
     }
 }
 
+KNMusicProxyModel *KNMusicNowPlaying::playingModel()
+{
+    return m_playingModel;
+}
+
 void KNMusicNowPlaying::playNext()
 {
     //If there's no model or the source model is not the music model,
@@ -256,6 +261,17 @@ void KNMusicNowPlaying::checkRemovedModel(KNMusicModel *model)
         resetPlayingModels();
         //Set playing model to nullptr.
         setPlayingModel(nullptr);
+    }
+}
+
+void KNMusicNowPlaying::checkRemovedIndex(const QModelIndex &index)
+{
+    //When a music is removing, we need to check whether this index is the
+    //current playing one.
+    if(m_currentPlayingIndex.row()==index.row())
+    {
+        //We need to play the next one.
+        playNext();
     }
 }
 
