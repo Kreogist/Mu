@@ -82,7 +82,7 @@ KNMusicPlugin::~KNMusicPlugin()
 
 QString KNMusicPlugin::caption()
 {
-    return m_caption;
+    return tr("Music");
 }
 
 QPixmap KNMusicPlugin::icon()
@@ -166,11 +166,6 @@ void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
     m_pluginList.append(plugin);
     //Add tabs.
     addMusicTab(plugin->categoryTab());
-}
-
-void KNMusicPlugin::retranslate()
-{
-    m_caption=tr("Music");
 }
 
 void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)

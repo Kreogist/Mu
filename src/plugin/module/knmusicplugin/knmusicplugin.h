@@ -56,7 +56,6 @@ public:
 signals:
 
 public slots:
-    void retranslate();
     void onArgumentsAvailable(const QStringList &data);
 
 protected slots:

@@ -179,7 +179,8 @@ SOURCES += \
     plugin/module/knmusicplugin/sdk/knmusicratingdelegate.cpp \
     plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp \
     plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp
+    plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitemassistant.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -295,7 +296,8 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.h \
     plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
     plugin/module/knmusicplugin/sdk/knmusicmultimenubase.h \
-    plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.h
+    plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitemassistant.h
 
 RESOURCES += \
     resource/res.qrc

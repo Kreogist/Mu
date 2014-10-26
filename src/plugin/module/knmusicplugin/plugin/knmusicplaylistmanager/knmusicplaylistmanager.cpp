@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knmusicplaylistlistitem.h"
+#include "knmusicplaylistlistitemassistant.h"
 #include "knmusicplaylisttab.h"
 #include "knmusicplaylistlist.h"
 #include "knmusicplaylistmodel.h"
@@ -28,8 +29,13 @@
 KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     KNMusicPlaylistManagerBase(parent)
 {
-    //Initial playlist icon.
-    m_playlistIcon=QIcon(":/plugin/music/playlist/playlist.png");
+    //Set the playlist icon.
+    KNMusicPlaylistListItemAssistant::setPlaylistIcon(
+                QIcon(":/plugin/music/playlist/playlist.png"));
+    //Set the playlist folder path.
+    KNMusicPlaylistListItemAssistant::setPlaylistFolderPath(
+                );
+
     //Initial playlist viewer UI.
     m_playlistTab=new KNMusicPlaylistTab(this);
     //Generate the playlist list.
@@ -56,7 +62,8 @@ KNMusicTab *KNMusicPlaylistManager::categoryTab()
 
 void KNMusicPlaylistManager::onActionAddPlaylist(const QString &caption)
 {
-    KNMusicPlaylistListItem *playlistItem=generatePlaylist(caption);
+    KNMusicPlaylistListItem *playlistItem=
+            KNMusicPlaylistListItemAssistant::generateBlankPlaylist(caption);
     m_playlistList->appendRow(playlistItem);
     //Set the new playlist to the current playlist.
     m_playlistTab->setCurrentPlaylist(playlistItem->index());
@@ -80,13 +87,4 @@ void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &c
     Q_UNUSED(previous)
     //Ask UI to display the playlist item.
     m_playlistTab->displayPlaylistItem(m_playlistList->playlistItemFromIndex(current));
-}
-
-KNMusicPlaylistListItem *KNMusicPlaylistManager::generatePlaylist(const QString &caption)
-{
-    //Generate a default playlist.
-    KNMusicPlaylistListItem *playlistItem=new KNMusicPlaylistListItem();
-    playlistItem->setIcon(m_playlistIcon);
-    playlistItem->setText(caption);
-    return playlistItem;
 }

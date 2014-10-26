@@ -34,3 +34,13 @@ KNMusicPlaylistModel *KNMusicPlaylistListItem::playlistModel()
 {
     return m_playlistModel;
 }
+
+QString KNMusicPlaylistListItem::playlistFilePath() const
+{
+    return m_playlistFilePath;
+}
+
+void KNMusicPlaylistListItem::setPlaylistFilePath(const QString &playlistFilePath)
+{
+    m_playlistFilePath = playlistFilePath;
+}

@@ -15,35 +15,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef KNMUSICPLAYLISTLIST_H
-#define KNMUSICPLAYLISTLIST_H
+#ifndef KNMUSICPLAYLISTLISTITEMASSISTANT_H
+#define KNMUSICPLAYLISTLISTITEMASSISTANT_H
 
-#include <QJsonArray>
+#include <QIcon>
 
-#include <QStandardItemModel>
+#include <QObject>
 
-class KNMusicPlaylistModel;
 class KNMusicPlaylistListItem;
-class KNMusicPlaylistList : public QStandardItemModel
+class KNMusicPlaylistListItemAssistant : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistList(QObject *parent = 0);
-    void loadDataFile();
-    KNMusicPlaylistModel *playlistModel(const int &row);
-    KNMusicPlaylistListItem *playlistItem(const int &row);
-    KNMusicPlaylistListItem *playlistItemFromIndex(const QModelIndex &index);
+    static KNMusicPlaylistListItem *generateBlankPlaylist(const QString &caption);
+    static KNMusicPlaylistListItem *generatePlaylist(const QString &caption);
+    static QIcon playlistIcon();
+    static void setPlaylistIcon(const QIcon &playlistIcon);
+    static QString playlistFolderPath();
+    static void setPlaylistFolderPath(const QString &playlistFolderPath);
 
 signals:
 
 public slots:
 
-private slots:
-    void onActionRowInserted(const QModelIndex &parent, int first, int last);
-    void onActionRowRemoved(const QModelIndex &parent, int first, int last);
-
 private:
-    QJsonArray m_playlistListData;
+    static QString alloctPlaylistFilePath();
+    explicit KNMusicPlaylistListItemAssistant(QObject *parent = 0);
+    static QIcon m_playlistIcon;
+    static QString m_playlistFolderPath;
 };
 
-#endif // KNMUSICPLAYLISTLIST_H
+#endif // KNMUSICPLAYLISTLISTITEMASSISTANT_H

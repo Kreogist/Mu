@@ -19,9 +19,21 @@
 
 #include "knmusicplaylistlist.h"
 
+#include <QDebug>
+
 KNMusicPlaylistList::KNMusicPlaylistList(QObject *parent) :
     QStandardItemModel(parent)
 {
+    ;
+}
+
+void KNMusicPlaylistList::loadDataFile()
+{
+    //After loading from disk. Connect row detect signal.
+    connect(this, &KNMusicPlaylistList::rowsInserted,
+            this, &KNMusicPlaylistList::onActionRowInserted);
+    connect(this, &KNMusicPlaylistList::rowsRemoved,
+            this, &KNMusicPlaylistList::onActionRowRemoved);
 }
 
 KNMusicPlaylistModel *KNMusicPlaylistList::playlistModel(const int &row)
@@ -37,4 +49,26 @@ KNMusicPlaylistListItem *KNMusicPlaylistList::playlistItem(const int &row)
 KNMusicPlaylistListItem *KNMusicPlaylistList::playlistItemFromIndex(const QModelIndex &index)
 {
     return (KNMusicPlaylistListItem *)itemFromIndex(index);
+}
+
+void KNMusicPlaylistList::onActionRowInserted(const QModelIndex &parent,
+                                              int first,
+                                              int last)
+{
+    Q_UNUSED(parent)
+    //Insert the playlist data in to json array.
+    for(int i=first; i<=last; i++)
+    {
+        KNMusicPlaylistListItem *currentItem=playlistItem(i);
+        qDebug()<<currentItem->playlistFilePath();
+//        m_playlistListData.insert();
+        ;
+    }
+}
+
+void KNMusicPlaylistList::onActionRowRemoved(const QModelIndex &parent,
+                                             int first,
+                                             int last)
+{
+    Q_UNUSED(parent);
 }

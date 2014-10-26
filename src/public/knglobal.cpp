@@ -128,6 +128,8 @@ void KNGlobal::setSystemData(const QString &key, const QVariant &value)
     case QVariant::Bool:
         m_configure->setSystemData(key, value.toBool());
         break;
+    default:
+        break;
     }
 }
 
@@ -153,6 +155,8 @@ void KNGlobal::setCustomData(const QString &module,
         break;
     case QVariant::Bool:
         m_configure->setCustomData(module, key, value.toBool());
+        break;
+    default:
         break;
     }
 }

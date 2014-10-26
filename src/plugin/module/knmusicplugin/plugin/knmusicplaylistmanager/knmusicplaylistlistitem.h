@@ -27,9 +27,12 @@ public:
     explicit KNMusicPlaylistListItem();
     ~KNMusicPlaylistListItem();
     KNMusicPlaylistModel *playlistModel();
+    QString playlistFilePath() const;
+    void setPlaylistFilePath(const QString &playlistFilePath);
 
 private:
     KNMusicPlaylistModel *m_playlistModel;
+    QString m_playlistFilePath;
 };
 
 #endif // KNMUSICPLAYLISTLISTITEM_H
