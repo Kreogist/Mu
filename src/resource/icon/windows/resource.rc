@@ -1,0 +1,33 @@
+IDI_ICON1 ICON DISCARDABLE "mu.ico"
+#if defined(UNDER_CE)
+#include <winbase.h>
+#else
+#include <winver.h>
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+    FILEVERSION 0,0,50,0
+    PRODUCTVERSION 0,0,50,0
+    FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+    FILEFLAGS VS_FF_DEBUG
+#else
+    FILEFLAGS 0x0L
+#endif
+    FILEOS VOS__WINDOWS32
+    FILETYPE VFT_DLL
+    FILESUBTYPE 0x0L
+    BEGIN
+        BLOCK "StringFileInfo"
+        BEGIN
+            BLOCK "040904B0"
+            BEGIN
+                VALUE "CompanyName", "Kreogist Dev Team\0"
+                VALUE "FileDescription", "Kreogist mu\0"
+                VALUE "FileVersion", "0.0.50\0"
+                VALUE "LegalCopyright", "(C) Kreogist Dev Team. \0"
+                VALUE "OriginalFilename", "mu.exe\0"
+                VALUE "ProductName", "mu\0"
+            END
+        END
+    END

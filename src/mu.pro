@@ -37,6 +37,8 @@ win32{
     libbass{
         LIBS += -lbass
     }
+    RC_FILE += resource/icon/windows/resource.rc
+    ICON += resource/icon/windows/mu.ico
 }
 
 #UNIX common configure
