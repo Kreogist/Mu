@@ -145,6 +145,8 @@ public:
     static void setSoloMenu(KNMusicSoloMenuBase *soloMenu);
     static KNMusicMultiMenuBase *multiMenu();
     static void setMultiMenu(KNMusicMultiMenuBase *multiMenu);
+    static QString musicLibraryPath();
+    static void setMusicLibraryPath(const QString &musicLibraryPath);
     bool isMusicFile(const QString &suffix);
     bool isMusicListFile(const QString &suffix);
     QString typeDescription(const QString &suffix) const;
@@ -174,6 +176,7 @@ private:
     static KNMusicNowPlayingBase *m_nowPlaying;
     static KNMusicSoloMenuBase *m_soloMenu;
     static KNMusicMultiMenuBase *m_multiMenu;
+    static QString m_musicLibraryPath;
     explicit KNMusicGlobal(QObject *parent = 0);
     QString m_treeViewHeaderText[MusicDisplayDataCount];
     QStringList m_suffixs, m_listSuffixs,

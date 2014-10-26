@@ -36,6 +36,7 @@ QString KNGlobal::byteToHigherUnit(const qint64 &fileSize)
     }
     return QString::number(dFileSize, 'f', 2)+" "+m_storageUnit[unitPointer];
 }
+
 QString KNGlobal::dylibSuffix()
 {
     return m_dylibSuffix;

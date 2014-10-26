@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QVector>
 #include <QThread>
+#include <QDir>
 #include <QItemSelection>
 #include <QStandardItem>
 
@@ -21,6 +22,7 @@ KNMusicParser *KNMusicGlobal::m_parser=nullptr;
 KNMusicNowPlayingBase *KNMusicGlobal::m_nowPlaying=nullptr;
 KNMusicSoloMenuBase *KNMusicGlobal::m_soloMenu=nullptr;
 KNMusicMultiMenuBase *KNMusicGlobal::m_multiMenu=nullptr;
+QString KNMusicGlobal::m_musicLibraryPath=QString();
 
 KNMusicGlobal *KNMusicGlobal::instance()
 {
@@ -207,6 +209,24 @@ void KNMusicGlobal::initialThreads()
 void KNMusicGlobal::initialHeaderText()
 {
     m_treeViewHeaderText[BlankData]=" ";
+}
+
+QString KNMusicGlobal::musicLibraryPath()
+{
+    return m_musicLibraryPath;
+}
+
+void KNMusicGlobal::setMusicLibraryPath(const QString &musicLibraryPath)
+{
+    //Check is the path exist.
+    QDir musicLibraryDir(musicLibraryPath);
+    //If not, make the dir.
+    if(!musicLibraryDir.exists())
+    {
+        musicLibraryDir.mkpath(musicLibraryDir.absolutePath());
+    }
+    //Set the path.
+    m_musicLibraryPath = musicLibraryDir.absolutePath();
 }
 
 KNMusicMultiMenuBase *KNMusicGlobal::multiMenu()

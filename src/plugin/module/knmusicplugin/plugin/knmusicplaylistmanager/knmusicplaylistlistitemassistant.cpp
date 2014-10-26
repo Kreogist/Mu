@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#include <QDateTime>
 #include <QFileInfo>
 
 #include "knmusicplaylistlistitem.h"
@@ -22,6 +23,7 @@
 #include "knmusicplaylistlistitemassistant.h"
 
 QIcon KNMusicPlaylistListItemAssistant::m_playlistIcon=QIcon();
+QString KNMusicPlaylistListItemAssistant::m_playlistFolderPath=QString();
 
 KNMusicPlaylistListItemAssistant::KNMusicPlaylistListItemAssistant(QObject *parent) :
     QObject(parent)

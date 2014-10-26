@@ -22,6 +22,8 @@
 #include "knmusicplaylistmodel.h"
 #include "knmusicnowplayingbase.h"
 
+#include "knmusicglobal.h"
+
 #include "knmusicplaylistmanager.h"
 
 #include <QDebug>
@@ -34,7 +36,7 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
                 QIcon(":/plugin/music/playlist/playlist.png"));
     //Set the playlist folder path.
     KNMusicPlaylistListItemAssistant::setPlaylistFolderPath(
-                );
+                KNMusicGlobal::musicLibraryPath()+"/Playlist");
 
     //Initial playlist viewer UI.
     m_playlistTab=new KNMusicPlaylistTab(this);

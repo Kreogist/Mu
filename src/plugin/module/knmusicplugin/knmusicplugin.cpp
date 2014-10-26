@@ -40,8 +40,10 @@
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
 
+#include "knglobal.h"
 #include "kncategorytabwidget.h"
 #include "knpreferencewidgetspanel.h"
+
 #include "knmusicplugin.h"
 
 #include <QDebug>
@@ -63,9 +65,6 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadNowPlaying(new KNMusicNowPlaying);
     loadPlaylistManager(new KNMusicPlaylistManager);
-
-    //Do the translation at the last.
-    retranslate();
 }
 
 KNMusicPlugin::~KNMusicPlugin()
@@ -199,6 +198,7 @@ void KNMusicPlugin::initialInfrastructure()
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
     m_musicGlobal->setNoAlbumArt(QPixmap(":/plugin/music/common/noalbum.png"));
+    KNMusicGlobal::setMusicLibraryPath(KNGlobal::applicationDirPath()+"/Music");
 
     //Initial preference panel.
     m_preferencePanel=new KNPreferenceWidgetsPanel;
