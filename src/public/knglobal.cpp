@@ -8,6 +8,7 @@
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QProcess>
+#include <QDir>
 
 #include "knconfigure.h"
 #include "knfontmanager.h"
