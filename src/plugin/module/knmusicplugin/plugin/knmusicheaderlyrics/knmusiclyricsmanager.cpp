@@ -18,7 +18,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include "knglobal.h"
 #include "knmusiclrcparser.h"
 #include "knmusicglobal.h"
 #include "preference/knpreferenceitemglobal.h"
@@ -146,13 +145,11 @@ bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent)
 {
-    //Initial global instance.
-    m_global=KNGlobal::instance();
     //Initial music global instance.
     m_musicGlobal=KNMusicGlobal::instance();
 
     //Set the default lyrics folder path.
-    m_lyricsFolderPath=m_global->applicationDirPath()+"/Lyrics";
+    m_lyricsFolderPath=KNMusicGlobal::musicLibraryPath()+"/Lyrics";
     //Set the default loading policy.
     m_policyList.append(SameNameInLyricsDir);
     m_policyList.append(RelateNameInLyricsDir);

@@ -76,7 +76,6 @@ private:
     static KNMusicLyricsManager *m_instance;
     explicit KNMusicLyricsManager(QObject *parent = 0);
 
-    KNGlobal *m_global;
     KNMusicGlobal *m_musicGlobal;
     KNMusicLRCParser *m_lrcParser;
     KNPreferenceItemGlobal *m_preferenceItemGlobal;

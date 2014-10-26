@@ -13,6 +13,7 @@
 #include <QStandardItem>
 
 #include "preference/knpreferenceitembase.h"
+#include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
 
 #include "knmusicglobal.h"
@@ -218,15 +219,8 @@ QString KNMusicGlobal::musicLibraryPath()
 
 void KNMusicGlobal::setMusicLibraryPath(const QString &musicLibraryPath)
 {
-    //Check is the path exist.
-    QDir musicLibraryDir(musicLibraryPath);
-    //If not, make the dir.
-    if(!musicLibraryDir.exists())
-    {
-        musicLibraryDir.mkpath(musicLibraryDir.absolutePath());
-    }
     //Set the path.
-    m_musicLibraryPath = musicLibraryDir.absolutePath();
+    m_musicLibraryPath=KNGlobal::ensurePathAvaliable(musicLibraryPath);
 }
 
 KNMusicMultiMenuBase *KNMusicGlobal::multiMenu()

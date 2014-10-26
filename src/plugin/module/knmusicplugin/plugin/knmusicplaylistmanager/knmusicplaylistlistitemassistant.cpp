@@ -18,6 +18,8 @@
 #include <QDateTime>
 #include <QFileInfo>
 
+#include "knglobal.h"
+
 #include "knmusicplaylistlistitem.h"
 
 #include "knmusicplaylistlistitemassistant.h"
@@ -36,9 +38,10 @@ QString KNMusicPlaylistListItemAssistant::playlistFolderPath()
     return m_playlistFolderPath;
 }
 
-void KNMusicPlaylistListItemAssistant::setPlaylistFolderPath(const QString &playlistFolderPath)
+void KNMusicPlaylistListItemAssistant::setPlaylistFolderPath(
+        const QString &playlistFolderPath)
 {
-    m_playlistFolderPath = playlistFolderPath;
+    m_playlistFolderPath = KNGlobal::ensurePathAvaliable(playlistFolderPath);
 }
 
 QIcon KNMusicPlaylistListItemAssistant::playlistIcon()

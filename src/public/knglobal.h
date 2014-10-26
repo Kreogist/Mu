@@ -21,6 +21,7 @@ public:
     QString byteToHigherUnit(const qint64 &fileSize);
     static QString dylibSuffix();
     static QString applicationDirPath();
+    static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);
     static void setDylibSuffix(const QString &dylibSuffix);
     static void showInGraphicalShell(const QString &filePath);

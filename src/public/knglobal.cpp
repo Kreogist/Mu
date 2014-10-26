@@ -6,6 +6,9 @@
  */
 #include <QApplication>
 #include <QClipboard>
+#include <QFileInfo>
+#include <QFile>
+#include <QDir>
 #include <QDesktopServices>
 #include <QProcess>
 #include <QDir>
@@ -46,6 +49,26 @@ QString KNGlobal::dylibSuffix()
 QString KNGlobal::applicationDirPath()
 {
     return QApplication::applicationDirPath();
+}
+
+QString KNGlobal::ensurePathAvaliable(const QString &path)
+{
+    QFileInfo detectInfo(path);
+    if(detectInfo.isFile())
+    {
+        QFile detectFile(detectInfo.absoluteFilePath());
+        if(!detectFile.remove())
+        {
+            return QString();
+        }
+    }
+    if(detectInfo.exists())
+    {
+        return detectInfo.absoluteFilePath();
+    }
+    QDir detectFolder(detectInfo.absoluteFilePath());
+    return detectFolder.mkpath(detectFolder.absolutePath())?
+                detectFolder.absolutePath():QString();
 }
 
 QStringList KNGlobal::urlToPathList(const QList<QUrl> urls)
