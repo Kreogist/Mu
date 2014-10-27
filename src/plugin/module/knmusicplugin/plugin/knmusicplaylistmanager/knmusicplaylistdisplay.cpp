@@ -104,13 +104,21 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
     //When user add or remove file to playlist, should update the detail info.
     m_modelSignalHandler->addConnectionHandle(
                 connect(musicModel, &KNMusicPlaylistModel::rowCountChanged,
-                        this, &KNMusicPlaylistDisplay::updateDetailInfo));
+                        this, &KNMusicPlaylistDisplay::onActionRowChanged));
     //Analysis file signal.
     m_modelSignalHandler->addConnectionHandle(
                 connect(this, &KNMusicPlaylistDisplay::requireAnalysisFiles,
                         musicModel, &KNMusicPlaylistModel::requireAnalysisFiles));
     //Update the informations.
     updatePlaylistInfo();
+}
+
+void KNMusicPlaylistDisplay::onActionRowChanged()
+{
+    //Update the detail info first.
+    updateDetailInfo();
+    //Set the changed flag to true.
+    m_currentItem->setChanged(true);
 }
 
 void KNMusicPlaylistDisplay::retranslate()

@@ -39,6 +39,7 @@ public slots:
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
 
 private slots:
+    void onActionRowChanged();
     void updateDetailInfo();
 
 private:

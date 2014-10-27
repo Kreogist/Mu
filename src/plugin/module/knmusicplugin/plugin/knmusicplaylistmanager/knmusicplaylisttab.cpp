@@ -82,6 +82,11 @@ KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()
 
 void KNMusicPlaylistTab::onActionRemoveCurrent()
 {
+    //Check is current index available.
+    if(!m_playlistListView->currentIndex().isValid())
+    {
+        return;
+    }
     //Set the display to null first.
     m_playlistDisplay->displayPlaylistItem(nullptr);
     //Send signal.
@@ -90,8 +95,9 @@ void KNMusicPlaylistTab::onActionRemoveCurrent()
 
 void KNMusicPlaylistTab::onActionPlaylistItemChanged(QStandardItem *item)
 {
-    KNMusicPlaylistListItem *changedItem=(KNMusicPlaylistListItem *)item;
-    if(m_playlistDisplay->currentItem()==changedItem)
+    KNMusicPlaylistListItem *changedItem=
+            static_cast<KNMusicPlaylistListItem *>(item);
+    if(changedItem!=nullptr && m_playlistDisplay->currentItem()==changedItem)
     {
         m_playlistDisplay->updatePlaylistInfo();
     }
@@ -111,6 +117,12 @@ void KNMusicPlaylistTab::setPlaylistList(KNMusicPlaylistList *playlistList)
 
 void KNMusicPlaylistTab::setCurrentPlaylist(const QModelIndex &index)
 {
+    //Check index available first.
+    if(!index.isValid())
+    {
+        return;
+    }
+    //Set current index.
     m_playlistListView->setCurrentIndex(index);
 }
 

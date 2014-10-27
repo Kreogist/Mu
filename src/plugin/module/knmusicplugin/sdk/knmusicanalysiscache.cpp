@@ -51,7 +51,7 @@ void KNMusicAnalysisCache::parseItem(KNMusicAnalysisCache::AnalysisItem &current
         m_parser->parseFile(currentItem.filePath,
                             currentItem.detailInfo);
         //Create music row.
-        emit requireAppendMusicRow(m_musicModelAssist->generateRow(currentItem.detailInfo));
+        emit requireAppendMusicRow(KNMusicModelAssist::generateRow(currentItem.detailInfo));
         return;
     }
     //So, it must be a list now.
@@ -60,7 +60,7 @@ void KNMusicAnalysisCache::parseItem(KNMusicAnalysisCache::AnalysisItem &current
                              trackDetailInfo);
     while(!trackDetailInfo.isEmpty())
     {
-        emit requireAppendMusicRow(m_musicModelAssist->generateRow(trackDetailInfo.takeFirst()));
+        emit requireAppendMusicRow(KNMusicModelAssist::generateRow(trackDetailInfo.takeFirst()));
     }
 }
 

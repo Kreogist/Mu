@@ -25,7 +25,7 @@ public:
     static QString dateTimeToString(const QDateTime &dateTime);
     static QString dateTimeToDataString(const QDateTime &dateTime);
     static QDateTime dataStringToDateTime(const QString &text);
-    QList<QStandardItem *> generateRow(const KNMusicDetailInfo &detailInfo);
+    static QList<QStandardItem *> generateRow(const KNMusicDetailInfo &detailInfo);
 
 signals:
 

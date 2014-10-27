@@ -18,32 +18,38 @@
 #ifndef KNMUSICPLAYLISTLIST_H
 #define KNMUSICPLAYLISTLIST_H
 
-#include <QJsonArray>
+#include <QStringList>
 
 #include <QStandardItemModel>
 
+class KNConnectionHandler;
 class KNMusicPlaylistModel;
 class KNMusicPlaylistListItem;
+class KNMusicPlaylistListAssistant;
 class KNMusicPlaylistList : public QStandardItemModel
 {
     Q_OBJECT
 public:
     explicit KNMusicPlaylistList(QObject *parent = 0);
-    void loadDataFile();
     KNMusicPlaylistModel *playlistModel(const int &row);
     KNMusicPlaylistListItem *playlistItem(const int &row);
     KNMusicPlaylistListItem *playlistItemFromIndex(const QModelIndex &index);
+    QStringList playlistListData() const;
+    void setPlaylistListData(const QStringList &playlistListData);
 
 signals:
 
 public slots:
 
 private slots:
+    void onActionItemChanged(QStandardItem *item);
     void onActionRowInserted(const QModelIndex &parent, int first, int last);
     void onActionRowRemoved(const QModelIndex &parent, int first, int last);
 
 private:
-    QJsonArray m_playlistListData;
+    KNMusicPlaylistListAssistant *m_assistant;
+    KNConnectionHandler *m_rowChangeHandle;
+    QStringList m_playlistListData;
 };
 
 #endif // KNMUSICPLAYLISTLIST_H

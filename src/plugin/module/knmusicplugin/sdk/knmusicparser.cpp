@@ -25,14 +25,17 @@ KNMusicParser::~KNMusicParser()
     //Delete all analysisers.
     while(!m_analysisers.isEmpty())
     {
-        KNMusicAnalysiser *analysiser=m_analysisers.takeLast();
-        delete analysiser;
+        delete m_analysisers.takeLast();
     }
     //Delete all tag parsers.
     while(!m_tagParsers.isEmpty())
     {
-        KNMusicTagParser *parser=m_tagParsers.takeLast();
-        delete parser;
+        delete m_tagParsers.takeLast();
+    }
+    //Delete all list parsers.
+    while(!m_listParsers.isEmpty())
+    {
+        delete m_listParsers.takeLast();
     }
 }
 

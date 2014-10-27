@@ -13,29 +13,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICPLAYLISTLISTITEM_H
-#define KNMUSICPLAYLISTLISTITEM_H
+#ifndef KNMUSICPLAYLISTLOADER_H
+#define KNMUSICPLAYLISTLOADER_H
 
-#include <QStandardItem>
+#include <QList>
 
-class KNMusicPlaylistModel;
-class KNMusicPlaylistListItem : public QStandardItem
+//Ports.
+#include "knmusicplaylistparser.h"
+
+#include <QObject>
+
+class KNMusicPlaylistLoader : public QObject
 {
+    Q_OBJECT
 public:
-    explicit KNMusicPlaylistListItem();
-    ~KNMusicPlaylistListItem();
-    KNMusicPlaylistModel *playlistModel();
-    QString playlistFilePath() const;
-    void setPlaylistFilePath(const QString &playlistFilePath);
-    bool changed() const;
-    void setChanged(bool changed);
+    explicit KNMusicPlaylistLoader(QObject *parent = 0);
+    ~KNMusicPlaylistLoader();
+    void installPlaylistParser(KNMusicPlaylistParser *parser);
+    bool parsePlaylist(const QString &filePath,
+                       QStringList &playlistFiles);
+
+signals:
+
+public slots:
 
 private:
-    KNMusicPlaylistModel *m_playlistModel=nullptr;
-    QString m_playlistFilePath;
-    bool m_changed=false;
+    QList<KNMusicPlaylistParser *> m_parsers;
 };
 
-#endif // KNMUSICPLAYLISTLISTITEM_H
+#endif // KNMUSICPLAYLISTLOADER_H

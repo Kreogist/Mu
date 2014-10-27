@@ -15,24 +15,36 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef KNMUSICPLAYLISTLISTITEMASSISTANT_H
-#define KNMUSICPLAYLISTLISTITEMASSISTANT_H
+#ifndef KNMUSICPLAYLISTLISTASSISTANT_H
+#define KNMUSICPLAYLISTLISTASSISTANT_H
 
 #include <QIcon>
+#include <QStringList>
 
 #include <QObject>
 
 class KNMusicPlaylistListItem;
-class KNMusicPlaylistListItemAssistant : public QObject
+class KNMusicPlaylistListAssistant : public QObject
 {
     Q_OBJECT
 public:
     static KNMusicPlaylistListItem *generateBlankPlaylist(const QString &caption);
-    static KNMusicPlaylistListItem *generatePlaylist(const QString &caption);
+    static KNMusicPlaylistListItem *generatePlaylist(const QString &caption=QString());
+    static KNMusicPlaylistListItem *generatePlaylistFromFile(const QString &filePath);
+    static bool parsePlaylistFile(const QString &playlistFilePath,
+                                  QString &title,
+                                  QJsonArray &playlistData);
     static QIcon playlistIcon();
     static void setPlaylistIcon(const QIcon &playlistIcon);
     static QString playlistFolderPath();
     static void setPlaylistFolderPath(const QString &playlistFolderPath);
+    static void loadPlaylistDatabase(const QString &filePath,
+                                     QStringList &data);
+    static bool readPlaylist(const QString &filePath,
+                             KNMusicPlaylistListItem *item);
+    static bool writePlaylist(KNMusicPlaylistListItem *item);
+    static void savePlaylistDatabase(const QString &filePath,
+                                     const QStringList &data);
 
 signals:
 
@@ -40,9 +52,10 @@ public slots:
 
 private:
     static QString alloctPlaylistFilePath();
-    explicit KNMusicPlaylistListItemAssistant(QObject *parent = 0);
+    explicit KNMusicPlaylistListAssistant(QObject *parent = 0);
     static QIcon m_playlistIcon;
     static QString m_playlistFolderPath;
+    static int m_version;
 };
 
-#endif // KNMUSICPLAYLISTLISTITEMASSISTANT_H
+#endif // KNMUSICPLAYLISTLISTASSISTANT_H

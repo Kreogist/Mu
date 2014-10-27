@@ -22,6 +22,7 @@
 
 #include "knmusicplaylistmanagerbase.h"
 
+class KNMusicPlaylistLoader;
 class KNMusicPlaylistTab;
 class KNMusicPlaylistList;
 class KNMusicPlaylistListItem;
@@ -30,7 +31,9 @@ class KNMusicPlaylistManager : public KNMusicPlaylistManagerBase
     Q_OBJECT
 public:
     explicit KNMusicPlaylistManager(QObject *parent = 0);
+    ~KNMusicPlaylistManager();
     KNMusicTab *categoryTab();
+    void loadPlaylistList();
 
 signals:
 
@@ -43,9 +46,14 @@ private slots:
                                         const QModelIndex &previous);
 
 private:
+    void initialPlaylistLoader();
+    void saveChangedPlaylist();
+    bool importPlaylistFromFile(const QString &filePath);
+    KNMusicPlaylistLoader *m_loader;
     KNMusicPlaylistTab *m_playlistTab;
     KNMusicPlaylistList *m_playlistList;
     KNMusicNowPlayingBase *m_nowPlaying;
+    QString m_playlistDatabasePath;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H

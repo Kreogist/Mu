@@ -44,3 +44,13 @@ void KNMusicPlaylistListItem::setPlaylistFilePath(const QString &playlistFilePat
 {
     m_playlistFilePath = playlistFilePath;
 }
+bool KNMusicPlaylistListItem::changed() const
+{
+    return m_changed;
+}
+
+void KNMusicPlaylistListItem::setChanged(bool changed)
+{
+    m_changed = changed;
+}
+

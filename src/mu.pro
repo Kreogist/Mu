@@ -53,6 +53,8 @@ macx{
         LIBS += /usr/lib/libbass.dylib
     }
     QMAKE_LFLAGS += -framework CoreFoundation
+    QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
+    ICON += resource/icon/mac/mu.icns
 }
 
 #Linux configure
@@ -83,7 +85,8 @@ INCLUDEPATH += public
 #Add plugin and sdk path
 INCLUDEPATH += plugin \
                plugin/sdk \
-               plugin/module/knmusicplugin/sdk
+               plugin/module/knmusicplugin/sdk \
+               plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk
 
 SOURCES += \
     main.cpp \
@@ -182,8 +185,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp \
     plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitemassistant.cpp \
-    plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.cpp
+    plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistassistant.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistloader.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -300,8 +304,10 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
     plugin/module/knmusicplugin/sdk/knmusicmultimenubase.h \
     plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitemassistant.h \
-    plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.h
+    plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistassistant.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistparser.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistloader.h
 
 RESOURCES += \
     resource/res.qrc
