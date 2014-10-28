@@ -99,8 +99,8 @@ SOURCES += \
     plugin/base/knmainwindowheader/knmainwindowheader.cpp \
     plugin/base/knmainwindowheader/knheadercontainer.cpp \
     plugin/base/knmainwindowheader/knheaderbutton.cpp \
-    plugin/sdk/knanimecheckedbutton.cpp \
     plugin/base/knmainwindowheader/knheaderswitcher.cpp \
+    plugin/sdk/knanimecheckedbutton.cpp \
     plugin/sdk/knwidgetswitcher.cpp \
     plugin/base/knmainwindowcategorystack/knmainwindowcategorystack.cpp \
     plugin/sdk/knhwidgetswitcher.cpp \
@@ -144,11 +144,11 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttab.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistdisplay.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp \
     plugin/module/knmusicplugin/sdk/knmusiccategorylistviewbase.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistview.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistvieweditor.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp \
     plugin/sdk/knanimationmenu.cpp \
     plugin/sdk/knlinearsensewidget.cpp \
     plugin/sdk/kndropproxycontainer.cpp \
@@ -157,8 +157,8 @@ SOURCES += \
     plugin/module/knmusicplugin/sdk/knmusictreeviewheader.cpp \
     plugin/sdk/knmousesenseheader.cpp \
     plugin/module/knmusicplugin/sdk/knmusictreeviewheadermenu.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttreeview.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistindex.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttreeview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistindex.cpp \
     plugin/module/knmusicplugin/sdk/knmusicsearcher.cpp \
     plugin/sdk/knfilesearcher.cpp \
     plugin/module/knmusicplugin/sdk/knmusicmodelassist.cpp \
@@ -170,24 +170,24 @@ SOURCES += \
     plugin/sdk/knsideshadowwidget.cpp \
     plugin/sdk/knanimeroundswitcher.cpp \
     plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmodel.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitem.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlist.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistmodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistitem.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlist.cpp \
     plugin/sdk/knconnectionhandler.cpp \
     plugin/sdk/knanimecolorswitcher.cpp \
     plugin/sdk/preference/knpreferenceitemlineedit.cpp \
     plugin/sdk/preference/knpreferenceitemglobal.cpp \
     plugin/sdk/preference/knpreferenceitempathbrowser.cpp \
     plugin/sdk/knpathlineedit.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistdelegate.cpp \
     plugin/module/knmusicplugin/sdk/knmusicratingeditor.cpp \
     plugin/module/knmusicplugin/sdk/knmusicratingdelegate.cpp \
     plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp \
     plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp \
     plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistassistant.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistloader.cpp
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistassistant.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistloader.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -261,11 +261,11 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusictab.h \
     plugin/module/knmusicplugin/sdk/knmusicplaylistmanagerbase.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttab.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistdisplay.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.h \
     plugin/module/knmusicplugin/sdk/knmusiccategorylistviewbase.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistview.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistvieweditor.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistview.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.h \
     plugin/sdk/knanimationmenu.h \
     plugin/sdk/knlinearsensewidget.h \
     plugin/sdk/kndropproxycontainer.h \
@@ -274,8 +274,8 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusictreeviewheader.h \
     plugin/sdk/knmousesenseheader.h \
     plugin/module/knmusicplugin/sdk/knmusictreeviewheadermenu.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylisttreeview.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistindex.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttreeview.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistindex.h \
     plugin/module/knmusicplugin/sdk/knmusicsearcher.h \
     plugin/sdk/knfilesearcher.h \
     plugin/module/knmusicplugin/sdk/knmusicmodelassist.h \
@@ -287,16 +287,16 @@ HEADERS += \
     plugin/sdk/knsideshadowwidget.h \
     plugin/sdk/knanimeroundswitcher.h \
     plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmodel.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistitem.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlist.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistmodel.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistitem.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlist.h \
     plugin/sdk/knconnectionhandler.h \
     plugin/sdk/knanimecolorswitcher.h \
     plugin/sdk/preference/knpreferenceitemlineedit.h \
     plugin/sdk/preference/knpreferenceitemglobal.h \
     plugin/sdk/preference/knpreferenceitempathbrowser.h \
     plugin/sdk/knpathlineedit.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistdelegate.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistdelegate.h \
     plugin/module/knmusicplugin/sdk/knmusicratingeditor.h \
     plugin/module/knmusicplugin/sdk/knmusicratingdelegate.h \
     plugin/module/knmusicplugin/sdk/knmusicsolomenubase.h \
@@ -305,9 +305,9 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicmultimenubase.h \
     plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.h \
     plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistlistassistant.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistassistant.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistparser.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistloader.h
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistloader.h
 
 RESOURCES += \
     resource/res.qrc
