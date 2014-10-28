@@ -31,17 +31,15 @@ KNMusicProxyModelPool::~KNMusicProxyModelPool()
 
 KNMusicProxyModel *KNMusicProxyModelPool::alloct()
 {
-    //Check is available list is empty.
-    if(m_available.isEmpty())
-    {
-        //If so, alloct one.
-        KNMusicProxyModel *element=new KNMusicProxyModel;
-        //Add to occupation list.
-        m_occupation.append(element);
-        return element;
-    }
-    //Return the first one of the avaliable.
-    return m_available.first();
+    //Check is available list is empty. If so, return the first one of the
+    //avaliable, or else generate one.
+    KNMusicProxyModel *element=
+            m_available.isEmpty()?new KNMusicProxyModel:m_available.takeFirst();
+    //Add to occupation list.
+    m_occupation.append(element);
+    //Add a counter for that element.
+    m_referenceCounter.append(1);
+    return element;
 }
 
 bool KNMusicProxyModelPool::release(KNMusicProxyModel *model)
@@ -53,16 +51,49 @@ bool KNMusicProxyModelPool::release(KNMusicProxyModel *model)
     {
         return false;
     }
-    //Reset the model first.
-    resetProxyModel(model);
-    //Set it free.
-    m_available.append(m_occupation.takeAt(modelIndex));
+    //Check model's reference.
+    if(m_referenceCounter.at(modelIndex)==1)
+    {
+        //Reset the model first.
+        resetProxyModel(model);
+        //Set it free.
+        m_available.append(m_occupation.takeAt(modelIndex));
+        //Remove the reference counter.
+        m_referenceCounter.removeAt(modelIndex);
+    }
+    else
+    {
+        //Modify the counter.
+        m_referenceCounter.replace(modelIndex,
+                                   m_referenceCounter.at(modelIndex)-1);
+    }
     return true;
 }
 
-bool KNMusicProxyModelPool::isOccupied(KNMusicProxyModel *model)
+bool KNMusicProxyModelPool::isModelPlaying(KNMusicProxyModel *model)
 {
-    return m_occupation.contains(model);
+    //Find the model in occupation list.
+    int modelIndex=m_occupation.indexOf(model);
+    //If not find, of course it can be playing.
+    if(modelIndex==-1)
+    {
+        return false;
+    }
+    return (m_referenceCounter.at(modelIndex)>1);
+}
+
+void KNMusicProxyModelPool::reference(KNMusicProxyModel *model)
+{
+    //Find the model in occupation list.
+    int modelIndex=m_occupation.indexOf(model);
+    //If not find, return.
+    if(modelIndex==-1)
+    {
+        return;
+    }
+    //Add counting to the reference counter.
+    m_referenceCounter.replace(modelIndex,
+                               m_referenceCounter.at(modelIndex)+1);
 }
 
 KNMusicProxyModelPool::KNMusicProxyModelPool(QObject *parent) :
@@ -70,41 +101,8 @@ KNMusicProxyModelPool::KNMusicProxyModelPool(QObject *parent) :
 {
 }
 
-KNMusicProxyModel *KNMusicProxyModelPool::playing() const
-{
-    return m_playing;
-}
-
-bool KNMusicProxyModelPool::setPlaying(KNMusicProxyModel *playing)
-{
-    int modelIndex=m_occupation.indexOf(playing);
-    //If not find, return false.
-    if(modelIndex==-1)
-    {
-        return false;
-    }
-    //Get that model.
-    m_playing=m_occupation.takeAt(modelIndex);
-    //Means taken success.
-    return true;
-}
-
-void KNMusicProxyModelPool::releasePlaying()
-{
-    //If playing model is not null,
-    if(m_playing!=nullptr)
-    {
-        //Reset the proxy model.
-        resetProxyModel(m_playing);
-        //Move it to available list.
-        m_available.append(m_playing);
-        //Clear the pointer.
-        m_playing=nullptr;
-    }
-}
-
 void KNMusicProxyModelPool::resetProxyModel(KNMusicProxyModel *model)
 {
+    //Clear the source model.
     model->setSourceModel(nullptr);
 }
-

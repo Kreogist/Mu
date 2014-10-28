@@ -19,9 +19,8 @@ public:
     static KNMusicProxyModelPool *instance();
     KNMusicProxyModel *alloct();
     bool release(KNMusicProxyModel *model);
-    bool isOccupied(KNMusicProxyModel *model);
-    KNMusicProxyModel *playing() const;
-    bool setPlaying(KNMusicProxyModel *playing);
+    bool isModelPlaying(KNMusicProxyModel *model);
+    void reference(KNMusicProxyModel *model);
     void releasePlaying();
 
 signals:
@@ -34,7 +33,7 @@ private:
     explicit KNMusicProxyModelPool(QObject *parent = 0);
     QList<KNMusicProxyModel *> m_available,
                                m_occupation;
-    KNMusicProxyModel *m_playing=nullptr;
+    QList<int> m_referenceCounter;
 };
 
 #endif // KNMUSICPROXYMODELPOOL_H

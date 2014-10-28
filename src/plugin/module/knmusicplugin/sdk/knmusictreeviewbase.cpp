@@ -87,9 +87,11 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
     //Check is the current proxy model is the playing model.
-    if(m_proxyModel==m_proxyModelPool->playing())
+    if(m_proxyModel==nullptr ||
+            m_proxyModelPool->isModelPlaying(m_proxyModel))
     {
-        //Get a new avaliable proxy model.
+        //Release the current model, and get a new avaliable proxy model.
+        m_proxyModelPool->release(m_proxyModel);
         m_proxyModel=m_proxyModelPool->alloct();
         //Set the proxy model.
         setModel(m_proxyModel);
