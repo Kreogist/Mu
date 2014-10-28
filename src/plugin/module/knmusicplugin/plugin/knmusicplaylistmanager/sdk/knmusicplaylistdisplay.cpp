@@ -103,7 +103,7 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
     m_playlistTreeView->setMusicModel(musicModel);
     //When user add or remove file to playlist, should update the detail info.
     m_modelSignalHandler->addConnectionHandle(
-                connect(musicModel, &KNMusicPlaylistModel::rowCountChanged,
+                connect(musicModel, &KNMusicPlaylistModel::itemChanged,
                         this, &KNMusicPlaylistDisplay::onActionRowChanged));
     //Analysis file signal.
     m_modelSignalHandler->addConnectionHandle(

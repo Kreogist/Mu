@@ -38,6 +38,8 @@ KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent) :
 void KNMusicPlaylistTreeView::resetHeaderState()
 {
     KNMusicTreeViewBase::resetHeaderState();
+    //We need to make the play times visible, because it's playlist.
+    setColumnHidden(Plays, false);
     //No more hack here, move the display data index one by one.
     moveToFirst(BlankData);
     //Set the index column at a enough width.
