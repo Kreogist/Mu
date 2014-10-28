@@ -36,6 +36,7 @@ signals:
 public slots:
     void retranslate();
     void updatePlaylistInfo();
+    void onActionRemoveCurrent();
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
 
 private slots:

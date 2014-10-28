@@ -25,6 +25,7 @@ public:
     explicit KNMusicTreeViewBase(QWidget *parent = 0);
     KNMusicModel *musicModel();
     void setMusicModel(KNMusicModel *musicModel);
+    void backupHeader();
 
 signals:
 
@@ -58,13 +59,14 @@ private:
                         *m_multiConnections;
     QDrag *m_drag;
     QMimeData *m_mimeData;
+    QByteArray m_headerState;
     QColor m_alternateColor=QColor(255,255,255,0),
     m_fontColor=QColor(255,255,255),
     m_buttonColor=QColor(255,255,255);
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;
-    bool m_pressed=false;
+    bool m_pressed=false, m_initialLoad=true;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

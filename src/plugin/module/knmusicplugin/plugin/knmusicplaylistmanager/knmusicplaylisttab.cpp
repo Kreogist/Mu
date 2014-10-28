@@ -87,8 +87,8 @@ void KNMusicPlaylistTab::onActionRemoveCurrent()
     {
         return;
     }
-    //Set the display to null first.
-    m_playlistDisplay->displayPlaylistItem(nullptr);
+    //Ask playlist display to backup header and set null model.
+    m_playlistDisplay->onActionRemoveCurrent();
     //Send signal.
     emit requireRemovePlaylist(m_playlistListView->currentIndex());
 }

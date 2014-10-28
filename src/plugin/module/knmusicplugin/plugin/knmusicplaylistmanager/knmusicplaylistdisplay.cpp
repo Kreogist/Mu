@@ -150,6 +150,14 @@ void KNMusicPlaylistDisplay::updatePlaylistInfo()
     updateDetailInfo();
 }
 
+void KNMusicPlaylistDisplay::onActionRemoveCurrent()
+{
+    //Backup header first.
+    m_playlistTreeView->backupHeader();
+    //Set to model to nullptr.
+    displayPlaylistItem(nullptr);
+}
+
 void KNMusicPlaylistDisplay::updateDetailInfo()
 {
     //Reset the detail info label text.

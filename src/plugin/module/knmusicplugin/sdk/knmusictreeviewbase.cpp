@@ -86,7 +86,6 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
-    bool resetHeader=false;
     //Check is the current proxy model is the playing model.
     if(m_proxyModel==m_proxyModelPool->playing())
     {
@@ -94,16 +93,27 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
         m_proxyModel=m_proxyModelPool->alloct();
         //Set the proxy model.
         setModel(m_proxyModel);
-        //Set header reset flag.
-        resetHeader=true;
     }
     //Set the source model.
     m_proxyModel->setSourceModel(musicModel);
     //Check and do header reset.
-    if(resetHeader)
+    if(m_initialLoad)
     {
+        m_initialLoad=false;
         resetHeaderState();
+        return;
     }
+    //Check if we need to load header state from backup.
+    if(musicModel!=nullptr && !m_headerState.isEmpty())
+    {
+        header()->restoreState(m_headerState);
+        m_headerState.clear();
+    }
+}
+
+void KNMusicTreeViewBase::backupHeader()
+{
+    m_headerState=header()->saveState();
 }
 
 void KNMusicTreeViewBase::resetHeaderState()
