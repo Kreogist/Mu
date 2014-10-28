@@ -162,6 +162,7 @@ void KNMusicPlaylistManager::saveChangedPlaylist()
 {
     for(int i=0; i<m_playlistList->rowCount(); i++)
     {
+        //Check the item need to save or not.
         KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItem(i);
         if(currentItem->changed())
         {
@@ -182,6 +183,7 @@ bool KNMusicPlaylistManager::importPlaylistFromFile(const QString &filePath)
         m_playlistList->appendRow(playlistItem);
         return true;
     }
+    //!FIXME: Parse other type of the data.
 //    m_loader->parsePlaylist(filePath);
     delete playlistItem;
     return false;

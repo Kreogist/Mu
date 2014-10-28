@@ -120,7 +120,8 @@ void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
     }
     int yOffset=0;
     //Check the position is previous than the current yet.
-    if(position<m_lyricsManager->positionAt(m_currentLyricsLine))
+    if(position<m_lyricsManager->positionAt(m_currentLyricsLine) &&
+            m_currentLyricsLine!=0)
     {
         //Find the matching lyrics.
         while(m_currentLyricsLine>-1 &&
@@ -201,7 +202,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     //Draw up lines.
     int lineBottom=centerY;
     paintLine=m_currentLyricsLine-1;
-    while(lineBottom>0 && paintLine>0)
+    while(lineBottom>0 && paintLine>-1)
     {
         //Draw the line.
         currentText=m_lyricsManager->lyricsAt(paintLine);
