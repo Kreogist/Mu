@@ -145,6 +145,11 @@ void KNMusicNowPlaying::playPrevious()
 
 void KNMusicNowPlaying::onActionPlayingFinished()
 {
+    //Add play times.
+    if(m_playingModel!=nullptr && m_currentPlayingIndex.isValid())
+    {
+        m_playingModel->addPlayTimes(m_currentPlayingIndex);
+    }
     //If current mode is track repeat, just play it again. :)
     if(m_loopMode==RepeatTrack)
     {

@@ -51,6 +51,16 @@ QString KNMusicProxyModel::fileNameFromRow(const int &row)
     return data(index(row, Name), FileNameRole).toString();
 }
 
+void KNMusicProxyModel::addPlayTimes(const QModelIndex &sourceIndex)
+{
+    //Get the destination index.
+    QModelIndex playTimesIndex=index(mapFromSource(sourceIndex).row(), Plays);
+    //Add the data.
+    setData(playTimesIndex,
+            data(playTimesIndex, Qt::DisplayRole).toInt()+1,
+            Qt::DisplayRole);
+}
+
 void KNMusicProxyModel::removeMusicRow(const int &row)
 {
     musicModel()->removeMusicRow(row);

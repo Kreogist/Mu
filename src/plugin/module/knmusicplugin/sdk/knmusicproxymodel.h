@@ -21,6 +21,7 @@ public:
     QVariant roleData(int row, int column, int role) const;
     QString filePathFromRow(const int &row);
     QString fileNameFromRow(const int &row);
+    void addPlayTimes(const QModelIndex &sourceIndex);
 
 signals:
 
