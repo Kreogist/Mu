@@ -33,13 +33,13 @@ public:
     explicit KNMusicPlaylistManager(QObject *parent = 0);
     ~KNMusicPlaylistManager();
     KNMusicTab *categoryTab();
-    void loadPlaylistList();
 
 signals:
 
 public slots:
 
 private slots:
+    void onActionLoadPlaylistList();
     void onActionAddPlaylist(const QString &caption);
     void onActionRemovePlaylist(const QModelIndex &index);
     void onActionCurrentPlaylistChanged(const QModelIndex &current,

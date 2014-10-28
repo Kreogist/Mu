@@ -40,6 +40,7 @@ public:
     KNMusicPlaylistModel *currentPlaylistModel();
 
 signals:
+    void requireLoadPlaylistList();
     void requireGeneratePlaylist(QString caption);
     void requireRemovePlaylist(const QModelIndex &index);
     void currentPlaylistChanged(const QModelIndex &current,

@@ -30,3 +30,15 @@ KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
     //Initial the delegate.
     setItemDelegate(new KNMusicPlaylistListDelegate(this));
 }
+
+void KNMusicPlaylistListView::showEvent(QShowEvent *event)
+{
+    //Check if we have load playlist before.
+    if(m_noPlaylistList)
+    {
+        //Remove the flag.
+        m_noPlaylistList=false;
+        //Emit loading signal.
+        emit requireLoadPlaylistList();
+    }
+}

@@ -152,6 +152,8 @@ void KNMusicPlaylistTab::initialPlaylistList()
 
     //Initial the list view.
     m_playlistListView=new KNMusicPlaylistListView(m_playlistListViewer);
+    connect(m_playlistListView, &KNMusicPlaylistListView::requireLoadPlaylistList,
+            this, &KNMusicPlaylistTab::requireLoadPlaylistList);
     playlistListLayout->addWidget(m_playlistListView);
 
     //Initial the list editor.

@@ -28,9 +28,15 @@ public:
     explicit KNMusicPlaylistListView(QWidget *parent = 0);
 
 signals:
+    void requireLoadPlaylistList();
 
 public slots:
 
+protected:
+    void showEvent(QShowEvent *event);
+
+private:
+    bool m_noPlaylistList=true;
 };
 
 #endif // KNMUSICPLAYLISTLISTVIEW_H

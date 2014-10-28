@@ -54,6 +54,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_playlistTab->setPlaylistList(m_playlistList);
 
     //Link the UI's request.
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
+            this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,
             this, &KNMusicPlaylistManager::onActionAddPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireRemovePlaylist,
@@ -63,9 +65,6 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     //When the data of playlist list has been changed, update the detail.
     connect(m_playlistList, &KNMusicPlaylistList::itemChanged,
             m_playlistTab, &KNMusicPlaylistTab::onActionPlaylistItemChanged);
-
-    //Temporary load here.
-    loadPlaylistList();
 }
 
 KNMusicPlaylistManager::~KNMusicPlaylistManager()
@@ -82,8 +81,11 @@ KNMusicTab *KNMusicPlaylistManager::categoryTab()
     return m_playlistTab;
 }
 
-void KNMusicPlaylistManager::loadPlaylistList()
+void KNMusicPlaylistManager::onActionLoadPlaylistList()
 {
+    //Disconnect require signal.
+    disconnect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
+               this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
     //Initial a blank playlist files.
     QStringList rawFiles, playlistFiles;
     //Load the raw playlist files.
@@ -101,6 +103,12 @@ void KNMusicPlaylistManager::loadPlaylistList()
     }
     //Set the playlist list data to the list.
     m_playlistList->setPlaylistListData(playlistFiles);
+    //Check whether there's any playlist in the model.
+    //If so, display the first playlist.
+    if(m_playlistList->rowCount()!=0)
+    {
+        m_playlistTab->setCurrentPlaylist(m_playlistList->index(0,0));
+    }
 }
 
 void KNMusicPlaylistManager::onActionAddPlaylist(const QString &caption)
@@ -166,6 +174,7 @@ bool KNMusicPlaylistManager::importPlaylistFromFile(const QString &filePath)
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generatePlaylist();
+    //!FIXME: Here we just load the playlist, but I want dymanic loading.
     //Using the mu playlist parser first to parse it.
     if(KNMusicPlaylistListAssistant::readPlaylist(filePath, playlistItem))
     {
