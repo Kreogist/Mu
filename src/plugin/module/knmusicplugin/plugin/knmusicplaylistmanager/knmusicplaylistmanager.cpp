@@ -65,6 +65,11 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     //When the data of playlist list has been changed, update the detail.
     connect(m_playlistList, &KNMusicPlaylistList::itemChanged,
             m_playlistTab, &KNMusicPlaylistTab::onActionPlaylistItemChanged);
+    //Connect add to item request.
+    connect(m_playlistList, &KNMusicPlaylistList::requireAddToPlaylist,
+            this, &KNMusicPlaylistManager::onActionAddToPlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
+            this, &KNMusicPlaylistManager::onActionCreatePlaylist);
 }
 
 KNMusicPlaylistManager::~KNMusicPlaylistManager()
@@ -122,6 +127,16 @@ void KNMusicPlaylistManager::onActionAddPlaylist(const QString &caption)
     m_playlistTab->editPlaylistName(playlistItem->index());
 }
 
+void KNMusicPlaylistManager::onActionAddToPlaylist(const int &row,
+                                                   const QStringList &filePaths)
+{
+
+    //Get the playlist item.
+    KNMusicPlaylistListItem *playlistItem=m_playlistList->playlistItem(row);
+    //Add files to the item.
+    playlistItem->playlistModel()->addFiles(filePaths);
+}
+
 void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
 {
     int playlistItemRow=index.row();
@@ -141,6 +156,20 @@ void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
                 m_playlistList->playlistModel(playlistItemRow));
     //Remove that row.
     m_playlistList->removeRow(playlistItemRow);
+}
+
+void KNMusicPlaylistManager::onActionCreatePlaylist(const int &row,
+                                                    const QStringList &filePaths)
+{
+    KNMusicPlaylistListItem *playlistItem=
+            KNMusicPlaylistListAssistant::generateBlankPlaylist(tr("New Playlist"));
+    m_playlistList->insertRow(row, playlistItem);
+    //Add the file to playlist.
+    playlistItem->playlistModel()->addFiles(filePaths);
+    //Set the new playlist to the current playlist.
+    m_playlistTab->setCurrentPlaylist(playlistItem->index());
+    //Let user rename it automatically.
+    m_playlistTab->editPlaylistName(playlistItem->index());
 }
 
 void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &current,

@@ -59,7 +59,7 @@ Qt::ItemFlags KNMusicModel::flags(const QModelIndex &index) const
 QStringList KNMusicModel::mimeTypes() const
 {
     //Add url list to mimetypes, but I don't know why should add uri.
-    //14.08.21: Add .
+    //14.08.21: Add org.kreogist.mu/MusicModelRow for music row.
     QStringList types=QStandardItemModel::mimeTypes();
     types<<"text/uri-list"
          <<"org.kreogist.mu/MusicModelRow";

@@ -26,6 +26,8 @@
 
 #include "knmusicplaylistdisplay.h"
 
+#include <QDebug>
+
 KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
     KNDropProxyContainer(parent)
 {
@@ -104,6 +106,9 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
     //When user add or remove file to playlist, should update the detail info.
     m_modelSignalHandler->addConnectionHandle(
                 connect(musicModel, &KNMusicPlaylistModel::itemChanged,
+                        this, &KNMusicPlaylistDisplay::onActionRowChanged));
+    m_modelSignalHandler->addConnectionHandle(
+                connect(musicModel, &KNMusicPlaylistModel::rowCountChanged,
                         this, &KNMusicPlaylistDisplay::onActionRowChanged));
     //Analysis file signal.
     m_modelSignalHandler->addConnectionHandle(

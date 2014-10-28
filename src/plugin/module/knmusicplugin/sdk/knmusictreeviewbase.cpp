@@ -90,6 +90,8 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     if(m_proxyModel==nullptr ||
             m_proxyModelPool->isModelPlaying(m_proxyModel))
     {
+        //Backup myself.
+        backupHeader();
         //Release the current model, and get a new avaliable proxy model.
         m_proxyModelPool->release(m_proxyModel);
         m_proxyModel=m_proxyModelPool->alloct();
@@ -103,6 +105,8 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     {
         m_initialLoad=false;
         resetHeaderState();
+        //Clear the header state backup data.
+        m_headerState.clear();
         return;
     }
     //Check if we need to load header state from backup.

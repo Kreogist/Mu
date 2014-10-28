@@ -31,6 +31,14 @@ class KNMusicPlaylistList : public QStandardItemModel
     Q_OBJECT
 public:
     explicit KNMusicPlaylistList(QObject *parent = 0);
+    Qt::DropActions supportedDropActions() const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    QStringList mimeTypes() const;
+    bool dropMimeData(const QMimeData *data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex &parent);
     KNMusicPlaylistModel *playlistModel(const int &row);
     KNMusicPlaylistListItem *playlistItem(const int &row);
     KNMusicPlaylistListItem *playlistItemFromIndex(const QModelIndex &index);
@@ -38,6 +46,8 @@ public:
     void setPlaylistListData(const QStringList &playlistListData);
 
 signals:
+    void requireAddToPlaylist(int playlistRowIndex, QStringList fileList);
+    void requireCreatePlaylist(int preferRow, QStringList fileList);
 
 public slots:
 
