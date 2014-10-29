@@ -35,6 +35,7 @@ public slots:
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void startDrag(Qt::DropActions supportedActions);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);

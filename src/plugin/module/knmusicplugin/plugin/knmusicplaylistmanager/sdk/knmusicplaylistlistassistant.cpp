@@ -321,8 +321,3 @@ KNMusicPlaylistListItem *KNMusicPlaylistListAssistant::generatePlaylist(
     playlistItem->setText(caption);
     return playlistItem;
 }
-
-KNMusicPlaylistListItem *KNMusicPlaylistListAssistant::generatePlaylistFromFile(const QString &filePath)
-{
-    ;
-}

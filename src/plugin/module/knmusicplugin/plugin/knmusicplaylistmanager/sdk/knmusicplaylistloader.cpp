@@ -29,10 +29,8 @@ KNMusicPlaylistLoader::KNMusicPlaylistLoader(QObject *parent) :
 KNMusicPlaylistLoader::~KNMusicPlaylistLoader()
 {
     //Delete all parsers.
-    while(!m_parsers.isEmpty())
-    {
-        delete m_parsers.takeLast();
-    }
+    qDeleteAll(m_parsers);
+    m_parsers.clear();
 }
 
 void KNMusicPlaylistLoader::installPlaylistParser(KNMusicPlaylistParser *parser)

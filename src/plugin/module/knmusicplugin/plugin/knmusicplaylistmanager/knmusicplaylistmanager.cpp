@@ -68,8 +68,12 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     //Connect add to item request.
     connect(m_playlistList, &KNMusicPlaylistList::requireAddToPlaylist,
             this, &KNMusicPlaylistManager::onActionAddToPlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireAddRowsToPlaylist,
+            this, &KNMusicPlaylistManager::onActionAddRowToPlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
             this, &KNMusicPlaylistManager::onActionCreatePlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireCreateRowsPlaylist,
+            this, &KNMusicPlaylistManager::onActionCreateRowPlaylist);
 }
 
 KNMusicPlaylistManager::~KNMusicPlaylistManager()
@@ -137,6 +141,14 @@ void KNMusicPlaylistManager::onActionAddToPlaylist(const int &row,
     playlistItem->playlistModel()->addFiles(filePaths);
 }
 
+void KNMusicPlaylistManager::onActionAddRowToPlaylist(const int &row)
+{
+    //Get the playlist item.
+    KNMusicPlaylistListItem *playlistItem=m_playlistList->playlistItem(row);
+    //Call the add drag function in the model to the item.
+    playlistItem->playlistModel()->appendDragMusicRows();
+}
+
 void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
 {
     int playlistItemRow=index.row();
@@ -166,6 +178,19 @@ void KNMusicPlaylistManager::onActionCreatePlaylist(const int &row,
     m_playlistList->insertRow(row, playlistItem);
     //Add the file to playlist.
     playlistItem->playlistModel()->addFiles(filePaths);
+    //Set the new playlist to the current playlist.
+    m_playlistTab->setCurrentPlaylist(playlistItem->index());
+    //Let user rename it automatically.
+    m_playlistTab->editPlaylistName(playlistItem->index());
+}
+
+void KNMusicPlaylistManager::onActionCreateRowPlaylist(const int &row)
+{
+    KNMusicPlaylistListItem *playlistItem=
+            KNMusicPlaylistListAssistant::generateBlankPlaylist(tr("New Playlist"));
+    m_playlistList->insertRow(row, playlistItem);
+    //Append the drag music rows.
+    playlistItem->playlistModel()->appendDragMusicRows();
     //Set the new playlist to the current playlist.
     m_playlistTab->setCurrentPlaylist(playlistItem->index());
     //Let user rename it automatically.

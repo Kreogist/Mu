@@ -19,6 +19,7 @@
 
 #include "knglobal.h"
 #include "knconnectionhandler.h"
+#include "knmusicglobal.h"
 #include "knmusicplaylistlistitem.h"
 #include "knmusicplaylistlistassistant.h"
 
@@ -58,11 +59,10 @@ Qt::ItemFlags KNMusicPlaylistList::flags(const QModelIndex &index) const
 
 QStringList KNMusicPlaylistList::mimeTypes() const
 {
-    //Add url list to mimetypes, but I don't know why should add uri.
-    //14.08.21: Add org.kreogist.mu/MusicModelRow for music row.
+    //Add url list to mimetypes.
     QStringList types=QStandardItemModel::mimeTypes();
     types<<"text/uri-list"
-         <<"org.kreogist.mu/MusicModelRow";
+         <<KNMusicGlobal::musicRowFormat();
     return types;
 }
 
@@ -77,18 +77,18 @@ bool KNMusicPlaylistList::dropMimeData(const QMimeData *data,
     if((action==Qt::MoveAction || action==Qt::CopyAction))
     {
 //        //Check is the data has format of music row list flag.
-//        if(data->hasFormat("org.kreogist.mu/MusicModelRow"))
-//        {
-//            if(parent.isValid())
-//            {
-//                emit requireAddRowsToPlaylist(parent.row());
-//            }
-//            else
-//            {
-//                emit requireCreatePlaylistFromRow(row);
-//            }
-//            return true;
-//        }
+        if(data->hasFormat(KNMusicGlobal::musicRowFormat()))
+        {
+            if(parent.isValid())
+            {
+                emit requireAddRowsToPlaylist(parent.row());
+            }
+            else
+            {
+                emit requireCreateRowsPlaylist(row==-1?rowCount():row);
+            }
+            return true;
+        }
         //Check is the data contains urls,
         if(data->hasUrls())
         {
@@ -101,12 +101,13 @@ bool KNMusicPlaylistList::dropMimeData(const QMimeData *data,
             else
             {
                 //We should create a new one for it.
-                emit requireCreatePlaylist(row,
+                emit requireCreatePlaylist(row==-1?rowCount():row,
                                            KNGlobal::urlToPathList(data->urls()));
             }
             return true;
         }
     }
+    return false;
 }
 
 KNMusicPlaylistModel *KNMusicPlaylistList::playlistModel(const int &row)

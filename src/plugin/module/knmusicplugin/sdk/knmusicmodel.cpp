@@ -59,10 +59,10 @@ Qt::ItemFlags KNMusicModel::flags(const QModelIndex &index) const
 QStringList KNMusicModel::mimeTypes() const
 {
     //Add url list to mimetypes, but I don't know why should add uri.
-    //14.08.21: Add org.kreogist.mu/MusicModelRow for music row.
+    //14.08.21: Add music model row foramt for music row.
     QStringList types=QStandardItemModel::mimeTypes();
     types<<"text/uri-list"
-         <<"org.kreogist.mu/MusicModelRow";
+         <<KNMusicGlobal::musicRowFormat();
     return types;
 }
 
@@ -75,14 +75,14 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     //When mimedata contains url data, and ensure that move&copy action enabled.
     if((action==Qt::MoveAction || action==Qt::CopyAction))
     {
+        if(data->hasFormat(KNMusicGlobal::musicRowFormat()))
+        {
+            //!FIXME: Add row process code here.
+            return true;
+        }
         if(data->hasUrls())
         {
             addFiles(KNGlobal::urlToPathList(data->urls()));
-            return true;
-        }
-        if(data->hasFormat("org.kreogist.mu/MusicModelRow"))
-        {
-            //!FIXME: Add row process code here.
             return true;
         }
     }
@@ -188,6 +188,15 @@ int KNMusicModel::playingItemColumn()
 void KNMusicModel::addFiles(const QStringList &fileList)
 {
     emit requireAnalysisFiles(fileList);
+}
+
+void KNMusicModel::appendDragMusicRows()
+{
+    QList<QList<QStandardItem *> > musicRows=KNMusicGlobal::dragMusicRow();
+    while(!musicRows.isEmpty())
+    {
+        appendMusicRow(musicRows.takeLast());
+    }
 }
 
 void KNMusicModel::appendMusicRow(const QList<QStandardItem *> &musicRow)

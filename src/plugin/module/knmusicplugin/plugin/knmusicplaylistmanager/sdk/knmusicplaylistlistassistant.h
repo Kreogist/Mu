@@ -30,7 +30,6 @@ class KNMusicPlaylistListAssistant : public QObject
 public:
     static KNMusicPlaylistListItem *generateBlankPlaylist(const QString &caption);
     static KNMusicPlaylistListItem *generatePlaylist(const QString &caption=QString());
-    static KNMusicPlaylistListItem *generatePlaylistFromFile(const QString &filePath);
     static bool parsePlaylistFile(const QString &playlistFilePath,
                                   QString &title,
                                   QJsonArray &playlistData);

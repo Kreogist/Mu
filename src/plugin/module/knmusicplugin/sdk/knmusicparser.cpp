@@ -23,20 +23,14 @@ KNMusicParser::KNMusicParser(QObject *parent) :
 KNMusicParser::~KNMusicParser()
 {
     //Delete all analysisers.
-    while(!m_analysisers.isEmpty())
-    {
-        delete m_analysisers.takeLast();
-    }
+    qDeleteAll(m_analysisers);
+    m_analysisers.clear();
     //Delete all tag parsers.
-    while(!m_tagParsers.isEmpty())
-    {
-        delete m_tagParsers.takeLast();
-    }
+    qDeleteAll(m_tagParsers);
+    m_tagParsers.clear();
     //Delete all list parsers.
-    while(!m_listParsers.isEmpty())
-    {
-        delete m_listParsers.takeLast();
-    }
+    qDeleteAll(m_tagParsers);
+    m_listParsers.clear();
 }
 
 void KNMusicParser::parseFile(QString filePath,

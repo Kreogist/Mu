@@ -16,17 +16,10 @@ KNMusicProxyModelPool *KNMusicProxyModelPool::instance()
 KNMusicProxyModelPool::~KNMusicProxyModelPool()
 {
     //Recover all the memory.
-    KNMusicProxyModel *element;
-    while(!m_available.isEmpty())
-    {
-        element=m_available.takeLast();
-        delete element;
-    }
-    while(!m_occupation.isEmpty())
-    {
-        element=m_occupation.takeLast();
-        delete element;
-    }
+    qDeleteAll(m_available);
+    m_available.clear();
+    qDeleteAll(m_occupation);
+    m_occupation.clear();
 }
 
 KNMusicProxyModel *KNMusicProxyModelPool::alloct()

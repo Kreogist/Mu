@@ -24,6 +24,9 @@ KNMusicNowPlayingBase *KNMusicGlobal::m_nowPlaying=nullptr;
 KNMusicSoloMenuBase *KNMusicGlobal::m_soloMenu=nullptr;
 KNMusicMultiMenuBase *KNMusicGlobal::m_multiMenu=nullptr;
 QString KNMusicGlobal::m_musicLibraryPath=QString();
+QString KNMusicGlobal::m_musicRowFormat=QString("org.kreogist.mu/MusicModelRow");
+bool KNMusicGlobal::m_dragMusicRowTaken=false;
+QList<QList<QStandardItem *> > KNMusicGlobal::m_dragMusicRow;
 
 KNMusicGlobal *KNMusicGlobal::instance()
 {
@@ -60,6 +63,11 @@ QString KNMusicGlobal::dateTimeToString(const QDateTime &dateTime)
 QString KNMusicGlobal::dateTimeToDataString(const QDateTime &dateTime)
 {
     return dateTime.toString("yyyyMMddHHmmss");
+}
+
+QString KNMusicGlobal::musicRowFormat()
+{
+    return m_musicRowFormat;
 }
 
 QDateTime KNMusicGlobal::dataStringToDateTime(const QString &text)
@@ -210,6 +218,37 @@ void KNMusicGlobal::initialThreads()
 void KNMusicGlobal::initialHeaderText()
 {
     m_treeViewHeaderText[BlankData]=" ";
+}
+
+QList<QList<QStandardItem *> > KNMusicGlobal::dragMusicRow()
+{
+    //Set the taken flag.
+    m_dragMusicRowTaken=true;
+    return m_dragMusicRow;
+}
+
+void KNMusicGlobal::setDragMusicRow(const QList<QList<QStandardItem *> > &dragMusicRow)
+{
+    //Recover the memory first.
+    recoverDragMusicRow();
+    //Set the rows.
+    m_dragMusicRow = dragMusicRow;
+}
+
+void KNMusicGlobal::recoverDragMusicRow()
+{
+    //Check if the row is not used.
+    if(!m_dragMusicRowTaken)
+    {
+        while(!m_dragMusicRow.isEmpty())
+        {
+            qDeleteAll(m_dragMusicRow.takeFirst());
+        }
+    }
+    //Clear the rows.
+    m_dragMusicRow.clear();
+    //Set the taken flag.
+    m_dragMusicRowTaken=false;
 }
 
 QString KNMusicGlobal::musicLibraryPath()

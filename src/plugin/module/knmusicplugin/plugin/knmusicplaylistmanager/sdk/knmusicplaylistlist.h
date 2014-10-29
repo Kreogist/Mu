@@ -47,7 +47,9 @@ public:
 
 signals:
     void requireAddToPlaylist(int playlistRowIndex, QStringList fileList);
+    void requireAddRowsToPlaylist(int playlistRowIndex);
     void requireCreatePlaylist(int preferRow, QStringList fileList);
+    void requireCreateRowsPlaylist(int playlistRowIndex);
 
 public slots:
 

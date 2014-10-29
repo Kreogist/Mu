@@ -54,6 +54,7 @@ signals:
 
 public slots:
     virtual void addFiles(const QStringList &fileList);
+    virtual void appendDragMusicRows();
     virtual void appendMusicRow(const QList<QStandardItem *> &musicRow);
     virtual void removeMusicRow(const int &row);
     virtual void clearMusicRow();

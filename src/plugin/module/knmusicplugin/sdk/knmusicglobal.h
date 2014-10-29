@@ -13,6 +13,7 @@
 #include <QDateTime>
 #include <QVariant>
 #include <QStringList>
+#include <QStandardItem>
 
 #include <QObject>
 
@@ -136,6 +137,7 @@ public:
     static QString msecondToString(const qint64 &msecond);
     static QString dateTimeToString(const QDateTime &dateTime);
     static QString dateTimeToDataString(const QDateTime &dateTime);
+    static QString musicRowFormat();
     static QDateTime dataStringToDateTime(const QString &text);
     static KNMusicParser *parser();
     static void setParser(KNMusicParser *parser);
@@ -161,6 +163,10 @@ public:
     void addItem(KNPreferenceItemBase *item,
                  const bool &isAdvanced=false);
 
+    static QList<QList<QStandardItem *> > dragMusicRow();
+    static void setDragMusicRow(const QList<QList<QStandardItem *> > &dragMusicRow);
+    static void recoverDragMusicRow();
+
 signals:
 
 public slots:
@@ -177,6 +183,9 @@ private:
     static KNMusicSoloMenuBase *m_soloMenu;
     static KNMusicMultiMenuBase *m_multiMenu;
     static QString m_musicLibraryPath;
+    static QString m_musicRowFormat;
+    static QList<QList<QStandardItem *>> m_dragMusicRow;
+    static bool m_dragMusicRowTaken;
     explicit KNMusicGlobal(QObject *parent = 0);
     QString m_treeViewHeaderText[MusicDisplayDataCount];
     QStringList m_suffixs, m_listSuffixs,
