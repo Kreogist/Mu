@@ -160,6 +160,8 @@ void KNMusicPlaylistTab::initialPlaylistList()
     m_playlistListViewEditor=new KNMusicPlaylistListViewEditor(m_playlistListViewer);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireAddPlaylist,
             this, &KNMusicPlaylistTab::onActionAddPlaylist);
+    connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireImportPlaylist,
+            this, &KNMusicPlaylistTab::requireImportPlaylist);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireRemoveCurrentPlaylist,
             this, &KNMusicPlaylistTab::onActionRemoveCurrent);
     playlistListLayout->addWidget(m_playlistListViewEditor);

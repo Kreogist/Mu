@@ -41,6 +41,7 @@ public:
 
 signals:
     void requireLoadPlaylistList();
+    void requireImportPlaylist(const QStringList &playlistList);
     void requireGeneratePlaylist(QString caption);
     void requireRemovePlaylist(const QModelIndex &index);
     void currentPlaylistChanged(const QModelIndex &current,

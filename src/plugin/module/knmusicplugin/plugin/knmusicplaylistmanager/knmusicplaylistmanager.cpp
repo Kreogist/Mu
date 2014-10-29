@@ -58,6 +58,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
             this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,
             this, &KNMusicPlaylistManager::onActionAddPlaylist);
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireImportPlaylist,
+            this, &KNMusicPlaylistManager::onActionImportPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireRemovePlaylist,
             this, &KNMusicPlaylistManager::onActionRemovePlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::currentPlaylistChanged,
@@ -168,6 +170,14 @@ void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
                 m_playlistList->playlistModel(playlistItemRow));
     //Remove that row.
     m_playlistList->removeRow(playlistItemRow);
+}
+
+void KNMusicPlaylistManager::onActionImportPlaylist(QStringList playlistPaths)
+{
+    while(!playlistPaths.isEmpty())
+    {
+        importPlaylistFromFile(playlistPaths.takeFirst());
+    }
 }
 
 void KNMusicPlaylistManager::onActionCreatePlaylist(const int &row,
