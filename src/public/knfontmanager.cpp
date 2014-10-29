@@ -38,12 +38,12 @@ void KNFontManager::loadCustomFont(const QFileInfo &fontInfo)
 
 void KNFontManager::loadCustomFontFolder(const QString &folderPath)
 {
-    QDir m_customFontDir(folderPath);
+    QDir customFontDir(folderPath);
     //Check the folder is exsist or not, if not exsist, create one.
-    if(m_customFontDir.exists())
+    if(customFontDir.exists())
     {
         //Get all the files, load all the fonts.
-        QFileInfoList fontFiles=m_customFontDir.entryInfoList();
+        QFileInfoList fontFiles=customFontDir.entryInfoList();
         int fontCount=fontFiles.size();
         while(fontCount--)
         {
@@ -62,7 +62,7 @@ void KNFontManager::loadCustomFontFolder(const QString &folderPath)
     }
     else
     {
-        m_customFontDir.mkpath(folderPath);
+        customFontDir.mkpath(folderPath);
     }
 }
 
