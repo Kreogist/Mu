@@ -29,7 +29,7 @@
 #include <QDebug>
 
 KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
-    KNDropProxyContainer(parent)
+    QWidget(parent)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -110,10 +110,6 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
     m_modelSignalHandler->addConnectionHandle(
                 connect(musicModel, &KNMusicPlaylistModel::rowCountChanged,
                         this, &KNMusicPlaylistDisplay::onActionRowChanged));
-    //Analysis file signal.
-    m_modelSignalHandler->addConnectionHandle(
-                connect(this, &KNMusicPlaylistDisplay::requireAnalysisFiles,
-                        musicModel, &KNMusicPlaylistModel::requireAnalysisFiles));
     //Update the informations.
     updatePlaylistInfo();
 }

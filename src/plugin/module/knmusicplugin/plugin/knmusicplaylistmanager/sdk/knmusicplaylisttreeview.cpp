@@ -22,6 +22,9 @@
 KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent) :
     KNMusicTreeViewBase(parent)
 {
+    //Set properties.
+    setDragDropMode(QAbstractItemView::DragDrop);
+
     //Set default color.
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x10, 0x10, 0x10));

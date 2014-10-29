@@ -77,7 +77,7 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     {
         if(data->hasFormat(KNMusicGlobal::musicRowFormat()))
         {
-            //!FIXME: Add row process code here.
+            appendDragMusicRows();
             return true;
         }
         if(data->hasUrls())

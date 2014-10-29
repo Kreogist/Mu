@@ -18,13 +18,13 @@
 #ifndef KNMUSICPLAYLISTDISPLAY_H
 #define KNMUSICPLAYLISTDISPLAY_H
 
-#include "kndropproxycontainer.h"
+#include <QWidget>
 
 class QLabel;
 class KNConnectionHandler;
 class KNMusicPlaylistListItem;
 class KNMusicPlaylistTreeView;
-class KNMusicPlaylistDisplay : public KNDropProxyContainer
+class KNMusicPlaylistDisplay : public QWidget
 {
     Q_OBJECT
 public:
