@@ -41,6 +41,9 @@ public slots:
 
 private:
     void initialStorageUnit();
+#ifdef Q_OS_LINUX
+    static QString substituteFileBrowserParameters(QString &pre, QString &file);
+#endif
     static KNGlobal *m_instance;
     static QString m_dylibSuffix;
     enum StorageUnit

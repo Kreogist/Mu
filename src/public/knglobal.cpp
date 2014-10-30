@@ -127,6 +127,39 @@ void KNGlobal::showInGraphicalShell(const QString &filePath)
 #endif
 }
 
+#ifdef Q_OS_LINUX
+QString KNGlobal::substituteFileBrowserParameters(QString &pre, QString &file)
+{
+    QString cmd;
+    for (int i = 0; i < pre.size(); ++i)
+    {
+        QChar c = pre.at(i);
+        if (c == QLatin1Char('%') && i < pre.size()-1)
+        {
+            c = pre.at(++i);
+            QString s;
+            if (c == QLatin1Char('d'))
+                s = QLatin1Char('"') + QFileInfo(file).path() + QLatin1Char('"');
+            else if (c == QLatin1Char('f'))
+                s = QLatin1Char('"') + file + QLatin1Char('"');
+            else if (c == QLatin1Char('n'))
+                s = QLatin1Char('"') + QFileInfo(file).fileName() + QLatin1Char('"');
+            else if (c == QLatin1Char('%'))
+                s = c;
+            else
+            {
+                s = QLatin1Char('%');
+                s += c;
+            }
+            cmd += s;
+            continue;
+        }
+        cmd += c;
+    }
+    return cmd;
+}
+#endif
+
 void KNGlobal::openLocalFile(const QString &filePath)
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
