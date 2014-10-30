@@ -13,6 +13,7 @@
 
 class QBoxLayout;
 class QLabel;
+class KNGlobal;
 class KNPreferenceItemBase;
 class KNPreferenceWidgetsPanel : public QScrollArea
 {
@@ -20,8 +21,8 @@ class KNPreferenceWidgetsPanel : public QScrollArea
 public:
     explicit KNPreferenceWidgetsPanel(QWidget *parent = 0);
     bool advancedMode() const;
-    QString panelCaption() const;
-    void setPanelCaption(const QString &panelCaption);
+    QString panelName() const;
+    void setPanelName(const QString &panelName);
     void addTitle(QLabel *title,
                   const bool &isAdvanced=false);
     void addItem(KNPreferenceItemBase *item,
@@ -31,6 +32,7 @@ signals:
     void requireSetAdvancedVisible(const bool &ok);
 
 public slots:
+    void savePanelData();
     void setNormalMode(bool normalMode);
     void setAdvancedMode(bool advancedMode);
 
@@ -38,9 +40,11 @@ protected:
 
 private:
     void setAdvancedItem(QWidget *item);
-    QString m_panelCaption;
+    QString m_panelName;
     QBoxLayout *m_mainLayout;
     QWidget *m_container;
+    QList<KNPreferenceItemBase *> m_itemList;
+    KNGlobal *m_global;
     bool m_advancedMode=false;
 };
 

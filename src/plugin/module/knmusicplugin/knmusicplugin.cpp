@@ -203,7 +203,7 @@ void KNMusicPlugin::initialInfrastructure()
 
     //Initial preference panel.
     m_preferencePanel=new KNPreferenceWidgetsPanel;
-    m_preferencePanel->setPanelCaption("Music");
+    m_preferencePanel->setPanelName("Music");
     m_musicGlobal->setPreferencePanel(m_preferencePanel);
 
     //Initial central widget.

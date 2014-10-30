@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QBoxLayout>
 
+#include "knglobal.h"
 #include "preference/knpreferenceitemglobal.h"
 #include "preference/knpreferenceitembase.h"
 
@@ -23,6 +24,9 @@ KNPreferenceWidgetsPanel::KNPreferenceWidgetsPanel(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     setFrameShape(QFrame::NoFrame);
     setWidgetResizable(true);
+
+    //Initial global instance.
+    m_global=KNGlobal::instance();
 
     //Initial the container.
     m_container=new QWidget(this);
@@ -61,6 +65,8 @@ void KNPreferenceWidgetsPanel::addItem(KNPreferenceItemBase *item,
 {
     //Change parent relationship.
     item->setParent(this);
+    //Save the item to the list.
+    m_itemList.append(item);
     //Check is advacned item. If yes, linked to advanced signal.
     if(isAdvanced)
     {
@@ -71,14 +77,26 @@ void KNPreferenceWidgetsPanel::addItem(KNPreferenceItemBase *item,
                                item);
 }
 
-QString KNPreferenceWidgetsPanel::panelCaption() const
+void KNPreferenceWidgetsPanel::savePanelData()
 {
-    return m_panelCaption;
+    for(QList<KNPreferenceItemBase *>::iterator i=m_itemList.begin();
+        i!=m_itemList.end();
+        ++i)
+    {
+        m_global->setCustomData(m_panelName,
+                                (*i)->valueName(),
+                                (*i)->value());
+    }
 }
 
-void KNPreferenceWidgetsPanel::setPanelCaption(const QString &panelCaption)
+QString KNPreferenceWidgetsPanel::panelName() const
 {
-    m_panelCaption = panelCaption;
+    return m_panelName;
+}
+
+void KNPreferenceWidgetsPanel::setPanelName(const QString &panelCaption)
+{
+    m_panelName = panelCaption;
 }
 
 bool KNPreferenceWidgetsPanel::advancedMode() const
