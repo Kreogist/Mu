@@ -27,10 +27,18 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     KNMusicBackendThread(parent)
 {
     //Initial position updater.
-    m_positionUpdater=new QTimer(this);
+    m_positionUpdater=new QTimer;
     m_positionUpdater->setInterval(5);
     connect(m_positionUpdater, &QTimer::timeout,
             this, &KNMusicBackendBassThread::onActionPositionCheck);
+
+    connect(this, &KNMusicBackendBassThread::requireStopped,
+            this, &KNMusicBackendBassThread::stop);
+}
+
+KNMusicBackendBassThread::~KNMusicBackendBassThread()
+{
+    delete m_positionUpdater;
 }
 
 void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
@@ -264,10 +272,11 @@ void KNMusicBackendBassThread::onActionEnd(HSYNC handle,
     Q_UNUSED(handle)
     Q_UNUSED(channel)
     Q_UNUSED(data)
+
     //Transform the user pointer to channel pointer.
     KNMusicBackendBassThread *bassThread=(KNMusicBackendBassThread *)user;
     //Stop that thread first.
-    bassThread->stop();
+    bassThread->requireDoStopped();
     //Set the stopped state.
     bassThread->setStoppedState(true);
     //Emit finished signal, simply calling that function is enough.
@@ -276,11 +285,12 @@ void KNMusicBackendBassThread::onActionEnd(HSYNC handle,
 
 void KNMusicBackendBassThread::establishSyncHandle()
 {
-    m_syncHandles.append(BASS_ChannelSetSync(m_channel,
-                                             BASS_SYNC_END,
-                                             0,
-                                             onActionEnd,
-                                             this));
+    HSYNC handle=BASS_ChannelSetSync(m_channel,
+                                     BASS_SYNC_END,
+                                     0,
+                                     onActionEnd,
+                                     this);
+    m_syncHandles.append(handle);
 }
 
 void KNMusicBackendBassThread::releaseSyncHandle()
@@ -311,5 +321,10 @@ bool KNMusicBackendBassThread::stoppedState() const
 void KNMusicBackendBassThread::setStoppedState(bool stoppedState)
 {
     m_stoppedState = stoppedState;
+}
+
+void KNMusicBackendBassThread::requireDoStopped()
+{
+    emit requireStopped();
 }
 

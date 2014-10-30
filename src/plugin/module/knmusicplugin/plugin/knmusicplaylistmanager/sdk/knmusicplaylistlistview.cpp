@@ -33,6 +33,7 @@ KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
 
 void KNMusicPlaylistListView::showEvent(QShowEvent *event)
 {
+    KNMusicCategoryListViewBase::showEvent(event);
     //Check if we have load playlist before.
     if(m_noPlaylistList)
     {

@@ -122,7 +122,7 @@ void KNScrollLabel::onActionMoving()
             //Change direction.
             m_movingLeft=false;
             //Stop moving, start short waiting.
-            m_movingAnime->stop();
+            stopAllTimer();
             m_waiting->setInterval(2500);
             m_waiting->start();
             return;
@@ -138,7 +138,7 @@ void KNScrollLabel::onActionMoving()
         //Change direction,
         m_movingLeft=true;
         //Stop moving, start long waitng.
-        m_movingAnime->stop();
+        stopAllTimer();
         m_waiting->setInterval(5000);
         m_waiting->start();
         return;

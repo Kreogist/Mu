@@ -31,6 +31,7 @@ class KNMusicBackendBassThread : public KNMusicBackendThread
     Q_OBJECT
 public:
     explicit KNMusicBackendBassThread(QObject *parent = 0);
+    ~KNMusicBackendBassThread();
     void loadFromFile(const QString &filePath);
     void clear();
     void resetState();
@@ -45,8 +46,10 @@ public:
 
     bool stoppedState() const;
     void setStoppedState(bool stoppedState);
+    void requireDoStopped();
 
 signals:
+    void requireStopped();
 
 public slots:
     void setVolume(const float &volumeSize);
@@ -56,7 +59,7 @@ private slots:
     void onActionPositionCheck();
 
 private:
-    static void onActionEnd(HSYNC handle, DWORD channel, DWORD data, void *user);
+    static void CALLBACK onActionEnd(HSYNC handle, DWORD channel, DWORD data, void *user);
     void establishSyncHandle();
     void releaseSyncHandle();
     void setState(const int &state);
