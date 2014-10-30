@@ -37,6 +37,10 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
 {
     //Stop the thread first.
     stop();
+    //Stop the position updater.
+    m_positionUpdater->stop();
+    //Release all the sync handle.
+    releaseSyncHandle();
     //Load the file to thread.
     //Check is the file the current file.
     if(filePath==m_filePath)
@@ -46,8 +50,6 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
     }
     //Backup the file path.
     m_filePath=filePath;
-    //Stop the position updater.
-    m_positionUpdater->stop();
     //Load the file.
 #ifdef Q_OS_WIN32
     std::wstring uniPath=m_filePath.toStdWString();
@@ -83,6 +85,8 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
         qDebug()<<"Cannot load file.";
         return;
     }
+    //Establish sync handle.
+    establishSyncHandle();
     //When loading the file complete, set the channel info to the thread.
     //Get the byte duration.
     m_totalDuration=BASS_ChannelBytes2Seconds(m_channel,
@@ -107,7 +111,7 @@ void KNMusicBackendBassThread::clear()
 void KNMusicBackendBassThread::resetState()
 {
     //Set stop flag.
-    m_stopped=true;
+    m_stoppedState=true;
     //Get the duration
     m_duration=m_totalDuration;
     //Set the start position at the very beginning.
@@ -122,6 +126,8 @@ void KNMusicBackendBassThread::stop()
     {
         //Stop the channel, here is what the specific thing.
         BASS_ChannelStop(m_channel);
+        //Stop position updater.
+        m_positionUpdater->stop();
         //Reset position.
         setPosition(0);
         //Reset the state.
@@ -150,10 +156,10 @@ void KNMusicBackendBassThread::play()
         //Start the position updater first.
         m_positionUpdater->start();
         //Check whether is now is playing or not.
-        if(m_stopped)
+        if(m_stoppedState)
         {
             //Reset flag.
-            m_stopped=false;
+            m_stoppedState=false;
             //Reset the position to fit track playing.
             setPosition(0);
         }
@@ -236,11 +242,54 @@ void KNMusicBackendBassThread::onActionPositionCheck()
 {
     qint64 currentPosition=position();
     emit positionChanged(currentPosition);
+    /*
+     * - Q: Why we still need to do this?
+     * - A: When cue is playing, it may not stopped at the end of the file.
+     *      The callback is only used to solve the position won't reach the end
+     *   bug, the track duration stopped will still process here.
+     */
     if(currentPosition>=m_duration)
     {
         stop();
-        m_stopped=true;
+        m_stoppedState=true;
         emit finished();
+    }
+}
+
+void KNMusicBackendBassThread::onActionEnd(HSYNC handle,
+                                           DWORD channel,
+                                           DWORD data,
+                                           void *user)
+{
+    Q_UNUSED(handle)
+    Q_UNUSED(channel)
+    Q_UNUSED(data)
+    //Transform the user pointer to channel pointer.
+    KNMusicBackendBassThread *bassThread=(KNMusicBackendBassThread *)user;
+    //Stop that thread first.
+    bassThread->stop();
+    //Set the stopped state.
+    bassThread->setStoppedState(true);
+    //Emit finished signal, simply calling that function is enough.
+    bassThread->finished();
+}
+
+void KNMusicBackendBassThread::establishSyncHandle()
+{
+    m_syncHandles.append(BASS_ChannelSetSync(m_channel,
+                                             BASS_SYNC_END,
+                                             0,
+                                             onActionEnd,
+                                             this));
+}
+
+void KNMusicBackendBassThread::releaseSyncHandle()
+{
+    //Remove all the sync in the list.
+    while(!m_syncHandles.isEmpty())
+    {
+        BASS_ChannelRemoveSync(m_channel,
+                               m_syncHandles.takeLast());
     }
 }
 
@@ -254,3 +303,13 @@ void KNMusicBackendBassThread::setState(const int &state)
         emit stateChanged(m_playingState);
     }
 }
+bool KNMusicBackendBassThread::stoppedState() const
+{
+    return m_stoppedState;
+}
+
+void KNMusicBackendBassThread::setStoppedState(bool stoppedState)
+{
+    m_stoppedState = stoppedState;
+}
+

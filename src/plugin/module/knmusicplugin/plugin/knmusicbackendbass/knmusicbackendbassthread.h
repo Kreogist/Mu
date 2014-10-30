@@ -26,7 +26,6 @@
 
 using namespace KNMusic;
 
-class QTimer;
 class KNMusicBackendBassThread : public KNMusicBackendThread
 {
     Q_OBJECT
@@ -44,6 +43,9 @@ public:
     void playSection(const qint64 &sectionStart=-1,
                      const qint64 &sectionDuration=-1);
 
+    bool stoppedState() const;
+    void setStoppedState(bool stoppedState);
+
 signals:
 
 public slots:
@@ -54,15 +56,19 @@ private slots:
     void onActionPositionCheck();
 
 private:
+    static void onActionEnd(HSYNC handle, DWORD channel, DWORD data, void *user);
+    void establishSyncHandle();
+    void releaseSyncHandle();
     void setState(const int &state);
     int m_playingState=StoppedState;
     QString m_filePath;
-    bool m_stopped=true;
+    bool m_stoppedState=true;
     qint64 m_startPosition;   //Unit: millisecond
     qint64 m_endPosition;     //Unit: millisecond
     qint64 m_duration;        //Unit: millisecond
     qint64 m_totalDuration;   //Unit: millisecond
     QTimer *m_positionUpdater=nullptr;
+    QList<HSYNC> m_syncHandles;
     DWORD m_channel;
 };
 
