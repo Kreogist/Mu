@@ -187,7 +187,12 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp \
     plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistassistant.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistloader.cpp
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistloader.cpp \
+    plugin/sdk/knmessagebox.cpp \
+    plugin/sdk/messagebox/knmessageboxconfigure.cpp \
+    plugin/sdk/messagebox/knmessagecontent.cpp \
+    plugin/sdk/messagebox/knmessageblock.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetaildialog.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -307,7 +312,13 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistassistant.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistparser.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistloader.h
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistloader.h \
+    plugin/sdk/knmessagebox.h \
+    plugin/sdk/messagebox/knmessageboxconfigure.h \
+    plugin/sdk/messagebox/knmessagecontent.h \
+    plugin/sdk/messagebox/knmessageblock.h \
+    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetaildialog.h \
+    plugin/module/knmusicplugin/sdk/knmusicdetaildialogbase.h
 
 RESOURCES += \
     resource/res.qrc

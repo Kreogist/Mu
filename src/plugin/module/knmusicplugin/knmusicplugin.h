@@ -27,6 +27,7 @@ class KNMusicTab;
 class KNMusicBackend;
 class KNMusicGlobal;
 class KNMusicParser;
+class KNMusicDetailDialogBase;
 class KNMusicHeaderPlayerBase;
 class KNMusicHeaderLyricsBase;
 class KNMusicNowPlayingBase;
@@ -48,6 +49,7 @@ public:
     KNPreferenceWidgetsPanel *preferencePanelWidget();
 
     void loadBackend(KNMusicBackend *plugin);
+    void loadDetailInfo(KNMusicDetailDialogBase *plugin);
     void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
     void loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin);
     void loadNowPlaying(KNMusicNowPlayingBase *plugin);
@@ -85,6 +87,7 @@ private:
     QThread m_parserThread, m_backendThread;
     KNMusicGlobal *m_musicGlobal;
 
+    KNMusicDetailDialogBase *m_detailDialog=nullptr;
     KNMusicBackend *m_backend=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
 };

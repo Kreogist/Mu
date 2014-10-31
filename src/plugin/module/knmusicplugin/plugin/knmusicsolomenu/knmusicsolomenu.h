@@ -27,6 +27,7 @@ public:
     explicit KNMusicSoloMenu(QWidget *parent = 0);
     void setProxyModel(KNMusicProxyModel *model);
     void setCurrentIndex(const QModelIndex &itemIndex);
+    void setDetailDialog(KNMusicDetailDialogBase *dialog);
 
 signals:
 
@@ -38,6 +39,7 @@ private slots:
     void onActionShowInGraphicsShell();
     void onActionCopyFilePath();
     void onActionCopyItemText();
+    void onActionShowDetail();
 
 private:
     enum SoloMenuActions
@@ -56,6 +58,7 @@ private:
     QString m_actionTitles[SoloMenuActionCount], m_itemText, m_filePath;
     QAction *m_actions[SoloMenuActionCount];
     KNMusicProxyModel *m_proxyModel;
+    KNMusicDetailDialogBase *m_detailDialog;
 };
 
 #endif // KNMUSICSOLOMENU_H
