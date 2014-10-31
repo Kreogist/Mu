@@ -44,6 +44,7 @@ int KNMessageBlock::preferWidth()
 void KNMessageBlock::resizeEvent(QResizeEvent *event)
 {
     QLabel::resizeEvent(event);
+    //Update the size parameters.
     updateSizeParam();
     updateBackground();
 }
@@ -53,7 +54,7 @@ void KNMessageBlock::updateSizeParam()
     m_backgroundGradient.setFinalStop(0,height());
     QFont textFont=font();
     int preferSize=(height()>>1)-9;
-    textFont.setPixelSize(preferSize<0?2:preferSize);
+    textFont.setPixelSize(preferSize<2?2:preferSize);
     setFont(textFont);
 }
 

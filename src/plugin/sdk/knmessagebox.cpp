@@ -22,6 +22,8 @@
 
 #include "knmessagebox.h"
 
+#include <QDebug>
+
 KNMessageBox::KNMessageBox(QWidget *parent) :
     QDialog(parent)
 {
@@ -93,25 +95,26 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
 
     //Initial animations.
     m_zoomIn=new QPropertyAnimation(this, "geometry", this);
-    m_zoomIn->setDuration(100);
+    m_zoomIn->setEasingCurve(QEasingCurve::OutCubic);
+    m_zoomIn->setDuration(120);
     m_showAnime->addAnimation(m_zoomIn);
 
     m_fadeIn=new QPropertyAnimation(this, "windowOpacity", this);
-    m_fadeIn->setDuration(100);
+    m_fadeIn->setDuration(120);
     m_fadeIn->setStartValue(0.0);
     m_fadeIn->setEndValue(1.0);
     m_showAnime->addAnimation(m_fadeIn);
     m_expandAnime->addAnimation(m_showAnime);
 
     m_expand=new QPropertyAnimation(this, "geometry", this);
-    m_expand->setDuration(50);
+    m_expand->setDuration(100);
     m_expandAnime->addAnimation(m_expand);
+    connect(m_expandAnime, &QSequentialAnimationGroup::finished,
+            this, &KNMessageBox::onActionExpandFinished);
 
     m_fold=new QPropertyAnimation(this, "geometry", this);
     m_fold->setDuration(50);
     m_fold->setEasingCurve(QEasingCurve::OutCubic);
-    connect(m_fold, &QPropertyAnimation::finished,
-            this, &KNMessageBox::close);
     m_hideAnime->addAnimation(m_fold);
 
     m_fadeOut=new QPropertyAnimation(this, "windowOpacity", this);
@@ -120,6 +123,8 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_fadeOut->setStartValue(1.0);
     m_fadeOut->setEndValue(0.0);
     m_hideAnime->addAnimation(m_fadeOut);
+    connect(m_hideAnime, &QParallelAnimationGroup::finished,
+            this, &KNMessageBox::close);
 }
 
 void KNMessageBox::showEvent(QShowEvent *event)
@@ -141,7 +146,7 @@ void KNMessageBox::showEvent(QShowEvent *event)
         xBase=parentWidget()->x()+(parentWidget()->frameGeometry().width()>>1);
         yBase=parentWidget()->y()+(parentWidget()->frameGeometry().height()>>1);
     }
-    int finalWidth=m_title->preferWidth(),
+    int finalWidth=qMax(m_title->preferWidth(), m_content->preferWidth()),
         finalHeight=m_middleHeight+m_content->preferHeight();
     QRect middleRect=QRect(xBase-(finalWidth>>1),
                            yBase-(m_middleHeight>>1),
@@ -180,6 +185,11 @@ bool KNMessageBox::onActionOkayClose()
     return true;
 }
 
+void KNMessageBox::onActionExpandFinished()
+{
+    m_content->showContent();
+}
+
 void KNMessageBox::onActionOkay()
 {
     if(onActionOkayClose())
@@ -190,6 +200,8 @@ void KNMessageBox::onActionOkay()
 
 void KNMessageBox::onActionClose()
 {
+    //Hide content first.
+    m_content->hideContent();
     //Stop anime groups.
     m_expandAnime->stop();
     m_hideAnime->stop();
@@ -223,6 +235,8 @@ void KNMessageBox::initialDialog()
     m_title->setText(m_titleText);
     //Update button.
     m_okButton->show();
+    //Hide the content.
+    m_content->hideContent();
 }
 
 void KNMessageBox::initialButton(KNOpacityAnimeButton *button)
@@ -233,6 +247,16 @@ void KNMessageBox::initialButton(KNOpacityAnimeButton *button)
 QString KNMessageBox::title() const
 {
     return m_titleText;
+}
+
+QWidget *KNMessageBox::content() const
+{
+    return m_content->content();
+}
+
+void KNMessageBox::setContent(QWidget *content)
+{
+    m_content->setContent(content);
 }
 
 void KNMessageBox::setTitle(const QString &title)

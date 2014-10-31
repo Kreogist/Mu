@@ -192,7 +192,8 @@ SOURCES += \
     plugin/sdk/messagebox/knmessageboxconfigure.cpp \
     plugin/sdk/messagebox/knmessagecontent.cpp \
     plugin/sdk/messagebox/knmessageblock.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetaildialog.cpp
+    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetaildialog.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailpanel.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -318,7 +319,8 @@ HEADERS += \
     plugin/sdk/messagebox/knmessagecontent.h \
     plugin/sdk/messagebox/knmessageblock.h \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetaildialog.h \
-    plugin/module/knmusicplugin/sdk/knmusicdetaildialogbase.h
+    plugin/module/knmusicplugin/sdk/knmusicdetaildialogbase.h \
+    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailpanel.h
 
 RESOURCES += \
     resource/res.qrc

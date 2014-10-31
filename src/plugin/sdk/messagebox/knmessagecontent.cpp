@@ -4,13 +4,27 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QBoxLayout>
 #include <QPainter>
 
 #include "knmessagecontent.h"
 
+#include <QDebug>
+
 KNMessageContent::KNMessageContent(QWidget *parent) :
     QWidget(parent)
 {
+    //Initial the layout.
+    m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                this);
+    m_mainLayout->setContentsMargins(0,m_shadowHeight,0,m_shadowHeight);
+    m_mainLayout->setSpacing(0);
+    setLayout(m_mainLayout);
+}
+
+int KNMessageContent::preferWidth()
+{
+    return (m_content==nullptr)?0:m_content->sizeHint().width();
 }
 
 int KNMessageContent::preferHeight()
@@ -48,4 +62,21 @@ QWidget *KNMessageContent::content() const
 void KNMessageContent::setContent(QWidget *content)
 {
     m_content = content;
+    m_mainLayout->addWidget(m_content);
+}
+
+void KNMessageContent::showContent()
+{
+    if(m_content!=nullptr)
+    {
+        m_content->show();
+    }
+}
+
+void KNMessageContent::hideContent()
+{
+    if(m_content!=nullptr)
+    {
+        m_content->hide();
+    }
 }

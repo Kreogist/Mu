@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusicdetailpanel.h"
+
 #include "knmessagebox.h"
 
 #include "knmusicdetaildialog.h"
@@ -24,6 +26,9 @@ KNMusicDetailDialog::KNMusicDetailDialog(QObject *parent) :
 {
     m_detailDialog=new KNMessageBox;
     m_detailDialog->setTitle("Detail");
+
+    m_detailPanel=new KNMusicDetailPanel(m_detailDialog);
+    m_detailDialog->setContent(m_detailPanel);
 }
 
 KNMusicDetailDialog::~KNMusicDetailDialog()

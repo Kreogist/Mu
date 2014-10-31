@@ -24,10 +24,12 @@ class KNMessageBox : public QDialog
 public:
     explicit KNMessageBox(QWidget *parent = 0);
     QString title() const;
+    QWidget *content() const;
 
 signals:
 
 public slots:
+    void setContent(QWidget *content);
     void setTitle(const QString &title);
 
 protected:
@@ -36,6 +38,7 @@ protected:
     virtual bool onActionOkayClose();
 
 private slots:
+    void onActionExpandFinished();
     void onActionOkay();
     void onActionClose();
 

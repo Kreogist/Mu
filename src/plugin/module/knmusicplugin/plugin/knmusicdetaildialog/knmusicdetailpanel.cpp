@@ -15,28 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICDETAILDIALOG_H
-#define KNMUSICDETAILDIALOG_H
+#include "knmusicdetailpanel.h"
 
-#include "knmusicdetaildialogbase.h"
-
-class KNMusicDetailPanel;
-class KNMessageBox;
-class KNMusicDetailDialog : public KNMusicDetailDialogBase
+KNMusicDetailPanel::KNMusicDetailPanel(QWidget *parent) :
+    QWidget(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicDetailDialog(QObject *parent = 0);
-    ~KNMusicDetailDialog();
-    void showDialog(const QString &filePath);
+    ;
+}
 
-signals:
-
-public slots:
-
-private:
-    KNMessageBox *m_detailDialog;
-    KNMusicDetailPanel *m_detailPanel;
-};
-
-#endif // KNMUSICDETAILDIALOG_H
+QSize KNMusicDetailPanel::sizeHint() const
+{
+    return QSize(200, 100);
+}
