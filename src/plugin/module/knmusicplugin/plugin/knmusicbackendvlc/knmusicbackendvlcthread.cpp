@@ -52,7 +52,6 @@ KNMusicBackendVLCThread::~KNMusicBackendVLCThread()
 
 void KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
 {
-    qDebug()<<"Load file:"<<filePath;
     //Stop the thread first.
     stop();
     //Load the file to thread.
@@ -110,13 +109,10 @@ void KNMusicBackendVLCThread::stop()
 {
     if(m_playingState!=StoppedState)
     {
-        qDebug()<<"Begin Stop.";
         //Stop the player.
         libvlc_media_player_stop(m_player);
-        qDebug()<<"Begin set state";
         //Reset the state.
         setState(StoppedState);
-        qDebug()<<"Begin Emit Stopped.";
         emit stopped();
     }
 }

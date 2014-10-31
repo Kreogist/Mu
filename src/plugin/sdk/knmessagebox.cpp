@@ -119,7 +119,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
 
     m_fadeOut=new QPropertyAnimation(this, "windowOpacity", this);
     m_fadeOut->setEasingCurve(QEasingCurve::OutCubic);
-    m_fadeOut->setDuration(50);
+    m_fadeOut->setDuration(120);
     m_fadeOut->setStartValue(1.0);
     m_fadeOut->setEndValue(0.0);
     m_hideAnime->addAnimation(m_fadeOut);
