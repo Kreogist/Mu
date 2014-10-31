@@ -15,33 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICBACKENDBASS_H
-#define KNMUSICBACKENDBASS_H
-
-/*
- * Oct 2nd, 2014:
- *    This is only a optional module for Windows and Mac OS X. Because bass is
- * not a open source project, it's only free for non-commercial use. But it
- * works really nice on Windows. It even support ASIO on Windows.
- *    So, we are going to use bass lib on Windows and Mac OS X as an optional
- * choice. But don't expect it can have many optional choice. Though it may be
- * 'optional' enough.
- *    This module can also be used on Linux, but you should configure the binary
- * package yourself.
- */
-
-#include "bass.h"
+#ifndef KNMUSICBACKENDVLC_H
+#define KNMUSICBACKENDVLC_H
 
 #include "knmusicstandardbackend.h"
 
-class KNMusicBackendBassThread;
-class KNMusicBackendBass : public KNMusicStandardBackend
+class KNMusicVLCGlobal;
+class KNMusicBackendVLCThread;
+class KNMusicBackendVLC : public KNMusicStandardBackend
 {
     Q_OBJECT
 public:
-    explicit KNMusicBackendBass(QObject *parent = 0);
-    ~KNMusicBackendBass();
+    explicit KNMusicBackendVLC(QObject *parent = 0);
+     ~KNMusicBackendVLC();
     bool available();
+
     int volume() const;
 
     void loadUrl(const QString &url);
@@ -57,10 +45,8 @@ protected:
     void changeVolume(const int &volumeSize);
 
 private:
-    bool initialBass();
-    void initialPlugin(const QString &pluginDirPath);
-    KNMusicBackendBassThread *m_main, *m_preview;
-    bool m_available=false;
+    KNMusicVLCGlobal *m_vlcGlobal;
+    KNMusicBackendVLCThread *m_main, *m_preview;
 };
 
-#endif // KNMUSICBACKENDBASS_H
+#endif // KNMUSICBACKENDVLC_H

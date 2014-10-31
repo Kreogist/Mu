@@ -32,9 +32,14 @@
 #include "knmusictab.h"
 
 //Plugins
-#include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
+#ifdef ENABLE_LIBBASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
+#endif
+#ifdef ENABLE_LIBVLC
+#include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
+#endif
+#include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
 #include "plugin/knmusiccueparser/knmusiccueparser.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
@@ -65,7 +70,12 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     initialMultiMenu(new KNMusicMultiMenu);
 
     //Load plugins.
+#ifdef ENABLE_LIBBASS
     loadBackend(new KNMusicBackendBass);
+#endif
+#ifdef ENABLE_LIBVLC
+    loadBackend(new KNMusicBackendVLC);
+#endif
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadNowPlaying(new KNMusicNowPlaying);
@@ -254,7 +264,9 @@ void KNMusicPlugin::initialParser()
 
     //Install all plugins here.
     parser->installListParser(new KNMusicCueParser);
+#ifdef ENABLE_LIBBASS
     parser->installAnalysiser(new KNMusicBassAnalysiser);
+#endif
 
     //Add this to plugin list.
     m_pluginList.append(parser);

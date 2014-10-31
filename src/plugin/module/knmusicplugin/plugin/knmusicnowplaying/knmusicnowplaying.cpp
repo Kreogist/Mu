@@ -156,6 +156,7 @@ void KNMusicNowPlaying::onActionPlayingFinished()
         m_headerPlayer->play();
         return;
     }
+    qDebug()<<"Do Play Next!";
     //Or else, we need to play the next.
     playNext();
 }

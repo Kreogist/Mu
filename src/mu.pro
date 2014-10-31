@@ -65,13 +65,31 @@ linux{
     }
 }
 
+libVLC{
+    contains(CONFIG, libbass){
+        error("You can't enable libvlc and libbass as the same time.")
+    }
+    DEFINES += ENABLE_LIBVLC
+    SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlc.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicvlcglobal.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlcthread.cpp
+    HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlc.h \
+               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicvlcglobal.h \
+               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlcthread.h
+}
+
 libbass{
+    contains(CONFIG, libvlc){
+        error("You can't enable libvlc and libbass as the same time.")
+    }
     DEFINES += ENABLE_LIBBASS
     SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.cpp
     HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.h \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
+               plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
 }
 
@@ -183,7 +201,6 @@ SOURCES += \
     plugin/module/knmusicplugin/sdk/knmusicratingeditor.cpp \
     plugin/module/knmusicplugin/sdk/knmusicratingdelegate.cpp \
     plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp \
     plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistassistant.cpp \
@@ -308,7 +325,6 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicratingdelegate.h \
     plugin/module/knmusicplugin/sdk/knmusicsolomenubase.h \
     plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.h \
-    plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
     plugin/module/knmusicplugin/sdk/knmusicmultimenubase.h \
     plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.h \
     plugin/module/knmusicplugin/plugin/knmusiccueparser/knmusiccueparser.h \

@@ -15,23 +15,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICBACKENDBASSTHREAD_H
-#define KNMUSICBACKENDBASSTHREAD_H
+#ifndef KNMUSICBACKENDVLCTHREAD_H
+#define KNMUSICBACKENDVLCTHREAD_H
 
-#include "bass.h"
-
-#include "knmusicglobal.h"
+#include <QList>
 
 #include "knmusicbackendthread.h"
 
+#include "vlc/libvlc.h"
+#include "vlc/libvlc_media.h"
+#include "vlc/libvlc_media_player.h"
+#include "vlc/libvlc_events.h"
+
+#include "knmusicglobal.h"
+
+#include "knmusicvlcglobal.h"
+
 using namespace KNMusic;
 
-class KNMusicBackendBassThread : public KNMusicBackendThread
+class KNMusicBackendVLCThread : public KNMusicBackendThread
 {
     Q_OBJECT
 public:
-    explicit KNMusicBackendBassThread(QObject *parent = 0);
-    ~KNMusicBackendBassThread();
+    explicit KNMusicBackendVLCThread(QObject *parent = 0);
+    ~KNMusicBackendVLCThread();
     void loadFromFile(const QString &filePath);
     void clear();
     void resetState();
@@ -44,38 +51,34 @@ public:
     void playSection(const qint64 &sectionStart=-1,
                      const qint64 &sectionDuration=-1);
 
-    bool stoppedState() const;
-    void setStoppedState(bool stoppedState);
-    void requireDoStopped();
+    void positionCheck();
 
 signals:
-    void requireStopped();
 
 public slots:
     void setVolume(const float &volumeSize);
     void setPosition(const qint64 &position);
 
-private slots:
-    void onActionPositionCheck();
-
 private:
-    static void CALLBACK onActionEnd(HSYNC handle,
-                                     DWORD channel,
-                                     DWORD data,
-                                     void *user);
-    void establishSyncHandle();
-    void releaseSyncHandle();
+    static void libvlcCallBack(const libvlc_event_t *event,
+                               void *data);
+    void clearMedia();
     void setState(const int &state);
-    int m_playingState=StoppedState;
+    void establishEventAttach();
+    void releaseEventAttach();
     QString m_filePath;
-    bool m_stoppedState=true;
+    KNMusicVLCGlobal *m_vlcGlobal;
+    libvlc_event_manager_t *m_vlcEventManager;
+    libvlc_media_player_t *m_player=nullptr;
+    libvlc_media_t *m_media=nullptr;
+    int m_playingState=StoppedState;
+
     qint64 m_startPosition;   //Unit: millisecond
     qint64 m_endPosition;     //Unit: millisecond
     qint64 m_duration;        //Unit: millisecond
     qint64 m_totalDuration;   //Unit: millisecond
-    QTimer *m_positionUpdater=nullptr;
-    QList<HSYNC> m_syncHandles;
-    DWORD m_channel;
+
+    QList<libvlc_event_e> m_vlcEventList;
 };
 
-#endif // KNMUSICBACKENDBASSTHREAD_H
+#endif // KNMUSICBACKENDVLCTHREAD_H
