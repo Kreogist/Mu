@@ -11,6 +11,7 @@
 
 #include "knanimationmenu.h"
 
+class KNMusicDetailDialogBase;
 class KNMusicProxyModel;
 class KNMusicSoloMenuBase : public KNAnimationMenu
 {
@@ -19,6 +20,7 @@ public:
     KNMusicSoloMenuBase(QWidget *parent = 0):KNAnimationMenu(parent){}
     virtual void setProxyModel(KNMusicProxyModel *model)=0;
     virtual void setCurrentIndex(const QModelIndex &itemIndex)=0;
+    virtual void setDetailDialog(KNMusicDetailDialogBase *dialog)=0;
 
 signals:
     void requirePlayCurrent();

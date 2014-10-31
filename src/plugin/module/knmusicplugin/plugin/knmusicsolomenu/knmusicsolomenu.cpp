@@ -17,6 +17,7 @@
  */
 #include "knglobal.h"
 
+#include "knmusicdetaildialogbase.h"
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
 
@@ -74,6 +75,11 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
     }
 }
 
+void KNMusicSoloMenu::setDetailDialog(KNMusicDetailDialogBase *dialog)
+{
+    m_detailDialog=dialog;
+}
+
 void KNMusicSoloMenu::retranslate()
 {
     //Update the caption first.
@@ -124,6 +130,11 @@ void KNMusicSoloMenu::onActionCopyItemText()
     KNGlobal::setClipboardText(m_itemText);
 }
 
+void KNMusicSoloMenu::onActionShowDetail()
+{
+    m_detailDialog->showDialog(m_filePath);
+}
+
 void KNMusicSoloMenu::createActions()
 {
     for(int i=0; i<SoloMenuActionCount; i++)
@@ -143,8 +154,8 @@ void KNMusicSoloMenu::createActions()
     addSeparator();
 
     //Get the detail info of the file.
-//    connect(m_actions[GetInfo], SIGNAL(triggered()),
-//            this, SLOT(onActionGetInfo()));
+    connect(m_actions[GetInfo], SIGNAL(triggered()),
+            this, SLOT(onActionShowDetail()));
     addAction(m_actions[GetInfo]);
 
     //Show in graphics shell.

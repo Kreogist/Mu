@@ -24,6 +24,7 @@
 #include "knmusicbackend.h"
 #include "knmusicparser.h"
 #include "knmusicsolomenubase.h"
+#include "knmusicdetaildialogbase.h"
 #include "knmusicheaderplayerbase.h"
 #include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
@@ -31,6 +32,7 @@
 #include "knmusictab.h"
 
 //Plugins
+#include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
 #include "plugin/knmusiccueparser/knmusiccueparser.h"
@@ -54,6 +56,8 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 {
     //Initial infrastructure.
     initialInfrastructure();
+    //Load detail info first.
+    loadDetailInfo(new KNMusicDetailDialog);
     //Initial parser.
     initialParser();
     //Initial menus.
@@ -122,6 +126,16 @@ void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
         m_backend=plugin;
         //Add plugin to the list.
         m_pluginList.append(m_backend);
+    }
+}
+
+void KNMusicPlugin::loadDetailInfo(KNMusicDetailDialogBase *plugin)
+{
+    if(m_detailDialog==nullptr)
+    {
+        m_detailDialog=plugin;
+        //Add plugin to the list.
+        m_pluginList.append(m_detailDialog);
     }
 }
 
@@ -254,6 +268,8 @@ void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
 {
     //Add this to plugin list.
     m_pluginList.append(soloMenu);
+    //Set detail dialog.
+    soloMenu->setDetailDialog(m_detailDialog);
     //Set the solo menu.
     KNMusicGlobal::setSoloMenu(soloMenu);
 }
