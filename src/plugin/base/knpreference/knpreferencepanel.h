@@ -21,6 +21,7 @@
 #include <QWidget>
 
 class QBoxLayout;
+class KNAnimeCheckedButton;
 class KNPreferenceContents;
 class KNPreferenceCategory;
 class KNPreferenceWidgetsPanel;
@@ -35,6 +36,7 @@ signals:
     void requireHidePreference();
 
 public slots:
+    void addLanguageButton(KNAnimeCheckedButton *languageButton);
     void addCategory(const QString &title,
                      const QPixmap &icon,
                      const QPixmap &headerIcon,

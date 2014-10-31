@@ -85,6 +85,12 @@ void KNPreferenceCategory::addCategory(const QString &title,
     m_headerIcons.append(headerIcon);
 }
 
+void KNPreferenceCategory::addLanguageButton(KNAnimeCheckedButton *languageButton)
+{
+    //Add the language button to the beginning of the list.
+    m_categoryList->addButtonToList(languageButton, 0);
+}
+
 void KNPreferenceCategory::setCurrentIndex(const int &index)
 {
     //Check is the index available.

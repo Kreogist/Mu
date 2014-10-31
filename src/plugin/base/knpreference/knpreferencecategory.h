@@ -26,6 +26,7 @@ class QLabel;
 class QTimeLine;
 class KNLinearSenseWidget;
 class KNSideShadowWidget;
+class KNAnimeCheckedButton;
 class KNPreferenceTitle;
 class KNPreferenceCategoryList;
 class KNPreferenceCategory : public QWidget
@@ -44,6 +45,7 @@ public slots:
     void addCategory(const QString &title,
                      const QPixmap &icon,
                      const QPixmap &headerIcon);
+    void addLanguageButton(KNAnimeCheckedButton *languageButton);
     void setCurrentIndex(const int &index);
     void setCategoryText(const int &index, const QString &caption);
     void retranslate();

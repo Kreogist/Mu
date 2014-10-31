@@ -62,6 +62,12 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
     retranslate();
 }
 
+void KNPreferencePanel::addLanguageButton(KNAnimeCheckedButton *languageButton)
+{
+    //Simply add the button to the category list.
+    m_categoryList->addLanguageButton(languageButton);
+}
+
 void KNPreferencePanel::addCategory(const QString &title,
                                     const QPixmap &icon,
                                     const QPixmap &headerIcon,

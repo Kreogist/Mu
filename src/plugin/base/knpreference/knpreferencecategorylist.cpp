@@ -77,15 +77,8 @@ void KNPreferenceCategoryList::addCategory(const QString &text,
     KNPreferenceCategoryItem *currentItem=new KNPreferenceCategoryItem(this);
     currentItem->setText(text);
     currentItem->setIcon(pixmap);
-    //Connect the signal.
-    connect(currentItem, SIGNAL(clicked()),
-            m_buttonMapper, SLOT(map()));
-    int itemIndex=m_mainLayout->count()-1;
-    m_buttonMapper->setMapping(currentItem, itemIndex);
     //Add the item to the list.
-    m_itemList.append(currentItem);
-    //Add to layout.
-    m_mainLayout->insertWidget(itemIndex, currentItem);
+    addButtonToList(currentItem);
 }
 
 void KNPreferenceCategoryList::setCategoryText(const int &index,
@@ -107,4 +100,17 @@ void KNPreferenceCategoryList::setCurrentIndex(const int &index)
     //Set it checked and emit the signal
     m_itemList.at(m_currentIndex)->setChecked(true);
     emit currentIndexChanged(m_currentIndex);
+}
+
+void KNPreferenceCategoryList::addButtonToList(KNAnimeCheckedButton *currentItem,
+                                               const int &position)
+{
+    //Connect the signal.
+    connect(currentItem, SIGNAL(clicked()), m_buttonMapper, SLOT(map()));
+    int itemIndex=m_mainLayout->count()-1;
+    m_buttonMapper->setMapping(currentItem, itemIndex);
+    //Add the item to the list.
+    m_itemList.append(currentItem);
+    //Add to layout.
+    m_mainLayout->insertWidget(position==-1?itemIndex:position, currentItem);
 }

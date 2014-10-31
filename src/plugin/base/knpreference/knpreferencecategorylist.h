@@ -40,6 +40,8 @@ signals:
 
 public slots:
     void addCategory(const QString &text, const QPixmap &pixmap);
+    void addButtonToList(KNAnimeCheckedButton *currentItem,
+                         const int &position=-1);
     void setCategoryText(const int &index, const QString &caption);
     void setCurrentIndex(const int &index);
 
@@ -47,7 +49,7 @@ private slots:
 
 private:
     QBoxLayout *m_mainLayout;
-    QList<KNPreferenceCategoryItem *> m_itemList;
+    QList<KNAnimeCheckedButton *> m_itemList;
     QSignalMapper *m_buttonMapper;
     int m_currentIndex=-1;
 };
