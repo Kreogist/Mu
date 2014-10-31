@@ -208,6 +208,7 @@ void KNPluginManager::onActionArgumentReceive(const QStringList &message)
 
 void KNPluginManager::onActionMainWindowDestory()
 {
+    qDebug()<<"Here?!";
     //Backup geometry.
     backupWindowGeometry();
 }

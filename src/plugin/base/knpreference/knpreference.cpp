@@ -51,6 +51,9 @@ void KNPreference::setCurrentIndex(const int &index)
 
 void KNPreference::onActionHidePreference()
 {
+    //Save preference first.
+    m_preferencePanel->requireSavePreference();
+    //Ask to apply the preference.
     m_preferenceGlobal->requireApplyPreference();
     //Ask to hide preference.
     emit requireHidePreference();

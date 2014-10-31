@@ -124,6 +124,7 @@ class QLabel;
 class QThread;
 class KNPreferenceItemBase;
 class KNPreferenceWidgetsPanel;
+class KNGlobal;
 class KNMusicParser;
 class KNMusicNowPlayingBase;
 class KNMusicSoloMenuBase;
@@ -162,6 +163,9 @@ public:
                   const bool &isAdvanced=false);
     void addItem(KNPreferenceItemBase *item,
                  const bool &isAdvanced=false);
+    void setConfigureData(const QString &key, const QVariant &value);
+    QVariant configureData(const QString &key,
+                           const QVariant &defaultValue=QVariant());
 
     static QList<QList<QStandardItem *> > dragMusicRow();
     static void setDragMusicRow(const QList<QList<QStandardItem *> > &dragMusicRow);
@@ -194,6 +198,7 @@ private:
     QPixmap m_noAlbumArt;
     QThread *m_searcherThread, *m_analysisThread;
     KNPreferenceWidgetsPanel *m_preferencePanel;
+    KNGlobal *m_global;
 };
 
 #endif // KNMUSICGLOBAL_H

@@ -305,6 +305,8 @@ void KNMusicGlobal::setSoloMenu(KNMusicSoloMenuBase *soloMenu)
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     QObject(parent)
 {
+    //Initial global instance.
+    m_global=KNGlobal::instance();
     //Register music metatypes.
     regMetaType();
     //Initial music types.
@@ -331,6 +333,18 @@ void KNMusicGlobal::addTitle(QLabel *title, const bool &isAdvanced)
 void KNMusicGlobal::addItem(KNPreferenceItemBase *item, const bool &isAdvanced)
 {
     m_preferencePanel->addItem(item, isAdvanced);
+}
+
+void KNMusicGlobal::setConfigureData(const QString &key, const QVariant &value)
+{
+    m_global->setCustomData("Music", key, value);
+}
+
+QVariant KNMusicGlobal::configureData(const QString &key,
+                                      const QVariant &defaultValue)
+{
+    QVariant preferData=m_global->customData("Music", key);
+    return preferData.isNull()?defaultValue:preferData;
 }
 
 QPixmap KNMusicGlobal::noAlbumArt() const

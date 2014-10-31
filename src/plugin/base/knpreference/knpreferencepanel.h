@@ -31,6 +31,7 @@ public:
     explicit KNPreferencePanel(QWidget *parent = 0);
 
 signals:
+    void requireSavePreference();
     void requireHidePreference();
 
 public slots:

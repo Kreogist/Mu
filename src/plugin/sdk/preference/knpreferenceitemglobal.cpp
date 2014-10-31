@@ -41,7 +41,7 @@ KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const int &index,
                                                            const QVariant &value,
                                                            const QVariant &defaultValue)
 {
-    KNPreferenceItemBase *item;
+    KNPreferenceItemBase *item=nullptr;
     switch(index)
     {
     case Switcher:
@@ -56,6 +56,10 @@ KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const int &index,
         //Generate a path editor.
         item=new KNPreferenceItemPathBrowser;
         break;
+    }
+    if(item==nullptr)
+    {
+        return item;
     }
     //Set properties.
     item->setValueName(valueName);

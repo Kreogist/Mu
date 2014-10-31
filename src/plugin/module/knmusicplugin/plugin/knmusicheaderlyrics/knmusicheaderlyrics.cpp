@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QTimeLine>
+#include <QApplication>
 #include <QPaintEvent>
 #include <QPainter>
 
@@ -255,7 +256,8 @@ void KNMusicHeaderLyrics::startMovingAnime(const int &durationOffset,
     //Stop the time line.
     m_moveToCurrent->stop();
     //Reset the duration and the start frame.
-    m_moveToCurrent->setDuration(qMin(qAbs(durationOffset), m_animationDuration));
+    m_moveToCurrent->setDuration(qMin(qMax(durationOffset, 1),
+                                      m_animationDuration));
     m_moveToCurrent->setStartFrame(yOffset);
     //Before we start, set the widget to the start frame state.
     onActionLyricsMoved(yOffset);
