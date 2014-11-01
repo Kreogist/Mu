@@ -22,7 +22,7 @@
 #include <QStringList>
 #include <QLinkedList>
 
-class QMainWindow;
+class KNExpandMainWindow;
 class KNGlobal;
 class KNConfigure;
 class KNMainWindowPlugin;
@@ -37,8 +37,8 @@ class KNPluginManager : public QObject
 public:
     static KNPluginManager *instance();
     ~KNPluginManager();
-    QMainWindow *mainWindow() const;
-    void setMainWindow(QMainWindow *mainWindow);
+    KNExpandMainWindow *mainWindow() const;
+    void setMainWindow(KNExpandMainWindow *mainWindow);
     void loadPlugins();
     void processArguments();
     void start();
@@ -63,7 +63,7 @@ private:
     explicit KNPluginManager(QObject *parent = 0);
     void backupWindowGeometry();
     void recoverWindowGeometry();
-    QMainWindow *m_mainWindow=nullptr;
+    KNExpandMainWindow *m_mainWindow=nullptr;
     KNMainWindowPlugin *m_mainWindowPlugin=nullptr;
     KNPreferencePlugin *m_preferencePlugin=nullptr;
     QLinkedList<QObject *> m_pluginList;

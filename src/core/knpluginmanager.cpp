@@ -15,13 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QMainWindow>
 #include <QApplication>
 #include <QStyleFactory>
 #include <QDesktopWidget>
 
 #include "knglobal.h"
 #include "knconfigure.h"
+
+#include "knexpandmainwindow.h"
 
 //Ports
 #include "knmainwindowplugin.h"
@@ -143,12 +144,12 @@ void KNPluginManager::recoverWindowGeometry()
     }
 }
 
-QMainWindow *KNPluginManager::mainWindow() const
+KNExpandMainWindow *KNPluginManager::mainWindow() const
 {
     return m_mainWindow;
 }
 
-void KNPluginManager::setMainWindow(QMainWindow *mainWindow)
+void KNPluginManager::setMainWindow(KNExpandMainWindow *mainWindow)
 {
     //Ensure the main window is null.
     if(m_mainWindow==nullptr)
@@ -162,7 +163,7 @@ void KNPluginManager::setMainWindow(QMainWindow *mainWindow)
         pal.setColor(QPalette::WindowText, QColor(255,255,255));
         m_mainWindow->setPalette(pal);
         //Connect destory signal.
-        connect(m_mainWindow, &QMainWindow::destroyed,
+        connect(m_mainWindow, &KNExpandMainWindow::windowAboutToClose,
                 this, &KNPluginManager::onActionMainWindowDestory);
         //Recover the geometry.
         recoverWindowGeometry();
@@ -208,7 +209,6 @@ void KNPluginManager::onActionArgumentReceive(const QStringList &message)
 
 void KNPluginManager::onActionMainWindowDestory()
 {
-    qDebug()<<"Here?!";
     //Backup geometry.
     backupWindowGeometry();
 }

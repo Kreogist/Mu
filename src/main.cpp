@@ -19,6 +19,7 @@
 
 #include "core/knsingleapplication.h"
 #include "core/knpluginmanager.h"
+#include "core/knexpandmainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
         return EXIT_SUCCESS;
     }
     //Create the main window.
-    QMainWindow mainWindow;
+    KNExpandMainWindow mainWindow;
     //Initial the plugin manager.
     KNPluginManager *pluginManager=KNPluginManager::instance();
     //Connect message process slot.
