@@ -25,5 +25,5 @@ KNMusicDetailPanel::KNMusicDetailPanel(QWidget *parent) :
 
 QSize KNMusicDetailPanel::sizeHint() const
 {
-    return QSize(200, 100);
+    return QSize(460, 400);
 }

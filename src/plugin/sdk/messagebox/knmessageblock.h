@@ -19,10 +19,14 @@ public:
     int preferWidth();
 
 signals:
+    void requireMoveTo(const QPoint &destination);
 
 public slots:
 
 protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void resizeEvent(QResizeEvent *event);
 
 private:
@@ -30,6 +34,8 @@ private:
     void updateBackground();
     QLinearGradient m_backgroundGradient;
     QPalette m_palette;
+    bool m_pressed=false;
+    QPoint m_referencePoint;
 };
 
 

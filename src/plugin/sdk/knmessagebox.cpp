@@ -44,6 +44,8 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
 
     //Initial title block.
     m_title=new KNMessageBlock(this);
+    connect(m_title, &KNMessageBlock::requireMoveTo,
+            this, &KNMessageBox::onActionMove);
     m_title->setFont(m_boxConfigureInstance->titleFont());
     m_title->setTopColor(QColor(240,240,240));
     m_title->setButtomColor(QColor(255,255,255));
@@ -218,6 +220,11 @@ void KNMessageBox::onActionClose()
                                     height()));
     //Start anime.
     m_hideAnime->start();
+}
+
+void KNMessageBox::onActionMove(const QPoint &point)
+{
+    move(point);
 }
 
 void KNMessageBox::initialShortCut()

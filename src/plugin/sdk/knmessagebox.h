@@ -41,6 +41,7 @@ private slots:
     void onActionExpandFinished();
     void onActionOkay();
     void onActionClose();
+    void onActionMove(const QPoint &point);
 
 private:
     void initialShortCut();

@@ -4,6 +4,8 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QMouseEvent>
+
 #include "knmessageblock.h"
 
 KNMessageBlock::KNMessageBlock(QWidget *parent) :
@@ -39,6 +41,36 @@ void KNMessageBlock::setButtomColor(const QColor &bottomColor)
 int KNMessageBlock::preferWidth()
 {
     return qMax(332, fontMetrics().width(text())+150);
+}
+
+void KNMessageBlock::mousePressEvent(QMouseEvent *event)
+{
+    //Do original pressed event.
+    QLabel::mousePressEvent(event);
+    //Set pressed flag.
+    m_pressed=true;
+    //Save the reference point.
+    m_referencePoint=event->pos()-pos();
+}
+
+void KNMessageBlock::mouseMoveEvent(QMouseEvent *event)
+{
+    //Do original move event.
+    QLabel::mouseMoveEvent(event);
+    //Check pressed flag.
+    if(m_pressed)
+    {
+        //Ask to move the window.
+        emit requireMoveTo(event->globalPos()-m_referencePoint);
+    }
+}
+
+void KNMessageBlock::mouseReleaseEvent(QMouseEvent *event)
+{
+    //Do original release event.
+    QLabel::mouseReleaseEvent(event);
+    //Disable the pressed flag.
+    m_pressed=false;
 }
 
 void KNMessageBlock::resizeEvent(QResizeEvent *event)
