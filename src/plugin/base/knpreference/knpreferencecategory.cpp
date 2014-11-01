@@ -26,6 +26,8 @@
 #include "knpreferencetitle.h"
 #include "knpreferencecategorylist.h"
 
+#include "knlocalemanager.h"
+
 #include "knpreferencecategory.h"
 
 KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
@@ -66,6 +68,9 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     //Initial the shadow.
     m_rightShadow=new KNSideShadowWidget(RightShadow, this);
 
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNPreferenceCategory::retranslate);
     //Do translation.
     retranslate();
 }
@@ -85,10 +90,13 @@ void KNPreferenceCategory::addCategory(const QString &title,
     m_headerIcons.append(headerIcon);
 }
 
-void KNPreferenceCategory::addLanguageButton(KNAnimeCheckedButton *languageButton)
+void KNPreferenceCategory::addLanguageButton(KNAnimeCheckedButton *languageButton,
+                                             const QPixmap &headerIcon)
 {
     //Add the language button to the beginning of the list.
     m_categoryList->addButtonToList(languageButton, 0);
+    //Save the header icon.
+    m_headerIcons.append(headerIcon);
 }
 
 void KNPreferenceCategory::setCurrentIndex(const int &index)

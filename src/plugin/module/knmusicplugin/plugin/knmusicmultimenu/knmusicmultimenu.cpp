@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knlocalemanager.h"
+
 #include "knmusicmultimenu.h"
 
 KNMusicMultiMenu::KNMusicMultiMenu(QWidget *parent) :
@@ -36,6 +38,10 @@ KNMusicMultiMenu::KNMusicMultiMenu(QWidget *parent) :
     setPalette(pal);
     //Generate actions.
     createActions();
+
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicMultiMenu::retranslate);
     //Get the latest translation.
     retranslate();
 }

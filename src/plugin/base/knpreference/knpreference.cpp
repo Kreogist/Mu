@@ -29,6 +29,8 @@ KNPreference::KNPreference(QObject *parent) :
     m_preferencePanel=new KNPreferencePanel;
     connect(m_preferencePanel, &KNPreferencePanel::requireHidePreference,
             this, &KNPreference::onActionHidePreference);
+    //Initial the language panel.
+
 }
 
 QWidget *KNPreference::preferencePanel()

@@ -24,6 +24,8 @@
 
 #include "knmusiclyricsmanager.h"
 
+#include "knlocalemanager.h"
+
 #include <QDebug>
 
 KNMusicLyricsManager *KNMusicLyricsManager::m_instance=nullptr;
@@ -168,6 +170,9 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     //Initial the LRC file parser.
     m_lrcParser=new KNMusicLRCParser(this);
 
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicLyricsManager::retranslate);
     //Retranslate.
     retranslate();
 }

@@ -20,6 +20,10 @@
 #include "knpreferencewidgetspanel.h"
 #include "knpreferencecategory.h"
 #include "knpreferencecontents.h"
+#include "knpreferencelanguageitem.h"
+#include "knpreferencelanguagepanel.h"
+
+#include "knlocalemanager.h"
 
 #include "knpreferencepanel.h"
 
@@ -30,6 +34,9 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 {
     //Set properties.
     setAutoFillBackground(true);
+
+    //Initial locale manager.
+    m_localeManager=KNLocaleManager::instance();
 
     //Initial layout.
     m_layout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -48,6 +55,9 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
     m_contents=new KNPreferenceContents(this);
     m_layout->addWidget(m_contents, 1);
 
+    //Initial the language panel.
+    initialLanguagePanel();
+
     //Initial the general panel.
     m_generalPanel=new KNPreferenceWidgetsPanel(this);
     m_generalPanel->setPanelName("General");
@@ -58,14 +68,21 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
                 QPixmap(":/plugin/configure/general/headicon.png"),
                 m_generalPanel);
 
+    //Connect retranslate signal.
+    connect(m_localeManager, &KNLocaleManager::requireRetranslate,
+            this, &KNPreferencePanel::retranslate);
     //Retranslate.
     retranslate();
 }
 
-void KNPreferencePanel::addLanguageButton(KNAnimeCheckedButton *languageButton)
+void KNPreferencePanel::addLanguageButton(KNAnimeCheckedButton *languageButton,
+                                          const QPixmap &headerIcon,
+                                          QWidget *panel)
 {
     //Simply add the button to the category list.
-    m_categoryList->addLanguageButton(languageButton);
+    m_categoryList->addLanguageButton(languageButton, headerIcon);
+    //Add panel to content.
+    m_contents->addPanelWidget(panel);
 }
 
 void KNPreferencePanel::addCategory(const QString &title,
@@ -98,10 +115,26 @@ void KNPreferencePanel::setCurrentIndex(const int &index)
 
 void KNPreferencePanel::retranslate()
 {
-    setCategoryText(0, tr("General"));
+    //Update the general text.
+    setCategoryText(1, tr("General"));
+    //Update the language item.
+    m_languageItem->setIcon(m_localeManager->currentLanguageIcon());
+    m_languageItem->setText(m_localeManager->currentLanguageName());
 }
 
 void KNPreferencePanel::onActionCategoryIndexChange(const int &index)
 {
     m_contents->setCurrentIndex(index);
+}
+
+void KNPreferencePanel::initialLanguagePanel()
+{
+    //Initial the language item.
+    m_languageItem=new KNPreferenceLanguageItem(this);
+    //Initial the language panel.
+    m_languagePanel=new KNPreferenceLanguagePanel(this);
+    //Add language button.
+    addLanguageButton(m_languageItem,
+                      QPixmap(":/plugin/configure/locale/headicon.png"),
+                      m_languagePanel);
 }

@@ -25,6 +25,8 @@
 #include "knmusiclyricsmanager.h"
 #include "preference/knpreferenceitemglobal.h"
 
+#include "knlocalemanager.h"
+
 #include "knmusicheaderlyrics.h"
 
 #include <QDebug>
@@ -51,6 +53,10 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     m_moveToCurrent->setEndFrame(0);
     connect(m_moveToCurrent, &QTimeLine::frameChanged,
             this, &KNMusicHeaderLyrics::onActionLyricsMoved);
+
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicHeaderLyrics::retranslate);
 
     //Retranslate.
     retranslate();

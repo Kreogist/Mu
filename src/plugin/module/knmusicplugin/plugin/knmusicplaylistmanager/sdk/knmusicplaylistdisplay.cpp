@@ -24,6 +24,8 @@
 #include "knmusicplaylistlistitem.h"
 #include "knmusicplaylisttreeview.h"
 
+#include "knlocalemanager.h"
+
 #include "knmusicplaylistdisplay.h"
 
 #include <QDebug>
@@ -77,6 +79,9 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
     //Initial playlist connection handler.
     m_modelSignalHandler=new KNConnectionHandler(this);
 
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicPlaylistDisplay::retranslate);
     //Do retranslate.
     retranslate();
 }

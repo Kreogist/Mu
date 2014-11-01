@@ -21,6 +21,8 @@
 #include "knanimationmenu.h"
 #include "knopacityanimebutton.h"
 
+#include "knlocalemanager.h"
+
 #include "knmusicplaylistlistvieweditor.h"
 
 KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
@@ -62,6 +64,10 @@ KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
             this, &KNMusicPlaylistListViewEditor::showConfigureMenu);
     mainLayout->addWidget(m_configure, 0, Qt::AlignCenter);
 
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicPlaylistListViewEditor::retranslate);
+    //Do Retranslate.
     retranslate();
 }
 

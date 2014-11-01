@@ -21,6 +21,8 @@
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
 
+#include "knlocalemanager.h"
+
 #include "knmusicsolomenu.h"
 
 using namespace KNMusic;
@@ -44,6 +46,10 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
     setPalette(pal);
     //Create Actions.
     createActions();
+
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicSoloMenu::retranslate);
     //Get the translation.
     retranslate();
 }

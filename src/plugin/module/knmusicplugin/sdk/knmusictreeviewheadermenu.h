@@ -30,7 +30,6 @@ signals:
 
 public slots:
     void retranslate();
-    void retranslateAndSet();
     void setMouseDownLogicalIndex(const int &index);
 
 protected:
@@ -45,8 +44,6 @@ private:
     void createVisibleMenu();
     KNMusicGlobal *m_musicGlobal=KNMusicGlobal::instance();
     QAction *m_tweakAllWidth, *m_tweakWidth, *m_itemVisible[MusicDataCount];
-    QString m_tweakAllWidthText,
-            m_tweakWidthText;
     QSignalMapper *m_visibleMapper;
     int m_mouseDownLogicalIndex=-1;
 };

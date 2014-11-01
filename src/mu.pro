@@ -213,7 +213,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailpanel.cpp \
     core/knexpandmainwindow.cpp \
     plugin/sdk/knemptystatewidget.cpp \
-    public/knlocalemanager.cpp
+    public/knlocalemanager.cpp \
+    plugin/base/knpreference/knpreferencelanguageitem.cpp \
+    plugin/base/knpreference/knpreferencelanguagepanel.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -342,7 +344,9 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailpanel.h \
     core/knexpandmainwindow.h \
     plugin/sdk/knemptystatewidget.h \
-    public/knlocalemanager.h
+    public/knlocalemanager.h \
+    plugin/base/knpreference/knpreferencelanguageitem.h \
+    plugin/base/knpreference/knpreferencelanguagepanel.h
 
 RESOURCES += \
     resource/res.qrc

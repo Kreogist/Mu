@@ -10,6 +10,8 @@
 
 #include "knpathlineedit.h"
 
+#include "knlocalemanager.h"
+
 #include "knpreferenceitempathbrowser.h"
 
 #include <QDebug>
@@ -69,6 +71,9 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     //Insert the control widget.
     insertControlWidget(pathEditorWidget);
 
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNPreferenceItemPathBrowser::retranslate);
     //Do translation.
     retranslate();
 }

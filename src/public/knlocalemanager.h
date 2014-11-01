@@ -7,23 +7,34 @@
 #ifndef KNLOCALEMANAGER_H
 #define KNLOCALEMANAGER_H
 
+#include <QPixmap>
+#include <QStringList>
 #include <QObject>
 
+class QTranslator;
 class KNLocaleManager : public QObject
 {
     Q_OBJECT
 public:
     static KNLocaleManager *instance();
+    QString currentLanguageName() const;
+    QPixmap currentLanguageIcon() const;
 
 signals:
-    void languageChange();
+    void requireRetranslate();
 
 public slots:
+    void setLanguage(const int &index);
 
 private:
     void loadLanguageFiles();
     static KNLocaleManager *m_instance;
     explicit KNLocaleManager(QObject *parent = 0);
+    int m_currentIndex=-1;
+    QStringList m_languageFiles, m_languageNames;
+    QList<QPixmap> m_languageIcons;
+    QPixmap m_noImageIcon;
+    QTranslator *m_translator;
 };
 
 #endif // KNLOCALEMANAGER_H

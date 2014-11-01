@@ -276,6 +276,9 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();
 
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNGlobal::retranslate);
     //Retranslate every thing.
     retranslate();
 }

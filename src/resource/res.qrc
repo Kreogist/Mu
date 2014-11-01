@@ -43,5 +43,7 @@
         <file>configure/music/headicon.png</file>
         <file>configure/music/icon.png</file>
         <file>configure/icon.png</file>
+        <file>configure/locale/noIcon.png</file>
+        <file>configure/locale/headicon.png</file>
     </qresource>
 </RCC>

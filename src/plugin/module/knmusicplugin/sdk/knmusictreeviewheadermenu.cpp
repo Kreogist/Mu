@@ -9,6 +9,8 @@
 #include <QPainter>
 #include <QSignalMapper>
 
+#include "knlocalemanager.h"
+
 #include "knmusictreeviewheadermenu.h"
 
 #include <QDebug>
@@ -16,8 +18,6 @@
 KNMusicTreeViewHeaderMenu::KNMusicTreeViewHeaderMenu(QWidget *parent) :
     KNAnimationMenu(parent)
 {
-    retranslate();
-
     //Set properties.
     setAutoFillBackground(true);
 
@@ -45,6 +45,12 @@ KNMusicTreeViewHeaderMenu::KNMusicTreeViewHeaderMenu(QWidget *parent) :
     pal.setColor(QPalette::Highlight, QColor(0x60, 0x60, 0x60));
     pal.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     setPalette(pal);
+
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicTreeViewHeaderMenu::retranslate);
+    //Do retranslate.
+    retranslate();
 }
 
 void KNMusicTreeViewHeaderMenu::syncVisibleState(const int &logicalIndex,
@@ -55,13 +61,14 @@ void KNMusicTreeViewHeaderMenu::syncVisibleState(const int &logicalIndex,
 
 void KNMusicTreeViewHeaderMenu::retranslate()
 {
-    m_tweakWidthText=tr("Auto Size Column");
-    m_tweakAllWidthText=tr("Auto Size All Columns");
-}
-
-void KNMusicTreeViewHeaderMenu::retranslateAndSet()
-{
-    retranslate();
+    //Set tweak width action text.
+    m_tweakWidth->setText(tr("Auto Size Column"));
+    m_tweakAllWidth->setText(tr("Auto Size All Columns"));
+    //Set visible action text.
+    for(int i=Name+1; i<MusicDataCount; i++)
+    {
+        m_itemVisible[i]->setText(m_musicGlobal->treeViewHeaderText(i));
+    }
 }
 
 void KNMusicTreeViewHeaderMenu::setMouseDownLogicalIndex(const int &index)
@@ -96,13 +103,11 @@ void KNMusicTreeViewHeaderMenu::onActionResizeCurrent()
 void KNMusicTreeViewHeaderMenu::createWidthTweakMenu()
 {
     //Add two tweak widget.
-    m_tweakWidth=new QAction(m_tweakWidthText,
-                             this);
+    m_tweakWidth=new QAction(this);
     connect(m_tweakWidth, SIGNAL(triggered()),
             this, SLOT(onActionResizeCurrent()));
     addAction(m_tweakWidth);
-    m_tweakAllWidth=new QAction(m_tweakAllWidthText,
-                                this);
+    m_tweakAllWidth=new QAction(this);
     connect(m_tweakAllWidth, SIGNAL(triggered()),
             this, SIGNAL(requireResizeAll()));
     addAction(m_tweakAllWidth);
@@ -114,8 +119,7 @@ void KNMusicTreeViewHeaderMenu::createVisibleMenu()
 {
     for(int i=Name+1; i<MusicDataCount; i++)
     {
-        m_itemVisible[i]=new QAction(m_musicGlobal->treeViewHeaderText(i),
-                                     this);
+        m_itemVisible[i]=new QAction(this);
         m_itemVisible[i]->setCheckable(true);
         connect(m_itemVisible[i], SIGNAL(triggered()),
                 m_visibleMapper, SLOT(map()));

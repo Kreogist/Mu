@@ -15,6 +15,7 @@
 #include "preference/knpreferenceitembase.h"
 #include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
+#include "knlocalemanager.h"
 
 #include "knmusicglobal.h"
 
@@ -316,6 +317,9 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     //Initial resources.
     initialHeaderText();
 
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicGlobal::retranslate);
     //Get the latest translation.
     retranslate();
 }
