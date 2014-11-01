@@ -79,7 +79,7 @@ void KNPreferenceWidgetsPanel::addItem(KNPreferenceItemBase *item,
 
 void KNPreferenceWidgetsPanel::savePanelData()
 {
-    for(QList<KNPreferenceItemBase *>::iterator i=m_itemList.begin();
+    for(auto i=m_itemList.begin();
         i!=m_itemList.end();
         ++i)
     {

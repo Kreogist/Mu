@@ -119,7 +119,7 @@ bool KNMusicPlaylistListAssistant::readPlaylist(const QString &filePath,
     //Set the data to the string list.
     QJsonArray playlistContent=playlistObject["Songs"].toArray();
     //Initial the model.
-    for(QJsonArray::iterator i=playlistContent.begin();
+    for(auto i=playlistContent.begin();
         i!=playlistContent.end();
         ++i)
     {

@@ -13,6 +13,7 @@
 
 class KNConfigure;
 class KNFontManager;
+class KNLocaleManager;
 class KNGlobal : public QObject
 {
     Q_OBJECT
@@ -33,6 +34,7 @@ public:
     QVariant customData(const QString &module, const QString &key);
 
 signals:
+    void languageChanged();
 
 public slots:
     void retranslate();
@@ -65,6 +67,7 @@ private:
     explicit KNGlobal(QObject *parent = 0);
     KNConfigure *m_configure;
     KNFontManager *m_fontManager;
+    KNLocaleManager *m_localeManager;
 };
 
 #endif // KNGLOBAL_H

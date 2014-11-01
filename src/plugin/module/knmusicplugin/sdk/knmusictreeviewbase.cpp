@@ -195,9 +195,9 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
     QList<QUrl> fileUrlList;
     QList<QList<QStandardItem *>> songContentRowList;
     KNMusicModel *musicModel=m_proxyModel->musicModel();
-    for(QModelIndexList::iterator i=indexes.begin();
-                i!=indexes.end();
-                ++i)
+    for(auto i=indexes.begin();
+             i!=indexes.end();
+             ++i)
     {
         //Get the original row of the specific row.
         int currentRow=m_proxyModel->mapToSource(*i).row();

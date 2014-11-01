@@ -4,21 +4,26 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
-#ifndef KNLANGUAGE_H
-#define KNLANGUAGE_H
+#ifndef KNLOCALEMANAGER_H
+#define KNLOCALEMANAGER_H
 
-#include "knlanguageplugin.h"
+#include <QObject>
 
-class KNLanguage : public KNLanguagePlugin
+class KNLocaleManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNLanguage(QObject *parent = 0);
+    static KNLocaleManager *instance();
 
 signals:
+    void languageChange();
 
 public slots:
 
+private:
+    void loadLanguageFiles();
+    static KNLocaleManager *m_instance;
+    explicit KNLocaleManager(QObject *parent = 0);
 };
 
-#endif // KNLANGUAGE_H
+#endif // KNLOCALEMANAGER_H

@@ -15,6 +15,7 @@
 
 #include "knconfigure.h"
 #include "knfontmanager.h"
+#include "knlocalemanager.h"
 
 #include "knglobal.h"
 
@@ -271,6 +272,9 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Set the configure file path.
     m_configure->setConfigurePath(QApplication::applicationDirPath() +
                                       "/Configure");
+
+    //Initial the locale.
+    m_localeManager=KNLocaleManager::instance();
 
     //Retranslate every thing.
     retranslate();
