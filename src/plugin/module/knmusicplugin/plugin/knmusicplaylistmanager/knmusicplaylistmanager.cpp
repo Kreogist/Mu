@@ -54,6 +54,11 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_playlistTab->setPlaylistList(m_playlistList);
 
     //Link the UI's request.
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireCreateFirstPlaylist,
+            [=](const QStringList &filePath)
+            {
+                onActionCreatePlaylist(0, filePath);
+            });
     connect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
             this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,
@@ -97,6 +102,8 @@ void KNMusicPlaylistManager::onActionLoadPlaylistList()
     //Disconnect require signal.
     disconnect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
                this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
+    //Break the load requirement.
+    m_playlistTab->cutLoadRequirement();
     //Initial a blank playlist files.
     QStringList rawFiles, playlistFiles;
     //Load the raw playlist files.
@@ -126,7 +133,7 @@ void KNMusicPlaylistManager::onActionAddPlaylist(const QString &caption)
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generateBlankPlaylist(caption);
-    m_playlistList->appendRow(playlistItem);
+    m_playlistList->appendPlaylist(playlistItem);
     //Set the new playlist to the current playlist.
     m_playlistTab->setCurrentPlaylist(playlistItem->index());
     //Let user rename it automatically.
@@ -169,7 +176,7 @@ void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
     KNMusicGlobal::nowPlaying()->checkRemovedModel(
                 m_playlistList->playlistModel(playlistItemRow));
     //Remove that row.
-    m_playlistList->removeRow(playlistItemRow);
+    m_playlistList->removePlaylist(playlistItemRow);
 }
 
 void KNMusicPlaylistManager::onActionImportPlaylist(QStringList playlistPaths)
@@ -185,7 +192,7 @@ void KNMusicPlaylistManager::onActionCreatePlaylist(const int &row,
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generateBlankPlaylist(tr("New Playlist"));
-    m_playlistList->insertRow(row, playlistItem);
+    m_playlistList->insertPlaylist(row, playlistItem);
     //Add the file to playlist.
     playlistItem->playlistModel()->addFiles(filePaths);
     //Set the new playlist to the current playlist.
@@ -198,7 +205,7 @@ void KNMusicPlaylistManager::onActionCreateRowPlaylist(const int &row)
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generateBlankPlaylist(tr("New Playlist"));
-    m_playlistList->insertRow(row, playlistItem);
+    m_playlistList->insertPlaylist(row, playlistItem);
     //Append the drag music rows.
     playlistItem->playlistModel()->appendDragMusicRows();
     //Set the new playlist to the current playlist.
@@ -244,7 +251,7 @@ bool KNMusicPlaylistManager::importPlaylistFromFile(const QString &filePath)
     if(KNMusicPlaylistListAssistant::readPlaylist(filePath, playlistItem))
     {
         //If we can parse it, means it's a standard playlist.
-        m_playlistList->appendRow(playlistItem);
+        m_playlistList->appendPlaylist(playlistItem);
         return true;
     }
     //!FIXME: Parse other type of the data.

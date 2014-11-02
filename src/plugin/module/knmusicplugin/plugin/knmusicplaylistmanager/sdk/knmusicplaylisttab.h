@@ -22,6 +22,8 @@
 
 class QSplitter;
 class QStandardItem;
+class KNEmptyStateWidget;
+class KNMusicPlaylistEmptyHint;
 class KNMusicPlaylistModel;
 class KNMusicPlaylistDisplay;
 class KNMusicPlaylistList;
@@ -38,9 +40,11 @@ public:
     QPixmap icon();
     QWidget *widget();
     KNMusicPlaylistModel *currentPlaylistModel();
+    void cutLoadRequirement();
 
 signals:
     void requireLoadPlaylistList();
+    void requireCreateFirstPlaylist(const QStringList &fileList);
     void requireImportPlaylist(const QStringList &playlistList);
     void requireGeneratePlaylist(QString caption);
     void requireRemovePlaylist(const QModelIndex &index);
@@ -60,8 +64,11 @@ private slots:
 
 private:
     void initialPlaylistList();
-    QSplitter *m_viewer;
+    KNEmptyStateWidget *m_viewer;
+    QSplitter *m_mainViewer;
     QWidget *m_playlistListViewer;
+    KNMusicPlaylistList *m_playlistList;
+    KNMusicPlaylistEmptyHint *m_emptyHint;
     KNMusicPlaylistDisplay *m_playlistDisplay;
     KNMusicPlaylistListView *m_playlistListView;
     KNMusicPlaylistListViewEditor *m_playlistListViewEditor;

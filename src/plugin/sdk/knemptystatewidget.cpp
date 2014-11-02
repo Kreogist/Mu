@@ -6,6 +6,8 @@
  */
 #include "knemptystatewidget.h"
 
+#include <QDebug>
+
 KNEmptyStateWidget::KNEmptyStateWidget(QWidget *parent) :
     QStackedWidget(parent)
 {

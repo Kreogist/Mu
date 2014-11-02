@@ -50,8 +50,13 @@ signals:
     void requireAddRowsToPlaylist(int playlistRowIndex);
     void requireCreatePlaylist(int preferRow, QStringList fileList);
     void requireCreateRowsPlaylist(int playlistRowIndex);
+    void requireShowContent();
+    void requireHideContent();
 
 public slots:
+    void appendPlaylist(QStandardItem *playlistItem);
+    void insertPlaylist(const int &row, QStandardItem *playlistItem);
+    void removePlaylist(const int &playlistItemRow);
 
 private slots:
     void onActionItemChanged(QStandardItem *item);

@@ -15,18 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include "knmusicplaylistlistdelegate.h"
+#ifndef KNMUSICPLAYLISTEMPTYHINT_H
+#define KNMUSICPLAYLISTEMPTYHINT_H
 
-#include "knmusicplaylistlistview.h"
+#include "kndropproxycontainer.h"
 
-KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
-    KNMusicCategoryListViewBase(parent)
+class QLabel;
+class KNMusicPlaylistEmptyHint : public KNDropProxyContainer
 {
-    //Enabled drag and drop.
-    enabledDragDrop();
-    //Set properties.
-    setIconSize(QSize(40, 40));
-    setDragDropMode(QAbstractItemView::DropOnly);
-    //Initial the delegate.
-    setItemDelegate(new KNMusicPlaylistListDelegate(this));
-}
+    Q_OBJECT
+public:
+    explicit KNMusicPlaylistEmptyHint(QWidget *parent = 0);
+
+signals:
+
+public slots:
+    void retranslate();
+
+private:
+    QLabel *m_hintText;
+};
+
+#endif // KNMUSICPLAYLISTEMPTYHINT_H

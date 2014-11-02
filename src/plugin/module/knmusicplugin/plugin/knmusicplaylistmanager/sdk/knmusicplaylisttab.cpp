@@ -19,6 +19,8 @@
 #include <QItemSelectionModel>
 #include <QSplitter>
 
+#include "knemptystatewidget.h"
+#include "knmusicplaylistemptyhint.h"
 #include "knmusicplaylistlistitem.h"
 #include "knmusicplaylistlist.h"
 #include "knmusicplaylistlistview.h"
@@ -33,29 +35,42 @@ KNMusicPlaylistTab::KNMusicPlaylistTab(QObject *parent) :
     KNMusicTab(parent)
 {
     //Initial the viewer.
-    m_viewer=new QSplitter();
+    m_viewer=new KNEmptyStateWidget();
+    connect(m_viewer, &KNEmptyStateWidget::aboutToBeShown,
+            this, &KNMusicPlaylistTab::requireLoadPlaylistList);
+
+    //Initial the empty hint widget.
+    m_emptyHint=new KNMusicPlaylistEmptyHint(m_viewer);
+    connect(m_emptyHint, &KNMusicPlaylistEmptyHint::requireAnalysisFiles,
+            this, &KNMusicPlaylistTab::requireCreateFirstPlaylist);
+    m_viewer->setEmptyWidget(m_emptyHint);
+
+    //Initial the viewer.
+    m_mainViewer=new QSplitter(m_viewer);
     //Set viewer properties.
-    m_viewer->setContentsMargins(0,0,0,0);
-    m_viewer->setHandleWidth(0); //This is beautiful.
-    m_viewer->setChildrenCollapsible(false);
+    m_mainViewer->setContentsMargins(0,0,0,0);
+    m_mainViewer->setHandleWidth(0); //This is beautiful.
+    m_mainViewer->setChildrenCollapsible(false);
+    m_viewer->setContentWidget(m_mainViewer);
+    m_viewer->showEmptyWidget();
 
     //Initial the playlist list.
     initialPlaylistList();
-    m_viewer->addWidget(m_playlistListViewer);
+    m_mainViewer->addWidget(m_playlistListViewer);
     //Initial the playlist display.
-    m_playlistDisplay=new KNMusicPlaylistDisplay(m_viewer);
-    m_viewer->addWidget(m_playlistDisplay);
+    m_playlistDisplay=new KNMusicPlaylistDisplay(m_mainViewer);
+    m_mainViewer->addWidget(m_playlistDisplay);
 
     //Set viewer properties after add widgets.
-    m_viewer->setCollapsible(1, false);
-    m_viewer->setStretchFactor(1, 1);
+    m_mainViewer->setCollapsible(1, false);
+    m_mainViewer->setStretchFactor(1, 1);
 }
 
 KNMusicPlaylistTab::~KNMusicPlaylistTab()
 {
-    if(m_viewer->parent()==0)
+    if(m_mainViewer->parent()==0)
     {
-        delete m_viewer;
+        delete m_mainViewer;
     }
 }
 
@@ -78,6 +93,12 @@ KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()
 {
     KNMusicPlaylistListItem *currentItem=m_playlistDisplay->currentItem();
     return currentItem==nullptr?nullptr:currentItem->playlistModel();
+}
+
+void KNMusicPlaylistTab::cutLoadRequirement()
+{
+    disconnect(m_viewer, &KNEmptyStateWidget::aboutToBeShown,
+               this, &KNMusicPlaylistTab::requireLoadPlaylistList);
 }
 
 void KNMusicPlaylistTab::onActionRemoveCurrent()
@@ -110,7 +131,16 @@ void KNMusicPlaylistTab::displayPlaylistItem(KNMusicPlaylistListItem *item)
 
 void KNMusicPlaylistTab::setPlaylistList(KNMusicPlaylistList *playlistList)
 {
-    m_playlistListView->setModel(playlistList);
+    //Save the pointer.
+    m_playlistList=playlistList;
+    //Set the playlist model.
+    m_playlistListView->setModel(m_playlistList);
+    //Connect when the row count changed.
+    connect(m_playlistList, &KNMusicPlaylistList::requireShowContent,
+            m_viewer, &KNEmptyStateWidget::showContentWidget);
+    connect(m_playlistList, &KNMusicPlaylistList::requireHideContent,
+            m_viewer, &KNEmptyStateWidget::showEmptyWidget);
+    //Connect current changed signal.
     connect(m_playlistListView->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &KNMusicPlaylistTab::currentPlaylistChanged);
 }
@@ -139,7 +169,7 @@ void KNMusicPlaylistTab::onActionAddPlaylist()
 void KNMusicPlaylistTab::initialPlaylistList()
 {
     //Initial the container.
-    m_playlistListViewer=new QWidget(m_viewer);
+    m_playlistListViewer=new QWidget(m_mainViewer);
     //Set properties.
     m_playlistListViewer->setContentsMargins(0,0,0,0);
 
@@ -152,8 +182,6 @@ void KNMusicPlaylistTab::initialPlaylistList()
 
     //Initial the list view.
     m_playlistListView=new KNMusicPlaylistListView(m_playlistListViewer);
-    connect(m_playlistListView, &KNMusicPlaylistListView::requireLoadPlaylistList,
-            this, &KNMusicPlaylistTab::requireLoadPlaylistList);
     playlistListLayout->addWidget(m_playlistListView);
 
     //Initial the list editor.
