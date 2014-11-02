@@ -169,6 +169,40 @@ void KNMusicPlaylistList::setPlaylistListData(const QStringList &playlistListDat
                         this, &KNMusicPlaylistList::onActionRowRemoved));
 }
 
+void KNMusicPlaylistList::appendPlaylist(QStandardItem *playlistItem)
+{
+    //Do append.
+    appendRow(playlistItem);
+    //Check is the first playlist?
+    if(rowCount()==1)
+    {
+        emit requireShowContent();
+    }
+}
+
+void KNMusicPlaylistList::insertPlaylist(const int &row,
+                                         QStandardItem *playlistItem)
+{
+    //Do row insert.
+    insertRow(row, playlistItem);
+    //Check is the first playlist?
+    if(rowCount()==1)
+    {
+        emit requireShowContent();
+    }
+}
+
+void KNMusicPlaylistList::removePlaylist(const int &playlistItemRow)
+{
+    //Do row remove.
+    removeRow(playlistItemRow);
+    //Check is the list empty?
+    if(rowCount()==0)
+    {
+        emit requireHideContent();
+    }
+}
+
 void KNMusicPlaylistList::onActionItemChanged(QStandardItem *item)
 {
     KNMusicPlaylistListItem *currentItem=static_cast<KNMusicPlaylistListItem *>(item);
