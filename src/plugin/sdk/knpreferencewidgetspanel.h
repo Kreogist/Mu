@@ -42,7 +42,6 @@ private:
     void setAdvancedItem(QWidget *item);
     QString m_panelName;
     QBoxLayout *m_mainLayout;
-    QWidget *m_container;
     QList<KNPreferenceItemBase *> m_itemList;
     KNGlobal *m_global;
     bool m_advancedMode=false;

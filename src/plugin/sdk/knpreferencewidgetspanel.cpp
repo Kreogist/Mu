@@ -29,17 +29,17 @@ KNPreferenceWidgetsPanel::KNPreferenceWidgetsPanel(QWidget *parent) :
     m_global=KNGlobal::instance();
 
     //Initial the container.
-    m_container=new QWidget(this);
+    QWidget *container=new QWidget(this);
     //Set container properties.
-    m_container->setContentsMargins(0,0,0,0);
-    setWidget(m_container);
+    container->setContentsMargins(0,0,0,0);
+    setWidget(container);
 
     //Initial the layout.
     m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                 this);
     m_mainLayout->setContentsMargins(0,0,0,0);
     m_mainLayout->setSpacing(0);
-    m_container->setLayout(m_mainLayout);
+    container->setLayout(m_mainLayout);
 
     //Add strectch at the end of the layout.
     m_mainLayout->addStretch();

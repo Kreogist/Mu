@@ -31,6 +31,21 @@ QPixmap KNLocaleManager::currentLanguageIcon() const
                 m_languageIcons.at(m_currentIndex):m_noImageIcon;
 }
 
+int KNLocaleManager::languageSize() const
+{
+    return m_languageFiles.size();
+}
+
+QString KNLocaleManager::languageNameAt(const int &i)
+{
+    return m_languageNames.at(i);
+}
+
+QPixmap KNLocaleManager::languageIconAt(const int &i)
+{
+    return m_languageIcons.at(i);
+}
+
 void KNLocaleManager::setLanguage(const int &index)
 {
     if(index<-1 || index>m_languageFiles.size())

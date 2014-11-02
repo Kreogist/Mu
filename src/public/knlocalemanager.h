@@ -19,6 +19,9 @@ public:
     static KNLocaleManager *instance();
     QString currentLanguageName() const;
     QPixmap currentLanguageIcon() const;
+    int languageSize() const;
+    QString languageNameAt(const int &i);
+    QPixmap languageIconAt(const int &i);
 
 signals:
     void requireRetranslate();
