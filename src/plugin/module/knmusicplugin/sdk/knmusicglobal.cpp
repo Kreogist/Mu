@@ -375,3 +375,9 @@ QString KNMusicGlobal::treeViewHeaderText(const int &index)
 {
     return m_treeViewHeaderText[index];
 }
+
+QString KNMusicGlobal::indexedGenre(const int &index)
+{
+    return (index>0 && index<m_indexedGenres.size())?
+                    m_indexedGenres.at(index):"Unknown";
+}

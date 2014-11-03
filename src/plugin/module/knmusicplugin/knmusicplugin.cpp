@@ -39,6 +39,7 @@
 #ifdef ENABLE_LIBVLC
 #include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
 #endif
+#include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
 #include "plugin/knmusiccueparser/knmusiccueparser.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
@@ -262,8 +263,13 @@ void KNMusicPlugin::initialParser()
     //Initial the music parser.
     KNMusicParser *parser=new KNMusicParser;
 
-    //Install all plugins here.
+    //Install all list parser plugins here.
     parser->installListParser(new KNMusicCueParser);
+
+    //Install all tag parser plugins here.
+    parser->installTagParser(new KNMusicTagID3v1);
+
+    //Install all analysiser plugins here.
 #ifdef ENABLE_LIBBASS
     parser->installAnalysiser(new KNMusicBassAnalysiser);
 #endif

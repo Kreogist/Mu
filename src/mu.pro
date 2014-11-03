@@ -217,7 +217,8 @@ SOURCES += \
     plugin/base/knpreference/knpreferencelanguageitem.cpp \
     plugin/base/knpreference/knpreferencelanguagepanel.cpp \
     plugin/base/knpreference/knpreferencelanguagepanelitem.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp \
+    plugin/module/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -350,7 +351,8 @@ HEADERS += \
     plugin/base/knpreference/knpreferencelanguageitem.h \
     plugin/base/knpreference/knpreferencelanguagepanel.h \
     plugin/base/knpreference/knpreferencelanguagepanelitem.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.h
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.h \
+    plugin/module/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.h
 
 RESOURCES += \
     resource/res.qrc

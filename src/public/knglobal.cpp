@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QProcess>
+#include <QTextCodec>
 #include <QDir>
 
 #include "knconfigure.h"
@@ -50,6 +51,24 @@ QString KNGlobal::dylibSuffix()
 QString KNGlobal::applicationDirPath()
 {
     return QApplication::applicationDirPath();
+}
+
+QTextCodec *KNGlobal::localeDefaultCodec()
+{
+    switch(QLocale::system().country())
+    {
+    case QLocale::China:
+        return QTextCodec::codecForName("GB18030");
+    case QLocale::HongKong:
+        return QTextCodec::codecForName("Big5-HKSCS");
+    case QLocale::Macau:
+    case QLocale::Taiwan:
+        return QTextCodec::codecForName("Big5");
+    case QLocale::Japan:
+        return QTextCodec::codecForName("Shift-JIS");
+    default:
+        return QTextCodec::codecForName("ISO 8859-1");
+    }
 }
 
 QString KNGlobal::ensurePathAvaliable(const QString &path)

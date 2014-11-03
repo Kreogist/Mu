@@ -158,6 +158,7 @@ public:
     QThread *analysisThread();
     void setNoAlbumArt(const QPixmap &noAlbumArt);
     QString treeViewHeaderText(const int &index);
+    QString indexedGenre(const int &index);
     void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
     void addTitle(QLabel *title,
                   const bool &isAdvanced=false);
@@ -193,8 +194,8 @@ private:
     explicit KNMusicGlobal(QObject *parent = 0);
     QString m_treeViewHeaderText[MusicDisplayDataCount];
     QStringList m_suffixs, m_listSuffixs,
-                    m_suffixDescription, m_listSuffixDescription,
-                    m_indexedGenres;
+                m_suffixDescription, m_listSuffixDescription,
+                m_indexedGenres;
     QPixmap m_noAlbumArt;
     QThread *m_searcherThread, *m_analysisThread;
     KNPreferenceWidgetsPanel *m_preferencePanel;
