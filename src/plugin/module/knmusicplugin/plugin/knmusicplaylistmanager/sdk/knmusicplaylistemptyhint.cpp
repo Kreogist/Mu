@@ -38,17 +38,26 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     setLayout(mainLayout);
 
+    mainLayout->addStretch();
+
+    QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                             mainLayout->widget());
+    contentLayout->setContentsMargins(0,0,0,0);
+    contentLayout->setSpacing(20);
+    mainLayout->addLayout(contentLayout);
+
     //Initial the empty hint icon.
     QLabel *emptyHintIcon=new QLabel(this);
     emptyHintIcon->setPixmap(QPixmap(":/plugin/music/common/emptyicon.png"));
-    mainLayout->addWidget(emptyHintIcon,
+    contentLayout->addWidget(emptyHintIcon,
                           0,
                           Qt::AlignRight | Qt::AlignVCenter);
 
     //Initial the hint layout.
     QBoxLayout *hintLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                          mainLayout->widget());
-    mainLayout->addLayout(hintLayout);
+                                          contentLayout->widget());
+    contentLayout->addLayout(hintLayout);
+    mainLayout->addStretch();
 
     //Initial the hint text lable.
     m_hintText=new QLabel(this);
@@ -58,6 +67,8 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     m_hintText->setPalette(pal);
     //Set the property.
     m_hintText->setWordWrap(true);
+    m_hintText->setSizePolicy(QSizePolicy::Expanding,
+                              QSizePolicy::Expanding);
     //Add to layout.
     hintLayout->addWidget(m_hintText);
 
@@ -70,7 +81,7 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
 
 void KNMusicPlaylistEmptyHint::retranslate()
 {
-    m_hintText->setText(tr("Songs you add to playlists and playlists you"
+    m_hintText->setText(tr("Songs you add to playlists and playlists you "
                            "import appear in Playlist.\n"
                            "To create a playlist, drag your songs here."));
 }

@@ -19,6 +19,8 @@
 
 #include "knmusicplaylistlistitem.h"
 
+#include <QDebug>
+
 KNMusicPlaylistListItem::KNMusicPlaylistListItem() :
     QStandardItem()
 {
