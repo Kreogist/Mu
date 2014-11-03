@@ -150,6 +150,8 @@ public:
     static void setMultiMenu(KNMusicMultiMenuBase *multiMenu);
     static QString musicLibraryPath();
     static void setMusicLibraryPath(const QString &musicLibraryPath);
+    static quint32 charToInt32(char *rawTagData);
+    static quint32 inverseCharToInt32(char *rawTagData);
     bool isMusicFile(const QString &suffix);
     bool isMusicListFile(const QString &suffix);
     QString typeDescription(const QString &suffix) const;
