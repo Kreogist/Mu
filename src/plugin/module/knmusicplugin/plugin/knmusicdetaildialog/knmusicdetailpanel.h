@@ -20,6 +20,8 @@
 
 #include <QWidget>
 
+class KNHWidgetSwitcher;
+class KNMusicDetailOverview;
 class KNMusicDetailPanel : public QWidget
 {
     Q_OBJECT
@@ -30,7 +32,12 @@ public:
 signals:
 
 public slots:
+    void setFilePath(const QString &filePath);
 
+private:
+    void initialOverview();
+    KNHWidgetSwitcher *m_contents;
+    KNMusicDetailOverview *m_overview;
 };
 
 #endif // KNMUSICDETAILPANEL_H

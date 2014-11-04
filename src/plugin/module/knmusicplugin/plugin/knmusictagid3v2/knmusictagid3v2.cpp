@@ -37,6 +37,12 @@ KNMusicTagID3v2::KNMusicTagID3v2(QObject *parent) :
     //Initial music global.
     m_musicGlobal=KNMusicGlobal::instance();
 
+    //Initial unsynchronisation data.
+    //Using forced conversation to ignore the ambiguous calling.
+    m_unsynchronisationRaw.append((char)0xff);
+    m_unsynchronisationRaw.append((char)0x00);
+    m_unsynchronisationTo.append((char)0xff);
+
     //Initial frame ID Index.
     m_frameIDIndex["TIT2"]=Name;
     m_frameIDIndex["TPE1"]=Artist;
@@ -337,6 +343,12 @@ void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames
         else
         {
             frameData=QByteArray((*i).start, (*i).size);
+        }
+        //Check if the frame is unsynchronisation.
+        if((*i).flags[1] & FrameUnsynchronisation)
+        {
+            frameData.replace(m_unsynchronisationRaw,
+                              m_unsynchronisationTo);
         }
         //Get the frame Index.
         QString frameID=QString((*i).frameID).toUpper();

@@ -220,7 +220,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp \
     plugin/module/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.cpp \
     plugin/module/knmusicplugin/plugin/knmusictagflac/knmusictagflac.cpp \
-    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.cpp
+    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -356,7 +357,8 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.h \
     plugin/module/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.h \
     plugin/module/knmusicplugin/plugin/knmusictagflac/knmusictagflac.h \
-    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.h
+    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.h \
+    plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.h
 
 RESOURCES += \
     resource/res.qrc

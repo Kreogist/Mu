@@ -144,6 +144,7 @@ void KNMusicPlaylistListViewEditor::initialMenu()
             this, SIGNAL(requireAddPlaylist()));
     connect(m_addActions[ImportPlaylist], SIGNAL(triggered()),
             this, SLOT(showImportDialog()));
+    m_addActions[ImportPlaylist]->setEnabled(false);
 
     //Generate menu.
     m_addMenu->addAction(m_addActions[AddPlaylist]);
@@ -155,6 +156,9 @@ void KNMusicPlaylistListViewEditor::initialMenu()
     {
         m_configureActions[i]=new QAction(this);
     }
+
+    m_configureActions[ExportPlaylist]->setEnabled(false);
+    m_configureActions[CopyPlaylist]->setEnabled(false);
 
     m_configureMenu->addAction(m_configureActions[ExportPlaylist]);
     m_configureMenu->addSeparator();

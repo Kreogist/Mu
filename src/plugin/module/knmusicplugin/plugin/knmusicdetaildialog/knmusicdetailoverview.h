@@ -15,31 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knmusicdetailpanel.h"
+#ifndef KNMUSICDETAILOVERVIEW_H
+#define KNMUSICDETAILOVERVIEW_H
 
-#include "knmessagebox.h"
+#include <QWidget>
 
-#include "knmusicdetaildialog.h"
-
-KNMusicDetailDialog::KNMusicDetailDialog(QObject *parent) :
-    KNMusicDetailDialogBase(parent)
+class QLabel;
+class KNMusicParser;
+class KNMusicDetailOverview : public QWidget
 {
-    m_detailDialog=new KNMessageBox;
-    m_detailDialog->setTitle("Detail");
+    Q_OBJECT
+public:
+    explicit KNMusicDetailOverview(QWidget *parent = 0);
 
-    m_detailPanel=new KNMusicDetailPanel(m_detailDialog);
-    m_detailDialog->setContent(m_detailPanel);
-}
+signals:
 
-KNMusicDetailDialog::~KNMusicDetailDialog()
-{
-    delete m_detailDialog;
-}
+public slots:
+    void setFilePath(const QString &filePath);
 
-void KNMusicDetailDialog::showDialog(const QString &filePath)
-{
-    //Set the file path to the dialog.
-    m_detailPanel->setFilePath(filePath);
-    //Launch the detail dialog.
-    m_detailDialog->exec();
-}
+private:
+    KNMusicParser *m_parser;
+    QLabel *m_albumArt, *m_title, *m_artist, *m_album, *m_duration;
+};
+
+#endif // KNMUSICDETAILOVERVIEW_H

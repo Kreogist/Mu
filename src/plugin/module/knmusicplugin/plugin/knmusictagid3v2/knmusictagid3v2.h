@@ -43,7 +43,6 @@ enum ID3v2TextEncoding
     EncodeUTF16,
     EncodeUTF8
 };
-
 struct ID3v2Header
 {
     quint8 major=0;
@@ -116,6 +115,7 @@ private:
     QHash<QString, int> m_frameIDIndex;
     KNMusicGlobal *m_musicGlobal;
 
+    QByteArray m_unsynchronisationRaw, m_unsynchronisationTo;
     QTextCodec *m_isoCodec,
                *m_utf16BECodec,
                *m_utf16LECodec,

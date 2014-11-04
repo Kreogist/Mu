@@ -69,6 +69,9 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     m_hintText->setWordWrap(true);
     m_hintText->setSizePolicy(QSizePolicy::Expanding,
                               QSizePolicy::Expanding);
+    QFont hintTextFont=m_hintText->font();
+    hintTextFont.setPixelSize(15);
+    m_hintText->setFont(hintTextFont);
     //Add to layout.
     hintLayout->addWidget(m_hintText);
 
