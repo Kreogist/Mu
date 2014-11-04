@@ -113,7 +113,42 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
 
 bool KNMusicTagID3v2::parseAlbumArt(KNMusicDetailInfo &detailInfo)
 {
-    ;
+    if(!detailInfo.imageData.contains("ID3v2"))
+    {
+        return false;
+    }
+    //Get the total size of images.
+    QByteArray imageTypes=detailInfo.imageData["ID3v2"].takeLast();
+    int imageCount=imageTypes.size();
+    QHash<int, ID3v2PictureFrame> imageMap;
+    for(int i=0; i<imageCount; i++)
+    {
+        //Check the flag is "APIC" or "PIC"
+        if(imageTypes.at(i)==1)
+        {
+            parseAPICImageData(detailInfo.imageData["ID3v2_Images"].takeFirst(),
+                               imageMap);
+        }
+        else
+        {
+            parsePICImageData(detailInfo.imageData["ID3v2_Images"].takeFirst(),
+                              imageMap);
+        }
+    }
+    //If there's a album art image after parse all the album art, set.
+    if(imageMap.contains(3))
+    {
+        detailInfo.coverImage=imageMap[3].image;
+    }
+    else
+    {
+        //Or else use the first image.
+        if(!imageMap.isEmpty())
+        {
+            detailInfo.coverImage=imageMap.begin().value().image;
+        }
+    }
+    return true;
 }
 
 quint32 KNMusicTagID3v2::minor2Size(char *rawTagData)
@@ -147,22 +182,28 @@ void KNMusicTagID3v2::saveFlag(char *rawTagData, ID3v2Frame &frameData)
 
 QString KNMusicTagID3v2::frameToText(QByteArray content)
 {
-    //Remove all the '\0' byte at the end of the array.
-    int realContentSize=content.size();
-    while(content.at(realContentSize-1)==0)
+//    //Remove all the '\0' byte at the end of the array.
+//    int realContentSize=content.size();
+//    while(realContentSize>0 &&
+//          content.at(realContentSize-1)==0)
+//    {
+//        realContentSize--;
+//    }
+//    content.resize(realContentSize);
+    //Check is content empty.
+    if(content.isEmpty())
     {
-        realContentSize--;
+        return QString();
     }
-    content.resize(realContentSize);
     //Get the codec.
     //The first char of the ID3v2 text is the encoding of the current text.
     quint8 encoding=(quint8)(content.at(0));
     content.remove(0, 1);
     switch(encoding)
     {
-    case 0: //0 = ISO-8859-1
+    case EncodeISO: //0 = ISO-8859-1
         return m_isoCodec->toUnicode(content).simplified();
-    case 1: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
+    case EncodeUTF16BELE: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
         if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
         {
             return m_utf16BECodec->toUnicode(content).simplified();
@@ -172,9 +213,9 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
             return m_utf16LECodec->toUnicode(content).simplified();
         }
         return m_utf16Codec->toUnicode(content).simplified();
-    case 2: //2 = UTF-16 BE without BOM
+    case EncodeUTF16: //2 = UTF-16 BE without BOM
         return m_utf16Codec->toUnicode(content).simplified();
-    case 3: //3 = UTF-8
+    case EncodeUTF8: //3 = UTF-8
         return m_utf8Codec->toUnicode(content).simplified();
     default://Use locale codec.
         return m_localeCodec->toUnicode(content).simplified();
@@ -280,7 +321,7 @@ void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames
                                            const ID3v2MinorProperty &property,
                                            KNMusicDetailInfo &detailInfo)
 {
-    int imageCounter=0;
+    QByteArray imageTypeList;
     for(QLinkedList<ID3v2Frame>::const_iterator i=frames.begin();
         i!=frames.end();
         ++i)
@@ -301,9 +342,13 @@ void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames
         QString frameID=QString((*i).frameID).toUpper();
         if(frameID=="APIC" || frameID=="PIC")
         {
-            QString imageID="ID3v2"+QString::number(imageCounter++);
-            detailInfo.containsImage=true;
-            detailInfo.imageData[imageID].append(frameData);
+            //Here is a hack:
+            //Using "ID3v2" as a counter, the size of the byte array is the
+            //number of how many images contains in ID3v2.
+            //If the frameID is "APIC", add a 1 to the "ID3v2" array, or else
+            //add a 0.
+            imageTypeList.append((int)(frameID=="APIC"));
+            detailInfo.imageData["ID3v2_Images"].append(frameData);
             continue;
         }
         if(!m_frameIDIndex.contains((*i).frameID))
@@ -407,5 +452,80 @@ void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames
             setTextData(detailInfo.textLists[frameIndex],
                         frameToText(frameData));
         }
+    }
+    //If there's any data in type list, add it to image data.
+    if(!imageTypeList.isEmpty())
+    {
+        detailInfo.imageData["ID3v2"].append(imageTypeList);
+    }
+}
+
+void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,
+                                         QHash<int, ID3v2PictureFrame> &imageMap)
+{
+    //APIC contains:
+    /*
+       Text encoding      $xx
+       MIME type          <text string> $00
+       Picture type       $xx
+       Description        <text string according to encoding> $00 (00)
+       Picture data       <binary data>
+     */
+    //In the official document above, (00) in the description means there's a
+    //00 byte after the $00, I finally understand what this mean.
+    ID3v2PictureFrame currentFrame;
+    //Get mime end and description end.
+    int mimeTypeEnd=imageData.indexOf('\0', 1),
+        descriptionEnd=imageData.indexOf('\0', mimeTypeEnd+2);
+    //Backup the text encording and get the picture type.
+    quint8 textEncoding=imageData.at(0),
+           pictureType=imageData.at(mimeTypeEnd+1);
+    //Get the mime type text.
+    currentFrame.mimeType=frameToText(imageData.left(mimeTypeEnd));
+    //Get the description text.
+    QByteArray descriptionText=imageData.mid(mimeTypeEnd+2,
+                                             descriptionEnd-(mimeTypeEnd+2));
+    descriptionText.insert(0, textEncoding);
+    currentFrame.description=frameToText(descriptionText);
+    //Get the image.
+    imageData.remove(0, descriptionEnd+1);
+    currentFrame.image.loadFromData(imageData);
+    //If parse the image success, add it to map.
+    if(!currentFrame.image.isNull())
+    {
+        imageMap[pictureType]=currentFrame;
+    }
+}
+
+void KNMusicTagID3v2::parsePICImageData(QByteArray imageData,
+                                        QHash<int, ID3v2PictureFrame> &imageMap)
+{
+    //PIC contains:
+    /*
+      Text encoding      $xx
+      Image format       $xx xx xx
+      Picture type       $xx
+      Description        <textstring> $00 (00)
+      Picture data       <binary data>
+    */
+    //In the official document above, the (00) in description is the same as APIC.
+    ID3v2PictureFrame currentFrame;
+    //Get the mime type text.
+    currentFrame.mimeType=imageData.mid(1, 3);
+    //Backup the text encording and get the picture type.
+    quint8 textEncoding=imageData.at(0), pictureType=imageData.at(4);
+    //Get description end.
+    int descriptionEnd=imageData.indexOf('\0', 5);
+    //Get the description.
+    QByteArray descriptionText=imageData.mid(5, descriptionEnd-5);
+    descriptionText.append(textEncoding);
+    currentFrame.description=frameToText(descriptionText);
+    //Get the image.
+    imageData.remove(0, descriptionEnd+1);
+    currentFrame.image.loadFromData(imageData);
+    //If parse the image success, add it to map.
+    if(!currentFrame.image.isNull())
+    {
+        imageMap[pictureType]=currentFrame;
     }
 }

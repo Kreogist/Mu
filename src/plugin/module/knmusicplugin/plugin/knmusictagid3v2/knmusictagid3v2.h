@@ -36,6 +36,13 @@ enum ID3v2FrameFlag
     FrameDataLengthIndicator=0b00000001,
     FrameUnsynchronisation=0b00000010
 };
+enum ID3v2TextEncoding
+{
+    EncodeISO,
+    EncodeUTF16BELE,
+    EncodeUTF16,
+    EncodeUTF8
+};
 
 struct ID3v2Header
 {
@@ -50,6 +57,12 @@ struct ID3v2Frame
     char *start;
     quint32 size=0;
     char flags[2]={0};
+};
+struct ID3v2PictureFrame
+{
+    QString mimeType;
+    QString description;
+    QImage image;
 };
 typedef quint32 (*FrameSizeCalculator)(char *);
 typedef void (*FlagSaver)(char *, ID3v2Frame &);
@@ -96,6 +109,10 @@ private:
     void writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames,
                               const ID3v2MinorProperty &property,
                               KNMusicDetailInfo &detailInfo);
+    void parseAPICImageData(QByteArray imageData,
+                            QHash<int, ID3v2PictureFrame> &imageMap);
+    void parsePICImageData(QByteArray imageData,
+                           QHash<int, ID3v2PictureFrame> &imageMap);
     QHash<QString, int> m_frameIDIndex;
     KNMusicGlobal *m_musicGlobal;
 
