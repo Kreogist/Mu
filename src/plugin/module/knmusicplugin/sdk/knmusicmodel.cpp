@@ -50,7 +50,11 @@ Qt::ItemFlags KNMusicModel::flags(const QModelIndex &index) const
     //Enabled drag and drop flags when the index is valid.
     if(index.isValid())
     {
-        return Qt::ItemIsDragEnabled | QStandardItemModel::flags(index);
+        return Qt::ItemIsDragEnabled |
+                Qt::ItemIsSelectable |
+                Qt::ItemIsEditable |
+                Qt::ItemIsEnabled |
+                Qt::ItemNeverHasChildren;
     }
     //Or else, just enabled drop.
     return Qt::ItemIsDropEnabled;

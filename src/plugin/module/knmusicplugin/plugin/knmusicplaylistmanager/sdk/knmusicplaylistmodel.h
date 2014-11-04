@@ -25,6 +25,7 @@ class KNMusicPlaylistModel : public KNMusicModel
     Q_OBJECT
 public:
     explicit KNMusicPlaylistModel(QObject *parent = 0);
+    Qt::ItemFlags flags(const QModelIndex &index) const;
     int playingItemColumn();
 
 signals:

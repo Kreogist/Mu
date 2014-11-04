@@ -27,7 +27,7 @@ KNMusicTagID3v2::KNMusicTagID3v2(QObject *parent) :
     KNMusicTagParser(parent)
 {
     //Initial the codec.
-    m_isoCodec=QTextCodec::codecForName("ISO 8859-16");
+    m_isoCodec=QTextCodec::codecForName("ISO 8859-1");
     m_utf16Codec=QTextCodec::codecForName("UTF-16");
     m_utf16BECodec=QTextCodec::codecForName("UTF-16BE");
     m_utf16LECodec=QTextCodec::codecForName("UTF-16LE");

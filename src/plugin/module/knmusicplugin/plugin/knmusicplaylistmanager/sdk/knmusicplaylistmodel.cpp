@@ -26,6 +26,16 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
     initialHeader();
 }
 
+Qt::ItemFlags KNMusicPlaylistModel::flags(const QModelIndex &index) const
+{
+    return (index.column()==BlankData)?
+                (Qt::ItemIsSelectable |
+                 Qt::ItemIsDragEnabled |
+                 Qt::ItemIsEnabled |
+                 Qt::ItemNeverHasChildren):
+                KNMusicModel::flags(index);
+}
+
 int KNMusicPlaylistModel::playingItemColumn()
 {
     return BlankData;

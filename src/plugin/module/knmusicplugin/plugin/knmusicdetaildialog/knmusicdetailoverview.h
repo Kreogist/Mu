@@ -32,10 +32,25 @@ signals:
 
 public slots:
     void setFilePath(const QString &filePath);
+    void retranslate();
 
 private:
     KNMusicParser *m_parser;
-    QLabel *m_albumArt, *m_title, *m_artist, *m_album, *m_duration;
+    enum DetailInformation
+    {
+        Kind,
+        Duration,
+        Size,
+        BitRate,
+        SampleRate,
+        DateModified,
+        DetailInformationCount
+    };
+    void initialBasicInfoLabel();
+    void initialDetailInfoLabel();
+    QLabel *m_albumArt, *m_title, *m_artist, *m_album, *m_duration,
+           *m_detailInfoCaption[DetailInformationCount],
+           *m_detailInfo[DetailInformationCount];
 };
 
 #endif // KNMUSICDETAILOVERVIEW_H

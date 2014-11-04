@@ -24,8 +24,9 @@
 KNMusicDetailDialog::KNMusicDetailDialog(QObject *parent) :
     KNMusicDetailDialogBase(parent)
 {
+    //Initial the dialog.
     m_detailDialog=new KNMessageBox;
-    m_detailDialog->setTitle("Detail");
+    m_detailDialog->setTitle("Information");
 
     m_detailPanel=new KNMusicDetailPanel(m_detailDialog);
     m_detailDialog->setContent(m_detailPanel);
