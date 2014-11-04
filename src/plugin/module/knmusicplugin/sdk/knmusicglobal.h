@@ -111,6 +111,7 @@ struct KNMusicDetailInfo
     //Album art data.
     QImage coverImage;
     QString coverImageHash;
+    bool containsImage=false;
     QMap<QString, QList<QByteArray>> imageData;
     //Tag datas.
     QString textLists[MusicDataCount];
@@ -184,6 +185,7 @@ private:
     void initialFileType();
     void initialThreads();
     void initialHeaderText();
+    void initialGenreText();
     static KNMusicGlobal *m_instance;
     static KNMusicParser *m_parser;
     static KNMusicNowPlayingBase *m_nowPlaying;

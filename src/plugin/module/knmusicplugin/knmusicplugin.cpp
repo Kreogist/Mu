@@ -41,6 +41,7 @@
 #endif
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagflac/knmusictagflac.h"
+#include "plugin/knmusictagid3v2/knmusictagid3v2.h"
 #include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
 #include "plugin/knmusiccueparser/knmusiccueparser.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
@@ -270,6 +271,7 @@ void KNMusicPlugin::initialParser()
     //Install all tag parser plugins here.
     parser->installTagParser(new KNMusicTagID3v1);
     parser->installTagParser(new KNMusicTagFLAC);
+    parser->installTagParser(new KNMusicTagID3v2);
 
     //Install all analysiser plugins here.
 #ifdef ENABLE_LIBBASS

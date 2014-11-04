@@ -66,16 +66,16 @@ bool KNMusicTagFLAC::praseTag(QFile &musicFile,
         lastMetadataBlock=((quint8)rawHeader[0]>>7)==1;
         //the 2-8 bit is the block type:
         /*
-                0 : STREAMINFO
-                1 : PADDING
-                2 : APPLICATION
-                3 : SEEKTABLE
-                4 : VORBIS_COMMENT
-                5 : CUESHEET
-                6 : PICTURE
-                7-126 : reserved
-                127 : Invalid.
-            */
+            0 : STREAMINFO
+            1 : PADDING
+            2 : APPLICATION
+            3 : SEEKTABLE
+            4 : VORBIS_COMMENT
+            5 : CUESHEET
+            6 : PICTURE
+            7-126 : reserved
+            127 : Invalid.
+        */
         quint8 blockType=(quint8)rawHeader[0]&0b01111111;
         //The last 3 bytes are the size of this block expect the header.
         quint32 blockSize=(((quint32)rawHeader[1]<<16) & 0b00000000111111110000000000000000) +

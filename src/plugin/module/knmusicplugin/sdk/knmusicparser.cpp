@@ -29,7 +29,7 @@ KNMusicParser::~KNMusicParser()
     qDeleteAll(m_tagParsers);
     m_tagParsers.clear();
     //Delete all list parsers.
-    qDeleteAll(m_tagParsers);
+    qDeleteAll(m_listParsers);
     m_listParsers.clear();
 }
 
