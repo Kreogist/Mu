@@ -35,7 +35,7 @@ KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                          this);
     mainLayout->setContentsMargins(17,12,17,12);
-    mainLayout->setSpacing(0);
+    mainLayout->setSpacing(9);
     setLayout(mainLayout);
 
     //Initial the album art layout
@@ -67,7 +67,10 @@ KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
 
     //Initial the overview form layout.
     QFormLayout *infoFormLayout=new QFormLayout(mainLayout->widget());
-    infoFormLayout->setSpacing(10);
+    infoFormLayout->setVerticalSpacing(9);
+    infoFormLayout->setLabelAlignment(Qt::AlignRight);
+    infoFormLayout->setRowWrapPolicy(QFormLayout::DontWrapRows);
+    infoFormLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
     mainLayout->addLayout(infoFormLayout, 1);
 
     //Initial the detail infos.
@@ -78,8 +81,9 @@ KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
                                m_detailInfo[i]);
     }
 
-    connect(KNLocaleManager::instance(), SIGNAL(requireRetranslate()),
-            this, SLOT(retranslate()));
+    //Link require.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicDetailOverview::retranslate);
     //Retranslate.
     retranslate();
 }
@@ -149,7 +153,7 @@ void KNMusicDetailOverview::initialDetailInfoLabel()
     //Initial the first caption.
     m_detailInfoCaption[0]=new QLabel(this);
     QFont captionFont=m_detailInfoCaption[0]->font();
-    captionFont.setPixelSize(12);
+    captionFont.setPixelSize(14);
     m_detailInfoCaption[0]->setFont(captionFont);
     QPalette captionPalette=m_detailInfoCaption[0]->palette();
     captionPalette.setColor(QPalette::WindowText, QColor(0xa0, 0xa0, 0xa0));
