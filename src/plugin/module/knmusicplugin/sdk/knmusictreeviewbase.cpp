@@ -41,6 +41,8 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setEditTriggers(QAbstractItemView::SelectedClicked |
+                    QAbstractItemView::EditKeyPressed);
 
     //Set scroll bar properties.
     horizontalScrollBar()->setSingleStep(5);
