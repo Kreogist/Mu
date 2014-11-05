@@ -38,19 +38,21 @@ private:
     KNMusicParser *m_parser;
     enum DetailInformation
     {
-        Kind,
-        Duration,
-        Size,
-        BitRate,
-        SampleRate,
-        DateModified,
+        DetailYear,
+        DetailGenre,
+        DetailKind,
+        DetailSize,
+        DetailBitRate,
+        DetailSampleRate,
+        DetailDateModified,
         DetailInformationCount
     };
     void initialBasicInfoLabel();
     void initialDetailInfoLabel();
     QLabel *m_albumArt, *m_title, *m_artist, *m_album, *m_duration,
            *m_detailInfoCaption[DetailInformationCount],
-           *m_detailInfo[DetailInformationCount];
+           *m_detailInfo[DetailInformationCount],
+           *m_filePathCaption, *m_filePathDataField;
 };
 
 #endif // KNMUSICDETAILOVERVIEW_H

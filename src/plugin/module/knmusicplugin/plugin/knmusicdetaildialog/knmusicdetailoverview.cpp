@@ -65,21 +65,30 @@ KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
     basicInfoLayout->addWidget(m_album);
     basicInfoLayout->addStretch();
 
-    //Initial the overview form layout.
-    QFormLayout *infoFormLayout=new QFormLayout(mainLayout->widget());
-    infoFormLayout->setVerticalSpacing(9);
-    infoFormLayout->setLabelAlignment(Qt::AlignRight);
-    infoFormLayout->setRowWrapPolicy(QFormLayout::DontWrapRows);
-    infoFormLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
-    mainLayout->addLayout(infoFormLayout, 1);
+    //Initial the detail info form layout.
+    QFormLayout *detailLayout=new QFormLayout(mainLayout->widget());
+    detailLayout->setVerticalSpacing(9);
+    detailLayout->setLabelAlignment(Qt::AlignRight);
+    detailLayout->setRowWrapPolicy(QFormLayout::DontWrapRows);
+    detailLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+    mainLayout->addLayout(detailLayout);
 
     //Initial the detail infos.
     initialDetailInfoLabel();
     for(int i=0; i<DetailInformationCount; i++)
     {
-        infoFormLayout->addRow(m_detailInfoCaption[i],
+        detailLayout->addRow(m_detailInfoCaption[i],
                                m_detailInfo[i]);
     }
+
+    //Initila the file path info.
+    QBoxLayout *pathLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                          mainLayout->widget());
+    pathLayout->setContentsMargins(0,0,0,0);
+    pathLayout->setSpacing(9);
+    mainLayout->addLayout(pathLayout, 1);
+    pathLayout->addWidget(m_filePathCaption, 0, Qt::AlignTop);
+    pathLayout->addWidget(m_filePathDataField, 1, Qt::AlignTop);
 
     //Link require.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -94,7 +103,7 @@ void KNMusicDetailOverview::setFilePath(const QString &filePath)
     //Analysis the file.
     KNMusicGlobal::parser()->parseFile(filePath, currentInfo);
     KNMusicGlobal::parser()->parseAlbumArt(currentInfo);
-    //Set the data.
+    //Set the caption data.
     QPixmap albumArtPixmap=QPixmap::fromImage(currentInfo.coverImage);
     if(albumArtPixmap.isNull())
     {
@@ -107,16 +116,29 @@ void KNMusicDetailOverview::setFilePath(const QString &filePath)
     m_duration->setText(KNMusicGlobal::msecondToString(currentInfo.duration));
     m_artist->setText(currentInfo.textLists[Artist]);
     m_album->setText(currentInfo.textLists[Album]);
+
+    //Set the detail info data.
+    m_detailInfo[DetailYear]->setText(currentInfo.textLists[Year]);
+    m_detailInfo[DetailGenre]->setText(currentInfo.textLists[Genre]);
+    m_detailInfo[DetailKind]->setText(currentInfo.textLists[Kind]);
+    m_detailInfo[DetailSize]->setText(currentInfo.textLists[Size]);
+    m_detailInfo[DetailBitRate]->setText(currentInfo.textLists[BitRate]);
+    m_detailInfo[DetailSampleRate]->setText(currentInfo.textLists[SampleRate]);
+    m_detailInfo[DetailDateModified]->setText(
+                currentInfo.textLists[DateModified]);
+    m_filePathDataField->setText(currentInfo.filePath);
 }
 
 void KNMusicDetailOverview::retranslate()
 {
-    m_detailInfoCaption[Kind]->setText(tr("Kind"));
-    m_detailInfoCaption[Duration]->setText(tr("Duration"));
-    m_detailInfoCaption[Size]->setText(tr("Size"));
-    m_detailInfoCaption[BitRate]->setText(tr("Bit Rate"));
-    m_detailInfoCaption[SampleRate]->setText(tr("Sample Rate"));
-    m_detailInfoCaption[DateModified]->setText(tr("Date Modified"));
+    m_detailInfoCaption[DetailYear]->setText(tr("Year"));
+    m_detailInfoCaption[DetailGenre]->setText(tr("Genre"));
+    m_detailInfoCaption[DetailKind]->setText(tr("Kind"));
+    m_detailInfoCaption[DetailSize]->setText(tr("Size"));
+    m_detailInfoCaption[DetailBitRate]->setText(tr("Bit Rate"));
+    m_detailInfoCaption[DetailSampleRate]->setText(tr("Sample Rate"));
+    m_detailInfoCaption[DetailDateModified]->setText(tr("Date Modified"));
+    m_filePathCaption->setText(tr("Location"));
 }
 
 void KNMusicDetailOverview::initialBasicInfoLabel()
@@ -175,4 +197,13 @@ void KNMusicDetailOverview::initialDetailInfoLabel()
         m_detailInfo[i]=new QLabel(this);
         m_detailInfo[i]->setPalette(infoPalette);
     }
+
+    //Initial file path caption.
+    m_filePathCaption=new QLabel(this);
+    m_filePathCaption->setPalette(captionPalette);
+    m_filePathCaption->setFont(captionFont);
+    //Initial the data field.
+    m_filePathDataField=new QLabel(this);
+    m_filePathDataField->setWordWrap(true);
+    m_filePathDataField->setPalette(infoPalette);
 }
