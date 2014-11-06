@@ -79,14 +79,14 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
                                QDataStream &musicDataStream,
                                KNMusicDetailInfo &detailInfo)
 {
-    //Initial datas.
-    char rawHeader[10];
-    ID3v2Header header;
     //If file is less than ID3v2 header, it can't contains ID3v2 tag.
     if(musicFile.size()<10)
     {
         return false;
     }
+    //Initial datas.
+    char rawHeader[10];
+    ID3v2Header header;
     //Detect ID3v2 header.
     musicDataStream.readRawData(rawHeader, 10);
     if(!parseHeader(rawHeader, header))
