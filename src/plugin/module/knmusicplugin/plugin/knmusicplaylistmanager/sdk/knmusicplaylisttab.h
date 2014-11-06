@@ -46,7 +46,7 @@ signals:
     void requireLoadPlaylistList();
     void requireCreateFirstPlaylist(const QStringList &fileList);
     void requireImportPlaylist(const QStringList &playlistList);
-    void requireGeneratePlaylist(QString caption);
+    void requireGeneratePlaylist();
     void requireRemovePlaylist(const QModelIndex &index);
     void requireMakeCopy(int index);
     void currentPlaylistChanged(const QModelIndex &current,
@@ -61,7 +61,6 @@ public slots:
     void editPlaylistName(const QModelIndex &index);
 
 private slots:
-    void onActionAddPlaylist();
     void onActionCopyCurrent();
 
 private:

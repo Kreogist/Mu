@@ -161,11 +161,6 @@ void KNMusicPlaylistTab::editPlaylistName(const QModelIndex &index)
     m_playlistListView->edit(index);
 }
 
-void KNMusicPlaylistTab::onActionAddPlaylist()
-{
-    emit requireGeneratePlaylist(tr("New Playlist"));
-}
-
 void KNMusicPlaylistTab::onActionCopyCurrent()
 {
     emit requireMakeCopy(m_playlistListView->currentIndex().row());
@@ -192,7 +187,7 @@ void KNMusicPlaylistTab::initialPlaylistList()
     //Initial the list editor.
     m_playlistListViewEditor=new KNMusicPlaylistListViewEditor(m_playlistListViewer);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireAddPlaylist,
-            this, &KNMusicPlaylistTab::onActionAddPlaylist);
+            this, &KNMusicPlaylistTab::requireGeneratePlaylist);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireImportPlaylist,
             this, &KNMusicPlaylistTab::requireImportPlaylist);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireRemoveCurrentPlaylist,

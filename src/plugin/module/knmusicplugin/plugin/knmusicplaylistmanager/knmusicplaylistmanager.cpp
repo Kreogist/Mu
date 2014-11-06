@@ -131,15 +131,9 @@ void KNMusicPlaylistManager::onActionLoadPlaylistList()
     }
 }
 
-void KNMusicPlaylistManager::onActionAddPlaylist(const QString &caption)
+void KNMusicPlaylistManager::onActionAddPlaylist()
 {
-    KNMusicPlaylistListItem *playlistItem=
-            KNMusicPlaylistListAssistant::generateBlankPlaylist(caption);
-    m_playlistList->appendPlaylist(playlistItem);
-    //Set the new playlist to the current playlist.
-    m_playlistTab->setCurrentPlaylist(playlistItem->index());
-    //Let user rename it automatically.
-    m_playlistTab->editPlaylistName(playlistItem->index());
+    createBlankPlaylist();
 }
 
 void KNMusicPlaylistManager::onActionAddToPlaylist(const int &row,
@@ -201,43 +195,43 @@ void KNMusicPlaylistManager::onActionCopyPlaylist(const int &index)
     if(QFile::copy(playlistItem->playlistFilePath(), copiedFilePath))
     {
         //Import that file into playlist list.
-        importPlaylistFromFile(copiedFilePath);
+        playlistItem=importPlaylistFromFile(copiedFilePath);
+        //Check is import successful or not.
+        if(playlistItem!=nullptr)
+        {
+            //Change the playlist name.
+            playlistItem->setText(generatePlaylistName(playlistItem->text()));
+            //Display the copied playlist.
+            m_playlistTab->setCurrentPlaylist(playlistItem->index());
+        }
     }
 }
 
 void KNMusicPlaylistManager::onActionCreatePlaylist(const int &row,
                                                     const QStringList &filePaths)
 {
-    KNMusicPlaylistListItem *playlistItem=
-            KNMusicPlaylistListAssistant::generateBlankPlaylist(tr("New Playlist"));
-    m_playlistList->insertPlaylist(row, playlistItem);
+    //Genreate a blank playlist first.
+    KNMusicPlaylistListItem *playlistItem=createBlankPlaylist(row);
     //Add the file to playlist.
     playlistItem->playlistModel()->addFiles(filePaths);
-    //Set the new playlist to the current playlist.
-    m_playlistTab->setCurrentPlaylist(playlistItem->index());
-    //Let user rename it automatically.
-    m_playlistTab->editPlaylistName(playlistItem->index());
 }
 
 void KNMusicPlaylistManager::onActionCreateRowPlaylist(const int &row)
 {
-    KNMusicPlaylistListItem *playlistItem=
-            KNMusicPlaylistListAssistant::generateBlankPlaylist(tr("New Playlist"));
-    m_playlistList->insertPlaylist(row, playlistItem);
+    //Genreate a blank playlist first.
+    KNMusicPlaylistListItem *playlistItem=createBlankPlaylist(row);
     //Append the drag music rows.
     playlistItem->playlistModel()->appendDragMusicRows();
-    //Set the new playlist to the current playlist.
-    m_playlistTab->setCurrentPlaylist(playlistItem->index());
-    //Let user rename it automatically.
-    m_playlistTab->editPlaylistName(playlistItem->index());
 }
 
 void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &current,
                                                             const QModelIndex &previous)
 {
     Q_UNUSED(previous)
+    //Display the current index playlist.
     //Ask UI to display the playlist item.
-    m_playlistTab->displayPlaylistItem(m_playlistList->playlistItemFromIndex(current));
+    m_playlistTab->displayPlaylistItem(
+                m_playlistList->playlistItemFromIndex(current));
 }
 
 void KNMusicPlaylistManager::initialPlaylistLoader()
@@ -260,7 +254,7 @@ void KNMusicPlaylistManager::saveChangedPlaylist()
     }
 }
 
-bool KNMusicPlaylistManager::importPlaylistFromFile(const QString &filePath)
+KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QString &filePath)
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generatePlaylist();
@@ -270,10 +264,102 @@ bool KNMusicPlaylistManager::importPlaylistFromFile(const QString &filePath)
     {
         //If we can parse it, means it's a standard playlist.
         m_playlistList->appendPlaylist(playlistItem);
-        return true;
+        return playlistItem;
     }
     //!FIXME: Parse other type of the data.
 //    m_loader->parsePlaylist(filePath);
     delete playlistItem;
-    return false;
+    return nullptr;
+}
+
+QString KNMusicPlaylistManager::generatePlaylistName(const QString &preferName)
+{
+    //Check is prefer name has been used in the list or not.
+    if(!preferName.isEmpty() &&
+            m_playlistList->match(m_playlistList->index(0,0),
+                                  Qt::DisplayRole,
+                                  preferName).isEmpty())
+    {
+        return preferName;
+    }
+    //Now we need to generate a new plalist name.
+    //The base name of the caption.
+    QString baseName;
+    //Start counting at two, because you have already got baseName playlist if
+    //you need this counter.
+    int sameFileCounter=2;
+    //Genreate the base name.
+    if(preferName.isEmpty())
+    {
+        //Set the base name here.
+        baseName=tr("New Playlist");
+        //If we are here, there might no other playlist named this, do the check
+        //once more.
+        if(m_playlistList->match(m_playlistList->index(0,0),
+                                 Qt::DisplayRole,
+                                 baseName).isEmpty())
+        {
+            return baseName;
+        }
+    }
+    else
+    {
+        //Check is the caption's format is like "XXX 2"
+        int lastSpace=preferName.lastIndexOf(" ");
+        if(lastSpace==-1)
+        {
+            baseName=preferName;
+        }
+        else
+        {
+            //Get the right content and try to tranlsate it to caption.
+            QString rightContent=preferName.mid(lastSpace+1);
+            bool translateSuccess=false;
+            int lastIndex=rightContent.toInt(&translateSuccess);
+            //If we have been find a number there, set the counter to that number.
+            if(translateSuccess)
+            {
+                baseName=preferName.left(lastSpace);
+                sameFileCounter=lastIndex+1;
+            }
+            else
+            {
+                baseName=preferName;
+            }
+        }
+    }
+    //If it has been taken add count after it.
+    QString linkedName=baseName + " " + QString::number(sameFileCounter);
+    while(!m_playlistList->match(m_playlistList->index(0,0),
+                                Qt::DisplayRole,
+                                linkedName).isEmpty())
+    {
+        sameFileCounter++;
+        linkedName=baseName + " " + QString::number(sameFileCounter);
+    }
+    return linkedName;
+}
+
+KNMusicPlaylistListItem *KNMusicPlaylistManager::createBlankPlaylist(const int &row,
+                                                                     const QString &caption)
+{
+    //Create blank playlist.
+    KNMusicPlaylistListItem *playlistItem=
+            KNMusicPlaylistListAssistant::generateBlankPlaylist(
+                caption.isEmpty()?generatePlaylistName():caption);
+    //Insert the playlist item to the prefer row, or else append to the end.
+    if(row>0 && row<m_playlistList->rowCount())
+    {
+        m_playlistList->insertPlaylist(row, playlistItem);
+    }
+    else
+    {
+        m_playlistList->appendPlaylist(playlistItem);
+    }
+    //Set the new playlist to the current playlist.
+    m_playlistTab->setCurrentPlaylist(playlistItem->index());
+    //Let user rename it automatically.
+    m_playlistTab->editPlaylistName(playlistItem->index());
+    //Return this item.
+    return playlistItem;
 }

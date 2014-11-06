@@ -40,7 +40,7 @@ public slots:
 
 private slots:
     void onActionLoadPlaylistList();
-    void onActionAddPlaylist(const QString &caption);
+    void onActionAddPlaylist();
     void onActionAddToPlaylist(const int &row,
                                const QStringList &filePaths);
     void onActionAddRowToPlaylist(const int &row);
@@ -56,12 +56,16 @@ private slots:
 private:
     void initialPlaylistLoader();
     void saveChangedPlaylist();
-    bool importPlaylistFromFile(const QString &filePath);
+    QString generatePlaylistName(const QString &preferName="");
+    KNMusicPlaylistListItem *createBlankPlaylist(const int &row=-1,
+                                                 const QString &caption="");
+    KNMusicPlaylistListItem *importPlaylistFromFile(const QString &filePath);
+
+    QString m_playlistDatabasePath;
     KNMusicPlaylistLoader *m_loader;
     KNMusicPlaylistTab *m_playlistTab;
     KNMusicPlaylistList *m_playlistList;
     KNMusicNowPlayingBase *m_nowPlaying;
-    QString m_playlistDatabasePath;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H
