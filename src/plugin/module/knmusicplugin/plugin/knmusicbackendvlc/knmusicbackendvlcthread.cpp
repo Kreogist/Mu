@@ -63,6 +63,8 @@ void KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
     }
     //Backup the file path.
     m_filePath=filePath;
+    //Emit file path changed signal.
+    emit filePathChanged(m_filePath);
     //Clear the media data first.
     clearMedia();
     //Load the file.

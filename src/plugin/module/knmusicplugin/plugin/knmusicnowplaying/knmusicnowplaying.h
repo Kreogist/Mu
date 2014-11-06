@@ -31,7 +31,7 @@ class KNMusicNowPlaying : public KNMusicNowPlayingBase
     Q_OBJECT
 public:
     explicit KNMusicNowPlaying(QObject *parent = 0);
-    void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
+    void setBackend(KNMusicBackend *backend);
     KNMusicProxyModel *playingModel();
 
 signals:
@@ -51,7 +51,7 @@ public slots:
 private:
     void resetPlayingItem();
     void resetPlayingModels();
-    KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
+    KNMusicBackend *m_backend=nullptr;
     KNMusicSinglePlaylistModel *m_temporaryModel;
     KNMusicModel *m_playingMusicModel=nullptr;
     KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;

@@ -27,6 +27,7 @@ public:
                              const qint64 &sectionDuration=-1)=0;
 
 signals:
+    void filePathChanged(QString filePath);
     void durationChanged(qint64 duration);
     void positionChanged(qint64 position);
     void stateChanged(int state);

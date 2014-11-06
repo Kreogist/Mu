@@ -30,6 +30,7 @@
 #include "knopacityanimebutton.h"
 
 #include "knglobal.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
@@ -64,12 +65,16 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_mouseIn=new QParallelAnimationGroup(this);
     m_mouseOut=new QParallelAnimationGroup(this);
 
+    //Initial widgets.
     initialAlbumArt();
     initialLabels();
     initialProrgess();
     initialControlPanel();
     initialVolume();
     initialAppendPanel();
+    //Connect drag play request.
+    connect(this, &KNMusicHeaderPlayer::requireAnalysisFiles,
+            this, &KNMusicHeaderPlayer::onActionPlayDragIn);
 }
 
 KNMusicHeaderPlayer::~KNMusicHeaderPlayer()
@@ -111,11 +116,30 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
             this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
     connect(m_backend, &KNMusicBackend::finished,
             this, &KNMusicHeaderPlayer::finished);
+    connect(m_backend, &KNMusicBackend::filePathChanged,
+            this, &KNMusicHeaderPlayer::loadFileInfo);
     connect(m_backend, &KNMusicBackend::muteStateChanged,
             [=](const bool &mute)
             {
                 m_volumeIndicator->setIcon(mute?m_muteIcon:m_noMuteIcon);
             });
+}
+
+void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
+{
+    m_nowPlaying=nowPlaying;
+    //Connect request.
+    connect(this, &KNMusicHeaderPlayer::requirePlayNext,
+            m_nowPlaying, &KNMusicNowPlayingBase::playNext);
+    connect(this, &KNMusicHeaderPlayer::requirePlayPrevious,
+            m_nowPlaying, &KNMusicNowPlayingBase::playPrevious);
+    connect(this, &KNMusicHeaderPlayer::requireChangeLoopState,
+            m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
+    //Connect responds.
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
+            this, &KNMusicHeaderPlayerBase::onActionLoopStateChanged);
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetPlayer,
+            this, &KNMusicHeaderPlayerBase::reset);
 }
 
 void KNMusicHeaderPlayer::reset()
@@ -140,24 +164,6 @@ void KNMusicHeaderPlayer::reset()
 void KNMusicHeaderPlayer::play()
 {
     m_backend->play();
-}
-
-void KNMusicHeaderPlayer::playFile(const QString &filePath)
-{
-    //Update file info.
-    loadFileInfo(filePath);
-    //Play the file.
-    m_backend->playFile(filePath);
-}
-
-void KNMusicHeaderPlayer::playSection(const QString &filePath,
-                                      const qint64 &startPosition,
-                                      const qint64 &duration)
-{
-    //Update file info.
-    loadFileInfo(filePath);
-    //Play the file.
-    m_backend->playSection(filePath, startPosition, duration);
 }
 
 void KNMusicHeaderPlayer::onActionLoopStateChanged(const int &state)
@@ -237,6 +243,11 @@ void KNMusicHeaderPlayer::setDuration(const qint64 &duration)
     m_progressSlider->setMaximum(duration);
     //Set duration display text.
     m_duration->setText(KNMusicGlobal::msecondToString(duration));
+}
+
+void KNMusicHeaderPlayer::onActionPlayDragIn(const QStringList &filePaths)
+{
+    ;
 }
 
 void KNMusicHeaderPlayer::onActionProgressPressed()
@@ -678,12 +689,12 @@ void KNMusicHeaderPlayer::saveConfigure()
     m_global->setCustomData(objectName(), "Volume", (double)m_volumeSlider->percentage());
 }
 
-bool KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
+void KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
 {
     //Check is the playing file the current file. If it is, do nothing.
     if(m_currentFilePath==filePath)
     {
-        return false;
+        return;
     }
     //Save the new file path and emit file path changed signal.
     m_currentFilePath=filePath;
@@ -701,5 +712,4 @@ bool KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
     //!FIXME: Set the new data.
     //Ask to load lyrics.
     emit requireLoadLyrics(m_currentFilePath);
-    return true;
 }

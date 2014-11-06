@@ -81,9 +81,9 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 #ifdef ENABLE_LIBVLC
     loadBackend(new KNMusicBackendVLC);
 #endif
+    loadNowPlaying(new KNMusicNowPlaying);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
-    loadNowPlaying(new KNMusicNowPlaying);
     loadPlaylistManager(new KNMusicPlaylistManager);
 }
 
@@ -161,6 +161,7 @@ void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
         m_headerPlayer=plugin;
         //Configure the header player.
         m_headerPlayer->setBackend(m_backend);
+        m_headerPlayer->setNowPlaying(m_nowPlaying);
         //Restore configure.
         m_headerPlayer->restoreConfigure();
         //Add plugin to the list.
@@ -182,12 +183,16 @@ void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
 
 void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
 {
-    //Set the header player.
-    plugin->setHeaderPlayer(m_headerPlayer);
-    //Add plugin to list.
-    m_pluginList.append(plugin);
-    //Set global now playing plugin.
-    KNMusicGlobal::setNowPlaying(plugin);
+    if(m_nowPlaying==nullptr)
+    {
+        m_nowPlaying=plugin;
+        //Set the header player.
+        m_nowPlaying->setBackend(m_backend);
+        //Add plugin to list.
+        m_pluginList.append(m_nowPlaying);
+        //Set global now playing plugin.
+        KNMusicGlobal::setNowPlaying(m_nowPlaying);
+    }
 }
 
 void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)

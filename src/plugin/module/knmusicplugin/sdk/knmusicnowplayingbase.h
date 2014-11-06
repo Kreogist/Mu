@@ -7,7 +7,7 @@
 #ifndef KNMUSICNOWPLAYINGBASE_H
 #define KNMUSICNOWPLAYINGBASE_H
 
-#include "knmusicheaderplayerbase.h"
+#include "knmusicbackend.h"
 
 #include "knmusicglobal.h"
 
@@ -22,10 +22,11 @@ class KNMusicNowPlayingBase : public QObject
     Q_OBJECT
 public:
     KNMusicNowPlayingBase(QObject *parent = 0):QObject(parent){}
-    virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)=0;
+    virtual void setBackend(KNMusicBackend *backend)=0;
     virtual KNMusicProxyModel *playingModel()=0;
 
 signals:
+    void requireResetPlayer();
     void loopStateChanged(int state);
 
 public slots:

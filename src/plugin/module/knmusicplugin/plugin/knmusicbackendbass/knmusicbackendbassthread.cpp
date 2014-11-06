@@ -58,6 +58,8 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
     }
     //Backup the file path.
     m_filePath=filePath;
+    //Emit file path changed signal.
+    emit filePathChanged(m_filePath);
     //Load the file.
 #ifdef Q_OS_WIN32
     std::wstring uniPath=m_filePath.toStdWString();

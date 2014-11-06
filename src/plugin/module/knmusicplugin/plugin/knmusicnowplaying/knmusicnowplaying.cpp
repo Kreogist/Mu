@@ -37,24 +37,15 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     m_temporaryProxyModel->setSourceModel(m_temporaryModel);
 }
 
-void KNMusicNowPlaying::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
+void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
 {
-    if(m_headerPlayer==nullptr)
+    if(m_backend==nullptr)
     {
-        //Save the player.
-        m_headerPlayer=headerPlayer;
+        //Save the backend.
+        m_backend=backend;
         //Connect request.
-        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayNext,
-                this, &KNMusicNowPlaying::playNext);
-        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayPrevious,
-                this, &KNMusicNowPlaying::playPrevious);
-        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::finished,
+        connect(m_backend, &KNMusicBackend::finished,
                 this, &KNMusicNowPlaying::onActionPlayingFinished);
-        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireChangeLoopState,
-                this, &KNMusicNowPlaying::changeLoopState);
-        //Connect responds.
-        connect(this, &KNMusicNowPlaying::loopStateChanged,
-                m_headerPlayer, &KNMusicHeaderPlayerBase::onActionLoopStateChanged);
     }
 }
 
@@ -153,7 +144,7 @@ void KNMusicNowPlaying::onActionPlayingFinished()
     //If current mode is track repeat, just play it again. :)
     if(m_loopMode==RepeatTrack)
     {
-        m_headerPlayer->play();
+        m_backend->play();
         return;
     }
     //Or else, we need to play the next.
@@ -238,16 +229,16 @@ void KNMusicNowPlaying::playMusic(const int &row)
     if(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
                                         StartPositionRole).toLongLong()==-1)
     {
-        m_headerPlayer->playFile(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
-                                                                  FilePathRole).toString());
+        m_backend->playFile(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                             FilePathRole).toString());
     }
     else
     {
-        m_headerPlayer->playSection(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
-                                                                     FilePathRole).toString(),
-                                    m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
-                                                                     StartPositionRole).toLongLong(),
-                                    m_playingMusicModel->songDuration(m_currentPlayingIndex.row()));
+        m_backend->playSection(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                                FilePathRole).toString(),
+                               m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                                StartPositionRole).toLongLong(),
+                               m_playingMusicModel->songDuration(m_currentPlayingIndex.row()));
     }
 }
 
@@ -284,7 +275,7 @@ void KNMusicNowPlaying::checkRemovedIndex(const QModelIndex &index)
 void KNMusicNowPlaying::resetPlayingItem()
 {
     //No matter what, reset header player first.
-    m_headerPlayer->reset();
+    emit requireResetPlayer();
     //Check is the current item null, if not, clear the playing icon.
     if(m_currentPlayingIndex.isValid())
     {

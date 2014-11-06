@@ -7,14 +7,17 @@
 #ifndef KNMUSICHEADERPLAYERBASE_H
 #define KNMUSICHEADERPLAYERBASE_H
 
-#include <QWidget>
+#include "kndropproxycontainer.h"
 
 class KNMusicBackend;
-class KNMusicHeaderPlayerBase : public QWidget
+class KNMusicNowPlayingBase;
+class KNMusicHeaderPlayerBase : public KNDropProxyContainer
 {
     Q_OBJECT
 public:
-    KNMusicHeaderPlayerBase(QWidget *parent = 0):QWidget(parent){}
+    KNMusicHeaderPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
+    virtual void setBackend(KNMusicBackend *backend)=0;
+    virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
 
 signals:
     void requirePlayPrevious();
@@ -29,14 +32,9 @@ signals:
 
 public slots:
     virtual void restoreConfigure()=0;
-    virtual void setBackend(KNMusicBackend *backend)=0;
     virtual void onActionLoopStateChanged(const int &state)=0;
     virtual void reset()=0;
     virtual void play()=0;
-    virtual void playFile(const QString &filePath)=0;
-    virtual void playSection(const QString &filePath,
-                             const qint64 &startPosition,
-                             const qint64 &duration)=0;
 
 };
 

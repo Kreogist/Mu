@@ -40,19 +40,16 @@ class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
 public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
     ~KNMusicHeaderPlayer();
+    void setBackend(KNMusicBackend *backend);
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
 
 signals:
 
 public slots:
     void restoreConfigure();
-    void setBackend(KNMusicBackend *backend);
     void onActionLoopStateChanged(const int &state);
     void reset();
     void play();
-    void playFile(const QString &filePath);
-    void playSection(const QString &filePath,
-                     const qint64 &startPosition,
-                     const qint64 &duration);
 
 protected:
     void enterEvent(QEvent *event);
@@ -65,6 +62,7 @@ protected:
 
 private slots:
     void setDuration(const qint64 &duration);
+    void onActionPlayDragIn(const QStringList &filePaths);
     void onActionProgressPressed();
     void onActionProgressReleased();
     void onActionPositionEdited();
@@ -77,6 +75,7 @@ private slots:
     void onActionPlayStateChanged(const int &state);
 
     void setPosition(const qint64 &position);
+    void loadFileInfo(const QString &filePath);
 
 private:
     void initialAlbumArt();
@@ -100,11 +99,11 @@ private:
 
     void saveConfigure();
 
-    bool loadFileInfo(const QString &filePath);
     //Public classes.
     KNMusicGlobal *m_musicGlobal;
     KNMusicParser *m_parser;
     KNMusicBackend *m_backend;
+    KNMusicNowPlayingBase *m_nowPlaying;
     KNGlobal *m_global;
 
     //Animations

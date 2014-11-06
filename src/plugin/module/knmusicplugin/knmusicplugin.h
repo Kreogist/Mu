@@ -89,6 +89,7 @@ private:
 
     KNMusicDetailDialogBase *m_detailDialog=nullptr;
     KNMusicBackend *m_backend=nullptr;
+    KNMusicNowPlayingBase *m_nowPlaying=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
 };
 
