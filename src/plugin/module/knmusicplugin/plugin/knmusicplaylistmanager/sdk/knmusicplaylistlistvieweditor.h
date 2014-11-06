@@ -34,6 +34,7 @@ signals:
     void requireAddPlaylist();
     void requireImportPlaylist(const QStringList &playlistList);
     void requireRemoveCurrentPlaylist();
+    void requireCopyCurrentPlaylist();
 
 public slots:
     void retranslate();

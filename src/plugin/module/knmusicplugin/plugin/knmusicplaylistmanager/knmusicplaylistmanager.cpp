@@ -63,6 +63,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
             this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,
             this, &KNMusicPlaylistManager::onActionAddPlaylist);
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireMakeCopy,
+            this, &KNMusicPlaylistManager::onActionCopyPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireImportPlaylist,
             this, &KNMusicPlaylistManager::onActionImportPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireRemovePlaylist,
@@ -184,6 +186,22 @@ void KNMusicPlaylistManager::onActionImportPlaylist(QStringList playlistPaths)
     while(!playlistPaths.isEmpty())
     {
         importPlaylistFromFile(playlistPaths.takeFirst());
+    }
+}
+
+void KNMusicPlaylistManager::onActionCopyPlaylist(const int &index)
+{
+    //Get the playlist item.
+    KNMusicPlaylistListItem *playlistItem=m_playlistList->playlistItem(index);
+    //Save that plalist item first
+    KNMusicPlaylistListAssistant::writePlaylist(playlistItem);
+    //Get a new file name.
+    QString copiedFilePath=KNMusicPlaylistListAssistant::alloctPlaylistFilePath();
+    //Copy the file in playlist item.
+    if(QFile::copy(playlistItem->playlistFilePath(), copiedFilePath))
+    {
+        //Import that file into playlist list.
+        importPlaylistFromFile(copiedFilePath);
     }
 }
 

@@ -44,13 +44,13 @@ public:
     static bool writePlaylist(KNMusicPlaylistListItem *item);
     static void savePlaylistDatabase(const QString &filePath,
                                      const QStringList &data);
+    static QString alloctPlaylistFilePath();
 
 signals:
 
 public slots:
 
 private:
-    static QString alloctPlaylistFilePath();
     explicit KNMusicPlaylistListAssistant(QObject *parent = 0);
     static QIcon m_playlistIcon;
     static QString m_playlistFolderPath;

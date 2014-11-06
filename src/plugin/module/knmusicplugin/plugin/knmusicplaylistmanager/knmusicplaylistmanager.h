@@ -46,6 +46,7 @@ private slots:
     void onActionAddRowToPlaylist(const int &row);
     void onActionRemovePlaylist(const QModelIndex &index);
     void onActionImportPlaylist(QStringList playlistPaths);
+    void onActionCopyPlaylist(const int &index);
     void onActionCreatePlaylist(const int &row,
                                 const QStringList &filePaths);
     void onActionCreateRowPlaylist(const int &row);

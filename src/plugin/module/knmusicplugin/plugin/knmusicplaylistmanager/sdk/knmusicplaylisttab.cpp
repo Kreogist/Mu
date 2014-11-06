@@ -166,6 +166,11 @@ void KNMusicPlaylistTab::onActionAddPlaylist()
     emit requireGeneratePlaylist(tr("New Playlist"));
 }
 
+void KNMusicPlaylistTab::onActionCopyCurrent()
+{
+    emit requireMakeCopy(m_playlistListView->currentIndex().row());
+}
+
 void KNMusicPlaylistTab::initialPlaylistList()
 {
     //Initial the container.
@@ -192,5 +197,7 @@ void KNMusicPlaylistTab::initialPlaylistList()
             this, &KNMusicPlaylistTab::requireImportPlaylist);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireRemoveCurrentPlaylist,
             this, &KNMusicPlaylistTab::onActionRemoveCurrent);
+    connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireCopyCurrentPlaylist,
+            this, &KNMusicPlaylistTab::onActionCopyCurrent);
     playlistListLayout->addWidget(m_playlistListViewEditor);
 }
