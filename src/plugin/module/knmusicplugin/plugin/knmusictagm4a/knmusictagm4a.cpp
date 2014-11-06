@@ -86,7 +86,7 @@ bool KNMusicTagM4A::praseTag(QFile &musicFile,
         return false;
     }
     bool findUdta=false, findMeta=false;
-    for(QList<M4ABox>::iterator i=expandList.begin();
+    for(auto i=expandList.begin();
         i!=expandList.end();
         ++i)
     {
@@ -112,7 +112,7 @@ bool KNMusicTagM4A::praseTag(QFile &musicFile,
     {
         return false;
     }
-    for(QList<M4ABox>::iterator i=expandList.begin();
+    for(auto i=expandList.begin();
         i!=expandList.end();
         ++i)
     {
@@ -211,7 +211,7 @@ void KNMusicTagM4A::toIndependence(M4ABox &box)
 void KNMusicTagM4A::writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
                                              KNMusicDetailInfo &detailInfo)
 {
-    for(QList<M4ABox>::const_iterator i=expandList.begin();
+    for(auto i=expandList.begin();
         i!=expandList.end();
         ++i)
     {
