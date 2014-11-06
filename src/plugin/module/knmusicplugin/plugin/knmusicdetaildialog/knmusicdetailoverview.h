@@ -21,6 +21,7 @@
 #include <QWidget>
 
 class QLabel;
+class KNFilePathLabel;
 class KNMusicParser;
 class KNMusicDetailOverview : public QWidget
 {
@@ -52,7 +53,8 @@ private:
     QLabel *m_albumArt, *m_title, *m_artist, *m_album, *m_duration,
            *m_detailInfoCaption[DetailInformationCount],
            *m_detailInfo[DetailInformationCount],
-           *m_filePathCaption, *m_filePathDataField;
+           *m_filePathCaption;
+    KNFilePathLabel *m_filePathDataField;
 };
 
 #endif // KNMUSICDETAILOVERVIEW_H

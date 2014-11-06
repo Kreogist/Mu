@@ -20,6 +20,7 @@
 #include <QLabel>
 
 #include "knlocalemanager.h"
+#include "knfilepathlabel.h"
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
 
@@ -203,7 +204,7 @@ void KNMusicDetailOverview::initialDetailInfoLabel()
     m_filePathCaption->setPalette(captionPalette);
     m_filePathCaption->setFont(captionFont);
     //Initial the data field.
-    m_filePathDataField=new QLabel(this);
+    m_filePathDataField=new KNFilePathLabel(this);
     m_filePathDataField->setWordWrap(true);
     m_filePathDataField->setPalette(infoPalette);
 }
