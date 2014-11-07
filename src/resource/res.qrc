@@ -46,5 +46,6 @@
         <file>configure/locale/noIcon.png</file>
         <file>configure/locale/headicon.png</file>
         <file>music/common/emptyicon.png</file>
+        <file>music/common/cantplay.png</file>
     </qresource>
 </RCC>

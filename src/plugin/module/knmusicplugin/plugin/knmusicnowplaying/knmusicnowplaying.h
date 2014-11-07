@@ -40,6 +40,7 @@ public slots:
     void playNext();
     void playPrevious();
     void onActionPlayingFinished();
+    void onActionCannotPlay();
     void changeLoopState();
     void playTemporaryFiles(const QStringList &filePaths);
     void setPlayingModel(KNMusicProxyModel *model);
@@ -49,6 +50,7 @@ public slots:
     void checkRemovedIndex(const QModelIndex &index);
 
 private:
+    void playNextSong(bool cannotLoadFile=false);
     void resetPlayingItem();
     void resetPlayingModels();
     KNMusicBackend *m_backend=nullptr;
@@ -57,7 +59,7 @@ private:
     KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;
     KNMusicProxyModelPool *m_proxyModelPool;
     QPersistentModelIndex m_currentPlayingIndex;
-    QPixmap m_playingIcon;
+    QPixmap m_playingIcon, m_cantPlayIcon;
     int m_loopMode=NoRepeat;
 };
 

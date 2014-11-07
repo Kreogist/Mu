@@ -27,6 +27,7 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
 {
     //Initial the icon.
     m_playingIcon=QPixmap(":/plugin/music/common/playingicon.png");
+    m_cantPlayIcon=QPixmap(":/plugin/music/common/cantplay.png");
     //Initial temporary model.
     m_temporaryModel=new KNMusicSinglePlaylistModel(this);
     //Initial proxy model pool.
@@ -47,7 +48,7 @@ void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
         connect(m_backend, &KNMusicBackend::finished,
                 this, &KNMusicNowPlaying::onActionPlayingFinished);
         connect(m_backend, &KNMusicBackend::cannotLoadFile,
-                this, &KNMusicNowPlaying::playNext);
+                this, &KNMusicNowPlaying::onActionCannotPlay);
     }
 }
 
@@ -58,42 +59,7 @@ KNMusicProxyModel *KNMusicNowPlaying::playingModel()
 
 void KNMusicNowPlaying::playNext()
 {
-    //If there's no model or the source model is not the music model,
-    //reset all the model.
-    if(m_playingModel==nullptr)
-    {
-        resetPlayingItem();
-        resetPlayingModels();
-        return;
-    }
-    //If current playing index is invaild, then try to play the first item.
-    if(!m_currentPlayingIndex.isValid())
-    {
-        if(m_playingModel->rowCount()>0)
-        {
-            playMusic(0);
-        }
-        return;
-    }
-    QModelIndex currentIndex=m_playingModel->mapFromSource(m_currentPlayingIndex);
-    //If it's the last one.
-    if(currentIndex.row()==m_playingModel->rowCount()-1)
-    {
-        switch(m_loopMode)
-        {
-        case NoRepeat:
-        case RepeatTrack:
-            //Finished playing.
-            resetPlayingItem();
-            return;
-        case RepeatAll:
-            //Play the first one.
-            playMusic(0);
-            return;
-        }
-    }
-    //Play the next song.
-    playMusic(currentIndex.row()+1);
+    playNextSong();
 }
 
 void KNMusicNowPlaying::playPrevious()
@@ -272,6 +238,64 @@ void KNMusicNowPlaying::checkRemovedIndex(const QModelIndex &index)
         //Reset the playing item.
         resetPlayingItem();
     }
+}
+
+void KNMusicNowPlaying::onActionCannotPlay()
+{
+    int cannotPlayRow=m_currentPlayingIndex.row();
+    //Play the next song with cannot play mode.
+    playNextSong(true);
+    //Set cannot play icon.
+    m_playingMusicModel->setRoleData(cannotPlayRow,
+                                     BlankData,
+                                     Qt::DecorationRole,
+                                     m_cantPlayIcon);
+}
+
+void KNMusicNowPlaying::playNextSong(bool cannotLoadFile)
+{
+    //If there's no model or the source model is not the music model,
+    //reset all the model.
+    if(m_playingModel==nullptr)
+    {
+        resetPlayingItem();
+        resetPlayingModels();
+        return;
+    }
+    //If current playing index is invaild, then try to play the first item.
+    if(!m_currentPlayingIndex.isValid())
+    {
+        if(m_playingModel->rowCount()>0)
+        {
+            playMusic(0);
+        }
+        return;
+    }
+    QModelIndex currentIndex=m_playingModel->mapFromSource(m_currentPlayingIndex);
+    //If it's the last one.
+    if(currentIndex.row()==m_playingModel->rowCount()-1)
+    {
+        if(cannotLoadFile)
+        {
+            //Finished playing.
+            resetPlayingItem();
+            return;
+        }
+        switch(m_loopMode)
+        {
+        case NoRepeat:
+        case RepeatTrack:
+            //Finished playing.
+            resetPlayingItem();
+            return;
+        case RepeatAll:
+            //Play the first one.
+            playMusic(0);
+            return;
+        }
+    }
+    //Play the next song.
+    playMusic(currentIndex.row()+1);
 }
 
 void KNMusicNowPlaying::resetPlayingItem()

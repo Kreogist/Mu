@@ -46,5 +46,5 @@ void KNMusicPlaylistTreeView::resetHeaderState()
     //No more hack here, move the display data index one by one.
     moveToFirst(BlankData);
     //Set the index column at a enough width.
-    setColumnWidth(BlankData, fontMetrics().width('6')*3+30);
+    setColumnWidth(BlankData, fontMetrics().width('6')*4+30);
 }
