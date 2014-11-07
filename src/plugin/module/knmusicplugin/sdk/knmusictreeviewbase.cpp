@@ -6,6 +6,7 @@
  */
 #include <QMimeData>
 #include <QList>
+#include <QKeyEvent>
 #include <QDataStream>
 #include <QDrag>
 #include <QScrollBar>
@@ -182,6 +183,37 @@ void KNMusicTreeViewBase::leaveEvent(QEvent *event)
     m_mouseOut->start();
 }
 
+void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
+{
+    QRect selectedRect;
+    //Get the key event
+    switch(event->key())
+    {
+    case Qt::Key_Menu:
+        //Check the select rows count.
+        switch(selectionModel()->selectedRows().size())
+        {
+        case 0:
+            break;
+        case 1:
+            //Calculate the selected rows position.
+            selectedRect=visualRect(currentIndex());
+            showSoloMenu(QPoint(0,
+                                selectedRect.y()));
+            break;
+        default:
+            //Calculate the selected rows position.
+            selectedRect=visualRect(currentIndex());
+            showMultiMenu(QPoint(0,
+                                 selectedRect.y()));
+            break;
+        }
+    default:
+        QTreeView::keyReleaseEvent(event);
+        break;
+    }
+}
+
 void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
 {
     Q_UNUSED(supportedActions)
@@ -241,10 +273,10 @@ void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
             case 0:
                 break;
             case 1:
-                showSoloMenu(event);
+                showSoloMenu(event->pos());
                 break;
             default:
-                showMultiMenu(event);
+                showMultiMenu(event->pos());
                 break;
             }
         }
@@ -289,10 +321,10 @@ void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)
             this, &KNMusicTreeViewBase::onActionMouseInOut);
 }
 
-void KNMusicTreeViewBase::showSoloMenu(QMouseEvent *event)
+void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
 {
     //Get the index of the position where mouse pressed.
-    QModelIndex pressedIndex=indexAt(event->pos());
+    QModelIndex pressedIndex=indexAt(position);
     if(pressedIndex.isValid())
     {
         KNMusicSoloMenuBase *soloMenu=KNMusicGlobal::instance()->soloMenu();
@@ -306,26 +338,30 @@ void KNMusicTreeViewBase::showSoloMenu(QMouseEvent *event)
         soloMenu->setProxyModel(m_proxyModel);
         soloMenu->setCurrentIndex(pressedIndex);
         //Set position.
-        soloMenu->setMouseDownPos(event->globalPos());
+        QPoint menuPosition=mapToGlobal(position);
+        menuPosition.setY(menuPosition.y()+header()->height());
+        soloMenu->setMouseDownPos(menuPosition);
         //Launch it.
-        soloMenu->exec(event->globalPos());
+        soloMenu->exec(menuPosition);
         //Disconnect all the signals.
         m_soloConnections->disConnectAll();
     }
 }
 
-void KNMusicTreeViewBase::showMultiMenu(QMouseEvent *event)
+void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
 {
-    if(indexAt(event->pos()).isValid())
+    if(indexAt(position).isValid())
     {
         KNMusicMultiMenuBase *multiMenu=KNMusicGlobal::instance()->multiMenu();
         m_multiConnections->addConnectionHandle(
                             connect(multiMenu, &KNMusicMultiMenuBase::requireDeleteSelection,
                                     this, &KNMusicTreeViewBase::removeSelections));
         //Set position.
-        multiMenu->setMouseDownPos(event->globalPos());
+        QPoint menuPosition=mapToGlobal(position);
+        menuPosition.setY(menuPosition.y()+header()->height());
+        multiMenu->setMouseDownPos(menuPosition);
         //Launch it.
-        multiMenu->exec(event->globalPos());
+        multiMenu->exec(menuPosition);
         //Disconnect all the signals.
         m_multiConnections->disConnectAll();
     }

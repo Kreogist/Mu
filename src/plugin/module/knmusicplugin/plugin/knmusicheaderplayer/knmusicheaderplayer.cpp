@@ -135,6 +135,8 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             m_nowPlaying, &KNMusicNowPlayingBase::playPrevious);
     connect(this, &KNMusicHeaderPlayer::requireChangeLoopState,
             m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
+    connect(this, &KNMusicHeaderPlayer::requireAnalysisFiles,
+            m_nowPlaying, &KNMusicNowPlayingBase::playTemporaryFiles);
     //Connect responds.
     connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
             this, &KNMusicHeaderPlayerBase::onActionLoopStateChanged);

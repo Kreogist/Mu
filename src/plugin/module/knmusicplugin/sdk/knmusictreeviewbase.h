@@ -35,6 +35,7 @@ public slots:
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
     void startDrag(Qt::DropActions supportedActions);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
@@ -51,8 +52,8 @@ private slots:
 
 private:
     void configureTimeLine(QTimeLine *timeLine);
-    void showSoloMenu(QMouseEvent *event);
-    void showMultiMenu(QMouseEvent *event);
+    void showSoloMenu(const QPoint &position);
+    void showMultiMenu(const QPoint &position);
     QTimeLine *m_mouseIn, *m_mouseOut;
     KNMusicProxyModel *m_proxyModel=nullptr;
     KNMusicProxyModelPool *m_proxyModelPool;
