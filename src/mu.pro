@@ -224,7 +224,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp \
     plugin/module/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
     plugin/sdk/knfilepathlabel.cpp \
-    plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp
+    plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp \
+    plugin/sdk/knsearchbox.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -364,7 +366,10 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.h \
     plugin/module/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h \
     plugin/sdk/knfilepathlabel.h \
-    plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h
+    plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h \
+    plugin/sdk/knsearchbox.h \
+    plugin/module/knmusicplugin/sdk/knmusicsearchplugin.h \
+    plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.h
 
 RESOURCES += \
     resource/res.qrc

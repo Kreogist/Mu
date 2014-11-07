@@ -27,6 +27,7 @@ class KNMusicTab;
 class KNMusicBackend;
 class KNMusicGlobal;
 class KNMusicParser;
+class KNMusicSearchPlugin;
 class KNMusicDetailDialogBase;
 class KNMusicHeaderPlayerBase;
 class KNMusicHeaderLyricsBase;
@@ -48,6 +49,7 @@ public:
     QWidget *headerWidget();
     KNPreferenceWidgetsPanel *preferencePanelWidget();
 
+    void loadSearch(KNMusicSearchPlugin *plugin);
     void loadBackend(KNMusicBackend *plugin);
     void loadDetailInfo(KNMusicDetailDialogBase *plugin);
     void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);

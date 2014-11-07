@@ -28,6 +28,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     QDialog(parent)
 {
     //Set properties.
+    setWindowOpacity(0.9);
     //Reset window flags, SAO style show be no border, ToolTip is the best
     //choice. Why not Qt::FramelessWindowHint? Ask Gnome Shell, I don't know.
     setWindowFlags(Qt::ToolTip);

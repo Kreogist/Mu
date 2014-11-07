@@ -23,6 +23,7 @@
 //Ports
 #include "knmusicbackend.h"
 #include "knmusicparser.h"
+#include "knmusicsearchplugin.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicdetaildialogbase.h"
 #include "knmusicheaderplayerbase.h"
@@ -45,6 +46,7 @@
 #include "plugin/knmusictagm4a/knmusictagm4a.h"
 #include "plugin/knmusictagwma/knmusictagwma.h"
 #include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
+#include "plugin/knmusicsearch/knmusicsearch.h"
 #include "plugin/knmusiccueparser/knmusiccueparser.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
@@ -75,6 +77,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     initialMultiMenu(new KNMusicMultiMenu);
 
     //Load plugins.
+    loadSearch(new KNMusicSearch);
 #ifdef ENABLE_LIBBASS
     loadBackend(new KNMusicBackendBass);
 #endif
@@ -132,6 +135,11 @@ QWidget *KNMusicPlugin::headerWidget()
 KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
 {
     return m_preferencePanel;
+}
+
+void KNMusicPlugin::loadSearch(KNMusicSearchPlugin *plugin)
+{
+    addRightHeaderWidget(plugin->searchBox());
 }
 
 void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
@@ -250,7 +258,7 @@ void KNMusicPlugin::initialInfrastructure()
     //Set header layout.
     QBoxLayout *headerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             m_headerWidget);
-    headerLayout->setContentsMargins(0,0,0,0);
+    headerLayout->setContentsMargins(0,0,10,0);
     headerLayout->setSpacing(0);
     m_headerWidget->setLayout(headerLayout);
     //Initial left layout.
@@ -258,11 +266,11 @@ void KNMusicPlugin::initialInfrastructure()
                                       headerLayout->widget());
     m_headerLeftLayout->setContentsMargins(0,0,0,0);
     m_headerLeftLayout->setSpacing(0);
-    headerLayout->addLayout(m_headerLeftLayout);
+    headerLayout->addLayout(m_headerLeftLayout, 1);
     //Initial right layout.
     m_headerRightLayout=new QBoxLayout(QBoxLayout::RightToLeft,
                                        headerLayout->widget());
-    m_headerRightLayout->setContentsMargins(0,0,0,0);
+    m_headerRightLayout->setContentsMargins(10,0,0,0);
     m_headerRightLayout->setSpacing(0);
     headerLayout->addLayout(m_headerRightLayout);
 }
