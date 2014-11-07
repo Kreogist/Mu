@@ -49,6 +49,7 @@ public:
     virtual int volumeMaximum()=0;
 
 signals:
+    void cannotLoadFile();
     void filePathChanged(const QString &filePath);
     void positionChanged(qint64 position);
     void durationChanged(qint64 duration);
@@ -57,6 +58,7 @@ signals:
     void stopped();
     void playingStateChanged(int state);
 
+    void previewCannotLoadFile();
     void previewFilePathChanged(const QString &filePath);
     void previewPositionChanged(qint64 position);
     void previewDurationChanged(qint64 duration);

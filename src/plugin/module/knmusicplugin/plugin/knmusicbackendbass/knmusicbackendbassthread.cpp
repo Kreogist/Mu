@@ -92,7 +92,7 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                           KNMusicBassGlobal::fdps(),1)))
 #endif
     {
-        qDebug()<<"Cannot load file.";
+        emit cannotLoadFile();
         return;
     }
     //Establish sync handle.

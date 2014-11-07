@@ -46,6 +46,8 @@ void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
         //Connect request.
         connect(m_backend, &KNMusicBackend::finished,
                 this, &KNMusicNowPlaying::onActionPlayingFinished);
+        connect(m_backend, &KNMusicBackend::cannotLoadFile,
+                this, &KNMusicNowPlaying::playNext);
     }
 }
 

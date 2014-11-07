@@ -183,6 +183,8 @@ void KNMusicStandardBackend::setMainThread(KNMusicBackendThread *thread)
                 this, &KNMusicStandardBackend::playingStateChanged);
         connect(m_main, &KNMusicBackendThread::filePathChanged,
                 this, &KNMusicStandardBackend::filePathChanged);
+        connect(m_main, &KNMusicBackendThread::cannotLoadFile,
+                this, &KNMusicStandardBackend::cannotLoadFile);
     }
 }
 
@@ -203,6 +205,8 @@ void KNMusicStandardBackend::setPreviewThread(KNMusicBackendThread *thread)
                 this, &KNMusicStandardBackend::previewPlayingStateChanged);
         connect(m_preview, &KNMusicBackendThread::filePathChanged,
                 this, &KNMusicStandardBackend::previewFilePathChanged);
+        connect(m_preview, &KNMusicBackendThread::cannotLoadFile,
+                this, &KNMusicStandardBackend::previewCannotLoadFile);
     }
 }
 

@@ -72,7 +72,7 @@ void KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
                                   QDir::toNativeSeparators(m_filePath).toStdString().data());
     if(m_media==nullptr)
     {
-        qDebug()<<"Cannot load file.";
+        emit cannotLoadFile();
         return;
     }
     //Parse the media immedately.
@@ -206,11 +206,8 @@ void KNMusicBackendVLCThread::positionCheck()
      */
     if(currentPosition>=m_duration)
     {
-        qDebug()<<"I called fucked stop.";
 //        stop();
-        qDebug()<<"Emit Finished?!";
         emit finished();
-        qDebug()<<"Emit Complete.";
     }
 }
 
@@ -239,7 +236,6 @@ void KNMusicBackendVLCThread::libvlcCallBack(const libvlc_event_t *event,
     switch(event->type)
     {
     case libvlc_MediaPlayerEndReached:
-        qDebug()<<"Reach End?!";
         //Emit finished signal, simply calling that function is enough.
         vlcThread->finished();
         break;
