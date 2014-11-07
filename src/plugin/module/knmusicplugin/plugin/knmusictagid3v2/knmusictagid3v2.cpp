@@ -188,14 +188,6 @@ void KNMusicTagID3v2::saveFlag(char *rawTagData, ID3v2Frame &frameData)
 
 QString KNMusicTagID3v2::frameToText(QByteArray content)
 {
-//    //Remove all the '\0' byte at the end of the array.
-//    int realContentSize=content.size();
-//    while(realContentSize>0 &&
-//          content.at(realContentSize-1)==0)
-//    {
-//        realContentSize--;
-//    }
-//    content.resize(realContentSize);
     //Check is content empty.
     if(content.isEmpty())
     {

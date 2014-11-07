@@ -18,7 +18,35 @@
 #ifndef KNMUSICTAGWMA_H
 #define KNMUSICTAGWMA_H
 
+#include <QHash>
+
 #include "knmusictagpraser.h"
+
+namespace KNMusicWMA
+{
+enum StandardFrameItems
+{
+    ItemTitle,
+    ItemAuthor,
+    ItemCopyright,
+    ItemDescription,
+    ItemRating,
+    StandardFrameItemsCount
+};
+struct KNMusicWMAFrame
+{
+    QString name;
+    QByteArray data;
+};
+struct WMAPicture
+{
+    QString mimeType;
+    QString description;
+    QImage image;
+};
+}
+
+using namespace KNMusicWMA;
 
 class KNMusicTagWMA : public KNMusicTagParser
 {
@@ -35,10 +63,18 @@ signals:
 public slots:
 
 private:
+    QString frameToText(QByteArray content);
     bool isStandardFrame(char *frame);
     bool isExtendFrame(char *frame);
-    bool parseStandardFrame(char *frameStart, const quint64 &frameSize);
-    bool parseExtendFrame(char *frameStart, const quint64 &frameSize);
+    bool parseStandardFrame(char *frameStart,
+                            quint64 frameSize,
+                            QList<KNMusicWMAFrame> &frameList);
+    bool parseExtendFrame(char *frameStart,
+                          quint64 frameSize,
+                          QList<KNMusicWMAFrame> &frameList);
+    bool parseImageData(QByteArray imageData, WMAPicture &albumArt);
+    void writeTagMapToDetailInfo(const QList<KNMusicWMAFrame> &frameList,
+                                 KNMusicDetailInfo &detailInfo);
     unsigned char m_headerMark[17]={0x30, 0x26, 0xB2, 0x75,
                                     0x8E, 0x66, 0xCF, 0x11,
                                     0xA6, 0xD9, 0x00, 0xAA,
@@ -51,6 +87,15 @@ private:
                                        0x07, 0xE3, 0xD2, 0x11,
                                        0x97, 0xF0, 0x00, 0xA0,
                                        0xC9, 0x5E, 0xA8, 0x50};
+
+    QString m_standardFrameID[StandardFrameItemsCount];
+    QHash<QString, int> m_attributesIndex;
+    QTextCodec *m_isoCodec,
+               *m_utf16BECodec,
+               *m_utf16LECodec,
+               *m_utf16Codec,
+               *m_utf8Codec,
+               *m_localeCodec;
 };
 
 #endif // KNMUSICTAGWMA_H
