@@ -71,8 +71,6 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
 
     //Initial the tree view.
     m_playlistTreeView=new KNMusicPlaylistTreeView(this);
-//    connect(m_playlistTreeView, &KNMusicPlaylistTreeView::requireRemoveItem,
-//            this, &KNMusicPlaylistDisplay::requireRemoveItem);
 
     displayLayout->addWidget(m_playlistTreeView, 1);
 
@@ -89,6 +87,11 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
 KNMusicPlaylistListItem *KNMusicPlaylistDisplay::currentItem()
 {
     return m_currentItem;
+}
+
+void KNMusicPlaylistDisplay::searchText(const QString &text)
+{
+    m_playlistTreeView->searchText(text);
 }
 
 void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)

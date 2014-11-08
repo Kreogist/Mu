@@ -53,6 +53,7 @@ signals:
                                 const QModelIndex &previous);
 
 public slots:
+    void onActionSearch(const QString &text);
     void onActionRemoveCurrent();
     void onActionPlaylistItemChanged(QStandardItem *item);
     void displayPlaylistItem(KNMusicPlaylistListItem *item);

@@ -101,6 +101,11 @@ void KNMusicPlaylistTab::cutLoadRequirement()
                this, &KNMusicPlaylistTab::requireLoadPlaylistList);
 }
 
+void KNMusicPlaylistTab::onActionSearch(const QString &text)
+{
+    m_playlistDisplay->searchText(text);
+}
+
 void KNMusicPlaylistTab::onActionRemoveCurrent()
 {
     //Check is current index available.

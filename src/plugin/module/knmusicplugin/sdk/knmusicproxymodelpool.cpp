@@ -98,4 +98,6 @@ void KNMusicProxyModelPool::resetProxyModel(KNMusicProxyModel *model)
 {
     //Clear the source model.
     model->setSourceModel(nullptr);
+    //Clear the model data.
+    model->setFilterFixedString("");
 }

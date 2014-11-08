@@ -368,8 +368,8 @@ HEADERS += \
     plugin/sdk/knfilepathlabel.h \
     plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h \
     plugin/sdk/knsearchbox.h \
-    plugin/module/knmusicplugin/sdk/knmusicsearchplugin.h \
-    plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.h
+    plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.h \
+    plugin/module/knmusicplugin/sdk/knmusicsearchbase.h
 
 RESOURCES += \
     resource/res.qrc

@@ -129,6 +129,7 @@ class KNMusicParser;
 class KNMusicNowPlayingBase;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
+class KNMusicSearchBase;
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
@@ -173,6 +174,8 @@ public:
     static QList<QList<QStandardItem *> > dragMusicRow();
     static void setDragMusicRow(const QList<QList<QStandardItem *> > &dragMusicRow);
     static void recoverDragMusicRow();
+    static KNMusicSearchBase *musicSearch();
+    static void setMusicSearch(KNMusicSearchBase *musicSearch);
 
 signals:
 
@@ -190,6 +193,7 @@ private:
     static KNMusicNowPlayingBase *m_nowPlaying;
     static KNMusicSoloMenuBase *m_soloMenu;
     static KNMusicMultiMenuBase *m_multiMenu;
+    static KNMusicSearchBase *m_musicSearch;
     static QString m_musicLibraryPath;
     static QString m_musicRowFormat;
     static QList<QList<QStandardItem *>> m_dragMusicRow;

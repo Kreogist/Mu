@@ -31,6 +31,7 @@ signals:
 
 public slots:
     virtual void resetHeaderState();
+    virtual void searchText(QString text);
 
 protected:
     void enterEvent(QEvent *event);
@@ -51,6 +52,7 @@ private slots:
     void removeCurrent();
 
 private:
+    void initialActions();
     void configureTimeLine(QTimeLine *timeLine);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
@@ -63,8 +65,9 @@ private:
     QMimeData *m_mimeData;
     QByteArray m_headerState;
     QColor m_alternateColor=QColor(255,255,255,0),
-    m_fontColor=QColor(255,255,255),
-    m_buttonColor=QColor(255,255,255);
+           m_fontColor=QColor(255,255,255),
+           m_buttonColor=QColor(255,255,255);
+    QString m_seachText;
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;

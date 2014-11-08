@@ -18,10 +18,10 @@
 #ifndef KNMUSICSEARCH_H
 #define KNMUSICSEARCH_H
 
-#include "knmusicsearchplugin.h"
+#include "knmusicsearchbase.h"
 
 class KNSearchBox;
-class KNMusicSearch : public KNMusicSearchPlugin
+class KNMusicSearch : public KNMusicSearchBase
 {
     Q_OBJECT
 public:
@@ -31,8 +31,11 @@ public:
 signals:
 
 public slots:
+    void retranslate();
+    void setSearchFocus();
 
 private:
+    QWidget *m_requestSender=nullptr;
     KNSearchBox *m_searchBox;
 };
 

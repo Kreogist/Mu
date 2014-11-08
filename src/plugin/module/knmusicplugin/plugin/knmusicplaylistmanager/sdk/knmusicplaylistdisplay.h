@@ -30,6 +30,7 @@ class KNMusicPlaylistDisplay : public QWidget
 public:
     explicit KNMusicPlaylistDisplay(QWidget *parent = 0);
     KNMusicPlaylistListItem *currentItem();
+    void searchText(const QString &text);
 
 signals:
 

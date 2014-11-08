@@ -4,23 +4,24 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
-#ifndef KNMUSICSEARCHPLUGIN_H
-#define KNMUSICSEARCHPLUGIN_H
+#ifndef KNMUSICSEARCHBASE_H
+#define KNMUSICSEARCHBASE_H
 
 #include <QObject>
 
-class KNMusicSearchPlugin : public QObject
+class KNMusicSearchBase : public QObject
 {
     Q_OBJECT
 public:
-    KNMusicSearchPlugin(QObject *parent = 0):QObject(parent){}
+    KNMusicSearchBase(QObject *parent = 0):QObject(parent){}
     virtual QWidget *searchBox()=0;
 
 signals:
     void requireSearch(const QString &text);
 
 public slots:
+    virtual void setSearchFocus()=0;
 
 };
 
-#endif // KNMUSICSEARCHPLUGIN_H
+#endif // KNMUSICSEARCHBASE_H

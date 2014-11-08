@@ -15,6 +15,7 @@
 
 #include "knconnectionhandler.h"
 #include "knmusicmodel.h"
+#include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
 #include "knmusicnowplayingbase.h"
@@ -88,6 +89,9 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     //Initial reacts.
     connect(this, &KNMusicTreeViewBase::activated,
             this, &KNMusicTreeViewBase::playIndex);
+
+    //Initial actions.
+    initialActions();
 }
 
 KNMusicModel *KNMusicTreeViewBase::musicModel()
@@ -106,6 +110,8 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
         //Release the current model, and get a new avaliable proxy model.
         m_proxyModelPool->release(m_proxyModel);
         m_proxyModel=m_proxyModelPool->alloct();
+        //Initial the proxy model.
+        m_proxyModel->setFilterFixedString(m_seachText);
         //Set the proxy model.
         setModel(m_proxyModel);
     }
@@ -159,6 +165,17 @@ void KNMusicTreeViewBase::resetHeaderState()
     setColumnWidth(Artist, 126);
     setColumnWidth(Time, 60);
     setColumnWidth(Name, 200);
+}
+
+void KNMusicTreeViewBase::searchText(QString text)
+{
+    //Backup the search text.
+    m_seachText=text;
+    //Set to proxy model's filter.
+    if(m_proxyModel!=nullptr)
+    {
+        m_proxyModel->setFilterFixedString(m_seachText);
+    }
 }
 
 void KNMusicTreeViewBase::enterEvent(QEvent *event)
@@ -313,6 +330,17 @@ void KNMusicTreeViewBase::removeCurrent()
     removeIndex(currentIndex());
 }
 
+void KNMusicTreeViewBase::initialActions()
+{
+    //Initial the search action
+    QAction *findAction=new QAction(this);
+    findAction->setShortcut(QKeySequence(QKeySequence::Find));
+    findAction->setShortcutContext(Qt::WidgetShortcut);
+    connect(findAction, SIGNAL(triggered()),
+            KNMusicGlobal::musicSearch(), SLOT(setSearchFocus()));
+    addAction(findAction);
+}
+
 void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)
 {
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
@@ -385,7 +413,7 @@ void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
         KNMusicGlobal::nowPlaying()->checkRemovedIndex(index);
     }
     //Remove the row right in the proxy model.
-    m_proxyModel->removeMusicRow(index.row());
+    m_proxyModel->removeSourceMusicRow(m_proxyModel->mapToSource(index).row());
 }
 
 void KNMusicTreeViewBase::removeSelections()

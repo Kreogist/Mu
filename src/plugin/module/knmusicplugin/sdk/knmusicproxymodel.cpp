@@ -11,6 +11,10 @@
 KNMusicProxyModel::KNMusicProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
+    //Set properties.
+    setFilterKeyColumn(-1); //Read from all columns.
+    setFilterCaseSensitivity(Qt::CaseInsensitive);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
 }
 
 KNMusicModel *KNMusicProxyModel::musicModel()
@@ -62,6 +66,11 @@ void KNMusicProxyModel::addPlayTimes(const QModelIndex &sourceIndex)
 }
 
 void KNMusicProxyModel::removeMusicRow(const int &row)
+{
+    musicModel()->removeMusicRow(mapToSource(index(row, Name)).row());
+}
+
+void KNMusicProxyModel::removeSourceMusicRow(const int &row)
 {
     musicModel()->removeMusicRow(row);
 }

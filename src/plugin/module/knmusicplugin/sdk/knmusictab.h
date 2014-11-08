@@ -24,6 +24,7 @@ public:
 signals:
 
 public slots:
+    virtual void onActionSearch(const QString &text)=0;
 
 };
 

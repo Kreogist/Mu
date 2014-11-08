@@ -23,7 +23,7 @@
 //Ports
 #include "knmusicbackend.h"
 #include "knmusicparser.h"
-#include "knmusicsearchplugin.h"
+#include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicdetaildialogbase.h"
 #include "knmusicheaderplayerbase.h"
@@ -137,8 +137,11 @@ KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
     return m_preferencePanel;
 }
 
-void KNMusicPlugin::loadSearch(KNMusicSearchPlugin *plugin)
+void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
 {
+    //Link global search focus.
+    KNMusicGlobal::setMusicSearch(plugin);
+    //Add the searcher box to the right most plugin.
     addRightHeaderWidget(plugin->searchBox());
 }
 
@@ -327,6 +330,9 @@ void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
     addMusicCategory(musicTab->icon(),
                      musicTab->caption(),
                      musicTab->widget());
+    //Connect request to the music tab.
+    connect(KNMusicGlobal::musicSearch(), &KNMusicSearchBase::requireSearch,
+            musicTab, &KNMusicTab::onActionSearch);
 }
 
 void KNMusicPlugin::startThreads()

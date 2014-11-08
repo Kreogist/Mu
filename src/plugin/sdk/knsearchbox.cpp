@@ -2,6 +2,7 @@
 #include <QBoxLayout>
 #include <QFocusEvent>
 #include <QKeySequence>
+#include <QKeyEvent>
 #include <QTimeLine>
 #include <QFocusEvent>
 #include <QCursor>
@@ -13,6 +14,7 @@
 KNSearchLineEdit::KNSearchLineEdit(QWidget *parent) :
     QLineEdit(parent)
 {
+    //Set properties.
     setTextMargins(0,0,0,0);
     setContentsMargins(0,0,0,0);
     setFrame(false);
@@ -21,27 +23,32 @@ KNSearchLineEdit::KNSearchLineEdit(QWidget *parent) :
 void KNSearchLineEdit::focusInEvent(QFocusEvent *event)
 {
     QLineEdit::focusInEvent(event);
+    //When getting a focus, emit a signal.
     emit getFocus();
 }
 
 void KNSearchLineEdit::focusOutEvent(QFocusEvent *event)
 {
     QLineEdit::focusOutEvent(event);
+    //When losing a focus, emit a signal.
     emit lostFocus();
 }
 
 KNSearchButton::KNSearchButton(QWidget *parent) :
     QLabel(parent)
 {
+    //Set properties.
     setContentsMargins(0,0,0,0);
 }
 
 KNSearchBox::KNSearchBox(QWidget *parent) :
     QWidget(parent)
 {
+    //Set properties.
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
 
+    //Initial the default palette.
     m_originalGrey=0x3A;
     m_grey=m_originalGrey;
     m_palette=palette();
@@ -80,6 +87,7 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
 
     QAction *escapeAction=new QAction(m_keyText);
     escapeAction->setShortcut(QKeySequence(Qt::Key_Escape));
+    escapeAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(escapeAction, SIGNAL(triggered()),
             this, SLOT(onFocusLost()));
     m_keyText->addAction(escapeAction);

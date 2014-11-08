@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knsearchbox.h"
+#include "knlocalemanager.h"
 
 #include "knmusicsearch.h"
 
 KNMusicSearch::KNMusicSearch(QObject *parent) :
-    KNMusicSearchPlugin(parent)
+    KNMusicSearchBase(parent)
 {
     //Initial search box.
     m_searchBox=new KNSearchBox;
@@ -28,9 +29,26 @@ KNMusicSearch::KNMusicSearch(QObject *parent) :
     //Connect request.
     connect(m_searchBox, &KNSearchBox::textChanged,
             this, &KNMusicSearch::requireSearch);
+
+    //Connect retranslate request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicSearch::retranslate);
+    //Retranslate.
+    retranslate();
 }
 
 QWidget *KNMusicSearch::searchBox()
 {
     return m_searchBox;
+}
+
+void KNMusicSearch::retranslate()
+{
+    m_searchBox->setPlaceHolderText(tr("Search in Music"));
+}
+
+void KNMusicSearch::setSearchFocus()
+{
+    //Set the focus.
+    m_searchBox->setSearchFocus();
 }
