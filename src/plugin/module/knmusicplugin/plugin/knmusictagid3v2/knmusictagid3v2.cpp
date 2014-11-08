@@ -193,14 +193,17 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
     {
         return QString();
     }
-    //Get the codec.
+    //Get the codec according to the first char.
     //The first char of the ID3v2 text is the encoding of the current text.
+    //Using a state to catch the convert state.
     quint8 encoding=(quint8)(content.at(0));
     content.remove(0, 1);
     switch(encoding)
     {
     case EncodeISO: //0 = ISO-8859-1
-        return m_isoCodec->toUnicode(content).simplified();
+        return m_usingDefaultCodec?
+                    m_localeCodec->toUnicode(content).simplified():
+                    m_isoCodec->toUnicode(content).simplified();
     case EncodeUTF16BELE: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
         if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
         {
@@ -533,3 +536,13 @@ void KNMusicTagID3v2::parsePICImageData(QByteArray imageData,
         imageMap[pictureType]=currentFrame;
     }
 }
+bool KNMusicTagID3v2::usingDefaultCodec() const
+{
+    return m_usingDefaultCodec;
+}
+
+void KNMusicTagID3v2::setUsingDefaultCodec(bool usingDefaultCodec)
+{
+    m_usingDefaultCodec = usingDefaultCodec;
+}
+

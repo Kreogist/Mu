@@ -17,10 +17,13 @@
  */
 #include <QFile>
 #include <QTextStream>
+#include <QTextCodec>
 #include <QStringList>
 #include <QLinkedList>
 #include <QRegularExpressionMatch>
 #include <QRegularExpressionMatchIterator>
+
+#include "knglobal.h"
 
 #include "knmusiclrcparser.h"
 
@@ -36,6 +39,9 @@ KNMusicLRCParser::KNMusicLRCParser(QObject *parent) :
     m_headerText.append("ar");
     m_headerText.append("al");
     m_headerText.append("by");
+    //Get the codec.
+    m_utf8Codec=QTextCodec::codecForName("UTF-8");
+    m_localeCodec=KNGlobal::localeDefaultCodec();
 }
 
 void KNMusicLRCParser::parseFile(const QString &filePath,
@@ -55,21 +61,44 @@ void KNMusicLRCParser::parseFile(const QString &filePath,
         return;
     }
     //Using the text stream read all data.
-    QTextStream lyricsStream(&lyricsFile);
-    lyricsStream.setAutoDetectUnicode(true);
-    //Cache the file line by line.
-    QString lineCache;
-    while(!(lineCache=lyricsStream.readLine()).isNull())
+//    QTextStream lyricsStream(&lyricsFile);
+//    lyricsStream.setAutoDetectUnicode(true);
+//    //Cache the file line by line.
+//    QString lineCache;
+//    while(!(lineCache=lyricsStream.readLine()).isNull())
+//    {
+//        lineCache=lineCache.simplified();
+//        if(!lineCache.isEmpty())
+//        {
+//            lyricsRawData.append(lineCache);
+//        }
+//    }
+    //Read all the raw data of the file.
+    QByteArray fileRawData=lyricsFile.readAll();
+    //Try to parse it using UTF-8.
+    QTextCodec::ConverterState convState;
+    QString fileTextData=m_utf8Codec->toUnicode(fileRawData.constData(),
+                                                fileRawData.size(),
+                                                &convState);
+    //If we can't decode it, try to use default codec.
+    if(convState.invalidChars>0)
     {
-        lineCache=lineCache.simplified();
-        if(!lineCache.isEmpty())
+        fileTextData=m_localeCodec->toUnicode(fileRawData.constData(),
+                                              fileRawData.size(),
+                                              &convState);
+        //If we still cannot decode it, ask user to select a codec.
+        if(convState.invalidChars>0)
         {
-            lyricsRawData.append(lineCache);
+            ;
         }
     }
+    lyricsRawData=fileTextData.split(QRegularExpression("\n"),
+                                     QString::SkipEmptyParts);
     //Close the file.
     lyricsFile.close();
     //-------Parse the file---------
+    //Clear the same line.
+    lyricsRawData.removeDuplicates();
     //Clear the data.
     QList<LRCFrame> lyricsData;
     //Process each line.

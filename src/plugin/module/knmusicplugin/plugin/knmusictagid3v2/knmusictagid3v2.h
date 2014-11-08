@@ -91,6 +91,8 @@ public:
     static quint32 minor4Size(char *rawTagData);
     static void saveFlag(char *rawTagData, ID3v2Frame &frameData);
     QString frameToText(QByteArray content);
+    bool usingDefaultCodec() const;
+    void setUsingDefaultCodec(bool usingDefaultCodec);
 
 signals:
 
@@ -122,6 +124,7 @@ private:
                *m_utf16Codec,
                *m_utf8Codec,
                *m_localeCodec;
+    bool m_usingDefaultCodec=true;
 };
 
 #endif // KNMUSICTAGID3V2_H

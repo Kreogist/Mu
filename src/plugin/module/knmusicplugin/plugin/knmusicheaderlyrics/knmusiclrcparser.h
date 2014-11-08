@@ -66,6 +66,7 @@ private:
                               const LRCFrame &frameRight);
     QRegularExpression m_frameCatch;
     QStringList m_headerText;
+    QTextCodec *m_utf8Codec, *m_localeCodec;
 };
 
 #endif // KNMUSICLRCPARSER_H
