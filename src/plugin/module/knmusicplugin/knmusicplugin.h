@@ -29,6 +29,7 @@ class KNMusicGlobal;
 class KNMusicParser;
 class KNMusicSearchBase;
 class KNMusicDetailDialogBase;
+class KNMusicDetailTooltipBase;
 class KNMusicHeaderPlayerBase;
 class KNMusicHeaderLyricsBase;
 class KNMusicNowPlayingBase;
@@ -50,6 +51,7 @@ public:
     KNPreferenceWidgetsPanel *preferencePanelWidget();
 
     void loadSearch(KNMusicSearchBase *plugin);
+    void loadDetailTooptip(KNMusicDetailTooltipBase *plugin);
     void loadBackend(KNMusicBackend *plugin);
     void loadDetailInfo(KNMusicDetailDialogBase *plugin);
     void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);

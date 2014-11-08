@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) Kreogist Dev Team <kreogistdevteam@126.com>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the Do What The Fuck You Want To Public License, Version 2,
+ * as published by Sam Hocevar. See the COPYING file for more details.
+ */
 #ifndef KNSEARCHBOX_H
 #define KNSEARCHBOX_H
 
@@ -43,6 +49,8 @@ public:
     void setPlaceHolderText(const QString &text);
     void clear();
     QString text() const;
+    QWidget *escFocusTo() const;
+    void setEscFocusTo(QWidget *escFocusTo);
 
 signals:
     void requireLostFocus();
@@ -70,6 +78,7 @@ private:
     QPalette m_palette, m_textPalette;
     KNSearchLineEdit *m_textContent;
     KNSearchButton *m_button;
+    QWidget *m_escFocusTo=nullptr;
     QColor m_baseColor=QColor(0xff, 0xff, 0xff),
            m_textColor=QColor(0xff, 0xff, 0xff);
     QTimeLine *m_mouseEnterAnime, *m_mouseLeaveAnime, *m_focusGet, *m_focusLost;

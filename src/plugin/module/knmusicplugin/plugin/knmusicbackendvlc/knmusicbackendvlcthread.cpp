@@ -168,8 +168,7 @@ qint64 KNMusicBackendVLCThread::position()
     return libvlc_media_player_get_time(m_player)-m_startPosition;
 }
 
-void KNMusicBackendVLCThread::playSection(const qint64 &sectionStart,
-                                          const qint64 &sectionDuration)
+void KNMusicBackendVLCThread::setPlaySection(const qint64 &sectionStart, const qint64 &sectionDuration)
 {
     //Check the start position and duration is still in the duration.
     //If it's available, set the start position.
@@ -190,6 +189,13 @@ void KNMusicBackendVLCThread::playSection(const qint64 &sectionStart,
     }
     //Update the duration like playing file.
     emit durationChanged(duration());
+}
+
+void KNMusicBackendVLCThread::playSection(const qint64 &sectionStart,
+                                          const qint64 &sectionDuration)
+{
+    //Set the section.
+    setPlaySection(sectionStart, sectionDuration);
     //Play the main thread.
     play();
 }
@@ -211,7 +217,7 @@ void KNMusicBackendVLCThread::positionCheck()
     }
 }
 
-void KNMusicBackendVLCThread::setVolume(const float &volumeSize)
+void KNMusicBackendVLCThread::setVolume(const int &volumeSize)
 {
     libvlc_audio_set_volume(m_player, volumeSize);
 }

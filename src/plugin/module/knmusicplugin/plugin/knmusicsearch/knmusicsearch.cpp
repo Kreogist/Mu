@@ -47,9 +47,10 @@ void KNMusicSearch::retranslate()
     m_searchBox->setPlaceHolderText(tr("Search in Music"));
 }
 
-void KNMusicSearch::setSearchFocus()
+void KNMusicSearch::setSearchFocus(QWidget *focusSource)
 {
-    //Set the focus.
+    //Set the focus source and focus.
+    m_searchBox->setEscFocusTo(focusSource);
     m_searchBox->setFocus();
 }
 

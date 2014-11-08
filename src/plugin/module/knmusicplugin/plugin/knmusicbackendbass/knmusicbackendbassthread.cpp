@@ -186,7 +186,7 @@ int KNMusicBackendBassThread::volume()
     BASS_ChannelGetAttribute(m_channel,
                              BASS_ATTRIB_VOL,
                              &channelVolume);
-    return (int)channelVolume;
+    return (int)channelVolume*100;
 }
 
 qint64 KNMusicBackendBassThread::duration()
@@ -198,11 +198,11 @@ qint64 KNMusicBackendBassThread::position()
 {
     return (qint64)(BASS_ChannelBytes2Seconds(m_channel,
                                              BASS_ChannelGetPosition(m_channel, BASS_POS_BYTE))
-           *1000)-m_startPosition;
+                    *1000)-m_startPosition;
 }
 
-void KNMusicBackendBassThread::playSection(const qint64 &sectionStart,
-                                           const qint64 &sectionDuration)
+void KNMusicBackendBassThread::setPlaySection(const qint64 &sectionStart,
+                                              const qint64 &sectionDuration)
 {
     //Check the start position and duration is still in the duration.
     //If it's available, set the start position.
@@ -223,13 +223,21 @@ void KNMusicBackendBassThread::playSection(const qint64 &sectionStart,
     }
     //Update the duration like playing file.
     emit durationChanged(duration());
+}
+
+void KNMusicBackendBassThread::playSection(const qint64 &sectionStart,
+                                           const qint64 &sectionDuration)
+{
+    //Set the section.
+    setPlaySection(sectionStart, sectionDuration);
     //Play the main thread.
     play();
 }
 
-void KNMusicBackendBassThread::setVolume(const float &volumeSize)
+void KNMusicBackendBassThread::setVolume(const int &volumeSize)
 {
-    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, volumeSize);
+    float bassVolumeSize=(float)volumeSize/100;
+    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, bassVolumeSize);
 }
 
 void KNMusicBackendBassThread::setPosition(const qint64 &position)

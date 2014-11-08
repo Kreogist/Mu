@@ -20,7 +20,7 @@ signals:
     void requireSearch(const QString &text);
 
 public slots:
-    virtual void setSearchFocus()=0;
+    virtual void setSearchFocus(QWidget *focusSource=nullptr)=0;
     virtual void search(const QString &text)=0;
 
 };

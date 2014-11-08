@@ -32,7 +32,7 @@ signals:
 
 public slots:
     void retranslate();
-    void setSearchFocus();
+    void setSearchFocus(QWidget *focusSource=nullptr);
     void search(const QString &text);
 
 private:

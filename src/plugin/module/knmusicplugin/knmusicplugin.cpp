@@ -26,6 +26,7 @@
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicdetaildialogbase.h"
+#include "knmusicdetailtooltipbase.h"
 #include "knmusicheaderplayerbase.h"
 #include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
@@ -49,6 +50,7 @@
 #include "plugin/knmusictagm4a/knmusictagm4a.h"
 #include "plugin/knmusictagwma/knmusictagwma.h"
 #include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
+#include "plugin/knmusicdetailtooltip/knmusicdetailtooltip.h"
 #include "plugin/knmusicsearch/knmusicsearch.h"
 #include "plugin/knmusiccueparser/knmusiccueparser.h"
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
@@ -87,6 +89,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 #ifdef ENABLE_LIBVLC
     loadBackend(new KNMusicBackendVLC);
 #endif
+    loadDetailTooptip(new KNMusicDetailTooltip);
     loadNowPlaying(new KNMusicNowPlaying);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
@@ -99,10 +102,8 @@ KNMusicPlugin::~KNMusicPlugin()
     m_parserThread.quit();
     m_parserThread.wait();
     //Delete all the plugins.
-    while(!m_pluginList.isEmpty())
-    {
-        delete m_pluginList.takeFirst();
-    }
+    qDeleteAll(m_pluginList);
+    m_pluginList.clear();
 }
 
 QString KNMusicPlugin::caption()
@@ -142,10 +143,22 @@ KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
 
 void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
 {
+    //Add plugin to the list.
+    m_pluginList.append(plugin);
     //Link global search focus.
     KNMusicGlobal::setMusicSearch(plugin);
     //Add the searcher box to the right most plugin.
     addRightHeaderWidget(plugin->searchBox());
+}
+
+void KNMusicPlugin::loadDetailTooptip(KNMusicDetailTooltipBase *plugin)
+{
+    //Add plugin to the list.
+    m_pluginList.append(plugin);
+    //Link global detail tooltip widget.
+    KNMusicGlobal::setDetailTooltip(plugin);
+    //Set backend.
+    plugin->setBackend(m_backend);
 }
 
 void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)

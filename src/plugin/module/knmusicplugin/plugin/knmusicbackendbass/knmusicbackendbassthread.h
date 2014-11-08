@@ -41,6 +41,8 @@ public:
     int volume();
     qint64 duration();
     qint64 position();
+    void setPlaySection(const qint64 &sectionStart=-1,
+                        const qint64 &sectionDuration=-1);
     void playSection(const qint64 &sectionStart=-1,
                      const qint64 &sectionDuration=-1);
 
@@ -52,7 +54,7 @@ signals:
     void requireStopped();
 
 public slots:
-    void setVolume(const float &volumeSize);
+    void setVolume(const int &volumeSize);
     void setPosition(const qint64 &position);
 
 private slots:

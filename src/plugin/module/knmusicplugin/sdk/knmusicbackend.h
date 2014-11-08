@@ -36,12 +36,15 @@ public:
     virtual void loadPreview(const QString &filePath)=0;
     virtual qint64 previewDuration() const=0;
     virtual void playPreviewFile(const QString &fileName)=0;
+    virtual void setPreviewSection(const qint64 &start=-1,
+                                   const qint64 &duration=-1)=0;
     virtual void playPreviewSection(const QString &fileName,
                                     const qint64 &start=-1,
                                     const qint64 &duration=-1)=0;
     virtual void playPreview()=0;
     virtual void pausePreview()=0;
     virtual void stopPreview()=0;
+    virtual void resetPreviewPlayer()=0;
 
     virtual void loadUrl(const QString &url)=0;
 

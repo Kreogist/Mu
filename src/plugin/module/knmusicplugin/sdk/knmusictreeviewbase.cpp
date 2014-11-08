@@ -16,6 +16,7 @@
 #include "knconnectionhandler.h"
 #include "knmusicmodel.h"
 #include "knmusicsearchbase.h"
+#include "knmusicdetailtooltipbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
 #include "knmusicnowplayingbase.h"
@@ -237,6 +238,38 @@ void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
+bool KNMusicTreeViewBase::event(QEvent *event)
+{
+    if(event->type()==QEvent::ToolTip)
+    {
+        //Get the help event from the event.
+        QHelpEvent *helpEvent=static_cast<QHelpEvent *>(event);
+        //Get the right position of the index.
+        QPoint indexPosition=QPoint(helpEvent->pos().x(),
+                                    helpEvent->pos().y()-header()->height());
+        //Locate the index via the position.
+        QModelIndex mouseIndex=indexAt(indexPosition);
+        if(mouseIndex.isValid())
+        {
+            if(verticalScrollBar()->isVisible() &&
+                    indexPosition.x()>(viewport()->rect().right()-verticalScrollBar()->width()))
+            {
+                KNMusicGlobal::detailTooltip()->hide();
+            }
+            else
+            {
+//                KNMusicGlobal::detailTooltip()->hide();
+                KNMusicGlobal::detailTooltip()->setPreviewIndex(m_proxyModel->musicModel(),
+                                                                m_proxyModel->mapToSource(mouseIndex),
+                                                                helpEvent->globalPos());
+                KNMusicGlobal::detailTooltip()->showTooltip();
+            }
+        }
+        return true;
+    }
+    return QTreeView::event(event);
+}
+
 void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
 {
     Q_UNUSED(supportedActions)
@@ -312,6 +345,12 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
     header()->moveSection(header()->visualIndex(logicalIndex), 0);
 }
 
+void KNMusicTreeViewBase::onActionSearch()
+{
+    //Set focus.
+    KNMusicGlobal::musicSearch()->setSearchFocus(this);
+}
+
 void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
 {
     QPalette pal=palette();
@@ -343,7 +382,7 @@ void KNMusicTreeViewBase::initialActions()
     findAction->setShortcut(QKeySequence(QKeySequence::Find));
     findAction->setShortcutContext(Qt::WidgetShortcut);
     connect(findAction, SIGNAL(triggered()),
-            KNMusicGlobal::musicSearch(), SLOT(setSearchFocus()));
+            this, SLOT(onActionSearch()));
     addAction(findAction);
 }
 

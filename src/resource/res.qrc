@@ -48,5 +48,7 @@
         <file>configure/locale/headicon.png</file>
         <file>music/common/emptyicon.png</file>
         <file>music/common/cantplay.png</file>
+        <file>music/preview/pause.png</file>
+        <file>music/preview/play.png</file>
     </qresource>
 </RCC>

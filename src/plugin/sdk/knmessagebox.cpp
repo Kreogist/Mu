@@ -116,7 +116,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
             this, &KNMessageBox::onActionExpandFinished);
 
     m_fold=new QPropertyAnimation(this, "geometry", this);
-    m_fold->setDuration(50);
+    m_fold->setDuration(120);
     m_fold->setEasingCurve(QEasingCurve::OutCubic);
     m_hideAnime->addAnimation(m_fold);
 
@@ -216,9 +216,9 @@ void KNMessageBox::onActionClose()
     //Set close animation properties.
     m_fold->setStartValue(geometry());
     m_fold->setEndValue(QRect(x()+(frameGeometry().width()/2),
-                                    y(),
-                                    0,
-                                    height()));
+                              y(),
+                              0,
+                              height()));
     //Start anime.
     m_hideAnime->start();
 }
@@ -231,9 +231,10 @@ void KNMessageBox::onActionMove(const QPoint &point)
 void KNMessageBox::initialShortCut()
 {
     QAction *escapeClose=new QAction(this);
-    escapeClose->setShortcut(QKeySequence(QKeySequence::Close));
+    escapeClose->setShortcut(QKeySequence(Qt::Key_Escape));
+    escapeClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(escapeClose, SIGNAL(triggered()),
-            this, SLOT(close()));
+            this, SLOT(onActionClose()));
     addAction(escapeClose);
 }
 

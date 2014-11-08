@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) Kreogist Dev Team <kreogistdevteam@126.com>
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the Do What The Fuck You Want To Public License, Version 2,
+ * as published by Sam Hocevar. See the COPYING file for more details.
+ */
 #include <QAction>
 #include <QBoxLayout>
 #include <QFocusEvent>
@@ -91,8 +97,8 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     escapeAction->setShortcut(QKeySequence(Qt::Key_Escape));
     escapeAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(escapeAction, SIGNAL(triggered()),
-            this, SLOT(onFocusLost()));
-    m_textContent->addAction(escapeAction);
+            this, SLOT(onActionLostFocus()));
+    addAction(escapeAction);
 
     m_mouseEnterAnime=new QTimeLine(100, this);
     m_mouseEnterAnime->setUpdateInterval(5);
@@ -169,6 +175,17 @@ void KNSearchBox::leaveEvent(QEvent *event)
     }
 }
 
+void KNSearchBox::onActionLostFocus()
+{
+    //Set the focus to the widget we set at first.
+    if(m_escFocusTo!=nullptr)
+    {
+        m_escFocusTo->setFocus();
+    }
+    //Do lost focus animation.
+    onFocusLost();
+}
+
 void KNSearchBox::onActionBackgroundChanged(const int &frame)
 {
     //Change color and palette.
@@ -211,6 +228,8 @@ void KNSearchBox::onFocusGet()
 
 void KNSearchBox::onFocusLost()
 {
+    //Clear focus source widget.
+    m_escFocusTo=nullptr;
     //Stop focus timeline.
     m_focusGet->stop();
     m_focusLost->stop();
@@ -220,3 +239,13 @@ void KNSearchBox::onFocusLost()
     //Emit
     emit requireLostFocus();
 }
+QWidget *KNSearchBox::escFocusTo() const
+{
+    return m_escFocusTo;
+}
+
+void KNSearchBox::setEscFocusTo(QWidget *escFocusTo)
+{
+    m_escFocusTo=escFocusTo;
+}
+

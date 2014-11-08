@@ -17,6 +17,8 @@
 KNProgressSlider::KNProgressSlider(QWidget *parent) :
     KNAbstractSlider(parent)
 {
+    //Set the focus.
+    setFocusPolicy(Qt::WheelFocus);
     //Initial the mouse sense timeline.
     m_mouseIn=new QTimeLine(200, this);
     m_mouseIn->setEndFrame(100);

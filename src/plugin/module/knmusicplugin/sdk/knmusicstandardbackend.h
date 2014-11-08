@@ -30,12 +30,15 @@ public:
     void loadPreview(const QString &filePath);
     qint64 previewDuration() const;
     void playPreviewFile(const QString &fileName);
+    void setPreviewSection(const qint64 &start=-1,
+                           const qint64 &duration=-1);
     void playPreviewSection(const QString &fileName,
                             const qint64 &start=-1,
                             const qint64 &duration=-1);
     void playPreview();
     void stopPreview();
     void pausePreview();
+    void resetPreviewPlayer();
 
 signals:
 

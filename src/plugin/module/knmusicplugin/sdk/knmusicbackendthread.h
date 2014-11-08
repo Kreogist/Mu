@@ -23,6 +23,8 @@ public:
     virtual int volume()=0;
     virtual qint64 duration()=0;
     virtual qint64 position()=0;
+    virtual void setPlaySection(const qint64 &sectionStart=-1,
+                                const qint64 &sectionDuration=-1)=0;
     virtual void playSection(const qint64 &sectionStart=-1,
                              const qint64 &sectionDuration=-1)=0;
 
@@ -36,7 +38,7 @@ signals:
     void stopped();
 
 public slots:
-    virtual void setVolume(const float &volumeSize)=0;
+    virtual void setVolume(const int &volumeSize)=0;
     virtual void setPosition(const qint64 &position)=0;
 
 };

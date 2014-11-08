@@ -20,8 +20,6 @@ public:
     virtual qint64 range() const;
     virtual qreal percentage() const;
     virtual qint64 wheelStep() const;
-    virtual void setMaximum(qint64 maximum);
-    virtual void setMinimal(qint64 minimal);
     virtual void setRange(qint64 min, qint64 max);
     virtual void setValue(qint64 value);
     virtual void setWheelStep(qint64 wheelStep);
@@ -34,6 +32,8 @@ signals:
     void valueChanged(float value);
 
 public slots:
+    virtual void setMaximum(qint64 maximum);
+    virtual void setMinimal(qint64 minimal);
 
 protected:
     void wheelEvent(QWheelEvent *event);

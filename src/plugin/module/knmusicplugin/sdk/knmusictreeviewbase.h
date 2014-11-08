@@ -37,12 +37,14 @@ protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
+    bool event(QEvent *event);
     void startDrag(Qt::DropActions supportedActions);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
 
 private slots:
+    void onActionSearch();
     void onActionMouseInOut(const int &frame);
     void playIndex(const QModelIndex &index);
     void removeIndex(const QModelIndex &index);
