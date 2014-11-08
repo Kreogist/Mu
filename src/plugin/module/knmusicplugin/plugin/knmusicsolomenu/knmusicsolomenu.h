@@ -39,6 +39,7 @@ private slots:
     void onActionShowInGraphicsShell();
     void onActionCopyFilePath();
     void onActionCopyItemText();
+    void onActionSearchItemText();
     void onActionShowDetail();
 
 private:
@@ -48,6 +49,7 @@ private:
         Open,
         GetInfo,
         ShowInGraphicShell,
+        SearchItemText,
         CopyFilePath,
         CopyItemText,
         Delete,

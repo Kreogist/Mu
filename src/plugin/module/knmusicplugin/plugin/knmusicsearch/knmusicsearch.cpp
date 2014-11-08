@@ -50,5 +50,10 @@ void KNMusicSearch::retranslate()
 void KNMusicSearch::setSearchFocus()
 {
     //Set the focus.
-    m_searchBox->setSearchFocus();
+    m_searchBox->setFocus();
+}
+
+void KNMusicSearch::search(const QString &text)
+{
+    m_searchBox->setText(text);
 }

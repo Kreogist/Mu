@@ -177,7 +177,9 @@ void KNMusicTreeViewBase::searchText(QString text)
         m_proxyModel->setFilterFixedString(m_seachText);
         if(currentIndex().isValid())
         {
-            scrollTo(currentIndex(), QAbstractItemView::PositionAtCenter);
+            scrollTo(model()->index(currentIndex().row(),
+                                    0),
+                     QAbstractItemView::PositionAtCenter);
         }
     }
 }

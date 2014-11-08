@@ -48,99 +48,109 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
 
-    //Initial the default palette.
-    m_originalGrey=0x3A;
-    m_grey=m_originalGrey;
-    m_palette=palette();
-    m_palette.setColor(QPalette::Base, QColor(m_originalGrey, m_originalGrey, m_originalGrey));
-    m_palette.setColor(QPalette::Window, QColor(m_originalGrey, m_originalGrey, m_originalGrey));
-    m_palette.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    m_palette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
-    setPalette(m_palette);
+    //Initial the main layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 
-    m_layout=new QBoxLayout(QBoxLayout::LeftToRight, this);
-    m_layout->setContentsMargins(0,0,0,0);
-    m_layout->setSpacing(0);
-    setLayout(m_layout);
-
+    //Initial the search button.
     m_button=new KNSearchButton(this);
     m_button->setPixmap(QPixmap("://public/SearchIcon.png"));
-    m_layout->addWidget(m_button);
+    mainLayout->addWidget(m_button);
 
-    m_keyText=new KNSearchLineEdit(this);
-    m_keyText->setPalette(m_palette);
-    connect(m_keyText, &KNSearchLineEdit::getFocus,
+    //Initial the text content box.
+    m_textContent=new KNSearchLineEdit(this);
+    setFocusProxy(m_textContent);
+    m_textContent->setPalette(m_palette);
+    connect(m_textContent, &KNSearchLineEdit::getFocus,
             this, &KNSearchBox::onFocusGet);
-    connect(m_keyText, &KNSearchLineEdit::lostFocus,
+    connect(m_textContent, &KNSearchLineEdit::lostFocus,
             this, &KNSearchBox::onFocusLost);
-    connect(m_keyText, &KNSearchLineEdit::editingFinished,
+    connect(m_textContent, &KNSearchLineEdit::editingFinished,
             this, &KNSearchBox::editingFinished);
-    connect(m_keyText, &KNSearchLineEdit::returnPressed,
+    connect(m_textContent, &KNSearchLineEdit::returnPressed,
             this, &KNSearchBox::returnPressed);
-    connect(m_keyText, &KNSearchLineEdit::selectionChanged,
+    connect(m_textContent, &KNSearchLineEdit::selectionChanged,
             this, &KNSearchBox::selectionChanged);
-    connect(m_keyText, &KNSearchLineEdit::textChanged,
+    connect(m_textContent, &KNSearchLineEdit::textChanged,
             this, &KNSearchBox::textChanged);
-    connect(m_keyText, &KNSearchLineEdit::textEdited,
+    connect(m_textContent, &KNSearchLineEdit::textEdited,
             this, &KNSearchBox::textEdited);
-    m_layout->addWidget(m_keyText, 1);
+    mainLayout->addWidget(m_textContent, 1);
 
-    QAction *escapeAction=new QAction(m_keyText);
+    //Initial the default palette.
+    m_palette=palette();
+    m_palette.setColor(QPalette::Text, m_textColor);
+    m_palette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
+    setPalette(m_palette);
+    onActionBackgroundChanged(m_minLightness);
+
+    //When pressed Esc key, do escape focus.
+    QAction *escapeAction=new QAction(m_textContent);
     escapeAction->setShortcut(QKeySequence(Qt::Key_Escape));
     escapeAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(escapeAction, SIGNAL(triggered()),
             this, SLOT(onFocusLost()));
-    m_keyText->addAction(escapeAction);
+    m_textContent->addAction(escapeAction);
 
     m_mouseEnterAnime=new QTimeLine(100, this);
+    m_mouseEnterAnime->setUpdateInterval(5);
     m_mouseEnterAnime->setEndFrame(0x60);
     connect(m_mouseEnterAnime, &QTimeLine::frameChanged,
             this, &KNSearchBox::onActionBackgroundChanged);
 
     m_mouseLeaveAnime=new QTimeLine(100, this);
-    m_mouseLeaveAnime->setEndFrame(m_originalGrey);
+    m_mouseLeaveAnime->setUpdateInterval(5);
+    m_mouseLeaveAnime->setEndFrame(m_minLightness);
     connect(m_mouseLeaveAnime, &QTimeLine::frameChanged,
             this, &KNSearchBox::onActionBackgroundChanged);
 
     m_focusGet=new QTimeLine(100, this);
+    m_focusGet->setUpdateInterval(5);
     m_focusGet->setEndFrame(0xff);
     connect(m_focusGet, &QTimeLine::frameChanged,
             this, &KNSearchBox::onActionTextBackgroundChange);
 
     m_focusLost=new QTimeLine(200, this);
+    m_focusLost->setUpdateInterval(5);
+    m_focusLost->setEndFrame(m_minLightness);
     connect(m_focusLost, &QTimeLine::frameChanged,
             this, &KNSearchBox::onActionTextBackgroundChange);
 
-    setFixedHeight(m_keyText->height()-8);
+    setFixedHeight(m_textContent->height()-8);
 }
 
 void KNSearchBox::setPlaceHolderText(const QString &text)
 {
-    m_keyText->setPlaceholderText(text);
-}
-
-void KNSearchBox::setSearchFocus()
-{
-    m_keyText->setFocus();
+    m_textContent->setPlaceholderText(text);
 }
 
 void KNSearchBox::clear()
 {
-    m_keyText->clear();
+    m_textContent->clear();
 }
 
 QString KNSearchBox::text() const
 {
-    return m_keyText->text();
+    return m_textContent->text();
+}
+
+void KNSearchBox::setText(const QString &text)
+{
+    m_textContent->setText(text);
 }
 
 void KNSearchBox::enterEvent(QEvent *event)
 {
     QWidget::enterEvent(event);
-    if(!m_focus)
+    if(!m_textContent->hasFocus())
     {
+        //Stop all timeline.
         m_mouseLeaveAnime->stop();
-        m_mouseEnterAnime->setStartFrame(m_grey);
+        m_mouseEnterAnime->stop();
+        //Set parameter and start time line.
+        m_mouseEnterAnime->setStartFrame(m_baseColor.value());
         m_mouseEnterAnime->start();
     }
 }
@@ -148,52 +158,65 @@ void KNSearchBox::enterEvent(QEvent *event)
 void KNSearchBox::leaveEvent(QEvent *event)
 {
     QWidget::leaveEvent(event);
-    if(!m_focus)
+    if(!m_textContent->hasFocus())
     {
+        //Stop all timeline.
         m_mouseEnterAnime->stop();
-        m_mouseLeaveAnime->setStartFrame(m_grey);
+        m_mouseLeaveAnime->stop();
+        //Set parameter and start time line.
+        m_mouseLeaveAnime->setStartFrame(m_baseColor.value());
         m_mouseLeaveAnime->start();
     }
 }
 
 void KNSearchBox::onActionBackgroundChanged(const int &frame)
 {
-    m_grey=frame;
-    m_palette.setColor(QPalette::Base, QColor(frame, frame, frame));
-    m_palette.setColor(QPalette::Window, QColor(frame, frame, frame));
+    //Change color and palette.
+    m_baseColor.setHsv(m_baseColor.hue(),
+                       m_baseColor.saturation(),
+                       frame);
+    m_palette.setColor(QPalette::Base, m_baseColor);
+    m_palette.setColor(QPalette::Window, m_baseColor);
+    //Set palette.
     setPalette(m_palette);
-    m_keyText->setPalette(m_palette);
+    m_textContent->setPalette(m_palette);
 }
 
 void KNSearchBox::onActionTextBackgroundChange(const int &frame)
 {
-    m_grey=frame;
-    m_palette.setColor(QPalette::Base, QColor(frame, frame, frame));
-    m_palette.setColor(QPalette::Window, QColor(frame, frame, frame));
-    m_palette.setColor(QPalette::Text, QColor(0xff-frame, 0xff-frame, 0xff-frame));
+    //Change color and palette.
+    m_baseColor.setHsv(m_baseColor.hue(),
+                       m_baseColor.saturation(),
+                       frame);
+    m_palette.setColor(QPalette::Base, m_baseColor);
+    m_palette.setColor(QPalette::Window, m_baseColor);
+    m_textColor.setHsv(m_textColor.hue(),
+                       m_textColor.saturation(),
+                       0xff-frame);
+    m_palette.setColor(QPalette::Text, m_textColor);
+    //Set palette.
     setPalette(m_palette);
-    m_keyText->setPalette(m_palette);
+    m_textContent->setPalette(m_palette);
 }
 
 void KNSearchBox::onFocusGet()
 {
-    if(!m_focus)
-    {
-        m_focus=true;
-        m_focusLost->stop();
-        m_focusGet->setStartFrame(m_grey);
-        m_focusGet->start();
-    }
+    //Stop focus timeline.
+    m_focusLost->stop();
+    m_focusGet->stop();
+    //Set parameters and start timeline.
+    m_focusGet->setStartFrame(m_baseColor.value());
+    m_focusGet->start();
 }
 
 void KNSearchBox::onFocusLost()
 {
-    if(m_focus)
-    {
-        m_focus=false;
-        m_focusGet->stop();
-        m_focusLost->setEndFrame(m_originalGrey);
-        m_focusLost->start();
-        emit requireLostFocus();
-    }
+    //Stop focus timeline.
+    m_focusGet->stop();
+    m_focusLost->stop();
+    //Set parameters and start timeline.
+    m_focusLost->setStartFrame(m_baseColor.value());
+    m_focusLost->start();
+    //Emit
+    emit requireLostFocus();
 }

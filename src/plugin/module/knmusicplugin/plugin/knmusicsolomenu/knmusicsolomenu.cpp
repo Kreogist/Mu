@@ -17,6 +17,7 @@
  */
 #include "knglobal.h"
 
+#include "knmusicsearchbase.h"
 #include "knmusicdetaildialogbase.h"
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
@@ -73,11 +74,14 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
     if(m_itemText.isEmpty())
     {
         m_actions[CopyItemText]->setVisible(false);
+        m_actions[SearchItemText]->setVisible(false);
     }
     else
     {
         m_actions[CopyItemText]->setVisible(true);
+        m_actions[SearchItemText]->setVisible(true);
         m_actions[CopyItemText]->setText(m_actionTitles[CopyItemText].arg(m_itemText));
+        m_actions[SearchItemText]->setText(m_actionTitles[SearchItemText].arg(m_itemText));
     }
 }
 
@@ -103,6 +107,7 @@ void KNMusicSoloMenu::retranslate()
 #endif
     m_actionTitles[CopyFilePath]=tr("Copy location");
     m_actionTitles[CopyItemText]=tr("Copy '%1'");
+    m_actionTitles[SearchItemText]=tr("Search '%1'");
     m_actionTitles[Delete]=tr("Delete");
 
     /*
@@ -134,6 +139,11 @@ void KNMusicSoloMenu::onActionCopyFilePath()
 void KNMusicSoloMenu::onActionCopyItemText()
 {
     KNGlobal::setClipboardText(m_itemText);
+}
+
+void KNMusicSoloMenu::onActionSearchItemText()
+{
+    KNMusicGlobal::musicSearch()->search(m_itemText);
 }
 
 void KNMusicSoloMenu::onActionShowDetail()
@@ -168,6 +178,12 @@ void KNMusicSoloMenu::createActions()
     connect(m_actions[ShowInGraphicShell], SIGNAL(triggered()),
             this, SLOT(onActionShowInGraphicsShell()));
     addAction(m_actions[ShowInGraphicShell]);
+
+    addSeparator();
+
+    connect(m_actions[SearchItemText], SIGNAL(triggered()),
+            this, SLOT(onActionSearchItemText()));
+    addAction(m_actions[SearchItemText]);
 
     addSeparator();
 

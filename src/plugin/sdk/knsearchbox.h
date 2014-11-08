@@ -5,7 +5,6 @@
 #include <QLabel>
 #include <QLineEdit>
 
-class QBoxLayout;
 class QToolButton;
 class QLineEdit;
 class QTimeLine;
@@ -42,7 +41,6 @@ class KNSearchBox : public QWidget
 public:
     explicit KNSearchBox(QWidget *parent = 0);
     void setPlaceHolderText(const QString &text);
-    void setSearchFocus();
     void clear();
     QString text() const;
 
@@ -55,12 +53,14 @@ signals:
     void textEdited(const QString & text);
 
 public slots:
+    void setText(const QString &text);
 
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
 
 private slots:
+    void onActionLostFocus();
     void onActionBackgroundChanged(const int &frame);
     void onActionTextBackgroundChange(const int &frame);
     void onFocusGet();
@@ -68,12 +68,12 @@ private slots:
 
 private:
     QPalette m_palette, m_textPalette;
-    KNSearchLineEdit *m_keyText;
-    QBoxLayout *m_layout;
+    KNSearchLineEdit *m_textContent;
     KNSearchButton *m_button;
+    QColor m_baseColor=QColor(0xff, 0xff, 0xff),
+           m_textColor=QColor(0xff, 0xff, 0xff);
     QTimeLine *m_mouseEnterAnime, *m_mouseLeaveAnime, *m_focusGet, *m_focusLost;
-    int m_grey, m_originalGrey, m_fontGrey;
-    bool m_focus=false;
+    int m_lightness=0x3A, m_minLightness=m_lightness, m_fontGrey;
 };
 
 #endif // KNSEARCHBOX_H
