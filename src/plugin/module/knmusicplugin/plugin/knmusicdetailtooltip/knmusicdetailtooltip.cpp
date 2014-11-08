@@ -298,6 +298,8 @@ void KNMusicDetailTooltip::resetPreviewPlayer()
     m_playNPause->setIcon(m_playIcon);
     //Reset the backend.
     m_backend->resetPreviewPlayer();
+    //Reset the progress bar.
+    m_progress->setValue(0);
 }
 
 void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
