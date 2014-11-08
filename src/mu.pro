@@ -33,7 +33,7 @@ release{
 #Windows configure
 win32{
     DESTDIR =../mu
-    CONFIG += libbass
+    CONFIG += libbass FFMpeg
     libbass{
         LIBS += -lbass
     }
@@ -63,6 +63,15 @@ linux{
     libbass{
         LIBS += -lbass
     }
+}
+
+FFMpeg{
+    DEFINES += ENABLE_FFMPEG
+    LIBS += -lavformat -lavcodec -lavutil
+    SOURCES += plugin/sdk/knffmpegglobal.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.cpp
+    HEADERS += plugin/sdk/knffmpegglobal.h \
+               plugin/module/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h
 }
 
 libVLC{

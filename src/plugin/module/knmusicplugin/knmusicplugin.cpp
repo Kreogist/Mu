@@ -37,6 +37,9 @@
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
 #endif
+#ifdef ENABLE_FFMPEG
+#include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
+#endif
 #ifdef ENABLE_LIBVLC
 #include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
 #endif
@@ -296,6 +299,9 @@ void KNMusicPlugin::initialParser()
     //Install all analysiser plugins here.
 #ifdef ENABLE_LIBBASS
     parser->installAnalysiser(new KNMusicBassAnalysiser);
+#endif
+#ifdef ENABLE_FFMPEG
+    parser->installAnalysiser(new KNMusicFFMpegAnalysiser);
 #endif
 
     //Add this to plugin list.
