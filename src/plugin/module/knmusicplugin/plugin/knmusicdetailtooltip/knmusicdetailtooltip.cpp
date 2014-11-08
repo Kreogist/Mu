@@ -58,6 +58,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     QBoxLayout *albumLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                            mainLayout->widget());
     mainLayout->addLayout(albumLayout, 1);
+    //Initial the album art.
     m_albumArt=new QLabel(this);
     m_albumArt->setFixedSize(128, 128);
     m_albumArt->setScaledContents(true);
@@ -67,9 +68,11 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
                                            mainLayout->widget());
     labelLayout->setContentsMargins(0,0,0,0);
     albumLayout->addLayout(labelLayout, 1);
+    //Initial the detail info labels.
     for(int i=0; i<ToolTipItemsCount; i++)
     {
         m_labels[i]=new QLabel(this);
+        m_labels[i]->setPalette(m_palette);
         labelLayout->addWidget(m_labels[i]);
     }
     labelLayout->addStretch();
@@ -85,6 +88,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
             this, &KNMusicDetailTooltip::onActionPlayNPauseClick);
     previewPlayer->addWidget(m_playNPause);
     m_progress=new KNProgressSlider(this);
+    m_progress->setWheelStep(1000);
     connect(m_progress, &KNProgressSlider::sliderPressed,
             this, &KNMusicDetailTooltip::onActionProgressPressed);
     connect(m_progress, &KNProgressSlider::sliderReleased,

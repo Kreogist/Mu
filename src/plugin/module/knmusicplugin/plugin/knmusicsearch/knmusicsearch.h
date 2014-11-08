@@ -27,6 +27,7 @@ class KNMusicSearch : public KNMusicSearchBase
 public:
     explicit KNMusicSearch(QObject *parent = 0);
     QWidget *searchBox();
+    QString searchText();
 
 signals:
 

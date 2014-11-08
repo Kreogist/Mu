@@ -175,6 +175,7 @@ void KNMusicTreeViewBase::searchText(QString text)
     //Set to proxy model's filter.
     if(m_proxyModel!=nullptr)
     {
+        //Do search.
         m_proxyModel->setFilterFixedString(m_seachText);
         if(currentIndex().isValid())
         {
@@ -182,6 +183,8 @@ void KNMusicTreeViewBase::searchText(QString text)
                                     0),
                      QAbstractItemView::PositionAtCenter);
         }
+        //Emit search signal.
+        emit searchComplete();
     }
 }
 

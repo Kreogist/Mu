@@ -15,6 +15,7 @@ class KNMusicSearchBase : public QObject
 public:
     KNMusicSearchBase(QObject *parent = 0):QObject(parent){}
     virtual QWidget *searchBox()=0;
+    virtual QString searchText()=0;
 
 signals:
     void requireSearch(const QString &text);

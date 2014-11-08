@@ -42,6 +42,11 @@ QWidget *KNMusicSearch::searchBox()
     return m_searchBox;
 }
 
+QString KNMusicSearch::searchText()
+{
+    return m_searchBox->text();
+}
+
 void KNMusicSearch::retranslate()
 {
     m_searchBox->setPlaceHolderText(tr("Search in Music"));

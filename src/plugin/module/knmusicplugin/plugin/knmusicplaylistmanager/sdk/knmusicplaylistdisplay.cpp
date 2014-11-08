@@ -20,6 +20,7 @@
 
 #include "knmousesensewidget.h"
 #include "knconnectionhandler.h"
+#include "knmusicsearchbase.h"
 #include "knmusicplaylistmodel.h"
 #include "knmusicplaylistlistitem.h"
 #include "knmusicplaylisttreeview.h"
@@ -71,11 +72,17 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
 
     //Initial the tree view.
     m_playlistTreeView=new KNMusicPlaylistTreeView(this);
+    connect(m_playlistTreeView, &KNMusicPlaylistTreeView::searchComplete,
+            this, &KNMusicPlaylistDisplay::updateDetailInfo);
 
     displayLayout->addWidget(m_playlistTreeView, 1);
 
     //Initial playlist connection handler.
     m_modelSignalHandler=new KNConnectionHandler(this);
+
+    //Connect search signal.
+    connect(KNMusicGlobal::musicSearch(), SIGNAL(requireSearch(QString)),
+            this, SLOT(updatePlaylistTitle()));
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -140,6 +147,13 @@ void KNMusicPlaylistDisplay::retranslate()
     m_minuateCount[1]=tr("1 minuate.");
     m_minuateCount[2]=tr("%1 minuates.");
 
+    m_searchCount[0]=tr("No result.");
+    m_searchCount[1]=tr("1 result.");
+    m_searchCount[2]=tr("%1 results.");
+
+    m_searchResultIn=tr("Search '%1' in '%2'");
+
+    updatePlaylistTitle();
     updateDetailInfo();
 }
 
@@ -154,7 +168,7 @@ void KNMusicPlaylistDisplay::updatePlaylistInfo()
         return;
     }
     //Set the title.
-    m_playlistTitle->setText(m_currentItem->text());
+    updatePlaylistTitle();
     //Update the detail.
     updateDetailInfo();
 }
@@ -176,6 +190,26 @@ void KNMusicPlaylistDisplay::updateDetailInfo()
     {
         return;
     }
+    //Check is now searching.
+    if(!KNMusicGlobal::musicSearch()->searchText().isEmpty())
+    {
+        //Get the result count, is the proxy model's count.
+        int searchCount=m_playlistTreeView->model()->rowCount();
+        switch(searchCount)
+        {
+        case 0:
+            m_playlistInfo->setText(m_searchCount[0]);
+            break;
+        case 1:
+            m_playlistInfo->setText(m_searchCount[1]);
+            break;
+        default:
+            m_playlistInfo->setText(m_searchCount[2].arg(QString::number(searchCount)));
+            break;
+        }
+        return;
+    }
+
     //Get the playlist model.
     KNMusicPlaylistModel *model=m_currentItem->playlistModel();
     if(model==nullptr)
@@ -212,4 +246,20 @@ void KNMusicPlaylistDisplay::updateDetailInfo()
     }
     //Set detail info.
     m_playlistInfo->setText(playlistInfoText);
+}
+
+void KNMusicPlaylistDisplay::updatePlaylistTitle()
+{
+    if(m_currentItem!=nullptr)
+    {
+        m_playlistTitle->setText(
+                    KNMusicGlobal::musicSearch()->searchText().isEmpty()?
+                        m_currentItem->text():
+                        m_searchResultIn.arg(KNMusicGlobal::musicSearch()->searchText(),
+                                       m_currentItem->text()));
+    }
+    else
+    {
+        m_playlistTitle->clear();
+    }
 }

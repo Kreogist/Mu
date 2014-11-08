@@ -43,14 +43,15 @@ public slots:
 private slots:
     void onActionRowChanged();
     void updateDetailInfo();
+    void updatePlaylistTitle();
 
 private:
     QLabel *m_playlistTitle, *m_playlistInfo;
     KNMusicPlaylistListItem *m_currentItem=nullptr;
     KNMusicPlaylistTreeView *m_playlistTreeView;
     KNConnectionHandler *m_modelSignalHandler;
-    QString m_songCount[3];
-    QString m_minuateCount[3];
+    QString m_songCount[3], m_minuateCount[3], m_searchResultIn,
+            m_searchCount[3];
 };
 
 #endif // KNMUSICPLAYLISTDISPLAY_H

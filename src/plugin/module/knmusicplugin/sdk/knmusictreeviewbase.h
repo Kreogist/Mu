@@ -28,6 +28,7 @@ public:
     void backupHeader();
 
 signals:
+    void searchComplete();
 
 public slots:
     virtual void resetHeaderState();
