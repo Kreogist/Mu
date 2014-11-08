@@ -217,6 +217,8 @@ void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
     switch(event->key())
     {
     case Qt::Key_Menu:
+        //Hide preview tooltips.
+        KNMusicGlobal::detailTooltip()->hide();
         //Check the select rows count.
         switch(selectionModel()->selectedRows().size())
         {
@@ -327,6 +329,9 @@ void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
         //Check is button right button and position is in the treeview.
         if(event->button()==Qt::RightButton && rect().contains(event->pos()))
         {
+            //Hide preview tooltips.
+            KNMusicGlobal::detailTooltip()->hide();
+            //According to the selected rows to display menu.
             switch(selectionModel()->selectedRows().size())
             {
             case 0:
