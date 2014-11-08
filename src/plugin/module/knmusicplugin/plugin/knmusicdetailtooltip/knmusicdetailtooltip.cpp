@@ -38,9 +38,6 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Set properties.
     setFixedSize(m_tooltipWidth, m_tooltipHeight);
     setWindowFlags(Qt::ToolTip);
-    //Initial the color and palette, initial the palette with frame slot.
-    m_palette=palette();
-    onActionMouseInOut(0x28);
     //Initial the resource.
     m_playIcon=QPixmap(":/plugin/music/preview/play.png");
     m_pauseIcon=QPixmap(":/plugin/music/preview/pause.png");
@@ -75,6 +72,11 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
         m_labels[i]->setPalette(m_palette);
         labelLayout->addWidget(m_labels[i]);
     }
+    //Set the title label font.
+    QFont nameFont=m_labels[ItemTitle]->font();
+    nameFont.setBold(true);
+    nameFont.setPixelSize(18);
+    m_labels[ItemTitle]->setFont(nameFont);
     labelLayout->addStretch();
 
     QBoxLayout *previewPlayer=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -102,6 +104,10 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     m_mouseOut=new QTimeLine(200, this);
     m_mouseOut->setEndFrame(0x28);
     initialTimeLine(m_mouseOut);
+
+    //Initial the color and palette, initial the palette with frame slot.
+    m_palette=palette();
+    onActionMouseInOut(0x28);
 }
 
 void KNMusicDetailTooltip::setBackend(KNMusicBackend *backend)
@@ -147,7 +153,9 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
                                        detailInfo);
     KNMusicGlobal::parser()->parseAlbumArt(detailInfo);
     //Set data to details.
-    m_albumArt->setPixmap(QPixmap::fromImage(detailInfo.coverImage));
+    m_albumArt->setPixmap(detailInfo.coverImage.isNull()?
+                              KNMusicGlobal::instance()->noAlbumArt():
+                              QPixmap::fromImage(detailInfo.coverImage));
     m_labels[ItemTitle]->setText(detailInfo.textLists[Name]);
     m_labels[ItemFileName]->setText(tr("In file: %1").arg(detailInfo.fileName));
     m_labels[ItemTime]->setText(detailInfo.textLists[Time]);
@@ -226,6 +234,10 @@ void KNMusicDetailTooltip::onActionMouseInOut(const int &frame)
     m_palette.setColor(QPalette::WindowText, m_textColor);
     //Set the palette.
     setPalette(m_palette);
+    for(int i=0; i<ToolTipItemsCount; i++)
+    {
+        m_labels[i]->setPalette(m_palette);
+    }
 }
 
 void KNMusicDetailTooltip::onActionPlayNPauseClick()
