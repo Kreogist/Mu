@@ -483,10 +483,26 @@ void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,
     ID3v2PictureFrame currentFrame;
     //Get mime end and description end.
     int mimeTypeEnd=imageData.indexOf('\0', 1),
-        descriptionEnd=imageData.indexOf('\0', mimeTypeEnd+2);
+        descriptionEnd=mimeTypeEnd+2;
     //Backup the text encording and get the picture type.
     quint8 textEncoding=imageData.at(0),
            pictureType=imageData.at(mimeTypeEnd+1);
+    switch (textEncoding) {
+    case EncodeISO:
+    case EncodeUTF8:
+        descriptionEnd=imageData.indexOf('\0', mimeTypeEnd+2);
+        break;
+    case EncodeUTF16BELE:
+    case EncodeUTF16:
+        while(imageData.at(descriptionEnd)!='\0' ||
+              imageData.at(descriptionEnd+1)!='\0')
+        {
+            descriptionEnd+=2;
+        }
+        break;
+    default:
+        break;
+    }
     //Get the mime type text.
     currentFrame.mimeType=frameToText(imageData.left(mimeTypeEnd));
     //Get the description text.
@@ -495,7 +511,19 @@ void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,
     descriptionText.insert(0, textEncoding);
     currentFrame.description=frameToText(descriptionText);
     //Get the image.
-    imageData.remove(0, descriptionEnd+1);
+    switch (textEncoding)
+    {
+    case EncodeISO:
+    case EncodeUTF8:
+        imageData.remove(0, descriptionEnd+1);
+        break;
+    case EncodeUTF16BELE:
+    case EncodeUTF16:
+        imageData.remove(0, descriptionEnd+2);
+        break;
+    default:
+        break;
+    }
     currentFrame.image.loadFromData(imageData);
     //If parse the image success, add it to map.
     if(!currentFrame.image.isNull())
@@ -522,13 +550,42 @@ void KNMusicTagID3v2::parsePICImageData(QByteArray imageData,
     //Backup the text encording and get the picture type.
     quint8 textEncoding=imageData.at(0), pictureType=imageData.at(4);
     //Get description end.
-    int descriptionEnd=imageData.indexOf('\0', 5);
+    int descriptionEnd=5;
+    switch (textEncoding)
+    {
+    case EncodeISO:
+    case EncodeUTF8:
+        descriptionEnd=imageData.indexOf('\0', 5);
+        break;
+    case EncodeUTF16BELE:
+    case EncodeUTF16:
+        while(imageData.at(descriptionEnd)!='\0' ||
+              imageData.at(descriptionEnd+1)!='\0')
+        {
+            descriptionEnd+=2;
+        }
+        break;
+    default:
+        break;
+    }
     //Get the description.
     QByteArray descriptionText=imageData.mid(5, descriptionEnd-5);
     descriptionText.append(textEncoding);
     currentFrame.description=frameToText(descriptionText);
     //Get the image.
-    imageData.remove(0, descriptionEnd+1);
+    switch (textEncoding)
+    {
+    case EncodeISO:
+    case EncodeUTF8:
+        imageData.remove(0, descriptionEnd+1);
+        break;
+    case EncodeUTF16BELE:
+    case EncodeUTF16:
+        imageData.remove(0, descriptionEnd+2);
+        break;
+    default:
+        break;
+    }
     currentFrame.image.loadFromData(imageData);
     //If parse the image success, add it to map.
     if(!currentFrame.image.isNull())
