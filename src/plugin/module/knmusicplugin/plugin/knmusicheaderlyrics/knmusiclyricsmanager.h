@@ -48,6 +48,7 @@ class KNMusicLyricsManager : public QObject
 public:
     static KNMusicLyricsManager *instance();
     int lines() const;
+    bool isEmpty() const;
     qint64 positionAt(const int &index) const;
     QString lyricsAt(const int &index) const;
     QString lyricsFolderPath() const;

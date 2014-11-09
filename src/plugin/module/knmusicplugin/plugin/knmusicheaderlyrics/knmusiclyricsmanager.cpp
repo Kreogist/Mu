@@ -40,6 +40,11 @@ int KNMusicLyricsManager::lines() const
     return m_positions.size();
 }
 
+bool KNMusicLyricsManager::isEmpty() const
+{
+    return m_positions.isEmpty();
+}
+
 qint64 KNMusicLyricsManager::positionAt(const int &index) const
 {
     return m_positions.at(index);

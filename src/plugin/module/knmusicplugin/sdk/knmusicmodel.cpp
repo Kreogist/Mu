@@ -51,10 +51,11 @@ Qt::ItemFlags KNMusicModel::flags(const QModelIndex &index) const
     if(index.isValid())
     {
         return Qt::ItemIsDragEnabled |
-                Qt::ItemIsSelectable |
-                Qt::ItemIsEditable |
                 Qt::ItemIsEnabled |
-                Qt::ItemNeverHasChildren;
+                Qt::ItemNeverHasChildren |
+                Qt::ItemIsSelectable |
+                (index.column()==Rating || index.column()==AlbumRating?
+                     Qt::ItemIsEditable:Qt::NoItemFlags);
     }
     //Or else, just enabled drop.
     return Qt::ItemIsDropEnabled;
@@ -243,6 +244,7 @@ void KNMusicModel::updateMusicRow(const int &row,
         case Rating:
         case AlbumRating:
         case DateAdded:
+        case Plays:
             break;
         default:
             setItemText(row, i, detailInfo.textLists[i]);

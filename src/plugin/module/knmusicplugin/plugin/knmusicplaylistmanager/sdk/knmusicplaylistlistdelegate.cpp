@@ -79,7 +79,9 @@ QWidget *KNMusicPlaylistListDelegate::createEditor(QWidget *parent,
     //Generate the caption editor.
     QLineEdit *captionEditor=new QLineEdit(parent);
 
-    captionEditor->setPalette(option.palette);
+    QPalette editorPalette=option.palette;
+    editorPalette.setColor(QPalette::WindowText, QColor(0,0,0,0));
+    captionEditor->setPalette(editorPalette);
     //Set the size of the editor.
     /*
      * This resize is meant to fixed this bug:

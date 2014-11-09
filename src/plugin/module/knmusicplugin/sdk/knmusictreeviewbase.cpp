@@ -39,13 +39,12 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     setUniformRowHeights(true);
     setAllColumnsShowFocus(true);
     setDragDropMode(QAbstractItemView::DragOnly);
+    setDropIndicatorShown(true);
     setAlternatingRowColors(true);
     setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
-    setEditTriggers(QAbstractItemView::SelectedClicked |
-                    QAbstractItemView::EditKeyPressed);
 
     //Set scroll bar properties.
     horizontalScrollBar()->setSingleStep(5);
@@ -263,7 +262,6 @@ bool KNMusicTreeViewBase::event(QEvent *event)
             }
             else
             {
-//                KNMusicGlobal::detailTooltip()->hide();
                 KNMusicGlobal::detailTooltip()->setPreviewIndex(m_proxyModel->musicModel(),
                                                                 m_proxyModel->mapToSource(mouseIndex),
                                                                 helpEvent->globalPos());

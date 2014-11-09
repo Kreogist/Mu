@@ -67,7 +67,6 @@ private:
         m_leftSpacing=15, m_animationDuration=200;
     QColor m_normalText=QColor(100,100,100),
            m_highlightColor=QColor(0xf7, 0xcf, 0x3d);
-    bool m_noLyrics=true;
     KNMusicGlobal *m_musicGlobal;
     KNPreferenceItemGlobal *m_preferenceItemGlobal;
 };
