@@ -47,11 +47,19 @@ KNCategoryTabWidget::KNCategoryTabWidget(QWidget *parent) :
     m_tabLayout->addWidget(m_widgetSwitcher, 1);
 }
 
-void KNCategoryTabWidget::addTab(const QPixmap &icon,
-                                 const QString &caption,
-                                 QWidget *widget)
+int KNCategoryTabWidget::addTab(const QPixmap &icon,
+                                const QString &caption,
+                                QWidget *widget)
 {
     //Add widget first, because tab bar will emit signal to switch widget.
     m_widgetSwitcher->addWidget(widget);
     m_tabBar->addCategory(icon, caption);
+    //Return the current widget index.
+    return m_widgetSwitcher->count()-1;
+}
+
+void KNCategoryTabWidget::setTabText(const int &index,
+                                     const QString &caption)
+{
+    m_tabBar->setCategoryText(index, caption);
 }

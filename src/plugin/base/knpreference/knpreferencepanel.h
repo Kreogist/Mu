@@ -42,10 +42,10 @@ public slots:
     void addLanguageButton(KNAnimeCheckedButton *languageButton,
                            const QPixmap &headerIcon,
                            QWidget *panel);
-    void addCategory(const QString &title,
-                     const QPixmap &icon,
-                     const QPixmap &headerIcon,
-                     KNPreferenceWidgetsPanel *contentWidget);
+    int addCategory(const QString &title,
+                    const QPixmap &icon,
+                    const QPixmap &headerIcon,
+                    KNPreferenceWidgetsPanel *contentWidget);
     void setCategoryText(const int &index,
                          const QString &title);
     void setCurrentIndex(const int &index);

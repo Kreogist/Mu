@@ -279,8 +279,5 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     m_mainWindowPlugin->addHeaderWidget(plugin->headerWidget());
     m_mainWindowPlugin->addCentralWidget(plugin->centralWidget());
     //Add preference panel.
-    m_preferencePlugin->addCategory(plugin->caption(),
-                                    plugin->preferenceIcon(),
-                                    plugin->headerIcon(),
-                                    plugin->preferencePanelWidget());
+    m_preferencePlugin->addCategory(plugin);
 }

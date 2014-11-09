@@ -10,6 +10,7 @@
 #include <QObject>
 
 class QWidget;
+class KNCategoryPlugin;
 class KNPreferenceWidgetsPanel;
 class KNPreferencePlugin : public QObject
 {
@@ -22,10 +23,7 @@ signals:
     void requireHidePreference();
 
 public slots:
-    virtual void addCategory(const QString &title,
-                             const QPixmap &icon,
-                             const QPixmap &headerIcon,
-                             KNPreferenceWidgetsPanel *contentWidget)=0;
+    virtual void addCategory(KNCategoryPlugin *plugin)=0;
     virtual void setCurrentIndex(const int &index)=0;
 };
 

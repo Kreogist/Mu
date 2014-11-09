@@ -125,11 +125,11 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     //Draw text
     painter.setPen(QColor(255,255,255));
     painter.setOpacity(m_textAlpha);
-    painter.drawText(iconX+m_iconSize,
+    painter.drawText(iconX+m_iconSize+m_spacing,
                      m_textY,
-                     m_textWidth,
+                     m_textWidth+m_spacing,
                      m_iconSize,
-                     Qt::AlignRight | Qt::AlignVCenter,
+                     Qt::AlignLeft | Qt::AlignVCenter,
                      m_text);
 }
 

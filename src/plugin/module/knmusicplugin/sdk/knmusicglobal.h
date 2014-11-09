@@ -37,7 +37,6 @@ enum MusicDatas
     DiscCount,
     DiscNumber,
     Genre,
-    Grouping,
     Kind,
     LastPlayed,
     Plays,

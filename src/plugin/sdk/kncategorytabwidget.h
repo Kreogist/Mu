@@ -28,13 +28,14 @@ class KNCategoryTabWidget : public QWidget
     Q_OBJECT
 public:
     explicit KNCategoryTabWidget(QWidget *parent = 0);
-    void addTab(const QPixmap &icon,
-                const QString &caption,
-                QWidget *widget);
+    int addTab(const QPixmap &icon,
+               const QString &caption,
+               QWidget *widget);
 
 signals:
 
 public slots:
+    void setTabText(const int &index, const QString &caption);
 
 private:
     QBoxLayout *m_tabLayout;

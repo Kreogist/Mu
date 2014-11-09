@@ -42,9 +42,9 @@ signals:
     void requireShowNormal(bool ok);
 
 public slots:
-    void addCategory(const QString &title,
-                     const QPixmap &icon,
-                     const QPixmap &headerIcon);
+    int addCategory(const QString &title,
+                    const QPixmap &icon,
+                    const QPixmap &headerIcon);
     void addLanguageButton(KNAnimeCheckedButton *languageButton,
                            const QPixmap &headerIcon);
     void setCurrentIndex(const int &index);

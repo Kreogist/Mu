@@ -20,9 +20,9 @@ signals:
 public slots:
 
 protected slots:
-    virtual void addMusicCategory(const QPixmap &icon,
-                                  const QString &caption,
-                                  QWidget *widget)=0;
+    virtual int addMusicCategory(const QPixmap &icon,
+                                 const QString &caption,
+                                 QWidget *widget)=0;
 
 };
 

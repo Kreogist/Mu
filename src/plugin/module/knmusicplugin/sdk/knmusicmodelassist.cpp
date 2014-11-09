@@ -87,6 +87,11 @@ bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
     parser->parseTrackList(musicModel->rowProperty(index.row(),
                                                    TrackFileRole).toString(),
                            currentTrackInfo);
+    //No list parsed.
+    if(currentTrackInfo.isEmpty())
+    {
+        return false;
+    }
     //Check the beginning of the track list, if it's 0, means the track is indexed at:
     // 0 1 2 3 ...
     //Or else, it is start at 1, we need to reduce the track number.

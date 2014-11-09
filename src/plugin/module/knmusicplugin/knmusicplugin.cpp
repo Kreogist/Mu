@@ -31,7 +31,6 @@
 #include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicplaylistmanagerbase.h"
-#include "knmusictab.h"
 
 //Plugins
 #ifdef ENABLE_LIBBASS
@@ -61,7 +60,9 @@
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
 
 #include "knglobal.h"
+#include "knmusictab.h"
 #include "kncategorytabwidget.h"
+#include "knlocalemanager.h"
 #include "knpreferencewidgetspanel.h"
 
 #include "knmusicplugin.h"
@@ -94,6 +95,10 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadPlaylistManager(new KNMusicPlaylistManager);
+
+    //Connect retranslate request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicPlugin::retranslate);
 }
 
 KNMusicPlugin::~KNMusicPlugin()
@@ -234,11 +239,22 @@ void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
     KNMusicGlobal::nowPlaying()->playTemporaryFiles(data);
 }
 
-void KNMusicPlugin::addMusicCategory(const QPixmap &icon,
-                                     const QString &caption,
-                                     QWidget *widget)
+void KNMusicPlugin::retranslate()
 {
-    m_centralWidget->addTab(icon, caption, widget);
+    //Update the tab caption.
+    for(auto i=m_tabList.begin();
+        i!=m_tabList.end();
+        ++i)
+    {
+        m_centralWidget->setTabText((*i).index, (*i).tab->caption());
+    }
+}
+
+int KNMusicPlugin::addMusicCategory(const QPixmap &icon,
+                                    const QString &caption,
+                                    QWidget *widget)
+{
+    return m_centralWidget->addTab(icon, caption, widget);
 }
 
 void KNMusicPlugin::addLeftHeaderWidget(QWidget *widget,
@@ -346,9 +362,13 @@ void KNMusicPlugin::initialMultiMenu(KNMusicMultiMenuBase *multiMenu)
 void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
 {
     //Just add them to a new music category.
-    addMusicCategory(musicTab->icon(),
-                     musicTab->caption(),
-                     musicTab->widget());
+    MusicTabItem currentTab;
+    currentTab.index=addMusicCategory(musicTab->icon(),
+                                      musicTab->caption(),
+                                      musicTab->widget());
+    currentTab.tab=musicTab;
+    //Add tab to list.
+    m_tabList.append(currentTab);
     //Connect request to the music tab.
     connect(KNMusicGlobal::musicSearch(), &KNMusicSearchBase::requireSearch,
             musicTab, &KNMusicTab::onActionSearch);

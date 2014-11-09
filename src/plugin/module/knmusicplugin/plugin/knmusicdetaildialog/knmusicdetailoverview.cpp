@@ -182,6 +182,8 @@ void KNMusicDetailOverview::initialDetailInfoLabel()
     QPalette captionPalette=m_detailInfoCaption[0]->palette();
     captionPalette.setColor(QPalette::WindowText, QColor(0xa0, 0xa0, 0xa0));
     m_detailInfoCaption[0]->setPalette(captionPalette);
+    m_detailInfoCaption[0]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_detailInfoCaption[0]->setMinimumWidth(100);
     //Initial the first data field.
     m_detailInfo[0]=new QLabel(this);
     QPalette infoPalette=m_detailInfo[0]->palette();
@@ -193,7 +195,9 @@ void KNMusicDetailOverview::initialDetailInfoLabel()
     {
         //Initial the caption.
         m_detailInfoCaption[i]=new QLabel(this);
+        m_detailInfoCaption[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         m_detailInfoCaption[i]->setPalette(captionPalette);
+        m_detailInfoCaption[i]->setMinimumWidth(100);
         m_detailInfoCaption[i]->setFont(captionFont);
         //Initial the data field.
         m_detailInfo[i]=new QLabel(this);
@@ -202,6 +206,8 @@ void KNMusicDetailOverview::initialDetailInfoLabel()
 
     //Initial file path caption.
     m_filePathCaption=new QLabel(this);
+    m_filePathCaption->setMinimumWidth(100);
+    m_filePathCaption->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_filePathCaption->setPalette(captionPalette);
     m_filePathCaption->setFont(captionFont);
     //Initial the data field.

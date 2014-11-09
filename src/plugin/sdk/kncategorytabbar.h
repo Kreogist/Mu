@@ -42,6 +42,7 @@ signals:
 public slots:
     void unlockBar();
     void setCurrentIndex(int buttonIndex);
+    void setCategoryText(const int &index, const QString &text);
 
 protected:
     void enterEvent(QEvent *event);

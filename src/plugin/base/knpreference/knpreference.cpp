@@ -15,7 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kncategoryplugin.h"
 #include "knpreferencepanel.h"
+#include "knlocalemanager.h"
 #include "preference/knpreferenceitemglobal.h"
 
 #include "knpreference.h"
@@ -29,8 +31,10 @@ KNPreference::KNPreference(QObject *parent) :
     m_preferencePanel=new KNPreferencePanel;
     connect(m_preferencePanel, &KNPreferencePanel::requireHidePreference,
             this, &KNPreference::onActionHidePreference);
-    //Initial the language panel.
 
+    //Connect retranslate request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNPreference::retranslate);
 }
 
 QWidget *KNPreference::preferencePanel()
@@ -38,12 +42,18 @@ QWidget *KNPreference::preferencePanel()
     return m_preferencePanel;
 }
 
-void KNPreference::addCategory(const QString &title,
-                               const QPixmap &icon,
-                               const QPixmap &headerIcon,
-                               KNPreferenceWidgetsPanel *contentWidget)
+void KNPreference::addCategory(KNCategoryPlugin *plugin)
 {
-    m_preferencePanel->addCategory(title, icon, headerIcon, contentWidget);
+    CategoryItem currentCategory;
+    //Get the index of current category.
+    currentCategory.index=
+            m_preferencePanel->addCategory(plugin->caption(),
+                                           plugin->preferenceIcon(),
+                                           plugin->headerIcon(),
+                                           plugin->preferencePanelWidget());
+    currentCategory.plugin=plugin;
+    //Add to list.
+    m_categoryList.append(currentCategory);
 }
 
 void KNPreference::setCurrentIndex(const int &index)
@@ -59,4 +69,15 @@ void KNPreference::onActionHidePreference()
     m_preferenceGlobal->requireApplyPreference();
     //Ask to hide preference.
     emit requireHidePreference();
+}
+
+void KNPreference::retranslate()
+{
+    //Update the preference caption.
+    for(auto i=m_categoryList.begin();
+        i!=m_categoryList.end();
+        ++i)
+    {
+        m_preferencePanel->setCategoryText((*i).index, (*i).plugin->caption());
+    }
 }

@@ -112,6 +112,13 @@ void KNCategoryTabBar::setCurrentIndex(int buttonIndex)
     emit currentIndexChanged(m_currentIndex);
 }
 
+void KNCategoryTabBar::setCategoryText(const int &index, const QString &text)
+{
+    Q_ASSERT(index>-1 && index<m_buttonList.size());
+    //Get the button and update the text.
+    m_buttonList.at(index)->setText(text);
+}
+
 void KNCategoryTabBar::enterEvent(QEvent *event)
 {
     //Stop animations.

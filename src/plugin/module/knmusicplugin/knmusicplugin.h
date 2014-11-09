@@ -63,11 +63,12 @@ signals:
 
 public slots:
     void onArgumentsAvailable(const QStringList &data);
+    void retranslate();
 
 protected slots:
-    void addMusicCategory(const QPixmap &icon,
-                          const QString &caption,
-                          QWidget *widget);
+    int addMusicCategory(const QPixmap &icon,
+                         const QString &caption,
+                         QWidget *widget);
     virtual void addLeftHeaderWidget(QWidget *widget,
                                      int stretch=0,
                                      Qt::Alignment alignment=0);
@@ -83,6 +84,12 @@ private:
     void addMusicTab(KNMusicTab *musicTab);
     void startThreads();
     QLinkedList<QObject *> m_pluginList;
+    struct MusicTabItem
+    {
+        int index;
+        KNMusicTab *tab;
+    };
+    QLinkedList<MusicTabItem> m_tabList;
     QString m_caption;
     KNCategoryTabWidget *m_centralWidget=nullptr;
     QWidget *m_headerWidget=nullptr;

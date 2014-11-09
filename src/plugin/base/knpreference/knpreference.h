@@ -18,6 +18,8 @@
 #ifndef KNPREFERENCE_H
 #define KNPREFERENCE_H
 
+#include <QLinkedList>
+
 #include "knpreferenceplugin.h"
 
 class KNPreferenceItemGlobal;
@@ -32,14 +34,18 @@ public:
 signals:
 
 public slots:
-    void addCategory(const QString &title,
-                     const QPixmap &icon,
-                     const QPixmap &headerIcon,
-                     KNPreferenceWidgetsPanel *contentWidget);
+    void addCategory(KNCategoryPlugin *plugin);
     void setCurrentIndex(const int &index);
     void onActionHidePreference();
+    void retranslate();
 
 private:
+    struct CategoryItem
+    {
+        int index;
+        KNCategoryPlugin *plugin;
+    };
+    QLinkedList<CategoryItem> m_categoryList;
     KNPreferenceItemGlobal *m_preferenceGlobal;
     KNPreferencePanel *m_preferencePanel;
 };

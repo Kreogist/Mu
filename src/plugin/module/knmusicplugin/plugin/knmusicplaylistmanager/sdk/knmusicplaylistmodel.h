@@ -31,6 +31,7 @@ public:
 signals:
 
 public slots:
+    void retranslate();
 
 private:
     void initialHeader();

@@ -80,14 +80,16 @@ int KNPreferenceCategory::currentIndex() const
     return m_categoryList->currentIndex();
 }
 
-void KNPreferenceCategory::addCategory(const QString &title,
-                                       const QPixmap &icon,
-                                       const QPixmap &headerIcon)
+int KNPreferenceCategory::addCategory(const QString &title,
+                                      const QPixmap &icon,
+                                      const QPixmap &headerIcon)
 {
     //Add to the list.
     m_categoryList->addCategory(title, icon);
     //Save the header icon.
     m_headerIcons.append(headerIcon);
+    //Return the icons size.
+    return m_headerIcons.size()-1;
 }
 
 void KNPreferenceCategory::addLanguageButton(KNAnimeCheckedButton *languageButton,

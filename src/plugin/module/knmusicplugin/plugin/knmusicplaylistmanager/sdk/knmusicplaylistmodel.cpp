@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knlocalemanager.h"
+
 #include "knmusicplaylistmodel.h"
 
 KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
@@ -22,6 +24,9 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
 {
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
+    //Connect language changed request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicPlaylistModel::retranslate);
     //Initial header.
     initialHeader();
 }
@@ -41,7 +46,7 @@ int KNMusicPlaylistModel::playingItemColumn()
     return BlankData;
 }
 
-void KNMusicPlaylistModel::initialHeader()
+void KNMusicPlaylistModel::retranslate()
 {
     //Set the header text.
     QStringList header;
@@ -50,6 +55,12 @@ void KNMusicPlaylistModel::initialHeader()
         header<<(m_musicGlobal->treeViewHeaderText(i));
     }
     setHorizontalHeaderLabels(header);
+}
+
+void KNMusicPlaylistModel::initialHeader()
+{
+    //Using retranslate to update the header text.
+    retranslate();
     //Set header size hint.
     setHeaderData(0, Qt::Horizontal, QSize(10,23), Qt::SizeHintRole);
     //Set header alignment

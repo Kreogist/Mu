@@ -85,19 +85,21 @@ void KNPreferencePanel::addLanguageButton(KNAnimeCheckedButton *languageButton,
     m_contents->addPanelWidget(panel);
 }
 
-void KNPreferencePanel::addCategory(const QString &title,
-                                    const QPixmap &icon,
-                                    const QPixmap &headerIcon,
-                                    KNPreferenceWidgetsPanel *contentWidget)
+int KNPreferencePanel::addCategory(const QString &title,
+                                   const QPixmap &icon,
+                                   const QPixmap &headerIcon,
+                                   KNPreferenceWidgetsPanel *contentWidget)
 {
     //Add the info of this category to the category list and content.
-    m_categoryList->addCategory(title, icon, headerIcon);
+    int categoryIndex=m_categoryList->addCategory(title, icon, headerIcon);
     m_contents->addPanelWidget(contentWidget);
     //Connect request.
     connect(m_categoryList, &KNPreferenceCategory::requireShowNormal,
             contentWidget, &KNPreferenceWidgetsPanel::setNormalMode);
     connect(this, &KNPreferencePanel::requireSavePreference,
             contentWidget, &KNPreferenceWidgetsPanel::savePanelData);
+    //Get back the category index.
+    return categoryIndex;
 }
 
 void KNPreferencePanel::setCategoryText(const int &index,
