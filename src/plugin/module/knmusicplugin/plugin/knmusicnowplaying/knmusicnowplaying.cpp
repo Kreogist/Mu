@@ -16,8 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knmusicsingleplaylistmodel.h"
+#include "knmusicmodelassist.h"
 #include "knmusicproxymodelpool.h"
-#include "knmusicparser.h"
 
 #include "knmusicnowplaying.h"
 
@@ -29,8 +29,6 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     //Initial the icon.
     m_playingIcon=QPixmap(":/plugin/music/common/playingicon.png");
     m_cantPlayIcon=QPixmap(":/plugin/music/common/cantplay.png");
-    //Initial the parser.
-    m_parser=KNMusicGlobal::parser();
     //Initial temporary model.
     m_temporaryModel=new KNMusicSinglePlaylistModel(this);
     //Initial proxy model pool.
@@ -197,63 +195,27 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                      Qt::DecorationRole,
                                      m_playingIcon);
     KNMusicDetailInfo currentInfo;
-    //Get the file path.
-    QString musicFilePath=m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
-                                                           FilePathRole).toString();
-    //Check the start position role, if it is not -1, means it's a music file,
-    if(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
-                                        StartPositionRole).toLongLong()==-1)
+    //Parse the current index, if we cannot parse it, play next.
+    if(KNMusicModelAssist::reanalysisRow(m_playingMusicModel,
+                                         m_currentPlayingIndex,
+                                         currentInfo))
     {
-        //Parse the info.
-        m_parser->parseFile(musicFilePath, currentInfo);
-        m_parser->parseAlbumArt(currentInfo);
         //Update the player's data.
         emit requireUpdatePlayerInfo(currentInfo);
         //Update the data in proxy model.
         m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
                                             currentInfo);
         //Ask backend to play the file.
-        m_backend->playFile(currentInfo.filePath);
-    }
-    else
-    {
-        QList<KNMusicDetailInfo> currentTrackInfo;
-        int currentTrackNumber=m_playingMusicModel->roleData(m_currentPlayingIndex.row(),
-                                                             TrackNumber,
-                                                             Qt::DisplayRole).toInt();
-        //Parse the list first.
-        m_parser->parseTrackList(m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
-                                                                  TrackFileRole).toString(),
-                                 currentTrackInfo);
-        //Check the beginning of the track list, if it's 0, means the track is indexed at:
-        // 0 1 2 3 ...
-        //Or else, it is start at 1, we need to reduce the track number.
-        if(currentTrackInfo.first().textLists[TrackNumber].toInt()!=0)
+        if(currentInfo.startPosition==-1)
         {
-            currentTrackNumber--;
-            //Still need to check the tracknumber.
-            if(currentTrackNumber<0)
-            {
-                currentTrackNumber=0;
-            }
+            m_backend->playFile(currentInfo.filePath);
         }
-        //Check the size of the new track we get.
-        if(currentTrackInfo.size()>currentTrackNumber)
+        else
         {
-            //Get the track number's current info.
-            currentInfo=currentTrackInfo.at(currentTrackNumber);
-            //Update the player's data.
-            emit requireUpdatePlayerInfo(currentInfo);
-            //Update the data in proxy model.
-            m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
-                                                currentInfo);
-            //Ask backend to play the file.
-            m_backend->playSection(musicFilePath,
+            m_backend->playSection(currentInfo.filePath,
                                    currentInfo.startPosition,
                                    currentInfo.duration);
-            return;
         }
-        //!FIXME: tell user that this track number is invaild.
     }
 }
 

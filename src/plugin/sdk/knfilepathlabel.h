@@ -18,6 +18,7 @@ public:
     void setFilePath(const QString &filePath);
 
 signals:
+    void aboutToShowInGraphicalShell();
 
 public slots:
 

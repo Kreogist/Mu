@@ -17,6 +17,7 @@
 
 using namespace KNMusic;
 
+class KNMusicModel;
 class KNMusicModelAssist : public QObject
 {
     Q_OBJECT
@@ -26,6 +27,9 @@ public:
     static QString dateTimeToDataString(const QDateTime &dateTime);
     static QDateTime dataStringToDateTime(const QString &text);
     static QList<QStandardItem *> generateRow(const KNMusicDetailInfo &detailInfo);
+    static bool reanalysisRow(KNMusicModel *musicModel,
+                              const QPersistentModelIndex &index,
+                              KNMusicDetailInfo &currentInfo);
 
 signals:
 

@@ -37,7 +37,7 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     m_palette.setColor(QPalette::Window, QColor(0x30, 0x30, 0x30));
     m_palette.setColor(QPalette::Button, QColor(0x30, 0x30, 0x30));
     m_palette.setColor(QPalette::Text, QColor(0x8f, 0x8f, 0x8f, 0xaf));
-    m_palette.setColor(QPalette::Highlight, QColor(0x60, 0x60, 0x60));
+    m_palette.setColor(QPalette::Highlight, QColor(0xff, 0xff, 0xff, 0x40));
     m_palette.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     setPalette(m_palette);
 

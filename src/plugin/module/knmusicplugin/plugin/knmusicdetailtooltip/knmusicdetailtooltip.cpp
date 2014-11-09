@@ -26,7 +26,7 @@
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
 #include "knfilepathlabel.h"
-#include "knmusicparser.h"
+#include "knmusicmodelassist.h"
 #include "knmusicmodel.h"
 #include "knmusicbackend.h"
 
@@ -88,6 +88,8 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Initial the file path label.
     m_fileName=new KNFilePathLabel(this);
     m_fileName->setPalette(m_palette);
+    connect(m_fileName, &KNFilePathLabel::aboutToShowInGraphicalShell,
+            this, &KNMusicDetailTooltip::startDisappearCountWithAnime);
     labelLayout->insertWidget(1, m_fileName);
     labelLayout->addStretch();
 
@@ -161,19 +163,20 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
     m_currentMusicModel=musicModel;
     //Get the detail from data.
     KNMusicDetailInfo detailInfo;
-    KNMusicGlobal::parser()->parseFile(m_currentMusicModel->filePathFromRow(m_currentIndex.row()),
-                                       detailInfo);
-    KNMusicGlobal::parser()->parseAlbumArt(detailInfo);
-    //Set data to details.
-    m_albumArt->setPixmap(detailInfo.coverImage.isNull()?
-                              KNMusicGlobal::instance()->noAlbumArt():
-                              QPixmap::fromImage(detailInfo.coverImage));
-    setEliedText(m_labels[ItemTitle], detailInfo.textLists[Name]);
-    setEliedText(m_fileName, tr("In file: %1").arg(detailInfo.fileName));
-    m_fileName->setFilePath(detailInfo.filePath);
-    setEliedText(m_labels[ItemTime], detailInfo.textLists[Time]);
-    setEliedText(m_labels[ItemArtist], detailInfo.textLists[Artist]);
-
+    if(KNMusicModelAssist::reanalysisRow(musicModel,
+                                         index,
+                                         detailInfo))
+    {
+        //Set data to details.
+        m_albumArt->setPixmap(detailInfo.coverImage.isNull()?
+                                  KNMusicGlobal::instance()->noAlbumArt():
+                                  QPixmap::fromImage(detailInfo.coverImage));
+        setEliedText(m_labels[ItemTitle], detailInfo.textLists[Name]);
+        setEliedText(m_fileName, tr("In file: %1").arg(detailInfo.fileName));
+        m_fileName->setFilePath(detailInfo.filePath);
+        setEliedText(m_labels[ItemTime], detailInfo.textLists[Time]);
+        setEliedText(m_labels[ItemArtist], detailInfo.textLists[Artist]);
+    }
     //Set the position.
     moveToPosition(position);
 }

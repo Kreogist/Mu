@@ -54,6 +54,7 @@ private slots:
     void onActionProgressPressed();
     void onActionProgressReleased();
     void onActionPreviewPositionChanged(const qint64 &position);
+    void startDisappearCountWithAnime();
 
 private:
     void loadCurrentToPreview();
@@ -68,7 +69,6 @@ private:
     void resetPreviewPlayer();
     void initialTimeLine(QTimeLine *timeline);
     void setEliedText(QLabel *label, const QString &text);
-    void startDisappearCountWithAnime();
     void moveToPosition(const QPoint &position);
     int m_tooltipWidth=448, m_tooltipHeight=176;
     bool m_isButtonPlay=true, m_progressPressed=false;

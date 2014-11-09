@@ -42,6 +42,9 @@ void KNFilePathLabel::mouseReleaseEvent(QMouseEvent *event)
                 switch(event->button())
                 {
                 case Qt::LeftButton:
+                    //Emit showing signal.
+                    emit aboutToShowInGraphicalShell();
+                    //Show the file in the graphics shell.
                     KNGlobal::showInGraphicalShell(contentCheck.absoluteFilePath());
                     break;
                 case Qt::RightButton:
