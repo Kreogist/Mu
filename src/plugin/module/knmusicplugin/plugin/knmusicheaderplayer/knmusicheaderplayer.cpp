@@ -150,8 +150,9 @@ void KNMusicHeaderPlayer::reset()
     m_currentFilePath.clear();
     //Set text.
     setTitle("");
-    setArtist("");
-    setAlbum("");
+    m_artist.clear();
+    m_album.clear();
+    updateArtistAndAlbum();
     //Set no album art icon.
     setAlbumArt(m_musicGlobal->noAlbumArt());
     //Set the duration and position.
@@ -223,22 +224,6 @@ void KNMusicHeaderPlayer::setTitle(const QString &title)
     m_title->setText(title);
 }
 
-void KNMusicHeaderPlayer::setArtist(const QString &artist)
-{
-    m_artist=artist;
-    //If album is empty, just set artist information.
-    m_artistAndAlbum->setText(m_album.isEmpty()?
-                                  m_artist:m_artist+" - "+m_album);
-}
-
-void KNMusicHeaderPlayer::setAlbum(const QString &album)
-{
-    m_album=album;
-    //If artist is empty, just set artist information.
-    m_artistAndAlbum->setText(m_artist.isEmpty()?
-                                  m_album:m_artist+" - "+m_album);
-}
-
 void KNMusicHeaderPlayer::setDuration(const qint64 &duration)
 {
     //Change the progress slider range.
@@ -249,7 +234,7 @@ void KNMusicHeaderPlayer::setDuration(const qint64 &duration)
 
 void KNMusicHeaderPlayer::onActionPlayDragIn(const QStringList &filePaths)
 {
-    ;
+    m_nowPlaying->playTemporaryFiles(filePaths);
 }
 
 void KNMusicHeaderPlayer::onActionProgressPressed()
@@ -640,6 +625,31 @@ void KNMusicHeaderPlayer::setPauseIconMode()
     m_isShownPlay=false;
 }
 
+void KNMusicHeaderPlayer::updateArtistAndAlbum()
+{
+    //Clear it first.
+    m_artistAndAlbum->setText("");
+    //Set the text.
+    if(m_artist.isEmpty())
+    {
+        if(!m_album.isEmpty())
+        {
+            m_artistAndAlbum->setText(m_album);
+        }
+    }
+    else
+    {
+        if(m_album.isEmpty())
+        {
+            m_artistAndAlbum->setText(m_artist);
+        }
+        else
+        {
+            m_artistAndAlbum->setText(m_artist + " - " + m_album);
+        }
+    }
+}
+
 void KNMusicHeaderPlayer::configureScrollLabel(KNScrollLabel *label)
 {
     QPalette pal=label->palette();
@@ -707,8 +717,9 @@ void KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
     m_parser->parseAlbumArt(detailInfo);
     //Set the display data.
     setTitle(detailInfo.textLists[Name]);
-    setArtist(detailInfo.textLists[Artist]);
-    setAlbum(detailInfo.textLists[Album]);
+    m_artist=detailInfo.textLists[Artist];
+    m_album=detailInfo.textLists[Album];
+    updateArtistAndAlbum();
     QPixmap coverImage=QPixmap::fromImage(detailInfo.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
     //!FIXME: Set the new data.

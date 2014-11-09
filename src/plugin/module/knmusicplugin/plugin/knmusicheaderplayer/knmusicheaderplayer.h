@@ -57,8 +57,6 @@ protected:
 
     void setAlbumArt(const QPixmap &pixmap);
     void setTitle(const QString &title);
-    void setArtist(const QString &artist);
-    void setAlbum(const QString &album);
 
 private slots:
     void setDuration(const qint64 &duration);
@@ -88,6 +86,7 @@ private:
 
     void setPlayIconMode();
     void setPauseIconMode();
+    void updateArtistAndAlbum();
 
     void configureScrollLabel(KNScrollLabel *label);
     void configurePanelAnimation(QPropertyAnimation *animation);
