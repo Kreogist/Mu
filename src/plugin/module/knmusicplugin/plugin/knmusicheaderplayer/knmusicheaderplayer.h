@@ -28,7 +28,6 @@ class KNOpacityButton;
 class KNOpacityAnimeButton;
 class KNVolumeSlider;
 class KNGlobal;
-class KNMusicParser;
 class KNScrollLabel;
 class KNProgressSlider;
 class KNEditableLabel;
@@ -73,7 +72,7 @@ private slots:
     void onActionPlayStateChanged(const int &state);
 
     void setPosition(const qint64 &position);
-    void loadFileInfo(const QString &filePath);
+    void updatePlayerInfo(const KNMusicDetailInfo &detailInfo);
 
 private:
     void initialAlbumArt();
@@ -100,7 +99,6 @@ private:
 
     //Public classes.
     KNMusicGlobal *m_musicGlobal;
-    KNMusicParser *m_parser;
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
     KNGlobal *m_global;

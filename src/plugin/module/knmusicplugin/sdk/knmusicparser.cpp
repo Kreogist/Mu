@@ -186,7 +186,6 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                     //Set the track number.
                     currentInfo.textLists[TrackNumber]=
                             QString::number(currentTrack.index);
-                    currentInfo.trackIndex=currentTrack.index;
                     //Set the track position.
                     currentInfo.startPosition=currentTrack.startPosition;
                     //Calculate the duration, check whether is the duration -1,

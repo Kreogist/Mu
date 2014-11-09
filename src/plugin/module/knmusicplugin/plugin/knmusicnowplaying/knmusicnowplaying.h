@@ -23,6 +23,7 @@
 #include "knmusicnowplayingbase.h"
 
 class KNMusicModel;
+class KNMusicParser;
 class KNMusicProxyModel;
 class KNMusicProxyModelPool;
 class KNMusicSinglePlaylistModel;
@@ -54,6 +55,7 @@ private:
     void resetPlayingItem();
     void resetPlayingModels();
     KNMusicBackend *m_backend=nullptr;
+    KNMusicParser *m_parser;
     KNMusicSinglePlaylistModel *m_temporaryModel;
     KNMusicModel *m_playingMusicModel=nullptr;
     KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;

@@ -9,6 +9,10 @@
 
 #include "kndropproxycontainer.h"
 
+#include "knmusicglobal.h"
+
+using namespace KNMusic;
+
 class KNMusicBackend;
 class KNMusicNowPlayingBase;
 class KNMusicHeaderPlayerBase : public KNDropProxyContainer

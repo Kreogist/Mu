@@ -68,7 +68,8 @@ void KNMusicProxyModel::addPlayTimes(const QModelIndex &sourceIndex)
 void KNMusicProxyModel::updateMusicRow(const int &row,
                                        const KNMusicDetailInfo &detailInfo)
 {
-    ;
+    musicModel()->updateMusicRow(mapToSource(index(row, Name)).row(),
+                                 detailInfo);
 }
 
 void KNMusicProxyModel::removeMusicRow(const int &row)

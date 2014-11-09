@@ -33,7 +33,6 @@
 #include "knmusicnowplayingbase.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
-#include "knmusicparser.h"
 
 #include "knmusicheaderplayer.h"
 
@@ -50,7 +49,6 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //Initial music global.
     m_global=KNGlobal::instance();
     m_musicGlobal=KNMusicGlobal::instance();
-    m_parser=KNMusicGlobal::parser();
 
     //Initial the pixmaps.
     m_playIcon=QPixmap(":/plugin/music/player/play.png");
@@ -116,8 +114,6 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
             this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
     connect(m_backend, &KNMusicBackend::finished,
             this, &KNMusicHeaderPlayer::finished);
-    connect(m_backend, &KNMusicBackend::filePathChanged,
-            this, &KNMusicHeaderPlayer::loadFileInfo);
     connect(m_backend, &KNMusicBackend::muteStateChanged,
             [=](const bool &mute)
             {
@@ -139,9 +135,11 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             m_nowPlaying, &KNMusicNowPlayingBase::playTemporaryFiles);
     //Connect responds.
     connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
-            this, &KNMusicHeaderPlayerBase::onActionLoopStateChanged);
+            this, &KNMusicHeaderPlayer::onActionLoopStateChanged);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetPlayer,
-            this, &KNMusicHeaderPlayerBase::reset);
+            this, &KNMusicHeaderPlayer::reset);
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::requireUpdatePlayerInfo,
+            this, &KNMusicHeaderPlayer::updatePlayerInfo);
 }
 
 void KNMusicHeaderPlayer::reset()
@@ -701,20 +699,15 @@ void KNMusicHeaderPlayer::saveConfigure()
     m_global->setCustomData(objectName(), "Volume", (double)m_volumeSlider->percentage());
 }
 
-void KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
+void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicDetailInfo &detailInfo)
 {
     //Check is the playing file the current file. If it is, do nothing.
-    if(m_currentFilePath==filePath)
+    if(m_currentFilePath==detailInfo.filePath)
     {
         return;
     }
     //Save the new file path and emit file path changed signal.
-    m_currentFilePath=filePath;
-    //Create a detail data.
-    KNMusicDetailInfo detailInfo;
-    //Parse the file before playing.
-    m_parser->parseFile(m_currentFilePath, detailInfo);
-    m_parser->parseAlbumArt(detailInfo);
+    m_currentFilePath=detailInfo.filePath;
     //Set the display data.
     setTitle(detailInfo.textLists[Name]);
     m_artist=detailInfo.textLists[Artist];
@@ -722,7 +715,6 @@ void KNMusicHeaderPlayer::loadFileInfo(const QString &filePath)
     updateArtistAndAlbum();
     QPixmap coverImage=QPixmap::fromImage(detailInfo.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
-    //!FIXME: Set the new data.
     //Ask to load lyrics.
     emit requireLoadLyrics(m_currentFilePath);
 }

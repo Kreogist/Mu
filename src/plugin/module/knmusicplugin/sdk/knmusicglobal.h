@@ -61,8 +61,7 @@ enum KNMusicModelRole
     FileNameRole,
     StartPositionRole,
     ArtworkKeyRole,
-    TrackFileRole,
-    TrackIndexRole
+    TrackFileRole
 };
 enum KNMusicPlaybackOrder
 {
@@ -118,7 +117,6 @@ struct KNMusicDetailInfo
     //Tag datas.
     QString textLists[MusicDataCount];
     int rating=0;
-    int trackIndex=-1;
 };
 }
 

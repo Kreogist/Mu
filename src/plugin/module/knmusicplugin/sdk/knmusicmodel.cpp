@@ -238,13 +238,20 @@ void KNMusicModel::updateMusicRow(const int &row,
     //Update the text of the row.
     for(int i=0; i<MusicDataCount; i++)
     {
-        setItemText(row, i, detailInfo.textLists[i]);
+        switch(i)
+        {
+        case Rating:
+        case AlbumRating:
+        case DateAdded:
+            break;
+        default:
+            setItemText(row, i, detailInfo.textLists[i]);
+        }
     }
     //Update the properties.
     setRowProperty(row, FilePathRole, detailInfo.filePath);
     setRowProperty(row, FileNameRole, detailInfo.fileName);
     setRowProperty(row, TrackFileRole, detailInfo.trackFilePath);
-    setRowProperty(row, TrackIndexRole, detailInfo.trackIndex);
     setRowProperty(row, StartPositionRole, detailInfo.startPosition);
     setRoleData(row, Size, Qt::UserRole, detailInfo.size);
     setRoleData(row, DateModified, Qt::UserRole, detailInfo.dateModified);
