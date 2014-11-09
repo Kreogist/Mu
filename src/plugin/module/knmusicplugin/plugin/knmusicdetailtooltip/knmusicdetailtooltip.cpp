@@ -24,6 +24,7 @@
 
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
+#include "knfilepathlabel.h"
 #include "knmusicparser.h"
 #include "knmusicmodel.h"
 #include "knmusicbackend.h"
@@ -64,6 +65,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     QBoxLayout *labelLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                            mainLayout->widget());
     labelLayout->setContentsMargins(0,0,0,0);
+    labelLayout->setSizeConstraint(QLayout::SetMaximumSize);
     albumLayout->addLayout(labelLayout, 1);
     //Initial the detail info labels.
     for(int i=0; i<ToolTipItemsCount; i++)
@@ -77,6 +79,10 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     nameFont.setBold(true);
     nameFont.setPixelSize(18);
     m_labels[ItemTitle]->setFont(nameFont);
+    //Initial the file path label.
+    m_fileName=new KNFilePathLabel(this);
+    m_fileName->setPalette(m_palette);
+    labelLayout->insertWidget(1, m_fileName);
     labelLayout->addStretch();
 
     QBoxLayout *previewPlayer=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -156,10 +162,11 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
     m_albumArt->setPixmap(detailInfo.coverImage.isNull()?
                               KNMusicGlobal::instance()->noAlbumArt():
                               QPixmap::fromImage(detailInfo.coverImage));
-    m_labels[ItemTitle]->setText(detailInfo.textLists[Name]);
-    m_labels[ItemFileName]->setText(tr("In file: %1").arg(detailInfo.fileName));
-    m_labels[ItemTime]->setText(detailInfo.textLists[Time]);
-    m_labels[ItemArtist]->setText(detailInfo.textLists[Artist]);
+    setEliedText(m_labels[ItemTitle], detailInfo.textLists[Name]);
+    setEliedText(m_fileName, tr("In file: %1").arg(detailInfo.fileName));
+    m_fileName->setFilePath(detailInfo.filePath);
+    setEliedText(m_labels[ItemTime], detailInfo.textLists[Time]);
+    setEliedText(m_labels[ItemArtist], detailInfo.textLists[Artist]);
 
     //Set the position.
     moveToPosition(position);
@@ -195,6 +202,8 @@ void KNMusicDetailTooltip::enterEvent(QEvent *event)
     //Launch mouse in/out timer.
     m_mouseIn->setStartFrame(m_backgroundColor.value());
     m_mouseIn->start();
+    //Set focus.
+    setFocus();
     //When mouse move in, it means user may want to preview the song, load the
     //music here.
     loadCurrentToPreview();
@@ -324,4 +333,23 @@ void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
     timeline->setUpdateInterval(5);
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNMusicDetailTooltip::onActionMouseInOut);
+}
+
+void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &text)
+{
+    //Calculate the size of the text using the fontMetrics of the label.
+    if(label->fontMetrics().width(text)>label->width())
+    {
+        //Set the elied text to the label, add the text as tooltip of it.
+        label->setText(label->fontMetrics().elidedText(text,
+                                                       Qt::ElideRight,
+                                                       label->width()));
+        label->setToolTip(text);
+    }
+    else
+    {
+        //Clear the tooltip and set text.
+        label->setText(text);
+        label->setToolTip("");
+    }
 }

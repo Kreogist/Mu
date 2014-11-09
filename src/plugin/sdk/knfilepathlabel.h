@@ -14,6 +14,8 @@ class KNFilePathLabel : public QLabel
     Q_OBJECT
 public:
     explicit KNFilePathLabel(QWidget *parent = 0);
+    QString filePath() const;
+    void setFilePath(const QString &filePath);
 
 signals:
 
@@ -25,6 +27,7 @@ protected:
 
 private:
     bool m_pressed=false;
+    QString m_filePath;
 };
 
 #endif // KNFILEPATHLABEL_H

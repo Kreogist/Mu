@@ -34,21 +34,32 @@ void KNFilePathLabel::mouseReleaseEvent(QMouseEvent *event)
         //Check position.
         if(rect().contains(event->pos()))
         {
-            QFileInfo contentCheck(text());
-            switch(event->button())
+            //Check the path you set first.
+            QFileInfo contentCheck(m_filePath);
+            //Check if it's exist not.
+            if(contentCheck.exists())
             {
-            case Qt::LeftButton:
-                //Check is the text availble.
-                if(contentCheck.exists())
+                switch(event->button())
                 {
+                case Qt::LeftButton:
                     KNGlobal::showInGraphicalShell(contentCheck.absoluteFilePath());
+                    break;
+                case Qt::RightButton:
+                    break;
+                default:
+                    break;
                 }
-                break;
-            case Qt::RightButton:
-                break;
-            default:
-                break;
             }
         }
     }
+}
+
+QString KNFilePathLabel::filePath() const
+{
+    return m_filePath;
+}
+
+void KNFilePathLabel::setFilePath(const QString &filePath)
+{
+    m_filePath = filePath;
 }

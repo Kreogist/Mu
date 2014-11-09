@@ -23,6 +23,7 @@
 class QTimer;
 class QLabel;
 class QTimeLine;
+class KNFilePathLabel;
 class KNOpacityButton;
 class KNProgressSlider;
 class KNMusicDetailTooltip : public KNMusicDetailTooltipBase
@@ -58,7 +59,6 @@ private:
     enum ToolTipItems
     {
         ItemTitle,
-        ItemFileName,
         ItemTime,
         ItemArtist,
         ToolTipItemsCount
@@ -66,12 +66,14 @@ private:
     void resetDisappearCounter();
     void resetPreviewPlayer();
     void initialTimeLine(QTimeLine *timeline);
+    void setEliedText(QLabel *label, const QString &text);
     void moveToPosition(const QPoint &position);
     int m_tooltipWidth=448, m_tooltipHeight=176;
     bool m_isButtonPlay=true, m_progressPressed=false;
     QColor m_backgroundColor=QColor(255,255,255),
            m_textColor=QColor(255,255,255);
     QLabel *m_albumArt, *m_labels[ToolTipItemsCount];
+    KNFilePathLabel *m_fileName;
     QPalette m_palette;
     QTimer *m_disappearCounter;
     QPersistentModelIndex m_currentIndex;

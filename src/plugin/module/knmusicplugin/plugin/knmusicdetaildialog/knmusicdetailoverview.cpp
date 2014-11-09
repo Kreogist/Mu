@@ -128,6 +128,7 @@ void KNMusicDetailOverview::setFilePath(const QString &filePath)
     m_detailInfo[DetailDateModified]->setText(
                 currentInfo.textLists[DateModified]);
     m_filePathDataField->setText(currentInfo.filePath);
+    m_filePathDataField->setFilePath(currentInfo.filePath);
 }
 
 void KNMusicDetailOverview::retranslate()
