@@ -1,6 +1,24 @@
+/*
+ * Copyright (C) Kreogist Dev Team
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 #include <QTimeLine>
 #include <QMouseEvent>
 
+#include "knlocalemanager.h"
 #include "kncategorysettingbutton.h"
 
 #include "kncategoryswitcherwidget.h"
@@ -29,6 +47,11 @@ KNCategorySwitcherWidget::KNCategorySwitcherWidget(QWidget *parent) :
     initialTimeLine(m_outBackground);
     connect(m_outBackground, &QTimeLine::finished,
             this, &KNCategorySwitcherWidget::onActionHideComplete);
+
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNCategorySwitcherWidget::retranslate);
+    //Retranslate.
+    retranslate();
 }
 
 void KNCategorySwitcherWidget::showSwitcher()
@@ -55,6 +78,11 @@ void KNCategorySwitcherWidget::hideSwitcher()
     m_outBackground->start();
     //Start button animations.
     startButtonOutAnime();
+}
+
+void KNCategorySwitcherWidget::retranslate()
+{
+    m_settingButton->setText(tr("Preference"));
 }
 
 void KNCategorySwitcherWidget::mousePressEvent(QMouseEvent *event)
@@ -109,7 +137,6 @@ void KNCategorySwitcherWidget::initialButtons()
 {
     m_settingButton=new KNCategorySettingButton(this);
     m_settingButton->setIcon(QPixmap(":/plugin/configure/icon.png"));
-    m_settingButton->setText(tr("Preference"));
     connect(m_settingButton, &KNCategorySettingButton::clicked,
             [=]
             {
