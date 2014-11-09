@@ -457,14 +457,15 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
 
 void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
 {
+    QModelIndex sourceIndex=m_proxyModel->mapToSource(index);
     //Check is the current model playing.
     if(KNMusicGlobal::nowPlaying()->playingModel()==m_proxyModel)
     {
         //If so, ask now playing to check the index.
-        KNMusicGlobal::nowPlaying()->checkRemovedIndex(index);
+        KNMusicGlobal::nowPlaying()->checkRemovedIndex(sourceIndex);
     }
     //Remove the row right in the proxy model.
-    m_proxyModel->removeSourceMusicRow(m_proxyModel->mapToSource(index).row());
+    m_proxyModel->removeSourceMusicRow(sourceIndex.row());
 }
 
 void KNMusicTreeViewBase::removeSelections()
