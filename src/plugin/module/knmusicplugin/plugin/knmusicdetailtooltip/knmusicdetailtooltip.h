@@ -44,6 +44,7 @@ public slots:
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void focusOutEvent(QFocusEvent *event);
 
 private slots:
     void onActionHide();
@@ -67,6 +68,7 @@ private:
     void resetPreviewPlayer();
     void initialTimeLine(QTimeLine *timeline);
     void setEliedText(QLabel *label, const QString &text);
+    void startDisappearCountWithAnime();
     void moveToPosition(const QPoint &position);
     int m_tooltipWidth=448, m_tooltipHeight=176;
     bool m_isButtonPlay=true, m_progressPressed=false;

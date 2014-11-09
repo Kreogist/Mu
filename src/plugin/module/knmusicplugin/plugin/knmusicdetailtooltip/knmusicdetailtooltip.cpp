@@ -18,6 +18,7 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QDesktopWidget>
+#include <QFocusEvent>
 #include <QLabel>
 #include <QTimer>
 #include <QTimeLine>
@@ -62,15 +63,20 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     m_albumArt->setScaledContents(true);
     albumLayout->addWidget(m_albumArt);
 
+    QWidget *labelContainer=new QWidget(this);
+    labelContainer->setContentsMargins(0,0,0,0);
+    albumLayout->addWidget(labelContainer);
+
     QBoxLayout *labelLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                            mainLayout->widget());
     labelLayout->setContentsMargins(0,0,0,0);
     labelLayout->setSizeConstraint(QLayout::SetMaximumSize);
-    albumLayout->addLayout(labelLayout, 1);
+    labelContainer->setLayout(labelLayout);
     //Initial the detail info labels.
     for(int i=0; i<ToolTipItemsCount; i++)
     {
         m_labels[i]=new QLabel(this);
+        m_labels[i]->setFixedWidth(292);
         m_labels[i]->setPalette(m_palette);
         labelLayout->addWidget(m_labels[i]);
     }
@@ -212,14 +218,15 @@ void KNMusicDetailTooltip::enterEvent(QEvent *event)
 void KNMusicDetailTooltip::leaveEvent(QEvent *event)
 {
     QWidget::leaveEvent(event);
-    //Stop the time line.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Launch mouse in/out timer.
-    m_mouseOut->setStartFrame(m_backgroundColor.value());
-    m_mouseOut->start();
-    //Start disappear count.
-    m_disappearCounter->start();
+    //Start disappear.
+    startDisappearCountWithAnime();
+}
+
+void KNMusicDetailTooltip::focusOutEvent(QFocusEvent *event)
+{
+    QWidget::focusOutEvent(event);
+    //Start disappear.
+    startDisappearCountWithAnime();
 }
 
 void KNMusicDetailTooltip::onActionHide()
@@ -352,4 +359,16 @@ void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &text)
         label->setText(text);
         label->setToolTip("");
     }
+}
+
+void KNMusicDetailTooltip::startDisappearCountWithAnime()
+{
+    //Stop the time line.
+    m_mouseIn->stop();
+    m_mouseOut->stop();
+    //Launch mouse in/out timer.
+    m_mouseOut->setStartFrame(m_backgroundColor.value());
+    m_mouseOut->start();
+    //Start disappear count.
+    m_disappearCounter->start();
 }
