@@ -65,6 +65,12 @@ void KNMusicProxyModel::addPlayTimes(const QModelIndex &sourceIndex)
             Qt::DisplayRole);
 }
 
+void KNMusicProxyModel::updateMusicRow(const int &row,
+                                       const KNMusicDetailInfo &detailInfo)
+{
+    ;
+}
+
 void KNMusicProxyModel::removeMusicRow(const int &row)
 {
     musicModel()->removeMusicRow(mapToSource(index(row, Name)).row());

@@ -129,7 +129,16 @@ QString KNMusicModel::itemText(const int &row, const int &column) const
 {
     Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
     //Only for text easy access.
-    return roleData(row, column, Qt::DisplayRole).toString();
+    return data(index(row, column), Qt::DisplayRole).toString();
+}
+
+void KNMusicModel::setItemText(const int &row,
+                               const int &column,
+                               const QString &text)
+{
+    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
+    //Only for text easy access.
+    setData(index(row, column), text, Qt::DisplayRole);
 }
 
 QVariant KNMusicModel::roleData(int row, int column, int role) const
@@ -167,6 +176,15 @@ QVariant KNMusicModel::rowProperty(const int &row, const int &propertyRole)
     Q_ASSERT(row>-1 && row<rowCount());
     //All the property of a song is stored in the first item.
     return roleData(row, 0, propertyRole);
+}
+
+void KNMusicModel::setRowProperty(const int &row,
+                                  const int &propertyRole,
+                                  const QVariant &value)
+{
+    Q_ASSERT(row>-1 && row<rowCount());
+    //All the property of a song is stored in the first item.
+    setData(index(row, 0), value, propertyRole);
 }
 
 QPixmap KNMusicModel::songAlbumArt(const int &row)
@@ -212,6 +230,29 @@ void KNMusicModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
     //Append this row.
     appendRow(musicRow);
     emit rowCountChanged();
+}
+
+void KNMusicModel::updateMusicRow(const int &row,
+                                  const KNMusicDetailInfo &detailInfo)
+{
+    //Update the text of the row.
+    for(int i=0; i<MusicDataCount; i++)
+    {
+        setItemText(row, i, detailInfo.textLists[i]);
+    }
+    //Update the properties.
+    setRowProperty(row, FilePathRole, detailInfo.filePath);
+    setRowProperty(row, FileNameRole, detailInfo.fileName);
+    setRowProperty(row, TrackFileRole, detailInfo.trackFilePath);
+    setRowProperty(row, TrackIndexRole, detailInfo.trackIndex);
+    setRowProperty(row, StartPositionRole, detailInfo.startPosition);
+    setRoleData(row, Size, Qt::UserRole, detailInfo.size);
+    setRoleData(row, DateModified, Qt::UserRole, detailInfo.dateModified);
+    setRoleData(row, DateAdded, Qt::UserRole, detailInfo.dateAdded);
+    setRoleData(row, LastPlayed, Qt::UserRole, detailInfo.lastPlayed);
+    setRoleData(row, Time, Qt::UserRole, detailInfo.duration);
+    setRoleData(row, BitRate, Qt::UserRole, detailInfo.bitRate);
+    setRoleData(row, SampleRate, Qt::UserRole, detailInfo.samplingRate);
 }
 
 void KNMusicModel::removeMusicRow(const int &row)

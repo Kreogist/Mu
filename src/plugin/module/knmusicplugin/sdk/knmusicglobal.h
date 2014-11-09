@@ -60,7 +60,9 @@ enum KNMusicModelRole
     FilePathRole=Qt::UserRole,
     FileNameRole,
     StartPositionRole,
-    ArtworkKeyRole
+    ArtworkKeyRole,
+    TrackFileRole,
+    TrackIndexRole
 };
 enum KNMusicPlaybackOrder
 {
@@ -99,6 +101,7 @@ struct KNMusicDetailInfo
     //Properties.
     QString fileName;
     QString filePath;
+    QString trackFilePath;
     quint64 size;
     QDateTime dateModified;
     QDateTime lastPlayed;
@@ -115,6 +118,7 @@ struct KNMusicDetailInfo
     //Tag datas.
     QString textLists[MusicDataCount];
     int rating=0;
+    int trackIndex=-1;
 };
 }
 

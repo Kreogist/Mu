@@ -135,6 +135,8 @@ bool KNMusicPlaylistListAssistant::readPlaylist(const QString &filePath,
         //Read appendix data.
         currentInfo.filePath=musicItem["FilePath"].toString();
         currentInfo.fileName=musicItem["FileName"].toString();
+        currentInfo.trackFilePath=musicItem["TrackFilePath"].toString();
+        currentInfo.trackIndex=musicItem["TrackIndex"].toInt();
         currentInfo.startPosition=musicItem["StartPosition"].toInt();
         currentInfo.size=musicItem["Size"].toInt();
         currentInfo.dateModified=
@@ -197,11 +199,15 @@ bool KNMusicPlaylistListAssistant::writePlaylist(KNMusicPlaylistListItem *item)
             musicItem["Text"]=textData;
             //Save appendix data.
             musicItem["FilePath"]=
-                    playlistModel->roleData(row, Name, FilePathRole).toString();
+                    playlistModel->rowProperty(row, FilePathRole).toString();
             musicItem["FileName"]=
-                    playlistModel->roleData(row, Name, FileNameRole).toString();
+                    playlistModel->rowProperty(row, FileNameRole).toString();
+            musicItem["TrackFilePath"]=
+                    playlistModel->rowProperty(row, TrackFileRole).toString();
+            musicItem["TrackIndex"]=
+                    playlistModel->rowProperty(row, TrackIndexRole).toString();
             musicItem["StartPosition"]=
-                    playlistModel->roleData(row, Name, StartPositionRole).toInt();
+                    playlistModel->rowProperty(row, StartPositionRole).toInt();
             musicItem["Size"]=
                     playlistModel->roleData(row, Size, Qt::UserRole).toInt();
             musicItem["DateModified"]=

@@ -37,6 +37,7 @@ public:
     QString filePathFromIndex(const QModelIndex &index);
     QModelIndexList indexFromFilePath(const QString &filePath);
     QString itemText(const int &row, const int &column) const;
+    void setItemText(const int &row, const int &column, const QString &text);
     QVariant roleData(int row, int column, int role) const;
     void setRoleData(const int &row,
                      const int &column,
@@ -44,6 +45,9 @@ public:
                      const QVariant &value);
     QList<QStandardItem *> songRow(const int &row) const;
     QVariant rowProperty(const int &row, const int &propertyRole);
+    void setRowProperty(const int &row,
+                        const int &propertyRole,
+                        const QVariant &value);
     virtual QPixmap songAlbumArt(const int &row);
     qint64 songDuration(const int &row);
     virtual int playingItemColumn();
@@ -56,6 +60,8 @@ public slots:
     virtual void addFiles(const QStringList &fileList);
     virtual void appendDragMusicRows();
     virtual void appendMusicRow(const QList<QStandardItem *> &musicRow);
+    virtual void updateMusicRow(const int &row,
+                                const KNMusicDetailInfo &detailInfo);
     virtual void removeMusicRow(const int &row);
     virtual void clearMusicRow();
 

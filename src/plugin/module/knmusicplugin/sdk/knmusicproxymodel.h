@@ -9,6 +9,10 @@
 
 #include <QSortFilterProxyModel>
 
+#include "knmusicglobal.h"
+
+using namespace KNMusic;
+
 class KNMusicModel;
 class KNMusicProxyModel : public QSortFilterProxyModel
 {
@@ -26,6 +30,8 @@ public:
 signals:
 
 public slots:
+    void updateMusicRow(const int &row,
+                        const KNMusicDetailInfo &detailInfo);
     void removeMusicRow(const int &row);
     void removeSourceMusicRow(const int &row);
 };
