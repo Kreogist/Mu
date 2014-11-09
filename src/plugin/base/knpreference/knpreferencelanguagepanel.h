@@ -21,6 +21,7 @@
 #include <QScrollArea>
 
 class QBoxLayout;
+class QSignalMapper;
 class KNLocaleManager;
 class KNPreferenceLanguagePanelItem;
 class KNPreferenceLanguagePanel : public QScrollArea
@@ -37,6 +38,7 @@ private:
     void generateLanguageList();
     KNLocaleManager *m_localeManager;
     QBoxLayout *m_mainLayout;
+    QSignalMapper *m_languageRequests;
 };
 
 #endif // KNPREFERENCELANGUAGEPANEL_H

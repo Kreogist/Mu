@@ -69,6 +69,26 @@ void KNPreferenceLanguagePanelItem::leaveEvent(QEvent *event)
     m_mouseOut->start();
 }
 
+void KNPreferenceLanguagePanelItem::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+    //Set flag.
+    m_pressed=true;
+}
+
+void KNPreferenceLanguagePanelItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    QWidget::mouseReleaseEvent(event);
+    //Judge via flag.
+    if(m_pressed)
+    {
+        //Release flag.
+        m_pressed=false;
+        //Emit require change language signal.
+        emit requireSetLanguage();
+    }
+}
+
 void KNPreferenceLanguagePanelItem::paintEvent(QPaintEvent *event)
 {
     //Paint other things.
@@ -111,6 +131,16 @@ void KNPreferenceLanguagePanelItem::configureMouseInOutTimeline(QTimeLine *timeL
     timeLine->setUpdateInterval(5);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNPreferenceLanguagePanelItem::onActionChangeHighlight);
+}
+
+int KNPreferenceLanguagePanelItem::languageIndex() const
+{
+    return m_languageIndex;
+}
+
+void KNPreferenceLanguagePanelItem::setLanguageIndex(int languageIndex)
+{
+    m_languageIndex = languageIndex;
 }
 
 QPixmap KNPreferenceLanguagePanelItem::languageIcon() const

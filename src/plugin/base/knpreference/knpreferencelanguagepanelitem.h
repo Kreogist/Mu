@@ -22,14 +22,19 @@ public:
     void setLanguageName(const QString &languageName);
     QPixmap languageIcon() const;
     void setLanguageIcon(const QPixmap &languageIcon);
+    int languageIndex() const;
+    void setLanguageIndex(int languageIndex);
 
 signals:
+    void requireSetLanguage();
 
 public slots:
 
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
 
 private slots:
@@ -38,7 +43,8 @@ private slots:
 private:
     void configureMouseInOutTimeline(QTimeLine *timeLine);
     int m_itemHeight=40, m_iconX=10, m_iconSize=40,
-        m_textX=m_iconX+m_iconSize+10;
+        m_textX=m_iconX+m_iconSize+10, m_languageIndex=-1;
+    bool m_pressed=false;
     qreal m_highLightOpacity=0.0;
     QString m_languageName;
     QPixmap m_languageIcon;

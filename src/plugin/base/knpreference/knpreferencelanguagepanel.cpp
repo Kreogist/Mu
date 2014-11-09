@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QSignalMapper>
 
 #include "knpreferencelanguagepanelitem.h"
 
@@ -50,6 +51,10 @@ KNPreferenceLanguagePanel::KNPreferenceLanguagePanel(QWidget *parent) :
 
     m_mainLayout->addStretch();
 
+    //Initial the request map.
+    m_languageRequests=new QSignalMapper(this);
+    connect(m_languageRequests, SIGNAL(mapped(int)),
+            m_localeManager, SLOT(setLanguage(int)));
     //Generate the language list.
     generateLanguageList();
 }
@@ -60,10 +65,17 @@ void KNPreferenceLanguagePanel::generateLanguageList()
         i<languageSize;
         i++)
     {
+        //Generate the item for current language.
         KNPreferenceLanguagePanelItem *currentItem=
                 new KNPreferenceLanguagePanelItem(this);
+        //Set the language info.
         currentItem->setLanguageName(m_localeManager->languageNameAt(i));
         currentItem->setLanguageIcon(m_localeManager->languageIconAt(i));
+        //Connect to request map.
+        connect(currentItem, SIGNAL(requireSetLanguage()),
+                m_languageRequests, SLOT(map()));
+        m_languageRequests->setMapping(currentItem, i);
+        //Add the language to layout.
         m_mainLayout->insertWidget(m_mainLayout->count()-1,
                                    currentItem);
     }
