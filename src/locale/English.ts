@@ -514,7 +514,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="115"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="116"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -596,12 +596,12 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceCategory</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="120"/>
+        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="122"/>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="121"/>
+        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="123"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
@@ -617,7 +617,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferencePanel</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="119"/>
+        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="121"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>

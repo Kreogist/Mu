@@ -21,6 +21,8 @@
 #include "knmainwindowcontainer.h"
 #include "knmainwindowheaderplugin.h"
 
+#include "knlocalemanager.h"
+
 #include "knmainwindow.h"
 
 #include <QDebug>
@@ -30,6 +32,52 @@ KNMainWindow::KNMainWindow(QObject *parent) :
 {
     //Initial the container.
     m_container=new KNMainWindowContainer;
+    //Connect translate request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMainWindow::retranslate);
+}
+
+void KNMainWindow::retranslate()
+{
+    //Check if the current category is usable.
+    for(auto i=m_categoryList.begin();
+        i!=m_categoryList.end();
+        ++i)
+    {
+        QString categoryTitle=(*i).plugin->caption();
+        //Check if i is current category.
+        if((*i).index==m_currentCategory)
+        {
+            //Update the header text.
+            setHeaderText(categoryTitle);
+        }
+        //Update the preference text.
+        m_preferencePlugin->setCategoryText((*i).index,
+                                            categoryTitle);
+    }
+}
+
+void KNMainWindow::addCategoryPlugin(KNCategoryPlugin *plugin)
+{
+    //Generate category plugin item
+    CategoryPluginItem currentCategory;
+    currentCategory.plugin=plugin;
+    //Add header widget and central widget.
+    addHeaderWidget(plugin->headerWidget());
+    addCentralWidget(plugin->centralWidget());
+    //Add preference panel.
+    currentCategory.index=m_preferencePlugin->addCategory(plugin);
+    //Add the category item in to the list.
+    m_categoryList.append(currentCategory);
+    //If this is the first category, set it to button.
+    if(m_categoryList.size()==1)
+    {
+        //Change the current category.
+        m_currentCategory=currentCategory.index;
+        //Set the icon and text to the first category.
+        setHeaderIcon(plugin->icon());
+        setHeaderText(plugin->caption());
+    }
 }
 
 void KNMainWindow::setMainWindow(QMainWindow *mainWindow)

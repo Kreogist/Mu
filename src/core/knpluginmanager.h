@@ -67,12 +67,6 @@ private:
     KNMainWindowPlugin *m_mainWindowPlugin=nullptr;
     KNPreferencePlugin *m_preferencePlugin=nullptr;
     QLinkedList<QObject *> m_pluginList;
-    struct CategoryPluginItem
-    {
-        int index;
-        KNCategoryPlugin *plugin;
-    };
-    QLinkedList<CategoryPluginItem> m_categoryList;
     KNGlobal *m_global;
     KNConfigure *m_configure;
 };

@@ -464,7 +464,8 @@
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="87"/>
         <source>Songs you add to playlists and playlists you import appear in Playlist.
 To create a playlist, drag your songs here.</source>
-        <translation type="unfinished"></translation>
+        <translation>您创建、导入的播放列表以及播放列表中的歌曲将显示在播放列表中。
+如需创建播放列表，将歌曲拖拽至此。</translation>
     </message>
 </context>
 <context>
@@ -514,7 +515,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="115"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="116"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -596,12 +597,12 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceCategory</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="120"/>
+        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="122"/>
         <source>Normal</source>
         <translation>普通</translation>
     </message>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="121"/>
+        <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="123"/>
         <source>Advanced</source>
         <translation>高级</translation>
     </message>
@@ -617,7 +618,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferencePanel</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="119"/>
+        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="121"/>
         <source>General</source>
         <translation>通用</translation>
     </message>

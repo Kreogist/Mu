@@ -10,6 +10,7 @@
 #include "knmainwindowheaderplugin.h"
 #include "knmainwindowcategorystackplugin.h"
 #include "knmainwindowcategoryswitcherplugin.h"
+#include "kncategoryplugin.h"
 #include "knpreferenceplugin.h"
 
 #include <QObject>
@@ -24,6 +25,7 @@ public:
 signals:
 
 public slots:
+    virtual void addCategoryPlugin(KNCategoryPlugin *plugin)=0;
     virtual void setMainWindow(QMainWindow *mainWindow)=0;
     virtual void setHeader(KNMainWindowHeaderPlugin *plugin)=0;
     virtual void setCategoryStack(KNMainWindowCategoryStackPlugin *widget)=0;

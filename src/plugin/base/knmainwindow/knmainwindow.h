@@ -30,6 +30,8 @@ public:
 signals:
 
 public slots:
+    void retranslate();
+    void addCategoryPlugin(KNCategoryPlugin *plugin);
     void addHeaderWidget(QWidget *widget);
     void addCentralWidget(QWidget *widget);
     void setMainWindow(QMainWindow *mainWindow);
@@ -45,6 +47,13 @@ public slots:
     void restoreHeaderButton();
 
 private:
+    struct CategoryPluginItem
+    {
+        int index;
+        KNCategoryPlugin *plugin;
+    };
+    QList<CategoryPluginItem> m_categoryList;
+    int m_currentCategory=-1;
     QMainWindow *m_mainWindow=nullptr;
     KNMainWindowContainer *m_container;
     KNMainWindowHeaderPlugin *m_headerPlugin=nullptr;
