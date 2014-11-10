@@ -31,17 +31,21 @@ class KNMusicNowPlaying : public KNMusicNowPlayingBase
     Q_OBJECT
 public:
     explicit KNMusicNowPlaying(QObject *parent = 0);
+    ~KNMusicNowPlaying();
     void setBackend(KNMusicBackend *backend);
     KNMusicProxyModel *playingModel();
+    int loopState();
 
 signals:
 
 public slots:
+    void restoreConfigure();
     void playNext();
     void playPrevious();
     void onActionPlayingFinished();
     void onActionCannotPlay();
     void changeLoopState();
+    void setLoopState(const int &state);
     void playTemporaryFiles(const QStringList &filePaths);
     void setPlayingModel(KNMusicProxyModel *model);
     void playMusic(const int &row);
@@ -50,6 +54,8 @@ public slots:
     void checkRemovedIndex(const QModelIndex &index);
 
 private:
+    void saveConfigure();
+
     void playNextSong(bool cannotLoadFile=false);
     void resetPlayingItem();
     void resetPlayingModels();

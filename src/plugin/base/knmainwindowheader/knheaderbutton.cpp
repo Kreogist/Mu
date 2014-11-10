@@ -233,7 +233,7 @@ void KNHeaderButton::startMouseUpAnime()
 void KNHeaderButton::updateWidth()
 {
     int sizeParam=qMax(m_rawFontMetrics.width(m_text->text())+m_leftMargin,
-                       110);
+                       182);
     resize(sizeParam, height());
     emit requireSetLeftSpacing(sizeParam);
 }

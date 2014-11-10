@@ -18,6 +18,7 @@
 #include "knmusicsingleplaylistmodel.h"
 #include "knmusicmodelassist.h"
 #include "knmusicproxymodelpool.h"
+#include "knmusicglobal.h"
 
 #include "knmusicnowplaying.h"
 
@@ -39,6 +40,11 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     m_temporaryProxyModel->setSourceModel(m_temporaryModel);
 }
 
+KNMusicNowPlaying::~KNMusicNowPlaying()
+{
+    saveConfigure();
+}
+
 void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
 {
     if(m_backend==nullptr)
@@ -56,6 +62,17 @@ void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
 KNMusicProxyModel *KNMusicNowPlaying::playingModel()
 {
     return m_playingModel;
+}
+
+int KNMusicNowPlaying::loopState()
+{
+    return m_loopMode;
+}
+
+void KNMusicNowPlaying::restoreConfigure()
+{
+    setLoopState(KNMusicGlobal::instance()->configureData("LoopState",
+                                                          NoRepeat).toInt());
 }
 
 void KNMusicNowPlaying::playNext()
@@ -123,7 +140,13 @@ void KNMusicNowPlaying::onActionPlayingFinished()
 void KNMusicNowPlaying::changeLoopState()
 {
     //Switch to the next loop mode.
-    m_loopMode=(m_loopMode+1)%LoopCount;
+    setLoopState(m_loopMode+1);
+}
+
+void KNMusicNowPlaying::setLoopState(const int &state)
+{
+    //Set to the state.
+    m_loopMode=state%LoopCount;
     //Emit the loop changed signal.
     emit loopStateChanged(m_loopMode);
 }
@@ -247,6 +270,11 @@ void KNMusicNowPlaying::checkRemovedIndex(const QModelIndex &index)
         //Reset the playing item.
         resetPlayingItem();
     }
+}
+
+void KNMusicNowPlaying::saveConfigure()
+{
+    KNMusicGlobal::instance()->setConfigureData("LoopState", m_loopMode);
 }
 
 void KNMusicNowPlaying::onActionCannotPlay()

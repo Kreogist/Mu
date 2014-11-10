@@ -220,6 +220,8 @@ void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
         m_nowPlaying=plugin;
         //Set the header player.
         m_nowPlaying->setBackend(m_backend);
+        //Restore configure.
+        m_nowPlaying->restoreConfigure();
         //Add plugin to list.
         m_pluginList.append(m_nowPlaying);
         //Set global now playing plugin.

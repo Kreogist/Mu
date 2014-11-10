@@ -24,6 +24,7 @@ public:
     KNMusicNowPlayingBase(QObject *parent = 0):QObject(parent){}
     virtual void setBackend(KNMusicBackend *backend)=0;
     virtual KNMusicProxyModel *playingModel()=0;
+    virtual int loopState()=0;
 
 signals:
     void requireResetPlayer();
@@ -31,10 +32,12 @@ signals:
     void loopStateChanged(int state);
 
 public slots:
+    virtual void restoreConfigure()=0;
     virtual void playNext()=0;
     virtual void playPrevious()=0;
     virtual void onActionPlayingFinished()=0;
     virtual void onActionCannotPlay()=0;
+    virtual void setLoopState(const int &state)=0;
     virtual void changeLoopState()=0;
     virtual void playTemporaryFiles(const QStringList &filePaths)=0;
     virtual void setPlayingModel(KNMusicProxyModel *model)=0;

@@ -29,7 +29,6 @@
 #include "knopacitybutton.h"
 #include "knopacityanimebutton.h"
 
-#include "knglobal.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
@@ -42,12 +41,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent)
 {
     //Set properties.
-    setObjectName("MusicHeaderPlayer");
     setContentsMargins(0,0,0,0);
     setFixedSize(302, 66);
 
     //Initial music global.
-    m_global=KNGlobal::instance();
     m_musicGlobal=KNMusicGlobal::instance();
 
     //Initial the pixmaps.
@@ -86,7 +83,7 @@ void KNMusicHeaderPlayer::restoreConfigure()
     m_volumeSlider->setValue(
                 m_volumeSlider->minimal()+
                 (double)m_volumeSlider->range()*
-                m_global->customData(objectName(), "Volume").toDouble());
+                m_musicGlobal->configureData("Volume", 1.0).toDouble());
 }
 
 void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
@@ -140,6 +137,8 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             this, &KNMusicHeaderPlayer::reset);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::requireUpdatePlayerInfo,
             this, &KNMusicHeaderPlayer::updatePlayerInfo);
+    //Sync the data with now playing.
+    onActionLoopStateChanged(m_nowPlaying->loopState());
 }
 
 void KNMusicHeaderPlayer::reset()
@@ -169,7 +168,7 @@ void KNMusicHeaderPlayer::play()
 
 void KNMusicHeaderPlayer::onActionLoopStateChanged(const int &state)
 {
-    //Change the icon and the state.
+    //Change the icon.
     switch(state)
     {
     case RepeatTrack:
@@ -696,7 +695,8 @@ QRect KNMusicHeaderPlayer::generateInPosition()
 
 void KNMusicHeaderPlayer::saveConfigure()
 {
-    m_global->setCustomData(objectName(), "Volume", (double)m_volumeSlider->percentage());
+    m_musicGlobal->setConfigureData("Volume",
+                                    (double)m_volumeSlider->percentage());
 }
 
 void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicDetailInfo &detailInfo)
