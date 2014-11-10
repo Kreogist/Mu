@@ -18,8 +18,6 @@
 #ifndef KNHEADERBUTTON_H
 #define KNHEADERBUTTON_H
 
-#include <QFontMetrics>
-
 #include "knanimecheckedbutton.h"
 
 class QGraphicsOpacityEffect;
@@ -68,7 +66,6 @@ private:
     QLinearGradient m_textGradient;
     QColor m_opacityColor=QColor(255,255,255,0);
     QFont m_textFont;
-    QFontMetrics m_rawFontMetrics=QFontMetrics(m_textFont);
     int m_iconSize=190,
         m_textY=25,
         m_iconX=-80,

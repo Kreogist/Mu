@@ -29,6 +29,7 @@ KNHeaderButton::KNHeaderButton(QWidget *parent) :
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
+    setMinimumWidth(182);
 
     //Connect signal.
     connect(this, &KNHeaderButton::clicked,
@@ -53,7 +54,12 @@ void KNHeaderButton::setIcon(const QPixmap &pixmap)
 
 void KNHeaderButton::setText(const QString &text)
 {
+    //Update the text.
     m_text->setText(text);
+    //Resize the text.
+    m_text->resize(m_text->fontMetrics().width(text),
+                   m_text->fontMetrics().height());
+    //Resize the button size.
     updateWidth();
 }
 
@@ -149,7 +155,7 @@ void KNHeaderButton::initialText()
     m_textFont.setPixelSize(m_textSize);
     m_text->setFont(m_textFont);
     //Update font metrics data.
-    m_rawFontMetrics=m_text->fontMetrics();
+    m_text->fontMetrics();
     //Initial the graphic effects.
     m_textEffect=new QGraphicsOpacityEffect(m_text);
     m_textEffect->setOpacity(0.7);
@@ -232,8 +238,9 @@ void KNHeaderButton::startMouseUpAnime()
 
 void KNHeaderButton::updateWidth()
 {
-    int sizeParam=qMax(m_rawFontMetrics.width(m_text->text())+m_leftMargin,
-                       182);
-    resize(sizeParam, height());
-    emit requireSetLeftSpacing(sizeParam);
+    //Update the size.
+    resize(m_text->fontMetrics().width(m_text->text())+m_leftMargin,
+           height());
+    //Ask to resize the space to fit the width.
+    emit requireSetLeftSpacing(width());
 }
