@@ -67,14 +67,18 @@ void KNLocaleManager::setLanguage(const int &index)
     qApp->removeTranslator(m_translator);
     //Load the language file.
     m_translator->load(m_languageList.at(m_currentIndex).filePath);
-    //Install translator.
-    qApp->installTranslator(m_translator);
+    if(!m_translator->isEmpty())
+    {
+        //Install translator.
+        qApp->installTranslator(m_translator);
+    }
     //Ask to retranslate.
     emit requireRetranslate();
 }
 
 void KNLocaleManager::setLanguageFromID(const QString &id)
 {
+    //Find the language one by one.
     for(int i=0; i<m_languageList.size(); i++)
     {
         if(m_languageList.at(i).id==id)
@@ -103,6 +107,13 @@ void KNLocaleManager::loadLanguageFiles()
         languageTranslation=rawFileDocument.object();
         languageTranslationFile.close();
     }
+    //Add English language item, English will always be the first language.
+    LanguageItem englishLanguage;
+    englishLanguage.id="English";
+    englishLanguage.name="English";
+    englishLanguage.icon=QPixmap("://public/English.png");
+    englishLanguage.filePath="";
+    m_languageList.append(englishLanguage);
     //Get all the folder in the language list.
     QFileInfoList folderList=languageFolder.entryInfoList();
     for(QFileInfoList::iterator i=folderList.begin();
@@ -162,4 +173,7 @@ KNLocaleManager::KNLocaleManager(QObject *parent) :
     m_noImageIcon=QPixmap(":/plugin/configure/locale/noIcon.png");
     //Load all the language.
     loadLanguageFiles();
+    //Now we can load the first English language as default language.
+    //The ID of English is 0.
+    setLanguage(0);
 }
