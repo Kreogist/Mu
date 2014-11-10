@@ -9,7 +9,7 @@
 	<key>BuildMachineOSBuild</key>
 	<string>13D65</string>
 	<key>CFBundleExecutable</key>
-	<string>Kreogist mu</string>
+        <string>Kreogist μ</string>
 	<key>CFBundleGetInfoString</key>
 	<string>0.0.381 (20140707 2014/07/07:21:24:00)</string>
 	<key>CFBundleIconFile</key>
@@ -21,7 +21,7 @@
 	<key>CFBundleLongVersionString</key>
 	<string>0.0.381 (20140707 2014/07/07:21:24:00)</string>
 	<key>CFBundleName</key>
-	<string>mu</string>
+        <string>μ</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

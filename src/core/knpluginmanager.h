@@ -53,6 +53,7 @@ private slots:
     void onActionMainWindowDestory();
 
 private:
+    void setApplicationInformation();
     void loadMainWindowPlugin(KNMainWindowPlugin *plugin);
     void loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin);
     void loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin);

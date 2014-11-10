@@ -68,6 +68,8 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent)
 {
     //---Initial infrastructure.---
+    //Initial the application information.
+    setApplicationInformation();
     //Initial global style.
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial global.
@@ -157,6 +159,7 @@ void KNPluginManager::setMainWindow(KNExpandMainWindow *mainWindow)
         //Set the main window. It can't be changed.
         m_mainWindow=mainWindow;
         //Set the basic property.
+        m_mainWindow->setWindowTitle(QApplication::applicationDisplayName());
         m_mainWindow->setMinimumSize(730, 432);
         //Set the basic palette.
         QPalette pal=m_mainWindow->palette();
@@ -211,6 +214,18 @@ void KNPluginManager::onActionMainWindowDestory()
 {
     //Backup geometry.
     backupWindowGeometry();
+}
+
+void KNPluginManager::setApplicationInformation()
+{
+    //Generate application name.
+    QString applicationName=QChar(0x03BC);
+    //Set application name and other info.
+    QApplication::setApplicationName(applicationName);
+    QApplication::setApplicationVersion("0.3");
+    QApplication::setApplicationDisplayName(applicationName);
+    QApplication::setOrganizationName("Kreogist Dev Team");
+    QApplication::setOrganizationDomain("http://kreogist.github.io/");
 }
 
 void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)
