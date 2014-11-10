@@ -172,6 +172,9 @@ void KNMusicBackendBassThread::play()
             m_stoppedState=false;
             //Reset the position to fit track playing.
             setPosition(0);
+            //Set the volume to the last volume, because of the reset, the
+            //volume is back to 1.0.
+            BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, m_lastVolume);
         }
         //Play the thread.
         BASS_ChannelPlay(m_channel, FALSE);
@@ -236,8 +239,10 @@ void KNMusicBackendBassThread::playSection(const qint64 &sectionStart,
 
 void KNMusicBackendBassThread::setVolume(const int &volumeSize)
 {
-    float bassVolumeSize=(float)volumeSize/100;
-    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, bassVolumeSize);
+    float channelVolume=(float)volumeSize/100;
+    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, channelVolume);
+    //Backup the volume
+    m_lastVolume=channelVolume;
 }
 
 void KNMusicBackendBassThread::setPosition(const qint64 &position)

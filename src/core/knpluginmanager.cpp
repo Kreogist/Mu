@@ -267,17 +267,20 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     //Connect arguments process.
     connect(this, &KNPluginManager::requireProcessArguments,
             plugin, &KNCategoryPlugin::onArgumentsAvailable);
-    //Add the plugin data to the main window.
-    /*!
-     *  FIXME: Here we need to add the icon to the category list.
-     *         But now we just need one category, so we don't need to do it now.
-     *         Fix this ASAP.
-     */
-    m_mainWindowPlugin->setHeaderIcon(plugin->icon());
-    m_mainWindowPlugin->setHeaderText(plugin->caption());
+    //Generate category plugin item
+    CategoryPluginItem currentCategory;
+    currentCategory.plugin=plugin;
     //Add header widget and central widget.
     m_mainWindowPlugin->addHeaderWidget(plugin->headerWidget());
     m_mainWindowPlugin->addCentralWidget(plugin->centralWidget());
     //Add preference panel.
-    m_preferencePlugin->addCategory(plugin);
+    currentCategory.index=m_preferencePlugin->addCategory(plugin);
+    //Add the category item in to the list.
+    m_categoryList.append(currentCategory);
+    //If this is the first category, set it to button.
+    if(m_categoryList.size()==1)
+    {
+        m_mainWindowPlugin->setHeaderIcon(plugin->icon());
+        m_mainWindowPlugin->setHeaderText(plugin->caption());
+    }
 }

@@ -23,7 +23,8 @@ signals:
     void requireHidePreference();
 
 public slots:
-    virtual void addCategory(KNCategoryPlugin *plugin)=0;
+    virtual int addCategory(KNCategoryPlugin *plugin)=0;
+    virtual void setCategoryText(const int &index, const QString &title)=0;
     virtual void setCurrentIndex(const int &index)=0;
 };
 

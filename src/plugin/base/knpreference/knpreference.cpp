@@ -17,7 +17,6 @@
  */
 #include "kncategoryplugin.h"
 #include "knpreferencepanel.h"
-#include "knlocalemanager.h"
 #include "preference/knpreferenceitemglobal.h"
 
 #include "knpreference.h"
@@ -31,10 +30,6 @@ KNPreference::KNPreference(QObject *parent) :
     m_preferencePanel=new KNPreferencePanel;
     connect(m_preferencePanel, &KNPreferencePanel::requireHidePreference,
             this, &KNPreference::onActionHidePreference);
-
-    //Connect retranslate request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
-            this, &KNPreference::retranslate);
 }
 
 QWidget *KNPreference::preferencePanel()
@@ -42,18 +37,17 @@ QWidget *KNPreference::preferencePanel()
     return m_preferencePanel;
 }
 
-void KNPreference::addCategory(KNCategoryPlugin *plugin)
+int KNPreference::addCategory(KNCategoryPlugin *plugin)
 {
-    CategoryItem currentCategory;
-    //Get the index of current category.
-    currentCategory.index=
-            m_preferencePanel->addCategory(plugin->caption(),
-                                           plugin->preferenceIcon(),
-                                           plugin->headerIcon(),
-                                           plugin->preferencePanelWidget());
-    currentCategory.plugin=plugin;
-    //Add to list.
-    m_categoryList.append(currentCategory);
+    return m_preferencePanel->addCategory(plugin->caption(),
+                                          plugin->preferenceIcon(),
+                                          plugin->headerIcon(),
+                                          plugin->preferencePanelWidget());
+}
+
+void KNPreference::setCategoryText(const int &index, const QString &title)
+{
+    m_preferencePanel->setCategoryText(index, title);
 }
 
 void KNPreference::setCurrentIndex(const int &index)
@@ -69,15 +63,4 @@ void KNPreference::onActionHidePreference()
     m_preferenceGlobal->requireApplyPreference();
     //Ask to hide preference.
     emit requireHidePreference();
-}
-
-void KNPreference::retranslate()
-{
-    //Update the preference caption.
-    for(auto i=m_categoryList.begin();
-        i!=m_categoryList.end();
-        ++i)
-    {
-        m_preferencePanel->setCategoryText((*i).index, (*i).plugin->caption());
-    }
 }

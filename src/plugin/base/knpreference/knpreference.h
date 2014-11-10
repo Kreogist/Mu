@@ -34,10 +34,10 @@ public:
 signals:
 
 public slots:
-    void addCategory(KNCategoryPlugin *plugin);
+    int addCategory(KNCategoryPlugin *plugin);
+    void setCategoryText(const int &index, const QString &title);
     void setCurrentIndex(const int &index);
     void onActionHidePreference();
-    void retranslate();
 
 private:
     struct CategoryItem

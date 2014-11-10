@@ -69,6 +69,7 @@ private:
     void releaseSyncHandle();
     void setState(const int &state);
     int m_playingState=StoppedState;
+    float m_lastVolume=1.0;
     QString m_filePath;
     bool m_stoppedState=true;
     qint64 m_startPosition;   //Unit: millisecond
