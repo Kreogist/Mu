@@ -18,6 +18,7 @@ class KNLocaleManager : public QObject
 public:
     static KNLocaleManager *instance();
     QString currentLanguageName() const;
+    QString currentLanguageID() const;
     QPixmap currentLanguageIcon() const;
     int languageSize() const;
     QString languageNameAt(const int &i);
@@ -28,14 +29,21 @@ signals:
 
 public slots:
     void setLanguage(const int &index);
+    void setLanguageFromID(const QString &id);
 
 private:
     void loadLanguageFiles();
     static KNLocaleManager *m_instance;
     explicit KNLocaleManager(QObject *parent = 0);
     int m_currentIndex=-1;
-    QStringList m_languageFiles, m_languageNames;
-    QList<QPixmap> m_languageIcons;
+    struct LanguageItem
+    {
+        QString name;
+        QString id;
+        QString filePath;
+        QPixmap icon;
+    };
+    QList<LanguageItem> m_languageList;
     QPixmap m_noImageIcon;
     QTranslator *m_translator;
 };

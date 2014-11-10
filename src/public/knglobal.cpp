@@ -252,11 +252,17 @@ void KNGlobal::retranslate()
 
 void KNGlobal::loadConfigure()
 {
+    //Load the configure first.
     m_configure->loadConfigure();
+    //Set the language by the id.
+    m_localeManager->setLanguageFromID(systemData("Language").toString());
 }
 
 void KNGlobal::saveConfigure()
 {
+    //Set the language information.
+    setSystemData("Language", m_localeManager->currentLanguageID());
+    //Save the configure data.
     m_configure->saveConfigure();
 }
 
