@@ -5,15 +5,15 @@
 	<key>Kreogist Product Build</key>
 	<string>20140707</string>
 	<key>Kreogist Product Version</key>
-	<string>0.0.381</string>
+	<string>0.3</string>
 	<key>BuildMachineOSBuild</key>
 	<string>13D65</string>
 	<key>CFBundleExecutable</key>
-        <string>Kreogist μ</string>
+	<string>Kreogist μ</string>
 	<key>CFBundleGetInfoString</key>
-	<string>0.0.381 (20140707 2014/07/07:21:24:00)</string>
+	<string>0.3 (20141110 2014/11/10:23:47:00)</string>
 	<key>CFBundleIconFile</key>
-	<string>Nerve.icns</string>
+	<string>mu.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.kreogist.mu</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -21,7 +21,7 @@
 	<key>CFBundleLongVersionString</key>
 	<string>0.0.381 (20140707 2014/07/07:21:24:00)</string>
 	<key>CFBundleName</key>
-        <string>μ</string>
+	<string>μ</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
