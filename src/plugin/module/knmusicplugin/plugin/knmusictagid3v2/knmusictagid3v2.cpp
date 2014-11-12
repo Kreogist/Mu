@@ -201,10 +201,12 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
     switch(encoding)
     {
     case EncodeISO: //0 = ISO-8859-1
+        //Use unicode codec to translate.
         return m_usingDefaultCodec?
                     m_localeCodec->toUnicode(content).simplified():
                     m_isoCodec->toUnicode(content).simplified();
     case EncodeUTF16BELE: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
+        //Decode via first two bytes.
         if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
         {
             return m_utf16BECodec->toUnicode(content).simplified();
@@ -215,8 +217,10 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
         }
         return m_utf16Codec->toUnicode(content).simplified();
     case EncodeUTF16: //2 = UTF-16 BE without BOM
+        //Decode with UTF-16
         return m_utf16Codec->toUnicode(content).simplified();
     case EncodeUTF8: //3 = UTF-8
+        //Use UTF-8 to decode it.
         return m_utf8Codec->toUnicode(content).simplified();
     default://Use locale codec.
         return m_localeCodec->toUnicode(content).simplified();
@@ -424,28 +428,14 @@ void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames
                 }
                 else
                 {
-                    //We find ')', check is it the last char.
-                    if(rightBracketsPosition==frameText.size()-1)
-                    {
-                        //Remove the first and the last.
-                        frameText.resize(frameText.size()-1);
-                        frameText.remove(0, 1);
-                        //Try to translate this into a number.
-                        bool indexTranslateOk=false;
-                        int attemptIndex=frameText.toInt(&indexTranslateOk);
-                        //If it's a number, set the indexed genre, or set the raw text.
-                        setTextData(detailInfo.textLists[Genre],
-                                    indexTranslateOk?
-                                        m_musicGlobal->indexedGenre(attemptIndex):
-                                        frameText);
-                    }
-                    else
-                    {
-                        //There still something after the genre.
-                        //That will be the genre text, set it to them.
-                        setTextData(detailInfo.textLists[Genre],
-                                    frameText.mid(rightBracketsPosition+1));
-                    }
+                    //Try to translate the content in the brackets.
+                    bool indexTranslateOk=false;
+                    int attemptIndex=frameText.mid(1, rightBracketsPosition-1).toInt(&indexTranslateOk);
+                    //If it's a number, set the indexed genre, or set the raw text.
+                    setTextData(detailInfo.textLists[Genre],
+                                indexTranslateOk?
+                                    m_musicGlobal->indexedGenre(attemptIndex):
+                                    frameText);
                 }
             }
             else
@@ -487,7 +477,8 @@ void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,
     //Backup the text encording and get the picture type.
     quint8 textEncoding=imageData.at(0),
            pictureType=imageData.at(mimeTypeEnd+1);
-    switch (textEncoding) {
+    switch (textEncoding)
+    {
     case EncodeISO:
     case EncodeUTF8:
         descriptionEnd=imageData.indexOf('\0', mimeTypeEnd+2);

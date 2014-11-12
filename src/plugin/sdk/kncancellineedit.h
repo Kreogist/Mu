@@ -14,6 +14,7 @@ signals:
     void editingCancel();
 
 public slots:
+    void focusOutEvent(QFocusEvent *event);
 
 protected:
     void keyReleaseEvent(QKeyEvent *event);

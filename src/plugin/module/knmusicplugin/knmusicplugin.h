@@ -23,6 +23,7 @@
 class QBoxLayout;
 class KNCategoryTabWidget;
 class KNPreferenceWidgetsPanel;
+class KNConnectionHandler;
 class KNMusicTab;
 class KNMusicBackend;
 class KNMusicGlobal;
@@ -50,6 +51,7 @@ public:
     QWidget *headerWidget();
     KNPreferenceWidgetsPanel *preferencePanelWidget();
 
+    void setPlatformExtras(KNPlatformExtras *plugin);
     void loadSearch(KNMusicSearchBase *plugin);
     void loadDetailTooptip(KNMusicDetailTooltipBase *plugin);
     void loadBackend(KNMusicBackend *plugin);
@@ -64,6 +66,8 @@ signals:
 public slots:
     void onArgumentsAvailable(const QStringList &data);
     void retranslate();
+    void enablePlatformExtras();
+    void disablePlatformExtras();
 
 protected slots:
     int addMusicCategory(const QPixmap &icon,
@@ -102,6 +106,8 @@ private:
     KNMusicBackend *m_backend=nullptr;
     KNMusicNowPlayingBase *m_nowPlaying=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
+    KNPlatformExtras *m_platformExtras=nullptr;
+    KNConnectionHandler *m_extraHandler=nullptr;
 };
 
 #endif // KNMUSICPLUGIN_H

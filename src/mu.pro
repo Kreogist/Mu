@@ -39,6 +39,10 @@ win32{
     }
     RC_FILE += resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
+    #Windows special extras.
+    QT += winextras
+    SOURCES += plugin/module/knwindowsextras/knwindowsextras.cpp
+    HEADERS += plugin/module/knwindowsextras/knwindowsextras.h
 }
 
 #UNIX common configure
@@ -381,7 +385,8 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.h \
     plugin/module/knmusicplugin/sdk/knmusicsearchbase.h \
     plugin/module/knmusicplugin/sdk/knmusicdetailtooltipbase.h \
-    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.h
+    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.h \
+    plugin/sdk/knplatformextras.h
 
 RESOURCES += \
     resource/res.qrc

@@ -31,6 +31,7 @@
 #include "knmainwindowcategoryswitcherplugin.h"
 #include "knpreferenceplugin.h"
 #include "kncategoryplugin.h"
+#include "knplatformextras.h"
 
 //Basic Plugins
 #include "plugin/base/knmainwindow/knmainwindow.h"
@@ -41,6 +42,11 @@
 
 //Category Plugins
 #include "plugin/module/knmusicplugin/knmusicplugin.h"
+
+//Platform Plugins
+#ifdef Q_OS_WIN32
+#include "plugin/module/knwindowsextras/knwindowsextras.h"
+#endif
 
 #include "knpluginmanager.h"
 
@@ -182,6 +188,11 @@ void KNPluginManager::loadPlugins()
     loadMainWindowCategorySwitcher(new KNMainWindowCategorySwitcher);
     loadPreference(new KNPreference);
 
+    //Initial platform plugins.
+#ifdef Q_OS_WIN32
+    loadPlatformExtras(new KNWindowsExtras);
+#endif
+
     //Initial category modules.
     loadCategoryPlugin(new KNMusicPlugin);
 }
@@ -279,9 +290,26 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 {
     //Add this to the plugin list.
     m_pluginList.append(plugin);
+    //Set platform extra for this category.
+    if(m_platformExtra!=nullptr)
+    {
+        plugin->setPlatformExtras(m_platformExtra);
+    }
     //Connect arguments process.
     connect(this, &KNPluginManager::requireProcessArguments,
             plugin, &KNCategoryPlugin::onArgumentsAvailable);
     //Add this plugin to main window.
     m_mainWindowPlugin->addCategoryPlugin(plugin);
+}
+
+
+void KNPluginManager::loadPlatformExtras(KNPlatformExtras *plugin)
+{
+    //Add this to the plugin list.
+    m_pluginList.append(plugin);
+    //Save the platform extras.
+    m_platformExtra=plugin;
+    //Set main window.
+    qDebug()<<m_mainWindow<<m_mainWindow->windowHandle();
+    m_platformExtra->setMainWindow(m_mainWindow);
 }

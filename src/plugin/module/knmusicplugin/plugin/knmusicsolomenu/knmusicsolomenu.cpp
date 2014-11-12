@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QDir>
+
 #include "knglobal.h"
 
 #include "knmusicsearchbase.h"
@@ -25,6 +27,8 @@
 #include "knlocalemanager.h"
 
 #include "knmusicsolomenu.h"
+
+#include <QDebug>
 
 using namespace KNMusic;
 
@@ -133,7 +137,7 @@ void KNMusicSoloMenu::onActionShowInGraphicsShell()
 
 void KNMusicSoloMenu::onActionCopyFilePath()
 {
-    KNGlobal::setClipboardText(m_filePath);
+    KNGlobal::setClipboardText(QDir::toNativeSeparators(m_filePath));
 }
 
 void KNMusicSoloMenu::onActionCopyItemText()

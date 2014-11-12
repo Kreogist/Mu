@@ -74,6 +74,8 @@ void KNMainWindow::addCategoryPlugin(KNCategoryPlugin *plugin)
     {
         //Change the current category.
         m_currentCategory=currentCategory.index;
+        //Enable extras for the plugin.
+        plugin->enablePlatformExtras();
         //Set the icon and text to the first category.
         setHeaderIcon(plugin->icon());
         setHeaderText(plugin->caption());

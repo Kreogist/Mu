@@ -14,6 +14,8 @@
 KNOpacityButton::KNOpacityButton(QWidget *parent) :
     KNAbstractButton(parent)
 {
+    //Set as strong focus.
+    setFocusPolicy(Qt::StrongFocus);
     //Set toolbutton size policy.
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,
                               QSizePolicy::MinimumExpanding,

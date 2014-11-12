@@ -98,12 +98,14 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     previewPlayer->setContentsMargins(0,0,0,0);
     mainLayout->addLayout(previewPlayer);
     m_playNPause=new KNOpacityButton(this);
+    m_playNPause->setFocusProxy(this);
     m_playNPause->setFixedSize(20, 20);
     m_playNPause->setIcon(m_playIcon);
     connect(m_playNPause, &KNOpacityButton::clicked,
             this, &KNMusicDetailTooltip::onActionPlayNPauseClick);
     previewPlayer->addWidget(m_playNPause);
     m_progress=new KNProgressSlider(this);
+    m_progress->setFocusProxy(this);
     m_progress->setWheelStep(1000);
     connect(m_progress, &KNProgressSlider::sliderPressed,
             this, &KNMusicDetailTooltip::onActionProgressPressed);

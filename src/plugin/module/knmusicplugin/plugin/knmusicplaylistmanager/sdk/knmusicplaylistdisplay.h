@@ -22,6 +22,7 @@
 
 class QLabel;
 class KNConnectionHandler;
+class KNSideShadowWidget;
 class KNMusicPlaylistListItem;
 class KNMusicPlaylistTreeView;
 class KNMusicPlaylistDisplay : public QWidget
@@ -40,6 +41,9 @@ public slots:
     void onActionRemoveCurrent();
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 private slots:
     void onActionRowChanged();
     void updateDetailInfo();
@@ -47,6 +51,7 @@ private slots:
 
 private:
     QLabel *m_playlistTitle, *m_playlistInfo;
+    KNSideShadowWidget *m_leftShadow;
     KNMusicPlaylistListItem *m_currentItem=nullptr;
     KNMusicPlaylistTreeView *m_playlistTreeView;
     KNConnectionHandler *m_modelSignalHandler;

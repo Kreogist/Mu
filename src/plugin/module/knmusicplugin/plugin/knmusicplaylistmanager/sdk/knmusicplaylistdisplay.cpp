@@ -20,6 +20,7 @@
 
 #include "knmousesensewidget.h"
 #include "knconnectionhandler.h"
+#include "knsideshadowwidget.h"
 #include "knmusicsearchbase.h"
 #include "knmusicplaylistmodel.h"
 #include "knmusicplaylistlistitem.h"
@@ -80,6 +81,9 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
     //Initial playlist connection handler.
     m_modelSignalHandler=new KNConnectionHandler(this);
 
+    //Initial the shadow.
+    m_leftShadow=new KNSideShadowWidget(LeftShadow, this);
+
     //Connect search signal.
     connect(KNMusicGlobal::musicSearch(), SIGNAL(requireSearch(QString)),
             this, SLOT(updatePlaylistTitle()));
@@ -127,6 +131,16 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
                         this, &KNMusicPlaylistDisplay::onActionRowChanged));
     //Update the informations.
     updatePlaylistInfo();
+}
+
+void KNMusicPlaylistDisplay::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    //Move the shadow.
+    m_leftShadow->setGeometry(0,
+                              0,
+                              15,
+                              height());
 }
 
 void KNMusicPlaylistDisplay::onActionRowChanged()

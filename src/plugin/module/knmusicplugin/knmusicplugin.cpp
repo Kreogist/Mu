@@ -61,6 +61,8 @@
 
 #include "knglobal.h"
 #include "knmusictab.h"
+#include "knplatformextras.h"
+#include "knconnectionhandler.h"
 #include "kncategorytabwidget.h"
 #include "knlocalemanager.h"
 #include "knpreferencewidgetspanel.h"
@@ -252,6 +254,33 @@ void KNMusicPlugin::retranslate()
     }
 }
 
+void KNMusicPlugin::enablePlatformExtras()
+{
+    if(m_platformExtras)
+    {
+        m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requirePlayPrev,
+                            m_nowPlaying, &KNMusicNowPlayingBase::playPrevious));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requirePlayNext,
+                            m_nowPlaying, &KNMusicNowPlayingBase::playNext));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requirePlay,
+                            m_backend, &KNMusicBackend::play));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requirePause,
+                            m_backend, &KNMusicBackend::pause));
+    }
+}
+
+void KNMusicPlugin::disablePlatformExtras()
+{
+    if(m_platformExtras)
+    {
+        m_extraHandler->disConnectAll();
+    }
+}
+
 int KNMusicPlugin::addMusicCategory(const QPixmap &icon,
                                     const QString &caption,
                                     QWidget *widget)
@@ -310,6 +339,9 @@ void KNMusicPlugin::initialInfrastructure()
     m_headerRightLayout->setContentsMargins(10,0,0,0);
     m_headerRightLayout->setSpacing(0);
     headerLayout->addLayout(m_headerRightLayout);
+
+    //Initial the extra platform connection handler.
+    m_extraHandler=new KNConnectionHandler(this);
 }
 
 void KNMusicPlugin::initialParser()
@@ -379,4 +411,10 @@ void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
 void KNMusicPlugin::startThreads()
 {
     m_parserThread.start();
+}
+
+
+void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *plugin)
+{
+    m_platformExtras=plugin;
 }

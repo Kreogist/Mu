@@ -15,6 +15,8 @@
 KNOpacityAnimeButton::KNOpacityAnimeButton(QWidget *parent) :
     KNAbstractButton(parent)
 {
+    //Set properties.
+    setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     //Initial the graphic effects.
     m_effect=new QGraphicsOpacityEffect(this);

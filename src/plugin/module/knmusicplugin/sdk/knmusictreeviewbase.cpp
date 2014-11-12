@@ -251,6 +251,12 @@ bool KNMusicTreeViewBase::event(QEvent *event)
         //Get the right position of the index.
         QPoint indexPosition=QPoint(helpEvent->pos().x(),
                                     helpEvent->pos().y()-header()->height());
+        //If the pointer is on the header, hide the detail tooltip.
+        if(indexPosition.y()<0)
+        {
+            KNMusicGlobal::detailTooltip()->hide();
+            return false;
+        }
         //Locate the index via the position.
         QModelIndex mouseIndex=indexAt(indexPosition);
         if(mouseIndex.isValid())

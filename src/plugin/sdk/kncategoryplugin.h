@@ -12,6 +12,7 @@
 
 #include <QObject>
 
+class KNPlatformExtras;
 class KNPreferenceWidgetsPanel;
 class KNCategoryPlugin : public QObject
 {
@@ -25,10 +26,13 @@ public:
     virtual QWidget *centralWidget()=0;
     virtual QWidget *headerWidget()=0;
     virtual KNPreferenceWidgetsPanel *preferencePanelWidget()=0;
+    virtual void setPlatformExtras(KNPlatformExtras *plugin)=0;
 
 signals:
 
 public slots:
+    virtual void enablePlatformExtras()=0;
+    virtual void disablePlatformExtras()=0;
     virtual void onArgumentsAvailable(const QStringList &data)=0;
 
 };
