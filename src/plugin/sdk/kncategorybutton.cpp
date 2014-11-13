@@ -176,6 +176,8 @@ void KNCategoryButton::mouseReleaseEvent(QMouseEvent *event)
     {
         m_checked=true;
         startMouseDownAnime();
+        //Emit clicked signal.
+        emit clicked();
     }
     KNAbstractButton::mouseReleaseEvent(event);
 }

@@ -242,7 +242,13 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp \
     plugin/sdk/knmousedetectheader.cpp \
-    plugin/module/knmusicplugin/plugin/knmusictagapev2/knmusictagapev2.cpp
+    plugin/module/knmusicplugin/plugin/knmusictagapev2/knmusictagapev2.cpp \
+    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -390,7 +396,14 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.h \
     plugin/sdk/knplatformextras.h \
     plugin/sdk/knmousedetectheader.h \
-    plugin/module/knmusicplugin/plugin/knmusictagapev2/knmusictagapev2.h
+    plugin/module/knmusicplugin/plugin/knmusictagapev2/knmusictagapev2.h \
+    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h \
+    plugin/module/knmusicplugin/sdk/knmusiclibrarybase.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h
 
 RESOURCES += \
     resource/res.qrc

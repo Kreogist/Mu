@@ -4,18 +4,21 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
-#ifndef KNMUSICPLAYLISTMANAGERBASE_H
-#define KNMUSICPLAYLISTMANAGERBASE_H
+#ifndef KNMUSICLIBRARYBASE_H
+#define KNMUSICLIBRARYBASE_H
 
 #include <QObject>
 
 class KNMusicTab;
-class KNMusicPlaylistManagerBase : public QObject
+class KNMusicLibraryBase : public QObject
 {
     Q_OBJECT
 public:
-    KNMusicPlaylistManagerBase(QObject *parent = 0):QObject(parent){}
-    virtual KNMusicTab *categoryTab()=0;
+    KNMusicLibraryBase(QObject *parent = 0):QObject(parent){}
+    virtual KNMusicTab *songTab()=0;
+    virtual KNMusicTab *artistTab()=0;
+    virtual KNMusicTab *albumTab()=0;
+    virtual KNMusicTab *genreTab()=0;
 
 signals:
 
@@ -23,4 +26,4 @@ public slots:
 
 };
 
-#endif // KNMUSICPLAYLISTMANAGERBASE_H
+#endif // KNMUSICLIBRARYBASE_H

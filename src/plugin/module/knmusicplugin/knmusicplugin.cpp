@@ -30,6 +30,7 @@
 #include "knmusicheaderplayerbase.h"
 #include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusiclibrarybase.h"
 #include "knmusicplaylistmanagerbase.h"
 
 //Plugins
@@ -58,6 +59,7 @@
 #include "plugin/knmusicmultimenu/knmusicmultimenu.h"
 #include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+#include "plugin/knmusiclibrary/knmusiclibrary.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
 
 #include "knglobal.h"
@@ -98,6 +100,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadNowPlaying(new KNMusicNowPlaying);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
+    loadLibrary(new KNMusicLibrary);
     loadPlaylistManager(new KNMusicPlaylistManager);
 
     //Connect retranslate request.
@@ -236,6 +239,16 @@ void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
         //Set global now playing plugin.
         KNMusicGlobal::setNowPlaying(m_nowPlaying);
     }
+}
+
+void KNMusicPlugin::loadLibrary(KNMusicLibraryBase *plugin)
+{
+    m_pluginList.append(plugin);
+    //Add tabs.
+    addMusicTab(plugin->songTab());
+    addMusicTab(plugin->artistTab());
+    addMusicTab(plugin->albumTab());
+    addMusicTab(plugin->genreTab());
 }
 
 void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)

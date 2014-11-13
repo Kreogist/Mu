@@ -23,6 +23,8 @@
 
 #include "kncategorytabbar.h"
 
+#include <QDebug>
+
 KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     QWidget(parent)
 {
@@ -79,6 +81,7 @@ void KNCategoryTabBar::addCategory(const QPixmap &pixmap,
     if(m_currentIndex==-1)
     {
         setCurrentIndex(0);
+        unlockBar();
     }
 }
 
@@ -163,4 +166,3 @@ void KNCategoryTabBar::unlockBar()
 {
     m_locked=false;
 }
-

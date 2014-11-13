@@ -86,10 +86,6 @@ public:
                   QDataStream &musicDataStream,
                   KNMusicDetailInfo &detailInfo);
     bool parseAlbumArt(KNMusicDetailInfo &detailInfo);
-    static quint32 minor2Size(char *rawTagData);
-    static quint32 minor3Size(char *rawTagData);
-    static quint32 minor4Size(char *rawTagData);
-    static void saveFlag(char *rawTagData, ID3v2Frame &frameData);
     QString frameToText(QByteArray content);
     bool usingDefaultCodec() const;
     void setUsingDefaultCodec(bool usingDefaultCodec);
@@ -99,6 +95,10 @@ signals:
 public slots:
 
 private:
+    static quint32 minor2Size(char *rawTagData);
+    static quint32 minor3Size(char *rawTagData);
+    static quint32 minor4Size(char *rawTagData);
+    static void saveFlag(char *rawTagData, ID3v2Frame &frameData);
     bool parseHeader(char *rawHeader,
                      ID3v2Header &header);
     bool parseRawData(char *rawTagData,

@@ -65,7 +65,6 @@ private:
     KNMusicPlaylistLoader *m_loader;
     KNMusicPlaylistTab *m_playlistTab;
     KNMusicPlaylistList *m_playlistList;
-    KNMusicNowPlayingBase *m_nowPlaying;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H
