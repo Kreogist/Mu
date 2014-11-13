@@ -108,16 +108,14 @@ libbass{
 
 #Add translations
 TRANSLATIONS += locale/Simplified_Chinese.ts \
-                locale/Traditional_Chinese.ts \
-                locale/English.ts
+                locale/Traditional_Chinese.ts
 
 #Add public path
 INCLUDEPATH += public
 #Add plugin and sdk path
 INCLUDEPATH += plugin \
                plugin/sdk \
-               plugin/module/knmusicplugin/sdk \
-               plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk
+               plugin/module/knmusicplugin/sdk
 
 SOURCES += \
     main.cpp \
@@ -248,7 +246,10 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -403,7 +404,10 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.h \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.h
 
 RESOURCES += \
     resource/res.qrc

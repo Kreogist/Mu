@@ -76,7 +76,7 @@ KNMusicPlaylistTab::~KNMusicPlaylistTab()
 
 QString KNMusicPlaylistTab::caption()
 {
-    return tr("Playlist");
+    return tr("Playlists");
 }
 
 QPixmap KNMusicPlaylistTab::icon()

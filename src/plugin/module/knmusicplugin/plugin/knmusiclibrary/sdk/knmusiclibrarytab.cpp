@@ -15,28 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICLIBRARYALBUMTAB_H
-#define KNMUSICLIBRARYALBUMTAB_H
-
 #include "knmusiclibrarytab.h"
 
-class KNMusicLibraryAlbumTab : public KNMusicLibraryTab
+KNMusicLibraryTab::KNMusicLibraryTab(QObject *parent) :
+    KNMusicTab(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicLibraryAlbumTab(QObject *parent = 0);
-    QString caption();
-    QPixmap icon();
-    QWidget *widget();
-
-signals:
-
-public slots:
-    void setLibraryModel(KNMusicLibraryModel *model);
-    void onActionSearch(const QString &text);
-
-private:
-    QWidget *m_widget;
-};
-
-#endif // KNMUSICLIBRARYALBUMTAB_H
+}

@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "sdk/knmusiclibrarymodel.h"
+#include "sdk/knmusiclibrarytab.h"
 #include "sdk/knmusiclibrarysongtab.h"
 #include "sdk/knmusiclibraryartisttab.h"
 #include "sdk/knmusiclibraryalbumtab.h"
@@ -25,29 +27,41 @@
 KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent)
 {
-    //Initial the tabs.
-    m_songTab=new KNMusicLibrarySongTab(this);
-    m_artistTab=new KNMusicLibraryArtistTab(this);
-    m_albumTab=new KNMusicLibraryAlbumTab(this);
-    m_genreTab=new KNMusicLibraryGenreTab(this);
+    //Initial the music model.
+    m_libraryModel=new KNMusicLibraryModel(this);
+    initialTabs();
 }
 
 KNMusicTab *KNMusicLibrary::songTab()
 {
-    return m_songTab;
+    return m_libraryTabs[Songs];
 }
 
 KNMusicTab *KNMusicLibrary::artistTab()
 {
-    return m_artistTab;
+    return m_libraryTabs[Artists];
 }
 
 KNMusicTab *KNMusicLibrary::albumTab()
 {
-    return m_albumTab;
+    return m_libraryTabs[Albums];
 }
 
 KNMusicTab *KNMusicLibrary::genreTab()
 {
-    return m_genreTab;
+    return m_libraryTabs[Genres];
+}
+
+void KNMusicLibrary::initialTabs()
+{
+    //Genreate these tabs.
+    m_libraryTabs[Songs]=new KNMusicLibrarySongTab(this);
+    m_libraryTabs[Artists]=new KNMusicLibraryArtistTab(this);
+    m_libraryTabs[Albums]=new KNMusicLibraryAlbumTab(this);
+    m_libraryTabs[Genres]=new KNMusicLibraryGenreTab(this);
+    //Set model.
+    for(int i=0; i<LibraryTabs; i++)
+    {
+        m_libraryTabs[i]->setLibraryModel(m_libraryModel);
+    }
 }

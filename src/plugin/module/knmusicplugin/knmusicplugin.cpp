@@ -374,10 +374,10 @@ void KNMusicPlugin::initialParser()
 
     //Install all tag parser plugins here.
     parser->installTagParser(new KNMusicTagID3v1);
+    parser->installTagParser(new KNMusicTagAPEv2);
     parser->installTagParser(new KNMusicTagFLAC);
     parser->installTagParser(new KNMusicTagID3v2);
     parser->installTagParser(new KNMusicTagM4A);
-    parser->installTagParser(new KNMusicTagAPEv2);
     parser->installTagParser(new KNMusicTagWMA);
 
     //Install all analysiser plugins here.

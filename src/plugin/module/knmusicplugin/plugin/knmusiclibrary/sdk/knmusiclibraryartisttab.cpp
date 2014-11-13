@@ -20,14 +20,14 @@
 #include "knmusiclibraryartisttab.h"
 
 KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
-    KNMusicTab(parent)
+    KNMusicLibraryTab(parent)
 {
     m_widget=new QWidget;
 }
 
 QString KNMusicLibraryArtistTab::caption()
 {
-    return tr("Artist");
+    return tr("Artists");
 }
 
 QPixmap KNMusicLibraryArtistTab::icon()
@@ -38,6 +38,11 @@ QPixmap KNMusicLibraryArtistTab::icon()
 QWidget *KNMusicLibraryArtistTab::widget()
 {
     return m_widget;
+}
+
+void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
+{
+    ;
 }
 
 void KNMusicLibraryArtistTab::onActionSearch(const QString &text)

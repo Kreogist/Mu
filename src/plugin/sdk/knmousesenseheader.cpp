@@ -55,6 +55,9 @@ KNMouseSenseHeader::KNMouseSenseHeader(QWidget *parent) :
     m_mouseOut=new QTimeLine(200, this);
     m_mouseOut->setEndFrame(m_outBrightness);
     configureTimeLine(m_mouseOut);
+
+    //Use mouse out to set the default value.
+    onActionMouseInOut(m_outBrightness);
 }
 
 void KNMouseSenseHeader::enterEvent(QEvent *event)

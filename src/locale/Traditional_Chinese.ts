@@ -63,7 +63,7 @@
 <context>
     <name>KNMusicDetailTooltip</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="175"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="177"/>
         <source>In file: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -390,6 +390,38 @@
     </message>
 </context>
 <context>
+    <name>KNMusicLibraryAlbumTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="30"/>
+        <source>Albums</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryArtistTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="30"/>
+        <source>Artists</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryGenreTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="30"/>
+        <source>Genres</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibrarySongTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="52"/>
+        <source>Songs</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLyricsManager</name>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp" line="77"/>
@@ -408,52 +440,52 @@
 <context>
     <name>KNMusicPlaylistDisplay</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="142"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="156"/>
         <source>No song, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="143"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="157"/>
         <source>1 song, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="144"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="158"/>
         <source>%1 songs, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="146"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="160"/>
         <source>0 minuate.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="147"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="161"/>
         <source>1 minuate.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="148"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="162"/>
         <source>%1 minuates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="150"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="164"/>
         <source>No result.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="151"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="165"/>
         <source>1 result.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="152"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="166"/>
         <source>%1 results.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="154"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="168"/>
         <source>Search &apos;%1&apos; in &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -507,14 +539,14 @@ To create a playlist, drag your songs here.</source>
     <name>KNMusicPlaylistTab</name>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="79"/>
-        <source>Playlist</source>
+        <source>Playlists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="116"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="123"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -530,52 +562,52 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicSoloMenu</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="96"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="100"/>
         <source>Play %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="97"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="101"/>
         <source>Open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="98"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="102"/>
         <source>Get Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="100"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="104"/>
         <source>Show in Explorer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="103"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="107"/>
         <source>Show in Finder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="110"/>
         <source>Show the contains folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="108"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="112"/>
         <source>Copy location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="113"/>
         <source>Copy &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="110"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="114"/>
         <source>Search &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="111"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="115"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>

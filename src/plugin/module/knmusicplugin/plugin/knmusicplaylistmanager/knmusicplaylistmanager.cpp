@@ -17,15 +17,15 @@
  */
 #include <QFile>
 
-#include "knmusicplaylistloader.h"
-#include "knmusicplaylistlistitem.h"
-#include "knmusicplaylistlistassistant.h"
-#include "knmusicplaylisttab.h"
-#include "knmusicplaylistlist.h"
-#include "knmusicplaylistmodel.h"
-#include "knmusicnowplayingbase.h"
+#include "sdk/knmusicplaylistloader.h"
+#include "sdk/knmusicplaylistlistitem.h"
+#include "sdk/knmusicplaylistlistassistant.h"
+#include "sdk/knmusicplaylisttab.h"
+#include "sdk/knmusicplaylistlist.h"
+#include "sdk/knmusicplaylistmodel.h"
 
 #include "knmusicglobal.h"
+#include "knmusicnowplayingbase.h"
 
 #include "knmusicplaylistmanager.h"
 

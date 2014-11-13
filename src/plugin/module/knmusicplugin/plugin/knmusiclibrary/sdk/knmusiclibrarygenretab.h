@@ -18,9 +18,9 @@
 #ifndef KNMUSICLIBRARYGENRETAB_H
 #define KNMUSICLIBRARYGENRETAB_H
 
-#include "knmusictab.h"
+#include "knmusiclibrarytab.h"
 
-class KNMusicLibraryGenreTab : public KNMusicTab
+class KNMusicLibraryGenreTab : public KNMusicLibraryTab
 {
     Q_OBJECT
 public:
@@ -32,6 +32,7 @@ public:
 signals:
 
 public slots:
+    void setLibraryModel(KNMusicLibraryModel *model);
     void onActionSearch(const QString &text);
 
 private:

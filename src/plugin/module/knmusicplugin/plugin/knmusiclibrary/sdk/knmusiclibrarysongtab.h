@@ -18,13 +18,16 @@
 #ifndef KNMUSICLIBRARYSONGTAB_H
 #define KNMUSICLIBRARYSONGTAB_H
 
-#include "knmusictab.h"
+#include "knmusiclibrarytab.h"
 
-class KNMusicLibrarySongTab : public KNMusicTab
+class KNDropProxyContainer;
+class KNMusicLibraryTreeView;
+class KNMusicLibrarySongTab : public KNMusicLibraryTab
 {
     Q_OBJECT
 public:
     explicit KNMusicLibrarySongTab(QObject *parent = 0);
+    ~KNMusicLibrarySongTab();
     QString caption();
     QPixmap icon();
     QWidget *widget();
@@ -32,10 +35,12 @@ public:
 signals:
 
 public slots:
+    void setLibraryModel(KNMusicLibraryModel *model);
     void onActionSearch(const QString &text);
 
 private:
-    QWidget *m_widget;
+    KNDropProxyContainer *m_dropProxy;
+    KNMusicLibraryTreeView *m_treeview;
 };
 
 #endif // KNMUSICLIBRARYSONGTAB_H

@@ -20,14 +20,14 @@
 #include "knmusiclibrarygenretab.h"
 
 KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QObject *parent) :
-    KNMusicTab(parent)
+    KNMusicLibraryTab(parent)
 {
     m_widget=new QWidget;
 }
 
 QString KNMusicLibraryGenreTab::caption()
 {
-    return tr("Genre");
+    return tr("Genres");
 }
 
 QPixmap KNMusicLibraryGenreTab::icon()
@@ -38,6 +38,11 @@ QPixmap KNMusicLibraryGenreTab::icon()
 QWidget *KNMusicLibraryGenreTab::widget()
 {
     return m_widget;
+}
+
+void KNMusicLibraryGenreTab::setLibraryModel(KNMusicLibraryModel *model)
+{
+    ;
 }
 
 void KNMusicLibraryGenreTab::onActionSearch(const QString &text)

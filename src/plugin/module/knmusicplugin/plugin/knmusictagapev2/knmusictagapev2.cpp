@@ -228,15 +228,7 @@ void KNMusicTagAPEv2::writeTagListToDetailInfo(const QList<APETagItem> &tagList,
                 }
                 break;
             default:
-                if(detailInfo.textLists[frameIndex].isEmpty())
-                {
-                    detailInfo.textLists[frameIndex]=QString((*i).value);
-                }
-                else
-                {
-                    detailInfo.textLists[frameIndex].append("; " +
-                                                            QString((*i).value));
-                }
+                detailInfo.textLists[frameIndex]=QString((*i).value);
             }
         }
     }

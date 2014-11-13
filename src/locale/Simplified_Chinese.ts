@@ -63,7 +63,7 @@
 <context>
     <name>KNMusicDetailTooltip</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="175"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="177"/>
         <source>In file: %1</source>
         <translation>在文件：%1</translation>
     </message>
@@ -390,6 +390,38 @@
     </message>
 </context>
 <context>
+    <name>KNMusicLibraryAlbumTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="30"/>
+        <source>Albums</source>
+        <translation>专辑</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryArtistTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="30"/>
+        <source>Artists</source>
+        <translation>艺术家</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryGenreTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="30"/>
+        <source>Genres</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibrarySongTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="52"/>
+        <source>Songs</source>
+        <translation>歌曲</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLyricsManager</name>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp" line="77"/>
@@ -408,52 +440,52 @@
 <context>
     <name>KNMusicPlaylistDisplay</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="142"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="156"/>
         <source>No song, </source>
         <translation>没有歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="143"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="157"/>
         <source>1 song, </source>
         <translation>1 首歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="144"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="158"/>
         <source>%1 songs, </source>
         <translation>%1 首歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="146"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="160"/>
         <source>0 minuate.</source>
         <translation>0 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="147"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="161"/>
         <source>1 minuate.</source>
         <translation>1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="148"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="162"/>
         <source>%1 minuates.</source>
         <translation>%1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="150"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="164"/>
         <source>No result.</source>
         <translation>没有搜索结果。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="151"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="165"/>
         <source>1 result.</source>
         <translation>1 个搜索结果。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="152"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="166"/>
         <source>%1 results.</source>
         <translation>%1 个搜索结果。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="154"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="168"/>
         <source>Search &apos;%1&apos; in &apos;%2&apos;</source>
         <translation>在 %2 中搜索 %1</translation>
     </message>
@@ -507,15 +539,19 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="79"/>
         <source>Playlist</source>
+        <translation type="vanished">播放列表</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="79"/>
+        <source>Playlists</source>
         <translation>播放列表</translation>
     </message>
 </context>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="116"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="123"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -531,52 +567,52 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicSoloMenu</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="96"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="100"/>
         <source>Play %1</source>
         <translation>播放 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="97"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="101"/>
         <source>Open %1</source>
         <translation>打开 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="98"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="102"/>
         <source>Get Info</source>
         <translation>查看信息</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="100"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="104"/>
         <source>Show in Explorer</source>
         <translation>在资源管理器中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="103"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="107"/>
         <source>Show in Finder</source>
         <translation>在 Finder 中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="110"/>
         <source>Show the contains folder</source>
         <translation>显示所在的文件夹</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="108"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="112"/>
         <source>Copy location</source>
         <translation>复制文件路径</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="113"/>
         <source>Copy &apos;%1&apos;</source>
         <translation>复制 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="110"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="114"/>
         <source>Search &apos;%1&apos;</source>
         <translation>搜索 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="111"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="115"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>

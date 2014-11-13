@@ -20,14 +20,14 @@
 #include "knmusiclibraryalbumtab.h"
 
 KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
-    KNMusicTab(parent)
+    KNMusicLibraryTab(parent)
 {
     m_widget=new QWidget;
 }
 
 QString KNMusicLibraryAlbumTab::caption()
 {
-    return tr("Album");
+    return tr("Albums");
 }
 
 QPixmap KNMusicLibraryAlbumTab::icon()
@@ -38,6 +38,11 @@ QPixmap KNMusicLibraryAlbumTab::icon()
 QWidget *KNMusicLibraryAlbumTab::widget()
 {
     return m_widget;
+}
+
+void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
+{
+    ;
 }
 
 void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)
