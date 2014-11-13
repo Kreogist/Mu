@@ -166,6 +166,32 @@ void KNMusicHeaderPlayer::play()
     m_backend->play();
 }
 
+void KNMusicHeaderPlayer::activatePlayer()
+{
+    //Stop animations.
+    m_mouseOut->stop();
+    m_mouseIn->stop();
+    //Set parameters.
+    m_showVolume->setStartValue(m_volumePanel->geometry());
+    m_showPanel->setStartValue(m_controlPanel->geometry());
+    m_showAppendPanel->setStartValue(m_appendPanel->geometry());
+    //Start animation.
+    m_mouseIn->start();
+}
+
+void KNMusicHeaderPlayer::inactivatePlayer()
+{
+    //Stop animations.
+    m_mouseIn->stop();
+    m_mouseOut->stop();
+    //Set parameters.
+    m_hideVolume->setStartValue(m_volumePanel->geometry());
+    m_hidePanel->setStartValue(m_controlPanel->geometry());
+    m_hideAppendPanel->setStartValue(m_appendPanel->geometry());
+    //Start animation.
+    m_mouseOut->start();
+}
+
 void KNMusicHeaderPlayer::onActionLoopStateChanged(const int &state)
 {
     //Change the icon.
@@ -181,34 +207,6 @@ void KNMusicHeaderPlayer::onActionLoopStateChanged(const int &state)
         m_loopStatus->setIcon(m_noRepeatIcon);
         break;
     }
-}
-
-void KNMusicHeaderPlayer::enterEvent(QEvent *event)
-{
-    //Stop animations.
-    m_mouseOut->stop();
-    m_mouseIn->stop();
-    //Set parameters.
-    m_showVolume->setStartValue(m_volumePanel->geometry());
-    m_showPanel->setStartValue(m_controlPanel->geometry());
-    m_showAppendPanel->setStartValue(m_appendPanel->geometry());
-    //Start animation.
-    m_mouseIn->start();
-    KNMusicHeaderPlayerBase::enterEvent(event);
-}
-
-void KNMusicHeaderPlayer::leaveEvent(QEvent *event)
-{
-    //Stop animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set parameters.
-    m_hideVolume->setStartValue(m_volumePanel->geometry());
-    m_hidePanel->setStartValue(m_controlPanel->geometry());
-    m_hideAppendPanel->setStartValue(m_appendPanel->geometry());
-    //Start animation.
-    m_mouseOut->start();
-    KNMusicHeaderPlayerBase::leaveEvent(event);
 }
 
 void KNMusicHeaderPlayer::setAlbumArt(const QPixmap &pixmap)

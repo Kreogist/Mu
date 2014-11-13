@@ -240,7 +240,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp \
     plugin/sdk/knsearchbox.cpp \
     plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp
+    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp \
+    plugin/sdk/knmousedetectheader.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -386,7 +387,8 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicsearchbase.h \
     plugin/module/knmusicplugin/sdk/knmusicdetailtooltipbase.h \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.h \
-    plugin/sdk/knplatformextras.h
+    plugin/sdk/knplatformextras.h \
+    plugin/sdk/knmousedetectheader.h
 
 RESOURCES += \
     resource/res.qrc

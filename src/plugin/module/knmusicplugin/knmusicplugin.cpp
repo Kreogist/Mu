@@ -61,6 +61,7 @@
 
 #include "knglobal.h"
 #include "knmusictab.h"
+#include "knmousedetectheader.h"
 #include "knplatformextras.h"
 #include "knconnectionhandler.h"
 #include "kncategorytabwidget.h"
@@ -200,6 +201,11 @@ void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
         m_headerPlayer->restoreConfigure();
         //Add plugin to the list.
         m_pluginList.append(m_headerPlayer);
+        //Link player to sense header.
+        connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
+                m_headerPlayer, &KNMusicHeaderPlayerBase::activatePlayer);
+        connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
+                m_headerPlayer, &KNMusicHeaderPlayerBase::inactivatePlayer);
         //Add to main window.
         addLeftHeaderWidget(m_headerPlayer);
     }
@@ -318,7 +324,7 @@ void KNMusicPlugin::initialInfrastructure()
     m_centralWidget=new KNCategoryTabWidget;
 
     //Initial header widget.
-    m_headerWidget=new QWidget;
+    m_headerWidget=new KNMouseDetectHeader;
     //Set header properties.
     m_headerWidget->setContentsMargins(0,0,0,0);
     //Set header layout.
