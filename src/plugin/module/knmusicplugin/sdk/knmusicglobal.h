@@ -75,6 +75,14 @@ enum KNMusicPlayingState
     PlayingState,
     PausedState
 };
+enum KNMusicSortFlag
+{
+    SortByInt,
+    SortUserByInt,
+    SortUserByFloat,
+    SortUserByDate
+};
+
 struct KNMusicListTrackDetailInfo
 {
     //Track index.

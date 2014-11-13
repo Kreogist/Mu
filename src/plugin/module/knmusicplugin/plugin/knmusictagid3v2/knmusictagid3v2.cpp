@@ -89,7 +89,7 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
     ID3v2Header header;
     //Detect ID3v2 header.
     musicDataStream.readRawData(rawHeader, 10);
-    if(!parseHeader(rawHeader, header))
+    if(!parseID3v2Header(rawHeader, header))
     {
         return false;
     }
@@ -105,12 +105,12 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
     //Parse these raw data.
     QLinkedList<ID3v2Frame> frames;
     ID3v2MinorProperty property;
-    generateProperty(header.minor, property);
-    parseRawData(rawTagData, header, property, frames);
+    generateID3v2Property(header.minor, property);
+    parseID3v2RawData(rawTagData, header, property, frames);
     //Write the tag to details.
     if(!frames.isEmpty())
     {
-        writeFramesToDetails(frames, property, detailInfo);
+        writeID3v2ToDetails(frames, property, detailInfo);
     }
     //Recover the memory.
     delete[] rawTagData;
@@ -227,8 +227,8 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
     }
 }
 
-bool KNMusicTagID3v2::parseHeader(char *rawHeader,
-                                  ID3v2Header &header)
+bool KNMusicTagID3v2::parseID3v2Header(char *rawHeader,
+                                       ID3v2Header &header)
 {
     //Check 'ID3' from the very beginning.
     if(rawHeader[0]!='I' || rawHeader[1]!='D' || rawHeader[2]!='3')
@@ -248,10 +248,10 @@ bool KNMusicTagID3v2::parseHeader(char *rawHeader,
     return true;
 }
 
-bool KNMusicTagID3v2::parseRawData(char *rawTagData,
-                                   const ID3v2Header &header,
-                                   const ID3v2MinorProperty &property,
-                                   QLinkedList<ID3v2Frame> &frameList)
+bool KNMusicTagID3v2::parseID3v2RawData(char *rawTagData,
+                                        const ID3v2Header &header,
+                                        const ID3v2MinorProperty &property,
+                                        QLinkedList<ID3v2Frame> &frameList)
 {
     char *rawPosition=rawTagData;
     quint32 rawTagDataSurplus=header.size;
@@ -290,8 +290,8 @@ bool KNMusicTagID3v2::parseRawData(char *rawTagData,
     return true;
 }
 
-void KNMusicTagID3v2::generateProperty(const quint8 &minor,
-                                       ID3v2MinorProperty &property)
+void KNMusicTagID3v2::generateID3v2Property(const quint8 &minor,
+                                            ID3v2MinorProperty &property)
 {
     //Because the ID3v2 has so many version, we have to use different calculate
     //function to process these frames.
@@ -322,9 +322,9 @@ void KNMusicTagID3v2::generateProperty(const quint8 &minor,
     }
 }
 
-void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames,
-                                           const ID3v2MinorProperty &property,
-                                           KNMusicDetailInfo &detailInfo)
+void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
+                                          const ID3v2MinorProperty &property,
+                                          KNMusicDetailInfo &detailInfo)
 {
     QByteArray imageTypeList;
     for(QLinkedList<ID3v2Frame>::const_iterator i=frames.begin();

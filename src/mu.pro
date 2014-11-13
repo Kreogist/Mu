@@ -249,7 +249,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.cpp
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicdatabase.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -407,7 +408,8 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.h \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.h
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicdatabase.h
 
 RESOURCES += \
     resource/res.qrc

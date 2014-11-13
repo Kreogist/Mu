@@ -20,6 +20,8 @@
 KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent) :
     KNMusicTreeViewBase(parent)
 {
+    //Enable sort for treeview.
+    setSortingEnabled(true);
     //Set default color.
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x10, 0x10, 0x10));

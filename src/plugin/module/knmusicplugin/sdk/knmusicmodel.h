@@ -67,6 +67,7 @@ public slots:
 
 protected:
     virtual void blockAddFile(const QString &filePath);
+    virtual void setHeaderSortFlag();
 
 private:
     KNMusicSearcher *m_searcher;

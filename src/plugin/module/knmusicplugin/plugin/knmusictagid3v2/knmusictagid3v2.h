@@ -94,22 +94,24 @@ signals:
 
 public slots:
 
+protected:
+    bool parseID3v2Header(char *rawHeader,
+                          ID3v2Header &header);
+    void generateID3v2Property(const quint8 &minor,
+                               ID3v2MinorProperty &property);
+    bool parseID3v2RawData(char *rawTagData,
+                           const ID3v2Header &header,
+                           const ID3v2MinorProperty &property,
+                           QLinkedList<ID3v2Frame> &frameList);
+    void writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
+                             const ID3v2MinorProperty &property,
+                             KNMusicDetailInfo &detailInfo);
+
 private:
     static quint32 minor2Size(char *rawTagData);
     static quint32 minor3Size(char *rawTagData);
     static quint32 minor4Size(char *rawTagData);
     static void saveFlag(char *rawTagData, ID3v2Frame &frameData);
-    bool parseHeader(char *rawHeader,
-                     ID3v2Header &header);
-    bool parseRawData(char *rawTagData,
-                      const ID3v2Header &header,
-                      const ID3v2MinorProperty &property,
-                      QLinkedList<ID3v2Frame> &frameList);
-    void generateProperty(const quint8 &minor,
-                          ID3v2MinorProperty &property);
-    void writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames,
-                              const ID3v2MinorProperty &property,
-                              KNMusicDetailInfo &detailInfo);
     void parseAPICImageData(QByteArray imageData,
                             QHash<int, ID3v2PictureFrame> &imageMap);
     void parsePICImageData(QByteArray imageData,

@@ -65,6 +65,33 @@ void KNMusicProxyModel::addPlayTimes(const QModelIndex &sourceIndex)
             Qt::DisplayRole);
 }
 
+bool KNMusicProxyModel::lessThan(const QModelIndex &left,
+                                 const QModelIndex &right) const
+{
+    QVariant sortFlag=sourceModel()->headerData(left.column(),
+                                                Qt::Horizontal,
+                                                Qt::UserRole);
+    if(!sortFlag.isValid())
+    {
+        return QSortFilterProxyModel::lessThan(left, right);
+    }
+    QVariant leftUserData=sourceModel()->data(left, Qt::UserRole),
+             rightUserData=sourceModel()->data(right, Qt::UserRole);
+    switch(sortFlag.toInt())
+    {
+    case SortByInt:
+        return sourceModel()->data(left, Qt::DisplayRole).toInt()<
+                sourceModel()->data(right, Qt::DisplayRole).toInt();
+    case SortUserByInt:
+        return leftUserData.toInt()<rightUserData.toInt();
+    case SortUserByFloat:
+        return leftUserData.toFloat()<rightUserData.toFloat();
+    case SortUserByDate:
+        return leftUserData.toDateTime()<rightUserData.toDateTime();
+    }
+    return QSortFilterProxyModel::lessThan(left, right);
+}
+
 void KNMusicProxyModel::updateMusicRow(const int &row,
                                        const KNMusicDetailInfo &detailInfo)
 {

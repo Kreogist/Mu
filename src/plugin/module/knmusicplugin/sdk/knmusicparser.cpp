@@ -58,6 +58,11 @@ void KNMusicParser::parseFile(QString filePath,
     //Analysis Music.
     parseTag(filePath, detailInfo);
     analysis(filePath, detailInfo);
+    //Check the duration.
+    if(detailInfo.duration<0)
+    {
+        detailInfo.duration=0;
+    }
     //Generate analysis info.
     detailInfo.textLists[Time]=KNMusicGlobal::msecondToString(detailInfo.duration);
     detailInfo.textLists[BitRate]=
@@ -193,6 +198,11 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                     currentInfo.duration=currentTrack.trackDuration==-1?
                                 (musicFileDetailInfo.duration-currentTrack.startPosition):
                                 currentTrack.trackDuration;
+                    //To ensure that the duration is greater than 0.
+                    if(currentInfo.duration<0)
+                    {
+                        currentInfo.duration=0;
+                    }
                     currentInfo.textLists[Time]=
                             KNMusicGlobal::msecondToString(currentInfo.duration);
                     trackDetailList.append(currentInfo);

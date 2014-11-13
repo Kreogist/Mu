@@ -20,6 +20,17 @@
 
 #include "knmusictagid3v2.h"
 
+namespace KNMusicWAV
+{
+struct WAVItem
+{
+    QString key;
+    QString value;
+};
+}
+
+using namespace KNMusicWAV;
+
 class KNMusicTagWAV : public KNMusicTagID3v2
 {
     Q_OBJECT
@@ -35,6 +46,17 @@ signals:
 public slots:
 
 private:
+    void parseListChunk(char *rawData,
+                        quint32 dataSize,
+                        QList<WAVItem> &listData);
+    void writeListDataToDetailInfo(const QList<WAVItem> &listData,
+                                   KNMusicDetailInfo &detailInfo);
+    const char m_riffHeader[4]={'R', 'I', 'F', 'F'},
+               m_waveHeader[4]={'W', 'A', 'V', 'E'},
+               m_listChunk[4]={'L', 'I', 'S', 'T'},
+               m_listInfoHeader[4]={'I', 'N', 'F', 'O'},
+               m_id32Chunk[4]={'i', 'd', '3', 0x20};
+    QHash<QString, int> m_listKeyIndex;
 };
 
 #endif // KNMUSICTAGWAV_H

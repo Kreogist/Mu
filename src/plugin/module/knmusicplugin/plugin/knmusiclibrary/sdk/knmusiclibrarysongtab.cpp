@@ -67,6 +67,9 @@ void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
 {
     //Set the music model.
     m_treeview->setMusicModel(model);
+    //Connect analysis requirement signal.
+    connect(m_dropProxy, &KNDropProxyContainer::requireAnalysisFiles,
+            model, &KNMusicLibraryModel::addFiles);
     //Reset the header state.
     m_treeview->resetHeaderState();
 }

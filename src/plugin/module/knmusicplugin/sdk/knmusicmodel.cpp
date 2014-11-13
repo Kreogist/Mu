@@ -293,3 +293,17 @@ void KNMusicModel::blockAddFile(const QString &filePath)
         m_analysisCache->analysisFile(filePath);
     }
 }
+
+void KNMusicModel::setHeaderSortFlag()
+{
+    setHeaderData(Time, Qt::Horizontal, SortUserByInt, Qt::UserRole);
+    setHeaderData(DiscNumber, Qt::Horizontal, SortByInt, Qt::UserRole);
+    setHeaderData(DiscCount, Qt::Horizontal, SortByInt, Qt::UserRole);
+    setHeaderData(TrackNumber, Qt::Horizontal, SortByInt, Qt::UserRole);
+    setHeaderData(TrackCount, Qt::Horizontal, SortByInt, Qt::UserRole);
+    setHeaderData(Size, Qt::Horizontal, SortUserByInt, Qt::UserRole);
+    setHeaderData(BitRate, Qt::Horizontal, SortUserByFloat, Qt::UserRole);
+    setHeaderData(DateAdded, Qt::Horizontal, SortUserByDate, Qt::UserRole);
+    setHeaderData(DateModified, Qt::Horizontal, SortUserByDate, Qt::UserRole);
+    setHeaderData(LastPlayed, Qt::Horizontal, SortUserByDate, Qt::UserRole);
+}

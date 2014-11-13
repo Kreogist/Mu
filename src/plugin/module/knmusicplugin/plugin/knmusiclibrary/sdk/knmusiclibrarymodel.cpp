@@ -72,14 +72,6 @@ void KNMusicLibraryModel::initialHeader()
     setHeaderData(Time, Qt::Horizontal, QVariant(Qt::AlignVCenter|Qt::AlignRight), Qt::TextAlignmentRole);
     setHeaderData(Size, Qt::Horizontal, QVariant(Qt::AlignVCenter|Qt::AlignRight), Qt::TextAlignmentRole);
     setHeaderData(TrackNumber, Qt::Horizontal, QVariant(Qt::AlignVCenter|Qt::AlignRight), Qt::TextAlignmentRole);
-    setHeaderData(Time, Qt::Horizontal, 2, Qt::UserRole);
-    setHeaderData(DiscNumber, Qt::Horizontal, 1, Qt::UserRole);
-    setHeaderData(DiscCount, Qt::Horizontal, 1, Qt::UserRole);
-    setHeaderData(TrackNumber, Qt::Horizontal, 1, Qt::UserRole);
-    setHeaderData(TrackCount, Qt::Horizontal, 1, Qt::UserRole);
-    setHeaderData(Size, Qt::Horizontal, 2, Qt::UserRole);
-    setHeaderData(BitRate, Qt::Horizontal, 3, Qt::UserRole);
-    setHeaderData(DateAdded, Qt::Horizontal, 4, Qt::UserRole);
-    setHeaderData(DateModified, Qt::Horizontal, 4, Qt::UserRole);
-    setHeaderData(LastPlayed, Qt::Horizontal, 4, Qt::UserRole);
+    //Set sort flag.
+    setHeaderSortFlag();
 }

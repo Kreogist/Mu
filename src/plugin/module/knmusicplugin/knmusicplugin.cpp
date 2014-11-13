@@ -50,6 +50,7 @@
 #include "plugin/knmusictagm4a/knmusictagm4a.h"
 #include "plugin/knmusictagwma/knmusictagwma.h"
 #include "plugin/knmusictagapev2/knmusictagapev2.h"
+#include "plugin/knmusictagid3v2/knmusictagwav.h"
 #include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
 #include "plugin/knmusicdetailtooltip/knmusicdetailtooltip.h"
 #include "plugin/knmusicsearch/knmusicsearch.h"
@@ -379,6 +380,7 @@ void KNMusicPlugin::initialParser()
     parser->installTagParser(new KNMusicTagID3v2);
     parser->installTagParser(new KNMusicTagM4A);
     parser->installTagParser(new KNMusicTagWMA);
+    parser->installTagParser(new KNMusicTagWAV);
 
     //Install all analysiser plugins here.
 #ifdef ENABLE_LIBBASS
