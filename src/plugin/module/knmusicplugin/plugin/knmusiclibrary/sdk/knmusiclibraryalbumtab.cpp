@@ -20,7 +20,7 @@
 #include "knmusiclibraryalbumtab.h"
 
 KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
-    KNMusicLibraryTab(parent)
+    KNMusicLibraryCategoryTab(parent)
 {
     m_widget=new QWidget;
 }

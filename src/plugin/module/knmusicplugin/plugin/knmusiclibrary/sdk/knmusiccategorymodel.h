@@ -15,28 +15,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICLIBRARYGENRETAB_H
-#define KNMUSICLIBRARYGENRETAB_H
+#ifndef KNMUSICCATEGORYMODEL_H
+#define KNMUSICCATEGORYMODEL_H
 
-#include "knmusiclibrarycategorytab.h"
+#include <QStandardItemModel>
 
-class KNMusicLibraryGenreTab : public KNMusicLibraryCategoryTab
+#include "knmusicglobal.h"
+
+using namespace KNMusic;
+
+class KNMusicCategoryModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryGenreTab(QObject *parent = 0);
-    QString caption();
-    QPixmap icon();
-    QWidget *widget();
+    explicit KNMusicCategoryModel(QObject *parent = 0);
+    QString noCategoryText() const;
+    void setNoCategoryText(const QString &noCategoryText);
+    int categoryIndex() const;
+    void setCategoryIndex(int categoryIndex);
 
 signals:
 
 public slots:
-    void setLibraryModel(KNMusicLibraryModel *model);
-    void onActionSearch(const QString &text);
+    virtual void onCategoryAdded(const QString &categoryText);
+    virtual void onCategoryRemoved(const QString &categoryText);
 
 private:
-    QWidget *m_widget;
+    void resetModel();
+    int m_categoryIndex=-1;
+    QString m_noCategoryText;
 };
 
-#endif // KNMUSICLIBRARYGENRETAB_H
+#endif // KNMUSICCATEGORYMODEL_H

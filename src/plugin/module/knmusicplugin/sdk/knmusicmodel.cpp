@@ -12,6 +12,8 @@
 
 #include "knmusicmodel.h"
 
+#include <QDebug>
+
 KNMusicModel::KNMusicModel(QObject *parent) :
     QStandardItemModel(parent)
 {
@@ -218,7 +220,7 @@ void KNMusicModel::appendDragMusicRows()
     QList<QList<QStandardItem *> > musicRows=KNMusicGlobal::dragMusicRow();
     while(!musicRows.isEmpty())
     {
-        appendMusicRow(musicRows.takeLast());
+        appendMusicRow(musicRows.takeFirst());
     }
 }
 

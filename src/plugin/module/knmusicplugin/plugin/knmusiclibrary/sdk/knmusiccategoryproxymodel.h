@@ -15,28 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICLIBRARYGENRETAB_H
-#define KNMUSICLIBRARYGENRETAB_H
+#ifndef KNMUSICCATEGORYPROXYMODEL_H
+#define KNMUSICCATEGORYPROXYMODEL_H
 
-#include "knmusiclibrarycategorytab.h"
+#include <QSortFilterProxyModel>
 
-class KNMusicLibraryGenreTab : public KNMusicLibraryCategoryTab
+class KNMusicCategoryProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryGenreTab(QObject *parent = 0);
-    QString caption();
-    QPixmap icon();
-    QWidget *widget();
+    explicit KNMusicCategoryProxyModel(QObject *parent = 0);
+    QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
 
 signals:
 
 public slots:
-    void setLibraryModel(KNMusicLibraryModel *model);
-    void onActionSearch(const QString &text);
 
-private:
-    QWidget *m_widget;
+protected:
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+    bool filterAcceptsRow(int source_row, const QModelIndex & source_parent) const;
 };
 
-#endif // KNMUSICLIBRARYGENRETAB_H
+#endif // KNMUSICCATEGORYPROXYMODEL_H

@@ -62,6 +62,11 @@ enum KNMusicModelRole
     ArtworkKeyRole,
     TrackFileRole
 };
+enum KNMusicCategoryRole
+{
+    CategoryItemSizeRole=Qt::UserRole,
+    CategoryItemVisibleRole
+};
 enum KNMusicPlaybackOrder
 {
     NoRepeat,

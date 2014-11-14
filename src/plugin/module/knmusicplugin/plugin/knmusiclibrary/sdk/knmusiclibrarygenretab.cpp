@@ -20,7 +20,7 @@
 #include "knmusiclibrarygenretab.h"
 
 KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QObject *parent) :
-    KNMusicLibraryTab(parent)
+    KNMusicLibraryCategoryTab(parent)
 {
     m_widget=new QWidget;
 }

@@ -31,6 +31,11 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     initialHeader();
 }
 
+Qt::DropActions KNMusicLibraryModel::supportedDropActions() const
+{
+    return Qt::IgnoreAction;
+}
+
 Qt::ItemFlags KNMusicLibraryModel::flags(const QModelIndex &index) const
 {
     return (index.column()==BlankData)?
@@ -46,6 +51,25 @@ int KNMusicLibraryModel::playingItemColumn()
     return BlankData;
 }
 
+bool KNMusicLibraryModel::dropMimeData(const QMimeData *data,
+                                       Qt::DropAction action,
+                                       int row,
+                                       int column,
+                                       const QModelIndex &parent)
+{
+    Q_UNUSED(data)
+    Q_UNUSED(action)
+    Q_UNUSED(row)
+    Q_UNUSED(column)
+    Q_UNUSED(parent)
+    return false;
+}
+
+void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
+{
+    m_categoryModels.append(model);
+}
+
 void KNMusicLibraryModel::retranslate()
 {
     //Set the header text.
@@ -55,6 +79,33 @@ void KNMusicLibraryModel::retranslate()
         header<<(m_musicGlobal->treeViewHeaderText(i));
     }
     setHorizontalHeaderLabels(header);
+}
+
+void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
+{
+    //Add current data to category models.
+    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+        i!=m_categoryModels.end();
+        ++i)
+    {
+        (*i)->onCategoryAdded(musicRow.at((*i)->categoryIndex())->text());
+    }
+    //Add the row to model.
+    KNMusicModel::appendMusicRow(musicRow);
+}
+
+void KNMusicLibraryModel::removeMusicRow(const int &row)
+{
+    //Ask category model to remove this row.
+    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+        i!=m_categoryModels.end();
+        ++i)
+    {
+        (*i)->onCategoryRemoved(data(index(row, (*i)->categoryIndex()),
+                                     Qt::DisplayRole).toString());
+    }
+    //Remove the row.
+    KNMusicModel::removeMusicRow(row);
 }
 
 void KNMusicLibraryModel::initialHeader()

@@ -15,28 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICLIBRARYGENRETAB_H
-#define KNMUSICLIBRARYGENRETAB_H
+#include "knmusiccategorymodel.h"
+#include "knmusiccategoryproxymodel.h"
 
 #include "knmusiclibrarycategorytab.h"
 
-class KNMusicLibraryGenreTab : public KNMusicLibraryCategoryTab
+KNMusicLibraryCategoryTab::KNMusicLibraryCategoryTab(QObject *parent) :
+    KNMusicLibraryTab(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicLibraryGenreTab(QObject *parent = 0);
-    QString caption();
-    QPixmap icon();
-    QWidget *widget();
+    //Initial the proxy model.
+    m_proxyCategoryModel=new KNMusicCategoryProxyModel(this);
+}
 
-signals:
+void KNMusicLibraryCategoryTab::setCategoryModel(KNMusicCategoryModel *model)
+{
+    //Set source model.
+    m_proxyCategoryModel->setSourceModel(model);
+}
 
-public slots:
-    void setLibraryModel(KNMusicLibraryModel *model);
-    void onActionSearch(const QString &text);
-
-private:
-    QWidget *m_widget;
-};
-
-#endif // KNMUSICLIBRARYGENRETAB_H
+KNMusicCategoryProxyModel *KNMusicLibraryCategoryTab::proxyCategoryModel()
+{
+    return m_proxyCategoryModel;
+}

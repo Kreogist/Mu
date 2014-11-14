@@ -15,28 +15,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICLIBRARYGENRETAB_H
-#define KNMUSICLIBRARYGENRETAB_H
+#ifndef KNMUSICLIBRARYCATEGORYTAB_H
+#define KNMUSICLIBRARYCATEGORYTAB_H
 
-#include "knmusiclibrarycategorytab.h"
+#include "knmusiclibrarytab.h"
 
-class KNMusicLibraryGenreTab : public KNMusicLibraryCategoryTab
+class KNMusicCategoryModel;
+class KNMusicCategoryProxyModel;
+class KNMusicLibraryCategoryTab : public KNMusicLibraryTab
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryGenreTab(QObject *parent = 0);
-    QString caption();
-    QPixmap icon();
-    QWidget *widget();
+    explicit KNMusicLibraryCategoryTab(QObject *parent = 0);
 
 signals:
 
 public slots:
-    void setLibraryModel(KNMusicLibraryModel *model);
-    void onActionSearch(const QString &text);
+    virtual void setCategoryModel(KNMusicCategoryModel *model);
+
+protected:
+    KNMusicCategoryProxyModel *proxyCategoryModel();
 
 private:
-    QWidget *m_widget;
+    KNMusicCategoryProxyModel *m_proxyCategoryModel;
 };
 
-#endif // KNMUSICLIBRARYGENRETAB_H
+#endif // KNMUSICLIBRARYCATEGORYTAB_H

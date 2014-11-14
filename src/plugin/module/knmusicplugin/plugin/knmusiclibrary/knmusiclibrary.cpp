@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "sdk/knmusiclibrarymodel.h"
+#include "sdk/knmusiccategorymodel.h"
 #include "sdk/knmusiclibrarytab.h"
 #include "sdk/knmusiclibrarysongtab.h"
 #include "sdk/knmusiclibraryartisttab.h"
@@ -29,39 +30,55 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
 {
     //Initial the music model.
     m_libraryModel=new KNMusicLibraryModel(this);
-    initialTabs();
+
+    initialSongTab();
+    initialArtistTab();
+    m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
+    m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab(this);
+
+    //Set library model.
+    m_librarySongTab->setLibraryModel(m_libraryModel);
+    for(int i=0; i<CategoryTabsCount; i++)
+    {
+        m_libraryTabs[i]->setLibraryModel(m_libraryModel);
+    }
 }
 
 KNMusicTab *KNMusicLibrary::songTab()
 {
-    return m_libraryTabs[Songs];
+    return m_librarySongTab;
 }
 
 KNMusicTab *KNMusicLibrary::artistTab()
 {
-    return m_libraryTabs[Artists];
+    return m_libraryTabs[TabArtists];
 }
 
 KNMusicTab *KNMusicLibrary::albumTab()
 {
-    return m_libraryTabs[Albums];
+    return m_libraryTabs[TabAlbums];
 }
 
 KNMusicTab *KNMusicLibrary::genreTab()
 {
-    return m_libraryTabs[Genres];
+    return m_libraryTabs[TabGenres];
 }
 
-void KNMusicLibrary::initialTabs()
+void KNMusicLibrary::initialSongTab()
 {
     //Genreate these tabs.
-    m_libraryTabs[Songs]=new KNMusicLibrarySongTab(this);
-    m_libraryTabs[Artists]=new KNMusicLibraryArtistTab(this);
-    m_libraryTabs[Albums]=new KNMusicLibraryAlbumTab(this);
-    m_libraryTabs[Genres]=new KNMusicLibraryGenreTab(this);
-    //Set model.
-    for(int i=0; i<LibraryTabs; i++)
-    {
-        m_libraryTabs[i]->setLibraryModel(m_libraryModel);
-    }
+    m_librarySongTab=new KNMusicLibrarySongTab(this);
+}
+
+void KNMusicLibrary::initialArtistTab()
+{
+    //Initial the model and proxy model.
+    m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
+    m_categoryModel[TabArtists]->setCategoryIndex(Artist);
+    //Install the category model to library model.
+    m_libraryModel->installCategoryModel(m_categoryModel[TabArtists]);
+    //Initial the artist tab.
+    m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab(this);
+    m_libraryTabs[TabArtists]->setCategoryModel(m_categoryModel[TabArtists]);
+
 }

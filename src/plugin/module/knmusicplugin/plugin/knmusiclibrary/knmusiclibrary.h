@@ -20,8 +20,10 @@
 
 #include "knmusiclibrarybase.h"
 
+class KNMusicCategoryModel;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
+class KNMusicLibraryCategoryTab;
 class KNMusicLibrary : public KNMusicLibraryBase
 {
     Q_OBJECT
@@ -37,17 +39,19 @@ signals:
 public slots:
 
 private:
-    void initialTabs();
-    enum LibraryTabs
+    void initialSongTab();
+    void initialArtistTab();
+    enum CategoryTabs
     {
-        Songs,
-        Artists,
-        Albums,
-        Genres,
-        LibraryTabs
+        TabArtists,
+        TabAlbums,
+        TabGenres,
+        CategoryTabsCount
     };
     KNMusicLibraryModel *m_libraryModel;
-    KNMusicLibraryTab *m_libraryTabs[LibraryTabs];
+    KNMusicLibraryTab *m_librarySongTab;
+    KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
+    KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
 };
 
 #endif // KNMUSICLIBRARY_H

@@ -18,9 +18,9 @@
 #ifndef KNMUSICLIBRARYALBUMTAB_H
 #define KNMUSICLIBRARYALBUMTAB_H
 
-#include "knmusiclibrarytab.h"
+#include "knmusiclibrarycategorytab.h"
 
-class KNMusicLibraryAlbumTab : public KNMusicLibraryTab
+class KNMusicLibraryAlbumTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
 public:

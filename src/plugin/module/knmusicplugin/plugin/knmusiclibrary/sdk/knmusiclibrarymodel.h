@@ -18,6 +18,10 @@
 #ifndef KNMUSICLIBRARYMODEL_H
 #define KNMUSICLIBRARYMODEL_H
 
+#include <QLinkedList>
+
+#include "knmusiccategorymodel.h"
+
 #include "knmusicmodel.h"
 
 class KNMusicLibraryModel : public KNMusicModel
@@ -25,16 +29,26 @@ class KNMusicLibraryModel : public KNMusicModel
     Q_OBJECT
 public:
     explicit KNMusicLibraryModel(QObject *parent = 0);
+    Qt::DropActions supportedDropActions() const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int playingItemColumn();
+    bool dropMimeData(const QMimeData *data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex &parent);
+    void installCategoryModel(KNMusicCategoryModel *model);
 
 signals:
 
 public slots:
     void retranslate();
+    void appendMusicRow(const QList<QStandardItem *> &musicRow);
+    void removeMusicRow(const int &row);
 
 private:
     void initialHeader();
+    QLinkedList<KNMusicCategoryModel *> m_categoryModels;
     KNMusicGlobal *m_musicGlobal;
 };
 

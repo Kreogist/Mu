@@ -18,9 +18,11 @@
 #ifndef KNMUSICLIBRARYARTISTTAB_H
 #define KNMUSICLIBRARYARTISTTAB_H
 
-#include "knmusiclibrarytab.h"
+#include "knmusiclibrarycategorytab.h"
 
-class KNMusicLibraryArtistTab : public KNMusicLibraryTab
+class QSplitter;
+class KNMusicCategoryListViewBase;
+class KNMusicLibraryArtistTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
 public:
@@ -33,10 +35,13 @@ signals:
 
 public slots:
     void setLibraryModel(KNMusicLibraryModel *model);
+    void setCategoryModel(KNMusicCategoryModel *model);
     void onActionSearch(const QString &text);
 
 private:
     QWidget *m_widget;
+    QSplitter *m_splitter;
+    KNMusicCategoryListViewBase *m_artistList;
 };
 
 #endif // KNMUSICLIBRARYARTISTTAB_H

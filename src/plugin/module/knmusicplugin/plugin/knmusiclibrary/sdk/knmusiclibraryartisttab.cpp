@@ -15,14 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QWidget>
+#include <QSplitter>
+#include <QBoxLayout>
+
+#include "kndropproxycontainer.h"
+#include "knmusiccategoryproxymodel.h"
+#include "knmusiccategorylistviewbase.h"
 
 #include "knmusiclibraryartisttab.h"
 
 KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
-    KNMusicLibraryTab(parent)
+    KNMusicLibraryCategoryTab(parent)
 {
-    m_widget=new QWidget;
+    //Initial the drop proxy container.
+    m_widget=new KNDropProxyContainer;
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_widget);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    m_widget->setLayout(mainLayout);
+    m_splitter=new QSplitter(m_widget);
+    mainLayout->addWidget(m_splitter);
+    m_artistList=new KNMusicCategoryListViewBase(m_widget);
+    m_splitter->addWidget(m_artistList);
 }
 
 QString KNMusicLibraryArtistTab::caption()
@@ -43,6 +57,14 @@ QWidget *KNMusicLibraryArtistTab::widget()
 void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
 {
     ;
+}
+
+void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
+{
+    //Apply category model.
+    KNMusicLibraryCategoryTab::setCategoryModel(model);
+    //Set the proxy model to tree view.
+    m_artistList->setModel(proxyCategoryModel());
 }
 
 void KNMusicLibraryArtistTab::onActionSearch(const QString &text)
