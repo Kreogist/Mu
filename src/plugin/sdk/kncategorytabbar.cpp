@@ -90,6 +90,11 @@ int KNCategoryTabBar::currentIndex() const
     return m_currentIndex;
 }
 
+int KNCategoryTabBar::categorySize() const
+{
+    return m_buttonList.size();
+}
+
 void KNCategoryTabBar::setCurrentIndex(int buttonIndex)
 {
     Q_ASSERT(buttonIndex>-1 && buttonIndex<m_buttonList.size());

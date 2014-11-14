@@ -33,6 +33,8 @@ public:
     void setNoCategoryText(const QString &noCategoryText);
     int categoryIndex() const;
     void setCategoryIndex(int categoryIndex);
+    QPixmap noAlbumIcon() const;
+    void setNoAlbumIcon(const QPixmap &noAlbumIcon);
 
 signals:
 
@@ -40,9 +42,15 @@ public slots:
     virtual void onCategoryAdded(const QString &categoryText);
     virtual void onCategoryRemoved(const QString &categoryText);
 
+protected:
+    virtual QStandardItem *generateItem(const QString &itemText,
+                                        const QPixmap &itemIcon=QPixmap());
+
 private:
     void resetModel();
     int m_categoryIndex=-1;
+    QSize m_iconSize=QSize(40, 40);
+    QPixmap m_noAlbumIcon;
     QString m_noCategoryText;
 };
 

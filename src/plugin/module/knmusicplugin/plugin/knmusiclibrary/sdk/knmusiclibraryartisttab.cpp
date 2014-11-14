@@ -19,6 +19,8 @@
 #include <QBoxLayout>
 
 #include "kndropproxycontainer.h"
+#include "knmusiccategorymodel.h"
+#include "knmusiclibrarymodel.h"
 #include "knmusiccategoryproxymodel.h"
 #include "knmusiccategorylistviewbase.h"
 
@@ -28,14 +30,14 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
     KNMusicLibraryCategoryTab(parent)
 {
     //Initial the drop proxy container.
-    m_widget=new KNDropProxyContainer;
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_widget);
+    m_container=new KNDropProxyContainer;
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_container);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    m_widget->setLayout(mainLayout);
-    m_splitter=new QSplitter(m_widget);
+    m_container->setLayout(mainLayout);
+    m_splitter=new QSplitter(m_container);
     mainLayout->addWidget(m_splitter);
-    m_artistList=new KNMusicCategoryListViewBase(m_widget);
+    m_artistList=new KNMusicCategoryListViewBase(m_container);
     m_splitter->addWidget(m_artistList);
 }
 
@@ -51,20 +53,28 @@ QPixmap KNMusicLibraryArtistTab::icon()
 
 QWidget *KNMusicLibraryArtistTab::widget()
 {
-    return m_widget;
+    return m_container;
 }
 
 void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
 {
-    ;
+    //Do connections.
+    connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
+            model, &KNMusicLibraryModel::addFiles);
 }
 
 void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
 {
+    //Set the no category text.
+    model->setNoCategoryText(tr("No Artist"));
     //Apply category model.
     KNMusicLibraryCategoryTab::setCategoryModel(model);
+
+    //! This should be done in constructor, but setModel() is a virtual
+    //! function, so we moved here.
     //Set the proxy model to tree view.
     m_artistList->setModel(proxyCategoryModel());
+    proxyCategoryModel()->sort(0, Qt::AscendingOrder);
 }
 
 void KNMusicLibraryArtistTab::onActionSearch(const QString &text)

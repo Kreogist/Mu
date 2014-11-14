@@ -35,6 +35,7 @@ public:
     void addCategory(const QPixmap &pixmap,
                      const QString &string);
     int currentIndex() const;
+    int categorySize() const;
 
 signals:
     void currentIndexChanged(int index);

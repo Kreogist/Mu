@@ -43,6 +43,7 @@ signals:
 
 public slots:
     void retranslate();
+    void addFiles(const QStringList &fileList);
     void appendMusicRow(const QList<QStandardItem *> &musicRow);
     void removeMusicRow(const int &row);
 

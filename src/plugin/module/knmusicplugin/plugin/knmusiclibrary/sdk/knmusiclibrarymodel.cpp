@@ -81,6 +81,32 @@ void KNMusicLibraryModel::retranslate()
     setHorizontalHeaderLabels(header);
 }
 
+void KNMusicLibraryModel::addFiles(const QStringList &fileList)
+{
+    //Only analysis the file that we don't contain.
+    QStringList zippedFileList;
+    for(QStringList::const_iterator i=fileList.begin();
+        i!=fileList.end();
+        ++i)
+    {
+        //Check if we can find the file in the library.
+        QModelIndexList fileCheck=match(index(0,0),
+                                        FilePathRole,
+                                        (*i),
+                                        1);
+        //If we can't find it, check in the filelist.
+        if(fileCheck.isEmpty())
+        {
+            if(!zippedFileList.contains((*i)))
+            {
+                zippedFileList.append((*i));
+            }
+        }
+    }
+    //Ask to analysis the zipped file list.
+    KNMusicModel::addFiles(zippedFileList);
+}
+
 void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
 {
     //Add current data to category models.

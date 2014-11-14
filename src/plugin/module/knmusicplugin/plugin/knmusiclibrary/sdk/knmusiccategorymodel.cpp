@@ -20,6 +20,9 @@
 KNMusicCategoryModel::KNMusicCategoryModel(QObject *parent) :
     QStandardItemModel(parent)
 {
+    //Set the default no album icon.
+    setNoAlbumIcon(KNMusicGlobal::instance()->noAlbumArt());
+    //Initial the model.
     resetModel();
 }
 
@@ -28,14 +31,22 @@ void KNMusicCategoryModel::resetModel()
     //Clear the model.
     clear();
     //Add initial item: the blank item.
-    QStandardItem *currentItem=new QStandardItem();
-    currentItem->setData(KNMusicGlobal::instance()->noAlbumArt(),
-                         Qt::DecorationRole);
-    currentItem->setEditable(false);
-    currentItem->setText(m_noCategoryText);
+    QStandardItem *currentItem=generateItem(m_noCategoryText);
     currentItem->setData(0, CategoryItemSizeRole);
     appendRow(currentItem);
 }
+QPixmap KNMusicCategoryModel::noAlbumIcon() const
+{
+    return m_noAlbumIcon;
+}
+
+void KNMusicCategoryModel::setNoAlbumIcon(const QPixmap &noAlbumIcon)
+{
+    m_noAlbumIcon = noAlbumIcon.scaled(m_iconSize,
+                                       Qt::KeepAspectRatio,
+                                       Qt::SmoothTransformation);
+}
+
 int KNMusicCategoryModel::categoryIndex() const
 {
     return m_categoryIndex;
@@ -64,9 +75,13 @@ void KNMusicCategoryModel::onCategoryAdded(const QString &categoryText)
     //Check if it need to be add to blank item.
     if(categoryText.isEmpty())
     {
-        setData(index(0,0),
-                data(index(0,0), CategoryItemSizeRole).toInt()+1,
+        QModelIndex resultIndex=index(0,0);
+        setData(resultIndex,
+                data(resultIndex, CategoryItemSizeRole).toInt()+1,
                 CategoryItemSizeRole);
+        setData(resultIndex,
+                1,
+                CategoryItemVisibleRole);
         return;
     }
     //Search the category text.
@@ -75,8 +90,7 @@ void KNMusicCategoryModel::onCategoryAdded(const QString &categoryText)
     if(results.isEmpty())
     {
         //We need to generate a new item for it.
-        QStandardItem *item=new QStandardItem(categoryText);
-        item->setEditable(false);
+        QStandardItem *item=generateItem(categoryText);
         item->setData(1, CategoryItemSizeRole);
         appendRow(item);
     }
@@ -92,12 +106,27 @@ void KNMusicCategoryModel::onCategoryAdded(const QString &categoryText)
 
 void KNMusicCategoryModel::onCategoryRemoved(const QString &categoryText)
 {
+    QModelIndex resultIndex;
     //Check if it's in a blank item.
     if(categoryText.isEmpty())
     {
-        setData(index(0,0),
-                data(index(0,0), CategoryItemSizeRole).toInt()-1,
-                CategoryItemSizeRole);
+        resultIndex=index(0,0);
+        int currentCategorySize=data(resultIndex, CategoryItemSizeRole).toInt();
+        if(currentCategorySize==1)
+        {
+            setData(resultIndex,
+                    0,
+                    CategoryItemSizeRole);
+            setData(resultIndex,
+                    0,
+                    CategoryItemVisibleRole);
+        }
+        else
+        {
+            setData(resultIndex,
+                    currentCategorySize-1,
+                    CategoryItemSizeRole);
+        }
         return;
     }
     //Search the category text.
@@ -108,7 +137,7 @@ void KNMusicCategoryModel::onCategoryRemoved(const QString &categoryText)
         //Are you kidding me?
         return;
     }
-    QModelIndex resultIndex=results.first();
+    resultIndex=results.first();
     int currentCategorySize=resultIndex.data(CategoryItemSizeRole).toInt();
     //If current item is the last item of the category,
     if(currentCategorySize==1)
@@ -121,4 +150,18 @@ void KNMusicCategoryModel::onCategoryRemoved(const QString &categoryText)
         //Reduce the count.
         setData(resultIndex, currentCategorySize-1, CategoryItemSizeRole);
     }
+}
+
+QStandardItem *KNMusicCategoryModel::generateItem(const QString &itemText,
+                                                  const QPixmap &itemIcon)
+{
+    QStandardItem *currentItem=new QStandardItem(itemText);
+    currentItem->setData(itemIcon.isNull()?
+                             m_noAlbumIcon:
+                             itemIcon.scaled(m_iconSize,
+                                             Qt::KeepAspectRatio,
+                                             Qt::SmoothTransformation),
+                         Qt::DecorationRole);
+    currentItem->setEditable(false);
+    return currentItem;
 }

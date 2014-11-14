@@ -21,6 +21,7 @@
 #include "knmusiclibrarycategorytab.h"
 
 class QSplitter;
+class KNDropProxyContainer;
 class KNMusicCategoryListViewBase;
 class KNMusicLibraryArtistTab : public KNMusicLibraryCategoryTab
 {
@@ -39,7 +40,7 @@ public slots:
     void onActionSearch(const QString &text);
 
 private:
-    QWidget *m_widget;
+    KNDropProxyContainer *m_container;
     QSplitter *m_splitter;
     KNMusicCategoryListViewBase *m_artistList;
 };
