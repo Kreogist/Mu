@@ -410,7 +410,7 @@
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="30"/>
         <source>Genres</source>
-        <translation type="unfinished"></translation>
+        <translation>流派</translation>
     </message>
 </context>
 <context>
