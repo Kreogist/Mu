@@ -20,6 +20,7 @@
 
 #include "kndropproxycontainer.h"
 #include "knmusiccategorymodel.h"
+#include "knmusiccategorydisplay.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiccategoryproxymodel.h"
 #include "knmusiccategorylistviewbase.h"
@@ -36,9 +37,16 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
     mainLayout->setSpacing(0);
     m_container->setLayout(mainLayout);
     m_splitter=new QSplitter(m_container);
+    m_splitter->setHandleWidth(0); //This is beautiful.
+    m_splitter->setChildrenCollapsible(false);
     mainLayout->addWidget(m_splitter);
     m_artistList=new KNMusicCategoryListViewBase(m_container);
     m_splitter->addWidget(m_artistList);
+    m_artistDisplay=new KNMusicCategoryDisplay(m_container);
+    m_splitter->addWidget(m_artistDisplay);
+    //Set viewer properties after add widgets.
+    m_splitter->setCollapsible(1, false);
+    m_splitter->setStretchFactor(1, 1);
 }
 
 QString KNMusicLibraryArtistTab::caption()

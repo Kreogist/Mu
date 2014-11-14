@@ -35,6 +35,7 @@ void KNMusicCategoryModel::resetModel()
     currentItem->setData(0, CategoryItemSizeRole);
     appendRow(currentItem);
 }
+
 QPixmap KNMusicCategoryModel::noAlbumIcon() const
 {
     return m_noAlbumIcon;

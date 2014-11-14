@@ -33,6 +33,8 @@ signals:
 public slots:
     virtual void resetHeaderState();
     virtual void searchText(QString text);
+    void sortMusicColumn(int column,
+                         Qt::SortOrder order=Qt::AscendingOrder);
 
 protected:
     void enterEvent(QEvent *event);
@@ -43,6 +45,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
+    KNMusicProxyModel *proxyModel();
 
 private slots:
     void onActionSearch();

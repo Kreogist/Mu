@@ -13,23 +13,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#ifndef KNMUSICLIBRARYTREEVIEW_H
-#define KNMUSICLIBRARYTREEVIEW_H
+#include "knhashpixmaplist.h"
 
-#include "knmusictreeviewbase.h"
-
-class KNMusicLibraryTreeView : public KNMusicTreeViewBase
+KNHashPixmapList::KNHashPixmapList(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicLibraryTreeView(QWidget *parent = 0);
-
-signals:
-
-public slots:
-    void resetHeaderState();
-};
-
-#endif // KNMUSICLIBRARYTREEVIEW_H
+}

@@ -89,9 +89,13 @@ KNMusicPlaylistManager::~KNMusicPlaylistManager()
 {
     //Save all the playlist changes first.
     saveChangedPlaylist();
-    //Save the playlist list data.
-    KNMusicPlaylistListAssistant::savePlaylistDatabase(m_playlistDatabasePath,
-                                                       m_playlistList->playlistListData());
+    //Check if it has been loaded.
+    if(m_playlistListLoaded)
+    {
+        //Save the playlist list data.
+        KNMusicPlaylistListAssistant::savePlaylistDatabase(m_playlistDatabasePath,
+                                                           m_playlistList->playlistListData());
+    }
 }
 
 KNMusicTab *KNMusicPlaylistManager::categoryTab()
@@ -129,6 +133,8 @@ void KNMusicPlaylistManager::onActionLoadPlaylistList()
     {
         m_playlistTab->setCurrentPlaylist(m_playlistList->index(0,0));
     }
+    //Set the flag.
+    m_playlistListLoaded=true;
 }
 
 void KNMusicPlaylistManager::onActionAddPlaylist()

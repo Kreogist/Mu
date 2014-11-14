@@ -15,36 +15,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICLIBRARYARTISTTAB_H
-#define KNMUSICLIBRARYARTISTTAB_H
+#ifndef KNMUSICCATEGORYDISPLAY_H
+#define KNMUSICCATEGORYDISPLAY_H
 
-#include "knmusiclibrarycategorytab.h"
+#include <QWidget>
 
-class QSplitter;
-class KNDropProxyContainer;
-class KNMusicCategoryDisplay;
-class KNMusicCategoryListViewBase;
-class KNMusicLibraryArtistTab : public KNMusicLibraryCategoryTab
+class QLabel;
+class KNSideShadowWidget;
+class KNMusicLibraryTreeView;
+class KNMusicCategoryDisplay : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryArtistTab(QObject *parent = 0);
-    QString caption();
-    QPixmap icon();
-    QWidget *widget();
+    explicit KNMusicCategoryDisplay(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void setLibraryModel(KNMusicLibraryModel *model);
-    void setCategoryModel(KNMusicCategoryModel *model);
-    void onActionSearch(const QString &text);
+    void retranslate();
+    void updateDetailInfo();
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 
 private:
-    KNDropProxyContainer *m_container;
-    QSplitter *m_splitter;
-    KNMusicCategoryListViewBase *m_artistList;
-    KNMusicCategoryDisplay *m_artistDisplay;
+    QLabel *m_categoryTitle, *m_categoryInfo;
+    KNSideShadowWidget *m_leftShadow;
+    KNMusicLibraryTreeView *m_categoryTreeView;
+    QString m_songCount[3], m_minuateCount[3], m_searchResultIn,
+            m_searchCount[3];
 };
 
-#endif // KNMUSICLIBRARYARTISTTAB_H
+#endif // KNMUSICCATEGORYDISPLAY_H

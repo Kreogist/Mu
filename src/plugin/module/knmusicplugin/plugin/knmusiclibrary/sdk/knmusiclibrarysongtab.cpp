@@ -72,6 +72,8 @@ void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
             model, &KNMusicLibraryModel::addFiles);
     //Reset the header state.
     m_treeview->resetHeaderState();
+    //Set default sort state.
+    m_treeview->sortByColumn(Name, Qt::AscendingOrder);
 }
 
 void KNMusicLibrarySongTab::onActionSearch(const QString &text)

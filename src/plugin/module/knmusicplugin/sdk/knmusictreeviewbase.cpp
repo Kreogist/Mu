@@ -187,6 +187,12 @@ void KNMusicTreeViewBase::searchText(QString text)
     }
 }
 
+void KNMusicTreeViewBase::sortMusicColumn(int column,
+                                          Qt::SortOrder order)
+{
+    m_proxyModel->sort(column, order);
+}
+
 void KNMusicTreeViewBase::enterEvent(QEvent *event)
 {
     QTreeView::enterEvent(event);
@@ -355,6 +361,11 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
 {
     //The reorder function: move section!
     header()->moveSection(header()->visualIndex(logicalIndex), 0);
+}
+
+KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()
+{
+    return m_proxyModel;
 }
 
 void KNMusicTreeViewBase::onActionSearch()
