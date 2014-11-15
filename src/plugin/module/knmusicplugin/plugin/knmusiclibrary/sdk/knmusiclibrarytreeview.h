@@ -30,6 +30,8 @@ signals:
 
 public slots:
     void resetHeaderState();
+
+private:
 };
 
 #endif // KNMUSICLIBRARYTREEVIEW_H

@@ -69,6 +69,8 @@ void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
     //Do connections.
     connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
             model, &KNMusicLibraryModel::addFiles);
+    //Set the model.
+    m_artistDisplay->setLibraryModel(model);
 }
 
 void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)

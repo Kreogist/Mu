@@ -25,6 +25,7 @@ public:
     virtual void setBackend(KNMusicBackend *backend)=0;
     virtual KNMusicProxyModel *playingModel()=0;
     virtual int loopState()=0;
+    virtual QPersistentModelIndex currentPlayingIndex() const=0;
 
 signals:
     void requireResetPlayer();
@@ -32,6 +33,7 @@ signals:
     void loopStateChanged(int state);
 
 public slots:
+    virtual void resetCurrentPlaying()=0;
     virtual void restoreConfigure()=0;
     virtual void playNext()=0;
     virtual void playPrevious()=0;

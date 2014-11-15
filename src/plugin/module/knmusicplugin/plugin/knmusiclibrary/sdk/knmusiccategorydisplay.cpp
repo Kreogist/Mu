@@ -20,6 +20,7 @@
 
 #include "knsideshadowwidget.h"
 #include "knmousesensewidget.h"
+#include "knmusiclibrarymodel.h"
 #include "knmusiclibrarytreeview.h"
 
 #include "knlocalemanager.h"
@@ -88,6 +89,11 @@ void KNMusicCategoryDisplay::retranslate()
 void KNMusicCategoryDisplay::updateDetailInfo()
 {
     ;
+}
+
+void KNMusicCategoryDisplay::setLibraryModel(KNMusicLibraryModel *model)
+{
+    m_categoryTreeView->setMusicModel(model);
 }
 
 void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)

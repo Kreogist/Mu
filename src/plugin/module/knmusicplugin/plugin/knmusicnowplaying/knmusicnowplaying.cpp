@@ -360,3 +360,13 @@ void KNMusicNowPlaying::resetPlayingModels()
     //Clear music model.
     m_playingMusicModel=nullptr;
 }
+
+QPersistentModelIndex KNMusicNowPlaying::currentPlayingIndex() const
+{
+    return m_currentPlayingIndex;
+}
+
+void KNMusicNowPlaying::resetCurrentPlaying()
+{
+    resetPlayingItem();
+}

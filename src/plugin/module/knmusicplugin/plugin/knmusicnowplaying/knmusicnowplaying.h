@@ -35,10 +35,12 @@ public:
     void setBackend(KNMusicBackend *backend);
     KNMusicProxyModel *playingModel();
     int loopState();
+    QPersistentModelIndex currentPlayingIndex() const;
 
 signals:
 
 public slots:
+    void resetCurrentPlaying();
     void restoreConfigure();
     void playNext();
     void playPrevious();

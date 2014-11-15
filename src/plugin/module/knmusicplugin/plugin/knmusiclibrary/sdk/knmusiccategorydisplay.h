@@ -22,6 +22,7 @@
 
 class QLabel;
 class KNSideShadowWidget;
+class KNMusicLibraryModel;
 class KNMusicLibraryTreeView;
 class KNMusicCategoryDisplay : public QWidget
 {
@@ -34,6 +35,7 @@ signals:
 public slots:
     void retranslate();
     void updateDetailInfo();
+    void setLibraryModel(KNMusicLibraryModel *model);
 
 protected:
     void resizeEvent(QResizeEvent *event);
