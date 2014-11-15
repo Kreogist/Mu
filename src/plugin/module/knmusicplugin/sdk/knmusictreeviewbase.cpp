@@ -506,12 +506,28 @@ void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
 
 void KNMusicTreeViewBase::removeSelections()
 {
+    //Check is the current playing item is in the selection.
+    if(KNMusicGlobal::nowPlaying()->playingModel()!=nullptr &&
+            KNMusicGlobal::nowPlaying()->playingModel()->sourceModel()==
+            m_proxyModel->sourceModel())
+    {
+        //Get the current playing index first.
+        QModelIndex currentPlayingIndex=
+                m_proxyModel->mapFromSource(KNMusicGlobal::nowPlaying()->currentPlayingIndex());
+        //Check is the playing index is in the selection.
+        if(selectionModel()->selectedIndexes().contains(currentPlayingIndex))
+        {
+            //If so, ask now playing to reset current playing.
+            KNMusicGlobal::nowPlaying()->resetCurrentPlaying();
+        }
+    }
     //Get the current indexes.
-    QModelIndexList selectionList=selectionModel()->selectedRows(Name);
+    QModelIndexList selectionList=selectionModel()->selectedRows(m_proxyModel->playingItemColumn());
+    //Change the model index list to persistent index.
     QList<QPersistentModelIndex> persistentList;
     while(!selectionList.isEmpty())
     {
-        persistentList.append(QPersistentModelIndex(selectionList.takeLast()));
+        persistentList.append(m_proxyModel->mapToSource(selectionList.takeLast()));
     }
     //Remove all the indexes.
     while(!persistentList.isEmpty())
@@ -519,7 +535,7 @@ void KNMusicTreeViewBase::removeSelections()
         QPersistentModelIndex currentRemovedIndex=persistentList.takeLast();
         if(currentRemovedIndex.isValid())
         {
-            removeIndex(currentRemovedIndex);
+            m_proxyModel->removeSourceMusicRow(currentRemovedIndex.row());
         }
     }
 }

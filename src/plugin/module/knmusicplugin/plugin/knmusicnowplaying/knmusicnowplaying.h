@@ -53,7 +53,6 @@ public slots:
     void playMusic(const int &row);
     void playMusic(const QModelIndex &index);
     void checkRemovedModel(KNMusicModel *model);
-    void checkRemovedIndex(const QModelIndex &index);
 
 private:
     void saveConfigure();

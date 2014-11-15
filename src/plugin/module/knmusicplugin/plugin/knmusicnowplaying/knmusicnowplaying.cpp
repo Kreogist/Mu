@@ -261,17 +261,6 @@ void KNMusicNowPlaying::checkRemovedModel(KNMusicModel *model)
     }
 }
 
-void KNMusicNowPlaying::checkRemovedIndex(const QModelIndex &index)
-{
-    //When a music is removing, we need to check whether this index is the
-    //current playing one.
-    if(m_currentPlayingIndex.row()==index.row())
-    {
-        //Reset the playing item.
-        resetPlayingItem();
-    }
-}
-
 void KNMusicNowPlaying::saveConfigure()
 {
     KNMusicGlobal::instance()->setConfigureData("LoopState", m_loopMode);
