@@ -24,7 +24,6 @@
 
 class KNMusicModel;
 class KNMusicProxyModel;
-class KNMusicProxyModelPool;
 class KNMusicSinglePlaylistModel;
 class KNMusicNowPlaying : public KNMusicNowPlayingBase
 {
@@ -64,7 +63,6 @@ private:
     KNMusicSinglePlaylistModel *m_temporaryModel;
     KNMusicModel *m_playingMusicModel=nullptr;
     KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;
-    KNMusicProxyModelPool *m_proxyModelPool;
     QPersistentModelIndex m_currentPlayingIndex;
     QPixmap m_playingIcon, m_cantPlayIcon;
     int m_loopMode=NoRepeat;

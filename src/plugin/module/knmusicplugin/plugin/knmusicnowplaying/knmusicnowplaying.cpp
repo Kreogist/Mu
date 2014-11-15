@@ -32,10 +32,9 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     m_cantPlayIcon=QPixmap(":/plugin/music/common/cantplay.png");
     //Initial temporary model.
     m_temporaryModel=new KNMusicSinglePlaylistModel(this);
-    //Initial proxy model pool.
-    m_proxyModelPool=KNMusicProxyModelPool::instance();
-    //The proxy model which used by temporary model is not generate in pool,
-    //Generate here.
+    //Initial proxy model.
+    m_playingModel=new KNMusicProxyModel(this);
+    //Generate temporary proxy model.
     m_temporaryProxyModel=new KNMusicProxyModel(this);
     m_temporaryProxyModel->setSourceModel(m_temporaryModel);
 }
@@ -171,25 +170,33 @@ void KNMusicNowPlaying::playTemporaryFiles(const QStringList &filePaths)
 void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model)
 {
     //Check model.
-    if(model==m_playingModel)
+    if(model->sourceModel()==m_playingModel->sourceModel())
     {
         return;
     }
     //Reset current item and music model.
     resetPlayingItem();
     resetPlayingModels();
-    //Release the current playing model.
-    m_proxyModelPool->release(m_playingModel);
-    //Occupy the new proxy model.
-    m_playingModel=model;
-    //If not null, occupy it.
-    if(m_playingModel!=nullptr)
+    //Save the music model.
+    m_playingMusicModel=model->musicModel();
+    //Do deep copy for play model.
+    if(model!=nullptr)
     {
-        if(m_playingModel!=m_temporaryProxyModel)
+        //--Copy the filter options.
+        m_playingModel->setFilterRegExp(model->filterRegExp());
+        m_playingModel->setFilterRole(model->filterRole());
+        m_playingModel->setFilterCaseSensitivity(model->filterCaseSensitivity());
+        m_playingModel->setFilterKeyColumn(model->filterKeyColumn());
+        //--Copy the source model.
+        m_playingModel->setSourceModel(model->sourceModel());
+        //--Copy the sort options.
+        if(model->sortColumn()!=-1)
         {
-            m_proxyModelPool->reference(m_playingModel);
+            m_playingModel->setSortCaseSensitivity(model->sortCaseSensitivity());
+            m_playingModel->setSortRole(model->sortRole());
+            m_playingModel->sort(model->sortColumn(),
+                                 model->sortOrder());
         }
-        m_playingMusicModel=m_playingModel->musicModel();
     }
 }
 
@@ -331,21 +338,24 @@ void KNMusicNowPlaying::resetPlayingItem()
     //Check is the current item null, if not, clear the playing icon.
     if(m_currentPlayingIndex.isValid())
     {
-        m_playingMusicModel->setData(m_currentPlayingIndex,
-                                     QPixmap(),
-                                     Qt::DecorationRole);
+        //Though this should never happend, only for safe.
+        if(m_playingMusicModel!=nullptr)
+        {
+            m_playingMusicModel->setData(m_currentPlayingIndex,
+                                         QPixmap(),
+                                         Qt::DecorationRole);
+        }
         m_currentPlayingIndex=QPersistentModelIndex();
     }
 }
 
 void KNMusicNowPlaying::resetPlayingModels()
 {
-    //If the old proxy model is not nullptr, we should release it.
-    if(m_playingModel!=nullptr)
-    {
-        m_proxyModelPool->release(m_playingModel);
-    }
-    m_playingModel=nullptr;
+    //Clear the playing model data.
+    m_playingModel->setSourceModel(nullptr);
+    m_playingModel->setSortRole(-1);
+    m_playingModel->setFilterFixedString("");
+    m_playingModel->setFilterRole(-1);
     //Clear music model.
     m_playingMusicModel=nullptr;
 }

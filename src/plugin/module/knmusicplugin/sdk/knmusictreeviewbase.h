@@ -17,7 +17,6 @@ class QTimeLine;
 class KNConnectionHandler;
 class KNMusicModel;
 class KNMusicProxyModel;
-class KNMusicProxyModelPool;
 class KNMusicTreeViewBase : public QTreeView
 {
     Q_OBJECT
@@ -64,7 +63,6 @@ private:
     void showMultiMenu(const QPoint &position);
     QTimeLine *m_mouseIn, *m_mouseOut;
     KNMusicProxyModel *m_proxyModel=nullptr;
-    KNMusicProxyModelPool *m_proxyModelPool;
     KNConnectionHandler *m_soloConnections,
                         *m_multiConnections;
     QDrag *m_drag;

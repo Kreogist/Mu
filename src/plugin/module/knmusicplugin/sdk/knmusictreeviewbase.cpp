@@ -14,14 +14,14 @@
 #include <QMouseEvent>
 
 #include "knconnectionhandler.h"
+#include "knmusicdetailtooltipbase.h"
 #include "knmusicmodel.h"
 #include "knmusicsearchbase.h"
-#include "knmusicdetailtooltipbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusictreeviewheader.h"
-#include "knmusicproxymodelpool.h"
+#include "knmusicproxymodel.h"
 #include "knmusicratingdelegate.h"
 
 #include "knmusictreeviewbase.h"
@@ -71,9 +71,6 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     m_soloConnections=new KNConnectionHandler(this);
     m_multiConnections=new KNConnectionHandler(this);
 
-    //Initial proxy model pool.
-    m_proxyModelPool=KNMusicProxyModelPool::instance();
-
     //Initial the mime data and drag action.
     m_mimeData=new QMimeData;
     m_drag=new QDrag(this);
@@ -101,25 +98,27 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
-    //Check is the current proxy model is the playing model.
-    if(m_proxyModel==nullptr ||
-            m_proxyModelPool->isModelPlaying(m_proxyModel))
+    //Check is the proxy model need to initial.
+    if(m_proxyModel==nullptr)
     {
-        //Backup myself.
-        backupHeader();
-        //Release the current model, and get a new avaliable proxy model.
-        m_proxyModelPool->release(m_proxyModel);
-        m_proxyModel=m_proxyModelPool->alloct();
         //Initial the proxy model.
+        m_proxyModel=new KNMusicProxyModel(this);
+        //Set the search text.
         m_proxyModel->setFilterFixedString(m_seachText);
         //Set the proxy model.
         setModel(m_proxyModel);
+    }
+    //If we're going to set the model to null, backup header first.
+    if(musicModel==nullptr)
+    {
+        backupHeader();
     }
     //Set the source model.
     m_proxyModel->setSourceModel(musicModel);
     //Check and do header reset.
     if(m_initialLoad)
     {
+        //Clear the initial load flag.
         m_initialLoad=false;
         resetHeaderState();
         //Clear the header state backup data.
@@ -467,23 +466,8 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
 {
     if(index.isValid())
     {
-        //Allocate a new model for playing.
-        KNMusicProxyModel *playModel=m_proxyModelPool->alloct();
-        //Do deep copy for play model.
-        playModel->setFilterRegExp(m_proxyModel->filterRegExp());
-        playModel->setFilterRole(m_proxyModel->filterRole());
-        playModel->setFilterCaseSensitivity(m_proxyModel->filterCaseSensitivity());
-        playModel->setFilterKeyColumn(m_proxyModel->filterKeyColumn());
-        playModel->setSourceModel(m_proxyModel->sourceModel());
-        if(m_proxyModel->sortColumn()!=-1)
-        {
-            playModel->setSortCaseSensitivity(m_proxyModel->sortCaseSensitivity());
-            playModel->setSortRole(m_proxyModel->sortRole());
-            playModel->sort(m_proxyModel->sortColumn(),
-                            m_proxyModel->sortOrder());
-        }
         //Set the playing model.
-        KNMusicGlobal::nowPlaying()->setPlayingModel(playModel);
+        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
         KNMusicGlobal::nowPlaying()->playMusic(index);
     }
 }
