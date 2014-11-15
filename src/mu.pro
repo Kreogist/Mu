@@ -168,7 +168,6 @@ SOURCES += \
     plugin/base/knpreference/knpreferencecategoryitem.cpp \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.cpp \
     plugin/module/knmusicplugin/sdk/knmusicmodel.cpp \
-    plugin/module/knmusicplugin/sdk/knmusicproxymodelpool.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.cpp \
@@ -321,7 +320,6 @@ HEADERS += \
     plugin/base/knpreference/knpreferencecategoryitem.h \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.h \
     plugin/module/knmusicplugin/sdk/knmusicmodel.h \
-    plugin/module/knmusicplugin/sdk/knmusicproxymodelpool.h \
     plugin/module/knmusicplugin/sdk/knmusicheaderlyricsbase.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.h \
