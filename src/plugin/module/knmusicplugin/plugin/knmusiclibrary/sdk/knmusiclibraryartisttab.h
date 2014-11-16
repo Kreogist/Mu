@@ -40,9 +40,13 @@ public slots:
     void setCategoryModel(KNMusicCategoryModel *model);
     void onActionSearch(const QString &text);
 
+protected slots:
+    void onActionCategoryIndexChanged(const QModelIndex &index);
+
 private:
     KNDropProxyContainer *m_container;
     QSplitter *m_splitter;
+    KNMusicCategoryModel *m_categoryModel;
     KNMusicCategoryListViewBase *m_artistList;
     KNMusicCategoryDisplay *m_artistDisplay;
 };

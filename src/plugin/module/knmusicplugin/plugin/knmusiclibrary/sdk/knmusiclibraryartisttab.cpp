@@ -27,6 +27,8 @@
 
 #include "knmusiclibraryartisttab.h"
 
+#include <QDebug>
+
 KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
     KNMusicLibraryCategoryTab(parent)
 {
@@ -43,6 +45,7 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
     m_artistList=new KNMusicCategoryListViewBase(m_container);
     m_splitter->addWidget(m_artistList);
     m_artistDisplay=new KNMusicCategoryDisplay(m_container);
+    m_artistDisplay->setCategoryColumn(Artist);
     m_splitter->addWidget(m_artistDisplay);
     //Set viewer properties after add widgets.
     m_splitter->setCollapsible(1, false);
@@ -75,19 +78,30 @@ void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
 
 void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
 {
+    //Save the model pointer.
+    m_categoryModel=model;
     //Set the no category text.
-    model->setNoCategoryText(tr("No Artist"));
+    m_categoryModel->setNoCategoryText(tr("No Artist"));
     //Apply category model.
-    KNMusicLibraryCategoryTab::setCategoryModel(model);
+    KNMusicLibraryCategoryTab::setCategoryModel(m_categoryModel);
 
     //! This should be done in constructor, but setModel() is a virtual
     //! function, so we moved here.
     //Set the proxy model to tree view.
     m_artistList->setModel(proxyCategoryModel());
     proxyCategoryModel()->sort(0, Qt::AscendingOrder);
+    connect(m_artistList->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &KNMusicLibraryArtistTab::onActionCategoryIndexChanged);
 }
 
 void KNMusicLibraryArtistTab::onActionSearch(const QString &text)
 {
     ;
+}
+
+void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(const QModelIndex &index)
+{
+    m_artistDisplay->setCategoryText(
+                m_categoryModel->data(proxyCategoryModel()->mapToSource(index),
+                                      Qt::DisplayRole).toString());
 }

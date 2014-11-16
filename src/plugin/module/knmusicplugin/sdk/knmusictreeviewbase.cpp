@@ -98,23 +98,21 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
-    //Check is the proxy model need to initial.
-    if(m_proxyModel==nullptr)
-    {
-        //Initial the proxy model.
-        m_proxyModel=new KNMusicProxyModel(this);
-        //Set the search text.
-        m_proxyModel->setFilterFixedString(m_seachText);
-        //Set the proxy model.
-        setModel(m_proxyModel);
-    }
     //If we're going to set the model to null, backup header first.
     if(musicModel==nullptr)
     {
         backupHeader();
     }
+    else
+    {
+        //Before we set the source model, we need to check the proxy model.
+        if(KNMusicGlobal::nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
+        {
+            KNMusicGlobal::nowPlaying()->shadowPlayingModel();
+        }
+    }
     //Set the source model.
-    m_proxyModel->setSourceModel(musicModel);
+    proxyModel()->setSourceModel(musicModel);
     //Check and do header reset.
     if(m_initialLoad)
     {
@@ -364,6 +362,16 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
 
 KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()
 {
+    //Check is the proxy model need to initial.
+    if(m_proxyModel==nullptr)
+    {
+        //Initial the proxy model.
+        m_proxyModel=new KNMusicProxyModel(this);
+        //Set the search text.
+        m_proxyModel->setFilterFixedString(m_seachText);
+        //Set the proxy model.
+        setModel(m_proxyModel);
+    }
     return m_proxyModel;
 }
 

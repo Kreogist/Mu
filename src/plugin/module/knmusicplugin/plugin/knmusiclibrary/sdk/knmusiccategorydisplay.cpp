@@ -68,7 +68,6 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
 
     //Initial the tree view.
     m_categoryTreeView=new KNMusicLibraryTreeView(this);
-
     displayLayout->addWidget(m_categoryTreeView, 1);
 
     //Initial the shadow.
@@ -94,6 +93,19 @@ void KNMusicCategoryDisplay::updateDetailInfo()
 void KNMusicCategoryDisplay::setLibraryModel(KNMusicLibraryModel *model)
 {
     m_categoryTreeView->setMusicModel(model);
+}
+
+void KNMusicCategoryDisplay::setCategoryText(const QString &text)
+{
+    //Update the title.
+    m_categoryTitle->setText(text);
+    //Set the category text to treeview.
+    m_categoryTreeView->setCategoryText(text);
+}
+
+void KNMusicCategoryDisplay::setCategoryColumn(const int &column)
+{
+    m_categoryTreeView->setCategoryColumn(column);
 }
 
 void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)

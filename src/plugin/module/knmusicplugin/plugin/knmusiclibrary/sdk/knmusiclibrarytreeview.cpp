@@ -15,7 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusicproxymodel.h"
+#include "knmusicnowplayingbase.h"
+
 #include "knmusiclibrarytreeview.h"
+
+#include <QDebug>
 
 KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent) :
     KNMusicTreeViewBase(parent)
@@ -36,8 +41,29 @@ void KNMusicLibraryTreeView::resetHeaderState()
     KNMusicTreeViewBase::resetHeaderState();
     //I'd like to let plays to see at default.
     setColumnHidden(Plays, false);
+    //Hide the category column.
+    //Because we set that column, so we don't need to display it.
+    //They are all the same!
+    setColumnHidden(proxyModel()->filterKeyColumn(), true);
     //No more hack here, move the display data index one by one.
     moveToFirst(BlankData);
     //Set the index column at a enough width.
     setColumnWidth(BlankData, fontMetrics().width('6')*4+30);
+}
+
+void KNMusicLibraryTreeView::setCategoryColumn(const int &column)
+{
+    //Set the column to the proxy model.
+    proxyModel()->setFilterKeyColumn(column);
+}
+
+void KNMusicLibraryTreeView::setCategoryText(const QString &fixedText)
+{
+    //We need to check the now playing model before we change the category.
+    if(KNMusicGlobal::nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
+    {
+        KNMusicGlobal::nowPlaying()->shadowPlayingModel();
+    }
+    //Change the filter string.
+    proxyModel()->setFilterFixedString(fixedText);
 }

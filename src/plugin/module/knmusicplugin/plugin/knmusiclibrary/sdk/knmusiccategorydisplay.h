@@ -36,6 +36,8 @@ public slots:
     void retranslate();
     void updateDetailInfo();
     void setLibraryModel(KNMusicLibraryModel *model);
+    void setCategoryText(const QString &text);
+    void setCategoryColumn(const int &column);
 
 protected:
     void resizeEvent(QResizeEvent *event);
