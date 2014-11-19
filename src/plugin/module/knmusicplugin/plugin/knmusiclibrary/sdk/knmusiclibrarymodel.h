@@ -47,6 +47,7 @@ public slots:
     void retranslate();
     void addFiles(const QStringList &fileList);
     void appendMusicRow(const QList<QStandardItem *> &musicRow);
+    void updateCoverImage(const KNMusicDetailInfo &detailInfo);
     void removeMusicRow(const int &row);
 
 private:

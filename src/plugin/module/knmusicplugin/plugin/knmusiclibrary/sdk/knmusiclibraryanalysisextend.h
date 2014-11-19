@@ -46,13 +46,14 @@ public:
     void setCoverImageList(KNHashPixmapList *coverImageList);
 
 signals:
-    void requireAnalysisNext();
+    void requireParseNextImage();
+    void requireUpdateAlbumArt(const KNMusicDetailInfo &detailInfo);
 
 public slots:
     void onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo);
 
 private slots:
-    void onActionAnalysisNext();
+    void onActionParseNextImage();
 
 private:
     QLinkedList<AlbumArtItem> m_analysisQueue;

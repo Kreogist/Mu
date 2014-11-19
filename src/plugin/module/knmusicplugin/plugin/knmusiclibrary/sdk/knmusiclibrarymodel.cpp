@@ -34,6 +34,8 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     //Reset the analysis extend.
     m_analysisExtend=new KNMusicLibraryAnalysisExtend;
     m_analysisExtend->setCoverImageList(m_coverImageList);
+    connect(m_analysisExtend, &KNMusicLibraryAnalysisExtend::requireUpdateAlbumArt,
+            this, &KNMusicLibraryModel::updateCoverImage);
     setAnalysisExtend(m_analysisExtend);
 
     //Connect language changed request.
@@ -128,6 +130,20 @@ void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
     }
     //Add the row to model.
     KNMusicModel::appendMusicRow(musicRow);
+}
+
+void KNMusicLibraryModel::updateCoverImage(const KNMusicDetailInfo &detailInfo)
+{
+    QPixmap coverImagePixmap=QPixmap::fromImage(detailInfo.coverImage);
+    //Ask category models to update the cover image.
+    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+        i!=m_categoryModels.end();
+        ++i)
+    {
+        (*i)->onCoverImageUpdate(detailInfo.textLists[(*i)->categoryIndex()],
+                                 detailInfo.coverImageHash,
+                                 coverImagePixmap);
+    }
 }
 
 void KNMusicLibraryModel::removeMusicRow(const int &row)

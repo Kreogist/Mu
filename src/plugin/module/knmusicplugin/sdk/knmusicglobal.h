@@ -65,7 +65,8 @@ enum KNMusicModelRole
 enum KNMusicCategoryRole
 {
     CategoryItemSizeRole=Qt::UserRole,
-    CategoryItemVisibleRole
+    CategoryItemVisibleRole,
+    CategoryArtworkKeyRole
 };
 enum KNMusicPlaybackOrder
 {

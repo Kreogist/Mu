@@ -53,6 +53,8 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Initial the layout and widget.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
+    mainLayout->setContentsMargins(11,11,11,6);
+    mainLayout->setSpacing(6);
     setLayout(mainLayout);
     QBoxLayout *albumLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                            mainLayout->widget());

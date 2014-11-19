@@ -27,8 +27,8 @@ KNMusicLibraryAnalysisExtend::KNMusicLibraryAnalysisExtend(QObject *parent) :
     KNMusicAnalysisExtend(parent)
 {
     //Establish the analysis loop
-    connect(this, &KNMusicLibraryAnalysisExtend::requireAnalysisNext,
-            this, &KNMusicLibraryAnalysisExtend::onActionAnalysisNext);
+    connect(this, &KNMusicLibraryAnalysisExtend::requireParseNextImage,
+            this, &KNMusicLibraryAnalysisExtend::onActionParseNextImage);
 }
 
 void KNMusicLibraryAnalysisExtend::onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo)
@@ -44,10 +44,10 @@ void KNMusicLibraryAnalysisExtend::onActionAnalysisComplete(const KNMusicDetailI
     //Append the music row.
     emit requireAppendRow(songRow);
     //And of course, ask to analysis the next item.
-    emit requireAnalysisNext();
+    emit requireParseNextImage();
 }
 
-void KNMusicLibraryAnalysisExtend::onActionAnalysisNext()
+void KNMusicLibraryAnalysisExtend::onActionParseNextImage()
 {
     //Check is there no item in the queue.
     if(m_analysisQueue.isEmpty())
@@ -57,15 +57,19 @@ void KNMusicLibraryAnalysisExtend::onActionAnalysisNext()
     //Analysis the first item in the queue.
     AlbumArtItem currentItem=m_analysisQueue.takeFirst();
     KNMusicGlobal::parser()->parseAlbumArt(currentItem.detailInfo);
-    //Add the image data in the hash pixmap list, get the hash key.
-    QString hashKey=
-            m_coverImageList->appendImage(currentItem.detailInfo.coverImage);
-    //Set the hash key to the item.
-    currentItem.item->setData(hashKey, ArtworkKeyRole);
-    //We should ask to update the data.
-    ;
+    if(!currentItem.detailInfo.coverImage.isNull())
+    {
+        //Add the image data in the hash pixmap list, get the hash key.
+        currentItem.detailInfo.coverImageHash=
+                m_coverImageList->appendImage(currentItem.detailInfo.coverImage);
+        //Set the hash key to the item.
+        currentItem.item->setData(currentItem.detailInfo.coverImageHash,
+                                  ArtworkKeyRole);
+        //We should ask to update the data.
+        emit requireUpdateAlbumArt(currentItem.detailInfo);
+    }
     //Ask to analysis next item.
-    emit requireAnalysisNext();
+    emit requireParseNextImage();
 }
 
 KNHashPixmapList *KNMusicLibraryAnalysisExtend::coverImageList() const
