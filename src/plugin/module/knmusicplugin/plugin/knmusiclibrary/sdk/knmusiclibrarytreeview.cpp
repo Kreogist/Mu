@@ -64,6 +64,10 @@ void KNMusicLibraryTreeView::setCategoryText(const QString &fixedText)
     {
         KNMusicGlobal::nowPlaying()->shadowPlayingModel();
     }
+    QRegExp nameFilter("^"+
+                       QRegExp::escape(fixedText)+
+                       "$");
+    nameFilter.setPatternSyntax(QRegExp::RegExp);
     //Change the filter string.
-    proxyModel()->setFilterFixedString(fixedText);
+    proxyModel()->setFilterRegExp(nameFilter);
 }

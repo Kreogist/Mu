@@ -25,6 +25,7 @@ public:
     KNMusicModel *musicModel();
     void setMusicModel(KNMusicModel *musicModel);
     void backupHeader();
+    KNMusicProxyModel *proxyModel();
 
 signals:
     void searchComplete();
@@ -44,7 +45,6 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
-    KNMusicProxyModel *proxyModel();
 
 private slots:
     void onActionSearch();

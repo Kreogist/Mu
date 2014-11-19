@@ -21,6 +21,7 @@
 
 #include "knsideshadowwidget.h"
 #include "knmousesensewidget.h"
+#include "knmusicproxymodel.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiclibrarytreeview.h"
 
@@ -106,17 +107,47 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
 
 void KNMusicCategoryDisplay::retranslate()
 {
-    ;
+    //Update the text resourse.
+    m_songCount[0]=tr("No song.");
+    m_songCount[1]=tr("1 song.");
+    m_songCount[2]=tr("%1 songs.");
+    //Update the information.
+    updateDetailInfo();
 }
 
 void KNMusicCategoryDisplay::updateDetailInfo()
 {
-    ;
+    KNMusicProxyModel *model=m_categoryTreeView->proxyModel();
+    //Check the model row count, this will be used as song count.
+    switch(model->rowCount())
+    {
+    case 0:
+        m_categoryInfo->setText(m_songCount[0]);
+        break;
+    case 1:
+        m_categoryInfo->setText(m_songCount[1]);
+        break;
+    default:
+        m_categoryInfo->setText(m_songCount[2].arg(QString::number(model->rowCount())));
+        break;
+    }
 }
 
 void KNMusicCategoryDisplay::setLibraryModel(KNMusicLibraryModel *model)
 {
     m_categoryTreeView->setMusicModel(model);
+}
+
+void KNMusicCategoryDisplay::showNoCategoryItem(const QString &title)
+{
+    //Update the title.
+    m_categoryTitle->setText(title);
+    //Set the category text to treeview.
+    m_categoryTreeView->setCategoryText("");
+    //Update the background to no album art.
+    setCategoryIcon(QPixmap());
+    //Update the detail info.
+    updateDetailInfo();
 }
 
 void KNMusicCategoryDisplay::setCategoryText(const QString &text)
@@ -125,11 +156,15 @@ void KNMusicCategoryDisplay::setCategoryText(const QString &text)
     m_categoryTitle->setText(text);
     //Set the category text to treeview.
     m_categoryTreeView->setCategoryText(text);
+    //Update the detail info.
+    updateDetailInfo();
 }
 
 void KNMusicCategoryDisplay::setCategoryIcon(const QPixmap &pixmap)
 {
-    m_largeIcon->setPixmap(pixmap);
+    m_largeIcon->setPixmap(pixmap.isNull()?
+                               KNMusicGlobal::instance()->noAlbumArt():
+                               pixmap);
 }
 
 void KNMusicCategoryDisplay::setCategoryColumn(const int &column)

@@ -104,6 +104,12 @@ void KNMusicLibraryArtistTab::onActionSearch(const QString &text)
 void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(const QModelIndex &index)
 {
     QModelIndex categoryIndex=proxyCategoryModel()->mapToSource(index);
+    //Check is the no category item.
+    if(categoryIndex.row()==0)
+    {
+        m_artistDisplay->showNoCategoryItem(m_categoryModel->noCategoryText());
+        return;
+    }
     //Set the category text.
     m_artistDisplay->setCategoryText(
                 m_categoryModel->data(categoryIndex,

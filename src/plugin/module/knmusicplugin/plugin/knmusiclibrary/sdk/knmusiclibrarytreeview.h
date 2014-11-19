@@ -34,6 +34,7 @@ public slots:
     void setCategoryText(const QString &fixedText);
 
 private:
+    void nowPlayingCheck();
 };
 
 #endif // KNMUSICLIBRARYTREEVIEW_H
