@@ -46,6 +46,7 @@ protected slots:
 private:
     KNDropProxyContainer *m_container;
     QSplitter *m_splitter;
+    KNMusicLibraryModel *m_musicLibrary;
     KNMusicCategoryModel *m_categoryModel;
     KNMusicCategoryListViewBase *m_artistList;
     KNMusicCategoryDisplay *m_artistDisplay;

@@ -33,6 +33,7 @@ public:
     explicit KNMusicLibraryModel(QObject *parent = 0);
     Qt::DropActions supportedDropActions() const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    QPixmap artwork(const QString &key);
     int playingItemColumn();
     bool dropMimeData(const QMimeData *data,
                       Qt::DropAction action,

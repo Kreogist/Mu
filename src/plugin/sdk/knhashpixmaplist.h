@@ -30,6 +30,7 @@ class KNHashPixmapList : public QObject
 public:
     explicit KNHashPixmapList(QObject *parent = 0);
     QString appendImage(const QImage &image);
+    QPixmap pixmap(const QString &key);
 
 signals:
 

@@ -42,3 +42,8 @@ QString KNHashPixmapList::appendImage(const QImage &image)
     //Return the image key.
     return imageKey;
 }
+
+QPixmap KNHashPixmapList::pixmap(const QString &key)
+{
+    return QPixmap::fromImage(m_imageList.value(key));
+}

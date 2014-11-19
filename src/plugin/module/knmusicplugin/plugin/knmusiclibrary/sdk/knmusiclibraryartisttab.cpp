@@ -69,11 +69,13 @@ QWidget *KNMusicLibraryArtistTab::widget()
 
 void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
 {
+    //Save the library.
+    m_musicLibrary=model;
     //Do connections.
     connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
-            model, &KNMusicLibraryModel::addFiles);
+            m_musicLibrary, &KNMusicLibraryModel::addFiles);
     //Set the model.
-    m_artistDisplay->setLibraryModel(model);
+    m_artistDisplay->setLibraryModel(m_musicLibrary);
 }
 
 void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
@@ -101,7 +103,13 @@ void KNMusicLibraryArtistTab::onActionSearch(const QString &text)
 
 void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(const QModelIndex &index)
 {
+    QModelIndex categoryIndex=proxyCategoryModel()->mapToSource(index);
+    //Set the category text.
     m_artistDisplay->setCategoryText(
-                m_categoryModel->data(proxyCategoryModel()->mapToSource(index),
+                m_categoryModel->data(categoryIndex,
                                       Qt::DisplayRole).toString());
+    //Set the artwork.
+    m_artistDisplay->setCategoryIcon(
+                m_musicLibrary->artwork(m_categoryModel->data(categoryIndex,
+                                                              CategoryArtworkKeyRole).toString()));
 }

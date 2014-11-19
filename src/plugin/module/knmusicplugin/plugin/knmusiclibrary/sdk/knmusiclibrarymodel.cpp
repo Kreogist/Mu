@@ -58,6 +58,11 @@ Qt::ItemFlags KNMusicLibraryModel::flags(const QModelIndex &index) const
                 KNMusicModel::flags(index);
 }
 
+QPixmap KNMusicLibraryModel::artwork(const QString &key)
+{
+    return m_coverImageList->pixmap(key);
+}
+
 int KNMusicLibraryModel::playingItemColumn()
 {
     return BlankData;

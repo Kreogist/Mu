@@ -18,9 +18,12 @@
 #ifndef KNMUSICCATEGORYDISPLAY_H
 #define KNMUSICCATEGORYDISPLAY_H
 
+#include <QPixmap>
+
 #include <QWidget>
 
 class QLabel;
+class QGraphicsOpacityEffect;
 class KNSideShadowWidget;
 class KNMusicLibraryModel;
 class KNMusicLibraryTreeView;
@@ -37,13 +40,17 @@ public slots:
     void updateDetailInfo();
     void setLibraryModel(KNMusicLibraryModel *model);
     void setCategoryText(const QString &text);
+    void setCategoryIcon(const QPixmap &pixmap);
     void setCategoryColumn(const int &column);
 
 protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    QLabel *m_categoryTitle, *m_categoryInfo;
+    void updateBackgroundIcon();
+    QLabel *m_categoryTitle, *m_categoryInfo, *m_largeIcon;
+    QGraphicsOpacityEffect *m_iconEffect;
+    QRadialGradient m_iconGradient;
     KNSideShadowWidget *m_leftShadow;
     KNMusicLibraryTreeView *m_categoryTreeView;
     QString m_songCount[3], m_minuateCount[3], m_searchResultIn,
