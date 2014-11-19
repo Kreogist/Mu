@@ -153,6 +153,43 @@ void KNMusicCategoryModel::onCategoryRemoved(const QString &categoryText)
     }
 }
 
+void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
+                                              const QString &imageKey,
+                                              const QPixmap &image)
+{
+    //Check if it need to be add to blank item.
+    if(categoryText.isEmpty())
+    {
+        return;
+    }
+    //Search the category text.
+    QModelIndexList results=
+            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+    if(results.isEmpty())
+    {
+        //Are you kidding me?
+        return;
+    }
+    else
+    {
+        //Check is the cover image has a key.
+        QModelIndex resultIndex=results.first();
+        if(data(resultIndex, CategoryArtworkKeyRole).isNull())
+        {
+            //Set the image key.
+            setData(resultIndex,
+                    imageKey,
+                    CategoryArtworkKeyRole);
+            //Set the cover image.
+            setData(resultIndex,
+                    image.scaled(m_iconSize,
+                                 Qt::KeepAspectRatio,
+                                 Qt::SmoothTransformation),
+                    Qt::DecorationRole);
+        }
+    }
+}
+
 QStandardItem *KNMusicCategoryModel::generateItem(const QString &itemText,
                                                   const QPixmap &itemIcon)
 {

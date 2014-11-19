@@ -254,7 +254,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.cpp \
     plugin/sdk/knhashpixmaplist.cpp \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicanalysisextend.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryanalysisextend.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -417,7 +419,9 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.h \
     plugin/sdk/knhashpixmaplist.h \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.h
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.h \
+    plugin/module/knmusicplugin/sdk/knmusicanalysisextend.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryanalysisextend.h
 
 RESOURCES += \
     resource/res.qrc

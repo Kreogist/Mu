@@ -18,6 +18,7 @@ using namespace KNMusic;
 
 class KNMusicSearcher;
 class KNMusicAnalysisCache;
+class KNMusicAnalysisExtend;
 class KNMusicModel : public QStandardItemModel
 {
     Q_OBJECT
@@ -68,10 +69,13 @@ public slots:
 protected:
     virtual void blockAddFile(const QString &filePath);
     virtual void setHeaderSortFlag();
+    KNMusicAnalysisExtend *analysisExtend() const;
+    void setAnalysisExtend(KNMusicAnalysisExtend *analysisExtend);
 
 private:
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisCache *m_analysisCache;
+    KNMusicAnalysisExtend *m_analysisExtend=nullptr;
     KNMusicGlobal *m_musicGlobal;
     qint64 m_totalDuration=0;
 };

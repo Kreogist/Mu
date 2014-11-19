@@ -17,6 +17,7 @@
  */
 #include <QBoxLayout>
 #include <QLabel>
+#include <QGraphicsOpacityEffect>
 
 #include "knsideshadowwidget.h"
 #include "knmousesensewidget.h"
@@ -27,11 +28,25 @@
 
 #include "knmusiccategorydisplay.h"
 
+#include <QDebug>
+
 KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
     QWidget(parent)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
+    setAutoFillBackground(true);
+
+    //Initial icon background.
+    m_largeIcon=new QLabel(this);
+    m_largeIcon->installEventFilter(this);
+    m_largeIcon->setScaledContents(true);
+
+    m_iconEffect=new QGraphicsOpacityEffect(m_largeIcon);
+    m_iconEffect->setOpacity(0.9);
+    m_iconGradient.setColorAt(0.0, Qt::black);
+    m_iconGradient.setColorAt(1.0, Qt::transparent);
+    m_largeIcon->setGraphicsEffect(m_iconEffect);
 
     //Add layout.
     QBoxLayout *displayLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -58,20 +73,29 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
     captionPal.setColor(QPalette::WindowText, QColor(255,255,255));
     m_categoryTitle->setPalette(captionPal);
     QFont titleFont=m_categoryTitle->font();
-    titleFont.setPixelSize(17);
+    titleFont.setPixelSize(21);
     titleFont.setBold(true);
     m_categoryTitle->setFont(titleFont);
     infoLayout->addWidget(m_categoryTitle);
     m_categoryInfo=new QLabel(this);
     m_categoryInfo->setPalette(captionPal);
+    QFont infoFont=m_categoryInfo->font();
+    infoFont.setPixelSize(14);
+    m_categoryInfo->setFont(infoFont);
     infoLayout->addWidget(m_categoryInfo);
 
     //Initial the tree view.
     m_categoryTreeView=new KNMusicLibraryTreeView(this);
+    QPalette pal=m_categoryTreeView->palette();
+    pal.setColor(QPalette::Base, QColor(0,0,0,0));
+    m_categoryTreeView->setPalette(pal);
     displayLayout->addWidget(m_categoryTreeView, 1);
 
     //Initial the shadow.
     m_leftShadow=new KNSideShadowWidget(LeftShadow, this);
+
+    //Update the background icon.
+    updateBackgroundIcon();
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -103,6 +127,11 @@ void KNMusicCategoryDisplay::setCategoryText(const QString &text)
     m_categoryTreeView->setCategoryText(text);
 }
 
+void KNMusicCategoryDisplay::setCategoryIcon(const QPixmap &pixmap)
+{
+    m_largeIcon->setPixmap(pixmap);
+}
+
 void KNMusicCategoryDisplay::setCategoryColumn(const int &column)
 {
     m_categoryTreeView->setCategoryColumn(column);
@@ -116,4 +145,23 @@ void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)
                               0,
                               15,
                               height());
+    //Update the background icon.
+    updateBackgroundIcon();
+}
+
+void KNMusicCategoryDisplay::updateBackgroundIcon()
+{
+    //Get the tree view height.
+    int viewHeight=m_categoryTreeView->height();
+    //Update the geometry.
+    m_largeIcon->setGeometry(width()-viewHeight,
+                             height()-viewHeight,
+                             viewHeight,
+                             viewHeight);
+    //Update the gradient.
+    m_iconGradient.setCenter(QPointF(viewHeight, viewHeight));
+    m_iconGradient.setFocalPoint(QPointF(viewHeight, viewHeight));
+    m_iconGradient.setRadius(viewHeight);
+    //Set the gradient as the mask of the opacity effect.
+    m_iconEffect->setOpacityMask(m_iconGradient);
 }

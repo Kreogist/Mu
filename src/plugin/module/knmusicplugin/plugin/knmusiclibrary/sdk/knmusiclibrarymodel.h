@@ -24,6 +24,8 @@
 
 #include "knmusicmodel.h"
 
+class KNHashPixmapList;
+class KNMusicLibraryAnalysisExtend;
 class KNMusicLibraryModel : public KNMusicModel
 {
     Q_OBJECT
@@ -31,6 +33,7 @@ public:
     explicit KNMusicLibraryModel(QObject *parent = 0);
     Qt::DropActions supportedDropActions() const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    QPixmap artwork(const QString &key);
     int playingItemColumn();
     bool dropMimeData(const QMimeData *data,
                       Qt::DropAction action,
@@ -45,12 +48,15 @@ public slots:
     void retranslate();
     void addFiles(const QStringList &fileList);
     void appendMusicRow(const QList<QStandardItem *> &musicRow);
+    void updateCoverImage(const KNMusicDetailInfo &detailInfo);
     void removeMusicRow(const int &row);
 
 private:
     void initialHeader();
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
     KNMusicGlobal *m_musicGlobal;
+    KNMusicLibraryAnalysisExtend *m_analysisExtend;
+    KNHashPixmapList *m_coverImageList;
 };
 
 #endif // KNMUSICLIBRARYMODEL_H

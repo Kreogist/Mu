@@ -9,6 +9,7 @@
 #include "knglobal.h"
 #include "knmusicsearcher.h"
 #include "knmusicanalysiscache.h"
+#include "knmusicanalysisextend.h"
 
 #include "knmusicmodel.h"
 
@@ -31,8 +32,9 @@ KNMusicModel::KNMusicModel(QObject *parent) :
     m_analysisCache->moveToThread(m_musicGlobal->analysisThread());
     connect(m_searcher, &KNMusicSearcher::fileFound,
             m_analysisCache, &KNMusicAnalysisCache::appendFilePath);
-    connect(m_analysisCache, &KNMusicAnalysisCache::requireAppendMusicRow,
-            this, &KNMusicModel::appendMusicRow);
+
+    //Initial a default analysis extend.
+    setAnalysisExtend(new KNMusicAnalysisExtend);
 }
 
 KNMusicModel::~KNMusicModel()
@@ -40,6 +42,7 @@ KNMusicModel::~KNMusicModel()
     //Delete objects.
     delete m_searcher;
     delete m_analysisCache;
+    delete m_analysisExtend;
 }
 
 Qt::DropActions KNMusicModel::supportedDropActions() const
@@ -308,4 +311,35 @@ void KNMusicModel::setHeaderSortFlag()
     setHeaderData(DateAdded, Qt::Horizontal, SortUserByDate, Qt::UserRole);
     setHeaderData(DateModified, Qt::Horizontal, SortUserByDate, Qt::UserRole);
     setHeaderData(LastPlayed, Qt::Horizontal, SortUserByDate, Qt::UserRole);
+}
+
+KNMusicAnalysisExtend *KNMusicModel::analysisExtend() const
+{
+    return m_analysisExtend;
+}
+
+void KNMusicModel::setAnalysisExtend(KNMusicAnalysisExtend *analysisExtend)
+{
+    if(m_analysisExtend!=nullptr)
+    {
+        //Disconnect the extended.
+        disconnect(m_analysisExtend, &KNMusicAnalysisExtend::requireAppendRow,
+                   this, &KNMusicModel::appendMusicRow);
+        //Clear the extend in analysis cache.
+        m_analysisCache->setExtend(nullptr);
+        //Recover the memory.
+        delete m_analysisExtend;
+    }
+    //Save the pointer.
+    m_analysisExtend=analysisExtend;
+    //Move to the analysis thread.
+    m_analysisExtend->moveToThread(m_musicGlobal->analysisThread());
+    //Install the extend.
+    m_analysisCache->setExtend(m_analysisExtend);
+    //Establish connections.
+    if(m_analysisExtend!=nullptr)
+    {
+        connect(m_analysisExtend, &KNMusicAnalysisExtend::requireAppendRow,
+                this, &KNMusicModel::appendMusicRow);
+    }
 }

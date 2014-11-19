@@ -41,6 +41,9 @@ signals:
 public slots:
     virtual void onCategoryAdded(const QString &categoryText);
     virtual void onCategoryRemoved(const QString &categoryText);
+    virtual void onCoverImageUpdate(const QString &categoryText,
+                                    const QString &imageKey,
+                                    const QPixmap &image);
 
 protected:
     virtual QStandardItem *generateItem(const QString &itemText,

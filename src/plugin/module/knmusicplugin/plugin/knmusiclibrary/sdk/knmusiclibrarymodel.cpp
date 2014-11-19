@@ -15,6 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusiclibraryanalysisextend.h"
+#include "knhashpixmaplist.h"
+
 #include "knlocalemanager.h"
 
 #include "knmusiclibrarymodel.h"
@@ -24,11 +27,20 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
 {
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
+    //Initial header.
+    initialHeader();
+    //Initial the pixmap list.
+    m_coverImageList=new KNHashPixmapList(this);
+    //Reset the analysis extend.
+    m_analysisExtend=new KNMusicLibraryAnalysisExtend;
+    m_analysisExtend->setCoverImageList(m_coverImageList);
+    connect(m_analysisExtend, &KNMusicLibraryAnalysisExtend::requireUpdateAlbumArt,
+            this, &KNMusicLibraryModel::updateCoverImage);
+    setAnalysisExtend(m_analysisExtend);
+
     //Connect language changed request.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNMusicLibraryModel::retranslate);
-    //Initial header.
-    initialHeader();
 }
 
 Qt::DropActions KNMusicLibraryModel::supportedDropActions() const
@@ -44,6 +56,11 @@ Qt::ItemFlags KNMusicLibraryModel::flags(const QModelIndex &index) const
                  Qt::ItemIsEnabled |
                  Qt::ItemNeverHasChildren):
                 KNMusicModel::flags(index);
+}
+
+QPixmap KNMusicLibraryModel::artwork(const QString &key)
+{
+    return m_coverImageList->pixmap(key);
 }
 
 int KNMusicLibraryModel::playingItemColumn()
@@ -118,6 +135,20 @@ void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
     }
     //Add the row to model.
     KNMusicModel::appendMusicRow(musicRow);
+}
+
+void KNMusicLibraryModel::updateCoverImage(const KNMusicDetailInfo &detailInfo)
+{
+    QPixmap coverImagePixmap=QPixmap::fromImage(detailInfo.coverImage);
+    //Ask category models to update the cover image.
+    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+        i!=m_categoryModels.end();
+        ++i)
+    {
+        (*i)->onCoverImageUpdate(detailInfo.textLists[(*i)->categoryIndex()],
+                                 detailInfo.coverImageHash,
+                                 coverImagePixmap);
+    }
 }
 
 void KNMusicLibraryModel::removeMusicRow(const int &row)
