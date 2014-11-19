@@ -24,6 +24,8 @@
 
 #include "knmusicmodel.h"
 
+class KNHashPixmapList;
+class KNMusicLibraryAnalysisExtend;
 class KNMusicLibraryModel : public KNMusicModel
 {
     Q_OBJECT
@@ -51,6 +53,8 @@ private:
     void initialHeader();
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
     KNMusicGlobal *m_musicGlobal;
+    KNMusicLibraryAnalysisExtend *m_analysisExtend;
+    KNHashPixmapList *m_coverImageList;
 };
 
 #endif // KNMUSICLIBRARYMODEL_H

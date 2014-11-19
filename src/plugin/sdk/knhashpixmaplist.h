@@ -18,7 +18,9 @@
 #ifndef KNHASHPIXMAPLIST_H
 #define KNHASHPIXMAPLIST_H
 
-#include <QPersistentModelIndex>
+#include <QHash>
+#include <QImage>
+#include <QPixmap>
 
 #include <QObject>
 
@@ -27,13 +29,14 @@ class KNHashPixmapList : public QObject
     Q_OBJECT
 public:
     explicit KNHashPixmapList(QObject *parent = 0);
-    void appendPixmap(QPersistentModelIndex index,
-                      const QPixmap &pixmap);
+    QString appendImage(const QImage &image);
 
 signals:
 
 public slots:
 
+private:
+    QHash<QString, QImage> m_imageList;
 };
 
 #endif // KNHASHPIXMAPLIST_H

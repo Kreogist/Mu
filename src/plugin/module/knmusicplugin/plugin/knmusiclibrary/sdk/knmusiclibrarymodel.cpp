@@ -15,6 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusiclibraryanalysisextend.h"
+#include "knhashpixmaplist.h"
+
 #include "knlocalemanager.h"
 
 #include "knmusiclibrarymodel.h"
@@ -24,11 +27,18 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
 {
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
+    //Initial header.
+    initialHeader();
+    //Initial the pixmap list.
+    m_coverImageList=new KNHashPixmapList(this);
+    //Reset the analysis extend.
+    m_analysisExtend=new KNMusicLibraryAnalysisExtend;
+    m_analysisExtend->setCoverImageList(m_coverImageList);
+    setAnalysisExtend(m_analysisExtend);
+
     //Connect language changed request.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNMusicLibraryModel::retranslate);
-    //Initial header.
-    initialHeader();
 }
 
 Qt::DropActions KNMusicLibraryModel::supportedDropActions() const
