@@ -34,19 +34,28 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
 {
     //Initial the drop proxy container.
     m_container=new KNDropProxyContainer;
+
+    //Initial the layout for the container, only for auto resize splitter.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_container);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     m_container->setLayout(mainLayout);
+
+    //Initial the main splitter.
     m_splitter=new QSplitter(m_container);
     m_splitter->setHandleWidth(0); //This is beautiful.
     m_splitter->setChildrenCollapsible(false);
     mainLayout->addWidget(m_splitter);
+
+    //Initial the list.
     m_artistList=new KNMusicCategoryListViewBase(m_container);
     m_splitter->addWidget(m_artistList);
+
+    //Initial the category display.
     m_artistDisplay=new KNMusicCategoryDisplay(m_container);
     m_artistDisplay->setCategoryColumn(Artist);
     m_splitter->addWidget(m_artistDisplay);
+
     //Set viewer properties after add widgets.
     m_splitter->setCollapsible(1, false);
     m_splitter->setStretchFactor(1, 1);

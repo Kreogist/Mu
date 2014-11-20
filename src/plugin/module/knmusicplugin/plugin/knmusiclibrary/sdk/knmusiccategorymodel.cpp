@@ -55,7 +55,7 @@ int KNMusicCategoryModel::categoryIndex() const
 
 void KNMusicCategoryModel::setCategoryIndex(int categoryIndex)
 {
-    m_categoryIndex = categoryIndex;
+    m_categoryIndex=categoryIndex;
 }
 
 
@@ -202,4 +202,9 @@ QStandardItem *KNMusicCategoryModel::generateItem(const QString &itemText,
                          Qt::DecorationRole);
     currentItem->setEditable(false);
     return currentItem;
+}
+
+QSize KNMusicCategoryModel::iconSize() const
+{
+    return m_iconSize;
 }

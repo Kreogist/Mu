@@ -48,6 +48,7 @@ public slots:
 protected:
     virtual QStandardItem *generateItem(const QString &itemText,
                                         const QPixmap &itemIcon=QPixmap());
+    QSize iconSize() const;
 
 private:
     void resetModel();

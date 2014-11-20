@@ -20,6 +20,11 @@
 
 #include "knmusiclibrarycategorytab.h"
 
+class QSplitter;
+class KNMusicGenreModel;
+class KNDropProxyContainer;
+class KNMusicCategoryDisplay;
+class KNMusicCategoryListViewBase;
 class KNMusicLibraryGenreTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
@@ -33,10 +38,19 @@ signals:
 
 public slots:
     void setLibraryModel(KNMusicLibraryModel *model);
+    void setCategoryModel(KNMusicCategoryModel *model);
     void onActionSearch(const QString &text);
 
+protected slots:
+    void onActionCategoryIndexChanged(const QModelIndex &index);
+
 private:
-    QWidget *m_widget;
+    KNDropProxyContainer *m_container;
+    QSplitter *m_splitter;
+    KNMusicLibraryModel *m_musicLibrary;
+    KNMusicGenreModel *m_categoryModel;
+    KNMusicCategoryListViewBase *m_genreList;
+    KNMusicCategoryDisplay *m_genreDisplay;
 };
 
 #endif // KNMUSICLIBRARYGENRETAB_H

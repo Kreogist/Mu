@@ -41,6 +41,7 @@ public slots:
 private:
     void initialSongTab();
     void initialArtistTab();
+    void initialGenreTab();
     enum CategoryTabs
     {
         TabArtists,

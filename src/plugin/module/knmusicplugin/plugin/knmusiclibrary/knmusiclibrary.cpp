@@ -17,6 +17,7 @@
  */
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
+#include "sdk/knmusicgenremodel.h"
 #include "sdk/knmusiclibrarytab.h"
 #include "sdk/knmusiclibrarysongtab.h"
 #include "sdk/knmusiclibraryartisttab.h"
@@ -34,7 +35,7 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     initialSongTab();
     initialArtistTab();
     m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
-    m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab(this);
+    initialGenreTab();
 
     //Set library model.
     m_librarySongTab->setLibraryModel(m_libraryModel);
@@ -81,4 +82,16 @@ void KNMusicLibrary::initialArtistTab()
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab(this);
     m_libraryTabs[TabArtists]->setCategoryModel(m_categoryModel[TabArtists]);
 
+}
+
+void KNMusicLibrary::initialGenreTab()
+{
+    //Initial the model and proxy model.
+    m_categoryModel[TabGenres]=new KNMusicGenreModel(this);
+    m_categoryModel[TabGenres]->setCategoryIndex(Genre);
+    //Install the category model to library model.
+    m_libraryModel->installCategoryModel(m_categoryModel[TabGenres]);
+    //Initial the genre tab.
+    m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab(this);
+    m_libraryTabs[TabGenres]->setCategoryModel(m_categoryModel[TabGenres]);
 }
