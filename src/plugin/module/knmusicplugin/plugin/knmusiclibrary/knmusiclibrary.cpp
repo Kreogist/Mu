@@ -35,17 +35,33 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Initial the music model.
     m_libraryModel=new KNMusicLibraryModel(this);
 
+    QList<QAction *> showInActionList;
+    //Initial the song tab.
     initialSongTab();
+    //Set the library model for song tab.
+    m_librarySongTab->setLibraryModel(m_libraryModel);
+    //Get the go to action.
+    showInActionList.append(m_librarySongTab->showInAction());
+
+    //Initial the category models.
+    for(int i=0; i<CategoryTabsCount; i++)
+    {
+        //Initial the model and proxy model.
+        m_categoryModel[i]=new KNMusicCategoryModel(this);
+        //Install the category model to library model.
+        m_libraryModel->installCategoryModel(m_categoryModel[i]);
+    }
+
+    //Initial the category tabs.
     initialArtistTab();
-    m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
+    initialAlbumTab();
     initialGenreTab();
 
     //Set library model, get the go to action.
-    QList<QAction *> showInActionList;
-    m_librarySongTab->setLibraryModel(m_libraryModel);
-    showInActionList.append(m_librarySongTab->showInAction());
     for(int i=0; i<CategoryTabsCount; i++)
     {
+        //Set the category model
+        m_libraryTabs[i]->setCategoryModel(m_categoryModel[i]);
         //Set the library model.
         m_libraryTabs[i]->setLibraryModel(m_libraryModel);
         //Get the action list.
@@ -83,24 +99,24 @@ void KNMusicLibrary::initialSongTab()
 
 void KNMusicLibrary::initialArtistTab()
 {
-    //Initial the model and proxy model.
-    m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
-    m_categoryModel[TabArtists]->setCategoryIndex(Artist);
-    //Install the category model to library model.
-    m_libraryModel->installCategoryModel(m_categoryModel[TabArtists]);
     //Initial the artist tab.
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab(this);
-    m_libraryTabs[TabArtists]->setCategoryModel(m_categoryModel[TabArtists]);
+    //Initial the model and proxy model.
+    m_categoryModel[TabArtists]->setCategoryIndex(Artist);
+}
+
+void KNMusicLibrary::initialAlbumTab()
+{
+    //Initial the album tab.
+    m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
+    //Initial the model and proxy model.
+    m_categoryModel[TabAlbums]->setCategoryIndex(Album);
 }
 
 void KNMusicLibrary::initialGenreTab()
 {
-    //Initial the model and proxy model.
-    m_categoryModel[TabGenres]=new KNMusicGenreModel(this);
-    m_categoryModel[TabGenres]->setCategoryIndex(Genre);
-    //Install the category model to library model.
-    m_libraryModel->installCategoryModel(m_categoryModel[TabGenres]);
     //Initial the genre tab.
     m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab(this);
-    m_libraryTabs[TabGenres]->setCategoryModel(m_categoryModel[TabGenres]);
+    //Initial the model and proxy model.
+    m_categoryModel[TabGenres]->setCategoryIndex(Genre);
 }

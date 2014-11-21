@@ -15,8 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QWidget>
 #include <QAction>
+#include <QBoxLayout>
+
+#include "kndropproxycontainer.h"
+#include "knmusiclibrarymodel.h"
 
 #include "knlocalemanager.h"
 
@@ -25,7 +28,18 @@
 KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     KNMusicLibraryCategoryTab(parent)
 {
-    m_widget=new QWidget;
+    //Initial the drop proxy container.
+    m_container=new KNDropProxyContainer;
+    connect(m_container, &KNDropProxyContainer::dropProxyShow,
+            this, &KNMusicLibraryAlbumTab::onActionTabShow);
+    connect(m_container, &KNDropProxyContainer::dropProxyHide,
+            this, &KNMusicLibraryAlbumTab::onActionTabHide);
+
+    //Initial the layout for the container, only for auto resize splitter.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_container);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    m_container->setLayout(mainLayout);
 
     //Initial the show in action.
     initialShowInAction();
@@ -53,7 +67,7 @@ QPixmap KNMusicLibraryAlbumTab::icon()
 
 QWidget *KNMusicLibraryAlbumTab::widget()
 {
-    return m_widget;
+    return m_container;
 }
 
 void KNMusicLibraryAlbumTab::retranslate()
@@ -63,7 +77,11 @@ void KNMusicLibraryAlbumTab::retranslate()
 
 void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
 {
-    ;
+    //Save the library.
+    m_musicLibrary=model;
+    //Do connections.
+    connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
+            m_musicLibrary, &KNMusicLibraryModel::addFiles);
 }
 
 void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)

@@ -20,6 +20,7 @@
 
 #include "knmusiclibrarycategorytab.h"
 
+class KNDropProxyContainer;
 class KNMusicLibraryAlbumTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
@@ -40,7 +41,9 @@ public slots:
 private:
     void initialShowInAction();
     QAction *m_showInAlbumTab;
-    QWidget *m_widget;
+    KNDropProxyContainer *m_container;
+    KNMusicLibraryModel *m_musicLibrary;
+    KNMusicCategoryModel *m_categoryModel;
 };
 
 #endif // KNMUSICLIBRARYALBUMTAB_H
