@@ -15,11 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
 #include <QBoxLayout>
 
 #include "kndropproxycontainer.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiclibrarytreeview.h"
+#include "knmusicsolomenubase.h"
+
+#include "knlocalemanager.h"
 
 #include "knmusiclibrarysongtab.h"
 
@@ -37,6 +41,14 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QObject *parent) :
     //Initial the library treeview.
     m_treeview=new KNMusicLibraryTreeView(m_dropProxy);
     mainLayout->addWidget(m_treeview);
+
+    //Initial the show in tab.
+    initialShowInAction();
+    //Connect retranslate request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicLibrarySongTab::retranslate);
+    //Retranslate.
+    retranslate();
 }
 
 KNMusicLibrarySongTab::~KNMusicLibrarySongTab()
@@ -46,6 +58,11 @@ KNMusicLibrarySongTab::~KNMusicLibrarySongTab()
     {
         delete m_dropProxy;
     }
+}
+
+QAction *KNMusicLibrarySongTab::showInAction()
+{
+    return m_showInSongTab;
 }
 
 QString KNMusicLibrarySongTab::caption()
@@ -63,13 +80,20 @@ QWidget *KNMusicLibrarySongTab::widget()
     return m_dropProxy;
 }
 
+void KNMusicLibrarySongTab::retranslate()
+{
+    m_showInSongTab->setText(tr("Go to Songs"));
+}
+
 void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
 {
+    //Save the music library model.
+    m_musicLibrary=model;
     //Set the music model.
-    m_treeview->setMusicModel(model);
+    m_treeview->setMusicModel(m_musicLibrary);
     //Connect analysis requirement signal.
     connect(m_dropProxy, &KNDropProxyContainer::requireAnalysisFiles,
-            model, &KNMusicLibraryModel::addFiles);
+            m_musicLibrary, &KNMusicLibraryModel::addFiles);
     //Reset the header state.
     m_treeview->resetHeaderState();
     //Set default sort state.
@@ -79,4 +103,26 @@ void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
 void KNMusicLibrarySongTab::onActionSearch(const QString &text)
 {
     m_treeview->searchText(text);
+}
+
+void KNMusicLibrarySongTab::onActionShowInSong()
+{
+    //Get the row of the file.
+    int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
+    //If the row is available.
+    if(musicRow!=-1)
+    {
+        //Scroll to the song.
+        m_treeview->scrollToSourceSongRow(musicRow);
+        //Ask to show current tab.
+        emit requireShowTab();
+    }
+}
+
+void KNMusicLibrarySongTab::initialShowInAction()
+{
+    //Initial the show in actions.
+    m_showInSongTab=new QAction(this);
+    connect(m_showInSongTab, SIGNAL(triggered()),
+            this, SLOT(onActionShowInSong()));
 }

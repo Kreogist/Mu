@@ -172,6 +172,16 @@ void KNMusicCategoryDisplay::setCategoryColumn(const int &column)
     m_categoryTreeView->setCategoryColumn(column);
 }
 
+void KNMusicCategoryDisplay::scrollToRow(const int &row)
+{
+    m_categoryTreeView->scrollToSongRow(row);
+}
+
+void KNMusicCategoryDisplay::scrollToSourceRow(const int &row)
+{
+    m_categoryTreeView->scrollToSourceSongRow(row);
+}
+
 void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);

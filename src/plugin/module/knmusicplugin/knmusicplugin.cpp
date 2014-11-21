@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QSignalMapper>
 
 //Music Global.
 #include "knmusicglobal.h"
@@ -323,6 +324,11 @@ void KNMusicPlugin::addRightHeaderWidget(QWidget *widget,
     m_headerRightLayout->addWidget(widget, stretch, alignment);
 }
 
+void KNMusicPlugin::onActionShowTab(const int &tabIndex)
+{
+    m_centralWidget->setCurrentIndex(tabIndex);
+}
+
 void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
@@ -363,6 +369,11 @@ void KNMusicPlugin::initialInfrastructure()
 
     //Initial the extra platform connection handler.
     m_extraHandler=new KNConnectionHandler(this);
+
+    //Initial the tab switch signal mapper.
+    m_tabSwitchMapper=new QSignalMapper(this);
+    connect(m_tabSwitchMapper, SIGNAL(mapped(int)),
+            this, SLOT(onActionShowTab(int)));
 }
 
 void KNMusicPlugin::initialParser()
@@ -424,6 +435,10 @@ void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
                                       musicTab->caption(),
                                       musicTab->widget());
     currentTab.tab=musicTab;
+    //Connect show tab request.
+    connect(musicTab, SIGNAL(requireShowTab()),
+            m_tabSwitchMapper, SLOT(map()));
+    m_tabSwitchMapper->setMapping(musicTab, m_tabList.size());
     //Add tab to list.
     m_tabList.append(currentTab);
     //Connect request to the music tab.
@@ -435,7 +450,6 @@ void KNMusicPlugin::startThreads()
 {
     m_parserThread.start();
 }
-
 
 void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *plugin)
 {

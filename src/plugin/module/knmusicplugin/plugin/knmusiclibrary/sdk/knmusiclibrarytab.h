@@ -20,12 +20,14 @@
 
 #include "knmusictab.h"
 
+class QAction;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab : public KNMusicTab
 {
     Q_OBJECT
 public:
     explicit KNMusicLibraryTab(QObject *parent = 0);
+    virtual QAction *showInAction()=0;
 
 signals:
 

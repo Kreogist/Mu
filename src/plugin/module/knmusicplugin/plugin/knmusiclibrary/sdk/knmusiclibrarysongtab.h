@@ -28,6 +28,7 @@ class KNMusicLibrarySongTab : public KNMusicLibraryTab
 public:
     explicit KNMusicLibrarySongTab(QObject *parent = 0);
     ~KNMusicLibrarySongTab();
+    QAction *showInAction();
     QString caption();
     QPixmap icon();
     QWidget *widget();
@@ -35,12 +36,19 @@ public:
 signals:
 
 public slots:
+    void retranslate();
     void setLibraryModel(KNMusicLibraryModel *model);
     void onActionSearch(const QString &text);
 
+private slots:
+    void onActionShowInSong();
+
 private:
+    void initialShowInAction();
     KNDropProxyContainer *m_dropProxy;
     KNMusicLibraryTreeView *m_treeview;
+    QAction *m_showInSongTab;
+    KNMusicLibraryModel *m_musicLibrary;
 };
 
 #endif // KNMUSICLIBRARYSONGTAB_H

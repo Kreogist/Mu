@@ -25,6 +25,7 @@ class KNMusicLibraryAlbumTab : public KNMusicLibraryCategoryTab
     Q_OBJECT
 public:
     explicit KNMusicLibraryAlbumTab(QObject *parent = 0);
+    QAction *showInAction();
     QString caption();
     QPixmap icon();
     QWidget *widget();
@@ -32,10 +33,13 @@ public:
 signals:
 
 public slots:
+    void retranslate();
     void setLibraryModel(KNMusicLibraryModel *model);
     void onActionSearch(const QString &text);
 
 private:
+    void initialShowInAction();
+    QAction *m_showInAlbumTab;
     QWidget *m_widget;
 };
 

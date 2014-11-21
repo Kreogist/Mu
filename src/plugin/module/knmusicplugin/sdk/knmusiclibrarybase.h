@@ -21,6 +21,7 @@ public:
     virtual KNMusicTab *genreTab()=0;
 
 signals:
+    void requireShowTab();
 
 public slots:
 

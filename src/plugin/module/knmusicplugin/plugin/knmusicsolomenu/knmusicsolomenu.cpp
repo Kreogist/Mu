@@ -94,6 +94,11 @@ void KNMusicSoloMenu::setDetailDialog(KNMusicDetailDialogBase *dialog)
     m_detailDialog=dialog;
 }
 
+QString KNMusicSoloMenu::currentFilePath() const
+{
+    return m_filePath;
+}
+
 void KNMusicSoloMenu::retranslate()
 {
     //Update the caption first.
@@ -123,6 +128,14 @@ void KNMusicSoloMenu::retranslate()
     {
         m_actions[i]->setText(m_actionTitles[i]);
     }
+}
+
+void KNMusicSoloMenu::addMusicActions(QList<QAction *> actions)
+{
+    //Add the actions before custom seperator.
+    insertActions(m_customSeperator, actions);
+    //Add a seperator for these actions.
+    insertSeparator(m_customSeperator);
 }
 
 void KNMusicSoloMenu::onActionOpenCurrentFile()
@@ -188,6 +201,7 @@ void KNMusicSoloMenu::createActions()
     connect(m_actions[SearchItemText], SIGNAL(triggered()),
             this, SLOT(onActionSearchItemText()));
     addAction(m_actions[SearchItemText]);
+    m_customSeperator=m_actions[SearchItemText];
 
     addSeparator();
 

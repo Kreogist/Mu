@@ -16,6 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QWidget>
+#include <QAction>
+
+#include "knlocalemanager.h"
 
 #include "knmusiclibraryalbumtab.h"
 
@@ -23,6 +26,19 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     KNMusicLibraryCategoryTab(parent)
 {
     m_widget=new QWidget;
+
+    //Initial the show in action.
+    initialShowInAction();
+    //Connect retranslate request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicLibraryAlbumTab::retranslate);
+    //Retranslate.
+    retranslate();
+}
+
+QAction *KNMusicLibraryAlbumTab::showInAction()
+{
+    return m_showInAlbumTab;
 }
 
 QString KNMusicLibraryAlbumTab::caption()
@@ -40,6 +56,11 @@ QWidget *KNMusicLibraryAlbumTab::widget()
     return m_widget;
 }
 
+void KNMusicLibraryAlbumTab::retranslate()
+{
+    m_showInAlbumTab->setText(tr("Go to Album"));
+}
+
 void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
 {
     ;
@@ -48,4 +69,10 @@ void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
 void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)
 {
     ;
+}
+
+void KNMusicLibraryAlbumTab::initialShowInAction()
+{
+    //Initial the action.
+    m_showInAlbumTab=new QAction(this);
 }

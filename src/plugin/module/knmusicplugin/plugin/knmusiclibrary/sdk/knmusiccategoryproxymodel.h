@@ -26,6 +26,7 @@ class KNMusicCategoryProxyModel : public QSortFilterProxyModel
 public:
     explicit KNMusicCategoryProxyModel(QObject *parent = 0);
     QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
+    QModelIndex categoryIndex(const QString &categoryText);
 
 signals:
 

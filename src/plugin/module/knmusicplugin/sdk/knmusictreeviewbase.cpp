@@ -136,6 +136,29 @@ void KNMusicTreeViewBase::backupHeader()
     m_headerState=header()->saveState();
 }
 
+void KNMusicTreeViewBase::scrollToSourceSongRow(const int &row)
+{
+    //Do scroll and ensure that the music model exist.
+    if(m_proxyModel->musicModel()!=nullptr)
+    {
+        scrollToSongIndex(m_proxyModel->mapFromSource(m_proxyModel->musicModel()->index(row, Name)));
+    }
+}
+
+void KNMusicTreeViewBase::scrollToSongRow(const int &row)
+{
+    //Get the target index.
+    scrollToSongIndex(m_proxyModel->index(row, Name));
+}
+
+void KNMusicTreeViewBase::scrollToSongIndex(const QModelIndex &songIndex)
+{
+    //Set the current index to that row.
+    setCurrentIndex(songIndex);
+    //And move to that index.
+    scrollTo(songIndex, QAbstractItemView::PositionAtCenter);
+}
+
 void KNMusicTreeViewBase::resetHeaderState()
 {
     //Hide all column first.

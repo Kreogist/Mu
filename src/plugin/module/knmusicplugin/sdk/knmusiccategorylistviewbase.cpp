@@ -40,6 +40,8 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     m_palette.setColor(QPalette::Highlight, QColor(0xff, 0xff, 0xff, 0x40));
     m_palette.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     setPalette(m_palette);
+    //Initial the background by mouse in out function.
+    onActionMouseInOut(m_outBrightness);
 
     m_mouseIn=new QTimeLine(200, this);
     m_mouseIn->setEndFrame(m_inBrightness);

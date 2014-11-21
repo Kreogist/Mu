@@ -34,6 +34,7 @@ public:
     Qt::DropActions supportedDropActions() const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QPixmap artwork(const QString &key);
+    int rowFromFilePath(const QString &filePath);
     int playingItemColumn();
     bool dropMimeData(const QMimeData *data,
                       Qt::DropAction action,

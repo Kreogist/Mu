@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
+
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
 #include "sdk/knmusicgenremodel.h"
@@ -23,6 +25,7 @@
 #include "sdk/knmusiclibraryartisttab.h"
 #include "sdk/knmusiclibraryalbumtab.h"
 #include "sdk/knmusiclibrarygenretab.h"
+#include "knmusicsolomenubase.h"
 
 #include "knmusiclibrary.h"
 
@@ -37,12 +40,19 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
     initialGenreTab();
 
-    //Set library model.
+    //Set library model, get the go to action.
+    QList<QAction *> showInActionList;
     m_librarySongTab->setLibraryModel(m_libraryModel);
+    showInActionList.append(m_librarySongTab->showInAction());
     for(int i=0; i<CategoryTabsCount; i++)
     {
+        //Set the library model.
         m_libraryTabs[i]->setLibraryModel(m_libraryModel);
+        //Get the action list.
+        showInActionList.append(m_libraryTabs[i]->showInAction());
     }
+    //Add the show in actions to solo menu.
+    KNMusicGlobal::soloMenu()->addMusicActions(showInActionList);
 }
 
 KNMusicTab *KNMusicLibrary::songTab()

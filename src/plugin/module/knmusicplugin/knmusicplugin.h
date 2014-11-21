@@ -21,6 +21,7 @@
 #include "knabstractmusicplugin.h"
 
 class QBoxLayout;
+class QSignalMapper;
 class KNCategoryTabWidget;
 class KNPreferenceWidgetsPanel;
 class KNConnectionHandler;
@@ -83,6 +84,9 @@ protected slots:
                                       int stretch=0,
                                       Qt::Alignment alignment=0);
 
+private slots:
+    void onActionShowTab(const int &tabIndex);
+
 private:
     void initialInfrastructure();
     void initialParser();
@@ -103,6 +107,7 @@ private:
     KNPreferenceWidgetsPanel *m_preferencePanel;
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
     QThread m_parserThread, m_backendThread;
+    QSignalMapper *m_tabSwitchMapper;
     KNMusicGlobal *m_musicGlobal;
 
     KNMusicDetailDialogBase *m_detailDialog=nullptr;

@@ -63,6 +63,20 @@ QPixmap KNMusicLibraryModel::artwork(const QString &key)
     return m_coverImageList->pixmap(key);
 }
 
+int KNMusicLibraryModel::rowFromFilePath(const QString &filePath)
+{
+    QModelIndexList fileCheck=match(index(0,0),
+                                    FilePathRole,
+                                    filePath,
+                                    1);
+    //If we can't find it, check in the filelist.
+    if(fileCheck.isEmpty())
+    {
+        return -1;
+    }
+    return fileCheck.first().row();
+}
+
 int KNMusicLibraryModel::playingItemColumn()
 {
     return BlankData;

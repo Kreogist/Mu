@@ -43,6 +43,8 @@ public slots:
     void setCategoryText(const QString &text);
     void setCategoryIcon(const QPixmap &pixmap);
     void setCategoryColumn(const int &column);
+    void scrollToRow(const int &row);
+    void scrollToSourceRow(const int &row);
 
 protected:
     void resizeEvent(QResizeEvent *event);

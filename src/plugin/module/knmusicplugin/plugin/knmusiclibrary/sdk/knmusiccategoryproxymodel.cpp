@@ -38,6 +38,32 @@ QVariant KNMusicCategoryProxyModel::data(const QModelIndex &index,
     return QSortFilterProxyModel::data(index, role);
 }
 
+QModelIndex KNMusicCategoryProxyModel::categoryIndex(const QString &categoryText)
+{
+    //Check the source model first.
+    if(sourceModel()==nullptr)
+    {
+        return QModelIndex();
+    }
+    //If it's empty, return the default empty category.
+    if(categoryText.isEmpty())
+    {
+        return index(0,0);
+    }
+    //Find the category in display role.
+    QModelIndexList categoryMatch=match(index(0,0),
+                                        Qt::DisplayRole,
+                                        categoryText,
+                                        1);
+    //If it's empty, means we can't find it.
+    if(categoryMatch.isEmpty())
+    {
+        return QModelIndex();
+    }
+    //Or else return the result.
+    return categoryMatch.first();
+}
+
 bool KNMusicCategoryProxyModel::lessThan(const QModelIndex &left,
                                          const QModelIndex &right) const
 {

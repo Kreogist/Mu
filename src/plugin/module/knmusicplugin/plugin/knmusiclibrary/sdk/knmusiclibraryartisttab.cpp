@@ -17,6 +17,7 @@
  */
 #include <QSplitter>
 #include <QBoxLayout>
+#include <QAction>
 
 #include "kndropproxycontainer.h"
 #include "knmusiccategorymodel.h"
@@ -24,6 +25,9 @@
 #include "knmusiclibrarymodel.h"
 #include "knmusiccategoryproxymodel.h"
 #include "knmusiccategorylistviewbase.h"
+#include "knmusicsolomenubase.h"
+
+#include "knlocalemanager.h"
 
 #include "knmusiclibraryartisttab.h"
 
@@ -34,6 +38,8 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
 {
     //Initial the drop proxy container.
     m_container=new KNDropProxyContainer;
+    connect(m_container, &KNDropProxyContainer::dropProxyShow,
+            this, &KNMusicLibraryArtistTab::onActionTabShow);
 
     //Initial the layout for the container, only for auto resize splitter.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_container);
@@ -59,6 +65,20 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
     //Set viewer properties after add widgets.
     m_splitter->setCollapsible(1, false);
     m_splitter->setStretchFactor(1, 1);
+
+    //Initial the show in action.
+    initialShowInAction();
+
+    //Connect retranslate request.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicLibraryArtistTab::retranslate);
+    //Retranslate.
+    retranslate();
+}
+
+QAction *KNMusicLibraryArtistTab::showInAction()
+{
+    return m_showInArtistTab;
 }
 
 QString KNMusicLibraryArtistTab::caption()
@@ -74,6 +94,11 @@ QPixmap KNMusicLibraryArtistTab::icon()
 QWidget *KNMusicLibraryArtistTab::widget()
 {
     return m_container;
+}
+
+void KNMusicLibraryArtistTab::retranslate()
+{
+    m_showInArtistTab->setText(tr("Go to Artist"));
 }
 
 void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
@@ -108,6 +133,49 @@ void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
 void KNMusicLibraryArtistTab::onActionSearch(const QString &text)
 {
     ;
+}
+
+void KNMusicLibraryArtistTab::onActionTabShow()
+{
+    //Ensure we have any artist item, and check whether the current index is vaild.
+    if(proxyCategoryModel()->rowCount()>0 &&
+            !m_artistList->currentIndex().isValid())
+    {
+        m_artistList->setCurrentIndex(proxyCategoryModel()->index(0,0));
+    }
+}
+
+void KNMusicLibraryArtistTab::onActionShowInArtist()
+{
+    //Get the row of the file.
+    int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
+    //If the row is available.
+    if(musicRow!=-1)
+    {
+        //Get the genre name of the row.
+        QModelIndex categoryIndex=
+                proxyCategoryModel()->categoryIndex(
+                    m_musicLibrary->itemText(musicRow,
+                                             m_categoryModel->categoryIndex()));
+        //Check is the catgeory vaild.
+        if(categoryIndex.isValid())
+        {
+            //Change the current category index.
+            m_artistList->setCurrentIndex(categoryIndex);
+            //Set the details to display the index of the song.
+            m_artistDisplay->scrollToSourceRow(musicRow);
+            //Ask to show the genre tab.
+            emit requireShowTab();
+        }
+    }
+}
+
+void KNMusicLibraryArtistTab::initialShowInAction()
+{
+    //Initial the artist tab.
+    m_showInArtistTab=new QAction(this);
+    connect(m_showInArtistTab, SIGNAL(triggered()),
+            this, SLOT(onActionShowInArtist()));
 }
 
 void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(const QModelIndex &index)

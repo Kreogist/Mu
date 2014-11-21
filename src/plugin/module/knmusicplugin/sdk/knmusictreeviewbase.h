@@ -25,6 +25,9 @@ public:
     KNMusicModel *musicModel();
     void setMusicModel(KNMusicModel *musicModel);
     void backupHeader();
+    void scrollToSongRow(const int &row);
+    void scrollToSongIndex(const QModelIndex &songIndex);
+    void scrollToSourceSongRow(const int &row);
     KNMusicProxyModel *proxyModel();
 
 signals:
