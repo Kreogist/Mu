@@ -41,3 +41,9 @@ void KNDropProxyContainer::showEvent(QShowEvent *event)
     emit dropProxyShow();
     QWidget::showEvent(event);
 }
+
+void KNDropProxyContainer::hideEvent(QHideEvent *event)
+{
+    emit dropProxyHide();
+    QWidget::hideEvent(event);
+}

@@ -40,6 +40,8 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
     m_container=new KNDropProxyContainer;
     connect(m_container, &KNDropProxyContainer::dropProxyShow,
             this, &KNMusicLibraryArtistTab::onActionTabShow);
+    connect(m_container, &KNDropProxyContainer::dropProxyHide,
+            this, &KNMusicLibraryArtistTab::onActionTabHide);
 
     //Initial the layout for the container, only for auto resize splitter.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_container);
@@ -137,6 +139,8 @@ void KNMusicLibraryArtistTab::onActionSearch(const QString &text)
 
 void KNMusicLibraryArtistTab::onActionTabShow()
 {
+    //Do the original show request.
+    KNMusicLibraryCategoryTab::onActionTabShow();
     //Ensure we have any artist item, and check whether the current index is vaild.
     if(proxyCategoryModel()->rowCount()>0 &&
             !m_artistList->currentIndex().isValid())
@@ -162,6 +166,8 @@ void KNMusicLibraryArtistTab::onActionShowInArtist()
         {
             //Change the current category index.
             m_artistList->setCurrentIndex(categoryIndex);
+            m_artistList->scrollTo(categoryIndex,
+                                   QAbstractItemView::PositionAtCenter);
             //Set the details to display the index of the song.
             m_artistDisplay->scrollToSourceRow(musicRow);
             //Ask to show the genre tab.

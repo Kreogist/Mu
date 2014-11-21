@@ -15,9 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
+
 #include "knmusiclibrarytab.h"
 
 KNMusicLibraryTab::KNMusicLibraryTab(QObject *parent) :
     KNMusicTab(parent)
 {
+}
+
+void KNMusicLibraryTab::onActionTabShow()
+{
+    //Hide the current show in action.
+    showInAction()->setVisible(false);
+}
+
+void KNMusicLibraryTab::onActionTabHide()
+{
+    //Show the current show in action.
+    showInAction()->setVisible(true);
 }

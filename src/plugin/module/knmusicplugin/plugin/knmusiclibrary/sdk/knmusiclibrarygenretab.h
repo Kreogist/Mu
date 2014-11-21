@@ -45,9 +45,9 @@ public slots:
 
 protected slots:
     void onActionCategoryIndexChanged(const QModelIndex &index);
+    void onActionTabShow();
 
 private slots:
-    void onActionTabShow();
     void onActionShowInGenre();
 
 private:

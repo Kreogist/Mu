@@ -91,7 +91,6 @@ void KNMusicLibrary::initialArtistTab()
     //Initial the artist tab.
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab(this);
     m_libraryTabs[TabArtists]->setCategoryModel(m_categoryModel[TabArtists]);
-
 }
 
 void KNMusicLibrary::initialGenreTab()

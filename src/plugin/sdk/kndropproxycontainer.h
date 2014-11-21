@@ -20,6 +20,7 @@ public:
 signals:
     void requireAnalysisFiles(const QStringList &urls);
     void dropProxyShow();
+    void dropProxyHide();
     void dragEntered();
     void dropped();
 
@@ -29,6 +30,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
     void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
 };
 
 #endif // KNDROPPROXYCONTAINER_H

@@ -34,6 +34,9 @@ signals:
 public slots:
     virtual void setLibraryModel(KNMusicLibraryModel *model)=0;
 
+protected slots:
+    virtual void onActionTabShow();
+    virtual void onActionTabHide();
 };
 
 #endif // KNMUSICLIBRARYTAB_H

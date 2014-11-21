@@ -32,6 +32,11 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QObject *parent) :
 {
     //Initial the drop proxy.
     m_dropProxy=new KNDropProxyContainer;
+    connect(m_dropProxy, &KNDropProxyContainer::dropProxyShow,
+            this, &KNMusicLibrarySongTab::onActionTabShow);
+    connect(m_dropProxy, &KNDropProxyContainer::dropProxyHide,
+            this, &KNMusicLibrarySongTab::onActionTabHide);
+
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_dropProxy);
     mainLayout->setContentsMargins(0,0,0,0);
