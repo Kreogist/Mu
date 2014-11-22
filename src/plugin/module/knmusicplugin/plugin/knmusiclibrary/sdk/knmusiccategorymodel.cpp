@@ -36,28 +36,14 @@ void KNMusicCategoryModel::resetModel()
     appendRow(currentItem);
 }
 
-bool KNMusicCategoryModel::isScaleIcon() const
-{
-    return m_isScaleIcon;
-}
-
-void KNMusicCategoryModel::setScaleIcon(bool scaleIcon)
-{
-    m_isScaleIcon = scaleIcon;
-}
-
-QPixmap KNMusicCategoryModel::noAlbumIcon() const
+QIcon KNMusicCategoryModel::noAlbumIcon() const
 {
     return m_noAlbumIcon;
 }
 
 void KNMusicCategoryModel::setNoAlbumIcon(const QPixmap &noAlbumIcon)
 {
-    m_noAlbumIcon = m_isScaleIcon?
-                        noAlbumIcon.scaled(m_iconSize,
-                                           Qt::KeepAspectRatio,
-                                           Qt::SmoothTransformation):
-                        noAlbumIcon;
+    m_noAlbumIcon=QIcon(noAlbumIcon);
 }
 
 int KNMusicCategoryModel::categoryIndex() const
@@ -194,11 +180,7 @@ void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
                     CategoryArtworkKeyRole);
             //Set the cover image.
             setData(resultIndex,
-                    m_isScaleIcon?
-                        image.scaled(m_iconSize,
-                                     Qt::KeepAspectRatio,
-                                     Qt::SmoothTransformation):
-                        image,
+                    QIcon(image),
                     Qt::DecorationRole);
         }
     }
@@ -210,17 +192,8 @@ QStandardItem *KNMusicCategoryModel::generateItem(const QString &itemText,
     QStandardItem *currentItem=new QStandardItem(itemText);
     currentItem->setData(itemIcon.isNull()?
                              m_noAlbumIcon:
-                             m_isScaleIcon?
-                                 itemIcon.scaled(m_iconSize,
-                                                 Qt::KeepAspectRatio,
-                                                 Qt::SmoothTransformation):
-                                 itemIcon,
+                             QIcon(itemIcon),
                          Qt::DecorationRole);
     currentItem->setEditable(false);
     return currentItem;
-}
-
-QSize KNMusicCategoryModel::iconSize() const
-{
-    return m_iconSize;
 }

@@ -29,10 +29,9 @@ KNMusicGenreModel::KNMusicGenreModel(QObject *parent) :
     loadGenreIcons();
 }
 
-QPixmap KNMusicGenreModel::genreIcon(const QString &genreName)
+QIcon KNMusicGenreModel::genreIcon(const QString &genreName)
 {
-    return m_genreIconMap.value(genreName.toLower(),
-                                KNMusicGlobal::instance()->noAlbumArt());
+    return m_genreIconMap.value(genreName.toLower(), noAlbumIcon());
 }
 
 void KNMusicGenreModel::onCoverImageUpdate(const QString &categoryText,
@@ -59,9 +58,7 @@ QStandardItem *KNMusicGenreModel::generateItem(const QString &itemText,
     {
         QString artworkKey=itemText.toLower();
         currentItem->setData(m_genreIconMap.contains(artworkKey)?
-                                 m_genreIconMap.value(artworkKey).scaled(iconSize(),
-                                                                         Qt::KeepAspectRatio,
-                                                                         Qt::SmoothTransformation):
+                                 m_genreIconMap.value(artworkKey):
                                  noAlbumIcon(),
                              Qt::DecorationRole);
     }

@@ -17,11 +17,14 @@
  */
 #include <QScrollBar>
 #include <QPainter>
+#include <QIcon>
 
 #include "knmusiccategoryproxymodel.h"
 #include "knmusiccategorymodel.h"
 
 #include "knmusicalbumview.h"
+
+#include <QDebug>
 
 KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     QAbstractItemView(parent)
@@ -117,6 +120,7 @@ void KNMusicAlbumView::setModel(QAbstractItemModel *model)
 
 void KNMusicAlbumView::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
     //Initial the painter.
     QPainter painter(viewport());
     painter.setRenderHints(QPainter::Antialiasing |
@@ -142,6 +146,8 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
     }
     //Get the row count.
     int albumCount=m_proxyModel->rowCount();
+    //Calculate the line count.
+    m_lineCount=(albumCount+m_maxColumnCount-1)/m_maxColumnCount;
     //Check the album count first.
     if(albumCount==0)
     {
@@ -149,9 +155,8 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
     }
     int currentColumn=0,
         currentLeft=m_spacing,
-        currentTop=m_spacing,
-        skipLineCount=verticalScrollBar()->value()/m_itemSpacingHeight,
-        currentLine=skipLineCount,
+        currentLine=verticalScrollBar()->value()/m_itemSpacingHeight, //Skip the before.
+        currentTop=m_spacing+currentLine*m_itemSpacingHeight,
         currentRow=currentLine*m_maxColumnCount,
         heightSurplus=height()+m_itemSpacingHeight;
     //Change the origin of coordinate.
@@ -160,7 +165,7 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
     while(currentRow < albumCount && heightSurplus > 0)
     {
         //Get the source index of the item.
-        QModelIndex sourceIndex=m_proxyModel->mapToSource(m_proxyModel->index(currentRow, 0));
+        QModelIndex sourceIndex=m_proxyModel->index(currentRow, 0);
         //If the source index is not the current index, then draw the album.
         if(sourceIndex!=m_selectedIndex)
         {
@@ -177,8 +182,8 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
         //Check if we need to move to next row.
         if(currentColumn>=m_maxColumnCount)
         {
-            //Add count to row.
-            currentRow++;
+            //Add one line.
+            currentLine++;
             //Reset the column.
             currentColumn=0;
             //Change the position.
@@ -277,8 +282,8 @@ void KNMusicAlbumView::updateGeometries()
                                   qMax(0,
                                        m_lineCount*m_itemSpacingHeight+m_spacing-height()));
     //Update the page and single step.
-    verticalScrollBar()->setPageStep((m_itemIconSize>>1)-m_spacing);
-    verticalScrollBar()->setSingleStep((m_itemIconSize>>1)-m_spacing);
+    verticalScrollBar()->setPageStep(m_itemSpacingHeight>>1);
+    verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>1);
 }
 
 void KNMusicAlbumView::paintAlbum(QPainter *painter,
@@ -291,13 +296,22 @@ void KNMusicAlbumView::paintAlbum(QPainter *painter,
         return;
     }
     //Draw the album art first.
-    QPixmap currentIcon=
-            m_model->data(index, Qt::DecorationRole).value<QPixmap>();
+    QIcon currentIcon=
+            m_proxyModel->data(index, Qt::DecorationRole).value<QIcon>();
     painter->drawPixmap(QRect(rect.x()+1,
                               rect.y()-1,
                               m_itemIconSize-2,
                               m_itemIconSize-2),
-                        currentIcon.scaled(m_itemIconSize, m_itemIconSize));
+                        currentIcon.pixmap(m_itemIconSize, m_itemIconSize));
+    //Draw the album text.
+    painter->drawText(rect.x(),
+                      rect.y()+m_itemIconSize,
+                      m_itemIconSize-2,
+                      fontMetrics().height(),
+                      Qt::AlignLeft,
+                      fontMetrics().elidedText(index.data(Qt::DisplayRole).toString(),
+                                               Qt::ElideRight,
+                                               m_itemIconSize-2));
 }
 
 int KNMusicAlbumView::indexScrollBarValue(const QModelIndex &index,

@@ -160,11 +160,11 @@ void KNMusicCategoryDisplay::setCategoryText(const QString &text)
     updateDetailInfo();
 }
 
-void KNMusicCategoryDisplay::setCategoryIcon(const QPixmap &pixmap)
+void KNMusicCategoryDisplay::setCategoryIcon(const QIcon &icon)
 {
-    m_largeIcon->setPixmap(pixmap.isNull()?
+    m_largeIcon->setPixmap(icon.isNull()?
                                KNMusicGlobal::instance()->noAlbumArt():
-                               pixmap);
+                               icon.pixmap(m_largeIcon->size()));
 }
 
 void KNMusicCategoryDisplay::setCategoryColumn(const int &column)

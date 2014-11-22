@@ -41,7 +41,7 @@ public slots:
     void setLibraryModel(KNMusicLibraryModel *model);
     void showNoCategoryItem(const QString &title);
     void setCategoryText(const QString &text);
-    void setCategoryIcon(const QPixmap &pixmap);
+    void setCategoryIcon(const QIcon &icon);
     void setCategoryColumn(const int &column);
     void scrollToRow(const int &row);
     void scrollToSourceRow(const int &row);

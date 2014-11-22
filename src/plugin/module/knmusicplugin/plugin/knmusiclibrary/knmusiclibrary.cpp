@@ -106,7 +106,6 @@ void KNMusicLibrary::initialAlbumTab()
     //Initial the model and proxy model.
     m_categoryModel[TabAlbums]=new KNMusicCategoryModel(this);
     m_categoryModel[TabAlbums]->setCategoryIndex(Album);
-    m_categoryModel[TabAlbums]->setScaleIcon(false);
 }
 
 void KNMusicLibrary::initialGenreTab()

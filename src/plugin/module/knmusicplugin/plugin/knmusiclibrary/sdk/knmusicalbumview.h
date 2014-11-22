@@ -52,9 +52,9 @@ protected slots:
     void updateGeometries();
 
 private:
-    void paintAlbum(QPainter *painter,
-                    const QRect &rect,
-                    const QModelIndex &index);
+    inline void paintAlbum(QPainter *painter,
+                           const QRect &rect,
+                           const QModelIndex &index);
     int indexScrollBarValue(const QModelIndex &index,
                             ScrollHint hint = EnsureVisible);
     QRect itemContentRect(const QModelIndex &index) const;
@@ -66,7 +66,7 @@ private:
     int m_outBrightness=0x30;
     //View parameters.
     int m_lineCount=0,
-        m_spacing=13,
+        m_spacing=30,
         m_itemMinimalWidth=124,
         m_itemHeight=154,
         m_itemWidth=134,

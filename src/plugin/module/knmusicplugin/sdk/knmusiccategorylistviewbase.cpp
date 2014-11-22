@@ -20,6 +20,7 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setIconSize(QSize(40, 40));
     setLineWidth(0);
     setLayoutMode(QListView::Batched); //For speed up.
     setMinimumWidth(200);

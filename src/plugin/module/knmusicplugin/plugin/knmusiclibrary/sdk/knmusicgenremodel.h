@@ -27,7 +27,7 @@ class KNMusicGenreModel : public KNMusicCategoryModel
     Q_OBJECT
 public:
     explicit KNMusicGenreModel(QObject *parent = 0);
-    QPixmap genreIcon(const QString &genreName);
+    QIcon genreIcon(const QString &genreName);
 
 signals:
 
@@ -42,7 +42,7 @@ protected:
 
 private:
     void loadGenreIcons();
-    QHash<QString, QPixmap> m_genreIconMap;
+    QHash<QString, QIcon> m_genreIconMap;
 };
 
 #endif // KNMUSICGENREMODEL_H
