@@ -169,7 +169,7 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
         //If the source index is not the current index, then draw the album.
         if(sourceIndex!=m_selectedIndex)
         {
-            paintAlbum(&painter,
+            paintAlbum(painter,
                        QRect(currentLeft,
                              currentTop,
                              m_itemWidth,
@@ -286,7 +286,7 @@ void KNMusicAlbumView::updateGeometries()
     verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>1);
 }
 
-void KNMusicAlbumView::paintAlbum(QPainter *painter,
+void KNMusicAlbumView::paintAlbum(QPainter &painter,
                                   const QRect &rect,
                                   const QModelIndex &index)
 {
@@ -298,13 +298,13 @@ void KNMusicAlbumView::paintAlbum(QPainter *painter,
     //Draw the album art first.
     QIcon currentIcon=
             m_proxyModel->data(index, Qt::DecorationRole).value<QIcon>();
-    painter->drawPixmap(QRect(rect.x()+1,
+    painter.drawPixmap(QRect(rect.x()+1,
                               rect.y()-1,
                               m_itemIconSize-2,
                               m_itemIconSize-2),
                         currentIcon.pixmap(m_itemIconSize, m_itemIconSize));
     //Draw the album text.
-    painter->drawText(rect.x(),
+    painter.drawText(rect.x(),
                       rect.y()+m_itemIconSize,
                       m_itemIconSize-2,
                       fontMetrics().height(),

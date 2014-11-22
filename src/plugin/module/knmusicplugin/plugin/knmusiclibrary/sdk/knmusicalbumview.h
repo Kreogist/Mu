@@ -52,7 +52,7 @@ protected slots:
     void updateGeometries();
 
 private:
-    inline void paintAlbum(QPainter *painter,
+    inline void paintAlbum(QPainter &painter,
                            const QRect &rect,
                            const QModelIndex &index);
     int indexScrollBarValue(const QModelIndex &index,
