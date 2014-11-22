@@ -43,15 +43,6 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Get the go to action.
     showInActionList.append(m_librarySongTab->showInAction());
 
-    //Initial the category models.
-    for(int i=0; i<CategoryTabsCount; i++)
-    {
-        //Initial the model and proxy model.
-        m_categoryModel[i]=new KNMusicCategoryModel(this);
-        //Install the category model to library model.
-        m_libraryModel->installCategoryModel(m_categoryModel[i]);
-    }
-
     //Initial the category tabs.
     initialArtistTab();
     initialAlbumTab();
@@ -60,6 +51,8 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Set library model, get the go to action.
     for(int i=0; i<CategoryTabsCount; i++)
     {
+        //Install the category model to library model.
+        m_libraryModel->installCategoryModel(m_categoryModel[i]);
         //Set the category model
         m_libraryTabs[i]->setCategoryModel(m_categoryModel[i]);
         //Set the library model.
@@ -102,6 +95,7 @@ void KNMusicLibrary::initialArtistTab()
     //Initial the artist tab.
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab(this);
     //Initial the model and proxy model.
+    m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
     m_categoryModel[TabArtists]->setCategoryIndex(Artist);
 }
 
@@ -110,7 +104,9 @@ void KNMusicLibrary::initialAlbumTab()
     //Initial the album tab.
     m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
     //Initial the model and proxy model.
+    m_categoryModel[TabAlbums]=new KNMusicCategoryModel(this);
     m_categoryModel[TabAlbums]->setCategoryIndex(Album);
+    m_categoryModel[TabAlbums]->setScaleIcon(false);
 }
 
 void KNMusicLibrary::initialGenreTab()
@@ -118,5 +114,6 @@ void KNMusicLibrary::initialGenreTab()
     //Initial the genre tab.
     m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab(this);
     //Initial the model and proxy model.
+    m_categoryModel[TabGenres]=new KNMusicGenreModel(this);
     m_categoryModel[TabGenres]->setCategoryIndex(Genre);
 }

@@ -19,7 +19,10 @@
 #include <QBoxLayout>
 
 #include "kndropproxycontainer.h"
+#include "knmusicalbumview.h"
 #include "knmusiclibrarymodel.h"
+#include "knmusiccategorymodel.h"
+#include "knmusiccategoryproxymodel.h"
 
 #include "knlocalemanager.h"
 
@@ -40,6 +43,10 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     m_container->setLayout(mainLayout);
+
+    //Initial the album view.
+    m_albumView=new KNMusicAlbumView(m_container);
+    mainLayout->addWidget(m_albumView);
 
     //Initial the show in action.
     initialShowInAction();
@@ -82,6 +89,22 @@ void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
     //Do connections.
     connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
             m_musicLibrary, &KNMusicLibraryModel::addFiles);
+}
+
+void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModel *model)
+{
+    //Save the model pointer.
+    m_categoryModel=model;
+    //Set the no category text.
+    m_categoryModel->setNoCategoryText(tr("No Album"));
+    //Apply category model.
+    KNMusicLibraryCategoryTab::setCategoryModel(m_categoryModel);
+
+    //! This should be done in constructor, but setModel() is a virtual
+    //! function, so we moved here.
+    //Set the proxy model to tree view.
+    m_albumView->setModel(proxyCategoryModel());
+    proxyCategoryModel()->sort(0, Qt::AscendingOrder);
 }
 
 void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)

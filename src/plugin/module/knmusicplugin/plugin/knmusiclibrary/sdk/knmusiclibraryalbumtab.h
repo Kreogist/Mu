@@ -21,6 +21,7 @@
 #include "knmusiclibrarycategorytab.h"
 
 class KNDropProxyContainer;
+class KNMusicAlbumView;
 class KNMusicLibraryAlbumTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
@@ -36,11 +37,13 @@ signals:
 public slots:
     void retranslate();
     void setLibraryModel(KNMusicLibraryModel *model);
+    void setCategoryModel(KNMusicCategoryModel *model);
     void onActionSearch(const QString &text);
 
 private:
     void initialShowInAction();
     QAction *m_showInAlbumTab;
+    KNMusicAlbumView *m_albumView;
     KNDropProxyContainer *m_container;
     KNMusicLibraryModel *m_musicLibrary;
     KNMusicCategoryModel *m_categoryModel;

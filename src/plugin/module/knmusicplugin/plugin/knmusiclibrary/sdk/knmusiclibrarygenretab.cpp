@@ -133,7 +133,7 @@ void KNMusicLibraryGenreTab::setCategoryModel(KNMusicCategoryModel *model)
 
 void KNMusicLibraryGenreTab::onActionSearch(const QString &text)
 {
-
+    ;
 }
 
 void KNMusicLibraryGenreTab::onActionCategoryIndexChanged(const QModelIndex &index)

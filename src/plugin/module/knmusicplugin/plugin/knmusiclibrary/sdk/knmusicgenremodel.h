@@ -36,6 +36,10 @@ public slots:
                             const QString &imageKey,
                             const QPixmap &image);
 
+protected:
+    QStandardItem *generateItem(const QString &itemText,
+                                const QPixmap &itemIcon=QPixmap());
+
 private:
     void loadGenreIcons();
     QHash<QString, QPixmap> m_genreIconMap;

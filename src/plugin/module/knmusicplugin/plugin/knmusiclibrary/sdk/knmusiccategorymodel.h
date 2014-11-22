@@ -35,6 +35,8 @@ public:
     void setCategoryIndex(int categoryIndex);
     QPixmap noAlbumIcon() const;
     void setNoAlbumIcon(const QPixmap &noAlbumIcon);
+    bool isScaleIcon() const;
+    void setScaleIcon(bool scaleIcon);
 
 signals:
 
@@ -52,6 +54,7 @@ protected:
 
 private:
     void resetModel();
+    bool m_isScaleIcon=true;
     int m_categoryIndex=-1;
     QSize m_iconSize=QSize(40, 40);
     QPixmap m_noAlbumIcon;

@@ -32,51 +32,41 @@ KNMusicGenreModel::KNMusicGenreModel(QObject *parent) :
 QPixmap KNMusicGenreModel::genreIcon(const QString &genreName)
 {
     return m_genreIconMap.value(genreName.toLower(),
-                                QPixmap());
+                                KNMusicGlobal::instance()->noAlbumArt());
 }
 
 void KNMusicGenreModel::onCoverImageUpdate(const QString &categoryText,
                                            const QString &imageKey,
                                            const QPixmap &image)
 {
+    Q_UNUSED(categoryText)
     Q_UNUSED(imageKey)
     Q_UNUSED(image)
-    //Ignore the empty genre.
-    if(categoryText.isEmpty())
+    //Do nothing.
+    return;
+}
+
+QStandardItem *KNMusicGenreModel::generateItem(const QString &itemText,
+                                               const QPixmap &itemIcon)
+{
+    Q_UNUSED(itemIcon)
+    QStandardItem *currentItem=new QStandardItem(itemText);
+    if(itemText.isEmpty())
     {
-        return;
-    }
-    //Search the category text.
-    QModelIndexList results=
-            match(index(0,0), Qt::DisplayRole, categoryText, 1);
-    if(results.isEmpty())
-    {
-        //Are you kidding me?
-        return;
+        currentItem->setData(noAlbumIcon(), Qt::DecorationRole);
     }
     else
     {
-        //Check is the cover image has a key.
-        QModelIndex resultIndex=results.first();
-        if(data(resultIndex, CategoryArtworkKeyRole).isNull())
-        {
-            //Use the lower category text as the key.
-            QString artworkKey=categoryText.toLower();
-            if(m_genreIconMap.contains(artworkKey))
-            {
-                //Set the image key.
-                setData(resultIndex,
-                        artworkKey,
-                        CategoryArtworkKeyRole);
-                //Set the cover image.
-                setData(resultIndex,
-                        m_genreIconMap.value(artworkKey).scaled(iconSize(),
-                                                                Qt::KeepAspectRatio,
-                                                                Qt::SmoothTransformation),
-                        Qt::DecorationRole);
-            }
-        }
+        QString artworkKey=itemText.toLower();
+        currentItem->setData(m_genreIconMap.contains(artworkKey)?
+                                 m_genreIconMap.value(artworkKey).scaled(iconSize(),
+                                                                         Qt::KeepAspectRatio,
+                                                                         Qt::SmoothTransformation):
+                                 noAlbumIcon(),
+                             Qt::DecorationRole);
     }
+    currentItem->setEditable(false);
+    return currentItem;
 }
 
 void KNMusicGenreModel::loadGenreIcons()
