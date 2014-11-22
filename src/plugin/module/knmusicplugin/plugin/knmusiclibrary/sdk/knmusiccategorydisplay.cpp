@@ -135,7 +135,10 @@ void KNMusicCategoryDisplay::updateDetailInfo()
 
 void KNMusicCategoryDisplay::setLibraryModel(KNMusicLibraryModel *model)
 {
+    //Set the model.
     m_categoryTreeView->setMusicModel(model);
+    //Set default sort state.
+    m_categoryTreeView->sortByColumn(Name, Qt::AscendingOrder);
 }
 
 void KNMusicCategoryDisplay::showNoCategoryItem(const QString &title)

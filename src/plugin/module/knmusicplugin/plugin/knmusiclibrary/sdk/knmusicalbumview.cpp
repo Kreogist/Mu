@@ -211,29 +211,29 @@ QModelIndex KNMusicAlbumView::moveCursor(QAbstractItemView::CursorAction cursorA
                                          Qt::KeyboardModifiers modifiers)
 {
     QModelIndex current=currentIndex(), movedIndex;
-//    switch (cursorAction)
-//    {
-//    case QAbstractItemView::MoveUp:
-//        movedIndex=m_proxyModel->index(current.row()-m_maxColumnCount, 0);
-//        break;
-//    case QAbstractItemView::MoveDown:
-//        movedIndex=m_proxyModel->index(current.row()+m_maxColumnCount, 0);
-//        break;
-//    case QAbstractItemView::MoveLeft:
-//        movedIndex=m_proxyModel->index(current.row()-1, 0);
-//        break;
-//    case QAbstractItemView::MoveRight:
-//        movedIndex=m_proxyModel->index(current.row()+1, 0);
-//        break;
-//    case QAbstractItemView::MoveHome:
-//        movedIndex=m_proxyModel->index(0, 0);
-//        break;
-//    case QAbstractItemView::MoveEnd:
-//        movedIndex=m_proxyModel->index(m_model->rowCount()-1, 0);
-//        break;
-//    default:
-//        break;
-//    }
+    switch (cursorAction)
+    {
+    case QAbstractItemView::MoveUp:
+        movedIndex=m_proxyModel->index(current.row()-m_maxColumnCount, 0);
+        break;
+    case QAbstractItemView::MoveDown:
+        movedIndex=m_proxyModel->index(current.row()+m_maxColumnCount, 0);
+        break;
+    case QAbstractItemView::MoveLeft:
+        movedIndex=m_proxyModel->index(current.row()-1, 0);
+        break;
+    case QAbstractItemView::MoveRight:
+        movedIndex=m_proxyModel->index(current.row()+1, 0);
+        break;
+    case QAbstractItemView::MoveHome:
+        movedIndex=m_proxyModel->index(0, 0);
+        break;
+    case QAbstractItemView::MoveEnd:
+        movedIndex=m_proxyModel->index(m_model->rowCount()-1, 0);
+        break;
+    default:
+        break;
+    }
     viewport()->update();
     return current;
 }
