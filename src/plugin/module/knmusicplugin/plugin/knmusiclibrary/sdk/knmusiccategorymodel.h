@@ -39,7 +39,7 @@ public:
 signals:
 
 public slots:
-    virtual void onCategoryAdded(const QString &categoryText);
+    virtual void onCategoryAdded(const QList<QStandardItem *> &musicRow);
     virtual void onCategoryRemoved(const QString &categoryText);
     virtual void onCoverImageUpdate(const QString &categoryText,
                                     const QString &imageKey,

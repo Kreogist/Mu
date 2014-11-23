@@ -140,15 +140,15 @@ void KNMusicLibraryModel::addFiles(const QStringList &fileList)
 
 void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
 {
-    //Add current data to category models.
+    //Add the row to model.
+    KNMusicModel::appendMusicRow(musicRow);
+    //Add the row data to category models.
     for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
         i!=m_categoryModels.end();
         ++i)
     {
-        (*i)->onCategoryAdded(musicRow.at((*i)->categoryIndex())->text());
+        (*i)->onCategoryAdded(musicRow);
     }
-    //Add the row to model.
-    KNMusicModel::appendMusicRow(musicRow);
 }
 
 void KNMusicLibraryModel::updateCoverImage(const KNMusicDetailInfo &detailInfo)

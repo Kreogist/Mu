@@ -19,6 +19,7 @@
 
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
+#include "sdk/knmusicalbummodel.h"
 #include "sdk/knmusicgenremodel.h"
 #include "sdk/knmusiclibrarytab.h"
 #include "sdk/knmusiclibrarysongtab.h"
@@ -104,7 +105,7 @@ void KNMusicLibrary::initialAlbumTab()
     //Initial the album tab.
     m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
     //Initial the model and proxy model.
-    m_categoryModel[TabAlbums]=new KNMusicCategoryModel(this);
+    m_categoryModel[TabAlbums]=new KNMusicAlbumModel(this);
     m_categoryModel[TabAlbums]->setCategoryIndex(Album);
 }
 

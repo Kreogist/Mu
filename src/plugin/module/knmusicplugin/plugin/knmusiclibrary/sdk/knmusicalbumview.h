@@ -20,7 +20,8 @@
 
 #include <QAbstractItemView>
 
-class KNMusicCategoryModel;
+class KNMusicLibraryModel;
+class KNMusicAlbumModel;
 class KNMusicCategoryProxyModel;
 class KNMusicAlbumView : public QAbstractItemView
 {
@@ -31,6 +32,7 @@ public:
     void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
     QRect visualRect(const QModelIndex &index) const;
     void setModel(QAbstractItemModel *model);
+    void setLibraryModel(KNMusicLibraryModel *libraryModel);
 
 signals:
 
@@ -59,7 +61,7 @@ private:
                             ScrollHint hint = EnsureVisible);
     QRect itemContentRect(const QModelIndex &index) const;
     void updateParameters();
-    KNMusicCategoryModel *m_model=nullptr;
+    KNMusicAlbumModel *m_model=nullptr;
     KNMusicCategoryProxyModel *m_proxyModel=nullptr;
     QModelIndex m_selectedIndex;
     QColor m_backgroundColor=QColor(0x30, 0x30, 0x30);

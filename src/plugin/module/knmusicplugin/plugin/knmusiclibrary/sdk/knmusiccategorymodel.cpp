@@ -32,7 +32,6 @@ void KNMusicCategoryModel::resetModel()
     clear();
     //Add initial item: the blank item.
     QStandardItem *currentItem=generateItem(m_noCategoryText);
-    currentItem->setData(0, CategoryItemSizeRole);
     appendRow(currentItem);
 }
 
@@ -69,9 +68,10 @@ void KNMusicCategoryModel::setNoCategoryText(const QString &noCategoryText)
     setData(index(0,0), m_noCategoryText, Qt::DisplayRole);
 }
 
-void KNMusicCategoryModel::onCategoryAdded(const QString &categoryText)
+void KNMusicCategoryModel::onCategoryAdded(const QList<QStandardItem *> &musicRow)
 {
     //Check if it need to be add to blank item.
+    QString categoryText=musicRow.at(m_categoryIndex)->text();
     if(categoryText.isEmpty())
     {
         QModelIndex resultIndex=index(0,0);
@@ -194,6 +194,7 @@ QStandardItem *KNMusicCategoryModel::generateItem(const QString &itemText,
                              m_noAlbumIcon:
                              QIcon(itemIcon),
                          Qt::DecorationRole);
+    currentItem->setData(0, CategoryItemSizeRole);
     currentItem->setEditable(false);
     return currentItem;
 }

@@ -50,6 +50,7 @@ QStandardItem *KNMusicGenreModel::generateItem(const QString &itemText,
 {
     Q_UNUSED(itemIcon)
     QStandardItem *currentItem=new QStandardItem(itemText);
+    currentItem->setData(0, CategoryItemSizeRole);
     if(itemText.isEmpty())
     {
         currentItem->setData(noAlbumIcon(), Qt::DecorationRole);

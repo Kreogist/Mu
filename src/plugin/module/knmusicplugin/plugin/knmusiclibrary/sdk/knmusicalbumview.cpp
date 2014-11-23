@@ -20,7 +20,7 @@
 #include <QIcon>
 
 #include "knmusiccategoryproxymodel.h"
-#include "knmusiccategorymodel.h"
+#include "knmusicalbummodel.h"
 
 #include "knmusicalbumview.h"
 
@@ -111,7 +111,7 @@ void KNMusicAlbumView::setModel(QAbstractItemModel *model)
 {
     //Save the proxy model and the category model.
     m_proxyModel=static_cast<KNMusicCategoryProxyModel *>(model);
-    m_model=static_cast<KNMusicCategoryModel *>(m_proxyModel->sourceModel());
+    m_model=static_cast<KNMusicAlbumModel *>(m_proxyModel->sourceModel());
     //Set the model.
     QAbstractItemView::setModel(m_proxyModel);
     //Update the geometries.
@@ -134,8 +134,6 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
     {
         painter.fillRect(rect(), option.palette.base());
     }
-    //Set the pen as the text color.
-    painter.setPen(option.palette.color(QPalette::Text));
 
     //Update the parameters of the view first.
     updateParameters();
@@ -303,15 +301,41 @@ void KNMusicAlbumView::paintAlbum(QPainter &painter,
                               m_itemIconSize-2,
                               m_itemIconSize-2),
                         currentIcon.pixmap(m_itemIconSize, m_itemIconSize));
+    //Get the option view item.
+    QStyleOptionViewItem option=viewOptions();
+    //Set the pen as the text color.
+    QColor textColor=option.palette.color(QPalette::Text);
+    painter.setPen(textColor);
     //Draw the album text.
+    //Draw the album name first.
     painter.drawText(rect.x(),
-                      rect.y()+m_itemIconSize,
-                      m_itemIconSize-2,
-                      fontMetrics().height(),
-                      Qt::AlignLeft,
-                      fontMetrics().elidedText(index.data(Qt::DisplayRole).toString(),
-                                               Qt::ElideRight,
-                                               m_itemIconSize-2));
+                     rect.y()+m_itemIconSize,
+                     m_itemIconSize,
+                     fontMetrics().height(),
+                     Qt::AlignLeft,
+                     fontMetrics().elidedText(index.data(Qt::DisplayRole).toString(),
+                                              Qt::ElideRight,
+                                              m_itemIconSize));
+    //Draw the album artist name.
+    //Get the album list.
+    QHash<QString, QVariant> artistList=index.data(CategoryAlbumArtist).toHash();
+    if(!artistList.isEmpty())
+    {
+        //Set color.
+        textColor.setAlpha(textColor.alpha()>>1);
+        painter.setPen(textColor);
+        //Draw the text.
+        painter.drawText(rect.x(),
+                         rect.y()+m_itemIconSize+fontMetrics().height(),
+                         m_itemIconSize,
+                         fontMetrics().height(),
+                         Qt::AlignLeft,
+                         fontMetrics().elidedText(artistList.size()==1?
+                                                      artistList.keys().first():
+                                                      tr("Various Artists"),
+                                                  Qt::ElideRight,
+                                                  m_itemIconSize));
+    }
 }
 
 int KNMusicAlbumView::indexScrollBarValue(const QModelIndex &index,
