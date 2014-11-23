@@ -62,7 +62,7 @@ private:
     KNMusicPlaylistListItem *importPlaylistFromFile(const QString &filePath);
 
     QString m_playlistDatabasePath;
-    KNMusicPlaylistLoader *m_loader;
+    KNMusicPlaylistLoader *m_playlistLoader;
     KNMusicPlaylistTab *m_playlistTab;
     KNMusicPlaylistList *m_playlistList;
     bool m_playlistListLoaded=false;

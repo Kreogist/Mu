@@ -101,6 +101,11 @@ void KNMusicPlaylistTab::cutLoadRequirement()
                this, &KNMusicPlaylistTab::requireLoadPlaylistList);
 }
 
+void KNMusicPlaylistTab::setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader)
+{
+    m_playlistListViewEditor->setPlaylistLoader(playlistLoader);
+}
+
 void KNMusicPlaylistTab::onActionSearch(const QString &text)
 {
     m_playlistDisplay->searchText(text);

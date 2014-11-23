@@ -7,7 +7,9 @@
 #ifndef KNMUSICPLAYLISTPARSER_H
 #define KNMUSICPLAYLISTPARSER_H
 
-#include <QStringList>
+#include <QList>
+
+#include "knmusicglobal.h"
 
 #include <QObject>
 
@@ -16,8 +18,11 @@ class KNMusicPlaylistParser : public QObject
     Q_OBJECT
 public:
     KNMusicPlaylistParser(QObject *parent = 0):QObject(parent){}
+    virtual QString playlistType() const=0;
+    virtual QString playlistSuffix() const=0;
     virtual bool parse(const QString &playlistFilePath,
-                       QStringList &data)=0;
+                       QString &playlistTitle,
+                       QStringList &fileList)=0;
 
 signals:
 

@@ -17,6 +17,8 @@
  */
 #include <QFile>
 
+#include "plugin/knmusicxspfparser/knmusicxspfparser.h"
+
 #include "sdk/knmusicplaylistloader.h"
 #include "sdk/knmusicplaylistlistitem.h"
 #include "sdk/knmusicplaylistlistassistant.h"
@@ -50,8 +52,9 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_playlistTab=new KNMusicPlaylistTab(this);
     //Generate the playlist list.
     m_playlistList=new KNMusicPlaylistList(this);
-    //Set the playlist list.
+    //Set the playlist list and loader.
     m_playlistTab->setPlaylistList(m_playlistList);
+    m_playlistTab->setPlaylistLoader(m_playlistLoader);
 
     //Link the UI's request.
     connect(m_playlistTab, &KNMusicPlaylistTab::requireCreateFirstPlaylist,
@@ -243,8 +246,9 @@ void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &c
 void KNMusicPlaylistManager::initialPlaylistLoader()
 {
     //Initial the loader.
-    m_loader=new KNMusicPlaylistLoader(this);
+    m_playlistLoader=new KNMusicPlaylistLoader(this);
     //Install all the plugins.
+    m_playlistLoader->installPlaylistParser(new KNMusicXSPFParser);
 }
 
 void KNMusicPlaylistManager::saveChangedPlaylist()
@@ -264,7 +268,7 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generatePlaylist();
-    //!FIXME: Here we just load the playlist, but I want dymanic loading.
+    //!FIXME: Here we just load the playlist, but I want to load it dymanicly.
     //Using the mu playlist parser first to parse it.
     if(KNMusicPlaylistListAssistant::readPlaylist(filePath, playlistItem))
     {
@@ -272,8 +276,22 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
         m_playlistList->appendPlaylist(playlistItem);
         return playlistItem;
     }
-    //!FIXME: Parse other type of the data.
-//    m_loader->parsePlaylist(filePath);
+    //Parse other type of the data.
+    QString playlistTitle;
+    QStringList playlistFiles;
+    if(m_playlistLoader->parsePlaylist(filePath, playlistTitle, playlistFiles))
+    {
+        //Set the title.
+        playlistItem->setText(playlistTitle);
+        //Analysis files.
+        playlistItem->playlistModel()->addFiles(playlistFiles);
+        //Add to playlist list.
+        m_playlistList->appendPlaylist(playlistItem);
+        //Set to current playlist.
+        m_playlistTab->setCurrentPlaylist(playlistItem->index());
+        return playlistItem;
+    }
+    //Delete the no used item.
     delete playlistItem;
     return nullptr;
 }
