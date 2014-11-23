@@ -318,7 +318,7 @@ void KNMusicAlbumView::paintAlbum(QPainter &painter,
                                               m_itemIconSize));
     //Draw the album artist name.
     //Get the album list.
-    QHash<QString, QVariant> artistList=index.data(CategoryAlbumArtist).toHash();
+    QHash<QString, QVariant> artistList=index.data(CategoryArtistList).toHash();
     if(!artistList.isEmpty())
     {
         //Set color.

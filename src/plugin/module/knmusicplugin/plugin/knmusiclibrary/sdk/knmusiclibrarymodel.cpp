@@ -167,13 +167,18 @@ void KNMusicLibraryModel::updateCoverImage(const KNMusicDetailInfo &detailInfo)
 
 void KNMusicLibraryModel::removeMusicRow(const int &row)
 {
+    //Quick generate the row, this shouldn't so slow.
+    QList<QStandardItem *> currentRow;
+    for(int i=0; i<columnCount(); i++)
+    {
+        currentRow.append(item(row, i));
+    }
     //Ask category model to remove this row.
     for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
         i!=m_categoryModels.end();
         ++i)
     {
-        (*i)->onCategoryRemoved(data(index(row, (*i)->categoryIndex()),
-                                     Qt::DisplayRole).toString());
+        (*i)->onCategoryRemoved(currentRow);
     }
     //Remove the row.
     KNMusicModel::removeMusicRow(row);

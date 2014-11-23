@@ -103,9 +103,10 @@ void KNMusicCategoryModel::onCategoryAdded(const QList<QStandardItem *> &musicRo
     }
 }
 
-void KNMusicCategoryModel::onCategoryRemoved(const QString &categoryText)
+void KNMusicCategoryModel::onCategoryRemoved(const QList<QStandardItem *> &musicRow)
 {
     QModelIndex resultIndex;
+    QString categoryText=musicRow.at(m_categoryIndex)->text();
     //Check if it's in a blank item.
     if(categoryText.isEmpty())
     {

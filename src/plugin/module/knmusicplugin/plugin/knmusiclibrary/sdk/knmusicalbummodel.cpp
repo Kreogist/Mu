@@ -75,7 +75,7 @@ void KNMusicAlbumModel::onCategoryAdded(const QList<QStandardItem *> &musicRow)
         {
             //Add the artist to the list, set the data.
             artistList.insert(albumArtist,
-                                   artistList.value(albumArtist).toInt()+1);
+                              artistList.value(albumArtist).toInt()+1);
         }
         else
         {
@@ -86,5 +86,73 @@ void KNMusicAlbumModel::onCategoryAdded(const QList<QStandardItem *> &musicRow)
         setData(resultIndex,
                 artistList,
                 CategoryArtistList);
+    }
+}
+
+void KNMusicAlbumModel::onCategoryRemoved(const QList<QStandardItem *> &musicRow)
+{
+    QModelIndex resultIndex;
+    QString categoryText=musicRow.at(categoryIndex())->text();
+    //Check if it's in a blank item.
+    if(categoryText.isEmpty())
+    {
+        resultIndex=index(0,0);
+        int currentCategorySize=data(resultIndex, CategoryItemSizeRole).toInt();
+        if(currentCategorySize==1)
+        {
+            setData(resultIndex,
+                    0,
+                    CategoryItemSizeRole);
+            setData(resultIndex,
+                    0,
+                    CategoryItemVisibleRole);
+        }
+        else
+        {
+            setData(resultIndex,
+                    currentCategorySize-1,
+                    CategoryItemSizeRole);
+        }
+        return;
+    }
+    //Search the category text.
+    QModelIndexList results=
+            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+    if(results.isEmpty())
+    {
+        //Are you kidding me?
+        return;
+    }
+    resultIndex=results.first();
+    int currentCategorySize=resultIndex.data(CategoryItemSizeRole).toInt();
+    //If current item is the last item of the category,
+    if(currentCategorySize==1)
+    {
+        //Remove this category.
+        removeRow(resultIndex.row());
+    }
+    else
+    {
+        //Reduce the count.
+        setData(resultIndex, currentCategorySize-1, CategoryItemSizeRole);
+        //Check the artist, and reduce the artist count.
+        QHash<QString, QVariant> artistList=data(resultIndex,
+                                                 CategoryArtistList).toHash();
+        QString songArtist=musicRow.at(AlbumArtist)->text();
+        if(artistList.contains(songArtist))
+        {
+            int artistSongCount=artistList.value(songArtist).toInt();
+            //If this is the last song of the artist, remove the artist from the
+            //list.
+            if(artistSongCount==1)
+            {
+                artistList.remove(songArtist);
+            }
+            else
+            {
+                artistList.insert(songArtist, artistSongCount-1);
+            }
+            setData(resultIndex, artistList, CategoryArtistList);
+        }
     }
 }

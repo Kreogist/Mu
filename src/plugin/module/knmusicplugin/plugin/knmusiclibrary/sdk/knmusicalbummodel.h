@@ -24,7 +24,8 @@ namespace KNMusicLibraryAlbumCategory
 {
 enum KNMusicAlbumRole
 {
-    CategoryAlbumArtist=CategoryArtworkKeyRole+1
+    CategoryArtistList=CategoryArtworkKeyRole+1,
+    CategoryAlbumArtist
 };
 }
 
@@ -40,6 +41,7 @@ signals:
 
 public slots:
     void onCategoryAdded(const QList<QStandardItem *> &musicRow);
+    void onCategoryRemoved(const QList<QStandardItem *> &musicRow);
 };
 
 #endif // KNMUSICALBUMMODEL_H
