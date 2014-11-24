@@ -19,6 +19,7 @@
 
 #include "plugin/knmusicxspfparser/knmusicxspfparser.h"
 #include "plugin/knmusicttplparser/knmusicttplparser.h"
+#include "plugin/knmusicm3uparser/knmusicm3uparser.h"
 
 #include "sdk/knmusicplaylistloader.h"
 #include "sdk/knmusicplaylistlistitem.h"
@@ -265,6 +266,7 @@ void KNMusicPlaylistManager::initialPlaylistLoader()
     //Install all the plugins.
     m_playlistLoader->installPlaylistParser(new KNMusicXSPFParser);
     m_playlistLoader->installPlaylistParser(new KNMusicTTPLParser);
+    m_playlistLoader->installPlaylistParser(new KNMusicM3UParser);
 }
 
 void KNMusicPlaylistManager::saveChangedPlaylist()
