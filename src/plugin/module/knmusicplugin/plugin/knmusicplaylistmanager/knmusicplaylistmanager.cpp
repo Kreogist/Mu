@@ -18,6 +18,7 @@
 #include <QFile>
 
 #include "plugin/knmusicxspfparser/knmusicxspfparser.h"
+#include "plugin/knmusicttplparser/knmusicttplparser.h"
 
 #include "sdk/knmusicplaylistloader.h"
 #include "sdk/knmusicplaylistlistitem.h"
@@ -186,9 +187,23 @@ void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
 
 void KNMusicPlaylistManager::onActionImportPlaylist(QStringList playlistPaths)
 {
+    //Last import item saver.
+    KNMusicPlaylistListItem *playlistItem=nullptr, *currentItem;
     while(!playlistPaths.isEmpty())
     {
-        importPlaylistFromFile(playlistPaths.takeFirst());
+        //Import the playlist.
+        currentItem=importPlaylistFromFile(playlistPaths.takeFirst());
+        //If load it success, set to the last import item.
+        if(currentItem!=nullptr)
+        {
+            playlistItem=currentItem;
+        }
+    }
+    //If we load any playlist of the paths, set current to the last one we import.
+    if(playlistItem!=nullptr)
+    {
+        //Set to current playlist.
+        m_playlistTab->setCurrentPlaylist(playlistItem->index());
     }
 }
 
@@ -249,6 +264,7 @@ void KNMusicPlaylistManager::initialPlaylistLoader()
     m_playlistLoader=new KNMusicPlaylistLoader(this);
     //Install all the plugins.
     m_playlistLoader->installPlaylistParser(new KNMusicXSPFParser);
+    m_playlistLoader->installPlaylistParser(new KNMusicTTPLParser);
 }
 
 void KNMusicPlaylistManager::saveChangedPlaylist()
@@ -277,18 +293,12 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
         return playlistItem;
     }
     //Parse other type of the data.
-    QString playlistTitle;
-    QStringList playlistFiles;
-    if(m_playlistLoader->parsePlaylist(filePath, playlistTitle, playlistFiles))
+    if(m_playlistLoader->parsePlaylist(filePath, playlistItem))
     {
-        //Set the title.
-        playlistItem->setText(playlistTitle);
-        //Analysis files.
-        playlistItem->playlistModel()->addFiles(playlistFiles);
+        //Set a file path for the item.
+        playlistItem->setPlaylistFilePath(KNMusicPlaylistListAssistant::alloctPlaylistFilePath());
         //Add to playlist list.
         m_playlistList->appendPlaylist(playlistItem);
-        //Set to current playlist.
-        m_playlistTab->setCurrentPlaylist(playlistItem->index());
         return playlistItem;
     }
     //Delete the no used item.

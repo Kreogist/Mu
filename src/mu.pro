@@ -261,7 +261,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.cpp
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicttplparser/knmusicttplparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -430,7 +432,9 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.h
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicttplparser/knmusicttplparser.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.h
 
 RESOURCES += \
     resource/res.qrc

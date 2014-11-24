@@ -28,8 +28,7 @@ public:
     QString playlistType() const;
     QString playlistSuffix() const;
     bool parse(const QString &playlistFilePath,
-               QString &playlistTitle,
-               QStringList &fileList);
+               KNMusicPlaylistListItem *playlistItem);
 
 signals:
 

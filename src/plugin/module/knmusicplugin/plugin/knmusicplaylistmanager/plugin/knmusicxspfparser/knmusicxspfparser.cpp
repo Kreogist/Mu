@@ -20,6 +20,9 @@
 #include <QUrl>
 #include <QDomDocument>
 
+#include "../../sdk/knmusicplaylistlistitem.h"
+#include "../../sdk/knmusicplaylistmodel.h"
+
 #include "knmusicxspfparser.h"
 
 #include <QDebug>
@@ -42,8 +45,7 @@ QString KNMusicXSPFParser::playlistSuffix() const
 }
 
 bool KNMusicXSPFParser::parse(const QString &playlistFilePath,
-                              QString &playlistTitle,
-                              QStringList &fileList)
+                              KNMusicPlaylistListItem *playlistItem)
 {
     //Open the playlist file first.
     QFile xspfFile(playlistFilePath);
@@ -69,7 +71,7 @@ bool KNMusicXSPFParser::parse(const QString &playlistFilePath,
         return false;
     }
     //Get the title of the playlist.
-    playlistTitle=root.firstChildElement("title").text();
+    playlistItem->setText(root.firstChildElement("title").text());
     //Get the track list data.
     QDomElement trackListData=root.firstChildElement("trackList");
     if(trackListData.isNull())
@@ -78,6 +80,7 @@ bool KNMusicXSPFParser::parse(const QString &playlistFilePath,
     }
     //Get the track list.
     QDomNodeList trackList=trackListData.childNodes();
+    QStringList fileList;
     for(int i=0, trackCount=trackList.size(); i<trackCount; i++)
     {
         //Get the current track.
@@ -89,5 +92,9 @@ bool KNMusicXSPFParser::parse(const QString &playlistFilePath,
         //Add to detail list.
         fileList.append(currentInfo.absoluteFilePath());
     }
+    //Add files to playlist item model.
+    playlistItem->playlistModel()->addFiles(fileList);
+    //Set changed flags.
+    playlistItem->setChanged(true);
     return true;
 }

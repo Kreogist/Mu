@@ -13,6 +13,7 @@
 
 #include <QObject>
 
+class KNMusicPlaylistListItem;
 class KNMusicPlaylistParser : public QObject
 {
     Q_OBJECT
@@ -21,8 +22,7 @@ public:
     virtual QString playlistType() const=0;
     virtual QString playlistSuffix() const=0;
     virtual bool parse(const QString &playlistFilePath,
-                       QString &playlistTitle,
-                       QStringList &fileList)=0;
+                       KNMusicPlaylistListItem *playlistItem)=0;
 
 signals:
 

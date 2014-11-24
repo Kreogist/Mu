@@ -15,37 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICPLAYLISTLOADER_H
-#define KNMUSICPLAYLISTLOADER_H
+#include "knmusicm3uparser.h"
 
-#include <QList>
-
-//Ports.
-#include "knmusicplaylistparser.h"
-
-#include "knmusicglobal.h"
-
-#include <QObject>
-
-class KNMusicPlaylistListItem;
-class KNMusicPlaylistLoader : public QObject
+KNMusicM3UParser::KNMusicM3UParser(QObject *parent) :
+    KNMusicPlaylistParser(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicPlaylistLoader(QObject *parent = 0);
-    ~KNMusicPlaylistLoader();
-    void installPlaylistParser(KNMusicPlaylistParser *parser);
-    bool parsePlaylist(const QString &filePath,
-                       KNMusicPlaylistListItem *playlistItem);
-    void getPlaylistTypeAndSuffix(QStringList &types,
-                                  QStringList &suffixs);
+}
 
-signals:
+QString KNMusicM3UParser::playlistType() const
+{
+    ;
+}
 
-public slots:
+QString KNMusicM3UParser::playlistSuffix() const
+{
+    ;
+}
 
-private:
-    QList<KNMusicPlaylistParser *> m_parsers;
-};
-
-#endif // KNMUSICPLAYLISTLOADER_H
+bool KNMusicM3UParser::parse(const QString &playlistFilePath,
+                             KNMusicPlaylistListItem *playlistItem)
+{
+    ;
+}
