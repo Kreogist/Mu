@@ -20,9 +20,11 @@
 
 #include <QAbstractItemView>
 
+class QTimeLine;
 class KNMusicLibraryModel;
 class KNMusicAlbumModel;
 class KNMusicCategoryProxyModel;
+class KNMusicAlbumDetail;
 class KNMusicAlbumView : public QAbstractItemView
 {
     Q_OBJECT
@@ -33,6 +35,8 @@ public:
     QRect visualRect(const QModelIndex &index) const;
     void setModel(QAbstractItemModel *model);
     void setLibraryModel(KNMusicLibraryModel *libraryModel);
+    KNMusicAlbumDetail *albumDetail() const;
+    void setAlbumDetail(KNMusicAlbumDetail *albumDetail);
 
 signals:
 
@@ -49,11 +53,14 @@ protected:
     void setSelection(const QRect &rect,
                       QItemSelectionModel::SelectionFlags command);
     QRegion visualRegionForSelection(const QItemSelection &selection) const;
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 protected slots:
     void updateGeometries();
 
 private:
+    void selectAlbum(QModelIndex albumIndex);
     inline void paintAlbum(QPainter &painter,
                            const QRect &rect,
                            const QModelIndex &index);
@@ -63,7 +70,9 @@ private:
     void updateParameters();
     KNMusicAlbumModel *m_model=nullptr;
     KNMusicCategoryProxyModel *m_proxyModel=nullptr;
-    QModelIndex m_selectedIndex;
+    QTimeLine *m_scrollTimeLine;
+    KNMusicAlbumDetail *m_albumDetail;
+    QModelIndex m_selectedIndex, m_mouseDownIndex;
     QColor m_backgroundColor=QColor(0x30, 0x30, 0x30);
     int m_outBrightness=0x30;
     //View parameters.

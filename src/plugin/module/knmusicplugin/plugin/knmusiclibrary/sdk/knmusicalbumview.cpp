@@ -15,12 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QScrollBar>
-#include <QPainter>
 #include <QIcon>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QScrollBar>
+#include <QTimeLine>
 
 #include "knmusiccategoryproxymodel.h"
 #include "knmusicalbummodel.h"
+#include "knmusicalbumdetail.h"
 
 #include "knmusicalbumview.h"
 
@@ -46,6 +49,14 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     pal.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     setPalette(pal);
 
+    //Initial the timeline.
+    m_scrollTimeLine=new QTimeLine(200, this);
+    m_scrollTimeLine->setUpdateInterval(5);
+    m_scrollTimeLine->setEasingCurve(QEasingCurve::OutCubic);
+    connect(m_scrollTimeLine, SIGNAL(frameChanged(int)),
+            verticalScrollBar(), SLOT(setValue(int)));
+
+    //Update parameters.
     updateParameters();
 }
 
@@ -72,7 +83,7 @@ QModelIndex KNMusicAlbumView::indexAt(const QPoint &point) const
     //Check if the category row vaild.
     //We should check the category proxy model, because the point is a display
     //variable.
-    return (categoryRow>0 && categoryRow<m_proxyModel->rowCount())?
+    return (categoryRow>-1 && categoryRow<m_proxyModel->rowCount())?
                 m_proxyModel->index(categoryRow, 0, rootIndex()):
                 QModelIndex();
 }
@@ -90,8 +101,12 @@ void KNMusicAlbumView::scrollTo(const QModelIndex &index, ScrollHint hint)
     {
         return;
     }
-    //Let the scroll bar move to the prefer position.
-    verticalScrollBar()->setValue(indexScrollBarValue(index, hint));
+    //Use timeline to move to the position.
+    m_scrollTimeLine->setFrameRange(verticalScrollBar()->value(),
+                                    indexScrollBarValue(index, hint));
+    m_scrollTimeLine->start();
+    //Update.
+    viewport()->update();
 }
 
 QRect KNMusicAlbumView::visualRect(const QModelIndex &index) const
@@ -163,16 +178,16 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
     while(currentRow < albumCount && heightSurplus > 0)
     {
         //Get the source index of the item.
-        QModelIndex sourceIndex=m_proxyModel->index(currentRow, 0);
+        QModelIndex proxyIndex=m_proxyModel->index(currentRow, 0);
         //If the source index is not the current index, then draw the album.
-        if(sourceIndex!=m_selectedIndex)
+        if(m_proxyModel->mapToSource(proxyIndex)!=m_selectedIndex)
         {
             paintAlbum(painter,
                        QRect(currentLeft,
                              currentTop,
                              m_itemWidth,
                              m_itemHeight),
-                       sourceIndex);
+                       proxyIndex);
         }
         //Add current row and column.
         currentRow++;
@@ -203,6 +218,9 @@ void KNMusicAlbumView::resizeEvent(QResizeEvent *event)
 {
     //Do resize.
     QAbstractItemView::resizeEvent(event);
+    //Resize the album detail.
+    m_albumDetail->resize(size());
+    m_albumDetail->setSizeParameter(qMin(width(), height()));
 }
 
 QModelIndex KNMusicAlbumView::moveCursor(QAbstractItemView::CursorAction cursorAction,
@@ -248,7 +266,7 @@ int KNMusicAlbumView::verticalOffset() const
 
 bool KNMusicAlbumView::isIndexHidden(const QModelIndex &index) const
 {
-    //!FIXME: No album process.
+    Q_UNUSED(index)
     return false;
 }
 
@@ -273,6 +291,32 @@ QRegion KNMusicAlbumView::visualRegionForSelection(const QItemSelection &selecti
     return region;
 }
 
+void KNMusicAlbumView::mousePressEvent(QMouseEvent *event)
+{
+    QAbstractItemView::mousePressEvent(event);
+    //Get the mouse down index.
+    m_mouseDownIndex=indexAt(event->pos());
+}
+
+void KNMusicAlbumView::mouseReleaseEvent(QMouseEvent *event)
+{
+    QAbstractItemView::mouseReleaseEvent(event);
+    //Check whether the released pos index is the pressed index.
+    if(m_mouseDownIndex==indexAt(event->pos()))
+    {
+        QModelIndex sourcePressedIndex=m_proxyModel->mapToSource(m_mouseDownIndex);
+        //Check is the pressed index is the current index.
+        if(m_selectedIndex!=sourcePressedIndex)
+        {
+            selectAlbum(sourcePressedIndex);
+            viewport()->update();
+            return;
+        }
+    }
+    //If goes here, we need to fold the expanded album.
+    //!FIXME: Add code here!
+}
+
 void KNMusicAlbumView::updateGeometries()
 {
     //Update the range of the vertical scroll bar.
@@ -282,6 +326,26 @@ void KNMusicAlbumView::updateGeometries()
     //Update the page and single step.
     verticalScrollBar()->setPageStep(m_itemSpacingHeight>>1);
     verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>1);
+}
+
+void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
+{
+    //If the index is vaild, set the initial animation parameters.
+    if(albumIndex.isValid())
+    {
+        //Set the selected index.
+        m_selectedIndex=albumIndex;
+        //Show the detail.
+        m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(albumIndex)),
+                                         m_itemIconSize);
+        m_albumDetail->displayAlbumIndex(albumIndex);
+        //Update the album view.
+        viewport()->update();
+    }
+    else
+    {
+        ;
+    }
 }
 
 void KNMusicAlbumView::paintAlbum(QPainter &painter,
@@ -381,8 +445,8 @@ QRect KNMusicAlbumView::itemContentRect(const QModelIndex &index) const
     int itemIndex=index.row(),
         itemLine=itemIndex/m_maxColumnCount;
     //Calculate the rect.
-    return QRect((itemIndex-itemLine*m_maxColumnCount)*m_itemSpacingWidth,
-                 itemLine*m_itemSpacingHeight,
+    return QRect((itemIndex-itemLine*m_maxColumnCount)*m_itemSpacingWidth+m_spacing,
+                 itemLine*m_itemSpacingHeight+m_spacing,
                  m_itemWidth,
                  m_itemHeight);
 }
@@ -413,4 +477,18 @@ void KNMusicAlbumView::updateParameters()
     //Calcualte the spacing item width and height.
     m_itemSpacingHeight=m_spacing+m_itemHeight;
     m_itemSpacingWidth=m_spacing+m_itemWidth;
+}
+
+KNMusicAlbumDetail *KNMusicAlbumView::albumDetail() const
+{
+    return m_albumDetail;
+}
+
+void KNMusicAlbumView::setAlbumDetail(KNMusicAlbumDetail *albumDetail)
+{
+    m_albumDetail = albumDetail;
+    //Hide the album detail.
+    m_albumDetail->hide();
+    //Move it up to the top.
+    m_albumDetail->raise();
 }

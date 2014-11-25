@@ -20,6 +20,7 @@
 
 #include "kndropproxycontainer.h"
 #include "knmusicalbumview.h"
+#include "knmusicalbumdetail.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiccategorymodel.h"
 #include "knmusiccategoryproxymodel.h"
@@ -44,8 +45,11 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     mainLayout->setSpacing(0);
     m_container->setLayout(mainLayout);
 
+    //Initial the album detail.
+    m_albumDetail=new KNMusicAlbumDetail(m_container);
     //Initial the album view.
     m_albumView=new KNMusicAlbumView(m_container);
+    m_albumView->setAlbumDetail(m_albumDetail);
     mainLayout->addWidget(m_albumView);
 
     //Initial the show in action.
@@ -86,6 +90,8 @@ void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
 {
     //Save the library.
     m_musicLibrary=model;
+    //Set the music library to detail widget.
+    m_albumDetail->setLibraryModel(model);
     //Do connections.
     connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
             m_musicLibrary, &KNMusicLibraryModel::addFiles);
@@ -102,7 +108,9 @@ void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModel *model)
 
     //! This should be done in constructor, but setModel() is a virtual
     //! function, so we moved here.
-    //Set the proxy model to tree view.
+    //Set the proxy model to album detail.
+    m_albumDetail->setAlbumModel(m_categoryModel);
+    //Set the proxy model to album view.
     m_albumView->setModel(proxyCategoryModel());
     proxyCategoryModel()->sort(0, Qt::AscendingOrder);
 }
