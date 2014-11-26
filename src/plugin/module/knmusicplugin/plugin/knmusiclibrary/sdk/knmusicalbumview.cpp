@@ -102,6 +102,7 @@ void KNMusicAlbumView::scrollTo(const QModelIndex &index, ScrollHint hint)
         return;
     }
     //Use timeline to move to the position.
+    m_scrollTimeLine->stop();
     m_scrollTimeLine->setFrameRange(verticalScrollBar()->value(),
                                     indexScrollBarValue(index, hint));
     m_scrollTimeLine->start();
@@ -304,17 +305,11 @@ void KNMusicAlbumView::mouseReleaseEvent(QMouseEvent *event)
     //Check whether the released pos index is the pressed index.
     if(m_mouseDownIndex==indexAt(event->pos()))
     {
-        QModelIndex sourcePressedIndex=m_proxyModel->mapToSource(m_mouseDownIndex);
-        //Check is the pressed index is the current index.
-        if(m_selectedIndex!=sourcePressedIndex)
-        {
-            selectAlbum(sourcePressedIndex);
-            viewport()->update();
-            return;
-        }
+        displayAlbum(event->pos());
+        return;
     }
     //If goes here, we need to fold the expanded album.
-    //!FIXME: Add code here!
+    displayAlbum(QPoint(-1,-1));
 }
 
 void KNMusicAlbumView::updateGeometries()
@@ -328,6 +323,31 @@ void KNMusicAlbumView::updateGeometries()
     verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>1);
 }
 
+void KNMusicAlbumView::displayAlbum(const QPoint &point)
+{
+    QModelIndex proxyIndex=indexAt(point),
+                sourceIndex=m_proxyModel->mapToSource(proxyIndex);
+    if(proxyIndex.isValid() && m_selectedIndex!=sourceIndex)
+    {
+        //Select the album.
+        selectAlbum(sourceIndex);
+        //Scroll to the album.
+        scrollTo(proxyIndex);
+    }
+    else
+    {
+        //Show the detail.
+        m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
+                                         m_itemIconSize);
+        //Set the selected index.
+        m_selectedIndex=QModelIndex();
+        //Fold the album.
+        m_albumDetail->foldDetail();
+        //Update the viewport.
+        viewport()->update();
+    }
+}
+
 void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
 {
     //If the index is vaild, set the initial animation parameters.
@@ -336,15 +356,24 @@ void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
         //Set the selected index.
         m_selectedIndex=albumIndex;
         //Show the detail.
-        m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(albumIndex)),
+        m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
                                          m_itemIconSize);
-        m_albumDetail->displayAlbumIndex(albumIndex);
+        m_albumDetail->displayAlbumIndex(m_selectedIndex);
         //Update the album view.
         viewport()->update();
     }
     else
     {
-        ;
+        //Show the detail.
+        m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
+                                         m_itemIconSize);
+        //Set the selected index.
+        m_selectedIndex=QModelIndex();
+        //Do fold detail animation.
+        m_albumDetail->foldDetail();
+        //Update the viewport.
+        update();
+        viewport()->update();
     }
 }
 

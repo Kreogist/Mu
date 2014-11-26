@@ -216,23 +216,29 @@ void KNMusicTreeViewBase::sortMusicColumn(int column,
 void KNMusicTreeViewBase::enterEvent(QEvent *event)
 {
     QTreeView::enterEvent(event);
-    //Stop timelines.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set parameters.
-    m_mouseIn->setStartFrame(m_alternateColor.alpha());
-    m_mouseIn->start();
+    if(m_animate)
+    {
+        //Stop timelines.
+        m_mouseIn->stop();
+        m_mouseOut->stop();
+        //Set parameters.
+        m_mouseIn->setStartFrame(m_alternateColor.alpha());
+        m_mouseIn->start();
+    }
 }
 
 void KNMusicTreeViewBase::leaveEvent(QEvent *event)
 {
     QTreeView::leaveEvent(event);
-    //Stop timelines.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set parameters.
-    m_mouseOut->setStartFrame(m_alternateColor.alpha());
-    m_mouseOut->start();
+    if(m_animate)
+    {
+        //Stop timelines.
+        m_mouseIn->stop();
+        m_mouseOut->stop();
+        //Set parameters.
+        m_mouseOut->setStartFrame(m_alternateColor.alpha());
+        m_mouseOut->start();
+    }
 }
 
 void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
@@ -381,6 +387,11 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
 {
     //The reorder function: move section!
     header()->moveSection(header()->visualIndex(logicalIndex), 0);
+}
+
+void KNMusicTreeViewBase::setAnimateState(bool on)
+{
+    m_animate=on;
 }
 
 KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()

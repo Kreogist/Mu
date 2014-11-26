@@ -19,15 +19,19 @@
 #define KNMUSICALBUMDETAIL_H
 
 #include <QModelIndex>
+#include <QEasingCurve>
 #include <QWidget>
 
+class QGraphicsOpacityEffect;
 class QLabel;
 class QPropertyAnimation;
 class QParallelAnimationGroup;
 class QSequentialAnimationGroup;
+class KNSideShadowWidget;
 class KNMusicAlbumModel;
 class KNMusicCategoryModel;
 class KNMusicLibraryModel;
+class KNMusicAlbumTreeView;
 class KNMusicAlbumDetail : public QWidget
 {
     Q_OBJECT
@@ -51,24 +55,41 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private slots:
-    void onActionAlbumArtInFinished();
+    void onActionExpandStep1(const QVariant &position);
+    void onActionExpandStep1InFinished();
+    void onActionExpandStep2(const QVariant &position);
+    void onActionFold(const QVariant &position);
+    void showContentWidgets();
+    void hideContentWidgets();
 
 private:
+    void generateStep1FinalPosition(QRect &albumArtGeometry,
+                                    QRect &contentGeometry);
     void generateStep2FinalPosition(QRect &albumArtGeometry,
                                     QRect &contentGeometry);
     void updateWidgetGeometries();
-    QLabel *m_albumArt;
+    void updateShadowGeometries(const QRect &contentPosition);
+    void updateAlbumCaptions();
+    QLabel *m_albumArt, *m_albumTitle, *m_albumDetails;
     QWidget *m_albumContent;
+    KNMusicAlbumTreeView *m_albumTreeView;
     KNMusicAlbumModel *m_albumModel;
     KNMusicLibraryModel *m_libraryModel;
+    KNSideShadowWidget *m_rightShadow, *m_leftShadow;
     QModelIndex m_currentAlbumIndex;
     QRect m_animeStartRect;
     QPropertyAnimation *m_albumArtIn1, *m_albumContentIn1,
-                       *m_albumArtIn2, *m_albumContentIn2;
-    QParallelAnimationGroup *m_expandStep1, *m_expandStep2;
+                       *m_albumArtIn2, *m_albumContentIn2,
+                       *m_albumArtOut, *m_albumContentOut;
+    QGraphicsOpacityEffect *m_opacityEffect;
+    QParallelAnimationGroup *m_expandStep1, *m_expandStep2,
+                            *m_foldAnime;
     QSequentialAnimationGroup *m_expandAnime;
+    QEasingCurve m_inCurve;
+    QModelIndex m_currentIndex;
+    bool m_pressed=false;
 
-    int m_iconSize, m_sizeParameter=0;
+    int m_iconSize, m_sizeParameter=0, m_shadowWidth=15;
 };
 
 #endif // KNMUSICALBUMDETAIL_H

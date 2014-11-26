@@ -48,6 +48,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
+    void setAnimateState(bool on);
 
 private slots:
     void onActionSearch();
@@ -78,7 +79,7 @@ private:
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;
-    bool m_pressed=false, m_initialLoad=true;
+    bool m_pressed=false, m_initialLoad=true, m_animate=true;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

@@ -59,6 +59,9 @@ protected:
 protected slots:
     void updateGeometries();
 
+private slots:
+    void displayAlbum(const QPoint &point);
+
 private:
     void selectAlbum(QModelIndex albumIndex);
     inline void paintAlbum(QPainter &painter,

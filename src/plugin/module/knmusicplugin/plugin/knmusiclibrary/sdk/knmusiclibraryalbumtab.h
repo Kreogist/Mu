@@ -44,8 +44,8 @@ public slots:
 private:
     void initialShowInAction();
     QAction *m_showInAlbumTab;
-    KNMusicAlbumView *m_albumView;
     KNDropProxyContainer *m_container;
+    KNMusicAlbumView *m_albumView;
     KNMusicAlbumDetail *m_albumDetail;
     KNMusicLibraryModel *m_musicLibrary;
     KNMusicCategoryModel *m_categoryModel;
