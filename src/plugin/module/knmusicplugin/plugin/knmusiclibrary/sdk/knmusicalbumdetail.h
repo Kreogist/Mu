@@ -67,6 +67,7 @@ private slots:
     void hideContentWidgets();
 
 private:
+    void initialShortCuts();
     void generateStep1FinalPosition(QRect &albumArtGeometry,
                                     QRect &contentGeometry);
     void generateStep2FinalPosition(QRect &albumArtGeometry,

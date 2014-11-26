@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
 #include <QBoxLayout>
 #include <QLabel>
 #include <QPropertyAnimation>
@@ -139,6 +140,9 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
     m_albumContentOut=new QPropertyAnimation(m_albumContent, "geometry", this);
     m_albumContentOut->setEasingCurve(QEasingCurve::OutCubic);
     m_foldAnime->addAnimation(m_albumContentOut);
+
+    //Initial the shortcut.
+    initialShortCuts();
 }
 
 void KNMusicAlbumDetail::setAlbumModel(KNMusicCategoryModel *model)
@@ -166,6 +170,8 @@ void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
 
 void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
 {
+    //Stop fold animation.
+    m_foldAnime->stop();
     //Hide the contents.
     hideContentWidgets();
     //Save the index.
@@ -219,6 +225,8 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
 
 void KNMusicAlbumDetail::foldDetail()
 {
+    //Stop expand anime.
+    m_expandAnime->stop();
     //Set the position.
     QRect albumArtEndRect(m_animeStartRect.x(),
                           m_animeStartRect.y(),
@@ -344,6 +352,15 @@ void KNMusicAlbumDetail::hideContentWidgets()
     m_albumTitle->hide();
     m_albumDetails->hide();
     m_albumTreeView->hide();
+}
+
+void KNMusicAlbumDetail::initialShortCuts()
+{
+    QAction *foldShortCut=new QAction(this);
+    foldShortCut->setShortcut(QKeySequence(Qt::Key_Escape));
+    foldShortCut->setShortcutContext(Qt::WidgetShortcut);
+    connect(foldShortCut, SIGNAL(triggered()), this, SLOT(foldDetail()));
+    addAction(foldShortCut);
 }
 
 void KNMusicAlbumDetail::generateStep1FinalPosition(QRect &albumArtGeometry,
