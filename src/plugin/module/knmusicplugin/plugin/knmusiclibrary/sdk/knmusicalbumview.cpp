@@ -110,6 +110,26 @@ void KNMusicAlbumView::scrollTo(const QModelIndex &index, ScrollHint hint)
     viewport()->update();
 }
 
+void KNMusicAlbumView::locateTo(const QModelIndex &index,
+                                QAbstractItemView::ScrollHint hint)
+{
+    //Check the index and the max column count.
+    if(!index.isValid() || m_maxColumnCount==0)
+    {
+        return;
+    }
+    //Check whether we need to move the vertical scroll bar.
+    if(hint==QAbstractItemView::EnsureVisible &&
+            rect().contains(visualRect(index), true))
+    {
+        return;
+    }
+    //Use timeline to move to the position.
+    verticalScrollBar()->setValue(indexScrollBarValue(index, hint));
+    //Update.
+    viewport()->update();
+}
+
 QRect KNMusicAlbumView::visualRect(const QModelIndex &index) const
 {
     //Get the item content rect.
@@ -516,6 +536,9 @@ KNMusicAlbumDetail *KNMusicAlbumView::albumDetail() const
 void KNMusicAlbumView::setAlbumDetail(KNMusicAlbumDetail *albumDetail)
 {
     m_albumDetail = albumDetail;
+    //Do connection.
+    connect(m_albumDetail, &KNMusicAlbumDetail::requireShowAlbum,
+            this, &KNMusicAlbumView::displayAlbum);
     //Hide the album detail.
     m_albumDetail->hide();
     //Move it up to the top.

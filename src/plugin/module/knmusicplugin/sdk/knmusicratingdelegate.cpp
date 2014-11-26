@@ -14,6 +14,8 @@
 
 #include "knmusicratingdelegate.h"
 
+int KNMusicRatingDelegate::m_starSizeHint=20;
+
 KNMusicRatingDelegate::KNMusicRatingDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
 {
@@ -95,4 +97,9 @@ void KNMusicRatingDelegate::commitAndCloseEditor()
     QWidget *editor=static_cast<QWidget *>(sender());
     emit commitData(editor);
     emit closeEditor(editor);
+}
+
+int KNMusicRatingDelegate::starSizeHint()
+{
+    return m_starSizeHint;
 }

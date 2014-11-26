@@ -41,6 +41,9 @@ public slots:
     void setCategoryModel(KNMusicCategoryModel *model);
     void onActionSearch(const QString &text);
 
+private slots:
+    void onActionShowInAlbum();
+
 private:
     void initialShowInAction();
     QAction *m_showInAlbumTab;

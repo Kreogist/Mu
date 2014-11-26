@@ -15,31 +15,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#include <QAbstractItemModel>
 #include <QPainter>
 
-#include "knmusicplaylistindex.h"
+#include "knmusicglobal.h"
 
-KNMusicPlaylistIndex::KNMusicPlaylistIndex(QWidget *parent) :
+#include "knmusicalbumindexdelegate.h"
+
+KNMusicAlbumIndexDelegate::KNMusicAlbumIndexDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
 {
 }
 
-void KNMusicPlaylistIndex::paint(QPainter *painter,
-                                 const QStyleOptionViewItem &option,
-                                 const QModelIndex &index) const
+void KNMusicAlbumIndexDelegate::paint(QPainter *painter,
+                                      const QStyleOptionViewItem &option,
+                                      const QModelIndex &index) const
 {
     //Enabled text antialiasing.
     painter->setRenderHint(QPainter::TextAntialiasing, true);
     //Hack the option, change the text to the index row.
     QStyleOptionViewItem indexOption=option;
-    indexOption.text=QString::number(index.row()+1);
+    const QAbstractItemModel *indexModel=index.model();
+    indexOption.text=indexModel->data(indexModel->index(index.row(),
+                                                        TrackNumber),
+                                      Qt::DisplayRole).toString();
     indexOption.displayAlignment=Qt::AlignRight | Qt::AlignVCenter;
     //Using the original painting to paint delegate.
     QStyledItemDelegate::paint(painter, indexOption, index);
 }
 
-QSize KNMusicPlaylistIndex::sizeHint(const QStyleOptionViewItem &option,
-                                     const QModelIndex &index) const
+QSize KNMusicAlbumIndexDelegate::sizeHint(const QStyleOptionViewItem &option,
+                                          const QModelIndex &index) const
 {
-    return QSize(option.fontMetrics.width(QString::number(index.row()+1))+20, 20);
+    const QAbstractItemModel *indexModel=index.model();
+    return QSize(option.fontMetrics.width(indexModel->data(indexModel->index(index.row(),
+                                                                             TrackNumber),
+                                                           Qt::DisplayRole).toString()),
+                 20);
 }

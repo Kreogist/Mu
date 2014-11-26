@@ -47,12 +47,16 @@ public:
     void setSizeParameter(int sizeParameter);
 
 signals:
+    void requireShowAlbum(QPoint indexPoint);
 
 public slots:
     void foldDetail();
+    void scrollToSourceRow(const int &row);
 
 protected:
     void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private slots:
     void onActionExpandStep1(const QVariant &position);
@@ -87,7 +91,7 @@ private:
     QSequentialAnimationGroup *m_expandAnime;
     QEasingCurve m_inCurve;
     QModelIndex m_currentIndex;
-    bool m_pressed=false;
+    bool m_pressed=false, m_backgroundAnime=true;
 
     int m_iconSize, m_sizeParameter=0, m_shadowWidth=15;
 };

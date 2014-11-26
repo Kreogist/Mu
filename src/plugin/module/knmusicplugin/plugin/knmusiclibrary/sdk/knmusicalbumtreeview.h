@@ -25,10 +25,14 @@ class KNMusicAlbumTreeView : public KNMusicLibraryTreeView
     Q_OBJECT
 public:
     explicit KNMusicAlbumTreeView(QWidget *parent = 0);
+    void resizeHeader();
 
 signals:
 
 public slots:
+
+protected:
+    void resetHeaderState();
 
 };
 

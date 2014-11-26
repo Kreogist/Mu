@@ -10,6 +10,7 @@
 #include "knmusicsearcher.h"
 #include "knmusicanalysiscache.h"
 #include "knmusicanalysisextend.h"
+#include "knmusicratingdelegate.h"
 
 #include "knmusicmodel.h"
 

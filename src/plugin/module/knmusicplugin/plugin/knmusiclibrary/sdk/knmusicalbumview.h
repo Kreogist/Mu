@@ -32,11 +32,13 @@ public:
     explicit KNMusicAlbumView(QWidget *parent = 0);
     QModelIndex indexAt(const QPoint &point) const;
     void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
+    void locateTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
     QRect visualRect(const QModelIndex &index) const;
     void setModel(QAbstractItemModel *model);
     void setLibraryModel(KNMusicLibraryModel *libraryModel);
     KNMusicAlbumDetail *albumDetail() const;
     void setAlbumDetail(KNMusicAlbumDetail *albumDetail);
+    void selectAlbum(QModelIndex albumIndex);
 
 signals:
 
@@ -63,7 +65,6 @@ private slots:
     void displayAlbum(const QPoint &point);
 
 private:
-    void selectAlbum(QModelIndex albumIndex);
     inline void paintAlbum(QPainter &painter,
                            const QRect &rect,
                            const QModelIndex &index);

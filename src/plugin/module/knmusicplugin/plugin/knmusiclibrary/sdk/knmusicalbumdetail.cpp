@@ -69,8 +69,8 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
 
     QBoxLayout *captionLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              contentLayout->widget());
-    captionLayout->setContentsMargins(8,8,8,8);
-    captionLayout->setSpacing(8);
+    captionLayout->setContentsMargins(25,25,8,14);
+    captionLayout->setSpacing(0);
     contentLayout->addLayout(captionLayout);
 
     //Initial title.
@@ -175,8 +175,12 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
     //Set the pixmap.
     m_albumArt->setPixmap(currentPixmap.isNull()?
                               KNMusicGlobal::instance()->noAlbumArt():currentPixmap);
+    //Set category content.
+    m_albumTreeView->setCategoryText(m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString());
     //Initial the opacity effect.
     m_opacityEffect->setOpacity(1.0);
+    //Set the background animation flag.
+    m_backgroundAnime=!isVisible();
     //Set the position.
     QRect albumArtStartRect(m_animeStartRect.x(),
                             m_animeStartRect.y(),
@@ -207,8 +211,6 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
     m_rightShadow->hide();
     m_leftShadow->raise();
     m_leftShadow->show();
-    //Set the data.
-    updateAlbumCaptions();
     //Show the widget.
     show();
     //Start animation.
@@ -234,6 +236,11 @@ void KNMusicAlbumDetail::foldDetail()
     m_foldAnime->start();
 }
 
+void KNMusicAlbumDetail::scrollToSourceRow(const int &row)
+{
+    m_albumTreeView->scrollToSourceSongRow(row);
+}
+
 void KNMusicAlbumDetail::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
@@ -243,6 +250,29 @@ void KNMusicAlbumDetail::resizeEvent(QResizeEvent *event)
     if(m_currentIndex.isValid())
     {
         updateAlbumCaptions();
+        updateShadowGeometries(m_albumContent->geometry());
+        m_albumTreeView->resizeHeader();
+    }
+}
+
+void KNMusicAlbumDetail::mousePressEvent(QMouseEvent *event)
+{
+    QWidget::mousePressEvent(event);
+    //Set the preesed flag.
+    m_pressed=true;
+}
+
+void KNMusicAlbumDetail::mouseReleaseEvent(QMouseEvent *event)
+{
+    QWidget::mouseReleaseEvent(event);
+    //Check the flag.
+    if(m_pressed)
+    {
+        m_pressed=false;
+        if(rect().contains(event->pos()))
+        {
+            emit requireShowAlbum(event->pos());
+        }
     }
 }
 
@@ -252,9 +282,12 @@ void KNMusicAlbumDetail::onActionExpandStep1(const QVariant &position)
     updateShadowGeometries(position.toRect());
     //Calculate the progress.
     qreal progress=m_inCurve.valueForProgress((qreal)m_albumArtIn1->currentTime()/m_albumArtIn1->duration());
-    QPalette pal=palette();
-    pal.setColor(QPalette::Window, QColor(0,0,0,progress*200));
-    setPalette(pal);
+    if(m_backgroundAnime)
+    {
+        QPalette pal=palette();
+        pal.setColor(QPalette::Window, QColor(0,0,0,progress*200));
+        setPalette(pal);
+    }
     //Set the opacity effect.
     m_opacityEffect->setOpacity(progress);
 }
@@ -296,8 +329,13 @@ void KNMusicAlbumDetail::onActionExpandStep1InFinished()
 
 void KNMusicAlbumDetail::showContentWidgets()
 {
+    //Set the data.
+    updateAlbumCaptions();
+    //Show the titles.
     m_albumTitle->show();
     m_albumDetails->show();
+    //When show the treeview, resize the header first.
+    m_albumTreeView->resizeHeader();
     m_albumTreeView->show();
 }
 
@@ -359,10 +397,30 @@ void KNMusicAlbumDetail::updateShadowGeometries(const QRect &contentPosition)
 
 void KNMusicAlbumDetail::updateAlbumCaptions()
 {
+    //Set the title.
     m_albumTitle->setText(m_albumTitle->fontMetrics().elidedText(
                               m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString(),
                               Qt::ElideRight,
                               m_albumTitle->width()-16));
+    //Set the artist label.
+    //Get the album list.
+    QHash<QString, QVariant> artistList=m_albumModel->data(m_currentIndex, CategoryArtistList).toHash();
+    //Judge the artist by list.
+    QString albumArtist;
+    if(artistList.isEmpty())
+    {
+        albumArtist=tr("Unknown Artist");
+    }
+    else
+    {
+        albumArtist=artistList.size()==1?
+                        artistList.keys().first():
+                        tr("Various Artists");
+    }
+    m_albumDetails->setText(m_albumDetails->fontMetrics().elidedText(
+                                albumArtist,
+                                Qt::ElideMiddle,
+                                m_albumDetails->width()-16));
 }
 
 int KNMusicAlbumDetail::sizeParameter() const

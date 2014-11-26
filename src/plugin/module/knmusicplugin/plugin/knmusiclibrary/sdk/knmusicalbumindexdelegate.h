@@ -13,13 +13,28 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include "knmusicalbumtreeview.h"
+#ifndef KNMUSICALBUMINDEXDELEGATE_H
+#define KNMUSICALBUMINDEXDELEGATE_H
 
-KNMusicAlbumTreeView::KNMusicAlbumTreeView(QWidget *parent) :
-    KNMusicLibraryTreeView(parent)
+#include <QStyledItemDelegate>
+
+class KNMusicAlbumIndexDelegate : public QStyledItemDelegate
 {
-    //Set properties.
-    setAnimateState(false);
-}
+    Q_OBJECT
+public:
+    explicit KNMusicAlbumIndexDelegate(QWidget *parent = 0);
+    void paint(QPainter *painter,
+               const QStyleOptionViewItem &option,
+               const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const;
+
+signals:
+
+public slots:
+
+};
+
+#endif // KNMUSICALBUMINDEXDELEGATE_H

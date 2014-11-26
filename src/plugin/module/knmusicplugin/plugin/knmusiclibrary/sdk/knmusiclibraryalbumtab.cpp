@@ -19,11 +19,12 @@
 #include <QBoxLayout>
 
 #include "kndropproxycontainer.h"
+#include "knmusicsolomenubase.h"
 #include "knmusicalbumview.h"
 #include "knmusicalbumdetail.h"
-#include "knmusiclibrarymodel.h"
 #include "knmusiccategorymodel.h"
 #include "knmusiccategoryproxymodel.h"
+#include "knmusiclibrarymodel.h"
 
 #include "knlocalemanager.h"
 
@@ -120,8 +121,35 @@ void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)
     ;
 }
 
+void KNMusicLibraryAlbumTab::onActionShowInAlbum()
+{
+    //Get the row of the file.
+    int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
+    //If the row is available.
+    if(musicRow!=-1)
+    {
+        //Get the genre name of the row.
+        QModelIndex categoryIndex=
+                proxyCategoryModel()->categoryIndex(
+                    m_musicLibrary->itemText(musicRow,
+                                             m_categoryModel->categoryIndex()));
+        //Check is the catgeory vaild.
+        if(categoryIndex.isValid())
+        {
+            //Ask to show the genre tab.
+            emit requireShowTab();
+            //Change the current category index.
+            m_albumView->selectAlbum(proxyCategoryModel()->mapToSource(categoryIndex));
+            //Set the details to display the index of the song.
+            m_albumDetail->scrollToSourceRow(musicRow);
+        }
+    }
+}
+
 void KNMusicLibraryAlbumTab::initialShowInAction()
 {
     //Initial the action.
     m_showInAlbumTab=new QAction(this);
+    connect(m_showInAlbumTab, SIGNAL(triggered()),
+            this, SLOT(onActionShowInAlbum()));
 }
