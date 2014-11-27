@@ -189,8 +189,6 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
     m_albumTreeView->setCategoryText(m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString());
     //Initial the opacity effect.
     m_opacityEffect->setOpacity(1.0);
-    //Set the background animation flag.
-    m_backgroundAnime=!isVisible();
     //Set the position.
     QRect albumArtStartRect(m_animeStartRect.x(),
                             m_animeStartRect.y(),
@@ -231,8 +229,10 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
 
 void KNMusicAlbumDetail::foldDetail()
 {
-    //If m_animeStartRect is empty means now is running fold.
-    if(!m_animeStartRect.isNull())
+    //If m_animeStartRect is empty, or the state is running means now is running
+    //fold animation, we don't need to fold it more.
+    if(!m_animeStartRect.isNull() ||
+            m_foldAnime->state()!=QAbstractAnimation::Running)
     {
         //Stop all the anime.
         m_expandAnime->stop();
@@ -250,6 +250,8 @@ void KNMusicAlbumDetail::foldDetail()
         //Hide all the shadows.
         m_rightShadow->hide();
         m_leftShadow->hide();
+        //Enable background change.
+        m_backgroundAnime=true;
         //Start animation.
         m_foldAnime->start();
     }
@@ -356,6 +358,8 @@ void KNMusicAlbumDetail::onActionExpandStep1InFinished()
     m_rightShadow->raise();
     m_rightShadow->show();
     m_leftShadow->hide();
+    //Disable the background anime.
+    m_backgroundAnime=false;
     //Show the contents.
     showContentWidgets();
 }
