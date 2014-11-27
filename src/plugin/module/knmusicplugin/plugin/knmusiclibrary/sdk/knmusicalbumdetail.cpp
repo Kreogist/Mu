@@ -172,8 +172,9 @@ void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
 
 void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
 {
-    //Stop fold animation.
+    //Stop all the animation.
     m_foldAnime->stop();
+    m_expandAnime->stop();
     //Hide the contents.
     hideContentWidgets();
     //Save the index.
@@ -227,23 +228,28 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
 
 void KNMusicAlbumDetail::foldDetail()
 {
-    //Stop expand anime.
-    m_expandAnime->stop();
-    //Set the position.
-    QRect albumArtEndRect(m_animeStartRect.x(),
-                          m_animeStartRect.y(),
-                          m_iconSize,
-                          m_iconSize);
-    //Set the animation start and end value.
-    m_albumArtOut->setStartValue(m_albumArt->geometry());
-    m_albumArtOut->setEndValue(albumArtEndRect);
-    m_albumContentOut->setStartValue(m_albumContent->geometry());
-    m_albumContentOut->setEndValue(albumArtEndRect);
-    //Hide all the shadows.
-    m_rightShadow->hide();
-    m_leftShadow->hide();
-    //Start animation.
-    m_foldAnime->start();
+    //If m_animeStartRect is empty means now is running fold.
+    if(!m_animeStartRect.isNull())
+    {
+        //Stop all the anime.
+        m_expandAnime->stop();
+        m_foldAnime->stop();
+        //Set the position.
+        QRect albumArtEndRect(m_animeStartRect.x(),
+                              m_animeStartRect.y(),
+                              m_iconSize,
+                              m_iconSize);
+        //Set the animation start and end value.
+        m_albumArtOut->setStartValue(m_albumArt->geometry());
+        m_albumArtOut->setEndValue(albumArtEndRect);
+        m_albumContentOut->setStartValue(m_albumContent->geometry());
+        m_albumContentOut->setEndValue(albumArtEndRect);
+        //Hide all the shadows.
+        m_rightShadow->hide();
+        m_leftShadow->hide();
+        //Start animation.
+        m_foldAnime->start();
+    }
 }
 
 void KNMusicAlbumDetail::scrollToSourceRow(const int &row)
