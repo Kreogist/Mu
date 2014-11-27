@@ -27,6 +27,8 @@
 #include <QTransform>
 
 #include "knsideshadowwidget.h"
+#include "knconnectionhandler.h"
+#include "knmusicalbumtitle.h"
 #include "knmusicalbummodel.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusicalbumtreeview.h"
@@ -47,103 +49,12 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
     setPalette(pal);
 
     //Initial the album content.
-    //Initial this first, and we don't need to raise it after.
-    m_albumContent=new QWidget(this);
-    m_albumContent->setAutoFillBackground(true);
-    pal=m_albumContent->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255,240));
-    m_albumContent->setPalette(pal);
-    //Initial the side shadows.
-    m_rightShadow=new KNSideShadowWidget(this);
-    m_rightShadow->setDirection(KNSideShadow::RightShadow);
-    m_leftShadow=new KNSideShadowWidget(this);
-    m_leftShadow->setDirection(KNSideShadow::LeftShadow);
-    //Initial the opacity effects.
-    m_opacityEffect=new QGraphicsOpacityEffect(this);
-    m_opacityEffect->setOpacity(1.0);
-    m_albumContent->setGraphicsEffect(m_opacityEffect);
-    //Initial the content layout.
-    QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                             m_albumContent);
-    contentLayout->setContentsMargins(0,0,0,0);
-    contentLayout->setSpacing(0);
-    m_albumContent->setLayout(contentLayout);
-
-    QBoxLayout *captionLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                             contentLayout->widget());
-    captionLayout->setContentsMargins(25,25,8,14);
-    captionLayout->setSpacing(0);
-    contentLayout->addLayout(captionLayout);
-
-    //Initial title.
-    m_albumTitle=new QLabel(this);
-    QFont captionFont=m_albumTitle->font();
-    captionFont.setBold(true);
-    captionFont.setPixelSize(21);
-    m_albumTitle->setFont(captionFont);
-    QPalette captionPalette=m_albumTitle->palette();
-    captionPalette.setColor(QPalette::WindowText, QColor(0,0,0));
-    m_albumTitle->setPalette(captionPalette);
-    captionLayout->addWidget(m_albumTitle);
-    //Initial the details.
-    m_albumDetails=new QLabel(this);
-    m_albumDetails->setPalette(captionPalette);
-    captionLayout->addWidget(m_albumDetails);
-    //Initial album treeview.
-    m_albumTreeView=new KNMusicAlbumTreeView(this);
-    contentLayout->addWidget(m_albumTreeView, 1);
-
-    //Initial the album art.
-    m_albumArt=new QLabel(this);
-    m_albumArt->setScaledContents(true);
-
-    //Initial expand animation.
-    m_expandAnime=new QSequentialAnimationGroup(this);
-    //Initial expand step 1.
-    m_expandStep1=new QParallelAnimationGroup(this);
-    //Initial artwork-in step 1.
-    m_inCurve=QEasingCurve(QEasingCurve::OutCubic);
-    m_albumArtIn1=new QPropertyAnimation(m_albumArt, "geometry", this);
-    m_albumArtIn1->setEasingCurve(QEasingCurve::OutCubic);
-    m_expandStep1->addAnimation(m_albumArtIn1);
-    //Initial content-in step 1.
-    m_albumContentIn1=new QPropertyAnimation(m_albumContent, "geometry", this);
-    m_albumContentIn1->setEasingCurve(m_inCurve);
-    connect(m_albumContentIn1, &QPropertyAnimation::valueChanged,
-            this, &KNMusicAlbumDetail::onActionExpandStep1);
-    m_expandStep1->addAnimation(m_albumContentIn1);
-    connect(m_expandStep1, &QParallelAnimationGroup::finished,
-            this, &KNMusicAlbumDetail::onActionExpandStep1InFinished);
-    m_expandAnime->addAnimation(m_expandStep1);
-
-    //Initial expand step 2.
-    m_expandStep2=new QParallelAnimationGroup(this);
-    //Initial artwork-in step 1.
-    m_albumArtIn2=new QPropertyAnimation(m_albumArt, "geometry", this);
-    m_albumArtIn2->setEasingCurve(QEasingCurve::OutCubic);
-    m_expandStep2->addAnimation(m_albumArtIn2);
-    //Initial content-in step 1.
-    m_albumContentIn2=new QPropertyAnimation(m_albumContent, "geometry", this);
-    m_albumContentIn2->setEasingCurve(QEasingCurve::OutCubic);
-    connect(m_albumContentIn2, &QPropertyAnimation::valueChanged,
-            this, &KNMusicAlbumDetail::onActionExpandStep2);
-    m_expandStep2->addAnimation(m_albumContentIn2);
-    m_expandAnime->addAnimation(m_expandStep2);
-
-    //Initial fold animation.
-    m_foldAnime=new QParallelAnimationGroup(this);
-    connect(m_foldAnime, &QParallelAnimationGroup::finished,
-            this, &KNMusicAlbumDetail::onActionFoldFinished);
-    //Initial artwork fold animation.
-    m_albumArtOut=new QPropertyAnimation(m_albumArt, "geometry", this);
-    m_albumArtOut->setEasingCurve(QEasingCurve::OutCubic);
-    connect(m_albumArtOut, &QPropertyAnimation::valueChanged,
-            this, &KNMusicAlbumDetail::onActionFold);
-    m_foldAnime->addAnimation(m_albumArtOut);
-    m_albumContentOut=new QPropertyAnimation(m_albumContent, "geometry", this);
-    m_albumContentOut->setEasingCurve(QEasingCurve::OutCubic);
-    m_foldAnime->addAnimation(m_albumContentOut);
-
+    initialInfrastructure();
+    initialAlbumShadow();
+    //Initial the album content widgets.
+    initialAlbumContentWidgets();
+    //Initial the animations.
+    initialAnimations();
     //Initial the shortcut.
     initialShortCuts();
 }
@@ -229,6 +140,8 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
 
 void KNMusicAlbumDetail::foldDetail()
 {
+    //Cut all the connections.
+    m_detailHandler->disConnectAll();
     //If m_animeStartRect is empty, or the state is running means now is running
     //fold animation, we don't need to fold it more.
     if(!m_animeStartRect.isNull()
@@ -337,7 +250,7 @@ void KNMusicAlbumDetail::onActionAskToFold()
     emit requireShowAlbum(QPoint(-1,-1));
 }
 
-void KNMusicAlbumDetail::onActionExpandStep2(const QVariant &position)
+void KNMusicAlbumDetail::onActionContentMove(const QVariant &position)
 {
     //Move the shadows.
     updateShadowGeometries(position.toRect());
@@ -355,6 +268,16 @@ void KNMusicAlbumDetail::onActionExpandStep1InFinished()
     m_backgroundAnime=false;
     //Show the contents.
     showContentWidgets();
+}
+
+void KNMusicAlbumDetail::onActionExpandFinished()
+{
+    m_detailHandler->addConnectionHandle(
+                connect(m_albumArt, &KNMusicAlbumTitle::requireShowAlbumArt,
+                        this, &KNMusicAlbumDetail::onActionShowAlbumArt));
+    m_detailHandler->addConnectionHandle(
+                connect(m_albumArt, &KNMusicAlbumTitle::requireHideAlbumArt,
+                        this, &KNMusicAlbumDetail::onActionHideAlbumArt));
 }
 
 void KNMusicAlbumDetail::showContentWidgets()
@@ -376,6 +299,180 @@ void KNMusicAlbumDetail::hideContentWidgets()
     m_albumTreeView->hide();
 }
 
+void KNMusicAlbumDetail::onActionShowAlbumArt()
+{
+    //Stop all shown animation.
+    m_showAlbumArt->stop();
+    m_hideAlbumArt->stop();
+    //Get the position.
+    QRect albumArtStepFinal, albumContentStepFinal;
+    generateStep1FinalPosition(albumArtStepFinal,
+                               albumContentStepFinal);
+    //Set the value.
+    m_showAlbumArtLabel->setStartValue(m_albumArt->geometry());
+    m_showAlbumContent->setStartValue(m_albumContent->geometry());
+    m_showAlbumArtLabel->setEndValue(albumArtStepFinal);
+    m_showAlbumContent->setEndValue(albumContentStepFinal);
+    //Start hide album.
+    m_showAlbumArt->start();
+}
+
+void KNMusicAlbumDetail::onActionHideAlbumArt()
+{
+    //Stop all shown animation.
+    m_showAlbumArt->stop();
+    m_hideAlbumArt->stop();
+    //Get the position.
+    QRect albumArtStepFinal, albumContentStepFinal;
+    generateStep2FinalPosition(albumArtStepFinal,
+                               albumContentStepFinal);
+    //Set the value.
+    m_hideAlbumArtLabel->setStartValue(m_albumArt->geometry());
+    m_hideAlbumContent->setStartValue(m_albumContent->geometry());
+    m_hideAlbumArtLabel->setEndValue(albumArtStepFinal);
+    m_hideAlbumContent->setEndValue(albumContentStepFinal);
+    //Start hide album.
+    m_hideAlbumArt->start();
+}
+
+void KNMusicAlbumDetail::initialInfrastructure()
+{
+    //Initial this first, and we don't need to raise it after.
+    m_albumContent=new QWidget(this);
+    m_albumContent->setAutoFillBackground(true);
+    QPalette pal=m_albumContent->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255,240));
+    m_albumContent->setPalette(pal);
+    //Initial the opacity effects.
+    m_opacityEffect=new QGraphicsOpacityEffect(this);
+    m_opacityEffect->setOpacity(1.0);
+    m_albumContent->setGraphicsEffect(m_opacityEffect);
+    //Initial the album art.
+    m_albumArt=new KNMusicAlbumTitle(this);
+    m_albumArt->setScaledContents(true);
+    //Initial the show and hide artwork connection.
+    m_detailHandler=new KNConnectionHandler(this);
+}
+
+void KNMusicAlbumDetail::initialAlbumShadow()
+{
+    //Initial the side shadows.
+    m_rightShadow=new KNSideShadowWidget(this);
+    m_rightShadow->setDirection(KNSideShadow::RightShadow);
+    m_leftShadow=new KNSideShadowWidget(this);
+    m_leftShadow->setDirection(KNSideShadow::LeftShadow);
+}
+
+void KNMusicAlbumDetail::initialAlbumContentWidgets()
+{
+    //Initial the content layout for album content.
+    QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                             m_albumContent);
+    contentLayout->setContentsMargins(0,0,0,0);
+    contentLayout->setSpacing(0);
+    m_albumContent->setLayout(contentLayout);
+
+    //Initial the caption layout for the title and detail label.
+    QBoxLayout *captionLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                             contentLayout->widget());
+    captionLayout->setContentsMargins(25,25,8,14);
+    captionLayout->setSpacing(0);
+    contentLayout->addLayout(captionLayout);
+
+    //Initial title label.
+    m_albumTitle=new QLabel(this);
+    QFont captionFont=m_albumTitle->font();
+    captionFont.setBold(true);
+    captionFont.setPixelSize(21);
+    m_albumTitle->setFont(captionFont);
+    QPalette captionPalette=m_albumTitle->palette();
+    captionPalette.setColor(QPalette::WindowText, QColor(0,0,0));
+    m_albumTitle->setPalette(captionPalette);
+    captionLayout->addWidget(m_albumTitle);
+
+    //Initial the details label.
+    m_albumDetails=new QLabel(this);
+    m_albumDetails->setPalette(captionPalette);
+    captionLayout->addWidget(m_albumDetails);
+
+    //Initial album treeview.
+    m_albumTreeView=new KNMusicAlbumTreeView(this);
+    contentLayout->addWidget(m_albumTreeView, 1);
+}
+
+void KNMusicAlbumDetail::initialAnimations()
+{
+    //Initial expand animation.
+    m_expandAnime=new QSequentialAnimationGroup(this);
+    connect(m_expandAnime, &QSequentialAnimationGroup::finished,
+            this, &KNMusicAlbumDetail::onActionExpandFinished);
+    //Initial expand step 1.
+    m_expandStep1=new QParallelAnimationGroup(this);
+    //Initial artwork-in step 1.
+    m_inCurve=QEasingCurve(QEasingCurve::OutCubic);
+    m_albumArtIn1=new QPropertyAnimation(this);
+    generateAlbumArtAnimation(m_albumArtIn1);
+    m_expandStep1->addAnimation(m_albumArtIn1);
+    //Initial content-in step 1.
+    m_albumContentIn1=new QPropertyAnimation(this);
+    generateContentAnimation(m_albumContentIn1);
+    connect(m_albumContentIn1, &QPropertyAnimation::valueChanged,
+            this, &KNMusicAlbumDetail::onActionExpandStep1);
+    m_expandStep1->addAnimation(m_albumContentIn1);
+    connect(m_expandStep1, &QParallelAnimationGroup::finished,
+            this, &KNMusicAlbumDetail::onActionExpandStep1InFinished);
+    m_expandAnime->addAnimation(m_expandStep1);
+
+    //Initial expand step 2.
+    m_expandStep2=new QParallelAnimationGroup(this);
+    //Initial artwork-in step 1.
+    m_albumArtIn2=new QPropertyAnimation(this);
+    generateAlbumArtAnimation(m_albumArtIn2);
+    m_expandStep2->addAnimation(m_albumArtIn2);
+    //Initial content-in step 1.
+    m_albumContentIn2=new QPropertyAnimation(this);
+    generateContentAnimation(m_albumContentIn2);
+    connect(m_albumContentIn2, &QPropertyAnimation::valueChanged,
+            this, &KNMusicAlbumDetail::onActionContentMove);
+    m_expandStep2->addAnimation(m_albumContentIn2);
+    m_expandAnime->addAnimation(m_expandStep2);
+
+    //Initial fold animation.
+    m_foldAnime=new QParallelAnimationGroup(this);
+    connect(m_foldAnime, &QParallelAnimationGroup::finished,
+            this, &KNMusicAlbumDetail::onActionFoldFinished);
+    //Initial artwork fold animation.
+    m_albumArtOut=new QPropertyAnimation(this);
+    generateAlbumArtAnimation(m_albumArtOut);
+    connect(m_albumArtOut, &QPropertyAnimation::valueChanged,
+            this, &KNMusicAlbumDetail::onActionFold);
+    m_foldAnime->addAnimation(m_albumArtOut);
+    m_albumContentOut=new QPropertyAnimation(this);
+    generateContentAnimation(m_albumContentOut);
+    m_foldAnime->addAnimation(m_albumContentOut);
+
+    //Initial show album animation.
+    m_showAlbumArt=new QParallelAnimationGroup(this);
+    m_showAlbumArtLabel=new QPropertyAnimation(this);
+    generateAlbumArtAnimation(m_showAlbumArtLabel);
+    m_showAlbumArt->addAnimation(m_showAlbumArtLabel);
+    m_showAlbumContent=new QPropertyAnimation(this);
+    generateContentAnimation(m_showAlbumContent);
+    connect(m_showAlbumContent, &QPropertyAnimation::valueChanged,
+            this, &KNMusicAlbumDetail::onActionContentMove);
+    m_showAlbumArt->addAnimation(m_showAlbumContent);
+    //Initial hide album animation.
+    m_hideAlbumArt=new QParallelAnimationGroup(this);
+    m_hideAlbumArtLabel=new QPropertyAnimation(this);
+    generateAlbumArtAnimation(m_hideAlbumArtLabel);
+    m_hideAlbumArt->addAnimation(m_hideAlbumArtLabel);
+    m_hideAlbumContent=new QPropertyAnimation(this);
+    connect(m_hideAlbumContent, &QPropertyAnimation::valueChanged,
+            this, &KNMusicAlbumDetail::onActionContentMove);
+    generateContentAnimation(m_hideAlbumContent);
+    m_hideAlbumArt->addAnimation(m_hideAlbumContent);
+}
+
 void KNMusicAlbumDetail::initialShortCuts()
 {
     QAction *foldShortCut=new QAction(this);
@@ -383,6 +480,20 @@ void KNMusicAlbumDetail::initialShortCuts()
     foldShortCut->setShortcutContext(Qt::WidgetShortcut);
     connect(foldShortCut, SIGNAL(triggered()), this, SLOT(onActionAskToFold()));
     addAction(foldShortCut);
+}
+
+void KNMusicAlbumDetail::generateAlbumArtAnimation(QPropertyAnimation *anime)
+{
+    anime->setTargetObject(m_albumArt);
+    anime->setPropertyName("geometry");
+    anime->setEasingCurve(m_inCurve);
+}
+
+void KNMusicAlbumDetail::generateContentAnimation(QPropertyAnimation *anime)
+{
+    anime->setTargetObject(m_albumContent);
+    anime->setPropertyName("geometry");
+    anime->setEasingCurve(QEasingCurve::OutCubic);
 }
 
 void KNMusicAlbumDetail::generateStep1FinalPosition(QRect &albumArtGeometry,

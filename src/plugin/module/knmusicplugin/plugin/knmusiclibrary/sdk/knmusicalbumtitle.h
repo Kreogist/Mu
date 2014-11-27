@@ -27,6 +27,8 @@ public:
     explicit KNMusicAlbumTitle(QWidget *parent = 0);
 
 signals:
+    void requireShowAlbumArt();
+    void requireHideAlbumArt();
 
 public slots:
 

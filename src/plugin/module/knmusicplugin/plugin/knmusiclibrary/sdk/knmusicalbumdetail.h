@@ -27,7 +27,9 @@ class QLabel;
 class QPropertyAnimation;
 class QParallelAnimationGroup;
 class QSequentialAnimationGroup;
+class KNConnectionHandler;
 class KNSideShadowWidget;
+class KNMusicAlbumTitle;
 class KNMusicAlbumModel;
 class KNMusicCategoryModel;
 class KNMusicLibraryModel;
@@ -62,15 +64,24 @@ protected:
 private slots:
     void onActionExpandStep1(const QVariant &position);
     void onActionExpandStep1InFinished();
-    void onActionExpandStep2(const QVariant &position);
+    void onActionExpandFinished();
+    void onActionContentMove(const QVariant &position);
     void onActionFold(const QVariant &position);
     void onActionFoldFinished();
     void onActionAskToFold();
     void showContentWidgets();
     void hideContentWidgets();
+    void onActionShowAlbumArt();
+    void onActionHideAlbumArt();
 
 private:
+    void initialInfrastructure();
+    void initialAlbumShadow();
+    void initialAlbumContentWidgets();
+    void initialAnimations();
     void initialShortCuts();
+    void generateAlbumArtAnimation(QPropertyAnimation *anime);
+    void generateContentAnimation(QPropertyAnimation *anime);
     void generateStep1FinalPosition(QRect &albumArtGeometry,
                                     QRect &contentGeometry);
     void generateStep2FinalPosition(QRect &albumArtGeometry,
@@ -78,7 +89,8 @@ private:
     void updateWidgetGeometries();
     void updateShadowGeometries(const QRect &contentPosition);
     void updateAlbumCaptions();
-    QLabel *m_albumArt, *m_albumTitle, *m_albumDetails;
+    KNMusicAlbumTitle *m_albumArt;
+    QLabel *m_albumTitle, *m_albumDetails;
     QWidget *m_albumContent;
     KNMusicAlbumTreeView *m_albumTreeView;
     KNMusicAlbumModel *m_albumModel;
@@ -88,11 +100,14 @@ private:
     QRect m_animeStartRect;
     QPropertyAnimation *m_albumArtIn1, *m_albumContentIn1,
                        *m_albumArtIn2, *m_albumContentIn2,
-                       *m_albumArtOut, *m_albumContentOut;
+                       *m_albumArtOut, *m_albumContentOut,
+                       *m_showAlbumArtLabel, *m_showAlbumContent,
+                       *m_hideAlbumArtLabel, *m_hideAlbumContent;
     QGraphicsOpacityEffect *m_opacityEffect;
     QParallelAnimationGroup *m_expandStep1, *m_expandStep2,
-                            *m_foldAnime;
+                            *m_foldAnime, *m_showAlbumArt, *m_hideAlbumArt;
     QSequentialAnimationGroup *m_expandAnime;
+    KNConnectionHandler *m_detailHandler;
     QEasingCurve m_inCurve;
     QModelIndex m_currentIndex;
     bool m_pressed=false, m_backgroundAnime=true;

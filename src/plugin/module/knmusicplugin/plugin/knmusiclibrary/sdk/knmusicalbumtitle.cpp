@@ -20,14 +20,19 @@
 KNMusicAlbumTitle::KNMusicAlbumTitle(QWidget *parent) :
     QLabel(parent)
 {
+    ;
 }
 
 void KNMusicAlbumTitle::enterEvent(QEvent *event)
 {
     QLabel::enterEvent(event);
+    //Ask to show the album art.
+    emit requireShowAlbumArt();
 }
 
 void KNMusicAlbumTitle::leaveEvent(QEvent *event)
 {
     QLabel::leaveEvent(event);
+    //Ask to hide the album art.
+    emit requireHideAlbumArt();
 }
