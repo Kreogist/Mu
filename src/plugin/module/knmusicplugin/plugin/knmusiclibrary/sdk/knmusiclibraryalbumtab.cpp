@@ -139,6 +139,7 @@ void KNMusicLibraryAlbumTab::onActionShowInAlbum()
             //Ask to show the genre tab.
             emit requireShowTab();
             //Change the current category index.
+            m_albumView->locateTo(categoryIndex);
             m_albumView->selectAlbum(proxyCategoryModel()->mapToSource(categoryIndex));
             //Set the details to display the index of the song.
             m_albumDetail->scrollToSourceRow(musicRow);

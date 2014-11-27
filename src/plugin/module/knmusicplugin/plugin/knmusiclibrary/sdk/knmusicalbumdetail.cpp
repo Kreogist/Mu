@@ -40,6 +40,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
 {
     //Set properties.
     setAutoFillBackground(true);
+    setFocusPolicy(Qt::WheelFocus);
     //Set the background color.
     QPalette pal=palette();
     pal.setColor(QPalette::Window, QColor(0,0,0,0));
@@ -132,7 +133,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
     //Initial fold animation.
     m_foldAnime=new QParallelAnimationGroup(this);
     connect(m_foldAnime, &QParallelAnimationGroup::finished,
-            this, &KNMusicAlbumDetail::hide);
+            this, &KNMusicAlbumDetail::onActionFoldFinished);
     //Initial artwork fold animation.
     m_albumArtOut=new QPropertyAnimation(m_albumArt, "geometry", this);
     m_albumArtOut->setEasingCurve(QEasingCurve::OutCubic);
@@ -222,6 +223,8 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
     m_leftShadow->show();
     //Show the widget.
     show();
+    //Set the focus.
+    setFocus();
     //Start animation.
     m_expandAnime->start();
 }
@@ -325,6 +328,20 @@ void KNMusicAlbumDetail::onActionFold(const QVariant &position)
     m_opacityEffect->setOpacity(progress);
 }
 
+void KNMusicAlbumDetail::onActionFoldFinished()
+{
+    //Emit finished signal.
+    emit foldComplete();
+    //Hide the detail widget.
+    hide();
+}
+
+void KNMusicAlbumDetail::onActionAskToFold()
+{
+    //Emit a album which must be unavailable to fold the detail.
+    emit requireShowAlbum(QPoint(-1,-1));
+}
+
 void KNMusicAlbumDetail::onActionExpandStep2(const QVariant &position)
 {
     //Move the shadows.
@@ -367,7 +384,7 @@ void KNMusicAlbumDetail::initialShortCuts()
     QAction *foldShortCut=new QAction(this);
     foldShortCut->setShortcut(QKeySequence(Qt::Key_Escape));
     foldShortCut->setShortcutContext(Qt::WidgetShortcut);
-    connect(foldShortCut, SIGNAL(triggered()), this, SLOT(foldDetail()));
+    connect(foldShortCut, SIGNAL(triggered()), this, SLOT(onActionAskToFold()));
     addAction(foldShortCut);
 }
 

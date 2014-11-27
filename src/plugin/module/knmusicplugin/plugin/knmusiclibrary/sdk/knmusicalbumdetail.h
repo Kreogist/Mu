@@ -48,6 +48,7 @@ public:
 
 signals:
     void requireShowAlbum(QPoint indexPoint);
+    void foldComplete();
 
 public slots:
     void foldDetail();
@@ -63,6 +64,8 @@ private slots:
     void onActionExpandStep1InFinished();
     void onActionExpandStep2(const QVariant &position);
     void onActionFold(const QVariant &position);
+    void onActionFoldFinished();
+    void onActionAskToFold();
     void showContentWidgets();
     void hideContentWidgets();
 

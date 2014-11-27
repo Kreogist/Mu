@@ -359,13 +359,19 @@ void KNMusicAlbumView::displayAlbum(const QPoint &point)
         //Show the detail.
         m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
                                          m_itemIconSize);
-        //Set the selected index.
-        m_selectedIndex=QModelIndex();
         //Fold the album.
         m_albumDetail->foldDetail();
         //Update the viewport.
         viewport()->update();
     }
+}
+
+void KNMusicAlbumView::onActionFoldComplete()
+{
+    //When complete the fold, set the selected index to null.
+    m_selectedIndex=QModelIndex();
+    //Update the viewport.
+    viewport()->update();
 }
 
 void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
@@ -387,8 +393,6 @@ void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
         //Show the detail.
         m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
                                          m_itemIconSize);
-        //Set the selected index.
-        m_selectedIndex=QModelIndex();
         //Do fold detail animation.
         m_albumDetail->foldDetail();
         //Update the viewport.
@@ -539,6 +543,8 @@ void KNMusicAlbumView::setAlbumDetail(KNMusicAlbumDetail *albumDetail)
     //Do connection.
     connect(m_albumDetail, &KNMusicAlbumDetail::requireShowAlbum,
             this, &KNMusicAlbumView::displayAlbum);
+    connect(m_albumDetail, &KNMusicAlbumDetail::foldComplete,
+            this, &KNMusicAlbumView::onActionFoldComplete);
     //Hide the album detail.
     m_albumDetail->hide();
     //Move it up to the top.
