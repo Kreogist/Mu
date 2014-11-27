@@ -160,23 +160,23 @@ QString KNMusicTagWMA::frameToText(QByteArray content)
     switch(encoding)
     {
     case 0: //0 = ISO-8859-1
-        return m_isoCodec->toUnicode(content).simplified();
+        return m_isoCodec->toUnicode(content).simplified().remove('\0');
     case 1: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
         if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
         {
-            return m_utf16BECodec->toUnicode(content).simplified();
+            return m_utf16BECodec->toUnicode(content).simplified().remove('\0');
         }
         if((quint8)content.at(0)==0xFF && (quint8)content.at(1)==0xFE)
         {
-            return m_utf16LECodec->toUnicode(content).simplified();
+            return m_utf16LECodec->toUnicode(content).simplified().remove('\0');
         }
-        return m_utf16Codec->toUnicode(content).simplified();
+        return m_utf16Codec->toUnicode(content).simplified().remove('\0');
     case 2: //2 = UTF-16 BE without BOM
-        return m_utf16Codec->toUnicode(content).simplified();
+        return m_utf16Codec->toUnicode(content).simplified().remove('\0');
     case 3: //3 = UTF-8
-        return m_utf8Codec->toUnicode(content).simplified();
+        return m_utf8Codec->toUnicode(content).simplified().remove('\0');
     default://Use locale codec.
-        return m_localeCodec->toUnicode(content).simplified();
+        return m_localeCodec->toUnicode(content).simplified().remove('\0');
     }
 }
 
