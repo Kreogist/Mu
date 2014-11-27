@@ -38,31 +38,19 @@ KNMusicAlbumTreeView::KNMusicAlbumTreeView(QWidget *parent) :
     //Set the index delegate.
     setItemDelegateForColumn(BlankData,
                              new KNMusicAlbumIndexDelegate(this));
+    //Always hide horizontal scroll bar.
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
-void KNMusicAlbumTreeView::resizeHeader()
+void KNMusicAlbumTreeView::resizeHeader(int preferWidth)
 {
     //Resize time and rating column.
     resizeColumnToContents(Time);
-    int preferWidth=width()-columnWidth(Time)-columnWidth(BlankData);
-    //If the width is too small, hide the rating.
-    if(width()<350)
-    {
-        //Hide the rating column.
-        setColumnHidden(Rating, true);
-    }
-    else
-    {
-        //Show and resize rating size.
-        setColumnHidden(Rating, false);
-        resizeColumnToContents(Rating);
-        //Set the prefer width.
-        preferWidth-=columnWidth(Rating);
-    }
-    //Check vertical scroll bar is visible.
-    setColumnWidth(Name,verticalScrollBar()->isVisible()?
-                            preferWidth-verticalScrollBar()->width():
-                            preferWidth);
+    //Calculate the row count is larger than the height, to ensure the vertical
+    //scroll bar will be visible or not.
+    int calculateWidth=preferWidth==-1?width():preferWidth;
+    setColumnWidth(Name,
+                   calculateWidth-columnWidth(Time)-columnWidth(BlankData)-verticalScrollBar()->width());
 }
 
 void KNMusicAlbumTreeView::resetHeaderState()
@@ -74,10 +62,8 @@ void KNMusicAlbumTreeView::resetHeaderState()
     }
     //Show the default columns.
     setColumnHidden(Time, false);
-    setColumnHidden(Rating, false);
     //Reorder the columns.
     moveToFirst(Time);
-    moveToFirst(Rating);
     moveToFirst(Name);
     //No more hack here, move the display data index one by one.
     moveToFirst(BlankData);

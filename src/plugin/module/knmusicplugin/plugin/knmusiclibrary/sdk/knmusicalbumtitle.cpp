@@ -15,25 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICALBUMTREEVIEW_H
-#define KNMUSICALBUMTREEVIEW_H
+#include "knmusicalbumtitle.h"
 
-#include "knmusiclibrarytreeview.h"
-
-class KNMusicAlbumTreeView : public KNMusicLibraryTreeView
+KNMusicAlbumTitle::KNMusicAlbumTitle(QWidget *parent) :
+    QLabel(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicAlbumTreeView(QWidget *parent = 0);
-    void resizeHeader(int preferWidth=-1);
+}
 
-signals:
+void KNMusicAlbumTitle::enterEvent(QEvent *event)
+{
+    QLabel::enterEvent(event);
+}
 
-public slots:
-
-protected:
-    void resetHeaderState();
-
-};
-
-#endif // KNMUSICALBUMTREEVIEW_H
+void KNMusicAlbumTitle::leaveEvent(QEvent *event)
+{
+    QLabel::leaveEvent(event);
+}

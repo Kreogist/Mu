@@ -267,13 +267,6 @@ void KNMusicAlbumDetail::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
     //Update the child widget geometries.
     updateWidgetGeometries();
-    //Update the data.
-    if(m_currentIndex.isValid())
-    {
-        updateAlbumCaptions();
-        updateShadowGeometries(m_albumContent->geometry());
-        m_albumTreeView->resizeHeader();
-    }
 }
 
 void KNMusicAlbumDetail::mousePressEvent(QMouseEvent *event)
@@ -372,7 +365,7 @@ void KNMusicAlbumDetail::showContentWidgets()
     m_albumTitle->show();
     m_albumDetails->show();
     //When show the treeview, resize the header first.
-    m_albumTreeView->resizeHeader();
+    m_albumTreeView->resizeHeader((m_sizeParameter>>2)*3);
     m_albumTreeView->show();
 }
 
@@ -427,6 +420,14 @@ void KNMusicAlbumDetail::updateWidgetGeometries()
     //Set the geometry.
     m_albumArt->setGeometry(albumArtGeometry);
     m_albumContent->setGeometry(contentGeometry);
+    //Update the shadow.
+    updateShadowGeometries(contentGeometry);
+    //Update the data.
+    if(m_currentIndex.isValid())
+    {
+        updateAlbumCaptions();
+        m_albumTreeView->resizeHeader();
+    }
 }
 
 void KNMusicAlbumDetail::updateShadowGeometries(const QRect &contentPosition)
