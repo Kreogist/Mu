@@ -231,8 +231,8 @@ void KNMusicAlbumDetail::foldDetail()
 {
     //If m_animeStartRect is empty, or the state is running means now is running
     //fold animation, we don't need to fold it more.
-    if(!m_animeStartRect.isNull() ||
-            m_foldAnime->state()!=QAbstractAnimation::Running)
+    if(!m_animeStartRect.isNull()
+            && m_foldAnime->state()==QAbstractAnimation::Stopped)
     {
         //Stop all the anime.
         m_expandAnime->stop();
