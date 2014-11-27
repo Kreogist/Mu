@@ -203,27 +203,27 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
     case EncodeISO: //0 = ISO-8859-1
         //Use unicode codec to translate.
         return m_usingDefaultCodec?
-                    m_localeCodec->toUnicode(content).simplified().remove('\0'):
-                    m_isoCodec->toUnicode(content).simplified().remove('\0');
+                    m_localeCodec->toUnicode(content).simplified().remove(QChar('\0')):
+                    m_isoCodec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF16BELE: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
         //Decode via first two bytes.
         if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
         {
-            return m_utf16BECodec->toUnicode(content).simplified().remove('\0');
+            return m_utf16BECodec->toUnicode(content).simplified().remove(QChar('\0'));
         }
         if((quint8)content.at(0)==0xFF && (quint8)content.at(1)==0xFE)
         {
-            return m_utf16LECodec->toUnicode(content).simplified().remove('\0');
+            return m_utf16LECodec->toUnicode(content).simplified().remove(QChar('\0'));
         }
-        return m_utf16Codec->toUnicode(content).simplified().remove('\0');
+        return m_utf16Codec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF16: //2 = UTF-16 BE without BOM
         //Decode with UTF-16
-        return m_utf16Codec->toUnicode(content).simplified().remove('\0');
+        return m_utf16Codec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF8: //3 = UTF-8
         //Use UTF-8 to decode it.
-        return m_utf8Codec->toUnicode(content).simplified().remove('\0');
+        return m_utf8Codec->toUnicode(content).simplified().remove(QChar('\0'));
     default://Use locale codec.
-        return m_localeCodec->toUnicode(content).simplified().remove('\0');
+        return m_localeCodec->toUnicode(content).simplified().remove(QChar('\0'));
     }
 }
 

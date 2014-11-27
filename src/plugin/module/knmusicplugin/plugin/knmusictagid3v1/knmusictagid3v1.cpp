@@ -75,16 +75,16 @@ void KNMusicTagID3v1::parseRawData(char *rawTagData,
     //Just read them by order.
     backupByte(rawTagData, 33, lastBackupData, lastBackupPosition, true);
     //Title
-    tagData.tags[0]=m_defaultCodec->toUnicode(rawTagData+3).simplified().remove('\0');
+    tagData.tags[0]=m_defaultCodec->toUnicode(rawTagData+3).simplified().remove(QChar('\0'));
     backupByte(rawTagData, 63, lastBackupData, lastBackupPosition, true);
     //Artist
-    tagData.tags[1]=m_defaultCodec->toUnicode(rawTagData+33, 30).simplified().remove('\0');
+    tagData.tags[1]=m_defaultCodec->toUnicode(rawTagData+33, 30).simplified().remove(QChar('\0'));
     backupByte(rawTagData, 93, lastBackupData, lastBackupPosition, true);
     //Album
-    tagData.tags[2]=m_defaultCodec->toUnicode(rawTagData+63, 30).simplified().remove('\0');
+    tagData.tags[2]=m_defaultCodec->toUnicode(rawTagData+63, 30).simplified().remove(QChar('\0'));
     backupByte(rawTagData, 97, lastBackupData, lastBackupPosition, true);
     //Year
-    tagData.tags[3]=m_defaultCodec->toUnicode(rawTagData+93, 4).simplified().remove('\0');
+    tagData.tags[3]=m_defaultCodec->toUnicode(rawTagData+93, 4).simplified().remove(QChar('\0'));
     backupByte(rawTagData, 127, lastBackupData, lastBackupPosition, true);
     //Comment is a little complex: check the No.125 char first, if it's 0, then
     //the following char is track index.

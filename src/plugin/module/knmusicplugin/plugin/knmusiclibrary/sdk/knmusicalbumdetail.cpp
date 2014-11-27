@@ -80,11 +80,13 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
     captionFont.setBold(true);
     captionFont.setPixelSize(21);
     m_albumTitle->setFont(captionFont);
+    QPalette captionPalette=m_albumTitle->palette();
+    captionPalette.setColor(QPalette::WindowText, QColor(0,0,0));
+    m_albumTitle->setPalette(captionPalette);
     captionLayout->addWidget(m_albumTitle);
     //Initial the details.
     m_albumDetails=new QLabel(this);
-    captionFont=m_albumDetails->font();
-    m_albumDetails->setFont(captionFont);
+    m_albumDetails->setPalette(captionPalette);
     captionLayout->addWidget(m_albumDetails);
     //Initial album treeview.
     m_albumTreeView=new KNMusicAlbumTreeView(this);
