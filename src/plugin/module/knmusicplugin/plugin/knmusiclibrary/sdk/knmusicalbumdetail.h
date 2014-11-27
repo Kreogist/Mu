@@ -44,6 +44,8 @@ public:
     void setAnimeParameter(const QRect &albumRect,
                            const int &iconSize);
     void displayAlbumIndex(const QModelIndex &index);
+    void updateFoldEndValue(const QRect &position,
+                            const int &iconSize);
 
     int sizeParameter() const;
     void setSizeParameter(int sizeParameter);

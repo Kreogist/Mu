@@ -138,6 +138,24 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
     m_expandAnime->start();
 }
 
+void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
+                                            const int &iconSize)
+{
+    if(m_foldAnime->state()==QAbstractAnimation::Running)
+    {
+        //Update the icon size.
+        m_iconSize=iconSize;
+        //Generate the final value.
+        QRect endPosition=QRect(position.x(),
+                                position.y(),
+                                m_iconSize,
+                                m_iconSize);
+        //Update the final geometry.
+        m_albumArtOut->setEndValue(endPosition);
+        m_albumContentOut->setEndValue(endPosition);
+    }
+}
+
 void KNMusicAlbumDetail::foldDetail()
 {
     //Cut all the connections.

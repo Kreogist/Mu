@@ -64,6 +64,7 @@ protected slots:
 private slots:
     void displayAlbum(const QPoint &point);
     void onActionFoldComplete();
+    void onActionScrolling();
 
 private:
     inline void paintAlbum(QPainter &painter,

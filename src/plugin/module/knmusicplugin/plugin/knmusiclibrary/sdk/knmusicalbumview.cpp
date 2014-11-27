@@ -53,8 +53,11 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     m_scrollTimeLine=new QTimeLine(200, this);
     m_scrollTimeLine->setUpdateInterval(5);
     m_scrollTimeLine->setEasingCurve(QEasingCurve::OutCubic);
-    connect(m_scrollTimeLine, SIGNAL(frameChanged(int)),
-            verticalScrollBar(), SLOT(setValue(int)));
+    connect(m_scrollTimeLine, &QTimeLine::frameChanged,
+            verticalScrollBar(), &QScrollBar::setValue);
+
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &KNMusicAlbumView::onActionScrolling);
 
     //Update parameters.
     updateParameters();
@@ -372,6 +375,12 @@ void KNMusicAlbumView::onActionFoldComplete()
     m_selectedIndex=QModelIndex();
     //Update the viewport.
     viewport()->update();
+}
+
+void KNMusicAlbumView::onActionScrolling()
+{
+    m_albumDetail->updateFoldEndValue(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
+                                      m_itemIconSize);
 }
 
 void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
