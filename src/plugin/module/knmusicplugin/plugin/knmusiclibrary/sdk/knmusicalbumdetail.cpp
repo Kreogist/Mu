@@ -71,6 +71,7 @@ void KNMusicAlbumDetail::setLibraryModel(KNMusicLibraryModel *model)
     m_libraryModel=model;
     //Set the library model to treeview.
     m_albumTreeView->setMusicModel(m_libraryModel);
+    m_albumTreeView->setCategoryColumn(Album);
     //Set default sort state.
     m_albumTreeView->sortByColumn(TrackNumber, Qt::AscendingOrder);
 }
@@ -97,7 +98,9 @@ void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
     m_albumArt->setPixmap(currentPixmap.isNull()?
                               KNMusicGlobal::instance()->noAlbumArt():currentPixmap);
     //Set category content.
-    m_albumTreeView->setCategoryText(m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString());
+    m_albumTreeView->setCategoryText(m_currentIndex.row()==0?
+                                         "":
+                                         m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString());
     //Initial the opacity effect.
     m_opacityEffect->setOpacity(1.0);
     //Set the position.
@@ -358,6 +361,7 @@ void KNMusicAlbumDetail::initialInfrastructure()
     //Initial this first, and we don't need to raise it after.
     m_albumContent=new QWidget(this);
     m_albumContent->setAutoFillBackground(true);
+    m_albumContent->setFocusPolicy(Qt::StrongFocus);
     QPalette pal=m_albumContent->palette();
     pal.setColor(QPalette::Window, QColor(255,255,255,240));
     m_albumContent->setPalette(pal);

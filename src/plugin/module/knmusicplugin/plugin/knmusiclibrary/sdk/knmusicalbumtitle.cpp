@@ -20,7 +20,8 @@
 KNMusicAlbumTitle::KNMusicAlbumTitle(QWidget *parent) :
     QLabel(parent)
 {
-    ;
+    //Change the focus policy.
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void KNMusicAlbumTitle::enterEvent(QEvent *event)

@@ -22,6 +22,8 @@
 
 #include "knmusiclibrarymodel.h"
 
+#include <QDebug>
+
 KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     KNMusicModel(parent)
 {
