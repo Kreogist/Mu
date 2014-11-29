@@ -250,7 +250,6 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.cpp \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicdatabase.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.cpp \
@@ -267,7 +266,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtreeview.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumindexdelegate.cpp \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.cpp
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.cpp \
+    plugin/sdk/knjsondatabase.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydatabase.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -425,7 +426,6 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.h \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicdatabase.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodel.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.h \
@@ -442,7 +442,9 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtreeview.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumindexdelegate.h \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.h
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.h \
+    plugin/sdk/knjsondatabase.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydatabase.h
 
 RESOURCES += \
     resource/res.qrc

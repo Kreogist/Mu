@@ -211,17 +211,17 @@ bool KNMusicPlaylistListAssistant::writePlaylist(KNMusicPlaylistListItem *item)
                     KNMusicModelAssist::dateTimeToDataString(
                         playlistModel->roleData(row,
                                                 DateModified,
-                                                Qt::UserRole).toDateTime());
+                                                Qt::UserRole));
             musicItem["DateAdded"]=
                     KNMusicModelAssist::dateTimeToDataString(
                         playlistModel->roleData(row,
                                                 DateAdded,
-                                                Qt::UserRole).toDateTime());
+                                                Qt::UserRole));
             musicItem["LastPlayed"]=
                     KNMusicModelAssist::dateTimeToDataString(
                         playlistModel->roleData(row,
                                                 LastPlayed,
-                                                Qt::UserRole).toDateTime());
+                                                Qt::UserRole));
             musicItem["Time"]=
                     playlistModel->roleData(row, Time, Qt::UserRole).toInt();
             musicItem["BitRate"]=

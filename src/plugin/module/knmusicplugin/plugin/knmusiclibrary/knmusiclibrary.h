@@ -20,7 +20,9 @@
 
 #include "knmusiclibrarybase.h"
 
+class QThread;
 class KNMusicCategoryModel;
+class KNMusicLibraryDatabase;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
 class KNMusicLibraryCategoryTab;
@@ -29,6 +31,7 @@ class KNMusicLibrary : public KNMusicLibraryBase
     Q_OBJECT
 public:
     explicit KNMusicLibrary(QObject *parent = 0);
+    ~KNMusicLibrary();
     KNMusicTab *songTab();
     KNMusicTab *artistTab();
     KNMusicTab *albumTab();
@@ -50,6 +53,8 @@ private:
         TabGenres,
         CategoryTabsCount
     };
+    QThread *m_libraryDatabaseThread;
+    KNMusicLibraryDatabase *m_libraryDatabase;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_librarySongTab;
     KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];

@@ -15,8 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knmusiclibraryanalysisextend.h"
 #include "knhashpixmaplist.h"
+#include "knmusiclibraryanalysisextend.h"
+#include "knmusiclibrarydatabase.h"
 
 #include "knlocalemanager.h"
 
@@ -142,15 +143,25 @@ void KNMusicLibraryModel::addFiles(const QStringList &fileList)
 
 void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
 {
-    //Add the row to model.
-    KNMusicModel::appendMusicRow(musicRow);
-    //Add the row data to category models.
-    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
-        i!=m_categoryModels.end();
-        ++i)
+    //Add the row to database.
+    m_database->appendMusicRow(musicRow);
+    //Using recover to add the row.
+    recoverMusicRow(musicRow);
+}
+
+void KNMusicLibraryModel::updateMusicRow(const int &row, const
+                                         KNMusicDetailInfo &detailInfo)
+{
+    //Do row udpates operate.
+    KNMusicModel::updateMusicRow(row, detailInfo);
+    //Quick generate the row, this shouldn't so slow.
+    QList<QStandardItem *> currentRow;
+    for(int i=0; i<columnCount(); i++)
     {
-        (*i)->onCategoryAdded(musicRow);
+        currentRow.append(item(row, i));
     }
+    //Ask to update the row in the database.
+    m_database->updateMusicRow(row, currentRow);
 }
 
 void KNMusicLibraryModel::updateCoverImage(const KNMusicDetailInfo &detailInfo)
@@ -169,6 +180,8 @@ void KNMusicLibraryModel::updateCoverImage(const KNMusicDetailInfo &detailInfo)
 
 void KNMusicLibraryModel::removeMusicRow(const int &row)
 {
+    //Remove the row from the database.
+    m_database->removeMusicRow(row);
     //Quick generate the row, this shouldn't so slow.
     QList<QStandardItem *> currentRow;
     for(int i=0; i<columnCount(); i++)
@@ -184,6 +197,19 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
     }
     //Remove the row.
     KNMusicModel::removeMusicRow(row);
+}
+
+void KNMusicLibraryModel::recoverMusicRow(const QList<QStandardItem *> &musicRow)
+{
+    //Add the row to model.
+    KNMusicModel::appendMusicRow(musicRow);
+    //Add the row data to category models.
+    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+        i!=m_categoryModels.end();
+        ++i)
+    {
+        (*i)->onCategoryAdded(musicRow);
+    }
 }
 
 void KNMusicLibraryModel::initialHeader()
@@ -203,4 +229,17 @@ void KNMusicLibraryModel::initialHeader()
     setHeaderData(TrackNumber, Qt::Horizontal, QVariant(Qt::AlignVCenter|Qt::AlignRight), Qt::TextAlignmentRole);
     //Set sort flag.
     setHeaderSortFlag();
+}
+
+KNMusicLibraryDatabase *KNMusicLibraryModel::database() const
+{
+    return m_database;
+}
+
+void KNMusicLibraryModel::setDatabase(KNMusicLibraryDatabase *database)
+{
+    m_database = database;
+    //Linked request.
+    connect(m_database, &KNMusicLibraryDatabase::requireRecoverMusicRow,
+            this, &KNMusicLibraryModel::recoverMusicRow);
 }

@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QAction>
+#include <QThread>
 
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
@@ -26,6 +27,7 @@
 #include "sdk/knmusiclibraryartisttab.h"
 #include "sdk/knmusiclibraryalbumtab.h"
 #include "sdk/knmusiclibrarygenretab.h"
+#include "sdk/knmusiclibrarydatabase.h"
 #include "knmusicsolomenubase.h"
 
 #include "knmusiclibrary.h"
@@ -33,8 +35,16 @@
 KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent)
 {
+    //Initial the music database thread.
+    m_libraryDatabaseThread=new QThread(this);
+    //Initial the music database.
+    m_libraryDatabase=new KNMusicLibraryDatabase;
+    m_libraryDatabase->moveToThread(m_libraryDatabaseThread);
+    m_libraryDatabase->setDatabaseFile(
+                KNMusicGlobal::musicLibraryPath()+"/Library/Music.db");
     //Initial the music model.
     m_libraryModel=new KNMusicLibraryModel(this);
+    m_libraryModel->setDatabase(m_libraryDatabase);
 
     QList<QAction *> showInActionList;
     //Initial the song tab.
@@ -63,6 +73,24 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     }
     //Add the show in actions to solo menu.
     KNMusicGlobal::soloMenu()->addMusicActions(showInActionList);
+
+    //Start database thread.
+    m_libraryDatabaseThread->start();
+
+    //Read the database.
+    m_libraryDatabase->recoverModel();
+}
+
+KNMusicLibrary::~KNMusicLibrary()
+{
+    //Quit the thread.
+    m_libraryDatabaseThread->quit();
+    m_libraryDatabaseThread->wait();
+
+    //Save the database.
+    m_libraryDatabase->write();
+
+    delete m_libraryDatabase;
 }
 
 KNMusicTab *KNMusicLibrary::songTab()

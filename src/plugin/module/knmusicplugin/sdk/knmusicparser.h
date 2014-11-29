@@ -36,6 +36,8 @@ public:
     void installAnalysiser(KNMusicAnalysiser *analysiser);
     void installTagParser(KNMusicTagParser *tagParser);
     void installListParser(KNMusicListParser *listParser);
+    static QString bitRateText(const qint64 &bitRateNumber);
+    static QString sampleRateText(const qint64 &sampleRateNumber);
 
 signals:
 

@@ -9,6 +9,8 @@
 
 #include "knmusicmodelassist.h"
 
+#include <QDebug>
+
 KNMusicModelAssist::KNMusicModelAssist(QObject *parent) :
     QObject(parent)
 {
@@ -124,6 +126,11 @@ QString KNMusicModelAssist::dateTimeToString(const QDateTime &dateTime)
 QString KNMusicModelAssist::dateTimeToDataString(const QDateTime &dateTime)
 {
     return dateTime.toString("yyyyMMddHHmmss");
+}
+
+QString KNMusicModelAssist::dateTimeToDataString(const QVariant &dateTime)
+{
+    return dateTime.toDateTime().toString("yyyyMMddHHmmss");
 }
 
 QDateTime KNMusicModelAssist::dataStringToDateTime(const QString &text)
