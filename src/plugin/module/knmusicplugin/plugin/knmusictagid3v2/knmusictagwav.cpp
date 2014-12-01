@@ -131,7 +131,8 @@ bool KNMusicTagWAV::praseTag(QFile &musicFile,
 
 bool KNMusicTagWAV::parseAlbumArt(KNMusicDetailInfo &detailInfo)
 {
-    ;
+    Q_UNUSED(detailInfo)
+    return false;
 }
 
 void KNMusicTagWAV::parseListChunk(char *rawData,

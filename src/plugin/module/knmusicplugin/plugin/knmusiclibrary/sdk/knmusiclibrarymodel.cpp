@@ -15,9 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QThread>
+
 #include "knhashpixmaplist.h"
 #include "knmusiclibraryanalysisextend.h"
 #include "knmusiclibrarydatabase.h"
+#include "knmusiclibraryimagemanager.h"
 
 #include "knlocalemanager.h"
 
@@ -37,8 +40,10 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     //Reset the analysis extend.
     m_analysisExtend=new KNMusicLibraryAnalysisExtend;
     m_analysisExtend->setCoverImageList(m_coverImageList);
-    connect(m_analysisExtend, &KNMusicLibraryAnalysisExtend::requireUpdateAlbumArt,
+    connect(m_analysisExtend, &KNMusicLibraryAnalysisExtend::requireUpdateImage,
             this, &KNMusicLibraryModel::updateCoverImage);
+    connect(m_analysisExtend, &KNMusicLibraryAnalysisExtend::requireAppendLibraryRow,
+            this, &KNMusicLibraryModel::appendLibraryMusicRow);
     setAnalysisExtend(m_analysisExtend);
 
     //Connect language changed request.
@@ -143,14 +148,21 @@ void KNMusicLibraryModel::addFiles(const QStringList &fileList)
 
 void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
 {
+    //Add the row to model.
+    KNMusicModel::appendMusicRow(musicRow);
     //Add the row to database.
     m_database->appendMusicRow(musicRow);
-    //Using recover to add the row.
-    recoverMusicRow(musicRow);
+    //Add the row data to category models.
+    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+        i!=m_categoryModels.end();
+        ++i)
+    {
+        (*i)->onCategoryAdded(musicRow);
+    }
 }
 
-void KNMusicLibraryModel::updateMusicRow(const int &row, const
-                                         KNMusicDetailInfo &detailInfo)
+void KNMusicLibraryModel::updateMusicRow(const int &row,
+                                         const KNMusicDetailInfo &detailInfo)
 {
     //Do row udpates operate.
     KNMusicModel::updateMusicRow(row, detailInfo);
@@ -164,8 +176,12 @@ void KNMusicLibraryModel::updateMusicRow(const int &row, const
     m_database->updateMusicRow(row, currentRow);
 }
 
-void KNMusicLibraryModel::updateCoverImage(const KNMusicDetailInfo &detailInfo)
+void KNMusicLibraryModel::updateCoverImage(const int &row,
+                                           const KNMusicDetailInfo &detailInfo)
 {
+    //Ask to update the image key in the database.
+    m_database->updateArtworkKey(row, detailInfo.coverImageHash);
+    //Get the cover image.
     QPixmap coverImagePixmap=QPixmap::fromImage(detailInfo.coverImage);
     //Ask category models to update the cover image.
     for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
@@ -199,6 +215,15 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
     KNMusicModel::removeMusicRow(row);
 }
 
+void KNMusicLibraryModel::appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
+                                                const KNMusicDetailInfo &detailInfo)
+{
+    //Append the music row first.
+    appendMusicRow(musicRow);
+    //Ask to analysis album art.
+    m_analysisExtend->onActionAnalysisAlbumArt(musicRow.at(Name), detailInfo);
+}
+
 void KNMusicLibraryModel::recoverMusicRow(const QList<QStandardItem *> &musicRow)
 {
     //Add the row to model.
@@ -208,7 +233,18 @@ void KNMusicLibraryModel::recoverMusicRow(const QList<QStandardItem *> &musicRow
         i!=m_categoryModels.end();
         ++i)
     {
-        (*i)->onCategoryAdded(musicRow);
+        (*i)->onCategoryRecover(musicRow);
+    }
+}
+
+void KNMusicLibraryModel::imageRecoverComplete()
+{
+    //Ask category models to update images.
+    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+        i!=m_categoryModels.end();
+        ++i)
+    {
+        (*i)->onImageRecoverComplete(m_coverImageList);
     }
 }
 
@@ -229,6 +265,21 @@ void KNMusicLibraryModel::initialHeader()
     setHeaderData(TrackNumber, Qt::Horizontal, QVariant(Qt::AlignVCenter|Qt::AlignRight), Qt::TextAlignmentRole);
     //Set sort flag.
     setHeaderSortFlag();
+}
+
+KNMusicLibraryImageManager *KNMusicLibraryModel::imageManager() const
+{
+    return m_imageManager;
+}
+
+void KNMusicLibraryModel::setImageManager(KNMusicLibraryImageManager *imageManager)
+{
+    m_imageManager=imageManager;
+    //Set the hash list.
+    m_imageManager->setPixmapList(m_coverImageList);
+    //Link request.
+    connect(m_imageManager, &KNMusicLibraryImageManager::recoverComplete,
+            this, &KNMusicLibraryModel::imageRecoverComplete);
 }
 
 KNMusicLibraryDatabase *KNMusicLibraryModel::database() const

@@ -38,7 +38,13 @@ QString KNHashPixmapList::appendImage(const QImage &image)
                     QString::number((quint8)hashResult.at(i), 16);
     }
     //Save the image.
-    m_imageList.insert(imageKey, image);
+    if(!m_imageList.contains(imageKey))
+    {
+        //Insert the image in to the hash list.
+        m_imageList.insert(imageKey, image);
+        //Ask to save the image.
+        emit requireSaveImage(imageKey);
+    }
     //Return the image key.
     return imageKey;
 }
@@ -46,4 +52,15 @@ QString KNHashPixmapList::appendImage(const QImage &image)
 QPixmap KNHashPixmapList::pixmap(const QString &key)
 {
     return QPixmap::fromImage(m_imageList.value(key));
+}
+
+QImage KNHashPixmapList::image(const QString &key)
+{
+    return m_imageList.value(key, QImage());
+}
+
+void KNHashPixmapList::setImage(const QString &key, const QImage &image)
+{
+    //Insert the key and image to the hash list.
+    m_imageList.insert(key, image);
 }

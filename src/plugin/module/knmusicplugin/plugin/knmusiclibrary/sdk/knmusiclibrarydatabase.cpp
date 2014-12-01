@@ -65,6 +65,17 @@ void KNMusicLibraryDatabase::updateMusicRow(const int &row,
     replace(row, currentObject);
 }
 
+void KNMusicLibraryDatabase::updateArtworkKey(const int &row,
+                                              const QString &artworkKey)
+{
+    QJsonObject currentObject=at(row).toObject();
+    qDebug()<<row<<currentObject;
+    //Insert the artwork key to the object.
+    currentObject.insert("ArtworkKeyRole", artworkKey);
+    //Replace the object.
+    replace(row, currentObject);
+}
+
 void KNMusicLibraryDatabase::removeMusicRow(const int &row)
 {
     //Remove the music row.
@@ -113,6 +124,7 @@ void KNMusicLibraryDatabase::generateObject(const QList<QStandardItem *> &musicR
     QStandardItem *propertyItem=musicRow.at(Name);
     musicObject.insert("FilePath", propertyItem->data(FilePathRole).toString());
     musicObject.insert("FileName", propertyItem->data(FileNameRole).toString());
+    musicObject.insert("ArtworkKeyRole", propertyItem->data(ArtworkKeyRole).toString());
     QString trackFilePath=propertyItem->data(TrackFileRole).toString();
     if(!trackFilePath.isEmpty())
     {
@@ -129,6 +141,7 @@ void KNMusicLibraryDatabase::generateRow(const QJsonObject &musicObject,
     //Set properties.
     currentDetail.filePath=musicObject.value("FilePath").toString();
     currentDetail.fileName=musicObject.value("FileName").toString();
+    currentDetail.coverImageHash=musicObject.value("ArtworkKeyRole").toString();
     QString trackFilePath=musicObject.value("TrackFilePath").toString();
     if(!trackFilePath.isEmpty())
     {

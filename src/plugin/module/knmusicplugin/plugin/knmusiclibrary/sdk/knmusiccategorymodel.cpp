@@ -15,7 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knhashpixmaplist.h"
+
 #include "knmusiccategorymodel.h"
+
+#include <QDebug>
 
 KNMusicCategoryModel::KNMusicCategoryModel(QObject *parent) :
     QStandardItemModel(parent)
@@ -85,7 +89,7 @@ void KNMusicCategoryModel::onCategoryAdded(const QList<QStandardItem *> &musicRo
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+            match(index(1,0), Qt::DisplayRole, categoryText, 1);
     if(results.isEmpty())
     {
         //We need to generate a new item for it.
@@ -131,7 +135,7 @@ void KNMusicCategoryModel::onCategoryRemoved(const QList<QStandardItem *> &music
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+            match(index(1,0), Qt::DisplayRole, categoryText, 1);
     if(results.isEmpty())
     {
         //Are you kidding me?
@@ -152,6 +156,43 @@ void KNMusicCategoryModel::onCategoryRemoved(const QList<QStandardItem *> &music
     }
 }
 
+void KNMusicCategoryModel::onCategoryRecover(const QList<QStandardItem *> &musicRow)
+{
+    //Check if it need to be add to blank item.
+    QString categoryText=musicRow.at(m_categoryIndex)->text();
+    if(categoryText.isEmpty())
+    {
+        QModelIndex resultIndex=index(0,0);
+        setData(resultIndex,
+                data(resultIndex, CategoryItemSizeRole).toInt()+1,
+                CategoryItemSizeRole);
+        setData(resultIndex,
+                1,
+                CategoryItemVisibleRole);
+        return;
+    }
+    //Search the category text.
+    QModelIndexList results=
+            match(index(1,0), Qt::DisplayRole, categoryText, 1);
+    if(results.isEmpty())
+    {
+        //We need to generate a new item for it.
+        QStandardItem *item=generateItem(categoryText);
+        item->setData(1, CategoryItemSizeRole);
+        item->setData(musicRow.at(Name)->data(ArtworkKeyRole),
+                      CategoryArtworkKeyRole);
+        appendRow(item);
+    }
+    else
+    {
+        //Add the counter of the result.
+        QModelIndex resultIndex=results.first();
+        setData(resultIndex,
+                data(resultIndex, CategoryItemSizeRole).toInt()+1,
+                CategoryItemSizeRole);
+    }
+}
+
 void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
                                               const QString &imageKey,
                                               const QPixmap &image)
@@ -163,7 +204,7 @@ void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+            match(index(1,0), Qt::DisplayRole, categoryText, 1);
     if(results.isEmpty())
     {
         //Are you kidding me?
@@ -182,6 +223,25 @@ void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
             //Set the cover image.
             setData(resultIndex,
                     QIcon(image),
+                    Qt::DecorationRole);
+        }
+    }
+}
+
+void KNMusicCategoryModel::onImageRecoverComplete(KNHashPixmapList *pixmapList)
+{
+    //Update all the image data, ignore the first item.
+    for(int i=1; i<rowCount(); i++)
+    {
+        QModelIndex currentIndex=index(i,0);
+        //Get the image key of the item.
+        QString hashKey=data(currentIndex, CategoryArtworkKeyRole).toString();
+        //Set the image according to the hash key.
+        if(!hashKey.isEmpty())
+        {
+            //Set the artwork.
+            setData(currentIndex,
+                    QIcon(pixmapList->pixmap(hashKey)),
                     Qt::DecorationRole);
         }
     }

@@ -31,22 +31,6 @@ KNMusicLibraryAnalysisExtend::KNMusicLibraryAnalysisExtend(QObject *parent) :
             this, &KNMusicLibraryAnalysisExtend::onActionParseNextImage);
 }
 
-void KNMusicLibraryAnalysisExtend::onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo)
-{
-    //Generate the row.
-    QList<QStandardItem *> songRow=KNMusicModelAssist::generateRow(detailInfo);
-    //Generate a item row.
-    AlbumArtItem currentItem;
-    currentItem.item=songRow.at(Name);
-    currentItem.detailInfo=detailInfo;
-    //Add the item to analysis queue.
-    m_analysisQueue.append(currentItem);
-    //Append the music row.
-    emit requireAppendRow(songRow);
-    //And of course, ask to analysis the next item.
-    emit requireParseNextImage();
-}
-
 void KNMusicLibraryAnalysisExtend::onActionParseNextImage()
 {
     //Check is there no item in the queue.
@@ -62,11 +46,8 @@ void KNMusicLibraryAnalysisExtend::onActionParseNextImage()
         //Add the image data in the hash pixmap list, get the hash key.
         currentItem.detailInfo.coverImageHash=
                 m_coverImageList->appendImage(currentItem.detailInfo.coverImage);
-        //Set the hash key to the item.
-        currentItem.item->setData(currentItem.detailInfo.coverImageHash,
-                                  ArtworkKeyRole);
-        //We should ask to update the data.
-        emit requireUpdateAlbumArt(currentItem.detailInfo);
+        //Require update the row.
+        emit requireUpdateImage(currentItem.item->row(), currentItem.detailInfo);
     }
     //Ask to analysis next item.
     emit requireParseNextImage();
@@ -79,5 +60,24 @@ KNHashPixmapList *KNMusicLibraryAnalysisExtend::coverImageList() const
 
 void KNMusicLibraryAnalysisExtend::setCoverImageList(KNHashPixmapList *coverImageList)
 {
-    m_coverImageList = coverImageList;
+    m_coverImageList=coverImageList;
+}
+
+void KNMusicLibraryAnalysisExtend::onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo)
+{
+    emit requireAppendLibraryRow(KNMusicModelAssist::generateRow(detailInfo),
+                                 detailInfo);
+}
+
+void KNMusicLibraryAnalysisExtend::onActionAnalysisAlbumArt(QStandardItem *item,
+                                                            const KNMusicDetailInfo &detailInfo)
+{
+    //Generate a item row.
+    AlbumArtItem currentItem;
+    currentItem.item=item;
+    currentItem.detailInfo=detailInfo;
+    //Add the item to analysis queue.
+    m_analysisQueue.append(currentItem);
+    //And of course, ask to analysis the next item.
+    emit requireParseNextImage();
 }

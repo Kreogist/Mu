@@ -38,6 +38,7 @@ QList<QStandardItem *> KNMusicModelAssist::generateRow(
     item->setData(detailInfo.filePath, FilePathRole);
     item->setData(detailInfo.fileName, FileNameRole);
     item->setData(detailInfo.trackFilePath, TrackFileRole);
+    item->setData(detailInfo.coverImageHash, ArtworkKeyRole);
     item->setData(detailInfo.startPosition, StartPositionRole);
     item=musicRow.at(Size);
     item->setData(detailInfo.size, Qt::UserRole);
