@@ -363,7 +363,7 @@ void KNMusicAlbumView::displayAlbum(const QPoint &point)
         m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
                                          m_itemIconSize);
         //Fold the album.
-        m_albumDetail->foldDetail();
+        m_albumDetail->foldAlbumDetail();
         //Update the viewport.
         viewport()->update();
     }
@@ -393,7 +393,7 @@ void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
         //Show the detail.
         m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
                                          m_itemIconSize);
-        m_albumDetail->displayAlbumIndex(m_selectedIndex);
+        m_albumDetail->displayAlbumDetail(m_selectedIndex);
         //Update the album view.
         viewport()->update();
     }
@@ -403,7 +403,7 @@ void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
         m_albumDetail->setAnimeParameter(visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
                                          m_itemIconSize);
         //Do fold detail animation.
-        m_albumDetail->foldDetail();
+        m_albumDetail->foldAlbumDetail();
         //Update the viewport.
         update();
         viewport()->update();

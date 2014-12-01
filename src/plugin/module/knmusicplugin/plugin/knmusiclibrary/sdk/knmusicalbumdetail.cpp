@@ -83,7 +83,7 @@ void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
     m_animeStartRect=albumRect;
 }
 
-void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
+void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
 {
     //Cut all the connections.
     m_detailHandler->disConnectAll();
@@ -160,7 +160,7 @@ void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
     }
 }
 
-void KNMusicAlbumDetail::foldDetail()
+void KNMusicAlbumDetail::foldAlbumDetail()
 {
     //Cut all the connections.
     m_detailHandler->disConnectAll();
@@ -189,6 +189,11 @@ void KNMusicAlbumDetail::foldDetail()
         //Start animation.
         m_foldAnime->start();
     }
+}
+
+void KNMusicAlbumDetail::flyAwayAlbumDetail()
+{
+    ;
 }
 
 void KNMusicAlbumDetail::scrollToSourceRow(const int &row)
@@ -467,9 +472,21 @@ void KNMusicAlbumDetail::initialAnimations()
     connect(m_albumArtOut, &QPropertyAnimation::valueChanged,
             this, &KNMusicAlbumDetail::onActionFold);
     m_foldAnime->addAnimation(m_albumArtOut);
+    //Initial the content fold animation.
     m_albumContentOut=new QPropertyAnimation(this);
     generateContentAnimation(m_albumContentOut);
     m_foldAnime->addAnimation(m_albumContentOut);
+
+    //Initial fly away animation.
+    m_flyAwayAnime=new QParallelAnimationGroup(this);
+    ;
+    //Initial artwork fly away animation.
+    m_albumArtFlyAway=new QPropertyAnimation(this);
+    generateAlbumArtAnimation(m_albumArtFlyAway);
+    m_flyAwayAnime->addAnimation(m_albumArtFlyAway);
+    m_albumContentFlyAway=new QPropertyAnimation(this);
+    generateContentAnimation(m_albumContentFlyAway);
+    m_flyAwayAnime->addAnimation(m_albumContentFlyAway);
 
     //Initial show album animation.
     m_showAlbumArt=new QParallelAnimationGroup(this);
@@ -551,6 +568,7 @@ void KNMusicAlbumDetail::stopAllAnimations()
     m_expandAnime->stop();
     m_showAlbumArt->stop();
     m_hideAlbumArt->stop();
+    m_flyAwayAnime->stop();
 }
 
 void KNMusicAlbumDetail::updateWidgetGeometries()

@@ -43,7 +43,6 @@ public:
     void setLibraryModel(KNMusicLibraryModel *model);
     void setAnimeParameter(const QRect &albumRect,
                            const int &iconSize);
-    void displayAlbumIndex(const QModelIndex &index);
     void updateFoldEndValue(const QRect &position,
                             const int &iconSize);
 
@@ -55,7 +54,9 @@ signals:
     void foldComplete();
 
 public slots:
-    void foldDetail();
+    void displayAlbumDetail(const QModelIndex &index);
+    void foldAlbumDetail();
+    void flyAwayAlbumDetail();
     void scrollToSourceRow(const int &row);
 
 protected:
@@ -104,11 +105,13 @@ private:
     QPropertyAnimation *m_albumArtIn1, *m_albumContentIn1,
                        *m_albumArtIn2, *m_albumContentIn2,
                        *m_albumArtOut, *m_albumContentOut,
+                       *m_albumArtFlyAway, *m_albumContentFlyAway,
                        *m_showAlbumArtLabel, *m_showAlbumContent,
                        *m_hideAlbumArtLabel, *m_hideAlbumContent;
     QGraphicsOpacityEffect *m_opacityEffect;
     QParallelAnimationGroup *m_expandStep1, *m_expandStep2,
-                            *m_foldAnime, *m_showAlbumArt, *m_hideAlbumArt;
+                            *m_foldAnime, *m_showAlbumArt, *m_hideAlbumArt,
+                            *m_flyAwayAnime;
     QSequentialAnimationGroup *m_expandAnime;
     KNConnectionHandler *m_detailHandler;
     QEasingCurve m_inCurve;
