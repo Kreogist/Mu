@@ -56,6 +56,7 @@ QList<QStandardItem *> KNMusicModelAssist::generateRow(
     item=musicRow.at(SampleRate);
     item->setData(detailInfo.samplingRate, Qt::UserRole);
     item=musicRow.at(Rating);
+    item->setData(detailInfo.rating, Qt::DisplayRole);
     item->setEditable(true);
     item=musicRow.at(AlbumRating);
     item->setEditable(true);

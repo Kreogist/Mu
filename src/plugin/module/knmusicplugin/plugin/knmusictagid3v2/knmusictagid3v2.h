@@ -108,6 +108,7 @@ protected:
                              KNMusicDetailInfo &detailInfo);
 
 private:
+    static int ratingStars(const quint8 &hex);
     static quint32 minor2Size(char *rawTagData);
     static quint32 minor3Size(char *rawTagData);
     static quint32 minor4Size(char *rawTagData);

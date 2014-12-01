@@ -445,6 +445,22 @@ void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
                             frameText);
             }
             break;
+        case Rating:
+            //I don't know why all the file using this.
+            if(QString(frameData.left(29))=="Windows Media Player 9 Series")
+            {
+                //Translate the last bytes as rating.
+                detailInfo.rating=ratingStars((quint8)(frameData.at(30)));
+            }
+            else
+            {
+                //Treat the first bytes as rating.
+                if(!frameData.isEmpty())
+                {
+                    detailInfo.rating=frameData.at(0);
+                }
+            }
+            break;
         default:
             setTextData(detailInfo.textLists[frameIndex],
                         frameToText(frameData));
@@ -455,6 +471,36 @@ void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
     {
         detailInfo.imageData["ID3v2"].append(imageTypeList);
     }
+}
+
+int KNMusicTagID3v2::ratingStars(const quint8 &hex)
+{
+    //1-31  = 1 star.
+    //32-95 = 2 stars.
+    //96-159 = 3 stars.
+    //160-223 = 4 stars.
+    //224-255 = 5 stars.
+    if(hex>0 && hex<32)
+    {
+        return 1;
+    }
+    if(hex>31 && hex<96)
+    {
+        return 2;
+    }
+    if(hex>95 && hex<160)
+    {
+        return 3;
+    }
+    if(hex>159 && hex<224)
+    {
+        return 4;
+    }
+    if(hex>223)
+    {
+        return 5;
+    }
+    return 0;
 }
 
 void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,

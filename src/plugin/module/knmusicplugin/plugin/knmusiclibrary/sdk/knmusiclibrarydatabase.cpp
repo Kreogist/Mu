@@ -137,6 +137,7 @@ void KNMusicLibraryDatabase::generateRow(const QJsonObject &musicObject,
     }
     //Set the detail information first.
     currentDetail.bitRate=musicObject.value("BitRate").toInt();
+    currentDetail.rating=musicObject.value("Rating").toString().toInt();
     currentDetail.samplingRate=musicObject.value("SampleRate").toInt();
     currentDetail.size=musicObject.value("Size").toString().toLongLong();
     currentDetail.duration=musicObject.value("Time").toString().toLongLong();
