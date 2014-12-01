@@ -133,7 +133,29 @@ void KNMusicLibraryGenreTab::setCategoryModel(KNMusicCategoryModel *model)
 
 void KNMusicLibraryGenreTab::onActionSearch(const QString &text)
 {
-    ;
+    //Search in genres.
+    proxyCategoryModel()->setFilterFixedString(text);
+    //We want to track the result index.
+    QModelIndex resultIndex=m_genreList->currentIndex();
+    //Check whether there's select item in the treeview.
+    if(!resultIndex.isValid())
+    {
+        //Check it's there any other choice of the index.
+        if(proxyCategoryModel()->rowCount()>0)
+        {
+            //New category index.
+            resultIndex=proxyCategoryModel()->index(0,0);
+            //Set the current index to the first item of the category model.
+            m_genreList->setCurrentIndex(resultIndex);
+        }
+        else
+        {
+            return;
+        }
+    }
+    //Trace the result index.
+    m_genreList->scrollTo(resultIndex,
+                           QAbstractItemView::PositionAtCenter);
 }
 
 void KNMusicLibraryGenreTab::onActionCategoryIndexChanged(const QModelIndex &index)

@@ -42,6 +42,7 @@ signals:
 public slots:
     void onCategoryAdded(const QList<QStandardItem *> &musicRow);
     void onCategoryRemoved(const QList<QStandardItem *> &musicRow);
+    void onCategoryRecover(const QList<QStandardItem *> &musicRow);
 };
 
 #endif // KNMUSICALBUMMODEL_H

@@ -156,3 +156,70 @@ void KNMusicAlbumModel::onCategoryRemoved(const QList<QStandardItem *> &musicRow
         }
     }
 }
+
+void KNMusicAlbumModel::onCategoryRecover(const QList<QStandardItem *> &musicRow)
+{
+    //Check if it need to be add to blank item.
+    QString categoryText=musicRow.at(categoryIndex())->text();
+    if(categoryText.isEmpty())
+    {
+        QModelIndex resultIndex=index(0,0);
+        setData(resultIndex,
+                data(resultIndex, CategoryItemSizeRole).toInt()+1,
+                CategoryItemSizeRole);
+        setData(resultIndex,
+                1,
+                CategoryItemVisibleRole);
+        return;
+    }
+    //Get the album artist, if there's no album artist, use the song artist
+    //instead.
+    QString albumArtist=musicRow.at(AlbumArtist)->text();
+    if(albumArtist.isEmpty())
+    {
+        albumArtist=musicRow.at(Artist)->text();
+    }
+    //Search the category text.
+    QModelIndexList results=
+            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+    if(results.isEmpty())
+    {
+        //We need to generate a new item for it.
+        QStandardItem *item=generateItem(categoryText);
+        item->setData(1, CategoryItemSizeRole);
+        item->setData(musicRow.at(Name)->data(ArtworkKeyRole),
+                      CategoryArtworkKeyRole);
+        //Set the album artist.
+        QHash<QString, QVariant> artistList;
+        artistList.insert(albumArtist, 1);
+        item->setData(artistList, CategoryArtistList);
+        //Add the item to category model.
+        appendRow(item);
+    }
+    else
+    {
+        //Add the counter of the result.
+        QModelIndex resultIndex=results.first();
+        setData(resultIndex,
+                data(resultIndex, CategoryItemSizeRole).toInt()+1,
+                CategoryItemSizeRole);
+        //Check whether the artist is in the artist list.
+        QHash<QString, QVariant> artistList=data(resultIndex,
+                                                 CategoryArtistList).toHash();
+        if(artistList.contains(albumArtist))
+        {
+            //Add the artist to the list, set the data.
+            artistList.insert(albumArtist,
+                              artistList.value(albumArtist).toInt()+1);
+        }
+        else
+        {
+            //Add a new one for it.
+            artistList.insert(albumArtist, 1);
+        }
+        //Set data.
+        setData(resultIndex,
+                artistList,
+                CategoryArtistList);
+    }
+}

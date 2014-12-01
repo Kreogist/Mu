@@ -22,6 +22,7 @@
 KNMusicCategoryProxyModel::KNMusicCategoryProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
+    //Set properties.
     setSortCaseSensitivity(Qt::CaseInsensitive);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
     setFilterKeyColumn(0);

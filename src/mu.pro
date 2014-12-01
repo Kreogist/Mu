@@ -27,8 +27,8 @@ CONFIG += c++11
 
 #Enable processor instruction sets when using release mode.
 release{
-    CONFIG += mmx sse sse2 sse3
-    QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions
+    CONFIG += mmx sse sse2
+    QMAKE_CXXFLAGS += -mmmx -msse -msse2 -finline-functions
 }
 
 #Windows configure

@@ -30,6 +30,8 @@
 
 #include "knmusiclibraryalbumtab.h"
 
+#include <QDebug>
+
 KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     KNMusicLibraryCategoryTab(parent)
 {
@@ -118,7 +120,10 @@ void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModel *model)
 
 void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)
 {
-    ;
+    //Set the key word to do the search.
+    proxyCategoryModel()->setFilterFixedString(text);
+    //Update the album view.
+    m_albumView->viewport()->update();
 }
 
 void KNMusicLibraryAlbumTab::onActionShowInAlbum()

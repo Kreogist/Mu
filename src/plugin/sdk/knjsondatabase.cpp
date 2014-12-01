@@ -85,6 +85,11 @@ void KNJSONDatabase::read()
 
 void KNJSONDatabase::write()
 {
+    //Check if we need to write.
+    if(m_batchCount==0)
+    {
+        return;
+    }
     //Insert the content data to object.
     m_contentObject.insert("Database", m_dataField);
     //Set the version data.
@@ -100,6 +105,8 @@ void KNJSONDatabase::write()
         m_databaseFile->write(m_document.toJson());
         m_databaseFile->close();
     }
+    //Clear count.
+    m_batchCount=0;
 }
 
 void KNJSONDatabase::append(QJsonObject value)
@@ -145,8 +152,6 @@ void KNJSONDatabase::addBatchCount()
     //Check the count.
     if(m_batchCount==MAX_BATCH)
     {
-        //Clear count, and write to disk.
-        m_batchCount=0;
         //Write to disk.
         write();
     }
