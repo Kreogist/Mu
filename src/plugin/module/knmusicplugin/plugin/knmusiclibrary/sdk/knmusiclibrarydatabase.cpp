@@ -69,7 +69,6 @@ void KNMusicLibraryDatabase::updateArtworkKey(const int &row,
                                               const QString &artworkKey)
 {
     QJsonObject currentObject=at(row).toObject();
-    qDebug()<<row<<currentObject;
     //Insert the artwork key to the object.
     currentObject.insert("ArtworkKeyRole", artworkKey);
     //Replace the object.
