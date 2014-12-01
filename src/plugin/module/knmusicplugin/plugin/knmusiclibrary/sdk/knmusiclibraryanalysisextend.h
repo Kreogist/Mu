@@ -47,10 +47,15 @@ public:
 
 signals:
     void requireParseNextImage();
-    void requireUpdateAlbumArt(const KNMusicDetailInfo &detailInfo);
+    void requireAppendLibraryRow(QList<QStandardItem *> musicRow,
+                                 KNMusicDetailInfo detailInfo);
+    void requireUpdateImage(int row,
+                            KNMusicDetailInfo detailInfo);
 
 public slots:
     void onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo);
+    void onActionAnalysisAlbumArt(QStandardItem *item,
+                                  const KNMusicDetailInfo &detailInfo);
 
 private slots:
     void onActionParseNextImage();

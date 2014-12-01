@@ -29,15 +29,15 @@ signals:
 public slots:
 
 protected:
-    void append(const QJsonObject &value);
-    void replace(int i,
-                 const QJsonObject &value);
+    void append(QJsonObject value);
+    void replace(int i, QJsonObject value);
     void removeAt(int i);
     QJsonValue at(int i);
     QJsonArray::iterator begin();
     QJsonArray::iterator end();
 
 private:
+    void addBatchCount();
     void checkDatabaseDir();
     QFile *m_databaseFile;
     QFileInfo m_databaseFileInfo;
@@ -47,6 +47,7 @@ private:
     QJsonParseError m_lastError;
     static int m_majorVersion;
     static int m_minorVersion;
+    int m_batchCount=0;
 };
 
 #endif // KNJSONDATABASE_H

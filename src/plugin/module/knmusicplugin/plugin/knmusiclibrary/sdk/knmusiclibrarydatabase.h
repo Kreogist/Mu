@@ -37,6 +37,7 @@ public:
     void appendMusicRow(const QList<QStandardItem *> &musicRow);
     void updateMusicRow(const int &row,
                         const QList<QStandardItem *> &musicRow);
+    void updateArtworkKey(const int &row, const QString &artworkKey);
     void removeMusicRow(const int &row);
 
 signals:

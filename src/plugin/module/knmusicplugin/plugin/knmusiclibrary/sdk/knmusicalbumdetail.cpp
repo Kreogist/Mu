@@ -85,9 +85,10 @@ void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
 
 void KNMusicAlbumDetail::displayAlbumIndex(const QModelIndex &index)
 {
-    //Stop all the animation.
-    m_foldAnime->stop();
-    m_expandAnime->stop();
+    //Cut all the connections.
+    m_detailHandler->disConnectAll();
+    //Stop all the animations.
+    stopAllAnimations();
     //Hide the contents.
     hideContentWidgets();
     //Save the index.
@@ -168,9 +169,8 @@ void KNMusicAlbumDetail::foldDetail()
     if(!m_animeStartRect.isNull()
             && m_foldAnime->state()==QAbstractAnimation::Stopped)
     {
-        //Stop all the anime.
-        m_expandAnime->stop();
-        m_foldAnime->stop();
+        //Stop all the animations.
+        stopAllAnimations();
         //Set the position.
         QRect albumArtEndRect(m_animeStartRect.x(),
                               m_animeStartRect.y(),
@@ -322,9 +322,8 @@ void KNMusicAlbumDetail::hideContentWidgets()
 
 void KNMusicAlbumDetail::onActionShowAlbumArt()
 {
-    //Stop all shown animation.
-    m_showAlbumArt->stop();
-    m_hideAlbumArt->stop();
+    //Stop all the animations.
+    stopAllAnimations();
     //Get the position.
     QRect albumArtStepFinal, albumContentStepFinal;
     generateStep1FinalPosition(albumArtStepFinal,
@@ -340,9 +339,8 @@ void KNMusicAlbumDetail::onActionShowAlbumArt()
 
 void KNMusicAlbumDetail::onActionHideAlbumArt()
 {
-    //Stop all shown animation.
-    m_showAlbumArt->stop();
-    m_hideAlbumArt->stop();
+    //Stop all the animations.
+    stopAllAnimations();
     //Get the position.
     QRect albumArtStepFinal, albumContentStepFinal;
     generateStep2FinalPosition(albumArtStepFinal,
@@ -544,6 +542,15 @@ void KNMusicAlbumDetail::generateStep2FinalPosition(QRect &albumArtGeometry,
                           albumArtGeometry.y(),
                           finalSizeParameter,
                           finalSizeParameter);
+}
+
+void KNMusicAlbumDetail::stopAllAnimations()
+{
+    //Stop all the anime group.
+    m_foldAnime->stop();
+    m_expandAnime->stop();
+    m_showAlbumArt->stop();
+    m_hideAlbumArt->stop();
 }
 
 void KNMusicAlbumDetail::updateWidgetGeometries()

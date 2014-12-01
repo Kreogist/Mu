@@ -28,6 +28,7 @@
 #include "sdk/knmusiclibraryalbumtab.h"
 #include "sdk/knmusiclibrarygenretab.h"
 #include "sdk/knmusiclibrarydatabase.h"
+#include "sdk/knmusiclibraryimagemanager.h"
 #include "knmusicsolomenubase.h"
 
 #include "knmusiclibrary.h"
@@ -35,16 +36,24 @@
 KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent)
 {
-    //Initial the music database thread.
+    //Initial the music threads.
 //    m_libraryDatabaseThread=new QThread(this);
+    m_libraryImageThread=new QThread(this);
+    //Initial the music library folder path.
+    m_libraryPath=KNMusicGlobal::musicLibraryPath()+"/Library";
     //Initial the music database.
     m_libraryDatabase=new KNMusicLibraryDatabase;
 //    m_libraryDatabase->moveToThread(m_libraryDatabaseThread);
-    m_libraryDatabase->setDatabaseFile(
-                KNMusicGlobal::musicLibraryPath()+"/Library/Music.db");
+    m_libraryDatabase->setDatabaseFile(m_libraryPath+"/Music.db");
+    //Initial the music image manager.
+    m_libraryImageManager=new KNMusicLibraryImageManager;
+    m_libraryImageManager->moveToThread(m_libraryImageThread);
+    m_libraryImageManager->setImageFolderPath(m_libraryPath+"/Artworks");
+
     //Initial the music model.
     m_libraryModel=new KNMusicLibraryModel(this);
     m_libraryModel->setDatabase(m_libraryDatabase);
+    m_libraryModel->setImageManager(m_libraryImageManager);
 
     QList<QAction *> showInActionList;
     //Initial the song tab.
@@ -74,23 +83,28 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Add the show in actions to solo menu.
     KNMusicGlobal::soloMenu()->addMusicActions(showInActionList);
 
-    //Start database thread.
+    //Start threads.
 //    m_libraryDatabaseThread->start();
+    m_libraryImageThread->start();
 
     //Read the database.
     m_libraryDatabase->recoverModel();
+    m_libraryImageManager->recoverFromFolder();
 }
 
 KNMusicLibrary::~KNMusicLibrary()
 {
-    //Quit the thread.
+    //Quit the threads.
 //    m_libraryDatabaseThread->quit();
+    m_libraryImageThread->quit();
 //    m_libraryDatabaseThread->wait();
+    m_libraryImageThread->wait();
 
     //Save the database.
     m_libraryDatabase->write();
 
     delete m_libraryDatabase;
+    delete m_libraryImageManager;
 }
 
 KNMusicTab *KNMusicLibrary::songTab()

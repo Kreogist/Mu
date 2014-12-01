@@ -24,6 +24,7 @@
 
 using namespace KNMusic;
 
+class KNHashPixmapList;
 class KNMusicCategoryModel : public QStandardItemModel
 {
     Q_OBJECT
@@ -41,9 +42,11 @@ signals:
 public slots:
     virtual void onCategoryAdded(const QList<QStandardItem *> &musicRow);
     virtual void onCategoryRemoved(const QList<QStandardItem *> &musicRow);
+    virtual void onCategoryRecover(const QList<QStandardItem *> &musicRow);
     virtual void onCoverImageUpdate(const QString &categoryText,
                                     const QString &imageKey,
                                     const QPixmap &image);
+    virtual void onImageRecoverComplete(KNHashPixmapList *pixmapList);
 
 protected:
     virtual QStandardItem *generateItem(const QString &itemText,

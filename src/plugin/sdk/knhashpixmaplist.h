@@ -31,8 +31,11 @@ public:
     explicit KNHashPixmapList(QObject *parent = 0);
     QString appendImage(const QImage &image);
     QPixmap pixmap(const QString &key);
+    QImage image(const QString &key);
+    void setImage(const QString &key, const QImage &image);
 
 signals:
+    void requireSaveImage(QString hashKey);
 
 public slots:
 

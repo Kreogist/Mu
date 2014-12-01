@@ -45,6 +45,19 @@ void KNMusicGenreModel::onCoverImageUpdate(const QString &categoryText,
     return;
 }
 
+void KNMusicGenreModel::onCategoryRecover(const QList<QStandardItem *> &musicRow)
+{
+    //Using category add instead of recover in Genre list.
+    onCategoryAdded(musicRow);
+}
+
+void KNMusicGenreModel::onImageRecoverComplete(KNHashPixmapList *pixmapList)
+{
+    Q_UNUSED(pixmapList)
+    //Do nothing.
+    return;
+}
+
 QStandardItem *KNMusicGenreModel::generateItem(const QString &itemText,
                                                const QPixmap &itemIcon)
 {

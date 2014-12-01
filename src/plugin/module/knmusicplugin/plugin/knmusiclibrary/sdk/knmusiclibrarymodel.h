@@ -25,6 +25,7 @@
 #include "knmusicmodel.h"
 
 class KNHashPixmapList;
+class KNMusicLibraryImageManager;
 class KNMusicLibraryDatabase;
 class KNMusicLibraryAnalysisExtend;
 class KNMusicLibraryModel : public KNMusicModel
@@ -45,6 +46,8 @@ public:
     void installCategoryModel(KNMusicCategoryModel *model);
     KNMusicLibraryDatabase *database() const;
     void setDatabase(KNMusicLibraryDatabase *database);
+    KNMusicLibraryImageManager *imageManager() const;
+    void setImageManager(KNMusicLibraryImageManager *imageManager);
 
 signals:
 
@@ -54,11 +57,15 @@ public slots:
     void appendMusicRow(const QList<QStandardItem *> &musicRow);
     void updateMusicRow(const int &row,
                         const KNMusicDetailInfo &detailInfo);
-    void updateCoverImage(const KNMusicDetailInfo &detailInfo);
+    void updateCoverImage(const int &row,
+                          const KNMusicDetailInfo &detailInfo);
     void removeMusicRow(const int &row);
 
 private slots:
+    void appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
+                               const KNMusicDetailInfo &detailInfo);
     void recoverMusicRow(const QList<QStandardItem *> &musicRow);
+    void imageRecoverComplete();
 
 private:
     void initialHeader();
@@ -67,6 +74,7 @@ private:
     KNMusicGlobal *m_musicGlobal;
     KNMusicLibraryAnalysisExtend *m_analysisExtend;
     KNHashPixmapList *m_coverImageList;
+    KNMusicLibraryImageManager *m_imageManager;
 };
 
 #endif // KNMUSICLIBRARYMODEL_H

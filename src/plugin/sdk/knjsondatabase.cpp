@@ -15,6 +15,8 @@
 int KNJSONDatabase::m_majorVersion=1;
 int KNJSONDatabase::m_minorVersion=0;
 
+#define MAX_BATCH 300
+
 KNJSONDatabase::KNJSONDatabase(QObject *parent) :
     QObject(parent)
 {
@@ -63,7 +65,20 @@ void KNJSONDatabase::read()
         return;
     }
     //Get the data field.
-    m_dataField=m_contentObject.value("Database").toArray();
+    //*****Magic, don't touch!!*****
+    //I don't know why give the datafield the raw data it will crash.
+    //The reason is: when you delete one item from the QJsonArray, the size
+    //will be strange. Although it contains more than 70 items, the size() will
+    //give out only 3. But if the array is empty at beginning, this bug won't
+    //happend.
+    //So manually copy the data can solve this bug until Digia give out a fix.
+    QJsonArray rawDataField=m_contentObject.value("Database").toArray();
+    for(QJsonArray::iterator i=rawDataField.begin();
+        i!=rawDataField.end();
+        ++i)
+    {
+        m_dataField.append(*i);
+    }
     //Clear the content object.
     m_contentObject=QJsonObject();
 }
@@ -87,19 +102,25 @@ void KNJSONDatabase::write()
     }
 }
 
-void KNJSONDatabase::append(const QJsonObject &value)
+void KNJSONDatabase::append(QJsonObject value)
 {
     m_dataField.append(value);
+    //Count a operate.
+    addBatchCount();
 }
 
-void KNJSONDatabase::replace(int i, const QJsonObject &value)
+void KNJSONDatabase::replace(int i, QJsonObject value)
 {
     m_dataField.replace(i, value);
+    //Count a operate.
+    addBatchCount();
 }
 
 void KNJSONDatabase::removeAt(int i)
 {
     m_dataField.removeAt(i);
+    //Count a operate.
+    addBatchCount();
 }
 
 QJsonValue KNJSONDatabase::at(int i)
@@ -115,6 +136,20 @@ QJsonArray::iterator KNJSONDatabase::begin()
 QJsonArray::iterator KNJSONDatabase::end()
 {
     return m_dataField.end();
+}
+
+void KNJSONDatabase::addBatchCount()
+{
+    //Count the operate.
+    m_batchCount++;
+    //Check the count.
+    if(m_batchCount==MAX_BATCH)
+    {
+        //Clear count, and write to disk.
+        m_batchCount=0;
+        //Write to disk.
+        write();
+    }
 }
 
 void KNJSONDatabase::checkDatabaseDir()

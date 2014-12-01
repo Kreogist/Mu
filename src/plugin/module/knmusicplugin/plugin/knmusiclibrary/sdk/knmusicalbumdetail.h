@@ -88,6 +88,7 @@ private:
                                     QRect &contentGeometry);
     void generateStep2FinalPosition(QRect &albumArtGeometry,
                                     QRect &contentGeometry);
+    inline void stopAllAnimations();
     void updateWidgetGeometries();
     void updateShadowGeometries(const QRect &contentPosition);
     void updateAlbumCaptions();

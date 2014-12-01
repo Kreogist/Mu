@@ -25,6 +25,7 @@ class KNMusicCategoryModel;
 class KNMusicLibraryDatabase;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
+class KNMusicLibraryImageManager;
 class KNMusicLibraryCategoryTab;
 class KNMusicLibrary : public KNMusicLibraryBase
 {
@@ -53,10 +54,13 @@ private:
         TabGenres,
         CategoryTabsCount
     };
-    QThread *m_libraryDatabaseThread;
+    QThread *m_libraryDatabaseThread,
+            *m_libraryImageThread;
+    QString m_libraryPath;
     KNMusicLibraryDatabase *m_libraryDatabase;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_librarySongTab;
+    KNMusicLibraryImageManager *m_libraryImageManager;
     KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
     KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
 };

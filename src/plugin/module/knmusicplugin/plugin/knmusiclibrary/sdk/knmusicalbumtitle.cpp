@@ -37,3 +37,9 @@ void KNMusicAlbumTitle::leaveEvent(QEvent *event)
     //Ask to hide the album art.
     emit requireHideAlbumArt();
 }
+
+void KNMusicAlbumTitle::mouseReleaseEvent(QMouseEvent *event)
+{
+    //Cut down the calling.
+    ;
+}

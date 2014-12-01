@@ -35,6 +35,7 @@ public slots:
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 };
 

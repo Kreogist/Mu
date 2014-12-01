@@ -15,36 +15,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICGENREMODEL_H
-#define KNMUSICGENREMODEL_H
+#ifndef KNMUSICLIBRARYIMAGEMANAGER_H
+#define KNMUSICLIBRARYIMAGEMANAGER_H
 
-#include <QHash>
+#include <QStringList>
 
-#include "knmusiccategorymodel.h"
+#include <QObject>
 
-class KNMusicGenreModel : public KNMusicCategoryModel
+class KNHashPixmapList;
+class KNMusicLibraryImageManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNMusicGenreModel(QObject *parent = 0);
-    QIcon genreIcon(const QString &genreName);
+    explicit KNMusicLibraryImageManager(QObject *parent = 0);
+    KNHashPixmapList *pixmapList() const;
+    void setPixmapList(KNHashPixmapList *pixmapList);
+    void recoverFromFolder();
+    QString imageFolderPath() const;
+    void setImageFolderPath(const QString &imageFolderPath);
 
 signals:
+    void requireSaveNext();
+    void recoverComplete();
 
 public slots:
-    void onCoverImageUpdate(const QString &categoryText,
-                            const QString &imageKey,
-                            const QPixmap &image);
-    void onCategoryRecover(const QList<QStandardItem *> &musicRow);
-    void onImageRecoverComplete(KNHashPixmapList *pixmapList);
+    void saveImage(const QString &imageHash);
 
-protected:
-    QStandardItem *generateItem(const QString &itemText,
-                                const QPixmap &itemIcon=QPixmap());
+private slots:
+    void onActionSaveNext();
 
 private:
-    void loadGenreIcons();
-    QHash<QString, QIcon> m_genreIconMap;
+    QStringList m_imageHashList;
+    QString m_imageFolderPath;
+    KNHashPixmapList *m_pixmapList=nullptr;
 };
 
-#endif // KNMUSICGENREMODEL_H
+#endif // KNMUSICLIBRARYIMAGEMANAGER_H
