@@ -19,6 +19,7 @@
 #include <QBoxLayout>
 
 #include "kndropproxycontainer.h"
+#include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicalbumview.h"
 #include "knmusicalbumdetail.h"
@@ -55,8 +56,9 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     m_albumView->setAlbumDetail(m_albumDetail);
     mainLayout->addWidget(m_albumView);
 
-    //Initial the show in action.
+    //Initial the show in and search action.
     initialShowInAction();
+    initialFindAction();
     //Connect retranslate request.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNMusicLibraryAlbumTab::retranslate);
@@ -128,8 +130,16 @@ void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)
     m_albumView->viewport()->update();
 }
 
+void KNMusicLibraryAlbumTab::onActionRequireSearch()
+{
+    //Set focus.
+    KNMusicGlobal::musicSearch()->setSearchFocus(m_albumView);
+}
+
 void KNMusicLibraryAlbumTab::onActionShowInAlbum()
 {
+    //Clear the search result.
+    KNMusicGlobal::musicSearch()->search("");
     //Get the row of the file.
     int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
     //If the row is available.
@@ -160,4 +170,14 @@ void KNMusicLibraryAlbumTab::initialShowInAction()
     m_showInAlbumTab=new QAction(this);
     connect(m_showInAlbumTab, SIGNAL(triggered()),
             this, SLOT(onActionShowInAlbum()));
+}
+
+void KNMusicLibraryAlbumTab::initialFindAction()
+{
+    //Initial the search action
+    QAction *findAction=new QAction(m_albumView);
+    findAction->setShortcut(QKeySequence(QKeySequence::Find));
+    findAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(findAction, SIGNAL(triggered()), this, SLOT(onActionRequireSearch()));
+    m_albumView->addAction(findAction);
 }

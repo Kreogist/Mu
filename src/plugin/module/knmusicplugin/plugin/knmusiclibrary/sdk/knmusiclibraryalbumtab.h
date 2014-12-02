@@ -42,10 +42,12 @@ public slots:
     void onActionSearch(const QString &text);
 
 private slots:
+    void onActionRequireSearch();
     void onActionShowInAlbum();
 
 private:
     void initialShowInAction();
+    void initialFindAction();
     QAction *m_showInAlbumTab;
     KNDropProxyContainer *m_container;
     KNMusicAlbumView *m_albumView;

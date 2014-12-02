@@ -48,10 +48,12 @@ protected slots:
     void onActionTabShow();
 
 private slots:
+    void onActionRequireSearch();
     void onActionShowInGenre();
 
 private:
     void initialShowInAction();
+    void initialFindAction();
     QAction *m_showInGenre;
     KNDropProxyContainer *m_container;
     QSplitter *m_splitter;

@@ -47,10 +47,12 @@ protected slots:
     void onActionTabShow();
 
 private slots:
+    void onActionRequireSearch();
     void onActionShowInArtist();
 
 private:
     void initialShowInAction();
+    void initialFindAction();
     QAction *m_showInArtistTab;
     KNDropProxyContainer *m_container;
     QSplitter *m_splitter;

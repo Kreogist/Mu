@@ -20,6 +20,7 @@
 #include <QAction>
 
 #include "kndropproxycontainer.h"
+#include "knmusicsearchbase.h"
 #include "knmusicgenremodel.h"
 #include "knmusiccategorydisplay.h"
 #include "knmusiclibrarymodel.h"
@@ -67,8 +68,9 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QObject *parent) :
     m_splitter->setCollapsible(1, false);
     m_splitter->setStretchFactor(1, 1);
 
-    //Initial the show in action.
+    //Initial the show in and search action.
     initialShowInAction();
+    initialFindAction();
 
     //Connect retranslate request.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -187,8 +189,16 @@ void KNMusicLibraryGenreTab::onActionTabShow()
     }
 }
 
+void KNMusicLibraryGenreTab::onActionRequireSearch()
+{
+    //Set focus.
+    KNMusicGlobal::musicSearch()->setSearchFocus(m_genreList);
+}
+
 void KNMusicLibraryGenreTab::onActionShowInGenre()
 {
+    //Clear the search result.
+    KNMusicGlobal::musicSearch()->search("");
     //Get the row of the file.
     int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
     //If the row is available.
@@ -220,4 +230,14 @@ void KNMusicLibraryGenreTab::initialShowInAction()
     m_showInGenre=new QAction(this);
     connect(m_showInGenre, SIGNAL(triggered()),
             this, SLOT(onActionShowInGenre()));
+}
+
+void KNMusicLibraryGenreTab::initialFindAction()
+{
+    //Initial the search action
+    QAction *findAction=new QAction(m_container);
+    findAction->setShortcut(QKeySequence(QKeySequence::Find));
+    findAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(findAction, SIGNAL(triggered()), this, SLOT(onActionRequireSearch()));
+    m_container->addAction(findAction);
 }
