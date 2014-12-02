@@ -31,6 +31,7 @@ public:
     KNHashPixmapList *pixmapList() const;
     void setPixmapList(KNHashPixmapList *pixmapList);
     void recoverFromFolder();
+    void removeImage(const QString &imageHash);
     QString imageFolderPath() const;
     void setImageFolderPath(const QString &imageFolderPath);
 

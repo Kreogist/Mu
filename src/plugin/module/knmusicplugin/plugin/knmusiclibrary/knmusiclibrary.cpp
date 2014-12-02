@@ -60,6 +60,9 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     initialSongTab();
     //Set the library model for song tab.
     m_librarySongTab->setLibraryModel(m_libraryModel);
+    //Link the load request.
+    connect(m_librarySongTab, &KNMusicLibraryTab::requireLoadLibrary,
+            this, &KNMusicLibrary::onActionLoadLibrary);
     //Get the go to action.
     showInActionList.append(m_librarySongTab->showInAction());
 
@@ -77,6 +80,9 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
         m_libraryTabs[i]->setCategoryModel(m_categoryModel[i]);
         //Set the library model.
         m_libraryTabs[i]->setLibraryModel(m_libraryModel);
+        //Link the load request.
+        connect(m_libraryTabs[i], &KNMusicLibraryCategoryTab::requireLoadLibrary,
+                this, &KNMusicLibrary::onActionLoadLibrary);
         //Get the action list.
         showInActionList.append(m_libraryTabs[i]->showInAction());
     }
@@ -86,10 +92,6 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Start threads.
 //    m_libraryDatabaseThread->start();
     m_libraryImageThread->start();
-
-    //Read the database.
-    m_libraryDatabase->recoverModel();
-    m_libraryImageManager->recoverFromFolder();
 }
 
 KNMusicLibrary::~KNMusicLibrary()
@@ -125,6 +127,24 @@ KNMusicTab *KNMusicLibrary::albumTab()
 KNMusicTab *KNMusicLibrary::genreTab()
 {
     return m_libraryTabs[TabGenres];
+}
+
+void KNMusicLibrary::onActionLoadLibrary()
+{
+    //Disconnect all the links of the music tab.
+    disconnect(m_librarySongTab, &KNMusicLibraryTab::requireLoadLibrary,
+               this, &KNMusicLibrary::onActionLoadLibrary);
+    for(int i=0; i<CategoryTabsCount; i++)
+    {
+        //Link the load request.
+        disconnect(m_libraryTabs[i], &KNMusicLibraryCategoryTab::requireLoadLibrary,
+                   this, &KNMusicLibrary::onActionLoadLibrary);
+    }
+    //Read the database.
+    //**!WARNING!**
+    //Don't change the order of the following code.
+    m_libraryDatabase->recoverModel();
+    m_libraryImageManager->recoverFromFolder();
 }
 
 void KNMusicLibrary::initialSongTab()

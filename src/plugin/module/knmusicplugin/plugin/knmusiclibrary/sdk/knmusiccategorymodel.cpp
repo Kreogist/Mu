@@ -89,7 +89,11 @@ void KNMusicCategoryModel::onCategoryAdded(const QList<QStandardItem *> &musicRo
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(1,0), Qt::DisplayRole, categoryText, 1);
+            match(index(1,0),
+                  Qt::DisplayRole,
+                  categoryText,
+                  1,
+                  Qt::MatchFixedString);
     if(results.isEmpty())
     {
         //We need to generate a new item for it.
@@ -135,7 +139,11 @@ void KNMusicCategoryModel::onCategoryRemoved(const QList<QStandardItem *> &music
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(1,0), Qt::DisplayRole, categoryText, 1);
+            match(index(1,0),
+                  Qt::DisplayRole,
+                  categoryText,
+                  1,
+                  Qt::MatchFixedString | Qt::MatchCaseSensitive);
     if(results.isEmpty())
     {
         //Are you kidding me?
@@ -173,7 +181,11 @@ void KNMusicCategoryModel::onCategoryRecover(const QList<QStandardItem *> &music
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(1,0), Qt::DisplayRole, categoryText, 1);
+            match(index(1,0),
+                  Qt::DisplayRole,
+                  categoryText,
+                  1,
+                  Qt::MatchFixedString | Qt::MatchCaseSensitive);
     if(results.isEmpty())
     {
         //We need to generate a new item for it.
@@ -204,7 +216,11 @@ void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(1,0), Qt::DisplayRole, categoryText, 1);
+            match(index(1,0),
+                  Qt::DisplayRole,
+                  categoryText,
+                  1,
+                  Qt::MatchFixedString | Qt::MatchCaseSensitive);
     if(results.isEmpty())
     {
         //Are you kidding me?

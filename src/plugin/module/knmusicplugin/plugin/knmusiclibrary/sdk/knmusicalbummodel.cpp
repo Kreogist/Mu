@@ -48,7 +48,11 @@ void KNMusicAlbumModel::onCategoryAdded(const QList<QStandardItem *> &musicRow)
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+            match(index(0,0),
+                  Qt::DisplayRole,
+                  categoryText,
+                  1,
+                  Qt::MatchFixedString | Qt::MatchCaseSensitive);
     if(results.isEmpty())
     {
         //We need to generate a new item for it.
@@ -117,7 +121,11 @@ void KNMusicAlbumModel::onCategoryRemoved(const QList<QStandardItem *> &musicRow
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+            match(index(0,0),
+                  Qt::DisplayRole,
+                  categoryText,
+                  1,
+                  Qt::MatchFixedString | Qt::MatchCaseSensitive);
     if(results.isEmpty())
     {
         //Are you kidding me?
@@ -183,7 +191,11 @@ void KNMusicAlbumModel::onCategoryRecover(const QList<QStandardItem *> &musicRow
     }
     //Search the category text.
     QModelIndexList results=
-            match(index(0,0), Qt::DisplayRole, categoryText, 1);
+            match(index(0,0),
+                  Qt::DisplayRole,
+                  categoryText,
+                  1,
+                  Qt::MatchFixedString | Qt::MatchCaseSensitive);
     if(results.isEmpty())
     {
         //We need to generate a new item for it.

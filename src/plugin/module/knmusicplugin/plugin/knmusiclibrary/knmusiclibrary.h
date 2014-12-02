@@ -42,6 +42,9 @@ signals:
 
 public slots:
 
+private slots:
+    void onActionLoadLibrary();
+
 private:
     void initialSongTab();
     void initialArtistTab();

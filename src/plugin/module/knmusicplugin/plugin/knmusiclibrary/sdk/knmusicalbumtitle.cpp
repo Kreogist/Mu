@@ -40,6 +40,7 @@ void KNMusicAlbumTitle::leaveEvent(QEvent *event)
 
 void KNMusicAlbumTitle::mouseReleaseEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event)
     //Cut down the calling.
     ;
 }

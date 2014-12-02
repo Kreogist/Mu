@@ -29,6 +29,7 @@ public:
 
 signals:
     void analysisNext();
+    void requireAppendRow(QList<QStandardItem *> musicRow);
     void analysisComplete(KNMusicDetailInfo detailInfo);
 
 public slots:
@@ -42,7 +43,7 @@ private:
         QString filePath;
         KNMusicDetailInfo detailInfo;
     };
-    void parseItem(AnalysisItem &currentItem);
+    void parseItem(AnalysisItem &currentItem, bool blocked=false);
     QList<AnalysisItem> m_analysisQueue;
     KNMusicAnalysisExtend *m_extend=nullptr;
     KNConnectionHandler *m_extendConnections;

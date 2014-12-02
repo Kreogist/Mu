@@ -64,3 +64,9 @@ void KNHashPixmapList::setImage(const QString &key, const QImage &image)
     //Insert the key and image to the hash list.
     m_imageList.insert(key, image);
 }
+
+void KNHashPixmapList::removeImage(const QString &key)
+{
+    //Remove the key and image from the hash list.
+    m_imageList.remove(key);
+}

@@ -33,6 +33,7 @@ public:
     QPixmap pixmap(const QString &key);
     QImage image(const QString &key);
     void setImage(const QString &key, const QImage &image);
+    void removeImage(const QString &key);
 
 signals:
     void requireSaveImage(QString hashKey);

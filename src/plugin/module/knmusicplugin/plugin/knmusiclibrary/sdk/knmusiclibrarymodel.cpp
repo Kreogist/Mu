@@ -76,7 +76,8 @@ int KNMusicLibraryModel::rowFromFilePath(const QString &filePath)
     QModelIndexList fileCheck=match(index(0,0),
                                     FilePathRole,
                                     filePath,
-                                    1);
+                                    1,
+                                    Qt::MatchFixedString);
     //If we can't find it, check in the filelist.
     if(fileCheck.isEmpty())
     {
@@ -132,7 +133,8 @@ void KNMusicLibraryModel::addFiles(const QStringList &fileList)
         QModelIndexList fileCheck=match(index(0,0),
                                         FilePathRole,
                                         (*i),
-                                        1);
+                                        1,
+                                        Qt::MatchFixedString);
         //If we can't find it, check in the filelist.
         if(fileCheck.isEmpty())
         {
@@ -181,6 +183,8 @@ void KNMusicLibraryModel::updateCoverImage(const int &row,
 {
     //Ask to update the image key in the database.
     m_database->updateArtworkKey(row, detailInfo.coverImageHash);
+    //Set the artwork key for the model.
+    setRowProperty(row, ArtworkKeyRole, detailInfo.coverImageHash);
     //Get the cover image.
     QPixmap coverImagePixmap=QPixmap::fromImage(detailInfo.coverImage);
     //Ask category models to update the cover image.
@@ -211,8 +215,21 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
     {
         (*i)->onCategoryRemoved(currentRow);
     }
+    //Save the album artwork key.
+    QString currentArtworkKey=rowProperty(row, ArtworkKeyRole).toString();
     //Remove the row.
     KNMusicModel::removeMusicRow(row);
+    //Check the artwork key after remove the row.
+    //If no one use this artwork key any more, remove the artwork.
+    if(match(index(0,0),
+             ArtworkKeyRole,
+             currentArtworkKey,
+             Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
+    {
+        //Remove the image from the disk and hash list.
+        m_imageManager->removeImage(currentArtworkKey);
+        m_coverImageList->removeImage(currentArtworkKey);
+    }
 }
 
 void KNMusicLibraryModel::appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,

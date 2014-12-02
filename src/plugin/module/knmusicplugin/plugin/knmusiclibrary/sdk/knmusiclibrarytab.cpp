@@ -26,6 +26,8 @@ KNMusicLibraryTab::KNMusicLibraryTab(QObject *parent) :
 
 void KNMusicLibraryTab::onActionTabShow()
 {
+    //Emit load request.
+    emit requireLoadLibrary();
     //Hide the current show in action.
     showInAction()->setVisible(false);
 }

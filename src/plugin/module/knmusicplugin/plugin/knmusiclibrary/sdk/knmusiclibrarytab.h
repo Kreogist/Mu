@@ -30,6 +30,7 @@ public:
     virtual QAction *showInAction()=0;
 
 signals:
+    void requireLoadLibrary();
 
 public slots:
     virtual void setLibraryModel(KNMusicLibraryModel *model)=0;

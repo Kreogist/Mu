@@ -5,6 +5,7 @@
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
 #include "knmusicparser.h"
+#include "knmusicmodelassist.h"
 #include "knmusicanalysiscache.h"
 #include "knmusicanalysisextend.h"
 #include "knconnectionhandler.h"
@@ -40,10 +41,11 @@ void KNMusicAnalysisCache::analysisFile(const QString &filePath)
 {
     AnalysisItem currentItem;
     currentItem.filePath=filePath;
-    parseItem(currentItem);
+    parseItem(currentItem, true);
 }
 
-void KNMusicAnalysisCache::parseItem(KNMusicAnalysisCache::AnalysisItem &currentItem)
+void KNMusicAnalysisCache::parseItem(KNMusicAnalysisCache::AnalysisItem &currentItem,
+                                     bool blocked)
 {
     //Judge the file is a list or a music file.
     if(m_musicGlobal->isMusicFile(
@@ -52,6 +54,11 @@ void KNMusicAnalysisCache::parseItem(KNMusicAnalysisCache::AnalysisItem &current
         //Parse the file.
         m_parser->parseFile(currentItem.filePath, currentItem.detailInfo);
         //Emit the analysis finished signal, give out the detail info.
+        if(blocked)
+        {
+            emit requireAppendRow(KNMusicModelAssist::generateRow(currentItem.detailInfo));
+            return;
+        }
         emit analysisComplete(currentItem.detailInfo);
         return;
     }
@@ -61,6 +68,11 @@ void KNMusicAnalysisCache::parseItem(KNMusicAnalysisCache::AnalysisItem &current
                              trackDetailInfo);
     while(!trackDetailInfo.isEmpty())
     {
+        if(blocked)
+        {
+            emit requireAppendRow(KNMusicModelAssist::generateRow(trackDetailInfo.takeFirst()));
+            continue;
+        }
         //Give out the analysis complete info by track index.
         emit analysisComplete(trackDetailInfo.takeFirst());
     }

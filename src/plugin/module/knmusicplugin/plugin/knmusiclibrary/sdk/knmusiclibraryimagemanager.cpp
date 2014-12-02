@@ -88,6 +88,23 @@ void KNMusicLibraryImageManager::recoverFromFolder()
     emit recoverComplete();
 }
 
+void KNMusicLibraryImageManager::removeImage(const QString &imageHash)
+{
+    //Check is the file exist.
+    QFileInfo imageFileInfo(m_imageFolderPath + "/" + imageHash + ".png");
+    //If it's exist.
+    if(imageFileInfo.exists())
+    {
+        //If it's a file, remove it.
+        if(imageFileInfo.isFile())
+        {
+            QFile imageFile(imageFileInfo.absoluteFilePath());
+            imageFile.remove();
+            return;
+        }
+    }
+}
+
 void KNMusicLibraryImageManager::saveImage(const QString &imageHash)
 {
     //Append the image hash to mission list.

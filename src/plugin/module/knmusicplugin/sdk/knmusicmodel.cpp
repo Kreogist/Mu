@@ -33,6 +33,8 @@ KNMusicModel::KNMusicModel(QObject *parent) :
     m_analysisCache->moveToThread(m_musicGlobal->analysisThread());
     connect(m_searcher, &KNMusicSearcher::fileFound,
             m_analysisCache, &KNMusicAnalysisCache::appendFilePath);
+    connect(m_analysisCache, &KNMusicAnalysisCache::requireAppendRow,
+            this, &KNMusicModel::appendMusicRow);
 
     //Initial a default analysis extend.
     setAnalysisExtend(new KNMusicAnalysisExtend);
@@ -129,7 +131,8 @@ QModelIndexList KNMusicModel::indexFromFilePath(const QString &filePath)
     //Using match to find all pathes.
     return match(index(0, Name),
                  FilePathRole,
-                 filePath);
+                 filePath,
+                 Qt::MatchFixedString);
 }
 
 QString KNMusicModel::itemText(const int &row, const int &column) const

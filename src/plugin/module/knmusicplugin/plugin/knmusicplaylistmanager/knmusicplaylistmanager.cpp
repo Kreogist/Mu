@@ -314,7 +314,8 @@ QString KNMusicPlaylistManager::generatePlaylistName(const QString &preferName)
     if(!preferName.isEmpty() &&
             m_playlistList->match(m_playlistList->index(0,0),
                                   Qt::DisplayRole,
-                                  preferName).isEmpty())
+                                  preferName,
+                                  Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
     {
         return preferName;
     }
@@ -333,7 +334,8 @@ QString KNMusicPlaylistManager::generatePlaylistName(const QString &preferName)
         //once more.
         if(m_playlistList->match(m_playlistList->index(0,0),
                                  Qt::DisplayRole,
-                                 baseName).isEmpty())
+                                 baseName,
+                                 Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
         {
             return baseName;
         }
@@ -368,7 +370,8 @@ QString KNMusicPlaylistManager::generatePlaylistName(const QString &preferName)
     QString linkedName=baseName + " " + QString::number(sameFileCounter);
     while(!m_playlistList->match(m_playlistList->index(0,0),
                                 Qt::DisplayRole,
-                                linkedName).isEmpty())
+                                linkedName,
+                                Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
     {
         sameFileCounter++;
         linkedName=baseName + " " + QString::number(sameFileCounter);

@@ -55,7 +55,8 @@ QModelIndex KNMusicCategoryProxyModel::categoryIndex(const QString &categoryText
     QModelIndexList categoryMatch=match(index(0,0),
                                         Qt::DisplayRole,
                                         categoryText,
-                                        1);
+                                        1,
+                                        Qt::MatchFixedString | Qt::MatchCaseSensitive);
     //If it's empty, means we can't find it.
     if(categoryMatch.isEmpty())
     {
