@@ -51,7 +51,7 @@ public:
 
 signals:
     void requireShowAlbum(QPoint indexPoint);
-    void foldComplete();
+    void requireClearSelection();
 
 public slots:
     void displayAlbumDetail(const QModelIndex &index);
@@ -71,6 +71,9 @@ private slots:
     void onActionContentMove(const QVariant &position);
     void onActionFold(const QVariant &position);
     void onActionFoldFinished();
+    void onActionFlyAway(const QVariant &position);
+    void onActionFlyAwayFinished();
+    void onActionAlbumRemoved(const QModelIndex &removedIndex);
     void onActionAskToFold();
     void showContentWidgets();
     void hideContentWidgets();
@@ -90,6 +93,7 @@ private:
     void generateStep2FinalPosition(QRect &albumArtGeometry,
                                     QRect &contentGeometry);
     inline void stopAllAnimations();
+    inline void stopShowHideArtworkAnimations();
     void updateWidgetGeometries();
     void updateShadowGeometries(const QRect &contentPosition);
     void updateAlbumCaptions();
@@ -100,7 +104,6 @@ private:
     KNMusicAlbumModel *m_albumModel;
     KNMusicLibraryModel *m_libraryModel;
     KNSideShadowWidget *m_rightShadow, *m_leftShadow;
-    QModelIndex m_currentAlbumIndex;
     QRect m_animeStartRect;
     QPropertyAnimation *m_albumArtIn1, *m_albumContentIn1,
                        *m_albumArtIn2, *m_albumContentIn2,

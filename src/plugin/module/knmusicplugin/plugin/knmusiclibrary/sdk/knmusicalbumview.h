@@ -43,6 +43,7 @@ public:
 signals:
 
 public slots:
+    void clearSelection();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -63,7 +64,6 @@ protected slots:
 
 private slots:
     void displayAlbum(const QPoint &point);
-    void onActionFoldComplete();
     void onActionScrolling();
 
 private:

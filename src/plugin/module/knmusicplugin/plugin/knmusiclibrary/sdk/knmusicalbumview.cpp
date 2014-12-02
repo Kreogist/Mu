@@ -369,7 +369,7 @@ void KNMusicAlbumView::displayAlbum(const QPoint &point)
     }
 }
 
-void KNMusicAlbumView::onActionFoldComplete()
+void KNMusicAlbumView::clearSelection()
 {
     //When complete the fold, set the selected index to null.
     m_selectedIndex=QModelIndex();
@@ -552,8 +552,8 @@ void KNMusicAlbumView::setAlbumDetail(KNMusicAlbumDetail *albumDetail)
     //Do connection.
     connect(m_albumDetail, &KNMusicAlbumDetail::requireShowAlbum,
             this, &KNMusicAlbumView::displayAlbum);
-    connect(m_albumDetail, &KNMusicAlbumDetail::foldComplete,
-            this, &KNMusicAlbumView::onActionFoldComplete);
+    connect(m_albumDetail, &KNMusicAlbumDetail::requireClearSelection,
+            this, &KNMusicAlbumView::clearSelection);
     //Hide the album detail.
     m_albumDetail->hide();
     //Move it up to the top.

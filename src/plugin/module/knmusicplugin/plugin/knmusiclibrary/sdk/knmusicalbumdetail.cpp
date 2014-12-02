@@ -63,6 +63,9 @@ void KNMusicAlbumDetail::setAlbumModel(KNMusicCategoryModel *model)
 {
     //Translate the model to album model.
     m_albumModel=static_cast<KNMusicAlbumModel *>(model);
+    //When the album model is going to remove an item, check it's index.
+    connect(m_albumModel, &KNMusicAlbumModel::albumRemoved,
+            this, &KNMusicAlbumDetail::onActionAlbumRemoved);
 }
 
 void KNMusicAlbumDetail::setLibraryModel(KNMusicLibraryModel *model)
@@ -186,6 +189,8 @@ void KNMusicAlbumDetail::foldAlbumDetail()
         m_leftShadow->hide();
         //Enable background change.
         m_backgroundAnime=true;
+        //Hide contents.
+        hideContentWidgets();
         //Start animation.
         m_foldAnime->start();
     }
@@ -193,7 +198,35 @@ void KNMusicAlbumDetail::foldAlbumDetail()
 
 void KNMusicAlbumDetail::flyAwayAlbumDetail()
 {
-    ;
+    //Cut all the connections.
+    m_detailHandler->disConnectAll();
+    //Check is fly out animation is running.
+    if(m_flyAwayAnime->state()==QAbstractAnimation::Stopped)
+    {
+        //Stop all animations.
+        stopAllAnimations();
+        //Emit clear selection signal.
+        emit requireClearSelection();
+        //Generate the position.
+        QRect albumArtEndRect(-m_iconSize,
+                              (height()-m_iconSize)>>1,
+                              m_iconSize,
+                              m_iconSize);
+        //Set the animation start and end value.
+        m_albumArtFlyAway->setStartValue(m_albumArt->geometry());
+        m_albumArtFlyAway->setEndValue(albumArtEndRect);
+        m_albumContentFlyAway->setStartValue(m_albumArt->geometry());
+        m_albumContentFlyAway->setEndValue(albumArtEndRect);
+        //Hide all the shadows.
+        m_rightShadow->hide();
+        m_leftShadow->hide();
+        //Enable background change.
+        m_backgroundAnime=true;
+        //Hide contents.
+        hideContentWidgets();
+        //Start animation.
+        m_flyAwayAnime->start();
+    }
 }
 
 void KNMusicAlbumDetail::scrollToSourceRow(const int &row)
@@ -250,8 +283,6 @@ void KNMusicAlbumDetail::onActionFold(const QVariant &position)
     Q_UNUSED(position)
     //Clear the current index.
     m_currentIndex=QModelIndex();
-    //Hide contents.
-    hideContentWidgets();
     //Calculate the progress.
     qreal progress=1.0-(qreal)m_albumArtOut->currentTime()/(qreal)m_albumArtOut->duration();
     //Set the palette.
@@ -264,10 +295,40 @@ void KNMusicAlbumDetail::onActionFold(const QVariant &position)
 
 void KNMusicAlbumDetail::onActionFoldFinished()
 {
-    //Emit finished signal.
-    emit foldComplete();
+    //Emit clear selection signal.
+    emit requireClearSelection();
     //Hide the detail widget.
     hide();
+}
+
+void KNMusicAlbumDetail::onActionFlyAway(const QVariant &position)
+{
+    Q_UNUSED(position)
+    //Clear the current index.
+    m_currentIndex=QModelIndex();
+    //Calculate the progress.
+    qreal progress=1.0-(qreal)m_albumArtFlyAway->currentTime()/(qreal)m_albumArtFlyAway->duration();
+    //Set the palette.
+    QPalette pal=palette();
+    pal.setColor(QPalette::Window, QColor(0,0,0,progress*200));
+    setPalette(pal);
+    //Set the opacity effect.
+    m_opacityEffect->setOpacity(progress);
+}
+
+void KNMusicAlbumDetail::onActionFlyAwayFinished()
+{
+    //Hide the detail widget.
+    hide();
+}
+
+void KNMusicAlbumDetail::onActionAlbumRemoved(const QModelIndex &removedIndex)
+{
+    //Check the index, if the delete one is current, fly me away.
+    if(removedIndex==m_currentIndex)
+    {
+        flyAwayAlbumDetail();
+    }
 }
 
 void KNMusicAlbumDetail::onActionAskToFold()
@@ -479,11 +540,16 @@ void KNMusicAlbumDetail::initialAnimations()
 
     //Initial fly away animation.
     m_flyAwayAnime=new QParallelAnimationGroup(this);
-    ;
+    connect(m_flyAwayAnime, &QParallelAnimationGroup::finished,
+            this, &KNMusicAlbumDetail::onActionFlyAwayFinished);
     //Initial artwork fly away animation.
     m_albumArtFlyAway=new QPropertyAnimation(this);
     generateAlbumArtAnimation(m_albumArtFlyAway);
+    //Using the same animation as fold animation.
+    connect(m_albumArtFlyAway, &QPropertyAnimation::valueChanged,
+            this, &KNMusicAlbumDetail::onActionFlyAway);
     m_flyAwayAnime->addAnimation(m_albumArtFlyAway);
+    //Initial content fly away animation.
     m_albumContentFlyAway=new QPropertyAnimation(this);
     generateContentAnimation(m_albumContentFlyAway);
     m_flyAwayAnime->addAnimation(m_albumContentFlyAway);
@@ -566,9 +632,14 @@ void KNMusicAlbumDetail::stopAllAnimations()
     //Stop all the anime group.
     m_foldAnime->stop();
     m_expandAnime->stop();
+    m_flyAwayAnime->stop();
+    stopShowHideArtworkAnimations();
+}
+
+void KNMusicAlbumDetail::stopShowHideArtworkAnimations()
+{
     m_showAlbumArt->stop();
     m_hideAlbumArt->stop();
-    m_flyAwayAnime->stop();
 }
 
 void KNMusicAlbumDetail::updateWidgetGeometries()

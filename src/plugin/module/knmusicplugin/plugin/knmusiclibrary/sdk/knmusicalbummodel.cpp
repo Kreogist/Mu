@@ -128,6 +128,8 @@ void KNMusicAlbumModel::onCategoryRemoved(const QList<QStandardItem *> &musicRow
     //If current item is the last item of the category,
     if(currentCategorySize==1)
     {
+        //Emit removed signal.
+        emit albumRemoved(resultIndex);
         //Remove this category.
         removeRow(resultIndex.row());
     }

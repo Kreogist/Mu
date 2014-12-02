@@ -120,6 +120,8 @@ void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModel *model)
 
 void KNMusicLibraryAlbumTab::onActionSearch(const QString &text)
 {
+    //Hide the detail and clear the selection first.
+    m_albumDetail->flyAwayAlbumDetail();
     //Set the key word to do the search.
     proxyCategoryModel()->setFilterFixedString(text);
     //Update the album view.

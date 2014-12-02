@@ -38,6 +38,7 @@ public:
     explicit KNMusicAlbumModel(QObject *parent = 0);
 
 signals:
+    void albumRemoved(QModelIndex removedIndex);
 
 public slots:
     void onCategoryAdded(const QList<QStandardItem *> &musicRow);
