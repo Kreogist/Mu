@@ -328,8 +328,12 @@ void KNMusicAlbumView::mouseReleaseEvent(QMouseEvent *event)
     //Check whether the released pos index is the pressed index.
     if(m_mouseDownIndex==indexAt(event->pos()))
     {
-        displayAlbum(event->pos());
-        return;
+        //Check the mouse pressed button is left button or not.
+        if(event->button()==Qt::LeftButton)
+        {
+            displayAlbum(event->pos());
+            return;
+        }
     }
     //If goes here, we need to fold the expanded album.
     displayAlbum(QPoint(-1,-1));

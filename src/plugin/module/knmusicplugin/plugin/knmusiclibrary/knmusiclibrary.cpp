@@ -37,13 +37,13 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent)
 {
     //Initial the music threads.
-//    m_libraryDatabaseThread=new QThread(this);
+    m_libraryDatabaseThread=new QThread(this);
     m_libraryImageThread=new QThread(this);
     //Initial the music library folder path.
     m_libraryPath=KNMusicGlobal::musicLibraryPath()+"/Library";
     //Initial the music database.
     m_libraryDatabase=new KNMusicLibraryDatabase;
-//    m_libraryDatabase->moveToThread(m_libraryDatabaseThread);
+    m_libraryDatabase->moveToThread(m_libraryDatabaseThread);
     m_libraryDatabase->setDatabaseFile(m_libraryPath+"/Music.db");
     //Initial the music image manager.
     m_libraryImageManager=new KNMusicLibraryImageManager;
@@ -90,16 +90,16 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicGlobal::soloMenu()->addMusicActions(showInActionList);
 
     //Start threads.
-//    m_libraryDatabaseThread->start();
+    m_libraryDatabaseThread->start();
     m_libraryImageThread->start();
 }
 
 KNMusicLibrary::~KNMusicLibrary()
 {
     //Quit the threads.
-//    m_libraryDatabaseThread->quit();
+    m_libraryDatabaseThread->quit();
     m_libraryImageThread->quit();
-//    m_libraryDatabaseThread->wait();
+    m_libraryDatabaseThread->wait();
     m_libraryImageThread->wait();
 
     //Save the database.
