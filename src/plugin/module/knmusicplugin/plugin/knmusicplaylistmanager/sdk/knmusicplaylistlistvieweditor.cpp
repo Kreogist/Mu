@@ -116,7 +116,7 @@ void KNMusicPlaylistListViewEditor::showConfigureMenu()
     m_configureMenu->exec(QCursor::pos());
 }
 
-void KNMusicPlaylistListViewEditor::showImportDialog()
+void KNMusicPlaylistListViewEditor::importPlaylists()
 {
     QFileDialog importFile(this);
     importFile.setFileMode(QFileDialog::ExistingFiles);
@@ -160,7 +160,7 @@ void KNMusicPlaylistListViewEditor::initialMenu()
     connect(m_addActions[AddPlaylist], SIGNAL(triggered()),
             this, SIGNAL(requireAddPlaylist()));
     connect(m_addActions[ImportPlaylist], SIGNAL(triggered()),
-            this, SLOT(showImportDialog()));
+            this, SLOT(importPlaylists()));
 
     //Generate menu.
     m_addMenu->addAction(m_addActions[AddPlaylist]);

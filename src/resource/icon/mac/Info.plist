@@ -9,9 +9,9 @@
 	<key>BuildMachineOSBuild</key>
 	<string>13D65</string>
 	<key>CFBundleExecutable</key>
-	<string>Kreogist μ</string>
+	<string>mu</string>
 	<key>CFBundleGetInfoString</key>
-	<string>0.3 (20141110 2014/11/10:23:47:00)</string>
+	<string>Kreogist μ</string>
 	<key>CFBundleIconFile</key>
 	<string>mu.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -20,6 +20,8 @@
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
 	<string>0.0.381 (20140707 2014/07/07:21:24:00)</string>
+	<key>NOTE</key>
+	<string>Kreogist μ</string>
 	<key>CFBundleName</key>
 	<string>μ</string>
 	<key>CFBundlePackageType</key>
@@ -40,5 +42,7 @@
 	<string>Copyright © 2014 Kreogist Dev Team</string>
 	<key>UIDisallowUserKeyboardShortcuts</key>
 	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
 </dict>
 </plist>

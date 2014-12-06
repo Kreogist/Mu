@@ -40,11 +40,11 @@ signals:
 
 public slots:
     void retranslate();
+    void importPlaylists();
 
 private slots:
     void showAddMenu();
     void showConfigureMenu();
-    void showImportDialog();
 
 private:
     void initialMenu();

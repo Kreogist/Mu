@@ -18,6 +18,8 @@
 #include <QLabel>
 #include <QBoxLayout>
 
+#include "knngnlbutton.h"
+
 #include "knlocalemanager.h"
 
 #include "knmusicplaylistemptyhint.h"
@@ -56,9 +58,11 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     //Initial the hint layout.
     QBoxLayout *hintLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           contentLayout->widget());
+    hintLayout->setSpacing(5);
     contentLayout->addLayout(hintLayout);
     mainLayout->addStretch();
 
+    hintLayout->addStretch();
     //Initial the hint text lable.
     m_hintText=new QLabel(this);
     //Set palette.
@@ -67,13 +71,28 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     m_hintText->setPalette(pal);
     //Set the property.
     m_hintText->setWordWrap(true);
-    m_hintText->setSizePolicy(QSizePolicy::Expanding,
-                              QSizePolicy::Expanding);
     QFont hintTextFont=m_hintText->font();
     hintTextFont.setPixelSize(15);
     m_hintText->setFont(hintTextFont);
     //Add to layout.
     hintLayout->addWidget(m_hintText);
+    hintLayout->addSpacing(20);
+
+    //Initial the operate button.
+    m_generatePlaylist=new KNNGNLButton(this);
+    m_generatePlaylist->setIcon(QPixmap(":/plugin/music/playlist/playlist_add.png"));
+    configureNGNLButton(m_generatePlaylist);
+    connect(m_generatePlaylist, &KNNGNLButton::clicked,
+            this, &KNMusicPlaylistEmptyHint::requireCreatePlaylist);
+    hintLayout->addWidget(m_generatePlaylist);
+
+    m_importPlaylist=new KNNGNLButton(this);
+    m_importPlaylist->setIcon(QPixmap(":/plugin/music/playlist/playlist_import.png"));
+    configureNGNLButton(m_importPlaylist);
+    hintLayout->addWidget(m_importPlaylist);
+    connect(m_importPlaylist, &KNNGNLButton::clicked,
+            this, &KNMusicPlaylistEmptyHint::requireImportPlaylist);
+    hintLayout->addStretch();
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -84,7 +103,18 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
 
 void KNMusicPlaylistEmptyHint::retranslate()
 {
+    //Update the hint text.
     m_hintText->setText(tr("Songs you add to playlists and playlists you "
                            "import appear in Playlist.\n"
                            "To create a playlist, drag your songs here."));
+
+    //Update the operate button text.
+    m_generatePlaylist->setText(tr("New empty playlist"));
+    m_importPlaylist->setText(tr("Import playlists"));
+}
+
+void KNMusicPlaylistEmptyHint::configureNGNLButton(KNNGNLButton *button)
+{
+    button->setIconSize(28, 28);
+    button->setMinimumHeight(34);
 }

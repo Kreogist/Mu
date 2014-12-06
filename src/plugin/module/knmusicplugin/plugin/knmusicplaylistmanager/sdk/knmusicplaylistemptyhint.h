@@ -21,6 +21,7 @@
 #include "kndropproxycontainer.h"
 
 class QLabel;
+class KNNGNLButton;
 class KNMusicPlaylistEmptyHint : public KNDropProxyContainer
 {
     Q_OBJECT
@@ -28,12 +29,16 @@ public:
     explicit KNMusicPlaylistEmptyHint(QWidget *parent = 0);
 
 signals:
+    void requireCreatePlaylist();
+    void requireImportPlaylist();
 
 public slots:
     void retranslate();
 
 private:
+    void configureNGNLButton(KNNGNLButton *button);
     QLabel *m_hintText;
+    KNNGNLButton *m_generatePlaylist, *m_importPlaylist;
 };
 
 #endif // KNMUSICPLAYLISTEMPTYHINT_H
