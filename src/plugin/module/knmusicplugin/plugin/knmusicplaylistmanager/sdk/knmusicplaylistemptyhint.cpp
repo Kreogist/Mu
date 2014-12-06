@@ -50,7 +50,7 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
 
     //Initial the empty hint icon.
     QLabel *emptyHintIcon=new QLabel(this);
-    emptyHintIcon->setPixmap(QPixmap(":/plugin/music/common/emptyicon.png"));
+    emptyHintIcon->setPixmap(QPixmap(":/plugin/music/playlist/emptyicon.png"));
     contentLayout->addWidget(emptyHintIcon,
                           0,
                           Qt::AlignRight | Qt::AlignVCenter);

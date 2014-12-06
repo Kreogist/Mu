@@ -33,7 +33,7 @@
 <context>
     <name>KNMusicAlbumView</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="461"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="465"/>
         <source>Various Artists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -575,9 +575,19 @@
 <context>
     <name>KNMusicPlaylistEmptyHint</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="87"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="107"/>
         <source>Songs you add to playlists and playlists you import appear in Playlist.
 To create a playlist, drag your songs here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="112"/>
+        <source>New empty playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="113"/>
+        <source>Import playlists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -625,7 +635,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="79"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="81"/>
         <source>Playlists</source>
         <translation type="unfinished"></translation>
     </message>
