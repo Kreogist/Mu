@@ -207,13 +207,16 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
                     m_isoCodec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF16BELE: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
         //Decode via first two bytes.
-        if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
+        if(content.size()>1)
         {
-            return m_utf16BECodec->toUnicode(content).simplified().remove(QChar('\0'));
-        }
-        if((quint8)content.at(0)==0xFF && (quint8)content.at(1)==0xFE)
-        {
-            return m_utf16LECodec->toUnicode(content).simplified().remove(QChar('\0'));
+            if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
+            {
+                return m_utf16BECodec->toUnicode(content).simplified().remove(QChar('\0'));
+            }
+            if((quint8)content.at(0)==0xFF && (quint8)content.at(1)==0xFE)
+            {
+                return m_utf16LECodec->toUnicode(content).simplified().remove(QChar('\0'));
+            }
         }
         return m_utf16Codec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF16: //2 = UTF-16 BE without BOM
