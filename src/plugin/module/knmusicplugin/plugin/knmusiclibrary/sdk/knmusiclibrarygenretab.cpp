@@ -37,30 +37,31 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QObject *parent) :
     KNMusicLibraryCategoryTab(parent)
 {
     //Initial the drop proxy container.
-    m_container=new KNDropProxyContainer;
-    connect(m_container, &KNDropProxyContainer::dropProxyShow,
+    m_dropProxy=new KNDropProxyContainer(viewerWidget());
+    setContentWidget(m_dropProxy);
+    connect(m_dropProxy, &KNDropProxyContainer::dropProxyShow,
             this, &KNMusicLibraryGenreTab::onActionTabShow);
-    connect(m_container, &KNDropProxyContainer::dropProxyHide,
+    connect(m_dropProxy, &KNDropProxyContainer::dropProxyHide,
             this, &KNMusicLibraryGenreTab::onActionTabHide);
 
     //Initial the layout for the container, only for auto resize splitter.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_container);
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_dropProxy);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    m_container->setLayout(mainLayout);
+    m_dropProxy->setLayout(mainLayout);
 
     //Initial the main splitter.
-    m_splitter=new QSplitter(m_container);
+    m_splitter=new QSplitter(m_dropProxy);
     m_splitter->setHandleWidth(0); //This is beautiful.
     m_splitter->setChildrenCollapsible(false);
     mainLayout->addWidget(m_splitter);
 
     //Initial the list.
-    m_genreList=new KNMusicCategoryListViewBase(m_container);
+    m_genreList=new KNMusicCategoryListViewBase(m_dropProxy);
     m_splitter->addWidget(m_genreList);
 
     //Initial the category display.
-    m_genreDisplay=new KNMusicCategoryDisplay(m_container);
+    m_genreDisplay=new KNMusicCategoryDisplay(m_dropProxy);
     m_genreDisplay->setCategoryColumn(Genre);
     m_splitter->addWidget(m_genreDisplay);
 
@@ -94,11 +95,6 @@ QPixmap KNMusicLibraryGenreTab::icon()
     return QPixmap(":/plugin/music/category/04_genres.png");
 }
 
-QWidget *KNMusicLibraryGenreTab::widget()
-{
-    return m_container;
-}
-
 void KNMusicLibraryGenreTab::retranslate()
 {
     m_showInGenre->setText(tr("Go to Genre"));
@@ -106,10 +102,12 @@ void KNMusicLibraryGenreTab::retranslate()
 
 void KNMusicLibraryGenreTab::setLibraryModel(KNMusicLibraryModel *model)
 {
+    //Do original set library model.
+    KNMusicLibraryCategoryTab::setLibraryModel(model);
     //Save the library.
     m_musicLibrary=model;
     //Do connections.
-    connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
+    connect(m_dropProxy, &KNDropProxyContainer::requireAnalysisFiles,
             m_musicLibrary, &KNMusicLibraryModel::addFiles);
     //Set the model.
     m_genreDisplay->setLibraryModel(m_musicLibrary);
@@ -235,9 +233,9 @@ void KNMusicLibraryGenreTab::initialShowInAction()
 void KNMusicLibraryGenreTab::initialFindAction()
 {
     //Initial the search action
-    QAction *findAction=new QAction(m_container);
+    QAction *findAction=new QAction(m_dropProxy);
     findAction->setShortcut(QKeySequence(QKeySequence::Find));
     findAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(findAction, SIGNAL(triggered()), this, SLOT(onActionRequireSearch()));
-    m_container->addAction(findAction);
+    m_dropProxy->addAction(findAction);
 }

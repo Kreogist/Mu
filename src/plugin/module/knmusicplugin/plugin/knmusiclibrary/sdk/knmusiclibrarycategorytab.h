@@ -20,6 +20,8 @@
 
 #include "knmusiclibrarytab.h"
 
+class KNEmptyStateWidget;
+class KNMusicLibraryEmptyHint;
 class KNMusicCategoryModel;
 class KNMusicCategoryProxyModel;
 class KNMusicLibraryCategoryTab : public KNMusicLibraryTab
@@ -27,17 +29,23 @@ class KNMusicLibraryCategoryTab : public KNMusicLibraryTab
     Q_OBJECT
 public:
     explicit KNMusicLibraryCategoryTab(QObject *parent = 0);
+    QWidget *widget();
 
 signals:
 
 public slots:
     virtual void setCategoryModel(KNMusicCategoryModel *model);
+    void setLibraryModel(KNMusicLibraryModel *model);
 
 protected:
     KNMusicCategoryProxyModel *proxyCategoryModel();
+    void setContentWidget(QWidget *widget);
+    QWidget *viewerWidget();
 
 private:
     KNMusicCategoryProxyModel *m_proxyCategoryModel;
+    KNEmptyStateWidget *m_viewer;
+    KNMusicLibraryEmptyHint *m_emptyHint;
 };
 
 #endif // KNMUSICLIBRARYCATEGORYTAB_H

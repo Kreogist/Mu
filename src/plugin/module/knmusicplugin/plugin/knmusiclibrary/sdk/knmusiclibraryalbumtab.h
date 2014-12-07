@@ -31,7 +31,6 @@ public:
     QAction *showInAction();
     QString caption();
     QPixmap icon();
-    QWidget *widget();
 
 signals:
 
@@ -49,7 +48,7 @@ private:
     void initialShowInAction();
     void initialFindAction();
     QAction *m_showInAlbumTab;
-    KNDropProxyContainer *m_container;
+    KNDropProxyContainer *m_dropProxy;
     KNMusicAlbumView *m_albumView;
     KNMusicAlbumDetail *m_albumDetail;
     KNMusicLibraryModel *m_musicLibrary;

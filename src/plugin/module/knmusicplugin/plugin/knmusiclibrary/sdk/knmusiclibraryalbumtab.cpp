@@ -37,22 +37,23 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     KNMusicLibraryCategoryTab(parent)
 {
     //Initial the drop proxy container.
-    m_container=new KNDropProxyContainer;
-    connect(m_container, &KNDropProxyContainer::dropProxyShow,
+    m_dropProxy=new KNDropProxyContainer(viewerWidget());
+    setContentWidget(m_dropProxy);
+    connect(m_dropProxy, &KNDropProxyContainer::dropProxyShow,
             this, &KNMusicLibraryAlbumTab::onActionTabShow);
-    connect(m_container, &KNDropProxyContainer::dropProxyHide,
+    connect(m_dropProxy, &KNDropProxyContainer::dropProxyHide,
             this, &KNMusicLibraryAlbumTab::onActionTabHide);
 
     //Initial the layout for the container, only for auto resize splitter.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_container);
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_dropProxy);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    m_container->setLayout(mainLayout);
+    m_dropProxy->setLayout(mainLayout);
 
     //Initial the album detail.
-    m_albumDetail=new KNMusicAlbumDetail(m_container);
+    m_albumDetail=new KNMusicAlbumDetail(m_dropProxy);
     //Initial the album view.
-    m_albumView=new KNMusicAlbumView(m_container);
+    m_albumView=new KNMusicAlbumView(m_dropProxy);
     m_albumView->setAlbumDetail(m_albumDetail);
     mainLayout->addWidget(m_albumView);
 
@@ -81,11 +82,6 @@ QPixmap KNMusicLibraryAlbumTab::icon()
     return QPixmap(":/plugin/music/category/03_ablums.png");
 }
 
-QWidget *KNMusicLibraryAlbumTab::widget()
-{
-    return m_container;
-}
-
 void KNMusicLibraryAlbumTab::retranslate()
 {
     m_showInAlbumTab->setText(tr("Go to Album"));
@@ -93,13 +89,15 @@ void KNMusicLibraryAlbumTab::retranslate()
 
 void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
 {
+    //Do original set library model.
+    KNMusicLibraryCategoryTab::setLibraryModel(model);
     //Save the library.
     m_musicLibrary=model;
+    //Do connections.
+    connect(m_dropProxy, &KNDropProxyContainer::requireAnalysisFiles,
+            m_musicLibrary, &KNMusicLibraryModel::addFiles);
     //Set the music library to detail widget.
     m_albumDetail->setLibraryModel(model);
-    //Do connections.
-    connect(m_container, &KNDropProxyContainer::requireAnalysisFiles,
-            m_musicLibrary, &KNMusicLibraryModel::addFiles);
 }
 
 void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModel *model)

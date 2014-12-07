@@ -33,7 +33,6 @@ public:
     QAction *showInAction();
     QString caption();
     QPixmap icon();
-    QWidget *widget();
 
 signals:
 
@@ -55,7 +54,7 @@ private:
     void initialShowInAction();
     void initialFindAction();
     QAction *m_showInGenre;
-    KNDropProxyContainer *m_container;
+    KNDropProxyContainer *m_dropProxy;
     QSplitter *m_splitter;
     KNMusicLibraryModel *m_musicLibrary;
     KNMusicGenreModel *m_categoryModel;

@@ -18,8 +18,8 @@
 #include <QAction>
 #include <QBoxLayout>
 
-#include "knemptystatewidget.h"
 #include "kndropproxycontainer.h"
+#include "knemptystatewidget.h"
 #include "knmusiclibraryemptyhint.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiclibrarytreeview.h"
