@@ -45,10 +45,12 @@ public slots:
 protected slots:
     void onActionCategoryIndexChanged(const QModelIndex &index);
     void onActionTabShow();
+    void onActionTabHide();
 
 private slots:
     void onActionRequireSearch();
     void onActionShowInGenre();
+    void checkCategorySelected();
 
 private:
     void initialShowInAction();
@@ -60,6 +62,7 @@ private:
     KNMusicGenreModel *m_categoryModel;
     KNMusicCategoryListViewBase *m_genreList;
     KNMusicCategoryDisplay *m_genreDisplay;
+    QMetaObject::Connection m_notEmptyCheck;
 };
 
 #endif // KNMUSICLIBRARYGENRETAB_H
