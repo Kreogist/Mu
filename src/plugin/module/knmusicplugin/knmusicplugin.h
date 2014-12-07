@@ -88,8 +88,8 @@ private slots:
     void onActionShowTab(const int &tabIndex);
 
 private:
-    void initialInfrastructure();
-    void initialParser();
+    inline void initialInfrastructure();
+    inline void initialParser();
     void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
     void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
     void addMusicTab(KNMusicTab *musicTab);

@@ -46,10 +46,10 @@ private slots:
     void onActionLoadLibrary();
 
 private:
-    void initialSongTab();
-    void initialArtistTab();
-    void initialAlbumTab();
-    void initialGenreTab();
+    inline void initialSongTab();
+    inline void initialArtistTab();
+    inline void initialAlbumTab();
+    inline void initialGenreTab();
     enum CategoryTabs
     {
         TabArtists,
