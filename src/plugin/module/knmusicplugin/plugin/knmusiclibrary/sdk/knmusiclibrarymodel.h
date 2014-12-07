@@ -50,6 +50,8 @@ public:
     void setImageManager(KNMusicLibraryImageManager *imageManager);
 
 signals:
+    void libraryNotEmpty();
+    void libraryEmpty();
 
 public slots:
     void retranslate();

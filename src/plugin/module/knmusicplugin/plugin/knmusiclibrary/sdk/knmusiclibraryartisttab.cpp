@@ -166,11 +166,18 @@ void KNMusicLibraryArtistTab::onActionTabShow()
     //Do the original show request.
     KNMusicLibraryCategoryTab::onActionTabShow();
     //Ensure we have any artist item, and check whether the current index is vaild.
-    if(proxyCategoryModel()->rowCount()>0 &&
-            !m_artistList->currentIndex().isValid())
-    {
-        m_artistList->setCurrentIndex(proxyCategoryModel()->index(0,0));
-    }
+    checkCategorySelected();
+    //Linked library not empty signal to category selected check.
+    m_notEmptyCheck=connect(m_musicLibrary, &KNMusicLibraryModel::libraryNotEmpty,
+                            this, &KNMusicLibraryArtistTab::checkCategorySelected);
+}
+
+void KNMusicLibraryArtistTab::onActionTabHide()
+{
+    //Do the original hide request.
+    KNMusicLibraryCategoryTab::onActionTabHide();
+    //Cut down the not empty check.
+    disconnect(m_notEmptyCheck);
 }
 
 void KNMusicLibraryArtistTab::onActionRequireSearch()
@@ -205,6 +212,16 @@ void KNMusicLibraryArtistTab::onActionShowInArtist()
             //Ask to show the genre tab.
             emit requireShowTab();
         }
+    }
+}
+
+void KNMusicLibraryArtistTab::checkCategorySelected()
+{
+    //Check whether we have category to select, and is category selected or not.
+    if(proxyCategoryModel()->rowCount()>0 &&
+            !m_artistList->currentIndex().isValid())
+    {
+        m_artistList->setCurrentIndex(proxyCategoryModel()->index(0,0));
     }
 }
 

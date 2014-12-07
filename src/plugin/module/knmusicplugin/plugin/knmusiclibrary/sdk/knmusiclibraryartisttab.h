@@ -45,10 +45,12 @@ public slots:
 protected slots:
     void onActionCategoryIndexChanged(const QModelIndex &index);
     void onActionTabShow();
+    void onActionTabHide();
 
 private slots:
     void onActionRequireSearch();
     void onActionShowInArtist();
+    void checkCategorySelected();
 
 private:
     void initialShowInAction();
@@ -60,6 +62,7 @@ private:
     KNMusicCategoryModel *m_categoryModel;
     KNMusicCategoryListViewBase *m_artistList;
     KNMusicCategoryDisplay *m_artistDisplay;
+    QMetaObject::Connection m_notEmptyCheck;
 };
 
 #endif // KNMUSICLIBRARYARTISTTAB_H

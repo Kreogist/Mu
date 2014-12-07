@@ -38,6 +38,8 @@ public:
     void setNoAlbumIcon(const QPixmap &noAlbumIcon);
 
 signals:
+    void categoryAboutEmpty();
+    void categoryAboutNotEmpty();
 
 public slots:
     virtual void onCategoryAdded(const QList<QStandardItem *> &musicRow);

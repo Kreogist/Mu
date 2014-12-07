@@ -21,6 +21,8 @@
 #include "knmusiclibrarytab.h"
 
 class KNDropProxyContainer;
+class KNEmptyStateWidget;
+class KNMusicLibraryEmptyHint;
 class KNMusicLibraryTreeView;
 class KNMusicLibrarySongTab : public KNMusicLibraryTab
 {
@@ -45,6 +47,8 @@ private slots:
 
 private:
     void initialShowInAction();
+    KNEmptyStateWidget *m_viewer;
+    KNMusicLibraryEmptyHint *m_emptyHint;
     KNDropProxyContainer *m_dropProxy;
     KNMusicLibraryTreeView *m_treeview;
     QAction *m_showInSongTab;

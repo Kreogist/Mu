@@ -18,7 +18,9 @@
 #include <QAction>
 #include <QBoxLayout>
 
+#include "knemptystatewidget.h"
 #include "kndropproxycontainer.h"
+#include "knmusiclibraryemptyhint.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiclibrarytreeview.h"
 #include "knmusicsolomenubase.h"
@@ -30,8 +32,18 @@
 KNMusicLibrarySongTab::KNMusicLibrarySongTab(QObject *parent) :
     KNMusicLibraryTab(parent)
 {
+    //Initial the viewer widget.
+    m_viewer=new KNEmptyStateWidget();
+    connect(m_viewer, &KNEmptyStateWidget::aboutToBeShown,
+            this, &KNMusicLibraryTab::requireLoadLibrary);
+
+    //Initial the empty hint.
+    m_emptyHint=new KNMusicLibraryEmptyHint(m_viewer);
+    m_viewer->setEmptyWidget(m_emptyHint);
+
     //Initial the drop proxy.
-    m_dropProxy=new KNDropProxyContainer;
+    m_dropProxy=new KNDropProxyContainer(m_viewer);
+    m_viewer->setContentWidget(m_dropProxy);
     connect(m_dropProxy, &KNDropProxyContainer::dropProxyShow,
             this, &KNMusicLibrarySongTab::onActionTabShow);
     connect(m_dropProxy, &KNDropProxyContainer::dropProxyHide,
@@ -83,7 +95,7 @@ QPixmap KNMusicLibrarySongTab::icon()
 
 QWidget *KNMusicLibrarySongTab::widget()
 {
-    return m_dropProxy;
+    return m_viewer;
 }
 
 void KNMusicLibrarySongTab::retranslate()
@@ -98,8 +110,15 @@ void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
     //Set the music model.
     m_treeview->setMusicModel(m_musicLibrary);
     //Connect analysis requirement signal.
+    connect(m_emptyHint, &KNMusicLibraryEmptyHint::requireAnalysisFiles,
+            m_musicLibrary, &KNMusicLibraryModel::addFiles);
     connect(m_dropProxy, &KNDropProxyContainer::requireAnalysisFiles,
             m_musicLibrary, &KNMusicLibraryModel::addFiles);
+    //Connect show and hide signal.
+    connect(m_musicLibrary, &KNMusicLibraryModel::libraryNotEmpty,
+            m_viewer, &KNEmptyStateWidget::showContentWidget);
+    connect(m_musicLibrary, &KNMusicLibraryModel::libraryEmpty,
+            m_viewer, &KNEmptyStateWidget::showEmptyWidget);
     //Reset the header state.
     m_treeview->resetHeaderState();
     //Set default sort state.

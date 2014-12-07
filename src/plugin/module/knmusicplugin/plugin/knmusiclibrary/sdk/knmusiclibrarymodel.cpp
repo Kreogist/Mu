@@ -230,6 +230,11 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
         m_imageManager->removeImage(currentArtworkKey);
         m_coverImageList->removeImage(currentArtworkKey);
     }
+    //Check row count before remove row.
+    if(rowCount()==0)
+    {
+        emit libraryEmpty();
+    }
 }
 
 void KNMusicLibraryModel::appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
@@ -239,6 +244,11 @@ void KNMusicLibraryModel::appendLibraryMusicRow(const QList<QStandardItem *> &mu
     appendMusicRow(musicRow);
     //Ask to analysis album art.
     m_analysisExtend->onActionAnalysisAlbumArt(musicRow.at(Name), detailInfo);
+    //Check row count before add the row.
+    if(rowCount()==1)
+    {
+        emit libraryNotEmpty();
+    }
 }
 
 void KNMusicLibraryModel::recoverMusicRow(const QList<QStandardItem *> &musicRow)
@@ -251,6 +261,11 @@ void KNMusicLibraryModel::recoverMusicRow(const QList<QStandardItem *> &musicRow
         ++i)
     {
         (*i)->onCategoryRecover(musicRow);
+    }
+    //Check row count before add the row.
+    if(rowCount()==1)
+    {
+        emit libraryNotEmpty();
     }
 }
 

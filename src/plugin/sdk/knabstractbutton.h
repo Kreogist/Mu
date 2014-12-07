@@ -13,7 +13,11 @@ class KNAbstractButton : public QWidget
 {
     Q_OBJECT
 public:
-    KNAbstractButton(QWidget *parent = 0):QWidget(parent){}
+    KNAbstractButton(QWidget *parent = 0):QWidget(parent)
+    {
+        //Set clicked focus policy, make it works like a button.
+        setFocusPolicy(Qt::ClickFocus);
+    }
     virtual QPixmap icon() const=0;
     virtual QString text() const=0;
     virtual void setIcon(const QPixmap &icon)=0;

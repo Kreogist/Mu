@@ -13,25 +13,33 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <QAction>
+#ifndef KNMUSICLIBRARYEMPTYHINT_H
+#define KNMUSICLIBRARYEMPTYHINT_H
 
-#include "knmusiclibrarytab.h"
+#include "kndropproxycontainer.h"
 
-KNMusicLibraryTab::KNMusicLibraryTab(QObject *parent) :
-    KNMusicTab(parent)
+class QLabel;
+class KNNGNLButton;
+class KNMusicLibraryEmptyHint : public KNDropProxyContainer
 {
-}
+    Q_OBJECT
+public:
+    explicit KNMusicLibraryEmptyHint(QWidget *parent = 0);
 
-void KNMusicLibraryTab::onActionTabShow()
-{
-    //Hide the current show in action.
-    showInAction()->setVisible(false);
-}
+signals:
 
-void KNMusicLibraryTab::onActionTabHide()
-{
-    //Show the current show in action.
-    showInAction()->setVisible(true);
-}
+public slots:
+    void retranslate();
+
+private slots:
+    void onActionAddToLibrary();
+
+private:
+    void configureNGNLButton(KNNGNLButton *button);
+    QLabel *m_hintText;
+    KNNGNLButton *m_addMusic, *m_scanForMusic, *m_importLibrary;
+};
+
+#endif // KNMUSICLIBRARYEMPTYHINT_H
