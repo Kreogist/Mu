@@ -20,6 +20,7 @@
 
 #include "knmusicdetailtooltipbase.h"
 
+class QBoxLayout;
 class QTimer;
 class QLabel;
 class QTimeLine;
@@ -70,8 +71,10 @@ private:
     void initialTimeLine(QTimeLine *timeline);
     void setEliedText(QLabel *label, const QString &text);
     void moveToPosition(const QPoint &position);
-    int m_tooltipWidth=448, m_tooltipHeight=176;
+    int m_tooltipWidth=448, m_tooltipHeight=176,
+        m_labelWidth=m_tooltipWidth-m_tooltipHeight-11;
     bool m_isButtonPlay=true, m_progressPressed=false;
+    QBoxLayout *m_previewPlayer;
     QColor m_backgroundColor=QColor(255,255,255),
            m_textColor=QColor(255,255,255);
     QLabel *m_albumArt, *m_labels[ToolTipItemsCount];

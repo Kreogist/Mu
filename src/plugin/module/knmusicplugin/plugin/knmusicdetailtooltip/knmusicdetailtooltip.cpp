@@ -51,23 +51,20 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
             this, &KNMusicDetailTooltip::onActionHide);
 
     //Initial the layout and widget.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                           this);
-    mainLayout->setContentsMargins(11,11,11,6);
+    mainLayout->setContentsMargins(11,11,11,11);
     mainLayout->setSpacing(6);
     setLayout(mainLayout);
-    QBoxLayout *albumLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                           mainLayout->widget());
-    mainLayout->addLayout(albumLayout, 1);
     //Initial the album art.
     m_albumArt=new QLabel(this);
-    m_albumArt->setFixedSize(128, 128);
+    m_albumArt->setFixedSize(154, 154);
     m_albumArt->setScaledContents(true);
-    albumLayout->addWidget(m_albumArt);
+    mainLayout->addWidget(m_albumArt);
 
     QWidget *labelContainer=new QWidget(this);
     labelContainer->setContentsMargins(0,0,0,0);
-    albumLayout->addWidget(labelContainer);
+    mainLayout->addWidget(labelContainer, 1);
 
     QBoxLayout *labelLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                            mainLayout->widget());
@@ -78,7 +75,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     for(int i=0; i<ToolTipItemsCount; i++)
     {
         m_labels[i]=new QLabel(this);
-        m_labels[i]->setFixedWidth(292);
+        m_labels[i]->setFixedWidth(m_labelWidth);
         m_labels[i]->setPalette(m_palette);
         labelLayout->addWidget(m_labels[i]);
     }
@@ -95,17 +92,19 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     labelLayout->insertWidget(1, m_fileName);
     labelLayout->addStretch();
 
-    QBoxLayout *previewPlayer=new QBoxLayout(QBoxLayout::LeftToRight,
-                                             mainLayout->widget());
-    previewPlayer->setContentsMargins(0,0,0,0);
-    mainLayout->addLayout(previewPlayer);
+    //Initial the preview player.
+    m_previewPlayer=new QBoxLayout(QBoxLayout::LeftToRight,
+                                   mainLayout->widget());
+    m_previewPlayer->setSpacing(0);
+    m_previewPlayer->setContentsMargins(0,0,0,0);
+    labelLayout->addLayout(m_previewPlayer);
     m_playNPause=new KNOpacityButton(this);
     m_playNPause->setFocusProxy(this);
     m_playNPause->setFixedSize(20, 20);
     m_playNPause->setIcon(m_playIcon);
     connect(m_playNPause, &KNOpacityButton::clicked,
             this, &KNMusicDetailTooltip::onActionPlayNPauseClick);
-    previewPlayer->addWidget(m_playNPause);
+    m_previewPlayer->addWidget(m_playNPause);
     m_progress=new KNProgressSlider(this);
     m_progress->setFocusProxy(this);
     m_progress->setWheelStep(1000);
@@ -113,7 +112,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
             this, &KNMusicDetailTooltip::onActionProgressPressed);
     connect(m_progress, &KNProgressSlider::sliderReleased,
             this, &KNMusicDetailTooltip::onActionProgressReleased);
-    previewPlayer->addWidget(m_progress, 1);
+    m_previewPlayer->addWidget(m_progress, 1);
 
     //Initial the mouse in/out timeline.
     m_mouseIn=new QTimeLine(200, this);
@@ -352,12 +351,12 @@ void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
 void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &text)
 {
     //Calculate the size of the text using the fontMetrics of the label.
-    if(label->fontMetrics().width(text)>label->width())
+    if(label->fontMetrics().width(text)>m_labelWidth)
     {
         //Set the elied text to the label, add the text as tooltip of it.
         label->setText(label->fontMetrics().elidedText(text,
                                                        Qt::ElideRight,
-                                                       label->width()));
+                                                       m_labelWidth));
         label->setToolTip(text);
     }
     else
