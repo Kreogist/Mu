@@ -25,6 +25,7 @@ public:
     static KNMusicModelAssist *instance();
     static QString dateTimeToString(const QDateTime &dateTime);
     static QString dateTimeToDataString(const QDateTime &dateTime);
+    static QString dateTimeToDataString(const QVariant &dateTime);
     static QDateTime dataStringToDateTime(const QString &text);
     static QList<QStandardItem *> generateRow(const KNMusicDetailInfo &detailInfo);
     static bool reanalysisRow(KNMusicModel *musicModel,

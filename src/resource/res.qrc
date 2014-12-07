@@ -36,7 +36,6 @@
         <file>music/common/unstar.png</file>
         <file>music/common/playingicon.png</file>
         <file>music/common/icon.png</file>
-        <file>music/playlist/icon.png</file>
         <file>music/playlist/playlist_add.png</file>
         <file>music/playlist/playlist_import.png</file>
         <file>music/common/noalbum.png</file>
@@ -51,6 +50,10 @@
         <file>music/common/cantplay.png</file>
         <file>music/preview/pause.png</file>
         <file>music/preview/play.png</file>
+        <file>music/playlist/emptyicon.png</file>
+        <file>music/library/library_add.png</file>
+        <file>music/library/library_import.png</file>
+        <file>music/library/library_scan.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>windows/next.png</file>

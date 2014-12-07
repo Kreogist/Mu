@@ -24,11 +24,13 @@
 
 class KNAnimationMenu;
 class KNOpacityAnimeButton;
+class KNMusicPlaylistLoader;
 class KNMusicPlaylistListViewEditor : public KNLinearSenseWidget
 {
     Q_OBJECT
 public:
     explicit KNMusicPlaylistListViewEditor(QWidget *parent = 0);
+    void setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader);
 
 signals:
     void requireAddPlaylist();
@@ -38,11 +40,11 @@ signals:
 
 public slots:
     void retranslate();
+    void importPlaylists();
 
 private slots:
     void showAddMenu();
     void showConfigureMenu();
-    void showImportDialog();
 
 private:
     void initialMenu();
@@ -64,6 +66,7 @@ private:
             *m_configureActions[ConfigureMenuActionCount];
     KNAnimationMenu *m_addMenu, *m_configureMenu;
     KNOpacityAnimeButton *m_add, *m_removeCurrent, *m_configure;
+    KNMusicPlaylistLoader *m_playlistLoader;
 };
 
 #endif // KNMUSICPLAYLISTLISTVIEWEDITOR_H

@@ -89,7 +89,7 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
     ID3v2Header header;
     //Detect ID3v2 header.
     musicDataStream.readRawData(rawHeader, 10);
-    if(!parseHeader(rawHeader, header))
+    if(!parseID3v2Header(rawHeader, header))
     {
         return false;
     }
@@ -105,12 +105,12 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
     //Parse these raw data.
     QLinkedList<ID3v2Frame> frames;
     ID3v2MinorProperty property;
-    generateProperty(header.minor, property);
-    parseRawData(rawTagData, header, property, frames);
+    generateID3v2Property(header.minor, property);
+    parseID3v2RawData(rawTagData, header, property, frames);
     //Write the tag to details.
     if(!frames.isEmpty())
     {
-        writeFramesToDetails(frames, property, detailInfo);
+        writeID3v2ToDetails(frames, property, detailInfo);
     }
     //Recover the memory.
     delete[] rawTagData;
@@ -203,32 +203,32 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
     case EncodeISO: //0 = ISO-8859-1
         //Use unicode codec to translate.
         return m_usingDefaultCodec?
-                    m_localeCodec->toUnicode(content).simplified():
-                    m_isoCodec->toUnicode(content).simplified();
+                    m_localeCodec->toUnicode(content).simplified().remove(QChar('\0')):
+                    m_isoCodec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF16BELE: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
         //Decode via first two bytes.
         if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
         {
-            return m_utf16BECodec->toUnicode(content).simplified();
+            return m_utf16BECodec->toUnicode(content).simplified().remove(QChar('\0'));
         }
         if((quint8)content.at(0)==0xFF && (quint8)content.at(1)==0xFE)
         {
-            return m_utf16LECodec->toUnicode(content).simplified();
+            return m_utf16LECodec->toUnicode(content).simplified().remove(QChar('\0'));
         }
-        return m_utf16Codec->toUnicode(content).simplified();
+        return m_utf16Codec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF16: //2 = UTF-16 BE without BOM
         //Decode with UTF-16
-        return m_utf16Codec->toUnicode(content).simplified();
+        return m_utf16Codec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF8: //3 = UTF-8
         //Use UTF-8 to decode it.
-        return m_utf8Codec->toUnicode(content).simplified();
+        return m_utf8Codec->toUnicode(content).simplified().remove(QChar('\0'));
     default://Use locale codec.
-        return m_localeCodec->toUnicode(content).simplified();
+        return m_localeCodec->toUnicode(content).simplified().remove(QChar('\0'));
     }
 }
 
-bool KNMusicTagID3v2::parseHeader(char *rawHeader,
-                                  ID3v2Header &header)
+bool KNMusicTagID3v2::parseID3v2Header(char *rawHeader,
+                                       ID3v2Header &header)
 {
     //Check 'ID3' from the very beginning.
     if(rawHeader[0]!='I' || rawHeader[1]!='D' || rawHeader[2]!='3')
@@ -248,10 +248,10 @@ bool KNMusicTagID3v2::parseHeader(char *rawHeader,
     return true;
 }
 
-bool KNMusicTagID3v2::parseRawData(char *rawTagData,
-                                   const ID3v2Header &header,
-                                   const ID3v2MinorProperty &property,
-                                   QLinkedList<ID3v2Frame> &frameList)
+bool KNMusicTagID3v2::parseID3v2RawData(char *rawTagData,
+                                        const ID3v2Header &header,
+                                        const ID3v2MinorProperty &property,
+                                        QLinkedList<ID3v2Frame> &frameList)
 {
     char *rawPosition=rawTagData;
     quint32 rawTagDataSurplus=header.size;
@@ -290,8 +290,8 @@ bool KNMusicTagID3v2::parseRawData(char *rawTagData,
     return true;
 }
 
-void KNMusicTagID3v2::generateProperty(const quint8 &minor,
-                                       ID3v2MinorProperty &property)
+void KNMusicTagID3v2::generateID3v2Property(const quint8 &minor,
+                                            ID3v2MinorProperty &property)
 {
     //Because the ID3v2 has so many version, we have to use different calculate
     //function to process these frames.
@@ -322,9 +322,9 @@ void KNMusicTagID3v2::generateProperty(const quint8 &minor,
     }
 }
 
-void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames,
-                                           const ID3v2MinorProperty &property,
-                                           KNMusicDetailInfo &detailInfo)
+void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
+                                          const ID3v2MinorProperty &property,
+                                          KNMusicDetailInfo &detailInfo)
 {
     QByteArray imageTypeList;
     for(QLinkedList<ID3v2Frame>::const_iterator i=frames.begin();
@@ -445,6 +445,22 @@ void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames
                             frameText);
             }
             break;
+        case Rating:
+            //I don't know why all the file using this.
+            if(QString(frameData.left(29))=="Windows Media Player 9 Series")
+            {
+                //Translate the last bytes as rating.
+                detailInfo.rating=ratingStars((quint8)(frameData.at(30)));
+            }
+            else
+            {
+                //Treat the first bytes as rating.
+                if(!frameData.isEmpty())
+                {
+                    detailInfo.rating=frameData.at(0);
+                }
+            }
+            break;
         default:
             setTextData(detailInfo.textLists[frameIndex],
                         frameToText(frameData));
@@ -455,6 +471,36 @@ void KNMusicTagID3v2::writeFramesToDetails(const QLinkedList<ID3v2Frame> &frames
     {
         detailInfo.imageData["ID3v2"].append(imageTypeList);
     }
+}
+
+int KNMusicTagID3v2::ratingStars(const quint8 &hex)
+{
+    //1-31  = 1 star.
+    //32-95 = 2 stars.
+    //96-159 = 3 stars.
+    //160-223 = 4 stars.
+    //224-255 = 5 stars.
+    if(hex>0 && hex<32)
+    {
+        return 1;
+    }
+    if(hex>31 && hex<96)
+    {
+        return 2;
+    }
+    if(hex>95 && hex<160)
+    {
+        return 3;
+    }
+    if(hex>159 && hex<224)
+    {
+        return 4;
+    }
+    if(hex>223)
+    {
+        return 5;
+    }
+    return 0;
 }
 
 void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,

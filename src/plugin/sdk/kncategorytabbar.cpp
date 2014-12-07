@@ -23,6 +23,8 @@
 
 #include "kncategorytabbar.h"
 
+#include <QDebug>
+
 KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     QWidget(parent)
 {
@@ -79,12 +81,18 @@ void KNCategoryTabBar::addCategory(const QPixmap &pixmap,
     if(m_currentIndex==-1)
     {
         setCurrentIndex(0);
+        unlockBar();
     }
 }
 
 int KNCategoryTabBar::currentIndex() const
 {
     return m_currentIndex;
+}
+
+int KNCategoryTabBar::categorySize() const
+{
+    return m_buttonList.size();
 }
 
 void KNCategoryTabBar::setCurrentIndex(int buttonIndex)
@@ -106,7 +114,7 @@ void KNCategoryTabBar::setCurrentIndex(int buttonIndex)
     m_currentIndex=buttonIndex;
     button=m_buttonList.at(m_currentIndex);
     button->setChecked(true);
-    //Lock the tabbed
+    //Lock the tabbed and disable bar.
     m_locked=true;
     //Emit index changed signal.
     emit currentIndexChanged(m_currentIndex);
@@ -163,4 +171,3 @@ void KNCategoryTabBar::unlockBar()
 {
     m_locked=false;
 }
-

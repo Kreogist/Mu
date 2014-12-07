@@ -29,6 +29,9 @@ public:
 
 signals:
 
+protected:
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+
 public slots:
     void updateMusicRow(const int &row,
                         const KNMusicDetailInfo &detailInfo);

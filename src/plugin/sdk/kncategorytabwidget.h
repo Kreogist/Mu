@@ -31,13 +31,21 @@ public:
     int addTab(const QPixmap &icon,
                const QString &caption,
                QWidget *widget);
+    int currentIndex() const;
+    int categorySize() const;
 
 signals:
 
 public slots:
     void setTabText(const int &index, const QString &caption);
+    void setCurrentIndex(int index);
+
+private slots:
+    void moveLeft();
+    void moveRight();
 
 private:
+    void initialShortcuts();
     QBoxLayout *m_tabLayout;
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_widgetSwitcher;

@@ -21,6 +21,8 @@
 #include "core/knpluginmanager.h"
 #include "core/knexpandmainwindow.h"
 
+#include <QDebug>
+
 int main(int argc, char *argv[])
 {
     //Create a singleton pattern application.

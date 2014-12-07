@@ -23,8 +23,11 @@
 //Ports.
 #include "knmusicplaylistparser.h"
 
+#include "knmusicglobal.h"
+
 #include <QObject>
 
+class KNMusicPlaylistListItem;
 class KNMusicPlaylistLoader : public QObject
 {
     Q_OBJECT
@@ -33,7 +36,9 @@ public:
     ~KNMusicPlaylistLoader();
     void installPlaylistParser(KNMusicPlaylistParser *parser);
     bool parsePlaylist(const QString &filePath,
-                       QStringList &playlistFiles);
+                       KNMusicPlaylistListItem *playlistItem);
+    void getPlaylistTypeAndSuffix(QStringList &types,
+                                  QStringList &suffixs);
 
 signals:
 

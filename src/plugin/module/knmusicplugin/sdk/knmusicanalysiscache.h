@@ -16,17 +16,21 @@
 
 using namespace KNMusic;
 
+class KNConnectionHandler;
+class KNMusicAnalysisExtend;
 class KNMusicParser;
-class KNMusicModelAssist;
 class KNMusicAnalysisCache : public QObject
 {
     Q_OBJECT
 public:
     explicit KNMusicAnalysisCache(QObject *parent = 0);
+    KNMusicAnalysisExtend *extend() const;
+    void setExtend(KNMusicAnalysisExtend *extend);
 
 signals:
     void analysisNext();
-    void requireAppendMusicRow(QList<QStandardItem *> musicRow);
+    void requireAppendRow(QList<QStandardItem *> musicRow);
+    void analysisComplete(KNMusicDetailInfo detailInfo);
 
 public slots:
     void appendFilePath(const QString &filePath);
@@ -39,11 +43,12 @@ private:
         QString filePath;
         KNMusicDetailInfo detailInfo;
     };
-    void parseItem(AnalysisItem &currentItem);
+    void parseItem(AnalysisItem &currentItem, bool blocked=false);
     QList<AnalysisItem> m_analysisQueue;
+    KNMusicAnalysisExtend *m_extend=nullptr;
+    KNConnectionHandler *m_extendConnections;
     KNMusicParser *m_parser;
     KNMusicGlobal *m_musicGlobal;
-    KNMusicModelAssist *m_musicModelAssist;
 };
 
 #endif // KNMUSICANALYSISCACHE_H

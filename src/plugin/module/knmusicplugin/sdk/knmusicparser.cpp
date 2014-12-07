@@ -58,12 +58,15 @@ void KNMusicParser::parseFile(QString filePath,
     //Analysis Music.
     parseTag(filePath, detailInfo);
     analysis(filePath, detailInfo);
+    //Check the duration.
+    if(detailInfo.duration<0)
+    {
+        detailInfo.duration=0;
+    }
     //Generate analysis info.
     detailInfo.textLists[Time]=KNMusicGlobal::msecondToString(detailInfo.duration);
-    detailInfo.textLists[BitRate]=
-            QString::number(detailInfo.bitRate)+" Kbps";
-    detailInfo.textLists[SampleRate]=
-            QString::number(detailInfo.samplingRate)+" Hz";
+    detailInfo.textLists[BitRate]=bitRateText(detailInfo.bitRate);
+    detailInfo.textLists[SampleRate]=sampleRateText(detailInfo.samplingRate);
 }
 
 void KNMusicParser::installAnalysiser(KNMusicAnalysiser *analysiser)
@@ -79,6 +82,16 @@ void KNMusicParser::installTagParser(KNMusicTagParser *tagParser)
 void KNMusicParser::installListParser(KNMusicListParser *listParser)
 {
     m_listParsers.append(listParser);
+}
+
+QString KNMusicParser::bitRateText(const qint64 &bitRateNumber)
+{
+    return QString::number(bitRateNumber)+" Kbps";
+}
+
+QString KNMusicParser::sampleRateText(const qint64 &sampleRateNumber)
+{
+    return QString::number((qreal)sampleRateNumber/1000)+" kHz";
 }
 
 void KNMusicParser::parseAlbumArt(KNMusicDetailInfo &detailInfo)
@@ -193,6 +206,11 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                     currentInfo.duration=currentTrack.trackDuration==-1?
                                 (musicFileDetailInfo.duration-currentTrack.startPosition):
                                 currentTrack.trackDuration;
+                    //To ensure that the duration is greater than 0.
+                    if(currentInfo.duration<0)
+                    {
+                        currentInfo.duration=0;
+                    }
                     currentInfo.textLists[Time]=
                             KNMusicGlobal::msecondToString(currentInfo.duration);
                     trackDetailList.append(currentInfo);

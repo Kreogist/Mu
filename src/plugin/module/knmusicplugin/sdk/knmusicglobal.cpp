@@ -129,6 +129,7 @@ void KNMusicGlobal::regMetaType()
     qRegisterMetaType<QVector<int>>("QVector<int>");
     qRegisterMetaType<QItemSelection>("QItemSelection");
     qRegisterMetaType<QList<QStandardItem *>>("QList<QStandardItem *>");
+    qRegisterMetaType<KNMusicDetailInfo>("KNMusicDetailInfo");
 }
 
 void KNMusicGlobal::initialFileType()

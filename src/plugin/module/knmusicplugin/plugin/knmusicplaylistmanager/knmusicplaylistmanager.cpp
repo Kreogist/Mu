@@ -17,15 +17,19 @@
  */
 #include <QFile>
 
-#include "knmusicplaylistloader.h"
-#include "knmusicplaylistlistitem.h"
-#include "knmusicplaylistlistassistant.h"
-#include "knmusicplaylisttab.h"
-#include "knmusicplaylistlist.h"
-#include "knmusicplaylistmodel.h"
-#include "knmusicnowplayingbase.h"
+#include "plugin/knmusicxspfparser/knmusicxspfparser.h"
+#include "plugin/knmusicttplparser/knmusicttplparser.h"
+#include "plugin/knmusicm3uparser/knmusicm3uparser.h"
+
+#include "sdk/knmusicplaylistloader.h"
+#include "sdk/knmusicplaylistlistitem.h"
+#include "sdk/knmusicplaylistlistassistant.h"
+#include "sdk/knmusicplaylisttab.h"
+#include "sdk/knmusicplaylistlist.h"
+#include "sdk/knmusicplaylistmodel.h"
 
 #include "knmusicglobal.h"
+#include "knmusicnowplayingbase.h"
 
 #include "knmusicplaylistmanager.h"
 
@@ -50,8 +54,9 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_playlistTab=new KNMusicPlaylistTab(this);
     //Generate the playlist list.
     m_playlistList=new KNMusicPlaylistList(this);
-    //Set the playlist list.
+    //Set the playlist list and loader.
     m_playlistTab->setPlaylistList(m_playlistList);
+    m_playlistTab->setPlaylistLoader(m_playlistLoader);
 
     //Link the UI's request.
     connect(m_playlistTab, &KNMusicPlaylistTab::requireCreateFirstPlaylist,
@@ -89,9 +94,13 @@ KNMusicPlaylistManager::~KNMusicPlaylistManager()
 {
     //Save all the playlist changes first.
     saveChangedPlaylist();
-    //Save the playlist list data.
-    KNMusicPlaylistListAssistant::savePlaylistDatabase(m_playlistDatabasePath,
-                                                       m_playlistList->playlistListData());
+    //Check if it has been loaded.
+    if(m_playlistListLoaded)
+    {
+        //Save the playlist list data.
+        KNMusicPlaylistListAssistant::savePlaylistDatabase(m_playlistDatabasePath,
+                                                           m_playlistList->playlistListData());
+    }
 }
 
 KNMusicTab *KNMusicPlaylistManager::categoryTab()
@@ -129,6 +138,8 @@ void KNMusicPlaylistManager::onActionLoadPlaylistList()
     {
         m_playlistTab->setCurrentPlaylist(m_playlistList->index(0,0));
     }
+    //Set the flag.
+    m_playlistListLoaded=true;
 }
 
 void KNMusicPlaylistManager::onActionAddPlaylist()
@@ -177,9 +188,23 @@ void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
 
 void KNMusicPlaylistManager::onActionImportPlaylist(QStringList playlistPaths)
 {
+    //Last import item saver.
+    KNMusicPlaylistListItem *playlistItem=nullptr, *currentItem;
     while(!playlistPaths.isEmpty())
     {
-        importPlaylistFromFile(playlistPaths.takeFirst());
+        //Import the playlist.
+        currentItem=importPlaylistFromFile(playlistPaths.takeFirst());
+        //If load it success, set to the last import item.
+        if(currentItem!=nullptr)
+        {
+            playlistItem=currentItem;
+        }
+    }
+    //If we load any playlist of the paths, set current to the last one we import.
+    if(playlistItem!=nullptr)
+    {
+        //Set to current playlist.
+        m_playlistTab->setCurrentPlaylist(playlistItem->index());
     }
 }
 
@@ -237,8 +262,11 @@ void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &c
 void KNMusicPlaylistManager::initialPlaylistLoader()
 {
     //Initial the loader.
-    m_loader=new KNMusicPlaylistLoader(this);
+    m_playlistLoader=new KNMusicPlaylistLoader(this);
     //Install all the plugins.
+    m_playlistLoader->installPlaylistParser(new KNMusicXSPFParser);
+    m_playlistLoader->installPlaylistParser(new KNMusicTTPLParser);
+    m_playlistLoader->installPlaylistParser(new KNMusicM3UParser);
 }
 
 void KNMusicPlaylistManager::saveChangedPlaylist()
@@ -258,7 +286,7 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generatePlaylist();
-    //!FIXME: Here we just load the playlist, but I want dymanic loading.
+    //!FIXME: Here we just load the playlist, but I want to load it dymanicly.
     //Using the mu playlist parser first to parse it.
     if(KNMusicPlaylistListAssistant::readPlaylist(filePath, playlistItem))
     {
@@ -266,8 +294,16 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
         m_playlistList->appendPlaylist(playlistItem);
         return playlistItem;
     }
-    //!FIXME: Parse other type of the data.
-//    m_loader->parsePlaylist(filePath);
+    //Parse other type of the data.
+    if(m_playlistLoader->parsePlaylist(filePath, playlistItem))
+    {
+        //Set a file path for the item.
+        playlistItem->setPlaylistFilePath(KNMusicPlaylistListAssistant::alloctPlaylistFilePath());
+        //Add to playlist list.
+        m_playlistList->appendPlaylist(playlistItem);
+        return playlistItem;
+    }
+    //Delete the no used item.
     delete playlistItem;
     return nullptr;
 }
@@ -278,7 +314,8 @@ QString KNMusicPlaylistManager::generatePlaylistName(const QString &preferName)
     if(!preferName.isEmpty() &&
             m_playlistList->match(m_playlistList->index(0,0),
                                   Qt::DisplayRole,
-                                  preferName).isEmpty())
+                                  preferName,
+                                  Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
     {
         return preferName;
     }
@@ -297,7 +334,8 @@ QString KNMusicPlaylistManager::generatePlaylistName(const QString &preferName)
         //once more.
         if(m_playlistList->match(m_playlistList->index(0,0),
                                  Qt::DisplayRole,
-                                 baseName).isEmpty())
+                                 baseName,
+                                 Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
         {
             return baseName;
         }
@@ -332,7 +370,8 @@ QString KNMusicPlaylistManager::generatePlaylistName(const QString &preferName)
     QString linkedName=baseName + " " + QString::number(sameFileCounter);
     while(!m_playlistList->match(m_playlistList->index(0,0),
                                 Qt::DisplayRole,
-                                linkedName).isEmpty())
+                                linkedName,
+                                Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
     {
         sameFileCounter++;
         linkedName=baseName + " " + QString::number(sameFileCounter);

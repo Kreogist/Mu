@@ -18,6 +18,7 @@ class KNMusicSoloMenuBase : public KNAnimationMenu
     Q_OBJECT
 public:
     KNMusicSoloMenuBase(QWidget *parent = 0):KNAnimationMenu(parent){}
+    virtual QString currentFilePath() const=0;
     virtual void setProxyModel(KNMusicProxyModel *model)=0;
     virtual void setCurrentIndex(const QModelIndex &itemIndex)=0;
     virtual void setDetailDialog(KNMusicDetailDialogBase *dialog)=0;
@@ -27,6 +28,7 @@ signals:
     void requireRemoveCurrent();
 
 public slots:
+    virtual void addMusicActions(QList<QAction *> actions)=0;
 
 };
 

@@ -62,6 +62,12 @@ enum KNMusicModelRole
     ArtworkKeyRole,
     TrackFileRole
 };
+enum KNMusicCategoryRole
+{
+    CategoryItemSizeRole=Qt::UserRole,
+    CategoryItemVisibleRole,
+    CategoryArtworkKeyRole,
+};
 enum KNMusicPlaybackOrder
 {
     NoRepeat,
@@ -75,6 +81,14 @@ enum KNMusicPlayingState
     PlayingState,
     PausedState
 };
+enum KNMusicSortFlag
+{
+    SortByInt,
+    SortUserByInt,
+    SortUserByFloat,
+    SortUserByDate
+};
+
 struct KNMusicListTrackDetailInfo
 {
     //Track index.

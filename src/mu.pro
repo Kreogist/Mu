@@ -19,6 +19,7 @@ QT += core \
       gui \
       widgets \
       multimedia \
+      xml \
       network
 
 #Enable c++11
@@ -26,8 +27,8 @@ CONFIG += c++11
 
 #Enable processor instruction sets when using release mode.
 release{
-    CONFIG += mmx sse sse2 sse3
-    QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions
+    CONFIG += mmx sse sse2
+    QMAKE_CXXFLAGS += -mmmx -msse -msse2 -finline-functions
 }
 
 #Windows configure
@@ -108,16 +109,14 @@ libbass{
 
 #Add translations
 TRANSLATIONS += locale/Simplified_Chinese.ts \
-                locale/Traditional_Chinese.ts \
-                locale/English.ts
+                locale/Traditional_Chinese.ts
 
 #Add public path
 INCLUDEPATH += public
 #Add plugin and sdk path
 INCLUDEPATH += plugin \
                plugin/sdk \
-               plugin/module/knmusicplugin/sdk \
-               plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk
+               plugin/module/knmusicplugin/sdk
 
 SOURCES += \
     main.cpp \
@@ -170,7 +169,6 @@ SOURCES += \
     plugin/base/knpreference/knpreferencecategoryitem.cpp \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.cpp \
     plugin/module/knmusicplugin/sdk/knmusicmodel.cpp \
-    plugin/module/knmusicplugin/sdk/knmusicproxymodelpool.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.cpp \
@@ -240,7 +238,40 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp \
     plugin/sdk/knsearchbox.cpp \
     plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp
+    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp \
+    plugin/sdk/knmousedetectheader.cpp \
+    plugin/module/knmusicplugin/plugin/knmusictagapev2/knmusictagapev2.cpp \
+    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.cpp \
+    plugin/sdk/knhashpixmaplist.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicanalysisextend.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryanalysisextend.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicttplparser/knmusicttplparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtreeview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumindexdelegate.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.cpp \
+    plugin/sdk/knjsondatabase.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydatabase.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.cpp \
+    plugin/sdk/knngnlbutton.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -306,7 +337,6 @@ HEADERS += \
     plugin/base/knpreference/knpreferencecategoryitem.h \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.h \
     plugin/module/knmusicplugin/sdk/knmusicmodel.h \
-    plugin/module/knmusicplugin/sdk/knmusicproxymodelpool.h \
     plugin/module/knmusicplugin/sdk/knmusicheaderlyricsbase.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.h \
@@ -386,7 +416,41 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicsearchbase.h \
     plugin/module/knmusicplugin/sdk/knmusicdetailtooltipbase.h \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.h \
-    plugin/sdk/knplatformextras.h
+    plugin/sdk/knplatformextras.h \
+    plugin/sdk/knmousedetectheader.h \
+    plugin/module/knmusicplugin/plugin/knmusictagapev2/knmusictagapev2.h \
+    plugin/module/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h \
+    plugin/module/knmusicplugin/sdk/knmusiclibrarybase.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodel.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.h \
+    plugin/sdk/knhashpixmaplist.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.h \
+    plugin/module/knmusicplugin/sdk/knmusicanalysisextend.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryanalysisextend.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicttplparser/knmusicttplparser.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtreeview.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumindexdelegate.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.h \
+    plugin/sdk/knjsondatabase.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydatabase.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.h \
+    plugin/sdk/knngnlbutton.h \
+    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.h
 
 RESOURCES += \
     resource/res.qrc

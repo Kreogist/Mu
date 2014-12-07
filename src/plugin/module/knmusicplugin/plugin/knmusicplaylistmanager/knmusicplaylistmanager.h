@@ -62,10 +62,10 @@ private:
     KNMusicPlaylistListItem *importPlaylistFromFile(const QString &filePath);
 
     QString m_playlistDatabasePath;
-    KNMusicPlaylistLoader *m_loader;
+    KNMusicPlaylistLoader *m_playlistLoader;
     KNMusicPlaylistTab *m_playlistTab;
     KNMusicPlaylistList *m_playlistList;
-    KNMusicNowPlayingBase *m_nowPlaying;
+    bool m_playlistListLoaded=false;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H

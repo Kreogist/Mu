@@ -41,6 +41,5 @@ void KNMusicPlaylistIndex::paint(QPainter *painter,
 QSize KNMusicPlaylistIndex::sizeHint(const QStyleOptionViewItem &option,
                                      const QModelIndex &index) const
 {
-    return QSize(option.fontMetrics.width(QString::number(index.row()+1))+20,
-                 option.fontMetrics.height());
+    return QSize(option.fontMetrics.width(QString::number(index.row()+1))+20, 20);
 }

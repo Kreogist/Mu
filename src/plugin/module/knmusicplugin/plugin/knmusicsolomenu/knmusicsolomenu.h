@@ -28,11 +28,13 @@ public:
     void setProxyModel(KNMusicProxyModel *model);
     void setCurrentIndex(const QModelIndex &itemIndex);
     void setDetailDialog(KNMusicDetailDialogBase *dialog);
+    QString currentFilePath() const;
 
 signals:
 
 public slots:
     void retranslate();
+    void addMusicActions(QList<QAction *> actions);
 
 private slots:
     void onActionOpenCurrentFile();
@@ -58,7 +60,8 @@ private:
     void createActions();
     void updateActionsCaption();
     QString m_actionTitles[SoloMenuActionCount], m_itemText, m_filePath;
-    QAction *m_actions[SoloMenuActionCount];
+    QAction *m_actions[SoloMenuActionCount],
+            *m_customSeperator;
     KNMusicProxyModel *m_proxyModel;
     KNMusicDetailDialogBase *m_detailDialog;
 };

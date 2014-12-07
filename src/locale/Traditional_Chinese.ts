@@ -18,6 +18,45 @@
     </message>
 </context>
 <context>
+    <name>KNMusicAlbumDetail</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="688"/>
+        <source>Unknown Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="694"/>
+        <source>Various Artists</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicAlbumView</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="465"/>
+        <source>Various Artists</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicCategoryDisplay</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="111"/>
+        <source>No song.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="112"/>
+        <source>1 song.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="113"/>
+        <source>%1 songs.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicDetailOverview</name>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="136"/>
@@ -63,7 +102,7 @@
 <context>
     <name>KNMusicDetailTooltip</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="175"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="179"/>
         <source>In file: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,182 +240,182 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="173"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="174"/>
         <source>MPEG Audio Layer III (mp3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="174"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="175"/>
         <source>MPEG-4 Part 14 (m4a)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="175"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="176"/>
         <source>Waveform Audio File Format (wav)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="176"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="177"/>
         <source>Free Lossless Audio Codec (flac)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="177"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="178"/>
         <source>Monkey&apos;s Audio (ape)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="178"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="179"/>
         <source>Ogg Vorbis Audio (ogg)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="179"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="180"/>
         <source>True Audio Codec (tta)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="180"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="181"/>
         <source>Audio Interchange File Format (aiff)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="181"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="182"/>
         <source>Audio Interchange File Format (aifc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="182"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="183"/>
         <source>Audio Interchange File Format (aif)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="183"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="184"/>
         <source>MPEG-4 Part 14 (mp4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="184"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="185"/>
         <source>MPEG Audio Layer II (mpa)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="185"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="186"/>
         <source>MPEG Audio Layer II (mp2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="186"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="187"/>
         <source>MPEG Audio Layer I (mp1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="187"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="188"/>
         <source>Musical Instrument Digital Interface (midi)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="188"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="189"/>
         <source>Musical Instrument Digital Interface (mid)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="189"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="190"/>
         <source>MPEG Audio Layer III with SBR (mp3pro)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="190"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="191"/>
         <source>Musepack Lossy Audio Codec (mpc)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="191"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="192"/>
         <source>Advanced Audio Coding (aac)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="192"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="193"/>
         <source>Windows Media Audio (wma)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="193"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="194"/>
         <source>Flash Audio (fla)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="194"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="195"/>
         <source>Tom&apos;s lossless Audio Kompressor (tak)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="195"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="196"/>
         <source>Musepack Lossy Audio Codec (mp+)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="196"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="197"/>
         <source>Audible Audio File (aa)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="197"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="198"/>
         <source>Real Audio (ra)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="198"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="199"/>
         <source>Monkey&apos;s Audio (mac)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="199"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="200"/>
         <source>Musical Instrument Digital Interface (rmi)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="200"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="201"/>
         <source>DTS Audio Codec (dtswav)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="201"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="202"/>
         <source>DTS Audio Codec (dts)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="202"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="203"/>
         <source>SouND Audio (snd)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="203"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="204"/>
         <source>Au File Format (au)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="204"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="205"/>
         <source>Dolby Surround Audio Coding-3 (ac3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="205"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="206"/>
         <source>Fast Tracker Module (xm)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="206"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="207"/>
         <source>Unreal Engine 1 Music Format (umx)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="208"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="209"/>
         <source>Compact Disc Audio track (cda)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="209"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="210"/>
         <source>Cue sheet (cue)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -390,10 +429,104 @@
     </message>
 </context>
 <context>
+    <name>KNMusicLibraryAlbumTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="77"/>
+        <source>Albums</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="87"/>
+        <source>Go to Album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="108"/>
+        <source>No Album</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryArtistTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="91"/>
+        <source>Artists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="101"/>
+        <source>Go to Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="122"/>
+        <source>No Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryEmptyHint</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="101"/>
+        <source>Songs and music you add to Mu appear in your music library.
+To add songs to library, drag your songs here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="106"/>
+        <source>Add songs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="113"/>
+        <source>Add To Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryGenreTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="90"/>
+        <source>Genres</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="100"/>
+        <source>Go to Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="121"/>
+        <source>No Genre</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibrarySongTab</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="88"/>
+        <source>Songs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="103"/>
+        <source>Go to Songs</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLyricsManager</name>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp" line="77"/>
         <source>Lyrics Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicM3UParser</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.cpp" line="36"/>
+        <source>M3U Playlist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -408,52 +541,52 @@
 <context>
     <name>KNMusicPlaylistDisplay</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="142"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="156"/>
         <source>No song, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="143"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="157"/>
         <source>1 song, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="144"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="158"/>
         <source>%1 songs, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="146"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="160"/>
         <source>0 minuate.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="147"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="161"/>
         <source>1 minuate.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="148"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="162"/>
         <source>%1 minuates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="150"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="164"/>
         <source>No result.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="151"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="165"/>
         <source>1 result.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="152"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="166"/>
         <source>%1 results.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="154"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="168"/>
         <source>Search &apos;%1&apos; in &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -461,44 +594,59 @@
 <context>
     <name>KNMusicPlaylistEmptyHint</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="87"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="107"/>
         <source>Songs you add to playlists and playlists you import appear in Playlist.
 To create a playlist, drag your songs here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="112"/>
+        <source>New empty playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="113"/>
+        <source>Import playlists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNMusicPlaylistListViewEditor</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="77"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="76"/>
         <source>New Playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="78"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="77"/>
         <source>Import Playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="80"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="79"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="81"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="80"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="84"/>
-        <source>Mu playlist (*.mplst)</source>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="87"/>
+        <source>All Support Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistvieweditor.cpp" line="90"/>
+        <source>Mu playlist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNMusicPlaylistManager</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp" line="295"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp" line="332"/>
         <source>New Playlist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -506,15 +654,15 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="79"/>
-        <source>Playlist</source>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="81"/>
+        <source>Playlists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="116"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="125"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -530,53 +678,61 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicSoloMenu</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="96"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="105"/>
         <source>Play %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="97"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="106"/>
         <source>Open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="98"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="107"/>
         <source>Get Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="100"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="109"/>
         <source>Show in Explorer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="103"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="112"/>
         <source>Show in Finder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="115"/>
         <source>Show the contains folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="108"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="117"/>
         <source>Copy location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="118"/>
         <source>Copy &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="110"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="119"/>
         <source>Search &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="111"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="120"/>
         <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicTTPLParser</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicttplparser/knmusicttplparser.cpp" line="39"/>
+        <source>TTPlayer Playlist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -590,6 +746,14 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/module/knmusicplugin/sdk/knmusictreeviewheadermenu.cpp" line="66"/>
         <source>Auto Size All Columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicXSPFParser</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.cpp" line="39"/>
+        <source>Vox playlist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

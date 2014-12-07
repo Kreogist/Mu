@@ -43,6 +43,8 @@ KNMusicPlaylistTab::KNMusicPlaylistTab(QObject *parent) :
     m_emptyHint=new KNMusicPlaylistEmptyHint(m_viewer);
     connect(m_emptyHint, &KNMusicPlaylistEmptyHint::requireAnalysisFiles,
             this, &KNMusicPlaylistTab::requireCreateFirstPlaylist);
+    connect(m_emptyHint, &KNMusicPlaylistEmptyHint::requireCreatePlaylist,
+            this, &KNMusicPlaylistTab::requireGeneratePlaylist);
     m_viewer->setEmptyWidget(m_emptyHint);
 
     //Initial the viewer.
@@ -76,7 +78,7 @@ KNMusicPlaylistTab::~KNMusicPlaylistTab()
 
 QString KNMusicPlaylistTab::caption()
 {
-    return tr("Playlist");
+    return tr("Playlists");
 }
 
 QPixmap KNMusicPlaylistTab::icon()
@@ -99,6 +101,11 @@ void KNMusicPlaylistTab::cutLoadRequirement()
 {
     disconnect(m_viewer, &KNEmptyStateWidget::aboutToBeShown,
                this, &KNMusicPlaylistTab::requireLoadPlaylistList);
+}
+
+void KNMusicPlaylistTab::setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader)
+{
+    m_playlistListViewEditor->setPlaylistLoader(playlistLoader);
 }
 
 void KNMusicPlaylistTab::onActionSearch(const QString &text)
@@ -191,6 +198,10 @@ void KNMusicPlaylistTab::initialPlaylistList()
 
     //Initial the list editor.
     m_playlistListViewEditor=new KNMusicPlaylistListViewEditor(m_playlistListViewer);
+    //Link command.
+    connect(m_emptyHint, &KNMusicPlaylistEmptyHint::requireImportPlaylist,
+            m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::importPlaylists);
+    //Link requests.
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireAddPlaylist,
             this, &KNMusicPlaylistTab::requireGeneratePlaylist);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireImportPlaylist,

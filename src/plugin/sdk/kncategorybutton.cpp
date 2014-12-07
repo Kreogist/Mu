@@ -112,10 +112,10 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     //Draw background.
     painter.setBrush(m_background);
     painter.drawRect(rect());
-    //Draw top line
+    //Draw top line.
     painter.setBrush(m_highLightColor);
-    painter.drawRect(0,0,width(),2);
-    //Draw icon
+    painter.drawRect(0,0,width(),1);
+    //Draw icon.
     int iconX=(width()-m_iconSize-m_textWidth)/2;
     painter.drawPixmap(iconX,
                        m_iconY,
@@ -176,6 +176,8 @@ void KNCategoryButton::mouseReleaseEvent(QMouseEvent *event)
     {
         m_checked=true;
         startMouseDownAnime();
+        //Emit clicked signal.
+        emit clicked();
     }
     KNAbstractButton::mouseReleaseEvent(event);
 }

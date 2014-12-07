@@ -116,6 +116,12 @@ void KNMusicBackendBassThread::clear()
     m_totalDuration=0;
     //Reset thread data.
     resetState();
+    //Reset the state to stopped.
+    if(m_playingState!=StoppedState)
+    {
+        m_playingState=StoppedState;
+        emit stateChanged(m_playingState);
+    }
 }
 
 void KNMusicBackendBassThread::resetState()

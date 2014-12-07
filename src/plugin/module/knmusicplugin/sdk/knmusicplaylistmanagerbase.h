@@ -10,7 +10,6 @@
 #include <QObject>
 
 class KNMusicTab;
-class KNMusicNowPlayingBase;
 class KNMusicPlaylistManagerBase : public QObject
 {
     Q_OBJECT

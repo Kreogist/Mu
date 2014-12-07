@@ -91,6 +91,13 @@ void KNLocaleManager::setLanguageFromID(const QString &id)
 
 void KNLocaleManager::loadLanguageFiles()
 {
+    //Add English language item, English will always be the first language.
+    LanguageItem englishLanguage;
+    englishLanguage.id="English";
+    englishLanguage.name="English";
+    englishLanguage.icon=QPixmap("://public/English.png");
+    englishLanguage.filePath="";
+    m_languageList.append(englishLanguage);
     //We will only find language files in "Language" folder of the app path.
     QDir languageFolder(QApplication::applicationDirPath() + "/Language");
     if(!languageFolder.exists()) //No folder you say a P?
@@ -107,13 +114,6 @@ void KNLocaleManager::loadLanguageFiles()
         languageTranslation=rawFileDocument.object();
         languageTranslationFile.close();
     }
-    //Add English language item, English will always be the first language.
-    LanguageItem englishLanguage;
-    englishLanguage.id="English";
-    englishLanguage.name="English";
-    englishLanguage.icon=QPixmap("://public/English.png");
-    englishLanguage.filePath="";
-    m_languageList.append(englishLanguage);
     //Get all the folder in the language list.
     QFileInfoList folderList=languageFolder.entryInfoList();
     for(QFileInfoList::iterator i=folderList.begin();

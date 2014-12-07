@@ -22,6 +22,7 @@ public:
     virtual QWidget *widget()=0;
 
 signals:
+    void requireShowTab();
 
 public slots:
     virtual void onActionSearch(const QString &text)=0;

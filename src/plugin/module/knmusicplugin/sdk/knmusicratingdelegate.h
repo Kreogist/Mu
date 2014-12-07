@@ -28,6 +28,8 @@ public:
     void setModelData(QWidget *editor,
                       QAbstractItemModel *model,
                       const QModelIndex &index) const;
+    static int starSizeHint();
+
 signals:
 
 public slots:
@@ -37,7 +39,7 @@ private slots:
 
 private:
     QPixmap m_star;
-    int m_starSizeHint=20;
+    static int m_starSizeHint;
 };
 
 #endif // KNMUSICRATINGDELEGATE_H

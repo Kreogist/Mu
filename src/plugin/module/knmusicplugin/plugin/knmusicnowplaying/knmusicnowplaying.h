@@ -24,7 +24,6 @@
 
 class KNMusicModel;
 class KNMusicProxyModel;
-class KNMusicProxyModelPool;
 class KNMusicSinglePlaylistModel;
 class KNMusicNowPlaying : public KNMusicNowPlayingBase
 {
@@ -34,11 +33,15 @@ public:
     ~KNMusicNowPlaying();
     void setBackend(KNMusicBackend *backend);
     KNMusicProxyModel *playingModel();
+    KNMusicModel *playingMusicModel();
     int loopState();
+    QPersistentModelIndex currentPlayingIndex() const;
 
 signals:
 
 public slots:
+    void shadowPlayingModel();
+    void resetCurrentPlaying();
     void restoreConfigure();
     void playNext();
     void playPrevious();
@@ -51,7 +54,6 @@ public slots:
     void playMusic(const int &row);
     void playMusic(const QModelIndex &index);
     void checkRemovedModel(KNMusicModel *model);
-    void checkRemovedIndex(const QModelIndex &index);
 
 private:
     void saveConfigure();
@@ -62,8 +64,9 @@ private:
     KNMusicBackend *m_backend=nullptr;
     KNMusicSinglePlaylistModel *m_temporaryModel;
     KNMusicModel *m_playingMusicModel=nullptr;
-    KNMusicProxyModel *m_playingModel=nullptr, *m_temporaryProxyModel;
-    KNMusicProxyModelPool *m_proxyModelPool;
+    KNMusicProxyModel *m_playingModel=nullptr,
+                      *m_shadowPlayingModel,
+                      *m_temporaryProxyModel;
     QPersistentModelIndex m_currentPlayingIndex;
     QPixmap m_playingIcon, m_cantPlayIcon;
     int m_loopMode=NoRepeat;

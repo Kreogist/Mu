@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QSignalMapper>
 
 //Music Global.
 #include "knmusicglobal.h"
@@ -30,6 +31,7 @@
 #include "knmusicheaderplayerbase.h"
 #include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusiclibrarybase.h"
 #include "knmusicplaylistmanagerbase.h"
 
 //Plugins
@@ -48,6 +50,8 @@
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
 #include "plugin/knmusictagm4a/knmusictagm4a.h"
 #include "plugin/knmusictagwma/knmusictagwma.h"
+#include "plugin/knmusictagapev2/knmusictagapev2.h"
+#include "plugin/knmusictagid3v2/knmusictagwav.h"
 #include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
 #include "plugin/knmusicdetailtooltip/knmusicdetailtooltip.h"
 #include "plugin/knmusicsearch/knmusicsearch.h"
@@ -57,10 +61,12 @@
 #include "plugin/knmusicmultimenu/knmusicmultimenu.h"
 #include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+#include "plugin/knmusiclibrary/knmusiclibrary.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
 
 #include "knglobal.h"
 #include "knmusictab.h"
+#include "knmousedetectheader.h"
 #include "knplatformextras.h"
 #include "knconnectionhandler.h"
 #include "kncategorytabwidget.h"
@@ -96,6 +102,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadNowPlaying(new KNMusicNowPlaying);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
+    loadLibrary(new KNMusicLibrary);
     loadPlaylistManager(new KNMusicPlaylistManager);
 
     //Connect retranslate request.
@@ -200,6 +207,11 @@ void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
         m_headerPlayer->restoreConfigure();
         //Add plugin to the list.
         m_pluginList.append(m_headerPlayer);
+        //Link player to sense header.
+        connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
+                m_headerPlayer, &KNMusicHeaderPlayerBase::activatePlayer);
+        connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
+                m_headerPlayer, &KNMusicHeaderPlayerBase::inactivatePlayer);
         //Add to main window.
         addLeftHeaderWidget(m_headerPlayer);
     }
@@ -229,6 +241,16 @@ void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
         //Set global now playing plugin.
         KNMusicGlobal::setNowPlaying(m_nowPlaying);
     }
+}
+
+void KNMusicPlugin::loadLibrary(KNMusicLibraryBase *plugin)
+{
+    m_pluginList.append(plugin);
+    //Add tabs.
+    addMusicTab(plugin->songTab());
+    addMusicTab(plugin->artistTab());
+    addMusicTab(plugin->albumTab());
+    addMusicTab(plugin->genreTab());
 }
 
 void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
@@ -302,6 +324,11 @@ void KNMusicPlugin::addRightHeaderWidget(QWidget *widget,
     m_headerRightLayout->addWidget(widget, stretch, alignment);
 }
 
+void KNMusicPlugin::onActionShowTab(const int &tabIndex)
+{
+    m_centralWidget->setCurrentIndex(tabIndex);
+}
+
 void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
@@ -318,7 +345,7 @@ void KNMusicPlugin::initialInfrastructure()
     m_centralWidget=new KNCategoryTabWidget;
 
     //Initial header widget.
-    m_headerWidget=new QWidget;
+    m_headerWidget=new KNMouseDetectHeader;
     //Set header properties.
     m_headerWidget->setContentsMargins(0,0,0,0);
     //Set header layout.
@@ -342,6 +369,11 @@ void KNMusicPlugin::initialInfrastructure()
 
     //Initial the extra platform connection handler.
     m_extraHandler=new KNConnectionHandler(this);
+
+    //Initial the tab switch signal mapper.
+    m_tabSwitchMapper=new QSignalMapper(this);
+    connect(m_tabSwitchMapper, SIGNAL(mapped(int)),
+            this, SLOT(onActionShowTab(int)));
 }
 
 void KNMusicPlugin::initialParser()
@@ -354,10 +386,12 @@ void KNMusicPlugin::initialParser()
 
     //Install all tag parser plugins here.
     parser->installTagParser(new KNMusicTagID3v1);
+    parser->installTagParser(new KNMusicTagAPEv2);
     parser->installTagParser(new KNMusicTagFLAC);
     parser->installTagParser(new KNMusicTagID3v2);
     parser->installTagParser(new KNMusicTagM4A);
     parser->installTagParser(new KNMusicTagWMA);
+    parser->installTagParser(new KNMusicTagWAV);
 
     //Install all analysiser plugins here.
 #ifdef ENABLE_LIBBASS
@@ -401,6 +435,10 @@ void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
                                       musicTab->caption(),
                                       musicTab->widget());
     currentTab.tab=musicTab;
+    //Connect show tab request.
+    connect(musicTab, SIGNAL(requireShowTab()),
+            m_tabSwitchMapper, SLOT(map()));
+    m_tabSwitchMapper->setMapping(musicTab, m_tabList.size());
     //Add tab to list.
     m_tabList.append(currentTab);
     //Connect request to the music tab.
@@ -412,7 +450,6 @@ void KNMusicPlugin::startThreads()
 {
     m_parserThread.start();
 }
-
 
 void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *plugin)
 {

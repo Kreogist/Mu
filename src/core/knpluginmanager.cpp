@@ -190,11 +190,6 @@ void KNPluginManager::loadPlugins()
     loadMainWindowCategorySwitcher(new KNMainWindowCategorySwitcher);
     loadPreference(new KNPreference);
 
-    //Initial platform plugins.
-#ifdef Q_OS_WIN32
-    loadPlatformExtras(new KNWindowsExtras);
-#endif
-
     //Initial category modules.
     loadCategoryPlugin(new KNMusicPlugin);
 }

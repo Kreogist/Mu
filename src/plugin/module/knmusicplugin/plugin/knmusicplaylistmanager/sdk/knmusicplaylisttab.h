@@ -30,6 +30,7 @@ class KNMusicPlaylistList;
 class KNMusicPlaylistListItem;
 class KNMusicPlaylistListView;
 class KNMusicPlaylistListViewEditor;
+class KNMusicPlaylistLoader;
 class KNMusicPlaylistTab : public KNMusicTab
 {
     Q_OBJECT
@@ -41,6 +42,7 @@ public:
     QWidget *widget();
     KNMusicPlaylistModel *currentPlaylistModel();
     void cutLoadRequirement();
+    void setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader);
 
 signals:
     void requireLoadPlaylistList();

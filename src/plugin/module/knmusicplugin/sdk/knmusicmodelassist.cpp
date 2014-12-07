@@ -9,6 +9,8 @@
 
 #include "knmusicmodelassist.h"
 
+#include <QDebug>
+
 KNMusicModelAssist::KNMusicModelAssist(QObject *parent) :
     QObject(parent)
 {
@@ -36,6 +38,7 @@ QList<QStandardItem *> KNMusicModelAssist::generateRow(
     item->setData(detailInfo.filePath, FilePathRole);
     item->setData(detailInfo.fileName, FileNameRole);
     item->setData(detailInfo.trackFilePath, TrackFileRole);
+    item->setData(detailInfo.coverImageHash, ArtworkKeyRole);
     item->setData(detailInfo.startPosition, StartPositionRole);
     item=musicRow.at(Size);
     item->setData(detailInfo.size, Qt::UserRole);
@@ -54,6 +57,7 @@ QList<QStandardItem *> KNMusicModelAssist::generateRow(
     item=musicRow.at(SampleRate);
     item->setData(detailInfo.samplingRate, Qt::UserRole);
     item=musicRow.at(Rating);
+    item->setData(detailInfo.rating, Qt::DisplayRole);
     item->setEditable(true);
     item=musicRow.at(AlbumRating);
     item->setEditable(true);
@@ -124,6 +128,11 @@ QString KNMusicModelAssist::dateTimeToString(const QDateTime &dateTime)
 QString KNMusicModelAssist::dateTimeToDataString(const QDateTime &dateTime)
 {
     return dateTime.toString("yyyyMMddHHmmss");
+}
+
+QString KNMusicModelAssist::dateTimeToDataString(const QVariant &dateTime)
+{
+    return dateTime.toDateTime().toString("yyyyMMddHHmmss");
 }
 
 QDateTime KNMusicModelAssist::dataStringToDateTime(const QString &text)

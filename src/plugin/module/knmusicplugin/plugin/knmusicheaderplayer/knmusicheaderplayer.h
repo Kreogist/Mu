@@ -49,15 +49,12 @@ public slots:
     void onActionLoopStateChanged(const int &state);
     void reset();
     void play();
-
-protected:
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-
-    void setAlbumArt(const QPixmap &pixmap);
-    void setTitle(const QString &title);
+    void activatePlayer();
+    void inactivatePlayer();
 
 private slots:
+    void setAlbumArt(const QPixmap &pixmap);
+    void setTitle(const QString &title);
     void setDuration(const qint64 &duration);
     void onActionPlayDragIn(const QStringList &filePaths);
     void onActionProgressPressed();

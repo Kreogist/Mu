@@ -39,7 +39,7 @@ void KNMusicPlaylistLoader::installPlaylistParser(KNMusicPlaylistParser *parser)
 }
 
 bool KNMusicPlaylistLoader::parsePlaylist(const QString &filePath,
-                                          QStringList &playlistFiles)
+                                          KNMusicPlaylistListItem *playlistItem)
 {
     //Try to parse the file using all parsers.
     for(auto i=m_parsers.begin();
@@ -47,10 +47,26 @@ bool KNMusicPlaylistLoader::parsePlaylist(const QString &filePath,
         i++)
     {
         //If there's any one parser can parse this, that's it.
-        if((*i)->parse(filePath, playlistFiles))
+        if((*i)->parse(filePath, playlistItem))
         {
             return true;
         }
     }
     return false;
+}
+
+void KNMusicPlaylistLoader::getPlaylistTypeAndSuffix(QStringList &types,
+                                                     QStringList &suffixs)
+{
+    //Clear the list.
+    types.clear();
+    suffixs.clear();
+    //Set the data.
+    for(auto i=m_parsers.begin();
+        i!=m_parsers.end();
+        i++)
+    {
+        types.append((*i)->playlistType());
+        suffixs.append((*i)->playlistSuffix());
+    }
 }

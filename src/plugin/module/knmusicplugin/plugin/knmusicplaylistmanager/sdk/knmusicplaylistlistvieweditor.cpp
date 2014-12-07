@@ -20,6 +20,7 @@
 
 #include "knanimationmenu.h"
 #include "knopacityanimebutton.h"
+#include "knmusicplaylistloader.h"
 
 #include "knlocalemanager.h"
 
@@ -67,8 +68,6 @@ KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNMusicPlaylistListViewEditor::retranslate);
-    //Do Retranslate.
-    retranslate();
 }
 
 void KNMusicPlaylistListViewEditor::retranslate()
@@ -80,8 +79,25 @@ void KNMusicPlaylistListViewEditor::retranslate()
     m_configureActions[ExportPlaylist]->setText(tr("Export"));
     m_configureActions[CopyPlaylist]->setText(tr("Copy"));
     //Update filter.
+    //Get the types and suffixs.
+    QStringList playlistTypes, playlistSuffixs;
+    m_playlistLoader->getPlaylistTypeAndSuffix(playlistTypes, playlistSuffixs);
+
+    //Initial the all support filter.
+    QString allSupportFilter=tr("All Support Playlist") + "(*.mplst";
+    //Initial the filters.
     m_playlistFilter.clear();
-    m_playlistFilter<<tr("Mu playlist (*.mplst)");
+    m_playlistFilter<<tr("Mu playlist") + " (*.mplst)";
+    for(int i=0; i<playlistTypes.size(); i++)
+    {
+        //Add the all support filter.
+        allSupportFilter.append(" "+playlistSuffixs.at(i));
+        //Add to filter list.
+        m_playlistFilter<<playlistTypes.at(i)+" ("+playlistSuffixs.at(i)+")";
+    }
+    allSupportFilter.append(")");
+    //Insert the all support filter to filter list.
+    m_playlistFilter.prepend(allSupportFilter);
 }
 
 void KNMusicPlaylistListViewEditor::showAddMenu()
@@ -100,12 +116,13 @@ void KNMusicPlaylistListViewEditor::showConfigureMenu()
     m_configureMenu->exec(QCursor::pos());
 }
 
-void KNMusicPlaylistListViewEditor::showImportDialog()
+void KNMusicPlaylistListViewEditor::importPlaylists()
 {
     QFileDialog importFile(this);
     importFile.setFileMode(QFileDialog::ExistingFiles);
     importFile.setNameFilters(m_playlistFilter);
-    if(importFile.exec())
+    if(importFile.exec() &&
+            !importFile.selectedFiles().isEmpty())
     {
         emit requireImportPlaylist(importFile.selectedFiles());
     }
@@ -143,7 +160,7 @@ void KNMusicPlaylistListViewEditor::initialMenu()
     connect(m_addActions[AddPlaylist], SIGNAL(triggered()),
             this, SIGNAL(requireAddPlaylist()));
     connect(m_addActions[ImportPlaylist], SIGNAL(triggered()),
-            this, SLOT(showImportDialog()));
+            this, SLOT(importPlaylists()));
 
     //Generate menu.
     m_addMenu->addAction(m_addActions[AddPlaylist]);
@@ -163,4 +180,11 @@ void KNMusicPlaylistListViewEditor::initialMenu()
     m_configureMenu->addAction(m_configureActions[ExportPlaylist]);
     m_configureMenu->addSeparator();
     m_configureMenu->addAction(m_configureActions[CopyPlaylist]);
+}
+
+void KNMusicPlaylistListViewEditor::setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader)
+{
+    m_playlistLoader=playlistLoader;
+    //Do Retranslate.
+    retranslate();
 }

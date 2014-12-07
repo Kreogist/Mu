@@ -17,7 +17,6 @@ class QTimeLine;
 class KNConnectionHandler;
 class KNMusicModel;
 class KNMusicProxyModel;
-class KNMusicProxyModelPool;
 class KNMusicTreeViewBase : public QTreeView
 {
     Q_OBJECT
@@ -26,6 +25,10 @@ public:
     KNMusicModel *musicModel();
     void setMusicModel(KNMusicModel *musicModel);
     void backupHeader();
+    void scrollToSongRow(const int &row);
+    void scrollToSongIndex(const QModelIndex &songIndex);
+    void scrollToSourceSongRow(const int &row);
+    KNMusicProxyModel *proxyModel();
 
 signals:
     void searchComplete();
@@ -33,6 +36,8 @@ signals:
 public slots:
     virtual void resetHeaderState();
     virtual void searchText(QString text);
+    void sortMusicColumn(int column,
+                         Qt::SortOrder order=Qt::AscendingOrder);
 
 protected:
     void enterEvent(QEvent *event);
@@ -43,6 +48,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
+    void setAnimateState(bool on);
 
 private slots:
     void onActionSearch();
@@ -61,7 +67,6 @@ private:
     void showMultiMenu(const QPoint &position);
     QTimeLine *m_mouseIn, *m_mouseOut;
     KNMusicProxyModel *m_proxyModel=nullptr;
-    KNMusicProxyModelPool *m_proxyModelPool;
     KNConnectionHandler *m_soloConnections,
                         *m_multiConnections;
     QDrag *m_drag;
@@ -74,7 +79,7 @@ private:
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;
-    bool m_pressed=false, m_initialLoad=true;
+    bool m_pressed=false, m_initialLoad=true, m_animate=true;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

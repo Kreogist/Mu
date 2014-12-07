@@ -14,14 +14,14 @@
 #include <QMouseEvent>
 
 #include "knconnectionhandler.h"
+#include "knmusicdetailtooltipbase.h"
 #include "knmusicmodel.h"
 #include "knmusicsearchbase.h"
-#include "knmusicdetailtooltipbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusictreeviewheader.h"
-#include "knmusicproxymodelpool.h"
+#include "knmusicproxymodel.h"
 #include "knmusicratingdelegate.h"
 
 #include "knmusictreeviewbase.h"
@@ -71,9 +71,6 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     m_soloConnections=new KNConnectionHandler(this);
     m_multiConnections=new KNConnectionHandler(this);
 
-    //Initial proxy model pool.
-    m_proxyModelPool=KNMusicProxyModelPool::instance();
-
     //Initial the mime data and drag action.
     m_mimeData=new QMimeData;
     m_drag=new QDrag(this);
@@ -101,25 +98,25 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
-    //Check is the current proxy model is the playing model.
-    if(m_proxyModel==nullptr ||
-            m_proxyModelPool->isModelPlaying(m_proxyModel))
+    //If we're going to set the model to null, backup header first.
+    if(musicModel==nullptr)
     {
-        //Backup myself.
         backupHeader();
-        //Release the current model, and get a new avaliable proxy model.
-        m_proxyModelPool->release(m_proxyModel);
-        m_proxyModel=m_proxyModelPool->alloct();
-        //Initial the proxy model.
-        m_proxyModel->setFilterFixedString(m_seachText);
-        //Set the proxy model.
-        setModel(m_proxyModel);
+    }
+    else
+    {
+        //Before we set the source model, we need to check the proxy model.
+        if(KNMusicGlobal::nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
+        {
+            KNMusicGlobal::nowPlaying()->shadowPlayingModel();
+        }
     }
     //Set the source model.
-    m_proxyModel->setSourceModel(musicModel);
+    proxyModel()->setSourceModel(musicModel);
     //Check and do header reset.
     if(m_initialLoad)
     {
+        //Clear the initial load flag.
         m_initialLoad=false;
         resetHeaderState();
         //Clear the header state backup data.
@@ -137,6 +134,29 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 void KNMusicTreeViewBase::backupHeader()
 {
     m_headerState=header()->saveState();
+}
+
+void KNMusicTreeViewBase::scrollToSourceSongRow(const int &row)
+{
+    //Do scroll and ensure that the music model exist.
+    if(m_proxyModel->musicModel()!=nullptr)
+    {
+        scrollToSongIndex(m_proxyModel->mapFromSource(m_proxyModel->musicModel()->index(row, Name)));
+    }
+}
+
+void KNMusicTreeViewBase::scrollToSongRow(const int &row)
+{
+    //Get the target index.
+    scrollToSongIndex(m_proxyModel->index(row, Name));
+}
+
+void KNMusicTreeViewBase::scrollToSongIndex(const QModelIndex &songIndex)
+{
+    //Set the current index to that row.
+    setCurrentIndex(songIndex);
+    //And move to that index.
+    scrollTo(songIndex, QAbstractItemView::PositionAtCenter);
 }
 
 void KNMusicTreeViewBase::resetHeaderState()
@@ -187,26 +207,38 @@ void KNMusicTreeViewBase::searchText(QString text)
     }
 }
 
+void KNMusicTreeViewBase::sortMusicColumn(int column,
+                                          Qt::SortOrder order)
+{
+    m_proxyModel->sort(column, order);
+}
+
 void KNMusicTreeViewBase::enterEvent(QEvent *event)
 {
     QTreeView::enterEvent(event);
-    //Stop timelines.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set parameters.
-    m_mouseIn->setStartFrame(m_alternateColor.alpha());
-    m_mouseIn->start();
+    if(m_animate)
+    {
+        //Stop timelines.
+        m_mouseIn->stop();
+        m_mouseOut->stop();
+        //Set parameters.
+        m_mouseIn->setStartFrame(m_alternateColor.alpha());
+        m_mouseIn->start();
+    }
 }
 
 void KNMusicTreeViewBase::leaveEvent(QEvent *event)
 {
     QTreeView::leaveEvent(event);
-    //Stop timelines.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set parameters.
-    m_mouseOut->setStartFrame(m_alternateColor.alpha());
-    m_mouseOut->start();
+    if(m_animate)
+    {
+        //Stop timelines.
+        m_mouseIn->stop();
+        m_mouseOut->stop();
+        //Set parameters.
+        m_mouseOut->setStartFrame(m_alternateColor.alpha());
+        m_mouseOut->start();
+    }
 }
 
 void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
@@ -357,6 +389,26 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
     header()->moveSection(header()->visualIndex(logicalIndex), 0);
 }
 
+void KNMusicTreeViewBase::setAnimateState(bool on)
+{
+    m_animate=on;
+}
+
+KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()
+{
+    //Check is the proxy model need to initial.
+    if(m_proxyModel==nullptr)
+    {
+        //Initial the proxy model.
+        m_proxyModel=new KNMusicProxyModel(this);
+        //Set the search text.
+        m_proxyModel->setFilterFixedString(m_seachText);
+        //Set the proxy model.
+        setModel(m_proxyModel);
+    }
+    return m_proxyModel;
+}
+
 void KNMusicTreeViewBase::onActionSearch()
 {
     //Set focus.
@@ -456,6 +508,7 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
 {
     if(index.isValid())
     {
+        //Set the playing model.
         KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
         KNMusicGlobal::nowPlaying()->playMusic(index);
     }
@@ -464,11 +517,14 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
 void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
 {
     QModelIndex sourceIndex=m_proxyModel->mapToSource(index);
-    //Check is the current model playing.
-    if(KNMusicGlobal::nowPlaying()->playingModel()==m_proxyModel)
+    //Check is the current model playing, and is the index playing.
+    if(KNMusicGlobal::nowPlaying()->playingModel()!=nullptr &&
+            KNMusicGlobal::nowPlaying()->playingModel()->sourceModel()==
+            m_proxyModel->sourceModel() &&
+            KNMusicGlobal::nowPlaying()->currentPlayingIndex().row()==sourceIndex.row())
     {
-        //If so, ask now playing to check the index.
-        KNMusicGlobal::nowPlaying()->checkRemovedIndex(sourceIndex);
+        //If so, ask now playing to reset current playing.
+        KNMusicGlobal::nowPlaying()->resetCurrentPlaying();
     }
     //Remove the row right in the proxy model.
     m_proxyModel->removeSourceMusicRow(sourceIndex.row());
@@ -476,12 +532,28 @@ void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
 
 void KNMusicTreeViewBase::removeSelections()
 {
+    //Check is the current playing item is in the selection.
+    if(KNMusicGlobal::nowPlaying()->playingModel()!=nullptr &&
+            KNMusicGlobal::nowPlaying()->playingModel()->sourceModel()==
+            m_proxyModel->sourceModel())
+    {
+        //Get the current playing index first.
+        QModelIndex currentPlayingIndex=
+                m_proxyModel->mapFromSource(KNMusicGlobal::nowPlaying()->currentPlayingIndex());
+        //Check is the playing index is in the selection.
+        if(selectionModel()->selectedIndexes().contains(currentPlayingIndex))
+        {
+            //If so, ask now playing to reset current playing.
+            KNMusicGlobal::nowPlaying()->resetCurrentPlaying();
+        }
+    }
     //Get the current indexes.
-    QModelIndexList selectionList=selectionModel()->selectedRows(Name);
+    QModelIndexList selectionList=selectionModel()->selectedRows(m_proxyModel->playingItemColumn());
+    //Change the model index list to persistent index.
     QList<QPersistentModelIndex> persistentList;
     while(!selectionList.isEmpty())
     {
-        persistentList.append(QPersistentModelIndex(selectionList.takeLast()));
+        persistentList.append(m_proxyModel->mapToSource(selectionList.takeLast()));
     }
     //Remove all the indexes.
     while(!persistentList.isEmpty())
@@ -489,7 +561,7 @@ void KNMusicTreeViewBase::removeSelections()
         QPersistentModelIndex currentRemovedIndex=persistentList.takeLast();
         if(currentRemovedIndex.isValid())
         {
-            removeIndex(currentRemovedIndex);
+            m_proxyModel->removeSourceMusicRow(currentRemovedIndex.row());
         }
     }
 }

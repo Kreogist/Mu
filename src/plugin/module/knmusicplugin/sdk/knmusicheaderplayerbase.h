@@ -38,6 +38,8 @@ public slots:
     virtual void restoreConfigure()=0;
     virtual void onActionLoopStateChanged(const int &state)=0;
     virtual void reset()=0;
+    virtual void activatePlayer()=0;
+    virtual void inactivatePlayer()=0;
     virtual void play()=0;
 
 };
