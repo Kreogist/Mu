@@ -431,17 +431,17 @@
 <context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="76"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="77"/>
         <source>Albums</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="91"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="87"/>
         <source>Go to Album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="110"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="108"/>
         <source>No Album</source>
         <translation type="unfinished"></translation>
     </message>
@@ -449,35 +449,54 @@
 <context>
     <name>KNMusicLibraryArtistTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="90"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="91"/>
         <source>Artists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="105"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="101"/>
         <source>Go to Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="124"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="122"/>
         <source>No Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicLibraryEmptyHint</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="101"/>
+        <source>Songs and music you add to Mu appear in your music library.
+To add songs to library, drag your songs here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="106"/>
+        <source>Add songs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="113"/>
+        <source>Add To Library</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNMusicLibraryGenreTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="89"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="90"/>
         <source>Genres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="104"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="100"/>
         <source>Go to Genre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="123"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="121"/>
         <source>No Genre</source>
         <translation type="unfinished"></translation>
     </message>
@@ -485,12 +504,12 @@
 <context>
     <name>KNMusicLibrarySongTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="76"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="88"/>
         <source>Songs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="91"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="103"/>
         <source>Go to Songs</source>
         <translation type="unfinished"></translation>
     </message>

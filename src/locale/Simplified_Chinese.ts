@@ -431,17 +431,17 @@
 <context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="76"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="77"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="91"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="87"/>
         <source>Go to Album</source>
         <translation>在专辑中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="110"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="108"/>
         <source>No Album</source>
         <translation>未知专辑</translation>
     </message>
@@ -449,35 +449,55 @@
 <context>
     <name>KNMusicLibraryArtistTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="90"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="91"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="105"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="101"/>
         <source>Go to Artist</source>
         <translation>在艺术家中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="124"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="122"/>
         <source>No Artist</source>
         <translation>未知艺术家</translation>
     </message>
 </context>
 <context>
+    <name>KNMusicLibraryEmptyHint</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="101"/>
+        <source>Songs and music you add to Mu appear in your music library.
+To add songs to library, drag your songs here.</source>
+        <translation>您添加到 Mu 的歌曲和音乐都将显示在音乐库中。
+如需将歌曲添加到音乐库，请将歌曲拖拽至此。</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="106"/>
+        <source>Add songs</source>
+        <translation>添加歌曲到音乐库</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="113"/>
+        <source>Add To Library</source>
+        <translation>添加到音乐库</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLibraryGenreTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="89"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="90"/>
         <source>Genres</source>
         <translation>流派</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="104"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="100"/>
         <source>Go to Genre</source>
         <translation>在流派中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="123"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="121"/>
         <source>No Genre</source>
         <translation>未知流派</translation>
     </message>
@@ -485,12 +505,12 @@
 <context>
     <name>KNMusicLibrarySongTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="76"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="88"/>
         <source>Songs</source>
         <translation>歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="91"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="103"/>
         <source>Go to Songs</source>
         <translation>在歌曲中显示</translation>
     </message>
