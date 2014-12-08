@@ -21,6 +21,7 @@
 #include <QWidget>
 
 class QBoxLayout;
+class KNSideShadowWidget;
 class KNHWidgetSwitcher;
 class KNCategoryTabBar;
 class KNCategoryTabWidget : public QWidget
@@ -40,14 +41,19 @@ public slots:
     void setTabText(const int &index, const QString &caption);
     void setCurrentIndex(int index);
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 private slots:
     void moveLeft();
     void moveRight();
 
 private:
     void initialShortcuts();
+    int m_shadowHeight=9;
     QBoxLayout *m_tabLayout;
     KNCategoryTabBar *m_tabBar;
+    KNSideShadowWidget *m_topShadow;
     KNHWidgetSwitcher *m_widgetSwitcher;
 };
 

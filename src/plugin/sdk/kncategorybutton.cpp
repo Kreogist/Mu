@@ -114,7 +114,7 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     painter.drawRect(rect());
     //Draw top line.
     painter.setBrush(m_highLightColor);
-    painter.drawRect(0,0,width(),1);
+    painter.drawRect(0,0,width(),2);
     //Draw icon.
     int iconX=(width()-m_iconSize-m_textWidth)/2;
     painter.drawPixmap(iconX,

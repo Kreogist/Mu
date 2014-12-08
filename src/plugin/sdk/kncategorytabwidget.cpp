@@ -19,6 +19,7 @@
 #include <QBoxLayout>
 
 #include "kncategorytabbar.h"
+#include "knsideshadowwidget.h"
 #include "knhwidgetswitcher.h"
 
 #include "kncategorytabwidget.h"
@@ -46,6 +47,9 @@ KNCategoryTabWidget::KNCategoryTabWidget(QWidget *parent) :
     connect(m_widgetSwitcher, &KNHWidgetSwitcher::movedComplete,
             m_tabBar, &KNCategoryTabBar::unlockBar);
     m_tabLayout->addWidget(m_widgetSwitcher, 1);
+
+    //Initial the shadow.
+    m_topShadow=new KNSideShadowWidget(KNSideShadow::TopShadow, this);
 
     //Initial the shortcuts.
     initialShortcuts();
@@ -81,6 +85,17 @@ void KNCategoryTabWidget::setTabText(const int &index,
 void KNCategoryTabWidget::setCurrentIndex(int index)
 {
     m_tabBar->setCurrentIndex(index);
+}
+
+void KNCategoryTabWidget::resizeEvent(QResizeEvent *event)
+{
+    //Apply resize.
+    QWidget::resizeEvent(event);
+    //Move the shadow.
+    m_topShadow->setGeometry(0,
+                             m_widgetSwitcher->y(),
+                             width(),
+                             m_shadowHeight);
 }
 
 void KNCategoryTabWidget::moveLeft()
