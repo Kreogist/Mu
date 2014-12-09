@@ -30,7 +30,6 @@
 KNMusicXSPFParser::KNMusicXSPFParser(QObject *parent) :
     KNMusicPlaylistParser(parent)
 {
-    //
     ;
 }
 
