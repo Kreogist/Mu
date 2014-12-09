@@ -43,7 +43,7 @@ public slots:
     void saveConfigure();
 
 private:
-    void initialStorageUnit();
+    inline void initialStorageUnit();
 #ifdef Q_OS_LINUX
     static QString substituteFileBrowserParameters(QString &pre, QString &file);
 #endif

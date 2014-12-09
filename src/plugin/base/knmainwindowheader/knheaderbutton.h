@@ -51,14 +51,14 @@ private slots:
     void onActionMouseDownUpAnimation(const int &frame);
 
 private:
-    void configurePalette();
-    void initialIcon();
-    void initialText();
-    void initialTimeLine();
-    void initialMouseInOutTimeLine(QTimeLine *anime);
-    void initialMouseDownTimeLine(QTimeLine *anime);
-    void initialMouseUpTimeLine(QTimeLine *anime);
-    void updateWidth();
+    inline void configurePalette();
+    inline void initialIcon();
+    inline void initialText();
+    inline void initialTimeLine();
+    inline void initialMouseInOutTimeLine(QTimeLine *anime);
+    inline void initialMouseDownTimeLine(QTimeLine *anime);
+    inline void initialMouseUpTimeLine(QTimeLine *anime);
+    inline void updateWidth();
     QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseUp, *m_mouseDown;
     QLabel *m_icon, *m_text;
     QGraphicsOpacityEffect *m_textEffect;

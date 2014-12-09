@@ -58,16 +58,16 @@ signals:
 public slots:
 
 private:
-    void clearBox(M4ABox &box);
-    void toIndependence(M4ABox &box);
-    void writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
-                                  KNMusicDetailInfo &detailInfo);
-    bool parseMetaBox(M4ABox &metaBox, M4ABox &ilstBox);
-    bool getBox(QDataStream &musicDataStream,
-                M4ABox &box,
-                bool ignoreContent=false);
-    bool extractBox(M4ABox &source,
-                    QList<M4ABox> &boxes);
+    inline void clearBox(M4ABox &box);
+    inline void toIndependence(M4ABox &box);
+    inline void writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
+                                         KNMusicDetailInfo &detailInfo);
+    inline bool parseMetaBox(M4ABox &metaBox, M4ABox &ilstBox);
+    inline bool getBox(QDataStream &musicDataStream,
+                       M4ABox &box,
+                       bool ignoreContent=false);
+    inline bool extractBox(M4ABox &source,
+                           QList<M4ABox> &boxes);
     QHash<QString, int> m_metadataAtom;
 };
 

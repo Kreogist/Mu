@@ -30,10 +30,10 @@ KNPreferenceHeaderButton::KNPreferenceHeaderButton(QWidget *parent) :
     //Initial the timelines.
     m_mouseIn=new QTimeLine(200, this);
     m_mouseIn->setEndFrame(100);
-    initialTimeLine(m_mouseIn);
+    configureTimeLine(m_mouseIn);
     m_mouseOut=new QTimeLine(200, this);
     m_mouseOut->setEndFrame(0);
-    initialTimeLine(m_mouseOut);
+    configureTimeLine(m_mouseOut);
 
     //Initial the border.
     m_border.moveTo(0,0);
@@ -135,7 +135,7 @@ void KNPreferenceHeaderButton::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNPreferenceHeaderButton::initialTimeLine(QTimeLine *timeLine)
+void KNPreferenceHeaderButton::configureTimeLine(QTimeLine *timeLine)
 {
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setUpdateInterval(5);

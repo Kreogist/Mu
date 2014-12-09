@@ -44,9 +44,9 @@ private slots:
     void onActionMove(const QPoint &point);
 
 private:
-    void initialShortCut();
-    void initialDialog();
-    void initialButton(KNOpacityAnimeButton *button);
+    inline void initialShortCut();
+    inline void initialDialog();
+    inline void initialButton(KNOpacityAnimeButton *button);
     QPropertyAnimation *m_zoomIn, *m_fadeIn, *m_expand, *m_fold, *m_fadeOut;
     QParallelAnimationGroup *m_showAnime, *m_hideAnime;
     QSequentialAnimationGroup *m_expandAnime;

@@ -47,7 +47,7 @@ private slots:
     void showConfigureMenu();
 
 private:
-    void initialMenu();
+    inline void initialMenu();
     void updateDialogFilter();
     enum AddMenuAction
     {

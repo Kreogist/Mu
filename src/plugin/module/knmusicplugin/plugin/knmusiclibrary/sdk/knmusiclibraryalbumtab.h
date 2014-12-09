@@ -45,8 +45,8 @@ private slots:
     void onActionShowInAlbum();
 
 private:
-    void initialShowInAction();
-    void initialFindAction();
+    inline void initialShowInAction();
+    inline void initialFindAction();
     QAction *m_showInAlbumTab;
     KNDropProxyContainer *m_dropProxy;
     KNMusicAlbumView *m_albumView;

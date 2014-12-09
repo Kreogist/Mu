@@ -64,8 +64,16 @@ public slots:
 
 private:
     QString frameToText(QByteArray content);
-    bool isStandardFrame(char *frame);
-    bool isExtendFrame(char *frame);
+    inline bool isStandardFrame(char *frame)
+    {
+        return !memcmp(frame, m_standardFrame, 16);
+    }
+
+    inline bool isExtendFrame(char *frame)
+    {
+        return !memcmp(frame, m_extendedFrame, 16);
+    }
+
     bool parseStandardFrame(char *frameStart,
                             quint64 frameSize,
                             QList<KNMusicWMAFrame> &frameList);
@@ -73,8 +81,8 @@ private:
                           quint64 frameSize,
                           QList<KNMusicWMAFrame> &frameList);
     bool parseImageData(QByteArray imageData, WMAPicture &albumArt);
-    void writeTagMapToDetailInfo(const QList<KNMusicWMAFrame> &frameList,
-                                 KNMusicDetailInfo &detailInfo);
+    inline void writeTagMapToDetailInfo(const QList<KNMusicWMAFrame> &frameList,
+                                        KNMusicDetailInfo &detailInfo);
     unsigned char m_headerMark[17]={0x30, 0x26, 0xB2, 0x75,
                                     0x8E, 0x66, 0xCF, 0x11,
                                     0xA6, 0xD9, 0x00, 0xAA,

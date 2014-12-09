@@ -81,22 +81,22 @@ private slots:
     void onActionHideAlbumArt();
 
 private:
-    void initialInfrastructure();
-    void initialAlbumShadow();
-    void initialAlbumContentWidgets();
-    void initialAnimations();
-    void initialShortCuts();
-    void generateAlbumArtAnimation(QPropertyAnimation *anime);
-    void generateContentAnimation(QPropertyAnimation *anime);
-    void generateStep1FinalPosition(QRect &albumArtGeometry,
-                                    QRect &contentGeometry);
-    void generateStep2FinalPosition(QRect &albumArtGeometry,
-                                    QRect &contentGeometry);
+    inline void initialInfrastructure();
+    inline void initialAlbumShadow();
+    inline void initialAlbumContentWidgets();
+    inline void initialAnimations();
+    inline void initialShortCuts();
+    inline void generateAlbumArtAnimation(QPropertyAnimation *anime);
+    inline void generateContentAnimation(QPropertyAnimation *anime);
+    inline void generateStep1FinalPosition(QRect &albumArtGeometry,
+                                           QRect &contentGeometry);
+    inline void generateStep2FinalPosition(QRect &albumArtGeometry,
+                                           QRect &contentGeometry);
     inline void stopAllAnimations();
     inline void stopShowHideArtworkAnimations();
-    void updateWidgetGeometries();
-    void updateShadowGeometries(const QRect &contentPosition);
-    void updateAlbumCaptions();
+    inline void updateWidgetGeometries();
+    inline void updateShadowGeometries(const QRect &contentPosition);
+    inline void updateAlbumCaptions();
     KNMusicAlbumTitle *m_albumArt;
     QLabel *m_albumTitle, *m_albumDetails;
     QWidget *m_albumContent;

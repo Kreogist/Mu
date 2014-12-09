@@ -60,7 +60,7 @@ private slots:
     void onActionIndexChanged(const int &index);
 
 private:
-    void initialStatusBar();
+    inline void initialStatusBar();
     void syncTitle();
     QColor m_backgroundColor=QColor(42,42,42),
            m_borderColor=QColor(255,255,255,67);

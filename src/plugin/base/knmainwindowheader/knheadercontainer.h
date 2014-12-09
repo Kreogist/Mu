@@ -43,8 +43,8 @@ private slots:
     void changeBackgroundColor(const int &frameData);
 
 private:
-    void configurePalette();
-    void configureMouseTimeLine(QTimeLine *timeline);
+    inline void configurePalette();
+    inline void configureMouseTimeLine(QTimeLine *timeline);
     void updateSwitcherPosition();
     QPalette m_palette;
     int minimumBrightness=0x10,

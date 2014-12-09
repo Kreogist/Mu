@@ -72,27 +72,27 @@ private slots:
     void updatePlayerInfo(const KNMusicDetailInfo &detailInfo);
 
 private:
-    void initialAlbumArt();
-    void initialLabels();
-    void initialProrgess();
-    void initialLoopState();
-    void initialControlPanel();
-    void initialVolume();
-    void initialAppendPanel();
+    inline void initialAlbumArt();
+    inline void initialLabels();
+    inline void initialProrgess();
+    inline void initialLoopState();
+    inline void initialControlPanel();
+    inline void initialVolume();
+    inline void initialAppendPanel();
 
-    void setPlayIconMode();
-    void setPauseIconMode();
-    void updateArtistAndAlbum();
+    inline void setPlayIconMode();
+    inline void setPauseIconMode();
+    inline void updateArtistAndAlbum();
 
-    void configureScrollLabel(KNScrollLabel *label);
-    void configurePanelAnimation(QPropertyAnimation *animation);
-    void configureAppendPanelAnimation(QPropertyAnimation *animation);
-    void configureVolumeAnimation(QPropertyAnimation *animation);
+    inline void configureScrollLabel(KNScrollLabel *label);
+    inline void configurePanelAnimation(QPropertyAnimation *animation);
+    inline void configureAppendPanelAnimation(QPropertyAnimation *animation);
+    inline void configureVolumeAnimation(QPropertyAnimation *animation);
 
-    QRect generateOutPosition();
-    QRect generateInPosition();
+    inline QRect generateOutPosition();
+    inline QRect generateInPosition();
 
-    void saveConfigure();
+    inline void saveConfigure();
 
     //Public classes.
     KNMusicGlobal *m_musicGlobal;

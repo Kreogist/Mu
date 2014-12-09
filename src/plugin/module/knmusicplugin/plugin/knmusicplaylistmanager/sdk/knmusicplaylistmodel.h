@@ -34,7 +34,7 @@ public slots:
     void retranslate();
 
 private:
-    void initialHeader();
+    inline void initialHeader();
     KNMusicGlobal *m_musicGlobal;
 };
 

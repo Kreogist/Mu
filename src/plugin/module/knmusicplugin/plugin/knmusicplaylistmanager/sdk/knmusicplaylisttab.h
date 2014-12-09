@@ -67,7 +67,7 @@ private slots:
     void onActionCopyCurrent();
 
 private:
-    void initialPlaylistList();
+    inline void initialPlaylistList();
     KNEmptyStateWidget *m_viewer;
     QSplitter *m_mainViewer;
     QWidget *m_playlistListViewer;

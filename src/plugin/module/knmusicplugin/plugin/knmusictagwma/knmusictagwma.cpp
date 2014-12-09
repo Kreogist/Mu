@@ -180,16 +180,6 @@ QString KNMusicTagWMA::frameToText(QByteArray content)
     }
 }
 
-bool KNMusicTagWMA::isStandardFrame(char *frame)
-{
-    return !memcmp(frame, m_standardFrame, 16);
-}
-
-bool KNMusicTagWMA::isExtendFrame(char *frame)
-{
-    return !memcmp(frame, m_extendedFrame, 16);
-}
-
 bool KNMusicTagWMA::parseStandardFrame(char *frameStart,
                                        quint64 frameSize,
                                        QList<KNMusicWMAFrame> &frameList)

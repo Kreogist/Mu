@@ -34,8 +34,13 @@ signals:
 public slots:
 
 protected:
-    void setTextData(QString &destination, const QString &source);
-
+    inline void setTextData(QString &destination, const QString &source)
+    {
+        if(!source.isEmpty())
+        {
+            destination=source;
+        }
+    }
 };
 
 #endif // KNMUSICTAGPRASER_H

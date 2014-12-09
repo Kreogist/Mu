@@ -202,10 +202,10 @@ public slots:
 
 private:
     void regMetaType();
-    void initialFileType();
-    void initialThreads();
-    void initialHeaderText();
-    void initialGenreText();
+    inline void initialFileType();
+    inline void initialThreads();
+    inline void initialHeaderText();
+    inline void initialGenreText();
     static KNMusicGlobal *m_instance;
     static KNMusicParser *m_parser;
     static KNMusicNowPlayingBase *m_nowPlaying;

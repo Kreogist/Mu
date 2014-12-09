@@ -70,6 +70,12 @@ void KNAbstractCategoryButton::paintEvent(QPaintEvent *event)
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform,
                            true);
+    //Draw the background with opacity first.
+    //!FIXME: add background code here.
+    ;
+
+    //Restore the opacity and set the pen and brush.
+    painter.setOpacity(1.0);
     painter.setPen(palette().color(QPalette::WindowText));
     //Paint the icon.
     painter.drawPixmap(m_margin, m_margin, m_icon);

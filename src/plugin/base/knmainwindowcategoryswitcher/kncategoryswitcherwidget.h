@@ -46,11 +46,11 @@ private slots:
     void onActionHideComplete();
 
 private:
-    void initialTimeLine(QTimeLine *timeline);
+    inline void initialTimeLine(QTimeLine *timeline);
     inline void initialButtons();
-    void startButtonInAnime();
-    void startButtonOutAnime();
-    void stopAllAnime();
+    inline void startButtonInAnime();
+    inline void startButtonOutAnime();
+    inline void stopAllAnime();
     QColor m_backgroundColor=QColor(0,0,0,0);
     QTimeLine *m_inBackground, *m_outBackground;
     QPalette m_palette;

@@ -610,12 +610,14 @@ void KNMusicHeaderPlayer::initialAppendPanel()
 
 void KNMusicHeaderPlayer::setPlayIconMode()
 {
+    //Set the icon and the flag.
     m_playNPause->setIcon(m_playIcon);
     m_isShownPlay=true;
 }
 
 void KNMusicHeaderPlayer::setPauseIconMode()
 {
+    //Set the icon and the flag.
     m_playNPause->setIcon(m_pauseIcon);
     m_isShownPlay=false;
 }

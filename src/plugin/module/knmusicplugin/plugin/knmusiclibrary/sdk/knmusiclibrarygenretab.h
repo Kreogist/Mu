@@ -53,8 +53,8 @@ private slots:
     void checkCategorySelected();
 
 private:
-    void initialShowInAction();
-    void initialFindAction();
+    inline void initialShowInAction();
+    inline void initialFindAction();
     QAction *m_showInGenre;
     KNDropProxyContainer *m_dropProxy;
     QSplitter *m_splitter;

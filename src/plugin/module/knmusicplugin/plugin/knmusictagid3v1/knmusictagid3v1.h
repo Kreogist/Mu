@@ -48,14 +48,15 @@ signals:
 public slots:
 
 private:
-    void parseRawData(char *rawTagData, ID3v1Struct &tagData);
-    void writeTagDataToDetailInfo(const ID3v1Struct &tagData,
-                                  KNMusicDetailInfo &detailInfo);
-    void backupByte(char *rawTagData,
-                    const int &backupPosition,
-                    char &backupPool,
-                    int &positionPool,
-                    const bool &clearData=false);
+    inline void parseRawData(char *rawTagData, ID3v1Struct &tagData);
+    inline void writeTagDataToDetailInfo(const ID3v1Struct &tagData,
+                                         KNMusicDetailInfo &detailInfo);
+    inline QString standardizeText(const QString &text);
+    inline void backupByte(char *rawTagData,
+                           const int &backupPosition,
+                           char &backupPool,
+                           int &positionPool,
+                           const bool &clearData=false);
     QTextCodec *m_defaultCodec;
 };
 

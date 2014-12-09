@@ -43,7 +43,7 @@ private slots:
     void onActionPlayAndPause();
 
 private:
-    void initialThumbnailToolBar();
+    inline void initialThumbnailToolBar();
     QWinThumbnailToolBar *m_thumbnailToolbar;
     QWinTaskbarButton *m_taskbarButton;
     QWinTaskbarProgress *m_taskbarProgress;

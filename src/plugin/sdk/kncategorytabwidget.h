@@ -49,7 +49,7 @@ private slots:
     void moveRight();
 
 private:
-    void initialShortcuts();
+    inline void initialShortcuts();
     int m_shadowHeight=9;
     QBoxLayout *m_tabLayout;
     KNCategoryTabBar *m_tabBar;

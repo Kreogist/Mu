@@ -46,7 +46,7 @@ private slots:
     void onActionShowInSong();
 
 private:
-    void initialShowInAction();
+    inline void initialShowInAction();
     KNEmptyStateWidget *m_viewer;
     KNMusicLibraryEmptyHint *m_emptyHint;
     KNDropProxyContainer *m_dropProxy;

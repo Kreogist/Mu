@@ -60,14 +60,14 @@ signals:
 public slots:
 
 private:
-    void parseVorbisComment(QByteArray &blockData,
-                            QLinkedList<VorbisCommentFrame> &tagMap);
-    void parsePictureList(QList<QByteArray> &blocks,
-                          QHash<int, PictureFrame> &imageMap);
-    void parsePicture(QByteArray &blockData,
-                      QHash<int, PictureFrame> &imageMap);
-    void writeTagToDetails(QLinkedList<VorbisCommentFrame> &tagMap,
-                           KNMusicDetailInfo &detailInfo);
+    inline void parseVorbisComment(QByteArray &blockData,
+                                   QLinkedList<VorbisCommentFrame> &tagMap);
+    inline void parsePictureList(QList<QByteArray> &blocks,
+                                 QHash<int, PictureFrame> &imageMap);
+    inline void parsePicture(QByteArray &blockData,
+                             QHash<int, PictureFrame> &imageMap);
+    inline void writeTagToDetails(QLinkedList<VorbisCommentFrame> &tagMap,
+                                  KNMusicDetailInfo &detailInfo);
     QHash<QString, int> m_fieldNameIndex;
 };
 

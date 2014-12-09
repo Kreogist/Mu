@@ -33,7 +33,7 @@ public slots:
     void setCurrentFiles(QStringList filePaths);
 
 private:
-    void initialHeader();
+    inline void initialHeader();
     KNMusicGlobal *m_musicGlobal;
 };
 

@@ -70,7 +70,7 @@ private slots:
     void imageRecoverComplete();
 
 private:
-    void initialHeader();
+    inline void initialHeader();
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
     KNMusicLibraryDatabase *m_database;
     KNMusicGlobal *m_musicGlobal;

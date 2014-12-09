@@ -54,7 +54,7 @@ private slots:
                                         const QModelIndex &previous);
 
 private:
-    void initialPlaylistLoader();
+    inline void initialPlaylistLoader();
     void saveChangedPlaylist();
     QString generatePlaylistName(const QString &preferName="");
     KNMusicPlaylistListItem *createBlankPlaylist(const int &row=-1,

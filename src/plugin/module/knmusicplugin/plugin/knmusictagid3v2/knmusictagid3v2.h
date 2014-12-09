@@ -108,11 +108,11 @@ protected:
                              KNMusicDetailInfo &detailInfo);
 
 private:
-    static int ratingStars(const quint8 &hex);
-    static quint32 minor2Size(char *rawTagData);
-    static quint32 minor3Size(char *rawTagData);
-    static quint32 minor4Size(char *rawTagData);
-    static void saveFlag(char *rawTagData, ID3v2Frame &frameData);
+    static inline int ratingStars(const quint8 &hex);
+    static inline quint32 minor2Size(char *rawTagData);
+    static inline quint32 minor3Size(char *rawTagData);
+    static inline quint32 minor4Size(char *rawTagData);
+    static inline void saveFlag(char *rawTagData, ID3v2Frame &frameData);
     void parseAPICImageData(QByteArray imageData,
                             QHash<int, ID3v2PictureFrame> &imageMap);
     void parsePICImageData(QByteArray imageData,

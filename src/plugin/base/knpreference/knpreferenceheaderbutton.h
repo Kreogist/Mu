@@ -48,7 +48,7 @@ private slots:
     void onActionMouseInOut(const int &frame);
 
 private:
-    void initialTimeLine(QTimeLine *timeLine);
+    inline void configureTimeLine(QTimeLine *timeLine);
     QPainterPath m_border;
     QTimeLine *m_mouseIn, *m_mouseOut;
     QPixmap m_icon, m_closeIcon;

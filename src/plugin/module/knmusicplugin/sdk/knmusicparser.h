@@ -45,14 +45,14 @@ public slots:
     void parseAlbumArt(KNMusicDetailInfo &detailInfo);
 
 private:
-    void parseTag(const QString &filePath,
-                  KNMusicDetailInfo &detailInfo);
-    void analysis(const QString &filePath,
-                  KNMusicDetailInfo &detailInfo);
-    bool findImageFile(const QString &imageBaseFileName,
-                       KNMusicDetailInfo &detailInfo);
-    bool checkImageFile(const QString &imageFileInfo,
-                        KNMusicDetailInfo &detailInfo);
+    inline void parseTag(const QString &filePath,
+                         KNMusicDetailInfo &detailInfo);
+    inline void analysis(const QString &filePath,
+                         KNMusicDetailInfo &detailInfo);
+    inline bool findImageFile(const QString &imageBaseFileName,
+                              KNMusicDetailInfo &detailInfo);
+    inline bool checkImageFile(const QString &imageFileInfo,
+                               KNMusicDetailInfo &detailInfo);
     KNGlobal *m_global;
     KNMusicGlobal *m_musicGlobal;
     QList<KNMusicAnalysiser *> m_analysisers;

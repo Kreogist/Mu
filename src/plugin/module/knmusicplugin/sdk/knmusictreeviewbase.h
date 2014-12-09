@@ -61,8 +61,8 @@ private slots:
     void removeCurrent();
 
 private:
-    void initialActions();
-    void configureTimeLine(QTimeLine *timeLine);
+    inline void initialActions();
+    inline void configureTimeLine(QTimeLine *timeLine);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
     QTimeLine *m_mouseIn, *m_mouseOut;
