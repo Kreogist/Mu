@@ -41,9 +41,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    int m_iconSize=64,
-        m_margin=10,
-        m_spacing=10;
+    int m_iconSize=32, m_margin=10, m_spacing=10;
     QPixmap m_icon;
     QString m_text;
 };

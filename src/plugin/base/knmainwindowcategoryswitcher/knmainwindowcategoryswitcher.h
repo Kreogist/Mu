@@ -26,6 +26,7 @@ class KNMainWindowCategorySwitcher : public KNMainWindowCategorySwitcherPlugin
     Q_OBJECT
 public:
     explicit KNMainWindowCategorySwitcher(QObject *parent = 0);
+    ~KNMainWindowCategorySwitcher();
     QWidget *switcherWidget();
 
 signals:

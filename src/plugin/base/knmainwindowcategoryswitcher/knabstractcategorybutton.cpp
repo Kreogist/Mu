@@ -24,7 +24,7 @@ KNAbstractCategoryButton::KNAbstractCategoryButton(QWidget *parent) :
 {
     //Set font.
     QFont captionFont=font();
-    captionFont.setPixelSize(20);
+    captionFont.setPixelSize(15);
     setFont(captionFont);
     //Set palette.
     QPalette pal=palette();
@@ -46,8 +46,7 @@ QPixmap KNAbstractCategoryButton::icon() const
 void KNAbstractCategoryButton::setIcon(const QPixmap &icon)
 {
     //Scale the icon.
-    m_icon=icon.scaled(m_iconSize,
-                       m_iconSize,
+    m_icon=icon.scaled(m_iconSize, m_iconSize,
                        Qt::KeepAspectRatio,
                        Qt::SmoothTransformation);
 }
@@ -67,14 +66,13 @@ void KNAbstractCategoryButton::paintEvent(QPaintEvent *event)
     KNAbstractButton::paintEvent(event);
     //Initial antialiasing painter.
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform,
+                           true);
     painter.setPen(palette().color(QPalette::WindowText));
     //Paint the icon.
-    painter.drawPixmap(m_margin,
-                       m_margin,
-                       m_icon);
+    painter.drawPixmap(m_margin, m_margin, m_icon);
     //Paint the text.
     painter.drawText(m_margin+m_iconSize+m_spacing,
                      m_margin,

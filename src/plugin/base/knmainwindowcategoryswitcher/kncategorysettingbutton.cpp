@@ -52,7 +52,7 @@ void KNCategorySettingButton::startMouseUpAnime()
 void KNCategorySettingButton::startInAnime()
 {
     //Stop all slide anime.
-    stopSlideAnime();
+    stopSlideAnimation();
     //Set parameters.
     m_slideIn->setStartValue(generateOut());
     m_slideIn->setEndValue(generateIn());
@@ -63,7 +63,7 @@ void KNCategorySettingButton::startInAnime()
 void KNCategorySettingButton::startOutAnime()
 {
     //Stop all slide anime.
-    stopSlideAnime();
+    stopSlideAnimation();
     //Set parameters.
     m_slideOut->setStartValue(generateIn());
     m_slideOut->setEndValue(generateOut());
@@ -78,7 +78,7 @@ void KNCategorySettingButton::initialGeometryAnime(QPropertyAnimation *anime)
     anime->setTargetObject(this);
 }
 
-void KNCategorySettingButton::stopSlideAnime()
+void KNCategorySettingButton::stopSlideAnimation()
 {
     m_slideIn->stop();
     m_slideOut->stop();

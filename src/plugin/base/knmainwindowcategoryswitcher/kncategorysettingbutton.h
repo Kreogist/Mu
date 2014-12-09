@@ -41,9 +41,9 @@ protected:
 
 private:
     void initialGeometryAnime(QPropertyAnimation *anime);
-    void stopSlideAnime();
-    QRect generateOut();
-    QRect generateIn();
+    inline void stopSlideAnimation();
+    inline QRect generateOut();
+    inline QRect generateIn();
     QPropertyAnimation *m_slideIn, *m_slideOut;
 };
 

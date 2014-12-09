@@ -48,6 +48,7 @@ KNCategorySwitcherWidget::KNCategorySwitcherWidget(QWidget *parent) :
     connect(m_outBackground, &QTimeLine::finished,
             this, &KNCategorySwitcherWidget::onActionHideComplete);
 
+    //Link the retranslate request.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNCategorySwitcherWidget::retranslate);
     //Retranslate.

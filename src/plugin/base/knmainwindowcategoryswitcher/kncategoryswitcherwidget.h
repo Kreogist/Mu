@@ -47,7 +47,7 @@ private slots:
 
 private:
     void initialTimeLine(QTimeLine *timeline);
-    void initialButtons();
+    inline void initialButtons();
     void startButtonInAnime();
     void startButtonOutAnime();
     void stopAllAnime();

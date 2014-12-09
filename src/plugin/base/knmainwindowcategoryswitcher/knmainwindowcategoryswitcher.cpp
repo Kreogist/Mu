@@ -22,11 +22,22 @@
 KNMainWindowCategorySwitcher::KNMainWindowCategorySwitcher(QObject *parent) :
     KNMainWindowCategorySwitcherPlugin(parent)
 {
+    //Initial the category switcher.
     m_categorySwitcher=new KNCategorySwitcherWidget;
+    //Linke the reset and show preference request.
     connect(m_categorySwitcher, &KNCategorySwitcherWidget::requireResetHeaderButton,
             this, &KNMainWindowCategorySwitcher::requireResetHeaderButton);
     connect(m_categorySwitcher, &KNCategorySwitcherWidget::requireShowPreference,
             this, &KNMainWindowCategorySwitcher::requireShowPreference);
+}
+
+KNMainWindowCategorySwitcher::~KNMainWindowCategorySwitcher()
+{
+    //Check the parent of the switcher.
+    if(m_categorySwitcher->parent()==nullptr)
+    {
+        delete m_categorySwitcher;
+    }
 }
 
 QWidget *KNMainWindowCategorySwitcher::switcherWidget()
