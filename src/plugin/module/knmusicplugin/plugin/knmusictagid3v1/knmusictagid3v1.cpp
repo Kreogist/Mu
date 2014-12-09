@@ -101,17 +101,18 @@ void KNMusicTagID3v1::writeTagDataToDetailInfo(const ID3v1Struct &tagData,
                                                KNMusicDetailInfo &detailInfo)
 {
     //Set texts
-    detailInfo.textLists[Name]=tagData.tags[0];
-    detailInfo.textLists[Artist]=tagData.tags[1];
-    detailInfo.textLists[Album]=tagData.tags[2];
-    detailInfo.textLists[Year]=tagData.tags[3];
-    detailInfo.textLists[Comments]=tagData.tags[4];
-    detailInfo.textLists[Genre]=
-            KNMusicGlobal::instance()->indexedGenre(tagData.genreIndex);
+    setTextData(detailInfo.textLists[Name], tagData.tags[0]);
+    setTextData(detailInfo.textLists[Artist], tagData.tags[1]);
+    setTextData(detailInfo.textLists[Album], tagData.tags[2]);
+    setTextData(detailInfo.textLists[Year], tagData.tags[3]);
+    setTextData(detailInfo.textLists[Comments], tagData.tags[4]);
+    setTextData(detailInfo.textLists[Genre],
+                KNMusicGlobal::instance()->indexedGenre(tagData.genreIndex));
     //Set track
     if(tagData.track!=-1)
     {
-        detailInfo.textLists[TrackNumber]=QString::number(tagData.track);
+        setTextData(detailInfo.textLists[TrackNumber],
+                    QString::number(tagData.track));
     }
 }
 
