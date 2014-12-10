@@ -14,7 +14,7 @@ KNSideShadowWidget::KNSideShadowWidget(QWidget *parent) :
     //Set properties.
     setAttribute(Qt::WA_TransparentForMouseEvents, true);
     //Initial the shadow gradient.
-    m_shadow.setColorAt(0, QColor(0,0,0,100));
+    m_shadow.setColorAt(0, QColor(0,0,0,150));
     m_shadow.setColorAt(1, QColor(0,0,0,0));
     //Set default direction.
     setDirection(TopShadow);

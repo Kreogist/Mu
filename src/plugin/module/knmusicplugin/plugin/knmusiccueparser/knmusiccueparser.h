@@ -35,15 +35,15 @@ signals:
 public slots:
 
 private:
-    void parseCommand(const QString &rawLine,
-                      QString &command,
-                      QString &commandData);
-    void parseMetaCommand(const QString &command,
-                          const QString &data,
-                          int &commandIndex,
-                          QString &metaData, const bool &inTrack);
-    qint64 timeTextToPosition(const QString &cueTimeText);
-    int commandToIndex(const QString &command, const bool &inTrack);
+    inline void parseCommand(const QString &rawLine,
+                             QString &command,
+                             QString &commandData);
+    inline void parseMetaCommand(const QString &command,
+                                 const QString &data,
+                                 int &commandIndex,
+                                 QString &metaData, const bool &inTrack);
+    inline qint64 timeTextToPosition(const QString &cueTimeText);
+    inline int commandToIndex(const QString &command, const bool &inTrack);
     QHash<QString, int> m_trackCommandList,
                         m_albumCommandList,
                         m_publicCommandList;

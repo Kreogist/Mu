@@ -50,7 +50,7 @@ private slots:
 
 private:
     inline void initialShortcuts();
-    int m_shadowHeight=9;
+    int m_shadowHeight=15;
     QBoxLayout *m_tabLayout;
     KNCategoryTabBar *m_tabBar;
     KNSideShadowWidget *m_topShadow;
