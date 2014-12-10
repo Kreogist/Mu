@@ -486,7 +486,7 @@ int KNMusicAlbumView::indexScrollBarValue(const QModelIndex &index,
         //Reduce the whole viewer height to move up.
         return topPositionValue-height()+m_itemSpacingHeight;
         break;
-    case QAbstractItemView::EnsureVisible:
+    default:
         //Now, the index item must be a unvisible one in the viewer.
         //We have already has the top position, calculate the bottom position,
         //and calculate the distence of the current vertical scroll bar's value

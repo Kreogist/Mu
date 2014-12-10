@@ -70,10 +70,10 @@ private:
     inline void paintAlbum(QPainter &painter,
                            const QRect &rect,
                            const QModelIndex &index);
-    int indexScrollBarValue(const QModelIndex &index,
-                            ScrollHint hint = EnsureVisible);
-    QRect itemContentRect(const QModelIndex &index) const;
-    void updateParameters();
+    inline int indexScrollBarValue(const QModelIndex &index,
+                                   ScrollHint hint = EnsureVisible);
+    inline QRect itemContentRect(const QModelIndex &index) const;
+    inline void updateParameters();
     KNMusicAlbumModel *m_model=nullptr;
     KNMusicCategoryProxyModel *m_proxyModel=nullptr;
     QTimeLine *m_scrollTimeLine;

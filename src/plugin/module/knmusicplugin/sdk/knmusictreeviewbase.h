@@ -63,8 +63,8 @@ private slots:
 private:
     inline void initialActions();
     inline void configureTimeLine(QTimeLine *timeLine);
-    void showSoloMenu(const QPoint &position);
-    void showMultiMenu(const QPoint &position);
+    inline void showSoloMenu(const QPoint &position);
+    inline void showMultiMenu(const QPoint &position);
     QTimeLine *m_mouseIn, *m_mouseOut;
     KNMusicProxyModel *m_proxyModel=nullptr;
     KNConnectionHandler *m_soloConnections,

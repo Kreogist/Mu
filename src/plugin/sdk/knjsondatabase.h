@@ -37,8 +37,8 @@ protected:
     QJsonArray::iterator end();
 
 private:
-    void addBatchCount();
-    void checkDatabaseDir();
+    inline void addBatchCount();
+    inline void checkDatabaseDir();
     QFile *m_databaseFile;
     QFileInfo m_databaseFileInfo;
     QJsonArray m_dataField;
