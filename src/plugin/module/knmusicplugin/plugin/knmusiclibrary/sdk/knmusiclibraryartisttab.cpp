@@ -104,6 +104,11 @@ void KNMusicLibraryArtistTab::retranslate()
     if(m_categoryModel!=nullptr)
     {
         m_categoryModel->setNoCategoryText(tr("No Artist"));
+        //Update the detail info, might update the translation.
+        if(m_artistList->currentIndex().isValid())
+        {
+            onActionCategoryIndexChanged(m_artistList->currentIndex());
+        }
     }
 }
 

@@ -104,6 +104,11 @@ void KNMusicLibraryGenreTab::retranslate()
     {
         //Set the no category text.
         m_categoryModel->setNoCategoryText(tr("No Genre"));
+        //Update the detail info, might update the translation.
+        if(m_genreList->currentIndex().isValid())
+        {
+            onActionCategoryIndexChanged(m_genreList->currentIndex());
+        }
     }
 }
 

@@ -110,6 +110,8 @@ void KNMusicAlbumModel::onCategoryRemoved(const QList<QStandardItem *> &musicRow
             setData(resultIndex,
                     0,
                     CategoryItemVisibleRole);
+            //Emit removed signal, treat it as removed.
+            emit albumRemoved(resultIndex);
         }
         else
         {
