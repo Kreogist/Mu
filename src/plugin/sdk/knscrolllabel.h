@@ -19,8 +19,7 @@ public:
     QString text() const;
     void setText(const QString &text);
     qreal opacity() const;
-    QFont scrollFont() const;
-    void setScrollFont(const QFont &scrollFont);
+    void setFont(const QFont &font);
 
 signals:
 
@@ -39,8 +38,6 @@ private:
     void stopAllTimer();
     void updateAnimeParameters();
     KNGraphicsGlowEffect *m_glowEffect;
-    QFont m_scrollFont=font();
-    QFontMetrics m_scrollFontMetrics=QFontMetrics(m_scrollFont);
     QString m_text;
     QTimer *m_movingAnime, *m_waiting;
     int m_leftMostX=0, m_textX=0;

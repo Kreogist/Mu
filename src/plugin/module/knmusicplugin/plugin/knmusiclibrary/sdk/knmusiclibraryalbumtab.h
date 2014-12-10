@@ -52,7 +52,7 @@ private:
     KNMusicAlbumView *m_albumView;
     KNMusicAlbumDetail *m_albumDetail;
     KNMusicLibraryModel *m_musicLibrary;
-    KNMusicCategoryModel *m_categoryModel;
+    KNMusicCategoryModel *m_categoryModel=nullptr;
 };
 
 #endif // KNMUSICLIBRARYALBUMTAB_H

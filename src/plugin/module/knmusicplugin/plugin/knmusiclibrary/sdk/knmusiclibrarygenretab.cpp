@@ -97,7 +97,14 @@ QPixmap KNMusicLibraryGenreTab::icon()
 
 void KNMusicLibraryGenreTab::retranslate()
 {
+    //Update the goto caption.
     m_showInGenre->setText(tr("Go to Genre"));
+    //Check the category model.
+    if(m_categoryModel!=nullptr)
+    {
+        //Set the no category text.
+        m_categoryModel->setNoCategoryText(tr("No Genre"));
+    }
 }
 
 void KNMusicLibraryGenreTab::setLibraryModel(KNMusicLibraryModel *model)
@@ -117,10 +124,10 @@ void KNMusicLibraryGenreTab::setCategoryModel(KNMusicCategoryModel *model)
 {
     //Save the model pointer.
     m_categoryModel=static_cast<KNMusicGenreModel *>(model);
-    //Set the no category text.
-    m_categoryModel->setNoCategoryText(tr("No Genre"));
     //Apply category model.
     KNMusicLibraryCategoryTab::setCategoryModel(m_categoryModel);
+    //Update the no category text.
+    retranslate();
 
     //! This should be done in constructor, but setModel() is a virtual
     //! function, so we moved here.

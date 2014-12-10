@@ -59,7 +59,7 @@ private:
     KNDropProxyContainer *m_dropProxy;
     QSplitter *m_splitter;
     KNMusicLibraryModel *m_musicLibrary;
-    KNMusicGenreModel *m_categoryModel;
+    KNMusicGenreModel *m_categoryModel=nullptr;
     KNMusicCategoryListViewBase *m_genreList;
     KNMusicCategoryDisplay *m_genreDisplay;
     QMetaObject::Connection m_notEmptyCheck;

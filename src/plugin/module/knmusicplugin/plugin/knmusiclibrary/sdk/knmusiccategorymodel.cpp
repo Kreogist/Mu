@@ -59,7 +59,6 @@ void KNMusicCategoryModel::setCategoryIndex(int categoryIndex)
     m_categoryIndex=categoryIndex;
 }
 
-
 QString KNMusicCategoryModel::noCategoryText() const
 {
     return m_noCategoryText;

@@ -360,10 +360,9 @@ void KNMusicHeaderPlayer::initialLabels()
 {
     //Initial the title scroll label.
     m_title=new KNScrollLabel(this);
-    QFont scrollFont=m_title->scrollFont();
-    scrollFont.setFamily("Source Han Sans");
+    QFont scrollFont=m_title->font();
     scrollFont.setPixelSize(13);
-    m_title->setScrollFont(scrollFont);
+    m_title->setFont(scrollFont);
     m_title->setGeometry(82,
                          5,
                          208,
@@ -372,7 +371,7 @@ void KNMusicHeaderPlayer::initialLabels()
 
     //Initial the artist and album.
     m_artistAndAlbum=new KNScrollLabel(this);
-    m_artistAndAlbum->setScrollFont(scrollFont);
+    m_artistAndAlbum->setFont(scrollFont);
     m_artistAndAlbum->setGeometry(82,
                                   25,
                                   208,

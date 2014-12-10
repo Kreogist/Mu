@@ -19,7 +19,6 @@ KNScrollLabel::KNScrollLabel(QWidget *parent) :
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,
                               QSizePolicy::Minimum,
                               QSizePolicy::Label));
-    setScrollFont(font());
 
     //Initial animation timer.
     m_movingAnime=new QTimer(this);
@@ -44,7 +43,7 @@ KNScrollLabel::KNScrollLabel(QWidget *parent) :
 QSize KNScrollLabel::sizeHint() const
 {
     return QSize(QWidget::sizeHint().width(),
-                 m_scrollFontMetrics.height()+m_glowRadius);
+                 fontMetrics().height()+m_glowRadius);
 }
 
 QString KNScrollLabel::text() const
@@ -79,7 +78,7 @@ void KNScrollLabel::paintEvent(QPaintEvent *event)
     painter.setRenderHint(QPainter::TextAntialiasing, true);
     painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
     //Prepare the font.
-    painter.setFont(m_scrollFont);
+    painter.setFont(font());
     //Set opacity.
     painter.setOpacity(m_opacity);
     //Set contents margins.
@@ -89,7 +88,7 @@ void KNScrollLabel::paintEvent(QPaintEvent *event)
     painter.setPen(palette().color(QPalette::Text));
     painter.drawText(m_textX,
                      m_glowRadius/4,
-                     m_scrollFontMetrics.width(m_text)+m_glowRadius,
+                     fontMetrics().width(m_text)+m_glowRadius,
                      height(),
                      Qt::AlignLeft,
                      m_text);
@@ -164,7 +163,7 @@ void KNScrollLabel::stopAllTimer()
 void KNScrollLabel::updateAnimeParameters()
 {
     //Get the text width
-    int textWidth=m_scrollFontMetrics.width(m_text)+m_glowRadius;
+    int textWidth=fontMetrics().width(m_text)+m_glowRadius;
     //If text is too long, enabled the scrolling.
     if(textWidth>contentsRect().width())
     {
@@ -183,19 +182,12 @@ void KNScrollLabel::updateAnimeParameters()
     setToolTip("");
 }
 
-QFont KNScrollLabel::scrollFont() const
+void KNScrollLabel::setFont(const QFont &font)
 {
-    return m_scrollFont;
-}
-
-void KNScrollLabel::setScrollFont(const QFont &scrollFont)
-{
-    //Update scroll font.
-    m_scrollFont=scrollFont;
-    //Update metrics.
-    m_scrollFontMetrics=QFontMetrics(m_scrollFont);
+    //Set font.
+    QWidget::setFont(font);
     //Update fixed size.
-    setFixedHeight(m_scrollFontMetrics.height()+m_glowRadius/2);
+    setFixedHeight(fontMetrics().height()+m_glowRadius/2);
 }
 
 qreal KNScrollLabel::opacity() const

@@ -84,7 +84,14 @@ QPixmap KNMusicLibraryAlbumTab::icon()
 
 void KNMusicLibraryAlbumTab::retranslate()
 {
+    //Set the goto action caption.
     m_showInAlbumTab->setText(tr("Go to Album"));
+    //Set the no album text.
+    if(m_categoryModel!=nullptr)
+    {
+        //Set the no category text.
+        m_categoryModel->setNoCategoryText(tr("No Album"));
+    }
 }
 
 void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
@@ -104,10 +111,10 @@ void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModel *model)
 {
     //Save the model pointer.
     m_categoryModel=model;
-    //Set the no category text.
-    m_categoryModel->setNoCategoryText(tr("No Album"));
     //Apply category model.
     KNMusicLibraryCategoryTab::setCategoryModel(m_categoryModel);
+    //Update no category text.
+    retranslate();
 
     //! This should be done in constructor, but setModel() is a virtual
     //! function, so we moved here.

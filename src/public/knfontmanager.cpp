@@ -82,7 +82,7 @@ void KNFontManager::setGlobalFont(const QString &fontName, const int &pixelSize)
 
 void KNFontManager::initialDefaultFont()
 {
-    setGlobalFont("Source Han Sans");
+    setGlobalFont("Source Han Sans Normal");
 }
 
 KNFontManager::KNFontManager(QObject *parent) :
