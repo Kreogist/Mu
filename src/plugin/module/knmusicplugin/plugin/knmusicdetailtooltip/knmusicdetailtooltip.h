@@ -58,7 +58,7 @@ private slots:
     void startDisappearCountWithAnime();
 
 private:
-    void loadCurrentToPreview();
+    inline void loadCurrentToPreview();
     enum ToolTipItems
     {
         ItemTitle,
@@ -66,11 +66,11 @@ private:
         ItemArtist,
         ToolTipItemsCount
     };
-    void resetDisappearCounter();
-    void resetPreviewPlayer();
-    void initialTimeLine(QTimeLine *timeline);
-    void setEliedText(QLabel *label, const QString &text);
-    void moveToPosition(const QPoint &position);
+    inline void resetDisappearCounter();
+    inline void resetPreviewPlayer();
+    inline void initialTimeLine(QTimeLine *timeline);
+    inline void setEliedText(QLabel *label, const QString &text);
+    inline void moveToPosition(const QPoint &position);
     int m_tooltipWidth=448, m_tooltipHeight=176,
         m_labelWidth=m_tooltipWidth-m_tooltipHeight-11;
     bool m_isButtonPlay=true, m_progressPressed=false;

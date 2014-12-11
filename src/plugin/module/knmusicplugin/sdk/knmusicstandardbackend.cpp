@@ -232,7 +232,7 @@ void KNMusicStandardBackend::smartVolumeOn()
         return;
     }
     //Backup the original volume.
-    m_originalVolume=m_main->volume();
+    m_originalVolume=volume();
     //Set the preview as the full volume.
     m_preview->setVolume(m_originalVolume);
     //Set the main volume as the 1/8 of the full volume.
