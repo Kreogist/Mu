@@ -132,6 +132,7 @@ QModelIndexList KNMusicModel::indexFromFilePath(const QString &filePath)
     return match(index(0, Name),
                  FilePathRole,
                  filePath,
+                 1,
                  Qt::MatchFixedString);
 }
 

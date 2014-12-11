@@ -52,6 +52,7 @@ public:
 signals:
     void libraryNotEmpty();
     void libraryEmpty();
+    void hashRemoved();
 
 public slots:
     void retranslate();

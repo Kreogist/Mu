@@ -33,6 +33,8 @@
 #include "knmusiclibrarymodel.h"
 #include "knmusicalbumtreeview.h"
 
+#include "knlocalemanager.h"
+
 #include "knmusicalbumdetail.h"
 
 #include <QDebug>
@@ -57,6 +59,10 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
     initialAnimations();
     //Initial the shortcut.
     initialShortCuts();
+
+    //Link the retranslate request to update label slot.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicAlbumDetail::updateAlbumCaptions);
 }
 
 void KNMusicAlbumDetail::setAlbumModel(KNMusicCategoryModel *model)
@@ -673,6 +679,11 @@ void KNMusicAlbumDetail::updateShadowGeometries(const QRect &contentPosition)
 
 void KNMusicAlbumDetail::updateAlbumCaptions()
 {
+    //Check is current index vaild.
+    if(!m_currentIndex.isValid())
+    {
+        return;
+    }
     //Set the title.
     m_albumTitle->setText(m_albumTitle->fontMetrics().elidedText(
                               m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString(),

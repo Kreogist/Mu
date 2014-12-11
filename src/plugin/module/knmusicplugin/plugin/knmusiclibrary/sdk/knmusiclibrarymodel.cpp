@@ -224,6 +224,7 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
     if(match(index(0,0),
              ArtworkKeyRole,
              currentArtworkKey,
+             1,
              Qt::MatchFixedString | Qt::MatchCaseSensitive).isEmpty())
     {
         //Remove the image from the disk and hash list.

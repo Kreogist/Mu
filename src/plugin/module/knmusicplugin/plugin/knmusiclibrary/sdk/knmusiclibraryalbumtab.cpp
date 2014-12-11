@@ -91,8 +91,6 @@ void KNMusicLibraryAlbumTab::retranslate()
     {
         //Set the no category text.
         m_categoryModel->setNoCategoryText(tr("No Album"));
-//        //Update the text which might be retranslated.
-//        m_albumDetail->updateAlbumCaptions();
     }
 }
 

@@ -79,6 +79,7 @@ private slots:
     void hideContentWidgets();
     void onActionShowAlbumArt();
     void onActionHideAlbumArt();
+    void updateAlbumCaptions();
 
 private:
     inline void initialInfrastructure();
@@ -96,7 +97,6 @@ private:
     inline void stopShowHideArtworkAnimations();
     inline void updateWidgetGeometries();
     inline void updateShadowGeometries(const QRect &contentPosition);
-    inline void updateAlbumCaptions();
     KNMusicAlbumTitle *m_albumArt;
     QLabel *m_albumTitle, *m_albumDetails;
     QWidget *m_albumContent;
