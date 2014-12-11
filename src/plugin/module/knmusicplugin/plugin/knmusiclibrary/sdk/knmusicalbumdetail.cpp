@@ -59,10 +59,6 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent) :
     initialAnimations();
     //Initial the shortcut.
     initialShortCuts();
-
-    //Link the retranslate request to update label slot.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
-            this, &KNMusicAlbumDetail::updateAlbumCaptions);
 }
 
 void KNMusicAlbumDetail::setAlbumModel(KNMusicCategoryModel *model)
@@ -72,6 +68,12 @@ void KNMusicAlbumDetail::setAlbumModel(KNMusicCategoryModel *model)
     //When the album model is going to remove an item, check it's index.
     connect(m_albumModel, &KNMusicAlbumModel::albumRemoved,
             this, &KNMusicAlbumDetail::onActionAlbumRemoved);
+    //Link the retranslate request to update label slot.
+    //Why here?
+    //Because Qt's signals and slots is linked in order, connect here is to
+    //ensure that album model has been translated before.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicAlbumDetail::updateAlbumCaptions);
 }
 
 void KNMusicAlbumDetail::setLibraryModel(KNMusicLibraryModel *model)
