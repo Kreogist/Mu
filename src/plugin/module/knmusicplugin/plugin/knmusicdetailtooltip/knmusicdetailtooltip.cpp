@@ -26,6 +26,7 @@
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
 #include "knfilepathlabel.h"
+#include "knmusicdetailtooltipartwork.h"
 #include "knmusicmodelassist.h"
 #include "knmusicmodel.h"
 #include "knmusicbackend.h"
@@ -57,9 +58,8 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     mainLayout->setSpacing(6);
     setLayout(mainLayout);
     //Initial the album art.
-    m_albumArt=new QLabel(this);
-    m_albumArt->setFixedSize(154, 154);
-    m_albumArt->setScaledContents(true);
+    m_albumArt=new KNMusicDetailTooltipArtwork(this);
+    m_albumArt->setArtworkSize(154, 154);
     mainLayout->addWidget(m_albumArt);
 
     QWidget *labelContainer=new QWidget(this);
@@ -171,9 +171,9 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
                                          detailInfo))
     {
         //Set data to details.
-        m_albumArt->setPixmap(detailInfo.coverImage.isNull()?
-                                  KNMusicGlobal::instance()->noAlbumArt():
-                                  QPixmap::fromImage(detailInfo.coverImage));
+        m_albumArt->setArtwork(detailInfo.coverImage.isNull()?
+                                   KNMusicGlobal::instance()->noAlbumArt():
+                                   QPixmap::fromImage(detailInfo.coverImage));
         setEliedText(m_labels[ItemTitle], detailInfo.textLists[Name]);
         setEliedText(m_fileName, tr("In file: %1").arg(detailInfo.fileName));
         m_fileName->setFilePath(detailInfo.filePath);

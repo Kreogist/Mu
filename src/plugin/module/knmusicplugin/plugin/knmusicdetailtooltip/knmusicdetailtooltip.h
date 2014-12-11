@@ -27,6 +27,7 @@ class QTimeLine;
 class KNFilePathLabel;
 class KNOpacityButton;
 class KNProgressSlider;
+class KNMusicDetailTooltipArtwork;
 class KNMusicDetailTooltip : public KNMusicDetailTooltipBase
 {
     Q_OBJECT
@@ -77,7 +78,8 @@ private:
     QBoxLayout *m_previewPlayer;
     QColor m_backgroundColor=QColor(255,255,255),
            m_textColor=QColor(255,255,255);
-    QLabel *m_albumArt, *m_labels[ToolTipItemsCount];
+    KNMusicDetailTooltipArtwork *m_albumArt;
+    QLabel *m_labels[ToolTipItemsCount];
     KNFilePathLabel *m_fileName;
     QPalette m_palette;
     QTimer *m_disappearCounter;
