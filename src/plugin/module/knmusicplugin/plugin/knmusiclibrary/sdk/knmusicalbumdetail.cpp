@@ -22,7 +22,6 @@
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
 #include <QGraphicsOpacityEffect>
-#include <QPolygonF>
 #include <QMouseEvent>
 #include <QTransform>
 

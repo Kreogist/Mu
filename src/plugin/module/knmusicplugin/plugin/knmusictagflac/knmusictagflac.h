@@ -62,7 +62,7 @@ public slots:
 private:
     inline void parseVorbisComment(QByteArray &blockData,
                                    QLinkedList<VorbisCommentFrame> &tagMap);
-    inline void parsePictureList(QList<QByteArray> &blocks,
+    inline void parsePictureList(QByteArrayList &blocks,
                                  QHash<int, PictureFrame> &imageMap);
     inline void parsePicture(QByteArray &blockData,
                              QHash<int, PictureFrame> &imageMap);

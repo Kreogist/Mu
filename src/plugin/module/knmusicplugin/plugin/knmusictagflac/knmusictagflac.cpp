@@ -160,7 +160,7 @@ void KNMusicTagFLAC::parseVorbisComment(QByteArray &blockData,
     }
 }
 
-void KNMusicTagFLAC::parsePictureList(QList<QByteArray> &blocks,
+void KNMusicTagFLAC::parsePictureList(QByteArrayList &blocks,
                                       QHash<int, PictureFrame> &imageMap)
 {
     for(auto i=blocks.begin();

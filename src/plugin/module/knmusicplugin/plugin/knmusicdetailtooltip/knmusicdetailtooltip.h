@@ -88,6 +88,7 @@ private:
     KNOpacityButton *m_playNPause;
     KNProgressSlider *m_progress;
     QPixmap m_playIcon, m_pauseIcon;
+    QPolygonF m_imageShape;
 };
 
 #endif // KNMUSICDETAILTOOLTIP_H
