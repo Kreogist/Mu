@@ -121,8 +121,8 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     painter.setBrush(m_background);
     painter.drawRect(rect());
     //Draw top line.
-//    painter.setBrush(m_highLightColor);
-//    painter.drawRect(0,0,width(),1);
+    painter.setPen(m_highLightColor);
+    painter.drawRect(0,0,width(),1);
     //Draw icon.
     painter.setOpacity(1.0);
     int iconX=(width()-m_iconSize-m_textWidth)/2;

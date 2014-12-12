@@ -64,7 +64,7 @@ private:
     QLabel *m_preferenceCaption;
     QTimeLine *m_moveToCurrent;
     int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,
-        m_leftSpacing=15, m_animationDuration=200;
+        m_leftSpacing=15, m_animationDuration=200, m_lineSpacing=2;
     QColor m_normalText=QColor(100,100,100),
            m_highlightColor=QColor(0xf7, 0xcf, 0x3d);
     KNMusicGlobal *m_musicGlobal;
