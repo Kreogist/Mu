@@ -230,6 +230,55 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
         //Remove the image from the disk and hash list.
         m_imageManager->removeImage(currentArtworkKey);
         m_coverImageList->removeImage(currentArtworkKey);
+        //Ask category model to remove the image and replace it.
+        for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+            i!=m_categoryModels.end();
+            ++i)
+        {
+            //If the category model is asking to update album art, update it.
+            if((*i)->updateAlbumArt())
+            {
+                QModelIndexList keyRemovedIndex=
+                        (*i)->match((*i)->index(0,0),
+                                    CategoryArtworkKeyRole,
+                                    currentArtworkKey,
+                                    -1,
+                                    Qt::MatchFixedString);
+                //Replace all the artworks.
+                for(QModelIndexList::iterator j=keyRemovedIndex.begin();
+                    j!=keyRemovedIndex.end();
+                    ++j)
+                {
+                    //Search the category text in model.
+                    QModelIndexList categoryList=match(index(0, (*i)->categoryIndex()),
+                                                       Qt::DisplayRole,
+                                                       (*i)->data(*j).toString(),
+                                                       -1,
+                                                       Qt::MatchExactly);
+                    //Try to find the text.
+                    for(QModelIndexList::iterator k=categoryList.begin();
+                        k!=categoryList.end();
+                        ++k)
+                    {
+                        //Get the artwork from the row property.
+                        QString artworkKey=rowProperty((*k).row(), ArtworkKeyRole).toString();
+                        //Check the artwork key.
+                        if(!artworkKey.isEmpty())
+                        {
+                            //Update the artwork.
+                            (*i)->setData((*j),
+                                          QIcon(artwork(artworkKey)),
+                                          Qt::DecorationRole);
+                            //Update the artwork key.
+                            (*i)->setData((*j),
+                                          artworkKey,
+                                          CategoryArtworkKeyRole);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
     //Check row count before remove row.
     if(rowCount()==0)

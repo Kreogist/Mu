@@ -43,7 +43,7 @@ protected:
                                 const QPixmap &itemIcon=QPixmap());
 
 private:
-    void loadGenreIcons();
+    inline void loadGenreIcons();
     QHash<QString, QIcon> m_genreIconMap;
 };
 

@@ -37,7 +37,7 @@ private slots:
     void onActionAddToLibrary();
 
 private:
-    void configureNGNLButton(KNNGNLButton *button);
+    inline void configureNGNLButton(KNNGNLButton *button);
     QLabel *m_hintText;
     KNNGNLButton *m_addMusic, *m_scanForMusic, *m_importLibrary;
 };

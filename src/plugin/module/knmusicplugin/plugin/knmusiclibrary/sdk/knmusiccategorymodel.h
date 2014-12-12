@@ -36,6 +36,8 @@ public:
     void setCategoryIndex(int categoryIndex);
     QIcon noAlbumIcon() const;
     void setNoAlbumIcon(const QPixmap &noAlbumIcon);
+    bool updateAlbumArt() const;
+    void setUpdateAlbumArt(bool updateAlbumArt);
 
 signals:
     void categoryAboutEmpty();
@@ -55,8 +57,9 @@ protected:
                                         const QPixmap &itemIcon=QPixmap());
 
 private:
-    void resetModel();
+    inline void resetModel();
     int m_categoryIndex=-1;
+    bool m_updateAlbumArt=true;
     QIcon m_noAlbumIcon;
     QString m_noCategoryText;
 };

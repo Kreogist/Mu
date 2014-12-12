@@ -32,9 +32,6 @@ public slots:
     void resetHeaderState();
     void setCategoryColumn(const int &column);
     void setCategoryText(const QString &fixedText);
-
-private:
-    void nowPlayingCheck();
 };
 
 #endif // KNMUSICLIBRARYTREEVIEW_H

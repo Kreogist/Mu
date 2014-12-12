@@ -685,11 +685,12 @@ void KNMusicAlbumDetail::updateAlbumCaptions()
     {
         return;
     }
+    int labelWidth=(m_sizeParameter>>2)*3-49;
     //Set the title.
     m_albumTitle->setText(m_albumTitle->fontMetrics().elidedText(
                               m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString(),
                               Qt::ElideRight,
-                              (m_sizeParameter>>2)*3-49));
+                              labelWidth));
     //Set the artist label.
     //Get the album list.
     QHash<QString, QVariant> artistList=m_albumModel->data(m_currentIndex, CategoryArtistList).toHash();
@@ -708,7 +709,7 @@ void KNMusicAlbumDetail::updateAlbumCaptions()
     m_albumDetails->setText(m_albumDetails->fontMetrics().elidedText(
                                 albumArtist,
                                 Qt::ElideMiddle,
-                                m_albumDetails->width()-16));
+                                labelWidth));
 }
 
 int KNMusicAlbumDetail::sizeParameter() const

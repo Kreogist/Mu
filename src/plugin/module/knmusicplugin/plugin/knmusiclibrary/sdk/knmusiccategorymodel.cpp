@@ -39,6 +39,16 @@ void KNMusicCategoryModel::resetModel()
     appendRow(currentItem);
 }
 
+bool KNMusicCategoryModel::updateAlbumArt() const
+{
+    return m_updateAlbumArt;
+}
+
+void KNMusicCategoryModel::setUpdateAlbumArt(bool updateAlbumArt)
+{
+    m_updateAlbumArt = updateAlbumArt;
+}
+
 QIcon KNMusicCategoryModel::noAlbumIcon() const
 {
     return m_noAlbumIcon;

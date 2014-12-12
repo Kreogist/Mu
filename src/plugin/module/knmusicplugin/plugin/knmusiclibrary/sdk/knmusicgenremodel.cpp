@@ -25,6 +25,8 @@
 KNMusicGenreModel::KNMusicGenreModel(QObject *parent) :
     KNMusicCategoryModel(parent)
 {
+    //Use custom icon as decoration role.
+    setUpdateAlbumArt(false);
     //Initial all the icon in the folder path.
     loadGenreIcons();
 }
