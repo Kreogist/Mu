@@ -55,15 +55,15 @@ public:
     KNPreferenceWidgetsPanel *preferencePanelWidget();
 
     void setPlatformExtras(KNPlatformExtras *plugin);
-    void loadSearch(KNMusicSearchBase *plugin);
-    void loadDetailTooptip(KNMusicDetailTooltipBase *plugin);
-    void loadBackend(KNMusicBackend *plugin);
-    void loadDetailInfo(KNMusicDetailDialogBase *plugin);
-    void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
-    void loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin);
-    void loadNowPlaying(KNMusicNowPlayingBase *plugin);
-    void loadLibrary(KNMusicLibraryBase *plugin);
-    void loadPlaylistManager(KNMusicPlaylistManagerBase *plugin);
+    inline void loadSearch(KNMusicSearchBase *plugin);
+    inline void loadDetailTooptip(KNMusicDetailTooltipBase *plugin);
+    inline void loadBackend(KNMusicBackend *plugin);
+    inline void loadDetailInfo(KNMusicDetailDialogBase *plugin);
+    inline void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
+    inline void loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin);
+    inline void loadNowPlaying(KNMusicNowPlayingBase *plugin);
+    inline void loadLibrary(KNMusicLibraryBase *plugin);
+    inline void loadPlaylistManager(KNMusicPlaylistManagerBase *plugin);
 
 signals:
 
@@ -90,10 +90,10 @@ private slots:
 private:
     inline void initialInfrastructure();
     inline void initialParser();
-    void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
-    void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
-    void addMusicTab(KNMusicTab *musicTab);
-    void startThreads();
+    inline void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
+    inline void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
+    inline void addMusicTab(KNMusicTab *musicTab);
+    inline void startThreads();
     QLinkedList<QObject *> m_pluginList;
     struct MusicTabItem
     {

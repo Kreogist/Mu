@@ -42,8 +42,15 @@ KNCategoryButton::KNCategoryButton(QWidget *parent) :
 
     //Prepare the gradient background.
     m_background=QLinearGradient(0,0,0,height());
-    m_background.setColorAt(0, m_gradientColor);
-    m_background.setColorAt(1, m_gradientColor);
+    QColor gradientColor;
+    gradientColor.setHsl(m_gradientColor.hue(),
+                         m_gradientColor.saturation(),
+                         139);
+    m_background.setColorAt(0, gradientColor);
+    gradientColor.setHsl(m_gradientColor.hue(),
+                         m_gradientColor.saturation(),
+                         92);
+    m_background.setColorAt(1, gradientColor);
 
     //Initial the mouse animation.
     m_mouseIn=new QTimeLine(200, this);
@@ -110,12 +117,14 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     //Set pen.
     painter.setPen(Qt::NoPen);
     //Draw background.
+    painter.setOpacity(m_textAlpha);
     painter.setBrush(m_background);
     painter.drawRect(rect());
     //Draw top line.
-    painter.setBrush(m_highLightColor);
-    painter.drawRect(0,0,width(),2);
+//    painter.setBrush(m_highLightColor);
+//    painter.drawRect(0,0,width(),1);
     //Draw icon.
+    painter.setOpacity(1.0);
     int iconX=(width()-m_iconSize-m_textWidth)/2;
     painter.drawPixmap(iconX,
                        m_iconY,
@@ -123,8 +132,8 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
                        m_iconSize,
                        m_icon);
     //Draw text
-    painter.setPen(QColor(255,255,255));
     painter.setOpacity(m_textAlpha);
+    painter.setPen(QColor(255,255,255));
     painter.drawText(iconX+m_iconSize+m_spacing,
                      m_textY,
                      m_textWidth+m_spacing,
@@ -205,9 +214,6 @@ void KNCategoryButton::mouseInOutAnimeFrame(const int &frame)
     Q_ASSERT(frame>-1 && frame<=m_maxMouseInAlpha);
     //Change the light color.
     m_highLightColor.setAlpha(frame);
-    //Change the background gradient color.
-    m_gradientColor.setAlpha(frame>>1);
-    m_background.setColorAt(0, m_gradientColor);
 
     //Change the text alpha.
     m_textAlpha=(qreal)frame/(qreal)m_maxMouseInAlpha;
@@ -221,9 +227,6 @@ void KNCategoryButton::mouseUpDownAnimeFrame(const int &frame)
 {
     //Change the light color.
     m_highLightColor.setAlpha(frame);
-    //Change the background gradient color.
-    m_gradientColor.setAlpha(frame>>1);
-    m_background.setColorAt(0, m_gradientColor);
     //Paint.
     update();
 }

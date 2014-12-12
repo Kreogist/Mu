@@ -67,8 +67,8 @@ private:
     //Animation timeline and parameters.
     QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseDown, *m_mouseUp;
     QLinearGradient m_background;
-    QColor m_highLightColor=QColor(200,200,200,0),
-           m_gradientColor=QColor(255,255,255,0);
+    QColor m_highLightColor=QColor(255,255,255,0),
+           m_gradientColor=QColor(0,0,0);
     qreal m_textAlpha=0.0;
 
     //Button states.
