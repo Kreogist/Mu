@@ -689,7 +689,7 @@ void KNMusicAlbumDetail::updateAlbumCaptions()
     m_albumTitle->setText(m_albumTitle->fontMetrics().elidedText(
                               m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString(),
                               Qt::ElideRight,
-                              m_albumTitle->width()-16));
+                              (m_sizeParameter>>2)*3-49));
     //Set the artist label.
     //Get the album list.
     QHash<QString, QVariant> artistList=m_albumModel->data(m_currentIndex, CategoryArtistList).toHash();
