@@ -107,13 +107,6 @@ qint64 KNMusicModel::totalDuration() const
     return m_totalDuration;
 }
 
-QString KNMusicModel::filePathFromRow(const int &row)
-{
-    Q_ASSERT(row>-1 && row<rowCount());
-    //Return the file path role data.
-    return data(index(row, Name), FilePathRole).toString();
-}
-
 QString KNMusicModel::filePathFromIndex(const QModelIndex &index)
 {
     Q_ASSERT(index.isValid());
@@ -134,68 +127,6 @@ QModelIndexList KNMusicModel::indexFromFilePath(const QString &filePath)
                  filePath,
                  1,
                  Qt::MatchFixedString);
-}
-
-QString KNMusicModel::itemText(const int &row, const int &column) const
-{
-    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
-    //Only for text easy access.
-    return data(index(row, column), Qt::DisplayRole).toString();
-}
-
-void KNMusicModel::setItemText(const int &row,
-                               const int &column,
-                               const QString &text)
-{
-    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
-    //Only for text easy access.
-    setData(index(row, column), text, Qt::DisplayRole);
-}
-
-QVariant KNMusicModel::roleData(int row, int column, int role) const
-{
-    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
-    //Only for easy access.
-    return data(index(row, column), role);
-}
-
-void KNMusicModel::setRoleData(const int &row,
-                               const int &column,
-                               const int &role,
-                               const QVariant &value)
-{
-    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
-    //Only for easy access.
-    setData(index(row, column), value, role);
-}
-
-QList<QStandardItem *> KNMusicModel::songRow(const int &row) const
-{
-    Q_ASSERT(row>-1 && row<rowCount());
-    //Get all the items, add to a list.
-    QList<QStandardItem *> songRowData;
-    for(int i=0; i<MusicDataCount; i++)
-    {
-        //Using clone to do data copy.
-        songRowData.append(item(row, i)->clone());
-    }
-    return songRowData;
-}
-
-QVariant KNMusicModel::rowProperty(const int &row, const int &propertyRole)
-{
-    Q_ASSERT(row>-1 && row<rowCount());
-    //All the property of a song is stored in the first item.
-    return roleData(row, 0, propertyRole);
-}
-
-void KNMusicModel::setRowProperty(const int &row,
-                                  const int &propertyRole,
-                                  const QVariant &value)
-{
-    Q_ASSERT(row>-1 && row<rowCount());
-    //All the property of a song is stored in the first item.
-    setData(index(row, 0), value, propertyRole);
 }
 
 QPixmap KNMusicModel::songAlbumArt(const int &row)
