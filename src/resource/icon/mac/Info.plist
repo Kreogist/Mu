@@ -2,47 +2,47 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Kreogist Product Build</key>
-	<string>20140707</string>
-	<key>Kreogist Product Version</key>
-	<string>0.3</string>
-	<key>BuildMachineOSBuild</key>
-	<string>13D65</string>
-	<key>CFBundleExecutable</key>
-	<string>mu</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Kreogist μ</string>
-	<key>CFBundleIconFile</key>
-	<string>mu.icns</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.kreogist.mu</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleLongVersionString</key>
-	<string>0.0.381 (20140707 2014/07/07:21:24:00)</string>
-	<key>NOTE</key>
-	<string>Kreogist μ</string>
-	<key>CFBundleName</key>
-	<string>μ</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>13.0.0</string>
-	<key>CFBundleSignature</key>
-	<string>8BIM</string>
-	<key>CFBundleVersion</key>
-	<string>20140707</string>
-	<key>CGDisableCoalescedUpdates</key>
-	<true/>
-	<key>CSResourcesFileMapped</key>
-	<false/>
-	<key>NSAppleScriptEnabled</key>
-	<string>Yes</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 Kreogist Dev Team</string>
-	<key>UIDisallowUserKeyboardShortcuts</key>
-	<true/>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+        <key>Kreogist Product Build</key>
+        <string>20141213</string>
+        <key>Kreogist Product Version</key>
+        <string>0.4</string>
+        <key>BuildMachineOSBuild</key>
+        <string>13F34</string>
+        <key>CFBundleExecutable</key>
+        <string>mu</string>
+        <key>CFBundleGetInfoString</key>
+        <string>Kreogist μ</string>
+        <key>CFBundleIconFile</key>
+        <string>mu.icns</string>
+        <key>CFBundleIdentifier</key>
+        <string>com.kreogist.mu</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleLongVersionString</key>
+        <string>0.4.0 (20141213 2014/12/13:22:20:00)</string>
+        <key>NOTE</key>
+        <string>Kreogist μ</string>
+        <key>CFBundleName</key>
+        <string>μ</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleShortVersionString</key>
+        <string>13.0.0</string>
+        <key>CFBundleSignature</key>
+        <string>8BIM</string>
+        <key>CFBundleVersion</key>
+        <string>20141213</string>
+        <key>CGDisableCoalescedUpdates</key>
+        <true/>
+        <key>CSResourcesFileMapped</key>
+        <false/>
+        <key>NSAppleScriptEnabled</key>
+        <string>Yes</string>
+        <key>NSHumanReadableCopyright</key>
+        <string>Copyright © 2014 Kreogist Dev Team</string>
+        <key>UIDisallowUserKeyboardShortcuts</key>
+        <true/>
+        <key>NSPrincipalClass</key>
+        <string>NSApplication</string>
 </dict>
 </plist>
