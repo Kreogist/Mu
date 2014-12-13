@@ -245,6 +245,12 @@ void KNMusicAlbumView::resizeEvent(QResizeEvent *event)
     //Resize the album detail.
     m_albumDetail->resize(size());
     m_albumDetail->setSizeParameter(qMin(width(), height()));
+    //If the current index is not null, must ensure that we can display the
+    //selected album.
+    if(currentIndex().isValid())
+    {
+        locateTo(currentIndex());
+    }
 }
 
 QModelIndex KNMusicAlbumView::moveCursor(QAbstractItemView::CursorAction cursorAction,
@@ -376,6 +382,7 @@ void KNMusicAlbumView::displayAlbum(const QPoint &point)
 void KNMusicAlbumView::clearSelection()
 {
     //When complete the fold, set the selected index to null.
+    setCurrentIndex(QModelIndex());
     m_selectedIndex=QModelIndex();
     //Update the viewport.
     viewport()->update();
@@ -392,6 +399,8 @@ void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
     //If the index is vaild, set the initial animation parameters.
     if(albumIndex.isValid())
     {
+        //Set current index to the proxy index of the album index.
+        setCurrentIndex(m_proxyModel->mapFromSource(albumIndex));
         //Set the selected index.
         m_selectedIndex=albumIndex;
         //Show the detail.

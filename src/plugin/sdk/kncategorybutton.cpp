@@ -123,16 +123,9 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     //Draw top line.
     painter.setPen(m_highLightColor);
     painter.drawRect(0,0,width(),1);
-    //Draw icon.
-    painter.setOpacity(1.0);
+    //Initial the icon position.
     int iconX=(width()-m_iconSize-m_textWidth)/2;
-    painter.drawPixmap(iconX,
-                       m_iconY,
-                       m_iconSize,
-                       m_iconSize,
-                       m_icon);
     //Draw text
-    painter.setOpacity(m_textAlpha);
     painter.setPen(QColor(255,255,255));
     painter.drawText(iconX+m_iconSize+m_spacing,
                      m_textY,
@@ -140,6 +133,13 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
                      m_iconSize,
                      Qt::AlignLeft | Qt::AlignVCenter,
                      m_text);
+    //Draw icon.
+    painter.setOpacity(1.0);
+    painter.drawPixmap(iconX,
+                       m_iconY,
+                       m_iconSize,
+                       m_iconSize,
+                       m_icon);
 }
 
 void KNCategoryButton::enterEvent(QEvent *event)
