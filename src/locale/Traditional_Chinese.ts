@@ -20,12 +20,12 @@
 <context>
     <name>KNMusicAlbumDetail</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="701"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="720"/>
         <source>Unknown Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="707"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="726"/>
         <source>Various Artists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -33,7 +33,7 @@
 <context>
     <name>KNMusicAlbumView</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="465"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="474"/>
         <source>Various Artists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -423,8 +423,18 @@
 <context>
     <name>KNMusicHeaderLyrics</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="82"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="274"/>
         <source>Lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="281"/>
+        <source>Lyrics Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="285"/>
+        <source>Text Spacing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -511,14 +521,6 @@ To add songs to library, drag your songs here.</source>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="103"/>
         <source>Go to Songs</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicLyricsManager</name>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp" line="77"/>
-        <source>Lyrics Folder</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

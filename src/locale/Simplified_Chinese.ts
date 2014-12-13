@@ -20,12 +20,12 @@
 <context>
     <name>KNMusicAlbumDetail</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="701"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="720"/>
         <source>Unknown Artist</source>
         <translation>未知艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="707"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="726"/>
         <source>Various Artists</source>
         <translation>多个艺术家</translation>
     </message>
@@ -33,7 +33,7 @@
 <context>
     <name>KNMusicAlbumView</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="465"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="474"/>
         <source>Various Artists</source>
         <translation>多个艺术家</translation>
     </message>
@@ -423,9 +423,19 @@
 <context>
     <name>KNMusicHeaderLyrics</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="82"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="274"/>
         <source>Lyrics</source>
         <translation>歌词</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="281"/>
+        <source>Lyrics Folder</source>
+        <translation>歌词文件夹</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="285"/>
+        <source>Text Spacing</source>
+        <translation>行间距</translation>
     </message>
 </context>
 <context>
@@ -518,9 +528,8 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLyricsManager</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp" line="77"/>
         <source>Lyrics Folder</source>
-        <translation>歌词文件夹</translation>
+        <translation type="vanished">歌词文件夹</translation>
     </message>
 </context>
 <context>

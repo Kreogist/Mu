@@ -41,9 +41,9 @@ win32{
     RC_FILE += resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
     #Windows special extras.
-    QT += winextras
-    SOURCES += plugin/module/knwindowsextras/knwindowsextras.cpp
-    HEADERS += plugin/module/knwindowsextras/knwindowsextras.h
+#    QT += winextras
+#    SOURCES += plugin/module/knwindowsextras/knwindowsextras.cpp
+#    HEADERS += plugin/module/knwindowsextras/knwindowsextras.h
 }
 
 #UNIX common configure
@@ -273,7 +273,8 @@ SOURCES += \
     plugin/sdk/knngnlbutton.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.cpp
+    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.cpp \
+    plugin/sdk/preference/knpreferenceitemnumber.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -454,7 +455,8 @@ HEADERS += \
     plugin/sdk/knngnlbutton.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.h \
-    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.h
+    plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.h \
+    plugin/sdk/preference/knpreferenceitemnumber.h
 
 RESOURCES += \
     resource/res.qrc

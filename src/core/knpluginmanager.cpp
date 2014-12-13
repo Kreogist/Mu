@@ -45,7 +45,7 @@
 
 //Platform Plugins
 #ifdef Q_OS_WIN32
-#include "plugin/module/knwindowsextras/knwindowsextras.h"
+//#include "plugin/module/knwindowsextras/knwindowsextras.h"
 #endif
 
 #include "knpluginmanager.h"
@@ -299,7 +299,6 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     m_mainWindowPlugin->addCategoryPlugin(plugin);
 }
 
-
 void KNPluginManager::loadPlatformExtras(KNPlatformExtras *plugin)
 {
     //Add this to the plugin list.
@@ -307,6 +306,5 @@ void KNPluginManager::loadPlatformExtras(KNPlatformExtras *plugin)
     //Save the platform extras.
     m_platformExtra=plugin;
     //Set main window.
-    qDebug()<<m_mainWindow<<m_mainWindow->windowHandle();
-    m_platformExtra->setMainWindow(m_mainWindow);
+     m_platformExtra->setMainWindow(m_mainWindow);
 }

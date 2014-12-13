@@ -9,6 +9,7 @@
 
 #include <QVariant>
 #include <QObject>
+#include <QHash>
 #include <QFont>
 #include <QPalette>
 
@@ -17,6 +18,7 @@ namespace KNPreferenceItemList
 enum KNPreferenceItemType
 {
     Switcher,
+    Number,
     LineEdit,
     PathEdit
 };
@@ -35,6 +37,7 @@ struct KNPreferenceItemInfo
     QString valueName;
     QVariant value;
     QVariant defaultValue;
+    QHash<QString, QVariant> property;
 };
 }
 
@@ -48,10 +51,7 @@ class KNPreferenceItemGlobal : public QObject
 public:
     static KNPreferenceItemGlobal *instance();
     QLabel *generateLabel(const QString &caption=QString());
-    KNPreferenceItemBase *generateItem(const int &index,
-                                       const QString &valueName,
-                                       const QVariant &value=QVariant(),
-                                       const QVariant &defaultValue=QVariant());
+    KNPreferenceItemBase *generateItem(const KNPreferenceItemInfo &info);
     static KNPreferenceItemInfo generateInfo(int type,
                                              const QString &title,
                                              const QString &valueName,

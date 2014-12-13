@@ -111,6 +111,7 @@ void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
     m_albumTreeView->setCategoryText(m_currentIndex.row()==0?
                                          "":
                                          m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString());
+    m_albumTreeView->scrollToTop();
     //Initial the opacity effect.
     m_opacityEffect->setOpacity(1.0);
     //Set the position.

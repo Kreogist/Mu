@@ -61,7 +61,6 @@ private slots:
 
 private:
     inline void initialStatusBar();
-    void syncTitle();
     QColor m_backgroundColor=QColor(42,42,42),
            m_borderColor=QColor(255,255,255,67);
     int m_listWidth=250, m_shadowWidth=15, m_highlightHeight=64;

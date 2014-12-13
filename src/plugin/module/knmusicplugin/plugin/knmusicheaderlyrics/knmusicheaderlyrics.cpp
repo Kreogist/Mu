@@ -32,8 +32,14 @@
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     KNMusicHeaderLyricsBase(parent)
 {
+    //Initial the music global.
+    m_musicGlobal=KNMusicGlobal::instance();
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicLyricsManager::instance();
+    //Set line spacing specially for Windows.
+#ifdef Q_OS_WIN32
+    m_lineSpacing=0;
+#endif
 
     //Initial the lyrics moving time line.
     m_moveToCurrent=new QTimeLine(m_animationDuration, this);
@@ -43,10 +49,14 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     connect(m_moveToCurrent, &QTimeLine::frameChanged,
             this, &KNMusicHeaderLyrics::onActionLyricsMoved);
 
+    //Connect apply preference signal.
+    connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
+            this, &KNMusicHeaderLyrics::applyPreference);
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNMusicHeaderLyrics::retranslate);
-    //Retranslate.
+    //Load preference and retranslate.
+    applyPreference();
     retranslate();
 }
 
@@ -236,6 +246,18 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     }
 }
 
+void KNMusicHeaderLyrics::applyPreference()
+{
+    //Update the lyrics folder.
+    m_lyricsManager->setLyricsFolderPath(
+                m_musicGlobal->configureData("LyricsFolder",
+                                             m_lyricsManager->lyricsFolderPath()).toString());
+    //Update the spacing.
+    m_lineSpacing=
+                m_musicGlobal->configureData("TextSpacing",
+                                             m_lineSpacing).toInt();
+}
+
 void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
 {
     //Update the offset.
@@ -259,6 +281,15 @@ void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTi
                                                      tr("Lyrics Folder"),
                                                      "LyricsFolder",
                                                      m_lyricsManager->lyricsFolderPath()));
+    KNPreferenceItemInfo currentInfo=KNPreferenceItemGlobal::generateInfo(Number,
+                                                                          tr("Text Spacing"),
+                                                                          "TextSpacing",
+                                                                          m_lineSpacing,
+                                                                          m_lineSpacing,
+                                                                          true);
+    currentInfo.property.insert("Min", 0);
+    currentInfo.property.insert("Max", 15);
+    list.append(currentInfo);
 }
 
 int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)

@@ -132,9 +132,7 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_musicGlobal=KNMusicGlobal::instance();
 
     //Get the lyrics folder path.
-    m_lyricsFolderPath=
-            m_musicGlobal->configureData("LyricsFolderPath",
-                                         KNMusicGlobal::musicLibraryPath()+"/Lyrics").toString();
+    m_lyricsFolderPath=KNMusicGlobal::musicLibraryPath()+"/Lyrics";
     //Set the default loading policy.
     m_policyList.append(SameNameInLyricsDir);
     m_policyList.append(RelateNameInLyricsDir);

@@ -47,6 +47,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private slots:
+    void applyPreference();
     void onActionLyricsMoved(const int &frame);
 
 private:
@@ -58,11 +59,10 @@ private:
     void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
                                   QList<KNPreferenceItemInfo> &list);
     inline int lyricsLineDuration(const int &index);
-
     inline void startMovingAnime(const int &durationOffset,
                                  const int &yOffset);
-
     KNMusicLyricsManager *m_lyricsManager;
+    KNMusicGlobal *m_musicGlobal;
 
     QTimeLine *m_moveToCurrent;
     int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,

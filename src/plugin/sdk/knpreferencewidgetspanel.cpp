@@ -134,12 +134,7 @@ void KNPreferenceWidgetsPanel::generateItemFromInfoList(const KNPreferenceTitleI
         ++i)
     {
         //Generate the item via item info.
-        KNPreferenceItemBase *currentItem=
-                m_preferenceItemGlobal->generateItem((*i).type,
-                                                     (*i).valueName,
-                                                     (*i).value,
-                                                     (*i).defaultValue);
-        currentItem->setCaption((*i).title);
+        KNPreferenceItemBase *currentItem=m_preferenceItemGlobal->generateItem((*i));
         //Add the item to the list.
         m_itemList.insert((*i).valueName, currentItem);
         addItem(currentItem, (*i).advanced);

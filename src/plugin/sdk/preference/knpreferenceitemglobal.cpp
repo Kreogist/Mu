@@ -13,6 +13,7 @@
 #include "knpreferenceitemswitcher.h"
 #include "knpreferenceitemlineedit.h"
 #include "knpreferenceitempathbrowser.h"
+#include "knpreferenceitemnumber.h"
 
 #include "knpreferenceitemglobal.h"
 
@@ -36,17 +37,20 @@ QLabel *KNPreferenceItemGlobal::generateLabel(const QString &caption)
     return titleWidget;
 }
 
-KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const int &index,
-                                                           const QString &valueName,
-                                                           const QVariant &value,
-                                                           const QVariant &defaultValue)
+KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const KNPreferenceItemInfo &info)
 {
     KNPreferenceItemBase *item=nullptr;
-    switch(index)
+    switch(info.type)
     {
     case Switcher:
         //Generate a switcher.
         item=new KNPreferenceItemSwitcher;
+        break;
+    case Number:
+        //Generate a number slider.
+        item=new KNPreferenceItemNumber;
+        ((KNPreferenceItemNumber *)item)->setRange(info.property.value("Min").toInt(),
+                                                   info.property.value("Max").toInt());
         break;
     case LineEdit:
         //Generate a line editor.
@@ -62,9 +66,10 @@ KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const int &index,
         return item;
     }
     //Set properties.
-    item->setValueName(valueName);
-    item->setDefaultValue(defaultValue);
-    item->setValue(value.isNull()?defaultValue:value);
+    item->setCaption(info.title);
+    item->setValueName(info.valueName);
+    item->setDefaultValue(info.defaultValue);
+    item->setValue(info.value.isNull()?info.defaultValue:info.value);
     //Return the item.
     return item;
 }
@@ -82,7 +87,7 @@ KNPreferenceItemInfo KNPreferenceItemGlobal::generateInfo(int type,
     currentItem.title=title;
     currentItem.valueName=valueName;
     currentItem.value=value;
-    currentItem.defaultValue=defaultValue;
+    currentItem.defaultValue=defaultValue.isNull()?value:defaultValue;
     currentItem.advanced=advanced;
     return currentItem;
 }
