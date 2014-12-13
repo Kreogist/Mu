@@ -265,14 +265,9 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
                         //Check the artwork key.
                         if(!artworkKey.isEmpty())
                         {
-                            //Update the artwork.
-                            (*i)->setData((*j),
-                                          QIcon(artwork(artworkKey)),
-                                          Qt::DecorationRole);
-                            //Update the artwork key.
-                            (*i)->setData((*j),
-                                          artworkKey,
-                                          CategoryArtworkKeyRole);
+                            (*i)->changeAlbumArt((*j),
+                                                 artworkKey,
+                                                 QIcon(artwork(artworkKey)));
                             break;
                         }
                     }

@@ -40,6 +40,7 @@ public slots:
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
     void onActionInOutBackground(const int &frame);

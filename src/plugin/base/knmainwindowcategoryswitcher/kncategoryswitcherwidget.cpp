@@ -109,6 +109,14 @@ void KNCategorySwitcherWidget::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+void KNCategorySwitcherWidget::resizeEvent(QResizeEvent *event)
+{
+    //Resize the widget.
+    QWidget::resizeEvent(event);
+    //Resize the buttons.
+    m_settingButton->setFixedWidth(width());
+}
+
 void KNCategorySwitcherWidget::onActionInOutBackground(const int &frame)
 {
     //Change the alpha.

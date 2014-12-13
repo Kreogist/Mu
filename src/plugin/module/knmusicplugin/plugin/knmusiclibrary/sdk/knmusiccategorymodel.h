@@ -38,10 +38,12 @@ public:
     void setNoAlbumIcon(const QPixmap &noAlbumIcon);
     bool updateAlbumArt() const;
     void setUpdateAlbumArt(bool updateAlbumArt);
+    void changeAlbumArt(const QModelIndex &target,
+                        const QString &artworkKey,
+                        const QIcon &artwork);
 
 signals:
-    void categoryAboutEmpty();
-    void categoryAboutNotEmpty();
+    void categoryAlbumArtUpdate(QModelIndex updatedIndex);
 
 public slots:
     virtual void onCategoryAdded(const QList<QStandardItem *> &musicRow);
@@ -58,6 +60,15 @@ protected:
 
 private:
     inline void resetModel();
+    inline void setAlbumArt(const QModelIndex &target,
+                            const QString &artworkKey,
+                            const QIcon &artwork)
+    {
+        //Update the artwork.
+        setData(target, artwork, Qt::DecorationRole);
+        //Update the artwork key.
+        setData(target, artworkKey, CategoryArtworkKeyRole);
+    }
     int m_categoryIndex=-1;
     bool m_updateAlbumArt=true;
     QIcon m_noAlbumIcon;

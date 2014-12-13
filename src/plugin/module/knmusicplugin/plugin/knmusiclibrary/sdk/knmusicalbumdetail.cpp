@@ -67,6 +67,8 @@ void KNMusicAlbumDetail::setAlbumModel(KNMusicCategoryModel *model)
     //When the album model is going to remove an item, check it's index.
     connect(m_albumModel, &KNMusicAlbumModel::albumRemoved,
             this, &KNMusicAlbumDetail::onActionAlbumRemoved);
+    connect(m_albumModel, &KNMusicAlbumModel::categoryAlbumArtUpdate,
+            this, &KNMusicAlbumDetail::onActionCategoryAlbumArtUpdate);
     //Link the retranslate request to update label slot.
     //Why here?
     //Because Qt's signals and slots is linked in order, connect here is to
@@ -103,11 +105,8 @@ void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
     hideContentWidgets();
     //Save the index.
     m_currentIndex=index;
-    //Initial the pixmap.
-    QPixmap currentPixmap=m_libraryModel->artwork(m_albumModel->data(m_currentIndex, CategoryArtworkKeyRole).toString());
-    //Set the pixmap.
-    m_albumArt->setPixmap(currentPixmap.isNull()?
-                              KNMusicGlobal::instance()->noAlbumArt():currentPixmap);
+    //Update the artwork.
+    updateAlbumArtwork();
     //Set category content.
     m_albumTreeView->setCategoryText(m_currentIndex.row()==0?
                                          "":
@@ -342,6 +341,16 @@ void KNMusicAlbumDetail::onActionAskToFold()
 {
     //Emit a album which must be unavailable to fold the detail.
     emit requireShowAlbum(QPoint(-1,-1));
+}
+
+void KNMusicAlbumDetail::onActionCategoryAlbumArtUpdate(const QModelIndex &updatedIndex)
+{
+    //Check the index, if the updated index is the current index.
+    if(updatedIndex==m_currentIndex)
+    {
+        //Update the artwork.
+        updateAlbumArtwork();
+    }
 }
 
 void KNMusicAlbumDetail::onActionContentMove(const QVariant &position)
@@ -647,6 +656,15 @@ void KNMusicAlbumDetail::stopShowHideArtworkAnimations()
 {
     m_showAlbumArt->stop();
     m_hideAlbumArt->stop();
+}
+
+void KNMusicAlbumDetail::updateAlbumArtwork()
+{
+    //Initial the pixmap.
+    QPixmap currentPixmap=m_libraryModel->artwork(m_albumModel->data(m_currentIndex, CategoryArtworkKeyRole).toString());
+    //Set the pixmap.
+    m_albumArt->setPixmap(currentPixmap.isNull()?
+                              KNMusicGlobal::instance()->noAlbumArt():currentPixmap);
 }
 
 void KNMusicAlbumDetail::updateWidgetGeometries()

@@ -75,6 +75,7 @@ private slots:
     void onActionFlyAwayFinished();
     void onActionAlbumRemoved(const QModelIndex &removedIndex);
     void onActionAskToFold();
+    void onActionCategoryAlbumArtUpdate(const QModelIndex &updatedIndex);
     void showContentWidgets();
     void hideContentWidgets();
     void onActionShowAlbumArt();
@@ -95,6 +96,7 @@ private:
                                            QRect &contentGeometry);
     inline void stopAllAnimations();
     inline void stopShowHideArtworkAnimations();
+    inline void updateAlbumArtwork();
     inline void updateWidgetGeometries();
     inline void updateShadowGeometries(const QRect &contentPosition);
     KNMusicAlbumTitle *m_albumArt;

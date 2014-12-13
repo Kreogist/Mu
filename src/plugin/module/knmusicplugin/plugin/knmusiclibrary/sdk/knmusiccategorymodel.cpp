@@ -49,6 +49,16 @@ void KNMusicCategoryModel::setUpdateAlbumArt(bool updateAlbumArt)
     m_updateAlbumArt = updateAlbumArt;
 }
 
+void KNMusicCategoryModel::changeAlbumArt(const QModelIndex &target,
+                                          const QString &artworkKey,
+                                          const QIcon &artwork)
+{
+    //Set the album art first.
+    setAlbumArt(target, artworkKey, artwork);
+    //Emit updated signal.
+    emit categoryAlbumArtUpdate(target);
+}
+
 QIcon KNMusicCategoryModel::noAlbumIcon() const
 {
     return m_noAlbumIcon;
@@ -230,26 +240,18 @@ void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
                   categoryText,
                   1,
                   Qt::MatchFixedString | Qt::MatchCaseSensitive);
+    //This result should never be empty.
     if(results.isEmpty())
     {
         //Are you kidding me?
         return;
     }
-    else
+    //Check is the result index cover image has a key.
+    //If it contains a key, then do nothing.
+    QModelIndex resultIndex=results.first();
+    if(data(resultIndex, CategoryArtworkKeyRole).isNull())
     {
-        //Check is the cover image has a key.
-        QModelIndex resultIndex=results.first();
-        if(data(resultIndex, CategoryArtworkKeyRole).isNull())
-        {
-            //Set the image key.
-            setData(resultIndex,
-                    imageKey,
-                    CategoryArtworkKeyRole);
-            //Set the cover image.
-            setData(resultIndex,
-                    QIcon(image),
-                    Qt::DecorationRole);
-        }
+        setAlbumArt(resultIndex, imageKey, QIcon(image));
     }
 }
 

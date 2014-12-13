@@ -4,7 +4,7 @@
 <context>
     <name>KNCategorySwitcherWidget</name>
     <message>
-        <location filename="../plugin/base/knmainwindowcategoryswitcher/kncategoryswitcherwidget.cpp" line="85"/>
+        <location filename="../plugin/base/knmainwindowcategoryswitcher/kncategoryswitcherwidget.cpp" line="86"/>
         <source>Preference</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,12 +20,12 @@
 <context>
     <name>KNMusicAlbumDetail</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="688"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="701"/>
         <source>Unknown Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="694"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="707"/>
         <source>Various Artists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -102,7 +102,7 @@
 <context>
     <name>KNMusicDetailTooltip</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="179"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="178"/>
         <source>In file: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -436,12 +436,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="87"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="88"/>
         <source>Go to Album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="108"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="93"/>
         <source>No Album</source>
         <translation type="unfinished"></translation>
     </message>
@@ -454,12 +454,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="101"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="102"/>
         <source>Go to Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="122"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="106"/>
         <source>No Artist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -491,12 +491,12 @@ To add songs to library, drag your songs here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="100"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="101"/>
         <source>Go to Genre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="121"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="106"/>
         <source>No Genre</source>
         <translation type="unfinished"></translation>
     </message>
@@ -646,7 +646,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistManager</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp" line="332"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp" line="335"/>
         <source>New Playlist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -750,9 +750,17 @@ To create a playlist, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicWPLParser</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp" line="39"/>
+        <source>Windows Media Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicXSPFParser</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.cpp" line="39"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicxspfparser/knmusicxspfparser.cpp" line="38"/>
         <source>Vox playlist</source>
         <translation type="unfinished"></translation>
     </message>

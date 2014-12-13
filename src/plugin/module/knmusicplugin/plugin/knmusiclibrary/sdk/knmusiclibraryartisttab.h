@@ -18,6 +18,8 @@
 #ifndef KNMUSICLIBRARYARTISTTAB_H
 #define KNMUSICLIBRARYARTISTTAB_H
 
+#include <QModelIndex>
+
 #include "knmusiclibrarycategorytab.h"
 
 class QSplitter;
@@ -49,11 +51,14 @@ protected slots:
 private slots:
     void onActionRequireSearch();
     void onActionShowInArtist();
+    void onActionCategoryAlbumArtUpdate(const QModelIndex &updatedIndex);
     void checkCategorySelected();
 
 private:
     inline void initialShowInAction();
     inline void initialFindAction();
+    inline void setCategoryArtwork(const QModelIndex &categoryIndex);
+
     QAction *m_showInArtistTab;
     KNDropProxyContainer *m_dropProxy;
     QSplitter *m_splitter;
@@ -62,6 +67,7 @@ private:
     KNMusicCategoryListViewBase *m_artistList;
     KNMusicCategoryDisplay *m_artistDisplay;
     QMetaObject::Connection m_notEmptyCheck;
+    QModelIndex m_currentSourceIndex;
 };
 
 #endif // KNMUSICLIBRARYARTISTTAB_H

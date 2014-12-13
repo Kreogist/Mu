@@ -131,6 +131,9 @@ void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
     m_categoryModel=model;
     //Apply category model.
     KNMusicLibraryCategoryTab::setCategoryModel(m_categoryModel);
+    //Link the artwork update signal.
+    connect(m_categoryModel, &KNMusicCategoryModel::categoryAlbumArtUpdate,
+            this, &KNMusicLibraryArtistTab::onActionCategoryAlbumArtUpdate);
     //Update the model.
     retranslate();
 
@@ -224,6 +227,16 @@ void KNMusicLibraryArtistTab::onActionShowInArtist()
     }
 }
 
+void KNMusicLibraryArtistTab::onActionCategoryAlbumArtUpdate(const QModelIndex &updatedIndex)
+{
+    //Update the background when the album art update if the index is the
+    //current index.
+    if(updatedIndex==m_currentSourceIndex)
+    {
+        setCategoryArtwork(m_currentSourceIndex);
+    }
+}
+
 void KNMusicLibraryArtistTab::checkCategorySelected()
 {
     //Check whether we have category to select, and is category selected or not.
@@ -252,21 +265,27 @@ void KNMusicLibraryArtistTab::initialFindAction()
     m_dropProxy->addAction(findAction);
 }
 
+void KNMusicLibraryArtistTab::setCategoryArtwork(const QModelIndex &categoryIndex)
+{
+    //Set the artwork.
+    m_artistDisplay->setCategoryIcon(
+                m_musicLibrary->artwork(m_categoryModel->data(categoryIndex,
+                                                              CategoryArtworkKeyRole).toString()));
+}
+
 void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(const QModelIndex &index)
 {
-    QModelIndex categoryIndex=proxyCategoryModel()->mapToSource(index);
+    m_currentSourceIndex=proxyCategoryModel()->mapToSource(index);
     //Check is the no category item.
-    if(categoryIndex.row()==0)
+    if(m_currentSourceIndex.row()==0)
     {
         m_artistDisplay->showNoCategoryItem(m_categoryModel->noCategoryText());
         return;
     }
     //Set the category text.
     m_artistDisplay->setCategoryText(
-                m_categoryModel->data(categoryIndex,
+                m_categoryModel->data(m_currentSourceIndex,
                                       Qt::DisplayRole).toString());
-    //Set the artwork.
-    m_artistDisplay->setCategoryIcon(
-                m_musicLibrary->artwork(m_categoryModel->data(categoryIndex,
-                                                              CategoryArtworkKeyRole).toString()));
+    //Set the category artwork.
+    setCategoryArtwork(m_currentSourceIndex);
 }
