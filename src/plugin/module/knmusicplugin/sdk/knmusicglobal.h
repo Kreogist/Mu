@@ -15,6 +15,8 @@
 #include <QStringList>
 #include <QStandardItem>
 
+#include "preference/knpreferenceitemglobal.h"
+
 #include <QObject>
 
 namespace KNMusic
@@ -178,11 +180,6 @@ public:
     void setNoAlbumArt(const QPixmap &noAlbumArt);
     QString treeViewHeaderText(const int &index);
     QString indexedGenre(const int &index);
-    void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
-    void addTitle(QLabel *title,
-                  const bool &isAdvanced=false);
-    void addItem(KNPreferenceItemBase *item,
-                 const bool &isAdvanced=false);
     void setConfigureData(const QString &key, const QVariant &value);
     QVariant configureData(const QString &key,
                            const QVariant &defaultValue=QVariant());
@@ -194,6 +191,9 @@ public:
     static void setMusicSearch(KNMusicSearchBase *musicSearch);
     static KNMusicDetailTooltipBase *detailTooltip();
     static void setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip);
+    void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
+    void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
+                            const QList<KNPreferenceItemInfo> &list);
 
 signals:
 

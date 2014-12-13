@@ -7,22 +7,38 @@
 #ifndef KNPREFERENCEITEMGLOBAL_H
 #define KNPREFERENCEITEMGLOBAL_H
 
-namespace PreferenceItemGlobal
+#include <QVariant>
+#include <QObject>
+#include <QFont>
+#include <QPalette>
+
+namespace KNPreferenceItemList
 {
-enum KNPreferenceWidgetIndex
+enum KNPreferenceItemType
 {
     Switcher,
     LineEdit,
     PathEdit
 };
+struct KNPreferenceTitleInfo
+{
+    bool advanced=false;
+    QString title;
+    QString titleIdentifier;
+};
+
+struct KNPreferenceItemInfo
+{
+    bool advanced=false;
+    int type=0;
+    QString title;
+    QString valueName;
+    QVariant value;
+    QVariant defaultValue;
+};
 }
 
-using namespace PreferenceItemGlobal;
-
-#include <QVariant>
-#include <QObject>
-#include <QFont>
-#include <QPalette>
+using namespace KNPreferenceItemList;
 
 class QLabel;
 class KNPreferenceItemBase;
@@ -36,6 +52,12 @@ public:
                                        const QString &valueName,
                                        const QVariant &value=QVariant(),
                                        const QVariant &defaultValue=QVariant());
+    static KNPreferenceItemInfo generateInfo(int type,
+                                             const QString &title,
+                                             const QString &valueName,
+                                             const QVariant &value=QVariant(),
+                                             const QVariant &defaultValue=QVariant(),
+                                             bool advanced=false);
     void updateTitleCaption(QLabel *title,
                             const QString &caption);
     void updateItemCaption(KNPreferenceItemBase *item,

@@ -7,7 +7,10 @@
 #ifndef KNPREFERENCEWIDGETSPANEL_H
 #define KNPREFERENCEWIDGETSPANEL_H
 
-#include <QList>
+#include <QHash>
+#include <QStringList>
+
+#include "preference/knpreferenceitemglobal.h"
 
 #include <QScrollArea>
 
@@ -23,10 +26,8 @@ public:
     bool advancedMode() const;
     QString panelName() const;
     void setPanelName(const QString &panelName);
-    void addTitle(QLabel *title,
-                  const bool &isAdvanced=false);
-    void addItem(KNPreferenceItemBase *item,
-                 const bool &isAdvanced=false);
+    void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
+                            const QList<KNPreferenceItemInfo> &list);
 
 signals:
     void requireSetAdvancedVisible(const bool &ok);
@@ -39,10 +40,20 @@ public slots:
 protected:
 
 private:
+    void addTitle(QLabel *title,
+                  const bool &isAdvanced=false);
+    void addItem(KNPreferenceItemBase *item,
+                 const bool &isAdvanced=false);
+    void generateItemFromInfoList(const KNPreferenceTitleInfo &listTitle,
+                                  const QList<KNPreferenceItemInfo> &list);
+    void updateItemFromInfoList(const KNPreferenceTitleInfo &listTitle,
+                                const QList<KNPreferenceItemInfo> &list);
     void setAdvancedItem(QWidget *item);
     QString m_panelName;
     QBoxLayout *m_mainLayout;
-    QList<KNPreferenceItemBase *> m_itemList;
+    QHash<QString, QLabel *> m_titleList;
+    QHash<QString, KNPreferenceItemBase *> m_itemList;
+    KNPreferenceItemGlobal *m_preferenceItemGlobal;
     KNGlobal *m_global;
     bool m_advancedMode=false;
 };

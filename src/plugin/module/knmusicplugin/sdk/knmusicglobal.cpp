@@ -517,17 +517,13 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
 
 void KNMusicGlobal::setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel)
 {
-    m_preferencePanel=preferencePanel;
+    m_preferencePanel = preferencePanel;
 }
 
-void KNMusicGlobal::addTitle(QLabel *title, const bool &isAdvanced)
+void KNMusicGlobal::insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
+                                       const QList<KNPreferenceItemInfo> &list)
 {
-    m_preferencePanel->addTitle(title, isAdvanced);
-}
-
-void KNMusicGlobal::addItem(KNPreferenceItemBase *item, const bool &isAdvanced)
-{
-    m_preferencePanel->addItem(item, isAdvanced);
+    m_preferencePanel->insertItemInfoList(listTitle, list);
 }
 
 void KNMusicGlobal::setConfigureData(const QString &key, const QVariant &value)

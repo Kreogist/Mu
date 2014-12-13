@@ -20,10 +20,8 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-#include "knmusicglobal.h"
 #include "knmusicheaderplayerbase.h"
 #include "knmusiclyricsmanager.h"
-#include "preference/knpreferenceitemglobal.h"
 
 #include "knlocalemanager.h"
 
@@ -31,18 +29,9 @@
 
 #include <QDebug>
 
-using namespace PreferenceItemGlobal;
-
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     KNMusicHeaderLyricsBase(parent)
 {
-    //Initial the music global.
-    m_musicGlobal=KNMusicGlobal::instance();
-    //Initial the preference item global.
-    m_preferenceItemGlobal=KNPreferenceItemGlobal::instance();
-    //Initial the preference items.
-    initialPreference();
-
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicLyricsManager::instance();
 
@@ -57,7 +46,6 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNMusicHeaderLyrics::retranslate);
-
     //Retranslate.
     retranslate();
 }
@@ -79,7 +67,12 @@ void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 
 void KNMusicHeaderLyrics::retranslate()
 {
-    m_preferenceItemGlobal->updateTitleCaption(m_preferenceCaption, tr("Lyrics"));
+    //Get the latest title and item info.
+    KNPreferenceTitleInfo lyricsTitle;
+    QList<KNPreferenceItemInfo> itemList;
+    generateTitleAndItemInfo(lyricsTitle, itemList);
+    //Ask to insert the info list.
+    KNMusicGlobal::instance()->insertItemInfoList(lyricsTitle, itemList);
 }
 
 void KNMusicHeaderLyrics::resetStatus()
@@ -251,11 +244,21 @@ void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
     update();
 }
 
-void KNMusicHeaderLyrics::initialPreference()
+void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
+                                                   QList<KNPreferenceItemInfo> &list)
 {
-    //Initial the caption.
-    m_preferenceCaption=m_preferenceItemGlobal->generateLabel();
-    m_musicGlobal->addTitle(m_preferenceCaption);
+    //Set the title.
+    listTitle.advanced=false;
+    listTitle.title=tr("Lyrics");
+    listTitle.titleIdentifier="Lyrics";
+
+    //Clear the list.
+    list.clear();
+    //Add the current info.
+    list.append(KNPreferenceItemGlobal::generateInfo(PathEdit,
+                                                     tr("Lyrics Folder"),
+                                                     "LyricsFolder",
+                                                     m_lyricsManager->lyricsFolderPath()));
 }
 
 int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)

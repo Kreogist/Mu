@@ -69,6 +69,24 @@ KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const int &index,
     return item;
 }
 
+KNPreferenceItemInfo KNPreferenceItemGlobal::generateInfo(int type,
+                                                          const QString &title,
+                                                          const QString &valueName,
+                                                          const QVariant &value,
+                                                          const QVariant &defaultValue,
+                                                          bool advanced)
+{
+    KNPreferenceItemInfo currentItem;
+    //Set the data.
+    currentItem.type=type;
+    currentItem.title=title;
+    currentItem.valueName=valueName;
+    currentItem.value=value;
+    currentItem.defaultValue=defaultValue;
+    currentItem.advanced=advanced;
+    return currentItem;
+}
+
 void KNPreferenceItemGlobal::updateTitleCaption(QLabel *title,
                                                 const QString &caption)
 {

@@ -20,11 +20,8 @@
 
 #include "knmusiclrcparser.h"
 #include "knmusicglobal.h"
-#include "preference/knpreferenceitemglobal.h"
 
 #include "knmusiclyricsmanager.h"
-
-#include "knlocalemanager.h"
 
 #include <QDebug>
 
@@ -70,27 +67,6 @@ bool KNMusicLyricsManager::loadLyricsForFile(const QString &filePath)
                            m_positions,
                            m_lyricsText);
     return !m_positions.isEmpty();
-}
-
-void KNMusicLyricsManager::retranslate()
-{
-    m_preferenceItemGlobal->updateItemCaption(m_itemBase[LyricsFolderPath], tr("Lyrics Folder"));
-}
-
-void KNMusicLyricsManager::applyPreference()
-{
-    setLyricsFolderPath(
-                m_preferenceItemGlobal->itemData(m_itemBase[LyricsFolderPath]).toString());
-}
-
-void KNMusicLyricsManager::initialPreference()
-{
-    //Initial the controls.
-    m_itemBase[LyricsFolderPath]=
-            m_preferenceItemGlobal->generateItem(PathEdit,
-                                                 "LyricsFolderPath",
-                                                 m_lyricsFolderPath);
-    m_musicGlobal->addItem(m_itemBase[LyricsFolderPath]);
 }
 
 void KNMusicLyricsManager::clear()
@@ -165,21 +141,8 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_policyList.append(SameNameInMusicDir);
     m_policyList.append(RelateNameInMusicDir);
 
-    //Initial the preference item global.
-    m_preferenceItemGlobal=KNPreferenceItemGlobal::instance();
-    connect(m_preferenceItemGlobal, &KNPreferenceItemGlobal::requireApplyPreference,
-            this, &KNMusicLyricsManager::applyPreference);
-    //Initial the preference items.
-    initialPreference();
-
     //Initial the LRC file parser.
     m_lrcParser=new KNMusicLRCParser(this);
-
-    //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
-            this, &KNMusicLyricsManager::retranslate);
-    //Retranslate.
-    retranslate();
 }
 
 QString KNMusicLyricsManager::lyricsFolderPath() const
