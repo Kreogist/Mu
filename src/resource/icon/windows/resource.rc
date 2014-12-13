@@ -5,18 +5,21 @@ IDI_ICON1 ICON DISCARDABLE "mu.ico"
 #include <winver.h>
 #endif
 
+#define VER_FILEVERSION_STR         "0.4.0\0"
+#define VER_PRODUCTVERSION_STR      "0.4\0"
+
 VS_VERSION_INFO VERSIONINFO
-    FILEVERSION 0,0,50,0
-    PRODUCTVERSION 0,0,50,0
-    FILEFLAGSMASK 0x3fL
+    FILEVERSION         0,4,0,0
+    PRODUCTVERSION      0,4,0,0
+    FILEFLAGSMASK       0x3fL
 #ifdef _DEBUG
-    FILEFLAGS VS_FF_DEBUG
+    FILEFLAGS           VS_FF_DEBUG
 #else
-    FILEFLAGS 0x0L
+    FILEFLAGS           0x0L
 #endif
-    FILEOS VOS__WINDOWS32
-    FILETYPE VFT_DLL
-    FILESUBTYPE 0x0L
+    FILEOS              VOS__WINDOWS32
+    FILETYPE            VFT_DLL
+    FILESUBTYPE         0x0L
     BEGIN
         BLOCK "StringFileInfo"
         BEGIN
@@ -24,10 +27,23 @@ VS_VERSION_INFO VERSIONINFO
             BEGIN
                 VALUE "CompanyName", "Kreogist Dev Team\0"
                 VALUE "FileDescription", "Kreogist mu\0"
-                VALUE "FileVersion", "0.0.50\0"
-                VALUE "LegalCopyright", "(C) Kreogist Dev Team. \0"
+                VALUE "FileVersion", VER_FILEVERSION_STR
+                VALUE "LegalCopyright", "© Kreogist Dev Team. All rights reserved.\0"
+                VALUE "InternalName", "Nerve\0"
                 VALUE "OriginalFilename", "mu.exe\0"
                 VALUE "ProductName", "mu\0"
+                VALUE "ProductVersion", VER_PRODUCTVERSION_STR
+            END
+            BLOCK "080404B0"
+            BEGIN
+                VALUE "CompanyName", "Kreogist Dev Team\0"
+                VALUE "FileDescription", "Kreogist mu\0"
+                VALUE "FileVersion", VER_FILEVERSION_STR
+                VALUE "LegalCopyright", "© Kreogist Dev Team. 保留所有权利.\0"
+                VALUE "InternalName", "Nerve\0"
+                VALUE "OriginalFilename", "mu.exe\0"
+                VALUE "ProductName", "mu\0"
+                VALUE "ProductVersion", VER_PRODUCTVERSION_STR
             END
         END
     END
