@@ -98,9 +98,21 @@ bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo
                 return true;
             }
             break;
+        case RelateNameInLyricsDir:
+            if(findRelateLyrics(m_lyricsFolderPath, detailInfo))
+            {
+                return true;
+            }
+            break;
         case SameNameInMusicDir:
             if(checkLyricsFile(musicInfo.absolutePath() + "/" +
                                musicInfo.completeBaseName()+".lrc"))
+            {
+                return true;
+            }
+            break;
+        case RelateNameInMusicDir:
+            if(findRelateLyrics(musicInfo.absolutePath(), detailInfo))
             {
                 return true;
             }
@@ -122,6 +134,15 @@ bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
         return true;
     }
     return false;
+}
+
+bool KNMusicLyricsManager::findRelateLyrics(const QString &folderPath,
+                                            const KNMusicDetailInfo &detailInfo)
+{
+    //Find the title, the artist and the title, the album and the title.
+    return checkLyricsFile(folderPath+"/"+detailInfo.textLists[Name]+".lrc") ||
+            checkLyricsFile(folderPath+"/"+detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc") ||
+            checkLyricsFile(folderPath+"/"+detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc");
 }
 
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :

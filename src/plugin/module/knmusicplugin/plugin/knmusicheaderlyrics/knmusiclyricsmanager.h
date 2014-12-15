@@ -37,6 +37,7 @@ enum SearchPolicy
 };
 }
 
+using namespace KNMusic;
 using namespace KNMusicLyrics;
 
 class KNGlobal;
@@ -67,6 +68,8 @@ private slots:
 private:
     inline bool findLyricsForFile(const KNMusicDetailInfo &detailInfo);
     inline bool checkLyricsFile(const QString &lyricsPath);
+    inline bool findRelateLyrics(const QString &folderPath,
+                                 const KNMusicDetailInfo &detailInfo);
     static KNMusicLyricsManager *m_instance;
     explicit KNMusicLyricsManager(QObject *parent = 0);
 

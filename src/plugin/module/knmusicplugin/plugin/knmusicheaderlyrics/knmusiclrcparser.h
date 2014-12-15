@@ -28,9 +28,9 @@ namespace KNMusicLRC
 {
 enum Properties
 {
-    Title,
-    Artist,
-    Album,
+    LyricsTitle,
+    LyricsArtist,
+    LyricsAlbum,
     LyricAuthor
 };
 struct LRCFrame

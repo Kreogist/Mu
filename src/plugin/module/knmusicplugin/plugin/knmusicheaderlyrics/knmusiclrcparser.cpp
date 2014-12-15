@@ -60,19 +60,6 @@ void KNMusicLRCParser::parseFile(const QString &filePath,
     {
         return;
     }
-    //Using the text stream read all data.
-//    QTextStream lyricsStream(&lyricsFile);
-//    lyricsStream.setAutoDetectUnicode(true);
-//    //Cache the file line by line.
-//    QString lineCache;
-//    while(!(lineCache=lyricsStream.readLine()).isNull())
-//    {
-//        lineCache=lineCache.simplified();
-//        if(!lineCache.isEmpty())
-//        {
-//            lyricsRawData.append(lineCache);
-//        }
-//    }
     //Read all the raw data of the file.
     QByteArray fileRawData=lyricsFile.readAll();
     //Try to parse it using UTF-8.
