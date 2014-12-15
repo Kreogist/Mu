@@ -40,7 +40,7 @@ signals:
 public slots:
     void retranslate();
     void resetStatus();
-    void loadLyricsForMusic(const QString &filePath);
+    void loadLyricsForMusic(const KNMusicDetailInfo &detailInfo);
     void onActionPositionChange(const qint64 &position);
 
 protected:

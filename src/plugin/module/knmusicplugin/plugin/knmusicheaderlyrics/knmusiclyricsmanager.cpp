@@ -19,7 +19,6 @@
 #include <QDir>
 
 #include "knmusiclrcparser.h"
-#include "knmusicglobal.h"
 
 #include "knmusiclyricsmanager.h"
 
@@ -52,12 +51,12 @@ QString KNMusicLyricsManager::lyricsAt(const int &index) const
     return m_lyricsText.at(index);
 }
 
-bool KNMusicLyricsManager::loadLyricsForFile(const QString &filePath)
+bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo)
 {
     //Clear the lyrics.
     clear();
     //Find the lyrics.
-    if(!findLyricsForFile(filePath))
+    if(!findLyricsForFile(detailInfo))
     {
         return false;
     }
@@ -80,12 +79,12 @@ void KNMusicLyricsManager::clear()
     m_lyricsText.clear();
 }
 
-bool KNMusicLyricsManager::findLyricsForFile(const QString &filePath)
+bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo)
 {
     //Clear the old path.
     m_currentLyricsPath.clear();
     //Get the file info of the music.
-    QFileInfo musicInfo(filePath);
+    QFileInfo musicInfo(detailInfo.filePath);
     //Search the lyrics using the policy.
     int currentPolicy=0;
     while(currentPolicy<m_policyList.size())

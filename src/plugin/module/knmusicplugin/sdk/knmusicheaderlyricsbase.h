@@ -7,7 +7,11 @@
 #ifndef KNMUSICHEADERLYRICSBASE_H
 #define KNMUSICHEADERLYRICSBASE_H
 
+#include "knmusicglobal.h"
+
 #include <QWidget>
+
+using namespace KNMusic;
 
 class KNMusicHeaderPlayerBase;
 class KNMusicHeaderLyricsBase : public QWidget
@@ -21,7 +25,7 @@ signals:
 
 public slots:
     virtual void resetStatus()=0;
-    virtual void loadLyricsForMusic(const QString &filePath)=0;
+    virtual void loadLyricsForMusic(const KNMusicDetailInfo &detailInfo)=0;
     virtual void onActionPositionChange(const qint64 &position)=0;
 
 };

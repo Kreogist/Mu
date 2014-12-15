@@ -22,6 +22,8 @@
 #include <QMap>
 #include <QStringList>
 
+#include "knmusicglobal.h"
+
 #include <QObject>
 
 namespace KNMusicLyrics
@@ -58,12 +60,12 @@ public:
 signals:
 
 public slots:
-    bool loadLyricsForFile(const QString &filePath);
+    bool loadLyricsForFile(const KNMusicDetailInfo &detailInfo);
 
 private slots:
 
 private:
-    inline bool findLyricsForFile(const QString &filePath);
+    inline bool findLyricsForFile(const KNMusicDetailInfo &detailInfo);
     inline bool checkLyricsFile(const QString &lyricsPath);
     static KNMusicLyricsManager *m_instance;
     explicit KNMusicLyricsManager(QObject *parent = 0);

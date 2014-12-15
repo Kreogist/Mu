@@ -29,7 +29,7 @@ signals:
     void requireChangeLoopState();
     void requireShowMainPlayer();
     void requireShowAppendMenu();
-    void requireLoadLyrics(QString musicFilePath);
+    void requireLoadLyrics(KNMusicDetailInfo detailInfo);
     void playerReset();
     void finished();
     void positionChanged(qint64 position);

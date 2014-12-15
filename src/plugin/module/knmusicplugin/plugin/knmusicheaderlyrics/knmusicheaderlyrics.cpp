@@ -97,12 +97,12 @@ void KNMusicHeaderLyrics::resetStatus()
     update();
 }
 
-void KNMusicHeaderLyrics::loadLyricsForMusic(const QString &filePath)
+void KNMusicHeaderLyrics::loadLyricsForMusic(const KNMusicDetailInfo &detailInfo)
 {
     //Reset the lyrics viewer.
     resetStatus();
     //Load the lyrics.
-    if(m_lyricsManager->loadLyricsForFile(filePath))
+    if(m_lyricsManager->loadLyricsForFile(detailInfo))
     {
         //Update parameters.
         //Get the lyrics lines.
