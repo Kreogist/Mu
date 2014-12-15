@@ -133,7 +133,7 @@ bool KNMusicTagWMA::parseAlbumArt(KNMusicDetailInfo &detailInfo)
         return false;
     }
     //Get the image data.
-    QByteArrayList imageRawDatas=detailInfo.imageData["WMA"];
+    QList<QByteArray> imageRawDatas=detailInfo.imageData["WMA"];
     //These image data is just the same as ID3v2, so many of these codes are
     //copied from ID3v2 module.
     //But one WMA can only contains one image, send this image to parse.

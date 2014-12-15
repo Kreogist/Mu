@@ -128,7 +128,7 @@ struct KNMusicDetailInfo
     //Album art data.
     QImage coverImage;
     QString coverImageHash;
-    QMap<QString, QByteArrayList> imageData;
+    QMap<QString, QList<QByteArray>> imageData;
     //Tag datas.
     QString textLists[MusicDataCount];
     int rating=0;
