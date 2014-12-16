@@ -53,8 +53,7 @@ private slots:
 private:
     inline QSize lyricsSize(const QString &lyricsText)
     {
-        return fontMetrics().size(Qt::TextExpandTabs,
-                                  lyricsText);
+        return fontMetrics().size(Qt::TextExpandTabs, lyricsText);
     }
     void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
                                   QList<KNPreferenceItemInfo> &list);

@@ -43,9 +43,11 @@ protected:
     {
         //Clear some no used words. I don't know how these regexp works.
         //Magic, don't touch.
-        str=str.toLower().replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
-        str=str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
-        str=str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");
+        str=str.toLower();
+        str.replace('.', " ");
+        str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
+        str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
+        str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");
         return str;
     }
     void get(const QString &url, QByteArray &responseData);
