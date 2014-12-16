@@ -25,7 +25,6 @@ class KNMusicXiaMiLyrics : public KNMusicLyricsDownloader
     Q_OBJECT
 public:
     explicit KNMusicXiaMiLyrics(QObject *parent = 0);
-    ~KNMusicXiaMiLyrics();
     QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
 
 signals:

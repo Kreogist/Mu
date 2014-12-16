@@ -28,6 +28,7 @@ class KNConnectionHandler : public QObject
     Q_OBJECT
 public:
     explicit KNConnectionHandler(QObject *parent = 0);
+    ~KNConnectionHandler();
     bool isEmpty();
     void disConnectAll();
     void addConnectionHandle(const QMetaObject::Connection connection);

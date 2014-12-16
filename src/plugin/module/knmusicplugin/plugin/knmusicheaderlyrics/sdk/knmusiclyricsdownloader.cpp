@@ -46,6 +46,7 @@ KNMusicLyricsDownloader::~KNMusicLyricsDownloader()
 
 void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
 {
+    m_timeout->stop();
     //Clear the data first.
     responseData.clear();
     //Generate the request.
