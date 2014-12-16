@@ -35,7 +35,8 @@ protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
     void paintEvent(QPaintEvent *event);
-    void insertControlWidget(QWidget *widget);
+    void insertControlWidget(QWidget *widget, int stretch = 0);
+    void insertStretch();
 
 private slots:
     void onActionChangeHighlight(const int &frame);

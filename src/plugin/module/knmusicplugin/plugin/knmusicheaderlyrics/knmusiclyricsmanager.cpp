@@ -59,7 +59,7 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
     //Find the lyrics.
     if(!findLyricsForFile(detailInfo))
     {
-        if(!downloadLyricsForFile(detailInfo))
+        if(m_downloadLyrics && !downloadLyricsForFile(detailInfo))
         {
             return false;
         }
@@ -203,6 +203,16 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
 
     //Install the downloaders.
     installDownloaders();
+}
+
+bool KNMusicLyricsManager::downloadLyrics() const
+{
+    return m_downloadLyrics;
+}
+
+void KNMusicLyricsManager::setDownloadLyrics(bool downloadLyrics)
+{
+    m_downloadLyrics = downloadLyrics;
 }
 
 QString KNMusicLyricsManager::lyricsFolderPath() const

@@ -47,7 +47,7 @@ KNPreferenceItemNumber::KNPreferenceItemNumber(QWidget *parent) :
     numberEditorLayout->addStretch();
 
     //Insert the control widget.
-    insertControlWidget(numberEditorWidget);
+    insertControlWidget(numberEditorWidget, 1);
 }
 
 void KNPreferenceItemNumber::setRange(int min, int max)

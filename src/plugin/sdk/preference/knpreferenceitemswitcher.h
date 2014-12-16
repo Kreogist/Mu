@@ -9,6 +9,7 @@
 
 #include "knpreferenceitembase.h"
 
+class KNAnimeColorSwitcher;
 class KNPreferenceItemSwitcher : public KNPreferenceItemBase
 {
     Q_OBJECT
@@ -26,7 +27,8 @@ public slots:
 protected:
 
 private:
-    bool m_defaultValue=false, m_value=false;
+    bool m_defaultValue=false;
+    KNAnimeColorSwitcher *m_switcher;
 };
 
 #endif // KNPREFERENCEITEMSWITCHER_H

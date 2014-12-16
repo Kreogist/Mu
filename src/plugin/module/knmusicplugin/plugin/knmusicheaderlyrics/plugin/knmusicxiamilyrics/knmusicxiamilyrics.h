@@ -32,7 +32,7 @@ signals:
 public slots:
 
 private:
-    QString processKeywords(QString str);
+    inline QString processKeywords(QString str);
 };
 
 #endif // KNMUSICXIAMILYRICS_H
