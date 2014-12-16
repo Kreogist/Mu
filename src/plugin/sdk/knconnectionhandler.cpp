@@ -24,6 +24,11 @@ KNConnectionHandler::KNConnectionHandler(QObject *parent) :
     connections.clear();
 }
 
+KNConnectionHandler::~KNConnectionHandler()
+{
+    disConnectAll();
+}
+
 bool KNConnectionHandler::isEmpty()
 {
     return connections.isEmpty();

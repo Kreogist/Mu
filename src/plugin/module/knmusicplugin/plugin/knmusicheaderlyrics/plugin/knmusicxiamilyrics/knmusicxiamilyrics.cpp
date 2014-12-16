@@ -28,16 +28,11 @@ KNMusicXiaMiLyrics::KNMusicXiaMiLyrics(QObject *parent) :
 
 }
 
-KNMusicXiaMiLyrics::~KNMusicXiaMiLyrics()
-{
-
-}
-
 QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
 {
     //Generate the url.
     QString url="http://www.xiami.com/search/song-lyric?key=" +
-                process_keywords(detailInfo.textLists[Name]);
+                processKeywords(detailInfo.textLists[Name]);
     //Get the data from url.
     QByteArray responseData;
     get(url, responseData);
@@ -105,14 +100,13 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     return QString();
 }
 
-QString KNMusicXiaMiLyrics::process_keywords(QString str)
+QString KNMusicXiaMiLyrics::processKeywords(QString str)
 {
+    //Clear some no used words.
     str=str.toLower();
-    str=str.replace(QRegularExpression("\\'|·|\\$|\\&|–"), "");
-    str=str.replace(QRegularExpression("\\(.*?\\)|\\[.*?]|{.*?}|（.*?"), "");
-    str=str.replace(QRegularExpression("[-/:-@[-`{-~]+"), "");
-//    str=str.replace(QRegularExpression("[\\u2014\\u2018\\u201c\\u2026\\u3001\\u3002\\u300a\\u300b\\u300e\\u300f\\u3010\\u3011\\u30fb\\uff01\\uff08\\uff09\\uff0c\\uff1a\\uff1b\\uff1f\\uff5e\\uffe5]+"),
-//                    "");
+    str=str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
+    str=str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
+    str=str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");
     return str;
 }
 
