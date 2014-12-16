@@ -17,7 +17,7 @@ KNMusicQQLyrics::KNMusicQQLyrics(QObject *parent) :
 
 QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
 {
-    QString url=QQQueryString(detailInfo);
+    QString url=generateQueryUrl(detailInfo);
     QByteArray responseData;
     get(url, responseData);
     if(responseData.isEmpty())
@@ -41,7 +41,7 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
         i!=songid.end();
         ++i)
     {
-        get(QQRequestString(*i), responseData);
+        get(generateRequestString(*i), responseData);
         if(responseData.isEmpty())
         {
             continue;
@@ -63,25 +63,24 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     return QString();
 }
 
-QString KNMusicQQLyrics::QQStringFilter(QString s)
+QString KNMusicQQLyrics::processKeywordsToGBK(QString s)
 {
-    s=s.toLower();
-    s=s.replace(QRegExp("\\'|·|\\$|\\&|–"), "");
-    s=s.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|（.*?"), "");
-    s=s.replace(QRegExp("[-/:-@[-`{-~]+"), "");
-    return m_gbkCodec->fromUnicode(s).toPercentEncoding();
+    return m_gbkCodec->fromUnicode(processKeywords(s)).toPercentEncoding();
 }
 
-QString KNMusicQQLyrics::QQQueryString(const KNMusicDetailInfo &detailInfo)
+QString KNMusicQQLyrics::generateQueryUrl(const KNMusicDetailInfo &detailInfo)
 {
     return "http://qqmusic.qq.com/fcgi-bin/qm_getLyricId.fcg?name="+
-            QQStringFilter(detailInfo.textLists[Name])+"&singer="+
-            QQStringFilter(detailInfo.textLists[Artist])+"&from=qqplayer";
+            processKeywordsToGBK(detailInfo.textLists[Name])+"&singer="+
+            processKeywordsToGBK(detailInfo.textLists[Artist])+"&from=qqplayer";
 }
 
-QString KNMusicQQLyrics::QQRequestString(const QString &id)
+QString KNMusicQQLyrics::generateRequestString(const QString &id)
 {
-    return "http://music.qq.com/miniportal/static/lyric/" + QString::number(id.toLongLong()%100)
-            + "/" + id + ".xml";
+    return "http://music.qq.com/miniportal/static/lyric/" +
+            QString::number(id.toLongLong()%100) +
+            "/" +
+            id +
+            ".xml";
 }
 

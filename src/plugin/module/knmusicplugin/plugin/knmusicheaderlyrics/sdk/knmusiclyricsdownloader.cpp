@@ -39,11 +39,6 @@ KNMusicLyricsDownloader::KNMusicLyricsDownloader(QObject *parent) :
     m_timeout->setInterval(5000);
 }
 
-KNMusicLyricsDownloader::~KNMusicLyricsDownloader()
-{
-    ;
-}
-
 void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
 {
     m_timeout->stop();
