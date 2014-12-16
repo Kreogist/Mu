@@ -37,7 +37,7 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
 {
     //Generate the url.
     QString url="http://www.xiami.com/search/song-lyric?key=" +
-                process_keywords(detailInfo.textLists[Name]);
+                processKeywords(detailInfo.textLists[Name]);
     //Get the data from url.
     QByteArray responseData;
     get(url, responseData);
@@ -105,7 +105,7 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     return QString();
 }
 
-QString KNMusicXiaMiLyrics::process_keywords(QString str)
+QString KNMusicXiaMiLyrics::processKeywords(QString str)
 {
     str=str.toLower();
     str=str.replace(QRegularExpression("\\'|·|\\$|\\&|–"), "");

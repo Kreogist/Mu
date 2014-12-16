@@ -61,6 +61,8 @@ public:
     void setLyricsFolderPath(const QString &lyricsFolderPath);
     void clear();
     void installLyricsDownloader(KNMusicLyricsDownloader *downloader);
+    bool downloadLyrics() const;
+    void setDownloadLyrics(bool downloadLyrics);
 
 signals:
 
@@ -89,6 +91,8 @@ private:
     QStringList m_lyricsText;
     QMap<int, QString> m_lyricsProperty;
     QLinkedList<KNMusicLyricsDownloader *> m_downloaders;
+
+    bool m_downloadLyrics=true;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H

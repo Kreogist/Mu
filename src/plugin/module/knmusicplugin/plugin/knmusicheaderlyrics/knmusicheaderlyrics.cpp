@@ -257,6 +257,10 @@ void KNMusicHeaderLyrics::applyPreference()
     m_lyricsManager->setLyricsFolderPath(
                 m_musicGlobal->configureData("LyricsFolder",
                                              m_lyricsManager->lyricsFolderPath()).toString());
+    //Update the download info.
+    m_lyricsManager->setDownloadLyrics(
+                m_musicGlobal->configureData("DownloadLyrics",
+                                             m_lyricsManager->downloadLyrics()).toBool());
     //Update the spacing.
     m_lineSpacing=
                 m_musicGlobal->configureData("TextSpacing",
@@ -286,6 +290,10 @@ void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTi
                                                      tr("Lyrics Folder"),
                                                      "LyricsFolder",
                                                      m_lyricsManager->lyricsFolderPath()));
+    list.append(KNPreferenceItemGlobal::generateInfo(Switcher,
+                                                     tr("Download Lyrics"),
+                                                     "DownloadLyrics",
+                                                     m_lyricsManager->downloadLyrics()));
     KNPreferenceItemInfo currentInfo=KNPreferenceItemGlobal::generateInfo(Number,
                                                                           tr("Text Spacing"),
                                                                           "TextSpacing",
