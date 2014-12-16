@@ -41,10 +41,12 @@ KNMusicGlobal::~KNMusicGlobal()
     //Quit all working threads.
     m_searcherThread->quit();
     m_analysisThread->quit();
+    m_lyricsThread->quit();
 
     //Wait.
     m_searcherThread->wait();
     m_analysisThread->wait();
+    m_lyricsThread->wait();
 }
 
 QString KNMusicGlobal::msecondToString(const qint64 &msecond)
@@ -214,8 +216,10 @@ void KNMusicGlobal::initialThreads()
 {
     m_searcherThread=new QThread(this);
     m_analysisThread=new QThread(this);
+    m_lyricsThread=new QThread(this);
     m_searcherThread->start();
     m_analysisThread->start();
+    m_lyricsThread->start();
 }
 
 void KNMusicGlobal::initialHeaderText()
@@ -551,6 +555,11 @@ QThread *KNMusicGlobal::searchThread()
 QThread *KNMusicGlobal::analysisThread()
 {
     return m_analysisThread;
+}
+
+QThread *KNMusicGlobal::lyricsThread()
+{
+    return m_lyricsThread;
 }
 
 void KNMusicGlobal::setNoAlbumArt(const QPixmap &noAlbumArt)

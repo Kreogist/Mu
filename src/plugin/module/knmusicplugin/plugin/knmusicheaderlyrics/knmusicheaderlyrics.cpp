@@ -36,6 +36,7 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     m_musicGlobal=KNMusicGlobal::instance();
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicLyricsManager::instance();
+    m_lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
     //Set line spacing specially for Windows.
 #ifdef Q_OS_WIN32
     m_lineSpacing=0;
@@ -101,6 +102,10 @@ void KNMusicHeaderLyrics::loadLyricsForMusic(const KNMusicDetailInfo &detailInfo
 {
     //Reset the lyrics viewer.
     resetStatus();
+    //Clear the current lyrics.
+    m_lyricsManager->clear();
+    //Update the widget first.
+    update();
     //Load the lyrics.
     if(m_lyricsManager->loadLyricsForFile(detailInfo))
     {

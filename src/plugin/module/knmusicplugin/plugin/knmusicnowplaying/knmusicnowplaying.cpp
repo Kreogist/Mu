@@ -215,8 +215,6 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                          m_currentPlayingIndex,
                                          currentInfo))
     {
-        //Update the player's data.
-        emit requireUpdatePlayerInfo(currentInfo);
         //Update the data in proxy model.
         m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
                                             currentInfo);
@@ -231,6 +229,8 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                    currentInfo.startPosition,
                                    currentInfo.duration);
         }
+        //Update the player's data.
+        emit requireUpdatePlayerInfo(currentInfo);
     }
 }
 

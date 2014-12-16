@@ -177,6 +177,7 @@ public:
     QPixmap noAlbumArt() const;
     QThread *searchThread();
     QThread *analysisThread();
+    QThread *lyricsThread();
     void setNoAlbumArt(const QPixmap &noAlbumArt);
     QString treeViewHeaderText(const int &index);
     QString indexedGenre(const int &index);
@@ -223,7 +224,7 @@ private:
                 m_suffixDescription, m_listSuffixDescription,
                 m_indexedGenres;
     QPixmap m_noAlbumArt;
-    QThread *m_searcherThread, *m_analysisThread;
+    QThread *m_searcherThread, *m_analysisThread, *m_lyricsThread;
     KNPreferenceWidgetsPanel *m_preferencePanel;
     KNGlobal *m_global;
 };
