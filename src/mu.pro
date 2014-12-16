@@ -274,7 +274,10 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.cpp \
-    plugin/sdk/preference/knpreferenceitemnumber.cpp
+    plugin/sdk/preference/knpreferenceitemnumber.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -456,7 +459,10 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.h \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.h \
-    plugin/sdk/preference/knpreferenceitemnumber.h
+    plugin/sdk/preference/knpreferenceitemnumber.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h
 
 RESOURCES += \
     resource/res.qrc

@@ -16,8 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QFileInfo>
-#include <QDir>
 
+#include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
+#include "sdk/knmusiclyricsglobal.h"
 #include "knmusiclrcparser.h"
 
 #include "knmusiclyricsmanager.h"
@@ -58,7 +59,10 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
     //Find the lyrics.
     if(!findLyricsForFile(detailInfo))
     {
-        return false;
+        if(!downloadLyricsForFile(detailInfo))
+        {
+            return false;
+        }
     }
     //Using parser to parse the file.
     m_lrcParser->parseFile(m_currentLyricsPath,
@@ -66,6 +70,11 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
                            m_positions,
                            m_lyricsText);
     return !m_positions.isEmpty();
+}
+
+void KNMusicLyricsManager::installDownloaders()
+{
+    installLyricsDownloader(new KNMusicXiaMiLyrics);
 }
 
 void KNMusicLyricsManager::clear()
@@ -77,6 +86,12 @@ void KNMusicLyricsManager::clear()
     //Remove all the positions and the texts.
     m_positions.clear();
     m_lyricsText.clear();
+}
+
+void KNMusicLyricsManager::installLyricsDownloader(KNMusicLyricsDownloader *downloader)
+{
+    //Add the downloader to linked list.
+    m_downloaders.append(downloader);
 }
 
 bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo)
@@ -92,14 +107,14 @@ bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo
         switch (m_policyList.at(currentPolicy))
         {
         case SameNameInLyricsDir:
-            if(checkLyricsFile(m_lyricsFolderPath + "/" +
+            if(checkLyricsFile(KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
                                musicInfo.completeBaseName()+".lrc"))
             {
                 return true;
             }
             break;
         case RelateNameInLyricsDir:
-            if(findRelateLyrics(m_lyricsFolderPath, detailInfo))
+            if(findRelateLyrics(KNMusicLyricsGlobal::lyricsFolderPath(), detailInfo))
             {
                 return true;
             }
@@ -121,6 +136,30 @@ bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo
             break;
         }
         currentPolicy++;
+    }
+    return false;
+}
+
+bool KNMusicLyricsManager::downloadLyricsForFile(const KNMusicDetailInfo &detailInfo)
+{
+    //Using the downloader to download the lyrics.
+    for(QLinkedList<KNMusicLyricsDownloader *>::iterator i=m_downloaders.begin();
+        i!=m_downloaders.end();
+        ++i)
+    {
+        //Try to download the file from server.
+        QString downloadedFilePath=(*i)->downloadLyrics(detailInfo);
+        //If download success.
+        if(!downloadedFilePath.isEmpty())
+        {
+            //Load the file.
+            if(checkLyricsFile(downloadedFilePath))
+            {
+                return true;
+            }
+            //Or else, we need to delete this file.
+            //!FIXME: add delete code here.
+        }
     }
     return false;
 }
@@ -152,7 +191,7 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_musicGlobal=KNMusicGlobal::instance();
 
     //Get the lyrics folder path.
-    m_lyricsFolderPath=KNMusicGlobal::musicLibraryPath()+"/Lyrics";
+    KNMusicLyricsGlobal::setLyricsFolderPath(KNMusicGlobal::musicLibraryPath()+"/Lyrics");
     //Set the default loading policy.
     m_policyList.append(SameNameInLyricsDir);
     m_policyList.append(RelateNameInLyricsDir);
@@ -161,30 +200,17 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
 
     //Initial the LRC file parser.
     m_lrcParser=new KNMusicLRCParser(this);
+
+    //Install the downloaders.
+    installDownloaders();
 }
 
 QString KNMusicLyricsManager::lyricsFolderPath() const
 {
-    return m_lyricsFolderPath;
+    return KNMusicLyricsGlobal::lyricsFolderPath();
 }
 
 void KNMusicLyricsManager::setLyricsFolderPath(const QString &lyricsFolderPath)
 {
-    QFileInfo lyricsFolderInfo(lyricsFolderPath);
-    if(lyricsFolderInfo.exists())
-    {
-        if(lyricsFolderInfo.isDir())
-        {
-            m_lyricsFolderPath = lyricsFolderInfo.absoluteFilePath() + "/";
-        }
-    }
-    else
-    {
-        QDir lyricsFolder(lyricsFolderInfo.absoluteFilePath());
-        lyricsFolder.mkpath(lyricsFolder.absolutePath());
-        if(lyricsFolder.exists())
-        {
-            m_lyricsFolderPath=lyricsFolder.absolutePath() + "/";
-        }
-    }
+    KNMusicLyricsGlobal::setLyricsFolderPath(lyricsFolderPath);
 }

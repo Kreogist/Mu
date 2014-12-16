@@ -20,7 +20,10 @@
 
 #include <QFile>
 #include <QMap>
+#include <QLinkedList>
 #include <QStringList>
+
+#include "sdk/knmusiclyricsdownloader.h"
 
 #include "knmusicglobal.h"
 
@@ -57,6 +60,7 @@ public:
     QString lyricsFolderPath() const;
     void setLyricsFolderPath(const QString &lyricsFolderPath);
     void clear();
+    void installLyricsDownloader(KNMusicLyricsDownloader *downloader);
 
 signals:
 
@@ -66,7 +70,9 @@ public slots:
 private slots:
 
 private:
+    void installDownloaders();
     inline bool findLyricsForFile(const KNMusicDetailInfo &detailInfo);
+    bool downloadLyricsForFile(const KNMusicDetailInfo &detailInfo);
     inline bool checkLyricsFile(const QString &lyricsPath);
     inline bool findRelateLyrics(const QString &folderPath,
                                  const KNMusicDetailInfo &detailInfo);
@@ -75,13 +81,14 @@ private:
 
     KNMusicGlobal *m_musicGlobal;
     KNMusicLRCParser *m_lrcParser;
-    QString m_currentLyricsPath, m_lyricsFolderPath;
+    QString m_currentLyricsPath;
     QFile m_lyricsFile;
     QList<int> m_policyList;
 
     QList<qint64> m_positions;
     QStringList m_lyricsText;
     QMap<int, QString> m_lyricsProperty;
+    QLinkedList<KNMusicLyricsDownloader *> m_downloaders;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H
