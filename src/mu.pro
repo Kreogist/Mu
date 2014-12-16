@@ -277,7 +277,8 @@ SOURCES += \
     plugin/sdk/preference/knpreferenceitemnumber.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -462,7 +463,8 @@ HEADERS += \
     plugin/sdk/preference/knpreferenceitemnumber.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.h
 
 RESOURCES += \
     resource/res.qrc
