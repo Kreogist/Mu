@@ -46,6 +46,7 @@ protected:
         //Magic, don't touch.
         str=str.toLower();
         str.replace('.', " ");
+        str.replace('&', " ");
         str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
         //truncate all symbols
         str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
