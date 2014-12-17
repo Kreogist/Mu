@@ -20,6 +20,7 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 
 #include "knconnectionhandler.h"
@@ -78,9 +79,12 @@ void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
 QString KNMusicLyricsDownloader::writeLyricsFile(const KNMusicDetailInfo &detailInfo,
                                                  const QString &content)
 {
-    QString filePath=KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
-            detailInfo.textLists[Artist] + " - " + detailInfo.textLists[Name] + ".lrc";
-    QFile lyricsFile(filePath);
+    //Get the complete base file name of the original file.
+    QFileInfo musicFileInfo(detailInfo.filePath);
+    //Generate the lyrics file path
+    QString lyricsFilePath=KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
+            musicFileInfo.completeBaseName() + ".lrc";
+    QFile lyricsFile(lyricsFilePath);
     //Try to open the file.
     if(lyricsFile.open(QIODevice::WriteOnly))
     {
@@ -90,7 +94,7 @@ QString KNMusicLyricsDownloader::writeLyricsFile(const KNMusicDetailInfo &detail
         //Close the file.
         lyricsFile.close();
         //Return the file path.
-        return filePath;
+        return lyricsFilePath;
     }
     return QString();
 }

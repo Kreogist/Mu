@@ -47,8 +47,8 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
             continue;
         }
         //Ensure the id is not empty.
-        QString currentID=attribute("id");
-        if(currentID.isEmpty())
+        QString currentID=currentSongInfo.attribute("id");
+        if(!currentID.isEmpty())
         {
             songIDList.append(currentID);
         }

@@ -8,6 +8,10 @@ class KNMusicQQLyrics : public KNMusicLyricsDownloader
     Q_OBJECT
 public:
     explicit KNMusicQQLyrics(QObject *parent = 0);
+    QString downloaderName()
+    {
+        return "QQ Music";
+    }
     QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
 
 signals:
