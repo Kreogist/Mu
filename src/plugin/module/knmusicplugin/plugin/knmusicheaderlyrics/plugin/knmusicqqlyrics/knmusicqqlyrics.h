@@ -15,11 +15,9 @@ signals:
 public slots:
 
 private:
-    QString QQStringFilter(QString s);
-    QString QQQueryString(const KNMusicDetailInfo &detailInfo);
-    QString QQRequestString(const QString &id);
+    inline QString processKeywordsToGBK(const QString &keywords);
+    inline QString generateRequestString(const QString &id);
     QTextCodec *m_gbkCodec;
-    QString QQFilter;
 };
 
 #endif // KNMUSICQQLYRICS_H

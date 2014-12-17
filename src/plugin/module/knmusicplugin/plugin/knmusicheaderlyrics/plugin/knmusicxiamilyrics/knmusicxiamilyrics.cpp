@@ -100,13 +100,3 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     return QString();
 }
 
-QString KNMusicXiaMiLyrics::processKeywords(QString str)
-{
-    //Clear some no used words.
-    str=str.toLower();
-    str=str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
-    str=str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
-    str=str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");
-    return str;
-}
-

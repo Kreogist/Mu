@@ -32,7 +32,6 @@ class KNMusicLyricsDownloader : public QObject
     Q_OBJECT
 public:
     explicit KNMusicLyricsDownloader(QObject *parent = 0);
-    ~KNMusicLyricsDownloader();
     virtual QString downloadLyrics(const KNMusicDetailInfo &detailInfo)=0;
 
 signals:
@@ -40,6 +39,17 @@ signals:
 public slots:
 
 protected:
+    inline QString processKeywords(QString str)
+    {
+        //Clear some no used words. I don't know how these regexp works.
+        //Magic, don't touch.
+        str=str.toLower();
+        str.replace('.', " ");
+        str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
+        str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
+        str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");
+        return str;
+    }
     void get(const QString &url, QByteArray &responseData);
     QString writeLyricsFile(const KNMusicDetailInfo &detailInfo,
                             const QString &content);

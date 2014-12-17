@@ -11,43 +11,68 @@ KNMusicQQLyrics::KNMusicQQLyrics(QObject *parent) :
 {
     //Initial the GBK codec.
     m_gbkCodec=QTextCodec::codecForName("GBK");
-    //
-    QQFilter=QString(" _-*.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 }
 
 QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
 {
-    QString url=QQQueryString(detailInfo);
+    //Generate the url and get the data from the url.
+    QString url="http://qqmusic.qq.com/fcgi-bin/qm_getLyricId.fcg?name="+
+            processKeywordsToGBK(detailInfo.textLists[Name])+"&singer="+
+            processKeywordsToGBK(detailInfo.textLists[Artist])+"&from=qqplayer";
     QByteArray responseData;
     get(url, responseData);
+    //Check the response.
     if(responseData.isEmpty())
     {
         return QString();
     }
-    //Tencent use GBK as default codec.
+    //Tencent use GBK as default codec, translate the data to UTF-8, parse it
+    //with DomDocument.
     QDomDocument xmlDoc;
     xmlDoc.setContent(m_gbkCodec->toUnicode(responseData));
-    QDomNodeList lrc=xmlDoc.elementsByTagName("songinfo");
-    if(lrc.isEmpty())
+    //To find whether it contains song info.
+    QDomNodeList songInfoList=xmlDoc.elementsByTagName("songinfo");
+    if(songInfoList.isEmpty())
     {
         return QString();
     }
-    QStringList songid;
-    for(int i=0; i<lrc.length(); i++)
+    //Get the song id from the song info.
+    QStringList songIDList;
+    for(int i=0; i<songInfoList.length(); i++)
     {
-        songid.append(lrc.at(i).toElement().attribute("id"));
+        //Ensure the song info is available.
+        QDomElement currentSongInfo=songInfoList.at(i).toElement();
+        if(currentSongInfo.isNull())
+        {
+            continue;
+        }
+        //Ensure the id is not empty.
+        QString currentID=attribute("id");
+        if(currentID.isEmpty())
+        {
+            songIDList.append(currentID);
+        }
     }
-    for(QStringList::iterator i=songid.begin();
-        i!=songid.end();
+    //Check if the song id is empty.
+    if(songIDList.isEmpty())
+    {
+        return QString();
+    }
+    //Get the detail data for each song.
+    for(QStringList::iterator i=songIDList.begin();
+        i!=songIDList.end();
         ++i)
     {
-        get(QQRequestString(*i), responseData);
+        get(generateRequestString(*i), responseData);
+        //Check the response data is empty or not.
         if(responseData.isEmpty())
         {
             continue;
         }
+        //Parse the response data.
         QString xml_text=m_gbkCodec->toUnicode(responseData);
         xmlDoc.setContent(xml_text);
+        //Find the lyrics.
         QDomNodeList lr=xmlDoc.elementsByTagName("lyric");
         if(lr.isEmpty())
         {
@@ -58,30 +83,22 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
         {
             continue;
         }
+        //Write the lyrics and return the file name.
         return writeLyricsFile(detailInfo, lyricsContent);
     }
     return QString();
 }
 
-QString KNMusicQQLyrics::QQStringFilter(QString s)
+QString KNMusicQQLyrics::processKeywordsToGBK(const QString &keywords)
 {
-    s=s.toLower();
-    s=s.replace(QRegExp("\\'|·|\\$|\\&|–"), "");
-    s=s.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|（.*?"), "");
-    s=s.replace(QRegExp("[-/:-@[-`{-~]+"), "");
-    return m_gbkCodec->fromUnicode(s).toPercentEncoding();
+    return m_gbkCodec->fromUnicode(processKeywords(keywords)).toPercentEncoding();
 }
 
-QString KNMusicQQLyrics::QQQueryString(const KNMusicDetailInfo &detailInfo)
+QString KNMusicQQLyrics::generateRequestString(const QString &id)
 {
-    return "http://qqmusic.qq.com/fcgi-bin/qm_getLyricId.fcg?name="+
-            QQStringFilter(detailInfo.textLists[Name])+"&singer="+
-            QQStringFilter(detailInfo.textLists[Artist])+"&from=qqplayer";
+    return "http://music.qq.com/miniportal/static/lyric/" +
+            QString::number(id.toLongLong()%100) +
+            "/" +
+            id +
+            ".xml";
 }
-
-QString KNMusicQQLyrics::QQRequestString(const QString &id)
-{
-    return "http://music.qq.com/miniportal/static/lyric/" + QString::number(id.toLongLong()%100)
-            + "/" + id + ".xml";
-}
-
