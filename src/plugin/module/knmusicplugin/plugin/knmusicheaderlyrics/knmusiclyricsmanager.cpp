@@ -15,10 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QFile>
 #include <QFileInfo>
 
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
+#include "plugin/knmusicbaidulyrics/knmusicbaidulyrics.h"
 #include "sdk/knmusiclyricsglobal.h"
 #include "knmusiclrcparser.h"
 
@@ -77,6 +79,7 @@ void KNMusicLyricsManager::installDownloaders()
 {
     installLyricsDownloader(new KNMusicQQLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
+    installLyricsDownloader(new KNMusicBaiduLyrics);
 }
 
 void KNMusicLyricsManager::clear()
@@ -160,7 +163,8 @@ bool KNMusicLyricsManager::downloadLyricsForFile(const KNMusicDetailInfo &detail
                 return true;
             }
             //Or else, we need to delete this file.
-            //!FIXME: add delete code here.
+            QFile removedFile(downloadedFilePath);
+            removedFile.remove();
         }
     }
     return false;

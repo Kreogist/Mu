@@ -15,21 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICXIAMILYRICS_H
-#define KNMUSICXIAMILYRICS_H
+#ifndef KNMUSICBAIDULYRICS_H
+#define KNMUSICBAIDULYRICS_H
 
 #include "../../sdk/knmusiclyricsdownloader.h"
 
-class KNMusicXiaMiLyrics : public KNMusicLyricsDownloader
+class KNMusicBaiduLyrics : public KNMusicLyricsDownloader
 {
     Q_OBJECT
 public:
-    explicit KNMusicXiaMiLyrics(QObject *parent = 0);
+    explicit KNMusicBaiduLyrics(QObject *parent = 0);
     QString downloaderName()
     {
-        return "XiaMi Music";
+        return "Baidu Music";
     }
     QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
+
+private:
+    QTextCodec *m_gbkCodec;
 };
 
-#endif // KNMUSICXIAMILYRICS_H
+#endif // KNMUSICBAIDULYRICS_H

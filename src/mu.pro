@@ -38,6 +38,9 @@ win32{
     libbass{
         LIBS += -lbass
     }
+    FFMpeg{
+        LIBS += -lavformat -lavcodec -lavutil
+    }
     RC_FILE += resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
     #Windows special extras.
@@ -53,9 +56,16 @@ unix{
 
 #Mac OS X configure
 macx{
-    CONFIG += libbass
+    INCLUDEPATH += /usr/include
+#    LIBS += -L/usr/lib
+    CONFIG += libbass FFMpeg
     libbass{
         LIBS += /usr/lib/libbass.dylib
+    }
+    FFMpeg{
+        LIBS += /usr/lib/libavformat.dylib \
+                /usr/lib/libavcodec.dylib \
+                /usr/lib/libavutil.dylib
     }
     QMAKE_LFLAGS += -framework CoreFoundation
     QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
@@ -72,7 +82,6 @@ linux{
 
 FFMpeg{
     DEFINES += ENABLE_FFMPEG
-    LIBS += -lavformat -lavcodec -lavutil
     SOURCES += plugin/sdk/knffmpegglobal.cpp \
                plugin/module/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.cpp
     HEADERS += plugin/sdk/knffmpegglobal.h \
@@ -278,7 +287,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -464,7 +474,8 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.h
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.h
 
 RESOURCES += \
     resource/res.qrc

@@ -32,6 +32,7 @@ class KNMusicLyricsDownloader : public QObject
     Q_OBJECT
 public:
     explicit KNMusicLyricsDownloader(QObject *parent = 0);
+    virtual QString downloaderName()=0;
     virtual QString downloadLyrics(const KNMusicDetailInfo &detailInfo)=0;
 
 signals:
@@ -46,6 +47,7 @@ protected:
         str=str.toLower();
         str.replace('.', " ");
         str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
+        //truncate all symbols
         str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
         str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");
         return str;
