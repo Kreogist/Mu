@@ -20,6 +20,7 @@
 
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
+#include "plugin/knmusicbaidulyrics/knmusicbaidulyrics.h"
 #include "sdk/knmusiclyricsglobal.h"
 #include "knmusiclrcparser.h"
 
@@ -78,6 +79,7 @@ void KNMusicLyricsManager::installDownloaders()
 {
     installLyricsDownloader(new KNMusicQQLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
+    installLyricsDownloader(new KNMusicBaiduLyrics);
 }
 
 void KNMusicLyricsManager::clear()
