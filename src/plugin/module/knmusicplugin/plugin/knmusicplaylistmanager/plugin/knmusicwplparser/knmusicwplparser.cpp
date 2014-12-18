@@ -118,5 +118,72 @@ bool KNMusicWPLParser::parse(const QString &playlistFilePath,
 bool KNMusicWPLParser::write(const QString &playlistFilePath,
                              KNMusicPlaylistListItem *playlistItem)
 {
-    return false;
+    QDomDocument wplDocument;
+    //Initial the root element.
+    QDomElement root=wplDocument.createElement("smil");
+    wplDocument.appendChild(root);
+
+    //Initial the playlist model.
+    KNMusicPlaylistModel *playlistModel=playlistItem->playlistModel();
+
+    //Initial the head element.
+    QDomElement head=wplDocument.createElement("head");
+    root.appendChild(head);
+    //Add meta data to the head element.
+    QDomElement metaGenerator=wplDocument.createElement("meta"),
+                metaIsNetworkFeed=wplDocument.createElement("meta"),
+                metaItemCount=wplDocument.createElement("meta"),
+                metaIsFavorite=wplDocument.createElement("meta"),
+                metaContentPartnerListID=wplDocument.createElement("meta"),
+                metaContentPartnerNameType=wplDocument.createElement("meta"),
+                metaContentPartnerName=wplDocument.createElement("meta"),
+                metaSubtitle=wplDocument.createElement("meta"),
+                author=wplDocument.createElement("author"),
+                title=wplDocument.createElement("title");
+    //Set name to the elements.
+    metaGenerator.setAttribute("name","Generator");
+    metaIsNetworkFeed.setAttribute("name","IsNetworkFeed");
+    metaItemCount.setAttribute("name","ItemCount");
+    metaIsFavorite.setAttribute("name","IsFavorite");
+    metaContentPartnerListID.setAttribute("name","ContentPartnerListID");
+    metaContentPartnerNameType.setAttribute("name","ContentPartnerNameType");
+    metaContentPartnerName.setAttribute("name","ContentPartnerName");
+    metaSubtitle.setAttribute("name","Subtitle");
+    //Set content.
+    metaGenerator.setAttribute("content", "Kreogist Mu");
+    metaIsNetworkFeed.setAttribute("content", "0");
+    metaItemCount.setAttribute("content", QString::number(playlistModel->rowCount()));
+    //Set title.
+    QDomText titleText=wplDocument.createTextNode(playlistItem->text());
+    title.appendChild(titleText);
+    //Add these data to head.
+    head.appendChild(metaGenerator);
+    head.appendChild(metaIsNetworkFeed);
+    head.appendChild(metaItemCount);
+    head.appendChild(metaIsFavorite);
+    head.appendChild(metaContentPartnerListID);
+    head.appendChild(metaContentPartnerNameType);
+    head.appendChild(metaContentPartnerName);
+    head.appendChild(metaSubtitle);
+    head.appendChild(author);
+    head.appendChild(title);
+
+    //Generate the list.
+    QDomElement body=wplDocument.createElement("body"),
+                seq=wplDocument.createElement("seq");
+    root.appendChild(body);
+    body.appendChild(seq);
+    for(int i=0; i<playlistModel->rowCount(); i++)
+    {
+        QDomElement media=wplDocument.createElement("media");
+        //Set the media info.
+        media.setAttribute("src", QDir::toNativeSeparators(playlistModel->filePathFromRow(i)));
+        //Add to seq.
+        seq.appendChild(media);
+    }
+
+    //Write the data to playlist file.
+    return writePlaylistContentToFile(playlistFilePath,
+                                      "<?wpl version=\"1.0\"?>"+
+                                      wplDocument.toString(4));
 }
