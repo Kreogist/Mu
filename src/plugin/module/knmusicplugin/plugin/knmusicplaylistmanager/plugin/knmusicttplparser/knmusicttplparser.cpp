@@ -129,3 +129,9 @@ bool KNMusicTTPLParser::parse(const QString &playlistFilePath,
     playlistItem->setChanged(true);
     return true;
 }
+
+bool KNMusicTTPLParser::write(const QString &playlistFilePath,
+                              KNMusicPlaylistListItem *playlistItem)
+{
+    return false;
+}

@@ -38,11 +38,92 @@ using namespace KNMusic;
 
 QIcon KNMusicPlaylistListAssistant::m_playlistIcon=QIcon();
 QString KNMusicPlaylistListAssistant::m_playlistFolderPath=QString();
+QString KNMusicPlaylistListAssistant::m_playlistSuffix="mplst";
 int KNMusicPlaylistListAssistant::m_version=3;
 
 KNMusicPlaylistListAssistant::KNMusicPlaylistListAssistant(QObject *parent) :
     QObject(parent)
 {
+}
+
+bool KNMusicPlaylistListAssistant::writePlaylistToFile(const QString &filePath,
+                                                       KNMusicPlaylistListItem *item)
+{
+    //Try to open the file as write mode.
+    QFile playlistFile(filePath);
+    if(!playlistFile.open(QIODevice::WriteOnly))
+    {
+        return false;
+    }
+    //Create the playlist content.
+    KNMusicPlaylistModel *playlistModel=item->playlistModel();
+    QJsonArray playlistContent;
+    //Check if the playlist model null. If not, save data.
+    if(playlistModel!=nullptr)
+    {
+        for(int row=0, songSize=playlistModel->rowCount();
+            row<songSize;
+            ++row)
+        {
+            //Initial the music item.
+            QJsonObject musicItem;
+            //Save the text data.
+            QJsonArray textData;
+            for(int j=0; j<MusicDataCount; j++)
+            {
+                textData.append(playlistModel->itemText(row, j));
+            }
+            musicItem["Text"]=textData;
+            //Save appendix data.
+            musicItem["FilePath"]=
+                    playlistModel->rowProperty(row, FilePathRole).toString();
+            musicItem["FileName"]=
+                    playlistModel->rowProperty(row, FileNameRole).toString();
+            musicItem["TrackFilePath"]=
+                    playlistModel->rowProperty(row, TrackFileRole).toString();
+            musicItem["StartPosition"]=
+                    playlistModel->rowProperty(row, StartPositionRole).toInt();
+            musicItem["Size"]=
+                    playlistModel->roleData(row, Size, Qt::UserRole).toInt();
+            musicItem["DateModified"]=
+                    KNMusicModelAssist::dateTimeToDataString(
+                        playlistModel->roleData(row,
+                                                DateModified,
+                                                Qt::UserRole));
+            musicItem["DateAdded"]=
+                    KNMusicModelAssist::dateTimeToDataString(
+                        playlistModel->roleData(row,
+                                                DateAdded,
+                                                Qt::UserRole));
+            musicItem["LastPlayed"]=
+                    KNMusicModelAssist::dateTimeToDataString(
+                        playlistModel->roleData(row,
+                                                LastPlayed,
+                                                Qt::UserRole));
+            musicItem["Time"]=
+                    playlistModel->roleData(row, Time, Qt::UserRole).toInt();
+            musicItem["BitRate"]=
+                    playlistModel->roleData(row, BitRate, Qt::UserRole).toInt();
+            musicItem["SampleRate"]=
+                    playlistModel->roleData(row, SampleRate, Qt::UserRole).toInt();
+            //Add to playlist content.
+            playlistContent.append(musicItem);
+        }
+    }
+    //Create the playlist object.
+    QJsonObject playlistObject;
+    //Set the data of the playlist.
+    playlistObject["Version"]=m_version;
+    playlistObject["Name"]=item->data(Qt::DisplayRole).toString();
+    playlistObject["Songs"]=playlistContent;
+    //Create playlist document
+    QJsonDocument playlistDocument;
+    playlistDocument.setObject(playlistObject);
+    //Write document data to the file.
+    playlistFile.write(playlistDocument.toJson());
+    //Close the file.
+    playlistFile.close();
+    return true;
 }
 
 QString KNMusicPlaylistListAssistant::playlistFolderPath()
@@ -117,8 +198,16 @@ bool KNMusicPlaylistListAssistant::readPlaylist(const QString &filePath,
     QFileInfo playlistFileInfo(playlistFile);
     item->setPlaylistFilePath(playlistFileInfo.absoluteFilePath());
     //Set the data to the string list.
-    QJsonArray playlistContent=playlistObject["Songs"].toArray();
-    //Initial the model.
+    item->setPlaylistContent(playlistObject["Songs"].toArray());
+    return true;
+}
+
+void KNMusicPlaylistListAssistant::buildPlaylist(KNMusicPlaylistListItem *item)
+{
+    //Get the playlist content from the item.
+    QJsonArray playlistContent=item->playlistContent();
+    item->clearPlaylistContent();
+    //Initial the model from the content.
     for(auto i=playlistContent.begin();
         i!=playlistContent.end();
         ++i)
@@ -161,7 +250,8 @@ bool KNMusicPlaylistListAssistant::readPlaylist(const QString &filePath,
         item->playlistModel()->appendMusicRow(
                     KNMusicModelAssist::generateRow(currentInfo));
     }
-    return true;
+    //Set builded flag.
+    item->setBuilt(true);
 }
 
 bool KNMusicPlaylistListAssistant::writePlaylist(KNMusicPlaylistListItem *item)
@@ -171,81 +261,20 @@ bool KNMusicPlaylistListAssistant::writePlaylist(KNMusicPlaylistListItem *item)
     {
         return false;
     }
-    //Try to open the file as write mode.
-    QFile playlistFile(item->playlistFilePath());
-    if(!playlistFile.open(QIODevice::WriteOnly))
+    //Write the playlist to the item's file.
+    return writePlaylistToFile(item->playlistFilePath(), item);
+}
+
+bool KNMusicPlaylistListAssistant::exportPlaylist(const QString &filePath,
+                                                  KNMusicPlaylistListItem *item)
+{
+    //We still need to check this item.
+    if(item==nullptr)
     {
         return false;
     }
-    //Create the playlist content.
-    QJsonArray playlistContent;
-    KNMusicPlaylistModel *playlistModel=item->playlistModel();
-    //Check if the playlist model null. If not, save data.
-    if(playlistModel!=nullptr)
-    {
-        for(int row=0, songSize=playlistModel->rowCount();
-            row<songSize;
-            ++row)
-        {
-            //Initial the music item.
-            QJsonObject musicItem;
-            //Save the text data.
-            QJsonArray textData;
-            for(int j=0; j<MusicDataCount; j++)
-            {
-                textData.append(playlistModel->itemText(row, j));
-            }
-            musicItem["Text"]=textData;
-            //Save appendix data.
-            musicItem["FilePath"]=
-                    playlistModel->rowProperty(row, FilePathRole).toString();
-            musicItem["FileName"]=
-                    playlistModel->rowProperty(row, FileNameRole).toString();
-            musicItem["TrackFilePath"]=
-                    playlistModel->rowProperty(row, TrackFileRole).toString();
-            musicItem["StartPosition"]=
-                    playlistModel->rowProperty(row, StartPositionRole).toInt();
-            musicItem["Size"]=
-                    playlistModel->roleData(row, Size, Qt::UserRole).toInt();
-            musicItem["DateModified"]=
-                    KNMusicModelAssist::dateTimeToDataString(
-                        playlistModel->roleData(row,
-                                                DateModified,
-                                                Qt::UserRole));
-            musicItem["DateAdded"]=
-                    KNMusicModelAssist::dateTimeToDataString(
-                        playlistModel->roleData(row,
-                                                DateAdded,
-                                                Qt::UserRole));
-            musicItem["LastPlayed"]=
-                    KNMusicModelAssist::dateTimeToDataString(
-                        playlistModel->roleData(row,
-                                                LastPlayed,
-                                                Qt::UserRole));
-            musicItem["Time"]=
-                    playlistModel->roleData(row, Time, Qt::UserRole).toInt();
-            musicItem["BitRate"]=
-                    playlistModel->roleData(row, BitRate, Qt::UserRole).toInt();
-            musicItem["SampleRate"]=
-                    playlistModel->roleData(row, SampleRate, Qt::UserRole).toInt();
-            //Add to playlist content.
-            playlistContent.append(musicItem);
-        }
-    }
-    //Create the playlist object.
-    QJsonObject playlistObject;
-    //Set the data of the playlist.
-    playlistObject["Version"]=m_version;
-    playlistObject["Name"]=item->data(Qt::DisplayRole).toString();
-    playlistObject["Songs"]=playlistContent;
-    //Create playlist document
-    QJsonDocument playlistDocument;
-    playlistDocument.setObject(playlistObject);
-    //Write document data to the file.
-    playlistFile.write(playlistDocument.toJson());
-    //Close the file.
-    playlistFile.close();
-    return true;
+    //Write the playlist to the item's file.
+    return writePlaylistToFile(filePath, item);
 }
 
 void KNMusicPlaylistListAssistant::savePlaylistDatabase(const QString &filePath,
@@ -283,11 +312,16 @@ void KNMusicPlaylistListAssistant::setPlaylistIcon(const QIcon &playlistIcon)
     m_playlistIcon = playlistIcon;
 }
 
+QString KNMusicPlaylistListAssistant::playlistSuffix()
+{
+    return m_playlistSuffix;
+}
+
 QString KNMusicPlaylistListAssistant::alloctPlaylistFilePath()
 {
     //Initial the playlist file path.
     QString baseName=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"),
-            playlistFilePath=m_playlistFolderPath+"/"+baseName+".mplst";
+            playlistFilePath=m_playlistFolderPath+"/"+baseName+"."+m_playlistSuffix;
     //Test the file is exsist or not.
     QFileInfo playlistFile(playlistFilePath);
     if(playlistFile.exists())
@@ -298,7 +332,8 @@ QString KNMusicPlaylistListAssistant::alloctPlaylistFilePath()
         {
             playlistFilePath=m_playlistFolderPath+"/"+
                     baseName+" "+
-                    QString::number(count++)+".mplst";
+                    QString::number(count++)+"."+
+                    m_playlistSuffix;
             playlistFile.setFile(playlistFilePath);
         }
     }

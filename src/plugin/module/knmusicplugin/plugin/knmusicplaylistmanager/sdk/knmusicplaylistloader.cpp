@@ -21,6 +21,8 @@
 
 #include "knmusicplaylistloader.h"
 
+#include <QDebug>
+
 KNMusicPlaylistLoader::KNMusicPlaylistLoader(QObject *parent) :
     QObject(parent)
 {
@@ -69,4 +71,22 @@ void KNMusicPlaylistLoader::getPlaylistTypeAndSuffix(QStringList &types,
         types.append((*i)->playlistType());
         suffixs.append((*i)->playlistSuffix());
     }
+}
+
+bool KNMusicPlaylistLoader::writePlaylist(const QString &filePath,
+                                          const QString &suffix,
+                                          KNMusicPlaylistListItem *playlistItem)
+{
+    //Try to find the suffix in all parsers.
+    for(QList<KNMusicPlaylistParser *>::iterator i=m_parsers.begin();
+        i!=m_parsers.end();
+        ++i)
+    {
+        //Check if the parser is enabled to output this suffix.
+        if((*i)->playlistSuffix()==suffix)
+        {
+            return (*i)->write(filePath, playlistItem);
+        }
+    }
+    return false;
 }

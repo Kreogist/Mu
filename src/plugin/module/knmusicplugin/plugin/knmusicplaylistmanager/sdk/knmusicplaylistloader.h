@@ -39,6 +39,9 @@ public:
                        KNMusicPlaylistListItem *playlistItem);
     void getPlaylistTypeAndSuffix(QStringList &types,
                                   QStringList &suffixs);
+    bool writePlaylist(const QString &filePath,
+                       const QString &suffix,
+                       KNMusicPlaylistListItem *playlistItem);
 
 signals:
 

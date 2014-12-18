@@ -48,6 +48,8 @@ signals:
     void requireLoadPlaylistList();
     void requireCreateFirstPlaylist(const QStringList &fileList);
     void requireImportPlaylist(const QStringList &playlistList);
+    void requireExportPlaylist(const QString &filePath,
+                               const QModelIndex &index);
     void requireGeneratePlaylist();
     void requireRemovePlaylist(const QModelIndex &index);
     void requireMakeCopy(int index);

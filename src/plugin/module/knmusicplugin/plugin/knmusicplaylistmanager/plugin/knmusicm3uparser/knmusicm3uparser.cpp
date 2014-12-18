@@ -26,6 +26,8 @@
 
 #include "knmusicm3uparser.h"
 
+#include <QDebug>
+
 KNMusicM3UParser::KNMusicM3UParser(QObject *parent) :
     KNMusicPlaylistParser(parent)
 {
@@ -50,29 +52,70 @@ bool KNMusicM3UParser::parse(const QString &playlistFilePath,
     {
         return false;
     }
+    //Read all the file from the playlist.
+    QTextStream m3uStream(&m3uFile);
+    QStringList fileLines=m3uStream.readAll().split(QRegExp("[\n\r]"),
+                                                    QString::SkipEmptyParts),
+                availableFilePath;
+    //Until we cannot read any more.
+    for(QStringList::iterator currentLine=fileLines.begin();
+        currentLine!=fileLines.end();
+        ++currentLine)
+    {
+        //Check is this line unuseable.
+        if((*currentLine).at(0)=='#')
+        {
+            continue;
+        }
+        //Check is the file available.
+        QFileInfo currentFile(*currentLine);
+        //If exist, add it to file path list.
+        if(currentFile.exists())
+        {
+            availableFilePath.append(currentFile.absoluteFilePath());
+        }
+    }
+    //Clear the no use data.
+    fileLines.clear();
+    //Close the file.
+    m3uFile.close();
+    //Check if the file is available.
+    if(availableFilePath.isEmpty())
+    {
+        return false;
+    }
+
     //Set the file name as the title.
     QFileInfo m3uFileInfo(m3uFile);
     playlistItem->setText(m3uFileInfo.baseName());
     //Get the model and the parser.
     KNMusicPlaylistModel *playlistModel=playlistItem->playlistModel();
     KNMusicParser *parser=KNMusicGlobal::parser();
-    //Read all the file from the playlist.
-    QTextStream m3uStream(&m3uFile);
-    QString currentLine=m3uStream.readLine().simplified();
-    //Until we cannot read any more.
-    while(!currentLine.isEmpty())
+    //Parse all the file in the file list.
+    for(QStringList::iterator currentFilePath=availableFilePath.begin();
+        currentFilePath!=availableFilePath.end();
+        ++currentFilePath)
     {
-        //Check is this line unuseable.
-        if(currentLine.at(0)!='#')
-        {
-            KNMusicDetailInfo currentDetail;
-            //Treat it as a music file, parse it.
-            parser->parseFile(currentLine, currentDetail);
-            //Add this song to playlist.
-            playlistModel->appendMusicRow(KNMusicModelAssist::generateRow(currentDetail));
-        }
-        //Read next line.
-        currentLine=m3uStream.readLine().simplified();
+        KNMusicDetailInfo currentDetail;
+        //Treat it as a music file, parse it.
+        parser->parseFile(*currentFilePath, currentDetail);
+        //Add this song to playlist.
+        playlistModel->appendMusicRow(KNMusicModelAssist::generateRow(currentDetail));
     }
     return true;
+}
+
+bool KNMusicM3UParser::write(const QString &playlistFilePath,
+                             KNMusicPlaylistListItem *playlistItem)
+{
+    QString playlistContent;
+    //Get the model.
+    KNMusicPlaylistModel *playlistModel=playlistItem->playlistModel();
+    //Write all the file path to the content.
+    for(int i=0; i<playlistModel->rowCount(); i++)
+    {
+        playlistContent.append(playlistModel->filePathFromRow(i) + "\n");
+    }
+    //Write the content to file.
+    return writePlaylistContentToFile(playlistFilePath, playlistContent);
 }

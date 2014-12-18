@@ -55,4 +55,29 @@ void KNMusicPlaylistListItem::setChanged(bool changed)
 {
     m_changed = changed;
 }
+QJsonArray KNMusicPlaylistListItem::playlistContent() const
+{
+    return m_playlistContent;
+}
+
+void KNMusicPlaylistListItem::setPlaylistContent(const QJsonArray &playlistContent)
+{
+    m_playlistContent = playlistContent;
+}
+
+void KNMusicPlaylistListItem::clearPlaylistContent()
+{
+    m_playlistContent=QJsonArray();
+}
+bool KNMusicPlaylistListItem::built() const
+{
+    return m_builded;
+}
+
+void KNMusicPlaylistListItem::setBuilt(bool builded)
+{
+    m_builded = builded;
+}
+
+
 

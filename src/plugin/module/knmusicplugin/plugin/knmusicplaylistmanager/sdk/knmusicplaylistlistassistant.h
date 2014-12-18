@@ -23,6 +23,7 @@
 
 #include <QObject>
 
+class KNMusicPlaylistModel;
 class KNMusicPlaylistListItem;
 class KNMusicPlaylistListAssistant : public QObject
 {
@@ -35,13 +36,17 @@ public:
                                   QJsonArray &playlistData);
     static QIcon playlistIcon();
     static void setPlaylistIcon(const QIcon &playlistIcon);
+    static QString playlistSuffix();
     static QString playlistFolderPath();
     static void setPlaylistFolderPath(const QString &playlistFolderPath);
     static void loadPlaylistDatabase(const QString &filePath,
                                      QStringList &data);
     static bool readPlaylist(const QString &filePath,
                              KNMusicPlaylistListItem *item);
+    static void buildPlaylist(KNMusicPlaylistListItem *item);
     static bool writePlaylist(KNMusicPlaylistListItem *item);
+    static bool exportPlaylist(const QString &filePath,
+                               KNMusicPlaylistListItem *item);
     static void savePlaylistDatabase(const QString &filePath,
                                      const QStringList &data);
     static QString alloctPlaylistFilePath();
@@ -52,8 +57,11 @@ public slots:
 
 private:
     explicit KNMusicPlaylistListAssistant(QObject *parent = 0);
+    static bool writePlaylistToFile(const QString &filePath,
+                                    KNMusicPlaylistListItem *item);
     static QIcon m_playlistIcon;
     static QString m_playlistFolderPath;
+    static QString m_playlistSuffix;
     static int m_version;
 };
 
