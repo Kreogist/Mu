@@ -156,6 +156,7 @@ void KNMusicModel::addFiles(const QStringList &fileList)
 
 void KNMusicModel::appendDragMusicRows()
 {
+    //Add all the music row to model.
     QList<QList<QStandardItem *> > musicRows=KNMusicGlobal::dragMusicRow();
     while(!musicRows.isEmpty())
     {

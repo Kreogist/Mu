@@ -154,19 +154,32 @@ void KNMusicPlaylistManager::onActionAddPlaylist()
 void KNMusicPlaylistManager::onActionAddToPlaylist(const int &row,
                                                    const QStringList &filePaths)
 {
-
     //Get the playlist item.
     KNMusicPlaylistListItem *playlistItem=m_playlistList->playlistItem(row);
+    //Check whether the item has been built before.
+    if(!playlistItem->built())
+    {
+        KNMusicPlaylistListAssistant::buildPlaylist(playlistItem);
+    }
     //Add files to the item.
     playlistItem->playlistModel()->addFiles(filePaths);
+    //Set the changed flag.
+    playlistItem->setChanged(true);
 }
 
 void KNMusicPlaylistManager::onActionAddRowToPlaylist(const int &row)
 {
     //Get the playlist item.
     KNMusicPlaylistListItem *playlistItem=m_playlistList->playlistItem(row);
+    //Check whether the item has been built before.
+    if(!playlistItem->built())
+    {
+        KNMusicPlaylistListAssistant::buildPlaylist(playlistItem);
+    }
     //Call the add drag function in the model to the item.
     playlistItem->playlistModel()->appendDragMusicRows();
+    //Set the changed flag.
+    playlistItem->setChanged(true);
 }
 
 void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
@@ -291,9 +304,10 @@ void KNMusicPlaylistManager::saveChangedPlaylist()
     {
         //Get the current item.
         KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItem(i);
+        qDebug()<<currentItem->changed();
         //Check the item need to save or not, and the item's model must be builded,
         //If the playlist model has never been built, how can it be changed?
-        if(currentItem->built() && currentItem->changed())
+        if(currentItem->changed())
         {
             KNMusicPlaylistListAssistant::writePlaylist(currentItem);
         }
