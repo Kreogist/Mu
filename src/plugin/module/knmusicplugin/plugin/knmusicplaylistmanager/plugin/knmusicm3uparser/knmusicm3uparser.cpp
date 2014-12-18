@@ -26,6 +26,8 @@
 
 #include "knmusicm3uparser.h"
 
+#include <QDebug>
+
 KNMusicM3UParser::KNMusicM3UParser(QObject *parent) :
     KNMusicPlaylistParser(parent)
 {
@@ -52,25 +54,29 @@ bool KNMusicM3UParser::parse(const QString &playlistFilePath,
     }
     //Read all the file from the playlist.
     QTextStream m3uStream(&m3uFile);
-    QString currentLine=m3uStream.readLine().simplified();
-    QStringList availableFilePath;
+    QStringList fileLines=m3uStream.readAll().split(QRegExp("[\n\r]"),
+                                                    QString::SkipEmptyParts),
+                availableFilePath;
     //Until we cannot read any more.
-    while(!currentLine.isEmpty())
+    for(QStringList::iterator currentLine=fileLines.begin();
+        currentLine!=fileLines.end();
+        ++currentLine)
     {
         //Check is this line unuseable.
-        if(currentLine.at(0)!='#')
+        if((*currentLine).at(0)=='#')
         {
-            //Check is the file available.
-            QFileInfo currentFile(currentLine);
-            //If exist, add it to file path list.
-            if(currentFile.exists())
-            {
-                availableFilePath.append(currentFile.absoluteFilePath());
-            }
+            continue;
         }
-        //Read next line.
-        currentLine=m3uStream.readLine().simplified();
+        //Check is the file available.
+        QFileInfo currentFile(*currentLine);
+        //If exist, add it to file path list.
+        if(currentFile.exists())
+        {
+            availableFilePath.append(currentFile.absoluteFilePath());
+        }
     }
+    //Clear the no use data.
+    fileLines.clear();
     //Close the file.
     m3uFile.close();
     //Check if the file is available.
@@ -102,5 +108,14 @@ bool KNMusicM3UParser::parse(const QString &playlistFilePath,
 bool KNMusicM3UParser::write(const QString &playlistFilePath,
                              KNMusicPlaylistListItem *playlistItem)
 {
-    return false;
+    QString playlistContent;
+    //Get the model.
+    KNMusicPlaylistModel *playlistModel=playlistItem->playlistModel();
+    //Write all the file path to the content.
+    for(int i=0; i<playlistModel->rowCount(); i++)
+    {
+        playlistContent.append(playlistModel->filePathFromRow(i) + "\n");
+    }
+    //Write the content to file.
+    return writePlaylistContentToFile(playlistFilePath, playlistContent);
 }
