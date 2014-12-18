@@ -199,6 +199,7 @@ void KNMusicPlaylistTab::initialPlaylistList()
 
     //Initial the list editor.
     m_playlistListViewEditor=new KNMusicPlaylistListViewEditor(m_playlistListViewer);
+    m_playlistListViewEditor->setPlaylistListView(m_playlistListView);
     //Link command.
     connect(m_emptyHint, &KNMusicPlaylistEmptyHint::requireImportPlaylist,
             m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::importPlaylists);
@@ -207,6 +208,8 @@ void KNMusicPlaylistTab::initialPlaylistList()
             this, &KNMusicPlaylistTab::requireGeneratePlaylist);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireImportPlaylist,
             this, &KNMusicPlaylistTab::requireImportPlaylist);
+    connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireExportPlaylist,
+            this, &KNMusicPlaylistTab::requireExportPlaylist);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireRemoveCurrentPlaylist,
             this, &KNMusicPlaylistTab::onActionRemoveCurrent);
     connect(m_playlistListViewEditor, &KNMusicPlaylistListViewEditor::requireCopyCurrentPlaylist,

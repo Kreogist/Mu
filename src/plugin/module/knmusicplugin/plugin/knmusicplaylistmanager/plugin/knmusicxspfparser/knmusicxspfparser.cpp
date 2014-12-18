@@ -19,6 +19,8 @@
 #include <QFileInfo>
 #include <QUrl>
 #include <QDomDocument>
+#include <QDateTime>
+#include <QTimeZone>
 
 #include "../../sdk/knmusicplaylistlistitem.h"
 #include "../../sdk/knmusicplaylistmodel.h"
@@ -96,4 +98,74 @@ bool KNMusicXSPFParser::parse(const QString &playlistFilePath,
     //Set changed flags.
     playlistItem->setChanged(true);
     return true;
+}
+
+bool KNMusicXSPFParser::write(const QString &playlistFilePath,
+                              KNMusicPlaylistListItem *playlistItem)
+{
+    QDomDocument xspfDocument;
+    //Initial the root element.
+    QDomElement root=xspfDocument.createElement("playlist");
+    root.setAttribute("xmlns", "http://xspf.org/ns/0/");
+    root.setAttribute("version", "1");
+    xspfDocument.appendChild(root);
+
+    //Write the playlist information.
+    QDomElement titleElement=xspfDocument.createElement("title"),
+                creatorElement=xspfDocument.createElement("creator"),
+                dateElement=xspfDocument.createElement("date");
+    //Get the current time and time zone text.
+    QDateTime generateTime=QDateTime::currentDateTime();
+    int timeZoneOffset=generateTime.timeZone().standardTimeOffset(generateTime),
+            hour=qAbs(timeZoneOffset)/3600;
+    QString timeZoneText=hour<10?"0"+QString::number(hour):QString::number(hour);
+    timeZoneText=timeZoneOffset>-1?"+"+timeZoneText+":00":"-"+timeZoneText+":00";
+    QDomText titleTextElement=xspfDocument.createTextNode(playlistItem->text()),
+             creatorTextElement=xspfDocument.createTextNode("VOX"),
+             dateTextElement=xspfDocument.createTextNode(
+                generateTime.toString("yyyy-MM-ddThh:mm:ss")+timeZoneText);
+    //Add the text element to info elements.
+    titleElement.appendChild(titleTextElement);
+    creatorElement.appendChild(creatorTextElement);
+    dateElement.appendChild(dateTextElement);
+    //Add to root element.
+    root.appendChild(titleElement);
+    root.appendChild(creatorElement);
+    root.appendChild(dateElement);
+
+    //Write the tracklist.
+    QDomElement trackListElement=xspfDocument.createElement("trackList");
+    root.appendChild(trackListElement);
+    KNMusicPlaylistModel *playlistModel=playlistItem->playlistModel();
+    for(int i=0; i<playlistModel->rowCount(); i++)
+    {
+        //Generate the track element and information elements.
+        QDomElement currentTrack=xspfDocument.createElement("track"),
+                    location=xspfDocument.createElement("location"),
+                    title=xspfDocument.createElement("title"),
+                    trackNum=xspfDocument.createElement("trackNum"),
+                    duration=xspfDocument.createElement("duration");
+        QDomText locationText=xspfDocument.createTextNode(
+                    QUrl::toPercentEncoding(playlistModel->filePathFromRow(i))),
+                 titleText=xspfDocument.createTextNode(playlistModel->itemText(i, Name)),
+                 trackNumText=xspfDocument.createTextNode(QString::number(i+1)),
+                 durationText=xspfDocument.createTextNode(
+                             QString::number(playlistModel->roleData(i, Time, Qt::UserRole).toLongLong()));
+        //Add the text element to info elements.
+        location.appendChild(locationText);
+        title.appendChild(titleText);
+        trackNum.appendChild(trackNumText);
+        duration.appendChild(durationText);
+        //Add the information elements to track element.
+        currentTrack.appendChild(location);
+        currentTrack.appendChild(title);
+        currentTrack.appendChild(trackNum);
+        currentTrack.appendChild(duration);
+        //Add to track list.
+        trackListElement.appendChild(currentTrack);
+    }
+    //Write the data to playlist file.
+    return writePlaylistContentToFile(playlistFilePath,
+                                      "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"+
+                                      xspfDocument.toString(4));
 }

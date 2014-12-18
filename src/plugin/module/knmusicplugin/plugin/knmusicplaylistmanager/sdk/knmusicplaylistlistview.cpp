@@ -19,6 +19,8 @@
 
 #include "knmusicplaylistlistview.h"
 
+#include <QDebug>
+
 KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
     KNMusicCategoryListViewBase(parent)
 {
@@ -29,4 +31,11 @@ KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
     setDragDropMode(QAbstractItemView::DropOnly);
     //Initial the delegate.
     setItemDelegate(new KNMusicPlaylistListDelegate(this));
+}
+
+QString KNMusicPlaylistListView::currentPlaylistTitle()
+{
+    return currentIndex().isValid()?
+                currentIndex().data(Qt::DisplayRole).toString():
+                QString();
 }

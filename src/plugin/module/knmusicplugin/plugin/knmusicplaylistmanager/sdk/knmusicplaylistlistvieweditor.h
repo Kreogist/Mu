@@ -25,22 +25,27 @@
 class KNAnimationMenu;
 class KNOpacityAnimeButton;
 class KNMusicPlaylistLoader;
+class KNMusicPlaylistListView;
 class KNMusicPlaylistListViewEditor : public KNLinearSenseWidget
 {
     Q_OBJECT
 public:
     explicit KNMusicPlaylistListViewEditor(QWidget *parent = 0);
     void setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader);
+    void setPlaylistListView(KNMusicPlaylistListView *playlistListView);
 
 signals:
     void requireAddPlaylist();
     void requireImportPlaylist(const QStringList &playlistList);
+    void requireExportPlaylist(const QString &filePath,
+                               const QModelIndex &index);
     void requireRemoveCurrentPlaylist();
     void requireCopyCurrentPlaylist();
 
 public slots:
     void retranslate();
     void importPlaylists();
+    void exportPlaylist();
 
 private slots:
     void showAddMenu();
@@ -67,6 +72,7 @@ private:
     KNAnimationMenu *m_addMenu, *m_configureMenu;
     KNOpacityAnimeButton *m_add, *m_removeCurrent, *m_configure;
     KNMusicPlaylistLoader *m_playlistLoader;
+    KNMusicPlaylistListView *m_playlistListView;
 };
 
 #endif // KNMUSICPLAYLISTLISTVIEWEDITOR_H

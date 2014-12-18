@@ -21,10 +21,13 @@
 #include "knanimationmenu.h"
 #include "knopacityanimebutton.h"
 #include "knmusicplaylistloader.h"
+#include "knmusicplaylistlistview.h"
 
 #include "knlocalemanager.h"
 
 #include "knmusicplaylistlistvieweditor.h"
+
+#include <QDebug>
 
 KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
     KNLinearSenseWidget(parent)
@@ -128,6 +131,31 @@ void KNMusicPlaylistListViewEditor::importPlaylists()
     }
 }
 
+void KNMusicPlaylistListViewEditor::exportPlaylist()
+{
+    //Ensure the current index is vaild.
+    if(!m_playlistListView->currentIndex().isValid())
+    {
+        return;
+    }
+    //Set the export file dialog properties.
+    QFileDialog exportFile(this);
+    exportFile.setFileMode(QFileDialog::AnyFile);
+    exportFile.setAcceptMode(QFileDialog::AcceptSave);
+    //Set the default playlist file name.
+    exportFile.selectFile(m_playlistListView->currentPlaylistTitle());
+    //Set the export filter.
+    QStringList exportFilter=m_playlistFilter;
+    exportFilter.removeFirst();
+    exportFile.setNameFilters(exportFilter);
+    if(exportFile.exec() &&
+            !exportFile.selectedFiles().isEmpty())
+    {
+        emit requireExportPlaylist(exportFile.selectedFiles().first(),
+                                   m_playlistListView->currentIndex());
+    }
+}
+
 void KNMusicPlaylistListViewEditor::initialMenu()
 {
     m_addMenu=new KNAnimationMenu(this);
@@ -173,13 +201,19 @@ void KNMusicPlaylistListViewEditor::initialMenu()
         m_configureActions[i]=new QAction(this);
     }
 
-    m_configureActions[ExportPlaylist]->setEnabled(false);
+    connect(m_configureActions[ExportPlaylist], SIGNAL(triggered()),
+            this, SLOT(exportPlaylist()));
     connect(m_configureActions[CopyPlaylist], SIGNAL(triggered()),
             this, SIGNAL(requireCopyCurrentPlaylist()));
 
     m_configureMenu->addAction(m_configureActions[ExportPlaylist]);
     m_configureMenu->addSeparator();
     m_configureMenu->addAction(m_configureActions[CopyPlaylist]);
+}
+
+void KNMusicPlaylistListViewEditor::setPlaylistListView(KNMusicPlaylistListView *playlistListView)
+{
+    m_playlistListView = playlistListView;
 }
 
 void KNMusicPlaylistListViewEditor::setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader)

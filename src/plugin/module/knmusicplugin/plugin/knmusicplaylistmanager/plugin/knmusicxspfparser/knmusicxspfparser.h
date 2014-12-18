@@ -29,6 +29,8 @@ public:
     QString playlistSuffix() const;
     bool parse(const QString &playlistFilePath,
                KNMusicPlaylistListItem *playlistItem);
+    bool write(const QString &playlistFilePath,
+               KNMusicPlaylistListItem *playlistItem);
 
 signals:
 

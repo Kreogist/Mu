@@ -8,6 +8,7 @@
 #define KNMUSICPLAYLISTPARSER_H
 
 #include <QList>
+#include <QFile>
 
 #include "knmusicglobal.h"
 
@@ -23,10 +24,29 @@ public:
     virtual QString playlistSuffix() const=0;
     virtual bool parse(const QString &playlistFilePath,
                        KNMusicPlaylistListItem *playlistItem)=0;
+    virtual bool write(const QString &playlistFilePath,
+                       KNMusicPlaylistListItem *playlistItem)=0;
 
 signals:
 
 public slots:
+
+protected:
+    inline bool writePlaylistContentToFile(const QString &filePath,
+                                           const QString &fileContent)
+    {
+        //Open the destination file.
+        QFile playlistFile(filePath);
+        if(!playlistFile.open(QIODevice::WriteOnly))
+        {
+            return false;
+        }
+        //Write the data.
+        playlistFile.write(fileContent.toUtf8());
+        //Close the file.
+        playlistFile.close();
+        return true;
+    }
 
 };
 

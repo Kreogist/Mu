@@ -26,6 +26,7 @@ class KNMusicPlaylistListView : public KNMusicCategoryListViewBase
     Q_OBJECT
 public:
     explicit KNMusicPlaylistListView(QWidget *parent = 0);
+    QString currentPlaylistTitle();
 
 signals:
 

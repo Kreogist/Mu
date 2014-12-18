@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QFile>
+#include <QFileInfo>
 
 #include "plugin/knmusicxspfparser/knmusicxspfparser.h"
 #include "plugin/knmusicttplparser/knmusicttplparser.h"
@@ -73,6 +74,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
             this, &KNMusicPlaylistManager::onActionCopyPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireImportPlaylist,
             this, &KNMusicPlaylistManager::onActionImportPlaylist);
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireExportPlaylist,
+            this, &KNMusicPlaylistManager::onActionExportPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireRemovePlaylist,
             this, &KNMusicPlaylistManager::onActionRemovePlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::currentPlaylistChanged,
@@ -209,6 +212,12 @@ void KNMusicPlaylistManager::onActionImportPlaylist(QStringList playlistPaths)
     }
 }
 
+void KNMusicPlaylistManager::onActionExportPlaylist(const QString &filePath,
+                                                    const QModelIndex &index)
+{
+    writePlaylistToFile(filePath, m_playlistList->playlistItem(index.row()));
+}
+
 void KNMusicPlaylistManager::onActionCopyPlaylist(const int &index)
 {
     //Get the playlist item.
@@ -316,6 +325,24 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
     //Delete the no used item.
     delete playlistItem;
     return nullptr;
+}
+
+void KNMusicPlaylistManager::writePlaylistToFile(const QString &filePath,
+                                                 KNMusicPlaylistListItem *playlistItem)
+{
+    //Get the suffix of the file.
+    QFileInfo exportFileInfo(filePath);
+    QString exportFileSuffix=exportFileInfo.suffix().toLower();
+    //If the suffix is the default playlist suffix, export it.
+    if(KNMusicPlaylistListAssistant::playlistSuffix()==exportFileSuffix)
+    {
+        KNMusicPlaylistListAssistant::exportPlaylist(filePath,
+                                                     playlistItem);
+    }
+    //Or else, we need to ask loader to write the playlist.
+    m_playlistLoader->writePlaylist(filePath,
+                                    "*."+exportFileSuffix,
+                                    playlistItem);
 }
 
 KNMusicPlaylistListItem *KNMusicPlaylistManager::recoverPlaylistFromFile(const QString &filePath)

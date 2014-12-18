@@ -114,3 +114,9 @@ bool KNMusicWPLParser::parse(const QString &playlistFilePath,
     }
     return true;
 }
+
+bool KNMusicWPLParser::write(const QString &playlistFilePath,
+                             KNMusicPlaylistListItem *playlistItem)
+{
+    return false;
+}
