@@ -39,7 +39,7 @@ signals:
 public slots:
 
 private slots:
-    void onActionLoadPlaylistList();
+    void loadPlaylistList();
     void onActionAddPlaylist();
     void onActionAddToPlaylist(const int &row,
                                const QStringList &filePaths);
@@ -60,6 +60,7 @@ private:
     KNMusicPlaylistListItem *createBlankPlaylist(const int &row=-1,
                                                  const QString &caption="");
     KNMusicPlaylistListItem *importPlaylistFromFile(const QString &filePath);
+    KNMusicPlaylistListItem *recoverPlaylistFromFile(const QString &filePath);
 
     QString m_playlistDatabasePath;
     KNMusicPlaylistLoader *m_playlistLoader;

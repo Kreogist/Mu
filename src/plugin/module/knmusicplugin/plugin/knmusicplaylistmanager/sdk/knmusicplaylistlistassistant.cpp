@@ -117,8 +117,16 @@ bool KNMusicPlaylistListAssistant::readPlaylist(const QString &filePath,
     QFileInfo playlistFileInfo(playlistFile);
     item->setPlaylistFilePath(playlistFileInfo.absoluteFilePath());
     //Set the data to the string list.
-    QJsonArray playlistContent=playlistObject["Songs"].toArray();
-    //Initial the model.
+    item->setPlaylistContent(playlistObject["Songs"].toArray());
+    return true;
+}
+
+void KNMusicPlaylistListAssistant::buildPlaylist(KNMusicPlaylistListItem *item)
+{
+    //Get the playlist content from the item.
+    QJsonArray playlistContent=item->playlistContent();
+    item->clearPlaylistContent();
+    //Initial the model from the content.
     for(auto i=playlistContent.begin();
         i!=playlistContent.end();
         ++i)
@@ -161,7 +169,8 @@ bool KNMusicPlaylistListAssistant::readPlaylist(const QString &filePath,
         item->playlistModel()->appendMusicRow(
                     KNMusicModelAssist::generateRow(currentInfo));
     }
-    return true;
+    //Set builded flag.
+    item->setBuilt(true);
 }
 
 bool KNMusicPlaylistListAssistant::writePlaylist(KNMusicPlaylistListItem *item)

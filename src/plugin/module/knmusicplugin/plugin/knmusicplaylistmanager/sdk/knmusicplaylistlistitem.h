@@ -18,6 +18,8 @@
 #ifndef KNMUSICPLAYLISTLISTITEM_H
 #define KNMUSICPLAYLISTLISTITEM_H
 
+#include <QJsonArray>
+
 #include <QStandardItem>
 
 class KNMusicPlaylistModel;
@@ -31,11 +33,17 @@ public:
     void setPlaylistFilePath(const QString &playlistFilePath);
     bool changed() const;
     void setChanged(bool changed);
+    QJsonArray playlistContent() const;
+    void setPlaylistContent(const QJsonArray &playlistContent);
+    void clearPlaylistContent();
+    bool built() const;
+    void setBuilt(bool built);
 
 private:
     KNMusicPlaylistModel *m_playlistModel=nullptr;
     QString m_playlistFilePath;
-    bool m_changed=false;
+    QJsonArray m_playlistContent;
+    bool m_changed=false, m_builded=false;
 };
 
 #endif // KNMUSICPLAYLISTLISTITEM_H

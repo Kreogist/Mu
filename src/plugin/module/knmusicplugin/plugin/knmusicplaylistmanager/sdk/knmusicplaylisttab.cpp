@@ -99,6 +99,7 @@ KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()
 
 void KNMusicPlaylistTab::cutLoadRequirement()
 {
+    //Disconnect the load list requirement.
     disconnect(m_viewer, &KNEmptyStateWidget::aboutToBeShown,
                this, &KNMusicPlaylistTab::requireLoadPlaylistList);
 }

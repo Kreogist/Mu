@@ -41,6 +41,7 @@ public:
                                      QStringList &data);
     static bool readPlaylist(const QString &filePath,
                              KNMusicPlaylistListItem *item);
+    static void buildPlaylist(KNMusicPlaylistListItem *item);
     static bool writePlaylist(KNMusicPlaylistListItem *item);
     static void savePlaylistDatabase(const QString &filePath,
                                      const QStringList &data);

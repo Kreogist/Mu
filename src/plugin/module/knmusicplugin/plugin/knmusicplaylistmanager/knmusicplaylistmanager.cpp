@@ -66,7 +66,7 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
                 onActionCreatePlaylist(0, filePath);
             });
     connect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
-            this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
+            this, &KNMusicPlaylistManager::loadPlaylistList);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,
             this, &KNMusicPlaylistManager::onActionAddPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireMakeCopy,
@@ -109,11 +109,11 @@ KNMusicTab *KNMusicPlaylistManager::categoryTab()
     return m_playlistTab;
 }
 
-void KNMusicPlaylistManager::onActionLoadPlaylistList()
+void KNMusicPlaylistManager::loadPlaylistList()
 {
     //Disconnect require signal.
     disconnect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
-               this, &KNMusicPlaylistManager::onActionLoadPlaylistList);
+               this, &KNMusicPlaylistManager::loadPlaylistList);
     //Break the load requirement.
     m_playlistTab->cutLoadRequirement();
     //Initial a blank playlist files.
@@ -126,7 +126,7 @@ void KNMusicPlaylistManager::onActionLoadPlaylistList()
     {
         QString currentFile=rawFiles.takeFirst();
         //If we can load this file, add to the playlist list.
-        if(importPlaylistFromFile(currentFile))
+        if(recoverPlaylistFromFile(currentFile))
         {
             playlistFiles.append(currentFile);
         }
@@ -254,10 +254,15 @@ void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &c
                                                             const QModelIndex &previous)
 {
     Q_UNUSED(previous)
-    //Display the current index playlist.
-    //Ask UI to display the playlist item.
-    m_playlistTab->displayPlaylistItem(
-                m_playlistList->playlistItemFromIndex(current));
+    //Get the current item.
+    KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItemFromIndex(current);
+    //Check if we need to build the item.
+    if(!currentItem->built())
+    {
+        KNMusicPlaylistListAssistant::buildPlaylist(currentItem);
+    }
+    //Ask UI to display the current index playlist.
+    m_playlistTab->displayPlaylistItem(currentItem);
 }
 
 void KNMusicPlaylistManager::initialPlaylistLoader()
@@ -275,9 +280,11 @@ void KNMusicPlaylistManager::saveChangedPlaylist()
 {
     for(int i=0; i<m_playlistList->rowCount(); i++)
     {
-        //Check the item need to save or not.
+        //Get the current item.
         KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItem(i);
-        if(currentItem->changed())
+        //Check the item need to save or not, and the item's model must be builded,
+        //If the playlist model has never been built, how can it be changed?
+        if(currentItem->built() && currentItem->changed())
         {
             KNMusicPlaylistListAssistant::writePlaylist(currentItem);
         }
@@ -288,10 +295,11 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
 {
     KNMusicPlaylistListItem *playlistItem=
             KNMusicPlaylistListAssistant::generatePlaylist();
-    //!FIXME: Here we just load the playlist, but I want to load it dymanicly.
     //Using the mu playlist parser first to parse it.
     if(KNMusicPlaylistListAssistant::readPlaylist(filePath, playlistItem))
     {
+        //Build the playlist.
+        KNMusicPlaylistListAssistant::buildPlaylist(playlistItem);
         //If we can parse it, means it's a standard playlist.
         m_playlistList->appendPlaylist(playlistItem);
         return playlistItem;
@@ -302,6 +310,22 @@ KNMusicPlaylistListItem *KNMusicPlaylistManager::importPlaylistFromFile(const QS
         //Set a file path for the item.
         playlistItem->setPlaylistFilePath(KNMusicPlaylistListAssistant::alloctPlaylistFilePath());
         //Add to playlist list.
+        m_playlistList->appendPlaylist(playlistItem);
+        return playlistItem;
+    }
+    //Delete the no used item.
+    delete playlistItem;
+    return nullptr;
+}
+
+KNMusicPlaylistListItem *KNMusicPlaylistManager::recoverPlaylistFromFile(const QString &filePath)
+{
+    KNMusicPlaylistListItem *playlistItem=
+            KNMusicPlaylistListAssistant::generatePlaylist();
+    //Using the mu playlist parser to try to parse it.
+    if(KNMusicPlaylistListAssistant::readPlaylist(filePath, playlistItem))
+    {
+        //If we can parse it, means it's a standard playlist, add to playlist.
         m_playlistList->appendPlaylist(playlistItem);
         return playlistItem;
     }
