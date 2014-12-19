@@ -43,6 +43,7 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QObject *parent) :
 
     //Initial the drop proxy.
     m_dropProxy=new KNDropProxyContainer(m_viewer);
+    m_viewer->setFocusProxy(m_dropProxy);
     m_viewer->setContentWidget(m_dropProxy);
     connect(m_dropProxy, &KNDropProxyContainer::dropProxyShow,
             this, &KNMusicLibrarySongTab::onActionTabShow);
@@ -59,6 +60,7 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QObject *parent) :
     m_treeview=new KNMusicLibraryTreeView(m_dropProxy);
     mainLayout->addWidget(m_treeview);
     m_dropProxy->installEventFilter(m_treeview);
+    m_dropProxy->setFocusProxy(m_treeview);
 
     //Initial the show in tab.
     initialShowInAction();

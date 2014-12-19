@@ -19,6 +19,8 @@ KNDropProxyContainer::KNDropProxyContainer(QWidget *parent) :
 {
     //Enabled drops.
     setAcceptDrops(true);
+    //Enabled focus.
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void KNDropProxyContainer::dragEnterEvent(QDragEnterEvent *event)
