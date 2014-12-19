@@ -27,20 +27,26 @@ KNMusicAlbumTitle::KNMusicAlbumTitle(QWidget *parent) :
 void KNMusicAlbumTitle::enterEvent(QEvent *event)
 {
     QLabel::enterEvent(event);
-    //Ask to show the album art.
-    emit requireShowAlbumArt();
+    checkMouseFlag();
 }
 
 void KNMusicAlbumTitle::leaveEvent(QEvent *event)
 {
     QLabel::leaveEvent(event);
+    //Release the flag.
+    m_mouseIn=false;
     //Ask to hide the album art.
     emit requireHideAlbumArt();
+}
+
+void KNMusicAlbumTitle::mouseMoveEvent(QMouseEvent *event)
+{
+    QLabel::mouseMoveEvent(event);
+    checkMouseFlag();
 }
 
 void KNMusicAlbumTitle::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
-    //Cut down the calling.
-    ;
+    checkMouseFlag();
 }

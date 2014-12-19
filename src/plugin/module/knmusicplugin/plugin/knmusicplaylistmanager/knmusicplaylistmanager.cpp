@@ -277,7 +277,6 @@ void KNMusicPlaylistManager::saveChangedPlaylist()
     {
         //Get the current item.
         KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItem(i);
-        qDebug()<<currentItem->changed();
         //Check the item need to save or not, and the item's model must be builded,
         //If the playlist model has never been built, how can it be changed?
         if(currentItem->changed())
