@@ -136,6 +136,16 @@ void KNMusicTreeViewBase::backupHeader()
     m_headerState=header()->saveState();
 }
 
+void KNMusicTreeViewBase::enableSearchShortcut()
+{
+    addAction(m_findAction);
+}
+
+void KNMusicTreeViewBase::disableSearchShortcut()
+{
+    removeAction(m_findAction);
+}
+
 void KNMusicTreeViewBase::scrollToSourceSongRow(const int &row)
 {
     //Do scroll and ensure that the music model exist.
@@ -442,12 +452,13 @@ void KNMusicTreeViewBase::removeCurrent()
 void KNMusicTreeViewBase::initialActions()
 {
     //Initial the search action
-    QAction *findAction=new QAction(this);
-    findAction->setShortcut(QKeySequence(QKeySequence::Find));
-    findAction->setShortcutContext(Qt::WidgetShortcut);
-    connect(findAction, SIGNAL(triggered()),
+    m_findAction=new QAction(this);
+    m_findAction->setShortcut(QKeySequence(QKeySequence::Find));
+    m_findAction->setShortcutContext(Qt::WidgetShortcut);
+    connect(m_findAction, SIGNAL(triggered()),
             this, SLOT(onActionSearch()));
-    addAction(findAction);
+
+    enableSearchShortcut();
 }
 
 void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)

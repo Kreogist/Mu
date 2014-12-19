@@ -25,6 +25,8 @@ public:
     KNMusicModel *musicModel();
     void setMusicModel(KNMusicModel *musicModel);
     void backupHeader();
+    void enableSearchShortcut();
+    void disableSearchShortcut();
     void scrollToSongRow(const int &row);
     void scrollToSongIndex(const QModelIndex &songIndex);
     void scrollToSourceSongRow(const int &row);
@@ -65,6 +67,7 @@ private:
     inline void configureTimeLine(QTimeLine *timeLine);
     inline void showSoloMenu(const QPoint &position);
     inline void showMultiMenu(const QPoint &position);
+    QAction *m_findAction;
     QTimeLine *m_mouseIn, *m_mouseOut;
     KNMusicProxyModel *m_proxyModel=nullptr;
     KNConnectionHandler *m_soloConnections,

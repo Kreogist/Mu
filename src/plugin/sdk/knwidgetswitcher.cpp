@@ -126,6 +126,8 @@ void KNWidgetSwitcher::hideMoveOutWidget()
     //Hide the out widget, reset out widget index.
     setWidgetVisible(m_outWidgetIndex, false);
     m_outWidgetIndex=-1;
+    //Set the focus to the content widget.
+    m_widgets.at(m_currentIndex)->setFocus();
     emit movedComplete();
 }
 

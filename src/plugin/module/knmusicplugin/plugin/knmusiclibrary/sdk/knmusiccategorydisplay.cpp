@@ -87,6 +87,8 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
 
     //Initial the tree view.
     m_categoryTreeView=new KNMusicLibraryTreeView(this);
+    //Disable the search shortcut, using the category search shortcut.
+    m_categoryTreeView->disableSearchShortcut();
     QPalette pal=m_categoryTreeView->palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));
     m_categoryTreeView->setPalette(pal);

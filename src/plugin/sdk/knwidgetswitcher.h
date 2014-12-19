@@ -33,16 +33,14 @@ protected:
     void resizeEvent(QResizeEvent *event);
     virtual void updateAnimationPosition()=0;
     int m_currentIndex=-1, m_outWidgetIndex=-1;
-    QPropertyAnimation *m_inAnimation,
-                       *m_outAnimation;
+    QPropertyAnimation *m_inAnimation, *m_outAnimation;
 
 private slots:
     void hideMoveOutWidget();
 
 private:
-    void configureAnimation(QPropertyAnimation *animation);
-    void setWidgetVisible(const int &index,
-                          const bool &ok);
+    inline void configureAnimation(QPropertyAnimation *animation);
+    inline void setWidgetVisible(const int &index, const bool &ok);
     QList<QWidget *> m_widgets;
     QParallelAnimationGroup *m_movingAnimationGroup;
 };
