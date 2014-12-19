@@ -23,8 +23,7 @@ KNMusicModelAssist *KNMusicModelAssist::instance()
     return m_instance==nullptr?m_instance=new KNMusicModelAssist:m_instance;
 }
 
-QList<QStandardItem *> KNMusicModelAssist::generateRow(
-        const KNMusicDetailInfo &detailInfo)
+QList<QStandardItem *> KNMusicModelAssist::generateRow(const KNMusicDetailInfo &detailInfo)
 {
     QList<QStandardItem *> musicRow;
     QStandardItem *item;

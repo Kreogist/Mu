@@ -88,11 +88,6 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     //When mimedata contains url data, and ensure that move&copy action enabled.
     if((action==Qt::MoveAction || action==Qt::CopyAction))
     {
-        if(data->hasFormat(KNMusicGlobal::musicRowFormat()))
-        {
-            appendDragMusicRows();
-            return true;
-        }
         if(data->hasUrls())
         {
             addFiles(KNGlobal::urlToPathList(data->urls()));
@@ -152,16 +147,6 @@ int KNMusicModel::playingItemColumn()
 void KNMusicModel::addFiles(const QStringList &fileList)
 {
     emit requireAnalysisFiles(fileList);
-}
-
-void KNMusicModel::appendDragMusicRows()
-{
-    //Add all the music row to model.
-    QList<QList<QStandardItem *> > musicRows=KNMusicGlobal::dragMusicRow();
-    while(!musicRows.isEmpty())
-    {
-        appendMusicRow(musicRows.takeFirst());
-    }
 }
 
 void KNMusicModel::appendMusicRow(const QList<QStandardItem *> &musicRow)

@@ -86,12 +86,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     //Connect add to item request.
     connect(m_playlistList, &KNMusicPlaylistList::requireAddToPlaylist,
             this, &KNMusicPlaylistManager::onActionAddToPlaylist);
-    connect(m_playlistList, &KNMusicPlaylistList::requireAddRowsToPlaylist,
-            this, &KNMusicPlaylistManager::onActionAddRowToPlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
             this, &KNMusicPlaylistManager::onActionCreatePlaylist);
-    connect(m_playlistList, &KNMusicPlaylistList::requireCreateRowsPlaylist,
-            this, &KNMusicPlaylistManager::onActionCreateRowPlaylist);
 }
 
 KNMusicPlaylistManager::~KNMusicPlaylistManager()
@@ -163,21 +159,6 @@ void KNMusicPlaylistManager::onActionAddToPlaylist(const int &row,
     }
     //Add files to the item.
     playlistItem->playlistModel()->addFiles(filePaths);
-    //Set the changed flag.
-    playlistItem->setChanged(true);
-}
-
-void KNMusicPlaylistManager::onActionAddRowToPlaylist(const int &row)
-{
-    //Get the playlist item.
-    KNMusicPlaylistListItem *playlistItem=m_playlistList->playlistItem(row);
-    //Check whether the item has been built before.
-    if(!playlistItem->built())
-    {
-        KNMusicPlaylistListAssistant::buildPlaylist(playlistItem);
-    }
-    //Call the add drag function in the model to the item.
-    playlistItem->playlistModel()->appendDragMusicRows();
     //Set the changed flag.
     playlistItem->setChanged(true);
 }
@@ -262,14 +243,6 @@ void KNMusicPlaylistManager::onActionCreatePlaylist(const int &row,
     KNMusicPlaylistListItem *playlistItem=createBlankPlaylist(row);
     //Add the file to playlist.
     playlistItem->playlistModel()->addFiles(filePaths);
-}
-
-void KNMusicPlaylistManager::onActionCreateRowPlaylist(const int &row)
-{
-    //Genreate a blank playlist first.
-    KNMusicPlaylistListItem *playlistItem=createBlankPlaylist(row);
-    //Append the drag music rows.
-    playlistItem->playlistModel()->appendDragMusicRows();
 }
 
 void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &current,

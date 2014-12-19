@@ -71,10 +71,6 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     m_soloConnections=new KNConnectionHandler(this);
     m_multiConnections=new KNConnectionHandler(this);
 
-    //Initial the mime data and drag action.
-    m_mimeData=new QMimeData;
-    m_drag=new QDrag(this);
-
     //Initial mouse sense animation.
     m_mouseIn=new QTimeLine(200, this);
     configureTimeLine(m_mouseIn);
@@ -321,10 +317,10 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
         return;
     }
     //Clear the mimedata.
-    m_mimeData->clear();
+    QDrag *drag=new QDrag(this);
+    QMimeData *mimeData=new QMimeData;
     //Get the file path and music row of all the selected rows.
     QList<QUrl> fileUrlList;
-    QList<QList<QStandardItem *>> songContentRowList;
     KNMusicModel *musicModel=m_proxyModel->musicModel();
     for(auto i=indexes.begin();
              i!=indexes.end();
@@ -334,18 +330,18 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
         int currentRow=m_proxyModel->mapToSource(*i).row();
         //Add the file path and music row to list.
         fileUrlList.append(QUrl::fromLocalFile(musicModel->filePathFromRow(currentRow)));
-        songContentRowList.append(musicModel->songRow(currentRow));
+//        songContentRowList.append(musicModel->songRow(currentRow));
     }
     //Store the row data.
-    KNMusicGlobal::setDragMusicRow(songContentRowList);
+//    KNMusicGlobal::setDragMusicRow(songContentRowList);
     //Set the data to mimedata.
-    m_mimeData->setUrls(fileUrlList);
-    m_mimeData->setData(KNMusicGlobal::musicRowFormat(),
-                        QByteArray(1,0)); //Only a data for flag.
+    mimeData->setUrls(fileUrlList);
+//    m_mimeData->setData(KNMusicGlobal::musicRowFormat(),
+//                        QByteArray(1,0)); //Only a data for flag.
     //Set the mime data to the drag action.
-    m_drag->setMimeData(m_mimeData);
+    drag->setMimeData(mimeData);
     //Do the drag.
-    m_drag->exec(Qt::CopyAction);
+    drag->exec(Qt::CopyAction);
 }
 
 void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
