@@ -22,6 +22,7 @@
 #include "plugin/knmusicttplparser/knmusicttplparser.h"
 #include "plugin/knmusicm3uparser/knmusicm3uparser.h"
 #include "plugin/knmusicwplparser/knmusicwplparser.h"
+#include "plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.h"
 
 #include "sdk/knmusicplaylistloader.h"
 #include "sdk/knmusicplaylistlistitem.h"
@@ -284,6 +285,7 @@ void KNMusicPlaylistManager::initialPlaylistLoader()
     //Initial the loader.
     m_playlistLoader=new KNMusicPlaylistLoader(this);
     //Install all the plugins.
+    m_playlistLoader->installPlaylistParser(new KNMusiciTunesXMLParser);
     m_playlistLoader->installPlaylistParser(new KNMusicXSPFParser);
     m_playlistLoader->installPlaylistParser(new KNMusicTTPLParser);
     m_playlistLoader->installPlaylistParser(new KNMusicWPLParser);

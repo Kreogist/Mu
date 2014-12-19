@@ -288,7 +288,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.cpp
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -475,7 +476,8 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.h
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.h \
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.h
 
 RESOURCES += \
     resource/res.qrc
