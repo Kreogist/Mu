@@ -19,6 +19,9 @@
 #define KNMUSICITUNESXMLPARSER_H
 
 #include <QHash>
+#include <QDomDocument>
+
+#include <QHash>
 
 #include "../../sdk/knmusicplaylistparser.h"
 
@@ -32,6 +35,12 @@ public:
                KNMusicPlaylistListItem *playlistItem);
     bool write(const QString &playlistFilePath,
                KNMusicPlaylistListItem *playlistItem);
+
+private:
+    inline void appendDictValue(QDomDocument &plistDocument,
+                                QDomElement &dict,
+                                const QString &key,
+                                const QVariant &value);
 };
 
 #endif // KNMUSICITUNESXMLPARSER_H
