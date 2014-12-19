@@ -121,7 +121,7 @@ bool KNMusicXSPFParser::write(const QString &playlistFilePath,
     QString timeZoneText=hour<10?"0"+QString::number(hour):QString::number(hour);
     timeZoneText=timeZoneOffset>-1?"+"+timeZoneText+":00":"-"+timeZoneText+":00";
     QDomText titleTextElement=xspfDocument.createTextNode(playlistItem->text()),
-             creatorTextElement=xspfDocument.createTextNode("VOX"),
+             creatorTextElement=xspfDocument.createTextNode("Kreogist Mu"),
              dateTextElement=xspfDocument.createTextNode(
                 generateTime.toString("yyyy-MM-ddThh:mm:ss")+timeZoneText);
     //Add the text element to info elements.

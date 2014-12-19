@@ -30,12 +30,13 @@ public:
     explicit KNConnectionHandler(QObject *parent = 0);
     ~KNConnectionHandler();
     bool isEmpty();
+    int size() const;
     void disConnectAll();
     void addConnectionHandle(const QMetaObject::Connection connection);
     KNConnectionHandler &operator += (const QMetaObject::Connection connection);
 
 private:
-    QLinkedList<QMetaObject::Connection> connections;
+    QLinkedList<QMetaObject::Connection> m_connections;
 };
 
 #endif // KNCONNECTIONHANDLER_H

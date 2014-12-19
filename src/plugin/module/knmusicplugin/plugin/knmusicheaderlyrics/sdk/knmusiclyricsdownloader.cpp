@@ -45,6 +45,7 @@ void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
     m_timeout->stop();
     //Clear the data first.
     responseData.clear();
+    m_networkManager->clearAccessCache();
     //Generate the request.
     QNetworkRequest currentRequest;
     currentRequest.setUrl(QUrl(url));

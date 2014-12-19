@@ -409,20 +409,17 @@ QList<QList<QStandardItem *> > KNMusicGlobal::dragMusicRow()
 void KNMusicGlobal::setDragMusicRow(const QList<QList<QStandardItem *> > &dragMusicRow)
 {
     //Recover the memory first.
-    recoverDragMusicRow();
+    clearDragMusicRow();
     //Set the rows.
     m_dragMusicRow = dragMusicRow;
 }
 
-void KNMusicGlobal::recoverDragMusicRow()
+void KNMusicGlobal::clearDragMusicRow()
 {
-    //Check if the row is not used.
-    if(!m_dragMusicRowTaken)
+    //Remove all the data in the row.
+    while(!m_dragMusicRow.isEmpty())
     {
-        while(!m_dragMusicRow.isEmpty())
-        {
-            qDeleteAll(m_dragMusicRow.takeFirst());
-        }
+        qDeleteAll(m_dragMusicRow.takeFirst());
     }
     //Clear the rows.
     m_dragMusicRow.clear();

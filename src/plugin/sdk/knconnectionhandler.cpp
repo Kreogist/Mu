@@ -21,7 +21,7 @@
 KNConnectionHandler::KNConnectionHandler(QObject *parent) :
     QObject(parent)
 {
-    connections.clear();
+    m_connections.clear();
 }
 
 KNConnectionHandler::~KNConnectionHandler()
@@ -31,24 +31,29 @@ KNConnectionHandler::~KNConnectionHandler()
 
 bool KNConnectionHandler::isEmpty()
 {
-    return connections.isEmpty();
+    return m_connections.isEmpty();
+}
+
+int KNConnectionHandler::size() const
+{
+    return m_connections.size();
 }
 
 void KNConnectionHandler::disConnectAll()
 {
-    for(auto i=connections.begin();
-        i!=connections.end();
+    for(auto i=m_connections.begin();
+        i!=m_connections.end();
         ++i)
     {
         disconnect(*i);
     }
-    connections.clear();
+    m_connections.clear();
 }
 
 void KNConnectionHandler::addConnectionHandle(
         const QMetaObject::Connection connection)
 {
-    connections.append(connection);
+    m_connections.append(connection);
 }
 
 KNConnectionHandler &KNConnectionHandler::operator +=(

@@ -106,7 +106,6 @@ signals:
 
 public slots:
     virtual void addFiles(const QStringList &fileList);
-    virtual void appendDragMusicRows();
     virtual void appendMusicRow(const QList<QStandardItem *> &musicRow);
     virtual void updateMusicRow(const int &row,
                                 const KNMusicDetailInfo &detailInfo);

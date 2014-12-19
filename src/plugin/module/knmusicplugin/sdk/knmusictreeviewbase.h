@@ -72,8 +72,6 @@ private:
     KNMusicProxyModel *m_proxyModel=nullptr;
     KNConnectionHandler *m_soloConnections,
                         *m_multiConnections;
-    QDrag *m_drag;
-    QMimeData *m_mimeData;
     QByteArray m_headerState;
     QColor m_alternateColor=QColor(255,255,255,0),
            m_fontColor=QColor(255,255,255),

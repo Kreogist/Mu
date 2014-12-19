@@ -199,6 +199,8 @@ bool KNMusicPlaylistListAssistant::readPlaylist(const QString &filePath,
     item->setPlaylistFilePath(playlistFileInfo.absoluteFilePath());
     //Set the data to the string list.
     item->setPlaylistContent(playlistObject["Songs"].toArray());
+    //Set the flag.
+    item->setChanged(false);
     return true;
 }
 

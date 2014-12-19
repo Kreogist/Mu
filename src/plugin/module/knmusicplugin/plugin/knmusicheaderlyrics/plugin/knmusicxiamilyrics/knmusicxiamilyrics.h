@@ -30,12 +30,6 @@ public:
         return "XiaMi Music";
     }
     QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
-
-signals:
-
-public slots:
-
-private:
 };
 
 #endif // KNMUSICXIAMILYRICS_H

@@ -187,7 +187,7 @@ public:
 
     static QList<QList<QStandardItem *> > dragMusicRow();
     static void setDragMusicRow(const QList<QList<QStandardItem *> > &dragMusicRow);
-    static void recoverDragMusicRow();
+    static void clearDragMusicRow();
     static KNMusicSearchBase *musicSearch();
     static void setMusicSearch(KNMusicSearchBase *musicSearch);
     static KNMusicDetailTooltipBase *detailTooltip();

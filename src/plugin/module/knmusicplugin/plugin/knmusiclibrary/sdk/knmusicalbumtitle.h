@@ -35,8 +35,22 @@ public slots:
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
+private:
+    inline void checkMouseFlag()
+    {
+        //Cut down the calling and check the flag.
+        if(!m_mouseIn)
+        {
+            //Set the flag.
+            m_mouseIn=true;
+            //Ask to show the album art.
+            emit requireShowAlbumArt();
+        }
+    }
+    bool m_mouseIn=false;
 };
 
 #endif // KNMUSICALBUMTITLE_H

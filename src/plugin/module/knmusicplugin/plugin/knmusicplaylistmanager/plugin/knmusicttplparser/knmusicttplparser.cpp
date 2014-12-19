@@ -17,6 +17,7 @@
  */
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 #include <QUrl>
 #include <QDomDocument>
 
@@ -133,5 +134,52 @@ bool KNMusicTTPLParser::parse(const QString &playlistFilePath,
 bool KNMusicTTPLParser::write(const QString &playlistFilePath,
                               KNMusicPlaylistListItem *playlistItem)
 {
-    return false;
+    QDomDocument ttplDocument;
+    //Initial the root element.
+    QDomElement root=ttplDocument.createElement("ttplaylist");
+    root.setAttribute("title", playlistItem->text());
+    root.setAttribute("version", "4");
+    root.setAttribute("generator", "Kreogist Mu");
+    ttplDocument.appendChild(root);
+
+    //Initial the format.
+    QDomElement format=ttplDocument.createElement("format");
+    format.setAttribute("tagtitle", "%A - %T");
+    format.setAttribute("deftitle", "%F");
+    root.appendChild(format);
+
+    KNMusicPlaylistModel *playlistModel=playlistItem->playlistModel();
+    //Write the item list.
+    QDomElement items=ttplDocument.createElement("items");
+    root.appendChild(items);
+    items.setAttribute("count", QString::number(playlistModel->rowCount()));
+    for(int i=0; i<playlistModel->rowCount(); i++)
+    {
+        //Generate the item element and set the information attribute.
+        QDomElement item=ttplDocument.createElement("item");
+        //Set information.
+        QString songName=playlistModel->itemText(i, Name).toHtmlEscaped(),
+                songArtist=playlistModel->itemText(i, Artist).toHtmlEscaped();
+        item.setAttribute("title", songArtist + " - " + songName);
+        item.setAttribute("SongName", songName);
+        item.setAttribute("SongArtist", songArtist);
+        item.setAttribute("len", QString::number(playlistModel->roleData(i, Time, Qt::UserRole).toLongLong()));
+        //Check if it has a track file.
+        QString trackFileTest=playlistModel->rowProperty(i, TrackFileRole).toString();
+        if(trackFileTest.isEmpty())
+        {
+            item.setAttribute("file", QDir::toNativeSeparators(playlistModel->filePathFromRow(i)));
+        }
+        else
+        {
+            item.setAttribute("file", QDir::toNativeSeparators(trackFileTest));
+            item.setAttribute("subtk", QString::number(playlistModel->itemText(i, TrackNumber).toInt()));
+        }
+        //Add the item to list.
+        items.appendChild(item);
+    }
+    //Write the data to playlist file.
+    return writePlaylistContentToFile(playlistFilePath,
+                                      "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>" +
+                                      ttplDocument.toString(4));
 }
