@@ -87,6 +87,8 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
 
     //Initial the tree view.
     m_categoryTreeView=new KNMusicLibraryTreeView(this);
+    //Set the focus proxy to the treeview.
+    setFocusProxy(m_categoryTreeView);
     //Disable the search shortcut, using the category search shortcut.
     m_categoryTreeView->disableSearchShortcut();
     QPalette pal=m_categoryTreeView->palette();

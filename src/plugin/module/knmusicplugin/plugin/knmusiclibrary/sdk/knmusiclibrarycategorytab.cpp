@@ -70,6 +70,8 @@ KNMusicCategoryProxyModel *KNMusicLibraryCategoryTab::proxyCategoryModel()
 void KNMusicLibraryCategoryTab::setContentWidget(QWidget *widget)
 {
     m_viewer->setContentWidget(widget);
+    //Give the widget the focus proxy.
+    m_viewer->setFocusProxy(widget);
 }
 
 QWidget *KNMusicLibraryCategoryTab::viewerWidget()

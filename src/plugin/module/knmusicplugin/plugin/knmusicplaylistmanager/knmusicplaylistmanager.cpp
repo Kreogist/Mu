@@ -265,6 +265,11 @@ void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &c
     Q_UNUSED(previous)
     //Get the current item.
     KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItemFromIndex(current);
+    //Check the item is available.
+    if(currentItem==nullptr)
+    {
+        return;
+    }
     //Check if we need to build the item.
     if(!currentItem->built())
     {

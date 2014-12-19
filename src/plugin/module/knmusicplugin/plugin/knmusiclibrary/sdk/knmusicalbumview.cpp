@@ -32,6 +32,9 @@
 KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     QAbstractItemView(parent)
 {
+    //Set properties.
+    setFocusPolicy(Qt::WheelFocus);
+
     //Set default scrollbar properties.
     verticalScrollBar()->setRange(0, 0);
 
@@ -562,6 +565,7 @@ KNMusicAlbumDetail *KNMusicAlbumView::albumDetail() const
 void KNMusicAlbumView::setAlbumDetail(KNMusicAlbumDetail *albumDetail)
 {
     m_albumDetail = albumDetail;
+    m_albumDetail->setFocusProxy(this);
     //Do connection.
     connect(m_albumDetail, &KNMusicAlbumDetail::requireShowAlbum,
             this, &KNMusicAlbumView::displayAlbum);

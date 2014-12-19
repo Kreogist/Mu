@@ -54,10 +54,13 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QObject *parent) :
     m_splitter=new QSplitter(m_dropProxy);
     m_splitter->setHandleWidth(0); //This is beautiful.
     m_splitter->setChildrenCollapsible(false);
+    //Set the proxy.
+    m_dropProxy->setFocusProxy(m_splitter);
     mainLayout->addWidget(m_splitter);
 
     //Initial the list.
     m_genreList=new KNMusicCategoryListViewBase(m_dropProxy);
+    m_dropProxy->setFocusProxy(m_genreList);
     m_splitter->addWidget(m_genreList);
 
     //Initial the category display.

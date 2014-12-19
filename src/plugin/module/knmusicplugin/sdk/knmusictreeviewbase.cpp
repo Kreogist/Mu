@@ -32,19 +32,19 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     QTreeView(parent)
 {
     //Set properties.
+    setAllColumnsShowFocus(true);
+    setAlternatingRowColors(true);
     setContentsMargins(0,0,0,0);
+    setDragDropMode(QAbstractItemView::DragOnly);
+    setDropIndicatorShown(true);
     setFrameShape(QFrame::NoFrame);
     setIndentation(0);
     setMouseTracking(true);
-    setUniformRowHeights(true);
-    setAllColumnsShowFocus(true);
-    setDragDropMode(QAbstractItemView::DragOnly);
-    setDropIndicatorShown(true);
-    setAlternatingRowColors(true);
     setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-    setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setUniformRowHeights(true);
+    setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     //Set scroll bar properties.
     horizontalScrollBar()->setSingleStep(5);

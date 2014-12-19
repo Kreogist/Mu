@@ -55,6 +55,8 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     //Initial the album view.
     m_albumView=new KNMusicAlbumView(m_dropProxy);
     m_albumView->setAlbumDetail(m_albumDetail);
+    //Get the drop proxy container's focus proxy to album view.
+    m_dropProxy->setFocusProxy(m_albumView);
     mainLayout->addWidget(m_albumView);
 
     //Initial the show in and search action.

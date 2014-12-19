@@ -55,15 +55,22 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
     m_splitter=new QSplitter(m_dropProxy);
     m_splitter->setHandleWidth(0); //This is beautiful.
     m_splitter->setChildrenCollapsible(false);
+    //Set drop proxy container widget's focus proxy to the splitter.
+    m_dropProxy->setFocusProxy(m_splitter);
     mainLayout->addWidget(m_splitter);
 
     //Initial the list.
     m_artistList=new KNMusicCategoryListViewBase(m_dropProxy);
+    //Set the splitter's focus proxy to the list.
+    m_splitter->setFocusProxy(m_artistList);
     m_splitter->addWidget(m_artistList);
 
     //Initial the category display.
     m_artistDisplay=new KNMusicCategoryDisplay(m_dropProxy);
     m_artistDisplay->setCategoryColumn(Artist);
+    //Set the tab order.
+    m_splitter->setTabOrder(m_artistList, m_artistDisplay);
+    //Add to widget.
     m_splitter->addWidget(m_artistDisplay);
 
     //Set viewer properties after add widgets.
