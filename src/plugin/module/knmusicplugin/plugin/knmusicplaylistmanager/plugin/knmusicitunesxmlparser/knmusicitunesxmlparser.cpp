@@ -98,8 +98,17 @@ bool KNMusiciTunesXMLParser::parse(const QString &playlistFilePath,
                     {
                         if(songKeyNode.text()=="Location")
                         {
-                            QFileInfo currentFileInfo(
-                                        QUrl(QUrl::fromPercentEncoding(songValueNode.text().toUtf8())).path());
+                            QString rawUrlText=QUrl::fromPercentEncoding(songValueNode.text().toUtf8());
+                            if(rawUrlText.length()>17 &&
+                                    rawUrlText.left(17)=="file://localhost/")
+                            {
+                                rawUrlText.remove(0, 17);
+                            }
+                            else
+                            {
+                                rawUrlText=QUrl(rawUrlText).path();
+                            }
+                            QFileInfo currentFileInfo(rawUrlText);
                             //Set the hash.
                             musicLocateHash.insert(trackKeyNode.text(), currentFileInfo.absoluteFilePath());
                             break;
