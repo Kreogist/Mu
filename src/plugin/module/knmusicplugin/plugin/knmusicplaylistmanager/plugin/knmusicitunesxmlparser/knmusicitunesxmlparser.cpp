@@ -36,7 +36,7 @@ KNMusiciTunesXMLParser::KNMusiciTunesXMLParser(QObject *parent) :
 
 QString KNMusiciTunesXMLParser::playlistType() const
 {
-    return tr("iTunes XML Playlist");
+    return tr("iTunes Playlist");
 }
 
 QString KNMusiciTunesXMLParser::playlistSuffix() const
