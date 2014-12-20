@@ -144,7 +144,7 @@ QStringList KNMusicPlaylistList::playlistListData() const
 void KNMusicPlaylistList::setPlaylistListData(const QStringList &playlistListData)
 {
     //Disconnect all.
-    m_rowChangeHandle->disConnectAll();
+    m_rowChangeHandle->disconnectAll();
     //Set the stirng list.
     m_playlistListData = playlistListData;
     //After set the new string list. Connect row detect signal.

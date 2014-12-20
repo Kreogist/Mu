@@ -42,7 +42,7 @@ void KNPathLineEdit::focusOutEvent(QFocusEvent *event)
 void KNPathLineEdit::disableChangedCheck()
 {
     //This is simple, just disconnect all :)
-    m_checkHandle->disConnectAll();
+    m_checkHandle->disconnectAll();
 }
 
 void KNPathLineEdit::enableChangedCheck()

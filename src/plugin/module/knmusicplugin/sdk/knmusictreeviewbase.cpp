@@ -488,7 +488,7 @@ void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
         //Launch it.
         soloMenu->exec(menuPosition);
         //Disconnect all the signals.
-        m_soloConnections->disConnectAll();
+        m_soloConnections->disconnectAll();
     }
 }
 
@@ -507,7 +507,7 @@ void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
         //Launch it.
         multiMenu->exec(menuPosition);
         //Disconnect all the signals.
-        m_multiConnections->disConnectAll();
+        m_multiConnections->disconnectAll();
     }
 }
 

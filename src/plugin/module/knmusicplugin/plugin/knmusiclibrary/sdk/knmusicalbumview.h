@@ -68,22 +68,25 @@ private slots:
 
 private:
     inline void paintAlbum(QPainter &painter,
-                           const QRect &rect,
-                           const QModelIndex &index);
+                           const QPoint &position,
+                           const QModelIndex &index, const QPixmap &albumArtShadow);
     inline int indexScrollBarValue(const QModelIndex &index,
                                    ScrollHint hint = EnsureVisible);
     inline QRect itemContentRect(const QModelIndex &index) const;
     inline void updateParameters();
+    inline QPixmap generateShadow(QSize szDst);
     KNMusicAlbumModel *m_model=nullptr;
     KNMusicCategoryProxyModel *m_proxyModel=nullptr;
     QTimeLine *m_scrollTimeLine;
     KNMusicAlbumDetail *m_albumDetail;
     QModelIndex m_selectedIndex, m_mouseDownIndex;
+    QPixmap m_shadowSource;
     QColor m_backgroundColor=QColor(0x30, 0x30, 0x30);
     int m_outBrightness=0x30;
     //View parameters.
     int m_lineCount=0,
         m_spacing=30,
+        m_imageTextSpacing=5,
         m_itemMinimalWidth=124,
         m_itemHeight=154,
         m_itemWidth=134,

@@ -110,7 +110,7 @@ void KNMusicPlaylistDisplay::searchText(const QString &text)
 void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
 {
     //Reset the connection.
-    m_modelSignalHandler->disConnectAll();
+    m_modelSignalHandler->disconnectAll();
     //Backup the item.
     m_currentItem=item;
     if(m_currentItem==nullptr)

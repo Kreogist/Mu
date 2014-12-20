@@ -28,7 +28,7 @@ protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
     void paintSection(QPainter *painter,
-                      const QRect &rect,
+                      const QRect &position,
                       int logicalIndex) const;
 
 private slots:

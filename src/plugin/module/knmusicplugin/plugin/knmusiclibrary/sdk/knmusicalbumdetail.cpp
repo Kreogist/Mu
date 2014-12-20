@@ -98,7 +98,7 @@ void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
 void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
 {
     //Cut all the connections.
-    m_detailHandler->disConnectAll();
+    m_detailHandler->disconnectAll();
     //Stop all the animations.
     stopAllAnimations();
     //Hide the contents.
@@ -173,7 +173,7 @@ void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
 void KNMusicAlbumDetail::foldAlbumDetail()
 {
     //Cut all the connections.
-    m_detailHandler->disConnectAll();
+    m_detailHandler->disconnectAll();
     //If m_animeStartRect is empty, or the state is running means now is running
     //fold animation, we don't need to fold it more.
     if(!m_animeStartRect.isNull()
@@ -206,7 +206,7 @@ void KNMusicAlbumDetail::foldAlbumDetail()
 void KNMusicAlbumDetail::flyAwayAlbumDetail()
 {
     //Cut all the connections.
-    m_detailHandler->disConnectAll();
+    m_detailHandler->disconnectAll();
     //Check is fly out animation is running.
     if(m_flyAwayAnime->state()==QAbstractAnimation::Stopped)
     {

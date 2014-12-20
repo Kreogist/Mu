@@ -89,7 +89,7 @@ void KNMusicAnalysisCache::setExtend(KNMusicAnalysisExtend *extend)
     if(m_extend!=nullptr)
     {
         //Remove all connections.
-        m_extendConnections->disConnectAll();
+        m_extendConnections->disconnectAll();
     }
     //Save the extend pointer.
     m_extend = extend;

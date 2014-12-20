@@ -7,6 +7,7 @@
         <file>public/items/Close.png</file>
         <file>public/SearchIcon.png</file>
         <file>public/English.png</file>
+        <file>public/shadow.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/category/01_musics.png</file>

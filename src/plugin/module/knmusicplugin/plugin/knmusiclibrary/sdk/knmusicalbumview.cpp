@@ -20,6 +20,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QTimeLine>
+#include <QtMath>
 
 #include "knmusiccategoryproxymodel.h"
 #include "knmusicalbummodel.h"
@@ -51,6 +52,9 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     pal.setColor(QPalette::Highlight, QColor(0x60, 0x60, 0x60));
     pal.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     setPalette(pal);
+
+    //Initial the shadow source.
+    m_shadowSource=QPixmap("://public/shadow.png");
 
     //Initial the timeline.
     m_scrollTimeLine=new QTimeLine(200, this);
@@ -201,6 +205,8 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
         heightSurplus=height()+m_itemSpacingHeight;
     //Change the origin of coordinate.
     painter.translate(0, -verticalScrollBar()->value());
+    //Generate the album art shadow pixmap.
+    QPixmap albumArtShadow=generateShadow(QSize(m_itemIconSize+18, m_itemIconSize+18));
     //Draw all the albums.
     while(currentRow < albumCount && heightSurplus > 0)
     {
@@ -210,11 +216,9 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
         if(m_proxyModel->mapToSource(proxyIndex)!=m_selectedIndex)
         {
             paintAlbum(painter,
-                       QRect(currentLeft,
-                             currentTop,
-                             m_itemWidth,
-                             m_itemHeight),
-                       proxyIndex);
+                       QPoint(currentLeft, currentTop),
+                       proxyIndex,
+                       albumArtShadow);
         }
         //Add current row and column.
         currentRow++;
@@ -427,22 +431,28 @@ void KNMusicAlbumView::selectAlbum(QModelIndex albumIndex)
 }
 
 void KNMusicAlbumView::paintAlbum(QPainter &painter,
-                                  const QRect &rect,
-                                  const QModelIndex &index)
+                                  const QPoint &position,
+                                  const QModelIndex &index,
+                                  const QPixmap &albumArtShadow)
 {
     //Ensure the index is vaild.
     if(!index.isValid())
     {
         return;
     }
+    //Draw the shadow first.
+    painter.drawPixmap(position.x()-9,
+                       position.y()-11,
+                       albumArtShadow);
     //Draw the album art first.
     QIcon currentIcon=
             m_proxyModel->data(index, Qt::DecorationRole).value<QIcon>();
-    painter.drawPixmap(QRect(rect.x()+1,
-                              rect.y()-1,
-                              m_itemIconSize-2,
-                              m_itemIconSize-2),
-                        currentIcon.pixmap(m_itemIconSize, m_itemIconSize));
+    QPixmap albumArtPixmap=currentIcon.pixmap(m_itemIconSize, m_itemIconSize);
+    painter.drawPixmap(QRect(position.x()+1,
+                             position.y()-1,
+                             m_itemIconSize-2,
+                             m_itemIconSize-2),
+                        albumArtPixmap);
     //Get the option view item.
     QStyleOptionViewItem option=viewOptions();
     //Set the pen as the text color.
@@ -450,10 +460,11 @@ void KNMusicAlbumView::paintAlbum(QPainter &painter,
     painter.setPen(textColor);
     //Draw the album text.
     //Draw the album name first.
-    painter.drawText(rect.x(),
-                     rect.y()+m_itemIconSize,
-                     m_itemIconSize,
-                     fontMetrics().height(),
+    QRect textRect(position.x(),
+                   position.y()+m_itemIconSize+m_imageTextSpacing,
+                   m_itemIconSize,
+                   fontMetrics().height());
+    painter.drawText(textRect,
                      Qt::AlignLeft,
                      fontMetrics().elidedText(index.data(Qt::DisplayRole).toString(),
                                               Qt::ElideRight,
@@ -467,10 +478,11 @@ void KNMusicAlbumView::paintAlbum(QPainter &painter,
         textColor.setAlpha(textColor.alpha()>>1);
         painter.setPen(textColor);
         //Draw the text.
-        painter.drawText(rect.x(),
-                         rect.y()+m_itemIconSize+fontMetrics().height(),
-                         m_itemIconSize,
-                         fontMetrics().height(),
+        QRect artistTextRect(textRect.x(),
+                             textRect.y()+fontMetrics().height(),
+                             m_itemIconSize,
+                             fontMetrics().height());
+        painter.drawText(artistTextRect,
                          Qt::AlignLeft,
                          fontMetrics().elidedText(artistList.size()==1?
                                                       artistList.keys().first():
@@ -555,6 +567,47 @@ void KNMusicAlbumView::updateParameters()
     //Calcualte the spacing item width and height.
     m_itemSpacingHeight=m_spacing+m_itemHeight;
     m_itemSpacingWidth=m_spacing+m_itemWidth;
+}
+
+QPixmap KNMusicAlbumView::generateShadow(QSize szDst)
+{
+    QPixmap dstPix(szDst);
+    dstPix.fill(QColor(255, 255, 255, 0));
+    QPainter painter;
+    painter.begin(&dstPix);
+
+    int nW = szDst.width();
+    int nH = szDst.height();
+
+    int nWBg = m_shadowSource.width();
+    int nHBg = m_shadowSource.height();
+    QPoint m_ptBgLT(10, 10);
+    QPoint m_ptBgRB(19, 19);
+
+    QPoint ptDstLT(m_ptBgLT.x(), m_ptBgLT.y());
+    QPoint ptDstRB(nW-(nWBg-m_ptBgRB.x()), nH-(nHBg-m_ptBgRB.y()));
+
+    //LT
+    painter.drawPixmap(QRect(0,0,ptDstLT.x(), ptDstLT.y()), m_shadowSource, QRect(0,0,m_ptBgLT.x(), m_ptBgLT.y()));
+    //MT
+    painter.drawPixmap(QRect(ptDstLT.x(),0, ptDstRB.x()-ptDstLT.x(), ptDstLT.y()), m_shadowSource, QRect(m_ptBgLT.x(),0,m_ptBgRB.x()-m_ptBgLT.x(), m_ptBgLT.y()));
+    //RT
+    painter.drawPixmap(QRect(ptDstRB.x(),0,nW-ptDstRB.x(), ptDstLT.y()), m_shadowSource, QRect(m_ptBgRB.x(),0,nWBg-m_ptBgRB.x(), m_ptBgLT.y()));
+    //LM
+    painter.drawPixmap(QRect(0,ptDstLT.y(),ptDstLT.x(), ptDstRB.y()-ptDstLT.y()), m_shadowSource, QRect(0,m_ptBgLT.y(),m_ptBgLT.x(), m_ptBgRB.y()-m_ptBgLT.y()));
+    //MM
+    painter.drawPixmap(QRect(ptDstLT.x(),ptDstLT.y(),ptDstRB.x()-ptDstLT.x(), ptDstRB.y()-ptDstLT.y()), m_shadowSource, QRect(m_ptBgLT.x(),m_ptBgLT.y(),m_ptBgRB.x()-m_ptBgLT.x(), m_ptBgRB.y()-m_ptBgLT.y()));
+    //RM
+    painter.drawPixmap(QRect(ptDstRB.x(),ptDstLT.y(), nW-ptDstRB.x(), ptDstRB.y()-ptDstLT.y()), m_shadowSource, QRect(m_ptBgRB.x(),m_ptBgLT.y(), nWBg-m_ptBgRB.x(), m_ptBgRB.y()-m_ptBgLT.y()));
+    //LB
+    painter.drawPixmap(QRect(0,ptDstRB.y(),ptDstLT.x(), nH-ptDstRB.y()), m_shadowSource, QRect(0,m_ptBgRB.y(),m_ptBgLT.x(), nHBg-m_ptBgRB.y()));
+    //MB
+    painter.drawPixmap(QRect(ptDstLT.x(),ptDstRB.y(),ptDstRB.x()-ptDstLT.x(),nH-ptDstRB.y()), m_shadowSource, QRect(m_ptBgLT.x(),m_ptBgRB.y(),m_ptBgRB.x()-m_ptBgLT.x(),  nHBg-m_ptBgRB.y()));
+    //RB
+    painter.drawPixmap(QRect(ptDstRB.x(),ptDstRB.y(),nW-ptDstRB.x(),  nH-ptDstRB.y()), m_shadowSource, QRect(m_ptBgRB.x(),m_ptBgRB.y(),nWBg-m_ptBgRB.x(),  nHBg-m_ptBgRB.y()));
+
+    painter.end();
+    return dstPix;
 }
 
 KNMusicAlbumDetail *KNMusicAlbumView::albumDetail() const

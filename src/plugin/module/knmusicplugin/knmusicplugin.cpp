@@ -301,7 +301,7 @@ void KNMusicPlugin::disablePlatformExtras()
 {
     if(m_platformExtras)
     {
-        m_extraHandler->disConnectAll();
+        m_extraHandler->disconnectAll();
     }
 }
 

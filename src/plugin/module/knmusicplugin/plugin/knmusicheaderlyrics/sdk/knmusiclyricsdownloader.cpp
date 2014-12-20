@@ -65,7 +65,7 @@ void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
     //Start loop.
     stuckWaitingLoop.exec();
     //Disconnect all the links.
-    quiterHandle.disConnectAll();
+    quiterHandle.disconnectAll();
     //Check if there's reply.
     if(currentReply==nullptr)
     {
