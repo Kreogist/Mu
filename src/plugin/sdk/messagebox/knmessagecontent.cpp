@@ -14,6 +14,8 @@
 KNMessageContent::KNMessageContent(QWidget *parent) :
     QWidget(parent)
 {
+    //Set properties.
+    setFocusPolicy(Qt::StrongFocus);
     //Initial the layout.
     m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                 this);

@@ -14,6 +14,7 @@ KNMessageBlock::KNMessageBlock(QWidget *parent) :
     //Set properties.
     setAutoFillBackground(true);
     setAlignment(Qt::AlignCenter);
+    setFocusPolicy(Qt::StrongFocus);
 
     //Update palette.
     m_palette=palette();

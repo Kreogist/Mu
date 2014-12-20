@@ -32,6 +32,8 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     //Reset window flags, SAO style show be no border, ToolTip is the best
     //choice. Why not Qt::FramelessWindowHint? Ask Gnome Shell, I don't know.
     setWindowFlags(Qt::ToolTip);
+    //Set the focus policy after set the tooltip window flags.
+    setFocusPolicy(Qt::StrongFocus);
 
     //Initial the configure.
     m_boxConfigureInstance=KNMessageBoxConfigure::instance();
@@ -47,6 +49,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_title=new KNMessageBlock(this);
     connect(m_title, &KNMessageBlock::requireMoveTo,
             this, &KNMessageBox::onActionMove);
+    m_title->setFocusProxy(this);
     m_title->setFont(m_boxConfigureInstance->titleFont());
     m_title->setTopColor(QColor(240,240,240));
     m_title->setButtomColor(QColor(255,255,255));
@@ -57,11 +60,13 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
 
     //Initial the content widget.
     m_content=new KNMessageContent(this);
+    m_content->setFocusProxy(this);
     m_content->setMinimumHeight(1);
     mainLayout->addWidget(m_content);
 
     //Initial the bottom block.
     m_buttom=new KNMessageBlock(this);
+    m_buttom->setFocusProxy(this);
     m_buttom->setTopColor(QColor(244,244,244));
     m_buttom->setButtomColor(QColor(255,255,255));
     m_buttom->setMaximumHeight(m_panelHeight);
@@ -169,8 +174,8 @@ void KNMessageBox::showEvent(QShowEvent *event)
     m_expandAnime->start();
     //Show dialog.
     QDialog::showEvent(event);
-    //Set focus.
-    setFocus();
+    //Set the focus.
+    activateWindow();
 }
 
 void KNMessageBox::paintEvent(QPaintEvent *event)
@@ -190,6 +195,7 @@ bool KNMessageBox::onActionOkayClose()
 
 void KNMessageBox::onActionExpandFinished()
 {
+    //Show the content widget.
     m_content->showContent();
 }
 
