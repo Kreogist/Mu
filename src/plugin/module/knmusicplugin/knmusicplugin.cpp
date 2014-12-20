@@ -157,6 +157,8 @@ KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
 
 void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
 {
+    //Give the central widget as the default focus source.
+    plugin->setDefaultFocusSource(m_centralWidget);
     //Add plugin to the list.
     m_pluginList.append(plugin);
     //Link global search focus.

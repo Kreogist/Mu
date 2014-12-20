@@ -29,6 +29,7 @@ KNCategoryTabWidget::KNCategoryTabWidget(QWidget *parent) :
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
+    setFocusPolicy(Qt::StrongFocus);
 
     //Set layout.
     m_tabLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -42,6 +43,7 @@ KNCategoryTabWidget::KNCategoryTabWidget(QWidget *parent) :
 
     //Initial the widget switcher.
     m_widgetSwitcher=new KNHWidgetSwitcher(this);
+    setFocusProxy(m_widgetSwitcher);
     connect(m_tabBar, &KNCategoryTabBar::currentIndexChanged,
             m_widgetSwitcher, &KNHWidgetSwitcher::setCurrentIndex);
     connect(m_widgetSwitcher, &KNHWidgetSwitcher::movedComplete,

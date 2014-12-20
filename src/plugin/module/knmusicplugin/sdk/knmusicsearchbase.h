@@ -23,6 +23,7 @@ signals:
 public slots:
     virtual void setSearchFocus(QWidget *focusSource=nullptr)=0;
     virtual void search(const QString &text)=0;
+    virtual void setDefaultFocusSource(QWidget *widget)=0;
 
 };
 

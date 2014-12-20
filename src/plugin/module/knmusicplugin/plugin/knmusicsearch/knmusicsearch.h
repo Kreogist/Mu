@@ -35,9 +35,10 @@ public slots:
     void retranslate();
     void setSearchFocus(QWidget *focusSource=nullptr);
     void search(const QString &text);
+    void setDefaultFocusSource(QWidget *widget);
 
 private:
-    QWidget *m_requestSender=nullptr;
+    QWidget *m_requestSender=nullptr, *m_defaultSender=nullptr;
     KNSearchBox *m_searchBox;
 };
 

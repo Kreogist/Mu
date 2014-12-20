@@ -73,6 +73,8 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
 
     //Initial the tree view.
     m_playlistTreeView=new KNMusicPlaylistTreeView(this);
+    //Give the focus to the treeview.
+    setFocusProxy(m_playlistTreeView);
     connect(m_playlistTreeView, &KNMusicPlaylistTreeView::searchComplete,
             this, &KNMusicPlaylistDisplay::updateDetailInfo);
 

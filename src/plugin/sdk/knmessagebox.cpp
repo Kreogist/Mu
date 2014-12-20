@@ -197,6 +197,8 @@ void KNMessageBox::onActionExpandFinished()
 {
     //Show the content widget.
     m_content->showContent();
+    //Set the focus.
+    m_okButton->setFocus();
 }
 
 void KNMessageBox::onActionOkay()
@@ -242,6 +244,13 @@ void KNMessageBox::initialShortCut()
     connect(escapeClose, SIGNAL(triggered()),
             this, SLOT(onActionClose()));
     addAction(escapeClose);
+
+    QAction *acceptClose=new QAction(this);
+    acceptClose->setShortcut(QKeySequence(Qt::Key_Return));
+    acceptClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(acceptClose, SIGNAL(triggered()),
+            this, SLOT(onActionOkay()));
+    addAction(acceptClose);
 }
 
 void KNMessageBox::initialDialog()
