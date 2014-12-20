@@ -94,7 +94,7 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     m_global->loadConfigure();
 }
 
-void KNPluginManager::backupWindowGeometry()
+inline void KNPluginManager::backupWindowGeometry()
 {
     //Backup the window state.
     m_global->setSystemData("windowState", (int)m_mainWindow->windowState());
@@ -108,7 +108,7 @@ void KNPluginManager::backupWindowGeometry()
     m_global->setSystemData("desktopHeight", QApplication::desktop()->height());
 }
 
-void KNPluginManager::recoverWindowGeometry()
+inline void KNPluginManager::recoverWindowGeometry()
 {
     //Check is the value avaliable.
     //!FIXME: We need a better way to check is the last record is complete.
@@ -224,7 +224,7 @@ void KNPluginManager::onActionMainWindowDestory()
     backupWindowGeometry();
 }
 
-void KNPluginManager::setApplicationInformation()
+inline void KNPluginManager::setApplicationInformation()
 {
     //Generate application name.
     QString applicationName=QChar(0x03BC);
@@ -236,7 +236,7 @@ void KNPluginManager::setApplicationInformation()
     QApplication::setOrganizationDomain("http://kreogist.github.io/");
 }
 
-void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)
+inline void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);
@@ -245,7 +245,7 @@ void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)
     m_mainWindowPlugin->setMainWindow(m_mainWindow);
 }
 
-void KNPluginManager::loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin)
+inline void KNPluginManager::loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);
@@ -253,7 +253,7 @@ void KNPluginManager::loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin)
     m_mainWindowPlugin->setHeader(plugin);
 }
 
-void KNPluginManager::loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin)
+inline void KNPluginManager::loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);
@@ -261,7 +261,7 @@ void KNPluginManager::loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugi
     m_mainWindowPlugin->setCategoryStack(plugin);
 }
 
-void KNPluginManager::loadMainWindowCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin)
+inline void KNPluginManager::loadMainWindowCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);
@@ -269,7 +269,7 @@ void KNPluginManager::loadMainWindowCategorySwitcher(KNMainWindowCategorySwitche
     m_mainWindowPlugin->setCategorySwitcher(plugin);
 }
 
-void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
+inline void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
 {
     //Ensure the preference is null.
     if(m_preferencePlugin==nullptr)
@@ -283,7 +283,7 @@ void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
     }
 }
 
-void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
+inline void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 {
     //Add this to the plugin list.
     m_pluginList.append(plugin);
@@ -299,7 +299,7 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     m_mainWindowPlugin->addCategoryPlugin(plugin);
 }
 
-void KNPluginManager::loadPlatformExtras(KNPlatformExtras *plugin)
+inline void KNPluginManager::loadPlatformExtras(KNPlatformExtras *plugin)
 {
     //Add this to the plugin list.
     m_pluginList.append(plugin);

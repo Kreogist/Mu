@@ -174,7 +174,7 @@ void KNPreferenceCategory::onActionIndexChanged(const int &index)
     emit currentIndexChanged(index);
 }
 
-void KNPreferenceCategory::initialStatusBar()
+inline void KNPreferenceCategory::initialStatusBar()
 {
     //Initial the status bar widget.
     m_statusBar=new KNLinearSenseWidget(this);

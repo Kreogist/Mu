@@ -147,13 +147,13 @@ void KNMusicLibrary::onActionLoadLibrary()
     m_libraryImageManager->recoverFromFolder();
 }
 
-void KNMusicLibrary::initialSongTab()
+inline void KNMusicLibrary::initialSongTab()
 {
     //Genreate these tabs.
     m_librarySongTab=new KNMusicLibrarySongTab(this);
 }
 
-void KNMusicLibrary::initialArtistTab()
+inline void KNMusicLibrary::initialArtistTab()
 {
     //Initial the artist tab.
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab(this);
@@ -162,7 +162,7 @@ void KNMusicLibrary::initialArtistTab()
     m_categoryModel[TabArtists]->setCategoryIndex(Artist);
 }
 
-void KNMusicLibrary::initialAlbumTab()
+inline void KNMusicLibrary::initialAlbumTab()
 {
     //Initial the album tab.
     m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab(this);
@@ -171,7 +171,7 @@ void KNMusicLibrary::initialAlbumTab()
     m_categoryModel[TabAlbums]->setCategoryIndex(Album);
 }
 
-void KNMusicLibrary::initialGenreTab()
+inline void KNMusicLibrary::initialGenreTab()
 {
     //Initial the genre tab.
     m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab(this);

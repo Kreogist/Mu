@@ -135,7 +135,7 @@ void KNPreferenceHeaderButton::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNPreferenceHeaderButton::configureTimeLine(QTimeLine *timeLine)
+inline void KNPreferenceHeaderButton::configureTimeLine(QTimeLine *timeLine)
 {
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setUpdateInterval(5);

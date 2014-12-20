@@ -46,10 +46,10 @@ signals:
 public slots:
 
 private:
-    void generateObject(const QList<QStandardItem *> &musicRow,
-                        QJsonObject &musicObject);
-    void generateRow(const QJsonObject &musicObject,
-                     QList<QStandardItem *> &musicRow);
+    inline void generateObject(const QList<QStandardItem *> &musicRow,
+                               QJsonObject &musicObject);
+    inline void generateRow(const QJsonObject &musicObject,
+                            QList<QStandardItem *> &musicRow);
     KNGlobal *m_global;
 };
 

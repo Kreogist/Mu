@@ -54,7 +54,7 @@ private slots:
     void onActionMainWindowDestory();
 
 private:
-    void setApplicationInformation();
+    inline void setApplicationInformation();
     inline void loadMainWindowPlugin(KNMainWindowPlugin *plugin);
     inline void loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin);
     inline void loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin);
@@ -64,8 +64,8 @@ private:
     inline void loadCategoryPlugin(KNCategoryPlugin *plugin);
     static KNPluginManager *m_instance;
     explicit KNPluginManager(QObject *parent = 0);
-    void backupWindowGeometry();
-    void recoverWindowGeometry();
+    inline void backupWindowGeometry();
+    inline void recoverWindowGeometry();
     KNExpandMainWindow *m_mainWindow=nullptr;
     KNMainWindowPlugin *m_mainWindowPlugin=nullptr;
     KNPreferencePlugin *m_preferencePlugin=nullptr;

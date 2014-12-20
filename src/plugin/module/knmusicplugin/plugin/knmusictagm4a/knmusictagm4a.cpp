@@ -175,7 +175,7 @@ bool KNMusicTagM4A::parseAlbumArt(KNMusicDetailInfo &detailInfo)
     return true;
 }
 
-void KNMusicTagM4A::clearBox(M4ABox &box)
+inline void KNMusicTagM4A::clearBox(M4ABox &box)
 {
     //Clear the box information.
     box.name.clear();
@@ -191,7 +191,7 @@ void KNMusicTagM4A::clearBox(M4ABox &box)
     }
 }
 
-void KNMusicTagM4A::toIndependence(M4ABox &box)
+inline void KNMusicTagM4A::toIndependence(M4ABox &box)
 {
     //Check whether is the box has been independence box.
     if(box.independence)
@@ -208,8 +208,8 @@ void KNMusicTagM4A::toIndependence(M4ABox &box)
     memcpy(box.data, sourceData, box.size);
 }
 
-void KNMusicTagM4A::writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
-                                             KNMusicDetailInfo &detailInfo)
+inline void KNMusicTagM4A::writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
+                                                    KNMusicDetailInfo &detailInfo)
 {
     for(auto i=expandList.begin();
         i!=expandList.end();
@@ -255,7 +255,7 @@ void KNMusicTagM4A::writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
     }
 }
 
-bool KNMusicTagM4A::parseMetaBox(M4ABox &metaBox, M4ABox &ilstBox)
+inline bool KNMusicTagM4A::parseMetaBox(M4ABox &metaBox, M4ABox &ilstBox)
 {
     //In the "meta" box, the first 4 bytes is a mystery version. In the
     //document, it says '1 byte atom version (0x00) & 3 bytes atom flags
@@ -290,7 +290,7 @@ bool KNMusicTagM4A::parseMetaBox(M4ABox &metaBox, M4ABox &ilstBox)
     return false;
 }
 
-bool KNMusicTagM4A::getBox(QDataStream &musicDataStream,
+inline bool KNMusicTagM4A::getBox(QDataStream &musicDataStream,
                            M4ABox &box,
                            bool ignoreContent)
 {
@@ -319,8 +319,8 @@ bool KNMusicTagM4A::getBox(QDataStream &musicDataStream,
     return musicDataStream.readRawData(box.data, box.size);
 }
 
-bool KNMusicTagM4A::extractBox(M4ABox &source,
-                               QList<M4ABox> &boxes)
+inline bool KNMusicTagM4A::extractBox(M4ABox &source,
+                                      QList<M4ABox> &boxes)
 {
     //To extract box in a single box, we need to count the byte we read.
     quint32 sourceSize=source.size;

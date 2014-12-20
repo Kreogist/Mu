@@ -274,8 +274,8 @@ void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
     update();
 }
 
-void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
-                                                   QList<KNPreferenceItemInfo> &list)
+inline void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
+                                                          QList<KNPreferenceItemInfo> &list)
 {
     //Set the title.
     listTitle.advanced=false;
@@ -304,7 +304,7 @@ void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTi
     list.append(currentInfo);
 }
 
-int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)
+inline int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)
 {
     if(index==-1)
     {
@@ -318,8 +318,8 @@ int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)
     return m_animationDuration<<2;
 }
 
-void KNMusicHeaderLyrics::startMovingAnime(const int &durationOffset,
-                                           const int &yOffset)
+inline void KNMusicHeaderLyrics::startMovingAnime(const int &durationOffset,
+                                                  const int &yOffset)
 {
     //Stop the time line.
     m_moveToCurrent->stop();

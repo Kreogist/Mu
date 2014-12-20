@@ -22,6 +22,7 @@
 KNMusicTagWAV::KNMusicTagWAV(QObject *parent) :
     KNMusicTagID3v2(parent)
 {
+    //Initial the map.
     m_listKeyIndex["IART"]=Artist;
     m_listKeyIndex["IPRO"]=Album;
     m_listKeyIndex["IBPM"]=BeatsPerMinuate;
@@ -135,7 +136,7 @@ bool KNMusicTagWAV::parseAlbumArt(KNMusicDetailInfo &detailInfo)
     return false;
 }
 
-void KNMusicTagWAV::parseListChunk(char *rawData,
+inline void KNMusicTagWAV::parseListChunk(char *rawData,
                                    quint32 dataSize,
                                    QList<WAVItem> &listData)
 {
@@ -177,8 +178,8 @@ void KNMusicTagWAV::parseListChunk(char *rawData,
     }
 }
 
-void KNMusicTagWAV::writeListDataToDetailInfo(const QList<WAVItem> &listData,
-                                              KNMusicDetailInfo &detailInfo)
+inline void KNMusicTagWAV::writeListDataToDetailInfo(const QList<WAVItem> &listData,
+                                                     KNMusicDetailInfo &detailInfo)
 {
     for(QList<WAVItem>::const_iterator i=listData.begin();
         i!=listData.end();

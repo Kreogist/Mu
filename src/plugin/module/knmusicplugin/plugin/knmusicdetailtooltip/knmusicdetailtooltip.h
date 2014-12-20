@@ -59,7 +59,6 @@ private slots:
     void startDisappearCountWithAnime();
 
 private:
-    inline void loadCurrentToPreview();
     enum ToolTipItems
     {
         ItemTitle,
@@ -67,6 +66,7 @@ private:
         ItemArtist,
         ToolTipItemsCount
     };
+    inline void loadCurrentToPreview();
     inline void resetDisappearCounter();
     inline void resetPreviewPlayer();
     inline void initialTimeLine(QTimeLine *timeline);

@@ -155,7 +155,7 @@ KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
     return m_preferencePanel;
 }
 
-void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
+inline void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
 {
     //Give the central widget as the default focus source.
     plugin->setDefaultFocusSource(m_centralWidget);
@@ -167,7 +167,7 @@ void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
     addRightHeaderWidget(plugin->searchBox());
 }
 
-void KNMusicPlugin::loadDetailTooptip(KNMusicDetailTooltipBase *plugin)
+inline void KNMusicPlugin::loadDetailTooptip(KNMusicDetailTooltipBase *plugin)
 {
     //Add plugin to the list.
     m_pluginList.append(plugin);
@@ -177,7 +177,7 @@ void KNMusicPlugin::loadDetailTooptip(KNMusicDetailTooltipBase *plugin)
     plugin->setBackend(m_backend);
 }
 
-void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
+inline void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
 {
     if(m_backend==nullptr)
     {
@@ -187,7 +187,7 @@ void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
     }
 }
 
-void KNMusicPlugin::loadDetailInfo(KNMusicDetailDialogBase *plugin)
+inline void KNMusicPlugin::loadDetailInfo(KNMusicDetailDialogBase *plugin)
 {
     if(m_detailDialog==nullptr)
     {
@@ -197,7 +197,7 @@ void KNMusicPlugin::loadDetailInfo(KNMusicDetailDialogBase *plugin)
     }
 }
 
-void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
+inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
 {
     if(m_headerPlayer==nullptr)
     {
@@ -219,7 +219,7 @@ void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
     }
 }
 
-void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
+inline void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
 {
     //Add plugin to the list.
     m_pluginList.append(plugin);
@@ -229,7 +229,7 @@ void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
     addLeftHeaderWidget(plugin, 1);
 }
 
-void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
+inline void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
 {
     if(m_nowPlaying==nullptr)
     {
@@ -245,7 +245,7 @@ void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
     }
 }
 
-void KNMusicPlugin::loadLibrary(KNMusicLibraryBase *plugin)
+inline void KNMusicPlugin::loadLibrary(KNMusicLibraryBase *plugin)
 {
     m_pluginList.append(plugin);
     //Add tabs.
@@ -255,7 +255,7 @@ void KNMusicPlugin::loadLibrary(KNMusicLibraryBase *plugin)
     addMusicTab(plugin->genreTab());
 }
 
-void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
+inline void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
 {
     m_pluginList.append(plugin);
     //Add tabs.
@@ -331,7 +331,7 @@ void KNMusicPlugin::onActionShowTab(const int &tabIndex)
     m_centralWidget->setCurrentIndex(tabIndex);
 }
 
-void KNMusicPlugin::initialInfrastructure()
+inline void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
@@ -378,7 +378,7 @@ void KNMusicPlugin::initialInfrastructure()
             this, SLOT(onActionShowTab(int)));
 }
 
-void KNMusicPlugin::initialParser()
+inline void KNMusicPlugin::initialParser()
 {
     //Initial the music parser.
     KNMusicParser *parser=new KNMusicParser;
@@ -411,7 +411,7 @@ void KNMusicPlugin::initialParser()
     KNMusicGlobal::setParser(parser);
 }
 
-void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
+inline void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
 {
     //Add this to plugin list.
     m_pluginList.append(soloMenu);
@@ -421,7 +421,7 @@ void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
     KNMusicGlobal::setSoloMenu(soloMenu);
 }
 
-void KNMusicPlugin::initialMultiMenu(KNMusicMultiMenuBase *multiMenu)
+inline void KNMusicPlugin::initialMultiMenu(KNMusicMultiMenuBase *multiMenu)
 {
     //Add this to plugin list.
     m_pluginList.append(multiMenu);
@@ -429,7 +429,7 @@ void KNMusicPlugin::initialMultiMenu(KNMusicMultiMenuBase *multiMenu)
     KNMusicGlobal::setMultiMenu(multiMenu);
 }
 
-void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
+inline void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
 {
     //Just add them to a new music category.
     MusicTabItem currentTab;
@@ -448,7 +448,7 @@ void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
             musicTab, &KNMusicTab::onActionSearch);
 }
 
-void KNMusicPlugin::startThreads()
+inline void KNMusicPlugin::startThreads()
 {
     m_parserThread.start();
 }

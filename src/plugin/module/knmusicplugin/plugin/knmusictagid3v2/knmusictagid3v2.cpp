@@ -157,35 +157,6 @@ bool KNMusicTagID3v2::parseAlbumArt(KNMusicDetailInfo &detailInfo)
     return true;
 }
 
-quint32 KNMusicTagID3v2::minor2Size(char *rawTagData)
-{
-    return (((quint32)rawTagData[0]<<16)&0b00000000111111110000000000000000)+
-           (((quint32)rawTagData[1]<<8) &0b00000000000000001111111100000000)+
-           ( (quint32)rawTagData[2]     &0b00000000000000000000000011111111);
-}
-
-quint32 KNMusicTagID3v2::minor3Size(char *rawTagData)
-{
-    return (((quint32)rawTagData[0]<<24)&0b11111111000000000000000000000000)+
-           (((quint32)rawTagData[1]<<16)&0b00000000111111110000000000000000)+
-           (((quint32)rawTagData[2]<<8 )&0b00000000000000001111111100000000)+
-           ( (quint32)rawTagData[3]     &0b00000000000000000000000011111111);
-}
-
-quint32 KNMusicTagID3v2::minor4Size(char *rawTagData)
-{
-    return (((quint32)rawTagData[0]<<21)&0b00001111111000000000000000000000)+
-           (((quint32)rawTagData[1]<<14)&0b00000000000111111100000000000000)+
-           (((quint32)rawTagData[2]<<7 )&0b00000000000000000011111110000000)+
-           ( (quint32)rawTagData[3]     &0b00000000000000000000000001111111);
-}
-
-void KNMusicTagID3v2::saveFlag(char *rawTagData, ID3v2Frame &frameData)
-{
-    frameData.flags[0]=rawTagData[8];
-    frameData.flags[1]=rawTagData[9];
-}
-
 QString KNMusicTagID3v2::frameToText(QByteArray content)
 {
     //Check is content empty.
@@ -230,27 +201,6 @@ QString KNMusicTagID3v2::frameToText(QByteArray content)
     }
 }
 
-bool KNMusicTagID3v2::parseID3v2Header(char *rawHeader,
-                                       ID3v2Header &header)
-{
-    //Check 'ID3' from the very beginning.
-    if(rawHeader[0]!='I' || rawHeader[1]!='D' || rawHeader[2]!='3')
-    {
-        return false;
-    }
-    //Get the version of the tag.
-    header.major=(quint8)rawHeader[3];
-    header.minor=(quint8)rawHeader[3];
-    //Get the flag.
-    header.flag=(quint8)rawHeader[5];
-    //Calculate tag size.
-    header.size=(((quint32)rawHeader[6]<<21)&0b00001111111000000000000000000000)+
-                (((quint32)rawHeader[7]<<14)&0b00000000000111111100000000000000)+
-                (((quint32)rawHeader[8]<<7) &0b00000000000000000011111110000000)+
-                ( (quint32)rawHeader[9]     &0b00000000000000000000000001111111);
-    return true;
-}
-
 bool KNMusicTagID3v2::parseID3v2RawData(char *rawTagData,
                                         const ID3v2Header &header,
                                         const ID3v2MinorProperty &property,
@@ -291,38 +241,6 @@ bool KNMusicTagID3v2::parseID3v2RawData(char *rawTagData,
         rawPosition=rawPosition+frameContentSize;
     }
     return true;
-}
-
-void KNMusicTagID3v2::generateID3v2Property(const quint8 &minor,
-                                            ID3v2MinorProperty &property)
-{
-    //Because the ID3v2 has so many version, we have to use different calculate
-    //function to process these frames.
-    switch(minor)
-    {
-    case 0:
-    case 1:
-    case 2:
-        property.frameIDSize=3;
-        property.frameHeaderSize=6;
-        property.toSize=KNMusicTagID3v2::minor2Size;
-        property.saveFlag=nullptr;
-        break;
-    case 3:
-        property.frameIDSize=4;
-        property.frameHeaderSize=10;
-        property.toSize=KNMusicTagID3v2::minor3Size;
-        property.saveFlag=KNMusicTagID3v2::saveFlag;
-        break;
-    case 4:
-        property.frameIDSize=4;
-        property.frameHeaderSize=10;
-        property.toSize=KNMusicTagID3v2::minor4Size;
-        property.saveFlag=KNMusicTagID3v2::saveFlag;
-        break;
-    default:
-        break;
-    }
 }
 
 void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
@@ -476,38 +394,8 @@ void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
     }
 }
 
-int KNMusicTagID3v2::ratingStars(const quint8 &hex)
-{
-    //1-31  = 1 star.
-    //32-95 = 2 stars.
-    //96-159 = 3 stars.
-    //160-223 = 4 stars.
-    //224-255 = 5 stars.
-    if(hex>0 && hex<32)
-    {
-        return 1;
-    }
-    if(hex>31 && hex<96)
-    {
-        return 2;
-    }
-    if(hex>95 && hex<160)
-    {
-        return 3;
-    }
-    if(hex>159 && hex<224)
-    {
-        return 4;
-    }
-    if(hex>223)
-    {
-        return 5;
-    }
-    return 0;
-}
-
-void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,
-                                         QHash<int, ID3v2PictureFrame> &imageMap)
+inline void KNMusicTagID3v2::parseAPICImageData(QByteArray imageData,
+                                                QHash<int, ID3v2PictureFrame> &imageMap)
 {
     //APIC contains:
     /*

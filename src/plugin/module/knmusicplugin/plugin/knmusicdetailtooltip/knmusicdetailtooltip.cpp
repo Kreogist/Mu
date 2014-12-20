@@ -184,7 +184,7 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
     moveToPosition(position);
 }
 
-void KNMusicDetailTooltip::moveToPosition(const QPoint &position)
+inline void KNMusicDetailTooltip::moveToPosition(const QPoint &position)
 {
     //Move right of the tooltip for a little to avoid the mouse pointer.
     int preferX=position.x()+14, preferY=position.y()-(m_tooltipHeight>>1),
@@ -301,7 +301,7 @@ void KNMusicDetailTooltip::onActionPreviewPositionChanged(const qint64 &position
     }
 }
 
-void KNMusicDetailTooltip::loadCurrentToPreview()
+inline void KNMusicDetailTooltip::loadCurrentToPreview()
 {
     //Check is the current index still available.
     if(m_currentIndex.isValid())
@@ -322,14 +322,14 @@ void KNMusicDetailTooltip::loadCurrentToPreview()
     }
 }
 
-void KNMusicDetailTooltip::resetDisappearCounter()
+inline void KNMusicDetailTooltip::resetDisappearCounter()
 {
     //Stop the counter and set the interval.
     m_disappearCounter->stop();
     m_disappearCounter->setInterval(1500);
 }
 
-void KNMusicDetailTooltip::resetPreviewPlayer()
+inline void KNMusicDetailTooltip::resetPreviewPlayer()
 {
     //Reset player button state.
     m_isButtonPlay=true;
@@ -340,7 +340,7 @@ void KNMusicDetailTooltip::resetPreviewPlayer()
     m_progress->setValue(0);
 }
 
-void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
+inline void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
 {
     timeline->setEasingCurve(QEasingCurve::OutCubic);
     timeline->setUpdateInterval(5);
@@ -348,7 +348,7 @@ void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
             this, &KNMusicDetailTooltip::onActionMouseInOut);
 }
 
-void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &text)
+inline void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &text)
 {
     //Calculate the size of the text using the fontMetrics of the label.
     if(label->fontMetrics().width(text)>m_labelWidth)

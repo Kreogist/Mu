@@ -46,11 +46,11 @@ signals:
 public slots:
 
 private:
-    void parseListChunk(char *rawData,
-                        quint32 dataSize,
-                        QList<WAVItem> &listData);
-    void writeListDataToDetailInfo(const QList<WAVItem> &listData,
-                                   KNMusicDetailInfo &detailInfo);
+    inline void parseListChunk(char *rawData,
+                               quint32 dataSize,
+                               QList<WAVItem> &listData);
+    inline void writeListDataToDetailInfo(const QList<WAVItem> &listData,
+                                          KNMusicDetailInfo &detailInfo);
     const char m_riffHeader[4]={'R', 'I', 'F', 'F'},
                m_waveHeader[4]={'W', 'A', 'V', 'E'},
                m_listChunk[4]={'L', 'I', 'S', 'T'},

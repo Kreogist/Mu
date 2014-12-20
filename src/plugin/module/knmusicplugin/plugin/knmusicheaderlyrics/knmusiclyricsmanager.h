@@ -72,9 +72,9 @@ public slots:
 private slots:
 
 private:
-    void installDownloaders();
+    inline void installDownloaders();
     inline bool findLyricsForFile(const KNMusicDetailInfo &detailInfo);
-    bool downloadLyricsForFile(const KNMusicDetailInfo &detailInfo);
+    inline bool downloadLyricsForFile(const KNMusicDetailInfo &detailInfo);
     inline bool checkLyricsFile(const QString &lyricsPath);
     inline bool findRelateLyrics(const QString &folderPath,
                                  const KNMusicDetailInfo &detailInfo);

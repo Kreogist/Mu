@@ -209,20 +209,20 @@ bool KNMusicCueParser::parseList(QFile &listFile,
     return true;
 }
 
-void KNMusicCueParser::parseCommand(const QString &rawLine,
-                                    QString &command,
-                                    QString &commandData)
+inline void KNMusicCueParser::parseCommand(const QString &rawLine,
+                                           QString &command,
+                                           QString &commandData)
 {
     int commandSpliter=rawLine.indexOf(' ');
     command=rawLine.left(commandSpliter);
     commandData=rawLine.mid(commandSpliter+1).simplified();
 }
 
-void KNMusicCueParser::parseMetaCommand(const QString &command,
-                                        const QString &data,
-                                        int &commandIndex,
-                                        QString &metaData,
-                                        const bool &inTrack)
+inline void KNMusicCueParser::parseMetaCommand(const QString &command,
+                                               const QString &data,
+                                               int &commandIndex,
+                                               QString &metaData,
+                                               const bool &inTrack)
 {
     //Check is the command "REM", because there's some metadata like: GENRE and
     //DATE are using in REM by public. e.g.:
@@ -271,7 +271,7 @@ void KNMusicCueParser::parseMetaCommand(const QString &command,
     }
 }
 
-qint64 KNMusicCueParser::timeTextToPosition(const QString &cueTimeText)
+inline qint64 KNMusicCueParser::timeTextToPosition(const QString &cueTimeText)
 {
     //Check is the text vaild.
     if(cueTimeText.at(2)==':' && cueTimeText.at(5)==':')
@@ -287,8 +287,8 @@ qint64 KNMusicCueParser::timeTextToPosition(const QString &cueTimeText)
     return -1;
 }
 
-int KNMusicCueParser::commandToIndex(const QString &command,
-                                     const bool &inTrack)
+inline int KNMusicCueParser::commandToIndex(const QString &command,
+                                            const bool &inTrack)
 {
     //Check is it in the public command list.
     return inTrack?m_trackCommandList.value(command, -1):

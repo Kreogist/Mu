@@ -45,7 +45,7 @@ private slots:
 private:
     inline void configurePalette();
     inline void configureMouseTimeLine(QTimeLine *timeline);
-    void updateSwitcherPosition();
+    inline void updateSwitcherPosition();
     QPalette m_palette;
     int minimumBrightness=0x10,
         maximumBrightness=0x50,

@@ -75,7 +75,7 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
     return !m_positions.isEmpty();
 }
 
-void KNMusicLyricsManager::installDownloaders()
+inline void KNMusicLyricsManager::installDownloaders()
 {
     installLyricsDownloader(new KNMusicQQLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
@@ -99,7 +99,7 @@ void KNMusicLyricsManager::installLyricsDownloader(KNMusicLyricsDownloader *down
     m_downloaders.append(downloader);
 }
 
-bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo)
+inline bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo)
 {
     //Clear the old path.
     m_currentLyricsPath.clear();
@@ -145,7 +145,7 @@ bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo
     return false;
 }
 
-bool KNMusicLyricsManager::downloadLyricsForFile(const KNMusicDetailInfo &detailInfo)
+inline bool KNMusicLyricsManager::downloadLyricsForFile(const KNMusicDetailInfo &detailInfo)
 {
     //Using the downloader to download the lyrics.
     for(QLinkedList<KNMusicLyricsDownloader *>::iterator i=m_downloaders.begin();
@@ -170,7 +170,7 @@ bool KNMusicLyricsManager::downloadLyricsForFile(const KNMusicDetailInfo &detail
     return false;
 }
 
-bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
+inline bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
 {
     QFile testFile(lyricsPath);
     if(testFile.exists())
@@ -181,7 +181,7 @@ bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
     return false;
 }
 
-bool KNMusicLyricsManager::findRelateLyrics(const QString &folderPath,
+inline bool KNMusicLyricsManager::findRelateLyrics(const QString &folderPath,
                                             const KNMusicDetailInfo &detailInfo)
 {
     //Find the title, the artist and the title, the album and the title.

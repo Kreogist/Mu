@@ -55,8 +55,8 @@ private:
     {
         return fontMetrics().size(Qt::TextExpandTabs, lyricsText);
     }
-    void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
-                                  QList<KNPreferenceItemInfo> &list);
+    inline void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
+                                         QList<KNPreferenceItemInfo> &list);
     inline int lyricsLineDuration(const int &index);
     inline void startMovingAnime(const int &durationOffset,
                                  const int &yOffset);

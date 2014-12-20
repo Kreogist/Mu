@@ -40,7 +40,7 @@ protected:
     void startMouseUpAnime();
 
 private:
-    void initialGeometryAnime(QPropertyAnimation *anime);
+    inline void initialGeometryAnime(QPropertyAnimation *anime);
     inline void stopSlideAnimation();
     inline QRect generateOut();
     inline QRect generateIn();

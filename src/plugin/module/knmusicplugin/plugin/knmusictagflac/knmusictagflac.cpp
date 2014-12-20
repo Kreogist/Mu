@@ -130,8 +130,8 @@ bool KNMusicTagFLAC::parseAlbumArt(KNMusicDetailInfo &detailInfo)
     return true;
 }
 
-void KNMusicTagFLAC::parseVorbisComment(QByteArray &blockData,
-                                        QLinkedList<VorbisCommentFrame> &tagMap)
+inline void KNMusicTagFLAC::parseVorbisComment(QByteArray &blockData,
+                                               QLinkedList<VorbisCommentFrame> &tagMap)
 {
     //There's a string like 'Lavf53.24.0' at the begin, should jump over.
     //It's a 4-byte length+string data+4-byte unknown data.
@@ -160,8 +160,8 @@ void KNMusicTagFLAC::parseVorbisComment(QByteArray &blockData,
     }
 }
 
-void KNMusicTagFLAC::parsePictureList(QList<QByteArray> &blocks,
-                                      QHash<int, PictureFrame> &imageMap)
+inline void KNMusicTagFLAC::parsePictureList(QList<QByteArray> &blocks,
+                                             QHash<int, PictureFrame> &imageMap)
 {
     for(auto i=blocks.begin();
         i!=blocks.end();
@@ -171,8 +171,8 @@ void KNMusicTagFLAC::parsePictureList(QList<QByteArray> &blocks,
     }
 }
 
-void KNMusicTagFLAC::parsePicture(QByteArray &blockData,
-                                  QHash<int, PictureFrame> &imageMap)
+inline void KNMusicTagFLAC::parsePicture(QByteArray &blockData,
+                                         QHash<int, PictureFrame> &imageMap)
 {
     PictureFrame frame;
     //Picture metadata block start with 4-bytes type.
@@ -193,8 +193,8 @@ void KNMusicTagFLAC::parsePicture(QByteArray &blockData,
     imageMap[imageType]=frame;
 }
 
-void KNMusicTagFLAC::writeTagToDetails(QLinkedList<VorbisCommentFrame> &tagMap,
-                                       KNMusicDetailInfo &detailInfo)
+inline void KNMusicTagFLAC::writeTagToDetails(QLinkedList<VorbisCommentFrame> &tagMap,
+                                              KNMusicDetailInfo &detailInfo)
 {
     //Try all the tags, check whether it's usable in text list.
     for(auto i=tagMap.begin();

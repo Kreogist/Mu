@@ -102,7 +102,7 @@ void KNHeaderContainer::changeBackgroundColor(const int &frameData)
     setPalette(m_palette);
 }
 
-void KNHeaderContainer::configurePalette()
+inline void KNHeaderContainer::configurePalette()
 {
     //Set the background color to the minimum brightness.
     m_backgroundColor.setHsv(m_backgroundColor.hue(),
@@ -116,7 +116,7 @@ void KNHeaderContainer::configurePalette()
     setPalette(m_palette);
 }
 
-void KNHeaderContainer::configureMouseTimeLine(QTimeLine *timeline)
+inline void KNHeaderContainer::configureMouseTimeLine(QTimeLine *timeline)
 {
     timeline->setEasingCurve(QEasingCurve::OutCubic);
     timeline->setUpdateInterval(5);
@@ -126,7 +126,7 @@ void KNHeaderContainer::configureMouseTimeLine(QTimeLine *timeline)
             this, &KNHeaderContainer::changeBackgroundColor);
 }
 
-void KNHeaderContainer::updateSwitcherPosition()
+inline void KNHeaderContainer::updateSwitcherPosition()
 {
     if(m_switcher!=nullptr)
     {

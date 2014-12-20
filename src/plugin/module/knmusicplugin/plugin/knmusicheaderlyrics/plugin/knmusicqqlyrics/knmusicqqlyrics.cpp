@@ -106,12 +106,12 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     return QString();
 }
 
-QString KNMusicQQLyrics::processKeywordsToGBK(const QString &keywords)
+inline QString KNMusicQQLyrics::processKeywordsToGBK(const QString &keywords)
 {
     return m_gbkCodec->fromUnicode(processKeywords(keywords)).toPercentEncoding();
 }
 
-QString KNMusicQQLyrics::generateRequestString(const QString &id)
+inline QString KNMusicQQLyrics::generateRequestString(const QString &id)
 {
     return "http://music.qq.com/miniportal/static/lyric/" +
             QString::number(id.toLongLong()%100) +

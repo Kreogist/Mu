@@ -81,8 +81,8 @@ void KNMusicLibraryDatabase::removeMusicRow(const int &row)
     removeAt(row);
 }
 
-void KNMusicLibraryDatabase::generateObject(const QList<QStandardItem *> &musicRow,
-                                            QJsonObject &musicObject)
+inline void KNMusicLibraryDatabase::generateObject(const QList<QStandardItem *> &musicRow,
+                                                   QJsonObject &musicObject)
 {
     musicObject.insert("Name", musicRow.at(Name)->text());
     musicObject.insert("Album", musicRow.at(Album)->text());
@@ -133,8 +133,8 @@ void KNMusicLibraryDatabase::generateObject(const QList<QStandardItem *> &musicR
     }
 }
 
-void KNMusicLibraryDatabase::generateRow(const QJsonObject &musicObject,
-                                         QList<QStandardItem *> &musicRow)
+inline void KNMusicLibraryDatabase::generateRow(const QJsonObject &musicObject,
+                                                QList<QStandardItem *> &musicRow)
 {
     KNMusicDetailInfo currentDetail;
     //Set properties.

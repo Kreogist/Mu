@@ -342,7 +342,7 @@ void KNMusicHeaderPlayer::setPosition(const qint64 &position)
     m_backend->setPosition(position);
 }
 
-void KNMusicHeaderPlayer::initialAlbumArt()
+inline void KNMusicHeaderPlayer::initialAlbumArt()
 {
     //Initial album art label.
     m_albumArt=new KNHighlightLabel(this);
@@ -356,7 +356,7 @@ void KNMusicHeaderPlayer::initialAlbumArt()
     m_albumArt->setGraphicsEffect(m_albumArtEffect);
 }
 
-void KNMusicHeaderPlayer::initialLabels()
+inline void KNMusicHeaderPlayer::initialLabels()
 {
     //Initial the title scroll label.
     m_title=new KNScrollLabel(this);
@@ -379,7 +379,7 @@ void KNMusicHeaderPlayer::initialLabels()
     configureScrollLabel(m_artistAndAlbum);
 }
 
-void KNMusicHeaderPlayer::initialProrgess()
+inline void KNMusicHeaderPlayer::initialProrgess()
 {
     //Initial panel.
     m_progressPanel=new QWidget(this);
@@ -451,7 +451,7 @@ void KNMusicHeaderPlayer::initialProrgess()
     progressLayout->addWidget(m_loopStatus);
 }
 
-void KNMusicHeaderPlayer::initialLoopState()
+inline void KNMusicHeaderPlayer::initialLoopState()
 {
     m_loopStatus=new KNOpacityButton(this);
     m_loopStatus->setFixedSize(16, 16);
@@ -462,7 +462,7 @@ void KNMusicHeaderPlayer::initialLoopState()
             this, &KNMusicHeaderPlayer::requireChangeLoopState);
 }
 
-void KNMusicHeaderPlayer::initialControlPanel()
+inline void KNMusicHeaderPlayer::initialControlPanel()
 {
     //Initial the control panel.
     m_controlPanel=new QWidget(this);
@@ -515,7 +515,7 @@ void KNMusicHeaderPlayer::initialControlPanel()
     m_mouseOut->addAnimation(m_hidePanel);
 }
 
-void KNMusicHeaderPlayer::initialVolume()
+inline void KNMusicHeaderPlayer::initialVolume()
 {
     //Initial volume panel.
     m_volumePanel=new QWidget(this);
@@ -557,7 +557,7 @@ void KNMusicHeaderPlayer::initialVolume()
     m_mouseOut->addAnimation(m_hideVolume);
 }
 
-void KNMusicHeaderPlayer::initialAppendPanel()
+inline void KNMusicHeaderPlayer::initialAppendPanel()
 {
     //Initial panel.
     m_appendPanel=new QWidget(this);
@@ -607,21 +607,21 @@ void KNMusicHeaderPlayer::initialAppendPanel()
     m_mouseOut->addAnimation(m_hideAppendPanel);
 }
 
-void KNMusicHeaderPlayer::setPlayIconMode()
+inline void KNMusicHeaderPlayer::setPlayIconMode()
 {
     //Set the icon and the flag.
     m_playNPause->setIcon(m_playIcon);
     m_isShownPlay=true;
 }
 
-void KNMusicHeaderPlayer::setPauseIconMode()
+inline void KNMusicHeaderPlayer::setPauseIconMode()
 {
     //Set the icon and the flag.
     m_playNPause->setIcon(m_pauseIcon);
     m_isShownPlay=false;
 }
 
-void KNMusicHeaderPlayer::updateArtistAndAlbum()
+inline void KNMusicHeaderPlayer::updateArtistAndAlbum()
 {
     //Clear it first.
     m_artistAndAlbum->setText("");
@@ -646,14 +646,14 @@ void KNMusicHeaderPlayer::updateArtistAndAlbum()
     }
 }
 
-void KNMusicHeaderPlayer::configureScrollLabel(KNScrollLabel *label)
+inline void KNMusicHeaderPlayer::configureScrollLabel(KNScrollLabel *label)
 {
     QPalette pal=label->palette();
     pal.setColor(QPalette::Text, QColor(255,255,255));
     label->setPalette(pal);
 }
 
-void KNMusicHeaderPlayer::configurePanelAnimation(QPropertyAnimation *animation)
+inline void KNMusicHeaderPlayer::configurePanelAnimation(QPropertyAnimation *animation)
 {
     animation->setTargetObject(m_controlPanel);
     animation->setPropertyName("geometry");
@@ -662,21 +662,21 @@ void KNMusicHeaderPlayer::configurePanelAnimation(QPropertyAnimation *animation)
             this, &KNMusicHeaderPlayer::onActionInOutOpacityChange);
 }
 
-void KNMusicHeaderPlayer::configureAppendPanelAnimation(QPropertyAnimation *animation)
+inline void KNMusicHeaderPlayer::configureAppendPanelAnimation(QPropertyAnimation *animation)
 {
     animation->setTargetObject(m_appendPanel);
     animation->setPropertyName("geometry");
     animation->setEasingCurve(QEasingCurve::OutCubic);
 }
 
-void KNMusicHeaderPlayer::configureVolumeAnimation(QPropertyAnimation *animation)
+inline void KNMusicHeaderPlayer::configureVolumeAnimation(QPropertyAnimation *animation)
 {
     animation->setTargetObject(m_volumePanel);
     animation->setPropertyName("geometry");
     animation->setEasingCurve(QEasingCurve::OutCubic);
 }
 
-QRect KNMusicHeaderPlayer::generateOutPosition()
+inline QRect KNMusicHeaderPlayer::generateOutPosition()
 {
     return QRect(0,
                  -45,
@@ -684,7 +684,7 @@ QRect KNMusicHeaderPlayer::generateOutPosition()
                  40);
 }
 
-QRect KNMusicHeaderPlayer::generateInPosition()
+inline QRect KNMusicHeaderPlayer::generateInPosition()
 {
     return QRect(0,
                  5,
@@ -692,7 +692,7 @@ QRect KNMusicHeaderPlayer::generateInPosition()
                  40);
 }
 
-void KNMusicHeaderPlayer::saveConfigure()
+inline void KNMusicHeaderPlayer::saveConfigure()
 {
     m_musicGlobal->setConfigureData("Volume",
                                     (double)m_volumeSlider->percentage());

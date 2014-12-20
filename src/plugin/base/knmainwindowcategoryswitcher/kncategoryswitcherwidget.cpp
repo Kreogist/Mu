@@ -134,7 +134,7 @@ void KNCategorySwitcherWidget::onActionHideComplete()
     hide();
 }
 
-void KNCategorySwitcherWidget::initialTimeLine(QTimeLine *timeline)
+inline void KNCategorySwitcherWidget::initialTimeLine(QTimeLine *timeline)
 {
     timeline->setEasingCurve(QEasingCurve::OutCubic);
     timeline->setUpdateInterval(5);
@@ -142,7 +142,7 @@ void KNCategorySwitcherWidget::initialTimeLine(QTimeLine *timeline)
             this, &KNCategorySwitcherWidget::onActionInOutBackground);
 }
 
-void KNCategorySwitcherWidget::initialButtons()
+inline void KNCategorySwitcherWidget::initialButtons()
 {
     m_settingButton=new KNCategorySettingButton(this);
     m_settingButton->setIcon(QPixmap(":/plugin/configure/icon.png"));
@@ -154,17 +154,17 @@ void KNCategorySwitcherWidget::initialButtons()
             });
 }
 
-void KNCategorySwitcherWidget::startButtonInAnime()
+inline void KNCategorySwitcherWidget::startButtonInAnime()
 {
     m_settingButton->startInAnime();
 }
 
-void KNCategorySwitcherWidget::startButtonOutAnime()
+inline void KNCategorySwitcherWidget::startButtonOutAnime()
 {
     m_settingButton->startOutAnime();
 }
 
-void KNCategorySwitcherWidget::stopAllAnime()
+inline void KNCategorySwitcherWidget::stopAllAnime()
 {
     m_inBackground->stop();
     m_outBackground->stop();

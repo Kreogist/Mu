@@ -64,8 +64,8 @@ bool KNMusicTagID3v1::parseAlbumArt(KNMusicDetailInfo &detailInfo)
     return false;
 }
 
-void KNMusicTagID3v1::parseRawData(char *rawTagData,
-                                   ID3v1Struct &tagData)
+inline void KNMusicTagID3v1::parseRawData(char *rawTagData,
+                                          ID3v1Struct &tagData)
 {
     char lastBackupData;
     int lastBackupPosition=-1;
@@ -97,8 +97,8 @@ void KNMusicTagID3v1::parseRawData(char *rawTagData,
     tagData.genreIndex=lastBackupData;
 }
 
-void KNMusicTagID3v1::writeTagDataToDetailInfo(const ID3v1Struct &tagData,
-                                               KNMusicDetailInfo &detailInfo)
+inline void KNMusicTagID3v1::writeTagDataToDetailInfo(const ID3v1Struct &tagData,
+                                                      KNMusicDetailInfo &detailInfo)
 {
     //Set texts
     setTextData(detailInfo.textLists[Name], tagData.tags[0]);
@@ -116,16 +116,16 @@ void KNMusicTagID3v1::writeTagDataToDetailInfo(const ID3v1Struct &tagData,
     }
 }
 
-QString KNMusicTagID3v1::standardizeText(const QString &text)
+inline QString KNMusicTagID3v1::standardizeText(const QString &text)
 {
     return text.simplified().remove(QChar('\0'));
 }
 
-void KNMusicTagID3v1::backupByte(char *rawTagData,
-                                 const int &backupPosition,
-                                 char &backupPool,
-                                 int &positionPool,
-                                 const bool &clearData)
+inline void KNMusicTagID3v1::backupByte(char *rawTagData,
+                                        const int &backupPosition,
+                                        char &backupPool,
+                                        int &positionPool,
+                                        const bool &clearData)
 {
     //Check the position backup pool, if it's not null(-1), restore the data.
     if(positionPool!=-1)

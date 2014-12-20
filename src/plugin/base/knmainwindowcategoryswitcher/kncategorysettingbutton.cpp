@@ -71,25 +71,25 @@ void KNCategorySettingButton::startOutAnime()
     m_slideOut->start();
 }
 
-void KNCategorySettingButton::initialGeometryAnime(QPropertyAnimation *anime)
+inline void KNCategorySettingButton::initialGeometryAnime(QPropertyAnimation *anime)
 {
     anime->setPropertyName("geometry");
     anime->setEasingCurve(QEasingCurve::OutCubic);
     anime->setTargetObject(this);
 }
 
-void KNCategorySettingButton::stopSlideAnimation()
+inline void KNCategorySettingButton::stopSlideAnimation()
 {
     m_slideIn->stop();
     m_slideOut->stop();
 }
 
-QRect KNCategorySettingButton::generateOut()
+inline QRect KNCategorySettingButton::generateOut()
 {
     return QRect(0, -height(), width(), height());
 }
 
-QRect KNCategorySettingButton::generateIn()
+inline QRect KNCategorySettingButton::generateIn()
 {
     return QRect(0, 0, width(), height());
 }

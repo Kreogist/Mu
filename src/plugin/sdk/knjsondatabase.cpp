@@ -145,7 +145,7 @@ QJsonArray::iterator KNJSONDatabase::end()
     return m_dataField.end();
 }
 
-void KNJSONDatabase::addBatchCount()
+inline void KNJSONDatabase::addBatchCount()
 {
     //Count the operate.
     m_batchCount++;
@@ -157,7 +157,7 @@ void KNJSONDatabase::addBatchCount()
     }
 }
 
-void KNJSONDatabase::checkDatabaseDir()
+inline void KNJSONDatabase::checkDatabaseDir()
 {
     //Check is the dir a dir?
     QFileInfo databaseDir(m_databaseFileInfo.absolutePath());

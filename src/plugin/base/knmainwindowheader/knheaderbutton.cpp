@@ -104,14 +104,14 @@ void KNHeaderButton::onActionMouseDownUpAnimation(const int &frame)
     m_text->move(m_leftMargin, m_textY+(frame-m_iconX)/2);
 }
 
-void KNHeaderButton::configurePalette()
+inline void KNHeaderButton::configurePalette()
 {
     QPalette pal=palette();
     pal.setColor(QPalette::WindowText, QColor(0xff,0xff,0xff));
     setPalette(pal);
 }
 
-void KNHeaderButton::initialTimeLine()
+inline void KNHeaderButton::initialTimeLine()
 {
     //Initial text anime(geometry).
     m_mouseIn=new QTimeLine(200, this);
@@ -131,7 +131,7 @@ void KNHeaderButton::initialTimeLine()
     m_mouseUp->setEndFrame(m_iconMouseUpX);
 }
 
-void KNHeaderButton::initialIcon()
+inline void KNHeaderButton::initialIcon()
 {
     //Initial the icon displayer.
     m_icon=new QLabel(this);
@@ -140,7 +140,7 @@ void KNHeaderButton::initialIcon()
     m_icon->move(m_iconX, m_iconY);
 }
 
-void KNHeaderButton::initialText()
+inline void KNHeaderButton::initialText()
 {
     //Initial the text displayer.
     m_text=new QLabel(this);
@@ -167,8 +167,7 @@ void KNHeaderButton::initialText()
     m_text->setGraphicsEffect(m_textEffect);
 }
 
-
-void KNHeaderButton::initialMouseInOutTimeLine(QTimeLine *anime)
+inline void KNHeaderButton::initialMouseInOutTimeLine(QTimeLine *anime)
 {
     anime->setEasingCurve(QEasingCurve::OutCubic);
     anime->setUpdateInterval(5);
@@ -176,7 +175,7 @@ void KNHeaderButton::initialMouseInOutTimeLine(QTimeLine *anime)
             this, &KNHeaderButton::onActionMouseAnimation);
 }
 
-void KNHeaderButton::initialMouseDownTimeLine(QTimeLine *anime)
+inline void KNHeaderButton::initialMouseDownTimeLine(QTimeLine *anime)
 {
     anime->setEasingCurve(QEasingCurve::OutCubic);
     anime->setUpdateInterval(5);
@@ -184,7 +183,7 @@ void KNHeaderButton::initialMouseDownTimeLine(QTimeLine *anime)
             this, &KNHeaderButton::onActionMouseDownUpAnimation);
 }
 
-void KNHeaderButton::initialMouseUpTimeLine(QTimeLine *anime)
+inline void KNHeaderButton::initialMouseUpTimeLine(QTimeLine *anime)
 {
     anime->setEasingCurve(QEasingCurve::OutCubic);
     anime->setUpdateInterval(5);
@@ -236,7 +235,7 @@ void KNHeaderButton::startMouseUpAnime()
     m_mouseUp->start();
 }
 
-void KNHeaderButton::updateWidth()
+inline void KNHeaderButton::updateWidth()
 {
     //Update the size.
     resize(m_text->fontMetrics().width(m_text->text())+m_leftMargin,
