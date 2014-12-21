@@ -94,6 +94,8 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
+    //Hide the detail tool tip first.
+    KNMusicGlobal::detailTooltip()->hide();
     //If we're going to set the model to null, backup header first.
     if(musicModel==nullptr)
     {

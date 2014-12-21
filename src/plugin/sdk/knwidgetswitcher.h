@@ -30,6 +30,7 @@ public slots:
     void setCurrentIndex(int currentIndex);
 
 protected:
+    void focusInEvent(QFocusEvent *event);
     void resizeEvent(QResizeEvent *event);
     virtual void updateAnimationPosition()=0;
     int m_currentIndex=-1, m_outWidgetIndex=-1;

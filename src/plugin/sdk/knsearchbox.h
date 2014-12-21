@@ -51,6 +51,8 @@ public:
     QString text() const;
     QWidget *escFocusTo() const;
     void setEscFocusTo(QWidget *escFocusTo);
+    QWidget *defaultEscFocusTo() const;
+    void setDefaultEscFocusTo(QWidget *defaultEscFocusTo);
 
 signals:
     void requireLostFocus();
@@ -78,7 +80,7 @@ private:
     QPalette m_palette, m_textPalette;
     KNSearchLineEdit *m_textContent;
     KNSearchButton *m_button;
-    QWidget *m_escFocusTo=nullptr;
+    QWidget *m_escFocusTo=nullptr, *m_defaultEscFocusTo=nullptr;
     QColor m_baseColor=QColor(0xff, 0xff, 0xff),
            m_textColor=QColor(0xff, 0xff, 0xff);
     QTimeLine *m_mouseEnterAnime, *m_mouseLeaveAnime, *m_focusGet, *m_focusLost;

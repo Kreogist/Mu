@@ -37,6 +37,7 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
     //Set properties.
     setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
+    setFocusPolicy(Qt::StrongFocus);
 
     //Initial icon background.
     m_largeIcon=new QLabel(this);

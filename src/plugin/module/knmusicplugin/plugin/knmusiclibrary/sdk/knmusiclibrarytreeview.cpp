@@ -17,6 +17,7 @@
  */
 #include "knmusicproxymodel.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusicdetailtooltipbase.h"
 
 #include "knmusiclibrarytreeview.h"
 
@@ -53,6 +54,8 @@ void KNMusicLibraryTreeView::resetHeaderState()
 
 void KNMusicLibraryTreeView::setCategoryColumn(const int &column)
 {
+    //Hide the detail tooltip first.
+    KNMusicGlobal::detailTooltip()->hide();
     //Set the column to the proxy model.
     proxyModel()->setFilterKeyColumn(column);
 }

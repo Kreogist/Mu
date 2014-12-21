@@ -31,6 +31,7 @@ KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     //Set properties.
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
+    setFocusPolicy(Qt::StrongFocus);
     //Hight should be the same as the button.
     setFixedHeight(KNCategoryButton::buttonHeight());
     //Initial the color.

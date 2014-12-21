@@ -100,6 +100,14 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
             this, SLOT(onActionLostFocus()));
     addAction(escapeAction);
 
+    //This is a hack to process the tab request.
+    QAction *tabAction=new QAction(m_textContent);
+    tabAction->setShortcut(QKeySequence(Qt::Key_Tab));
+    tabAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(tabAction, SIGNAL(triggered()),
+            this, SLOT(onActionLostFocus()));
+    addAction(tabAction);
+
     m_mouseEnterAnime=new QTimeLine(100, this);
     m_mouseEnterAnime->setUpdateInterval(5);
     m_mouseEnterAnime->setEndFrame(0x60);
@@ -182,6 +190,10 @@ void KNSearchBox::onActionLostFocus()
     {
         m_escFocusTo->setFocus();
     }
+    else if(m_defaultEscFocusTo!=nullptr)
+    {
+        m_defaultEscFocusTo->setFocus();
+    }
     //Do lost focus animation.
     onFocusLost();
 }
@@ -239,6 +251,16 @@ void KNSearchBox::onFocusLost()
     //Emit
     emit requireLostFocus();
 }
+QWidget *KNSearchBox::defaultEscFocusTo() const
+{
+    return m_defaultEscFocusTo;
+}
+
+void KNSearchBox::setDefaultEscFocusTo(QWidget *defaultEscFocusTo)
+{
+    m_defaultEscFocusTo = defaultEscFocusTo;
+}
+
 QWidget *KNSearchBox::escFocusTo() const
 {
     return m_escFocusTo;
@@ -248,4 +270,3 @@ void KNSearchBox::setEscFocusTo(QWidget *escFocusTo)
 {
     m_escFocusTo=escFocusTo;
 }
-

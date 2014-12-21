@@ -17,6 +17,7 @@ KNWidgetSwitcher::KNWidgetSwitcher(QWidget *parent) :
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
+    setFocusPolicy(Qt::StrongFocus);
 
     //Initial the animation group.
     m_movingAnimationGroup=new QParallelAnimationGroup(this);
@@ -105,6 +106,16 @@ void KNWidgetSwitcher::setCurrentIndex(int currentIndex)
     m_widgets.at(currentIndex)->setFocus();
     //Start animation.
     m_movingAnimationGroup->start();
+}
+
+void KNWidgetSwitcher::focusInEvent(QFocusEvent *event)
+{
+    Q_UNUSED(event)
+    //Check the focus to current index.
+    if(m_currentIndex!=-1)
+    {
+        m_widgets.at(m_currentIndex)->setFocus();
+    }
 }
 
 void KNWidgetSwitcher::resizeEvent(QResizeEvent *event)

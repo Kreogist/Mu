@@ -165,6 +165,9 @@ inline void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
     KNMusicGlobal::setMusicSearch(plugin);
     //Add the searcher box to the right most plugin.
     addRightHeaderWidget(plugin->searchBox());
+    //Set the next tab focus to the content widget.
+    plugin->searchBox()->setTabOrder(plugin->searchBox(),
+                                     m_centralWidget);
 }
 
 inline void KNMusicPlugin::loadDetailTooptip(KNMusicDetailTooltipBase *plugin)

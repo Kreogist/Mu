@@ -55,7 +55,7 @@ void KNMusicSearch::retranslate()
 void KNMusicSearch::setSearchFocus(QWidget *focusSource)
 {
     //Set the focus source and focus.
-    m_searchBox->setEscFocusTo(focusSource==nullptr?m_defaultSender:focusSource);
+    m_searchBox->setEscFocusTo(focusSource);
     m_searchBox->setFocus();
 }
 
@@ -66,5 +66,5 @@ void KNMusicSearch::search(const QString &text)
 
 void KNMusicSearch::setDefaultFocusSource(QWidget *widget)
 {
-    m_defaultSender=widget;
+    m_searchBox->setDefaultEscFocusTo(widget);
 }
