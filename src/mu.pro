@@ -28,13 +28,14 @@ CONFIG += c++11
 #Enable processor instruction sets when using release mode.
 release{
     CONFIG += mmx sse sse2 sse3
-    QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions -fforce-addr
+    QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions
 }
 
 #Windows configure
 win32{
     DESTDIR =../mu
     CONFIG += libbass FFMpeg
+    QMAKE_CXXFLAGS += -fforce-addr
     libbass{
         LIBS += -lbass
     }
@@ -75,6 +76,7 @@ macx{
 #Linux configure
 linux{
     CONFIG += libbass
+    QMAKE_CXXFLAGS += -fforce-addr
     libbass{
         LIBS += -lbass
     }
