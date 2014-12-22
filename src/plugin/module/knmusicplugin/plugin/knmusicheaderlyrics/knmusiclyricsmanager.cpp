@@ -21,6 +21,7 @@
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
 #include "plugin/knmusicbaidulyrics/knmusicbaidulyrics.h"
+#include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "sdk/knmusiclyricsglobal.h"
 #include "knmusiclrcparser.h"
 
@@ -77,6 +78,7 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
 
 inline void KNMusicLyricsManager::installDownloaders()
 {
+//    installLyricsDownloader(new KNMusicTTPlayerLyrics);
     installLyricsDownloader(new KNMusicQQLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
     installLyricsDownloader(new KNMusicBaiduLyrics);
