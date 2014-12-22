@@ -222,6 +222,14 @@ inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
     }
 }
 
+void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
+{
+    //Add plugin to the list.
+//    m_pluginList.append(plugin);
+    //
+    ;
+}
+
 inline void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
 {
     //Add plugin to the list.

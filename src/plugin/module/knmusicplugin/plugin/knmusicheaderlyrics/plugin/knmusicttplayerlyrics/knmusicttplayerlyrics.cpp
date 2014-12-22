@@ -36,6 +36,7 @@ KNMusicTTPlayerLyrics::~KNMusicTTPlayerLyrics()
 
 QString KNMusicTTPlayerLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
 {
+    //Another address: http://ttlrccnc.qianqian.com
     QString queryUrl="http://ttlrcct.qianqian.com"
                      "/dll/lyricsvr.dll?sh?Artist="+
                      utf16LEHex(processKeywords(detailInfo.textLists[Artist])) +
@@ -78,27 +79,31 @@ QString KNMusicTTPlayerLyrics::downloadLyrics(const KNMusicDetailInfo &detailInf
                             generateCode(*i);
         //Download data.
         get(downloadUrl, responseData);
-        return QString();
+//        qDebug()<<responseData;
+        if(!responseData.isEmpty() &&
+                !responseData.contains("errmsg"))
+        {
+            return writeLyricsFile(detailInfo, responseData);
+        }
     }
-//    processKeywords(detailInfo.textLists[Artist]);
     return QString();
 }
 
 inline QString KNMusicTTPlayerLyrics::generateCode(const QHash<QString, QString> &info)
 {
-    QString utf8hex=utf8Hex(info.value("artist")+info.value("title"));
+    QString utf8hex=utf8HexText(info.value("artist")+info.value("title"));
     QList<quint8> code;
     int len=utf8hex.length()/2;
-    for(int i=0; i<utf8hex.size(); i++)
+    for(int i=0; i<utf8hex.size(); i+=2)
     {
         code.append(utf8hex.mid(i, 2).toInt(0, 16));
     }
-    quint32 id=info.value("id").toLongLong(),
-            t1=(id & 0x0000FF00) >> 8,
-            t2,
-            t3=((id & 0x00FF0000) == 0)?
-                    (0x000000FF & ~t1):
-                    (0x000000FF & ((id & 0x00FF0000) >> 16));
+    qint32 id=info.value("id").toLongLong(),
+           t1=(id & 0x0000FF00) >> 8,
+           t2=0,
+           t3=((id & 0x00FF0000) == 0)?
+                   (0x000000FF & ~t1):
+                   (0x000000FF & ((id & 0x00FF0000) >> 16));
     t3 = t3 | ((0x000000FF & id) << 8);
     t3 = t3 << 8;
     t3 = t3 | (0x000000FF & t1);
@@ -114,12 +119,12 @@ inline QString KNMusicTTPlayerLyrics::generateCode(const QHash<QString, QString>
     int j=len-1;
     while(j>=0)
     {
-        quint8 c=code.at(j);
-        if(c>=0x80)
+        qint8 c=(qint8)code.at(j);
+        if(c>=(qint8)0x80)
         {
-            c-=0x100;
+            c-=(qint8)0x100;
         }
-        t1 = ((c + t2) & 0xFFFFFFFF);
+        t1 = (((qint32)c + t2) & 0xFFFFFFFF);
         t2 = ((t2 << (j % 2 + 4)) & 0xFFFFFFFF);
         t2 = ((t1 + t2) & 0xFFFFFFFF);
         j--;
@@ -128,28 +133,28 @@ inline QString KNMusicTTPlayerLyrics::generateCode(const QHash<QString, QString>
     t1 = 0;
     while(j<len)
     {
-        quint8 c=code.at(j);
-        if(c>=128)
+        qint8 c=(qint8)code.at(j);
+        if(c>=(qint8)128)
         {
-            c-=256;
+            c-=(qint8)256;
         }
-        quint32 t4=(((quint32)c+t1)& 0xFFFFFFFF);
-        t1 = ((t1 << (quint8)(j % 2 + 3)) & 0xFFFFFFFF);
+        qint32 t4=(((qint32)c+t1)& 0xFFFFFFFF);
+        t1 = ((t1 << (j % 2 + 3)) & 0xFFFFFFFF);
         t1 = ((t1 + t4) & 0xFFFFFFFF);
         j++;
     }
-    quint32 t5=conv(t2 ^ t3);
+    qint64 t5=conv((qint64)t2 ^ (qint64)t3);
     t5 = conv(t5 + (t1 | id));
     t5 = conv(t5 * (t1 | t3));
     t5 = conv(t5 * (t2 ^ id));
-    if (t5 > 0x80000000)
+    if (t5 > (qint32)0x80000000)
     {
         t5 = (t5 - 0x100000000) & 0xFFFFFFFF;
     }
     return QString::number(t5, 10);
 }
 
-QString KNMusicTTPlayerLyrics::utf8Hex(const QString &original)
+QString KNMusicTTPlayerLyrics::utf8HexText(const QString &original)
 {
     QByteArray utf8Array=original.toUtf8();
     //Read the data, and translate to string.
@@ -190,10 +195,10 @@ QString KNMusicTTPlayerLyrics::utf16LEHex(const QString &original)
     return leText;
 }
 
-inline quint32 KNMusicTTPlayerLyrics::conv(quint32 i)
+inline qint64 KNMusicTTPlayerLyrics::conv(qint64 i)
 {
-    i=i&0xFFFFFFFF;
-    quint64 r=(quint64)i%0x100000000;
+    i&=0xFFFFFFFF;
+    qint64 r=(qint64)i%0x100000000;
     if (i >= 0 && r > 0x80000000)
     {
         r = r - 0x100000000;

@@ -40,9 +40,9 @@ private:
         QString title;
     };
     inline QString generateCode(const QHash<QString, QString> &info);
-    inline QString utf8Hex(const QString &original);
+    inline QString utf8HexText(const QString &original);
     inline QString utf16LEHex(const QString &original);
-    inline quint32 conv(qint32 i);
+    inline qint64 conv(qint64 i);
     QTextCodec *m_utf16LE;
 };
 

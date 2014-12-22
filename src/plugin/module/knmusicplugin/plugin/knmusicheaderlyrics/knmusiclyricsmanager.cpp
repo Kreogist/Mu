@@ -78,7 +78,7 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
 
 inline void KNMusicLyricsManager::installDownloaders()
 {
-//    installLyricsDownloader(new KNMusicTTPlayerLyrics);
+    installLyricsDownloader(new KNMusicTTPlayerLyrics);
     installLyricsDownloader(new KNMusicQQLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
     installLyricsDownloader(new KNMusicBaiduLyrics);
