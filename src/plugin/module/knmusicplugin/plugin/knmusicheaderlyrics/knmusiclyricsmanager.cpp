@@ -18,6 +18,7 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
 #include "plugin/knmusicbaidulyrics/knmusicbaidulyrics.h"
@@ -78,9 +79,11 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
 
 inline void KNMusicLyricsManager::installDownloaders()
 {
-    installLyricsDownloader(new KNMusicTTPlayerLyrics);
+    ;
     installLyricsDownloader(new KNMusicQQLyrics);
+    installLyricsDownloader(new KNMusicTTPodLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
+    installLyricsDownloader(new KNMusicTTPlayerLyrics);
     installLyricsDownloader(new KNMusicBaiduLyrics);
 }
 
