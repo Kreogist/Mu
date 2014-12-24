@@ -299,21 +299,25 @@ KNGlobal::KNGlobal(QObject *parent) :
 
     //Set mu application data path.
     //Set library path.
+#ifdef Q_OS_WIN32
+    m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+                                              "/Kreogist/Mu");
+#endif
 #ifdef Q_OS_LINUX
     m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
                                               "/.kreogist/mu");
 #endif
-    m_libraryPath=ensurePathAvaliable(m_userDataPath+"/library");
+    m_libraryPath=ensurePathAvaliable(userDataPath()+"/Library");
 
     //Initial the fonts.
     m_fontManager=KNFontManager::instance();
-    m_fontManager->loadCustomFontFolder(libraryPath()+"/Fonts");
+    m_fontManager->loadCustomFontFolder(userDataPath()+"/Fonts");
     m_fontManager->initialDefaultFont();
 
     //Initial the configure.
     m_configure=KNConfigure::instance();
     //Set the configure file path.
-    m_configure->setConfigurePath(libraryPath()+"/Configure");
+    m_configure->setConfigurePath(userDataPath()+"/Configure");
 
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();

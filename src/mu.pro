@@ -18,7 +18,6 @@
 QT += core \
       gui \
       widgets \
-      multimedia \
       xml \
       network
 
