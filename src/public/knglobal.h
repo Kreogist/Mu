@@ -22,6 +22,7 @@ public:
     QString byteToHigherUnit(const qint64 &fileSize);
     static QString dylibSuffix();
     static QString applicationDirPath();
+    static QString userDataPath();
     static QString libraryPath();
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
@@ -51,6 +52,7 @@ private:
 #endif
     static KNGlobal *m_instance;
     static QString m_dylibSuffix;
+    static QString m_userDataPath;
     static QString m_libraryPath;
     enum StorageUnit
     {
