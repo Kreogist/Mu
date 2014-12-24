@@ -21,13 +21,30 @@ KNSAOSubMenu::KNSAOSubMenu(QWidget *parent) :
 
     //Initial the indicator.
     m_indicator=new QWidget;
-    m_indicator->setWindowFlags(Qt::ToolTip);
+    //Set properties.
+    m_indicator->setWindowFlags(Qt::ToolTip |
+                                Qt::FramelessWindowHint);
+    m_indicator->setAutoFillBackground(true);
+    m_indicator->setAttribute(Qt::WA_NoBackground, true);
     m_indicator->setAttribute(Qt::WA_TranslucentBackground, true);
     m_indicator->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    //Set palette.
+    QPalette pal=m_indicator->palette();
+    pal.setColor(QPalette::Base, QColor(0,0,0,0));
+    pal.setColor(QPalette::Window, QColor(0,0,0,0));
+    pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
+    pal.setColor(QPalette::AlternateBase, QColor(0,0,0,0));
+    pal.setColor(QPalette::ToolTipBase, QColor(255,255,255,0));
+    pal.setColor(QPalette::ToolTipText, QColor(255,255,255,0));
+    pal.setColor(QPalette::Button, QColor(255,255,255,0));
+    pal.setColor(QPalette::ButtonText, QColor(255,255,255,0));
+    m_indicator->setPalette(pal);
+    //Generate the image label.
     QLabel *indicatorLabel=new QLabel(m_indicator);
+    indicatorLabel->setPalette(pal);
     QPixmap indicatorPixmap=QPixmap("://public/indicator.png");
     indicatorLabel->setPixmap(indicatorPixmap);
-    indicatorLabel->setMask(indicatorPixmap.mask());
+    m_indicator->setMask(indicatorPixmap.mask());
     m_indicator->setFixedSize(indicatorPixmap.size());
     m_indicator->hide();
 
