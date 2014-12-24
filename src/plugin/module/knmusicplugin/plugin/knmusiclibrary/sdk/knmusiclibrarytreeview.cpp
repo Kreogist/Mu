@@ -62,6 +62,8 @@ void KNMusicLibraryTreeView::setCategoryColumn(const int &column)
 
 void KNMusicLibraryTreeView::setCategoryText(const QString &fixedText)
 {
+    //Hide the detail tool tip first.
+    KNMusicGlobal::detailTooltip()->hide();
     //We need to check the now playing model before we change the category.
     if(KNMusicGlobal::nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
     {
