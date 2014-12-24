@@ -9,6 +9,7 @@
 
 #include <QObject>
 
+class KNMusicHeaderPlayerBase;
 class KNMusicTab;
 class KNMusicLibraryBase : public QObject
 {
@@ -19,6 +20,7 @@ public:
     virtual KNMusicTab *artistTab()=0;
     virtual KNMusicTab *albumTab()=0;
     virtual KNMusicTab *genreTab()=0;
+    virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *player)=0;
 
 signals:
     void requireShowTab();

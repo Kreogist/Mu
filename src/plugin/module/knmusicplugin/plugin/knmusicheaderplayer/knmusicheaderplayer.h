@@ -42,6 +42,7 @@ public:
     ~KNMusicHeaderPlayer();
     void setBackend(KNMusicBackend *backend);
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+    QString currentFilePath() const;
 
 signals:
 

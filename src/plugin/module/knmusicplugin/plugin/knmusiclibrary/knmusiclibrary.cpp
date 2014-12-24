@@ -29,6 +29,8 @@
 #include "sdk/knmusiclibrarygenretab.h"
 #include "sdk/knmusiclibrarydatabase.h"
 #include "sdk/knmusiclibraryimagemanager.h"
+
+#include "knmusicheaderplayerbase.h"
 #include "knmusicsolomenubase.h"
 
 #include "knmusiclibrary.h"
@@ -127,6 +129,18 @@ KNMusicTab *KNMusicLibrary::albumTab()
 KNMusicTab *KNMusicLibrary::genreTab()
 {
     return m_libraryTabs[TabGenres];
+}
+
+void KNMusicLibrary::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
+{
+    connect(player, &KNMusicHeaderPlayerBase::requireShowInSongs,
+            [=]{m_librarySongTab->showInTab(player->currentFilePath());});
+    connect(player, &KNMusicHeaderPlayerBase::requireShowInArtists,
+            [=]{m_libraryTabs[TabArtists]->showInTab(player->currentFilePath());});
+    connect(player, &KNMusicHeaderPlayerBase::requireShowInAlbums,
+            [=]{m_libraryTabs[TabAlbums]->showInTab(player->currentFilePath());});
+    connect(player, &KNMusicHeaderPlayerBase::requireShowInGenres,
+            [=]{m_libraryTabs[TabGenres]->showInTab(player->currentFilePath());});
 }
 
 void KNMusicLibrary::onActionLoadLibrary()

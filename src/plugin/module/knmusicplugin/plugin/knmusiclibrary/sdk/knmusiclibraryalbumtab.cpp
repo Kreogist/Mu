@@ -84,6 +84,34 @@ QPixmap KNMusicLibraryAlbumTab::icon()
     return QPixmap(":/plugin/music/category/03_ablums.png");
 }
 
+void KNMusicLibraryAlbumTab::showInTab(QString filePath)
+{
+    //Clear the search result.
+    KNMusicGlobal::musicSearch()->search("");
+    //Get the row of the file.
+    int musicRow=m_musicLibrary->rowFromFilePath(filePath);
+    //If the row is available.
+    if(musicRow!=-1)
+    {
+        //Get the genre name of the row.
+        QModelIndex categoryIndex=
+                proxyCategoryModel()->categoryIndex(
+                    m_musicLibrary->itemText(musicRow,
+                                             m_categoryModel->categoryIndex()));
+        //Check is the catgeory vaild.
+        if(categoryIndex.isValid())
+        {
+            //Ask to show the genre tab.
+            emit requireShowTab();
+            //Change the current category index.
+            m_albumView->locateTo(categoryIndex);
+            m_albumView->selectAlbum(proxyCategoryModel()->mapToSource(categoryIndex));
+            //Set the details to display the index of the song.
+            m_albumDetail->scrollToSourceRow(musicRow);
+        }
+    }
+}
+
 void KNMusicLibraryAlbumTab::retranslate()
 {
     //Set the goto action caption.
@@ -145,30 +173,7 @@ void KNMusicLibraryAlbumTab::onActionRequireSearch()
 
 void KNMusicLibraryAlbumTab::onActionShowInAlbum()
 {
-    //Clear the search result.
-    KNMusicGlobal::musicSearch()->search("");
-    //Get the row of the file.
-    int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
-    //If the row is available.
-    if(musicRow!=-1)
-    {
-        //Get the genre name of the row.
-        QModelIndex categoryIndex=
-                proxyCategoryModel()->categoryIndex(
-                    m_musicLibrary->itemText(musicRow,
-                                             m_categoryModel->categoryIndex()));
-        //Check is the catgeory vaild.
-        if(categoryIndex.isValid())
-        {
-            //Ask to show the genre tab.
-            emit requireShowTab();
-            //Change the current category index.
-            m_albumView->locateTo(categoryIndex);
-            m_albumView->selectAlbum(proxyCategoryModel()->mapToSource(categoryIndex));
-            //Set the details to display the index of the song.
-            m_albumDetail->scrollToSourceRow(musicRow);
-        }
-    }
+    showInTab(KNMusicGlobal::soloMenu()->currentFilePath());
 }
 
 void KNMusicLibraryAlbumTab::initialShowInAction()

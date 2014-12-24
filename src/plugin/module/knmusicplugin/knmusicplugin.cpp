@@ -266,6 +266,8 @@ inline void KNMusicPlugin::loadLibrary(KNMusicLibraryBase *plugin)
     addMusicTab(plugin->artistTab());
     addMusicTab(plugin->albumTab());
     addMusicTab(plugin->genreTab());
+    //Set the player.
+    plugin->setHeaderPlayer(m_headerPlayer);
 }
 
 inline void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)

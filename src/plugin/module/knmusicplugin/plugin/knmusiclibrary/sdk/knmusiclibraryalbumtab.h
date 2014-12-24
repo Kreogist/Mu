@@ -31,6 +31,7 @@ public:
     QAction *showInAction();
     QString caption();
     QPixmap icon();
+    void showInTab(QString filePath);
 
 signals:
 

@@ -34,6 +34,7 @@ public:
     QString caption();
     QPixmap icon();
     QWidget *widget();
+    void showInTab(QString filePath);
 
 signals:
 

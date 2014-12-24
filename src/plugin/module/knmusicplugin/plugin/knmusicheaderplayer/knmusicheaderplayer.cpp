@@ -144,6 +144,11 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     onActionLoopStateChanged(m_nowPlaying->loopState());
 }
 
+QString KNMusicHeaderPlayer::currentFilePath() const
+{
+    return m_currentFilePath;
+}
+
 void KNMusicHeaderPlayer::reset()
 {
     //Reset file path.
@@ -358,6 +363,19 @@ void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
         KNGlobal::showInGraphicalShell(m_currentFilePath);
         break;
     case AppendLocateSong:
+        ;
+        break;
+    case AppendShowInSongs:
+        emit requireShowInSongs();
+        break;
+    case AppendShowInArtists:
+        emit requireShowInArtists();
+        break;
+    case AppendShowInAlbums:
+        emit requireShowInAlbums();
+        break;
+    case AppendShowInGenres:
+        emit requireShowInGenres();
         break;
     }
 }
