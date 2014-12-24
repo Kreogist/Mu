@@ -173,43 +173,43 @@ void KNMusicGlobal::initialFileType()
     m_listSuffixs<<"cue"
                  <<"cda";
 
-    m_suffixDescription<<tr("MPEG Audio Layer III (mp3)")
-                           <<tr("MPEG-4 Part 14 (m4a)")
-                           <<tr("Waveform Audio File Format (wav)")
-                           <<tr("Free Lossless Audio Codec (flac)")
-                           <<tr("Monkey's Audio (ape)")
-                           <<tr("Ogg Vorbis Audio (ogg)")
-                           <<tr("True Audio Codec (tta)")
-                           <<tr("Audio Interchange File Format (aiff)")
-                           <<tr("Audio Interchange File Format (aifc)")
-                           <<tr("Audio Interchange File Format (aif)")
-                           <<tr("MPEG-4 Part 14 (mp4)")
-                           <<tr("MPEG Audio Layer II (mpa)")
-                           <<tr("MPEG Audio Layer II (mp2)")
-                           <<tr("MPEG Audio Layer I (mp1)")
-                           <<tr("Musical Instrument Digital Interface (midi)")
-                           <<tr("Musical Instrument Digital Interface (mid)")
-                           <<tr("MPEG Audio Layer III with SBR (mp3pro)")
-                           <<tr("Musepack Lossy Audio Codec (mpc)")
-                           <<tr("Advanced Audio Coding (aac)")
-                           <<tr("Windows Media Audio (wma)")
-                           <<tr("Flash Audio (fla)")
-                           <<tr("Tom's lossless Audio Kompressor (tak)")
-                           <<tr("Musepack Lossy Audio Codec (mp+)")
-                           <<tr("Audible Audio File (aa)")
-                           <<tr("Real Audio (ra)")
-                           <<tr("Monkey's Audio (mac)")
-                           <<tr("Musical Instrument Digital Interface (rmi)")
-                           <<tr("DTS Audio Codec (dtswav)")
-                           <<tr("DTS Audio Codec (dts)")
-                           <<tr("SouND Audio (snd)")
-                           <<tr("Au File Format (au)")
-                           <<tr("Dolby Surround Audio Coding-3 (ac3)")
-                           <<tr("Fast Tracker Module (xm)")
-                           <<tr("Unreal Engine 1 Music Format (umx)");
+    m_suffixDescription<<"MPEG Audio Layer III (mp3)"
+                       <<"MPEG-4 Part 14 (m4a)"
+                       <<"Waveform Audio File Format (wav)"
+                       <<"Free Lossless Audio Codec (flac)"
+                       <<"Monkey's Audio (ape)"
+                       <<"Ogg Vorbis Audio (ogg)"
+                       <<"True Audio Codec (tta)"
+                       <<"Audio Interchange File Format (aiff)"
+                       <<"Audio Interchange File Format (aifc)"
+                       <<"Audio Interchange File Format (aif)"
+                       <<"MPEG-4 Part 14 (mp4)"
+                       <<"MPEG Audio Layer II (mpa)"
+                       <<"MPEG Audio Layer II (mp2)"
+                       <<"MPEG Audio Layer I (mp1)"
+                       <<"Musical Instrument Digital Interface (midi)"
+                       <<"Musical Instrument Digital Interface (mid)"
+                       <<"MPEG Audio Layer III with SBR (mp3pro)"
+                       <<"Musepack Lossy Audio Codec (mpc)"
+                       <<"Advanced Audio Coding (aac)"
+                       <<"Windows Media Audio (wma)"
+                       <<"Flash Audio (fla)"
+                       <<"Tom's lossless Audio Kompressor (tak)"
+                       <<"Musepack Lossy Audio Codec (mp+)"
+                       <<"Audible Audio File (aa)"
+                       <<"Real Audio (ra)"
+                       <<"Monkey's Audio (mac)"
+                       <<"Musical Instrument Digital Interface (rmi)"
+                       <<"DTS Audio Codec (dtswav)"
+                       <<"DTS Audio Codec (dts)"
+                       <<"SouND Audio (snd)"
+                       <<"Au File Format (au)"
+                       <<"Dolby Surround Audio Coding-3 (ac3)"
+                       <<"Fast Tracker Module (xm)"
+                       <<"Unreal Engine 1 Music Format (umx)";
 
-    m_listSuffixDescription<<tr("Compact Disc Audio track (cda)")
-                          <<tr("Cue sheet (cue)");
+    m_listSuffixDescription<<"Compact Disc Audio track (cda)"
+                           <<"Cue sheet (cue)";
 }
 
 void KNMusicGlobal::initialThreads()
