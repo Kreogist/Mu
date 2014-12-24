@@ -44,7 +44,9 @@ KNSAOSubMenu::KNSAOSubMenu(QWidget *parent) :
     indicatorLabel->setPalette(pal);
     QPixmap indicatorPixmap=QPixmap("://public/indicator.png");
     indicatorLabel->setPixmap(indicatorPixmap);
+#ifdef Q_OS_WIN32
     m_indicator->setMask(indicatorPixmap.mask());
+#endif
     m_indicator->setFixedSize(indicatorPixmap.size());
     m_indicator->hide();
 
