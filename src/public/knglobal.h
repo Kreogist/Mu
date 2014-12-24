@@ -22,10 +22,12 @@ public:
     QString byteToHigherUnit(const qint64 &fileSize);
     static QString dylibSuffix();
     static QString applicationDirPath();
+    static QString libraryPath();
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);
     static void setDylibSuffix(const QString &dylibSuffix);
+    static void setLibraryPath(const QString &libraryPath);
     static void showInGraphicalShell(const QString &filePath);
     static void openLocalFile(const QString &filePath);
     static void setClipboardText(const QString &text);
@@ -49,6 +51,7 @@ private:
 #endif
     static KNGlobal *m_instance;
     static QString m_dylibSuffix;
+    static QString m_libraryPath;
     enum StorageUnit
     {
         Byte,

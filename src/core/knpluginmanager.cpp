@@ -18,6 +18,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 #include <QDesktopWidget>
+#include <QStandardPaths>
 
 #include "knglobal.h"
 #include "knconfigure.h"
@@ -80,6 +81,11 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial global.
     m_global=KNGlobal::instance();
+    //Set the library path.
+#ifdef Q_OS_LINUX
+    KNGlobal::setLibraryPath(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
+                             "/.kreogist/mu/library");
+#endif
     //Set dymanic link library suffix.
 #ifdef Q_OS_WIN32
     KNGlobal::setDylibSuffix("dll");

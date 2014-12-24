@@ -23,7 +23,7 @@
 #include <QDebug>
 
 QString KNGlobal::m_dylibSuffix="";
-
+QString KNGlobal::m_libraryPath="";
 KNGlobal *KNGlobal::m_instance=nullptr;
 
 KNGlobal *KNGlobal::instance()
@@ -51,6 +51,11 @@ QString KNGlobal::dylibSuffix()
 QString KNGlobal::applicationDirPath()
 {
     return QApplication::applicationDirPath();
+}
+
+QString KNGlobal::libraryPath()
+{
+    return m_libraryPath;
 }
 
 QTextCodec *KNGlobal::localeDefaultCodec()
@@ -111,6 +116,11 @@ QStringList KNGlobal::urlToPathList(const QList<QUrl> urls)
 void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
 {
     m_dylibSuffix = dylibSuffix;
+}
+
+void KNGlobal::setLibraryPath(const QString &libraryPath)
+{
+    m_libraryPath = ensurePathAvaliable(libraryPath);
 }
 
 void KNGlobal::showInGraphicalShell(const QString &filePath)

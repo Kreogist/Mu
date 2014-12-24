@@ -37,7 +37,7 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
         return;
     }
     //Load plugins.
-    initialPlugin(KNGlobal::applicationDirPath()+"/Plugins");
+    initialPlugin(KNGlobal::libraryPath()+"/Plugins");
     //Initial the main and preview thread.
     m_main=new KNMusicBackendBassThread(this);
     setMainThread(m_main);
