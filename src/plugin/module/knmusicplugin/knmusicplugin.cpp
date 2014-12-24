@@ -213,6 +213,8 @@ inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
         //Add plugin to the list.
         m_pluginList.append(m_headerPlayer);
         //Link player to sense header.
+        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireCheckCursor,
+                m_headerWidget, &KNMouseDetectHeader::checkCurrentCursorPos);
         connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
                 m_headerPlayer, &KNMusicHeaderPlayerBase::activatePlayer);
         connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,

@@ -32,6 +32,7 @@ class KNScrollLabel;
 class KNProgressSlider;
 class KNEditableLabel;
 class KNHighlightLabel;
+class KNMusicHeaderPlayerAppendMenu;
 class KNMusicGlobal;
 class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
 {
@@ -60,10 +61,12 @@ private slots:
     void onActionProgressPressed();
     void onActionProgressReleased();
     void onActionPositionEdited();
-    void setPositionText(const qint64 &position);
     void onActionPlayNPauseClicked();
     void onActionVolumeSliderChanged(const qint64 &value);
     void onActionInOutOpacityChange(const QVariant &value);
+    void onActionShowAppendMenu();
+    void onActionAppendMenuActionTriggered(int actionIndex);
+    void setPositionText(const qint64 &position);
 
     void onActionPositionChanged(const qint64 &position);
     void onActionPlayStateChanged(const int &state);
@@ -79,6 +82,7 @@ private:
     inline void initialControlPanel();
     inline void initialVolume();
     inline void initialAppendPanel();
+    inline void initialAppendMenu();
 
     inline void setPlayIconMode();
     inline void setPauseIconMode();
@@ -117,14 +121,18 @@ private:
     KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause,
                              *m_showMainPlayer, *m_showAppendMenu;
     KNVolumeSlider *m_volumeSlider;
+    KNMusicHeaderPlayerAppendMenu *m_appendMenu;
 
     //Effects.
     QGraphicsOpacityEffect *m_albumArtEffect,
                            *m_durationEffect,
                            *m_volumeEffect;
 
+    //Actions.
+    QAction *showIn[4];
+
     //States
-    bool m_isShownPlay=true, m_progressPressed=false;
+    bool m_isShownPlay=true, m_progressPressed=false, m_appendMenuShown=false;
     int m_albumArtSize=61, m_buttonSize=38, m_loopState=NoRepeat;
 
     //Images

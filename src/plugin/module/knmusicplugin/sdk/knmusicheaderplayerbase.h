@@ -29,6 +29,11 @@ signals:
     void requireChangeLoopState();
     void requireShowMainPlayer();
     void requireShowAppendMenu();
+    void requireShowInSongs();
+    void requireShowInArtists();
+    void requireShowInAlbums();
+    void requireShowInGenres();
+    void requireCheckCursor();
     void requireLoadLyrics(KNMusicDetailInfo detailInfo);
     void playerReset();
     void finished();

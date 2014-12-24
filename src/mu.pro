@@ -293,7 +293,10 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
     plugin/module/knmusicplugin/sdk/knmusicmainplayerbase.cpp \
     plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
+    plugin/sdk/sao/knsaostyle.cpp \
+    plugin/sdk/sao/knsaosubmenu.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -485,7 +488,10 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
     plugin/module/knmusicplugin/sdk/knmusicmainplayerbase.h \
     plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h \
+    plugin/sdk/sao/knsaostyle.h \
+    plugin/sdk/sao/knsaosubmenu.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.h
 
 RESOURCES += \
     resource/res.qrc

@@ -20,6 +20,7 @@ signals:
     void requireInactivateWidget();
 
 public slots:
+    void checkCurrentCursorPos();
 
 protected:
     void enterEvent(QEvent *event);

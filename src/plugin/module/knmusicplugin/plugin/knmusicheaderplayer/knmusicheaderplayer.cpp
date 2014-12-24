@@ -28,10 +28,12 @@
 #include "kneditablelabel.h"
 #include "knopacitybutton.h"
 #include "knopacityanimebutton.h"
+#include "knmusicheaderplayerappendmenu.h"
 
 #include "knmusicnowplayingbase.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
+#include "knglobal.h"
 
 #include "knmusicheaderplayer.h"
 
@@ -67,6 +69,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     initialControlPanel();
     initialVolume();
     initialAppendPanel();
+    initialAppendMenu();
     //Connect drag play request.
     connect(this, &KNMusicHeaderPlayer::requireAnalysisFiles,
             this, &KNMusicHeaderPlayer::onActionPlayDragIn);
@@ -181,6 +184,10 @@ void KNMusicHeaderPlayer::activatePlayer()
 
 void KNMusicHeaderPlayer::inactivatePlayer()
 {
+    if(m_appendMenuShown)
+    {
+        return;
+    }
     //Stop animations.
     m_mouseIn->stop();
     m_mouseOut->stop();
@@ -314,6 +321,45 @@ void KNMusicHeaderPlayer::onActionInOutOpacityChange(const QVariant &value)
     m_artistAndAlbum->setOpacity(albumOpacity);
 
     m_durationEffect->setOpacity(1-albumOpacity);
+}
+
+void KNMusicHeaderPlayer::onActionShowAppendMenu()
+{
+    //Ensure that there's file is playing.
+    if(m_currentFilePath.isEmpty())
+    {
+        return;
+    }
+    //Set the flag.
+    m_appendMenuShown=true;
+    //Launch the menu.
+    m_appendMenu->exec();
+    //Reset the flag.
+    m_appendMenuShown=false;
+    //Ask the header widget to check the cursor.
+    emit requireCheckCursor();
+}
+
+void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
+{
+    //Reset the flag.
+    m_appendMenuShown=false;
+    //Ask the header widget to check the cursor.
+    emit requireCheckCursor();
+    //Ensure that there's file is playing.
+    if(m_currentFilePath.isEmpty())
+    {
+        return;
+    }
+    //Do the actions.
+    switch(actionIndex)
+    {
+    case AppendShowInGraphicShell:
+        KNGlobal::showInGraphicalShell(m_currentFilePath);
+        break;
+    case AppendLocateSong:
+        break;
+    }
 }
 
 void KNMusicHeaderPlayer::onActionPositionChanged(const qint64 &position)
@@ -605,6 +651,20 @@ inline void KNMusicHeaderPlayer::initialAppendPanel()
                                          m_appendPanel->width(),
                                          m_appendPanel->height()));
     m_mouseOut->addAnimation(m_hideAppendPanel);
+}
+
+inline void KNMusicHeaderPlayer::initialAppendMenu()
+{
+    //Initial the menu.
+    m_appendMenu=new KNMusicHeaderPlayerAppendMenu(m_showAppendMenu);
+    m_appendMenu->setFocusProxy(this);
+    //Linked the menu actions.
+    connect(m_appendMenu, &KNMusicHeaderPlayerAppendMenu::requireDoAction,
+            this, &KNMusicHeaderPlayer::onActionAppendMenuActionTriggered);
+
+    //Link the clicked
+    connect(m_showAppendMenu, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicHeaderPlayer::onActionShowAppendMenu);
 }
 
 inline void KNMusicHeaderPlayer::setPlayIconMode()
