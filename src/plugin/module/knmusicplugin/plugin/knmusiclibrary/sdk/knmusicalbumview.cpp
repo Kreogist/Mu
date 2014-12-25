@@ -437,8 +437,8 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
         return;
     }
     //Draw the shadow first.
-    painter.drawPixmap(position.x()-15,
-                       position.y()-15,
+    painter.drawPixmap(position.x()-m_shadowIncrease,
+                       position.y()-m_shadowIncrease,
                        albumArtShadow);
     //Draw the album art first.
     QIcon currentIcon=
@@ -558,7 +558,8 @@ inline void KNMusicAlbumView::updateParameters()
     //The icon size should be the item width.
     m_itemIconSize=m_itemWidth;
     //Generate the album art shadow pixmap.
-    albumArtShadow=generateShadow(m_itemIconSize+30, m_itemIconSize+30);
+    int shadowSize=m_itemIconSize+(m_shadowIncrease<<1);
+    albumArtShadow=generateShadow(shadowSize, shadowSize);
     //The height of the item should be a item icon size and two text lines.
     m_itemHeight=m_itemIconSize+(fontMetrics().height()<<1);
     //Calcualte the spacing item width and height.

@@ -93,7 +93,8 @@ private:
         m_itemIconSize=124,
         m_itemSpacingHeight=m_spacing+m_itemHeight,
         m_itemSpacingWidth=m_spacing+m_itemWidth,
-        m_maxColumnCount=0;
+        m_maxColumnCount=0,
+        m_shadowIncrease=15;
 };
 
 #endif // KNMUSICALBUMVIEW_H
