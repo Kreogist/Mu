@@ -34,7 +34,7 @@ public:
     static void openLocalFile(const QString &filePath);
     static void setClipboardText(const QString &text);
     static bool renameFile(const QString &originalPath,
-                           const QString &preferName);
+                           const QString &currentPath);
     void setSystemData(const QString &key, const QVariant &value);
     QVariant systemData(const QString &key);
     void setCustomData(const QString &module, const QString &key, const QVariant &value);

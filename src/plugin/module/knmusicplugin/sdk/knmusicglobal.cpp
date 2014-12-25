@@ -129,10 +129,41 @@ void KNMusicGlobal::retranslate()
     m_treeViewHeaderText[Year]=tr("Year");
 }
 
-void KNMusicGlobal::renameMusicFile(const QString &originalPath,
+bool KNMusicGlobal::renameMusicFile(const QString &originalPath,
                                     const QString &preferName)
 {
-    qDebug()<<KNMessageBox::question("Title", "test only");
+    QFileInfo originalFile(originalPath);
+    //If the original file is not
+    if(!originalFile.exists())
+    {
+        //Tell the user that original file cannot find.
+        KNMessageBox::information("Error",
+                                  tr("Cannot find file:\n") +
+                                  originalFile.absoluteFilePath());
+        return false;
+    }
+    //Check the prefer name's availability.
+    QFileInfo destinationFile(originalFile.absolutePath()+"/"+preferName);
+    if(destinationFile.exists())
+    {
+        if(!KNMessageBox::question("Overwrite",
+                                   tr("File %1 has been exist in folder:\n%2\nOverwrite?").arg(
+                                       destinationFile.fileName(), destinationFile.absolutePath())))
+        {
+            return false;
+        }
+    }
+    //Rename the music file.
+    if(KNGlobal::renameFile(originalFile.absoluteFilePath(),
+                            destinationFile.absoluteFilePath()))
+    {
+        //Emit the file name changed signal.
+        emit musicFilePathChanged(originalFile.absoluteFilePath(),
+                                  destinationFile.absoluteFilePath(),
+                                  destinationFile.fileName());
+        return true;
+    }
+    return false;
 }
 
 void KNMusicGlobal::regMetaType()

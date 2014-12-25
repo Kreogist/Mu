@@ -21,6 +21,9 @@ KNMusicModel::KNMusicModel(QObject *parent) :
 {
     //Initial music global.
     m_musicGlobal=KNMusicGlobal::instance();
+    //Linked the signal.
+    connect(m_musicGlobal, &KNMusicGlobal::musicFilePathChanged,
+            this, &KNMusicModel::onActionFileNameChanged);
 
     //Initial file searcher.
     m_searcher=new KNMusicSearcher;
@@ -100,28 +103,6 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
 qint64 KNMusicModel::totalDuration() const
 {
     return m_totalDuration;
-}
-
-QString KNMusicModel::filePathFromIndex(const QModelIndex &index)
-{
-    Q_ASSERT(index.isValid());
-    //Return the file path role data.
-    return filePathFromRow(index.row());
-}
-
-QModelIndexList KNMusicModel::indexFromFilePath(const QString &filePath)
-{
-    //If the file path is empty, return a null index.
-    if(filePath.isEmpty())
-    {
-        return QModelIndexList();
-    }
-    //Using match to find all pathes.
-    return match(index(0, Name),
-                 FilePathRole,
-                 filePath,
-                 1,
-                 Qt::MatchFixedString);
 }
 
 QPixmap KNMusicModel::songAlbumArt(const int &row)
@@ -263,5 +244,26 @@ void KNMusicModel::setAnalysisExtend(KNMusicAnalysisExtend *analysisExtend)
     {
         connect(m_analysisExtend, &KNMusicAnalysisExtend::requireAppendRow,
                 this, &KNMusicModel::appendMusicRow);
+    }
+}
+
+void KNMusicModel::onActionFileNameChanged(const QString &originalPath,
+                                           const QString &currentPath,
+                                           const QString &currentFileName)
+{
+    //Search all the path.
+    QModelIndexList originalPathList=match(index(0,0),
+                                           FilePathRole,
+                                           originalPath,
+                                           -1,
+                                           Qt::MatchFixedString);
+    //Change all the pathes and file names.
+    while(!originalPathList.isEmpty())
+    {
+        //Get the row.
+        int currentRow=originalPathList.takeLast().row();
+        //Set the new data.
+        setRowProperty(currentRow, FilePathRole, currentPath);
+        setRowProperty(currentRow, FileNameRole, currentFileName);
     }
 }

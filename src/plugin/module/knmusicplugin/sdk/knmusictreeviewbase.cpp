@@ -4,6 +4,7 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QScopedPointer>
 #include <QMimeData>
 #include <QList>
 #include <QKeyEvent>
@@ -329,7 +330,7 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
         return;
     }
     //Clear the mimedata.
-    QDrag *drag=new QDrag(this);
+    QScopedPointer<QDrag> drag(new QDrag(this));
     QMimeData *mimeData=new QMimeData;
     //Get the file path and music row of all the selected rows.
     QList<QUrl> fileUrlList;
@@ -342,14 +343,9 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
         int currentRow=m_proxyModel->mapToSource(*i).row();
         //Add the file path and music row to list.
         fileUrlList.append(QUrl::fromLocalFile(musicModel->filePathFromRow(currentRow)));
-//        songContentRowList.append(musicModel->songRow(currentRow));
     }
-    //Store the row data.
-//    KNMusicGlobal::setDragMusicRow(songContentRowList);
     //Set the data to mimedata.
     mimeData->setUrls(fileUrlList);
-//    m_mimeData->setData(KNMusicGlobal::musicRowFormat(),
-//                        QByteArray(1,0)); //Only a data for flag.
     //Set the mime data to the drag action.
     drag->setMimeData(mimeData);
     //Do the drag.

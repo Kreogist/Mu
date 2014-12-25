@@ -195,13 +195,16 @@ public:
     void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
     void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
                             const QList<KNPreferenceItemInfo> &list);
+    bool renameMusicFile(const QString &originalPath,
+                         const QString &preferName);
 
 signals:
+    void musicFilePathChanged(const QString &originalPath,
+                              const QString &currentPath,
+                              const QString &currentFileName);
 
 public slots:
     void retranslate();
-    void renameMusicFile(const QString &originalPath,
-                         const QString &preferName);
 
 private:
     void regMetaType();

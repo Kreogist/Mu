@@ -40,8 +40,6 @@ public:
         //Return the file path role data.
         return data(index(row, Name), FilePathRole).toString();
     }
-    inline QString filePathFromIndex(const QModelIndex &index);
-    inline QModelIndexList indexFromFilePath(const QString &filePath);
     inline QString itemText(const int &row, const int &column) const
     {
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
@@ -117,6 +115,11 @@ protected:
     virtual void setHeaderSortFlag();
     KNMusicAnalysisExtend *analysisExtend() const;
     void setAnalysisExtend(KNMusicAnalysisExtend *analysisExtend);
+
+private slots:
+    void onActionFileNameChanged(const QString &originalPath,
+                                 const QString &currentPath,
+                                 const QString &currentFileName);
 
 private:
     KNMusicSearcher *m_searcher;

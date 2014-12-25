@@ -207,7 +207,7 @@ void KNGlobal::setClipboardText(const QString &text)
     QApplication::clipboard()->setText(text, QClipboard::Clipboard);
 }
 
-bool KNGlobal::renameFile(const QString &originalPath, const QString &preferName)
+bool KNGlobal::renameFile(const QString &originalPath, const QString &currentPath)
 {
     QFile targetFile(originalPath);
     //Check the file is exist or not.
@@ -215,7 +215,9 @@ bool KNGlobal::renameFile(const QString &originalPath, const QString &preferName
     {
         return false;
     }
-    return targetFile.rename(preferName);
+    //This is the most fucking place, the string you give in rename should be
+    //the COMPLETE path, like: "D:/Tojo Nozomi - Start_DASH!.flac"
+    return targetFile.rename(currentPath);
 }
 
 void KNGlobal::setSystemData(const QString &key, const QVariant &value)
