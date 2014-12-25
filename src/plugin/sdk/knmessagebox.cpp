@@ -14,6 +14,7 @@
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QScopedPointer>
 
 #include "knopacityanimebutton.h"
 #include "messagebox/knmessageblock.h"
@@ -133,6 +134,17 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_hideAnime->addAnimation(m_fadeOut);
     connect(m_hideAnime, &QParallelAnimationGroup::finished,
             this, &KNMessageBox::close);
+}
+
+bool KNMessageBox::question(const QString &title,
+                            const QString &text)
+{
+    //Generate a message box first.
+    QScopedPointer<KNMessageBox> questionBox(new KNMessageBox);
+    questionBox->setTitle(title);
+    questionBox->setContent(new QLabel(text, questionBox.data()));
+    qDebug()<<questionBox->exec();
+    return false;
 }
 
 void KNMessageBox::showEvent(QShowEvent *event)

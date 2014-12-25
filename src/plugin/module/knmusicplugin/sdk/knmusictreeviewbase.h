@@ -61,6 +61,7 @@ private slots:
 
     void playCurrent();
     void removeCurrent();
+    void renameCurrent(const QString &preferName);
 
 private:
     inline void initialActions();

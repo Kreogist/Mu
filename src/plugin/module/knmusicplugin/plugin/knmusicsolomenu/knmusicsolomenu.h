@@ -37,12 +37,13 @@ public slots:
     void addMusicActions(QList<QAction *> actions);
 
 private slots:
-    void onActionOpenCurrentFile();
+    void onActionOpenCurrent();
     void onActionShowInGraphicsShell();
     void onActionCopyFilePath();
     void onActionCopyItemText();
     void onActionSearchItemText();
     void onActionShowDetail();
+    void onActionRenameCurrent();
 
 private:
     enum SoloMenuActions

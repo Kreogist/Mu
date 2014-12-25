@@ -26,6 +26,7 @@ public:
 signals:
     void requirePlayCurrent();
     void requireRemoveCurrent();
+    void requireRenameCurrent(QString preferName);
 
 public slots:
     virtual void addMusicActions(QList<QAction *> actions)=0;

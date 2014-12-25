@@ -13,11 +13,14 @@
 #include <QStandardItem>
 
 #include "preference/knpreferenceitembase.h"
+#include "knmessagebox.h"
 #include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
 #include "knlocalemanager.h"
 
 #include "knmusicglobal.h"
+
+#include <QDebug>
 
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
 KNMusicParser *KNMusicGlobal::m_parser=nullptr;
@@ -129,7 +132,7 @@ void KNMusicGlobal::retranslate()
 void KNMusicGlobal::renameMusicFile(const QString &originalPath,
                                     const QString &preferName)
 {
-    ;
+    qDebug()<<KNMessageBox::question("Title", "test only");
 }
 
 void KNMusicGlobal::regMetaType()

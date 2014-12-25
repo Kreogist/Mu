@@ -156,7 +156,7 @@ void KNMusicSoloMenu::addMusicActions(QList<QAction *> actions)
     insertSeparator(m_customSeperator);
 }
 
-void KNMusicSoloMenu::onActionOpenCurrentFile()
+void KNMusicSoloMenu::onActionOpenCurrent()
 {
     KNGlobal::openLocalFile(m_filePath);
 }
@@ -186,6 +186,11 @@ void KNMusicSoloMenu::onActionShowDetail()
     m_detailDialog->showDialog(m_filePath);
 }
 
+void KNMusicSoloMenu::onActionRenameCurrent()
+{
+    emit requireRenameCurrent(m_preferFileName);
+}
+
 void KNMusicSoloMenu::createActions()
 {
     for(int i=0; i<SoloMenuActionCount; i++)
@@ -199,7 +204,7 @@ void KNMusicSoloMenu::createActions()
 
     //Open.
     connect(m_actions[Open], SIGNAL(triggered()),
-            this, SLOT(onActionOpenCurrentFile()));
+            this, SLOT(onActionOpenCurrent()));
     addAction(m_actions[Open]);
 
     addSeparator();
@@ -216,6 +221,7 @@ void KNMusicSoloMenu::createActions()
 
     addSeparator();
 
+    //Search current item text.
     connect(m_actions[SearchItemText], SIGNAL(triggered()),
             this, SLOT(onActionSearchItemText()));
     addAction(m_actions[SearchItemText]);
@@ -223,6 +229,9 @@ void KNMusicSoloMenu::createActions()
 
     addSeparator();
 
+    //Rename current file.
+    connect(m_actions[RenameToArtistHyphonName], SIGNAL(triggered()),
+            this, SLOT(onActionRenameCurrent()));
     addAction(m_actions[RenameToArtistHyphonName]);
 
     addSeparator();

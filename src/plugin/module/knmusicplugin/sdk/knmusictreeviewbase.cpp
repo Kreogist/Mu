@@ -447,6 +447,13 @@ void KNMusicTreeViewBase::removeCurrent()
     removeIndex(currentIndex());
 }
 
+void KNMusicTreeViewBase::renameCurrent(const QString &preferName)
+{
+    KNMusicGlobal::instance()->renameMusicFile(
+                m_proxyModel->filePathFromRow(currentIndex().row()),
+                preferName);
+}
+
 void KNMusicTreeViewBase::initialActions()
 {
     //Initial the search action
@@ -480,6 +487,9 @@ void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
         m_soloConnections->addConnectionHandle(
                     connect(soloMenu, &KNMusicSoloMenuBase::requireRemoveCurrent,
                             this, &KNMusicTreeViewBase::removeCurrent));
+        m_soloConnections->addConnectionHandle(
+                    connect(soloMenu, &KNMusicSoloMenuBase::requireRenameCurrent,
+                            this, &KNMusicTreeViewBase::renameCurrent));
         //Set proxy model and current index.
         soloMenu->setProxyModel(m_proxyModel);
         soloMenu->setCurrentIndex(pressedIndex);
