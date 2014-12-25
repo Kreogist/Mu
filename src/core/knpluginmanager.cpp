@@ -18,6 +18,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 #include <QDesktopWidget>
+#include <QStandardPaths>
 
 #include "knglobal.h"
 #include "knconfigure.h"

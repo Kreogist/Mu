@@ -37,8 +37,10 @@ KNPreferenceItemNumber::KNPreferenceItemNumber(QWidget *parent) :
 
     m_slider=new QSlider(Qt::Horizontal, numberEditorWidget);
     m_slider->setFixedWidth(200);
-    connect(m_slider, &QSlider::valueChanged, m_spinBox, &QSpinBox::setValue);
-    connect(m_spinBox, SIGNAL(valueChanged(int)), m_slider, SLOT(setValue(int)));
+    connect(m_slider, &QSlider::valueChanged,
+            this, &KNPreferenceItemNumber::synchronizeValue);
+    connect(m_spinBox, SIGNAL(valueChanged(int)), //Signal has QString and int.
+            this, SLOT(synchronizeValue(int)));
     pal.setColor(QPalette::Button, QColor(0x60, 0x60, 0x60));
     pal.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
     m_slider->setPalette(pal);
@@ -71,10 +73,23 @@ void KNPreferenceItemNumber::setDefaultValue(const QVariant &defaultValue)
     //Set the default value.
     m_defaultValue=defaultValue.toInt();
     //When default value changed, set the value to the default value.
-    setValue(m_defaultValue);
+    synchronizeValue(m_defaultValue);
 }
 
 void KNPreferenceItemNumber::setValue(const QVariant &value)
 {
-    m_spinBox->setValue(value.toInt());
+    synchronizeValue(value.toInt());
+}
+
+void KNPreferenceItemNumber::synchronizeValue(const int &value)
+{
+    //Block the signal.
+    m_spinBox->blockSignals(true);
+    m_slider->blockSignals(true);
+    //Set the value.
+    m_spinBox->setValue(value);
+    m_slider->setValue(value);
+    //Release the signal.
+    m_spinBox->blockSignals(false);
+    m_slider->blockSignals(false);
 }

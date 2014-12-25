@@ -26,6 +26,9 @@ public slots:
     void setDefaultValue(const QVariant &defaultValue);
     void setValue(const QVariant &value);
 
+private slots:
+    void synchronizeValue(const int &value);
+
 private:
     QSlider *m_slider;
     QSpinBox *m_spinBox;

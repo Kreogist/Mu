@@ -23,7 +23,8 @@
 #include <QDebug>
 
 QString KNGlobal::m_dylibSuffix="";
-
+QString KNGlobal::m_libraryPath="";
+QString KNGlobal::m_userDataPath="";
 KNGlobal *KNGlobal::m_instance=nullptr;
 
 KNGlobal *KNGlobal::instance()
@@ -51,6 +52,16 @@ QString KNGlobal::dylibSuffix()
 QString KNGlobal::applicationDirPath()
 {
     return QApplication::applicationDirPath();
+}
+
+QString KNGlobal::userDataPath()
+{
+    return m_userDataPath;
+}
+
+QString KNGlobal::libraryPath()
+{
+    return m_libraryPath;
 }
 
 QTextCodec *KNGlobal::localeDefaultCodec()
@@ -286,17 +297,27 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Initial the basic strings.
     initialStorageUnit();
 
+    //Set mu application data path.
+    //Set library path.
+#ifdef Q_OS_WIN32
+    m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+                                              "/Kreogist/Mu");
+#endif
+#ifdef Q_OS_LINUX
+    m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
+                                              "/.kreogist/mu");
+#endif
+    m_libraryPath=ensurePathAvaliable(userDataPath()+"/Library");
+
     //Initial the fonts.
     m_fontManager=KNFontManager::instance();
-    m_fontManager->loadCustomFontFolder(QApplication::applicationDirPath() +
-                                        "/Fonts");
+    m_fontManager->loadCustomFontFolder(userDataPath()+"/Fonts");
     m_fontManager->initialDefaultFont();
 
     //Initial the configure.
     m_configure=KNConfigure::instance();
     //Set the configure file path.
-    m_configure->setConfigurePath(QApplication::applicationDirPath() +
-                                      "/Configure");
+    m_configure->setConfigurePath(userDataPath()+"/Configure");
 
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();
