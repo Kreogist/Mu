@@ -27,44 +27,6 @@ int KNMusicProxyModel::playingItemColumn()
     return musicModel()->playingItemColumn();
 }
 
-QString KNMusicProxyModel::itemText(const int &row, const int &column) const
-{
-    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
-    //Only for text easy access.
-    return roleData(row, column, Qt::DisplayRole).toString();
-}
-
-QVariant KNMusicProxyModel::roleData(int row, int column, int role) const
-{
-    Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
-    //Only for easy access.
-    return data(index(row, column), role);
-}
-
-QString KNMusicProxyModel::filePathFromRow(const int &row)
-{
-    Q_ASSERT(row>-1 && row<rowCount());
-    //Return the file path role data.
-    return data(index(row, Name), FilePathRole).toString();
-}
-
-QString KNMusicProxyModel::fileNameFromRow(const int &row)
-{
-    Q_ASSERT(row>-1 && row<rowCount());
-    //Return the file path role data.
-    return data(index(row, Name), FileNameRole).toString();
-}
-
-void KNMusicProxyModel::addPlayTimes(const QModelIndex &sourceIndex)
-{
-    //Get the destination index.
-    QModelIndex playTimesIndex=index(mapFromSource(sourceIndex).row(), Plays);
-    //Add the data.
-    setData(playTimesIndex,
-            data(playTimesIndex, Qt::DisplayRole).toInt()+1,
-            Qt::DisplayRole);
-}
-
 bool KNMusicProxyModel::lessThan(const QModelIndex &left,
                                  const QModelIndex &right) const
 {

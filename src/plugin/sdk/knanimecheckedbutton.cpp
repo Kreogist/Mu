@@ -8,11 +8,6 @@
 
 #include "knanimecheckedbutton.h"
 
-KNAnimeCheckedButton::KNAnimeCheckedButton(QWidget *parent) :
-    KNAbstractButton(parent)
-{
-}
-
 bool KNAnimeCheckedButton::checked() const
 {
     return m_checked;

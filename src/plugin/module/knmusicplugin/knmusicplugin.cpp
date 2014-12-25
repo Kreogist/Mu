@@ -33,6 +33,7 @@
 #include "knmusicnowplayingbase.h"
 #include "knmusiclibrarybase.h"
 #include "knmusicplaylistmanagerbase.h"
+#include "knmusicmainplayerbase.h"
 
 //Plugins
 #ifdef ENABLE_LIBBASS
@@ -63,6 +64,7 @@
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
+#include "plugin/knmusicmainplayer/knmusicmainplayer.h"
 
 #include "knglobal.h"
 #include "knmusictab.h"
@@ -205,10 +207,10 @@ inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
     if(m_headerPlayer==nullptr)
     {
         m_headerPlayer=plugin;
-        //Configure the header player.
+        //Set the backend and now playing controls to the header player.
         m_headerPlayer->setBackend(m_backend);
         m_headerPlayer->setNowPlaying(m_nowPlaying);
-        //Restore configure.
+        //Restore the preference.
         m_headerPlayer->restoreConfigure();
         //Add plugin to the list.
         m_pluginList.append(m_headerPlayer);
@@ -226,10 +228,18 @@ inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
 
 void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
 {
-    //Add plugin to the list.
-//    m_pluginList.append(plugin);
-    //
-    ;
+    if(m_mainPlayer==nullptr)
+    {
+        m_mainPlayer=plugin;
+        //Configure the main player.
+        ;
+        //Restore the settings.
+        ;
+        //Add plugin to the list.
+        m_pluginList.append(m_mainPlayer);
+        //
+        ;
+    }
 }
 
 inline void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)

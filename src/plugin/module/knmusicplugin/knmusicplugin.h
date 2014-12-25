@@ -61,8 +61,8 @@ public:
     inline void loadBackend(KNMusicBackend *plugin);
     inline void loadDetailInfo(KNMusicDetailDialogBase *plugin);
     inline void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
-    inline void loadMainPlayer(KNMusicMainPlayerBase *plugin);
     inline void loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin);
+    inline void loadMainPlayer(KNMusicMainPlayerBase *plugin);
     inline void loadNowPlaying(KNMusicNowPlayingBase *plugin);
     inline void loadLibrary(KNMusicLibraryBase *plugin);
     inline void loadPlaylistManager(KNMusicPlaylistManagerBase *plugin);
@@ -116,6 +116,7 @@ private:
     KNMusicBackend *m_backend=nullptr;
     KNMusicNowPlayingBase *m_nowPlaying=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
+    KNMusicMainPlayerBase *m_mainPlayer=nullptr;
     KNPlatformExtras *m_platformExtras=nullptr;
     KNConnectionHandler *m_extraHandler=nullptr;
 };

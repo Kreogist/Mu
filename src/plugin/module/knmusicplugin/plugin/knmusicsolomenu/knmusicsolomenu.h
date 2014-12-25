@@ -54,12 +54,14 @@ private:
         SearchItemText,
         CopyFilePath,
         CopyItemText,
+        RenameToArtistHyphonName,
         Delete,
         SoloMenuActionCount
     };
     void createActions();
-    void updateActionsCaption();
-    QString m_actionTitles[SoloMenuActionCount], m_itemText, m_filePath;
+    inline QString generatePreferFileName(const QModelIndex &itemIndex);
+    QString m_actionTitles[SoloMenuActionCount],
+            m_itemText, m_filePath, m_preferFileName;
     QAction *m_actions[SoloMenuActionCount],
             *m_customSeperator;
     KNMusicProxyModel *m_proxyModel;

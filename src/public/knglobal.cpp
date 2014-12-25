@@ -25,6 +25,7 @@
 QString KNGlobal::m_dylibSuffix="";
 QString KNGlobal::m_libraryPath="";
 QString KNGlobal::m_userDataPath="";
+QString KNGlobal::m_pluginDirPath="";
 KNGlobal *KNGlobal::m_instance=nullptr;
 
 KNGlobal *KNGlobal::instance()
@@ -57,6 +58,11 @@ QString KNGlobal::applicationDirPath()
 QString KNGlobal::userDataPath()
 {
     return m_userDataPath;
+}
+
+QString KNGlobal::pluginDirPath()
+{
+    return m_pluginDirPath;
 }
 
 QString KNGlobal::libraryPath()
@@ -303,6 +309,10 @@ KNGlobal::KNGlobal(QObject *parent) :
     m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
                                               "/Kreogist/Mu");
 #endif
+#ifdef Q_OS_MACX
+    m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+                                              "/Mu");
+#endif
 #ifdef Q_OS_LINUX
     m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
                                               "/.kreogist/mu");
@@ -321,6 +331,13 @@ KNGlobal::KNGlobal(QObject *parent) :
 
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();
+    //Set the language dir path.
+    m_localeManager->setLanguageDirPath(userDataPath()+"/Language");
+    //Load all the language.
+    m_localeManager->loadLanguageFiles();
+    //Now we can load the first English language as default language.
+    //The ID of English is 0.
+    m_localeManager->setLanguage(0);
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,

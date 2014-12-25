@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QDir>
+#include <QFileInfo>
 
 #include "knglobal.h"
 
@@ -75,6 +76,10 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
                     m_proxyModel->fileNameFromRow(row)));
     m_itemText=m_proxyModel->itemText(itemIndex.row(), itemIndex.column());
     m_filePath=m_proxyModel->filePathFromRow(row);
+    //Generate the prefer name.
+    m_preferFileName=generatePreferFileName(itemIndex);
+    m_actions[RenameToArtistHyphonName]->setText(
+                m_actionTitles[RenameToArtistHyphonName].arg(m_preferFileName));
     if(m_itemText.isEmpty())
     {
         m_actions[CopyItemText]->setVisible(false);
@@ -114,6 +119,7 @@ void KNMusicSoloMenu::retranslate()
 #ifdef Q_OS_LINUX
     m_actionTitles[ShowInGraphicShell]=tr("Show the contains folder");
 #endif
+    m_actionTitles[RenameToArtistHyphonName]=tr("Rename to %1");
     m_actionTitles[CopyFilePath]=tr("Copy location");
     m_actionTitles[CopyItemText]=tr("Copy '%1'");
     m_actionTitles[SearchItemText]=tr("Search '%1'");
@@ -205,6 +211,10 @@ void KNMusicSoloMenu::createActions()
 
     addSeparator();
 
+    addAction(m_actions[RenameToArtistHyphonName]);
+
+    addSeparator();
+
     //Copy item text.
     connect(m_actions[CopyFilePath], SIGNAL(triggered()),
             this, SLOT(onActionCopyFilePath()));
@@ -219,4 +229,18 @@ void KNMusicSoloMenu::createActions()
     connect(m_actions[Delete], SIGNAL(triggered()),
             this, SIGNAL(requireRemoveCurrent()));
     addAction(m_actions[Delete]);
+}
+
+inline QString KNMusicSoloMenu::generatePreferFileName(
+        const QModelIndex &itemIndex)
+{
+    QFileInfo currentFile(
+                m_proxyModel->rowProperty(itemIndex.row(), FilePathRole).toString());
+    QString preferString=m_proxyModel->itemText(itemIndex.row(), Artist) +
+                         " - " +
+                         m_proxyModel->itemText(itemIndex.row(), Name) +
+                         "." +
+                         currentFile.suffix();
+//    preferString.replace(QRegExp(), "_");
+    return preferString;
 }

@@ -23,6 +23,7 @@ public:
     static QString dylibSuffix();
     static QString applicationDirPath();
     static QString userDataPath();
+    static QString pluginDirPath();
     static QString libraryPath();
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
@@ -53,6 +54,7 @@ private:
     static KNGlobal *m_instance;
     static QString m_dylibSuffix;
     static QString m_userDataPath;
+    static QString m_pluginDirPath;
     static QString m_libraryPath;
     enum StorageUnit
     {

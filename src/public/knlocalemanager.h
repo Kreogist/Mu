@@ -23,6 +23,10 @@ public:
     int languageSize() const;
     QString languageNameAt(const int &i);
     QPixmap languageIconAt(const int &i);
+    void loadLanguageFiles();
+
+    QString languageDirPath() const;
+    void setLanguageDirPath(const QString &languageDirPath);
 
 signals:
     void requireRetranslate();
@@ -32,7 +36,6 @@ public slots:
     void setLanguageFromID(const QString &id);
 
 private:
-    void loadLanguageFiles();
     static KNLocaleManager *m_instance;
     explicit KNLocaleManager(QObject *parent = 0);
     int m_currentIndex=-1;
@@ -43,6 +46,7 @@ private:
         QString filePath;
         QPixmap icon;
     };
+    QString m_languageDirPath;
     QList<LanguageItem> m_languageList;
     QPixmap m_noImageIcon;
     QTranslator *m_translator;
