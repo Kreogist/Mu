@@ -126,6 +126,12 @@ void KNMusicGlobal::retranslate()
     m_treeViewHeaderText[Year]=tr("Year");
 }
 
+void KNMusicGlobal::renameMusicFile(const QString &originalPath,
+                                    const QString &preferName)
+{
+    ;
+}
+
 void KNMusicGlobal::regMetaType()
 {
     qRegisterMetaType<QVector<int>>("QVector<int>");

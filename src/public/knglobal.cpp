@@ -207,6 +207,17 @@ void KNGlobal::setClipboardText(const QString &text)
     QApplication::clipboard()->setText(text, QClipboard::Clipboard);
 }
 
+bool KNGlobal::renameFile(const QString &originalPath, const QString &preferName)
+{
+    QFile targetFile(originalPath);
+    //Check the file is exist or not.
+    if(!targetFile.exists())
+    {
+        return false;
+    }
+    return targetFile.rename(preferName);
+}
+
 void KNGlobal::setSystemData(const QString &key, const QVariant &value)
 {
     switch(value.type())

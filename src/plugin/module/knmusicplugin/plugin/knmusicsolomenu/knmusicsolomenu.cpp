@@ -78,8 +78,20 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
     m_filePath=m_proxyModel->filePathFromRow(row);
     //Generate the prefer name.
     m_preferFileName=generatePreferFileName(itemIndex);
-    m_actions[RenameToArtistHyphonName]->setText(
-                m_actionTitles[RenameToArtistHyphonName].arg(m_preferFileName));
+    //If the prefer file name is empty, means now the file is just the prefer
+    //name, hide this action.
+    if(m_preferFileName.isEmpty())
+    {
+        m_actions[RenameToArtistHyphonName]->setVisible(false);
+    }
+    else
+    {
+        //Or else, show the action and set the text.
+        m_actions[RenameToArtistHyphonName]->setVisible(true);
+        m_actions[RenameToArtistHyphonName]->setText(
+                    m_actionTitles[RenameToArtistHyphonName].arg(m_preferFileName));
+    }
+    //Set current item relate action text.
     if(m_itemText.isEmpty())
     {
         m_actions[CopyItemText]->setVisible(false);
@@ -236,11 +248,29 @@ inline QString KNMusicSoloMenu::generatePreferFileName(
 {
     QFileInfo currentFile(
                 m_proxyModel->rowProperty(itemIndex.row(), FilePathRole).toString());
-    QString preferString=m_proxyModel->itemText(itemIndex.row(), Artist) +
-                         " - " +
-                         m_proxyModel->itemText(itemIndex.row(), Name) +
-                         "." +
-                         currentFile.suffix();
-//    preferString.replace(QRegExp(), "_");
-    return preferString;
+    QString artistText=m_proxyModel->itemText(itemIndex.row(), Artist),
+            nameText=m_proxyModel->itemText(itemIndex.row(), Name),
+            preferString;
+    //Check the artist text first.
+    if(!artistText.isEmpty())
+    {
+        preferString=m_proxyModel->itemText(itemIndex.row(), Artist);
+    }
+    //Check the title then.
+    //The title might be empty or it might be the file name itself,
+    //set it to the base name, check this first.
+    if(nameText.isEmpty() || nameText==currentFile.fileName())
+    {
+        nameText=currentFile.completeBaseName();
+    }
+    //Now name text cannot be empty any more, add it to the prefer string.
+    if(!preferString.isEmpty())
+    {
+        preferString += " - ";
+    }
+    preferString += nameText + "." + currentFile.suffix();
+    //Check is the prefer string is just the file name, if so, return a empty
+    //string.
+    return preferString==currentFile.fileName()?
+                QString():preferString;
 }

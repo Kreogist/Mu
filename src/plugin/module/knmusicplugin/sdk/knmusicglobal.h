@@ -200,6 +200,8 @@ signals:
 
 public slots:
     void retranslate();
+    void renameMusicFile(const QString &originalPath,
+                         const QString &preferName);
 
 private:
     void regMetaType();
