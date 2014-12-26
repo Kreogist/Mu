@@ -85,9 +85,9 @@ public:
         //All the property of a song is stored in the first item.
         return roleData(row, 0, propertyRole);
     }
-    inline void setRowProperty(const int &row,
-                               const int &propertyRole,
-                               const QVariant &value)
+    inline virtual void setRowProperty(const int &row,
+                                       const int &propertyRole,
+                                       const QVariant &value)
     {
         Q_ASSERT(row>-1 && row<rowCount());
         //All the property of a song is stored in the first item.

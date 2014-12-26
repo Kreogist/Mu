@@ -43,6 +43,9 @@ public:
                       int row,
                       int column,
                       const QModelIndex &parent);
+    inline void setRowProperty(const int &row,
+                               const int &propertyRole,
+                               const QVariant &value);
     void installCategoryModel(KNMusicCategoryModel *model);
     KNMusicLibraryDatabase *database() const;
     void setDatabase(KNMusicLibraryDatabase *database);
@@ -72,6 +75,7 @@ private slots:
 
 private:
     inline void initialHeader();
+    inline void updateRowInDatabase(const int &row);
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
     KNMusicLibraryDatabase *m_database;
     KNMusicGlobal *m_musicGlobal;

@@ -105,6 +105,16 @@ bool KNMusicLibraryModel::dropMimeData(const QMimeData *data,
     return false;
 }
 
+inline void KNMusicLibraryModel::setRowProperty(const int &row,
+                                                const int &propertyRole,
+                                                const QVariant &value)
+{
+    //Update the row property.
+    KNMusicModel::setRowProperty(row, propertyRole, value);
+    //Update the row in database.
+    updateRowInDatabase(row);
+}
+
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
 {
     m_categoryModels.append(model);
@@ -168,14 +178,8 @@ void KNMusicLibraryModel::updateMusicRow(const int &row,
 {
     //Do row udpates operate.
     KNMusicModel::updateMusicRow(row, detailInfo);
-    //Quick generate the row, this shouldn't so slow.
-    QList<QStandardItem *> currentRow;
-    for(int i=0; i<columnCount(); i++)
-    {
-        currentRow.append(item(row, i));
-    }
-    //Ask to update the row in the database.
-    m_database->updateMusicRow(row, currentRow);
+    //Update the row in database.
+    updateRowInDatabase(row);
 }
 
 void KNMusicLibraryModel::updateCoverImage(const int &row,
@@ -342,6 +346,18 @@ void KNMusicLibraryModel::initialHeader()
     setHeaderData(TrackNumber, Qt::Horizontal, QVariant(Qt::AlignVCenter|Qt::AlignRight), Qt::TextAlignmentRole);
     //Set sort flag.
     setHeaderSortFlag();
+}
+
+inline void KNMusicLibraryModel::updateRowInDatabase(const int &row)
+{
+    //Quick generate the row, this shouldn't so slow.
+    QList<QStandardItem *> currentRow;
+    for(int i=0; i<columnCount(); i++)
+    {
+        currentRow.append(item(row, i));
+    }
+    //Ask to update the row in the database.
+    m_database->updateMusicRow(row, currentRow);
 }
 
 KNMusicLibraryImageManager *KNMusicLibraryModel::imageManager() const
