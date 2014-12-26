@@ -95,7 +95,8 @@ QWidget *KNMusicPlaylistTab::widget()
 void KNMusicPlaylistTab::showIndexInModel(KNMusicModel *model,
                                           const QModelIndex &index)
 {
-    qDebug()<<index;
+    //Ask playlist manager to locate the index.
+    emit requireLocateIndexInModel(model, index);
 }
 
 KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()

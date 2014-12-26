@@ -18,6 +18,8 @@
 #ifndef KNMUSICPLAYLISTTAB_H
 #define KNMUSICPLAYLISTTAB_H
 
+#include <QModelIndex>
+
 #include "knmusictab.h"
 
 class QSplitter;
@@ -47,6 +49,7 @@ public:
     void setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader);
 
 signals:
+    void requireLocateIndexInModel(KNMusicModel *model, QModelIndex index);
     void requireLoadPlaylistList();
     void requireCreateFirstPlaylist(const QStringList &fileList);
     void requireImportPlaylist(const QStringList &playlistList);
