@@ -172,13 +172,15 @@ void KNMusicNowPlaying::playTemporaryFiles(const QStringList &filePaths)
     }
 }
 
-void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model)
+void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model,
+                                        KNMusicTab *tab)
 {
     //Reset current item and music model.
     resetPlayingItem();
     resetPlayingModels();
     //Save the proxy model and music model.
     m_playingModel=model;
+    m_currentTab=tab;
     if(m_playingModel!=nullptr)
     {
         m_playingMusicModel=m_playingModel->musicModel();
@@ -336,6 +338,7 @@ void KNMusicNowPlaying::resetPlayingModels()
 {
     //Clear the playing model.
     m_playingModel=nullptr;
+    m_currentTab=nullptr;
     //Clear the shadow playing model data.
     m_shadowPlayingModel->setSourceModel(nullptr);
     m_shadowPlayingModel->setSortRole(-1);

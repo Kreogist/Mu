@@ -150,7 +150,8 @@ void KNMusicTreeViewBase::scrollToSourceSongRow(const int &row)
     //Do scroll and ensure that the music model exist.
     if(m_proxyModel->musicModel()!=nullptr)
     {
-        scrollToSongIndex(m_proxyModel->mapFromSource(m_proxyModel->musicModel()->index(row, Name)));
+        scrollToSongIndex(m_proxyModel->mapFromSource(
+                              m_proxyModel->musicModel()->index(row, Name)));
     }
 }
 
@@ -534,7 +535,7 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
     if(index.isValid())
     {
         //Set the playing model.
-        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
+        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel, m_musicTab);
         KNMusicGlobal::nowPlaying()->playMusic(index);
     }
 }

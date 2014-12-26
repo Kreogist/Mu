@@ -50,7 +50,8 @@ public slots:
     void changeLoopState();
     void setLoopState(const int &state);
     void playTemporaryFiles(const QStringList &filePaths);
-    void setPlayingModel(KNMusicProxyModel *model);
+    void setPlayingModel(KNMusicProxyModel *model,
+                         KNMusicTab *tab=nullptr);
     void playMusic(const int &row);
     void playMusic(const QModelIndex &index);
     void checkRemovedModel(KNMusicModel *model);
@@ -69,6 +70,7 @@ private:
                       *m_temporaryProxyModel;
     QPersistentModelIndex m_currentPlayingIndex;
     QPixmap m_playingIcon, m_cantPlayIcon;
+    KNMusicTab *m_currentTab=nullptr;
     int m_loopMode=NoRepeat;
 };
 
