@@ -118,6 +118,8 @@ KNMusicPlugin::~KNMusicPlugin()
     //Stop threads.
     m_parserThread.quit();
     m_parserThread.wait();
+    //Ask to save the configure.
+    emit requireSaveConfigure();
     //Delete all the plugins.
     while(!m_pluginList.isEmpty())
     {
@@ -215,11 +217,14 @@ inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
     if(m_headerPlayer==nullptr)
     {
         m_headerPlayer=plugin;
+        //Link the save configure signal.
+        connect(this, &KNMusicPlugin::requireSaveConfigure,
+                m_headerPlayer, &KNMusicHeaderPlayerBase::saveConfigure);
         //Set the backend and now playing controls to the header player.
         m_headerPlayer->setBackend(m_backend);
         m_headerPlayer->setNowPlaying(m_nowPlaying);
         //Restore the preference.
-        m_headerPlayer->restoreConfigure();
+        m_headerPlayer->loadConfigure();
         //Add plugin to the list.
         m_pluginList.append(m_headerPlayer);
         //Link player to sense header.

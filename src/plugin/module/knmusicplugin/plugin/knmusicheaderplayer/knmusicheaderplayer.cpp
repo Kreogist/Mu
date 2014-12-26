@@ -75,18 +75,19 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
             this, &KNMusicHeaderPlayer::onActionPlayDragIn);
 }
 
-KNMusicHeaderPlayer::~KNMusicHeaderPlayer()
-{
-    saveConfigure();
-}
-
-void KNMusicHeaderPlayer::restoreConfigure()
+void KNMusicHeaderPlayer::loadConfigure()
 {
     //Set the value, calculate by the range percentage.
     m_volumeSlider->setValue(
                 m_volumeSlider->minimal()+
                 (double)m_volumeSlider->range()*
                 m_musicGlobal->configureData("Volume", 1.0).toDouble());
+}
+
+void KNMusicHeaderPlayer::saveConfigure()
+{
+    m_musicGlobal->setConfigureData("Volume",
+                                    (double)m_volumeSlider->percentage());
 }
 
 void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
@@ -768,12 +769,6 @@ inline QRect KNMusicHeaderPlayer::generateInPosition()
                  5,
                  width(),
                  40);
-}
-
-inline void KNMusicHeaderPlayer::saveConfigure()
-{
-    m_musicGlobal->setConfigureData("Volume",
-                                    (double)m_volumeSlider->percentage());
 }
 
 void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicDetailInfo &detailInfo)

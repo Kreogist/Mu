@@ -39,7 +39,6 @@ class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
     Q_OBJECT
 public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
-    ~KNMusicHeaderPlayer();
     void setBackend(KNMusicBackend *backend);
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     QString currentFilePath() const;
@@ -47,7 +46,8 @@ public:
 signals:
 
 public slots:
-    void restoreConfigure();
+    void loadConfigure();
+    void saveConfigure();
     void onActionLoopStateChanged(const int &state);
     void reset();
     void play();
@@ -97,7 +97,6 @@ private:
     inline QRect generateOutPosition();
     inline QRect generateInPosition();
 
-    inline void saveConfigure();
 
     //Public classes.
     KNMusicGlobal *m_musicGlobal;

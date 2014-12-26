@@ -41,7 +41,8 @@ signals:
     void positionChanged(qint64 position);
 
 public slots:
-    virtual void restoreConfigure()=0;
+    virtual void loadConfigure()=0;
+    virtual void saveConfigure()=0;
     virtual void onActionLoopStateChanged(const int &state)=0;
     virtual void reset()=0;
     virtual void activatePlayer()=0;
