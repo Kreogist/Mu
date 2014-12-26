@@ -363,7 +363,7 @@ void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
         KNGlobal::showInGraphicalShell(m_currentFilePath);
         break;
     case AppendLocateSong:
-        ;
+        m_nowPlaying->showCurrentIndexInOriginalTab();
         break;
     case AppendShowInSongs:
         emit requireShowInSongs();
