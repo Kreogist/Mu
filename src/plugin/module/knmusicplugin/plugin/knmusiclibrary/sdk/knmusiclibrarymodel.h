@@ -43,9 +43,9 @@ public:
                       int row,
                       int column,
                       const QModelIndex &parent);
-    inline void setRowProperty(const int &row,
-                               const int &propertyRole,
-                               const QVariant &value);
+    void setRowProperty(const int &row,
+                        const int &propertyRole,
+                        const QVariant &value);
     void installCategoryModel(KNMusicCategoryModel *model);
     KNMusicLibraryDatabase *database() const;
     void setDatabase(KNMusicLibraryDatabase *database);

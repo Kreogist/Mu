@@ -105,7 +105,7 @@ bool KNMusicLibraryModel::dropMimeData(const QMimeData *data,
     return false;
 }
 
-inline void KNMusicLibraryModel::setRowProperty(const int &row,
+void KNMusicLibraryModel::setRowProperty(const int &row,
                                                 const int &propertyRole,
                                                 const QVariant &value)
 {
@@ -329,7 +329,7 @@ void KNMusicLibraryModel::imageRecoverComplete()
     }
 }
 
-void KNMusicLibraryModel::initialHeader()
+inline void KNMusicLibraryModel::initialHeader()
 {
     //Using retranslate to update the header text.
     retranslate();
