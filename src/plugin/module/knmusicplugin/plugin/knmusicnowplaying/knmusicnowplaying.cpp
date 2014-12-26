@@ -19,6 +19,7 @@
 #include "knmusicmodelassist.h"
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
+#include "knmusictab.h"
 
 #include "knmusicnowplaying.h"
 
@@ -351,6 +352,18 @@ void KNMusicNowPlaying::resetPlayingModels()
 QPersistentModelIndex KNMusicNowPlaying::currentPlayingIndex() const
 {
     return m_currentPlayingIndex;
+}
+
+void KNMusicNowPlaying::showCurrentIndexInOriginalTab()
+{
+    //Abandon the action when the current tab is null.
+    if(m_currentTab==nullptr)
+    {
+        return;
+    }
+    //Ask the tab to locate the index.
+    m_currentTab->showIndexInModel(m_playingMusicModel,
+                                   m_currentPlayingIndex);
 }
 
 void KNMusicNowPlaying::shadowPlayingModel()

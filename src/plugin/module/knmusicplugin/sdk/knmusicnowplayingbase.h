@@ -35,6 +35,7 @@ signals:
     void loopStateChanged(int state);
 
 public slots:
+    virtual void showCurrentIndexInOriginalTab()=0;
     virtual void shadowPlayingModel()=0;
     virtual void resetCurrentPlaying()=0;
     virtual void restoreConfigure()=0;

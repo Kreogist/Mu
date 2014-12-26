@@ -40,6 +40,7 @@ public:
 signals:
 
 public slots:
+    void showCurrentIndexInOriginalTab();
     void shadowPlayingModel();
     void resetCurrentPlaying();
     void restoreConfigure();
