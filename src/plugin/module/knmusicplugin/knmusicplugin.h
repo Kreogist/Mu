@@ -22,11 +22,11 @@
 
 class QBoxLayout;
 class QSignalMapper;
-class KNCategoryTabWidget;
 class KNPreferenceWidgetsPanel;
 class KNConnectionHandler;
 class KNMouseDetectHeader;
 class KNMusicTab;
+class KNMusicCategoryTabWidget;
 class KNMusicBackend;
 class KNMusicGlobal;
 class KNMusicParser;
@@ -104,7 +104,7 @@ private:
     };
     QLinkedList<MusicTabItem> m_tabList;
     QString m_caption;
-    KNCategoryTabWidget *m_centralWidget=nullptr;
+    KNMusicCategoryTabWidget *m_centralWidget=nullptr;
     KNMouseDetectHeader *m_headerWidget=nullptr;
     KNPreferenceWidgetsPanel *m_preferencePanel;
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;

@@ -71,7 +71,7 @@
 #include "knmousedetectheader.h"
 #include "knplatformextras.h"
 #include "knconnectionhandler.h"
-#include "kncategorytabwidget.h"
+#include "knmusiccategorytabwidget.h"
 #include "knlocalemanager.h"
 #include "knpreferencewidgetspanel.h"
 
@@ -104,6 +104,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadNowPlaying(new KNMusicNowPlaying);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
+    loadMainPlayer(new KNMusicMainPlayer);
     loadLibrary(new KNMusicLibrary);
     loadPlaylistManager(new KNMusicPlaylistManager);
 
@@ -118,8 +119,15 @@ KNMusicPlugin::~KNMusicPlugin()
     m_parserThread.quit();
     m_parserThread.wait();
     //Delete all the plugins.
-    qDeleteAll(m_pluginList);
-    m_pluginList.clear();
+    while(!m_pluginList.isEmpty())
+    {
+        //We only need to remove the plugin which don't have a parent.
+        QObject *currentPlugin=m_pluginList.takeFirst();
+        if(currentPlugin->parent()==nullptr)
+        {
+            delete currentPlugin;
+        }
+    }
 }
 
 QString KNMusicPlugin::caption()
@@ -232,13 +240,13 @@ void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
     {
         m_mainPlayer=plugin;
         //Configure the main player.
-        ;
+        m_mainPlayer->hide();
         //Restore the settings.
         ;
         //Add plugin to the list.
         m_pluginList.append(m_mainPlayer);
-        //
-        ;
+        //Set the main player.
+        m_centralWidget->setMainPlayer(m_mainPlayer);
     }
 }
 
@@ -370,7 +378,7 @@ inline void KNMusicPlugin::initialInfrastructure()
     m_musicGlobal->setPreferencePanel(m_preferencePanel);
 
     //Initial central widget.
-    m_centralWidget=new KNCategoryTabWidget;
+    m_centralWidget=new KNMusicCategoryTabWidget;
 
     //Initial header widget.
     m_headerWidget=new KNMouseDetectHeader;

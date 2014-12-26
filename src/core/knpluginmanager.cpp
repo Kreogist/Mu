@@ -65,7 +65,12 @@ KNPluginManager::~KNPluginManager()
     //Delete all the plugins.
     while(!m_pluginList.isEmpty())
     {
-        delete m_pluginList.takeFirst();
+        //We only need to recover the object which don't have parent.
+        QObject *currentObject=m_pluginList.takeFirst();
+        if(currentObject->parent()==nullptr)
+        {
+            delete currentObject;
+        }
     }
     //Save the configure.
     m_global->saveConfigure();
