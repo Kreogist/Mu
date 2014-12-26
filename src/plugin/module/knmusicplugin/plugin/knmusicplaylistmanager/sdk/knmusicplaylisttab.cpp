@@ -92,6 +92,12 @@ QWidget *KNMusicPlaylistTab::widget()
     return m_viewer;
 }
 
+void KNMusicPlaylistTab::showIndexInModel(KNMusicModel *model,
+                                          const QModelIndex &index)
+{
+    qDebug()<<index;
+}
+
 KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()
 {
     KNMusicPlaylistListItem *currentItem=m_playlistDisplay->currentItem();

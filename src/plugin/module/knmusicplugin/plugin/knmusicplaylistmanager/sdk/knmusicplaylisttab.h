@@ -40,6 +40,8 @@ public:
     QString caption();
     QPixmap icon();
     QWidget *widget();
+    void showIndexInModel(KNMusicModel *model,
+                          const QModelIndex &index);
     KNMusicPlaylistModel *currentPlaylistModel();
     void cutLoadRequirement();
     void setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader);

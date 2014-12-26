@@ -17,11 +17,20 @@
  */
 #include <QAction>
 
+#include "knmusicmodel.h"
+
 #include "knmusiclibrarytab.h"
 
 KNMusicLibraryTab::KNMusicLibraryTab(QObject *parent) :
     KNMusicTab(parent)
 {
+}
+
+void KNMusicLibraryTab::showIndexInModel(KNMusicModel *model,
+                                         const QModelIndex &index)
+{
+    //Using the show in tab function to show the file via file path.
+    showInTab(model->filePathFromRow(index.row()));
 }
 
 void KNMusicLibraryTab::onActionTabShow()

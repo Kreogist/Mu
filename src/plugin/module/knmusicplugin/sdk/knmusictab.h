@@ -12,6 +12,7 @@
 #include <QObject>
 
 class QWidget;
+class KNMusicModel;
 class KNMusicTab : public QObject
 {
     Q_OBJECT
@@ -20,6 +21,8 @@ public:
     virtual QString caption()=0;
     virtual QPixmap icon()=0;
     virtual QWidget *widget()=0;
+    virtual void showIndexInModel(KNMusicModel *model,
+                                  const QModelIndex &index)=0;
 
 signals:
     void requireShowTab();
