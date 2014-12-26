@@ -282,7 +282,9 @@ void KNMusicPlaylistManager::locateIndexInModel(KNMusicModel *model,
             //Switch to the current playlist.
             m_playlistTab->setCurrentPlaylist(m_playlistList->index(i, 0));
             //Select the index.
-            qDebug()<<index;
+            m_playlistTab->selectSourceRow(index.row());
+            //Ask to show the playlist tab.
+            emit m_playlistTab->requireShowTab();
             return;
         }
     }

@@ -166,6 +166,11 @@ void KNMusicPlaylistTab::setPlaylistList(KNMusicPlaylistList *playlistList)
             this, &KNMusicPlaylistTab::currentPlaylistChanged);
 }
 
+void KNMusicPlaylistTab::selectSourceRow(const int &row)
+{
+    m_playlistDisplay->scrollToSourceSongRow(row);
+}
+
 void KNMusicPlaylistTab::setCurrentPlaylist(const QModelIndex &index)
 {
     //Check index available first.

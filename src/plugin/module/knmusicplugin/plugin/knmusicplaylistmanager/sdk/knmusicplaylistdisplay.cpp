@@ -140,6 +140,11 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
     updatePlaylistInfo();
 }
 
+void KNMusicPlaylistDisplay::scrollToSourceSongRow(const int &row)
+{
+    m_playlistTreeView->scrollToSourceSongRow(row);
+}
+
 void KNMusicPlaylistDisplay::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);

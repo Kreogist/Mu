@@ -29,7 +29,7 @@ public:
     void enableSearchShortcut();
     void disableSearchShortcut();
     void scrollToSongRow(const int &row);
-    void scrollToSongIndex(const QModelIndex &songIndex);
+    inline void scrollToSongIndex(const QModelIndex &songIndex);
     void scrollToSourceSongRow(const int &row);
     KNMusicProxyModel *proxyModel();
     KNMusicTab *musicTab() const;

@@ -67,6 +67,7 @@ public slots:
     void onActionPlaylistItemChanged(QStandardItem *item);
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
     void setPlaylistList(KNMusicPlaylistList *playlistList);
+    void selectSourceRow(const int &row);
     void setCurrentPlaylist(const QModelIndex &index);
     void editPlaylistName(const QModelIndex &index);
 

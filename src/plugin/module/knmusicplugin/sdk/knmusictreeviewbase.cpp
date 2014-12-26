@@ -161,7 +161,7 @@ void KNMusicTreeViewBase::scrollToSongRow(const int &row)
     scrollToSongIndex(m_proxyModel->index(row, Name));
 }
 
-void KNMusicTreeViewBase::scrollToSongIndex(const QModelIndex &songIndex)
+inline void KNMusicTreeViewBase::scrollToSongIndex(const QModelIndex &songIndex)
 {
     //Set the current index to that row.
     setCurrentIndex(songIndex);

@@ -42,6 +42,7 @@ public slots:
     void updatePlaylistInfo();
     void onActionRemoveCurrent();
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
+    void scrollToSourceSongRow(const int &row);
 
 protected:
     void resizeEvent(QResizeEvent *event);
