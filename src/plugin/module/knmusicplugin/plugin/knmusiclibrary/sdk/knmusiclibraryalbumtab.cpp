@@ -52,6 +52,7 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
 
     //Initial the album detail.
     m_albumDetail=new KNMusicAlbumDetail(m_dropProxy);
+    m_albumDetail->setMusicTab(this);
     //Initial the album view.
     m_albumView=new KNMusicAlbumView(m_dropProxy);
     m_albumView->setAlbumDetail(m_albumDetail);

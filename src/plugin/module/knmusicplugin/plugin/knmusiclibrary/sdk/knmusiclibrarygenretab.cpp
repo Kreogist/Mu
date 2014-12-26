@@ -65,6 +65,7 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QObject *parent) :
 
     //Initial the category display.
     m_genreDisplay=new KNMusicCategoryDisplay(m_dropProxy);
+    m_genreDisplay->setMusicTab(this);
     m_genreDisplay->setCategoryColumn(Genre);
     m_splitter->addWidget(m_genreDisplay);
 

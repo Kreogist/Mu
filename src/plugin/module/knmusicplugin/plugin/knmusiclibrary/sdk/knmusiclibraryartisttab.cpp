@@ -67,6 +67,7 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QObject *parent) :
 
     //Initial the category display.
     m_artistDisplay=new KNMusicCategoryDisplay(m_dropProxy);
+    m_artistDisplay->setMusicTab(this);
     m_artistDisplay->setCategoryColumn(Artist);
     //Set the tab order.
     m_artistList->setTabOrder(m_artistList, m_artistDisplay);

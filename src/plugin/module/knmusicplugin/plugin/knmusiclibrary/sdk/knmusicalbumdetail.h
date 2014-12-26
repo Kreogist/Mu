@@ -30,6 +30,7 @@ class QSequentialAnimationGroup;
 class KNConnectionHandler;
 class KNSideShadowWidget;
 class KNMusicAlbumTitle;
+class KNMusicTab;
 class KNMusicAlbumModel;
 class KNMusicCategoryModel;
 class KNMusicLibraryModel;
@@ -45,6 +46,7 @@ public:
                            const int &iconSize);
     void updateFoldEndValue(const QRect &position,
                             const int &iconSize);
+    void setMusicTab(KNMusicTab *tab);
 
     int sizeParameter() const;
     void setSizeParameter(int sizeParameter);

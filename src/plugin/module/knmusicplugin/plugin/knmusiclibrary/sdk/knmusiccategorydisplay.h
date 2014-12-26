@@ -25,6 +25,7 @@
 class QLabel;
 class QGraphicsOpacityEffect;
 class KNSideShadowWidget;
+class KNMusicTab;
 class KNMusicLibraryModel;
 class KNMusicLibraryTreeView;
 class KNMusicCategoryDisplay : public QWidget
@@ -32,6 +33,7 @@ class KNMusicCategoryDisplay : public QWidget
     Q_OBJECT
 public:
     explicit KNMusicCategoryDisplay(QWidget *parent = 0);
+    void setMusicTab(KNMusicTab *tab);
 
 signals:
 

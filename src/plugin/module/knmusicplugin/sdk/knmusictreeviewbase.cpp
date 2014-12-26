@@ -519,6 +519,16 @@ void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
     }
 }
 
+KNMusicTab *KNMusicTreeViewBase::musicTab() const
+{
+    return m_musicTab;
+}
+
+void KNMusicTreeViewBase::setMusicTab(KNMusicTab *musicTab)
+{
+    m_musicTab = musicTab;
+}
+
 void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
 {
     if(index.isValid())

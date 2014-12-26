@@ -23,6 +23,7 @@
 class QLabel;
 class KNConnectionHandler;
 class KNSideShadowWidget;
+class KNMusicTab;
 class KNMusicPlaylistListItem;
 class KNMusicPlaylistTreeView;
 class KNMusicPlaylistDisplay : public QWidget
@@ -31,6 +32,7 @@ class KNMusicPlaylistDisplay : public QWidget
 public:
     explicit KNMusicPlaylistDisplay(QWidget *parent = 0);
     KNMusicPlaylistListItem *currentItem();
+    void setMusicTab(KNMusicTab *tab);
     void searchText(const QString &text);
 
 signals:

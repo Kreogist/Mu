@@ -170,6 +170,11 @@ void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
     }
 }
 
+void KNMusicAlbumDetail::setMusicTab(KNMusicTab *tab)
+{
+    m_albumTreeView->setMusicTab(tab);
+}
+
 void KNMusicAlbumDetail::foldAlbumDetail()
 {
     //Cut all the connections.

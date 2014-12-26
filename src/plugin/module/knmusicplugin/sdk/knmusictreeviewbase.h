@@ -17,6 +17,7 @@ class QTimeLine;
 class KNConnectionHandler;
 class KNMusicModel;
 class KNMusicProxyModel;
+class KNMusicTab;
 class KNMusicTreeViewBase : public QTreeView
 {
     Q_OBJECT
@@ -31,6 +32,8 @@ public:
     void scrollToSongIndex(const QModelIndex &songIndex);
     void scrollToSourceSongRow(const int &row);
     KNMusicProxyModel *proxyModel();
+    KNMusicTab *musicTab() const;
+    void setMusicTab(KNMusicTab *musicTab);
 
 signals:
     void searchComplete();
@@ -78,6 +81,7 @@ private:
            m_fontColor=QColor(255,255,255),
            m_buttonColor=QColor(255,255,255);
     QString m_seachText;
+    KNMusicTab *m_musicTab=nullptr;
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;

@@ -59,6 +59,7 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QObject *parent) :
 
     //Initial the library treeview.
     m_treeview=new KNMusicLibraryTreeView(m_dropProxy);
+    m_treeview->setMusicTab(this);
     mainLayout->addWidget(m_treeview);
     m_dropProxy->installEventFilter(m_treeview);
     m_dropProxy->setFocusProxy(m_treeview);
