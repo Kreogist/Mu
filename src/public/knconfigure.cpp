@@ -100,6 +100,8 @@ inline QVariant KNConfigure::parseJsonValue(const QJsonValue &value)
                 valueFont.setBold(valueObject.value("Bold").toBool());
                 valueFont.setItalic(valueObject.value("Italic").toBool());
                 valueFont.setUnderline(valueObject.value("Underline").toBool());
+                valueFont.setStrikeOut(valueObject.value("Strikeout").toBool());
+                valueFont.setKerning(valueObject.value("Kerning").toBool());
                 return QVariant::fromValue(valueFont);
                 break;
             }

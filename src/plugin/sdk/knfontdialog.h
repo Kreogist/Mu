@@ -52,6 +52,7 @@ private:
     };
 
     inline void applyFontData();
+    inline void applySizeChanged(const int &currentSize);
     inline void blockFontListWidget();
     inline void releaseFontListWidget();
     inline void blockFontSizeWidget();

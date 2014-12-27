@@ -324,6 +324,8 @@ QJsonObject KNGlobal::fontToObject(const QFont &font)
     fontObject.insert("Bold", font.bold());
     fontObject.insert("Italic", font.italic());
     fontObject.insert("Underline", font.underline());
+    fontObject.insert("Strikeout", font.strikeOut());
+    fontObject.insert("Kerning", font.kerning());
     return fontObject;
 }
 

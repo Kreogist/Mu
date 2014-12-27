@@ -24,9 +24,9 @@ public slots:
 
 private slots:
     void onActionSelectFont();
+    void updateOverview();
 
 private:
-    inline void updateOverview();
     QLabel *m_fontOverview, *m_previewIcon;
     QFont m_value, m_defaultFont;
     QPushButton *m_changeFont;

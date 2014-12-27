@@ -9,6 +9,8 @@
 
 #include "../knfontdialog.h"
 
+#include "knlocalemanager.h"
+
 #include "knpreferenceitemfont.h"
 
 KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
@@ -29,7 +31,8 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     pal.setColor(QPalette::Window, QColor(0x20, 0x20, 0x20));
     pal.setColor(QPalette::ButtonText, QColor(0x60, 0x60, 0x60));
     m_changeFont->setPalette(pal);
-    m_changeFont->setText(tr("..."));
+    m_changeFont->setText("...");
+    m_changeFont->setFixedWidth(25);
     connect(m_changeFont, &QPushButton::pressed,
             this, &KNPreferenceItemFont::onActionSelectFont);
 
@@ -40,6 +43,10 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     insertWidget(m_changeFont);
     insertSpacing(5);
     insertWidget(m_previewIcon);
+
+    //Linked the translation.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNPreferenceItemFont::updateOverview);
 }
 
 KNPreferenceItemFont::~KNPreferenceItemFont()
@@ -81,13 +88,14 @@ void KNPreferenceItemFont::onActionSelectFont()
     updateOverview();
 }
 
-inline void KNPreferenceItemFont::updateOverview()
+void KNPreferenceItemFont::updateOverview()
 {
     m_fontOverview->setText(m_value.family() + "," +
                             tr(" Size: ") +
                             QString::number(m_value.pixelSize()) +
                             (m_value.bold()?tr(", Bold"):"") +
                             (m_value.italic()?tr(", Italic"):"") +
-                            (m_value.underline()?tr(", Underline"):""));
+                            (m_value.underline()?tr(", Underline"):"") +
+                            (m_value.strikeOut()?tr(", Strike Out"):"") +
+                            (m_value.kerning()?tr(", Kerning"):""));
 }
-

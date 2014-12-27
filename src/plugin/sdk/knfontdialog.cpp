@@ -66,6 +66,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     sizeBox->setSpacing(0);
 
     m_fontSizeList=new QListWidget(this);
+    m_fontSizeList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_fontSizeList->setMaximumWidth(70);
     m_standardSize<<6<<8<<9<<10<<11<<12<<13<<14<<18<<24<<36<<48<<64<<72<<96
                   <<144<<288;
@@ -169,6 +170,7 @@ void KNFontDialog::fontChanged(const int &currentIndex)
     QModelIndex fontIndex=m_fontModel->index(currentIndex, 0);
     m_fontList->setCurrentIndex(fontIndex);
     m_fontList->scrollTo(fontIndex);
+    m_fontList->viewport()->update();
     //Synchronize the font.
     synchronizeFont();
     //Release the font tunner signals.
@@ -179,14 +181,8 @@ void KNFontDialog::sizeChanged(const int &currentSize)
 {
     //Block the size tunner signals.
     blockFontSizeWidget();
-    //Set the data.
-    m_sizeSpin->setValue(currentSize);
-    m_sizeSlider->setValue(currentSize);
-    int sizeIndex=m_standardSize.indexOf(currentSize);
-    if(sizeIndex!=-1)
-    {
-        m_fontSizeList->setCurrentRow(sizeIndex);
-    }
+    //Apply size changed.
+    applySizeChanged(currentSize);
     //Synchronize the font.
     synchronizeFont();
     //Release the size tunner signals.
@@ -220,14 +216,8 @@ void KNFontDialog::applyFontData()
                                                     0);
     m_fontList->setCurrentIndex(currentFontIndex);
     m_fontList->scrollTo(currentFontIndex);
-    //Restore widgets signal.
-    m_sizeSpin->setValue(m_currentFont.pixelSize());
-    m_sizeSlider->setValue(m_currentFont.pixelSize());
-    int sizeIndex=m_standardSize.indexOf(m_currentFont.pixelSize());
-    if(sizeIndex!=-1)
-    {
-        m_fontSizeList->setCurrentRow(sizeIndex);
-    }
+    //Apply size changed.
+    applySizeChanged(m_currentFont.pixelSize());
     //Set the style.
     m_fontStyles[StyleBold]->setChecked(m_currentFont.bold());
     m_fontStyles[StyleItalic]->setChecked(m_currentFont.italic());
@@ -240,6 +230,18 @@ void KNFontDialog::applyFontData()
     releaseFontListWidget();
     releaseFontSizeWidget();
     releaseFontStyleWidget();
+}
+
+void KNFontDialog::applySizeChanged(const int &currentSize)
+{
+    //Set the data.
+    m_sizeSpin->setValue(currentSize);
+    m_sizeSlider->setValue(currentSize);
+    int sizeIndex=m_standardSize.indexOf(currentSize);
+    if(sizeIndex!=-1)
+    {
+        m_fontSizeList->setCurrentRow(sizeIndex);
+    }
 }
 
 void KNFontDialog::blockFontListWidget()
