@@ -9,6 +9,8 @@
 
 #include <QStringList>
 #include <QUrl>
+#include <QJsonObject>
+#include <QFont>
 #include <QObject>
 
 class KNConfigure;
@@ -50,6 +52,7 @@ public slots:
 
 private:
     inline void initialStorageUnit();
+    inline QJsonObject fontToObject(const QFont &font);
 #ifdef Q_OS_LINUX
     static QString substituteFileBrowserParameters(QString &pre, QString &file);
 #endif

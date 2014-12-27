@@ -13,19 +13,8 @@
 KNPreferenceItemNumber::KNPreferenceItemNumber(QWidget *parent) :
     KNPreferenceItemBase(parent)
 {
-    //Initial the editor widget.
-    QWidget *numberEditorWidget=new QWidget(this);
-    numberEditorWidget->setContentsMargins(0,0,0,0);
-
-    //Initial the editor widget layout.
-    QBoxLayout *numberEditorLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                                numberEditorWidget);
-    numberEditorLayout->setContentsMargins(0,0,0,0);
-    numberEditorLayout->setSpacing(5);
-    numberEditorWidget->setLayout(numberEditorLayout);
-
-    //Initial the slider.
-    m_spinBox=new QSpinBox(numberEditorWidget);
+    //Initial the spin box.
+    m_spinBox=new QSpinBox(this);
     QPalette pal=m_spinBox->palette();
     pal.setColor(QPalette::Base, QColor(0x40, 0x40, 0x40));
     pal.setColor(QPalette::Button, QColor(0x50, 0x50, 0x50));
@@ -33,23 +22,25 @@ KNPreferenceItemNumber::KNPreferenceItemNumber(QWidget *parent) :
     pal.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     pal.setColor(QPalette::Text, QColor(0xA0, 0xA0, 0xA0));
     m_spinBox->setPalette(pal);
-    numberEditorLayout->addWidget(m_spinBox);
 
-    m_slider=new QSlider(Qt::Horizontal, numberEditorWidget);
+    //Initial the slider.
+    m_slider=new QSlider(Qt::Horizontal, this);
     m_slider->setFixedWidth(200);
+    pal.setColor(QPalette::Button, QColor(0x60, 0x60, 0x60));
+    pal.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
+    m_slider->setPalette(pal);
+
+    //Link the control.
     connect(m_slider, &QSlider::valueChanged,
             this, &KNPreferenceItemNumber::synchronizeValue);
     connect(m_spinBox, SIGNAL(valueChanged(int)), //Signal has QString and int.
             this, SLOT(synchronizeValue(int)));
-    pal.setColor(QPalette::Button, QColor(0x60, 0x60, 0x60));
-    pal.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
-    m_slider->setPalette(pal);
-    numberEditorLayout->addWidget(m_slider);
 
-    numberEditorLayout->addStretch();
-
-    //Insert the control widget.
-    insertControlWidget(numberEditorWidget, 1);
+    //Insert the widget to preference item.
+    insertStretch();
+    insertWidget(m_slider);
+    insertSpacing(5);
+    insertWidget(m_spinBox);
 }
 
 void KNPreferenceItemNumber::setRange(int min, int max)

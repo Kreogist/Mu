@@ -14,7 +14,7 @@ KNPreferenceItemLineEdit::KNPreferenceItemLineEdit(QWidget *parent) :
     m_valueEditor=new QLineEdit(this);
     m_valueEditor->setMinimumWidth(260);
     //Add the control widget.
-    insertControlWidget(m_valueEditor, 1);
+    insertWidget(m_valueEditor, 1);
 }
 
 QVariant KNPreferenceItemLineEdit::defaultValue() const

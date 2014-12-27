@@ -264,6 +264,10 @@ void KNMusicHeaderLyrics::applyPreference()
     m_lineSpacing=
                 m_musicGlobal->configureData("TextSpacing",
                                              m_lineSpacing).toInt();
+    //Update the font.
+    setFont(m_musicGlobal->configureData("LyricsFont", font()).value<QFont>());
+    //Update the lyrics.
+    update();
 }
 
 void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
@@ -293,6 +297,10 @@ inline void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo 
                                                      tr("Download Lyrics"),
                                                      "DownloadLyrics",
                                                      m_lyricsManager->downloadLyrics()));
+    list.append(KNPreferenceItemGlobal::generateInfo(Font,
+                                                     tr("Lyrics Font"),
+                                                     "LyricsFont",
+                                                     font()));
     KNPreferenceItemInfo currentInfo=KNPreferenceItemGlobal::generateInfo(Number,
                                                                           tr("Text Spacing"),
                                                                           "TextSpacing",

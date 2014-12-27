@@ -69,7 +69,7 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     pathEditorLayout->addSpacing(5);
 
     //Insert the control widget.
-    insertControlWidget(pathEditorWidget, 1);
+    insertWidget(pathEditorWidget, 1);
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,

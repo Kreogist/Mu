@@ -236,6 +236,9 @@ void KNGlobal::setSystemData(const QString &key, const QVariant &value)
     case QVariant::Bool:
         m_configure->setSystemData(key, value.toBool());
         break;
+    case QVariant::Font:
+        m_configure->setSystemData(key, fontToObject(value.value<QFont>()));
+        break;
     default:
         break;
     }
@@ -264,6 +267,8 @@ void KNGlobal::setCustomData(const QString &module,
     case QVariant::Bool:
         m_configure->setCustomData(module, key, value.toBool());
         break;
+    case QVariant::Font:
+        m_configure->setCustomData(module, key, fontToObject(value.value<QFont>()));
     default:
         break;
     }
@@ -296,7 +301,7 @@ void KNGlobal::saveConfigure()
     m_configure->saveConfigure();
 }
 
-void KNGlobal::initialStorageUnit()
+inline void KNGlobal::initialStorageUnit()
 {
     m_storageUnit[KiloByte]="KB";
     m_storageUnit[MegaByte]="MB";
@@ -308,6 +313,18 @@ void KNGlobal::initialStorageUnit()
     m_storageUnit[YottaByte]="YB";
     m_storageUnit[NonaByte]="NB";
     m_storageUnit[DoggaByte]="DB";
+}
+
+QJsonObject KNGlobal::fontToObject(const QFont &font)
+{
+    QJsonObject fontObject;
+    fontObject.insert("KNObjectType", "Font");
+    fontObject.insert("Family", font.family());
+    fontObject.insert("PixelSize", font.pixelSize());
+    fontObject.insert("Bold", font.bold());
+    fontObject.insert("Italic", font.italic());
+    fontObject.insert("Underline", font.underline());
+    return fontObject;
 }
 
 KNGlobal::KNGlobal(QObject *parent) :

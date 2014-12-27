@@ -115,9 +115,14 @@ void KNPreferenceItemBase::paintEvent(QPaintEvent *event)
     painter.drawLine(0,0,width(),0);
 }
 
-void KNPreferenceItemBase::insertControlWidget(QWidget *widget, int stretch)
+void KNPreferenceItemBase::insertWidget(QWidget *widget, int stretch)
 {
     m_mainLayout->insertWidget(1, widget, stretch);
+}
+
+void KNPreferenceItemBase::insertSpacing(int size)
+{
+    m_mainLayout->insertSpacing(1, size);
 }
 
 void KNPreferenceItemBase::insertStretch()

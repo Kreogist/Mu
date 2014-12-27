@@ -23,7 +23,7 @@ class KNMusicTagParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNMusicTagParser(QObject *parent = 0);
+    KNMusicTagParser(QObject *parent = 0):QObject(parent){}
     virtual bool praseTag(QFile &musicFile,
                           QDataStream &musicDataStream,
                           KNMusicDetailInfo &detailInfo)=0;
