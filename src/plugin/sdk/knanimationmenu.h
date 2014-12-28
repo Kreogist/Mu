@@ -17,6 +17,7 @@ class KNAnimationMenu : public QMenu
 public:
     explicit KNAnimationMenu(QWidget *parent = 0);
     void setMouseDownPos(const QPoint &mouseDownPos);
+    void setSeparatorColor(const QColor &backgroundColor);
 
 signals:
 

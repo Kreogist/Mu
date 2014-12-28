@@ -212,7 +212,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     //Draw other lyrics.
     painter.setPen(m_normalText);
     //Draw down lines.
-    int lineTop=centerY+currentSize.height()+(m_lineSpacing<<1),
+    int lineTop=centerY+currentSize.height()+m_lineSpacing,
         paintLine=m_currentLyricsLine+1;
     while(lineTop<height() && paintLine<m_lyricsLines)
     {
@@ -230,7 +230,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
         lineTop+=currentSize.height()+m_lineSpacing;
     }
     //Draw up lines.
-    int lineBottom=centerY-m_lineSpacing;
+    int lineBottom=centerY;
     paintLine=m_currentLyricsLine-1;
     while(lineBottom>0 && paintLine>-1)
     {

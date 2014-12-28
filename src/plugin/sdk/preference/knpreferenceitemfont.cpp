@@ -24,6 +24,9 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     m_fontOverview->setPalette(pal);
     //Initial the preview label.
     m_previewIcon=new QLabel(this);
+    m_previewIcon->setScaledContents(true);
+    m_previewIcon->setFixedSize(16, 16);
+    m_previewIcon->setPixmap(QPixmap("://public/preview_font.png"));
     //Initial the change font button.
     m_changeFont=new QPushButton(this);
     pal=m_changeFont->palette();
