@@ -48,6 +48,7 @@ public slots:
     void playPrevious();
     void onActionPlayingFinished();
     void onActionCannotPlay();
+    void setRating(const int &rating);
     void changeLoopState();
     void setLoopState(const int &state);
     void playTemporaryFiles(const QStringList &filePaths);

@@ -46,6 +46,9 @@ public:
     void setRowProperty(const int &row,
                         const int &propertyRole,
                         const QVariant &value);
+    void setItemText(const int &row,
+                     const int &column,
+                     const QString &text);
     void installCategoryModel(KNMusicCategoryModel *model);
     KNMusicLibraryDatabase *database() const;
     void setDatabase(KNMusicLibraryDatabase *database);

@@ -47,7 +47,10 @@ KNMusicHeaderPlayerAppendMenu::~KNMusicHeaderPlayerAppendMenu()
 void KNMusicHeaderPlayerAppendMenu::retranslate()
 {
     //Set the sub menu title.
+    m_subMenus[SubMenuRating]->menuAction()->setText(tr("Rating"));
     m_subMenus[SubMenuShowIn]->menuAction()->setText(tr("Show in"));
+    //Set the no stars title.
+    m_menuActions[AppendRatingNoStar]->setText(tr("(No star)"));
     //Set the detail info title.
     m_menuActions[AppendShowDetail]->setText(tr("Get Info"));
     //Set the action title.
@@ -75,6 +78,8 @@ inline void KNMusicHeaderPlayerAppendMenu::initialSubMenus()
         m_subMenus[i]=new KNSAOSubMenu(this);
     }
     //Set the icons.
+    m_subMenus[SubMenuRating]->menuAction()->setIcon(
+                QIcon(":/plugin/music/player/menuicons/rating.png"));
     m_subMenus[SubMenuShowIn]->menuAction()->setIcon(
                 QIcon(":/plugin/music/player/menuicons/locate_original.png"));
 }
@@ -90,6 +95,23 @@ inline void KNMusicHeaderPlayerAppendMenu::initialActions()
                 m_actionTrigger, SLOT(map()));
         m_actionTrigger->setMapping(m_menuActions[i], i);
     }
+
+    QIcon ratingIcon=QIcon(":/plugin/music/player/menuicons/rating.png");
+    QByteArray starTextData;
+    starTextData.resize(3);
+    starTextData[0]=226;
+    starTextData[1]=152;
+    starTextData[2]=133;
+    QString starText=starTextData;
+    for(int i=AppendRatingNoStar; i<=AppendRatingFiveStar; i++)
+    {
+        //Set action properties
+        m_menuActions[i]->setIcon(ratingIcon);
+        m_menuActions[i]->setText(starText.repeated(i-AppendRatingNoStar));
+        //Add to rating menu.
+        m_subMenus[SubMenuRating]->addAction(m_menuActions[i]);
+    }
+    addMenu(m_subMenus[SubMenuRating]);
 
     m_menuActions[AppendShowDetail]->setIcon(
                 QIcon(":/plugin/music/player/menuicons/get_info.png"));

@@ -115,6 +115,16 @@ void KNMusicLibraryModel::setRowProperty(const int &row,
     updateRowInDatabase(row);
 }
 
+void KNMusicLibraryModel::setItemText(const int &row,
+                                      const int &column,
+                                      const QString &text)
+{
+    //Set the item text.
+    KNMusicModel::setItemText(row, column, text);
+    //Update the row in database.
+    updateRowInDatabase(row);
+}
+
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
 {
     m_categoryModels.append(model);

@@ -271,6 +271,16 @@ void KNMusicNowPlaying::onActionCannotPlay()
                                      m_cantPlayIcon);
 }
 
+void KNMusicNowPlaying::setRating(const int &rating)
+{
+    //Get the current index.
+    int ratingRow=m_currentPlayingIndex.row();
+    //Set the rating to the row.
+    m_playingMusicModel->setItemText(ratingRow,
+                                     Rating,
+                                     QString::number(rating));
+}
+
 void KNMusicNowPlaying::playNextSong(bool cannotLoadFile)
 {
     //If there's no model or the source model is not the music model,

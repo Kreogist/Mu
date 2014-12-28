@@ -46,7 +46,7 @@ public:
         //Only for text easy access.
         return data(index(row, column), Qt::DisplayRole).toString();
     }
-    inline void setItemText(const int &row, const int &column, const QString &text)
+    virtual void setItemText(const int &row, const int &column, const QString &text)
     {
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
         //Only for text easy access.

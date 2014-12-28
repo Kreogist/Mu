@@ -44,6 +44,7 @@ public slots:
     virtual void onActionPlayingFinished()=0;
     virtual void onActionCannotPlay()=0;
     virtual void setLoopState(const int &state)=0;
+    virtual void setRating(const int &rating)=0;
     virtual void changeLoopState()=0;
     virtual void playTemporaryFiles(const QStringList &filePaths)=0;
     virtual void setPlayingModel(KNMusicProxyModel *model,

@@ -362,6 +362,14 @@ void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
     //Do the actions.
     switch(actionIndex)
     {
+    case AppendRatingNoStar:
+    case AppendRatingOneStar:
+    case AppendRatingTwoStar:
+    case AppendRatingThreeStar:
+    case AppendRatingFourStar:
+    case AppendRatingFiveStar:
+        m_nowPlaying->setRating(actionIndex-AppendRatingNoStar);
+        break;
     case AppendShowInGraphicShell:
         KNGlobal::showInGraphicalShell(m_currentFilePath);
         break;

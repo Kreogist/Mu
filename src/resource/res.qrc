@@ -64,6 +64,7 @@
         <file>music/player/menuicons/locate_songs.png</file>
         <file>music/player/menuicons/showInGraphicsShell.png</file>
         <file>music/player/menuicons/get_info.png</file>
+        <file>music/player/menuicons/rating.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>windows/next.png</file>

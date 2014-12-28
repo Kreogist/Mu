@@ -24,6 +24,12 @@ namespace KNMusicAppendMenu
 {
 enum MenuActions
 {
+    AppendRatingNoStar,
+    AppendRatingOneStar,
+    AppendRatingTwoStar,
+    AppendRatingThreeStar,
+    AppendRatingFourStar,
+    AppendRatingFiveStar,
     AppendShowInGraphicShell,
     AppendShowDetail,
     AppendLocateSong,
@@ -54,6 +60,7 @@ public slots:
 private:
     enum SubMenus
     {
+        SubMenuRating,
         SubMenuShowIn,
         SubMenuCount
     };
