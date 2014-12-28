@@ -21,7 +21,6 @@ public:
     virtual QString currentFilePath() const=0;
     virtual void setProxyModel(KNMusicProxyModel *model)=0;
     virtual void setCurrentIndex(const QModelIndex &itemIndex)=0;
-    virtual void setDetailDialog(KNMusicDetailDialogBase *dialog)=0;
 
 signals:
     void requirePlayCurrent();

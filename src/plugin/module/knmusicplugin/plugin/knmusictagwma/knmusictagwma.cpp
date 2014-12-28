@@ -91,7 +91,7 @@ bool KNMusicTagWMA::praseTag(QFile &musicFile,
     //Initial the map.
     QList<KNMusicWMAFrame> tagMap;
     //Parse tag data.
-    while(tagDataCount>0 || !standardParsed || !extendParsed)
+    while(tagDataCount!=0 || !standardParsed || !extendParsed)
     {
         //Calculate the frame size first.
         quint64 frameSize=(((quint64)framePointer[23]<<56)&0b1111111100000000000000000000000000000000000000000000000000000000)+
@@ -102,6 +102,11 @@ bool KNMusicTagWMA::praseTag(QFile &musicFile,
                           (((quint64)framePointer[18]<<16)&0b0000000000000000000000000000000000000000111111110000000000000000)+
                           (((quint64)framePointer[17]<<8) &0b0000000000000000000000000000000000000000000000001111111100000000)+
                           ( (quint64)framePointer[16]     &0b0000000000000000000000000000000000000000000000000000000011111111);
+        //Ensure the frame size is not larger than tag data.
+        if(frameSize>tagDataCount)
+        {
+            break;
+        }
         //If detect standard frame, parse it.
         if(isStandardFrame(framePointer))
         {

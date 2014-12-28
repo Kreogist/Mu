@@ -29,6 +29,7 @@ KNMusicSoloMenuBase *KNMusicGlobal::m_soloMenu=nullptr;
 KNMusicMultiMenuBase *KNMusicGlobal::m_multiMenu=nullptr;
 KNMusicSearchBase *KNMusicGlobal::m_musicSearch=nullptr;
 KNMusicDetailTooltipBase *KNMusicGlobal::m_detailTooltip=nullptr;
+KNMusicDetailDialogBase *KNMusicGlobal::m_detailDialog=nullptr;
 QString KNMusicGlobal::m_musicLibraryPath=QString();
 QString KNMusicGlobal::m_musicRowFormat=QString("org.kreogist.mu/MusicModelRow");
 bool KNMusicGlobal::m_dragMusicRowTaken=false;
@@ -417,6 +418,16 @@ void KNMusicGlobal::initialGenreText()
                    <<"Anime"
                    <<"JPop"
                    <<"Synthpop";
+}
+
+KNMusicDetailDialogBase *KNMusicGlobal::detailDialog()
+{
+    return m_detailDialog;
+}
+
+void KNMusicGlobal::setDetailDialog(KNMusicDetailDialogBase *detailDialog)
+{
+    m_detailDialog = detailDialog;
 }
 
 KNMusicDetailTooltipBase *KNMusicGlobal::detailTooltip()

@@ -28,11 +28,13 @@
 #include "kneditablelabel.h"
 #include "knopacitybutton.h"
 #include "knopacityanimebutton.h"
-#include "knmusicheaderplayerappendmenu.h"
 
+#include "knmusicheaderplayerappendmenu.h"
+#include "knmusicdetaildialogbase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
+
 #include "knglobal.h"
 
 #include "knmusicheaderplayer.h"
@@ -362,6 +364,9 @@ void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
     {
     case AppendShowInGraphicShell:
         KNGlobal::showInGraphicalShell(m_currentFilePath);
+        break;
+    case AppendShowDetail:
+        KNMusicGlobal::detailDialog()->showDialog(m_currentFilePath);
         break;
     case AppendLocateSong:
         m_nowPlaying->showCurrentIndexInOriginalTab();

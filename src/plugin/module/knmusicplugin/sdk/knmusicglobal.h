@@ -145,6 +145,7 @@ class KNGlobal;
 class KNMusicParser;
 class KNMusicNowPlayingBase;
 class KNMusicDetailTooltipBase;
+class KNMusicDetailDialogBase;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
 class KNMusicSearchBase;
@@ -192,6 +193,8 @@ public:
     static void setMusicSearch(KNMusicSearchBase *musicSearch);
     static KNMusicDetailTooltipBase *detailTooltip();
     static void setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip);
+    static KNMusicDetailDialogBase *detailDialog();
+    static void setDetailDialog(KNMusicDetailDialogBase *detailDialog);
     void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
     void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
                             const QList<KNPreferenceItemInfo> &list);
@@ -219,6 +222,7 @@ private:
     static KNMusicMultiMenuBase *m_multiMenu;
     static KNMusicSearchBase *m_musicSearch;
     static KNMusicDetailTooltipBase *m_detailTooltip;
+    static KNMusicDetailDialogBase *m_detailDialog;
     static QString m_musicLibraryPath;
     static QString m_musicRowFormat;
     static QList<QList<QStandardItem *>> m_dragMusicRow;

@@ -112,7 +112,6 @@ private:
     QSignalMapper *m_tabSwitchMapper;
     KNMusicGlobal *m_musicGlobal;
 
-    KNMusicDetailDialogBase *m_detailDialog=nullptr;
     KNMusicBackend *m_backend=nullptr;
     KNMusicNowPlayingBase *m_nowPlaying=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;

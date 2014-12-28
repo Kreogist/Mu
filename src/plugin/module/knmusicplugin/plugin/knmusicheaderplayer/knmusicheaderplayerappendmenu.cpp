@@ -48,6 +48,8 @@ void KNMusicHeaderPlayerAppendMenu::retranslate()
 {
     //Set the sub menu title.
     m_subMenus[SubMenuShowIn]->menuAction()->setText(tr("Show in"));
+    //Set the detail info title.
+    m_menuActions[AppendShowDetail]->setText(tr("Get Info"));
     //Set the action title.
 #ifdef Q_OS_WIN32
     m_menuActions[AppendShowInGraphicShell]->setText(tr("Show in Explorer"));
@@ -88,6 +90,10 @@ inline void KNMusicHeaderPlayerAppendMenu::initialActions()
                 m_actionTrigger, SLOT(map()));
         m_actionTrigger->setMapping(m_menuActions[i], i);
     }
+
+    m_menuActions[AppendShowDetail]->setIcon(
+                QIcon(":/plugin/music/player/menuicons/get_info.png"));
+    addAction(m_menuActions[AppendShowDetail]);
 
     m_menuActions[AppendShowInGraphicShell]->setIcon(
                 QIcon(":/plugin/music/player/menuicons/showInGraphicsShell.png"));

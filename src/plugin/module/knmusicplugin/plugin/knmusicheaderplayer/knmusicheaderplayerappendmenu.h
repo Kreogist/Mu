@@ -25,6 +25,7 @@ namespace KNMusicAppendMenu
 enum MenuActions
 {
     AppendShowInGraphicShell,
+    AppendShowDetail,
     AppendLocateSong,
     AppendShowInSongs,
     AppendShowInArtists,

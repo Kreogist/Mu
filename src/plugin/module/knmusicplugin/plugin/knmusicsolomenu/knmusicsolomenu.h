@@ -27,7 +27,6 @@ public:
     explicit KNMusicSoloMenu(QWidget *parent = 0);
     void setProxyModel(KNMusicProxyModel *model);
     void setCurrentIndex(const QModelIndex &itemIndex);
-    void setDetailDialog(KNMusicDetailDialogBase *dialog);
     QString currentFilePath() const;
 
 signals:
@@ -66,7 +65,6 @@ private:
     QAction *m_actions[SoloMenuActionCount],
             *m_customSeperator;
     KNMusicProxyModel *m_proxyModel;
-    KNMusicDetailDialogBase *m_detailDialog;
 };
 
 #endif // KNMUSICSOLOMENU_H

@@ -103,11 +103,6 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
     }
 }
 
-void KNMusicSoloMenu::setDetailDialog(KNMusicDetailDialogBase *dialog)
-{
-    m_detailDialog=dialog;
-}
-
 QString KNMusicSoloMenu::currentFilePath() const
 {
     return m_filePath;
@@ -180,7 +175,7 @@ void KNMusicSoloMenu::onActionSearchItemText()
 
 void KNMusicSoloMenu::onActionShowDetail()
 {
-    m_detailDialog->showDialog(m_filePath);
+    KNMusicGlobal::detailDialog()->showDialog(m_filePath);
 }
 
 void KNMusicSoloMenu::onActionRenameCurrent()

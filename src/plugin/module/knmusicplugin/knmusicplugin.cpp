@@ -204,12 +204,10 @@ inline void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
 
 inline void KNMusicPlugin::loadDetailInfo(KNMusicDetailDialogBase *plugin)
 {
-    if(m_detailDialog==nullptr)
-    {
-        m_detailDialog=plugin;
-        //Add plugin to the list.
-        m_pluginList.append(m_detailDialog);
-    }
+    //Add plugin to the list.
+    m_pluginList.append(plugin);
+    //Linke global detail dialog widget.
+    KNMusicGlobal::setDetailDialog(plugin);
 }
 
 inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
@@ -454,8 +452,6 @@ inline void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
 {
     //Add this to plugin list.
     m_pluginList.append(soloMenu);
-    //Set detail dialog.
-    soloMenu->setDetailDialog(m_detailDialog);
     //Set the solo menu.
     KNMusicGlobal::setSoloMenu(soloMenu);
 }
