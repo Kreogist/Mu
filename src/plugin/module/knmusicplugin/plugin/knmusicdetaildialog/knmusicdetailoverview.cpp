@@ -100,12 +100,14 @@ KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
 
 void KNMusicDetailOverview::setFilePath(const QString &filePath)
 {
-    KNMusicDetailInfo currentInfo;
+    KNMusicAnalysisItem analysisItem;
     //Analysis the file.
-    KNMusicGlobal::parser()->parseFile(filePath, currentInfo);
-    KNMusicGlobal::parser()->parseAlbumArt(currentInfo);
+    KNMusicGlobal::parser()->parseFile(filePath, analysisItem);
+    KNMusicGlobal::parser()->parseAlbumArt(analysisItem);
+    //Get detail info.
+    KNMusicDetailInfo &currentInfo=analysisItem.detailInfo;
     //Set the caption data.
-    QPixmap albumArtPixmap=QPixmap::fromImage(currentInfo.coverImage);
+    QPixmap albumArtPixmap=QPixmap::fromImage(analysisItem.coverImage);
     if(albumArtPixmap.isNull())
     {
         albumArtPixmap=KNMusicGlobal::instance()->noAlbumArt();

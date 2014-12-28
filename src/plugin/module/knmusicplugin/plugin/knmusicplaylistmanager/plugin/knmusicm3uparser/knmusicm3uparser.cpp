@@ -96,11 +96,12 @@ bool KNMusicM3UParser::parse(const QString &playlistFilePath,
         currentFilePath!=availableFilePath.end();
         ++currentFilePath)
     {
-        KNMusicDetailInfo currentDetail;
+        KNMusicAnalysisItem analysisItem;
         //Treat it as a music file, parse it.
-        parser->parseFile(*currentFilePath, currentDetail);
+        parser->parseFile(*currentFilePath, analysisItem);
         //Add this song to playlist.
-        playlistModel->appendMusicRow(KNMusicModelAssist::generateRow(currentDetail));
+        playlistModel->appendMusicRow(
+                    KNMusicModelAssist::generateRow(analysisItem.detailInfo));
     }
     return true;
 }

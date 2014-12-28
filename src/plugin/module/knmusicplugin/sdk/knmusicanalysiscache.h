@@ -30,7 +30,7 @@ public:
 signals:
     void analysisNext();
     void requireAppendRow(QList<QStandardItem *> musicRow);
-    void analysisComplete(KNMusicDetailInfo detailInfo);
+    void analysisComplete(KNMusicAnalysisItem detailInfo);
 
 public slots:
     void appendFilePath(const QString &filePath);
@@ -38,13 +38,8 @@ public slots:
     void onActionAnalysisNext();
 
 private:
-    struct AnalysisItem
-    {
-        QString filePath;
-        KNMusicDetailInfo detailInfo;
-    };
-    void parseItem(AnalysisItem &currentItem, bool blocked=false);
-    QList<AnalysisItem> m_analysisQueue;
+    void parseItem(KNMusicAnalysisItem &currentItem, bool blocked=false);
+    QList<KNMusicAnalysisItem> m_analysisQueue;
     KNMusicAnalysisExtend *m_extend=nullptr;
     KNConnectionHandler *m_extendConnections;
     KNMusicParser *m_parser;

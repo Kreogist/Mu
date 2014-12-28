@@ -31,7 +31,7 @@ public:
 
 signals:
     void requireResetPlayer();
-    void requireUpdatePlayerInfo(KNMusicDetailInfo detailInfo);
+    void requireUpdatePlayerInfo(KNMusicAnalysisItem analysisItem);
     void loopStateChanged(int state);
 
 public slots:

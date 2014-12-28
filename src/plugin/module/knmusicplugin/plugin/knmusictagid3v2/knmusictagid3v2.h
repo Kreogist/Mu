@@ -84,8 +84,8 @@ public:
     explicit KNMusicTagID3v2(QObject *parent = 0);
     bool praseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
-                  KNMusicDetailInfo &detailInfo);
-    bool parseAlbumArt(KNMusicDetailInfo &detailInfo);
+                  KNMusicAnalysisItem &analysisItem);
+    bool parseAlbumArt(KNMusicAnalysisItem &analysisItem);
     QString frameToText(QByteArray content);
     bool usingDefaultCodec() const;
     void setUsingDefaultCodec(bool usingDefaultCodec);
@@ -152,7 +152,7 @@ protected:
                            QLinkedList<ID3v2Frame> &frameList);
     void writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
                              const ID3v2MinorProperty &property,
-                             KNMusicDetailInfo &detailInfo);
+                             KNMusicAnalysisItem &analysisItem);
 
 private:
     static inline int ratingStars(const quint8 &hex)

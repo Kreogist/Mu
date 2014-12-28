@@ -30,7 +30,7 @@ public:
     static QList<QStandardItem *> generateRow(const KNMusicDetailInfo &detailInfo);
     static bool reanalysisRow(KNMusicModel *musicModel,
                               const QPersistentModelIndex &index,
-                              KNMusicDetailInfo &currentInfo);
+                              KNMusicAnalysisItem &analysisItem);
 
 signals:
 

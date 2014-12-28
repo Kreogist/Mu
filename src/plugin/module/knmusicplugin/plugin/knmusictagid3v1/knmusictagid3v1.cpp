@@ -29,7 +29,7 @@ KNMusicTagID3v1::KNMusicTagID3v1(QObject *parent) :
 
 bool KNMusicTagID3v1::praseTag(QFile &musicFile,
                                QDataStream &musicDataStream,
-                               KNMusicDetailInfo &detailInfo)
+                               KNMusicAnalysisItem &analysisItem)
 {
     //Check is the file size is enough.
     int fileSize=musicFile.size();
@@ -53,14 +53,14 @@ bool KNMusicTagID3v1::praseTag(QFile &musicFile,
     //Parse the raw data.
     parseRawData(rawTagData, tagData);
     //Write raw data to the detail info.
-    writeTagDataToDetailInfo(tagData, detailInfo);
+    writeTagDataToDetailInfo(tagData, analysisItem.detailInfo);
     return true;
 }
 
-bool KNMusicTagID3v1::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+bool KNMusicTagID3v1::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //ID3v1 doesn't contains album art.
-    Q_UNUSED(detailInfo)
+    Q_UNUSED(analysisItem)
     return false;
 }
 

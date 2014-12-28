@@ -23,7 +23,7 @@ signals:
     void requireAppendRow(QList<QStandardItem *> musicRow);
 
 public slots:
-    virtual void onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo);
+    virtual void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
 };
 
 #endif // KNMUSICANALYSISEXTEND_H

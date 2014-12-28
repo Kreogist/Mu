@@ -193,14 +193,15 @@ void KNMusicLibraryModel::updateMusicRow(const int &row,
 }
 
 void KNMusicLibraryModel::updateCoverImage(const int &row,
-                                           const KNMusicDetailInfo &detailInfo)
+                                           const KNMusicAnalysisItem &analysisItem)
 {
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Ask to update the image key in the database.
     m_database->updateArtworkKey(row, detailInfo.coverImageHash);
     //Set the artwork key for the model.
     setRowProperty(row, ArtworkKeyRole, detailInfo.coverImageHash);
     //Get the cover image.
-    QPixmap coverImagePixmap=QPixmap::fromImage(detailInfo.coverImage);
+    QPixmap coverImagePixmap=QPixmap::fromImage(analysisItem.coverImage);
     //Ask category models to update the cover image.
     for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
         i!=m_categoryModels.end();
@@ -297,12 +298,13 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
 }
 
 void KNMusicLibraryModel::appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
-                                                const KNMusicDetailInfo &detailInfo)
+                                                const KNMusicAnalysisItem &analysisItem)
 {
     //Append the music row first.
     appendMusicRow(musicRow);
     //Ask to analysis album art.
-    m_analysisExtend->onActionAnalysisAlbumArt(musicRow.at(Name), detailInfo);
+    m_analysisExtend->onActionAnalysisAlbumArt(musicRow.at(Name),
+                                               analysisItem);
     //Check row count before add the row.
     if(rowCount()==1)
     {

@@ -40,7 +40,7 @@ KNMusicTagFLAC::KNMusicTagFLAC(QObject *parent) :
 
 bool KNMusicTagFLAC::praseTag(QFile &musicFile,
                               QDataStream &musicDataStream,
-                              KNMusicDetailInfo &detailInfo)
+                              KNMusicAnalysisItem &analysisItem)
 {
     Q_UNUSED(musicFile)
     char rawHeader[5];
@@ -93,10 +93,10 @@ bool KNMusicTagFLAC::praseTag(QFile &musicFile,
         {
         case 4:
             parseVorbisComment(blockData, tagMap);
-            writeTagToDetails(tagMap, detailInfo);
+            writeTagToDetails(tagMap, analysisItem.detailInfo);
             break;
         case 6:
-            detailInfo.imageData["FLAC"].append(blockData);
+            analysisItem.imageData["FLAC"].append(blockData);
             break;
         default:
             break;
@@ -105,26 +105,26 @@ bool KNMusicTagFLAC::praseTag(QFile &musicFile,
     return true;
 }
 
-bool KNMusicTagFLAC::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+bool KNMusicTagFLAC::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
-    if(!detailInfo.imageData.contains("FLAC"))
+    if(!analysisItem.imageData.contains("FLAC"))
     {
         return false;
     }
     QHash<int, PictureFrame> imageMap;
     //Parse all the picture.
-    parsePictureList(detailInfo.imageData["FLAC"], imageMap);
+    parsePictureList(analysisItem.imageData["FLAC"], imageMap);
     //If there's a album art image after parse all the album art, set.
     if(imageMap.contains(3))
     {
-        detailInfo.coverImage=imageMap[3].image;
+        analysisItem.coverImage=imageMap[3].image;
     }
     else
     {
         //Or else use the first image.
         if(!imageMap.isEmpty())
         {
-            detailInfo.coverImage=imageMap.begin().value().image;
+            analysisItem.coverImage=imageMap.begin().value().image;
         }
     }
     return true;

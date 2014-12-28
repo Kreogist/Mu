@@ -38,8 +38,8 @@ public:
     explicit KNMusicTagWAV(QObject *parent = 0);
     bool praseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
-                  KNMusicDetailInfo &detailInfo);
-    bool parseAlbumArt(KNMusicDetailInfo &detailInfo);
+                  KNMusicAnalysisItem &analysisItem);
+    bool parseAlbumArt(KNMusicAnalysisItem &analysisItem);
 
 signals:
 

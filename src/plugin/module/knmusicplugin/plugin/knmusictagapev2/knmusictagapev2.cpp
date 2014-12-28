@@ -36,7 +36,7 @@ KNMusicTagAPEv2::KNMusicTagAPEv2(QObject *parent) :
 
 bool KNMusicTagAPEv2::praseTag(QFile &musicFile,
                                QDataStream &musicDataStream,
-                               KNMusicDetailInfo &detailInfo)
+                               KNMusicAnalysisItem &analysisItem)
 {
     //Check the file size.
     if(musicFile.size()<32)
@@ -86,14 +86,14 @@ bool KNMusicTagAPEv2::praseTag(QFile &musicFile,
     parseRawData(rawTagData, header, tagList);
     delete[] rawTagData;
     //Write the tag list to detail info.
-    writeTagListToDetailInfo(tagList, detailInfo);
+    writeTagListToAnalysisItem(tagList, analysisItem);
     return true;
 }
 
-bool KNMusicTagAPEv2::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+bool KNMusicTagAPEv2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //APEv2 cannot contains album art.
-    Q_UNUSED(detailInfo)
+    Q_UNUSED(analysisItem)
     return false;
 }
 
@@ -192,9 +192,10 @@ void KNMusicTagAPEv2::parseRawData(char *rawData,
     }
 }
 
-void KNMusicTagAPEv2::writeTagListToDetailInfo(const QList<APETagItem> &tagList,
-                                               KNMusicDetailInfo &detailInfo)
+void KNMusicTagAPEv2::writeTagListToAnalysisItem(const QList<APETagItem> &tagList,
+                                               KNMusicAnalysisItem &analysisItem)
 {
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     QString trackText;
     int splitterIndex;
     //Parse each tag list.

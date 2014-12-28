@@ -58,7 +58,7 @@ KNMusicTagWMA::KNMusicTagWMA(QObject *parent) :
 
 bool KNMusicTagWMA::praseTag(QFile &musicFile,
                              QDataStream &musicDataStream,
-                             KNMusicDetailInfo &detailInfo)
+                             KNMusicAnalysisItem &analysisItem)
 {
     //If file is less than WMA header, it can't contains tag.
     if(musicFile.size()<16)
@@ -125,27 +125,27 @@ bool KNMusicTagWMA::praseTag(QFile &musicFile,
         tagDataCount-=frameSize;
     }
     //Write the map to detail info.
-    writeTagMapToDetailInfo(tagMap, detailInfo);
+    writeTagMapToDetailInfo(tagMap, analysisItem);
     delete[] rawTagData;
     return true;
 }
 
-bool KNMusicTagWMA::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+bool KNMusicTagWMA::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //Check is there contains wma data.
-    if(!detailInfo.imageData.contains("WMA"))
+    if(!analysisItem.imageData.contains("WMA"))
     {
         return false;
     }
     //Get the image data.
-    QList<QByteArray> imageRawDatas=detailInfo.imageData["WMA"];
+    QList<QByteArray> imageRawDatas=analysisItem.imageData["WMA"];
     //These image data is just the same as ID3v2, so many of these codes are
     //copied from ID3v2 module.
     //But one WMA can only contains one image, send this image to parse.
     WMAPicture albumArt;
     if(parseImageData(imageRawDatas.first(), albumArt))
     {
-        detailInfo.coverImage=albumArt.image;
+        analysisItem.coverImage=albumArt.image;
         return true;
     }
     return false;
@@ -285,8 +285,10 @@ bool KNMusicTagWMA::parseImageData(QByteArray imageData,
 }
 
 void KNMusicTagWMA::writeTagMapToDetailInfo(const QList<KNMusicWMAFrame> &frameList,
-                                            KNMusicDetailInfo &detailInfo)
+                                            KNMusicAnalysisItem &analysisItem)
 {
+    //Get the detail info.
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     for(QList<KNMusicWMAFrame>::const_iterator i=frameList.begin();
         i!=frameList.end();
         ++i)
@@ -294,7 +296,7 @@ void KNMusicTagWMA::writeTagMapToDetailInfo(const QList<KNMusicWMAFrame> &frameL
         //If it's album art frame, save the image data.
         if((*i).name=="WM/Picture")
         {
-            detailInfo.imageData["WMA"].append((*i).data);
+            analysisItem.imageData["WMA"].append((*i).data);
             continue;
         }
         //Check the index first.

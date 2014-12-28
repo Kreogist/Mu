@@ -105,11 +105,12 @@ bool KNMusicWPLParser::parse(const QString &playlistFilePath,
                                           srcInformation:
                                           nativeSeparatorPlaylistPath+"\\"+currentElement.attribute("src"));
             //Parse as a file.
-            KNMusicDetailInfo currentDetail;
+            KNMusicAnalysisItem currentItem;
             parser->parseFile(currentFileInfo.absoluteFilePath(),
-                              currentDetail);
+                              currentItem);
             //Add to playlist.
-            playlistModel->appendMusicRow(KNMusicModelAssist::generateRow(currentDetail));
+            playlistModel->appendMusicRow(
+                        KNMusicModelAssist::generateRow(currentItem.detailInfo));
         }
     }
     return true;

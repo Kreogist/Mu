@@ -212,12 +212,13 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                      BlankData,
                                      Qt::DecorationRole,
                                      m_playingIcon);
-    KNMusicDetailInfo currentInfo;
+    KNMusicAnalysisItem currentItem;
     //Parse the current index, if we cannot parse it, play next.
     if(KNMusicModelAssist::reanalysisRow(m_playingMusicModel,
                                          m_currentPlayingIndex,
-                                         currentInfo))
+                                         currentItem))
     {
+        KNMusicDetailInfo &currentInfo=currentItem.detailInfo;
         //Update the data in proxy model.
         m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
                                             currentInfo);
@@ -233,7 +234,7 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                    currentInfo.duration);
         }
         //Update the player's data.
-        emit requireUpdatePlayerInfo(currentInfo);
+        emit requireUpdatePlayerInfo(currentItem);
     }
 }
 

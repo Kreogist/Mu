@@ -29,8 +29,8 @@ KNMusicAnalysisCache::KNMusicAnalysisCache(QObject *parent) :
 void KNMusicAnalysisCache::appendFilePath(const QString &filePath)
 {
     //We will add this file into current music model.
-    AnalysisItem currentItem;
-    currentItem.filePath=filePath;
+    KNMusicAnalysisItem currentItem;
+    currentItem.detailInfo.filePath=filePath;
     //Add to analysis list.
     m_analysisQueue.append(currentItem);
     //Begin analysis.
@@ -39,38 +39,40 @@ void KNMusicAnalysisCache::appendFilePath(const QString &filePath)
 
 void KNMusicAnalysisCache::analysisFile(const QString &filePath)
 {
-    AnalysisItem currentItem;
-    currentItem.filePath=filePath;
+    KNMusicAnalysisItem currentItem;
+    currentItem.detailInfo.filePath=filePath;
     parseItem(currentItem, true);
 }
 
-void KNMusicAnalysisCache::parseItem(KNMusicAnalysisCache::AnalysisItem &currentItem,
+void KNMusicAnalysisCache::parseItem(KNMusicAnalysisItem &currentItem,
                                      bool blocked)
 {
+    QString currentFilePath=currentItem.detailInfo.filePath;
     //Judge the file is a list or a music file.
     if(m_musicGlobal->isMusicFile(
-                currentItem.filePath.mid(currentItem.filePath.lastIndexOf('.')+1)))
+                currentFilePath.mid(currentFilePath.lastIndexOf('.')+1)))
     {
         //Parse the file.
-        m_parser->parseFile(currentItem.filePath, currentItem.detailInfo);
+        m_parser->parseFile(currentFilePath, currentItem);
         //Emit the analysis finished signal, give out the detail info.
         if(blocked)
         {
             emit requireAppendRow(KNMusicModelAssist::generateRow(currentItem.detailInfo));
             return;
         }
-        emit analysisComplete(currentItem.detailInfo);
+        emit analysisComplete(currentItem);
         return;
     }
     //So, it must be a list now.
-    QList<KNMusicDetailInfo> trackDetailInfo;
-    m_parser->parseTrackList(currentItem.filePath,
-                             trackDetailInfo);
+    QList<KNMusicAnalysisItem> trackDetailInfo;
+    m_parser->parseTrackList(currentFilePath, trackDetailInfo);
     while(!trackDetailInfo.isEmpty())
     {
         if(blocked)
         {
-            emit requireAppendRow(KNMusicModelAssist::generateRow(trackDetailInfo.takeFirst()));
+            emit requireAppendRow(
+                        KNMusicModelAssist::generateRow(
+                            trackDetailInfo.takeFirst().detailInfo));
             continue;
         }
         //Give out the analysis complete info by track index.
@@ -109,7 +111,7 @@ void KNMusicAnalysisCache::onActionAnalysisNext()
         return;
     }
     //Take the first item of the queue.
-    AnalysisItem currentItem=m_analysisQueue.takeFirst();
+    KNMusicAnalysisItem currentItem=m_analysisQueue.takeFirst();
     parseItem(currentItem);
     //Require to analysis next.
     emit analysisNext();

@@ -165,15 +165,16 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
     m_currentIndex=index;
     m_currentMusicModel=musicModel;
     //Get the detail from data.
-    KNMusicDetailInfo detailInfo;
+    KNMusicAnalysisItem analysisItem;
     if(KNMusicModelAssist::reanalysisRow(musicModel,
                                          index,
-                                         detailInfo))
+                                         analysisItem))
     {
+        KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
         //Set data to details.
-        m_albumArt->setArtwork(detailInfo.coverImage.isNull()?
+        m_albumArt->setArtwork(analysisItem.coverImage.isNull()?
                                    KNMusicGlobal::instance()->noAlbumArt():
-                                   QPixmap::fromImage(detailInfo.coverImage));
+                                   QPixmap::fromImage(analysisItem.coverImage));
         setEliedText(m_labels[ItemTitle], detailInfo.textLists[Name]);
         setEliedText(m_fileName, tr("In file: %1").arg(detailInfo.fileName));
         m_fileName->setFilePath(detailInfo.filePath);

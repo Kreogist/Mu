@@ -50,8 +50,8 @@ public:
     explicit KNMusicTagM4A(QObject *parent = 0);
     bool praseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
-                  KNMusicDetailInfo &detailInfo);
-    bool parseAlbumArt(KNMusicDetailInfo &detailInfo);
+                  KNMusicAnalysisItem &analysisItem);
+    bool parseAlbumArt(KNMusicAnalysisItem &analysisItem);
 
 signals:
 
@@ -61,7 +61,7 @@ private:
     inline void clearBox(M4ABox &box);
     inline void toIndependence(M4ABox &box);
     inline void writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
-                                         KNMusicDetailInfo &detailInfo);
+                                         KNMusicAnalysisItem &analysisItem);
     inline bool parseMetaBox(M4ABox &metaBox, M4ABox &ilstBox);
     inline bool getBox(QDataStream &musicDataStream,
                        M4ABox &box,

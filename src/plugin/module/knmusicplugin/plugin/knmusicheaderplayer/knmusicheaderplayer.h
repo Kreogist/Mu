@@ -73,7 +73,7 @@ private slots:
     void onActionPlayStateChanged(const int &state);
 
     void setPosition(const qint64 &position);
-    void updatePlayerInfo(const KNMusicDetailInfo &detailInfo);
+    void updatePlayerInfo(const KNMusicAnalysisItem &analysisItem);
 
 private:
     inline void initialAlbumArt();

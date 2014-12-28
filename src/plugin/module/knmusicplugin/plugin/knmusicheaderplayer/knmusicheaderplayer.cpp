@@ -784,8 +784,9 @@ inline QRect KNMusicHeaderPlayer::generateInPosition()
                  40);
 }
 
-void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicDetailInfo &detailInfo)
+void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisItem)
 {
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Check is the playing file the current file. If it is, do nothing.
     if(m_currentFilePath==detailInfo.filePath)
     {
@@ -798,7 +799,7 @@ void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicDetailInfo &detailInfo)
     m_artist=detailInfo.textLists[Artist];
     m_album=detailInfo.textLists[Album];
     updateArtistAndAlbum();
-    QPixmap coverImage=QPixmap::fromImage(detailInfo.coverImage);
+    QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
     //Ask to load lyrics.
     emit requireLoadLyrics(detailInfo);

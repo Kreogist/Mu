@@ -53,7 +53,7 @@ KNMusicTagM4A::KNMusicTagM4A(QObject *parent) :
 
 bool KNMusicTagM4A::praseTag(QFile &musicFile,
                              QDataStream &musicDataStream,
-                             KNMusicDetailInfo &detailInfo)
+                             KNMusicAnalysisItem &analysisItem)
 {
     Q_UNUSED(musicFile)
     //The m4a file is made of a number of atoms, now they are called 'boxes'.
@@ -144,20 +144,20 @@ bool KNMusicTagM4A::praseTag(QFile &musicFile,
         return false;
     }
     //Write the expand list to the detail info.
-    writeBoxListToDetailInfo(expandList, detailInfo);
+    writeBoxListToDetailInfo(expandList, analysisItem);
     return true;
 }
 
-bool KNMusicTagM4A::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+bool KNMusicTagM4A::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //Check flag.
-    if(!detailInfo.imageData.contains("M4A"))
+    if(!analysisItem.imageData.contains("M4A"))
     {
         return false;
     }
     //Get the image data. There can be only one image.
     //This box is simple, it only contains a 'data' box.
-    QByteArray boxData=detailInfo.imageData["M4A"].at(0);
+    QByteArray boxData=analysisItem.imageData["M4A"].at(0);
     M4ABox covrBox;
     covrBox.name="covr";
     covrBox.size=boxData.size();
@@ -170,7 +170,7 @@ bool KNMusicTagM4A::parseAlbumArt(KNMusicDetailInfo &detailInfo)
         return false;
     }
     //Remember, there's 8 bytes version and flags here.
-    detailInfo.coverImage.loadFromData(QByteArray(expandList.first().data+8,
+    analysisItem.coverImage.loadFromData(QByteArray(expandList.first().data+8,
                                                   expandList.first().size-8));
     return true;
 }
@@ -209,8 +209,10 @@ inline void KNMusicTagM4A::toIndependence(M4ABox &box)
 }
 
 inline void KNMusicTagM4A::writeBoxListToDetailInfo(const QList<M4ABox> &expandList,
-                                                    KNMusicDetailInfo &detailInfo)
+                                                    KNMusicAnalysisItem &analysisItem)
 {
+    //Get the detail info.
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     for(auto i=expandList.begin();
         i!=expandList.end();
         ++i)
@@ -218,7 +220,7 @@ inline void KNMusicTagM4A::writeBoxListToDetailInfo(const QList<M4ABox> &expandL
         //Check the metadata name first, if is covr, means it's album art.
         if((*i).name=="covr")
         {
-            detailInfo.imageData["M4A"].append(QByteArray((*i).data,
+            analysisItem.imageData["M4A"].append(QByteArray((*i).data,
                                                           (*i).size));
             continue;
         }

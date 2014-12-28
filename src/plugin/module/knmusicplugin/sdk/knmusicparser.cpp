@@ -34,8 +34,11 @@ KNMusicParser::~KNMusicParser()
 }
 
 void KNMusicParser::parseFile(QString filePath,
-                              KNMusicDetailInfo &detailInfo)
+                              KNMusicAnalysisItem &analysisItem)
 {
+    //Get the detail info.
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Set the added date.
     detailInfo.dateAdded=QDateTime::currentDateTime();
     QFileInfo fileInfo(filePath);
     //Set detail info.
@@ -56,7 +59,7 @@ void KNMusicParser::parseFile(QString filePath,
     detailInfo.textLists[Kind]=
             m_musicGlobal->typeDescription(fileInfo.suffix());
     //Analysis Music.
-    parseTag(filePath, detailInfo);
+    parseTag(filePath, analysisItem);
     analysis(filePath, detailInfo);
     //Check the duration.
     if(detailInfo.duration<0)
@@ -94,29 +97,29 @@ QString KNMusicParser::sampleRateText(const qint64 &sampleRateNumber)
     return QString::number((qreal)sampleRateNumber/1000)+" kHz";
 }
 
-void KNMusicParser::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+void KNMusicParser::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //Using all the tag parser try to parse the album art.
     for(auto i=m_tagParsers.begin();
         i!=m_tagParsers.end();
         ++i)
     {
-        (*i)->parseAlbumArt(detailInfo);
+        (*i)->parseAlbumArt(analysisItem);
     }
-    if(detailInfo.coverImage.isNull())
+    if(analysisItem.coverImage.isNull())
     {
         //Try to find external images, here is the policy.
         //  1. Find the same file name in the same folder.
-        QFileInfo musicFileInfo(detailInfo.filePath);
+        QFileInfo musicFileInfo(analysisItem.detailInfo.filePath);
         if(findImageFile(musicFileInfo.absolutePath()+"/"+
                          musicFileInfo.completeBaseName(),
-                         detailInfo))
+                         analysisItem))
         {
             return;
         }
         //  2. Find the "cover" named image in the same folder.
         if(findImageFile(musicFileInfo.absolutePath()+"/cover",
-                         detailInfo))
+                         analysisItem))
         {
             return;
         }
@@ -126,7 +129,7 @@ void KNMusicParser::parseAlbumArt(KNMusicDetailInfo &detailInfo)
 }
 
 void KNMusicParser::parseTag(const QString &filePath,
-                             KNMusicDetailInfo &detailInfo)
+                             KNMusicAnalysisItem &analysisItem)
 {
     QFile musicFile(filePath);
     //Open the music file at read only mode.
@@ -140,7 +143,7 @@ void KNMusicParser::parseTag(const QString &filePath,
             ++i)
         {
             musicFile.reset();
-            (*i)->praseTag(musicFile, musicDataStream, detailInfo);
+            (*i)->praseTag(musicFile, musicDataStream, analysisItem);
         }
         //Close the file.
         musicFile.close();
@@ -148,7 +151,7 @@ void KNMusicParser::parseTag(const QString &filePath,
 }
 
 void KNMusicParser::parseTrackList(const QString &filePath,
-                                   QList<KNMusicDetailInfo> &trackDetailList)
+                                   QList<KNMusicAnalysisItem> &trackDetailList)
 {
     QFile trackListFile(filePath);
     //Open the track list file at read only mode.
@@ -166,11 +169,12 @@ void KNMusicParser::parseTrackList(const QString &filePath,
             if((*i)->parseList(trackListFile, listDetailInfo))
             {
                 //Parse the music file which the list point to.
-                KNMusicDetailInfo musicFileDetailInfo;
+                KNMusicAnalysisItem currentItem;
+                KNMusicDetailInfo &musicFileDetailInfo=currentItem.detailInfo;
                 musicFileDetailInfo.trackFilePath=filePath;
                 //Parse the tag.
                 parseFile(listDetailInfo.musicFilePath,
-                          musicFileDetailInfo);
+                          currentItem);
                 //Generate the template detail info.
                 while(!listDetailInfo.metaData.isEmpty())
                 {
@@ -188,7 +192,8 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                     KNMusicListTrackDetailInfo currentTrack=
                             listDetailInfo.trackList.takeFirst();
                     //Generate current track info from template.
-                    KNMusicDetailInfo currentInfo=musicFileDetailInfo;
+                    KNMusicAnalysisItem currentTrackItem=currentItem;
+                    KNMusicDetailInfo &currentInfo=currentTrackItem.detailInfo;
                     //Set the text data.
                     while(!currentTrack.metaData.isEmpty())
                     {
@@ -213,7 +218,7 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                     }
                     currentInfo.textLists[Time]=
                             KNMusicGlobal::msecondToString(currentInfo.duration);
-                    trackDetailList.append(currentInfo);
+                    trackDetailList.append(currentTrackItem);
                 }
                 break;
             }
@@ -240,21 +245,21 @@ void KNMusicParser::analysis(const QString &filePath,
 }
 
 bool KNMusicParser::findImageFile(const QString &imageBaseFileName,
-                                  KNMusicDetailInfo &detailInfo)
+                                  KNMusicAnalysisItem &analysisItem)
 {
-    return  checkImageFile(imageBaseFileName+".jpg", detailInfo) ||
-            checkImageFile(imageBaseFileName+".png", detailInfo) ||
-            checkImageFile(imageBaseFileName+".jpeg", detailInfo) ||
-            checkImageFile(imageBaseFileName+".bmp", detailInfo);
+    return  checkImageFile(imageBaseFileName+".jpg", analysisItem) ||
+            checkImageFile(imageBaseFileName+".png", analysisItem) ||
+            checkImageFile(imageBaseFileName+".jpeg", analysisItem) ||
+            checkImageFile(imageBaseFileName+".bmp", analysisItem);
 }
 
 bool KNMusicParser::checkImageFile(const QString &imageFilePath,
-                                   KNMusicDetailInfo &detailInfo)
+                                   KNMusicAnalysisItem &analysisItem)
 {
     QFileInfo imageFileInfo(imageFilePath);
     if(imageFileInfo.exists())
     {
-        detailInfo.coverImage=QImage(imageFileInfo.absoluteFilePath());
+        analysisItem.coverImage=QImage(imageFileInfo.absoluteFilePath());
         return true;
     }
     return false;

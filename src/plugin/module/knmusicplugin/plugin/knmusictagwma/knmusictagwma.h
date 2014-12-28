@@ -55,8 +55,8 @@ public:
     explicit KNMusicTagWMA(QObject *parent = 0);
     bool praseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
-                  KNMusicDetailInfo &detailInfo);
-    bool parseAlbumArt(KNMusicDetailInfo &detailInfo);
+                  KNMusicAnalysisItem &analysisItem);
+    bool parseAlbumArt(KNMusicAnalysisItem &analysisItem);
 
 signals:
 
@@ -82,7 +82,7 @@ private:
                           QList<KNMusicWMAFrame> &frameList);
     bool parseImageData(QByteArray imageData, WMAPicture &albumArt);
     inline void writeTagMapToDetailInfo(const QList<KNMusicWMAFrame> &frameList,
-                                        KNMusicDetailInfo &detailInfo);
+                                        KNMusicAnalysisItem &analysisItem);
     unsigned char m_headerMark[17]={0x30, 0x26, 0xB2, 0x75,
                                     0x8E, 0x66, 0xCF, 0x11,
                                     0xA6, 0xD9, 0x00, 0xAA,

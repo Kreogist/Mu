@@ -30,9 +30,9 @@ public:
     explicit KNMusicParser(QObject *parent = 0);
     ~KNMusicParser();
     void parseFile(QString filePath,
-                   KNMusicDetailInfo &detailInfo);
+                   KNMusicAnalysisItem &analysisItem);
     void parseTrackList(const QString &filePath,
-                        QList<KNMusicDetailInfo> &trackDetailList);
+                        QList<KNMusicAnalysisItem> &trackDetailList);
     void installAnalysiser(KNMusicAnalysiser *analysiser);
     void installTagParser(KNMusicTagParser *tagParser);
     void installListParser(KNMusicListParser *listParser);
@@ -42,17 +42,17 @@ public:
 signals:
 
 public slots:
-    void parseAlbumArt(KNMusicDetailInfo &detailInfo);
+    void parseAlbumArt(KNMusicAnalysisItem &analysisItem);
 
 private:
     inline void parseTag(const QString &filePath,
-                         KNMusicDetailInfo &detailInfo);
+                         KNMusicAnalysisItem &analysisItem);
     inline void analysis(const QString &filePath,
                          KNMusicDetailInfo &detailInfo);
     inline bool findImageFile(const QString &imageBaseFileName,
-                              KNMusicDetailInfo &detailInfo);
+                              KNMusicAnalysisItem &analysisItem);
     inline bool checkImageFile(const QString &imageFileInfo,
-                               KNMusicDetailInfo &detailInfo);
+                               KNMusicAnalysisItem &analysisItem);
     KNGlobal *m_global;
     KNMusicGlobal *m_musicGlobal;
     QList<KNMusicAnalysiser *> m_analysisers;

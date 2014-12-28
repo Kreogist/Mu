@@ -67,12 +67,12 @@ public slots:
     void updateMusicRow(const int &row,
                         const KNMusicDetailInfo &detailInfo);
     void updateCoverImage(const int &row,
-                          const KNMusicDetailInfo &detailInfo);
+                          const KNMusicAnalysisItem &analysisItem);
     void removeMusicRow(const int &row);
 
 private slots:
     void appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
-                               const KNMusicDetailInfo &detailInfo);
+                               const KNMusicAnalysisItem &analysisItem);
     void recoverMusicRow(const QList<QStandardItem *> &musicRow);
     void imageRecoverComplete();
 

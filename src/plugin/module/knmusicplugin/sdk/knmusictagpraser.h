@@ -26,8 +26,8 @@ public:
     KNMusicTagParser(QObject *parent = 0):QObject(parent){}
     virtual bool praseTag(QFile &musicFile,
                           QDataStream &musicDataStream,
-                          KNMusicDetailInfo &detailInfo)=0;
-    virtual bool parseAlbumArt(KNMusicDetailInfo &detailInfo)=0;
+                          KNMusicAnalysisItem &analysisItem)=0;
+    virtual bool parseAlbumArt(KNMusicAnalysisItem &analysisItem)=0;
 
 signals:
 

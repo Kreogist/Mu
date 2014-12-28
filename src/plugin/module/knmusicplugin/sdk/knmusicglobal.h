@@ -125,13 +125,18 @@ struct KNMusicDetailInfo
     qint64 duration=0;
     qint64 bitRate=0;
     qint64 samplingRate=0;
-    //Album art data.
-    QImage coverImage;
+    //Image hash data.
     QString coverImageHash;
-    QMap<QString, QList<QByteArray>> imageData;
     //Tag datas.
     QString textLists[MusicDataCount];
     int rating=0;
+};
+struct KNMusicAnalysisItem
+{
+    KNMusicDetailInfo detailInfo;
+    //Album art data.
+    QImage coverImage;
+    QMap<QString, QList<QByteArray>> imageData;
 };
 }
 
