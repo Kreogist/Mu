@@ -296,7 +296,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp \
     plugin/module/knmusicplugin/sdk/knmusiccategorytabwidget.cpp \
     plugin/sdk/preference/knpreferenceitemfont.cpp \
-    plugin/sdk/knfontdialog.cpp
+    plugin/sdk/knfontdialog.cpp \
+    plugin/sdk/knmousedetectlabel.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -494,7 +495,8 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.h \
     plugin/module/knmusicplugin/sdk/knmusiccategorytabwidget.h \
     plugin/sdk/preference/knpreferenceitemfont.h \
-    plugin/sdk/knfontdialog.h
+    plugin/sdk/knfontdialog.h \
+    plugin/sdk/knmousedetectlabel.h
 
 RESOURCES += \
     resource/res.qrc

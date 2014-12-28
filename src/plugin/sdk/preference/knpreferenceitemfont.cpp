@@ -8,6 +8,7 @@
 #include <QPushButton>
 
 #include "../knfontdialog.h"
+#include "../knmousedetectlabel.h"
 
 #include "knlocalemanager.h"
 
@@ -23,10 +24,19 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     pal.setColor(QPalette::WindowText, QColor(0xA0, 0xA0, 0xA0));
     m_fontOverview->setPalette(pal);
     //Initial the preview label.
-    m_previewIcon=new QLabel(this);
+    m_previewIcon=new KNMouseDetectLabel(this);
     m_previewIcon->setScaledContents(true);
     m_previewIcon->setFixedSize(16, 16);
     m_previewIcon->setPixmap(QPixmap("://public/preview_font.png"));
+    connect(m_previewIcon, &KNMouseDetectLabel::mouseEntered,
+            this, &KNPreferenceItemFont::onActionShowTooltip);
+    connect(m_previewIcon, &KNMouseDetectLabel::mouseLeaved,
+            this, &KNPreferenceItemFont::onActionHideTooltip);
+    //Initial the preview tooltip.
+    m_previewTooltip=new QLabel;
+    m_previewTooltip->setContentsMargins(10,10,10,10);
+    m_previewTooltip->setWindowFlags(Qt::ToolTip);
+    m_previewTooltip->hide();
     //Initial the change font button.
     m_changeFont=new QPushButton(this);
     pal=m_changeFont->palette();
@@ -49,12 +59,12 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
 
     //Linked the translation.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
-            this, &KNPreferenceItemFont::updateOverview);
+            this, &KNPreferenceItemFont::retranslate);
 }
 
 KNPreferenceItemFont::~KNPreferenceItemFont()
 {
-    ;
+    delete m_previewTooltip;
 }
 
 QVariant KNPreferenceItemFont::defaultValue() const
@@ -79,16 +89,38 @@ void KNPreferenceItemFont::setValue(const QVariant &value)
 {
     //Set the value.
     m_value=value.value<QFont>();
+    //Set the preview font.
+    m_previewTooltip->setFont(m_value);
+    m_previewTooltip->setText(m_value.family());
     //Update the overview label info.
+    updateOverview();
+}
+
+void KNPreferenceItemFont::retranslate()
+{
+    //Update the font information.
     updateOverview();
 }
 
 void KNPreferenceItemFont::onActionSelectFont()
 {
-    //Get the new font.
-    m_value=KNFontDialog::getFont(m_value);
-    //Update the information.
-    updateOverview();
+    setValue(KNFontDialog::getFont(m_value));
+}
+
+void KNPreferenceItemFont::onActionShowTooltip()
+{
+    //Move the tooltip.
+    QPoint previewButtonPos=mapToGlobal(m_previewIcon->pos());
+    m_previewTooltip->move(previewButtonPos.x()+m_previewIcon->width()+12,
+                           previewButtonPos.y()+(m_previewIcon->height()>>1)-
+                           (m_previewTooltip->height()>>1));
+    //Show the tooltip.
+    m_previewTooltip->show();
+}
+
+void KNPreferenceItemFont::onActionHideTooltip()
+{
+    m_previewTooltip->hide();
 }
 
 void KNPreferenceItemFont::updateOverview()

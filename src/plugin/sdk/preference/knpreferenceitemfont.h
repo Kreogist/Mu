@@ -10,6 +10,7 @@
 #include "knpreferenceitembase.h"
 
 class QPushButton;
+class KNMouseDetectLabel;
 class KNPreferenceItemFont : public KNPreferenceItemBase
 {
 public:
@@ -23,11 +24,15 @@ public slots:
     void setValue(const QVariant &value);
 
 private slots:
+    void retranslate();
     void onActionSelectFont();
+    void onActionShowTooltip();
+    void onActionHideTooltip();
     void updateOverview();
 
 private:
-    QLabel *m_fontOverview, *m_previewIcon;
+    KNMouseDetectLabel *m_previewIcon;
+    QLabel *m_fontOverview, *m_previewTooltip;
     QFont m_value, m_defaultFont;
     QPushButton *m_changeFont;
 };
