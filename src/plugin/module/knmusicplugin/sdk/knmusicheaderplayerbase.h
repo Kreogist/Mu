@@ -22,7 +22,7 @@ public:
     KNMusicHeaderPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
     virtual void setBackend(KNMusicBackend *backend)=0;
     virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
-    virtual QString currentFilePath() const=0;
+    virtual KNMusicDetailInfo currentDetailInfo()=0;
 
 signals:
     void requirePlayPrevious();

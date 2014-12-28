@@ -34,7 +34,7 @@ public:
     QString caption();
     QPixmap icon();
     QWidget *widget();
-    void showInTab(QString filePath);
+    void showInTab(const KNMusicDetailInfo &detailInfo);
 
 signals:
 

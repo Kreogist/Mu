@@ -34,6 +34,7 @@ public:
                       int column,
                       const QModelIndex &parent);
     qint64 totalDuration() const;
+    KNMusicDetailInfo detailInfoFromRow(const int &row);
     inline QString filePathFromRow(const int &row)
     {
         Q_ASSERT(row>-1 && row<rowCount());

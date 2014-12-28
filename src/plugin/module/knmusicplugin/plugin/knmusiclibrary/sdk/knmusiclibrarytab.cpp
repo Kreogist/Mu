@@ -30,7 +30,7 @@ void KNMusicLibraryTab::showIndexInModel(KNMusicModel *model,
                                          const QModelIndex &index)
 {
     //Using the show in tab function to show the file via file path.
-    showInTab(model->filePathFromRow(index.row()));
+    showInTab(model->detailInfoFromRow(index.row()));
 }
 
 void KNMusicLibraryTab::onActionTabShow()

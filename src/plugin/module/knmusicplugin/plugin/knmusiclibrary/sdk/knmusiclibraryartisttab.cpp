@@ -104,12 +104,12 @@ QPixmap KNMusicLibraryArtistTab::icon()
     return QPixmap(":/plugin/music/category/02_artists.png");
 }
 
-void KNMusicLibraryArtistTab::showInTab(QString filePath)
+void KNMusicLibraryArtistTab::showInTab(const KNMusicDetailInfo &detailInfo)
 {
     //Clear the search result.
     KNMusicGlobal::musicSearch()->search("");
     //Get the row of the file.
-    int musicRow=m_musicLibrary->rowFromFilePath(filePath);
+    int musicRow=m_musicLibrary->rowFromDetailInfo(detailInfo);
     //If the row is available.
     if(musicRow!=-1)
     {
@@ -237,7 +237,7 @@ void KNMusicLibraryArtistTab::onActionRequireSearch()
 
 void KNMusicLibraryArtistTab::onActionShowInArtist()
 {
-    showInTab(KNMusicGlobal::soloMenu()->currentFilePath());
+    showInTab(KNMusicGlobal::soloMenu()->currentDetailInfo());
 }
 
 void KNMusicLibraryArtistTab::onActionCategoryAlbumArtUpdate(const QModelIndex &updatedIndex)

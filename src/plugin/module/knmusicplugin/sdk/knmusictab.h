@@ -9,7 +9,11 @@
 
 #include <QPixmap>
 
+#include "knmusicglobal.h"
+
 #include <QObject>
+
+using namespace KNMusic;
 
 class QWidget;
 class KNMusicModel;

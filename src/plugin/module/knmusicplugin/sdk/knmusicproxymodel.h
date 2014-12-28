@@ -21,6 +21,8 @@ public:
     explicit KNMusicProxyModel(QObject *parent = 0);
     KNMusicModel *musicModel();
     int playingItemColumn();
+    KNMusicDetailInfo detailInfoFromRow(const int &row);
+    inline int sourceRow(const int &proxyRow) const;
     inline QString itemText(const int &row, const int &column) const
     {
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());

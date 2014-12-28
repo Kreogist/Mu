@@ -33,7 +33,7 @@ public:
     QAction *showInAction();
     QString caption();
     QPixmap icon();
-    void showInTab(QString filePath);
+    void showInTab(const KNMusicDetailInfo &detailInfo);
 
 signals:
 

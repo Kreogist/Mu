@@ -105,6 +105,32 @@ qint64 KNMusicModel::totalDuration() const
     return m_totalDuration;
 }
 
+KNMusicDetailInfo KNMusicModel::detailInfoFromRow(const int &row)
+{
+    KNMusicDetailInfo detailInfo;
+    //Copy the text first.
+    for(int i=0; i<MusicDataCount; i++)
+    {
+        detailInfo.textLists[i]=itemText(row, i);
+    }
+    //Copy the properties.
+    detailInfo.fileName=rowProperty(row, FileNameRole).toString();
+    detailInfo.filePath=rowProperty(row, FilePathRole).toString();
+    detailInfo.trackFilePath=rowProperty(row, TrackFileRole).toString();
+    detailInfo.coverImageHash=rowProperty(row, ArtworkKeyRole).toString();
+    detailInfo.startPosition=rowProperty(row, StartPositionRole).toLongLong();
+    detailInfo.size=roleData(row, Size, Qt::UserRole).toLongLong();
+    detailInfo.dateModified=roleData(row, DateModified, Qt::UserRole).toDateTime();
+    detailInfo.dateAdded=roleData(row, DateAdded, Qt::UserRole).toDateTime();
+    detailInfo.lastPlayed=roleData(row, LastPlayed, Qt::UserRole).toDateTime();
+    detailInfo.duration=roleData(row, Time, Qt::UserRole).toLongLong();
+    detailInfo.bitRate=roleData(row, BitRate, Qt::UserRole).toLongLong();
+    detailInfo.samplingRate=roleData(row, SampleRate, Qt::UserRole).toLongLong();
+    detailInfo.rating=roleData(row, Size, Qt::DisplayRole).toInt();
+    //Return the detail info.
+    return detailInfo;
+}
+
 QPixmap KNMusicModel::songAlbumArt(const int &row)
 {
     Q_UNUSED(row)

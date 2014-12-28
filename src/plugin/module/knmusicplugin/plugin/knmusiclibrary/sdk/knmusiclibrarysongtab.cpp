@@ -102,12 +102,12 @@ QWidget *KNMusicLibrarySongTab::widget()
     return m_viewer;
 }
 
-void KNMusicLibrarySongTab::showInTab(QString filePath)
+void KNMusicLibrarySongTab::showInTab(const KNMusicDetailInfo &detailInfo)
 {
     //Clear the search result.
     KNMusicGlobal::musicSearch()->search("");
     //Get the row of the file.
-    int musicRow=m_musicLibrary->rowFromFilePath(filePath);
+    int musicRow=m_musicLibrary->rowFromDetailInfo(detailInfo);
     //If the row is available.
     if(musicRow!=-1)
     {
@@ -152,7 +152,7 @@ void KNMusicLibrarySongTab::onActionSearch(const QString &text)
 
 void KNMusicLibrarySongTab::onActionShowInSong()
 {
-    showInTab(KNMusicGlobal::soloMenu()->currentFilePath());
+    showInTab(KNMusicGlobal::soloMenu()->currentDetailInfo());
 }
 
 void KNMusicLibrarySongTab::initialShowInAction()

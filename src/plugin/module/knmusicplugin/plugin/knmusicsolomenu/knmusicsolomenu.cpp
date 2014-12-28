@@ -62,19 +62,22 @@ void KNMusicSoloMenu::setProxyModel(KNMusicProxyModel *model)
     m_proxyModel=model;
 }
 
-void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
+void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &proxyIndex)
 {
-    int row=itemIndex.row();
+    //Save the current index.
+    m_currentIndex=proxyIndex;
+    //Get the row and set data.
+    int row=m_currentIndex.row();
     m_actions[PlayCurrent]->setText(
                 m_actionTitles[PlayCurrent].arg(
                     m_proxyModel->itemText(row, Name)));
     m_actions[Open]->setText(
                 m_actionTitles[Open].arg(
                     m_proxyModel->fileNameFromRow(row)));
-    m_itemText=m_proxyModel->itemText(itemIndex.row(), itemIndex.column());
+    m_itemText=m_proxyModel->itemText(proxyIndex.row(), proxyIndex.column());
     m_filePath=m_proxyModel->filePathFromRow(row);
     //Generate the prefer name.
-    m_preferFileName=generatePreferFileName(itemIndex);
+    m_preferFileName=generatePreferFileName(proxyIndex);
     //If the prefer file name is empty, means now the file is just the prefer
     //name, hide this action.
     if(m_preferFileName.isEmpty())
@@ -103,9 +106,10 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
     }
 }
 
-QString KNMusicSoloMenu::currentFilePath() const
+KNMusicDetailInfo KNMusicSoloMenu::currentDetailInfo()
 {
-    return m_filePath;
+    //Return the detail info from the proxy model.
+    return m_proxyModel->detailInfoFromRow(m_currentIndex.row());
 }
 
 void KNMusicSoloMenu::retranslate()

@@ -28,7 +28,7 @@ class KNMusicLibraryTab : public KNMusicTab
 public:
     explicit KNMusicLibraryTab(QObject *parent = 0);
     virtual QAction *showInAction()=0;
-    virtual void showInTab(QString filePath)=0;
+    virtual void showInTab(const KNMusicDetailInfo &detailInfo)=0;
     void showIndexInModel(KNMusicModel *model,
                           const QModelIndex &index);
 

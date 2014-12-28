@@ -147,9 +147,9 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     onActionLoopStateChanged(m_nowPlaying->loopState());
 }
 
-QString KNMusicHeaderPlayer::currentFilePath() const
+KNMusicDetailInfo KNMusicHeaderPlayer::currentDetailInfo()
 {
-    return m_currentFilePath;
+    return m_currentDetailInfo;
 }
 
 void KNMusicHeaderPlayer::reset()
@@ -786,21 +786,21 @@ inline QRect KNMusicHeaderPlayer::generateInPosition()
 
 void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisItem)
 {
-    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    m_currentDetailInfo=analysisItem.detailInfo;
     //Check is the playing file the current file. If it is, do nothing.
-    if(m_currentFilePath==detailInfo.filePath)
+    if(m_currentFilePath==m_currentDetailInfo.filePath)
     {
         return;
     }
     //Save the new file path and emit file path changed signal.
-    m_currentFilePath=detailInfo.filePath;
+    m_currentFilePath=m_currentDetailInfo.filePath;
     //Set the display data.
-    setTitle(detailInfo.textLists[Name]);
-    m_artist=detailInfo.textLists[Artist];
-    m_album=detailInfo.textLists[Album];
+    setTitle(m_currentDetailInfo.textLists[Name]);
+    m_artist=m_currentDetailInfo.textLists[Artist];
+    m_album=m_currentDetailInfo.textLists[Album];
     updateArtistAndAlbum();
     QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
     //Ask to load lyrics.
-    emit requireLoadLyrics(detailInfo);
+    emit requireLoadLyrics(m_currentDetailInfo);
 }

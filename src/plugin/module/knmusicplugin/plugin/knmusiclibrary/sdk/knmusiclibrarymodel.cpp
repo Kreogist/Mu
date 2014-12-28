@@ -78,12 +78,39 @@ int KNMusicLibraryModel::rowFromFilePath(const QString &filePath)
                                     filePath,
                                     1,
                                     Qt::MatchFixedString);
-    //If we can't find it, check in the filelist.
+    //If we can't find it, return -1.
     if(fileCheck.isEmpty())
     {
         return -1;
     }
     return fileCheck.first().row();
+}
+
+int KNMusicLibraryModel::rowFromDetailInfo(const KNMusicDetailInfo &detailInfo)
+{
+    QModelIndexList fileCheck=match(index(0,0),
+                                    FilePathRole,
+                                    detailInfo.filePath,
+                                    -1,
+                                    Qt::MatchFixedString);
+    //If we can't find it, return -1.
+    if(fileCheck.isEmpty())
+    {
+        return -1;
+    }
+    //Check the start position is the same as the detail info.
+    for(QModelIndexList::iterator i=fileCheck.begin();
+        i!=fileCheck.end();
+        ++i)
+    {
+        if(rowProperty((*i).row(), StartPositionRole).toLongLong()==
+                detailInfo.startPosition)
+        {
+            return (*i).row();
+        }
+    }
+    //If we are here, means find nothing.
+    return -1;
 }
 
 int KNMusicLibraryModel::playingItemColumn()

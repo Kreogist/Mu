@@ -37,6 +37,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QPixmap artwork(const QString &key);
     int rowFromFilePath(const QString &filePath);
+    int rowFromDetailInfo(const KNMusicDetailInfo &detailInfo);
     int playingItemColumn();
     bool dropMimeData(const QMimeData *data,
                       Qt::DropAction action,

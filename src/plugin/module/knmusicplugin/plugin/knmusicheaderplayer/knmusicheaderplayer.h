@@ -41,7 +41,7 @@ public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
     void setBackend(KNMusicBackend *backend);
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
-    QString currentFilePath() const;
+    KNMusicDetailInfo currentDetailInfo();
 
 signals:
 
@@ -135,12 +135,15 @@ private:
     bool m_isShownPlay=true, m_progressPressed=false, m_appendMenuShown=false;
     int m_albumArtSize=61, m_buttonSize=38, m_loopState=NoRepeat;
 
-    //Images
+    //Images.
     QPixmap m_playIcon, m_pauseIcon,
             m_noRepeatIcon, m_repeatTrackIcon, m_repeatAllIcon,
             m_muteIcon, m_noMuteIcon,
             m_noAlbumArt;
+
+    //Datas.
     QString m_artist, m_album, m_currentFilePath;
+    KNMusicDetailInfo m_currentDetailInfo;
 };
 
 #endif // KNMUSICHEADERPLAYER_H

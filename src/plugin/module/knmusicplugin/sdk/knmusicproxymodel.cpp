@@ -27,6 +27,17 @@ int KNMusicProxyModel::playingItemColumn()
     return musicModel()->playingItemColumn();
 }
 
+KNMusicDetailInfo KNMusicProxyModel::detailInfoFromRow(const int &row)
+{
+    return musicModel()->detailInfoFromRow(sourceRow(row));
+}
+
+inline int KNMusicProxyModel::sourceRow(const int &proxyRow) const
+{
+    Q_ASSERT(proxyRow>-1 && proxyRow<rowCount());
+    return mapToSource(index(proxyRow, 0)).row();
+}
+
 bool KNMusicProxyModel::lessThan(const QModelIndex &left,
                                  const QModelIndex &right) const
 {
