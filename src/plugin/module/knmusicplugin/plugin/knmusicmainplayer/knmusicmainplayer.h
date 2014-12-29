@@ -20,6 +20,7 @@
 
 #include "knmusicmainplayerbase.h"
 
+class QPropertyAnimation;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
 public:

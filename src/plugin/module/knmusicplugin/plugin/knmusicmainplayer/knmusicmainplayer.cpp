@@ -15,16 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QPropertyAnimation>
+
 #include "knmusicmainplayer.h"
+
+#include <QDebug>
 
 KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     KNMusicMainPlayerBase(parent)
 {
-    ;
+    //Set properties.
+    setAutoFillBackground(true);
+    //Set palette.
+    QPalette pal=palette();
+    pal.setColor(QPalette::Window, QColor(0,0,0,220));
+    setPalette(pal);
 }
 
 KNMusicMainPlayer::~KNMusicMainPlayer()
 {
     ;
 }
-

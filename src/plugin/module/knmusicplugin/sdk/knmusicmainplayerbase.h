@@ -14,6 +14,7 @@ class KNMusicMainPlayerBase : public KNDropProxyContainer
     Q_OBJECT
 public:
     KNMusicMainPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
+
 };
 
 #endif // KNMUSICMAINPLAYERBASE_H
