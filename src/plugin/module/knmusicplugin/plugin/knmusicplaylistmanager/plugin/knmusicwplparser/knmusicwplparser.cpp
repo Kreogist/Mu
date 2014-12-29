@@ -88,6 +88,7 @@ bool KNMusicWPLParser::parse(const QString &playlistFilePath,
     //Read the seq node information.
     QString nativeSeparatorPlaylistPath=
             QDir::toNativeSeparators(wplFileInfo.absolutePath());
+    QStringList playlistFileList;
     for(QDomNode i=seqNode.firstChild();
         i!=seqNode.lastChild();
         i=i.nextSibling())
@@ -96,23 +97,24 @@ bool KNMusicWPLParser::parse(const QString &playlistFilePath,
         {
             QDomElement currentElement=i.toElement();
             QString srcInformation=currentElement.attribute("src");
-            //Check is the file path absolute path, treat the other file as
-            //relative path.
-            QFileInfo currentFileInfo((srcInformation.size()>3 &&
-                                       srcInformation.at(0).isLetter() &&
-                                       srcInformation.at(1)==':' &&
-                                       srcInformation.at(2)=='\\')?
-                                          srcInformation:
-                                          nativeSeparatorPlaylistPath+"\\"+currentElement.attribute("src"));
-            //Parse as a file.
-            KNMusicAnalysisItem currentItem;
-            parser->parseFile(currentFileInfo.absoluteFilePath(),
-                              currentItem);
-            //Add to playlist.
-            playlistModel->appendMusicRow(
-                        KNMusicModelAssist::generateRow(currentItem.detailInfo));
+            //Check is the file path absolute path.
+            QFileInfo currentFileInfo(srcInformation);
+            if(!currentFileInfo.exists())
+            {
+                //Treat it as relative file path.
+                currentFileInfo.setFile(nativeSeparatorPlaylistPath+"\\"+currentElement.attribute("src"));
+                //If the file is still not exist, then abandon this file track.
+                if(!currentFileInfo.exists())
+                {
+                    continue;
+                }
+            }
+            //Add this file to playlist file list.
+            playlistFileList.append(currentFileInfo.absoluteFilePath());
         }
     }
+    //Add to playlist.
+    playlistModel->addFiles(playlistFileList);
     return true;
 }
 
