@@ -9,6 +9,7 @@
 
 #include "kncategorytabwidget.h"
 
+class QPropertyAnimation;
 class KNMusicCategoryTabWidget : public KNCategoryTabWidget
 {
 public:
@@ -17,11 +18,17 @@ public:
     QWidget *mainPlayer() const;
     void setMainPlayer(QWidget *mainPlayer);
 
+public slots:
+    void showMainPlayer();
+    void hideMainPlayer();
+
 protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    inline void configureAnimation(QPropertyAnimation *anime);
     QWidget *m_mainPlayer=nullptr;
+    QPropertyAnimation *m_mainPlayerIn, *m_mainPlayerOut;
 };
 
 #endif // KNMUSICCATEGORYTABWIDGET_H

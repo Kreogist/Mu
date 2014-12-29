@@ -232,6 +232,9 @@ inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
                 m_headerPlayer, &KNMusicHeaderPlayerBase::activatePlayer);
         connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
                 m_headerPlayer, &KNMusicHeaderPlayerBase::inactivatePlayer);
+        //Linke the request to category tab widget.
+        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowMainPlayer,
+                m_centralWidget, &KNMusicCategoryTabWidget::showMainPlayer);
         //Add to main window.
         addLeftHeaderWidget(m_headerPlayer);
     }
