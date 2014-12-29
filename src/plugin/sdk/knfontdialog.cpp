@@ -27,11 +27,11 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     QGridLayout *mainLayout=new QGridLayout(this);
     setLayout(mainLayout);
     //Generate the caption.
-    m_caption[0]=new QLabel(tr("Font:"), this);
+    m_caption[0]=new QLabel(tr("Font"), this);
     mainLayout->addWidget(m_caption[0], 0, 0, 1, 1);
-    m_caption[1]=new QLabel(tr("Size:"), this);
+    m_caption[1]=new QLabel(tr("Size"), this);
     mainLayout->addWidget(m_caption[1], 0, 1, 1, 1);
-    m_caption[2]=new QLabel(tr("Styles:"), this);
+    m_caption[2]=new QLabel(tr("Styles"), this);
     mainLayout->addWidget(m_caption[2], 4, 1, 1, 1);
 
     //Initial the font family combo box and list view.
@@ -104,7 +104,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     m_fontStyles[StyleBold]->setText(tr("Bold"));
     m_fontStyles[StyleItalic]->setText(tr("Italic"));
     m_fontStyles[StyleUnderline]->setText(tr("Underline"));
-    m_fontStyles[StyleStrikeout]->setText(tr("Strikeout"));
+    m_fontStyles[StyleStrikeout]->setText(tr("Strike Out"));
     m_fontStyles[StyleKerning]->setText(tr("Kerning"));
     stylesBox->addStretch();
     mainLayout->addLayout(stylesBox, 5, 1, 1, 1);
@@ -121,7 +121,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
 
     finalLayout->addStretch();
 
-    m_caption[3]=new QLabel(tr("Sample:"), this);
+    m_caption[3]=new QLabel(tr("Sample"), this);
     finalLayout->addWidget(m_caption[3]);
 
     //Initial the preview edit.

@@ -13,6 +13,7 @@ class QPushButton;
 class KNMouseDetectLabel;
 class KNPreferenceItemFont : public KNPreferenceItemBase
 {
+    Q_OBJECT
 public:
     explicit KNPreferenceItemFont(QWidget *parent = 0);
     ~KNPreferenceItemFont();

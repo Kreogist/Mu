@@ -48,7 +48,7 @@ void KNMusicHeaderPlayerAppendMenu::retranslate()
 {
     //Set the sub menu title.
     m_subMenus[SubMenuRating]->menuAction()->setText(tr("Rating"));
-    m_subMenus[SubMenuShowIn]->menuAction()->setText(tr("Show in"));
+    m_subMenus[SubMenuLocate]->menuAction()->setText(tr("Locate"));
     //Set the no stars title.
     m_menuActions[AppendRatingNoStar]->setText(tr("(No star)"));
     //Set the detail info title.
@@ -63,7 +63,7 @@ void KNMusicHeaderPlayerAppendMenu::retranslate()
 #ifdef Q_OS_LINUX
     m_menuActions[AppendShowInGraphicShell]->setText(tr("Show the contains folder"));
 #endif
-    m_menuActions[AppendLocateSong]->setText(tr("Locate the current song"));
+    m_menuActions[AppendLocateNowPlaying]->setText(tr("Locate now playing"));
     m_menuActions[AppendShowInSongs]->setText(tr("Show in songs"));
     m_menuActions[AppendShowInArtists]->setText(tr("Show in artists"));
     m_menuActions[AppendShowInAlbums]->setText(tr("Show in albums"));
@@ -80,7 +80,7 @@ inline void KNMusicHeaderPlayerAppendMenu::initialSubMenus()
     //Set the icons.
     m_subMenus[SubMenuRating]->menuAction()->setIcon(
                 QIcon(":/plugin/music/player/menuicons/rating.png"));
-    m_subMenus[SubMenuShowIn]->menuAction()->setIcon(
+    m_subMenus[SubMenuLocate]->menuAction()->setIcon(
                 QIcon(":/plugin/music/player/menuicons/locate_original.png"));
 }
 
@@ -122,22 +122,22 @@ inline void KNMusicHeaderPlayerAppendMenu::initialActions()
     addAction(m_menuActions[AppendShowInGraphicShell]);
 
     //Add actions to menu.
-    m_menuActions[AppendLocateSong]->setIcon(
+    m_menuActions[AppendLocateNowPlaying]->setIcon(
                 QIcon(":/plugin/music/player/menuicons/locate_original.png"));
-    m_subMenus[SubMenuShowIn]->addAction(m_menuActions[AppendLocateSong]);
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendLocateNowPlaying]);
     m_menuActions[AppendShowInSongs]->setIcon(
                 QIcon(":/plugin/music/player/menuicons/locate_songs.png"));
-    m_subMenus[SubMenuShowIn]->addAction(m_menuActions[AppendShowInSongs]);
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInSongs]);
     m_menuActions[AppendShowInArtists]->setIcon(
                 QIcon(":/plugin/music/player/menuicons/locate_artists.png"));
-    m_subMenus[SubMenuShowIn]->addAction(m_menuActions[AppendShowInArtists]);
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInArtists]);
     m_menuActions[AppendShowInAlbums]->setIcon(
                 QIcon(":/plugin/music/player/menuicons/locate_albums.png"));
-    m_subMenus[SubMenuShowIn]->addAction(m_menuActions[AppendShowInAlbums]);
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInAlbums]);
     m_menuActions[AppendShowInGenres]->setIcon(
                 QIcon(":/plugin/music/player/menuicons/locate_genres.png"));
-    m_subMenus[SubMenuShowIn]->addAction(m_menuActions[AppendShowInGenres]);
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInGenres]);
 
-    addMenu(m_subMenus[SubMenuShowIn]);
+    addMenu(m_subMenus[SubMenuLocate]);
 }
 

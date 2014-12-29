@@ -14,6 +14,8 @@
 
 #include "knpreferenceitemfont.h"
 
+#include <QDebug>
+
 KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     KNPreferenceItemBase(parent)
 {
@@ -46,8 +48,7 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     m_changeFont->setPalette(pal);
     m_changeFont->setText("...");
     m_changeFont->setFixedWidth(25);
-    connect(m_changeFont, &QPushButton::pressed,
-            this, &KNPreferenceItemFont::onActionSelectFont);
+    connect(m_changeFont, SIGNAL(clicked()), this, SLOT(onActionSelectFont()));
 
     //Insert these widgets.
     insertStretch();
@@ -60,6 +61,8 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     //Linked the translation.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNPreferenceItemFont::retranslate);
+    //Do retranslate.
+    retranslate();
 }
 
 KNPreferenceItemFont::~KNPreferenceItemFont()
@@ -89,7 +92,7 @@ void KNPreferenceItemFont::setValue(const QVariant &value)
 {
     //Set the value.
     m_value=value.value<QFont>();
-    //Set the preview font.
+    //Set the preview font and preview text(The font name).
     m_previewTooltip->setFont(m_value);
     m_previewTooltip->setText(m_value.family());
     //Update the overview label info.
@@ -113,7 +116,7 @@ void KNPreferenceItemFont::onActionShowTooltip()
     QPoint previewButtonPos=mapToGlobal(m_previewIcon->pos());
     m_previewTooltip->move(previewButtonPos.x()+m_previewIcon->width()+12,
                            previewButtonPos.y()+(m_previewIcon->height()>>1)-
-                           (m_previewTooltip->height()>>1));
+                           (m_previewTooltip->sizeHint().height()>>1));
     //Show the tooltip.
     m_previewTooltip->show();
 }
@@ -125,8 +128,8 @@ void KNPreferenceItemFont::onActionHideTooltip()
 
 void KNPreferenceItemFont::updateOverview()
 {
-    m_fontOverview->setText(m_value.family() + "," +
-                            tr(" Size: ") +
+    m_fontOverview->setText(m_value.family() +
+                            tr(", Size: ") +
                             QString::number(m_value.pixelSize()) +
                             (m_value.bold()?tr(", Bold"):"") +
                             (m_value.italic()?tr(", Italic"):"") +

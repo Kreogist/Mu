@@ -32,7 +32,7 @@ enum MenuActions
     AppendRatingFiveStar,
     AppendShowInGraphicShell,
     AppendShowDetail,
-    AppendLocateSong,
+    AppendLocateNowPlaying,
     AppendShowInSongs,
     AppendShowInArtists,
     AppendShowInAlbums,
@@ -61,7 +61,7 @@ private:
     enum SubMenus
     {
         SubMenuRating,
-        SubMenuShowIn,
+        SubMenuLocate,
         SubMenuCount
     };
     inline void initialSubMenus();

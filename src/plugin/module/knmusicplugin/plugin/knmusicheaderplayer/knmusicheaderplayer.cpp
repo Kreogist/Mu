@@ -376,7 +376,7 @@ void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
     case AppendShowDetail:
         KNMusicGlobal::detailDialog()->showDialog(m_currentFilePath);
         break;
-    case AppendLocateSong:
+    case AppendLocateNowPlaying:
         m_nowPlaying->showCurrentIndexInOriginalTab();
         break;
     case AppendShowInSongs:
