@@ -26,6 +26,8 @@
 
 #include "knmusicdetailoverview.h"
 
+#include <QDebug>
+
 KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
     QWidget(parent)
 {
@@ -115,10 +117,10 @@ void KNMusicDetailOverview::setFilePath(const QString &filePath)
     m_albumArt->setPixmap(albumArtPixmap.scaled(QSize(100, 100),
                                                 Qt::KeepAspectRatio,
                                                 Qt::SmoothTransformation));
-    m_title->setText(currentInfo.textLists[Name]);
+    setEliedText(m_title, currentInfo.textLists[Name], 310);
+    setEliedText(m_artist, currentInfo.textLists[Artist], 310);
+    setEliedText(m_album, currentInfo.textLists[Album], 310);
     m_duration->setText(KNMusicGlobal::msecondToString(currentInfo.duration));
-    m_artist->setText(currentInfo.textLists[Artist]);
-    m_album->setText(currentInfo.textLists[Album]);
 
     //Set the detail info data.
     m_detailInfo[DetailYear]->setText(currentInfo.textLists[Year]);
@@ -145,7 +147,7 @@ void KNMusicDetailOverview::retranslate()
     m_filePathCaption->setText(tr("Location"));
 }
 
-void KNMusicDetailOverview::initialBasicInfoLabel()
+inline void KNMusicDetailOverview::initialBasicInfoLabel()
 {
     //Initial title label.
     m_title=new QLabel(this);
@@ -174,7 +176,7 @@ void KNMusicDetailOverview::initialBasicInfoLabel()
     m_album->setFont(detailInfoFont);
 }
 
-void KNMusicDetailOverview::initialDetailInfoLabel()
+inline void KNMusicDetailOverview::initialDetailInfoLabel()
 {
     //Initial the first caption.
     m_detailInfoCaption[0]=new QLabel(this);
@@ -216,4 +218,22 @@ void KNMusicDetailOverview::initialDetailInfoLabel()
     m_filePathDataField=new KNFilePathLabel(this);
     m_filePathDataField->setWordWrap(true);
     m_filePathDataField->setPalette(infoPalette);
+}
+
+void KNMusicDetailOverview::setEliedText(QLabel *label,
+                                         const QString &text,
+                                         const int &width)
+{
+    if(label->fontMetrics().width(text)>width)
+    {
+        label->setText(label->fontMetrics().elidedText(text,
+                                                       Qt::ElideRight,
+                                                       width));
+        label->setToolTip(text);
+    }
+    else
+    {
+        label->setText(text);
+        label->setToolTip("");
+    }
 }
