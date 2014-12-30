@@ -4,6 +4,8 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QCompleter>
+#include <QDirModel>
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QFileDialog>
@@ -46,6 +48,15 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
 
     //Initial the path editor.
     m_pathEditor=new KNPathLineEdit(this);
+    //Generate auto path completer for path editor.
+    QCompleter *pathCompleter=new QCompleter(m_pathEditor);
+    QDirModel *pathCompleterModel=new QDirModel(m_pathEditor);
+    //Configure the dir model.
+    pathCompleterModel->setFilter(QDir::Dirs |
+                                  QDir::NoDotAndDotDot |
+                                  QDir::NoSymLinks);
+    pathCompleter->setModel(pathCompleterModel);
+    m_pathEditor->setCompleter(pathCompleter);
     //When start editing, set the palette to normal mode.
     connect(m_pathEditor, &KNPathLineEdit::startEditPath,
             this, &KNPreferenceItemPathBrowser::onActionPathExist);

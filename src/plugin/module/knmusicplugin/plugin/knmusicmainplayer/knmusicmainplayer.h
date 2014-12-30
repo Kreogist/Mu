@@ -21,11 +21,22 @@
 #include "knmusicmainplayerbase.h"
 
 class QPropertyAnimation;
+class QLabel;
+class KNHighlightLabel;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
 public:
     explicit KNMusicMainPlayer(QWidget *parent = 0);
     ~KNMusicMainPlayer();
+
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    inline void initialWidgets();
+    KNHighlightLabel *m_albumArt;
+    QLabel *m_title, *m_detail;
+    QFont m_captionFont, m_titleFont;
 };
 
 #endif // KNMUSICMAINPLAYER_H
