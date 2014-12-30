@@ -6,6 +6,7 @@
  */
 #include <QScopedPointer>
 #include <QMimeData>
+#include <QPainter>
 #include <QList>
 #include <QKeyEvent>
 #include <QDataStream>
@@ -34,7 +35,6 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
 {
     //Set properties.
     setAllColumnsShowFocus(true);
-    setAlternatingRowColors(true);
     setContentsMargins(0,0,0,0);
     setDragDropMode(QAbstractItemView::DragOnly);
     setDropIndicatorShown(true);
@@ -394,6 +394,24 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
     header()->moveSection(header()->visualIndex(logicalIndex), 0);
 }
 
+void KNMusicTreeViewBase::drawRow(QPainter *painter,
+                                  const QStyleOptionViewItem &options,
+                                  const QModelIndex &index) const
+{
+    if(index.row()&1)
+    {
+        //Prepare the painter.
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(m_alternateColor);
+        //Draw the alternative background.
+        painter->drawRect(options.rect.x(),
+                          options.rect.y(),
+                          width(),
+                          options.rect.height());
+    }
+    QTreeView::drawRow(painter, options, index);
+}
+
 void KNMusicTreeViewBase::setAnimateState(bool on)
 {
     m_animate=on;
@@ -428,7 +446,6 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
     m_buttonColor.setHsv(m_buttonColor.hue(),
                          m_buttonColor.saturation(),
                          frame<<1);
-    pal.setColor(QPalette::AlternateBase, m_alternateColor);
     pal.setColor(QPalette::Text, m_fontColor);
     pal.setColor(QPalette::Button, m_buttonColor);
     setPalette(pal);
