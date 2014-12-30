@@ -53,7 +53,9 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
-    void drawRow(QPainter *painter, const QStyleOptionViewItem &options, const QModelIndex &index) const;
+    void drawRow(QPainter *painter,
+                 const QStyleOptionViewItem &options,
+                 const QModelIndex &index) const;
     void setAnimateState(bool on);
 
 private slots:

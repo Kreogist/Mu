@@ -409,6 +409,17 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                           width(),
                           options.rect.height());
     }
+    if(currentIndex().row()==index.row())
+    {
+        //Prepare the painter.
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(options.palette.highlight());
+        //Draw the alternative background.
+        painter->drawRect(options.rect.x(),
+                          options.rect.y(),
+                          width(),
+                          options.rect.height());
+    }
     QTreeView::drawRow(painter, options, index);
 }
 
