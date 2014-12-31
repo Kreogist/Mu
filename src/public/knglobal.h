@@ -35,6 +35,8 @@ public:
     static void showInGraphicalShell(const QString &filePath);
     static void openLocalFile(const QString &filePath);
     static void setClipboardText(const QString &text);
+    static void moveFolder(const QString &sourceDirPath,
+                           const QString &destinationDirPath);
     static bool renameFile(const QString &originalPath,
                            const QString &currentPath);
     void setSystemData(const QString &key, const QVariant &value);

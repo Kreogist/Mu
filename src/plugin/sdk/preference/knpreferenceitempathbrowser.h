@@ -30,6 +30,7 @@ public slots:
 
 private slots:
     void onActionBrowseFolder();
+    void onActionMoveFolder();
     void onActionPathExist();
     void onActionPathNotExist();
 
@@ -37,7 +38,7 @@ private:
     QString m_defaultValue;
     QPalette m_existEditPalette,
              m_notExistEditPalette;
-    QPushButton *m_browse;
+    QPushButton *m_browse, *m_moveTo;
     KNPathLineEdit *m_pathEditor;
     bool m_ensureExist=false;
 };

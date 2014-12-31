@@ -207,6 +207,44 @@ void KNGlobal::setClipboardText(const QString &text)
     QApplication::clipboard()->setText(text, QClipboard::Clipboard);
 }
 
+void KNGlobal::moveFolder(const QString &sourceDirPath,
+                          const QString &destinationDirPath)
+{
+    //Ensure that the destination dir should exist.
+    QDir sourceDir(sourceDirPath);
+    QFileInfoList sourceDirInfoList=sourceDir.entryInfoList(QDir::Dirs |
+                                                            QDir::Files |
+                                                            QDir::NoDotAndDotDot);
+    for(QFileInfoList::iterator i=sourceDirInfoList.begin();
+        i!=sourceDirInfoList.end();
+        ++i)
+    {
+        QString destinationPath=destinationDirPath+"/"+(*i).fileName();
+        if((*i).isDir())
+        {
+            //Generate the sub dir.
+            sourceDir.mkpath(destinationPath);
+            //Move the sub dir.
+            moveFolder((*i).absoluteFilePath(), destinationPath);
+        }
+        else if((*i).isFile())
+        {
+            //Delete the destination path file if it already exist.
+            QFileInfo destinationCheck(destinationPath);
+            if(destinationCheck.exists())
+            {
+                //We can hint user to chose.
+                QFile::remove(destinationCheck.absoluteFilePath());
+            }
+            //Rename the file to move it.
+            QFile::rename((*i).absoluteFilePath(),
+                          destinationPath);
+        }
+    }
+    //Remove the source dir.
+    sourceDir.rmdir(".");
+}
+
 bool KNGlobal::renameFile(const QString &originalPath, const QString &currentPath)
 {
     QFile targetFile(originalPath);
