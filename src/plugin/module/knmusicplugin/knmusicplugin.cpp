@@ -375,8 +375,6 @@ inline void KNMusicPlugin::initialInfrastructure()
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
     m_musicGlobal->setNoAlbumArt(QPixmap(":/plugin/music/common/noalbum.png"));
-    //Set the music library path.
-    KNMusicGlobal::setMusicLibraryPath(KNGlobal::libraryPath()+"/Music");
 
     //Initial preference panel.
     m_preferencePanel=new KNPreferenceWidgetsPanel;

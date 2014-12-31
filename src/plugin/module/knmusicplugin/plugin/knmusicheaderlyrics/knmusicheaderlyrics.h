@@ -48,6 +48,8 @@ protected:
 
 private slots:
     void applyPreference();
+    void onActionMusicLibraryMoved(const QString &originalPath,
+                                   const QString &currentPath);
     void onActionLyricsMoved(const int &frame);
 
 private:

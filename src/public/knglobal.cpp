@@ -130,6 +130,11 @@ void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
     m_dylibSuffix = dylibSuffix;
 }
 
+void KNGlobal::setLibraryPath(const QString &libraryPath)
+{
+    m_libraryPath = ensurePathAvaliable(libraryPath);
+}
+
 void KNGlobal::showInGraphicalShell(const QString &filePath)
 {
 #ifdef Q_OS_WIN32
@@ -312,9 +317,12 @@ void KNGlobal::setCustomData(const QString &module,
     }
 }
 
-QVariant KNGlobal::customData(const QString &module, const QString &key)
+QVariant KNGlobal::customData(const QString &module,
+                              const QString &key,
+                              const QVariant &defaultValue)
 {
-    return m_configure->customData(module, key);
+    QVariant preferData=m_configure->customData(module, key);
+    return preferData.isNull()?defaultValue:preferData;
 }
 
 void KNGlobal::retranslate()
@@ -327,8 +335,6 @@ void KNGlobal::loadConfigure()
 {
     //Load the configure first.
     m_configure->loadConfigure();
-    //Set the language by the id.
-    m_localeManager->setLanguageFromID(systemData("Language").toString());
 }
 
 void KNGlobal::saveConfigure()
@@ -353,6 +359,40 @@ inline void KNGlobal::initialStorageUnit()
     m_storageUnit[DoggaByte]="DB";
 }
 
+inline void KNGlobal::initialDefaultPath()
+{
+#ifdef Q_OS_WIN32
+    m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+                   "/Kreogist/Mu";
+#endif
+#ifdef Q_OS_MACX
+    m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+                   "/Mu";
+#endif
+#ifdef Q_OS_LINUX
+    m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
+                   "/.kreogist/mu";
+#endif
+    m_libraryPath=userDataPath()+"/Library";
+    m_pluginDirPath=userDataPath()+"/Plugins";
+}
+
+void KNGlobal::updateInfrastructure()
+{
+    //Update the data path.
+    QString originalLibraryPath=m_libraryPath;
+    m_libraryPath=customData("General", "LibraryPath", m_libraryPath).toString();
+    //Give out the library path udpate signal.
+    emit libraryMoved(originalLibraryPath, m_libraryPath);
+
+    //Configure set the custom font folder, load fonts from the folder.
+    m_fontManager->loadCustomFontFolder(userDataPath()+"/Fonts");
+    //Set the language dir path.
+    m_localeManager->setLanguageDirPath(userDataPath()+"/Language");
+    //Load all the language.
+    m_localeManager->loadLanguageFiles();
+}
+
 QJsonObject KNGlobal::fontToObject(const QFont &font)
 {
     QJsonObject fontObject;
@@ -370,45 +410,45 @@ QJsonObject KNGlobal::fontToObject(const QFont &font)
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent)
 {
-    //Initial the basic strings.
-    initialStorageUnit();
-
-    //Set mu application data path.
-    //Set library path.
+    //Set dymanic link library suffix.
 #ifdef Q_OS_WIN32
-    m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
-                                              "/Kreogist/Mu");
+    setDylibSuffix("dll");
 #endif
 #ifdef Q_OS_MACX
-    m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
-                                              "/Mu");
+    setDylibSuffix("dylib");
 #endif
 #ifdef Q_OS_LINUX
-    m_userDataPath=ensurePathAvaliable(QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
-                                              "/.kreogist/mu");
+    setDylibSuffix("so");
 #endif
-    m_libraryPath=ensurePathAvaliable(userDataPath()+"/Library");
-    m_pluginDirPath=ensurePathAvaliable(userDataPath()+"/Plugins");
+    //Initial the basic strings.
+    initialStorageUnit();
+    //Set the default library path.
+    initialDefaultPath();
 
-    //Initial the fonts.
-    m_fontManager=KNFontManager::instance();
-    m_fontManager->loadCustomFontFolder(userDataPath()+"/Fonts");
-    m_fontManager->initialDefaultFont();
-
-    //Initial the configure.
+    //Initial the configure manager.
     m_configure=KNConfigure::instance();
     //Set the configure file path.
+    //-- Why set configure path here?
+    //A: Because we won't change the configure path.
     m_configure->setConfigurePath(userDataPath()+"/Configure");
+    //Load the configure.
+    loadConfigure();
 
+    //Initial the font manager.
+    m_fontManager=KNFontManager::instance();
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();
-    //Set the language dir path.
-    m_localeManager->setLanguageDirPath(userDataPath()+"/Language");
-    //Load all the language.
-    m_localeManager->loadLanguageFiles();
+
+    //Update the infrastructure.
+    updateInfrastructure();
+
+    //Load the default settings.
+    m_fontManager->initialDefaultFont();
     //Now we can load the first English language as default language.
     //The ID of English is 0.
     m_localeManager->setLanguage(0);
+    //Set the language by the id from the configure.
+    m_localeManager->setLanguageFromID(systemData("Language").toString());
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,

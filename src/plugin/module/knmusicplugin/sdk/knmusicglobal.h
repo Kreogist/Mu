@@ -201,18 +201,23 @@ public:
     static KNMusicDetailDialogBase *detailDialog();
     static void setDetailDialog(KNMusicDetailDialogBase *detailDialog);
     void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
+    void updateItemValue(const QString &valueName);
     void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
                             const QList<KNPreferenceItemInfo> &list);
     bool renameMusicFile(const QString &originalPath,
                          const QString &preferName);
 
 signals:
+    void musicLibraryMoved(const QString &originalPath,
+                           const QString &currentPath);
     void musicFilePathChanged(const QString &originalPath,
                               const QString &currentPath,
                               const QString &currentFileName);
 
 public slots:
     void retranslate();
+    void onActionLibraryMoved(const QString &originalPath,
+                              const QString &currentPath);
 
 private:
     void regMetaType();

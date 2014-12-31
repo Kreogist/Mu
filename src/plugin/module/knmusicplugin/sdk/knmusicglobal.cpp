@@ -130,6 +130,18 @@ void KNMusicGlobal::retranslate()
     m_treeViewHeaderText[Year]=tr("Year");
 }
 
+void KNMusicGlobal::onActionLibraryMoved(const QString &originalPath,
+                                         const QString &currentPath)
+{
+    Q_UNUSED(originalPath)
+    //Backup the original library path.
+    QString originalLibraryPath=musicLibraryPath();
+    //Set the new path of the music library.
+    setMusicLibraryPath(currentPath+"/Music");
+    //Emit music library changed signal.
+    emit musicLibraryMoved(originalLibraryPath, musicLibraryPath());
+}
+
 bool KNMusicGlobal::renameMusicFile(const QString &originalPath,
                                     const QString &preferName)
 {
@@ -560,6 +572,11 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     //Initial resources.
     initialHeaderText();
     initialGenreText();
+    //Set the library path.
+    setMusicLibraryPath(KNGlobal::libraryPath()+"/Music");
+    //Link the library changed request.
+    connect(KNGlobal::instance(), &KNGlobal::libraryMoved,
+            this, &KNMusicGlobal::onActionLibraryMoved);
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -571,6 +588,11 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
 void KNMusicGlobal::setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel)
 {
     m_preferencePanel = preferencePanel;
+}
+
+void KNMusicGlobal::updateItemValue(const QString &valueName)
+{
+    m_preferencePanel->updateItemValue(valueName);
 }
 
 void KNMusicGlobal::insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
@@ -587,8 +609,7 @@ void KNMusicGlobal::setConfigureData(const QString &key, const QVariant &value)
 QVariant KNMusicGlobal::configureData(const QString &key,
                                       const QVariant &defaultValue)
 {
-    QVariant preferData=m_global->customData("Music", key);
-    return preferData.isNull()?defaultValue:preferData;
+    return m_global->customData("Music", key, defaultValue);
 }
 
 QPixmap KNMusicGlobal::noAlbumArt() const

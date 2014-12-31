@@ -86,18 +86,6 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial global.
     m_global=KNGlobal::instance();
-    //Set dymanic link library suffix.
-#ifdef Q_OS_WIN32
-    KNGlobal::setDylibSuffix("dll");
-#endif
-#ifdef Q_OS_MACX
-    KNGlobal::setDylibSuffix("dylib");
-#endif
-#ifdef Q_OS_LINUX
-    KNGlobal::setDylibSuffix("so");
-#endif
-    //Load the configure.
-    m_global->loadConfigure();
 }
 
 inline void KNPluginManager::backupWindowGeometry()

@@ -41,19 +41,26 @@ public:
                            const QString &currentPath);
     void setSystemData(const QString &key, const QVariant &value);
     QVariant systemData(const QString &key);
-    void setCustomData(const QString &module, const QString &key, const QVariant &value);
-    QVariant customData(const QString &module, const QString &key);
+    void setCustomData(const QString &module,
+                       const QString &key,
+                       const QVariant &value);
+    QVariant customData(const QString &module,
+                        const QString &key,
+                        const QVariant &defaultValue);
 
 signals:
     void languageChanged();
+    void libraryMoved(QString originalPath, QString currentPath);
 
 public slots:
     void retranslate();
+    void updateInfrastructure();
     void loadConfigure();
     void saveConfigure();
 
 private:
     inline void initialStorageUnit();
+    inline void initialDefaultPath();
     inline QJsonObject fontToObject(const QFont &font);
 #ifdef Q_OS_LINUX
     static QString substituteFileBrowserParameters(QString &pre, QString &file);

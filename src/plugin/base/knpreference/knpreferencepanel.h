@@ -28,6 +28,7 @@ class KNPreferenceLanguagePanel;
 class KNPreferenceContents;
 class KNPreferenceCategory;
 class KNPreferenceWidgetsPanel;
+class KNPreferenceGeneralPanel;
 class KNPreferencePanel : public QWidget
 {
     Q_OBJECT
@@ -35,6 +36,7 @@ public:
     explicit KNPreferencePanel(QWidget *parent = 0);
 
 signals:
+    void requireUpdateInfrastructure();
     void requireSavePreference();
     void requireHidePreference();
 
@@ -55,14 +57,14 @@ private slots:
     void onActionCategoryIndexChange(const int &index);
 
 private:
-    void initialLanguagePanel();
+    inline void initialLanguagePanel();
     KNLocaleManager *m_localeManager;
     QBoxLayout *m_layout;
     KNPreferenceLanguageItem *m_languageItem;
     KNPreferenceLanguagePanel *m_languagePanel;
     KNPreferenceCategory *m_categoryList;
     KNPreferenceContents *m_contents;
-    KNPreferenceWidgetsPanel *m_generalPanel;
+    KNPreferenceGeneralPanel *m_generalPanel;
 };
 
 #endif // KNPREFERENCEPANEL_H

@@ -37,6 +37,9 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicLyricsManager::instance();
     m_lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
+    //Link the library changed request.
+    connect(m_musicGlobal, &KNMusicGlobal::musicLibraryMoved,
+            this, &KNMusicHeaderLyrics::onActionMusicLibraryMoved);
     //Set line spacing specially for Windows.
 #ifdef Q_OS_WIN32
     m_lineSpacing=0;
@@ -268,6 +271,24 @@ void KNMusicHeaderLyrics::applyPreference()
     setFont(m_musicGlobal->configureData("LyricsFont", font()).value<QFont>());
     //Update the lyrics.
     update();
+}
+
+void KNMusicHeaderLyrics::onActionMusicLibraryMoved(const QString &originalPath,
+                                                    const QString &currentPath)
+{
+    //Check if lyrics manager's folder path is in the orginal path.
+    QString managerFolderPath=m_lyricsManager->lyricsFolderPath();
+    if(managerFolderPath.left(originalPath.size())==originalPath)
+    {
+        //Set the lyrics manager to the new path.
+        QString currentFolderPath=
+                currentPath+managerFolderPath.mid(originalPath.size());
+        m_lyricsManager->setLyricsFolderPath(currentFolderPath);
+        m_musicGlobal->setConfigureData("LyricsFolder",
+                                        currentFolderPath);
+        //Update the lyrics path value.
+        m_musicGlobal->updateItemValue("LyricsFolder");
+    }
 }
 
 void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)

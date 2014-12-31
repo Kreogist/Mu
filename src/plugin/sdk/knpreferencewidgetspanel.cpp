@@ -109,6 +109,19 @@ void KNPreferenceWidgetsPanel::setPanelName(const QString &panelCaption)
     m_panelName = panelCaption;
 }
 
+void KNPreferenceWidgetsPanel::updateItemValue(const QString &valueName)
+{
+    //Find the item.
+    KNPreferenceItemBase *currentItem=m_itemList.value(valueName, nullptr);
+    //If we find the item successful, update the value.
+    if(currentItem!=nullptr)
+    {
+        currentItem->setValue(m_global->customData(m_panelName,
+                                                   currentItem->valueName(),
+                                                   currentItem->value()));
+    }
+}
+
 bool KNPreferenceWidgetsPanel::advancedMode() const
 {
     return m_advancedMode;
@@ -118,6 +131,11 @@ void KNPreferenceWidgetsPanel::setAdvancedMode(bool advancedMode)
 {
     m_advancedMode=advancedMode;
     emit requireSetAdvancedVisible(m_advancedMode);
+}
+
+KNPreferenceItemBase *KNPreferenceWidgetsPanel::itemFromValueName(const QString &valueName)
+{
+    return m_itemList.value(valueName, nullptr);
 }
 
 void KNPreferenceWidgetsPanel::generateItemFromInfoList(const KNPreferenceTitleInfo &listTitle,

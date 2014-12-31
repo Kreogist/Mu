@@ -20,7 +20,6 @@
 #include <QFileInfo>
 #include <QDomDocument>
 
-#include "knmusicparser.h"
 #include "knmusicmodelassist.h"
 #include "../../sdk/knmusicplaylistlistitem.h"
 #include "../../sdk/knmusicplaylistmodel.h"
@@ -84,7 +83,6 @@ bool KNMusicWPLParser::parse(const QString &playlistFilePath,
     playlistItem->setText(headNode.firstChildElement("title").text());
     //Get the model and the parser.
     KNMusicPlaylistModel *playlistModel=playlistItem->playlistModel();
-    KNMusicParser *parser=KNMusicGlobal::parser();
     //Read the seq node information.
     QString nativeSeparatorPlaylistPath=
             QDir::toNativeSeparators(wplFileInfo.absolutePath());

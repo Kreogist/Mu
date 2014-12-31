@@ -171,8 +171,10 @@ void KNPreferenceItemPathBrowser::onActionMoveFolder()
                 //Move the folder.
                 KNGlobal::moveFolder(currentDirInfo.absoluteFilePath(),
                                      destinationDirInfo.absoluteFilePath());
+                setValue(destinationPath);
+                //Emit dir moved signal.
+                emit dirMoved();
             }
-            setValue(destinationPath);
         }
     }
 }

@@ -22,6 +22,7 @@ public:
     void setEnsureExist(bool ensureExist);
 
 signals:
+    void dirMoved();
 
 public slots:
     void retranslate();
