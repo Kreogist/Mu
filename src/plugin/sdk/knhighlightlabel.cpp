@@ -29,8 +29,8 @@ void KNHighlightLabel::paintEvent(QPaintEvent *event)
     QLabel::paintEvent(event);
     //Create a antialiasing painter.
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::SmoothPixmapTransform, true);
     //Set pen and brush.
     painter.setPen(Qt::NoPen);
     painter.setBrush(m_highlight);

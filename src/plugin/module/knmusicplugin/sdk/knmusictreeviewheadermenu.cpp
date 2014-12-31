@@ -83,8 +83,6 @@ void KNMusicTreeViewHeaderMenu::paintEvent(QPaintEvent *event)
     KNAnimationMenu::paintEvent(event);
     //Initial painter.
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
     //Draw rects.
     painter.drawRect(rect());
 }

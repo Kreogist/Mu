@@ -33,8 +33,8 @@ void KNMusicRatingDelegate::paint(QPainter *painter,
                                   const QModelIndex &index) const
 {
     //Enable antialiasing.
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter->setRenderHints(QPainter::Antialiasing |
+                            QPainter::SmoothPixmapTransform, true);
     //Draw the background part of the widget.
     if (option.state & QStyle::State_Selected)
     {

@@ -111,9 +111,9 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
     QPainter painter(this);
     //Set antialiasing hints.
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform, true);
     //Set pen.
     painter.setPen(Qt::NoPen);
     //Draw background.

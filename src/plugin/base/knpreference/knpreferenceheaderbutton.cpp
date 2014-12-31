@@ -114,9 +114,9 @@ void KNPreferenceHeaderButton::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
     //Initial the antialiasing painter.
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform, true);
     //Draw the background.
     painter.setPen(Qt::NoPen);
     painter.setBrush(palette().window());

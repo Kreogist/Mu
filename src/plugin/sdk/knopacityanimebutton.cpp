@@ -131,9 +131,9 @@ void KNOpacityAnimeButton::paintEvent(QPaintEvent *event)
     //Initial the painter.
     QPainter painter(this);
     //Set painter render hints.
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform, true);
     //Draw pixmap.
     painter.drawPixmap(0,0,m_icon.scaled(size(),
                                          Qt::KeepAspectRatio,

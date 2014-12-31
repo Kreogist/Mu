@@ -73,9 +73,9 @@ void KNGraphicsGlowEffect::draw(QPainter *painter)
     QImage sourceBlured(source.size(), QImage::Format_ARGB32_Premultiplied);
     sourceBlured.fill(0);
     QPainter blurPainter(&sourceBlured);
-    blurPainter.setRenderHint(QPainter::Antialiasing, true);
-    blurPainter.setRenderHint(QPainter::TextAntialiasing, true);
-    blurPainter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    blurPainter.setRenderHints(QPainter::Antialiasing |
+                               QPainter::TextAntialiasing |
+                               QPainter::SmoothPixmapTransform, true);
     blurPainter.drawPixmap(0, 0, source);
     blurPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
     blurPainter.fillRect(sourceBlured.rect(), m_color);

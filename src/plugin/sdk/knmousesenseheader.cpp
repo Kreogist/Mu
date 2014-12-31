@@ -88,9 +88,10 @@ void KNMouseSenseHeader::paintSection(QPainter *painter,
 {
     QRect contentRect;
     //Enabled Antialiasing.
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setRenderHint(QPainter::TextAntialiasing);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform);
+    painter->setRenderHints(QPainter::Antialiasing |
+                            QPainter::TextAntialiasing |
+                            QPainter::SmoothPixmapTransform,
+                            true);
     //Draw Sort Indicator if it is shown, update the content rect.
     if(logicalIndex==sortIndicatorSection() && isSortIndicatorShown())
     {

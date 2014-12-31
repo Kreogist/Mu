@@ -72,9 +72,9 @@ void KNOpacityButton::paintEvent(QPaintEvent *event)
     KNAbstractButton::paintEvent(event);
     //Initial antialiasing painter.
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform, true);
     //Paint the contents.
     painter.drawPixmap(0,0,width(),height(),
                        m_icon.scaled(width(),
