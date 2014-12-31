@@ -219,7 +219,7 @@ void KNMessageBox::paintEvent(QPaintEvent *event)
     //Draw a rect at final.
     QPainter painter(this);
     painter.setPen(QColor(255,255,255));
-    painter.setBrush(QBrush(QColor(0,0,0,0)));
+    painter.setBrush(QColor(0,0,0,0));
     painter.drawRect(QRect(0,0,width()-1,height()-1));
 }
 

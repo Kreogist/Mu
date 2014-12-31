@@ -122,9 +122,8 @@ void KNNGNLButton::paintEvent(QPaintEvent *event)
     painter.setOpacity(m_quoteOpacity);
     //Set the painter.
     painter.setPen(Qt::NoPen);
-    painter.setBrush(pal.background());
     //Draw the background.
-    painter.drawRect(rect());
+    painter.fillRect(rect(), pal.background());
     //Restore the opacity.
     painter.setOpacity(1.0);
 

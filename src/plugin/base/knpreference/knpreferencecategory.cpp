@@ -145,12 +145,9 @@ void KNPreferenceCategory::paintEvent(QPaintEvent *event)
                            true);
     //Paint the background.
     painter.setPen(Qt::NoPen);
-    painter.setBrush(m_backgroundColor);
-    painter.drawRect(rect());
+    painter.fillRect(rect(), m_backgroundColor);
     //Paint the highlight.
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(m_highlightGradient);
-    painter.drawRect(0,0,width(),64);
+    painter.fillRect(QRect(0,0,width(),64), m_highlightGradient);
     //Draw other things.
     QWidget::paintEvent(event);
 }

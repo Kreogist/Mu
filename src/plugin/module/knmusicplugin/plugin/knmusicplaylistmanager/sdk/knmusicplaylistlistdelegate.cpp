@@ -41,8 +41,8 @@ void KNMusicPlaylistListDelegate::paint(QPainter *painter,
     if (option.state & QStyle::State_Selected)
     {
         painter->setPen(Qt::NoPen);
-        painter->setBrush(option.palette.highlight());
-        painter->drawRect(option.rect);
+        painter->fillRect(option.rect,
+                          option.palette.highlight());
         textColor=option.palette.color(QPalette::HighlightedText);
     }
     //Draw the icon.

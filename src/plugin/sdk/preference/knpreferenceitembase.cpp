@@ -109,8 +109,7 @@ void KNPreferenceItemBase::paintEvent(QPaintEvent *event)
     //Draw highlight background.
     painter.setOpacity(m_highLightOpacity);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(m_highlight);
-    painter.drawRect(rect());
+    painter.fillRect(rect(), m_highlight);
     painter.setPen(QColor(0x52, 0x52, 0x52));
     painter.drawLine(0,0,width(),0);
 }

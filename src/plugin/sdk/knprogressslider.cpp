@@ -74,11 +74,11 @@ void KNProgressSlider::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::NoPen);
 
     //Draw central rects.
-    painter.setBrush(m_rectColor);
-    painter.drawRect(m_glowWidth,
-                     m_glowWidth+m_spacing,
-                     width()-(m_glowWidth<<1),
-                     m_sliderHeight);
+    painter.fillRect(QRect(m_glowWidth,
+                           m_glowWidth+m_spacing,
+                           width()-(m_glowWidth<<1),
+                           m_sliderHeight),
+                     m_rectColor);
 
     //If range is not 0, draw the button.
     if(range()>0)
@@ -93,12 +93,11 @@ void KNProgressSlider::paintEvent(QPaintEvent *event)
             positionLeft=0;
         }
         //Paint the rect.
-        painter.setBrush(m_buttonColor);
-        painter.drawRect(m_glowWidth,
-                         m_glowWidth+m_spacing,
-                         positionLeft,
-                         m_sliderHeight);
-
+        painter.fillRect(QRect(m_glowWidth,
+                               m_glowWidth+m_spacing,
+                               positionLeft,
+                               m_sliderHeight),
+                         m_buttonColor);
 
         //Draw the circle button.
         painter.save();
