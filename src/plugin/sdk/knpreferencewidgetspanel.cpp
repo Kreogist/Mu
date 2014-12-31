@@ -19,6 +19,7 @@ KNPreferenceWidgetsPanel::KNPreferenceWidgetsPanel(QWidget *parent) :
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameShape(QFrame::NoFrame);
     setWidgetResizable(true);
 

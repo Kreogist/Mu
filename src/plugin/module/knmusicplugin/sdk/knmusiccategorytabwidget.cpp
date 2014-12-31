@@ -28,10 +28,13 @@ void KNMusicCategoryTabWidget::resizeEvent(QResizeEvent *event)
     //Do the resize first.
     KNCategoryTabWidget::resizeEvent(event);
     //Resize the player and set the y().
-    m_mainPlayer->setGeometry(QRect(0,
-                                    m_mainPlayer->y()==0?0:-height(),
-                                    width(),
-                                    height()));
+    if(m_mainPlayer!=nullptr)
+    {
+        m_mainPlayer->setGeometry(QRect(0,
+                                        m_mainPlayer->y()==0?0:-height(),
+                                        width(),
+                                        height()));
+    }
     //When the hide animation is running, change the finished position.
     if(m_mainPlayerOut->state()==QAbstractAnimation::Running)
     {
@@ -72,26 +75,32 @@ void KNMusicCategoryTabWidget::setMainPlayer(QWidget *mainPlayer)
 
 void KNMusicCategoryTabWidget::showMainPlayer()
 {
-    //Stop all animation.
-    m_mainPlayerIn->stop();
-    m_mainPlayerOut->stop();
-    //Set properties.
-    m_mainPlayerIn->setStartValue(m_mainPlayer->geometry());
-    m_mainPlayerIn->setEndValue(QRect(0,0,width(),height()));
-    //Show the main player.
-    m_mainPlayer->show();
-    //Start animation.
-    m_mainPlayerIn->start();
+    if(m_mainPlayer!=nullptr)
+    {
+        //Stop all animation.
+        m_mainPlayerIn->stop();
+        m_mainPlayerOut->stop();
+        //Set properties.
+        m_mainPlayerIn->setStartValue(m_mainPlayer->geometry());
+        m_mainPlayerIn->setEndValue(QRect(0,0,width(),height()));
+        //Show the main player.
+        m_mainPlayer->show();
+        //Start animation.
+        m_mainPlayerIn->start();
+    }
 }
 
 void KNMusicCategoryTabWidget::hideMainPlayer()
 {
-    //Stop all animation.
-    m_mainPlayerIn->stop();
-    m_mainPlayerOut->stop();
-    //Set properties.
-    m_mainPlayerOut->setStartValue(m_mainPlayer->geometry());
-    m_mainPlayerOut->setEndValue(QRect(0,-height(),width(),height()));
-    //Start animation.
-    m_mainPlayerOut->start();
+    if(m_mainPlayer!=nullptr)
+    {
+        //Stop all animation.
+        m_mainPlayerIn->stop();
+        m_mainPlayerOut->stop();
+        //Set properties.
+        m_mainPlayerOut->setStartValue(m_mainPlayer->geometry());
+        m_mainPlayerOut->setEndValue(QRect(0,-height(),width(),height()));
+        //Start animation.
+        m_mainPlayerOut->start();
+    }
 }

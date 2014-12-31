@@ -350,6 +350,7 @@ KNGlobal::KNGlobal(QObject *parent) :
                                               "/.kreogist/mu");
 #endif
     m_libraryPath=ensurePathAvaliable(userDataPath()+"/Library");
+    m_pluginDirPath=ensurePathAvaliable(userDataPath()+"/Plugins");
 
     //Initial the fonts.
     m_fontManager=KNFontManager::instance();

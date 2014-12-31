@@ -104,7 +104,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadNowPlaying(new KNMusicNowPlaying);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
-    loadMainPlayer(new KNMusicMainPlayer);
+//    loadMainPlayer(new KNMusicMainPlayer);
     loadLibrary(new KNMusicLibrary);
     loadPlaylistManager(new KNMusicPlaylistManager);
 
