@@ -75,7 +75,7 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../public/knglobal.cpp" line="285"/>
+        <location filename="../public/knglobal.cpp" line="331"/>
         <source>Byte</source>
         <translation type="unfinished"></translation>
     </message>
@@ -122,42 +122,42 @@
 <context>
     <name>KNMusicDetailOverview</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="138"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="140"/>
         <source>Year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="139"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="141"/>
         <source>Genre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="140"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="142"/>
         <source>Kind</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="141"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="143"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="142"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="144"/>
         <source>Bit Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="143"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="145"/>
         <source>Sample Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="144"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="146"/>
         <source>Date Modified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="145"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="147"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
@@ -303,13 +303,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="142"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="154"/>
         <source>Cannot find file:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="151"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="163"/>
         <source>File %1 has been exist in folder:
 %2
 Overwrite?</source>
@@ -319,27 +319,27 @@ Overwrite?</source>
 <context>
     <name>KNMusicHeaderLyrics</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="286"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="307"/>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="293"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="314"/>
         <source>Lyrics Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="297"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="318"/>
         <source>Download Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="301"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="322"/>
         <source>Lyrics Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="305"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="326"/>
         <source>Text Spacing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -446,18 +446,18 @@ Overwrite?</source>
 <context>
     <name>KNMusicLibraryEmptyHint</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="101"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="102"/>
         <source>Songs and music you add to Mu appear in your music library.
 To add songs to library, drag your songs here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="107"/>
         <source>Add songs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="113"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="114"/>
         <source>Add To Library</source>
         <translation type="unfinished"></translation>
     </message>
@@ -565,18 +565,18 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistEmptyHint</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="107"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="110"/>
         <source>Songs you add to playlists and playlists you import appear in Playlist.
 To create a playlist, drag your songs here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="112"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="115"/>
         <source>New empty playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="113"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="116"/>
         <source>Import playlists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -728,7 +728,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicWPLParser</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp" line="39"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp" line="38"/>
         <source>Windows Media Playlist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -759,6 +759,19 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/base/knpreference/knpreferencecategory.cpp" line="123"/>
         <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNPreferenceGeneralPanel</name>
+    <message>
+        <location filename="../plugin/base/knpreference/knpreferencegeneralpanel.cpp" line="44"/>
+        <source>Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/base/knpreference/knpreferencegeneralpanel.cpp" line="49"/>
+        <source>Library Path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -798,15 +811,20 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceItemPathBrowser</name>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="157"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="210"/>
         <source>Browse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="211"/>
+        <source>Move To</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNPreferencePanel</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="121"/>
+        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="125"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
