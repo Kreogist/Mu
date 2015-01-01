@@ -5,7 +5,7 @@
 	<key>Kreogist Product Build</key>
 	<string>20141213</string>
 	<key>Kreogist Product Version</key>
-	<string>0.4</string>
+        <string>0.5</string>
 	<key>BuildMachineOSBuild</key>
 	<string>13F34</string>
 	<key>CFBundleExecutable</key>
@@ -297,7 +297,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
-	<string>0.4.0 (20141213 2014/12/13:22:20:00)</string>
+        <string>0.5.0 (20150101 2015/01/01:17:20:00)</string>
 	<key>NOTE</key>
 	<string>Kreogist μ</string>
 	<key>CFBundleName</key>
@@ -305,7 +305,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.4</string>
+        <string>0.5</string>
 	<key>CFBundleSignature</key>
 	<string>8BIM</string>
 	<key>CFBundleVersion</key>
@@ -317,7 +317,7 @@
 	<key>NSAppleScriptEnabled</key>
 	<string>Yes</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2014 Kreogist Dev Team</string>
+        <string>Copyright © 2014-2015 Kreogist Dev Team</string>
 	<key>UIDisallowUserKeyboardShortcuts</key>
 	<true/>
 	<key>NSPrincipalClass</key>
