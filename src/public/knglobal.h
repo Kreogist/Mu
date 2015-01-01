@@ -27,6 +27,8 @@ public:
     static QString userDataPath();
     static QString pluginDirPath();
     static QString libraryPath();
+    static QString resourceDirPath();
+    static QString simplifiedPath(const QString &path);
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);
@@ -61,6 +63,7 @@ public slots:
 private:
     inline void initialStorageUnit();
     inline void initialDefaultPath();
+    inline void initialInfrastrcture();
     inline QJsonObject fontToObject(const QFont &font);
 #ifdef Q_OS_LINUX
     static QString substituteFileBrowserParameters(QString &pre, QString &file);
@@ -68,6 +71,7 @@ private:
     static KNGlobal *m_instance;
     static QString m_dylibSuffix;
     static QString m_userDataPath;
+    static QString m_resourceDirPath;
     static QString m_pluginDirPath;
     static QString m_libraryPath;
     enum StorageUnit

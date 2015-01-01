@@ -25,6 +25,7 @@
 QString KNGlobal::m_dylibSuffix="";
 QString KNGlobal::m_libraryPath="";
 QString KNGlobal::m_userDataPath="";
+QString KNGlobal::m_resourceDirPath="";
 QString KNGlobal::m_pluginDirPath="";
 KNGlobal *KNGlobal::m_instance=nullptr;
 
@@ -65,9 +66,20 @@ QString KNGlobal::pluginDirPath()
     return m_pluginDirPath;
 }
 
+QString KNGlobal::simplifiedPath(const QString &path)
+{
+    QFileInfo simplifiedInfo(path);
+    return simplifiedInfo.absoluteFilePath();
+}
+
 QString KNGlobal::libraryPath()
 {
     return m_libraryPath;
+}
+
+QString KNGlobal::resourceDirPath()
+{
+    return m_resourceDirPath;
 }
 
 QTextCodec *KNGlobal::localeDefaultCodec()
@@ -90,19 +102,23 @@ QTextCodec *KNGlobal::localeDefaultCodec()
 
 QString KNGlobal::ensurePathAvaliable(const QString &path)
 {
+    //Check if there's a file named the same as the path.
     QFileInfo detectInfo(path);
     if(detectInfo.isFile())
     {
+        //Remove the file first.
         QFile detectFile(detectInfo.absoluteFilePath());
         if(!detectFile.remove())
         {
             return QString();
         }
     }
-    if(detectInfo.exists())
+    //Check if the directory has already exist.
+    if(detectInfo.isDir() && detectInfo.exists())
     {
         return detectInfo.absoluteFilePath();
     }
+    //Generate the folder.
     QDir detectFolder(detectInfo.absoluteFilePath());
     return detectFolder.mkpath(detectFolder.absolutePath())?
                 detectFolder.absolutePath():QString();
@@ -364,17 +380,30 @@ inline void KNGlobal::initialDefaultPath()
 #ifdef Q_OS_WIN32
     m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
                    "/Kreogist/Mu";
+    m_resourceDirPath=applicationDirPath();
 #endif
 #ifdef Q_OS_MACX
     m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
                    "/Mu";
+    m_resourceDirPath=simplifiedPath(applicationDirPath()+"/../Resources");
 #endif
 #ifdef Q_OS_LINUX
     m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
                    "/.kreogist/mu";
+    m_resourceDirPath=m_userDataPath;
 #endif
     m_libraryPath=userDataPath()+"/Library";
     m_pluginDirPath=userDataPath()+"/Plugins";
+}
+
+inline void KNGlobal::initialInfrastrcture()
+{
+    //Configure set the custom font folder, load fonts from the folder.
+    m_fontManager->loadCustomFontFolder(m_resourceDirPath+"/Fonts");
+    //Set the language dir path.
+    m_localeManager->setLanguageDirPath(m_resourceDirPath+"/Language");
+    //Load all the language.
+    m_localeManager->loadLanguageFiles();
 }
 
 void KNGlobal::updateInfrastructure()
@@ -384,13 +413,6 @@ void KNGlobal::updateInfrastructure()
     m_libraryPath=customData("General", "LibraryPath", m_libraryPath).toString();
     //Give out the library path udpate signal.
     emit libraryMoved(originalLibraryPath, m_libraryPath);
-
-    //Configure set the custom font folder, load fonts from the folder.
-    m_fontManager->loadCustomFontFolder(userDataPath()+"/Fonts");
-    //Set the language dir path.
-    m_localeManager->setLanguageDirPath(userDataPath()+"/Language");
-    //Load all the language.
-    m_localeManager->loadLanguageFiles();
 }
 
 QJsonObject KNGlobal::fontToObject(const QFont &font)
@@ -439,6 +461,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();
 
+    //Initial the infrastructure.
+    initialInfrastrcture();
     //Update the infrastructure.
     updateInfrastructure();
 

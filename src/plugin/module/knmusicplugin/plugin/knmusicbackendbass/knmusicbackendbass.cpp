@@ -36,9 +36,9 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
     {
         return;
     }
-    //Load plugins from global plugin dir and application plugin dir.
-    initialPlugin(KNGlobal::pluginDirPath());
-    initialPlugin(KNGlobal::applicationDirPath()+"/Plugins");
+    //Load plugins from application resource dir and global plugin dir.
+    initialPlugin(KNGlobal::resourceDirPath()+"/Bass");
+    initialPlugin(KNGlobal::pluginDirPath()+"/Bass");
     //Initial the main and preview thread.
     m_main=new KNMusicBackendBassThread(this);
     setMainThread(m_main);
