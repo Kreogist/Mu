@@ -37,7 +37,7 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
         return;
     }
     //Load plugins from application resource dir and global plugin dir.
-    initialPlugin(KNGlobal::resourceDirPath()+"/Bass");
+    initialPlugin(KNGlobal::resourceDirPath()+"/Plugins/Bass");
     initialPlugin(KNGlobal::pluginDirPath()+"/Bass");
     //Initial the main and preview thread.
     m_main=new KNMusicBackendBassThread(this);
@@ -120,7 +120,7 @@ void KNMusicBackendBass::initialPlugin(const QString &pluginDirPath)
 {
     QString dylibSuffix=KNGlobal::dylibSuffix();
     //Get the specific plugin dir for Bass.
-    QDir pluginDir(pluginDirPath+"/Bass");
+    QDir pluginDir(pluginDirPath);
     //Check the dir exist.
     if(pluginDir.exists())
     {
