@@ -77,7 +77,7 @@ KNMusicTagID3v2::KNMusicTagID3v2(QObject *parent) :
 
 bool KNMusicTagID3v2::praseTag(QFile &musicFile,
                                QDataStream &musicDataStream,
-                               KNMusicDetailInfo &detailInfo)
+                               KNMusicAnalysisItem &analysisItem)
 {
     //If file is less than ID3v2 header, it can't contains ID3v2 tag.
     if(musicFile.size()<10)
@@ -110,21 +110,21 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
     //Write the tag to details.
     if(!frames.isEmpty())
     {
-        writeID3v2ToDetails(frames, property, detailInfo);
+        writeID3v2ToDetails(frames, property, analysisItem);
     }
     //Recover the memory.
     delete[] rawTagData;
     return true;
 }
 
-bool KNMusicTagID3v2::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+bool KNMusicTagID3v2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
-    if(!detailInfo.imageData.contains("ID3v2"))
+    if(!analysisItem.imageData.contains("ID3v2"))
     {
         return false;
     }
     //Get the total size of images.
-    QByteArray imageTypes=detailInfo.imageData["ID3v2"].takeLast();
+    QByteArray imageTypes=analysisItem.imageData["ID3v2"].takeLast();
     int imageCount=imageTypes.size();
     QHash<int, ID3v2PictureFrame> imageMap;
     for(int i=0; i<imageCount; i++)
@@ -132,26 +132,26 @@ bool KNMusicTagID3v2::parseAlbumArt(KNMusicDetailInfo &detailInfo)
         //Check the flag is "APIC" or "PIC"
         if(imageTypes.at(i)==1)
         {
-            parseAPICImageData(detailInfo.imageData["ID3v2_Images"].takeFirst(),
+            parseAPICImageData(analysisItem.imageData["ID3v2_Images"].takeFirst(),
                                imageMap);
         }
         else
         {
-            parsePICImageData(detailInfo.imageData["ID3v2_Images"].takeFirst(),
+            parsePICImageData(analysisItem.imageData["ID3v2_Images"].takeFirst(),
                               imageMap);
         }
     }
     //If there's a album art image after parse all the album art, set.
     if(imageMap.contains(3))
     {
-        detailInfo.coverImage=imageMap[3].image;
+        analysisItem.coverImage=imageMap[3].image;
     }
     else
     {
         //Or else use the first image.
         if(!imageMap.isEmpty())
         {
-            detailInfo.coverImage=imageMap.begin().value().image;
+            analysisItem.coverImage=imageMap.begin().value().image;
         }
     }
     return true;
@@ -245,8 +245,11 @@ bool KNMusicTagID3v2::parseID3v2RawData(char *rawTagData,
 
 void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
                                           const ID3v2MinorProperty &property,
-                                          KNMusicDetailInfo &detailInfo)
+                                          KNMusicAnalysisItem &analysisItem)
 {
+    //Get the detail info.
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Prepare the image type list.
     QByteArray imageTypeList;
     for(QLinkedList<ID3v2Frame>::const_iterator i=frames.begin();
         i!=frames.end();
@@ -280,7 +283,7 @@ void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
             //If the frameID is "APIC", add a 1 to the "ID3v2" array, or else
             //add a 0.
             imageTypeList.append((int)(frameID=="APIC"));
-            detailInfo.imageData["ID3v2_Images"].append(frameData);
+            analysisItem.imageData["ID3v2_Images"].append(frameData);
             continue;
         }
         if(!m_frameIDIndex.contains((*i).frameID))
@@ -390,7 +393,7 @@ void KNMusicTagID3v2::writeID3v2ToDetails(const QLinkedList<ID3v2Frame> &frames,
     //If there's any data in type list, add it to image data.
     if(!imageTypeList.isEmpty())
     {
-        detailInfo.imageData["ID3v2"].append(imageTypeList);
+        analysisItem.imageData["ID3v2"].append(imageTypeList);
     }
 }
 

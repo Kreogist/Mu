@@ -78,12 +78,39 @@ int KNMusicLibraryModel::rowFromFilePath(const QString &filePath)
                                     filePath,
                                     1,
                                     Qt::MatchFixedString);
-    //If we can't find it, check in the filelist.
+    //If we can't find it, return -1.
     if(fileCheck.isEmpty())
     {
         return -1;
     }
     return fileCheck.first().row();
+}
+
+int KNMusicLibraryModel::rowFromDetailInfo(const KNMusicDetailInfo &detailInfo)
+{
+    QModelIndexList fileCheck=match(index(0,0),
+                                    FilePathRole,
+                                    detailInfo.filePath,
+                                    -1,
+                                    Qt::MatchFixedString);
+    //If we can't find it, return -1.
+    if(fileCheck.isEmpty())
+    {
+        return -1;
+    }
+    //Check the start position is the same as the detail info.
+    for(QModelIndexList::iterator i=fileCheck.begin();
+        i!=fileCheck.end();
+        ++i)
+    {
+        if(rowProperty((*i).row(), StartPositionRole).toLongLong()==
+                detailInfo.startPosition)
+        {
+            return (*i).row();
+        }
+    }
+    //If we are here, means find nothing.
+    return -1;
 }
 
 int KNMusicLibraryModel::playingItemColumn()
@@ -103,6 +130,26 @@ bool KNMusicLibraryModel::dropMimeData(const QMimeData *data,
     Q_UNUSED(column)
     Q_UNUSED(parent)
     return false;
+}
+
+void KNMusicLibraryModel::setRowProperty(const int &row,
+                                                const int &propertyRole,
+                                                const QVariant &value)
+{
+    //Update the row property.
+    KNMusicModel::setRowProperty(row, propertyRole, value);
+    //Update the row in database.
+    updateRowInDatabase(row);
+}
+
+void KNMusicLibraryModel::setItemText(const int &row,
+                                      const int &column,
+                                      const QString &text)
+{
+    //Set the item text.
+    KNMusicModel::setItemText(row, column, text);
+    //Update the row in database.
+    updateRowInDatabase(row);
 }
 
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
@@ -168,25 +215,20 @@ void KNMusicLibraryModel::updateMusicRow(const int &row,
 {
     //Do row udpates operate.
     KNMusicModel::updateMusicRow(row, detailInfo);
-    //Quick generate the row, this shouldn't so slow.
-    QList<QStandardItem *> currentRow;
-    for(int i=0; i<columnCount(); i++)
-    {
-        currentRow.append(item(row, i));
-    }
-    //Ask to update the row in the database.
-    m_database->updateMusicRow(row, currentRow);
+    //Update the row in database.
+    updateRowInDatabase(row);
 }
 
 void KNMusicLibraryModel::updateCoverImage(const int &row,
-                                           const KNMusicDetailInfo &detailInfo)
+                                           const KNMusicAnalysisItem &analysisItem)
 {
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Ask to update the image key in the database.
     m_database->updateArtworkKey(row, detailInfo.coverImageHash);
     //Set the artwork key for the model.
     setRowProperty(row, ArtworkKeyRole, detailInfo.coverImageHash);
     //Get the cover image.
-    QPixmap coverImagePixmap=QPixmap::fromImage(detailInfo.coverImage);
+    QPixmap coverImagePixmap=QPixmap::fromImage(analysisItem.coverImage);
     //Ask category models to update the cover image.
     for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
         i!=m_categoryModels.end();
@@ -283,12 +325,13 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
 }
 
 void KNMusicLibraryModel::appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
-                                                const KNMusicDetailInfo &detailInfo)
+                                                const KNMusicAnalysisItem &analysisItem)
 {
     //Append the music row first.
     appendMusicRow(musicRow);
     //Ask to analysis album art.
-    m_analysisExtend->onActionAnalysisAlbumArt(musicRow.at(Name), detailInfo);
+    m_analysisExtend->onActionAnalysisAlbumArt(musicRow.at(Name),
+                                               analysisItem);
     //Check row count before add the row.
     if(rowCount()==1)
     {
@@ -325,7 +368,7 @@ void KNMusicLibraryModel::imageRecoverComplete()
     }
 }
 
-void KNMusicLibraryModel::initialHeader()
+inline void KNMusicLibraryModel::initialHeader()
 {
     //Using retranslate to update the header text.
     retranslate();
@@ -342,6 +385,18 @@ void KNMusicLibraryModel::initialHeader()
     setHeaderData(TrackNumber, Qt::Horizontal, QVariant(Qt::AlignVCenter|Qt::AlignRight), Qt::TextAlignmentRole);
     //Set sort flag.
     setHeaderSortFlag();
+}
+
+inline void KNMusicLibraryModel::updateRowInDatabase(const int &row)
+{
+    //Quick generate the row, this shouldn't so slow.
+    QList<QStandardItem *> currentRow;
+    for(int i=0; i<columnCount(); i++)
+    {
+        currentRow.append(item(row, i));
+    }
+    //Ask to update the row in the database.
+    m_database->updateMusicRow(row, currentRow);
 }
 
 KNMusicLibraryImageManager *KNMusicLibraryModel::imageManager() const

@@ -14,6 +14,7 @@
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QScopedPointer>
 
 #include "knopacityanimebutton.h"
 #include "messagebox/knmessageblock.h"
@@ -91,7 +92,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_cancelButton->setIcon(QPixmap("://public/messagebox/cancel.png"));
     buttonLayout->addWidget(m_cancelButton);
     connect(m_cancelButton, &KNOpacityAnimeButton::clicked,
-            this, &KNMessageBox::onActionClose);
+            this, &KNMessageBox::onActionCancel);
 
     //Initial short cut key.
     initialShortCut();
@@ -131,8 +132,42 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_fadeOut->setStartValue(1.0);
     m_fadeOut->setEndValue(0.0);
     m_hideAnime->addAnimation(m_fadeOut);
-    connect(m_hideAnime, &QParallelAnimationGroup::finished,
-            this, &KNMessageBox::close);
+}
+
+bool KNMessageBox::question(const QString &title,
+                            const QString &text)
+{
+    //Generate a message box first.
+    QScopedPointer<KNMessageBox> questionBox(new KNMessageBox);
+    //Set properties.
+    questionBox->setTitle(title);
+    questionBox->enableCancel();
+    //Initial the question widget.
+    QLabel *questionHint=new QLabel(text, questionBox.data());
+    questionHint->setContentsMargins(10,10,10,10);
+    questionHint->setAlignment(Qt::AlignCenter);
+    questionHint->setMinimumHeight(78);
+    //Set the content widget.
+    questionBox->setContent(questionHint);
+    //Launch the message box, judge the dialog data.
+    return (questionBox->exec()==QDialog::Accepted);
+}
+
+void KNMessageBox::information(const QString &title, const QString &text)
+{
+    //Generate a message box first.
+    QScopedPointer<KNMessageBox> informationBox(new KNMessageBox);
+    //Set properties.
+    informationBox->setTitle(title);
+    //Initial the question widget.
+    QLabel *informationHint=new QLabel(text, informationBox.data());
+    informationHint->setContentsMargins(10,10,10,10);
+    informationHint->setAlignment(Qt::AlignCenter);
+    informationHint->setMinimumHeight(78);
+    //Set the content widget.
+    informationBox->setContent(informationHint);
+    //Launch the message box.
+    informationBox->exec();
 }
 
 void KNMessageBox::showEvent(QShowEvent *event)
@@ -184,7 +219,7 @@ void KNMessageBox::paintEvent(QPaintEvent *event)
     //Draw a rect at final.
     QPainter painter(this);
     painter.setPen(QColor(255,255,255));
-    painter.setBrush(QBrush(QColor(0,0,0,0)));
+    painter.setBrush(QColor(0,0,0,0));
     painter.drawRect(QRect(0,0,width()-1,height()-1));
 }
 
@@ -205,8 +240,26 @@ void KNMessageBox::onActionOkay()
 {
     if(onActionOkayClose())
     {
+        //Linked the finished animation to accept.
+        connect(m_hideAnime, &QParallelAnimationGroup::finished,
+                this, &KNMessageBox::accept);
+        //Set the result data.
+        setResult(true);
+        //Close the dialog.
         onActionClose();
+        return;
     }
+}
+
+void KNMessageBox::onActionCancel()
+{
+    //Linked the finished animation to reject.
+    connect(m_hideAnime, &QParallelAnimationGroup::finished,
+            this, &KNMessageBox::reject);
+    //Set the result data.
+    setResult(false);
+    //Close the dialog.
+    onActionClose();
 }
 
 void KNMessageBox::onActionClose()
@@ -242,7 +295,7 @@ void KNMessageBox::initialShortCut()
     escapeClose->setShortcut(QKeySequence(Qt::Key_Escape));
     escapeClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(escapeClose, SIGNAL(triggered()),
-            this, SLOT(onActionClose()));
+            this, SLOT(onActionCancel()));
     addAction(escapeClose);
 
     QAction *acceptClose=new QAction(this);
@@ -276,6 +329,11 @@ QString KNMessageBox::title() const
 QWidget *KNMessageBox::content() const
 {
     return m_content->content();
+}
+
+void KNMessageBox::enableCancel()
+{
+    m_cancelButton->show();
 }
 
 void KNMessageBox::setContent(QWidget *content)

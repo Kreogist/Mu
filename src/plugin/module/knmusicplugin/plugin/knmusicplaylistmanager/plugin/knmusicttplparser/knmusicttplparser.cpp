@@ -99,31 +99,33 @@ bool KNMusicTTPLParser::parse(const QString &playlistFilePath,
         if(currentTrack.hasAttribute("subtk"))
         {
             //Means this is a track list, parse as a track list.
-            QList<KNMusicDetailInfo> currentDetails;
+            QList<KNMusicAnalysisItem> currentDetails;
             parser->parseTrackList(currentTrack.attribute("file"),
                                    currentDetails);
             //Get the track index.
             QString trackIndex=QString::number(currentTrack.attribute("subtk").toInt());
             //Find the track index in the list.
-            for(QList<KNMusicDetailInfo>::iterator i=currentDetails.begin();
+            for(QList<KNMusicAnalysisItem>::iterator i=currentDetails.begin();
                 i!=currentDetails.end();
                 ++i)
             {
                 //If we find the index, add to the playlist.
-                if((*i).textLists[TrackNumber]==trackIndex)
+                if((*i).detailInfo.textLists[TrackNumber]==trackIndex)
                 {
-                    playlistModel->appendMusicRow(KNMusicModelAssist::generateRow(*i));
+                    playlistModel->appendMusicRow(KNMusicModelAssist::generateRow((*i).detailInfo));
                 }
             }
         }
         else
         {
             //Parse as a file.
-            KNMusicDetailInfo currentDetail;
+            KNMusicAnalysisItem currentItem;
             parser->parseFile(currentTrack.attribute("file"),
-                              currentDetail);
+                              currentItem);
             //Add to playlist.
-            playlistModel->appendMusicRow(KNMusicModelAssist::generateRow(currentDetail));
+            playlistModel->appendMusicRow(
+                        KNMusicModelAssist::generateRow(
+                            currentItem.detailInfo));
         }
     }
     //Set changed flag.

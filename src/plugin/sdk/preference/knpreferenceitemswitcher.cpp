@@ -17,7 +17,7 @@ KNPreferenceItemSwitcher::KNPreferenceItemSwitcher(QWidget *parent) :
     m_switcher=new KNAnimeColorSwitcher(this);
     //Add the control widget.
     insertStretch();
-    insertControlWidget(m_switcher);
+    insertWidget(m_switcher);
 }
 
 QVariant KNPreferenceItemSwitcher::defaultValue() const

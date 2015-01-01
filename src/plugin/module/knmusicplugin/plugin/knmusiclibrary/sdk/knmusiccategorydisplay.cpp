@@ -110,6 +110,11 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
     retranslate();
 }
 
+void KNMusicCategoryDisplay::setMusicTab(KNMusicTab *tab)
+{
+    m_categoryTreeView->setMusicTab(tab);
+}
+
 void KNMusicCategoryDisplay::retranslate()
 {
     //Update the text resourse.

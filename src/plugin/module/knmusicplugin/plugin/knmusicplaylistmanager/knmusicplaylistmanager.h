@@ -20,12 +20,15 @@
 
 #include <QIcon>
 
+#include <QModelIndex>
+
 #include "knmusicplaylistmanagerbase.h"
 
 class KNMusicPlaylistLoader;
 class KNMusicPlaylistTab;
 class KNMusicPlaylistList;
 class KNMusicPlaylistListItem;
+class KNMusicModel;
 class KNMusicPlaylistManager : public KNMusicPlaylistManagerBase
 {
     Q_OBJECT
@@ -52,10 +55,11 @@ private slots:
                                 const QStringList &filePaths);
     void onActionCurrentPlaylistChanged(const QModelIndex &current,
                                         const QModelIndex &previous);
+    void locateIndexInModel(KNMusicModel *model, QModelIndex index);
 
 private:
     inline void initialPlaylistLoader();
-    void saveChangedPlaylist();
+    inline void saveChangedPlaylist();
     QString generatePlaylistName(const QString &preferName="");
     KNMusicPlaylistListItem *createBlankPlaylist(const int &row=-1,
                                                  const QString &caption="");

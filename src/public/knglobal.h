@@ -9,6 +9,8 @@
 
 #include <QStringList>
 #include <QUrl>
+#include <QJsonObject>
+#include <QFont>
 #include <QObject>
 
 class KNConfigure;
@@ -22,33 +24,52 @@ public:
     QString byteToHigherUnit(const qint64 &fileSize);
     static QString dylibSuffix();
     static QString applicationDirPath();
+    static QString userDataPath();
+    static QString pluginDirPath();
+    static QString libraryPath();
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);
     static void setDylibSuffix(const QString &dylibSuffix);
+    static void setLibraryPath(const QString &libraryPath);
     static void showInGraphicalShell(const QString &filePath);
     static void openLocalFile(const QString &filePath);
     static void setClipboardText(const QString &text);
+    static void moveFolder(const QString &sourceDirPath,
+                           const QString &destinationDirPath);
+    static bool renameFile(const QString &originalPath,
+                           const QString &currentPath);
     void setSystemData(const QString &key, const QVariant &value);
     QVariant systemData(const QString &key);
-    void setCustomData(const QString &module, const QString &key, const QVariant &value);
-    QVariant customData(const QString &module, const QString &key);
+    void setCustomData(const QString &module,
+                       const QString &key,
+                       const QVariant &value);
+    QVariant customData(const QString &module,
+                        const QString &key,
+                        const QVariant &defaultValue);
 
 signals:
     void languageChanged();
+    void libraryMoved(QString originalPath, QString currentPath);
 
 public slots:
     void retranslate();
+    void updateInfrastructure();
     void loadConfigure();
     void saveConfigure();
 
 private:
     inline void initialStorageUnit();
+    inline void initialDefaultPath();
+    inline QJsonObject fontToObject(const QFont &font);
 #ifdef Q_OS_LINUX
     static QString substituteFileBrowserParameters(QString &pre, QString &file);
 #endif
     static KNGlobal *m_instance;
     static QString m_dylibSuffix;
+    static QString m_userDataPath;
+    static QString m_pluginDirPath;
+    static QString m_libraryPath;
     enum StorageUnit
     {
         Byte,

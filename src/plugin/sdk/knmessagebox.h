@@ -23,8 +23,11 @@ class KNMessageBox : public QDialog
     Q_OBJECT
 public:
     explicit KNMessageBox(QWidget *parent = 0);
+    static bool question(const QString & title, const QString & text);
+    static void information(const QString & title, const QString & text);
     QString title() const;
     QWidget *content() const;
+    void enableCancel();
 
 signals:
 
@@ -40,6 +43,7 @@ protected:
 private slots:
     void onActionExpandFinished();
     void onActionOkay();
+    void onActionCancel();
     void onActionClose();
     void onActionMove(const QPoint &point);
 

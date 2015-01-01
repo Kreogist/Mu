@@ -16,7 +16,7 @@ Mu is a cross-platform application for media file managing.
 * Support play all your music including the following formats: mp3, m4a, wav, flac, ape, mpc, wv, ac3, spx, wma (Windows Only).
 * Support read ID3v1, ID3v2, APEv2 format tag, and read metadata information from FLAC, WMA, M4A and WAV files.
 * Support import m3u, ttpl, wpl, xspf and iTunes xml format playlists.
-* Support automatically download lyrics from XiaMi, QQMusic and Baidu.
+* Support automatically download lyrics from TTPlayer, TTPod, XiaMi, QQMusic and Baidu.
 
 ## Dependencies
 * bass

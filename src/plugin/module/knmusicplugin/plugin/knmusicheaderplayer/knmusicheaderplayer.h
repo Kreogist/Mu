@@ -32,20 +32,22 @@ class KNScrollLabel;
 class KNProgressSlider;
 class KNEditableLabel;
 class KNHighlightLabel;
+class KNMusicHeaderPlayerAppendMenu;
 class KNMusicGlobal;
 class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
 {
     Q_OBJECT
 public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
-    ~KNMusicHeaderPlayer();
     void setBackend(KNMusicBackend *backend);
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+    KNMusicDetailInfo currentDetailInfo();
 
 signals:
 
 public slots:
-    void restoreConfigure();
+    void loadConfigure();
+    void saveConfigure();
     void onActionLoopStateChanged(const int &state);
     void reset();
     void play();
@@ -60,16 +62,18 @@ private slots:
     void onActionProgressPressed();
     void onActionProgressReleased();
     void onActionPositionEdited();
-    void setPositionText(const qint64 &position);
     void onActionPlayNPauseClicked();
     void onActionVolumeSliderChanged(const qint64 &value);
     void onActionInOutOpacityChange(const QVariant &value);
+    void onActionShowAppendMenu();
+    void onActionAppendMenuActionTriggered(int actionIndex);
+    void setPositionText(const qint64 &position);
 
     void onActionPositionChanged(const qint64 &position);
     void onActionPlayStateChanged(const int &state);
 
     void setPosition(const qint64 &position);
-    void updatePlayerInfo(const KNMusicDetailInfo &detailInfo);
+    void updatePlayerInfo(const KNMusicAnalysisItem &analysisItem);
 
 private:
     inline void initialAlbumArt();
@@ -79,6 +83,7 @@ private:
     inline void initialControlPanel();
     inline void initialVolume();
     inline void initialAppendPanel();
+    inline void initialAppendMenu();
 
     inline void setPlayIconMode();
     inline void setPauseIconMode();
@@ -92,7 +97,6 @@ private:
     inline QRect generateOutPosition();
     inline QRect generateInPosition();
 
-    inline void saveConfigure();
 
     //Public classes.
     KNMusicGlobal *m_musicGlobal;
@@ -117,22 +121,29 @@ private:
     KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause,
                              *m_showMainPlayer, *m_showAppendMenu;
     KNVolumeSlider *m_volumeSlider;
+    KNMusicHeaderPlayerAppendMenu *m_appendMenu;
 
     //Effects.
     QGraphicsOpacityEffect *m_albumArtEffect,
                            *m_durationEffect,
                            *m_volumeEffect;
 
+    //Actions.
+    QAction *showIn[4];
+
     //States
-    bool m_isShownPlay=true, m_progressPressed=false;
+    bool m_isShownPlay=true, m_progressPressed=false, m_appendMenuShown=false;
     int m_albumArtSize=61, m_buttonSize=38, m_loopState=NoRepeat;
 
-    //Images
+    //Images.
     QPixmap m_playIcon, m_pauseIcon,
             m_noRepeatIcon, m_repeatTrackIcon, m_repeatAllIcon,
             m_muteIcon, m_noMuteIcon,
             m_noAlbumArt;
+
+    //Datas.
     QString m_artist, m_album, m_currentFilePath;
+    KNMusicDetailInfo m_currentDetailInfo;
 };
 
 #endif // KNMUSICHEADERPLAYER_H

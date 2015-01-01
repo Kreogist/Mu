@@ -26,6 +26,7 @@ public:
     bool advancedMode() const;
     QString panelName() const;
     void setPanelName(const QString &panelName);
+    void updateItemValue(const QString &valueName);
     void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
                             const QList<KNPreferenceItemInfo> &list);
 
@@ -38,6 +39,7 @@ public slots:
     void setAdvancedMode(bool advancedMode);
 
 protected:
+    KNPreferenceItemBase *itemFromValueName(const QString &valueName);
 
 private:
     void addTitle(QLabel *title,

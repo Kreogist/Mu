@@ -22,11 +22,8 @@
 KNMusicMultiMenu::KNMusicMultiMenu(QWidget *parent) :
     KNMusicMultiMenuBase(parent)
 {
-    //Set seperator style sheet, I can't solve this bug in coding way.
-    setStyleSheet("QMenu::separator {height:1px;"
-                  "background: rgba(255, 255, 255, 100);"
-                  "margin-left: 5px;"
-                  "margin-right: 5px;}");
+    //Set seperator color.
+    setSeparatorColor(QColor(255, 255, 255, 100));
     //Set palette.
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));

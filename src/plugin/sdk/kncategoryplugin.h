@@ -29,6 +29,7 @@ public:
     virtual void setPlatformExtras(KNPlatformExtras *plugin)=0;
 
 signals:
+    void requireSaveConfigure();
 
 public slots:
     virtual void enablePlatformExtras()=0;

@@ -13,11 +13,14 @@
 #include <QStandardItem>
 
 #include "preference/knpreferenceitembase.h"
+#include "knmessagebox.h"
 #include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
 #include "knlocalemanager.h"
 
 #include "knmusicglobal.h"
+
+#include <QDebug>
 
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
 KNMusicParser *KNMusicGlobal::m_parser=nullptr;
@@ -26,6 +29,7 @@ KNMusicSoloMenuBase *KNMusicGlobal::m_soloMenu=nullptr;
 KNMusicMultiMenuBase *KNMusicGlobal::m_multiMenu=nullptr;
 KNMusicSearchBase *KNMusicGlobal::m_musicSearch=nullptr;
 KNMusicDetailTooltipBase *KNMusicGlobal::m_detailTooltip=nullptr;
+KNMusicDetailDialogBase *KNMusicGlobal::m_detailDialog=nullptr;
 QString KNMusicGlobal::m_musicLibraryPath=QString();
 QString KNMusicGlobal::m_musicRowFormat=QString("org.kreogist.mu/MusicModelRow");
 bool KNMusicGlobal::m_dragMusicRowTaken=false;
@@ -126,12 +130,62 @@ void KNMusicGlobal::retranslate()
     m_treeViewHeaderText[Year]=tr("Year");
 }
 
+void KNMusicGlobal::onActionLibraryMoved(const QString &originalPath,
+                                         const QString &currentPath)
+{
+    Q_UNUSED(originalPath)
+    //Backup the original library path.
+    QString originalLibraryPath=musicLibraryPath();
+    //Set the new path of the music library.
+    setMusicLibraryPath(currentPath+"/Music");
+    //Emit music library changed signal.
+    emit musicLibraryMoved(originalLibraryPath, musicLibraryPath());
+}
+
+bool KNMusicGlobal::renameMusicFile(const QString &originalPath,
+                                    const QString &preferName)
+{
+    QFileInfo originalFile(originalPath);
+    //If the original file is not
+    if(!originalFile.exists())
+    {
+        //Tell the user that original file cannot find.
+        KNMessageBox::information("Error",
+                                  tr("Cannot find file:\n") +
+                                  originalFile.absoluteFilePath());
+        return false;
+    }
+    //Check the prefer name's availability.
+    QFileInfo destinationFile(originalFile.absolutePath()+"/"+preferName);
+    if(destinationFile.exists())
+    {
+        if(!KNMessageBox::question("Overwrite",
+                                   tr("File %1 has been exist in folder:\n%2\nOverwrite?").arg(
+                                       destinationFile.fileName(), destinationFile.absolutePath())))
+        {
+            return false;
+        }
+    }
+    //Rename the music file.
+    if(KNGlobal::renameFile(originalFile.absoluteFilePath(),
+                            destinationFile.absoluteFilePath()))
+    {
+        //Emit the file name changed signal.
+        emit musicFilePathChanged(originalFile.absoluteFilePath(),
+                                  destinationFile.absoluteFilePath(),
+                                  destinationFile.fileName());
+        return true;
+    }
+    return false;
+}
+
 void KNMusicGlobal::regMetaType()
 {
     qRegisterMetaType<QVector<int>>("QVector<int>");
     qRegisterMetaType<QItemSelection>("QItemSelection");
     qRegisterMetaType<QList<QStandardItem *>>("QList<QStandardItem *>");
     qRegisterMetaType<KNMusicDetailInfo>("KNMusicDetailInfo");
+    qRegisterMetaType<KNMusicAnalysisItem>("KNMusicAnalysisItem");
 }
 
 void KNMusicGlobal::initialFileType()
@@ -173,43 +227,43 @@ void KNMusicGlobal::initialFileType()
     m_listSuffixs<<"cue"
                  <<"cda";
 
-    m_suffixDescription<<tr("MPEG Audio Layer III (mp3)")
-                           <<tr("MPEG-4 Part 14 (m4a)")
-                           <<tr("Waveform Audio File Format (wav)")
-                           <<tr("Free Lossless Audio Codec (flac)")
-                           <<tr("Monkey's Audio (ape)")
-                           <<tr("Ogg Vorbis Audio (ogg)")
-                           <<tr("True Audio Codec (tta)")
-                           <<tr("Audio Interchange File Format (aiff)")
-                           <<tr("Audio Interchange File Format (aifc)")
-                           <<tr("Audio Interchange File Format (aif)")
-                           <<tr("MPEG-4 Part 14 (mp4)")
-                           <<tr("MPEG Audio Layer II (mpa)")
-                           <<tr("MPEG Audio Layer II (mp2)")
-                           <<tr("MPEG Audio Layer I (mp1)")
-                           <<tr("Musical Instrument Digital Interface (midi)")
-                           <<tr("Musical Instrument Digital Interface (mid)")
-                           <<tr("MPEG Audio Layer III with SBR (mp3pro)")
-                           <<tr("Musepack Lossy Audio Codec (mpc)")
-                           <<tr("Advanced Audio Coding (aac)")
-                           <<tr("Windows Media Audio (wma)")
-                           <<tr("Flash Audio (fla)")
-                           <<tr("Tom's lossless Audio Kompressor (tak)")
-                           <<tr("Musepack Lossy Audio Codec (mp+)")
-                           <<tr("Audible Audio File (aa)")
-                           <<tr("Real Audio (ra)")
-                           <<tr("Monkey's Audio (mac)")
-                           <<tr("Musical Instrument Digital Interface (rmi)")
-                           <<tr("DTS Audio Codec (dtswav)")
-                           <<tr("DTS Audio Codec (dts)")
-                           <<tr("SouND Audio (snd)")
-                           <<tr("Au File Format (au)")
-                           <<tr("Dolby Surround Audio Coding-3 (ac3)")
-                           <<tr("Fast Tracker Module (xm)")
-                           <<tr("Unreal Engine 1 Music Format (umx)");
+    m_suffixDescription<<"MPEG Audio Layer III (mp3)"
+                       <<"MPEG-4 Part 14 (m4a)"
+                       <<"Waveform Audio File Format (wav)"
+                       <<"Free Lossless Audio Codec (flac)"
+                       <<"Monkey's Audio (ape)"
+                       <<"Ogg Vorbis Audio (ogg)"
+                       <<"True Audio Codec (tta)"
+                       <<"Audio Interchange File Format (aiff)"
+                       <<"Audio Interchange File Format (aifc)"
+                       <<"Audio Interchange File Format (aif)"
+                       <<"MPEG-4 Part 14 (mp4)"
+                       <<"MPEG Audio Layer II (mpa)"
+                       <<"MPEG Audio Layer II (mp2)"
+                       <<"MPEG Audio Layer I (mp1)"
+                       <<"Musical Instrument Digital Interface (midi)"
+                       <<"Musical Instrument Digital Interface (mid)"
+                       <<"MPEG Audio Layer III with SBR (mp3pro)"
+                       <<"Musepack Lossy Audio Codec (mpc)"
+                       <<"Advanced Audio Coding (aac)"
+                       <<"Windows Media Audio (wma)"
+                       <<"Flash Audio (fla)"
+                       <<"Tom's lossless Audio Kompressor (tak)"
+                       <<"Musepack Lossy Audio Codec (mp+)"
+                       <<"Audible Audio File (aa)"
+                       <<"Real Audio (ra)"
+                       <<"Monkey's Audio (mac)"
+                       <<"Musical Instrument Digital Interface (rmi)"
+                       <<"DTS Audio Codec (dtswav)"
+                       <<"DTS Audio Codec (dts)"
+                       <<"SouND Audio (snd)"
+                       <<"Au File Format (au)"
+                       <<"Dolby Surround Audio Coding-3 (ac3)"
+                       <<"Fast Tracker Module (xm)"
+                       <<"Unreal Engine 1 Music Format (umx)";
 
-    m_listSuffixDescription<<tr("Compact Disc Audio track (cda)")
-                          <<tr("Cue sheet (cue)");
+    m_listSuffixDescription<<"Compact Disc Audio track (cda)"
+                           <<"Cue sheet (cue)";
 }
 
 void KNMusicGlobal::initialThreads()
@@ -379,6 +433,16 @@ void KNMusicGlobal::initialGenreText()
                    <<"Synthpop";
 }
 
+KNMusicDetailDialogBase *KNMusicGlobal::detailDialog()
+{
+    return m_detailDialog;
+}
+
+void KNMusicGlobal::setDetailDialog(KNMusicDetailDialogBase *detailDialog)
+{
+    m_detailDialog = detailDialog;
+}
+
 KNMusicDetailTooltipBase *KNMusicGlobal::detailTooltip()
 {
     return m_detailTooltip;
@@ -508,6 +572,11 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     //Initial resources.
     initialHeaderText();
     initialGenreText();
+    //Set the library path.
+    setMusicLibraryPath(KNGlobal::libraryPath()+"/Music");
+    //Link the library changed request.
+    connect(KNGlobal::instance(), &KNGlobal::libraryMoved,
+            this, &KNMusicGlobal::onActionLibraryMoved);
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -519,6 +588,11 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
 void KNMusicGlobal::setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel)
 {
     m_preferencePanel = preferencePanel;
+}
+
+void KNMusicGlobal::updateItemValue(const QString &valueName)
+{
+    m_preferencePanel->updateItemValue(valueName);
 }
 
 void KNMusicGlobal::insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
@@ -535,8 +609,7 @@ void KNMusicGlobal::setConfigureData(const QString &key, const QVariant &value)
 QVariant KNMusicGlobal::configureData(const QString &key,
                                       const QVariant &defaultValue)
 {
-    QVariant preferData=m_global->customData("Music", key);
-    return preferData.isNull()?defaultValue:preferData;
+    return m_global->customData("Music", key, defaultValue);
 }
 
 QPixmap KNMusicGlobal::noAlbumArt() const

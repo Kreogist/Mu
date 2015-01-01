@@ -15,8 +15,8 @@ KNMusicAnalysisExtend::KNMusicAnalysisExtend(QObject *parent) :
 {
 }
 
-void KNMusicAnalysisExtend::onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo)
+void KNMusicAnalysisExtend::onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem)
 {
     //Add this detail to model.
-    emit requireAppendRow(KNMusicModelAssist::generateRow(detailInfo));
+    emit requireAppendRow(KNMusicModelAssist::generateRow(analysisItem.detailInfo));
 }

@@ -4,11 +4,14 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QCompleter>
+#include <QDirModel>
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QFileDialog>
 
 #include "knpathlineedit.h"
+#include "knglobal.h"
 
 #include "knlocalemanager.h"
 
@@ -40,12 +43,24 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     m_browse->setPalette(pal);
     connect(m_browse, SIGNAL(clicked()),
             this, SLOT(onActionBrowseFolder()));
-    pathEditorLayout->addWidget(m_browse);
 
-    pathEditorLayout->addSpacing(5);
+    //Initial the move to button.
+    m_moveTo=new QPushButton(this);
+    m_moveTo->setPalette(pal);
+    connect(m_moveTo, SIGNAL(clicked()),
+            this, SLOT(onActionMoveFolder()));
 
     //Initial the path editor.
     m_pathEditor=new KNPathLineEdit(this);
+    //Generate auto path completer for path editor.
+    QCompleter *pathCompleter=new QCompleter(m_pathEditor);
+    QDirModel *pathCompleterModel=new QDirModel(m_pathEditor);
+    //Configure the dir model.
+    pathCompleterModel->setFilter(QDir::Dirs |
+                                  QDir::NoDotAndDotDot |
+                                  QDir::NoSymLinks);
+    pathCompleter->setModel(pathCompleterModel);
+    m_pathEditor->setCompleter(pathCompleter);
     //When start editing, set the palette to normal mode.
     connect(m_pathEditor, &KNPathLineEdit::startEditPath,
             this, &KNPreferenceItemPathBrowser::onActionPathExist);
@@ -64,12 +79,14 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     m_pathEditor->setPalette(m_existEditPalette);
     m_notExistEditPalette=m_existEditPalette;
     m_notExistEditPalette.setColor(QPalette::Base, QColor(255,0,0));
-    pathEditorLayout->addWidget(m_pathEditor, 1);
 
-    pathEditorLayout->addSpacing(5);
-
-    //Insert the control widget.
-    insertControlWidget(pathEditorWidget, 1);
+    //Add widgets to item.
+    insertSpacing(5);
+    insertWidget(m_pathEditor, 1);
+    insertSpacing(5);
+    insertWidget(m_moveTo);
+    insertSpacing(5);
+    insertWidget(m_browse);
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
@@ -90,31 +107,74 @@ QVariant KNPreferenceItemPathBrowser::value() const
 
 void KNPreferenceItemPathBrowser::setDefaultValue(const QVariant &defaultValue)
 {
-    m_defaultValue=defaultValue.toString();
+    QFileInfo defaultValueInfo(defaultValue.toString());
+    m_defaultValue=defaultValueInfo.absoluteFilePath();
     //When default value changed, set the value to the default value.
     setValue(m_defaultValue);
 }
 
 void KNPreferenceItemPathBrowser::setValue(const QVariant &value)
 {
-    m_pathEditor->setText(value.toString());
+    //Block the signal first.
+    m_pathEditor->blockSignals(true);
+    //Set the value.
+    QFileInfo defaultValueInfo(value.toString());
+    m_pathEditor->setText(defaultValueInfo.absoluteFilePath());
+    //Release the block signal.
+    m_pathEditor->blockSignals(false);
 }
 
 void KNPreferenceItemPathBrowser::onActionBrowseFolder()
 {
     //Initial the file dialog.
-    QFileDialog importFile(this);
+    QFileDialog selectFolder(this);
     //Set property.
-    importFile.setFileMode(QFileDialog::Directory);
-    importFile.setOption(QFileDialog::ShowDirsOnly);
+    selectFolder.setFileMode(QFileDialog::Directory);
+    selectFolder.setOption(QFileDialog::ShowDirsOnly);
     //If launch success.
-    if(importFile.exec())
+    if(selectFolder.exec())
     {
         //Check is the user select a folder.
-        if(!importFile.selectedFiles().isEmpty())
+        if(!selectFolder.selectedFiles().isEmpty())
         {
             //Set the current value to that folder.
-            setValue(importFile.selectedFiles().first());
+            setValue(selectFolder.selectedFiles().first());
+        }
+    }
+}
+
+void KNPreferenceItemPathBrowser::onActionMoveFolder()
+{
+    //Initial the file dialog.
+    QFileDialog moveToDir(this);
+    //Set property.
+    moveToDir.setFileMode(QFileDialog::Directory);
+    moveToDir.setOption(QFileDialog::ShowDirsOnly);
+    //If launch success.
+    if(moveToDir.exec())
+    {
+        //Check is the user select a folder.
+        if(!moveToDir.selectedFiles().isEmpty())
+        {
+            QString destinationPath=moveToDir.selectedFiles().first();
+            //Get the current folder is exist.
+            QFileInfo currentDirInfo(value().toString());
+            if(currentDirInfo.isDir() && currentDirInfo.exists())
+            {
+                QDir currentDir;
+                //Ensure that the destination dir exist.
+                QFileInfo destinationDirInfo(destinationPath);
+                if(!destinationDirInfo.exists())
+                {
+                    currentDir.mkpath(destinationDirInfo.absoluteFilePath());
+                }
+                //Move the folder.
+                KNGlobal::moveFolder(currentDirInfo.absoluteFilePath(),
+                                     destinationDirInfo.absoluteFilePath());
+                setValue(destinationPath);
+                //Emit dir moved signal.
+                emit dirMoved();
+            }
         }
     }
 }
@@ -148,5 +208,6 @@ void KNPreferenceItemPathBrowser::setEnsureExist(bool ensureExist)
 void KNPreferenceItemPathBrowser::retranslate()
 {
     m_browse->setText(tr("Browse"));
+    m_moveTo->setText(tr("Move To"));
 }
 

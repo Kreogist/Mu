@@ -122,8 +122,7 @@ void KNPreferenceLanguageItem::paintEvent(QPaintEvent *event)
     //Draw the select background with the opacity.
     painter.setOpacity(m_backgroundOpacity);
     painter.setPen(Qt::NoPen);
-    painter.setBrush(palette().window());
-    painter.drawRect(rect());
+    painter.fillRect(rect(), palette().window());
     //Draw the icon.
     painter.setOpacity(1.0);
     painter.drawPixmap(m_iconX,
@@ -147,15 +146,13 @@ void KNPreferenceLanguageItem::paintEvent(QPaintEvent *event)
         m_shadowGradient.setColorAt(0, QColor(0,0,0,shadowOpacity));
         m_shadowGradient.setColorAt(1, QColor(0,0,0,0));
         painter.setPen(Qt::NoPen);
-        painter.setBrush(m_shadowGradient);
-        painter.drawRect(0,0,width(),m_shadowHeight);
+        painter.fillRect(QRect(0,0,width(),m_shadowHeight), m_shadowGradient);
         //Draw the down shadow.
         //Change the coordinate.
         painter.translate(0,height()-m_shadowHeight);
         m_shadowGradient.setColorAt(0, QColor(0,0,0,0));
         m_shadowGradient.setColorAt(1, QColor(0,0,0,shadowOpacity));
-        painter.setBrush(m_shadowGradient);
-        painter.drawRect(0,0,width(),m_shadowHeight);
+        painter.fillRect(QRect(0,0,width(),m_shadowHeight), m_shadowGradient);
     }
 }
 

@@ -71,6 +71,7 @@ KNMusicLibraryEmptyHint::KNMusicLibraryEmptyHint(QWidget *parent) :
     pal.setColor(QPalette::WindowText, QColor(0xA0, 0xA0, 0xA0));
     m_hintText->setPalette(pal);
     //Set the property.
+    m_hintText->setMaximumWidth(600);
     m_hintText->setWordWrap(true);
     QFont hintTextFont=m_hintText->font();
     hintTextFont.setPixelSize(15);

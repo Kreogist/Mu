@@ -4,7 +4,9 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QApplication>
 #include <QDir>
+#include <QFont>
 #include <QFile>
 #include <QJsonDocument>
 
@@ -22,7 +24,7 @@ KNConfigure *KNConfigure::instance()
 void KNConfigure::loadConfigure()
 {
     //Do folder check first.
-    checkConfigureFolder();
+    generateConfigureFolder();
     //Generate the system and user configure file path.
     m_systemConfigurePath=m_configurePath+"/system.json";
     m_userConfigurePath=m_configurePath+"/user.json";
@@ -34,7 +36,7 @@ void KNConfigure::loadConfigure()
 void KNConfigure::saveConfigure()
 {
     //Do folder check first.
-    checkConfigureFolder();
+    generateConfigureFolder();
     //Save the configure.
     saveConfigureToFile(m_systemConfigurePath, m_systemConfigure);
     saveConfigureToFile(m_userConfigurePath, m_customConfigure);
@@ -60,23 +62,57 @@ void KNConfigure::setCustomData(const QString &module,
 
 QVariant KNConfigure::systemData(const QString &key)
 {
-    return QVariant(m_systemConfigure[key]);
+    return parseJsonValue(m_systemConfigure[key]);
 }
 
 QVariant KNConfigure::customData(const QString &module, const QString &key)
 {
     QJsonValue currentModuleValue=m_customConfigure[module];
     return currentModuleValue.type()==QJsonValue::Object?
-              QVariant(currentModuleValue.toObject()[key]):QVariant();
+              parseJsonValue(currentModuleValue.toObject()[key]):QVariant();
 }
 
 KNConfigure::KNConfigure(QObject *parent) :
     QObject(parent)
 {
-    ;
+    //Initial the type hash.
+    m_objectType.insert("Font", Font);
 }
 
-void KNConfigure::checkConfigureFolder()
+inline QVariant KNConfigure::parseJsonValue(const QJsonValue &value)
+{
+    if(value.type()==QJsonValue::Object)
+    {
+        QJsonObject valueObject=value.toObject();
+        //This is an available configure file.
+        if(valueObject.contains("KNObjectType"))
+        {
+            int objectType=m_objectType.value(
+                        valueObject.value("KNObjectType").toString(),
+                        -1);
+            switch(objectType)
+            {
+            case Font:
+            {
+                QFont valueFont=QApplication::font();
+                valueFont.setFamily(valueObject.value("Family").toString());
+                valueFont.setPixelSize(valueObject.value("PixelSize").toInt());
+                valueFont.setBold(valueObject.value("Bold").toBool());
+                valueFont.setItalic(valueObject.value("Italic").toBool());
+                valueFont.setUnderline(valueObject.value("Underline").toBool());
+                valueFont.setStrikeOut(valueObject.value("Strikeout").toBool());
+                valueFont.setKerning(valueObject.value("Kerning").toBool());
+                return QVariant::fromValue(valueFont);
+                break;
+            }
+            }
+        }
+        return QVariant();
+    }
+    return QVariant(value);
+}
+
+inline void KNConfigure::generateConfigureFolder()
 {
     //Check is the folder exist.
     QDir configureFolder(m_configurePath);
@@ -109,8 +145,8 @@ void KNConfigure::checkConfigureFolder()
     }
 }
 
-void KNConfigure::loadConfigureFromFile(const QString &filePath,
-                                        QJsonObject &configureObject)
+inline void KNConfigure::loadConfigureFromFile(const QString &filePath,
+                                               QJsonObject &configureObject)
 {
     QFile configureFile(filePath);
     //Check is the file exist.
@@ -131,8 +167,8 @@ void KNConfigure::loadConfigureFromFile(const QString &filePath,
     }
 }
 
-void KNConfigure::saveConfigureToFile(const QString &filePath,
-                                      const QJsonObject &configureObject)
+inline void KNConfigure::saveConfigureToFile(const QString &filePath,
+                                             const QJsonObject &configureObject)
 {
     //Open the file for writing.
     QFile configureFile(filePath);

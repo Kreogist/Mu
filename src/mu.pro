@@ -18,7 +18,6 @@
 QT += core \
       gui \
       widgets \
-      multimedia \
       xml \
       network
 
@@ -163,7 +162,6 @@ SOURCES += \
     plugin/module/knmusicplugin/sdk/knmusicglobal.cpp \
     plugin/module/knmusicplugin/sdk/knmusicstandardbackend.cpp \
     plugin/module/knmusicplugin/sdk/knmusicparser.cpp \
-    plugin/module/knmusicplugin/sdk/knmusictagpraser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp \
     plugin/sdk/knhighlightlabel.cpp \
     plugin/sdk/knscrolllabel.cpp \
@@ -291,7 +289,18 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.cpp
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
+    plugin/sdk/sao/knsaostyle.cpp \
+    plugin/sdk/sao/knsaosubmenu.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp \
+    plugin/module/knmusicplugin/sdk/knmusiccategorytabwidget.cpp \
+    plugin/sdk/preference/knpreferenceitemfont.cpp \
+    plugin/sdk/knfontdialog.cpp \
+    plugin/sdk/knmousedetectlabel.cpp \
+    plugin/base/knpreference/knpreferencegeneralpanel.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -479,7 +488,19 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.h \
-    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.h
+    plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
+    plugin/module/knmusicplugin/sdk/knmusicmainplayerbase.h \
+    plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h \
+    plugin/sdk/sao/knsaostyle.h \
+    plugin/sdk/sao/knsaosubmenu.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.h \
+    plugin/module/knmusicplugin/sdk/knmusiccategorytabwidget.h \
+    plugin/sdk/preference/knpreferenceitemfont.h \
+    plugin/sdk/knfontdialog.h \
+    plugin/sdk/knmousedetectlabel.h \
+    plugin/base/knpreference/knpreferencegeneralpanel.h
 
 RESOURCES += \
     resource/res.qrc

@@ -18,6 +18,8 @@
 #ifndef KNMUSICPLAYLISTTAB_H
 #define KNMUSICPLAYLISTTAB_H
 
+#include <QModelIndex>
+
 #include "knmusictab.h"
 
 class QSplitter;
@@ -40,11 +42,14 @@ public:
     QString caption();
     QPixmap icon();
     QWidget *widget();
+    void showIndexInModel(KNMusicModel *model,
+                          const QModelIndex &index);
     KNMusicPlaylistModel *currentPlaylistModel();
     void cutLoadRequirement();
     void setPlaylistLoader(KNMusicPlaylistLoader *playlistLoader);
 
 signals:
+    void requireLocateIndexInModel(KNMusicModel *model, QModelIndex index);
     void requireLoadPlaylistList();
     void requireCreateFirstPlaylist(const QStringList &fileList);
     void requireImportPlaylist(const QStringList &playlistList);
@@ -62,6 +67,7 @@ public slots:
     void onActionPlaylistItemChanged(QStandardItem *item);
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
     void setPlaylistList(KNMusicPlaylistList *playlistList);
+    void selectSourceRow(const int &row);
     void setCurrentPlaylist(const QModelIndex &index);
     void editPlaylistName(const QModelIndex &index);
 

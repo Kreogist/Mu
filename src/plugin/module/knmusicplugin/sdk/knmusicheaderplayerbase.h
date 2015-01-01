@@ -22,6 +22,7 @@ public:
     KNMusicHeaderPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
     virtual void setBackend(KNMusicBackend *backend)=0;
     virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
+    virtual KNMusicDetailInfo currentDetailInfo()=0;
 
 signals:
     void requirePlayPrevious();
@@ -29,13 +30,19 @@ signals:
     void requireChangeLoopState();
     void requireShowMainPlayer();
     void requireShowAppendMenu();
+    void requireShowInSongs();
+    void requireShowInArtists();
+    void requireShowInAlbums();
+    void requireShowInGenres();
+    void requireCheckCursor();
     void requireLoadLyrics(KNMusicDetailInfo detailInfo);
     void playerReset();
     void finished();
     void positionChanged(qint64 position);
 
 public slots:
-    virtual void restoreConfigure()=0;
+    virtual void loadConfigure()=0;
+    virtual void saveConfigure()=0;
     virtual void onActionLoopStateChanged(const int &state)=0;
     virtual void reset()=0;
     virtual void activatePlayer()=0;

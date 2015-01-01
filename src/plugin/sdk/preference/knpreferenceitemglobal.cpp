@@ -14,6 +14,7 @@
 #include "knpreferenceitemlineedit.h"
 #include "knpreferenceitempathbrowser.h"
 #include "knpreferenceitemnumber.h"
+#include "knpreferenceitemfont.h"
 
 #include "knpreferenceitemglobal.h"
 
@@ -59,6 +60,9 @@ KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const KNPreferenceIte
     case PathEdit:
         //Generate a path editor.
         item=new KNPreferenceItemPathBrowser;
+        break;
+    case Font:
+        item=new KNPreferenceItemFont;
         break;
     }
     if(item==nullptr)

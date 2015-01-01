@@ -18,6 +18,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 #include <QDesktopWidget>
+#include <QStandardPaths>
 
 #include "knglobal.h"
 #include "knconfigure.h"
@@ -64,7 +65,12 @@ KNPluginManager::~KNPluginManager()
     //Delete all the plugins.
     while(!m_pluginList.isEmpty())
     {
-        delete m_pluginList.takeFirst();
+        //We only need to recover the object which don't have parent.
+        QObject *currentObject=m_pluginList.takeFirst();
+        if(currentObject->parent()==nullptr)
+        {
+            delete currentObject;
+        }
     }
     //Save the configure.
     m_global->saveConfigure();
@@ -80,18 +86,6 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial global.
     m_global=KNGlobal::instance();
-    //Set dymanic link library suffix.
-#ifdef Q_OS_WIN32
-    KNGlobal::setDylibSuffix("dll");
-#endif
-#ifdef Q_OS_MACX
-    KNGlobal::setDylibSuffix("dylib");
-#endif
-#ifdef Q_OS_LINUX
-    KNGlobal::setDylibSuffix("so");
-#endif
-    //Load the configure.
-    m_global->loadConfigure();
 }
 
 inline void KNPluginManager::backupWindowGeometry()

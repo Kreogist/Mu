@@ -20,7 +20,8 @@ enum KNPreferenceItemType
     Switcher,
     Number,
     LineEdit,
-    PathEdit
+    PathEdit,
+    Font
 };
 struct KNPreferenceTitleInfo
 {

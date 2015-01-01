@@ -37,14 +37,11 @@ void KNVolumeSlider::paintEvent(QPaintEvent *event)
     //Initial painter.
     QPainter painter(this);
     //Set antialiasing.
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-    //Set pen
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform, true);
+    //Set pen and draw central rects.
     painter.setPen(m_rectColor);
-
-    //Draw central rects.
     painter.drawRoundedRect(m_sliderHeight,
                             (height()-m_sliderHeight)>>1,
                             width()-(m_sliderHeight<<1),
@@ -52,8 +49,7 @@ void KNVolumeSlider::paintEvent(QPaintEvent *event)
                             m_sliderHeight>>1,
                             m_sliderHeight>>1,
                             Qt::AbsoluteSize);
-
-    //Set no pen
+    //Set no pen, and set brush to the filling color.
     painter.setPen(Qt::NoPen);
     QColor contentsColor=m_rectColor;
     contentsColor.setAlphaF(percentage());

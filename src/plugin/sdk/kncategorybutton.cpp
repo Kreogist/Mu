@@ -111,15 +111,14 @@ void KNCategoryButton::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
     QPainter painter(this);
     //Set antialiasing hints.
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform, true);
     //Set pen.
     painter.setPen(Qt::NoPen);
     //Draw background.
     painter.setOpacity(m_textAlpha);
-    painter.setBrush(m_background);
-    painter.drawRect(rect());
+    painter.fillRect(rect(), m_background);
     //Draw top line.
     painter.setPen(m_highLightColor);
     painter.drawRect(0,0,width(),1);

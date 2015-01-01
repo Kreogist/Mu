@@ -37,12 +37,19 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QPixmap artwork(const QString &key);
     int rowFromFilePath(const QString &filePath);
+    int rowFromDetailInfo(const KNMusicDetailInfo &detailInfo);
     int playingItemColumn();
     bool dropMimeData(const QMimeData *data,
                       Qt::DropAction action,
                       int row,
                       int column,
                       const QModelIndex &parent);
+    void setRowProperty(const int &row,
+                        const int &propertyRole,
+                        const QVariant &value);
+    void setItemText(const int &row,
+                     const int &column,
+                     const QString &text);
     void installCategoryModel(KNMusicCategoryModel *model);
     KNMusicLibraryDatabase *database() const;
     void setDatabase(KNMusicLibraryDatabase *database);
@@ -61,17 +68,18 @@ public slots:
     void updateMusicRow(const int &row,
                         const KNMusicDetailInfo &detailInfo);
     void updateCoverImage(const int &row,
-                          const KNMusicDetailInfo &detailInfo);
+                          const KNMusicAnalysisItem &analysisItem);
     void removeMusicRow(const int &row);
 
 private slots:
     void appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
-                               const KNMusicDetailInfo &detailInfo);
+                               const KNMusicAnalysisItem &analysisItem);
     void recoverMusicRow(const QList<QStandardItem *> &musicRow);
     void imageRecoverComplete();
 
 private:
     inline void initialHeader();
+    inline void updateRowInDatabase(const int &row);
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
     KNMusicLibraryDatabase *m_database;
     KNMusicGlobal *m_musicGlobal;

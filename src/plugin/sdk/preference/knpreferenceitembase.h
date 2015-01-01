@@ -35,7 +35,8 @@ protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
     void paintEvent(QPaintEvent *event);
-    void insertControlWidget(QWidget *widget, int stretch = 0);
+    void insertWidget(QWidget *widget, int stretch = 0);
+    void insertSpacing(int size);
     void insertStretch();
 
 private slots:

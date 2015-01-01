@@ -24,6 +24,7 @@
 #include "knmusiclibrarymodel.h"
 #include "knmusiclibrarytreeview.h"
 #include "knmusicsolomenubase.h"
+#include "knmusicsearchbase.h"
 
 #include "knlocalemanager.h"
 
@@ -58,6 +59,7 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QObject *parent) :
 
     //Initial the library treeview.
     m_treeview=new KNMusicLibraryTreeView(m_dropProxy);
+    m_treeview->setMusicTab(this);
     mainLayout->addWidget(m_treeview);
     m_dropProxy->installEventFilter(m_treeview);
     m_dropProxy->setFocusProxy(m_treeview);
@@ -100,6 +102,22 @@ QWidget *KNMusicLibrarySongTab::widget()
     return m_viewer;
 }
 
+void KNMusicLibrarySongTab::showInTab(const KNMusicDetailInfo &detailInfo)
+{
+    //Clear the search result.
+    KNMusicGlobal::musicSearch()->search("");
+    //Get the row of the file.
+    int musicRow=m_musicLibrary->rowFromDetailInfo(detailInfo);
+    //If the row is available.
+    if(musicRow!=-1)
+    {
+        //Scroll to the song.
+        m_treeview->scrollToSourceSongRow(musicRow);
+        //Ask to show current tab.
+        emit requireShowTab();
+    }
+}
+
 void KNMusicLibrarySongTab::retranslate()
 {
     m_showInSongTab->setText(tr("Go to Songs"));
@@ -134,16 +152,7 @@ void KNMusicLibrarySongTab::onActionSearch(const QString &text)
 
 void KNMusicLibrarySongTab::onActionShowInSong()
 {
-    //Get the row of the file.
-    int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
-    //If the row is available.
-    if(musicRow!=-1)
-    {
-        //Scroll to the song.
-        m_treeview->scrollToSourceSongRow(musicRow);
-        //Ask to show current tab.
-        emit requireShowTab();
-    }
+    showInTab(KNMusicGlobal::soloMenu()->currentDetailInfo());
 }
 
 void KNMusicLibrarySongTab::initialShowInAction()

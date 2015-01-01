@@ -48,8 +48,8 @@ public:
     explicit KNMusicTagAPEv2(QObject *parent = 0);
     bool praseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
-                  KNMusicDetailInfo &detailInfo);
-    bool parseAlbumArt(KNMusicDetailInfo &detailInfo);
+                  KNMusicAnalysisItem &analysisItem);
+    bool parseAlbumArt(KNMusicAnalysisItem &analysisItem);
 
 signals:
 
@@ -62,8 +62,8 @@ private:
     void parseRawData(char *rawData,
                       APEHeader &header,
                       QList<APETagItem> &tagList);
-    void writeTagListToDetailInfo(const QList<APETagItem> &tagList,
-                                  KNMusicDetailInfo &detailInfo);
+    void writeTagListToAnalysisItem(const QList<APETagItem> &tagList,
+                                  KNMusicAnalysisItem &analysisItem);
     const char m_apePreamble[8]={'A', 'P', 'E', 'T', 'A', 'G', 'E', 'X'};
     QHash<QString, int> m_keyIndex;
 };

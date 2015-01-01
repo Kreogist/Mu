@@ -102,6 +102,11 @@ KNMusicPlaylistListItem *KNMusicPlaylistDisplay::currentItem()
     return m_currentItem;
 }
 
+void KNMusicPlaylistDisplay::setMusicTab(KNMusicTab *tab)
+{
+    m_playlistTreeView->setMusicTab(tab);
+}
+
 void KNMusicPlaylistDisplay::searchText(const QString &text)
 {
     m_playlistTreeView->searchText(text);
@@ -133,6 +138,11 @@ void KNMusicPlaylistDisplay::displayPlaylistItem(KNMusicPlaylistListItem *item)
                         this, &KNMusicPlaylistDisplay::onActionRowChanged));
     //Update the informations.
     updatePlaylistInfo();
+}
+
+void KNMusicPlaylistDisplay::scrollToSourceSongRow(const int &row)
+{
+    m_playlistTreeView->scrollToSourceSongRow(row);
 }
 
 void KNMusicPlaylistDisplay::resizeEvent(QResizeEvent *event)

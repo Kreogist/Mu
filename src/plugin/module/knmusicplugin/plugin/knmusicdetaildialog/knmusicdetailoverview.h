@@ -48,8 +48,11 @@ private:
         DetailDateModified,
         DetailInformationCount
     };
-    void initialBasicInfoLabel();
-    void initialDetailInfoLabel();
+    inline void initialBasicInfoLabel();
+    inline void initialDetailInfoLabel();
+    inline void setEliedText(QLabel *label,
+                             const QString &text,
+                             const int &width);
     QLabel *m_albumArt, *m_title, *m_artist, *m_album, *m_duration,
            *m_detailInfoCaption[DetailInformationCount],
            *m_detailInfo[DetailInformationCount],

@@ -60,6 +60,7 @@ private:
     void smartVolumeOff();
     int m_originalVolume=-1,
         m_volumeBeforeMute=0.0;
+    qint64 m_backupPosition=-1;
     bool m_mute=false;
     KNMusicBackendThread *m_main=nullptr, *m_preview=nullptr;
 };

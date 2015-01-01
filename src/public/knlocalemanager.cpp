@@ -99,7 +99,7 @@ void KNLocaleManager::loadLanguageFiles()
     englishLanguage.filePath="";
     m_languageList.append(englishLanguage);
     //We will only find language files in "Language" folder of the app path.
-    QDir languageFolder(QApplication::applicationDirPath() + "/Language");
+    QDir languageFolder(m_languageDirPath);
     if(!languageFolder.exists()) //No folder you say a P?
     {
         return;
@@ -171,9 +171,14 @@ KNLocaleManager::KNLocaleManager(QObject *parent) :
     m_translator=new QTranslator(this);
     //Initial no iamge icon.
     m_noImageIcon=QPixmap(":/plugin/configure/locale/noIcon.png");
-    //Load all the language.
-    loadLanguageFiles();
-    //Now we can load the first English language as default language.
-    //The ID of English is 0.
-    setLanguage(0);
 }
+QString KNLocaleManager::languageDirPath() const
+{
+    return m_languageDirPath;
+}
+
+void KNLocaleManager::setLanguageDirPath(const QString &languageDirPath)
+{
+    m_languageDirPath = languageDirPath;
+}
+

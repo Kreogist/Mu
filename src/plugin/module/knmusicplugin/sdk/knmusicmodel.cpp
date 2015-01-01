@@ -21,6 +21,9 @@ KNMusicModel::KNMusicModel(QObject *parent) :
 {
     //Initial music global.
     m_musicGlobal=KNMusicGlobal::instance();
+    //Linked the signal.
+    connect(m_musicGlobal, &KNMusicGlobal::musicFilePathChanged,
+            this, &KNMusicModel::onActionFileNameChanged);
 
     //Initial file searcher.
     m_searcher=new KNMusicSearcher;
@@ -102,26 +105,30 @@ qint64 KNMusicModel::totalDuration() const
     return m_totalDuration;
 }
 
-QString KNMusicModel::filePathFromIndex(const QModelIndex &index)
+KNMusicDetailInfo KNMusicModel::detailInfoFromRow(const int &row)
 {
-    Q_ASSERT(index.isValid());
-    //Return the file path role data.
-    return filePathFromRow(index.row());
-}
-
-QModelIndexList KNMusicModel::indexFromFilePath(const QString &filePath)
-{
-    //If the file path is empty, return a null index.
-    if(filePath.isEmpty())
+    KNMusicDetailInfo detailInfo;
+    //Copy the text first.
+    for(int i=0; i<MusicDataCount; i++)
     {
-        return QModelIndexList();
+        detailInfo.textLists[i]=itemText(row, i);
     }
-    //Using match to find all pathes.
-    return match(index(0, Name),
-                 FilePathRole,
-                 filePath,
-                 1,
-                 Qt::MatchFixedString);
+    //Copy the properties.
+    detailInfo.fileName=rowProperty(row, FileNameRole).toString();
+    detailInfo.filePath=rowProperty(row, FilePathRole).toString();
+    detailInfo.trackFilePath=rowProperty(row, TrackFileRole).toString();
+    detailInfo.coverImageHash=rowProperty(row, ArtworkKeyRole).toString();
+    detailInfo.startPosition=rowProperty(row, StartPositionRole).toLongLong();
+    detailInfo.size=roleData(row, Size, Qt::UserRole).toLongLong();
+    detailInfo.dateModified=roleData(row, DateModified, Qt::UserRole).toDateTime();
+    detailInfo.dateAdded=roleData(row, DateAdded, Qt::UserRole).toDateTime();
+    detailInfo.lastPlayed=roleData(row, LastPlayed, Qt::UserRole).toDateTime();
+    detailInfo.duration=roleData(row, Time, Qt::UserRole).toLongLong();
+    detailInfo.bitRate=roleData(row, BitRate, Qt::UserRole).toLongLong();
+    detailInfo.samplingRate=roleData(row, SampleRate, Qt::UserRole).toLongLong();
+    detailInfo.rating=roleData(row, Size, Qt::DisplayRole).toInt();
+    //Return the detail info.
+    return detailInfo;
 }
 
 QPixmap KNMusicModel::songAlbumArt(const int &row)
@@ -263,5 +270,26 @@ void KNMusicModel::setAnalysisExtend(KNMusicAnalysisExtend *analysisExtend)
     {
         connect(m_analysisExtend, &KNMusicAnalysisExtend::requireAppendRow,
                 this, &KNMusicModel::appendMusicRow);
+    }
+}
+
+void KNMusicModel::onActionFileNameChanged(const QString &originalPath,
+                                           const QString &currentPath,
+                                           const QString &currentFileName)
+{
+    //Search all the path.
+    QModelIndexList originalPathList=match(index(0,0),
+                                           FilePathRole,
+                                           originalPath,
+                                           -1,
+                                           Qt::MatchFixedString);
+    //Change all the pathes and file names.
+    while(!originalPathList.isEmpty())
+    {
+        //Get the row.
+        int currentRow=originalPathList.takeLast().row();
+        //Set the new data.
+        setRowProperty(currentRow, FilePathRole, currentPath);
+        setRowProperty(currentRow, FileNameRole, currentFileName);
     }
 }

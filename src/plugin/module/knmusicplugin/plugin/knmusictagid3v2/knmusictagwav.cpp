@@ -35,8 +35,9 @@ KNMusicTagWAV::KNMusicTagWAV(QObject *parent) :
 
 bool KNMusicTagWAV::praseTag(QFile &musicFile,
                              QDataStream &musicDataStream,
-                             KNMusicDetailInfo &detailInfo)
+                             KNMusicAnalysisItem &analysisItem)
 {
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Check file size.
     if(musicFile.size()<12)
     {
@@ -125,14 +126,15 @@ bool KNMusicTagWAV::praseTag(QFile &musicFile,
     //Write the id3 tag to details.
     if(!frames.isEmpty())
     {
-        writeID3v2ToDetails(frames, property, detailInfo);
+        writeID3v2ToDetails(frames, property, analysisItem);
     }
     return true;
 }
 
-bool KNMusicTagWAV::parseAlbumArt(KNMusicDetailInfo &detailInfo)
+bool KNMusicTagWAV::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
-    Q_UNUSED(detailInfo)
+    //WAV doesn't contains album art, but the ID3v2 might contains data.
+    Q_UNUSED(analysisItem)
     return false;
 }
 

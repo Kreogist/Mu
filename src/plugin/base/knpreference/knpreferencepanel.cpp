@@ -17,6 +17,7 @@
  */
 #include <QBoxLayout>
 
+#include "knpreferencegeneralpanel.h"
 #include "knpreferencewidgetspanel.h"
 #include "knpreferencecategory.h"
 #include "knpreferencecontents.h"
@@ -59,8 +60,11 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
     initialLanguagePanel();
 
     //Initial the general panel.
-    m_generalPanel=new KNPreferenceWidgetsPanel(this);
+    m_generalPanel=new KNPreferenceGeneralPanel(this);
     m_generalPanel->setPanelName("General");
+    //Link the request.
+    connect(m_generalPanel, &KNPreferenceGeneralPanel::libraryDirMoved,
+            this, &KNPreferencePanel::requireUpdateInfrastructure);
 
     //Add category.
     addCategory("",
@@ -129,7 +133,7 @@ void KNPreferencePanel::onActionCategoryIndexChange(const int &index)
     m_contents->setCurrentIndex(index);
 }
 
-void KNPreferencePanel::initialLanguagePanel()
+inline void KNPreferencePanel::initialLanguagePanel()
 {
     //Initial the language item.
     m_languageItem=new KNPreferenceLanguageItem(this);

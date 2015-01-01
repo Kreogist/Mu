@@ -52,6 +52,7 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
 
     //Initial the album detail.
     m_albumDetail=new KNMusicAlbumDetail(m_dropProxy);
+    m_albumDetail->setMusicTab(this);
     //Initial the album view.
     m_albumView=new KNMusicAlbumView(m_dropProxy);
     m_albumView->setAlbumDetail(m_albumDetail);
@@ -82,6 +83,34 @@ QString KNMusicLibraryAlbumTab::caption()
 QPixmap KNMusicLibraryAlbumTab::icon()
 {
     return QPixmap(":/plugin/music/category/03_ablums.png");
+}
+
+void KNMusicLibraryAlbumTab::showInTab(const KNMusicDetailInfo &detailInfo)
+{
+    //Clear the search result.
+    KNMusicGlobal::musicSearch()->search("");
+    //Get the row of the file.
+    int musicRow=m_musicLibrary->rowFromDetailInfo(detailInfo);
+    //If the row is available.
+    if(musicRow!=-1)
+    {
+        //Get the genre name of the row.
+        QModelIndex categoryIndex=
+                proxyCategoryModel()->categoryIndex(
+                    m_musicLibrary->itemText(musicRow,
+                                             m_categoryModel->categoryIndex()));
+        //Check is the catgeory vaild.
+        if(categoryIndex.isValid())
+        {
+            //Ask to show the genre tab.
+            emit requireShowTab();
+            //Change the current category index.
+            m_albumView->locateTo(categoryIndex);
+            m_albumView->selectAlbum(proxyCategoryModel()->mapToSource(categoryIndex));
+            //Set the details to display the index of the song.
+            m_albumDetail->scrollToSourceRow(musicRow);
+        }
+    }
 }
 
 void KNMusicLibraryAlbumTab::retranslate()
@@ -145,30 +174,7 @@ void KNMusicLibraryAlbumTab::onActionRequireSearch()
 
 void KNMusicLibraryAlbumTab::onActionShowInAlbum()
 {
-    //Clear the search result.
-    KNMusicGlobal::musicSearch()->search("");
-    //Get the row of the file.
-    int musicRow=m_musicLibrary->rowFromFilePath(KNMusicGlobal::soloMenu()->currentFilePath());
-    //If the row is available.
-    if(musicRow!=-1)
-    {
-        //Get the genre name of the row.
-        QModelIndex categoryIndex=
-                proxyCategoryModel()->categoryIndex(
-                    m_musicLibrary->itemText(musicRow,
-                                             m_categoryModel->categoryIndex()));
-        //Check is the catgeory vaild.
-        if(categoryIndex.isValid())
-        {
-            //Ask to show the genre tab.
-            emit requireShowTab();
-            //Change the current category index.
-            m_albumView->locateTo(categoryIndex);
-            m_albumView->selectAlbum(proxyCategoryModel()->mapToSource(categoryIndex));
-            //Set the details to display the index of the song.
-            m_albumDetail->scrollToSourceRow(musicRow);
-        }
-    }
+    showInTab(KNMusicGlobal::soloMenu()->currentDetailInfo());
 }
 
 void KNMusicLibraryAlbumTab::initialShowInAction()

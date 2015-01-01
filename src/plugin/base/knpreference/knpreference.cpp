@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knglobal.h"
 #include "kncategoryplugin.h"
 #include "knpreferencepanel.h"
 #include "preference/knpreferenceitemglobal.h"
@@ -26,8 +27,11 @@ KNPreference::KNPreference(QObject *parent) :
 {
     //Initial the preference global.
     m_preferenceGlobal=KNPreferenceItemGlobal::instance();
+    //Link the update infrastructure signal at very beginning.
     //Initial the preference panel.
     m_preferencePanel=new KNPreferencePanel;
+    connect(m_preferencePanel, &KNPreferencePanel::requireUpdateInfrastructure,
+            KNGlobal::instance(), &KNGlobal::updateInfrastructure);
     connect(m_preferencePanel, &KNPreferencePanel::requireHidePreference,
             this, &KNPreference::onActionHidePreference);
 }

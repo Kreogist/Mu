@@ -61,6 +61,7 @@ KNMusicPlaylistTab::KNMusicPlaylistTab(QObject *parent) :
     m_mainViewer->addWidget(m_playlistListViewer);
     //Initial the playlist display.
     m_playlistDisplay=new KNMusicPlaylistDisplay(m_mainViewer);
+    m_playlistDisplay->setMusicTab(this);
     m_mainViewer->addWidget(m_playlistDisplay);
 
     //Set viewer properties after add widgets.
@@ -89,6 +90,13 @@ QPixmap KNMusicPlaylistTab::icon()
 QWidget *KNMusicPlaylistTab::widget()
 {
     return m_viewer;
+}
+
+void KNMusicPlaylistTab::showIndexInModel(KNMusicModel *model,
+                                          const QModelIndex &index)
+{
+    //Ask playlist manager to locate the index.
+    emit requireLocateIndexInModel(model, index);
 }
 
 KNMusicPlaylistModel *KNMusicPlaylistTab::currentPlaylistModel()
@@ -156,6 +164,11 @@ void KNMusicPlaylistTab::setPlaylistList(KNMusicPlaylistList *playlistList)
     //Connect current changed signal.
     connect(m_playlistListView->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &KNMusicPlaylistTab::currentPlaylistChanged);
+}
+
+void KNMusicPlaylistTab::selectSourceRow(const int &row)
+{
+    m_playlistDisplay->scrollToSourceSongRow(row);
 }
 
 void KNMusicPlaylistTab::setCurrentPlaylist(const QModelIndex &index)

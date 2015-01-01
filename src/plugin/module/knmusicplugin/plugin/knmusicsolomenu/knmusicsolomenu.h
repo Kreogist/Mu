@@ -27,8 +27,7 @@ public:
     explicit KNMusicSoloMenu(QWidget *parent = 0);
     void setProxyModel(KNMusicProxyModel *model);
     void setCurrentIndex(const QModelIndex &itemIndex);
-    void setDetailDialog(KNMusicDetailDialogBase *dialog);
-    QString currentFilePath() const;
+    KNMusicDetailInfo currentDetailInfo();
 
 signals:
 
@@ -37,12 +36,13 @@ public slots:
     void addMusicActions(QList<QAction *> actions);
 
 private slots:
-    void onActionOpenCurrentFile();
+    void onActionOpenCurrent();
     void onActionShowInGraphicsShell();
     void onActionCopyFilePath();
     void onActionCopyItemText();
     void onActionSearchItemText();
     void onActionShowDetail();
+    void onActionRenameCurrent();
 
 private:
     enum SoloMenuActions
@@ -54,16 +54,18 @@ private:
         SearchItemText,
         CopyFilePath,
         CopyItemText,
+        RenameToArtistHyphonName,
         Delete,
         SoloMenuActionCount
     };
     void createActions();
-    void updateActionsCaption();
-    QString m_actionTitles[SoloMenuActionCount], m_itemText, m_filePath;
+    inline QString generatePreferFileName(const QModelIndex &itemIndex);
+    QString m_actionTitles[SoloMenuActionCount],
+            m_itemText, m_filePath, m_preferFileName;
     QAction *m_actions[SoloMenuActionCount],
             *m_customSeperator;
+    QModelIndex m_currentIndex;
     KNMusicProxyModel *m_proxyModel;
-    KNMusicDetailDialogBase *m_detailDialog;
 };
 
 #endif // KNMUSICSOLOMENU_H

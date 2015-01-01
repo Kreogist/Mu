@@ -67,6 +67,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
             {
                 onActionCreatePlaylist(0, filePath);
             });
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireLocateIndexInModel,
+            this, &KNMusicPlaylistManager::locateIndexInModel);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
             this, &KNMusicPlaylistManager::loadPlaylistList);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,
@@ -250,8 +252,9 @@ void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &c
                                                             const QModelIndex &previous)
 {
     Q_UNUSED(previous)
-    //Get the current item.
-    KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItemFromIndex(current);
+    //Display the current index playlist list item.
+    KNMusicPlaylistListItem *currentItem=
+            m_playlistList->playlistItemFromIndex(current);
     //Check the item is available.
     if(currentItem==nullptr)
     {
@@ -264,6 +267,27 @@ void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &c
     }
     //Ask UI to display the current index playlist.
     m_playlistTab->displayPlaylistItem(currentItem);
+}
+
+void KNMusicPlaylistManager::locateIndexInModel(KNMusicModel *model,
+                                                QModelIndex index)
+{
+    //Find the music model first.
+    for(int i=0; i<m_playlistList->rowCount(); ++i)
+    {
+        KNMusicPlaylistListItem *currentItem=m_playlistList->playlistItem(i);
+        //Check the item's model.
+        if((KNMusicModel *)currentItem->playlistModel()==model)
+        {
+            //Switch to the current playlist.
+            m_playlistTab->setCurrentPlaylist(m_playlistList->index(i, 0));
+            //Select the index.
+            m_playlistTab->selectSourceRow(index.row());
+            //Ask to show the playlist tab.
+            emit m_playlistTab->requireShowTab();
+            return;
+        }
+    }
 }
 
 void KNMusicPlaylistManager::initialPlaylistLoader()

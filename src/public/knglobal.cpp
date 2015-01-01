@@ -23,7 +23,9 @@
 #include <QDebug>
 
 QString KNGlobal::m_dylibSuffix="";
-
+QString KNGlobal::m_libraryPath="";
+QString KNGlobal::m_userDataPath="";
+QString KNGlobal::m_pluginDirPath="";
 KNGlobal *KNGlobal::m_instance=nullptr;
 
 KNGlobal *KNGlobal::instance()
@@ -51,6 +53,21 @@ QString KNGlobal::dylibSuffix()
 QString KNGlobal::applicationDirPath()
 {
     return QApplication::applicationDirPath();
+}
+
+QString KNGlobal::userDataPath()
+{
+    return m_userDataPath;
+}
+
+QString KNGlobal::pluginDirPath()
+{
+    return m_pluginDirPath;
+}
+
+QString KNGlobal::libraryPath()
+{
+    return m_libraryPath;
 }
 
 QTextCodec *KNGlobal::localeDefaultCodec()
@@ -111,6 +128,11 @@ QStringList KNGlobal::urlToPathList(const QList<QUrl> urls)
 void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
 {
     m_dylibSuffix = dylibSuffix;
+}
+
+void KNGlobal::setLibraryPath(const QString &libraryPath)
+{
+    m_libraryPath = ensurePathAvaliable(libraryPath);
 }
 
 void KNGlobal::showInGraphicalShell(const QString &filePath)
@@ -190,6 +212,57 @@ void KNGlobal::setClipboardText(const QString &text)
     QApplication::clipboard()->setText(text, QClipboard::Clipboard);
 }
 
+void KNGlobal::moveFolder(const QString &sourceDirPath,
+                          const QString &destinationDirPath)
+{
+    //Ensure that the destination dir should exist.
+    QDir sourceDir(sourceDirPath);
+    QFileInfoList sourceDirInfoList=sourceDir.entryInfoList(QDir::Dirs |
+                                                            QDir::Files |
+                                                            QDir::NoDotAndDotDot);
+    for(QFileInfoList::iterator i=sourceDirInfoList.begin();
+        i!=sourceDirInfoList.end();
+        ++i)
+    {
+        QString destinationPath=destinationDirPath+"/"+(*i).fileName();
+        if((*i).isDir())
+        {
+            //Generate the sub dir.
+            sourceDir.mkpath(destinationPath);
+            //Move the sub dir.
+            moveFolder((*i).absoluteFilePath(), destinationPath);
+        }
+        else if((*i).isFile())
+        {
+            //Delete the destination path file if it already exist.
+            QFileInfo destinationCheck(destinationPath);
+            if(destinationCheck.exists())
+            {
+                //We can hint user to chose.
+                QFile::remove(destinationCheck.absoluteFilePath());
+            }
+            //Rename the file to move it.
+            QFile::rename((*i).absoluteFilePath(),
+                          destinationPath);
+        }
+    }
+    //Remove the source dir.
+    sourceDir.rmdir(".");
+}
+
+bool KNGlobal::renameFile(const QString &originalPath, const QString &currentPath)
+{
+    QFile targetFile(originalPath);
+    //Check the file is exist or not.
+    if(!targetFile.exists())
+    {
+        return false;
+    }
+    //This is the most fucking place, the string you give in rename should be
+    //the COMPLETE path, like: "D:/Tojo Nozomi - Start_DASH!.flac"
+    return targetFile.rename(currentPath);
+}
+
 void KNGlobal::setSystemData(const QString &key, const QVariant &value)
 {
     switch(value.type())
@@ -205,6 +278,9 @@ void KNGlobal::setSystemData(const QString &key, const QVariant &value)
         break;
     case QVariant::Bool:
         m_configure->setSystemData(key, value.toBool());
+        break;
+    case QVariant::Font:
+        m_configure->setSystemData(key, fontToObject(value.value<QFont>()));
         break;
     default:
         break;
@@ -234,14 +310,19 @@ void KNGlobal::setCustomData(const QString &module,
     case QVariant::Bool:
         m_configure->setCustomData(module, key, value.toBool());
         break;
+    case QVariant::Font:
+        m_configure->setCustomData(module, key, fontToObject(value.value<QFont>()));
     default:
         break;
     }
 }
 
-QVariant KNGlobal::customData(const QString &module, const QString &key)
+QVariant KNGlobal::customData(const QString &module,
+                              const QString &key,
+                              const QVariant &defaultValue)
 {
-    return m_configure->customData(module, key);
+    QVariant preferData=m_configure->customData(module, key);
+    return preferData.isNull()?defaultValue:preferData;
 }
 
 void KNGlobal::retranslate()
@@ -254,8 +335,6 @@ void KNGlobal::loadConfigure()
 {
     //Load the configure first.
     m_configure->loadConfigure();
-    //Set the language by the id.
-    m_localeManager->setLanguageFromID(systemData("Language").toString());
 }
 
 void KNGlobal::saveConfigure()
@@ -266,7 +345,7 @@ void KNGlobal::saveConfigure()
     m_configure->saveConfigure();
 }
 
-void KNGlobal::initialStorageUnit()
+inline void KNGlobal::initialStorageUnit()
 {
     m_storageUnit[KiloByte]="KB";
     m_storageUnit[MegaByte]="MB";
@@ -280,26 +359,96 @@ void KNGlobal::initialStorageUnit()
     m_storageUnit[DoggaByte]="DB";
 }
 
+inline void KNGlobal::initialDefaultPath()
+{
+#ifdef Q_OS_WIN32
+    m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+                   "/Kreogist/Mu";
+#endif
+#ifdef Q_OS_MACX
+    m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) +
+                   "/Mu";
+#endif
+#ifdef Q_OS_LINUX
+    m_userDataPath=QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+
+                   "/.kreogist/mu";
+#endif
+    m_libraryPath=userDataPath()+"/Library";
+    m_pluginDirPath=userDataPath()+"/Plugins";
+}
+
+void KNGlobal::updateInfrastructure()
+{
+    //Update the data path.
+    QString originalLibraryPath=m_libraryPath;
+    m_libraryPath=customData("General", "LibraryPath", m_libraryPath).toString();
+    //Give out the library path udpate signal.
+    emit libraryMoved(originalLibraryPath, m_libraryPath);
+
+    //Configure set the custom font folder, load fonts from the folder.
+    m_fontManager->loadCustomFontFolder(userDataPath()+"/Fonts");
+    //Set the language dir path.
+    m_localeManager->setLanguageDirPath(userDataPath()+"/Language");
+    //Load all the language.
+    m_localeManager->loadLanguageFiles();
+}
+
+QJsonObject KNGlobal::fontToObject(const QFont &font)
+{
+    QJsonObject fontObject;
+    fontObject.insert("KNObjectType", "Font");
+    fontObject.insert("Family", font.family());
+    fontObject.insert("PixelSize", font.pixelSize());
+    fontObject.insert("Bold", font.bold());
+    fontObject.insert("Italic", font.italic());
+    fontObject.insert("Underline", font.underline());
+    fontObject.insert("Strikeout", font.strikeOut());
+    fontObject.insert("Kerning", font.kerning());
+    return fontObject;
+}
+
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent)
 {
+    //Set dymanic link library suffix.
+#ifdef Q_OS_WIN32
+    setDylibSuffix("dll");
+#endif
+#ifdef Q_OS_MACX
+    setDylibSuffix("dylib");
+#endif
+#ifdef Q_OS_LINUX
+    setDylibSuffix("so");
+#endif
     //Initial the basic strings.
     initialStorageUnit();
+    //Set the default library path.
+    initialDefaultPath();
 
-    //Initial the fonts.
-    m_fontManager=KNFontManager::instance();
-    m_fontManager->loadCustomFontFolder(QApplication::applicationDirPath() +
-                                        "/Fonts");
-    m_fontManager->initialDefaultFont();
-
-    //Initial the configure.
+    //Initial the configure manager.
     m_configure=KNConfigure::instance();
     //Set the configure file path.
-    m_configure->setConfigurePath(QApplication::applicationDirPath() +
-                                      "/Configure");
+    //-- Why set configure path here?
+    //A: Because we won't change the configure path.
+    m_configure->setConfigurePath(userDataPath()+"/Configure");
+    //Load the configure.
+    loadConfigure();
 
+    //Initial the font manager.
+    m_fontManager=KNFontManager::instance();
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();
+
+    //Update the infrastructure.
+    updateInfrastructure();
+
+    //Load the default settings.
+    m_fontManager->initialDefaultFont();
+    //Now we can load the first English language as default language.
+    //The ID of English is 0.
+    m_localeManager->setLanguage(0);
+    //Set the language by the id from the configure.
+    m_localeManager->setLanguageFromID(systemData("Language").toString());
 
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,

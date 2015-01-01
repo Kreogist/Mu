@@ -9,8 +9,19 @@
 
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QHash>
 
 #include <QObject>
+
+namespace KNConfigureTypes
+{
+enum Types
+{
+    Font
+};
+}
+
+using namespace KNConfigureTypes;
 
 class KNConfigure : public QObject
 {
@@ -38,16 +49,19 @@ private:
     static KNConfigure *m_instance;
     explicit KNConfigure(QObject *parent = 0);
 
-    void checkConfigureFolder();
-    void loadConfigureFromFile(const QString &filePath,
-                               QJsonObject &configureObject);
-    void saveConfigureToFile(const QString &filePath,
-                             const QJsonObject &configureObject);
+    inline QVariant parseJsonValue(const QJsonValue &value);
+
+    inline void generateConfigureFolder();
+    inline void loadConfigureFromFile(const QString &filePath,
+                                      QJsonObject &configureObject);
+    inline void saveConfigureToFile(const QString &filePath,
+                                    const QJsonObject &configureObject);
 
     QString m_configurePath,
             m_systemConfigurePath,
             m_userConfigurePath;
     QJsonObject m_systemConfigure, m_customConfigure;
+    QHash<QString, int> m_objectType;
 };
 
 #endif // KNCONFIGURE_H

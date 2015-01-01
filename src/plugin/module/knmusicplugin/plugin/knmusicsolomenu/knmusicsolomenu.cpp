@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QDir>
+#include <QFileInfo>
 
 #include "knglobal.h"
 
@@ -35,11 +36,8 @@ using namespace KNMusic;
 KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
     KNMusicSoloMenuBase(parent)
 {
-    //Set seperator style sheet, I can't solve this bug in coding way.
-    setStyleSheet("QMenu::separator {height:1px;"
-                  "background: rgba(255, 255, 255, 100);"
-                  "margin-left: 5px;"
-                  "margin-right: 5px;}");
+    //Set the separator color.
+    setSeparatorColor(QColor(255, 255, 255, 100));
     //Set palette.
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));
@@ -64,17 +62,36 @@ void KNMusicSoloMenu::setProxyModel(KNMusicProxyModel *model)
     m_proxyModel=model;
 }
 
-void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
+void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &proxyIndex)
 {
-    int row=itemIndex.row();
+    //Save the current index.
+    m_currentIndex=proxyIndex;
+    //Get the row and set data.
+    int row=m_currentIndex.row();
     m_actions[PlayCurrent]->setText(
                 m_actionTitles[PlayCurrent].arg(
                     m_proxyModel->itemText(row, Name)));
     m_actions[Open]->setText(
                 m_actionTitles[Open].arg(
                     m_proxyModel->fileNameFromRow(row)));
-    m_itemText=m_proxyModel->itemText(itemIndex.row(), itemIndex.column());
+    m_itemText=m_proxyModel->itemText(proxyIndex.row(), proxyIndex.column());
     m_filePath=m_proxyModel->filePathFromRow(row);
+    //Generate the prefer name.
+    m_preferFileName=generatePreferFileName(proxyIndex);
+    //If the prefer file name is empty, means now the file is just the prefer
+    //name, hide this action.
+    if(m_preferFileName.isEmpty())
+    {
+        m_actions[RenameToArtistHyphonName]->setVisible(false);
+    }
+    else
+    {
+        //Or else, show the action and set the text.
+        m_actions[RenameToArtistHyphonName]->setVisible(true);
+        m_actions[RenameToArtistHyphonName]->setText(
+                    m_actionTitles[RenameToArtistHyphonName].arg(m_preferFileName));
+    }
+    //Set current item relate action text.
     if(m_itemText.isEmpty())
     {
         m_actions[CopyItemText]->setVisible(false);
@@ -89,14 +106,10 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &itemIndex)
     }
 }
 
-void KNMusicSoloMenu::setDetailDialog(KNMusicDetailDialogBase *dialog)
+KNMusicDetailInfo KNMusicSoloMenu::currentDetailInfo()
 {
-    m_detailDialog=dialog;
-}
-
-QString KNMusicSoloMenu::currentFilePath() const
-{
-    return m_filePath;
+    //Return the detail info from the proxy model.
+    return m_proxyModel->detailInfoFromRow(m_currentIndex.row());
 }
 
 void KNMusicSoloMenu::retranslate()
@@ -114,6 +127,7 @@ void KNMusicSoloMenu::retranslate()
 #ifdef Q_OS_LINUX
     m_actionTitles[ShowInGraphicShell]=tr("Show the contains folder");
 #endif
+    m_actionTitles[RenameToArtistHyphonName]=tr("Rename to %1");
     m_actionTitles[CopyFilePath]=tr("Copy location");
     m_actionTitles[CopyItemText]=tr("Copy '%1'");
     m_actionTitles[SearchItemText]=tr("Search '%1'");
@@ -138,7 +152,7 @@ void KNMusicSoloMenu::addMusicActions(QList<QAction *> actions)
     insertSeparator(m_customSeperator);
 }
 
-void KNMusicSoloMenu::onActionOpenCurrentFile()
+void KNMusicSoloMenu::onActionOpenCurrent()
 {
     KNGlobal::openLocalFile(m_filePath);
 }
@@ -165,7 +179,12 @@ void KNMusicSoloMenu::onActionSearchItemText()
 
 void KNMusicSoloMenu::onActionShowDetail()
 {
-    m_detailDialog->showDialog(m_filePath);
+    KNMusicGlobal::detailDialog()->showDialog(m_filePath);
+}
+
+void KNMusicSoloMenu::onActionRenameCurrent()
+{
+    emit requireRenameCurrent(m_preferFileName);
 }
 
 void KNMusicSoloMenu::createActions()
@@ -181,7 +200,7 @@ void KNMusicSoloMenu::createActions()
 
     //Open.
     connect(m_actions[Open], SIGNAL(triggered()),
-            this, SLOT(onActionOpenCurrentFile()));
+            this, SLOT(onActionOpenCurrent()));
     addAction(m_actions[Open]);
 
     addSeparator();
@@ -198,10 +217,18 @@ void KNMusicSoloMenu::createActions()
 
     addSeparator();
 
+    //Search current item text.
     connect(m_actions[SearchItemText], SIGNAL(triggered()),
             this, SLOT(onActionSearchItemText()));
     addAction(m_actions[SearchItemText]);
     m_customSeperator=m_actions[SearchItemText];
+
+    addSeparator();
+
+    //Rename current file.
+    connect(m_actions[RenameToArtistHyphonName], SIGNAL(triggered()),
+            this, SLOT(onActionRenameCurrent()));
+    addAction(m_actions[RenameToArtistHyphonName]);
 
     addSeparator();
 
@@ -219,4 +246,38 @@ void KNMusicSoloMenu::createActions()
     connect(m_actions[Delete], SIGNAL(triggered()),
             this, SIGNAL(requireRemoveCurrent()));
     addAction(m_actions[Delete]);
+}
+
+inline QString KNMusicSoloMenu::generatePreferFileName(
+        const QModelIndex &itemIndex)
+{
+    QFileInfo currentFile(
+                m_proxyModel->rowProperty(itemIndex.row(), FilePathRole).toString());
+    QString artistText=m_proxyModel->itemText(itemIndex.row(), Artist),
+            nameText=m_proxyModel->itemText(itemIndex.row(), Name),
+            preferString;
+    //Check the artist text first.
+    if(!artistText.isEmpty())
+    {
+        preferString=m_proxyModel->itemText(itemIndex.row(), Artist);
+    }
+    //Check the title then.
+    //The title might be empty or it might be the file name itself,
+    //set it to the base name, check this first.
+    if(nameText.isEmpty() || nameText==currentFile.fileName())
+    {
+        nameText=currentFile.completeBaseName();
+    }
+    //Now name text cannot be empty any more, add it to the prefer string.
+    if(!preferString.isEmpty())
+    {
+        preferString += " - ";
+    }
+    preferString += nameText + "." + currentFile.suffix();
+    //Remove the unavailable characters in the prefer string.
+    preferString.replace(QRegExp("[\\\\/:*?\"<>]"), "_");
+    //Check is the prefer string is just the file name, if so, return a empty
+    //string.
+    return preferString==currentFile.fileName()?
+                QString():preferString;
 }

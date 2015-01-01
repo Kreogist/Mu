@@ -4,7 +4,9 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
+#include <QScopedPointer>
 #include <QMimeData>
+#include <QPainter>
 #include <QList>
 #include <QKeyEvent>
 #include <QDataStream>
@@ -33,7 +35,6 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
 {
     //Set properties.
     setAllColumnsShowFocus(true);
-    setAlternatingRowColors(true);
     setContentsMargins(0,0,0,0);
     setDragDropMode(QAbstractItemView::DragOnly);
     setDropIndicatorShown(true);
@@ -149,7 +150,8 @@ void KNMusicTreeViewBase::scrollToSourceSongRow(const int &row)
     //Do scroll and ensure that the music model exist.
     if(m_proxyModel->musicModel()!=nullptr)
     {
-        scrollToSongIndex(m_proxyModel->mapFromSource(m_proxyModel->musicModel()->index(row, Name)));
+        scrollToSongIndex(m_proxyModel->mapFromSource(
+                              m_proxyModel->musicModel()->index(row, Name)));
     }
 }
 
@@ -159,7 +161,7 @@ void KNMusicTreeViewBase::scrollToSongRow(const int &row)
     scrollToSongIndex(m_proxyModel->index(row, Name));
 }
 
-void KNMusicTreeViewBase::scrollToSongIndex(const QModelIndex &songIndex)
+inline void KNMusicTreeViewBase::scrollToSongIndex(const QModelIndex &songIndex)
 {
     //Set the current index to that row.
     setCurrentIndex(songIndex);
@@ -329,7 +331,7 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
         return;
     }
     //Clear the mimedata.
-    QDrag *drag=new QDrag(this);
+    QScopedPointer<QDrag> drag(new QDrag(this));
     QMimeData *mimeData=new QMimeData;
     //Get the file path and music row of all the selected rows.
     QList<QUrl> fileUrlList;
@@ -342,14 +344,9 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
         int currentRow=m_proxyModel->mapToSource(*i).row();
         //Add the file path and music row to list.
         fileUrlList.append(QUrl::fromLocalFile(musicModel->filePathFromRow(currentRow)));
-//        songContentRowList.append(musicModel->songRow(currentRow));
     }
-    //Store the row data.
-//    KNMusicGlobal::setDragMusicRow(songContentRowList);
     //Set the data to mimedata.
     mimeData->setUrls(fileUrlList);
-//    m_mimeData->setData(KNMusicGlobal::musicRowFormat(),
-//                        QByteArray(1,0)); //Only a data for flag.
     //Set the mime data to the drag action.
     drag->setMimeData(mimeData);
     //Do the drag.
@@ -397,6 +394,33 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
     header()->moveSection(header()->visualIndex(logicalIndex), 0);
 }
 
+void KNMusicTreeViewBase::drawRow(QPainter *painter,
+                                  const QStyleOptionViewItem &options,
+                                  const QModelIndex &index) const
+{
+    if(index.row()&1)
+    {
+        //Draw the alternative background.
+        painter->fillRect(QRect(options.rect.x(),
+                                options.rect.y(),
+                                width(),
+                                options.rect.height()),
+                          m_alternateColor);
+    }
+//    if(currentIndex().row()==index.row())
+//    {
+//        //Prepare the painter.
+//        painter->setPen(Qt::NoPen);
+//        painter->setBrush(options.palette.highlight());
+//        //Draw the alternative background.
+//        painter->drawRect(options.rect.x(),
+//                          options.rect.y(),
+//                          width(),
+//                          options.rect.height());
+//    }
+    QTreeView::drawRow(painter, options, index);
+}
+
 void KNMusicTreeViewBase::setAnimateState(bool on)
 {
     m_animate=on;
@@ -431,7 +455,6 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
     m_buttonColor.setHsv(m_buttonColor.hue(),
                          m_buttonColor.saturation(),
                          frame<<1);
-    pal.setColor(QPalette::AlternateBase, m_alternateColor);
     pal.setColor(QPalette::Text, m_fontColor);
     pal.setColor(QPalette::Button, m_buttonColor);
     setPalette(pal);
@@ -445,6 +468,13 @@ void KNMusicTreeViewBase::playCurrent()
 void KNMusicTreeViewBase::removeCurrent()
 {
     removeIndex(currentIndex());
+}
+
+void KNMusicTreeViewBase::renameCurrent(const QString &preferName)
+{
+    KNMusicGlobal::instance()->renameMusicFile(
+                m_proxyModel->filePathFromRow(currentIndex().row()),
+                preferName);
 }
 
 void KNMusicTreeViewBase::initialActions()
@@ -480,6 +510,9 @@ void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
         m_soloConnections->addConnectionHandle(
                     connect(soloMenu, &KNMusicSoloMenuBase::requireRemoveCurrent,
                             this, &KNMusicTreeViewBase::removeCurrent));
+        m_soloConnections->addConnectionHandle(
+                    connect(soloMenu, &KNMusicSoloMenuBase::requireRenameCurrent,
+                            this, &KNMusicTreeViewBase::renameCurrent));
         //Set proxy model and current index.
         soloMenu->setProxyModel(m_proxyModel);
         soloMenu->setCurrentIndex(pressedIndex);
@@ -513,12 +546,22 @@ void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
     }
 }
 
+KNMusicTab *KNMusicTreeViewBase::musicTab() const
+{
+    return m_musicTab;
+}
+
+void KNMusicTreeViewBase::setMusicTab(KNMusicTab *musicTab)
+{
+    m_musicTab = musicTab;
+}
+
 void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
 {
     if(index.isValid())
     {
         //Set the playing model.
-        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel);
+        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel, m_musicTab);
         KNMusicGlobal::nowPlaying()->playMusic(index);
     }
 }

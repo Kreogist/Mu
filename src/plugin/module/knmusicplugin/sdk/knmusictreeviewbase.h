@@ -17,6 +17,7 @@ class QTimeLine;
 class KNConnectionHandler;
 class KNMusicModel;
 class KNMusicProxyModel;
+class KNMusicTab;
 class KNMusicTreeViewBase : public QTreeView
 {
     Q_OBJECT
@@ -28,9 +29,11 @@ public:
     void enableSearchShortcut();
     void disableSearchShortcut();
     void scrollToSongRow(const int &row);
-    void scrollToSongIndex(const QModelIndex &songIndex);
+    inline void scrollToSongIndex(const QModelIndex &songIndex);
     void scrollToSourceSongRow(const int &row);
     KNMusicProxyModel *proxyModel();
+    KNMusicTab *musicTab() const;
+    void setMusicTab(KNMusicTab *musicTab);
 
 signals:
     void searchComplete();
@@ -50,6 +53,9 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);
+    void drawRow(QPainter *painter,
+                 const QStyleOptionViewItem &options,
+                 const QModelIndex &index) const;
     void setAnimateState(bool on);
 
 private slots:
@@ -61,6 +67,7 @@ private slots:
 
     void playCurrent();
     void removeCurrent();
+    void renameCurrent(const QString &preferName);
 
 private:
     inline void initialActions();
@@ -77,6 +84,7 @@ private:
            m_fontColor=QColor(255,255,255),
            m_buttonColor=QColor(255,255,255);
     QString m_seachText;
+    KNMusicTab *m_musicTab=nullptr;
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;

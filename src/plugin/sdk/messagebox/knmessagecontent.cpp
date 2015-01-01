@@ -46,14 +46,15 @@ void KNMessageContent::paintEvent(QPaintEvent *event)
     QLinearGradient shadowGradient(0,0,0,m_shadowHeight);
     shadowGradient.setColorAt(0, QColor(0,0,0,33));
     shadowGradient.setColorAt(1, QColor(0,0,0,0));
-    painter.setBrush(shadowGradient);
-    painter.drawRect(0,0,width(),m_shadowHeight);
+    painter.fillRect(QRect(0,0,width(),m_shadowHeight), shadowGradient);
     //Draw down bound shadow.
+    //--Why using translate?
+    //Because you need to change the start and stop postion of the gradient
+    //if you don't want to use translate.
     painter.translate(0, height()-m_shadowHeight);
     shadowGradient.setColorAt(0, QColor(0,0,0,0));
     shadowGradient.setColorAt(1, QColor(0,0,0,20));
-    painter.setBrush(shadowGradient);
-    painter.drawRect(0,0,width(),m_shadowHeight);
+    painter.fillRect(QRect(0,0,width(),m_shadowHeight), shadowGradient);
 }
 
 QWidget *KNMessageContent::content() const

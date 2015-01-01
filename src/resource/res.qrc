@@ -8,6 +8,8 @@
         <file>public/SearchIcon.png</file>
         <file>public/English.png</file>
         <file>public/shadow.png</file>
+        <file>public/indicator.png</file>
+        <file>public/preview_font.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/category/01_musics.png</file>
@@ -55,6 +57,14 @@
         <file>music/library/library_add.png</file>
         <file>music/library/library_import.png</file>
         <file>music/library/library_scan.png</file>
+        <file>music/player/menuicons/locate_albums.png</file>
+        <file>music/player/menuicons/locate_artists.png</file>
+        <file>music/player/menuicons/locate_genres.png</file>
+        <file>music/player/menuicons/locate_original.png</file>
+        <file>music/player/menuicons/locate_songs.png</file>
+        <file>music/player/menuicons/showInGraphicsShell.png</file>
+        <file>music/player/menuicons/get_info.png</file>
+        <file>music/player/menuicons/rating.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>windows/next.png</file>

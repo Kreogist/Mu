@@ -10,9 +10,72 @@
     </message>
 </context>
 <context>
+    <name>KNFontDialog</name>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="30"/>
+        <source>Font</source>
+        <translation>字体</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="32"/>
+        <source>Size</source>
+        <translation>大小</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="34"/>
+        <source>Styles</source>
+        <translation>样式</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="104"/>
+        <source>Bold</source>
+        <translation>加粗</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="105"/>
+        <source>Italic</source>
+        <translation>倾斜</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="106"/>
+        <source>Underline</source>
+        <translation>下划线</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="107"/>
+        <source>Strike Out</source>
+        <translation>删除线</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="108"/>
+        <source>Kerning</source>
+        <translation>文字紧靠</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="115"/>
+        <source>OK</source>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="118"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="124"/>
+        <source>Sample</source>
+        <translation>文字样例</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="130"/>
+        <source>AaBbYyZz</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../public/knglobal.cpp" line="250"/>
+        <location filename="../public/knglobal.cpp" line="331"/>
         <source>Byte</source>
         <translation>字节</translation>
     </message>
@@ -20,12 +83,12 @@
 <context>
     <name>KNMusicAlbumDetail</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="720"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="725"/>
         <source>Unknown Artist</source>
         <translation>未知艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="726"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="731"/>
         <source>Various Artists</source>
         <translation>多个艺术家</translation>
     </message>
@@ -33,7 +96,7 @@
 <context>
     <name>KNMusicAlbumView</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="477"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp" line="484"/>
         <source>Various Artists</source>
         <translation>多个艺术家</translation>
     </message>
@@ -41,17 +104,17 @@
 <context>
     <name>KNMusicCategoryDisplay</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="115"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="121"/>
         <source>No song.</source>
         <translation>没有歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="116"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="122"/>
         <source>1 song.</source>
         <translation>1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="117"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="123"/>
         <source>%1 songs.</source>
         <translation>%1 首歌曲。</translation>
     </message>
@@ -59,42 +122,42 @@
 <context>
     <name>KNMusicDetailOverview</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="136"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="140"/>
         <source>Year</source>
         <translation>年代</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="137"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="141"/>
         <source>Genre</source>
         <translation>流派</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="138"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="142"/>
         <source>Kind</source>
         <translation>文件类型</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="139"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="143"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="140"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="144"/>
         <source>Bit Rate</source>
         <translation>比特率</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="141"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="145"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="142"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="146"/>
         <source>Date Modified</source>
         <translation>修改日期</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="143"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailoverview.cpp" line="147"/>
         <source>Location</source>
         <translation>路径</translation>
     </message>
@@ -102,7 +165,7 @@
 <context>
     <name>KNMusicDetailTooltip</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="178"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="179"/>
         <source>In file: %1</source>
         <translation>在文件：%1</translation>
     </message>
@@ -110,353 +173,254 @@
 <context>
     <name>KNMusicGlobal</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="101"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="105"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="102"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="106"/>
         <source>Album</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="103"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="107"/>
         <source>Album Artist</source>
         <translation>专辑艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="104"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="108"/>
         <source>Album Rating</source>
         <translation>专辑评分</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="105"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="109"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="110"/>
         <source>Beats Per Minuate</source>
         <translation>BPM</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="107"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="111"/>
         <source>Bit Rate</source>
         <translation>比特率</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="108"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="112"/>
         <source>Category</source>
         <translation>类别</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="113"/>
         <source>Comments</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="110"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="114"/>
         <source>Composer</source>
         <translation>作曲家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="111"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="115"/>
         <source>Date Added</source>
         <translation>添加日期</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="112"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="116"/>
         <source>Date Modified</source>
         <translation>修改日期</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="113"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="117"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="114"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="118"/>
         <source>Disc Count</source>
         <translation>光盘数</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="115"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="119"/>
         <source>Disc Number</source>
         <translation>光盘编号</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="116"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="120"/>
         <source>Genre</source>
         <translation>流派</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="117"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="121"/>
         <source>Kind</source>
         <translation>文件类型</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="118"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="122"/>
         <source>Last Played</source>
         <translation>上次播放日期</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="119"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="123"/>
         <source>Plays</source>
         <translation>播放次数</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="120"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="124"/>
         <source>Rating</source>
         <translation>评分</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="121"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="125"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="122"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="126"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="123"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="127"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="124"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="128"/>
         <source>Track Count</source>
         <translation>音轨数</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="125"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="129"/>
         <source>Track Number</source>
         <translation>音轨编号</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="126"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="130"/>
         <source>Year</source>
         <translation>年代</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="176"/>
-        <source>MPEG Audio Layer III (mp3)</source>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="154"/>
+        <source>Cannot find file:
+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="177"/>
-        <source>MPEG-4 Part 14 (m4a)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="178"/>
-        <source>Waveform Audio File Format (wav)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="179"/>
-        <source>Free Lossless Audio Codec (flac)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="180"/>
-        <source>Monkey&apos;s Audio (ape)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="181"/>
-        <source>Ogg Vorbis Audio (ogg)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="182"/>
-        <source>True Audio Codec (tta)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="183"/>
-        <source>Audio Interchange File Format (aiff)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="184"/>
-        <source>Audio Interchange File Format (aifc)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="185"/>
-        <source>Audio Interchange File Format (aif)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="186"/>
-        <source>MPEG-4 Part 14 (mp4)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="187"/>
-        <source>MPEG Audio Layer II (mpa)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="188"/>
-        <source>MPEG Audio Layer II (mp2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="189"/>
-        <source>MPEG Audio Layer I (mp1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="190"/>
-        <source>Musical Instrument Digital Interface (midi)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="191"/>
-        <source>Musical Instrument Digital Interface (mid)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="192"/>
-        <source>MPEG Audio Layer III with SBR (mp3pro)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="193"/>
-        <source>Musepack Lossy Audio Codec (mpc)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="194"/>
-        <source>Advanced Audio Coding (aac)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="195"/>
-        <source>Windows Media Audio (wma)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="196"/>
-        <source>Flash Audio (fla)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="197"/>
-        <source>Tom&apos;s lossless Audio Kompressor (tak)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="198"/>
-        <source>Musepack Lossy Audio Codec (mp+)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="199"/>
-        <source>Audible Audio File (aa)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="200"/>
-        <source>Real Audio (ra)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="201"/>
-        <source>Monkey&apos;s Audio (mac)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="202"/>
-        <source>Musical Instrument Digital Interface (rmi)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="203"/>
-        <source>DTS Audio Codec (dtswav)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="204"/>
-        <source>DTS Audio Codec (dts)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="205"/>
-        <source>SouND Audio (snd)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="206"/>
-        <source>Au File Format (au)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="207"/>
-        <source>Dolby Surround Audio Coding-3 (ac3)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="208"/>
-        <source>Fast Tracker Module (xm)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="209"/>
-        <source>Unreal Engine 1 Music Format (umx)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="211"/>
-        <source>Compact Disc Audio track (cda)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="212"/>
-        <source>Cue sheet (cue)</source>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="163"/>
+        <source>File %1 has been exist in folder:
+%2
+Overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNMusicHeaderLyrics</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="282"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="307"/>
         <source>Lyrics</source>
         <translation>歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="289"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="314"/>
         <source>Lyrics Folder</source>
         <translation>歌词文件夹</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="293"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="318"/>
         <source>Download Lyrics</source>
         <translation>下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="297"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="322"/>
+        <source>Lyrics Font</source>
+        <translation>歌词字体</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="326"/>
         <source>Text Spacing</source>
         <translation>行间距</translation>
     </message>
 </context>
 <context>
+    <name>KNMusicHeaderPlayerAppendMenu</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="50"/>
+        <source>Rating</source>
+        <translation>评分</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="51"/>
+        <source>Locate</source>
+        <translation>定位</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="53"/>
+        <source>(No star)</source>
+        <translation>（无评分）</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="55"/>
+        <source>Get Info</source>
+        <translation>查看信息</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="58"/>
+        <source>Show in Explorer</source>
+        <translation>在资源管理器中显示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="61"/>
+        <source>Show in Finder</source>
+        <translation>在 Finder 中显示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="64"/>
+        <source>Show the contains folder</source>
+        <translation>显示所在的文件夹</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="66"/>
+        <source>Locate now playing</source>
+        <translation>定位当前歌曲</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="67"/>
+        <source>Show in songs</source>
+        <translation>在歌曲中显示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="68"/>
+        <source>Show in artists</source>
+        <translation>在艺术家中显示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="69"/>
+        <source>Show in albums</source>
+        <translation>在专辑中显示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayerappendmenu.cpp" line="70"/>
+        <source>Show in genres</source>
+        <translation>在流派中显示</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="79"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="80"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="90"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="119"/>
         <source>Go to Album</source>
         <translation>在专辑中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="95"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="124"/>
         <source>No Album</source>
         <translation>未知专辑</translation>
     </message>
@@ -464,17 +428,17 @@
 <context>
     <name>KNMusicLibraryArtistTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="98"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="99"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="139"/>
         <source>Go to Artist</source>
         <translation>在艺术家中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="113"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="143"/>
         <source>No Artist</source>
         <translation>未知艺术家</translation>
     </message>
@@ -482,19 +446,19 @@
 <context>
     <name>KNMusicLibraryEmptyHint</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="101"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="102"/>
         <source>Songs and music you add to Mu appear in your music library.
 To add songs to library, drag your songs here.</source>
         <translation>您添加到 Mu 的歌曲和音乐都将显示在音乐库中。
 如需将歌曲添加到音乐库，请将歌曲拖拽至此。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="107"/>
         <source>Add songs</source>
         <translation>添加歌曲到音乐库</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="113"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="114"/>
         <source>Add To Library</source>
         <translation>添加到音乐库</translation>
     </message>
@@ -502,17 +466,17 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibraryGenreTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="93"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="94"/>
         <source>Genres</source>
         <translation>流派</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="104"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="134"/>
         <source>Go to Genre</source>
         <translation>在流派中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="139"/>
         <source>No Genre</source>
         <translation>未知流派</translation>
     </message>
@@ -520,12 +484,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibrarySongTab</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="90"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="92"/>
         <source>Songs</source>
         <translation>歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="105"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="123"/>
         <source>Go to Songs</source>
         <translation>在歌曲中显示</translation>
     </message>
@@ -548,7 +512,7 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicMultiMenu</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="52"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="49"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -556,52 +520,52 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistDisplay</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="156"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="168"/>
         <source>No song, </source>
         <translation>没有歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="157"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="169"/>
         <source>1 song, </source>
         <translation>1 首歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="158"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="170"/>
         <source>%1 songs, </source>
         <translation>%1 首歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="160"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="172"/>
         <source>0 minuate.</source>
         <translation>0 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="161"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="173"/>
         <source>1 minuate.</source>
         <translation>1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="162"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="174"/>
         <source>%1 minuates.</source>
         <translation>%1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="164"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="176"/>
         <source>No result.</source>
         <translation>没有搜索结果。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="165"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="177"/>
         <source>1 result.</source>
         <translation>1 个搜索结果。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="166"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="178"/>
         <source>%1 results.</source>
         <translation>%1 个搜索结果。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="168"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="180"/>
         <source>Search &apos;%1&apos; in &apos;%2&apos;</source>
         <translation>在 %2 中搜索 %1</translation>
     </message>
@@ -609,19 +573,19 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistEmptyHint</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="107"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="110"/>
         <source>Songs you add to playlists and playlists you import appear in Playlist.
 To create a playlist, drag your songs here.</source>
         <translation>您创建、导入的播放列表以及播放列表中的歌曲将显示在播放列表中。
 如需创建播放列表，将歌曲拖拽至此。</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="112"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="115"/>
         <source>New empty playlist</source>
         <translation>创建新的播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="113"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistemptyhint.cpp" line="116"/>
         <source>Import playlists</source>
         <translation>导入播放列表</translation>
     </message>
@@ -666,7 +630,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistManager</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp" line="379"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp" line="403"/>
         <source>New Playlist</source>
         <translation>新播放列表</translation>
     </message>
@@ -678,7 +642,7 @@ To create a playlist, drag your songs here.</source>
         <translation type="vanished">播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="81"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp" line="82"/>
         <source>Playlists</source>
         <translation>播放列表</translation>
     </message>
@@ -686,7 +650,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="125"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="137"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -702,52 +666,57 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicSoloMenu</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="105"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="118"/>
         <source>Play %1</source>
         <translation>播放 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="119"/>
         <source>Open %1</source>
         <translation>打开 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="107"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="120"/>
         <source>Get Info</source>
         <translation>查看信息</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="122"/>
         <source>Show in Explorer</source>
         <translation>在资源管理器中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="112"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="125"/>
         <source>Show in Finder</source>
         <translation>在 Finder 中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="115"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="128"/>
         <source>Show the contains folder</source>
         <translation>显示所在的文件夹</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="117"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="130"/>
+        <source>Rename to %1</source>
+        <translation>重命名为 %1</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="131"/>
         <source>Copy location</source>
         <translation>复制文件路径</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="118"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="132"/>
         <source>Copy &apos;%1&apos;</source>
         <translation>复制 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="119"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="133"/>
         <source>Search &apos;%1&apos;</source>
         <translation>搜索 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="120"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="134"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -776,7 +745,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicWPLParser</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp" line="39"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp" line="38"/>
         <source>Windows Media Playlist</source>
         <translation>Windows Media 播放列表</translation>
     </message>
@@ -811,17 +780,68 @@ To create a playlist, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNPreferenceGeneralPanel</name>
+    <message>
+        <location filename="../plugin/base/knpreference/knpreferencegeneralpanel.cpp" line="44"/>
+        <source>Library</source>
+        <translation>媒体库</translation>
+    </message>
+    <message>
+        <location filename="../plugin/base/knpreference/knpreferencegeneralpanel.cpp" line="49"/>
+        <source>Library Path</source>
+        <translation>媒体库路径</translation>
+    </message>
+</context>
+<context>
+    <name>KNPreferenceItemFont</name>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="132"/>
+        <source>, Size: </source>
+        <translation>，大小：</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="134"/>
+        <source>, Bold</source>
+        <translation>，加粗</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="135"/>
+        <source>, Italic</source>
+        <translation>，倾斜</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="136"/>
+        <source>, Underline</source>
+        <translation>，下划线</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="137"/>
+        <source>, Strike Out</source>
+        <translation>，删除线</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="138"/>
+        <source>, Kerning</source>
+        <translation>，文字紧靠</translation>
+    </message>
+</context>
+<context>
     <name>KNPreferenceItemPathBrowser</name>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="150"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="210"/>
         <source>Browse</source>
         <translation>浏览</translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="211"/>
+        <source>Move To</source>
+        <translation>移动到</translation>
     </message>
 </context>
 <context>
     <name>KNPreferencePanel</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="121"/>
+        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="125"/>
         <source>General</source>
         <translation>通用</translation>
     </message>

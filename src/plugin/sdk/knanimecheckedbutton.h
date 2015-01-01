@@ -13,7 +13,7 @@ class KNAnimeCheckedButton : public KNAbstractButton
 {
     Q_OBJECT
 public:
-    explicit KNAnimeCheckedButton(QWidget *parent = 0);
+    KNAnimeCheckedButton(QWidget *parent = 0):KNAbstractButton(parent){}
     bool checked() const;
 
 signals:

@@ -34,21 +34,20 @@ public:
                       int column,
                       const QModelIndex &parent);
     qint64 totalDuration() const;
+    KNMusicDetailInfo detailInfoFromRow(const int &row);
     inline QString filePathFromRow(const int &row)
     {
         Q_ASSERT(row>-1 && row<rowCount());
         //Return the file path role data.
         return data(index(row, Name), FilePathRole).toString();
     }
-    inline QString filePathFromIndex(const QModelIndex &index);
-    inline QModelIndexList indexFromFilePath(const QString &filePath);
     inline QString itemText(const int &row, const int &column) const
     {
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
         //Only for text easy access.
         return data(index(row, column), Qt::DisplayRole).toString();
     }
-    inline void setItemText(const int &row, const int &column, const QString &text)
+    virtual void setItemText(const int &row, const int &column, const QString &text)
     {
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
         //Only for text easy access.
@@ -87,9 +86,9 @@ public:
         //All the property of a song is stored in the first item.
         return roleData(row, 0, propertyRole);
     }
-    inline void setRowProperty(const int &row,
-                               const int &propertyRole,
-                               const QVariant &value)
+    virtual void setRowProperty(const int &row,
+                                const int &propertyRole,
+                                const QVariant &value)
     {
         Q_ASSERT(row>-1 && row<rowCount());
         //All the property of a song is stored in the first item.
@@ -117,6 +116,11 @@ protected:
     virtual void setHeaderSortFlag();
     KNMusicAnalysisExtend *analysisExtend() const;
     void setAnalysisExtend(KNMusicAnalysisExtend *analysisExtend);
+
+private slots:
+    void onActionFileNameChanged(const QString &originalPath,
+                                 const QString &currentPath,
+                                 const QString &currentFileName);
 
 private:
     KNMusicSearcher *m_searcher;

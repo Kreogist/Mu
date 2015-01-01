@@ -21,11 +21,47 @@ public:
     explicit KNMusicProxyModel(QObject *parent = 0);
     KNMusicModel *musicModel();
     int playingItemColumn();
-    QString itemText(const int &row, const int &column) const;
-    QVariant roleData(int row, int column, int role) const;
-    QString filePathFromRow(const int &row);
-    QString fileNameFromRow(const int &row);
-    void addPlayTimes(const QModelIndex &sourceIndex);
+    KNMusicDetailInfo detailInfoFromRow(const int &row);
+    inline int sourceRow(const int &proxyRow) const;
+    inline QString itemText(const int &row, const int &column) const
+    {
+        Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
+        //Only for text easy access.
+        return roleData(row, column, Qt::DisplayRole).toString();
+    }
+    inline QVariant rowProperty(const int &row, const int &propertyRole)
+    {
+        Q_ASSERT(row>-1 && row<rowCount());
+        //All the property of a song is stored in the first item.
+        return roleData(row, 0, propertyRole);
+    }
+    inline QVariant roleData(int row, int column, int role) const
+    {
+        Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
+        //Only for easy access.
+        return data(index(row, column), role);
+    }
+    inline QString filePathFromRow(const int &row)
+    {
+        Q_ASSERT(row>-1 && row<rowCount());
+        //Return the file path role data.
+        return data(index(row, Name), FilePathRole).toString();
+    }
+    inline QString fileNameFromRow(const int &row)
+    {
+        Q_ASSERT(row>-1 && row<rowCount());
+        //Return the file path role data.
+        return data(index(row, Name), FileNameRole).toString();
+    }
+    inline void addPlayTimes(const QModelIndex &sourceIndex)
+    {
+        //Get the destination index.
+        QModelIndex playTimesIndex=index(mapFromSource(sourceIndex).row(), Plays);
+        //Add the data.
+        setData(playTimesIndex,
+                data(playTimesIndex, Qt::DisplayRole).toInt()+1,
+                Qt::DisplayRole);
+    }
 
 signals:
 

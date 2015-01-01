@@ -33,6 +33,7 @@
 #include "knmusicnowplayingbase.h"
 #include "knmusiclibrarybase.h"
 #include "knmusicplaylistmanagerbase.h"
+#include "knmusicmainplayerbase.h"
 
 //Plugins
 #ifdef ENABLE_LIBBASS
@@ -63,13 +64,14 @@
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
+#include "plugin/knmusicmainplayer/knmusicmainplayer.h"
 
 #include "knglobal.h"
 #include "knmusictab.h"
 #include "knmousedetectheader.h"
 #include "knplatformextras.h"
 #include "knconnectionhandler.h"
-#include "kncategorytabwidget.h"
+#include "knmusiccategorytabwidget.h"
 #include "knlocalemanager.h"
 #include "knpreferencewidgetspanel.h"
 
@@ -102,6 +104,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadNowPlaying(new KNMusicNowPlaying);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
+//    loadMainPlayer(new KNMusicMainPlayer);
     loadLibrary(new KNMusicLibrary);
     loadPlaylistManager(new KNMusicPlaylistManager);
 
@@ -115,9 +118,18 @@ KNMusicPlugin::~KNMusicPlugin()
     //Stop threads.
     m_parserThread.quit();
     m_parserThread.wait();
+    //Ask to save the configure.
+    emit requireSaveConfigure();
     //Delete all the plugins.
-    qDeleteAll(m_pluginList);
-    m_pluginList.clear();
+    while(!m_pluginList.isEmpty())
+    {
+        //We only need to remove the plugin which don't have a parent.
+        QObject *currentPlugin=m_pluginList.takeFirst();
+        if(currentPlugin->parent()==nullptr)
+        {
+            delete currentPlugin;
+        }
+    }
 }
 
 QString KNMusicPlugin::caption()
@@ -192,12 +204,10 @@ inline void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
 
 inline void KNMusicPlugin::loadDetailInfo(KNMusicDetailDialogBase *plugin)
 {
-    if(m_detailDialog==nullptr)
-    {
-        m_detailDialog=plugin;
-        //Add plugin to the list.
-        m_pluginList.append(m_detailDialog);
-    }
+    //Add plugin to the list.
+    m_pluginList.append(plugin);
+    //Linke global detail dialog widget.
+    KNMusicGlobal::setDetailDialog(plugin);
 }
 
 inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
@@ -205,20 +215,44 @@ inline void KNMusicPlugin::loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin)
     if(m_headerPlayer==nullptr)
     {
         m_headerPlayer=plugin;
-        //Configure the header player.
+        //Link the save configure signal.
+        connect(this, &KNMusicPlugin::requireSaveConfigure,
+                m_headerPlayer, &KNMusicHeaderPlayerBase::saveConfigure);
+        //Set the backend and now playing controls to the header player.
         m_headerPlayer->setBackend(m_backend);
         m_headerPlayer->setNowPlaying(m_nowPlaying);
-        //Restore configure.
-        m_headerPlayer->restoreConfigure();
+        //Restore the preference.
+        m_headerPlayer->loadConfigure();
         //Add plugin to the list.
         m_pluginList.append(m_headerPlayer);
         //Link player to sense header.
+        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireCheckCursor,
+                m_headerWidget, &KNMouseDetectHeader::checkCurrentCursorPos);
         connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
                 m_headerPlayer, &KNMusicHeaderPlayerBase::activatePlayer);
         connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
                 m_headerPlayer, &KNMusicHeaderPlayerBase::inactivatePlayer);
+        //Linke the request to category tab widget.
+        connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowMainPlayer,
+                m_centralWidget, &KNMusicCategoryTabWidget::showMainPlayer);
         //Add to main window.
         addLeftHeaderWidget(m_headerPlayer);
+    }
+}
+
+void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
+{
+    if(m_mainPlayer==nullptr)
+    {
+        m_mainPlayer=plugin;
+        //Configure the main player.
+        m_mainPlayer->hide();
+        //Restore the settings.
+        ;
+        //Add plugin to the list.
+        m_pluginList.append(m_mainPlayer);
+        //Set the main player.
+        m_centralWidget->setMainPlayer(m_mainPlayer);
     }
 }
 
@@ -256,6 +290,8 @@ inline void KNMusicPlugin::loadLibrary(KNMusicLibraryBase *plugin)
     addMusicTab(plugin->artistTab());
     addMusicTab(plugin->albumTab());
     addMusicTab(plugin->genreTab());
+    //Set the player.
+    plugin->setHeaderPlayer(m_headerPlayer);
 }
 
 inline void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugin)
@@ -339,7 +375,6 @@ inline void KNMusicPlugin::initialInfrastructure()
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
     m_musicGlobal->setNoAlbumArt(QPixmap(":/plugin/music/common/noalbum.png"));
-    KNMusicGlobal::setMusicLibraryPath(KNGlobal::applicationDirPath()+"/Library/Music");
 
     //Initial preference panel.
     m_preferencePanel=new KNPreferenceWidgetsPanel;
@@ -347,7 +382,7 @@ inline void KNMusicPlugin::initialInfrastructure()
     m_musicGlobal->setPreferencePanel(m_preferencePanel);
 
     //Initial central widget.
-    m_centralWidget=new KNCategoryTabWidget;
+    m_centralWidget=new KNMusicCategoryTabWidget;
 
     //Initial header widget.
     m_headerWidget=new KNMouseDetectHeader;
@@ -418,8 +453,6 @@ inline void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
 {
     //Add this to plugin list.
     m_pluginList.append(soloMenu);
-    //Set detail dialog.
-    soloMenu->setDetailDialog(m_detailDialog);
     //Set the solo menu.
     KNMusicGlobal::setSoloMenu(soloMenu);
 }

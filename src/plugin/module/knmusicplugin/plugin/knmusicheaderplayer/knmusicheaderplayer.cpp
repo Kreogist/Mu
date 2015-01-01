@@ -29,9 +29,13 @@
 #include "knopacitybutton.h"
 #include "knopacityanimebutton.h"
 
+#include "knmusicheaderplayerappendmenu.h"
+#include "knmusicdetaildialogbase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
+
+#include "knglobal.h"
 
 #include "knmusicheaderplayer.h"
 
@@ -67,23 +71,25 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     initialControlPanel();
     initialVolume();
     initialAppendPanel();
+    initialAppendMenu();
     //Connect drag play request.
     connect(this, &KNMusicHeaderPlayer::requireAnalysisFiles,
             this, &KNMusicHeaderPlayer::onActionPlayDragIn);
 }
 
-KNMusicHeaderPlayer::~KNMusicHeaderPlayer()
-{
-    saveConfigure();
-}
-
-void KNMusicHeaderPlayer::restoreConfigure()
+void KNMusicHeaderPlayer::loadConfigure()
 {
     //Set the value, calculate by the range percentage.
     m_volumeSlider->setValue(
                 m_volumeSlider->minimal()+
                 (double)m_volumeSlider->range()*
                 m_musicGlobal->configureData("Volume", 1.0).toDouble());
+}
+
+void KNMusicHeaderPlayer::saveConfigure()
+{
+    m_musicGlobal->setConfigureData("Volume",
+                                    (double)m_volumeSlider->percentage());
 }
 
 void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
@@ -141,6 +147,11 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     onActionLoopStateChanged(m_nowPlaying->loopState());
 }
 
+KNMusicDetailInfo KNMusicHeaderPlayer::currentDetailInfo()
+{
+    return m_currentDetailInfo;
+}
+
 void KNMusicHeaderPlayer::reset()
 {
     //Reset file path.
@@ -181,6 +192,10 @@ void KNMusicHeaderPlayer::activatePlayer()
 
 void KNMusicHeaderPlayer::inactivatePlayer()
 {
+    if(m_appendMenuShown)
+    {
+        return;
+    }
     //Stop animations.
     m_mouseIn->stop();
     m_mouseOut->stop();
@@ -314,6 +329,69 @@ void KNMusicHeaderPlayer::onActionInOutOpacityChange(const QVariant &value)
     m_artistAndAlbum->setOpacity(albumOpacity);
 
     m_durationEffect->setOpacity(1-albumOpacity);
+}
+
+void KNMusicHeaderPlayer::onActionShowAppendMenu()
+{
+    //Ensure that there's file is playing.
+    if(m_currentFilePath.isEmpty())
+    {
+        return;
+    }
+    //Set the flag.
+    m_appendMenuShown=true;
+    //Launch the menu.
+    m_appendMenu->exec();
+    //Reset the flag.
+    m_appendMenuShown=false;
+    //Ask the header widget to check the cursor.
+    emit requireCheckCursor();
+}
+
+void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
+{
+    //Reset the flag.
+    m_appendMenuShown=false;
+    //Ask the header widget to check the cursor.
+    emit requireCheckCursor();
+    //Ensure that there's file is playing.
+    if(m_currentFilePath.isEmpty())
+    {
+        return;
+    }
+    //Do the actions.
+    switch(actionIndex)
+    {
+    case AppendRatingNoStar:
+    case AppendRatingOneStar:
+    case AppendRatingTwoStar:
+    case AppendRatingThreeStar:
+    case AppendRatingFourStar:
+    case AppendRatingFiveStar:
+        m_nowPlaying->setRating(actionIndex-AppendRatingNoStar);
+        break;
+    case AppendShowInGraphicShell:
+        KNGlobal::showInGraphicalShell(m_currentFilePath);
+        break;
+    case AppendShowDetail:
+        KNMusicGlobal::detailDialog()->showDialog(m_currentFilePath);
+        break;
+    case AppendLocateNowPlaying:
+        m_nowPlaying->showCurrentIndexInOriginalTab();
+        break;
+    case AppendShowInSongs:
+        emit requireShowInSongs();
+        break;
+    case AppendShowInArtists:
+        emit requireShowInArtists();
+        break;
+    case AppendShowInAlbums:
+        emit requireShowInAlbums();
+        break;
+    case AppendShowInGenres:
+        emit requireShowInGenres();
+        break;
+    }
 }
 
 void KNMusicHeaderPlayer::onActionPositionChanged(const qint64 &position)
@@ -607,6 +685,20 @@ inline void KNMusicHeaderPlayer::initialAppendPanel()
     m_mouseOut->addAnimation(m_hideAppendPanel);
 }
 
+inline void KNMusicHeaderPlayer::initialAppendMenu()
+{
+    //Initial the menu.
+    m_appendMenu=new KNMusicHeaderPlayerAppendMenu(m_showAppendMenu);
+    m_appendMenu->setFocusProxy(this);
+    //Linked the menu actions.
+    connect(m_appendMenu, &KNMusicHeaderPlayerAppendMenu::requireDoAction,
+            this, &KNMusicHeaderPlayer::onActionAppendMenuActionTriggered);
+
+    //Link the clicked
+    connect(m_showAppendMenu, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicHeaderPlayer::onActionShowAppendMenu);
+}
+
 inline void KNMusicHeaderPlayer::setPlayIconMode()
 {
     //Set the icon and the flag.
@@ -692,28 +784,23 @@ inline QRect KNMusicHeaderPlayer::generateInPosition()
                  40);
 }
 
-inline void KNMusicHeaderPlayer::saveConfigure()
+void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisItem)
 {
-    m_musicGlobal->setConfigureData("Volume",
-                                    (double)m_volumeSlider->percentage());
-}
-
-void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicDetailInfo &detailInfo)
-{
+    m_currentDetailInfo=analysisItem.detailInfo;
     //Check is the playing file the current file. If it is, do nothing.
-    if(m_currentFilePath==detailInfo.filePath)
+    if(m_currentFilePath==m_currentDetailInfo.filePath)
     {
         return;
     }
     //Save the new file path and emit file path changed signal.
-    m_currentFilePath=detailInfo.filePath;
+    m_currentFilePath=m_currentDetailInfo.filePath;
     //Set the display data.
-    setTitle(detailInfo.textLists[Name]);
-    m_artist=detailInfo.textLists[Artist];
-    m_album=detailInfo.textLists[Album];
+    setTitle(m_currentDetailInfo.textLists[Name]);
+    m_artist=m_currentDetailInfo.textLists[Artist];
+    m_album=m_currentDetailInfo.textLists[Album];
     updateArtistAndAlbum();
-    QPixmap coverImage=QPixmap::fromImage(detailInfo.coverImage);
+    QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
     //Ask to load lyrics.
-    emit requireLoadLyrics(detailInfo);
+    emit requireLoadLyrics(m_currentDetailInfo);
 }

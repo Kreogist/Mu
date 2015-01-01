@@ -9,7 +9,11 @@
 
 #include <QModelIndex>
 
+#include "knmusicglobal.h"
+
 #include "knanimationmenu.h"
+
+using namespace KNMusic;
 
 class KNMusicDetailDialogBase;
 class KNMusicProxyModel;
@@ -18,14 +22,14 @@ class KNMusicSoloMenuBase : public KNAnimationMenu
     Q_OBJECT
 public:
     KNMusicSoloMenuBase(QWidget *parent = 0):KNAnimationMenu(parent){}
-    virtual QString currentFilePath() const=0;
+    virtual KNMusicDetailInfo currentDetailInfo()=0;
     virtual void setProxyModel(KNMusicProxyModel *model)=0;
     virtual void setCurrentIndex(const QModelIndex &itemIndex)=0;
-    virtual void setDetailDialog(KNMusicDetailDialogBase *dialog)=0;
 
 signals:
     void requirePlayCurrent();
     void requireRemoveCurrent();
+    void requireRenameCurrent(QString preferName);
 
 public slots:
     virtual void addMusicActions(QList<QAction *> actions)=0;

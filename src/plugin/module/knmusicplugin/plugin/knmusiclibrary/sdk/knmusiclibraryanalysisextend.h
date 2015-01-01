@@ -29,7 +29,7 @@ namespace KNMusicLibraryAlbumArt
 struct AlbumArtItem
 {
     QStandardItem *item=nullptr;
-    KNMusicDetailInfo detailInfo;
+    KNMusicAnalysisItem analysisItem;
 };
 }
 
@@ -48,14 +48,14 @@ public:
 signals:
     void requireParseNextImage();
     void requireAppendLibraryRow(QList<QStandardItem *> musicRow,
-                                 KNMusicDetailInfo detailInfo);
+                                 KNMusicAnalysisItem analysisItem);
     void requireUpdateImage(int row,
-                            KNMusicDetailInfo detailInfo);
+                            KNMusicAnalysisItem analysisItem);
 
 public slots:
-    void onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo);
+    void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
     void onActionAnalysisAlbumArt(QStandardItem *item,
-                                  const KNMusicDetailInfo &detailInfo);
+                                  const KNMusicAnalysisItem &analysisItem);
 
 private slots:
     void onActionParseNextImage();

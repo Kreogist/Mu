@@ -125,13 +125,18 @@ struct KNMusicDetailInfo
     qint64 duration=0;
     qint64 bitRate=0;
     qint64 samplingRate=0;
-    //Album art data.
-    QImage coverImage;
+    //Image hash data.
     QString coverImageHash;
-    QMap<QString, QList<QByteArray>> imageData;
     //Tag datas.
     QString textLists[MusicDataCount];
     int rating=0;
+};
+struct KNMusicAnalysisItem
+{
+    KNMusicDetailInfo detailInfo;
+    //Album art data.
+    QImage coverImage;
+    QMap<QString, QList<QByteArray>> imageData;
 };
 }
 
@@ -145,6 +150,7 @@ class KNGlobal;
 class KNMusicParser;
 class KNMusicNowPlayingBase;
 class KNMusicDetailTooltipBase;
+class KNMusicDetailDialogBase;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
 class KNMusicSearchBase;
@@ -192,14 +198,26 @@ public:
     static void setMusicSearch(KNMusicSearchBase *musicSearch);
     static KNMusicDetailTooltipBase *detailTooltip();
     static void setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip);
+    static KNMusicDetailDialogBase *detailDialog();
+    static void setDetailDialog(KNMusicDetailDialogBase *detailDialog);
     void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
+    void updateItemValue(const QString &valueName);
     void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
                             const QList<KNPreferenceItemInfo> &list);
+    bool renameMusicFile(const QString &originalPath,
+                         const QString &preferName);
 
 signals:
+    void musicLibraryMoved(const QString &originalPath,
+                           const QString &currentPath);
+    void musicFilePathChanged(const QString &originalPath,
+                              const QString &currentPath,
+                              const QString &currentFileName);
 
 public slots:
     void retranslate();
+    void onActionLibraryMoved(const QString &originalPath,
+                              const QString &currentPath);
 
 private:
     void regMetaType();
@@ -214,6 +232,7 @@ private:
     static KNMusicMultiMenuBase *m_multiMenu;
     static KNMusicSearchBase *m_musicSearch;
     static KNMusicDetailTooltipBase *m_detailTooltip;
+    static KNMusicDetailDialogBase *m_detailDialog;
     static QString m_musicLibraryPath;
     static QString m_musicRowFormat;
     static QList<QList<QStandardItem *>> m_dragMusicRow;

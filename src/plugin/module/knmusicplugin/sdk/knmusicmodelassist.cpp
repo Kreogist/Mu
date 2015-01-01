@@ -65,7 +65,7 @@ QList<QStandardItem *> KNMusicModelAssist::generateRow(const KNMusicDetailInfo &
 
 bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
                                        const QPersistentModelIndex &index,
-                                       KNMusicDetailInfo &currentInfo)
+                                       KNMusicAnalysisItem &analysisItem)
 {
     //Get the parser.
     KNMusicParser *parser=KNMusicGlobal::parser();
@@ -77,11 +77,11 @@ bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
                                StartPositionRole).toLongLong()==-1)
     {
         //Parse the info.
-        parser->parseFile(musicFilePath, currentInfo);
-        parser->parseAlbumArt(currentInfo);
+        parser->parseFile(musicFilePath, analysisItem);
+        parser->parseAlbumArt(analysisItem);
         return true;
     }
-    QList<KNMusicDetailInfo> currentTrackInfo;
+    QList<KNMusicAnalysisItem> currentTrackInfo;
     //Get the track number.
     int currentTrackNumber=musicModel->roleData(index.row(),
                                                 TrackNumber,
@@ -98,7 +98,7 @@ bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
     //Check the beginning of the track list, if it's 0, means the track is indexed at:
     // 0 1 2 3 ...
     //Or else, it is start at 1, we need to reduce the track number.
-    if(currentTrackInfo.first().textLists[TrackNumber].toInt()!=0)
+    if(currentTrackInfo.first().detailInfo.textLists[TrackNumber].toInt()!=0)
     {
         currentTrackNumber--;
         //Still need to check the tracknumber.
@@ -111,9 +111,9 @@ bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
     if(currentTrackInfo.size()>currentTrackNumber)
     {
         //Get the track number's current info.
-        currentInfo=currentTrackInfo.at(currentTrackNumber);
+        analysisItem=currentTrackInfo.at(currentTrackNumber);
         //Parse the album art.
-        parser->parseAlbumArt(currentInfo);
+        parser->parseAlbumArt(analysisItem);
         return true;
     }
     return false;

@@ -40,14 +40,15 @@ void KNMusicLibraryAnalysisExtend::onActionParseNextImage()
     }
     //Analysis the first item in the queue.
     AlbumArtItem currentItem=m_analysisQueue.takeFirst();
-    KNMusicGlobal::parser()->parseAlbumArt(currentItem.detailInfo);
-    if(!currentItem.detailInfo.coverImage.isNull())
+    KNMusicGlobal::parser()->parseAlbumArt(currentItem.analysisItem);
+    if(!currentItem.analysisItem.coverImage.isNull())
     {
         //Add the image data in the hash pixmap list, get the hash key.
-        currentItem.detailInfo.coverImageHash=
-                m_coverImageList->appendImage(currentItem.detailInfo.coverImage);
+        currentItem.analysisItem.detailInfo.coverImageHash=
+                m_coverImageList->appendImage(currentItem.analysisItem.coverImage);
         //Require update the row.
-        emit requireUpdateImage(currentItem.item->row(), currentItem.detailInfo);
+        emit requireUpdateImage(currentItem.item->row(),
+                                currentItem.analysisItem);
     }
     //Ask to analysis next item.
     emit requireParseNextImage();
@@ -63,19 +64,20 @@ void KNMusicLibraryAnalysisExtend::setCoverImageList(KNHashPixmapList *coverImag
     m_coverImageList=coverImageList;
 }
 
-void KNMusicLibraryAnalysisExtend::onActionAnalysisComplete(const KNMusicDetailInfo &detailInfo)
+void KNMusicLibraryAnalysisExtend::onActionAnalysisComplete(
+        const KNMusicAnalysisItem &analysisItem)
 {
-    emit requireAppendLibraryRow(KNMusicModelAssist::generateRow(detailInfo),
-                                 detailInfo);
+    emit requireAppendLibraryRow(KNMusicModelAssist::generateRow(analysisItem.detailInfo),
+                                 analysisItem);
 }
 
 void KNMusicLibraryAnalysisExtend::onActionAnalysisAlbumArt(QStandardItem *item,
-                                                            const KNMusicDetailInfo &detailInfo)
+                                                            const KNMusicAnalysisItem &analysisItem)
 {
     //Generate a item row.
     AlbumArtItem currentItem;
     currentItem.item=item;
-    currentItem.detailInfo=detailInfo;
+    currentItem.analysisItem=analysisItem;
     //Add the item to analysis queue.
     m_analysisQueue.append(currentItem);
     //And of course, ask to analysis the next item.

@@ -40,8 +40,7 @@ void KNMusicRatingEditor::paintEvent(QPaintEvent *event)
                            true);
     //Set the pen and brush.
     painter.setPen(Qt::NoPen);
-    painter.setBrush(palette().color(QPalette::Window));
-    painter.drawRect(rect());
+    painter.fillRect(rect(), palette().color(QPalette::Window));
     //Paint the star number.
     for(int i=0; i<m_starNum; i++)
     {

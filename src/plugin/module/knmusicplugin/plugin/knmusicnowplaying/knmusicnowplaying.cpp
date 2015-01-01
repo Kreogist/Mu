@@ -19,6 +19,7 @@
 #include "knmusicmodelassist.h"
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
+#include "knmusictab.h"
 
 #include "knmusicnowplaying.h"
 
@@ -172,13 +173,15 @@ void KNMusicNowPlaying::playTemporaryFiles(const QStringList &filePaths)
     }
 }
 
-void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model)
+void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model,
+                                        KNMusicTab *tab)
 {
     //Reset current item and music model.
     resetPlayingItem();
     resetPlayingModels();
     //Save the proxy model and music model.
     m_playingModel=model;
+    m_currentTab=tab;
     if(m_playingModel!=nullptr)
     {
         m_playingMusicModel=m_playingModel->musicModel();
@@ -209,12 +212,13 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                      BlankData,
                                      Qt::DecorationRole,
                                      m_playingIcon);
-    KNMusicDetailInfo currentInfo;
+    KNMusicAnalysisItem currentItem;
     //Parse the current index, if we cannot parse it, play next.
     if(KNMusicModelAssist::reanalysisRow(m_playingMusicModel,
                                          m_currentPlayingIndex,
-                                         currentInfo))
+                                         currentItem))
     {
+        KNMusicDetailInfo &currentInfo=currentItem.detailInfo;
         //Update the data in proxy model.
         m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
                                             currentInfo);
@@ -230,7 +234,7 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                    currentInfo.duration);
         }
         //Update the player's data.
-        emit requireUpdatePlayerInfo(currentInfo);
+        emit requireUpdatePlayerInfo(currentItem);
     }
 }
 
@@ -266,6 +270,16 @@ void KNMusicNowPlaying::onActionCannotPlay()
                                      BlankData,
                                      Qt::DecorationRole,
                                      m_cantPlayIcon);
+}
+
+void KNMusicNowPlaying::setRating(const int &rating)
+{
+    //Get the current index.
+    int ratingRow=m_currentPlayingIndex.row();
+    //Set the rating to the row.
+    m_playingMusicModel->setItemText(ratingRow,
+                                     Rating,
+                                     QString::number(rating));
 }
 
 void KNMusicNowPlaying::playNextSong(bool cannotLoadFile)
@@ -336,6 +350,7 @@ void KNMusicNowPlaying::resetPlayingModels()
 {
     //Clear the playing model.
     m_playingModel=nullptr;
+    m_currentTab=nullptr;
     //Clear the shadow playing model data.
     m_shadowPlayingModel->setSourceModel(nullptr);
     m_shadowPlayingModel->setSortRole(-1);
@@ -348,6 +363,18 @@ void KNMusicNowPlaying::resetPlayingModels()
 QPersistentModelIndex KNMusicNowPlaying::currentPlayingIndex() const
 {
     return m_currentPlayingIndex;
+}
+
+void KNMusicNowPlaying::showCurrentIndexInOriginalTab()
+{
+    //Abandon the action when the current tab is null.
+    if(m_currentTab==nullptr)
+    {
+        return;
+    }
+    //Ask the tab to locate the index.
+    m_currentTab->showIndexInModel(m_playingMusicModel,
+                                   m_currentPlayingIndex);
 }
 
 void KNMusicNowPlaying::shadowPlayingModel()

@@ -31,6 +31,7 @@ public:
     QAction *showInAction();
     QString caption();
     QPixmap icon();
+    void showInTab(const KNMusicDetailInfo &detailInfo);
 
 signals:
 

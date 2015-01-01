@@ -37,6 +37,7 @@ public:
     KNMusicTab *artistTab();
     KNMusicTab *albumTab();
     KNMusicTab *genreTab();
+    void setHeaderPlayer(KNMusicHeaderPlayerBase *player);
 
 signals:
 

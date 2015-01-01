@@ -41,6 +41,7 @@ private:
     QColor m_rectColor=QColor(255,255,255,70),
            m_backgroundColor=QColor(255,255,255,80),
            m_buttonColor=QColor(255,255,255,110);
+    QRadialGradient m_buttonGradient;
     QTimeLine *m_mouseIn, *m_mouseOut;
     qreal m_mouseOutOpacity=0.65,
           m_backOpacity=m_mouseOutOpacity;
