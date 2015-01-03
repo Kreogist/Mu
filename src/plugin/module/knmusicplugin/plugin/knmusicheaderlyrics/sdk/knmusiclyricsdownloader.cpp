@@ -19,9 +19,6 @@
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QTimer>
-#include <QFile>
-#include <QFileInfo>
-#include <QTextStream>
 
 #include "knconnectionhandler.h"
 #include "knmusiclyricsglobal.h"
@@ -75,27 +72,4 @@ void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
     responseData=currentReply->readAll();
     //Clear the reply.
     delete currentReply;
-}
-
-QString KNMusicLyricsDownloader::writeLyricsFile(const KNMusicDetailInfo &detailInfo,
-                                                 const QString &content)
-{
-    //Get the complete base file name of the original file.
-    QFileInfo musicFileInfo(detailInfo.filePath);
-    //Generate the lyrics file path
-    QString lyricsFilePath=KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
-            musicFileInfo.completeBaseName() + ".lrc";
-    QFile lyricsFile(lyricsFilePath);
-    //Try to open the file.
-    if(lyricsFile.open(QIODevice::WriteOnly))
-    {
-        //Write the data to the file.
-        QTextStream lyricsStream(&lyricsFile);
-        lyricsStream << content << flush;
-        //Close the file.
-        lyricsFile.close();
-        //Return the file path.
-        return lyricsFilePath;
-    }
-    return QString();
 }

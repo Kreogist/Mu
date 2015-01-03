@@ -28,7 +28,6 @@ QString KNGlobal::m_userDataPath="";
 QString KNGlobal::m_resourceDirPath="";
 QString KNGlobal::m_pluginDirPath="";
 KNGlobal *KNGlobal::m_instance=nullptr;
-
 KNGlobal *KNGlobal::instance()
 {
     return m_instance==nullptr?m_instance=new KNGlobal:m_instance;
@@ -139,6 +138,29 @@ QStringList KNGlobal::urlToPathList(const QList<QUrl> urls)
         filePathList.append(currentPath);
     }
     return filePathList;
+}
+
+int KNGlobal::similarity(const QString &str1, const QString &str2)
+{
+    //Levenshtein distance.
+    //Based on http://en.wikibooks.org/wiki/Algorithm_implementation/Strings/Levenshtein_distance#C.2B.2B
+    //Initial the size.
+    const unsigned len1=str1.size(), len2=str2.size();
+    std::vector<size_t> col(len2+1), prevCol(len2+1);
+    //Fills the vector with ascending numbers, starting by 0
+    std::iota(prevCol.begin(), prevCol.end(), 0);
+    for(unsigned i=0; i<len1; i++)
+    {
+        col[0]=i+1;
+        for(unsigned j=0; j<len2; j++)
+        {
+            col[j+1]=std::min({1+col[j],
+                               1+prevCol[1+j],
+                               prevCol[j]+(str1[i]!=str2[j])});
+        }
+        std::swap(col, prevCol);
+    }
+    return prevCol[len2];
 }
 
 void KNGlobal::setDylibSuffix(const QString &dylibSuffix)

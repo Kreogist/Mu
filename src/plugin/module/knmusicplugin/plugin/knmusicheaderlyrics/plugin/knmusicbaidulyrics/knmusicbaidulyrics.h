@@ -29,7 +29,8 @@ public:
     {
         return "Baidu Music";
     }
-    QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
+    void downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                        QList<KNMusicLyricsDetails> &lyricsList);
 
 private:
     QTextCodec *m_gbkCodec;

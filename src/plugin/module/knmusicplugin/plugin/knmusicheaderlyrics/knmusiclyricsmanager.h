@@ -78,6 +78,10 @@ private:
     inline bool checkLyricsFile(const QString &lyricsPath);
     inline bool findRelateLyrics(const QString &folderPath,
                                  const KNMusicDetailInfo &detailInfo);
+    inline QString writeLyricsFile(const KNMusicDetailInfo &detailInfo,
+                                   const QString &content);
+    static bool lyricsDetailLessThan(const KNMusicLyricsDetails &lyricsDetailLeft,
+                                     const KNMusicLyricsDetails &lyricsDetailRight);
     static KNMusicLyricsManager *m_instance;
     explicit KNMusicLyricsManager(QObject *parent = 0);
 

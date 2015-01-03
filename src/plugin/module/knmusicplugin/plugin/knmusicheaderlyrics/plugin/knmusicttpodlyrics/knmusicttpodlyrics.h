@@ -29,7 +29,8 @@ public:
     {
         return "TTPod";
     }
-    QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
+    void downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                        QList<KNMusicLyricsDetails> &lyricsList);
 
 private:
     inline QString process_code(const QVariant &str);
