@@ -226,7 +226,7 @@ inline void KNPluginManager::setApplicationInformation()
     QString applicationName=QChar(0x03BC);
     //Set application name and other info.
     QApplication::setApplicationName(applicationName);
-    QApplication::setApplicationVersion("0.3");
+    QApplication::setApplicationVersion("0.6");
     QApplication::setApplicationDisplayName(applicationName);
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("http://kreogist.github.io/");
