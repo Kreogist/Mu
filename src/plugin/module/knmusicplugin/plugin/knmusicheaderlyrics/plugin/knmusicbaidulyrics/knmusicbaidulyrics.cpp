@@ -29,7 +29,8 @@ KNMusicBaiduLyrics::KNMusicBaiduLyrics(QObject *parent):
     m_gbkCodec=QTextCodec::codecForName("GBK");
 }
 
-QString KNMusicBaiduLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
+void KNMusicBaiduLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                                        QList<KNMusicLyricsDetails> &lyricsList)
 {
     //Generate the song info base url.
     QString url="http://box.zhangmen.baidu.com/x?title=" +
@@ -42,16 +43,15 @@ QString KNMusicBaiduLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     get(url, responseData);
     if(responseData.isEmpty())
     {
-        return QString();
+        return;
     }
-
     //Find lyric id.
     QString responseText=responseData;
     QRegularExpression lyricsID("<lrcid>([0-9]*)</lrcid>");
     QRegularExpressionMatchIterator i=lyricsID.globalMatch(responseText);
     if(!i.hasNext())
     {
-        return QString();
+        return;
     }
     //Use the first id.
     QString currentID=i.next().captured(1),
@@ -64,9 +64,9 @@ QString KNMusicBaiduLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     get(lyricsUrl, responseData);
     if(responseData.isEmpty())
     {
-        return QString();
+        return;
     }
     //Change the codec from GBK to UTF-8.
-    return writeLyricsFile(detailInfo,
-                           m_gbkCodec->toUnicode(responseData));
+//    return writeLyricsFile(detailInfo,
+//                           m_gbkCodec->toUnicode(responseData));
 }

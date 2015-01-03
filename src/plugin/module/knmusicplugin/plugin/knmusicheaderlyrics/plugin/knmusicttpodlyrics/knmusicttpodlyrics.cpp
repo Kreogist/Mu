@@ -70,7 +70,8 @@ KNMusicTTPodLyrics::~KNMusicTTPodLyrics()
     ;
 }
 
-QString KNMusicTTPodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
+void KNMusicTTPodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                                        QList<KNMusicLyricsDetails> &lyricsList)
 {
     QString searchUrl="http://so.ard.iyyin.com/search.do?q=" +
                       processKeywords(detailInfo.textLists[Name]) +
@@ -82,13 +83,13 @@ QString KNMusicTTPodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     //Check the response data.
     if(responseData.isEmpty())
     {
-        return QString();
+        return;
     }
     //Get the data, and parse the json.
     QJsonDocument songInfoList=QJsonDocument::fromJson(responseData);
     if(songInfoList.isNull())
     {
-        return QString();
+        return;
     }
     //Get the 'data' to from the base object.
     QJsonArray songListData=songInfoList.object().value("data").toArray();
@@ -125,12 +126,16 @@ QString KNMusicTTPodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
             QString lrcText=dataObject.value("lrc").toString();
             if(!lrcText.isEmpty())
             {
-                return writeLyricsFile(detailInfo,
-                                       lrcText);
+                KNMusicLyricsDetails currentDetails;
+                //Don't ask me why, they are just wrong.
+                currentDetails.title=currentObject.value("singerName").toString();
+                currentDetails.artist=currentObject.value("songName").toString();
+                saveLyrics(detailInfo, lrcText, currentDetails);
+                //Add to lyrics list.
+                lyricsList.append(currentDetails);
             }
         }
     }
-    return QString();
 }
 
 inline QString KNMusicTTPodLyrics::process_code(const QVariant &str)

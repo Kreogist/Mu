@@ -74,10 +74,13 @@ macx{
 
 #Linux configure
 linux{
-    CONFIG += libbass
+    CONFIG += libbass FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
     libbass{
         LIBS += -lbass
+    }
+    FFMpeg{
+        LIBS += -lavformat -lavcodec -lavutil
     }
 }
 

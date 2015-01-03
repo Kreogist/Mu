@@ -30,7 +30,8 @@ public:
     {
         return "TTPlayer";
     }
-    QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
+    void downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                        QList<KNMusicLyricsDetails> &lyricsList);
 
 private:
     struct lrcInfo

@@ -398,7 +398,7 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                                   const QStyleOptionViewItem &options,
                                   const QModelIndex &index) const
 {
-    if(index.row()&1)
+    if((index.row()&1))
     {
         //Draw the alternative background.
         painter->fillRect(QRect(options.rect.x(),
@@ -407,17 +407,6 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                                 options.rect.height()),
                           m_alternateColor);
     }
-//    if(currentIndex().row()==index.row())
-//    {
-//        //Prepare the painter.
-//        painter->setPen(Qt::NoPen);
-//        painter->setBrush(options.palette.highlight());
-//        //Draw the alternative background.
-//        painter->drawRect(options.rect.x(),
-//                          options.rect.y(),
-//                          width(),
-//                          options.rect.height());
-//    }
     QTreeView::drawRow(painter, options, index);
 }
 

@@ -10,6 +10,7 @@
         <file>public/shadow.png</file>
         <file>public/indicator.png</file>
         <file>public/preview_font.png</file>
+        <file>icon/mu.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/category/01_musics.png</file>

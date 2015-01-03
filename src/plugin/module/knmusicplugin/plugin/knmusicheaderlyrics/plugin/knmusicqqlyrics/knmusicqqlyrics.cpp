@@ -17,6 +17,7 @@
  */
 #include <QUrl>
 #include <QTextCodec>
+#include <QLinkedList>
 #include <QDomDocument>
 
 #include "knmusicqqlyrics.h"
@@ -30,7 +31,8 @@ KNMusicQQLyrics::KNMusicQQLyrics(QObject *parent) :
     m_gbkCodec=QTextCodec::codecForName("GBK");
 }
 
-QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
+void KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                                     QList<KNMusicLyricsDetails> &lyricsList)
 {
     //Generate the url and get the data from the url.
     QString url="http://qqmusic.qq.com/fcgi-bin/qm_getLyricId.fcg?name="+
@@ -41,20 +43,23 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     //Check the response.
     if(responseData.isEmpty())
     {
-        return QString();
+        return;
     }
     //Tencent use GBK as default codec, translate the data to UTF-8, parse it
     //with DomDocument.
     QDomDocument xmlDoc;
     xmlDoc.setContent(m_gbkCodec->toUnicode(responseData));
     //To find whether it contains song info.
-    QDomNodeList songInfoList=xmlDoc.elementsByTagName("songinfo");
+    QDomNodeList nameList=xmlDoc.elementsByTagName("name"),
+                 singerNameList=xmlDoc.elementsByTagName("singername"),
+                 songInfoList=xmlDoc.elementsByTagName("songinfo");
     if(songInfoList.isEmpty())
     {
-        return QString();
+        return;
     }
     //Get the song id from the song info.
     QStringList songIDList;
+    QLinkedList<KNMusicLyricsDetails> lyricsDetails;
     for(int i=0; i<songInfoList.length(); i++)
     {
         //Ensure the song info is available.
@@ -67,19 +72,28 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
         QString currentID=currentSongInfo.attribute("id");
         if(!currentID.isEmpty())
         {
+            //Save the title and artist information.
+            KNMusicLyricsDetails currentDetails;
+            currentDetails.title=
+                    QUrl::fromPercentEncoding(nameList.at(i).toElement().text().toUtf8());
+            currentDetails.artist=
+                    QUrl::fromPercentEncoding(singerNameList.at(i).toElement().text().toUtf8());
+            //Write to the list.
+            lyricsDetails.append(currentDetails);
             songIDList.append(currentID);
         }
     }
     //Check if the song id is empty.
     if(songIDList.isEmpty())
     {
-        return QString();
+        return;
     }
     //Get the detail data for each song.
     for(QStringList::iterator i=songIDList.begin();
         i!=songIDList.end();
         ++i)
     {
+        KNMusicLyricsDetails currentDetails=lyricsDetails.takeFirst();
         get(generateRequestString(*i), responseData);
         //Check the response data is empty or not.
         if(responseData.isEmpty())
@@ -100,10 +114,10 @@ QString KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
         {
             continue;
         }
-        //Write the lyrics and return the file name.
-        return writeLyricsFile(detailInfo, lyricsContent);
+        //Save the lyrics data and calculate the similarity.
+        saveLyrics(detailInfo, lyricsContent, currentDetails);
+        lyricsList.append(currentDetails);
     }
-    return QString();
 }
 
 inline QString KNMusicQQLyrics::processKeywordsToGBK(const QString &keywords)

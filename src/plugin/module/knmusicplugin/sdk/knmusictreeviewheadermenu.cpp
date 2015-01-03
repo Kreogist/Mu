@@ -84,7 +84,7 @@ void KNMusicTreeViewHeaderMenu::paintEvent(QPaintEvent *event)
     //Initial painter.
     QPainter painter(this);
     //Draw rects.
-    painter.drawRect(rect());
+    painter.drawRect(QRect(0,0,width()-1,height()-1));
 }
 
 void KNMusicTreeViewHeaderMenu::onActionVisibleChange(const int &index)

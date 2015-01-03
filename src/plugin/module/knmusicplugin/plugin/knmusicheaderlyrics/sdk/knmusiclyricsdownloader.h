@@ -18,11 +18,25 @@
 #ifndef KNMUSICLYRICSDOWNLOADER_H
 #define KNMUSICLYRICSDOWNLOADER_H
 
+#include "knglobal.h"
 #include "knmusicglobal.h"
 
 #include <QObject>
 
+namespace KNMusicLyricsData
+{
+struct KNMusicLyricsDetails
+{
+    int titleSimilarity;
+    int artistSimilarity;
+    QString title;
+    QString artist;
+    QString lyricsData;
+};
+}
+
 using namespace KNMusic;
+using namespace KNMusicLyricsData;
 
 class QTimer;
 class QNetworkReply;
@@ -33,7 +47,8 @@ class KNMusicLyricsDownloader : public QObject
 public:
     explicit KNMusicLyricsDownloader(QObject *parent = 0);
     virtual QString downloaderName()=0;
-    virtual QString downloadLyrics(const KNMusicDetailInfo &detailInfo)=0;
+    virtual void downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                                QList<KNMusicLyricsDetails> &lyricsList)=0;
 
 signals:
 
@@ -54,8 +69,16 @@ protected:
         return str;
     }
     void get(const QString &url, QByteArray &responseData);
-    QString writeLyricsFile(const KNMusicDetailInfo &detailInfo,
-                            const QString &content);
+    inline void saveLyrics(const KNMusicDetailInfo &detailInfo,
+                           const QString &lyricsContent,
+                           KNMusicLyricsDetails &currentDetails)
+    {
+        currentDetails.titleSimilarity=
+                KNGlobal::similarity(currentDetails.title, detailInfo.textLists[Name]);
+        currentDetails.artistSimilarity=
+                KNGlobal::similarity(currentDetails.artist, detailInfo.textLists[Artist]);
+        currentDetails.lyricsData=lyricsContent;
+    }
 
 private:
     QNetworkAccessManager *m_networkManager;

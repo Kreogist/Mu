@@ -17,6 +17,7 @@
  */
 #include <QFile>
 #include <QFileInfo>
+#include <QTextStream>
 
 #include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
@@ -79,12 +80,11 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
 
 inline void KNMusicLyricsManager::installDownloaders()
 {
-    ;
     installLyricsDownloader(new KNMusicQQLyrics);
     installLyricsDownloader(new KNMusicTTPodLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
     installLyricsDownloader(new KNMusicTTPlayerLyrics);
-    installLyricsDownloader(new KNMusicBaiduLyrics);
+//    installLyricsDownloader(new KNMusicBaiduLyrics);
 }
 
 void KNMusicLyricsManager::clear()
@@ -152,27 +152,30 @@ inline bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &det
 
 inline bool KNMusicLyricsManager::downloadLyricsForFile(const KNMusicDetailInfo &detailInfo)
 {
+    //Prepare the lyrics detail list.
+    QList<KNMusicLyricsDetails> lyricsList;
     //Using the downloader to download the lyrics.
     for(QLinkedList<KNMusicLyricsDownloader *>::iterator i=m_downloaders.begin();
         i!=m_downloaders.end();
         ++i)
     {
-        //Try to download the file from server.
-        QString downloadedFilePath=(*i)->downloadLyrics(detailInfo);
-        //If download success.
-        if(!downloadedFilePath.isEmpty())
-        {
-            //Load the file.
-            if(checkLyricsFile(downloadedFilePath))
-            {
-                return true;
-            }
-            //Or else, we need to delete this file.
-            QFile removedFile(downloadedFilePath);
-            removedFile.remove();
-        }
+        //Try to download the file from all the server.
+        (*i)->downloadLyrics(detailInfo, lyricsList);
     }
-    return false;
+    //Check if we need to process lyrics list.
+    if(lyricsList.isEmpty())
+    {
+        return false;
+    }
+    //Sort the list according to the similarity.
+    qSort(lyricsList.begin(), lyricsList.end(), lyricsDetailLessThan);
+    //Now the first data is the best matching data we can find,
+    //Save it to a file.
+    QString lyricsFilePath=
+            writeLyricsFile(detailInfo, lyricsList.first().lyricsData);
+    return lyricsFilePath.isEmpty()?
+                false:
+                checkLyricsFile(lyricsFilePath);
 }
 
 inline bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
@@ -193,6 +196,37 @@ inline bool KNMusicLyricsManager::findRelateLyrics(const QString &folderPath,
     return checkLyricsFile(folderPath+"/"+detailInfo.textLists[Name]+".lrc") ||
             checkLyricsFile(folderPath+"/"+detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc") ||
             checkLyricsFile(folderPath+"/"+detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc");
+}
+
+inline QString KNMusicLyricsManager::writeLyricsFile(const KNMusicDetailInfo &detailInfo,
+                                                     const QString &content)
+{
+    //Get the complete base file name of the original file.
+    QFileInfo musicFileInfo(detailInfo.filePath);
+    //Generate the lyrics file path
+    QString lyricsFilePath=KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
+            musicFileInfo.completeBaseName() + ".lrc";
+    QFile lyricsFile(lyricsFilePath);
+    //Try to open the file.
+    if(lyricsFile.open(QIODevice::WriteOnly))
+    {
+        //Write the data to the file.
+        QTextStream lyricsStream(&lyricsFile);
+        lyricsStream << content << flush;
+        //Close the file.
+        lyricsFile.close();
+        //Return the file path.
+        return lyricsFilePath;
+    }
+    return QString();
+}
+
+bool KNMusicLyricsManager::lyricsDetailLessThan(const KNMusicLyricsDetails &lyricsDetailLeft,
+                                                const KNMusicLyricsDetails &lyricsDetailRight)
+{
+    return (lyricsDetailLeft.titleSimilarity==lyricsDetailRight.titleSimilarity)?
+                lyricsDetailLeft.artistSimilarity<lyricsDetailRight.artistSimilarity:
+                lyricsDetailLeft.titleSimilarity<lyricsDetailRight.titleSimilarity;
 }
 
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :

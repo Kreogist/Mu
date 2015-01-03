@@ -21,7 +21,7 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 ## Dependencies
 * Qt 5.4
 * bass
-* ffmpeg (Windows, Mac OS X)
+* ffmpeg
 
 ## License
 

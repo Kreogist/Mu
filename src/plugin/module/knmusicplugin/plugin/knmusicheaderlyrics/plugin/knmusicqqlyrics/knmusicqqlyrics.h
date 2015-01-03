@@ -29,7 +29,8 @@ public:
     {
         return "QQ Music";
     }
-    QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
+    void downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                        QList<KNMusicLyricsDetails> &lyricsList);
 
 signals:
 

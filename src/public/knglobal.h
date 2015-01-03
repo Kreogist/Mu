@@ -32,6 +32,7 @@ public:
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);
+    static int similarity(const QString &str1, const QString &str2);
     static void setDylibSuffix(const QString &dylibSuffix);
     static void setLibraryPath(const QString &libraryPath);
     static void showInGraphicalShell(const QString &filePath);

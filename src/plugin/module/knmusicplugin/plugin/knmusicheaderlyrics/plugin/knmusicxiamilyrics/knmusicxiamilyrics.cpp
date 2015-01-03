@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QLinkedList>
 #include <QDomDocument>
 #include <QRegularExpression>
 
@@ -28,7 +29,8 @@ KNMusicXiaMiLyrics::KNMusicXiaMiLyrics(QObject *parent) :
 
 }
 
-QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
+void KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                                        QList<KNMusicLyricsDetails> &lyricsList)
 {
     //Generate the url.
     QString url="http://www.xiami.com/search/song-lyric?key=" +
@@ -38,7 +40,7 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
     get(url, responseData);
     if(responseData.isEmpty())
     {
-        return QString();
+        return;
     }
     QString xmlhttpText=responseData;
     //Parse the data.
@@ -58,6 +60,7 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
         get(url, responseData);
         if(!responseData.isEmpty())
         {
+            QLinkedList<KNMusicLyricsDetails> rawLyricsDetail;
             QStringList lyricsUrlList;
             //Parse the document.
             QDomDocument lyricsDocument;
@@ -68,15 +71,21 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
             //Get the information from the tracklist.
             for(int j=0; j<trackList.size(); j++)
             {
+                QDomElement currentTrack=trackList.at(j).toElement();
                 //Find lyrics url.
-                QDomNodeList lyric_urlList=
-                        trackList.at(j).toElement().elementsByTagName("lyric");
-                if(!lyric_urlList.isEmpty())
+                QDomNodeList lyricUrlList=
+                        currentTrack.elementsByTagName("lyric");
+                if(!lyricUrlList.isEmpty())
                 {
-                    QDomNodeList lyricsUrl=lyric_urlList.at(0).toElement().childNodes();
+                    QDomNodeList lyricsUrl=lyricUrlList.at(0).toElement().childNodes();
                     if(!lyricsUrl.isEmpty())
                     {
-                        //Add the url to the url list.
+                        //Save the lyrics information.
+                        KNMusicLyricsDetails currentDetail;
+                        currentDetail.title=currentTrack.elementsByTagName("title").at(0).toElement().childNodes().at(0).nodeValue();
+                        currentDetail.artist=currentTrack.elementsByTagName("artist").at(0).toElement().childNodes().at(0).nodeValue();
+                        //Add the lyrics information and url to the list.
+                        rawLyricsDetail.append(currentDetail);
                         lyricsUrlList.append(lyricsUrl.at(0).nodeValue());
                     }
                 }
@@ -87,16 +96,16 @@ QString KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
                 i!=lyricsUrlList.end();
                 ++i)
             {
+                KNMusicLyricsDetails currentDetail=rawLyricsDetail.takeFirst();
                 //Get the data from the url.
                 get((*i), responseData);
-                //This is the lyrics file! Write it to the file, return the file name.
+                //This is the lyrics file! Add to the lyrics list.
                 if(!responseData.isEmpty())
                 {
-                    return writeLyricsFile(detailInfo, responseData);
+                    saveLyrics(detailInfo, responseData, currentDetail);
+                    lyricsList.append(currentDetail);
                 }
             }
         }
     }
-    return QString();
 }
-

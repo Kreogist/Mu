@@ -29,7 +29,8 @@ public:
     {
         return "XiaMi Music";
     }
-    QString downloadLyrics(const KNMusicDetailInfo &detailInfo);
+    void downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                        QList<KNMusicLyricsDetails> &lyricsList);
 };
 
 #endif // KNMUSICXIAMILYRICS_H

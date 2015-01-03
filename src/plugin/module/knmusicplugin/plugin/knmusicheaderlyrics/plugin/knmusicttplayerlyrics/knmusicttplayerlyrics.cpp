@@ -34,7 +34,8 @@ KNMusicTTPlayerLyrics::~KNMusicTTPlayerLyrics()
 
 }
 
-QString KNMusicTTPlayerLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo)
+void KNMusicTTPlayerLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
+                                           QList<KNMusicLyricsDetails> &lyricsList)
 {
     //Another address: http://ttlrccnc.qianqian.com
     QString queryUrl="http://ttlrcct.qianqian.com"
@@ -52,7 +53,7 @@ QString KNMusicTTPlayerLyrics::downloadLyrics(const KNMusicDetailInfo &detailInf
     QDomNodeList lyrics=songInfoDocument.documentElement().elementsByTagName("lrc");
     if(lyrics.isEmpty())
     {
-        return QString();
+        return;
     }
     //Save the ids.
     QList<QHash<QString, QString>> lyricsInfoList;
@@ -79,14 +80,18 @@ QString KNMusicTTPlayerLyrics::downloadLyrics(const KNMusicDetailInfo &detailInf
                             generateCode(*i);
         //Download data.
         get(downloadUrl, responseData);
-//        qDebug()<<responseData;
         if(!responseData.isEmpty() &&
                 !responseData.contains("errmsg"))
         {
-            return writeLyricsFile(detailInfo, responseData);
+            //Generate the lyrics details data.
+            KNMusicLyricsDetails currentDetails;
+            currentDetails.title=(*i).value("title");
+            currentDetails.artist=(*i).value("artist");
+            saveLyrics(detailInfo, responseData, currentDetails);
+            //Add to list.
+            lyricsList.append(currentDetails);
         }
     }
-    return QString();
 }
 
 inline QString KNMusicTTPlayerLyrics::generateCode(const QHash<QString, QString> &info)
