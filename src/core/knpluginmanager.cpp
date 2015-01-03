@@ -159,10 +159,12 @@ void KNPluginManager::setMainWindow(KNExpandMainWindow *mainWindow)
         //Set the main window. It can't be changed.
         m_mainWindow=mainWindow;
         //Set the basic property.
+        m_mainWindow->setWindowIcon(QIcon("://icon/mu.png"));
+        m_mainWindow->setMinimumSize(730, 432);
+        //Mac OS X hack.
 #ifdef Q_OS_MACX
         m_mainWindow->setWindowTitle(QApplication::applicationDisplayName());
 #endif
-        m_mainWindow->setMinimumSize(730, 432);
         //Set the basic palette.
         QPalette pal=m_mainWindow->palette();
         pal.setColor(QPalette::WindowText, QColor(255,255,255));
