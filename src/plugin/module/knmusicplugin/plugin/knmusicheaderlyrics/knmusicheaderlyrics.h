@@ -62,6 +62,7 @@ private:
     inline int lyricsLineDuration(const int &index);
     inline void startMovingAnime(const int &durationOffset,
                                  const int &yOffset);
+    static KNMusicDetailInfo m_currentDeailInfo;
     KNMusicLyricsManager *m_lyricsManager;
     KNMusicGlobal *m_musicGlobal;
 

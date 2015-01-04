@@ -29,6 +29,8 @@
 
 #include <QDebug>
 
+KNMusicDetailInfo KNMusicHeaderLyrics::m_currentDeailInfo;
+
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     KNMusicHeaderLyricsBase(parent)
 {
@@ -104,6 +106,8 @@ void KNMusicHeaderLyrics::resetStatus()
 
 void KNMusicHeaderLyrics::loadLyricsForMusic(const KNMusicDetailInfo &detailInfo)
 {
+    //Save the current detail info.
+    m_currentDeailInfo=detailInfo;
     //Reset the lyrics viewer.
     resetStatus();
     //Clear the current lyrics.
@@ -111,11 +115,21 @@ void KNMusicHeaderLyrics::loadLyricsForMusic(const KNMusicDetailInfo &detailInfo
     m_lyricsText.clear();
     //Update the widget first.
     update();
+    //Generate temporary parse data.
+    QList<qint64> loadedPositions;
+    QStringList loadedLyricsText;
     //Load the lyrics.
     if(m_lyricsManager->loadLyricsForFile(detailInfo,
-                                          m_positions,
-                                          m_lyricsText))
+                                          loadedPositions,
+                                          loadedLyricsText))
     {
+        //Ensure that the detail info is still the same.
+        if(m_currentDeailInfo.filePath!=detailInfo.filePath)
+        {
+            return;
+        }
+        m_positions=loadedPositions;
+        m_lyricsText=loadedLyricsText;
         //Update parameters.
         //Get the lyrics lines.
         m_lyricsLines=m_positions.size();
