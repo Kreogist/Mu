@@ -80,11 +80,11 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
 
 inline void KNMusicLyricsManager::installDownloaders()
 {
-//    installLyricsDownloader(new KNMusicQQLyrics);
-//    installLyricsDownloader(new KNMusicTTPodLyrics);
-//    installLyricsDownloader(new KNMusicXiaMiLyrics);
-//    installLyricsDownloader(new KNMusicTTPlayerLyrics);
     installLyricsDownloader(new KNMusicNeteaseLyrics);
+    installLyricsDownloader(new KNMusicTTPodLyrics);
+    installLyricsDownloader(new KNMusicQQLyrics);
+    installLyricsDownloader(new KNMusicTTPlayerLyrics);
+    installLyricsDownloader(new KNMusicXiaMiLyrics);
 }
 
 void KNMusicLyricsManager::clear()
