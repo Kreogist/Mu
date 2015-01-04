@@ -37,15 +37,50 @@ KNMusicLyricsDownloader::KNMusicLyricsDownloader(QObject *parent) :
     m_timeout->setInterval(5000);
 }
 
-void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
+void KNMusicLyricsDownloader::get(const QString &url,
+                                  QByteArray &responseData,
+                                  const QVariant &cookie,
+                                  const QString &referer)
 {
+    networkProcess(Get, url, responseData, QByteArray(), cookie, referer);
+}
+
+void KNMusicLyricsDownloader::post(const QString &url,
+                                   QByteArray &responseData,
+                                   const QByteArray &parameter,
+                                   const QVariant &cookie,
+                                   const QString &referer)
+{
+    networkProcess(Post, url, responseData, parameter, cookie, referer);
+}
+
+inline void KNMusicLyricsDownloader::networkProcess(int type,
+                                                    const QString &url,
+                                                    QByteArray &responseData,
+                                                    const QByteArray &parameter,
+                                                    const QVariant &cookie,
+                                                    const QString &referer)
+{
+    //Stop the timer.
     m_timeout->stop();
     //Clear the data first.
     responseData.clear();
     m_networkManager->clearAccessCache();
     //Generate the request.
     QNetworkRequest currentRequest;
+    //Set the data to request.
     currentRequest.setUrl(QUrl(url));
+    if(!cookie.isNull())
+    {
+        currentRequest.setHeader(QNetworkRequest::CookieHeader,
+                                 cookie);
+    }
+    if(!referer.isEmpty())
+    {
+        currentRequest.setRawHeader("Referer", referer.toStdString().data());
+        currentRequest.setRawHeader("Origin", referer.toStdString().data());
+    }
+    //Generate the reply and quit handler.
     QNetworkReply *currentReply=nullptr;
     KNConnectionHandler quiterHandle;
     //Wait for response, using the event loop, generate the loop.
@@ -56,7 +91,23 @@ void KNMusicLyricsDownloader::get(const QString &url, QByteArray &responseData)
     quiterHandle+=connect(m_timeout, SIGNAL(timeout()),
                           &stuckWaitingLoop, SLOT(quit()));
     //Do GET.
-    currentReply=m_networkManager->get(currentRequest);
+    switch(type)
+    {
+    case Post:
+    {
+        currentRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                                 "application/x-www-form-urlencoded");
+        currentRequest.setHeader(QNetworkRequest::ContentLengthHeader,
+                                 parameter.size());
+        currentReply=m_networkManager->post(currentRequest, parameter);
+        break;
+    }
+    case Get:
+    {
+        currentReply=m_networkManager->get(currentRequest);
+        break;
+    }
+    }
     //Start counting.
     m_timeout->start();
     //Start loop.

@@ -22,7 +22,7 @@
 #include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
-#include "plugin/knmusicbaidulyrics/knmusicbaidulyrics.h"
+#include "plugin/knmusicneteaselyrics/knmusicneteaselyrics.h"
 #include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "sdk/knmusiclyricsglobal.h"
 #include "knmusiclrcparser.h"
@@ -80,11 +80,11 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
 
 inline void KNMusicLyricsManager::installDownloaders()
 {
-    installLyricsDownloader(new KNMusicQQLyrics);
-    installLyricsDownloader(new KNMusicTTPodLyrics);
-    installLyricsDownloader(new KNMusicXiaMiLyrics);
-    installLyricsDownloader(new KNMusicTTPlayerLyrics);
-//    installLyricsDownloader(new KNMusicBaiduLyrics);
+//    installLyricsDownloader(new KNMusicQQLyrics);
+//    installLyricsDownloader(new KNMusicTTPodLyrics);
+//    installLyricsDownloader(new KNMusicXiaMiLyrics);
+//    installLyricsDownloader(new KNMusicTTPlayerLyrics);
+    installLyricsDownloader(new KNMusicNeteaseLyrics);
 }
 
 void KNMusicLyricsManager::clear()
