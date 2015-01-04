@@ -65,6 +65,8 @@ private:
     KNMusicLyricsManager *m_lyricsManager;
     KNMusicGlobal *m_musicGlobal;
 
+    QList<qint64> m_positions;
+    QStringList m_lyricsText;
     QTimeLine *m_moveToCurrent;
     int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,
         m_leftSpacing=15, m_animationDuration=200, m_lineSpacing=2;
