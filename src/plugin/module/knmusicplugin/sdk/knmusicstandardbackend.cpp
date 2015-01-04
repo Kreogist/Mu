@@ -28,7 +28,7 @@ qint64 KNMusicStandardBackend::duration() const
 
 qint64 KNMusicStandardBackend::position() const
 {
-    return m_main->position();;
+    return m_main->position();
 }
 
 void KNMusicStandardBackend::playFile(const QString &fileName)

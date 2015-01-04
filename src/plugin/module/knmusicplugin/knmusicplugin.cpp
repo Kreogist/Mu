@@ -43,6 +43,9 @@
 #ifdef ENABLE_FFMPEG
 #include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
 #endif
+#ifdef ENABLE_LIBQTAV
+#include "plugin/knmusicbackendqtav/knmusicbackendqtav.h"
+#endif
 #ifdef ENABLE_LIBVLC
 #include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
 #endif
@@ -99,6 +102,9 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 #endif
 #ifdef ENABLE_LIBVLC
     loadBackend(new KNMusicBackendVLC);
+#endif
+#ifdef ENABLE_LIBQTAV
+    loadBackend(new KNMusicBackendQtAV);
 #endif
     loadDetailTooptip(new KNMusicDetailTooltip);
     loadNowPlaying(new KNMusicNowPlaying);

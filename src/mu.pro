@@ -56,16 +56,12 @@ unix{
 
 #Mac OS X configure
 macx{
-    INCLUDEPATH += /usr/include
-#    LIBS += -L/usr/lib
-    CONFIG += libbass FFMpeg
+    CONFIG += FFMpeg libQtAV
     libbass{
         LIBS += /usr/lib/libbass.dylib
     }
     FFMpeg{
-        LIBS += /usr/lib/libavformat.dylib \
-                /usr/lib/libavcodec.dylib \
-                /usr/lib/libavutil.dylib
+        LIBS += -lavformat -lavcodec -lavutil
     }
     QMAKE_LFLAGS += -framework CoreFoundation
     QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
@@ -92,8 +88,26 @@ FFMpeg{
                plugin/module/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h
 }
 
+libQtAV{
+    contains(CONFIG, libbass){
+        error("You can't enable more than one backend at the same time.")
+    }
+    contains(CONFIG, libvlc){
+        error("You can't enable more than one backend at the same time.")
+    }
+    DEFINES += ENABLE_LIBQTAV
+    QT += av
+    SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtav.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtavthread.cpp
+    HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtav.h \
+               plugin/module/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtavthread.h
+}
+
 libVLC{
     contains(CONFIG, libbass){
+        error("You can't enable more than one backend at the same time.")
+    }
+    contains(CONFIG, libQtAV){
         error("You can't enable more than one backend at the same time.")
     }
     DEFINES += ENABLE_LIBVLC
@@ -107,6 +121,9 @@ libVLC{
 
 libbass{
     contains(CONFIG, libvlc){
+        error("You can't enable more than one backend at the same time.")
+    }
+    contains(CONFIG, libQtAV){
         error("You can't enable more than one backend at the same time.")
     }
     DEFINES += ENABLE_LIBBASS
