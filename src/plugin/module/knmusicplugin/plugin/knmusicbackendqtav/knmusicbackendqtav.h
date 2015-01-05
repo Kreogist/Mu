@@ -20,6 +20,7 @@
 
 #include "knmusicstandardbackend.h"
 
+class QThread;
 class KNMusicBackendQtAVThread;
 class KNMusicBackendQtAV : public KNMusicStandardBackend
 {
@@ -45,6 +46,7 @@ protected:
 
 private:
     KNMusicBackendQtAVThread *m_main, *m_preview;
+    QThread *m_mainThread, *m_previewThread;
 };
 
 #endif // KNMUSICBACKENDQTAV_H

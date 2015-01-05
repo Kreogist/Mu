@@ -20,9 +20,12 @@
 
 #include <QtAV/QtAV.h>
 
+#include "knmusicglobal.h"
+
 #include "knmusicbackendthread.h"
 
 using namespace QtAV;
+using namespace KNMusic;
 
 class KNMusicBackendQtAVThread : public KNMusicBackendThread
 {
@@ -51,14 +54,18 @@ public slots:
     void setPosition(const qint64 &position);
 
 private slots:
+    void onActionLoaded();
     void onActionPositionChanged(const qint64 &position);
 
 private:
+    inline void setPlayerVolume();
     AVPlayer *m_player;
-    qint64 m_startPosition;   //Unit: millisecond
-    qint64 m_endPosition;     //Unit: millisecond
-    qint64 m_duration;        //Unit: millisecond
-    qint64 m_totalDuration;   //Unit: millisecond
+    bool m_hasSection=false;
+    qreal m_threadVolumeLevel=1.0;
+    qint64 m_startPosition=0;   //Unit: millisecond
+    qint64 m_endPosition=0;     //Unit: millisecond
+    qint64 m_duration=0;        //Unit: millisecond
+    qint64 m_totalDuration=0;   //Unit: millisecond
 };
 
 #endif // KNMUSICBACKENDQTAVTHREAD_H

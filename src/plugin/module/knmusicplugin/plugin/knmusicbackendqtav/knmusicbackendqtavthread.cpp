@@ -27,9 +27,13 @@ KNMusicBackendQtAVThread::KNMusicBackendQtAVThread(QObject *parent) :
     //Initial the player and enable audio.
     m_player=new AVPlayer(this);
     m_player->enableAudio(true);
+    //Set the default audio size to maximum.
+    setVolume(10000);
     //Linked the duration changed signal.
-    connect(m_player, &AVPlayer::positionChanged,
-            this, &KNMusicBackendQtAVThread::onActionPositionChanged);
+//    connect(m_player, &AVPlayer::loaded,
+//            this, &KNMusicBackendQtAVThread::onActionLoaded);
+//    connect(m_player, &AVPlayer::positionChanged,
+//            this, &KNMusicBackendQtAVThread::onActionPositionChanged);
 }
 
 KNMusicBackendQtAVThread::~KNMusicBackendQtAVThread()
@@ -63,37 +67,56 @@ void KNMusicBackendQtAVThread::clear()
 void KNMusicBackendQtAVThread::resetState()
 {
     //Get the duration.
-    m_duration=m_totalDuration;
+    m_duration=0;
     //Set the start position at the very beginning.
     m_startPosition=0;
     //Set the default end position as the whole file.
-    m_endPosition=m_duration;
+    m_endPosition=0;
+    m_hasSection=false;
+
 }
 
 void KNMusicBackendQtAVThread::stop()
 {
+    //Stop player and emit signal.
     m_player->stop();
+    emit stateChanged(StoppedState);
 }
 
 void KNMusicBackendQtAVThread::pause()
 {
+    //Process nothing is the player has been paused.
+    if(m_player->isPaused())
+    {
+        return;
+    }
+    //Set the pause.
     m_player->pause(true);
+    //Emit pause state changed signal.
+    emit stateChanged(PausedState);
 }
 
 void KNMusicBackendQtAVThread::play()
 {
+    //Check if now is paused.
     if(m_player->isPaused())
     {
         m_player->pause(false);
-        return;
     }
-    m_player->play();
+    else
+    {
+        //Play the music, and set the volume to the volume.
+        m_player->play();
+        //Set the player volume.
+        setPlayerVolume();
+    }
+    //Emit played state changed signal.
+    emit stateChanged(PlayingState);
 }
 
 int KNMusicBackendQtAVThread::volume()
 {
-    return m_player->audio()==nullptr?
-              0:m_player->audio()->volume();
+    return m_threadVolumeLevel;
 }
 
 qint64 KNMusicBackendQtAVThread::duration()
@@ -109,15 +132,25 @@ qint64 KNMusicBackendQtAVThread::position()
 void KNMusicBackendQtAVThread::setPlaySection(const qint64 &sectionStart,
                                               const qint64 &sectionDuration)
 {
-    if(sectionStart!=-1)
+    //Save the start position.
+    m_hasSection=(sectionStart!=-1);
+    //Check if the start position is
+    if(m_hasSection)
     {
-        m_player->setStartPosition(sectionStart);
-        m_player->setStopPosition(sectionStart+sectionDuration);
+        m_startPosition=sectionStart;
+        //Save the section and duration.
+        m_endPosition=sectionStart+sectionDuration;
+        //Set start and stop postion.
+        m_player->setStartPosition(m_startPosition);
+        m_player->setStopPosition(m_endPosition);
+        //Update the duration.
+        m_duration=m_endPosition-m_startPosition;
+        emit durationChanged(m_duration);
     }
 }
 
 void KNMusicBackendQtAVThread::playSection(const qint64 &sectionStart,
-                                          const qint64 &sectionDuration)
+                                           const qint64 &sectionDuration)
 {
     //Set the section.
     setPlaySection(sectionStart, sectionDuration);
@@ -127,10 +160,10 @@ void KNMusicBackendQtAVThread::playSection(const qint64 &sectionStart,
 
 void KNMusicBackendQtAVThread::setVolume(const int &volumeSize)
 {
-    if(m_player->audio()!=nullptr)
-    {
-        m_player->audio()->setVolume((qreal)volumeSize/10000.0);
-    }
+    //Save the thread volume value.
+    m_threadVolumeLevel=(qreal)volumeSize/10000.0;
+    //Set the volume.
+    setPlayerVolume();
 }
 
 void KNMusicBackendQtAVThread::setPosition(const qint64 &position)
@@ -143,9 +176,37 @@ void KNMusicBackendQtAVThread::setPosition(const qint64 &position)
     m_player->setPosition(position+m_startPosition);
 }
 
+void KNMusicBackendQtAVThread::onActionLoaded()
+{
+    //Update duration data.
+    if(m_hasSection)
+    {
+        //Because we don't need to do anything, duration has been set.
+        return;
+    }
+    //Update the duration and end position.
+    m_duration=m_player->duration();
+    m_endPosition=m_duration;
+    emit durationChanged(m_duration);
+}
+
 void KNMusicBackendQtAVThread::onActionPositionChanged(const qint64 &position)
 {
-    qDebug()<<position;
+    qint64 currentPosition=position-m_startPosition;
     //Emit the reduced position.
-    emit positionChanged(position);
+    emit positionChanged(currentPosition);
+    //Check if the position is end position.
+//    if(currentPosition>=m_endPosition)
+//    {
+//        emit finished();
+    //    }
+}
+
+void KNMusicBackendQtAVThread::setPlayerVolume()
+{
+    //Check is audio null, set the volume.
+    if(m_player->audio()!=nullptr)
+    {
+        m_player->audio()->setVolume(m_threadVolumeLevel);
+    }
 }

@@ -32,7 +32,7 @@ signals:
     void cannotLoadFile();
     void filePathChanged(QString filePath);
     void durationChanged(qint64 duration);
-    void positionChanged(qint64 position);
+    void positionChanged(const qint64 &position);
     void stateChanged(int state);
     void finished();
     void stopped();

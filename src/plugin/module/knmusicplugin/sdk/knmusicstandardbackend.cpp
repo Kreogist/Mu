@@ -103,21 +103,21 @@ void KNMusicStandardBackend::playPreviewSection(const QString &fileName,
 
 void KNMusicStandardBackend::playPreview()
 {
-    smartVolumeOn();
+//    smartVolumeOn();
     //Play the preview.
     m_preview->play();
 }
 
 void KNMusicStandardBackend::stopPreview()
 {
-    smartVolumeOff();
+//    smartVolumeOff();
     //Stop the preview
     m_preview->stop();
 }
 
 void KNMusicStandardBackend::pausePreview()
 {
-    smartVolumeOff();
+//    smartVolumeOff();
     //Stop the preview
     m_preview->pause();
 }
@@ -125,7 +125,7 @@ void KNMusicStandardBackend::pausePreview()
 void KNMusicStandardBackend::resetPreviewPlayer()
 {
     //Set the smart volume off first.
-    smartVolumeOff();
+//    smartVolumeOff();
     //Clear the thread.
     m_preview->clear();
 }
@@ -233,6 +233,7 @@ void KNMusicStandardBackend::smartVolumeOn()
     }
     //Backup the original volume.
     m_originalVolume=m_main->volume()==0?volume():m_main->volume();
+    qDebug()<<"m_originalVolume:"<<m_originalVolume;
     //Set the preview as the full volume.
     m_preview->setVolume(m_originalVolume);
     //Set the main volume as the 1/8 of the full volume.

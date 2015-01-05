@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QThread>
+
 #include "knmusicbackendqtavthread.h"
 
 #include "knmusicbackendqtav.h"
@@ -23,15 +25,16 @@ KNMusicBackendQtAV::KNMusicBackendQtAV(QObject *parent) :
     KNMusicStandardBackend(parent)
 {
     //Initial the main and preview thread.
-    m_main=new KNMusicBackendQtAVThread(this);
+    m_main=new KNMusicBackendQtAVThread;
     setMainThread(m_main);
-    m_preview=new KNMusicBackendQtAVThread(this);
+    m_preview=new KNMusicBackendQtAVThread;
     setPreviewThread(m_preview);
 }
 
 KNMusicBackendQtAV::~KNMusicBackendQtAV()
 {
-    ;
+    m_main->deleteLater();
+    m_preview->deleteLater();
 }
 
 bool KNMusicBackendQtAV::available()

@@ -33,7 +33,7 @@ release{
 #Windows configure
 win32{
     DESTDIR =../mu
-    CONFIG += libbass FFMpeg
+    CONFIG += FFMpeg libQtAV
     QMAKE_CXXFLAGS += -fforce-addr
     libbass{
         LIBS += -lbass
