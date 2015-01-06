@@ -30,10 +30,15 @@ KNMusicBackendQtAVThread::KNMusicBackendQtAVThread(QObject *parent) :
     //Set the default audio size to maximum.
     setVolume(10000);
     //Linked the duration changed signal.
-//    connect(m_player, &AVPlayer::loaded,
-//            this, &KNMusicBackendQtAVThread::onActionLoaded);
-//    connect(m_player, &AVPlayer::positionChanged,
-//            this, &KNMusicBackendQtAVThread::onActionPositionChanged);
+    connect(m_player, &AVPlayer::loaded,
+            this, &KNMusicBackendQtAVThread::onActionLoaded);
+    connect(m_player, &AVPlayer::positionChanged,
+            this, &KNMusicBackendQtAVThread::onActionPositionChanged);
+    connect(m_player, &AVPlayer::stopped,
+            this, &KNMusicBackendQtAVThread::onActionStopped);
+    //Started hack, when started, set the volume value to the player.
+    connect(m_player, &AVPlayer::started,
+            this, &KNMusicBackendQtAVThread::setPlayerVolume);
 }
 
 KNMusicBackendQtAVThread::~KNMusicBackendQtAVThread()
@@ -43,14 +48,18 @@ KNMusicBackendQtAVThread::~KNMusicBackendQtAVThread()
 
 void KNMusicBackendQtAVThread::loadFromFile(const QString &filePath)
 {
-    //Check the file path.
-    if(m_player->file()==filePath)
-    {
-        //Stop playing.
-        stop();
-        //Reset playing parameter state.
-        resetState();
-    }
+    //Block the signals.
+    m_player->blockSignals(true);
+    //Stop playing.
+    m_player->stop();
+    //Release the signal.
+    m_player->blockSignals(false);
+//    //Check the file path.
+//    if(m_player->file()==filePath)
+//    {
+//        //Reset playing parameter state.
+//        resetState();
+//    }
     //Emit the file changed signal.
     emit filePathChanged(filePath);
     //Don't use load! Use setFile!
@@ -73,7 +82,6 @@ void KNMusicBackendQtAVThread::resetState()
     //Set the default end position as the whole file.
     m_endPosition=0;
     m_hasSection=false;
-
 }
 
 void KNMusicBackendQtAVThread::stop()
@@ -140,12 +148,6 @@ void KNMusicBackendQtAVThread::setPlaySection(const qint64 &sectionStart,
         m_startPosition=sectionStart;
         //Save the section and duration.
         m_endPosition=sectionStart+sectionDuration;
-        //Set start and stop postion.
-        m_player->setStartPosition(m_startPosition);
-        m_player->setStopPosition(m_endPosition);
-        //Update the duration.
-        m_duration=m_endPosition-m_startPosition;
-        emit durationChanged(m_duration);
     }
 }
 
@@ -181,25 +183,34 @@ void KNMusicBackendQtAVThread::onActionLoaded()
     //Update duration data.
     if(m_hasSection)
     {
-        //Because we don't need to do anything, duration has been set.
-        return;
+        //Update the duration.
+        m_duration=m_endPosition-m_startPosition;
+        //Set start and stop postion.
+        m_player->setStartPosition(m_startPosition);
+        m_player->setStopPosition(m_endPosition);
     }
-    //Update the duration and end position.
-    m_duration=m_player->duration();
-    m_endPosition=m_duration;
+    else
+    {
+        //Update the duration and end position.
+        m_duration=m_player->duration();
+        m_endPosition=m_duration;
+    }
+    //Emit duration changed signal.
     emit durationChanged(m_duration);
+}
+
+void KNMusicBackendQtAVThread::onActionStopped()
+{
+    //Emit the final position reach signal.
+    emit durationChanged(m_duration);
+    //Emit finished signal.
+    emit finished();
 }
 
 void KNMusicBackendQtAVThread::onActionPositionChanged(const qint64 &position)
 {
-    qint64 currentPosition=position-m_startPosition;
     //Emit the reduced position.
-    emit positionChanged(currentPosition);
-    //Check if the position is end position.
-//    if(currentPosition>=m_endPosition)
-//    {
-//        emit finished();
-    //    }
+    emit positionChanged(position-m_startPosition);
 }
 
 void KNMusicBackendQtAVThread::setPlayerVolume()

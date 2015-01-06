@@ -55,10 +55,11 @@ public slots:
 
 private slots:
     void onActionLoaded();
+    void onActionStopped();
     void onActionPositionChanged(const qint64 &position);
+    void setPlayerVolume();
 
 private:
-    inline void setPlayerVolume();
     AVPlayer *m_player;
     bool m_hasSection=false;
     qreal m_threadVolumeLevel=1.0;
