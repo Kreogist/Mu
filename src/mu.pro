@@ -503,8 +503,12 @@ HEADERS += \
     plugin/sdk/knfontdialog.h \
     plugin/sdk/knmousedetectlabel.h \
     plugin/base/knpreference/knpreferencegeneralpanel.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
+    core/knversion.h
 
 RESOURCES += \
     resource/res.qrc
+
+DISTFILES += \
+    resource/icon/windows/resource.rc
 

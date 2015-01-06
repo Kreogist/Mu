@@ -66,7 +66,7 @@ inline void KNMusicLyricsManager::installDownloaders()
     installLyricsDownloader(new KNMusicQQLyrics);
     installLyricsDownloader(new KNMusicTTPlayerLyrics);
     installLyricsDownloader(new KNMusicXiaMiLyrics);
-    installLyricsDownloader(new KNMusicNeteaseLyrics);
+//    installLyricsDownloader(new KNMusicNeteaseLyrics);
 }
 
 void KNMusicLyricsManager::clear()

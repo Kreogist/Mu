@@ -21,6 +21,7 @@
 #include <QStandardPaths>
 
 #include "knglobal.h"
+#include "knversion.h"
 #include "knconfigure.h"
 
 #include "knexpandmainwindow.h"
@@ -226,7 +227,7 @@ inline void KNPluginManager::setApplicationInformation()
     QString applicationName=QChar(0x03BC);
     //Set application name and other info.
     QApplication::setApplicationName(applicationName);
-    QApplication::setApplicationVersion("0.6");
+    QApplication::setApplicationVersion(APP_VERSION_STR);
     QApplication::setApplicationDisplayName(applicationName);
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("http://kreogist.github.io/");
