@@ -24,15 +24,34 @@
 KNMusicBackendQtAV::KNMusicBackendQtAV(QObject *parent) :
     KNMusicStandardBackend(parent)
 {
+    //Initial the QThread.
+    m_mainThread=new QThread(this);
+    m_previewThread=new QThread(this);
+
     //Initial the main and preview thread.
     m_main=new KNMusicBackendQtAVThread;
+    m_main->moveToThread(m_mainThread);
     setMainThread(m_main);
     m_preview=new KNMusicBackendQtAVThread;
+    m_preview->moveToThread(m_previewThread);
     setPreviewThread(m_preview);
+
+    //Start the thread.
+    m_mainThread->start();
+    m_previewThread->start();
 }
 
 KNMusicBackendQtAV::~KNMusicBackendQtAV()
 {
+    //Quit the thread.
+    m_mainThread->quit();
+    m_previewThread->quit();
+
+    //Wait the thread.
+    m_mainThread->wait();
+    m_previewThread->wait();
+
+    //Delete the main and preview.
     m_main->deleteLater();
     m_preview->deleteLater();
 }

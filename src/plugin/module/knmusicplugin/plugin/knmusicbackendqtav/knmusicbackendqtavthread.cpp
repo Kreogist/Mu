@@ -25,7 +25,7 @@ KNMusicBackendQtAVThread::KNMusicBackendQtAVThread(QObject *parent) :
     KNMusicBackendThread(parent)
 {
     //Initial the player and enable audio.
-    m_player=new AVPlayer(this);
+    m_player=new AVPlayer;
     m_player->enableAudio(true);
     //Set the default audio size to maximum.
     setVolume(10000);
@@ -43,7 +43,7 @@ KNMusicBackendQtAVThread::KNMusicBackendQtAVThread(QObject *parent) :
 
 KNMusicBackendQtAVThread::~KNMusicBackendQtAVThread()
 {
-    ;
+    m_player->deleteLater();
 }
 
 void KNMusicBackendQtAVThread::loadFromFile(const QString &filePath)
