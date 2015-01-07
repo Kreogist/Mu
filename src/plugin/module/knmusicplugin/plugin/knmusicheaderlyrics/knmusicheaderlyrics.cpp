@@ -29,6 +29,8 @@
 
 #include <QDebug>
 
+KNMusicDetailInfo KNMusicHeaderLyrics::m_currentDeailInfo;
+
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     KNMusicHeaderLyricsBase(parent)
 {
@@ -96,27 +98,43 @@ void KNMusicHeaderLyrics::resetStatus()
     //Reset lines.
     m_currentLyricsLine=-1;
     //Clear lyrics manager.
-    m_lyricsManager->clear();
+    m_positions.clear();
+    m_lyricsText.clear();
     //Update the viewport.
     update();
 }
 
 void KNMusicHeaderLyrics::loadLyricsForMusic(const KNMusicDetailInfo &detailInfo)
 {
+    //Save the current detail info.
+    m_currentDeailInfo=detailInfo;
     //Reset the lyrics viewer.
     resetStatus();
     //Clear the current lyrics.
-    m_lyricsManager->clear();
+    m_positions.clear();
+    m_lyricsText.clear();
     //Update the widget first.
     update();
+    //Generate temporary parse data.
+    QList<qint64> loadedPositions;
+    QStringList loadedLyricsText;
     //Load the lyrics.
-    if(m_lyricsManager->loadLyricsForFile(detailInfo))
+    if(m_lyricsManager->loadLyricsForFile(detailInfo,
+                                          loadedPositions,
+                                          loadedLyricsText))
     {
+        //Ensure that the detail info is still the same.
+        if(m_currentDeailInfo.filePath!=detailInfo.filePath)
+        {
+            return;
+        }
+        m_positions=loadedPositions;
+        m_lyricsText=loadedLyricsText;
         //Update parameters.
         //Get the lyrics lines.
-        m_lyricsLines=m_lyricsManager->lines();
+        m_lyricsLines=m_positions.size();
         //Check is there lyrics.
-        if(!m_lyricsManager->isEmpty())
+        if(!m_positions.isEmpty())
         {
             //Initial the current line to the first line.
             m_currentLyricsLine=0;
@@ -131,7 +149,7 @@ void KNMusicHeaderLyrics::loadLyricsForMusic(const KNMusicDetailInfo &detailInfo
 void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
 {
     //If no lyrics, do nothing.
-    if(m_lyricsManager->isEmpty())
+    if(m_positions.isEmpty())
     {
         return;
     }
@@ -142,7 +160,7 @@ void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
         //Find current line from the beginning.
         m_currentLyricsLine=0;
         while(m_currentLyricsLine<m_lyricsLines &&
-              position<m_lyricsManager->positionAt(m_currentLyricsLine))
+              position<m_positions.at(m_currentLyricsLine))
         {
             m_currentLyricsLine++;
         }
@@ -151,14 +169,14 @@ void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
     }
     int yOffset=0;
     //Check the position is previous than the current yet.
-    if(position<m_lyricsManager->positionAt(m_currentLyricsLine) &&
+    if(position<m_positions.at(m_currentLyricsLine) &&
             m_currentLyricsLine!=0)
     {
         //Find the matching lyrics.
         while(m_currentLyricsLine>-1 &&
-              m_lyricsManager->positionAt(m_currentLyricsLine)>position)
+              m_positions.at(m_currentLyricsLine)>position)
         {
-            yOffset-=lyricsSize(m_lyricsManager->lyricsAt(m_currentLyricsLine)).height();
+            yOffset-=lyricsSize(m_lyricsText.at(m_currentLyricsLine)).height();
             m_currentLyricsLine--;
         }
         update();
@@ -169,9 +187,9 @@ void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
     }
     //Find the next specific position.
     while(m_currentLyricsLine<m_lyricsLines-2 &&
-          m_lyricsManager->positionAt(m_currentLyricsLine+1)<position)
+          m_positions.at(m_currentLyricsLine+1)<position)
     {
-        yOffset+=lyricsSize(m_lyricsManager->lyricsAt(m_currentLyricsLine)).height();
+        yOffset+=lyricsSize(m_lyricsText.at(m_currentLyricsLine)).height();
         m_currentLyricsLine++;
     }
     if(yOffset>0)
@@ -186,7 +204,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     //Paint other things.
     QWidget::paintEvent(event);
     //Check is current line available, if not means no lyrics.
-    if(m_lyricsManager->isEmpty() ||
+    if(m_positions.isEmpty() ||
             m_currentLyricsLine<0 ||
             m_currentLyricsLine>=m_lyricsLines)
     {
@@ -203,7 +221,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     int centerY=(height()>>1)+m_currentLineOffsetY;
     //Draw the current line.
     painter.setPen(m_highlightColor);
-    currentText=m_lyricsManager->lyricsAt(m_currentLyricsLine);
+    currentText=m_lyricsText.at(m_currentLyricsLine);
     currentSize=lyricsSize(currentText);
     centerY-=(currentSize.height()>>1);
     painter.drawText(m_leftSpacing,
@@ -220,7 +238,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     while(lineTop<height() && paintLine<m_lyricsLines)
     {
         //Draw the line.
-        currentText=m_lyricsManager->lyricsAt(paintLine);
+        currentText=m_lyricsText.at(paintLine);
         currentSize=lyricsSize(currentText);
         painter.drawText(m_leftSpacing,
                          lineTop,
@@ -238,7 +256,7 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
     while(lineBottom>0 && paintLine>-1)
     {
         //Draw the line.
-        currentText=m_lyricsManager->lyricsAt(paintLine);
+        currentText=m_lyricsText.at(paintLine);
         currentSize=lyricsSize(currentText);
         //MAGIC: the line bottom is current line's top, so calculate here.
         lineBottom-=currentSize.height()+m_lineSpacing;
@@ -341,8 +359,7 @@ inline int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)
     }
     if(index<m_lyricsLines-1)
     {
-        return m_lyricsManager->positionAt(index+1)-
-                m_lyricsManager->positionAt(index);
+        return m_positions.at(index+1)-m_positions.at(index);
     }
     return m_animationDuration<<2;
 }

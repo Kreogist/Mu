@@ -1,23 +1,20 @@
 IDI_ICON1 ICON DISCARDABLE "mu.ico"
-#if defined(UNDER_CE)
-#include <winbase.h>
-#else
 #include <winver.h>
-#endif
+#include "../../../core/knversion.h"
 
-#define VER_FILEVERSION_STR         "0.4.0\0"
-#define VER_PRODUCTVERSION_STR      "0.4\0"
+#define VER_FILEVERSION_STR         APP_VERSION_STR "\0"
+#define VER_PRODUCTVERSION_STR      APP_VERSION_STR "\0"
 
 VS_VERSION_INFO VERSIONINFO
-    FILEVERSION         0,4,0,0
-    PRODUCTVERSION      0,4,0,0
+    FILEVERSION         MAJOR_VERSION,MINOR_VERSION,PATCH_VERSION,0
+    PRODUCTVERSION      MAJOR_VERSION,MINOR_VERSION,PATCH_VERSION,0
     FILEFLAGSMASK       0x3fL
 #ifdef _DEBUG
     FILEFLAGS           VS_FF_DEBUG
 #else
     FILEFLAGS           0x0L
 #endif
-    FILEOS              VOS__WINDOWS32
+    FILEOS              VOS_NT_WINDOWS32
     FILETYPE            VFT_DLL
     FILESUBTYPE         0x0L
     BEGIN
@@ -45,5 +42,9 @@ VS_VERSION_INFO VERSIONINFO
                 VALUE "ProductName", "mu\0"
                 VALUE "ProductVersion", VER_PRODUCTVERSION_STR
             END
+        END
+        BLOCK "VarFileInfo"
+        BEGIN
+            VALUE "Translation", 0x0, 1200
         END
     END

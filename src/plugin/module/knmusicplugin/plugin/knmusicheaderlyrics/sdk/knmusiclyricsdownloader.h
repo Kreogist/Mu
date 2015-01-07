@@ -68,7 +68,15 @@ protected:
         str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");
         return str;
     }
-    void get(const QString &url, QByteArray &responseData);
+    void get(const QString &url,
+             QByteArray &responseData,
+             const QVariant &cookie=QVariant(),
+             const QString &referer=QString());
+    void post(const QString &url,
+              QByteArray &responseData,
+              const QByteArray &parameter,
+              const QVariant &cookie=QVariant(),
+              const QString &referer=QString());
     inline void saveLyrics(const KNMusicDetailInfo &detailInfo,
                            const QString &lyricsContent,
                            KNMusicLyricsDetails &currentDetails)
@@ -81,6 +89,17 @@ protected:
     }
 
 private:
+    enum NetworkProcessType
+    {
+        Post,
+        Get
+    };
+    inline void networkProcess(int type,
+                               const QString &url,
+                               QByteArray &responseData,
+                               const QByteArray &parameter,
+                               const QVariant &cookie,
+                               const QString &referer);
     QNetworkAccessManager *m_networkManager;
     QTimer *m_timeout;
 };

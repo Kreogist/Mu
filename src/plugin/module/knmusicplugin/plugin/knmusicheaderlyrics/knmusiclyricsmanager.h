@@ -53,10 +53,6 @@ class KNMusicLyricsManager : public QObject
     Q_OBJECT
 public:
     static KNMusicLyricsManager *instance();
-    int lines() const;
-    bool isEmpty() const;
-    qint64 positionAt(const int &index) const;
-    QString lyricsAt(const int &index) const;
     QString lyricsFolderPath() const;
     void setLyricsFolderPath(const QString &lyricsFolderPath);
     void clear();
@@ -67,7 +63,9 @@ public:
 signals:
 
 public slots:
-    bool loadLyricsForFile(const KNMusicDetailInfo &detailInfo);
+    bool loadLyricsForFile(const KNMusicDetailInfo &detailInfo,
+                           QList<qint64> &positions,
+                           QStringList &lyricsText);
 
 private slots:
 
@@ -90,9 +88,6 @@ private:
     QString m_currentLyricsPath;
     QFile m_lyricsFile;
     QList<int> m_policyList;
-
-    QList<qint64> m_positions;
-    QStringList m_lyricsText;
     QMap<int, QString> m_lyricsProperty;
     QLinkedList<KNMusicLyricsDownloader *> m_downloaders;
 

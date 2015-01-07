@@ -20,11 +20,11 @@
 
 #include "../../sdk/knmusiclyricsdownloader.h"
 
-class KNMusicBaiduLyrics : public KNMusicLyricsDownloader
+class KNMusicNeteaseLyrics : public KNMusicLyricsDownloader
 {
     Q_OBJECT
 public:
-    explicit KNMusicBaiduLyrics(QObject *parent = 0);
+    explicit KNMusicNeteaseLyrics(QObject *parent = 0);
     QString downloaderName()
     {
         return "Baidu Music";
@@ -33,7 +33,6 @@ public:
                         QList<KNMusicLyricsDetails> &lyricsList);
 
 private:
-    QTextCodec *m_gbkCodec;
 };
 
 #endif // KNMUSICBAIDULYRICS_H

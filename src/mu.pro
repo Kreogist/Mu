@@ -308,7 +308,6 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
@@ -320,7 +319,8 @@ SOURCES += \
     plugin/sdk/preference/knpreferenceitemfont.cpp \
     plugin/sdk/knfontdialog.cpp \
     plugin/sdk/knmousedetectlabel.cpp \
-    plugin/base/knpreference/knpreferencegeneralpanel.cpp
+    plugin/base/knpreference/knpreferencegeneralpanel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -507,7 +507,6 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicbaidulyrics/knmusicbaidulyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
     plugin/module/knmusicplugin/sdk/knmusicmainplayerbase.h \
@@ -520,8 +519,13 @@ HEADERS += \
     plugin/sdk/preference/knpreferenceitemfont.h \
     plugin/sdk/knfontdialog.h \
     plugin/sdk/knmousedetectlabel.h \
-    plugin/base/knpreference/knpreferencegeneralpanel.h
+    plugin/base/knpreference/knpreferencegeneralpanel.h \
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
+    core/knversion.h
 
 RESOURCES += \
     resource/res.qrc
+
+DISTFILES += \
+    resource/icon/windows/resource.rc
 
