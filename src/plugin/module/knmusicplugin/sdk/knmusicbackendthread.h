@@ -36,6 +36,7 @@ signals:
     void stateChanged(int state);
     void finished();
     void stopped();
+    void loaded();
 
 public slots:
     virtual void setVolume(const int &volumeSize)=0;

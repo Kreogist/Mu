@@ -56,6 +56,8 @@ void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
                 this, &KNMusicNowPlaying::onActionPlayingFinished);
         connect(m_backend, &KNMusicBackend::cannotLoadFile,
                 this, &KNMusicNowPlaying::onActionCannotPlay);
+        connect(m_backend, &KNMusicBackend::loaded,
+                this, &KNMusicNowPlaying::onActionLoaded);
     }
 }
 
@@ -212,13 +214,12 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                      BlankData,
                                      Qt::DecorationRole,
                                      m_playingIcon);
-    KNMusicAnalysisItem currentItem;
     //Parse the current index, if we cannot parse it, play next.
     if(KNMusicModelAssist::reanalysisRow(m_playingMusicModel,
                                          m_currentPlayingIndex,
-                                         currentItem))
+                                         m_currentPlayingAnalysisItem))
     {
-        KNMusicDetailInfo &currentInfo=currentItem.detailInfo;
+        KNMusicDetailInfo &currentInfo=m_currentPlayingAnalysisItem.detailInfo;
         //Update the data in proxy model.
         m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
                                             currentInfo);
@@ -233,8 +234,6 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                    currentInfo.startPosition,
                                    currentInfo.duration);
         }
-        //Update the player's data.
-        emit requireUpdatePlayerInfo(currentItem);
     }
 }
 
@@ -270,6 +269,12 @@ void KNMusicNowPlaying::onActionCannotPlay()
                                      BlankData,
                                      Qt::DecorationRole,
                                      m_cantPlayIcon);
+}
+
+void KNMusicNowPlaying::onActionLoaded()
+{
+    //Update the player's data when the file loaded successfully.
+    emit requireUpdatePlayerInfo(m_currentPlayingAnalysisItem);
 }
 
 void KNMusicNowPlaying::setRating(const int &rating)

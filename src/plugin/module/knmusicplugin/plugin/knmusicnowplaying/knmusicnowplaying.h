@@ -48,6 +48,7 @@ public slots:
     void playPrevious();
     void onActionPlayingFinished();
     void onActionCannotPlay();
+    void onActionLoaded();
     void setRating(const int &rating);
     void changeLoopState();
     void setLoopState(const int &state);
@@ -71,6 +72,7 @@ private:
                       *m_shadowPlayingModel,
                       *m_temporaryProxyModel;
     QPersistentModelIndex m_currentPlayingIndex;
+    KNMusicAnalysisItem m_currentPlayingAnalysisItem;
     QPixmap m_playingIcon, m_cantPlayIcon;
     KNMusicTab *m_currentTab=nullptr;
     int m_loopMode=NoRepeat;
