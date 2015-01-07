@@ -8,9 +8,9 @@
 #define KNVERSION
 
 //Change the version here.
-#define MAJOR_VERSION 0    //((QTAV_VERSION&0xff0000)>>16)
-#define MINOR_VERSION 5    //((QTAV_VERSION&0xff00)>>8)
-#define PATCH_VERSION 0    //(QTAV_VERSION&0xff)
+#define MAJOR_VERSION 0    //((APP_VERSION&0xff0000)>>16)
+#define MINOR_VERSION 5    //((APP_VERSION&0xff00)>>8)
+#define PATCH_VERSION 0    //(APP_VERSION&0xff)
 
 //----DON'T TOUCH BELOW---
 //The following data will automatically generate according to MAJOR_VERSION,
