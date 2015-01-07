@@ -103,6 +103,8 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                               BASS_ChannelGetLength(m_channel, BASS_POS_BYTE))*1000;
     //Reset the thread.
     resetState();
+    //Emit loaded signal.
+    emit loaded();
 }
 
 void KNMusicBackendBassThread::clear()

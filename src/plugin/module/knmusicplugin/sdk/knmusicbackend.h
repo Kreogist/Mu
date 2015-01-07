@@ -59,6 +59,7 @@ signals:
     void muteStateChanged(bool mute);
     void finished();
     void stopped();
+    void loaded();
     void playingStateChanged(int state);
 
     void previewCannotLoadFile();

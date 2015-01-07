@@ -199,6 +199,8 @@ void KNMusicStandardBackend::setMainThread(KNMusicBackendThread *thread)
                 this, &KNMusicStandardBackend::filePathChanged);
         connect(m_main, &KNMusicBackendThread::cannotLoadFile,
                 this, &KNMusicStandardBackend::cannotLoadFile);
+        connect(m_main, &KNMusicBackendThread::loaded,
+                this, &KNMusicStandardBackend::loaded);
     }
 }
 
