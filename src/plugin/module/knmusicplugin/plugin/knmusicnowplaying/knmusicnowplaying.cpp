@@ -56,8 +56,8 @@ void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
                 this, &KNMusicNowPlaying::onActionPlayingFinished);
         connect(m_backend, &KNMusicBackend::cannotLoadFile,
                 this, &KNMusicNowPlaying::onActionCannotPlay);
-        connect(m_backend, &KNMusicBackend::loaded,
-                this, &KNMusicNowPlaying::onActionLoaded);
+//        connect(m_backend, &KNMusicBackend::loaded,
+//                this, &KNMusicNowPlaying::onActionLoaded);
     }
 }
 
@@ -234,6 +234,7 @@ void KNMusicNowPlaying::playMusic(const int &row)
                                    currentInfo.startPosition,
                                    currentInfo.duration);
         }
+        onActionLoaded();
     }
 }
 
