@@ -50,10 +50,16 @@ public slots:
     void setVolume(const int &volumeSize);
     void setPosition(const qint64 &position);
 
+private slots:
+    void onActionStateChanged(const State &newstate,
+                              const State &oldstate);
+
 private:
     MediaSource m_mediaSource;
     MediaObject *m_mediaObject;
     AudioOutput *m_audioOutput;
+
+    int m_state;
 };
 
 #endif // KNMUSICBACKENDPHONONTHREAD_H

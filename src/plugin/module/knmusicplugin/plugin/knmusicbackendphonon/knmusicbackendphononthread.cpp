@@ -25,8 +25,21 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
     m_audioOutput=new AudioOutput(MusicCategory,
                                   this);
 
-    //Linke the media object and audio output.
+    //Initial the state.
+    m_state=StoppedState;
+
+    //Link the media object and audio output.
     createPath(m_mediaObject, m_audioOutput);
+
+    //Link signals.
+    connect(m_mediaObject, SIGNAL(totalTimeChanged(qint64)),
+            this, SIGNAL(durationChanged(qint64)));
+    connect(m_mediaObject, SIGNAL(tick(qint64)),
+            this, SIGNAL(positionChanged(qint64)));
+    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+            this, SLOT(onActionStateChanged(State,State)));
+    connect(m_mediaObject, SIGNAL(finished()),
+            this, SIGNAL(finished()));
 }
 
 KNMusicBackendPhononThread::~KNMusicBackendPhononThread()
@@ -102,5 +115,34 @@ void KNMusicBackendPhononThread::setVolume(const int &volumeSize)
 
 void KNMusicBackendPhononThread::setPosition(const qint64 &position)
 {
-    ;
+    m_mediaObject->seek(position);
+}
+
+void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
+                                                      const State &oldstate)
+{
+    Q_UNUSED(oldstate)
+    //Get the new state.
+    int threadNewState;
+    switch(newstate)
+    {
+    case PlayingState:
+        threadNewState=StoppedState;
+        break;
+    case PausedState:
+        threadNewState=PausedState;
+        break;
+    default:
+        threadNewState=StoppedState;
+        break;
+    }
+    //Ignore the same state.
+    if(threadNewState==m_state)
+    {
+        return;
+    }
+    //Save the new state.
+    m_state=threadNewState;
+    //Emit signal state changed signal.
+    emit stateChanged(m_state);
 }
