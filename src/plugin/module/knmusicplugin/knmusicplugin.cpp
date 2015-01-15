@@ -46,6 +46,9 @@
 #ifdef ENABLE_LIBVLC
 #include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
 #endif
+#ifdef ENABLE_PHONON
+#include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
+#endif
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagflac/knmusictagflac.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
@@ -99,6 +102,9 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 #endif
 #ifdef ENABLE_LIBVLC
     loadBackend(new KNMusicBackendVLC);
+#endif
+#ifdef ENABLE_PHONON
+    loadBackend(new KNMusicBackendPhonon);
 #endif
     loadDetailTooptip(new KNMusicDetailTooltip);
     loadNowPlaying(new KNMusicNowPlaying);
