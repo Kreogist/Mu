@@ -84,6 +84,9 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     connect(this, &KNMusicTreeViewBase::activated,
             this, &KNMusicTreeViewBase::playIndex);
 
+    //Initial music global.
+    m_musicGlobal=KNMusicGlobal::instance();
+
     //Initial actions.
     initialActions();
 }
@@ -105,9 +108,9 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     else
     {
         //Before we set the source model, we need to check the proxy model.
-        if(KNMusicGlobal::nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
+        if(m_musicGlobal->nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
         {
-            KNMusicGlobal::nowPlaying()->shadowPlayingModel();
+            m_musicGlobal->nowPlaying()->shadowPlayingModel();
         }
     }
     //Set the source model.
@@ -550,8 +553,8 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
     if(index.isValid())
     {
         //Set the playing model.
-        KNMusicGlobal::nowPlaying()->setPlayingModel(m_proxyModel, m_musicTab);
-        KNMusicGlobal::nowPlaying()->playMusic(index);
+        m_musicGlobal->nowPlaying()->setPlayingModel(m_proxyModel, m_musicTab);
+        m_musicGlobal->nowPlaying()->playMusic(index);
     }
 }
 
@@ -559,13 +562,13 @@ void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
 {
     QModelIndex sourceIndex=m_proxyModel->mapToSource(index);
     //Check is the current model playing, and is the index playing.
-    if(KNMusicGlobal::nowPlaying()->playingModel()!=nullptr &&
-            KNMusicGlobal::nowPlaying()->playingModel()->sourceModel()==
+    if(m_musicGlobal->nowPlaying()->playingModel()!=nullptr &&
+            m_musicGlobal->nowPlaying()->playingModel()->sourceModel()==
             m_proxyModel->sourceModel() &&
-            KNMusicGlobal::nowPlaying()->currentPlayingIndex().row()==sourceIndex.row())
+            m_musicGlobal->nowPlaying()->currentPlayingIndex().row()==sourceIndex.row())
     {
         //If so, ask now playing to reset current playing.
-        KNMusicGlobal::nowPlaying()->resetCurrentPlaying();
+        m_musicGlobal->nowPlaying()->resetCurrentPlaying();
     }
     //Remove the row right in the proxy model.
     m_proxyModel->removeSourceMusicRow(sourceIndex.row());
@@ -574,18 +577,18 @@ void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
 void KNMusicTreeViewBase::removeSelections()
 {
     //Check is the current playing item is in the selection.
-    if(KNMusicGlobal::nowPlaying()->playingModel()!=nullptr &&
-            KNMusicGlobal::nowPlaying()->playingModel()->sourceModel()==
+    if(m_musicGlobal->nowPlaying()->playingModel()!=nullptr &&
+            m_musicGlobal->nowPlaying()->playingModel()->sourceModel()==
             m_proxyModel->sourceModel())
     {
         //Get the current playing index first.
         QModelIndex currentPlayingIndex=
-                m_proxyModel->mapFromSource(KNMusicGlobal::nowPlaying()->currentPlayingIndex());
+                m_proxyModel->mapFromSource(m_musicGlobal->nowPlaying()->currentPlayingIndex());
         //Check is the playing index is in the selection.
         if(selectionModel()->selectedIndexes().contains(currentPlayingIndex))
         {
             //If so, ask now playing to reset current playing.
-            KNMusicGlobal::nowPlaying()->resetCurrentPlaying();
+            m_musicGlobal->nowPlaying()->resetCurrentPlaying();
         }
     }
     //Get the current indexes.

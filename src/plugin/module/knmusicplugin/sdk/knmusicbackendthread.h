@@ -14,7 +14,7 @@ class KNMusicBackendThread : public QObject
     Q_OBJECT
 public:
     KNMusicBackendThread(QObject *parent = 0):QObject(parent){}
-    virtual void loadFromFile(const QString &filePath)=0;
+    virtual bool loadFromFile(const QString &filePath)=0;
     virtual void clear()=0;
     virtual void resetState()=0;
     virtual void stop()=0;

@@ -14,6 +14,10 @@ class KNHighlightLabel : public QLabel
     Q_OBJECT
 public:
     explicit KNHighlightLabel(QWidget *parent = 0);
+    inline void setAlbumSize(const int &albumSize)
+    {
+        setFixedSize(albumSize, albumSize);
+    }
 
 signals:
 

@@ -55,9 +55,6 @@ public slots:
     void inactivatePlayer();
 
 private slots:
-    void setAlbumArt(const QPixmap &pixmap);
-    void setTitle(const QString &title);
-    void setDuration(const qint64 &duration);
     void onActionPlayDragIn(const QStringList &filePaths);
     void onActionProgressPressed();
     void onActionProgressReleased();
@@ -73,9 +70,12 @@ private slots:
     void onActionPlayStateChanged(const int &state);
 
     void setPosition(const qint64 &position);
-    void updatePlayerInfo(const KNMusicAnalysisItem &analysisItem);
+    void updatePlayerInfo();
 
 private:
+    void initialInformationPanel();
+    void initialPlayerControls();
+
     inline void initialAlbumArt();
     inline void initialLabels();
     inline void initialProrgess();
@@ -97,6 +97,9 @@ private:
     inline QRect generateOutPosition();
     inline QRect generateInPosition();
 
+    inline void setAlbumArt(const QPixmap &pixmap);
+    inline void setTitle(const QString &title);
+    inline void setDuration(const qint64 &duration);
 
     //Public classes.
     KNMusicGlobal *m_musicGlobal;

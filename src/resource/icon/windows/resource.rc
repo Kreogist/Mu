@@ -25,7 +25,7 @@ VS_VERSION_INFO VERSIONINFO
                 VALUE "CompanyName", "Kreogist Dev Team\0"
                 VALUE "FileDescription", "Kreogist mu\0"
                 VALUE "FileVersion", VER_FILEVERSION_STR
-                VALUE "LegalCopyright", "© Kreogist Dev Team. All rights reserved.\0"
+                VALUE "LegalCopyright", "(C) Kreogist Dev Team. All rights reserved.\0"
                 VALUE "InternalName", "Nerve\0"
                 VALUE "OriginalFilename", "mu.exe\0"
                 VALUE "ProductName", "mu\0"
@@ -36,7 +36,7 @@ VS_VERSION_INFO VERSIONINFO
                 VALUE "CompanyName", "Kreogist Dev Team\0"
                 VALUE "FileDescription", "Kreogist mu\0"
                 VALUE "FileVersion", VER_FILEVERSION_STR
-                VALUE "LegalCopyright", "© Kreogist Dev Team. 保留所有权利.\0"
+                VALUE "LegalCopyright", "(C) Kreogist Dev Team. 保留所有权利.\0"
                 VALUE "InternalName", "Nerve\0"
                 VALUE "OriginalFilename", "mu.exe\0"
                 VALUE "ProductName", "mu\0"

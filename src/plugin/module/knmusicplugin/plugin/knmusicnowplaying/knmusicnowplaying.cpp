@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QApplication>
+
 #include "knmusicsingleplaylistmodel.h"
 #include "knmusicmodelassist.h"
 #include "knmusicproxymodel.h"
@@ -38,6 +40,9 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     //Generate temporary proxy model.
     m_temporaryProxyModel=new KNMusicProxyModel(this);
     m_temporaryProxyModel->setSourceModel(m_temporaryModel);
+
+    connect(this, &KNMusicNowPlaying::requirePlayNextAvailable,
+            this, &KNMusicNowPlaying::playNextAvailable);
 }
 
 KNMusicNowPlaying::~KNMusicNowPlaying()
@@ -54,10 +59,6 @@ void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
         //Connect request.
         connect(m_backend, &KNMusicBackend::finished,
                 this, &KNMusicNowPlaying::onActionPlayingFinished);
-        connect(m_backend, &KNMusicBackend::cannotLoadFile,
-                this, &KNMusicNowPlaying::onActionCannotPlay);
-//        connect(m_backend, &KNMusicBackend::loaded,
-//                this, &KNMusicNowPlaying::onActionLoaded);
     }
 }
 
@@ -84,7 +85,23 @@ void KNMusicNowPlaying::restoreConfigure()
 
 void KNMusicNowPlaying::playNext()
 {
-    playNextSong();
+    //Get the next index with loop mode.
+    int preferNextRow=nextSongIndex(m_playingModel->mapFromSource(m_currentPlayingIndex).row());
+    //Check the index available.
+    if(preferNextRow==-1)
+    {
+        resetPlayingItem();
+        return;
+    }
+    //Or else play the row.
+    if(playMusicRow(preferNextRow))
+    {
+        return;
+    }
+    //Set the cannot play icon to current row.
+    setCannotPlayIcon();
+    //Play the next available song.
+    emit requirePlayNextAvailable(preferNextRow);
 }
 
 void KNMusicNowPlaying::playPrevious()
@@ -190,52 +207,17 @@ void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model,
     }
 }
 
-void KNMusicNowPlaying::playMusic(const int &row)
+void KNMusicNowPlaying::playMusic(int row)
 {
-    Q_ASSERT(m_playingModel!=nullptr &&
-            row>-1 &&
-            row<m_playingModel->rowCount());
-    //Clear the current item.
-    resetPlayingItem();
-    //Get the model index in the proxy model.
-    QModelIndex sourceIndex=
-            m_playingModel->mapToSource(
-                m_playingModel->index(row,
-                                      m_playingModel->playingItemColumn()));
-    //Get the source standard item. Storage the item.
-    //Because the index of the current item might be changing, store the item
-    //pointer can solve this problem.
-    //Oct 18th, 2014: Actually there's a better way to solve this problem, and
-    //                we don't need any pointer, that's QPersistentModelIndex,
-    //                Check it ASAP.
-    m_currentPlayingIndex=QPersistentModelIndex(sourceIndex);
-    //Set the current playing icon.
-    m_playingMusicModel->setRoleData(m_currentPlayingIndex.row(),
-                                     BlankData,
-                                     Qt::DecorationRole,
-                                     m_playingIcon);
-    //Parse the current index, if we cannot parse it, play next.
-    if(KNMusicModelAssist::reanalysisRow(m_playingMusicModel,
-                                         m_currentPlayingIndex,
-                                         m_currentPlayingAnalysisItem))
+    //If we can play this row.
+    if(playMusicRow(row))
     {
-        KNMusicDetailInfo &currentInfo=m_currentPlayingAnalysisItem.detailInfo;
-        //Update the data in proxy model.
-        m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
-                                            currentInfo);
-        //Ask backend to play the file.
-        if(currentInfo.startPosition==-1)
-        {
-            m_backend->playFile(currentInfo.filePath);
-        }
-        else
-        {
-            m_backend->playSection(currentInfo.filePath,
-                                   currentInfo.startPosition,
-                                   currentInfo.duration);
-        }
-        onActionLoaded();
+        return;
     }
+    //Set the cannot play icon to current row.
+    setCannotPlayIcon();
+    //Play the next available song, give the initial row.
+    emit requirePlayNextAvailable(row);
 }
 
 void KNMusicNowPlaying::playMusic(const QModelIndex &index)
@@ -260,22 +242,25 @@ void KNMusicNowPlaying::saveConfigure()
     KNMusicGlobal::instance()->setConfigureData("LoopState", m_loopMode);
 }
 
-void KNMusicNowPlaying::onActionCannotPlay()
+void KNMusicNowPlaying::playNextAvailable(const int &currentRow)
 {
-    int cannotPlayRow=m_currentPlayingIndex.row();
-    //Play the next song with cannot play mode.
-    playNextSong(true);
-    //Set cannot play icon.
-    m_playingMusicModel->setRoleData(cannotPlayRow,
-                                     BlankData,
-                                     Qt::DecorationRole,
-                                     m_cantPlayIcon);
-}
-
-void KNMusicNowPlaying::onActionLoaded()
-{
-    //Update the player's data when the file loaded successfully.
-    emit requireUpdatePlayerInfo(m_currentPlayingAnalysisItem);
+    //We need to search the next available index.
+    int preferRow=nextSongIndex(currentRow, true);
+    if(preferRow==-1)
+    {
+        //If we come here, means there's no file we can play.
+        resetPlayingItem();
+        return;
+    }
+    //Get the next available row.
+    if(playMusicRow(preferRow))
+    {
+        return;
+    }
+    //Set the cannot play row to the failed row.
+    setCannotPlayIcon();
+    //Emit check next signal.
+    emit requirePlayNextAvailable(preferRow);
 }
 
 void KNMusicNowPlaying::setRating(const int &rating)
@@ -288,52 +273,6 @@ void KNMusicNowPlaying::setRating(const int &rating)
                                      QString::number(rating));
 }
 
-void KNMusicNowPlaying::playNextSong(bool cannotLoadFile)
-{
-    //If there's no model or the source model is not the music model,
-    //reset all the model.
-    if(m_playingModel==nullptr)
-    {
-        resetPlayingItem();
-        resetPlayingModels();
-        return;
-    }
-    //If current playing index is invaild, then try to play the first item.
-    if(!m_currentPlayingIndex.isValid())
-    {
-        if(m_playingModel->rowCount()>0)
-        {
-            playMusic(0);
-        }
-        return;
-    }
-    QModelIndex currentIndex=m_playingModel->mapFromSource(m_currentPlayingIndex);
-    //If it's the last one.
-    if(currentIndex.row()==m_playingModel->rowCount()-1)
-    {
-        if(cannotLoadFile)
-        {
-            //Finished playing.
-            resetPlayingItem();
-            return;
-        }
-        switch(m_loopMode)
-        {
-        case NoRepeat:
-        case RepeatTrack:
-            //Finished playing.
-            resetPlayingItem();
-            return;
-        case RepeatAll:
-            //Play the first one.
-            playMusic(0);
-            return;
-        }
-    }
-    //Play the next song.
-    playMusic(currentIndex.row()+1);
-}
-
 void KNMusicNowPlaying::resetPlayingItem()
 {
     //No matter what, reset header player first.
@@ -344,11 +283,17 @@ void KNMusicNowPlaying::resetPlayingItem()
         //Though this should never happend, only for safe.
         if(m_playingMusicModel!=nullptr)
         {
-            m_playingMusicModel->setData(m_currentPlayingIndex,
-                                         QPixmap(),
-                                         Qt::DecorationRole);
+            if(!m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                 CantPlayFlagRole).toBool())
+            {
+                m_playingMusicModel->setRoleData(m_currentPlayingIndex.row(),
+                                                 BlankData,
+                                                 Qt::DecorationRole,
+                                                 QPixmap());
+            }
         }
         m_currentPlayingIndex=QPersistentModelIndex();
+        m_currentPlayingAnalysisItem=KNMusicAnalysisItem();
     }
 }
 
@@ -366,9 +311,126 @@ void KNMusicNowPlaying::resetPlayingModels()
     m_playingMusicModel=nullptr;
 }
 
+int KNMusicNowPlaying::nextSongIndex(int currentRow,
+                                     bool ignoreLoopMode)
+{
+    //If there's no model or the source model is not the music model,
+    //return an invaild index.
+    if(m_playingModel==nullptr)
+    {
+        return -1;
+    }
+    //Check the current row.
+    if(currentRow==-1)
+    {
+        return m_playingModel->rowCount()>0?0:-1;
+    }
+    //If the row is the last one.
+    if(currentRow==m_playingModel->rowCount()-1)
+    {
+        if(ignoreLoopMode)
+        {
+            //Reach the end of the model.
+            return -1;
+        }
+        switch(m_loopMode)
+        {
+        case NoRepeat:
+        case RepeatTrack:
+            //Reach the end of the track.
+            return -1;
+        case RepeatAll:
+            //Back to the first one.
+            return 0;
+        }
+    }
+    //Return the next song's row.
+    return currentRow+1;
+}
+
+bool KNMusicNowPlaying::playMusicRow(const int &row)
+{
+    Q_ASSERT(m_playingModel!=nullptr &&
+            row>-1 &&
+            row<m_playingModel->rowCount());
+    //Clear the current item.
+    resetPlayingItem();
+    //Get the model index in the proxy model.
+    QModelIndex sourceIndex=
+            m_playingModel->mapToSource(
+                m_playingModel->index(row,
+                                      m_playingModel->playingItemColumn()));
+    //Get the source standard item. Storage the item.
+    //Because the index of the current item might be changing, store the item
+    //pointer can solve this problem.
+    //Oct 18th, 2014: Actually there's a better way to solve this problem, and
+    //                we don't need any pointer, that's QPersistentModelIndex,
+    //                Check it ASAP.
+    m_currentPlayingIndex=QPersistentModelIndex(sourceIndex);
+    //Parse the current index.
+    KNMusicAnalysisItem currentItem;
+    if(KNMusicModelAssist::reanalysisRow(m_playingMusicModel,
+                                         m_currentPlayingIndex,
+                                         currentItem))
+    {
+        KNMusicDetailInfo &currentInfo=currentItem.detailInfo;
+        //Update the data in proxy model first.
+        m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
+                                            currentInfo);
+        //Get the result of playing the file.
+        bool playingResult=
+                currentInfo.startPosition==-1?
+                    m_backend->playFile(currentInfo.filePath):
+                    m_backend->playSection(currentInfo.filePath,
+                                           currentInfo.startPosition,
+                                           currentInfo.duration);
+        //If we play the music successful,
+        if(playingResult)
+        {
+            //Save the current analysis item.
+            m_currentPlayingAnalysisItem=currentItem;
+            //Set the playing icon.
+            m_playingMusicModel->setRoleData(m_currentPlayingIndex.row(),
+                                             BlankData,
+                                             Qt::DecorationRole,
+                                             m_playingIcon);
+            //Clear the cannot play flag.
+            m_playingMusicModel->setRowProperty(m_currentPlayingIndex.row(),
+                                                CantPlayFlagRole,
+                                                false);
+            //Emit current changed signal.
+            emit nowPlayingChanged();
+        }
+        else
+        {
+            //Set the cannot play flag.
+            m_playingMusicModel->setRowProperty(m_currentPlayingIndex.row(),
+                                                CantPlayFlagRole,
+                                                true);
+        }
+        return playingResult;
+    }
+    //If we can't analysis the file, this file can't be played.
+    return false;
+}
+
+void KNMusicNowPlaying::setCannotPlayIcon()
+{
+    //Set cannot play icon to current row.
+    m_playingMusicModel->setRoleData(m_currentPlayingIndex.row(),
+                                     BlankData,
+                                     Qt::DecorationRole,
+                                     m_cantPlayIcon);
+}
+
 QPersistentModelIndex KNMusicNowPlaying::currentPlayingIndex() const
 {
     return m_currentPlayingIndex;
+}
+
+KNMusicAnalysisItem KNMusicNowPlaying::currentAnalaysisItem() const
+{
+    return m_currentPlayingAnalysisItem;
 }
 
 void KNMusicNowPlaying::showCurrentIndexInOriginalTab()

@@ -65,13 +65,13 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_mouseOut=new QParallelAnimationGroup(this);
 
     //Initial widgets.
-    initialAlbumArt();
-    initialLabels();
-    initialProrgess();
-    initialControlPanel();
-    initialVolume();
+    initialInformationPanel();
+    initialPlayerControls();
+
+    //Initial append widgets.
     initialAppendPanel();
     initialAppendMenu();
+
     //Connect drag play request.
     connect(this, &KNMusicHeaderPlayer::requireAnalysisFiles,
             this, &KNMusicHeaderPlayer::onActionPlayDragIn);
@@ -111,8 +111,6 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     //Connect responds.
     connect(m_backend, &KNMusicBackend::positionChanged,
             this, &KNMusicHeaderPlayer::onActionPositionChanged);
-    connect(m_backend, &KNMusicBackend::durationChanged,
-            this, &KNMusicHeaderPlayer::setDuration);
     connect(m_backend, &KNMusicBackend::playingStateChanged,
             this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
     connect(m_backend, &KNMusicBackend::finished,
@@ -141,7 +139,7 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             this, &KNMusicHeaderPlayer::onActionLoopStateChanged);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetPlayer,
             this, &KNMusicHeaderPlayer::reset);
-    connect(m_nowPlaying, &KNMusicNowPlayingBase::requireUpdatePlayerInfo,
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
             this, &KNMusicHeaderPlayer::updatePlayerInfo);
     //Sync the data with now playing.
     onActionLoopStateChanged(m_nowPlaying->loopState());
@@ -424,9 +422,7 @@ inline void KNMusicHeaderPlayer::initialAlbumArt()
 {
     //Initial album art label.
     m_albumArt=new KNHighlightLabel(this);
-    m_albumArt->setScaledContents(true);
-    m_albumArt->setFixedSize(m_albumArtSize,
-                             m_albumArtSize);
+    m_albumArt->setAlbumSize(m_albumArtSize);
     m_albumArt->move(13, 2);
     //Initial album art effect.
     m_albumArtEffect=new QGraphicsOpacityEffect(m_albumArt);
@@ -784,8 +780,10 @@ inline QRect KNMusicHeaderPlayer::generateInPosition()
                  40);
 }
 
-void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisItem)
+void KNMusicHeaderPlayer::updatePlayerInfo()
 {
+    //Get the current information.
+    KNMusicAnalysisItem analysisItem=m_nowPlaying->currentAnalaysisItem();
     m_currentDetailInfo=analysisItem.detailInfo;
     //Check is the playing file the current file. If it is, do nothing.
     if(m_currentFilePath==m_currentDetailInfo.filePath)
@@ -801,6 +799,21 @@ void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisIt
     updateArtistAndAlbum();
     QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
+    //Load the duration and position data from backend.
+    setDuration(m_backend->duration());
     //Ask to load lyrics.
     emit requireLoadLyrics(m_currentDetailInfo);
+}
+
+void KNMusicHeaderPlayer::initialInformationPanel()
+{
+    initialAlbumArt();
+    initialLabels();
+}
+
+void KNMusicHeaderPlayer::initialPlayerControls()
+{
+    initialControlPanel();
+    initialProrgess();
+    initialVolume();
 }

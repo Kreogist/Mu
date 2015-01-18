@@ -98,7 +98,6 @@ inline void KNMusicMainPlayer::initialWidgets()
 {
     //Initial the album art label.
     m_albumArt=new KNHighlightLabel(this);
-    m_albumArt->setScaledContents(true);
 
     //Initial the captions.
     m_detail=new QLabel(this);

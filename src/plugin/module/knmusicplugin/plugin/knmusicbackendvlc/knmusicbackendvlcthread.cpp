@@ -50,7 +50,7 @@ KNMusicBackendVLCThread::~KNMusicBackendVLCThread()
     libvlc_media_player_release(m_player);
 }
 
-void KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
+bool KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
 {
     //Stop the thread first.
     stop();
@@ -59,7 +59,7 @@ void KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
     if(filePath==m_filePath)
     {
         resetState();
-        return;
+        return true;
     }
     //Backup the file path.
     m_filePath=filePath;
@@ -72,8 +72,7 @@ void KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
                                   QDir::toNativeSeparators(m_filePath).toStdString().data());
     if(m_media==nullptr)
     {
-        emit cannotLoadFile();
-        return;
+        return false;
     }
     //Parse the media immedately.
     libvlc_media_parse(m_media);
@@ -83,6 +82,7 @@ void KNMusicBackendVLCThread::loadFromFile(const QString &filePath)
     m_totalDuration=libvlc_media_get_duration(m_media);
     //Reset the thread.
     resetState();
+    return true;
 }
 
 void KNMusicBackendVLCThread::clear()

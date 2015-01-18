@@ -15,11 +15,10 @@ class KNMusicStandardBackend : public KNMusicBackend
     Q_OBJECT
 public:
     explicit KNMusicStandardBackend(QObject *parent = 0);
-    void loadMusic(const QString &filePath);
+    bool loadMusic(const QString &filePath);
     qint64 duration() const;
     qint64 position() const;
-    void playFile(const QString &fileName);
-    void playSection(const QString &fileName,
+    bool playSection(const QString &fileName,
                      const qint64 &start=-1,
                      const qint64 &duration=-1);
     void play();

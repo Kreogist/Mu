@@ -65,9 +65,9 @@ void KNMusicLibraryTreeView::setCategoryText(const QString &fixedText)
     //Hide the detail tool tip first.
     KNMusicGlobal::detailTooltip()->hide();
     //We need to check the now playing model before we change the category.
-    if(KNMusicGlobal::nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
+    if(KNMusicGlobal::instance()->nowPlaying()->playingMusicModel()==proxyModel()->musicModel())
     {
-        KNMusicGlobal::nowPlaying()->shadowPlayingModel();
+        KNMusicGlobal::instance()->nowPlaying()->shadowPlayingModel();
     }
     QRegExp nameFilter("^"+
                        QRegExp::escape(fixedText)+
