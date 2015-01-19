@@ -39,7 +39,8 @@ public:
     KNMusicAnalysisItem currentAnalaysisItem() const;
 
 signals:
-    void requirePlayNextAvailable(int currentRow);
+    void requirePlayPrevAvailable(int currentProxyRow);
+    void requirePlayNextAvailable(int currentProxyRow);
 
 public slots:
     void resetCurrentPlaying();
@@ -65,7 +66,8 @@ public slots:
     void checkRemovedModel(KNMusicModel *model);
 
 private slots:
-    void playNextAvailable(const int &currentRow);
+    void playNextAvailable(const int &currentProxyRow);
+    void playPrevAvailable(const int &currentProxyRow);
 
 private:
     void saveConfigure();
@@ -73,7 +75,9 @@ private:
     void resetPlayingItem();
     void resetPlayingModels();
 
-    int nextSongIndex(int currentRow,
+    int prevSongIndex(int currentProxyRow,
+                      bool ignoreLoopMode=false);
+    int nextSongIndex(int currentProxyRow,
                       bool ignoreLoopMode=false);
     bool playMusicRow(const int &row);
     void setCannotPlay(const int &row);

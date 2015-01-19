@@ -41,6 +41,8 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     m_temporaryProxyModel=new KNMusicProxyModel(this);
     m_temporaryProxyModel->setSourceModel(m_temporaryModel);
 
+    connect(this, &KNMusicNowPlaying::requirePlayPrevAvailable,
+            this, &KNMusicNowPlaying::playPrevAvailable);
     connect(this, &KNMusicNowPlaying::requirePlayNextAvailable,
             this, &KNMusicNowPlaying::playNextAvailable);
 }
@@ -98,48 +100,31 @@ void KNMusicNowPlaying::playNext()
     {
         return;
     }
+    //Process the events.
+    qApp->processEvents();
     //Play the next available song.
     emit requirePlayNextAvailable(preferNextRow);
 }
 
 void KNMusicNowPlaying::playPrevious()
 {
-    //If there's no model or the source model is not the music model,
-    //reset all the model.
-    if(m_playingModel==nullptr)
+    //Get the previous index with loop mode.
+    int preferPrevRow=prevSongIndex(m_playingModel->mapFromSource(m_currentPlayingIndex).row());
+    //Check the index available.
+    if(preferPrevRow==-1)
     {
         resetPlayingItem();
-        resetPlayingModels();
         return;
     }
-    //If current playing index is invaild, then try to play the first item.
-    if(!m_currentPlayingIndex.isValid())
+    //Or else play the row.
+    if(playMusicRow(preferPrevRow))
     {
-        if(m_playingModel->rowCount()>0)
-        {
-            playMusic(m_playingModel->rowCount()-1);
-        }
         return;
     }
-    QModelIndex currentIndex=m_playingModel->mapFromSource(m_currentPlayingIndex);
-    //If it's the first one
-    if(currentIndex.row()==0)
-    {
-        switch(m_loopMode)
-        {
-        case NoRepeat:
-        case RepeatTrack:
-            //Finished playing.
-            resetPlayingItem();
-            return;
-        case RepeatAll:
-            //Play the last one.
-            playMusic(m_playingModel->rowCount()-1);
-            return;
-        }
-    }
-    //Play the previous song.
-    playMusic(currentIndex.row()-1);
+    //Process the events.
+    qApp->processEvents();
+    //Play the previous available song.
+    emit requirePlayPrevAvailable(preferPrevRow);
 }
 
 void KNMusicNowPlaying::onActionPlayingFinished()
@@ -212,6 +197,8 @@ void KNMusicNowPlaying::playMusic(int row)
     {
         return;
     }
+    //Process the events.
+    qApp->processEvents();
     //Play the next available song, give the initial row.
     emit requirePlayNextAvailable(row);
 }
@@ -238,11 +225,12 @@ void KNMusicNowPlaying::saveConfigure()
     KNMusicGlobal::instance()->setConfigureData("LoopState", m_loopMode);
 }
 
-void KNMusicNowPlaying::playNextAvailable(const int &currentRow)
+void KNMusicNowPlaying::playNextAvailable(const int &currentProxyRow)
 {
+    //Process the events.
     qApp->processEvents();
     //We need to search the next available index.
-    int preferRow=nextSongIndex(currentRow, true);
+    int preferRow=nextSongIndex(currentProxyRow, true);
     if(preferRow==-1)
     {
         //If we come here, means there's no file we can play.
@@ -254,9 +242,33 @@ void KNMusicNowPlaying::playNextAvailable(const int &currentRow)
     {
         return;
     }
+    //Process the events.
     qApp->processEvents();
     //Emit check next signal.
     emit requirePlayNextAvailable(preferRow);
+}
+
+void KNMusicNowPlaying::playPrevAvailable(const int &currentProxyRow)
+{
+    //Process the events.
+    qApp->processEvents();
+    //We need to search the next available index.
+    int preferRow=prevSongIndex(currentProxyRow, true);
+    if(preferRow==-1)
+    {
+        //If we come here, means there's no file we can play.
+        resetPlayingItem();
+        return;
+    }
+    //Get the next available row.
+    if(playMusicRow(preferRow))
+    {
+        return;
+    }
+    //Process the events.
+    qApp->processEvents();
+    //Emit check next signal.
+    emit requirePlayPrevAvailable(preferRow);
 }
 
 void KNMusicNowPlaying::setRating(const int &rating)
@@ -307,11 +319,48 @@ void KNMusicNowPlaying::resetPlayingModels()
     m_playingMusicModel=nullptr;
 }
 
+int KNMusicNowPlaying::prevSongIndex(int currentProxyRow,
+                                     bool ignoreLoopMode)
+{
+    //If there's no model or the source model is not the music model,
+    //return an invaild row.
+    if(m_playingModel==nullptr)
+    {
+        return -1;
+    }
+    //If current playing index is invaild, then try to play the first item.
+    if(currentProxyRow<0)
+    {
+        return m_playingModel->rowCount()>0?0:-1;
+    }
+    //If it's the first one
+    if(currentProxyRow==0)
+    {
+        if(ignoreLoopMode)
+        {
+            //Reach the start of the model.
+            return -1;
+        }
+        switch(m_loopMode)
+        {
+        case NoRepeat:
+        case RepeatTrack:
+            //Reach the start of the model.
+            return -1;
+        case RepeatAll:
+            //Play the last one.
+            return m_playingModel->rowCount()-1;
+        }
+    }
+    //Return the previous row.
+    return currentProxyRow-1;
+}
+
 int KNMusicNowPlaying::nextSongIndex(int currentProxyRow,
                                      bool ignoreLoopMode)
 {
     //If there's no model or the source model is not the music model,
-    //return an invaild index.
+    //return an invaild row.
     if(m_playingModel==nullptr)
     {
         return -1;
@@ -334,7 +383,7 @@ int KNMusicNowPlaying::nextSongIndex(int currentProxyRow,
         {
         case NoRepeat:
         case RepeatTrack:
-            //Reach the end of the track.
+            //Reach the end of the model.
             return -1;
         case RepeatAll:
             //Back to the first one.
