@@ -129,7 +129,7 @@ void KNMusicNowPlaying::playPrevious()
 
 void KNMusicNowPlaying::onActionPlayingFinished()
 {
-    //Add play times.
+    //Add play times, check the playing model and index.
     if(m_playingModel!=nullptr && m_currentPlayingIndex.isValid())
     {
         m_playingModel->addPlayTimes(m_currentPlayingIndex);
