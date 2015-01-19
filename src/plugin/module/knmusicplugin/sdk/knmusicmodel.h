@@ -53,7 +53,6 @@ public:
         //Only for text easy access, only update the different text.
         if(itemText(row, column)!=text)
         {
-            qDebug("Here");
             setData(index(row, column), text, Qt::DisplayRole);
         }
     }

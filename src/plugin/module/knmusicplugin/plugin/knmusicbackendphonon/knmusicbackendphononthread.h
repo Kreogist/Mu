@@ -62,6 +62,7 @@ private:
     AudioOutput *m_audioOutput;
 
     int m_state;
+    qreal m_userSetVolume=1.0;
 };
 
 #endif // KNMUSICBACKENDPHONONTHREAD_H
