@@ -151,7 +151,8 @@ bool KNMusicTagM4A::praseTag(QFile &musicFile,
 bool KNMusicTagM4A::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //Check flag.
-    if(!analysisItem.imageData.contains("M4A"))
+    if(!analysisItem.imageData.contains("M4A") ||
+            analysisItem.imageData["M4A"].isEmpty())
     {
         return false;
     }

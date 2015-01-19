@@ -22,6 +22,8 @@
 #include <phonon4qt5/phonon/AudioOutput>
 #include <phonon4qt5/phonon/MediaSource>
 
+#include "knmusicglobal.h"
+
 #include "knmusicbackendthread.h"
 
 using namespace Phonon;

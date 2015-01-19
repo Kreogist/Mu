@@ -107,7 +107,8 @@ bool KNMusicTagFLAC::praseTag(QFile &musicFile,
 
 bool KNMusicTagFLAC::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
-    if(!analysisItem.imageData.contains("FLAC"))
+    if(!analysisItem.imageData.contains("FLAC") ||
+            analysisItem.imageData["FLAC"].isEmpty())
     {
         return false;
     }

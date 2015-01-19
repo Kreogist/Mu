@@ -26,7 +26,7 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
                                   this);
 
     //Initial the state.
-    m_state=StoppedState;
+    m_state=KNMusic::StoppedState;
 
     //Link the media object and audio output.
     createPath(m_mediaObject, m_audioOutput);
@@ -48,7 +48,7 @@ KNMusicBackendPhononThread::~KNMusicBackendPhononThread()
 
 void KNMusicBackendPhononThread::loadFromFile(const QString &filePath)
 {
-    m_mediaSource=MediaSource(filePath);
+    m_mediaSource=MediaSource(QUrl::fromLocalFile(filePath));
     //Load the file to media source.
     m_mediaObject->setCurrentSource(m_mediaSource);
 }
@@ -126,14 +126,14 @@ void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
     int threadNewState;
     switch(newstate)
     {
-    case PlayingState:
-        threadNewState=StoppedState;
+    case Phonon::PlayingState:
+        threadNewState=KNMusic::PlayingState;
         break;
-    case PausedState:
-        threadNewState=PausedState;
+    case Phonon::PausedState:
+        threadNewState=KNMusic::PausedState;
         break;
     default:
-        threadNewState=StoppedState;
+        threadNewState=KNMusic::StoppedState;
         break;
     }
     //Ignore the same state.
