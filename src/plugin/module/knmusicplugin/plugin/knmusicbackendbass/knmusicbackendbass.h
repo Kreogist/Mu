@@ -27,7 +27,8 @@
  * choice. But don't expect it can have many optional choice. Though it may be
  * 'optional' enough.
  *    This module can also be used on Linux, but you should configure the binary
- * package yourself.
+ * package yourself. And it works really bad under Ubuntu Linux 14.04 LTS in
+ * VirtualBox 4.13. Don't enable this module under Linux.
  */
 
 #include "bass.h"

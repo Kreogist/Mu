@@ -181,7 +181,7 @@ void KNMusicPlaylistManager::onActionRemovePlaylist(const QModelIndex &index)
         }
     }
     //Ask now playing to check the model.
-    KNMusicGlobal::nowPlaying()->checkRemovedModel(
+    KNMusicGlobal::instance()->nowPlaying()->checkRemovedModel(
                 m_playlistList->playlistModel(playlistItemRow));
     //Remove that row.
     m_playlistList->removePlaylist(playlistItemRow);

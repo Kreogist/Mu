@@ -28,10 +28,11 @@ public:
     virtual KNMusicModel *playingMusicModel()=0;
     virtual int loopState()=0;
     virtual QPersistentModelIndex currentPlayingIndex() const=0;
+    virtual KNMusicAnalysisItem currentAnalaysisItem() const=0;
 
 signals:
     void requireResetPlayer();
-    void requireUpdatePlayerInfo(KNMusicAnalysisItem analysisItem);
+    void nowPlayingChanged();
     void loopStateChanged(int state);
 
 public slots:
@@ -42,14 +43,13 @@ public slots:
     virtual void playNext()=0;
     virtual void playPrevious()=0;
     virtual void onActionPlayingFinished()=0;
-    virtual void onActionCannotPlay()=0;
     virtual void setLoopState(const int &state)=0;
     virtual void setRating(const int &rating)=0;
     virtual void changeLoopState()=0;
     virtual void playTemporaryFiles(const QStringList &filePaths)=0;
     virtual void setPlayingModel(KNMusicProxyModel *model,
                                  KNMusicTab *tab=nullptr)=0;
-    virtual void playMusic(const int &row)=0;
+    virtual void playMusic(int row)=0;
     virtual void playMusic(const QModelIndex &index)=0;
     virtual void checkRemovedModel(KNMusicModel *model)=0;
 };

@@ -62,7 +62,8 @@ enum KNMusicModelRole
     FileNameRole,
     StartPositionRole,
     ArtworkKeyRole,
-    TrackFileRole
+    TrackFileRole,
+    CantPlayFlagRole
 };
 enum KNMusicCategoryRole
 {
@@ -167,8 +168,8 @@ public:
     static QDateTime dataStringToDateTime(const QString &text);
     static KNMusicParser *parser();
     static void setParser(KNMusicParser *parser);
-    static KNMusicNowPlayingBase *nowPlaying();
-    static void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+    KNMusicNowPlayingBase *nowPlaying();
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     static KNMusicSoloMenuBase *soloMenu();
     static void setSoloMenu(KNMusicSoloMenuBase *soloMenu);
     static KNMusicMultiMenuBase *multiMenu();

@@ -85,6 +85,7 @@ private:
            m_buttonColor=QColor(255,255,255);
     QString m_seachText;
     KNMusicTab *m_musicTab=nullptr;
+    KNMusicGlobal *m_musicGlobal;
     int m_maxOpacity=0x30,
     m_fontBase=0x9f,
     m_buttonBase=0x10;

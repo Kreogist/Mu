@@ -25,9 +25,11 @@ public:
     virtual KNMusicDetailInfo currentDetailInfo()=0;
 
 signals:
+    //Order Controls
     void requirePlayPrevious();
     void requirePlayNext();
     void requireChangeLoopState();
+
     void requireShowMainPlayer();
     void requireShowAppendMenu();
     void requireShowInSongs();

@@ -13,6 +13,8 @@
 KNHighlightLabel::KNHighlightLabel(QWidget *parent) :
     QLabel(parent)
 {
+    //Set properties.
+    setScaledContents(true);
     //Initial the highlight gradient.
     m_highlight=QLinearGradient(QPointF(0,0), QPointF(0, height()));
     m_highlight.setColorAt(0, QColor(0xff,0xff,0xff,130));

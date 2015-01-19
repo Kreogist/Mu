@@ -119,7 +119,8 @@ bool KNMusicTagID3v2::praseTag(QFile &musicFile,
 
 bool KNMusicTagID3v2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
-    if(!analysisItem.imageData.contains("ID3v2"))
+    if(!analysisItem.imageData.contains("ID3v2") ||
+            analysisItem.imageData["ID3v2"].isEmpty())
     {
         return false;
     }

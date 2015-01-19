@@ -32,7 +32,7 @@ class KNMusicBackendBassThread : public KNMusicBackendThread
 public:
     explicit KNMusicBackendBassThread(QObject *parent = 0);
     ~KNMusicBackendBassThread();
-    void loadFromFile(const QString &filePath);
+    bool loadFromFile(const QString &filePath);
     void clear();
     void resetState();
     void stop();

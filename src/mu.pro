@@ -70,7 +70,7 @@ macx{
 
 #Linux configure
 linux{
-    CONFIG += libbass FFMpeg
+    CONFIG += libPhonon FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
     libbass{
         LIBS += -lbass
@@ -92,8 +92,26 @@ FFMpeg{
                plugin/module/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h
 }
 
+libPhonon{
+    contains(CONFIG, libbass){
+        error("You can't enable more than one backend at the same time.")
+    }
+    contains(CONFIG, libvlc){
+        error("You can't enable more than one backend at the same time.")
+    }
+    DEFINES += ENABLE_PHONON
+    LIBS += -lphonon4qt5
+    SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphonon.cpp \
+               plugin/module/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.cpp
+    HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphonon.h \
+               plugin/module/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.h
+}
+
 libVLC{
     contains(CONFIG, libbass){
+        error("You can't enable more than one backend at the same time.")
+    }
+    contains(CONFIG, libPhonon){
         error("You can't enable more than one backend at the same time.")
     }
     DEFINES += ENABLE_LIBVLC
@@ -107,6 +125,9 @@ libVLC{
 
 libbass{
     contains(CONFIG, libvlc){
+        error("You can't enable more than one backend at the same time.")
+    }
+    contains(CONFIG, libPhonon){
         error("You can't enable more than one backend at the same time.")
     }
     DEFINES += ENABLE_LIBBASS

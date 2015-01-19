@@ -15,30 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICBACKENDVLCTHREAD_H
-#define KNMUSICBACKENDVLCTHREAD_H
+#ifndef KNMUSICBACKENDPHONONTHREAD_H
+#define KNMUSICBACKENDPHONONTHREAD_H
 
-#include <QList>
-
-#include "knmusicbackendthread.h"
-
-#include "vlc/libvlc.h"
-#include "vlc/libvlc_media.h"
-#include "vlc/libvlc_media_player.h"
-#include "vlc/libvlc_events.h"
+#include <phonon4qt5/phonon/MediaObject>
+#include <phonon4qt5/phonon/AudioOutput>
+#include <phonon4qt5/phonon/MediaSource>
 
 #include "knmusicglobal.h"
 
-#include "knmusicvlcglobal.h"
+#include "knmusicbackendthread.h"
 
-using namespace KNMusic;
+using namespace Phonon;
 
-class KNMusicBackendVLCThread : public KNMusicBackendThread
+class KNMusicBackendPhononThread : public KNMusicBackendThread
 {
     Q_OBJECT
 public:
-    explicit KNMusicBackendVLCThread(QObject *parent = 0);
-    ~KNMusicBackendVLCThread();
+    explicit KNMusicBackendPhononThread(QObject *parent = 0);
+    ~KNMusicBackendPhononThread();
     bool loadFromFile(const QString &filePath);
     void clear();
     void resetState();
@@ -53,34 +48,20 @@ public:
     void playSection(const qint64 &sectionStart=-1,
                      const qint64 &sectionDuration=-1);
 
-    void positionCheck();
-
-signals:
-
 public slots:
     void setVolume(const int &volumeSize);
     void setPosition(const qint64 &position);
 
+private slots:
+    void onActionStateChanged(const State &newstate,
+                              const State &oldstate);
+
 private:
-    static void libvlcCallBack(const libvlc_event_t *event,
-                               void *data);
-    void clearMedia();
-    void setState(const int &state);
-    void establishEventAttach();
-    void releaseEventAttach();
-    QString m_filePath;
-    KNMusicVLCGlobal *m_vlcGlobal;
-    libvlc_event_manager_t *m_vlcEventManager;
-    libvlc_media_player_t *m_player=nullptr;
-    libvlc_media_t *m_media=nullptr;
-    int m_playingState=StoppedState;
+    MediaSource m_mediaSource;
+    MediaObject *m_mediaObject;
+    AudioOutput *m_audioOutput;
 
-    qint64 m_startPosition;   //Unit: millisecond
-    qint64 m_endPosition;     //Unit: millisecond
-    qint64 m_duration;        //Unit: millisecond
-    qint64 m_totalDuration;   //Unit: millisecond
-
-    QList<libvlc_event_e> m_vlcEventList;
+    int m_state;
 };
 
-#endif // KNMUSICBACKENDVLCTHREAD_H
+#endif // KNMUSICBACKENDPHONONTHREAD_H

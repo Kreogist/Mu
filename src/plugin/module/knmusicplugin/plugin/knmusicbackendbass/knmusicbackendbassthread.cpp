@@ -41,7 +41,7 @@ KNMusicBackendBassThread::~KNMusicBackendBassThread()
     delete m_positionUpdater;
 }
 
-void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
+bool KNMusicBackendBassThread::loadFromFile(const QString &filePath)
 {
     //Stop the thread first.
     stop();
@@ -54,7 +54,7 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
     if(filePath==m_filePath)
     {
         resetState();
-        return;
+        return true;
     }
     //Backup the file path.
     m_filePath=filePath;
@@ -92,8 +92,7 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                           KNMusicBassGlobal::fdps(),1)))
 #endif
     {
-        emit cannotLoadFile();
-        return;
+        return false;
     }
     //Establish sync handle.
     establishSyncHandle();
@@ -103,8 +102,7 @@ void KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                               BASS_ChannelGetLength(m_channel, BASS_POS_BYTE))*1000;
     //Reset the thread.
     resetState();
-    //Emit loaded signal.
-    emit loaded();
+    return true;
 }
 
 void KNMusicBackendBassThread::clear()

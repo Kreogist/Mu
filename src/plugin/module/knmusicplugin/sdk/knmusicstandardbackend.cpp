@@ -16,9 +16,9 @@ KNMusicStandardBackend::KNMusicStandardBackend(QObject *parent) :
     ;
 }
 
-void KNMusicStandardBackend::loadMusic(const QString &filePath)
+bool KNMusicStandardBackend::loadMusic(const QString &filePath)
 {
-    m_main->loadFromFile(filePath);
+    return m_main->loadFromFile(filePath);
 }
 
 qint64 KNMusicStandardBackend::duration() const
@@ -28,23 +28,21 @@ qint64 KNMusicStandardBackend::duration() const
 
 qint64 KNMusicStandardBackend::position() const
 {
-    return m_main->position();;
+    return m_main->position();
 }
 
-void KNMusicStandardBackend::playFile(const QString &fileName)
-{
-    //Play the whole file as a section.
-    playSection(fileName);
-}
-
-void KNMusicStandardBackend::playSection(const QString &fileName,
+bool KNMusicStandardBackend::playSection(const QString &fileName,
                                          const qint64 &start,
                                          const qint64 &duration)
 {
     //Load the music file first.
-    loadMusic(fileName);
+    if(!loadMusic(fileName))
+    {
+        return false;
+    }
     //Play the section
     m_main->playSection(start, duration);
+    return true;
 }
 
 void KNMusicStandardBackend::play()
@@ -197,10 +195,6 @@ void KNMusicStandardBackend::setMainThread(KNMusicBackendThread *thread)
                 this, &KNMusicStandardBackend::playingStateChanged);
         connect(m_main, &KNMusicBackendThread::filePathChanged,
                 this, &KNMusicStandardBackend::filePathChanged);
-        connect(m_main, &KNMusicBackendThread::cannotLoadFile,
-                this, &KNMusicStandardBackend::cannotLoadFile);
-        connect(m_main, &KNMusicBackendThread::loaded,
-                this, &KNMusicStandardBackend::loaded);
     }
 }
 

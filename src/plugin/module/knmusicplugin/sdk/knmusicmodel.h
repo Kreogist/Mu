@@ -47,6 +47,16 @@ public:
         //Only for text easy access.
         return data(index(row, column), Qt::DisplayRole).toString();
     }
+    virtual void updateItemText(const int &row, const int &column, const QString &text)
+    {
+        Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
+        //Only for text easy access, only update the different text.
+        if(itemText(row, column)!=text)
+        {
+            qDebug("Here");
+            setData(index(row, column), text, Qt::DisplayRole);
+        }
+    }
     virtual void setItemText(const int &row, const int &column, const QString &text)
     {
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
@@ -58,6 +68,18 @@ public:
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
         //Only for easy access.
         return data(index(row, column), role);
+    }
+    inline void updateRoleData(const int &row,
+                               const int &column,
+                               const int &role,
+                               const QVariant &value)
+    {
+        Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
+        //Only for easy access.
+        if(data(index(row, column), role)!=value)
+        {
+            setData(index(row, column), value, role);
+        }
     }
     inline void setRoleData(const int &row,
                             const int &column,
@@ -86,9 +108,20 @@ public:
         //All the property of a song is stored in the first item.
         return roleData(row, 0, propertyRole);
     }
-    virtual void setRowProperty(const int &row,
-                                const int &propertyRole,
-                                const QVariant &value)
+    inline virtual void updateRowProperty(const int &row,
+                                          const int &propertyRole,
+                                          const QVariant &value)
+    {
+        Q_ASSERT(row>-1 && row<rowCount());
+        //All the property of a song is stored in the first item.
+        if(value!=data(index(row, 0)))
+        {
+            setData(index(row, 0), value, propertyRole);
+        }
+    }
+    inline virtual void setRowProperty(const int &row,
+                                       const int &propertyRole,
+                                       const QVariant &value)
     {
         Q_ASSERT(row>-1 && row<rowCount());
         //All the property of a song is stored in the first item.

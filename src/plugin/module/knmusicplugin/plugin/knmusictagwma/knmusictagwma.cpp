@@ -133,7 +133,8 @@ bool KNMusicTagWMA::praseTag(QFile &musicFile,
 bool KNMusicTagWMA::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //Check is there contains wma data.
-    if(!analysisItem.imageData.contains("WMA"))
+    if(!analysisItem.imageData.contains("WMA") ||
+            analysisItem.imageData["WMA"].isEmpty())
     {
         return false;
     }
