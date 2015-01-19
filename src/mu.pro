@@ -38,9 +38,6 @@ win32{
     libbass{
         LIBS += -lbass
     }
-    FFMpeg{
-        LIBS += -lavformat -lavcodec -lavutil
-    }
     RC_FILE += resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
     #Windows special extras.
@@ -56,18 +53,17 @@ unix{
 
 #Mac OS X configure
 macx{
-    INCLUDEPATH += /usr/include
-#    LIBS += -L/usr/lib
+    #Brew configure. Use brew to install all your libs.
+    INCLUDEPATH += /usr/local/include/
+    LIBS += -L/usr/local/lib/
+    LIBS += -framework CoreFoundation
+
     CONFIG += libbass FFMpeg
-    libbass{
-        LIBS += /usr/lib/libbass.dylib
-    }
-    FFMpeg{
-        LIBS += /usr/lib/libavformat.dylib \
-                /usr/lib/libavcodec.dylib \
-                /usr/lib/libavutil.dylib
-    }
     QMAKE_LFLAGS += -framework CoreFoundation
+    libbass{
+        LIBS += -lbass
+    }
+    RC_FILE += resource/icon/mac/mu.icns
     QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
     ICON += resource/icon/mac/mu.icns
 }
@@ -85,6 +81,10 @@ linux{
 }
 
 FFMpeg{
+    macx: {
+        LIBS += -lswresample -lswscale
+    }
+    LIBS += -lavformat -lavcodec -lavutil
     DEFINES += ENABLE_FFMPEG
     SOURCES += plugin/sdk/knffmpegglobal.cpp \
                plugin/module/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.cpp
