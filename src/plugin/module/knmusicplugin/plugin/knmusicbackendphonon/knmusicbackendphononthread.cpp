@@ -46,15 +46,18 @@ KNMusicBackendPhononThread::~KNMusicBackendPhononThread()
 {
 }
 
-void KNMusicBackendPhononThread::loadFromFile(const QString &filePath)
+bool KNMusicBackendPhononThread::loadFromFile(const QString &filePath)
 {
+    //Generate the media source.
     m_mediaSource=MediaSource(QUrl::fromLocalFile(filePath));
     //Load the file to media source.
     m_mediaObject->setCurrentSource(m_mediaSource);
+    return (m_mediaObject->errorType()==NoError);
 }
 
 void KNMusicBackendPhononThread::clear()
 {
+    //Remove the media sources.
     m_mediaObject->clear();
 }
 

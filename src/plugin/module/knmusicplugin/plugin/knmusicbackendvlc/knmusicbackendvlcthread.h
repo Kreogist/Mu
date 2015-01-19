@@ -39,7 +39,7 @@ class KNMusicBackendVLCThread : public KNMusicBackendThread
 public:
     explicit KNMusicBackendVLCThread(QObject *parent = 0);
     ~KNMusicBackendVLCThread();
-    void loadFromFile(const QString &filePath);
+    bool loadFromFile(const QString &filePath);
     void clear();
     void resetState();
     void stop();

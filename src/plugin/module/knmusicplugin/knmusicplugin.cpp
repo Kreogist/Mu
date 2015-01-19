@@ -36,6 +36,8 @@
 #include "knmusicmainplayerbase.h"
 
 //Plugins
+
+//Backends
 #ifdef ENABLE_LIBBASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
@@ -49,6 +51,8 @@
 #ifdef ENABLE_PHONON
 #include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
 #endif
+
+//Tags
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagflac/knmusictagflac.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
@@ -56,18 +60,32 @@
 #include "plugin/knmusictagwma/knmusictagwma.h"
 #include "plugin/knmusictagapev2/knmusictagapev2.h"
 #include "plugin/knmusictagid3v2/knmusictagwav.h"
+
+//Details
 #include "plugin/knmusicdetaildialog/knmusicdetaildialog.h"
 #include "plugin/knmusicdetailtooltip/knmusicdetailtooltip.h"
+
+//Search
 #include "plugin/knmusicsearch/knmusicsearch.h"
 #include "plugin/knmusiccueparser/knmusiccueparser.h"
+
+//Header plugins
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
+#include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
+
+//Menus
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 #include "plugin/knmusicmultimenu/knmusicmultimenu.h"
-#include "plugin/knmusicheaderlyrics/knmusicheaderlyrics.h"
+
+//Now playing
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+
+//Main player
+#include "plugin/knmusicmainplayer/knmusicmainplayer.h"
+
+//Category plugin
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
-#include "plugin/knmusicmainplayer/knmusicmainplayer.h"
 
 #include "knglobal.h"
 #include "knmusictab.h"
@@ -124,6 +142,8 @@ KNMusicPlugin::~KNMusicPlugin()
     //Stop threads.
     m_parserThread.quit();
     m_parserThread.wait();
+    m_nowPlayingThread.quit();
+    m_nowPlayingThread.wait();
     //Ask to save the configure.
     emit requireSaveConfigure();
     //Delete all the plugins.
@@ -277,14 +297,15 @@ inline void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
     if(m_nowPlaying==nullptr)
     {
         m_nowPlaying=plugin;
-        //Set the header player.
+//        m_nowPlaying->moveToThread(&m_nowPlayingThread);
+        //Set the backend for control.
         m_nowPlaying->setBackend(m_backend);
         //Restore configure.
         m_nowPlaying->restoreConfigure();
         //Add plugin to list.
         m_pluginList.append(m_nowPlaying);
         //Set global now playing plugin.
-        KNMusicGlobal::setNowPlaying(m_nowPlaying);
+        m_musicGlobal->setNowPlaying(m_nowPlaying);
     }
 }
 
@@ -309,7 +330,7 @@ inline void KNMusicPlugin::loadPlaylistManager(KNMusicPlaylistManagerBase *plugi
 
 void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
 {
-    KNMusicGlobal::nowPlaying()->playTemporaryFiles(data);
+    m_nowPlaying->playTemporaryFiles(data);
 }
 
 void KNMusicPlugin::retranslate()
@@ -493,6 +514,7 @@ inline void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
 inline void KNMusicPlugin::startThreads()
 {
     m_parserThread.start();
+    m_nowPlayingThread.start();
 }
 
 void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *plugin)

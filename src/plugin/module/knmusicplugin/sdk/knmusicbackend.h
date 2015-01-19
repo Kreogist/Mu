@@ -20,11 +20,15 @@ class KNMusicBackend : public QObject
 public:
     KNMusicBackend(QObject *parent = 0) : QObject(parent){}
     virtual bool available()=0;
-    virtual void loadMusic(const QString &filePath)=0;
+    virtual bool loadMusic(const QString &filePath)=0;
     virtual qint64 duration() const=0;
     virtual qint64 position() const=0;
-    virtual void playFile(const QString &fileName)=0;
-    virtual void playSection(const QString &fileName,
+    virtual bool playFile(const QString &fileName)
+    {
+        //Play the whole file as a section.
+        return playSection(fileName);
+    }
+    virtual bool playSection(const QString &fileName,
                              const qint64 &start=-1,
                              const qint64 &duration=-1)=0;
     virtual void play()=0;

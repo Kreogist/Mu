@@ -181,21 +181,21 @@ void KNMusicModel::updateMusicRow(const int &row,
         case Plays:
             break;
         default:
-            setItemText(row, i, detailInfo.textLists[i]);
+            updateItemText(row, i, detailInfo.textLists[i]);
         }
     }
     //Update the properties.
-    setRowProperty(row, FilePathRole, detailInfo.filePath);
-    setRowProperty(row, FileNameRole, detailInfo.fileName);
-    setRowProperty(row, TrackFileRole, detailInfo.trackFilePath);
-    setRowProperty(row, StartPositionRole, detailInfo.startPosition);
-    setRoleData(row, Size, Qt::UserRole, detailInfo.size);
-    setRoleData(row, DateModified, Qt::UserRole, detailInfo.dateModified);
-    setRoleData(row, DateAdded, Qt::UserRole, detailInfo.dateAdded);
-    setRoleData(row, LastPlayed, Qt::UserRole, detailInfo.lastPlayed);
-    setRoleData(row, Time, Qt::UserRole, detailInfo.duration);
-    setRoleData(row, BitRate, Qt::UserRole, detailInfo.bitRate);
-    setRoleData(row, SampleRate, Qt::UserRole, detailInfo.samplingRate);
+    updateRowProperty(row, FilePathRole, detailInfo.filePath);
+    updateRowProperty(row, FileNameRole, detailInfo.fileName);
+    updateRowProperty(row, TrackFileRole, detailInfo.trackFilePath);
+    updateRowProperty(row, StartPositionRole, detailInfo.startPosition);
+    updateRoleData(row, Size, Qt::UserRole, detailInfo.size);
+    updateRoleData(row, DateModified, Qt::UserRole, detailInfo.dateModified);
+    updateRoleData(row, DateAdded, Qt::UserRole, detailInfo.dateAdded);
+    updateRoleData(row, LastPlayed, Qt::UserRole, detailInfo.lastPlayed);
+    updateRoleData(row, Time, Qt::UserRole, detailInfo.duration);
+    updateRoleData(row, BitRate, Qt::UserRole, detailInfo.bitRate);
+    updateRoleData(row, SampleRate, Qt::UserRole, detailInfo.samplingRate);
 }
 
 void KNMusicModel::removeMusicRow(const int &row)

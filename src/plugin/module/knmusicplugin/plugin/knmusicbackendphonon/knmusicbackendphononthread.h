@@ -34,7 +34,7 @@ class KNMusicBackendPhononThread : public KNMusicBackendThread
 public:
     explicit KNMusicBackendPhononThread(QObject *parent = 0);
     ~KNMusicBackendPhononThread();
-    void loadFromFile(const QString &filePath);
+    bool loadFromFile(const QString &filePath);
     void clear();
     void resetState();
     void stop();

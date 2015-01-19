@@ -36,35 +36,51 @@ public:
     KNMusicModel *playingMusicModel();
     int loopState();
     QPersistentModelIndex currentPlayingIndex() const;
+    KNMusicAnalysisItem currentAnalaysisItem() const;
 
 signals:
+    void requirePlayPrevAvailable(int currentProxyRow);
+    void requirePlayNextAvailable(int currentProxyRow);
 
 public slots:
-    void showCurrentIndexInOriginalTab();
-    void shadowPlayingModel();
     void resetCurrentPlaying();
     void restoreConfigure();
+
+    void showCurrentIndexInOriginalTab();
+    void shadowPlayingModel();
+
+    void setPlayingModel(KNMusicProxyModel *model, KNMusicTab *tab=nullptr);
+
     void playNext();
     void playPrevious();
+    void playMusic(int row);
+    void playMusic(const QModelIndex &index);
+    void playTemporaryFiles(const QStringList &filePaths);
+
     void onActionPlayingFinished();
-    void onActionCannotPlay();
-    void onActionLoaded();
-    void setRating(const int &rating);
+
     void changeLoopState();
     void setLoopState(const int &state);
-    void playTemporaryFiles(const QStringList &filePaths);
-    void setPlayingModel(KNMusicProxyModel *model,
-                         KNMusicTab *tab=nullptr);
-    void playMusic(const int &row);
-    void playMusic(const QModelIndex &index);
+    void setRating(const int &rating);
+
     void checkRemovedModel(KNMusicModel *model);
+
+private slots:
+    void playNextAvailable(const int &currentProxyRow);
+    void playPrevAvailable(const int &currentProxyRow);
 
 private:
     void saveConfigure();
 
-    void playNextSong(bool cannotLoadFile=false);
     void resetPlayingItem();
     void resetPlayingModels();
+
+    int prevSongIndex(int currentProxyRow,
+                      bool ignoreLoopMode=false);
+    int nextSongIndex(int currentProxyRow,
+                      bool ignoreLoopMode=false);
+    bool playMusicRow(const int &row);
+    void setCannotPlay(const int &row);
     KNMusicBackend *m_backend=nullptr;
     KNMusicSinglePlaylistModel *m_temporaryModel;
     KNMusicModel *m_playingMusicModel=nullptr;
