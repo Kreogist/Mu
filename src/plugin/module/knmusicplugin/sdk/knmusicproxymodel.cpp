@@ -41,9 +41,11 @@ inline int KNMusicProxyModel::sourceRow(const int &proxyRow) const
 bool KNMusicProxyModel::lessThan(const QModelIndex &left,
                                  const QModelIndex &right) const
 {
+    //Sort the data according to the column flag.
     QVariant sortFlag=sourceModel()->headerData(left.column(),
                                                 Qt::Horizontal,
                                                 Qt::UserRole);
+    //If there's no sort flag, means use default less than.
     if(!sortFlag.isValid())
     {
         return QSortFilterProxyModel::lessThan(left, right);

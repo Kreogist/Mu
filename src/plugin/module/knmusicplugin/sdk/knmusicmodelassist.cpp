@@ -73,8 +73,7 @@ bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
     QString musicFilePath=musicModel->rowProperty(index.row(),
                                                   FilePathRole).toString();
     //Check the start position role, if it is not -1, means it's a music file.
-    if(musicModel->rowProperty(index.row(),
-                               StartPositionRole).toLongLong()==-1)
+    if(musicModel->rowProperty(index.row(),StartPositionRole).toLongLong()==-1)
     {
         //Parse the info.
         parser->parseFile(musicFilePath, analysisItem);

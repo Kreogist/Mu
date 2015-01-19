@@ -73,6 +73,9 @@ public slots:
                         const KNMusicDetailInfo &detailInfo);
     void removeMusicRow(const int &row);
     void removeSourceMusicRow(const int &row);
+
+private:
+
 };
 
 #endif // KNMUSICPROXYMODEL_H

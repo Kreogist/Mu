@@ -76,7 +76,7 @@ private:
     int nextSongIndex(int currentRow,
                       bool ignoreLoopMode=false);
     bool playMusicRow(const int &row);
-    void setCannotPlayIcon();
+    void setCannotPlay(const int &row);
     KNMusicBackend *m_backend=nullptr;
     KNMusicSinglePlaylistModel *m_temporaryModel;
     KNMusicModel *m_playingMusicModel=nullptr;
