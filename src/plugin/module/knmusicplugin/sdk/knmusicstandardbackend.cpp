@@ -231,8 +231,9 @@ void KNMusicStandardBackend::smartVolumeOn()
     m_originalVolume=m_main->volume()==0?volume():m_main->volume();
     //Set the preview as the full volume.
     m_preview->setVolume(m_originalVolume);
-    //Set the main volume as the 1/8 of the full volume.
-    m_main->setVolume(m_originalVolume>8?m_originalVolume/8:0);
+    //Set the main volume as the smartVolumeScale of the full volume.
+    qreal mainVolumeSize=(qreal)m_originalVolume*smartVolumeScale();
+    m_main->setVolume((int)mainVolumeSize);
 }
 
 void KNMusicStandardBackend::smartVolumeOff()

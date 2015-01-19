@@ -43,6 +43,7 @@ public slots:
 
 protected:
     void changeVolume(const int &volumeSize);
+    qreal smartVolumeScale() const;
 
 private:
     KNMusicVLCGlobal *m_vlcGlobal;

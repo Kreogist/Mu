@@ -53,6 +53,7 @@ protected:
     void setMainThread(KNMusicBackendThread *thread);
     void setPreviewThread(KNMusicBackendThread *thread);
     virtual void changeVolume(const int &volumeSize)=0;
+    virtual qreal smartVolumeScale() const=0;
 
 private:
     void smartVolumeOn();

@@ -58,6 +58,7 @@ public:
 
 protected:
     void changeVolume(const int &volumeSize);
+    qreal smartVolumeScale() const;
 
 private:
     KNMusicBackendPhononThread *m_main, *m_preview;
