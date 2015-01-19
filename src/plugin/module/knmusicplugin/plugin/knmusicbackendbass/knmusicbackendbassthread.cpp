@@ -100,6 +100,8 @@ bool KNMusicBackendBassThread::loadFromFile(const QString &filePath)
     //Get the byte duration.
     m_totalDuration=BASS_ChannelBytes2Seconds(m_channel,
                                               BASS_ChannelGetLength(m_channel, BASS_POS_BYTE))*1000;
+    //Change the duration.
+    emit durationChanged(m_totalDuration);
     //Reset the thread.
     resetState();
     return true;

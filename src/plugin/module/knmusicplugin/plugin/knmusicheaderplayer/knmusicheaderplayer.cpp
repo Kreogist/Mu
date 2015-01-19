@@ -111,6 +111,8 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     //Connect responds.
     connect(m_backend, &KNMusicBackend::positionChanged,
             this, &KNMusicHeaderPlayer::onActionPositionChanged);
+    connect(m_backend, &KNMusicBackend::durationChanged,
+            this, &KNMusicHeaderPlayer::onActionDurationChanged);
     connect(m_backend, &KNMusicBackend::playingStateChanged,
             this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
     connect(m_backend, &KNMusicBackend::finished,
@@ -399,6 +401,12 @@ void KNMusicHeaderPlayer::onActionPositionChanged(const qint64 &position)
     {
         m_progressSlider->setValue(position);
     }
+}
+
+void KNMusicHeaderPlayer::onActionDurationChanged(const qint64 &duration)
+{
+    //Change the slider maximum.
+    setDuration(duration);
 }
 
 void KNMusicHeaderPlayer::onActionPlayStateChanged(const int &state)
@@ -764,22 +772,6 @@ inline void KNMusicHeaderPlayer::configureVolumeAnimation(QPropertyAnimation *an
     animation->setEasingCurve(QEasingCurve::OutCubic);
 }
 
-inline QRect KNMusicHeaderPlayer::generateOutPosition()
-{
-    return QRect(0,
-                 -45,
-                 width(),
-                 40);
-}
-
-inline QRect KNMusicHeaderPlayer::generateInPosition()
-{
-    return QRect(0,
-                 5,
-                 width(),
-                 40);
-}
-
 void KNMusicHeaderPlayer::updatePlayerInfo()
 {
     //Get the current information.
@@ -799,19 +791,17 @@ void KNMusicHeaderPlayer::updatePlayerInfo()
     updateArtistAndAlbum();
     QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
-    //Load the duration and position data from backend.
-    setDuration(m_backend->duration());
     //Ask to load lyrics.
     emit requireLoadLyrics(m_currentDetailInfo);
 }
 
-void KNMusicHeaderPlayer::initialInformationPanel()
+inline void KNMusicHeaderPlayer::initialInformationPanel()
 {
     initialAlbumArt();
     initialLabels();
 }
 
-void KNMusicHeaderPlayer::initialPlayerControls()
+inline void KNMusicHeaderPlayer::initialPlayerControls()
 {
     initialControlPanel();
     initialProrgess();

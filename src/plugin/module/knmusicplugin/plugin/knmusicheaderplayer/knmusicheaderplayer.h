@@ -67,14 +67,15 @@ private slots:
     void setPositionText(const qint64 &position);
 
     void onActionPositionChanged(const qint64 &position);
+    void onActionDurationChanged(const qint64 &duration);
     void onActionPlayStateChanged(const int &state);
 
     void setPosition(const qint64 &position);
     void updatePlayerInfo();
 
 private:
-    void initialInformationPanel();
-    void initialPlayerControls();
+    inline void initialInformationPanel();
+    inline void initialPlayerControls();
 
     inline void initialAlbumArt();
     inline void initialLabels();
@@ -94,8 +95,15 @@ private:
     inline void configureAppendPanelAnimation(QPropertyAnimation *animation);
     inline void configureVolumeAnimation(QPropertyAnimation *animation);
 
-    inline QRect generateOutPosition();
-    inline QRect generateInPosition();
+    inline QRect generateOutPosition()
+    {
+        return QRect(0, -45, width(), 40);
+    }
+
+    inline QRect generateInPosition()
+    {
+        return QRect(0, 5, width(), 40);
+    }
 
     inline void setAlbumArt(const QPixmap &pixmap);
     inline void setTitle(const QString &title);
