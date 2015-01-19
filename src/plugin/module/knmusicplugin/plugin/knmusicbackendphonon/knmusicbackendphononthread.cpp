@@ -78,12 +78,17 @@ void KNMusicBackendPhononThread::pause()
 
 void KNMusicBackendPhononThread::play()
 {
+    //Play the media.
     m_mediaObject->play();
+    qDebug()<<m_audioOutput->volume();
+    //Try to set the audio output to user set volume, set it again to ensure the
+    //volume has been set.
+    m_audioOutput->setVolume(m_userSetVolume);
 }
 
 int KNMusicBackendPhononThread::volume()
 {
-    return m_audioOutput->volume()*10000;
+    return m_userSetVolume*10000;
 }
 
 qint64 KNMusicBackendPhononThread::duration()
@@ -113,7 +118,10 @@ void KNMusicBackendPhononThread::playSection(const qint64 &sectionStart,
 
 void KNMusicBackendPhononThread::setVolume(const int &volumeSize)
 {
-    m_audioOutput->setVolume((qreal)volumeSize/10000.0);
+    //Save the user set volume size.
+    m_userSetVolume=(qreal)volumeSize/10000.0;
+    //Try to set the audio output to user set volume.
+    m_audioOutput->setVolume(m_userSetVolume);
 }
 
 void KNMusicBackendPhononThread::setPosition(const qint64 &position)
