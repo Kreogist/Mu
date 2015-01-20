@@ -133,6 +133,8 @@ void KNMusicDetailTooltip::setBackend(KNMusicBackend *backend)
     //Connect to backend.
     connect(m_backend, &KNMusicBackend::previewPositionChanged,
             this, &KNMusicDetailTooltip::onActionPreviewPositionChanged);
+    connect(m_backend, &KNMusicBackend::previewDurationChanged,
+            this, &KNMusicDetailTooltip::onActionPreviewDurationChanged);
     connect(m_backend, &KNMusicBackend::previewPlayingStateChanged,
             this, &KNMusicDetailTooltip::onActionPreviewStatusChange);
     connect(m_progress, &KNProgressSlider::sliderMoved,
@@ -302,6 +304,11 @@ void KNMusicDetailTooltip::onActionPreviewPositionChanged(const qint64 &position
     }
 }
 
+void KNMusicDetailTooltip::onActionPreviewDurationChanged(const qint64 &duration)
+{
+    m_progress->setMaximum(duration);
+}
+
 inline void KNMusicDetailTooltip::loadCurrentToPreview()
 {
     //Check is the current index still available.
@@ -318,8 +325,6 @@ inline void KNMusicDetailTooltip::loadCurrentToPreview()
                                                                           StartPositionRole).toLongLong(),
                                          m_currentMusicModel->songDuration(m_currentIndex.row()));
         }
-        //Update the progress bar.
-        m_progress->setMaximum(m_backend->previewDuration());
     }
 }
 
