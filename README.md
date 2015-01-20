@@ -2,13 +2,13 @@
 
 Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 
-##Menu
+## Menu
 
 * Overview
 * Dependencies
 * License
 
-##Overview
+## Overview
 
 μ is a cross-platform application for media file managing. 
 
@@ -22,7 +22,7 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 * Qt 5.4
 * bass (Windows / Mac OS X)
 * phonon4qt5 (Linux)
-* FFMpeg / LibAV
+* FFMpeg / LibAV(Not tested)
 
 ## License
 
