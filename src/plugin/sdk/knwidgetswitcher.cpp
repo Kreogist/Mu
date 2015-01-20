@@ -103,7 +103,8 @@ void KNWidgetSwitcher::setCurrentIndex(int currentIndex)
     updateAnimationPosition();
     //Prepare the widget.
     setWidgetVisible(m_currentIndex, true);
-    m_widgets.at(currentIndex)->setFocus();
+    //Disable the current index widget.
+    m_widgets.at(m_currentIndex)->setEnabled(false);
     //Start animation.
     m_movingAnimationGroup->start();
 }
@@ -137,6 +138,8 @@ void KNWidgetSwitcher::hideMoveOutWidget()
     //Hide the out widget, reset out widget index.
     setWidgetVisible(m_outWidgetIndex, false);
     m_outWidgetIndex=-1;
+    //Enable the current widget.
+    m_widgets.at(m_currentIndex)->setEnabled(true);
     //Set the focus to the content widget.
     m_widgets.at(m_currentIndex)->setFocus();
     emit movedComplete();
@@ -150,8 +153,8 @@ void KNWidgetSwitcher::configureAnimation(QPropertyAnimation *animation)
     animation->setDuration(200);
 }
 
-void KNWidgetSwitcher::setWidgetVisible(const int &index,
-                                         const bool &visible)
+inline void KNWidgetSwitcher::setWidgetVisible(const int &index,
+                                               const bool &visible)
 {
     Q_ASSERT(index>-1 && index<m_widgets.size());
     QWidget *widget=m_widgets.at(index);

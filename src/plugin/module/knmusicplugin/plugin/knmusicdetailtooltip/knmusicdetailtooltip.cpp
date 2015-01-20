@@ -364,13 +364,11 @@ inline void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &tex
                                                        Qt::ElideRight,
                                                        m_labelWidth));
         label->setToolTip(text);
+        return;
     }
-    else
-    {
-        //Clear the tooltip and set text.
-        label->setText(text);
-        label->setToolTip("");
-    }
+    //Clear the tooltip and set text.
+    label->setText(text);
+    label->setToolTip("");
 }
 
 void KNMusicDetailTooltip::startDisappearCountWithAnime()
