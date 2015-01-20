@@ -22,6 +22,7 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
 {
     //Initial the media object and audio output.
     m_mediaObject=new MediaObject(this);
+    m_mediaObject->setTickInterval(10);
     m_audioOutput=new AudioOutput(MusicCategory,
                                   this);
 
@@ -32,10 +33,10 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
     createPath(m_mediaObject, m_audioOutput);
 
     //Link signals.
-    connect(m_mediaObject, SIGNAL(totalTimeChanged(qint64)),
-            this, SIGNAL(durationChanged(qint64)));
-    connect(m_mediaObject, SIGNAL(tick(qint64)),
-            this, SIGNAL(positionChanged(qint64)));
+    connect(m_mediaObject, &MediaObject::totalTimeChanged,
+            this, &KNMusicBackendPhononThread::onActionDurationChanged);
+    connect(m_mediaObject, &MediaObject::tick,
+            this, &KNMusicBackendPhononThread::onActionPositionChanged);
     connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
             this, SLOT(onActionStateChanged(State,State)));
     connect(m_mediaObject, SIGNAL(finished()),
@@ -80,7 +81,6 @@ void KNMusicBackendPhononThread::play()
 {
     //Play the media.
     m_mediaObject->play();
-    qDebug()<<m_audioOutput->volume();
     //Try to set the audio output to user set volume, set it again to ensure the
     //volume has been set.
     m_audioOutput->setVolume(m_userSetVolume);
@@ -126,19 +126,23 @@ void KNMusicBackendPhononThread::setVolume(const int &volumeSize)
 
 void KNMusicBackendPhononThread::setPosition(const qint64 &position)
 {
-    m_mediaObject->seek(position);
+    if(!m_ticking)
+    {
+        m_mediaObject->seek(position);
+    }
 }
 
 void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
                                                       const State &oldstate)
 {
-    Q_UNUSED(oldstate)
     //Get the new state.
     int threadNewState;
     switch(newstate)
     {
     case Phonon::PlayingState:
         threadNewState=KNMusic::PlayingState;
+        //We need to do something here.
+        m_mediaObject->setTickInterval(350);
         break;
     case Phonon::PausedState:
         threadNewState=KNMusic::PausedState;
@@ -156,4 +160,28 @@ void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
     m_state=threadNewState;
     //Emit signal state changed signal.
     emit stateChanged(m_state);
+}
+
+void KNMusicBackendPhononThread::onActionDurationChanged(
+        const qint64 &newTotalTime)
+{
+    m_ticking=true;
+    //When we are here, this is a important signal.
+    //It means the file has been loaded or the file cannot be loaded.
+    emit loaded();
+    qDebug()<<newTotalTime<<m_mediaObject->state()<<m_mediaObject->errorType();
+    //Emit the duration changed signal.
+    emit durationChanged(newTotalTime);
+    m_ticking=false;
+}
+
+void KNMusicBackendPhononThread::onActionPositionChanged(const qint64 &time)
+{
+    //I don't know why should write this.
+    //Thread lock?
+    m_ticking=true;
+    //Emit position changed signal.
+    emit positionChanged(time);
+    //Unlock ticking.
+    m_ticking=false;
 }

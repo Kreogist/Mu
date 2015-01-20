@@ -48,6 +48,9 @@ public:
     void playSection(const qint64 &sectionStart=-1,
                      const qint64 &sectionDuration=-1);
 
+signals:
+    void loaded();
+
 public slots:
     void setVolume(const int &volumeSize);
     void setPosition(const qint64 &position);
@@ -55,6 +58,8 @@ public slots:
 private slots:
     void onActionStateChanged(const State &newstate,
                               const State &oldstate);
+    void onActionDurationChanged(const qint64 &newTotalTime);
+    void onActionPositionChanged(const qint64 &time);
 
 private:
     MediaSource m_mediaSource;
@@ -62,6 +67,7 @@ private:
     AudioOutput *m_audioOutput;
 
     int m_state;
+    bool m_ticking=false;
     qreal m_userSetVolume=1.0;
 };
 

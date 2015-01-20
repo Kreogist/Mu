@@ -48,6 +48,7 @@ public:
     ~KNMusicBackendPhonon();
 
     bool available();
+    bool loadMusic(const QString &filePath);
 
     int volume() const;
 
