@@ -56,6 +56,7 @@ private slots:
     void onActionProgressPressed();
     void onActionProgressReleased();
     void onActionPreviewPositionChanged(const qint64 &position);
+    void onActionPreviewDurationChanged(const qint64 &duration);
     void startDisappearCountWithAnime();
 
 private:
