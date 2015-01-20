@@ -103,8 +103,6 @@ void KNWidgetSwitcher::setCurrentIndex(int currentIndex)
     updateAnimationPosition();
     //Prepare the widget.
     setWidgetVisible(m_currentIndex, true);
-    //Disable the current index widget.
-    m_widgets.at(m_currentIndex)->setEnabled(false);
     //Start animation.
     m_movingAnimationGroup->start();
 }

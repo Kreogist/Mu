@@ -20,8 +20,9 @@
 #include "knmusicsingleplaylistmodel.h"
 #include "knmusicmodelassist.h"
 #include "knmusicproxymodel.h"
-#include "knmusicglobal.h"
 #include "knmusictab.h"
+
+#include "knlocalemanager.h"
 
 #include "knmusicnowplaying.h"
 
@@ -33,6 +34,8 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     //Initial the icon.
     m_playingIcon=QPixmap(":/plugin/music/common/playingicon.png");
     m_cantPlayIcon=QPixmap(":/plugin/music/common/cantplay.png");
+    //Initial music global.
+    m_musicGlobal=KNMusicGlobal::instance();
     //Initial temporary model.
     m_temporaryModel=new KNMusicSinglePlaylistModel(this);
     //Initial shadow proxy model.
@@ -45,6 +48,17 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
             this, &KNMusicNowPlaying::playPrevAvailable);
     connect(this, &KNMusicNowPlaying::requirePlayNextAvailable,
             this, &KNMusicNowPlaying::playNextAvailable);
+
+
+    //Connect apply preference signal.
+    connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
+            this, &KNMusicNowPlaying::applyPreference);
+    //Load preference and retranslate.
+    applyPreference();
+    //Connect retranslate signal.
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNMusicNowPlaying::retranslate);
+    retranslate();
 }
 
 KNMusicNowPlaying::~KNMusicNowPlaying()
@@ -81,8 +95,8 @@ int KNMusicNowPlaying::loopState()
 
 void KNMusicNowPlaying::restoreConfigure()
 {
-    setLoopState(KNMusicGlobal::instance()->configureData("LoopState",
-                                                          NoRepeat).toInt());
+    setLoopState(m_musicGlobal->configureData("LoopState",
+                                              NoRepeat).toInt());
 }
 
 void KNMusicNowPlaying::playNext()
@@ -102,8 +116,11 @@ void KNMusicNowPlaying::playNext()
     }
     //Process the events.
     qApp->processEvents();
-    //Play the next available song.
-    emit requirePlayNextAvailable(preferNextRow);
+    //Play the next available song if user wants.
+    if(m_playNextAvailable)
+    {
+        emit requirePlayNextAvailable(preferNextRow);
+    }
 }
 
 void KNMusicNowPlaying::playPrevious()
@@ -123,8 +140,11 @@ void KNMusicNowPlaying::playPrevious()
     }
     //Process the events.
     qApp->processEvents();
-    //Play the previous available song.
-    emit requirePlayPrevAvailable(preferPrevRow);
+    //Play the previous available song if the user wants.
+    if(m_playNextAvailable)
+    {
+        emit requirePlayPrevAvailable(preferPrevRow);
+    }
 }
 
 void KNMusicNowPlaying::onActionPlayingFinished()
@@ -199,8 +219,11 @@ void KNMusicNowPlaying::playMusic(int row)
     }
     //Process the events.
     qApp->processEvents();
-    //Play the next available song, give the initial row.
-    emit requirePlayNextAvailable(row);
+    //Play the next available song if the user wants, give the initial row.
+    if(m_playNextAvailable)
+    {
+        emit requirePlayNextAvailable(row);
+    }
 }
 
 void KNMusicNowPlaying::playMusic(const QModelIndex &index)
@@ -220,9 +243,42 @@ void KNMusicNowPlaying::checkRemovedModel(KNMusicModel *model)
     }
 }
 
+void KNMusicNowPlaying::applyPreference()
+{
+    m_playNextAvailable=m_musicGlobal->configureData("PlayNextAvailable",
+                                                     m_playNextAvailable).toBool();
+}
+
+void KNMusicNowPlaying::retranslate()
+{
+    //Get the latest title and item info.
+    KNPreferenceTitleInfo lyricsTitle;
+    QList<KNPreferenceItemInfo> itemList;
+    generateTitleAndItemInfo(lyricsTitle, itemList);
+    //Ask to insert the info list.
+    KNMusicGlobal::instance()->insertItemInfoList(lyricsTitle, itemList);
+}
+
 void KNMusicNowPlaying::saveConfigure()
 {
-    KNMusicGlobal::instance()->setConfigureData("LoopState", m_loopMode);
+    m_musicGlobal->setConfigureData("LoopState", m_loopMode);
+}
+
+void KNMusicNowPlaying::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
+                                                 QList<KNPreferenceItemInfo> &list)
+{
+    //Set the title.
+    listTitle.advanced=false;
+    listTitle.title=tr("Playback");
+    listTitle.titleIdentifier="Playback";
+
+    //Clear the list.
+    list.clear();
+    //Add the current info.
+    list.append(KNPreferenceItemGlobal::generateInfo(Switcher,
+                                                     tr("Play next when error"),
+                                                     "PlayNextAvailable",
+                                                     m_playNextAvailable));
 }
 
 void KNMusicNowPlaying::playNextAvailable(const int &currentProxyRow)

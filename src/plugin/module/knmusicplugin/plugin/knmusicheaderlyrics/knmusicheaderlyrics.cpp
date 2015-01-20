@@ -58,11 +58,11 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     //Connect apply preference signal.
     connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
             this, &KNMusicHeaderLyrics::applyPreference);
+    //Load preference and retranslate.
+    applyPreference();
     //Connect retranslate signal.
     connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
             this, &KNMusicHeaderLyrics::retranslate);
-    //Load preference and retranslate.
-    applyPreference();
     retranslate();
 }
 

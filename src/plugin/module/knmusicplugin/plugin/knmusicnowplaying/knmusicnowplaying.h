@@ -66,11 +66,17 @@ public slots:
     void checkRemovedModel(KNMusicModel *model);
 
 private slots:
+    void applyPreference();
+    void retranslate();
+
     void playNextAvailable(const int &currentProxyRow);
     void playPrevAvailable(const int &currentProxyRow);
 
 private:
     void saveConfigure();
+
+    inline void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
+                                         QList<KNPreferenceItemInfo> &list);
 
     void resetPlayingItem();
     void resetPlayingModels();
@@ -91,7 +97,9 @@ private:
     KNMusicAnalysisItem m_currentPlayingAnalysisItem;
     QPixmap m_playingIcon, m_cantPlayIcon;
     KNMusicTab *m_currentTab=nullptr;
+    KNMusicGlobal *m_musicGlobal;
     int m_loopMode=NoRepeat;
+    bool m_playNextAvailable=true;
 };
 
 #endif // KNMUSICNOWPLAYING_H
