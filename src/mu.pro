@@ -324,7 +324,8 @@ SOURCES += \
     plugin/sdk/knfontdialog.cpp \
     plugin/sdk/knmousedetectlabel.cpp \
     plugin/base/knpreference/knpreferencegeneralpanel.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp
+    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
+    plugin/sdk/knlabelbutton.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -525,7 +526,8 @@ HEADERS += \
     plugin/sdk/knmousedetectlabel.h \
     plugin/base/knpreference/knpreferencegeneralpanel.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
-    core/knversion.h
+    core/knversion.h \
+    plugin/sdk/knlabelbutton.h
 
 RESOURCES += \
     resource/res.qrc

@@ -11,6 +11,7 @@
 #include <QFileDialog>
 
 #include "knpathlineedit.h"
+#include "knlabelbutton.h"
 #include "knglobal.h"
 
 #include "knlocalemanager.h"
@@ -50,6 +51,13 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     connect(m_moveTo, SIGNAL(clicked()),
             this, SLOT(onActionMoveFolder()));
 
+    //Initial the goto button.
+    m_goto=new KNLabelButton(this);
+    m_goto->setFixedSize(16,16);
+    m_goto->setPixmap(QPixmap("://public/goto_folder.png"));
+    connect(m_goto, &KNLabelButton::clicked,
+            this, &KNPreferenceItemPathBrowser::onActionGotoFolder);
+
     //Initial the path editor.
     m_pathEditor=new KNPathLineEdit(this);
     //Generate auto path completer for path editor.
@@ -83,6 +91,8 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     //Add widgets to item.
     insertSpacing(5);
     insertWidget(m_pathEditor, 1);
+    insertSpacing(5);
+    insertWidget(m_goto);
     insertSpacing(5);
     insertWidget(m_moveTo);
     insertSpacing(5);
@@ -126,8 +136,9 @@ void KNPreferenceItemPathBrowser::setValue(const QVariant &value)
 
 void KNPreferenceItemPathBrowser::onActionBrowseFolder()
 {
+    startLeaveAnime();
     //Initial the file dialog.
-    QFileDialog selectFolder(this);
+    QFileDialog selectFolder(this, tr("Browse"));
     //Set property.
     selectFolder.setFileMode(QFileDialog::Directory);
     selectFolder.setOption(QFileDialog::ShowDirsOnly);
@@ -145,8 +156,9 @@ void KNPreferenceItemPathBrowser::onActionBrowseFolder()
 
 void KNPreferenceItemPathBrowser::onActionMoveFolder()
 {
+    startLeaveAnime();
     //Initial the file dialog.
-    QFileDialog moveToDir(this);
+    QFileDialog moveToDir(this, tr("Move to"));
     //Set property.
     moveToDir.setFileMode(QFileDialog::Directory);
     moveToDir.setOption(QFileDialog::ShowDirsOnly);
@@ -177,6 +189,14 @@ void KNPreferenceItemPathBrowser::onActionMoveFolder()
             }
         }
     }
+}
+
+void KNPreferenceItemPathBrowser::onActionGotoFolder()
+{
+    //Start leave animation.
+    startLeaveAnime();
+    //Do the action.
+    KNGlobal::openLocalFile(m_pathEditor->text());
 }
 
 void KNPreferenceItemPathBrowser::onActionPathExist()

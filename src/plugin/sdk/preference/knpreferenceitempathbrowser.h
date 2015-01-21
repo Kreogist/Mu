@@ -11,6 +11,7 @@
 
 class QPushButton;
 class KNPathLineEdit;
+class KNLabelButton;
 class KNPreferenceItemPathBrowser : public KNPreferenceItemBase
 {
     Q_OBJECT
@@ -32,6 +33,7 @@ public slots:
 private slots:
     void onActionBrowseFolder();
     void onActionMoveFolder();
+    void onActionGotoFolder();
     void onActionPathExist();
     void onActionPathNotExist();
 
@@ -40,6 +42,7 @@ private:
     QPalette m_existEditPalette,
              m_notExistEditPalette;
     QPushButton *m_browse, *m_moveTo;
+    KNLabelButton *m_goto;
     KNPathLineEdit *m_pathEditor;
     bool m_ensureExist=false;
 };

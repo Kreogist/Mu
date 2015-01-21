@@ -39,6 +39,8 @@ protected:
     void insertSpacing(int size);
     void insertStretch();
 
+    void startLeaveAnime();
+
 private slots:
     void onActionChangeHighlight(const int &frame);
 

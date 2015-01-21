@@ -11,6 +11,7 @@
         <file>public/indicator.png</file>
         <file>public/preview_font.png</file>
         <file>icon/mu.png</file>
+        <file>public/goto_folder.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/category/01_musics.png</file>

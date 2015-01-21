@@ -84,12 +84,7 @@ void KNPreferenceItemBase::leaveEvent(QEvent *event)
 {
     //Running parent's leave event.
     QWidget::leaveEvent(event);
-    //Stop all animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set start parameters.
-    m_mouseOut->setStartFrame(m_highLightOpacity*100);
-    m_mouseOut->start();
+    startLeaveAnime();
 }
 
 void KNPreferenceItemBase::paintEvent(QPaintEvent *event)
@@ -127,6 +122,16 @@ void KNPreferenceItemBase::insertSpacing(int size)
 void KNPreferenceItemBase::insertStretch()
 {
     m_mainLayout->insertStretch(1);
+}
+
+void KNPreferenceItemBase::startLeaveAnime()
+{
+    //Stop all animations.
+    m_mouseIn->stop();
+    m_mouseOut->stop();
+    //Set start parameters.
+    m_mouseOut->setStartFrame(m_highLightOpacity*100);
+    m_mouseOut->start();
 }
 
 void KNPreferenceItemBase::onActionChangeHighlight(const int &frame)

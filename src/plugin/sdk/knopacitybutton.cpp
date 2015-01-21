@@ -69,18 +69,18 @@ void KNOpacityButton::mouseReleaseEvent(QMouseEvent *event)
 
 void KNOpacityButton::paintEvent(QPaintEvent *event)
 {
-    KNAbstractButton::paintEvent(event);
     //Initial antialiasing painter.
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing |
-                           QPainter::TextAntialiasing |
-                           QPainter::SmoothPixmapTransform, true);
+                           QPainter::TextAntialiasing, true);
     //Paint the contents.
     painter.drawPixmap(0,0,width(),height(),
                        m_icon.scaled(width(),
                                      height(),
                                      Qt::KeepAspectRatio,
                                      Qt::SmoothTransformation));
+    //Paint other things.
+    KNAbstractButton::paintEvent(event);
 }
 
 qreal KNOpacityButton::opacity() const
