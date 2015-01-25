@@ -21,10 +21,12 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
     KNMusicBackendThread(parent)
 {
     //Initial the media object and audio output.
-    m_mediaObject=new MediaObject(this);
+    m_mediaObject=new MediaObject;
+    m_mediaObject->moveToThread(&m_workingThread);
     m_mediaObject->setTickInterval(10);
-    m_audioOutput=new AudioOutput(MusicCategory,
-                                  this);
+
+    m_audioOutput=new AudioOutput(MusicCategory);
+    m_audioOutput->moveToThread(&m_workingThread);
 
     //Initial the state.
     m_state=KNMusic::StoppedState;
@@ -41,10 +43,17 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
             this, SLOT(onActionStateChanged(State,State)));
     connect(m_mediaObject, SIGNAL(finished()),
             this, SIGNAL(finished()));
+
+    m_workingThread.start();
 }
 
 KNMusicBackendPhononThread::~KNMusicBackendPhononThread()
 {
+    m_workingThread.quit();
+    m_workingThread.wait();
+
+    delete m_audioOutput;
+    delete m_mediaObject;
 }
 
 bool KNMusicBackendPhononThread::loadFromFile(const QString &filePath)

@@ -22,6 +22,8 @@
 #include <phonon4qt5/phonon/AudioOutput>
 #include <phonon4qt5/phonon/MediaSource>
 
+#include <QThread>
+
 #include "knmusicglobal.h"
 
 #include "knmusicbackendthread.h"
@@ -65,6 +67,8 @@ private:
     MediaSource m_mediaSource;
     MediaObject *m_mediaObject;
     AudioOutput *m_audioOutput;
+
+    QThread m_workingThread;
 
     int m_state;
     bool m_ticking=false;
