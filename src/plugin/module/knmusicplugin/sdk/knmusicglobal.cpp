@@ -167,6 +167,7 @@ bool KNMusicGlobal::renameMusicFile(const QString &originalPath,
             return false;
         }
     }
+
     bool restoreNowPlaying=false;
     //Check is the file playing.
     if(m_nowPlaying->currentAnalaysisItem().detailInfo.filePath

@@ -543,10 +543,11 @@ void KNMusicNowPlaying::restoreCurrentPlaying()
     //set the position the backup position.
     if(m_backupPosition!=-1)
     {
-        playMusic(m_currentPlayingIndex);
-
+        //Replay the current playing index.
+        playMusic(m_playingModel->mapFromSource(m_currentPlayingIndex));
+        //Restore the playing position.
         m_backend->setPosition(m_backupPosition);
-
+        //Reset the backup flag to invaild.
         m_backupPosition=-1;
     }
 }
