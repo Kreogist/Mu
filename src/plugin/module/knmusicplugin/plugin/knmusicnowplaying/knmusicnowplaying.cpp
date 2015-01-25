@@ -531,6 +531,26 @@ KNMusicAnalysisItem KNMusicNowPlaying::currentAnalaysisItem() const
     return m_currentPlayingAnalysisItem;
 }
 
+void KNMusicNowPlaying::backupCurrentPlaying()
+{
+    m_backupPosition=m_backend->position();
+}
+
+void KNMusicNowPlaying::restoreCurrentPlaying()
+{
+    //Check if the backup position is available.
+    //If it's not -1, means we should play the current index again,
+    //set the position the backup position.
+    if(m_backupPosition!=-1)
+    {
+        playMusic(m_currentPlayingIndex);
+
+        m_backend->setPosition(m_backupPosition);
+
+        m_backupPosition=-1;
+    }
+}
+
 void KNMusicNowPlaying::showCurrentIndexInOriginalTab()
 {
     //Abandon the action when the current tab is null.

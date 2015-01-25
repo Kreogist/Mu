@@ -43,6 +43,9 @@ signals:
     void requirePlayNextAvailable(int currentProxyRow);
 
 public slots:
+    void backupCurrentPlaying();
+    void restoreCurrentPlaying();
+
     void resetCurrentPlaying();
     void restoreConfigure();
 
@@ -100,6 +103,8 @@ private:
     KNMusicGlobal *m_musicGlobal;
     int m_loopMode=NoRepeat;
     bool m_playNextAvailable=true;
+
+    qint64 m_backupPosition=-1;
 };
 
 #endif // KNMUSICNOWPLAYING_H

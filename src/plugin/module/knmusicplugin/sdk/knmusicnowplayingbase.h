@@ -36,6 +36,9 @@ signals:
     void loopStateChanged(int state);
 
 public slots:
+    virtual void backupCurrentPlaying()=0;
+    virtual void restoreCurrentPlaying()=0;
+
     virtual void resetCurrentPlaying()=0;
     virtual void restoreConfigure()=0;
 

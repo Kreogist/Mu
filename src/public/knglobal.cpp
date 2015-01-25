@@ -71,6 +71,12 @@ QString KNGlobal::simplifiedPath(const QString &path)
     return simplifiedInfo.absoluteFilePath();
 }
 
+void KNGlobal::legalFileName(QString &fileName)
+{
+    //Remove the unavailable characters in the prefer string.
+    fileName.replace(QRegExp("[\\\\/:*?\"<>]"), "_");
+}
+
 QString KNGlobal::libraryPath()
 {
     return m_libraryPath;

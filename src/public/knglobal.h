@@ -29,6 +29,7 @@ public:
     static QString libraryPath();
     static QString resourceDirPath();
     static QString simplifiedPath(const QString &path);
+    static void legalFileName(QString &fileName);
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);

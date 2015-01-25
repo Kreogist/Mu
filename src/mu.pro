@@ -64,7 +64,7 @@ macx{
         LIBS += -lbass
     }
     RC_FILE += resource/icon/mac/mu.icns
-    QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
+#    QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
     ICON += resource/icon/mac/mu.icns
 }
 
@@ -93,13 +93,10 @@ FFMpeg{
 }
 
 libPhonon{
-    contains(CONFIG, libbass){
+    contains(DEFINES, BACKEND_ENABLED){
         error("You can't enable more than one backend at the same time.")
     }
-    contains(CONFIG, libvlc){
-        error("You can't enable more than one backend at the same time.")
-    }
-    DEFINES += ENABLE_PHONON
+    DEFINES += ENABLE_PHONON BACKEND_ENABLED
     LIBS += -lphonon4qt5
     SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphonon.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.cpp
@@ -108,13 +105,10 @@ libPhonon{
 }
 
 libVLC{
-    contains(CONFIG, libbass){
+    contains(DEFINES, BACKEND_ENABLED){
         error("You can't enable more than one backend at the same time.")
     }
-    contains(CONFIG, libPhonon){
-        error("You can't enable more than one backend at the same time.")
-    }
-    DEFINES += ENABLE_LIBVLC
+    DEFINES += ENABLE_LIBVLC BACKEND_ENABLED
     SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlc.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicvlcglobal.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlcthread.cpp
@@ -124,13 +118,10 @@ libVLC{
 }
 
 libbass{
-    contains(CONFIG, libvlc){
+    contains(DEFINES, BACKEND_ENABLED){
         error("You can't enable more than one backend at the same time.")
     }
-    contains(CONFIG, libPhonon){
-        error("You can't enable more than one backend at the same time.")
-    }
-    DEFINES += ENABLE_LIBBASS
+    DEFINES += ENABLE_LIBBASS BACKEND_ENABLED
     SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \

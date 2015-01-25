@@ -17,6 +17,7 @@
 #include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
 #include "knlocalemanager.h"
+#include "knmusicnowplayingbase.h"
 
 #include "knmusicglobal.h"
 
@@ -166,17 +167,34 @@ bool KNMusicGlobal::renameMusicFile(const QString &originalPath,
             return false;
         }
     }
+    bool restoreNowPlaying=false;
+    //Check is the file playing.
+    if(m_nowPlaying->currentAnalaysisItem().detailInfo.filePath
+            ==originalFile.absoluteFilePath())
+    {
+        //Backup the current playing.
+        m_nowPlaying->backupCurrentPlaying();
+        //Set the flag.
+        restoreNowPlaying=true;
+    }
+
     //Rename the music file.
-    if(KNGlobal::renameFile(originalFile.absoluteFilePath(),
-                            destinationFile.absoluteFilePath()))
+    bool renameResult=KNGlobal::renameFile(originalFile.absoluteFilePath(),
+                                           destinationFile.absoluteFilePath());
+    if(renameResult)
     {
         //Emit the file name changed signal.
         emit musicFilePathChanged(originalFile.absoluteFilePath(),
                                   destinationFile.absoluteFilePath(),
                                   destinationFile.fileName());
-        return true;
     }
-    return false;
+
+    //Restore the now playing according to the flag.
+    if(restoreNowPlaying)
+    {
+        m_nowPlaying->restoreCurrentPlaying();
+    }
+    return renameResult;
 }
 
 void KNMusicGlobal::regMetaType()

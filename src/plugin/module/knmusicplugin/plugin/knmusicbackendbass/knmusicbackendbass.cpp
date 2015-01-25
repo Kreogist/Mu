@@ -18,6 +18,9 @@
 #include <QDir>
 #include <QEasingCurve>
 
+//Debug
+#include <QMessageBox>
+
 #include "knglobal.h"
 #include "knmusicbassglobal.h"
 #include "knmusicbackendbassthread.h"

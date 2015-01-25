@@ -274,8 +274,8 @@ inline QString KNMusicSoloMenu::generatePreferFileName(
         preferString += " - ";
     }
     preferString += nameText + "." + currentFile.suffix();
-    //Remove the unavailable characters in the prefer string.
-    preferString.replace(QRegExp("[\\\\/:*?\"<>]"), "_");
+    //Legal the file name.
+    KNGlobal::legalFileName(preferString);
     //Check is the prefer string is just the file name, if so, return a empty
     //string.
     return preferString==currentFile.fileName()?
