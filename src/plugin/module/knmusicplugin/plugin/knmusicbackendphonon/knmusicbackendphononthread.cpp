@@ -42,7 +42,7 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
     connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
             this, SLOT(onActionStateChanged(State,State)));
     connect(m_mediaObject, SIGNAL(finished()),
-            this, SIGNAL(finished()));
+            this, SLOT(onActionFinished()));
 
     //Start working thread.
 //    m_workingThread.start();
@@ -93,10 +93,10 @@ void KNMusicBackendPhononThread::resetState()
     //Set the state.
     m_state=KNMusic::StoppedState;
     //Clear the position data.
-    m_startPosition=0;
-    m_endPosition=0;
-    m_totalDuration=0;
-    m_duration=0;
+    m_startPosition=-1;
+    m_endPosition=-1;
+    m_totalDuration=-1;
+    m_duration=-1;
 }
 
 void KNMusicBackendPhononThread::stop()
@@ -143,6 +143,42 @@ void KNMusicBackendPhononThread::setPlaySection(const qint64 &sectionStart,
     m_duration=sectionDuration;
     //Calculate the end position.
     m_endPosition=sectionStart+m_duration;
+    //Check if file has been loaded.
+    if(m_totalDuration!=-1)
+    {
+        //Check the start position is available or not.
+        if(m_startPosition==-1)
+        {
+            //Set the play section to whole file.
+            m_startPosition=0;
+            m_endPosition=m_totalDuration;
+            m_duration=m_totalDuration;
+        }
+        else
+        {
+            //If we goes here means the file has been loaded,
+            //Check if the section play available right now.
+            if(m_endPosition>m_totalDuration)
+            {
+                //Change the end position to the total duration.
+                m_endPosition=m_totalDuration;
+            }
+            //Check if the start position is larger than end position
+            if(m_startPosition>m_totalDuration)
+            {
+                //Set the start position to the total duration.
+                m_startPosition=m_totalDuration;
+            }
+            //Calculate the new duration.
+            m_duration=m_endPosition-m_startPosition;
+            //Seek the file to the position.
+            m_mediaObject->seek(m_startPosition);
+        }
+        //Emit the duration changed signal.
+        emit durationChanged(m_duration);
+        //Force set the loaded flag.
+        m_loadFlag=true;
+    }
 }
 
 void KNMusicBackendPhononThread::playSection(const qint64 &sectionStart,
@@ -166,7 +202,7 @@ void KNMusicBackendPhononThread::setPosition(const qint64 &position)
 {
     if(!m_ticking)
     {
-        m_mediaObject->seek(position);
+        m_mediaObject->seek(m_startPosition+position);
     }
 }
 
@@ -182,7 +218,7 @@ void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
         threadNewState=KNMusic::PlayingState;
         //We need to do something here.
         //First set the tick interval, copied from ProgressSlider.
-        m_mediaObject->setTickInterval(350);
+        m_mediaObject->setTickInterval(100);
         break;
     case Phonon::PausedState:
         threadNewState=KNMusic::PausedState;
@@ -236,15 +272,15 @@ void KNMusicBackendPhononThread::onActionDurationChanged(
             {
                 //Change the end position to the total duration.
                 m_endPosition=m_totalDuration;
-                //Check if the start position is larger than end position
-                if(m_startPosition>m_totalDuration)
-                {
-                    //Set the start position to the total duration.
-                    m_startPosition=m_totalDuration;
-                }
-                //Calculate the new duration.
-                m_duration=m_endPosition-m_startPosition;
             }
+            //Check if the start position is larger than end position
+            if(m_startPosition>m_totalDuration)
+            {
+                //Set the start position to the total duration.
+                m_startPosition=m_totalDuration;
+            }
+            //Calculate the new duration.
+            m_duration=m_endPosition-m_startPosition;
         }
         //We need to move the playing position to the start position.
         //If there's a start position has been set.
@@ -252,7 +288,6 @@ void KNMusicBackendPhononThread::onActionDurationChanged(
         {
             m_mediaObject->seek(m_startPosition);
         }
-        qDebug()<<m_duration;
         //Emit the duration changed signal.
         emit durationChanged(m_duration);
         //Change the flag.
@@ -268,6 +303,19 @@ void KNMusicBackendPhononThread::onActionPositionChanged(const qint64 &time)
     m_ticking=true;
     //Emit position changed signal.
     emit positionChanged(time-m_startPosition);
+    //Check the time should be finished.
+    if(m_endPosition>0 && time>=m_endPosition)
+    {
+        //Stop playing.
+        stop();
+        //Do things finished.
+        onActionFinished();
+    }
     //Unlock ticking.
     m_ticking=false;
+}
+
+void KNMusicBackendPhononThread::onActionFinished()
+{
+    emit finished();
 }

@@ -62,6 +62,7 @@ private slots:
                               const State &oldstate);
     void onActionDurationChanged(const qint64 &newTotalTime);
     void onActionPositionChanged(const qint64 &time);
+    void onActionFinished();
 
 private:
     MediaSource m_mediaSource;
@@ -73,10 +74,10 @@ private:
     int m_state;
     bool m_ticking=false, m_loadFlag=false;
     qreal m_userSetVolume=1.0;
-    qint64 m_startPosition=0,
-           m_endPosition=0,
-           m_totalDuration=0,
-           m_duration=0;
+    qint64 m_startPosition=-1,
+           m_endPosition=-1,
+           m_totalDuration=-1,
+           m_duration=-1;
 };
 
 #endif // KNMUSICBACKENDPHONONTHREAD_H
