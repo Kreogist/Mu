@@ -115,14 +115,11 @@ void KNMusicBackendPhononThread::play()
 {
     //Play the media.
     m_mediaObject->play();
-    //Try to set the audio output to user set volume, set it again to ensure the
-    //volume has been set.
-    m_audioOutput->setVolume(m_userSetVolume);
 }
 
 int KNMusicBackendPhononThread::volume()
 {
-    return m_userSetVolume*10000;
+    return m_volumeProgress*10000;
 }
 
 qint64 KNMusicBackendPhononThread::duration()
@@ -193,16 +190,21 @@ void KNMusicBackendPhononThread::playSection(const qint64 &sectionStart,
 void KNMusicBackendPhononThread::setVolume(const int &volumeSize)
 {
     //Save the user set volume size.
-    m_userSetVolume=(qreal)volumeSize/10000.0;
+    m_volumeProgress=(qreal)volumeSize/10000.0;
+    m_volumeSize=m_volumeCurve.valueForProgress(m_volumeProgress);
     //Try to set the audio output to user set volume.
-    m_audioOutput->setVolume(m_userSetVolume);
+    m_audioOutput->setVolume(m_volumeSize);
 }
 
 void KNMusicBackendPhononThread::setPosition(const qint64 &position)
 {
+    //Check if we are ticking.
     if(!m_ticking)
     {
+        //Try to seek the media.
         m_mediaObject->seek(m_startPosition+position);
+        //Send position changed signal.
+        emit positionChanged(position);
     }
 }
 
@@ -217,7 +219,10 @@ void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
     case Phonon::PlayingState:
         threadNewState=KNMusic::PlayingState;
         //We need to do something here.
-        //First set the tick interval, copied from ProgressSlider.
+        //First try to set the audio output to user set volume, set it again to
+        //ensure the volume has been set.
+        m_audioOutput->setVolume(m_volumeSize);
+        //Then set the tick interval, copied from ProgressSlider.
         m_mediaObject->setTickInterval(100);
         break;
     case Phonon::PausedState:
@@ -298,6 +303,12 @@ void KNMusicBackendPhononThread::onActionDurationChanged(
 
 void KNMusicBackendPhononThread::onActionPositionChanged(const qint64 &time)
 {
+    //Check if the time is 0, ignore this signal changed.
+    //Because there's no reason for a file can be back to 0 if it's being played.
+    if(time==0)
+    {
+        return;
+    }
     //I don't know why should write this.
     //Thread lock?
     m_ticking=true;
