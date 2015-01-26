@@ -200,9 +200,13 @@ void KNMusicBackendPhononThread::setVolume(const int &volumeSize)
 
 void KNMusicBackendPhononThread::setPosition(const qint64 &position)
 {
+    //Check if we are ticking.
     if(!m_ticking)
     {
+        //Try to seek the media.
         m_mediaObject->seek(m_startPosition+position);
+        //Send position changed signal.
+        emit positionChanged(position);
     }
 }
 
@@ -298,6 +302,12 @@ void KNMusicBackendPhononThread::onActionDurationChanged(
 
 void KNMusicBackendPhononThread::onActionPositionChanged(const qint64 &time)
 {
+    //Check if the time is 0, ignore this signal changed.
+    //Because there's no reason for a file can be back to 0 if it's being played.
+    if(time==0)
+    {
+        return;
+    }
     //I don't know why should write this.
     //Thread lock?
     m_ticking=true;
