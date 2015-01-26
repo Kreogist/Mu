@@ -119,7 +119,7 @@ void KNMusicBackendPhononThread::play()
 
 int KNMusicBackendPhononThread::volume()
 {
-    return m_userSetVolume*10000;
+    return m_volumeProgress*10000;
 }
 
 qint64 KNMusicBackendPhononThread::duration()
@@ -190,9 +190,10 @@ void KNMusicBackendPhononThread::playSection(const qint64 &sectionStart,
 void KNMusicBackendPhononThread::setVolume(const int &volumeSize)
 {
     //Save the user set volume size.
-    m_userSetVolume=(qreal)volumeSize/10000.0;
+    m_volumeProgress=(qreal)volumeSize/10000.0;
+    m_volumeSize=m_volumeCurve.valueForProgress(m_volumeProgress);
     //Try to set the audio output to user set volume.
-    m_audioOutput->setVolume(m_userSetVolume);
+    m_audioOutput->setVolume(m_volumeSize);
 }
 
 void KNMusicBackendPhononThread::setPosition(const qint64 &position)
@@ -220,7 +221,7 @@ void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
         //We need to do something here.
         //First try to set the audio output to user set volume, set it again to
         //ensure the volume has been set.
-        m_audioOutput->setVolume(m_userSetVolume);
+        m_audioOutput->setVolume(m_volumeSize);
         //Then set the tick interval, copied from ProgressSlider.
         m_mediaObject->setTickInterval(100);
         break;

@@ -22,6 +22,8 @@
 #include <phonon4qt5/phonon/AudioOutput>
 #include <phonon4qt5/phonon/MediaSource>
 
+#include <QEasingCurve>
+
 #include <QThread>
 
 #include "knmusicglobal.h"
@@ -73,7 +75,9 @@ private:
 
     int m_state;
     bool m_ticking=false, m_loadFlag=false;
-    qreal m_userSetVolume=1.0;
+    qreal m_volumeProgress=1.0,
+          m_volumeSize=1.0;
+    QEasingCurve m_volumeCurve=QEasingCurve(QEasingCurve::OutCubic);
     qint64 m_startPosition=-1,
            m_endPosition=-1,
            m_totalDuration=-1,
