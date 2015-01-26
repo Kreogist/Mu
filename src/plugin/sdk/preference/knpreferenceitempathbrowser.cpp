@@ -138,7 +138,9 @@ void KNPreferenceItemPathBrowser::onActionBrowseFolder()
 {
     startLeaveAnime();
     //Initial the file dialog.
-    QFileDialog selectFolder(this, tr("Browse"));
+    QFileDialog selectFolder(this,
+                             tr("Browse"),
+                             value().toString());
     //Set property.
     selectFolder.setFileMode(QFileDialog::Directory);
     selectFolder.setOption(QFileDialog::ShowDirsOnly);
@@ -158,7 +160,9 @@ void KNPreferenceItemPathBrowser::onActionMoveFolder()
 {
     startLeaveAnime();
     //Initial the file dialog.
-    QFileDialog moveToDir(this, tr("Move to"));
+    QFileDialog moveToDir(this,
+                          tr("Move to"),
+                          value().toString());
     //Set property.
     moveToDir.setFileMode(QFileDialog::Directory);
     moveToDir.setOption(QFileDialog::ShowDirsOnly);

@@ -75,7 +75,7 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../public/knglobal.cpp" line="331"/>
+        <location filename="../public/knglobal.cpp" line="380"/>
         <source>Byte</source>
         <translation type="unfinished"></translation>
     </message>
@@ -165,7 +165,7 @@
 <context>
     <name>KNMusicDetailTooltip</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="179"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp" line="181"/>
         <source>In file: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,143 +173,143 @@
 <context>
     <name>KNMusicGlobal</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="105"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="106"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="106"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="107"/>
         <source>Album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="107"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="108"/>
         <source>Album Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="108"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="109"/>
         <source>Album Rating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="109"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="110"/>
         <source>Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="110"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="111"/>
         <source>Beats Per Minuate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="111"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="112"/>
         <source>Bit Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="112"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="113"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="113"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="114"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="114"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="115"/>
         <source>Composer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="115"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="116"/>
         <source>Date Added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="116"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="117"/>
         <source>Date Modified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="117"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="118"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="118"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="119"/>
         <source>Disc Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="119"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="120"/>
         <source>Disc Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="120"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="121"/>
         <source>Genre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="121"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="122"/>
         <source>Kind</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="122"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="123"/>
         <source>Last Played</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="123"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="124"/>
         <source>Plays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="124"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="125"/>
         <source>Rating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="125"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="126"/>
         <source>Sample Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="126"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="127"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="127"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="128"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="128"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="129"/>
         <source>Track Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="129"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="130"/>
         <source>Track Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="130"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="131"/>
         <source>Year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="154"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="155"/>
         <source>Cannot find file:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="163"/>
+        <location filename="../plugin/module/knmusicplugin/sdk/knmusicglobal.cpp" line="164"/>
         <source>File %1 has been exist in folder:
 %2
 Overwrite?</source>
@@ -319,27 +319,27 @@ Overwrite?</source>
 <context>
     <name>KNMusicHeaderLyrics</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="307"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="325"/>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="314"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="332"/>
         <source>Lyrics Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="318"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="336"/>
         <source>Download Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="322"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="340"/>
         <source>Lyrics Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="326"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp" line="344"/>
         <source>Text Spacing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -510,6 +510,19 @@ To add songs to library, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicNowPlaying</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.cpp" line="272"/>
+        <source>Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.cpp" line="279"/>
+        <source>Play next when error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicPlaylistDisplay</name>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp" line="168"/>
@@ -633,7 +646,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="137"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="163"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -811,12 +824,18 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceItemPathBrowser</name>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="210"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="141"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="230"/>
         <source>Browse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="211"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="161"/>
+        <source>Move to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/sdk/preference/knpreferenceitempathbrowser.cpp" line="231"/>
         <source>Move To</source>
         <translation type="unfinished"></translation>
     </message>
