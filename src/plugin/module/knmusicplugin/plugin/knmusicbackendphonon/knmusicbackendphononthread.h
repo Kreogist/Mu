@@ -71,8 +71,12 @@ private:
     QThread m_workingThread;
 
     int m_state;
-    bool m_ticking=false;
+    bool m_ticking=false, m_loadFlag=false;
     qreal m_userSetVolume=1.0;
+    qint64 m_startPosition=0,
+           m_endPosition=0,
+           m_totalDuration=0,
+           m_duration=0;
 };
 
 #endif // KNMUSICBACKENDPHONONTHREAD_H
