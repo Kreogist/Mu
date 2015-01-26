@@ -115,9 +115,6 @@ void KNMusicBackendPhononThread::play()
 {
     //Play the media.
     m_mediaObject->play();
-    //Try to set the audio output to user set volume, set it again to ensure the
-    //volume has been set.
-    m_audioOutput->setVolume(m_userSetVolume);
 }
 
 int KNMusicBackendPhononThread::volume()
@@ -221,7 +218,10 @@ void KNMusicBackendPhononThread::onActionStateChanged(const State &newstate,
     case Phonon::PlayingState:
         threadNewState=KNMusic::PlayingState;
         //We need to do something here.
-        //First set the tick interval, copied from ProgressSlider.
+        //First try to set the audio output to user set volume, set it again to
+        //ensure the volume has been set.
+        m_audioOutput->setVolume(m_userSetVolume);
+        //Then set the tick interval, copied from ProgressSlider.
         m_mediaObject->setTickInterval(100);
         break;
     case Phonon::PausedState:
