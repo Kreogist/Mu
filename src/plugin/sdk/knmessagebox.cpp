@@ -29,12 +29,18 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     QDialog(parent)
 {
     //Set properties.
+    setAutoFillBackground(true);
     setWindowOpacity(0.9);
     //Reset window flags, SAO style show be no border, ToolTip is the best
     //choice. Why not Qt::FramelessWindowHint? Ask Gnome Shell, I don't know.
     setWindowFlags(Qt::ToolTip);
     //Set the focus policy after set the tooltip window flags.
     setFocusPolicy(Qt::StrongFocus);
+
+    //Set palette.
+    QPalette pal=palette();
+    pal.setColor(QPalette::Window, QColor(240,240,240));
+    setPalette(pal);
 
     //Initial the configure.
     m_boxConfigureInstance=KNMessageBoxConfigure::instance();
