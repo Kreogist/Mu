@@ -1,4 +1,23 @@
+/*
+ * Copyright (C) Kreogist Dev Team
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#ifndef Q_OS_MACX
 #include <QPropertyAnimation>
+#endif
 #include <QApplication>
 #include <QBitmap>
 #include <QDesktopWidget>
@@ -16,6 +35,7 @@ KNSAOSubMenu::KNSAOSubMenu(QWidget *parent) :
 {
     //Initial the object name.
     setObjectName("SAOSubMenu");
+    setWindowOpacity(0.9);
     //Initial the style.
     setStyle(KNSAOStyle::instance());
 
@@ -50,9 +70,11 @@ KNSAOSubMenu::KNSAOSubMenu(QWidget *parent) :
     m_indicator->setFixedSize(indicatorPixmap.size());
     m_indicator->hide();
 
+#ifndef Q_OS_MACX
     //Initial the animation.
     m_start=new QPropertyAnimation(this, "geometry", this);
     m_start->setEasingCurve(QEasingCurve::OutCubic);
+#endif
 }
 
 KNSAOSubMenu::~KNSAOSubMenu()
@@ -62,8 +84,10 @@ KNSAOSubMenu::~KNSAOSubMenu()
 
 void KNSAOSubMenu::showEvent(QShowEvent *event)
 {
+#ifndef Q_OS_MACX
     //Stop the animation.
     m_start->stop();
+#endif
     //Move and show the indicator.
     int menuX=QCursor::pos().x()+m_indicator->width(),
         centerPosition=QCursor::pos().y();
@@ -107,6 +131,12 @@ void KNSAOSubMenu::showEvent(QShowEvent *event)
     {
         preferTopPosition=QApplication::desktop()->height()-height();
     }
+#ifdef Q_OS_MACX
+    setGeometry(QRect(menuX,
+                      preferTopPosition,
+                      width(),
+                      height()));
+#else
     //Set the position.
     m_start->setStartValue(QRect(menuX,
                                  preferTopPosition+height()/2,
@@ -118,6 +148,7 @@ void KNSAOSubMenu::showEvent(QShowEvent *event)
                                height()));
     //Start the animation.
     m_start->start();
+#endif
     //Do show event.
     QMenu::showEvent(event);
 }

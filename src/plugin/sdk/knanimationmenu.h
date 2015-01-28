@@ -9,8 +9,10 @@
 
 #include <QMenu>
 
+#ifndef Q_OS_MACX
 class QShowEvent;
 class QPropertyAnimation;
+#endif
 class KNAnimationMenu : public QMenu
 {
     Q_OBJECT
@@ -25,10 +27,13 @@ public slots:
 
 protected:
     void showEvent(QShowEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 private:
+#ifndef Q_OS_MACX
     QPropertyAnimation *m_showAnimation;
     QPoint m_mouseDownPos=QPoint(0,0);
+#endif
 };
 
 #endif // KNANIMATIONMENU_H
