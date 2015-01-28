@@ -32,9 +32,6 @@ public slots:
     void retranslate();
     void setMouseDownLogicalIndex(const int &index);
 
-protected:
-    void paintEvent(QPaintEvent *event);
-
 private slots:
     void onActionVisibleChange(const int &index);
     void onActionResizeCurrent();

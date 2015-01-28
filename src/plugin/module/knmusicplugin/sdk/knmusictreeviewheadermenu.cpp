@@ -6,7 +6,6 @@
  */
 #include <QAction>
 #include <QFrame>
-#include <QPainter>
 #include <QSignalMapper>
 
 #include "knlocalemanager.h"
@@ -22,10 +21,7 @@ KNMusicTreeViewHeaderMenu::KNMusicTreeViewHeaderMenu(QWidget *parent) :
     setAutoFillBackground(true);
 
     //Set seperator style sheet, I can't solve this bug in coding way.
-    setStyleSheet("QMenu::separator {height:1px;"
-                  "background: rgba(255, 255, 255, 100);"
-                  "margin-left: 5px;"
-                  "margin-right: 5px;}");
+    setSeparatorColor(QColor(255, 255, 255, 100));
 
     //Initial signal mapper.
     m_visibleMapper=new QSignalMapper(this);
@@ -75,16 +71,6 @@ void KNMusicTreeViewHeaderMenu::setMouseDownLogicalIndex(const int &index)
 {
     m_tweakWidth->setVisible(index!=-1 && index<MusicDataCount);
     m_mouseDownLogicalIndex=index;
-}
-
-void KNMusicTreeViewHeaderMenu::paintEvent(QPaintEvent *event)
-{
-    //Draw menu content.
-    KNAnimationMenu::paintEvent(event);
-    //Initial painter.
-    QPainter painter(this);
-    //Draw rects.
-    painter.drawRect(QRect(0,0,width()-1,height()-1));
 }
 
 void KNMusicTreeViewHeaderMenu::onActionVisibleChange(const int &index)
