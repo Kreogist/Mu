@@ -78,6 +78,12 @@ void KNLocaleManager::setLanguage(const int &index)
 
 void KNLocaleManager::setLanguageFromID(const QString &id)
 {
+    qDebug()<<id;
+    //Check if the id is empty, ignore the unavailable id.
+    if(id.isEmpty())
+    {
+        return;
+    }
     //Find the language one by one.
     for(int i=0; i<m_languageList.size(); i++)
     {
@@ -87,6 +93,9 @@ void KNLocaleManager::setLanguageFromID(const QString &id)
             return;
         }
     }
+    //When we came here, it means that we can't find the id, set the language to
+    //0.
+    setLanguage(0);
 }
 
 void KNLocaleManager::loadLanguageFiles()
@@ -171,6 +180,20 @@ KNLocaleManager::KNLocaleManager(QObject *parent) :
     m_translator=new QTranslator(this);
     //Initial no iamge icon.
     m_noImageIcon=QPixmap(":/plugin/configure/locale/noIcon.png");
+}
+
+QString KNLocaleManager::systemLocaleLanguageID()
+{
+    //Generate the default locale, get the system data.
+    QLocale locale;
+    //Magic!
+    switch(locale.language())
+    {
+    case QLocale::Chinese:
+        return "Simplified_Chinese";
+    default:
+        return "English";
+    }
 }
 QString KNLocaleManager::languageDirPath() const
 {

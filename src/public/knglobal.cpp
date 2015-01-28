@@ -501,9 +501,8 @@ KNGlobal::KNGlobal(QObject *parent) :
 
     //Load the default settings.
     m_fontManager->initialDefaultFont();
-    //Now we can load the first English language as default language.
-    //The ID of English is 0.
-    m_localeManager->setLanguage(0);
+    //Load the default language according to the system locale settings.
+    m_localeManager->setLanguageFromID(m_localeManager->systemLocaleLanguageID());
     //Set the language by the id from the configure.
     m_localeManager->setLanguageFromID(systemData("Language").toString());
 

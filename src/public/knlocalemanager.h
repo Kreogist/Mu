@@ -28,6 +28,8 @@ public:
     QString languageDirPath() const;
     void setLanguageDirPath(const QString &languageDirPath);
 
+    QString systemLocaleLanguageID();
+
 signals:
     void requireRetranslate();
 
