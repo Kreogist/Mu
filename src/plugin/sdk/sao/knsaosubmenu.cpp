@@ -35,7 +35,9 @@ KNSAOSubMenu::KNSAOSubMenu(QWidget *parent) :
 {
     //Initial the object name.
     setObjectName("SAOSubMenu");
+#ifdef Q_OS_MACX
     setWindowOpacity(0.9);
+#endif
     //Initial the style.
     setStyle(KNSAOStyle::instance());
 

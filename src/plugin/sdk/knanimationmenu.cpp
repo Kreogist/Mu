@@ -15,8 +15,9 @@ KNAnimationMenu::KNAnimationMenu(QWidget *parent) :
     QMenu(parent)
 {
     //Set properties.
+#ifdef Q_OS_MACX
     setWindowOpacity(0.85);
-#ifndef Q_OS_MACX
+#else
     //Initial the show up animation.
     m_showAnimation=new QPropertyAnimation(this, "geometry", this);
     m_showAnimation->setEasingCurve(QEasingCurve::OutCubic);
@@ -60,8 +61,7 @@ void KNAnimationMenu::setMouseDownPos(const QPoint &mouseDownPos)
 {
 #ifdef Q_OS_MACX
     Q_UNUSED(mouseDownPos)
-#endif
-#ifndef Q_OS_MACX
+#else
     m_mouseDownPos=mouseDownPos;
 #endif
 }
