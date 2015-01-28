@@ -19,10 +19,10 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 * Support automatically download lyrics from TTPlayer, TTPod, XiaMi, QQMusic and Baidu.
 
 ## Dependencies
-* Qt 5.4
+* Qt (>=5.3)
 * bass (Windows / Mac OS X)
 * phonon4qt5 (Linux)
-* FFMpeg / LibAV(Not tested)
+* FFMpeg(>=2.5) / Libav
 
 ## License
 

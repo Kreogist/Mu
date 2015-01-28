@@ -14,70 +14,58 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-#Add modules
+# Add modules
 QT += core \
       gui \
       widgets \
       xml \
       network
 
-#Enable c++11
+# Enable c++11
 CONFIG += c++11
 
-#Enable processor instruction sets when using release mode.
+# Enable processor instruction sets when using release mode.
 release{
     CONFIG += mmx sse sse2 sse3
     QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions
 }
 
-#Windows configure
+# Windows configure
 win32{
     DESTDIR =../mu
     CONFIG += libbass FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
-    libbass{
-        LIBS += -lbass
-    }
     RC_FILE += resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
-    #Windows special extras.
+    # Windows special extras.
 #    QT += winextras
 #    SOURCES += plugin/module/knwindowsextras/knwindowsextras.cpp
 #    HEADERS += plugin/module/knwindowsextras/knwindowsextras.h
 }
 
-#UNIX common configure
+# UNIX common configure
 unix{
     LIBS += -ldl
 }
 
-#Mac OS X configure
+# Mac OS X configure
 macx{
-    #Brew configure. Use brew to install all your libs.
+    # Brew configure. Use brew to install all your libs.
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
     LIBS += -framework CoreFoundation
 
     CONFIG += libbass FFMpeg
     QMAKE_LFLAGS += -framework CoreFoundation
-    libbass{
-        LIBS += -lbass
-    }
     RC_FILE += resource/icon/mac/mu.icns
 #    QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
     ICON += resource/icon/mac/mu.icns
 }
 
-#Linux configure
+# Linux configure
 linux{
     CONFIG += libPhonon FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
-    libbass{
-        LIBS += -lbass
-    }
-    FFMpeg{
-        LIBS += -lavformat -lavcodec -lavutil
-    }
 }
 
 FFMpeg{
@@ -121,6 +109,7 @@ libbass{
     contains(DEFINES, BACKEND_ENABLED){
         error("You can't enable more than one backend at the same time.")
     }
+    LIBS += -lbass
     DEFINES += ENABLE_LIBBASS BACKEND_ENABLED
     SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassglobal.cpp \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
@@ -132,13 +121,13 @@ libbass{
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
 }
 
-#Add translations
+# Add translations
 TRANSLATIONS += locale/Simplified_Chinese.ts \
                 locale/Traditional_Chinese.ts
 
-#Add public path
+# Add public path
 INCLUDEPATH += public
-#Add plugin and sdk path
+# Add plugin and sdk path
 INCLUDEPATH += plugin \
                plugin/sdk \
                plugin/module/knmusicplugin/sdk
