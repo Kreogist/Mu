@@ -78,7 +78,6 @@ void KNLocaleManager::setLanguage(const int &index)
 
 void KNLocaleManager::setLanguageFromID(const QString &id)
 {
-    qDebug()<<id;
     //Check if the id is empty, ignore the unavailable id.
     if(id.isEmpty())
     {
