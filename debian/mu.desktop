@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=μ
+GenericName=Music Manager
+Exec=mu
+Icon=mu
+Categories=Audio;Player;
