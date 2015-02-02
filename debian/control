@@ -1,0 +1,22 @@
+Source: mu
+Section: sound
+Priority: optional
+Maintainer: 宋文武 <iyzsong@gmail.com>
+Build-Depends: debhelper (>= 9),
+               qt5-default, libphonon4qt5-dev,
+               libavformat-dev,
+               libavcodec-dev,
+               libavutil-dev,
+               libavresample-dev
+Standards-Version: 3.9.5
+Homepage: http://kreogist.github.io/Mu/
+
+Package: mu
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: phonon4qt5-backend-gstreamer
+Suggests:   gstreamer1.0-plugins-bad,
+            gstreamer1.0-plugins-ugly,
+            gstreamer1.0-plugins-libav
+Description: Fantastic music manager
+ μ is a cross-platform application for media file managing.
