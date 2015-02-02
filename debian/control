@@ -6,8 +6,7 @@ Build-Depends: debhelper (>= 9),
                qt5-default, libphonon4qt5-dev,
                libavformat-dev,
                libavcodec-dev,
-               libavutil-dev,
-               libavresample-dev
+               libavutil-dev
 Standards-Version: 3.9.5
 Homepage: http://kreogist.github.io/Mu/
 

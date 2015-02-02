@@ -6,6 +6,7 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 
 * Overview
 * Dependencies
+* Special Thanks
 * License
 
 ## Overview
@@ -23,6 +24,10 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 * bass (Windows / Mac OS X)
 * phonon4qt5 (Linux)
 * FFMpeg(>=2.5) / Libav
+
+## Special Thanks
+* [WangBin](https://github.com/wang-bin)
+* [Sou Bunnbu](https://github.com/iyzsong)
 
 ## License
 
