@@ -18,15 +18,13 @@
 #include "knglobal.h"
 #include "preference/knpreferenceitempathbrowser.h"
 
-#include "knlocalemanager.h"
-
 #include "knpreferencegeneralpanel.h"
 
 KNPreferenceGeneralPanel::KNPreferenceGeneralPanel(QWidget *parent) :
     KNPreferenceWidgetsPanel(parent)
 {
     //Link the retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNPreferenceGeneralPanel::retranslate);
     //Do restranslate.
     retranslate();

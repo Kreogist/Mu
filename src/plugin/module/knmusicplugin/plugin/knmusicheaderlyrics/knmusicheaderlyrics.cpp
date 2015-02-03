@@ -23,8 +23,6 @@
 #include "knmusicheaderplayerbase.h"
 #include "knmusiclyricsmanager.h"
 
-#include "knlocalemanager.h"
-
 #include "knmusicheaderlyrics.h"
 
 #include <QDebug>
@@ -61,7 +59,7 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     //Load preference and retranslate.
     applyPreference();
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicHeaderLyrics::retranslate);
     retranslate();
 }

@@ -493,6 +493,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     m_fontManager=KNFontManager::instance();
     //Initial the locale.
     m_localeManager=KNLocaleManager::instance();
+    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+            this, &KNGlobal::requireRetranslate);
 
     //Initial the infrastructure.
     initialInfrastrcture();
@@ -507,7 +509,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     m_localeManager->setLanguageFromID(systemData("Language").toString());
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(this, &KNGlobal::requireRetranslate,
             this, &KNGlobal::retranslate);
     //Retranslate every thing.
     retranslate();

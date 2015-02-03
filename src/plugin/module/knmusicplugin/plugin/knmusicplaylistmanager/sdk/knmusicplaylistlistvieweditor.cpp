@@ -20,10 +20,11 @@
 
 #include "knanimationmenu.h"
 #include "knopacityanimebutton.h"
+
+#include "knglobal.h"
+
 #include "knmusicplaylistloader.h"
 #include "knmusicplaylistlistview.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusicplaylistlistvieweditor.h"
 
@@ -69,8 +70,10 @@ KNMusicPlaylistListViewEditor::KNMusicPlaylistListViewEditor(QWidget *parent) :
     mainLayout->addWidget(m_configure, 0, Qt::AlignCenter);
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicPlaylistListViewEditor::retranslate);
+    //Don't retranslate now!
+    //Do it in setPlaylistLoader, in retranslate it will call the loader.
 }
 
 void KNMusicPlaylistListViewEditor::retranslate()

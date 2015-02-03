@@ -18,11 +18,11 @@
 #include <QThread>
 
 #include "knhashpixmaplist.h"
+#include "knglobal.h"
+
 #include "knmusiclibraryanalysisextend.h"
 #include "knmusiclibrarydatabase.h"
 #include "knmusiclibraryimagemanager.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusiclibrarymodel.h"
 
@@ -47,7 +47,7 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     setAnalysisExtend(m_analysisExtend);
 
     //Connect language changed request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicLibraryModel::retranslate);
 }
 

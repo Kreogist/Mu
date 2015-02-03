@@ -20,13 +20,12 @@
 #include <QBrush>
 #include <QLabel>
 
+#include "knglobal.h"
 #include "knanimeroundswitcher.h"
 #include "knsideshadowwidget.h"
 #include "knlinearsensewidget.h"
 #include "knpreferencetitle.h"
 #include "knpreferencecategorylist.h"
-
-#include "knlocalemanager.h"
 
 #include "knpreferencecategory.h"
 
@@ -69,7 +68,7 @@ KNPreferenceCategory::KNPreferenceCategory(QWidget *parent) :
     m_rightShadow=new KNSideShadowWidget(RightShadow, this);
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNPreferenceCategory::retranslate);
     //Do translation.
     retranslate();

@@ -53,7 +53,7 @@ public:
                         const QVariant &defaultValue);
 
 signals:
-    void languageChanged();
+    void requireRetranslate();
     void libraryMoved(QString originalPath, QString currentPath);
 
 public slots:

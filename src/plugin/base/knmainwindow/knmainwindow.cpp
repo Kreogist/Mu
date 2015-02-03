@@ -21,8 +21,6 @@
 #include "knmainwindowcontainer.h"
 #include "knmainwindowheaderplugin.h"
 
-#include "knlocalemanager.h"
-
 #include "knmainwindow.h"
 
 #include <QDebug>
@@ -33,7 +31,7 @@ KNMainWindow::KNMainWindow(QObject *parent) :
     //Initial the container.
     m_container=new KNMainWindowContainer;
     //Connect translate request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMainWindow::retranslate);
 }
 

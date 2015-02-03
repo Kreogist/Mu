@@ -8,7 +8,7 @@
 #include <QFrame>
 #include <QSignalMapper>
 
-#include "knlocalemanager.h"
+#include "knglobal.h"
 
 #include "knmusictreeviewheadermenu.h"
 
@@ -43,7 +43,7 @@ KNMusicTreeViewHeaderMenu::KNMusicTreeViewHeaderMenu(QWidget *parent) :
     setPalette(pal);
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicTreeViewHeaderMenu::retranslate);
     //Do retranslate.
     retranslate();

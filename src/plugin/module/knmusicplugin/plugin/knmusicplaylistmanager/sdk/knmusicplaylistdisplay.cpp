@@ -18,6 +18,8 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+#include "knglobal.h"
+
 #include "knmousesensewidget.h"
 #include "knconnectionhandler.h"
 #include "knsideshadowwidget.h"
@@ -25,8 +27,6 @@
 #include "knmusicplaylistmodel.h"
 #include "knmusicplaylistlistitem.h"
 #include "knmusicplaylisttreeview.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusicplaylistdisplay.h"
 
@@ -91,7 +91,7 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
             this, SLOT(updatePlaylistTitle()));
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicPlaylistDisplay::retranslate);
     //Do retranslate.
     retranslate();

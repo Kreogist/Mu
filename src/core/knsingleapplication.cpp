@@ -31,7 +31,7 @@ KNSingleApplication::KNSingleApplication(int &argc,
         //Create a shared memory.
         if(!m_uniqueKeyMemory.create(1))
         {
-            //!FIXME: show up 'Unable to create single instance.'
+            qDebug("Unable to create single instance.");
             return;
         }
         //Create a local server for listening incomming messages from other instances.

@@ -27,12 +27,12 @@
 
 #include "knsideshadowwidget.h"
 #include "knconnectionhandler.h"
+#include "knglobal.h"
+
 #include "knmusicalbumtitle.h"
 #include "knmusicalbummodel.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusicalbumtreeview.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusicalbumdetail.h"
 
@@ -73,7 +73,7 @@ void KNMusicAlbumDetail::setAlbumModel(KNMusicCategoryModel *model)
     //Why here?
     //Because Qt's signals and slots is linked in order, connect here is to
     //ensure that album model has been translated before.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicAlbumDetail::updateAlbumCaptions);
 }
 

@@ -17,12 +17,12 @@
  */
 #include <QApplication>
 
+#include "knglobal.h"
+
 #include "knmusicsingleplaylistmodel.h"
 #include "knmusicmodelassist.h"
 #include "knmusicproxymodel.h"
 #include "knmusictab.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusicnowplaying.h"
 
@@ -56,7 +56,7 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     //Load preference and retranslate.
     applyPreference();
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicNowPlaying::retranslate);
     retranslate();
 }

@@ -19,6 +19,8 @@
 #include <QBoxLayout>
 
 #include "kndropproxycontainer.h"
+#include "knglobal.h"
+
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicalbumview.h"
@@ -26,8 +28,6 @@
 #include "knmusiccategorymodel.h"
 #include "knmusiccategoryproxymodel.h"
 #include "knmusiclibrarymodel.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusiclibraryalbumtab.h"
 
@@ -64,7 +64,7 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QObject *parent) :
     initialShowInAction();
     initialFindAction();
     //Connect retranslate request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicLibraryAlbumTab::retranslate);
     //Retranslate.
     retranslate();

@@ -18,7 +18,7 @@
 #include <QTimeLine>
 #include <QMouseEvent>
 
-#include "knlocalemanager.h"
+#include "knglobal.h"
 #include "kncategorysettingbutton.h"
 
 #include "kncategoryswitcherwidget.h"
@@ -49,7 +49,7 @@ KNCategorySwitcherWidget::KNCategorySwitcherWidget(QWidget *parent) :
             this, &KNCategorySwitcherWidget::onActionHideComplete);
 
     //Link the retranslate request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNCategorySwitcherWidget::retranslate);
     //Retranslate.
     retranslate();

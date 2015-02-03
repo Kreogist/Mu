@@ -7,10 +7,9 @@
 #include <QLabel>
 #include <QPushButton>
 
-#include "../knfontdialog.h"
-#include "../knmousedetectlabel.h"
-
-#include "knlocalemanager.h"
+#include "knglobal.h"
+#include "knfontdialog.h"
+#include "knmousedetectlabel.h"
 
 #include "knpreferenceitemfont.h"
 
@@ -59,7 +58,7 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     insertWidget(m_previewIcon);
 
     //Linked the translation.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNPreferenceItemFont::retranslate);
     //Do retranslate.
     retranslate();

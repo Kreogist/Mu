@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knsearchbox.h"
-#include "knlocalemanager.h"
+#include "knglobal.h"
 
 #include "knmusicsearch.h"
 
@@ -31,7 +31,7 @@ KNMusicSearch::KNMusicSearch(QObject *parent) :
             this, &KNMusicSearch::requireSearch);
 
     //Connect retranslate request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicSearch::retranslate);
     //Retranslate.
     retranslate();

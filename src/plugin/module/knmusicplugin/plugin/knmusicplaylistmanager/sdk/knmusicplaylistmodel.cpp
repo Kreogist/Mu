@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knlocalemanager.h"
+#include "knglobal.h"
 
 #include "knmusicplaylistmodel.h"
 
@@ -25,7 +25,7 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
     //Connect language changed request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicPlaylistModel::retranslate);
     //Initial header.
     initialHeader();

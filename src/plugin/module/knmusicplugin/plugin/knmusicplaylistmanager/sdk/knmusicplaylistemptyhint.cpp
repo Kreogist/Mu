@@ -18,9 +18,8 @@
 #include <QLabel>
 #include <QBoxLayout>
 
+#include "knglobal.h"
 #include "knngnlbutton.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusicplaylistemptyhint.h"
 
@@ -98,7 +97,7 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     hintLayout->addStretch();
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicPlaylistEmptyHint::retranslate);
     //Retranslate.
     retranslate();

@@ -20,12 +20,12 @@
 #include <QGraphicsOpacityEffect>
 
 #include "knsideshadowwidget.h"
+#include "knglobal.h"
+
 #include "knmousesensewidget.h"
 #include "knmusicproxymodel.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiclibrarytreeview.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusiccategorydisplay.h"
 
@@ -104,7 +104,7 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent) :
     updateBackgroundIcon();
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicCategoryDisplay::retranslate);
     //Do retranslate.
     retranslate();

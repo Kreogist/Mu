@@ -14,8 +14,6 @@
 #include "knlabelbutton.h"
 #include "knglobal.h"
 
-#include "knlocalemanager.h"
-
 #include "knpreferenceitempathbrowser.h"
 
 #include <QDebug>
@@ -99,7 +97,7 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     insertWidget(m_browse);
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNPreferenceItemPathBrowser::retranslate);
     //Do translation.
     retranslate();

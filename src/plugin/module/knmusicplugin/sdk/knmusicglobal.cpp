@@ -16,7 +16,6 @@
 #include "knmessagebox.h"
 #include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
-#include "knlocalemanager.h"
 #include "knmusicnowplayingbase.h"
 
 #include "knmusicglobal.h"
@@ -598,7 +597,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
             this, &KNMusicGlobal::onActionLibraryMoved);
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicGlobal::retranslate);
     //Get the latest translation.
     retranslate();

@@ -39,7 +39,7 @@ win32{
     DESTDIR =../mu
     CONFIG += libbass FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
-    RC_FILE += resource/icon/windows/resource.rc
+    RC_FILE = resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
     # Windows special extras.
 #    QT += winextras

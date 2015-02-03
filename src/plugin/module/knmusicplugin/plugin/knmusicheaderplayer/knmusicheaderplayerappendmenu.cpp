@@ -17,7 +17,7 @@
  */
 #include <QSignalMapper>
 
-#include "knlocalemanager.h"
+#include "knglobal.h"
 
 #include "knmusicheaderplayerappendmenu.h"
 
@@ -33,7 +33,7 @@ KNMusicHeaderPlayerAppendMenu::KNMusicHeaderPlayerAppendMenu(QWidget *parent) :
     initialActions();
 
     //Link retranslated signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicHeaderPlayerAppendMenu::retranslate);
     //Retranslate the menu.
     retranslate();

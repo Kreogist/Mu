@@ -93,7 +93,6 @@
 #include "knplatformextras.h"
 #include "knconnectionhandler.h"
 #include "knmusiccategorytabwidget.h"
-#include "knlocalemanager.h"
 #include "knpreferencewidgetspanel.h"
 
 #include "knmusicplugin.h"
@@ -133,7 +132,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadPlaylistManager(new KNMusicPlaylistManager);
 
     //Connect retranslate request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicPlugin::retranslate);
 }
 

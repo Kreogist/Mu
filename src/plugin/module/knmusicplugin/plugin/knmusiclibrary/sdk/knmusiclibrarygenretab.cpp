@@ -20,6 +20,8 @@
 #include <QAction>
 
 #include "kndropproxycontainer.h"
+#include "knglobal.h"
+
 #include "knmusicsearchbase.h"
 #include "knmusicgenremodel.h"
 #include "knmusiccategorydisplay.h"
@@ -28,8 +30,6 @@
 #include "knmusiccategorylistviewbase.h"
 #include "knmusicglobal.h"
 #include "knmusicsolomenubase.h"
-
-#include "knlocalemanager.h"
 
 #include "knmusiclibrarygenretab.h"
 
@@ -78,7 +78,7 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QObject *parent) :
     initialFindAction();
 
     //Connect retranslate request.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicLibraryGenreTab::retranslate);
     //Retranslate.
     retranslate();

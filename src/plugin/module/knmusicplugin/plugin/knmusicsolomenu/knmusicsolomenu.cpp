@@ -25,8 +25,6 @@
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
 
-#include "knlocalemanager.h"
-
 #include "knmusicsolomenu.h"
 
 #include <QDebug>
@@ -51,7 +49,7 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
     createActions();
 
     //Connect retranslate signal.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicSoloMenu::retranslate);
     //Get the translation.
     retranslate();

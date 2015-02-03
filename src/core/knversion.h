@@ -9,7 +9,7 @@
 
 //Change the version here.
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 6
+#define MINOR_VERSION 7
 #define PATCH_VERSION 0
 
 //----DON'T TOUCH BELOW---

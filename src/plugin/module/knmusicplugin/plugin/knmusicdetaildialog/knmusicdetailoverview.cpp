@@ -19,14 +19,12 @@
 #include <QFormLayout>
 #include <QLabel>
 
-#include "knlocalemanager.h"
+#include "knglobal.h"
 #include "knfilepathlabel.h"
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
 
 #include "knmusicdetailoverview.h"
-
-#include <QDebug>
 
 KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
     QWidget(parent)
@@ -94,7 +92,7 @@ KNMusicDetailOverview::KNMusicDetailOverview(QWidget *parent) :
     pathLayout->addWidget(m_filePathDataField, 1, Qt::AlignTop);
 
     //Link require.
-    connect(KNLocaleManager::instance(), &KNLocaleManager::requireRetranslate,
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicDetailOverview::retranslate);
     //Retranslate.
     retranslate();
