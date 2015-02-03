@@ -141,7 +141,6 @@ SOURCES += \
     core/knsingleapplication.cpp \
     core/knpluginmanager.cpp \
     public/knglobal.cpp \
-    public/knconfigure.cpp \
     plugin/base/knmainwindow/knmainwindow.cpp \
     plugin/base/knmainwindow/knmainwindowcontainer.cpp \
     plugin/base/knmainwindowheader/knmainwindowheader.cpp \
@@ -309,14 +308,15 @@ SOURCES += \
     plugin/sdk/knmousedetectlabel.cpp \
     plugin/base/knpreference/knpreferencegeneralpanel.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
-    plugin/sdk/knlabelbutton.cpp
+    plugin/sdk/knlabelbutton.cpp \
+    public/knconfiguremanager.cpp \
+    plugin/sdk/knconfigure.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
     core/knpluginmanager.h \
     public/knglobal.h \
     plugin/sdk/knmainwindowplugin.h \
-    public/knconfigure.h \
     plugin/base/knmainwindow/knmainwindow.h \
     plugin/base/knmainwindow/knmainwindowcontainer.h \
     plugin/sdk/knmainwindowheaderplugin.h \
@@ -511,7 +511,9 @@ HEADERS += \
     plugin/base/knpreference/knpreferencegeneralpanel.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
     core/knversion.h \
-    plugin/sdk/knlabelbutton.h
+    plugin/sdk/knlabelbutton.h \
+    public/knconfiguremanager.h \
+    plugin/sdk/knconfigure.h
 
 RESOURCES += \
     resource/res.qrc

@@ -4,8 +4,8 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
-#ifndef KNCONFIGURE_H
-#define KNCONFIGURE_H
+#ifndef KNCONFIGUREMANAGER_H
+#define KNCONFIGUREMANAGER_H
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -23,11 +23,11 @@ enum Types
 
 using namespace KNConfigureTypes;
 
-class KNConfigure : public QObject
+class KNConfigureManager : public QObject
 {
     Q_OBJECT
 public:
-    static KNConfigure *instance();
+    static KNConfigureManager *instance();
     void loadConfigure();
     void saveConfigure();
     void setSystemData(const QString &key,
@@ -46,8 +46,8 @@ signals:
 public slots:
 
 private:
-    static KNConfigure *m_instance;
-    explicit KNConfigure(QObject *parent = 0);
+    static KNConfigureManager *m_instance;
+    explicit KNConfigureManager(QObject *parent = 0);
 
     inline QVariant parseJsonValue(const QJsonValue &value);
 
@@ -64,4 +64,4 @@ private:
     QHash<QString, int> m_objectType;
 };
 
-#endif // KNCONFIGURE_H
+#endif // KNCONFIGUREMANAGER_H

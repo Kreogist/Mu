@@ -14,7 +14,7 @@
 #include <QTextCodec>
 #include <QDir>
 
-#include "knconfigure.h"
+#include "knconfiguremanager.h"
 #include "knfontmanager.h"
 #include "knlocalemanager.h"
 
@@ -481,7 +481,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     initialDefaultPath();
 
     //Initial the configure manager.
-    m_configure=KNConfigure::instance();
+    m_configure=KNConfigureManager::instance();
     //Set the configure file path.
     //-- Why set configure path here?
     //A: Because we won't change the configure path.

@@ -13,7 +13,7 @@
 #include <QFont>
 #include <QObject>
 
-class KNConfigure;
+class KNConfigureManager;
 class KNFontManager;
 class KNLocaleManager;
 class KNGlobal : public QObject
@@ -93,7 +93,7 @@ private:
     };
     QString m_storageUnit[StorageUnitCount];
     explicit KNGlobal(QObject *parent = 0);
-    KNConfigure *m_configure;
+    KNConfigureManager *m_configure;
     KNFontManager *m_fontManager;
     KNLocaleManager *m_localeManager;
 };

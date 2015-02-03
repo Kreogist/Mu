@@ -10,18 +10,18 @@
 #include <QFile>
 #include <QJsonDocument>
 
-#include "knconfigure.h"
+#include "knconfiguremanager.h"
 
 #include <QDebug>
 
-KNConfigure *KNConfigure::m_instance=nullptr;
+KNConfigureManager *KNConfigureManager::m_instance=nullptr;
 
-KNConfigure *KNConfigure::instance()
+KNConfigureManager *KNConfigureManager::instance()
 {
-    return m_instance==nullptr?m_instance=new KNConfigure:m_instance;
+    return m_instance==nullptr?m_instance=new KNConfigureManager:m_instance;
 }
 
-void KNConfigure::loadConfigure()
+void KNConfigureManager::loadConfigure()
 {
     //Do folder check first.
     generateConfigureFolder();
@@ -33,7 +33,7 @@ void KNConfigure::loadConfigure()
     loadConfigureFromFile(m_userConfigurePath, m_customConfigure);
 }
 
-void KNConfigure::saveConfigure()
+void KNConfigureManager::saveConfigure()
 {
     //Do folder check first.
     generateConfigureFolder();
@@ -42,13 +42,13 @@ void KNConfigure::saveConfigure()
     saveConfigureToFile(m_userConfigurePath, m_customConfigure);
 }
 
-void KNConfigure::setSystemData(const QString &key,
+void KNConfigureManager::setSystemData(const QString &key,
                                 const QJsonValue &value)
 {
     m_systemConfigure[key]=value;
 }
 
-void KNConfigure::setCustomData(const QString &module,
+void KNConfigureManager::setCustomData(const QString &module,
                                 const QString &key,
                                 const QJsonValue &value)
 {
@@ -60,26 +60,26 @@ void KNConfigure::setCustomData(const QString &module,
     m_customConfigure[module]=currentModule;
 }
 
-QVariant KNConfigure::systemData(const QString &key)
+QVariant KNConfigureManager::systemData(const QString &key)
 {
     return parseJsonValue(m_systemConfigure[key]);
 }
 
-QVariant KNConfigure::customData(const QString &module, const QString &key)
+QVariant KNConfigureManager::customData(const QString &module, const QString &key)
 {
     QJsonValue currentModuleValue=m_customConfigure[module];
     return currentModuleValue.type()==QJsonValue::Object?
               parseJsonValue(currentModuleValue.toObject()[key]):QVariant();
 }
 
-KNConfigure::KNConfigure(QObject *parent) :
+KNConfigureManager::KNConfigureManager(QObject *parent) :
     QObject(parent)
 {
     //Initial the type hash.
     m_objectType.insert("Font", Font);
 }
 
-inline QVariant KNConfigure::parseJsonValue(const QJsonValue &value)
+inline QVariant KNConfigureManager::parseJsonValue(const QJsonValue &value)
 {
     if(value.type()==QJsonValue::Object)
     {
@@ -112,7 +112,7 @@ inline QVariant KNConfigure::parseJsonValue(const QJsonValue &value)
     return QVariant(value);
 }
 
-inline void KNConfigure::generateConfigureFolder()
+inline void KNConfigureManager::generateConfigureFolder()
 {
     //Check is the folder exist.
     QDir configureFolder(m_configurePath);
@@ -145,7 +145,7 @@ inline void KNConfigure::generateConfigureFolder()
     }
 }
 
-inline void KNConfigure::loadConfigureFromFile(const QString &filePath,
+inline void KNConfigureManager::loadConfigureFromFile(const QString &filePath,
                                                QJsonObject &configureObject)
 {
     QFile configureFile(filePath);
@@ -167,7 +167,7 @@ inline void KNConfigure::loadConfigureFromFile(const QString &filePath,
     }
 }
 
-inline void KNConfigure::saveConfigureToFile(const QString &filePath,
+inline void KNConfigureManager::saveConfigureToFile(const QString &filePath,
                                              const QJsonObject &configureObject)
 {
     //Open the file for writing.
@@ -184,12 +184,12 @@ inline void KNConfigure::saveConfigureToFile(const QString &filePath,
     }
 }
 
-QString KNConfigure::configurePath() const
+QString KNConfigureManager::configurePath() const
 {
     return m_configurePath;
 }
 
-void KNConfigure::setConfigurePath(const QString &configureFilePath)
+void KNConfigureManager::setConfigurePath(const QString &configureFilePath)
 {
     m_configurePath=configureFilePath;
 }

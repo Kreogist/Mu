@@ -22,7 +22,7 @@
 
 #include "knglobal.h"
 #include "knversion.h"
-#include "knconfigure.h"
+#include "knconfiguremanager.h"
 
 #include "knexpandmainwindow.h"
 
