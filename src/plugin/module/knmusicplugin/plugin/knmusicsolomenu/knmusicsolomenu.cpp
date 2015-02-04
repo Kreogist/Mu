@@ -17,8 +17,10 @@
  */
 #include <QDir>
 #include <QFileInfo>
+#include <QLineEdit>
 
 #include "knglobal.h"
+#include "knmessagebox.h"
 
 #include "knmusicsearchbase.h"
 #include "knmusicdetaildialogbase.h"
@@ -127,6 +129,7 @@ void KNMusicSoloMenu::retranslate()
 #ifdef Q_OS_LINUX
     m_actionTitles[ShowInGraphicShell]=tr("Show the contains folder");
 #endif
+    m_actionTitles[Rename]=tr("Rename");
     m_actionTitles[RenameToArtistHyphonName]=tr("Rename to %1");
     m_actionTitles[CopyFilePath]=tr("Copy location");
     m_actionTitles[CopyItemText]=tr("Copy '%1'");
@@ -182,9 +185,23 @@ void KNMusicSoloMenu::onActionShowDetail()
     KNMusicGlobal::detailDialog()->showDialog(m_filePath);
 }
 
-void KNMusicSoloMenu::onActionRenameCurrent()
+void KNMusicSoloMenu::onActionRenameArtistHyphonName()
 {
     emit requireRenameCurrent(m_preferFileName);
+}
+
+void KNMusicSoloMenu::onActionRename()
+{
+    QLineEdit *nameEdit=new QLineEdit;
+
+    nameEdit->setContentsMargins(15,10,15,10);
+    nameEdit->setText(m_preferFileName);
+    nameEdit->setSelection(0, m_preferFileName.lastIndexOf('.'));
+
+    if(KNMessageBox::customQuestion("Rename",nameEdit))
+    {
+        emit requireRenameCurrent(nameEdit->text());
+    }
 }
 
 void KNMusicSoloMenu::createActions()
@@ -225,9 +242,14 @@ void KNMusicSoloMenu::createActions()
 
     addSeparator();
 
-    //Rename current file.
+    //Rename current file
+    connect(m_actions[Rename], SIGNAL(triggered()),
+            this, SLOT(onActionRename()));
+    addAction(m_actions[Rename]);
+
+    //Rename current file to 'artist - name'.
     connect(m_actions[RenameToArtistHyphonName], SIGNAL(triggered()),
-            this, SLOT(onActionRenameCurrent()));
+            this, SLOT(onActionRenameArtistHyphonName()));
     addAction(m_actions[RenameToArtistHyphonName]);
 
     addSeparator();
