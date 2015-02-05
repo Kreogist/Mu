@@ -24,7 +24,6 @@
 
 #include <QDebug>
 
-QString KNGlobal::m_libraryPath="";
 QString KNGlobal::m_userDataPath="";
 QString KNGlobal::m_resourceDirPath="";
 QString KNGlobal::m_pluginDirPath="";
@@ -72,10 +71,11 @@ QString KNGlobal::simplifiedPath(const QString &path)
     return simplifiedInfo.absoluteFilePath();
 }
 
-void KNGlobal::legalFileName(QString &fileName)
+QString KNGlobal::legalFileName(QString fileName)
 {
     //Remove the unavailable characters in the prefer string.
     fileName.replace(QRegExp("[\\\\/:*?\"<>]"), "_");
+    return fileName;
 }
 
 QString KNGlobal::libraryPath()

@@ -450,7 +450,19 @@ void KNMusicGlobal::initialGenreText()
                    <<"Thrash Metal"
                    <<"Anime"
                    <<"JPop"
-                   <<"Synthpop";
+                  <<"Synthpop";
+}
+
+void KNMusicGlobal::initialPreference()
+{
+    //Initial the configure.
+    m_musicConfigure=new KNConfigure(this);
+    m_musicConfigure->setCaption("Music");
+    //Add the user configure.
+    m_global->userConfigure()->addSubConfigure(m_musicConfigure);
+    //Initial the preference panel.
+    m_preferencePanel=new KNPreferenceWidgetsPanel;
+    m_preferencePanel->setConfigure(m_musicConfigure);
 }
 
 KNMusicDetailDialogBase *KNMusicGlobal::detailDialog()
@@ -603,13 +615,9 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     initialHeaderText();
     initialGenreText();
     //Initial the configure.
-    m_musicConfigure=new KNConfigure(this);
-    m_musicConfigure->setCaption("Music");
-    m_global->userConfigure()->addSubConfigure(m_musicConfigure);
-    m_preferencePanel=new KNPreferenceWidgetsPanel;
-    m_preferencePanel->setConfigure(m_musicConfigure);
+    initialPreference();
     //Set the library path.
-    setMusicLibraryPath(KNGlobal::libraryPath()+"/Music");
+    setMusicLibraryPath(m_global->libraryPath()+"/Music");
     //Link the library changed request.
     connect(KNGlobal::instance(), &KNGlobal::libraryMoved,
             this, &KNMusicGlobal::onActionLibraryMoved);

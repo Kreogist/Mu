@@ -32,15 +32,15 @@ public:
     static QString applicationDirPath();
     static QString userDataPath();
     static QString pluginDirPath();
-    static QString libraryPath();
+    QString libraryPath();
     static QString resourceDirPath();
     static QString simplifiedPath(const QString &path);
-    static void legalFileName(QString &fileName);
+    static QString legalFileName(QString fileName);
     static QTextCodec *localeDefaultCodec();
     static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);
     static int similarity(const QString &str1, const QString &str2);
-    static void setLibraryPath(const QString &libraryPath);
+    void setLibraryPath(const QString &libraryPath);
     static void showInGraphicalShell(const QString &filePath);
     static void openLocalFile(const QString &filePath);
     static void setClipboardText(const QString &text);
@@ -71,7 +71,7 @@ private:
     static QString m_userDataPath;
     static QString m_resourceDirPath;
     static QString m_pluginDirPath;
-    static QString m_libraryPath;
+    QString m_libraryPath;
     enum StorageUnit
     {
         Byte,

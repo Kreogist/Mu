@@ -19,6 +19,8 @@
 #include <QFileInfo>
 #include <QTextStream>
 
+#include "knglobal.h"
+
 #include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
@@ -103,7 +105,8 @@ inline bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &det
             }
             break;
         case RelateNameInLyricsDir:
-            if(findRelateLyrics(KNMusicLyricsGlobal::lyricsFolderPath(), detailInfo))
+            if(findRelateLyrics(KNMusicLyricsGlobal::lyricsFolderPath(),
+                                detailInfo))
             {
                 return true;
             }
@@ -116,7 +119,8 @@ inline bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &det
             }
             break;
         case RelateNameInMusicDir:
-            if(findRelateLyrics(musicInfo.absolutePath(), detailInfo))
+            if(findRelateLyrics(musicInfo.absolutePath(),
+                                detailInfo))
             {
                 return true;
             }
@@ -169,22 +173,20 @@ inline bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
 }
 
 inline bool KNMusicLyricsManager::findRelateLyrics(const QString &folderPath,
-                                            const KNMusicDetailInfo &detailInfo)
+                                                   const KNMusicDetailInfo &detailInfo)
 {
     //Find the title, the artist and the title, the album and the title.
     return checkLyricsFile(folderPath+"/"+detailInfo.textLists[Name]+".lrc") ||
-            checkLyricsFile(folderPath+"/"+detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc") ||
-            checkLyricsFile(folderPath+"/"+detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc");
+            checkLyricsFile(folderPath+"/"+m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc")) ||
+            checkLyricsFile(folderPath+"/"+m_global->legalFileName(detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc"));
 }
 
 inline QString KNMusicLyricsManager::writeLyricsFile(const KNMusicDetailInfo &detailInfo,
                                                      const QString &content)
 {
-    //Get the complete base file name of the original file.
-    QFileInfo musicFileInfo(detailInfo.filePath);
     //Generate the lyrics file path
     QString lyricsFilePath=KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
-            musicFileInfo.completeBaseName() + ".lrc";
+            m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc");
     QFile lyricsFile(lyricsFilePath);
     //Try to open the file.
     if(lyricsFile.open(QIODevice::WriteOnly))
@@ -211,7 +213,8 @@ bool KNMusicLyricsManager::lyricsDetailLessThan(const KNMusicLyricsDetails &lyri
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent)
 {
-    //Initial music global instance.
+    //Initial global instances.
+    m_global=KNGlobal::instance();
     m_musicGlobal=KNMusicGlobal::instance();
 
     //Get the lyrics folder path.

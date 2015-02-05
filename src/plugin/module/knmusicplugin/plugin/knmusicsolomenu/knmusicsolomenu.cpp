@@ -92,7 +92,7 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &proxyIndex)
     m_preferFileName=generatePreferFileName(proxyIndex);
     //If the prefer file name is empty, means now the file is just the prefer
     //name, hide this action.
-    if(m_preferFileName.isEmpty())
+    if(m_preferFileName==fileName)
     {
         m_actions[RenameToArtistHyphonName]->setVisible(false);
     }
@@ -204,7 +204,7 @@ void KNMusicSoloMenu::onActionRename()
 {
     if(m_renameDialog->exec()==QDialog::Accepted)
     {
-        emit requireRenameCurrent(m_nameEdit->text());
+        emit requireRenameCurrent(KNGlobal::legalFileName(m_nameEdit->text()));
     }
 }
 
@@ -313,10 +313,6 @@ inline QString KNMusicSoloMenu::generatePreferFileName(
         preferString += " - ";
     }
     preferString += nameText + "." + currentFile.suffix();
-    //Legal the file name.
-    KNGlobal::legalFileName(preferString);
-    //Check is the prefer string is just the file name, if so, return a empty
-    //string.
-    return preferString==currentFile.fileName()?
-                QString():preferString;
+    //Return the legal the file name.
+    return KNGlobal::legalFileName(preferString);
 }

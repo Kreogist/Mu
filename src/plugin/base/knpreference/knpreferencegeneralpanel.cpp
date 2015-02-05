@@ -47,7 +47,7 @@ void KNPreferenceGeneralPanel::getLibrarySettings(KNPreferenceTitleInfo &listTit
     list.append(KNPreferenceItemGlobal::generateInfo(PathEdit,
                                                      tr("Library Path"),
                                                      "LibraryPath",
-                                                     KNGlobal::libraryPath()));
+                                                     KNGlobal::instance()->libraryPath()));
 }
 
 void KNPreferenceGeneralPanel::retranslate()

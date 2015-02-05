@@ -228,6 +228,7 @@ private:
     inline void initialThreads();
     inline void initialHeaderText();
     inline void initialGenreText();
+    inline void initialPreference();
     static KNMusicGlobal *m_instance;
     static KNMusicParser *m_parser;
     static KNMusicNowPlayingBase *m_nowPlaying;
