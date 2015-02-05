@@ -288,6 +288,7 @@ void KNMusicModel::onActionFileNameChanged(const QString &originalPath,
     {
         //Get the row.
         int currentRow=originalPathList.takeLast().row();
+        qDebug()<<currentRow;
         //Set the new data.
         setRowProperty(currentRow, FilePathRole, currentPath);
         setRowProperty(currentRow, FileNameRole, currentFileName);

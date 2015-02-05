@@ -49,12 +49,20 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
     setPalette(pal);
     //Create Actions.
     createActions();
+    //Initial the rename dialog.
+    initialRenameDialog();
 
     //Connect retranslate signal.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicSoloMenu::retranslate);
     //Get the translation.
     retranslate();
+}
+
+KNMusicSoloMenu::~KNMusicSoloMenu()
+{
+    //Recover the rename dialog memory.
+    delete m_renameDialog;
 }
 
 void KNMusicSoloMenu::setProxyModel(KNMusicProxyModel *model)
@@ -66,16 +74,20 @@ void KNMusicSoloMenu::setCurrentIndex(const QModelIndex &proxyIndex)
 {
     //Save the current index.
     m_currentIndex=proxyIndex;
-    //Get the row and set data.
+    //Get the row.
     int row=m_currentIndex.row();
+    //Save the row property data.
+    m_itemText=m_proxyModel->itemText(proxyIndex.row(), proxyIndex.column());
+    m_filePath=m_proxyModel->filePathFromRow(row);
+    //Update action caption.
     m_actions[PlayCurrent]->setText(
                 m_actionTitles[PlayCurrent].arg(
                     m_proxyModel->itemText(row, Name)));
-    m_actions[Open]->setText(
-                m_actionTitles[Open].arg(
-                    m_proxyModel->fileNameFromRow(row)));
-    m_itemText=m_proxyModel->itemText(proxyIndex.row(), proxyIndex.column());
-    m_filePath=m_proxyModel->filePathFromRow(row);
+
+    QString fileName=m_proxyModel->fileNameFromRow(row);
+    m_actions[Open]->setText(m_actionTitles[Open].arg(fileName));
+    m_nameEdit->setText(fileName);
+    m_nameEdit->setSelection(0, fileName.lastIndexOf('.'));
     //Generate the prefer name.
     m_preferFileName=generatePreferFileName(proxyIndex);
     //If the prefer file name is empty, means now the file is just the prefer
@@ -190,15 +202,9 @@ void KNMusicSoloMenu::onActionRenameArtistHyphonName()
 
 void KNMusicSoloMenu::onActionRename()
 {
-    QLineEdit *nameEdit=new QLineEdit;
-
-    nameEdit->setContentsMargins(15,10,15,10);
-    nameEdit->setText(m_preferFileName);
-    nameEdit->setSelection(0, m_preferFileName.lastIndexOf('.'));
-
-    if(KNMessageBox::customQuestion("Rename",nameEdit))
+    if(m_renameDialog->exec()==QDialog::Accepted)
     {
-        emit requireRenameCurrent(nameEdit->text());
+        emit requireRenameCurrent(m_nameEdit->text());
     }
 }
 
@@ -266,6 +272,19 @@ void KNMusicSoloMenu::createActions()
     connect(m_actions[Delete], SIGNAL(triggered()),
             this, SIGNAL(requireRemoveCurrent()));
     addAction(m_actions[Delete]);
+}
+
+void KNMusicSoloMenu::initialRenameDialog()
+{
+    //Initial the rename dialog.
+    m_renameDialog=new KNMessageBox();
+    m_renameDialog->setTitle("Rename");
+    m_renameDialog->enableCancel();
+    //Inital the rename line edit.
+    m_nameEdit=new QLineEdit(m_renameDialog);
+    m_nameEdit->setContentsMargins(15,10,15,10);
+    //Set content.
+    m_renameDialog->setContent(m_nameEdit);
 }
 
 inline QString KNMusicSoloMenu::generatePreferFileName(

@@ -252,8 +252,6 @@ void KNMessageBox::onActionExpandFinished()
 {
     //Show the content widget.
     m_content->showContent();
-    //Set the focus.
-    m_okButton->setFocus();
 }
 
 void KNMessageBox::onActionOkay()

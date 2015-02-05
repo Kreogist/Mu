@@ -464,9 +464,11 @@ void KNMusicTreeViewBase::removeCurrent()
 
 void KNMusicTreeViewBase::renameCurrent(const QString &preferName)
 {
+    //Rename the file.
     KNMusicGlobal::instance()->renameMusicFile(
                 m_proxyModel->filePathFromRow(currentIndex().row()),
                 preferName);
+    //Change the record in the proxy model.
 }
 
 void KNMusicTreeViewBase::initialActions()

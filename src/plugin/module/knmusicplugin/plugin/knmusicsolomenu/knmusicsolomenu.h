@@ -20,11 +20,14 @@
 
 #include "knmusicsolomenubase.h"
 
+class QLineEdit;
+class KNMessageBox;
 class KNMusicSoloMenu : public KNMusicSoloMenuBase
 {
     Q_OBJECT
 public:
     explicit KNMusicSoloMenu(QWidget *parent = 0);
+    ~KNMusicSoloMenu();
     void setProxyModel(KNMusicProxyModel *model);
     void setCurrentIndex(const QModelIndex &itemIndex);
     KNMusicDetailInfo currentDetailInfo();
@@ -61,7 +64,10 @@ private:
         SoloMenuActionCount
     };
     void createActions();
+    void initialRenameDialog();
     inline QString generatePreferFileName(const QModelIndex &itemIndex);
+    KNMessageBox *m_renameDialog;
+    QLineEdit *m_nameEdit;
     QString m_actionTitles[SoloMenuActionCount],
             m_itemText, m_filePath, m_preferFileName;
     QAction *m_actions[SoloMenuActionCount],

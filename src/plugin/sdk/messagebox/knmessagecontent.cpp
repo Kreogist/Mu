@@ -72,7 +72,9 @@ void KNMessageContent::showContent()
 {
     if(m_content!=nullptr)
     {
+        //Show and give the focus to m_content.
         m_content->show();
+        m_content->setFocus();
     }
 }
 
