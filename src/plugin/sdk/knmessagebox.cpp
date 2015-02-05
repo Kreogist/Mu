@@ -159,6 +159,20 @@ bool KNMessageBox::question(const QString &title,
     return (questionBox->exec()==QDialog::Accepted);
 }
 
+bool KNMessageBox::customQuestion(const QString &title,
+                                  QWidget *widget)
+{
+    //Generate a message box first.
+    QScopedPointer<KNMessageBox> questionBox(new KNMessageBox);
+    //Set properties.
+    questionBox->setTitle(title);
+    questionBox->enableCancel();
+    //Set the content widget to user custom widget.
+    questionBox->setContent(widget);
+    //Launch the message box, judge the dialog data.
+    return (questionBox->exec()==QDialog::Accepted);
+}
+
 void KNMessageBox::information(const QString &title, const QString &text)
 {
     //Generate a message box first.

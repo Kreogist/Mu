@@ -42,7 +42,8 @@ private slots:
     void onActionCopyItemText();
     void onActionSearchItemText();
     void onActionShowDetail();
-    void onActionRenameCurrent();
+    void onActionRenameArtistHyphonName();
+    void onActionRename();
 
 private:
     enum SoloMenuActions
@@ -54,6 +55,7 @@ private:
         SearchItemText,
         CopyFilePath,
         CopyItemText,
+        Rename,
         RenameToArtistHyphonName,
         Delete,
         SoloMenuActionCount
