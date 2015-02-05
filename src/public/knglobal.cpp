@@ -14,6 +14,8 @@
 #include <QTextCodec>
 #include <QDir>
 
+#include "knconfigure.h"
+
 #include "knconfiguremanager.h"
 #include "knfontmanager.h"
 #include "knlocalemanager.h"
@@ -22,7 +24,6 @@
 
 #include <QDebug>
 
-QString KNGlobal::m_dylibSuffix="";
 QString KNGlobal::m_libraryPath="";
 QString KNGlobal::m_userDataPath="";
 QString KNGlobal::m_resourceDirPath="";
@@ -179,6 +180,21 @@ void KNGlobal::setDylibSuffix(const QString &dylibSuffix)
     m_dylibSuffix = dylibSuffix;
 }
 
+KNConfigure *KNGlobal::cacheConfigure()
+{
+    return m_configureManager->getConfigure(Cache);
+}
+
+KNConfigure *KNGlobal::systemConfigure()
+{
+    return m_configureManager->getConfigure(System);
+}
+
+KNConfigure *KNGlobal::userConfigure()
+{
+    return m_configureManager->getConfigure(User);
+}
+
 void KNGlobal::setLibraryPath(const QString &libraryPath)
 {
     m_libraryPath = ensurePathAvaliable(libraryPath);
@@ -312,86 +328,19 @@ bool KNGlobal::renameFile(const QString &originalPath, const QString &currentPat
     return targetFile.rename(currentPath);
 }
 
-void KNGlobal::setSystemData(const QString &key, const QVariant &value)
-{
-    switch(value.type())
-    {
-    case QVariant::Double:
-        m_configure->setSystemData(key, value.toDouble());
-        break;
-    case QVariant::String:
-        m_configure->setSystemData(key, value.toString());
-        break;
-    case QVariant::Int:
-        m_configure->setSystemData(key, value.toInt());
-        break;
-    case QVariant::Bool:
-        m_configure->setSystemData(key, value.toBool());
-        break;
-    case QVariant::Font:
-        m_configure->setSystemData(key, fontToObject(value.value<QFont>()));
-        break;
-    default:
-        break;
-    }
-}
-
-QVariant KNGlobal::systemData(const QString &key)
-{
-    return m_configure->systemData(key);
-}
-
-void KNGlobal::setCustomData(const QString &module,
-                             const QString &key,
-                             const QVariant &value)
-{
-    switch(value.type())
-    {
-    case QVariant::Double:
-        m_configure->setCustomData(module, key, value.toDouble());
-        break;
-    case QVariant::String:
-        m_configure->setCustomData(module, key, value.toString());
-        break;
-    case QVariant::Int:
-        m_configure->setCustomData(module, key, value.toInt());
-        break;
-    case QVariant::Bool:
-        m_configure->setCustomData(module, key, value.toBool());
-        break;
-    case QVariant::Font:
-        m_configure->setCustomData(module, key, fontToObject(value.value<QFont>()));
-    default:
-        break;
-    }
-}
-
-QVariant KNGlobal::customData(const QString &module,
-                              const QString &key,
-                              const QVariant &defaultValue)
-{
-    QVariant preferData=m_configure->customData(module, key);
-    return preferData.isNull()?defaultValue:preferData;
-}
-
 void KNGlobal::retranslate()
 {
     //Update the storage unit.
     m_storageUnit[0]=tr("Byte");
 }
 
-void KNGlobal::loadConfigure()
-{
-    //Load the configure first.
-    m_configure->loadConfigure();
-}
-
 void KNGlobal::saveConfigure()
 {
     //Set the language information.
-    setSystemData("Language", m_localeManager->currentLanguageID());
+    m_globalConfigure->setData("Language",
+                               m_localeManager->currentLanguage());
     //Save the configure data.
-    m_configure->saveConfigure();
+    m_configureManager->saveConfigure();
 }
 
 inline void KNGlobal::initialStorageUnit()
@@ -443,23 +392,15 @@ void KNGlobal::updateInfrastructure()
 {
     //Update the data path.
     QString originalLibraryPath=m_libraryPath;
-    m_libraryPath=customData("General", "LibraryPath", m_libraryPath).toString();
+    m_libraryPath=m_globalConfigure->getData("LibraryPath", m_libraryPath).toString();
     //Give out the library path udpate signal.
     emit libraryMoved(originalLibraryPath, m_libraryPath);
 }
 
-QJsonObject KNGlobal::fontToObject(const QFont &font)
+void KNGlobal::loadConfigure()
 {
-    QJsonObject fontObject;
-    fontObject.insert("KNObjectType", "Font");
-    fontObject.insert("Family", font.family());
-    fontObject.insert("PixelSize", font.pixelSize());
-    fontObject.insert("Bold", font.bold());
-    fontObject.insert("Italic", font.italic());
-    fontObject.insert("Underline", font.underline());
-    fontObject.insert("Strikeout", font.strikeOut());
-    fontObject.insert("Kerning", font.kerning());
-    return fontObject;
+    //Load the configure first.
+    m_configureManager->loadConfigure();
 }
 
 KNGlobal::KNGlobal(QObject *parent) :
@@ -481,13 +422,17 @@ KNGlobal::KNGlobal(QObject *parent) :
     initialDefaultPath();
 
     //Initial the configure manager.
-    m_configure=KNConfigureManager::instance();
+    m_configureManager=KNConfigureManager::instance();
     //Set the configure file path.
     //-- Why set configure path here?
     //A: Because we won't change the configure path.
-    m_configure->setConfigurePath(userDataPath()+"/Configure");
+    m_configureManager->setConfigurePath(userDataPath()+"/Configure");
     //Load the configure.
     loadConfigure();
+    //Initial global configure.
+    m_globalConfigure=new KNConfigure(this);
+    m_globalConfigure->setCaption("Global");
+    userConfigure()->addSubConfigure(m_globalConfigure);
 
     //Initial the font manager.
     m_fontManager=KNFontManager::instance();
@@ -504,9 +449,9 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Load the default settings.
     m_fontManager->initialDefaultFont();
     //Load the default language according to the system locale settings.
-    m_localeManager->setLanguageFromID(m_localeManager->systemLocaleLanguageID());
+    m_localeManager->setLanguage(m_localeManager->systemLocaleLanguageID());
     //Set the language by the id from the configure.
-    m_localeManager->setLanguageFromID(systemData("Language").toString());
+    m_localeManager->setLanguage(m_globalConfigure->getData("Language").toString());
 
     //Connect retranslate signal.
     connect(this, &KNGlobal::requireRetranslate,

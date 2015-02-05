@@ -54,7 +54,7 @@ KNPreferenceLanguagePanel::KNPreferenceLanguagePanel(QWidget *parent) :
     //Initial the request map.
     m_languageRequests=new QSignalMapper(this);
     connect(m_languageRequests, SIGNAL(mapped(int)),
-            m_localeManager, SLOT(setLanguage(int)));
+            m_localeManager, SLOT(setLanguageIndex(int)));
     //Generate the language list.
     generateLanguageList();
 }

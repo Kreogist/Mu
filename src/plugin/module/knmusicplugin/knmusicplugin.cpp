@@ -189,7 +189,7 @@ QWidget *KNMusicPlugin::headerWidget()
 
 KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
 {
-    return m_preferencePanel;
+    return m_musicGlobal->preferencePanel();
 }
 
 inline void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
@@ -401,11 +401,6 @@ inline void KNMusicPlugin::initialInfrastructure()
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
     m_musicGlobal->setNoAlbumArt(QPixmap(":/plugin/music/common/noalbum.png"));
-
-    //Initial preference panel.
-    m_preferencePanel=new KNPreferenceWidgetsPanel;
-    m_preferencePanel->setPanelName("Music");
-    m_musicGlobal->setPreferencePanel(m_preferencePanel);
 
     //Initial central widget.
     m_centralWidget=new KNMusicCategoryTabWidget;

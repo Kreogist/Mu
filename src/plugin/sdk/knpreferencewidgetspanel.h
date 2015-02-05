@@ -17,6 +17,7 @@
 class QBoxLayout;
 class QLabel;
 class KNGlobal;
+class KNConfigure;
 class KNPreferenceItemBase;
 class KNPreferenceWidgetsPanel : public QScrollArea
 {
@@ -24,11 +25,11 @@ class KNPreferenceWidgetsPanel : public QScrollArea
 public:
     explicit KNPreferenceWidgetsPanel(QWidget *parent = 0);
     bool advancedMode() const;
-    QString panelName() const;
-    void setPanelName(const QString &panelName);
     void updateItemValue(const QString &valueName);
     void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
                             const QList<KNPreferenceItemInfo> &list);
+    KNConfigure *configure() const;
+    void setConfigure(KNConfigure *configure);
 
 signals:
     void requireSetAdvancedVisible(const bool &ok);
@@ -51,7 +52,7 @@ private:
     void updateItemFromInfoList(const KNPreferenceTitleInfo &listTitle,
                                 const QList<KNPreferenceItemInfo> &list);
     void setAdvancedItem(QWidget *item);
-    QString m_panelName;
+    KNConfigure *m_configure;
     QBoxLayout *m_mainLayout;
     QHash<QString, QLabel *> m_titleList;
     QHash<QString, KNPreferenceItemBase *> m_itemList;

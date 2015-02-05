@@ -4,11 +4,9 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
-#include <QApplication>
 #include <QDir>
-#include <QFont>
-#include <QFile>
-#include <QJsonDocument>
+
+#include "knconfigure.h"
 
 #include "knconfiguremanager.h"
 
@@ -23,93 +21,36 @@ KNConfigureManager *KNConfigureManager::instance()
 
 void KNConfigureManager::loadConfigure()
 {
-    //Do folder check first.
-    generateConfigureFolder();
-    //Generate the system and user configure file path.
-    m_systemConfigurePath=m_configurePath+"/system.json";
-    m_userConfigurePath=m_configurePath+"/user.json";
-    //Load the configure.
-    loadConfigureFromFile(m_systemConfigurePath, m_systemConfigure);
-    loadConfigureFromFile(m_userConfigurePath, m_customConfigure);
+    //Load configure data.
+    for(int i=0; i<ConfigureTypeCount; i++)
+    {
+        m_configures[i]->loadConfigure();
+    }
 }
 
 void KNConfigureManager::saveConfigure()
 {
-    //Do folder check first.
-    generateConfigureFolder();
-    //Save the configure.
-    saveConfigureToFile(m_systemConfigurePath, m_systemConfigure);
-    saveConfigureToFile(m_userConfigurePath, m_customConfigure);
+    //Save the configure, the data should be set before calling this function.
+    for(int i=0; i<ConfigureTypeCount; i++)
+    {
+        m_configures[i]->saveConfigure();
+    }
 }
 
-void KNConfigureManager::setSystemData(const QString &key,
-                                const QJsonValue &value)
+KNConfigure *KNConfigureManager::getConfigure(const int &index)
 {
-    m_systemConfigure[key]=value;
-}
-
-void KNConfigureManager::setCustomData(const QString &module,
-                                const QString &key,
-                                const QJsonValue &value)
-{
-    QJsonValue currentModuleValue=m_customConfigure[module];
-    QJsonObject currentModule=
-            currentModuleValue.type()==QJsonValue::Object?
-                currentModuleValue.toObject():QJsonObject();
-    currentModule[key]=value;
-    m_customConfigure[module]=currentModule;
-}
-
-QVariant KNConfigureManager::systemData(const QString &key)
-{
-    return parseJsonValue(m_systemConfigure[key]);
-}
-
-QVariant KNConfigureManager::customData(const QString &module, const QString &key)
-{
-    QJsonValue currentModuleValue=m_customConfigure[module];
-    return currentModuleValue.type()==QJsonValue::Object?
-              parseJsonValue(currentModuleValue.toObject()[key]):QVariant();
+    Q_ASSERT(index<ConfigureTypeCount);
+    return m_configures[index];
 }
 
 KNConfigureManager::KNConfigureManager(QObject *parent) :
     QObject(parent)
 {
-    //Initial the type hash.
-    m_objectType.insert("Font", Font);
-}
-
-inline QVariant KNConfigureManager::parseJsonValue(const QJsonValue &value)
-{
-    if(value.type()==QJsonValue::Object)
+    //Initial the configure classes.
+    for(int i=0; i<ConfigureTypeCount; i++)
     {
-        QJsonObject valueObject=value.toObject();
-        //This is an available configure file.
-        if(valueObject.contains("KNObjectType"))
-        {
-            int objectType=m_objectType.value(
-                        valueObject.value("KNObjectType").toString(),
-                        -1);
-            switch(objectType)
-            {
-            case Font:
-            {
-                QFont valueFont=QApplication::font();
-                valueFont.setFamily(valueObject.value("Family").toString());
-                valueFont.setPixelSize(valueObject.value("PixelSize").toInt());
-                valueFont.setBold(valueObject.value("Bold").toBool());
-                valueFont.setItalic(valueObject.value("Italic").toBool());
-                valueFont.setUnderline(valueObject.value("Underline").toBool());
-                valueFont.setStrikeOut(valueObject.value("Strikeout").toBool());
-                valueFont.setKerning(valueObject.value("Kerning").toBool());
-                return QVariant::fromValue(valueFont);
-                break;
-            }
-            }
-        }
-        return QVariant();
+        m_configures[i]=new KNConfigure(this);
     }
-    return QVariant(value);
 }
 
 inline void KNConfigureManager::generateConfigureFolder()
@@ -121,66 +62,19 @@ inline void KNConfigureManager::generateConfigureFolder()
     //If not exist, means there's no file and no folder, create the folder.
     if(!configureFolder.exists())
     {
-        configureFolder.mkpath(m_configurePath);
-        //Double check, if still not exist, check is there is a file named this.
+        //Check is there is a file named this.
         if(!configureFolder.exists())
         {
-            QFile sameNameCheck(m_configurePath);
-            //If there's no same named file.
-            if(!sameNameCheck.exists())
+            QFileInfo sameNameCheck(m_configurePath);
+            if(sameNameCheck.exists() &&
+                    sameNameCheck.isFile())
             {
-                //I can't understand what happend.
-                return;
-            }
-            //Remove the file.
-            QFile::remove(m_configurePath);
-            //Create the folder again.
-            configureFolder.mkpath(m_configurePath);
-            if(!configureFolder.exists())
-            {
-                //If still not exists, I have no idea.
-                return;
+                //Remove the file.
+                QFile::remove(m_configurePath);
             }
         }
-    }
-}
-
-inline void KNConfigureManager::loadConfigureFromFile(const QString &filePath,
-                                               QJsonObject &configureObject)
-{
-    QFile configureFile(filePath);
-    //Check is the file exist.
-    if(!configureFile.exists())
-    {
-        //Okay, load nothing.
-        return;
-    }
-    //Open the file.
-    if(configureFile.open(QIODevice::ReadOnly))
-    {
-        //Read the confiure.
-        QJsonDocument configureDocument=
-                QJsonDocument::fromJson(configureFile.readAll());
-        configureFile.close();
-        //Get the configure array.
-        configureObject=configureDocument.object();
-    }
-}
-
-inline void KNConfigureManager::saveConfigureToFile(const QString &filePath,
-                                             const QJsonObject &configureObject)
-{
-    //Open the file for writing.
-    QFile configureFile(filePath);
-    if(configureFile.open(QIODevice::WriteOnly))
-    {
-        //Generate the document.
-        QJsonDocument configureDocument;
-        configureDocument.setObject(configureObject);
-        //Write the document to file.
-        configureFile.write(configureDocument.toJson());
-        //Close the file.
-        configureFile.close();
+        //Now it should be ok the create the path.
+        configureFolder.mkpath(m_configurePath);
     }
 }
 
@@ -191,6 +85,12 @@ QString KNConfigureManager::configurePath() const
 
 void KNConfigureManager::setConfigurePath(const QString &configureFilePath)
 {
+    //Save the configure path.
     m_configurePath=configureFilePath;
+    //Generate the configure folder right now.
+    generateConfigureFolder();
+    //Set the configure file path according to the configure path.
+    m_configures[Cache]->setFilePath(m_configurePath+"/cache.json");
+    m_configures[System]->setFilePath(m_configurePath+"/system.json");
+    m_configures[User]->setFilePath(m_configurePath+"/user.json");
 }
-

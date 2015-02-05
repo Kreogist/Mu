@@ -106,7 +106,6 @@ private:
     QString m_caption;
     KNMusicCategoryTabWidget *m_centralWidget=nullptr;
     KNMouseDetectHeader *m_headerWidget=nullptr;
-    KNPreferenceWidgetsPanel *m_preferencePanel;
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
     QThread m_parserThread, m_nowPlayingThread;
     QSignalMapper *m_tabSwitchMapper;

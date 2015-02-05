@@ -83,7 +83,7 @@ void KNMusicHeaderPlayer::loadConfigure()
     m_volumeSlider->setValue(
                 m_volumeSlider->minimal()+
                 (double)m_volumeSlider->range()*
-                m_musicGlobal->configureData("Volume", 1.0).toDouble());
+                m_musicGlobal->configureData("Volume", 0.5).toDouble());
 }
 
 void KNMusicHeaderPlayer::saveConfigure()
@@ -101,8 +101,6 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     //Change the mouse step based on the range.
     int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
     m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
-    //Set the default volume.
-    m_volumeSlider->setValue(m_volumeSlider->maximum());
     //Reset the player.
     reset();
     //Connect requests.

@@ -21,8 +21,9 @@
 #include <QWidget>
 
 class QBoxLayout;
-class KNLocaleManager;
 class KNAnimeCheckedButton;
+class KNLocaleManager;
+class KNConfigure;
 class KNPreferenceLanguageItem;
 class KNPreferenceLanguagePanel;
 class KNPreferenceContents;
@@ -65,6 +66,7 @@ private:
     KNPreferenceCategory *m_categoryList;
     KNPreferenceContents *m_contents;
     KNPreferenceGeneralPanel *m_generalPanel;
+    KNConfigure *m_generalConfigure;
 };
 
 #endif // KNPREFERENCEPANEL_H

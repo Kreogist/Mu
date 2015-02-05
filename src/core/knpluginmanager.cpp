@@ -17,7 +17,6 @@
  */
 #include <QApplication>
 #include <QStyleFactory>
-#include <QDesktopWidget>
 #include <QStandardPaths>
 
 #include "knglobal.h"
@@ -89,64 +88,6 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     m_global=KNGlobal::instance();
 }
 
-inline void KNPluginManager::backupWindowGeometry()
-{
-    //Backup the window state.
-    m_global->setSystemData("windowState", (int)m_mainWindow->windowState());
-    //Window position.
-    m_global->setSystemData("windowX", m_mainWindow->geometry().x());
-    m_global->setSystemData("windowY", m_mainWindow->geometry().y());
-    m_global->setSystemData("windowWidth", m_mainWindow->geometry().width());
-    m_global->setSystemData("windowHeight", m_mainWindow->geometry().height());
-    //Desktop size.
-    m_global->setSystemData("desktopWidth", QApplication::desktop()->width());
-    m_global->setSystemData("desktopHeight", QApplication::desktop()->height());
-}
-
-inline void KNPluginManager::recoverWindowGeometry()
-{
-    //Check is the value avaliable.
-    //!FIXME: We need a better way to check is the last record is complete.
-    if(m_global->systemData("windowWidth").isNull())
-    {
-        return;
-    }
-    //Recover the window state.
-    int windowState=m_global->systemData("windowState").toInt();
-    switch(windowState)
-    {
-    case Qt::WindowMaximized:
-        m_mainWindow->setWindowState(Qt::WindowMaximized);
-        return;
-    case Qt::WindowFullScreen:
-        m_mainWindow->setWindowState(Qt::WindowFullScreen);
-        return;
-    default:
-        m_mainWindow->setWindowState(Qt::WindowNoState);
-    }
-    //Check is the resolution is the same as the last time.
-    int lastResolutionWidth=m_global->systemData("desktopWidth").toInt(),
-        lastResolutionHeight=m_global->systemData("desktopHeight").toInt(),
-        lastX=m_global->systemData("windowX").toInt(),
-        lastY=m_global->systemData("windowY").toInt(),
-        lastWidth=m_global->systemData("windowWidth").toInt(),
-        lastHeight=m_global->systemData("windowHeight").toInt();
-    if(QApplication::desktop()->width()==lastResolutionWidth &&
-            QApplication::desktop()->height()==lastResolutionHeight)
-    {
-        //In the same resolution.
-        m_mainWindow->setGeometry(lastX, lastY, lastWidth, lastHeight);
-    }
-    else
-    {
-        //Calculate the new geometry in the current resolution.
-        m_mainWindow->setGeometry((double)lastX/(double)lastResolutionWidth*(double)QApplication::desktop()->width(),
-                                  (double)lastY/(double)lastResolutionHeight*(double)QApplication::desktop()->height(),
-                                  (double)lastWidth/(double)lastResolutionWidth*(double)QApplication::desktop()->width(),
-                                  (double)lastHeight/(double)lastResolutionHeight*(double)QApplication::desktop()->height());
-    }
-}
-
 KNExpandMainWindow *KNPluginManager::mainWindow() const
 {
     return m_mainWindow;
@@ -161,11 +102,12 @@ void KNPluginManager::setMainWindow(KNExpandMainWindow *mainWindow)
         m_mainWindow=mainWindow;
         //Set the basic property.
         m_mainWindow->setWindowIcon(QIcon("://icon/mu.png"));
-        m_mainWindow->setMinimumSize(730, 432);
-        //Mac OS X hack.
 #ifdef Q_OS_MACX
+        //Mac OS X title hack.
         m_mainWindow->setWindowTitle(QApplication::applicationDisplayName());
 #endif
+        //Set the configure.
+        m_mainWindow->setCacheConfigure(m_global->cacheConfigure());
         //Set the basic palette.
         QPalette pal=m_mainWindow->palette();
         pal.setColor(QPalette::WindowText, QColor(255,255,255));
@@ -174,7 +116,7 @@ void KNPluginManager::setMainWindow(KNExpandMainWindow *mainWindow)
         connect(m_mainWindow, &KNExpandMainWindow::windowAboutToClose,
                 this, &KNPluginManager::onActionMainWindowDestory);
         //Recover the geometry.
-        recoverWindowGeometry();
+        m_mainWindow->recoverGeometry();
     }
 }
 
@@ -217,8 +159,7 @@ void KNPluginManager::onActionArgumentReceive(const QStringList &message)
 
 void KNPluginManager::onActionMainWindowDestory()
 {
-    //Backup geometry.
-    backupWindowGeometry();
+    ;
 }
 
 inline void KNPluginManager::setApplicationInformation()

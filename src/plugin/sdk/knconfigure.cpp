@@ -23,12 +23,17 @@
 
 #include "knconfigure.h"
 
+#include <QDebug>
+
 QHash<QString, int> KNConfigure::m_objectType;
 
 KNConfigure::KNConfigure(QObject *parent) :
     QObject(parent)
 {
-    ;
+    if(m_objectType.isEmpty())
+    {
+        buildObjectTypeList();
+    }
 }
 
 KNConfigure::~KNConfigure()
@@ -123,14 +128,20 @@ void KNConfigure::saveConfigure()
     QJsonDocument configureDocument;
     configureDocument.setObject(configureObject());
     //Save the configure.
-    configureFile.write(configureDocument.toBinaryData());
+    configureFile.write(configureDocument.toJson());
     //Close the file.
     configureFile.close();
 }
 
-QVariant KNConfigure::getData(const QString &key)
+QVariant KNConfigure::getData(const QString &key,
+                              const QVariant &defaultValue)
 {
     QJsonValue value=m_dataObject.value(key);
+    //Check if value is available.
+    if(value.type()==QJsonValue::Undefined)
+    {
+        return defaultValue;
+    }
     //Check if the value is a advanced type.
     if(value.type()==QJsonValue::Object)
     {
@@ -144,7 +155,7 @@ QVariant KNConfigure::getData(const QString &key)
             if(objectType==-1)
             {
                 //We cannot translate this value.
-                return QVariant();
+                return defaultValue;
             }
             switch(objectType)
             {
@@ -161,10 +172,10 @@ QVariant KNConfigure::getData(const QString &key)
                 return QVariant::fromValue(valueFont);
             }
             default:
-                return QVariant();
+                return defaultValue;
             }
         }
-        return QVariant();
+        return defaultValue;
     }
     return QVariant(value);
 }
@@ -237,6 +248,5 @@ void KNConfigure::updateSubConfigure()
 
 void KNConfigure::buildObjectTypeList()
 {
-    qDebug("Build the type list");
     m_objectType.insert("Font", Font);
 }

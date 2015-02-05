@@ -13,6 +13,7 @@
 #include <QFont>
 #include <QObject>
 
+class KNConfigure;
 class KNConfigureManager;
 class KNFontManager;
 class KNLocaleManager;
@@ -22,7 +23,12 @@ class KNGlobal : public QObject
 public:
     static KNGlobal *instance();
     QString byteToHigherUnit(const qint64 &fileSize);
-    static QString dylibSuffix();
+    //Dymantic link suffix.
+    QString dylibSuffix();
+    void setDylibSuffix(const QString &dylibSuffix);
+    KNConfigure *cacheConfigure();
+    KNConfigure *systemConfigure();
+    KNConfigure *userConfigure();
     static QString applicationDirPath();
     static QString userDataPath();
     static QString pluginDirPath();
@@ -34,7 +40,6 @@ public:
     static QString ensurePathAvaliable(const QString &path);
     static QStringList urlToPathList(const QList<QUrl> urls);
     static int similarity(const QString &str1, const QString &str2);
-    static void setDylibSuffix(const QString &dylibSuffix);
     static void setLibraryPath(const QString &libraryPath);
     static void showInGraphicalShell(const QString &filePath);
     static void openLocalFile(const QString &filePath);
@@ -43,14 +48,6 @@ public:
                            const QString &destinationDirPath);
     static bool renameFile(const QString &originalPath,
                            const QString &currentPath);
-    void setSystemData(const QString &key, const QVariant &value);
-    QVariant systemData(const QString &key);
-    void setCustomData(const QString &module,
-                       const QString &key,
-                       const QVariant &value);
-    QVariant customData(const QString &module,
-                        const QString &key,
-                        const QVariant &defaultValue);
 
 signals:
     void requireRetranslate();
@@ -66,12 +63,11 @@ private:
     inline void initialStorageUnit();
     inline void initialDefaultPath();
     inline void initialInfrastrcture();
-    inline QJsonObject fontToObject(const QFont &font);
 #ifdef Q_OS_LINUX
     static QString substituteFileBrowserParameters(QString &pre, QString &file);
 #endif
     static KNGlobal *m_instance;
-    static QString m_dylibSuffix;
+    QString m_dylibSuffix;
     static QString m_userDataPath;
     static QString m_resourceDirPath;
     static QString m_pluginDirPath;
@@ -93,7 +89,8 @@ private:
     };
     QString m_storageUnit[StorageUnitCount];
     explicit KNGlobal(QObject *parent = 0);
-    KNConfigureManager *m_configure;
+    KNConfigure *m_globalConfigure;
+    KNConfigureManager *m_configureManager;
     KNFontManager *m_fontManager;
     KNLocaleManager *m_localeManager;
 };

@@ -14,6 +14,7 @@
 
 #include "preference/knpreferenceitembase.h"
 #include "knmessagebox.h"
+#include "knconfigure.h"
 #include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
 #include "knmusicnowplayingbase.h"
@@ -23,6 +24,7 @@
 #include <QDebug>
 
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
+
 KNMusicParser *KNMusicGlobal::m_parser=nullptr;
 KNMusicNowPlayingBase *KNMusicGlobal::m_nowPlaying=nullptr;
 KNMusicSoloMenuBase *KNMusicGlobal::m_soloMenu=nullptr;
@@ -556,6 +558,16 @@ void KNMusicGlobal::setParser(KNMusicParser *parser)
     m_parser = parser;
 }
 
+KNConfigure *KNMusicGlobal::musicConfigure()
+{
+    return m_musicConfigure;
+}
+
+KNPreferenceWidgetsPanel *KNMusicGlobal::preferencePanel()
+{
+    return m_preferencePanel;
+}
+
 KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying()
 {
     return m_nowPlaying;
@@ -590,6 +602,12 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     //Initial resources.
     initialHeaderText();
     initialGenreText();
+    //Initial the configure.
+    m_musicConfigure=new KNConfigure(this);
+    m_musicConfigure->setCaption("Music");
+    m_global->userConfigure()->addSubConfigure(m_musicConfigure);
+    m_preferencePanel=new KNPreferenceWidgetsPanel;
+    m_preferencePanel->setConfigure(m_musicConfigure);
     //Set the library path.
     setMusicLibraryPath(KNGlobal::libraryPath()+"/Music");
     //Link the library changed request.
@@ -601,11 +619,6 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
             this, &KNMusicGlobal::retranslate);
     //Get the latest translation.
     retranslate();
-}
-
-void KNMusicGlobal::setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel)
-{
-    m_preferencePanel = preferencePanel;
 }
 
 void KNMusicGlobal::updateItemValue(const QString &valueName)
@@ -621,13 +634,13 @@ void KNMusicGlobal::insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
 
 void KNMusicGlobal::setConfigureData(const QString &key, const QVariant &value)
 {
-    m_global->setCustomData("Music", key, value);
+    m_musicConfigure->setData(key, value);
 }
 
 QVariant KNMusicGlobal::configureData(const QString &key,
                                       const QVariant &defaultValue)
 {
-    return m_global->customData("Music", key, defaultValue);
+    return m_musicConfigure->getData(key, defaultValue);
 }
 
 QPixmap KNMusicGlobal::noAlbumArt() const

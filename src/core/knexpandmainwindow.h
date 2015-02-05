@@ -20,11 +20,15 @@
 
 #include <QMainWindow>
 
+class KNConfigure;
 class KNExpandMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     explicit KNExpandMainWindow(QWidget *parent = 0);
+    void setCacheConfigure(KNConfigure *cacheConfigure);
+    void backupGeometry();
+    void recoverGeometry();
 
 signals:
     void windowAboutToClose();
@@ -33,6 +37,9 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+
+private:
+    KNConfigure *m_cacheConfigure;
 };
 
 #endif // KNEXPANDMAINWINDOW_H

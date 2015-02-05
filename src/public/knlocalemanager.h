@@ -17,8 +17,8 @@ class KNLocaleManager : public QObject
     Q_OBJECT
 public:
     static KNLocaleManager *instance();
-    QString currentLanguageName() const;
-    QString currentLanguageID() const;
+    QString currentLanguageCaption() const;
+    QString currentLanguage() const;
     QPixmap currentLanguageIcon() const;
     int languageSize() const;
     QString languageNameAt(const int &i);
@@ -34,8 +34,8 @@ signals:
     void requireRetranslate();
 
 public slots:
-    void setLanguage(const int &index);
-    void setLanguageFromID(const QString &id);
+    void setLanguageIndex(const int &index);
+    void setLanguage(const QString &id);
 
 private:
     static KNLocaleManager *m_instance;

@@ -8,6 +8,7 @@
 #include <QBoxLayout>
 
 #include "knglobal.h"
+#include "knconfigure.h"
 #include "preference/knpreferenceitembase.h"
 
 #include "knpreferencewidgetspanel.h"
@@ -93,20 +94,8 @@ void KNPreferenceWidgetsPanel::savePanelData()
         i!=m_itemList.end();
         ++i)
     {
-        m_global->setCustomData(m_panelName,
-                                (*i)->valueName(),
-                                (*i)->value());
+        m_configure->setData((*i)->valueName(), (*i)->value());
     }
-}
-
-QString KNPreferenceWidgetsPanel::panelName() const
-{
-    return m_panelName;
-}
-
-void KNPreferenceWidgetsPanel::setPanelName(const QString &panelCaption)
-{
-    m_panelName = panelCaption;
 }
 
 void KNPreferenceWidgetsPanel::updateItemValue(const QString &valueName)
@@ -116,8 +105,7 @@ void KNPreferenceWidgetsPanel::updateItemValue(const QString &valueName)
     //If we find the item successful, update the value.
     if(currentItem!=nullptr)
     {
-        currentItem->setValue(m_global->customData(m_panelName,
-                                                   currentItem->valueName(),
+        currentItem->setValue(m_configure->getData(currentItem->valueName(),
                                                    currentItem->value()));
     }
 }
@@ -184,6 +172,16 @@ void KNPreferenceWidgetsPanel::setAdvancedItem(QWidget *item)
             item, &QWidget::setVisible);
     item->setVisible(m_advancedMode);
 }
+KNConfigure *KNPreferenceWidgetsPanel::configure() const
+{
+    return m_configure;
+}
+
+void KNPreferenceWidgetsPanel::setConfigure(KNConfigure *configure)
+{
+    m_configure = configure;
+}
+
 
 void KNPreferenceWidgetsPanel::setNormalMode(bool normalMode)
 {

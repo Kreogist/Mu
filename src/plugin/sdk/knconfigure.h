@@ -44,7 +44,7 @@ public:
     ~KNConfigure();
     QJsonObject configureObject();
     void setConfigureObject(const QJsonObject &configureObject);
-    void addSubConfigure(KNConfigure *configure=nullptr);
+    void addSubConfigure(KNConfigure *configure);
 
     //Properties.
     QString filePath() const;
@@ -55,7 +55,8 @@ public:
     //Actions.
     void loadConfigure();
     void saveConfigure();
-    QVariant getData(const QString &key);
+    QVariant getData(const QString &key,
+                     const QVariant &defaultValue=QVariant());
     void setData(const QString &key, const QVariant &value);
 
 signals:

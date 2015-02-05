@@ -147,6 +147,7 @@ class QLabel;
 class QThread;
 class KNPreferenceItemBase;
 class KNPreferenceWidgetsPanel;
+class KNConfigure;
 class KNGlobal;
 class KNMusicParser;
 class KNMusicNowPlayingBase;
@@ -168,6 +169,8 @@ public:
     static QDateTime dataStringToDateTime(const QString &text);
     static KNMusicParser *parser();
     static void setParser(KNMusicParser *parser);
+    KNConfigure *musicConfigure();
+    KNPreferenceWidgetsPanel *preferencePanel();
     KNMusicNowPlayingBase *nowPlaying();
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     static KNMusicSoloMenuBase *soloMenu();
@@ -201,7 +204,6 @@ public:
     static void setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip);
     static KNMusicDetailDialogBase *detailDialog();
     static void setDetailDialog(KNMusicDetailDialogBase *detailDialog);
-    void setPreferencePanel(KNPreferenceWidgetsPanel *preferencePanel);
     void updateItemValue(const QString &valueName);
     void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
                             const QList<KNPreferenceItemInfo> &list);
@@ -239,6 +241,7 @@ private:
     static QList<QList<QStandardItem *>> m_dragMusicRow;
     static bool m_dragMusicRowTaken;
     explicit KNMusicGlobal(QObject *parent = 0);
+    KNConfigure *m_musicConfigure;
     QString m_treeViewHeaderText[MusicDisplayDataCount];
     QStringList m_suffixs, m_listSuffixs,
                 m_suffixDescription, m_listSuffixDescription,

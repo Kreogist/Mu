@@ -9,6 +9,8 @@
 #include <QBoxLayout>
 #include <QPainter>
 
+#include "knconfigure.h"
+
 #include "knpreferenceitembase.h"
 
 KNPreferenceItemBase::KNPreferenceItemBase(QWidget *parent) :

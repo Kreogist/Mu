@@ -17,6 +17,9 @@
  */
 #include <QBoxLayout>
 
+#include "knconfigure.h"
+#include "knglobal.h"
+
 #include "knpreferencegeneralpanel.h"
 #include "knpreferencewidgetspanel.h"
 #include "knpreferencecategory.h"
@@ -59,9 +62,12 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
     //Initial the language panel.
     initialLanguagePanel();
 
-    //Initial the general panel.
+    //Initial the general configure and panel.
+    m_generalConfigure=new KNConfigure(this);
+    m_generalConfigure->setCaption("General");
+    KNGlobal::instance()->userConfigure()->addSubConfigure(m_generalConfigure);
     m_generalPanel=new KNPreferenceGeneralPanel(this);
-    m_generalPanel->setPanelName("General");
+    m_generalPanel->setConfigure(m_generalConfigure);
     //Link the request.
     connect(m_generalPanel, &KNPreferenceGeneralPanel::libraryDirMoved,
             this, &KNPreferencePanel::requireUpdateInfrastructure);
@@ -125,7 +131,7 @@ void KNPreferencePanel::retranslate()
     setCategoryText(1, tr("General"));
     //Update the language item.
     m_languageItem->setIcon(m_localeManager->currentLanguageIcon());
-    m_languageItem->setText(m_localeManager->currentLanguageName());
+    m_languageItem->setText(m_localeManager->currentLanguageCaption());
 }
 
 void KNPreferencePanel::onActionCategoryIndexChange(const int &index)

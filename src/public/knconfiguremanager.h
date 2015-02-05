@@ -7,22 +7,22 @@
 #ifndef KNCONFIGUREMANAGER_H
 #define KNCONFIGUREMANAGER_H
 
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QHash>
-
 #include <QObject>
 
-namespace KNConfigureTypes
+namespace KNConfigureManagerGlobal
 {
-enum Types
+enum ConfigureTypes
 {
-    Font
+    Cache,
+    System,
+    User,
+    ConfigureTypeCount
 };
 }
 
-using namespace KNConfigureTypes;
+using namespace KNConfigureManagerGlobal;
 
+class KNConfigure;
 class KNConfigureManager : public QObject
 {
     Q_OBJECT
@@ -30,14 +30,8 @@ public:
     static KNConfigureManager *instance();
     void loadConfigure();
     void saveConfigure();
-    void setSystemData(const QString &key,
-                       const QJsonValue &value);
-    void setCustomData(const QString &module,
-                       const QString &key,
-                       const QJsonValue &value);
-    QVariant systemData(const QString &key);
-    QVariant customData(const QString &module,
-                        const QString &key);
+    KNConfigure *getConfigure(const int &index);
+
     QString configurePath() const;
     void setConfigurePath(const QString &configurePath);
 
@@ -49,19 +43,11 @@ private:
     static KNConfigureManager *m_instance;
     explicit KNConfigureManager(QObject *parent = 0);
 
-    inline QVariant parseJsonValue(const QJsonValue &value);
-
     inline void generateConfigureFolder();
-    inline void loadConfigureFromFile(const QString &filePath,
-                                      QJsonObject &configureObject);
-    inline void saveConfigureToFile(const QString &filePath,
-                                    const QJsonObject &configureObject);
 
-    QString m_configurePath,
-            m_systemConfigurePath,
-            m_userConfigurePath;
-    QJsonObject m_systemConfigure, m_customConfigure;
-    QHash<QString, int> m_objectType;
+    QString m_configurePath;
+
+    KNConfigure *m_configures[ConfigureTypeCount];
 };
 
 #endif // KNCONFIGUREMANAGER_H

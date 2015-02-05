@@ -121,7 +121,7 @@ bool KNMusicBackendBass::initialBass()
 
 void KNMusicBackendBass::initialPlugin(const QString &pluginDirPath)
 {
-    QString dylibSuffix=KNGlobal::dylibSuffix();
+    QString dylibSuffix=KNGlobal::instance()->dylibSuffix();
     //Get the specific plugin dir for Bass.
     QDir pluginDir(pluginDirPath);
     //Check the dir exist.
@@ -149,7 +149,7 @@ void KNMusicBackendBass::initialPlugin(const QString &pluginDirPath)
                     const BASS_PLUGININFO *pluginInfo=BASS_PluginGetInfo(plugin);
                     for(DWORD i=0; i<pluginInfo->formatc; i++)
                     {
-                        qDebug()<<pluginInfo->formats[i].exts;
+//                        qDebug()<<pluginInfo->formats[i].exts;
                     }
                 }
             }

@@ -22,13 +22,13 @@ KNLocaleManager *KNLocaleManager::instance()
     return m_instance==nullptr?m_instance=new KNLocaleManager:m_instance;
 }
 
-QString KNLocaleManager::currentLanguageName() const
+QString KNLocaleManager::currentLanguageCaption() const
 {
     return (m_currentIndex>-1 && m_currentIndex<m_languageList.size())?
                 m_languageList.at(m_currentIndex).name:"N/A";
 }
 
-QString KNLocaleManager::currentLanguageID() const
+QString KNLocaleManager::currentLanguage() const
 {
     return (m_currentIndex>-1 && m_currentIndex<m_languageList.size())?
                 m_languageList.at(m_currentIndex).id:QString();
@@ -55,7 +55,7 @@ QPixmap KNLocaleManager::languageIconAt(const int &i)
     return m_languageList.at(i).icon;
 }
 
-void KNLocaleManager::setLanguage(const int &index)
+void KNLocaleManager::setLanguageIndex(const int &index)
 {
     if(index<-1 || index>m_languageList.size())
     {
@@ -76,7 +76,7 @@ void KNLocaleManager::setLanguage(const int &index)
     emit requireRetranslate();
 }
 
-void KNLocaleManager::setLanguageFromID(const QString &id)
+void KNLocaleManager::setLanguage(const QString &id)
 {
     //Check if the id is empty, ignore the unavailable id.
     if(id.isEmpty())
@@ -88,13 +88,13 @@ void KNLocaleManager::setLanguageFromID(const QString &id)
     {
         if(m_languageList.at(i).id==id)
         {
-            setLanguage(i);
+            setLanguageIndex(i);
             return;
         }
     }
     //When we came here, it means that we can't find the id, set the language to
     //0.
-    setLanguage(0);
+    setLanguageIndex(0);
 }
 
 void KNLocaleManager::loadLanguageFiles()

@@ -64,8 +64,6 @@ private:
     inline void loadCategoryPlugin(KNCategoryPlugin *plugin);
     static KNPluginManager *m_instance;
     explicit KNPluginManager(QObject *parent = 0);
-    inline void backupWindowGeometry();
-    inline void recoverWindowGeometry();
     KNExpandMainWindow *m_mainWindow=nullptr;
     KNMainWindowPlugin *m_mainWindowPlugin=nullptr;
     KNPreferencePlugin *m_preferencePlugin=nullptr;

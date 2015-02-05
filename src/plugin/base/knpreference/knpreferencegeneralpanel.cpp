@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knglobal.h"
+#include "knconfigure.h"
 #include "preference/knpreferenceitempathbrowser.h"
 
 #include "knpreferencegeneralpanel.h"
@@ -79,9 +80,7 @@ void KNPreferenceGeneralPanel::retranslate()
 void KNPreferenceGeneralPanel::onLibraryMoved()
 {
     //Get the latest data.
-    KNGlobal::instance()->setCustomData(panelName(),
-                                        "LibraryPath",
-                                        m_libraryDetector->value());
+    configure()->setData("LibraryPath", m_libraryDetector->value());
     //Emit moved signal.
     emit libraryDirMoved();
 }
