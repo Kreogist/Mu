@@ -18,9 +18,10 @@
 #ifndef KNPLUGINMANAGER_H
 #define KNPLUGINMANAGER_H
 
-#include <QObject>
 #include <QStringList>
 #include <QLinkedList>
+
+#include <QObject>
 
 class KNExpandMainWindow;
 class KNGlobal;
@@ -38,17 +39,20 @@ class KNPluginManager : public QObject
 public:
     static KNPluginManager *instance();
     ~KNPluginManager();
+    //Give the main window generated in main().
     KNExpandMainWindow *mainWindow() const;
     void setMainWindow(KNExpandMainWindow *mainWindow);
+    //Load all the modules and plugins.
     void loadPlugins();
+    //Process the arguments.
     void processArguments();
+    //Start running mu.
     void start();
 
 signals:
     void requireProcessArguments(QStringList arguments);
 
 public slots:
-    void onActionArgumentReceive(const QStringList &message);
 
 private slots:
     void onActionMainWindowDestory();
@@ -56,9 +60,9 @@ private slots:
 private:
     inline void setApplicationInformation();
     inline void loadMainWindowPlugin(KNMainWindowPlugin *plugin);
-    inline void loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin);
-    inline void loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin);
-    inline void loadMainWindowCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin);
+    inline void loadHeader(KNMainWindowHeaderPlugin *plugin);
+    inline void loadCategoryStack(KNMainWindowCategoryStackPlugin *plugin);
+    inline void loadCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin);
     inline void loadPreference(KNPreferencePlugin *plugin);
     inline void loadPlatformExtras(KNPlatformExtras *plugin);
     inline void loadCategoryPlugin(KNCategoryPlugin *plugin);

@@ -54,7 +54,7 @@ private:
         PlayNext,
         ThumbnailActionsCount
     };
-    bool m_isShownPlay=true;
+    bool m_isStatePlay=true;
     QPixmap m_playIcon, m_pauseIcon;
     QWinThumbnailToolButton *m_thumbnailButtons[ThumbnailActionsCount];
 };

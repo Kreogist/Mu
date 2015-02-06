@@ -359,6 +359,12 @@ void KNMusicPlugin::enablePlatformExtras()
         m_extraHandler->addConnectionHandle(
                     connect(m_platformExtras, &KNPlatformExtras::requirePause,
                             m_backend, &KNMusicBackend::pause));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_backend, &KNMusicBackend::playingStateChanged,
+                            [=](const int &state)
+                            {
+                                m_platformExtras->onActionPlayStateChanged(state==PlayingState);
+                            }));
     }
 }
 

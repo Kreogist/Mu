@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     KNPluginManager *pluginManager=KNPluginManager::instance();
     //Connect message process slot.
     QObject::connect(&app, &KNSingleApplication::messageAvailable,
-                     pluginManager, &KNPluginManager::onActionArgumentReceive);
+                     pluginManager, &KNPluginManager::requireProcessArguments);
     pluginManager->setMainWindow(&mainWindow);
     //Load plugins.
     pluginManager->loadPlugins();

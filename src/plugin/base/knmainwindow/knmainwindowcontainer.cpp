@@ -53,7 +53,7 @@ void KNMainWindowContainer::setHeaderWidget(QWidget *widget)
     {
         //Save the widget.
         m_header=widget;
-        //Change the parent relationship.
+        //Take the ownership of the widget.
         m_header->setParent(this);
         //Set anime target.
         m_headerPositionAnime->setTargetObject(m_header);

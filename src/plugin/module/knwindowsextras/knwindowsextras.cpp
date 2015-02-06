@@ -16,10 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QMainWindow>
-#include <QWinTaskbarButton>
-#include <QWinTaskbarProgress>
-#include <QWinThumbnailToolBar>
-#include <QWinThumbnailToolButton>
+#include <QtWinExtras>
 
 #include "knwindowsextras.h"
 
@@ -37,6 +34,13 @@ KNWindowsExtras::KNWindowsExtras(QObject *parent) :
 
 void KNWindowsExtras::setMainWindow(QMainWindow *mainWindow)
 {
+    //Native window hack.
+    //We need to do this becuase windowHandle() only returns an available value
+    //when the QWidget is a native widget. Using this hack to make the main
+    //window to a native widget and the windowHandle() will return the handle.
+    mainWindow->setAttribute(Qt::WA_NativeWindow);
+    //Initial the toolbar.
+    m_thumbnailToolbar->setParent(mainWindow);
     m_thumbnailToolbar->setWindow(mainWindow->windowHandle());
 }
 
@@ -48,20 +52,20 @@ void KNWindowsExtras::setButtonIcon(const int &index, const QPixmap &icon)
 void KNWindowsExtras::onActionPlayStateChanged(const bool &isPlay)
 {
     //Save the state.
-    m_isShownPlay=isPlay;
+    m_isStatePlay=isPlay;
     //Set the icon according to the state.
-    setButtonIcon(PlayAndPause, m_isShownPlay?m_playIcon:m_pauseIcon);
+    setButtonIcon(PlayAndPause, m_isStatePlay?m_pauseIcon:m_playIcon);
 }
 
 void KNWindowsExtras::onActionPlayAndPause()
 {
     //Emit play or pause signal according to the icon.
-    if(m_isShownPlay)
+    if(m_isStatePlay)
     {
-        emit requirePlay();
+        emit requirePause();
         return;
     }
-    emit requirePause();
+    emit requirePlay();
 }
 
 void KNWindowsExtras::initialThumbnailToolBar()
@@ -85,4 +89,5 @@ void KNWindowsExtras::initialThumbnailToolBar()
     //Set icon.
     setButtonIcon(PlayPrev, QPixmap(":/platform/windows/previous.png"));
     setButtonIcon(PlayNext, QPixmap(":/platform/windows/next.png"));
+    onActionPlayStateChanged(false);
 }

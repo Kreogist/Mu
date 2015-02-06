@@ -42,9 +42,9 @@ win32{
     RC_FILE = resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
     # Windows special extras.
-#    QT += winextras
-#    SOURCES += plugin/module/knwindowsextras/knwindowsextras.cpp
-#    HEADERS += plugin/module/knwindowsextras/knwindowsextras.h
+    QT += winextras
+    SOURCES += plugin/module/knwindowsextras/knwindowsextras.cpp
+    HEADERS += plugin/module/knwindowsextras/knwindowsextras.h
 }
 
 # UNIX common configure

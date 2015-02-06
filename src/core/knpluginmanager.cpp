@@ -46,7 +46,7 @@
 
 //Platform Plugins
 #ifdef Q_OS_WIN32
-//#include "plugin/module/knwindowsextras/knwindowsextras.h"
+#include "plugin/module/knwindowsextras/knwindowsextras.h"
 #endif
 
 #include "knpluginmanager.h"
@@ -72,8 +72,8 @@ KNPluginManager::~KNPluginManager()
             delete currentObject;
         }
     }
-    //Save the configure.
-    m_global->saveConfigure();
+    //Delete the global object.
+    delete m_global;
 }
 
 KNPluginManager::KNPluginManager(QObject *parent) :
@@ -123,14 +123,22 @@ void KNPluginManager::setMainWindow(KNExpandMainWindow *mainWindow)
 void KNPluginManager::loadPlugins()
 {
     //Initial main window infrastructure.
+    //And the order must be:
+    //header -> category stack -> category switcher -> preference.
     loadMainWindowPlugin(new KNMainWindow);
-    loadMainWindowHeader(new KNMainWindowHeader);
-    loadMainWindowCategoryStack(new KNMainWindowCategoryStack);
-    loadMainWindowCategorySwitcher(new KNMainWindowCategorySwitcher);
+    loadHeader(new KNMainWindowHeader);
+    loadCategoryStack(new KNMainWindowCategoryStack);
+    loadCategorySwitcher(new KNMainWindowCategorySwitcher);
     loadPreference(new KNPreference);
+
+    //Load the platform extras if possible.
+#ifdef Q_OS_WIN32
+    loadPlatformExtras(new KNWindowsExtras);
+#endif
 
     //Initial category modules.
     loadCategoryPlugin(new KNMusicPlugin);
+
 }
 
 void KNPluginManager::processArguments()
@@ -152,14 +160,10 @@ void KNPluginManager::start()
     m_mainWindow->show();
 }
 
-void KNPluginManager::onActionArgumentReceive(const QStringList &message)
-{
-    emit requireProcessArguments(message);
-}
-
 void KNPluginManager::onActionMainWindowDestory()
 {
-    ;
+    //Save the configure right now.
+    m_global->saveConfigure();
 }
 
 inline void KNPluginManager::setApplicationInformation()
@@ -178,20 +182,20 @@ inline void KNPluginManager::loadMainWindowPlugin(KNMainWindowPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);
-    //Save the plugin.
+    //Save the plugin, and set the main window.
     m_mainWindowPlugin=plugin;
     m_mainWindowPlugin->setMainWindow(m_mainWindow);
 }
 
-inline void KNPluginManager::loadMainWindowHeader(KNMainWindowHeaderPlugin *plugin)
+inline void KNPluginManager::loadHeader(KNMainWindowHeaderPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);
-    //Set the plugin.
+    //Set the header to main window plugin.
     m_mainWindowPlugin->setHeader(plugin);
 }
 
-inline void KNPluginManager::loadMainWindowCategoryStack(KNMainWindowCategoryStackPlugin *plugin)
+inline void KNPluginManager::loadCategoryStack(KNMainWindowCategoryStackPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);
@@ -199,7 +203,7 @@ inline void KNPluginManager::loadMainWindowCategoryStack(KNMainWindowCategorySta
     m_mainWindowPlugin->setCategoryStack(plugin);
 }
 
-inline void KNPluginManager::loadMainWindowCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin)
+inline void KNPluginManager::loadCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugin)
 {
     //Add this plugin to the plugin list.
     m_pluginList.append(plugin);

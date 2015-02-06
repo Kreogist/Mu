@@ -26,14 +26,14 @@ class KNMainWindow : public KNMainWindowPlugin
     Q_OBJECT
 public:
     explicit KNMainWindow(QObject *parent = 0);
+    void addCategoryPlugin(KNCategoryPlugin *plugin);
+    void addHeaderWidget(QWidget *widget);
+    void addCentralWidget(QWidget *widget);
 
 signals:
 
 public slots:
     void retranslate();
-    void addCategoryPlugin(KNCategoryPlugin *plugin);
-    void addHeaderWidget(QWidget *widget);
-    void addCentralWidget(QWidget *widget);
     void setMainWindow(QMainWindow *mainWindow);
     void setHeader(KNMainWindowHeaderPlugin *plugin);
     void setHeaderIcon(const QPixmap &icon);
@@ -43,8 +43,6 @@ public slots:
     void setPreferencePanel(KNPreferencePlugin *plugin);
     void showPreference();
     void hidePreference();
-    void showCategorySwitcher();
-    void restoreHeaderButton();
 
 private:
     struct CategoryPluginItem
@@ -54,6 +52,8 @@ private:
     };
     QList<CategoryPluginItem> m_categoryList;
     int m_currentCategory=-1;
+
+    //Elements pointers
     QMainWindow *m_mainWindow=nullptr;
     KNMainWindowContainer *m_container;
     KNMainWindowHeaderPlugin *m_headerPlugin=nullptr;

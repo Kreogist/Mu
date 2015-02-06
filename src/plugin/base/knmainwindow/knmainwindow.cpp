@@ -28,7 +28,7 @@
 KNMainWindow::KNMainWindow(QObject *parent) :
     KNMainWindowPlugin(parent)
 {
-    //Initial the container.
+    //Initial the widget container.
     m_container=new KNMainWindowContainer;
     //Connect translate request.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
@@ -38,7 +38,7 @@ KNMainWindow::KNMainWindow(QObject *parent) :
 void KNMainWindow::retranslate()
 {
     //Check if the current category is usable.
-    for(auto i=m_categoryList.begin();
+    for(QList<CategoryPluginItem>::iterator i=m_categoryList.begin();
         i!=m_categoryList.end();
         ++i)
     {
@@ -84,17 +84,17 @@ void KNMainWindow::setMainWindow(QMainWindow *mainWindow)
 {
     if(m_mainWindow==nullptr)
     {
+        //Save the main window pointer.
         m_mainWindow=mainWindow;
         //Set properties.
         m_mainWindow->setAutoFillBackground(true);
         m_mainWindow->setContentsMargins(0,0,0,0);
-        //Set palette.
+        //Set basic palette.
         QPalette pal=m_mainWindow->palette();
         pal.setColor(QPalette::Window, QColor(0,0,0));
         m_mainWindow->setPalette(pal);
-        //Change parent relationship.
-        m_container->setParent(m_mainWindow);
-        //Set the container to the central widget.
+        //Set the container to the central widget, and main window will take the
+        //ownership of the container, will delete it at appropriate time.
         m_mainWindow->setCentralWidget(m_container);
     }
 }
@@ -103,10 +103,10 @@ void KNMainWindow::setHeader(KNMainWindowHeaderPlugin *plugin)
 {
     if(m_headerPlugin==nullptr)
     {
+        //Save the header pointer.
         m_headerPlugin=plugin;
+        //Give the widget to container.
         m_container->setHeaderWidget(m_headerPlugin->headerWidget());
-        connect(plugin, &KNMainWindowHeaderPlugin::requireShowCategorySwitcher,
-                this, &KNMainWindow::showCategorySwitcher);
     }
 }
 
@@ -124,7 +124,9 @@ void KNMainWindow::setCategoryStack(KNMainWindowCategoryStackPlugin *plugin)
 {
     if(m_categoryStackPlugin==nullptr)
     {
+        //Save the stack plugin pointer.
         m_categoryStackPlugin=plugin;
+        //Give the widget to container.
         m_container->setCategoryStack(m_categoryStackPlugin->stackedWidget());
     }
 }
@@ -133,13 +135,18 @@ void KNMainWindow::setCategorySwitcher(KNMainWindowCategorySwitcherPlugin *plugi
 {
     if(m_categorySwitcherPlugin==nullptr)
     {
+        //Save the switcher plugin.
         m_categorySwitcherPlugin=plugin;
         m_container->setCategorySwitcher(m_categorySwitcherPlugin->switcherWidget());
-        //Link the plugin.
+        //Link the switcher to the stack widget.
+        connect(m_headerPlugin, &KNMainWindowHeaderPlugin::requireShowCategorySwitcher,
+                m_categorySwitcherPlugin, &KNMainWindowCategorySwitcherPlugin::showSwitcher);
+        //Linke the switcher to the header.
+        connect(m_categorySwitcherPlugin, &KNMainWindowCategorySwitcherPlugin::requireResetHeaderButton,
+                m_headerPlugin, &KNMainWindowHeaderPlugin::restoreHeaderButton);
+        //Link the switcher preference related signal.
         connect(m_categorySwitcherPlugin, &KNMainWindowCategorySwitcherPlugin::requireShowPreference,
                 this, &KNMainWindow::showPreference);
-        connect(m_categorySwitcherPlugin, &KNMainWindowCategorySwitcherPlugin::requireResetHeaderButton,
-                this, &KNMainWindow::restoreHeaderButton);
     }
 }
 
@@ -163,16 +170,6 @@ void KNMainWindow::showPreference()
 void KNMainWindow::hidePreference()
 {
     m_container->hidePreference();
-}
-
-void KNMainWindow::showCategorySwitcher()
-{
-    m_categorySwitcherPlugin->showSwitcher();
-}
-
-void KNMainWindow::restoreHeaderButton()
-{
-    m_headerPlugin->restoreHeaderButton();
 }
 
 void KNMainWindow::addHeaderWidget(QWidget *widget)
