@@ -66,7 +66,11 @@ KNPluginManager::~KNPluginManager()
     while(!m_pluginList.isEmpty())
     {
         //We only need to recover the object which don't have parent.
-        QObject *currentObject=m_pluginList.takeFirst();
+        //Why take last:
+        //Because we build the plugin list from the first to the last, and the
+        //later loaded plugin must based on the plugin loaded earlier. So delete
+        //it later.
+        QObject *currentObject=m_pluginList.takeLast();
         if(currentObject->parent()==nullptr)
         {
             delete currentObject;
