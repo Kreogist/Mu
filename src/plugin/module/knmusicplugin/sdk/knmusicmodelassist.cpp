@@ -37,6 +37,7 @@ QList<QStandardItem *> KNMusicModelAssist::generateRow(const KNMusicDetailInfo &
     item->setData(detailInfo.filePath, FilePathRole);
     item->setData(detailInfo.fileName, FileNameRole);
     item->setData(detailInfo.trackFilePath, TrackFileRole);
+    item->setData(detailInfo.trackIndex, TrackIndexRole);
     item->setData(detailInfo.coverImageHash, ArtworkKeyRole);
     item->setData(detailInfo.startPosition, StartPositionRole);
     item=musicRow.at(Size);
@@ -82,9 +83,8 @@ bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
     }
     QList<KNMusicAnalysisItem> currentTrackInfo;
     //Get the track number.
-    int currentTrackNumber=musicModel->roleData(index.row(),
-                                                TrackNumber,
-                                                Qt::DisplayRole).toInt();
+    int currentTrackNumber=musicModel->rowProperty(index.row(),
+                                                   TrackIndexRole).toInt();
     //Parse the list first.
     parser->parseTrackList(musicModel->rowProperty(index.row(),
                                                    TrackFileRole).toString(),
@@ -97,7 +97,7 @@ bool KNMusicModelAssist::reanalysisRow(KNMusicModel *musicModel,
     //Check the beginning of the track list, if it's 0, means the track is indexed at:
     // 0 1 2 3 ...
     //Or else, it is start at 1, we need to reduce the track number.
-    if(currentTrackInfo.first().detailInfo.textLists[TrackNumber].toInt()!=0)
+    if(currentTrackInfo.first().detailInfo.trackIndex!=0)
     {
         currentTrackNumber--;
         //Still need to check the tracknumber.

@@ -63,6 +63,7 @@ enum KNMusicModelRole
     StartPositionRole,
     ArtworkKeyRole,
     TrackFileRole,
+    TrackIndexRole,
     CantPlayFlagRole
 };
 enum KNMusicCategoryRole
@@ -114,13 +115,15 @@ struct KNMusicListDetailInfo
 struct KNMusicDetailInfo
 {
     //Properties.
+    int rating=0;
+    int trackIndex=-1;
     QString fileName;
     QString filePath;
     QString trackFilePath;
-    quint64 size;
     QDateTime dateModified;
     QDateTime lastPlayed;
     QDateTime dateAdded;
+    quint64 size;
     //Music properties.
     qint64 startPosition=-1;
     qint64 duration=0;
@@ -130,7 +133,6 @@ struct KNMusicDetailInfo
     QString coverImageHash;
     //Tag datas.
     QString textLists[MusicDataCount];
-    int rating=0;
 };
 struct KNMusicAnalysisItem
 {

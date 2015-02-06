@@ -128,6 +128,7 @@ inline void KNMusicLibraryDatabase::generateObject(const QList<QStandardItem *> 
     if(!trackFilePath.isEmpty())
     {
         musicObject.insert("TrackFilePath", trackFilePath);
+        musicObject.insert("TrackIndex", propertyItem->data(TrackIndexRole).toInt());
         musicObject.insert("StartPosition",
                            QString::number(propertyItem->data(StartPositionRole).toLongLong()));
     }
@@ -145,6 +146,7 @@ inline void KNMusicLibraryDatabase::generateRow(const QJsonObject &musicObject,
     if(!trackFilePath.isEmpty())
     {
         currentDetail.trackFilePath=trackFilePath;
+        currentDetail.trackIndex=musicObject.value("TrackIndex").toInt();
         currentDetail.startPosition=musicObject.value("StartPosition").toString().toLongLong();
     }
     //Set the detail information first.

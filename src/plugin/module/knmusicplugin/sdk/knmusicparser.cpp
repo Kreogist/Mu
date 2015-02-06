@@ -47,6 +47,8 @@ void KNMusicParser::parseFile(QString filePath,
     detailInfo.size=fileInfo.size();
     detailInfo.lastPlayed=fileInfo.lastRead();
     detailInfo.dateModified=fileInfo.lastModified();
+    //Track index of single file is always -1.
+    detailInfo.trackIndex=-1;
     //Generate basic info.
     detailInfo.textLists[Name]=detailInfo.fileName;
     detailInfo.textLists[Size]=m_global->byteToHigherUnit(detailInfo.size);
@@ -158,7 +160,7 @@ void KNMusicParser::parseTrackList(const QString &filePath,
     if(trackListFile.open(QIODevice::ReadOnly))
     {
         //Using all the tag parser parse the list.
-        for(auto i=m_listParsers.begin();
+        for(QList<KNMusicListParser *>::iterator i=m_listParsers.begin();
             i!=m_listParsers.end();
             ++i)
         {
@@ -202,6 +204,7 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                                 currentTrack.metaData.take(firstKey);
                     }
                     //Set the track number.
+                    currentInfo.trackIndex=currentTrack.index;
                     currentInfo.textLists[TrackNumber]=
                             QString::number(currentTrack.index);
                     //Set the track position.

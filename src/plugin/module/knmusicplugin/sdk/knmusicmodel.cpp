@@ -188,6 +188,7 @@ void KNMusicModel::updateMusicRow(const int &row,
     updateRowProperty(row, FilePathRole, detailInfo.filePath);
     updateRowProperty(row, FileNameRole, detailInfo.fileName);
     updateRowProperty(row, TrackFileRole, detailInfo.trackFilePath);
+    updateRowProperty(row, TrackIndexRole, detailInfo.trackIndex);
     updateRowProperty(row, StartPositionRole, detailInfo.startPosition);
     updateRoleData(row, Size, Qt::UserRole, detailInfo.size);
     updateRoleData(row, DateModified, Qt::UserRole, detailInfo.dateModified);

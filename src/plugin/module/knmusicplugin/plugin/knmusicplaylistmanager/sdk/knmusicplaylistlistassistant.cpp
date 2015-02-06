@@ -81,6 +81,8 @@ bool KNMusicPlaylistListAssistant::writePlaylistToFile(const QString &filePath,
                     playlistModel->rowProperty(row, FileNameRole).toString();
             musicItem["TrackFilePath"]=
                     playlistModel->rowProperty(row, TrackFileRole).toString();
+            musicItem["TrackIndex"]=
+                    playlistModel->rowProperty(row, TrackIndexRole).toInt();
             musicItem["StartPosition"]=
                     playlistModel->rowProperty(row, StartPositionRole).toInt();
             musicItem["Size"]=
