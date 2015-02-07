@@ -47,7 +47,7 @@ public:
         //Only for text easy access.
         return data(index(row, column), Qt::DisplayRole).toString();
     }
-    virtual void updateItemText(const int &row, const int &column, const QString &text)
+    void updateItemText(const int &row, const int &column, const QString &text)
     {
         Q_ASSERT(row>-1 && row<rowCount() && column>-1 && column<columnCount());
         //Only for text easy access, only update the different text.
@@ -107,9 +107,9 @@ public:
         //All the property of a song is stored in the first item.
         return roleData(row, 0, propertyRole);
     }
-    inline virtual void updateRowProperty(const int &row,
-                                          const int &propertyRole,
-                                          const QVariant &value)
+    inline void updateRowProperty(const int &row,
+                                  const int &propertyRole,
+                                  const QVariant &value)
     {
         Q_ASSERT(row>-1 && row<rowCount());
         //All the property of a song is stored in the first item.

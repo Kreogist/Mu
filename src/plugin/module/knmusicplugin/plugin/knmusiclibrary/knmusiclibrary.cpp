@@ -18,6 +18,8 @@
 #include <QAction>
 #include <QThread>
 
+#include "knjsondatabase.h"
+
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
 #include "sdk/knmusicalbummodel.h"
@@ -27,7 +29,6 @@
 #include "sdk/knmusiclibraryartisttab.h"
 #include "sdk/knmusiclibraryalbumtab.h"
 #include "sdk/knmusiclibrarygenretab.h"
-#include "sdk/knmusiclibrarydatabase.h"
 #include "sdk/knmusiclibraryimagemanager.h"
 
 #include "knmusicheaderplayerbase.h"
@@ -44,7 +45,7 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Initial the music library folder path.
     m_libraryPath=KNMusicGlobal::musicLibraryPath()+"/Library";
     //Initial the music database.
-    m_libraryDatabase=new KNMusicLibraryDatabase;
+    m_libraryDatabase=new KNJSONDatabase;
     m_libraryDatabase->moveToThread(m_libraryDatabaseThread);
     m_libraryDatabase->setDatabaseFile(m_libraryPath+"/Music.db");
     //Initial the music image manager.

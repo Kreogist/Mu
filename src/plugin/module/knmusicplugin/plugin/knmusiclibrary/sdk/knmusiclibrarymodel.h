@@ -25,8 +25,8 @@
 #include "knmusicmodel.h"
 
 class KNHashPixmapList;
+class KNJSONDatabase;
 class KNMusicLibraryImageManager;
-class KNMusicLibraryDatabase;
 class KNMusicLibraryAnalysisExtend;
 class KNMusicLibraryModel : public KNMusicModel
 {
@@ -51,8 +51,8 @@ public:
                      const int &column,
                      const QString &text);
     void installCategoryModel(KNMusicCategoryModel *model);
-    KNMusicLibraryDatabase *database() const;
-    void setDatabase(KNMusicLibraryDatabase *database);
+    KNJSONDatabase *database() const;
+    void setDatabase(KNJSONDatabase *database);
     KNMusicLibraryImageManager *imageManager() const;
     void setImageManager(KNMusicLibraryImageManager *imageManager);
     void recoverModel();
@@ -96,11 +96,10 @@ private:
         PropertyTrackIndex,
         PropertyStartPosition
     };
-
     inline void initialHeader();
-    inline void updateRowInDatabase(const int &row);
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
-    KNMusicLibraryDatabase *m_database;
+
+    KNJSONDatabase *m_database;
     KNMusicGlobal *m_musicGlobal;
     KNMusicLibraryAnalysisExtend *m_analysisExtend;
     KNHashPixmapList *m_coverImageList;
