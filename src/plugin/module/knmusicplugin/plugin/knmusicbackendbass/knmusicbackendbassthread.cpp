@@ -45,8 +45,6 @@ bool KNMusicBackendBassThread::loadFromFile(const QString &filePath)
 {
     //Stop the thread first.
     stop();
-    //Stop the position updater.
-    m_positionUpdater->stop();
     //Release all the sync handle.
     releaseSyncHandle();
     //Load the file to thread.
@@ -140,6 +138,12 @@ void KNMusicBackendBassThread::resetState()
 
 void KNMusicBackendBassThread::stop()
 {
+    //Check if the thread data if empty.
+    if(m_filePath.isEmpty())
+    {
+        return;
+    }
+    //Check the state.
     if(m_playingState!=StoppedState)
     {
         //Stop the channel, here is what the specific thing.
@@ -156,6 +160,12 @@ void KNMusicBackendBassThread::stop()
 
 void KNMusicBackendBassThread::pause()
 {
+    //Check if the thread data if empty.
+    if(m_filePath.isEmpty())
+    {
+        return;
+    }
+    //Check the state.
     if(m_playingState!=PausedState)
     {
         //Pause that thread.
@@ -169,6 +179,12 @@ void KNMusicBackendBassThread::pause()
 
 void KNMusicBackendBassThread::play()
 {
+    //Check if the thread data if empty.
+    if(m_filePath.isEmpty())
+    {
+        return;
+    }
+    //Check the state.
     if(m_playingState!=PlayingState)
     {
         //Start the position updater first.
