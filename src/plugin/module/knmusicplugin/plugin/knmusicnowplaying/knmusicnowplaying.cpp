@@ -18,6 +18,7 @@
 #include <QApplication>
 
 #include "knglobal.h"
+#include "knconfigure.h"
 
 #include "knmusicsingleplaylistmodel.h"
 #include "knmusicmodelassist.h"
@@ -35,7 +36,8 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     m_playingIcon=QPixmap(":/plugin/music/common/playingicon.png");
     m_cantPlayIcon=QPixmap(":/plugin/music/common/cantplay.png");
     //Initial music global.
-    m_musicGlobal=KNMusicGlobal::instance();
+    m_cacheConfigure=KNGlobal::instance()->cacheConfigure();
+    m_musicConfigure=KNMusicGlobal::instance()->musicConfigure();
     //Initial temporary model.
     m_temporaryModel=new KNMusicSinglePlaylistModel(this);
     //Initial shadow proxy model.
@@ -95,8 +97,8 @@ int KNMusicNowPlaying::loopState()
 
 void KNMusicNowPlaying::restoreConfigure()
 {
-    setLoopState(m_musicGlobal->configureData("LoopState",
-                                              NoRepeat).toInt());
+    setLoopState(m_cacheConfigure->getData("LoopState",
+                                           NoRepeat).toInt());
 }
 
 void KNMusicNowPlaying::playNext()
@@ -245,8 +247,8 @@ void KNMusicNowPlaying::checkRemovedModel(KNMusicModel *model)
 
 void KNMusicNowPlaying::applyPreference()
 {
-    m_playNextAvailable=m_musicGlobal->configureData("PlayNextAvailable",
-                                                     m_playNextAvailable).toBool();
+    m_playNextAvailable=m_musicConfigure->getData("PlayNextAvailable",
+                                                  m_playNextAvailable).toBool();
 }
 
 void KNMusicNowPlaying::retranslate()
@@ -261,7 +263,7 @@ void KNMusicNowPlaying::retranslate()
 
 void KNMusicNowPlaying::saveConfigure()
 {
-    m_musicGlobal->setConfigureData("LoopState", m_loopMode);
+    m_cacheConfigure->setData("LoopState", m_loopMode);
 }
 
 void KNMusicNowPlaying::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
@@ -275,7 +277,7 @@ void KNMusicNowPlaying::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitl
     //Clear the list.
     list.clear();
     //Add the current info.
-    list.append(KNPreferenceItemGlobal::generateInfo(Switcher,
+    list.append(KNPreferenceItemGlobal::generateInfo(SwitcherItem,
                                                      tr("Play next when error"),
                                                      "PlayNextAvailable",
                                                      m_playNextAvailable));

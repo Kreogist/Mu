@@ -20,6 +20,8 @@
 #include <QPaintEvent>
 #include <QPainter>
 
+#include "knconfigure.h"
+
 #include "knmusicheaderplayerbase.h"
 #include "knmusiclyricsmanager.h"
 
@@ -34,6 +36,8 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 {
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
+    //Initial the music configure.
+    m_musicConfigure=m_musicGlobal->musicConfigure();
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicLyricsManager::instance();
     m_lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
@@ -273,18 +277,18 @@ void KNMusicHeaderLyrics::applyPreference()
 {
     //Update the lyrics folder.
     m_lyricsManager->setLyricsFolderPath(
-                m_musicGlobal->configureData("LyricsFolder",
-                                             m_lyricsManager->lyricsFolderPath()).toString());
+                m_musicConfigure->getData("LyricsFolder",
+                                          m_lyricsManager->lyricsFolderPath()).toString());
     //Update the download info.
     m_lyricsManager->setDownloadLyrics(
-                m_musicGlobal->configureData("DownloadLyrics",
-                                             m_lyricsManager->downloadLyrics()).toBool());
+                m_musicConfigure->getData("DownloadLyrics",
+                                          m_lyricsManager->downloadLyrics()).toBool());
     //Update the spacing.
     m_lineSpacing=
-                m_musicGlobal->configureData("TextSpacing",
-                                             m_lineSpacing).toInt();
+                m_musicConfigure->getData("TextSpacing",
+                                          m_lineSpacing).toInt();
     //Update the font.
-    setFont(m_musicGlobal->configureData("LyricsFont", font()).value<QFont>());
+    setFont(m_musicConfigure->getData("LyricsFont", font()).value<QFont>());
     //Update the lyrics.
     update();
 }
@@ -300,8 +304,8 @@ void KNMusicHeaderLyrics::onActionMusicLibraryMoved(const QString &originalPath,
         QString currentFolderPath=
                 currentPath+managerFolderPath.mid(originalPath.size());
         m_lyricsManager->setLyricsFolderPath(currentFolderPath);
-        m_musicGlobal->setConfigureData("LyricsFolder",
-                                        currentFolderPath);
+        m_musicConfigure->setData("LyricsFolder",
+                                  currentFolderPath);
         //Update the lyrics path value.
         m_musicGlobal->updateItemValue("LyricsFolder");
     }
@@ -326,19 +330,19 @@ inline void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo 
     //Clear the list.
     list.clear();
     //Add the current info.
-    list.append(KNPreferenceItemGlobal::generateInfo(PathEdit,
+    list.append(KNPreferenceItemGlobal::generateInfo(PathEditItem,
                                                      tr("Lyrics Folder"),
                                                      "LyricsFolder",
                                                      m_lyricsManager->lyricsFolderPath()));
-    list.append(KNPreferenceItemGlobal::generateInfo(Switcher,
+    list.append(KNPreferenceItemGlobal::generateInfo(SwitcherItem,
                                                      tr("Download Lyrics"),
                                                      "DownloadLyrics",
                                                      m_lyricsManager->downloadLyrics()));
-    list.append(KNPreferenceItemGlobal::generateInfo(Font,
+    list.append(KNPreferenceItemGlobal::generateInfo(FontItem,
                                                      tr("Lyrics Font"),
                                                      "LyricsFont",
                                                      font()));
-    KNPreferenceItemInfo currentInfo=KNPreferenceItemGlobal::generateInfo(Number,
+    KNPreferenceItemInfo currentInfo=KNPreferenceItemGlobal::generateInfo(NumberItem,
                                                                           tr("Text Spacing"),
                                                                           "TextSpacing",
                                                                           m_lineSpacing,

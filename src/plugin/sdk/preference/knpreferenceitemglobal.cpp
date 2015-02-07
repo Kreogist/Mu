@@ -43,25 +43,25 @@ KNPreferenceItemBase *KNPreferenceItemGlobal::generateItem(const KNPreferenceIte
     KNPreferenceItemBase *item=nullptr;
     switch(info.type)
     {
-    case Switcher:
+    case SwitcherItem:
         //Generate a switcher.
         item=new KNPreferenceItemSwitcher;
         break;
-    case Number:
+    case NumberItem:
         //Generate a number slider.
         item=new KNPreferenceItemNumber;
         ((KNPreferenceItemNumber *)item)->setRange(info.property.value("Min").toInt(),
                                                    info.property.value("Max").toInt());
         break;
-    case LineEdit:
+    case LineEditItem:
         //Generate a line editor.
         item=new KNPreferenceItemLineEdit;
         break;
-    case PathEdit:
+    case PathEditItem:
         //Generate a path editor.
         item=new KNPreferenceItemPathBrowser;
         break;
-    case Font:
+    case FontItem:
         item=new KNPreferenceItemFont;
         break;
     }

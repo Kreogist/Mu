@@ -229,6 +229,7 @@ void KNMusicPlaylistListAssistant::buildPlaylist(KNMusicPlaylistListItem *item)
         currentInfo.filePath=musicItem["FilePath"].toString();
         currentInfo.fileName=musicItem["FileName"].toString();
         currentInfo.trackFilePath=musicItem["TrackFilePath"].toString();
+        currentInfo.trackIndex=musicItem["TrackIndex"].toInt();
         currentInfo.startPosition=musicItem["StartPosition"].toInt();
         currentInfo.size=musicItem["Size"].toInt();
         currentInfo.dateModified=

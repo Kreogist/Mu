@@ -17,11 +17,11 @@ namespace KNPreferenceItemList
 {
 enum KNPreferenceItemType
 {
-    Switcher,
-    Number,
-    LineEdit,
-    PathEdit,
-    Font
+    SwitcherItem,
+    NumberItem,
+    LineEditItem,
+    PathEditItem,
+    FontItem
 };
 struct KNPreferenceTitleInfo
 {

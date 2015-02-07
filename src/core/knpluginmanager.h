@@ -25,7 +25,6 @@
 
 class KNExpandMainWindow;
 class KNGlobal;
-class KNConfigureManager;
 class KNMainWindowPlugin;
 class KNMainWindowHeaderPlugin;
 class KNMainWindowCategoryStackPlugin;
@@ -74,7 +73,6 @@ private:
     KNPlatformExtras *m_platformExtra=nullptr;
     QLinkedList<QObject *> m_pluginList;
     KNGlobal *m_global;
-    KNConfigureManager *m_configure;
 };
 
 #endif // KNPLUGINMANAGER_H

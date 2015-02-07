@@ -28,7 +28,7 @@ namespace KNConfigureGlobal
 {
 enum Types
 {
-    Font
+    FontType
 };
 }
 

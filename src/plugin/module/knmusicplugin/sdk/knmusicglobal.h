@@ -193,9 +193,6 @@ public:
     void setNoAlbumArt(const QPixmap &noAlbumArt);
     QString treeViewHeaderText(const int &index);
     QString indexedGenre(const int &index);
-    void setConfigureData(const QString &key, const QVariant &value);
-    QVariant configureData(const QString &key,
-                           const QVariant &defaultValue=QVariant());
 
     static QList<QList<QStandardItem *> > dragMusicRow();
     static void setDragMusicRow(const QList<QList<QStandardItem *> > &dragMusicRow);

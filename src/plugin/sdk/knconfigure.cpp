@@ -159,7 +159,7 @@ QVariant KNConfigure::getData(const QString &key,
             }
             switch(objectType)
             {
-            case Font:
+            case FontType:
             {
                 QFont valueFont=QApplication::font();
                 valueFont.setFamily(valueObject.value("Family").toString());
@@ -248,5 +248,5 @@ void KNConfigure::updateSubConfigure()
 
 void KNConfigure::buildObjectTypeList()
 {
-    m_objectType.insert("Font", Font);
+    m_objectType.insert("Font", FontType);
 }

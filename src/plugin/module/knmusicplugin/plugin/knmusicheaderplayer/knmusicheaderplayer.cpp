@@ -21,6 +21,7 @@
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
 
+#include "knconfigure.h"
 #include "knhighlightlabel.h"
 #include "knscrolllabel.h"
 #include "knprogressslider.h"
@@ -50,6 +51,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
 
     //Initial music global.
     m_musicGlobal=KNMusicGlobal::instance();
+    m_cacheConfigure=KNGlobal::instance()->cacheConfigure();
 
     //Initial the pixmaps.
     m_playIcon=QPixmap(":/plugin/music/player/play.png");
@@ -83,13 +85,13 @@ void KNMusicHeaderPlayer::loadConfigure()
     m_volumeSlider->setValue(
                 m_volumeSlider->minimal()+
                 (double)m_volumeSlider->range()*
-                m_musicGlobal->configureData("Volume", 0.5).toDouble());
+                m_cacheConfigure->getData("MusicVolume", 0.5).toDouble());
 }
 
 void KNMusicHeaderPlayer::saveConfigure()
 {
-    m_musicGlobal->setConfigureData("Volume",
-                                    (double)m_volumeSlider->percentage());
+    m_cacheConfigure->setData("MusicVolume",
+                              (double)m_volumeSlider->percentage());
 }
 
 void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)

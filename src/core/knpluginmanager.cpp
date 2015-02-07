@@ -76,6 +76,8 @@ KNPluginManager::~KNPluginManager()
             delete currentObject;
         }
     }
+    //Save the configure right now.
+    m_global->saveConfigure();
     //Delete the global object.
     delete m_global;
 }
@@ -166,8 +168,7 @@ void KNPluginManager::start()
 
 void KNPluginManager::onActionMainWindowDestory()
 {
-    //Save the configure right now.
-    m_global->saveConfigure();
+    ;
 }
 
 inline void KNPluginManager::setApplicationInformation()

@@ -65,6 +65,7 @@ private:
     static KNMusicDetailInfo m_currentDeailInfo;
     KNMusicLyricsManager *m_lyricsManager;
     KNMusicGlobal *m_musicGlobal;
+    KNConfigure *m_musicConfigure;
 
     QList<qint64> m_positions;
     QStringList m_lyricsText;

@@ -640,17 +640,6 @@ void KNMusicGlobal::insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
     m_preferencePanel->insertItemInfoList(listTitle, list);
 }
 
-void KNMusicGlobal::setConfigureData(const QString &key, const QVariant &value)
-{
-    m_musicConfigure->setData(key, value);
-}
-
-QVariant KNMusicGlobal::configureData(const QString &key,
-                                      const QVariant &defaultValue)
-{
-    return m_musicConfigure->getData(key, defaultValue);
-}
-
 QPixmap KNMusicGlobal::noAlbumArt() const
 {
     return m_noAlbumArt;

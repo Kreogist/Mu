@@ -28,6 +28,7 @@ class KNOpacityButton;
 class KNOpacityAnimeButton;
 class KNVolumeSlider;
 class KNGlobal;
+class KNConfigure;
 class KNScrollLabel;
 class KNProgressSlider;
 class KNEditableLabel;
@@ -111,9 +112,9 @@ private:
 
     //Public classes.
     KNMusicGlobal *m_musicGlobal;
+    KNConfigure *m_cacheConfigure;
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
-    KNGlobal *m_global;
 
     //Animations
     QParallelAnimationGroup *m_mouseIn, *m_mouseOut;

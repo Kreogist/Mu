@@ -23,6 +23,7 @@
 #include "knmusicnowplayingbase.h"
 
 class KNMusicModel;
+class KNConfigure;
 class KNMusicProxyModel;
 class KNMusicSinglePlaylistModel;
 class KNMusicNowPlaying : public KNMusicNowPlayingBase
@@ -100,7 +101,7 @@ private:
     KNMusicAnalysisItem m_currentPlayingAnalysisItem;
     QPixmap m_playingIcon, m_cantPlayIcon;
     KNMusicTab *m_currentTab=nullptr;
-    KNMusicGlobal *m_musicGlobal;
+    KNConfigure *m_cacheConfigure, *m_musicConfigure;
     int m_loopMode=NoRepeat;
     bool m_playNextAvailable=true;
 
