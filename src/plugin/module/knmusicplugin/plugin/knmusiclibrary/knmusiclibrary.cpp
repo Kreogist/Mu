@@ -157,7 +157,7 @@ void KNMusicLibrary::onActionLoadLibrary()
     //Read the database.
     //**!WARNING!**
     //Don't change the order of the following code.
-    m_libraryDatabase->recoverModel();
+    m_libraryModel->recoverModel();
     m_libraryImageManager->recoverFromFolder();
 }
 

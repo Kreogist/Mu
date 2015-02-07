@@ -55,6 +55,7 @@ public:
     void setDatabase(KNMusicLibraryDatabase *database);
     KNMusicLibraryImageManager *imageManager() const;
     void setImageManager(KNMusicLibraryImageManager *imageManager);
+    void recoverModel();
 
 signals:
     void libraryNotEmpty();
@@ -78,6 +79,24 @@ private slots:
     void imageRecoverComplete();
 
 private:
+    enum PropertyListIndex
+    {
+        PropertyFilePath,
+        PropertyFileName,
+        PropertyCoverImageHash,
+        PropertyBitRate,
+        PropertyRating,
+        PropertySampleRating,
+        PropertySize,
+        PropertyDuration,
+        PropertyDateAdded,
+        PropertyDateModified,
+        PropertyLastPlayed,
+        PropertyTrackFilePath,
+        PropertyTrackIndex,
+        PropertyStartPosition
+    };
+
     inline void initialHeader();
     inline void updateRowInDatabase(const int &row);
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;

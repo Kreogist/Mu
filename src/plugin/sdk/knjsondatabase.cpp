@@ -12,7 +12,7 @@
 
 #include <QDebug>
 
-int KNJSONDatabase::m_majorVersion=1;
+int KNJSONDatabase::m_majorVersion=2;
 int KNJSONDatabase::m_minorVersion=0;
 
 #define MAX_BATCH 300
@@ -109,14 +109,14 @@ void KNJSONDatabase::write()
     m_batchCount=0;
 }
 
-void KNJSONDatabase::append(QJsonObject value)
+void KNJSONDatabase::append(const QJsonValue &value)
 {
     m_dataField.append(value);
     //Count a operate.
     addBatchCount();
 }
 
-void KNJSONDatabase::replace(int i, QJsonObject value)
+void KNJSONDatabase::replace(int i, const QJsonValue &value)
 {
     m_dataField.replace(i, value);
     //Count a operate.

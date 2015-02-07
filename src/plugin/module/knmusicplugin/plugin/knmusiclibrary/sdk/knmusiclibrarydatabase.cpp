@@ -29,50 +29,14 @@ KNMusicLibraryDatabase::KNMusicLibraryDatabase(QObject *parent) :
     m_global=KNGlobal::instance();
 }
 
-void KNMusicLibraryDatabase::recoverModel()
-{
-    //Load the database first.
-    read();
-    //Recover the model for all the array data.
-    for(QJsonArray::iterator i=begin();
-        i!=end();
-        i++)
-    {
-        //Generate the row from the json object.
-        QList<QStandardItem *> recoverdMusicRow;
-        generateRow((*i).toObject(), recoverdMusicRow);
-        //Ask to append the recover row.
-        emit requireRecoverMusicRow(recoverdMusicRow);
-    }
-}
-
-void KNMusicLibraryDatabase::appendMusicRow(const QList<QStandardItem *> &musicRow)
-{
-    QJsonObject currentObject;
-    //Generate the object for the new row.
-    generateObject(musicRow, currentObject);
-    //Add the object to database.
-    append(currentObject);
-}
-
 void KNMusicLibraryDatabase::updateMusicRow(const int &row,
                                             const QList<QStandardItem *> &musicRow)
 {
-    QJsonObject currentObject;
-    //Generate the object for the new row.
-    generateObject(musicRow, currentObject);
-    //Replace the object in the database.
-    replace(row, currentObject);
-}
-
-void KNMusicLibraryDatabase::updateArtworkKey(const int &row,
-                                              const QString &artworkKey)
-{
-    QJsonObject currentObject=at(row).toObject();
-    //Insert the artwork key to the object.
-    currentObject.insert("ArtworkKeyRole", artworkKey);
-    //Replace the object.
-    replace(row, currentObject);
+//    QJsonObject currentObject;
+//    //Generate the object for the new row.
+//    generateObject(musicRow, currentObject);
+//    //Replace the object in the database.
+//    replace(row, currentObject);
 }
 
 void KNMusicLibraryDatabase::removeMusicRow(const int &row)
@@ -133,63 +97,3 @@ inline void KNMusicLibraryDatabase::generateObject(const QList<QStandardItem *> 
                            QString::number(propertyItem->data(StartPositionRole).toLongLong()));
     }
 }
-
-inline void KNMusicLibraryDatabase::generateRow(const QJsonObject &musicObject,
-                                                QList<QStandardItem *> &musicRow)
-{
-    KNMusicDetailInfo currentDetail;
-    //Set properties.
-    currentDetail.filePath=musicObject.value("FilePath").toString();
-    currentDetail.fileName=musicObject.value("FileName").toString();
-    currentDetail.coverImageHash=musicObject.value("ArtworkKeyRole").toString();
-    QString trackFilePath=musicObject.value("TrackFilePath").toString();
-    if(!trackFilePath.isEmpty())
-    {
-        currentDetail.trackFilePath=trackFilePath;
-        currentDetail.trackIndex=musicObject.value("TrackIndex").toInt();
-        currentDetail.startPosition=musicObject.value("StartPosition").toString().toLongLong();
-    }
-    //Set the detail information first.
-    currentDetail.bitRate=musicObject.value("BitRate").toInt();
-    currentDetail.rating=musicObject.value("Rating").toString().toInt();
-    currentDetail.samplingRate=musicObject.value("SampleRate").toInt();
-    currentDetail.size=musicObject.value("Size").toString().toLongLong();
-    currentDetail.duration=musicObject.value("Time").toString().toLongLong();
-    currentDetail.dateAdded=KNMusicModelAssist::dataStringToDateTime(
-                musicObject.value("DateAdded").toString());
-    currentDetail.dateModified=KNMusicModelAssist::dataStringToDateTime(
-                musicObject.value("DateModified").toString());
-    currentDetail.lastPlayed=KNMusicModelAssist::dataStringToDateTime(
-                musicObject.value("LastPlayed").toString());
-    //Set the text data.
-    currentDetail.textLists[Name]=musicObject.value("Name").toString();
-    currentDetail.textLists[Album]=musicObject.value("Album").toString();
-    currentDetail.textLists[AlbumArtist]=musicObject.value("AlbumArtist").toString();
-    currentDetail.textLists[AlbumRating]=musicObject.value("AlbumRating").toString();
-    currentDetail.textLists[Artist]=musicObject.value("Artist").toString();
-    currentDetail.textLists[BeatsPerMinuate]=musicObject.value("BeatsPerMinuate").toString();
-    currentDetail.textLists[BitRate]=KNMusicParser::bitRateText(currentDetail.bitRate);
-    currentDetail.textLists[Category]=musicObject.value("Category").toString();
-    currentDetail.textLists[Comments]=musicObject.value("Comments").toString();
-    currentDetail.textLists[Composer]=musicObject.value("Composer").toString();
-    currentDetail.textLists[DateAdded]=KNMusicModelAssist::dateTimeToString(currentDetail.dateAdded);
-    currentDetail.textLists[DateModified]=KNMusicModelAssist::dateTimeToString(currentDetail.dateModified);
-    currentDetail.textLists[Description]=musicObject.value("Description").toString();
-    currentDetail.textLists[DiscCount]=musicObject.value("DiscCount").toString();
-    currentDetail.textLists[DiscNumber]=musicObject.value("DiscNumber").toString();
-    currentDetail.textLists[Genre]=musicObject.value("Genre").toString();
-    currentDetail.textLists[Kind]=musicObject.value("Kind").toString();
-    currentDetail.textLists[LastPlayed]=KNMusicModelAssist::dateTimeToString(currentDetail.lastPlayed);
-    currentDetail.textLists[Plays]=musicObject.value("Plays").toString();
-    currentDetail.textLists[Rating]=musicObject.value("Rating").toString();
-    currentDetail.textLists[SampleRate]=KNMusicParser::sampleRateText(currentDetail.samplingRate);
-    currentDetail.textLists[Size]=m_global->byteToHigherUnit(currentDetail.size);
-    currentDetail.textLists[Time]=KNMusicGlobal::msecondToString(currentDetail.duration);
-    currentDetail.textLists[TrackCount]=musicObject.value("TrackCount").toString();
-    currentDetail.textLists[TrackNumber]=musicObject.value("TrackNumber").toString();
-    currentDetail.textLists[Year]=musicObject.value("Year").toString();
-    //Set the music row.
-    musicRow=KNMusicModelAssist::generateRow(currentDetail);
-}
-
-

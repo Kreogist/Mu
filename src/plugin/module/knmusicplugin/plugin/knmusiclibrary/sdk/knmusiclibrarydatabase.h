@@ -33,11 +33,8 @@ class KNMusicLibraryDatabase : public KNJSONDatabase
     Q_OBJECT
 public:
     explicit KNMusicLibraryDatabase(QObject *parent = 0);
-    void recoverModel();
-    void appendMusicRow(const QList<QStandardItem *> &musicRow);
     void updateMusicRow(const int &row,
                         const QList<QStandardItem *> &musicRow);
-    void updateArtworkKey(const int &row, const QString &artworkKey);
     void removeMusicRow(const int &row);
 
 signals:
@@ -48,8 +45,6 @@ public slots:
 private:
     inline void generateObject(const QList<QStandardItem *> &musicRow,
                                QJsonObject &musicObject);
-    inline void generateRow(const QJsonObject &musicObject,
-                            QList<QStandardItem *> &musicRow);
     KNGlobal *m_global;
 };
 
