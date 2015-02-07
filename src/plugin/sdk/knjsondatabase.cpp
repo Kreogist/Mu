@@ -45,8 +45,7 @@ void KNJSONDatabase::read()
         return;
     }
     //Read the data from the file.
-    m_document=QJsonDocument::fromJson(m_databaseFile->readAll(),
-                                       &m_lastError);
+    m_document=QJsonDocument::fromBinaryData(m_databaseFile->readAll());
     m_databaseFile->close();
     //Check whether the document is null.
     if(m_document.isNull())
@@ -102,7 +101,7 @@ void KNJSONDatabase::write()
     //Write the document to file.
     if(m_databaseFile->open(QIODevice::WriteOnly))
     {
-        m_databaseFile->write(m_document.toJson());
+        m_databaseFile->write(m_document.toBinaryData());
         m_databaseFile->close();
     }
     //Clear count.

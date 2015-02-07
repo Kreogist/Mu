@@ -44,7 +44,6 @@ private:
     QJsonArray m_dataField;
     QJsonDocument m_document;
     QJsonObject m_contentObject;
-    QJsonParseError m_lastError;
     static int m_majorVersion;
     static int m_minorVersion;
     int m_batchCount=0;
