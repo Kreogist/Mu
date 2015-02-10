@@ -555,8 +555,9 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
     if(index.isValid())
     {
         //Set the playing model.
-        m_musicGlobal->nowPlaying()->setPlayingModel(m_proxyModel, m_musicTab);
-        m_musicGlobal->nowPlaying()->playMusic(index);
+        m_musicGlobal->nowPlaying()->playMusicRow(m_proxyModel,
+                                                  index,
+                                                  m_musicTab);
     }
 }
 

@@ -111,7 +111,7 @@ void KNMusicNowPlaying::playNext()
         return;
     }
     //Or else play the row.
-    if(playMusicRow(preferNextRow))
+    if(playRow(preferNextRow))
     {
         return;
     }
@@ -135,7 +135,7 @@ void KNMusicNowPlaying::playPrevious()
         return;
     }
     //Or else play the row.
-    if(playMusicRow(preferPrevRow))
+    if(playRow(preferPrevRow))
     {
         return;
     }
@@ -189,10 +189,9 @@ void KNMusicNowPlaying::playTemporaryFiles(const QStringList &filePaths)
     //If there's any file we can play, play it.
     if(m_temporaryModel->rowCount()>0)
     {
-        //Set the playing model to temporary model.
-        setPlayingModel(m_temporaryProxyModel);
-        //Play the first file.
-        playMusic(0);
+        //Set the playing model to temporary model and play the first file..
+        playMusicRow(m_temporaryProxyModel,
+                      0);
     }
 }
 
@@ -216,10 +215,20 @@ void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model,
     }
 }
 
+void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
+                                     int row,
+                                     KNMusicTab *tab)
+{
+    //Set the playing model.
+    setPlayingModel(model, tab);
+    //Play the specific row.
+    playMusic(row);
+}
+
 void KNMusicNowPlaying::playMusic(int row)
 {
     //If we can play this row.
-    if(playMusicRow(row))
+    if(playRow(row))
     {
         return;
     }
@@ -230,11 +239,6 @@ void KNMusicNowPlaying::playMusic(int row)
     {
         emit requirePlayNextAvailable(row);
     }
-}
-
-void KNMusicNowPlaying::playMusic(const QModelIndex &index)
-{
-    playMusic(index.row());
 }
 
 void KNMusicNowPlaying::checkRemovedModel(KNMusicModel *model)
@@ -300,7 +304,7 @@ void KNMusicNowPlaying::playNextAvailable(const int &currentProxyRow)
         return;
     }
     //Get the next available row.
-    if(playMusicRow(preferRow))
+    if(playRow(preferRow))
     {
         return;
     }
@@ -323,7 +327,7 @@ void KNMusicNowPlaying::playPrevAvailable(const int &currentProxyRow)
         return;
     }
     //Get the next available row.
-    if(playMusicRow(preferRow))
+    if(playRow(preferRow))
     {
         return;
     }
@@ -461,7 +465,7 @@ int KNMusicNowPlaying::nextSongIndex(int currentProxyRow,
     return currentProxyRow+1;
 }
 
-bool KNMusicNowPlaying::playMusicRow(const int &row)
+bool KNMusicNowPlaying::playRow(const int &row)
 {
     Q_ASSERT(m_playingModel!=nullptr &&
             row>-1 &&
@@ -577,7 +581,7 @@ void KNMusicNowPlaying::restoreCurrentPlaying()
     if(m_backupPosition!=-1)
     {
         //Replay the current playing index.
-        playMusic(m_playingModel->mapFromSource(m_currentPlayingIndex));
+        playRow(m_playingModel->mapFromSource(m_currentPlayingIndex).row());
         //Restore the playing position.
         m_backend->setPosition(m_backupPosition);
         //Reset the backup flag to invaild.

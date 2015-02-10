@@ -53,12 +53,12 @@ public slots:
     void showCurrentIndexInOriginalTab();
     void shadowPlayingModel();
 
-    void setPlayingModel(KNMusicProxyModel *model, KNMusicTab *tab=nullptr);
+    void playMusicRow(KNMusicProxyModel *model,
+                      int row,
+                      KNMusicTab *tab=nullptr);
 
     void playNext();
     void playPrevious();
-    void playMusic(int row);
-    void playMusic(const QModelIndex &index);
     void playTemporaryFiles(const QStringList &filePaths);
 
     void onActionPlayingFinished();
@@ -77,7 +77,9 @@ private slots:
     void playPrevAvailable(const int &currentProxyRow);
 
 private:
-    void saveConfigure();
+    inline void setPlayingModel(KNMusicProxyModel *model, KNMusicTab *tab=nullptr);
+    inline void playMusic(int row);
+    inline void saveConfigure();
 
     inline void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
                                          QList<KNPreferenceItemInfo> &list);
@@ -90,7 +92,7 @@ private:
                       bool ignoreLoopMode=false);
     int nextSongIndex(int currentProxyRow,
                       bool ignoreLoopMode=false);
-    bool playMusicRow(const int &row);
+    bool playRow(const int &row);
     void setCannotPlay(const int &row);
     KNMusicBackend *m_backend=nullptr;
     KNMusicSinglePlaylistModel *m_temporaryModel;

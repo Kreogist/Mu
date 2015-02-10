@@ -46,13 +46,18 @@ public slots:
     virtual void showCurrentIndexInOriginalTab()=0;
     virtual void shadowPlayingModel()=0;
 
-    virtual void setPlayingModel(KNMusicProxyModel *model,
-                                 KNMusicTab *tab=nullptr)=0;
+    virtual void playMusicRow(KNMusicProxyModel *model,
+                              int row,
+                              KNMusicTab *tab=nullptr)=0;
+    inline void playMusicRow(KNMusicProxyModel *model,
+                             const QModelIndex &index,
+                             KNMusicTab *tab=nullptr)
+    {
+        playMusicRow(model, index.row(), tab);
+    }
 
     virtual void playNext()=0;
     virtual void playPrevious()=0;
-    virtual void playMusic(int row)=0;
-    virtual void playMusic(const QModelIndex &index)=0;
     virtual void playTemporaryFiles(const QStringList &filePaths)=0;
 
     virtual void onActionPlayingFinished()=0;
