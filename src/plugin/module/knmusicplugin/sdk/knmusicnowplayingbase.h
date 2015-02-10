@@ -32,6 +32,7 @@ public:
 
 signals:
     void requireResetPlayer();
+    void requireResetInformation();
     void nowPlayingChanged();
     void loopStateChanged(int state);
 

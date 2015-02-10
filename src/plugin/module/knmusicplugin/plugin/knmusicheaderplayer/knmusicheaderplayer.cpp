@@ -141,6 +141,8 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             this, &KNMusicHeaderPlayer::onActionLoopStateChanged);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetPlayer,
             this, &KNMusicHeaderPlayer::reset);
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetInformation,
+            this, &KNMusicHeaderPlayer::resetInformation);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
             this, &KNMusicHeaderPlayer::updatePlayerInfo);
     //Sync the data with now playing.
@@ -154,6 +156,16 @@ KNMusicDetailInfo KNMusicHeaderPlayer::currentDetailInfo()
 
 void KNMusicHeaderPlayer::reset()
 {
+    //Reset the current information.
+    resetInformation();
+    //Ask to reset main thread.
+    m_backend->resetMainPlayer();
+    //Emit reset signal.
+    emit playerReset();
+}
+
+void KNMusicHeaderPlayer::resetInformation()
+{
     //Reset file path.
     m_currentFilePath.clear();
     //Set text.
@@ -166,10 +178,6 @@ void KNMusicHeaderPlayer::reset()
     //Set the duration and position.
     setDuration(0);
     setPositionText(0);
-    //Ask to reset main thread.
-    m_backend->resetMainPlayer();
-    //Emit reset signal.
-    emit playerReset();
 }
 
 void KNMusicHeaderPlayer::play()

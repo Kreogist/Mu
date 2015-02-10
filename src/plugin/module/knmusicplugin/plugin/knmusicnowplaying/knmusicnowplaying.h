@@ -82,8 +82,9 @@ private:
     inline void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
                                          QList<KNPreferenceItemInfo> &list);
 
-    void resetPlayingItem();
-    void resetPlayingModels();
+    inline void resetPlayingItem();
+    inline void resetPlayingModels();
+    inline void resetShadowModel();
 
     int prevSongIndex(int currentProxyRow,
                       bool ignoreLoopMode=false);

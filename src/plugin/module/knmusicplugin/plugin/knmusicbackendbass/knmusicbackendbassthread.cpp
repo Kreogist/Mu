@@ -152,6 +152,8 @@ void KNMusicBackendBassThread::stop()
         m_positionUpdater->stop();
         //Reset position.
         setPosition(0);
+        //Set stop flag.
+        m_stoppedState=true;
         //Reset the state.
         setState(StoppedState);
         emit stopped();

@@ -40,18 +40,17 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     m_musicConfigure=KNMusicGlobal::instance()->musicConfigure();
     //Initial temporary model.
     m_temporaryModel=new KNMusicSinglePlaylistModel(this);
-    //Initial shadow proxy model.
-    m_shadowPlayingModel=new KNMusicProxyModel(this);
     //Generate temporary proxy model.
     m_temporaryProxyModel=new KNMusicProxyModel(this);
     m_temporaryProxyModel->setSourceModel(m_temporaryModel);
+    //Initial shadow proxy model.
+    m_shadowPlayingModel=new KNMusicProxyModel(this);
 
+    //Connect the play prev and next available signal.
     connect(this, &KNMusicNowPlaying::requirePlayPrevAvailable,
             this, &KNMusicNowPlaying::playPrevAvailable);
     connect(this, &KNMusicNowPlaying::requirePlayNextAvailable,
             this, &KNMusicNowPlaying::playNextAvailable);
-
-
     //Connect apply preference signal.
     connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
             this, &KNMusicNowPlaying::applyPreference);
@@ -200,6 +199,11 @@ void KNMusicNowPlaying::playTemporaryFiles(const QStringList &filePaths)
 void KNMusicNowPlaying::setPlayingModel(KNMusicProxyModel *model,
                                         KNMusicTab *tab)
 {
+    //Check is the model is the current model, then ignore the set request.
+    if(model==m_playingModel)
+    {
+        return;
+    }
     //Reset current item and music model.
     resetPlayingItem();
     resetPlayingModels();
@@ -365,16 +369,21 @@ void KNMusicNowPlaying::resetPlayingItem()
 
 void KNMusicNowPlaying::resetPlayingModels()
 {
-    //Clear the playing model.
+    //Clear the playing model, and relate data.
     m_playingModel=nullptr;
+    m_playingMusicModel=nullptr;
     m_currentTab=nullptr;
+    //Reset shadow model.
+    resetShadowModel();
+}
+
+void KNMusicNowPlaying::resetShadowModel()
+{
     //Clear the shadow playing model data.
     m_shadowPlayingModel->setSourceModel(nullptr);
     m_shadowPlayingModel->setSortRole(-1);
     m_shadowPlayingModel->setFilterFixedString("");
     m_shadowPlayingModel->setFilterRole(-1);
-    //Clear music model.
-    m_playingMusicModel=nullptr;
 }
 
 int KNMusicNowPlaying::prevSongIndex(int currentProxyRow,
@@ -457,8 +466,29 @@ bool KNMusicNowPlaying::playMusicRow(const int &row)
     Q_ASSERT(m_playingModel!=nullptr &&
             row>-1 &&
             row<m_playingModel->rowCount());
-    //Clear the current item.
-    resetPlayingItem();
+    //Clear the current item information.
+    //------------Reset for playing row------------------
+    //Reset the player display information.
+    emit requireResetInformation();
+    //Check is the current item null, if not, clear the playing icon.
+    if(m_currentPlayingIndex.isValid())
+    {
+        //Though this should never happend, only for safe.
+        if(m_playingMusicModel!=nullptr)
+        {
+            if(!m_playingMusicModel->rowProperty(m_currentPlayingIndex.row(),
+                                                 CantPlayFlagRole).toBool())
+            {
+                m_playingMusicModel->setRoleData(m_currentPlayingIndex.row(),
+                                                 BlankData,
+                                                 Qt::DecorationRole,
+                                                 QPixmap());
+            }
+        }
+        m_currentPlayingIndex=QPersistentModelIndex();
+        m_currentPlayingAnalysisItem=KNMusicAnalysisItem();
+    }
+    //------------Reset for playing row end------------------
     //Get the source index. Storage the index as persistent index.
     QPersistentModelIndex sourceIndex=
             QPersistentModelIndex(m_playingModel->mapToSource(
@@ -535,6 +565,7 @@ KNMusicAnalysisItem KNMusicNowPlaying::currentAnalaysisItem() const
 
 void KNMusicNowPlaying::backupCurrentPlaying()
 {
+    //Only do backup when the backend is playing or paused the music.
     m_backupPosition=m_backend->position();
 }
 

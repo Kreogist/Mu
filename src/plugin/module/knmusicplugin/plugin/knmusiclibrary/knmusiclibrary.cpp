@@ -52,6 +52,8 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_libraryImageManager=new KNMusicLibraryImageManager;
     m_libraryImageManager->moveToThread(m_libraryImageThread);
     m_libraryImageManager->setImageFolderPath(m_libraryPath+"/Artworks");
+    connect(this, &KNMusicLibrary::requireLoadImageLibrary,
+            m_libraryImageManager, &KNMusicLibraryImageManager::recoverFromFolder);
 
     //Initial the music model.
     m_libraryModel=new KNMusicLibraryModel(this);
@@ -159,7 +161,7 @@ void KNMusicLibrary::onActionLoadLibrary()
     //**!WARNING!**
     //Don't change the order of the following code.
     m_libraryModel->recoverModel();
-    m_libraryImageManager->recoverFromFolder();
+    emit requireLoadImageLibrary();
 }
 
 inline void KNMusicLibrary::initialSongTab()
