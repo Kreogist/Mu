@@ -18,6 +18,7 @@ using namespace KNMusic;
 class KNMusicTab;
 class KNMusicModel;
 class KNMusicProxyModel;
+class KNMusicSinglePlaylistModel;
 class KNMusicNowPlayingBase : public QObject
 {
     Q_OBJECT
@@ -49,21 +50,17 @@ public slots:
     virtual void playMusicRow(KNMusicProxyModel *model,
                               int row,
                               KNMusicTab *tab=nullptr)=0;
-    inline void playMusicRow(KNMusicProxyModel *model,
-                             const QModelIndex &index,
-                             KNMusicTab *tab=nullptr)
-    {
-        playMusicRow(model, index.row(), tab);
-    }
 
     virtual void playNext()=0;
     virtual void playPrevious()=0;
     virtual void playTemporaryFiles(const QStringList &filePaths)=0;
 
     virtual void onActionPlayingFinished()=0;
+    virtual void onActionCantLoad()=0;
+    virtual void onActionLoaded()=0;
 
     virtual void setLoopState(const int &state)=0;
-    virtual void setRating(const int &rating)=0;
+    virtual void setCurrentSongRating(const int &rating)=0;
     virtual void changeLoopState()=0;
 
     virtual void checkRemovedModel(KNMusicModel *model)=0;

@@ -309,7 +309,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
     plugin/sdk/knlabelbutton.cpp \
     public/knconfiguremanager.cpp \
-    plugin/sdk/knconfigure.cpp
+    plugin/sdk/knconfigure.cpp #\
+#    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -511,7 +512,8 @@ HEADERS += \
     core/knversion.h \
     plugin/sdk/knlabelbutton.h \
     public/knconfiguremanager.h \
-    plugin/sdk/knconfigure.h
+    plugin/sdk/knconfigure.h #\
+#    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.h
 
 RESOURCES += \
     resource/res.qrc

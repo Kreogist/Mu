@@ -75,6 +75,11 @@ qint64 KNMusicStandardBackend::previewDuration() const
     return m_preview->duration();
 }
 
+qint64 KNMusicStandardBackend::previewPosition() const
+{
+    return m_preview->position();
+}
+
 void KNMusicStandardBackend::playPreviewFile(const QString &fileName)
 {
     //Preview the whole file as a section.
@@ -195,6 +200,10 @@ void KNMusicStandardBackend::setMainThread(KNMusicBackendThread *thread)
                 this, &KNMusicStandardBackend::playingStateChanged);
         connect(m_main, &KNMusicBackendThread::filePathChanged,
                 this, &KNMusicStandardBackend::filePathChanged);
+        connect(m_main, &KNMusicBackendThread::loaded,
+                this, &KNMusicStandardBackend::loaded);
+        connect(m_main, &KNMusicBackendThread::cannotLoadFile,
+                this, &KNMusicStandardBackend::cannotLoad);
     }
 }
 
@@ -215,8 +224,10 @@ void KNMusicStandardBackend::setPreviewThread(KNMusicBackendThread *thread)
                 this, &KNMusicStandardBackend::previewPlayingStateChanged);
         connect(m_preview, &KNMusicBackendThread::filePathChanged,
                 this, &KNMusicStandardBackend::previewFilePathChanged);
+        connect(m_preview, &KNMusicBackendThread::loaded,
+                this, &KNMusicStandardBackend::previewLoaded);
         connect(m_preview, &KNMusicBackendThread::cannotLoadFile,
-                this, &KNMusicStandardBackend::previewCannotLoadFile);
+                this, &KNMusicStandardBackend::previewCannotLoad);
     }
 }
 

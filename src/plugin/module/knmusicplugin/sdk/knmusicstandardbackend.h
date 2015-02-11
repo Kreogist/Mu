@@ -28,6 +28,7 @@ public:
 
     void loadPreview(const QString &filePath);
     qint64 previewDuration() const;
+    qint64 previewPosition() const;
     void playPreviewFile(const QString &fileName);
     void setPreviewSection(const qint64 &start=-1,
                            const qint64 &duration=-1);

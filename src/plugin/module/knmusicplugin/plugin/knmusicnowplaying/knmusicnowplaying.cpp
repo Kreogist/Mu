@@ -165,6 +165,16 @@ void KNMusicNowPlaying::onActionPlayingFinished()
     playNext();
 }
 
+void KNMusicNowPlaying::onActionCantLoad()
+{
+    ;
+}
+
+void KNMusicNowPlaying::onActionLoaded()
+{
+    ;
+}
+
 void KNMusicNowPlaying::changeLoopState()
 {
     //Switch to the next loop mode.
@@ -191,7 +201,7 @@ void KNMusicNowPlaying::playTemporaryFiles(const QStringList &filePaths)
     {
         //Set the playing model to temporary model and play the first file..
         playMusicRow(m_temporaryProxyModel,
-                      0);
+                     0);
     }
 }
 
@@ -337,7 +347,7 @@ void KNMusicNowPlaying::playPrevAvailable(const int &currentProxyRow)
     emit requirePlayPrevAvailable(preferRow);
 }
 
-void KNMusicNowPlaying::setRating(const int &rating)
+void KNMusicNowPlaying::setCurrentSongRating(const int &rating)
 {
     //Get the current index.
     int ratingRow=m_currentPlayingIndex.row();

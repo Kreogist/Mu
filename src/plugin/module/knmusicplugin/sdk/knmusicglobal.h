@@ -158,6 +158,8 @@ class KNMusicDetailDialogBase;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
 class KNMusicSearchBase;
+class KNMusicProxyModel;
+class KNMusicTab;
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
@@ -215,6 +217,9 @@ signals:
     void musicFilePathChanged(const QString &originalPath,
                               const QString &currentPath,
                               const QString &currentFileName);
+    void requirePlayMusicRow(KNMusicProxyModel *model,
+                             int row,
+                             KNMusicTab *tab);
 
 public slots:
     void retranslate();

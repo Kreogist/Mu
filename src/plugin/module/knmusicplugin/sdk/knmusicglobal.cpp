@@ -588,6 +588,8 @@ KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying()
 void KNMusicGlobal::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
     m_nowPlaying = nowPlaying;
+    connect(this, SIGNAL(requirePlayMusicRow(KNMusicProxyModel*,int,KNMusicTab*)),
+            m_nowPlaying, SLOT(playMusicRow(KNMusicProxyModel*,int,KNMusicTab*)));
 }
 
 KNMusicSoloMenuBase *KNMusicGlobal::soloMenu()

@@ -15,99 +15,104 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICNOWPLAYING_H
-#define KNMUSICNOWPLAYING_H
+#ifndef KNMUSICNOWPLAYING2_H
+#define KNMUSICNOWPLAYING2_H
 
 #include "knmusicnowplayingbase.h"
 
-class KNMusicModel;
-class KNConfigure;
-class KNMusicProxyModel;
-class KNMusicNowPlaying : public KNMusicNowPlayingBase
+class KNMusicNowPlaying2 : public KNMusicNowPlayingBase
 {
     Q_OBJECT
 public:
-    explicit KNMusicNowPlaying(QObject *parent = 0);
-    ~KNMusicNowPlaying();
+    explicit KNMusicNowPlaying2(QObject *parent = 0);
+    ~KNMusicNowPlaying2();
+
+    //Set the backend for control.
     void setBackend(KNMusicBackend *backend);
+
+    //Current playing information.
     KNMusicProxyModel *playingModel();
     KNMusicModel *playingMusicModel();
-    int loopState();
     QPersistentModelIndex currentPlayingIndex() const;
     KNMusicAnalysisItem currentAnalaysisItem() const;
 
+    //Loop state.
+    int loopState();
+
 signals:
-    void requirePlayPrevAvailable(int currentProxyRow);
-    void requirePlayNextAvailable(int currentProxyRow);
 
 public slots:
+    //Backup and restore current playing, for rename current playing.
     void backupCurrentPlaying();
     void restoreCurrentPlaying();
 
+    //Clear current playing.
     void resetCurrentPlaying();
+
+    //Restore configure.
     void restoreConfigure();
 
+    //Locate the current index.
     void showCurrentIndexInOriginalTab();
+
+    //The original proxy model may be used to display other data,
+    //and we need to backup that model to a shadow model.
     void shadowPlayingModel();
 
+    //Play a row in a proxy model.
     void playMusicRow(KNMusicProxyModel *model,
                       int row,
                       KNMusicTab *tab=nullptr);
-
-    void playNext();
-    void playPrevious();
+    //Temporarily play several files.
     void playTemporaryFiles(const QStringList &filePaths);
 
+    //Playlist controls.
+    void playNext();
+    void playPrevious();
+    void changeLoopState();
+    void setLoopState(const int &state);
+
+    //Current song control.
+    void setCurrentSongRating(const int &rating);
+
+    //When a model is going to be delete, check if the model is the playing
+    //model.
+    void checkRemovedModel(KNMusicModel *model);
+    //Finished playing controls.
     void onActionPlayingFinished();
     void onActionCantLoad();
     void onActionLoaded();
 
-    void changeLoopState();
-    void setLoopState(const int &state);
-    void setCurrentSongRating(const int &rating);
-
-    void checkRemovedModel(KNMusicModel *model);
-
 private slots:
-    void applyPreference();
     void retranslate();
-
-    void playNextAvailable(const int &currentProxyRow);
-    void playPrevAvailable(const int &currentProxyRow);
+    void applyPreference();
 
 private:
-    inline void setPlayingModel(KNMusicProxyModel *model, KNMusicTab *tab=nullptr);
-    inline void playMusic(int row);
-    inline void saveConfigure();
+    //Common functions.
+    inline void initialTemporaryModel();
+    inline void initialShadowModel();
 
-    inline void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
-                                         QList<KNPreferenceItemInfo> &list);
+    //Play the specific row in the model.
+    inline void playRow(const int &proxyRow);
 
-    inline void resetPlayingItem();
-    inline void resetPlayingModels();
-    inline void resetShadowModel();
-
-    int prevSongIndex(int currentProxyRow,
-                      bool ignoreLoopMode=false);
-    int nextSongIndex(int currentProxyRow,
-                      bool ignoreLoopMode=false);
-    bool playRow(const int &row);
-    void setCannotPlay(const int &row);
+    //Infrastructure
     KNMusicBackend *m_backend=nullptr;
-    KNMusicSinglePlaylistModel *m_temporaryModel;
-    KNMusicModel *m_playingMusicModel=nullptr;
-    KNMusicProxyModel *m_playingModel=nullptr,
-                      *m_shadowPlayingModel,
-                      *m_temporaryProxyModel;
-    QPersistentModelIndex m_currentPlayingIndex;
-    KNMusicAnalysisItem m_currentPlayingAnalysisItem;
     QPixmap m_playingIcon, m_cantPlayIcon;
-    KNMusicTab *m_currentTab=nullptr;
     KNConfigure *m_cacheConfigure, *m_musicConfigure;
     int m_loopMode=NoRepeat;
-    bool m_playNextAvailable=true;
-
     qint64 m_backupPosition=-1;
+
+    //Models.
+    KNMusicProxyModel *m_playingModel=nullptr;
+    KNMusicModel *m_playingMusicModel=nullptr;
+    KNMusicProxyModel *m_shadowPlayingModel=nullptr,
+                      *m_temporaryModel=nullptr;
+    KNMusicSinglePlaylistModel *m_temporaryMusicModel;
+
+    //Current playing items.
+    QPersistentModelIndex m_currentPlayingIndex;
+    KNMusicAnalysisItem m_currentPlayingAnalysisItem;
+    KNMusicTab *m_currentTab=nullptr;
 };
 
-#endif // KNMUSICNOWPLAYING_H
+#endif // KNMUSICNOWPLAYING2_H
