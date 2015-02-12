@@ -80,7 +80,7 @@ private:
     QTimeLine *m_scrollTimeLine;
     KNMusicAlbumDetail *m_albumDetail;
     QModelIndex m_selectedIndex, m_mouseDownIndex;
-    QPixmap m_shadowSource, albumArtShadow;
+    QPixmap m_shadowSource, m_albumArtShadow;
     QColor m_backgroundColor=QColor(0x30, 0x30, 0x30);
     int m_outBrightness=0x30;
     //View parameters.

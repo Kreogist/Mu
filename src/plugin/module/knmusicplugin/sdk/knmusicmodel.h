@@ -140,6 +140,8 @@ public slots:
     virtual void appendMusicRow(const QList<QStandardItem *> &musicRow);
     virtual void updateMusicRow(const int &row,
                                 const KNMusicDetailInfo &detailInfo);
+    virtual void updateCoverImage(const int &row,
+                                  const KNMusicAnalysisItem &analysisItem);
     virtual void removeMusicRow(const int &row);
     virtual void clearMusicRow();
 

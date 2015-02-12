@@ -542,6 +542,7 @@ inline void KNMusicNowPlaying2::playRow(const int &proxyRow)
         KNMusicDetailInfo &currentInfo=m_currentPlayingAnalysisItem.detailInfo;
         //Update the music model row.
         m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(), currentInfo);
+        m_playingMusicModel->updateCoverImage(m_currentPlayingIndex.row(), currentAnalysisItem);
         //Play the music, according to the detail information.
         //This is a much better judge than the original version.
         if(currentInfo.trackFilePath.isEmpty())

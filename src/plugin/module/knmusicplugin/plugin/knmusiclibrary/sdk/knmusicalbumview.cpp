@@ -439,7 +439,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     //Draw the shadow first.
     painter.drawPixmap(position.x()-m_shadowIncrease,
                        position.y()-m_shadowIncrease,
-                       albumArtShadow);
+                       m_albumArtShadow);
     //Draw the album art first.
     QIcon currentIcon=
             m_proxyModel->data(index, Qt::DecorationRole).value<QIcon>();
@@ -559,7 +559,7 @@ inline void KNMusicAlbumView::updateParameters()
     m_itemIconSize=m_itemWidth;
     //Generate the album art shadow pixmap.
     int shadowSize=m_itemIconSize+(m_shadowIncrease<<1);
-    albumArtShadow=generateShadow(shadowSize, shadowSize);
+    m_albumArtShadow=generateShadow(shadowSize, shadowSize);
     //The height of the item should be a item icon size and two text lines.
     m_itemHeight=m_itemIconSize+(fontMetrics().height()<<1);
     //Calcualte the spacing item width and height.
@@ -601,21 +601,21 @@ inline QPixmap KNMusicAlbumView::generateShadow(int shadowWidth, int shadowHeigh
                        m_shadowSource,
                        QRect(0,blockSize,blockSize,blockSize));
     //Draw Middle-Right shadow.
-    painter.drawPixmap(QRect(destinationWidth,blockSize,blockSize2x,destinationHeight-blockSize),
+    painter.drawPixmap(QRect(destinationWidth+blockSize,blockSize,blockSize,destinationHeight),
                        m_shadowSource,
-                       QRect(blockSize,blockSize,blockSize2x,blockSize));
+                       QRect(blockSize2x,blockSize,blockSize,blockSize));
     //Draw Left-Bottom shadow.
     painter.drawPixmap(QRect(0,destinationHeight,blockSize, blockSize2x),
                        m_shadowSource,
                        QRect(0,blockSize,blockSize,blockSize2x));
     //Draw Middle-Bottom shadow.
-    painter.drawPixmap(QRect(blockSize,destinationHeight,destinationWidth-blockSize,blockSize2x),
+    painter.drawPixmap(QRect(blockSize,destinationHeight+blockSize,destinationWidth,blockSize),
                        m_shadowSource,
-                       QRect(blockSize,blockSize,blockSize,blockSize2x));
+                       QRect(blockSize,blockSize2x,blockSize,blockSize));
     //Draw Right-Buttom shadow.
-    painter.drawPixmap(QRect(destinationWidth,destinationHeight,blockSize2x,blockSize2x),
+    painter.drawPixmap(QRect(destinationWidth+blockSize,destinationHeight+blockSize,blockSize,blockSize),
                        m_shadowSource,
-                       QRect(blockSize,blockSize,blockSize2x,blockSize2x));
+                       QRect(blockSize2x,blockSize2x,blockSize,blockSize));
     painter.end();
     return shadowPixmap;
 }

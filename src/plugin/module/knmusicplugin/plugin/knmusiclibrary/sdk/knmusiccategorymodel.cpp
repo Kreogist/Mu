@@ -249,7 +249,7 @@ void KNMusicCategoryModel::onCoverImageUpdate(const QString &categoryText,
     //Check is the result index cover image has a key.
     //If it contains a key, then do nothing.
     QModelIndex resultIndex=results.first();
-    if(data(resultIndex, CategoryArtworkKeyRole).isNull())
+    if(data(resultIndex, CategoryArtworkKeyRole).toString().isEmpty())
     {
         setAlbumArt(resultIndex, imageKey, QIcon(image));
     }
@@ -266,10 +266,18 @@ void KNMusicCategoryModel::onImageRecoverComplete(KNHashPixmapList *pixmapList)
         //Set the image according to the hash key.
         if(!hashKey.isEmpty())
         {
-            //Set the artwork.
-            setData(currentIndex,
-                    QIcon(pixmapList->pixmap(hashKey)),
-                    Qt::DecorationRole);
+            QIcon recoverIcon=QIcon(pixmapList->pixmap(hashKey));
+            //Check the icon first.
+            if(recoverIcon.isNull())
+            {
+                //Clear the image key.
+                setData(currentIndex, QVariant(), CategoryArtworkKeyRole);
+            }
+            else
+            {
+                //Set the artwork.
+                setData(currentIndex,recoverIcon,Qt::DecorationRole);
+            }
         }
     }
 }

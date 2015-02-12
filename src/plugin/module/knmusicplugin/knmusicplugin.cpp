@@ -40,16 +40,20 @@
 //Backends
 #ifdef ENABLE_LIBBASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
-#include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
-#endif
-#ifdef ENABLE_FFMPEG
-#include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
 #endif
 #ifdef ENABLE_LIBVLC
 #include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
 #endif
 #ifdef ENABLE_PHONON
 #include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
+#endif
+
+//Analysiser
+#ifdef ENABLE_LIBBASS
+#include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
+#endif
+#ifdef ENABLE_FFMPEG
+#include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
 #endif
 
 //Tags
