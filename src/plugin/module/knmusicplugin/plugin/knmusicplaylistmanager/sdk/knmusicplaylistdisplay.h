@@ -40,7 +40,6 @@ signals:
     void requireAddToPlaylist(int playlistRowIndex, QStringList fileList);
 
 public slots:
-    void retranslate();
     void updatePlaylistInfo();
     void onActionRemoveCurrent();
     void displayPlaylistItem(KNMusicPlaylistListItem *item);
@@ -50,6 +49,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private slots:
+    void retranslate();
     void onActionRowChanged();
     void onActionAddToPlaylist();
     void updateDetailInfo();

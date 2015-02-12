@@ -242,6 +242,16 @@ void KNMusicNowPlaying2::playTemporaryFiles(const QStringList &filePaths)
 
 void KNMusicNowPlaying2::playNext()
 {
+    //Check the current playing index is available or not.
+    if(m_playingModel==nullptr || m_playingModel->rowCount()==0)
+    {
+        return;
+    }
+    if(!m_currentPlayingIndex.isValid())
+    {
+        emit requirePlayRow(0);
+        return;
+    }
     //Get the next row.
     int nextProxyRow=nextRow(m_playingModel->mapFromSource(m_currentPlayingIndex).row(),
                              false);
@@ -258,6 +268,16 @@ void KNMusicNowPlaying2::playNext()
 
 void KNMusicNowPlaying2::playPrevious()
 {
+    //Check the current playing index is available or not.
+    if(m_playingModel==nullptr || m_playingModel->rowCount()==0)
+    {
+        return;
+    }
+    if(!m_currentPlayingIndex.isValid())
+    {
+        emit requirePlayRow(m_playingModel->rowCount()-1);
+        return;
+    }
     //Get the previous row.
     int prevProxyRow=prevRow(m_playingModel->mapFromSource(m_currentPlayingIndex).row(),
                              false);
@@ -269,7 +289,7 @@ void KNMusicNowPlaying2::playPrevious()
         return;
     }
     //Play this row.
-    playRow(prevProxyRow);
+    emit requirePlayRow(prevProxyRow);
 }
 
 void KNMusicNowPlaying2::changeLoopState()
@@ -351,6 +371,16 @@ void KNMusicNowPlaying2::onActionCantLoad()
     }
     //Ask to play the next row.
     //!FIXME: Let these codes works together with the code in play next.
+    //Check the current playing index is available or not.
+    if(m_playingModel==nullptr || m_playingModel->rowCount()==0)
+    {
+        return;
+    }
+    if(!m_currentPlayingIndex.isValid())
+    {
+        emit requirePlayRow(0);
+        return;
+    }
     //Get the next row.
     int nextProxyRow=nextRow(m_playingModel->mapFromSource(m_currentPlayingIndex).row(),
                              true);
@@ -430,19 +460,6 @@ void KNMusicNowPlaying2::clearShadowModel()
 
 int KNMusicNowPlaying2::nextRow(int currentProxyRow, bool ignoreLoopMode)
 {
-    //Check the current model is available or not.
-    if(m_playingModel==nullptr)
-    {
-        return -1;
-    }
-    //Check the current row is available or not.
-    //If proxy row is smaller than 0 or larger than model's rowCount(), treat it
-    //as unavailable.
-    if(currentProxyRow<0 || currentProxyRow>=m_playingModel->rowCount())
-    {
-        //Check if there's any available row, return the first available row.
-        return m_playingModel->rowCount()>0?0:-1;
-    }
     //If the row is the last row in the model.
     if(currentProxyRow==m_playingModel->rowCount()-1)
     {
@@ -470,19 +487,6 @@ int KNMusicNowPlaying2::nextRow(int currentProxyRow, bool ignoreLoopMode)
 
 int KNMusicNowPlaying2::prevRow(int currentProxyRow, bool ignoreLoopMode)
 {
-    //Check the current model is available or not.
-    if(m_playingModel==nullptr)
-    {
-        return -1;
-    }
-    //Check the current row is available or not.
-    //If proxy row is smaller than 0 or larger than model's rowCount(), treat it
-    //as unavailable.
-    if(currentProxyRow<0 || currentProxyRow>=m_playingModel->rowCount())
-    {
-        //Check if there's any available row, return the last available row.
-        return m_playingModel->rowCount()>0?m_playingModel->rowCount()-1:-1;
-    }
     //If the row is the first row in the model.
     if(currentProxyRow==0)
     {

@@ -186,6 +186,9 @@ void KNMusicPlaylistDisplay::retranslate()
 
     updatePlaylistTitle();
     updateDetailInfo();
+
+    m_playPlaylist->setToolTip(tr("Play the current playlist."));
+    m_addToPlaylist->setToolTip(tr("Add music to playlist."));
 }
 
 void KNMusicPlaylistDisplay::updatePlaylistInfo()
