@@ -70,6 +70,7 @@ macx{
 linux{
     CONFIG += libPhonon FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
+    DESTDIR = ../bin
 }
 
 FFMpeg{

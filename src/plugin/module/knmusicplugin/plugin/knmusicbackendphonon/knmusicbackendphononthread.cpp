@@ -64,10 +64,22 @@ KNMusicBackendPhononThread::~KNMusicBackendPhononThread()
 
 bool KNMusicBackendPhononThread::loadFromFile(const QString &filePath)
 {
-    //Reset the state.
+    //Stop playing.
+    stop();
+    //Check if the media source is just the current file, then ignore the loading.
+    QUrl currentUrl=QUrl::fromLocalFile(filePath);
+    qDebug()<<m_mediaSource<<currentUrl;
+    if(m_mediaSource.url()==currentUrl)
+    {
+        qDebug("Here?!");
+        resetState();
+        return true;
+    }
+    //Reset the total duration and state.
+    m_totalDuration=-1;
     resetState();
     //Generate the media source.
-    m_mediaSource=MediaSource(QUrl::fromLocalFile(filePath));
+    m_mediaSource=MediaSource(currentUrl);
     //Load the file to media source.
     m_mediaObject->setCurrentSource(m_mediaSource);
     //Set the load flag.
@@ -94,9 +106,8 @@ void KNMusicBackendPhononThread::resetState()
     m_state=KNMusic::StoppedState;
     //Clear the position data.
     m_startPosition=-1;
-    m_endPosition=-1;
-    m_totalDuration=-1;
-    m_duration=-1;
+    m_endPosition=m_totalDuration;
+    m_duration=m_totalDuration;
 }
 
 void KNMusicBackendPhononThread::stop()
