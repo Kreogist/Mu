@@ -23,7 +23,7 @@
 #include <QLinkedList>
 #include <QStringList>
 
-#include "sdk/knmusiclyricsdownloader.h"
+#include "knmusiclyricsdownloader.h"
 
 #include "knmusicglobal.h"
 

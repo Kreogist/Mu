@@ -18,7 +18,7 @@
 #ifndef KNMUSICTTPLAYERLYRICS_H
 #define KNMUSICTTPLAYERLYRICS_H
 
-#include "../../sdk/knmusiclyricsdownloader.h"
+#include "knmusiclyricsdownloader.h"
 
 class KNMusicTTPlayerLyrics : public KNMusicLyricsDownloader
 {

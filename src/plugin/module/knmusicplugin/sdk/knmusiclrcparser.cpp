@@ -124,7 +124,8 @@ void KNMusicLRCParser::parseFile(const QString &filePath,
     }
     //-----------Sort the lyrics line-----------
     //- Why stable sort?
-    //  Because there might be some frames at the same time. Display them.
+    //  Because there might be some frames at the same time. Display them with
+    //their exist order.
     qStableSort(lyricsData.begin(), lyricsData.end(), frameLessThan);
     //Combine the lyrics.
     QMap<qint64, QString> lyricsMap;

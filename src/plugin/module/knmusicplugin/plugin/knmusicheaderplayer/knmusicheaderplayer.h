@@ -50,7 +50,6 @@ public slots:
     void loadConfigure();
     void saveConfigure();
     void onActionLoopStateChanged(const int &state);
-    void reset();
     void resetInformation();
     void play();
     void activatePlayer();

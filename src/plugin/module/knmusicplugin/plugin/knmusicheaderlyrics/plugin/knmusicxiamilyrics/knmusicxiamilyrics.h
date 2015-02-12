@@ -18,7 +18,7 @@
 #ifndef KNMUSICXIAMILYRICS_H
 #define KNMUSICXIAMILYRICS_H
 
-#include "../../sdk/knmusiclyricsdownloader.h"
+#include "knmusiclyricsdownloader.h"
 
 class KNMusicXiaMiLyrics : public KNMusicLyricsDownloader
 {

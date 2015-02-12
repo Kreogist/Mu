@@ -32,7 +32,6 @@ public:
     virtual KNMusicAnalysisItem currentAnalaysisItem() const=0;
 
 signals:
-    void requireResetPlayer();
     void requireResetInformation();
     void nowPlayingChanged();
     void loopStateChanged(int state);

@@ -46,12 +46,10 @@ public slots:
     virtual void loadConfigure()=0;
     virtual void saveConfigure()=0;
     virtual void onActionLoopStateChanged(const int &state)=0;
-    virtual void reset()=0;
     virtual void resetInformation()=0;
     virtual void activatePlayer()=0;
     virtual void inactivatePlayer()=0;
     virtual void play()=0;
-
 };
 
 #endif // KNMUSICHEADERPLAYERBASE_H

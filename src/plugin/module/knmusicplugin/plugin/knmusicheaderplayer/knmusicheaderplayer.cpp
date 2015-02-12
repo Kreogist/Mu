@@ -104,7 +104,7 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
     m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
     //Reset the player.
-    reset();
+    resetInformation();
     //Connect requests.
     connect(m_volumeIndicator, &KNOpacityButton::clicked,
             m_backend, &KNMusicBackend::changeMuteState);
@@ -139,8 +139,6 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     //Connect responds.
     connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
             this, &KNMusicHeaderPlayer::onActionLoopStateChanged);
-    connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetPlayer,
-            this, &KNMusicHeaderPlayer::reset);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetInformation,
             this, &KNMusicHeaderPlayer::resetInformation);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
@@ -152,14 +150,6 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 KNMusicDetailInfo KNMusicHeaderPlayer::currentDetailInfo()
 {
     return m_currentDetailInfo;
-}
-
-void KNMusicHeaderPlayer::reset()
-{
-    //Reset the current information.
-    resetInformation();
-    //Ask to reset main thread.
-    m_backend->resetMainPlayer();
 }
 
 void KNMusicHeaderPlayer::resetInformation()
