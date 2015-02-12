@@ -40,6 +40,7 @@ public:
     int loopState();
 
 signals:
+    void requirePlayRow(int row);
 
 public slots:
     //Backup and restore current playing, for rename current playing.
@@ -86,14 +87,18 @@ public slots:
 private slots:
     void retranslate();
     void applyPreference();
+    //Play the specific row in the model.
+    void playRow(const int &proxyRow);
 
 private:
     //Common functions.
     inline void initialTemporaryModel();
     inline void initialShadowModel();
+    inline void clearNowPlayingIcon();
+    inline void clearShadowModel();
 
-    //Play the specific row in the model.
-    inline void playRow(const int &proxyRow);
+    inline int nextRow(int currentProxyRow, bool ignoreLoopMode=false);
+    inline int prevRow(int currentProxyRow, bool ignoreLoopMode=false);
 
     //Infrastructure
     KNMusicBackend *m_backend=nullptr;
@@ -113,6 +118,9 @@ private:
     QPersistentModelIndex m_currentPlayingIndex;
     KNMusicAnalysisItem m_currentPlayingAnalysisItem;
     KNMusicTab *m_currentTab=nullptr;
+
+    //Flags.
+    bool m_manualPlayed=false;
 };
 
 #endif // KNMUSICNOWPLAYING2_H

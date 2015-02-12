@@ -78,7 +78,7 @@
 #include "plugin/knmusicmultimenu/knmusicmultimenu.h"
 
 //Now playing
-#include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+#include "plugin/knmusicnowplaying2/knmusicnowplaying2.h"
 
 //Main player
 #include "plugin/knmusicmainplayer/knmusicmainplayer.h"
@@ -124,7 +124,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadBackend(new KNMusicBackendPhonon);
 #endif
     loadDetailTooptip(new KNMusicDetailTooltip);
-    loadNowPlaying(new KNMusicNowPlaying);
+    loadNowPlaying(new KNMusicNowPlaying2);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
 //    loadMainPlayer(new KNMusicMainPlayer);

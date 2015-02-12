@@ -62,7 +62,6 @@ public:
 signals:
     void cannotLoad();
     void loaded();
-    void filePathChanged(const QString &filePath);
     void positionChanged(qint64 position);
     void durationChanged(qint64 duration);
     void finished();
@@ -71,7 +70,6 @@ signals:
 
     void previewCannotLoad();
     void previewLoaded();
-    void previewFilePathChanged(const QString &filePath);
     void previewPositionChanged(qint64 position);
     void previewDurationChanged(qint64 duration);
     void previewFinished();

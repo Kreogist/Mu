@@ -180,7 +180,6 @@ SOURCES += \
     plugin/sdk/knopacitybutton.cpp \
     plugin/sdk/knvolumeslider.cpp \
     plugin/sdk/kncancellineedit.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.cpp \
     plugin/base/knpreference/knpreferencecategorylist.cpp \
     plugin/base/knpreference/knpreferencecategoryitem.cpp \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.cpp \
@@ -309,8 +308,8 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
     plugin/sdk/knlabelbutton.cpp \
     public/knconfiguremanager.cpp \
-    plugin/sdk/knconfigure.cpp #\
-#    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.cpp
+    plugin/sdk/knconfigure.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -370,7 +369,6 @@ HEADERS += \
     plugin/sdk/knvolumeslider.h \
     plugin/sdk/kncancellineedit.h \
     plugin/module/knmusicplugin/sdk/knmusicnowplayingbase.h \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.h \
     plugin/base/knpreference/knpreferencecategorylist.h \
     plugin/base/knpreference/knpreferencecategoryitem.h \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.h \
@@ -512,8 +510,8 @@ HEADERS += \
     core/knversion.h \
     plugin/sdk/knlabelbutton.h \
     public/knconfiguremanager.h \
-    plugin/sdk/knconfigure.h #\
-#    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.h
+    plugin/sdk/knconfigure.h \
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.h
 
 RESOURCES += \
     resource/res.qrc

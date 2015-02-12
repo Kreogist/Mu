@@ -31,7 +31,6 @@ public:
 signals:
     void cannotLoadFile();
     void loaded();
-    void filePathChanged(QString filePath);
     void durationChanged(qint64 duration);
     void positionChanged(qint64 position);
     void stateChanged(int state);

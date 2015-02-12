@@ -160,8 +160,6 @@ void KNMusicHeaderPlayer::reset()
     resetInformation();
     //Ask to reset main thread.
     m_backend->resetMainPlayer();
-    //Emit reset signal.
-    emit playerReset();
 }
 
 void KNMusicHeaderPlayer::resetInformation()
@@ -178,6 +176,8 @@ void KNMusicHeaderPlayer::resetInformation()
     //Set the duration and position.
     setDuration(0);
     setPositionText(0);
+    //Emit reset signal.
+    emit playerReset();
 }
 
 void KNMusicHeaderPlayer::play()
@@ -785,11 +785,6 @@ void KNMusicHeaderPlayer::updatePlayerInfo()
     //Get the current information.
     KNMusicAnalysisItem analysisItem=m_nowPlaying->currentAnalaysisItem();
     m_currentDetailInfo=analysisItem.detailInfo;
-    //Check is the playing file the current file. If it is, do nothing.
-    if(m_currentFilePath==m_currentDetailInfo.filePath)
-    {
-        return;
-    }
     //Save the new file path and emit file path changed signal.
     m_currentFilePath=m_currentDetailInfo.filePath;
     //Set the display data.
