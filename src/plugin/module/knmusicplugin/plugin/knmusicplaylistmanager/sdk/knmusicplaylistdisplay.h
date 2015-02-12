@@ -23,6 +23,7 @@
 class QLabel;
 class KNConnectionHandler;
 class KNSideShadowWidget;
+class KNOpacityAnimeButton;
 class KNMusicTab;
 class KNMusicPlaylistListItem;
 class KNMusicPlaylistTreeView;
@@ -36,6 +37,7 @@ public:
     void searchText(const QString &text);
 
 signals:
+    void requireAddToPlaylist(int playlistRowIndex, QStringList fileList);
 
 public slots:
     void retranslate();
@@ -49,14 +51,19 @@ protected:
 
 private slots:
     void onActionRowChanged();
+    void onActionAddToPlaylist();
     void updateDetailInfo();
     void updatePlaylistTitle();
 
 private:
-    QLabel *m_playlistTitle, *m_playlistInfo;
+    inline void initialLabels();
+    inline void initialTreeView();
+    inline void initialControls();
+    QLabel *m_playlistTitle, *m_playlistDetail;
     KNSideShadowWidget *m_leftShadow;
     KNMusicPlaylistListItem *m_currentItem=nullptr;
     KNMusicPlaylistTreeView *m_playlistTreeView;
+    KNOpacityAnimeButton *m_playPlaylist, *m_shufflePlaylist, *m_addToPlaylist;
     KNConnectionHandler *m_modelSignalHandler;
     QString m_songCount[3], m_minuateCount[3], m_searchResultIn,
             m_searchCount[3];

@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knmusicplaylistindex.h"
+#include "knmusicproxymodel.h"
 
 #include "knmusicplaylisttreeview.h"
 
@@ -47,4 +48,15 @@ void KNMusicPlaylistTreeView::resetHeaderState()
     moveToFirst(BlankData);
     //Set the index column at a enough width.
     setColumnWidth(BlankData, fontMetrics().width('6')*4+30);
+}
+
+void KNMusicPlaylistTreeView::playCurrentrPlaylist()
+{
+    //Check the proxy model is available or not.
+    if(proxyModel()->rowCount()>0)
+    {
+        KNMusicGlobal::instance()->requirePlayMusicRow(proxyModel(),
+                                                       0,
+                                                       musicTab());
+    }
 }

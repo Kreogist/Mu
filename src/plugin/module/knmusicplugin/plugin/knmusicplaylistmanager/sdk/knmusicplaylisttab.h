@@ -58,6 +58,8 @@ signals:
     void requireGeneratePlaylist();
     void requireRemovePlaylist(const QModelIndex &index);
     void requireMakeCopy(int index);
+    void requireAddToPlaylist(int playlistRowIndex,
+                              QStringList fileList);
     void currentPlaylistChanged(const QModelIndex &current,
                                 const QModelIndex &previous);
 

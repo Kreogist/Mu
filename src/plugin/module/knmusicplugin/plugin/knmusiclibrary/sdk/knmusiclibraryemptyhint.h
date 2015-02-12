@@ -22,6 +22,7 @@
 
 class QLabel;
 class KNNGNLButton;
+class KNFileAndFolderDialog;
 class KNMusicLibraryEmptyHint : public KNDropProxyContainer
 {
     Q_OBJECT
@@ -40,6 +41,7 @@ private:
     inline void configureNGNLButton(KNNGNLButton *button);
     QLabel *m_hintText;
     KNNGNLButton *m_addMusic, *m_scanForMusic, *m_importLibrary;
+    KNFileAndFolderDialog *m_addToLibraryDialog;
 };
 
 #endif // KNMUSICLIBRARYEMPTYHINT_H

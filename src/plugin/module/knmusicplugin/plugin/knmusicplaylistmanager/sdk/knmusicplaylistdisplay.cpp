@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QFileDialog>
 #include <QLabel>
 
 #include "knglobal.h"
@@ -23,6 +24,8 @@
 #include "knmousesensewidget.h"
 #include "knconnectionhandler.h"
 #include "knsideshadowwidget.h"
+#include "knopacityanimebutton.h"
+
 #include "knmusicsearchbase.h"
 #include "knmusicplaylistmodel.h"
 #include "knmusicplaylistlistitem.h"
@@ -45,10 +48,14 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
     displayLayout->setSpacing(0);
     setLayout(displayLayout);
 
+    //Initial the labels.
+    initialLabels();
+    initialTreeView();
+    initialControls();
+
     //Initial information container.
     KNMouseSenseWidget *infoContainer=new KNMouseSenseWidget(this);
     infoContainer->setContentsMargins(20,12,0,8);
-
     QBoxLayout *infoLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           infoContainer);
     infoLayout->setContentsMargins(0,0,0,0);
@@ -58,25 +65,16 @@ KNMusicPlaylistDisplay::KNMusicPlaylistDisplay(QWidget *parent) :
     displayLayout->addWidget(infoContainer);
 
     //Initial the information label.
-    m_playlistTitle=new QLabel(this);
-    QPalette captionPal=m_playlistTitle->palette();
-    captionPal.setColor(QPalette::WindowText, QColor(255,255,255));
-    m_playlistTitle->setPalette(captionPal);
-    QFont titleFont=m_playlistTitle->font();
-    titleFont.setPixelSize(17);
-    titleFont.setBold(true);
-    m_playlistTitle->setFont(titleFont);
     infoLayout->addWidget(m_playlistTitle);
-    m_playlistInfo=new QLabel(this);
-    m_playlistInfo->setPalette(captionPal);
-    infoLayout->addWidget(m_playlistInfo);
-
-    //Initial the tree view.
-    m_playlistTreeView=new KNMusicPlaylistTreeView(this);
-    //Give the focus to the treeview.
-    setFocusProxy(m_playlistTreeView);
-    connect(m_playlistTreeView, &KNMusicPlaylistTreeView::searchComplete,
-            this, &KNMusicPlaylistDisplay::updateDetailInfo);
+    QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            infoLayout->widget());
+    detailLayout->setContentsMargins(0,0,0,0);
+    detailLayout->setSpacing(5);
+    detailLayout->addWidget(m_playlistDetail);
+    detailLayout->addWidget(m_playPlaylist);
+    detailLayout->addWidget(m_addToPlaylist);
+    detailLayout->addStretch();
+    infoLayout->addLayout(detailLayout);
 
     displayLayout->addWidget(m_playlistTreeView, 1);
 
@@ -148,11 +146,8 @@ void KNMusicPlaylistDisplay::scrollToSourceSongRow(const int &row)
 void KNMusicPlaylistDisplay::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
-    //Move the shadow.
-    m_leftShadow->setGeometry(0,
-                              0,
-                              15,
-                              height());
+    //Resize the shadow.
+    m_leftShadow->resize(15, height());
 }
 
 void KNMusicPlaylistDisplay::onActionRowChanged()
@@ -161,6 +156,16 @@ void KNMusicPlaylistDisplay::onActionRowChanged()
     updateDetailInfo();
     //Set the changed flag to true.
     m_currentItem->setChanged(true);
+}
+
+void KNMusicPlaylistDisplay::onActionAddToPlaylist()
+{
+    QStringList preferAddFileLists=
+            QFileDialog::getOpenFileNames(this, tr("Add to playlist %1").arg(m_currentItem->text()));
+    if(!preferAddFileLists.isEmpty())
+    {
+        emit requireAddToPlaylist(m_currentItem->row(), preferAddFileLists);
+    }
 }
 
 void KNMusicPlaylistDisplay::retranslate()
@@ -187,7 +192,7 @@ void KNMusicPlaylistDisplay::updatePlaylistInfo()
 {
     //Clear the original data first.
     m_playlistTitle->clear();
-    m_playlistInfo->clear();
+    m_playlistDetail->clear();
     //If the current item is null, then ignore it.
     if(m_currentItem==nullptr)
     {
@@ -210,7 +215,7 @@ void KNMusicPlaylistDisplay::onActionRemoveCurrent()
 void KNMusicPlaylistDisplay::updateDetailInfo()
 {
     //Reset the detail info label text.
-    m_playlistInfo->clear();
+    m_playlistDetail->clear();
     //Check is the item usable.
     if(m_currentItem==nullptr)
     {
@@ -224,13 +229,13 @@ void KNMusicPlaylistDisplay::updateDetailInfo()
         switch(searchCount)
         {
         case 0:
-            m_playlistInfo->setText(m_searchCount[0]);
+            m_playlistDetail->setText(m_searchCount[0]);
             break;
         case 1:
-            m_playlistInfo->setText(m_searchCount[1]);
+            m_playlistDetail->setText(m_searchCount[1]);
             break;
         default:
-            m_playlistInfo->setText(m_searchCount[2].arg(QString::number(searchCount)));
+            m_playlistDetail->setText(m_searchCount[2].arg(QString::number(searchCount)));
             break;
         }
         return;
@@ -271,7 +276,7 @@ void KNMusicPlaylistDisplay::updateDetailInfo()
         break;
     }
     //Set detail info.
-    m_playlistInfo->setText(playlistInfoText);
+    m_playlistDetail->setText(playlistInfoText);
 }
 
 void KNMusicPlaylistDisplay::updatePlaylistTitle()
@@ -288,4 +293,48 @@ void KNMusicPlaylistDisplay::updatePlaylistTitle()
     {
         m_playlistTitle->clear();
     }
+}
+
+inline void KNMusicPlaylistDisplay::initialLabels()
+{
+    //Initial the playlist title label.
+    m_playlistTitle=new QLabel(this);
+    QPalette captionPal=m_playlistTitle->palette();
+    captionPal.setColor(QPalette::WindowText, QColor(255,255,255));
+    m_playlistTitle->setPalette(captionPal);
+    QFont titleFont=m_playlistTitle->font();
+    titleFont.setPixelSize(17);
+    titleFont.setBold(true);
+    m_playlistTitle->setFont(titleFont);
+
+    //Initial the playlist information title.
+    m_playlistDetail=new QLabel(this);
+    m_playlistDetail->setPalette(captionPal);
+}
+
+inline void KNMusicPlaylistDisplay::initialTreeView()
+{
+    //Initial the tree view.
+    m_playlistTreeView=new KNMusicPlaylistTreeView(this);
+    //Give the focus to the treeview.
+    setFocusProxy(m_playlistTreeView);
+    connect(m_playlistTreeView, &KNMusicPlaylistTreeView::searchComplete,
+            this, &KNMusicPlaylistDisplay::updateDetailInfo);
+}
+
+void KNMusicPlaylistDisplay::initialControls()
+{
+    //Initial the play playlist button.
+    m_playPlaylist=new KNOpacityAnimeButton(this);
+    m_playPlaylist->setFixedSize(15, 15);
+    m_playPlaylist->setIcon(QPixmap(":/plugin/music/playlist/playlist_control_play.png"));
+    connect(m_playPlaylist, &KNOpacityAnimeButton::clicked,
+            m_playlistTreeView, &KNMusicPlaylistTreeView::playCurrentrPlaylist);
+
+    //Initial the playlist menu button.
+    m_addToPlaylist=new KNOpacityAnimeButton(this);
+    m_addToPlaylist->setFixedSize(15, 15);
+    m_addToPlaylist->setIcon(QPixmap(":/plugin/music/playlist/playlist_control_add.png"));
+    connect(m_addToPlaylist, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicPlaylistDisplay::onActionAddToPlaylist);
 }

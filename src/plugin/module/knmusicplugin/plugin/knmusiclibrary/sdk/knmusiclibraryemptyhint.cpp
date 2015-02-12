@@ -108,9 +108,7 @@ void KNMusicLibraryEmptyHint::retranslate()
 
 void KNMusicLibraryEmptyHint::onActionAddToLibrary()
 {
-    //Get the all the files the user want to add.
-    QStringList addedFiles=
-            QFileDialog::getOpenFileNames(this, tr("Add To Library"));
+    QStringList addedFiles=QFileDialog::getOpenFileNames(this, tr("Add To Library"));
     //If there's any file we can get, ask to analysis these files.
     if(!addedFiles.isEmpty())
     {
