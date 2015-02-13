@@ -79,23 +79,6 @@ private slots:
     void imageRecoverComplete();
 
 private:
-    enum PropertyListIndex
-    {
-        PropertyFilePath,
-        PropertyFileName,
-        PropertyCoverImageHash,
-        PropertyBitRate,
-        PropertyRating,
-        PropertySampleRating,
-        PropertySize,
-        PropertyDuration,
-        PropertyDateAdded,
-        PropertyDateModified,
-        PropertyLastPlayed,
-        PropertyTrackFilePath,
-        PropertyTrackIndex,
-        PropertyStartPosition
-    };
     inline void initialHeader();
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
 

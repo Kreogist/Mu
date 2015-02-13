@@ -91,6 +91,11 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     //When mimedata contains url data, and ensure that move&copy action enabled.
     if((action==Qt::MoveAction || action==Qt::CopyAction))
     {
+        if(data->hasFormat("org.kreogist.mu.musicrowlist"))
+        {
+            qDebug()<<"Cut it down!";
+            return true;
+        }
         if(data->hasUrls())
         {
             addFiles(KNGlobal::urlToPathList(data->urls()));

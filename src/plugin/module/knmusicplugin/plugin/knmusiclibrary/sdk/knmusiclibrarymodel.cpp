@@ -260,29 +260,7 @@ void KNMusicLibraryModel::updateMusicRow(const int &row,
     //Do row udpates operate.
     KNMusicModel::updateMusicRow(row, detailInfo);
     //Update the row data in database, we need to generate the new information from the row.
-    QJsonArray textInformationArray, propertyArray, itemDataArray;
-    int i;
-    for(i=0; i<MusicDataCount; i++)
-    {
-        textInformationArray.append(itemText(row, i));
-    }
-    propertyArray.append(rowProperty(row, FilePathRole).toString()); //PropertyFilePath
-    propertyArray.append(rowProperty(row, FileNameRole).toString()); //PropertyFileName
-    propertyArray.append(rowProperty(row, ArtworkKeyRole).toString()); //PropertyCoverImageHash
-    propertyArray.append(roleData(row, BitRate, Qt::UserRole).toInt()); //PropertyBitRate
-    propertyArray.append(roleData(row, Rating, Qt::DisplayRole).toInt()); //PropertyRating
-    propertyArray.append(roleData(row, SampleRate, Qt::UserRole).toInt()); //PropertySampleRating
-    propertyArray.append(QString::number(roleData(row, Size, Qt::UserRole).toLongLong())); //PropertySize
-    propertyArray.append(QString::number(roleData(row, Time, Qt::UserRole).toLongLong())); //PropertyDuration
-    propertyArray.append(KNMusicModelAssist::dateTimeToDataString(roleData(row, DateAdded, Qt::UserRole))); //PropertyDateAdded
-    propertyArray.append(KNMusicModelAssist::dateTimeToDataString(roleData(row, DateModified, Qt::UserRole))); //PropertyDateModified
-    propertyArray.append(KNMusicModelAssist::dateTimeToDataString(roleData(row, LastPlayed, Qt::UserRole))); //PropertyLastPlayed
-    propertyArray.append(rowProperty(row, TrackFileRole).toString()); //PropertyTrackFilePath
-    propertyArray.append(rowProperty(row, TrackIndexRole).toInt()); //PropertyTrackIndex
-    propertyArray.append(QString::number(rowProperty(row, StartPositionRole).toLongLong())); //PropertyStartPosition
-    itemDataArray.append(textInformationArray);
-    itemDataArray.append(propertyArray);
-    m_database->replace(row, itemDataArray);
+    m_database->replace(row, KNMusicModelAssist::rowToJsonArray(this, row));
 }
 
 void KNMusicLibraryModel::updateCoverImage(const int &row,
@@ -476,50 +454,13 @@ void KNMusicLibraryModel::recoverModel()
 {
     //Read the database information.
     m_database->read();
-    int j;
     //Recover the model for all the array data.
     for(QJsonArray::iterator i=m_database->begin();
         i!=m_database->end();
         i++)
     {
-        //Generate the detail information.
-        KNMusicDetailInfo currentDetail;
-        //Get the data array, ignore the unavailable data.
-        QJsonArray itemDataArray=(*i).toArray();
-        if(itemDataArray.size()!=2)
-        {
-            continue;
-        }
-        //Get the information and property array.
-        QJsonArray textInformationArray=itemDataArray.at(0).toArray(),
-                   propertyArray=itemDataArray.at(1).toArray();
-        //Load the data to the current detail.
-        if(textInformationArray.size()!=MusicDataCount)
-        {
-            continue;
-        }
-        //Read the text list data.
-        for(j=0; j<MusicDataCount; j++)
-        {
-            currentDetail.textLists[j]=textInformationArray.at(j).toString();
-        }
-        //Read the property data.
-        currentDetail.filePath=propertyArray.at(PropertyFilePath).toString();
-        currentDetail.fileName=propertyArray.at(PropertyFileName).toString();
-        currentDetail.coverImageHash=propertyArray.at(PropertyCoverImageHash).toString();
-        currentDetail.bitRate=propertyArray.at(PropertyBitRate).toInt();
-        currentDetail.rating=propertyArray.at(PropertyRating).toInt();
-        currentDetail.samplingRate=propertyArray.at(PropertySampleRating).toInt();
-        currentDetail.size=propertyArray.at(PropertySize).toString().toLongLong();
-        currentDetail.duration=propertyArray.at(PropertyDuration).toString().toLongLong();
-        currentDetail.dateAdded=KNMusicModelAssist::dataStringToDateTime(propertyArray.at(PropertyDateAdded).toString());
-        currentDetail.dateModified=KNMusicModelAssist::dataStringToDateTime(propertyArray.at(PropertyDateModified).toString());
-        currentDetail.lastPlayed=KNMusicModelAssist::dataStringToDateTime(propertyArray.at(PropertyLastPlayed).toString());
-        currentDetail.trackFilePath=propertyArray.at(PropertyTrackFilePath).toString();
-        currentDetail.trackIndex=propertyArray.at(PropertyTrackIndex).toInt();
-        currentDetail.startPosition=propertyArray.at(PropertyStartPosition).toString().toLongLong();
         //Recover the row.
-        recoverMusicRow(KNMusicModelAssist::generateRow(currentDetail));
+        recoverMusicRow(KNMusicModelAssist::generateRow((*i).toArray()));
     }
 }
 

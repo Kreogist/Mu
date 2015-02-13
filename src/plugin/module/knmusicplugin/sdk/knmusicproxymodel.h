@@ -55,6 +55,11 @@ public:
     }
     inline void addPlayTimes(const QModelIndex &sourceIndex)
     {
+        //Avoid unavailable source index request.
+        if(sourceIndex.model()!=this)
+        {
+            return;
+        }
         //Get the destination index.
         QModelIndex playTimesIndex=index(mapFromSource(sourceIndex).row(), Plays);
         //Add the data.

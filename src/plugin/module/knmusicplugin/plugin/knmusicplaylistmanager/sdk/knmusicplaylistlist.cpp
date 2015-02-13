@@ -76,14 +76,29 @@ bool KNMusicPlaylistList::dropMimeData(const QMimeData *data,
     //When mimedata contains url data, and ensure that move&copy action enabled.
     if((action==Qt::MoveAction || action==Qt::CopyAction))
     {
+        //Check is the data contains music row.
+        if(data->hasFormat("org.kreogist.mu.musicrowlist"))
+        {
+            if(parent.isValid())
+            {
+                emit requireAddRowToPlaylist(parent.row(),
+                                             data->data("org.kreogist.mu.musicrowlist"));
+            }
+            else
+            {
+                emit requireCreatePlaylistRow(row==-1?rowCount():row,
+                                              data->data("org.kreogist.mu.musicrowlist"));
+            }
+            return true;
+        }
         //Check is the data contains urls,
         if(data->hasUrls())
         {
             if(parent.isValid())
             {
                 //If user drag these data to a playlist, add these files to the playlist.
-                emit requireAddToPlaylist(parent.row(),
-                                          KNGlobal::urlToPathList(data->urls()));
+                emit requireAddFileToPlaylist(parent.row(),
+                                              KNGlobal::urlToPathList(data->urls()));
             }
             else
             {

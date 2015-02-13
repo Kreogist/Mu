@@ -14,10 +14,12 @@
 #include <QScrollBar>
 #include <QTimeLine>
 #include <QMouseEvent>
+#include <QJsonDocument>
 
 #include "knconnectionhandler.h"
 #include "knmusicdetailtooltipbase.h"
 #include "knmusicmodel.h"
+#include "knmusicmodelassist.h"
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
@@ -338,6 +340,7 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
     QMimeData *mimeData=new QMimeData;
     //Get the file path and music row of all the selected rows.
     QList<QUrl> fileUrlList;
+    QJsonArray musicRowList;
     KNMusicModel *musicModel=m_proxyModel->musicModel();
     for(auto i=indexes.begin();
              i!=indexes.end();
@@ -347,9 +350,13 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
         int currentRow=m_proxyModel->mapToSource(*i).row();
         //Add the file path and music row to list.
         fileUrlList.append(QUrl::fromLocalFile(musicModel->filePathFromRow(currentRow)));
+        musicRowList.append(KNMusicModelAssist::rowToJsonArray(musicModel, currentRow));
     }
+    QJsonDocument musicRowDocument;
+    musicRowDocument.setArray(musicRowList);
     //Set the data to mimedata.
     mimeData->setUrls(fileUrlList);
+    mimeData->setData("org.kreogist.mu.musicrowlist", musicRowDocument.toBinaryData());
     //Set the mime data to the drag action.
     drag->setMimeData(mimeData);
     //Do the drag.

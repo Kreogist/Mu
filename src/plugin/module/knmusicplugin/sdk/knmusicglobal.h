@@ -66,6 +66,23 @@ enum KNMusicModelRole
     TrackIndexRole,
     CantPlayFlagRole
 };
+enum PropertyListIndex
+{
+    PropertyFilePath,
+    PropertyFileName,
+    PropertyCoverImageHash,
+    PropertyBitRate,
+    PropertyRating,
+    PropertySampleRating,
+    PropertySize,
+    PropertyDuration,
+    PropertyDateAdded,
+    PropertyDateModified,
+    PropertyLastPlayed,
+    PropertyTrackFilePath,
+    PropertyTrackIndex,
+    PropertyStartPosition
+};
 enum KNMusicCategoryRole
 {
     CategoryItemSizeRole=Qt::UserRole,
