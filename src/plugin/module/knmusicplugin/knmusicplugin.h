@@ -92,6 +92,7 @@ private slots:
 private:
     inline void initialInfrastructure();
     inline void initialParser();
+    inline void initialLyricsManager();
     inline void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
     inline void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
     inline void addMusicTab(KNMusicTab *musicTab);

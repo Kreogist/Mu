@@ -52,7 +52,7 @@ class KNMusicLyricsManager : public QObject
 {
     Q_OBJECT
 public:
-    static KNMusicLyricsManager *instance();
+    explicit KNMusicLyricsManager(QObject *parent = 0);
     QString lyricsFolderPath() const;
     void setLyricsFolderPath(const QString &lyricsFolderPath);
     void clear();
@@ -70,7 +70,6 @@ public slots:
 private slots:
 
 private:
-    inline void installDownloaders();
     inline bool findLyricsForFile(const KNMusicDetailInfo &detailInfo);
     inline bool downloadLyricsForFile(const KNMusicDetailInfo &detailInfo);
     inline bool checkLyricsFile(const QString &lyricsPath);
@@ -80,8 +79,6 @@ private:
                                    const QString &content);
     static bool lyricsDetailLessThan(const KNMusicLyricsDetails &lyricsDetailLeft,
                                      const KNMusicLyricsDetails &lyricsDetailRight);
-    static KNMusicLyricsManager *m_instance;
-    explicit KNMusicLyricsManager(QObject *parent = 0);
 
     KNGlobal *m_global;
     KNMusicGlobal *m_musicGlobal;

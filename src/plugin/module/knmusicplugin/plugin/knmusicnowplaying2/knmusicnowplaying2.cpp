@@ -27,6 +27,8 @@
 
 #include "knmusicnowplaying2.h"
 
+#include <QDebug>
+
 KNMusicNowPlaying2::KNMusicNowPlaying2(QObject *parent) :
     KNMusicNowPlayingBase(parent)
 {
@@ -247,7 +249,8 @@ void KNMusicNowPlaying2::playNext()
     {
         return;
     }
-    if(!m_currentPlayingIndex.isValid())
+    if(!m_currentPlayingIndex.isValid() ||
+            m_currentPlayingIndex.model()!=m_playingModel->sourceModel())
     {
         emit requirePlayRow(0);
         return;
@@ -273,7 +276,8 @@ void KNMusicNowPlaying2::playPrevious()
     {
         return;
     }
-    if(!m_currentPlayingIndex.isValid())
+    if(!m_currentPlayingIndex.isValid() ||
+            m_currentPlayingIndex.model()!=m_playingModel->sourceModel())
     {
         emit requirePlayRow(m_playingModel->rowCount()-1);
         return;
@@ -376,7 +380,8 @@ void KNMusicNowPlaying2::onActionCantLoad()
     {
         return;
     }
-    if(!m_currentPlayingIndex.isValid())
+    if(!m_currentPlayingIndex.isValid() ||
+            m_currentPlayingIndex.model()!=m_playingModel->sourceModel())
     {
         emit requirePlayRow(0);
         return;

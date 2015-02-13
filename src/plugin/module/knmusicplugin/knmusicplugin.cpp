@@ -24,6 +24,7 @@
 //Ports
 #include "knmusicbackend.h"
 #include "knmusicparser.h"
+#include "knmusiclyricsmanager.h"
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicdetaildialogbase.h"
@@ -87,6 +88,12 @@
 //Main player
 #include "plugin/knmusicmainplayer/knmusicmainplayer.h"
 
+//Lyrics downloader
+#include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
+#include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
+#include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
+#include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
+
 //Category plugin
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
@@ -112,6 +119,8 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadDetailInfo(new KNMusicDetailDialog);
     //Initial parser.
     initialParser();
+    //Initial lyrics manager.
+    initialLyricsManager();
     //Initial menus.
     initialSoloMenu(new KNMusicSoloMenu);
     initialMultiMenu(new KNMusicMultiMenu);
@@ -478,6 +487,25 @@ inline void KNMusicPlugin::initialParser()
     parser->moveToThread(&m_parserThread);
     //Set the parser.
     KNMusicGlobal::setParser(parser);
+}
+
+void KNMusicPlugin::initialLyricsManager()
+{
+    //Initial the lyrics manager.
+    KNMusicLyricsManager *lyricsManager=new KNMusicLyricsManager;
+
+    //Install all the downloader.
+    lyricsManager->installLyricsDownloader(new KNMusicTTPodLyrics);
+    lyricsManager->installLyricsDownloader(new KNMusicQQLyrics);
+    lyricsManager->installLyricsDownloader(new KNMusicTTPlayerLyrics);
+    lyricsManager->installLyricsDownloader(new KNMusicXiaMiLyrics);
+
+    //Add lyrics manager to plugin list.
+    m_pluginList.append(lyricsManager);
+    //Move to working thread.
+    lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
+    //Set the lyrics manager.
+    m_musicGlobal->setLyricsManager(lyricsManager);
 }
 
 inline void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)

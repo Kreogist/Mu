@@ -152,6 +152,7 @@ class KNPreferenceWidgetsPanel;
 class KNConfigure;
 class KNGlobal;
 class KNMusicParser;
+class KNMusicLyricsManager;
 class KNMusicNowPlayingBase;
 class KNMusicDetailTooltipBase;
 class KNMusicDetailDialogBase;
@@ -210,6 +211,8 @@ public:
                             const QList<KNPreferenceItemInfo> &list);
     bool renameMusicFile(const QString &originalPath,
                          const QString &preferName);
+    KNMusicLyricsManager *lyricsManager() const;
+    void setLyricsManager(KNMusicLyricsManager *lyricsManager);
 
 signals:
     void musicLibraryMoved(const QString &originalPath,
@@ -234,6 +237,7 @@ private:
     inline void initialGenreText();
     inline void initialPreference();
     static KNMusicGlobal *m_instance;
+    KNMusicLyricsManager *m_lyricsManager;
     static KNMusicParser *m_parser;
     static KNMusicNowPlayingBase *m_nowPlaying;
     static KNMusicSoloMenuBase *m_soloMenu;

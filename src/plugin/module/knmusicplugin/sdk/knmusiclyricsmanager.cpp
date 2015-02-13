@@ -21,11 +21,6 @@
 
 #include "knglobal.h"
 
-#include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
-#include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
-#include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
-#include "plugin/knmusicneteaselyrics/knmusicneteaselyrics.h"
-#include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "knmusiclyricsglobal.h"
 #include "knmusiclrcparser.h"
 
@@ -33,11 +28,23 @@
 
 #include <QDebug>
 
-KNMusicLyricsManager *KNMusicLyricsManager::m_instance=nullptr;
-
-KNMusicLyricsManager *KNMusicLyricsManager::instance()
+KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
+    QObject(parent)
 {
-    return m_instance==nullptr?m_instance=new KNMusicLyricsManager:m_instance;
+    //Initial global instances.
+    m_global=KNGlobal::instance();
+    m_musicGlobal=KNMusicGlobal::instance();
+
+    //Get the lyrics folder path.
+    KNMusicLyricsGlobal::setLyricsFolderPath(KNMusicGlobal::musicLibraryPath()+"/Lyrics");
+    //Set the default loading policy.
+    m_policyList.append(SameNameInLyricsDir);
+    m_policyList.append(RelateNameInLyricsDir);
+    m_policyList.append(SameNameInMusicDir);
+    m_policyList.append(RelateNameInMusicDir);
+
+    //Initial the LRC file parser.
+    m_lrcParser=new KNMusicLRCParser(this);
 }
 
 bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo,
@@ -60,15 +67,6 @@ bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo
                            positions,
                            lyricsText);
     return !positions.isEmpty();
-}
-
-inline void KNMusicLyricsManager::installDownloaders()
-{
-    installLyricsDownloader(new KNMusicTTPodLyrics);
-    installLyricsDownloader(new KNMusicQQLyrics);
-    installLyricsDownloader(new KNMusicTTPlayerLyrics);
-    installLyricsDownloader(new KNMusicXiaMiLyrics);
-//    installLyricsDownloader(new KNMusicNeteaseLyrics);
 }
 
 void KNMusicLyricsManager::clear()
@@ -208,28 +206,6 @@ bool KNMusicLyricsManager::lyricsDetailLessThan(const KNMusicLyricsDetails &lyri
     return (lyricsDetailLeft.titleSimilarity==lyricsDetailRight.titleSimilarity)?
                 lyricsDetailLeft.artistSimilarity<lyricsDetailRight.artistSimilarity:
                 lyricsDetailLeft.titleSimilarity<lyricsDetailRight.titleSimilarity;
-}
-
-KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
-    QObject(parent)
-{
-    //Initial global instances.
-    m_global=KNGlobal::instance();
-    m_musicGlobal=KNMusicGlobal::instance();
-
-    //Get the lyrics folder path.
-    KNMusicLyricsGlobal::setLyricsFolderPath(KNMusicGlobal::musicLibraryPath()+"/Lyrics");
-    //Set the default loading policy.
-    m_policyList.append(SameNameInLyricsDir);
-    m_policyList.append(RelateNameInLyricsDir);
-    m_policyList.append(SameNameInMusicDir);
-    m_policyList.append(RelateNameInMusicDir);
-
-    //Initial the LRC file parser.
-    m_lrcParser=new KNMusicLRCParser(this);
-
-    //Install the downloaders.
-    installDownloaders();
 }
 
 bool KNMusicLyricsManager::downloadLyrics() const

@@ -34,18 +34,16 @@ KNMusicDetailInfo KNMusicHeaderLyrics::m_currentDeailInfo;
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
     KNMusicHeaderLyricsBase(parent)
 {
-    //Initial the music global.
+    //Initial the music global, music configure and lyrics manager.
     m_musicGlobal=KNMusicGlobal::instance();
-    //Initial the music configure.
     m_musicConfigure=m_musicGlobal->musicConfigure();
-    //Initial the lyrics manager.
-    m_lyricsManager=KNMusicLyricsManager::instance();
-    m_lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
+    m_lyricsManager=m_musicGlobal->lyricsManager();
     //Link the library changed request.
     connect(m_musicGlobal, &KNMusicGlobal::musicLibraryMoved,
             this, &KNMusicHeaderLyrics::onActionMusicLibraryMoved);
-    //Set line spacing specially for Windows.
 #ifdef Q_OS_WIN32
+    //Set line spacing specially for Windows. It seems that in Qt 5.4, line
+    //spacing has been calculate into a text line.
     m_lineSpacing=0;
 #endif
 
@@ -70,7 +68,6 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 
 KNMusicHeaderLyrics::~KNMusicHeaderLyrics()
 {
-    delete m_lyricsManager;
 }
 
 void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)

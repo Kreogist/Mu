@@ -785,7 +785,7 @@ void KNMusicHeaderPlayer::updatePlayerInfo()
     QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
     //Ask to load lyrics.
-    emit requireLoadLyrics(m_currentDetailInfo);
+//    emit requireLoadLyrics(m_currentDetailInfo);
 }
 
 inline void KNMusicHeaderPlayer::initialInformationPanel()
