@@ -18,78 +18,98 @@
 #ifndef KNMUSICLYRICSMANAGER_H
 #define KNMUSICLYRICSMANAGER_H
 
-#include <QFile>
-#include <QMap>
 #include <QLinkedList>
-#include <QStringList>
-
-#include "knmusiclyricsdownloader.h"
 
 #include "knmusicglobal.h"
+#include "knmusiclyricsdownloader.h"
 
 #include <QObject>
 
-namespace KNMusicLyrics
-{
-enum SearchPolicy
-{
-    SameNameInLyricsDir,
-    RelateNameInLyricsDir,
-    SameNameInMusicDir,
-    RelateNameInMusicDir
-};
-}
-
 using namespace KNMusic;
-using namespace KNMusicLyrics;
 
-class KNGlobal;
-class KNPreferenceItemBase;
-class KNPreferenceItemGlobal;
-class KNMusicGlobal;
-class KNMusicLRCParser;
+class KNMusicLRCLyricsParser;
 class KNMusicLyricsManager : public QObject
 {
     Q_OBJECT
 public:
     explicit KNMusicLyricsManager(QObject *parent = 0);
-    QString lyricsFolderPath() const;
-    void setLyricsFolderPath(const QString &lyricsFolderPath);
-    void clear();
+    ~KNMusicLyricsManager();
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     void installLyricsDownloader(KNMusicLyricsDownloader *downloader);
-    bool downloadLyrics() const;
-    void setDownloadLyrics(bool downloadLyrics);
+
+    //Lyrics data.
+    QList<qint64> positionList() const;
+    QStringList textList() const;
+    QString lyricsFilePath() const;
+    KNMusicDetailInfo musicDetailInfo() const;
+
+    //Configure.
+    QString lyricsDir() const;
+    void setLyricsDir(const QString &lyricsDir);
+    bool enableOnlineLyrics() const;
+    void setEnableOnlineLyrics(bool enableOnlineLyrics);
 
 signals:
+    void lyricsReset();
+    void lyricsUpdate();
 
 public slots:
-    bool loadLyricsForFile(const KNMusicDetailInfo &detailInfo,
-                           QList<qint64> &positions,
-                           QStringList &lyricsText);
-
-private slots:
+    void loadLyrics(const KNMusicAnalysisItem &analysisItem);
+    void downloadLyrics(const KNMusicDetailInfo &detailInfo);
 
 private:
-    inline bool findLyricsForFile(const KNMusicDetailInfo &detailInfo);
-    inline bool downloadLyricsForFile(const KNMusicDetailInfo &detailInfo);
-    inline bool checkLyricsFile(const QString &lyricsPath);
-    inline bool findRelateLyrics(const QString &folderPath,
-                                 const KNMusicDetailInfo &detailInfo);
-    inline QString writeLyricsFile(const KNMusicDetailInfo &detailInfo,
-                                   const QString &content);
+    enum SearchPolicy
+    {
+        SameNameInLyricsDir,
+        RelateNameInLyricsDir,
+        SameNameInMusicDir,
+        RelateNameInMusicDir
+    };
+    enum RelateNameFindPolicy
+    {
+        LyricsNamedTitle,
+        LyricsNamedArtistHyphonTitle,
+        LyricsNamedAlbumHyphonTitle
+    };
+
+    inline void clearCurrentData();
+    inline bool findLocalLyricsFile(const KNMusicDetailInfo &detailInfo);
+
+    //Tried to find and load the lyrics file, if the lyrics can be loaded,
+    //then returns true.
+    inline bool triedLyricsFile(const QString &lyricsPath);
+
+    //Tried to find and load the related named lyrics file, it will calling
+    //triedLyricsFile() functions.
+    inline bool triedRelatedNameLyricsFile(const QString &dirPath,
+                                           const KNMusicDetailInfo &detailInfo);
+
+    inline void saveLyrics(const KNMusicDetailInfo &detailInfo,
+                           const QString &content);
     static bool lyricsDetailLessThan(const KNMusicLyricsDetails &lyricsDetailLeft,
                                      const KNMusicLyricsDetails &lyricsDetailRight);
 
+    //Global instances.
     KNGlobal *m_global;
-    KNMusicGlobal *m_musicGlobal;
-    KNMusicLRCParser *m_lrcParser;
-    QString m_currentLyricsPath;
-    QFile m_lyricsFile;
-    QList<int> m_policyList;
-    QMap<int, QString> m_lyricsProperty;
+    KNMusicLRCLyricsParser *m_parser;
+    QTextCodec *m_utf8Codec;
+
+    //Lyrics data.
+    QList<qint64> m_positionList;
+    QStringList m_textList;
+    QString m_lyricsFilePath;
+    KNMusicDetailInfo m_musicDetailInfo;
+
+    //Lyrics downlaoders.
     QLinkedList<KNMusicLyricsDownloader *> m_downloaders;
 
-    bool m_downloadLyrics=true;
+    //Lyrics directory path.
+    QString m_lyricsDir;
+    //Lyrics finding policy list.
+    QList<int> m_policyList;
+    QList<int> m_relateNamePolicyList;
+    //Online lyrics search switch.
+    bool m_enableOnlineLyrics=true;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H

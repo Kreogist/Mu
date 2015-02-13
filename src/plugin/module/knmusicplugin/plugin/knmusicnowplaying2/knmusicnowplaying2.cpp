@@ -407,7 +407,7 @@ void KNMusicNowPlaying2::onActionLoaded()
                                         CantPlayFlagRole,
                                         false);
     //Give out the update signal.
-    emit nowPlayingChanged();
+    emit nowPlayingChanged(m_currentPlayingAnalysisItem);
 }
 
 void KNMusicNowPlaying2::retranslate()

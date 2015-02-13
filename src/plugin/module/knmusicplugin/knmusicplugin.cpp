@@ -30,7 +30,7 @@
 #include "knmusicdetaildialogbase.h"
 #include "knmusicdetailtooltipbase.h"
 #include "knmusicheaderplayerbase.h"
-#include "knmusicheaderlyricsbase.h"
+#include "knmusiclyricsbase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusiclibrarybase.h"
 #include "knmusicplaylistmanagerbase.h"
@@ -119,8 +119,6 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadDetailInfo(new KNMusicDetailDialog);
     //Initial parser.
     initialParser();
-    //Initial lyrics manager.
-    initialLyricsManager();
     //Initial menus.
     initialSoloMenu(new KNMusicSoloMenu);
     initialMultiMenu(new KNMusicMultiMenu);
@@ -138,6 +136,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 #endif
     loadDetailTooptip(new KNMusicDetailTooltip);
     loadNowPlaying(new KNMusicNowPlaying2);
+    initialLyricsManager();
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
 //    loadMainPlayer(new KNMusicMainPlayer);
@@ -154,8 +153,6 @@ KNMusicPlugin::~KNMusicPlugin()
     //Stop threads.
     m_parserThread.quit();
     m_parserThread.wait();
-    m_nowPlayingThread.quit();
-    m_nowPlayingThread.wait();
     //Ask to save the configure.
     emit requireSaveConfigure();
     //Delete all the plugins.
@@ -294,7 +291,7 @@ void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
     }
 }
 
-inline void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
+inline void KNMusicPlugin::loadHeaderLyrics(KNMusicLyricsBase *plugin)
 {
     //Add plugin to the list.
     m_pluginList.append(plugin);
@@ -309,7 +306,6 @@ inline void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
     if(m_nowPlaying==nullptr)
     {
         m_nowPlaying=plugin;
-//        m_nowPlaying->moveToThread(&m_nowPlayingThread);
         //Set the backend for control.
         m_nowPlaying->setBackend(m_backend);
         //Restore configure.
@@ -489,23 +485,26 @@ inline void KNMusicPlugin::initialParser()
     KNMusicGlobal::setParser(parser);
 }
 
-void KNMusicPlugin::initialLyricsManager()
+inline void KNMusicPlugin::initialLyricsManager()
 {
     //Initial the lyrics manager.
-    KNMusicLyricsManager *lyricsManager=new KNMusicLyricsManager;
+    m_lyricsManager=new KNMusicLyricsManager;
+    //Move to working thread.
+    m_lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
 
     //Install all the downloader.
-    lyricsManager->installLyricsDownloader(new KNMusicTTPodLyrics);
-    lyricsManager->installLyricsDownloader(new KNMusicQQLyrics);
-    lyricsManager->installLyricsDownloader(new KNMusicTTPlayerLyrics);
-    lyricsManager->installLyricsDownloader(new KNMusicXiaMiLyrics);
+    m_lyricsManager->installLyricsDownloader(new KNMusicTTPodLyrics);
+    m_lyricsManager->installLyricsDownloader(new KNMusicQQLyrics);
+    m_lyricsManager->installLyricsDownloader(new KNMusicTTPlayerLyrics);
+    m_lyricsManager->installLyricsDownloader(new KNMusicXiaMiLyrics);
+
+    //Set now playing.
+    m_lyricsManager->setNowPlaying(m_nowPlaying);
 
     //Add lyrics manager to plugin list.
-    m_pluginList.append(lyricsManager);
-    //Move to working thread.
-    lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
+    m_pluginList.append(m_lyricsManager);
     //Set the lyrics manager.
-    m_musicGlobal->setLyricsManager(lyricsManager);
+    m_musicGlobal->setLyricsManager(m_lyricsManager);
 }
 
 inline void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
@@ -546,7 +545,6 @@ inline void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
 inline void KNMusicPlugin::startThreads()
 {
     m_parserThread.start();
-    m_nowPlayingThread.start();
 }
 
 void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *plugin)

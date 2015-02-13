@@ -770,10 +770,9 @@ inline void KNMusicHeaderPlayer::configureVolumeAnimation(QPropertyAnimation *an
     animation->setEasingCurve(QEasingCurve::OutCubic);
 }
 
-void KNMusicHeaderPlayer::updatePlayerInfo()
+void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisItem)
 {
     //Get the current information.
-    KNMusicAnalysisItem analysisItem=m_nowPlaying->currentAnalaysisItem();
     m_currentDetailInfo=analysisItem.detailInfo;
     //Save the new file path and emit file path changed signal.
     m_currentFilePath=m_currentDetailInfo.filePath;

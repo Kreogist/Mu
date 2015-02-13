@@ -30,12 +30,13 @@ class KNMusicCategoryTabWidget;
 class KNMusicBackend;
 class KNMusicGlobal;
 class KNMusicParser;
+class KNMusicLyricsManager;
 class KNMusicSearchBase;
 class KNMusicMainPlayerBase;
 class KNMusicDetailDialogBase;
 class KNMusicDetailTooltipBase;
 class KNMusicHeaderPlayerBase;
-class KNMusicHeaderLyricsBase;
+class KNMusicLyricsBase;
 class KNMusicNowPlayingBase;
 class KNMusicLibraryBase;
 class KNMusicPlaylistManagerBase;
@@ -61,7 +62,7 @@ public:
     inline void loadBackend(KNMusicBackend *plugin);
     inline void loadDetailInfo(KNMusicDetailDialogBase *plugin);
     inline void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
-    inline void loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin);
+    inline void loadHeaderLyrics(KNMusicLyricsBase *plugin);
     inline void loadMainPlayer(KNMusicMainPlayerBase *plugin);
     inline void loadNowPlaying(KNMusicNowPlayingBase *plugin);
     inline void loadLibrary(KNMusicLibraryBase *plugin);
@@ -108,12 +109,13 @@ private:
     KNMusicCategoryTabWidget *m_centralWidget=nullptr;
     KNMouseDetectHeader *m_headerWidget=nullptr;
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
-    QThread m_parserThread, m_nowPlayingThread;
+    QThread m_parserThread;
     QSignalMapper *m_tabSwitchMapper;
     KNMusicGlobal *m_musicGlobal;
 
     KNMusicBackend *m_backend=nullptr;
     KNMusicNowPlayingBase *m_nowPlaying=nullptr;
+    KNMusicLyricsManager *m_lyricsManager=nullptr;
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
     KNMusicMainPlayerBase *m_mainPlayer=nullptr;
     KNPlatformExtras *m_platformExtras=nullptr;

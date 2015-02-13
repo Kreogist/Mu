@@ -20,14 +20,14 @@
 
 #include "preference/knpreferenceitemglobal.h"
 
-#include "knmusicheaderlyricsbase.h"
+#include "knmusiclyricsbase.h"
 
 class QLabel;
 class QTimeLine;
 class KNPreferenceItemGlobal;
 class KNMusicGlobal;
 class KNMusicLyricsManager;
-class KNMusicHeaderLyrics : public KNMusicHeaderLyricsBase
+class KNMusicHeaderLyrics : public KNMusicLyricsBase
 {
     Q_OBJECT
 public:
@@ -39,9 +39,9 @@ signals:
 
 public slots:
     void retranslate();
-    void resetStatus();
-    void loadLyricsForMusic(const KNMusicDetailInfo &detailInfo);
     void onActionPositionChange(const qint64 &position);
+    void onActionLyricsReset();
+    void onActionLyricsUpdate();
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -64,6 +64,7 @@ private:
                                  const int &yOffset);
     static KNMusicDetailInfo m_currentDeailInfo;
     KNMusicLyricsManager *m_lyricsManager;
+    KNMusicHeaderPlayerBase *m_player;
     KNMusicGlobal *m_musicGlobal;
     KNConfigure *m_musicConfigure;
 

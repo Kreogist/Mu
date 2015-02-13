@@ -33,7 +33,7 @@ public:
 
 signals:
     void requireResetInformation();
-    void nowPlayingChanged();
+    void nowPlayingChanged(KNMusicAnalysisItem analysisItem);
     void loopStateChanged(int state);
 
 public slots:

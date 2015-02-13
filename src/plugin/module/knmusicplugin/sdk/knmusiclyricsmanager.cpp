@@ -15,215 +15,286 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QTextCodec>
 
 #include "knglobal.h"
 
-#include "knmusiclyricsglobal.h"
-#include "knmusiclrcparser.h"
+#include "knmusiclrclyricsparser.h"
+#include "knmusicnowplayingbase.h"
 
 #include "knmusiclyricsmanager.h"
-
-#include <QDebug>
 
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent)
 {
-    //Initial global instances.
+    //Initial the global instance.
     m_global=KNGlobal::instance();
-    m_musicGlobal=KNMusicGlobal::instance();
-
-    //Get the lyrics folder path.
-    KNMusicLyricsGlobal::setLyricsFolderPath(KNMusicGlobal::musicLibraryPath()+"/Lyrics");
+    //Initial the LRC lyrics parser and utf-8 codec.
+    m_parser=new KNMusicLRCLyricsParser(this);
+    m_utf8Codec=QTextCodec::codecForName("UTF-8");
+    //Set the default lyrics directory path.
+    setLyricsDir(KNMusicGlobal::musicLibraryPath()+"/Lyrics");
     //Set the default loading policy.
-    m_policyList.append(SameNameInLyricsDir);
-    m_policyList.append(RelateNameInLyricsDir);
-    m_policyList.append(SameNameInMusicDir);
-    m_policyList.append(RelateNameInMusicDir);
-
-    //Initial the LRC file parser.
-    m_lrcParser=new KNMusicLRCParser(this);
+    m_policyList << SameNameInLyricsDir << RelateNameInLyricsDir
+                 << SameNameInMusicDir << RelateNameInMusicDir;
+    //Set the default relate finding policy list.
+    m_relateNamePolicyList << LyricsNamedArtistHyphonTitle
+                           << LyricsNamedTitle
+                           << LyricsNamedAlbumHyphonTitle;
 }
 
-bool KNMusicLyricsManager::loadLyricsForFile(const KNMusicDetailInfo &detailInfo,
-                                             QList<qint64> &positions,
-                                             QStringList &lyricsText)
+KNMusicLyricsManager::~KNMusicLyricsManager()
 {
-    //Clear the lyrics.
-    clear();
-    //Find the lyrics.
-    if(!findLyricsForFile(detailInfo))
-    {
-        if(m_downloadLyrics && !downloadLyricsForFile(detailInfo))
-        {
-            return false;
-        }
-    }
-    //Using parser to parse the file.
-    m_lrcParser->parseFile(m_currentLyricsPath,
-                           m_lyricsProperty,
-                           positions,
-                           lyricsText);
-    return !positions.isEmpty();
+    //Remove all the downloaders.
+    qDeleteAll(m_downloaders);
 }
 
-void KNMusicLyricsManager::clear()
+void KNMusicLyricsManager::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
-    //Remove the file path.
-    m_currentLyricsPath.clear();
-    //Remove the old properties.
-    m_lyricsProperty.clear();
+    connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
+            this, &KNMusicLyricsManager::loadLyrics);
 }
 
 void KNMusicLyricsManager::installLyricsDownloader(KNMusicLyricsDownloader *downloader)
 {
-    //Add the downloader to linked list.
+    //Move the downloader to manager threads.
+    downloader->moveToThread(thread());
+    //Add to downloader list.
     m_downloaders.append(downloader);
 }
 
-inline bool KNMusicLyricsManager::findLyricsForFile(const KNMusicDetailInfo &detailInfo)
+QStringList KNMusicLyricsManager::textList() const
 {
-    //Clear the old path.
-    m_currentLyricsPath.clear();
-    //Get the file info of the music.
-    QFileInfo musicInfo(detailInfo.filePath);
-    //Search the lyrics using the policy.
-    int currentPolicy=0;
-    while(currentPolicy<m_policyList.size())
+    return m_textList;
+}
+
+QList<qint64> KNMusicLyricsManager::positionList() const
+{
+    return m_positionList;
+}
+
+void KNMusicLyricsManager::loadLyrics(const KNMusicAnalysisItem &analysisItem)
+{
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Clear the current data of the lyrics.
+    clearCurrentData();
+    //Find the lyrics at local folder.
+    if(findLocalLyricsFile(detailInfo))
     {
-        switch (m_policyList.at(currentPolicy))
+        //Ask to update lyrics for datas.
+        emit lyricsUpdate();
+        m_musicDetailInfo=detailInfo;
+        return;
+    }
+    //Or else we need to download the lyrics.
+    if(m_enableOnlineLyrics)
+    {
+        downloadLyrics(detailInfo);
+    }
+}
+
+void KNMusicLyricsManager::downloadLyrics(const KNMusicDetailInfo &detailInfo)
+{
+    //Using all downloaders to download the lyrics.
+    QList<KNMusicLyricsDetails> lyricsList;
+    for(QLinkedList<KNMusicLyricsDownloader *>::iterator i=m_downloaders.begin();
+        i!=m_downloaders.end();
+        ++i)
+    {
+        //Try to download the lyrics from all the remote server.
+        (*i)->downloadLyrics(detailInfo, lyricsList);
+    }
+    //Check the lyrics list.
+    if(lyricsList.isEmpty())
+    {
+        return;
+    }
+    //Sort the list according to the similarity of the lyrics.
+    qSort(lyricsList.begin(), lyricsList.end(), lyricsDetailLessThan);
+    //Parse all the data from the top to the bottom, save the first lyrics which
+    //can be parsed.
+    QList<qint64> positionList;
+    QStringList textList;
+    for(QList<KNMusicLyricsDetails>::iterator i=lyricsList.begin();
+        i!=lyricsList.end();
+        ++i)
+    {
+        if(m_parser->parseData((*i).lyricsData, positionList, textList))
+        {
+            //Save the current data to a file.
+            saveLyrics(detailInfo, (*i).lyricsData);
+            //Save the position and text list.
+            m_positionList=positionList;
+            m_textList=textList;
+            //Save the detail info.
+            m_musicDetailInfo=detailInfo;
+            //Ask to update lyrics for datas.
+            emit lyricsUpdate();
+            return;
+        }
+    }
+}
+
+inline void KNMusicLyricsManager::clearCurrentData()
+{
+    //Clear the lyrics data.
+    m_textList.clear();
+    m_positionList.clear();
+    //Reset the lyrics file path.
+    m_lyricsFilePath.clear();
+    //Reset the music detail info.
+    m_musicDetailInfo=KNMusicDetailInfo();
+    //Emit the lyrics has been reset.
+    emit lyricsReset();
+}
+
+bool KNMusicLyricsManager::findLocalLyricsFile(const KNMusicDetailInfo &detailInfo)
+{
+    //Generate the same file name as the music.
+    QFileInfo musicFileInfo(detailInfo.filePath);
+    QString sameNameLyricsFileName=musicFileInfo.completeBaseName()+".lrc";
+    //Search the lyrics according the lyrics finding policy.
+    for(int i=0; i<m_policyList.size(); i++)
+    {
+        switch(m_policyList.at(i))
         {
         case SameNameInLyricsDir:
-            if(checkLyricsFile(KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
-                               musicInfo.completeBaseName()+".lrc"))
+            if(triedLyricsFile(m_lyricsDir+"/"+sameNameLyricsFileName))
             {
                 return true;
             }
             break;
         case RelateNameInLyricsDir:
-            if(findRelateLyrics(KNMusicLyricsGlobal::lyricsFolderPath(),
-                                detailInfo))
+            if(triedRelatedNameLyricsFile(m_lyricsDir, detailInfo))
             {
                 return true;
             }
             break;
         case SameNameInMusicDir:
-            if(checkLyricsFile(musicInfo.absolutePath() + "/" +
-                               musicInfo.completeBaseName()+".lrc"))
+            if(triedLyricsFile(musicFileInfo.absolutePath()+"/"+
+                               sameNameLyricsFileName))
             {
                 return true;
             }
             break;
         case RelateNameInMusicDir:
-            if(findRelateLyrics(musicInfo.absolutePath(),
-                                detailInfo))
+            if(triedRelatedNameLyricsFile(musicFileInfo.absolutePath(),
+                                          detailInfo))
             {
                 return true;
             }
             break;
-        default:
-            break;
         }
-        currentPolicy++;
     }
     return false;
 }
 
-inline bool KNMusicLyricsManager::downloadLyricsForFile(const KNMusicDetailInfo &detailInfo)
+inline bool KNMusicLyricsManager::triedLyricsFile(const QString &lyricsPath)
 {
-    //Prepare the lyrics detail list.
-    QList<KNMusicLyricsDetails> lyricsList;
-    //Using the downloader to download the lyrics.
-    for(QLinkedList<KNMusicLyricsDownloader *>::iterator i=m_downloaders.begin();
-        i!=m_downloaders.end();
-        ++i)
-    {
-        //Try to download the file from all the server.
-        (*i)->downloadLyrics(detailInfo, lyricsList);
-    }
-    //Check if we need to process lyrics list.
-    if(lyricsList.isEmpty())
+    //Check if the lyrics is exist.
+    QFileInfo lyricsFileInfo(lyricsPath);
+    if(!lyricsFileInfo.exists())
     {
         return false;
     }
-    //Sort the list according to the similarity.
-    qSort(lyricsList.begin(), lyricsList.end(), lyricsDetailLessThan);
-    //Now the first data is the best matching data we can find,
-    //Save it to a file.
-    QString lyricsFilePath=
-            writeLyricsFile(detailInfo, lyricsList.first().lyricsData);
-    return lyricsFilePath.isEmpty()?
-                false:
-                checkLyricsFile(lyricsFilePath);
-}
-
-inline bool KNMusicLyricsManager::checkLyricsFile(const QString &lyricsPath)
-{
-    QFile testFile(lyricsPath);
-    if(testFile.exists())
+    //Generate a temporary position and text list.
+    QList<qint64> positionList;
+    QStringList textList;
+    //Tried to parse the lyrics file.
+    if(m_parser->parseFile(lyricsPath, positionList, textList))
     {
-        m_currentLyricsPath=QFileInfo(testFile).absoluteFilePath();
+        //Save the position and text list.
+        m_positionList=positionList;
+        m_textList=textList;
         return true;
     }
     return false;
 }
 
-inline bool KNMusicLyricsManager::findRelateLyrics(const QString &folderPath,
-                                                   const KNMusicDetailInfo &detailInfo)
+bool KNMusicLyricsManager::triedRelatedNameLyricsFile(const QString &dirPath,
+                                                       const KNMusicDetailInfo &detailInfo)
 {
-    //Find the title, the artist and the title, the album and the title.
-    return checkLyricsFile(folderPath+"/"+detailInfo.textLists[Name]+".lrc") ||
-            checkLyricsFile(folderPath+"/"+m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc")) ||
-            checkLyricsFile(folderPath+"/"+m_global->legalFileName(detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc"));
+    //Find the lyrics named with the following.
+    for(int i=0; i<m_relateNamePolicyList.size(); i++)
+    {
+        switch(m_relateNamePolicyList.at(i))
+        {
+        case LyricsNamedArtistHyphonTitle:
+            if(triedLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc")))
+            {
+                return true;
+            }
+            break;
+        case LyricsNamedTitle:
+            if(triedLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Name]+".lrc")))
+            {
+                return true;
+            }
+            break;
+        case LyricsNamedAlbumHyphonTitle:
+            if(triedLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc")))
+            {
+                return true;
+            }
+            break;
+        }
+    }
+    return false;
 }
 
-inline QString KNMusicLyricsManager::writeLyricsFile(const KNMusicDetailInfo &detailInfo,
-                                                     const QString &content)
+void KNMusicLyricsManager::saveLyrics(const KNMusicDetailInfo &detailInfo,
+                                       const QString &content)
 {
-    //Generate the lyrics file path
-    QString lyricsFilePath=KNMusicLyricsGlobal::lyricsFolderPath() + "/" +
-            m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc");
-    QFile lyricsFile(lyricsFilePath);
-    //Try to open the file.
+    //Generate the lyrics file.
+    QFile lyricsFile(m_lyricsDir + "/" +
+                     m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc"));
     if(lyricsFile.open(QIODevice::WriteOnly))
     {
-        //Write the data to the file.
-        QTextStream lyricsStream(&lyricsFile);
-        lyricsStream << content << flush;
+        //Save the content to the file, encording UTF-8.
+        QTextStream lyricsFileStream(&lyricsFile);
+        lyricsFileStream.setCodec(m_utf8Codec);
+        lyricsFileStream << content << flush;
         //Close the file.
         lyricsFile.close();
-        //Return the file path.
-        return lyricsFilePath;
     }
-    return QString();
 }
 
 bool KNMusicLyricsManager::lyricsDetailLessThan(const KNMusicLyricsDetails &lyricsDetailLeft,
-                                                const KNMusicLyricsDetails &lyricsDetailRight)
+                                                 const KNMusicLyricsDetails &lyricsDetailRight)
 {
     return (lyricsDetailLeft.titleSimilarity==lyricsDetailRight.titleSimilarity)?
                 lyricsDetailLeft.artistSimilarity<lyricsDetailRight.artistSimilarity:
                 lyricsDetailLeft.titleSimilarity<lyricsDetailRight.titleSimilarity;
 }
 
-bool KNMusicLyricsManager::downloadLyrics() const
+KNMusicDetailInfo KNMusicLyricsManager::musicDetailInfo() const
 {
-    return m_downloadLyrics;
+    return m_musicDetailInfo;
 }
 
-void KNMusicLyricsManager::setDownloadLyrics(bool downloadLyrics)
+bool KNMusicLyricsManager::enableOnlineLyrics() const
 {
-    m_downloadLyrics = downloadLyrics;
+    return m_enableOnlineLyrics;
 }
 
-QString KNMusicLyricsManager::lyricsFolderPath() const
+void KNMusicLyricsManager::setEnableOnlineLyrics(bool enableOnlineLyrics)
 {
-    return KNMusicLyricsGlobal::lyricsFolderPath();
+    m_enableOnlineLyrics = enableOnlineLyrics;
 }
 
-void KNMusicLyricsManager::setLyricsFolderPath(const QString &lyricsFolderPath)
+QString KNMusicLyricsManager::lyricsFilePath() const
 {
-    KNMusicLyricsGlobal::setLyricsFolderPath(lyricsFolderPath);
+    return m_lyricsFilePath;
+}
+
+QString KNMusicLyricsManager::lyricsDir() const
+{
+    return m_lyricsDir;
+}
+
+void KNMusicLyricsManager::setLyricsDir(const QString &lyricsDir)
+{
+    m_lyricsDir=KNGlobal::ensurePathAvaliable(lyricsDir);
 }
