@@ -7,6 +7,8 @@
 #include <QMimeData>
 
 #include "knglobal.h"
+
+#include "knmusicmodelassist.h"
 #include "knmusicsearcher.h"
 #include "knmusicanalysiscache.h"
 #include "knmusicanalysisextend.h"
@@ -93,7 +95,13 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     {
         if(data->hasFormat("org.kreogist.mu.musicrowlist"))
         {
-            qDebug()<<"Cut it down!";
+            QJsonArray rowArray=KNMusicModelAssist::byteDataToJsonArray(data->data("org.kreogist.mu.musicrowlist"));
+            for(QJsonArray::iterator i=rowArray.begin();
+                i!=rowArray.end();
+                ++i)
+            {
+                appendMusicRow(KNMusicModelAssist::generateRow((*i).toArray()));
+            }
             return true;
         }
         if(data->hasUrls())
