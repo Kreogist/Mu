@@ -29,13 +29,13 @@ QT += core \
 CONFIG += c++11
 
 # Enable processor instruction sets when using release mode.
-release{
+release: {
     CONFIG += mmx sse sse2 sse3
     QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions
 }
 
 # Windows configure
-win32{
+win32: {
     DESTDIR =../mu
     CONFIG += libbass FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
@@ -48,12 +48,12 @@ win32{
 }
 
 # UNIX common configure
-unix{
+unix: {
     LIBS += -ldl
 }
 
 # Mac OS X configure
-macx{
+macx: {
     # Brew configure. Use brew to install all your libs.
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
@@ -67,11 +67,18 @@ macx{
 }
 
 # Linux configure
-linux{
+linux: {
     CONFIG += libPhonon FFMpeg
     QMAKE_CXXFLAGS += -fforce-addr
     DESTDIR = ../bin
 }
+
+# Internationalization
+Internationalization{
+    SimplifiedChinese: {
+    }
+}
+
 
 FFMpeg{
     macx: {

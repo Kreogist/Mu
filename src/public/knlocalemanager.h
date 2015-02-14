@@ -38,6 +38,7 @@ public slots:
     void setLanguage(const QString &id);
 
 private:
+    void loadLanguageInFolder(const QString &folderPath);
     static KNLocaleManager *m_instance;
     explicit KNLocaleManager(QObject *parent = 0);
     int m_currentIndex=-1;
