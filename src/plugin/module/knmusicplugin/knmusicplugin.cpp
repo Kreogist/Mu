@@ -470,11 +470,11 @@ inline void KNMusicPlugin::initialParser()
     parser->installTagParser(new KNMusicTagWAV);
 
     //Install all analysiser plugins here.
-#ifdef ENABLE_LIBBASS
-    parser->installAnalysiser(new KNMusicBassAnalysiser);
-#endif
 #ifdef ENABLE_FFMPEG
     parser->installAnalysiser(new KNMusicFFMpegAnalysiser);
+#endif
+#ifdef ENABLE_LIBBASS
+    parser->installAnalysiser(new KNMusicBassAnalysiser);
 #endif
 
     //Add this to plugin list.

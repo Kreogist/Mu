@@ -38,7 +38,8 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     //Set properties.
     setAllColumnsShowFocus(true);
     setContentsMargins(0,0,0,0);
-    setDragDropMode(QAbstractItemView::DragOnly);
+//    setDragDropMode(QAbstractItemView::DragOnly);
+    setDragDropMode(QAbstractItemView::InternalMove);
     setDropIndicatorShown(true);
     setFrameShape(QFrame::NoFrame);
     setIndentation(0);
@@ -337,30 +338,36 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
     }
     //Clear the mimedata.
     QScopedPointer<QDrag> drag(new QDrag(this));
-    QMimeData *mimeData=new QMimeData;
+    QMimeData *mimeData=m_proxyModel->mimeData(selectionModel()->selectedIndexes());
     //Get the file path and music row of all the selected rows.
     QList<QUrl> fileUrlList;
     QJsonArray musicRowList;
     KNMusicModel *musicModel=m_proxyModel->musicModel();
+    QByteArray sourceRowList;
+    QDataStream sourceRowStream(&sourceRowList, QIODevice::WriteOnly);
     for(auto i=indexes.begin();
              i!=indexes.end();
              ++i)
     {
         //Get the original row of the specific row.
         int currentRow=m_proxyModel->mapToSource(*i).row();
-        //Add the file path and music row to list.
+        //Add the file path, row index and music row to list.
         fileUrlList.append(QUrl::fromLocalFile(musicModel->filePathFromRow(currentRow)));
         musicRowList.append(KNMusicModelAssist::rowToJsonArray(musicModel, currentRow));
+        sourceRowStream << currentRow;
     }
     QJsonDocument musicRowDocument;
     musicRowDocument.setArray(musicRowList);
     //Set the data to mimedata.
     mimeData->setUrls(fileUrlList);
     mimeData->setData("org.kreogist.mu.musicrowlist", musicRowDocument.toBinaryData());
+    mimeData->setData("org.kreogist.mu.musicmodel", QByteArray::number((int)musicModel));
+    mimeData->setData("org.kreogist.mu.musicmodelrows", sourceRowList);
+    mimeData->setData("org.kreogist.mu.musicmodelrowsize", QByteArray::number(indexes.size()));
     //Set the mime data to the drag action.
     drag->setMimeData(mimeData);
     //Do the drag.
-    drag->exec(Qt::CopyAction);
+    drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
 void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)

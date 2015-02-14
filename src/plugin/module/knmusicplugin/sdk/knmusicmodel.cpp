@@ -5,6 +5,7 @@
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
 #include <QMimeData>
+#include <QLinkedList>
 
 #include "knglobal.h"
 
@@ -93,14 +94,55 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     //When mimedata contains url data, and ensure that move&copy action enabled.
     if((action==Qt::MoveAction || action==Qt::CopyAction))
     {
+        //Internal movment.
+        if(data->hasFormat(QLatin1String("application/x-qstandarditemmodeldatalist")) &&
+                data->data("org.kreogist.mu.musicmodel").toInt()==(int)this)
+        {
+            QLinkedList<QPersistentModelIndex> originalRowList;
+            //Get how many rows.
+            int movedRowCount=data->data("org.kreogist.mu.musicmodelrowsize").toInt();
+            QByteArray rowListData=data->data("org.kreogist.mu.musicmodelrows");
+            QDataStream rowListStream(&rowListData, QIODevice::ReadOnly);
+            int currentRow;
+            for(int i=0; i<movedRowCount; i++)
+            {
+                //Get the current row.
+                rowListStream >> currentRow;
+                //Generate the tracking row.
+                originalRowList.append(QPersistentModelIndex(index(currentRow, Name)));
+            }
+            //Use the default drop
+            bool moveResult=QStandardItemModel::dropMimeData(data, Qt::CopyAction, row, column, parent);
+            //Remove the original row.
+            while(!originalRowList.isEmpty())
+            {
+                removeRow(originalRowList.takeFirst().row());
+            }
+            //Though the rowCount shouldn't change here. But we can use this
+            //signal to save the data.
+            emit rowCountChanged();
+            return moveResult;
+        }
         if(data->hasFormat("org.kreogist.mu.musicrowlist"))
         {
             QJsonArray rowArray=KNMusicModelAssist::byteDataToJsonArray(data->data("org.kreogist.mu.musicrowlist"));
-            for(QJsonArray::iterator i=rowArray.begin();
-                i!=rowArray.end();
-                ++i)
+            if(row==-1)
             {
-                appendMusicRow(KNMusicModelAssist::generateRow((*i).toArray()));
+                for(QJsonArray::iterator i=rowArray.begin();
+                    i!=rowArray.end();
+                    ++i)
+                {
+                    appendMusicRow(KNMusicModelAssist::generateRow((*i).toArray()));
+                }
+            }
+            else
+            {
+                for(QJsonArray::iterator i=rowArray.end();
+                    i!=rowArray.begin();
+                    --i)
+                {
+                    insertMusicRow(row, KNMusicModelAssist::generateRow((*i).toArray()));
+                }
             }
             return true;
         }
@@ -177,6 +219,17 @@ void KNMusicModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
     m_totalDuration+=musicRow.at(Time)->data(Qt::UserRole).toInt();
     //Append this row.
     appendRow(musicRow);
+    emit rowCountChanged();
+}
+
+void KNMusicModel::insertMusicRow(const int &row, const QList<QStandardItem *> &musicRow)
+{
+    //Clear all the icons.
+    musicRow.at(Name)->setData(QPixmap(), Qt::DecorationRole);
+    //Calculate new total duration.
+    m_totalDuration+=musicRow.at(Time)->data(Qt::UserRole).toInt();
+    //Append this row.
+    insertRow(row, musicRow);
     emit rowCountChanged();
 }
 
