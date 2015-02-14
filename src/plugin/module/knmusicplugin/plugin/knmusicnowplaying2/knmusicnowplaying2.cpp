@@ -27,6 +27,8 @@
 
 #include "knmusicnowplaying2.h"
 
+#include <QDebug>
+
 KNMusicNowPlaying2::KNMusicNowPlaying2(QObject *parent) :
     KNMusicNowPlayingBase(parent)
 {
@@ -247,7 +249,8 @@ void KNMusicNowPlaying2::playNext()
     {
         return;
     }
-    if(!m_currentPlayingIndex.isValid())
+    if(!m_currentPlayingIndex.isValid() ||
+            m_currentPlayingIndex.model()!=m_playingModel->sourceModel())
     {
         emit requirePlayRow(0);
         return;
@@ -273,7 +276,8 @@ void KNMusicNowPlaying2::playPrevious()
     {
         return;
     }
-    if(!m_currentPlayingIndex.isValid())
+    if(!m_currentPlayingIndex.isValid() ||
+            m_currentPlayingIndex.model()!=m_playingModel->sourceModel())
     {
         emit requirePlayRow(m_playingModel->rowCount()-1);
         return;
@@ -376,7 +380,8 @@ void KNMusicNowPlaying2::onActionCantLoad()
     {
         return;
     }
-    if(!m_currentPlayingIndex.isValid())
+    if(!m_currentPlayingIndex.isValid() ||
+            m_currentPlayingIndex.model()!=m_playingModel->sourceModel())
     {
         emit requirePlayRow(0);
         return;
@@ -402,7 +407,7 @@ void KNMusicNowPlaying2::onActionLoaded()
                                         CantPlayFlagRole,
                                         false);
     //Give out the update signal.
-    emit nowPlayingChanged();
+    emit nowPlayingChanged(m_currentPlayingAnalysisItem);
 }
 
 void KNMusicNowPlaying2::retranslate()
@@ -541,8 +546,8 @@ inline void KNMusicNowPlaying2::playRow(const int &proxyRow)
         //Get the detail info.
         KNMusicDetailInfo &currentInfo=m_currentPlayingAnalysisItem.detailInfo;
         //Update the music model row.
-        m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(), currentInfo);
-        m_playingMusicModel->updateCoverImage(m_currentPlayingIndex.row(), currentAnalysisItem);
+        m_playingMusicModel->updateMusicRow(m_currentPlayingIndex.row(),
+                                            currentAnalysisItem);
         //Play the music, according to the detail information.
         //This is a much better judge than the original version.
         if(currentInfo.trackFilePath.isEmpty())

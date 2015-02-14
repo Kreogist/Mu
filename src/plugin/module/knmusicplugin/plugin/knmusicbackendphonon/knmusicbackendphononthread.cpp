@@ -43,9 +43,6 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
             this, SLOT(onActionStateChanged(State,State)));
     connect(m_mediaObject, SIGNAL(finished()),
             this, SLOT(onActionFinished()));
-
-    //Start working thread.
-//    m_workingThread.start();
 }
 
 KNMusicBackendPhononThread::~KNMusicBackendPhononThread()
@@ -53,9 +50,6 @@ KNMusicBackendPhononThread::~KNMusicBackendPhononThread()
     //Block all signals.
     m_audioOutput->blockSignals(true);
     m_mediaObject->blockSignals(true);
-    //Quit the working thread.
-//    m_workingThread.quit();
-//    m_workingThread.wait();
 
     //Recover memory.
     delete m_audioOutput;

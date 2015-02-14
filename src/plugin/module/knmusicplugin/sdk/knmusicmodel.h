@@ -138,10 +138,10 @@ signals:
 public slots:
     virtual void addFiles(const QStringList &fileList);
     virtual void appendMusicRow(const QList<QStandardItem *> &musicRow);
+    virtual void insertMusicRow(const int &row,
+                                const QList<QStandardItem *> &musicRow);
     virtual void updateMusicRow(const int &row,
-                                const KNMusicDetailInfo &detailInfo);
-    virtual void updateCoverImage(const int &row,
-                                  const KNMusicAnalysisItem &analysisItem);
+                                const KNMusicAnalysisItem &analysisItem);
     virtual void removeMusicRow(const int &row);
     virtual void clearMusicRow();
 

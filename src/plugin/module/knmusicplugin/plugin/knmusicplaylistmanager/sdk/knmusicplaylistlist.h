@@ -46,8 +46,10 @@ public:
     void setPlaylistListData(const QStringList &playlistListData);
 
 signals:
-    void requireAddToPlaylist(int playlistRowIndex, QStringList fileList);
+    void requireAddFileToPlaylist(int playlistRowIndex, QStringList fileList);
+    void requireAddRowToPlaylist(int playlistRowIndex, QByteArray rowData);
     void requireCreatePlaylist(int preferRow, QStringList fileList);
+    void requireCreatePlaylistRow(int preferRow, QByteArray rowData);
     void requireShowContent();
     void requireHideContent();
 

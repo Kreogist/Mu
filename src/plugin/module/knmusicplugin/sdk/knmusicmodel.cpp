@@ -5,8 +5,11 @@
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
 #include <QMimeData>
+#include <QLinkedList>
 
 #include "knglobal.h"
+
+#include "knmusicmodelassist.h"
 #include "knmusicsearcher.h"
 #include "knmusicanalysiscache.h"
 #include "knmusicanalysisextend.h"
@@ -91,6 +94,58 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     //When mimedata contains url data, and ensure that move&copy action enabled.
     if((action==Qt::MoveAction || action==Qt::CopyAction))
     {
+        //Internal movment.
+        if(data->hasFormat(QLatin1String("application/x-qstandarditemmodeldatalist")) &&
+                data->data("org.kreogist.mu.musicmodel").toLongLong()==(qint64)this)
+        {
+            QLinkedList<QPersistentModelIndex> originalRowList;
+            //Get how many rows.
+            int movedRowCount=data->data("org.kreogist.mu.musicmodelrowsize").toInt();
+            QByteArray rowListData=data->data("org.kreogist.mu.musicmodelrows");
+            QDataStream rowListStream(&rowListData, QIODevice::ReadOnly);
+            int currentRow;
+            for(int i=0; i<movedRowCount; i++)
+            {
+                //Get the current row.
+                rowListStream >> currentRow;
+                //Generate the tracking row.
+                originalRowList.append(QPersistentModelIndex(index(currentRow, Name)));
+            }
+            //Use the default drop
+            bool moveResult=QStandardItemModel::dropMimeData(data, Qt::CopyAction, row, column, parent);
+            //Remove the original row.
+            while(!originalRowList.isEmpty())
+            {
+                removeRow(originalRowList.takeFirst().row());
+            }
+            //Though the rowCount shouldn't change here. But we can use this
+            //signal to save the data.
+            emit rowCountChanged();
+            return moveResult;
+        }
+        if(data->hasFormat("org.kreogist.mu.musicrowlist"))
+        {
+            QJsonArray rowArray=KNMusicModelAssist::byteDataToJsonArray(data->data("org.kreogist.mu.musicrowlist"));
+            if(row==-1)
+            {
+                for(QJsonArray::iterator i=rowArray.begin();
+                    i!=rowArray.end();
+                    ++i)
+                {
+                    appendMusicRow(KNMusicModelAssist::generateRow((*i).toArray()));
+                }
+            }
+            else
+            {
+                for(QJsonArray::iterator i=rowArray.end();
+                    i!=rowArray.begin();
+                    --i)
+                {
+                    insertMusicRow(row, KNMusicModelAssist::generateRow((*i).toArray()));
+                }
+            }
+            return true;
+        }
         if(data->hasUrls())
         {
             addFiles(KNGlobal::urlToPathList(data->urls()));
@@ -167,9 +222,21 @@ void KNMusicModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
     emit rowCountChanged();
 }
 
-void KNMusicModel::updateMusicRow(const int &row,
-                                  const KNMusicDetailInfo &detailInfo)
+void KNMusicModel::insertMusicRow(const int &row, const QList<QStandardItem *> &musicRow)
 {
+    //Clear all the icons.
+    musicRow.at(Name)->setData(QPixmap(), Qt::DecorationRole);
+    //Calculate new total duration.
+    m_totalDuration+=musicRow.at(Time)->data(Qt::UserRole).toInt();
+    //Append this row.
+    insertRow(row, musicRow);
+    emit rowCountChanged();
+}
+
+void KNMusicModel::updateMusicRow(const int &row,
+                                  const KNMusicAnalysisItem &analysisItem)
+{
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Update the text of the row.
     for(int i=0; i<MusicDataCount; i++)
     {
@@ -197,14 +264,6 @@ void KNMusicModel::updateMusicRow(const int &row,
     updateRoleData(row, Time, Qt::UserRole, detailInfo.duration);
     updateRoleData(row, BitRate, Qt::UserRole, detailInfo.bitRate);
     updateRoleData(row, SampleRate, Qt::UserRole, detailInfo.samplingRate);
-}
-
-void KNMusicModel::updateCoverImage(const int &row,
-                                    const KNMusicAnalysisItem &analysisItem)
-{
-    //In the default playlist, we don't need to save any data.
-    Q_UNUSED(row)
-    Q_UNUSED(analysisItem)
 }
 
 void KNMusicModel::removeMusicRow(const int &row)

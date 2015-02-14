@@ -33,6 +33,7 @@
 
 #include "knmusicglobal.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusicmodelassist.h"
 
 #include "knmusicplaylistmanager.h"
 
@@ -89,10 +90,14 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     connect(m_playlistList, &KNMusicPlaylistList::itemChanged,
             m_playlistTab, &KNMusicPlaylistTab::onActionPlaylistItemChanged);
     //Connect add to item request.
-    connect(m_playlistList, &KNMusicPlaylistList::requireAddToPlaylist,
+    connect(m_playlistList, &KNMusicPlaylistList::requireAddFileToPlaylist,
             this, &KNMusicPlaylistManager::onActionAddToPlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireAddRowToPlaylist,
+            this, &KNMusicPlaylistManager::onActionAddRowToPlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
             this, &KNMusicPlaylistManager::onActionCreatePlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylistRow,
+            this, &KNMusicPlaylistManager::onActionCreatePlaylistWithRow);
 }
 
 KNMusicPlaylistManager::~KNMusicPlaylistManager()
@@ -164,6 +169,28 @@ void KNMusicPlaylistManager::onActionAddToPlaylist(const int &row,
     }
     //Add files to the item.
     playlistItem->playlistModel()->addFiles(filePaths);
+    //Set the changed flag.
+    playlistItem->setChanged(true);
+}
+
+void KNMusicPlaylistManager::onActionAddRowToPlaylist(const int &row,
+                                                      const QByteArray &rowData)
+{
+    //Get the playlist item.
+    KNMusicPlaylistListItem *playlistItem=m_playlistList->playlistItem(row);
+    //Check whether the item has been built before.
+    if(!playlistItem->built())
+    {
+        KNMusicPlaylistListAssistant::buildPlaylist(playlistItem);
+    }
+    //Add files to the item.
+    QJsonArray rowArray=KNMusicModelAssist::byteDataToJsonArray(rowData);
+    for(QJsonArray::iterator i=rowArray.begin();
+        i!=rowArray.end();
+        ++i)
+    {
+        playlistItem->playlistModel()->appendMusicRow(KNMusicModelAssist::generateRow((*i).toArray()));
+    }
     //Set the changed flag.
     playlistItem->setChanged(true);
 }
@@ -248,6 +275,23 @@ void KNMusicPlaylistManager::onActionCreatePlaylist(const int &row,
     KNMusicPlaylistListItem *playlistItem=createBlankPlaylist(row);
     //Add the file to playlist.
     playlistItem->playlistModel()->addFiles(filePaths);
+}
+
+void KNMusicPlaylistManager::onActionCreatePlaylistWithRow(const int &row,
+                                                           const QByteArray &rowData)
+{
+    //Genreate a blank playlist first.
+    KNMusicPlaylistListItem *playlistItem=createBlankPlaylist(row);
+    //Add files to the item.
+    QJsonArray rowArray=KNMusicModelAssist::byteDataToJsonArray(rowData);
+    for(QJsonArray::iterator i=rowArray.begin();
+        i!=rowArray.end();
+        ++i)
+    {
+        playlistItem->playlistModel()->appendMusicRow(KNMusicModelAssist::generateRow((*i).toArray()));
+    }
+    //Set the changed flag.
+    playlistItem->setChanged(true);
 }
 
 void KNMusicPlaylistManager::onActionCurrentPlaylistChanged(const QModelIndex &current,

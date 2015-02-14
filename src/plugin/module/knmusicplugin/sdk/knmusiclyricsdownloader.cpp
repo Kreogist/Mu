@@ -21,7 +21,6 @@
 #include <QTimer>
 
 #include "knconnectionhandler.h"
-#include "knmusiclyricsglobal.h"
 
 #include "knmusiclyricsdownloader.h"
 

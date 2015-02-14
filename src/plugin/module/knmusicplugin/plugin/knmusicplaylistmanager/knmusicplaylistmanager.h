@@ -46,6 +46,8 @@ private slots:
     void onActionAddPlaylist();
     void onActionAddToPlaylist(const int &row,
                                const QStringList &filePaths);
+    void onActionAddRowToPlaylist(const int &row,
+                                  const QByteArray &rowData);
     void onActionRemovePlaylist(const QModelIndex &index);
     void onActionImportPlaylist(QStringList playlistPaths);
     void onActionExportPlaylist(const QString &filePath,
@@ -53,6 +55,8 @@ private slots:
     void onActionCopyPlaylist(const int &index);
     void onActionCreatePlaylist(const int &row,
                                 const QStringList &filePaths);
+    void onActionCreatePlaylistWithRow(const int &row,
+                                       const QByteArray &rowData);
     void onActionCurrentPlaylistChanged(const QModelIndex &current,
                                         const QModelIndex &previous);
     void locateIndexInModel(KNMusicModel *model, QModelIndex index);

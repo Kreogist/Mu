@@ -24,8 +24,6 @@
 
 #include <QEasingCurve>
 
-#include <QThread>
-
 #include "knmusicglobal.h"
 
 #include "knmusicbackendthread.h"
@@ -70,7 +68,6 @@ private:
     MediaObject *m_mediaObject;
     AudioOutput *m_audioOutput;
 
-    QThread m_workingThread;
     QString m_filePath;
 
     int m_state;

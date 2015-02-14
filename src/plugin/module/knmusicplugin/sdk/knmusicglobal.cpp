@@ -465,6 +465,16 @@ void KNMusicGlobal::initialPreference()
     m_preferencePanel->setConfigure(m_musicConfigure);
 }
 
+KNMusicLyricsManager *KNMusicGlobal::lyricsManager() const
+{
+    return m_lyricsManager;
+}
+
+void KNMusicGlobal::setLyricsManager(KNMusicLyricsManager *lyricsManager)
+{
+    m_lyricsManager = lyricsManager;
+}
+
 KNMusicDetailDialogBase *KNMusicGlobal::detailDialog()
 {
     return m_detailDialog;

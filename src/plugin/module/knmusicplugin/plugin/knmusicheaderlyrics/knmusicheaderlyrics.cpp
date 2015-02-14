@@ -32,20 +32,23 @@
 KNMusicDetailInfo KNMusicHeaderLyrics::m_currentDeailInfo;
 
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
-    KNMusicHeaderLyricsBase(parent)
+    KNMusicLyricsBase(parent)
 {
-    //Initial the music global.
+    //Initial the music global, music configure and lyrics manager.
     m_musicGlobal=KNMusicGlobal::instance();
-    //Initial the music configure.
-    m_musicConfigure=m_musicGlobal->musicConfigure();
-    //Initial the lyrics manager.
-    m_lyricsManager=KNMusicLyricsManager::instance();
-    m_lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
-    //Link the library changed request.
     connect(m_musicGlobal, &KNMusicGlobal::musicLibraryMoved,
             this, &KNMusicHeaderLyrics::onActionMusicLibraryMoved);
-    //Set line spacing specially for Windows.
+
+    m_musicConfigure=m_musicGlobal->musicConfigure();
+
+    m_lyricsManager=m_musicGlobal->lyricsManager();
+    connect(m_lyricsManager, &KNMusicLyricsManager::lyricsReset,
+            this, &KNMusicHeaderLyrics::onActionLyricsReset);
+    connect(m_lyricsManager, &KNMusicLyricsManager::lyricsUpdate,
+            this, &KNMusicHeaderLyrics::onActionLyricsUpdate);
 #ifdef Q_OS_WIN32
+    //Set line spacing specially for Windows. It seems that in Qt 5.4, line
+    //spacing has been calculate into a text line.
     m_lineSpacing=0;
 #endif
 
@@ -70,16 +73,16 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 
 KNMusicHeaderLyrics::~KNMusicHeaderLyrics()
 {
-    delete m_lyricsManager;
 }
 
 void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 {
-    connect(player, &KNMusicHeaderPlayerBase::playerReset,
-            this, &KNMusicHeaderLyrics::resetStatus);
-    connect(player, &KNMusicHeaderPlayerBase::requireLoadLyrics,
-            this, &KNMusicHeaderLyrics::loadLyricsForMusic);
-    connect(player, &KNMusicHeaderPlayerBase::positionChanged,
+    //Save the player.
+    m_player=player;
+    //Link the player.
+    connect(m_player, &KNMusicHeaderPlayerBase::playerReset,
+            this, &KNMusicHeaderLyrics::onActionLyricsReset);
+    connect(m_player, &KNMusicHeaderPlayerBase::positionChanged,
             this, &KNMusicHeaderLyrics::onActionPositionChange);
 }
 
@@ -91,61 +94,6 @@ void KNMusicHeaderLyrics::retranslate()
     generateTitleAndItemInfo(lyricsTitle, itemList);
     //Ask to insert the info list.
     KNMusicGlobal::instance()->insertItemInfoList(lyricsTitle, itemList);
-}
-
-void KNMusicHeaderLyrics::resetStatus()
-{
-    //Clear lines.
-    m_lyricsLines=0;
-    //Reset lines.
-    m_currentLyricsLine=-1;
-    //Clear lyrics manager.
-    m_positions.clear();
-    m_lyricsText.clear();
-    //Update the viewport.
-    update();
-}
-
-void KNMusicHeaderLyrics::loadLyricsForMusic(const KNMusicDetailInfo &detailInfo)
-{
-    //Save the current detail info.
-    m_currentDeailInfo=detailInfo;
-    //Reset the lyrics viewer.
-    resetStatus();
-    //Clear the current lyrics.
-    m_positions.clear();
-    m_lyricsText.clear();
-    //Update the widget first.
-    update();
-    //Generate temporary parse data.
-    QList<qint64> loadedPositions;
-    QStringList loadedLyricsText;
-    //Load the lyrics.
-    if(m_lyricsManager->loadLyricsForFile(detailInfo,
-                                          loadedPositions,
-                                          loadedLyricsText))
-    {
-        //Ensure that the detail info is still the same.
-        if(m_currentDeailInfo.filePath!=detailInfo.filePath)
-        {
-            return;
-        }
-        m_positions=loadedPositions;
-        m_lyricsText=loadedLyricsText;
-        //Update parameters.
-        //Get the lyrics lines.
-        m_lyricsLines=m_positions.size();
-        //Check is there lyrics.
-        if(!m_positions.isEmpty())
-        {
-            //Initial the current line to the first line.
-            m_currentLyricsLine=0;
-            //Move the first line to center.
-            onActionLyricsMoved(0);
-        }
-        //Update the viewer.
-        update();
-    }
 }
 
 void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
@@ -199,6 +147,43 @@ void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
         startMovingAnime((lyricsLineDuration(m_currentLyricsLine)>>2),
                          yOffset);
     }
+}
+
+void KNMusicHeaderLyrics::onActionLyricsReset()
+{
+    //Clear lines.
+    m_lyricsLines=0;
+    //Reset lines.
+    m_currentLyricsLine=-1;
+    //Clear lyrics manager.
+    m_positions.clear();
+    m_lyricsText.clear();
+    //Update the viewport.
+    update();
+}
+
+void KNMusicHeaderLyrics::onActionLyricsUpdate()
+{
+    //Check is the updated lyrics is the player's lyrics.
+    if(m_lyricsManager->musicDetailInfo().filePath!=m_player->currentDetailInfo().filePath ||
+            m_lyricsManager->musicDetailInfo().trackFilePath!=m_player->currentDetailInfo().trackFilePath ||
+            m_lyricsManager->musicDetailInfo().trackIndex!=m_player->currentDetailInfo().trackIndex ||
+            m_lyricsManager->positionList().isEmpty())
+    {
+        return;
+    }
+    //Save the position and lyrics text.
+    m_positions=m_lyricsManager->positionList();
+    m_lyricsText=m_lyricsManager->textList();
+    //Update parameters.
+    //Get the lyrics lines.
+    m_lyricsLines=m_positions.size();
+    //Initial the current line to the first line.
+    m_currentLyricsLine=0;
+    //Move the first line to center.
+    onActionLyricsMoved(0);
+    //Update the viewer.
+    update();
 }
 
 void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
@@ -276,13 +261,13 @@ void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
 void KNMusicHeaderLyrics::applyPreference()
 {
     //Update the lyrics folder.
-    m_lyricsManager->setLyricsFolderPath(
+    m_lyricsManager->setLyricsDir(
                 m_musicConfigure->getData("LyricsFolder",
-                                          m_lyricsManager->lyricsFolderPath()).toString());
+                                          m_lyricsManager->lyricsDir()).toString());
     //Update the download info.
-    m_lyricsManager->setDownloadLyrics(
+    m_lyricsManager->setEnableOnlineLyrics(
                 m_musicConfigure->getData("DownloadLyrics",
-                                          m_lyricsManager->downloadLyrics()).toBool());
+                                          m_lyricsManager->enableOnlineLyrics()).toBool());
     //Update the spacing.
     m_lineSpacing=
                 m_musicConfigure->getData("TextSpacing",
@@ -297,13 +282,13 @@ void KNMusicHeaderLyrics::onActionMusicLibraryMoved(const QString &originalPath,
                                                     const QString &currentPath)
 {
     //Check if lyrics manager's folder path is in the orginal path.
-    QString managerFolderPath=m_lyricsManager->lyricsFolderPath();
+    QString managerFolderPath=m_lyricsManager->lyricsDir();
     if(managerFolderPath.left(originalPath.size())==originalPath)
     {
         //Set the lyrics manager to the new path.
         QString currentFolderPath=
                 currentPath+managerFolderPath.mid(originalPath.size());
-        m_lyricsManager->setLyricsFolderPath(currentFolderPath);
+        m_lyricsManager->setLyricsDir(currentFolderPath);
         m_musicConfigure->setData("LyricsFolder",
                                   currentFolderPath);
         //Update the lyrics path value.
@@ -333,11 +318,11 @@ inline void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo 
     list.append(KNPreferenceItemGlobal::generateInfo(PathEditItem,
                                                      tr("Lyrics Folder"),
                                                      "LyricsFolder",
-                                                     m_lyricsManager->lyricsFolderPath()));
+                                                     m_lyricsManager->lyricsDir()));
     list.append(KNPreferenceItemGlobal::generateInfo(SwitcherItem,
                                                      tr("Download Lyrics"),
                                                      "DownloadLyrics",
-                                                     m_lyricsManager->downloadLyrics()));
+                                                     m_lyricsManager->enableOnlineLyrics()));
     list.append(KNPreferenceItemGlobal::generateInfo(FontItem,
                                                      tr("Lyrics Font"),
                                                      "LyricsFont",

@@ -9,6 +9,7 @@
 
 #include <QList>
 #include <QStandardItem>
+#include <QJsonArray>
 #include <QDateTime>
 
 #include "knmusicglobal.h"
@@ -28,6 +29,9 @@ public:
     static QString dateTimeToDataString(const QVariant &dateTime);
     static QDateTime dataStringToDateTime(const QString &text);
     static QList<QStandardItem *> generateRow(const KNMusicDetailInfo &detailInfo);
+    static QList<QStandardItem *> generateRow(const QJsonArray &itemDataArray);
+    static QJsonArray rowToJsonArray(KNMusicModel *musicModel, const int &row);
+    static QJsonArray byteDataToJsonArray(const QByteArray &rowData);
     static bool reanalysisRow(KNMusicModel *musicModel,
                               const QPersistentModelIndex &index,
                               KNMusicAnalysisItem &analysisItem);

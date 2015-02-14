@@ -68,10 +68,10 @@ bool KNMusicProxyModel::lessThan(const QModelIndex &left,
 }
 
 void KNMusicProxyModel::updateMusicRow(const int &row,
-                                       const KNMusicDetailInfo &detailInfo)
+                                       const KNMusicAnalysisItem &analysisItem)
 {
     musicModel()->updateMusicRow(mapToSource(index(row, Name)).row(),
-                                 detailInfo);
+                                 analysisItem);
 }
 
 void KNMusicProxyModel::removeMusicRow(const int &row)

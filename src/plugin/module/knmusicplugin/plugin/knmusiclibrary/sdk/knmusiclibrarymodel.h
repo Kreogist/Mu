@@ -67,7 +67,7 @@ public slots:
     void addFiles(const QStringList &fileList);
     void appendMusicRow(const QList<QStandardItem *> &musicRow);
     void updateMusicRow(const int &row,
-                        const KNMusicDetailInfo &detailInfo);
+                        const KNMusicAnalysisItem &analysisItem);
     void updateCoverImage(const int &row,
                           const KNMusicAnalysisItem &analysisItem);
     void removeMusicRow(const int &row);
@@ -79,23 +79,6 @@ private slots:
     void imageRecoverComplete();
 
 private:
-    enum PropertyListIndex
-    {
-        PropertyFilePath,
-        PropertyFileName,
-        PropertyCoverImageHash,
-        PropertyBitRate,
-        PropertyRating,
-        PropertySampleRating,
-        PropertySize,
-        PropertyDuration,
-        PropertyDateAdded,
-        PropertyDateModified,
-        PropertyLastPlayed,
-        PropertyTrackFilePath,
-        PropertyTrackIndex,
-        PropertyStartPosition
-    };
     inline void initialHeader();
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
 

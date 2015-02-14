@@ -14,19 +14,19 @@
 using namespace KNMusic;
 
 class KNMusicHeaderPlayerBase;
-class KNMusicHeaderLyricsBase : public QWidget
+class KNMusicLyricsBase : public QWidget
 {
     Q_OBJECT
 public:
-    KNMusicHeaderLyricsBase(QWidget *parent = 0):QWidget(parent){}
+    KNMusicLyricsBase(QWidget *parent = 0):QWidget(parent){}
     virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *player)=0;
 
 signals:
 
 public slots:
-    virtual void resetStatus()=0;
-    virtual void loadLyricsForMusic(const KNMusicDetailInfo &detailInfo)=0;
     virtual void onActionPositionChange(const qint64 &position)=0;
+    virtual void onActionLyricsReset()=0;
+    virtual void onActionLyricsUpdate()=0;
 
 };
 
