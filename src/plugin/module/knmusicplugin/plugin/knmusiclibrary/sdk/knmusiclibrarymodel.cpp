@@ -259,14 +259,17 @@ void KNMusicLibraryModel::updateMusicRow(const int &row,
 {
     //Save the coverImageHash in library analysis item.
     KNMusicAnalysisItem libraryItem=analysisItem;
-    libraryItem.detailInfo.coverImageHash=
-            m_coverImageList->appendImage(libraryItem.coverImage);
+    if(!libraryItem.coverImage.isNull())
+    {
+        libraryItem.detailInfo.coverImageHash=
+                m_coverImageList->appendImage(libraryItem.coverImage);
+        //Update the row data in database, we need to generate the new information from the row.
+        m_database->replace(row, KNMusicModelAssist::rowToJsonArray(this, row));
+        //Update the cover image.
+        updateCoverImage(row, libraryItem);
+    }
     //Do row udpates operate.
     KNMusicModel::updateMusicRow(row, analysisItem);
-    //Update the row data in database, we need to generate the new information from the row.
-    m_database->replace(row, KNMusicModelAssist::rowToJsonArray(this, row));
-    //Update the cover image.
-    updateCoverImage(row, libraryItem);
 }
 
 void KNMusicLibraryModel::updateCoverImage(const int &row,
