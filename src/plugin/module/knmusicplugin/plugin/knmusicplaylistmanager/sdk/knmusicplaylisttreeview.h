@@ -30,7 +30,7 @@ signals:
 
 public slots:
     void resetHeaderState();
-
+    void playCurrentrPlaylist();
 };
 
 #endif // KNMUSICPLAYLISTTREEVIEW_H

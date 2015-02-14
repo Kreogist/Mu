@@ -26,7 +26,7 @@
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
 #include "plugin/knmusicneteaselyrics/knmusicneteaselyrics.h"
 #include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
-#include "sdk/knmusiclyricsglobal.h"
+#include "knmusiclyricsglobal.h"
 #include "knmusiclrcparser.h"
 
 #include "knmusiclyricsmanager.h"

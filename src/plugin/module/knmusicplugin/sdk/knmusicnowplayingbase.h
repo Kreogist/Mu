@@ -18,6 +18,7 @@ using namespace KNMusic;
 class KNMusicTab;
 class KNMusicModel;
 class KNMusicProxyModel;
+class KNMusicSinglePlaylistModel;
 class KNMusicNowPlayingBase : public QObject
 {
     Q_OBJECT
@@ -31,7 +32,7 @@ public:
     virtual KNMusicAnalysisItem currentAnalaysisItem() const=0;
 
 signals:
-    void requireResetPlayer();
+    void requireResetInformation();
     void nowPlayingChanged();
     void loopStateChanged(int state);
 
@@ -45,19 +46,20 @@ public slots:
     virtual void showCurrentIndexInOriginalTab()=0;
     virtual void shadowPlayingModel()=0;
 
-    virtual void setPlayingModel(KNMusicProxyModel *model,
-                                 KNMusicTab *tab=nullptr)=0;
+    virtual void playMusicRow(KNMusicProxyModel *model,
+                              int row,
+                              KNMusicTab *tab=nullptr)=0;
 
     virtual void playNext()=0;
     virtual void playPrevious()=0;
-    virtual void playMusic(int row)=0;
-    virtual void playMusic(const QModelIndex &index)=0;
     virtual void playTemporaryFiles(const QStringList &filePaths)=0;
 
     virtual void onActionPlayingFinished()=0;
+    virtual void onActionCantLoad()=0;
+    virtual void onActionLoaded()=0;
 
     virtual void setLoopState(const int &state)=0;
-    virtual void setRating(const int &rating)=0;
+    virtual void setCurrentSongRating(const int &rating)=0;
     virtual void changeLoopState()=0;
 
     virtual void checkRemovedModel(KNMusicModel *model)=0;

@@ -17,6 +17,9 @@ using namespace KNMusic;
 class KNMusicBackend : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(qint64 position READ position WRITE setPosition NOTIFY positionChanged)
+    Q_PROPERTY(qint64 previewPosition READ previewPosition WRITE setPreviewPosition NOTIFY previewPositionChanged)
+    Q_PROPERTY(int volume READ volume WRITE setVolume)
 public:
     KNMusicBackend(QObject *parent = 0) : QObject(parent){}
     virtual bool available()=0;
@@ -39,6 +42,7 @@ public:
 
     virtual void loadPreview(const QString &filePath)=0;
     virtual qint64 previewDuration() const=0;
+    virtual qint64 previewPosition() const=0;
     virtual void playPreviewFile(const QString &fileName)=0;
     virtual void setPreviewSection(const qint64 &start=-1,
                                    const qint64 &duration=-1)=0;
@@ -56,23 +60,23 @@ public:
     virtual int volumeMaximum()=0;
 
 signals:
-    void cannotLoadFile();
-    void filePathChanged(const QString &filePath);
+    void cannotLoad();
+    void loaded();
     void positionChanged(qint64 position);
     void durationChanged(qint64 duration);
-    void muteStateChanged(bool mute);
     void finished();
     void stopped();
-    void loaded();
     void playingStateChanged(int state);
 
-    void previewCannotLoadFile();
-    void previewFilePathChanged(const QString &filePath);
+    void previewCannotLoad();
+    void previewLoaded();
     void previewPositionChanged(qint64 position);
     void previewDurationChanged(qint64 duration);
     void previewFinished();
     void previewStopped();
     void previewPlayingStateChanged(int state);
+
+    void muteStateChanged(bool mute);
 
 public slots:
     virtual void changeMuteState()=0;

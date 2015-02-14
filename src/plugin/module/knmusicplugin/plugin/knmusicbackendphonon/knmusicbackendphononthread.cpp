@@ -68,11 +68,11 @@ bool KNMusicBackendPhononThread::loadFromFile(const QString &filePath)
     stop();
     //Check if the media source is just the current file, then ignore the loading.
     QUrl currentUrl=QUrl::fromLocalFile(filePath);
-    qDebug()<<m_mediaSource<<currentUrl;
-    if(m_mediaSource.url()==currentUrl)
+    if(m_mediaSource==currentUrl)
     {
-        qDebug("Here?!");
         resetState();
+        //Emit load succeed signal.
+        emit loaded();
         return true;
     }
     //Reset the total duration and state.
@@ -262,10 +262,10 @@ void KNMusicBackendPhononThread::onActionDurationChanged(
     {
         return;
     }
-    //Set ticking flag, though I don't know what this.
     //Check the loading flag.
     if(m_loadFlag)
     {
+        //Set ticking flag, though I don't know what this.
         m_ticking=true;
         //When we are here, this is an important signal.
         //It means the file has been loaded or the file cannot be loaded.

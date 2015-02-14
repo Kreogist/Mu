@@ -22,7 +22,7 @@
 
 class QThread;
 class KNMusicCategoryModel;
-class KNMusicLibraryDatabase;
+class KNJSONDatabase;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
 class KNMusicLibraryImageManager;
@@ -61,7 +61,7 @@ private:
     QThread *m_libraryDatabaseThread,
             *m_libraryImageThread;
     QString m_libraryPath;
-    KNMusicLibraryDatabase *m_libraryDatabase;
+    KNJSONDatabase *m_libraryDatabase;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_librarySongTab;
     KNMusicLibraryImageManager *m_libraryImageManager;

@@ -199,6 +199,14 @@ void KNMusicModel::updateMusicRow(const int &row,
     updateRoleData(row, SampleRate, Qt::UserRole, detailInfo.samplingRate);
 }
 
+void KNMusicModel::updateCoverImage(const int &row,
+                                    const KNMusicAnalysisItem &analysisItem)
+{
+    //In the default playlist, we don't need to save any data.
+    Q_UNUSED(row)
+    Q_UNUSED(analysisItem)
+}
+
 void KNMusicModel::removeMusicRow(const int &row)
 {
     //We need to do sth before remove a row.
@@ -289,7 +297,6 @@ void KNMusicModel::onActionFileNameChanged(const QString &originalPath,
     {
         //Get the row.
         int currentRow=originalPathList.takeLast().row();
-        qDebug()<<currentRow;
         //Set the new data.
         setRowProperty(currentRow, FilePathRole, currentPath);
         setRowProperty(currentRow, FileNameRole, currentFileName);

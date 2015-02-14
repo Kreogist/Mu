@@ -104,7 +104,7 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
     m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
     //Reset the player.
-    reset();
+    resetInformation();
     //Connect requests.
     connect(m_volumeIndicator, &KNOpacityButton::clicked,
             m_backend, &KNMusicBackend::changeMuteState);
@@ -139,8 +139,8 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     //Connect responds.
     connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
             this, &KNMusicHeaderPlayer::onActionLoopStateChanged);
-    connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetPlayer,
-            this, &KNMusicHeaderPlayer::reset);
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::requireResetInformation,
+            this, &KNMusicHeaderPlayer::resetInformation);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
             this, &KNMusicHeaderPlayer::updatePlayerInfo);
     //Sync the data with now playing.
@@ -152,7 +152,7 @@ KNMusicDetailInfo KNMusicHeaderPlayer::currentDetailInfo()
     return m_currentDetailInfo;
 }
 
-void KNMusicHeaderPlayer::reset()
+void KNMusicHeaderPlayer::resetInformation()
 {
     //Reset file path.
     m_currentFilePath.clear();
@@ -166,8 +166,6 @@ void KNMusicHeaderPlayer::reset()
     //Set the duration and position.
     setDuration(0);
     setPositionText(0);
-    //Ask to reset main thread.
-    m_backend->resetMainPlayer();
     //Emit reset signal.
     emit playerReset();
 }
@@ -368,7 +366,7 @@ void KNMusicHeaderPlayer::onActionAppendMenuActionTriggered(int actionIndex)
     case AppendRatingThreeStar:
     case AppendRatingFourStar:
     case AppendRatingFiveStar:
-        m_nowPlaying->setRating(actionIndex-AppendRatingNoStar);
+        m_nowPlaying->setCurrentSongRating(actionIndex-AppendRatingNoStar);
         break;
     case AppendShowInGraphicShell:
         KNGlobal::showInGraphicalShell(m_currentFilePath);
@@ -777,11 +775,6 @@ void KNMusicHeaderPlayer::updatePlayerInfo()
     //Get the current information.
     KNMusicAnalysisItem analysisItem=m_nowPlaying->currentAnalaysisItem();
     m_currentDetailInfo=analysisItem.detailInfo;
-    //Check is the playing file the current file. If it is, do nothing.
-    if(m_currentFilePath==m_currentDetailInfo.filePath)
-    {
-        return;
-    }
     //Save the new file path and emit file path changed signal.
     m_currentFilePath=m_currentDetailInfo.filePath;
     //Set the display data.

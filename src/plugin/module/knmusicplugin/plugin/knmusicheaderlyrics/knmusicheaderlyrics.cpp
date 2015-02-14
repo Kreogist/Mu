@@ -175,7 +175,7 @@ void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
             m_currentLyricsLine!=0)
     {
         //Find the matching lyrics.
-        while(m_currentLyricsLine>-1 &&
+        while(m_currentLyricsLine>0 &&
               m_positions.at(m_currentLyricsLine)>position)
         {
             yOffset-=lyricsSize(m_lyricsText.at(m_currentLyricsLine)).height();

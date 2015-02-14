@@ -181,14 +181,12 @@ SOURCES += \
     plugin/sdk/knopacitybutton.cpp \
     plugin/sdk/knvolumeslider.cpp \
     plugin/sdk/kncancellineedit.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.cpp \
     plugin/base/knpreference/knpreferencecategorylist.cpp \
     plugin/base/knpreference/knpreferencecategoryitem.cpp \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.cpp \
     plugin/module/knmusicplugin/sdk/knmusicmodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylisttab.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistdisplay.cpp \
@@ -215,7 +213,7 @@ SOURCES += \
     plugin/sdk/preference/knpreferenceitemswitcher.cpp \
     plugin/sdk/knsideshadowwidget.cpp \
     plugin/sdk/knanimeroundswitcher.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicsingleplaylistmodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistmodel.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistitem.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlist.cpp \
@@ -285,16 +283,13 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumindexdelegate.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.cpp \
     plugin/sdk/knjsondatabase.cpp \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydatabase.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.cpp \
     plugin/sdk/knngnlbutton.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.cpp \
     plugin/sdk/preference/knpreferenceitemnumber.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.cpp \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
@@ -311,7 +306,11 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
     plugin/sdk/knlabelbutton.cpp \
     public/knconfiguremanager.cpp \
-    plugin/sdk/knconfigure.cpp
+    plugin/sdk/knconfigure.cpp \
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.cpp \
+    plugin/module/knmusicplugin/sdk/knmusiclrcparser.cpp \
+    plugin/module/knmusicplugin/sdk/knmusiclyricsdownloader.cpp \
+    plugin/module/knmusicplugin/sdk/knmusiclyricsglobal.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -371,7 +370,6 @@ HEADERS += \
     plugin/sdk/knvolumeslider.h \
     plugin/sdk/kncancellineedit.h \
     plugin/module/knmusicplugin/sdk/knmusicnowplayingbase.h \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.h \
     plugin/base/knpreference/knpreferencecategorylist.h \
     plugin/base/knpreference/knpreferencecategoryitem.h \
     plugin/module/knmusicplugin/sdk/knmusicproxymodel.h \
@@ -379,7 +377,6 @@ HEADERS += \
     plugin/module/knmusicplugin/sdk/knmusicheaderlyricsbase.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusicheaderlyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclyricsmanager.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/knmusiclrcparser.h \
     plugin/module/knmusicplugin/sdk/knmusictab.h \
     plugin/module/knmusicplugin/sdk/knmusicplaylistmanagerbase.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/knmusicplaylistmanager.h \
@@ -408,7 +405,7 @@ HEADERS += \
     plugin/sdk/preference/knpreferenceitemswitcher.h \
     plugin/sdk/knsideshadowwidget.h \
     plugin/sdk/knanimeroundswitcher.h \
-    plugin/module/knmusicplugin/plugin/knmusicnowplaying/knmusicsingleplaylistmodel.h \
+    plugin/module/knmusicplugin/sdk/knmusicsingleplaylistmodel.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistmodel.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistitem.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlist.h \
@@ -486,16 +483,13 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumindexdelegate.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.h \
     plugin/sdk/knjsondatabase.h \
-    plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydatabase.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.h \
     plugin/sdk/knngnlbutton.h \
     plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicwplparser/knmusicwplparser.h \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltipartwork.h \
     plugin/sdk/preference/knpreferenceitemnumber.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsdownloader.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
-    plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/sdk/knmusiclyricsglobal.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicitunesxmlparser/knmusicitunesxmlparser.h \
     plugin/module/knmusicplugin/plugin/knmusicheaderlyrics/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
@@ -514,7 +508,11 @@ HEADERS += \
     core/knversion.h \
     plugin/sdk/knlabelbutton.h \
     public/knconfiguremanager.h \
-    plugin/sdk/knconfigure.h
+    plugin/sdk/knconfigure.h \
+    plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.h \
+    plugin/module/knmusicplugin/sdk/knmusiclrcparser.h \
+    plugin/module/knmusicplugin/sdk/knmusiclyricsdownloader.h \
+    plugin/module/knmusicplugin/sdk/knmusiclyricsglobal.h
 
 RESOURCES += \
     resource/res.qrc

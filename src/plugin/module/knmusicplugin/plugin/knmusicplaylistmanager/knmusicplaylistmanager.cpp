@@ -69,6 +69,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
             });
     connect(m_playlistTab, &KNMusicPlaylistTab::requireLocateIndexInModel,
             this, &KNMusicPlaylistManager::locateIndexInModel);
+    connect(m_playlistTab, &KNMusicPlaylistTab::requireAddToPlaylist,
+            this, &KNMusicPlaylistManager::onActionAddToPlaylist);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireLoadPlaylistList,
             this, &KNMusicPlaylistManager::loadPlaylistList);
     connect(m_playlistTab, &KNMusicPlaylistTab::requireGeneratePlaylist,

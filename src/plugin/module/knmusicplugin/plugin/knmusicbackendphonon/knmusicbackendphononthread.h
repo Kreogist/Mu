@@ -53,7 +53,6 @@ public:
                      const qint64 &sectionDuration=-1);
 
 signals:
-    void loaded();
 
 public slots:
     void setVolume(const int &volumeSize);
@@ -72,6 +71,7 @@ private:
     AudioOutput *m_audioOutput;
 
     QThread m_workingThread;
+    QString m_filePath;
 
     int m_state;
     bool m_ticking=false, m_loadFlag=false;

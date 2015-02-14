@@ -40,16 +40,20 @@
 //Backends
 #ifdef ENABLE_LIBBASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
-#include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
-#endif
-#ifdef ENABLE_FFMPEG
-#include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
 #endif
 #ifdef ENABLE_LIBVLC
 #include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
 #endif
 #ifdef ENABLE_PHONON
 #include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
+#endif
+
+//Analysiser
+#ifdef ENABLE_LIBBASS
+#include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
+#endif
+#ifdef ENABLE_FFMPEG
+#include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
 #endif
 
 //Tags
@@ -78,7 +82,7 @@
 #include "plugin/knmusicmultimenu/knmusicmultimenu.h"
 
 //Now playing
-#include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+#include "plugin/knmusicnowplaying2/knmusicnowplaying2.h"
 
 //Main player
 #include "plugin/knmusicmainplayer/knmusicmainplayer.h"
@@ -124,7 +128,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadBackend(new KNMusicBackendPhonon);
 #endif
     loadDetailTooptip(new KNMusicDetailTooltip);
-    loadNowPlaying(new KNMusicNowPlaying);
+    loadNowPlaying(new KNMusicNowPlaying2);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
 //    loadMainPlayer(new KNMusicMainPlayer);

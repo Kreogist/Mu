@@ -24,6 +24,7 @@ public:
 
 signals:
     void requireShowTab();
+    void requireLoadImageLibrary();
 
 public slots:
 

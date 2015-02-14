@@ -52,15 +52,15 @@ bool KNMusicBackendBassThread::loadFromFile(const QString &filePath)
     if(filePath==m_filePath)
     {
         resetState();
+        //Emit load succeed signal.
+        emit loaded();
         return true;
     }
-    //Backup the file path.
-    m_filePath=filePath;
-    //Emit file path changed signal.
-    emit filePathChanged(m_filePath);
-    //Load the file.
+    //Clear the file path.
+    m_filePath.clear();
+    //Try to load the file.
 #ifdef Q_OS_WIN32
-    std::wstring uniPath=m_filePath.toStdWString();
+    std::wstring uniPath=filePath.toStdWString();
     if(!(m_channel=BASS_StreamCreateFile(FALSE,
                                          uniPath.data(),
                                          0,
@@ -90,8 +90,14 @@ bool KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                           KNMusicBassGlobal::fdps(),1)))
 #endif
     {
+        //Loaded failed, emit cannot load signal.
+        emit cannotLoadFile();
         return false;
     }
+    //Backup the file path.
+    m_filePath=filePath;
+    //Emit load succeed.
+    emit loaded();
     //Establish sync handle.
     establishSyncHandle();
     //When loading the file complete, set the channel info to the thread.
@@ -152,6 +158,8 @@ void KNMusicBackendBassThread::stop()
         m_positionUpdater->stop();
         //Reset position.
         setPosition(0);
+        //Set stop flag.
+        m_stoppedState=true;
         //Reset the state.
         setState(StoppedState);
         emit stopped();

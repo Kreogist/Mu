@@ -83,45 +83,48 @@ void KNProgressSlider::paintEvent(QPaintEvent *event)
                            m_sliderHeight),
                      m_rectColor);
 
-    //If range is not 0, draw the button.
+    //Calculat the position left.
+    int positionLeft;
     if(range()>0)
     {
-        //Restore the opacity.
-        painter.setOpacity(1.0);
-
         //Get the current position.
-        int positionLeft=percentage()*(qreal)(width()-m_buttonSize);
+        positionLeft=percentage()*(qreal)(width()-m_buttonSize);
         if(positionLeft<0)
         {
             positionLeft=0;
         }
-        //Paint the rect.
-        painter.fillRect(QRect(m_glowWidth,
-                               m_glowWidth+m_spacing,
-                               positionLeft+2,
-                               m_sliderHeight),
-                         m_buttonColor);
-
-        //Draw the circle button.
-        //Calculate position.
-        painter.translate(positionLeft,
-                          m_spacing);
-        //Set the gradient.
-        int buttonCenter=m_glowWidth+(m_sliderHeight>>1);
-        QPointF centerFocalPoint=QPointF(buttonCenter, buttonCenter);
-        m_buttonGradient.setCenter(centerFocalPoint);
-        m_buttonGradient.setRadius(buttonCenter);
-        m_buttonGradient.setFocalPoint(centerFocalPoint);
-        painter.setBrush(m_buttonGradient);
-        //Draw the button.
-        painter.drawEllipse(QRectF(0,0,height(),height()));
-        //Fill the center of the button once more.
-        painter.setBrush(m_buttonColor);
-        painter.drawEllipse(QRectF(m_glowWidth-1,
-                                   m_glowWidth-1,
-                                   m_sliderHeight+2,
-                                   m_sliderHeight+2));
     }
+    else
+    {
+        positionLeft=0;
+    }
+    //Restore the opacity.
+    painter.setOpacity(1.0);
+    //Paint the rect.
+    painter.fillRect(QRect(m_glowWidth,
+                           m_glowWidth+m_spacing,
+                           positionLeft+2,
+                           m_sliderHeight),
+                     m_buttonColor);
+
+    //Draw the circle button.
+    //Calculate position.
+    painter.translate(positionLeft, m_spacing);
+    //Set the gradient.
+    int buttonCenter=m_glowWidth+(m_sliderHeight>>1);
+    QPointF centerFocalPoint=QPointF(buttonCenter, buttonCenter);
+    m_buttonGradient.setCenter(centerFocalPoint);
+    m_buttonGradient.setRadius(buttonCenter);
+    m_buttonGradient.setFocalPoint(centerFocalPoint);
+    painter.setBrush(m_buttonGradient);
+    //Draw the button.
+    painter.drawEllipse(QRectF(0,0,height(),height()));
+    //Fill the center of the button once more.
+    painter.setBrush(m_buttonColor);
+    painter.drawEllipse(QRectF(m_glowWidth-1,
+                               m_glowWidth-1,
+                               m_sliderHeight+2,
+                               m_sliderHeight+2));
 }
 
 void KNProgressSlider::mousePressEvent(QMouseEvent *event)

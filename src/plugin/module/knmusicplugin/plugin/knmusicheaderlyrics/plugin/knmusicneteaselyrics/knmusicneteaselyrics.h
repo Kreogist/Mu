@@ -18,7 +18,7 @@
 #ifndef KNMUSICBAIDULYRICS_H
 #define KNMUSICBAIDULYRICS_H
 
-#include "../../sdk/knmusiclyricsdownloader.h"
+#include "knmusiclyricsdownloader.h"
 
 class KNMusicNeteaseLyrics : public KNMusicLyricsDownloader
 {

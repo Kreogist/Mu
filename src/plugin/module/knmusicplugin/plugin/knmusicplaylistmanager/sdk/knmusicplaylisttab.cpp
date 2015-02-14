@@ -62,6 +62,8 @@ KNMusicPlaylistTab::KNMusicPlaylistTab(QObject *parent) :
     //Initial the playlist display.
     m_playlistDisplay=new KNMusicPlaylistDisplay(m_mainViewer);
     m_playlistDisplay->setMusicTab(this);
+    connect(m_playlistDisplay, &KNMusicPlaylistDisplay::requireAddToPlaylist,
+            this, &KNMusicPlaylistTab::requireAddToPlaylist);
     m_mainViewer->addWidget(m_playlistDisplay);
 
     //Set viewer properties after add widgets.

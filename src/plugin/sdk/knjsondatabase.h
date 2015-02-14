@@ -23,18 +23,18 @@ public:
     void setDatabaseFile(const QString &filePath);
     void read();
     void write();
+    QJsonArray::iterator begin();
+    QJsonArray::iterator end();
+    void append(const QJsonValue &value);
+    void replace(int i, const QJsonValue &value);
+    void removeAt(int i);
+    QJsonValue at(int i);
 
 signals:
 
 public slots:
 
 protected:
-    void append(QJsonObject value);
-    void replace(int i, QJsonObject value);
-    void removeAt(int i);
-    QJsonValue at(int i);
-    QJsonArray::iterator begin();
-    QJsonArray::iterator end();
 
 private:
     inline void addBatchCount();
@@ -44,7 +44,6 @@ private:
     QJsonArray m_dataField;
     QJsonDocument m_document;
     QJsonObject m_contentObject;
-    QJsonParseError m_lastError;
     static int m_majorVersion;
     static int m_minorVersion;
     int m_batchCount=0;

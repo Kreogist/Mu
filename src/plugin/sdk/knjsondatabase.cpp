@@ -12,7 +12,7 @@
 
 #include <QDebug>
 
-int KNJSONDatabase::m_majorVersion=1;
+int KNJSONDatabase::m_majorVersion=2;
 int KNJSONDatabase::m_minorVersion=0;
 
 #define MAX_BATCH 300
@@ -45,8 +45,7 @@ void KNJSONDatabase::read()
         return;
     }
     //Read the data from the file.
-    m_document=QJsonDocument::fromJson(m_databaseFile->readAll(),
-                                       &m_lastError);
+    m_document=QJsonDocument::fromBinaryData(m_databaseFile->readAll());
     m_databaseFile->close();
     //Check whether the document is null.
     if(m_document.isNull())
@@ -102,21 +101,21 @@ void KNJSONDatabase::write()
     //Write the document to file.
     if(m_databaseFile->open(QIODevice::WriteOnly))
     {
-        m_databaseFile->write(m_document.toJson());
+        m_databaseFile->write(m_document.toBinaryData());
         m_databaseFile->close();
     }
     //Clear count.
     m_batchCount=0;
 }
 
-void KNJSONDatabase::append(QJsonObject value)
+void KNJSONDatabase::append(const QJsonValue &value)
 {
     m_dataField.append(value);
     //Count a operate.
     addBatchCount();
 }
 
-void KNJSONDatabase::replace(int i, QJsonObject value)
+void KNJSONDatabase::replace(int i, const QJsonValue &value)
 {
     m_dataField.replace(i, value);
     //Count a operate.

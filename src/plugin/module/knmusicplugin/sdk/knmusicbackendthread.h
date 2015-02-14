@@ -30,7 +30,7 @@ public:
 
 signals:
     void cannotLoadFile();
-    void filePathChanged(QString filePath);
+    void loaded();
     void durationChanged(qint64 duration);
     void positionChanged(qint64 position);
     void stateChanged(int state);
