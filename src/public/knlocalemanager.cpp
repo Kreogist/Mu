@@ -105,41 +105,32 @@ void KNLocaleManager::loadLanguageInFolder(const QString &folderPath)
     {
         return;
     }
-    //Get the language translation.
-    QFile languageTranslationFile(languageFolder.filePath("language.json"));
-    QJsonObject languageTranslation;
-    if(languageTranslationFile.open(QIODevice::ReadOnly))
-    {
-        QJsonDocument rawFileDocument=
-                QJsonDocument::fromJson(languageTranslationFile.readAll());
-        languageTranslation=rawFileDocument.object();
-        languageTranslationFile.close();
-    }
     //Get all the folder in the language list.
     QFileInfoList folderList=languageFolder.entryInfoList();
     for(QFileInfoList::iterator i=folderList.begin();
         i!=folderList.end();
         ++i)
     {
+        QString dirName=(*i).fileName();
         //Ignore the . and .. dir.
-        if(!(*i).isDir() || (*i).fileName()=="." || (*i).fileName()=="..")
+        if(!(*i).isDir() || dirName=="." || dirName=="..")
         {
             continue;
         }
         //Get the language file and the icon file.
-        QFileInfo languageFileInfo((*i).absoluteFilePath()+"/"+(*i).fileName()+".qm"),
-                  languageIconInfo((*i).absoluteFilePath()+"/"+(*i).fileName()+".png");
+        QFileInfo languageFileInfo((*i).absoluteFilePath()+"/"+dirName+".qm"),
+                  languageIconInfo((*i).absoluteFilePath()+"/"+dirName+".png");
         //Check is the language file available.
         if(languageFileInfo.exists())
         {
             LanguageItem currentLanguage;
             //Using filename as ID.
-            currentLanguage.id=(*i).fileName();
+            currentLanguage.id=dirName;
             //Get the language name.
-            currentLanguage.name=languageTranslation[(*i).fileName()].toString();
+            currentLanguage.name=m_languageTranslation.value(dirName);
             if(currentLanguage.name.isEmpty())
             {
-                currentLanguage.name=(*i).fileName();
+                currentLanguage.name=dirName;
             }
             //Add to language file list.
             currentLanguage.filePath=languageFileInfo.absoluteFilePath();
@@ -172,7 +163,24 @@ void KNLocaleManager::loadLanguageFiles()
 {
     //Clear the language list.
     m_languageList.clear();
-    //Add English language item, English will always be the first language.
+    //Get the language translations.
+    QFile languageTranslationFile("://public/language.json");
+    QJsonObject languageTranslation;
+    if(languageTranslationFile.open(QIODevice::ReadOnly))
+    {
+        languageTranslation=
+                QJsonDocument::fromJson(languageTranslationFile.readAll()).object();
+        languageTranslationFile.close();
+    }
+    QStringList languageIDList=languageTranslation.keys();
+    for(QStringList::iterator i=languageIDList.begin();
+        i!=languageIDList.end();
+        ++i)
+    {
+        m_languageTranslation.insert(*i, languageTranslation.value(*i).toString());
+    }
+    //Add English language item, English will always be the first language, it's
+    //the default embedded language.
     LanguageItem englishLanguage;
     englishLanguage.id="English";
     englishLanguage.name="English";
@@ -183,6 +191,12 @@ void KNLocaleManager::loadLanguageFiles()
     loadLanguageInFolder(QApplication::applicationDirPath() + "/Language");
     //Load the language in language folder.
     loadLanguageInFolder(m_languageDirPath);
+#ifdef Q_OS_LINUX
+    //Thanks for Sou Bunnbu:
+    //For Linux, we should also find langauges at /usr/share/mu, here's the
+    //default package resource provide place.
+    loadLanguageInFolder("/usr/share/mu/Language");
+#endif
 }
 
 KNLocaleManager::KNLocaleManager(QObject *parent) :

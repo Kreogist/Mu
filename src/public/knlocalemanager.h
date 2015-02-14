@@ -9,6 +9,7 @@
 
 #include <QPixmap>
 #include <QStringList>
+#include <QHash>
 #include <QObject>
 
 class QTranslator;
@@ -55,6 +56,7 @@ private:
     };
     QString m_languageDirPath;
     QList<LanguageItem> m_languageList;
+    QHash<QString, QString> m_languageTranslation;
     QPixmap m_noImageIcon;
     QTranslator *m_translator;
 };

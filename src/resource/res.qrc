@@ -12,6 +12,7 @@
         <file>public/preview_font.png</file>
         <file>icon/mu.png</file>
         <file>public/goto_folder.png</file>
+        <file>public/language.json</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/category/01_musics.png</file>

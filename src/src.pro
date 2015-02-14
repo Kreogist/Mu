@@ -28,6 +28,10 @@ QT += core \
 # Enable c++11
 CONFIG += c++11
 
+# Add translations
+TRANSLATIONS += locale/Simplified_Chinese.ts \
+                locale/Traditional_Chinese.ts
+
 # Enable processor instruction sets when using release mode.
 release: {
     CONFIG += mmx sse sse2 sse3
@@ -68,15 +72,17 @@ macx: {
 
 # Linux configure
 linux: {
-    CONFIG += libPhonon FFMpeg
+    CONFIG += libPhonon FFMpeg i10n
     QMAKE_CXXFLAGS += -fforce-addr
     DESTDIR = ../bin
 }
 
-# Internationalization
-Internationalization{
-    SimplifiedChinese: {
-    }
+i10n{
+    QMAKE_EXTRA_COMPILERS += MAKE_QM_FILES
+    MAKE_QM_FILES.input = TRANSLATIONS
+    MAKE_QM_FILES.output = ${QMAKE_FILE_BASE}.qm
+    MAKE_QM_FILES.commands = lrelease ${QMAKE_FILE_NAME} -qm ${QMAKE_FILE_BASE}.qm
+    MAKE_QM_FILES.CONFIG += no_link target_predeps
 }
 
 
@@ -132,10 +138,6 @@ libbass{
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
                plugin/module/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
 }
-
-# Add translations
-TRANSLATIONS += locale/Simplified_Chinese.ts \
-                locale/Traditional_Chinese.ts
 
 # Add public path
 INCLUDEPATH += public
