@@ -160,7 +160,10 @@ void KNLocaleManager::loadLanguageInFolder(const QString &folderPath)
                 currentLanguage.icon=m_noImageIcon;
             }
             //Append language list.
-            m_languageList.append(currentLanguage);
+            if(!m_languageList.contains(currentLanguage))
+            {
+                m_languageList.append(currentLanguage);
+            }
         }
     }
 }

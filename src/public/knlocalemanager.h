@@ -48,6 +48,10 @@ private:
         QString id;
         QString filePath;
         QPixmap icon;
+        bool operator ==(const LanguageItem &value)
+        {
+            return id==value.id;
+        }
     };
     QString m_languageDirPath;
     QList<LanguageItem> m_languageList;
