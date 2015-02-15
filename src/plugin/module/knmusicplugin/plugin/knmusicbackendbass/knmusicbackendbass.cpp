@@ -18,9 +18,6 @@
 #include <QDir>
 #include <QEasingCurve>
 
-//Debug
-#include <QMessageBox>
-
 #include "knglobal.h"
 #include "knmusicbassglobal.h"
 #include "knmusicbackendbassthread.h"
@@ -40,8 +37,14 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
         return;
     }
     //Load plugins from application resource dir and global plugin dir.
+#ifdef Q_OS_MACX
+    //This is a special OS, on Mac OS X, all the bass related dylib should be
+    //placed at the same path of the executable file.
+    initialPlugin(KNGlobal::applicationDirPath());
+#else
     initialPlugin(KNGlobal::resourceDirPath()+"/Plugins/Bass");
     initialPlugin(KNGlobal::pluginDirPath()+"/Bass");
+#endif
     //Initial the main and preview thread.
     m_main=new KNMusicBackendBassThread(this);
     setMainThread(m_main);
