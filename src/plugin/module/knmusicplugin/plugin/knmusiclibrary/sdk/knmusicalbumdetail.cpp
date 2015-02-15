@@ -141,9 +141,12 @@ void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
     m_albumContentIn2->setEndValue(albumContentStepFinal);
     //Make album art up.
     m_albumArt->raise();
+    //Tweak the shadows.
     m_rightShadow->hide();
     m_leftShadow->raise();
     m_leftShadow->show();
+    //Initial the shadow position.
+    updateShadowGeometries(albumArtStartRect);
     //Show the widget.
     show();
     //Set the focus.

@@ -16,8 +16,8 @@ KNFileSearcher::KNFileSearcher(QObject *parent) :
 {
     //Connect analysis signal and slots. Using Signal-Slost instead of calling
     //funcion directly, can avoid a deep calling stack.
-    connect(this, &KNFileSearcher::requireAnalysisFile,
-            this, &KNFileSearcher::analysisFile);
+    connect(this, &KNFileSearcher::requireAnalysisNext,
+            this, &KNFileSearcher::analysisNext);
     connect(this, &KNFileSearcher::requireAnlaysisFolder,
             this, &KNFileSearcher::analysisFolder);
 }
@@ -31,20 +31,12 @@ bool KNFileSearcher::isFilePathAccept(const QString &filePath)
 
 void KNFileSearcher::analysisUrls(QStringList urls)
 {
-    for(auto i=urls.begin();
-        i!=urls.end();
-        ++i)
+    //Append the urls to the waiting list.
+    m_fileSearchQueue.append(urls);
+    //Emit analysis signal.
+    if(!m_fileSearchQueue.isEmpty())
     {
-        QFileInfo typeChecker(*i);
-        //Analysis the current items.
-        if(typeChecker.isDir())
-        {
-            emit requireAnlaysisFolder(*i);
-        }
-        if(typeChecker.isFile())
-        {
-            emit requireAnalysisFile(typeChecker.suffix(), *i);
-        }
+        emit requireAnalysisNext();
     }
 }
 
@@ -75,12 +67,30 @@ void KNFileSearcher::analysisFolder(const QString &folderPath)
         //Analysis item.
         if((*i).isFile())
         {
-            emit requireAnalysisFile((*i).suffix(),
-                                     (*i).absoluteFilePath());
+            analysisFile((*i).suffix(), (*i).absoluteFilePath());
         }
         if((*i).isDir())
         {
             emit requireAnlaysisFolder((*i).absoluteFilePath());
         }
+    }
+}
+
+void KNFileSearcher::analysisNext()
+{
+    QFileInfo typeChecker(m_fileSearchQueue.takeFirst());
+    //Analysis the current items.
+    if(typeChecker.isDir())
+    {
+        emit requireAnlaysisFolder(typeChecker.absoluteFilePath());
+    }
+    if(typeChecker.isFile())
+    {
+        analysisFile(typeChecker.suffix(), typeChecker.absoluteFilePath());
+    }
+    //Emit analysis signal.
+    if(!m_fileSearchQueue.isEmpty())
+    {
+        emit requireAnalysisNext();
     }
 }

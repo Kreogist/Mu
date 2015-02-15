@@ -189,33 +189,6 @@ void KNMusicLibraryModel::retranslate()
     setHorizontalHeaderLabels(header);
 }
 
-void KNMusicLibraryModel::addFiles(const QStringList &fileList)
-{
-    //Only analysis the file that we don't contain.
-    QStringList zippedFileList;
-    for(QStringList::const_iterator i=fileList.begin();
-        i!=fileList.end();
-        ++i)
-    {
-        //Check if we can find the file in the library.
-        QModelIndexList fileCheck=match(index(0,0),
-                                        FilePathRole,
-                                        (*i),
-                                        1,
-                                        Qt::MatchFixedString);
-        //If we can't find it, check in the filelist.
-        if(fileCheck.isEmpty())
-        {
-            if(!zippedFileList.contains((*i)))
-            {
-                zippedFileList.append((*i));
-            }
-        }
-    }
-    //Ask to analysis the zipped file list.
-    KNMusicModel::addFiles(zippedFileList);
-}
-
 void KNMusicLibraryModel::appendMusicRow(const QList<QStandardItem *> &musicRow)
 {
     //Add the row to model.
@@ -275,25 +248,29 @@ void KNMusicLibraryModel::updateMusicRow(const int &row,
 void KNMusicLibraryModel::updateCoverImage(const int &row,
                                            const KNMusicAnalysisItem &analysisItem)
 {
-    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
-    //Ask to update the image key in the database.
-    QJsonArray itemDataArray=m_database->at(row).toArray(),
-               propertyArray=itemDataArray.at(1).toArray();
-    propertyArray.replace(PropertyCoverImageHash, detailInfo.coverImageHash);
-    itemDataArray.replace(1, propertyArray);
-    m_database->replace(row, itemDataArray);
-    //Set the artwork key for the model, we have already save the data.
-    KNMusicModel::setRowProperty(row, ArtworkKeyRole, detailInfo.coverImageHash);
-    //Get the cover image.
-    QPixmap coverImagePixmap=QPixmap::fromImage(analysisItem.coverImage);
-    //Ask category models to update the cover image.
-    for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
-        i!=m_categoryModels.end();
-        ++i)
+    //Check the row is vaild or not.
+    if(row<rowCount() && row>-1)
     {
-        (*i)->onCoverImageUpdate(detailInfo.textLists[(*i)->categoryIndex()],
-                                 detailInfo.coverImageHash,
-                                 coverImagePixmap);
+        const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+        //Ask to update the image key in the database.
+        QJsonArray itemDataArray=m_database->at(row).toArray(),
+                   propertyArray=itemDataArray.at(1).toArray();
+        propertyArray.replace(PropertyCoverImageHash, detailInfo.coverImageHash);
+        itemDataArray.replace(1, propertyArray);
+        m_database->replace(row, itemDataArray);
+        //Set the artwork key for the model, we have already save the data.
+        KNMusicModel::setRowProperty(row, ArtworkKeyRole, detailInfo.coverImageHash);
+        //Get the cover image.
+        QPixmap coverImagePixmap=QPixmap::fromImage(analysisItem.coverImage);
+        //Ask category models to update the cover image.
+        for(QLinkedList<KNMusicCategoryModel *>::iterator i=m_categoryModels.begin();
+            i!=m_categoryModels.end();
+            ++i)
+        {
+            (*i)->onCoverImageUpdate(detailInfo.textLists[(*i)->categoryIndex()],
+                                     detailInfo.coverImageHash,
+                                     coverImagePixmap);
+        }
     }
 }
 
@@ -384,6 +361,28 @@ void KNMusicLibraryModel::removeMusicRow(const int &row)
 void KNMusicLibraryModel::appendLibraryMusicRow(const QList<QStandardItem *> &musicRow,
                                                 const KNMusicAnalysisItem &analysisItem)
 {
+    const KNMusicDetailInfo &rowDetailInfo=analysisItem.detailInfo;
+    //Check if we have already contains this file.
+    QModelIndexList fileCheck=match(index(0,0),
+                                    FilePathRole,
+                                    rowDetailInfo.filePath,
+                                    -1,
+                                    Qt::MatchFixedString);
+    if(!fileCheck.isEmpty())
+    {
+        for(QModelIndexList::iterator i=fileCheck.begin();
+            i!=fileCheck.end();
+            ++i)
+        {
+            //Check the track file path and track index is the same or not.
+            if((*i).data(TrackFileRole).toString()==rowDetailInfo.trackFilePath
+                    && (*i).data(TrackIndexRole).toInt()==rowDetailInfo.trackIndex)
+            {
+                updateMusicRow((*i).row(), analysisItem);
+                return;
+            }
+        }
+    }
     //Append the music row first.
     appendMusicRow(musicRow);
     //Ask to analysis album art.

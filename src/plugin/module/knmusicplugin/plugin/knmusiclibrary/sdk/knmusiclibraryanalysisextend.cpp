@@ -47,8 +47,11 @@ void KNMusicLibraryAnalysisExtend::onActionParseNextImage()
         currentItem.analysisItem.detailInfo.coverImageHash=
                 m_coverImageList->appendImage(currentItem.analysisItem.coverImage);
         //Require update the row.
-        emit requireUpdateImage(currentItem.item->row(),
-                                currentItem.analysisItem);
+        if(currentItem.itemIndex.isValid())
+        {
+            emit requireUpdateImage(currentItem.itemIndex.row(),
+                                    currentItem.analysisItem);
+        }
     }
     //Ask to analysis next item.
     emit requireParseNextImage();
@@ -76,7 +79,7 @@ void KNMusicLibraryAnalysisExtend::onActionAnalysisAlbumArt(QStandardItem *item,
 {
     //Generate a item row.
     AlbumArtItem currentItem;
-    currentItem.item=item;
+    currentItem.itemIndex=item->index();
     currentItem.analysisItem=analysisItem;
     //Add the item to analysis queue.
     m_analysisQueue.append(currentItem);

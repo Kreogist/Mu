@@ -64,7 +64,6 @@ signals:
 
 public slots:
     void retranslate();
-    void addFiles(const QStringList &fileList);
     void appendMusicRow(const QList<QStandardItem *> &musicRow);
     void updateMusicRow(const int &row,
                         const KNMusicAnalysisItem &analysisItem);

@@ -117,16 +117,22 @@ void KNJSONDatabase::append(const QJsonValue &value)
 
 void KNJSONDatabase::replace(int i, const QJsonValue &value)
 {
-    m_dataField.replace(i, value);
-    //Count a operate.
-    addBatchCount();
+    if(i<m_dataField.size() && i>-1)
+    {
+        m_dataField.replace(i, value);
+        //Count a operate.
+        addBatchCount();
+    }
 }
 
 void KNJSONDatabase::removeAt(int i)
 {
-    m_dataField.removeAt(i);
-    //Count a operate.
-    addBatchCount();
+    if(i<m_dataField.size() && i>-1)
+    {
+        m_dataField.removeAt(i);
+        //Count a operate.
+        addBatchCount();
+    }
 }
 
 QJsonValue KNJSONDatabase::at(int i)

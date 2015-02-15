@@ -76,7 +76,7 @@ bool KNMusicBackendBassThread::loadFromFile(const QString &filePath)
                                            KNMusicBassGlobal::fdps(),1)))
 #endif
 #ifdef Q_OS_UNIX
-    std::string uniPath=m_filePath.toStdString();
+    std::string uniPath=filePath.toStdString();
     if(!(m_channel=BASS_StreamCreateFile(FALSE,
                                          uniPath.data(),
                                          0,
