@@ -18,6 +18,7 @@
 #ifndef KNMUSICLIBRARYANALYSISEXTEND_H
 #define KNMUSICLIBRARYANALYSISEXTEND_H
 
+#include <QPersistentModelIndex>
 #include <QLinkedList>
 
 #include "knmusicglobal.h"
@@ -28,7 +29,7 @@ namespace KNMusicLibraryAlbumArt
 {
 struct AlbumArtItem
 {
-    QStandardItem *item=nullptr;
+    QPersistentModelIndex itemIndex;
     KNMusicAnalysisItem analysisItem;
 };
 }

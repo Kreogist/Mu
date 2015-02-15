@@ -20,8 +20,7 @@ public:
 
 signals:
     void fileFound(QString filePath);
-    void requireAnalysisFile(const QString &suffix,
-                             const QString &filePath);
+    void requireAnalysisNext();
     void requireAnlaysisFolder(const QString &folderPath);
 
 public slots:
@@ -34,6 +33,10 @@ private slots:
     void analysisFile(const QString &suffix,
                       const QString &filePath);
     void analysisFolder(const QString &folderPath);
+    void analysisNext();
+
+private:
+    QStringList m_fileSearchQueue;
 };
 
 #endif // KNFILESEARCHER_H
