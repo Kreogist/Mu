@@ -58,6 +58,7 @@ unix: {
 
 # Mac OS X configure
 macx: {
+    DESTDIR = ../Applications
     # Brew configure. Use brew to install all your libs.
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
@@ -66,8 +67,8 @@ macx: {
     CONFIG += libbass FFMpeg
     QMAKE_LFLAGS += -framework CoreFoundation
     RC_FILE += resource/icon/mac/mu.icns
-#    QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
     ICON += resource/icon/mac/mu.icns
+#    QMAKE_INFO_PLIST = resource/icon/mac/Info.plist
 }
 
 # Linux configure
