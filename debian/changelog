@@ -1,3 +1,16 @@
+mu (0.7) unstable; urgency=medium
+
+  * Improve initial running speed. (Project S)
+  * Improve music playing speed. (Project S)
+  * Improve lyrics search speed. (Project S)
+  * Optimized lyrics download policy. (Project S)
+  * Optimized music switch policy. (Project S)
+  * Add import files and play current playlist button on playlist panel.
+  * Support rename the file for any name. (experimental)
+  * Fixed the image update bug.
+
+ -- Saki Tojo <tomguts@126.com> Sat, 14 Feb 2015 21:46:40 +0800
+
 mu (0.6.3) unstable; urgency=medium
 
   * Initial release.

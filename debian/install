@@ -1,3 +1,5 @@
-src/mu /usr/bin
+bin/mu /usr/bin
+src/Simplified_Chinese.qm /usr/share/mu/Language/Simplified_Chinese
+src/locale/Simplified_Chinese.png /usr/share/mu/Language/Simplified_Chinese
 src/resource/icon/mu.png /usr/share/icons/hicolor/256x256/apps
 debian/mu.desktop /usr/share/applications
