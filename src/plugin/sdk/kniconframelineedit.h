@@ -19,11 +19,14 @@ public:
     explicit KNIconFrameLineEdit(QWidget *parent = 0);
     //UI
     void setIcon(const QPixmap &icon);
+    void setMouseEnterLightness(int mouseEnterLightness);
+    void setMinimumLightness(int minimumLightness);
 
     //Content controls.
     void clear();
     QString text() const;
     void setPlaceHolderText(const QString &text);
+    void disableEscapeKey();
 
     //Focus control widgets.
     QWidget *escFocusTo();
@@ -77,6 +80,10 @@ private:
     QPalette m_palette;
     QColor m_baseColor=QColor(0xff, 0xff, 0xff),
            m_textColor=QColor(0xff, 0xff, 0xff);
+    int m_minimumLightness=0x3A;
+
+    //Actions.
+    QAction *m_escPressed;
 };
 
 #endif // KNICONFRAMELINEEDIT_H

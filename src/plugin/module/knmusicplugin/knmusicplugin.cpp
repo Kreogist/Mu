@@ -27,6 +27,7 @@
 #include "knmusiclyricsmanager.h"
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
+#include "knmusiclyricsdownloaddialogbase.h"
 #include "knmusicdetaildialogbase.h"
 #include "knmusicdetailtooltipbase.h"
 #include "knmusicheaderplayerbase.h"
@@ -94,6 +95,9 @@
 #include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 
+//Lyrics download plugin.
+#include "plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h"
+
 //Category plugin
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 #include "plugin/knmusicplaylistmanager/knmusicplaylistmanager.h"
@@ -116,7 +120,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     //Initial infrastructure.
     initialInfrastructure();
     //Load detail info first.
-    loadDetailInfo(new KNMusicDetailDialog);
+    loadDetailDialog(new KNMusicDetailDialog);
     //Initial parser.
     initialParser();
     //Initial menus.
@@ -137,6 +141,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadDetailTooptip(new KNMusicDetailTooltip);
     loadNowPlaying(new KNMusicNowPlaying2);
     initialLyricsManager();
+    loadLyricsDownloaDialog(new KNMusicLyricsDownloadDialog);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
 //    loadMainPlayer(new KNMusicMainPlayer);
@@ -237,7 +242,15 @@ inline void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
     }
 }
 
-inline void KNMusicPlugin::loadDetailInfo(KNMusicDetailDialogBase *plugin)
+void KNMusicPlugin::loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plugin)
+{
+    //Save the global plugin.
+    m_musicGlobal->setLyricsDownloadDialog(plugin);
+    //Add plugin to the list.
+    m_pluginList.append(plugin);
+}
+
+inline void KNMusicPlugin::loadDetailDialog(KNMusicDetailDialogBase *plugin)
 {
     //Add plugin to the list.
     m_pluginList.append(plugin);

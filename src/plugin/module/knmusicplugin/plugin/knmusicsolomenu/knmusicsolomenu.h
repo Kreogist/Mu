@@ -44,6 +44,7 @@ private slots:
     void onActionCopyFilePath();
     void onActionCopyItemText();
     void onActionSearchItemText();
+    void onActionDownloadLyrics();
     void onActionShowDetail();
     void onActionRenameArtistHyphonName();
     void onActionRename();
@@ -56,6 +57,7 @@ private:
         GetInfo,
         ShowInGraphicShell,
         SearchItemText,
+        DownloadLyrics,
         CopyFilePath,
         CopyItemText,
         Rename,
@@ -74,6 +76,8 @@ private:
             *m_customSeperator;
     QModelIndex m_currentIndex;
     KNMusicProxyModel *m_proxyModel;
+
+    KNMusicGlobal *m_musicGlobal;
 };
 
 #endif // KNMUSICSOLOMENU_H

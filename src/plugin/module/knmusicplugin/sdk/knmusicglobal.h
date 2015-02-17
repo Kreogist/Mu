@@ -170,6 +170,7 @@ class KNConfigure;
 class KNGlobal;
 class KNMusicParser;
 class KNMusicLyricsManager;
+class KNMusicLyricsDownloadDialogBase;
 class KNMusicNowPlayingBase;
 class KNMusicDetailTooltipBase;
 class KNMusicDetailDialogBase;
@@ -230,6 +231,8 @@ public:
                          const QString &preferName);
     KNMusicLyricsManager *lyricsManager() const;
     void setLyricsManager(KNMusicLyricsManager *lyricsManager);
+    KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog() const;
+    void setLyricsDownloadDialog(KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog);
 
 signals:
     void musicLibraryMoved(const QString &originalPath,
@@ -255,6 +258,7 @@ private:
     inline void initialPreference();
     static KNMusicGlobal *m_instance;
     KNMusicLyricsManager *m_lyricsManager;
+    KNMusicLyricsDownloadDialogBase *m_lyricsDownloadDialog;
     static KNMusicParser *m_parser;
     static KNMusicNowPlayingBase *m_nowPlaying;
     static KNMusicSoloMenuBase *m_soloMenu;

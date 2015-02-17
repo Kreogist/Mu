@@ -22,6 +22,8 @@
 #include "knglobal.h"
 #include "knmessagebox.h"
 
+#include "knmusiclyricsdownloaddialogbase.h"
+#include "knmusicmodelassist.h"
 #include "knmusicsearchbase.h"
 #include "knmusicdetaildialogbase.h"
 #include "knmusicproxymodel.h"
@@ -38,6 +40,8 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
 {
     //Set the separator color.
     setSeparatorColor(QColor(255, 255, 255, 100));
+    //Initial music global.
+    m_musicGlobal=KNMusicGlobal::instance();
     //Set palette.
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));
@@ -139,6 +143,7 @@ void KNMusicSoloMenu::retranslate()
 #ifdef Q_OS_LINUX
     m_actionTitles[ShowInGraphicShell]=tr("Show the contains folder");
 #endif
+    m_actionTitles[DownloadLyrics]=tr("Download Lyrics");
     m_actionTitles[Rename]=tr("Rename");
     m_actionTitles[RenameToArtistHyphonName]=tr("Rename to %1");
     m_actionTitles[CopyFilePath]=tr("Copy location");
@@ -188,6 +193,19 @@ void KNMusicSoloMenu::onActionCopyItemText()
 void KNMusicSoloMenu::onActionSearchItemText()
 {
     KNMusicGlobal::musicSearch()->search(m_itemText);
+}
+
+void KNMusicSoloMenu::onActionDownloadLyrics()
+{
+    //Get the detail of the current row.
+    KNMusicAnalysisItem currentAnalysisItem;
+    //Reanalysis the current row.
+    KNMusicModelAssist::reanalysisRow(m_proxyModel->musicModel(),
+                                      m_proxyModel->mapToSource(m_currentIndex),
+                                      currentAnalysisItem);
+    //Set the detail info and show the download dialog.
+    m_musicGlobal->lyricsDownloadDialog()->setDetailInfo(currentAnalysisItem.detailInfo);
+    m_musicGlobal->lyricsDownloadDialog()->exec();
 }
 
 void KNMusicSoloMenu::onActionShowDetail()
@@ -243,6 +261,13 @@ void KNMusicSoloMenu::createActions()
             this, SLOT(onActionSearchItemText()));
     addAction(m_actions[SearchItemText]);
     m_customSeperator=m_actions[SearchItemText];
+
+    addSeparator();
+
+    //Download lyrics.
+    connect(m_actions[DownloadLyrics], SIGNAL(triggered()),
+            this, SLOT(onActionDownloadLyrics()));
+    addAction(m_actions[DownloadLyrics]);
 
     addSeparator();
 

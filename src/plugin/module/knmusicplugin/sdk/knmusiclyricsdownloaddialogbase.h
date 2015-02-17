@@ -18,7 +18,7 @@ class KNMusicLyricsDownloadDialogBase : public KNMessageBox
     Q_OBJECT
 public:
     KNMusicLyricsDownloadDialogBase(QWidget *parent = 0):KNMessageBox(parent){}
-    virtual void setDetailInfo(const KNMusicDetailInfo &defailtInfo)=0;
+    virtual void setDetailInfo(const KNMusicDetailInfo &detailInfo)=0;
 
 signals:
 

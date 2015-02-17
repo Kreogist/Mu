@@ -70,6 +70,8 @@
         <file>music/player/menuicons/rating.png</file>
         <file>music/playlist/playlist_control_play.png</file>
         <file>music/playlist/playlist_control_add.png</file>
+        <file>music/lyrics/artist.png</file>
+        <file>music/lyrics/title.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>windows/next.png</file>

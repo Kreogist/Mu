@@ -22,6 +22,9 @@
 KNMusicLyricsDownloadDialog::KNMusicLyricsDownloadDialog(QWidget *parent) :
     KNMusicLyricsDownloadDialogBase(parent)
 {
+    //Set properties.
+    setTitle("Lyrics");
+
     //Initial the download widget, set the download widget as the content.
     m_downloadWidget=new KNMusicLyricsDownloadWidget(this);
     setContent(m_downloadWidget);
@@ -32,8 +35,10 @@ KNMusicLyricsDownloadDialog::~KNMusicLyricsDownloadDialog()
     ;
 }
 
-void KNMusicLyricsDownloadDialog::setDetailInfo(const KNMusicDetailInfo &defailtInfo)
+void KNMusicLyricsDownloadDialog::setDetailInfo(const KNMusicDetailInfo &detailInfo)
 {
-    ;
+    //Set text data.
+    m_downloadWidget->setTitle(detailInfo.textLists[Name]);
+    m_downloadWidget->setArtist(detailInfo.textLists[Artist]);
 }
 

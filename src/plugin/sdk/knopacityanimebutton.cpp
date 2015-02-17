@@ -7,8 +7,7 @@
 #include <QPainter>
 #include <QSizePolicy>
 #include <QMouseEvent>
-#include <QGraphicsOpacityEffect>
-#include <QPropertyAnimation>
+#include <QTimeLine>
 
 #include "knopacityanimebutton.h"
 
@@ -18,63 +17,63 @@ KNOpacityAnimeButton::KNOpacityAnimeButton(QWidget *parent) :
     //Set properties.
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    //Initial the graphic effects.
-    m_effect=new QGraphicsOpacityEffect(this);
-    m_effect->setOpacity(m_startOpacity);
-    setGraphicsEffect(m_effect);
 
     //Initial the animations.
-    m_mouseDown=new QPropertyAnimation(this);
-    m_mouseDown->setEndValue(1.0);
-    configureAnimation(m_mouseDown);
-
-    m_mouseIn=new QPropertyAnimation(this);
-    m_mouseIn->setEndValue(m_inoutOpacity);
-    configureAnimation(m_mouseIn);
-
-    m_mouseUp=new QPropertyAnimation(this);
-    m_mouseUp->setEndValue(m_inoutOpacity);
-    configureAnimation(m_mouseUp);
-
-    m_mouseOut=new QPropertyAnimation(this);
-    m_mouseOut->setEndValue(m_startOpacity);
-    configureAnimation(m_mouseOut);
+    m_mouseDown=generateTimeLine(1000);
+    m_mouseIn=generateTimeLine(m_inoutOpacity);
+    m_mouseUp=generateTimeLine(m_inoutOpacity);
+    m_mouseOut=generateTimeLine(m_startOpacity);
 }
 
 void KNOpacityAnimeButton::enterEvent(QEvent *event)
 {
     QWidget::enterEvent(event);
-    //Stop in out animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set mouse in parameters.
-    m_mouseIn->setStartValue(m_effect->opacity());
-    m_mouseIn->start();
+    //Stop and start the mouse in animation.
+    stopAllAnimations();
+    startAnimation(m_mouseIn);
 }
 
 void KNOpacityAnimeButton::leaveEvent(QEvent *event)
 {
     QWidget::leaveEvent(event);
-    //Stop in out animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Set mouse out parameters.
-    m_mouseOut->setStartValue(m_effect->opacity());
-    m_mouseOut->start();
+    //Stop and start the mouse out animation.
+    stopAllAnimations();
+    startAnimation(m_mouseOut);
+}
+
+void KNOpacityAnimeButton::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    //Update the icon.
+    updateScaledIcon();
+}
+
+void KNOpacityAnimeButton::focusInEvent(QFocusEvent *event)
+{
+    QWidget::focusInEvent(event);
+    //Stop and start the mouse in animation.
+    stopAllAnimations();
+    startAnimation(m_mouseIn);
+}
+
+void KNOpacityAnimeButton::focusOutEvent(QFocusEvent *event)
+{
+    QWidget::focusOutEvent(event);
+    //Stop and start the mouse out animation.
+    stopAllAnimations();
+    startAnimation(m_mouseOut);
 }
 
 void KNOpacityAnimeButton::mousePressEvent(QMouseEvent *event)
 {
     //Stop in out animations.
-    m_mouseUp->stop();
-    m_mouseDown->stop();
+    stopAllAnimations();
     if(event->button()==Qt::LeftButton)
     {
         //Set mouse down flags.
         m_isPressed=true;
         //Set mouse down parameters.
-        m_mouseDown->setStartValue(m_effect->opacity());
-        m_mouseDown->start();
+        startAnimation(m_mouseDown);
     }
     QWidget::mousePressEvent(event);
 }
@@ -82,8 +81,7 @@ void KNOpacityAnimeButton::mousePressEvent(QMouseEvent *event)
 void KNOpacityAnimeButton::mouseReleaseEvent(QMouseEvent *event)
 {
     //Stop in out animations.
-    m_mouseDown->stop();
-    m_mouseUp->stop();
+    stopAllAnimations();
     //Ensure this button has been mouse down.
     if(m_isPressed &&
             event->button()==Qt::LeftButton &&
@@ -92,8 +90,7 @@ void KNOpacityAnimeButton::mouseReleaseEvent(QMouseEvent *event)
         //Accept event.
         event->accept();
         //Start mouse up animation.
-        m_mouseUp->setStartValue(m_effect->opacity());
-        m_mouseUp->start();
+        startAnimation(m_mouseUp);
         //Emit clicked signals.
         emit clicked();
     }
@@ -101,26 +98,63 @@ void KNOpacityAnimeButton::mouseReleaseEvent(QMouseEvent *event)
     QWidget::mouseReleaseEvent(event);
 }
 
-void KNOpacityAnimeButton::configureAnimation(QPropertyAnimation *animation)
+void KNOpacityAnimeButton::onActionOpacityChanged(const int &opacity)
 {
-    animation->setTargetObject(m_effect);
-    animation->setPropertyName("opacity");
-    animation->setDuration(100);
-    animation->setEasingCurve(QEasingCurve::OutCubic);
+    //Save the opacity.
+    m_currentOpacity=opacity;
+    //Update the opacity.
+    m_opacity=opacity/1000.0;
+    //Update the widget.
+    update();
 }
+
+inline QTimeLine *KNOpacityAnimeButton::generateTimeLine(const int &endFrame)
+{
+    QTimeLine *timeLine=new QTimeLine(100, this);
+    timeLine->setEndFrame(endFrame);
+    timeLine->setEasingCurve(QEasingCurve::OutCubic);
+    timeLine->setUpdateInterval(5);
+    connect(timeLine, &QTimeLine::frameChanged,
+            this, &KNOpacityAnimeButton::onActionOpacityChanged);
+    return timeLine;
+}
+
+inline void KNOpacityAnimeButton::updateScaledIcon()
+{
+    m_scaledIcon=m_originalIcon.scaled(size(),
+                                       Qt::KeepAspectRatio,
+                                       Qt::SmoothTransformation);
+}
+
+inline void KNOpacityAnimeButton::stopAllAnimations()
+{
+    m_mouseDown->stop();
+    m_mouseUp->stop();
+    m_mouseIn->stop();
+    m_mouseOut->stop();
+}
+
+void KNOpacityAnimeButton::startAnimation(QTimeLine *timeline)
+{
+    timeline->setStartFrame(m_currentOpacity);
+    timeline->start();
+}
+
 QPixmap KNOpacityAnimeButton::icon() const
 {
-    return m_icon;
+    return m_originalIcon;
 }
 
 QSize KNOpacityAnimeButton::sizeHint() const
 {
-    return m_icon.size();
+    return m_originalIcon.size();
 }
 
 void KNOpacityAnimeButton::setIcon(const QPixmap &icon)
 {
-    m_icon=icon;
+    m_originalIcon=icon;
+    //Update the scaled icon.
+    updateScaledIcon();
     //Repaint the widget mannally.
     update();
 }
@@ -128,15 +162,17 @@ void KNOpacityAnimeButton::setIcon(const QPixmap &icon)
 void KNOpacityAnimeButton::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
+    if(m_scaledIcon.isNull())
+    {
+        return;
+    }
     //Initial the painter.
     QPainter painter(this);
     //Set painter render hints.
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
-    //Draw pixmap.
-    painter.drawPixmap(0,0,m_icon.scaled(size(),
-                                         Qt::KeepAspectRatio,
-                                         Qt::SmoothTransformation));
+    //Draw pixmap in the specific opacity.
+    painter.setOpacity(m_opacity);
+    painter.drawPixmap(0, 0, m_scaledIcon);
 }
-

@@ -20,6 +20,8 @@
 
 #include <QWidget>
 
+class QPushButton;
+class KNIconFrameLineEdit;
 class KNMusicLyricsDownloadWidget : public QWidget
 {
     Q_OBJECT
@@ -27,9 +29,17 @@ public:
     explicit KNMusicLyricsDownloadWidget(QWidget *parent = 0);
     ~KNMusicLyricsDownloadWidget();
 
+    void setTitle(const QString &title);
+    void setArtist(const QString &artist);
+
 signals:
 
 public slots:
+
+private:
+    inline KNIconFrameLineEdit *generateLineEdit(const QPixmap &icon);
+    KNIconFrameLineEdit *m_title, *m_artist;
+    QPushButton *m_searchLyrics;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADWIDGET_H

@@ -42,6 +42,7 @@ class KNMusicLibraryBase;
 class KNMusicPlaylistManagerBase;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
+class KNMusicLyricsDownloadDialogBase;
 class KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
@@ -60,7 +61,8 @@ public:
     inline void loadSearch(KNMusicSearchBase *plugin);
     inline void loadDetailTooptip(KNMusicDetailTooltipBase *plugin);
     inline void loadBackend(KNMusicBackend *plugin);
-    inline void loadDetailInfo(KNMusicDetailDialogBase *plugin);
+    inline void loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plugin);
+    inline void loadDetailDialog(KNMusicDetailDialogBase *plugin);
     inline void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
     inline void loadHeaderLyrics(KNMusicLyricsBase *plugin);
     inline void loadMainPlayer(KNMusicMainPlayerBase *plugin);

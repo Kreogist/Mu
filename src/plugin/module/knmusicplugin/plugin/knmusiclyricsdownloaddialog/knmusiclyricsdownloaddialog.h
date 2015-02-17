@@ -28,7 +28,7 @@ public:
     explicit KNMusicLyricsDownloadDialog(QWidget *parent = 0);
     ~KNMusicLyricsDownloadDialog();
 
-    void setDetailInfo(const KNMusicDetailInfo &defailtInfo);
+    void setDetailInfo(const KNMusicDetailInfo &detailInfo);
 
 signals:
 

@@ -20,11 +20,14 @@ KNIconFrameLineEdit::KNIconFrameLineEdit(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
     setFrameStyle(QFrame::NoFrame);
+    setLineWidth(1);
+    setMidLineWidth(0);
 
     //Intial the palette.
     m_palette=palette();
     m_palette.setColor(QPalette::Text, m_textColor);
     m_palette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
+    m_palette.setColor(QPalette::HighlightedText, QColor(0, 0, 0));
     setPalette(m_palette);
 
     //Initial the main layout.
@@ -35,6 +38,7 @@ KNIconFrameLineEdit::KNIconFrameLineEdit(QWidget *parent) :
 
     //Initial the search button.
     m_iconButton=new KNLabelButton(this);
+    m_iconButton->setScaledContents(true);
     mainLayout->addWidget(m_iconButton);
 
     //Initial the line edit.
@@ -45,7 +49,9 @@ KNIconFrameLineEdit::KNIconFrameLineEdit(QWidget *parent) :
     setFocusProxy(m_textContent);
     mainLayout->addWidget(m_textContent, 1);
     //Height hack.
-    setFixedHeight(m_textContent->height()-8);
+    int lineEditHeight=m_textContent->height()-8;
+    setFixedHeight(lineEditHeight);
+    m_iconButton->setFixedSize(lineEditHeight, lineEditHeight);
     //Link the text content signals.
     connect(m_textContent, &KNFocusLineEdit::editingFinished,
             this, &KNIconFrameLineEdit::editingFinished);
@@ -67,6 +73,9 @@ KNIconFrameLineEdit::KNIconFrameLineEdit(QWidget *parent) :
     initialActions();
     //Initial timelines.
     initialTimelines();
+
+    //Set the palette to the default state.
+    changeTextBackground(m_minimumLightness);
 }
 
 void KNIconFrameLineEdit::setIcon(const QPixmap &icon)
@@ -87,6 +96,11 @@ QString KNIconFrameLineEdit::text() const
 void KNIconFrameLineEdit::setPlaceHolderText(const QString &text)
 {
     m_textContent->setPlaceholderText(text);
+}
+
+void KNIconFrameLineEdit::disableEscapeKey()
+{
+    m_escPressed->setEnabled(false);
 }
 
 void KNIconFrameLineEdit::changeBackground(const int &frame)
@@ -124,11 +138,11 @@ void KNIconFrameLineEdit::changeTextBackground(const int &frame)
 inline void KNIconFrameLineEdit::initialActions()
 {
     //When pressed ESC, hand over the text focus to escaped widget.
-    QAction *escPressed=new QAction(m_textContent);
-    escPressed->setShortcut(QKeySequence(Qt::Key_Escape));
-    escPressed->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(escPressed, SIGNAL(triggered()), this, SLOT(handOverFocus()));
-    m_textContent->addAction(escPressed);
+    m_escPressed=new QAction(m_textContent);
+    m_escPressed->setShortcut(QKeySequence(Qt::Key_Escape));
+    m_escPressed->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(m_escPressed, SIGNAL(triggered()), this, SLOT(handOverFocus()));
+    m_textContent->addAction(m_escPressed);
 
     //When user pressed tab, hand over the focus to the escaped widget.
     //This is hack for custumize the tab order.
@@ -148,11 +162,10 @@ void KNIconFrameLineEdit::initialTimelines()
     m_focusOutAnime=generateTimeLines(200);
 
     //Set the final stops.
-    const int minimumLightness=0x3A;
     m_mouseEnterAnime->setEndFrame(0x60);
-    m_mouseLeaveAnime->setEndFrame(minimumLightness);
+    m_mouseLeaveAnime->setEndFrame(m_minimumLightness);
     m_focusInAnime->setEndFrame(0xFF);
-    m_focusOutAnime->setEndFrame(minimumLightness);
+    m_focusOutAnime->setEndFrame(m_minimumLightness);
 
     //Link the timeline animations.
     connect(m_mouseEnterAnime, &QTimeLine::frameChanged,
@@ -187,6 +200,16 @@ inline QTimeLine *KNIconFrameLineEdit::generateTimeLines(int duration)
     return timeLine;
 }
 
+void KNIconFrameLineEdit::setMinimumLightness(int minimumLightness)
+{
+    m_minimumLightness=minimumLightness;
+    //Update the leave animation.
+    m_mouseLeaveAnime->setEndFrame(m_minimumLightness);
+    m_focusOutAnime->setEndFrame(m_minimumLightness);
+    //Update the palette.
+    changeTextBackground(m_minimumLightness);
+}
+
 QWidget *KNIconFrameLineEdit::defaultEscFocusTo()
 {
     return m_defaultEscFocusTo;
@@ -195,6 +218,11 @@ QWidget *KNIconFrameLineEdit::defaultEscFocusTo()
 void KNIconFrameLineEdit::setDefaultEscFocusTo(QWidget *defaultEscFocusTo)
 {
     m_defaultEscFocusTo = defaultEscFocusTo;
+}
+
+void KNIconFrameLineEdit::setMouseEnterLightness(int mouseEnterLightness)
+{
+    m_mouseEnterAnime->setEndFrame(mouseEnterLightness);
 }
 
 void KNIconFrameLineEdit::setText(const QString &text)
