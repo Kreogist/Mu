@@ -4,8 +4,8 @@
  * terms of the Do What The Fuck You Want To Public License, Version 2,
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
-#ifndef KNMUSICHEADERLYRICSBASE_H
-#define KNMUSICHEADERLYRICSBASE_H
+#ifndef KNMUSICLYRICSBASE_H
+#define KNMUSICLYRICSBASE_H
 
 #include "knmusicglobal.h"
 
@@ -30,4 +30,4 @@ public slots:
 
 };
 
-#endif // KNMUSICHEADERLYRICSBASE_H
+#endif // KNMUSICLYRICSBASE_H

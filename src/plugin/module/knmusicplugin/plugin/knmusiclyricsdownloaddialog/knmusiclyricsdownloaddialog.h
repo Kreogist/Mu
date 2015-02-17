@@ -15,30 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICSEARCH_H
-#define KNMUSICSEARCH_H
+#ifndef KNMUSICLYRICSDOWNLOADDIALOG_H
+#define KNMUSICLYRICSDOWNLOADDIALOG_H
 
-#include "knmusicsearchbase.h"
+#include "knmusiclyricsdownloaddialogbase.h"
 
-class KNIconFrameLineEdit;
-class KNMusicSearch : public KNMusicSearchBase
+class KNMusicLyricsDownloadWidget;
+class KNMusicLyricsDownloadDialog : public KNMusicLyricsDownloadDialogBase
 {
     Q_OBJECT
 public:
-    explicit KNMusicSearch(QObject *parent = 0);
-    QWidget *searchBox();
-    QString searchText();
+    explicit KNMusicLyricsDownloadDialog(QWidget *parent = 0);
+    ~KNMusicLyricsDownloadDialog();
+
+    void setDetailInfo(const KNMusicDetailInfo &defailtInfo);
 
 signals:
 
 public slots:
-    void retranslate();
-    void setSearchFocus(QWidget *focusSource=nullptr);
-    void search(const QString &text);
-    void setDefaultFocusSource(QWidget *widget);
 
 private:
-    KNIconFrameLineEdit *m_searchBox;
+    KNMusicLyricsDownloadWidget *m_downloadWidget;
 };
 
-#endif // KNMUSICSEARCH_H
+#endif // KNMUSICLYRICSDOWNLOADDIALOG_H

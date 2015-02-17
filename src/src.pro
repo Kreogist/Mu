@@ -260,7 +260,6 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
     plugin/sdk/knfilepathlabel.cpp \
     plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp \
-    plugin/sdk/knsearchbox.cpp \
     plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp \
     plugin/module/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp \
     plugin/sdk/knmousedetectheader.cpp \
@@ -320,7 +319,11 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
     plugin/module/knmusicplugin/sdk/knmusiclrclyricsparser.cpp \
-    plugin/module/knmusicplugin/sdk/knmusiclyricsmanager.cpp
+    plugin/module/knmusicplugin/sdk/knmusiclyricsmanager.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp \
+    plugin/sdk/kniconframelineedit.cpp \
+    plugin/sdk/knfocuslineedit.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -455,7 +458,6 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h \
     plugin/sdk/knfilepathlabel.h \
     plugin/module/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h \
-    plugin/sdk/knsearchbox.h \
     plugin/module/knmusicplugin/plugin/knmusicsearch/knmusicsearch.h \
     plugin/module/knmusicplugin/sdk/knmusicsearchbase.h \
     plugin/module/knmusicplugin/sdk/knmusicdetailtooltipbase.h \
@@ -522,7 +524,12 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
     plugin/module/knmusicplugin/sdk/knmusiclrclyricsparser.h \
     plugin/module/knmusicplugin/sdk/knmusiclyricsmanager.h \
-    plugin/module/knmusicplugin/sdk/knmusiclyricsbase.h
+    plugin/module/knmusicplugin/sdk/knmusiclyricsbase.h \
+    plugin/module/knmusicplugin/sdk/knmusiclyricsdownloaddialogbase.h \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.h \
+    plugin/sdk/kniconframelineedit.h \
+    plugin/sdk/knfocuslineedit.h
 
 RESOURCES += \
     resource/res.qrc

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knsearchbox.h"
+#include "kniconframelineedit.h"
 #include "knglobal.h"
 
 #include "knmusicsearch.h"
@@ -24,10 +24,11 @@ KNMusicSearch::KNMusicSearch(QObject *parent) :
     KNMusicSearchBase(parent)
 {
     //Initial search box.
-    m_searchBox=new KNSearchBox;
+    m_searchBox=new KNIconFrameLineEdit;
+    m_searchBox->setIcon(QPixmap("://public/SearchIcon.png"));
     m_searchBox->setMinimumWidth(220);
     //Connect request.
-    connect(m_searchBox, &KNSearchBox::textChanged,
+    connect(m_searchBox, &KNIconFrameLineEdit::textChanged,
             this, &KNMusicSearch::requireSearch);
 
     //Connect retranslate request.
