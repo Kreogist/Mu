@@ -26,6 +26,7 @@ KNIconFrameLineEdit::KNIconFrameLineEdit(QWidget *parent) :
     //Intial the palette.
     m_palette=palette();
     m_palette.setColor(QPalette::Text, m_textColor);
+    m_palette.setColor(QPalette::WindowText, QColor(0,0,0,80));
     m_palette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
     m_palette.setColor(QPalette::HighlightedText, QColor(0, 0, 0));
     setPalette(m_palette);

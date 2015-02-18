@@ -19,6 +19,7 @@
 #include <QPushButton>
 
 #include "kniconframelineedit.h"
+#include "knclockwheel.h"
 
 #include "knmusiclyricsdownloadwidget.h"
 
@@ -62,6 +63,11 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     searchRequestLayout->addLayout(textEditLayout, 1);
 
     searchRequestLayout->addWidget(m_searchLyrics);
+
+    KNClockWheel *clockWheel=new KNClockWheel(this);
+    clockWheel->setWheelSize(350, 200);
+    clockWheel->startTick();
+    mainLayout->addWidget(clockWheel);
 }
 
 KNMusicLyricsDownloadWidget::~KNMusicLyricsDownloadWidget()
