@@ -22,8 +22,10 @@
 
 class QPushButton;
 class QAbstractItemModel;
+class KNClockWheel;
 class KNIconFrameLineEdit;
 class KNMusicLyricsListView;
+class KNEmptyStateWidget;
 class KNMusicLyricsDownloadWidget : public QWidget
 {
     Q_OBJECT
@@ -42,11 +44,15 @@ signals:
     void requireSearchLyrics();
 
 public slots:
+    void showLoadingWheel();
+    void showLyricsList();
 
 private:
     inline void initialListView();
     inline KNIconFrameLineEdit *generateLineEdit(const QPixmap &icon);
+    KNClockWheel *m_loadingWheel;
     KNIconFrameLineEdit *m_title, *m_artist;
+    KNEmptyStateWidget *m_lyricsList;
     KNMusicLyricsListView *m_lyricsListView;
     QPushButton *m_searchLyrics;
 };

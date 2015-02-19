@@ -89,6 +89,12 @@ enum KNMusicCategoryRole
     CategoryItemVisibleRole,
     CategoryArtworkKeyRole,
 };
+enum LyricsItemProperties
+{
+    LyricsArtistRole = Qt::UserRole,
+    LyricsTitleSimilarityRole,
+    LyricsArtistSimilarityRole
+};
 enum KNMusicPlaybackOrder
 {
     NoRepeat,
@@ -109,7 +115,6 @@ enum KNMusicSortFlag
     SortUserByFloat,
     SortUserByDate
 };
-
 struct KNMusicListTrackDetailInfo
 {
     //Track index.

@@ -18,6 +18,7 @@
 #include <QFileInfo>
 #include <QTextStream>
 #include <QTextCodec>
+#include <QStandardItemModel>
 
 #include "knglobal.h"
 
@@ -129,6 +130,33 @@ void KNMusicLyricsManager::downloadLyrics(const KNMusicDetailInfo &detailInfo)
             return;
         }
     }
+}
+
+void KNMusicLyricsManager::searchLyrics(const KNMusicDetailInfo &detailInfo,
+                                        QStandardItemModel *lyricsModel)
+{
+    //Generate a lyrics list.
+    QList<KNMusicLyricsDetails> lyricsList;
+    //Search the lyrics.
+    getOnlineLyrics(detailInfo, lyricsList);
+    //Check the lyrics list is empty or not.
+    if(!lyricsList.isEmpty())
+    {
+        //Set the lyrics data to the model.
+        for(QList<KNMusicLyricsDetails>::iterator i=lyricsList.begin();
+            i!=lyricsList.end();
+            ++i)
+        {
+            QStandardItem *lyricsItem=new QStandardItem((*i).title);
+            lyricsItem->setEditable(false);
+            lyricsItem->setData((*i).artist, LyricsArtistRole);
+            lyricsItem->setData((*i).titleSimilarity, LyricsTitleSimilarityRole);
+            lyricsItem->setData((*i).artistSimilarity, LyricsArtistSimilarityRole);
+            lyricsModel->appendRow(lyricsItem);
+        }
+    }
+    //Emit search complete signal.
+    emit lyricsSearchedComplete();
 }
 
 inline void KNMusicLyricsManager::clearCurrentData()
@@ -283,8 +311,8 @@ void KNMusicLyricsManager::setEnableOnlineLyrics(bool enableOnlineLyrics)
     m_enableOnlineLyrics = enableOnlineLyrics;
 }
 
-void KNMusicLyricsManager::getOnlineLyrics(const KNMusicDetailInfo &detailInfo,
-                                           QList<KNMusicLyricsDetails> &lyricsList)
+inline void KNMusicLyricsManager::getOnlineLyrics(const KNMusicDetailInfo &detailInfo,
+                                                  QList<KNMusicLyricsDetails> &lyricsList)
 {
     //Clear the lyrics list.
     lyricsList.clear();

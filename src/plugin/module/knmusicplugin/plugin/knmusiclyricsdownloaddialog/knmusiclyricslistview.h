@@ -18,6 +18,8 @@
 #ifndef KNMUSICLYRICSLISTVIEW_H
 #define KNMUSICLYRICSLISTVIEW_H
 
+#include <QModelIndex>
+
 #include <QWidget>
 
 class QLabel;
@@ -33,6 +35,7 @@ public:
     void setLyricsModel(QAbstractItemModel *model);
 
 signals:
+    void lyricsActivate(const QModelIndex &index);
 
 public slots:
 

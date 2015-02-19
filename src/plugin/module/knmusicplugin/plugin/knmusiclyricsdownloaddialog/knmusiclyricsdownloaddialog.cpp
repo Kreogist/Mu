@@ -60,26 +60,22 @@ void KNMusicLyricsDownloadDialog::setDetailInfo(const KNMusicDetailInfo &detailI
     m_downloadWidget->setArtist(m_detailInfo.textLists[Artist]);
 }
 
+void KNMusicLyricsDownloadDialog::onActionSearchComplete()
+{
+    //Switch to lyrics list.
+    m_downloadWidget->showLyricsList();
+}
+
 void KNMusicLyricsDownloadDialog::onActionSearchLyrics()
 {
+    //Switch to loading wheel.
+    m_downloadWidget->showLoadingWheel();
     //Clear the lyrics model.
     m_lyricsModel->clear();
     //Generate a new detail info, set the title and artist.
     KNMusicDetailInfo lyricsDetailInfo=m_detailInfo;
     lyricsDetailInfo.textLists[Name]=m_downloadWidget->title();
     lyricsDetailInfo.textLists[Artist]=m_downloadWidget->artist();
-    //Get all the lyrics from Internet.
-    QList<KNMusicLyricsDetails> lyricsList;
-    m_lyricsManager->getOnlineLyrics(lyricsDetailInfo, lyricsList);
-    //Set the lyrics data to the model.
-    for(QList<KNMusicLyricsDetails>::iterator i=lyricsList.begin();
-        i!=lyricsList.end();
-        ++i)
-    {
-        QStandardItem *lyricsItem=new QStandardItem((*i).title);
-        lyricsItem->setData((*i).artist, LyricsArtistRole);
-        lyricsItem->setData((*i).titleSimilarity, LyricsTitleSimilarityRole);
-        lyricsItem->setData((*i).artistSimilarity, LyricsArtistSimilarityRole);
-        m_lyricsModel->appendRow(lyricsItem);
-    }
+    //Ask to update the lyrics model.
+    emit requireSearchLyrics(lyricsDetailInfo, m_lyricsModel);
 }

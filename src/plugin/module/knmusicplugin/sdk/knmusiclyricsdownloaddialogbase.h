@@ -21,8 +21,11 @@ public:
     virtual void setDetailInfo(const KNMusicDetailInfo &detailInfo)=0;
 
 signals:
+    void requireSearchLyrics(KNMusicDetailInfo detailInfo,
+                             QStandardItemModel *lyricsModel);
 
 public slots:
+    virtual void onActionSearchComplete()=0;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADDIALOGBASE_H

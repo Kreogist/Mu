@@ -18,19 +18,9 @@
 #ifndef KNMUSICLYRICSITEMDELEGATE_H
 #define KNMUSICLYRICSITEMDELEGATE_H
 
+#include "knmusicglobal.h"
+
 #include <QStyledItemDelegate>
-
-namespace KNMusicLyricsItem
-{
-enum LyricsItemProperties
-{
-    LyricsArtistRole = Qt::UserRole,
-    LyricsTitleSimilarityRole,
-    LyricsArtistSimilarityRole
-};
-}
-
-using namespace KNMusicLyricsItem;
 
 class KNMusicLyricsItemDelegate : public QStyledItemDelegate
 {

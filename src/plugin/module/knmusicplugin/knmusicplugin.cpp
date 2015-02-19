@@ -246,6 +246,11 @@ void KNMusicPlugin::loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plu
 {
     //Save the global plugin.
     m_musicGlobal->setLyricsDownloadDialog(plugin);
+    //Link the download dialog to the lyrics manager.
+    connect(plugin, &KNMusicLyricsDownloadDialogBase::requireSearchLyrics,
+            m_lyricsManager, &KNMusicLyricsManager::searchLyrics);
+    connect(m_lyricsManager, &KNMusicLyricsManager::lyricsSearchedComplete,
+            plugin, &KNMusicLyricsDownloadDialogBase::onActionSearchComplete);
     //Add plugin to the list.
     m_pluginList.append(plugin);
 }

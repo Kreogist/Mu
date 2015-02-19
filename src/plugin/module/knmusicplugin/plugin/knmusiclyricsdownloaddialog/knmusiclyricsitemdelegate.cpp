@@ -47,29 +47,36 @@ void KNMusicLyricsItemDelegate::paint(QPainter *painter,
     painter->setRenderHints(QPainter::Antialiasing |
                             QPainter::TextAntialiasing, true);
     QColor textColor=option.palette.color(QPalette::WindowText);
+    int subTextAlpha=100;
     if(option.state & QStyle::State_Selected)
     {
         //Draw the background.
         painter->fillRect(option.rect, option.palette.highlight());
         //Set the text color.
-//        textColor=option.palette.color(QPalette::HighlightedText);
+        textColor=option.palette.color(QPalette::HighlightedText);
+        subTextAlpha=255;
     }
     //Draw the text.
-    int textTop=(option.rect.height()-(option.fontMetrics.height()<<1))>>1;
+    int textTop=(option.rect.height()-(option.fontMetrics.height()<<1))>>1,
+        textLeft=15, textWidth=option.rect.width()-(textLeft<<1);
     painter->setPen(textColor);
-    painter->drawText(option.rect.x(),
+    painter->drawText(option.rect.x()+textLeft,
                       option.rect.top()+textTop,
-                      option.rect.width(),
+                      textWidth,
                       option.fontMetrics.height(),
                       Qt::AlignLeft,
-                      index.data(Qt::DisplayRole).toString());
-    textColor.setAlpha(100);
+                      option.fontMetrics.elidedText(index.data(Qt::DisplayRole).toString(),
+                                                    Qt::ElideRight,
+                                                    textWidth));
+    textColor.setAlpha(subTextAlpha);
     painter->setPen(textColor);
-    painter->drawText(option.rect.x(),
+    painter->drawText(option.rect.x()+textLeft,
                       option.rect.top()+textTop+option.fontMetrics.height(),
-                      option.rect.width(),
+                      textWidth,
                       option.rect.height(),
                       Qt::AlignLeft,
-                      index.data(LyricsArtistRole).toString());
+                      option.fontMetrics.elidedText(index.data(LyricsArtistRole).toString(),
+                                                    Qt::ElideRight,
+                                                    textWidth));
 }
 

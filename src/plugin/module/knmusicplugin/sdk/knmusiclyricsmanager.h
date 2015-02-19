@@ -51,16 +51,16 @@ public:
     bool enableOnlineLyrics() const;
     void setEnableOnlineLyrics(bool enableOnlineLyrics);
 
-    void getOnlineLyrics(const KNMusicDetailInfo &detailInfo,
-                         QList<KNMusicLyricsDetails> &lyricsList);
-
 signals:
     void lyricsReset();
     void lyricsUpdate();
+    void lyricsSearchedComplete();
 
 public slots:
     void loadLyrics(const KNMusicAnalysisItem &analysisItem);
     void downloadLyrics(const KNMusicDetailInfo &detailInfo);
+    void searchLyrics(const KNMusicDetailInfo &detailInfo,
+                      QStandardItemModel *lyricsModel);
 
 private:
     enum SearchPolicy
@@ -77,6 +77,8 @@ private:
         LyricsNamedAlbumHyphonTitle
     };
 
+    inline void getOnlineLyrics(const KNMusicDetailInfo &detailInfo,
+                                QList<KNMusicLyricsDetails> &lyricsList);
     inline void clearCurrentData();
     inline bool findLocalLyricsFile(const KNMusicDetailInfo &detailInfo);
 

@@ -20,6 +20,7 @@
 
 #include "kniconframelineedit.h"
 #include "knclockwheel.h"
+#include "knemptystatewidget.h"
 
 #include "knmusiclyricslistview.h"
 
@@ -71,7 +72,7 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
 
     searchRequestLayout->addWidget(m_searchLyrics);
 
-    mainLayout->addWidget(m_lyricsListView);
+    mainLayout->addWidget(m_lyricsList);
 }
 
 KNMusicLyricsDownloadWidget::~KNMusicLyricsDownloadWidget()
@@ -104,15 +105,47 @@ void KNMusicLyricsDownloadWidget::setArtist(const QString &artist)
     m_artist->setText(artist);
 }
 
+void KNMusicLyricsDownloadWidget::showLoadingWheel()
+{
+    //Stop and start ticking the clock wheel.
+    m_loadingWheel->startTick();
+    //Switch to loading wheel.
+    m_lyricsList->showEmptyWidget();
+}
+
+void KNMusicLyricsDownloadWidget::showLyricsList()
+{
+    //Stop loading wheel.
+    m_loadingWheel->stopTick();
+    //Switch to content wheel.
+    m_lyricsList->showContentWidget();
+}
+
 inline void KNMusicLyricsDownloadWidget::initialListView()
 {
+    //Initial lyrics list widget.
+    m_lyricsList=new KNEmptyStateWidget(this);
+
+    //Initial the loading wheel and lyrics list.
+    QWidget *clockWheelContainer=new QWidget(this);
+    QBoxLayout *containerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                               clockWheelContainer);
+    containerLayout->setContentsMargins(0,0,0,0);
+    clockWheelContainer->setLayout(containerLayout);
+    m_loadingWheel=new KNClockWheel(this);
+    containerLayout->addWidget(m_loadingWheel);
+    m_lyricsList->setEmptyWidget(clockWheelContainer);
     m_lyricsListView=new KNMusicLyricsListView(this);
+    m_lyricsList->setContentWidget(m_lyricsListView);
+    //Set default widget to content widget.
+    m_lyricsList->showContentWidget();
+
 }
 
 inline KNIconFrameLineEdit *KNMusicLyricsDownloadWidget::generateLineEdit(const QPixmap &icon)
 {
     KNIconFrameLineEdit *lineEdit=new KNIconFrameLineEdit(this);
-    lineEdit->setMinimumWidth(300);
+    lineEdit->setMinimumWidth(500);
     lineEdit->disableEscapeKey();
     lineEdit->setMinimumLightness(0xD0);
     lineEdit->setMouseEnterLightness(0xE0);

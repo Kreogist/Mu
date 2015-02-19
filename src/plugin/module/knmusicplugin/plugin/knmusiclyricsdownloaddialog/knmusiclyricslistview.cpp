@@ -27,7 +27,8 @@
 
 #include "knmusiclyricslistview.h"
 
-KNMusicLyricsListView::KNMusicLyricsListView(QWidget *parent) : QWidget(parent)
+KNMusicLyricsListView::KNMusicLyricsListView(QWidget *parent) :
+    QWidget(parent)
 {
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicGlobal::instance()->lyricsManager();
@@ -84,4 +85,8 @@ void KNMusicLyricsListView::initialLyricsList()
     m_lyricsList->setPalette(pal);
     //Set the item delegate.
     m_lyricsList->setItemDelegate(new KNMusicLyricsItemDelegate);
+
+    //Link the lyrics list.
+    connect(m_lyricsList, &QListView::activated,
+            this, &KNMusicLyricsListView::lyricsActivate);
 }

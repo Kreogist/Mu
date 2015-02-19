@@ -35,6 +35,7 @@ public:
 signals:
 
 public slots:
+    void onActionSearchComplete();
 
 private slots:
     void onActionSearchLyrics();
