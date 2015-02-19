@@ -87,9 +87,7 @@ void KNMusicTTPlayerLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
             KNMusicLyricsDetails currentDetails;
             currentDetails.title=(*i).value("title");
             currentDetails.artist=(*i).value("artist");
-            saveLyrics(detailInfo, responseData, currentDetails);
-            //Add to list.
-            lyricsList.append(currentDetails);
+            saveLyrics(detailInfo, responseData, currentDetails, lyricsList);
         }
     }
 }

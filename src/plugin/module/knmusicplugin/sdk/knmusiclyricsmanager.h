@@ -18,6 +18,7 @@
 #ifndef KNMUSICLYRICSMANAGER_H
 #define KNMUSICLYRICSMANAGER_H
 
+#include <QList>
 #include <QLinkedList>
 
 #include "knmusicglobal.h"
@@ -36,6 +37,7 @@ public:
     ~KNMusicLyricsManager();
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     void installLyricsDownloader(KNMusicLyricsDownloader *downloader);
+    QStringList downloaderNames() const;
 
     //Lyrics data.
     QList<qint64> positionList() const;
@@ -48,6 +50,9 @@ public:
     void setLyricsDir(const QString &lyricsDir);
     bool enableOnlineLyrics() const;
     void setEnableOnlineLyrics(bool enableOnlineLyrics);
+
+    void getOnlineLyrics(const KNMusicDetailInfo &detailInfo,
+                         QList<KNMusicLyricsDetails> &lyricsList);
 
 signals:
     void lyricsReset();
@@ -102,6 +107,7 @@ private:
 
     //Lyrics downlaoders.
     QLinkedList<KNMusicLyricsDownloader *> m_downloaders;
+    QStringList m_downloaderNames;
 
     //Lyrics directory path.
     QString m_lyricsDir;

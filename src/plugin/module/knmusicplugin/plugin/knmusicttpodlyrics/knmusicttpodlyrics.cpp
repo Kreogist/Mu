@@ -128,11 +128,9 @@ void KNMusicTTPodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
             {
                 KNMusicLyricsDetails currentDetails;
                 //Don't ask me why, they are just wrong.
-                currentDetails.title=currentObject.value("singerName").toString();
-                currentDetails.artist=currentObject.value("songName").toString();
-                saveLyrics(detailInfo, lrcText, currentDetails);
-                //Add to lyrics list.
-                lyricsList.append(currentDetails);
+                currentDetails.title=currentObject.value("songName").toString();
+                currentDetails.artist=currentObject.value("singerName").toString();
+                saveLyrics(detailInfo, lrcText, currentDetails, lyricsList);
             }
         }
     }

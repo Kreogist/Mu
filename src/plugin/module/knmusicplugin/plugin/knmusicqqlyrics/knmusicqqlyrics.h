@@ -27,7 +27,7 @@ public:
     explicit KNMusicQQLyrics(QObject *parent = 0);
     QString downloaderName()
     {
-        return "QQ Music";
+        return tr("QQMusic");
     }
     void downloadLyrics(const KNMusicDetailInfo &detailInfo,
                         QList<KNMusicLyricsDetails> &lyricsList);

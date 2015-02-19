@@ -324,7 +324,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp \
     plugin/sdk/kniconframelineedit.cpp \
     plugin/sdk/knfocuslineedit.cpp \
-    plugin/sdk/knclockwheel.cpp
+    plugin/sdk/knclockwheel.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricslistview.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsitemdelegate.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -531,7 +533,9 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.h \
     plugin/sdk/kniconframelineedit.h \
     plugin/sdk/knfocuslineedit.h \
-    plugin/sdk/knclockwheel.h
+    plugin/sdk/knclockwheel.h \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricslistview.h \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsitemdelegate.h
 
 RESOURCES += \
     resource/res.qrc

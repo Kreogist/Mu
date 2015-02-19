@@ -115,8 +115,7 @@ void KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
             continue;
         }
         //Save the lyrics data and calculate the similarity.
-        saveLyrics(detailInfo, lyricsContent, currentDetails);
-        lyricsList.append(currentDetails);
+        saveLyrics(detailInfo, lyricsContent, currentDetails, lyricsList);
     }
 }
 

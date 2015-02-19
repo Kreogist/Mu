@@ -15,24 +15,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICBAIDULYRICS_H
-#define KNMUSICBAIDULYRICS_H
+#ifndef KNMUSICLYRICSITEMDELEGATE_H
+#define KNMUSICLYRICSITEMDELEGATE_H
 
-#include "knmusiclyricsdownloader.h"
+#include <QStyledItemDelegate>
 
-class KNMusicNeteaseLyrics : public KNMusicLyricsDownloader
+namespace KNMusicLyricsItem
 {
-    Q_OBJECT
-public:
-    explicit KNMusicNeteaseLyrics(QObject *parent = 0);
-    QString downloaderName()
-    {
-        return tr("Baidu");
-    }
-    void downloadLyrics(const KNMusicDetailInfo &detailInfo,
-                        QList<KNMusicLyricsDetails> &lyricsList);
+enum LyricsItemProperties
+{
+    LyricsArtistRole = Qt::UserRole,
+    LyricsTitleSimilarityRole,
+    LyricsArtistSimilarityRole
+};
+}
 
-private:
+using namespace KNMusicLyricsItem;
+
+class KNMusicLyricsItemDelegate : public QStyledItemDelegate
+{
+public:
+    explicit KNMusicLyricsItemDelegate(QObject *parent = 0);
+    ~KNMusicLyricsItemDelegate();
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const;
+    void paint(QPainter *painter,
+               const QStyleOptionViewItem &option,
+               const QModelIndex &index) const;
 };
 
-#endif // KNMUSICBAIDULYRICS_H
+#endif // KNMUSICLYRICSITEMDELEGATE_H

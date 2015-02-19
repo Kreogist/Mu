@@ -21,6 +21,8 @@
 #include "knglobal.h"
 #include "knmusicglobal.h"
 
+#include <QDebug>
+
 #include <QObject>
 
 namespace KNMusicLyricsData
@@ -46,6 +48,8 @@ class KNMusicLyricsDownloader : public QObject
     Q_OBJECT
 public:
     explicit KNMusicLyricsDownloader(QObject *parent = 0);
+    ~KNMusicLyricsDownloader();
+    void setWorkingThread(QThread *thread);
     virtual QString downloaderName()=0;
     virtual void downloadLyrics(const KNMusicDetailInfo &detailInfo,
                                 QList<KNMusicLyricsDetails> &lyricsList)=0;
@@ -78,14 +82,17 @@ protected:
               const QVariant &cookie=QVariant(),
               const QString &referer=QString());
     inline void saveLyrics(const KNMusicDetailInfo &detailInfo,
-                           const QString &lyricsContent,
-                           KNMusicLyricsDetails &currentDetails)
+                           const QString &content,
+                           KNMusicLyricsDetails &lyricsDetails,
+                           QList<KNMusicLyricsDetails> &lyricsList)
     {
-        currentDetails.titleSimilarity=
-                KNGlobal::similarity(currentDetails.title, detailInfo.textLists[Name]);
-        currentDetails.artistSimilarity=
-                KNGlobal::similarity(currentDetails.artist, detailInfo.textLists[Artist]);
-        currentDetails.lyricsData=lyricsContent;
+        lyricsDetails.titleSimilarity=
+                KNGlobal::similarity(lyricsDetails.title, detailInfo.textLists[Name]);
+        lyricsDetails.artistSimilarity=
+                KNGlobal::similarity(lyricsDetails.artist, detailInfo.textLists[Artist]);
+        lyricsDetails.lyricsData=content;
+        //Add to list.
+        lyricsList.append(lyricsDetails);
     }
 
 private:

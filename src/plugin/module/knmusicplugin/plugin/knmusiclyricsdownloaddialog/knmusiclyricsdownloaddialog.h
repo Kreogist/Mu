@@ -20,6 +20,8 @@
 
 #include "knmusiclyricsdownloaddialogbase.h"
 
+class QStandardItemModel;
+class KNMusicLyricsManager;
 class KNMusicLyricsDownloadWidget;
 class KNMusicLyricsDownloadDialog : public KNMusicLyricsDownloadDialogBase
 {
@@ -34,8 +36,19 @@ signals:
 
 public slots:
 
+private slots:
+    void onActionSearchLyrics();
+
 private:
+    //UI, Lyrics manager.
     KNMusicLyricsDownloadWidget *m_downloadWidget;
+    KNMusicLyricsManager *m_lyricsManager;
+
+    //Current information.
+    KNMusicDetailInfo m_detailInfo;
+
+    //Lyrics model.
+    QStandardItemModel *m_lyricsModel;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADDIALOG_H

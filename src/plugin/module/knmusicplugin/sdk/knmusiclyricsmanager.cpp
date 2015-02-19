@@ -60,9 +60,11 @@ void KNMusicLyricsManager::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 void KNMusicLyricsManager::installLyricsDownloader(KNMusicLyricsDownloader *downloader)
 {
     //Move the downloader to manager threads.
-    downloader->moveToThread(thread());
+    downloader->setWorkingThread(thread());
     //Add to downloader list.
     m_downloaders.append(downloader);
+    //Add the name to name list.
+    m_downloaderNames.append(downloader->downloaderName());
 }
 
 QStringList KNMusicLyricsManager::textList() const
@@ -99,20 +101,12 @@ void KNMusicLyricsManager::downloadLyrics(const KNMusicDetailInfo &detailInfo)
 {
     //Using all downloaders to download the lyrics.
     QList<KNMusicLyricsDetails> lyricsList;
-    for(QLinkedList<KNMusicLyricsDownloader *>::iterator i=m_downloaders.begin();
-        i!=m_downloaders.end();
-        ++i)
-    {
-        //Try to download the lyrics from all the remote server.
-        (*i)->downloadLyrics(detailInfo, lyricsList);
-    }
+    getOnlineLyrics(detailInfo, lyricsList);
     //Check the lyrics list.
     if(lyricsList.isEmpty())
     {
         return;
     }
-    //Sort the list according to the similarity of the lyrics.
-    qSort(lyricsList.begin(), lyricsList.end(), lyricsDetailLessThan);
     //Parse all the data from the top to the bottom, save the first lyrics which
     //can be parsed.
     QList<qint64> positionList;
@@ -269,6 +263,11 @@ bool KNMusicLyricsManager::lyricsDetailLessThan(const KNMusicLyricsDetails &lyri
                 lyricsDetailLeft.titleSimilarity<lyricsDetailRight.titleSimilarity;
 }
 
+QStringList KNMusicLyricsManager::downloaderNames() const
+{
+    return m_downloaderNames;
+}
+
 KNMusicDetailInfo KNMusicLyricsManager::musicDetailInfo() const
 {
     return m_musicDetailInfo;
@@ -282,6 +281,26 @@ bool KNMusicLyricsManager::enableOnlineLyrics() const
 void KNMusicLyricsManager::setEnableOnlineLyrics(bool enableOnlineLyrics)
 {
     m_enableOnlineLyrics = enableOnlineLyrics;
+}
+
+void KNMusicLyricsManager::getOnlineLyrics(const KNMusicDetailInfo &detailInfo,
+                                           QList<KNMusicLyricsDetails> &lyricsList)
+{
+    //Clear the lyrics list.
+    lyricsList.clear();
+    for(QLinkedList<KNMusicLyricsDownloader *>::iterator i=m_downloaders.begin();
+        i!=m_downloaders.end();
+        ++i)
+    {
+        //Try to download the lyrics from all the remote server.
+        (*i)->downloadLyrics(detailInfo, lyricsList);
+    }
+    //Sort the list according to the similarity of the lyrics, if the list is
+    //not empty.
+    if(!lyricsList.isEmpty())
+    {
+        qSort(lyricsList.begin(), lyricsList.end(), lyricsDetailLessThan);
+    }
 }
 
 QString KNMusicLyricsManager::lyricsFilePath() const

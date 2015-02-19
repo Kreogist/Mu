@@ -102,8 +102,7 @@ void KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
                 //This is the lyrics file! Add to the lyrics list.
                 if(!responseData.isEmpty())
                 {
-                    saveLyrics(detailInfo, responseData, currentDetail);
-                    lyricsList.append(currentDetail);
+                    saveLyrics(detailInfo, responseData, currentDetail, lyricsList);
                 }
             }
         }

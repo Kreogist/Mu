@@ -101,9 +101,8 @@ void KNMusicNeteaseLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
             }
             saveLyrics(detailInfo,
                        lrcObject.value("lyric").toString(),
-                       currentLyrics);
-            //Add to list.
-            lyricsList.append(currentLyrics);
+                       currentLyrics,
+                       lyricsList);
         }
     }
 }

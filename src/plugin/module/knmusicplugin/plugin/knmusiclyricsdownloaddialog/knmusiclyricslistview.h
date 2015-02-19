@@ -15,24 +15,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICBAIDULYRICS_H
-#define KNMUSICBAIDULYRICS_H
+#ifndef KNMUSICLYRICSLISTVIEW_H
+#define KNMUSICLYRICSLISTVIEW_H
 
-#include "knmusiclyricsdownloader.h"
+#include <QWidget>
 
-class KNMusicNeteaseLyrics : public KNMusicLyricsDownloader
+class QLabel;
+class QListView;
+class QAbstractItemModel;
+class KNMusicLyricsManager;
+class KNMusicLyricsListView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNMusicNeteaseLyrics(QObject *parent = 0);
-    QString downloaderName()
-    {
-        return tr("Baidu");
-    }
-    void downloadLyrics(const KNMusicDetailInfo &detailInfo,
-                        QList<KNMusicLyricsDetails> &lyricsList);
+    explicit KNMusicLyricsListView(QWidget *parent = 0);
+    ~KNMusicLyricsListView();
+    void setLyricsModel(QAbstractItemModel *model);
+
+signals:
+
+public slots:
+
+private slots:
+    void retranslate();
 
 private:
+    inline void initialLyricsList();
+    QListView *m_lyricsList;
+    KNMusicLyricsManager *m_lyricsManager;
 };
 
-#endif // KNMUSICBAIDULYRICS_H
+#endif // KNMUSICLYRICSLISTVIEW_H

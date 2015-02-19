@@ -21,6 +21,8 @@
 #include "kniconframelineedit.h"
 #include "knclockwheel.h"
 
+#include "knmusiclyricslistview.h"
+
 #include "knmusiclyricsdownloadwidget.h"
 
 KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
@@ -40,6 +42,11 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     buttonPalette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
     m_searchLyrics->setPalette(buttonPalette);
     m_searchLyrics->setText("Search");
+    connect(m_searchLyrics, SIGNAL(clicked()),
+            this, SIGNAL(requireSearchLyrics()));
+
+    //Initial the server list.
+    initialListView();
 
     //Establish tab order.
     m_title->setDefaultEscFocusTo(m_artist);
@@ -64,15 +71,27 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
 
     searchRequestLayout->addWidget(m_searchLyrics);
 
-    KNClockWheel *clockWheel=new KNClockWheel(this);
-    clockWheel->setWheelSize(350, 200);
-    clockWheel->startTick();
-    mainLayout->addWidget(clockWheel);
+    mainLayout->addWidget(m_lyricsListView);
 }
 
 KNMusicLyricsDownloadWidget::~KNMusicLyricsDownloadWidget()
 {
     ;
+}
+
+void KNMusicLyricsDownloadWidget::setLyricsModel(QAbstractItemModel *model)
+{
+    m_lyricsListView->setLyricsModel(model);
+}
+
+QString KNMusicLyricsDownloadWidget::title() const
+{
+    return m_title->text();
+}
+
+QString KNMusicLyricsDownloadWidget::artist() const
+{
+    return m_artist->text();
 }
 
 void KNMusicLyricsDownloadWidget::setTitle(const QString &title)
@@ -83,6 +102,11 @@ void KNMusicLyricsDownloadWidget::setTitle(const QString &title)
 void KNMusicLyricsDownloadWidget::setArtist(const QString &artist)
 {
     m_artist->setText(artist);
+}
+
+inline void KNMusicLyricsDownloadWidget::initialListView()
+{
+    m_lyricsListView=new KNMusicLyricsListView(this);
 }
 
 inline KNIconFrameLineEdit *KNMusicLyricsDownloadWidget::generateLineEdit(const QPixmap &icon)

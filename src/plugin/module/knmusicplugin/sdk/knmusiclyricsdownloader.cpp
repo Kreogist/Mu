@@ -28,12 +28,27 @@ KNMusicLyricsDownloader::KNMusicLyricsDownloader(QObject *parent) :
     QObject(parent)
 {
     //Initial the network access manager.
-    m_networkManager=new QNetworkAccessManager(this);
+    m_networkManager=new QNetworkAccessManager;
     //Initial the timer.
-    m_timeout=new QTimer(this);
+    m_timeout=new QTimer;
     m_timeout->setSingleShot(true);
     //Waiting for 5 seconds.
     m_timeout->setInterval(5000);
+}
+
+KNMusicLyricsDownloader::~KNMusicLyricsDownloader()
+{
+    delete m_timeout;
+    delete m_networkManager;
+}
+
+void KNMusicLyricsDownloader::setWorkingThread(QThread *thread)
+{
+    //Move to the thread.
+    moveToThread(thread);
+    //Change children's working thread.
+    m_timeout->moveToThread(thread);
+    m_networkManager->moveToThread(thread);
 }
 
 void KNMusicLyricsDownloader::get(const QString &url,

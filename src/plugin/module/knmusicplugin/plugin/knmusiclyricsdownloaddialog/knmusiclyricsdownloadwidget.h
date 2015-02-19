@@ -21,24 +21,33 @@
 #include <QWidget>
 
 class QPushButton;
+class QAbstractItemModel;
 class KNIconFrameLineEdit;
+class KNMusicLyricsListView;
 class KNMusicLyricsDownloadWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit KNMusicLyricsDownloadWidget(QWidget *parent = 0);
     ~KNMusicLyricsDownloadWidget();
+    void setLyricsModel(QAbstractItemModel *model);
+
+    QString title() const;
+    QString artist() const;
 
     void setTitle(const QString &title);
     void setArtist(const QString &artist);
 
 signals:
+    void requireSearchLyrics();
 
 public slots:
 
 private:
+    inline void initialListView();
     inline KNIconFrameLineEdit *generateLineEdit(const QPixmap &icon);
     KNIconFrameLineEdit *m_title, *m_artist;
+    KNMusicLyricsListView *m_lyricsListView;
     QPushButton *m_searchLyrics;
 };
 

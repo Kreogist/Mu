@@ -27,7 +27,7 @@ public:
     ~KNMusicTTPodLyrics();
     QString downloaderName()
     {
-        return "TTPod";
+        return tr("TTPod");
     }
     void downloadLyrics(const KNMusicDetailInfo &detailInfo,
                         QList<KNMusicLyricsDetails> &lyricsList);

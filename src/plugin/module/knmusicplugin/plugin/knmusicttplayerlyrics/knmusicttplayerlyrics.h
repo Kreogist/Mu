@@ -28,7 +28,7 @@ public:
     ~KNMusicTTPlayerLyrics();
     QString downloaderName()
     {
-        return "TTPlayer";
+        return tr("TTPlayer");
     }
     void downloadLyrics(const KNMusicDetailInfo &detailInfo,
                         QList<KNMusicLyricsDetails> &lyricsList);
