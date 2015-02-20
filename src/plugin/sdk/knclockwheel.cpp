@@ -30,7 +30,7 @@ KNClockWheel::KNClockWheel(QWidget *parent) :
     }
     //Initial the tick timer.
     m_tickTimer=new QTimer(this);
-    m_tickTimer->setInterval(30);
+    m_tickTimer->setInterval(20);
     connect(m_tickTimer, &QTimer::timeout, this, &KNClockWheel::tick);
     //Initial the default width and height.
     m_imageSize=m_clockFrames[0].width();

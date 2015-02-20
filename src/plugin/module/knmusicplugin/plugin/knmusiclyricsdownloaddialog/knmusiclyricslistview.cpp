@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QScrollBar>
 #include <QLabel>
 #include <QListView>
 
@@ -30,6 +31,8 @@
 KNMusicLyricsListView::KNMusicLyricsListView(QWidget *parent) :
     QWidget(parent)
 {
+    //Set properties.
+    setFixedHeight(300);
     //Initial the lyrics manager.
     m_lyricsManager=KNMusicGlobal::instance()->lyricsManager();
     //Initial the list widget.
@@ -69,13 +72,23 @@ void KNMusicLyricsListView::retranslate()
     ;
 }
 
-void KNMusicLyricsListView::initialLyricsList()
+inline void KNMusicLyricsListView::initialLyricsList()
 {
     //Initial the lyrics list.
     m_lyricsList=new QListView(this);
     //Set properties.
     m_lyricsList->setAutoFillBackground(true);
     m_lyricsList->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    //Hack: for the scroll area lines.
+    //A scroll area is worked like this:
+    /* +-----+-+
+     * |     | |
+     * +-----+-+ <- Here is the line, we should hide it.
+     * +-----+-+
+     */
+    //How to hide it? Use FIXED height to force not to draw the last pixel of
+    //the list view.
+    m_lyricsList->setFixedHeight(301);
     //Set palette.
     QPalette pal=m_lyricsList->palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));
@@ -85,6 +98,35 @@ void KNMusicLyricsListView::initialLyricsList()
     m_lyricsList->setPalette(pal);
     //Set the item delegate.
     m_lyricsList->setItemDelegate(new KNMusicLyricsItemDelegate);
+    //Customized scroll bar.
+    QScrollBar *listVScrollBar=new QScrollBar(m_lyricsList);
+    listVScrollBar->setStyleSheet(
+                "QScrollBar:vertical {"
+                "   border: 0px solid grey;"
+                "   background: rgba(0, 0, 0, 0);"
+                "   width: 8px;"
+                "}"
+                "QScrollBar::handle:vertical {"
+                "   background: rgba(0, 0, 0, 100);"
+                "   min-height: 10px;"
+                "   border-radius: 4px;"
+                "}"
+                "QScrollBar::add-line:vertical {"
+                "   border: 0px solid grey;"
+                "   background: rgba(0, 0, 0, 100);"
+                "   height: 0px;"
+                "   subcontrol-position: down;"
+                "   subcontrol-origin: margin;"
+                "}"
+                "QScrollBar::sub-line:vertical {"
+                "   border: 0px solid grey;"
+                "   background: rgba(0, 0, 0, 100);"
+                "   height: 0px;"
+                "   subcontrol-position: up;"
+                "   subcontrol-origin: margin;"
+                "}"
+                );
+    m_lyricsList->setVerticalScrollBar(listVScrollBar);
 
     //Link the lyrics list.
     connect(m_lyricsList, &QListView::activated,

@@ -17,6 +17,7 @@
  */
 #include <QBoxLayout>
 #include <QPushButton>
+#include <QLabel>
 
 #include "kniconframelineedit.h"
 #include "knclockwheel.h"
@@ -145,7 +146,7 @@ inline void KNMusicLyricsDownloadWidget::initialListView()
 inline KNIconFrameLineEdit *KNMusicLyricsDownloadWidget::generateLineEdit(const QPixmap &icon)
 {
     KNIconFrameLineEdit *lineEdit=new KNIconFrameLineEdit(this);
-    lineEdit->setMinimumWidth(500);
+    lineEdit->setMinimumWidth(550);
     lineEdit->disableEscapeKey();
     lineEdit->setMinimumLightness(0xD0);
     lineEdit->setMouseEnterLightness(0xE0);
