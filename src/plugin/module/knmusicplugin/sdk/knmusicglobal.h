@@ -235,8 +235,6 @@ public:
                             const QList<KNPreferenceItemInfo> &list);
     bool renameMusicFile(const QString &originalPath,
                          const QString &preferName);
-    KNMusicLyricsManager *lyricsManager() const;
-    void setLyricsManager(KNMusicLyricsManager *lyricsManager);
     KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog() const;
     void setLyricsDownloadDialog(KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog);
 
@@ -263,7 +261,6 @@ private:
     inline void initialGenreText();
     inline void initialPreference();
     static KNMusicGlobal *m_instance;
-    KNMusicLyricsManager *m_lyricsManager;
     KNMusicLyricsDownloadDialogBase *m_lyricsDownloadDialog;
     static KNMusicParser *m_parser;
     static KNMusicNowPlayingBase *m_nowPlaying;

@@ -17,6 +17,7 @@
 #include "knconfigure.h"
 #include "knglobal.h"
 #include "knpreferencewidgetspanel.h"
+
 #include "knmusicnowplayingbase.h"
 
 #include "knmusicglobal.h"
@@ -475,16 +476,6 @@ void KNMusicGlobal::setLyricsDownloadDialog(KNMusicLyricsDownloadDialogBase *lyr
     m_lyricsDownloadDialog = lyricsDownloadDialog;
 }
 
-KNMusicLyricsManager *KNMusicGlobal::lyricsManager() const
-{
-    return m_lyricsManager;
-}
-
-void KNMusicGlobal::setLyricsManager(KNMusicLyricsManager *lyricsManager)
-{
-    m_lyricsManager = lyricsManager;
-}
-
 KNMusicDetailDialogBase *KNMusicGlobal::detailDialog()
 {
     return m_detailDialog;
@@ -639,6 +630,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     initialGenreText();
     //Initial the configure.
     initialPreference();
+
     //Set the library path.
     setMusicLibraryPath(m_global->libraryPath()+"/Music");
     //Link the library changed request.

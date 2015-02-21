@@ -53,7 +53,7 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     connect(m_searchLyrics, SIGNAL(clicked()),
             this, SIGNAL(requireSearchLyrics()));
 
-    //Initial the server list.
+    //Initial the lyrics list.
     initialListView();
     //Initial the previews.
     initialPlainTextPreview();
@@ -121,6 +121,16 @@ void KNMusicLyricsDownloadWidget::setArtist(const QString &artist)
     m_artist->setText(artist);
 }
 
+void KNMusicLyricsDownloadWidget::linkBackend()
+{
+    m_playerPreview->linkBackend();
+}
+
+void KNMusicLyricsDownloadWidget::resetPreviewPlayer()
+{
+    m_playerPreview->resetPreviewPlayer();
+}
+
 void KNMusicLyricsDownloadWidget::showLoadingWheel()
 {
     //Stop and start ticking the clock wheel.
@@ -147,13 +157,16 @@ void KNMusicLyricsDownloadWidget::showLyricsItem(QStandardItem *item)
         return;
     }
     //Display the lyrics item.
-    m_plainTextPreview->setPlainText(item->data(LyricsTextRole).toString());
+    QString lyricsText=item->data(LyricsTextRole).toString();
+    m_plainTextPreview->setPlainText(lyricsText);
+    m_playerPreview->setLyrics(lyricsText);
 }
 
 void KNMusicLyricsDownloadWidget::clearPreview()
 {
     //Clear the plain text preview.
     m_plainTextPreview->clear();
+    m_playerPreview->clearLyrics();
 }
 
 inline void KNMusicLyricsDownloadWidget::initialListView()

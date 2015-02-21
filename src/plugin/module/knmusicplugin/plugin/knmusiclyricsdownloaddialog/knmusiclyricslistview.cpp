@@ -25,8 +25,8 @@
 #include "sao/knsaostyle.h"
 
 #include "knmusiclyricsitemdelegate.h"
-#include "knmusiclyricsmanager.h"
 #include "knmusicglobal.h"
+#include "knmusicparser.h"
 
 #include "knglobal.h"
 
@@ -37,8 +37,6 @@ KNMusicLyricsListView::KNMusicLyricsListView(QWidget *parent) :
 {
     //Set properties.
     setFixedHeight(300);
-    //Initial the lyrics manager.
-    m_lyricsManager=KNMusicGlobal::instance()->lyricsManager();
     //Initial the list widget.
     initialLyricsList();
     //Initial the lyrics preview widgets.
@@ -123,7 +121,8 @@ inline void KNMusicLyricsListView::initialLyricsList()
     //the list view.
     //Using the setFixedHeight() to force the list is 1px higher than the total
     //height.
-    m_lyricsList->setFixedHeight(301);
+    m_lyricsList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_lyricsList->setFixedHeight(301);
     //Set palette.
     QPalette pal=m_lyricsList->palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));

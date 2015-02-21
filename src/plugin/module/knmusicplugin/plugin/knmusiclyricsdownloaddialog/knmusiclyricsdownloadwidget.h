@@ -45,6 +45,9 @@ public:
     void setTitle(const QString &title);
     void setArtist(const QString &artist);
 
+    void linkBackend();
+    void resetPreviewPlayer();
+
 signals:
     void requireSearchLyrics();
     void lyricsActivate(const QModelIndex &index);

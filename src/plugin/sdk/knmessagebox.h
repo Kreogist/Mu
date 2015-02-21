@@ -43,6 +43,7 @@ protected:
     void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *event);
     virtual bool onActionOkayClose();
+    virtual void onActionCancelClose();
 
 private slots:
     void onActionExpandFinished();

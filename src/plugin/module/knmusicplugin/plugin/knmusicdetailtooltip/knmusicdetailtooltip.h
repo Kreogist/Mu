@@ -26,6 +26,7 @@ class QLabel;
 class QTimeLine;
 class KNFilePathLabel;
 class KNOpacityButton;
+class KNConnectionHandler;
 class KNProgressSlider;
 class KNMusicDetailTooltipArtwork;
 class KNMusicDetailTooltip : public KNMusicDetailTooltipBase
@@ -67,6 +68,10 @@ private:
         ItemArtist,
         ToolTipItemsCount
     };
+
+    inline void linkBackend();
+    inline void cutLinkWithBackend();
+
     inline void loadCurrentToPreview();
     inline void resetDisappearCounter();
     inline void resetPreviewPlayer();
@@ -82,6 +87,7 @@ private:
     KNMusicDetailTooltipArtwork *m_albumArt;
     QLabel *m_labels[ToolTipItemsCount];
     KNFilePathLabel *m_fileName;
+    KNConnectionHandler *m_backendHandler;
     QPalette m_palette;
     QTimer *m_disappearCounter;
     QPersistentModelIndex m_currentIndex;

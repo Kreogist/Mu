@@ -39,7 +39,7 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 
     m_musicConfigure=m_musicGlobal->musicConfigure();
 
-    m_lyricsManager=m_musicGlobal->lyricsManager();
+    m_lyricsManager=KNMusicLyricsManager::instance();
     connect(m_lyricsManager, &KNMusicLyricsManager::lyricsReset,
             this, &KNMusicHeaderLyrics::onActionLyricsReset);
     connect(m_lyricsManager, &KNMusicLyricsManager::lyricsUpdate,

@@ -27,6 +27,8 @@
 
 #include "knmusiclyricsmanager.h"
 
+KNMusicLyricsManager *KNMusicLyricsManager::m_instance=nullptr;
+
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent)
 {
@@ -44,6 +46,11 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_relateNamePolicyList << LyricsNamedArtistHyphonTitle
                            << LyricsNamedTitle
                            << LyricsNamedAlbumHyphonTitle;
+}
+
+KNMusicLyricsManager *KNMusicLyricsManager::instance()
+{
+    return m_instance==nullptr?m_instance=new KNMusicLyricsManager:m_instance;
 }
 
 KNMusicLyricsManager::~KNMusicLyricsManager()
@@ -144,7 +151,7 @@ void KNMusicLyricsManager::searchLyrics(const KNMusicDetailInfo &detailInfo,
     //Check the lyrics list is empty or not.
     if(!lyricsList.isEmpty())
     {
-        //Set the lyrics data to the model.
+        //Output the lyrics data to the model.
         for(QList<KNMusicLyricsDetails>::iterator i=lyricsList.begin();
             i!=lyricsList.end();
             ++i)
@@ -297,6 +304,11 @@ bool KNMusicLyricsManager::lyricsDetailLessThan(const KNMusicLyricsDetails &lyri
 QStringList KNMusicLyricsManager::downloaderNames() const
 {
     return m_downloaderNames;
+}
+
+KNMusicLRCLyricsParser *KNMusicLyricsManager::lrcParser()
+{
+    return m_parser;
 }
 
 KNMusicDetailInfo KNMusicLyricsManager::musicDetailInfo() const

@@ -248,6 +248,11 @@ bool KNMessageBox::onActionOkayClose()
     return true;
 }
 
+void KNMessageBox::onActionCancelClose()
+{
+    //Nothing gonna to do.
+}
+
 void KNMessageBox::onActionExpandFinished()
 {
     //Show the content widget.
@@ -271,6 +276,8 @@ void KNMessageBox::onActionOkay()
 
 void KNMessageBox::onActionCancel()
 {
+    //Do the things you want to.
+    onActionCancelClose();
     //Linked the finished animation to reject.
     connect(m_hideAnime, &QParallelAnimationGroup::finished,
             this, &KNMessageBox::reject);

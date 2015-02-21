@@ -33,11 +33,12 @@ class KNMusicLyricsManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNMusicLyricsManager(QObject *parent = 0);
+    static KNMusicLyricsManager *instance();
     ~KNMusicLyricsManager();
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     void installLyricsDownloader(KNMusicLyricsDownloader *downloader);
     QStringList downloaderNames() const;
+    KNMusicLRCLyricsParser *lrcParser();
 
     //Lyrics data.
     QList<qint64> positionList() const;
@@ -77,6 +78,8 @@ private:
         LyricsNamedAlbumHyphonTitle
     };
 
+    static KNMusicLyricsManager *m_instance;
+    explicit KNMusicLyricsManager(QObject *parent = 0);
     inline void getOnlineLyrics(const KNMusicDetailInfo &detailInfo,
                                 QList<KNMusicLyricsDetails> &lyricsList);
     inline void clearCurrentData();

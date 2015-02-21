@@ -123,6 +123,8 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadDetailDialog(new KNMusicDetailDialog);
     //Initial parser.
     initialParser();
+    //Initial lyrics manager.
+    initialLyricsManager();
     //Initial menus.
     initialSoloMenu(new KNMusicSoloMenu);
     initialMultiMenu(new KNMusicMultiMenu);
@@ -140,7 +142,6 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 #endif
     loadDetailTooptip(new KNMusicDetailTooltip);
     loadNowPlaying(new KNMusicNowPlaying2);
-    initialLyricsManager();
     loadLyricsDownloaDialog(new KNMusicLyricsDownloadDialog);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
@@ -244,8 +245,8 @@ inline void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
 
 void KNMusicPlugin::loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plugin)
 {
-    //Save the global plugin.
-    m_musicGlobal->setLyricsDownloadDialog(plugin);
+    //Set the backend to the dialog.
+    plugin->setBackend(m_backend);
     //Link the download dialog to the lyrics manager.
     connect(plugin, &KNMusicLyricsDownloadDialogBase::requireSearchLyrics,
             m_lyricsManager, &KNMusicLyricsManager::searchLyrics);
@@ -253,6 +254,8 @@ void KNMusicPlugin::loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plu
             plugin, &KNMusicLyricsDownloadDialogBase::onActionSearchComplete);
     //Add plugin to the list.
     m_pluginList.append(plugin);
+    //Save the global plugin.
+    m_musicGlobal->setLyricsDownloadDialog(plugin);
 }
 
 inline void KNMusicPlugin::loadDetailDialog(KNMusicDetailDialogBase *plugin)
@@ -326,6 +329,8 @@ inline void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
         m_nowPlaying=plugin;
         //Set the backend for control.
         m_nowPlaying->setBackend(m_backend);
+        //Set now playing to lyrics manager.
+        m_lyricsManager->setNowPlaying(m_nowPlaying);
         //Restore configure.
         m_nowPlaying->restoreConfigure();
         //Add plugin to list.
@@ -506,7 +511,7 @@ inline void KNMusicPlugin::initialParser()
 inline void KNMusicPlugin::initialLyricsManager()
 {
     //Initial the lyrics manager.
-    m_lyricsManager=new KNMusicLyricsManager;
+    m_lyricsManager=KNMusicLyricsManager::instance();
     //Move to working thread.
     m_lyricsManager->moveToThread(m_musicGlobal->lyricsThread());
 
@@ -516,13 +521,8 @@ inline void KNMusicPlugin::initialLyricsManager()
     m_lyricsManager->installLyricsDownloader(new KNMusicTTPlayerLyrics);
     m_lyricsManager->installLyricsDownloader(new KNMusicXiaMiLyrics);
 
-    //Set now playing.
-    m_lyricsManager->setNowPlaying(m_nowPlaying);
-
     //Add lyrics manager to plugin list.
     m_pluginList.append(m_lyricsManager);
-    //Set the lyrics manager.
-    m_musicGlobal->setLyricsManager(m_lyricsManager);
 }
 
 inline void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)

@@ -311,7 +311,6 @@ SOURCES += \
     public/knconfiguremanager.cpp \
     plugin/sdk/knconfigure.cpp \
     plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.cpp \
-    plugin/module/knmusicplugin/sdk/knmusiclrcparser.cpp \
     plugin/module/knmusicplugin/sdk/knmusiclyricsdownloader.cpp \
     plugin/module/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
     plugin/module/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
@@ -522,7 +521,6 @@ HEADERS += \
     public/knconfiguremanager.h \
     plugin/sdk/knconfigure.h \
     plugin/module/knmusicplugin/plugin/knmusicnowplaying2/knmusicnowplaying2.h \
-    plugin/module/knmusicplugin/sdk/knmusiclrcparser.h \
     plugin/module/knmusicplugin/sdk/knmusiclyricsdownloader.h \
     plugin/module/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
     plugin/module/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h \

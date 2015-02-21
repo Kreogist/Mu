@@ -25,7 +25,6 @@
 class QLabel;
 class QListView;
 class QAbstractItemModel;
-class KNMusicLyricsManager;
 class KNRoundButtonBar;
 class KNHWidgetSwitcher;
 class KNMusicLyricsListView : public QWidget
@@ -52,7 +51,6 @@ private:
     inline void initialLyricsList();
     inline void initialLyricsPreviewMode();
     QListView *m_lyricsList;
-    KNMusicLyricsManager *m_lyricsManager;
     KNRoundButtonBar *m_previewModeBar;
     KNHWidgetSwitcher *m_previewWidgets;
 };

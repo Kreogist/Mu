@@ -30,6 +30,7 @@ public:
     explicit KNMusicScrollLyrics(QWidget *parent = 0);
     int spacing() const;
     void setSpacing(int spacing);
+    void setLyricsData(const QList<qint64> positions, const QStringList texts);
 
 signals:
 
@@ -39,7 +40,6 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void setLyricsData(const QList<qint64> positions, const QStringList texts);
 
 private slots:
     void onActionLyricsMoved(const int &frame);

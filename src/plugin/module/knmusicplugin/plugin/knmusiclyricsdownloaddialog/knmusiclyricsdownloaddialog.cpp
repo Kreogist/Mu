@@ -17,6 +17,7 @@
  */
 #include <QStandardItemModel>
 
+#include "knmusicbackend.h"
 #include "knmusiclyricsitemdelegate.h"
 #include "knmusiclyricsmanager.h"
 #include "knmusiclyricsdownloadwidget.h"
@@ -27,7 +28,7 @@ KNMusicLyricsDownloadDialog::KNMusicLyricsDownloadDialog(QWidget *parent) :
     KNMusicLyricsDownloadDialogBase(parent)
 {
     //Initial the lyrics manager.
-    m_lyricsManager=KNMusicGlobal::instance()->lyricsManager();
+    m_lyricsManager=KNMusicLyricsManager::instance();
 
     //Set properties.
     setTitle("Lyrics");
@@ -63,17 +64,42 @@ void KNMusicLyricsDownloadDialog::setDetailInfo(const KNMusicDetailInfo &detailI
     //Set text data.
     m_downloadWidget->setTitle(m_detailInfo.textLists[Name]);
     m_downloadWidget->setArtist(m_detailInfo.textLists[Artist]);
+    m_downloadWidget->linkBackend();
+
+    //Load the file to backend preview.
+    m_backend->loadPreview(m_detailInfo.filePath);
+    //Check if we need to set a section.
+    if(m_detailInfo.startPosition!=-1)
+    {
+        m_backend->setPreviewSection(m_detailInfo.startPosition,
+                                     m_detailInfo.duration);
+    }
 }
 
 void KNMusicLyricsDownloadDialog::setBackend(KNMusicBackend *backend)
 {
-    m_downloadWidget->setBackend(backend);
+    m_backend=backend;
+    //Set the backend.
+    m_downloadWidget->setBackend(m_backend);
 }
 
 void KNMusicLyricsDownloadDialog::onActionSearchComplete()
 {
     //Switch to lyrics list.
     m_downloadWidget->showLyricsList();
+}
+
+bool KNMusicLyricsDownloadDialog::onActionOkayClose()
+{
+    //Cut down the links.
+    m_downloadWidget->resetPreviewPlayer();
+    return true;
+}
+
+void KNMusicLyricsDownloadDialog::onActionCancelClose()
+{
+    //Cut down the links.
+    m_downloadWidget->resetPreviewPlayer();
 }
 
 void KNMusicLyricsDownloadDialog::onActionSearchLyrics()

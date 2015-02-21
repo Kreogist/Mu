@@ -184,6 +184,11 @@ void KNMusicScrollLyrics::setLyricsData(const QList<qint64> positions,
 {
     //Reset the lyrics data.
     resetLyricsData();
+    //Check the size of position list and text list are the same or not.
+    if(positions.size()!=texts.size())
+    {
+        return;
+    }
     //Save the position and texts.
     m_positions=positions;
     m_texts=texts;

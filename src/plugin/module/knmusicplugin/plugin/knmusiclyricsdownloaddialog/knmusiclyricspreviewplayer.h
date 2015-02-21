@@ -24,6 +24,9 @@ class KNConnectionHandler;
 class KNOpacityButton;
 class KNProgressSlider;
 class KNMusicBackend;
+class KNMusicLyricsManager;
+class KNMusicLRCLyricsParser;
+class KNMusicScrollLyrics;
 class KNMusicLyricsPreviewPlayer : public QWidget
 {
     Q_OBJECT
@@ -32,7 +35,11 @@ public:
     ~KNMusicLyricsPreviewPlayer();
     void setBackend(KNMusicBackend *backend);
 
-    void establlishLinks();
+    void linkBackend();
+    void resetPreviewPlayer();
+
+    void setLyrics(const QString &lyricsText);
+    void clearLyrics();
 
 signals:
 
@@ -42,14 +49,22 @@ private slots:
     void onActionPlayNPauseClick();
     void onActionProgressPressed();
     void onActionProgressReleased();
+    void onActionPreviewStatusChange(const int &state);
+    void onActionPreviewPositionChanged(const qint64 &position);
+    void onActionPreviewDurationChanged(const qint64 &duration);
 
 private:
     inline void initialPlayerControls();
+    KNMusicLyricsManager *m_lyricsManager;
+    KNMusicLRCLyricsParser *m_parser;
     KNOpacityButton *m_playNPause;
     KNProgressSlider *m_progress;
     QPixmap m_playIcon, m_pauseIcon;
     KNMusicBackend *m_backend;
     KNConnectionHandler *m_backendLinks;
+    KNMusicScrollLyrics *m_lyricsDisplay;
+
+    bool m_isButtonPlay=true, m_progressPressed=false;
 };
 
 #endif // KNMUSICLYRICSPREVIEWPLAYER_H

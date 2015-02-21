@@ -22,6 +22,9 @@
 #include "knconnectionhandler.h"
 
 #include "knmusicbackend.h"
+#include "knmusiclrclyricsparser.h"
+#include "knmusiclyricsmanager.h"
+#include "knmusicscrolllyrics.h"
 
 #include "knmusiclyricspreviewplayer.h"
 
@@ -32,8 +35,17 @@ KNMusicLyricsPreviewPlayer::KNMusicLyricsPreviewPlayer(QWidget *parent) :
     m_playIcon=QPixmap(":/plugin/music/preview/play.png");
     m_pauseIcon=QPixmap(":/plugin/music/preview/pause.png");
 
+    //Initial the lyrics parser.
+    m_lyricsManager=KNMusicLyricsManager::instance();
+    m_parser=m_lyricsManager->lrcParser();
+
+    //Initial the connection handler.
+    m_backendLinks=new KNConnectionHandler(this);
+
     //Initial the player controls.
     initialPlayerControls();
+    //Initial the lyrics display.
+    m_lyricsDisplay=new KNMusicScrollLyrics(this);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -58,6 +70,8 @@ KNMusicLyricsPreviewPlayer::KNMusicLyricsPreviewPlayer(QWidget *parent) :
 
     playerLayout->addWidget(m_playNPause);
     playerLayout->addWidget(m_progress, 1);
+
+    mainLayout->addWidget(m_lyricsDisplay, 1);
 }
 
 KNMusicLyricsPreviewPlayer::~KNMusicLyricsPreviewPlayer()
@@ -71,24 +85,101 @@ void KNMusicLyricsPreviewPlayer::setBackend(KNMusicBackend *backend)
     m_backend=backend;
 }
 
-void KNMusicLyricsPreviewPlayer::establlishLinks()
+void KNMusicLyricsPreviewPlayer::linkBackend()
 {
-    ;
+    //Connect to player controls.
+    m_backendLinks->addConnectionHandle(
+                connect(m_backend, &KNMusicBackend::previewPositionChanged,
+                        this, &KNMusicLyricsPreviewPlayer::onActionPreviewPositionChanged));
+    m_backendLinks->addConnectionHandle(
+                connect(m_backend, &KNMusicBackend::previewDurationChanged,
+                        this, &KNMusicLyricsPreviewPlayer::onActionPreviewDurationChanged));
+    m_backendLinks->addConnectionHandle(
+                connect(m_backend, &KNMusicBackend::previewPlayingStateChanged,
+                        this, &KNMusicLyricsPreviewPlayer::onActionPreviewStatusChange));
+    m_backendLinks->addConnectionHandle(
+                connect(m_progress, &KNProgressSlider::sliderMoved,
+                        m_backend, &KNMusicBackend::setPreviewPosition));
+    //Connect to lyrics display.
+    m_backendLinks->addConnectionHandle(
+                connect(m_backend, &KNMusicBackend::previewPositionChanged,
+                        m_lyricsDisplay, &KNMusicScrollLyrics::onActionPositionChange));
+}
+
+void KNMusicLyricsPreviewPlayer::resetPreviewPlayer()
+{
+    //Reset player button state.
+    m_isButtonPlay=true;
+    m_playNPause->setIcon(m_playIcon);
+    //Reset the backend.
+    m_backend->resetPreviewPlayer();
+    //Reset the progress bar.
+    m_progress->setValue(0);
+    //Disconnect with the backend.
+    m_backendLinks->disconnectAll();
+}
+
+void KNMusicLyricsPreviewPlayer::setLyrics(const QString &lyricsText)
+{
+    //Reset the lyrics display first.
+    clearLyrics();
+
+    //Parse the lyrics text.
+    QList<qint64> positionList;
+    QStringList textList;
+    if(m_parser->parseData(lyricsText, positionList, textList))
+    {
+        m_lyricsDisplay->setLyricsData(positionList, textList);
+    }
+}
+
+void KNMusicLyricsPreviewPlayer::clearLyrics()
+{
+    m_lyricsDisplay->onActionLyricsReset();
 }
 
 void KNMusicLyricsPreviewPlayer::onActionPlayNPauseClick()
 {
-    ;
+    //According to the button icon to do the action.
+    if(m_isButtonPlay)
+    {
+        m_backend->playPreview();
+    }
+    else
+    {
+        m_backend->pausePreview();
+    }
 }
 
 void KNMusicLyricsPreviewPlayer::onActionProgressPressed()
 {
-    ;
+    m_progressPressed=true;
 }
 
 void KNMusicLyricsPreviewPlayer::onActionProgressReleased()
 {
-    ;
+    m_progressPressed=false;
+}
+
+void KNMusicLyricsPreviewPlayer::onActionPreviewStatusChange(const int &state)
+{
+    //Check the state.
+    m_isButtonPlay=(state!=PlayingState);
+    //Set the icon.
+    m_playNPause->setIcon(m_isButtonPlay?m_playIcon:m_pauseIcon);
+}
+
+void KNMusicLyricsPreviewPlayer::onActionPreviewPositionChanged(const qint64 &position)
+{
+    if(!m_progressPressed)
+    {
+        m_progress->setValue(position);
+    }
+}
+
+void KNMusicLyricsPreviewPlayer::onActionPreviewDurationChanged(const qint64 &duration)
+{
+    m_progress->setMaximum(duration);
 }
 
 inline void KNMusicLyricsPreviewPlayer::initialPlayerControls()

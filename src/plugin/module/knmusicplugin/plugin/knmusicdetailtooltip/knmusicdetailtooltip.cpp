@@ -26,6 +26,8 @@
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
 #include "knfilepathlabel.h"
+#include "knconnectionhandler.h"
+
 #include "knmusicdetailtooltipartwork.h"
 #include "knmusicmodelassist.h"
 #include "knmusicmodel.h"
@@ -50,6 +52,9 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     m_disappearCounter->setSingleShot(true);
     connect(m_disappearCounter, &QTimer::timeout,
             this, &KNMusicDetailTooltip::onActionHide);
+
+    //Initial the backend connect handler.
+    m_backendHandler=new KNConnectionHandler(this);
 
     //Initial the layout and widget.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -130,15 +135,6 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
 void KNMusicDetailTooltip::setBackend(KNMusicBackend *backend)
 {
     m_backend=backend;
-    //Connect to backend.
-    connect(m_backend, &KNMusicBackend::previewPositionChanged,
-            this, &KNMusicDetailTooltip::onActionPreviewPositionChanged);
-    connect(m_backend, &KNMusicBackend::previewDurationChanged,
-            this, &KNMusicDetailTooltip::onActionPreviewDurationChanged);
-    connect(m_backend, &KNMusicBackend::previewPlayingStateChanged,
-            this, &KNMusicDetailTooltip::onActionPreviewStatusChange);
-    connect(m_progress, &KNProgressSlider::sliderMoved,
-            m_backend, &KNMusicBackend::setPreviewPosition);
 }
 
 void KNMusicDetailTooltip::showTooltip()
@@ -325,6 +321,8 @@ inline void KNMusicDetailTooltip::loadCurrentToPreview()
                                                                           StartPositionRole).toLongLong(),
                                          m_currentMusicModel->songDuration(m_currentIndex.row()));
         }
+        //Link the preview.
+        linkBackend();
     }
 }
 
@@ -344,6 +342,8 @@ inline void KNMusicDetailTooltip::resetPreviewPlayer()
     m_backend->resetPreviewPlayer();
     //Reset the progress bar.
     m_progress->setValue(0);
+    //Disconnect with the backend.
+    cutLinkWithBackend();
 }
 
 inline void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
@@ -381,4 +381,26 @@ void KNMusicDetailTooltip::startDisappearCountWithAnime()
     m_mouseOut->start();
     //Start disappear count.
     m_disappearCounter->start();
+}
+
+inline void KNMusicDetailTooltip::linkBackend()
+{
+    //Connect to backend.
+    m_backendHandler->addConnectionHandle(
+                connect(m_backend, &KNMusicBackend::previewPositionChanged,
+                        this, &KNMusicDetailTooltip::onActionPreviewPositionChanged));
+    m_backendHandler->addConnectionHandle(
+                connect(m_backend, &KNMusicBackend::previewDurationChanged,
+                        this, &KNMusicDetailTooltip::onActionPreviewDurationChanged));
+    m_backendHandler->addConnectionHandle(
+                connect(m_backend, &KNMusicBackend::previewPlayingStateChanged,
+                        this, &KNMusicDetailTooltip::onActionPreviewStatusChange));
+    m_backendHandler->addConnectionHandle(
+                connect(m_progress, &KNProgressSlider::sliderMoved,
+                        m_backend, &KNMusicBackend::setPreviewPosition));
+}
+
+inline void KNMusicDetailTooltip::cutLinkWithBackend()
+{
+    m_backendHandler->disconnectAll();
 }

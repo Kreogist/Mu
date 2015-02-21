@@ -38,6 +38,10 @@ signals:
 public slots:
     void onActionSearchComplete();
 
+protected:
+    bool onActionOkayClose();
+    void onActionCancelClose();
+
 private slots:
     void onActionSearchLyrics();
     void onActionLyricsActivate(const QModelIndex &index);
@@ -52,6 +56,9 @@ private:
 
     //Lyrics model.
     QStandardItemModel *m_lyricsModel;
+
+    //Backend.
+    KNMusicBackend *m_backend;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADDIALOG_H
