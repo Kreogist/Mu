@@ -310,6 +310,8 @@ inline void KNMusicDetailTooltip::loadCurrentToPreview()
     //Check is the current index still available.
     if(m_currentIndex.isValid())
     {
+        //Link the preview.
+        linkBackend();
         //Load the file to preview thread.
         m_backend->loadPreview(m_currentMusicModel->rowProperty(m_currentIndex.row(),
                                                                 FilePathRole).toString());
@@ -321,8 +323,6 @@ inline void KNMusicDetailTooltip::loadCurrentToPreview()
                                                                           StartPositionRole).toLongLong(),
                                          m_currentMusicModel->songDuration(m_currentIndex.row()));
         }
-        //Link the preview.
-        linkBackend();
     }
 }
 

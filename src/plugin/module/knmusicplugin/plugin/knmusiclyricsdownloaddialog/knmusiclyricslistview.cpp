@@ -122,7 +122,7 @@ inline void KNMusicLyricsListView::initialLyricsList()
     //Using the setFixedHeight() to force the list is 1px higher than the total
     //height.
     m_lyricsList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//    m_lyricsList->setFixedHeight(301);
+    m_lyricsList->setFixedHeight(301);
     //Set palette.
     QPalette pal=m_lyricsList->palette();
     pal.setColor(QPalette::Base, QColor(0,0,0,0));
