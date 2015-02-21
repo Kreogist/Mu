@@ -19,6 +19,7 @@ public:
 signals:
 
 public slots:
+    virtual void onActionLyricsUpdate()=0;
 };
 
 #endif // KNMUSICHEADERLYRICSBASE_H

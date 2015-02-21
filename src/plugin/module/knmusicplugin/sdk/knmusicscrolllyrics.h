@@ -28,6 +28,8 @@ class KNMusicScrollLyrics : public KNMusicLyricsBase
     Q_OBJECT
 public:
     explicit KNMusicScrollLyrics(QWidget *parent = 0);
+    int spacing() const;
+    void setSpacing(int spacing);
 
 signals:
 
@@ -48,7 +50,7 @@ private:
     {
         return fontMetrics().size(Qt::TextExpandTabs, lyricsText);
     }
-    inline void startMove(const int &lyricsDuration,
+    inline void startMove(const int &lineDuration,
                           const int &displacement);
     inline int lyricsDuration(const int &index);
     //Lyrics moving animation.

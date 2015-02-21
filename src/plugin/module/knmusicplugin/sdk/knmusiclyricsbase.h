@@ -25,8 +25,6 @@ signals:
 public slots:
     virtual void onActionPositionChange(const qint64 &position)=0;
     virtual void onActionLyricsReset()=0;
-    virtual void onActionLyricsUpdate()=0;
-
 };
 
 #endif // KNMUSICLYRICSBASE_H

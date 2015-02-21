@@ -37,14 +37,26 @@ KNMusicScrollLyrics::KNMusicScrollLyrics(QWidget *parent) :
 void KNMusicScrollLyrics::onActionPositionChange(const qint64 &position)
 {
     //If the lyrics list is empty,.do nothing.
-    if(!m_positions.isEmpty())
+    if(m_positions.isEmpty())
     {
         return;
     }
     //Now the positions shouldn't be empty, and text shouldn't be emtpy as well.
     //Check the current line. If it's out of range, just update the widget.
-    if(m_currentLine<0 || m_currentLine>m_lastLine)
+    if(m_currentLine>m_lastLine)
     {
+        update();
+        return;
+    }
+    //If it's smaller than 0, check it with the first position.
+    if(m_currentLine<0)
+    {
+        if(position<m_positions.at(0))
+        {
+            update();
+            return;
+        }
+        m_currentLine=0;
         update();
         return;
     }
@@ -64,8 +76,11 @@ void KNMusicScrollLyrics::onActionPositionChange(const qint64 &position)
                   lyricsDisplacement);
         return;
     }
-    //Check whether we need to move or not.
-    if(position<m_positions.at(m_currentLine+1))
+    //Check whether we need to move the lyrics.
+    //When the current line is the last, or the position is not larger than the
+    //next line, we will do nothing.
+    if(m_currentLine==m_lastLine ||
+            position<m_positions.at(m_currentLine+1))
     {
         return;
     }
@@ -125,6 +140,7 @@ void KNMusicScrollLyrics::paintEvent(QPaintEvent *event)
         lineSize=QSize(0, fontMetrics().height());
         currentLineTop-=(lineSize.height()>>1);
     }
+    painter.setPen(m_normalText);
     //Draw the lines after the current lines.
     int otherLineTop=currentLineTop+lineSize.height()+m_spacing;
     paintingLine++; //Move to the next line.
@@ -195,7 +211,7 @@ inline void KNMusicScrollLyrics::resetLyricsData()
     m_centerOffset=0;
 }
 
-inline void KNMusicScrollLyrics::startMove(const int &lyricsDuration,
+inline void KNMusicScrollLyrics::startMove(const int &lineDuration,
                                            const int &displacement)
 {
     //Stop the time line first.
@@ -209,7 +225,7 @@ inline void KNMusicScrollLyrics::startMove(const int &lyricsDuration,
      * lyrics duration, but if the lyrics duration is to small(like 0), just set
      * it to the minimum update interval.
      */
-    m_moveToCurrentLine->setDuration(qMin(qMax(lyricsDuration, 2),
+    m_moveToCurrentLine->setDuration(qMin(qMax(lineDuration, 2),
                                           m_maximumDuration));
     m_moveToCurrentLine->setStartFrame(displacement);
     //Start the animation.
@@ -231,10 +247,20 @@ inline int KNMusicScrollLyrics::lyricsDuration(const int &index)
         return m_positions.at(1)-m_positions.at(0);
     }
     //--The last line and other invaild lines--
-    if(index>m_lastLine)
+    if(index>=m_lastLine)
     {
         return 0;
     }
     //--Normal lines--
     return m_positions.at(index+1)-m_positions.at(index);
 }
+int KNMusicScrollLyrics::spacing() const
+{
+    return m_spacing;
+}
+
+void KNMusicScrollLyrics::setSpacing(int spacing)
+{
+    m_spacing = spacing;
+}
+

@@ -47,16 +47,8 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 #ifdef Q_OS_WIN32
     //Set line spacing specially for Windows. It seems that in Qt 5.4, line
     //spacing has been calculate into a text line.
-    m_lineSpacing=0;
+    setSpacing(0);
 #endif
-
-    //Initial the lyrics moving time line.
-    m_moveToCurrent=new QTimeLine(m_animationDuration, this);
-    m_moveToCurrent->setUpdateInterval(2);
-    m_moveToCurrent->setEasingCurve(QEasingCurve::OutCubic);
-    m_moveToCurrent->setEndFrame(0);
-    connect(m_moveToCurrent, &QTimeLine::frameChanged,
-            this, &KNMusicHeaderLyrics::onActionLyricsMoved);
 
     //Connect apply preference signal.
     connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
@@ -94,74 +86,10 @@ void KNMusicHeaderLyrics::retranslate()
     KNMusicGlobal::instance()->insertItemInfoList(lyricsTitle, itemList);
 }
 
-void KNMusicHeaderLyrics::onActionPositionChange(const qint64 &position)
-{
-    //If no lyrics, do nothing.
-    if(m_positions.isEmpty())
-    {
-        return;
-    }
-    //If there's lines but current line is -1, or we reach the very end,
-    //Find from very beginning.
-    if(m_currentLyricsLine<0 || m_currentLyricsLine>=m_lyricsLines)
-    {
-        //Find current line from the beginning.
-        m_currentLyricsLine=0;
-        while(m_currentLyricsLine<m_lyricsLines &&
-              position<m_positions.at(m_currentLyricsLine))
-        {
-            m_currentLyricsLine++;
-        }
-        update();
-        return;
-    }
-    int yOffset=0;
-    //Check the position is previous than the current yet.
-    if(position<m_positions.at(m_currentLyricsLine) &&
-            m_currentLyricsLine!=0)
-    {
-        //Find the matching lyrics.
-        while(m_currentLyricsLine>0 &&
-              m_positions.at(m_currentLyricsLine)>position)
-        {
-            yOffset-=lyricsSize(m_lyricsText.at(m_currentLyricsLine)).height();
-            m_currentLyricsLine--;
-        }
-        update();
-        //Start animation.
-        startMovingAnime((lyricsLineDuration(m_currentLyricsLine)>>2),
-                         yOffset);
-        return;
-    }
-    //Find the next specific position.
-    while(m_currentLyricsLine<m_lyricsLines-2 &&
-          m_positions.at(m_currentLyricsLine+1)<position)
-    {
-        yOffset+=lyricsSize(m_lyricsText.at(m_currentLyricsLine)).height();
-        m_currentLyricsLine++;
-    }
-    if(yOffset>0)
-    {
-        startMovingAnime((lyricsLineDuration(m_currentLyricsLine)>>2),
-                         yOffset);
-    }
-}
-
-void KNMusicHeaderLyrics::onActionLyricsReset()
-{
-    //Clear lines.
-    m_lyricsLines=0;
-    //Reset lines.
-    m_currentLyricsLine=-1;
-    //Clear lyrics manager.
-    m_positions.clear();
-    m_lyricsText.clear();
-    //Update the viewport.
-    update();
-}
-
 void KNMusicHeaderLyrics::onActionLyricsUpdate()
 {
+    //Reset the lyrics first.
+    onActionLyricsReset();
     //Check is the updated lyrics is the player's lyrics.
     if(m_lyricsManager->musicDetailInfo().filePath!=m_player->currentDetailInfo().filePath ||
             m_lyricsManager->musicDetailInfo().trackFilePath!=m_player->currentDetailInfo().trackFilePath ||
@@ -170,90 +98,9 @@ void KNMusicHeaderLyrics::onActionLyricsUpdate()
     {
         return;
     }
-    //Save the position and lyrics text.
-    m_positions=m_lyricsManager->positionList();
-    m_lyricsText=m_lyricsManager->textList();
-    //Update parameters.
-    //Get the lyrics lines.
-    m_lyricsLines=m_positions.size();
-    //Initial the current line to the first line.
-    m_currentLyricsLine=0;
-    //Move the first line to center.
-    onActionLyricsMoved(0);
-    //Update the viewer.
-    update();
-}
-
-void KNMusicHeaderLyrics::paintEvent(QPaintEvent *event)
-{
-    //Paint other things.
-    QWidget::paintEvent(event);
-    //Check is current line available, if not means no lyrics.
-    if(m_positions.isEmpty() ||
-            m_currentLyricsLine<0 ||
-            m_currentLyricsLine>=m_lyricsLines)
-    {
-        return;
-    }
-    //Initial the painter.
-    QPainter painter(this);
-    painter.setRenderHints(QPainter::Antialiasing |
-                           QPainter::TextAntialiasing |
-                           QPainter::SmoothPixmapTransform,
-                           true);
-    QSize currentSize;
-    QString currentText;
-    int centerY=(height()>>1)+m_currentLineOffsetY;
-    //Draw the current line.
-    painter.setPen(m_highlightColor);
-    currentText=m_lyricsText.at(m_currentLyricsLine);
-    currentSize=lyricsSize(currentText);
-    centerY-=(currentSize.height()>>1);
-    painter.drawText(m_leftSpacing,
-                     centerY,
-                     width(),
-                     currentSize.height(),
-                     Qt::AlignLeft,
-                     currentText);
-    //Draw other lyrics.
-    painter.setPen(m_normalText);
-    //Draw down lines.
-    int lineTop=centerY+currentSize.height()+m_lineSpacing,
-        paintLine=m_currentLyricsLine+1;
-    while(lineTop<height() && paintLine<m_lyricsLines)
-    {
-        //Draw the line.
-        currentText=m_lyricsText.at(paintLine);
-        currentSize=lyricsSize(currentText);
-        painter.drawText(m_leftSpacing,
-                         lineTop,
-                         width(),
-                         currentSize.height(),
-                         Qt::AlignLeft,
-                         currentText);
-        //To the next line.
-        paintLine++;
-        lineTop+=currentSize.height()+m_lineSpacing;
-    }
-    //Draw up lines.
-    int lineBottom=centerY;
-    paintLine=m_currentLyricsLine-1;
-    while(lineBottom>0 && paintLine>-1)
-    {
-        //Draw the line.
-        currentText=m_lyricsText.at(paintLine);
-        currentSize=lyricsSize(currentText);
-        //MAGIC: the line bottom is current line's top, so calculate here.
-        lineBottom-=currentSize.height()+m_lineSpacing;
-        painter.drawText(m_leftSpacing,
-                         lineBottom,
-                         width(),
-                         currentSize.height(),
-                         Qt::AlignLeft,
-                         currentText);
-        //To the previous line.
-        paintLine--;
-    }
+    //Set the lyrics data.
+    setLyricsData(m_lyricsManager->positionList(),
+                  m_lyricsManager->textList());
 }
 
 void KNMusicHeaderLyrics::applyPreference()
@@ -267,9 +114,8 @@ void KNMusicHeaderLyrics::applyPreference()
                 m_musicConfigure->getData("DownloadLyrics",
                                           m_lyricsManager->enableOnlineLyrics()).toBool());
     //Update the spacing.
-    m_lineSpacing=
-                m_musicConfigure->getData("TextSpacing",
-                                          m_lineSpacing).toInt();
+    setSpacing(m_musicConfigure->getData("TextSpacing",
+                                         spacing()).toInt());
     //Update the font.
     setFont(m_musicConfigure->getData("LyricsFont", font()).value<QFont>());
     //Update the lyrics.
@@ -292,14 +138,6 @@ void KNMusicHeaderLyrics::onActionMusicLibraryMoved(const QString &originalPath,
         //Update the lyrics path value.
         m_musicGlobal->updateItemValue("LyricsFolder");
     }
-}
-
-void KNMusicHeaderLyrics::onActionLyricsMoved(const int &frame)
-{
-    //Update the offset.
-    m_currentLineOffsetY=frame;
-    //Redraw the display.
-    update();
 }
 
 inline void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
@@ -328,38 +166,10 @@ inline void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo 
     KNPreferenceItemInfo currentInfo=KNPreferenceItemGlobal::generateInfo(NumberItem,
                                                                           tr("Text Spacing"),
                                                                           "TextSpacing",
-                                                                          m_lineSpacing,
-                                                                          m_lineSpacing,
+                                                                          spacing(),
+                                                                          spacing(),
                                                                           true);
     currentInfo.property.insert("Min", 0);
     currentInfo.property.insert("Max", 15);
     list.append(currentInfo);
-}
-
-inline int KNMusicHeaderLyrics::lyricsLineDuration(const int &index)
-{
-    if(index==-1)
-    {
-        return 0;
-    }
-    if(index<m_lyricsLines-1)
-    {
-        return m_positions.at(index+1)-m_positions.at(index);
-    }
-    return m_animationDuration<<2;
-}
-
-inline void KNMusicHeaderLyrics::startMovingAnime(const int &durationOffset,
-                                                  const int &yOffset)
-{
-    //Stop the time line.
-    m_moveToCurrent->stop();
-    //Reset the duration and the start frame.
-    m_moveToCurrent->setDuration(qMin(qMax(durationOffset, 1),
-                                      m_animationDuration));
-    m_moveToCurrent->setStartFrame(yOffset);
-    //Before we start, set the widget to the start frame state.
-    onActionLyricsMoved(yOffset);
-    //Start the animation.
-    m_moveToCurrent->start();
 }

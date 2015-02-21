@@ -39,41 +39,20 @@ signals:
 
 public slots:
     void retranslate();
-    void onActionPositionChange(const qint64 &position);
-    void onActionLyricsReset();
     void onActionLyricsUpdate();
-
-protected:
-    void paintEvent(QPaintEvent *event);
 
 private slots:
     void applyPreference();
     void onActionMusicLibraryMoved(const QString &originalPath,
                                    const QString &currentPath);
-    void onActionLyricsMoved(const int &frame);
 
 private:
-    inline QSize lyricsSize(const QString &lyricsText)
-    {
-        return fontMetrics().size(Qt::TextExpandTabs, lyricsText);
-    }
     inline void generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
                                          QList<KNPreferenceItemInfo> &list);
-    inline int lyricsLineDuration(const int &index);
-    inline void startMovingAnime(const int &durationOffset,
-                                 const int &yOffset);
     KNMusicLyricsManager *m_lyricsManager;
     KNMusicHeaderPlayerBase *m_player;
     KNMusicGlobal *m_musicGlobal;
     KNConfigure *m_musicConfigure;
-
-    QList<qint64> m_positions;
-    QStringList m_lyricsText;
-    QTimeLine *m_moveToCurrent;
-    int m_currentLyricsLine=-1, m_lyricsLines=0, m_currentLineOffsetY=0,
-        m_leftSpacing=15, m_animationDuration=200, m_lineSpacing=2;
-    QColor m_normalText=QColor(100,100,100),
-           m_highlightColor=QColor(0xf7, 0xcf, 0x3d);
 };
 
 #endif // KNMUSICHEADERLYRICS_H
