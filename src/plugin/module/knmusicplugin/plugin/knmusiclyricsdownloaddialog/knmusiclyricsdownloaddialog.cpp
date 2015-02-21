@@ -31,6 +31,7 @@ KNMusicLyricsDownloadDialog::KNMusicLyricsDownloadDialog(QWidget *parent) :
     m_lyricsManager=KNMusicLyricsManager::instance();
 
     //Set properties.
+    enableCancel();
     setTitle("Lyrics");
 
     //Initial the lyrics model.
@@ -93,6 +94,27 @@ bool KNMusicLyricsDownloadDialog::onActionOkayClose()
 {
     //Cut down the links.
     m_downloadWidget->resetPreviewPlayer();
+    //Check whether there's any select item.
+    QModelIndex currentLyricsIndex=m_downloadWidget->currentLyricsIndex();
+    if(currentLyricsIndex.isValid())
+    {
+        QStandardItem *lyricsItem=m_lyricsModel->itemFromIndex(currentLyricsIndex);
+        if(lyricsItem!=nullptr)
+        {
+            //Save the lyrics to the current data.
+            QString lyricsFilePath=m_lyricsManager->saveLyrics(m_detailInfo,
+                                                               lyricsItem->data(LyricsTextRole).toString());
+            //Check the lyircs manager's current is playing the file or not.
+            if(m_lyricsManager->musicDetailInfo().filePath==m_detailInfo.filePath
+                    && m_lyricsManager->musicDetailInfo().trackFilePath==m_detailInfo.trackFilePath
+                    && m_lyricsManager->musicDetailInfo().trackIndex==m_detailInfo.trackIndex)
+            {
+                m_lyricsManager->loadLyricsFile(lyricsFilePath);
+                //Ask to update lyrics for datas.
+                m_lyricsManager->lyricsUpdate();
+            }
+        }
+    }
     return true;
 }
 

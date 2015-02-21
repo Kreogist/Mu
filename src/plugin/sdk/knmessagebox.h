@@ -68,6 +68,7 @@ private:
     int m_headerHeight=61,
     m_panelHeight=66,
     m_middleHeight=m_headerHeight+m_panelHeight;
+    bool m_cancelEnabled=false;
 };
 
 #endif // KNMESSAGEBOX_H

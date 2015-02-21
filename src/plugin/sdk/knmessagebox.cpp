@@ -337,6 +337,10 @@ void KNMessageBox::initialDialog()
     m_title->setText(m_titleText);
     //Update button.
     m_okButton->show();
+    if(m_cancelEnabled)
+    {
+        m_cancelButton->show();
+    }
     //Hide the content.
     m_content->hideContent();
 }
@@ -358,7 +362,7 @@ QWidget *KNMessageBox::content() const
 
 void KNMessageBox::enableCancel()
 {
-    m_cancelButton->show();
+    m_cancelEnabled=true;
 }
 
 void KNMessageBox::setContent(QWidget *content)

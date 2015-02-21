@@ -193,7 +193,7 @@ bool KNMusicLyricsManager::findLocalLyricsFile(const KNMusicDetailInfo &detailIn
         switch(m_policyList.at(i))
         {
         case SameNameInLyricsDir:
-            if(triedLyricsFile(m_lyricsDir+"/"+sameNameLyricsFileName))
+            if(loadLyricsFile(m_lyricsDir+"/"+sameNameLyricsFileName))
             {
                 return true;
             }
@@ -205,7 +205,7 @@ bool KNMusicLyricsManager::findLocalLyricsFile(const KNMusicDetailInfo &detailIn
             }
             break;
         case SameNameInMusicDir:
-            if(triedLyricsFile(musicFileInfo.absolutePath()+"/"+
+            if(loadLyricsFile(musicFileInfo.absolutePath()+"/"+
                                sameNameLyricsFileName))
             {
                 return true;
@@ -223,7 +223,7 @@ bool KNMusicLyricsManager::findLocalLyricsFile(const KNMusicDetailInfo &detailIn
     return false;
 }
 
-inline bool KNMusicLyricsManager::triedLyricsFile(const QString &lyricsPath)
+bool KNMusicLyricsManager::loadLyricsFile(const QString &lyricsPath)
 {
     //Check if the lyrics is exist.
     QFileInfo lyricsFileInfo(lyricsPath);
@@ -254,19 +254,19 @@ bool KNMusicLyricsManager::triedRelatedNameLyricsFile(const QString &dirPath,
         switch(m_relateNamePolicyList.at(i))
         {
         case LyricsNamedArtistHyphonTitle:
-            if(triedLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc")))
+            if(loadLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Artist]+" - "+detailInfo.textLists[Name]+".lrc")))
             {
                 return true;
             }
             break;
         case LyricsNamedTitle:
-            if(triedLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Name]+".lrc")))
+            if(loadLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Name]+".lrc")))
             {
                 return true;
             }
             break;
         case LyricsNamedAlbumHyphonTitle:
-            if(triedLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc")))
+            if(loadLyricsFile(dirPath+"/"+m_global->legalFileName(detailInfo.textLists[Album]+" - "+detailInfo.textLists[Name]+".lrc")))
             {
                 return true;
             }
@@ -276,8 +276,8 @@ bool KNMusicLyricsManager::triedRelatedNameLyricsFile(const QString &dirPath,
     return false;
 }
 
-void KNMusicLyricsManager::saveLyrics(const KNMusicDetailInfo &detailInfo,
-                                       const QString &content)
+QString KNMusicLyricsManager::saveLyrics(const KNMusicDetailInfo &detailInfo,
+                                         const QString &content)
 {
     //Generate the lyrics file.
     QFile lyricsFile(m_lyricsDir + "/" +
@@ -290,7 +290,10 @@ void KNMusicLyricsManager::saveLyrics(const KNMusicDetailInfo &detailInfo,
         lyricsFileStream << content << flush;
         //Close the file.
         lyricsFile.close();
+        //Return the successful file name.
+        return QFileInfo(lyricsFile).absoluteFilePath();
     }
+    return QString();
 }
 
 bool KNMusicLyricsManager::lyricsDetailLessThan(const KNMusicLyricsDetails &lyricsDetailLeft,

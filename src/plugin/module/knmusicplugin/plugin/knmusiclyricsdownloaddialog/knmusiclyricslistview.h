@@ -34,6 +34,7 @@ public:
     explicit KNMusicLyricsListView(QWidget *parent = 0);
     ~KNMusicLyricsListView();
     void setLyricsModel(QAbstractItemModel *model);
+    QModelIndex currentLyricsIndex() const;
 
     void addPreviewer(const QPixmap &icon, QWidget *widget);
 

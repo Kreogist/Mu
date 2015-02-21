@@ -39,6 +39,11 @@ public:
     void installLyricsDownloader(KNMusicLyricsDownloader *downloader);
     QStringList downloaderNames() const;
     KNMusicLRCLyricsParser *lrcParser();
+    QString saveLyrics(const KNMusicDetailInfo &detailInfo,
+                       const QString &content);
+    //Tried to find and load the lyrics file, if the lyrics can be loaded,
+    //then returns true.
+    bool loadLyricsFile(const QString &lyricsPath);
 
     //Lyrics data.
     QList<qint64> positionList() const;
@@ -85,17 +90,11 @@ private:
     inline void clearCurrentData();
     inline bool findLocalLyricsFile(const KNMusicDetailInfo &detailInfo);
 
-    //Tried to find and load the lyrics file, if the lyrics can be loaded,
-    //then returns true.
-    inline bool triedLyricsFile(const QString &lyricsPath);
-
     //Tried to find and load the related named lyrics file, it will calling
     //triedLyricsFile() functions.
     inline bool triedRelatedNameLyricsFile(const QString &dirPath,
                                            const KNMusicDetailInfo &detailInfo);
 
-    inline void saveLyrics(const KNMusicDetailInfo &detailInfo,
-                           const QString &content);
     static bool lyricsDetailLessThan(const KNMusicLyricsDetails &lyricsDetailLeft,
                                      const KNMusicLyricsDetails &lyricsDetailRight);
 

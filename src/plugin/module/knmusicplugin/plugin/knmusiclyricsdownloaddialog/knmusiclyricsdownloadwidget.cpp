@@ -131,6 +131,11 @@ void KNMusicLyricsDownloadWidget::resetPreviewPlayer()
     m_playerPreview->resetPreviewPlayer();
 }
 
+QModelIndex KNMusicLyricsDownloadWidget::currentLyricsIndex() const
+{
+    return m_lyricsListView->currentLyricsIndex();
+}
+
 void KNMusicLyricsDownloadWidget::showLoadingWheel()
 {
     //Stop and start ticking the clock wheel.

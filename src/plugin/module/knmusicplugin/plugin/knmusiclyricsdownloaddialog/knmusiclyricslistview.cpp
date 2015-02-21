@@ -82,6 +82,11 @@ void KNMusicLyricsListView::setLyricsModel(QAbstractItemModel *model)
             this, &KNMusicLyricsListView::currentLyricsChanged);
 }
 
+QModelIndex KNMusicLyricsListView::currentLyricsIndex() const
+{
+    return m_lyricsList->currentIndex();
+}
+
 void KNMusicLyricsListView::addPreviewer(const QPixmap &icon,
                                          QWidget *widget)
 {

@@ -57,7 +57,8 @@ void KNMusicScrollLyrics::onActionPositionChange(const qint64 &position)
             return;
         }
         m_currentLine=0;
-        update();
+        startMove(lyricsDuration(0),
+                  fontMetrics().height());
         return;
     }
     //Now the line should be in the range.

@@ -47,6 +47,7 @@ public:
 
     void linkBackend();
     void resetPreviewPlayer();
+    QModelIndex currentLyricsIndex() const;
 
 signals:
     void requireSearchLyrics();
