@@ -579,8 +579,7 @@ void KNMusicTreeViewBase::removeIndex(const QModelIndex &index)
     QModelIndex sourceIndex=m_proxyModel->mapToSource(index);
     //Check is the current model playing, and is the index playing.
     if(m_musicGlobal->nowPlaying()->playingModel()!=nullptr &&
-            m_musicGlobal->nowPlaying()->playingModel()->sourceModel()==
-            m_proxyModel->sourceModel() &&
+            m_musicGlobal->nowPlaying()->playingMusicModel()==m_proxyModel->sourceModel() &&
             m_musicGlobal->nowPlaying()->currentPlayingIndex().row()==sourceIndex.row())
     {
         //If so, ask now playing to reset current playing.
@@ -594,17 +593,19 @@ void KNMusicTreeViewBase::removeSelections()
 {
     //Check is the current playing item is in the selection.
     if(m_musicGlobal->nowPlaying()->playingModel()!=nullptr &&
-            m_musicGlobal->nowPlaying()->playingModel()->sourceModel()==
-            m_proxyModel->sourceModel())
+            m_musicGlobal->nowPlaying()->playingMusicModel()==m_proxyModel->sourceModel())
     {
         //Get the current playing index first.
-        QModelIndex currentPlayingIndex=
-                m_proxyModel->mapFromSource(m_musicGlobal->nowPlaying()->currentPlayingIndex());
-        //Check is the playing index is in the selection.
-        if(selectionModel()->selectedIndexes().contains(currentPlayingIndex))
+        QModelIndex playingSourceIndex=m_musicGlobal->nowPlaying()->currentPlayingIndex();
+        if(playingSourceIndex.isValid())
         {
-            //If so, ask now playing to reset current playing.
-            m_musicGlobal->nowPlaying()->resetCurrentPlaying();
+            QModelIndex playingProxyIndex=m_proxyModel->mapFromSource(playingSourceIndex);
+            //Check is the playing index is in the selection.
+            if(selectionModel()->selectedIndexes().contains(playingProxyIndex))
+            {
+                //If so, ask now playing to reset current playing.
+                m_musicGlobal->nowPlaying()->resetCurrentPlaying();
+            }
         }
     }
     //Get the current indexes.
