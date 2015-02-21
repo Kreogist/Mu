@@ -41,6 +41,8 @@ KNMusicLyricsDownloadDialog::KNMusicLyricsDownloadDialog(QWidget *parent) :
     setContent(m_downloadWidget);
     connect(m_downloadWidget, &KNMusicLyricsDownloadWidget::requireSearchLyrics,
             this, &KNMusicLyricsDownloadDialog::onActionSearchLyrics);
+    connect(m_downloadWidget, &KNMusicLyricsDownloadWidget::lyricsActivate,
+            this, &KNMusicLyricsDownloadDialog::onActionLyricsActivate);
 }
 
 KNMusicLyricsDownloadDialog::~KNMusicLyricsDownloadDialog()
@@ -52,12 +54,20 @@ void KNMusicLyricsDownloadDialog::setDetailInfo(const KNMusicDetailInfo &detailI
 {
     //Clear the original lyrics model.
     m_lyricsModel->clear();
+    //Clear the preview.
+    m_downloadWidget->clearPreview();
+
     //Save the detail info.
     m_detailInfo=detailInfo;
 
     //Set text data.
     m_downloadWidget->setTitle(m_detailInfo.textLists[Name]);
     m_downloadWidget->setArtist(m_detailInfo.textLists[Artist]);
+}
+
+void KNMusicLyricsDownloadDialog::setBackend(KNMusicBackend *backend)
+{
+    m_downloadWidget->setBackend(backend);
 }
 
 void KNMusicLyricsDownloadDialog::onActionSearchComplete()
@@ -70,12 +80,16 @@ void KNMusicLyricsDownloadDialog::onActionSearchLyrics()
 {
     //Switch to loading wheel.
     m_downloadWidget->showLoadingWheel();
-    //Clear the lyrics model.
-    m_lyricsModel->clear();
     //Generate a new detail info, set the title and artist.
     KNMusicDetailInfo lyricsDetailInfo=m_detailInfo;
     lyricsDetailInfo.textLists[Name]=m_downloadWidget->title();
     lyricsDetailInfo.textLists[Artist]=m_downloadWidget->artist();
     //Ask to update the lyrics model.
     emit requireSearchLyrics(lyricsDetailInfo, m_lyricsModel);
+}
+
+void KNMusicLyricsDownloadDialog::onActionLyricsActivate(const QModelIndex &index)
+{
+    //Give out the lyrics item.
+    m_downloadWidget->showLyricsItem(m_lyricsModel->item(index.row(), index.column()));
 }

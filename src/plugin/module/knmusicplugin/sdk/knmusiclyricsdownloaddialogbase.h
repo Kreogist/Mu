@@ -13,12 +13,14 @@
 
 using namespace KNMusic;
 
+class KNMusicBackend;
 class KNMusicLyricsDownloadDialogBase : public KNMessageBox
 {
     Q_OBJECT
 public:
     KNMusicLyricsDownloadDialogBase(QWidget *parent = 0):KNMessageBox(parent){}
     virtual void setDetailInfo(const KNMusicDetailInfo &detailInfo)=0;
+    virtual void setBackend(KNMusicBackend *backend)=0;
 
 signals:
     void requireSearchLyrics(KNMusicDetailInfo detailInfo,

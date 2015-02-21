@@ -20,14 +20,14 @@
 
 #include "preference/knpreferenceitemglobal.h"
 
-#include "knmusiclyricsbase.h"
+#include "knmusicheaderlyricsbase.h"
 
 class QLabel;
 class QTimeLine;
 class KNPreferenceItemGlobal;
 class KNMusicGlobal;
 class KNMusicLyricsManager;
-class KNMusicHeaderLyrics : public KNMusicLyricsBase
+class KNMusicHeaderLyrics : public KNMusicHeaderLyricsBase
 {
     Q_OBJECT
 public:
@@ -62,7 +62,6 @@ private:
     inline int lyricsLineDuration(const int &index);
     inline void startMovingAnime(const int &durationOffset,
                                  const int &yOffset);
-    static KNMusicDetailInfo m_currentDeailInfo;
     KNMusicLyricsManager *m_lyricsManager;
     KNMusicHeaderPlayerBase *m_player;
     KNMusicGlobal *m_musicGlobal;

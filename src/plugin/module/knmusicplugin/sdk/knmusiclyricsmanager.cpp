@@ -135,6 +135,8 @@ void KNMusicLyricsManager::downloadLyrics(const KNMusicDetailInfo &detailInfo)
 void KNMusicLyricsManager::searchLyrics(const KNMusicDetailInfo &detailInfo,
                                         QStandardItemModel *lyricsModel)
 {
+    //Clear the model first.
+    lyricsModel->clear();
     //Generate a lyrics list.
     QList<KNMusicLyricsDetails> lyricsList;
     //Search the lyrics.
@@ -152,6 +154,7 @@ void KNMusicLyricsManager::searchLyrics(const KNMusicDetailInfo &detailInfo,
             lyricsItem->setData((*i).artist, LyricsArtistRole);
             lyricsItem->setData((*i).titleSimilarity, LyricsTitleSimilarityRole);
             lyricsItem->setData((*i).artistSimilarity, LyricsArtistSimilarityRole);
+            lyricsItem->setData((*i).lyricsData, LyricsTextRole);
             lyricsModel->appendRow(lyricsItem);
         }
     }

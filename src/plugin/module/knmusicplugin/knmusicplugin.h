@@ -36,7 +36,7 @@ class KNMusicMainPlayerBase;
 class KNMusicDetailDialogBase;
 class KNMusicDetailTooltipBase;
 class KNMusicHeaderPlayerBase;
-class KNMusicLyricsBase;
+class KNMusicHeaderLyricsBase;
 class KNMusicNowPlayingBase;
 class KNMusicLibraryBase;
 class KNMusicPlaylistManagerBase;
@@ -64,7 +64,7 @@ public:
     inline void loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plugin);
     inline void loadDetailDialog(KNMusicDetailDialogBase *plugin);
     inline void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
-    inline void loadHeaderLyrics(KNMusicLyricsBase *plugin);
+    inline void loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin);
     inline void loadMainPlayer(KNMusicMainPlayerBase *plugin);
     inline void loadNowPlaying(KNMusicNowPlayingBase *plugin);
     inline void loadLibrary(KNMusicLibraryBase *plugin);

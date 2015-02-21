@@ -18,12 +18,18 @@
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QScrollBar>
+#include <QPlainTextEdit>
+#include <QStandardItem>
 
 #include "kniconframelineedit.h"
 #include "knclockwheel.h"
 #include "knemptystatewidget.h"
+#include "sao/knsaostyle.h"
 
+#include "knmusiclyricspreviewplayer.h"
 #include "knmusiclyricslistview.h"
+#include "knmusicglobal.h"
 
 #include "knmusiclyricsdownloadwidget.h"
 
@@ -49,6 +55,9 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
 
     //Initial the server list.
     initialListView();
+    //Initial the previews.
+    initialPlainTextPreview();
+    initialPlayerPreview();
 
     //Establish tab order.
     m_title->setDefaultEscFocusTo(m_artist);
@@ -66,7 +75,8 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     mainLayout->addLayout(searchRequestLayout);
 
     QBoxLayout *textEditLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                              mainLayout->widget());
+                                              searchRequestLayout->widget());
+    textEditLayout->setContentsMargins(0,0,0,0);
     textEditLayout->addWidget(m_title);
     textEditLayout->addWidget(m_artist);
     searchRequestLayout->addLayout(textEditLayout, 1);
@@ -84,6 +94,11 @@ KNMusicLyricsDownloadWidget::~KNMusicLyricsDownloadWidget()
 void KNMusicLyricsDownloadWidget::setLyricsModel(QAbstractItemModel *model)
 {
     m_lyricsListView->setLyricsModel(model);
+}
+
+void KNMusicLyricsDownloadWidget::setBackend(KNMusicBackend *backend)
+{
+    m_playerPreview->setBackend(backend);
 }
 
 QString KNMusicLyricsDownloadWidget::title() const
@@ -122,6 +137,25 @@ void KNMusicLyricsDownloadWidget::showLyricsList()
     m_lyricsList->showContentWidget();
 }
 
+void KNMusicLyricsDownloadWidget::showLyricsItem(QStandardItem *item)
+{
+    //Check the item.
+    if(item==nullptr)
+    {
+        //Then clear all the data.
+        clearPreview();
+        return;
+    }
+    //Display the lyrics item.
+    m_plainTextPreview->setPlainText(item->data(LyricsTextRole).toString());
+}
+
+void KNMusicLyricsDownloadWidget::clearPreview()
+{
+    //Clear the plain text preview.
+    m_plainTextPreview->clear();
+}
+
 inline void KNMusicLyricsDownloadWidget::initialListView()
 {
     //Initial lyrics list widget.
@@ -137,10 +171,39 @@ inline void KNMusicLyricsDownloadWidget::initialListView()
     containerLayout->addWidget(m_loadingWheel);
     m_lyricsList->setEmptyWidget(clockWheelContainer);
     m_lyricsListView=new KNMusicLyricsListView(this);
+    connect(m_lyricsListView, &KNMusicLyricsListView::lyricsActivate,
+            this, &KNMusicLyricsDownloadWidget::lyricsActivate);
     m_lyricsList->setContentWidget(m_lyricsListView);
     //Set default widget to content widget.
     m_lyricsList->showContentWidget();
+}
 
+void KNMusicLyricsDownloadWidget::initialPlainTextPreview()
+{
+    //Generate plain text preview widget.
+    m_plainTextPreview=new QPlainTextEdit(this);
+    m_plainTextPreview->setReadOnly(true);
+    m_plainTextPreview->setFrameStyle(QFrame::NoFrame);
+    QPalette pal=m_plainTextPreview->palette();
+    pal.setColor(QPalette::Base, QColor(0,0,0,0));
+    pal.setColor(QPalette::Window, QColor(0,0,0,0));
+    pal.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
+    pal.setColor(QPalette::HighlightedText, QColor(0,0,0));
+    m_plainTextPreview->setPalette(pal);
+    //Set scroll bar style sheet.
+    KNSAOStyle::setScrollBarStyleSheet(m_plainTextPreview->verticalScrollBar());
+    //Add the previewer.
+    m_lyricsListView->addPreviewer(QPixmap(":/plugin/music/lyrics/text_preview.png"),
+                                   m_plainTextPreview);
+}
+
+void KNMusicLyricsDownloadWidget::initialPlayerPreview()
+{
+    //Generate the preview player.
+    m_playerPreview=new KNMusicLyricsPreviewPlayer(this);
+    //Add the previewer.
+    m_lyricsListView->addPreviewer(QPixmap(":/plugin/music/lyrics/lyrics_preview.png"),
+                                   m_playerPreview);
 }
 
 inline KNIconFrameLineEdit *KNMusicLyricsDownloadWidget::generateLineEdit(const QPixmap &icon)

@@ -19,7 +19,6 @@ class KNMusicLyricsBase : public QWidget
     Q_OBJECT
 public:
     KNMusicLyricsBase(QWidget *parent = 0):QWidget(parent){}
-    virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *player)=0;
 
 signals:
 

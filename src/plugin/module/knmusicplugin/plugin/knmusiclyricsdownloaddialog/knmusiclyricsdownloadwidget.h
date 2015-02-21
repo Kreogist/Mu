@@ -20,12 +20,16 @@
 
 #include <QWidget>
 
+class QPlainTextEdit;
 class QPushButton;
 class QAbstractItemModel;
+class QStandardItem;
 class KNClockWheel;
 class KNIconFrameLineEdit;
-class KNMusicLyricsListView;
 class KNEmptyStateWidget;
+class KNMusicBackend;
+class KNMusicLyricsPreviewPlayer;
+class KNMusicLyricsListView;
 class KNMusicLyricsDownloadWidget : public QWidget
 {
     Q_OBJECT
@@ -33,6 +37,7 @@ public:
     explicit KNMusicLyricsDownloadWidget(QWidget *parent = 0);
     ~KNMusicLyricsDownloadWidget();
     void setLyricsModel(QAbstractItemModel *model);
+    void setBackend(KNMusicBackend *backend);
 
     QString title() const;
     QString artist() const;
@@ -42,19 +47,27 @@ public:
 
 signals:
     void requireSearchLyrics();
+    void lyricsActivate(const QModelIndex &index);
 
 public slots:
     void showLoadingWheel();
     void showLyricsList();
+    void showLyricsItem(QStandardItem *item);
+    void clearPreview();
 
 private:
     inline void initialListView();
+    inline void initialPlainTextPreview();
+    inline void initialPlayerPreview();
     inline KNIconFrameLineEdit *generateLineEdit(const QPixmap &icon);
     KNClockWheel *m_loadingWheel;
     KNIconFrameLineEdit *m_title, *m_artist;
     KNEmptyStateWidget *m_lyricsList;
     KNMusicLyricsListView *m_lyricsListView;
     QPushButton *m_searchLyrics;
+
+    QPlainTextEdit *m_plainTextPreview;
+    KNMusicLyricsPreviewPlayer *m_playerPreview;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADWIDGET_H

@@ -20,6 +20,10 @@
 #include <QLabel>
 #include <QListView>
 
+#include "knroundbuttonbar.h"
+#include "knhwidgetswitcher.h"
+#include "sao/knsaostyle.h"
+
 #include "knmusiclyricsitemdelegate.h"
 #include "knmusiclyricsmanager.h"
 #include "knmusicglobal.h"
@@ -37,6 +41,8 @@ KNMusicLyricsListView::KNMusicLyricsListView(QWidget *parent) :
     m_lyricsManager=KNMusicGlobal::instance()->lyricsManager();
     //Initial the list widget.
     initialLyricsList();
+    //Initial the lyrics preview widgets.
+    initialLyricsPreviewMode();
 
     //Set the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -50,6 +56,14 @@ KNMusicLyricsListView::KNMusicLyricsListView(QWidget *parent) :
     lyricsLayout->setSpacing(0);
     lyricsLayout->addWidget(m_lyricsList);
     mainLayout->addLayout(lyricsLayout);
+
+    QBoxLayout *previewLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                             mainLayout->widget());
+    previewLayout->setContentsMargins(0,0,0,0);
+    previewLayout->setSpacing(5);
+    previewLayout->addWidget(m_previewModeBar);
+    previewLayout->addWidget(m_previewWidgets, 1);
+    mainLayout->addLayout(previewLayout);
 
     //Retranslate.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
@@ -65,11 +79,30 @@ KNMusicLyricsListView::~KNMusicLyricsListView()
 void KNMusicLyricsListView::setLyricsModel(QAbstractItemModel *model)
 {
     m_lyricsList->setModel(model);
+    //Link the lyrics list.
+    connect(m_lyricsList->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &KNMusicLyricsListView::currentLyricsChanged);
+}
+
+void KNMusicLyricsListView::addPreviewer(const QPixmap &icon,
+                                         QWidget *widget)
+{
+    //Add the preview widget first.
+    m_previewWidgets->addWidget(widget);
+    //Add the icon button.
+    m_previewModeBar->addButton(icon);
 }
 
 void KNMusicLyricsListView::retranslate()
 {
     ;
+}
+
+void KNMusicLyricsListView::currentLyricsChanged(const QModelIndex &current,
+                                                 const QModelIndex &previous)
+{
+    Q_UNUSED(previous)
+    emit lyricsActivate(current);
 }
 
 inline void KNMusicLyricsListView::initialLyricsList()
@@ -82,12 +115,14 @@ inline void KNMusicLyricsListView::initialLyricsList()
     //Hack: for the scroll area lines.
     //A scroll area is worked like this:
     /* +-----+-+
-     * |     | |
-     * +-----+-+ <- Here is the line, we should hide it.
+     * | XXX | |
+     * +-----+=+ <- Here is the line (Marked '='), we should hide it.
      * +-----+-+
      */
     //How to hide it? Use FIXED height to force not to draw the last pixel of
     //the list view.
+    //Using the setFixedHeight() to force the list is 1px higher than the total
+    //height.
     m_lyricsList->setFixedHeight(301);
     //Set palette.
     QPalette pal=m_lyricsList->palette();
@@ -99,36 +134,16 @@ inline void KNMusicLyricsListView::initialLyricsList()
     //Set the item delegate.
     m_lyricsList->setItemDelegate(new KNMusicLyricsItemDelegate);
     //Customized scroll bar.
-    QScrollBar *listVScrollBar=new QScrollBar(m_lyricsList);
-    listVScrollBar->setStyleSheet(
-                "QScrollBar:vertical {"
-                "   border: 0px solid grey;"
-                "   background: rgba(0, 0, 0, 0);"
-                "   width: 8px;"
-                "}"
-                "QScrollBar::handle:vertical {"
-                "   background: rgba(0, 0, 0, 100);"
-                "   min-height: 10px;"
-                "   border-radius: 4px;"
-                "}"
-                "QScrollBar::add-line:vertical {"
-                "   border: 0px solid grey;"
-                "   background: rgba(0, 0, 0, 100);"
-                "   height: 0px;"
-                "   subcontrol-position: down;"
-                "   subcontrol-origin: margin;"
-                "}"
-                "QScrollBar::sub-line:vertical {"
-                "   border: 0px solid grey;"
-                "   background: rgba(0, 0, 0, 100);"
-                "   height: 0px;"
-                "   subcontrol-position: up;"
-                "   subcontrol-origin: margin;"
-                "}"
-                );
-    m_lyricsList->setVerticalScrollBar(listVScrollBar);
+    KNSAOStyle::setScrollBarStyleSheet(m_lyricsList->verticalScrollBar());
+}
 
-    //Link the lyrics list.
-    connect(m_lyricsList, &QListView::activated,
-            this, &KNMusicLyricsListView::lyricsActivate);
+inline void KNMusicLyricsListView::initialLyricsPreviewMode()
+{
+    //Initial the preview mode bar.
+    m_previewModeBar=new KNRoundButtonBar(this);
+    //Initial the horizontal widget switcher.
+    m_previewWidgets=new KNHWidgetSwitcher(this);
+    //Link the preview mode bar with the widget switcher.
+    connect(m_previewModeBar, &KNRoundButtonBar::currentIndexChanged,
+            m_previewWidgets, &KNHWidgetSwitcher::setCurrentIndex);
 }

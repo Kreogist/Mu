@@ -22,14 +22,15 @@ public:
     void addButton(const QPixmap &icon);
 
 signals:
-    void buttonClicked(int index);
+    void currentIndexChanged(int index);
 
 public slots:
+    void setCurrentIndex(const int &index);
 
 private:
     QBoxLayout *m_mainLayout;
     QSignalMapper *m_toolbarMappper;
-    int m_buttonIndex=0;
+    int m_buttonIndex=0, m_currentIndex=-1;
 };
 
 #endif // KNROUNDBUTTONBAR_H

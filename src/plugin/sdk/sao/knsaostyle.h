@@ -28,6 +28,8 @@ public:
     static KNSAOStyle *instance();
     ~KNSAOStyle();
 
+    static void setScrollBarStyleSheet(QWidget *widget);
+
     void drawControl(ControlElement element,
                      const QStyleOption *opt,
                      QPainter *p,

@@ -9,6 +9,7 @@
 
 #include "knabstractbutton.h"
 
+class QTimeLine;
 class KNRoundAnimeButton : public KNAbstractButton
 {
     Q_OBJECT
@@ -25,7 +26,7 @@ public:
     }
     void setIcon(const QPixmap &icon)
     {
-        m_icon=icon.scaled(QSize(20, 20),
+        m_icon=icon.scaled(QSize(m_iconSize, m_iconSize),
                            Qt::KeepAspectRatio,
                            Qt::SmoothTransformation);
         update();
@@ -35,16 +36,33 @@ public:
         Q_UNUSED(text)
     }
 
+    bool checked() const;
+    void setChecked(bool checked);
+
 signals:
 
 public slots:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private slots:
+    void onActionLightnessChanged(const int &frame);
 
 private:
+    inline void stopAllAnimations();
+    inline void startAnimation(QTimeLine *timeLine);
+    inline QTimeLine *generateTimeLine(const int &finalFrame);
     QPixmap m_icon;
-    int m_opacity=100;
+    QTimeLine *m_toSelect, *m_toUnselect;
+    const int m_minimumLightness=80;
+    int m_lightness=m_minimumLightness,
+        m_iconSize=13,
+        m_buttonSize=25,
+        m_iconPos=(m_buttonSize-m_iconSize)>>1;
+    bool m_checked=false, m_isPressed=false;
 };
 
 #endif // KNROUNDANIMEBUTTON_H

@@ -27,7 +27,7 @@ KNOpacityAnimeButton::KNOpacityAnimeButton(QWidget *parent) :
 
 void KNOpacityAnimeButton::enterEvent(QEvent *event)
 {
-    QWidget::enterEvent(event);
+    KNAbstractButton::enterEvent(event);
     //Stop and start the mouse in animation.
     stopAllAnimations();
     startAnimation(m_mouseIn);
@@ -35,7 +35,7 @@ void KNOpacityAnimeButton::enterEvent(QEvent *event)
 
 void KNOpacityAnimeButton::leaveEvent(QEvent *event)
 {
-    QWidget::leaveEvent(event);
+    KNAbstractButton::leaveEvent(event);
     //Stop and start the mouse out animation.
     stopAllAnimations();
     startAnimation(m_mouseOut);
@@ -43,14 +43,14 @@ void KNOpacityAnimeButton::leaveEvent(QEvent *event)
 
 void KNOpacityAnimeButton::resizeEvent(QResizeEvent *event)
 {
-    QWidget::resizeEvent(event);
+    KNAbstractButton::resizeEvent(event);
     //Update the icon.
     updateScaledIcon();
 }
 
 void KNOpacityAnimeButton::focusInEvent(QFocusEvent *event)
 {
-    QWidget::focusInEvent(event);
+    KNAbstractButton::focusInEvent(event);
     //Stop and start the mouse in animation.
     stopAllAnimations();
     startAnimation(m_mouseIn);
@@ -58,7 +58,7 @@ void KNOpacityAnimeButton::focusInEvent(QFocusEvent *event)
 
 void KNOpacityAnimeButton::focusOutEvent(QFocusEvent *event)
 {
-    QWidget::focusOutEvent(event);
+    KNAbstractButton::focusOutEvent(event);
     //Stop and start the mouse out animation.
     stopAllAnimations();
     startAnimation(m_mouseOut);
@@ -75,7 +75,7 @@ void KNOpacityAnimeButton::mousePressEvent(QMouseEvent *event)
         //Set mouse down parameters.
         startAnimation(m_mouseDown);
     }
-    QWidget::mousePressEvent(event);
+    KNAbstractButton::mousePressEvent(event);
 }
 
 void KNOpacityAnimeButton::mouseReleaseEvent(QMouseEvent *event)
@@ -95,7 +95,7 @@ void KNOpacityAnimeButton::mouseReleaseEvent(QMouseEvent *event)
         emit clicked();
     }
     m_isPressed=false;
-    QWidget::mouseReleaseEvent(event);
+    KNAbstractButton::mouseReleaseEvent(event);
 }
 
 void KNOpacityAnimeButton::onActionOpacityChanged(const int &opacity)
@@ -161,7 +161,7 @@ void KNOpacityAnimeButton::setIcon(const QPixmap &icon)
 
 void KNOpacityAnimeButton::paintEvent(QPaintEvent *event)
 {
-    QWidget::paintEvent(event);
+    KNAbstractButton::paintEvent(event);
     if(m_scaledIcon.isNull())
     {
         return;

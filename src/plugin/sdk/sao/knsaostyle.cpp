@@ -45,6 +45,34 @@ KNSAOStyle::~KNSAOStyle()
     delete m_fusionStyle;
 }
 
+void KNSAOStyle::setScrollBarStyleSheet(QWidget *widget)
+{
+    widget->setStyleSheet("QScrollBar:vertical {"
+                          "   border: 0px solid grey;"
+                          "   background: rgba(0, 0, 0, 0);"
+                          "   width: 8px;"
+                          "}"
+                          "QScrollBar::handle:vertical {"
+                          "   background: rgba(0, 0, 0, 100);"
+                          "   min-height: 10px;"
+                          "   border-radius: 4px;"
+                          "}"
+                          "QScrollBar::add-line:vertical {"
+                          "   border: 0px solid grey;"
+                          "   background: rgba(0, 0, 0, 100);"
+                          "   height: 0px;"
+                          "   subcontrol-position: down;"
+                          "   subcontrol-origin: margin;"
+                          "}"
+                          "QScrollBar::sub-line:vertical {"
+                          "   border: 0px solid grey;"
+                          "   background: rgba(0, 0, 0, 100);"
+                          "   height: 0px;"
+                          "   subcontrol-position: up;"
+                          "   subcontrol-origin: margin;"
+                          "}");
+}
+
 void KNSAOStyle::drawControl(ControlElement element,
                              const QStyleOption *opt,
                              QPainter *p,

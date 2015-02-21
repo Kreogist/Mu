@@ -15,43 +15,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICLYRICSDOWNLOADDIALOG_H
-#define KNMUSICLYRICSDOWNLOADDIALOG_H
+#ifndef KNMUSICLYRICSPREVIEWPLAYER_H
+#define KNMUSICLYRICSPREVIEWPLAYER_H
 
-#include "knmusiclyricsdownloaddialogbase.h"
+#include <QWidget>
 
-class QStandardItemModel;
-class KNMusicLyricsManager;
-class KNMusicLyricsDownloadWidget;
-class KNMusicLyricsDownloadDialog : public KNMusicLyricsDownloadDialogBase
+class KNConnectionHandler;
+class KNOpacityButton;
+class KNProgressSlider;
+class KNMusicBackend;
+class KNMusicLyricsPreviewPlayer : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNMusicLyricsDownloadDialog(QWidget *parent = 0);
-    ~KNMusicLyricsDownloadDialog();
-
-    void setDetailInfo(const KNMusicDetailInfo &detailInfo);
+    explicit KNMusicLyricsPreviewPlayer(QWidget *parent = 0);
+    ~KNMusicLyricsPreviewPlayer();
     void setBackend(KNMusicBackend *backend);
+
+    void establlishLinks();
 
 signals:
 
 public slots:
-    void onActionSearchComplete();
 
 private slots:
-    void onActionSearchLyrics();
-    void onActionLyricsActivate(const QModelIndex &index);
+    void onActionPlayNPauseClick();
+    void onActionProgressPressed();
+    void onActionProgressReleased();
 
 private:
-    //UI, Lyrics manager.
-    KNMusicLyricsDownloadWidget *m_downloadWidget;
-    KNMusicLyricsManager *m_lyricsManager;
-
-    //Current information.
-    KNMusicDetailInfo m_detailInfo;
-
-    //Lyrics model.
-    QStandardItemModel *m_lyricsModel;
+    inline void initialPlayerControls();
+    KNOpacityButton *m_playNPause;
+    KNProgressSlider *m_progress;
+    QPixmap m_playIcon, m_pauseIcon;
+    KNMusicBackend *m_backend;
+    KNConnectionHandler *m_backendLinks;
 };
 
-#endif // KNMUSICLYRICSDOWNLOADDIALOG_H
+#endif // KNMUSICLYRICSPREVIEWPLAYER_H

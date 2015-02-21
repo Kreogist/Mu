@@ -29,10 +29,8 @@
 
 #include <QDebug>
 
-KNMusicDetailInfo KNMusicHeaderLyrics::m_currentDeailInfo;
-
 KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
-    KNMusicLyricsBase(parent)
+    KNMusicHeaderLyricsBase(parent)
 {
     //Initial the music global, music configure and lyrics manager.
     m_musicGlobal=KNMusicGlobal::instance();

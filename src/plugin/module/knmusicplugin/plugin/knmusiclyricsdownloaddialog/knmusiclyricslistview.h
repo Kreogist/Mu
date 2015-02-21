@@ -26,6 +26,8 @@ class QLabel;
 class QListView;
 class QAbstractItemModel;
 class KNMusicLyricsManager;
+class KNRoundButtonBar;
+class KNHWidgetSwitcher;
 class KNMusicLyricsListView : public QWidget
 {
     Q_OBJECT
@@ -34,6 +36,8 @@ public:
     ~KNMusicLyricsListView();
     void setLyricsModel(QAbstractItemModel *model);
 
+    void addPreviewer(const QPixmap &icon, QWidget *widget);
+
 signals:
     void lyricsActivate(const QModelIndex &index);
 
@@ -41,11 +45,16 @@ public slots:
 
 private slots:
     void retranslate();
+    void currentLyricsChanged(const QModelIndex &current,
+                              const QModelIndex &previous);
 
 private:
     inline void initialLyricsList();
+    inline void initialLyricsPreviewMode();
     QListView *m_lyricsList;
     KNMusicLyricsManager *m_lyricsManager;
+    KNRoundButtonBar *m_previewModeBar;
+    KNHWidgetSwitcher *m_previewWidgets;
 };
 
 #endif // KNMUSICLYRICSLISTVIEW_H

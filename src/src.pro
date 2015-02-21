@@ -328,7 +328,9 @@ SOURCES += \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricslistview.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsitemdelegate.cpp \
     plugin/sdk/knroundanimebutton.cpp \
-    plugin/sdk/knroundbuttonbar.cpp
+    plugin/sdk/knroundbuttonbar.cpp \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricspreviewplayer.cpp \
+    plugin/module/knmusicplugin/sdk/knmusicscrolllyrics.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -539,7 +541,10 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricslistview.h \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsitemdelegate.h \
     plugin/sdk/knroundanimebutton.h \
-    plugin/sdk/knroundbuttonbar.h
+    plugin/sdk/knroundbuttonbar.h \
+    plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricspreviewplayer.h \
+    plugin/module/knmusicplugin/sdk/knmusicscrolllyrics.h \
+    plugin/module/knmusicplugin/sdk/knmusicheaderlyricsbase.h
 
 RESOURCES += \
     resource/res.qrc

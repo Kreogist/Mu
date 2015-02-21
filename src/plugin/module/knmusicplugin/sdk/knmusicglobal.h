@@ -93,7 +93,8 @@ enum LyricsItemProperties
 {
     LyricsArtistRole = Qt::UserRole,
     LyricsTitleSimilarityRole,
-    LyricsArtistSimilarityRole
+    LyricsArtistSimilarityRole,
+    LyricsTextRole
 };
 enum KNMusicPlaybackOrder
 {

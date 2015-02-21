@@ -19,7 +19,7 @@ KNRoundButtonBar::KNRoundButtonBar(QWidget *parent) :
     //Initial layout.
     m_mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     m_mainLayout->setContentsMargins(0,0,0,0);
-    m_mainLayout->setSpacing(0);
+    m_mainLayout->setSpacing(7);
     setLayout(m_mainLayout);
 
     //All the button will be placed at right.
@@ -28,7 +28,7 @@ KNRoundButtonBar::KNRoundButtonBar(QWidget *parent) :
     //Initial the button signal mapper.
     m_toolbarMappper=new QSignalMapper(this);
     connect(m_toolbarMappper, SIGNAL(mapped(int)),
-            this, SIGNAL(buttonClicked(int)));
+            this, SLOT(setCurrentIndex(int)));
 }
 
 KNRoundButtonBar::~KNRoundButtonBar()
@@ -41,9 +41,16 @@ void KNRoundButtonBar::addButton(KNRoundAnimeButton *button)
     //Add the button to the layout.
     m_mainLayout->addWidget(button);
     //Link the click signal to toolbar signal mapper.
-    connect(button, SIGNAL(clicked()), m_toolbarMappper, SLOT(map()));
+    connect(button, SIGNAL(toggled(bool)), m_toolbarMappper, SLOT(map()));
     //Set the mapping.
     m_toolbarMappper->setMapping(button, m_buttonIndex);
+    //Set the default checked button.
+    if(m_buttonIndex==0)
+    {
+        //Set the button to the current index.
+        m_currentIndex=0;
+        button->setChecked(true);
+    }
     m_buttonIndex++;
 }
 
@@ -56,3 +63,24 @@ void KNRoundButtonBar::addButton(const QPixmap &icon)
     addButton(button);
 }
 
+void KNRoundButtonBar::setCurrentIndex(const int &index)
+{
+    //Clear the original button
+    KNRoundAnimeButton *button=
+            static_cast<KNRoundAnimeButton *>(m_toolbarMappper->mapping(m_currentIndex));
+    if(button!=nullptr)
+    {
+        button->setChecked(false);
+    }
+    //Get the current mapping button.
+    button=static_cast<KNRoundAnimeButton *>(m_toolbarMappper->mapping(index));
+    if(button!=nullptr)
+    {
+        //Save the current index.
+        m_currentIndex=index;
+        //Set checked state.
+        button->setChecked(true);
+        //Emit index changed.
+        emit currentIndexChanged(m_currentIndex);
+    }
+}

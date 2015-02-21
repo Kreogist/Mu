@@ -31,7 +31,7 @@
 #include "knmusicdetaildialogbase.h"
 #include "knmusicdetailtooltipbase.h"
 #include "knmusicheaderplayerbase.h"
-#include "knmusiclyricsbase.h"
+#include "knmusicheaderlyricsbase.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusiclibrarybase.h"
 #include "knmusicplaylistmanagerbase.h"
@@ -309,7 +309,7 @@ void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
     }
 }
 
-inline void KNMusicPlugin::loadHeaderLyrics(KNMusicLyricsBase *plugin)
+inline void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
 {
     //Add plugin to the list.
     m_pluginList.append(plugin);
