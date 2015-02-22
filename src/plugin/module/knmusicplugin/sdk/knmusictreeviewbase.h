@@ -62,6 +62,7 @@ protected:
 private slots:
     void onActionSearch();
     void onActionMouseInOut(const int &frame);
+    void onActionIndexActivate(const QModelIndex &index);
     void playIndex(const QModelIndex &index);
     void removeIndex(const QModelIndex &index);
     void removeSelections();

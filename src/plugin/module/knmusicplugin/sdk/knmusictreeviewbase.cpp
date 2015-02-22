@@ -84,7 +84,7 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
 
     //Initial reacts.
     connect(this, &KNMusicTreeViewBase::activated,
-            this, &KNMusicTreeViewBase::playIndex);
+            this, &KNMusicTreeViewBase::onActionIndexActivate);
 
     //Initial music global.
     m_musicGlobal=KNMusicGlobal::instance();
@@ -315,9 +315,11 @@ bool KNMusicTreeViewBase::event(QEvent *event)
             }
             else
             {
+                QRect indexRect=visualRect(mouseIndex);
                 KNMusicGlobal::detailTooltip()->setPreviewIndex(m_proxyModel->musicModel(),
                                                                 m_proxyModel->mapToSource(mouseIndex),
-                                                                helpEvent->globalPos());
+                                                                mapToGlobal(QPoint(helpEvent->pos().x(),
+                                                                                   indexRect.y()+(indexRect.height()>>1))));
                 KNMusicGlobal::detailTooltip()->showTooltip();
             }
         }
@@ -472,6 +474,14 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
     pal.setColor(QPalette::Text, m_fontColor);
     pal.setColor(QPalette::Button, m_buttonColor);
     setPalette(pal);
+}
+
+void KNMusicTreeViewBase::onActionIndexActivate(const QModelIndex &index)
+{
+    //Hide the detail tooltip.
+    KNMusicGlobal::detailTooltip()->hide();
+    //Play the current index.
+    playIndex(index);
 }
 
 void KNMusicTreeViewBase::playCurrent()
