@@ -178,6 +178,18 @@ void KNMusicStandardBackend::setPosition(const qint64 &position)
     m_main->setPosition(position);
 }
 
+void KNMusicStandardBackend::volumeUp()
+{
+    int preferVolumeSize=volume()+volumeLevel();
+    setVolume(preferVolumeSize>volumeMaximum()?volumeMaximum():preferVolumeSize);
+}
+
+void KNMusicStandardBackend::volumeDown()
+{
+    int preferVolumeSize=volume()-volumeLevel();
+    setVolume(preferVolumeSize<volumeMinimal()?volumeMinimal():preferVolumeSize);
+}
+
 void KNMusicStandardBackend::setPreviewPosition(const qint64 &position)
 {
     m_preview->setPosition(position);

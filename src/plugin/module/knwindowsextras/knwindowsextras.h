@@ -38,6 +38,8 @@ signals:
 public slots:
     void setButtonIcon(const int &index, const QPixmap &icon);
     void onActionPlayStateChanged(const bool &isPlay);
+    void onActionMuteStateChanged(const bool &isMute);
+    void onActionLoopStateChanged(const int &loopState);
 
 private slots:
     void onActionPlayAndPause();
@@ -52,10 +54,15 @@ private:
         PlayPrev,
         PlayAndPause,
         PlayNext,
+        VolumeUp,
+        VolumeDown,
+        Mute,
+        LoopMode,
         ThumbnailActionsCount
     };
     bool m_isStatePlay=true;
-    QPixmap m_playIcon, m_pauseIcon;
+    QPixmap m_playIcon, m_pauseIcon, m_muteOn, m_muteOff,
+            m_loopStates[LoopStateButtonStateCount];
     QWinThumbnailToolButton *m_thumbnailButtons[ThumbnailActionsCount];
 };
 

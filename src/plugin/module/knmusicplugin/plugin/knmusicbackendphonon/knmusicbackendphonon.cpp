@@ -76,3 +76,8 @@ qreal KNMusicBackendPhonon::smartVolumeScale() const
 {
     return 0.2;
 }
+
+int KNMusicBackendPhonon::volumeLevel() const
+{
+    return 1000;
+}

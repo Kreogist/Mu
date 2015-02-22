@@ -9,6 +9,20 @@
 
 #include <QObject>
 
+namespace PlatformExtras
+{
+enum LoopStateButtonState
+{
+    ButtonNoRepeat,
+    ButtonRepeat,
+    ButtonRepeatAll,
+    ButtonShuffle,
+    LoopStateButtonStateCount
+};
+}
+
+using namespace PlatformExtras;
+
 class QMainWindow;
 class KNPlatformExtras : public QObject
 {
@@ -22,10 +36,16 @@ signals:
     void requirePause();
     void requirePlayNext();
     void requirePlayPrev();
+    void requireVolumeUp();
+    void requireVolumeDown();
+    void requireChangeMuteState();
+    void requireChangeLoopState();
 
 public slots:
     virtual void setButtonIcon(const int &index, const QPixmap &icon)=0;
     virtual void onActionPlayStateChanged(const bool &isPlay)=0;
+    virtual void onActionMuteStateChanged(const bool &isMute)=0;
+    virtual void onActionLoopStateChanged(const int &loopState)=0;
 };
 
 #endif // KNPLATFORMEXTRAS_H

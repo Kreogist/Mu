@@ -28,6 +28,13 @@ KNWindowsExtras::KNWindowsExtras(QObject *parent) :
     //Initial resource.
     m_playIcon=QPixmap(":/platform/windows/play.png");
     m_pauseIcon=QPixmap(":/platform/windows/pause.png");
+    m_muteOn=QPixmap(":/platform/windows/mute_on.png");
+    m_muteOff=QPixmap(":/platform/windows/mute.png");
+
+    m_loopStates[ButtonNoRepeat]=QPixmap(":/platform/windows/loopmode_norepeat.png");
+    m_loopStates[ButtonRepeat]=QPixmap(":/platform/windows/loopmode_repeatsingle.png");
+    m_loopStates[ButtonRepeatAll]=QPixmap(":/platform/windows/loopmode_repeat.png");
+    m_loopStates[ButtonShuffle]=QPixmap(":/platform/windows/loopmode_random.png");
     //Initial toolbar.
     initialThumbnailToolBar();
 }
@@ -55,6 +62,16 @@ void KNWindowsExtras::onActionPlayStateChanged(const bool &isPlay)
     m_isStatePlay=isPlay;
     //Set the icon according to the state.
     setButtonIcon(PlayAndPause, m_isStatePlay?m_pauseIcon:m_playIcon);
+}
+
+void KNWindowsExtras::onActionMuteStateChanged(const bool &isMute)
+{
+    setButtonIcon(Mute, isMute?m_muteOn:m_muteOff);
+}
+
+void KNWindowsExtras::onActionLoopStateChanged(const int &loopState)
+{
+    setButtonIcon(LoopMode, m_loopStates[loopState]);
 }
 
 void KNWindowsExtras::onActionPlayAndPause()
@@ -86,8 +103,21 @@ void KNWindowsExtras::initialThumbnailToolBar()
             this, &KNWindowsExtras::onActionPlayAndPause);
     connect(m_thumbnailButtons[PlayNext], &QWinThumbnailToolButton::clicked,
             this, &KNWindowsExtras::requirePlayNext);
+    connect(m_thumbnailButtons[VolumeUp], &QWinThumbnailToolButton::clicked,
+            this, &KNWindowsExtras::requireVolumeUp);
+    connect(m_thumbnailButtons[VolumeDown], &QWinThumbnailToolButton::clicked,
+            this, &KNWindowsExtras::requireVolumeDown);
+    connect(m_thumbnailButtons[Mute], &QWinThumbnailToolButton::clicked,
+            this, &KNWindowsExtras::requireChangeMuteState);
+    connect(m_thumbnailButtons[LoopMode], &QWinThumbnailToolButton::clicked,
+            this, &KNWindowsExtras::requireChangeLoopState);
     //Set icon.
     setButtonIcon(PlayPrev, QPixmap(":/platform/windows/previous.png"));
     setButtonIcon(PlayNext, QPixmap(":/platform/windows/next.png"));
+    setButtonIcon(VolumeUp, QPixmap(":/platform/windows/volup.png"));
+    setButtonIcon(VolumeDown, QPixmap(":/platform/windows/voldown.png"));
+    //Set default state button.
+    onActionMuteStateChanged(false);
+    onActionLoopStateChanged(ButtonNoRepeat);
     onActionPlayStateChanged(false);
 }

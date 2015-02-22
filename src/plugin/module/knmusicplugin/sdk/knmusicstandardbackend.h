@@ -47,6 +47,8 @@ public slots:
     void setVolume(const int &volumeSize);
     void setMute(const bool &mute);
     void setPosition(const qint64 &position);
+    void volumeUp();
+    void volumeDown();
 
     void setPreviewPosition(const qint64 &position);
 
@@ -54,13 +56,14 @@ protected:
     void setMainThread(KNMusicBackendThread *thread);
     void setPreviewThread(KNMusicBackendThread *thread);
     virtual void changeVolume(const int &volumeSize)=0;
+    virtual int volumeLevel() const=0;
     virtual qreal smartVolumeScale() const=0;
 
 private:
     void smartVolumeOn();
     void smartVolumeOff();
     int m_originalVolume=-1,
-        m_volumeBeforeMute=0.0;
+        m_volumeBeforeMute=0;
     qint64 m_backupPosition=-1;
     bool m_mute=false;
     KNMusicBackendThread *m_main=nullptr, *m_preview=nullptr;

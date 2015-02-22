@@ -116,12 +116,8 @@ libVLC{
         error("You can't enable more than one backend at the same time.")
     }
     DEFINES += ENABLE_LIBVLC BACKEND_ENABLED
-    SOURCES += plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlc.cpp \
-               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicvlcglobal.cpp \
-               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlcthread.cpp
-    HEADERS += plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlc.h \
-               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicvlcglobal.h \
-               plugin/module/knmusicplugin/plugin/knmusicbackendvlc/knmusicbackendvlcthread.h
+    SOURCES +=
+    HEADERS +=
 }
 
 libbass{

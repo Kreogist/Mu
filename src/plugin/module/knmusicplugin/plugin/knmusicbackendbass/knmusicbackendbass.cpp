@@ -169,3 +169,8 @@ qreal KNMusicBackendBass::smartVolumeScale() const
 {
     return 0.125;
 }
+
+int KNMusicBackendBass::volumeLevel() const
+{
+    return 1000;
+}

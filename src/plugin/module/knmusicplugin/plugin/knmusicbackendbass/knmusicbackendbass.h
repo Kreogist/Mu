@@ -57,6 +57,7 @@ public slots:
 protected:
     void changeVolume(const int &volumeSize);
     qreal smartVolumeScale() const;
+    int volumeLevel() const;
 
 private:
     bool initialBass();

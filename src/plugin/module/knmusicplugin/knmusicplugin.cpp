@@ -386,11 +386,45 @@ void KNMusicPlugin::enablePlatformExtras()
                     connect(m_platformExtras, &KNPlatformExtras::requirePlayNext,
                             m_nowPlaying, &KNMusicNowPlayingBase::playNext));
         m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requireChangeLoopState,
+                            m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState));
+        m_extraHandler->addConnectionHandle(
                     connect(m_platformExtras, &KNPlatformExtras::requirePlay,
                             m_backend, &KNMusicBackend::play));
         m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requireVolumeUp,
+                            m_backend, &KNMusicBackend::volumeUp));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requireVolumeDown,
+                            m_backend, &KNMusicBackend::volumeDown));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_platformExtras, &KNPlatformExtras::requireChangeMuteState,
+                            m_backend, &KNMusicBackend::changeMuteState));
+        m_extraHandler->addConnectionHandle(
                     connect(m_platformExtras, &KNPlatformExtras::requirePause,
                             m_backend, &KNMusicBackend::pause));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_backend, &KNMusicBackend::muteStateChanged,
+                            m_platformExtras, &KNPlatformExtras::onActionMuteStateChanged));
+        m_extraHandler->addConnectionHandle(
+                    connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
+                            [=](const int &loopState)
+                            {
+                                switch (loopState)
+                                {
+                                case NoRepeat:
+                                    m_platformExtras->onActionLoopStateChanged(ButtonNoRepeat);
+                                    break;
+                                case RepeatAll:
+                                    m_platformExtras->onActionLoopStateChanged(ButtonRepeatAll);
+                                    break;
+                                case RepeatTrack:
+                                    m_platformExtras->onActionLoopStateChanged(ButtonRepeat);
+                                    break;
+                                default:
+                                    break;
+                                }
+                            }));
         m_extraHandler->addConnectionHandle(
                     connect(m_backend, &KNMusicBackend::playingStateChanged,
                             [=](const int &state)

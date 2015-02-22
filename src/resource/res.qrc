@@ -104,5 +104,13 @@
         <file>windows/pause.png</file>
         <file>windows/play.png</file>
         <file>windows/previous.png</file>
+        <file>windows/voldown.png</file>
+        <file>windows/volup.png</file>
+        <file>windows/mute.png</file>
+        <file>windows/loopmode_norepeat.png</file>
+        <file>windows/loopmode_random.png</file>
+        <file>windows/loopmode_repeat.png</file>
+        <file>windows/loopmode_repeatsingle.png</file>
+        <file>windows/mute_on.png</file>
     </qresource>
 </RCC>
