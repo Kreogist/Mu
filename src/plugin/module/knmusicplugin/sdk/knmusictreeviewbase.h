@@ -50,6 +50,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event);
     bool event(QEvent *event);
     void startDrag(Qt::DropActions supportedActions);
+    void wheelEvent(QWheelEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void moveToFirst(const int &logicalIndex);

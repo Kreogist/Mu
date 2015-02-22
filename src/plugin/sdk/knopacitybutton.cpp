@@ -7,7 +7,6 @@
 #include <QMouseEvent>
 #include <QSizePolicy>
 #include <QPainter>
-#include <QGraphicsOpacityEffect>
 
 #include "knopacitybutton.h"
 
@@ -20,10 +19,6 @@ KNOpacityButton::KNOpacityButton(QWidget *parent) :
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,
                               QSizePolicy::MinimumExpanding,
                               QSizePolicy::ToolButton));
-    //Initial opacity effect.
-    m_opacityEffect=new QGraphicsOpacityEffect(this);
-    m_opacityEffect->setOpacity(m_originalOpacity);
-    setGraphicsEffect(m_opacityEffect);
 }
 
 QPixmap KNOpacityButton::icon() const
@@ -33,28 +28,30 @@ QPixmap KNOpacityButton::icon() const
 
 void KNOpacityButton::setIcon(const QPixmap &icon)
 {
+    //Save the icon, update the scaled icon.
     m_icon=icon;
+    updateScaledIcon();
+    //Redraw the widget.
     update();
 }
 
 void KNOpacityButton::mousePressEvent(QMouseEvent *event)
 {
     KNAbstractButton::mousePressEvent(event);
-    //Set opacity.
-    m_originalOpacity=m_opacityEffect->opacity();
-    qreal preferOpacity=m_originalOpacity-m_opacityGap;
-    m_opacityEffect->setOpacity(preferOpacity<0?
-                                    m_originalOpacity+m_opacityGap:
-                                    preferOpacity);
     //Set flag.
     m_pressed=true;
+    //Set opacity.
+    m_opacity=getPressedOpacity();
+    //Update the widget.
+    update();
 }
 
 void KNOpacityButton::mouseReleaseEvent(QMouseEvent *event)
 {
     KNAbstractButton::mouseReleaseEvent(event);
     //Recover opacity.
-    m_opacityEffect->setOpacity(m_originalOpacity);
+    m_opacity=m_originalOpacity;
+    update();
     //Judge is pressed?
     if(m_pressed)
     {
@@ -69,28 +66,65 @@ void KNOpacityButton::mouseReleaseEvent(QMouseEvent *event)
 
 void KNOpacityButton::paintEvent(QPaintEvent *event)
 {
+    if(m_scaledIcon.isNull())
+    {
+        return;
+    }
     //Initial antialiasing painter.
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::TextAntialiasing, true);
+    //Set opacity.
+    painter.setOpacity(m_opacity);
     //Paint the contents.
-    painter.drawPixmap(0,0,width(),height(),
-                       m_icon.scaled(width(),
-                                     height(),
-                                     Qt::KeepAspectRatio,
-                                     Qt::SmoothTransformation));
+    painter.drawPixmap(0,0,width(),height(),m_scaledIcon);
     //Paint other things.
     KNAbstractButton::paintEvent(event);
 }
 
+void KNOpacityButton::updateScaledIcon()
+{
+    if(m_icon.isNull())
+    {
+        m_scaledIcon=QPixmap();
+        return;
+    }
+    //Scaled the icon.
+    m_scaledIcon=m_icon.scaled(size(),
+                               Qt::KeepAspectRatio,
+                               Qt::SmoothTransformation);
+}
+
+inline qreal KNOpacityButton::getPressedOpacity()
+{
+    //Set opacity.
+    qreal opacity=m_originalOpacity-m_opacityGap;
+    //If the opacity is less than 0, means this settings wants to increase the
+    //opacity.
+    return (opacity<0)?m_originalOpacity+m_opacityGap:opacity;
+}
+
 qreal KNOpacityButton::opacity() const
 {
-    return m_opacityEffect->opacity();
+    return m_opacity;
 }
 
 void KNOpacityButton::setOpacity(const qreal &opacity)
 {
-    m_opacityEffect->setOpacity(opacity);
+    //Save the opacity.
+    m_originalOpacity=opacity;
+    //Calculate the opacity.
+    m_opacity=m_pressed?getPressedOpacity():m_originalOpacity;
+    //Update the widget.
+    update();
+}
+
+void KNOpacityButton::resizeEvent(QResizeEvent *event)
+{
+    //Do the resize first.
+    KNAbstractButton::resizeEvent(event);
+    //Update the icon.
+    updateScaledIcon();
 }
 
 qreal KNOpacityButton::opacityGap() const

@@ -35,14 +35,17 @@ signals:
 public slots:
 
 protected:
+    void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
 
 private:
-    QPixmap m_icon;
-    QGraphicsOpacityEffect *m_opacityEffect;
-    qreal m_opacityGap=0.2, m_originalOpacity=1.0;
+    inline void updateScaledIcon();
+    inline qreal getPressedOpacity();
+    QPixmap m_icon, m_scaledIcon;
+    qreal m_opacityGap=0.2, m_originalOpacity=1.0,
+          m_opacity=m_originalOpacity;
     bool m_pressed=false;
 };
 

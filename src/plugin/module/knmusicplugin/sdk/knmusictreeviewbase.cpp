@@ -369,6 +369,15 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
     drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
+void KNMusicTreeViewBase::wheelEvent(QWheelEvent *event)
+{
+    QTreeView::wheelEvent(event);
+    //When user using wheel, means the user don't want to preview the current
+    //thing.
+    //Hide the preview tooltip.
+    KNMusicGlobal::detailTooltip()->hide();
+}
+
 void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
 {
     QTreeView::mousePressEvent(event);
