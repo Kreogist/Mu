@@ -111,15 +111,6 @@ libPhonon{
                plugin/module/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.h
 }
 
-libVLC{
-    contains(DEFINES, BACKEND_ENABLED){
-        error("You can't enable more than one backend at the same time.")
-    }
-    DEFINES += ENABLE_LIBVLC BACKEND_ENABLED
-    SOURCES +=
-    HEADERS +=
-}
-
 libbass{
     contains(DEFINES, BACKEND_ENABLED){
         error("You can't enable more than one backend at the same time.")

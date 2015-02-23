@@ -163,6 +163,7 @@ void KNMusicBackendBass::initialPlugin(const QString &pluginDirPath)
 void KNMusicBackendBass::changeVolume(const int &volumeSize)
 {
     BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, volumeSize);
+    emit volumeChanged(volumeSize);
 }
 
 qreal KNMusicBackendBass::smartVolumeScale() const

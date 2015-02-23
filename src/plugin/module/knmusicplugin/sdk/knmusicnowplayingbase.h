@@ -41,7 +41,8 @@ public slots:
     virtual void restoreCurrentPlaying()=0;
 
     virtual void resetCurrentPlaying()=0;
-    virtual void restoreConfigure()=0;
+    virtual void loadConfigure()=0;
+    virtual void saveConfigure()=0;
 
     virtual void showCurrentIndexInOriginalTab()=0;
     virtual void shadowPlayingModel()=0;

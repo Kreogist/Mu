@@ -70,6 +70,7 @@ int KNMusicBackendPhonon::volumeMaximum()
 void KNMusicBackendPhonon::changeVolume(const int &volumeSize)
 {
     m_main->setVolume(volumeSize);
+    emit volumeChanged(volumeSize);
 }
 
 qreal KNMusicBackendPhonon::smartVolumeScale() const

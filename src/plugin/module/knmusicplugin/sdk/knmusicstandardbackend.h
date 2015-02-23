@@ -44,7 +44,7 @@ signals:
 
 public slots:
     void changeMuteState();
-    void setVolume(const int &volumeSize);
+    void setVolume(int volumeSize);
     void setMute(const bool &mute);
     void setPosition(const qint64 &position);
     void volumeUp();

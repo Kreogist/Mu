@@ -51,7 +51,8 @@ public slots:
     void resetCurrentPlaying();
 
     //Restore configure.
-    void restoreConfigure();
+    void loadConfigure();
+    void saveConfigure();
 
     //Locate the current index.
     void showCurrentIndexInOriginalTab();

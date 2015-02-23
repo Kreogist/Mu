@@ -60,6 +60,8 @@ public:
     virtual int volumeMaximum()=0;
 
 signals:
+    void volumeChanged(int volumeSize);
+
     void cannotLoad();
     void loaded();
     void positionChanged(qint64 position);
@@ -81,7 +83,7 @@ signals:
 public slots:
     virtual void changeMuteState()=0;
     virtual void setMute(const bool &mute)=0;
-    virtual void setVolume(const int &volumeSize)=0;
+    virtual void setVolume(int volumeSize)=0;
     virtual void setPosition(const qint64 &position)=0;
     virtual void volumeUp()=0;
     virtual void volumeDown()=0;

@@ -148,12 +148,17 @@ void KNMusicNowPlaying2::resetCurrentPlaying()
     m_currentPlayingAnalysisItem=KNMusicAnalysisItem();
 }
 
-void KNMusicNowPlaying2::restoreConfigure()
+void KNMusicNowPlaying2::loadConfigure()
 {
     //Restore the configure from cache data.
     //1. Recover the loop state.
     setLoopState(m_cacheConfigure->getData("LoopState",
                                            NoRepeat).toInt());
+}
+
+void KNMusicNowPlaying2::saveConfigure()
+{
+    m_cacheConfigure->setData("LoopState", m_loopMode);
 }
 
 void KNMusicNowPlaying2::showCurrentIndexInOriginalTab()

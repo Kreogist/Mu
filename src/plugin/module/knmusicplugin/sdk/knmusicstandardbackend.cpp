@@ -138,12 +138,23 @@ void KNMusicStandardBackend::changeMuteState()
     setMute(!m_mute);
 }
 
-void KNMusicStandardBackend::setVolume(const int &volumeSize)
+void KNMusicStandardBackend::setVolume(int volumeSize)
 {
     if(m_mute)
     {
         m_mute=false;
         emit muteStateChanged(m_mute);
+    }
+    //Check the volume size.
+    if(volumeSize<volumeMinimal())
+    {
+        changeVolume(volumeMinimal());
+        return;
+    }
+    if(volumeSize>volumeMaximum())
+    {
+        changeVolume(volumeMaximum());
+        return;
     }
     changeVolume(volumeSize);
 }
@@ -180,14 +191,12 @@ void KNMusicStandardBackend::setPosition(const qint64 &position)
 
 void KNMusicStandardBackend::volumeUp()
 {
-    int preferVolumeSize=volume()+volumeLevel();
-    setVolume(preferVolumeSize>volumeMaximum()?volumeMaximum():preferVolumeSize);
+    setVolume(volume()+volumeLevel());
 }
 
 void KNMusicStandardBackend::volumeDown()
 {
-    int preferVolumeSize=volume()-volumeLevel();
-    setVolume(preferVolumeSize<volumeMinimal()?volumeMinimal():preferVolumeSize);
+    setVolume(volume()-volumeLevel());
 }
 
 void KNMusicStandardBackend::setPreviewPosition(const qint64 &position)

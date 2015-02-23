@@ -61,7 +61,7 @@ public:
     inline void loadSearch(KNMusicSearchBase *plugin);
     inline void loadDetailTooptip(KNMusicDetailTooltipBase *plugin);
     inline void loadBackend(KNMusicBackend *plugin);
-    inline void loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plugin);
+    inline void loadLyricsDownloadDialog(KNMusicLyricsDownloadDialogBase *plugin);
     inline void loadDetailDialog(KNMusicDetailDialogBase *plugin);
     inline void loadHeaderPlayer(KNMusicHeaderPlayerBase *plugin);
     inline void loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin);

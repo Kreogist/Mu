@@ -117,6 +117,16 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
             this, &KNMusicHeaderPlayer::onActionPlayStateChanged);
     connect(m_backend, &KNMusicBackend::finished,
             this, &KNMusicHeaderPlayer::finished);
+    connect(m_backend, &KNMusicBackend::volumeChanged,
+            [=](const int &volumeSize)
+            {
+                m_volumeSlider->blockSignals(true);
+                //Change the opacity.
+                m_volumeIndicator->setOpacity(0.5+m_volumeSlider->percentage()/2);
+                //Sync the value.
+                m_volumeSlider->setValue(volumeSize);
+                m_volumeSlider->blockSignals(false);
+            });
     connect(m_backend, &KNMusicBackend::muteStateChanged,
             [=](const bool &mute)
             {
@@ -312,7 +322,9 @@ void KNMusicHeaderPlayer::onActionPlayNPauseClicked()
 
 void KNMusicHeaderPlayer::onActionVolumeSliderChanged(const qint64 &value)
 {
+    //Change the opacity.
     m_volumeIndicator->setOpacity(0.5+m_volumeSlider->percentage()/2);
+    //Change the volume.
     m_backend->setVolume((int)value);
 }
 

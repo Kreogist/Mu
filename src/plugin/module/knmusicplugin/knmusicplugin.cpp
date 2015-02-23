@@ -43,9 +43,6 @@
 #ifdef ENABLE_LIBBASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #endif
-#ifdef ENABLE_LIBVLC
-#include "plugin/knmusicbackendvlc/knmusicbackendvlc.h"
-#endif
 #ifdef ENABLE_PHONON
 #include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
 #endif
@@ -142,7 +139,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
 #endif
     loadDetailTooptip(new KNMusicDetailTooltip);
     loadNowPlaying(new KNMusicNowPlaying2);
-    loadLyricsDownloaDialog(new KNMusicLyricsDownloadDialog);
+    loadLyricsDownloadDialog(new KNMusicLyricsDownloadDialog);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
 //    loadMainPlayer(new KNMusicMainPlayer);
@@ -243,7 +240,7 @@ inline void KNMusicPlugin::loadBackend(KNMusicBackend *plugin)
     }
 }
 
-void KNMusicPlugin::loadLyricsDownloaDialog(KNMusicLyricsDownloadDialogBase *plugin)
+void KNMusicPlugin::loadLyricsDownloadDialog(KNMusicLyricsDownloadDialogBase *plugin)
 {
     //Set the backend to the dialog.
     plugin->setBackend(m_backend);
@@ -327,12 +324,15 @@ inline void KNMusicPlugin::loadNowPlaying(KNMusicNowPlayingBase *plugin)
     if(m_nowPlaying==nullptr)
     {
         m_nowPlaying=plugin;
+        //Link the save configure signal.
+        connect(this, &KNMusicPlugin::requireSaveConfigure,
+                m_nowPlaying, &KNMusicNowPlayingBase::saveConfigure);
         //Set the backend for control.
         m_nowPlaying->setBackend(m_backend);
         //Set now playing to lyrics manager.
         m_lyricsManager->setNowPlaying(m_nowPlaying);
         //Restore configure.
-        m_nowPlaying->restoreConfigure();
+        m_nowPlaying->loadConfigure();
         //Add plugin to list.
         m_pluginList.append(m_nowPlaying);
         //Set global now playing plugin.
