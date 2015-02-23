@@ -431,6 +431,8 @@ void KNMusicPlugin::enablePlatformExtras()
                             {
                                 m_platformExtras->onActionPlayStateChanged(state==PlayingState);
                             }));
+        //Sync the loop state data, hack way.
+        m_nowPlaying->loopStateChanged(m_nowPlaying->loopState());
     }
 }
 

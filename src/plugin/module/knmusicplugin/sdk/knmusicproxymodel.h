@@ -56,7 +56,7 @@ public:
     inline void addPlayTimes(const QModelIndex &sourceIndex)
     {
         //Avoid unavailable source index request.
-        if(sourceIndex.model()!=this)
+        if((KNMusicModel *)sourceIndex.model()!=musicModel())
         {
             return;
         }
