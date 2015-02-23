@@ -60,8 +60,10 @@ protected:
     virtual qreal smartVolumeScale() const=0;
 
 private:
-    void smartVolumeOn();
-    void smartVolumeOff();
+    inline void changeAndSyncVolume(const int &volumeSize);
+    inline void smartVolumeOn();
+    inline void smartVolumeOff();
+
     int m_originalVolume=-1,
         m_volumeBeforeMute=0;
     qint64 m_backupPosition=-1;

@@ -98,15 +98,24 @@ void KNMusicStandardBackend::playPreviewSection(const QString &fileName,
 {
     //Load the music file first.
     loadPreview(fileName);
-    //Turn on the smart volume.
-    smartVolumeOn();
+    //If the origial volume is not -1, means smart volume has been turned on.
+    if(m_originalVolume==-1)
+    {
+        //Turn on the smart volume.
+        smartVolumeOn();
+    }
     //Play the section
     m_preview->playSection(start, duration);
 }
 
 void KNMusicStandardBackend::playPreview()
 {
-    smartVolumeOn();
+    //If the origial volume is not -1, means smart volume has been turned on.
+    if(m_originalVolume==-1)
+    {
+        //Turn on the smart volume.
+        smartVolumeOn();
+    }
     //Play the preview.
     m_preview->play();
 }
@@ -148,15 +157,15 @@ void KNMusicStandardBackend::setVolume(int volumeSize)
     //Check the volume size.
     if(volumeSize<volumeMinimal())
     {
-        changeVolume(volumeMinimal());
+        changeAndSyncVolume(volumeMinimal());
         return;
     }
     if(volumeSize>volumeMaximum())
     {
-        changeVolume(volumeMaximum());
+        changeAndSyncVolume(volumeMaximum());
         return;
     }
-    changeVolume(volumeSize);
+    changeAndSyncVolume(volumeSize);
 }
 
 void KNMusicStandardBackend::setMute(const bool &mute)
@@ -172,16 +181,15 @@ void KNMusicStandardBackend::setMute(const bool &mute)
     {
         //Backup the original volume, mute it.
         m_volumeBeforeMute=volume();
-        changeVolume(0);
+        changeAndSyncVolume(0);
     }
     else
     {
         //Set the volume to the backup volume.
-        changeVolume(m_volumeBeforeMute);
+        changeAndSyncVolume(m_volumeBeforeMute);
     }
     //Emit changed signal.
     emit muteStateChanged(m_mute);
-
 }
 
 void KNMusicStandardBackend::setPosition(const qint64 &position)
@@ -248,13 +256,25 @@ void KNMusicStandardBackend::setPreviewThread(KNMusicBackendThread *thread)
     }
 }
 
-void KNMusicStandardBackend::smartVolumeOn()
+void KNMusicStandardBackend::changeAndSyncVolume(const int &volumeSize)
 {
-    //If the origial volume is not -1, means smart volume has been turned on.
-    if(m_originalVolume!=-1)
+    bool smartVolume=(m_originalVolume!=-1);
+    if(smartVolume)
     {
-        return;
+        smartVolumeOff();
     }
+    //Change the main thread volume.
+    changeVolume(volumeSize);
+    //Check if the smart volume on, if so, reset the smart volume size.
+    if(smartVolume)
+    {
+        //Sync the volume when smart volume is on.
+        smartVolumeOn();
+    }
+}
+
+inline void KNMusicStandardBackend::smartVolumeOn()
+{
     //Backup the original volume.
     m_originalVolume=m_main->volume()==0?volume():m_main->volume();
     //Set the preview as the full volume.
@@ -264,7 +284,7 @@ void KNMusicStandardBackend::smartVolumeOn()
     m_main->setVolume((int)mainVolumeSize);
 }
 
-void KNMusicStandardBackend::smartVolumeOff()
+inline void KNMusicStandardBackend::smartVolumeOff()
 {
     //If the original volume is -1, means it's not turned on.
     if(m_originalVolume==-1)
