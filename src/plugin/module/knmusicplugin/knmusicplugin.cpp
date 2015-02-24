@@ -315,6 +315,8 @@ inline void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
     m_pluginList.append(plugin);
     //Link the display to the header player.
     plugin->setHeaderPlayer(m_headerPlayer);
+    //Load the configure.
+    plugin->loadConfigure();
     //Add widget to the header.
     addLeftHeaderWidget(plugin, 1);
 }
@@ -556,6 +558,12 @@ inline void KNMusicPlugin::initialLyricsManager()
     m_lyricsManager->installLyricsDownloader(new KNMusicQQLyrics);
     m_lyricsManager->installLyricsDownloader(new KNMusicTTPlayerLyrics);
     m_lyricsManager->installLyricsDownloader(new KNMusicXiaMiLyrics);
+
+    //Load the configure.
+    m_lyricsManager->loadConfigure();
+    //Link save configure request.
+    connect(this, &KNMusicPlugin::requireSaveConfigure,
+            m_lyricsManager, &KNMusicLyricsManager::saveConfigure);
 
     //Add lyrics manager to plugin list.
     m_pluginList.append(m_lyricsManager);

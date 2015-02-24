@@ -21,7 +21,9 @@
 #include <QStandardItemModel>
 
 #include "knglobal.h"
+#include "knconfigure.h"
 
+#include "knmusicglobal.h"
 #include "knmusiclrclyricsparser.h"
 #include "knmusicnowplayingbase.h"
 
@@ -34,6 +36,11 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
 {
     //Initial the global instance.
     m_global=KNGlobal::instance();
+
+    //Get configures.
+    m_musicConfigure=KNMusicGlobal::instance()->musicConfigure();
+    m_systemConfigure=m_global->systemConfigure();
+
     //Initial the LRC lyrics parser and utf-8 codec.
     m_parser=new KNMusicLRCLyricsParser(this);
     m_utf8Codec=QTextCodec::codecForName("UTF-8");
@@ -327,6 +334,21 @@ bool KNMusicLyricsManager::enableOnlineLyrics() const
 void KNMusicLyricsManager::setEnableOnlineLyrics(bool enableOnlineLyrics)
 {
     m_enableOnlineLyrics = enableOnlineLyrics;
+}
+
+void KNMusicLyricsManager::loadConfigure()
+{
+    //Get path configures.
+    setLyricsDir(m_systemConfigure->getData("LyricsFolder",
+                                            lyricsDir()).toString());
+    //Get user configures.
+    setEnableOnlineLyrics(m_musicConfigure->getData("DownloadLyrics",
+                                                    enableOnlineLyrics()).toBool());
+}
+
+void KNMusicLyricsManager::saveConfigure()
+{
+    ;
 }
 
 inline void KNMusicLyricsManager::getOnlineLyrics(const KNMusicDetailInfo &detailInfo,

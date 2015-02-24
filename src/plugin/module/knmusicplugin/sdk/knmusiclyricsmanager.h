@@ -63,6 +63,8 @@ signals:
     void lyricsSearchedComplete();
 
 public slots:
+    void loadConfigure();
+    void saveConfigure();
     void loadLyrics(const KNMusicAnalysisItem &analysisItem);
     void downloadLyrics(const KNMusicDetailInfo &detailInfo);
     void searchLyrics(const KNMusicDetailInfo &detailInfo,
@@ -102,6 +104,7 @@ private:
     KNGlobal *m_global;
     KNMusicLRCLyricsParser *m_parser;
     QTextCodec *m_utf8Codec;
+    KNConfigure *m_musicConfigure, *m_systemConfigure;
 
     //Lyrics data.
     QList<qint64> m_positionList;

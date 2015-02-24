@@ -20,23 +20,49 @@
 
 #include "knmusicmainplayerbase.h"
 
-class QPropertyAnimation;
 class QLabel;
-class KNHighlightLabel;
+class QGridLayout;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
 public:
     explicit KNMusicMainPlayer(QWidget *parent = 0);
     ~KNMusicMainPlayer();
 
+private slots:
+    void retranslate();
+
 protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    inline void initialWidgets();
-    KNHighlightLabel *m_albumArt;
-    QLabel *m_title, *m_detail;
-    QFont m_captionFont, m_titleFont;
+    enum InformationElements
+    {
+        ElementTitle,
+        ElementArtist,
+        ElementAlbum,
+        ElementGenre,
+        ElementYear,
+        ElementQuality,
+        ElementLocation,
+        InformationElementsCount
+    };
+
+    inline void initialAlbumArt();
+    //Album art widgets.
+    QLabel *m_albumArt;
+
+    inline void initialInformationPanel();
+    //Information layouts.
+    QGridLayout *m_informationPanelLayout;
+    QLabel *m_informationElementCaptions[InformationElementsCount],
+           *m_informationElements[InformationElementsCount];
+
+    inline void initialLyricsPanel();
+    //Lyrics panel.
+
+    inline void initialPlaylistPanel();
+    inline void initialControlPanel();
+
 };
 
 #endif // KNMUSICMAINPLAYER_H

@@ -15,11 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QPropertyAnimation>
-#include <QBoxLayout>
 #include <QLabel>
+#include <QBoxLayout>
+#include <QGridLayout>
 
-#include "knhighlightlabel.h"
+#include "knglobal.h"
 
 #include "knmusicmainplayer.h"
 
@@ -30,45 +30,37 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
 {
     //Set properties.
     setAutoFillBackground(true);
-    //Set palette.
     QPalette pal=palette();
     pal.setColor(QPalette::Window, QColor(0,0,0,220));
     setPalette(pal);
+
     //Initial the widgets.
-    initialWidgets();
-    //Initial the layouts.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                          this);
+    initialAlbumArt();
+    initialInformationPanel();
+    initialLyricsPanel();
+    initialPlaylistPanel();
+    initialControlPanel();
+
+    //Initial main layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    QBoxLayout *playerLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                            mainLayout->widget());
-    playerLayout->setContentsMargins(0,0,0,0);
-    playerLayout->setSpacing(0);
-    mainLayout->addLayout(playerLayout);
+    QBoxLayout *panelLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                           mainLayout->widget());
+    panelLayout->setContentsMargins(0,0,0,0);
+    panelLayout->setSpacing(0);
+    mainLayout->addLayout(panelLayout);
 
-    QBoxLayout *artworkLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                             mainLayout->widget());
-    artworkLayout->setContentsMargins(0,0,0,0);
-    artworkLayout->setSpacing(0);
-    playerLayout->addLayout(artworkLayout);
+    panelLayout->addWidget(m_albumArt);
+    panelLayout->addLayout(m_informationPanelLayout);
 
-    artworkLayout->addWidget(m_albumArt);
 
-    QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                            mainLayout->widget());
-    detailLayout->setContentsMargins(0,0,0,0);
-    detailLayout->setSpacing(0);
-    artworkLayout->addLayout(detailLayout);
-
-    detailLayout->addWidget(m_detail);
-    detailLayout->addWidget(m_title);
-
-    //--Debug--.
-    m_detail->setText("BiBi - Cutie Panther");
-    m_title->setText("Cutie Panther");
+    //Link retranslate request.
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
+            this, &KNMusicMainPlayer::retranslate);
+    retranslate();
 }
 
 KNMusicMainPlayer::~KNMusicMainPlayer()
@@ -76,41 +68,71 @@ KNMusicMainPlayer::~KNMusicMainPlayer()
     ;
 }
 
-void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
+void KNMusicMainPlayer::retranslate()
 {
-    //Apply resize.
-    KNMusicMainPlayerBase::resizeEvent(event);
-    //Resize widgets.
-    int sizeParameter=qMin(width(), height());
-    float artworkSize=(float)sizeParameter*0.32;
-    m_albumArt->resize(artworkSize, artworkSize);
-    //Resize font.
-    int captionFontSize=qMax((int)(artworkSize*0.08), 15),
-        titleFontSize=qMax((int)(artworkSize*0.13), 30);
-    m_captionFont.setPixelSize(captionFontSize);
-    m_titleFont.setPixelSize(titleFontSize);
-    //Set the font to widget.
-    m_detail->setFont(m_captionFont);
-    m_title->setFont(m_titleFont);
+    m_informationElementCaptions[ElementTitle]->setText(tr("Title"));
+    m_informationElementCaptions[ElementArtist]->setText(tr("Artist"));
+    m_informationElementCaptions[ElementAlbum]->setText(tr("Album"));
+    m_informationElementCaptions[ElementGenre]->setText(tr("Genre"));
+    m_informationElementCaptions[ElementYear]->setText(tr("Year"));
+    m_informationElementCaptions[ElementQuality]->setText(tr("Quality"));
+    m_informationElementCaptions[ElementLocation]->setText(tr("Location"));
 }
 
-inline void KNMusicMainPlayer::initialWidgets()
+void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
 {
-    //Initial the album art label.
-    m_albumArt=new KNHighlightLabel(this);
+    //Do resize.
+    KNMusicMainPlayerBase::resizeEvent(event);
+    //Calculate the information layout spacing.
+    m_informationPanelLayout->setVerticalSpacing(height()/40);
+    int fontSize=height()/40;
+    if(fontSize<15)
+    {
+        fontSize=15;
+    }
+    QFont captionFont=m_informationElementCaptions[0]->font();
+    captionFont.setPixelSize(fontSize);
+    for(int i=0; i<InformationElementsCount; i++)
+    {
+        m_informationElementCaptions[i]->setFont(captionFont);
+    }
+}
 
-    //Initial the captions.
-    m_detail=new QLabel(this);
-    QPalette pal=m_detail->palette();
-    pal.setColor(QPalette::WindowText, QColor(0x99, 0x99, 0x99));
-    m_detail->setPalette(pal);
+void KNMusicMainPlayer::initialAlbumArt()
+{
+    m_albumArt=new QLabel(this);
+}
 
-    m_title=new QLabel(this);
-    pal=m_title->palette();
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xa5, 0x00));
-    m_title->setPalette(pal);
+void KNMusicMainPlayer::initialInformationPanel()
+{
+    //We will set the parent later.
+    m_informationPanelLayout=new QGridLayout;
 
-    //Initial the font.
-    m_captionFont=m_detail->font();
-    m_titleFont=m_title->font();
+    m_informationPanelLayout->setRowStretch(0, 1);
+    //Initial the element labels.
+    for(int i=0; i<InformationElementsCount; i++)
+    {
+        //Initial the element caption and text label.
+        m_informationElementCaptions[i]=new QLabel(this);
+        m_informationElements[i]=new QLabel(this);
+        //Add to layout.
+        m_informationPanelLayout->addWidget(m_informationElementCaptions[i], i+1, 1, Qt::AlignLeft);
+        m_informationPanelLayout->addWidget(m_informationElements[i], i+1, 2, Qt::AlignLeft);
+    }
+    m_informationPanelLayout->setRowStretch(InformationElementsCount+1, 1);
+}
+
+void KNMusicMainPlayer::initialLyricsPanel()
+{
+    ;
+}
+
+void KNMusicMainPlayer::initialPlaylistPanel()
+{
+    ;
+}
+
+void KNMusicMainPlayer::initialControlPanel()
+{
+    ;
 }

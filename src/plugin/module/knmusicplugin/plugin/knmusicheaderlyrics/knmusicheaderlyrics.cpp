@@ -52,9 +52,7 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 
     //Connect apply preference signal.
     connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
-            this, &KNMusicHeaderLyrics::applyPreference);
-    //Load preference and retranslate.
-    applyPreference();
+            this, &KNMusicHeaderLyrics::loadConfigure);
     //Connect retranslate signal.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNMusicHeaderLyrics::retranslate);
@@ -103,16 +101,8 @@ void KNMusicHeaderLyrics::onActionLyricsUpdate()
                   m_lyricsManager->textList());
 }
 
-void KNMusicHeaderLyrics::applyPreference()
+void KNMusicHeaderLyrics::loadConfigure()
 {
-    //Update the lyrics folder.
-    m_lyricsManager->setLyricsDir(
-                m_musicConfigure->getData("LyricsFolder",
-                                          m_lyricsManager->lyricsDir()).toString());
-    //Update the download info.
-    m_lyricsManager->setEnableOnlineLyrics(
-                m_musicConfigure->getData("DownloadLyrics",
-                                          m_lyricsManager->enableOnlineLyrics()).toBool());
     //Update the spacing.
     setSpacing(m_musicConfigure->getData("TextSpacing",
                                          spacing()).toInt());

@@ -39,10 +39,10 @@ signals:
 
 public slots:
     void retranslate();
+    void loadConfigure();
     void onActionLyricsUpdate();
 
 private slots:
-    void applyPreference();
     void onActionMusicLibraryMoved(const QString &originalPath,
                                    const QString &currentPath);
 

@@ -20,6 +20,7 @@ signals:
 
 public slots:
     virtual void onActionLyricsUpdate()=0;
+    virtual void loadConfigure()=0;
 };
 
 #endif // KNMUSICHEADERLYRICSBASE_H
