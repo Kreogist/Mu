@@ -59,8 +59,6 @@ void KNPreferenceItemNumber::setValue(const QVariant &value)
     int sliderValue=value.toInt();
     //Sync the value of all the widget.
     synchronizeValue(sliderValue);
-    //Set the value.
-    KNPreferenceItem::setValue(sliderValue);
 }
 
 void KNPreferenceItemNumber::synchronizeValue(const int &value)
@@ -71,6 +69,8 @@ void KNPreferenceItemNumber::synchronizeValue(const int &value)
     //Set the value.
     m_spinBox->setValue(value);
     m_slider->setValue(value);
+    //Set the value.
+    KNPreferenceItem::setValue(value);
     //Release the signal.
     m_spinBox->blockSignals(false);
     m_slider->blockSignals(false);

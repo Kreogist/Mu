@@ -62,6 +62,8 @@ KNPluginManager *KNPluginManager::instance()
 
 KNPluginManager::~KNPluginManager()
 {
+    //Save the configure right now.
+    m_global->saveConfigure();
     //Delete all the plugins.
     while(!m_pluginList.isEmpty())
     {
@@ -76,8 +78,6 @@ KNPluginManager::~KNPluginManager()
             delete currentObject;
         }
     }
-    //Save the configure right now.
-    m_global->saveConfigure();
     //Delete the global object.
     delete m_global;
 }

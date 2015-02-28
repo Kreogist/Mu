@@ -61,8 +61,8 @@ KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     m_undo=generateIconButton(QPixmap("://public/items/PreferenceUndo.png"));
     m_itemHint=generateIconButton(QPixmap("://public/items/PreferenceHint.png"));
     m_itemHint->setOpacityGap(0); //Fake button.
-    m_mainLayout->addWidget(m_undo);
-    m_mainLayout->addWidget(m_itemHint);
+    m_mainLayout->addWidget(m_undo, 0, Qt::AlignTop);
+    m_mainLayout->addWidget(m_itemHint, 0, Qt::AlignTop);
     //Link undo button.
     connect(m_undo, &KNOpacityButton::clicked,
             this, &KNPreferenceItem::onActionUndo);

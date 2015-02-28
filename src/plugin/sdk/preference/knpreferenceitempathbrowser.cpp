@@ -23,7 +23,7 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     KNPreferenceItem(parent)
 {
     //Resize the item.
-    setFixedHeight((PreferenceSingleItemHeight<<1)+5);
+    setFixedHeight((PreferenceSingleItemHeight<<1)-10);
 
     //Initial widgets.
     initialButtons();
@@ -32,18 +32,18 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     //Initial the editor widget layout.
     QBoxLayout *editorLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                             mainLayout()->widget());
-    editorLayout->setContentsMargins(0,0,0,0);
-    editorLayout->setSpacing(5);
+    editorLayout->setContentsMargins(0,0,5,0);
+    editorLayout->setSpacing(3);
     mainLayout()->addLayout(editorLayout, 1);
     QBoxLayout *pathEditorLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                                 editorLayout->widget());
     pathEditorLayout->setContentsMargins(0,0,0,0);
-    pathEditorLayout->setSpacing(0);
+    pathEditorLayout->setSpacing(5);
     editorLayout->addLayout(pathEditorLayout);
     QBoxLayout *controlsLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                               editorLayout->widget());
     controlsLayout->setContentsMargins(0,0,0,0);
-    controlsLayout->setSpacing(0);
+    controlsLayout->setSpacing(5);
     editorLayout->addLayout(controlsLayout);
     //Add widgets to layouts.
     pathEditorLayout->addWidget(m_goto);
@@ -213,6 +213,11 @@ void KNPreferenceItemPathBrowser::initialLineEdit()
             this, &KNPreferenceItemPathBrowser::onActionPathExist);
     connect(m_pathEditor, &KNPathLineEdit::pathNotExist,
             this, &KNPreferenceItemPathBrowser::onActionPathNotExist);
+    connect(m_pathEditor, &KNPathLineEdit::textChanged,
+            [=](const QString &changedText)
+            {
+                setValue(changedText);
+            });
     //Set palette.
     m_existEditPalette=m_pathEditor->palette();
     m_existEditPalette.setColor(QPalette::Base, QColor(0x20, 0x20, 0x20));
@@ -240,4 +245,3 @@ void KNPreferenceItemPathBrowser::retranslate()
     m_browse->setText(tr("Browse"));
     m_moveTo->setText(tr("Move To"));
 }
-

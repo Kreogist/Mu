@@ -19,7 +19,8 @@
 KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     KNPreferenceItem(parent)
 {
-    setFixedHeight((PreferenceSingleItemHeight<<1)+5);
+    //Change the height.
+    setFixedHeight((PreferenceSingleItemHeight<<1)-10);
     //Initial the overview label.
     m_fontOverview=new QLabel(this);
     //Set the font of overview.
@@ -54,7 +55,7 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     //Insert these widgets.
     QBoxLayout *fontControlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                                  mainLayout()->widget());
-    fontControlLayout->setContentsMargins(0,0,0,0);
+    fontControlLayout->setContentsMargins(0,5,0,5);
     fontControlLayout->setSpacing(5);
     mainLayout()->addLayout(fontControlLayout, 1);
 
