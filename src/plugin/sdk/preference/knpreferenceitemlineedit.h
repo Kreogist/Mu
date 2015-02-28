@@ -7,26 +7,23 @@
 #ifndef KNPREFERENCEITEMLINEEDIT_H
 #define KNPREFERENCEITEMLINEEDIT_H
 
-#include "knpreferenceitembase.h"
+#include "knpreferenceitem.h"
 
 class QLineEdit;
-class KNPreferenceItemLineEdit : public KNPreferenceItemBase
+class KNPreferenceItemLineEdit : public KNPreferenceItem
 {
     Q_OBJECT
 public:
     explicit KNPreferenceItemLineEdit(QWidget *parent = 0);
-    QVariant defaultValue() const;
-    QVariant value() const;
 
 signals:
 
 public slots:
-    void setDefaultValue(const QVariant &defaultValue);
     void setValue(const QVariant &value);
+    void setDefaultValue(const QVariant &defaultValue);
 
 private:
-    QLineEdit *m_valueEditor;
-    QString m_defaultValue;
+    QLineEdit *m_editor;
 };
 
 #endif // KNPREFERENCEITEMLINEEDIT_H

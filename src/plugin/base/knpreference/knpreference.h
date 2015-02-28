@@ -22,7 +22,6 @@
 
 #include "knpreferenceplugin.h"
 
-class KNPreferenceItemGlobal;
 class KNPreferencePanel;
 class KNPreference : public KNPreferencePlugin
 {
@@ -37,16 +36,11 @@ public slots:
     int addCategory(KNCategoryPlugin *plugin);
     void setCategoryText(const int &index, const QString &title);
     void setCurrentIndex(const int &index);
+
+private slots:
     void onActionHidePreference();
 
 private:
-    struct CategoryItem
-    {
-        int index;
-        KNCategoryPlugin *plugin;
-    };
-    QLinkedList<CategoryItem> m_categoryList;
-    KNPreferenceItemGlobal *m_preferenceGlobal;
     KNPreferencePanel *m_preferencePanel;
 };
 

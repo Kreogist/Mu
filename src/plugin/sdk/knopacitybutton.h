@@ -26,13 +26,15 @@ public:
         Q_UNUSED(text)
     }
     qreal opacityGap() const;
-    void setOpacityGap(const qreal &opacityGap);
     qreal opacity() const;
-    void setOpacity(const qreal &opacity);
+    bool enabled() const;
 
 signals:
 
 public slots:
+    void setEnabled(bool enabled);
+    void setOpacityGap(const qreal &opacityGap);
+    void setOpacity(const qreal &opacity);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -46,7 +48,7 @@ private:
     QPixmap m_icon, m_scaledIcon;
     qreal m_opacityGap=0.2, m_originalOpacity=1.0,
           m_opacity=m_originalOpacity;
-    bool m_pressed=false;
+    bool m_pressed=false, m_disabled=false;
 };
 
 #endif // KNOPACITYBUTTON_H

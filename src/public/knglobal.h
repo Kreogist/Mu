@@ -51,6 +51,7 @@ public:
 
 signals:
     void requireRetranslate();
+    void requireApplyPreference();
     void libraryMoved(QString originalPath, QString currentPath);
 
 public slots:

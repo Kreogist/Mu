@@ -18,10 +18,12 @@
 #include <QBoxLayout>
 
 #include "knconfigure.h"
+#include "kncategoryplugin.h"
+#include "kncategorypreference.h"
 #include "knglobal.h"
 
-#include "knpreferencegeneralpanel.h"
-#include "knpreferencewidgetspanel.h"
+#include "knpreferencegeneral.h"
+#include "knpreferenceitempanel.h"
 #include "knpreferencecategory.h"
 #include "knpreferencecontents.h"
 #include "knpreferencelanguageitem.h"
@@ -63,20 +65,16 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
     initialLanguagePanel();
 
     //Initial the general configure and panel.
-    m_generalConfigure=new KNConfigure(this);
-    m_generalConfigure->setCaption("General");
-    KNGlobal::instance()->userConfigure()->addSubConfigure(m_generalConfigure);
-    m_generalPanel=new KNPreferenceGeneralPanel(this);
-    m_generalPanel->setConfigure(m_generalConfigure);
+    m_generalPreference=new KNPreferenceGeneral(this);
     //Link the request.
-    connect(m_generalPanel, &KNPreferenceGeneralPanel::libraryDirMoved,
+    connect(m_generalPreference, &KNPreferenceGeneral::libraryDirMoved,
             this, &KNPreferencePanel::requireUpdateInfrastructure);
 
-    //Add category.
-    addCategory("",
-                QPixmap(":/plugin/configure/general/icon.png"),
-                QPixmap(":/plugin/configure/general/headicon.png"),
-                m_generalPanel);
+    //Add general category.
+    m_categoryList->addCategory("",
+                                QPixmap(":/plugin/configure/general/icon.png"),
+                                QPixmap(":/plugin/configure/general/headicon.png"));
+    addCategoryPreference(m_generalPreference);
 
     //Connect retranslate signal.
     connect(m_localeManager, &KNLocaleManager::requireRetranslate,
@@ -95,21 +93,14 @@ void KNPreferencePanel::addLanguageButton(KNAnimeCheckedButton *languageButton,
     m_contents->addPanelWidget(panel);
 }
 
-int KNPreferencePanel::addCategory(const QString &title,
-                                   const QPixmap &icon,
-                                   const QPixmap &headerIcon,
-                                   KNPreferenceWidgetsPanel *contentWidget)
+int KNPreferencePanel::addCategory(KNCategoryPlugin *plugin)
 {
+    //Add the preference panel, link request.
+    addCategoryPreference(plugin->preference());
     //Add the info of this category to the category list and content.
-    int categoryIndex=m_categoryList->addCategory(title, icon, headerIcon);
-    m_contents->addPanelWidget(contentWidget);
-    //Connect request.
-    connect(m_categoryList, &KNPreferenceCategory::requireShowNormal,
-            contentWidget, &KNPreferenceWidgetsPanel::setNormalMode);
-    connect(this, &KNPreferencePanel::requireSavePreference,
-            contentWidget, &KNPreferenceWidgetsPanel::savePanelData);
-    //Get back the category index.
-    return categoryIndex;
+    return m_categoryList->addCategory(plugin->caption(),
+                                       plugin->icon(),
+                                       plugin->headerIcon());
 }
 
 void KNPreferencePanel::setCategoryText(const int &index,
@@ -141,12 +132,23 @@ void KNPreferencePanel::onActionCategoryIndexChange(const int &index)
 
 inline void KNPreferencePanel::initialLanguagePanel()
 {
-    //Initial the language item.
+    //Initial the language item and panel.
     m_languageItem=new KNPreferenceLanguageItem(this);
-    //Initial the language panel.
     m_languagePanel=new KNPreferenceLanguagePanel(this);
     //Add language button.
     addLanguageButton(m_languageItem,
                       QPixmap(":/plugin/configure/locale/headicon.png"),
                       m_languagePanel);
+}
+
+void KNPreferencePanel::addCategoryPreference(KNCategoryPreference *preference)
+{
+    //Add the panel to contents.
+    KNPreferenceItemPanel *panel=preference->panel();
+    m_contents->addPanelWidget(panel);
+    //Link the panel.
+    connect(m_categoryList, &KNPreferenceCategory::requireShowNormal,
+            panel, &KNPreferenceItemPanel::setNormalMode);
+    connect(this, &KNPreferencePanel::requireSavePreference,
+            panel, &KNPreferenceItemPanel::saveItemsValue);
 }

@@ -47,7 +47,7 @@ KNMusicNowPlaying2::KNMusicNowPlaying2(QObject *parent) :
             this, &KNMusicNowPlaying2::playRow);
 
     //Link the apply preference request signal and apply preference.
-    connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
+    connect(KNGlobal::instance(), &KNGlobal::requireApplyPreference,
             this, &KNMusicNowPlaying2::applyPreference);
     applyPreference();
     //Link the retranslate request signal and do retranslate.

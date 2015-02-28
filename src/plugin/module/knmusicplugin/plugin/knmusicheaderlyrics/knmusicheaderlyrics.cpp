@@ -51,12 +51,8 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 #endif
 
     //Connect apply preference signal.
-    connect(KNPreferenceItemGlobal::instance(), &KNPreferenceItemGlobal::requireApplyPreference,
+    connect(KNGlobal::instance(), &KNGlobal::requireApplyPreference,
             this, &KNMusicHeaderLyrics::loadConfigure);
-    //Connect retranslate signal.
-    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
-            this, &KNMusicHeaderLyrics::retranslate);
-    retranslate();
 }
 
 KNMusicHeaderLyrics::~KNMusicHeaderLyrics()
@@ -72,16 +68,6 @@ void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
             this, &KNMusicHeaderLyrics::onActionLyricsReset);
     connect(m_player, &KNMusicHeaderPlayerBase::positionChanged,
             this, &KNMusicHeaderLyrics::onActionPositionChange);
-}
-
-void KNMusicHeaderLyrics::retranslate()
-{
-    //Get the latest title and item info.
-    KNPreferenceTitleInfo lyricsTitle;
-    QList<KNPreferenceItemInfo> itemList;
-    generateTitleAndItemInfo(lyricsTitle, itemList);
-    //Ask to insert the info list.
-    KNMusicGlobal::instance()->insertItemInfoList(lyricsTitle, itemList);
 }
 
 void KNMusicHeaderLyrics::onActionLyricsUpdate()
@@ -123,43 +109,6 @@ void KNMusicHeaderLyrics::onActionMusicLibraryMoved(const QString &originalPath,
         QString currentFolderPath=
                 currentPath+managerFolderPath.mid(originalPath.size());
         m_lyricsManager->setLyricsDir(currentFolderPath);
-        m_musicConfigure->setData("LyricsFolder",
-                                  currentFolderPath);
-        //Update the lyrics path value.
-        m_musicGlobal->updateItemValue("LyricsFolder");
+        m_musicConfigure->setData("LyricsFolder", currentFolderPath);
     }
-}
-
-inline void KNMusicHeaderLyrics::generateTitleAndItemInfo(KNPreferenceTitleInfo &listTitle,
-                                                          QList<KNPreferenceItemInfo> &list)
-{
-    //Set the title.
-    listTitle.advanced=false;
-    listTitle.title=tr("Lyrics");
-    listTitle.titleIdentifier="Lyrics";
-
-    //Clear the list.
-    list.clear();
-    //Add the current info.
-    list.append(KNPreferenceItemGlobal::generateInfo(PathEditItem,
-                                                     tr("Lyrics Folder"),
-                                                     "LyricsFolder",
-                                                     m_lyricsManager->lyricsDir()));
-    list.append(KNPreferenceItemGlobal::generateInfo(SwitcherItem,
-                                                     tr("Download Lyrics"),
-                                                     "DownloadLyrics",
-                                                     m_lyricsManager->enableOnlineLyrics()));
-    list.append(KNPreferenceItemGlobal::generateInfo(FontItem,
-                                                     tr("Lyrics Font"),
-                                                     "LyricsFont",
-                                                     font()));
-    KNPreferenceItemInfo currentInfo=KNPreferenceItemGlobal::generateInfo(NumberItem,
-                                                                          tr("Text Spacing"),
-                                                                          "TextSpacing",
-                                                                          spacing(),
-                                                                          spacing(),
-                                                                          true);
-    currentInfo.property.insert("Min", 0);
-    currentInfo.property.insert("Max", 15);
-    list.append(currentInfo);
 }

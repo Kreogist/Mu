@@ -203,9 +203,7 @@ SOURCES += \
     plugin/sdk/knfilesearcher.cpp \
     plugin/module/knmusicplugin/sdk/knmusicmodelassist.cpp \
     plugin/module/knmusicplugin/sdk/knmusicanalysiscache.cpp \
-    plugin/sdk/knpreferencewidgetspanel.cpp \
     plugin/sdk/knvwidgetswitcher.cpp \
-    plugin/sdk/preference/knpreferenceitembase.cpp \
     plugin/sdk/preference/knpreferenceitemswitcher.cpp \
     plugin/sdk/knsideshadowwidget.cpp \
     plugin/sdk/knanimeroundswitcher.cpp \
@@ -216,7 +214,6 @@ SOURCES += \
     plugin/sdk/knconnectionhandler.cpp \
     plugin/sdk/knanimecolorswitcher.cpp \
     plugin/sdk/preference/knpreferenceitemlineedit.cpp \
-    plugin/sdk/preference/knpreferenceitemglobal.cpp \
     plugin/sdk/preference/knpreferenceitempathbrowser.cpp \
     plugin/sdk/knpathlineedit.cpp \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistdelegate.cpp \
@@ -293,7 +290,6 @@ SOURCES += \
     plugin/sdk/preference/knpreferenceitemfont.cpp \
     plugin/sdk/knfontdialog.cpp \
     plugin/sdk/knmousedetectlabel.cpp \
-    plugin/base/knpreference/knpreferencegeneralpanel.cpp \
     plugin/sdk/knlabelbutton.cpp \
     public/knconfiguremanager.cpp \
     plugin/sdk/knconfigure.cpp \
@@ -316,7 +312,13 @@ SOURCES += \
     plugin/sdk/knroundanimebutton.cpp \
     plugin/sdk/knroundbuttonbar.cpp \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricspreviewplayer.cpp \
-    plugin/module/knmusicplugin/sdk/knmusicscrolllyrics.cpp
+    plugin/module/knmusicplugin/sdk/knmusicscrolllyrics.cpp \
+    plugin/module/knmusicplugin/knmusicpluginpreference.cpp \
+    plugin/sdk/kncategorypreference.cpp \
+    plugin/sdk/knpreferenceitempanel.cpp \
+    plugin/sdk/knpreferenceitem.cpp \
+    plugin/sdk/knpreferenceitemfactory.cpp \
+    plugin/base/knpreference/knpreferencegeneral.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -403,8 +405,6 @@ HEADERS += \
     plugin/sdk/knfilesearcher.h \
     plugin/module/knmusicplugin/sdk/knmusicmodelassist.h \
     plugin/module/knmusicplugin/sdk/knmusicanalysiscache.h \
-    plugin/sdk/preference/knpreferenceitembase.h \
-    plugin/sdk/knpreferencewidgetspanel.h \
     plugin/sdk/knvwidgetswitcher.h \
     plugin/sdk/preference/knpreferenceitemswitcher.h \
     plugin/sdk/knsideshadowwidget.h \
@@ -416,7 +416,6 @@ HEADERS += \
     plugin/sdk/knconnectionhandler.h \
     plugin/sdk/knanimecolorswitcher.h \
     plugin/sdk/preference/knpreferenceitemlineedit.h \
-    plugin/sdk/preference/knpreferenceitemglobal.h \
     plugin/sdk/preference/knpreferenceitempathbrowser.h \
     plugin/sdk/knpathlineedit.h \
     plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/sdk/knmusicplaylistlistdelegate.h \
@@ -502,7 +501,6 @@ HEADERS += \
     plugin/sdk/preference/knpreferenceitemfont.h \
     plugin/sdk/knfontdialog.h \
     plugin/sdk/knmousedetectlabel.h \
-    plugin/base/knpreference/knpreferencegeneralpanel.h \
     core/knversion.h \
     plugin/sdk/knlabelbutton.h \
     public/knconfiguremanager.h \
@@ -529,7 +527,13 @@ HEADERS += \
     plugin/sdk/knroundbuttonbar.h \
     plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricspreviewplayer.h \
     plugin/module/knmusicplugin/sdk/knmusicscrolllyrics.h \
-    plugin/module/knmusicplugin/sdk/knmusicheaderlyricsbase.h
+    plugin/module/knmusicplugin/sdk/knmusicheaderlyricsbase.h \
+    plugin/module/knmusicplugin/knmusicpluginpreference.h \
+    plugin/sdk/kncategorypreference.h \
+    plugin/sdk/knpreferenceitempanel.h \
+    plugin/sdk/knpreferenceitem.h \
+    plugin/sdk/knpreferenceitemfactory.h \
+    plugin/base/knpreference/knpreferencegeneral.h
 
 RESOURCES += \
     resource/res.qrc

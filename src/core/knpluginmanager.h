@@ -31,6 +31,7 @@ class KNMainWindowCategoryStackPlugin;
 class KNMainWindowCategorySwitcherPlugin;
 class KNPreferencePlugin;
 class KNCategoryPlugin;
+class KNCategoryPreference;
 class KNPlatformExtras;
 class KNPluginManager : public QObject
 {

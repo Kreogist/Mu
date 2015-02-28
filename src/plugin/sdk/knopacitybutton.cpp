@@ -38,6 +38,11 @@ void KNOpacityButton::setIcon(const QPixmap &icon)
 void KNOpacityButton::mousePressEvent(QMouseEvent *event)
 {
     KNAbstractButton::mousePressEvent(event);
+    //Check is the button disabled.
+    if(m_disabled)
+    {
+        return;
+    }
     //Set flag.
     m_pressed=true;
     //Set opacity.
@@ -49,6 +54,11 @@ void KNOpacityButton::mousePressEvent(QMouseEvent *event)
 void KNOpacityButton::mouseReleaseEvent(QMouseEvent *event)
 {
     KNAbstractButton::mouseReleaseEvent(event);
+    //Check is the button disabled.
+    if(m_disabled)
+    {
+        return;
+    }
     //Recover opacity.
     m_opacity=m_originalOpacity;
     update();
@@ -66,7 +76,8 @@ void KNOpacityButton::mouseReleaseEvent(QMouseEvent *event)
 
 void KNOpacityButton::paintEvent(QPaintEvent *event)
 {
-    if(m_scaledIcon.isNull())
+    //Ignore painting request when disabled or the icon is null.
+    if(m_scaledIcon.isNull() || m_disabled)
     {
         return;
     }
@@ -107,6 +118,18 @@ inline qreal KNOpacityButton::getPressedOpacity()
 qreal KNOpacityButton::opacity() const
 {
     return m_opacity;
+}
+
+bool KNOpacityButton::enabled() const
+{
+    return !m_disabled;
+}
+
+void KNOpacityButton::setEnabled(bool enabled)
+{
+    //Save the disabled state of the button.
+    m_disabled=!enabled;
+    update();
 }
 
 void KNOpacityButton::setOpacity(const qreal &opacity)

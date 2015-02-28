@@ -12,11 +12,10 @@
 #include <QItemSelection>
 #include <QStandardItem>
 
-#include "preference/knpreferenceitembase.h"
 #include "knmessagebox.h"
 #include "knconfigure.h"
 #include "knglobal.h"
-#include "knpreferencewidgetspanel.h"
+#include "knpreferenceitempanel.h"
 
 #include "knmusicnowplayingbase.h"
 
@@ -454,18 +453,6 @@ void KNMusicGlobal::initialGenreText()
                   <<"Synthpop";
 }
 
-void KNMusicGlobal::initialPreference()
-{
-    //Initial the configure.
-    m_musicConfigure=new KNConfigure(this);
-    m_musicConfigure->setCaption("Music");
-    //Add the user configure.
-    m_global->userConfigure()->addSubConfigure(m_musicConfigure);
-    //Initial the preference panel.
-    m_preferencePanel=new KNPreferenceWidgetsPanel;
-    m_preferencePanel->setConfigure(m_musicConfigure);
-}
-
 KNMusicLyricsDownloadDialogBase *KNMusicGlobal::lyricsDownloadDialog() const
 {
     return m_lyricsDownloadDialog;
@@ -586,9 +573,9 @@ KNConfigure *KNMusicGlobal::musicConfigure()
     return m_musicConfigure;
 }
 
-KNPreferenceWidgetsPanel *KNMusicGlobal::preferencePanel()
+void KNMusicGlobal::setMusicConfigure(KNConfigure *musicConfigure)
 {
-    return m_preferencePanel;
+    m_musicConfigure=musicConfigure;
 }
 
 KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying()
@@ -628,8 +615,6 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     //Initial resources.
     initialHeaderText();
     initialGenreText();
-    //Initial the configure.
-    initialPreference();
 
     //Set the library path.
     setMusicLibraryPath(m_global->libraryPath()+"/Music");
@@ -642,17 +627,6 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
             this, &KNMusicGlobal::retranslate);
     //Get the latest translation.
     retranslate();
-}
-
-void KNMusicGlobal::updateItemValue(const QString &valueName)
-{
-    m_preferencePanel->updateItemValue(valueName);
-}
-
-void KNMusicGlobal::insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
-                                       const QList<KNPreferenceItemInfo> &list)
-{
-    m_preferencePanel->insertItemInfoList(listTitle, list);
 }
 
 QPixmap KNMusicGlobal::noAlbumArt() const

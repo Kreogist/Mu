@@ -6,6 +6,7 @@
  */
 #include <QLabel>
 #include <QPushButton>
+#include <QBoxLayout>
 
 #include "knglobal.h"
 #include "knfontdialog.h"
@@ -16,8 +17,9 @@
 #include <QDebug>
 
 KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
-    KNPreferenceItemBase(parent)
+    KNPreferenceItem(parent)
 {
+    setFixedHeight((PreferenceSingleItemHeight<<1)+5);
     //Initial the overview label.
     m_fontOverview=new QLabel(this);
     //Set the font of overview.
@@ -50,12 +52,22 @@ KNPreferenceItemFont::KNPreferenceItemFont(QWidget *parent) :
     connect(m_changeFont, SIGNAL(clicked()), this, SLOT(onActionSelectFont()));
 
     //Insert these widgets.
-    insertStretch();
-    insertWidget(m_fontOverview);
-    insertSpacing(5);
-    insertWidget(m_changeFont);
-    insertSpacing(5);
-    insertWidget(m_previewIcon);
+    QBoxLayout *fontControlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                                 mainLayout()->widget());
+    fontControlLayout->setContentsMargins(0,0,0,0);
+    fontControlLayout->setSpacing(5);
+    mainLayout()->addLayout(fontControlLayout, 1);
+
+    fontControlLayout->addWidget(m_fontOverview, 1, Qt::AlignLeft);
+
+    QBoxLayout *overviewLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                              mainLayout()->widget());
+    overviewLayout->setContentsMargins(0,0,0,0);
+    overviewLayout->setSpacing(5);
+    overviewLayout->addWidget(m_changeFont);
+    overviewLayout->addWidget(m_previewIcon);
+    overviewLayout->addStretch();
+    fontControlLayout->addLayout(overviewLayout);
 
     //Linked the translation.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
@@ -69,33 +81,23 @@ KNPreferenceItemFont::~KNPreferenceItemFont()
     delete m_previewTooltip;
 }
 
-QVariant KNPreferenceItemFont::defaultValue() const
-{
-    return QVariant::fromValue(m_defaultFont);
-}
-
-QVariant KNPreferenceItemFont::value() const
-{
-    return QVariant::fromValue(m_value);
-}
-
 void KNPreferenceItemFont::setDefaultValue(const QVariant &defaultValue)
 {
-    //Save the font.
-    m_defaultFont=defaultValue.value<QFont>();
     //Set the font as default value.
-    setValue(QVariant::fromValue(m_defaultFont));
+    setValue(QVariant::fromValue(defaultValue.value<QFont>()));
 }
 
 void KNPreferenceItemFont::setValue(const QVariant &value)
 {
     //Set the value.
-    m_value=value.value<QFont>();
+    QFont fontValue=value.value<QFont>();
     //Set the preview font and preview text(The font name).
-    m_previewTooltip->setFont(m_value);
-    m_previewTooltip->setText(m_value.family());
+    m_previewTooltip->setFont(fontValue);
+    m_previewTooltip->setText(fontValue.family());
     //Update the overview label info.
     updateOverview();
+    //Set the value.
+    KNPreferenceItem::setValue(QVariant::fromValue(fontValue));
 }
 
 void KNPreferenceItemFont::retranslate()
@@ -106,7 +108,7 @@ void KNPreferenceItemFont::retranslate()
 
 void KNPreferenceItemFont::onActionSelectFont()
 {
-    setValue(KNFontDialog::getFont(m_value));
+    setValue(KNFontDialog::getFont(m_previewTooltip->font()));
 }
 
 void KNPreferenceItemFont::onActionShowTooltip()
@@ -127,12 +129,13 @@ void KNPreferenceItemFont::onActionHideTooltip()
 
 void KNPreferenceItemFont::updateOverview()
 {
-    m_fontOverview->setText(m_value.family() +
+    QFont targetFont=m_previewTooltip->font();
+    m_fontOverview->setText(targetFont.family() +
                             tr(", Size: ") +
-                            QString::number(m_value.pixelSize()) +
-                            (m_value.bold()?tr(", Bold"):"") +
-                            (m_value.italic()?tr(", Italic"):"") +
-                            (m_value.underline()?tr(", Underline"):"") +
-                            (m_value.strikeOut()?tr(", Strike Out"):"") +
-                            (m_value.kerning()?tr(", Kerning"):""));
+                            QString::number(targetFont.pixelSize()) +
+                            (targetFont.bold()?tr(", Bold"):"") +
+                            (targetFont.italic()?tr(", Italic"):"") +
+                            (targetFont.underline()?tr(", Underline"):"") +
+                            (targetFont.strikeOut()?tr(", Strike Out"):"") +
+                            (targetFont.kerning()?tr(", Kerning"):""));
 }

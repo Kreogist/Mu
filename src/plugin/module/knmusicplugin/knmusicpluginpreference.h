@@ -15,39 +15,48 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICHEADERLYRICS_H
-#define KNMUSICHEADERLYRICS_H
+#ifndef KNMUSICPLUGINPREFERENCE_H
+#define KNMUSICPLUGINPREFERENCE_H
 
-#include "knmusicheaderlyricsbase.h"
+#include "kncategorypreference.h"
 
-class QLabel;
-class QTimeLine;
-class KNPreferenceItemGlobal;
-class KNMusicGlobal;
-class KNMusicLyricsManager;
-class KNMusicHeaderLyrics : public KNMusicHeaderLyricsBase
+class KNConfigure;
+class KNMusicPluginPreference : public KNCategoryPreference
 {
     Q_OBJECT
 public:
-    explicit KNMusicHeaderLyrics(QWidget *parent = 0);
-    ~KNMusicHeaderLyrics();
-    void setHeaderPlayer(KNMusicHeaderPlayerBase *player);
+    explicit KNMusicPluginPreference(QObject *parent = 0);
+    KNPreferenceItemPanel *panel();
+    KNConfigure *configure();
 
 signals:
 
 public slots:
-    void loadConfigure();
-    void onActionLyricsUpdate();
 
 private slots:
-    void onActionMusicLibraryMoved(const QString &originalPath,
-                                   const QString &currentPath);
+    void retranslate();
 
 private:
-    KNMusicLyricsManager *m_lyricsManager;
-    KNMusicHeaderPlayerBase *m_player;
-    KNMusicGlobal *m_musicGlobal;
+    enum MusicPreferenceTitle
+    {
+        MusicLyrics,
+        MusicPreferenceTitleCount
+    };
+    enum MusicPreferenceItem
+    {
+        LyricsFolder,
+        LyricsDownloadOnline,
+        LyricsFont,
+        LyricsTextSpacing,
+        MusicPreferenceItemCount
+    };
+    QLabel *m_titles[MusicPreferenceTitleCount];
+    KNPreferenceItem *m_items[MusicPreferenceItemCount];
+
+    inline void initialItems();
+
+    KNPreferenceItemPanel *m_panel;
     KNConfigure *m_musicConfigure;
 };
 
-#endif // KNMUSICHEADERLYRICS_H
+#endif // KNMUSICPLUGINPREFERENCE_H

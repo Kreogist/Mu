@@ -12,33 +12,25 @@
 #include "knpreferenceitemswitcher.h"
 
 KNPreferenceItemSwitcher::KNPreferenceItemSwitcher(QWidget *parent) :
-    KNPreferenceItemBase(parent)
+    KNPreferenceItem(parent)
 {
     m_switcher=new KNAnimeColorSwitcher(this);
-    //Add the control widget.
-    insertStretch();
-    insertWidget(m_switcher);
-}
-
-QVariant KNPreferenceItemSwitcher::defaultValue() const
-{
-    return m_defaultValue;
-}
-
-QVariant KNPreferenceItemSwitcher::value() const
-{
-    return m_switcher->value();
+    //Add the switcher to layout.
+    mainLayout()->addWidget(m_switcher);
+    mainLayout()->addStretch();
 }
 
 void KNPreferenceItemSwitcher::setDefaultValue(const QVariant &defaultValue)
 {
-    //Save the default value.
-    m_defaultValue=defaultValue.toBool();
-    //Set the value.
-    m_switcher->setValue(m_defaultValue);
+    //Set the default value.
+    setDefaultValue(defaultValue.toBool());
 }
 
 void KNPreferenceItemSwitcher::setValue(const QVariant &value)
 {
-    m_switcher->setValue(value.toBool());
+    //Save the value.
+    bool switcherValue=value.toBool();
+    m_switcher->setValue(switcherValue);
+    //Set the value.
+    KNPreferenceItem::setValue(switcherValue);
 }

@@ -15,32 +15,47 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNPREFERENCEGENERALPANEL_H
-#define KNPREFERENCEGENERALPANEL_H
+#ifndef KNPREFERENCEGENERAL_H
+#define KNPREFERENCEGENERAL_H
 
-#include "knpreferencewidgetspanel.h"
+#include "kncategorypreference.h"
 
 class KNPreferenceItemPathBrowser;
-class KNPreferenceGeneralPanel : public KNPreferenceWidgetsPanel
+class KNPreferenceGeneral : public KNCategoryPreference
 {
     Q_OBJECT
 public:
-    explicit KNPreferenceGeneralPanel(QWidget *parent = 0);
-    ~KNPreferenceGeneralPanel();
-    void getLibrarySettings(KNPreferenceTitleInfo &listTitle,
-                            QList<KNPreferenceItemInfo> &list);
+    explicit KNPreferenceGeneral(QObject *parent = 0);
+    KNPreferenceItemPanel *panel();
+    KNConfigure *configure();
 
 signals:
     void libraryDirMoved();
 
 public slots:
-    void retranslate();
 
 private slots:
+    void retranslate();
     void onLibraryMoved();
 
 private:
-    KNPreferenceItemPathBrowser *m_libraryDetector=nullptr;
+    enum GeneralPreferenceTitle
+    {
+        GeneralLibrary,
+        GeneralPreferenceTitleCount
+    };
+    enum GeneralPreferenceItem
+    {
+        LibraryPath,
+        GeneralPreferenceItemCount
+    };
+    QLabel *m_titles[GeneralPreferenceTitleCount];
+    KNPreferenceItem *m_items[GeneralPreferenceItemCount];
+    KNConfigure *m_systemConfigure, *m_generalConfigure;
+
+    KNPreferenceItemPanel *m_panel;
+
+    KNPreferenceItemPathBrowser *m_libraryDetector;
 };
 
-#endif // KNPREFERENCEGENERALPANEL_H
+#endif // KNPREFERENCEGENERAL_H

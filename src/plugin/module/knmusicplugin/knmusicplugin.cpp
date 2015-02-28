@@ -21,6 +21,9 @@
 //Music Global.
 #include "knmusicglobal.h"
 
+//Music Preference.
+#include "knmusicpluginpreference.h"
+
 //Ports
 #include "knmusicbackend.h"
 #include "knmusicparser.h"
@@ -105,7 +108,7 @@
 #include "knplatformextras.h"
 #include "knconnectionhandler.h"
 #include "knmusiccategorytabwidget.h"
-#include "knpreferencewidgetspanel.h"
+#include "knpreferenceitempanel.h"
 
 #include "knmusicplugin.h"
 
@@ -200,9 +203,9 @@ QWidget *KNMusicPlugin::headerWidget()
     return m_headerWidget;
 }
 
-KNPreferenceWidgetsPanel *KNMusicPlugin::preferencePanelWidget()
+KNCategoryPreference *KNMusicPlugin::preference()
 {
-    return m_musicGlobal->preferencePanel();
+    return m_musicPreference;
 }
 
 inline void KNMusicPlugin::loadSearch(KNMusicSearchBase *plugin)
@@ -477,6 +480,10 @@ inline void KNMusicPlugin::initialInfrastructure()
     //Initial the music global.
     m_musicGlobal=KNMusicGlobal::instance();
     m_musicGlobal->setNoAlbumArt(QPixmap(":/plugin/music/common/noalbum.png"));
+
+    //Initial preference.
+    m_musicPreference=new KNMusicPluginPreference(this);
+    m_musicGlobal->setMusicConfigure(m_musicPreference->configure());
 
     //Initial central widget.
     m_centralWidget=new KNMusicCategoryTabWidget;

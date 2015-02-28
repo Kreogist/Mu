@@ -24,12 +24,14 @@ class QBoxLayout;
 class KNAnimeCheckedButton;
 class KNLocaleManager;
 class KNConfigure;
+class KNCategoryPlugin;
+class KNCategoryPreference;
 class KNPreferenceLanguageItem;
 class KNPreferenceLanguagePanel;
 class KNPreferenceContents;
 class KNPreferenceCategory;
-class KNPreferenceWidgetsPanel;
-class KNPreferenceGeneralPanel;
+class KNPreferenceItemPanel;
+class KNPreferenceGeneral;
 class KNPreferencePanel : public QWidget
 {
     Q_OBJECT
@@ -45,10 +47,7 @@ public slots:
     void addLanguageButton(KNAnimeCheckedButton *languageButton,
                            const QPixmap &headerIcon,
                            QWidget *panel);
-    int addCategory(const QString &title,
-                    const QPixmap &icon,
-                    const QPixmap &headerIcon,
-                    KNPreferenceWidgetsPanel *contentWidget);
+    int addCategory(KNCategoryPlugin *plugin);
     void setCategoryText(const int &index,
                          const QString &title);
     void setCurrentIndex(const int &index);
@@ -59,14 +58,14 @@ private slots:
 
 private:
     inline void initialLanguagePanel();
+    inline void addCategoryPreference(KNCategoryPreference *preference);
     KNLocaleManager *m_localeManager;
     QBoxLayout *m_layout;
     KNPreferenceLanguageItem *m_languageItem;
     KNPreferenceLanguagePanel *m_languagePanel;
     KNPreferenceCategory *m_categoryList;
     KNPreferenceContents *m_contents;
-    KNPreferenceGeneralPanel *m_generalPanel;
-    KNConfigure *m_generalConfigure;
+    KNPreferenceGeneral *m_generalPreference;
 };
 
 #endif // KNPREFERENCEPANEL_H

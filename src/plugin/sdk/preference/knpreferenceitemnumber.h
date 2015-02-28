@@ -9,18 +9,16 @@
 
 #include <QWidget>
 
-#include "knpreferenceitembase.h"
+#include "knpreferenceitem.h"
 
 class QSpinBox;
 class QSlider;
-class KNPreferenceItemNumber : public KNPreferenceItemBase
+class KNPreferenceItemNumber : public KNPreferenceItem
 {
     Q_OBJECT
 public:
     explicit KNPreferenceItemNumber(QWidget *parent = 0);
     void setRange(int min, int max);
-    QVariant defaultValue() const;
-    QVariant value() const;
 
 public slots:
     void setDefaultValue(const QVariant &defaultValue);
@@ -32,7 +30,6 @@ private slots:
 private:
     QSlider *m_slider;
     QSpinBox *m_spinBox;
-    int m_defaultValue=0;
 };
 
 #endif // KNPREFERENCEITEMNUMBER_H

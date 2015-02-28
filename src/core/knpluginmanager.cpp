@@ -227,6 +227,9 @@ inline void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
         m_pluginList.append(plugin);
         //Set the plugin.
         m_mainWindowPlugin->setPreferencePanel(m_preferencePlugin);
+        //Link the preference to global apply preference.
+        connect(m_preferencePlugin, &KNPreferencePlugin::requireApplyPreference,
+                m_global, &KNGlobal::requireApplyPreference);
     }
 }
 

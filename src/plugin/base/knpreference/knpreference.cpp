@@ -17,19 +17,19 @@
  */
 #include "knglobal.h"
 #include "kncategoryplugin.h"
+#include "knpreferenceitemfactory.h"
 #include "knpreferencepanel.h"
-#include "preference/knpreferenceitemglobal.h"
 
 #include "knpreference.h"
 
 KNPreference::KNPreference(QObject *parent) :
     KNPreferencePlugin(parent)
 {
-    //Initial the preference global.
-    m_preferenceGlobal=KNPreferenceItemGlobal::instance();
-    //Link the update infrastructure signal at very beginning.
+    //Initial the preference item factory.
+    KNPreferenceItemFactory::initialResource();
     //Initial the preference panel.
     m_preferencePanel=new KNPreferencePanel;
+    //Link the update infrastructure signal at very beginning.
     connect(m_preferencePanel, &KNPreferencePanel::requireUpdateInfrastructure,
             KNGlobal::instance(), &KNGlobal::updateInfrastructure);
     connect(m_preferencePanel, &KNPreferencePanel::requireHidePreference,
@@ -43,10 +43,7 @@ QWidget *KNPreference::preferencePanel()
 
 int KNPreference::addCategory(KNCategoryPlugin *plugin)
 {
-    return m_preferencePanel->addCategory(plugin->caption(),
-                                          plugin->preferenceIcon(),
-                                          plugin->headerIcon(),
-                                          plugin->preferencePanelWidget());
+    return m_preferencePanel->addCategory(plugin);
 }
 
 void KNPreference::setCategoryText(const int &index, const QString &title)
@@ -64,7 +61,7 @@ void KNPreference::onActionHidePreference()
     //Save preference first.
     m_preferencePanel->requireSavePreference();
     //Ask to apply the preference.
-    m_preferenceGlobal->requireApplyPreference();
+    emit requireApplyPreference();
     //Ask to hide preference.
     emit requireHidePreference();
 }

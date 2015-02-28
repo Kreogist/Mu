@@ -22,10 +22,10 @@
 
 class QBoxLayout;
 class QSignalMapper;
-class KNPreferenceWidgetsPanel;
 class KNConnectionHandler;
 class KNMouseDetectHeader;
 class KNMusicTab;
+class KNMusicPluginPreference;
 class KNMusicCategoryTabWidget;
 class KNMusicBackend;
 class KNMusicGlobal;
@@ -55,7 +55,7 @@ public:
     QPixmap preferenceIcon();
     QWidget *centralWidget();
     QWidget *headerWidget();
-    KNPreferenceWidgetsPanel *preferencePanelWidget();
+    KNCategoryPreference *preference();
 
     void setPlatformExtras(KNPlatformExtras *plugin);
     inline void loadSearch(KNMusicSearchBase *plugin);
@@ -114,6 +114,7 @@ private:
     QThread m_parserThread;
     QSignalMapper *m_tabSwitchMapper;
     KNMusicGlobal *m_musicGlobal;
+    KNMusicPluginPreference *m_musicPreference;
 
     KNMusicBackend *m_backend=nullptr;
     KNMusicNowPlayingBase *m_nowPlaying=nullptr;

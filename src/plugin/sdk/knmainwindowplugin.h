@@ -11,6 +11,7 @@
 #include "knmainwindowcategorystackplugin.h"
 #include "knmainwindowcategoryswitcherplugin.h"
 #include "kncategoryplugin.h"
+#include "kncategorypreference.h"
 #include "knpreferenceplugin.h"
 
 #include <QObject>

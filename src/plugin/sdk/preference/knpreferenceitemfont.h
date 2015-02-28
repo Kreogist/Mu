@@ -7,18 +7,16 @@
 #ifndef KNPREFERENCEITEMFONT_H
 #define KNPREFERENCEITEMFONT_H
 
-#include "knpreferenceitembase.h"
+#include "knpreferenceitem.h"
 
 class QPushButton;
 class KNMouseDetectLabel;
-class KNPreferenceItemFont : public KNPreferenceItemBase
+class KNPreferenceItemFont : public KNPreferenceItem
 {
     Q_OBJECT
 public:
     explicit KNPreferenceItemFont(QWidget *parent = 0);
     ~KNPreferenceItemFont();
-    QVariant defaultValue() const;
-    QVariant value() const;
 
 public slots:
     void setDefaultValue(const QVariant &defaultValue);
@@ -34,7 +32,6 @@ private slots:
 private:
     KNMouseDetectLabel *m_previewIcon;
     QLabel *m_fontOverview, *m_previewTooltip;
-    QFont m_value, m_defaultFont;
     QPushButton *m_changeFont;
 };
 

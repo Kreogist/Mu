@@ -7,18 +7,16 @@
 #ifndef KNPREFERENCEITEMPATHBROWSER_H
 #define KNPREFERENCEITEMPATHBROWSER_H
 
-#include "knpreferenceitembase.h"
+#include "knpreferenceitem.h"
 
 class QPushButton;
 class KNPathLineEdit;
 class KNLabelButton;
-class KNPreferenceItemPathBrowser : public KNPreferenceItemBase
+class KNPreferenceItemPathBrowser : public KNPreferenceItem
 {
     Q_OBJECT
 public:
     explicit KNPreferenceItemPathBrowser(QWidget *parent = 0);
-    QVariant defaultValue() const;
-    QVariant value() const;
     bool ensureExist() const;
     void setEnsureExist(bool ensureExist);
 
@@ -38,7 +36,8 @@ private slots:
     void onActionPathNotExist();
 
 private:
-    QString m_defaultValue;
+    inline void initialButtons();
+    inline void initialLineEdit();
     QPalette m_existEditPalette,
              m_notExistEditPalette;
     QPushButton *m_browse, *m_moveTo;

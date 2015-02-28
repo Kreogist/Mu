@@ -11,7 +11,7 @@
 
 class QWidget;
 class KNCategoryPlugin;
-class KNPreferenceWidgetsPanel;
+class KNPreferenceItemPanel;
 class KNPreferencePlugin : public QObject
 {
     Q_OBJECT
@@ -21,6 +21,7 @@ public:
 
 signals:
     void requireHidePreference();
+    void requireApplyPreference();
 
 public slots:
     virtual int addCategory(KNCategoryPlugin *plugin)=0;

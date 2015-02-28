@@ -5,36 +5,31 @@
  * as published by Sam Hocevar. See the COPYING file for more details.
  */
 #include <QLineEdit>
+#include <QBoxLayout>
 
 #include "knpreferenceitemlineedit.h"
 
 KNPreferenceItemLineEdit::KNPreferenceItemLineEdit(QWidget *parent) :
-    KNPreferenceItemBase(parent)
+    KNPreferenceItem(parent)
 {
-    m_valueEditor=new QLineEdit(this);
-    m_valueEditor->setMinimumWidth(260);
-    //Add the control widget.
-    insertWidget(m_valueEditor, 1);
-}
+    //Initial editor.
+    m_editor=new QLineEdit(this);
+    m_editor->setMinimumWidth(260);
 
-QVariant KNPreferenceItemLineEdit::defaultValue() const
-{
-    return m_defaultValue;
-}
-
-QVariant KNPreferenceItemLineEdit::value() const
-{
-    return m_valueEditor->text();
-}
-
-void KNPreferenceItemLineEdit::setDefaultValue(const QVariant &defaultValue)
-{
-    m_defaultValue=defaultValue.toString();
-    //When default value changed, set the value to the default value.
-    setValue(m_defaultValue);
+    //Add editor to layout.
+    mainLayout()->addWidget(m_editor, 1);
 }
 
 void KNPreferenceItemLineEdit::setValue(const QVariant &value)
 {
-    m_valueEditor->setText(value.toString());
+    //Simply set the text.
+    QString text=value.toString();
+    m_editor->setText(text);
+    //Set the value.
+    KNPreferenceItem::setValue(text);
+}
+
+void KNPreferenceItemLineEdit::setDefaultValue(const QVariant &defaultValue)
+{
+    KNPreferenceItem::setDefaultValue(defaultValue.toString());
 }

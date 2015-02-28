@@ -11,7 +11,7 @@
 #include "knpreferenceitemnumber.h"
 
 KNPreferenceItemNumber::KNPreferenceItemNumber(QWidget *parent) :
-    KNPreferenceItemBase(parent)
+    KNPreferenceItem(parent)
 {
     //Initial the spin box.
     m_spinBox=new QSpinBox(this);
@@ -37,10 +37,10 @@ KNPreferenceItemNumber::KNPreferenceItemNumber(QWidget *parent) :
             this, SLOT(synchronizeValue(int)));
 
     //Insert the widget to preference item.
-    insertStretch();
-    insertWidget(m_slider);
-    insertSpacing(5);
-    insertWidget(m_spinBox);
+    mainLayout()->addWidget(m_spinBox);
+    mainLayout()->addSpacing(5);
+    mainLayout()->addWidget(m_slider);
+    mainLayout()->addStretch();
 }
 
 void KNPreferenceItemNumber::setRange(int min, int max)
@@ -49,27 +49,18 @@ void KNPreferenceItemNumber::setRange(int min, int max)
     m_slider->setRange(min, max);
 }
 
-QVariant KNPreferenceItemNumber::defaultValue() const
-{
-    return m_defaultValue;
-}
-
-QVariant KNPreferenceItemNumber::value() const
-{
-    return m_spinBox->value();
-}
-
 void KNPreferenceItemNumber::setDefaultValue(const QVariant &defaultValue)
 {
-    //Set the default value.
-    m_defaultValue=defaultValue.toInt();
-    //When default value changed, set the value to the default value.
-    synchronizeValue(m_defaultValue);
+    setDefaultValue(defaultValue.toInt());
 }
 
 void KNPreferenceItemNumber::setValue(const QVariant &value)
 {
-    synchronizeValue(value.toInt());
+    int sliderValue=value.toInt();
+    //Sync the value of all the widget.
+    synchronizeValue(sliderValue);
+    //Set the value.
+    KNPreferenceItem::setValue(sliderValue);
 }
 
 void KNPreferenceItemNumber::synchronizeValue(const int &value)

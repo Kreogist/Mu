@@ -13,7 +13,7 @@
 #include <QObject>
 
 class KNPlatformExtras;
-class KNPreferenceWidgetsPanel;
+class KNCategoryPreference;
 class KNCategoryPlugin : public QObject
 {
     Q_OBJECT
@@ -25,7 +25,7 @@ public:
     virtual QPixmap preferenceIcon()=0;
     virtual QWidget *centralWidget()=0;
     virtual QWidget *headerWidget()=0;
-    virtual KNPreferenceWidgetsPanel *preferencePanelWidget()=0;
+    virtual KNCategoryPreference *preference()=0;
     virtual void setPlatformExtras(KNPlatformExtras *plugin)=0;
 
 signals:

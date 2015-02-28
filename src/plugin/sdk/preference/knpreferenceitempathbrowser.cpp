@@ -6,6 +6,7 @@
  */
 #include <QCompleter>
 #include <QDirModel>
+#include <QDir>
 #include <QBoxLayout>
 #include <QPushButton>
 #include <QFileDialog>
@@ -19,82 +20,37 @@
 #include <QDebug>
 
 KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
-    KNPreferenceItemBase(parent)
+    KNPreferenceItem(parent)
 {
-    //Initial the editor widget.
-    QWidget *pathEditorWidget=new QWidget(this);
-    pathEditorWidget->setContentsMargins(0,0,0,0);
+    //Resize the item.
+    setFixedHeight((PreferenceSingleItemHeight<<1)+5);
+
+    //Initial widgets.
+    initialButtons();
+    initialLineEdit();
 
     //Initial the editor widget layout.
+    QBoxLayout *editorLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                            mainLayout()->widget());
+    editorLayout->setContentsMargins(0,0,0,0);
+    editorLayout->setSpacing(5);
+    mainLayout()->addLayout(editorLayout, 1);
     QBoxLayout *pathEditorLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                                pathEditorWidget);
+                                                editorLayout->widget());
     pathEditorLayout->setContentsMargins(0,0,0,0);
     pathEditorLayout->setSpacing(0);
-    pathEditorWidget->setLayout(pathEditorLayout);
-
-    //Initial the browse button.
-    m_browse=new QPushButton(this);
-    //Set palette.
-    QPalette pal=m_browse->palette();
-    pal.setColor(QPalette::Button, QColor(0x20, 0x20, 0x20));
-    pal.setColor(QPalette::Window, QColor(0x20, 0x20, 0x20));
-    pal.setColor(QPalette::ButtonText, QColor(0x60, 0x60, 0x60));
-    m_browse->setPalette(pal);
-    connect(m_browse, SIGNAL(clicked()),
-            this, SLOT(onActionBrowseFolder()));
-
-    //Initial the move to button.
-    m_moveTo=new QPushButton(this);
-    m_moveTo->setPalette(pal);
-    connect(m_moveTo, SIGNAL(clicked()),
-            this, SLOT(onActionMoveFolder()));
-
-    //Initial the goto button.
-    m_goto=new KNLabelButton(this);
-    m_goto->setFixedSize(16,16);
-    m_goto->setPixmap(QPixmap("://public/goto_folder.png"));
-    connect(m_goto, &KNLabelButton::clicked,
-            this, &KNPreferenceItemPathBrowser::onActionGotoFolder);
-
-    //Initial the path editor.
-    m_pathEditor=new KNPathLineEdit(this);
-    //Generate auto path completer for path editor.
-    QCompleter *pathCompleter=new QCompleter(m_pathEditor);
-    QDirModel *pathCompleterModel=new QDirModel(m_pathEditor);
-    //Configure the dir model.
-    pathCompleterModel->setFilter(QDir::Dirs |
-                                  QDir::NoDotAndDotDot |
-                                  QDir::NoSymLinks);
-    pathCompleter->setModel(pathCompleterModel);
-    m_pathEditor->setCompleter(pathCompleter);
-    //When start editing, set the palette to normal mode.
-    connect(m_pathEditor, &KNPathLineEdit::startEditPath,
-            this, &KNPreferenceItemPathBrowser::onActionPathExist);
-    //Linked the exist and not exist process slot.
-    connect(m_pathEditor, &KNPathLineEdit::pathExist,
-            this, &KNPreferenceItemPathBrowser::onActionPathExist);
-    connect(m_pathEditor, &KNPathLineEdit::pathNotExist,
-            this, &KNPreferenceItemPathBrowser::onActionPathNotExist);
-    //Set palette.
-    m_existEditPalette=m_pathEditor->palette();
-    m_existEditPalette.setColor(QPalette::Base, QColor(0x20, 0x20, 0x20));
-    m_existEditPalette.setColor(QPalette::Window, QColor(0x4D, 0x4D, 0x4D));
-    m_existEditPalette.setColor(QPalette::Text, QColor(0xA0, 0xA0, 0xA0));
-    m_existEditPalette.setColor(QPalette::Highlight, QColor(0x60, 0x60, 0x60));
-    m_existEditPalette.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
-    m_pathEditor->setPalette(m_existEditPalette);
-    m_notExistEditPalette=m_existEditPalette;
-    m_notExistEditPalette.setColor(QPalette::Base, QColor(255,0,0));
-
-    //Add widgets to item.
-    insertSpacing(5);
-    insertWidget(m_pathEditor, 1);
-    insertSpacing(5);
-    insertWidget(m_goto);
-    insertSpacing(5);
-    insertWidget(m_moveTo);
-    insertSpacing(5);
-    insertWidget(m_browse);
+    editorLayout->addLayout(pathEditorLayout);
+    QBoxLayout *controlsLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                              editorLayout->widget());
+    controlsLayout->setContentsMargins(0,0,0,0);
+    controlsLayout->setSpacing(0);
+    editorLayout->addLayout(controlsLayout);
+    //Add widgets to layouts.
+    pathEditorLayout->addWidget(m_goto);
+    pathEditorLayout->addWidget(m_pathEditor);
+    controlsLayout->addWidget(m_browse);
+    controlsLayout->addWidget(m_moveTo);
+    controlsLayout->addStretch();
 
     //Connect retranslate signal.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
@@ -103,22 +59,11 @@ KNPreferenceItemPathBrowser::KNPreferenceItemPathBrowser(QWidget *parent) :
     retranslate();
 }
 
-QVariant KNPreferenceItemPathBrowser::defaultValue() const
-{
-    return m_defaultValue;
-}
-
-QVariant KNPreferenceItemPathBrowser::value() const
-{
-    return m_pathEditor->text();
-}
-
 void KNPreferenceItemPathBrowser::setDefaultValue(const QVariant &defaultValue)
 {
     QFileInfo defaultValueInfo(defaultValue.toString());
-    m_defaultValue=defaultValueInfo.absoluteFilePath();
     //When default value changed, set the value to the default value.
-    setValue(m_defaultValue);
+    setDefaultValue(defaultValueInfo.absoluteFilePath());
 }
 
 void KNPreferenceItemPathBrowser::setValue(const QVariant &value)
@@ -127,14 +72,17 @@ void KNPreferenceItemPathBrowser::setValue(const QVariant &value)
     m_pathEditor->blockSignals(true);
     //Set the value.
     QFileInfo defaultValueInfo(value.toString());
-    m_pathEditor->setText(defaultValueInfo.absoluteFilePath());
+    QString pathText=defaultValueInfo.absoluteFilePath();
+    m_pathEditor->setText(pathText);
     //Release the block signal.
     m_pathEditor->blockSignals(false);
+    //Set the value.
+    setValue(pathText);
 }
 
 void KNPreferenceItemPathBrowser::onActionBrowseFolder()
 {
-    startLeaveAnime();
+    startMouseOutAnime();
     //Initial the file dialog.
     QFileDialog selectFolder(this,
                              tr("Browse"),
@@ -156,7 +104,7 @@ void KNPreferenceItemPathBrowser::onActionBrowseFolder()
 
 void KNPreferenceItemPathBrowser::onActionMoveFolder()
 {
-    startLeaveAnime();
+    startMouseOutAnime();
     //Initial the file dialog.
     QFileDialog moveToDir(this,
                           tr("Move to"),
@@ -196,7 +144,7 @@ void KNPreferenceItemPathBrowser::onActionMoveFolder()
 void KNPreferenceItemPathBrowser::onActionGotoFolder()
 {
     //Start leave animation.
-    startLeaveAnime();
+    startMouseOutAnime();
     //Do the action.
     KNGlobal::openLocalFile(m_pathEditor->text());
 }
@@ -215,6 +163,66 @@ void KNPreferenceItemPathBrowser::onActionPathNotExist()
     {
         m_pathEditor->setPalette(m_notExistEditPalette);
     }
+}
+
+inline void KNPreferenceItemPathBrowser::initialButtons()
+{
+    //Initial the browse button.
+    m_browse=new QPushButton(this);
+    //Set palette.
+    QPalette pal=m_browse->palette();
+    pal.setColor(QPalette::Button, QColor(0x20, 0x20, 0x20));
+    pal.setColor(QPalette::Window, QColor(0x20, 0x20, 0x20));
+    pal.setColor(QPalette::ButtonText, QColor(0x60, 0x60, 0x60));
+    m_browse->setPalette(pal);
+    connect(m_browse, SIGNAL(clicked()),
+            this, SLOT(onActionBrowseFolder()));
+
+    //Initial the move to button.
+    m_moveTo=new QPushButton(this);
+    m_moveTo->setPalette(pal);
+    connect(m_moveTo, SIGNAL(clicked()),
+            this, SLOT(onActionMoveFolder()));
+
+    //Initial the goto button.
+    m_goto=new KNLabelButton(this);
+    m_goto->setFixedSize(16,16);
+    m_goto->setPixmap(QPixmap("://public/goto_folder.png"));
+    connect(m_goto, &KNLabelButton::clicked,
+            this, &KNPreferenceItemPathBrowser::onActionGotoFolder);
+}
+
+void KNPreferenceItemPathBrowser::initialLineEdit()
+{
+    //Initial the path editor.
+    m_pathEditor=new KNPathLineEdit(this);
+    //Generate auto path completer for path editor.
+    QCompleter *pathCompleter=new QCompleter(m_pathEditor);
+    QDirModel *pathCompleterModel=new QDirModel(m_pathEditor);
+    //Configure the dir model.
+    pathCompleterModel->setFilter(QDir::Dirs |
+                                  QDir::NoDotAndDotDot |
+                                  QDir::NoSymLinks);
+    pathCompleter->setModel(pathCompleterModel);
+    m_pathEditor->setCompleter(pathCompleter);
+    //When start editing, set the palette to normal mode.
+    connect(m_pathEditor, &KNPathLineEdit::startEditPath,
+            this, &KNPreferenceItemPathBrowser::onActionPathExist);
+    //Linked the exist and not exist process slot.
+    connect(m_pathEditor, &KNPathLineEdit::pathExist,
+            this, &KNPreferenceItemPathBrowser::onActionPathExist);
+    connect(m_pathEditor, &KNPathLineEdit::pathNotExist,
+            this, &KNPreferenceItemPathBrowser::onActionPathNotExist);
+    //Set palette.
+    m_existEditPalette=m_pathEditor->palette();
+    m_existEditPalette.setColor(QPalette::Base, QColor(0x20, 0x20, 0x20));
+    m_existEditPalette.setColor(QPalette::Window, QColor(0x4D, 0x4D, 0x4D));
+    m_existEditPalette.setColor(QPalette::Text, QColor(0xA0, 0xA0, 0xA0));
+    m_existEditPalette.setColor(QPalette::Highlight, QColor(0x60, 0x60, 0x60));
+    m_existEditPalette.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
+    m_pathEditor->setPalette(m_existEditPalette);
+    m_notExistEditPalette=m_existEditPalette;
+    m_notExistEditPalette.setColor(QPalette::Base, QColor(255,0,0));
 }
 
 bool KNPreferenceItemPathBrowser::ensureExist() const

@@ -15,8 +15,6 @@
 #include <QStringList>
 #include <QStandardItem>
 
-#include "preference/knpreferenceitemglobal.h"
-
 #include <QObject>
 
 namespace KNMusic
@@ -170,8 +168,7 @@ using namespace KNMusic;
 
 class QLabel;
 class QThread;
-class KNPreferenceItemBase;
-class KNPreferenceWidgetsPanel;
+class KNPreferenceItemPanel;
 class KNConfigure;
 class KNGlobal;
 class KNMusicParser;
@@ -199,7 +196,8 @@ public:
     static KNMusicParser *parser();
     static void setParser(KNMusicParser *parser);
     KNConfigure *musicConfigure();
-    KNPreferenceWidgetsPanel *preferencePanel();
+    void setMusicConfigure(KNConfigure *musicConfigure);
+    KNPreferenceItemPanel *preferencePanel();
     KNMusicNowPlayingBase *nowPlaying();
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     static KNMusicSoloMenuBase *soloMenu();
@@ -230,9 +228,6 @@ public:
     static void setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip);
     static KNMusicDetailDialogBase *detailDialog();
     static void setDetailDialog(KNMusicDetailDialogBase *detailDialog);
-    void updateItemValue(const QString &valueName);
-    void insertItemInfoList(const KNPreferenceTitleInfo &listTitle,
-                            const QList<KNPreferenceItemInfo> &list);
     bool renameMusicFile(const QString &originalPath,
                          const QString &preferName);
     KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog() const;
@@ -259,7 +254,6 @@ private:
     inline void initialThreads();
     inline void initialHeaderText();
     inline void initialGenreText();
-    inline void initialPreference();
     static KNMusicGlobal *m_instance;
     KNMusicLyricsDownloadDialogBase *m_lyricsDownloadDialog;
     static KNMusicParser *m_parser;
@@ -281,7 +275,6 @@ private:
                 m_indexedGenres;
     QPixmap m_noAlbumArt;
     QThread *m_searcherThread, *m_analysisThread, *m_lyricsThread;
-    KNPreferenceWidgetsPanel *m_preferencePanel;
     KNGlobal *m_global;
 };
 

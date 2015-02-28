@@ -7,16 +7,14 @@
 #ifndef KNPREFERENCEITEMSWITCHER_H
 #define KNPREFERENCEITEMSWITCHER_H
 
-#include "knpreferenceitembase.h"
+#include "knpreferenceitem.h"
 
 class KNAnimeColorSwitcher;
-class KNPreferenceItemSwitcher : public KNPreferenceItemBase
+class KNPreferenceItemSwitcher : public KNPreferenceItem
 {
     Q_OBJECT
 public:
     explicit KNPreferenceItemSwitcher(QWidget *parent = 0);
-    QVariant defaultValue() const;
-    QVariant value() const;
 
 signals:
 
@@ -27,7 +25,6 @@ public slots:
 protected:
 
 private:
-    bool m_defaultValue=false;
     KNAnimeColorSwitcher *m_switcher;
 };
 
