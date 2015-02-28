@@ -47,8 +47,7 @@ void KNSideShadowWidget::paintEvent(QPaintEvent *event)
                            QPainter::SmoothPixmapTransform,
                            true);
     //Set gradient.
-    painter.fillRect(QRect(-1,-1,width()+2,height()+2),
-                     m_shadow);
+    painter.fillRect(QRect(-1,-1,width()+2,height()+2), m_shadow);
 }
 
 void KNSideShadowWidget::resizeEvent(QResizeEvent *event)

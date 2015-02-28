@@ -318,7 +318,8 @@ SOURCES += \
     plugin/sdk/knpreferenceitempanel.cpp \
     plugin/sdk/knpreferenceitem.cpp \
     plugin/sdk/knpreferenceitemfactory.cpp \
-    plugin/base/knpreference/knpreferencegeneral.cpp
+    plugin/base/knpreference/knpreferencegeneral.cpp \
+    plugin/sdk/knmouseunclickablewidget.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -533,7 +534,8 @@ HEADERS += \
     plugin/sdk/knpreferenceitempanel.h \
     plugin/sdk/knpreferenceitem.h \
     plugin/sdk/knpreferenceitemfactory.h \
-    plugin/base/knpreference/knpreferencegeneral.h
+    plugin/base/knpreference/knpreferencegeneral.h \
+    plugin/sdk/knmouseunclickablewidget.h
 
 RESOURCES += \
     resource/res.qrc

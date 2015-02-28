@@ -53,7 +53,7 @@ void KNSAOStyle::setScrollBarStyleSheet(QWidget *widget)
                           "   width: 8px;"
                           "}"
                           "QScrollBar::handle:vertical {"
-                          "   background: rgba(0, 0, 0, 100);"
+                          "   background: rgba(100, 100, 100);"
                           "   min-height: 10px;"
                           "   border-radius: 4px;"
                           "}"

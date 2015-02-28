@@ -29,6 +29,7 @@ class QParallelAnimationGroup;
 class QSequentialAnimationGroup;
 class KNConnectionHandler;
 class KNSideShadowWidget;
+class KNMouseUnclickableWidget;
 class KNMusicAlbumTitle;
 class KNMusicTab;
 class KNMusicAlbumModel;
@@ -102,8 +103,8 @@ private:
     inline void updateWidgetGeometries();
     inline void updateShadowGeometries(const QRect &contentPosition);
     KNMusicAlbumTitle *m_albumArt;
+    KNMouseUnclickableWidget *m_albumContent;
     QLabel *m_albumTitle, *m_albumDetails;
-    QWidget *m_albumContent;
     KNMusicAlbumTreeView *m_albumTreeView;
     KNMusicAlbumModel *m_albumModel;
     KNMusicLibraryModel *m_libraryModel;

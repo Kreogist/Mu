@@ -27,6 +27,7 @@
 
 #include "knsideshadowwidget.h"
 #include "knconnectionhandler.h"
+#include "knmouseunclickablewidget.h"
 #include "knglobal.h"
 
 #include "knmusicalbumtitle.h"
@@ -448,7 +449,7 @@ void KNMusicAlbumDetail::onActionHideAlbumArt()
 void KNMusicAlbumDetail::initialInfrastructure()
 {
     //Initial this first, and we don't need to raise it after.
-    m_albumContent=new QWidget(this);
+    m_albumContent=new KNMouseUnclickableWidget(this);
     m_albumContent->setAutoFillBackground(true);
     m_albumContent->setFocusPolicy(Qt::StrongFocus);
     QPalette pal=m_albumContent->palette();

@@ -17,6 +17,8 @@
  */
 #include <QScrollBar>
 
+#include "sao/knsaostyle.h"
+
 #include "knmusicalbumindexdelegate.h"
 
 #include "knmusicalbumtreeview.h"
@@ -34,12 +36,16 @@ KNMusicAlbumTreeView::KNMusicAlbumTreeView(QWidget *parent) :
     pal.setColor(QPalette::WindowText, QColor(0,0,0));
     pal.setColor(QPalette::Text, QColor(0,0,0));
     pal.setColor(QPalette::Button, QColor(255,255,255));
+    pal.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
+    pal.setColor(QPalette::HighlightedText, QColor(0,0,0));
     setPalette(pal);
     //Set the index delegate.
     setItemDelegateForColumn(BlankData,
                              new KNMusicAlbumIndexDelegate(this));
     //Always hide horizontal scroll bar.
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //Configure the vertiacal scroll bar.
+    KNSAOStyle::setScrollBarStyleSheet(verticalScrollBar());
 }
 
 void KNMusicAlbumTreeView::resizeHeader(int preferWidth)

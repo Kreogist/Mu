@@ -17,6 +17,7 @@
 #include <QJsonDocument>
 
 #include "knconnectionhandler.h"
+
 #include "knmusicdetailtooltipbase.h"
 #include "knmusicmodel.h"
 #include "knmusicmodelassist.h"
