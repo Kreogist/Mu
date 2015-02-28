@@ -22,7 +22,6 @@
 #include <QEasingCurve>
 #include <QWidget>
 
-class QGraphicsOpacityEffect;
 class QLabel;
 class QPropertyAnimation;
 class QParallelAnimationGroup;
@@ -116,7 +115,6 @@ private:
                        *m_albumArtFlyAway, *m_albumContentFlyAway,
                        *m_showAlbumArtLabel, *m_showAlbumContent,
                        *m_hideAlbumArtLabel, *m_hideAlbumContent;
-    QGraphicsOpacityEffect *m_opacityEffect;
     QParallelAnimationGroup *m_expandStep1, *m_expandStep2,
                             *m_foldAnime, *m_showAlbumArt, *m_hideAlbumArt,
                             *m_flyAwayAnime;
@@ -124,6 +122,7 @@ private:
     KNConnectionHandler *m_detailHandler;
     QEasingCurve m_inCurve;
     QModelIndex m_currentIndex;
+    QPalette m_contentPalette;
     bool m_pressed=false, m_backgroundAnime=true;
 
     int m_iconSize, m_sizeParameter=0, m_shadowWidth=15;

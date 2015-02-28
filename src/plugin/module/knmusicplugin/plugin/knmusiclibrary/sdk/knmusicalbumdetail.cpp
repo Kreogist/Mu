@@ -21,7 +21,6 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
-#include <QGraphicsOpacityEffect>
 #include <QMouseEvent>
 #include <QTransform>
 
@@ -114,7 +113,8 @@ void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
                                          m_albumModel->data(m_currentIndex, Qt::DisplayRole).toString());
     m_albumTreeView->scrollToTop();
     //Initial the opacity effect.
-    m_opacityEffect->setOpacity(1.0);
+    m_contentPalette.setColor(QPalette::Window, QColor(255,255,255,240));
+    m_albumContent->setPalette(m_contentPalette);
     //Set the position.
     QRect albumArtStartRect(m_animeStartRect.x(),
                             m_animeStartRect.y(),
@@ -291,7 +291,8 @@ void KNMusicAlbumDetail::onActionExpandStep1(const QVariant &position)
         setPalette(pal);
     }
     //Set the opacity effect.
-    m_opacityEffect->setOpacity(progress);
+    m_contentPalette.setColor(QPalette::Window, QColor(255,255,255,progress*240.0));
+    m_albumContent->setPalette(m_contentPalette);
 }
 
 void KNMusicAlbumDetail::onActionFold(const QVariant &position)
@@ -306,7 +307,8 @@ void KNMusicAlbumDetail::onActionFold(const QVariant &position)
     pal.setColor(QPalette::Window, QColor(0,0,0,progress*200));
     setPalette(pal);
     //Set the opacity effect.
-    m_opacityEffect->setOpacity(progress);
+    m_contentPalette.setColor(QPalette::Window, QColor(255,255,255,progress*240.0));
+    m_albumContent->setPalette(m_contentPalette);
 }
 
 void KNMusicAlbumDetail::onActionFoldFinished()
@@ -329,7 +331,8 @@ void KNMusicAlbumDetail::onActionFlyAway(const QVariant &position)
     pal.setColor(QPalette::Window, QColor(0,0,0,progress*200));
     setPalette(pal);
     //Set the opacity effect.
-    m_opacityEffect->setOpacity(progress);
+    m_contentPalette.setColor(QPalette::Window, QColor(255,255,255,progress*240.0));
+    m_albumContent->setPalette(m_contentPalette);
 }
 
 void KNMusicAlbumDetail::onActionFlyAwayFinished()
@@ -452,13 +455,9 @@ void KNMusicAlbumDetail::initialInfrastructure()
     m_albumContent=new KNMouseUnclickableWidget(this);
     m_albumContent->setAutoFillBackground(true);
     m_albumContent->setFocusPolicy(Qt::StrongFocus);
-    QPalette pal=m_albumContent->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255,240));
-    m_albumContent->setPalette(pal);
-    //Initial the opacity effects.
-    m_opacityEffect=new QGraphicsOpacityEffect(this);
-    m_opacityEffect->setOpacity(1.0);
-    m_albumContent->setGraphicsEffect(m_opacityEffect);
+    m_contentPalette=m_albumContent->palette();
+    m_contentPalette.setColor(QPalette::Window, QColor(255,255,255,240));
+    m_albumContent->setPalette(m_contentPalette);
     //Initial the album art.
     m_albumArt=new KNMusicAlbumTitle(this);
     m_albumArt->setScaledContents(true);
