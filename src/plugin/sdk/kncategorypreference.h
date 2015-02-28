@@ -15,6 +15,8 @@ public:
     ~KNCategoryPreference();
     virtual KNPreferenceItemPanel *panel()=0;
     virtual KNConfigure *configure()=0;
+    virtual void saveConfigures()=0;
+    virtual void loadConfigures()=0;
 
 signals:
 

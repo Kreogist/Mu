@@ -103,6 +103,26 @@ int KNPreferencePanel::addCategory(KNCategoryPlugin *plugin)
                                        plugin->headerIcon());
 }
 
+void KNPreferencePanel::loadConfigures()
+{
+    for(QLinkedList<KNCategoryPreference *>::iterator i=m_preferenceList.begin();
+        i!=m_preferenceList.end();
+        ++i)
+    {
+        (*i)->loadConfigures();
+    }
+}
+
+void KNPreferencePanel::saveConfigures()
+{
+    for(QLinkedList<KNCategoryPreference *>::iterator i=m_preferenceList.begin();
+        i!=m_preferenceList.end();
+        ++i)
+    {
+        (*i)->saveConfigures();
+    }
+}
+
 void KNPreferencePanel::setCategoryText(const int &index,
                                         const QString &title)
 {
@@ -146,9 +166,9 @@ void KNPreferencePanel::addCategoryPreference(KNCategoryPreference *preference)
     //Add the panel to contents.
     KNPreferenceItemPanel *panel=preference->panel();
     m_contents->addPanelWidget(panel);
+    //Save the preference.
+    m_preferenceList.append(preference);
     //Link the panel.
     connect(m_categoryList, &KNPreferenceCategory::requireShowNormal,
             panel, &KNPreferenceItemPanel::setNormalMode);
-    connect(this, &KNPreferencePanel::requireSavePreference,
-            panel, &KNPreferenceItemPanel::saveItemsValue);
 }

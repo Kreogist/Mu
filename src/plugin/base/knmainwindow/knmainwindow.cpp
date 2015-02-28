@@ -164,6 +164,9 @@ void KNMainWindow::setPreferencePanel(KNPreferencePlugin *plugin)
 
 void KNMainWindow::showPreference()
 {
+    //Update configure data to the panel before show the panel.
+    m_preferencePlugin->loadConfigure();
+    //Show the preference.
     m_container->showPreference();
 }
 

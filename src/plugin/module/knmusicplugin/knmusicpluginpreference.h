@@ -28,6 +28,8 @@ public:
     explicit KNMusicPluginPreference(QObject *parent = 0);
     KNPreferenceItemPanel *panel();
     KNConfigure *configure();
+    void loadConfigures();
+    void saveConfigures();
 
 signals:
 

@@ -65,6 +65,22 @@ KNConfigure *KNPreferenceGeneral::configure()
     return m_generalConfigure;
 }
 
+void KNPreferenceGeneral::loadConfigures()
+{
+    for(int i=0; i<GeneralPreferenceItemCount; i++)
+    {
+        m_items[i]->loadValue();
+    }
+}
+
+void KNPreferenceGeneral::saveConfigures()
+{
+    for(int i=0; i<GeneralPreferenceItemCount; i++)
+    {
+        m_items[i]->saveValue();
+    }
+}
+
 void KNPreferenceGeneral::retranslate()
 {
     m_titles[GeneralLibrary]->setText(tr("Library"));

@@ -192,6 +192,7 @@ void KNAnimeColorSwitcher::setValue(bool value)
     }
     //Save value.
     m_value=value;
+    emit valueChanged(m_value);
     //Show animation.
     if(m_value)
     {

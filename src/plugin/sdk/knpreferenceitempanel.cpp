@@ -63,20 +63,8 @@ void KNPreferenceItemPanel::addItem(KNPreferenceItem *item, bool advanced)
     {
         setAdvancedItem(item);
     }
-    //Add item to list.
-    m_items.append(item);
     //Add widget to layout.
     m_mainLayout->insertWidget(m_mainLayout->count()-1, item);
-}
-
-void KNPreferenceItemPanel::saveItemsValue()
-{
-    for(QLinkedList<KNPreferenceItem *>::iterator i=m_items.begin();
-        i!=m_items.end();
-        ++i)
-    {
-        (*i)->saveValue();
-    }
 }
 
 bool KNPreferenceItemPanel::advancedMode() const
@@ -99,14 +87,4 @@ void KNPreferenceItemPanel::setAdvancedItem(QWidget *item)
             item, &QWidget::setVisible);
     //Set the item to current advanced mode.
     item->setVisible(m_advancedMode);
-}
-
-void KNPreferenceItemPanel::loadItemsValue()
-{
-    for(QLinkedList<KNPreferenceItem *>::iterator i=m_items.begin();
-        i!=m_items.end();
-        ++i)
-    {
-        (*i)->loadValue();
-    }
 }

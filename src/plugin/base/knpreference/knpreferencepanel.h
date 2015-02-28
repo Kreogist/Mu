@@ -18,6 +18,8 @@
 #ifndef KNPREFERENCEPANEL_H
 #define KNPREFERENCEPANEL_H
 
+#include <QLinkedList>
+
 #include <QWidget>
 
 class QBoxLayout;
@@ -40,7 +42,6 @@ public:
 
 signals:
     void requireUpdateInfrastructure();
-    void requireSavePreference();
     void requireHidePreference();
 
 public slots:
@@ -48,6 +49,8 @@ public slots:
                            const QPixmap &headerIcon,
                            QWidget *panel);
     int addCategory(KNCategoryPlugin *plugin);
+    void loadConfigures();
+    void saveConfigures();
     void setCategoryText(const int &index,
                          const QString &title);
     void setCurrentIndex(const int &index);
@@ -66,6 +69,8 @@ private:
     KNPreferenceCategory *m_categoryList;
     KNPreferenceContents *m_contents;
     KNPreferenceGeneral *m_generalPreference;
+
+    QLinkedList<KNCategoryPreference *> m_preferenceList;
 };
 
 #endif // KNPREFERENCEPANEL_H

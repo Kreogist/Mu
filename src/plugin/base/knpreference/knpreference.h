@@ -36,6 +36,7 @@ public slots:
     int addCategory(KNCategoryPlugin *plugin);
     void setCategoryText(const int &index, const QString &title);
     void setCurrentIndex(const int &index);
+    void loadConfigure();
 
 private slots:
     void onActionHidePreference();

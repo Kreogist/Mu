@@ -51,7 +51,7 @@ void KNPreferenceItemNumber::setRange(int min, int max)
 
 void KNPreferenceItemNumber::setDefaultValue(const QVariant &defaultValue)
 {
-    setDefaultValue(defaultValue.toInt());
+    KNPreferenceItem::setDefaultValue(defaultValue.toInt());
 }
 
 void KNPreferenceItemNumber::setValue(const QVariant &value)

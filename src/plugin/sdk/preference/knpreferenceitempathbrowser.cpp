@@ -63,7 +63,7 @@ void KNPreferenceItemPathBrowser::setDefaultValue(const QVariant &defaultValue)
 {
     QFileInfo defaultValueInfo(defaultValue.toString());
     //When default value changed, set the value to the default value.
-    setDefaultValue(defaultValueInfo.absoluteFilePath());
+    KNPreferenceItem::setDefaultValue(defaultValueInfo.absoluteFilePath());
 }
 
 void KNPreferenceItemPathBrowser::setValue(const QVariant &value)
@@ -77,7 +77,7 @@ void KNPreferenceItemPathBrowser::setValue(const QVariant &value)
     //Release the block signal.
     m_pathEditor->blockSignals(false);
     //Set the value.
-    setValue(pathText);
+    KNPreferenceItem::setValue(pathText);
 }
 
 void KNPreferenceItemPathBrowser::onActionBrowseFolder()

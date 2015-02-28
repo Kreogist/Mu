@@ -24,6 +24,9 @@ public slots:
 
 protected:
 
+private slots:
+    void onActionValueChange(bool value);
+
 private:
     KNAnimeColorSwitcher *m_switcher;
 };

@@ -56,6 +56,22 @@ KNConfigure *KNMusicPluginPreference::configure()
     return m_musicConfigure;
 }
 
+void KNMusicPluginPreference::loadConfigures()
+{
+    for(int i=0; i<MusicPreferenceItemCount; i++)
+    {
+        m_items[i]->loadValue();
+    }
+}
+
+void KNMusicPluginPreference::saveConfigures()
+{
+    for(int i=0; i<MusicPreferenceItemCount; i++)
+    {
+        m_items[i]->saveValue();
+    }
+}
+
 void KNMusicPluginPreference::retranslate()
 {
     //Update titles.

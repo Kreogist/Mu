@@ -84,7 +84,7 @@ KNPreferenceItemFont::~KNPreferenceItemFont()
 void KNPreferenceItemFont::setDefaultValue(const QVariant &defaultValue)
 {
     //Set the font as default value.
-    setValue(QVariant::fromValue(defaultValue.value<QFont>()));
+    KNPreferenceItem::setDefaultValue(QVariant::fromValue(defaultValue.value<QFont>()));
 }
 
 void KNPreferenceItemFont::setValue(const QVariant &value)

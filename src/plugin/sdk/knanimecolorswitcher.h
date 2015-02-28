@@ -21,6 +21,7 @@ public:
     void setButtonColor(const QColor &buttonColor);
 
 signals:
+    void valueChanged(bool value);
 
 public slots:
 
