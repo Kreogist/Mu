@@ -50,6 +50,7 @@ public:
 
 signals:
     void requireProcessArguments(QStringList arguments);
+    void requireSaveConfigure();
 
 public slots:
 

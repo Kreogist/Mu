@@ -62,6 +62,8 @@ KNPluginManager *KNPluginManager::instance()
 
 KNPluginManager::~KNPluginManager()
 {
+    //Ask all the plugins to save the configure.
+    emit requireSaveConfigure();
     //Save the configure right now.
     m_global->saveConfigure();
     //Delete all the plugins.
@@ -245,6 +247,8 @@ inline void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     //Connect arguments process.
     connect(this, &KNPluginManager::requireProcessArguments,
             plugin, &KNCategoryPlugin::onArgumentsAvailable);
+    connect(this, &KNPluginManager::requireSaveConfigure,
+            plugin, &KNCategoryPlugin::saveConfigure);
     //Add this plugin to main window.
     m_mainWindowPlugin->addCategoryPlugin(plugin);
 }

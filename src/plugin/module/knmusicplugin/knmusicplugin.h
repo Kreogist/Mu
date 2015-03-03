@@ -77,6 +77,7 @@ public slots:
     void retranslate();
     void enablePlatformExtras();
     void disablePlatformExtras();
+    void saveConfigure();
 
 protected slots:
     int addMusicCategory(const QPixmap &icon,

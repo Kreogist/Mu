@@ -32,6 +32,7 @@ signals:
     void requireSaveConfigure();
 
 public slots:
+    virtual void saveConfigure()=0;
     virtual void enablePlatformExtras()=0;
     virtual void disablePlatformExtras()=0;
     virtual void onArgumentsAvailable(const QStringList &data)=0;

@@ -159,8 +159,6 @@ KNMusicPlugin::~KNMusicPlugin()
     //Stop threads.
     m_parserThread.quit();
     m_parserThread.wait();
-    //Ask to save the configure.
-    emit requireSaveConfigure();
     //Delete all the plugins.
     while(!m_pluginList.isEmpty())
     {
@@ -448,6 +446,12 @@ void KNMusicPlugin::disablePlatformExtras()
     {
         m_extraHandler->disconnectAll();
     }
+}
+
+void KNMusicPlugin::saveConfigure()
+{
+    //Ask to save the configure.
+    emit requireSaveConfigure();
 }
 
 int KNMusicPlugin::addMusicCategory(const QPixmap &icon,
