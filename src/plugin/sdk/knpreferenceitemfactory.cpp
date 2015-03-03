@@ -23,7 +23,8 @@ QFont KNPreferenceItemFactory::m_titleFont=QFont();
 
 KNPreferenceItem *KNPreferenceItemFactory::create(int type,
                                                   const QString &valueName,
-                                                  KNConfigure *configure)
+                                                  KNConfigure *configure,
+                                                  const QVariant &defaultValue)
 {
     //Generate the item according to the type.
     KNPreferenceItem *item=nullptr;
@@ -57,6 +58,10 @@ KNPreferenceItem *KNPreferenceItemFactory::create(int type,
     //Set properties.
     item->setValueName(valueName);
     item->setConfigure(configure);
+    if(!defaultValue.isNull())
+    {
+        item->setDefaultValue(defaultValue);
+    }
     return item;
 }
 

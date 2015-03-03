@@ -137,13 +137,13 @@ KNMusicTab *KNMusicLibrary::genreTab()
 void KNMusicLibrary::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 {
     connect(player, &KNMusicHeaderPlayerBase::requireShowInSongs,
-            [=]{m_librarySongTab->showInTab(player->currentDetailInfo());});
+            [=]{m_librarySongTab->showInTab(player->currentAnalysisItem().detailInfo);});
     connect(player, &KNMusicHeaderPlayerBase::requireShowInArtists,
-            [=]{m_libraryTabs[TabArtists]->showInTab(player->currentDetailInfo());});
+            [=]{m_libraryTabs[TabArtists]->showInTab(player->currentAnalysisItem().detailInfo);});
     connect(player, &KNMusicHeaderPlayerBase::requireShowInAlbums,
-            [=]{m_libraryTabs[TabAlbums]->showInTab(player->currentDetailInfo());});
+            [=]{m_libraryTabs[TabAlbums]->showInTab(player->currentAnalysisItem().detailInfo);});
     connect(player, &KNMusicHeaderPlayerBase::requireShowInGenres,
-            [=]{m_libraryTabs[TabGenres]->showInTab(player->currentDetailInfo());});
+            [=]{m_libraryTabs[TabGenres]->showInTab(player->currentAnalysisItem().detailInfo);});
 }
 
 void KNMusicLibrary::onActionLoadLibrary()

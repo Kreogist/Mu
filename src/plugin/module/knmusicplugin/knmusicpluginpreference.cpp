@@ -24,6 +24,8 @@
 #include "knpreferenceitempanel.h"
 #include "knpreferenceitemfactory.h"
 
+#include "knmusicglobal.h"
+
 #include "knmusicpluginpreference.h"
 
 KNMusicPluginPreference::KNMusicPluginPreference(QObject *parent) :
@@ -92,8 +94,10 @@ inline void KNMusicPluginPreference::initialItems()
         m_titles[i]=KNPreferenceItemFactory::createTitle();
     }
     //Generate lyrics item.
-    m_items[LyricsFolder]=KNPreferenceItemFactory::create(PathEditItem, "LyricsFolder", m_musicConfigure);
-    m_items[LyricsDownloadOnline]=KNPreferenceItemFactory::create(SwitcherItem, "LyricsDownloadOnline", m_musicConfigure);
+    m_items[LyricsFolder]=KNPreferenceItemFactory::create(PathEditItem, "LyricsFolder", m_musicConfigure,
+                                                          KNMusicGlobal::musicLibraryPath()+"/Lyrics");
+    m_items[LyricsDownloadOnline]=KNPreferenceItemFactory::create(SwitcherItem, "LyricsDownloadOnline", m_musicConfigure,
+                                                                  true);
     m_items[LyricsFont]=KNPreferenceItemFactory::create(FontItem, "LyricsFont", m_musicConfigure);
     m_items[LyricsTextSpacing]=KNPreferenceItemFactory::create(NumberItem, "LyricsTextSpacing", m_musicConfigure);
     ((KNPreferenceItemNumber *)m_items[LyricsTextSpacing])->setRange(0, 15);

@@ -157,7 +157,7 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     onActionLoopStateChanged(m_nowPlaying->loopState());
 }
 
-KNMusicDetailInfo KNMusicHeaderPlayer::currentDetailInfo()
+KNMusicAnalysisItem KNMusicHeaderPlayer::currentAnalysisItem()
 {
     return m_currentDetailInfo;
 }
@@ -166,6 +166,7 @@ void KNMusicHeaderPlayer::resetInformation()
 {
     //Reset file path.
     m_currentFilePath.clear();
+    m_currentDetailInfo=KNMusicAnalysisItem();
     //Set text.
     setTitle("");
     m_artist.clear();
@@ -784,19 +785,20 @@ inline void KNMusicHeaderPlayer::configureVolumeAnimation(QPropertyAnimation *an
 
 void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisItem)
 {
-    //Get the current information.
-    m_currentDetailInfo=analysisItem.detailInfo;
+    //Save the analysis item, get the current information.
+    m_currentDetailInfo=analysisItem;
+    KNMusicDetailInfo &detailInfo=m_currentDetailInfo.detailInfo;
     //Save the new file path and emit file path changed signal.
-    m_currentFilePath=m_currentDetailInfo.filePath;
+    m_currentFilePath=detailInfo.filePath;
     //Set the display data.
-    setTitle(m_currentDetailInfo.textLists[Name]);
-    m_artist=m_currentDetailInfo.textLists[Artist];
-    m_album=m_currentDetailInfo.textLists[Album];
+    setTitle(detailInfo.textLists[Name]);
+    m_artist=detailInfo.textLists[Artist];
+    m_album=detailInfo.textLists[Album];
     updateArtistAndAlbum();
     QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
-    //Ask to load lyrics.
-//    emit requireLoadLyrics(m_currentDetailInfo);
+    //Ask to update the detail information.
+    emit analysisItemUpdated();
 }
 
 inline void KNMusicHeaderPlayer::initialInformationPanel()

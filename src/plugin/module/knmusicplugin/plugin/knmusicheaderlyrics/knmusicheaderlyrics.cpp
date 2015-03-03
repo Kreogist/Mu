@@ -34,8 +34,6 @@ KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
 {
     //Initial the music global, music configure and lyrics manager.
     m_musicGlobal=KNMusicGlobal::instance();
-    connect(m_musicGlobal, &KNMusicGlobal::musicLibraryMoved,
-            this, &KNMusicHeaderLyrics::onActionMusicLibraryMoved);
 
     m_musicConfigure=m_musicGlobal->musicConfigure();
 
@@ -74,17 +72,18 @@ void KNMusicHeaderLyrics::onActionLyricsUpdate()
 {
     //Reset the lyrics first.
     onActionLyricsReset();
+    const KNMusicDetailInfo &detailInfo=
+            m_player->currentAnalysisItem().detailInfo;
     //Check is the updated lyrics is the player's lyrics.
-    if(m_lyricsManager->musicDetailInfo().filePath!=m_player->currentDetailInfo().filePath ||
-            m_lyricsManager->musicDetailInfo().trackFilePath!=m_player->currentDetailInfo().trackFilePath ||
-            m_lyricsManager->musicDetailInfo().trackIndex!=m_player->currentDetailInfo().trackIndex ||
-            m_lyricsManager->positionList().isEmpty())
+    if(m_lyricsManager->musicDetailInfo().filePath==detailInfo.filePath &&
+            m_lyricsManager->musicDetailInfo().trackFilePath==detailInfo.trackFilePath &&
+            m_lyricsManager->musicDetailInfo().trackIndex==detailInfo.trackIndex &&
+            (!(m_lyricsManager->positionList().isEmpty())))
     {
-        return;
+        //Set the lyrics data.
+        setLyricsData(m_lyricsManager->positionList(),
+                      m_lyricsManager->textList());
     }
-    //Set the lyrics data.
-    setLyricsData(m_lyricsManager->positionList(),
-                  m_lyricsManager->textList());
 }
 
 void KNMusicHeaderLyrics::loadConfigure()
@@ -96,19 +95,4 @@ void KNMusicHeaderLyrics::loadConfigure()
     setFont(m_musicConfigure->getData("LyricsFont", font()).value<QFont>());
     //Update the lyrics.
     update();
-}
-
-void KNMusicHeaderLyrics::onActionMusicLibraryMoved(const QString &originalPath,
-                                                    const QString &currentPath)
-{
-    //Check if lyrics manager's folder path is in the orginal path.
-    QString managerFolderPath=m_lyricsManager->lyricsDir();
-    if(managerFolderPath.left(originalPath.size())==originalPath)
-    {
-        //Set the lyrics manager to the new path.
-        QString currentFolderPath=
-                currentPath+managerFolderPath.mid(originalPath.size());
-        m_lyricsManager->setLyricsDir(currentFolderPath);
-        m_musicConfigure->setData("LyricsFolder", currentFolderPath);
-    }
 }

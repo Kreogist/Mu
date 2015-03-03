@@ -36,6 +36,13 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
 {
     //Initial the global instance.
     m_global=KNGlobal::instance();
+    //Set the default loading policy.
+    m_policyList << SameNameInLyricsDir << RelateNameInLyricsDir
+                 << SameNameInMusicDir << RelateNameInMusicDir;
+    //Set the default relate finding policy list.
+    m_relateNamePolicyList << LyricsNamedArtistHyphonTitle
+                           << LyricsNamedTitle
+                           << LyricsNamedAlbumHyphonTitle;
 
     //Get configures.
     m_musicConfigure=KNMusicGlobal::instance()->musicConfigure();
@@ -44,15 +51,11 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     //Initial the LRC lyrics parser and utf-8 codec.
     m_parser=new KNMusicLRCLyricsParser(this);
     m_utf8Codec=QTextCodec::codecForName("UTF-8");
-    //Set the default lyrics directory path.
-    setLyricsDir(KNMusicGlobal::musicLibraryPath()+"/Lyrics");
-    //Set the default loading policy.
-    m_policyList << SameNameInLyricsDir << RelateNameInLyricsDir
-                 << SameNameInMusicDir << RelateNameInMusicDir;
-    //Set the default relate finding policy list.
-    m_relateNamePolicyList << LyricsNamedArtistHyphonTitle
-                           << LyricsNamedTitle
-                           << LyricsNamedAlbumHyphonTitle;
+    //Link the library moved signal.
+    connect(KNMusicGlobal::instance(), &KNMusicGlobal::musicLibraryMoved,
+            this, &KNMusicLyricsManager::onActionMusicLibraryMoved);
+    connect(m_global, &KNGlobal::requireApplyPreference,
+            this, &KNMusicLyricsManager::loadConfigure);
 }
 
 KNMusicLyricsManager *KNMusicLyricsManager::instance()
@@ -174,6 +177,20 @@ void KNMusicLyricsManager::searchLyrics(const KNMusicDetailInfo &detailInfo,
     }
     //Emit search complete signal.
     emit lyricsSearchedComplete();
+}
+
+void KNMusicLyricsManager::onActionMusicLibraryMoved(const QString &originalPath,
+                                                     const QString &currentPath)
+{
+    //Check if lyrics folder path is in the orginal path.
+    if(m_lyricsDir.left(originalPath.size())==originalPath)
+    {
+        //Set the lyrics manager to the new path.
+        QString currentFolderPath=
+                  currentPath+m_lyricsDir.mid(originalPath.size());
+        setLyricsDir(currentFolderPath);
+        m_musicConfigure->setData("LyricsFolder", currentFolderPath);
+    }
 }
 
 inline void KNMusicLyricsManager::clearCurrentData()
@@ -340,10 +357,10 @@ void KNMusicLyricsManager::loadConfigure()
 {
     //Get path configures.
     setLyricsDir(m_systemConfigure->getData("LyricsFolder",
-                                            lyricsDir()).toString());
+                                            m_lyricsDir).toString());
     //Get user configures.
     setEnableOnlineLyrics(m_musicConfigure->getData("DownloadLyrics",
-                                                    enableOnlineLyrics()).toBool());
+                                                    m_enableOnlineLyrics).toBool());
 }
 
 void KNMusicLyricsManager::saveConfigure()

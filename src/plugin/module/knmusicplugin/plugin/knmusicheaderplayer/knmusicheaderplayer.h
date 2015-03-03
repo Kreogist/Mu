@@ -42,7 +42,7 @@ public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
     void setBackend(KNMusicBackend *backend);
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
-    KNMusicDetailInfo currentDetailInfo();
+    KNMusicAnalysisItem currentAnalysisItem();
 
 signals:
 
@@ -155,7 +155,7 @@ private:
 
     //Datas.
     QString m_artist, m_album, m_currentFilePath;
-    KNMusicDetailInfo m_currentDetailInfo;
+    KNMusicAnalysisItem m_currentDetailInfo;
 };
 
 #endif // KNMUSICHEADERPLAYER_H

@@ -7,14 +7,20 @@
 #ifndef KNMUSICMAINPLAYERBASE_H
 #define KNMUSICMAINPLAYERBASE_H
 
+#include "knmusicglobal.h"
+
 #include "kndropproxycontainer.h"
 
+class KNMusicHeaderPlayerBase;
 class KNMusicMainPlayerBase : public KNDropProxyContainer
 {
     Q_OBJECT
 public:
     KNMusicMainPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
+    virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)=0;
 
+public slots:
+    virtual void onActionAnalysisItemUpdate()=0;
 };
 
 #endif // KNMUSICMAINPLAYERBASE_H

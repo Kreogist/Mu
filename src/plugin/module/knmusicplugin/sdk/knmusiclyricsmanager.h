@@ -70,6 +70,10 @@ public slots:
     void searchLyrics(const KNMusicDetailInfo &detailInfo,
                       QStandardItemModel *lyricsModel);
 
+private slots:
+    void onActionMusicLibraryMoved(const QString &originalPath,
+                                   const QString &currentPath);
+
 private:
     enum SearchPolicy
     {

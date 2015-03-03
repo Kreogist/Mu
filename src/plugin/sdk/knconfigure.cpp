@@ -140,6 +140,8 @@ QVariant KNConfigure::getData(const QString &key,
     //Check if value is available.
     if(value.type()==QJsonValue::Undefined)
     {
+        //Save the default value to data object.
+        setData(key, defaultValue);
         return defaultValue;
     }
     //Check if the value is a advanced type.

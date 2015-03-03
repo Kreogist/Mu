@@ -197,7 +197,10 @@ KNConfigure *KNGlobal::userConfigure()
 
 void KNGlobal::setLibraryPath(const QString &libraryPath)
 {
-    m_libraryPath = ensurePathAvaliable(libraryPath);
+    //Ensure the library path available.
+    m_libraryPath=ensurePathAvaliable(libraryPath);
+    //Save the new library path to configure.
+    systemConfigure()->setData("LibraryPath", m_libraryPath);
 }
 
 void KNGlobal::showInGraphicalShell(const QString &filePath)
@@ -315,7 +318,8 @@ void KNGlobal::moveFolder(const QString &sourceDirPath,
     sourceDir.rmdir(".");
 }
 
-bool KNGlobal::renameFile(const QString &originalPath, const QString &currentPath)
+bool KNGlobal::renameFile(const QString &originalPath,
+                          const QString &currentPath)
 {
     QFile targetFile(originalPath);
     //Check the file is exist or not.
@@ -374,8 +378,8 @@ inline void KNGlobal::initialDefaultPath()
                    "/.kreogist/mu";
     m_resourceDirPath=m_userDataPath;
 #endif
-    m_libraryPath=userDataPath()+"/Library";
-    m_pluginDirPath=userDataPath()+"/Plugins";
+    m_libraryPath=m_userDataPath+"/Library";
+    m_pluginDirPath=m_userDataPath+"/Plugins";
 }
 
 inline void KNGlobal::initialInfrastrcture()
@@ -392,7 +396,12 @@ void KNGlobal::updateInfrastructure()
 {
     //Update the data path.
     QString originalLibraryPath=m_libraryPath;
-    m_libraryPath=m_globalConfigure->getData("LibraryPath", m_libraryPath).toString();
+    m_libraryPath=systemConfigure()->getData("LibraryPath",
+                                             m_libraryPath).toString();
+    if(originalLibraryPath==m_libraryPath)
+    {
+        return;
+    }
     //Give out the library path udpate signal.
     emit libraryMoved(originalLibraryPath, m_libraryPath);
 }

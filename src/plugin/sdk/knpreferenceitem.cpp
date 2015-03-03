@@ -25,6 +25,8 @@
 
 #include "knpreferenceitem.h"
 
+#include <QDebug>
+
 KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     QWidget(parent)
 {
@@ -235,7 +237,7 @@ void KNPreferenceItem::loadValue()
     {
         return;
     }
-    setDefaultValue(m_configure->getData(m_valueName));
+    setDefaultValue(m_configure->getData(m_valueName, m_defaultValue));
 }
 
 void KNPreferenceItem::saveValue()

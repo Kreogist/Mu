@@ -145,7 +145,7 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadLyricsDownloadDialog(new KNMusicLyricsDownloadDialog);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
     loadHeaderLyrics(new KNMusicHeaderLyrics);
-//    loadMainPlayer(new KNMusicMainPlayer);
+    loadMainPlayer(new KNMusicMainPlayer);
     loadLibrary(new KNMusicLibrary);
     loadPlaylistManager(new KNMusicPlaylistManager);
 
@@ -302,6 +302,7 @@ void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
     {
         m_mainPlayer=plugin;
         //Configure the main player.
+        m_mainPlayer->setHeaderPlayer(m_headerPlayer);
         m_mainPlayer->hide();
         //Restore the settings.
         ;

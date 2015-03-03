@@ -20,6 +20,7 @@
 
 #include "kncategorypreference.h"
 
+class KNGlobal;
 class KNPreferenceItemPathBrowser;
 class KNPreferenceGeneral : public KNCategoryPreference
 {
@@ -51,6 +52,7 @@ private:
         LibraryPath,
         GeneralPreferenceItemCount
     };
+    KNGlobal *m_global;
     QLabel *m_titles[GeneralPreferenceTitleCount];
     KNPreferenceItem *m_items[GeneralPreferenceItemCount];
     KNConfigure *m_systemConfigure, *m_generalConfigure;

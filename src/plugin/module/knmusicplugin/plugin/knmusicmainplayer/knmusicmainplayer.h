@@ -21,18 +21,24 @@
 #include "knmusicmainplayerbase.h"
 
 class QLabel;
-class QGridLayout;
+class QBoxLayout;
+class QFormLayout;
+class KNLabelButton;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
 public:
     explicit KNMusicMainPlayer(QWidget *parent = 0);
     ~KNMusicMainPlayer();
+    void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
 
-private slots:
-    void retranslate();
+public slots:
+    void onActionAnalysisItemUpdate();
 
 protected:
     void resizeEvent(QResizeEvent *event);
+
+private slots:
+    void retranslate();
 
 private:
     enum InformationElements
@@ -42,27 +48,36 @@ private:
         ElementAlbum,
         ElementGenre,
         ElementYear,
-        ElementQuality,
-        ElementLocation,
         InformationElementsCount
     };
 
     inline void initialAlbumArt();
     //Album art widgets.
-    QLabel *m_albumArt;
+    QLabel *m_albumArtLabel;
+    QPixmap m_albumArt;
+    int m_pixmapSize=0;
 
     inline void initialInformationPanel();
+    inline void updateInformationPanel();
     //Information layouts.
-    QGridLayout *m_informationPanelLayout;
-    QLabel *m_informationElementCaptions[InformationElementsCount],
-           *m_informationElements[InformationElementsCount];
+    QBoxLayout *m_mainLayout;
+    QFormLayout *m_infoPanelLayout;
+    int m_maxElementWidth=0;
+    KNLabelButton *m_informationElementIcons[InformationElementsCount],
+                  *m_informationElementCaptions[InformationElementsCount],
+                  *m_informationElements[InformationElementsCount];
 
     inline void initialLyricsPanel();
     //Lyrics panel.
 
     inline void initialPlaylistPanel();
     inline void initialControlPanel();
+    inline void setEliedLabelText(QLabel *label,
+                                  const QString &text,
+                                  const int &width);
 
+    //Header player.
+    KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
 };
 
 #endif // KNMUSICMAINPLAYER_H

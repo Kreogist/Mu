@@ -22,7 +22,7 @@ public:
     KNMusicHeaderPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
     virtual void setBackend(KNMusicBackend *backend)=0;
     virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
-    virtual KNMusicDetailInfo currentDetailInfo()=0;
+    virtual KNMusicAnalysisItem currentAnalysisItem()=0;
 
 signals:
     //Order Controls
@@ -37,7 +37,7 @@ signals:
     void requireShowInAlbums();
     void requireShowInGenres();
     void requireCheckCursor();
-    void requireLoadLyrics(KNMusicDetailInfo detailInfo);
+    void analysisItemUpdated();
     void playerReset();
     void finished();
     void positionChanged(qint64 position);

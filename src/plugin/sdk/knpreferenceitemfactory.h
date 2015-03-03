@@ -33,7 +33,8 @@ class KNPreferenceItemFactory
 public:
     static KNPreferenceItem *create(int type,
                                     const QString &valueName,
-                                    KNConfigure *configure);
+                                    KNConfigure *configure,
+                                    const QVariant &defaultValue=QVariant());
     static QLabel *createTitle(const QString &caption=QString());
     static void setTitleFont(const QFont &font);
     static void setTitlePalette(const QPalette &palette);

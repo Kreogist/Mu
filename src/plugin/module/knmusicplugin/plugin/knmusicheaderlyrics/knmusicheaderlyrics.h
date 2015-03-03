@@ -39,10 +39,6 @@ public slots:
     void loadConfigure();
     void onActionLyricsUpdate();
 
-private slots:
-    void onActionMusicLibraryMoved(const QString &originalPath,
-                                   const QString &currentPath);
-
 private:
     KNMusicLyricsManager *m_lyricsManager;
     KNMusicHeaderPlayerBase *m_player;

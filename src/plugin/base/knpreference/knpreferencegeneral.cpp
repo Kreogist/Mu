@@ -28,12 +28,14 @@
 KNPreferenceGeneral::KNPreferenceGeneral(QObject *parent) :
     KNCategoryPreference(parent)
 {
+    //Initial the global.
+    m_global=KNGlobal::instance();
     //Get system configure.
-    m_systemConfigure=KNGlobal::instance()->systemConfigure();
+    m_systemConfigure=m_global->systemConfigure();
     //Initial general configure.
     m_generalConfigure=new KNConfigure(this);
     m_generalConfigure->setCaption("General");
-    KNGlobal::instance()->userConfigure()->addSubConfigure(m_generalConfigure);
+    m_global->userConfigure()->addSubConfigure(m_generalConfigure);
     //Initial the preference panel.
     m_panel=new KNPreferenceItemPanel;
 
@@ -50,7 +52,7 @@ KNPreferenceGeneral::KNPreferenceGeneral(QObject *parent) :
     m_panel->addTitle(m_titles[GeneralLibrary]);
     m_panel->addItem(m_items[LibraryPath]);
 
-    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
+    connect(m_global, &KNGlobal::requireRetranslate,
             this, &KNPreferenceGeneral::retranslate);
     retranslate();
 }
@@ -90,8 +92,8 @@ void KNPreferenceGeneral::retranslate()
 
 void KNPreferenceGeneral::onLibraryMoved()
 {
-    //Set the latest data.
-    m_systemConfigure->setData("LibraryPath", m_libraryDetector->value());
+    //Set the library path to the latest data.
+    m_global->setLibraryPath(m_libraryDetector->value().toString());
     //Emit moved signal.
     emit libraryDirMoved();
 }
