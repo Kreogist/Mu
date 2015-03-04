@@ -144,8 +144,8 @@ KNMusicPlugin::KNMusicPlugin(QObject *parent) :
     loadNowPlaying(new KNMusicNowPlaying2);
     loadLyricsDownloadDialog(new KNMusicLyricsDownloadDialog);
     loadHeaderPlayer(new KNMusicHeaderPlayer);
-    loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadMainPlayer(new KNMusicMainPlayer);
+    loadHeaderLyrics(new KNMusicHeaderLyrics);
     loadLibrary(new KNMusicLibrary);
     loadPlaylistManager(new KNMusicPlaylistManager);
 
@@ -320,6 +320,9 @@ inline void KNMusicPlugin::loadHeaderLyrics(KNMusicHeaderLyricsBase *plugin)
 {
     //Add plugin to the list.
     m_pluginList.append(plugin);
+    //Link the hide main player event.
+    connect(m_mainPlayer, &KNMusicMainPlayerBase::requireHideMainPlayer,
+            plugin, &KNMusicHeaderLyricsBase::show);
     //Link the display to the header player.
     plugin->setHeaderPlayer(m_headerPlayer);
     //Load the configure.

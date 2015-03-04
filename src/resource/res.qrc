@@ -101,6 +101,7 @@
         <file>music/lyrics/title.png</file>
         <file>music/lyrics/text_preview.png</file>
         <file>music/lyrics/lyrics_preview.png</file>
+        <file>music/player/hide_mainplayer.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>windows/next.png</file>

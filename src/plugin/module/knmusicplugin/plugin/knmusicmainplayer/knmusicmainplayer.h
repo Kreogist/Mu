@@ -24,6 +24,7 @@ class QLabel;
 class QBoxLayout;
 class QFormLayout;
 class KNLabelButton;
+class KNOpacityAnimeButton;
 class KNMusicMainLyrics;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
@@ -38,10 +39,12 @@ public slots:
 
 protected:
     void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
     void resizeEvent(QResizeEvent *event);
 
 private slots:
     void retranslate();
+    void onActionHideMainPlayer();
 
 private:
     enum InformationElements
@@ -53,6 +56,8 @@ private:
         ElementYear,
         InformationElementsCount
     };
+
+    KNOpacityAnimeButton *m_hideMainPlayer;
 
     inline void initialAlbumArt();
     //Album art widgets.
@@ -80,6 +85,8 @@ private:
 
     inline void initialPlaylistPanel();
     inline void initialControlPanel();
+    QWidget *m_controlWidget;
+
     inline void setEliedLabelText(QLabel *label,
                                   const QString &text,
                                   const int &width);

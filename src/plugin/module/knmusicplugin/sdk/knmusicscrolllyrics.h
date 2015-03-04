@@ -31,6 +31,9 @@ public:
     int spacing() const;
     void setSpacing(int spacing);
     void setLyricsData(const QList<qint64> positions, const QStringList texts);
+    int leftSpacing() const;
+    void setLeftSpacing(int leftSpacing);
+    void setDrawLyrics(bool drawLyrics);
 
 signals:
 
@@ -46,15 +49,22 @@ private slots:
 
 private:
     inline void resetLyricsData();
-    inline QSize lyricsSize(const QString &lyricsText)
+    inline QRect lyricsRect(const QString &lyricsText)
     {
-        return fontMetrics().size(Qt::TextExpandTabs, lyricsText);
+        return fontMetrics().boundingRect(m_leftSpacing,
+                                          0,
+                                          width()-m_leftSpacing,
+                                          height(),
+                                          Qt::TextWordWrap,
+                                          lyricsText);
     }
     inline void startMove(const int &lineDuration,
                           const int &displacement);
     inline int lyricsDuration(const int &index);
     //Lyrics moving animation.
     QTimeLine *m_moveToCurrentLine;
+
+    bool m_hideLyrics=false;
 
     //Lyrics data.
     QList<qint64> m_positions;

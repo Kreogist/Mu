@@ -69,7 +69,7 @@ void KNMusicScrollLyrics::onActionPositionChange(const qint64 &position)
         //Find the lyrics.
         while(m_currentLine>-1 && position<=m_positions.at(m_currentLine))
         {
-            lyricsDisplacement-=lyricsSize(m_texts.at(m_currentLine)).height();
+            lyricsDisplacement-=lyricsRect(m_texts.at(m_currentLine)).height();
             m_currentLine--;
         }
         //Start moving lyrics.
@@ -89,7 +89,7 @@ void KNMusicScrollLyrics::onActionPositionChange(const qint64 &position)
     //Why use while to find? User may seek the position a lot.
     while(m_currentLine<m_lastLine && position>m_positions.at(m_currentLine+1))
     {
-        lyricsDisplacement+=lyricsSize(m_texts.at(m_currentLine)).height();
+        lyricsDisplacement+=lyricsRect(m_texts.at(m_currentLine)).height();
         m_currentLine++;
     }
     //Start moving lyrics.
@@ -109,54 +109,49 @@ void KNMusicScrollLyrics::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     //Check the test list is empty or not.
-    if(m_texts.isEmpty())
+    if(m_hideLyrics || m_texts.isEmpty())
     {
         return;
     }
     //Initial the painter.
     QPainter painter(this);
-    painter.setRenderHints(QPainter::TextAntialiasing, true);
     //Initial parameters.
     int currentLineTop=(height()>>1)+m_centerOffset,
         paintingLine=m_currentLine;
-    QSize lineSize;
+    QRect lineRect;
     //Check if the current line is vaild.
     if(paintingLine>-1 && paintingLine<=m_lastLine)
     {
         //Draw the current line text.
-        lineSize=lyricsSize(m_texts.at(paintingLine));
-        currentLineTop-=(lineSize.height()>>1);
+        lineRect=lyricsRect(m_texts.at(paintingLine));
+        currentLineTop-=(lineRect.height()>>1);
+        lineRect.moveTop(currentLineTop);
         //Draw the text.
         painter.setPen(m_highlightColor);
-        painter.drawText(m_leftSpacing,
-                         currentLineTop,
-                         width(),
-                         lineSize.height(),
-                         Qt::AlignLeft,
+        painter.drawText(lineRect,
+                         Qt::AlignLeft | Qt::TextWordWrap,
                          m_texts.at(paintingLine));
     }
     else
     {
         //Draw a empty line.
-        lineSize=QSize(0, fontMetrics().height());
-        currentLineTop-=(lineSize.height()>>1);
+        lineRect=QRect(m_leftSpacing, 0, width()-m_leftSpacing, fontMetrics().height());
+        currentLineTop-=(lineRect.height()>>1);
     }
     painter.setPen(m_normalText);
     //Draw the lines after the current lines.
-    int otherLineTop=currentLineTop+lineSize.height()+m_spacing;
+    int otherLineTop=currentLineTop+lineRect.height()+m_spacing;
     paintingLine++; //Move to the next line.
     while(otherLineTop<height() && paintingLine<=m_lastLine)
     {
         //Draw the current line.
-        lineSize=lyricsSize(m_texts.at(paintingLine));
-        painter.drawText(m_leftSpacing,
-                         otherLineTop,
-                         width(),
-                         lineSize.height(),
-                         Qt::AlignLeft,
+        lineRect=lyricsRect(m_texts.at(paintingLine));
+        lineRect.moveTop(otherLineTop);
+        painter.drawText(lineRect,
+                         Qt::AlignLeft | Qt::TextWordWrap,
                          m_texts.at(paintingLine));
         //Move to the next line.
-        otherLineTop+=lineSize.height()+m_spacing;
+        otherLineTop+=lineRect.height()+m_spacing;
         paintingLine++;
     }
     //Draw the lines before the current lines.
@@ -165,15 +160,13 @@ void KNMusicScrollLyrics::paintEvent(QPaintEvent *event)
     while(otherLineBottom>0 && paintingLine>-1)
     {
         //Draw the current line.
-        lineSize=lyricsSize(m_texts.at(paintingLine));
+        lineRect=lyricsRect(m_texts.at(paintingLine));
         //MAGIC: the 'next' previous line's bottom is the current line's top,
         // moving the calculation here.
-        otherLineBottom-=lineSize.height()+m_spacing;
-        painter.drawText(m_leftSpacing,
-                         otherLineBottom,
-                         width(),
-                         lineSize.height(),
-                         Qt::AlignLeft,
+        otherLineBottom-=lineRect.height()+m_spacing;
+        lineRect.moveTop(otherLineBottom);
+        painter.drawText(lineRect,
+                         Qt::AlignLeft | Qt::TextWordWrap,
                          m_texts.at(paintingLine));
         //Move to previous line.
         paintingLine--;
@@ -260,6 +253,25 @@ inline int KNMusicScrollLyrics::lyricsDuration(const int &index)
     //--Normal lines--
     return m_positions.at(index+1)-m_positions.at(index);
 }
+int KNMusicScrollLyrics::leftSpacing() const
+{
+    return m_leftSpacing;
+}
+
+void KNMusicScrollLyrics::setLeftSpacing(int leftSpacing)
+{
+    m_leftSpacing = leftSpacing;
+    //Update the current data.
+    update();
+}
+
+void KNMusicScrollLyrics::setDrawLyrics(bool drawLyrics)
+{
+    m_hideLyrics=!drawLyrics;
+    //Update the widget.
+    update();
+}
+
 int KNMusicScrollLyrics::spacing() const
 {
     return m_spacing;
@@ -269,4 +281,3 @@ void KNMusicScrollLyrics::setSpacing(int spacing)
 {
     m_spacing = spacing;
 }
-

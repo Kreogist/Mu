@@ -67,10 +67,7 @@ void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
     connect(m_player, &KNMusicHeaderPlayerBase::positionChanged,
             this, &KNMusicHeaderLyrics::onActionPositionChange);
     connect(m_player, &KNMusicHeaderPlayerBase::requireShowMainPlayer,
-            [=]
-            {
-                hide();
-            });
+            this, &KNMusicHeaderLyrics::hide);
 }
 
 void KNMusicHeaderLyrics::onActionLyricsUpdate()

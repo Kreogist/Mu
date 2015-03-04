@@ -23,6 +23,7 @@
 #include "knlabelbutton.h"
 
 #include "knmusicheaderplayerbase.h"
+#include "knopacityanimebutton.h"
 #include "knmusicmainlyrics.h"
 #include "knmusicglobal.h"
 
@@ -41,6 +42,14 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
 
     //Initial the default album pixmap to no album.
     m_albumArt=KNMusicGlobal::instance()->noAlbumArt();
+
+    //Initial the hide main player button.
+    m_hideMainPlayer=new KNOpacityAnimeButton(this);
+    m_hideMainPlayer->move(16, 16);
+    m_hideMainPlayer->setFixedSize(32, 32);
+    m_hideMainPlayer->setIcon(QPixmap(":/plugin/music/player/hide_mainplayer.png"));
+    connect(m_hideMainPlayer, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicMainPlayer::onActionHideMainPlayer);
 
     //Initial the widgets.
     initialAlbumArt();
@@ -72,9 +81,11 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
 
     QWidget *informationPanel=new QWidget(this);
     informationPanel->setLayout(m_infoPanelLayout);
-    songLayout->addWidget(informationPanel, 0, Qt::AlignTop | Qt::AlignHCenter);
+    songLayout->addWidget(informationPanel, 0, Qt::AlignTop | Qt::AlignLeft);
 
     panelLayout->addWidget(m_mainLyrics, 2);
+
+    m_mainLayout->addWidget(m_controlWidget);
 
     //Link retranslate request.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
@@ -111,6 +122,14 @@ void KNMusicMainPlayer::retranslate()
     m_informationElementCaptions[ElementYear]->setText(tr("Year"));
 }
 
+void KNMusicMainPlayer::onActionHideMainPlayer()
+{
+    //Hide the banner.
+    m_banner->hide();
+    //Emit hide main player signal.
+    emit requireHideMainPlayer();
+}
+
 void KNMusicMainPlayer::onActionAnalysisItemUpdate()
 {
     //Set detail information.
@@ -133,8 +152,18 @@ void KNMusicMainPlayer::showEvent(QShowEvent *event)
 {
     //Show the banner.
     m_banner->show();
+    //Start draw the lyrics.
+    m_mainLyrics->setDrawLyrics(true);
     //Do show event.
     KNMusicMainPlayerBase::showEvent(event);
+}
+
+void KNMusicMainPlayer::hideEvent(QHideEvent *event)
+{
+    //Stop to draw lyrics.
+    m_mainLyrics->setDrawLyrics(false);
+    //Do hide event.
+    KNMusicMainPlayerBase::hideEvent(event);
 }
 
 void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
@@ -175,6 +204,7 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     lyricsFont.setPixelSize(fontSize+(fontSize>>1));
     m_mainLyrics->setFont(lyricsFont);
     m_mainLyrics->setSpacing(fontSize>>1);
+    m_mainLyrics->setLeftSpacing(fontSize<<1);
     //Calculate the elements label maximum width.
     m_maxElementWidth=width()/3-(fontSize+5+maxLabelWidth);
     //Update information.
@@ -251,6 +281,8 @@ void KNMusicMainPlayer::updateInformationPanel()
 void KNMusicMainPlayer::initialLyricsPanel()
 {
     m_mainLyrics=new KNMusicMainLyrics(this);
+    //Hide the lyrics by default.
+    m_mainLyrics->setDrawLyrics(false);
 }
 
 void KNMusicMainPlayer::initialBanner()
@@ -268,7 +300,14 @@ void KNMusicMainPlayer::initialPlaylistPanel()
 
 void KNMusicMainPlayer::initialControlPanel()
 {
-    ;
+    //Initial the control widget.
+    m_controlWidget=new QWidget(this);
+
+    QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                             this);
+    controlLayout->setContentsMargins(0,0,0,0);
+    controlLayout->setSpacing(0);
+    m_controlWidget->setLayout(controlLayout);
 }
 
 void KNMusicMainPlayer::setEliedLabelText(QLabel *label,
