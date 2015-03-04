@@ -38,13 +38,8 @@ KNCategorySwitcherWidget::KNCategorySwitcherWidget(QWidget *parent) :
     initialButtons();
 
     //Initial timeline.
-    m_inBackground=new QTimeLine(200, this);
-    m_inBackground->setEndFrame(200);
-    initialTimeLine(m_inBackground);
-
-    m_outBackground=new QTimeLine(200, this);
-    m_outBackground->setEndFrame(0);
-    initialTimeLine(m_outBackground);
+    m_inBackground=generateTimeline(200);
+    m_outBackground=generateTimeline(0);
     connect(m_outBackground, &QTimeLine::finished,
             this, &KNCategorySwitcherWidget::onActionHideComplete);
 
@@ -134,12 +129,15 @@ void KNCategorySwitcherWidget::onActionHideComplete()
     hide();
 }
 
-inline void KNCategorySwitcherWidget::initialTimeLine(QTimeLine *timeline)
+inline QTimeLine *KNCategorySwitcherWidget::generateTimeline(const int &endFrame)
 {
+    QTimeLine *timeline=new QTimeLine(200, this);
+    timeline->setEndFrame(endFrame);
+    timeline->setUpdateInterval(16);
     timeline->setEasingCurve(QEasingCurve::OutCubic);
-    timeline->setUpdateInterval(5);
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNCategorySwitcherWidget::onActionInOutBackground);
+    return timeline;
 }
 
 inline void KNCategorySwitcherWidget::initialButtons()

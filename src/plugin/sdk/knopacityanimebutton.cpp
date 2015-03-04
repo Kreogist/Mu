@@ -113,7 +113,7 @@ inline QTimeLine *KNOpacityAnimeButton::generateTimeLine(const int &endFrame)
     QTimeLine *timeLine=new QTimeLine(100, this);
     timeLine->setEndFrame(endFrame);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNOpacityAnimeButton::onActionOpacityChanged);
     return timeLine;

@@ -49,7 +49,7 @@ private slots:
     void onActionMouseInOut(const int &frame);
 
 private:
-    void configureTimeLine(QTimeLine *timeLine);
+    inline QTimeLine *generateTimeline(const int &endFrame);
     QPixmap m_icon;
     QString m_text;
     qreal m_backgroundOpacity=0.0;

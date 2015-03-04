@@ -67,7 +67,7 @@ void KNMouseSenseWidget::onActionMouseInOut(const int &frame)
 
 void KNMouseSenseWidget::configureTimeLine(QTimeLine *timeLine)
 {
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNMouseSenseWidget::onActionMouseInOut);

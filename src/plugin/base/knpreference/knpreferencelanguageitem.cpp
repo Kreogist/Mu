@@ -168,7 +168,7 @@ void KNPreferenceLanguageItem::onActionMouseInOut(const int &frame)
 
 void KNPreferenceLanguageItem::configureTimeLine(QTimeLine *timeLine)
 {
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNPreferenceLanguageItem::onActionMouseInOut);

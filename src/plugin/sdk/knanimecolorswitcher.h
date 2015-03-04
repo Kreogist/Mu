@@ -36,7 +36,7 @@ private slots:
 private:
     void moveButtonLeft();
     void moveButtonRight();
-    void configureTimeLine(QTimeLine *timeLine);
+    inline QTimeLine *generateTimeline(const int &endFrame);
     int m_switcherHeight=25, m_switcherWidth=65, m_buttonWidth=40,
         m_buttonX=0;
     bool m_value=false, m_pressed=false;

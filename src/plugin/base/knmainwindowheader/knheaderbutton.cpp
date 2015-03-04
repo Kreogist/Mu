@@ -114,21 +114,21 @@ inline void KNHeaderButton::configurePalette()
 inline void KNHeaderButton::initialTimeLine()
 {
     //Initial text anime(geometry).
-    m_mouseIn=new QTimeLine(200, this);
-    initialMouseInOutTimeLine(m_mouseIn);
-    m_mouseIn->setEndFrame(m_iconMouseInX);
+    m_mouseIn=generateTimeline(m_iconMouseInX);
+    connect(m_mouseIn, &QTimeLine::frameChanged,
+            this, &KNHeaderButton::onActionMouseAnimation);
 
-    m_mouseOut=new QTimeLine(200, this);
-    initialMouseInOutTimeLine(m_mouseOut);
-    m_mouseOut->setEndFrame(m_iconX);
+    m_mouseOut=generateTimeline(m_iconX);
+    connect(m_mouseOut, &QTimeLine::frameChanged,
+            this, &KNHeaderButton::onActionMouseAnimation);
 
-    m_mouseDown=new QTimeLine(200, this);
-    initialMouseDownTimeLine(m_mouseDown);
-    m_mouseDown->setEndFrame(-m_iconSize);
+    m_mouseDown=generateTimeline(-m_iconSize);
+    connect(m_mouseDown, &QTimeLine::frameChanged,
+            this, &KNHeaderButton::onActionMouseDownUpAnimation);
 
-    m_mouseUp=new QTimeLine(200, this);
-    initialMouseUpTimeLine(m_mouseUp);
-    m_mouseUp->setEndFrame(m_iconMouseUpX);
+    m_mouseUp=generateTimeline(m_iconMouseUpX);
+    connect(m_mouseUp, &QTimeLine::frameChanged,
+            this, &KNHeaderButton::onActionMouseDownUpAnimation);
 }
 
 inline void KNHeaderButton::initialIcon()
@@ -167,28 +167,13 @@ inline void KNHeaderButton::initialText()
     m_text->setGraphicsEffect(m_textEffect);
 }
 
-inline void KNHeaderButton::initialMouseInOutTimeLine(QTimeLine *anime)
+inline QTimeLine *KNHeaderButton::generateTimeline(const int &endFrame)
 {
-    anime->setEasingCurve(QEasingCurve::OutCubic);
-    anime->setUpdateInterval(5);
-    connect(anime, &QTimeLine::frameChanged,
-            this, &KNHeaderButton::onActionMouseAnimation);
-}
-
-inline void KNHeaderButton::initialMouseDownTimeLine(QTimeLine *anime)
-{
-    anime->setEasingCurve(QEasingCurve::OutCubic);
-    anime->setUpdateInterval(5);
-    connect(anime, &QTimeLine::frameChanged,
-            this, &KNHeaderButton::onActionMouseDownUpAnimation);
-}
-
-inline void KNHeaderButton::initialMouseUpTimeLine(QTimeLine *anime)
-{
-    anime->setEasingCurve(QEasingCurve::OutCubic);
-    anime->setUpdateInterval(5);
-    connect(anime, &QTimeLine::frameChanged,
-            this, &KNHeaderButton::onActionMouseDownUpAnimation);
+    QTimeLine *timeline=new QTimeLine(200, this);
+    timeline->setEasingCurve(QEasingCurve::OutCubic);
+    timeline->setUpdateInterval(16);
+    timeline->setEndFrame(endFrame);
+    return timeline;
 }
 
 void KNHeaderButton::startMouseInAnime()

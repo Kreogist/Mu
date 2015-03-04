@@ -47,12 +47,8 @@ KNPreferenceCategoryItem::KNPreferenceCategoryItem(QWidget *parent) :
     m_shadowGradient.setFinalStop(0,m_shadowHeight);
 
     //Set the animation timeline.
-    m_mouseIn=new QTimeLine(200, this);
-    m_mouseIn->setEndFrame(100);
-    configureTimeLine(m_mouseIn);
-    m_mouseOut=new QTimeLine(200, this);
-    m_mouseOut->setEndFrame(0);
-    configureTimeLine(m_mouseOut);
+    m_mouseIn=generateTimeline(100);
+    m_mouseOut=generateTimeline(0);
 }
 
 QPixmap KNPreferenceCategoryItem::icon() const
@@ -168,10 +164,13 @@ void KNPreferenceCategoryItem::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNPreferenceCategoryItem::configureTimeLine(QTimeLine *timeLine)
+inline QTimeLine *KNPreferenceCategoryItem::generateTimeline(const int &endFrame)
 {
-    timeLine->setUpdateInterval(5);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    connect(timeLine, &QTimeLine::frameChanged,
+    QTimeLine *timeline=new QTimeLine(200, this);
+    timeline->setEndFrame(endFrame);
+    timeline->setUpdateInterval(16);
+    timeline->setEasingCurve(QEasingCurve::OutCubic);
+    connect(timeline, &QTimeLine::frameChanged,
             this, &KNPreferenceCategoryItem::onActionMouseInOut);
+    return timeline;
 }

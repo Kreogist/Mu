@@ -101,7 +101,7 @@ inline void KNRoundAnimeButton::startAnimation(QTimeLine *timeLine)
 QTimeLine *KNRoundAnimeButton::generateTimeLine(const int &finalFrame)
 {
     QTimeLine *timeLine=new QTimeLine(finalFrame, this);
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setEndFrame(finalFrame);
     //Linke the time line.

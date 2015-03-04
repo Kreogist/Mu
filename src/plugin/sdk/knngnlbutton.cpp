@@ -208,7 +208,7 @@ void KNNGNLButton::stopAllAnimations()
 
 void KNNGNLButton::configureInOutTimeLine(QTimeLine *timeLine)
 {
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNNGNLButton::onActionMouseInOut);

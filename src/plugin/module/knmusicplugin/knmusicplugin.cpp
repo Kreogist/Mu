@@ -304,10 +304,15 @@ void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
         m_mainPlayer->hide();
         //Restore the settings.
         ;
-        //Add plugin to the list.
-        m_pluginList.append(m_mainPlayer);
         //Set the main player.
         m_centralWidget->setMainPlayer(m_mainPlayer);
+        //Add banner to the header.
+        addLeftHeaderWidget(m_mainPlayer->banner(), 1);
+        //Link the request.
+        connect(m_mainPlayer, &KNMusicMainPlayer::requireHideMainPlayer,
+                m_centralWidget, &KNMusicCategoryTabWidget::hideMainPlayer);
+        //Add plugin to the list.
+        m_pluginList.append(m_mainPlayer);
     }
 }
 

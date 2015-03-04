@@ -23,6 +23,7 @@
 #include "knlabelbutton.h"
 
 #include "knmusicheaderplayerbase.h"
+#include "knmusicmainlyrics.h"
 #include "knmusicglobal.h"
 
 #include "knmusicmainplayer.h"
@@ -47,6 +48,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     initialLyricsPanel();
     initialPlaylistPanel();
     initialControlPanel();
+    initialBanner();
 
     //Initial main layout.
     m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -58,13 +60,21 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
                                            m_mainLayout->widget());
     panelLayout->setContentsMargins(0,0,0,0);
     panelLayout->setSpacing(0);
-    m_mainLayout->addLayout(panelLayout);
+    m_mainLayout->addLayout(panelLayout, 1);
 
-    panelLayout->addWidget(m_albumArtLabel);
+    QBoxLayout *songLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          m_mainLayout->widget());
+    songLayout->setContentsMargins(0,0,0,0);
+    songLayout->setSpacing(0);
+    panelLayout->addLayout(songLayout, 1);
+
+    songLayout->addWidget(m_albumArtLabel, 0, Qt::AlignBottom | Qt::AlignHCenter);
 
     QWidget *informationPanel=new QWidget(this);
     informationPanel->setLayout(m_infoPanelLayout);
-    panelLayout->addWidget(informationPanel);
+    songLayout->addWidget(informationPanel, 0, Qt::AlignTop | Qt::AlignHCenter);
+
+    panelLayout->addWidget(m_mainLyrics, 2);
 
     //Link retranslate request.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
@@ -74,12 +84,20 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
 
 KNMusicMainPlayer::~KNMusicMainPlayer()
 {
-    ;
+}
+
+QWidget *KNMusicMainPlayer::banner()
+{
+    return m_banner;
 }
 
 void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
 {
+    //Save the header player.
     m_headerPlayer=headerPlayer;
+    //Set the header player to main lyrics.
+    m_mainLyrics->setHeaderPlayer(m_headerPlayer);
+    //Link the header player.
     connect(m_headerPlayer, &KNMusicHeaderPlayerBase::analysisItemUpdated,
             this, &KNMusicMainPlayer::onActionAnalysisItemUpdate);
 }
@@ -111,6 +129,14 @@ void KNMusicMainPlayer::onActionAnalysisItemUpdate()
     updateInformationPanel();
 }
 
+void KNMusicMainPlayer::showEvent(QShowEvent *event)
+{
+    //Show the banner.
+    m_banner->show();
+    //Do show event.
+    KNMusicMainPlayerBase::showEvent(event);
+}
+
 void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
 {
     //Do resize.
@@ -126,9 +152,9 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         fontSize=15;
     }
-    m_mainLayout->setSpacing(fontSize);
-    m_infoPanelLayout->setContentsMargins(fontSize, 0, fontSize, 0);
     m_mainLayout->setContentsMargins(fontSize, 0, fontSize, 0);
+    m_mainLayout->setSpacing(fontSize);
+    m_infoPanelLayout->setContentsMargins(0, fontSize, 0, fontSize);
     m_infoPanelLayout->setHorizontalSpacing(fontSize);
 
     //Change the font size.
@@ -144,6 +170,11 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
         m_informationElementCaptions[i]->setFont(captionFont);
         m_informationElements[i]->setFont(captionFont);
     }
+    //Set lyrics font.
+    QFont lyricsFont=m_mainLyrics->font();
+    lyricsFont.setPixelSize(fontSize+(fontSize>>1));
+    m_mainLyrics->setFont(lyricsFont);
+    m_mainLyrics->setSpacing(fontSize>>1);
     //Calculate the elements label maximum width.
     m_maxElementWidth=width()/3-(fontSize+5+maxLabelWidth);
     //Update information.
@@ -160,7 +191,7 @@ void KNMusicMainPlayer::initialInformationPanel()
 {
     //We will set the parent later.
     m_infoPanelLayout=new QFormLayout;
-    m_infoPanelLayout->setFormAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_infoPanelLayout->setFormAlignment(Qt::AlignHCenter);
 
     QString elementIconPath[InformationElementsCount];
     elementIconPath[ElementTitle]=":/plugin/music/category/01_musics.png";
@@ -193,6 +224,12 @@ void KNMusicMainPlayer::initialInformationPanel()
         m_infoPanelLayout->addRow(caption,
                                   m_informationElements[i]);
     }
+    QPalette captionPalette=m_informationElementCaptions[0]->palette();
+    captionPalette.setColor(QPalette::WindowText, QColor(0xcc, 0xcc, 0xcc));
+    for(int i=0; i<InformationElementsCount; i++)
+    {
+        m_informationElementCaptions[i]->setPalette(captionPalette);
+    }
 }
 
 void KNMusicMainPlayer::updateInformationPanel()
@@ -213,7 +250,15 @@ void KNMusicMainPlayer::updateInformationPanel()
 
 void KNMusicMainPlayer::initialLyricsPanel()
 {
-    ;
+    m_mainLyrics=new KNMusicMainLyrics(this);
+}
+
+void KNMusicMainPlayer::initialBanner()
+{
+    //Initial the banner.
+    m_banner=new QWidget(this);
+    //Hide the banner at default.
+    m_banner->hide();
 }
 
 void KNMusicMainPlayer::initialPlaylistPanel()

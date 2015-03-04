@@ -47,7 +47,7 @@ private slots:
     void onActionHideComplete();
 
 private:
-    inline void initialTimeLine(QTimeLine *timeline);
+    inline QTimeLine *generateTimeline(const int &endFrame);
     inline void initialButtons();
     inline void startButtonInAnime();
     inline void startButtonOutAnime();

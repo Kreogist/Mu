@@ -78,7 +78,7 @@ void KNLinearSenseWidget::onActionMouseInOut(const int &frame)
 void KNLinearSenseWidget::configureTimeLine(QTimeLine *timeLine)
 {
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNLinearSenseWidget::onActionMouseInOut);
 }

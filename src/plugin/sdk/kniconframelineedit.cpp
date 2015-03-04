@@ -197,7 +197,7 @@ inline void KNIconFrameLineEdit::configureAndStartAnimation(QTimeLine *animation
 inline QTimeLine *KNIconFrameLineEdit::generateTimeLines(int duration)
 {
     QTimeLine *timeLine=new QTimeLine(duration, this);
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     return timeLine;
 }
 

@@ -349,7 +349,7 @@ inline void KNMusicDetailTooltip::resetPreviewPlayer()
 inline void KNMusicDetailTooltip::initialTimeLine(QTimeLine *timeline)
 {
     timeline->setEasingCurve(QEasingCurve::OutCubic);
-    timeline->setUpdateInterval(5);
+    timeline->setUpdateInterval(16);
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNMusicDetailTooltip::onActionMouseInOut);
 }

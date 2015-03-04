@@ -35,12 +35,8 @@ KNAnimeColorSwitcher::KNAnimeColorSwitcher(QWidget *parent) :
     setHighLightColor(QColor(0xf7, 0xcf, 0x3d));
 
     //Initial the timeline.
-    m_moveLeft=new QTimeLine(100, this);
-    m_moveLeft->setEndFrame(0);
-    configureTimeLine(m_moveLeft);
-    m_moveRight=new QTimeLine(100, this);
-    m_moveRight->setEndFrame(m_switcherWidth-m_buttonWidth);
-    configureTimeLine(m_moveRight);
+    m_moveLeft=generateTimeline(0);
+    m_moveRight=generateTimeline(m_switcherWidth-m_buttonWidth);
 }
 
 void KNAnimeColorSwitcher::mousePressEvent(QMouseEvent *event)
@@ -121,12 +117,15 @@ void KNAnimeColorSwitcher::moveButtonRight()
     m_moveRight->start();
 }
 
-void KNAnimeColorSwitcher::configureTimeLine(QTimeLine *timeLine)
+inline QTimeLine *KNAnimeColorSwitcher::generateTimeline(const int &endFrame)
 {
-    timeLine->setUpdateInterval(2);
+    QTimeLine *timeLine=new QTimeLine(100, this);
+    timeLine->setEndFrame(endFrame);
+    timeLine->setUpdateInterval(16);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNAnimeColorSwitcher::onActionUpdateParameter);
+    return timeLine;
 }
 
 void KNAnimeColorSwitcher::setHighLightColor(const QColor &highLightColor)

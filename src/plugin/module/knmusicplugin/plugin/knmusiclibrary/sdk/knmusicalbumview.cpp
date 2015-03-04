@@ -58,7 +58,7 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
 
     //Initial the timeline.
     m_scrollTimeLine=new QTimeLine(200, this);
-    m_scrollTimeLine->setUpdateInterval(5);
+    m_scrollTimeLine->setUpdateInterval(16);
     m_scrollTimeLine->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_scrollTimeLine, &QTimeLine::frameChanged,
             verticalScrollBar(), &QScrollBar::setValue);

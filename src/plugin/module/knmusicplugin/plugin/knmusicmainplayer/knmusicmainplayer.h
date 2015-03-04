@@ -24,17 +24,20 @@ class QLabel;
 class QBoxLayout;
 class QFormLayout;
 class KNLabelButton;
+class KNMusicMainLyrics;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
 public:
     explicit KNMusicMainPlayer(QWidget *parent = 0);
     ~KNMusicMainPlayer();
+    QWidget *banner();
     void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
 
 public slots:
     void onActionAnalysisItemUpdate();
 
 protected:
+    void showEvent(QShowEvent *event);
     void resizeEvent(QResizeEvent *event);
 
 private slots:
@@ -57,9 +60,9 @@ private:
     QPixmap m_albumArt;
     int m_pixmapSize=0;
 
+    //Information layouts.
     inline void initialInformationPanel();
     inline void updateInformationPanel();
-    //Information layouts.
     QBoxLayout *m_mainLayout;
     QFormLayout *m_infoPanelLayout;
     int m_maxElementWidth=0;
@@ -67,8 +70,13 @@ private:
                   *m_informationElementCaptions[InformationElementsCount],
                   *m_informationElements[InformationElementsCount];
 
-    inline void initialLyricsPanel();
     //Lyrics panel.
+    inline void initialLyricsPanel();
+    KNMusicMainLyrics *m_mainLyrics;
+
+    //Banner.
+    inline void initialBanner();
+    QWidget *m_banner;
 
     inline void initialPlaylistPanel();
     inline void initialControlPanel();

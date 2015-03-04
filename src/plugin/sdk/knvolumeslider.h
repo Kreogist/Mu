@@ -32,7 +32,7 @@ private slots:
     void onActionMouseInOut(const int &frame);
 
 private:
-    void configureTimeLine(QTimeLine *timeline);
+    inline QTimeLine *generateTimeline(const int &endFrame);
     qint64 posToValue(int position);
     int m_sliderHeight=5, m_spacing=2, m_maxAlpha=255, m_minAlpha=80;
     bool m_pressed=false;

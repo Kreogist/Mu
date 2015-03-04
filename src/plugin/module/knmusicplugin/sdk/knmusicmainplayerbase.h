@@ -17,7 +17,11 @@ class KNMusicMainPlayerBase : public KNDropProxyContainer
     Q_OBJECT
 public:
     KNMusicMainPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
+    virtual QWidget *banner()=0;
     virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)=0;
+
+signals:
+    void requireHideMainPlayer();
 
 public slots:
     virtual void onActionAnalysisItemUpdate()=0;

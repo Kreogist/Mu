@@ -55,9 +55,7 @@ private:
     inline void initialIcon();
     inline void initialText();
     inline void initialTimeLine();
-    inline void initialMouseInOutTimeLine(QTimeLine *anime);
-    inline void initialMouseDownTimeLine(QTimeLine *anime);
-    inline void initialMouseUpTimeLine(QTimeLine *anime);
+    inline QTimeLine *generateTimeline(const int &endFrame);
     inline void updateWidth();
     QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseUp, *m_mouseDown;
     QLabel *m_icon, *m_text;

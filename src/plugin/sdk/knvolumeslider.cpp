@@ -23,12 +23,8 @@ KNVolumeSlider::KNVolumeSlider(QWidget *parent) :
                               QSizePolicy::Slider));
 
     //Initial the mouse in out time line.
-    m_mouseIn=new QTimeLine(200, this);
-    configureTimeLine(m_mouseIn);
-    m_mouseIn->setEndFrame(m_maxAlpha);
-    m_mouseOut=new QTimeLine(200, this);
-    configureTimeLine(m_mouseOut);
-    m_mouseOut->setEndFrame(m_minAlpha);
+    m_mouseIn=generateTimeline(m_maxAlpha);
+    m_mouseOut=generateTimeline(m_minAlpha);
 }
 
 void KNVolumeSlider::paintEvent(QPaintEvent *event)
@@ -128,12 +124,15 @@ void KNVolumeSlider::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNVolumeSlider::configureTimeLine(QTimeLine *timeline)
+inline QTimeLine *KNVolumeSlider::generateTimeline(const int &endFrame)
 {
+    QTimeLine *timeline=new QTimeLine(200, this);
+    timeline->setEndFrame(endFrame);
+    timeline->setUpdateInterval(16);
     timeline->setEasingCurve(QEasingCurve::OutCubic);
-    timeline->setUpdateInterval(5);
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNVolumeSlider::onActionMouseInOut);
+    return timeline;
 }
 
 qint64 KNVolumeSlider::posToValue(int position)

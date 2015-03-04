@@ -27,7 +27,7 @@ KNMusicScrollLyrics::KNMusicScrollLyrics(QWidget *parent) :
 {
     //Initial the time line.
     m_moveToCurrentLine=new QTimeLine(m_maximumDuration, this);
-    m_moveToCurrentLine->setUpdateInterval(2);
+    m_moveToCurrentLine->setUpdateInterval(16);
     m_moveToCurrentLine->setEasingCurve(QEasingCurve::OutCubic);
     m_moveToCurrentLine->setEndFrame(0);
     connect(m_moveToCurrentLine, &QTimeLine::frameChanged,

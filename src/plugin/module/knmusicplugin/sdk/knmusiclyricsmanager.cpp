@@ -56,6 +56,10 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
             this, &KNMusicLyricsManager::onActionMusicLibraryMoved);
     connect(m_global, &KNGlobal::requireApplyPreference,
             this, &KNMusicLyricsManager::loadConfigure);
+
+    //Set the default configure.
+    setLyricsDir(KNMusicGlobal::musicLibraryPath()+"/Lyrics");
+    setEnableOnlineLyrics(true);
 }
 
 KNMusicLyricsManager *KNMusicLyricsManager::instance()
@@ -357,15 +361,16 @@ void KNMusicLyricsManager::loadConfigure()
 {
     //Get path configures.
     setLyricsDir(m_systemConfigure->getData("LyricsFolder",
-                                            m_lyricsDir).toString());
+                                            lyricsDir()).toString());
     //Get user configures.
     setEnableOnlineLyrics(m_musicConfigure->getData("DownloadLyrics",
-                                                    m_enableOnlineLyrics).toBool());
+                                                    enableOnlineLyrics()).toBool());
 }
 
 void KNMusicLyricsManager::saveConfigure()
 {
-    ;
+    m_systemConfigure->setData("LyricsFolder", lyricsDir());
+    m_musicConfigure->setData("DownloadLyrics", enableOnlineLyrics());
 }
 
 inline void KNMusicLyricsManager::getOnlineLyrics(const KNMusicDetailInfo &detailInfo,

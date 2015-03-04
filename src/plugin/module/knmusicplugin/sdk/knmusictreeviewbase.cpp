@@ -519,7 +519,7 @@ void KNMusicTreeViewBase::initialActions()
 void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)
 {
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNMusicTreeViewBase::onActionMouseInOut);
 }

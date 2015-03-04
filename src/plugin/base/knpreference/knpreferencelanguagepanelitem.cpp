@@ -127,7 +127,7 @@ void KNPreferenceLanguagePanelItem::onActionChangeHighlight(const int &frame)
 
 void KNPreferenceLanguagePanelItem::configureMouseInOutTimeline(QTimeLine *timeLine)
 {
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNPreferenceLanguagePanelItem::onActionChangeHighlight);
 }

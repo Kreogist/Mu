@@ -29,12 +29,8 @@ KNHeaderContainer::KNHeaderContainer(QWidget *parent) :
     configurePalette();
 
     //Initial the animation timeline.
-    m_mouseIn=new QTimeLine(200, this);
-    m_mouseIn->setEndFrame(maximumBrightness);
-    configureMouseTimeLine(m_mouseIn);
-    m_mouseOut=new QTimeLine(200, this);
-    m_mouseOut->setEndFrame(minimumBrightness);
-    configureMouseTimeLine(m_mouseOut);
+    m_mouseIn=generateTimeline(maximumBrightness);
+    m_mouseOut=generateTimeline(minimumBrightness);
 }
 
 void KNHeaderContainer::setHeaderSwitcher(QWidget *switcher)
@@ -116,14 +112,17 @@ inline void KNHeaderContainer::configurePalette()
     setPalette(m_palette);
 }
 
-inline void KNHeaderContainer::configureMouseTimeLine(QTimeLine *timeline)
+inline QTimeLine *KNHeaderContainer::generateTimeline(const int &endFrame)
 {
+    QTimeLine *timeline=new QTimeLine(200, this);
+    timeline->setEndFrame(endFrame);
     timeline->setEasingCurve(QEasingCurve::OutCubic);
-    timeline->setUpdateInterval(5);
+    timeline->setUpdateInterval(16);
     //This animation is going to change to background color, so the each frame
     //will be the parameter of a color. When frame changed, change the color.
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNHeaderContainer::changeBackgroundColor);
+    return timeline;
 }
 
 inline void KNHeaderContainer::updateSwitcherPosition()

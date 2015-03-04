@@ -108,7 +108,7 @@ void KNAnimeRoundSwitcher::onActionMove(const int &frame)
 
 void KNAnimeRoundSwitcher::configureTimeLine(QTimeLine *timeLine)
 {
-    timeLine->setUpdateInterval(5);
+    timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNAnimeRoundSwitcher::onActionMove);
 }

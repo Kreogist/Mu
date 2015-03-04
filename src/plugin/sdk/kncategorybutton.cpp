@@ -286,7 +286,7 @@ void KNCategoryButton::updatePositionParameter()
 void KNCategoryButton::configureInOutTimeLine(QTimeLine *timeline)
 {
     timeline->setEasingCurve(QEasingCurve::OutCubic);
-    timeline->setUpdateInterval(5);
+    timeline->setUpdateInterval(16);
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNCategoryButton::mouseInOutAnimeFrame);
 }
@@ -294,7 +294,7 @@ void KNCategoryButton::configureInOutTimeLine(QTimeLine *timeline)
 void KNCategoryButton::configureMouseUpDownTimeLine(QTimeLine *timeline)
 {
     timeline->setEasingCurve(QEasingCurve::OutCubic);
-    timeline->setUpdateInterval(5);
+    timeline->setUpdateInterval(16);
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNCategoryButton::mouseUpDownAnimeFrame);
 }

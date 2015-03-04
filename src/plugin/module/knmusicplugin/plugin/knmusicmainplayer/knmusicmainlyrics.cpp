@@ -25,55 +25,41 @@
 #include "knmusicheaderplayerbase.h"
 #include "knmusiclyricsmanager.h"
 
-#include "knmusicheaderlyrics.h"
+#include "knmusicmainlyrics.h"
 
 #include <QDebug>
 
-KNMusicHeaderLyrics::KNMusicHeaderLyrics(QWidget *parent) :
-    KNMusicHeaderLyricsBase(parent)
+KNMusicMainLyrics::KNMusicMainLyrics(QWidget *parent) :
+    KNMusicScrollLyrics(parent)
 {
-    //Initial the music global, music configure and lyrics manager.
-    m_musicGlobal=KNMusicGlobal::instance();
-
-    m_musicConfigure=m_musicGlobal->musicConfigure();
-
     m_lyricsManager=KNMusicLyricsManager::instance();
     connect(m_lyricsManager, &KNMusicLyricsManager::lyricsReset,
-            this, &KNMusicHeaderLyrics::onActionLyricsReset);
+            this, &KNMusicMainLyrics::onActionLyricsReset);
     connect(m_lyricsManager, &KNMusicLyricsManager::lyricsUpdate,
-            this, &KNMusicHeaderLyrics::onActionLyricsUpdate);
+            this, &KNMusicMainLyrics::onActionLyricsUpdate);
 #ifdef Q_OS_WIN32
     //Set line spacing specially for Windows. It seems that in Qt 5.4, line
     //spacing has been calculate into a text line.
     setSpacing(0);
 #endif
-
-    //Connect apply preference signal.
-    connect(KNGlobal::instance(), &KNGlobal::requireApplyPreference,
-            this, &KNMusicHeaderLyrics::loadConfigure);
 }
 
-KNMusicHeaderLyrics::~KNMusicHeaderLyrics()
+KNMusicMainLyrics::~KNMusicMainLyrics()
 {
 }
 
-void KNMusicHeaderLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
+void KNMusicMainLyrics::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 {
     //Save the player.
     m_player=player;
     //Link the player.
     connect(m_player, &KNMusicHeaderPlayerBase::playerReset,
-            this, &KNMusicHeaderLyrics::onActionLyricsReset);
+            this, &KNMusicMainLyrics::onActionLyricsReset);
     connect(m_player, &KNMusicHeaderPlayerBase::positionChanged,
-            this, &KNMusicHeaderLyrics::onActionPositionChange);
-    connect(m_player, &KNMusicHeaderPlayerBase::requireShowMainPlayer,
-            [=]
-            {
-                hide();
-            });
+            this, &KNMusicMainLyrics::onActionPositionChange);
 }
 
-void KNMusicHeaderLyrics::onActionLyricsUpdate()
+void KNMusicMainLyrics::onActionLyricsUpdate()
 {
     //Reset the lyrics first.
     onActionLyricsReset();
@@ -89,15 +75,4 @@ void KNMusicHeaderLyrics::onActionLyricsUpdate()
         setLyricsData(m_lyricsManager->positionList(),
                       m_lyricsManager->textList());
     }
-}
-
-void KNMusicHeaderLyrics::loadConfigure()
-{
-    //Update the spacing.
-    setSpacing(m_musicConfigure->getData("TextSpacing",
-                                         spacing()).toInt());
-    //Update the font.
-    setFont(m_musicConfigure->getData("LyricsFont", font()).value<QFont>());
-    //Update the lyrics.
-    update();
 }
