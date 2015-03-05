@@ -42,7 +42,6 @@ signals:
     void requireChangeLoopState();
 
 public slots:
-    virtual void setButtonIcon(const int &index, const QPixmap &icon)=0;
     virtual void onActionPlayStateChanged(const bool &isPlay)=0;
     virtual void onActionMuteStateChanged(const bool &isMute)=0;
     virtual void onActionLoopStateChanged(const int &loopState)=0;

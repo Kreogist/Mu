@@ -48,6 +48,9 @@
 #ifdef Q_OS_WIN32
 #include "plugin/module/knwindowsextras/knwindowsextras.h"
 #endif
+#ifdef Q_OS_MACX
+#include "plugin/module/knmacextras/knmacextras.h"
+#endif
 
 #include "knpluginmanager.h"
 
@@ -142,6 +145,9 @@ void KNPluginManager::loadPlugins()
     //Load the platform extras if possible.
 #ifdef Q_OS_WIN32
     loadPlatformExtras(new KNWindowsExtras);
+#endif
+#ifdef Q_OS_MACX
+    loadPlatformExtras(new KNMacExtras);
 #endif
 
     //Initial category modules.

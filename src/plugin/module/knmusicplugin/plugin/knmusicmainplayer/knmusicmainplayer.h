@@ -53,7 +53,6 @@ private:
         ElementArtist,
         ElementAlbum,
         ElementGenre,
-        ElementYear,
         InformationElementsCount
     };
 

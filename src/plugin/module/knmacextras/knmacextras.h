@@ -15,22 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNWINDOWSEXTRAS_H
-#define KNWINDOWSEXTRAS_H
+#ifndef KNMACEXTRAS_H
+#define KNMACEXTRAS_H
 
-#include <QPixmap>
+#include <QSystemTrayIcon>
 
 #include "knplatformextras.h"
 
-class QWinThumbnailToolButton;
-class QWinThumbnailToolBar;
-class QWinTaskbarButton;
-class QWinTaskbarProgress;
-class KNWindowsExtras : public KNPlatformExtras
+class QMenu;
+class KNMacExtras : public KNPlatformExtras
 {
     Q_OBJECT
 public:
-    explicit KNWindowsExtras(QObject *parent = 0);
+    explicit KNMacExtras(QObject *parent = 0);
+    ~KNMacExtras();
     void setMainWindow(QMainWindow *mainWindow);
 
 signals:
@@ -41,29 +39,22 @@ public slots:
     void onActionLoopStateChanged(const int &loopState);
 
 private slots:
-    void onActionPlayAndPause();
+    void prevActivated(const QSystemTrayIcon::ActivationReason &reason);
+    void playNPauseActivated(const QSystemTrayIcon::ActivationReason &reason);
+    void nextActivated(const QSystemTrayIcon::ActivationReason &reason);
 
 private:
-    inline void setButtonIcon(const int &index, const QPixmap &icon);
-    inline void initialThumbnailToolBar();
-    QWinThumbnailToolBar *m_thumbnailToolbar;
-    QWinTaskbarButton *m_taskbarButton;
-    QWinTaskbarProgress *m_taskbarProgress;
     enum ThumbnailActions
     {
         PlayPrev,
         PlayAndPause,
         PlayNext,
-        VolumeUp,
-        VolumeDown,
-        Mute,
-        LoopMode,
         ThumbnailActionsCount
     };
-    bool m_isStatePlay=true;
-    QPixmap m_playIcon, m_pauseIcon, m_muteOn, m_muteOff,
-            m_loopStates[LoopStateButtonStateCount];
-    QWinThumbnailToolButton *m_thumbnailButtons[ThumbnailActionsCount];
+    QSystemTrayIcon *m_actionButtons[ThumbnailActionsCount];
+    QMenu *m_dummyMenu;
+    QIcon m_playIcon, m_pauseIcon;
+    bool m_isPlay=false;
 };
 
-#endif // KNWINDOWSEXTRAS_H
+#endif // KNMACEXTRAS_H

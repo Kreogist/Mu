@@ -51,7 +51,8 @@ void KNWindowsExtras::setMainWindow(QMainWindow *mainWindow)
     m_thumbnailToolbar->setWindow(mainWindow->windowHandle());
 }
 
-void KNWindowsExtras::setButtonIcon(const int &index, const QPixmap &icon)
+inline void KNWindowsExtras::setButtonIcon(const int &index,
+                                           const QPixmap &icon)
 {
     m_thumbnailButtons[index]->setIcon(QIcon(icon));
 }

@@ -119,7 +119,6 @@ void KNMusicMainPlayer::retranslate()
     m_informationElementCaptions[ElementArtist]->setText(tr("Artist"));
     m_informationElementCaptions[ElementAlbum]->setText(tr("Album"));
     m_informationElementCaptions[ElementGenre]->setText(tr("Genre"));
-    m_informationElementCaptions[ElementYear]->setText(tr("Year"));
 }
 
 void KNMusicMainPlayer::onActionHideMainPlayer()
@@ -228,7 +227,6 @@ void KNMusicMainPlayer::initialInformationPanel()
     elementIconPath[ElementArtist]=":/plugin/music/category/02_artists.png";
     elementIconPath[ElementAlbum]=":/plugin/music/category/03_ablums.png";
     elementIconPath[ElementGenre]=":/plugin/music/category/04_genres.png";
-    elementIconPath[ElementYear]=":/plugin/music/category/06_year.png";
 
     //Initial the element labels.
     for(int i=0; i<InformationElementsCount; i++)
@@ -254,11 +252,14 @@ void KNMusicMainPlayer::initialInformationPanel()
         m_infoPanelLayout->addRow(caption,
                                   m_informationElements[i]);
     }
-    QPalette captionPalette=m_informationElementCaptions[0]->palette();
-    captionPalette.setColor(QPalette::WindowText, QColor(0xcc, 0xcc, 0xcc));
+    QPalette captionPal=m_informationElementCaptions[0]->palette(),
+             elementsPal=m_informationElements[0]->palette();
+    captionPal.setColor(QPalette::WindowText, QColor(0xcc, 0xcc, 0xcc));
+    elementsPal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
     for(int i=0; i<InformationElementsCount; i++)
     {
-        m_informationElementCaptions[i]->setPalette(captionPalette);
+        m_informationElementCaptions[i]->setPalette(captionPal);
+        m_informationElements[i]->setPalette(elementsPal);
     }
 }
 
@@ -275,7 +276,6 @@ void KNMusicMainPlayer::updateInformationPanel()
     setEliedLabelText(m_informationElements[ElementArtist], detailInfo.textLists[Artist], m_maxElementWidth);
     setEliedLabelText(m_informationElements[ElementAlbum], detailInfo.textLists[Album], m_maxElementWidth);
     setEliedLabelText(m_informationElements[ElementGenre], detailInfo.textLists[Genre], m_maxElementWidth);
-    setEliedLabelText(m_informationElements[ElementYear], detailInfo.textLists[Year], m_maxElementWidth);
 }
 
 void KNMusicMainPlayer::initialLyricsPanel()
