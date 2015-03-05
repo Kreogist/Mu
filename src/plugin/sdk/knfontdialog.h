@@ -26,7 +26,8 @@ class KNFontDialog : public QDialog
 public:
     explicit KNFontDialog(QWidget *parent = 0);
     ~KNFontDialog();
-    static QFont getFont(const QFont &defaultFont);
+    static QFont getFont(const QFont &defaultFont,
+                         QWidget *parent=0);
     void setCurrentFont(const QFont &font);
     QFont currentFont() const;
 

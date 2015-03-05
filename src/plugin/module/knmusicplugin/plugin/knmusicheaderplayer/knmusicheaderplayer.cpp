@@ -339,7 +339,9 @@ void KNMusicHeaderPlayer::onActionInOutOpacityChange(const QVariant &value)
     m_title->setOpacity(albumOpacity);
     m_artistAndAlbum->setOpacity(albumOpacity);
 
-    m_durationEffect->setOpacity(1-albumOpacity);
+    QPalette pal=m_duration->palette();
+    pal.setColor(QPalette::WindowText, QColor(255,255,255,qMax(0.0, qMin(1.0, 1.0-albumOpacity))*255.0));
+    m_duration->setPalette(pal);
 }
 
 void KNMusicHeaderPlayer::onActionShowAppendMenu()
@@ -490,10 +492,6 @@ inline void KNMusicHeaderPlayer::initialProrgess()
     m_duration=new QLabel(this);
     m_duration->setContentsMargins(0,0,0,0);
     m_duration->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    //Set effect.
-    m_durationEffect=new QGraphicsOpacityEffect(this);
-    m_durationEffect->setOpacity(0);
-    m_duration->setGraphicsEffect(m_durationEffect);
     //Set time font
     QFont timeFont=m_duration->font();
     timeFont.setFamily("096MKSD");
@@ -501,7 +499,7 @@ inline void KNMusicHeaderPlayer::initialProrgess()
     m_duration->setFixedWidth(78);
     //Set color.
     QPalette pal=m_duration->palette();
-    pal.setColor(QPalette::WindowText, QColor(255,255,255));
+    pal.setColor(QPalette::WindowText, QColor(255,255,255,0));
     m_duration->setPalette(pal);
     progressLayout->addWidget(m_duration);
 
@@ -530,6 +528,7 @@ inline void KNMusicHeaderPlayer::initialProrgess()
                 m_positionDisplay->fontMetrics().width(':'));
 
     //Set color.
+    pal.setColor(QPalette::WindowText, QColor(255,255,255,255));
     m_positionDisplay->setPalette(pal);
     //Set default text.
     setPositionText(0);

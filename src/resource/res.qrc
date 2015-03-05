@@ -115,5 +115,9 @@
         <file>windows/loopmode_repeat.png</file>
         <file>windows/loopmode_repeatsingle.png</file>
         <file>windows/mute_on.png</file>
+        <file>mac/next.png</file>
+        <file>mac/pause.png</file>
+        <file>mac/play.png</file>
+        <file>mac/prev.png</file>
     </qresource>
 </RCC>

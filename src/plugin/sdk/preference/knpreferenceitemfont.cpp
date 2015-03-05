@@ -109,7 +109,8 @@ void KNPreferenceItemFont::retranslate()
 
 void KNPreferenceItemFont::onActionSelectFont()
 {
-    setValue(KNFontDialog::getFont(m_previewTooltip->font()));
+    setValue(KNFontDialog::getFont(m_previewTooltip->font(),
+                                   parentWidget()));
 }
 
 void KNPreferenceItemFont::onActionShowTooltip()

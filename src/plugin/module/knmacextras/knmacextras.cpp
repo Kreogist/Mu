@@ -26,14 +26,14 @@ KNMacExtras::KNMacExtras(QObject *parent) :
     m_dummyMenu=new QMenu;
 
     //Initial the playing and pause icon.
-    m_playIcon=QIcon(":/platform/windows/play.png");
-    m_pauseIcon=QIcon(":/platform/windows/pause.png");
+    m_playIcon=QIcon(":/platform/mac/play.png");
+    m_pauseIcon=QIcon(":/platform/mac/pause.png");
 
     //Configure the button icons.
     QIcon actionIcons[ThumbnailActionsCount];
-    actionIcons[PlayPrev]=QIcon(":/platform/windows/previous.png");
+    actionIcons[PlayPrev]=QIcon(":/platform/mac/prev.png");
     actionIcons[PlayAndPause]=m_playIcon;
-    actionIcons[PlayNext]=QIcon(":/platform/windows/next.png");
+    actionIcons[PlayNext]=QIcon(":/platform/mac/next.png");
 
     //Initial all the system tray icon button.
     for(int i=ThumbnailActionsCount-1; i>-1; i--)

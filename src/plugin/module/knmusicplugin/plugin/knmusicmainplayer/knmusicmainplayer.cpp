@@ -21,9 +21,10 @@
 
 #include "knglobal.h"
 #include "knlabelbutton.h"
+#include "knopacityanimebutton.h"
+#include "knprogressslider.h"
 
 #include "knmusicheaderplayerbase.h"
-#include "knopacityanimebutton.h"
 #include "knmusicmainlyrics.h"
 #include "knmusicglobal.h"
 
@@ -304,10 +305,19 @@ void KNMusicMainPlayer::initialControlPanel()
     m_controlWidget=new QWidget(this);
 
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                             this);
+                                             m_controlWidget);
     controlLayout->setContentsMargins(0,0,0,0);
     controlLayout->setSpacing(0);
     m_controlWidget->setLayout(controlLayout);
+
+    m_progress=new KNProgressSlider(this);
+    controlLayout->addWidget(m_progress);
+
+    QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            controlLayout->widget());
+    buttonLayout->setContentsMargins(0,0,0,0);
+    buttonLayout->setSpacing(0);
+    controlLayout->addLayout(buttonLayout);
 }
 
 void KNMusicMainPlayer::setEliedLabelText(QLabel *label,

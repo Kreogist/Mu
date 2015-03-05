@@ -138,10 +138,11 @@ KNFontDialog::~KNFontDialog()
 
 }
 
-QFont KNFontDialog::getFont(const QFont &defaultFont)
+QFont KNFontDialog::getFont(const QFont &defaultFont,
+                            QWidget *parent)
 {
     //Initial the font dialog.
-    QScopedPointer<KNFontDialog> fontDialog(new KNFontDialog);
+    QScopedPointer<KNFontDialog> fontDialog(new KNFontDialog(parent));
     //Set the font.
     fontDialog->setCurrentFont(defaultFont);
     //Launch the dialog.

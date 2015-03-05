@@ -25,6 +25,7 @@ class QBoxLayout;
 class QFormLayout;
 class KNLabelButton;
 class KNOpacityAnimeButton;
+class KNProgressSlider;
 class KNMusicMainLyrics;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
@@ -85,6 +86,7 @@ private:
     inline void initialPlaylistPanel();
     inline void initialControlPanel();
     QWidget *m_controlWidget;
+    KNProgressSlider *m_progress;
 
     inline void setEliedLabelText(QLabel *label,
                                   const QString &text,

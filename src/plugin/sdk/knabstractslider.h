@@ -29,7 +29,7 @@ signals:
     void sliderMoved(float value);
     void sliderPressed();
     void sliderReleased();
-    void valueChanged(float value);
+    void valueChanged(qint64 value);
 
 public slots:
     virtual void setMaximum(qint64 maximum);
