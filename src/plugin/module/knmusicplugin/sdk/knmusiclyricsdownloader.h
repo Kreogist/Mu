@@ -66,7 +66,7 @@ protected:
         str=str.toLower();
         str.replace('.', " ");
         str.replace('&', " ");
-        str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
+//        str.replace(QRegExp("\\'|·|\\$|\\&|–"), " ");
         //truncate all symbols
         str.replace(QRegExp("\\(.*?\\)|\\[.*?]|{.*?}|\\uff08.*?\\uff09"), " ");
         str.replace(QRegExp("[-/:-@[-`{-~]+"), " ");

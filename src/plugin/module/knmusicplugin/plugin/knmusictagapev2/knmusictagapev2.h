@@ -64,7 +64,7 @@ private:
                       QList<APETagItem> &tagList);
     void writeTagListToAnalysisItem(const QList<APETagItem> &tagList,
                                   KNMusicAnalysisItem &analysisItem);
-    const char m_apePreamble[8]={'A', 'P', 'E', 'T', 'A', 'G', 'E', 'X'};
+    const char *m_apePreamble="APETAGEX";
     QHash<QString, int> m_keyIndex;
 };
 

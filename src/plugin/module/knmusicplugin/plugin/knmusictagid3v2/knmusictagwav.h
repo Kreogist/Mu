@@ -51,11 +51,11 @@ private:
                                QList<WAVItem> &listData);
     inline void writeListDataToDetailInfo(const QList<WAVItem> &listData,
                                           KNMusicDetailInfo &detailInfo);
-    const char m_riffHeader[4]={'R', 'I', 'F', 'F'},
-               m_waveHeader[4]={'W', 'A', 'V', 'E'},
-               m_listChunk[4]={'L', 'I', 'S', 'T'},
-               m_listInfoHeader[4]={'I', 'N', 'F', 'O'},
-               m_id32Chunk[4]={'i', 'd', '3', 0x20};
+    const char *m_riffHeader="RIFF",
+               *m_waveHeader="WAVE",
+               *m_listChunk="LIST",
+               *m_listInfoHeader="INFO";
+    char m_id32Chunk[4];
     QHash<QString, int> m_listKeyIndex;
 };
 

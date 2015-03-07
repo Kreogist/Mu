@@ -11,6 +11,7 @@
 
 #include "kndropproxycontainer.h"
 
+class KNMusicBackend;
 class KNMusicHeaderPlayerBase;
 class KNMusicMainPlayerBase : public KNDropProxyContainer
 {
@@ -18,6 +19,7 @@ class KNMusicMainPlayerBase : public KNDropProxyContainer
 public:
     KNMusicMainPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
     virtual QWidget *banner()=0;
+    virtual void setBackend(KNMusicBackend *backend)=0;
     virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)=0;
 
 signals:

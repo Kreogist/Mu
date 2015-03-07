@@ -24,6 +24,8 @@
 
 #include "knmusicbackendbass.h"
 
+#include <QMessageBox>
+
 #include <QDebug>
 
 KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
@@ -152,7 +154,7 @@ void KNMusicBackendBass::initialPlugin(const QString &pluginDirPath)
                     const BASS_PLUGININFO *pluginInfo=BASS_PluginGetInfo(plugin);
                     for(DWORD i=0; i<pluginInfo->formatc; i++)
                     {
-//                        qDebug()<<pluginInfo->formats[i].exts;
+                        qDebug()<<pluginInfo->formats[i].exts;
                     }
                 }
             }

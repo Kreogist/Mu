@@ -91,7 +91,7 @@ void KNMusicHeaderLyrics::onActionLyricsUpdate()
 void KNMusicHeaderLyrics::loadConfigure()
 {
     //Update the spacing.
-    setSpacing(m_musicConfigure->getData("TextSpacing",
+    setSpacing(m_musicConfigure->getData("LyricsTextSpacing",
                                          spacing()).toInt());
     //Update the font.
     setFont(m_musicConfigure->getData("LyricsFont", font()).value<QFont>());

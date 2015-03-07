@@ -269,7 +269,7 @@ void KNMusicHeaderPlayer::onActionProgressReleased()
 void KNMusicHeaderPlayer::onActionPositionEdited()
 {
     //Get the latest text
-    QString positionText=m_positionDisplay->text();
+    QString positionText=m_position->text();
     //Find the colon.
     int colonPosition=positionText.indexOf(':');
     //If we cannot find the colon, means it's not format as 'xx:xx'.
@@ -298,9 +298,9 @@ void KNMusicHeaderPlayer::onActionPositionEdited()
 
 void KNMusicHeaderPlayer::setPositionText(const qint64 &position)
 {
-    if(!m_positionDisplay->editing())
+    if(!m_position->editing())
     {
-        m_positionDisplay->setText(KNMusicGlobal::msecondToString(position));
+        m_position->setText(KNMusicGlobal::msecondToString(position));
     }
 }
 
@@ -517,24 +517,24 @@ inline void KNMusicHeaderPlayer::initialProrgess()
     progressLayout->addWidget(m_progressSlider);
 
     //Initial the position display.
-    m_positionDisplay=new KNEditableLabel(this);
+    m_position=new KNEditableLabel(this);
     //Set alignment.
-    m_positionDisplay->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_position->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     //Set time font.
-    m_positionDisplay->setFont(timeFont);
+    m_position->setFont(timeFont);
     //Set fixed width
-    m_positionDisplay->setFixedWidth(
-                m_positionDisplay->fontMetrics().width('6')*4+
-                m_positionDisplay->fontMetrics().width(':'));
+    m_position->setFixedWidth(
+                m_position->fontMetrics().width('6')*4+
+                m_position->fontMetrics().width(':'));
 
     //Set color.
     pal.setColor(QPalette::WindowText, QColor(255,255,255,255));
-    m_positionDisplay->setPalette(pal);
+    m_position->setPalette(pal);
     //Set default text.
     setPositionText(0);
-    progressLayout->addWidget(m_positionDisplay);
+    progressLayout->addWidget(m_position);
     //Connect edit finished signal.
-    connect(m_positionDisplay, &KNEditableLabel::editingFinished,
+    connect(m_position, &KNEditableLabel::editingFinished,
             this, &KNMusicHeaderPlayer::onActionPositionEdited);
 
     //Initial loop state button.

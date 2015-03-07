@@ -224,6 +224,9 @@ bool KNMusicTagID3v2::parseID3v2RawData(char *rawTagData,
             break;
         }
         ID3v2Frame currentFrame;
+        //Clear the frameID.
+        memset(currentFrame.frameID, 0, sizeof(currentFrame.frameID));
+        memset(currentFrame.flags, 0, sizeof(currentFrame.flags));
         //Set the frame ID.
         strncpy(currentFrame.frameID, rawPosition, property.frameIDSize);
         //Set the start position and size.

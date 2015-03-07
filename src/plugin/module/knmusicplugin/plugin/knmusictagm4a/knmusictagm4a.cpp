@@ -269,10 +269,10 @@ inline bool KNMusicTagM4A::parseMetaBox(M4ABox &metaBox, M4ABox &ilstBox)
     while(sourceSize>0)
     {
         //Get the box size and the name of the box.
-        quint32 boxSize=(((quint32)data[0]<<24)&0b11111111000000000000000000000000)+
-                        (((quint32)data[1]<<16)&0b00000000111111110000000000000000)+
-                        (((quint32)data[2]<<8 )&0b00000000000000001111111100000000)+
-                        ( (quint32)data[3]     &0b00000000000000000000000011111111);
+        quint32 boxSize=(((quint32)data[0]<<24) & 0xFF000000)+
+                        (((quint32)data[1]<<16) & 0x00FF0000)+
+                        (((quint32)data[2]<<8 ) & 0x0000FF00)+
+                        ( (quint32)data[3]      & 0x000000FF);
         QString boxName=QString(QByteArray(data+4, 4));
         //If current box is "ilst", then mission complete.
         if(boxName=="ilst")
@@ -331,10 +331,10 @@ inline bool KNMusicTagM4A::extractBox(M4ABox &source,
     while(sourceSize>0)
     {
         //Assume the first four bytes are the size.
-        quint32 preferSize=(((quint32)dataPosition[0]<<24)&0b11111111000000000000000000000000)+
-                           (((quint32)dataPosition[1]<<16)&0b00000000111111110000000000000000)+
-                           (((quint32)dataPosition[2]<<8 )&0b00000000000000001111111100000000)+
-                           ( (quint32)dataPosition[3]     &0b00000000000000000000000011111111);
+        quint32 preferSize=(((quint32)dataPosition[0]<<24) & 0xFF000000)+
+                           (((quint32)dataPosition[1]<<16) & 0x00FF0000)+
+                           (((quint32)dataPosition[2]<<8 ) & 0x0000FF00)+
+                           ( (quint32)dataPosition[3]      & 0x000000FF);
         //Check the size to the prefer size.
         if(preferSize==0 || preferSize>sourceSize)
         {

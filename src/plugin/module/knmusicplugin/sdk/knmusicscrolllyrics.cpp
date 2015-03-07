@@ -279,5 +279,5 @@ int KNMusicScrollLyrics::spacing() const
 
 void KNMusicScrollLyrics::setSpacing(int spacing)
 {
-    m_spacing = spacing;
+    m_spacing=spacing;
 }

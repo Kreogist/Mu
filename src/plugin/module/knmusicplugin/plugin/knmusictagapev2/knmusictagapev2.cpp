@@ -111,22 +111,22 @@ bool KNMusicTagAPEv2::checkHeader(const int &position,
     if(memcmp(m_apePreamble, rawHeaderData, 8)==0)
     {
         //Parse the header data to header struct.
-        header.version=(((quint32)rawHeaderData[11]<<24)&0b11111111000000000000000000000000)+
-                       (((quint32)rawHeaderData[10]<<16)&0b00000000111111110000000000000000)+
-                       (((quint32)rawHeaderData[9] <<8) &0b00000000000000001111111100000000)+
-                       ( (quint32)rawHeaderData[8]      &0b00000000000000000000000011111111);
-        header.size=(((quint32)rawHeaderData[15]<<24)&0b11111111000000000000000000000000)+
-                    (((quint32)rawHeaderData[14]<<16)&0b00000000111111110000000000000000)+
-                    (((quint32)rawHeaderData[13]<<8) &0b00000000000000001111111100000000)+
-                    ( (quint32)rawHeaderData[12]     &0b00000000000000000000000011111111);
-        header.itemCount=(((quint32)rawHeaderData[19]<<24)&0b11111111000000000000000000000000)+
-                         (((quint32)rawHeaderData[18]<<16)&0b00000000111111110000000000000000)+
-                         (((quint32)rawHeaderData[17]<<8) &0b00000000000000001111111100000000)+
-                         ( (quint32)rawHeaderData[16]     &0b00000000000000000000000011111111);
-        header.flags=(((quint32)rawHeaderData[23]<<24)&0b11111111000000000000000000000000)+
-                     (((quint32)rawHeaderData[22]<<16)&0b00000000111111110000000000000000)+
-                     (((quint32)rawHeaderData[21]<<8) &0b00000000000000001111111100000000)+
-                     ( (quint32)rawHeaderData[20]     &0b00000000000000000000000011111111);
+        header.version=(((quint32)rawHeaderData[11]<<24) & 0xFF000000)+
+                       (((quint32)rawHeaderData[10]<<16) & 0x00FF0000)+
+                       (((quint32)rawHeaderData[9] <<8)  & 0x0000FF00)+
+                       ( (quint32)rawHeaderData[8]       & 0x000000FF);
+        header.size=(((quint32)rawHeaderData[15]<<24) & 0xFF000000)+
+                    (((quint32)rawHeaderData[14]<<16) & 0x00FF0000)+
+                    (((quint32)rawHeaderData[13]<<8)  & 0x0000FF00)+
+                    ( (quint32)rawHeaderData[12]      & 0x000000FF);
+        header.itemCount=(((quint32)rawHeaderData[19]<<24) & 0xFF000000)+
+                         (((quint32)rawHeaderData[18]<<16) & 0x00FF0000)+
+                         (((quint32)rawHeaderData[17]<<8)  & 0x0000FF00)+
+                         ( (quint32)rawHeaderData[16]      & 0x000000FF);
+        header.flags=(((quint32)rawHeaderData[23]<<24) & 0xFF000000)+
+                     (((quint32)rawHeaderData[22]<<16) & 0x00FF0000)+
+                     (((quint32)rawHeaderData[21]<<8)  & 0x0000FF00)+
+                     ( (quint32)rawHeaderData[20]      & 0x000000FF);
         return true;
     }
     return false;
@@ -160,10 +160,10 @@ void KNMusicTagAPEv2::parseRawData(char *rawData,
     while(sizeSurplus>0 && itemSurplus>0)
     {
         //Calculate the frame size.
-        quint32 currentFrameSize=(((quint32)dataPointer[3]<<24)&0b11111111000000000000000000000000)+
-                                 (((quint32)dataPointer[2]<<16)&0b00000000111111110000000000000000)+
-                                 (((quint32)dataPointer[1]<<8) &0b00000000000000001111111100000000)+
-                                 ( (quint32)dataPointer[0]     &0b00000000000000000000000011111111);
+        quint32 currentFrameSize=(((quint32)dataPointer[3]<<24) & 0xFF000000)+
+                                 (((quint32)dataPointer[2]<<16) & 0x00FF0000)+
+                                 (((quint32)dataPointer[1]<<8)  & 0x0000FF00)+
+                                 ( (quint32)dataPointer[0]      & 0x000000FF);
         //Check is frame size available.
         if(currentFrameSize>sizeSurplus)
         {
@@ -171,10 +171,10 @@ void KNMusicTagAPEv2::parseRawData(char *rawData,
         }
         //Generate item according to the frame size.
         APETagItem currentItem;
-        currentItem.flag=(((quint32)dataPointer[7]<<24)&0b11111111000000000000000000000000)+
-                         (((quint32)dataPointer[6]<<16)&0b00000000111111110000000000000000)+
-                         (((quint32)dataPointer[5]<<8) &0b00000000000000001111111100000000)+
-                         ( (quint32)dataPointer[4]     &0b00000000000000000000000011111111);
+        currentItem.flag=(((quint32)dataPointer[7]<<24) & 0xFF000000)+
+                         (((quint32)dataPointer[6]<<16) & 0x00FF0000)+
+                         (((quint32)dataPointer[5]<<8)  & 0x0000FF00)+
+                         ( (quint32)dataPointer[4]      & 0x000000FF);
         //Here is a magic:
         //QString can automatically terminate at the 0x00, so we don't need to
         //find 0x00 byte manually. Just use the key length to find the 0x00.

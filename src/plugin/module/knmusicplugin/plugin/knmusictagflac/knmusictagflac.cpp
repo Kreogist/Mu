@@ -76,11 +76,11 @@ bool KNMusicTagFLAC::praseTag(QFile &musicFile,
             7-126 : reserved
             127 : Invalid.
         */
-        quint8 blockType=(quint8)rawHeader[0]&0b01111111;
+        quint8 blockType=(quint8)rawHeader[0] & 0x7F;
         //The last 3 bytes are the size of this block expect the header.
-        quint32 blockSize=(((quint32)rawHeader[1]<<16) & 0b00000000111111110000000000000000) +
-                (((quint32)rawHeader[2]<<8)  & 0b00000000000000001111111100000000) +
-                ( (quint32)rawHeader[3]      & 0b00000000000000000000000011111111);
+        quint32 blockSize=(((quint32)rawHeader[1]<<16) & 0x00FF0000) +
+                          (((quint32)rawHeader[2]<<8)  & 0x0000FF00) +
+                          ( (quint32)rawHeader[3]      & 0x000000FF);
 
         //Read the raw metadata block data.
         rawTagData=new char[blockSize];

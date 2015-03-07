@@ -83,18 +83,9 @@ private:
     bool parseImageData(QByteArray imageData, WMAPicture &albumArt);
     inline void writeTagMapToDetailInfo(const QList<KNMusicWMAFrame> &frameList,
                                         KNMusicAnalysisItem &analysisItem);
-    unsigned char m_headerMark[17]={0x30, 0x26, 0xB2, 0x75,
-                                    0x8E, 0x66, 0xCF, 0x11,
-                                    0xA6, 0xD9, 0x00, 0xAA,
-                                    0x00, 0x62, 0xCE, 0x6C};
-    unsigned char m_standardFrame[17]={0x33, 0x26, 0xB2, 0x75,
-                                       0x8E, 0x66, 0xCF, 0x11,
-                                       0xA6, 0xD9, 0x00, 0xAA,
-                                       0x00, 0x62, 0xCE, 0x6C};
-    unsigned char m_extendedFrame[17]={0x40, 0xA4, 0xD0, 0xD2,
-                                       0x07, 0xE3, 0xD2, 0x11,
-                                       0x97, 0xF0, 0x00, 0xA0,
-                                       0xC9, 0x5E, 0xA8, 0x50};
+    unsigned char m_headerMark[17];
+    unsigned char m_standardFrame[17];
+    unsigned char m_extendedFrame[17];
 
     QString m_standardFrameID[StandardFrameItemsCount];
     QHash<QString, int> m_attributesIndex;

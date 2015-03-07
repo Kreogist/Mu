@@ -25,6 +25,21 @@
 KNMusicTagWMA::KNMusicTagWMA(QObject *parent) :
     KNMusicTagParser(parent)
 {
+    //Initial the header mark.
+    m_headerMark[ 1]=0x30; m_headerMark[ 2]=0x26; m_headerMark[ 3]=0xB2; m_headerMark[ 4]=0x75;
+    m_headerMark[ 5]=0x8E; m_headerMark[ 6]=0x66; m_headerMark[ 7]=0xCF; m_headerMark[ 8]=0x11;
+    m_headerMark[ 9]=0xA6; m_headerMark[10]=0xD9; m_headerMark[11]=0x00; m_headerMark[12]=0xAA;
+    m_headerMark[13]=0x00; m_headerMark[14]=0x62; m_headerMark[15]=0xCE; m_headerMark[16]=0x6C;
+    //Inital standard frames.
+    m_standardFrame[ 1]=0x33; m_standardFrame[ 2]=0x26; m_standardFrame[ 3]=0xB2; m_standardFrame[ 4]=0x75;
+    m_standardFrame[ 5]=0x8E; m_standardFrame[ 6]=0x66; m_standardFrame[ 7]=0xCF; m_standardFrame[ 8]=0x11;
+    m_standardFrame[ 9]=0xA6; m_standardFrame[10]=0xD9; m_standardFrame[11]=0x00; m_standardFrame[12]=0xAA;
+    m_standardFrame[13]=0x00; m_standardFrame[14]=0x62; m_standardFrame[15]=0xCE; m_standardFrame[16]=0x6C;
+    //Initial extended frames.
+    m_extendedFrame[ 1]=0x40; m_extendedFrame[ 2]=0xA4; m_extendedFrame[ 3]=0xD0; m_extendedFrame[ 4]=0xD2;
+    m_extendedFrame[ 5]=0x07; m_extendedFrame[ 6]=0xE3; m_extendedFrame[ 7]=0xD2; m_extendedFrame[ 8]=0x11;
+    m_extendedFrame[ 9]=0x97; m_extendedFrame[10]=0xF0; m_extendedFrame[11]=0x00; m_extendedFrame[12]=0xA0;
+    m_extendedFrame[13]=0xC9; m_extendedFrame[14]=0x5E; m_extendedFrame[15]=0xA8; m_extendedFrame[16]=0x50;
     //Initial the standard items attributes.
     m_standardFrameID[ItemTitle]="WMA_FRAMEID_TITLE";
     m_standardFrameID[ItemAuthor]="WMA_FRAMEID_AUTHOR";
@@ -74,14 +89,14 @@ bool KNMusicTagWMA::praseTag(QFile &musicFile,
     }
     //Get the tag size.
     musicDataStream.readRawData(rawTagSize, 14);
-    quint64 tagSize=(((quint64)rawTagSize[7]<<56)&0b1111111100000000000000000000000000000000000000000000000000000000)+
-                    (((quint64)rawTagSize[6]<<48)&0b0000000011111111000000000000000000000000000000000000000000000000)+
-                    (((quint64)rawTagSize[5]<<40)&0b0000000000000000111111110000000000000000000000000000000000000000)+
-                    (((quint64)rawTagSize[4]<<32)&0b0000000000000000000000001111111100000000000000000000000000000000)+
-                    (((quint64)rawTagSize[3]<<24)&0b0000000000000000000000000000000011111111000000000000000000000000)+
-                    (((quint64)rawTagSize[2]<<16)&0b0000000000000000000000000000000000000000111111110000000000000000)+
-                    (((quint64)rawTagSize[1]<<8) &0b0000000000000000000000000000000000000000000000001111111100000000)+
-                    ( (quint64)rawTagSize[0]     &0b0000000000000000000000000000000000000000000000000000000011111111)-30,
+    quint64 tagSize=(((quint64)rawTagSize[7]<<56) & 0xFF00000000000000)+
+                    (((quint64)rawTagSize[6]<<48) & 0x00FF000000000000)+
+                    (((quint64)rawTagSize[5]<<40) & 0x0000FF0000000000)+
+                    (((quint64)rawTagSize[4]<<32) & 0x000000FF00000000)+
+                    (((quint64)rawTagSize[3]<<24) & 0x00000000FF000000)+
+                    (((quint64)rawTagSize[2]<<16) & 0x0000000000FF0000)+
+                    (((quint64)rawTagSize[1]<<8)  & 0x000000000000FF00)+
+                    ( (quint64)rawTagSize[0]      & 0x00000000000000FF)-30,
             tagDataCount=tagSize;
     //Get all the tag data.
     char *rawTagData=new char[tagSize],
@@ -94,14 +109,14 @@ bool KNMusicTagWMA::praseTag(QFile &musicFile,
     while(tagDataCount!=0 || !standardParsed || !extendParsed)
     {
         //Calculate the frame size first.
-        quint64 frameSize=(((quint64)framePointer[23]<<56)&0b1111111100000000000000000000000000000000000000000000000000000000)+
-                          (((quint64)framePointer[22]<<48)&0b0000000011111111000000000000000000000000000000000000000000000000)+
-                          (((quint64)framePointer[21]<<40)&0b0000000000000000111111110000000000000000000000000000000000000000)+
-                          (((quint64)framePointer[20]<<32)&0b0000000000000000000000001111111100000000000000000000000000000000)+
-                          (((quint64)framePointer[19]<<24)&0b0000000000000000000000000000000011111111000000000000000000000000)+
-                          (((quint64)framePointer[18]<<16)&0b0000000000000000000000000000000000000000111111110000000000000000)+
-                          (((quint64)framePointer[17]<<8) &0b0000000000000000000000000000000000000000000000001111111100000000)+
-                          ( (quint64)framePointer[16]     &0b0000000000000000000000000000000000000000000000000000000011111111);
+        quint64 frameSize=(((quint64)framePointer[23]<<56) & 0xFF00000000000000)+
+                          (((quint64)framePointer[22]<<48) & 0x00FF000000000000)+
+                          (((quint64)framePointer[21]<<40) & 0x0000FF0000000000)+
+                          (((quint64)framePointer[20]<<32) & 0x000000FF00000000)+
+                          (((quint64)framePointer[19]<<24) & 0x00000000FF000000)+
+                          (((quint64)framePointer[18]<<16) & 0x0000000000FF0000)+
+                          (((quint64)framePointer[17]<<8)  & 0x000000000000FF00)+
+                          ( (quint64)framePointer[16]      & 0x00000000000000FF);
         //Ensure the frame size is not larger than tag data.
         if(frameSize>tagDataCount)
         {
@@ -200,8 +215,8 @@ bool KNMusicTagWMA::parseStandardFrame(char *frameStart,
     for(int i=0; i<StandardFrameItemsCount; i++)
     {
         //Get the size.
-        itemSizes[i]=(((quint16)dataPointer[1]<<8)&0b1111111100000000)+
-                     (((quint16)dataPointer[0])   &0b0000000011111111);
+        itemSizes[i]=(((quint16)dataPointer[1]<<8) & 0xFF00)+
+                     (((quint16)dataPointer[0])    & 0x00FF);
         //Calculate sum.
         sizeSum+=itemSizes[i];
         //Move the pointer.
@@ -233,8 +248,8 @@ bool KNMusicTagWMA::parseExtendFrame(char *frameStart,
 {
     char *dataPointer=frameStart;
     //In extend frame, it starts with the number of items it contains.
-    quint16 itemCounts=(((quint16)dataPointer[1]<<8)&0b1111111100000000)+
-                       (((quint16)dataPointer[0])   &0b0000000011111111);
+    quint16 itemCounts=(((quint16)dataPointer[1]<<8) & 0xFF00)+
+                       (((quint16)dataPointer[0])    & 0x00FF);
     //Remove item count bytes, move pointer.
     frameSize-=2;dataPointer+=2;
     //Read all these items to tag map.
@@ -242,14 +257,14 @@ bool KNMusicTagWMA::parseExtendFrame(char *frameStart,
     {
         KNMusicWMAFrame currentFrame;
         //And the first two bytes are name length, get the name.
-        quint16 nameLength=(((quint16)dataPointer[1]<<8)&0b1111111100000000)+
-                           (((quint16)dataPointer[0])   &0b0000000011111111);
+        quint16 nameLength=(((quint16)dataPointer[1]<<8) & 0xFF00)+
+                           (((quint16)dataPointer[0])    & 0x00FF);
         currentFrame.name=m_utf16LECodec->toUnicode(QByteArray(dataPointer+2, nameLength-2));
         //Move the pointer, skip the name length, name and 2 unkown bytes.
         dataPointer+=(nameLength+4);
         //Get the value.
-        quint16 valueLength=(((quint16)dataPointer[1]<<8)&0b1111111100000000)+
-                            (((quint16)dataPointer[0])   &0b0000000011111111);
+        quint16 valueLength=(((quint16)dataPointer[1]<<8) & 0xFF00)+
+                            (((quint16)dataPointer[0])    & 0x00FF);
         currentFrame.data=QByteArray(dataPointer+2, valueLength);
         //Add the frame to list.
         frameList.append(currentFrame);

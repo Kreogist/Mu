@@ -22,6 +22,11 @@
 KNMusicTagWAV::KNMusicTagWAV(QObject *parent) :
     KNMusicTagID3v2(parent)
 {
+    //Initial id3 chunk
+    m_id32Chunk[0]='i';
+    m_id32Chunk[1]='d';
+    m_id32Chunk[2]='3';
+    m_id32Chunk[3]=0x20;
     //Initial the map.
     m_listKeyIndex["IART"]=Artist;
     m_listKeyIndex["IPRO"]=Album;
@@ -66,10 +71,10 @@ bool KNMusicTagWAV::praseTag(QFile &musicFile,
         //Read chunk head.
         musicDataStream.readRawData(chunkHeader, 8);
         //Calculate the truck size.
-        quint32 chunkSize=(((quint32)chunkHeader[7]<<24)&0b11111111000000000000000000000000)+
-                          (((quint32)chunkHeader[6]<<16)&0b00000000111111110000000000000000)+
-                          (((quint32)chunkHeader[5]<<8 )&0b00000000000000001111111100000000)+
-                          ( (quint32)chunkHeader[4]     &0b00000000000000000000000011111111);
+        quint32 chunkSize=(((quint32)chunkHeader[7]<<24) & 0xFF000000)+
+                          (((quint32)chunkHeader[6]<<16) & 0x00FF0000)+
+                          (((quint32)chunkHeader[5]<<8 ) & 0x0000FF00)+
+                          ( (quint32)chunkHeader[4]      & 0x000000FF);
         if(memcmp(chunkHeader, m_listChunk, 4)==0)
         {
             //Read the raw data.
@@ -154,10 +159,10 @@ inline void KNMusicTagWAV::parseListChunk(char *rawData,
     while(dataSize>0)
     {
         //Calculate the frame size.
-        quint32 frameSize=(((quint32)rawData[7]<<24)&0b11111111000000000000000000000000)+
-                          (((quint32)rawData[6]<<16)&0b00000000111111110000000000000000)+
-                          (((quint32)rawData[5]<<8 )&0b00000000000000001111111100000000)+
-                          ( (quint32)rawData[4]     &0b00000000000000000000000011111111);
+        quint32 frameSize=(((quint32)rawData[7]<<24) & 0xFF000000)+
+                          (((quint32)rawData[6]<<16) & 0x00FF0000)+
+                          (((quint32)rawData[5]<<8 ) & 0x0000FF00)+
+                          ( (quint32)rawData[4]      & 0x000000FF);
         if(frameSize>dataSize)
         {
             break;

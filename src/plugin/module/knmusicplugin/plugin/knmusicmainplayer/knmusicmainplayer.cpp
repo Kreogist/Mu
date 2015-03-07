@@ -21,6 +21,7 @@
 
 #include "knglobal.h"
 #include "knlabelbutton.h"
+#include "kneditablelabel.h"
 #include "knopacityanimebutton.h"
 #include "knprogressslider.h"
 
@@ -78,7 +79,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     songLayout->setSpacing(0);
     panelLayout->addLayout(songLayout, 1);
 
-    songLayout->addWidget(m_albumArtLabel, 0, Qt::AlignBottom | Qt::AlignHCenter);
+    songLayout->addWidget(m_albumArtLabel, 1, Qt::AlignBottom | Qt::AlignHCenter);
 
     QWidget *informationPanel=new QWidget(this);
     informationPanel->setLayout(m_infoPanelLayout);
@@ -101,6 +102,11 @@ KNMusicMainPlayer::~KNMusicMainPlayer()
 QWidget *KNMusicMainPlayer::banner()
 {
     return m_banner;
+}
+
+void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
+{
+    ;
 }
 
 void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
@@ -181,14 +187,15 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         fontSize=15;
     }
-    m_mainLayout->setContentsMargins(fontSize, 0, fontSize, 0);
-    m_mainLayout->setSpacing(fontSize);
+    m_mainLayout->setContentsMargins(fontSize, fontSize, fontSize, fontSize>>1);
+    m_mainLayout->setSpacing(fontSize>>1);
     m_infoPanelLayout->setContentsMargins(0, fontSize, 0, fontSize);
     m_infoPanelLayout->setHorizontalSpacing(fontSize);
 
     //Change the font size.
     QFont captionFont=m_informationElementCaptions[0]->font();
     captionFont.setPixelSize(fontSize);
+    //Set font to all the labels.
     int maxLabelWidth=0;
     for(int i=0; i<InformationElementsCount; i++)
     {
@@ -199,9 +206,11 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
         m_informationElementCaptions[i]->setFont(captionFont);
         m_informationElements[i]->setFont(captionFont);
     }
+    m_position->setFont(captionFont);
+    m_duration->setFont(captionFont);
     //Set lyrics font.
     QFont lyricsFont=m_mainLyrics->font();
-    lyricsFont.setPixelSize(fontSize+(fontSize>>1));
+    lyricsFont.setPixelSize(fontSize+fontSize/4);
     m_mainLyrics->setFont(lyricsFont);
     m_mainLyrics->setSpacing(fontSize>>1);
     m_mainLyrics->setLeftSpacing(fontSize<<1);
@@ -301,23 +310,49 @@ void KNMusicMainPlayer::initialPlaylistPanel()
 
 void KNMusicMainPlayer::initialControlPanel()
 {
-    //Initial the control widget.
+    const int buttonSize=46;
+    //Initial the control widgets.
     m_controlWidget=new QWidget(this);
+    //Initial the progress bar and position labels.
+    m_progress=new KNProgressSlider(this);
+    m_position=new KNEditableLabel(this);
+    m_duration=new QLabel(this);
+    //Initial the control buttons.
+    m_previous=new KNOpacityAnimeButton(this);
+    m_previous->setFixedSize(buttonSize, buttonSize);
+    m_previous->setIcon(QPixmap(":/plugin/music/player/previous.png"));
+    m_next=new KNOpacityAnimeButton(this);
+    m_next->setFixedSize(buttonSize, buttonSize);
+    m_next->setIcon(QPixmap(":/plugin/music/player/next.png"));
+    m_playNPause=new KNOpacityAnimeButton(this);
+    m_playNPause->setFixedSize(buttonSize, buttonSize);
 
+    //Initial the layouts, add the widget to the layouts.
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              m_controlWidget);
     controlLayout->setContentsMargins(0,0,0,0);
     controlLayout->setSpacing(0);
     m_controlWidget->setLayout(controlLayout);
 
-    m_progress=new KNProgressSlider(this);
     controlLayout->addWidget(m_progress);
 
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             controlLayout->widget());
     buttonLayout->setContentsMargins(0,0,0,0);
     buttonLayout->setSpacing(0);
-    controlLayout->addLayout(buttonLayout);
+    controlLayout->addLayout(buttonLayout, 1);
+
+    buttonLayout->addWidget(m_position, 0, Qt::AlignTop);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(m_previous, 0, Qt::AlignCenter);
+    buttonLayout->addWidget(m_playNPause, 0, Qt::AlignCenter);
+    buttonLayout->addWidget(m_next, 0, Qt::AlignCenter);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(m_duration, 0, Qt::AlignTop);
+
+    //-----------Debug------------
+    m_position->setText("0:00");
+    m_duration->setText("0:00");
 }
 
 void KNMusicMainPlayer::setEliedLabelText(QLabel *label,

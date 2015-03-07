@@ -534,18 +534,18 @@ void KNMusicGlobal::setMusicLibraryPath(const QString &musicLibraryPath)
 
 quint32 KNMusicGlobal::charToInt32(char *rawTagData)
 {
-    return (((quint32)rawTagData[0]<<24) & 0b11111111000000000000000000000000) +
-           (((quint32)rawTagData[1]<<16) & 0b00000000111111110000000000000000) +
-           (((quint32)rawTagData[2]<<8)  & 0b00000000000000001111111100000000) +
-           ( (quint32)rawTagData[3]      & 0b00000000000000000000000011111111);
+    return (((quint32)rawTagData[0]<<24) & 0xFF000000) +
+           (((quint32)rawTagData[1]<<16) & 0x00FF0000) +
+           (((quint32)rawTagData[2]<<8)  & 0x0000FF00) +
+           ( (quint32)rawTagData[3]      & 0x000000FF);
 }
 
 quint32 KNMusicGlobal::inverseCharToInt32(char *rawTagData)
 {
-    return (((quint32)rawTagData[3]<<24) & 0b11111111000000000000000000000000) +
-           (((quint32)rawTagData[2]<<16) & 0b00000000111111110000000000000000) +
-           (((quint32)rawTagData[1]<<8)  & 0b00000000000000001111111100000000) +
-           ( (quint32)rawTagData[0]      & 0b00000000000000000000000011111111);
+    return (((quint32)rawTagData[3]<<24) & 0xFF000000) +
+           (((quint32)rawTagData[2]<<16) & 0x00FF0000) +
+           (((quint32)rawTagData[1]<<8)  & 0x0000FF00) +
+           ( (quint32)rawTagData[0]      & 0x000000FF);
 }
 
 KNMusicMultiMenuBase *KNMusicGlobal::multiMenu()

@@ -128,10 +128,9 @@ private:
     KNScrollLabel *m_title, *m_artistAndAlbum;
     QLabel *m_duration;
     KNProgressSlider *m_progressSlider;
-    KNEditableLabel *m_positionDisplay;
+    KNEditableLabel *m_position;
     KNOpacityButton *m_loopStatus, *m_volumeIndicator;
-    KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause,
-                             *m_showMainPlayer, *m_showAppendMenu;
+    KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause, *m_showMainPlayer, *m_showAppendMenu;
     KNVolumeSlider *m_volumeSlider;
     KNMusicHeaderPlayerAppendMenu *m_appendMenu;
 
@@ -145,7 +144,8 @@ private:
 
     //States
     bool m_isShownPlay=true, m_progressPressed=false, m_appendMenuShown=false;
-    int m_albumArtSize=61, m_buttonSize=38, m_loopState=NoRepeat;
+    const int m_albumArtSize=61, m_buttonSize=38;
+    int m_loopState=NoRepeat;
 
     //Images.
     QPixmap m_playIcon, m_pauseIcon,

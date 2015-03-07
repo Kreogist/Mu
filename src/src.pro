@@ -33,16 +33,14 @@ TRANSLATIONS += locale/Simplified_Chinese.ts \
                 locale/Traditional_Chinese.ts
 
 # Enable processor instruction sets when using release mode.
-release: {
-    CONFIG += mmx sse sse2 sse3
-    QMAKE_CXXFLAGS += -mmmx -msse -msse2 -msse3 -finline-functions
-}
+#release: {
+#    CONFIG += mmx sse sse2 sse3
+#}
 
 # Windows configure
 win32: {
     DESTDIR =../mu
     CONFIG += libbass FFMpeg
-    QMAKE_CXXFLAGS += -fforce-addr
     RC_FILE = resource/icon/windows/resource.rc
     ICON += resource/icon/windows/mu.ico
     # Windows special extras.
@@ -321,7 +319,8 @@ SOURCES += \
     plugin/base/knpreference/knpreferencegeneral.cpp \
     plugin/sdk/knmouseunclickablewidget.cpp \
     plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainlyrics.cpp \
-    plugin/module/knmacextras/knmacextras.cpp
+    plugin/module/knmacextras/knmacextras.cpp \
+    plugin/sdk/knglassanimebutton.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -539,7 +538,8 @@ HEADERS += \
     plugin/base/knpreference/knpreferencegeneral.h \
     plugin/sdk/knmouseunclickablewidget.h \
     plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainlyrics.h \
-    plugin/module/knmacextras/knmacextras.h
+    plugin/module/knmacextras/knmacextras.h \
+    plugin/sdk/knglassanimebutton.h
 
 RESOURCES += \
     resource/res.qrc

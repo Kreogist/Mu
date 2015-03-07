@@ -27,14 +27,14 @@ namespace KNMusicID3v2
 {
 enum ID3v2HeaderFlag
 {
-    Unsynchronisation=0b10000000,
-    ExtendedHeader=0b01000000,
-    ExperimentalIndicator=0b00100000
+    Unsynchronisation=0x80,
+    ExtendedHeader=0x40,
+    ExperimentalIndicator=0x20
 };
 enum ID3v2FrameFlag
 {
-    FrameDataLengthIndicator=0b00000001,
-    FrameUnsynchronisation=0b00000010
+    FrameDataLengthIndicator=0x01,
+    FrameUnsynchronisation=0x02
 };
 enum ID3v2TextEncoding
 {
@@ -52,10 +52,10 @@ struct ID3v2Header
 };
 struct ID3v2Frame
 {
-    char frameID[5]={0};
+    char frameID[5];
     char *start;
     quint32 size=0;
-    char flags[2]={0};
+    char flags[2];
 };
 struct ID3v2PictureFrame
 {
@@ -109,10 +109,10 @@ protected:
         //Get the flag.
         header.flag=(quint8)rawHeader[5];
         //Calculate tag size.
-        header.size=(((quint32)rawHeader[6]<<21)&0b00001111111000000000000000000000)+
-                (((quint32)rawHeader[7]<<14)&0b00000000000111111100000000000000)+
-                (((quint32)rawHeader[8]<<7) &0b00000000000000000011111110000000)+
-                ( (quint32)rawHeader[9]     &0b00000000000000000000000001111111);
+        header.size=(((quint32)rawHeader[6]<<21) & 0x0FE00000)+
+                    (((quint32)rawHeader[7]<<14) & 0x001FC000)+
+                    (((quint32)rawHeader[8]<<7)  & 0x00003F80)+
+                    ( (quint32)rawHeader[9]      & 0x0000007F);
         return true;
     }
     inline void generateID3v2Property(const quint8 &minor,
@@ -186,25 +186,25 @@ private:
     }
     static inline quint32 minor2Size(char *rawTagData)
     {
-        return (((quint32)rawTagData[0]<<16)&0b00000000111111110000000000000000)+
-               (((quint32)rawTagData[1]<<8) &0b00000000000000001111111100000000)+
-               ( (quint32)rawTagData[2]     &0b00000000000000000000000011111111);
+        return (((quint32)rawTagData[0]<<16) & 0x00FF0000)+
+               (((quint32)rawTagData[1]<<8)  & 0x0000FF00)+
+               ( (quint32)rawTagData[2]      & 0x000000FF);
     }
 
     static inline quint32 minor3Size(char *rawTagData)
     {
-        return (((quint32)rawTagData[0]<<24)&0b11111111000000000000000000000000)+
-               (((quint32)rawTagData[1]<<16)&0b00000000111111110000000000000000)+
-               (((quint32)rawTagData[2]<<8 )&0b00000000000000001111111100000000)+
-               ( (quint32)rawTagData[3]     &0b00000000000000000000000011111111);
+        return (((quint32)rawTagData[0]<<24) & 0xFF000000)+
+               (((quint32)rawTagData[1]<<16) & 0x00FF0000)+
+               (((quint32)rawTagData[2]<<8 ) & 0x0000FF00)+
+               ( (quint32)rawTagData[3]      & 0x000000FF);
     }
 
     static inline quint32 minor4Size(char *rawTagData)
     {
-        return (((quint32)rawTagData[0]<<21)&0b00001111111000000000000000000000)+
-               (((quint32)rawTagData[1]<<14)&0b00000000000111111100000000000000)+
-               (((quint32)rawTagData[2]<<7 )&0b00000000000000000011111110000000)+
-               ( (quint32)rawTagData[3]     &0b00000000000000000000000001111111);
+        return (((quint32)rawTagData[0]<<21) & 0x0FE00000)+
+               (((quint32)rawTagData[1]<<14) & 0x001FC000)+
+               (((quint32)rawTagData[2]<<7 ) & 0x00003F80)+
+               ( (quint32)rawTagData[3]      & 0x0000007F);
     }
 
     static inline void saveFlag(char *rawTagData, ID3v2Frame &frameData)

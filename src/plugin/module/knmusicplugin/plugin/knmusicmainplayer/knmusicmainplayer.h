@@ -24,6 +24,7 @@ class QLabel;
 class QBoxLayout;
 class QFormLayout;
 class KNLabelButton;
+class KNEditableLabel;
 class KNOpacityAnimeButton;
 class KNProgressSlider;
 class KNMusicMainLyrics;
@@ -33,6 +34,7 @@ public:
     explicit KNMusicMainPlayer(QWidget *parent = 0);
     ~KNMusicMainPlayer();
     QWidget *banner();
+    void setBackend(KNMusicBackend *backend);
     void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
 
 public slots:
@@ -87,6 +89,9 @@ private:
     inline void initialControlPanel();
     QWidget *m_controlWidget;
     KNProgressSlider *m_progress;
+    KNEditableLabel *m_position;
+    KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause;
+    QLabel *m_duration;
 
     inline void setEliedLabelText(QLabel *label,
                                   const QString &text,
