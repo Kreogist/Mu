@@ -26,6 +26,7 @@ class QFormLayout;
 class KNLabelButton;
 class KNEditableLabel;
 class KNOpacityAnimeButton;
+class KNGlassAnimeButton;
 class KNProgressSlider;
 class KNMusicMainLyrics;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
@@ -90,7 +91,7 @@ private:
     QWidget *m_controlWidget;
     KNProgressSlider *m_progress;
     KNEditableLabel *m_position;
-    KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause;
+    KNGlassAnimeButton *m_previous, *m_next, *m_playNPause;
     QLabel *m_duration;
 
     inline void setEliedLabelText(QLabel *label,

@@ -73,7 +73,7 @@ private slots:
 
 private:
     inline void initialActions();
-    inline void configureTimeLine(QTimeLine *timeLine);
+    inline QTimeLine *generateTimeline(const int &endFrame);
     inline void showSoloMenu(const QPoint &position);
     inline void showMultiMenu(const QPoint &position);
     QAction *m_findAction;
@@ -88,9 +88,8 @@ private:
     QString m_seachText;
     KNMusicTab *m_musicTab=nullptr;
     KNMusicGlobal *m_musicGlobal;
-    int m_maxOpacity=0x30,
-    m_fontBase=0x9f,
-    m_buttonBase=0x10;
+    int m_maxOpacity=0x20,
+        m_fontBase=0xBF;
     bool m_pressed=false, m_initialLoad=true, m_animate=true;
 };
 

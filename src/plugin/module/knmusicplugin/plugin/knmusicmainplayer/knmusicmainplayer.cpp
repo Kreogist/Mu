@@ -22,8 +22,9 @@
 #include "knglobal.h"
 #include "knlabelbutton.h"
 #include "kneditablelabel.h"
-#include "knopacityanimebutton.h"
+#include "knglassanimebutton.h"
 #include "knprogressslider.h"
+#include "knopacityanimebutton.h"
 
 #include "knmusicheaderplayerbase.h"
 #include "knmusicmainlyrics.h"
@@ -39,7 +40,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     //Set properties.
     setAutoFillBackground(true);
     QPalette pal=palette();
-    pal.setColor(QPalette::Window, QColor(0,0,0,220));
+    pal.setColor(QPalette::Window, QColor(0,0,0,240));
     setPalette(pal);
 
     //Initial the default album pixmap to no album.
@@ -187,7 +188,7 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         fontSize=15;
     }
-    m_mainLayout->setContentsMargins(fontSize, fontSize, fontSize, fontSize>>1);
+    m_mainLayout->setContentsMargins(fontSize, fontSize, fontSize, 0);
     m_mainLayout->setSpacing(fontSize>>1);
     m_infoPanelLayout->setContentsMargins(0, fontSize, 0, fontSize);
     m_infoPanelLayout->setHorizontalSpacing(fontSize);
@@ -214,6 +215,11 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_mainLyrics->setFont(lyricsFont);
     m_mainLyrics->setSpacing(fontSize>>1);
     m_mainLyrics->setLeftSpacing(fontSize<<1);
+    //Change the button size.
+    int buttonSize=fontSize*3+1;
+    m_next->setFixedSize(buttonSize, buttonSize);
+    m_playNPause->setFixedSize(buttonSize, buttonSize);
+    m_previous->setFixedSize(buttonSize, buttonSize);
     //Calculate the elements label maximum width.
     m_maxElementWidth=width()/3-(fontSize+5+maxLabelWidth);
     //Update information.
@@ -318,14 +324,16 @@ void KNMusicMainPlayer::initialControlPanel()
     m_position=new KNEditableLabel(this);
     m_duration=new QLabel(this);
     //Initial the control buttons.
-    m_previous=new KNOpacityAnimeButton(this);
+    m_previous=new KNGlassAnimeButton(this);
+    m_previous->setLeftLineVisible(true);
     m_previous->setFixedSize(buttonSize, buttonSize);
     m_previous->setIcon(QPixmap(":/plugin/music/player/previous.png"));
-    m_next=new KNOpacityAnimeButton(this);
+    m_next=new KNGlassAnimeButton(this);
     m_next->setFixedSize(buttonSize, buttonSize);
     m_next->setIcon(QPixmap(":/plugin/music/player/next.png"));
-    m_playNPause=new KNOpacityAnimeButton(this);
+    m_playNPause=new KNGlassAnimeButton(this);
     m_playNPause->setFixedSize(buttonSize, buttonSize);
+    m_playNPause->setIcon(QPixmap(":/plugin/music/player/next.png"));
 
     //Initial the layouts, add the widget to the layouts.
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,

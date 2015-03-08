@@ -76,12 +76,8 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     m_multiConnections=new KNConnectionHandler(this);
 
     //Initial mouse sense animation.
-    m_mouseIn=new QTimeLine(200, this);
-    configureTimeLine(m_mouseIn);
-    m_mouseIn->setEndFrame(m_maxOpacity);
-    m_mouseOut=new QTimeLine(200, this);
-    configureTimeLine(m_mouseOut);
-    m_mouseOut->setEndFrame(0);
+    m_mouseIn=generateTimeline(m_maxOpacity);
+    m_mouseOut=generateTimeline(0);
 
     //Initial reacts.
     connect(this, &KNMusicTreeViewBase::activated,
@@ -516,12 +512,15 @@ void KNMusicTreeViewBase::initialActions()
     enableSearchShortcut();
 }
 
-void KNMusicTreeViewBase::configureTimeLine(QTimeLine *timeLine)
+QTimeLine *KNMusicTreeViewBase::generateTimeline(const int &endFrame)
 {
+    QTimeLine *timeLine=new QTimeLine(200, this);
+    timeLine->setEndFrame(endFrame);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNMusicTreeViewBase::onActionMouseInOut);
+    return timeLine;
 }
 
 void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
