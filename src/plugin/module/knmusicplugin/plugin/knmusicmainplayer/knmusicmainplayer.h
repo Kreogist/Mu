@@ -91,8 +91,19 @@ private:
     QWidget *m_controlWidget;
     KNProgressSlider *m_progress;
     KNEditableLabel *m_position;
-    KNGlassAnimeButton *m_previous, *m_next, *m_playNPause;
+    enum ControlButtons
+    {
+        ButtonPrev,
+        ButtonRewind,
+        ButtonPlayNPause,
+        ButtonForward,
+        ButtonNext,
+        ControlButtonsCount
+    };
+
+    KNGlassAnimeButton *m_controlButtons[ControlButtonsCount];
     QLabel *m_duration;
+    QPixmap m_playIcon, m_pauseIcon;
 
     inline void setEliedLabelText(QLabel *label,
                                   const QString &text,

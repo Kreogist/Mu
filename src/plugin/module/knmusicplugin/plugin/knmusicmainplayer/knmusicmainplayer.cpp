@@ -207,8 +207,10 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
         m_informationElementCaptions[i]->setFont(captionFont);
         m_informationElements[i]->setFont(captionFont);
     }
-    m_position->setFont(captionFont);
-    m_duration->setFont(captionFont);
+    QFont timeFont=m_duration->font();
+    timeFont.setPixelSize(fontSize);
+    m_duration->setFont(timeFont);
+    m_position->setFont(timeFont);
     //Set lyrics font.
     QFont lyricsFont=m_mainLyrics->font();
     lyricsFont.setPixelSize(fontSize+fontSize/4);
@@ -217,9 +219,10 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_mainLyrics->setLeftSpacing(fontSize<<1);
     //Change the button size.
     int buttonSize=fontSize*3+1;
-    m_next->setFixedSize(buttonSize, buttonSize);
-    m_playNPause->setFixedSize(buttonSize, buttonSize);
-    m_previous->setFixedSize(buttonSize, buttonSize);
+    for(int i=0; i<ControlButtonsCount; i++)
+    {
+        m_controlButtons[i]->setFixedSize(buttonSize, buttonSize);
+    }
     //Calculate the elements label maximum width.
     m_maxElementWidth=width()/3-(fontSize+5+maxLabelWidth);
     //Update information.
@@ -316,6 +319,9 @@ void KNMusicMainPlayer::initialPlaylistPanel()
 
 void KNMusicMainPlayer::initialControlPanel()
 {
+    //Initial icons and integers.
+    m_playIcon=QPixmap(":/plugin/music/mainplayer/play.png");
+    m_pauseIcon=QPixmap(":/plugin/music/mainplayer/pause.png");
     const int buttonSize=46;
     //Initial the control widgets.
     m_controlWidget=new QWidget(this);
@@ -323,17 +329,24 @@ void KNMusicMainPlayer::initialControlPanel()
     m_progress=new KNProgressSlider(this);
     m_position=new KNEditableLabel(this);
     m_duration=new QLabel(this);
+    //Configure label font.
+    QFont timeFont=m_duration->font();
+    timeFont.setFamily("096MKSD");
+    m_duration->setFont(timeFont);
+    m_position->setFont(timeFont);
     //Initial the control buttons.
-    m_previous=new KNGlassAnimeButton(this);
-    m_previous->setLeftLineVisible(true);
-    m_previous->setFixedSize(buttonSize, buttonSize);
-    m_previous->setIcon(QPixmap(":/plugin/music/player/previous.png"));
-    m_next=new KNGlassAnimeButton(this);
-    m_next->setFixedSize(buttonSize, buttonSize);
-    m_next->setIcon(QPixmap(":/plugin/music/player/next.png"));
-    m_playNPause=new KNGlassAnimeButton(this);
-    m_playNPause->setFixedSize(buttonSize, buttonSize);
-    m_playNPause->setIcon(QPixmap(":/plugin/music/player/next.png"));
+    for(int i=0; i<ControlButtonsCount; i++)
+    {
+        m_controlButtons[i]=new KNGlassAnimeButton(this);
+        m_controlButtons[i]->setFixedSize(buttonSize, buttonSize);
+    }
+    m_controlButtons[0]->setLeftLineVisible(true);
+    //Configure buttons.
+    m_controlButtons[ButtonPrev]->setIcon(QPixmap(":/plugin/music/mainplayer/previous.png"));
+    m_controlButtons[ButtonRewind]->setIcon(QPixmap(":/plugin/music/mainplayer/rewind.png"));
+    m_controlButtons[ButtonPlayNPause]->setIcon(m_playIcon);
+    m_controlButtons[ButtonForward]->setIcon(QPixmap(":/plugin/music/mainplayer/forward.png"));
+    m_controlButtons[ButtonNext]->setIcon(QPixmap(":/plugin/music/mainplayer/next.png"));
 
     //Initial the layouts, add the widget to the layouts.
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -352,9 +365,10 @@ void KNMusicMainPlayer::initialControlPanel()
 
     buttonLayout->addWidget(m_position, 0, Qt::AlignTop);
     buttonLayout->addStretch();
-    buttonLayout->addWidget(m_previous, 0, Qt::AlignCenter);
-    buttonLayout->addWidget(m_playNPause, 0, Qt::AlignCenter);
-    buttonLayout->addWidget(m_next, 0, Qt::AlignCenter);
+    for(int i=0; i<ControlButtonsCount; i++)
+    {
+        buttonLayout->addWidget(m_controlButtons[i], 0, Qt::AlignBottom);
+    }
     buttonLayout->addStretch();
     buttonLayout->addWidget(m_duration, 0, Qt::AlignTop);
 

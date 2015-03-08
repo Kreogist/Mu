@@ -74,7 +74,10 @@ void KNGlassAnimeButton::paintEvent(QPaintEvent *event)
     //Draw the icon.
     if(!m_scaledIcon.isNull())
     {
-        painter.drawPixmap(rect(), m_scaledIcon);
+        int iconSize=m_scaledIcon.width();
+        painter.drawPixmap((width()-iconSize)>>1,
+                           (height()-iconSize)>>1,
+                           m_scaledIcon);
     }
 }
 
@@ -161,8 +164,8 @@ inline QTimeLine *KNGlassAnimeButton::generateTimeLine(const int &endFrame)
 
 inline void KNGlassAnimeButton::updateScaledIcon()
 {
-    int iconSize=qMin(qMin(width(), height()),
-                      qMin(m_originalIcon.width(), m_originalIcon.height()));
+    int iconSize=qMin((qMin(width(), height())>>2)*3,
+                      (qMin(m_originalIcon.width(), m_originalIcon.height())>>2)*3);
     m_scaledIcon=m_originalIcon.scaled(iconSize, iconSize,
                                        Qt::KeepAspectRatio,
                                        Qt::SmoothTransformation);
