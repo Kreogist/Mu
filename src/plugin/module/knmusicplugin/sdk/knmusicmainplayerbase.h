@@ -24,9 +24,16 @@ public:
 
 signals:
     void requireHideMainPlayer();
+    void requireShowInSongs();
+    void requireShowInArtists();
+    void requireShowInAlbums();
+    void requireShowInGenres();
 
 public slots:
     virtual void onActionAnalysisItemUpdate()=0;
+
+protected slots:
+    virtual void onActionRequireShowIn(const int &label)=0;
 };
 
 #endif // KNMUSICMAINPLAYERBASE_H

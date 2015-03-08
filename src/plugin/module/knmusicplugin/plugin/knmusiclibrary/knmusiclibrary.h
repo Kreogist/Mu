@@ -38,6 +38,7 @@ public:
     KNMusicTab *albumTab();
     KNMusicTab *genreTab();
     void setHeaderPlayer(KNMusicHeaderPlayerBase *player);
+    void setMainPlayer(KNMusicMainPlayerBase *player);
 
 signals:
 
@@ -45,6 +46,11 @@ public slots:
 
 private slots:
     void onActionLoadLibrary();
+
+    void onActionShowInSongs();
+    void onActionShowInArtists();
+    void onActionShowInAlbums();
+    void onActionShowInGenres();
 
 private:
     inline void initialSongTab();
@@ -67,6 +73,7 @@ private:
     KNMusicLibraryImageManager *m_libraryImageManager;
     KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
     KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
+    KNMusicHeaderPlayerBase *m_headerPlayer;
 };
 
 #endif // KNMUSICLIBRARY_H

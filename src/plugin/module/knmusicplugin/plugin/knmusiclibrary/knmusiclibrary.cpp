@@ -32,6 +32,7 @@
 #include "sdk/knmusiclibraryimagemanager.h"
 
 #include "knmusicheaderplayerbase.h"
+#include "knmusicmainplayerbase.h"
 #include "knmusicsolomenubase.h"
 
 #include "knmusiclibrary.h"
@@ -136,14 +137,27 @@ KNMusicTab *KNMusicLibrary::genreTab()
 
 void KNMusicLibrary::setHeaderPlayer(KNMusicHeaderPlayerBase *player)
 {
-    connect(player, &KNMusicHeaderPlayerBase::requireShowInSongs,
-            [=]{m_librarySongTab->showInTab(player->currentAnalysisItem().detailInfo);});
-    connect(player, &KNMusicHeaderPlayerBase::requireShowInArtists,
-            [=]{m_libraryTabs[TabArtists]->showInTab(player->currentAnalysisItem().detailInfo);});
-    connect(player, &KNMusicHeaderPlayerBase::requireShowInAlbums,
-            [=]{m_libraryTabs[TabAlbums]->showInTab(player->currentAnalysisItem().detailInfo);});
-    connect(player, &KNMusicHeaderPlayerBase::requireShowInGenres,
-            [=]{m_libraryTabs[TabGenres]->showInTab(player->currentAnalysisItem().detailInfo);});
+    m_headerPlayer=player;
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowInSongs,
+            this, &KNMusicLibrary::onActionShowInSongs);
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowInArtists,
+            this, &KNMusicLibrary::onActionShowInArtists);
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowInAlbums,
+            this, &KNMusicLibrary::onActionShowInAlbums);
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowInGenres,
+            this, &KNMusicLibrary::onActionShowInGenres);
+}
+
+void KNMusicLibrary::setMainPlayer(KNMusicMainPlayerBase *player)
+{
+    connect(player, &KNMusicMainPlayerBase::requireShowInSongs,
+            this, &KNMusicLibrary::onActionShowInSongs);
+    connect(player, &KNMusicMainPlayerBase::requireShowInArtists,
+            this, &KNMusicLibrary::onActionShowInArtists);
+    connect(player, &KNMusicMainPlayerBase::requireShowInAlbums,
+            this, &KNMusicLibrary::onActionShowInAlbums);
+    connect(player, &KNMusicMainPlayerBase::requireShowInGenres,
+            this, &KNMusicLibrary::onActionShowInGenres);
 }
 
 void KNMusicLibrary::onActionLoadLibrary()
@@ -162,6 +176,26 @@ void KNMusicLibrary::onActionLoadLibrary()
     //Don't change the order of the following code.
     m_libraryModel->recoverModel();
     emit requireLoadImageLibrary();
+}
+
+void KNMusicLibrary::onActionShowInSongs()
+{
+    m_librarySongTab->showInTab(m_headerPlayer->currentAnalysisItem().detailInfo);
+}
+
+void KNMusicLibrary::onActionShowInArtists()
+{
+    m_libraryTabs[TabArtists]->showInTab(m_headerPlayer->currentAnalysisItem().detailInfo);
+}
+
+void KNMusicLibrary::onActionShowInAlbums()
+{
+    m_libraryTabs[TabAlbums]->showInTab(m_headerPlayer->currentAnalysisItem().detailInfo);
+}
+
+void KNMusicLibrary::onActionShowInGenres()
+{
+    m_libraryTabs[TabGenres]->showInTab(m_headerPlayer->currentAnalysisItem().detailInfo);
 }
 
 inline void KNMusicLibrary::initialSongTab()

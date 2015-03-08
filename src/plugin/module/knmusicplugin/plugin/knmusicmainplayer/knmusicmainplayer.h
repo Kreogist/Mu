@@ -46,11 +46,23 @@ protected:
     void hideEvent(QHideEvent *event);
     void resizeEvent(QResizeEvent *event);
 
+protected slots:
+    void onActionRequireShowIn(const int &label);
+
 private slots:
     void retranslate();
     void onActionHideMainPlayer();
+    void onActionPlayNPauseClicked();
+
+    void onActionPositionChanged(const qint64 &position);
+    void onActionDurationChanged(const qint64 &duration);
+    void onActionPlayStateChanged(const int &state);
+
 
 private:
+    inline void setPlayIconMode();
+    inline void setPauseIconMode();
+
     enum InformationElements
     {
         ElementTitle,
@@ -87,6 +99,8 @@ private:
     QWidget *m_banner;
 
     inline void initialPlaylistPanel();
+
+    //Control panel.
     inline void initialControlPanel();
     QWidget *m_controlWidget;
     KNProgressSlider *m_progress;
@@ -100,15 +114,19 @@ private:
         ButtonNext,
         ControlButtonsCount
     };
-
     KNGlassAnimeButton *m_controlButtons[ControlButtonsCount];
     QLabel *m_duration;
     QPixmap m_playIcon, m_pauseIcon;
+    //Status.
+    bool m_isShownPlay=true, m_progressPressed=false;
+    int m_loopState=NoRepeat;
 
     inline void setEliedLabelText(QLabel *label,
                                   const QString &text,
                                   const int &width);
 
+    //Backend.
+    KNMusicBackend *m_backend=nullptr;
     //Header player.
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
 };

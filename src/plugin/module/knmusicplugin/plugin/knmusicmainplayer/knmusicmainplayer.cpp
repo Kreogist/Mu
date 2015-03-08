@@ -18,6 +18,7 @@
 #include <QLabel>
 #include <QBoxLayout>
 #include <QFormLayout>
+#include <QSignalMapper>
 
 #include "knglobal.h"
 #include "knlabelbutton.h"
@@ -28,6 +29,7 @@
 
 #include "knmusicheaderplayerbase.h"
 #include "knmusicmainlyrics.h"
+#include "knmusicbackend.h"
 #include "knmusicglobal.h"
 
 #include "knmusicmainplayer.h"
@@ -107,7 +109,14 @@ QWidget *KNMusicMainPlayer::banner()
 
 void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
 {
-    ;
+    m_backend=backend;
+    //Connect responses.
+    connect(m_backend, &KNMusicBackend::positionChanged,
+           this, &KNMusicMainPlayer::onActionPositionChanged);
+    connect(m_backend, &KNMusicBackend::durationChanged,
+            this, &KNMusicMainPlayer::onActionDurationChanged);
+    connect(m_backend, &KNMusicBackend::playingStateChanged,
+            this, &KNMusicMainPlayer::onActionPlayStateChanged);
 }
 
 void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
@@ -119,6 +128,11 @@ void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
     //Link the header player.
     connect(m_headerPlayer, &KNMusicHeaderPlayerBase::analysisItemUpdated,
             this, &KNMusicMainPlayer::onActionAnalysisItemUpdate);
+    //Hack the current player button to the header player.
+    connect(m_controlButtons[ButtonPrev], &KNGlassAnimeButton::clicked,
+            m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayPrevious);
+    connect(m_controlButtons[ButtonNext], &KNGlassAnimeButton::clicked,
+            m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayNext);
 }
 
 void KNMusicMainPlayer::retranslate()
@@ -135,6 +149,91 @@ void KNMusicMainPlayer::onActionHideMainPlayer()
     m_banner->hide();
     //Emit hide main player signal.
     emit requireHideMainPlayer();
+}
+
+void KNMusicMainPlayer::onActionPlayNPauseClicked()
+{
+    //Ignore when there's no file path.
+    if(m_backend==nullptr ||
+            m_headerPlayer->currentAnalysisItem().detailInfo.filePath.isEmpty())
+    {
+        return;
+    }
+    //When play & pause pressed and the button is displaying play icon,
+    //It means now is stopping or pausing. Should emit play signal.
+    if(m_isShownPlay)
+    {
+        m_backend->play();
+        return;
+    }
+    m_backend->pause();
+}
+
+void KNMusicMainPlayer::onActionPositionChanged(const qint64 &position)
+{
+    if(!m_progressPressed)
+    {
+        m_progress->setValue(position);
+    }
+}
+
+void KNMusicMainPlayer::onActionDurationChanged(const qint64 &duration)
+{
+    //Change the progress slider range.
+    m_progress->setMaximum(duration);
+    //Set duration display text.
+    m_duration->setText(KNMusicGlobal::msecondToString(duration));
+}
+
+void KNMusicMainPlayer::onActionPlayStateChanged(const int &state)
+{
+    //If it's playing, then should display pause icon.
+    if(state==PlayingState)
+    {
+        setPauseIconMode();
+        return;
+    }
+    //Or else, whatever stopped or paused state, should display play icon.
+    setPlayIconMode();
+}
+
+void KNMusicMainPlayer::onActionRequireShowIn(const int &label)
+{
+    //Emit show in signal.
+    switch(label)
+    {
+    case ElementTitle:
+        emit requireShowInSongs();
+        break;
+    case ElementArtist:
+        emit requireShowInArtists();
+        break;
+    case ElementAlbum:
+        emit requireShowInAlbums();
+        break;
+    case ElementGenre:
+        emit requireShowInGenres();
+        break;
+    default:
+        //Should never comes here.
+        break;
+    }
+    //Hide the main player.
+    onActionHideMainPlayer();
+}
+
+void KNMusicMainPlayer::setPlayIconMode()
+{
+    //Set the icon and the flag.
+    m_controlButtons[ButtonPlayNPause]->setIcon(m_playIcon);
+    m_isShownPlay=true;
+}
+
+void KNMusicMainPlayer::setPauseIconMode()
+{
+    //Set the icon and the flag.
+    m_controlButtons[ButtonPlayNPause]->setIcon(m_pauseIcon);
+    m_isShownPlay=false;
 }
 
 void KNMusicMainPlayer::onActionAnalysisItemUpdate()
@@ -247,6 +346,15 @@ void KNMusicMainPlayer::initialInformationPanel()
     elementIconPath[ElementAlbum]=":/plugin/music/category/03_ablums.png";
     elementIconPath[ElementGenre]=":/plugin/music/category/04_genres.png";
 
+    QSignalMapper *iconClicked=new QSignalMapper(this);
+    QSignalMapper *captionClicked=new QSignalMapper(this);
+    QSignalMapper *labelClicked=new QSignalMapper(this);
+    connect(iconClicked, SIGNAL(mapped(int)),
+            this, SLOT(onActionRequireShowIn(int)));
+    connect(captionClicked, SIGNAL(mapped(int)),
+            this, SLOT(onActionRequireShowIn(int)));
+    connect(labelClicked, SIGNAL(mapped(int)),
+            this, SLOT(onActionRequireShowIn(int)));
     //Initial the element labels.
     for(int i=0; i<InformationElementsCount; i++)
     {
@@ -267,6 +375,16 @@ void KNMusicMainPlayer::initialInformationPanel()
         m_informationElementCaptions[i]=new KNLabelButton(this);
         captionLayout->addWidget(m_informationElementCaptions[i]);
         m_informationElements[i]=new KNLabelButton(this);
+        //Set mapping.
+        connect(m_informationElementIcons[i], SIGNAL(clicked()),
+                iconClicked, SLOT(map()));
+        iconClicked->setMapping(m_informationElementIcons[i], i);
+        connect(m_informationElementCaptions[i], SIGNAL(clicked()),
+                captionClicked, SLOT(map()));
+        captionClicked->setMapping(m_informationElementCaptions[i], i);
+        connect(m_informationElements[i], SIGNAL(clicked()),
+                labelClicked, SLOT(map()));
+        labelClicked->setMapping(m_informationElements[i], i);
         //Add to layout.
         m_infoPanelLayout->addRow(caption,
                                   m_informationElements[i]);
@@ -347,6 +465,9 @@ void KNMusicMainPlayer::initialControlPanel()
     m_controlButtons[ButtonPlayNPause]->setIcon(m_playIcon);
     m_controlButtons[ButtonForward]->setIcon(QPixmap(":/plugin/music/mainplayer/forward.png"));
     m_controlButtons[ButtonNext]->setIcon(QPixmap(":/plugin/music/mainplayer/next.png"));
+    //Link the button.
+    connect(m_controlButtons[ButtonPlayNPause], &KNGlassAnimeButton::clicked,
+            this, &KNMusicMainPlayer::onActionPlayNPauseClicked);
 
     //Initial the layouts, add the widget to the layouts.
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
