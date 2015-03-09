@@ -496,9 +496,7 @@ void KNMusicMainPlayer::initialControlPanel()
     m_controlButtons[0]->setLeftLineVisible(true);
     //Configure buttons.
     m_controlButtons[ButtonPrev]->setIcon(QPixmap(":/plugin/music/mainplayer/previous.png"));
-    m_controlButtons[ButtonRewind]->setIcon(QPixmap(":/plugin/music/mainplayer/rewind.png"));
     m_controlButtons[ButtonPlayNPause]->setIcon(m_playIcon);
-    m_controlButtons[ButtonForward]->setIcon(QPixmap(":/plugin/music/mainplayer/forward.png"));
     m_controlButtons[ButtonNext]->setIcon(QPixmap(":/plugin/music/mainplayer/next.png"));
     //Link the button.
     connect(m_controlButtons[ButtonPlayNPause], &KNGlassAnimeButton::clicked,
@@ -520,12 +518,22 @@ void KNMusicMainPlayer::initialControlPanel()
     controlLayout->addLayout(buttonLayout, 1);
 
     buttonLayout->addWidget(m_position, 0, Qt::AlignTop);
-    buttonLayout->addStretch();
+    QBoxLayout *buttonLeftLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                                controlLayout->widget());
+    buttonLeftLayout->setContentsMargins(0,0,0,0);
+    buttonLeftLayout->setSpacing(0);
+    buttonLeftLayout->addStretch();
+    buttonLayout->addLayout(buttonLeftLayout, 1);
     for(int i=0; i<ControlButtonsCount; i++)
     {
         buttonLayout->addWidget(m_controlButtons[i], 0, Qt::AlignBottom);
     }
-    buttonLayout->addStretch();
+    QBoxLayout *buttonRightLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                                controlLayout->widget());
+    buttonRightLayout->setContentsMargins(0,0,0,0);
+    buttonRightLayout->setSpacing(0);
+    buttonRightLayout->addStretch();
+    buttonLayout->addLayout(buttonRightLayout, 1);
     buttonLayout->addWidget(m_duration, 0, Qt::AlignTop);
 
     //-----------Debug------------
