@@ -231,8 +231,9 @@ void KNMusicNowPlaying2::playMusicRow(KNMusicProxyModel *model,
     //Clear the shuffle list.
     m_shuffleList.clear();
     //Check the loop state, if the state is random state, the shuffle the model.
-    if(m_loopMode==Shuffle)
+    if(Shuffle==m_loopMode)
     {
+        qDebug()<<"Shuffle!!!";
         generateShuffleList();
     }
     //Play the row.
@@ -273,7 +274,9 @@ void KNMusicNowPlaying2::playNext()
     //Check the loop state.
     if(Shuffle==m_loopMode)
     {
+        qDebug()<<"Here?!!!";
         int nextProxyRow=nextShuffleProxyRow();
+        qDebug()<<"nextProxyRow="<<nextProxyRow;
         //Check is the row available.
         if(nextProxyRow==-1)
         {
@@ -519,20 +522,17 @@ void KNMusicNowPlaying2::generateShuffleList()
     //First, check is the model available.
     //Second, check is the shuffle list empty, if there's data in the list,
     //ignore the request.
-    if(m_playingMusicModel==nullptr ||
-            !m_shuffleList.isEmpty())
+    if(m_playingModel==nullptr || !m_shuffleList.isEmpty())
     {
         return;
     }
-    //Clear the shuffle list first.
-    m_shuffleList.clear();
     //Get all the model index.
-    for(int i=0, modelRows=m_playingMusicModel->rowCount(); i<modelRows; i++)
+    for(int i=0, modelRows=m_playingModel->rowCount(); i<modelRows; i++)
     {
         m_shuffleList.append(
                     QPersistentModelIndex(
-                        m_playingMusicModel->index(i,
-                                                   m_playingMusicModel->playingItemColumn())));
+                        m_playingModel->index(i,
+                                              m_playingModel->playingItemColumn())));
     }
     //Shuffle the list.
     std::random_device randomDevice;
@@ -549,7 +549,7 @@ inline int KNMusicNowPlaying2::prevShuffleProxyRow()
     }
     //Now the shuffle list cannot be a empty list.
     //Find the current playing index in the shuffle list from the last.
-    int playingIndex=m_shuffleList.indexOf(m_currentPlayingIndex);
+    int playingIndex=m_shuffleList.indexOf(m_playingModel->mapFromSource(m_currentPlayingIndex));
     if(playingIndex==-1)
     {
         //Find the first available index.
@@ -558,7 +558,7 @@ inline int KNMusicNowPlaying2::prevShuffleProxyRow()
             //If the first one is available, return the first one.
             if(m_shuffleList.last().isValid())
             {
-                return m_playingModel->mapFromSource(m_shuffleList.last()).row();
+                return m_shuffleList.last().row();
             }
             //Remove the invaild index.
             m_shuffleList.removeLast();
@@ -574,7 +574,7 @@ inline int KNMusicNowPlaying2::prevShuffleProxyRow()
         //If we find a vaild one, then return the index.
         if(m_shuffleList.at(i).isValid())
         {
-            return m_playingModel->mapFromSource(m_shuffleList.at(i)).row();
+            return m_shuffleList.at(i).row();
         }
         //Or else, remove the invaild index.
         m_shuffleList.removeAt(i);
@@ -587,7 +587,7 @@ inline int KNMusicNowPlaying2::prevShuffleProxyRow()
         //If the first one is available, return the first one.
         if(m_shuffleList.last().isValid())
         {
-            return m_playingModel->mapFromSource(m_shuffleList.last()).row();
+            return m_shuffleList.last().row();
         }
         //Remove the invaild index.
         m_shuffleList.removeLast();
@@ -606,7 +606,8 @@ int KNMusicNowPlaying2::nextShuffleProxyRow()
     }
     //Now the shuffle list cannot be a empty list.
     //Find the current playing index from the first one in the shuffle list.
-    int playingIndex=m_shuffleList.indexOf(m_currentPlayingIndex);
+    int playingIndex=m_shuffleList.indexOf(m_playingModel->mapFromSource(m_currentPlayingIndex));
+    qDebug()<<"playingIndex="<<playingIndex;
     if(playingIndex==-1)
     {
         //Find the first available index.
@@ -615,7 +616,7 @@ int KNMusicNowPlaying2::nextShuffleProxyRow()
             //If the first one is available, return the first one.
             if(m_shuffleList.first().isValid())
             {
-                return m_playingModel->mapFromSource(m_shuffleList.first()).row();
+                return m_shuffleList.first().row();
             }
             //Remove the invaild index.
             m_shuffleList.removeFirst();
@@ -632,7 +633,7 @@ int KNMusicNowPlaying2::nextShuffleProxyRow()
         //If we find a vaild one, then return the index.
         if(m_shuffleList.at(nextRow).isValid())
         {
-            return m_playingModel->mapFromSource(m_shuffleList.at(nextRow)).row();
+            return m_shuffleList.at(nextRow).row();
         }
         //Or else, remove the invaild index.
         m_shuffleList.removeAt(nextRow);
@@ -645,7 +646,7 @@ int KNMusicNowPlaying2::nextShuffleProxyRow()
         //If the first one is available, return the first one.
         if(m_shuffleList.first().isValid())
         {
-            return m_playingModel->mapFromSource(m_shuffleList.first()).row();
+            return m_shuffleList.first().row();
         }
         //Remove the invaild index.
         m_shuffleList.removeFirst();
