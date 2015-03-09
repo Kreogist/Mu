@@ -113,9 +113,7 @@ private:
     enum ControlButtons
     {
         ButtonPrev,
-        ButtonRewind,
         ButtonPlayNPause,
-        ButtonForward,
         ButtonNext,
         ControlButtonsCount
     };
