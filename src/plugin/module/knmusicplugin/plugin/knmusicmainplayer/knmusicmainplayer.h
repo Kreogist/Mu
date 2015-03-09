@@ -51,6 +51,8 @@ protected slots:
 
 private slots:
     void retranslate();
+    void onActionProgressPressed();
+    void onActionProgressReleased();
     void onActionHideMainPlayer();
     void onActionPlayNPauseClicked();
 
@@ -58,6 +60,9 @@ private slots:
     void onActionDurationChanged(const qint64 &duration);
     void onActionPlayStateChanged(const int &state);
 
+    void setPositionText(const qint64 &position);
+
+    void setPosition(const qint64 &position);
 
 private:
     inline void setPlayIconMode();

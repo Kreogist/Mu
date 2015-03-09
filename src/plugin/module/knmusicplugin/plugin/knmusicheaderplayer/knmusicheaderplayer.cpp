@@ -670,6 +670,8 @@ inline void KNMusicHeaderPlayer::initialAppendPanel()
     panelLayout->addWidget(m_showMainPlayer);
     connect(m_showMainPlayer, &KNOpacityAnimeButton::clicked,
             this, &KNMusicHeaderPlayer::requireShowMainPlayer);
+    connect(this, &KNMusicHeaderPlayer::requireShowMainPlayer,
+            this, &KNMusicHeaderPlayer::hide);
     //Show append menu.
     m_showAppendMenu=new KNOpacityAnimeButton(this);
     m_showAppendMenu->setFixedSize(14,14);

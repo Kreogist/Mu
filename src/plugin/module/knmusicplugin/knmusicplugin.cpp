@@ -311,6 +311,8 @@ void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
         addLeftHeaderWidget(m_mainPlayer->banner(), 1);
         //Link the request.
         connect(m_mainPlayer, &KNMusicMainPlayer::requireHideMainPlayer,
+                m_headerPlayer, &KNMusicHeaderPlayerBase::show);
+        connect(m_mainPlayer, &KNMusicMainPlayer::requireHideMainPlayer,
                 m_centralWidget, &KNMusicCategoryTabWidget::hideMainPlayer);
         //Add plugin to the list.
         m_pluginList.append(m_mainPlayer);

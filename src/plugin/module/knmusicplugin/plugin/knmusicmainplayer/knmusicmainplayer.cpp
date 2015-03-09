@@ -143,6 +143,16 @@ void KNMusicMainPlayer::retranslate()
     m_informationElementCaptions[ElementGenre]->setText(tr("Genre"));
 }
 
+void KNMusicMainPlayer::onActionProgressPressed()
+{
+    m_progressPressed=true;
+}
+
+void KNMusicMainPlayer::onActionProgressReleased()
+{
+    m_progressPressed=false;
+}
+
 void KNMusicMainPlayer::onActionHideMainPlayer()
 {
     //Hide the banner.
@@ -195,6 +205,19 @@ void KNMusicMainPlayer::onActionPlayStateChanged(const int &state)
     }
     //Or else, whatever stopped or paused state, should display play icon.
     setPlayIconMode();
+}
+
+void KNMusicMainPlayer::setPositionText(const qint64 &position)
+{
+    if(!m_position->editing())
+    {
+        m_position->setText(KNMusicGlobal::msecondToString(position));
+    }
+}
+
+void KNMusicMainPlayer::setPosition(const qint64 &position)
+{
+    m_backend->setPosition(position);
 }
 
 void KNMusicMainPlayer::onActionRequireShowIn(const int &label)
@@ -445,6 +468,7 @@ void KNMusicMainPlayer::initialControlPanel()
     m_controlWidget=new QWidget(this);
     //Initial the progress bar and position labels.
     m_progress=new KNProgressSlider(this);
+    m_progress->setWheelStep(1000);
     m_position=new KNEditableLabel(this);
     m_duration=new QLabel(this);
     //Configure label font.
@@ -452,6 +476,17 @@ void KNMusicMainPlayer::initialControlPanel()
     timeFont.setFamily("096MKSD");
     m_duration->setFont(timeFont);
     m_position->setFont(timeFont);
+    //Link the progress changed signal.
+    connect(m_progress, &KNProgressSlider::sliderPressed,
+            this, &KNMusicMainPlayer::onActionProgressPressed);
+    connect(m_progress, &KNProgressSlider::sliderReleased,
+            this, &KNMusicMainPlayer::onActionProgressReleased);
+    connect(m_progress, &KNProgressSlider::valueChanged,
+            this, &KNMusicMainPlayer::setPositionText);
+    connect(m_progress, &KNProgressSlider::sliderMoved,
+            this, &KNMusicMainPlayer::setPosition);
+    //Set default value.
+    setPositionText(0);
     //Initial the control buttons.
     for(int i=0; i<ControlButtonsCount; i++)
     {
