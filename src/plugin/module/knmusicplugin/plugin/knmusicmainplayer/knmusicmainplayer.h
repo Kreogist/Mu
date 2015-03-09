@@ -92,7 +92,6 @@ private:
     QFormLayout *m_infoPanelLayout;
     int m_maxElementWidth=0;
     KNLabelButton *m_informationElementIcons[InformationElementsCount],
-                  *m_informationElementCaptions[InformationElementsCount],
                   *m_informationElements[InformationElementsCount];
 
     //Lyrics panel.

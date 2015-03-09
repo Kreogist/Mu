@@ -137,10 +137,7 @@ void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
 
 void KNMusicMainPlayer::retranslate()
 {
-    m_informationElementCaptions[ElementTitle]->setText(tr("Title"));
-    m_informationElementCaptions[ElementArtist]->setText(tr("Artist"));
-    m_informationElementCaptions[ElementAlbum]->setText(tr("Album"));
-    m_informationElementCaptions[ElementGenre]->setText(tr("Genre"));
+    ;
 }
 
 void KNMusicMainPlayer::onActionProgressPressed()
@@ -316,7 +313,7 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_infoPanelLayout->setHorizontalSpacing(fontSize);
 
     //Change the font size.
-    QFont captionFont=m_informationElementCaptions[0]->font();
+    QFont captionFont=m_informationElements[0]->font();
     captionFont.setPixelSize(fontSize);
     //Set font to all the labels.
     int maxLabelWidth=0;
@@ -326,7 +323,6 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
                            m_infoPanelLayout->itemAt(i, QFormLayout::LabelRole)->widget()->width());
         m_informationElementIcons[i]->setFixedSize(fontSize+5,
                                                    fontSize+5);
-        m_informationElementCaptions[i]->setFont(captionFont);
         m_informationElements[i]->setFont(captionFont);
     }
     QFont timeFont=m_duration->font();
@@ -370,11 +366,8 @@ void KNMusicMainPlayer::initialInformationPanel()
     elementIconPath[ElementGenre]=":/plugin/music/category/04_genres.png";
 
     QSignalMapper *iconClicked=new QSignalMapper(this);
-    QSignalMapper *captionClicked=new QSignalMapper(this);
     QSignalMapper *labelClicked=new QSignalMapper(this);
     connect(iconClicked, SIGNAL(mapped(int)),
-            this, SLOT(onActionRequireShowIn(int)));
-    connect(captionClicked, SIGNAL(mapped(int)),
             this, SLOT(onActionRequireShowIn(int)));
     connect(labelClicked, SIGNAL(mapped(int)),
             this, SLOT(onActionRequireShowIn(int)));
@@ -395,16 +388,11 @@ void KNMusicMainPlayer::initialInformationPanel()
         m_informationElementIcons[i]->setPixmap(QPixmap(elementIconPath[i]));
         captionLayout->addWidget(m_informationElementIcons[i]);
         //Initial text label.
-        m_informationElementCaptions[i]=new KNLabelButton(this);
-        captionLayout->addWidget(m_informationElementCaptions[i]);
         m_informationElements[i]=new KNLabelButton(this);
         //Set mapping.
         connect(m_informationElementIcons[i], SIGNAL(clicked()),
                 iconClicked, SLOT(map()));
         iconClicked->setMapping(m_informationElementIcons[i], i);
-        connect(m_informationElementCaptions[i], SIGNAL(clicked()),
-                captionClicked, SLOT(map()));
-        captionClicked->setMapping(m_informationElementCaptions[i], i);
         connect(m_informationElements[i], SIGNAL(clicked()),
                 labelClicked, SLOT(map()));
         labelClicked->setMapping(m_informationElements[i], i);
@@ -412,13 +400,10 @@ void KNMusicMainPlayer::initialInformationPanel()
         m_infoPanelLayout->addRow(caption,
                                   m_informationElements[i]);
     }
-    QPalette captionPal=m_informationElementCaptions[0]->palette(),
-             elementsPal=m_informationElements[0]->palette();
-    captionPal.setColor(QPalette::WindowText, QColor(0xcc, 0xcc, 0xcc));
+    QPalette elementsPal=m_informationElements[0]->palette();
     elementsPal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
     for(int i=0; i<InformationElementsCount; i++)
     {
-        m_informationElementCaptions[i]->setPalette(captionPal);
         m_informationElements[i]->setPalette(elementsPal);
     }
 }

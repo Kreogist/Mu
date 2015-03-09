@@ -273,7 +273,6 @@ void KNMusicNowPlaying2::playNext()
     //Check the loop state.
     if(Shuffle==m_loopMode)
     {
-        qDebug()<<"Fucked here.";
         int nextProxyRow=nextShuffleProxyRow();
         //Check is the row available.
         if(nextProxyRow==-1)
@@ -600,17 +599,14 @@ inline int KNMusicNowPlaying2::prevShuffleProxyRow()
 
 int KNMusicNowPlaying2::nextShuffleProxyRow()
 {
-    qDebug()<<"Fucked in.";
     //Ensure the shuffle list is not empty.
     if(m_shuffleList.isEmpty())
     {
         return -1;
     }
-    qDebug()<<"Okay.";
     //Now the shuffle list cannot be a empty list.
     //Find the current playing index from the first one in the shuffle list.
     int playingIndex=m_shuffleList.indexOf(m_currentPlayingIndex);
-    qDebug()<<"Playing index:"<<playingIndex;
     if(playingIndex==-1)
     {
         //Find the first available index.

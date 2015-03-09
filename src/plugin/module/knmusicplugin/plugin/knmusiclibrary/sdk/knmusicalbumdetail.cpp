@@ -468,10 +468,8 @@ void KNMusicAlbumDetail::initialInfrastructure()
 void KNMusicAlbumDetail::initialAlbumShadow()
 {
     //Initial the side shadows.
-    m_rightShadow=new KNSideShadowWidget(this);
-    m_rightShadow->setDirection(KNSideShadow::RightShadow);
-    m_leftShadow=new KNSideShadowWidget(this);
-    m_leftShadow->setDirection(KNSideShadow::LeftShadow);
+    m_rightShadow=new KNSideShadowWidget(KNSideShadow::RightShadow, this);
+    m_leftShadow=new KNSideShadowWidget(KNSideShadow::LeftShadow, this);
 }
 
 void KNMusicAlbumDetail::initialAlbumContentWidgets()

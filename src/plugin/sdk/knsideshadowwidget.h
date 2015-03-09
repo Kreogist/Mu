@@ -27,7 +27,7 @@ class KNSideShadowWidget : public QWidget
     Q_OBJECT
 public:
     explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction=0, QWidget *parent=0);
+    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
 
     int direction() const;
     void setDirection(int direction);
