@@ -97,6 +97,10 @@ private:
     inline void initialShadowModel();
     inline void clearNowPlayingIcon();
     inline void clearShadowModel();
+    inline void generateShuffleList();
+
+    inline int prevShuffleProxyRow();
+    inline int nextShuffleProxyRow();
 
     inline int nextRow(int currentProxyRow, bool ignoreLoopMode=false);
     inline int prevRow(int currentProxyRow, bool ignoreLoopMode=false);
@@ -122,6 +126,9 @@ private:
 
     //Flags.
     bool m_manualPlayed=false;
+
+    //Shuffle list.
+    QList<QPersistentModelIndex> m_shuffleList;
 };
 
 #endif // KNMUSICNOWPLAYING2_H

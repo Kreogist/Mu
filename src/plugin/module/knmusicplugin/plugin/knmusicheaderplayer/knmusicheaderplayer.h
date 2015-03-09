@@ -149,7 +149,7 @@ private:
 
     //Images.
     QPixmap m_playIcon, m_pauseIcon,
-            m_noRepeatIcon, m_repeatTrackIcon, m_repeatAllIcon,
+            m_loopStateIcon[LoopCount],
             m_muteIcon, m_noMuteIcon,
             m_noAlbumArt;
 

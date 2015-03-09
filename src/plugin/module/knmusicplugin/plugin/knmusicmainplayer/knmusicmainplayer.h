@@ -124,7 +124,6 @@ private:
     QPixmap m_playIcon, m_pauseIcon;
     //Status.
     bool m_isShownPlay=true, m_progressPressed=false;
-    int m_loopState=NoRepeat;
 
     inline void setEliedLabelText(QLabel *label,
                                   const QString &text,

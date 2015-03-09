@@ -56,9 +56,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //Initial the pixmaps.
     m_playIcon=QPixmap(":/plugin/music/player/play.png");
     m_pauseIcon=QPixmap(":/plugin/music/player/pause.png");
-    m_noRepeatIcon=QPixmap(":/plugin/music/loopmode/NoRepeat.png");
-    m_repeatTrackIcon=QPixmap(":/plugin/music/loopmode/RepeatSingle.png");
-    m_repeatAllIcon=QPixmap(":/plugin/music/loopmode/Repeat.png");
+    m_loopStateIcon[NoRepeat]=QPixmap(":/plugin/music/loopmode/NoRepeat.png");
+    m_loopStateIcon[RepeatTrack]=QPixmap(":/plugin/music/loopmode/RepeatSingle.png");
+    m_loopStateIcon[RepeatAll]=QPixmap(":/plugin/music/loopmode/Repeat.png");
+    m_loopStateIcon[Shuffle]=QPixmap(":/plugin/music/loopmode/Random.png");
     m_muteIcon=QPixmap(":/plugin/music/player/mute.png");
     m_noMuteIcon=QPixmap(":/plugin/music/player/nomute.png");
 
@@ -219,18 +220,7 @@ void KNMusicHeaderPlayer::inactivatePlayer()
 void KNMusicHeaderPlayer::onActionLoopStateChanged(const int &state)
 {
     //Change the icon.
-    switch(state)
-    {
-    case RepeatTrack:
-        m_loopStatus->setIcon(m_repeatTrackIcon);
-        break;
-    case RepeatAll:
-        m_loopStatus->setIcon(m_repeatAllIcon);
-        break;
-    default:
-        m_loopStatus->setIcon(m_noRepeatIcon);
-        break;
-    }
+    m_loopStatus->setIcon(m_loopStateIcon[state]);
 }
 
 void KNMusicHeaderPlayer::setAlbumArt(const QPixmap &pixmap)

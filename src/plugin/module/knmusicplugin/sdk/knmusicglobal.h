@@ -99,6 +99,7 @@ enum KNMusicPlaybackOrder
     NoRepeat,
     RepeatAll,
     RepeatTrack,
+    Shuffle,
     LoopCount
 };
 enum KNMusicPlayingState

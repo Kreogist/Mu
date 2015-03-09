@@ -17,6 +17,9 @@
  */
 #include <QApplication>
 
+#include <algorithm>
+#include <random>
+
 #include "knglobal.h"
 #include "knconfigure.h"
 
@@ -225,6 +228,13 @@ void KNMusicNowPlaying2::playMusicRow(KNMusicProxyModel *model,
     m_currentPlayingIndex=QPersistentModelIndex();
     //Set the mannual played switch.
     m_manualPlayed=true;
+    //Clear the shuffle list.
+    m_shuffleList.clear();
+    //Check the loop state, if the state is random state, the shuffle the model.
+    if(m_loopMode==Shuffle)
+    {
+        generateShuffleList();
+    }
     //Play the row.
     playRow(row);
 }
@@ -260,6 +270,21 @@ void KNMusicNowPlaying2::playNext()
         emit requirePlayRow(0);
         return;
     }
+    //Check the loop state.
+    if(Shuffle==m_loopMode)
+    {
+        qDebug()<<"Fucked here.";
+        int nextProxyRow=nextShuffleProxyRow();
+        //Check is the row available.
+        if(nextProxyRow==-1)
+        {
+            //Clear the current playing.
+            resetCurrentPlaying();
+        }
+        //Play the shuffle row.
+        emit requirePlayRow(nextProxyRow);
+        return;
+    }
     //Get the next row.
     int nextProxyRow=nextRow(m_playingModel->mapFromSource(m_currentPlayingIndex).row(),
                              false);
@@ -285,6 +310,20 @@ void KNMusicNowPlaying2::playPrevious()
             m_currentPlayingIndex.model()!=m_playingModel->sourceModel())
     {
         emit requirePlayRow(m_playingModel->rowCount()-1);
+        return;
+    }
+    //Check the loop state.
+    if(Shuffle==m_loopMode)
+    {
+        int prevProxyRow=prevShuffleProxyRow();
+        //Check is the row available.
+        if(prevProxyRow==-1)
+        {
+            //Clear the current playing.
+            resetCurrentPlaying();
+        }
+        //Play the shuffle row.
+        emit requirePlayRow(prevProxyRow);
         return;
     }
     //Get the previous row.
@@ -313,6 +352,12 @@ void KNMusicNowPlaying2::setLoopState(const int &state)
     m_loopMode=state % LoopCount;
     //Emit the loop mode changed signal.
     emit loopStateChanged(m_loopMode);
+    //Check if the loop state is shuffle, generate the shuffle list.
+    if(Shuffle==m_loopMode)
+    {
+        //Generate the shuffle list for the current model.
+        generateShuffleList();
+    }
 }
 
 void KNMusicNowPlaying2::setCurrentSongRating(const int &rating)
@@ -339,6 +384,8 @@ void KNMusicNowPlaying2::checkRemovedModel(KNMusicModel *model)
         clearShadowModel();
         //Reset the music tab pointer.
         m_currentTab=nullptr;
+        //Clear the shuffle list.
+        m_shuffleList.clear();
     }
 }
 
@@ -466,6 +513,150 @@ void KNMusicNowPlaying2::clearShadowModel()
     m_shadowPlayingModel->setSortRole(-1);
     m_shadowPlayingModel->setFilterFixedString("");
     m_shadowPlayingModel->setFilterRole(-1);
+}
+
+void KNMusicNowPlaying2::generateShuffleList()
+{
+    //First, check is the model available.
+    //Second, check is the shuffle list empty, if there's data in the list,
+    //ignore the request.
+    if(m_playingMusicModel==nullptr ||
+            !m_shuffleList.isEmpty())
+    {
+        return;
+    }
+    //Clear the shuffle list first.
+    m_shuffleList.clear();
+    //Get all the model index.
+    for(int i=0, modelRows=m_playingMusicModel->rowCount(); i<modelRows; i++)
+    {
+        m_shuffleList.append(
+                    QPersistentModelIndex(
+                        m_playingMusicModel->index(i,
+                                                   m_playingMusicModel->playingItemColumn())));
+    }
+    //Shuffle the list.
+    std::random_device randomDevice;
+    std::mt19937_64 randomGenerator(randomDevice());
+    std::shuffle(m_shuffleList.begin(), m_shuffleList.end(), randomGenerator);
+}
+
+inline int KNMusicNowPlaying2::prevShuffleProxyRow()
+{
+    //Ensure the shuffle list is not empty.
+    if(m_shuffleList.isEmpty())
+    {
+        return -1;
+    }
+    //Now the shuffle list cannot be a empty list.
+    //Find the current playing index in the shuffle list from the last.
+    int playingIndex=m_shuffleList.indexOf(m_currentPlayingIndex);
+    if(playingIndex==-1)
+    {
+        //Find the first available index.
+        while(!m_shuffleList.isEmpty())
+        {
+            //If the first one is available, return the first one.
+            if(m_shuffleList.last().isValid())
+            {
+                return m_playingModel->mapFromSource(m_shuffleList.last()).row();
+            }
+            //Remove the invaild index.
+            m_shuffleList.removeLast();
+        }
+        return -1;
+    }
+    //When we come here, it means:
+    //1. The shuffle list is not empty.
+    //2. We find the now playing index in the shuffle list.
+    //We need to find a vaild index in the previous row.
+    for(int i=playingIndex-1; i>-1; i--)
+    {
+        //If we find a vaild one, then return the index.
+        if(m_shuffleList.at(i).isValid())
+        {
+            return m_playingModel->mapFromSource(m_shuffleList.at(i)).row();
+        }
+        //Or else, remove the invaild index.
+        m_shuffleList.removeAt(i);
+    }
+    //When we comes here, means all the index before the current index is
+    //invaild, find the index from the last one.
+    //Find the first available index.
+    while(!m_shuffleList.isEmpty())
+    {
+        //If the first one is available, return the first one.
+        if(m_shuffleList.last().isValid())
+        {
+            return m_playingModel->mapFromSource(m_shuffleList.last()).row();
+        }
+        //Remove the invaild index.
+        m_shuffleList.removeLast();
+    }
+    //It should never comes here, because there's at least one available index
+    //in the list.
+    return -1;
+}
+
+int KNMusicNowPlaying2::nextShuffleProxyRow()
+{
+    qDebug()<<"Fucked in.";
+    //Ensure the shuffle list is not empty.
+    if(m_shuffleList.isEmpty())
+    {
+        return -1;
+    }
+    qDebug()<<"Okay.";
+    //Now the shuffle list cannot be a empty list.
+    //Find the current playing index from the first one in the shuffle list.
+    int playingIndex=m_shuffleList.indexOf(m_currentPlayingIndex);
+    qDebug()<<"Playing index:"<<playingIndex;
+    if(playingIndex==-1)
+    {
+        //Find the first available index.
+        while(!m_shuffleList.isEmpty())
+        {
+            //If the first one is available, return the first one.
+            if(m_shuffleList.first().isValid())
+            {
+                return m_playingModel->mapFromSource(m_shuffleList.first()).row();
+            }
+            //Remove the invaild index.
+            m_shuffleList.removeFirst();
+        }
+        return -1;
+    }
+    //When we come here, it means:
+    //1. The shuffle list is not empty.
+    //2. We find the now playing index in the shuffle list.
+    //We need to find a vaild index in the next rows.
+    int nextRow=playingIndex+1;
+    while(nextRow<m_shuffleList.size())
+    {
+        //If we find a vaild one, then return the index.
+        if(m_shuffleList.at(nextRow).isValid())
+        {
+            return m_playingModel->mapFromSource(m_shuffleList.at(nextRow)).row();
+        }
+        //Or else, remove the invaild index.
+        m_shuffleList.removeAt(nextRow);
+    }
+    //When we comes here, means all the index after the current index is
+    //invaild, find the index from the first one.
+    //Find the first available index.
+    while(!m_shuffleList.isEmpty())
+    {
+        //If the first one is available, return the first one.
+        if(m_shuffleList.first().isValid())
+        {
+            return m_playingModel->mapFromSource(m_shuffleList.first()).row();
+        }
+        //Remove the invaild index.
+        m_shuffleList.removeFirst();
+    }
+    //It should never comes here, because there's at least one available index
+    //in the list.
+    return -1;
 }
 
 int KNMusicNowPlaying2::nextRow(int currentProxyRow, bool ignoreLoopMode)
