@@ -437,6 +437,9 @@ void KNMusicPlugin::enablePlatformExtras()
                                 case RepeatTrack:
                                     m_platformExtras->onActionLoopStateChanged(ButtonRepeat);
                                     break;
+                                case Shuffle:
+                                    m_platformExtras->onActionLoopStateChanged(ButtonShuffle);
+                                    break;
                                 default:
                                     break;
                                 }

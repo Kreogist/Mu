@@ -145,7 +145,6 @@ private:
     //States
     bool m_isShownPlay=true, m_progressPressed=false, m_appendMenuShown=false;
     const int m_albumArtSize=61, m_buttonSize=38;
-    int m_loopState=NoRepeat;
 
     //Images.
     QPixmap m_playIcon, m_pauseIcon,
