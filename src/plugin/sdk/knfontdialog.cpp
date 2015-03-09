@@ -23,6 +23,9 @@
 KNFontDialog::KNFontDialog(QWidget *parent) :
     QDialog(parent)
 {
+#ifdef Q_OS_MACX
+    setWindowFlags(Qt::Sheet);
+#endif
     //Initial the layout.
     QGridLayout *mainLayout=new QGridLayout(this);
     setLayout(mainLayout);
