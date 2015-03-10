@@ -533,7 +533,7 @@ void KNMusicNowPlaying2::generateShuffleList()
     }
     //Shuffle the list.
     std::random_device randomDevice;
-    std::mt19937_64 randomGenerator(randomDevice());
+    std::mt19937 randomGenerator(randomDevice());
     std::shuffle(m_shuffleList.begin(), m_shuffleList.end(), randomGenerator);
 }
 
