@@ -190,6 +190,36 @@ void KNMusicMainPlayer::onActionPlayNPauseClicked()
     m_backend->pause();
 }
 
+void KNMusicMainPlayer::onActionPositionEdited()
+{
+    //Get the latest text
+    QString positionText=m_position->text();
+    //Find the colon.
+    int colonPosition=positionText.indexOf(':');
+    //If we cannot find the colon, means it's not format as 'xx:xx'.
+    if(-1==colonPosition)
+    {
+        //This might be a number, we treat it as second time.
+        //Translate it to a number.
+        bool translateSuccess=false;
+        qint64 triedPositon=positionText.toLongLong(&translateSuccess);
+        //If we succeed, set the position to that second.
+        if(translateSuccess)
+        {
+            setPosition(triedPositon*1000);
+        }
+        return;
+    }
+    //Calculate the ms.
+    qint64 minuatePart=positionText.left(colonPosition).toInt(),
+           secondPart=positionText.mid(colonPosition+1).toInt(),
+           preferPosition=(minuatePart*60+secondPart)*1000;
+    if(preferPosition>0 && preferPosition<m_progress->maximum())
+    {
+        setPosition(preferPosition);
+    }
+}
+
 void KNMusicMainPlayer::onActionPositionChanged(const qint64 &position)
 {
     if(!m_progressPressed)
@@ -504,6 +534,8 @@ void KNMusicMainPlayer::initialControlPanel()
             this, &KNMusicMainPlayer::setPositionText);
     connect(m_progress, &KNProgressSlider::sliderMoved,
             this, &KNMusicMainPlayer::setPosition);
+    connect(m_position, &KNEditableLabel::editingFinished,
+            this, &KNMusicMainPlayer::onActionPositionEdited);
     //Initial the control buttons.
     for(int i=0; i<ControlButtonsCount; i++)
     {

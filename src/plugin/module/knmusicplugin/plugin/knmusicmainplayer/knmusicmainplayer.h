@@ -57,6 +57,7 @@ private slots:
     void onActionProgressReleased();
     void onActionHideMainPlayer();
     void onActionPlayNPauseClicked();
+    void onActionPositionEdited();
 
     void onActionPositionChanged(const qint64 &position);
     void onActionDurationChanged(const qint64 &duration);

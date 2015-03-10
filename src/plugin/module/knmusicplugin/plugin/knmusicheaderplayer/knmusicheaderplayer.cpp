@@ -237,7 +237,7 @@ void KNMusicHeaderPlayer::setTitle(const QString &title)
 void KNMusicHeaderPlayer::setDuration(const qint64 &duration)
 {
     //Change the progress slider range.
-    m_progressSlider->setMaximum(duration);
+    m_progress->setMaximum(duration);
     //Set duration display text.
     m_duration->setText(KNMusicGlobal::msecondToString(duration));
 }
@@ -281,7 +281,7 @@ void KNMusicHeaderPlayer::onActionPositionEdited()
     qint64 minuatePart=positionText.left(colonPosition).toInt(),
            secondPart=positionText.mid(colonPosition+1).toInt(),
            preferPosition=(minuatePart*60+secondPart)*1000;
-    if(preferPosition>0 && preferPosition<m_progressSlider->maximum())
+    if(preferPosition>0 && preferPosition<m_progress->maximum())
     {
         setPosition(preferPosition);
     }
@@ -403,7 +403,7 @@ void KNMusicHeaderPlayer::onActionPositionChanged(const qint64 &position)
     emit positionChanged(position);
     if(!m_progressPressed)
     {
-        m_progressSlider->setValue(position);
+        m_progress->setValue(position);
     }
 }
 
@@ -495,17 +495,17 @@ inline void KNMusicHeaderPlayer::initialProrgess()
     progressLayout->addWidget(m_duration);
 
     //Initial the progress bar.
-    m_progressSlider=new KNProgressSlider(this);
-    m_progressSlider->setWheelStep(1000);
-    connect(m_progressSlider, &KNProgressSlider::sliderPressed,
+    m_progress=new KNProgressSlider(this);
+    m_progress->setWheelStep(1000);
+    connect(m_progress, &KNProgressSlider::sliderPressed,
             this, &KNMusicHeaderPlayer::onActionProgressPressed);
-    connect(m_progressSlider, &KNProgressSlider::sliderReleased,
+    connect(m_progress, &KNProgressSlider::sliderReleased,
             this, &KNMusicHeaderPlayer::onActionProgressReleased);
-    connect(m_progressSlider, &KNProgressSlider::sliderMoved,
+    connect(m_progress, &KNProgressSlider::sliderMoved,
             this, &KNMusicHeaderPlayer::setPosition);
-    connect(m_progressSlider, &KNProgressSlider::valueChanged,
+    connect(m_progress, &KNProgressSlider::valueChanged,
             this, &KNMusicHeaderPlayer::setPositionText);
-    progressLayout->addWidget(m_progressSlider);
+    progressLayout->addWidget(m_progress);
 
     //Initial the position display.
     m_position=new KNEditableLabel(this);

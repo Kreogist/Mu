@@ -127,7 +127,7 @@ private:
     KNHighlightLabel *m_albumArt;
     KNScrollLabel *m_title, *m_artistAndAlbum;
     QLabel *m_duration;
-    KNProgressSlider *m_progressSlider;
+    KNProgressSlider *m_progress;
     KNEditableLabel *m_position;
     KNOpacityButton *m_loopStatus, *m_volumeIndicator;
     KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause, *m_showMainPlayer, *m_showAppendMenu;
