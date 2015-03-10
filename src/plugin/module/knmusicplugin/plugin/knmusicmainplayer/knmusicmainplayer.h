@@ -121,6 +121,7 @@ private:
     KNGlassAnimeButton *m_controlButtons[ControlButtonsCount];
     QLabel *m_duration;
     QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount];
+    QBoxLayout *m_buttonLeftLayout, *m_buttonRightLayout;
     //Loop mode button.
     KNOpacityAnimeButton *m_loopMode;
     //Status.

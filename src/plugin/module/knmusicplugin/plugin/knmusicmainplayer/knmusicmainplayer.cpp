@@ -141,6 +141,8 @@ void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     //Save now playing.
     m_nowPlaying=nowPlaying;
     //Link now playing.
+    connect(m_loopMode, &KNOpacityAnimeButton::clicked,
+            m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
             this, &KNMusicMainPlayer::onActionLoopStateChanged);
     //Sync the data with now playing.
@@ -359,6 +361,9 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         m_controlButtons[i]->setFixedSize(buttonSize, buttonSize);
     }
+    m_loopMode->setFixedSize(buttonSize>>1, buttonSize>>1);
+    //Change the layout spacing.
+    m_buttonLeftLayout->setContentsMargins(buttonSize>>2,0,buttonSize>>2,0);
     //Calculate the elements label maximum width.
     m_maxElementWidth=width()/3-(fontSize+5+maxLabelWidth);
     //Update information.
@@ -476,11 +481,16 @@ void KNMusicMainPlayer::initialControlPanel()
     //Initial the progress bar and position labels.
     m_progress=new KNProgressSlider(this);
     m_progress->setWheelStep(1000);
-    m_position=new KNEditableLabel(this);
     m_duration=new QLabel(this);
+    m_position=new KNEditableLabel(this);
     m_loopMode=new KNOpacityAnimeButton(this);
-    onActionLoopStateChanged(NoRepeat);
+    m_loopMode->setFixedSize(buttonSize>>1,
+                             buttonSize>>1);
     //Configure label font.
+    QPalette pal=m_duration->palette();
+    pal.setColor(QPalette::WindowText, QColor(255,255,255));
+    m_duration->setPalette(pal);
+    m_position->setPalette(pal);
     QFont timeFont=m_duration->font();
     timeFont.setFamily("096MKSD");
     m_duration->setFont(timeFont);
@@ -494,8 +504,6 @@ void KNMusicMainPlayer::initialControlPanel()
             this, &KNMusicMainPlayer::setPositionText);
     connect(m_progress, &KNProgressSlider::sliderMoved,
             this, &KNMusicMainPlayer::setPosition);
-    //Set default value.
-    setPositionText(0);
     //Initial the control buttons.
     for(int i=0; i<ControlButtonsCount; i++)
     {
@@ -527,28 +535,29 @@ void KNMusicMainPlayer::initialControlPanel()
     controlLayout->addLayout(buttonLayout, 1);
 
     buttonLayout->addWidget(m_position, 0, Qt::AlignTop);
-    QBoxLayout *buttonLeftLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                                controlLayout->widget());
-    buttonLeftLayout->setContentsMargins(0,0,0,0);
-    buttonLeftLayout->setSpacing(0);
-    buttonLeftLayout->addStretch();
-    buttonLeftLayout->addWidget(m_loopMode, 0, Qt::AlignVCenter);
-    buttonLayout->addLayout(buttonLeftLayout, 1);
+    m_buttonLeftLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                      controlLayout->widget());
+    m_buttonLeftLayout->setContentsMargins(buttonSize>>2,0,buttonSize>>2,0);
+    m_buttonLeftLayout->setSpacing(0);
+    m_buttonLeftLayout->addStretch();
+    m_buttonLeftLayout->addWidget(m_loopMode, 0, Qt::AlignVCenter);
+    buttonLayout->addLayout(m_buttonLeftLayout, 1);
     for(int i=0; i<ControlButtonsCount; i++)
     {
         buttonLayout->addWidget(m_controlButtons[i], 0, Qt::AlignBottom);
     }
-    QBoxLayout *buttonRightLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                                controlLayout->widget());
-    buttonRightLayout->setContentsMargins(0,0,0,0);
-    buttonRightLayout->setSpacing(0);
-    buttonRightLayout->addStretch();
-    buttonLayout->addLayout(buttonRightLayout, 1);
+    m_buttonRightLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                       controlLayout->widget());
+    m_buttonRightLayout->setContentsMargins(0,0,0,0);
+    m_buttonRightLayout->setSpacing(0);
+    m_buttonRightLayout->addStretch();
+    buttonLayout->addLayout(m_buttonRightLayout, 1);
     buttonLayout->addWidget(m_duration, 0, Qt::AlignTop);
 
-    //-----------Debug------------
-    m_position->setText("0:00");
-    m_duration->setText("0:00");
+    //Set default value.
+    setPositionText(0);
+    onActionDurationChanged(0);
+    onActionLoopStateChanged(NoRepeat);
 }
 
 void KNMusicMainPlayer::setEliedLabelText(QLabel *label,

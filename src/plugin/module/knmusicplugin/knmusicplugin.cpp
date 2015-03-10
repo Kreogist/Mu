@@ -302,6 +302,7 @@ void KNMusicPlugin::loadMainPlayer(KNMusicMainPlayerBase *plugin)
         //Configure the main player.
         m_mainPlayer->setBackend(m_backend);
         m_mainPlayer->setHeaderPlayer(m_headerPlayer);
+        m_mainPlayer->setNowPlaying(m_nowPlaying);
         m_mainPlayer->hide();
         //Restore the settings.
         ;

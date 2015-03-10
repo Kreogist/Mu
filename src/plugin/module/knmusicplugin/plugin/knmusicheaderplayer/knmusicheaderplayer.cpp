@@ -83,10 +83,11 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
 void KNMusicHeaderPlayer::loadConfigure()
 {
     //Set the value, calculate by the range percentage.
-    m_volumeSlider->setValue(
-                m_volumeSlider->minimal()+
-                (double)m_volumeSlider->range()*
-                m_cacheConfigure->getData("MusicVolume", 0.5).toDouble());
+    qint64 volumeSize=m_volumeSlider->minimal()+
+                        (double)m_volumeSlider->range()*
+                        m_cacheConfigure->getData("MusicVolume", 0.5).toDouble();
+    m_volumeSlider->setValue(volumeSize);
+    onActionVolumeSliderChanged(volumeSize);
 }
 
 void KNMusicHeaderPlayer::saveConfigure()
