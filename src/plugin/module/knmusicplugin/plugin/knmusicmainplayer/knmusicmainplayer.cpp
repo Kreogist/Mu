@@ -28,6 +28,7 @@
 #include "knopacityanimebutton.h"
 
 #include "knmusicheaderplayerbase.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusicmainlyrics.h"
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
@@ -133,6 +134,17 @@ void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
             m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayPrevious);
     connect(m_controlButtons[ButtonNext], &KNGlassAnimeButton::clicked,
             m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayNext);
+}
+
+void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
+{
+    //Save now playing.
+    m_nowPlaying=nowPlaying;
+    //Link now playing.
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
+            this, &KNMusicMainPlayer::onActionLoopStateChanged);
+    //Sync the data with now playing.
+    onActionLoopStateChanged(m_nowPlaying->loopState());
 }
 
 void KNMusicMainPlayer::retranslate()
@@ -272,6 +284,12 @@ void KNMusicMainPlayer::onActionAnalysisItemUpdate()
     }
     //Update the panel.
     updateInformationPanel();
+}
+
+void KNMusicMainPlayer::onActionLoopStateChanged(const int &state)
+{
+    //Change the icon.
+    m_loopMode->setIcon(m_loopStateIcon[state]);
 }
 
 void KNMusicMainPlayer::showEvent(QShowEvent *event)
@@ -448,6 +466,10 @@ void KNMusicMainPlayer::initialControlPanel()
     //Initial icons and integers.
     m_playIcon=QPixmap(":/plugin/music/mainplayer/play.png");
     m_pauseIcon=QPixmap(":/plugin/music/mainplayer/pause.png");
+    m_loopStateIcon[NoRepeat]=QPixmap(":/plugin/music/loopmode/NoRepeat.png");
+    m_loopStateIcon[RepeatTrack]=QPixmap(":/plugin/music/loopmode/RepeatSingle.png");
+    m_loopStateIcon[RepeatAll]=QPixmap(":/plugin/music/loopmode/Repeat.png");
+    m_loopStateIcon[Shuffle]=QPixmap(":/plugin/music/loopmode/Random.png");
     const int buttonSize=46;
     //Initial the control widgets.
     m_controlWidget=new QWidget(this);
@@ -456,6 +478,8 @@ void KNMusicMainPlayer::initialControlPanel()
     m_progress->setWheelStep(1000);
     m_position=new KNEditableLabel(this);
     m_duration=new QLabel(this);
+    m_loopMode=new KNOpacityAnimeButton(this);
+    onActionLoopStateChanged(NoRepeat);
     //Configure label font.
     QFont timeFont=m_duration->font();
     timeFont.setFamily("096MKSD");
@@ -508,6 +532,7 @@ void KNMusicMainPlayer::initialControlPanel()
     buttonLeftLayout->setContentsMargins(0,0,0,0);
     buttonLeftLayout->setSpacing(0);
     buttonLeftLayout->addStretch();
+    buttonLeftLayout->addWidget(m_loopMode, 0, Qt::AlignVCenter);
     buttonLayout->addLayout(buttonLeftLayout, 1);
     for(int i=0; i<ControlButtonsCount; i++)
     {

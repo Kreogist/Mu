@@ -21,6 +21,7 @@ public:
     virtual QWidget *banner()=0;
     virtual void setBackend(KNMusicBackend *backend)=0;
     virtual void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)=0;
+    virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
 
 signals:
     void requireHideMainPlayer();
@@ -31,6 +32,7 @@ signals:
 
 public slots:
     virtual void onActionAnalysisItemUpdate()=0;
+    virtual void onActionLoopStateChanged(const int &state)=0;
 
 protected slots:
     virtual void onActionRequireShowIn(const int &label)=0;

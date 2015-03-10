@@ -37,9 +37,11 @@ public:
     QWidget *banner();
     void setBackend(KNMusicBackend *backend);
     void setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
 
 public slots:
     void onActionAnalysisItemUpdate();
+    void onActionLoopStateChanged(const int &state);
 
 protected:
     void showEvent(QShowEvent *event);
@@ -118,7 +120,9 @@ private:
     };
     KNGlassAnimeButton *m_controlButtons[ControlButtonsCount];
     QLabel *m_duration;
-    QPixmap m_playIcon, m_pauseIcon;
+    QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount];
+    //Loop mode button.
+    KNOpacityAnimeButton *m_loopMode;
     //Status.
     bool m_isShownPlay=true, m_progressPressed=false;
 
@@ -130,6 +134,7 @@ private:
     KNMusicBackend *m_backend=nullptr;
     //Header player.
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
+    KNMusicNowPlayingBase *m_nowPlaying=nullptr;
 };
 
 #endif // KNMUSICMAINPLAYER_H

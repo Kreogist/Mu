@@ -233,7 +233,6 @@ void KNMusicNowPlaying2::playMusicRow(KNMusicProxyModel *model,
     //Check the loop state, if the state is random state, the shuffle the model.
     if(Shuffle==m_loopMode)
     {
-        qDebug()<<"Shuffle!!!";
         generateShuffleList();
     }
     //Play the row.
@@ -274,9 +273,7 @@ void KNMusicNowPlaying2::playNext()
     //Check the loop state.
     if(Shuffle==m_loopMode)
     {
-        qDebug()<<"Here?!!!";
         int nextProxyRow=nextShuffleProxyRow();
-        qDebug()<<"nextProxyRow="<<nextProxyRow;
         //Check is the row available.
         if(nextProxyRow==-1)
         {
@@ -607,7 +604,6 @@ int KNMusicNowPlaying2::nextShuffleProxyRow()
     //Now the shuffle list cannot be a empty list.
     //Find the current playing index from the first one in the shuffle list.
     int playingIndex=m_shuffleList.indexOf(m_playingModel->mapFromSource(m_currentPlayingIndex));
-    qDebug()<<"playingIndex="<<playingIndex;
     if(playingIndex==-1)
     {
         //Find the first available index.
