@@ -516,6 +516,8 @@ void KNMusicMainPlayer::initialControlPanel()
     m_loopMode=new KNOpacityAnimeButton(this);
     m_loopMode->setFixedSize(buttonSize>>1,
                              buttonSize>>1);
+    m_volumeIcon=new KNLabelButton(this);
+    m_volumeIcon->setPixmap(QPixmap(""));
     //Configure label font.
     QPalette pal=m_duration->palette();
     pal.setColor(QPalette::WindowText, QColor(255,255,255));
