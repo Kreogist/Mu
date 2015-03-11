@@ -88,12 +88,16 @@ void KNMusicHeaderPlayer::loadConfigure()
                         m_cacheConfigure->getData("MusicVolume", 0.5).toDouble();
     m_volumeSlider->setValue(volumeSize);
     onActionVolumeSliderChanged(volumeSize);
+    //Set mute according to the mute cache settings.
+    m_backend->setMute(m_cacheConfigure->getData("MusicMute", false).toBool());
 }
 
 void KNMusicHeaderPlayer::saveConfigure()
 {
     m_cacheConfigure->setData("MusicVolume",
                               (double)m_volumeSlider->percentage());
+    m_cacheConfigure->setData("MusicMute",
+                              m_backend->mute());
 }
 
 void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)

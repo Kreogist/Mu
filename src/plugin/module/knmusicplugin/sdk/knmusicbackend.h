@@ -59,6 +59,8 @@ public:
     virtual int volumeMinimal()=0;
     virtual int volumeMaximum()=0;
 
+    virtual bool mute()=0;
+
 signals:
     void volumeChanged(int volumeSize);
 

@@ -142,6 +142,11 @@ void KNMusicStandardBackend::resetPreviewPlayer()
     m_preview->clear();
 }
 
+bool KNMusicStandardBackend::mute()
+{
+    return m_mute;
+}
+
 void KNMusicStandardBackend::changeMuteState()
 {
     setMute(!m_mute);

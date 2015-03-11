@@ -40,6 +40,8 @@ public:
     void pausePreview();
     void resetPreviewPlayer();
 
+    bool mute();
+
 signals:
 
 public slots:
