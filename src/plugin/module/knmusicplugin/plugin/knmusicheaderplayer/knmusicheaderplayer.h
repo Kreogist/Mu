@@ -130,7 +130,8 @@ private:
     KNProgressSlider *m_progress;
     KNEditableLabel *m_position;
     KNOpacityButton *m_loopStatus, *m_volumeIndicator;
-    KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause, *m_showMainPlayer, *m_showAppendMenu;
+    KNOpacityAnimeButton *m_previous, *m_next, *m_playNPause, *m_showMainPlayer,
+                         *m_showAppendMenu;
     KNVolumeSlider *m_volumeSlider;
     KNMusicHeaderPlayerAppendMenu *m_appendMenu;
 

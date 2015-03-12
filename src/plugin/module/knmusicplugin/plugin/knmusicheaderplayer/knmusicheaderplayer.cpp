@@ -183,6 +183,9 @@ void KNMusicHeaderPlayer::resetInformation()
     //Set the duration and position.
     setDuration(0);
     setPositionText(0);
+    //Hide the main player expand and menu button.
+    m_showMainPlayer->hide();
+    m_showAppendMenu->hide();
     //Emit reset signal.
     emit playerReset();
 }
@@ -793,6 +796,9 @@ void KNMusicHeaderPlayer::updatePlayerInfo(const KNMusicAnalysisItem &analysisIt
     updateArtistAndAlbum();
     QPixmap coverImage=QPixmap::fromImage(analysisItem.coverImage);
     setAlbumArt(coverImage.isNull()?m_musicGlobal->noAlbumArt():coverImage);
+    //When it has been asked to update player info, then show the buttons.
+    m_showMainPlayer->show();
+    m_showAppendMenu->show();
     //Ask to update the detail information.
     emit analysisItemUpdated();
 }

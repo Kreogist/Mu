@@ -154,6 +154,8 @@ void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
             m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayPrevious);
     connect(m_controlButtons[ButtonNext], &KNGlassAnimeButton::clicked,
             m_headerPlayer, &KNMusicHeaderPlayerBase::requirePlayNext);
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::playerReset,
+            this, &KNMusicMainPlayer::onActionHideMainPlayer);
 }
 
 void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
