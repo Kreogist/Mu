@@ -112,6 +112,23 @@ QWidget *KNMusicMainPlayer::banner()
 void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
 {
     m_backend=backend;
+
+    //Calculate the volume stages, divide the volume range into 3 stages.
+    int volumeStage=(m_backend->volumeMaximum()-m_backend->volumeMinimal())/3;
+    m_firstStageVolume=m_backend->volumeMinimal()+volumeStage;
+    m_secondStageVolume=m_firstStageVolume+volumeStage;
+    //Set the volume slider range.
+    m_volumeSlider->setRange(m_backend->volumeMinimal(),
+                             m_backend->volumeMaximum());
+    //Change the mouse step based on the range.
+    int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
+    m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
+    //Set the volume slider to the backend volume size.
+    m_volumeSlider->setValue(m_backend->volume());
+    //Link the volume slider to backend.
+    connect(m_volumeSlider, &KNVolumeSlider::valueChanged,
+            m_backend, &KNMusicBackend::setVolume);
+
     //Connect responses.
     connect(m_backend, &KNMusicBackend::positionChanged,
            this, &KNMusicMainPlayer::onActionPositionChanged);
@@ -119,6 +136,8 @@ void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
             this, &KNMusicMainPlayer::onActionDurationChanged);
     connect(m_backend, &KNMusicBackend::playingStateChanged,
             this, &KNMusicMainPlayer::onActionPlayStateChanged);
+    connect(m_backend, &KNMusicBackend::volumeChanged,
+            this, &KNMusicMainPlayer::onActionVolumeChanged);
 }
 
 void KNMusicMainPlayer::setHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
@@ -247,6 +266,33 @@ void KNMusicMainPlayer::onActionPlayStateChanged(const int &state)
     }
     //Or else, whatever stopped or paused state, should display play icon.
     setPlayIconMode();
+}
+
+void KNMusicMainPlayer::onActionVolumeChanged(const int &volumeSize)
+{
+    if(volumeSize==m_backend->volumeMinimal()) //Check is the size is the minimum.
+    {
+        m_volumeIcon->setPixmap(m_volumeSizeIcon[NoVolume]);
+    }
+    else if(volumeSize<m_firstStageVolume) //Check is the size in the first stage.
+    {
+        m_volumeIcon->setPixmap(m_volumeSizeIcon[Volume1]);
+    }
+    else if(volumeSize<m_secondStageVolume) //Check is the size in the second stage.
+    {
+        m_volumeIcon->setPixmap(m_volumeSizeIcon[Volume2]);
+    }
+    else //Then all the other volume is in the third stage.
+    {
+        m_volumeIcon->setPixmap(m_volumeSizeIcon[Volume3]);
+    }
+    //Check the volume slider is the same as the current volume.
+    if(volumeSize!=m_volumeSlider->value())
+    {
+        m_volumeSlider->blockSignals(true);
+        m_volumeSlider->setValue(volumeSize);
+        m_volumeSlider->blockSignals(false);
+    }
 }
 
 void KNMusicMainPlayer::setPositionText(const qint64 &position)
@@ -528,8 +574,9 @@ void KNMusicMainPlayer::initialControlPanel()
     m_volumeIcon->setScaledContents(true);
     m_volumeIcon->setPixmap(m_volumeSizeIcon[NoVolume]);
     m_volumeIcon->setFixedSize(buttonSize>>1, buttonSize>>1);
-    m_volumeSilder=new KNVolumeSlider(this);
-    m_volumeSilder->setMinimumWidth(20);
+    m_volumeSlider=new KNVolumeSlider(this);
+    m_volumeSlider->setMinimumWidth(50);
+    m_volumeSlider->setMaximumWidth(100);
     //Configure label font.
     QPalette pal=m_duration->palette();
     pal.setColor(QPalette::WindowText, QColor(255,255,255));
@@ -597,7 +644,7 @@ void KNMusicMainPlayer::initialControlPanel()
     m_buttonRightLayout->setContentsMargins(buttonSize>>2,0,buttonSize>>2,0);
     m_buttonRightLayout->setSpacing(0);
     m_buttonRightLayout->addWidget(m_volumeIcon);
-    m_buttonRightLayout->addWidget(m_volumeSilder);
+    m_buttonRightLayout->addWidget(m_volumeSlider);
     m_buttonRightLayout->addStretch();
     buttonLayout->addLayout(m_buttonRightLayout, 1);
     buttonLayout->addWidget(m_duration, 0, Qt::AlignTop);

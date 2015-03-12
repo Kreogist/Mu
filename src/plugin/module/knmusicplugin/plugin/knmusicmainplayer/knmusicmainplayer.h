@@ -63,6 +63,7 @@ private slots:
     void onActionPositionChanged(const qint64 &position);
     void onActionDurationChanged(const qint64 &duration);
     void onActionPlayStateChanged(const int &state);
+    void onActionVolumeChanged(const int &volumeSize);
 
     void setPositionText(const qint64 &position);
 
@@ -133,7 +134,7 @@ private:
     QLabel *m_duration;
     QBoxLayout *m_buttonLeftLayout, *m_buttonRightLayout;
     KNLabelButton *m_volumeIcon;
-    KNVolumeSlider *m_volumeSilder;
+    KNVolumeSlider *m_volumeSlider;
     QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
             m_volumeSizeIcon[VolumeSizeCount];
     //Loop mode button.
@@ -147,6 +148,7 @@ private:
 
     //Backend.
     KNMusicBackend *m_backend=nullptr;
+    int m_firstStageVolume=0, m_secondStageVolume=0;
     //Header player.
     KNMusicHeaderPlayerBase *m_headerPlayer=nullptr;
     KNMusicNowPlayingBase *m_nowPlaying=nullptr;
