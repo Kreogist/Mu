@@ -42,29 +42,26 @@ KNPreferenceItemPanel::KNPreferenceItemPanel(QWidget *parent) :
 
 void KNPreferenceItemPanel::addTitle(QLabel *titleWidget, bool advanced)
 {
-    //Change parent relationship.
-    titleWidget->setParent(this);
-    //Check is advanced item. If yes, linked to advanced signal.
-    if(advanced)
-    {
-        setAdvancedItem(titleWidget);
-    }
-    //Add title widget.
-    m_mainLayout->insertWidget(m_mainLayout->count()-1,
-                               titleWidget);
+    addWidget(titleWidget, advanced);
 }
 
 void KNPreferenceItemPanel::addItem(KNPreferenceItem *item, bool advanced)
 {
-    //Change parent relationship.
-    item->setParent(this);
+    addWidget(item, advanced);
+}
+
+void KNPreferenceItemPanel::addWidget(QWidget *widget, bool advanced)
+{
+    //Change the parent relationship.
+    widget->setParent(this);
     //Check is advacned item. If yes, linked to advanced signal.
     if(advanced)
     {
-        setAdvancedItem(item);
+        setAdvancedWidget(widget);
     }
     //Add widget to layout.
-    m_mainLayout->insertWidget(m_mainLayout->count()-1, item);
+    m_mainLayout->insertWidget(m_mainLayout->count()-1,
+                               widget);
 }
 
 bool KNPreferenceItemPanel::advancedMode() const
@@ -80,7 +77,7 @@ void KNPreferenceItemPanel::setAdvancedMode(bool advancedMode)
     emit requireSetAdvancedVisible(m_advancedMode);
 }
 
-void KNPreferenceItemPanel::setAdvancedItem(QWidget *item)
+void KNPreferenceItemPanel::setAdvancedWidget(QWidget *item)
 {
     //Link the item.
     connect(this, &KNPreferenceItemPanel::requireSetAdvancedVisible,

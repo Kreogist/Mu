@@ -23,6 +23,7 @@ public:
     bool advancedMode() const;
     void addTitle(QLabel *title, bool advanced=false);
     void addItem(KNPreferenceItem *item, bool advanced=false);
+    void addWidget(QWidget *widget, bool advanced=false);
 
 signals:
     void requireSetAdvancedVisible(const bool &ok);
@@ -35,7 +36,7 @@ public slots:
     }
 
 private:
-    void setAdvancedItem(QWidget *item);
+    void setAdvancedWidget(QWidget *item);
     QBoxLayout *m_mainLayout;
     bool m_advancedMode=false;
 };
