@@ -26,6 +26,7 @@
 #include "knglassanimebutton.h"
 #include "knprogressslider.h"
 #include "knopacityanimebutton.h"
+#include "knvolumeslider.h"
 
 #include "knmusicheaderplayerbase.h"
 #include "knmusicnowplayingbase.h"
@@ -391,9 +392,12 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         m_controlButtons[i]->setFixedSize(buttonSize, buttonSize);
     }
-    m_loopMode->setFixedSize(buttonSize>>1, buttonSize>>1);
+    int iconButtonSize=buttonSize>>1;
+    m_loopMode->setFixedSize(iconButtonSize, iconButtonSize);
+    m_volumeIcon->setFixedSize(iconButtonSize, iconButtonSize);
     //Change the layout spacing.
     m_buttonLeftLayout->setContentsMargins(buttonSize>>2,0,buttonSize>>2,0);
+    m_buttonRightLayout->setContentsMargins(buttonSize>>2,0,buttonSize>>2,0);
     //Calculate the elements label maximum width.
     m_maxElementWidth=width()/3-(fontSize+5+maxLabelWidth);
     //Update information.
@@ -507,9 +511,9 @@ void KNMusicMainPlayer::initialControlPanel()
     m_loopStateIcon[Shuffle]=QPixmap(":/plugin/music/loopmode/Random.png");
 
     m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_0.png");
-    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_1.png");
-    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_2.png");
-    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_3.png");
+    m_volumeSizeIcon[Volume1]=QPixmap(":/plugin/music/mainplayer/volume_1.png");
+    m_volumeSizeIcon[Volume2]=QPixmap(":/plugin/music/mainplayer/volume_2.png");
+    m_volumeSizeIcon[Volume3]=QPixmap(":/plugin/music/mainplayer/volume_3.png");
     const int buttonSize=46;
     //Initial the control widgets.
     m_controlWidget=new QWidget(this);
@@ -519,10 +523,13 @@ void KNMusicMainPlayer::initialControlPanel()
     m_duration=new QLabel(this);
     m_position=new KNEditableLabel(this);
     m_loopMode=new KNOpacityAnimeButton(this);
-    m_loopMode->setFixedSize(buttonSize>>1,
-                             buttonSize>>1);
+    m_loopMode->setFixedSize(buttonSize>>1, buttonSize>>1);
     m_volumeIcon=new KNLabelButton(this);
-    m_volumeIcon->setPixmap(QPixmap(""));
+    m_volumeIcon->setScaledContents(true);
+    m_volumeIcon->setPixmap(m_volumeSizeIcon[NoVolume]);
+    m_volumeIcon->setFixedSize(buttonSize>>1, buttonSize>>1);
+    m_volumeSilder=new KNVolumeSlider(this);
+    m_volumeSilder->setMinimumWidth(20);
     //Configure label font.
     QPalette pal=m_duration->palette();
     pal.setColor(QPalette::WindowText, QColor(255,255,255));
@@ -587,8 +594,10 @@ void KNMusicMainPlayer::initialControlPanel()
     }
     m_buttonRightLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                        controlLayout->widget());
-    m_buttonRightLayout->setContentsMargins(0,0,0,0);
+    m_buttonRightLayout->setContentsMargins(buttonSize>>2,0,buttonSize>>2,0);
     m_buttonRightLayout->setSpacing(0);
+    m_buttonRightLayout->addWidget(m_volumeIcon);
+    m_buttonRightLayout->addWidget(m_volumeSilder);
     m_buttonRightLayout->addStretch();
     buttonLayout->addLayout(m_buttonRightLayout, 1);
     buttonLayout->addWidget(m_duration, 0, Qt::AlignTop);

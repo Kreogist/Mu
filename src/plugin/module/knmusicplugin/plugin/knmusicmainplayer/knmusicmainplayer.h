@@ -28,6 +28,7 @@ class KNEditableLabel;
 class KNOpacityAnimeButton;
 class KNGlassAnimeButton;
 class KNProgressSlider;
+class KNVolumeSlider;
 class KNMusicMainLyrics;
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
@@ -132,6 +133,7 @@ private:
     QLabel *m_duration;
     QBoxLayout *m_buttonLeftLayout, *m_buttonRightLayout;
     KNLabelButton *m_volumeIcon;
+    KNVolumeSlider *m_volumeSilder;
     QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
             m_volumeSizeIcon[VolumeSizeCount];
     //Loop mode button.
