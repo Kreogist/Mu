@@ -119,11 +119,21 @@ private:
         ButtonNext,
         ControlButtonsCount
     };
+    enum VolumeSizes
+    {
+        NoVolume,
+        Volume1,
+        Volume2,
+        Volume3,
+        VolumeSizeCount
+    };
+
     KNGlassAnimeButton *m_controlButtons[ControlButtonsCount];
     QLabel *m_duration;
-    QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount];
     QBoxLayout *m_buttonLeftLayout, *m_buttonRightLayout;
     KNLabelButton *m_volumeIcon;
+    QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
+            m_volumeSizeIcon[VolumeSizeCount];
     //Loop mode button.
     KNOpacityAnimeButton *m_loopMode;
     //Status.

@@ -104,6 +104,11 @@
         <file>music/mainplayer/pause.png</file>
         <file>music/mainplayer/play.png</file>
         <file>music/mainplayer/previous.png</file>
+        <file>music/mainplayer/volume_0.png</file>
+        <file>music/mainplayer/volume_1.png</file>
+        <file>music/mainplayer/volume_2.png</file>
+        <file>music/mainplayer/volume_3.png</file>
+        <file>music/mainplayer/volume_mute.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>windows/next.png</file>

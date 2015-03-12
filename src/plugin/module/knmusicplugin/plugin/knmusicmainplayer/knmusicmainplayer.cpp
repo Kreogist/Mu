@@ -505,6 +505,11 @@ void KNMusicMainPlayer::initialControlPanel()
     m_loopStateIcon[RepeatTrack]=QPixmap(":/plugin/music/loopmode/RepeatSingle.png");
     m_loopStateIcon[RepeatAll]=QPixmap(":/plugin/music/loopmode/Repeat.png");
     m_loopStateIcon[Shuffle]=QPixmap(":/plugin/music/loopmode/Random.png");
+
+    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_0.png");
+    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_1.png");
+    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_2.png");
+    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/mainplayer/volume_3.png");
     const int buttonSize=46;
     //Initial the control widgets.
     m_controlWidget=new QWidget(this);
