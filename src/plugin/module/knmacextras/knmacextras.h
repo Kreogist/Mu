@@ -44,6 +44,8 @@ private slots:
     void nextActivated(const QSystemTrayIcon::ActivationReason &reason);
 
 private:
+    inline void initialTrayIconControls();
+
     enum ThumbnailActions
     {
         PlayPrev,

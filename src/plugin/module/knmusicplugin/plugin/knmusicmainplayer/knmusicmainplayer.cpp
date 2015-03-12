@@ -124,7 +124,7 @@ void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
     int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
     m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
     //Set the volume slider to the backend volume size.
-    m_volumeSlider->setValue(m_backend->volume());
+    onActionVolumeChanged(m_backend->volume());
     //Link the volume slider to backend.
     connect(m_volumeSlider, &KNVolumeSlider::valueChanged,
             m_backend, &KNMusicBackend::setVolume);

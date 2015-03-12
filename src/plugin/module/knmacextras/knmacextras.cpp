@@ -22,35 +22,8 @@
 KNMacExtras::KNMacExtras(QObject *parent) :
     KNPlatformExtras(parent)
 {
-    //Initial the dummy menu.
-    m_dummyMenu=new QMenu;
-
-    //Initial the playing and pause icon.
-    m_playIcon=QIcon(":/platform/mac/play.png");
-    m_pauseIcon=QIcon(":/platform/mac/pause.png");
-
-    //Configure the button icons.
-    QIcon actionIcons[ThumbnailActionsCount];
-    actionIcons[PlayPrev]=QIcon(":/platform/mac/prev.png");
-    actionIcons[PlayAndPause]=m_playIcon;
-    actionIcons[PlayNext]=QIcon(":/platform/mac/next.png");
-
-    //Initial all the system tray icon button.
-    for(int i=ThumbnailActionsCount-1; i>-1; i--)
-    {
-        m_actionButtons[i]=new QSystemTrayIcon(this);
-        m_actionButtons[i]->setContextMenu(m_dummyMenu);
-        m_actionButtons[i]->setIcon(QIcon(actionIcons[i]));
-        m_actionButtons[i]->show();
-    }
-
-    //Link the buttons.
-    connect(m_actionButtons[PlayPrev], &QSystemTrayIcon::activated,
-            this, &KNMacExtras::prevActivated);
-    connect(m_actionButtons[PlayAndPause], &QSystemTrayIcon::activated,
-            this, &KNMacExtras::playNPauseActivated);
-    connect(m_actionButtons[PlayNext], &QSystemTrayIcon::activated,
-            this, &KNMacExtras::nextActivated);
+    //Initial the tray icon.
+    initialTrayIconControls();
 }
 
 KNMacExtras::~KNMacExtras()
@@ -112,4 +85,37 @@ void KNMacExtras::nextActivated(const QSystemTrayIcon::ActivationReason &reason)
     {
         emit requirePlayNext();
     }
+}
+
+inline void KNMacExtras::initialTrayIconControls()
+{
+    //Initial the dummy menu.
+    m_dummyMenu=new QMenu;
+
+    //Initial the playing and pause icon.
+    m_playIcon=QIcon(":/platform/mac/play.png");
+    m_pauseIcon=QIcon(":/platform/mac/pause.png");
+
+    //Configure the button icons.
+    QIcon actionIcons[ThumbnailActionsCount];
+    actionIcons[PlayPrev]=QIcon(":/platform/mac/prev.png");
+    actionIcons[PlayAndPause]=m_playIcon;
+    actionIcons[PlayNext]=QIcon(":/platform/mac/next.png");
+
+    //Initial all the system tray icon button.
+    for(int i=ThumbnailActionsCount-1; i>-1; i--)
+    {
+        m_actionButtons[i]=new QSystemTrayIcon(this);
+        m_actionButtons[i]->setContextMenu(m_dummyMenu);
+        m_actionButtons[i]->setIcon(QIcon(actionIcons[i]));
+        m_actionButtons[i]->show();
+    }
+
+    //Link the buttons.
+    connect(m_actionButtons[PlayPrev], &QSystemTrayIcon::activated,
+            this, &KNMacExtras::prevActivated);
+    connect(m_actionButtons[PlayAndPause], &QSystemTrayIcon::activated,
+            this, &KNMacExtras::playNPauseActivated);
+    connect(m_actionButtons[PlayNext], &QSystemTrayIcon::activated,
+            this, &KNMacExtras::nextActivated);
 }

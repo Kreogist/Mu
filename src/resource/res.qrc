@@ -127,5 +127,6 @@
         <file>mac/pause.png</file>
         <file>mac/play.png</file>
         <file>mac/prev.png</file>
+        <file>mac/icon.png</file>
     </qresource>
 </RCC>
