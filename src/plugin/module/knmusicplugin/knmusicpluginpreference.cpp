@@ -67,7 +67,7 @@ void KNMusicPluginPreference::retranslate()
     m_items[LyricsFolder]->setCaption(tr("Lyrics Folder"));
     m_items[LyricsDownloadOnline]->setCaption(tr("Download Lyrics"));
     m_items[LyricsFont]->setCaption(tr("Lyrics Font"));
-    m_items[LyricsTextSpacing]->setCaption("Text Spacing");
+    m_items[LyricsTextSpacing]->setCaption(tr("Text Spacing"));
 }
 
 inline void KNMusicPluginPreference::initialItems()
