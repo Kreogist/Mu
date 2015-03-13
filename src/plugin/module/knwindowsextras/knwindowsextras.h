@@ -32,6 +32,7 @@ class QWinTaskbarButton;
 class QWinTaskbarProgress;
 class KNConfigure;
 class KNPreferenceItem;
+class KNExpandMainWindow;
 class KNWindowsExtras : public KNPlatformExtras
 {
     Q_OBJECT
@@ -46,6 +47,8 @@ public slots:
     void onActionPlayStateChanged(const bool &isPlay);
     void onActionMuteStateChanged(const bool &isMute);
     void onActionLoopStateChanged(const int &loopState);
+    void loadPreference();
+    void savePreference();
 
 private slots:
     void retranslate();
@@ -84,10 +87,9 @@ private:
     };
     QAction *m_trayIconActions[TrayIconMenuActionCount];
     QMenu *m_trayIconMenu;
-    QMainWindow *m_mainWindow;
+    KNExpandMainWindow *m_mainWindow=nullptr;
     enum PlatformPreferenceItems
     {
-        MinimizeToTray,
         CloseToTray,
         PlatformPreferenceItemsCount
     };

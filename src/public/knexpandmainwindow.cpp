@@ -17,6 +17,7 @@
  */
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QCloseEvent>
 
 #include "knconfigure.h"
 
@@ -39,7 +40,11 @@ void KNExpandMainWindow::closeEvent(QCloseEvent *event)
     //If the flag is enabled, .
     if(m_closeToIcon)
     {
-        ;
+        //Ignore the close event.
+        event->ignore();
+        //Hide the main window.
+        hide();
+        return;
     }
     //Emit about to close signal.
     emit windowAboutToClose();
@@ -47,6 +52,16 @@ void KNExpandMainWindow::closeEvent(QCloseEvent *event)
     backupGeometry();
     //Do the mainwindow close event.
     QMainWindow::closeEvent(event);
+}
+
+bool KNExpandMainWindow::closeToIcon() const
+{
+    return m_closeToIcon;
+}
+
+void KNExpandMainWindow::setCloseToIcon(bool closeToIcon)
+{
+    m_closeToIcon = closeToIcon;
 }
 
 void KNExpandMainWindow::setCacheConfigure(KNConfigure *cacheConfigure)

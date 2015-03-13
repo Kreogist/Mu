@@ -8,8 +8,8 @@
 #include <QBoxLayout>
 
 #include "knconfigure.h"
-#include "knpreferenceitem.h"
 
+#include "knpreferenceitem.h"
 #include "knpreferenceitempanel.h"
 
 #include <QDebug>
@@ -47,7 +47,10 @@ void KNPreferenceItemPanel::addTitle(QLabel *titleWidget, bool advanced)
 
 void KNPreferenceItemPanel::addItem(KNPreferenceItem *item, bool advanced)
 {
+    //Add widget to the panel.
     addWidget(item, advanced);
+    //Add the item to the list.
+    m_itemList.append(item);
 }
 
 void KNPreferenceItemPanel::addWidget(QWidget *widget, bool advanced)
@@ -62,6 +65,26 @@ void KNPreferenceItemPanel::addWidget(QWidget *widget, bool advanced)
     //Add widget to layout.
     m_mainLayout->insertWidget(m_mainLayout->count()-1,
                                widget);
+}
+
+void KNPreferenceItemPanel::loadConfigure()
+{
+    for(QLinkedList<KNPreferenceItem *>::iterator i=m_itemList.begin();
+        i!=m_itemList.end();
+        ++i)
+    {
+        (*i)->loadValue();
+    }
+}
+
+void KNPreferenceItemPanel::saveConfigure()
+{
+    for(QLinkedList<KNPreferenceItem *>::iterator i=m_itemList.begin();
+        i!=m_itemList.end();
+        ++i)
+    {
+        (*i)->saveValue();
+    }
 }
 
 bool KNPreferenceItemPanel::advancedMode() const

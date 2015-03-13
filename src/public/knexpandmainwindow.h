@@ -29,11 +29,13 @@ public:
     void setCacheConfigure(KNConfigure *cacheConfigure);
     void backupGeometry();
     void recoverGeometry();
+    bool closeToIcon() const;
 
 signals:
     void windowAboutToClose();
 
 public slots:
+    void setCloseToIcon(bool closeToIcon);
 
 protected:
     void closeEvent(QCloseEvent *event);

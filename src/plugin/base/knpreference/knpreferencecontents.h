@@ -30,7 +30,7 @@ public:
 signals:
 
 public slots:
-    void addPanelWidget(QWidget *widget);
+    void addPanelWidget(QWidget *panel);
     void setCurrentIndex(const int &index);
 
 private:

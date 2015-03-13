@@ -29,6 +29,7 @@
 #include "knpreferenceitempanel.h"
 #include "knpreferenceitem.h"
 #include "knpreferenceitemfactory.h"
+#include "knexpandmainwindow.h"
 
 #include "knwindowsextras.h"
 
@@ -54,6 +55,9 @@ KNWindowsExtras::KNWindowsExtras(QObject *parent) :
     //Initial the preference panel.
     initialPreferenceItems();
 
+    //Link apply preference request.
+    connect(KNGlobal::instance(), &KNGlobal::requireApplyPreference,
+            this, &KNWindowsExtras::loadPreference);
     //Link retranslate request.
     connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
             this, &KNWindowsExtras::retranslate);
@@ -67,7 +71,8 @@ KNWindowsExtras::~KNWindowsExtras()
 
 void KNWindowsExtras::setMainWindow(QMainWindow *mainWindow)
 {
-    m_mainWindow=mainWindow;
+    //Cast main window to expand main window.
+    m_mainWindow=static_cast<KNExpandMainWindow *>(mainWindow);
     //Native window hack.
     //We need to do this becuase windowHandle() only returns an available value
     //when the QWidget is a native widget. Using this hack to make the main
@@ -109,7 +114,6 @@ void KNWindowsExtras::retranslate()
 
     //Update preference items.
     m_extraPreferenceTitle->setText(tr("Tray Icon"));
-    m_extraPreferenceItem[MinimizeToTray]->setCaption(tr("Minimize to tray icon"));
     m_extraPreferenceItem[CloseToTray]->setCaption(tr("Close to tray icon"));
 }
 
@@ -141,9 +145,27 @@ void KNWindowsExtras::onActionTrayMenuActionTriggered(const int &index)
     switch(index)
     {
     case Exit:
+        //Force set close to icon false.
+        m_mainWindow->setCloseToIcon(false);
+        //Then close the main window.
+        m_mainWindow->close();
         break;
     default:
         break;
+    }
+}
+
+void KNWindowsExtras::loadPreference()
+{
+    m_mainWindow->setCloseToIcon(m_extraConfigure->getData("CloseToIcon",
+                                                           false).toBool());
+}
+
+void KNWindowsExtras::savePreference()
+{
+    for(int i=0; i<PlatformPreferenceItemsCount; i++)
+    {
+        m_extraPreferenceItem[i]->saveValue();
     }
 }
 
@@ -219,11 +241,6 @@ inline void KNWindowsExtras::initialPreferenceItems()
     m_extraConfigure->setCaption("Windows Extras");
     KNGlobal::instance()->systemConfigure()->addSubConfigure(m_extraConfigure);
     //Initial the items.
-    m_extraPreferenceItem[MinimizeToTray]=
-            KNPreferenceItemFactory::create(SwitcherItem,
-                                            "MinimizeToIcon",
-                                            m_extraConfigure,
-                                            false);
     m_extraPreferenceItem[CloseToTray]=
             KNPreferenceItemFactory::create(SwitcherItem,
                                             "CloseToIcon",
@@ -234,6 +251,5 @@ inline void KNWindowsExtras::initialPreferenceItems()
     KNPreferenceItemPanel *generalPanel=
             KNGlobal::instance()->generalPreferencePanel();
     generalPanel->addTitle(m_extraPreferenceTitle);
-    generalPanel->addItem(m_extraPreferenceItem[MinimizeToTray]);
     generalPanel->addItem(m_extraPreferenceItem[CloseToTray]);
 }

@@ -54,6 +54,16 @@ void KNMacExtras::onActionLoopStateChanged(const int &loopState)
     Q_UNUSED(loopState)
 }
 
+void KNMacExtras::loadPreference()
+{
+    ;
+}
+
+void KNMacExtras::savePreference()
+{
+    ;
+}
+
 void KNMacExtras::prevActivated(const QSystemTrayIcon::ActivationReason &reason)
 {
     //Check the reason.
