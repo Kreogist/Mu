@@ -22,6 +22,7 @@
 #include <QPlainTextEdit>
 #include <QStandardItem>
 
+#include "knglobal.h"
 #include "kniconframelineedit.h"
 #include "knclockwheel.h"
 #include "knemptystatewidget.h"
@@ -49,7 +50,6 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     QPalette buttonPalette=m_searchLyrics->palette();
     buttonPalette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
     m_searchLyrics->setPalette(buttonPalette);
-    m_searchLyrics->setText("Search");
     connect(m_searchLyrics, SIGNAL(clicked()),
             this, SIGNAL(requireSearchLyrics()));
 
@@ -84,6 +84,11 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     searchRequestLayout->addWidget(m_searchLyrics);
 
     mainLayout->addWidget(m_lyricsList);
+
+    //Link retranslate request.
+    connect(KNGlobal::instance(), &KNGlobal::requireRetranslate,
+            this, &KNMusicLyricsDownloadWidget::retranslate);
+    retranslate();
 }
 
 KNMusicLyricsDownloadWidget::~KNMusicLyricsDownloadWidget()
@@ -172,6 +177,11 @@ void KNMusicLyricsDownloadWidget::clearPreview()
     //Clear the plain text preview.
     m_plainTextPreview->clear();
     m_playerPreview->clearLyrics();
+}
+
+void KNMusicLyricsDownloadWidget::retranslate()
+{
+    m_searchLyrics->setText(tr("Search"));
 }
 
 inline void KNMusicLyricsDownloadWidget::initialListView()

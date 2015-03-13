@@ -4,7 +4,7 @@
 <context>
     <name>KNCategorySwitcherWidget</name>
     <message>
-        <location filename="../plugin/base/knmainwindowcategoryswitcher/kncategoryswitcherwidget.cpp" line="86"/>
+        <location filename="../plugin/base/knmainwindowcategoryswitcher/kncategoryswitcherwidget.cpp" line="81"/>
         <source>Preference</source>
         <translation>设置</translation>
     </message>
@@ -12,62 +12,62 @@
 <context>
     <name>KNFontDialog</name>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="30"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="33"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="32"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="35"/>
         <source>Size</source>
         <translation>大小</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="34"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="37"/>
         <source>Styles</source>
         <translation>样式</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="104"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="107"/>
         <source>Bold</source>
         <translation>加粗</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="105"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="108"/>
         <source>Italic</source>
         <translation>倾斜</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="106"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="109"/>
         <source>Underline</source>
         <translation>下划线</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="107"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="110"/>
         <source>Strike Out</source>
         <translation>删除线</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="108"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="111"/>
         <source>Kerning</source>
         <translation>文字紧靠</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="115"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="118"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="118"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="121"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="124"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="127"/>
         <source>Sample</source>
         <translation>文字样例</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="130"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="133"/>
         <source>AaBbYyZz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -75,7 +75,7 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../public/knglobal.cpp" line="334"/>
+        <location filename="../public/knglobal.cpp" line="338"/>
         <source>Byte</source>
         <translation>字节</translation>
     </message>
@@ -83,12 +83,12 @@
 <context>
     <name>KNMusicAlbumDetail</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="728"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="726"/>
         <source>Unknown Artist</source>
         <translation>未知艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="734"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="732"/>
         <source>Various Artists</source>
         <translation>多个艺术家</translation>
     </message>
@@ -490,6 +490,14 @@ To add songs to library, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicLyricsDownloadWidget</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="184"/>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLyricsManager</name>
     <message>
         <source>Lyrics Folder</source>
@@ -507,39 +515,24 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicMainPlayer</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="73"/>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="74"/>
         <source>Artist</source>
-        <translation type="unfinished">艺术家</translation>
+        <translation type="obsolete">艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="75"/>
         <source>Album</source>
-        <translation type="unfinished">专辑</translation>
+        <translation type="obsolete">专辑</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="76"/>
         <source>Genre</source>
-        <translation type="unfinished">流派</translation>
+        <translation type="obsolete">流派</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="77"/>
         <source>Year</source>
-        <translation type="unfinished">年代</translation>
+        <translation type="obsolete">年代</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="78"/>
-        <source>Quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="79"/>
         <source>Location</source>
-        <translation type="unfinished">路径</translation>
+        <translation type="obsolete">路径</translation>
     </message>
 </context>
 <context>
@@ -717,7 +710,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="178"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="176"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -725,22 +718,22 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPluginPreference</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="78"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="80"/>
         <source>Lyrics</source>
         <translation>歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="81"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="83"/>
         <source>Lyrics Folder</source>
         <translation>歌词文件夹</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="82"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="84"/>
         <source>Download Lyrics</source>
         <translation>下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="83"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="85"/>
         <source>Lyrics Font</source>
         <translation>歌词字体</translation>
     </message>
@@ -906,12 +899,12 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceGeneral</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="86"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="88"/>
         <source>Library</source>
         <translation>媒体库</translation>
     </message>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="88"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="90"/>
         <source>Library Path</source>
         <translation>媒体库路径</translation>
     </message>
@@ -930,32 +923,32 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceItemFont</name>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="135"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="136"/>
         <source>, Size: </source>
         <translation>，大小：</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="137"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="138"/>
         <source>, Bold</source>
         <translation>，加粗</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="138"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="139"/>
         <source>, Italic</source>
         <translation>，倾斜</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="139"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="140"/>
         <source>, Underline</source>
         <translation>，下划线</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="140"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="141"/>
         <source>, Strike Out</source>
         <translation>，删除线</translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="141"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="142"/>
         <source>, Kerning</source>
         <translation>，文字紧靠</translation>
     </message>

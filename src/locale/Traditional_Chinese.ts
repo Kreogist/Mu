@@ -4,7 +4,7 @@
 <context>
     <name>KNCategorySwitcherWidget</name>
     <message>
-        <location filename="../plugin/base/knmainwindowcategoryswitcher/kncategoryswitcherwidget.cpp" line="86"/>
+        <location filename="../plugin/base/knmainwindowcategoryswitcher/kncategoryswitcherwidget.cpp" line="81"/>
         <source>Preference</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12,62 +12,62 @@
 <context>
     <name>KNFontDialog</name>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="30"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="33"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="32"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="35"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="34"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="37"/>
         <source>Styles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="104"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="107"/>
         <source>Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="105"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="108"/>
         <source>Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="106"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="109"/>
         <source>Underline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="107"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="110"/>
         <source>Strike Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="108"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="111"/>
         <source>Kerning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="115"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="118"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="118"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="121"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="124"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="127"/>
         <source>Sample</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/knfontdialog.cpp" line="130"/>
+        <location filename="../plugin/sdk/knfontdialog.cpp" line="133"/>
         <source>AaBbYyZz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -75,7 +75,7 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../public/knglobal.cpp" line="334"/>
+        <location filename="../public/knglobal.cpp" line="338"/>
         <source>Byte</source>
         <translation type="unfinished"></translation>
     </message>
@@ -83,12 +83,12 @@
 <context>
     <name>KNMusicAlbumDetail</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="728"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="726"/>
         <source>Unknown Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="734"/>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp" line="732"/>
         <source>Various Artists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -466,48 +466,18 @@ To add songs to library, drag your songs here.</source>
     </message>
 </context>
 <context>
-    <name>KNMusicM3UParser</name>
+    <name>KNMusicLyricsDownloadWidget</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.cpp" line="38"/>
-        <source>M3U Playlist</source>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="184"/>
+        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>KNMusicMainPlayer</name>
+    <name>KNMusicM3UParser</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="73"/>
-        <source>Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="74"/>
-        <source>Artist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="75"/>
-        <source>Album</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="76"/>
-        <source>Genre</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="77"/>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="78"/>
-        <source>Quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp" line="79"/>
-        <source>Location</source>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.cpp" line="38"/>
+        <source>M3U Playlist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -666,7 +636,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="178"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicplugin.cpp" line="176"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -674,22 +644,22 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPluginPreference</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="78"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="80"/>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="81"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="83"/>
         <source>Lyrics Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="82"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="84"/>
         <source>Download Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="83"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="85"/>
         <source>Lyrics Font</source>
         <translation type="unfinished"></translation>
     </message>
@@ -855,12 +825,12 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceGeneral</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="86"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="88"/>
         <source>Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="88"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="90"/>
         <source>Library Path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -868,32 +838,32 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceItemFont</name>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="135"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="136"/>
         <source>, Size: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="137"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="138"/>
         <source>, Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="138"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="139"/>
         <source>, Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="139"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="140"/>
         <source>, Underline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="140"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="141"/>
         <source>, Strike Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="141"/>
+        <location filename="../plugin/sdk/preference/knpreferenceitemfont.cpp" line="142"/>
         <source>, Kerning</source>
         <translation type="unfinished"></translation>
     </message>
