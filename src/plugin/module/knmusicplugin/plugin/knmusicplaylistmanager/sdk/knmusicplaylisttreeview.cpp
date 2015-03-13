@@ -30,7 +30,7 @@ KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent) :
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x10, 0x10, 0x10));
     pal.setColor(QPalette::Window, QColor(0x20, 0x20, 0x20));
-    pal.setColor(QPalette::Highlight, QColor(0x60, 0x60, 0x60));
+    pal.setColor(QPalette::Highlight, QColor(0xff, 0xff, 0xff, 0x50));
     pal.setColor(QPalette::HighlightedText, QColor(0xf7, 0xcf, 0x3d));
     setPalette(pal);
 

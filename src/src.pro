@@ -228,7 +228,6 @@ SOURCES += \
     plugin/sdk/messagebox/knmessageblock.cpp \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetaildialog.cpp \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailpanel.cpp \
-    core/knexpandmainwindow.cpp \
     plugin/sdk/knemptystatewidget.cpp \
     public/knlocalemanager.cpp \
     plugin/base/knpreference/knpreferencelanguageitem.cpp \
@@ -320,7 +319,8 @@ SOURCES += \
     plugin/sdk/knmouseunclickablewidget.cpp \
     plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainlyrics.cpp \
     plugin/module/knmacextras/knmacextras.cpp \
-    plugin/sdk/knglassanimebutton.cpp
+    plugin/sdk/knglassanimebutton.cpp \
+    public/knexpandmainwindow.cpp
 
 HEADERS += \
     core/knsingleapplication.h \
@@ -438,7 +438,6 @@ HEADERS += \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetaildialog.h \
     plugin/module/knmusicplugin/sdk/knmusicdetaildialogbase.h \
     plugin/module/knmusicplugin/plugin/knmusicdetaildialog/knmusicdetailpanel.h \
-    core/knexpandmainwindow.h \
     plugin/sdk/knemptystatewidget.h \
     public/knlocalemanager.h \
     plugin/base/knpreference/knpreferencelanguageitem.h \
@@ -539,7 +538,8 @@ HEADERS += \
     plugin/sdk/knmouseunclickablewidget.h \
     plugin/module/knmusicplugin/plugin/knmusicmainplayer/knmusicmainlyrics.h \
     plugin/module/knmacextras/knmacextras.h \
-    plugin/sdk/knglassanimebutton.h
+    plugin/sdk/knglassanimebutton.h \
+    public/knexpandmainwindow.h
 
 RESOURCES += \
     resource/res.qrc

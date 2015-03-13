@@ -17,6 +17,7 @@ class KNConfigure;
 class KNConfigureManager;
 class KNFontManager;
 class KNLocaleManager;
+class KNPreferenceItemPanel;
 class KNGlobal : public QObject
 {
     Q_OBJECT
@@ -48,6 +49,8 @@ public:
                            const QString &destinationDirPath);
     static bool renameFile(const QString &originalPath,
                            const QString &currentPath);
+    KNPreferenceItemPanel *generalPreferencePanel() const;
+    void setGeneralPreferencePanel(KNPreferenceItemPanel *generalPreferencePanel);
 
 signals:
     void requireRetranslate();
@@ -91,6 +94,7 @@ private:
     QString m_storageUnit[StorageUnitCount];
     explicit KNGlobal(QObject *parent = 0);
     KNConfigure *m_globalConfigure;
+    KNPreferenceItemPanel *m_generalPreferencePanel;
     KNConfigureManager *m_configureManager;
     KNFontManager *m_fontManager;
     KNLocaleManager *m_localeManager;

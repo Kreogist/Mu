@@ -38,8 +38,11 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *event);
 
+private slots:
+
 private:
     KNConfigure *m_cacheConfigure;
+    bool m_closeToIcon=false;
 };
 
 #endif // KNEXPANDMAINWINDOW_H

@@ -66,6 +66,7 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 
     //Initial the general configure and panel.
     m_generalPreference=new KNPreferenceGeneral(this);
+    KNGlobal::instance()->setGeneralPreferencePanel(m_generalPreference->panel());
     //Link the request.
     connect(m_generalPreference, &KNPreferenceGeneral::libraryDirMoved,
             this, &KNPreferencePanel::requireUpdateInfrastructure);
