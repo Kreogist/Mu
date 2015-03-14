@@ -32,7 +32,7 @@ public:
     bool closeToIcon() const;
 
 signals:
-    void windowAboutToClose();
+    void aboutToClose();
 
 public slots:
     void setCloseToIcon(bool closeToIcon);

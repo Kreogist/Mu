@@ -61,10 +61,15 @@ void KNPreference::loadConfigure()
     m_preferencePanel->loadConfigures();
 }
 
+void KNPreference::saveConfigure()
+{
+    m_preferencePanel->saveConfigures();
+}
+
 void KNPreference::onActionHidePreference()
 {
     //Save preference first.
-    m_preferencePanel->saveConfigures();
+    saveConfigure();
     //Ask to apply the preference.
     emit requireApplyPreference();
     //Ask to hide preference.

@@ -30,14 +30,12 @@ KNExpandMainWindow::KNExpandMainWindow(QWidget *parent) :
 {
     //Set properties.
     setMinimumSize(730, 432);
-
-    //Generate the
 }
 
 void KNExpandMainWindow::closeEvent(QCloseEvent *event)
 {
     //When user is going to close the main window, check the close to icon flag.
-    //If the flag is enabled, .
+    //If the flag is enabled, just hide the window and do nothing.
     if(m_closeToIcon)
     {
         //Ignore the close event.
@@ -47,7 +45,7 @@ void KNExpandMainWindow::closeEvent(QCloseEvent *event)
         return;
     }
     //Emit about to close signal.
-    emit windowAboutToClose();
+    emit aboutToClose();
     //Save the geometry.
     backupGeometry();
     //Do the mainwindow close event.

@@ -28,6 +28,7 @@ public slots:
     virtual void setCategoryText(const int &index, const QString &title)=0;
     virtual void setCurrentIndex(const int &index)=0;
     virtual void loadConfigure()=0;
+    virtual void saveConfigure()=0;
 };
 
 #endif // KNPREFERENCEPLUGIN_H

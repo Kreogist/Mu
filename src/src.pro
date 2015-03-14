@@ -62,7 +62,7 @@ macx: {
     LIBS += -L/usr/local/lib/
     LIBS += -framework CoreFoundation
 
-    CONFIG += libbass
+    CONFIG += libbass FFMpeg
     QMAKE_LFLAGS += -framework CoreFoundation
     RC_FILE += resource/icon/mac/mu.icns
     ICON += resource/icon/mac/mu.icns

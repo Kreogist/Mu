@@ -124,8 +124,8 @@ void KNPluginManager::setMainWindow(KNExpandMainWindow *mainWindow)
         pal.setColor(QPalette::WindowText, QColor(255,255,255));
         m_mainWindow->setPalette(pal);
         //Connect destory signal.
-        connect(m_mainWindow, &KNExpandMainWindow::windowAboutToClose,
-                this, &KNPluginManager::onActionMainWindowDestory);
+        connect(m_mainWindow, &KNExpandMainWindow::aboutToClose,
+                this, &KNPluginManager::onActionMainWindowClose);
         //Recover the geometry.
         m_mainWindow->recoverGeometry();
     }
@@ -174,9 +174,10 @@ void KNPluginManager::start()
     m_mainWindow->show();
 }
 
-void KNPluginManager::onActionMainWindowDestory()
+void KNPluginManager::onActionMainWindowClose()
 {
-    ;
+    //Save the preference when close the window.
+    m_preferencePlugin->saveConfigure();
 }
 
 inline void KNPluginManager::setApplicationInformation()

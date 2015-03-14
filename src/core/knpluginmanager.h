@@ -55,7 +55,7 @@ signals:
 public slots:
 
 private slots:
-    void onActionMainWindowDestory();
+    void onActionMainWindowClose();
 
 private:
     inline void setApplicationInformation();
