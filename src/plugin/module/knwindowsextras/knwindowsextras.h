@@ -19,18 +19,26 @@
 #define KNWINDOWSEXTRAS_H
 
 #include <QPixmap>
+#include <QSystemTrayIcon>
 
 #include "knplatformextras.h"
 
+class QMenu;
+class QAction;
+class QLabel;
 class QWinThumbnailToolButton;
 class QWinThumbnailToolBar;
 class QWinTaskbarButton;
 class QWinTaskbarProgress;
+class KNConfigure;
+class KNPreferenceItem;
+class KNExpandMainWindow;
 class KNWindowsExtras : public KNPlatformExtras
 {
     Q_OBJECT
 public:
     explicit KNWindowsExtras(QObject *parent = 0);
+    ~KNWindowsExtras();
     void setMainWindow(QMainWindow *mainWindow);
 
 signals:
@@ -39,13 +47,20 @@ public slots:
     void onActionPlayStateChanged(const bool &isPlay);
     void onActionMuteStateChanged(const bool &isMute);
     void onActionLoopStateChanged(const int &loopState);
+    void loadPreference();
+    void savePreference();
 
 private slots:
+    void retranslate();
     void onActionPlayAndPause();
+    void onActionTrayIconActivate(const QSystemTrayIcon::ActivationReason &reason);
+    void onActionTrayMenuActionTriggered(const int &index);
 
 private:
     inline void setButtonIcon(const int &index, const QPixmap &icon);
     inline void initialThumbnailToolBar();
+    inline void initialTrayIcon();
+    inline void initialPreferenceItems();
     QWinThumbnailToolBar *m_thumbnailToolbar;
     QWinTaskbarButton *m_taskbarButton;
     QWinTaskbarProgress *m_taskbarProgress;
@@ -64,6 +79,23 @@ private:
     QPixmap m_playIcon, m_pauseIcon, m_muteOn, m_muteOff,
             m_loopStates[LoopStateButtonStateCount];
     QWinThumbnailToolButton *m_thumbnailButtons[ThumbnailActionsCount];
+    QSystemTrayIcon *m_trayIcon;
+    enum TrayIconMenuActions
+    {
+        Exit,
+        TrayIconMenuActionCount
+    };
+    QAction *m_trayIconActions[TrayIconMenuActionCount];
+    QMenu *m_trayIconMenu;
+    KNExpandMainWindow *m_mainWindow=nullptr;
+    enum PlatformPreferenceItems
+    {
+        CloseToTray,
+        PlatformPreferenceItemsCount
+    };
+    QLabel *m_extraPreferenceTitle;
+    KNPreferenceItem *m_extraPreferenceItem[PlatformPreferenceItemsCount];
+    KNConfigure *m_extraConfigure;
 };
 
 #endif // KNWINDOWSEXTRAS_H

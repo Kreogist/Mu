@@ -45,6 +45,8 @@ public slots:
     virtual void onActionPlayStateChanged(const bool &isPlay)=0;
     virtual void onActionMuteStateChanged(const bool &isMute)=0;
     virtual void onActionLoopStateChanged(const int &loopState)=0;
+    virtual void loadPreference()=0;
+    virtual void savePreference()=0;
 };
 
 #endif // KNPLATFORMEXTRAS_H

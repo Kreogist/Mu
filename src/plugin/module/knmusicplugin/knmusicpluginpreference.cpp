@@ -58,22 +58,6 @@ KNConfigure *KNMusicPluginPreference::configure()
     return m_musicConfigure;
 }
 
-void KNMusicPluginPreference::loadConfigures()
-{
-    for(int i=0; i<MusicPreferenceItemCount; i++)
-    {
-        m_items[i]->loadValue();
-    }
-}
-
-void KNMusicPluginPreference::saveConfigures()
-{
-    for(int i=0; i<MusicPreferenceItemCount; i++)
-    {
-        m_items[i]->saveValue();
-    }
-}
-
 void KNMusicPluginPreference::retranslate()
 {
     //Update titles.
@@ -83,7 +67,7 @@ void KNMusicPluginPreference::retranslate()
     m_items[LyricsFolder]->setCaption(tr("Lyrics Folder"));
     m_items[LyricsDownloadOnline]->setCaption(tr("Download Lyrics"));
     m_items[LyricsFont]->setCaption(tr("Lyrics Font"));
-    m_items[LyricsTextSpacing]->setCaption("Text Spacing");
+    m_items[LyricsTextSpacing]->setCaption(tr("Text Spacing"));
 }
 
 inline void KNMusicPluginPreference::initialItems()

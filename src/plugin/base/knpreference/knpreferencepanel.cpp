@@ -66,6 +66,7 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 
     //Initial the general configure and panel.
     m_generalPreference=new KNPreferenceGeneral(this);
+    KNGlobal::instance()->setGeneralPreferencePanel(m_generalPreference->panel());
     //Link the request.
     connect(m_generalPreference, &KNPreferenceGeneral::libraryDirMoved,
             this, &KNPreferencePanel::requireUpdateInfrastructure);
@@ -105,21 +106,21 @@ int KNPreferencePanel::addCategory(KNCategoryPlugin *plugin)
 
 void KNPreferencePanel::loadConfigures()
 {
-    for(QLinkedList<KNCategoryPreference *>::iterator i=m_preferenceList.begin();
-        i!=m_preferenceList.end();
+    for(QLinkedList<KNPreferenceItemPanel *>::iterator i=m_panelList.begin();
+        i!=m_panelList.end();
         ++i)
     {
-        (*i)->loadConfigures();
+        (*i)->loadConfigure();
     }
 }
 
 void KNPreferencePanel::saveConfigures()
 {
-    for(QLinkedList<KNCategoryPreference *>::iterator i=m_preferenceList.begin();
-        i!=m_preferenceList.end();
+    for(QLinkedList<KNPreferenceItemPanel *>::iterator i=m_panelList.begin();
+        i!=m_panelList.end();
         ++i)
     {
-        (*i)->saveConfigures();
+        (*i)->saveConfigure();
     }
 }
 
@@ -167,7 +168,7 @@ void KNPreferencePanel::addCategoryPreference(KNCategoryPreference *preference)
     KNPreferenceItemPanel *panel=preference->panel();
     m_contents->addPanelWidget(panel);
     //Save the preference.
-    m_preferenceList.append(preference);
+    m_panelList.append(panel);
     //Link the panel.
     connect(m_categoryList, &KNPreferenceCategory::requireShowNormal,
             panel, &KNPreferenceItemPanel::setNormalMode);

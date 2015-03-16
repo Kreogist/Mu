@@ -46,10 +46,10 @@ KNPreferenceContents::KNPreferenceContents(QWidget *parent) :
     mainLayout->addWidget(m_panelSwitcher);
 }
 
-void KNPreferenceContents::addPanelWidget(QWidget *widget)
+void KNPreferenceContents::addPanelWidget(QWidget *panel)
 {
     //Simply add widget to switcher.
-    m_panelSwitcher->addWidget(widget);
+    m_panelSwitcher->addWidget(panel);
 }
 
 void KNPreferenceContents::setCurrentIndex(const int &index)

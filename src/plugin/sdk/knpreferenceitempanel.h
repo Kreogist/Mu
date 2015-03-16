@@ -8,6 +8,7 @@
 #define KNPREFERENCEITEMPANEL_H
 
 #include <QHash>
+#include <QLinkedList>
 
 #include <QScrollArea>
 
@@ -29,6 +30,8 @@ signals:
     void requireSetAdvancedVisible(const bool &ok);
 
 public slots:
+    void loadConfigure();
+    void saveConfigure();
     void setAdvancedMode(bool advancedMode);
     void setNormalMode(bool normalMode)
     {
@@ -39,6 +42,7 @@ private:
     void setAdvancedWidget(QWidget *item);
     QBoxLayout *m_mainLayout;
     bool m_advancedMode=false;
+    QLinkedList<KNPreferenceItem *> m_itemList;
 };
 
 #endif // KNPREFERENCEITEMPANEL_H

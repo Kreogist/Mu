@@ -644,23 +644,28 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPluginPreference</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="80"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="64"/>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="83"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="67"/>
         <source>Lyrics Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="84"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="68"/>
         <source>Download Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="85"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="69"/>
         <source>Lyrics Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="70"/>
+        <source>Text Spacing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -825,12 +830,12 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceGeneral</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="88"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="72"/>
         <source>Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="90"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="74"/>
         <source>Library Path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -890,8 +895,26 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferencePanel</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="142"/>
+        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="143"/>
         <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNWindowsExtras</name>
+    <message>
+        <location filename="../plugin/module/knwindowsextras/knwindowsextras.cpp" line="113"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knwindowsextras/knwindowsextras.cpp" line="116"/>
+        <source>Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knwindowsextras/knwindowsextras.cpp" line="117"/>
+        <source>Close to tray icon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

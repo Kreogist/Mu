@@ -468,3 +468,13 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Retranslate every thing.
     retranslate();
 }
+
+KNPreferenceItemPanel *KNGlobal::generalPreferencePanel() const
+{
+    return m_generalPreferencePanel;
+}
+
+void KNGlobal::setGeneralPreferencePanel(KNPreferenceItemPanel *generalPreferencePanel)
+{
+    m_generalPreferencePanel = generalPreferencePanel;
+}

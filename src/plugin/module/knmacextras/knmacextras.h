@@ -37,6 +37,8 @@ public slots:
     void onActionPlayStateChanged(const bool &isPlay);
     void onActionMuteStateChanged(const bool &isMute);
     void onActionLoopStateChanged(const int &loopState);
+    void loadPreference();
+    void savePreference();
 
 private slots:
     void prevActivated(const QSystemTrayIcon::ActivationReason &reason);

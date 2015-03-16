@@ -29,17 +29,22 @@ public:
     void setCacheConfigure(KNConfigure *cacheConfigure);
     void backupGeometry();
     void recoverGeometry();
+    bool closeToIcon() const;
 
 signals:
     void windowAboutToClose();
 
 public slots:
+    void setCloseToIcon(bool closeToIcon);
 
 protected:
     void closeEvent(QCloseEvent *event);
 
+private slots:
+
 private:
     KNConfigure *m_cacheConfigure;
+    bool m_closeToIcon=false;
 };
 
 #endif // KNEXPANDMAINWINDOW_H

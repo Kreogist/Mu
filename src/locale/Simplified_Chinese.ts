@@ -718,24 +718,29 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPluginPreference</name>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="80"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="64"/>
         <source>Lyrics</source>
         <translation>歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="83"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="67"/>
         <source>Lyrics Folder</source>
         <translation>歌词文件夹</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="84"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="68"/>
         <source>Download Lyrics</source>
         <translation>下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="85"/>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="69"/>
         <source>Lyrics Font</source>
         <translation>歌词字体</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/knmusicpluginpreference.cpp" line="70"/>
+        <source>Text Spacing</source>
+        <translation>歌词行间距</translation>
     </message>
 </context>
 <context>
@@ -899,12 +904,12 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceGeneral</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="88"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="72"/>
         <source>Library</source>
         <translation>媒体库</translation>
     </message>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="90"/>
+        <location filename="../plugin/base/knpreference/knpreferencegeneral.cpp" line="74"/>
         <source>Library Path</source>
         <translation>媒体库路径</translation>
     </message>
@@ -975,9 +980,27 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferencePanel</name>
     <message>
-        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="142"/>
+        <location filename="../plugin/base/knpreference/knpreferencepanel.cpp" line="143"/>
         <source>General</source>
         <translation>通用</translation>
+    </message>
+</context>
+<context>
+    <name>KNWindowsExtras</name>
+    <message>
+        <location filename="../plugin/module/knwindowsextras/knwindowsextras.cpp" line="113"/>
+        <source>Exit</source>
+        <translation>退出</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knwindowsextras/knwindowsextras.cpp" line="116"/>
+        <source>Tray Icon</source>
+        <translation>系统托盘图标</translation>
+    </message>
+    <message>
+        <location filename="../plugin/module/knwindowsextras/knwindowsextras.cpp" line="117"/>
+        <source>Close to tray icon</source>
+        <translation>关闭到系统托盘</translation>
     </message>
 </context>
 </TS>

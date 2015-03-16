@@ -70,7 +70,7 @@ private:
     KNPreferenceContents *m_contents;
     KNPreferenceGeneral *m_generalPreference;
 
-    QLinkedList<KNCategoryPreference *> m_preferenceList;
+    QLinkedList<KNPreferenceItemPanel *> m_panelList;
 };
 
 #endif // KNPREFERENCEPANEL_H

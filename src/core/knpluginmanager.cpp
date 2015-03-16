@@ -261,10 +261,15 @@ inline void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 
 inline void KNPluginManager::loadPlatformExtras(KNPlatformExtras *plugin)
 {
-    //Add this to the plugin list.
-    m_pluginList.append(plugin);
     //Save the platform extras.
     m_platformExtra=plugin;
     //Set main window.
      m_platformExtra->setMainWindow(m_mainWindow);
+     //Load preference.
+     m_platformExtra->loadPreference();
+     //Link configure save signal.
+     connect(this, &KNPluginManager::requireSaveConfigure,
+             plugin, &KNPlatformExtras::savePreference);
+    //Add this to the plugin list.
+    m_pluginList.append(plugin);
 }
