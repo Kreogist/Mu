@@ -466,6 +466,14 @@ To add songs to library, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicLyricsDownloadWidget</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="184"/>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicM3UParser</name>
     <message>
         <location filename="../plugin/module/knmusicplugin/plugin/knmusicplaylistmanager/plugin/knmusicm3uparser/knmusicm3uparser.cpp" line="38"/>

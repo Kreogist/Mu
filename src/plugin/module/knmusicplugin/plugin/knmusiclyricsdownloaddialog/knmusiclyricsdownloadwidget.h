@@ -59,6 +59,9 @@ public slots:
     void showLyricsItem(QStandardItem *item);
     void clearPreview();
 
+private slots:
+    void retranslate();
+
 private:
     inline void initialListView();
     inline void initialPlainTextPreview();

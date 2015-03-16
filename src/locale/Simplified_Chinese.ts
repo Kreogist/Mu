@@ -490,6 +490,14 @@ To add songs to library, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicLyricsDownloadWidget</name>
+    <message>
+        <location filename="../plugin/module/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="184"/>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLyricsManager</name>
     <message>
         <source>Lyrics Folder</source>
