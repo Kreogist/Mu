@@ -33,9 +33,19 @@ TRANSLATIONS += locale/Simplified_Chinese.ts \
                 locale/Traditional_Chinese.ts
 
 # Enable processor instruction sets when using release mode.
-#release: {
-#    CONFIG += mmx sse sse2 sse3
-#}
+msvc: {
+
+}
+gcc: {
+    CONFIG += mmx sse sse2 sse3
+    QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3 -finline-functions
+    win32:{
+        QMAKE_CXXFLAGS_RELEASE += -fforce-addr
+    }
+    linux:{
+        QMAKE_CXXFLAGS_RELEASE += -fforce-addr
+    }
+}
 
 # Windows configure
 win32: {
