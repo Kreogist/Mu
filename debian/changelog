@@ -1,3 +1,18 @@
+mu (0.8) unstable; urgency=medium
+
+  * New main player UI.
+  * New shuffle loop mode.
+  * New lyrics download dialog.
+  * New preference item cancel button for canceling single option.
+  * New Mac OS X tray controls.
+  * New Windows taskbar controls for up/down volume, slient and loop mode.
+  * Support minimized to tray icon on Windows.
+  * Improve UI performance by replaced QOpacityGraphicsEffect to QPainter.
+  * Fixed the wrong lyrics information provided bug in TTPod server module.
+  * Fixed the mouse penetrate bug in album art mode.
+
+ -- Saki Tojo <tomguts@126.com> Tue, 17 Mar 2015 08:30:00 +0800
+
 mu (0.7) unstable; urgency=medium
 
   * Improve initial running speed. (Project S)

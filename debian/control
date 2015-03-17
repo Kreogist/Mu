@@ -1,7 +1,7 @@
 Source: mu
 Section: sound
 Priority: optional
-Maintainer: 宋文武 <iyzsong@gmail.com>
+Maintainer: Tojo Saki <tomguts@126.com>
 Build-Depends: debhelper (>= 9),
                qt5-default, libphonon4qt5-dev,
                libavformat-dev,
