@@ -1,0 +1,42 @@
+# C++ objects and libs
+
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.dll
+*.dylib
+
+# Qt-es
+
+*.pro.user
+*.pro.user.*
+moc_*.cpp
+qrc_*.cpp
+Makefile
+*-build-*
+
+# build dir
+/build-*
+
+# debian build dir
+/debian/files
+/debian/*.debhelper.log
+/debian/*.substvars
+
+#gedit temp file
+*~
+
+#Mac Spotlight Search
+
+.DS_Store
+
+#astyle temp files
+Thumbs.db
+
+#doxygen
+doc/html
+
