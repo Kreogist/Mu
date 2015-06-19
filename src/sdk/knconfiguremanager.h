@@ -1,0 +1,103 @@
+/*
+ * Copyright (C) Kreogist Dev Team
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#ifndef KNCONFIGUREMANAGER_H
+#define KNCONFIGUREMANAGER_H
+
+#include <QObject>
+
+#define knConf (KNConfigureManager::instance())
+
+class KNConfigure;
+/*!
+ * \brief The KNConfigureManager class is a manager of three kind of configure:
+ * cache, system and user. \n
+ * Cache configure is some temporary data generate from the last session or
+ * runtime libraries. Data like the window geometry should be stored in this
+ * configure. The file name should be: cache.json\n
+ * System configure is some data dependent on the operating system. Like the
+ * file path. The file name should be: system.json\n
+ * User configure is some configure like binary switchers or customized settings
+ * like the color of the button or text font of the label. The file name should
+ * be: user.json\n
+ * All of these file should be stored as UTF-8, plain text format.\n
+ * You can get the KNConfigure class from the configure manager. It will provide
+ * those three configure class.
+ */
+class KNConfigureManager : public QObject
+{
+    Q_OBJECT
+public:
+    enum ConfigureType
+    {
+        Cache,
+        System,
+        User,
+        ConfigureTypeCount
+    };
+
+    /*!
+     * \brief Get the singleton instance of the configure manager.
+     * \return The instance of configure manager.
+     */
+    static KNConfigureManager *instance();
+
+    /*!
+     * \brief Construct a KNConfigureManager class.
+     * \param parent The parent object of the configure manager.
+     */
+    explicit KNConfigureManager(QObject *parent = 0);
+
+    /*!
+     * \brief Get the current configure folder path.
+     * \return The folder which should contains the files of three kinds of
+     * configure.
+     */
+    QString folderPath() const;
+
+    /*!
+     * \brief Get the configure class.
+     * \param index The configure index in ConfigureType.
+     * \return The specific configure.
+     */
+    KNConfigure *configure(int index);
+
+public slots:
+    /*!
+     * \brief Set the folder path which contains the configure files. \n
+     * If the folder path is not exist, the path won't be set.\n
+     * If you set the folder path to empty, it will load the configure under the
+     * application path.
+     * \param folderPath The configure file folder path.
+     */
+    void setFolderPath(const QString &folderPath);
+
+    /*!
+     * \brief Reload the configure from the folder path.
+     */
+    void reloadConfigure();
+
+private:
+    inline void loadConfigureFile(const QString &filePath, int type);
+    static KNConfigureManager *m_instance;
+
+    QString m_folderPath;
+    KNConfigure *m_configures[ConfigureTypeCount];
+};
+
+#endif // KNCONFIGUREMANAGER_H
