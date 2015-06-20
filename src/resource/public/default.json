@@ -1,4 +1,7 @@
 {
     "Application" : {
+    },
+    "MainWindow" : {
+        "WindowText" : "FFFFFF"
     }
 }

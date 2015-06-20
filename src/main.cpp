@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
     KNMainWindow mainWindow;
     //Set the main window to plugin manager.
     pluginManager.setMainWindow(&mainWindow);
+    //Load plugins.
+    pluginManager.loadPlugins();
     //Launch the application.
     pluginManager.launchApplication();
     //Spread message loop.

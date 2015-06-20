@@ -58,7 +58,16 @@ KNMainWindow *KNPluginManager::mainWindow() const
 
 void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
 {
-    m_mainWindow = mainWindow;
+    if(m_mainWindow==nullptr)
+    {
+        //Save the main window object.
+        m_mainWindow = mainWindow;
+    }
+}
+
+void KNPluginManager::loadPlugins()
+{
+    ;
 }
 
 void KNPluginManager::launchApplication()

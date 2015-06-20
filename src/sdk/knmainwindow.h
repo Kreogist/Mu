@@ -21,10 +21,25 @@
 
 #include <QMainWindow>
 
+class KNConfigure;
+/*!
+ * \brief The KNMainWindow class provides a main application window for mu.\n
+ * It contains several parts: header, main widget and preference.
+ *  * Header\n
+ * The header parts of the application. Managed header player and search box.
+ *  * Main widget\n
+ * The main part of the widget. It contains the categories and music shops.
+ *  * Preference\n
+ * The preference panel. It contains all the preference settings.
+ */
 class KNMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct KNMainWindow class.
+     * \param parent The parent widget object.
+     */
     explicit KNMainWindow(QWidget *parent = 0);
 
 signals:
@@ -32,6 +47,12 @@ signals:
 public slots:
 
 private slots:
+
+private:
+    inline void recoverGeometry();
+    inline int getCacheValue(const QString &valueName);
+    inline void zoomParameter(int &parameter, const qreal &ratio);
+    KNConfigure *m_cacheConfigure;
 };
 
 #endif // KNMAINWINDOW_H

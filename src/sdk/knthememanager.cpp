@@ -20,6 +20,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QApplication>
+#include <QWidget>
 
 #include "knutil.h"
 
@@ -71,6 +72,14 @@ KNThemeManager::KNThemeManager(QObject *parent) :
 QPalette KNThemeManager::getPalette(const QString &name) const
 {
     return m_paletteList.value(name, QApplication::palette());
+}
+
+void KNThemeManager::registerWidget(QWidget *widget)
+{
+    //Add the widget to widget list.
+    m_widgetList.append(widget);
+    //Give the registered widget its palette.
+    widget->setPalette(getPalette(widget->objectName()));
 }
 
 void KNThemeManager::loadThemeFiles(const QString &themeDirPath)
@@ -204,8 +213,13 @@ void KNThemeManager::loadTheme(const QString &themeFilePath)
     {
         //Save the palette map.
         m_paletteList=paletteList;
-        //Emit the palette changed signal.
-        emit themeChanged();
+        //Update all the widget's palette in the widget list.
+        for(QLinkedList<QWidget *>::iterator i=m_widgetList.begin();
+            i!=m_widgetList.end();
+            ++i)
+        {
+            (*i)->setPalette(getPalette((*i)->objectName()));
+        }
     }
 }
 

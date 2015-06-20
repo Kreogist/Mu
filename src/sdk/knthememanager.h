@@ -20,10 +20,13 @@
 #define KNTHEMEMANAGER_H
 
 #include <QPalette>
+#include <QLinkedList>
 
 #include <QObject>
 
 #define knTheme (KNThemeManager::instance())
+
+#define THEME_THIS_WIDGET (KNThemeManager::instance()->registerWidget(this))
 
 /*!
  * \brief The KNThemeManager class is the global theme manager. It manages all
@@ -53,27 +56,14 @@ public:
      */
     QPalette getPalette(const QString &name) const;
 
-    template<typename Func2>
     /*!
-     * \brief Link the theme change signal with the paletteUpdate() slot which
-     * should be provide by the receiver.
-     * \param receiver The recevier object.
-     * \param paletteUpdate The paletteUpdate slot.
+     * \brief Register a widget in the theme widget list. The theme manager will
+     * automatically update it's palette when a new theme list has been set.
+     * \param widget The widget will be registered.
      */
-    void link(const typename
-              QtPrivate::FunctionPointer<Func2>::Object *receiver,
-              Func2 paletteUpdate)
-    {
-        //Link the theme change signal to the receiver's paletteUpdate slot.
-        connect(this, &KNThemeManager::themeChanged, receiver, paletteUpdate);
-    }
+    void registerWidget(QWidget *widget);
 
 signals:
-    /*!
-     * \brief When the a new theme file has been loaded, this signal will be
-     * emitted.
-     */
-    void themeChanged();
 
 public slots:
     /*!
@@ -116,6 +106,7 @@ private:
         }
     };
 
+    QLinkedList<QWidget *> m_widgetList;
     QList<ThemeItem> m_themeList;
     int m_currentTheme;
     QHash<QString, QPalette> m_paletteList;

@@ -49,10 +49,18 @@ signals:
 
 public slots:
     /*!
-     * \brief Set the application main window class.
+     * \brief Set the application main window class.\n
+     * Only the first main window object will be set. When you called this
+     * function more than once, it will ignore those request except the first
+     * time.
      * \param mainWindow The main window class.
      */
     void setMainWindow(KNMainWindow *mainWindow);
+
+    /*!
+     * \brief Load all the plugins.
+     */
+    void loadPlugins();
 
     /*!
      * \brief Show the main window, start to launch the application.
