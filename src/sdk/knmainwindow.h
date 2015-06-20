@@ -22,13 +22,16 @@
 #include <QMainWindow>
 
 class KNConfigure;
+class KNMainWindowContainer;
+class KNMainWindowHeaderBase;
 /*!
  * \brief The KNMainWindow class provides a main application window for mu.\n
  * It contains several parts: header, main widget and preference.
  *  * Header\n
  * The header parts of the application. Managed header player and search box.
  *  * Main widget\n
- * The main part of the widget. It contains the categories and music shops.
+ * The main part of the widget. It contains the categories and music shops. It
+ * should be a kind of tab manager.
  *  * Preference\n
  * The preference panel. It contains all the preference settings.
  */
@@ -41,6 +44,27 @@ public:
      * \param parent The parent widget object.
      */
     explicit KNMainWindow(QWidget *parent = 0);
+
+    /*!
+     * \brief Set the header widget.
+     * \param header The header widget pointer. It will only save the first
+     * widget you set.
+     */
+    void setHeader(KNMainWindowHeaderBase *header);
+
+    /*!
+     * \brief Set the main widget.
+     * \param mainWidget The main widget pointer. It will only save the first
+     * widget you set.
+     */
+    void setMainWidget(QWidget *mainWidget);
+
+    /*!
+     * \brief Set the preference panel widget.
+     * \param preferencePanel The perference panel widget pointer. It will only
+     * save the frist widget you set.
+     */
+    void setPreferencePanel(QWidget *preferencePanel);
 
 signals:
 
@@ -57,7 +81,9 @@ private:
     inline int getCacheValue(const QString &valueName);
     inline void setCacheValue(const QString &valueName, const int &value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
+
     KNConfigure *m_cacheConfigure;
+    KNMainWindowContainer *m_container;
 };
 
 #endif // KNMAINWINDOW_H

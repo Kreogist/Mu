@@ -23,6 +23,9 @@
 #include "knmainwindow.h"
 #include "knversion.h"
 
+//Plugins
+#include "knmainwindowheader.h"
+
 #include "knpluginmanager.h"
 
 KNPluginManager::KNPluginManager(QObject *parent) :
@@ -69,7 +72,8 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
 
 void KNPluginManager::loadPlugins()
 {
-    ;
+    //Initial the infrastructure;
+    m_mainWindow->setHeader(new KNMainWindowHeader);
 }
 
 void KNPluginManager::launchApplication()

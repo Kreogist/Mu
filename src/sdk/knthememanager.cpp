@@ -220,6 +220,8 @@ void KNThemeManager::loadTheme(const QString &themeFilePath)
         {
             (*i)->setPalette(getPalette((*i)->objectName()));
         }
+        //Emit the theme change signal.
+        emit themeChange();
     }
 }
 

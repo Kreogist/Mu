@@ -26,8 +26,6 @@
 
 #define knTheme (KNThemeManager::instance())
 
-#define THEME_THIS_WIDGET (KNThemeManager::instance()->registerWidget(this))
-
 /*!
  * \brief The KNThemeManager class is the global theme manager. It manages all
  * the palette of the widget according to the object name.
@@ -64,6 +62,10 @@ public:
     void registerWidget(QWidget *widget);
 
 signals:
+    /*!
+     * \brief When the theme file changed, this signal will emit.
+     */
+    void themeChange();
 
 public slots:
     /*!

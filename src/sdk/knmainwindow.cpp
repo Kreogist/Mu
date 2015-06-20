@@ -21,15 +21,23 @@
 #include "knglobal.h"
 #include "knconfigure.h"
 #include "knthememanager.h"
+#include "knmainwindowcontainer.h"
+
+//Ports
+#include "knmainwindowheaderbase.h"
 
 #include "knmainwindow.h"
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
-    m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow"))
+    m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
+    m_container(new KNMainWindowContainer(this))
 {
     setObjectName("MainWindow");
     //Set properties.
+    setAutoFillBackground(true);
+    setCentralWidget(m_container);
+    setContentsMargins(0,0,0,0);
     setMinimumSize(730, 432);
     setWindowIcon(QIcon("://icon/mu.png"));
 #ifdef Q_OS_MACX
@@ -37,9 +45,24 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     setWindowTitle(qApp->applicationDisplayName());
 #endif
     //Add main window to theme list.
-    THEME_THIS_WIDGET;
+    knTheme->registerWidget(this);
     //Recover the geometry.
     recoverGeometry();
+}
+
+void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
+{
+    m_container->setHeader(header);
+}
+
+void KNMainWindow::setMainWidget(QWidget *mainWidget)
+{
+    m_container->setMainWidget(mainWidget);
+}
+
+void KNMainWindow::setPreferencePanel(QWidget *preferencePanel)
+{
+    m_container->setPreferencePanel(preferencePanel);
 }
 
 void KNMainWindow::closeEvent(QCloseEvent *event)

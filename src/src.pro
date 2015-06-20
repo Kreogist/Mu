@@ -68,7 +68,9 @@ SOURCES += \
     sdk/knutil.cpp \
     sdk/knfontmanager.cpp \
     sdk/knlocalemanager.cpp \
-    sdk/knthememanager.cpp
+    sdk/knthememanager.cpp \
+    sdk/knmainwindowcontainer.cpp \
+    core/knmainwindowheader.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -81,7 +83,10 @@ HEADERS += \
     sdk/knutil.h \
     sdk/knfontmanager.h \
     sdk/knlocalemanager.h \
-    sdk/knthememanager.h
+    sdk/knthememanager.h \
+    sdk/knmainwindowcontainer.h \
+    sdk/knmainwindowheaderbase.h \
+    core/knmainwindowheader.h
 
 RESOURCES += \
     resource/res.qrc

@@ -2,6 +2,14 @@
     "Application" : {
     },
     "MainWindow" : {
-        "WindowText" : "FFFFFF"
+        "Parent" : "Application",
+        "Window" : "#000000",
+        "WindowText" : "#FFFFFF"
+    },
+    "MainWindowHeader" :
+    {
+        "Parent" : "MainWindow",
+        "Window" : "#101010",
+        "Text" : "#9F9F9F"
     }
 }

@@ -86,7 +86,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Generate the theme manager.
     KNThemeManager::initial(this);
 
-    //Initial the infrastructure
+    //Initial the infrastructure.
     initialInfrastrcture();
     //Update the infrastructure.
 
