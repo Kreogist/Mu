@@ -23,6 +23,7 @@
 #include "knconfiguremanager.h"
 #include "knfontmanager.h"
 #include "knlocalemanager.h"
+#include "knthememanager.h"
 
 #include "knglobal.h"
 
@@ -74,18 +75,20 @@ KNGlobal::KNGlobal(QObject *parent) :
 
     //Initial the managers.
     //Gerenate the configure manager.
-    new KNConfigureManager(this);
+    KNConfigureManager::initial(this);
     //Generate the font manager.
-    new KNFontManager(this);
+    KNFontManager::initial(this);
     //Generate the locale manager.
-    new KNLocaleManager(this);
+    KNLocaleManager::initial(this);
+    //Generate the theme manager.
+    KNThemeManager::initial(this);
 
     //Initial the infrastructure
     initialInfrastrcture();
     //Update the infrastructure.
 
     //Link the retranslate.
-    linkRetranslate(this, &KNGlobal::retranslate);
+    knI18n->link(this, &KNGlobal::retranslate);
     retranslate();
 }
 
@@ -161,15 +164,12 @@ void KNGlobal::initialInfrastrcture()
     knFont->setGlobalFont("WenQuanYi Micro Hei");
 
     //Initial the locale manager.
-    //Link the locale manager's signal to current signal.
-    connect(knI18n, &KNLocaleManager::languageChange,
-            this, &KNGlobal::languageChange);
     //Load the language in language folder.
 #ifdef Q_OS_LINUX
     //Thanks for Sou Bunnbu:
     //For Linux, we should also find langauges at /usr/share/Kreogist/mu, here's
     //the default package resource provide place.
-    knI18n->loadLanguageInFolder("/usr/share/Kreogist/mu/Language");
+    knI18n->loadLanguageFiles("/usr/share/Kreogist/mu/Language");
 #else
     knI18n->loadLanguageFiles(m_dirPath[ResourceDir]+"/Language");
 #endif
@@ -179,4 +179,17 @@ void KNGlobal::initialInfrastrcture()
     knI18n->setDefaultLanguage();
     //Load the language stored in the configure file.
     knI18n->setLanguage(m_globalConfigure->data("Language").toString());
+
+    //Initial the theme manager.
+    //Load the theme in theme folder. It's familiar with the language folder.
+#ifdef Q_OS_LINUX
+    knTheme->loadThemeFiles("/usr/share/Kreogist/mu/Theme");
+#else
+    knTheme->loadThemeFiles(m_dirPath[ResourceDir]+"/Theme");
+#endif
+    //Load the current theme file.
+    //Like the language, we will load theme twice. Default first, user next.
+    knTheme->setTheme(0);
+    //Load the theme in the configure file.
+    knTheme->setTheme(m_globalConfigure->data("Theme").toString());
 }

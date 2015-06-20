@@ -109,29 +109,7 @@ public:
      */
     KNConfigure *userConfigure();
 
-    template<typename Func2>
-    /*!
-     * \brief Link the language change signal with the retranslate slot which
-     * should be provide by the receiver.\n
-     * You should make the retranslate function as a public slot.
-     * \param receiver The recevier object.
-     * \param retranslate The retranslate slot.
-     */
-    void linkRetranslate(const typename
-                         QtPrivate::FunctionPointer<Func2>::Object *receiver,
-                         Func2 retranslate)
-    {
-        //Link the language change signal to the receiver's retranslate slot.
-        connect(this, &KNGlobal::languageChange, receiver, retranslate);
-    }
-
 signals:
-    /*!
-     * \brief When the language file change, this signal will be emitted. All
-     * the multi-locale module should connect this signal with it's
-     * retranslate() slot.
-     */
-    void languageChange();
 
 public slots:
     /*!

@@ -3,5 +3,6 @@
         <file>public/language.json</file>
         <file>public/English.png</file>
         <file>public/noIcon.png</file>
+        <file>public/default.json</file>
     </qresource>
 </RCC>

@@ -20,10 +20,32 @@
 #define KNUTIL_H
 
 #include <QString>
+#include <QColor>
 
 class KNUtil
 {
 public:
+    /*!
+     * \brief Parse a color from a string. The format of the string can be: \n
+     *  * RGB
+     *  * #RGB
+     *  * RRGGBB
+     *  * #RRGGBB
+     *  * RRGGBBAA
+     *  * #RRGGBBAA
+     * All the R, G, B and A above can be a hex number range 0-F.
+     * \param data The color data string.
+     * \return A QColor parsed from the string.
+     */
+    static QColor parseColor(const QString &data);
+
+    /*!
+     * \brief Simplified a file path. Sometimes the file path may be like:
+     * /usr/bin//a, or /usr/bin/../bin/a. Both these path will be simplified to
+     * /usr/bin/a.
+     * \param path The file path.
+     * \return The simplified file path.
+     */
     static QString simplifiedPath(const QString &path);
 };
 

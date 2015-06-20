@@ -52,16 +52,18 @@ public:
     };
 
     /*!
-     * \brief Get the singleton instance of the configure manager.
+     * \brief Get the singleton instance of the configure manager. Before the
+     * initial() has been called, this function will return nullptr.
      * \return The instance of configure manager.
      */
     static KNConfigureManager *instance();
 
     /*!
-     * \brief Construct a KNConfigureManager class.
-     * \param parent The parent object of the configure manager.
+     * \brief Initial the manager, generate the instance with the given parent
+     * object.\n
+     * Only the first time will create a instance.
      */
-    explicit KNConfigureManager(QObject *parent = 0);
+    static void initial(QObject *parent = 0);
 
     /*!
      * \brief Get the current configure folder path.
@@ -93,7 +95,9 @@ public slots:
     void reloadConfigure();
 
 private:
+    explicit KNConfigureManager(QObject *parent = 0);
     inline void loadConfigureFile(const QString &filePath, int type);
+
     static KNConfigureManager *m_instance;
 
     QString m_folderPath;

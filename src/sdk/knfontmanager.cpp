@@ -29,14 +29,18 @@ KNFontManager *KNFontManager::instance()
     return m_instance;
 }
 
+void KNFontManager::initial(QObject *parent)
+{
+    if(m_instance==nullptr)
+    {
+        m_instance=new KNFontManager(parent);
+    }
+}
+
 KNFontManager::KNFontManager(QObject *parent) :
     QObject(parent)
 {
-    //Check the singleton instance first.
-    if(m_instance==nullptr)
-    {
-        m_instance=this;
-    }
+    ;
 }
 
 void KNFontManager::loadCustomFontFolder(const QString &folderPath)

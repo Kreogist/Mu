@@ -40,10 +40,11 @@ public:
     static KNThemeManager *instance();
 
     /*!
-     * \brief Construct KNThemeManager with a given parent.
-     * \param parent The parent object of the KNThemeManager.
+     * \brief Initial the manager, generate the instance with the given parent
+     * object.\n
+     * Only the first time will create a instance.
      */
-    explicit KNThemeManager(QObject *parent = 0);
+    static void initial(QObject *parent = 0);
 
     /*!
      * \brief Get the palette of a object according to the object name.
@@ -52,7 +53,27 @@ public:
      */
     QPalette getPalette(const QString &name) const;
 
+    template<typename Func2>
+    /*!
+     * \brief Link the theme change signal with the paletteUpdate() slot which
+     * should be provide by the receiver.
+     * \param receiver The recevier object.
+     * \param paletteUpdate The paletteUpdate slot.
+     */
+    void link(const typename
+              QtPrivate::FunctionPointer<Func2>::Object *receiver,
+              Func2 paletteUpdate)
+    {
+        //Link the theme change signal to the receiver's paletteUpdate slot.
+        connect(this, &KNThemeManager::themeChanged, receiver, paletteUpdate);
+    }
+
 signals:
+    /*!
+     * \brief When the a new theme file has been loaded, this signal will be
+     * emitted.
+     */
+    void themeChanged();
 
 public slots:
     /*!
@@ -61,9 +82,28 @@ public slots:
      */
     void loadThemeFiles(const QString &themeDirPath);
 
+    /*!
+     * \brief Set the current theme according to the index in the theme list.
+     * \param index The theme index.
+     */
+    void setTheme(const int &index);
+
+    /*!
+     * \brief Set the theme according to the theme name.
+     * \param themeName The theme name.
+     */
+    void setTheme(const QString &themeName);
+
 private:
     static KNThemeManager *m_instance;
-    static QMap<QString, QPalette::ColorRole> m_colorRoleList;
+    explicit KNThemeManager(QObject *parent = 0);
+    inline void addTheme(const QString &name,
+                         const QString &path,
+                         const QPixmap &preview);
+    inline void loadTheme(const QString &themeFilePath);
+    inline void parsePalette(const QString &name,
+                             QJsonObject *data,
+                             QHash<QString, QPalette> &map);
 
     struct ThemeItem
     {
@@ -77,7 +117,9 @@ private:
     };
 
     QList<ThemeItem> m_themeList;
+    int m_currentTheme;
     QHash<QString, QPalette> m_paletteList;
+    QHash<QString, QPalette::ColorRole> m_colorRoleList;
 };
 
 #endif // KNTHEMEMANAGER_H

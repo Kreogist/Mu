@@ -34,17 +34,22 @@ KNLocaleManager *KNLocaleManager::instance()
     return m_instance;
 }
 
+void KNLocaleManager::initial(QObject *parent)
+{
+    //Check the instance first.
+    if(m_instance==nullptr)
+    {
+        m_instance=new KNLocaleManager(parent);
+    }
+}
+
 KNLocaleManager::KNLocaleManager(QObject *parent) :
     QObject(parent),
     m_translator(new QTranslator(this)),
     m_noLanguageIcon(QPixmap("://public/noIcon.png")),
     m_currentLangauge(-1)
 {
-    //Check the instance first.
-    if(m_instance==nullptr)
-    {
-        m_instance=this;
-    }
+    ;
 }
 
 void KNLocaleManager::loadLanguageFiles(const QString &languageDir)

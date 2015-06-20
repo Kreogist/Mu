@@ -41,10 +41,11 @@ public:
     static KNFontManager *instance();
 
     /*!
-     * \brief Construct a KNFontManager class.
-     * \param parent The parent object of the font manager.
+     * \brief Initial the manager, generate the instance with the given parent
+     * object.\n
+     * Only the first time will create a instance.
      */
-    explicit KNFontManager(QObject *parent = 0);
+    static void initial(QObject *parent = 0);
 
     /*!
      * \brief Load all the font in from a folder. Notice: this function won't
@@ -84,6 +85,7 @@ signals:
 public slots:
 
 private:
+    explicit KNFontManager(QObject *parent = 0);
     static KNFontManager *m_instance;
 };
 

@@ -32,15 +32,19 @@ KNConfigureManager *KNConfigureManager::instance()
     return m_instance;
 }
 
-KNConfigureManager::KNConfigureManager(QObject *parent) :
-    QObject(parent),
-    m_folderPath(QString())
+void KNConfigureManager::initial(QObject *parent)
 {
     //Set the current instance as the singleton instance.
     if(m_instance==nullptr)
     {
-        m_instance=this;
+        m_instance=new KNConfigureManager(parent);
     }
+}
+
+KNConfigureManager::KNConfigureManager(QObject *parent) :
+    QObject(parent),
+    m_folderPath(QString())
+{
     //Initial the configures.
     for(int i=0; i<ConfigureTypeCount; i++)
     {

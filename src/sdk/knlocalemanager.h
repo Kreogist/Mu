@@ -44,10 +44,11 @@ public:
     static KNLocaleManager *instance();
 
     /*!
-     * \brief Construct a KNLocaleManager class.
-     * \param parent The parent object.
+     * \brief Initial the manager, generate the instance with the given parent
+     * object.\n
+     * Only the first time will create a instance.
      */
-    explicit KNLocaleManager(QObject *parent = 0);
+    static void initial(QObject *parent = 0);
 
     /*!
      * \brief Load the information about languages, load all the data about the
@@ -56,12 +57,26 @@ public:
      */
     void loadLanguageFiles(const QString &languageDir);
 
+    template<typename Func2>
+    /*!
+     * \brief Link the language change signal with the retranslate slot which
+     * should be provide by the receiver.
+     * \param receiver The recevier object.
+     * \param retranslate The retranslate slot.
+     */
+    void link(const typename
+              QtPrivate::FunctionPointer<Func2>::Object *receiver,
+              Func2 retranslate)
+    {
+        //Link the language change signal to the receiver's retranslate slot.
+        connect(this, &KNLocaleManager::languageChange, receiver, retranslate);
+    }
+
 signals:
     /*!
      * \brief When a new language file is loaded, this signal will emitted.
      */
     void languageChange();
-
 
 public slots:
     /*!
@@ -83,6 +98,7 @@ public slots:
 
 private:
     static KNLocaleManager *m_instance;
+    explicit KNLocaleManager(QObject *parent = 0);
     struct LanguageItem
     {
         QString key;
