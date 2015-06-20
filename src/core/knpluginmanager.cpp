@@ -19,6 +19,7 @@
 
 //Dependences.
 #include "knglobal.h"
+#include "knconfiguremanager.h"
 #include "knmainwindow.h"
 #include "knversion.h"
 
@@ -31,12 +32,13 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     //Set the application information.
     setApplicationInformation();
     //Initial the global.
-    new KNGlobal(this);
+    KNGlobal::initial(this);
 }
 
 KNPluginManager::~KNPluginManager()
 {
-    ;
+    //Save the configure.
+    knConf->saveConfigure();
 }
 
 void KNPluginManager::setApplicationInformation()

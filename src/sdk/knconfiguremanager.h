@@ -94,9 +94,15 @@ public slots:
      */
     void reloadConfigure();
 
+    /*!
+     * \brief Save the configure to the configure file.
+     */
+    void saveConfigure();
+
 private:
     explicit KNConfigureManager(QObject *parent = 0);
     inline void loadConfigureFile(const QString &filePath, int type);
+    inline void saveConfigureFile(const QString &filePath, int type);
 
     static KNConfigureManager *m_instance;
 

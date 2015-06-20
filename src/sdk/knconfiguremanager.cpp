@@ -66,9 +66,10 @@ KNConfigure *KNConfigureManager::configure(int index)
 void KNConfigureManager::setFolderPath(const QString &folderPath)
 {
     //Check if the folder path is vaild.
-    if(!(folderPath.isEmpty() || QFileInfo::exists(folderPath)))
+    if((!folderPath.isEmpty()) && !QFileInfo::exists(folderPath))
     {
-        return;
+        //Build the director.
+        QDir().mkpath(folderPath);
     }
     //Save the folder path.
     m_folderPath=folderPath;
@@ -88,6 +89,18 @@ void KNConfigureManager::reloadConfigure()
     loadConfigureFile(configureDir.filePath("user.json"), User);
 }
 
+void KNConfigureManager::saveConfigure()
+{
+    //If the folder path is empty, then set the folder path to application dir.
+    QDir configureDir(m_folderPath.isEmpty()?
+                          qApp->applicationDirPath():
+                          m_folderPath);
+    //Save the configure data.
+    saveConfigureFile(configureDir.filePath("cache.json"), Cache);
+    saveConfigureFile(configureDir.filePath("system.json"), System);
+    saveConfigureFile(configureDir.filePath("user.json"), User);
+}
+
 void KNConfigureManager::loadConfigureFile(const QString &filePath, int type)
 {
     //Check whether the type is valid.
@@ -102,11 +115,33 @@ void KNConfigureManager::loadConfigureFile(const QString &filePath, int type)
                 configureFile.open(QIODevice::ReadOnly))
         {
             //Parse the json object.
-            configureObject=QJsonDocument::fromJson(configureFile.readAll()).object();
+            configureObject=
+                    QJsonDocument::fromJson(configureFile.readAll()).object();
             //Close the file.
             configureFile.close();
         }
         //Set the object to configure.
         m_configures[type]->setDataObject(configureObject);
+    }
+}
+
+void KNConfigureManager::saveConfigureFile(const QString &filePath, int type)
+{
+    //Check whether the type is valid.
+    if(type<ConfigureTypeCount && type>-1)
+    {
+        //Load the file.
+        QFile configureFile(filePath);
+        //Open the configure file in write only mode.
+        if(configureFile.open(QIODevice::WriteOnly))
+        {
+            //Generate the Json document.
+            QJsonDocument configureDocument=
+                    QJsonDocument(m_configures[type]->dataObject());
+            //Write the Json data to the configure file.
+            configureFile.write(configureDocument.toJson());
+            //Close file.
+            configureFile.close();
+        }
     }
 }

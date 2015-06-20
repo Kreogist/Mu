@@ -56,16 +56,16 @@ public:
     };
 
     /*!
-     * \brief Construct a KNGlobal.
-     * \param parent The parent object.
-     */
-    explicit KNGlobal(QObject *parent = 0);
-
-    /*!
      * \brief Get the singleton instance of class KNGlobal.
      * \return The global instance of KNGlobal.
      */
     static KNGlobal *instance();
+
+    /*!
+     * \brief Initial the global class.
+     * \param parent The parent object of the global class.
+     */
+    static void initial(QObject *parent = 0);
 
     /*!
      * \brief Get the specific directory path. The definition of each
@@ -112,12 +112,9 @@ public:
 signals:
 
 public slots:
-    /*!
-     * \brief Update all the translation of the current object.
-     */
-    void retranslate();
 
 private slots:
+    void retranslate();
 
 private:
     enum StorageUnit
@@ -136,6 +133,7 @@ private:
         StorageUnitCount
     };
 
+    explicit KNGlobal(QObject *parent = 0);
     static KNGlobal *m_instance;
 
     inline void initialStorageUnit();

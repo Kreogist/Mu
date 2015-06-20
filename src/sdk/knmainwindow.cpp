@@ -42,6 +42,14 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     recoverGeometry();
 }
 
+void KNMainWindow::closeEvent(QCloseEvent *event)
+{
+    //Save the geometry.
+    backupGeometry();
+    //Do the mainwindow close event.
+    QMainWindow::closeEvent(event);
+}
+
 void KNMainWindow::recoverGeometry()
 {
     //Check is the last record is complete. If there's no windowWidth property
@@ -96,12 +104,33 @@ void KNMainWindow::recoverGeometry()
     {
         lastY=0;
     }
+    //Set the geometry.
     setGeometry(lastX, lastY, lastWidth, lastHeight);
+}
+
+void KNMainWindow::backupGeometry()
+{
+    //Set the window state.
+    setCacheValue("windowState", static_cast<int>(windowState()));
+    //Set the window position.
+    setCacheValue("windowX", x());
+    setCacheValue("windowY", y());
+    setCacheValue("windowWidth", width());
+    setCacheValue("windowHeight", height());
+    //Set the current desktop size.
+    setCacheValue("desktopWidth", qApp->desktop()->width());
+    setCacheValue("desktopHeight", qApp->desktop()->height());
 }
 
 inline int KNMainWindow::getCacheValue(const QString &valueName)
 {
     return m_cacheConfigure->data(valueName).toInt();
+}
+
+inline void KNMainWindow::setCacheValue(const QString &valueName,
+                                        const int &value)
+{
+    m_cacheConfigure->setData(valueName, value);
 }
 
 inline void KNMainWindow::zoomParameter(int &parameter, const qreal &ratio)

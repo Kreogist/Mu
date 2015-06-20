@@ -36,6 +36,16 @@ KNGlobal *KNGlobal::instance()
     return m_instance;
 }
 
+void KNGlobal::initial(QObject *parent)
+{
+    //Check if the singleton instance variable is null. Set the pointer to this
+    //object if this is the first constructed object.
+    if(m_instance==nullptr)
+    {
+        m_instance=new KNGlobal(parent);
+    }
+}
+
 QString KNGlobal::dirPath(const int &index)
 {
     Q_ASSERT(index>-1 && index<DefaultDirCount);
@@ -66,13 +76,6 @@ KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent),
     m_globalConfigure(nullptr)
 {
-    //Check if the singleton instance variable is null. Set the pointer to this
-    //object if this is the first constructed object.
-    if(m_instance==nullptr)
-    {
-        m_instance=this;
-    }
-
     //Initial the managers.
     //Gerenate the configure manager.
     KNConfigureManager::initial(this);

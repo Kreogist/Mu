@@ -46,11 +46,16 @@ signals:
 
 public slots:
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private slots:
 
 private:
     inline void recoverGeometry();
+    inline void backupGeometry();
     inline int getCacheValue(const QString &valueName);
+    inline void setCacheValue(const QString &valueName, const int &value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
     KNConfigure *m_cacheConfigure;
 };
