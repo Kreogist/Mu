@@ -33,12 +33,19 @@ class KNMainWindowHeader : public KNMainWindowHeaderBase
 public:
     /*!
      * \brief Construct a KNMainWindowHeader widget.
-     * \param parent
+     * \param parent The parent widget.
      */
     explicit KNMainWindowHeader(QWidget *parent = 0);
 
 protected:
+    /*!
+     * \brief Reimplemented from KNMainWindowHeaderBase::enterEvent().
+     */
     void enterEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplemented from KNMainWindowHeaderBase::leaveEvent().
+     */
     void leaveEvent(QEvent *event);
 
 private slots:

@@ -71,7 +71,9 @@ SOURCES += \
     sdk/knthememanager.cpp \
     sdk/knmainwindowcontainer.cpp \
     core/knmainwindowheader.cpp \
-    core/knmainwindowiconbutton.cpp
+    core/knmainwindowiconbutton.cpp \
+    sdk/knwidgetswitcher.cpp \
+    sdk/knhwidgetswitcher.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -88,7 +90,9 @@ HEADERS += \
     sdk/knmainwindowcontainer.h \
     sdk/knmainwindowheaderbase.h \
     core/knmainwindowheader.h \
-    core/knmainwindowiconbutton.h
+    core/knmainwindowiconbutton.h \
+    sdk/knwidgetswitcher.h \
+    sdk/knhwidgetswitcher.h
 
 RESOURCES += \
     resource/res.qrc

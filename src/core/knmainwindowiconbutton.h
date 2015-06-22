@@ -57,9 +57,24 @@ signals:
 public slots:
 
 protected:
+    /*!
+     * \brief Reimplemented from QAbstractButton::enterEvent().
+     */
     void enterEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplemented from QAbstractButton::leaveEvent().
+     */
     void leaveEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplemented from QAbstractButton::paintEvent().
+     */
     void paintEvent(QPaintEvent *event);
+
+    /*!
+     * \brief Reimplemented from QAbstractButton::resizeEvent().
+     */
     void resizeEvent(QResizeEvent *event);
 
 private slots:
