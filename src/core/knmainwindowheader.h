@@ -22,6 +22,7 @@
 #include "knmainwindowheaderbase.h"
 
 class QTimeLine;
+class KNMainWindowIconButton;
 /*!
  * \brief The KNMainWindowHeader class is a default realize of the main window
  * header.
@@ -47,6 +48,7 @@ private slots:
 private:
     inline QTimeLine *generateTimeline();
     QTimeLine *m_mouseInOut;
+    KNMainWindowIconButton *m_iconButton;
     int m_rangeStart, m_rangeEnd;
 };
 

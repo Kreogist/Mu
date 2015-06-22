@@ -54,6 +54,8 @@ void KNPluginManager::setApplicationInformation()
     QApplication::setApplicationDisplayName(applicationName);
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("http://kreogist.github.io/");
+    //Configure application attributes.
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 }
 
 KNMainWindow *KNPluginManager::mainWindow() const

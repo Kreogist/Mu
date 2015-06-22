@@ -11,5 +11,10 @@
         "Parent" : "MainWindow",
         "Window" : "#101010",
         "Text" : "#9F9F9F"
+    },
+    "MainWindowButtonText" :
+    {
+        "Parent" : "MainWindowHeader",
+        "ButtonText" : "#FFFFFF"
     }
 }

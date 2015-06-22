@@ -70,7 +70,8 @@ SOURCES += \
     sdk/knlocalemanager.cpp \
     sdk/knthememanager.cpp \
     sdk/knmainwindowcontainer.cpp \
-    core/knmainwindowheader.cpp
+    core/knmainwindowheader.cpp \
+    core/knmainwindowiconbutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -86,7 +87,8 @@ HEADERS += \
     sdk/knthememanager.h \
     sdk/knmainwindowcontainer.h \
     sdk/knmainwindowheaderbase.h \
-    core/knmainwindowheader.h
+    core/knmainwindowheader.h \
+    core/knmainwindowiconbutton.h
 
 RESOURCES += \
     resource/res.qrc

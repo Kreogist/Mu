@@ -26,6 +26,8 @@
 
 #include "knthememanager.h"
 
+#include <QDebug>
+
 KNThemeManager *KNThemeManager::m_instance=nullptr;
 
 KNThemeManager *KNThemeManager::instance()

@@ -18,6 +18,7 @@
 #include <QTimeLine>
 
 #include "knthememanager.h"
+#include "knmainwindowiconbutton.h"
 
 #include "knmainwindowheader.h"
 
@@ -26,6 +27,7 @@
 KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     KNMainWindowHeaderBase(parent),
     m_mouseInOut(generateTimeline()),
+    m_iconButton(new KNMainWindowIconButton(this)),
     m_rangeStart(0),
     m_rangeEnd(0)
 {

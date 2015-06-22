@@ -6,4 +6,8 @@
         <file>public/default.json</file>
         <file>icon/mu.png</file>
     </qresource>
+    <qresource prefix="/plugin">
+        <file>music/public/icon.png</file>
+        <file>preference/icon.png</file>
+    </qresource>
 </RCC>
