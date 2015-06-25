@@ -72,11 +72,6 @@ protected:
      */
     void paintEvent(QPaintEvent *event);
 
-    /*!
-     * \brief Reimplemented from QAbstractButton::resizeEvent().
-     */
-    void resizeEvent(QResizeEvent *event);
-
 private slots:
     void retranslate();
     void onActionMouseInOut(const int &frame);
@@ -85,6 +80,7 @@ private:
     inline void initialLabels();
     inline void initialTimeLines();
     inline void startInOutAnime(QTimeLine *timeLine);
+    inline void updateTitleLabel();
     inline QTimeLine *generateTimeLine();
 
     QLabel *m_icon[2], *m_title[2];
@@ -93,7 +89,6 @@ private:
     QGraphicsOpacityEffect *m_textEffect;
     QLinearGradient m_effectGradient;
     QString m_preferenceText;
-    QFont m_preferenceFont;
 };
 
 #endif // KNMAINWINDOWICONBUTTON_H

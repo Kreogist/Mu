@@ -82,7 +82,7 @@ int KNWidgetSwitcher::count() const
 QWidget *KNWidgetSwitcher::widgetAt(const int &index)
 {
     //Get the widget if the index is valid, or else return nullptr.
-    return (index>-1 && widget<m_widgets.size())?
+    return (index>-1 && index<m_widgets.size())?
                 m_widgets.at(index):nullptr;
 }
 
