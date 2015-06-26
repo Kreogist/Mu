@@ -45,6 +45,9 @@ public:
      */
     virtual QWidget *headerWidget()=0;
 
+    virtual QPixmap icon()=0;
+
+    virtual QString title()=0;
 
 signals:
 

@@ -16,9 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QTimeLine>
+#include <QBoxLayout>
 
 #include "knthememanager.h"
 #include "knmainwindowiconbutton.h"
+#include "kncategoryplugin.h"
+#include "knlocalemanager.h"
 
 #include "knmainwindowheader.h"
 
@@ -27,6 +30,8 @@
 KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     KNMainWindowHeaderBase(parent),
     m_mouseInOut(generateTimeline()),
+    m_widgetLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
+    m_categoryPlugin(nullptr),
     m_iconButton(new KNMainWindowIconButton(this)),
     m_rangeStart(0),
     m_rangeEnd(0)
@@ -39,6 +44,31 @@ KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMainWindowHeader::onActionPaletteChanged);
     onActionPaletteChanged();
+
+    //Initial the layout of the header.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+    //Add button to main layout.
+    mainLayout->addWidget(m_iconButton);
+    //Configure the widget layout.
+    m_widgetLayout->setContentsMargins(0,0,0,0);
+    m_widgetLayout->setSpacing(0);
+    //Add the widget layout to header.
+    mainLayout->addLayout(m_widgetLayout, 1);
+
+    //Link retranlsate.
+    knI18n->link(this, &KNMainWindowHeader::retranslate);
+    retranslate();
+}
+
+void KNMainWindowHeader::addHeaderWidget(QWidget *widget,
+                                         int stretch,
+                                         Qt::Alignment alignment)
+{
+    //Add the widget to widget layout.
+    m_widgetLayout->addWidget(widget, stretch, alignment);
 }
 
 void KNMainWindowHeader::enterEvent(QEvent *event)
@@ -65,6 +95,16 @@ void KNMainWindowHeader::leaveEvent(QEvent *event)
     m_mouseInOut->start();
     //Do the original leave event.
     KNMainWindowHeaderBase::leaveEvent(event);
+}
+
+void KNMainWindowHeader::retranslate()
+{
+    //Check the category plugin first.
+    if(m_categoryPlugin!=nullptr)
+    {
+        //Update the button text.
+        m_iconButton->setButtonText(m_categoryPlugin->title());
+    }
 }
 
 void KNMainWindowHeader::changeBackgroundColor(const int &frame)
@@ -107,3 +147,19 @@ inline QTimeLine *KNMainWindowHeader::generateTimeline()
     return timeline;
 }
 
+void KNMainWindowHeader::setCategoryPlugin(KNCategoryPlugin *categoryPlugin)
+{
+    //Save the category plugin.
+    m_categoryPlugin = categoryPlugin;
+    //Ensure this is not a null widget.
+    if(m_categoryPlugin==nullptr)
+    {
+        return;
+    }
+    //Add the header widget.
+    addHeaderWidget(m_categoryPlugin->headerWidget());
+    //Set the icon of the plugin.
+    m_iconButton->setButtonIcon(m_categoryPlugin->icon());
+    //Set the text of the plugin.
+    m_iconButton->setButtonText(m_categoryPlugin->title());
+}

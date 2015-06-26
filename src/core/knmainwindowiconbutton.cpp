@@ -60,10 +60,6 @@ KNMainWindowIconButton::KNMainWindowIconButton(QWidget *parent) :
     //Link retranslate.
     knI18n->link(this, &KNMainWindowIconButton::retranslate);
     retranslate();
-
-    //--Debug--
-    setButtonIcon(QPixmap(":/plugin/music/public/icon.png"));
-    setButtonText("Music");
 }
 
 void KNMainWindowIconButton::setButtonIcon(const QPixmap &icon)
@@ -124,7 +120,7 @@ void KNMainWindowIconButton::onActionMouseInOut(const int &frame)
     m_title[IndexApp]->move(TextLeft,
                             TextY+(baseNumber>>3));
     QFont appFont=m_title[IndexApp]->font();
-    appFont.setPointSizeF(TextSize+(baseNumber>>3));
+    appFont.setPixelSize(TextSize+(baseNumber>>3));
     m_title[IndexApp]->setFont(appFont);
     //Move the preference lable.
     m_title[IndexPreference]->move(m_title[IndexPreference]->x(),
@@ -173,10 +169,10 @@ void KNMainWindowIconButton::initialLabels()
     //Configure the text label of application.
     QFont textFont=font();
     textFont.setBold(true);
-    textFont.setPointSizeF(TextSize);
+    textFont.setPixelSize(TextSize);
     m_title[IndexApp]->setFont(textFont);
     //Configure the text label of the preference.
-    textFont.setPointSizeF(TextSize>>1);
+    textFont.setPixelSize(TextSize>>1);
     m_title[IndexPreference]->setFont(textFont);
     m_title[IndexPreference]->move(m_title[IndexPreference]->x(),
                                    height());
@@ -246,6 +242,6 @@ inline QTimeLine *KNMainWindowIconButton::generateTimeLine()
 {
     QTimeLine *timeLine=new QTimeLine(200, this);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(16);
+    timeLine->setUpdateInterval(10);
     return timeLine;
 }

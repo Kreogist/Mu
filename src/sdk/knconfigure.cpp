@@ -126,7 +126,7 @@ QVariant KNConfigure::data(const QString &key,
                 {
                     QFont valueFont=QApplication::font();
                     valueFont.setFamily(valueObject.value("Family").toString());
-                    valueFont.setPointSizeF(valueObject.value("PointSize").toDouble());
+                    valueFont.setPixelSize(valueObject.value("Size").toDouble());
                     valueFont.setBold(valueObject.value("Bold").toBool());
                     valueFont.setItalic(valueObject.value("Italic").toBool());
                     valueFont.setUnderline(valueObject.value("Underline").toBool());
@@ -180,7 +180,7 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         QJsonObject fontObject;
         fontObject.insert("Type", "Font");
         fontObject.insert("Family", font.family());
-        fontObject.insert("PointSize", font.pointSizeF());
+        fontObject.insert("Size", font.pixelSize());
         fontObject.insert("Bold", font.bold());
         fontObject.insert("Italic", font.italic());
         fontObject.insert("Underline", font.underline());

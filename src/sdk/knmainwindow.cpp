@@ -40,8 +40,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     setMinimumSize(730, 432);
     setWindowIcon(QIcon("://icon/mu.png"));
-#ifdef Q_OS_MACX
     //Mac OS X title hack.
+#ifdef Q_OS_MACX
     setWindowTitle(qApp->applicationDisplayName());
 #endif
     //Add main window to theme list.

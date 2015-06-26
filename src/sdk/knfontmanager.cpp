@@ -22,6 +22,8 @@
 
 #include "knfontmanager.h"
 
+#include <QDebug>
+
 KNFontManager *KNFontManager::m_instance=nullptr;
 
 KNFontManager *KNFontManager::instance()
@@ -87,9 +89,9 @@ void KNFontManager::setGlobalFont(const QString &fontName,
         return;
     }
     //Generate the font from the application font.
-    QFont globalFont=qApp->font();
+    QFont globalFont=QApplication::font();
     globalFont.setFamily(fontName);
-    globalFont.setPointSizeF(pointSize);
+    globalFont.setPixelSize(pointSize);
     //Set the font.
-    qApp->setFont(globalFont);
+    QApplication::setFont(globalFont);
 }

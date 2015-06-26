@@ -23,8 +23,13 @@
 #include "knmainwindow.h"
 #include "knversion.h"
 
+//Ports
+#include "knmainwindowheaderbase.h"
+#include "kncategoryplugin.h"
+
 //Plugins
 #include "knmainwindowheader.h"
+#include "plugin/knmusiccategoryplugin/knmusiccategoryplugin.h"
 
 #include "knpluginmanager.h"
 
@@ -58,6 +63,32 @@ void KNPluginManager::setApplicationInformation()
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 }
 
+void KNPluginManager::loadHeader(KNMainWindowHeaderBase *header)
+{
+    //You should load the main window first.
+    if(m_mainWindow==nullptr)
+    {
+        return;
+    }
+    //Save the header pointer.
+    m_header=header;
+    //Check the header pointer is valid or not.
+    if(m_header==nullptr)
+    {
+        return;
+    }
+    //Give the header to main window.
+    m_mainWindow->setHeader(m_header);
+}
+
+void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
+{
+    //Set the category plugin.
+    m_header->setCategoryPlugin(plugin);
+    //Set the category to be the main widget.
+    m_mainWindow->setMainWidget(plugin);
+}
+
 KNMainWindow *KNPluginManager::mainWindow() const
 {
     return m_mainWindow;
@@ -75,7 +106,10 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
 void KNPluginManager::loadPlugins()
 {
     //Initial the infrastructure;
-    m_mainWindow->setHeader(new KNMainWindowHeader);
+    loadHeader(new KNMainWindowHeader);
+
+    //Load the category plugin.
+    loadCategoryPlugin(new KNMusicCategoryPlugin);
 }
 
 void KNPluginManager::launchApplication()

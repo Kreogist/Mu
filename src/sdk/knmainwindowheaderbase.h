@@ -21,6 +21,7 @@
 
 #include <QWidget>
 
+class KNCategoryPlugin;
 /*!
  * \brief The KNMainWindowHeaderBase class is a port class of the main window
  * header. You can build all kinds of header from this function.
@@ -35,7 +36,23 @@ public:
      */
     KNMainWindowHeaderBase(QWidget *parent = 0): QWidget(parent){}
 
-    void addHeaderWidget(QWidget *widget);
+    /*!
+     * \brief Add a widget to header. There may be many widgets will be added to
+     * header, so the header widget should provide a layout or a stacked widget
+     * to store these widgets. You'd better to use a box layout.
+     * \param widget The widget pointer.
+     * \param stretch The widget stretch parameter.
+     * \param alignment The widget prefer alignment.
+     */
+    virtual void addHeaderWidget(QWidget *widget,
+                                 int stretch=0,
+                                 Qt::Alignment alignment=0)=0;
+
+    /*!
+     * \brief Set the category plugin. It is used to update the button caption.
+     * \param plugin The category plugin.
+     */
+    virtual void setCategoryPlugin(KNCategoryPlugin *plugin)=0;
 
 signals:
 

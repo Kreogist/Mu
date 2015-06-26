@@ -22,7 +22,8 @@
 #include "kncategoryplugin.h"
 
 /*!
- * \brief The KNAbstractMusicCategoryPlugin class
+ * \brief The KNAbstractMusicCategoryPlugin class is the port class of the music
+ * plugin. Your own music plugin should provide these function.
  */
 class KNAbstractMusicCategoryPlugin : public KNCategoryPlugin
 {

@@ -22,6 +22,8 @@
 
 class KNGlobal;
 class KNMainWindow;
+class KNMainWindowHeaderBase;
+class KNCategoryPlugin;
 /*!
  * \brief The KNPluginManager class is a port-class manager. It will create and
  * load all the plugin class with the specific port class. You should tweak the
@@ -69,7 +71,10 @@ public slots:
 
 private:
     inline void setApplicationInformation();
+    void loadHeader(KNMainWindowHeaderBase *header);
+    void loadCategoryPlugin(KNCategoryPlugin *plugin);
     KNMainWindow *m_mainWindow;
+    KNMainWindowHeaderBase *m_header;
 };
 
 #endif // KNPLUGINMANAGER_H

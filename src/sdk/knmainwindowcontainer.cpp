@@ -68,7 +68,20 @@ void KNMainWindowContainer::resizeEvent(QResizeEvent *event)
     //Resize the header widget.
     if(m_elementWidget[Header]!=nullptr)
     {
-        m_elementWidget[Header]->resize(width(), m_elementWidget[Header]->height());
+        m_elementWidget[Header]->resize(width(),
+                                        m_elementWidget[Header]->height());
+    }
+    //Resize the main widget and reposition the main widget if there's no
+    //animation running.
+    if(m_elementWidget[MainWidget]!=nullptr)
+    {
+        //Resize the main widget for no reason.
+        m_elementWidget[MainWidget]->resize(
+                    width(),
+                    height()-m_elementWidget[Header]->height());
+        //Check the state of the animation group.
+        //Check the position the main widget.
+        ;
     }
 }
 

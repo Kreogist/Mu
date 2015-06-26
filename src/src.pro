@@ -73,7 +73,8 @@ SOURCES += \
     core/knmainwindowheader.cpp \
     core/knmainwindowiconbutton.cpp \
     sdk/knwidgetswitcher.cpp \
-    sdk/knhwidgetswitcher.cpp
+    sdk/knhwidgetswitcher.cpp \
+    plugin/knmusiccategoryplugin/knmusiccategoryplugin.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -94,7 +95,8 @@ HEADERS += \
     sdk/knwidgetswitcher.h \
     sdk/knhwidgetswitcher.h \
     sdk/kncategoryplugin.h \
-    sdk/knabstractmusiccategoryplugin.h
+    sdk/knabstractmusiccategoryplugin.h \
+    plugin/knmusiccategoryplugin/knmusiccategoryplugin.h
 
 RESOURCES += \
     resource/res.qrc

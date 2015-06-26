@@ -21,6 +21,7 @@
 
 #include "knmainwindowheaderbase.h"
 
+class QBoxLayout;
 class QTimeLine;
 class KNMainWindowIconButton;
 /*!
@@ -37,6 +38,18 @@ public:
      */
     explicit KNMainWindowHeader(QWidget *parent = 0);
 
+    /*!
+     * \brief Reimplemented from KNMainWindowHeaderBase::addHeaderWidget().
+     */
+    void addHeaderWidget(QWidget *widget,
+                         int stretch=0,
+                         Qt::Alignment alignment=0);
+
+    /*!
+     * \brief Reimplemented from KNMainWindowHeaderBase::setCategoryPlugin().
+     */
+    void setCategoryPlugin(KNCategoryPlugin *categoryPlugin);
+
 protected:
     /*!
      * \brief Reimplemented from KNMainWindowHeaderBase::enterEvent().
@@ -49,12 +62,15 @@ protected:
     void leaveEvent(QEvent *event);
 
 private slots:
+    void retranslate();
     void changeBackgroundColor(const int &frame);
     void onActionPaletteChanged();
 
 private:
     inline QTimeLine *generateTimeline();
     QTimeLine *m_mouseInOut;
+    QBoxLayout *m_widgetLayout;
+    KNCategoryPlugin *m_categoryPlugin;
     KNMainWindowIconButton *m_iconButton;
     int m_rangeStart, m_rangeEnd;
 };

@@ -128,6 +128,13 @@ inline void KNGlobal::initialDefaultDirPath()
      * Plugin Dir:
      *      $UserDataDir$/Plugins
      */
+#ifdef Q_OS_WIN //No matter Win32/Win64
+    m_dirPath[UserDataDir]=
+            KNUtil::simplifiedPath(QStandardPaths::writableLocation(
+                                       QStandardPaths::DocumentsLocation)
+                                   +"/Kreogist/Mu");
+    m_dirPath[ResourceDir]=qApp->applicationDirPath();
+#endif
 #ifdef Q_OS_MACX
     m_dirPath[UserDataDir]=
             KNUtil::simplifiedPath(

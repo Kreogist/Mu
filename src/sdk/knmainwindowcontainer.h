@@ -94,9 +94,7 @@ private:
         PreferencePanel,
         ContainerWidgetCount
     };
-
     QWidget *m_elementWidget[ContainerWidgetCount];
-
 };
 
 #endif // KNMAINWINDOWCONTAINER_H
