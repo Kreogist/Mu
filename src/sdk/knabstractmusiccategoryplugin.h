@@ -16,30 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNHWIDGETSWITCHER_H
-#define KNHWIDGETSWITCHER_H
+#ifndef KNABSTRACTMUSICCATEGORYPLUGIN_H
+#define KNABSTRACTMUSICCATEGORYPLUGIN_H
 
-#include "knwidgetswitcher.h"
+#include "kncategoryplugin.h"
 
 /*!
- * \brief The KNHWidgetSwitcher class is a horizontal widget switcher. Inherits
- * KNWidgetSwitcher.
+ * \brief The KNAbstractMusicCategoryPlugin class
  */
-class KNHWidgetSwitcher : public KNWidgetSwitcher
+class KNAbstractMusicCategoryPlugin : public KNCategoryPlugin
 {
     Q_OBJECT
 public:
-    /*!
-     * \brief Construct a KNHWidgetSwitcher class.
-     * \param parent The parent widget.
-     */
-    explicit KNHWidgetSwitcher(QWidget *parent = 0);
+    KNAbstractMusicCategoryPlugin(QWidget *parent=0):KNCategoryPlugin(parent){}
 
-protected:
-    /*!
-     * \brief Reimplemented by KNWidgetSwitcher::updateAnimationPosition().
-     */
-    void updateAnimationPosition();
+signals:
+
+public slots:
 };
 
-#endif // KNHWIDGETSWITCHER_H
+#endif // KNABSTRACTMUSICCATEGORYPLUGIN_H

@@ -92,7 +92,9 @@ HEADERS += \
     core/knmainwindowheader.h \
     core/knmainwindowiconbutton.h \
     sdk/knwidgetswitcher.h \
-    sdk/knhwidgetswitcher.h
+    sdk/knhwidgetswitcher.h \
+    sdk/kncategoryplugin.h \
+    sdk/knabstractmusiccategoryplugin.h
 
 RESOURCES += \
     resource/res.qrc

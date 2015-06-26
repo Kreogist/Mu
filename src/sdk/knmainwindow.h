@@ -71,6 +71,9 @@ signals:
 public slots:
 
 protected:
+    /*!
+     * \brief Reimplemented from QMainWindow::closeEvent().
+     */
     void closeEvent(QCloseEvent *event);
 
 private slots:
