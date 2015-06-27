@@ -58,6 +58,10 @@ KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     //Add the widget layout to header.
     mainLayout->addLayout(m_widgetLayout, 1);
 
+    //Link the icon button.
+    connect(m_iconButton, SIGNAL(clicked(bool)),
+            this, SIGNAL(requireShowPreference()));
+
     //Link retranlsate.
     knI18n->link(this, &KNMainWindowHeader::retranslate);
     retranslate();

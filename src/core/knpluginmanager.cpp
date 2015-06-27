@@ -25,17 +25,21 @@
 
 //Ports
 #include "knmainwindowheaderbase.h"
+#include "knpreferenceplugin.h"
 #include "kncategoryplugin.h"
 
 //Plugins
 #include "knmainwindowheader.h"
-#include "plugin/knmusiccategoryplugin/knmusiccategoryplugin.h"
+#include "plugin/knmusicplugin/knmusicplugin.h"
+#include "plugin/knpreference/knpreference.h"
 
 #include "knpluginmanager.h"
 
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
-    m_mainWindow(nullptr)
+    m_mainWindow(nullptr),
+    m_header(nullptr),
+    m_preference(nullptr)
 {
     //Set the application information.
     setApplicationInformation();
@@ -81,6 +85,24 @@ void KNPluginManager::loadHeader(KNMainWindowHeaderBase *header)
     m_mainWindow->setHeader(m_header);
 }
 
+void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
+{
+    //You should load the main window first.
+    if(m_mainWindow==nullptr)
+    {
+        return;
+    }
+    //Save the preference
+    m_preference=plugin;
+    //Check the preference pointer.
+    if(m_preference==nullptr)
+    {
+        return;
+    }
+    //Give the preference panel to main window.
+    m_mainWindow->setPreferencePanel(m_preference);
+}
+
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 {
     //Set the category plugin.
@@ -107,9 +129,10 @@ void KNPluginManager::loadPlugins()
 {
     //Initial the infrastructure;
     loadHeader(new KNMainWindowHeader);
+    loadPreference(new KNPreference);
 
     //Load the category plugin.
-    loadCategoryPlugin(new KNMusicCategoryPlugin);
+    loadCategoryPlugin(new KNMusicPlugin);
 }
 
 void KNPluginManager::launchApplication()

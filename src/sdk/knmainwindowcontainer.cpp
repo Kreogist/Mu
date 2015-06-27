@@ -16,19 +16,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QParallelAnimationGroup>
+#include <QPropertyAnimation>
 
 #include "knmainwindowcontainer.h"
 
 KNMainWindowContainer::KNMainWindowContainer(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_preferenceAnimeGroup(new QParallelAnimationGroup(this))
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
     //Reset the widgets pointer, initial the animation.
     for(int i=0; i<ContainerWidgetCount; i++)
     {
+        //Reset the pointer.
         m_elementWidget[i]=nullptr;
+        //Initial the animation.
+        m_elementAnime[i]=generateAnime();
+        //Add it to parallel animation group.
+        m_preferenceAnimeGroup->addAnimation(m_elementAnime[i]);
     }
+    //Configure the properties of the animations.
+    m_elementAnime[Header]->setPropertyName("pos");
+    m_elementAnime[MainWidget]->setPropertyName("pos");
+    m_elementAnime[PreferencePanel]->setPropertyName("geometry");
 }
 
 QWidget *KNMainWindowContainer::header() const
@@ -61,6 +72,31 @@ void KNMainWindowContainer::setPreferencePanel(QWidget *preferencePanel)
     setWidget(PreferencePanel, preferencePanel);
 }
 
+void KNMainWindowContainer::showPreference()
+{
+    //Update the header position.
+    m_elementAnime[Header]->setStartValue(QPoint(0,0));
+    m_elementAnime[Header]->setEndValue(
+                QPoint(0,
+                       -m_elementWidget[Header]->height()));
+    //Update the main widget position.
+    m_elementAnime[MainWidget]->setStartValue(
+                QPoint(0,
+                       m_elementWidget[Header]->height()));
+    m_elementAnime[MainWidget]->setEndValue(QPoint(0, height()));
+    //Update the preference geometry.
+    m_elementAnime[PreferencePanel]->setStartValue(
+                QRect(width()>>2, height()>>2, width()>>1, height()>>1));
+    m_elementAnime[PreferencePanel]->setEndValue(QRect(0,0,width(),height()));
+    //Start the animation.
+    m_preferenceAnimeGroup->start();
+}
+
+void KNMainWindowContainer::hidePreference()
+{
+    ;
+}
+
 void KNMainWindowContainer::resizeEvent(QResizeEvent *event)
 {
     //Do the original resize.
@@ -80,8 +116,16 @@ void KNMainWindowContainer::resizeEvent(QResizeEvent *event)
                     width(),
                     height()-m_elementWidget[Header]->height());
         //Check the state of the animation group.
-        //Check the position the main widget.
-        ;
+        if(m_preferenceAnimeGroup->state()==QAbstractAnimation::Running)
+        {
+            //Update the animation group parameters.
+            ;
+        }
+        else
+        {
+            //Check the position the main widget.
+            ;
+        }
     }
 }
 
@@ -108,5 +152,14 @@ void KNMainWindowContainer::setWidget(const int &index, QWidget *widget)
         m_elementWidget[index]->setParent(this, Qt::Widget);
         //Update the stack relationship.
         updateTheStackRelationship();
+        //Set the animation target.
+        m_elementAnime[index]->setTargetObject(widget);
     }
+}
+
+inline QPropertyAnimation *KNMainWindowContainer::generateAnime()
+{
+    QPropertyAnimation *anime=new QPropertyAnimation(this);
+    anime->setEasingCurve(QEasingCurve::OutCubic);
+    return anime;
 }

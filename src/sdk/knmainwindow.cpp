@@ -52,7 +52,11 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 
 void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
 {
+    //Set the header widget.
     m_container->setHeader(header);
+    //Link the header show preference signal to container.
+    connect(header, &KNMainWindowHeaderBase::requireShowPreference,
+            m_container, &KNMainWindowContainer::showPreference);
 }
 
 void KNMainWindow::setMainWidget(QWidget *mainWidget)

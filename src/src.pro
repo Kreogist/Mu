@@ -54,7 +54,8 @@ gcc: {
 
 # Add sdk directory to include path.
 INCLUDEPATH += \
-sdk
+sdk \
+plugin/knmusicplugin/sdk/
 
 # Source and Headers.
 SOURCES += \
@@ -74,7 +75,10 @@ SOURCES += \
     core/knmainwindowiconbutton.cpp \
     sdk/knwidgetswitcher.cpp \
     sdk/knhwidgetswitcher.cpp \
-    plugin/knmusiccategoryplugin/knmusiccategoryplugin.cpp
+    plugin/knpreference/knpreference.cpp \
+    plugin/knmusicplugin/knmusicplugin.cpp \
+    plugin/knmusicplugin/sdk/knmusicglobal.cpp \
+    plugin/knpreference/knpreferencesidebar.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -95,8 +99,12 @@ HEADERS += \
     sdk/knwidgetswitcher.h \
     sdk/knhwidgetswitcher.h \
     sdk/kncategoryplugin.h \
-    sdk/knabstractmusiccategoryplugin.h \
-    plugin/knmusiccategoryplugin/knmusiccategoryplugin.h
+    sdk/knpreferenceplugin.h \
+    plugin/knpreference/knpreference.h \
+    sdk/knabstractmusicplugin.h \
+    plugin/knmusicplugin/knmusicplugin.h \
+    plugin/knmusicplugin/sdk/knmusicglobal.h \
+    plugin/knpreference/knpreferencesidebar.h
 
 RESOURCES += \
     resource/res.qrc

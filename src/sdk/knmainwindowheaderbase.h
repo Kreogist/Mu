@@ -55,6 +55,11 @@ public:
     virtual void setCategoryPlugin(KNCategoryPlugin *plugin)=0;
 
 signals:
+    /*!
+     * \brief This signal will be used, when the user ask to show the preference
+     * panel.
+     */
+    void requireShowPreference();
 
 public slots:
 };

@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class QPropertyAnimation;
+class QParallelAnimationGroup;
 /*!
  * \brief The KNMainWindowContainer class is the container of all the widget.
  * This class will be contructed by KNMainWindow. All the widget of the main
@@ -78,6 +80,10 @@ public slots:
      */
     void setPreferencePanel(QWidget *preferencePanel);
 
+    void showPreference();
+
+    void hidePreference();
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
@@ -87,6 +93,8 @@ protected:
 private:
     inline void updateTheStackRelationship();
     inline void setWidget(const int &index, QWidget *widget);
+    inline void updateTheStartPosition();
+    inline QPropertyAnimation *generateAnime();
     enum ContainerWidgetElement
     {
         Header,
@@ -94,6 +102,8 @@ private:
         PreferencePanel,
         ContainerWidgetCount
     };
+    QParallelAnimationGroup *m_preferenceAnimeGroup;
+    QPropertyAnimation *m_elementAnime[ContainerWidgetCount];
     QWidget *m_elementWidget[ContainerWidgetCount];
 };
 

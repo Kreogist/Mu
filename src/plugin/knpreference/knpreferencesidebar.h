@@ -12,28 +12,30 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNABSTRACTMUSICCATEGORYPLUGIN_H
-#define KNABSTRACTMUSICCATEGORYPLUGIN_H
+#ifndef KNPREFERENCESIDEBAR_H
+#define KNPREFERENCESIDEBAR_H
 
-#include "kncategoryplugin.h"
+#include <QWidget>
 
 /*!
- * \brief The KNAbstractMusicCategoryPlugin class is the port class of the music
- * plugin. Your own music plugin should provide these function.
+ * \brief The KNPreferenceSidebar class is the official preference sidebar. It
+ * contains a header button, the category item list, and a bottom bar. The
+ * header will display the current tab's icon, title and back button. The item
+ * list will display the category item list title.
  */
-class KNAbstractMusicCategoryPlugin : public KNCategoryPlugin
+class KNPreferenceSidebar : public QWidget
 {
     Q_OBJECT
 public:
-    KNAbstractMusicCategoryPlugin(QWidget *parent=0):KNCategoryPlugin(parent){}
+    explicit KNPreferenceSidebar(QWidget *parent = 0);
 
 signals:
 
 public slots:
 };
 
-#endif // KNABSTRACTMUSICCATEGORYPLUGIN_H
+#endif // KNPREFERENCESIDEBAR_H

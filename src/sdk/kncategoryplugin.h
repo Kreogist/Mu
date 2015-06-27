@@ -45,6 +45,10 @@ public:
      */
     virtual QWidget *headerWidget()=0;
 
+    /*!
+     * \brief Provide the icon of the category.
+     * \return
+     */
     virtual QPixmap icon()=0;
 
     virtual QString title()=0;

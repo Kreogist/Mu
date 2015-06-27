@@ -16,36 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knmusiccategoryplugin.h"
+#include "knpreferencesidebar.h"
 
-KNMusicCategoryPlugin::KNMusicCategoryPlugin(QWidget *parent) :
-    KNAbstractMusicCategoryPlugin(parent),
-    m_headerWidget(new QWidget(this))
+KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
+    QWidget(parent)
 {
-    ;
+
 }
 
-QWidget *KNMusicCategoryPlugin::headerWidget()
-{
-    return m_headerWidget;
-}
-
-QPixmap KNMusicCategoryPlugin::icon()
-{
-    return QPixmap(":/plugin/music/public/icon.png");
-}
-
-QString KNMusicCategoryPlugin::title()
-{
-    return tr("Music");
-}
-
-void KNMusicCategoryPlugin::saveConfigure()
-{
-    ;
-}
-
-void KNMusicCategoryPlugin::onArgumentsAvailable(const QStringList &data)
-{
-    ;
-}

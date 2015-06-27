@@ -16,17 +16,18 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICCATEGORYPLUGIN_H
-#define KNMUSICCATEGORYPLUGIN_H
+#ifndef KNMUSICPLUGIN_H
+#define KNMUSICPLUGIN_H
 
-#include "knabstractmusiccategoryplugin.h"
+#include "knabstractmusicplugin.h"
 
+class KNHWidgetSwitcher;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
  * It will use the all the official sdk class.
  */
-class KNMusicCategoryPlugin : public KNAbstractMusicCategoryPlugin
+class KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
 public:
@@ -34,13 +35,16 @@ public:
      * \brief Construct the KNMusicCategoryPlugin class.
      * \param parent
      */
-    explicit KNMusicCategoryPlugin(QWidget *parent = 0);
+    explicit KNMusicPlugin(QWidget *parent = 0);
 
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::headerWidget().
      */
     QWidget *headerWidget();
 
+    /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::icon().
+     */
     QPixmap icon();
 
     QString title();
@@ -61,6 +65,7 @@ public slots:
 
 private:
     QWidget *m_headerWidget;
+    KNHWidgetSwitcher *m_switcher;
 };
 
-#endif // KNMUSICCATEGORYPLUGIN_H
+#endif // KNMUSICPLUGIN_H
