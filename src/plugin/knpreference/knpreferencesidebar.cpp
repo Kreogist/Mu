@@ -17,7 +17,10 @@
  */
 #include <QBoxLayout>
 
+#include "knthememanager.h"
+
 #include "knpreferencetitlebar.h"
+#include "knlinearsensewidget.h"
 #include "knsideshadowwidget.h"
 
 #include "knpreferencesidebar.h"
@@ -25,22 +28,29 @@
 KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     QWidget(parent),
     m_titleBar(new KNPreferenceTitleBar(this)),
+    m_bottomBar(new KNLinearSenseWidget(this)),
     m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
                                          this)),
     m_shadowWidth(15)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
+    setFixedWidth(250);
+    //Initial bottom bar.
+    initialBottomBar();
+
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    //Add the widget.
+    //Add the title bar widget.
     mainLayout->addWidget(m_titleBar);
     //Add the widget.
     mainLayout->addStretch();
+    //Add the bottom bar.
+    mainLayout->addWidget(m_bottomBar);
 
     //Link requests.
     connect(m_titleBar, &KNPreferenceTitleBar::requireClosePreference,
@@ -56,5 +66,14 @@ void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)
                                0,
                                m_shadowWidth,
                                height());
+}
+
+void KNPreferenceSidebar::initialBottomBar()
+{
+    //Configure bottom bar.
+    m_bottomBar->setObjectName("PreferenceSidebarBottom");
+    m_bottomBar->setContentsMargins(0,0,0,0);
+    m_bottomBar->setFixedHeight(34);
+    knTheme->registerWidget(m_bottomBar);
 }
 

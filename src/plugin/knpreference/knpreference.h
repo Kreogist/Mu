@@ -22,6 +22,7 @@
 #include "knpreferenceplugin.h"
 
 class KNPreferenceSidebar;
+class KNVWidgetSwitcher;
 /*!
  * \brief The KNPreference class is a official preference panel. It provides the
  * standard item panels.
@@ -42,6 +43,7 @@ public slots:
 
 private:
     KNPreferenceSidebar *m_sidebar;
+    KNVWidgetSwitcher *m_content;
 };
 
 #endif // KNPREFERENCE_H

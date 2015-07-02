@@ -79,7 +79,20 @@ void KNPreferenceTitleBar::paintEvent(QPaintEvent *event)
                            QPainter::SmoothPixmapTransform, true);
 
     //Draw the texture.
-    painter.fillRect(rect(), m_dullPolishBrush);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(m_dullPolishBrush);
+    painter.drawRect(rect());
     //Draw the high light.
-    painter.fillRect(QRect(0,0,width(),64), m_highlightGradient);
+    painter.setBrush(m_highlightGradient);
+    painter.drawRect(QRect(0,0,width(),64));
+    //Draw the bottom border.
+    int lineY=height();
+    painter.setPen(QColor(0x2b, 0x2b, 0x2b));
+    painter.drawLine(QPointF(0, lineY), QPointF(width(), lineY));
+    lineY--;
+    painter.setPen(QColor(0x16, 0x16, 0x16));
+    painter.drawLine(QPointF(0, lineY), QPointF(width(), lineY));
+    lineY--;
+    painter.setPen(QColor(0x08, 0x08, 0x08));
+    painter.drawLine(QPointF(0, lineY), QPointF(width(), lineY));
 }

@@ -16,24 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNHWIDGETSWITCHER_H
-#define KNHWIDGETSWITCHER_H
+#ifndef KNVWIDGETSWITCHER_H
+#define KNVWIDGETSWITCHER_H
 
 #include "knwidgetswitcher.h"
 
 /*!
- * \brief The KNHWidgetSwitcher class is a horizontal widget switcher. Inherits
+ * \brief The KNVWidgetSwitcher class is a vertical widget switcher. Inherits
  * from KNWidgetSwitcher.
  */
-class KNHWidgetSwitcher : public KNWidgetSwitcher
+class KNVWidgetSwitcher : public KNWidgetSwitcher
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNHWidgetSwitcher class.
+     * \brief Construct a KNVWidgetSwitcher class.
      * \param parent The parent widget.
      */
-    explicit KNHWidgetSwitcher(QWidget *parent = 0);
+    explicit KNVWidgetSwitcher(QWidget *parent = 0);
 
 protected:
     /*!
@@ -42,4 +42,4 @@ protected:
     void updateAnimationPosition();
 };
 
-#endif // KNHWIDGETSWITCHER_H
+#endif // KNVWIDGETSWITCHER_H

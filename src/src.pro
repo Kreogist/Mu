@@ -81,7 +81,9 @@ SOURCES += \
     plugin/knpreference/knpreferencesidebar.cpp \
     plugin/knpreference/knpreferencetitlebar.cpp \
     plugin/knpreference/knpreferenceheaderbutton.cpp \
-    sdk/knsideshadowwidget.cpp
+    sdk/knsideshadowwidget.cpp \
+    sdk/knlinearsensewidget.cpp \
+    sdk/knvwidgetswitcher.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -110,7 +112,9 @@ HEADERS += \
     plugin/knpreference/knpreferencesidebar.h \
     plugin/knpreference/knpreferencetitlebar.h \
     plugin/knpreference/knpreferenceheaderbutton.h \
-    sdk/knsideshadowwidget.h
+    sdk/knsideshadowwidget.h \
+    sdk/knlinearsensewidget.h \
+    sdk/knvwidgetswitcher.h
 
 RESOURCES += \
     resource/res.qrc

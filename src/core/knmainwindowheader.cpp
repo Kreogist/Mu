@@ -142,7 +142,7 @@ inline QTimeLine *KNMainWindowHeader::generateTimeline()
     //Generate the time line.
     QTimeLine *timeline=new QTimeLine(200, this);
     timeline->setEasingCurve(QEasingCurve::OutCubic);
-    timeline->setUpdateInterval(16);
+    timeline->setUpdateInterval(10);
     //This animation is going to change to background color, so the each frame
     //will be the parameter of a color. When frame changed, change the color.
     connect(timeline, &QTimeLine::frameChanged,

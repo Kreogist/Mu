@@ -26,7 +26,7 @@ KNSideShadowWidget::KNSideShadowWidget(int direction,
     //Set properties.
     setAttribute(Qt::WA_TransparentForMouseEvents, true);
     //Initial the shadow gradient.
-    m_shadowGradient.setColorAt(0, QColor(0,0,0,150));
+    m_shadowGradient.setColorAt(0, QColor(0,0,0,70));
     m_shadowGradient.setColorAt(1, QColor(0,0,0,0));
     //Set the direction.
     setDirection(direction);

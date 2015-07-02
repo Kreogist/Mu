@@ -108,7 +108,7 @@ inline QTimeLine *KNPreferenceHeaderButton::generateTimeLine(
     //Configure the time line.
     timeLine->setEndFrame(endFrame);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(16);
+    timeLine->setUpdateInterval(10);
     //Link the time line.
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNPreferenceHeaderButton::onActionMouseInOut);

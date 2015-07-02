@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class KNPreferenceTitleBar;
+class KNLinearSenseWidget;
 class KNSideShadowWidget;
 /*!
  * \brief The KNPreferenceSidebar class is the official preference sidebar. It
@@ -49,10 +50,15 @@ signals:
 public slots:
 
 protected:
+    /*!
+     * \brief Reimplement from QWidget::resizeEvent().
+     */
     void resizeEvent(QResizeEvent *event);
 
 private:
+    inline void initialBottomBar();
     KNPreferenceTitleBar *m_titleBar;
+    KNLinearSenseWidget *m_bottomBar;
     KNSideShadowWidget *m_rightShadow;
     const int m_shadowWidth;
 };

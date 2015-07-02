@@ -20,12 +20,26 @@
     "Preference" :
     {
         "Parent" : "MainWindow",
+        "Window" : "#171717"
+    },
+    "PreferenceContent" :
+    {
+        "Parent" : "Preference",
         "Window" : "#2A2A2A"
+    },
+    "PreferenceSidebar" :
+    {
+        "Parent" : "Preference"
+    },
+    "PreferenceSidebarBottom" :
+    {
+        "Parent" : "PreferenceSidebar",
+        "Window" : "#000000"
     },
     "PreferenceTitleBar" :
     {
-        "Parent" : "Preference",
-        "Window" : "#1F1F1F"
+        "Parent" : "PreferenceSidebar",
+        "Window" : "#0A0A0A"
     },
     "PreferenceTitleBarLabel" :
     {

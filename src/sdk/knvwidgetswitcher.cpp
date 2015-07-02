@@ -17,43 +17,43 @@
  */
 #include <QPropertyAnimation>
 
-#include "knhwidgetswitcher.h"
+#include "knvwidgetswitcher.h"
 
-KNHWidgetSwitcher::KNHWidgetSwitcher(QWidget *parent) :
+KNVWidgetSwitcher::KNVWidgetSwitcher(QWidget *parent) :
     KNWidgetSwitcher(parent)
 {
     ;
 }
 
-void KNHWidgetSwitcher::updateAnimationPosition()
+void KNVWidgetSwitcher::updateAnimationPosition()
 {
     //Get the three position: left, center, right.
-    QRect leftPosition=QRect(-width(),
-                             0,
-                             width(),
-                             height()),
+    QRect upPosition=QRect(0,
+                           -height(),
+                           width(),
+                           height()),
           centerPosition=QRect(0,
                                0,
                                width(),
                                height()),
-          rightPosition=QRect(width(),
-                              0,
-                              width(),
-                              height());
+          downPosition=QRect(0,
+                             height(),
+                             width(),
+                             height());
     //The end of in and the start of out animation should be the center rect.
     inAnimation()->setEndValue(centerPosition);
     outAnimation()->setStartValue(centerPosition);
     //Check the index of the widget, judge the moving position.
     if(currentIndex()>outWidgetIndex())
     {
-        //Move left.
-        outAnimation()->setEndValue(leftPosition);
-        inAnimation()->setStartValue(rightPosition);
+        //Move down.
+        outAnimation()->setEndValue(upPosition);
+        inAnimation()->setStartValue(downPosition);
     }
     else
     {
-        //Move right.
-        outAnimation()->setEndValue(rightPosition);
-        inAnimation()->setStartValue(leftPosition);
+        //Move up.
+        outAnimation()->setEndValue(downPosition);
+        inAnimation()->setStartValue(upPosition);
     }
 }
