@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class KNPreferenceTitleBar;
+class KNSideShadowWidget;
 /*!
  * \brief The KNPreferenceSidebar class is the official preference sidebar. It
  * contains a header button, the category item list, and a bottom bar. The
@@ -31,11 +33,28 @@ class KNPreferenceSidebar : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct the KNPreferenceSidebar widget with a given parent.
+     * \param parent The parent widget.
+     */
     explicit KNPreferenceSidebar(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When the header button clicked, this signal will be emitted to ask
+     * to close the preference.
+     */
+    void requireClosePreference();
 
 public slots:
+
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    KNPreferenceTitleBar *m_titleBar;
+    KNSideShadowWidget *m_rightShadow;
+    const int m_shadowWidth;
 };
 
 #endif // KNPREFERENCESIDEBAR_H

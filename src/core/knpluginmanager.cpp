@@ -99,8 +99,11 @@ void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
     {
         return;
     }
-    //Give the preference panel to main window.
-    m_mainWindow->setPreferencePanel(m_preference);
+    if(m_mainWindow!=nullptr)
+    {
+        //Give the preference panel to main window.
+        m_mainWindow->setPreferencePanel(m_preference);
+    }
 }
 
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)

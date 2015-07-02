@@ -16,5 +16,25 @@
     {
         "Parent" : "MainWindowHeader",
         "ButtonText" : "#FFFFFF"
+    },
+    "Preference" :
+    {
+        "Parent" : "MainWindow",
+        "Window" : "#2A2A2A"
+    },
+    "PreferenceTitleBar" :
+    {
+        "Parent" : "Preference",
+        "Window" : "#1F1F1F"
+    },
+    "PreferenceTitleBarLabel" :
+    {
+        "Parent" : "PreferenceTitleBar",
+        "WindowText" : "#FFFFFF"
+    },
+    "PreferenceHeaderButton" :
+    {
+        "Parent" : "PreferenceTitleBar",
+        "Window" : "#000000"
     }
 }

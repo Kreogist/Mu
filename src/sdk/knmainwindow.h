@@ -24,6 +24,7 @@
 class KNConfigure;
 class KNMainWindowContainer;
 class KNMainWindowHeaderBase;
+class KNPreferencePlugin;
 /*!
  * \brief The KNMainWindow class provides a main application window for mu.\n
  * It contains several parts: header, main widget and preference.
@@ -64,7 +65,7 @@ public:
      * \param preferencePanel The perference panel widget pointer. It will only
      * save the frist widget you set.
      */
-    void setPreferencePanel(QWidget *preferencePanel);
+    void setPreferencePanel(KNPreferencePlugin *preferencePanel);
 
 signals:
 

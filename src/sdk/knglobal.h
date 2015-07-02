@@ -20,6 +20,7 @@
 #define KNGLOBAL_H
 
 #include <QObject>
+#include <QBrush>
 
 /*!
  * \def knGlobal
@@ -53,6 +54,12 @@ public:
         LibraryDir,
         PluginDir,
         DefaultDirCount
+    };
+
+    enum TextureBrush
+    {
+        DullPolish,
+        TextureBrushCount
     };
 
     /*!
@@ -90,6 +97,14 @@ public:
      * \return The path of the directory.
      */
     QString dirPath(const int &index);
+
+    /*!
+     * \brief Get the global texture brush resource.
+     * \param index The pixmap index. It should be in enum
+     * KNGlobal::TextureBrush.
+     * \return The brush at specific index.
+     */
+    QBrush textureBursh(const int &index) const;
 
     /*!
      * \brief Get the cache configure class.
@@ -139,9 +154,11 @@ private:
     inline void initialStorageUnit();
     inline void initialDefaultDirPath();
     inline void initialInfrastrcture();
+    inline void initialBrushes();
 
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];
+    QBrush m_brushes[TextureBrushCount];
 
     KNConfigure *m_globalConfigure;
 };

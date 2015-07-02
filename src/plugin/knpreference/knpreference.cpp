@@ -17,11 +17,16 @@
  */
 #include <QBoxLayout>
 
+#include "knthememanager.h"
+#include "knpreferencesidebar.h"
+
 #include "knpreference.h"
 
 KNPreference::KNPreference(QWidget *parent) :
-    KNPreferencePlugin(parent)
+    KNPreferencePlugin(parent),
+    m_sidebar(new KNPreferenceSidebar(this))
 {
+    setObjectName("Preference");
     //Set properties.
     setAutoFillBackground(true);
 
@@ -33,5 +38,12 @@ KNPreference::KNPreference(QWidget *parent) :
     setLayout(mainLayout);
 
     //Add the widgets to preference panels.
-    ;
+    mainLayout->addWidget(m_sidebar);
+
+    //Register the widget to theme manager.
+    knTheme->registerWidget(this);
+
+    //Link requests.
+    connect(m_sidebar, &KNPreferenceSidebar::requireClosePreference,
+            this, &KNPreference::requireClosePreference);
 }

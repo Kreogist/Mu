@@ -18,6 +18,7 @@
 #include <QSharedMemory>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QDataStream>
 
 #include "knsingletonapplication.h"
 

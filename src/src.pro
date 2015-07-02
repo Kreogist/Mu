@@ -78,7 +78,10 @@ SOURCES += \
     plugin/knpreference/knpreference.cpp \
     plugin/knmusicplugin/knmusicplugin.cpp \
     plugin/knmusicplugin/sdk/knmusicglobal.cpp \
-    plugin/knpreference/knpreferencesidebar.cpp
+    plugin/knpreference/knpreferencesidebar.cpp \
+    plugin/knpreference/knpreferencetitlebar.cpp \
+    plugin/knpreference/knpreferenceheaderbutton.cpp \
+    sdk/knsideshadowwidget.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -104,7 +107,10 @@ HEADERS += \
     sdk/knabstractmusicplugin.h \
     plugin/knmusicplugin/knmusicplugin.h \
     plugin/knmusicplugin/sdk/knmusicglobal.h \
-    plugin/knpreference/knpreferencesidebar.h
+    plugin/knpreference/knpreferencesidebar.h \
+    plugin/knpreference/knpreferencetitlebar.h \
+    plugin/knpreference/knpreferenceheaderbutton.h \
+    sdk/knsideshadowwidget.h
 
 RESOURCES += \
     resource/res.qrc

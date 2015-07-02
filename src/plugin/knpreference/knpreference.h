@@ -21,6 +21,7 @@
 
 #include "knpreferenceplugin.h"
 
+class KNPreferenceSidebar;
 /*!
  * \brief The KNPreference class is a official preference panel. It provides the
  * standard item panels.
@@ -31,7 +32,7 @@ class KNPreference : public KNPreferencePlugin
 public:
     /*!
      * \brief Construct a KNPreference widget with the given parent widget.
-     * \param parent
+     * \param parent The parent window widget.
      */
     explicit KNPreference(QWidget *parent = 0);
 
@@ -39,6 +40,8 @@ signals:
 
 public slots:
 
+private:
+    KNPreferenceSidebar *m_sidebar;
 };
 
 #endif // KNPREFERENCE_H

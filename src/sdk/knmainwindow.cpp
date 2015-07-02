@@ -20,6 +20,7 @@
 
 #include "knglobal.h"
 #include "knconfigure.h"
+#include "knpreferenceplugin.h"
 #include "knthememanager.h"
 #include "knmainwindowcontainer.h"
 
@@ -64,9 +65,13 @@ void KNMainWindow::setMainWidget(QWidget *mainWidget)
     m_container->setMainWidget(mainWidget);
 }
 
-void KNMainWindow::setPreferencePanel(QWidget *preferencePanel)
+void KNMainWindow::setPreferencePanel(KNPreferencePlugin *preferencePanel)
 {
+    //Set the preference widget.
     m_container->setPreferencePanel(preferencePanel);
+    //Link the hide preference request.
+    connect(preferencePanel, &KNPreferencePlugin::requireClosePreference,
+            m_container, &KNMainWindowContainer::hidePreference);
 }
 
 void KNMainWindow::closeEvent(QCloseEvent *event)

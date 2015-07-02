@@ -5,6 +5,8 @@
         <file>public/noIcon.png</file>
         <file>public/default.json</file>
         <file>icon/mu.png</file>
+        <file>public/close.png</file>
+        <file>public/dull_polish_texture.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

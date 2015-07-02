@@ -36,6 +36,11 @@ public:
     KNPreferencePlugin(QWidget *parent = 0):QWidget(parent){}
 
 signals:
+    /*!
+     * \brief When the header button clicked, this signal will be emitted to ask
+     * to close the preference.
+     */
+    void requireClosePreference();
 
 public slots:
 };

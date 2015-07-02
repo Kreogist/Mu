@@ -23,6 +23,7 @@
 
 class QPropertyAnimation;
 class QParallelAnimationGroup;
+class QGraphicsOpacityEffect;
 /*!
  * \brief The KNMainWindowContainer class is the container of all the widget.
  * This class will be contructed by KNMainWindow. All the widget of the main
@@ -80,8 +81,14 @@ public slots:
      */
     void setPreferencePanel(QWidget *preferencePanel);
 
+    /*!
+     * \brief Show the preference widget via animation.
+     */
     void showPreference();
 
+    /*!
+     * \brief Hide the preference widget via animation.
+     */
     void hidePreference();
 
 protected:
@@ -93,8 +100,10 @@ protected:
 private:
     inline void updateTheStackRelationship();
     inline void setWidget(const int &index, QWidget *widget);
-    inline void updateTheStartPosition();
-    inline QPropertyAnimation *generateAnime();
+    inline void updateShowAnimeParameters();
+    inline void updateHideAnimeParameters();
+
+    inline QPropertyAnimation *generateAnime(const QByteArray &propertyName);
     enum ContainerWidgetElement
     {
         Header,
@@ -105,6 +114,9 @@ private:
     QParallelAnimationGroup *m_preferenceAnimeGroup;
     QPropertyAnimation *m_elementAnime[ContainerWidgetCount];
     QWidget *m_elementWidget[ContainerWidgetCount];
+    QPropertyAnimation *m_preferenceOpacity;
+    QGraphicsOpacityEffect *m_preferenceOpacityEffect;
+    int m_headerHeight;
 };
 
 #endif // KNMAINWINDOWCONTAINER_H

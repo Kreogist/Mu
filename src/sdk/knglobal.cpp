@@ -52,6 +52,12 @@ QString KNGlobal::dirPath(const int &index)
     return m_dirPath[index];
 }
 
+QBrush KNGlobal::textureBursh(const int &index) const
+{
+    Q_ASSERT(index>-1 && index<TextureBrushCount);
+    return m_brushes[index];
+}
+
 KNConfigure *KNGlobal::cacheConfigure()
 {
     return knConf->configure(KNConfigureManager::Cache);
@@ -156,6 +162,8 @@ void KNGlobal::initialInfrastrcture()
     initialStorageUnit();
     //Initial the default path.
     initialDefaultDirPath();
+    //Initial the global pixmaps.
+    initialBrushes();
 
     //Initial the configure manager.
     //Set the configure folder path.
@@ -202,4 +210,17 @@ void KNGlobal::initialInfrastrcture()
     knTheme->setTheme(0);
     //Load the theme in the configure file.
     knTheme->setTheme(m_globalConfigure->data("Theme").toString());
+}
+
+inline void KNGlobal::initialBrushes()
+{
+    QString textures[TextureBrushCount];
+    textures[DullPolish]="://public/dull_polish_texture.png";
+
+    //Initial all kinds of pixmaps.
+    for(int i=0; i<TextureBrushCount; i++)
+    {
+        m_brushes[i]=QBrush();
+        m_brushes[i].setTexture(QPixmap(textures[i]));
+    }
 }
