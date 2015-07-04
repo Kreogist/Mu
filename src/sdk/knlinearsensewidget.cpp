@@ -22,15 +22,15 @@
 
 #include "knlinearsensewidget.h"
 
-#define maximumBrightness 0x57
-#define minimalBrightness 0x37
+#define maximumBrightness 0x2E
+#define minimalBrightness 0x17
 
 KNLinearSenseWidget::KNLinearSenseWidget(QWidget *parent) :
     QWidget(parent),
     m_highLight(QLinearGradient(QPoint(0,0), QPoint(0, height()))),
-    m_highLightColor(QColor(255,255,255,minimalBrightness)),
+    m_highLightColor(QColor(255,255,255,0)),
     m_mouseIn(generateTimeLine(maximumBrightness)),
-    m_mouseOut(generateTimeLine(minimalBrightness))
+    m_mouseOut(generateTimeLine(0))
 {
     //Set properties.
     setAutoFillBackground(true);
@@ -86,7 +86,7 @@ void KNLinearSenseWidget::onActionMouseInOut(const int &frame)
     //Update the high light color.
     m_highLightColor.setAlpha(frame);
     //Set palette.
-    m_highLight.setColorAt(1, m_highLightColor);
+    m_highLight.setColorAt(0, m_highLightColor);
     //Update the widget.
     update();
 }

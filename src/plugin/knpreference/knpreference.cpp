@@ -17,22 +17,27 @@
  */
 #include <QBoxLayout>
 
-#include "knthememanager.h"
+#include "knpreferenceitem.h"
 #include "knvwidgetswitcher.h"
 #include "knpreferencesidebar.h"
+#include "knpreferenceabout.h"
+#include "knthememanager.h"
+#include "knlocalemanager.h"
 
 #include "knpreference.h"
 
 KNPreference::KNPreference(QWidget *parent) :
     KNPreferencePlugin(parent),
     m_sidebar(new KNPreferenceSidebar(this)),
-    m_content(new KNVWidgetSwitcher(this))
+    m_content(new KNVWidgetSwitcher(this)),
+    m_aboutItem(new KNPreferenceItem(this)),
+    m_about(new KNPreferenceAbout(this))
 {
     setObjectName("Preference");
     //Set properties.
     setAutoFillBackground(true);
 
-    //Configure content.
+    //Configure preference content.
     m_content->setObjectName("PreferenceContent");
     m_content->setAutoFillBackground(true);
 
@@ -48,11 +53,43 @@ KNPreference::KNPreference(QWidget *parent) :
     //Add the contents to preference panel.
     mainLayout->addWidget(m_content, 1);
 
-    //Register the widget to theme manager.
-    knTheme->registerWidget(this);
-    knTheme->registerWidget(m_content);
+    //Add about item and content to preference.
+    addPreferenceTab(m_aboutItem, m_about);
 
     //Link requests.
     connect(m_sidebar, &KNPreferenceSidebar::requireClosePreference,
             this, &KNPreference::requireClosePreference);
+    connect(m_sidebar, &KNPreferenceSidebar::requireChangeContent,
+            m_content, &KNVWidgetSwitcher::setCurrentIndex);
+
+    //Register the widget to theme manager.
+    knTheme->registerWidget(this);
+    knTheme->registerWidget(m_content);
+
+    //Link retranslate.
+    knI18n->link(this, &KNPreference::retranslate);
+    retranslate();
+}
+
+void KNPreference::addTab(KNPreferenceItem *tabWidget, QWidget *content)
+{
+    //Add the tab to sidebar, add the content to content.
+    addPreferenceTab(tabWidget, content);
+}
+
+void KNPreference::retranslate()
+{
+    //Update the item data.
+    m_aboutItem->setText(tr("About"));
+
+    ;
+}
+
+inline void KNPreference::addPreferenceTab(KNPreferenceItem *tabWidget,
+                                           QWidget *content)
+{
+    //Add content widget to content container.
+    m_content->addWidget(content);
+    //Add tab widget to sidebar.
+    m_sidebar->addItemWidget(tabWidget);
 }

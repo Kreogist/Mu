@@ -23,6 +23,7 @@
 #include "knconfiguremanager.h"
 #include "knfontmanager.h"
 #include "knlocalemanager.h"
+#include "knpreferenceplugin.h"
 #include "knthememanager.h"
 
 #include "knglobal.h"
@@ -50,6 +51,15 @@ QString KNGlobal::dirPath(const int &index)
 {
     Q_ASSERT(index>-1 && index<DefaultDirCount);
     return m_dirPath[index];
+}
+
+void KNGlobal::addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content)
+{
+    //Check the preference plugin has been set or not.
+    if(m_preference!=nullptr)
+    {
+        m_preference->addTab(tabWidget, content);
+    }
 }
 
 QBrush KNGlobal::textureBursh(const int &index) const
@@ -80,6 +90,7 @@ void KNGlobal::retranslate()
 
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent),
+    m_preference(nullptr),
     m_globalConfigure(nullptr)
 {
     //Initial the managers.
@@ -214,6 +225,7 @@ void KNGlobal::initialInfrastrcture()
 
 inline void KNGlobal::initialBrushes()
 {
+    //Set the texture file path.
     QString textures[TextureBrushCount];
     textures[DullPolish]="://public/dull_polish_texture.png";
 
@@ -223,4 +235,15 @@ inline void KNGlobal::initialBrushes()
         m_brushes[i]=QBrush();
         m_brushes[i].setTexture(QPixmap(textures[i]));
     }
+}
+
+void KNGlobal::setPreference(KNPreferencePlugin *preference)
+{
+    //Check the preference has been set before or not.
+    if(m_preference==nullptr)
+    {
+        return;
+    }
+    //Save the preference pointer.
+    m_preference = preference;
 }

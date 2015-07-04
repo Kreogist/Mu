@@ -29,6 +29,8 @@
 #define knGlobal (KNGlobal::instance())
 
 class KNConfigure;
+class KNPreferencePlugin;
+class KNPreferenceItem;
 /*!
  * \brief The KNGlobal class is a global instance which contains several public
  * function. \n
@@ -99,6 +101,15 @@ public:
     QString dirPath(const int &index);
 
     /*!
+     * \brief Add a pair of preference tab and content to preference panel.
+     * Before calling this function, the preference plugin must be set by using
+     * setPreference() function;.
+     * \param tabWidget The preference item tab.
+     * \param content The content widget.
+     */
+    void addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content);
+
+    /*!
      * \brief Get the global texture brush resource.
      * \param index The pixmap index. It should be in enum
      * KNGlobal::TextureBrush.
@@ -123,6 +134,12 @@ public:
      * \return The user KNConfigure class.
      */
     KNConfigure *userConfigure();
+
+    /*!
+     * \brief Set the global preference plugin.
+     * \param preference The preference plugin.
+     */
+    void setPreference(KNPreferencePlugin *preference);
 
 signals:
 
@@ -156,6 +173,7 @@ private:
     inline void initialInfrastrcture();
     inline void initialBrushes();
 
+    KNPreferencePlugin *m_preference;
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];
     QBrush m_brushes[TextureBrushCount];

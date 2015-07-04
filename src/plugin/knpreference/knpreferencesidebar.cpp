@@ -20,6 +20,8 @@
 #include "knthememanager.h"
 
 #include "knpreferencetitlebar.h"
+#include "knshadowscrollarea.h"
+#include "knpreferenceitemlist.h"
 #include "knlinearsensewidget.h"
 #include "knsideshadowwidget.h"
 
@@ -28,6 +30,7 @@
 KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     QWidget(parent),
     m_titleBar(new KNPreferenceTitleBar(this)),
+    m_itemList(new KNPreferenceItemList(this)),
     m_bottomBar(new KNLinearSenseWidget(this)),
     m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
                                          this)),
@@ -36,6 +39,14 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     //Set properties.
     setContentsMargins(0,0,0,0);
     setFixedWidth(250);
+    //Initial shadow scroll area.
+    KNShadowScrollArea *scrollArea=new KNShadowScrollArea(this);
+    scrollArea->lower();
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(m_itemList);
+    //Link the item list.
+    connect(m_itemList, &KNPreferenceItemList::currentIndexChange,
+            this, &KNPreferenceSidebar::requireChangeContent);
     //Initial bottom bar.
     initialBottomBar();
 
@@ -47,14 +58,19 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
 
     //Add the title bar widget.
     mainLayout->addWidget(m_titleBar);
-    //Add the widget.
-    mainLayout->addStretch();
+    //Add the shadow scroll area widget.
+    mainLayout->addWidget(scrollArea, 1);
     //Add the bottom bar.
     mainLayout->addWidget(m_bottomBar);
 
     //Link requests.
     connect(m_titleBar, &KNPreferenceTitleBar::requireClosePreference,
             this, &KNPreferenceSidebar::requireClosePreference);
+}
+
+void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
+{
+    m_itemList->addItemWidget(item);
 }
 
 void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)

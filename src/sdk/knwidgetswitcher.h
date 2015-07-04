@@ -94,6 +94,11 @@ protected:
     virtual void updateAnimationPosition()=0;
 
     /*!
+     * \brief Reimplement from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event);
+
+    /*!
      * \brief Get the widget in animation object.
      * \return The animation object.
      */
@@ -113,6 +118,7 @@ protected:
 
 private:
     inline QPropertyAnimation *generateAnimation();
+    inline void setWidgetVisible(const int &index, bool visible);
 
     QList<QWidget *> m_widgets;
     QParallelAnimationGroup *m_movingAnimationGroup;

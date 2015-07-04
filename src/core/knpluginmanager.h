@@ -77,7 +77,6 @@ private:
     void loadCategoryPlugin(KNCategoryPlugin *plugin);
     KNMainWindow *m_mainWindow;
     KNMainWindowHeaderBase *m_header;
-    KNPreferencePlugin *m_preference;
 };
 
 #endif // KNPLUGINMANAGER_H

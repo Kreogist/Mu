@@ -21,7 +21,9 @@
 
 #include <QWidget>
 
+class KNPreferenceItem;
 class KNPreferenceTitleBar;
+class KNPreferenceItemList;
 class KNLinearSenseWidget;
 class KNSideShadowWidget;
 /*!
@@ -40,12 +42,25 @@ public:
      */
     explicit KNPreferenceSidebar(QWidget *parent = 0);
 
+    /*!
+     * \brief Add an item widget to sidebar.
+     * \param item The preference item widget pointer.
+     */
+    void addItemWidget(KNPreferenceItem *item);
+
 signals:
     /*!
      * \brief When the header button clicked, this signal will be emitted to ask
      * to close the preference.
      */
     void requireClosePreference();
+
+    /*!
+     * \brief When the current tab index is changed, this signal will be emitted
+     * to ask to change the content to specific index.
+     * \param tabIndex The tab index.
+     */
+    void requireChangeContent(int tabIndex);
 
 public slots:
 
@@ -58,6 +73,7 @@ protected:
 private:
     inline void initialBottomBar();
     KNPreferenceTitleBar *m_titleBar;
+    KNPreferenceItemList *m_itemList;
     KNLinearSenseWidget *m_bottomBar;
     KNSideShadowWidget *m_rightShadow;
     const int m_shadowWidth;

@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QApplication>
+#include <QStyleFactory>
 
 //Dependences.
 #include "knglobal.h"
@@ -38,11 +39,12 @@
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
-    m_header(nullptr),
-    m_preference(nullptr)
+    m_header(nullptr)
 {
     //Set the application information.
     setApplicationInformation();
+    //Set fusion style to application.
+    QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial the global.
     KNGlobal::initial(this);
 }
@@ -92,17 +94,17 @@ void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
     {
         return;
     }
-    //Save the preference
-    m_preference=plugin;
     //Check the preference pointer.
-    if(m_preference==nullptr)
+    if(plugin==nullptr)
     {
         return;
     }
+    //Set the preference panel to global preference plugin.
+    knGlobal->setPreference(plugin);
+    //Give the preference panel to main window.
     if(m_mainWindow!=nullptr)
     {
-        //Give the preference panel to main window.
-        m_mainWindow->setPreferencePanel(m_preference);
+        m_mainWindow->setPreferencePanel(plugin);
     }
 }
 

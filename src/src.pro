@@ -83,7 +83,12 @@ SOURCES += \
     plugin/knpreference/knpreferenceheaderbutton.cpp \
     sdk/knsideshadowwidget.cpp \
     sdk/knlinearsensewidget.cpp \
-    sdk/knvwidgetswitcher.cpp
+    sdk/knvwidgetswitcher.cpp \
+    sdk/knpreferenceitem.cpp \
+    sdk/knshadowscrollarea.cpp \
+    plugin/knpreference/knpreferenceitemlist.cpp \
+    sdk/sao/knsaostyle.cpp \
+    plugin/knpreference/knpreferenceabout.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -114,7 +119,12 @@ HEADERS += \
     plugin/knpreference/knpreferenceheaderbutton.h \
     sdk/knsideshadowwidget.h \
     sdk/knlinearsensewidget.h \
-    sdk/knvwidgetswitcher.h
+    sdk/knvwidgetswitcher.h \
+    sdk/knpreferenceitem.h \
+    sdk/knshadowscrollarea.h \
+    plugin/knpreference/knpreferenceitemlist.h \
+    sdk/sao/knsaostyle.h \
+    plugin/knpreference/knpreferenceabout.h
 
 RESOURCES += \
     resource/res.qrc

@@ -31,15 +31,19 @@
     {
         "Parent" : "Preference"
     },
-    "PreferenceSidebarBottom" :
+    "PreferenceItem" :
     {
         "Parent" : "PreferenceSidebar",
-        "Window" : "#000000"
+        "Button" : "#F7CF3D",
+        "ButtonText" : "#AAAAAA"
+    },
+    "PreferenceSidebarBottom" :
+    {
+        "Parent" : "PreferenceSidebar"
     },
     "PreferenceTitleBar" :
     {
-        "Parent" : "PreferenceSidebar",
-        "Window" : "#0A0A0A"
+        "Parent" : "PreferenceSidebar"
     },
     "PreferenceTitleBarLabel" :
     {

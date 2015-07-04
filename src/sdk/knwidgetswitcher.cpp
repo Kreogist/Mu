@@ -20,6 +20,8 @@
 
 #include "knwidgetswitcher.h"
 
+#include <QDebug>
+
 KNWidgetSwitcher::KNWidgetSwitcher(QWidget *parent) :
     QWidget(parent),
     m_movingAnimationGroup(new QParallelAnimationGroup(this)),
@@ -114,7 +116,29 @@ void KNWidgetSwitcher::setCurrentIndex(const int &currentIndex)
     m_inAnimation->setTargetObject(m_widgets.at(m_currentIndex));
     m_outAnimation->setTargetObject(m_widgets.at(m_outWidgetIndex));
     //Update the start and end value.
+    updateAnimationPosition();
+    //Prepare the widget.
+    setWidgetVisible(m_currentIndex, true);
+    //Start animation.
+    m_movingAnimationGroup->start();
+}
 
+void KNWidgetSwitcher::resizeEvent(QResizeEvent *event)
+{
+    //Do original resize.
+    QWidget::resizeEvent(event);
+    //If the animation is running, update the animation position.
+    if(m_movingAnimationGroup->state()==QPropertyAnimation::Running)
+    {
+        updateAnimationPosition();
+        return;
+    }
+    //Resize the current widget.
+    if(m_currentIndex!=-1)
+    {
+        //Resize the current widget to the same size as the switcher.
+        m_widgets.at(m_currentIndex)->resize(size());
+    }
 }
 
 inline QPropertyAnimation *KNWidgetSwitcher::generateAnimation()
@@ -127,6 +151,15 @@ inline QPropertyAnimation *KNWidgetSwitcher::generateAnimation()
     animation->setDuration(200);
     //Return the animation.
     return animation;
+}
+
+inline void KNWidgetSwitcher::setWidgetVisible(const int &index, bool visible)
+{
+    Q_ASSERT(index>-1 && index<m_widgets.size());
+    //Get the widget.
+    QWidget *widget=m_widgets.at(index);
+    //Set the widget visible.
+    widget->setVisible(visible);
 }
 
 int KNWidgetSwitcher::outWidgetIndex() const

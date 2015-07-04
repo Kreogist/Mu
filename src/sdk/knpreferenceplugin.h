@@ -21,6 +21,7 @@
 
 #include <QWidget>
 
+class KNPreferenceItem;
 /*!
  * \brief The KNPreferencePlugin class is the main preference panel. It's only a
  * port widget. You should reimplement it and fill those pure virtual methods.\n
@@ -34,6 +35,14 @@ public:
      * \param parent The parent widget.
      */
     KNPreferencePlugin(QWidget *parent = 0):QWidget(parent){}
+
+    /*!
+     * \brief Add a preference tab to prefernce plugin. It should provides two
+     * widgets: a tab widget and a content widget.
+     * \param tabWidget The tab widget.
+     * \param content The content widget.
+     */
+    virtual void addTab(KNPreferenceItem *tabWidget, QWidget *content)=0;
 
 signals:
     /*!
