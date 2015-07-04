@@ -31,8 +31,8 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(5);
+    mainLayout->setContentsMargins(18,18,18,18);
+    mainLayout->setSpacing(15);
     setLayout(mainLayout);
 
     //Initial the labels.
@@ -47,7 +47,13 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     }
     mainLayout->addStretch();
 
+
     //Set the default label.
+    m_textContent[Logo]->setPixmap(
+                QPixmap("://icon/mu.png").scaled(128,
+                                                 128,
+                                                 Qt::KeepAspectRatio,
+                                                 Qt::SmoothTransformation));
     m_textContent[Title]->setText(QApplication::applicationDisplayName());
 
     //Link the retranslate.

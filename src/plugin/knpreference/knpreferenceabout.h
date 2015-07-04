@@ -22,10 +22,18 @@
 #include <QWidget>
 
 class QLabel;
+/*!
+ * \brief The KNPreferenceAbout class is a simple class which provides the
+ * version information and some other links about this product.
+ */
 class KNPreferenceAbout : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct KNPreferenceAbout widget.
+     * \param parent The parent widget.
+     */
     explicit KNPreferenceAbout(QWidget *parent = 0);
 
 signals:
