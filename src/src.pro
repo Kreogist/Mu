@@ -42,7 +42,7 @@ gcc: {
     QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3 -finline-functions
     # Qt will use clang on Mac OS X, but it seems that it treats the clang as
     # gcc, it will use all the flags we set to gcc on clang. In clang, it
-    # doesn't have -fforce-addr switch, so we need to set these two switcher
+    # doesn't have -fforce-addr switch, so we need to set the switcher
     # especially for Windows and Linux.
     win32:{
         QMAKE_CXXFLAGS_RELEASE += -fforce-addr
@@ -88,7 +88,9 @@ SOURCES += \
     sdk/knshadowscrollarea.cpp \
     plugin/knpreference/knpreferenceitemlist.cpp \
     sdk/sao/knsaostyle.cpp \
-    plugin/knpreference/knpreferenceabout.cpp
+    plugin/knpreference/knpreferenceabout.cpp \
+    sdk/kncategorytab.cpp \
+    sdk/kncategorytabbar.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -124,7 +126,9 @@ HEADERS += \
     sdk/knshadowscrollarea.h \
     plugin/knpreference/knpreferenceitemlist.h \
     sdk/sao/knsaostyle.h \
-    plugin/knpreference/knpreferenceabout.h
+    plugin/knpreference/knpreferenceabout.h \
+    sdk/kncategorytab.h \
+    sdk/kncategorytabbar.h
 
 RESOURCES += \
     resource/res.qrc

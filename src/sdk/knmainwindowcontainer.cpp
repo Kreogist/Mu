@@ -73,7 +73,13 @@ QWidget *KNMainWindowContainer::mainWidget() const
 
 void KNMainWindowContainer::setMainWidget(QWidget *mainWidget)
 {
+    //Save the main widget.
     setWidget(MainWidget, mainWidget);
+    //Update the main widget geometry.
+    mainWidget->setGeometry(0,
+                            m_headerHeight,
+                            width(),
+                            height()-m_headerHeight);
 }
 
 QWidget *KNMainWindowContainer::preferencePanel() const

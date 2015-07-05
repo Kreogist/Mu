@@ -70,6 +70,10 @@ protected:
      */
     void resizeEvent(QResizeEvent *event);
 
+private slots:
+    void retranslate();
+    void onActionIndexChanged(const int &index);
+
 private:
     inline void initialBottomBar();
     KNPreferenceTitleBar *m_titleBar;

@@ -22,6 +22,7 @@
 #include "knabstractmusicplugin.h"
 
 class KNHWidgetSwitcher;
+class KNCategoryTabBar;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
@@ -47,6 +48,9 @@ public:
      */
     QPixmap icon();
 
+    /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::title().
+     */
     QString title();
 
 signals:
@@ -65,6 +69,7 @@ public slots:
 
 private:
     QWidget *m_headerWidget;
+    KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;
 };
 

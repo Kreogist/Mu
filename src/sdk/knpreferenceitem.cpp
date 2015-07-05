@@ -143,6 +143,8 @@ void KNPreferenceItem::paintEvent(QPaintEvent *event)
 
 void KNPreferenceItem::mouseReleaseEvent(QMouseEvent *event)
 {
+    //Ignore the original release event.
+    Q_UNUSED(event)
     //Keep the checked state.
     setChecked(true);
 }

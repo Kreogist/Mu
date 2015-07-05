@@ -62,6 +62,7 @@ void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
 
 void KNMainWindow::setMainWidget(QWidget *mainWidget)
 {
+    //Save the main widget.
     m_container->setMainWidget(mainWidget);
 }
 

@@ -72,6 +72,12 @@ void KNPreferenceItemList::addItemWidget(KNPreferenceItem *item)
     //Link the item with the signal mapper.
     connect(item, SIGNAL(pressed()), m_itemMapper, SLOT(map()));
     m_itemMapper->setMapping(item, m_mainLayout->count()-1);
+    //Check if this is the first item. Emit the current changed signal if this
+    //is the first item.
+    if(m_mainLayout->count()==1)
+    {
+        emit currentIndexChange(0);
+    }
 }
 
 QString KNPreferenceItemList::itemText(const int &index)

@@ -15,15 +15,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
+
+#include "kncategorytabbar.h"
 #include "knhwidgetswitcher.h"
 
 #include "knmusicplugin.h"
 
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     KNAbstractMusicPlugin(parent),
-    m_headerWidget(new QWidget(this))
+    m_headerWidget(new QWidget(this)),
+    m_tabBar(new KNCategoryTabBar(this)),
+    m_switcher(new KNHWidgetSwitcher(this))
 {
-    ;
+    //Initial layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+
+    //Add widget to layout.
+    mainLayout->addWidget(m_tabBar);
+    mainLayout->addWidget(m_switcher, 1);
 }
 
 QWidget *KNMusicPlugin::headerWidget()

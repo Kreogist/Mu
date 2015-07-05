@@ -24,8 +24,11 @@
 #include "knpreferenceitemlist.h"
 #include "knlinearsensewidget.h"
 #include "knsideshadowwidget.h"
+#include "knlocalemanager.h"
 
 #include "knpreferencesidebar.h"
+
+#include <QDebug>
 
 KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     QWidget(parent),
@@ -39,6 +42,9 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     //Set properties.
     setContentsMargins(0,0,0,0);
     setFixedWidth(250);
+    //Link title bar requests.
+    connect(m_titleBar, &KNPreferenceTitleBar::requireClosePreference,
+            this, &KNPreferenceSidebar::requireClosePreference);
     //Initial shadow scroll area.
     KNShadowScrollArea *scrollArea=new KNShadowScrollArea(this);
     scrollArea->lower();
@@ -46,7 +52,7 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     scrollArea->setWidget(m_itemList);
     //Link the item list.
     connect(m_itemList, &KNPreferenceItemList::currentIndexChange,
-            this, &KNPreferenceSidebar::requireChangeContent);
+            this, &KNPreferenceSidebar::onActionIndexChanged);
     //Initial bottom bar.
     initialBottomBar();
 
@@ -63,9 +69,9 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     //Add the bottom bar.
     mainLayout->addWidget(m_bottomBar);
 
-    //Link requests.
-    connect(m_titleBar, &KNPreferenceTitleBar::requireClosePreference,
-            this, &KNPreferenceSidebar::requireClosePreference);
+    //Link retranslate.
+    knI18n->link(this, &KNPreferenceSidebar::retranslate);
+    retranslate();
 }
 
 void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
@@ -82,6 +88,23 @@ void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)
                                0,
                                m_shadowWidth,
                                height());
+}
+
+void KNPreferenceSidebar::retranslate()
+{
+    //Check the current index. Update the title if the current index is not -1.
+    if(m_itemList->currentIndex()!=-1)
+    {
+        m_titleBar->setText(m_itemList->itemText(m_itemList->currentIndex()));
+    }
+}
+
+void KNPreferenceSidebar::onActionIndexChanged(const int &index)
+{
+    //Change the title text.
+    m_titleBar->setText(m_itemList->itemText(index));
+    //Emit content change requirement.
+    emit requireChangeContent(index);
 }
 
 void KNPreferenceSidebar::initialBottomBar()

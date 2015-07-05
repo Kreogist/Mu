@@ -6,6 +6,11 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "CategoryTab" : {
+        "Parent" : "MainWindow",
+        "Button" : "#000000",
+        "ButtonText" : "#FFFFFF"
+    },
     "MainWindowHeader" :
     {
         "Parent" : "MainWindow",
