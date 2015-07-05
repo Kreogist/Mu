@@ -17,6 +17,7 @@
  */
 #include <QBoxLayout>
 
+#include "kncategorytab.h"
 #include "kncategorytabbar.h"
 #include "knhwidgetswitcher.h"
 

@@ -90,7 +90,8 @@ SOURCES += \
     sdk/sao/knsaostyle.cpp \
     plugin/knpreference/knpreferenceabout.cpp \
     sdk/kncategorytab.cpp \
-    sdk/kncategorytabbar.cpp
+    sdk/kncategorytabbar.cpp \
+    sdk/knabstracttabgroup.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -128,7 +129,8 @@ HEADERS += \
     sdk/sao/knsaostyle.h \
     plugin/knpreference/knpreferenceabout.h \
     sdk/kncategorytab.h \
-    sdk/kncategorytabbar.h
+    sdk/kncategorytabbar.h \
+    sdk/knabstracttabgroup.h
 
 RESOURCES += \
     resource/res.qrc

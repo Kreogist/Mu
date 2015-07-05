@@ -19,24 +19,33 @@
 #ifndef KNCATEGORYTABBAR_H
 #define KNCATEGORYTABBAR_H
 
-#include <QWidget>
+#include "knabstracttabgroup.h"
 
 class QBoxLayout;
 /*!
  * \brief The KNCategoryTabBar class provides a container of the KNCategoryTab.
- * All the tab button add to this tab bar will be taken over the toggled signal.
- * If there's any button has been pushed, it will emit the currentIndexChanged()
- * signal.
  */
-class KNCategoryTabBar : public QWidget
+class KNCategoryTabBar : public KNAbstractTabGroup
 {
     Q_OBJECT
 public:
     explicit KNCategoryTabBar(QWidget *parent = 0);
 
-signals:
+protected:
+    /*!
+     * \brief Reimplement from KNAbstractTabGroup::isEmpty().
+     */
+    bool isEmpty();
 
-public slots:
+    /*!
+     * \brief Reimplemnt from KNAbstractTabGroup::addTabToWidget().
+     */
+    int addTabToWidget(QAbstractButton *tab);
+
+    /*!
+     * \brief Reimplement from KNAbstractTabGroup::tabAt().
+     */
+    QAbstractButton *tabAt(const int &index);
 
 private:
     QBoxLayout *m_mainLayout;

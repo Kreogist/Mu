@@ -25,6 +25,7 @@
 #include "knlinearsensewidget.h"
 #include "knsideshadowwidget.h"
 #include "knlocalemanager.h"
+#include "knpreferenceitem.h"
 
 #include "knpreferencesidebar.h"
 
@@ -76,7 +77,7 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
 
 void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
 {
-    m_itemList->addItemWidget(item);
+    m_itemList->addTab(item);
 }
 
 void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)

@@ -19,17 +19,14 @@
 #ifndef KNPREFERENCEITEMLIST_H
 #define KNPREFERENCEITEMLIST_H
 
-#include <QWidget>
+#include "knabstracttabgroup.h"
 
 class QBoxLayout;
-class QSignalMapper;
-class KNPreferenceItem;
 /*!
  * \brief The KNPreferenceItemList class provides a widget which will contains
- * all the prefercen items. When an item was clicked, then it will emit a signal
- * to notice to change the index of the content.
+ * all the prefercen items.
  */
-class KNPreferenceItemList : public QWidget
+class KNPreferenceItemList : public KNAbstractTabGroup
 {
     Q_OBJECT
 public:
@@ -40,41 +37,30 @@ public:
     explicit KNPreferenceItemList(QWidget *parent = 0);
 
     /*!
-     * \brief Add preference item widget to the list. It will take over the
-     * control of the click signal of the item.
-     * \param item The preference item widget.
-     */
-    void addItemWidget(KNPreferenceItem *item);
-
-    /*!
      * \brief Get the specific text of the item at index.
      * \param index The item index.
      * \return The item caption text.
      */
     QString itemText(const int &index);
 
+protected:
     /*!
-     * \brief Get the current item index. If there's no item it will be -1.
-     * \return The current item index.
+     * \brief Reimplement from KNAbstractTabGroup::isEmpty().
      */
-    int currentIndex() const;
+    bool isEmpty();
 
-signals:
     /*!
-     * \brief When there's a new item clicked, this signal will be emitted.
-     * \param index The new index.
+     * \brief Reimplemnt from KNAbstractTabGroup::addTabToWidget().
      */
-    void currentIndexChange(int index);
+    int addTabToWidget(QAbstractButton *tab);
 
-public slots:
-
-    void setCurrentIndex(const int &currentIndex);
+    /*!
+     * \brief Reimplement from KNAbstractTabGroup::tabAt().
+     */
+    QAbstractButton *tabAt(const int &index);
 
 private:
-    inline KNPreferenceItem *itemAt(const int &index);
-    QSignalMapper *m_itemMapper;
     QBoxLayout *m_mainLayout;
-    int m_currentIndex;
 };
 
 #endif // KNPREFERENCEITEMLIST_H

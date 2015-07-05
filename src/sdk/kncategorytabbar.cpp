@@ -22,10 +22,11 @@
 #include "kncategorytabbar.h"
 
 KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
-    QWidget(parent),
+    KNAbstractTabGroup(parent),
     m_mainLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
 {
     //Set properties.
+    setContentsMargins(0,0,0,0);
     setFixedHeight(KNCategoryTab::tabHeight());
 
     //Set layout.
@@ -34,3 +35,24 @@ KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     setLayout(m_mainLayout);
 }
 
+bool KNCategoryTabBar::isEmpty()
+{
+    //The group empty state is the same as the layout state.
+    return m_mainLayout->isEmpty();
+}
+
+int KNCategoryTabBar::addTabToWidget(QAbstractButton *tab)
+{
+    //Add tab item to the layout.
+    m_mainLayout->addWidget(tab);
+    //The maximum index of the main layout will be the tab's index.
+    return m_mainLayout->count()-1;
+}
+
+QAbstractButton *KNCategoryTabBar::tabAt(const int &index)
+{
+    Q_ASSERT(index>-1 && index<m_mainLayout->count());
+    //Get the index from the main layout.
+    return static_cast<QAbstractButton *>
+            (m_mainLayout->itemAt(index)->widget());
+}

@@ -64,6 +64,10 @@ KNCategoryTab::KNCategoryTab(QWidget *parent) :
     connect(m_mouseUp, &QTimeLine::frameChanged,
             this, &KNCategoryTab::onActionMouseUpDown);
 
+    //Link the toggled signal.
+    connect(this, &KNCategoryTab::toggled,
+            this, &KNCategoryTab::onActionToggled);
+
     //Register at theme manager.
     knTheme->registerWidget(this);
 }
@@ -196,7 +200,7 @@ void KNCategoryTab::onActionMouseUpDown(const int &frame)
 void KNCategoryTab::onActionToggled(bool checked)
 {
     //Start the anime according to checked state.
-    startAnime(checked?m_mouseDown:m_mouseUp);
+    startAnime(checked?m_mouseIn:m_mouseOut);
 }
 
 inline QTimeLine *KNCategoryTab::generateTimeLine(const int &endFrame)
