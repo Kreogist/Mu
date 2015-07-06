@@ -34,6 +34,8 @@
 #include "plugin/knmusicplugin/knmusicplugin.h"
 #include "plugin/knpreference/knpreference.h"
 
+#include "knmessagebox.h"
+
 #include "knpluginmanager.h"
 
 KNPluginManager::KNPluginManager(QObject *parent) :
@@ -47,6 +49,9 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial the global.
     KNGlobal::initial(this);
+
+    KNMessageBox *test=new KNMessageBox();
+    test->show();
 }
 
 KNPluginManager::~KNPluginManager()

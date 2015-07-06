@@ -34,7 +34,7 @@ class KNMusicPlugin : public KNAbstractMusicPlugin
 public:
     /*!
      * \brief Construct the KNMusicCategoryPlugin class.
-     * \param parent
+     * \param parent The parent widget of the plugin.
      */
     explicit KNMusicPlugin(QWidget *parent = 0);
 
@@ -68,6 +68,7 @@ public slots:
     void onArgumentsAvailable(const QStringList &data);
 
 private:
+    inline void initialInfrastructure();
     QWidget *m_headerWidget;
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;

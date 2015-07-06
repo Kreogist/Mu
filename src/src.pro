@@ -91,7 +91,11 @@ SOURCES += \
     plugin/knpreference/knpreferenceabout.cpp \
     sdk/kncategorytab.cpp \
     sdk/kncategorytabbar.cpp \
-    sdk/knabstracttabgroup.cpp
+    sdk/knabstracttabgroup.cpp \
+    sdk/knmessagebox.cpp \
+    sdk/sao/knmessageboxblock.cpp \
+    sdk/sao/knmessageboxcontent.cpp \
+    sdk/knopacityanimebutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -130,7 +134,11 @@ HEADERS += \
     plugin/knpreference/knpreferenceabout.h \
     sdk/kncategorytab.h \
     sdk/kncategorytabbar.h \
-    sdk/knabstracttabgroup.h
+    sdk/knabstracttabgroup.h \
+    sdk/knmessagebox.h \
+    sdk/sao/knmessageboxblock.h \
+    sdk/sao/knmessageboxcontent.h \
+    sdk/knopacityanimebutton.h
 
 RESOURCES += \
     resource/res.qrc

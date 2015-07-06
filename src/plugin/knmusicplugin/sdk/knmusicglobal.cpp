@@ -18,6 +18,25 @@
 
 #include "knmusicglobal.h"
 
+//Initial the instance pointer to null.
+KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
+
+KNMusicGlobal *KNMusicGlobal::instance()
+{
+    //Return the instance pointer.
+    return m_instance;
+}
+
+void KNMusicGlobal::initial(QObject *parent)
+{
+    //Check if the singleton instance variable is null. Set the pointer to this
+    //object if this is the first constructed object.
+    if(m_instance==nullptr)
+    {
+        m_instance=new KNMusicGlobal(parent);
+    }
+}
+
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     QObject(parent)
 {

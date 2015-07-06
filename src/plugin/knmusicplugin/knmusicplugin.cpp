@@ -17,9 +17,17 @@
  */
 #include <QBoxLayout>
 
+//Dependence
 #include "kncategorytab.h"
 #include "kncategorytabbar.h"
 #include "knhwidgetswitcher.h"
+
+//Ports
+
+//Plugins
+
+//Globals.
+#include "knmusicglobal.h"
 
 #include "knmusicplugin.h"
 
@@ -29,15 +37,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_tabBar(new KNCategoryTabBar(this)),
     m_switcher(new KNHWidgetSwitcher(this))
 {
-    //Initial layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(0);
-    setLayout(mainLayout);
-
-    //Add widget to layout.
-    mainLayout->addWidget(m_tabBar);
-    mainLayout->addWidget(m_switcher, 1);
+    //Initial the basic infrastructure.
+    initialInfrastructure();
 }
 
 QWidget *KNMusicPlugin::headerWidget()
@@ -63,4 +64,24 @@ void KNMusicPlugin::saveConfigure()
 void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
 {
     ;
+}
+
+void KNMusicPlugin::initialInfrastructure()
+{
+    //Initial the music global.
+    KNMusicGlobal::initial(this);
+
+    //Link the tab bar and switcher.
+    connect(m_tabBar, &KNCategoryTabBar::currentIndexChange,
+            m_switcher, &KNHWidgetSwitcher::setCurrentIndex);
+
+    //Initial layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+
+    //Add widget to layout.
+    mainLayout->addWidget(m_tabBar);
+    mainLayout->addWidget(m_switcher, 1);
 }

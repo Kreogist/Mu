@@ -21,15 +21,39 @@
 
 #include <QObject>
 
+/*!
+ * \def knGlobal
+ * A global pointer referring to the unique music global object.
+ */
+#define knMusicGlobal (KNMusicGlobal::instance())
+
+/*!
+ * \brief The KNMusicGlobal class provides some public instance and function of
+ * the official music category plugin.
+ */
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNMusicGlobal(QObject *parent = 0);
+    /*!
+     * \brief Get the singleton instance of class KNMusicGlobal.
+     * \return The global instance of KNMusicGlobal.
+     */
+    static KNMusicGlobal *instance();
+
+    /*!
+     * \brief Initial the music global class.
+     * \param parent The parent object of the music global class.
+     */
+    static void initial(QObject *parent = 0);
 
 signals:
 
 public slots:
+
+private:
+    static KNMusicGlobal *m_instance;
+    explicit KNMusicGlobal(QObject *parent = 0);
 };
 
 #endif // KNMUSICGLOBAL_H

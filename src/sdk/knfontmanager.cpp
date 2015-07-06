@@ -77,6 +77,7 @@ void KNFontManager::loadCustomFontFolder(const QString &folderPath)
 
 void KNFontManager::loadCustomFont(const QString &filePath)
 {
+    //Add file to application font.
     QFontDatabase::addApplicationFont(filePath);
 }
 

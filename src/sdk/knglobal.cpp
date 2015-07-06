@@ -33,7 +33,7 @@ KNGlobal *KNGlobal::m_instance=nullptr;
 
 KNGlobal *KNGlobal::instance()
 {
-    //Initial the global instance if it's still null.
+    //Return the instance pointer.
     return m_instance;
 }
 

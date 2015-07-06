@@ -22,6 +22,7 @@
 #include "knabstracttabgroup.h"
 
 class QBoxLayout;
+class QTimeLine;
 /*!
  * \brief The KNCategoryTabBar class provides a container of the KNCategoryTab.
  */
@@ -47,7 +48,23 @@ protected:
      */
     QAbstractButton *tabAt(const int &index);
 
+    /*!
+     * \brief Reimplement from KNAbstractTabGroup::enterEvent().
+     */
+    void enterEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplement from KNAbstractTabGroup::leaveEvent().
+     */
+    void leaveEvent(QEvent *event);
+
+private slots:
+    void onActionMouseInOut(const int &frame);
+
 private:
+    inline QTimeLine *generateTimeLine(const int &endFrame);
+    inline void startAnime(QTimeLine *timeLine);
+    QTimeLine *m_mouseIn, *m_mouseOut;
     QBoxLayout *m_mainLayout;
 };
 
