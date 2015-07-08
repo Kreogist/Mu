@@ -21,6 +21,7 @@
 
 #include "knabstractmusicplugin.h"
 
+class QBoxLayout;
 class KNMouseDetectHeader;
 class KNHWidgetSwitcher;
 class KNCategoryTabBar;
@@ -76,6 +77,7 @@ private:
 
     //UI infrastructure elements.
     KNMouseDetectHeader *m_headerWidget;
+    QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;
 };

@@ -41,6 +41,8 @@
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     KNAbstractMusicPlugin(parent),
     m_headerWidget(new KNMouseDetectHeader(this)),
+    m_headerLeftLayout(nullptr),
+    m_headerRightLayout(nullptr),
     m_tabBar(new KNCategoryTabBar(this)),
     m_switcher(new KNHWidgetSwitcher(this))
 {
@@ -83,6 +85,27 @@ void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
     KNMusicGlobal::initial(this);
+
+    //Configure the header widget.
+    m_headerWidget->setContentsMargins(0,0,0,0);
+    //Set header layout.
+    QBoxLayout *headerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            m_headerWidget);
+    headerLayout->setContentsMargins(0,0,10,0);
+    headerLayout->setSpacing(0);
+    m_headerWidget->setLayout(headerLayout);
+    //Initial left layout.
+    m_headerLeftLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                      headerLayout->widget());
+    m_headerLeftLayout->setContentsMargins(0,0,0,0);
+    m_headerLeftLayout->setSpacing(0);
+    headerLayout->addLayout(m_headerLeftLayout, 1);
+    //Initial right layout.
+    m_headerRightLayout=new QBoxLayout(QBoxLayout::RightToLeft,
+                                       headerLayout->widget());
+    m_headerRightLayout->setContentsMargins(10,0,0,0);
+    m_headerRightLayout->setSpacing(0);
+    headerLayout->addLayout(m_headerRightLayout);
 
     //Link the tab bar and switcher.
     connect(m_tabBar, &KNCategoryTabBar::currentIndexChange,
