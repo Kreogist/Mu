@@ -20,6 +20,8 @@
 
 #include "knmessageboxcontent.h"
 
+#include <QDebug>
+
 #define ShadowHeight 9
 #define ShadowOpacity 33
 
@@ -53,8 +55,8 @@ QSize KNMessageBoxContent::targetSize() const
     {
         return QSize(0, ShadowHeight<<1);
     }
-    //Get the size hint of the main layout, add two shadow size.
-    return m_mainLayout->sizeHint();
+    //Get the size hint of the content, add two shadow size.
+    return m_content->size()+QSize(0, ShadowHeight<<1);
 }
 
 QWidget *KNMessageBoxContent::content()

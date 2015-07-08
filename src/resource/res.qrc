@@ -13,5 +13,6 @@
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>
         <file>preference/icon.png</file>
+        <file>music/detaildialog/tab_icon/detail.png</file>
     </qresource>
 </RCC>

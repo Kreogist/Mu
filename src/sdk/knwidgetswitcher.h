@@ -75,6 +75,11 @@ public:
      */
     QWidget *currentWidget();
 
+    /*!
+     * \brief Reimplement from QWidget::sizeHint().
+     */
+    QSize sizeHint() const;
+
 signals:
 
 public slots:
@@ -123,7 +128,7 @@ private:
     QList<QWidget *> m_widgets;
     QParallelAnimationGroup *m_movingAnimationGroup;
     QPropertyAnimation *m_inAnimation, *m_outAnimation;
-    int m_currentIndex, m_outWidgetIndex;
+    int m_currentIndex, m_outWidgetIndex, m_maxWidth, m_maxHeight;
 };
 
 #endif // KNWIDGETSWITCHER_H

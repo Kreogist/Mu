@@ -62,6 +62,20 @@ void KNGlobal::addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content)
     }
 }
 
+QString KNGlobal::byteToString(qreal fileSize)
+{
+    //Set the unit pointer to Byte.
+    int unitPointer=Byte;
+    //Let the file size divide by 1024.0, and raise the pointer.
+    while(fileSize>1024.0 && unitPointer<StorageUnitCount)
+    {
+        fileSize/=1024.0;
+        unitPointer++;
+    }
+    //Return the file size and the unit string.
+    return QString::number(fileSize, 'f', 2) + " " + m_storageUnit[unitPointer];
+}
+
 QBrush KNGlobal::textureBursh(const int &index) const
 {
     Q_ASSERT(index>-1 && index<TextureBrushCount);

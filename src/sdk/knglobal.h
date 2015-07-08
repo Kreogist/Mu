@@ -110,6 +110,15 @@ public:
     void addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content);
 
     /*!
+     * \brief Translate a number from unit byte to higher unit. Until the number
+     * is less than 1024 or the unit is up to DB.\n
+     * The float number will have 2 number after the point.
+     * \param fileSize The file size.
+     * \return The text of the higher unit.
+     */
+    QString byteToString(qreal fileSize);
+
+    /*!
      * \brief Get the global texture brush resource.
      * \param index The pixmap index. It should be in enum
      * KNGlobal::TextureBrush.

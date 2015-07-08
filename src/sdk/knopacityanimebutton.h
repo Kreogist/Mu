@@ -22,10 +22,20 @@
 #include <QAbstractButton>
 
 class QTimeLine;
+/*!
+ * \brief The KNOpacityAnimeButton class is a button which will be sensitive to
+ * the following mouse events: mouse enter, leave, pressed and release. Even
+ * focus in and out can changed the opacity. It will ignore the text, but only
+ * paint the icon.
+ */
 class KNOpacityAnimeButton : public QAbstractButton
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNOpacityAnimeButton widget.
+     * \param parent The parent widget.
+     */
     explicit KNOpacityAnimeButton(QWidget *parent = 0);
 
 signals:
@@ -39,13 +49,40 @@ protected:
      */
     void paintEvent(QPaintEvent *event);
 
+    /*!
+     * \brief Get the current image opacity for painting.
+     * \return The opacity, range in 0.0 to 1.0.
+     */
     qreal imageOpacity();
 
+    /*!
+     * \brief Reimplement from QAbstractButton::enterEvent().
+     */
     void enterEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplement from QAbstractButton::leaveEvent().
+     */
     void leaveEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplement from QAbstractButton::focusInEvent().
+     */
     void focusInEvent(QFocusEvent *event);
+
+    /*!
+     * \brief Reimplement from QAbstractButton::focusOutEvent().
+     */
     void focusOutEvent(QFocusEvent *event);
+
+    /*!
+     * \brief Reimplement from QAbstractButton::mousePressEvent().
+     */
     void mousePressEvent(QMouseEvent *event);
+
+    /*!
+     * \brief Reimplement from QAbstractButton::mouseReleaseEvent().
+     */
     void mouseReleaseEvent(QMouseEvent *event);
 
 private slots:

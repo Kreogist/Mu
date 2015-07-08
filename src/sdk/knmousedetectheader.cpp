@@ -16,22 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSAOSTYLE_H
-#define KNSAOSTYLE_H
+#include "knmousedetectheader.h"
 
-#include <QCommonStyle>
-
-/*!
- * \brief The KNSaoStyle class is a special style. It will only be used in the
- * SAO styled menu for UI hacking.
- */
-class KNSaoStyle : public QCommonStyle
+KNMouseDetectHeader::KNMouseDetectHeader(QWidget *parent) :
+    QWidget(parent)
 {
-    Q_OBJECT
-public:
-    KNSaoStyle();
+}
 
-    static void styleVerticalScrollBar(QWidget *widget);
-};
+void KNMouseDetectHeader::enterEvent(QEvent *event)
+{
+    //Emit activate signal.
+    emit requireActivateWidget();
+    //Do original enter event.
+    QWidget::enterEvent(event);
+}
 
-#endif // KNSAOSTYLE_H
+void KNMouseDetectHeader::leaveEvent(QEvent *event)
+{
+    //Emit inactivate signal.
+    emit requireInactivateWidget();
+    //Do original leave event.
+    QWidget::leaveEvent(event);
+}

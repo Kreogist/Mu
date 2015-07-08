@@ -16,23 +16,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCATEGORYTABBAR_H
-#define KNCATEGORYTABBAR_H
+#ifndef KNHTABGROUP_H
+#define KNHTABGROUP_H
 
 #include "knabstracttabgroup.h"
 
 class QBoxLayout;
-class QTimeLine;
 /*!
- * \brief The KNCategoryTabBar class provides a container of the KNCategoryTab.
- * It will placed several tabs in horizontal way. It will use q box layout to
- * place the tab.
+ * \brief The KNHTabGroup class will placed several button in horizontal. This
+ * is a little the same as KNCategoryTabBar. But all the widget will be placed
+ * at alignment right. This class is mostly used at SAO styled elements.
  */
-class KNCategoryTabBar : public KNAbstractTabGroup
+class KNHTabGroup : public KNAbstractTabGroup
 {
     Q_OBJECT
 public:
-    explicit KNCategoryTabBar(QWidget *parent = 0);
+    /*!
+     * \brief Construct a KNHTabGroup widget.
+     * \param parent The parent widget.
+     */
+    explicit KNHTabGroup(QWidget *parent = 0);
+
+signals:
+
+public slots:
 
 protected:
     /*!
@@ -50,24 +57,8 @@ protected:
      */
     QAbstractButton *tabAt(const int &index);
 
-    /*!
-     * \brief Reimplement from KNAbstractTabGroup::enterEvent().
-     */
-    void enterEvent(QEvent *event);
-
-    /*!
-     * \brief Reimplement from KNAbstractTabGroup::leaveEvent().
-     */
-    void leaveEvent(QEvent *event);
-
-private slots:
-    void onActionMouseInOut(const int &frame);
-
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
-    QTimeLine *m_mouseIn, *m_mouseOut;
     QBoxLayout *m_mainLayout;
 };
 
-#endif // KNCATEGORYTABBAR_H
+#endif // KNHTABGROUP_H

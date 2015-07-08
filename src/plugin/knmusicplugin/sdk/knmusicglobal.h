@@ -27,14 +27,19 @@
  */
 #define knMusicGlobal (KNMusicGlobal::instance())
 
+class KNMusicDetailDialog;
+class KNMusicParser;
 /*!
  * \brief The KNMusicGlobal class provides some public instance and function of
- * the official music category plugin.
+ * the official music category plugin.\n
+ * It will provide a KNMusicDetailDialog for music global detail dialog editing.
  */
 class KNMusicGlobal : public QObject
 {
     Q_OBJECT
 public:
+    ~KNMusicGlobal();
+
     /*!
      * \brief Get the singleton instance of class KNMusicGlobal.
      * \return The global instance of KNMusicGlobal.
@@ -47,13 +52,52 @@ public:
      */
     static void initial(QObject *parent = 0);
 
+    /*!
+     * \brief Get the music detail dialog pointer.
+     * \return The dialog pointer.
+     */
+    KNMusicDetailDialog *detailDialog()
+    {
+        return m_detailDialog;
+    }
+
+    /*!
+     * \brief Get the music global parser.
+     * \return The parser pointer.
+     */
+    KNMusicParser *parser()
+    {
+        return m_parser;
+    }
+
+    /*!
+     * \brief Get the type description of a specific suffix.
+     * \param suffix The file suffix.
+     * \return The description of the suffix.
+     */
+    QString typeDescription(const QString &suffix) const;
+
 signals:
 
 public slots:
 
+private slots:
+    void retranslate();
+
 private:
     static KNMusicGlobal *m_instance;
     explicit KNMusicGlobal(QObject *parent = 0);
+    inline void initialFileType();
+    inline void initialGenre();
+
+    QWidget *m_parentWidget;
+    KNMusicDetailDialog *m_detailDialog;
+    KNMusicParser *m_parser;
+
+    QThread *m_searcherThread, *m_analysisThread;
+
+    QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
+                m_listSuffixDescription, m_indexedGenres;
 };
 
 #endif // KNMUSICGLOBAL_H

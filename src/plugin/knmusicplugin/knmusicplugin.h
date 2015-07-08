@@ -21,8 +21,10 @@
 
 #include "knabstractmusicplugin.h"
 
+class KNMouseDetectHeader;
 class KNHWidgetSwitcher;
 class KNCategoryTabBar;
+class KNMusicDetailDialogPanel;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
@@ -69,7 +71,11 @@ public slots:
 
 private:
     inline void initialInfrastructure();
-    QWidget *m_headerWidget;
+    void initialDetailDialogPanel();
+    void initialParserPlugin();
+
+    //UI infrastructure elements.
+    KNMouseDetectHeader *m_headerWidget;
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;
 };

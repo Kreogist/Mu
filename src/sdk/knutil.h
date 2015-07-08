@@ -22,6 +22,10 @@
 #include <QString>
 #include <QColor>
 
+/*!
+ * \brief The KNUtil class cannot be construct. It will only used to provides
+ * you several public static functions.
+ */
 class KNUtil
 {
 public:
@@ -47,6 +51,10 @@ public:
      * \return The simplified file path.
      */
     static QString simplifiedPath(const QString &path);
+
+private:
+    KNUtil();
+    KNUtil(const KNUtil &);
 };
 
 #endif // KNUTIL_H

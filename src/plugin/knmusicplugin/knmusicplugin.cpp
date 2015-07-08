@@ -21,10 +21,17 @@
 #include "kncategorytab.h"
 #include "kncategorytabbar.h"
 #include "knhwidgetswitcher.h"
+#include "knmousedetectheader.h"
+
+//SDK Dependence.
+#include "knmusicdetaildialog.h"
+#include "knmusicparser.h"
 
 //Ports
+#include "knmusicdetaildialogpanel.h"
 
 //Plugins
+#include "plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.h"
 
 //Globals.
 #include "knmusicglobal.h"
@@ -33,12 +40,18 @@
 
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     KNAbstractMusicPlugin(parent),
-    m_headerWidget(new QWidget(this)),
+    m_headerWidget(new KNMouseDetectHeader(this)),
     m_tabBar(new KNCategoryTabBar(this)),
     m_switcher(new KNHWidgetSwitcher(this))
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
+    //Initial the detail dialog plugins.
+    initialDetailDialogPanel();
+    //Initial parser.
+    initialParserPlugin();
+
+    //Initial the .
 }
 
 QWidget *KNMusicPlugin::headerWidget()
@@ -84,4 +97,15 @@ void KNMusicPlugin::initialInfrastructure()
     //Add widget to layout.
     mainLayout->addWidget(m_tabBar);
     mainLayout->addWidget(m_switcher, 1);
+}
+
+void KNMusicPlugin::initialDetailDialogPanel()
+{
+    //Add panels to detail dialog.
+    knMusicGlobal->detailDialog()->addPanel(new KNMusicDetailPanelOverview);
+}
+
+void KNMusicPlugin::initialParserPlugin()
+{
+    ;
 }

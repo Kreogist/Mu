@@ -49,9 +49,6 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial the global.
     KNGlobal::initial(this);
-
-    KNMessageBox *test=new KNMessageBox();
-    test->show();
 }
 
 KNPluginManager::~KNPluginManager()

@@ -27,30 +27,94 @@ class QPropertyAnimation;
 class KNMessageBoxBlock;
 class KNMessageBoxContent;
 class KNOpacityAnimeButton;
+/*!
+ * \brief The KNMessageBox class provides a SAO styled animated dialog. It can
+ * give out two kinds of result: Accept or Reject. You can set a content widget
+ * to this dialog.
+ */
 class KNMessageBox : public QDialog
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMessageBox class.
+     * \param parent The parent widget.
+     */
     explicit KNMessageBox(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the title text.
+     * \return The title text.
+     */
     QString titleText() const;
-    void setTitleText(const QString &titleText);
+
+    /*!
+     * \brief Whether the cancel button is visible.
+     * \return If the cancel button is visible, it will be true. Or else false.
+     */
+    bool showCancelButton() const;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the title text.
+     * \param titleText The prefer title text.
+     */
+    void setTitleText(const QString &titleText);
+
+    /*!
+     * \brief Set the content widget.
+     * \param widget The widget pointer.
+     */
+    void setContentWidget(QWidget *widget);
+
+    /*!
+     * \brief Set whether the dialog show the cancel button. The dialog won't
+     * need to display the cancel button at some time, like message box.
+     * \param showCancelButton To make the cancel button visible, set it to
+     * true.
+     */
+    void setShowCancelButton(bool showCancelButton);
 
 protected:
+    /*!
+     * \brief Reimplement from QDialog::showEvent().
+     */
     void showEvent(QShowEvent *event);
 
+    /*!
+     * \brief Reimplement from QDialog::mousePressEvent().
+     */
     void mousePressEvent(QMouseEvent *event);
+
+    /*!
+     * \brief Reimplement from QDialog::mouseMoveEvent().
+     */
     void mouseMoveEvent(QMouseEvent *event);
+
+    /*!
+     * \brief Reimplement from QDialog::mouseReleaseEvent().
+     */
     void mouseReleaseEvent(QMouseEvent *event);
 
+    /*!
+     * \brief This function is used to judge is it okay to accept the result.
+     * It will be called after user clicked okay button. Only when this function
+     * return true the dialog will be closed and set the value to accept.\n
+     * It will return true as default.
+     * \return True if it's okay to accept the data user prefered.
+     */
     virtual bool okayPressed();
+
+    /*!
+     * \brief This funciton will be called after user clicked cancel button. But
+     * this function cannot stop the close event.
+     */
     virtual void cancelPressed();
 
 private slots:
+    void onActionZoomFinished();
     void onActionShowFinished();
     void onActionOkayClicked();
     void onActionCancelClicked();
@@ -65,6 +129,8 @@ private:
     KNMessageBoxBlock *m_topBlock, *m_bottomBlock;
     KNMessageBoxContent *m_content;
     KNOpacityAnimeButton *m_okayButton, *m_cancelButton;
+    QString m_titleText;
+    bool m_showCancelButton;
 
     //Animations.
     QSequentialAnimationGroup *m_showAnime;

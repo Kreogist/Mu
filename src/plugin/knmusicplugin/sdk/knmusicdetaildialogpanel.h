@@ -15,23 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KNMUSICDETAILDIALOGPANEL_H
+#define KNMUSICDETAILDIALOGPANEL_H
 
-#ifndef KNSAOSTYLE_H
-#define KNSAOSTYLE_H
+#include <QWidget>
 
-#include <QCommonStyle>
-
-/*!
- * \brief The KNSaoStyle class is a special style. It will only be used in the
- * SAO styled menu for UI hacking.
- */
-class KNSaoStyle : public QCommonStyle
+class QAbstractButton;
+class KNMusicDetailDialogPanel : public QWidget
 {
     Q_OBJECT
 public:
-    KNSaoStyle();
+    KNMusicDetailDialogPanel(QWidget *parent = 0):QWidget(parent){}
 
-    static void styleVerticalScrollBar(QWidget *widget);
+    virtual QAbstractButton *tabButton()=0;
+
+signals:
+
+public slots:
+    virtual void setFilePath(const QString &filePath,
+                             const QString &indexFilePath=QString(),
+                             const int &index=-1)=0;
 };
 
-#endif // KNSAOSTYLE_H
+#endif // KNMUSICDETAILDIALOGPANEL_H

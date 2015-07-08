@@ -29,6 +29,8 @@
 
 #include "knmessagebox.h"
 
+#include <QDebug>
+
 #define HeaderHeight 61
 #define BottomHeight 66
 #define ButtonSize 40
@@ -40,6 +42,8 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_content(new KNMessageBoxContent(this)),
     m_okayButton(generateButton("://public/ok.png")),
     m_cancelButton(generateButton("://public/cancel.png")),
+    m_titleText(QString()),
+    m_showCancelButton(false),
     m_showAnime(new QSequentialAnimationGroup(this)),
     m_hideAnime(new QParallelAnimationGroup(this)),
     m_zoomIn(new QPropertyAnimation(this, "geometry", this)),
@@ -172,6 +176,15 @@ void KNMessageBox::cancelPressed()
     //For default, it will do nothing.
 }
 
+void KNMessageBox::onActionZoomFinished()
+{
+    //Set the top block text.
+    m_topBlock->setText(m_titleText.isEmpty()?"Information":m_titleText);
+    //Set show the button.
+    m_okayButton->show();
+    m_cancelButton->setVisible(m_showCancelButton);
+}
+
 void KNMessageBox::onActionShowFinished()
 {
     //Show the content widget.
@@ -248,6 +261,8 @@ void KNMessageBox::initialAnimes()
     //Step 1 zoom in part.
     m_zoomIn->setEasingCurve(QEasingCurve::OutCubic);
     m_zoomIn->setDuration(120);
+    connect(m_zoomIn, &QPropertyAnimation::finished,
+            this, &KNMessageBox::onActionZoomFinished);
     expandGroup->addAnimation(m_zoomIn);
     //Step 1 opacity part.
     m_fadeIn->setDuration(120);
@@ -281,13 +296,11 @@ void KNMessageBox::initialAnimes()
 
 inline void KNMessageBox::configureElements()
 {
-    //Check the title.
-    if(m_topBlock->text().isEmpty())
-    {
-        m_topBlock->setText("Information");
-    }
     //Hide the content.
     m_content->hideContent();
+    //Hide the button.
+    m_okayButton->hide();
+    m_cancelButton->hide();
 }
 
 inline KNOpacityAnimeButton *KNMessageBox::generateButton(
@@ -321,13 +334,29 @@ void KNMessageBox::startCloseAnime()
     m_hideAnime->start();
 }
 
+bool KNMessageBox::showCancelButton() const
+{
+    return m_showCancelButton;
+}
+
+void KNMessageBox::setShowCancelButton(bool showCancelButton)
+{
+    m_showCancelButton = showCancelButton;
+}
+
 QString KNMessageBox::titleText() const
 {
-    return m_topBlock->text();
+    return m_titleText;
 }
 
 void KNMessageBox::setTitleText(const QString &titleText)
 {
-    m_topBlock->setText(titleText);
+    m_titleText=titleText;
+}
+
+void KNMessageBox::setContentWidget(QWidget *widget)
+{
+    //Set the content widget.
+    m_content->setContent(widget);
 }
 

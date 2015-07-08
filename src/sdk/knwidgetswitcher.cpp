@@ -28,7 +28,9 @@ KNWidgetSwitcher::KNWidgetSwitcher(QWidget *parent) :
     m_inAnimation(generateAnimation()),
     m_outAnimation(generateAnimation()),
     m_currentIndex(-1),
-    m_outWidgetIndex(-1)
+    m_outWidgetIndex(-1),
+    m_maxWidth(0),
+    m_maxHeight(0)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -48,6 +50,9 @@ void KNWidgetSwitcher::addWidget(QWidget *widget)
     }
     //Change the widget relashionship.
     widget->setParent(this, Qt::Widget);
+    //Update the size hint parameter.
+    m_maxWidth=qMax(m_maxWidth, widget->width());
+    m_maxHeight=qMax(m_maxHeight, widget->height());
     //If this is the first widget add to switcher, it should be visible, and it
     //should be the current widget.
     if(m_widgets.isEmpty())
@@ -92,6 +97,12 @@ QWidget *KNWidgetSwitcher::currentWidget()
 {
     //Get the widget at m_currentIndex.
     return widgetAt(m_currentIndex);
+}
+
+QSize KNWidgetSwitcher::sizeHint() const
+{
+    //Combine the maximum width and maximum height.
+    return QSize(m_maxWidth, m_maxHeight);
 }
 
 void KNWidgetSwitcher::setCurrentIndex(const int &currentIndex)

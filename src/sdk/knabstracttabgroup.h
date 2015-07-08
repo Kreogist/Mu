@@ -34,8 +34,16 @@ class KNAbstractTabGroup : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNAbstractTabGroup widget.
+     * \param parent The parent widget.
+     */
     explicit KNAbstractTabGroup(QWidget *parent = 0);
 
+    /*!
+     * \brief Add a tab to the tab group.
+     * \param tab The tab button.
+     */
     virtual void addTab(QAbstractButton *tab);
 
     /*!

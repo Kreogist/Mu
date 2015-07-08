@@ -95,7 +95,13 @@ SOURCES += \
     sdk/knmessagebox.cpp \
     sdk/sao/knmessageboxblock.cpp \
     sdk/sao/knmessageboxcontent.cpp \
-    sdk/knopacityanimebutton.cpp
+    sdk/knopacityanimebutton.cpp \
+    plugin/knmusicplugin/sdk/knmusicdetaildialog.cpp \
+    sdk/knhtabgroup.cpp \
+    plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp \
+    sdk/kncircleiconbutton.cpp \
+    plugin/knmusicplugin/sdk/knmusicparser.cpp \
+    sdk/knmousedetectheader.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -138,7 +144,18 @@ HEADERS += \
     sdk/knmessagebox.h \
     sdk/sao/knmessageboxblock.h \
     sdk/sao/knmessageboxcontent.h \
-    sdk/knopacityanimebutton.h
+    sdk/knopacityanimebutton.h \
+    plugin/knmusicplugin/sdk/knmusicdetaildialog.h \
+    plugin/knmusicplugin/sdk/knmusicdetaildialogpanel.h \
+    sdk/knhtabgroup.h \
+    plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.h \
+    sdk/kncircleiconbutton.h \
+    plugin/knmusicplugin/sdk/knmusicparser.h \
+    plugin/knmusicplugin/sdk/knmusicutil.h \
+    plugin/knmusicplugin/sdk/knmusicanalysiser.h \
+    plugin/knmusicplugin/sdk/knmusictagparser.h \
+    plugin/knmusicplugin/sdk/knmusiclistparser.h \
+    sdk/knmousedetectheader.h
 
 RESOURCES += \
     resource/res.qrc
