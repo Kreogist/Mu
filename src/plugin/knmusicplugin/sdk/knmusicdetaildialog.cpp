@@ -16,13 +16,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+
 #include "knmusicdetaildialogpanel.h"
 #include "knhtabgroup.h"
+#include "knmusicglobal.h"
+#include "knmusicparser.h"
 #include "knhwidgetswitcher.h"
 
 #include "knmusicdetaildialog.h"
 
 #include <QDebug>
+
+using namespace MusicUtil;
 
 KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     KNMessageBox(parent),
@@ -67,13 +72,39 @@ void KNMusicDetailDialog::showDialog(const QString &filePath,
                                      const QString &indexFilePath,
                                      const int &index)
 {
+    //Analysis the song first.
+    KNMusicAnalysisItem analysisItem;
+    //Check the index file path is empty or not.
+    if(indexFilePath.isEmpty())
+    {
+        //Parse it as a single music file.
+        knMusicGlobal->parser()->parseFile(filePath, analysisItem);
+    }
+    else
+    {
+        //Generate the analysis list.
+        QList<KNMusicAnalysisItem> analysisItemList;
+        //Parse the track list file.
+        knMusicGlobal->parser()->parseTrackList(indexFilePath,
+                                                analysisItemList);
+        //Check the index of the analysis file.
+        if(index>-1 && index<analysisItemList.size())
+        {
+            analysisItem=analysisItemList.at(index);
+        }
+        else
+        {
+            //Parse it as a single music file.
+            knMusicGlobal->parser()->parseFile(filePath, analysisItem);
+        }
+    }
     //Ask all the panel to update the information.
     for(QLinkedList<KNMusicDetailDialogPanel *>::iterator i=m_panelList.begin();
         i!=m_panelList.end();
         ++i)
     {
         //Update the panel information.
-        (*i)->setFilePath(filePath, indexFilePath, index);
+        (*i)->setAnalysisItem(analysisItem);
     }
     //Show the dialog.
     exec();

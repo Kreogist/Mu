@@ -101,7 +101,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp \
     sdk/kncircleiconbutton.cpp \
     plugin/knmusicplugin/sdk/knmusicparser.cpp \
-    sdk/knmousedetectheader.cpp
+    sdk/knmousedetectheader.cpp \
+    plugin/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -155,7 +156,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicanalysiser.h \
     plugin/knmusicplugin/sdk/knmusictagparser.h \
     plugin/knmusicplugin/sdk/knmusiclistparser.h \
-    sdk/knmousedetectheader.h
+    sdk/knmousedetectheader.h \
+    plugin/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.h
 
 RESOURCES += \
     resource/res.qrc

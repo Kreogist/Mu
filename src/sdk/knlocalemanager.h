@@ -57,6 +57,12 @@ public:
      */
     void loadLanguageFiles(const QString &languageDir);
 
+    /*!
+     * \brief Get the local codec according to the locale.
+     * \return The codec generated from locale.
+     */
+    QTextCodec *localeCodec();
+
     template<typename Func2>
     /*!
      * \brief Link the language change signal with the retranslate slot which

@@ -64,7 +64,7 @@ namespace MusicUtil
         int rating=0;
         int trackIndex=-1;
         QString fileName;
-        QString path;
+        QString filePath;
         QString trackFilePath;
         QDateTime dateModified;
         QDateTime dateLastPlayed;

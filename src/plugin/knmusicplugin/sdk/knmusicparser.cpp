@@ -75,7 +75,7 @@ void KNMusicParser::parseFile(QString filePath,
     //Get the file info of the music file.
     QFileInfo fileInfo(filePath);
     //Set the file info of the detail info.
-    detailInfo.path=fileInfo.absoluteFilePath();
+    detailInfo.filePath=fileInfo.absoluteFilePath();
     detailInfo.fileName=fileInfo.fileName();
     detailInfo.size=fileInfo.size();
     detailInfo.dateLastPlayed=fileInfo.lastRead();

@@ -53,6 +53,22 @@ public:
     static void initial(QObject *parent = 0);
 
     /*!
+     * \brief Get the indexed genre text. It is the same as the index in ID3v1
+     * tags.
+     * \param index The genre index.
+     * \return The genre text. If index is out of range, it will be "Unknown".
+     */
+    QString indexedGenre(const int &index);
+
+    /*!
+     * \brief Get the genre index in the list. It is the same as the index in
+     * ID3v1 tag defination.
+     * \param genre The genre text.
+     * \return The genre index. If the genre is not in the list, it will be -1.
+     */
+    int genreIndex(const QString &genre);
+
+    /*!
      * \brief Get the music detail dialog pointer.
      * \return The dialog pointer.
      */

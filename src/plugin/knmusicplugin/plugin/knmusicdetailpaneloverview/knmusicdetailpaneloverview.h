@@ -23,20 +23,33 @@
 
 class QLabel;
 class KNCircleIconButton;
+/*!
+ * \brief The KNMusicDetailPanelOverview class is used to show the basic detail
+ * information of the current song.
+ */
 class KNMusicDetailPanelOverview : public KNMusicDetailDialogPanel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct the KNMusicDetailPanelOverview class with a given
+     * parent.
+     * \param parent The parent widget.
+     */
     explicit KNMusicDetailPanelOverview(QWidget *parent = 0);
 
+    /*!
+     * \brief Reimplement from KNMusicDetailDialogPanel::tabButton.
+     */
     QAbstractButton *tabButton();
 
 signals:
 
 public slots:
-    void setFilePath(const QString &filePath,
-                     const QString &indexFilePath=QString(),
-                     const int &index=-1);
+    /*!
+     * \brief Reimplement from KNMusicDetailDialogPanel::setAnalysisItem.
+     */
+    void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item);
 
 private slots:
     void retranslate();

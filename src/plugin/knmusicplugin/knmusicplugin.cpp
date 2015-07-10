@@ -29,14 +29,23 @@
 
 //Ports
 #include "knmusicdetaildialogpanel.h"
+#include "knmusictagparser.h"
 
 //Plugins
+// Detail Dialog Panels.
 #include "plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.h"
+// Tag Parsers.
+#include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 
 //Globals.
 #include "knmusicglobal.h"
 
 #include "knmusicplugin.h"
+
+//Debug
+#include <QFile>
+#include <QDataStream>
+#include <QDebug>
 
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     KNAbstractMusicPlugin(parent),
@@ -130,5 +139,24 @@ void KNMusicPlugin::initialDetailDialogPanel()
 
 void KNMusicPlugin::initialParserPlugin()
 {
-    ;
+    //Debug.
+//    KNMusicTagParser *parser=new KNMusicTagId3v1(this);
+//    KNMusicAnalysisItem item;
+//    QFile fuck("/Users/Saki/Documents/C.Namida - I like wind.mp3");
+//    item.detailInfo.filePath="/Users/Saki/Documents/C.Namida - I like wind.mp3";
+//    fuck.open(QIODevice::ReadOnly);
+//    QDataStream datastream(&fuck);
+//    qDebug()<<parser->parseTag(fuck, datastream, item);
+//    fuck.close();
+
+//    KNMusicDetailInfo &di=item.detailInfo;
+//    di.textLists[Name]="Dancing Stars On Me";
+//    di.textLists[Artist]="Mu's";
+//    di.textLists[Album]="Solo Love Live Best Album Collection II - Mu's Best Live CollectionLove Live Best Album Collection II - Mu's Best Live Collection";
+//    di.textLists[TrackNumber]="12";
+//    di.textLists[Genre]="Anime";
+//    qDebug()<<parser->writeTag(item);
+
+    //Add parsers.
+    knMusicGlobal->parser()->installTagParser(new KNMusicTagId3v1);
 }

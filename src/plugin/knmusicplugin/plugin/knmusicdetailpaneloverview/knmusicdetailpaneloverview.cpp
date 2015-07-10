@@ -23,6 +23,8 @@
 
 #include "knmusicdetailpaneloverview.h"
 
+using namespace MusicUtil;
+
 KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     KNMusicDetailDialogPanel(parent),
     m_button(new KNCircleIconButton(this))
@@ -63,11 +65,20 @@ QAbstractButton *KNMusicDetailPanelOverview::tabButton()
     return m_button;
 }
 
-void KNMusicDetailPanelOverview::setFilePath(const QString &filePath,
-                                             const QString &indexFilePath,
-                                             const int &index)
+void KNMusicDetailPanelOverview::setAnalysisItem(
+        const MusicUtil::KNMusicAnalysisItem &item)
 {
-    ;
+    //Get the detail info.
+    const KNMusicDetailInfo &detailInfo=item.detailInfo;
+    //Set the analysis item to the label.
+    m_information[DetailYear]->setText(detailInfo.textLists[Year]);
+    m_information[DetailGenre]->setText(detailInfo.textLists[Genre]);
+    m_information[DetailKind]->setText(detailInfo.textLists[Kind]);
+    m_information[DetailSize]->setText(detailInfo.textLists[Size]);
+    m_information[DetailBitRate]->setText(detailInfo.textLists[BitRate]);
+    m_information[DetailSampleRate]->setText(detailInfo.textLists[SampleRate]);
+    m_information[DetailDateModified]->setText(
+                detailInfo.textLists[DateModified]);
 }
 
 void KNMusicDetailPanelOverview::retranslate()

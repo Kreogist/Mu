@@ -24,6 +24,10 @@
 
 #include "knpreferencetitlebar.h"
 
+#include <QDebug>
+
+#define TitleBarHeight 69
+
 KNPreferenceTitleBar::KNPreferenceTitleBar(QWidget *parent) :
     QWidget(parent),
     m_button(new KNPreferenceHeaderButton(this)),
@@ -34,13 +38,14 @@ KNPreferenceTitleBar::KNPreferenceTitleBar(QWidget *parent) :
     setObjectName("PreferenceTitleBar");
     //Set properties.
     setAutoFillBackground(true);
-    setFixedHeight(69);
+    setFixedHeight(TitleBarHeight);
     //Configure the highlight gradient.
     m_highlightGradient.setColorAt(0, QColor(255,255,255,40));
     m_highlightGradient.setColorAt(1, QColor(255,255,255,0));
 
     //Configure the title label.
     m_title->setObjectName("PreferenceTitleBarLabel");
+    m_title->setFixedHeight(TitleBarHeight);
     m_title->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_title->move(93, 0);
     QFont titleFont=m_title->font();

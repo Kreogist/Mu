@@ -49,6 +49,7 @@ public slots:
 
 private slots:
     void retranslate();
+    void onActionIndexChange(const int &index);
 
 private:
     inline void addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content);

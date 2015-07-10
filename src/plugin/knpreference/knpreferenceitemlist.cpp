@@ -21,6 +21,8 @@
 
 #include "knpreferenceitemlist.h"
 
+#include <QDebug>
+
 KNPreferenceItemList::KNPreferenceItemList(QWidget *parent) :
     KNAbstractTabGroup(parent),
     m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this))

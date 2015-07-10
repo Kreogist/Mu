@@ -56,6 +56,17 @@ void KNMusicGlobal::initial(QObject *parent)
     }
 }
 
+QString KNMusicGlobal::indexedGenre(const int &index)
+{
+    return (index>0 && index<m_indexedGenres.size())?
+                m_indexedGenres.at(index):"Unknown";
+}
+
+int KNMusicGlobal::genreIndex(const QString &genre)
+{
+    return m_indexedGenres.indexOf(genre);
+}
+
 QString KNMusicGlobal::typeDescription(const QString &suffix) const
 {
     //Search the suffix if the suffix list.

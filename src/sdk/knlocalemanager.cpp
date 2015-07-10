@@ -20,6 +20,7 @@
 #include <QFile>
 #include <QDir>
 #include <QTranslator>
+#include <QTextCodec>
 
 #include <QApplication>
 
@@ -84,6 +85,24 @@ void KNLocaleManager::loadLanguageFiles(const QString &languageDir)
     loadLanguageInFolder(qApp->applicationDirPath()+"/Language");
     //Load the language in the language folder.
     loadLanguageInFolder(languageDir);
+}
+
+QTextCodec *KNLocaleManager::localeCodec()
+{
+    switch(QLocale::system().country())
+    {
+    case QLocale::China:
+        return QTextCodec::codecForName("GB18030");
+    case QLocale::HongKong:
+        return QTextCodec::codecForName("Big5-HKSCS");
+    case QLocale::Macau:
+    case QLocale::Taiwan:
+        return QTextCodec::codecForName("Big5");
+    case QLocale::Japan:
+        return QTextCodec::codecForName("Shift-JIS");
+    default:
+        return QTextCodec::codecForName("ISO 8859-1");
+    }
 }
 
 void KNLocaleManager::setLanguage(const QString &key)

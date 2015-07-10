@@ -18,6 +18,8 @@
 #ifndef KNMUSICDETAILDIALOGPANEL_H
 #define KNMUSICDETAILDIALOGPANEL_H
 
+#include "knmusicutil.h"
+
 #include <QWidget>
 
 class QAbstractButton;
@@ -32,9 +34,7 @@ public:
 signals:
 
 public slots:
-    virtual void setFilePath(const QString &filePath,
-                             const QString &indexFilePath=QString(),
-                             const int &index=-1)=0;
+    virtual void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)=0;
 };
 
 #endif // KNMUSICDETAILDIALOGPANEL_H

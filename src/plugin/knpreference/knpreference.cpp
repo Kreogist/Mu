@@ -53,14 +53,11 @@ KNPreference::KNPreference(QWidget *parent) :
     //Add the contents to preference panel.
     mainLayout->addWidget(m_content, 1);
 
-    //Add about item and content to preference.
-    addPreferenceTab(m_aboutItem, m_about);
-
     //Link requests.
     connect(m_sidebar, &KNPreferenceSidebar::requireClosePreference,
             this, &KNPreference::requireClosePreference);
     connect(m_sidebar, &KNPreferenceSidebar::requireChangeContent,
-            m_content, &KNVWidgetSwitcher::setCurrentIndex);
+            this, &KNPreference::onActionIndexChange);
 
     //Register the widget to theme manager.
     knTheme->registerWidget(this);
@@ -69,6 +66,9 @@ KNPreference::KNPreference(QWidget *parent) :
     //Link retranslate.
     knI18n->link(this, &KNPreference::retranslate);
     retranslate();
+
+    //Add about item and content to preference.
+    addPreferenceTab(m_aboutItem, m_about);
 }
 
 void KNPreference::addTab(KNPreferenceItem *tabWidget, QWidget *content)
@@ -81,8 +81,12 @@ void KNPreference::retranslate()
 {
     //Update the item data.
     m_aboutItem->setText(tr("About"));
+}
 
-    ;
+void KNPreference::onActionIndexChange(const int &index)
+{
+    //Change the content index.
+    m_content->setCurrentIndex(index);
 }
 
 inline void KNPreference::addPreferenceTab(KNPreferenceItem *tabWidget,
