@@ -77,6 +77,7 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
 
 void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
 {
+    //Add the item to item list.
     m_itemList->addTab(item);
 }
 

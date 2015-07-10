@@ -18,6 +18,8 @@
 #include <QSignalMapper>
 #include <QAbstractButton>
 
+#include "knpreferenceitem.h"
+
 #include "knabstracttabgroup.h"
 
 KNAbstractTabGroup::KNAbstractTabGroup(QWidget *parent) :
@@ -33,6 +35,8 @@ KNAbstractTabGroup::KNAbstractTabGroup(QWidget *parent) :
 
 void KNAbstractTabGroup::addTab(QAbstractButton *tab)
 {
+    //Cast the tab as a preference item.
+    KNPreferenceItem *preferenceTab=static_cast<KNPreferenceItem *>(tab);
     //Check is this tab the first tab. If the group is empty before we add this
     //tab, this tab should be the first tab.
     bool isFirstTab=isEmpty();
@@ -40,14 +44,14 @@ void KNAbstractTabGroup::addTab(QAbstractButton *tab)
     if(isFirstTab)
     {
         //Set the current tab checked.
-        tab->setChecked(true);
+        preferenceTab->setChecked(true);
         //Set the current index to 0.
         m_currentIndex=0;
     }
     //Add the tab to the group, and tweak the UI elements. Get the index of the
     //tab. Link the item with the signal mapper, the id of the tab is the index.
-    m_itemMapper->setMapping(tab, addTabToWidget(tab));
-    connect(tab, &QAbstractButton::pressed,
+    m_itemMapper->setMapping(preferenceTab, addTabToWidget(preferenceTab));
+    connect(preferenceTab, &QAbstractButton::pressed,
             m_itemMapper,
             static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     //Check if this is the first item. Emit the current changed signal if this

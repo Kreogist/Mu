@@ -35,10 +35,10 @@ KNMusicParser::KNMusicParser(QObject *parent) :
 void KNMusicParser::installAnalysiser(KNMusicAnalysiser *analysiser)
 {
     //Configure the analysiser.
-    //Change the relationship.
-    analysiser->setParent(this);
     //Move the analysiser to the parser's thread.
     analysiser->moveToThread(thread());
+    //Change the relationship.
+    analysiser->setParent(this);
     //Add analysiser to list.
     m_analysisers.append(analysiser);
 }
@@ -46,10 +46,10 @@ void KNMusicParser::installAnalysiser(KNMusicAnalysiser *analysiser)
 void KNMusicParser::installTagParser(KNMusicTagParser *tagParser)
 {
     //Configure the tag parser.
-    //Change the relationship.
-    tagParser->setParent(this);
     //Move the tag parser to the parser's thread.
     tagParser->moveToThread(thread());
+    //Change the relationship.
+    tagParser->setParent(this);
     //Add tag parser to list.
     m_tagParsers.append(tagParser);
 }
@@ -57,10 +57,10 @@ void KNMusicParser::installTagParser(KNMusicTagParser *tagParser)
 void KNMusicParser::installListParser(KNMusicListParser *listParser)
 {
     //Configure the tag parser.
-    //Change the relationship.
-    listParser->setParent(this);
     //Move the list parser to parser's thread.
     listParser->moveToThread(thread());
+    //Change the relationship.
+    listParser->setParent(this);
     //Add the list parser to list.
     m_listParsers.append(listParser);
 }
