@@ -44,6 +44,7 @@
 #include "knmusicplugin.h"
 
 #include <QDebug>
+#include "knanimationmenu.h"
 
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     KNAbstractMusicPlugin(parent),
@@ -59,14 +60,28 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     initialDetailDialogPanel();
     //Initial parser.
     initialParserPlugin();
+    //Initial global menus.
+    KNAnimationMenu *menu=new KNAnimationMenu(this);
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->addSeparator();
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->addSeparator();
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->addAction("Test 1");
+    menu->setMouseDownPos(QPoint(20,20));
+    menu->exec();
 
     //Initial the .
 
     //Start working threads.
     knMusicGlobal->startThreads();
-
-    //Show something.
-    knMusicGlobal->detailDialog()->showDialog("D:/音乐/五月天 - 离开地球表面.mp3");
 }
 
 QWidget *KNMusicPlugin::headerWidget()

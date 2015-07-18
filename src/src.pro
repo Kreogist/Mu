@@ -103,7 +103,8 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusicparser.cpp \
     sdk/knmousedetectheader.cpp \
     plugin/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.cpp \
-    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.cpp
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.cpp \
+    sdk/knanimationmenu.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -159,7 +160,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusiclistparser.h \
     sdk/knmousedetectheader.h \
     plugin/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.h \
-    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.h
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.h \
+    sdk/knanimationmenu.h
 
 RESOURCES += \
     resource/res.qrc
