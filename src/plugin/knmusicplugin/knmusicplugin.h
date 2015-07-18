@@ -26,6 +26,7 @@ class KNMouseDetectHeader;
 class KNHWidgetSwitcher;
 class KNCategoryTabBar;
 class KNMusicDetailDialogPanel;
+class KNMusicPlaylistBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
@@ -74,6 +75,8 @@ private:
     inline void initialInfrastructure();
     void initialDetailDialogPanel();
     void initialParserPlugin();
+
+    void initialPlaylist(KNMusicPlaylistBase *playlist);
 
     //UI infrastructure elements.
     KNMouseDetectHeader *m_headerWidget;

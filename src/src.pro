@@ -104,7 +104,12 @@ SOURCES += \
     sdk/knmousedetectheader.cpp \
     plugin/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.cpp \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.cpp \
-    sdk/knanimationmenu.cpp
+    sdk/knanimationmenu.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp \
+    plugin/knmusicplugin/sdk/knmusictreeviewbase.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylisttreeview.cpp \
+    sdk/knemptystatewidget.cpp \
+    sdk/kndropproxycontainer.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -161,7 +166,15 @@ HEADERS += \
     sdk/knmousedetectheader.h \
     plugin/knmusicplugin/plugin/knmusictagid3v1/knmusictagid3v1.h \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagid3v2.h \
-    sdk/knanimationmenu.h
+    sdk/knanimationmenu.h \
+    plugin/knmusicplugin/sdk/knmusicsolomenubase.h \
+    plugin/knmusicplugin/sdk/knmusictab.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.h \
+    plugin/knmusicplugin/sdk/knmusicplaylistbase.h \
+    plugin/knmusicplugin/sdk/knmusictreeviewbase.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylisttreeview.h \
+    sdk/knemptystatewidget.h \
+    sdk/kndropproxycontainer.h
 
 RESOURCES += \
     resource/res.qrc

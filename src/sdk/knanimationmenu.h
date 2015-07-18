@@ -22,20 +22,51 @@
 #include <QMenu>
 
 class QPropertyAnimation;
+/*!
+ * \brief The KNAnimationMenu class provides a smooth animation menu for all
+ * platform. It solves the animation shake bug under Mac OS X.
+ */
 class KNAnimationMenu : public QMenu
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNAnimationMenu class with given parent.
+     * \param parent The parent widget.
+     */
     explicit KNAnimationMenu(QWidget *parent = 0);
 
+    /*!
+     * \brief Set the mouse down position. The animation start expand point will
+     * be the mouse down position.
+     * \param mouseDownPos The position mouse pressed down.
+     */
     void setMouseDownPos(const QPoint &mouseDownPos);
+
+    /*!
+     * \brief This is a overload function.\n
+     * You can construct a point via give x and y parameter.
+     * \param x The x position of the point.
+     * \param y The y position of the point.
+     */
+    inline void setMouseDownPos(const int &x, const int &y)
+    {
+        setMouseDownPos(QPoint(x, y));
+    }
 
 signals:
 
 public slots:
 
 protected:
+    /*!
+     * \brief Reimplement from QMenu::showEvent().
+     */
     void showEvent(QShowEvent *event);
+
+    /*!
+     * \brief Reimplement from QMenu::paintEvent().
+     */
     void paintEvent(QPaintEvent *event);
 
 private:

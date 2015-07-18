@@ -30,6 +30,7 @@
 //Ports
 #include "knmusicdetaildialogpanel.h"
 #include "knmusictagparser.h"
+#include "knmusicplaylistbase.h"
 
 //Plugins
 // Detail Dialog Panels.
@@ -37,6 +38,8 @@
 // Tag Parsers.
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
+// Playlist.
+#include "plugin/knmusicplaylist/knmusicplaylist.h"
 
 //Globals.
 #include "knmusicglobal.h"
@@ -61,24 +64,9 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     //Initial parser.
     initialParserPlugin();
     //Initial global menus.
-    KNAnimationMenu *menu=new KNAnimationMenu(this);
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->addSeparator();
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->addSeparator();
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->addAction("Test 1");
-    menu->setMouseDownPos(QPoint(20,20));
-    menu->exec();
 
-    //Initial the .
+    //Initial the plugins.
+    initialPlaylist(new KNMusicPlaylist);
 
     //Start working threads.
     knMusicGlobal->startThreads();
@@ -164,4 +152,11 @@ void KNMusicPlugin::initialParserPlugin()
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagId3v1);
     parser->installTagParser(new KNMusicTagId3v2);
+}
+
+void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
+{
+    //Add playlist content to tab.
+    m_switcher->addWidget(playlist);
+    m_tabBar->addTab(playlist->tab());
 }
