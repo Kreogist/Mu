@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QFileInfo>
+#include <QDir>
 
 #include "knglobal.h"
 
@@ -29,7 +30,11 @@
 KNMusicParser::KNMusicParser(QObject *parent) :
     QObject(parent)
 {
-    ;
+    //Initial the image types.
+    m_imageTypes.append("jpg");
+    m_imageTypes.append("png");
+    m_imageTypes.append("jpeg");
+    m_imageTypes.append("bmp");
 }
 
 void KNMusicParser::installAnalysiser(KNMusicAnalysiser *analysiser)
@@ -225,4 +230,103 @@ void KNMusicParser::parseTrackList(const QString &filePath,
         //Close the file.
         listFile.close();
     }
+}
+
+void KNMusicParser::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
+{
+    //The analysis item should contains the data when the tag parser parse the
+    //tag. If the image data is not empty, then try all the parser.
+    if(!analysisItem.imageData.isEmpty())
+    {
+        //Using all the tag parser to parse the album art.
+        for(auto i=m_tagParsers.begin();
+            i!=m_tagParsers.end();
+            ++i)
+        {
+            (*i)->parseAlbumArt(analysisItem);
+        }
+    }
+
+    //Now the cover image shouldn't be null if tag includes the image.
+    //But sometimes the tag contains a null image or it doesn't contains image,
+    //we have to find the external album art image.
+    if(analysisItem.coverImage.isNull())
+    {
+        //Get the file info of the music file.
+        QFileInfo musicFileInfo(analysisItem.detailInfo.filePath);
+        //Try to find external images, here is the policy:
+        // 1. Find the same file name in the same folder.
+        if(findImageFile(musicFileInfo.absolutePath() + "/" +
+                         musicFileInfo.completeBaseName(), analysisItem) ||
+           findImageFile(musicFileInfo.absolutePath() + "/" +
+                         musicFileInfo.baseName(), analysisItem))
+        {
+            return;
+        }
+        // 2. Find the 'cover' named image in the save folder.
+        if(findImageFile(musicFileInfo.absoluteFilePath() + "/cover",
+                         analysisItem))
+        {
+            return;
+        }
+        //3. Find the file name contains 'cover' in the same folder.
+        QDir musicDir(musicFileInfo.absoluteDir());
+        QFileInfoList dirFileList=musicDir.entryInfoList();
+        for(auto i=dirFileList.begin();
+            i!=dirFileList.end();
+            ++i)
+        {
+            //Ignore dot and dot dot.
+            if((*i).fileName()=="." || (*i).fileName()=="..")
+            {
+                continue;
+            }
+            //Check if the current item is image type. Then find text 'cover' in
+            //the file name.
+            //If we can finished those steps, then load this file as cover
+            //image.
+            if(m_imageTypes.contains((*i).suffix().toLower()) &&
+                    (*i).fileName().toLower().contains("cover") &&
+                    checkImageFile((*i).absoluteFilePath(), analysisItem))
+            {
+                break;
+            }
+        }
+    }
+}
+
+bool KNMusicParser::findImageFile(const QString &baseName,
+                                  KNMusicAnalysisItem &item)
+{
+    //Check all the types in the image suffix list.
+    for(auto i=m_imageTypes.begin();
+        i!=m_imageTypes.end();
+        ++i)
+    {
+        //If any one of the suffix can be loaded, then return true.
+        if(checkImageFile(baseName + "." + (*i), item))
+        {
+            return true;
+        }
+    }
+    //All failed, return false.
+    return false;
+}
+
+bool KNMusicParser::checkImageFile(const QString &filePath,
+                                   KNMusicAnalysisItem &item)
+{
+    //Use bool QFileInfo::exists(const QString & file) [static].
+    //In the document:
+    //   Using this function is faster than using QFileInfo(file).exists() for
+    //file system access.
+    if(QFileInfo::exists(filePath))
+    {
+        //Load the image.
+        item.coverImage=QImage(filePath);
+        //Check the loading result.
+        return item.coverImage.isNull();
+    }
+    //If the file doesn't exist, of course not load success.
+    return false;
 }

@@ -23,6 +23,7 @@
 
 #include "knmessagebox.h"
 
+class QLabel;
 class KNMusicDetailDialogPanel;
 class KNHTabGroup;
 class KNHWidgetSwitcher;
@@ -62,6 +63,18 @@ public slots:
                     const int &index=-1);
 
 private:
+    //Basic Information.
+    enum BasicInformation
+    {
+        LabelAlbumArt,
+        LabelName,
+        LabelDuration,
+        LabelArtist,
+        LabelAlbum,
+        BasicInformationCount
+    };
+    QLabel *m_basicInfoLabel[BasicInformationCount];
+
     //Panel list.
     QLinkedList<KNMusicDetailDialogPanel *> m_panelList;
     //Panel switcher and container.

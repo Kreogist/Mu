@@ -92,4 +92,3 @@ void KNMusicDetailPanelOverview::retranslate()
     m_caption[DetailSampleRate]->setText(tr("Sample Rate"));
     m_caption[DetailDateModified]->setText(tr("Date Modified"));
 }
-

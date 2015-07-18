@@ -20,10 +20,13 @@
 #include "knglobal.h"
 
 #include "knmusicparser.h"
+#include "knmusictagparser.h"
 #include "knmusicdetaildialog.h"
 #include "knmusicutil.h"
 
 #include "knmusicglobal.h"
+
+#include <QDebug>
 
 //Initial the instance pointer to null.
 KNMusicGlobal *KNMusicGlobal::m_instance=nullptr;
@@ -75,6 +78,17 @@ QString KNMusicGlobal::typeDescription(const QString &suffix) const
     return suffixIndex==-1?QString():m_suffixDescription.at(suffixIndex);
 }
 
+void KNMusicGlobal::startThreads()
+{
+    //All the multi-thread things should be processed here.
+    //Move the parser to analysis thread.
+    m_parser->moveToThread(m_analysisThread);
+
+    //Start threads.
+    m_searcherThread->start();
+    m_analysisThread->start();
+}
+
 void KNMusicGlobal::retranslate()
 {
     ;
@@ -92,13 +106,6 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     initialFileType();
     //Initial the genere.
     initialGenre();
-
-    //Move the parser to analysis thread.
-    m_parser->moveToThread(m_analysisThread);
-
-    //Start threads.
-    m_searcherThread->start();
-    m_analysisThread->start();
 }
 
 inline void KNMusicGlobal::initialFileType()

@@ -53,8 +53,14 @@ public:
                    KNMusicAnalysisItem &analysisItem);
     void parseTrackList(const QString &filePath,
                         QList<KNMusicAnalysisItem> &trackDetailList);
+    void parseAlbumArt(KNMusicAnalysisItem &analysisItem);
 
 private:
+    inline bool findImageFile(const QString &baseName,
+                              KNMusicAnalysisItem &item);
+    inline bool checkImageFile(const QString &filePath,
+                               KNMusicAnalysisItem &item);
+    QList<QString> m_imageTypes;
     QLinkedList<KNMusicAnalysiser *> m_analysisers;
     QLinkedList<KNMusicTagParser *> m_tagParsers;
     QLinkedList<KNMusicListParser *> m_listParsers;

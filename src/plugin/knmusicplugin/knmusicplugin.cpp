@@ -43,9 +43,6 @@
 
 #include "knmusicplugin.h"
 
-//Debug
-#include <QFile>
-#include <QDataStream>
 #include <QDebug>
 
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
@@ -64,6 +61,12 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     initialParserPlugin();
 
     //Initial the .
+
+    //Start working threads.
+    knMusicGlobal->startThreads();
+
+    //Show something.
+    knMusicGlobal->detailDialog()->showDialog("D:/音乐/五月天 - 离开地球表面.mp3");
 }
 
 QWidget *KNMusicPlugin::headerWidget()
@@ -140,34 +143,10 @@ void KNMusicPlugin::initialDetailDialogPanel()
 
 void KNMusicPlugin::initialParserPlugin()
 {
-    //Debug.
-    KNMusicTagParser *parser=new KNMusicTagId3v2(this);
-    KNMusicAnalysisItem item;
-    QFile fuck("/Users/Saki/Desktop/test.mp3");
-    item.detailInfo.filePath="/Users/Saki/Desktop/test.mp3";
-//    QFile fuck("/Users/Saki/Music/初音未来 - 夏祭り.mp3");
-//    item.detailInfo.filePath="/Users/Saki/Music/初音未来 - 夏祭り.mp3";
-    qDebug()<<"Open result: "<<fuck.open(QIODevice::ReadOnly);
-    QDataStream datastream(&fuck);
-    qDebug()<<parser->parseTag(fuck, datastream, item);
-    qDebug()<<parser->parseAlbumArt(item);
-    fuck.close();
+    //Get the music parser.
+    KNMusicParser *parser=knMusicGlobal->parser();
 
-    KNMusicDetailInfo &di=item.detailInfo;
-//    item.coverImage.save("/Users/Saki/Desktop/屏幕快照 2015-07-14 下午11.35.29.png", "PNG");
-//    qDebug()<<di.textLists[Name];
-//    qDebug()<<di.textLists[Artist];
-//    qDebug()<<di.textLists[Album];
-//    qDebug()<<di.textLists[TrackNumber];
-//    qDebug()<<di.textLists[Genre];
-    di.textLists[Name]="Cutie Panther";
-    di.textLists[Artist]="Mu's";
-//    di.textLists[Album]="Solo Love Live Best Album Collection II - Mu's Best Live CollectionLove Live Best Album Collection II - Mu's Best Live Collection";
-    di.textLists[TrackNumber]="12";
-    di.textLists[Genre]="Anime";
-    qDebug()<<parser->writeTag(item);
-
-    //Add parsers.
-    knMusicGlobal->parser()->installTagParser(new KNMusicTagId3v1);
-    knMusicGlobal->parser()->installTagParser(new KNMusicTagId3v2);
+    //Add tag parsers.
+    parser->installTagParser(new KNMusicTagId3v1);
+    parser->installTagParser(new KNMusicTagId3v2);
 }

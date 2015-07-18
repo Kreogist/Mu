@@ -19,6 +19,8 @@
 #ifndef KNMUSICGLOBAL_H
 #define KNMUSICGLOBAL_H
 
+#include <QStringList>
+
 #include <QObject>
 
 /*!
@@ -92,6 +94,12 @@ public:
      * \return The description of the suffix.
      */
     QString typeDescription(const QString &suffix) const;
+
+    /*!
+     * \brief Move the parser and searcher to their own working threads. All the
+     * working threads shouhld be here.
+     */
+    void startThreads();
 
 signals:
 

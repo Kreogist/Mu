@@ -488,9 +488,13 @@ QString KNMusicTagId3v2::contentToString(QByteArray content)
         //Due to many windows software like TTPlayer, Windows Media Player and
         //some other player. Many players use the system default codec to write
         //the data.
+        //Use QChar('\0') instead of '\0', using MSVC compile it will have error
+        //that it's not clear to call the overload function.
         return m_useDefaultCodec?
-                    m_localeCodec->toUnicode(content).simplified().remove('\0'):
-                    m_isoCodec->toUnicode(content).simplified().remove('\0');
+                    m_localeCodec->toUnicode(
+                        content).simplified().remove(QChar('\0')):
+                    m_isoCodec->toUnicode(
+                        content).simplified().remove(QChar('\0'));
     case EncodeUTF16BELE: //1 = UTF-16 LE/BE (Treat other as no BOM UTF-16)
         //Decode via first two bytes.
         if(content.size()>1)
@@ -499,25 +503,26 @@ QString KNMusicTagId3v2::contentToString(QByteArray content)
             if((quint8)content.at(0)==0xFE && (quint8)content.at(1)==0xFF)
             {
                 return m_utf16BECodec->toUnicode(
-                            content).simplified().remove('\0');
+                            content).simplified().remove(QChar('\0'));
             }
             //UTF-16 LE BOM captured.
             if((quint8)content.at(0)==0xFF && (quint8)content.at(1)==0xFE)
             {
                 return m_utf16LECodec->toUnicode(
-                            content).simplified().remove('\0');
+                            content).simplified().remove(QChar('\0'));
             }
         }
         //Treat the reset situation as normal UTF-16.
-        return m_utf16Codec->toUnicode(content).simplified().remove('\0');
+        return m_utf16Codec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF16: //2 = UTF-16 BE without BOM
         //Decode with UTF-16
-        return m_utf16Codec->toUnicode(content).simplified().remove('\0');
+        return m_utf16Codec->toUnicode(content).simplified().remove(QChar('\0'));
     case EncodeUTF8: //3 = UTF-8
         //Use UTF-8 to decode it.
-        return m_utf8Codec->toUnicode(content).simplified().remove('\0');
+        return m_utf8Codec->toUnicode(content).simplified().remove(QChar('\0'));
     default://Use locale codec.
-        return m_localeCodec->toUnicode(content).simplified().remove('\0');
+        return m_localeCodec->toUnicode(
+                    content).simplified().remove(QChar('\0'));
     }
 }
 
@@ -596,7 +601,7 @@ bool KNMusicTagId3v2::parseID3v2RawData(char *rawTagData,
         memset(currentFrame.frameID, 0, sizeof(currentFrame.frameID));
         memset(currentFrame.flags, 0, sizeof(currentFrame.flags));
         //Copy the frame ID from raw data char array.
-        strncpy(currentFrame.frameID, rawPosition, property.frameIDSize);
+        memcpy(currentFrame.frameID, rawPosition, property.frameIDSize);
         //Save the start position and size.
         currentFrame.start=rawPosition+property.frameHeaderSize;
         currentFrame.size=frameSize;
