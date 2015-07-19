@@ -23,17 +23,35 @@
 #include <QWidget>
 
 class QAbstractButton;
+/*!
+ * \brief The KNMusicDetailDialogPanel class provides the basic functions of a
+ * detail dialog panel should have. It's a pure virtual port class.
+ */
 class KNMusicDetailDialogPanel : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicDetailDialogPanel class.
+     * \param parent The parent widget.
+     */
     KNMusicDetailDialogPanel(QWidget *parent = 0):QWidget(parent){}
 
+    /*!
+     * \brief The tab button. When this button get pushed, it will switch to
+     * this panel.
+     * \return The button widget pointer.
+     */
     virtual QAbstractButton *tabButton()=0;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the analysis item. It provides the file path and some other
+     * basic parameters.
+     * \param item The analysis item. It will be provided by the detail dialog.
+     */
     virtual void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)=0;
 };
 

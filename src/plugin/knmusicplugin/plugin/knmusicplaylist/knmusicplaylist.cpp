@@ -18,6 +18,8 @@
 #include "kncategorytab.h"
 #include "knemptystatewidget.h"
 
+#include "sdk/knmusicplaylistemptyhint.h"
+
 #include "knlocalemanager.h"
 
 #include "knmusicplaylist.h"
@@ -27,8 +29,10 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_tab(new KNCategoryTab(this)),
     m_container(new KNEmptyStateWidget(this))
 {
-    //
-    m_container;
+    //Generate the empty hint widget.
+    KNMusicPlaylistEmptyHint *emptyHint=new KNMusicPlaylistEmptyHint(this);
+    //Set the empty widget and content widget.
+    m_container->setEmptyWidget(emptyHint);
 
     //Link to retranslate.
     knI18n->link(this, &KNMusicPlaylist::retranslate);
@@ -46,6 +50,7 @@ void KNMusicPlaylist::resizeEvent(QResizeEvent *event)
     KNMusicPlaylistBase::resizeEvent(event);
     //Resize the container.
     m_container->resize(size());
+    //Resize the shadow.
 }
 
 void KNMusicPlaylist::retranslate()

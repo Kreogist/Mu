@@ -6,6 +6,15 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "PlaylistEmptyHint" : {
+        "Parent" : "MainWindow",
+        "Window" : "#353535",
+        "WindowText" : "#A0A0A0"
+    },
+    "PlaylistEmptyHintLabel" : {
+        "Parent" : "PlaylistEmptyHint",
+        "WindowText" : "#A0A0A0"
+    },
     "CategoryTabBar" : {
         "Parent" : "MainWindow",
         "Window" : "#FFFFFF"

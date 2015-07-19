@@ -22,6 +22,7 @@
 #include "kncategorytabbar.h"
 #include "knhwidgetswitcher.h"
 #include "knmousedetectheader.h"
+#include "knsideshadowwidget.h"
 
 //SDK Dependence.
 #include "knmusicdetaildialog.h"
@@ -47,7 +48,8 @@
 #include "knmusicplugin.h"
 
 #include <QDebug>
-#include "knanimationmenu.h"
+
+#define ShadowHeight 15
 
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     KNAbstractMusicPlugin(parent),
@@ -55,7 +57,9 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_headerLeftLayout(nullptr),
     m_headerRightLayout(nullptr),
     m_tabBar(new KNCategoryTabBar(this)),
-    m_switcher(new KNHWidgetSwitcher(this))
+    m_switcher(new KNHWidgetSwitcher(this)),
+    m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
+                                       this))
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
@@ -97,6 +101,15 @@ void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
     ;
 }
 
+void KNMusicPlugin::resizeEvent(QResizeEvent *event)
+{
+    //Do original resize event.
+    KNAbstractMusicPlugin::resizeEvent(event);
+    //Resize the shadow.
+    m_topShadow->resize(width(),
+                        m_topShadow->height());
+}
+
 void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
@@ -126,6 +139,10 @@ void KNMusicPlugin::initialInfrastructure()
     //Link the tab bar and switcher.
     connect(m_tabBar, &KNCategoryTabBar::currentIndexChange,
             m_switcher, &KNHWidgetSwitcher::setCurrentIndex);
+
+    //Configure the top shadow position.
+    m_topShadow->move(0, m_tabBar->height());
+    m_topShadow->setFixedHeight(ShadowHeight);
 
     //Initial layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);

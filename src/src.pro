@@ -109,7 +109,9 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusictreeviewbase.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylisttreeview.cpp \
     sdk/knemptystatewidget.cpp \
-    sdk/kndropproxycontainer.cpp
+    sdk/kndropproxycontainer.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp \
+    sdk/knglassbutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -174,7 +176,9 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusictreeviewbase.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylisttreeview.h \
     sdk/knemptystatewidget.h \
-    sdk/kndropproxycontainer.h
+    sdk/kndropproxycontainer.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.h \
+    sdk/knglassbutton.h
 
 RESOURCES += \
     resource/res.qrc

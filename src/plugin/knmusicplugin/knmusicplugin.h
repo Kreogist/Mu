@@ -25,6 +25,7 @@ class QBoxLayout;
 class KNMouseDetectHeader;
 class KNHWidgetSwitcher;
 class KNCategoryTabBar;
+class KNSideShadowWidget;
 class KNMusicDetailDialogPanel;
 class KNMusicPlaylistBase;
 /*!
@@ -71,6 +72,9 @@ public slots:
      */
     void onArgumentsAvailable(const QStringList &data);
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 private:
     inline void initialInfrastructure();
     void initialDetailDialogPanel();
@@ -83,6 +87,7 @@ private:
     QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;
+    KNSideShadowWidget *m_topShadow;
 };
 
 #endif // KNMUSICPLUGIN_H
