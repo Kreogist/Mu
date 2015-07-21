@@ -15,12 +15,22 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QTimeLine>
+
+#include "knthememanager.h"
 
 #include "knmusiccategorylistviewbase.h"
 
+#define InBrightness 0x50
+#define OutBrightness 0x30
+#define TextBrightnessGap 0xAF
+
 KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
-    QListView(parent)
+    QListView(parent),
+    m_mouseIn(generateTimeLine(InBrightness)),
+    m_mouseOut(generateTimeLine(OutBrightness))
 {
+    setObjectName("CategoryListViewBase");
     //Set properties.
     setAutoFillBackground(true);
     setContentsMargins(0, 0, 0, 0);
@@ -37,6 +47,93 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
 
     //Set viewport properties.
     viewport()->setContentsMargins(0, 0, 0, 0);
+    //Monitor the theme change signal.
+    connect(knTheme, &KNThemeManager::themeChange,
+            this, &KNMusicCategoryListViewBase::onActionPaletteChange);
+    //Set the palette.
+    onActionPaletteChange();
+}
 
+void KNMusicCategoryListViewBase::enabledDragDrop()
+{
+    //Enabled viewport drag and drop.
+    viewport()->setAcceptDrops(true);
+    //Enabled the drag and drop properties.
+    setAcceptDrops(true);
+    setDragDropMode(QAbstractItemView::DragDrop);
+    setDropIndicatorShown(true);
+}
+
+void KNMusicCategoryListViewBase::enterEvent(QEvent *event)
+{
+    //Start the mouse in anime.
+    startAnime(m_mouseIn);
+    //Do the original enter event.
+    QListView::enterEvent(event);
+}
+
+void KNMusicCategoryListViewBase::leaveEvent(QEvent *event)
+{
+    //Start the mouse out anime.
+    startAnime(m_mouseOut);
+    //Do the original leave event.
+    QListView::leaveEvent(event);
+}
+
+void KNMusicCategoryListViewBase::onActionPaletteChange()
+{
+    //Get the new palette.
+    m_palette=knTheme->getPalette(objectName());
+    //Update the background color.
+    m_backgroundColor=m_palette.color(QPalette::Base);
+    //Update the text color.
+    m_textColor=m_palette.color(QPalette::Text);
+    //Use the mouse in out to update the palette.
+    onActionMouseInOut(OutBrightness);
+}
+
+void KNMusicCategoryListViewBase::onActionMouseInOut(const int &frame)
+{
+    //Update the background color's brightness.
+    m_backgroundColor.setHsv(m_backgroundColor.hue(),
+                             m_backgroundColor.saturation(),
+                             frame);
+    //Update the text color's brightness.
+    m_textColor.setHsv(m_textColor.hue(),
+                       m_textColor.saturation(),
+                       frame+TextBrightnessGap);
+    //Update the palette.
+    m_palette.setColor(QPalette::Base, m_backgroundColor);
+    m_palette.setColor(QPalette::Text, m_textColor);
+    //Set the palette.
+    setPalette(m_palette);
+}
+
+inline QTimeLine *KNMusicCategoryListViewBase::generateTimeLine(
+        const int &endFrame)
+{
+    //Generate the time line,
+    QTimeLine *timeLine=new QTimeLine(200, this);
+    //Set the end frame.
+    timeLine->setEndFrame(endFrame);
+    //Configure the time line.
+    timeLine->setUpdateInterval(10);
+    timeLine->setEasingCurve(QEasingCurve::OutCubic);
+    //Link the time line.
+    connect(timeLine, &QTimeLine::frameChanged,
+            this, &KNMusicCategoryListViewBase::onActionMouseInOut);
+    //Give back the time line.
+    return timeLine;
+}
+
+inline void KNMusicCategoryListViewBase::startAnime(QTimeLine *timeLine)
+{
+    //Stop all the animations.
+    m_mouseIn->stop();
+    m_mouseOut->stop();
+    //Configure the time line.
+    timeLine->setStartFrame(m_backgroundColor.value());
+    //Start the time line.
+    timeLine->start();
 }
 

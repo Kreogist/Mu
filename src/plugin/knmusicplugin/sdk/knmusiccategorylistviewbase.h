@@ -21,15 +21,54 @@
 
 #include <QListView>
 
+class QTimeLine;
+/*!
+ * \brief The KNMusicCategoryListViewBase class provides the mouse in and out
+ * background detection and drag n drop enabled switcher. Many music category
+ * list view widget will be implemented from this class, like the playlist list
+ * view.
+ */
 class KNMusicCategoryListViewBase : public QListView
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicCategoryListViewBase class.
+     * \param parent The parent widget.
+     */
     explicit KNMusicCategoryListViewBase(QWidget *parent = 0);
 
 signals:
 
 public slots:
+
+protected:
+    /*!
+     * \brief Enabled drag and drop features of the list view. Once you enabled
+     * this feature, you can't disabled it.
+     */
+    void enabledDragDrop();
+
+    /*!
+     * \brief Reimpelemnt from QListView::enterEvent().
+     */
+    void enterEvent(QEvent *event);
+
+    /*!
+     * \brief Reimpelemnt from QListView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event);
+
+private slots:
+    void onActionPaletteChange();
+    void onActionMouseInOut(const int &frame);
+
+private:
+    inline QTimeLine *generateTimeLine(const int &endFrame);
+    inline void startAnime(QTimeLine *timeLine);
+    QTimeLine *m_mouseIn, *m_mouseOut;
+    QPalette m_palette;
+    QColor m_backgroundColor, m_textColor;
 };
 
 #endif // KNMUSICCATEGORYLISTVIEWBASE_H

@@ -6,6 +6,15 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "CategoryListViewBase" : {
+        "Parent" : "MainWindow",
+        "Base" : "#FFFFFF",
+        "Window" : "#303030",
+        "Button" : "#303030",
+        "Text" : "#8F8F8FAF",
+        "Highlight" : "#FFFFFF40",
+        "HighlightedText" : "#F7CF3D"
+    },
     "PlaylistEmptyHint" : {
         "Parent" : "MainWindow",
         "Window" : "#353535",
