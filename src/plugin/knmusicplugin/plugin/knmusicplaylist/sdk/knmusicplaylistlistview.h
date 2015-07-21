@@ -21,15 +21,27 @@
 
 #include "knmusiccategorylistviewbase.h"
 
+/*!
+ * \brief The KNMusicPlaylistListView class is a widget which can show the list
+ * of playlists in the playlist list model. It will use a delegate to avoid the
+ * icon selected feature in the default style.
+ */
+
 class KNMusicPlaylistListView : public KNMusicCategoryListViewBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistListView widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicPlaylistListView(QWidget *parent = 0);
 
-signals:
-
-public slots:
+    /*!
+     * \brief Get the title text of the current playlist.
+     * \return The title text string.
+     */
+    QString currentPlaylistTitle() const;
 };
 
 #endif // KNMUSICPLAYLISTLISTVIEW_H

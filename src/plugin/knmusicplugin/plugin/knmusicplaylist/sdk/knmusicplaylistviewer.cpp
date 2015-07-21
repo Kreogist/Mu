@@ -15,12 +15,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
+
+#include "knmousesensewidget.h"
 
 #include "knmusicplaylistviewer.h"
 
 KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     QWidget(parent)
 {
+    //Initial the main layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 
+    //Initial the information container.
+    KNMouseSenseWidget *infoContainer=new KNMouseSenseWidget(this);
+    infoContainer->updateObjectName("PlaylistInformationContainer");
+    infoContainer->setContentsMargins(20, 12, 0, 8);
+    mainLayout->addWidget(infoContainer);
+    //Initial the information container layout.
+    QBoxLayout *informationLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                                 infoContainer);
+    informationLayout->setContentsMargins(0,0,0,0);
+    infoContainer->setLayout(informationLayout);
 }
 

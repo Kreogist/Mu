@@ -19,14 +19,14 @@
 #ifndef KNMAINWINDOWHEADERBASE_H
 #define KNMAINWINDOWHEADERBASE_H
 
-#include <QWidget>
+#include "knmousesensewidget.h"
 
 class KNCategoryPlugin;
 /*!
  * \brief The KNMainWindowHeaderBase class is a port class of the main window
  * header. You can build all kinds of header from this function.
  */
-class KNMainWindowHeaderBase : public QWidget
+class KNMainWindowHeaderBase : public KNMouseSenseWidget
 {
     Q_OBJECT
 public:
@@ -34,7 +34,7 @@ public:
      * \brief Construct KNMainWindowHeaderBase with a give parent.
      * \param parent The parent widget of the header widget.
      */
-    KNMainWindowHeaderBase(QWidget *parent = 0): QWidget(parent){}
+    KNMainWindowHeaderBase(QWidget *parent = 0): KNMouseSenseWidget(parent){}
 
     /*!
      * \brief Add a widget to header. There may be many widgets will be added to

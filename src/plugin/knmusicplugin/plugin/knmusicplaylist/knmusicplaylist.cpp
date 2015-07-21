@@ -81,7 +81,7 @@ QSplitter *KNMusicPlaylist::generateSplitter()
     //Generate the splitter.
     QSplitter *splitter=new QSplitter(this);
     //Configure the splitter.
-//    splitter->setHandleWidth(0);
+    splitter->setHandleWidth(0);
     //Return the splitter.
     return splitter;
 }

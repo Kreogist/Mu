@@ -15,6 +15,10 @@
         "Highlight" : "#FFFFFF40",
         "HighlightedText" : "#F7CF3D"
     },
+    "PlaylistInformationContainer" : {
+        "Parent" : "MainWindowHeader"
+    },
+
     "PlaylistEmptyHint" : {
         "Parent" : "MainWindow",
         "Window" : "#353535",

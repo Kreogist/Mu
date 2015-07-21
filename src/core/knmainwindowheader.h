@@ -22,7 +22,6 @@
 #include "knmainwindowheaderbase.h"
 
 class QBoxLayout;
-class QTimeLine;
 class KNMainWindowIconButton;
 /*!
  * \brief The KNMainWindowHeader class is a default realize of the main window
@@ -50,29 +49,13 @@ public:
      */
     void setCategoryPlugin(KNCategoryPlugin *categoryPlugin);
 
-protected:
-    /*!
-     * \brief Reimplemented from KNMainWindowHeaderBase::enterEvent().
-     */
-    void enterEvent(QEvent *event);
-
-    /*!
-     * \brief Reimplemented from KNMainWindowHeaderBase::leaveEvent().
-     */
-    void leaveEvent(QEvent *event);
-
 private slots:
     void retranslate();
-    void changeBackgroundColor(const int &frame);
-    void onActionPaletteChanged();
 
 private:
-    inline QTimeLine *generateTimeline();
-    QTimeLine *m_mouseInOut;
     QBoxLayout *m_widgetLayout;
     KNCategoryPlugin *m_categoryPlugin;
     KNMainWindowIconButton *m_iconButton;
-    int m_rangeStart, m_rangeEnd;
 };
 
 #endif // KNMAINWINDOWHEADER_H

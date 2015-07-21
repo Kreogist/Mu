@@ -22,7 +22,7 @@
 #include "knmusiccategorylistviewbase.h"
 
 #define InBrightness 0x50
-#define OutBrightness 0x30
+#define OutBrightness 0x17
 #define TextBrightnessGap 0xAF
 
 KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
