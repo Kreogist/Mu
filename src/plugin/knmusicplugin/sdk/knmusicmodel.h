@@ -33,8 +33,11 @@ class KNMusicModel : public QAbstractTableModel
 public:
     explicit KNMusicModel(QObject *parent = 0);
 
-    void appendMusic(const KNMusicDetailInfo &detailInfo);
-    void removeMusic(int row);
+    void appendRow(const KNMusicDetailInfo &detailInfo);
+    void appendRows(const QList<KNMusicDetailInfo> &detailInfos);
+    bool removeRows(int position,
+                    int rows,
+                    const QModelIndex &index = QModelIndex()) Q_DECL_OVERRIDE;
 
     void clear();
 

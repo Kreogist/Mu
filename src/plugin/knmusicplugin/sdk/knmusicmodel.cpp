@@ -27,30 +27,46 @@ KNMusicModel::KNMusicModel(QObject *parent) :
 
 }
 
-void KNMusicModel::appendMusic(const KNMusicDetailInfo &detailInfo)
+void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
+    //Append the data at the end of the list.
     m_detailInfos.append(detailInfo);
     //Emit data changed signal.
-    int appendRow=m_detailInfos.size();
-    emit dataChanged(index(appendRow, 0),
-                     index(appendRow, MusicDataCount));
+    int rowIndex=m_detailInfos.size()-1;
+    emit dataChanged(index(rowIndex, 0),
+                     index(rowIndex, MusicDataCount));
 }
 
-void KNMusicModel::removeMusic(int row)
+void KNMusicModel::appendRows(const QList<KNMusicDetailInfo> &detailInfos)
 {
-    //Check the row before.
-    Q_ASSERT(row>-1 && row<m_detailInfos.size());
-    //Check the data size.
-    m_detailInfos.removeAt(row);
-    //Update the data changed information.
+    //Append the data at the end of the rows.
+    m_detailInfos.append(detailInfos);
+    //Emit data changed signal.
+    int topRow=m_detailInfos.size()-detailInfos.size()-1;
+    emit dataChanged(index(topRow, 0),
+                     index(m_detailInfos.size()-1, MusicDataCount));
+}
 
+bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
+{
+    Q_UNUSED(index);
+    //As the documentation said, called this function first.
+    beginRemoveRows(QModelIndex(), position, position + rows - 1);
+    //Remove those datas from the list.
+    while(rows--)
+    {
+        m_detailInfos.removeAt(position);
+    }
+    //As the documentation said, called this after remove rows.
+    endRemoveRows();
+    return true;
 }
 
 void KNMusicModel::clear()
 {
     //Clear the detail info list.
     m_detailInfos.clear();
-
+    ;
 }
 
 int KNMusicModel::rowCount(const QModelIndex &parent) const

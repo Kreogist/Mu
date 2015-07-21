@@ -40,9 +40,17 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     KNMusicDetailInfo t;
     t.textLists[Name]="Cutie Panther";
     t.textLists[Artist]="BiBi";
-    testModel->appendMusic(t);
+    testModel->appendRow(t);
+    QList<KNMusicDetailInfo> infoList;
+    for(int i=0; i<20; i++)
+    {
+        t.textLists[AlbumArtist]=QString::number(i);
+        infoList.append(t);
+    }
     t.textLists[Name]="Music S.T.A.R.T!!";
-    testModel->appendMusic(t);
+    testModel->appendRow(t);
+    testModel->removeRow(0);
+    testModel->appendRows(infoList);
     m_treeView->setModel(testModel);
 
     //Initial the information container.
