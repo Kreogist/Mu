@@ -21,7 +21,11 @@
 
 #include <QStringList>
 
+#include "knmusicutil.h"
+
 #include <QObject>
+
+using namespace MusicUtil;
 
 /*!
  * \def knGlobal
@@ -96,6 +100,13 @@ public:
     QString typeDescription(const QString &suffix) const;
 
     /*!
+     * \brief Get the header text of the specific column of tree view.
+     * \param index The index of the column.
+     * \return The text of the column title.
+     */
+    QString treeViewHeaderText(const int &index) const;
+
+    /*!
      * \brief Move the parser and searcher to their own working threads. All the
      * working threads shouhld be here.
      */
@@ -122,6 +133,7 @@ private:
 
     QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
                 m_listSuffixDescription, m_indexedGenres;
+    QString m_treeViewHeaderText[MusicDataCount];
 };
 
 #endif // KNMUSICGLOBAL_H

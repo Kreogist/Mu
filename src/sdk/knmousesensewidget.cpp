@@ -27,6 +27,8 @@ KNMouseSenseWidget::KNMouseSenseWidget(QWidget *parent) :
     m_rangeStart(0),
     m_rangeEnd(0)
 {
+    //Set properties.
+    setAutoFillBackground(true);
     //Add header to theme list.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMouseSenseWidget::onActionPaletteChanged);

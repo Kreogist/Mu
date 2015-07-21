@@ -16,25 +16,42 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTVIEWER_H
-#define KNMUSICPLAYLISTVIEWER_H
+#ifndef KNMUSICMODEL_H
+#define KNMUSICMODEL_H
 
-#include <QWidget>
+#include <QList>
 
-class KNMusicPlaylistTreeView;
-class KNMusicPlaylistViewer : public QWidget
+#include "knmusicglobal.h"
+
+#include <QAbstractTableModel>
+
+using namespace MusicUtil;
+
+class KNMusicModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistViewer(QWidget *parent = 0);
+    explicit KNMusicModel(QObject *parent = 0);
+
+    void appendMusic(const KNMusicDetailInfo &detailInfo);
+    void removeMusic(int row);
+
+    void clear();
+
+    int rowCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const;
+    QVariant headerData(int section,
+                        Qt::Orientation orientation,
+                        int role) const;
+
+    QVariant data(const QModelIndex &index, int role) const;
 
 signals:
 
 public slots:
 
 private:
-
-    KNMusicPlaylistTreeView *m_treeView;
+    QList<KNMusicDetailInfo> m_detailInfos;
 };
 
-#endif // KNMUSICPLAYLISTVIEWER_H
+#endif // KNMUSICMODEL_H

@@ -18,11 +18,11 @@
 #include <QThread>
 
 #include "knglobal.h"
+#include "knlocalemanager.h"
 
 #include "knmusicparser.h"
 #include "knmusictagparser.h"
 #include "knmusicdetaildialog.h"
-#include "knmusicutil.h"
 
 #include "knmusicglobal.h"
 
@@ -78,6 +78,11 @@ QString KNMusicGlobal::typeDescription(const QString &suffix) const
     return suffixIndex==-1?QString():m_suffixDescription.at(suffixIndex);
 }
 
+QString KNMusicGlobal::treeViewHeaderText(const int &index) const
+{
+    return m_treeViewHeaderText[index];
+}
+
 void KNMusicGlobal::startThreads()
 {
     //All the multi-thread things should be processed here.
@@ -91,7 +96,32 @@ void KNMusicGlobal::startThreads()
 
 void KNMusicGlobal::retranslate()
 {
-    ;
+    m_treeViewHeaderText[Name]=tr("Name");
+    m_treeViewHeaderText[Album]=tr("Album");
+    m_treeViewHeaderText[AlbumArtist]=tr("Album Artist");
+    m_treeViewHeaderText[AlbumRating]=tr("Album Rating");
+    m_treeViewHeaderText[Artist]=tr("Artist");
+    m_treeViewHeaderText[BeatsPerMinuate]=tr("Beats Per Minuate");
+    m_treeViewHeaderText[BitRate]=tr("Bit Rate");
+    m_treeViewHeaderText[Category]=tr("Category");
+    m_treeViewHeaderText[Comments]=tr("Comments");
+    m_treeViewHeaderText[Composer]=tr("Composer");
+    m_treeViewHeaderText[DateAdded]=tr("Date Added");
+    m_treeViewHeaderText[DateModified]=tr("Date Modified");
+    m_treeViewHeaderText[Description]=tr("Description");
+    m_treeViewHeaderText[DiscCount]=tr("Disc Count");
+    m_treeViewHeaderText[DiscNumber]=tr("Disc Number");
+    m_treeViewHeaderText[Genre]=tr("Genre");
+    m_treeViewHeaderText[Kind]=tr("Kind");
+    m_treeViewHeaderText[LastPlayed]=tr("Last Played");
+    m_treeViewHeaderText[Plays]=tr("Plays");
+    m_treeViewHeaderText[Rating]=tr("Rating");
+    m_treeViewHeaderText[SampleRate]=tr("Sample Rate");
+    m_treeViewHeaderText[Size]=tr("Size");
+    m_treeViewHeaderText[Time]=tr("Time");
+    m_treeViewHeaderText[TrackCount]=tr("Track Count");
+    m_treeViewHeaderText[TrackNumber]=tr("Track Number");
+    m_treeViewHeaderText[Year]=tr("Year");
 }
 
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :
@@ -106,6 +136,10 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     initialFileType();
     //Initial the genere.
     initialGenre();
+
+    //Link to retranslate.
+    knI18n->link(this, &KNMusicGlobal::retranslate);
+    retranslate();
 }
 
 inline void KNMusicGlobal::initialFileType()

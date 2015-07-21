@@ -33,7 +33,6 @@ KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
 {
     updateObjectName("MainWindowHeader");
     //Set properties.
-    setAutoFillBackground(true);
     setFixedHeight(70);
 
     //Initial the layout of the header.

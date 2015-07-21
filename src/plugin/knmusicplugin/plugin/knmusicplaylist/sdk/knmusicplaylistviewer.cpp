@@ -19,10 +19,14 @@
 
 #include "knmousesensewidget.h"
 
+#include "knmusicplaylisttreeview.h"
+#include "knmusicplaylistmodel.h"
+
 #include "knmusicplaylistviewer.h"
 
 KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_treeView(new KNMusicPlaylistTreeView(this))
 {
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -31,11 +35,23 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
+    //Debug
+    KNMusicPlaylistModel *testModel=new KNMusicPlaylistModel(this);
+    KNMusicDetailInfo t;
+    t.textLists[Name]="Cutie Panther";
+    t.textLists[Artist]="BiBi";
+    testModel->appendMusic(t);
+    t.textLists[Name]="Music S.T.A.R.T!!";
+    testModel->appendMusic(t);
+    m_treeView->setModel(testModel);
+
     //Initial the information container.
     KNMouseSenseWidget *infoContainer=new KNMouseSenseWidget(this);
     infoContainer->updateObjectName("PlaylistInformationContainer");
     infoContainer->setContentsMargins(20, 12, 0, 8);
+    //Add widget to layout.
     mainLayout->addWidget(infoContainer);
+    mainLayout->addWidget(m_treeView, 1);
     //Initial the information container layout.
     QBoxLayout *informationLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                                  infoContainer);
