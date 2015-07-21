@@ -27,8 +27,10 @@
 KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     KNDropProxyContainer(parent),
     m_hintText(new QLabel(this)),
-    m_addPlaylist(new KNGlassButton(this)),
-    m_importPlaylist(new KNGlassButton(this))
+    m_addPlaylist(
+        generateButton(":/plugin/music/playlist/playlist_add_empty.png")),
+    m_importPlaylist(
+        generateButton(":/plugin/music/playlist/playlist_import_empty.png"))
 {
     setObjectName("PlaylistEmptyHint");
     //Set properties.
@@ -42,14 +44,14 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     labelFont.setPixelSize(15);
     m_hintText->setFont(labelFont);
     knTheme->registerWidget(m_hintText);
-    //Configure the button.
-    configureGlassButton(m_addPlaylist,
-                         ":/plugin/music/playlist/playlist_add_empty.png");
-    configureGlassButton(m_importPlaylist,
-                         ":/plugin/music/playlist/playlist_import_empty.png");
     //Initial the icon.
     QLabel *icon=new QLabel(this);
     icon->setPixmap(QPixmap(":/plugin/music/playlist/empty.png"));
+    //Configure the button.
+    connect(m_addPlaylist, &KNGlassButton::released,
+            this, &KNMusicPlaylistEmptyHint::requireAddPlaylist);
+    connect(m_importPlaylist, &KNGlassButton::released,
+            this, &KNMusicPlaylistEmptyHint::requireImportPlaylists);
 
     //Initial the layout of the widget.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -96,9 +98,11 @@ void KNMusicPlaylistEmptyHint::retranslate()
     m_importPlaylist->setText(tr("Import playlists"));
 }
 
-void KNMusicPlaylistEmptyHint::configureGlassButton(KNGlassButton *button,
-                                                    const QString &iconPath)
+KNGlassButton *KNMusicPlaylistEmptyHint::generateButton(
+        const QString &iconPath)
 {
+    //Generate a button.
+    KNGlassButton *button=new KNGlassButton(this);
     //Change the size of the button
     button->setFixedSize(300,33);
     //Set the pixmap.
@@ -109,5 +113,7 @@ void KNMusicPlaylistEmptyHint::configureGlassButton(KNGlassButton *button,
     buttonFont.setPixelSize(15);
     //Set the font back.
     button->setFont(buttonFont);
+    //Send the button.
+    return button;
 }
 

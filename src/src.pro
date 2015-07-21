@@ -111,7 +111,11 @@ SOURCES += \
     sdk/knemptystatewidget.cpp \
     sdk/kndropproxycontainer.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp \
-    sdk/knglassbutton.cpp
+    sdk/knglassbutton.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp \
+    plugin/knmusicplugin/sdk/knmusiccategorylistviewbase.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlistview.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -178,7 +182,11 @@ HEADERS += \
     sdk/knemptystatewidget.h \
     sdk/kndropproxycontainer.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.h \
-    sdk/knglassbutton.h
+    sdk/knglassbutton.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.h \
+    plugin/knmusicplugin/sdk/knmusiccategorylistviewbase.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlistview.h
 
 RESOURCES += \
     resource/res.qrc

@@ -16,35 +16,27 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTEMPTYHINT_H
-#define KNMUSICPLAYLISTEMPTYHINT_H
+#include "knmusiccategorylistviewbase.h"
 
-#include <QUrl>
-#include <QList>
-
-#include "kndropproxycontainer.h"
-
-class QLabel;
-class KNGlassButton;
-class KNMusicPlaylistEmptyHint : public KNDropProxyContainer
+KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
+    QListView(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicPlaylistEmptyHint(QWidget *parent = 0);
+    //Set properties.
+    setAutoFillBackground(true);
+    setContentsMargins(0, 0, 0, 0);
+    setFrameShape(QFrame::NoFrame);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setIconSize(QSize(40, 40));
+    setLineWidth(0);
+    setLayoutMode(QListView::Batched); //For speed up.
+    setMinimumWidth(200);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSpacing(2);
+    setUniformItemSizes(true);
+    setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
-signals:
-    void requireAddPlaylist();
-    void requireImportPlaylists();
+    //Set viewport properties.
+    viewport()->setContentsMargins(0, 0, 0, 0);
 
-public slots:
+}
 
-private slots:
-    void retranslate();
-
-private:
-    inline KNGlassButton *generateButton(const QString &iconPath);
-    QLabel *m_hintText;
-    KNGlassButton *m_addPlaylist, *m_importPlaylist;
-};
-
-#endif // KNMUSICPLAYLISTEMPTYHINT_H

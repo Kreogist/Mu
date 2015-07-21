@@ -17,5 +17,9 @@
         <file>music/playlist/empty.png</file>
         <file>music/playlist/playlist_add_empty.png</file>
         <file>music/playlist/playlist_import_empty.png</file>
+        <file>music/playlist/icon.png</file>
+        <file>music/playlist/editor_add.png</file>
+        <file>music/playlist/editor_edit.png</file>
+        <file>music/playlist/editor_remove.png</file>
     </qresource>
 </RCC>

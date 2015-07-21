@@ -37,8 +37,7 @@ KNGlassButton::KNGlassButton(QWidget *parent) :
     m_mouseUp(generateTimeLine(HoverOpacity)),
     m_highLight(QLinearGradient(0.0, 0.0, 0.0, 0.0)),
     m_highLightMask(QLinearGradient(0.0, 0.0, 0.0, 0.0)),
-    m_maskImage(QPixmap()),
-    m_highLightOpacity(0.0)
+    m_maskImage(QPixmap())
 {
     //Set properties.
     setContentsMargins(20, 5, 20, 5);
@@ -52,6 +51,8 @@ KNGlassButton::KNGlassButton(QWidget *parent) :
 
 void KNGlassButton::paintEvent(QPaintEvent *event)
 {
+    //Ignore the original event.
+    Q_UNUSED(event)
     //Initial the painter.
     QPainter painter(this);
     //Set rendering hints.
@@ -68,7 +69,7 @@ void KNGlassButton::paintEvent(QPaintEvent *event)
     pen.setWidth(2);
     painter.setPen(pen);
     painter.setBrush(Qt::NoBrush);
-    painter.drawRoundedRect(rect(), 8, 6);
+    painter.drawRoundedRect(rect(), 6, 6);
 
     //Set the opacity.
     painter.setOpacity(basePaintOpacity);

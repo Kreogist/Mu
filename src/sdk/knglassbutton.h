@@ -24,13 +24,33 @@
 #include <QAbstractButton>
 
 class QTimeLine;
+/*!
+ * \brief The KNGlassButton class provides a glass looked button. But It seems
+ * that this button will cost a large memeory used. Don't use this button a lot.
+ * \n
+ * It's designed to copy the Aero Glass from the Window Media Center of Windows
+ * 7.
+ */
 class KNGlassButton : public QAbstractButton
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNGlassButton widget.
+     * \param parent The given parent widget.
+     */
     explicit KNGlassButton(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the spacing between the icon and the text.
+     * \return The spacing size.
+     */
     int spacing() const;
+
+    /*!
+     * \brief Set the spacing size of the icon and the text.
+     * \param spacing The spacing size.
+     */
     void setSpacing(int spacing);
 
 signals:
@@ -83,7 +103,6 @@ private:
     QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseDown, *m_mouseUp;
     QLinearGradient m_highLight, m_highLightMask;
     QPixmap m_maskImage;
-    qreal m_highLightOpacity;
 };
 
 #endif // KNGLASSBUTTON_H

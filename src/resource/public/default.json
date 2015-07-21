@@ -15,6 +15,15 @@
         "Parent" : "PlaylistEmptyHint",
         "WindowText" : "#A0A0A0"
     },
+    "PlaylistListEditorMenu" : {
+        "Parent" : "PlaylistEmptyHint",
+        "Base" : "#000000",
+        "Window" : "#000000",
+        "WindowText" : "#FFFFFF",
+        "Text" : "#FFFFFFFE",
+        "Highlight" : "#606060",
+        "HighlightedText" : "#F7CF3D"
+    },
     "CategoryTabBar" : {
         "Parent" : "MainWindow",
         "Window" : "#FFFFFF"

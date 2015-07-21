@@ -16,35 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTEMPTYHINT_H
-#define KNMUSICPLAYLISTEMPTYHINT_H
+#include "knmusicplaylistlistview.h"
 
-#include <QUrl>
-#include <QList>
-
-#include "kndropproxycontainer.h"
-
-class QLabel;
-class KNGlassButton;
-class KNMusicPlaylistEmptyHint : public KNDropProxyContainer
+KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
+    KNMusicCategoryListViewBase(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicPlaylistEmptyHint(QWidget *parent = 0);
 
-signals:
-    void requireAddPlaylist();
-    void requireImportPlaylists();
+}
 
-public slots:
-
-private slots:
-    void retranslate();
-
-private:
-    inline KNGlassButton *generateButton(const QString &iconPath);
-    QLabel *m_hintText;
-    KNGlassButton *m_addPlaylist, *m_importPlaylist;
-};
-
-#endif // KNMUSICPLAYLISTEMPTYHINT_H

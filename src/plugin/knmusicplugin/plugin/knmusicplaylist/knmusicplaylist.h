@@ -21,8 +21,11 @@
 
 #include "knmusicplaylistbase.h"
 
+class QSplitter;
 class KNCategoryTab;
 class KNEmptyStateWidget;
+class KNMusicPlaylistList;
+class KNMusicPlaylistViewer;
 class KNMusicPlaylist : public KNMusicPlaylistBase
 {
     Q_OBJECT
@@ -41,8 +44,11 @@ private slots:
     void retranslate();
 
 private:
+    inline QSplitter *generateSplitter();
     KNCategoryTab *m_tab;
     KNEmptyStateWidget *m_container;
+    KNMusicPlaylistList *m_playlistList;
+    KNMusicPlaylistViewer *m_playlistViewer;
 };
 
 #endif // KNMUSICPLAYLIST_H

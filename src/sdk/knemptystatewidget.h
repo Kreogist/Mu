@@ -19,6 +19,8 @@
 #ifndef KNEMPTYSTATEWIDGET_H
 #define KNEMPTYSTATEWIDGET_H
 
+#include <QList>
+#include <QUrl>
 #include <QWidget>
 
 /*!
@@ -64,6 +66,18 @@ public:
     void setEmptyWidget(QWidget *emptyWidget);
 
 signals:
+    /*!
+     * \brief When the user pressed the 'New Playlist', this signal will be
+     * emitted to ask to create a new playlist.
+     */
+    void requireCreatePlaylist();
+
+    /*!
+     * \brief When the user is required to import such playlists, this signal
+     * will be emitted to ask to import some files. Those files are stored in
+     * the url list.
+     */
+    void requireImportPlaylist();
 
 public slots:
     /*!
