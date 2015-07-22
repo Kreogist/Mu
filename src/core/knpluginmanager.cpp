@@ -38,9 +38,6 @@
 
 #include "knpluginmanager.h"
 
-#include <QDebug>
-#include "knjsondatabase.h"
-
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
@@ -52,17 +49,6 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial the global.
     KNGlobal::initial(this);
-
-    //Debug
-    KNJsonDatabase *db=new KNJsonDatabase(this);
-    qDebug()<<db->link("D:/文档/Kreogist/Mu/Library/Music/Library/Music.db");
-    qDebug()<<db->read();
-    int counter=0;
-    for(auto i=db->begin(); i!=db->end(); ++i)
-    {
-        counter++;
-    }
-    qDebug()<<counter;
 }
 
 KNPluginManager::~KNPluginManager()
