@@ -111,11 +111,23 @@ namespace MusicUtil
 class KNMusicUtil
 {
 public:
+    /*!
+     * \brief Translate a QData time function to a readable string. The format
+     * will be yyyy-MM-dd AP hh:mm.
+     * \param dateTime The date time object.
+     * \return The translated string.
+     */
     static QString dateTimeToString(const QDateTime &dateTime)
     {
         return dateTime.toString("yyyy-MM-dd AP hh:mm");
     }
 
+    /*!
+     * \brief Translate a msecond qint64 number to readable string. The format
+     * will be mm:ss. The surplus msecond will be dropped.
+     * \param msecond The msecond qint64 number.
+     * \return The translated string.
+     */
     static QString msecondToString(const qint64 &msecond)
     {
         //Translate m-second to second first.

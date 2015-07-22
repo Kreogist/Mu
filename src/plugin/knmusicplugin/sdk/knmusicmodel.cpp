@@ -64,7 +64,7 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
 {
     Q_UNUSED(index);
     //As the documentation said, called this function first.
-    beginRemoveRows(QModelIndex(), position, position + rows - 1);
+    beginRemoveRows(QModelIndex(), position, position+rows-1);
     //Remove those datas from the list.
     while(rows--)
     {
@@ -77,9 +77,12 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
 
 void KNMusicModel::clear()
 {
+    //As the documentation said, called this function first.
+    beginRemoveRows(QModelIndex(), 0, m_detailInfos.size()-1);
     //Clear the detail info list.
     m_detailInfos.clear();
-    ;
+    //As the documentation said, called this after remove rows.
+    endRemoveRows();
 }
 
 int KNMusicModel::rowCount(const QModelIndex &parent) const

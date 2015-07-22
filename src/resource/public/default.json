@@ -15,7 +15,7 @@
     "PlaylistTreeView" :{
         "Parent" : "MainWindow",
         "AlternateBase" : "#FFFFFF20",
-        "Base" : "#101010",
+        "Base" : "#202020",
         "Window" : "#202020",
         "Text" : "#FFFFFF",
         "Button" : "#FFFFFF",
@@ -34,7 +34,10 @@
     "PlaylistInformationContainer" : {
         "Parent" : "MainWindowHeader"
     },
-
+    "PlaylistViewerLabel" : {
+        "Parent" : "PlaylistInformationContainer",
+        "WindowText" : "#FFFFFF"
+    },
     "PlaylistEmptyHint" : {
         "Parent" : "MainWindow",
         "Window" : "#353535",

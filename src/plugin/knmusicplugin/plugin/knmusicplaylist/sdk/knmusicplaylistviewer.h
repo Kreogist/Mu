@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class QLabel;
+class KNSideShadowWidget;
 class KNMusicPlaylistTreeView;
 class KNMusicPlaylistViewer : public QWidget
 {
@@ -32,9 +34,13 @@ signals:
 
 public slots:
 
-private:
+protected:
+    void resizeEvent(QResizeEvent *event);
 
+private:
     KNMusicPlaylistTreeView *m_treeView;
+    QLabel *m_title, *m_detail;
+    KNSideShadowWidget *m_leftShadow;
 };
 
 #endif // KNMUSICPLAYLISTVIEWER_H

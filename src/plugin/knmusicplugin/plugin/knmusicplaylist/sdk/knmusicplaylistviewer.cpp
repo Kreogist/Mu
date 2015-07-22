@@ -16,44 +16,45 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QLabel>
 
 #include "knmousesensewidget.h"
+#include "knsideshadowwidget.h"
+#include "knthememanager.h"
 
 #include "knmusicplaylisttreeview.h"
 #include "knmusicplaylistmodel.h"
 
 #include "knmusicplaylistviewer.h"
 
+#define ShadowWidth 15
+
 KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     QWidget(parent),
-    m_treeView(new KNMusicPlaylistTreeView(this))
+    m_treeView(new KNMusicPlaylistTreeView(this)),
+    m_title(new QLabel(this)),
+    m_detail(new QLabel(this)),
+    m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow,
+                                        this))
 {
+    //Configure title label.
+    m_title->setObjectName("PlaylistViewerLabel");
+    QFont labelFont=m_title->font();
+    labelFont.setBold(true);
+    labelFont.setPixelSize(17);
+    m_title->setFont(labelFont);
+    //Link the theme manager with the label.
+    knTheme->registerWidget(m_title);
+    //Configure detail label.
+    m_detail->setObjectName("PlaylistViewerLabel");
+    knTheme->registerWidget(m_detail);
+
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
-
-    //Debug
-    KNMusicPlaylistModel *testModel=new KNMusicPlaylistModel(this);
-    KNMusicDetailInfo t;
-    t.textLists[Name]="Cutie Panther";
-    t.textLists[Artist]="BiBi";
-    testModel->appendRow(t);
-    QList<KNMusicDetailInfo> infoList;
-    for(int i=0; i<20; i++)
-    {
-        t.textLists[AlbumArtist]=QString::number(i);
-        infoList.append(t);
-    }
-    t.textLists[Name]="Music S.T.A.R.T!!";
-    testModel->appendRow(t);
-    testModel->removeRow(0);
-    testModel->appendRows(infoList);
-    t.textLists[Name]="Start DASH!";
-    testModel->insertRow(0, t);
-    m_treeView->setModel(testModel);
 
     //Initial the information container.
     KNMouseSenseWidget *infoContainer=new KNMouseSenseWidget(this);
@@ -69,3 +70,10 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     infoContainer->setLayout(informationLayout);
 }
 
+void KNMusicPlaylistViewer::resizeEvent(QResizeEvent *event)
+{
+    //Resize the viewer.
+    QWidget::resizeEvent(event);
+    //Resize the shadow,
+    m_leftShadow->resize(ShadowWidth, height());
+}
