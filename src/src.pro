@@ -121,7 +121,8 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusicmodel.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusictreeviewheader.cpp \
-    sdk/knmousesenseheader.cpp
+    sdk/knmousesenseheader.cpp \
+    sdk/knjsondatabase.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -198,7 +199,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicmodel.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmodel.h \
     plugin/knmusicplugin/sdk/knmusictreeviewheader.h \
-    sdk/knmousesenseheader.h
+    sdk/knmousesenseheader.h \
+    sdk/knjsondatabase.h
 
 RESOURCES += \
     resource/res.qrc
