@@ -22,6 +22,7 @@
 #include <QList>
 
 #include "knmusicglobal.h"
+#include <QStandardItemModel>
 
 #include <QAbstractTableModel>
 
@@ -35,6 +36,9 @@ public:
 
     void appendRow(const KNMusicDetailInfo &detailInfo);
     void appendRows(const QList<KNMusicDetailInfo> &detailInfos);
+
+    bool insertRow(int row, const KNMusicDetailInfo &detailInfo);
+
     bool removeRows(int position,
                     int rows,
                     const QModelIndex &index = QModelIndex()) Q_DECL_OVERRIDE;

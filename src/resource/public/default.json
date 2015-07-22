@@ -6,6 +6,22 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "MouseSenseHeader" : {
+        "Parent" : "MainWindow",
+        "Base" : "#00000000",
+        "Window" : "#00000000",
+        "Button" : "#FFFFFF"
+    },
+    "PlaylistTreeView" :{
+        "Parent" : "MainWindow",
+        "AlternateBase" : "#FFFFFF20",
+        "Base" : "#101010",
+        "Window" : "#202020",
+        "Text" : "#FFFFFF",
+        "Button" : "#FFFFFF",
+        "Highlight" : "#FFFFFF50",
+        "HighlightedText" : "#F7CF3D"
+    },
     "CategoryListViewBase" : {
         "Parent" : "MainWindow",
         "Base" : "#FFFFFF",

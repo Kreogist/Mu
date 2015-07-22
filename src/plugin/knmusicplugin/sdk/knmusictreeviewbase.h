@@ -21,15 +21,73 @@
 
 #include <QTreeView>
 
+class QTimeLine;
+/*!
+ * \brief The KNMusicTreeViewBase class is the basic tree view of all the music
+ * tree view. It provides mouse sense alternative row color. It can
+ * automatically link to the solo and multi menu to process the music row.\n
+ * Remember this is only a base class, it means you have to reimplement it. Set
+ * the object name and called onActionThemeUpdate() slot.
+ */
 class KNMusicTreeViewBase : public QTreeView
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicTreeViewBase widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicTreeViewBase(QWidget *parent = 0);
+
+    /*!
+     * \brief Get this tree view will enable animate features or not.
+     * \return If the animation features has been enabled, it will be true.
+     */
+    bool animate() const;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set whether this tree view widget should use animation features.
+     * \param animate To enabled animation features, set this property to be
+     * true.
+     */
+    void setAnimate(bool animate);
+
+protected:
+    /*!
+     * \brief Reimplement from QTreeView::enterEvent().
+     */
+    void enterEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplement from QTreeView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event);
+
+    /*!
+     * \brief Reimplement from QTreeView::drawRow().
+     */
+    void drawRow(QPainter *painter,
+                 const QStyleOptionViewItem &options,
+                 const QModelIndex &index) const;
+
+protected slots:
+    /*!
+     * \brief This slot is provide to update the palette when the tree view is
+     * being constructed. Or else the UI will be very ugly.
+     */
+    void onActionThemeUpdate();
+
+private slots:
+    void onActionMouseInOut(const int &frame);
+
+private:
+    inline QTimeLine *generateTimeLine(const int &endFrame);
+    inline void startAnime(QTimeLine *timeLine);
+    QTimeLine *m_mouseIn, *m_mouseOut;
+    bool m_animate;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

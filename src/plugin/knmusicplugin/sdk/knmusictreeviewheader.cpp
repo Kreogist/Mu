@@ -16,21 +16,11 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTTREEVIEW_H
-#define KNMUSICPLAYLISTTREEVIEW_H
+#include "knmusictreeviewheader.h"
 
-#include "knmusictreeviewbase.h"
-
-class KNMusicPlaylistTreeView : public KNMusicTreeViewBase
+KNMusicTreeViewHeader::KNMusicTreeViewHeader(QWidget *parent) :
+    KNMouseSenseHeader(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNMusicPlaylistTreeView(QWidget *parent = 0);
 
-signals:
+}
 
-public slots:
-
-};
-
-#endif // KNMUSICPLAYLISTTREEVIEW_H

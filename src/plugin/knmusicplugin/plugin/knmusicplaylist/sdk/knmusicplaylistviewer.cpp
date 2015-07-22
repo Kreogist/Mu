@@ -51,6 +51,8 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     testModel->appendRow(t);
     testModel->removeRow(0);
     testModel->appendRows(infoList);
+    t.textLists[Name]="Start DASH!";
+    testModel->insertRow(0, t);
     m_treeView->setModel(testModel);
 
     //Initial the information container.

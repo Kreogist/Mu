@@ -47,6 +47,19 @@ void KNMusicModel::appendRows(const QList<KNMusicDetailInfo> &detailInfos)
                      index(m_detailInfos.size()-1, MusicDataCount));
 }
 
+bool KNMusicModel::insertRow(int row, const KNMusicDetailInfo &detailInfo)
+{
+    //Check the row first.
+    Q_ASSERT(row>-1 && row<m_detailInfos.size());
+    //Follow the documentation, we have to do this.
+    beginInsertRows(QModelIndex(), row, row + 1);
+    //Insert the detail info into the list.
+    m_detailInfos.insert(row, detailInfo);
+    //As the documentation said, called this after insert rows.
+    endInsertRows();
+    return true;
+}
+
 bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
 {
     Q_UNUSED(index);
