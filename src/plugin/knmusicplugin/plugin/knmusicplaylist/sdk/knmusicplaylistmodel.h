@@ -27,9 +27,22 @@ class KNMusicPlaylistModel : public KNMusicModel
 public:
     explicit KNMusicPlaylistModel(QObject *parent = 0);
 
+    QString title() const;
+    void setTitle(const QString &title);
+
+    QString filePath() const;
+    void setFilePath(const QString &filePath);
+
+    bool built() const;
+    void buildModel();
+
 signals:
 
 public slots:
+
+private:
+    QString m_title, m_filePath;
+    bool m_built;
 };
 
 #endif // KNMUSICPLAYLISTMODEL_H

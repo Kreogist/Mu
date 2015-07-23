@@ -23,6 +23,7 @@
 #include "sdk/knmusicplaylistemptyhint.h"
 #include "sdk/knmusicplaylistlist.h"
 #include "sdk/knmusicplaylistviewer.h"
+#include "sdk/knmusicplaylistmanager.h"
 
 #include "knlocalemanager.h"
 
@@ -33,10 +34,13 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_tab(new KNCategoryTab(this)),
     m_container(new KNEmptyStateWidget(this)),
     m_playlistList(new KNMusicPlaylistList(this)),
-    m_playlistViewer(new KNMusicPlaylistViewer(this))
+    m_playlistViewer(new KNMusicPlaylistViewer(this)),
+    m_playlistManager(new KNMusicPlaylistManager(this))
 {
     //Configure the tab.
     m_tab->setIcon(QIcon(":/plugin/music/playlist/icon.png"));
+    //Set the playlist list model to the playlist list.
+    m_playlistList->setPlaylistList(m_playlistManager->playlistList());
 
     //Generate the empty hint widget.
     KNMusicPlaylistEmptyHint *emptyHint=new KNMusicPlaylistEmptyHint(this);

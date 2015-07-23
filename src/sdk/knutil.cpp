@@ -66,3 +66,26 @@ QString KNUtil::simplifiedPath(const QString &path)
 {
     return QFileInfo(path).absoluteFilePath();
 }
+
+QString KNUtil::ensurePathValid(const QString &path)
+{
+    //Gernerate the file info about the given path.
+    QFileInfo detectInfo(path);
+    //Check if the directory has alread exist.
+    if(detectInfo.isDir() && detectInfo.exists())
+    {
+        return detectInfo.absoluteFilePath();
+    }
+    //CHeck if there's a file named the same as the path.
+    if(detectInfo.isFile())
+    {
+        //Remove the file first.
+        if(!QFile::remove(detectInfo.absoluteFilePath()))
+        {
+            return QString();
+        }
+    }
+    //Generate the folder.
+    return QDir().mkpath(detectInfo.absoluteFilePath())?
+                detectInfo.absoluteFilePath():QString();
+}

@@ -29,22 +29,26 @@ KNMusicModel::KNMusicModel(QObject *parent) :
 
 void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
+    //Follow the documentation, we have to do this.
+    beginInsertRows(QModelIndex(),
+                    m_detailInfos.size(),
+                    m_detailInfos.size() + 1);
     //Append the data at the end of the list.
     m_detailInfos.append(detailInfo);
-    //Emit data changed signal.
-    int rowIndex=m_detailInfos.size()-1;
-    emit dataChanged(index(rowIndex, 0),
-                     index(rowIndex, MusicDataCount));
+    //As the documentation said, called this after insert rows.
+    endInsertRows();
 }
 
 void KNMusicModel::appendRows(const QList<KNMusicDetailInfo> &detailInfos)
 {
+    //Follow the documentation, we have to do this.
+    beginInsertRows(QModelIndex(),
+                    m_detailInfos.size(),
+                    m_detailInfos.size() + detailInfos.size());
     //Append the data at the end of the rows.
     m_detailInfos.append(detailInfos);
-    //Emit data changed signal.
-    int topRow=m_detailInfos.size()-detailInfos.size()-1;
-    emit dataChanged(index(topRow, 0),
-                     index(m_detailInfos.size()-1, MusicDataCount));
+    //As the documentation said, called this after insert rows.
+    endInsertRows();
 }
 
 bool KNMusicModel::insertRow(int row, const KNMusicDetailInfo &detailInfo)

@@ -52,6 +52,13 @@ public:
      */
     static QString simplifiedPath(const QString &path);
 
+    /*!
+     * \brief This function will try to make the path valid.
+     * \param path The prefer path.
+     * \return The simplified path of the prefer path.
+     */
+    static QString ensurePathValid(const QString &path);
+
 private:
     KNUtil();
     KNUtil(const KNUtil &);

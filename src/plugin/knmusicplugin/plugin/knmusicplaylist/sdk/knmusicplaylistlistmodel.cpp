@@ -15,12 +15,81 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusicplaylistmodel.h"
 
 #include "knmusicplaylistlistmodel.h"
 
 KNMusicPlaylistListModel::KNMusicPlaylistListModel(QObject *parent) :
-    QAbstractListModel(parent)
+    QAbstractListModel(parent),
+    m_playlistList(QList<KNMusicPlaylistModel *>()),
+    m_icon(QIcon(":/plugin/music/playlist/playlist_icon.png"))
 {
-
 }
 
+void KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
+{
+    //Follow the documentation, we have to do this.
+    beginInsertRows(QModelIndex(),
+                    m_playlistList.size(),
+                    m_playlistList.size() + 1);
+    //Append this data at the end of the list.
+    m_playlistList.append(model);
+    //End the insertation.
+    endInsertRows();
+}
+
+int KNMusicPlaylistListModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent)
+    //The row count is the size of the playlist model list size.
+    return m_playlistList.size();
+}
+
+QVariant KNMusicPlaylistListModel::data(const QModelIndex &index,
+                                        int role) const
+{
+    //The invalid index data cannot have any valid data.
+    if(!index.isValid())
+    {
+        return QVariant();
+    }
+    //Get the specfic model.
+    KNMusicPlaylistModel *model=m_playlistList.at(index.row());
+    //Get the data of the role.
+    switch(role)
+    {
+    case Qt::DisplayRole:
+        return model->title();
+    case Qt::DecorationRole:
+        return m_icon;
+    default:
+        return QVariant();
+    }
+}
+
+QVariant KNMusicPlaylistListModel::headerData(int section,
+                                              Qt::Orientation orientation,
+                                              int role) const
+{
+    Q_UNUSED(section)
+    Q_UNUSED(orientation)
+    Q_UNUSED(role)
+    //No matter what, just simply return a null variant.
+    return QVariant();
+}
+
+bool KNMusicPlaylistListModel::findTitle(const QString &title)
+{
+    //Find all the playlist item in the playlist.
+    for(auto i=m_playlistList.constBegin(); i!=m_playlistList.constEnd(); ++i)
+    {
+        //Chec if the title is the same as the title we searched, then return
+        //true, means we find it.
+        if((*i)->title()==title)
+        {
+            return true;
+        }
+    }
+    //Or else, we cannot find this title, it will be false.
+    return false;
+}

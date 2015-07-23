@@ -24,6 +24,7 @@
 #include "knlocalemanager.h"
 
 #include "knmusicplaylistlistview.h"
+#include "knmusicplaylistlistmodel.h"
 
 #include "knmusicplaylistlist.h"
 
@@ -48,6 +49,12 @@ KNMusicPlaylistList::KNMusicPlaylistList(QWidget *parent) :
     //Link to retranslate.
     knI18n->link(this, &KNMusicPlaylistList::retranslate);
     retranslate();
+}
+
+void KNMusicPlaylistList::setPlaylistList(KNMusicPlaylistListModel *model)
+{
+    //Set the model to the playlist list view.
+    m_playlistListView->setModel(model);
 }
 
 void KNMusicPlaylistList::retranslate()

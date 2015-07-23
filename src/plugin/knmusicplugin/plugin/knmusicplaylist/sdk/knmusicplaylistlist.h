@@ -23,13 +23,15 @@
 
 class KNAnimationMenu;
 class KNLinearSenseWidget;
-class KNMusicPlaylistListView;
 class KNOpacityAnimeButton;
+class KNMusicPlaylistListView;
+class KNMusicPlaylistListModel;
 class KNMusicPlaylistList : public QWidget
 {
     Q_OBJECT
 public:
     explicit KNMusicPlaylistList(QWidget *parent = 0);
+    void setPlaylistList(KNMusicPlaylistListModel *model);
 
 signals:
 

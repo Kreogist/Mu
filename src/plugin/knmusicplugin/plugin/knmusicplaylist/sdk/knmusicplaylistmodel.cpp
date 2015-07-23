@@ -19,8 +19,46 @@
 #include "knmusicplaylistmodel.h"
 
 KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
-    KNMusicModel(parent)
+    KNMusicModel(parent),
+    m_title(QString()),
+    m_filePath(QString()),
+    m_built(false)
 {
 
 }
 
+QString KNMusicPlaylistModel::title() const
+{
+    return m_title;
+}
+
+void KNMusicPlaylistModel::setTitle(const QString &title)
+{
+    m_title = title;
+}
+
+QString KNMusicPlaylistModel::filePath() const
+{
+    return m_filePath;
+}
+
+void KNMusicPlaylistModel::setFilePath(const QString &filePath)
+{
+    m_filePath = filePath;
+}
+
+bool KNMusicPlaylistModel::built() const
+{
+    return m_built;
+}
+
+void KNMusicPlaylistModel::buildModel()
+{
+    //Check if we have been build this model before.
+    if(m_built)
+    {
+        return;
+    }
+    //Set the build flag.
+    m_built=true;
+}

@@ -21,17 +21,27 @@
 
 #include <QObject>
 
+class KNMusicPlaylistListModel;
 class KNMusicPlaylistManager : public QObject
 {
     Q_OBJECT
 public:
     explicit KNMusicPlaylistManager(QObject *parent = 0);
 
+    KNMusicPlaylistListModel *playlistList();
+
+    QString playlistDirPath() const;
+    void setPlaylistDirPath(const QString &playlistDirPath);
+
 signals:
 
 public slots:
+    void createPlaylist();
 
 private:
+    QString generateTitle(const QString &preferName = QString());
+    KNMusicPlaylistListModel *m_playlistList;
+    QString m_playlistDirPath;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H

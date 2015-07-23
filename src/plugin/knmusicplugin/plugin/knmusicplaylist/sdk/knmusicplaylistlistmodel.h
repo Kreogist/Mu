@@ -20,6 +20,7 @@
 #define KNMUSICPLAYLISTLISTMODEL_H
 
 #include <QList>
+#include <QIcon>
 
 #include <QAbstractListModel>
 
@@ -30,12 +31,24 @@ class KNMusicPlaylistListModel : public QAbstractListModel
 public:
     explicit KNMusicPlaylistListModel(QObject *parent = 0);
 
+    void append(KNMusicPlaylistModel *model);
+
+    int rowCount(const QModelIndex &parent) const;
+
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section,
+                        Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const;
+
+    bool findTitle(const QString &title);
+
 signals:
 
 public slots:
 
 private:
-    QList<PlaylistItem> m_playlistList;
+    QList<KNMusicPlaylistModel *> m_playlistList;
+    QIcon m_icon;
 };
 
 #endif // KNMUSICPLAYLISTLISTMODEL_H

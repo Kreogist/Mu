@@ -26,6 +26,7 @@ class KNCategoryTab;
 class KNEmptyStateWidget;
 class KNMusicPlaylistList;
 class KNMusicPlaylistViewer;
+class KNMusicPlaylistManager;
 class KNMusicPlaylist : public KNMusicPlaylistBase
 {
     Q_OBJECT
@@ -49,6 +50,7 @@ private:
     KNEmptyStateWidget *m_container;
     KNMusicPlaylistList *m_playlistList;
     KNMusicPlaylistViewer *m_playlistViewer;
+    KNMusicPlaylistManager *m_playlistManager;
 };
 
 #endif // KNMUSICPLAYLIST_H

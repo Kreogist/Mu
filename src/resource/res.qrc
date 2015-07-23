@@ -21,5 +21,6 @@
         <file>music/playlist/editor_add.png</file>
         <file>music/playlist/editor_edit.png</file>
         <file>music/playlist/editor_remove.png</file>
+        <file>music/playlist/playlist_icon.png</file>
     </qresource>
 </RCC>
