@@ -23,12 +23,14 @@
 
 class QLabel;
 class KNSideShadowWidget;
+class KNMusicPlaylistModel;
 class KNMusicPlaylistTreeView;
 class KNMusicPlaylistViewer : public QWidget
 {
     Q_OBJECT
 public:
     explicit KNMusicPlaylistViewer(QWidget *parent = 0);
+    void setPlaylist(KNMusicPlaylistModel *model);
 
 signals:
 

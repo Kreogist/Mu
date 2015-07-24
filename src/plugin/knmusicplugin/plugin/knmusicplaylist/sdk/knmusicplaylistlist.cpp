@@ -55,6 +55,16 @@ void KNMusicPlaylistList::setPlaylistList(KNMusicPlaylistListModel *model)
 {
     //Set the model to the playlist list view.
     m_playlistListView->setModel(model);
+    //After set the model, the selection model will be update.
+    //Capture the currentChanged() signal from the list view, link to the
+    //requireShowPlaylist() signal.
+    connect(m_playlistListView->selectionModel(),
+            &QItemSelectionModel::currentChanged,
+            [=](const QModelIndex &current)
+            {
+                //Simply emit the signal is alright.
+                emit requireShowPlaylist(current);
+            });
 }
 
 void KNMusicPlaylistList::retranslate()

@@ -34,6 +34,7 @@ public:
     void setPlaylistList(KNMusicPlaylistListModel *model);
 
 signals:
+    void requireShowPlaylist(const QModelIndex &index);
 
 public slots:
 

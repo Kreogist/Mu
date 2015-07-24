@@ -30,13 +30,22 @@ class KNMusicPlaylistListModel : public QAbstractListModel
     Q_OBJECT
 public:
     explicit KNMusicPlaylistListModel(QObject *parent = 0);
+    ~KNMusicPlaylistListModel();
+
+    KNMusicPlaylistModel *playlist(const QModelIndex &index);
 
     void append(KNMusicPlaylistModel *model);
+    void insert(int row, KNMusicPlaylistModel *model);
+    bool removeRows(int row, int count, const QModelIndex &parent);
 
     int rowCount(const QModelIndex &parent) const;
 
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
     QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    bool setData(const QModelIndex &index,
+                 const QVariant &value,
+                 int role = Qt::EditRole);
     QVariant headerData(int section,
                         Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const;
@@ -44,6 +53,8 @@ public:
     bool findTitle(const QString &title);
 
 signals:
+    void requireShowContent();
+    void requireHideContent();
 
 public slots:
 

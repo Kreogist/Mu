@@ -36,11 +36,21 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_playlistDirPath(QString()),
     m_isPlaylistListLoaded(false)
 {
+    //Link the playlist list model with the manager.
+    connect(m_playlistList, &KNMusicPlaylistListModel::requireShowContent,
+            this, &KNMusicPlaylistManager::requireShowContent);
+    connect(m_playlistList, &KNMusicPlaylistListModel::requireHideContent,
+            this, &KNMusicPlaylistManager::requireHideContent);
 }
 
 KNMusicPlaylistListModel *KNMusicPlaylistManager::playlistList()
 {
     return m_playlistList;
+}
+
+KNMusicPlaylistModel *KNMusicPlaylistManager::playlist(const QModelIndex &index)
+{
+    return m_playlistList->playlist(index);
 }
 
 void KNMusicPlaylistManager::createPlaylist()
@@ -208,7 +218,7 @@ bool KNMusicPlaylistManager::loadPlaylist(const QString &filePath)
         return false;
     }
     //Generate the playlist.
-    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_playlistList);
+    KNMusicPlaylistModel *model=new KNMusicPlaylistModel();
     //Set the file path of the playlist.
     model->setFilePath(filePath);
     //Set the playlist meta data from the json object.

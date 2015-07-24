@@ -70,6 +70,13 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     infoContainer->setLayout(informationLayout);
 }
 
+void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
+{
+    //Update the playlist information.
+    ;
+    //Set the model to playlist tree view.
+}
+
 void KNMusicPlaylistViewer::resizeEvent(QResizeEvent *event)
 {
     //Resize the viewer.

@@ -46,6 +46,18 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     //Set the playlist list model to the playlist list.
     m_playlistList->setPlaylistList(m_playlistManager->playlistList());
 
+    //Link the GUI with che playlist manager.
+    connect(m_playlistManager, &KNMusicPlaylistManager::requireShowContent,
+            m_container, &KNEmptyStateWidget::showContentWidget);
+    connect(m_playlistManager, &KNMusicPlaylistManager::requireHideContent,
+            m_container, &KNEmptyStateWidget::showEmptyWidget);
+    connect(m_playlistList, &KNMusicPlaylistList::requireShowPlaylist,
+            [=](const QModelIndex &index)
+            {
+                m_playlistViewer->setPlaylist(
+                            m_playlistManager->playlist(index));
+            });
+
     //Generate the empty hint widget.
     KNMusicPlaylistEmptyHint *emptyHint=new KNMusicPlaylistEmptyHint(this);
     //Link the empty hint with the container.

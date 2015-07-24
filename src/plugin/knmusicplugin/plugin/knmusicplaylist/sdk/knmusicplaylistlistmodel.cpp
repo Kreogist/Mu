@@ -26,6 +26,31 @@ KNMusicPlaylistListModel::KNMusicPlaylistListModel(QObject *parent) :
 {
 }
 
+KNMusicPlaylistListModel::~KNMusicPlaylistListModel()
+{
+    //Delete all the surplus model to recover the memory.
+    for(auto i=m_playlistList.begin(); i!=m_playlistList.end(); ++i)
+    {
+        //Change the parent of the current model to nullptr, and the parent
+        //won't delete it twice.
+        (*i)->setParent(nullptr);
+        //Delete the model.
+        delete (*i);
+    }
+}
+
+KNMusicPlaylistModel *KNMusicPlaylistListModel::playlist(
+        const QModelIndex &index)
+{
+    //Ensure the valid of the index.
+    if(!index.isValid())
+    {
+        return nullptr;
+    }
+    //Return the model in the list.
+    return m_playlistList.at(index.row());
+}
+
 void KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
 {
     //Follow the documentation, we have to do this.
@@ -36,6 +61,51 @@ void KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
     m_playlistList.append(model);
     //End the insertation.
     endInsertRows();
+    //Check the size of the playlist, if it's 1, the ask to show the content.
+    if(m_playlistList.size()==1)
+    {
+        emit requireShowContent();
+    }
+}
+
+void KNMusicPlaylistListModel::insert(int row, KNMusicPlaylistModel *model)
+{
+    //Ensure the row is valid.
+    Q_ASSERT(row>-1 && row<m_playlistList.size());
+    //Follow the documentation, we have to do this.
+    beginInsertRows(QModelIndex(), row, row + 1);
+    //Insert the data to the list.
+    m_playlistList.insert(row, model);
+    //End the insertation.
+    endInsertRows();
+    //Check the size of the playlist, if it's 1, the ask to show the content.
+    if(m_playlistList.size()==1)
+    {
+        emit requireShowContent();
+    }
+}
+
+bool KNMusicPlaylistListModel::removeRows(int row,
+                                          int count,
+                                          const QModelIndex &parent)
+{
+    Q_UNUSED(parent)
+    //As the documentation said, called this function first.
+    beginRemoveRows(QModelIndex(), row, row+count-1);
+    //Remove those from the list.
+    while(count--)
+    {
+        //Get the model from the playlist list.
+        KNMusicPlaylistModel *model=m_playlistList.takeAt(row);
+        //Remove the parent, and the parent won't clear this again.
+        model->setParent(nullptr);
+        //Delete the model to recover the memory.
+        delete model;
+    }
+    //As the documentation said, called this after remove rows.
+    endRemoveRows();
+    //Remove complete.
+    return true;
 }
 
 int KNMusicPlaylistListModel::rowCount(const QModelIndex &parent) const
@@ -43,6 +113,11 @@ int KNMusicPlaylistListModel::rowCount(const QModelIndex &parent) const
     Q_UNUSED(parent)
     //The row count is the size of the playlist model list size.
     return m_playlistList.size();
+}
+
+Qt::ItemFlags KNMusicPlaylistListModel::flags(const QModelIndex &index) const
+{
+    return Qt::ItemIsEditable | QAbstractListModel::flags(index);
 }
 
 QVariant KNMusicPlaylistListModel::data(const QModelIndex &index,
@@ -59,6 +134,7 @@ QVariant KNMusicPlaylistListModel::data(const QModelIndex &index,
     switch(role)
     {
     case Qt::DisplayRole:
+    case Qt::EditRole:
         return model->title();
     case Qt::DecorationRole:
         return m_icon;
@@ -83,6 +159,7 @@ bool KNMusicPlaylistListModel::setData(const QModelIndex &index,
     switch(role)
     {
     case Qt::DisplayRole:
+    case Qt::EditRole:
         model->setTitle(value.toString());
         return true;
     default:

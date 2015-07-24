@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class KNMusicPlaylistModel;
 class KNMusicPlaylistListModel;
 class KNMusicPlaylistManager : public QObject
 {
@@ -29,6 +30,7 @@ public:
     explicit KNMusicPlaylistManager(QObject *parent = 0);
 
     KNMusicPlaylistListModel *playlistList();
+    KNMusicPlaylistModel *playlist(const QModelIndex &index);
 
     QString playlistDirPath() const;
     void setPlaylistDirPath(const QString &playlistDirPath);
@@ -39,6 +41,8 @@ public:
     void setPlaylistListLoaded(bool isPlaylistListLoaded);
 
 signals:
+    void requireShowContent();
+    void requireHideContent();
 
 public slots:
     void createPlaylist();
