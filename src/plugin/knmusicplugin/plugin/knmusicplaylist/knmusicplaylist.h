@@ -39,6 +39,7 @@ signals:
 public slots:
 
 protected:
+    void showEvent(QShowEvent *event);
     void resizeEvent(QResizeEvent *event);
 
 private slots:

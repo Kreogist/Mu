@@ -15,6 +15,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QFile>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+
 #include "knutil.h"
 
 #include "knmusicplaylistmodel.h"
@@ -22,9 +27,14 @@
 
 #include "knmusicplaylistmanager.h"
 
+#define PlaylistListFileName "/Playlist.mudb"
+#define PlaylistListVersion 3
+
 KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     QObject(parent),
-    m_playlistList(new KNMusicPlaylistListModel(this))
+    m_playlistList(new KNMusicPlaylistListModel(this)),
+    m_playlistDirPath(QString()),
+    m_isPlaylistListLoaded(false)
 {
 }
 
@@ -105,6 +115,16 @@ QString KNMusicPlaylistManager::generateTitle(const QString &preferName)
     return countedName;
 }
 
+bool KNMusicPlaylistManager::isPlaylistListLoaded() const
+{
+    return m_isPlaylistListLoaded;
+}
+
+void KNMusicPlaylistManager::setPlaylistListLoaded(bool isPlaylistListLoaded)
+{
+    m_isPlaylistListLoaded = isPlaylistListLoaded;
+}
+
 QString KNMusicPlaylistManager::playlistDirPath() const
 {
     return m_playlistDirPath;
@@ -113,4 +133,91 @@ QString KNMusicPlaylistManager::playlistDirPath() const
 void KNMusicPlaylistManager::setPlaylistDirPath(const QString &playlistDirPath)
 {
     m_playlistDirPath = playlistDirPath;
+}
+
+void KNMusicPlaylistManager::loadPlaylistList()
+{
+    //Get the playlist list file.
+    QFile playlistListFile(m_playlistDirPath + PlaylistListFileName);
+    //Check the existance and try to open the file in read only mode.
+    if(!playlistListFile.exists() ||
+            !playlistListFile.open(QIODevice::ReadOnly))
+    {
+        return;
+    }
+    //Read and parse the json object from the playlist list file.
+    QJsonObject playlistListObject=
+            QJsonDocument::fromJson(playlistListFile.readAll()).object();
+    //Close the playlist list file.
+    playlistListFile.close();
+    //Check the valid of the json object, then check the playlist list version,
+    //we can only load one version.
+    if(playlistListObject.isEmpty() ||
+            playlistListObject.value("Version").toInt()!=PlaylistListVersion)
+    {
+        return;
+    }
+    //Get the playlist file path content.
+    QJsonArray playlistPaths=playlistListObject.value("Playlists").toArray();
+    //A string list used to storage the failed loaded file path.
+    QStringList failedPaths;
+    //Generate those models.
+    for(auto i=playlistPaths.constBegin(); i!=playlistPaths.constEnd(); i++)
+    {
+        //Get the file path.
+        QString playlistPath=(*i).toString();
+        //Load the playlist file to a playlist model, but don't need to parse
+        //it. If it's failed to load the playlist, add it to failed path list.
+        if(!loadPlaylist(playlistPath))
+        {
+            failedPaths.append(playlistPath);
+        }
+    }
+    //Check whether the failedPaths is empty, if it's not empty, a message box
+    //should be display to hint the user there's invalid playlist.
+    if(!failedPaths.isEmpty())
+    {
+        //!FIXME: Raise message box to hint the user there's invalid playlist.
+        ;
+    }
+}
+
+bool KNMusicPlaylistManager::loadPlaylist(const QString &filePath)
+{
+    //Get the playlist file.
+    QFile playlistFile(filePath);
+    //Tried to open it as read only mode.
+    if(!playlistFile.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
+    //Get playlist content object from the playlist file.
+    QJsonObject contentObject=
+            QJsonDocument::fromJson(playlistFile.readAll()).object();
+    //Close the playlist file.
+    playlistFile.close();
+    //Check the content object, the following case will just make it failed to
+    //load the playlist.
+    // * The content object is empty.
+    // * It doesn't contain Version, Name or Songs value.
+    if(contentObject.isEmpty() ||
+            contentObject.value("Version").toInt()!=PlaylistListVersion ||
+            !contentObject.contains("Name") ||
+            !contentObject.contains("Songs"))
+    {
+        return false;
+    }
+    //Generate the playlist.
+    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_playlistList);
+    //Set the file path of the playlist.
+    model->setFilePath(filePath);
+    //Set the playlist meta data from the json object.
+    model->setTitle(contentObject.value("Name").toString());
+    model->setContentData(contentObject.value("Songs").toArray());
+    //Reset the changed state.
+    model->setChanged(false);
+    //Add this playlist model to playlist list.
+    m_playlistList->append(model);
+    //Load success.
+    return true;
 }

@@ -19,6 +19,8 @@
 #ifndef KNMUSICPLAYLISTMODEL_H
 #define KNMUSICPLAYLISTMODEL_H
 
+#include <QJsonArray>
+
 #include "knmusicmodel.h"
 
 class KNMusicPlaylistModel : public KNMusicModel
@@ -36,13 +38,20 @@ public:
     bool built() const;
     void buildModel();
 
+    QJsonArray contentData() const;
+    void setContentData(const QJsonArray &contentData);
+
+    bool changed() const;
+    void setChanged(bool changed);
+
 signals:
 
 public slots:
 
 private:
     QString m_title, m_filePath;
-    bool m_built;
+    QJsonArray m_contentData;
+    bool m_built, m_changed;
 };
 
 #endif // KNMUSICPLAYLISTMODEL_H

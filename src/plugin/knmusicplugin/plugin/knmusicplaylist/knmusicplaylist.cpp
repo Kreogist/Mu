@@ -19,13 +19,14 @@
 
 #include "kncategorytab.h"
 #include "knemptystatewidget.h"
+#include "knlocalemanager.h"
 
 #include "sdk/knmusicplaylistemptyhint.h"
 #include "sdk/knmusicplaylistlist.h"
 #include "sdk/knmusicplaylistviewer.h"
 #include "sdk/knmusicplaylistmanager.h"
 
-#include "knlocalemanager.h"
+#include "knmusicglobal.h"
 
 #include "knmusicplaylist.h"
 
@@ -39,6 +40,9 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
 {
     //Configure the tab.
     m_tab->setIcon(QIcon(":/plugin/music/playlist/icon.png"));
+    //Set the playlist folder path.
+    m_playlistManager->setPlaylistDirPath(
+                knMusicGlobal->musicLibPath()+"/Playlist");
     //Set the playlist list model to the playlist list.
     m_playlistList->setPlaylistList(m_playlistManager->playlistList());
 
@@ -65,6 +69,20 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
 QAbstractButton *KNMusicPlaylist::tab()
 {
     return m_tab;
+}
+
+void KNMusicPlaylist::showEvent(QShowEvent *event)
+{
+    //If the playlist list has never been load before, load it.
+    if(!m_playlistManager->isPlaylistListLoaded())
+    {
+        //Load the playlist list.
+        m_playlistManager->loadPlaylistList();
+        //Set the load flag.
+        m_playlistManager->setPlaylistListLoaded(true);
+    }
+    //Do the original show event.
+    KNMusicPlaylistBase::showEvent(event);
 }
 
 void KNMusicPlaylist::resizeEvent(QResizeEvent *event)

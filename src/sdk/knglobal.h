@@ -151,8 +151,16 @@ public:
     void setPreference(KNPreferencePlugin *preference);
 
 signals:
+    /*!
+     * \brief When the library directory's path is changed, this signal will be
+     * emitted.
+     * \param originalPath The original path of the library.
+     * \param currentPath The new path of the library.
+     */
+    void libraryPathChanged(QString originalPath, QString currentPath);
 
 public slots:
+    void updateInfrastructure();
 
 private slots:
     void retranslate();

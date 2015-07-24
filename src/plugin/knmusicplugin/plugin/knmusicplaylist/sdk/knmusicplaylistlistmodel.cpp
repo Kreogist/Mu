@@ -67,6 +67,29 @@ QVariant KNMusicPlaylistListModel::data(const QModelIndex &index,
     }
 }
 
+bool KNMusicPlaylistListModel::setData(const QModelIndex &index,
+                                       const QVariant &value,
+                                       int role)
+{
+    //Check validate of the index.
+    if(!index.isValid())
+    {
+        return false;
+    }
+    //Get the specfic model.
+    KNMusicPlaylistModel *model=m_playlistList.at(index.row());
+    //For different role, we have different ways to set data.
+    //Actually, you can only change the data of the display role.
+    switch(role)
+    {
+    case Qt::DisplayRole:
+        model->setTitle(value.toString());
+        return true;
+    default:
+        return true;
+    }
+}
+
 QVariant KNMusicPlaylistListModel::headerData(int section,
                                               Qt::Orientation orientation,
                                               int role) const

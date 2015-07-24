@@ -32,6 +32,11 @@ public:
 
     QString playlistDirPath() const;
     void setPlaylistDirPath(const QString &playlistDirPath);
+    void loadPlaylistList();
+    bool loadPlaylist(const QString &filePath);
+
+    bool isPlaylistListLoaded() const;
+    void setPlaylistListLoaded(bool isPlaylistListLoaded);
 
 signals:
 
@@ -42,6 +47,7 @@ private:
     QString generateTitle(const QString &preferName = QString());
     KNMusicPlaylistListModel *m_playlistList;
     QString m_playlistDirPath;
+    bool m_isPlaylistListLoaded;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H

@@ -22,7 +22,9 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
     KNMusicModel(parent),
     m_title(QString()),
     m_filePath(QString()),
-    m_built(false)
+    m_contentData(QJsonArray()),
+    m_built(false),
+    m_changed(false)
 {
 
 }
@@ -34,7 +36,10 @@ QString KNMusicPlaylistModel::title() const
 
 void KNMusicPlaylistModel::setTitle(const QString &title)
 {
-    m_title = title;
+    //Save the title.
+    m_title=title;
+    //Marked changed flag.
+    m_changed=true;
 }
 
 QString KNMusicPlaylistModel::filePath() const
@@ -61,4 +66,24 @@ void KNMusicPlaylistModel::buildModel()
     }
     //Set the build flag.
     m_built=true;
+}
+
+QJsonArray KNMusicPlaylistModel::contentData() const
+{
+    return m_contentData;
+}
+
+void KNMusicPlaylistModel::setContentData(const QJsonArray &contentData)
+{
+    m_contentData = contentData;
+}
+
+bool KNMusicPlaylistModel::changed() const
+{
+    return m_changed;
+}
+
+void KNMusicPlaylistModel::setChanged(bool changed)
+{
+    m_changed = changed;
 }

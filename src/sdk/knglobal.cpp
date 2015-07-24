@@ -235,6 +235,9 @@ void KNGlobal::initialInfrastrcture()
     knTheme->setTheme(0);
     //Load the theme in the configure file.
     knTheme->setTheme(m_globalConfigure->data("Theme").toString());
+
+    //Update infrastructure, update the path of the library directory.
+    updateInfrastructure();
 }
 
 inline void KNGlobal::initialBrushes()
@@ -260,4 +263,20 @@ void KNGlobal::setPreference(KNPreferencePlugin *preference)
     }
     //Save the preference pointer.
     m_preference = preference;
+}
+
+void KNGlobal::updateInfrastructure()
+{
+    //Update the library directory path.
+    QString oldLibraryPath=m_dirPath[LibraryDir];
+    //Get the directory path from the configure, use the old library path as the
+    //default value.
+    m_dirPath[LibraryDir]=
+            systemConfigure()->data("LibraryPath", oldLibraryPath).toString();
+    //Check if the previous directory is just the same as the current one.
+    //If they are different, emit the library moved signal to update.
+    if(oldLibraryPath!=m_dirPath[LibraryDir])
+    {
+        emit libraryPathChanged(oldLibraryPath, m_dirPath[LibraryDir]);
+    }
 }

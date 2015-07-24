@@ -18,6 +18,7 @@
 #include <QThread>
 
 #include "knglobal.h"
+#include "knutil.h"
 #include "knlocalemanager.h"
 
 #include "knmusicparser.h"
@@ -136,6 +137,9 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     initialFileType();
     //Initial the genere.
     initialGenre();
+
+    //Set the library path.
+    setMusicLibPath(knGlobal->dirPath(KNGlobal::LibraryDir) + "/Music");
 
     //Link to retranslate.
     knI18n->link(this, &KNMusicGlobal::retranslate);
@@ -369,4 +373,15 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Anime"
                    <<"JPop"
                    <<"Synthpop";
+}
+
+QString KNMusicGlobal::musicLibPath() const
+{
+    return m_musicLibPath;
+}
+
+void KNMusicGlobal::setMusicLibPath(const QString &musicLibPath)
+{
+    //Save and ensure the path should be exist.
+    m_musicLibPath=KNUtil::ensurePathValid(musicLibPath);
 }

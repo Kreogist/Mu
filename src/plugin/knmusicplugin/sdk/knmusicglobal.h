@@ -112,9 +112,20 @@ public:
      */
     void startThreads();
 
+    /*!
+     * \brief Get the music library path.
+     * \return The music library path.
+     */
+    QString musicLibPath() const;
+
 signals:
 
 public slots:
+    /*!
+     * \brief Set the path of the music library folder.
+     * \param musicLibPath The folder path.
+     */
+    void setMusicLibPath(const QString &musicLibPath);
 
 private slots:
     void retranslate();
@@ -130,6 +141,7 @@ private:
     KNMusicParser *m_parser;
 
     QThread *m_searcherThread, *m_analysisThread;
+    QString m_musicLibPath;
 
     QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
                 m_listSuffixDescription, m_indexedGenres;
