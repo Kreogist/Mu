@@ -68,12 +68,15 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
                                                  infoContainer);
     informationLayout->setContentsMargins(0,0,0,0);
     infoContainer->setLayout(informationLayout);
+    //Add labels to information layout.
+    informationLayout->addWidget(m_title);
+    informationLayout->addWidget(m_detail);
 }
 
 void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
 {
     //Update the playlist information.
-    ;
+    m_title->setText(model->title());
     //Set the model to playlist tree view.
 }
 

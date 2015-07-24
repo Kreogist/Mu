@@ -15,27 +15,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knmusicplaylistlistdelegate.h"
+#include "knmusicmodel.h"
 
-#include "knmusicplaylistlistview.h"
+#include "knmusicproxymodel.h"
 
-KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
-    KNMusicCategoryListViewBase(parent)
+KNMusicProxyModel::KNMusicProxyModel(QObject *parent) :
+    QSortFilterProxyModel(parent)
 {
-    //Enabled the drag and drop function.
-    enabledDragDrop();
     //Set properties.
-    setIconSize(QSize(40, 40));
-    setDragDropMode(QAbstractItemView::DropOnly);
-    //Initial the delegate.
-    setItemDelegate(new KNMusicPlaylistListDelegate(this));
+    setFilterKeyColumn(-1); //Search for all columns.
+    setFilterCaseSensitivity(Qt::CaseInsensitive);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
 }
 
-QString KNMusicPlaylistListView::currentPlaylistTitle() const
+KNMusicModel *KNMusicProxyModel::musicModel()
 {
-    //If current playlist is valid(according to the currentIndex()), then get
-    //the data of the display role, and transfer it to string.
-    return currentIndex().isValid()?
-                currentIndex().data(Qt::DisplayRole).toString():
-                QString();
+    return static_cast<KNMusicModel *>(sourceModel());
+}
+
+bool KNMusicProxyModel::lessThan(const QModelIndex &left,
+                                 const QModelIndex &right) const
+{
+    return QSortFilterProxyModel::lessThan(left, right);
 }

@@ -21,6 +21,8 @@
 
 #include "knthememanager.h"
 
+#include "knmusicproxymodel.h"
+#include "knmusicmodel.h"
 #include "knmusictreeviewheader.h"
 
 #include "knmusictreeviewbase.h"
@@ -34,7 +36,8 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     QTreeView(parent),
     m_mouseIn(generateTimeLine(0x20)),
     m_mouseOut(generateTimeLine(0)),
-    m_animate(true)
+    m_animate(true),
+    m_proxyModel(nullptr)
 {
     //Set properties.
     setAllColumnsShowFocus(true);
@@ -166,6 +169,39 @@ inline void KNMusicTreeViewBase::startAnime(QTimeLine *timeLine)
 bool KNMusicTreeViewBase::animate() const
 {
     return m_animate;
+}
+
+KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()
+{
+    //Check is the proxy model need to initial.
+    if(m_proxyModel==nullptr)
+    {
+        //Initial the proxy model.
+        m_proxyModel=new KNMusicProxyModel(this);
+        //Set the search text.
+        //!FIXME: Set search text here.
+        //Set the proxy model.
+        setModel(m_proxyModel);
+    }
+    return m_proxyModel;
+}
+
+KNMusicModel *KNMusicTreeViewBase::musicModel()
+{
+    //If the proxy model is nullptr, then it wil be nullptr.
+    //Or else, get the music model of the proxy model.
+    return m_proxyModel==nullptr?nullptr:m_proxyModel->musicModel();
+}
+
+void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
+{
+    //Hide the detail tooltip first.
+    ;
+    //
+    if(musicModel!=nullptr)
+    {
+        ;
+    }
 }
 
 void KNMusicTreeViewBase::setAnimate(bool animate)

@@ -16,27 +16,20 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTLISTDELEGATE_H
-#define KNMUSICPLAYLISTLISTDELEGATE_H
+#ifndef KNMUSICNOWPLAYINGBASE_H
+#define KNMUSICNOWPLAYINGBASE_H
 
-#include <QStyledItemDelegate>
+#include <QObject>
 
-class KNMusicPlaylistListDelegate : public QStyledItemDelegate
+class KNMusicNowPlayingBase : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistListDelegate(QWidget *parent = 0);
-    void paint(QPainter *painter,
-               const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
+    KNMusicNowPlayingBase(QObject *parent = 0):QObject(parent){}
 
 signals:
 
 public slots:
-
-private:
 };
 
-#endif // KNMUSICPLAYLISTLISTDELEGATE_H
+#endif // KNMUSICNOWPLAYINGBASE_H
