@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusicplaylistutil.h"
 
 #include "knmusicplaylistmodel.h"
 
@@ -26,7 +27,6 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
     m_built(false),
     m_changed(false)
 {
-
 }
 
 QString KNMusicPlaylistModel::title() const
@@ -52,7 +52,7 @@ void KNMusicPlaylistModel::setFilePath(const QString &filePath)
     m_filePath = filePath;
 }
 
-bool KNMusicPlaylistModel::built() const
+bool KNMusicPlaylistModel::isBuilt() const
 {
     return m_built;
 }
@@ -64,6 +64,19 @@ void KNMusicPlaylistModel::buildModel()
     {
         return;
     }
+    //Generate a detail info cache list.
+    QList<KNMusicDetailInfo> detailInfos;
+    //Parse all the data in the content array.
+    for(auto i=m_contentData.constBegin(); i!=m_contentData.constEnd(); ++i)
+    {
+        //Parse and add the data to the model.
+        detailInfos.append(
+                    KNMusicPlaylistUtil::objectToDetailInfo((*i).toObject()));
+    }
+    //Clear the content data.
+    m_contentData=QJsonArray();
+    //Add the detail infos to the model.
+    appendRows(detailInfos);
     //Set the build flag.
     m_built=true;
 }

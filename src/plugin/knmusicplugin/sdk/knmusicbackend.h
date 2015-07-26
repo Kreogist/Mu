@@ -258,20 +258,54 @@ signals:
     void previewPlayingStateChanged(int state);
 
     /*!
-     * \brief muteStateChanged
-     * \param mute
+     * \brief When mute state of the backend is changed, this signal will be
+     * emitted.
+     * \param mute The mute state of the backend.
      */
     void muteStateChanged(bool mute);
 
 public slots:
+    /*!
+     * \brief Change the mute state to the different side.
+     */
     virtual void changeMuteState()=0;
+
+    /*!
+     * \brief Set the mute state to specific state.
+     * \param mute To mute the backend, set true.
+     */
     virtual void setMute(bool mute)=0;
+
+    /*!
+     * \brief Set the volume to a specfic size. The size should be between
+     * minimalVolume() and maximumVolume(). Or else it won't change anything.
+     * \param volumeSize The prefer volume size.
+     */
     virtual void setVolume(int volumeSize)=0;
+
+    /*!
+     * \brief Raise volume up a level.
+     */
     virtual void volumeUp()=0;
+
+    /*!
+     * \brief Turn down the volume a level.
+     */
     virtual void volumeDown()=0;
 
+    /*!
+     * \brief Set the current position of the main thread. If there's no file
+     * loaded in the main thread or the position is not positive and less than
+     * the duration, nothing will happened.
+     * \param position The new position of the main thread.
+     */
     virtual void setPosition(const qint64 &position)=0;
 
+    /*!
+     * \brief Set the current position of the preview thread. It works very
+     * familiar to the setPosition() function.
+     * \param position The new position of the preview thread.
+     */
     virtual void setPreviewPosition(const qint64 &position)=0;
 };
 

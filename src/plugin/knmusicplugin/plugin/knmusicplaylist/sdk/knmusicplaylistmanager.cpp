@@ -56,7 +56,7 @@ KNMusicPlaylistModel *KNMusicPlaylistManager::playlist(const QModelIndex &index)
 void KNMusicPlaylistManager::createPlaylist()
 {
     //Generate the playlist.
-    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_playlistList);
+//    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_playlistList);
     //
     ;
 }

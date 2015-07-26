@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QColor>
+#include <QDateTime>
 
 /*!
  * \brief The KNUtil class cannot be construct. It will only used to provides

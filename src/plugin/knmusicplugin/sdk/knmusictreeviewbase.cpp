@@ -197,11 +197,11 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
     //Hide the detail tooltip first.
     ;
-    //
-    if(musicModel!=nullptr)
-    {
-        ;
-    }
+    //Check before set the music model, if the current playing model is the
+    //previous model, shadow the proxy model.
+    //!FIXME: add codes here.
+    //Set the source model.
+    proxyModel()->setSourceModel(musicModel);
 }
 
 void KNMusicTreeViewBase::setAnimate(bool animate)

@@ -35,7 +35,7 @@ public:
     QString filePath() const;
     void setFilePath(const QString &filePath);
 
-    bool built() const;
+    bool isBuilt() const;
     void buildModel();
 
     QJsonArray contentData() const;

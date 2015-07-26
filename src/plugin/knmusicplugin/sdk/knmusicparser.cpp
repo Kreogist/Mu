@@ -91,11 +91,11 @@ void KNMusicParser::parseFile(QString filePath,
     detailInfo.textLists[Name]=detailInfo.fileName;
     detailInfo.textLists[Size]=knGlobal->byteToString(detailInfo.size);
     detailInfo.textLists[DateAdded]=
-            KNMusicUtil::dateTimeToString(detailInfo.dateAdded);
+            KNMusicUtil::dateTimeToText(detailInfo.dateAdded);
     detailInfo.textLists[DateModified]=
-            KNMusicUtil::dateTimeToString(detailInfo.dateModified);
+            KNMusicUtil::dateTimeToText(detailInfo.dateModified);
     detailInfo.textLists[LastPlayed]=
-            KNMusicUtil::dateTimeToString(detailInfo.dateLastPlayed);
+            KNMusicUtil::dateTimeToText(detailInfo.dateLastPlayed);
     //Get the description of the suffix.
     detailInfo.textLists[Kind]=
             knMusicGlobal->typeDescription(fileInfo.suffix());

@@ -37,6 +37,7 @@ signals:
     void requireShowPlaylist(const QModelIndex &index);
 
 public slots:
+    void showPlaylist(const QModelIndex &index);
 
 private slots:
     void retranslate();

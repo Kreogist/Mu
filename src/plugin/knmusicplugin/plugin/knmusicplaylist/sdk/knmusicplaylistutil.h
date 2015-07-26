@@ -15,20 +15,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knmusicutil.h"
-#include "knmusicplaylistindexdelegate.h"
 
-#include "knmusicplaylisttreeview.h"
+#ifndef KNMUSICPLAYLISTUTIL_H
+#define KNMUSICPLAYLISTUTIL_H
+
+#include <QJsonObject>
+
+#include "knmusicutil.h"
 
 using namespace MusicUtil;
 
-KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent) :
-    KNMusicTreeViewBase(parent)
+class KNMusicPlaylistUtil
 {
-    setObjectName("PlaylistTreeView");
-    //Update the palettle.
-    onActionThemeUpdate();
-    //Set the delegate.
-    setItemDelegateForColumn(MusicDataCount,
-                             new KNMusicPlaylistIndexDelegate(this));
-}
+public:
+    static KNMusicDetailInfo objectToDetailInfo(const QJsonObject &object);
+
+private:
+    KNMusicPlaylistUtil();
+    KNMusicPlaylistUtil(const KNMusicPlaylistUtil &);
+};
+
+#endif // KNMUSICPLAYLISTUTIL_H

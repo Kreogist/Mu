@@ -23,6 +23,7 @@
 
 #include "sdk/knmusicplaylistemptyhint.h"
 #include "sdk/knmusicplaylistlist.h"
+#include "sdk/knmusicplaylistlistmodel.h"
 #include "sdk/knmusicplaylistviewer.h"
 #include "sdk/knmusicplaylistmanager.h"
 
@@ -67,11 +68,15 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_container->setEmptyWidget(emptyHint);
     //Get the splitter.
     QSplitter *contentContainer=generateSplitter();
+    //Configure the splitter.
+    contentContainer->setChildrenCollapsible(false);
     //Set the content widget as the splitter.
     m_container->setContentWidget(contentContainer);
     //Add the playlist list and playlist viewer to the splitter.
     contentContainer->addWidget(m_playlistList);
     contentContainer->addWidget(m_playlistViewer);
+    //Set the default stretch factor.
+    contentContainer->setStretchFactor(1, 1);
 
     //Link to retranslate.
     knI18n->link(this, &KNMusicPlaylist::retranslate);
@@ -92,6 +97,16 @@ void KNMusicPlaylist::showEvent(QShowEvent *event)
         m_playlistManager->loadPlaylistList();
         //Set the load flag.
         m_playlistManager->setPlaylistListLoaded(true);
+        //Get the playlist list temporarily.
+        KNMusicPlaylistListModel *playlistList=
+                m_playlistManager->playlistList();
+        //Check if there's any playlist exist in the playlist list, select the
+        //first one.
+        if(playlistList->rowCount()>0)
+        {
+            //Select the first index.
+            m_playlistList->showPlaylist(playlistList->index(0));
+        }
     }
     //Do the original show event.
     KNMusicPlaylistBase::showEvent(event);

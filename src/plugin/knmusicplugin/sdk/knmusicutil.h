@@ -58,6 +58,20 @@ namespace MusicUtil
         Year,
         MusicDataCount
     };
+    enum MusicPropertyRole
+    {
+        FilePathRole=Qt::UserRole,
+        FileNameRole,
+        StartPositionRole,
+        ArtworkKeyRole,
+        TrackFileRole,
+        TrackIndexRole,
+        CannotPlayFlagRole
+    };
+    enum MusicColumnRole
+    {
+        SortDataRole=Qt::UserRole
+    };
     struct KNMusicDetailInfo
     {
         //Properties.
@@ -117,9 +131,19 @@ public:
      * \param dateTime The date time object.
      * \return The translated string.
      */
-    static QString dateTimeToString(const QDateTime &dateTime)
+    static QString dateTimeToText(const QDateTime &dateTime)
     {
         return dateTime.toString("yyyy-MM-dd AP hh:mm");
+    }
+
+    /*!
+     * \brief Translate a data string to a QDateTime class.
+     * \param data The data string. The format is yyyyMMddHHmmss.
+     * \return A QDateTime class parsed from the data string.
+     */
+    static QDateTime dataToDateTime(const QString &data)
+    {
+        return QDateTime::fromString(data, "yyyyMMddHHmmss");
     }
 
     /*!

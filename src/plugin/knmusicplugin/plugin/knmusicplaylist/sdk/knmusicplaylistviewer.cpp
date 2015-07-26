@@ -75,9 +75,16 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
 
 void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
 {
+    //Check whether the model has been built from the stored data before.
+    if(!model->isBuilt())
+    {
+        //Build the model.
+        model->buildModel();
+    }
     //Update the playlist information.
     m_title->setText(model->title());
     //Set the model to playlist tree view.
+    m_treeView->setMusicModel(model);
 }
 
 void KNMusicPlaylistViewer::resizeEvent(QResizeEvent *event)
