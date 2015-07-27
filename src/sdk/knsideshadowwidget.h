@@ -58,6 +58,14 @@ public:
      */
     void setDirection(int direction);
 
+    /*!
+     * \brief Set the darkness of the shadow. Actually, it's the alpha channel
+     * of the darkest part. Default it's 70.
+     * \param darkness The alpha channel value of the darkest part. It should be
+     * ranged from 0 to 255.
+     */
+    void setDarkness(int darkness);
+
 signals:
 
 public slots:

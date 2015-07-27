@@ -58,6 +58,12 @@ namespace MusicUtil
         Year,
         MusicDataCount
     };
+    enum MusicColumns
+    {
+        MusicRowState=MusicDataCount,
+        MusicColumnCount
+    };
+
     enum MusicPropertyRole
     {
         FilePathRole=Qt::UserRole,

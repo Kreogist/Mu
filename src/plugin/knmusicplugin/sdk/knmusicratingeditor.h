@@ -15,22 +15,37 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KNMUSICRATINGEDITOR_H
+#define KNMUSICRATINGEDITOR_H
 
-#ifndef KNMUSICPLAYLISTTREEVIEW_H
-#define KNMUSICPLAYLISTTREEVIEW_H
+#include <QWidget>
 
-#include "knmusictreeviewbase.h"
-
-class KNMusicPlaylistTreeView : public KNMusicTreeViewBase
+class KNMusicRatingEditor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistTreeView(QWidget *parent = 0);
+    explicit KNMusicRatingEditor(QWidget *parent = 0);
+    QSize sizeHint() const Q_DECL_OVERRIDE
+    {
+        return QSize(m_editorWidth, m_starSizeHint);
+    }
+    int starSizeHint() const;
+    void setStarSizeHint(int starSizeHint);
+    int starNum() const;
+    void setStarNum(int starNum);
 
 signals:
+    void editingFinished();
 
-public slots:
-    void resetHeaderState();
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private:
+    int starAtPosition(int x);
+    int m_starSizeHint=0, m_editorWidth=0, m_starNum, m_halfStarSizeHint;
+    QPixmap m_star, m_unstar, m_scaleStar, m_scaleUnstar;
 };
 
-#endif // KNMUSICPLAYLISTTREEVIEW_H
+#endif // KNMUSICRATINGEDITOR_H

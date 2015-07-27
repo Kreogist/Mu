@@ -16,21 +16,35 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTTREEVIEW_H
-#define KNMUSICPLAYLISTTREEVIEW_H
+#ifndef KNCONNECTIONHANDLER_H
+#define KNCONNECTIONHANDLER_H
 
-#include "knmusictreeviewbase.h"
+#include <QMetaObject>
+#include <QLinkedList>
 
-class KNMusicPlaylistTreeView : public KNMusicTreeViewBase
+/*!
+ * \brief The KNConnectionHandler class is a special linked list. The element
+ * type is QMetaObject::Connection. This list is used to managed all the
+ * connections. You can use the disconnectAll() function to disconnect all the
+ * connection in the handler at one time. This is really handy sometimes.
+ */
+class KNConnectionHandler : public QLinkedList<QMetaObject::Connection>
 {
-    Q_OBJECT
 public:
-    explicit KNMusicPlaylistTreeView(QWidget *parent = 0);
+    /*!
+     * \brief Disconnect all the connection in the linked list.
+     */
+    void disconnectAll();
+
+    /*!
+     * \brief Reimplement from the QLinkedList::operator +=().
+     */
+    KNConnectionHandler &operator += (
+            const QMetaObject::Connection &connection);
 
 signals:
 
 public slots:
-    void resetHeaderState();
 };
 
-#endif // KNMUSICPLAYLISTTREEVIEW_H
+#endif // KNCONNECTIONHANDLER_H

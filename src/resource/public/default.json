@@ -9,8 +9,7 @@
     "MouseSenseHeader" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",
-        "Window" : "#00000000",
-        "Button" : "#FFFFFF"
+        "Window" : "#FFFFFF00"
     },
     "PlaylistTreeView" :{
         "Parent" : "MainWindow",
@@ -19,7 +18,7 @@
         "Window" : "#202020",
         "Text" : "#FFFFFF",
         "Button" : "#FFFFFF",
-        "Highlight" : "#FFFFFF50",
+        "Highlight" : "#505050",
         "HighlightedText" : "#F7CF3D"
     },
     "CategoryListViewBase" : {

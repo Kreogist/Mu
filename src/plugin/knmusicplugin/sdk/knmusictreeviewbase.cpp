@@ -24,6 +24,7 @@
 #include "knmusicproxymodel.h"
 #include "knmusicmodel.h"
 #include "knmusictreeviewheader.h"
+#include "knmusicratingdelegate.h"
 
 #include "knmusictreeviewbase.h"
 
@@ -63,6 +64,12 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     //Set animation header.
     KNMusicTreeViewHeader *header=new KNMusicTreeViewHeader(this);
     setHeader(header);
+
+    //Set the rating delegate for Rating and AlbumRating row.
+    setItemDelegateForColumn(Rating,
+                             new KNMusicRatingDelegate(this));
+    setItemDelegateForColumn(AlbumRating,
+                             new KNMusicRatingDelegate(this));
 
     //Link with theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
@@ -112,6 +119,12 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
     QTreeView::drawRow(painter, options, index);
 }
 
+void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
+{
+    //The overdriven function: move section.
+    header()->moveSection(header()->visualIndex(logicalIndex), 0);
+}
+
 void KNMusicTreeViewBase::onActionThemeUpdate()
 {
     //Get the new palette from theme manager, and set it.
@@ -153,6 +166,34 @@ inline QTimeLine *KNMusicTreeViewBase::generateTimeLine(const int &endFrame)
             this, &KNMusicTreeViewBase::onActionMouseInOut);
     //Return the time line.
     return timeLine;
+}
+
+void KNMusicTreeViewBase::resetHeaderState()
+{
+    //Hide all the data column first.
+    for(int i=Name+1; i<MusicDataCount; i++)
+    {
+        setColumnHidden(i, true);
+    }
+    //Show the default columns.
+    setColumnHidden(Time, false);
+    setColumnHidden(Artist, false);
+    setColumnHidden(Album, false);
+    setColumnHidden(Genre, false);
+    setColumnHidden(Rating, false);
+    //Reorder the columns.
+    moveToFirst(Rating);
+    moveToFirst(Genre);
+    moveToFirst(Album);
+    moveToFirst(Artist);
+    moveToFirst(Time);
+    moveToFirst(Name);
+    //Set the default width.
+    setColumnWidth(Genre, 81);
+    setColumnWidth(Album, 126);
+    setColumnWidth(Artist, 126);
+    setColumnWidth(Time, 60);
+    setColumnWidth(Name, 200);
 }
 
 inline void KNMusicTreeViewBase::startAnime(QTimeLine *timeLine)
@@ -202,6 +243,22 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     //!FIXME: add codes here.
     //Set the source model.
     proxyModel()->setSourceModel(musicModel);
+    //Check if the music model nullptr.
+    if(musicModel==nullptr)
+    {
+        //Set initial load to become true.
+        m_initialLoad=true;
+        //All work has been done.
+        return;
+    }
+    //Check if previous model is nullptr, if the initial load has been set to be
+    //true, we have to reset the header state.
+    if(m_initialLoad)
+    {
+        //
+        resetHeaderState();
+        m_initialLoad=false;
+    }
 }
 
 void KNMusicTreeViewBase::setAnimate(bool animate)

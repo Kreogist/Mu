@@ -252,6 +252,8 @@ inline void KNMusicTagId3v1::setRawTagData(char *rawTagData,
                                            const QString &text,
                                            const int &length)
 {
+    //Encode the text with the codec.
     QByteArray codecData=m_codec->fromUnicode(text);
-    strncpy(rawTagData, codecData.data(), length);
+    //Simply copy the data to the char array.
+    memcpy(rawTagData, codecData.data(), length);
 }

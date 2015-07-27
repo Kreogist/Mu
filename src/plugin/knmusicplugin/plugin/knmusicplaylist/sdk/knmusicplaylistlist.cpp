@@ -64,7 +64,7 @@ void KNMusicPlaylistList::setPlaylistList(KNMusicPlaylistListModel *model)
             {
                 //Simply emit the signal is alright.
                 emit requireShowPlaylist(current);
-    });
+            });
 }
 
 void KNMusicPlaylistList::showPlaylist(const QModelIndex &index)

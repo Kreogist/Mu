@@ -130,7 +130,7 @@ public:
      */
     virtual bool previewLoadMusic(const QString &filePath,
                                   const qint64 &start=-1,
-                                  const qint64 &duration=-1);
+                                  const qint64 &duration=-1)=0;
 
     /*!
      * \brief Play the preview thread.

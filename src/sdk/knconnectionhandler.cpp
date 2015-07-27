@@ -15,22 +15,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QObject>
 
-#ifndef KNMUSICPLAYLISTTREEVIEW_H
-#define KNMUSICPLAYLISTTREEVIEW_H
+#include "knconnectionhandler.h"
 
-#include "knmusictreeviewbase.h"
-
-class KNMusicPlaylistTreeView : public KNMusicTreeViewBase
+void KNConnectionHandler::disconnectAll()
 {
-    Q_OBJECT
-public:
-    explicit KNMusicPlaylistTreeView(QWidget *parent = 0);
+    //If the linked list is not empty, then disconnect all of them.
+    while(!isEmpty())
+    {
+        //Disconnect the last taken connection.
+        QObject::disconnect(takeLast());
+    }
+}
 
-signals:
-
-public slots:
-    void resetHeaderState();
-};
-
-#endif // KNMUSICPLAYLISTTREEVIEW_H
+KNConnectionHandler &KNConnectionHandler::operator +=(
+        const QMetaObject::Connection &connection)
+{
+    //Add this connection to the linked list.
+    append(connection);
+    //And for this kind of operator, just return this.
+    return *this;
+}

@@ -160,7 +160,10 @@ bool KNMusicPlaylistListModel::setData(const QModelIndex &index,
     {
     case Qt::DisplayRole:
     case Qt::EditRole:
+        //The display and edit role of the model is the title of the model.
         model->setTitle(value.toString());
+        //Emit the data changed signal.
+        emit dataChanged(index, index, QVector<int>(1, role));
         return true;
     default:
         return true;

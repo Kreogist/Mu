@@ -81,7 +81,9 @@ QString KNMusicGlobal::typeDescription(const QString &suffix) const
 
 QString KNMusicGlobal::treeViewHeaderText(const int &index) const
 {
-    return m_treeViewHeaderText[index];
+    return index<MusicDataCount?
+                m_treeViewHeaderText[index]:
+                QString();
 }
 
 void KNMusicGlobal::startThreads()

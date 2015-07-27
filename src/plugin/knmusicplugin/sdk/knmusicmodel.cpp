@@ -22,7 +22,8 @@
 
 KNMusicModel::KNMusicModel(QObject *parent) :
     QAbstractTableModel(parent),
-    m_detailInfos(QList<KNMusicDetailInfo>())
+    m_detailInfos(QList<KNMusicDetailInfo>()),
+    m_totalDuration(0)
 {
 
 }
@@ -35,8 +36,13 @@ void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
                     m_detailInfos.size() + 1);
     //Append the data at the end of the list.
     m_detailInfos.append(detailInfo);
+    //Add the duration to the total duration counter.
+    m_totalDuration+=detailInfo.duration;
     //As the documentation said, called this after insert rows.
     endInsertRows();
+    //Because this operation change the row count, the row count changed signal
+    //will be emitted.
+    emit rowCountChanged();
 }
 
 void KNMusicModel::appendRows(const QList<KNMusicDetailInfo> &detailInfos)
@@ -47,8 +53,17 @@ void KNMusicModel::appendRows(const QList<KNMusicDetailInfo> &detailInfos)
                     m_detailInfos.size() + detailInfos.size());
     //Append the data at the end of the rows.
     m_detailInfos.append(detailInfos);
+    //Add all the duration to the total duration counter.
+    for(auto i=detailInfos.constBegin(); i!=detailInfos.constEnd(); ++i)
+    {
+        //Add each duration to the total duration.
+        m_totalDuration+=(*i).duration;
+    }
     //As the documentation said, called this after insert rows.
     endInsertRows();
+    //Because this operation change the row count, the row count changed signal
+    //will be emitted.
+    emit rowCountChanged();
 }
 
 bool KNMusicModel::insertRow(int row, const KNMusicDetailInfo &detailInfo)
@@ -59,8 +74,31 @@ bool KNMusicModel::insertRow(int row, const KNMusicDetailInfo &detailInfo)
     beginInsertRows(QModelIndex(), row, row + 1);
     //Insert the detail info into the list.
     m_detailInfos.insert(row, detailInfo);
+    //Add the duration to the total duration counter.
+    m_totalDuration+=detailInfo.duration;
     //As the documentation said, called this after insert rows.
     endInsertRows();
+    //Because this operation change the row count, the row count changed signal
+    //will be emitted.
+    emit rowCountChanged();
+    return true;
+}
+
+bool KNMusicModel::updateRow(int row, const KNMusicDetailInfo &detailInfo)
+{
+    //Check the row first.
+    Q_ASSERT(row>-1 && row<m_detailInfos.size());
+    //Get the original detail info.
+    KNMusicDetailInfo previousDetailInfo=m_detailInfos.at(row);
+    //Remove the old duration from the total duration.
+    m_totalDuration-=previousDetailInfo.duration;
+    //Replace to the new detail info.
+    m_detailInfos.replace(row, detailInfo);
+    //Add the new duration to the total duration.
+    m_totalDuration+=detailInfo.duration;
+    //Emit the data changed signal.
+    emit dataChanged(index(row, 0),
+                     index(row, columnCount()));
     return true;
 }
 
@@ -72,10 +110,14 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
     //Remove those datas from the list.
     while(rows--)
     {
-        m_detailInfos.removeAt(position);
+        //Take away the detail info, and remove the duration .
+        m_totalDuration-=m_detailInfos.takeAt(position).duration;
     }
     //As the documentation said, called this after remove rows.
     endRemoveRows();
+    //Because this operation change the row count, the row count changed signal
+    //will be emitted.
+    emit rowCountChanged();
     return true;
 }
 
@@ -85,8 +127,13 @@ void KNMusicModel::clear()
     beginRemoveRows(QModelIndex(), 0, m_detailInfos.size()-1);
     //Clear the detail info list.
     m_detailInfos.clear();
+    //Clear the total duration.
+    m_totalDuration=0;
     //As the documentation said, called this after remove rows.
     endRemoveRows();
+    //Because this operation change the row count, the row count changed signal
+    //will be emitted.
+    emit rowCountChanged();
 }
 
 int KNMusicModel::rowCount(const QModelIndex &parent) const
@@ -104,7 +151,7 @@ int KNMusicModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     //This is a fixed column model.
-    return MusicDataCount+1;
+    return MusicColumnCount;
 }
 
 QVariant KNMusicModel::headerData(int section,
@@ -123,22 +170,105 @@ QVariant KNMusicModel::headerData(int section,
         return section==MusicDataCount?
                     QString():
                     knMusicGlobal->treeViewHeaderText(section);
+    case Qt::TextAlignmentRole:
+        //Check the section.
+        switch(section)
+        {
+        //For Size and Time columns, make it right and vertical center.
+        case Size:
+        case Time:
+            return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+        default:
+            //For other columns, make it left and vertical center.
+            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+        }
     default:
         return QAbstractTableModel::headerData(section, Qt::Horizontal, role);
     }
 
 }
 
+Qt::ItemFlags KNMusicModel::flags(const QModelIndex &index) const
+{
+    //Only rating and album rating column should be editable.
+    switch(index.column())
+    {
+    case Rating:
+    case AlbumRating:
+        return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+
+    default:
+        return QAbstractTableModel::flags(index);
+    }
+}
+
 QVariant KNMusicModel::data(const QModelIndex &index, int role) const
 {
+    //Check the index first, if the index is invalid, ignore the request.
+    if(!index.isValid())
+    {
+        return false;
+    }
+    //Get the data of the role.
     switch(role)
     {
     case Qt::DisplayRole:
-        return index.column()==MusicDataCount?
+    case Qt::EditRole:
+        return index.column()>=MusicDataCount?
                     QString():
                     m_detailInfos.at(index.row()).textLists[index.column()];
+    case Qt::TextAlignmentRole:
+        //Check the section.
+        switch(index.column())
+        {
+        //For Size and Time columns, make it right and vertical center.
+        case Size:
+        case Time:
+            return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+        default:
+            //For other columns, make it left and vertical center.
+            return QVariant(Qt::AlignVCenter);
+        }
     default:
         return QVariant();
     }
 }
 
+bool KNMusicModel::setData(const QModelIndex &index,
+                           const QVariant &value,
+                           int role)
+{
+    //Check the valid of the index first.
+    if(!index.isValid())
+    {
+        return false;
+    }
+    //Get the detail info.
+    KNMusicDetailInfo detailInfo=m_detailInfos.at(index.row());
+    //Change the value according to the index.
+    switch(role)
+    {
+    case Qt::DisplayRole:
+        //We will only support to change the display role data from 0 to
+        //MusicDataCount.
+        if(index.column()<MusicDataCount)
+        {
+            //Set the new text.
+            detailInfo.textLists[index.column()]=value.toString();
+            //Replace the detail info.
+            m_detailInfos.replace(index.row(), detailInfo);
+            //Emit the data changed signal.
+            emit dataChanged(index, index, QVector<int>(1, Qt::DisplayRole));
+            //Set has been done.
+            return true;
+        }
+        return false;
+    default:
+        return false;
+    }
+}
+
+quint64 KNMusicModel::totalDuration() const
+{
+    return m_totalDuration;
+}

@@ -29,6 +29,19 @@ KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent) :
     //Update the palettle.
     onActionThemeUpdate();
     //Set the delegate.
-    setItemDelegateForColumn(MusicDataCount,
+    setItemDelegateForColumn(MusicRowState,
                              new KNMusicPlaylistIndexDelegate(this));
+}
+
+void KNMusicPlaylistTreeView::resetHeaderState()
+{
+    //Do the previous reset first.
+    KNMusicTreeViewBase::resetHeaderState();
+    //To playlist, we will make the play times visible.
+    setColumnHidden(Plays, false);
+    //No more back here, move the last column to the front, because it's the
+    //playlist index.
+    moveToFirst(MusicRowState);
+    //Resize the index column at a enough width.
+    setColumnWidth(MusicRowState, fontMetrics().width('6')*4+30);
 }

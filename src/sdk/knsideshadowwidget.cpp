@@ -51,6 +51,12 @@ void KNSideShadowWidget::setDirection(int direction)
     }
 }
 
+void KNSideShadowWidget::setDarkness(int darkness)
+{
+    //Change the color at 0 position of the gradient.
+    m_shadowGradient.setColorAt(0, QColor(0,0,0,darkness));
+}
+
 void KNSideShadowWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);

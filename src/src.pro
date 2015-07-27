@@ -129,7 +129,10 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusicproxymodel.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistutil.cpp \
-    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistindexdelegate.cpp
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistindexdelegate.cpp \
+    plugin/knmusicplugin/sdk/knmusicratingdelegate.cpp \
+    plugin/knmusicplugin/sdk/knmusicratingeditor.cpp \
+    sdk/knconnectionhandler.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -216,7 +219,10 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicnowplayingbase.h \
     plugin/knmusicplugin/sdk/knmusicbackend.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistutil.h \
-    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistindexdelegate.h
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistindexdelegate.h \
+    plugin/knmusicplugin/sdk/knmusicratingdelegate.h \
+    plugin/knmusicplugin/sdk/knmusicratingeditor.h \
+    sdk/knconnectionhandler.h
 
 RESOURCES += \
     resource/res.qrc

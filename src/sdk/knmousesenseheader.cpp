@@ -115,7 +115,7 @@ void KNMouseSenseHeader::onThemeChanged()
     //Get the palette.
     QPalette pal=knTheme->getPalette(objectName());
     //Get the button color.
-    QColor color=pal.color(QPalette::Button);
+    QColor color=pal.color(QPalette::Window);
     //Change the brightness, use this as the gradient end color.
     color.setHsv(color.hue(), color.saturation(), OutBrightness+0x28);
     //Change the gradient color.
@@ -135,10 +135,11 @@ void KNMouseSenseHeader::onActionMouseInOut(const int &frame)
     color.setHsv(color.hue(), color.saturation(), frame);
     pal.setColor(QPalette::WindowText, color);
     //Change the button gradient start color.
-    color=pal.color(QPalette::Button);
+    color=pal.color(QPalette::Window);
     color.setHsv(color.hue(), color.saturation(), (frame>>1)+0x38);
     m_buttonGradient.setColorAt(0, color);
     pal.setBrush(QPalette::Button, m_buttonGradient);
+    pal.setBrush(QPalette::Window, m_buttonGradient);
     //Change the text color.
     color=pal.color(QPalette::ButtonText);
     color.setHsv(color.hue(), color.saturation(), frame+0x7F);

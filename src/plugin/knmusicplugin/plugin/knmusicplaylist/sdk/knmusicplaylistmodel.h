@@ -23,12 +23,25 @@
 
 #include "knmusicmodel.h"
 
+/*!
+ * \brief The KNMusicPlaylistModel class is used to describe a playlist. It
+ * contains title and file path. It can be built from a json array. You can set
+ * the json array and called the buildModel() function to build a playlist.
+ */
 class KNMusicPlaylistModel : public KNMusicModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistModel class.
+     * \param parent The parent object.
+     */
     explicit KNMusicPlaylistModel(QObject *parent = 0);
 
+    /*!
+     * \brief title
+     * \return
+     */
     QString title() const;
     void setTitle(const QString &title);
 
@@ -44,9 +57,14 @@ public:
     bool changed() const;
     void setChanged(bool changed);
 
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
+
+private slots:
+    void onActionModelChanged();
 
 private:
     QString m_title, m_filePath;

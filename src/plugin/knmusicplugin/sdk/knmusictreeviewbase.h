@@ -49,12 +49,22 @@ public:
 
     /*!
      * \brief Get the proxy of the model.
-     * \return The proxy model pointer.
+     * \return The proxy music model pointer.
      */
     KNMusicProxyModel *proxyModel();
 
+    /*!
+     * \brief Get the music model of the model. It will simply return the
+     * managing music model of the proxy model.
+     * \return The music model pointer.
+     */
     KNMusicModel *musicModel();
 
+    /*!
+     * \brief Set the music model. DO NOT use setModel() function. Use this
+     * instead.
+     * \param musicModel The music model pointer.
+     */
     void setMusicModel(KNMusicModel *musicModel);
 
 signals:
@@ -85,6 +95,9 @@ protected:
                  const QStyleOptionViewItem &options,
                  const QModelIndex &index) const;
 
+    virtual void resetHeaderState();
+    void moveToFirst(const int &logicalIndex);
+
 protected slots:
     /*!
      * \brief This slot is provide to update the palette when the tree view is
@@ -101,6 +114,8 @@ private:
     QTimeLine *m_mouseIn, *m_mouseOut;
     bool m_animate;
     KNMusicProxyModel *m_proxyModel;
+
+    bool m_initialLoad=true;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

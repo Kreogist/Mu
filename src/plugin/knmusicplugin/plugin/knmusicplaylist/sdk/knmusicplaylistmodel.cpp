@@ -27,6 +27,13 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
     m_built(false),
     m_changed(false)
 {
+    //When the row count changed, this model should be marked to be changed.
+    connect(this, &KNMusicPlaylistModel::rowCountChanged,
+            this, &KNMusicPlaylistModel::onActionModelChanged);
+    //When there's a data changed, this model should be marked to be changed
+    //as well.
+    connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
+            this, SLOT(onActionModelChanged()));
 }
 
 QString KNMusicPlaylistModel::title() const
@@ -79,6 +86,9 @@ void KNMusicPlaylistModel::buildModel()
     appendRows(detailInfos);
     //Set the build flag.
     m_built=true;
+    //Reset the changed flag, a model which just finished built cannot be
+    //changed before.
+    m_changed=false;
 }
 
 QJsonArray KNMusicPlaylistModel::contentData() const
@@ -99,4 +109,34 @@ bool KNMusicPlaylistModel::changed() const
 void KNMusicPlaylistModel::setChanged(bool changed)
 {
     m_changed = changed;
+}
+
+QVariant KNMusicPlaylistModel::data(const QModelIndex &index, int role) const
+{
+    //Check the index at the beginning.
+    if(!index.isValid())
+    {
+        return false;
+    }
+    //Check the role.
+    switch(role)
+    {
+    case Qt::TextAlignmentRole:
+        //For the row state column, make it right and vertical center.
+        if(index.column()==MusicRowState)
+        {
+            return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+        }
+        //For the other type of the data, just follow the music model.
+        return KNMusicModel::data(index, Qt::TextAlignmentRole);
+
+    default:
+        return KNMusicModel::data(index, role);
+    }
+}
+
+void KNMusicPlaylistModel::onActionModelChanged()
+{
+    //Set the changed flag to true.
+    m_changed=true;
 }

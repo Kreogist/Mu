@@ -94,6 +94,7 @@ KNMusicTagId3v2::KNMusicTagId3v2(QObject *parent) :
         m_IndexFrameID4.insert(Rating         , "POPM");
         m_IndexFrameID4.insert(Year           , "TYER");
 
+        //Three chars frame ID for ID3v2.2 and previous.
         m_frameIDIndex.insert("TT2", Name);
         m_frameIDIndex.insert("TP1", Artist);
         m_frameIDIndex.insert("TAL", Album);

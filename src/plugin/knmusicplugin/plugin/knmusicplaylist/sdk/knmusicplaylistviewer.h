@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class QLabel;
+class KNConnectionHandler;
 class KNSideShadowWidget;
 class KNMusicPlaylistModel;
 class KNMusicPlaylistTreeView;
@@ -30,6 +31,7 @@ class KNMusicPlaylistViewer : public QWidget
     Q_OBJECT
 public:
     explicit KNMusicPlaylistViewer(QWidget *parent = 0);
+    ~KNMusicPlaylistViewer();
     void setPlaylist(KNMusicPlaylistModel *model);
 
 signals:
@@ -39,10 +41,23 @@ public slots:
 protected:
     void resizeEvent(QResizeEvent *event);
 
+private slots:
+    void retranslate();
+    void onActionModelRowCountChanged();
+
 private:
+    inline void updateDetailInfo();
     KNMusicPlaylistTreeView *m_treeView;
     QLabel *m_title, *m_detail;
     KNSideShadowWidget *m_leftShadow;
+    KNConnectionHandler *m_modelLinkHandler;
+
+    QString m_songCount[3],
+            m_minuateCount[3],
+            m_hourCount[2],
+            m_hourCountWithoutMinuate[2],
+            m_searchCount[3];
+    QString m_searchResultIn;
 };
 
 #endif // KNMUSICPLAYLISTVIEWER_H

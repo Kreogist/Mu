@@ -40,17 +40,17 @@ public:
      */
     bool parseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
-                  KNMusicAnalysisItem &analysisItem);
+                  KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplement from KNMusicTagParser::writeTag.
      */
-    bool writeTag(KNMusicAnalysisItem &analysisItem);
+    bool writeTag(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplement from KNMusicTagParser::parseAlbumArt.
      */
-    bool parseAlbumArt(KNMusicAnalysisItem &analysisItem);
+    bool parseAlbumArt(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
 signals:
 
