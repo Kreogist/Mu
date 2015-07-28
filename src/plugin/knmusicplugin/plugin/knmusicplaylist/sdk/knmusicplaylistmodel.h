@@ -60,6 +60,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
 signals:
+    void titleChanged(const QString &title);
 
 public slots:
 

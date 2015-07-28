@@ -52,6 +52,8 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
             m_container, &KNEmptyStateWidget::showContentWidget);
     connect(m_playlistManager, &KNMusicPlaylistManager::requireHideContent,
             m_container, &KNEmptyStateWidget::showEmptyWidget);
+    connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
+            this, &KNMusicPlaylist::onActionCreatePlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireShowPlaylist,
             [=](const QModelIndex &index)
             {
@@ -63,7 +65,7 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     KNMusicPlaylistEmptyHint *emptyHint=new KNMusicPlaylistEmptyHint(this);
     //Link the empty hint with the container.
     connect(emptyHint, &KNMusicPlaylistEmptyHint::requireAddPlaylist,
-            m_container, &KNEmptyStateWidget::showContentWidget);
+            this, &KNMusicPlaylist::onActionCreatePlaylist);
     //Set the empty widget and content widget.
     m_container->setEmptyWidget(emptyHint);
     //Get the splitter.
@@ -122,7 +124,21 @@ void KNMusicPlaylist::resizeEvent(QResizeEvent *event)
 
 void KNMusicPlaylist::retranslate()
 {
+    //Update the tab title.
     m_tab->setText(tr("Playlist"));
+}
+
+void KNMusicPlaylist::onActionCreatePlaylist()
+{
+    //Generate a empty playlist model in the playlist manager, and get the index
+    //of the model.
+    QModelIndex playlistIndex=m_playlistManager->createPlaylist();
+    //Show that playlist.
+    m_playlistList->showPlaylist(playlistIndex);
+    //Ask the list view to rename it.
+    m_playlistList->renamePlaylist(playlistIndex);
+    //Make the container switch to the content widget.
+    m_container->showContentWidget();
 }
 
 QSplitter *KNMusicPlaylist::generateSplitter()

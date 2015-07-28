@@ -39,13 +39,13 @@ public:
 
     bool isPlaylistListLoaded() const;
     void setPlaylistListLoaded(bool isPlaylistListLoaded);
+    QModelIndex createPlaylist();
 
 signals:
     void requireShowContent();
     void requireHideContent();
 
 public slots:
-    void createPlaylist();
 
 private:
     QString generateTitle(const QString &preferName = QString());

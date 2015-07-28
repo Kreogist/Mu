@@ -64,7 +64,13 @@ void KNMusicPlaylistList::setPlaylistList(KNMusicPlaylistListModel *model)
             {
                 //Simply emit the signal is alright.
                 emit requireShowPlaylist(current);
-            });
+    });
+}
+
+void KNMusicPlaylistList::renamePlaylist(const QModelIndex &index)
+{
+    //Ask the playlist list view to rename the playlist.
+    m_playlistListView->edit(index);
 }
 
 void KNMusicPlaylistList::showPlaylist(const QModelIndex &index)
@@ -153,6 +159,9 @@ inline void KNMusicPlaylistList::configureEditor()
     }
     //Insert separator.
     addMenu->insertSeparator(m_addActions[ImportPlaylist]);
+    //Link action signals.
+    connect(m_addActions[AddPlaylist], SIGNAL(triggered(bool)),
+            this, SIGNAL(requireCreatePlaylist()));
     //Initial the configure actions.
     for(int i=0; i<ConfigureMenuActionCount; i++)
     {

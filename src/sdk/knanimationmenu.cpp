@@ -27,7 +27,9 @@ KNAnimationMenu::KNAnimationMenu(QWidget *parent) :
     m_mouseDownPos(QPoint(0,0))
 {
     //Set properties.
+#ifndef Q_OS_MAC
     setWindowOpacity(0.85);
+#endif
     //Configure the animation.
     m_showAnime->setEasingCurve(QEasingCurve::OutCubic);
     m_showAnime->setDuration(200);

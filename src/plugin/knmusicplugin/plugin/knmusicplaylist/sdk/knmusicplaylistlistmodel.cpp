@@ -51,7 +51,7 @@ KNMusicPlaylistModel *KNMusicPlaylistListModel::playlist(
     return m_playlistList.at(index.row());
 }
 
-void KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
+QModelIndex KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
 {
     //Follow the documentation, we have to do this.
     beginInsertRows(QModelIndex(),
@@ -66,6 +66,8 @@ void KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
     {
         emit requireShowContent();
     }
+    //Give back the index of the model.
+    return index(m_playlistList.size()-1, 0);
 }
 
 void KNMusicPlaylistListModel::insert(int row, KNMusicPlaylistModel *model)

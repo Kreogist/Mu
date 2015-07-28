@@ -34,7 +34,7 @@ public:
 
     KNMusicPlaylistModel *playlist(const QModelIndex &index);
 
-    void append(KNMusicPlaylistModel *model);
+    QModelIndex append(KNMusicPlaylistModel *model);
     void insert(int row, KNMusicPlaylistModel *model);
     bool removeRows(int row, int count, const QModelIndex &parent);
 

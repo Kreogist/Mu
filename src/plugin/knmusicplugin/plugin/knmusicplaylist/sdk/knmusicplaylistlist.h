@@ -32,8 +32,10 @@ class KNMusicPlaylistList : public QWidget
 public:
     explicit KNMusicPlaylistList(QWidget *parent = 0);
     void setPlaylistList(KNMusicPlaylistListModel *model);
+    void renamePlaylist(const QModelIndex &index);
 
 signals:
+    void requireCreatePlaylist();
     void requireShowPlaylist(const QModelIndex &index);
 
 public slots:

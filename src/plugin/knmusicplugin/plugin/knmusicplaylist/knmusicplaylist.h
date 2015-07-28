@@ -44,6 +44,7 @@ protected:
 
 private slots:
     void retranslate();
+    void onActionCreatePlaylist();
 
 private:
     inline QSplitter *generateSplitter();

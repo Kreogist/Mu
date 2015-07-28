@@ -27,6 +27,8 @@
 
 #include "knmusicplaylistmanager.h"
 
+#include <QDebug>
+
 #define PlaylistListFileName "/Playlist.mudb"
 #define PlaylistListVersion 3
 
@@ -53,12 +55,15 @@ KNMusicPlaylistModel *KNMusicPlaylistManager::playlist(const QModelIndex &index)
     return m_playlistList->playlist(index);
 }
 
-void KNMusicPlaylistManager::createPlaylist()
+QModelIndex KNMusicPlaylistManager::createPlaylist()
 {
     //Generate the playlist.
-//    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_playlistList);
-    //
-    ;
+    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_playlistList);
+    //Set the generate the title.
+    model->setTitle(generateTitle());
+    //Add the model to the playlist list, and give back the model index in the
+    //model list model.
+    return m_playlistList->append(model);
 }
 
 QString KNMusicPlaylistManager::generateTitle(const QString &preferName)

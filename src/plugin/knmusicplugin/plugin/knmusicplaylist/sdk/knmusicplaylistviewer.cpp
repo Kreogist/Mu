@@ -113,6 +113,10 @@ void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
                 connect(model, &KNMusicPlaylistModel::rowCountChanged,
                         this,
                         &KNMusicPlaylistViewer::onActionModelRowCountChanged));
+    m_modelLinkHandler->append(
+                connect(model, &KNMusicPlaylistModel::titleChanged,
+                        m_title,
+                        &QLabel::setText));
     //Update the detail information.
     updateDetailInfo();
 }

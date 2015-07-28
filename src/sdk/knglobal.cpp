@@ -249,7 +249,9 @@ inline void KNGlobal::initialBrushes()
     //Initial all kinds of pixmaps.
     for(int i=0; i<TextureBrushCount; i++)
     {
+        //Iniital the brush.
         m_brushes[i]=QBrush();
+        //Set the texture of the brush.
         m_brushes[i].setTexture(QPixmap(textures[i]));
     }
 }

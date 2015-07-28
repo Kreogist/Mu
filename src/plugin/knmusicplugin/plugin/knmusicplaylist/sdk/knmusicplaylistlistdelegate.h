@@ -21,20 +21,59 @@
 
 #include <QStyledItemDelegate>
 
+/*!
+ * \brief The KNMusicPlaylistListDelegate class is designed to tweak the UI of
+ * the playlist list view. It fixed the bug of the line edit of the original
+ * list view.
+ */
 class KNMusicPlaylistListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistListDelegate widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicPlaylistListDelegate(QWidget *parent = 0);
+
+    /*!
+     * \brief Reimplement from QStyledItemDelegate::paint().
+     */
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
+               const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplement from QStyledItemDelegate::sizeHint().
+     */
     QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
+                   const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief  Reimplement from QStyledItemDelegate::createEditor().
+     */
+    QWidget *createEditor(QWidget *parent,
+                          const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
+    /*!
+     * \brief  Reimplement from QStyledItemDelegate::setEditorData().
+     */
+    void setEditorData(QWidget *editor,
+                       const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief  Reimplement from QStyledItemDelegate::setModelData().
+     */
+    void setModelData(QWidget *editor,
+                      QAbstractItemModel *model,
+                      const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 signals:
 
 public slots:
+
+private slots:
+    void commitAndCloseEditor();
 
 private:
 };

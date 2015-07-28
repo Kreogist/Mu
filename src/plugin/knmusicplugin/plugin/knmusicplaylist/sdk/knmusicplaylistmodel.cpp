@@ -45,6 +45,8 @@ void KNMusicPlaylistModel::setTitle(const QString &title)
 {
     //Save the title.
     m_title=title;
+    //Emit the title changed signal.
+    emit titleChanged(m_title);
     //Marked changed flag.
     m_changed=true;
 }
