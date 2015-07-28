@@ -20,16 +20,75 @@
 #define KNMUSICPLAYLISTPARSER_H
 
 #include <QObject>
+#include <QFile>
 
+class KNMusicPlaylistModel;
+/*!
+ * \brief The KNMusicPlaylistParser class is the port class of the playlist
+ * parser. A playlist parser can parse and write a type of the playlist file by
+ * calling the read() and write() function.
+ */
 class KNMusicPlaylistParser : public QObject
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistParser class.
+     * \param parent The parent widget.
+     */
     explicit KNMusicPlaylistParser(QObject *parent = 0);
+
+    /*!
+     * \brief Get the description of the playlist type.
+     * \return The playlist type description string.
+     */
+    virtual QString description()=0;
+
+    /*!
+     * \brief The playlist suffix. This will be used in the dialog filter.
+     * \return The playlist suffix text.
+     */
+    virtual QString suffix()=0;
+
+    /*!
+     * \brief Read a playlist file according to the file path, and generate a
+     * model. If there's any error occurs, it will return a nullptr pointer.
+     * \param filePath The file path.
+     * \return If the playlist file can be parsed successfully, it will return
+     * the pointer of the playlist model. Or else it will return a nullptr.
+     */
+    virtual KNMusicPlaylistModel *read(const QString &filePath)=0;
+
+    /*!
+     * \brief Write a playlist model content to the file path in the model.
+     * \param playlist The playlist model.
+     * \return If write successfully, it will be true.
+     */
+    virtual bool write(KNMusicPlaylistModel *playlist)=0;
 
 signals:
 
 public slots:
+
+protected:
+    inline bool writeContent(const QString &filePath,
+                             const QString &content)
+    {
+        //Get the playlist file.
+        QFile playlistFile(filePath);
+        //Open it as write only mode, if the file cannot be written, return
+        //false.
+        if(!playlistFile.open(QIODevice::WriteOnly))
+        {
+            return false;
+        }
+        //Write the data, encode the text in UTF-8 codec.
+        playlistFile.write(content.toUtf8());
+        //Close the file.
+        playlistFile.close();
+        //Write successfully.
+        return true;
+    }
 };
 
 #endif // KNMUSICPLAYLISTPARSER_H

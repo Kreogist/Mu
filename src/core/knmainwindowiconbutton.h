@@ -60,17 +60,17 @@ protected:
     /*!
      * \brief Reimplemented from QAbstractButton::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

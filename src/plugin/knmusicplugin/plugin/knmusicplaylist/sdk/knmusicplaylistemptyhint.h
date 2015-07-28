@@ -26,14 +26,32 @@
 
 class QLabel;
 class KNGlassButton;
+/*!
+ * \brief The KNMusicPlaylistEmptyHint class is used when there's no playlists
+ * exist. This widget is used to give user a hint to create a new playlist or
+ * import playlists from the other applications.
+ */
 class KNMusicPlaylistEmptyHint : public KNDropProxyContainer
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistEmptyHint widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicPlaylistEmptyHint(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When the create playlist button pressed, this signal will be
+     * emitted for asking generate a empty playlist.
+     */
     void requireAddPlaylist();
+
+    /*!
+     * \brief When the import playlists button pressed, this signal will be
+     * emitted for asking show import playlist dialog.
+     */
     void requireImportPlaylists();
 
 public slots:

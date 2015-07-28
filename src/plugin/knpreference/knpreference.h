@@ -41,7 +41,7 @@ public:
     /*!
      * \brief Reimplement from KNPreferencePlugin::addTab().
      */
-    void addTab(KNPreferenceItem *tabWidget, QWidget *content);
+    void addTab(KNPreferenceItem *tabWidget, QWidget *content) Q_DECL_OVERRIDE;
 
 signals:
 
