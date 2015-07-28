@@ -41,7 +41,7 @@ public:
     /*!
      * \brief Reimplement from KNMusicDetailDialogPanel::tabButton.
      */
-    QAbstractButton *tabButton();
+    QAbstractButton *tabButton() Q_DECL_OVERRIDE;
 
 signals:
 
@@ -49,7 +49,8 @@ public slots:
     /*!
      * \brief Reimplement from KNMusicDetailDialogPanel::setAnalysisItem.
      */
-    void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item);
+    void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)
+    Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

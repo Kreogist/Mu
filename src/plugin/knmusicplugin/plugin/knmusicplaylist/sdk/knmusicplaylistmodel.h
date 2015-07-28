@@ -39,10 +39,15 @@ public:
     explicit KNMusicPlaylistModel(QObject *parent = 0);
 
     /*!
-     * \brief title
-     * \return
+     * \brief Get the title of the playlist.
+     * \return The title string.
      */
     QString title() const;
+
+    /*!
+     * \brief Set the title of the playlist model.
+     * \param title
+     */
     void setTitle(const QString &title);
 
     QString filePath() const;

@@ -46,17 +46,17 @@ public:
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::headerWidget().
      */
-    QWidget *headerWidget();
+    QWidget *headerWidget() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::icon().
      */
-    QPixmap icon();
+    QPixmap icon() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::title().
      */
-    QString title();
+    QString title() Q_DECL_OVERRIDE;
 
 signals:
 
@@ -64,16 +64,16 @@ public slots:
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::saveConfigure().
      */
-    void saveConfigure();
+    void saveConfigure() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from
      * KNAbstractMusicCategoryPlugin::onArgumentsAvailable().
      */
-    void onArgumentsAvailable(const QStringList &data);
+    void onArgumentsAvailable(const QStringList &data) Q_DECL_OVERRIDE;
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     inline void initialInfrastructure();

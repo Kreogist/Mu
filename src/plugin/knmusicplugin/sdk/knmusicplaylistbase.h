@@ -21,10 +21,19 @@
 
 #include "knmusictab.h"
 
+/*!
+ * \brief The KNMusicPlaylistBase class is the port class of the playlist
+ * modules. It provides all the ports of a playlist tab should contains. This
+ * class should be implement and realize these functions.
+ */
 class KNMusicPlaylistBase : public KNMusicTab
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistBase class with give parent.
+     * \param parent The parent widget.
+     */
     KNMusicPlaylistBase(QWidget *parent = 0):KNMusicTab(parent){}
 
 signals:

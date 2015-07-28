@@ -42,12 +42,12 @@ public:
      */
     void addHeaderWidget(QWidget *widget,
                          int stretch=0,
-                         Qt::Alignment alignment=0);
+                         Qt::Alignment alignment=0) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMainWindowHeaderBase::setCategoryPlugin().
      */
-    void setCategoryPlugin(KNCategoryPlugin *categoryPlugin);
+    void setCategoryPlugin(KNCategoryPlugin *categoryPlugin) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

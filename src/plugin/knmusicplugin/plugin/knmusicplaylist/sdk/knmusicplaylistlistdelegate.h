@@ -55,6 +55,7 @@ public:
     QWidget *createEditor(QWidget *parent,
                           const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
+
     /*!
      * \brief  Reimplement from QStyledItemDelegate::setEditorData().
      */

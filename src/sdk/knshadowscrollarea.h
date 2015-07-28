@@ -45,7 +45,7 @@ protected:
     /*!
      * \brief Reimplement from QScrollArea::resizeEvent().
      */
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionVerticalRangeChanged(int min, int max);

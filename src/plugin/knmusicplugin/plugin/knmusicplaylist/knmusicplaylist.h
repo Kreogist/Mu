@@ -27,20 +27,39 @@ class KNEmptyStateWidget;
 class KNMusicPlaylistList;
 class KNMusicPlaylistViewer;
 class KNMusicPlaylistManager;
+/*!
+ * \brief The KNMusicPlaylist class is the standard playlist realize. It can be
+ * treat as a tutorial.
+ */
 class KNMusicPlaylist : public KNMusicPlaylistBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct the KNMusicPlaylist class.
+     * \param parent The parent widget.
+     */
     explicit KNMusicPlaylist(QWidget *parent = 0);
-    QAbstractButton *tab();
+
+    /*!
+     * \brief Reimplement from the KNMusicPlaylistBase::tab().
+     */
+    QAbstractButton *tab() Q_DECL_OVERRIDE;
 
 signals:
 
 public slots:
 
 protected:
-    void showEvent(QShowEvent *event);
-    void resizeEvent(QResizeEvent *event);
+    /*!
+     * \brief  Reimplement from the KNMusicPlaylistBase::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief  Reimplement from the KNMusicPlaylistBase::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

@@ -90,8 +90,8 @@ void KNMusicRatingDelegate::setEditorData(QWidget *editor,
                                           const QModelIndex &index) const
 {
     //Set the star number to current number.
-    KNMusicRatingEditor *starEditor=static_cast<KNMusicRatingEditor *>(editor);
-    starEditor->setStarNum(index.data(Qt::DisplayRole).toInt());
+    (static_cast<KNMusicRatingEditor *>(editor))->setStarNum(
+                index.data(Qt::DisplayRole).toInt());
 }
 
 void KNMusicRatingDelegate::setModelData(QWidget *editor,
@@ -99,8 +99,9 @@ void KNMusicRatingDelegate::setModelData(QWidget *editor,
                                          const QModelIndex &index) const
 {
     //Set model data to star editor's star number.
-    KNMusicRatingEditor *starEditor=static_cast<KNMusicRatingEditor *>(editor);
-    model->setData(index, starEditor->starNum(), Qt::DisplayRole);
+    model->setData(index,
+                   static_cast<KNMusicRatingEditor *>(editor)->starNum(),
+                   Qt::DisplayRole);
 }
 
 void KNMusicRatingDelegate::commitAndCloseEditor()
