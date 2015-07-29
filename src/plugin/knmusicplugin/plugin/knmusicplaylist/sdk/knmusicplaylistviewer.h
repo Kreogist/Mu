@@ -44,6 +44,7 @@ protected:
 private slots:
     void retranslate();
     void onActionModelRowCountChanged();
+    void onActionSearch();
 
 private:
     inline void updateDetailInfo();

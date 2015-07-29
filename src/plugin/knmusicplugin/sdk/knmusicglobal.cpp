@@ -132,6 +132,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_parentWidget(static_cast<QWidget *>(parent)),
     m_detailDialog(new KNMusicDetailDialog(m_parentWidget)),
     m_parser(new KNMusicParser),
+    m_search(nullptr),
     m_searcherThread(new QThread(this)),
     m_analysisThread(new QThread(this))
 {
@@ -375,6 +376,16 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Anime"
                    <<"JPop"
                    <<"Synthpop";
+}
+
+KNMusicSearchBase *KNMusicGlobal::search() const
+{
+    return m_search;
+}
+
+void KNMusicGlobal::setSearch(KNMusicSearchBase *search)
+{
+    m_search = search;
 }
 
 QString KNMusicGlobal::musicLibPath() const

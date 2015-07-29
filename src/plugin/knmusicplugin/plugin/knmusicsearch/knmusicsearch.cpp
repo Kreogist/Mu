@@ -18,6 +18,7 @@
 #include <QCoreApplication>
 #include <QInputMethodEvent>
 #include <QTextLayout>
+#include <QAction>
 
 #include "knsearchbox.h"
 #include "knlocalemanager.h"
@@ -32,8 +33,16 @@
 KNMusicSearch::KNMusicSearch(QObject *parent) :
     KNMusicSearchBase(parent),
     m_searchBox(new KNSearchBox()),
-    m_engine(new KNMusicSearchSyntaxEngine(this))
+    m_engine(new KNMusicSearchSyntaxEngine(this)),
+    m_activateAction(new QAction(this))
 {
+    //Configure the action.
+    m_activateAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    m_activateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    //Link the activate action to the line edit.
+    connect(m_activateAction, &QAction::triggered,
+            [=]{m_searchBox->setFocus();});
+
     //Link the search box to the search actions.
     connect(m_searchBox, &KNSearchBox::textChanged,
             this, &KNMusicSearch::onActionSearch);
@@ -57,6 +66,16 @@ QWidget *KNMusicSearch::widget()
     return m_searchBox;
 }
 
+QList<KNMusicSearchBlock> KNMusicSearch::rules()
+{
+    return m_searchBlockList;
+}
+
+QAction *KNMusicSearch::activateAction()
+{
+    return m_activateAction;
+}
+
 void KNMusicSearch::retranslate()
 {
     //Update the text of the search box.
@@ -65,7 +84,8 @@ void KNMusicSearch::retranslate()
 
 void KNMusicSearch::onActionSearch(const QString &text)
 {
-    //Use the engin to parse the search box text.
-    QList<KNMusicSearchBlock> blockList=m_engine->parseSearch(text);
+    //Use the engin to parse the search box text, save the result to the list.
+    m_searchBlockList=m_engine->parseSearch(text);
     //Ask to search the data.
+    emit requireSearch();
 }

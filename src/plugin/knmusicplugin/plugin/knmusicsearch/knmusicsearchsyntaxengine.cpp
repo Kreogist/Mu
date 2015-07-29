@@ -58,7 +58,7 @@ QList<KNMusicSearchBlock> KNMusicSearchSyntaxEngine::parseSearch(
         {
             //Add the code as a normal block.
             block.index=-1;
-            block.value=(*i);
+            block.value=(*i).simplified();
             //Add the block to block list.
             blockList.append(block);
             //Continue to next block.
@@ -73,13 +73,12 @@ QList<KNMusicSearchBlock> KNMusicSearchSyntaxEngine::parseSearch(
 
         //Check the result, if we cannot find it in the column map, then tried
         //to find it in the property map.
-        qDebug()<<"columnFind="<<columnFind;
         if(!columnFind)
         {
             //!FIXME: add property check code here.
             //Add the code as a normal block.
             block.index=-1;
-            block.value=(*i);
+            block.value=(*i).simplified();
             //Add the block to block list.
             blockList.append(block);
             //Continue to next block.
@@ -89,7 +88,7 @@ QList<KNMusicSearchBlock> KNMusicSearchSyntaxEngine::parseSearch(
         block.index=targetIndex;
         block.isColumn=columnFind;
         //Now parse the search value data.
-        block.value=textToVariant((*i).mid(splitterPosition+1));
+        block.value=textToVariant(targetIndex, (*i).mid(splitterPosition+1));
         //Add this block to the block list.
         blockList.append(block);
     }
@@ -111,8 +110,20 @@ void KNMusicSearchSyntaxEngine::retranslate()
     m_splitter.setPattern(tr(", "));
 }
 
-QVariant KNMusicSearchSyntaxEngine::textToVariant(const QString &text)
+QVariant KNMusicSearchSyntaxEngine::textToVariant(const int &column,
+                                                  QString text)
 {
-    return QVariant(text);
+    //Ignore the empty data.
+    if(text.isEmpty())
+    {
+        return QVariant();
+    }
+    //Process the column.
+    switch(column)
+    {
+    default:
+        //Simply treat it as variant.
+        return QVariant(text.simplified());
+    }
 }
 

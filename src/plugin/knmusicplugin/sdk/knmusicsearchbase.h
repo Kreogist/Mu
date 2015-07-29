@@ -19,8 +19,14 @@
 #ifndef KNMUSICSEARCHBASE_H
 #define KNMUSICSEARCHBASE_H
 
+#include "knmusicutil.h"
+
 #include <QObject>
 
+using namespace MusicUtil;
+
+class QAction;
+class KNMusicProxyModel;
 /*!
  * \brief The KNMusicSearchBase class provides the base port of the music search
  * module. It also provides some basic structures and signals of the search
@@ -42,7 +48,23 @@ public:
      */
     virtual QWidget *widget()=0;
 
+    /*!
+     * \brief Get all the search rules generate by the search box.
+     * \return The search rule list.
+     */
+    virtual QList<KNMusicSearchBlock> rules()=0;
+
+    /*!
+     * \brief Get the search action for the content widget.
+     * \return The search box active action.
+     */
+    virtual QAction *activateAction()=0;
+
 signals:
+    /*!
+     * \brief When the search rules update, this signal will be emitted.
+     */
+    void requireSearch();
 
 public slots:
 

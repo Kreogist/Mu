@@ -65,7 +65,7 @@ private slots:
     void retranslate();
 
 private:
-    QVariant textToVariant(const QString &text);
+    QVariant textToVariant(const int &column, QString text);
     QHash<QString, int> m_columnMap;
     QRegularExpression m_splitter;
 };

@@ -39,11 +39,17 @@ public slots:
     void setSearchBlocks(const QList<KNMusicSearchBlock> &blockList);
 
 protected:
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+    bool lessThan(const QModelIndex &left,
+                  const QModelIndex &right) const Q_DECL_OVERRIDE;
     bool filterAcceptsRow(int source_row,
-                          const QModelIndex &source_parent) const;
+                          const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
 
 private:
+    inline bool checkColumnRule(const QModelIndex &index,
+                                const KNMusicSearchBlock &block) const;
+    inline bool checkRule(QAbstractItemModel *model,
+                                const int &row,
+                                const KNMusicSearchBlock &block) const;
     QList<KNMusicSearchBlock> m_blocks;
 };
 

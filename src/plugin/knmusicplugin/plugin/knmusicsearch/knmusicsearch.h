@@ -21,6 +21,7 @@
 
 #include "knmusicsearchbase.h"
 
+class QAction;
 class KNSearchBox;
 class KNMusicSearchSyntaxEngine;
 /*!
@@ -44,6 +45,16 @@ public:
      */
     QWidget *widget() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplement from KNMusicSearchBase::rules().
+     */
+    QList<KNMusicSearchBlock> rules() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplement from KNMusicSearchBase::activateAction().
+     */
+    QAction *activateAction() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -55,6 +66,9 @@ private slots:
 private:
     KNSearchBox *m_searchBox;
     KNMusicSearchSyntaxEngine *m_engine;
+    QAction *m_activateAction;
+
+    QList<KNMusicSearchBlock> m_searchBlockList;
 };
 
 #endif // KNMUSICSEARCH_H

@@ -35,6 +35,7 @@ using namespace MusicUtil;
 
 class KNMusicDetailDialog;
 class KNMusicParser;
+class KNMusicSearchBase;
 /*!
  * \brief The KNMusicGlobal class provides some public instance and function of
  * the official music category plugin.\n
@@ -118,6 +119,19 @@ public:
      */
     QString musicLibPath() const;
 
+    /*!
+     * \brief Get the music search object.
+     * \return The music search object. Before set this object it will be
+     * nullptr.
+     */
+    KNMusicSearchBase *search() const;
+
+    /*!
+     * \brief Set the music search object pointer.
+     * \param search The object pointer.
+     */
+    void setSearch(KNMusicSearchBase *search);
+
 signals:
 
 public slots:
@@ -139,6 +153,7 @@ private:
     QWidget *m_parentWidget;
     KNMusicDetailDialog *m_detailDialog;
     KNMusicParser *m_parser;
+    KNMusicSearchBase *m_search;
 
     QThread *m_searcherThread, *m_analysisThread;
     QString m_musicLibPath;

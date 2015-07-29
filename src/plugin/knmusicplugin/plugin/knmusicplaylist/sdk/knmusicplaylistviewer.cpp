@@ -24,8 +24,11 @@
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 
+#include "knmusicsearchbase.h"
 #include "knmusicplaylisttreeview.h"
 #include "knmusicplaylistmodel.h"
+#include "knmusicproxymodel.h"
+#include "knmusicglobal.h"
 
 #include "knmusicplaylistviewer.h"
 
@@ -76,6 +79,10 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
     //Add labels to information layout.
     informationLayout->addWidget(m_title);
     informationLayout->addWidget(m_detail);
+
+    //Link the search.
+    connect(knMusicGlobal->search(), &KNMusicSearchBase::requireSearch,
+            this, &KNMusicPlaylistViewer::onActionSearch);
 
     //Move the shadow to the top of the widget.
     m_leftShadow->setDarkness(100);
@@ -156,6 +163,18 @@ void KNMusicPlaylistViewer::onActionModelRowCountChanged()
 {
     //Update the detail information.
     updateDetailInfo();
+}
+
+void KNMusicPlaylistViewer::onActionSearch()
+{
+    //Check whether the proxy model is nullptr.
+    if(m_treeView->proxyModel()==nullptr)
+    {
+        //Ignore the search request.
+        return;
+    }
+    //Set the search rules to the proxy model.
+    m_treeView->proxyModel()->setSearchBlocks(knMusicGlobal->search()->rules());
 }
 
 void KNMusicPlaylistViewer::updateDetailInfo()
