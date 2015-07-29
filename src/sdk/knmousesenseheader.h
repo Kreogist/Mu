@@ -39,14 +39,6 @@ public:
     explicit KNMouseSenseHeader(QWidget *parent = 0);
 
 signals:
-    /*!
-     * \brief The context menu can ask the tree view to change the visibility of
-     * a column. You can connect the action to requireChangeVisible() signal to
-     * do this.
-     * \param index The index of the header.
-     * \param ok To change the column to visible, set ok to be true.
-     */
-    void requireChangeVisible(const int &index, const bool &ok);
 
 public slots:
 

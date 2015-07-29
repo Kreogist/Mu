@@ -21,15 +21,39 @@
 
 #include "knmousesenseheader.h"
 
+class KNMusicTreeViewHeaderMenu;
+/*!
+ * \brief The KNMusicTreeViewHeader class provides a specific music tree view
+ * header for music tree view. It will provides a menu to control the visibility
+ * of the music header.
+ */
 class KNMusicTreeViewHeader : public KNMouseSenseHeader
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicTreeViewHeader widget with given tree view
+     * widget parent.
+     * \param parent A music tree view widget.
+     */
     explicit KNMusicTreeViewHeader(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When one column is being asked to resize it to fit the content,
+     * this signal will be emitted.
+     * \param column The column index.
+     */
+    void requireResizeColumnToContents(int column);
 
 public slots:
+
+private slots:
+    void resizeAllColumns();
+    void showCustomContextMenu(const QPoint &mousePoint);
+
+private:
+    KNMusicTreeViewHeaderMenu *m_headerMenu;
 };
 
 #endif // KNMUSICTREEVIEWHEADER_H

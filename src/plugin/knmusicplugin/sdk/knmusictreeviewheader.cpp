@@ -15,12 +15,55 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusictreeviewheadermenu.h"
 
 #include "knmusictreeviewheader.h"
 
 KNMusicTreeViewHeader::KNMusicTreeViewHeader(QWidget *parent) :
-    KNMouseSenseHeader(parent)
+    KNMouseSenseHeader(parent),
+    m_headerMenu(new KNMusicTreeViewHeaderMenu(this))
 {
+    //Connect the custom context menu show request.
+    connect(this, &KNMusicTreeViewHeader::customContextMenuRequested,
+            this, &KNMusicTreeViewHeader::showCustomContextMenu);
 
+    //Link the request of the context menu to the header.
+    connect(m_headerMenu, &KNMusicTreeViewHeaderMenu::requireSetColumnVisible,
+            this, &KNMusicTreeViewHeader::setSectionHidden);
+    connect(m_headerMenu, &KNMusicTreeViewHeaderMenu::requireResizeAll,
+            this, &KNMusicTreeViewHeader::resizeAllColumns);
+    connect(m_headerMenu, &KNMusicTreeViewHeaderMenu::requireResize,
+            this, &KNMusicTreeViewHeader::requireResizeColumnToContents);
+}
+
+void KNMusicTreeViewHeader::resizeAllColumns()
+{
+    //Resize all the visible section.
+    for(int i=Name; i<MusicColumnCount; i++)
+    {
+        //Check the section visible.
+        if(!isSectionHidden(i))
+        {
+            emit requireResizeColumnToContents(i);
+        }
+    }
+}
+
+void KNMusicTreeViewHeader::showCustomContextMenu(const QPoint &mousePoint)
+{
+    //The set the logical index where the mouse point is to the header menu.
+    m_headerMenu->setMouseDownLogicalIndex(logicalIndexAt(mousePoint));
+    //Synchnorse column visible state.
+    for(int i=Name+1; i<MusicDataCount; i++)
+    {
+        //Here should use logical index.
+        m_headerMenu->setVisibleState(i, !isSectionHidden(i));
+    }
+    //Get the global position of the mouse pressed point.
+    QPoint menuStartPosition=mapToGlobal(mousePoint);
+    //Set it as the start position of the header menu.
+    m_headerMenu->setMouseDownPos(menuStartPosition);
+    //Execute the menu.
+    m_headerMenu->exec(menuStartPosition);
 }
 

@@ -61,8 +61,12 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     verticalScrollBar()->setSingleStep(4);
     verticalScrollBar()->setPageStep(4);
 
-    //Set animation header.
+    //Generate the music tree view animation header.
     KNMusicTreeViewHeader *header=new KNMusicTreeViewHeader(this);
+    //Link the reqirement.
+    connect(header, &KNMusicTreeViewHeader::requireResizeColumnToContents,
+            this, &KNMusicTreeViewBase::resizeColumnToContents);
+    //Set the header view.
     setHeader(header);
 
     //Set the rating delegate for Rating and AlbumRating row.

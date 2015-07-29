@@ -102,7 +102,7 @@ void KNMusicTreeViewHeaderMenu::retranslate()
     //Set visible action text.
     for(int i=Name+1; i<MusicDataCount; i++)
     {
-        m_itemVisible[i]->setText(m_musicGlobal->treeViewHeaderText(i));
+        m_itemVisible[i]->setText(knMusicGlobal->treeViewHeaderText(i));
     }
 }
 

@@ -24,21 +24,57 @@
 #include "knanimationmenu.h"
 
 class QSignalMapper;
+/*!
+ * \brief The KNMusicTreeViewHeaderMenu class provides a fixed content menu for
+ * music tree view header to manage the visibility of all the columns and tweak
+ * the width of the column.
+ */
 class KNMusicTreeViewHeaderMenu : public KNAnimationMenu
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicTreeViewHeaderMenu widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicTreeViewHeaderMenu(QWidget *parent = 0);
+
+    /*!
+     * \brief Set the visible state of a visible control action.
+     * \param logicalIndex The index of the action.
+     * \param visible The visible state.
+     */
     void setVisibleState(const int &logicalIndex,
                          const bool &visible);
 
 signals:
+    /*!
+     * \brief When one column is being asked to resize its size to the hint,
+     * this signal will be emitted.
+     * \param index The index of the action.
+     */
     void requireResize(const int &index);
+
+    /*!
+     * \brief When tweak all width action is triggered, this signal will be
+     * emitted.
+     */
     void requireResizeAll();
+
+    /*!
+     * \brief When the visible property of one column is being asked to be
+     * changed, this signal will be emitted.
+     * \param column The column index.
+     * \param ok To make the column visible, make this signal to be true.
+     */
     void requireSetColumnVisible(const int &column,
                                  const bool &ok);
 
 public slots:
+    /*!
+     * \brief Set the logical index where the mouse pressed down.
+     * \param index The logical index.
+     */
     void setMouseDownLogicalIndex(const int &index);
 
 private slots:
