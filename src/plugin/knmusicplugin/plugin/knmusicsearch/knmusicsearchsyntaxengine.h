@@ -66,7 +66,7 @@ private slots:
 
 private:
     QVariant textToVariant(const int &column, QString text);
-    QHash<QString, int> m_columnMap;
+    QHash<QString, int> m_columnMap, m_propertyMap;
     QRegularExpression m_splitter;
 };
 

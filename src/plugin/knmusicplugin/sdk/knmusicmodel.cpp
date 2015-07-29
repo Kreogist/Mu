@@ -209,14 +209,33 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
     {
         return false;
     }
+    //Get the current detail info.
+    const KNMusicDetailInfo &detailInfo=m_detailInfos.at(index.row());
     //Get the data of the role.
     switch(role)
     {
+    //For property role, no matther what the index is, the data should be all
+    //the same.
+    case FilePathRole:
+        return detailInfo.filePath;
+    case FileNameRole:
+        return detailInfo.fileName;
+    case StartPositionRole:
+        return detailInfo.startPosition;
+    case ArtworkKeyRole:
+        return detailInfo.coverImageHash;
+    case TrackFileRole:
+        return detailInfo.trackFilePath;
+    case TrackIndexRole:
+        return detailInfo.trackIndex;
+    case CannotPlayFlagRole:
+        return false;
+    //For display and edit role, return the same data from the text list.
     case Qt::DisplayRole:
     case Qt::EditRole:
         return index.column()>=MusicDataCount?
                     QString():
-                    m_detailInfos.at(index.row()).textLists[index.column()];
+                    detailInfo.textLists[index.column()];
     case Qt::TextAlignmentRole:
         //Check the section.
         switch(index.column())

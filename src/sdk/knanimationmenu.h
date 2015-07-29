@@ -54,6 +54,13 @@ public:
         setMouseDownPos(QPoint(x, y));
     }
 
+    /*!
+     * \brief Set the separator color via QStyleSheet. Actually this is a UI
+     * problem which I cannot solve in C++.
+     * \param color The color of the seperator line.
+     */
+    void setSeparatorColor(const QColor &color);
+
 signals:
 
 public slots:

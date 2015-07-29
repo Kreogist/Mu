@@ -156,7 +156,7 @@ void KNMusicPlaylistViewer::retranslate()
     m_searchCount[1]=tr("1 result.");
     m_searchCount[2]=tr("%1 results.");
 
-    m_searchResultIn=tr("Search '%1' in '%2'");
+    m_searchResultIn=tr("Search result in %1");
 }
 
 void KNMusicPlaylistViewer::onActionModelRowCountChanged()
@@ -175,6 +175,35 @@ void KNMusicPlaylistViewer::onActionSearch()
     }
     //Set the search rules to the proxy model.
     m_treeView->proxyModel()->setSearchBlocks(knMusicGlobal->search()->rules());
+    //Update the title and detail info.
+    updateTitle();
+    updateDetailInfo();
+}
+
+void KNMusicPlaylistViewer::updateTitle()
+{
+    //Check whether the proxy model is nullptr.
+    if(m_treeView->proxyModel()==nullptr)
+    {
+        //Clear the title.
+        m_title->clear();
+        //Ignore the title update request.
+        return;
+    }
+    //Get the proxy model.
+    KNMusicProxyModel *proxyModel=m_treeView->proxyModel();
+    //Get the playlist model of the tree view.
+    KNMusicPlaylistModel *model=
+            static_cast<KNMusicPlaylistModel *>(m_treeView->musicModel());
+    //Check whether the proxy model is in search mode.
+    if(proxyModel->isSearchMode())
+    {
+        //Update the search request.
+        m_title->setText(m_searchResultIn.arg(model->title()));
+        return;
+    }
+    //Simply set the name of the playlist to be the title.
+    m_title->setText(model->title());
 }
 
 void KNMusicPlaylistViewer::updateDetailInfo()
@@ -190,6 +219,19 @@ void KNMusicPlaylistViewer::updateDetailInfo()
     //Get the playlist model of the tree view.
     KNMusicPlaylistModel *model=
             static_cast<KNMusicPlaylistModel *>(m_treeView->musicModel());
+    //Check if is now searching.
+    if(m_treeView->proxyModel()->isSearchMode())
+    {
+        //Get the search result count.
+        int searchResult=m_treeView->proxyModel()->rowCount();
+        //Set the detail text.
+        m_detail->setText(searchResult<2?
+                              m_searchCount[searchResult]:
+                              m_searchCount[2].arg(
+                                QString::number(searchResult)));
+        //Get back right now.
+        return;
+    }
     //Generate a empty text string.
     QString playlistDetail;
     //First check the model row count, this will be used as song count.

@@ -84,3 +84,20 @@ void KNAnimationMenu::setMouseDownPos(const QPoint &mouseDownPos)
 {
     m_mouseDownPos = mouseDownPos;
 }
+
+void KNAnimationMenu::setSeparatorColor(const QColor &color)
+{
+    //Set seperator style sheet, I can't solve this bug in coding way.
+    setStyleSheet("QMenu::separator {height:1px;"
+                  "background: rgba("+
+                  QString::number(color.red())+
+                  ", "+
+                  QString::number(color.green())+
+                  ", "+
+                  QString::number(color.blue())+
+                  ", "+
+                  QString::number(color.alpha())+
+                  ");"
+                  "margin-left: 5px;"
+                  "margin-right: 5px;}");
+}

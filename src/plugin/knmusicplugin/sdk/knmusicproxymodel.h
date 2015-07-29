@@ -32,6 +32,7 @@ class KNMusicProxyModel : public QSortFilterProxyModel
 public:
     explicit KNMusicProxyModel(QObject *parent = 0);
     KNMusicModel *musicModel();
+    bool isSearchMode() const;
 
 signals:
 
@@ -42,7 +43,8 @@ protected:
     bool lessThan(const QModelIndex &left,
                   const QModelIndex &right) const Q_DECL_OVERRIDE;
     bool filterAcceptsRow(int source_row,
-                          const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
+                          const QModelIndex &source_parent) const
+    Q_DECL_OVERRIDE;
 
 private:
     inline bool checkColumnRule(const QModelIndex &index,
@@ -50,7 +52,7 @@ private:
     inline bool checkRule(QAbstractItemModel *model,
                                 const int &row,
                                 const KNMusicSearchBlock &block) const;
-    QList<KNMusicSearchBlock> m_blocks;
+    QList<KNMusicSearchBlock> m_searchBlocks;
 };
 
 #endif // KNMUSICPROXYMODEL_H

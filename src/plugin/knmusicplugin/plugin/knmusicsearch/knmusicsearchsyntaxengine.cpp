@@ -45,7 +45,7 @@ QList<KNMusicSearchBlock> KNMusicSearchSyntaxEngine::parseSearch(
     }
 
     //Split the text with the split word to get all the possible blocks.
-    QStringList blockDataList=text.split(", ", QString::SkipEmptyParts);
+    QStringList blockDataList=text.split(m_splitter, QString::SkipEmptyParts);
     //Check all the blocks.
     for(auto i=blockDataList.begin(); i!=blockDataList.end(); ++i)
     {
@@ -66,23 +66,26 @@ QList<KNMusicSearchBlock> KNMusicSearchSyntaxEngine::parseSearch(
         }
         //If there's a splitter, get the column or the property(we are calling
         //it target) first, tried to find it in the hash list.
-        int targetIndex=m_columnMap.value(
-                    (*i).left(splitterPosition).simplified().toLower(),
-                    -1);
+        QString target=(*i).left(splitterPosition).simplified().toLower();
+        int targetIndex=m_columnMap.value(target, -1);
         bool columnFind=(targetIndex!=-1);
-
         //Check the result, if we cannot find it in the column map, then tried
         //to find it in the property map.
         if(!columnFind)
         {
-            //!FIXME: add property check code here.
-            //Add the code as a normal block.
-            block.index=-1;
-            block.value=(*i).simplified();
-            //Add the block to block list.
-            blockList.append(block);
-            //Continue to next block.
-            continue;
+            //Search the target in the property map.
+            targetIndex=m_propertyMap.value(target, -1);
+            //Check the result again.
+            if(targetIndex==-1)
+            {
+                //Add the code as a normal block.
+                block.index=-1;
+                block.value=(*i).simplified();
+                //Add the block to block list.
+                blockList.append(block);
+                //Continue to next block.
+                continue;
+            }
         }
         //Set the index, isColumn data.
         block.index=targetIndex;
@@ -106,6 +109,9 @@ void KNMusicSearchSyntaxEngine::retranslate()
         m_columnMap.insert(knMusicGlobal->treeViewHeaderText(i).toLower(),
                            i);
     }
+    //Update the property map.
+    m_propertyMap.insert(tr("Path").toLower(), FilePathRole);
+    m_propertyMap.insert(tr("File Name").toLower(), FileNameRole);
     //Update the splitter.
     m_splitter.setPattern(tr(", "));
 }

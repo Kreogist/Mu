@@ -35,11 +35,16 @@ KNMusicModel *KNMusicProxyModel::musicModel()
     return static_cast<KNMusicModel *>(sourceModel());
 }
 
+bool KNMusicProxyModel::isSearchMode() const
+{
+    return !m_searchBlocks.isEmpty();
+}
+
 void KNMusicProxyModel::setSearchBlocks(
         const QList<KNMusicSearchBlock> &blockList)
 {
     //Save the blocks.
-    m_blocks=blockList;
+    m_searchBlocks=blockList;
     //Set a filter text to update the whole proxy model.
     setFilterFixedString("");
 }
@@ -58,13 +63,13 @@ bool KNMusicProxyModel::filterAcceptsRow(int source_row,
     QAbstractItemModel *model=sourceModel();
     //Check the model is null or not, treat the null tree view as accept all
     //rows. Check the block list is empty or not.
-    if(m_blocks.isEmpty() || model==nullptr)
+    if(m_searchBlocks.isEmpty() || model==nullptr)
     {
         //All the row will become accept if there's no blocks filter.
         return true;
     }
     //Check if the row comply with the limits.
-    for(auto i=m_blocks.constBegin(); i!=m_blocks.end(); ++i)
+    for(auto i=m_searchBlocks.constBegin(); i!=m_searchBlocks.end(); ++i)
     {
         //Check the the rule, if the row can not match one rule, then it cannot
         //be accept.
@@ -80,10 +85,10 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
                                          const int &row,
                                          const KNMusicSearchBlock &block) const
 {
-    //Check if this block a common search block
+    //Check if this block a common search block,
     if(block.index==-1)
     {
-        //Translate the search block data to string.
+        //Translate the format of the search block data to QString.
         QString ruleText=block.value.toString();
         //Search the text in all column.
         for(int i=0; i<MusicColumnCount; i++)
@@ -92,6 +97,7 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
             if(model->index(row, i).data(Qt::DisplayRole).toString().
                     contains(ruleText, Qt::CaseInsensitive))
             {
+                //Once match, then it should be true.
                 return true;
             }
         }
@@ -100,7 +106,8 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
     //Or else, check the specific column.
     if(block.isColumn)
     {
-        //Check the .
+        //Check the block index, for most of the blocks, simply match the string
+        //in the text.
         switch(block.index)
         {
         default:

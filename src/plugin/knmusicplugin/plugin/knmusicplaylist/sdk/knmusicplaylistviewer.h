@@ -47,6 +47,7 @@ private slots:
     void onActionSearch();
 
 private:
+    inline void updateTitle();
     inline void updateDetailInfo();
     KNMusicPlaylistTreeView *m_treeView;
     QLabel *m_title, *m_detail;
