@@ -16,35 +16,45 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPROXYMODEL_H
-#define KNMUSICPROXYMODEL_H
+#ifndef KNMUSICSEARCH_H
+#define KNMUSICSEARCH_H
 
-#include "knmusicutil.h"
+#include "knmusicsearchbase.h"
 
-#include <QSortFilterProxyModel>
-
-using namespace MusicUtil;
-
-class KNMusicModel;
-class KNMusicProxyModel : public QSortFilterProxyModel
+class KNSearchBox;
+class KNMusicSearchSyntaxEngine;
+/*!
+ * \brief The KNMusicSearch class is a default realize of the music search
+ * module. This is a simple example of the search module.
+ */
+class KNMusicSearch : public KNMusicSearchBase
 {
     Q_OBJECT
 public:
-    explicit KNMusicProxyModel(QObject *parent = 0);
-    KNMusicModel *musicModel();
+    /*!
+     * \brief Construct a KNMusicSearch class.
+     * \param parent The parent widget.
+     */
+    explicit KNMusicSearch(QObject *parent = 0);
+
+    ~KNMusicSearch();
+
+    /*!
+     * \brief Reimplement from KNMusicSearchBase::widget().
+     */
+    QWidget *widget() Q_DECL_OVERRIDE;
 
 signals:
 
 public slots:
-    void setSearchBlocks(const QList<KNMusicSearchBlock> &blockList);
 
-protected:
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
-    bool filterAcceptsRow(int source_row,
-                          const QModelIndex &source_parent) const;
+private slots:
+    void retranslate();
+    void onActionSearch(const QString &text);
 
 private:
-    QList<KNMusicSearchBlock> m_blocks;
+    KNSearchBox *m_searchBox;
+    KNMusicSearchSyntaxEngine *m_engine;
 };
 
-#endif // KNMUSICPROXYMODEL_H
+#endif // KNMUSICSEARCH_H

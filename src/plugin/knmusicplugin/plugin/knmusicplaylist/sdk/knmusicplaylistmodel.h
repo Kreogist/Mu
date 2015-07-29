@@ -46,25 +46,71 @@ public:
 
     /*!
      * \brief Set the title of the playlist model.
-     * \param title
+     * \param title The new title of the playlist.
      */
     void setTitle(const QString &title);
 
+    /*!
+     * \brief Get the file path of the playlist. If the path is not set before,
+     * it's QString().
+     * \return The file path of the playlist.
+     */
     QString filePath() const;
+
+    /*!
+     * \brief Set the file path of the playlist.
+     * \param filePath The file path of the playlist.
+     */
     void setFilePath(const QString &filePath);
 
+    /*!
+     * \brief Get whether this playlist has been built or it's still data in
+     * json array.
+     * \return If there's no content data in the json array, and the data has
+     * all loaded to the model, it will return true.
+     */
     bool isBuilt() const;
+
+    /*!
+     * \brief Build model from the content data first.
+     */
     void buildModel();
 
+    /*!
+     * \brief Get the content data array.
+     * \return The json array which storage the data of the whole playlist.
+     */
     QJsonArray contentData() const;
+
+    /*!
+     * \brief Set the content data of the whole playlist model.
+     * \param contentData The content data of the model.
+     */
     void setContentData(const QJsonArray &contentData);
 
+    /*!
+     * \brief Get the changed state of the model.
+     * \return If the model has been changed from the last saving, this will be
+     * true.
+     */
     bool changed() const;
+
+    /*!
+     * \brief Set the changed state manually.
+     * \param changed The changed state you prefer.
+     */
     void setChanged(bool changed);
 
-    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+    /*!
+     * \brief Reimplement from KNMusicPlaylistModel::data().
+     */
+    QVariant data(const QModelIndex &index, int role) const;
 
 signals:
+    /*!
+     * \brief When the playlist title changed, this signal will be emitted.
+     * \param title The new playlist title.
+     */
     void titleChanged(const QString &title);
 
 public slots:

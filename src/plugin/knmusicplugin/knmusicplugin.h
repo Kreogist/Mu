@@ -27,6 +27,7 @@ class KNHWidgetSwitcher;
 class KNCategoryTabBar;
 class KNSideShadowWidget;
 class KNMusicDetailDialogPanel;
+class KNMusicSearchBase;
 class KNMusicPlaylistBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
@@ -80,6 +81,7 @@ private:
     void initialDetailDialogPanel();
     void initialParserPlugin();
 
+    void initialSearch(KNMusicSearchBase *search);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
 
     //UI infrastructure elements.

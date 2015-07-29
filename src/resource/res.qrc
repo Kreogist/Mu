@@ -9,6 +9,7 @@
         <file>public/dull_polish_texture.png</file>
         <file>public/cancel.png</file>
         <file>public/ok.png</file>
+        <file>public/search.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

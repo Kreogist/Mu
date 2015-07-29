@@ -6,6 +6,12 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "SearchBox" : {
+        "Parent" : "MainWindow",
+        "Base" : "#000000",
+        "Highlight" : "#F7CF3D",
+        "HighlightedText" : "#000000"
+    },
     "MouseSenseHeader" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

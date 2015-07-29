@@ -32,8 +32,8 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
             this, &KNMusicPlaylistModel::onActionModelChanged);
     //When there's a data changed, this model should be marked to be changed
     //as well.
-    connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
-            this, SLOT(onActionModelChanged()));
+    connect(this, &KNMusicPlaylistModel::dataChanged,
+            this, &KNMusicPlaylistModel::onActionModelChanged);
 }
 
 QString KNMusicPlaylistModel::title() const

@@ -33,8 +33,21 @@ KNMusicModel *KNMusicProxyModel::musicModel()
     return static_cast<KNMusicModel *>(sourceModel());
 }
 
+void KNMusicProxyModel::setSearchBlocks(
+        const QList<KNMusicSearchBlock> &blockList)
+{
+    //Save the blocks.
+    m_blocks=blockList;
+}
+
 bool KNMusicProxyModel::lessThan(const QModelIndex &left,
                                  const QModelIndex &right) const
 {
     return QSortFilterProxyModel::lessThan(left, right);
+}
+
+bool KNMusicProxyModel::filterAcceptsRow(int source_row,
+                                         const QModelIndex &source_parent) const
+{
+    return true;
 }

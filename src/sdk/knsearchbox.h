@@ -16,35 +16,43 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPROXYMODEL_H
-#define KNMUSICPROXYMODEL_H
+#ifndef KNSEARCHBOX_H
+#define KNSEARCHBOX_H
 
-#include "knmusicutil.h"
+#include <QLineEdit>
 
-#include <QSortFilterProxyModel>
-
-using namespace MusicUtil;
-
-class KNMusicModel;
-class KNMusicProxyModel : public QSortFilterProxyModel
+class QTimeLine;
+class KNSearchBox : public QLineEdit
 {
     Q_OBJECT
 public:
-    explicit KNMusicProxyModel(QObject *parent = 0);
-    KNMusicModel *musicModel();
+    explicit KNSearchBox(QWidget *parent = 0);
+
+    QPixmap searchIcon() const;
+    void setSearchIcon(const QPixmap &searchIcon);
 
 signals:
 
 public slots:
-    void setSearchBlocks(const QList<KNMusicSearchBlock> &blockList);
 
 protected:
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
-    bool filterAcceptsRow(int source_row,
-                          const QModelIndex &source_parent) const;
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
+    void paintEvent(QPaintEvent *event);
+
+private slots:
+    void onActionThemeChanged();
+    void onActionMouseInOut(const int &frame);
+    void onActionFocusInOut(const int &frame);
 
 private:
-    QList<KNMusicSearchBlock> m_blocks;
+    inline QTimeLine *generateTimeLine();
+    inline void startAnime(QTimeLine *timeLine, const int &end);
+    QPixmap m_searchIcon;
+    QColor m_baseColor;
+    QTimeLine *m_mouseInOut, *m_focusInOut;
 };
 
-#endif // KNMUSICPROXYMODEL_H
+#endif // KNSEARCHBOX_H

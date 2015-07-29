@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QList>
 #include <QByteArray>
+#include <QVariant>
 
 namespace MusicUtil
 {
@@ -112,10 +113,16 @@ namespace MusicUtil
         //Track index.
         int index;
         //Track time.
-        qint64 startPosition=-1;
-        qint64 trackDuration=-1;
+        qint64 startPosition;
+        qint64 trackDuration;
         //Metadata map.
         QMap<int, QString> metaData;
+        //Initial values.
+        KNMusicListTrackDetailInfo() :
+            startPosition(-1),
+            trackDuration(-1)
+        {
+        }
     };
     struct KNMusicListDetailInfo
     {
@@ -125,6 +132,23 @@ namespace MusicUtil
         QMap<int, QString> metaData;
         //Track list.
         QList<KNMusicListTrackDetailInfo> trackList;
+    };
+    struct KNMusicSearchBlock
+    {
+        //Index of the column or the role.
+        int index;
+        //Actually there's two kinds of data, so using a bool to check the
+        //whether the index means a column or a property.
+        bool isColumn;
+        //Value of the block.
+        QVariant value;
+        //Initial value.
+        KNMusicSearchBlock():
+            index(-1),
+            isColumn(true),
+            value(QVariant())
+        {
+        }
     };
 }
 

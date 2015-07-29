@@ -31,6 +31,7 @@
 //Ports
 #include "knmusicdetaildialogpanel.h"
 #include "knmusictagparser.h"
+#include "knmusicsearchbase.h"
 #include "knmusicplaylistbase.h"
 
 //Plugins
@@ -39,6 +40,8 @@
 // Tag Parsers.
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
+// Search.
+#include "plugin/knmusicsearch/knmusicsearch.h"
 // Playlist.
 #include "plugin/knmusicplaylist/knmusicplaylist.h"
 
@@ -69,6 +72,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     initialParserPlugin();
     //Initial global menus.
 
+    //Initial the search.
+    initialSearch(new KNMusicSearch);
     //Initial the plugins.
     initialPlaylist(new KNMusicPlaylist);
 
@@ -169,6 +174,14 @@ void KNMusicPlugin::initialParserPlugin()
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagId3v1);
     parser->installTagParser(new KNMusicTagId3v2);
+}
+
+void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
+{
+    //Set the parent of the search.
+    search->setParent(this);
+    //Add the widget to the header widget.
+    m_headerRightLayout->addWidget(search->widget());
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
