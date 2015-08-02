@@ -15,12 +15,19 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusicsearcher.h"
+#include "knmusicanalysisqueue.h"
 #include "knmusicplaylistutil.h"
 
 #include "knmusicplaylistmodel.h"
 
-KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
+#include <QDebug>
+
+KNMusicPlaylistModel::KNMusicPlaylistModel(QThread *workingThread,
+                                           QObject *parent) :
     KNMusicModel(parent),
+    m_searcher(new KNMusicSearcher),
+    m_analysisQueue(new KNMusicAnalysisQueue),
     m_title(QString()),
     m_filePath(QString()),
     m_contentData(QJsonArray()),
@@ -34,6 +41,30 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QObject *parent) :
     //as well.
     connect(this, &KNMusicPlaylistModel::dataChanged,
             this, &KNMusicPlaylistModel::onActionModelChanged);
+
+    //Move the searcher to working thread.
+    m_searcher->moveToThread(workingThread);
+    //Link the require add signal to searcher.
+    connect(this, &KNMusicPlaylistModel::requireAnalysisFiles,
+            m_searcher, &KNMusicSearcher::analysisPaths,
+            Qt::QueuedConnection);
+
+    //Move the analysis queue to wokring thread.
+    m_analysisQueue->moveToThread(workingThread);
+    //Link the searcher with the analysis queue.
+    connect(m_searcher, &KNMusicSearcher::findFile,
+            m_analysisQueue, &KNMusicAnalysisQueue::addFile,
+            Qt::QueuedConnection);
+    connect(m_analysisQueue, &KNMusicAnalysisQueue::analysisComplete,
+            this, &KNMusicPlaylistModel::onActionAnalysisComplete,
+            Qt::QueuedConnection);
+}
+
+KNMusicPlaylistModel::~KNMusicPlaylistModel()
+{
+    //Remove the searcher and the analysis queue.
+    m_searcher->deleteLater();
+    m_analysisQueue->deleteLater();
 }
 
 QString KNMusicPlaylistModel::title() const
@@ -141,4 +172,11 @@ void KNMusicPlaylistModel::onActionModelChanged()
 {
     //Set the changed flag to true.
     m_changed=true;
+}
+
+void KNMusicPlaylistModel::onActionAnalysisComplete(
+        const KNMusicAnalysisItem &analysisItem)
+{
+    //Add the detail info to the playlist model.
+    appendRow(analysisItem.detailInfo);
 }

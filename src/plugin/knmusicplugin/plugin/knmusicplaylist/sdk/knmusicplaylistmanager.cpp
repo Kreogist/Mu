@@ -19,6 +19,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QThread>
 
 #include "knutil.h"
 
@@ -36,13 +37,25 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     QObject(parent),
     m_playlistList(new KNMusicPlaylistListModel(this)),
     m_playlistDirPath(QString()),
-    m_isPlaylistListLoaded(false)
+    m_isPlaylistListLoaded(false),
+    m_workingThread(new QThread())
 {
     //Link the playlist list model with the manager.
     connect(m_playlistList, &KNMusicPlaylistListModel::requireShowContent,
             this, &KNMusicPlaylistManager::requireShowContent);
     connect(m_playlistList, &KNMusicPlaylistListModel::requireHideContent,
             this, &KNMusicPlaylistManager::requireHideContent);
+    //Start working thread.
+    m_workingThread->start();
+}
+
+KNMusicPlaylistManager::~KNMusicPlaylistManager()
+{
+    //Quit and wait the working thread.
+    m_workingThread->quit();
+    m_workingThread->wait();
+    //Remove the working thread.
+    m_workingThread->deleteLater();
 }
 
 KNMusicPlaylistListModel *KNMusicPlaylistManager::playlistList()
@@ -58,7 +71,8 @@ KNMusicPlaylistModel *KNMusicPlaylistManager::playlist(const QModelIndex &index)
 QModelIndex KNMusicPlaylistManager::createPlaylist()
 {
     //Generate the playlist.
-    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_playlistList);
+    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_workingThread,
+                                                         m_playlistList);
     //Set the generate the title.
     model->setTitle(generateTitle());
     //Add the model to the playlist list, and give back the model index in the
@@ -223,7 +237,8 @@ bool KNMusicPlaylistManager::loadPlaylist(const QString &filePath)
         return false;
     }
     //Generate the playlist.
-    KNMusicPlaylistModel *model=new KNMusicPlaylistModel();
+    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_workingThread,
+                                                         m_playlistList);
     //Set the file path of the playlist.
     model->setFilePath(filePath);
     //Set the playlist meta data from the json object.

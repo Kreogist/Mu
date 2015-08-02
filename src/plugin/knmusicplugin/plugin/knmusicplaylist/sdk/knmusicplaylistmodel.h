@@ -23,6 +23,8 @@
 
 #include "knmusicmodel.h"
 
+class KNMusicSearcher;
+class KNMusicAnalysisQueue;
 /*!
  * \brief The KNMusicPlaylistModel class is used to describe a playlist. It
  * contains title and file path. It can be built from a json array. You can set
@@ -34,9 +36,12 @@ class KNMusicPlaylistModel : public KNMusicModel
 public:
     /*!
      * \brief Construct a KNMusicPlaylistModel class.
+     * \param workingThread The working thread for the searcher and the analysis
+     * cache.
      * \param parent The parent object.
      */
-    explicit KNMusicPlaylistModel(QObject *parent = 0);
+    explicit KNMusicPlaylistModel(QThread *workingThread, QObject *parent = 0);
+    ~KNMusicPlaylistModel();
 
     /*!
      * \brief Get the title of the playlist.
@@ -117,8 +122,11 @@ public slots:
 
 private slots:
     void onActionModelChanged();
+    void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
 
 private:
+    KNMusicSearcher *m_searcher;
+    KNMusicAnalysisQueue *m_analysisQueue;
     QString m_title, m_filePath;
     QJsonArray m_contentData;
     bool m_built, m_changed;

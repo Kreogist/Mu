@@ -173,8 +173,30 @@ public:
      */
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
 
+    /*!
+     * \brief Get the solo menu object class.
+     * \return The sole menu object pointer. It will be nullptr if you never set
+     * it before.
+     */
     KNMusicSoloMenuBase *soloMenu() const;
+
+    /*!
+     * \brief Set the solo menu pointer.
+     * \param soloMenu The solo menu object pointer.
+     */
     void setSoloMenu(KNMusicSoloMenuBase *soloMenu);
+
+    /*!
+     * \brief Get all the avaliable music file suffixs.
+     * \return The suffix list.
+     */
+    QStringList suffixList() const;
+
+    /*!
+     * \brief Get all the avaliable music list file suffixs.
+     * \return The suffix list.
+     */
+    QStringList listSuffixList() const;
 
 signals:
 

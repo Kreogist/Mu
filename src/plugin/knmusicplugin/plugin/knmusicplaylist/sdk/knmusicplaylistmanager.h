@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class QThread;
 class KNMusicPlaylistModel;
 class KNMusicPlaylistListModel;
 class KNMusicPlaylistManager : public QObject
@@ -28,6 +29,7 @@ class KNMusicPlaylistManager : public QObject
     Q_OBJECT
 public:
     explicit KNMusicPlaylistManager(QObject *parent = 0);
+    ~KNMusicPlaylistManager();
 
     KNMusicPlaylistListModel *playlistList();
     KNMusicPlaylistModel *playlist(const QModelIndex &index);
@@ -52,6 +54,7 @@ private:
     KNMusicPlaylistListModel *m_playlistList;
     QString m_playlistDirPath;
     bool m_isPlaylistListLoaded;
+    QThread *m_workingThread;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H

@@ -15,10 +15,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QMimeData>
+
+#include "knutil.h"
 
 #include "knmusicmodel.h"
 
 #include <QDebug>
+
+QStringList KNMusicModel::m_dropMimeTypes=QStringList();
 
 KNMusicModel::KNMusicModel(QObject *parent) :
     QAbstractTableModel(parent),
@@ -28,14 +33,41 @@ KNMusicModel::KNMusicModel(QObject *parent) :
     m_playingIcon(QIcon(":/plugin/music/public/playingicon.png")),
     m_cannotPlayIcon(QIcon(":/plugin/music/public/cannotplay.png"))
 {
+    //Build drop mime types for the first time.
+    if(m_dropMimeTypes.isEmpty())
+    {
+        //Set the drop mime types for original types first.
+        m_dropMimeTypes=QAbstractTableModel::mimeTypes();
+        //Add url format.
+        m_dropMimeTypes.append("text/uri-list");
+        //Add music detail info list.
+        //!FIXME: add codes here.
+    }
 }
 
 void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
     //Follow the documentation, we have to do this.
+    //Remember the index here should be the same:
+    //Url link.
+    //https://forum.qt.io/topic/28850/qtreeview-with-qsortfilterproxymodel-displ
+    //ays-an-empty-row-after-changing-the-qabstractitemmodel/5
+    //Text:
+    /*
+     * The issue here is that you tell your model that you are inserting two
+     *  rows:
+     * @this->beginInsertRows(QModelIndex() ,
+     *                        rootItem->childCount(),
+     *                        rootItem->childCount() + 1);@
+     * According to
+     * http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#beginInsertRows,
+     * you have to specify the first and last row number. Which, if you add only
+     * one row, should be the same. Remove the +1, it will probably solve your
+     * issue.
+     */
     beginInsertRows(QModelIndex(),
                     m_detailInfos.size(),
-                    m_detailInfos.size() + 1);
+                    m_detailInfos.size());
     //Append the data at the end of the list.
     m_detailInfos.append(detailInfo);
     //Add the duration to the total duration counter.
@@ -49,6 +81,11 @@ void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
 
 void KNMusicModel::appendRows(const QList<KNMusicDetailInfo> &detailInfos)
 {
+    //Ignore the empty adding request.
+    if(detailInfos.isEmpty())
+    {
+        return;
+    }
     //Follow the documentation, we have to do this.
     beginInsertRows(QModelIndex(),
                     m_detailInfos.size(),
@@ -221,10 +258,13 @@ Qt::ItemFlags KNMusicModel::flags(const QModelIndex &index) const
     {
     case Rating:
     case AlbumRating:
-        return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+        return QAbstractTableModel::flags(index) |
+                Qt::ItemIsEditable |
+                Qt::ItemIsDropEnabled;
 
     default:
-        return QAbstractTableModel::flags(index);
+        return QAbstractTableModel::flags(index) |
+                Qt::ItemIsDropEnabled;
     }
 }
 
@@ -376,6 +416,32 @@ QPersistentModelIndex KNMusicModel::playingIndex() const
 KNMusicDetailInfo KNMusicModel::rowDetailInfo(const int &row)
 {
     return m_detailInfos.at(row);
+}
+
+bool KNMusicModel::dropMimeData(const QMimeData *data,
+                                Qt::DropAction action,
+                                int row,
+                                int column,
+                                const QModelIndex &parent)
+{
+    //Check move or copy action enabled.
+    if(action==Qt::MoveAction || action==Qt::CopyAction)
+    {
+        if(data->hasUrls())
+        {
+            //Ask to add files to model.
+            emit requireAnalysisFiles(KNUtil::urlListToPathList(data->urls()));
+            //Mission complete.
+            return true;
+        }
+    }
+    //Or else false.
+    return false;
+}
+
+QStringList KNMusicModel::mimeTypes() const
+{
+    return m_dropMimeTypes;
 }
 
 void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)

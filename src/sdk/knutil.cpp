@@ -21,10 +21,7 @@
 #include <QUrl>
 #include <QClipboard>
 #include <QApplication>
-
-#ifdef Q_OS_MACX
 #include <QProcess>
-#endif
 
 #include "knutil.h"
 
@@ -193,4 +190,28 @@ void KNUtil::setClipboardText(const QString &text)
     }
     //Set the text to the clipboard.
     clipboard->setText(text, QClipboard::Clipboard);
+}
+
+QStringList KNUtil::urlListToPathList(const QList<QUrl> &urlList)
+{
+    //Generate a file path list first.
+    QStringList filePathList;
+    //Translate all the url to file path.
+    for(auto i=urlList.constBegin(); i!=urlList.constEnd(); ++i)
+    {
+        //Get the path of the file list.
+        QString path=(*i).path();
+        //Check whether the path is empty.
+        if(!path.isEmpty())
+        {
+#ifdef Q_OS_WIN
+            //Remove the very beginning '/' char in Windows.
+            path.remove(0,1);
+#endif
+            //Simply add the path to the path list.
+            filePathList.append(path);
+        }
+    }
+    //Give back the file path list.
+    return filePathList;
 }

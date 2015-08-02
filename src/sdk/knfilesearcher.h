@@ -20,6 +20,7 @@
 #define KNFILESEARCHER_H
 
 #include <QFileInfo>
+#include <QStringList>
 
 #include <QObject>
 
@@ -37,6 +38,12 @@ public:
      * \param parent The parent object pointer.
      */
     explicit KNFileSearcher(QObject *parent = 0);
+
+    /*!
+     * \brief Get the suffix filter list.
+     * \return The general suffix filter list.
+     */
+    static QStringList suffixList();
 
 signals:
     /*!
@@ -57,7 +64,7 @@ public slots:
      * \brief Set the suffix filter list.
      * \param suffixList All the valid suffix. It should all be lower case.
      */
-    void setSuffixList(const QStringList &suffixList);
+    static void setSuffixList(const QStringList &suffixList);
 
     /*!
      * \brief Analysis several paths. You can add both folder and file path. The
@@ -73,7 +80,8 @@ private slots:
 
 private:
     inline void analysisFile(const QFileInfo &fileInfo);
-    QStringList m_queue, m_suffixList;
+    static QStringList m_suffixList;
+    QStringList m_queue;
 };
 
 #endif // KNFILESEARCHER_H

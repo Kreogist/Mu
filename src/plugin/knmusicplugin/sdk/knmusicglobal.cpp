@@ -144,6 +144,8 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     initialFileType();
     //Initial the genere.
     initialGenre();
+    //Register the queue arguments.
+    qRegisterMetaType<KNMusicAnalysisItem>("KNMusicAnalysisItem");
 
     //Set the library path.
     setMusicLibPath(knGlobal->dirPath(KNGlobal::LibraryDir) + "/Music");
@@ -390,6 +392,16 @@ KNMusicSoloMenuBase *KNMusicGlobal::soloMenu() const
 void KNMusicGlobal::setSoloMenu(KNMusicSoloMenuBase *soloMenu)
 {
     m_soloMenu = soloMenu;
+}
+
+QStringList KNMusicGlobal::suffixList() const
+{
+    return m_suffixs;
+}
+
+QStringList KNMusicGlobal::listSuffixList() const
+{
+    return m_listSuffixs;
 }
 
 KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying() const

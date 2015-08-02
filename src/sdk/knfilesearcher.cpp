@@ -19,8 +19,11 @@
 
 #include "knfilesearcher.h"
 
+QStringList KNFileSearcher::m_suffixList=QStringList();
+
 KNFileSearcher::KNFileSearcher(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_queue(QStringList())
 {
     //These signals are only used to avoid a deep calling stack.
     //Calling funcion directly may caused a deep , and that will make the stack
@@ -100,6 +103,11 @@ inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo)
         emit findFile(fileInfo);
     }
 }
+QStringList KNFileSearcher::suffixList()
+{
+    return m_suffixList;
+}
+
 
 void KNFileSearcher::setSuffixList(const QStringList &suffixList)
 {

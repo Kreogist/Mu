@@ -22,6 +22,8 @@
 #include <QString>
 #include <QColor>
 #include <QDateTime>
+#include <QStringList>
+#include <QUrl>
 
 /*!
  * \brief The KNUtil class cannot be construct. It will only used to provides
@@ -78,6 +80,13 @@ public:
      * \param text The text.
      */
     static void setClipboardText(const QString &text);
+
+    /*!
+     * \brief Translate a local url list to file path string list.
+     * \param urlList The local file url list.
+     * \return The file path string list.
+     */
+    static QStringList urlListToPathList(const QList<QUrl> &urlList);
 
 private:
     KNUtil();

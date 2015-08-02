@@ -150,15 +150,45 @@ public:
      */
     void addPlayingTimes(const QPersistentModelIndex &index);
 
+    /*!
+     * \brief Get the current playing index.
+     * \return The playing index.
+     */
     QPersistentModelIndex playingIndex() const;
 
+    /*!
+     * \brief Get row music detail info.
+     * \param row The row index.
+     * \return The detail info structure of the song.
+     */
     KNMusicDetailInfo rowDetailInfo(const int &row);
+
+    /*!
+     * \brief Reimplemented from QAbstractTableModel::dropMimeData().
+     */
+    bool dropMimeData(const QMimeData *data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex &parent) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractTableModel::mimeTypes().
+     */
+    QStringList mimeTypes() const Q_DECL_OVERRIDE;
 
 signals:
     /*!
      * \brief When the row count is changed, this signal will be emitted.
      */
     void rowCountChanged();
+
+    /*!
+     * \brief When there's new file is trying to add to the music model, this
+     * signal will be emitted.
+     * \param fileList The file path list.
+     */
+    void requireAnalysisFiles(QStringList fileList);
 
 public slots:
     void setPlayingIndex(const QPersistentModelIndex &playingIndex);
@@ -168,6 +198,8 @@ private:
     quint64 m_totalDuration;
     QPersistentModelIndex m_playingIndex;
     QIcon m_playingIcon, m_cannotPlayIcon;
+
+    static QStringList m_dropMimeTypes;
 };
 
 #endif // KNMUSICMODEL_H
