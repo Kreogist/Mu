@@ -34,6 +34,24 @@ public:
     KNMusicModel *musicModel();
     bool isSearchMode() const;
 
+    KNMusicDetailInfo rowDetailInfo(int row);
+
+    KNMusicDetailInfo rowDetailInfo(const QModelIndex &row);
+
+    QList<KNMusicSearchBlock> searchBlocks() const;
+
+    void clearSearchBlock();
+
+    inline QString textData(int row, int column) const
+    {
+        return data(index(row, column), Qt::DisplayRole).toString();
+    }
+
+    inline QVariant propertyData(int row, int role) const
+    {
+        return data(index(row, 0), role);
+    }
+
 signals:
 
 public slots:

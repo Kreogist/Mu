@@ -129,6 +129,8 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
     {
         //Save the main window object.
         m_mainWindow = mainWindow;
+        //Set the main window to global.
+        knGlobal->setMainWindow(m_mainWindow);
     }
 }
 

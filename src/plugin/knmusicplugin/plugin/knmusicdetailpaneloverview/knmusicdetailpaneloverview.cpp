@@ -40,6 +40,10 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     mainLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
     setLayout(mainLayout);
 
+    //Initial the label palette.
+    QPalette pal=palette();
+    pal.setColor(QPalette::WindowText, QColor(0xa0, 0xa0, 0xa0));
+
     //Initial the labels.
     for(int i=0; i<DetailInformationCount; i++)
     {
@@ -48,6 +52,7 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
         //Configure caption.
         m_caption[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         m_caption[i]->setMinimumWidth(100);
+        m_caption[i]->setPalette(pal);
         //Construct detail label.
         m_information[i]=new QLabel(this);
 

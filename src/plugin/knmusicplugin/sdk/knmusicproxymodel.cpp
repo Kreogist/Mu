@@ -40,6 +40,38 @@ bool KNMusicProxyModel::isSearchMode() const
     return !m_searchBlocks.isEmpty();
 }
 
+KNMusicDetailInfo KNMusicProxyModel::rowDetailInfo(int row)
+{
+    //Check the music model. If it's null, return a null detail info.
+    if(musicModel()==nullptr)
+    {
+        return KNMusicDetailInfo();
+    }
+    //Return the specific detail info.
+    return musicModel()->rowDetailInfo(mapToSource(index(row, Name)).row());
+}
+
+KNMusicDetailInfo KNMusicProxyModel::rowDetailInfo(const QModelIndex &index)
+{
+    //Check the music model. If it's null, return a null detail info.
+    if(musicModel()==nullptr)
+    {
+        return KNMusicDetailInfo();
+    }
+    //Return the specific detail info.
+    return musicModel()->rowDetailInfo(mapToSource(index).row());
+}
+
+QList<KNMusicSearchBlock> KNMusicProxyModel::searchBlocks() const
+{
+    return m_searchBlocks;
+}
+
+void KNMusicProxyModel::clearSearchBlock()
+{
+    m_searchBlocks.clear();
+}
+
 void KNMusicProxyModel::setSearchBlocks(
         const QList<KNMusicSearchBlock> &blockList)
 {

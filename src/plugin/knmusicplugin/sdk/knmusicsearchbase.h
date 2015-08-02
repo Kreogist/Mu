@@ -67,7 +67,12 @@ signals:
     void requireSearch();
 
 public slots:
-
+    /*!
+     * \brief Search the particular rules. It should automatically replace the
+     * current search.
+     * \param blocks The search rule blocks.
+     */
+    virtual void search(const QList<KNMusicSearchBlock> &blocks)=0;
 };
 
 #endif // KNMUSICSEARCHBASE_H

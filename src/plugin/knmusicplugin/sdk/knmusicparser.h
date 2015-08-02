@@ -21,6 +21,7 @@
 
 #include <QList>
 #include <QLinkedList>
+#include <QFileInfo>
 #include <QObject>
 
 #include "knmusicutil.h"
@@ -49,11 +50,13 @@ public:
     void installTagParser(KNMusicTagParser *tagParser);
     void installListParser(KNMusicListParser *listParser);
 
-    void parseFile(QString filePath,
+    void parseFile(const QFileInfo &fileInfo,
                    KNMusicAnalysisItem &analysisItem);
     void parseTrackList(const QString &filePath,
                         QList<KNMusicAnalysisItem> &trackDetailList);
     void parseAlbumArt(KNMusicAnalysisItem &analysisItem);
+
+    bool reanalysisItem(KNMusicAnalysisItem &analysisItem);
 
 private:
     inline bool findImageFile(const QString &baseName,

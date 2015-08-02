@@ -255,6 +255,16 @@ inline void KNGlobal::initialBrushes()
         m_brushes[i].setTexture(QPixmap(textures[i]));
     }
 }
+QWidget *KNGlobal::mainWindow() const
+{
+    return m_mainWindow;
+}
+
+void KNGlobal::setMainWindow(QWidget *mainWindow)
+{
+    m_mainWindow = mainWindow;
+}
+
 
 void KNGlobal::setPreference(KNPreferencePlugin *preference)
 {

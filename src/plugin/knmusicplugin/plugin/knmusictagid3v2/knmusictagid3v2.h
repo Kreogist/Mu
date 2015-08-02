@@ -255,7 +255,7 @@ protected:
                              KNMusicAnalysisItem &analysisItem);
 
 private:
-    //Translate rating ratings to 5-level star.
+    //Translate rating to 5-level star.
     static inline int ratingStars(const quint8 &hex)
     {
         //1-31  = 1 star.
@@ -285,6 +285,32 @@ private:
         }
         return 0;
     }
+    //Translate 5-level star to ratings.
+    static inline int starsRating(const quint8 &stars)
+    {
+        //0 star  = 0
+        //1 star  = 31
+        //2 stars = 95
+        //3 stars = 159
+        //4 stars = 223
+        //5 stars = 255 (Default for else)
+        switch(stars)
+        {
+        case 0:
+            return 0;
+        case 1:
+            return 31;
+        case 2:
+            return 95;
+        case 3:
+            return 159;
+        case 4:
+            return 223;
+        default:
+            return 255;
+        }
+    }
+
     //Because the ID3v2 has so many version and the standard has been changed
     //for many times, we have to use different calculate function to process
     //these frames in different ways.

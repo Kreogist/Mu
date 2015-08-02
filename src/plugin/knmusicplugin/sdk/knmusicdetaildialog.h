@@ -21,6 +21,8 @@
 
 #include <QLinkedList>
 
+#include "knmusicglobal.h"
+
 #include "knmessagebox.h"
 
 class QLabel;
@@ -52,15 +54,9 @@ signals:
 public slots:
     /*!
      * \brief Show the dialog and display the detail info of the specific file.
-     * \param filePath The music file path.
-     * \param indexFilePath The track file path. If it doesn't have the track
-     * file, leave it to default QString().
-     * \param index The index of the music file. If it doesn't have the track
-     * file, leave it to default -1.
+     * \param analysisItem The analysis item of the file.
      */
-    void showDialog(const QString &filePath,
-                    const QString &indexFilePath=QString(),
-                    const int &index=-1);
+    void showDialog(KNMusicAnalysisItem analysisItem);
 
 private:
     //Basic Information.

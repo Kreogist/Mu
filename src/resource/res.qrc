@@ -25,5 +25,7 @@
         <file>music/playlist/playlist_icon.png</file>
         <file>music/public/star.png</file>
         <file>music/public/unstar.png</file>
+        <file>music/public/playingicon.png</file>
+        <file>music/public/cannotplay.png</file>
     </qresource>
 </RCC>

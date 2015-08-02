@@ -23,7 +23,10 @@
 KNMusicModel::KNMusicModel(QObject *parent) :
     QAbstractTableModel(parent),
     m_detailInfos(QList<KNMusicDetailInfo>()),
-    m_totalDuration(0)
+    m_totalDuration(0),
+    m_playingIndex(QPersistentModelIndex()),
+    m_playingIcon(QIcon(":/plugin/music/public/playingicon.png")),
+    m_cannotPlayIcon(QIcon(":/plugin/music/public/cannotplay.png"))
 {
 
 }
@@ -84,7 +87,31 @@ bool KNMusicModel::insertRow(int row, const KNMusicDetailInfo &detailInfo)
     return true;
 }
 
-bool KNMusicModel::updateRow(int row, const KNMusicDetailInfo &detailInfo)
+bool KNMusicModel::updateRow(int row, KNMusicDetailInfo detailInfo)
+{
+    //Check the row first.
+    Q_ASSERT(row>-1 && row<m_detailInfos.size());
+    //Get the original detail info.
+    KNMusicDetailInfo previousDetailInfo=m_detailInfos.at(row);
+    //Remove the old duration from the total duration.
+    m_totalDuration-=previousDetailInfo.duration;
+    //Copy some data from the previous detail info.
+    detailInfo.dateAdded=previousDetailInfo.dateAdded;
+    detailInfo.textLists[AlbumRating]=previousDetailInfo.textLists[AlbumRating];
+    detailInfo.textLists[DateAdded]=previousDetailInfo.textLists[DateAdded];
+    detailInfo.textLists[Plays]=previousDetailInfo.textLists[Plays];
+    detailInfo.textLists[Rating]=previousDetailInfo.textLists[Rating];
+    //Replace to the new detail info.
+    m_detailInfos.replace(row, detailInfo);
+    //Add the new duration to the total duration.
+    m_totalDuration+=detailInfo.duration;
+    //Emit the data changed signal.
+    emit dataChanged(index(row, 0),
+                     index(row, columnCount()));
+    return true;
+}
+
+bool KNMusicModel::replaceRow(int row, const KNMusicDetailInfo &detailInfo)
 {
     //Check the row first.
     Q_ASSERT(row>-1 && row<m_detailInfos.size());
@@ -229,7 +256,7 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
     case TrackIndexRole:
         return detailInfo.trackIndex;
     case CannotPlayFlagRole:
-        return false;
+        return detailInfo.cannotPlay;
     //For display and edit role, return the same data from the text list.
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -248,6 +275,25 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
             //For other columns, make it left and vertical center.
             return QVariant(Qt::AlignVCenter);
         }
+    case Qt::DecorationRole:
+        //Only when the column is MusicRowState column, it can have a decoration
+        //icon.
+        if(index.column()==MusicRowState)
+        {
+            //If the row is playing, return the playing icon.
+            if(index.row()==m_playingIndex.row())
+            {
+                return m_playingIcon;
+            }
+            //When the row cannot be played, return a cannot playing icon.
+            if(detailInfo.cannotPlay)
+            {
+                return m_cannotPlayIcon;
+            }
+            //Otherwise, nothing.
+        }
+        //All the default columns don't hold a icon.
+        return QVariant();
     default:
         return QVariant();
     }
@@ -267,6 +313,15 @@ bool KNMusicModel::setData(const QModelIndex &index,
     //Change the value according to the index.
     switch(role)
     {
+    case CannotPlayFlagRole:
+        //Set the cannot playing flag.
+        detailInfo.cannotPlay=value.toBool();
+        //Replace the detail info.
+        m_detailInfos.replace(index.row(), detailInfo);
+        //Emit the data changed signal.
+        emit dataChanged(index, index, QVector<int>(1, Qt::DisplayRole));
+        //Set has been done.
+        return true;
     case Qt::DisplayRole:
         //We will only support to change the display role data from 0 to
         //MusicDataCount.
@@ -290,4 +345,34 @@ bool KNMusicModel::setData(const QModelIndex &index,
 quint64 KNMusicModel::totalDuration() const
 {
     return m_totalDuration;
+}
+
+void KNMusicModel::addPlayingTimes(const QPersistentModelIndex &index)
+{
+    //Check the index first. If it's invalid, ignore the add request.
+    if(!index.isValid())
+    {
+        return;
+    }
+    //Get the rating data index.
+    QModelIndex ratingIndex=this->index(index.row(), Rating);
+    //It's a text format data, translate it to string first, then to numberous.
+    setData(ratingIndex,
+            data(ratingIndex, Qt::DisplayRole).toString().toLongLong() + 1,
+            Qt::DisplayRole);
+}
+
+QPersistentModelIndex KNMusicModel::playingIndex() const
+{
+    return m_playingIndex;
+}
+
+KNMusicDetailInfo KNMusicModel::rowDetailInfo(const int &row)
+{
+    return m_detailInfos.at(row);
+}
+
+void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)
+{
+    m_playingIndex = playingRow;
 }

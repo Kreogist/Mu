@@ -99,6 +99,41 @@ QList<KNMusicSearchBlock> KNMusicSearchSyntaxEngine::parseSearch(
     return blockList;
 }
 
+QString KNMusicSearchSyntaxEngine::generateSearchText(
+        const QList<KNMusicSearchBlock> &blocks)
+{
+    //Generate a text cache.
+    QString searchText;
+    //Check all the blocks.
+    for(auto i=blocks.constBegin();
+        i!=blocks.constEnd();
+        ++i)
+    {
+        //Check the block type.
+        if((*i).isColumn)
+        {
+            //Add captions.
+            searchText.append(knMusicGlobal->treeViewHeaderText((*i).index));
+        }
+        else
+        {
+            //Add captions from the property map.
+            searchText.append(m_propertyMap.key((*i).index));
+        }
+        //Add key-value spliter.
+        searchText.append("|");
+        //Translate the value.
+        searchText.append((*i).value.toString());
+        //Add spliter if it isn't the last block.
+        if((i+1)!=blocks.end())
+        {
+            searchText.append(", ");
+        }
+    }
+    //Give back the search text.
+    return searchText;
+}
+
 void KNMusicSearchSyntaxEngine::retranslate()
 {
     //Clear the target map.

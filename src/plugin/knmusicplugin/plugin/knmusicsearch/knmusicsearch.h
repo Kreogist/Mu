@@ -58,6 +58,10 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplement from KNMusicSearchBase::search().
+     */
+    void search(const QList<KNMusicSearchBlock> &blocks) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

@@ -17,6 +17,14 @@
  */
 #include <QFileInfo>
 #include <QDir>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QClipboard>
+#include <QApplication>
+
+#ifdef Q_OS_MACX
+#include <QProcess>
+#endif
 
 #include "knutil.h"
 
@@ -88,4 +96,101 @@ QString KNUtil::ensurePathValid(const QString &path)
     //Generate the folder.
     return QDir().mkpath(detectInfo.absoluteFilePath())?
                 detectInfo.absoluteFilePath():QString();
+}
+
+void KNUtil::openLocalFile(const QString &filePath)
+{
+    //Use the openUrl to open a local file.
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+}
+
+void KNUtil::showInGraphicalShell(const QString &filePath)
+{
+    //For Windows, explorer with /select parameter can open a new explorer
+    //window and select that file.
+#ifdef Q_OS_WIN
+    QStringList args;
+    QFileInfo pathInfo(filePath);
+    if(!pathInfo.isDir())
+    {
+        args<<"/select,";
+    }
+    args<<QDir::toNativeSeparators(filePath);
+    QProcess::startDetached("explorer.exe", args);
+    return;
+#endif
+    //For Mac OS X, use osacript.
+#ifdef Q_OS_MACX
+    QStringList scriptArgs;
+    scriptArgs << QLatin1String("-e")
+               << QString::fromLatin1("tell application \"Finder\" to reveal "
+                                      "POSIX file \"%1\"")
+               .arg(filePath);
+    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    scriptArgs.clear();
+    scriptArgs << QLatin1String("-e")
+               << QLatin1String("tell application \"Finder\" to activate");
+    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    return;
+#endif
+    //For Linux, it's magic. Don't touch.
+#ifdef Q_OS_LINUX
+    QFileInfo fileInfo(filePath);
+    QString folder = fileInfo.isDir() ?
+                fileInfo.absoluteFilePath() :
+                fileInfo.filePath();
+    QString app = QLatin1String("xdg-open %d");
+    QString browserArgs;
+    for (int i = 0; i < app.size(); ++i)
+    {
+        QChar c = app.at(i);
+        if (c == QLatin1Char('%') && i < app.size()-1)
+        {
+            c = app.at(++i);
+            QString s;
+            if (c == QLatin1Char('d'))
+            {
+                s = QLatin1Char('"') +
+                        QFileInfo(folder).path() +
+                        QLatin1Char('"');
+            }
+            else if (c == QLatin1Char('f'))
+            {
+                s = QLatin1Char('"') + folder + QLatin1Char('"');
+            }
+            else if (c == QLatin1Char('n'))
+            {
+                s = QLatin1Char('"') +
+                        QFileInfo(folder).fileName() +
+                        QLatin1Char('"');
+            }
+            else if (c == QLatin1Char('%'))
+            {
+                s = c;
+            }
+            else
+            {
+                s = QLatin1Char('%');
+                s += c;
+            }
+            browserArgs += s;
+            continue;
+        }
+        browserArgs += c;
+    }
+    QProcess::startDetached(browserArgs);
+#endif
+}
+
+void KNUtil::setClipboardText(const QString &text)
+{
+    //Get the clipboard from the QApplication instance.
+    QClipboard *clipboard=qApp->clipboard();
+    //Check the clipboard first.
+    if(clipboard==nullptr)
+    {
+        return;
+    }
+    //Set the text to the clipboard.
+    clipboard->setText(text, QClipboard::Clipboard);
 }

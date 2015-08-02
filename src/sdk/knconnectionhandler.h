@@ -31,6 +31,8 @@
 class KNConnectionHandler : public QLinkedList<QMetaObject::Connection>
 {
 public:
+    virtual ~KNConnectionHandler();
+
     /*!
      * \brief Disconnect all the connection in the linked list.
      */

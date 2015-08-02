@@ -20,7 +20,6 @@
 
 #include "knmusicdetaildialogpanel.h"
 #include "knhtabgroup.h"
-#include "knmusicglobal.h"
 #include "knmusicparser.h"
 #include "knhwidgetswitcher.h"
 
@@ -103,40 +102,12 @@ void KNMusicDetailDialog::addPanel(KNMusicDetailDialogPanel *panel)
     m_panelList.append(panel);
 }
 
-void KNMusicDetailDialog::showDialog(const QString &filePath,
-                                     const QString &indexFilePath,
-                                     const int &index)
+void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem)
 {
-    //Analysis the song first.
-    KNMusicAnalysisItem analysisItem;
     //Get the parser.
     KNMusicParser *parser=knMusicGlobal->parser();
-    //Check the index file path is empty or not.
-    if(indexFilePath.isEmpty())
-    {
-        //Parse it as a single music file.
-        parser->parseFile(filePath, analysisItem);
-    }
-    else
-    {
-        //Generate the analysis list.
-        QList<KNMusicAnalysisItem> analysisItemList;
-        //Parse the track list file.
-        parser->parseTrackList(indexFilePath,
-                               analysisItemList);
-        //Check the index of the analysis file.
-        if(index>-1 && index<analysisItemList.size())
-        {
-            analysisItem=analysisItemList.at(index);
-        }
-        else
-        {
-            //Parse it as a single music file.
-            parser->parseFile(filePath, analysisItem);
-        }
-    }
-    //Parse the cover image.
-    parser->parseAlbumArt(analysisItem);
+    //Reanalysis the analysis item.
+    parser->reanalysisItem(analysisItem);
 
     //Check whether the album art is null.
     if(analysisItem.coverImage.isNull())
@@ -171,4 +142,3 @@ void KNMusicDetailDialog::showDialog(const QString &filePath,
     //Show the dialog.
     exec();
 }
-

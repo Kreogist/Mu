@@ -52,7 +52,7 @@ void KNMusicRatingDelegate::paint(QPainter *painter,
         painter->fillRect(option.rect, option.palette.highlight());
     }
     //Draw the stars according to the number of the user sets.
-    int starNum=index.data(Qt::DisplayRole).toInt();
+    int starNum=index.data(Qt::DisplayRole).toString().toInt();
     painter->save();
     painter->translate(option.rect.topLeft());
     for(int i=0; i<starNum; i++)

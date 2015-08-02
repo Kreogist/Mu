@@ -66,13 +66,25 @@ public:
     bool insertRow(int row, const KNMusicDetailInfo &detailInfo);
 
     /*!
-     * \brief Update one music row into a new one.
+     * \brief Update one music row into a new one. Notice that this will update
+     * everything but except the following things: Rating, AlbumRating, Date
+     * Added, Plays.
      * \param row The specific row index of the model.
      * \param detailInfo The new detail info which is used to replace the old
      * one.
      * \return If the row update successfully, it will be true.
      */
-    bool updateRow(int row, const KNMusicDetailInfo &detailInfo);
+    bool updateRow(int row, KNMusicDetailInfo detailInfo);
+
+    /*!
+     * \brief Replace one music row into a new one. Different from update row,
+     * this will simply replace the data.
+     * \param row The specific row index of the model.
+     * \param detailInfo The new detail info which is used to replace the old
+     * one.
+     * \return If the row replace successfully, it will be true.
+     */
+    bool replaceRow(int row, const KNMusicDetailInfo &detailInfo);
 
     /*!
      * \brief Remove several rows of music from the model.
@@ -132,6 +144,16 @@ public:
      */
     quint64 totalDuration() const;
 
+    /*!
+     * \brief Increase the playing times of one music row.
+     * \param index Any index of the row.
+     */
+    void addPlayingTimes(const QPersistentModelIndex &index);
+
+    QPersistentModelIndex playingIndex() const;
+
+    KNMusicDetailInfo rowDetailInfo(const int &row);
+
 signals:
     /*!
      * \brief When the row count is changed, this signal will be emitted.
@@ -139,10 +161,13 @@ signals:
     void rowCountChanged();
 
 public slots:
+    void setPlayingIndex(const QPersistentModelIndex &playingIndex);
 
 private:
     QList<KNMusicDetailInfo> m_detailInfos;
     quint64 m_totalDuration;
+    QPersistentModelIndex m_playingIndex;
+    QIcon m_playingIcon, m_cannotPlayIcon;
 };
 
 #endif // KNMUSICMODEL_H

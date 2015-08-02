@@ -40,6 +40,7 @@ public:
      * \param parent The parent widget.
      */
     explicit KNMusicTreeViewBase(QWidget *parent = 0);
+    ~KNMusicTreeViewBase();
 
     /*!
      * \brief Get this tree view will enable animate features or not.
@@ -95,7 +96,26 @@ protected:
                  const QStyleOptionViewItem &options,
                  const QModelIndex &index) const;
 
+    /*!
+     * \brief Reimplement from QTreeView::mousePressEvent().
+     */
+    void mousePressEvent(QMouseEvent *event);
+
+    /*!
+     * \brief Reimplement from QTreeView::mouseReleaseEvent().
+     */
+    void mouseReleaseEvent(QMouseEvent *event);
+
+    /*!
+     * \brief Reset the header column state to a default state. Including the
+     * width and visible.
+     */
     virtual void resetHeaderState();
+
+    /*!
+     * \brief Move one column to the first column.
+     * \param logicalIndex The logical index of the header column.
+     */
     void moveToFirst(const int &logicalIndex);
 
 protected slots:
@@ -107,15 +127,20 @@ protected slots:
 
 private slots:
     void onActionMouseInOut(const int &frame);
+    void playCurrent();
+    void removeCurrent();
+    void renameCurrent();
 
 private:
     inline QTimeLine *generateTimeLine(const int &endFrame);
     inline void startAnime(QTimeLine *timeLine);
+    void showSoloMenu(const QPoint &position);
+
     QTimeLine *m_mouseIn, *m_mouseOut;
     bool m_animate;
     KNMusicProxyModel *m_proxyModel;
 
-    bool m_initialLoad=true;
+    bool m_initialLoad, m_pressed;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

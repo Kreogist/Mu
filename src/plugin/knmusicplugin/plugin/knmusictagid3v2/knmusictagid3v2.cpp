@@ -321,7 +321,8 @@ bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
         case Rating:
         {
             //Simply add rating number to data frame.
-            dataFrame.data.append(detailInfo.rating);
+            dataFrame.data.append(
+                        starsRating(detailInfo.textLists[Rating].toInt()));
             break;
         }
         default:
@@ -775,14 +776,16 @@ void KNMusicTagId3v2::writeFrameToDetails(const QLinkedList<ID3v2Frame> &frames,
             if(QString(frameData.left(29))=="Windows Media Player 9 Series")
             {
                 //Translate the last bytes as rating.
-                detailInfo.rating=ratingStars((quint8)(frameData.at(30)));
+                detailInfo.textLists[Rating]=
+                       QString::number(ratingStars((quint8)(frameData.at(30))));
             }
             else
             {
                 //Treat the first bytes as rating.
                 if(!frameData.isEmpty())
                 {
-                    detailInfo.rating=frameData.at(0);
+                    detailInfo.textLists[Rating]=
+                            QString::number(frameData.at(0));
                 }
             }
             break;

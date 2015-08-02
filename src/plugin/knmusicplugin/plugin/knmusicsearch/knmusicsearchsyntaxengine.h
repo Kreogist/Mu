@@ -57,6 +57,13 @@ public:
      */
     QList<KNMusicSearchBlock> parseSearch(const QString &text);
 
+    /*!
+     * \brief Generate the search text with specific block list.
+     * \param blocks The block list.
+     * \return The text generated from the block list.
+     */
+    QString generateSearchText(const QList<KNMusicSearchBlock> &blocks);
+
 signals:
 
 public slots:

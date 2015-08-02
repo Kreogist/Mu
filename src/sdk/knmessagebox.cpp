@@ -104,8 +104,8 @@ void KNMessageBox::showEvent(QShowEvent *event)
     }
     else
     {
-        xBase=parentWidget()->x()+(parentWidget()->frameGeometry().width()>>1);
-        yBase=parentWidget()->y()+(parentWidget()->frameGeometry().height()>>1);
+        xBase=parentWidget()->x()+(parentWidget()->width()>>1);
+        yBase=parentWidget()->y()+(parentWidget()->height()>>1);
     }
     //Calculate the final width, final height and middle rect.
     const int m_middleHeight=HeaderHeight+BottomHeight;
@@ -315,7 +315,7 @@ inline KNOpacityAnimeButton *KNMessageBox::generateButton(
 void KNMessageBox::startCloseAnime()
 {
     //Hide the content first.
-    m_content->hide();
+    m_content->hideContent();
     //Stop all the animations.
     m_showAnime->stop();
     m_hideAnime->stop();

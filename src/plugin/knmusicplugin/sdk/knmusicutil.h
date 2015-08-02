@@ -79,11 +79,18 @@ namespace MusicUtil
     {
         SortDataRole=Qt::UserRole
     };
+    enum KNMusicLoopState
+    {
+        NoRepeat,
+        RepeatAll,
+        RepeatTrack,
+        Shuffle,
+        LoopCount
+    };
     struct KNMusicDetailInfo
     {
         //Properties.
-        int rating=0;
-        int trackIndex=-1;
+        int trackIndex;
         QString fileName;
         QString filePath;
         QString trackFilePath;
@@ -92,14 +99,26 @@ namespace MusicUtil
         QDateTime dateAdded;
         quint64 size;
         //Music properties.
-        qint64 startPosition=-1;
-        qint64 duration=0;
-        qint64 bitRate=0;
-        qint64 samplingRate=0;
+        qint64 startPosition;
+        qint64 duration;
+        qint64 bitRate;
+        qint64 samplingRate;
         //Image hash data.
         QString coverImageHash;
         //Tag datas.
         QString textLists[MusicDataCount];
+        //The cannot playing flag.
+        bool cannotPlay;
+        //Initial the values
+        KNMusicDetailInfo():
+            trackIndex(-1),
+            startPosition(-1),
+            duration(0),
+            bitRate(0),
+            samplingRate(0),
+            cannotPlay(false)
+        {
+        }
     };
     struct KNMusicAnalysisItem
     {

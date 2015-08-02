@@ -27,7 +27,9 @@ class KNHWidgetSwitcher;
 class KNCategoryTabBar;
 class KNSideShadowWidget;
 class KNMusicDetailDialogPanel;
+class KNMusicSoloMenuBase;
 class KNMusicSearchBase;
+class KNMusicNowPlayingBase;
 class KNMusicPlaylistBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
@@ -43,6 +45,7 @@ public:
      * \param parent The parent widget of the plugin.
      */
     explicit KNMusicPlugin(QWidget *parent = 0);
+    ~KNMusicPlugin();
 
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::headerWidget().
@@ -80,8 +83,10 @@ private:
     inline void initialInfrastructure();
     void initialDetailDialogPanel();
     void initialParserPlugin();
+    void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
 
     void initialSearch(KNMusicSearchBase *search);
+    void initialNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
 
     //UI infrastructure elements.

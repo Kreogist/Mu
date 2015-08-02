@@ -15,7 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QFileInfo>
 #include <QDir>
 
 #include "knglobal.h"
@@ -70,15 +69,13 @@ void KNMusicParser::installListParser(KNMusicListParser *listParser)
     m_listParsers.append(listParser);
 }
 
-void KNMusicParser::parseFile(QString filePath,
+void KNMusicParser::parseFile(const QFileInfo &fileInfo,
                               KNMusicAnalysisItem &analysisItem)
 {
     //Get the file info class of the current analysis item.
     KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Set the database added time to current time.
     detailInfo.dateAdded=QDateTime::currentDateTime();
-    //Get the file info of the music file.
-    QFileInfo fileInfo(filePath);
     //Set the file info of the detail info.
     detailInfo.filePath=fileInfo.absoluteFilePath();
     detailInfo.fileName=fileInfo.fileName();
@@ -101,7 +98,7 @@ void KNMusicParser::parseFile(QString filePath,
             knMusicGlobal->typeDescription(fileInfo.suffix());
     //Analysis music file.
     //Step 1, parse the tag of the music file.
-    QFile file(filePath);
+    QFile file(detailInfo.filePath);
     //Open the music file at read only mode.
     if(file.open(QIODevice::ReadOnly))
     {
@@ -293,6 +290,73 @@ void KNMusicParser::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
             }
         }
     }
+}
+
+bool KNMusicParser::reanalysisItem(KNMusicAnalysisItem &analysisItem)
+{
+    //Get the detail info of the item.
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Check the type of the anlaysis item, if it's a single file, then we will
+    //use the parseFile() and parseAlbumArt() to parse the file.
+    if(-1==detailInfo.trackIndex)
+    {
+        //Use parse function to reanalysis the analysis item.
+        parseFile(detailInfo.filePath, analysisItem);
+        //Use parseAlbumArt function to update the album art.
+        parseAlbumArt(analysisItem);
+        //Reanlaysis complete.
+        return true;
+    }
+    //So now we should parse the track number in the track list file.
+    QList<KNMusicAnalysisItem> trackItemList;
+    //Parse the track list.
+    parseTrackList(detailInfo.trackFilePath, trackItemList);
+    //Check the size of the list, if it's empty then means parse the list
+    //failed.
+    if(trackItemList.isEmpty())
+    {
+        return false;
+    }
+    //Get the original track index.
+    int targetIndex=detailInfo.trackIndex,
+        startIndex=0, endIndex=trackItemList.size()-1;
+    //Find the track index in the new track item list.
+    while(endIndex-startIndex>0)
+    {
+        //Get the center item index, and the center item track index.
+        int centerIndex=(endIndex+startIndex)>>1,
+            trackIndex=trackItemList.at(centerIndex).detailInfo.trackIndex;
+        //Check if we hit the target.
+        if(trackIndex==targetIndex)
+        {
+            //Get the copy of the analysis item.
+            analysisItem=trackItemList.at(centerIndex);
+            //Exit the item.
+            break;
+        }
+        //Tweak the start and the end.
+        if(trackIndex>targetIndex)
+        {
+            startIndex=centerIndex;
+        }
+        else
+        {
+            endIndex=centerIndex;
+        }
+    }
+    //Now the start and end index should be the same, and we have to check the
+    //index is the same between the track list item at the startIndex and the
+    //analysisItem. Because the copy might not been executed. At this kind of
+    //moment, it will be false.
+    if(trackItemList.at(startIndex).detailInfo.trackIndex!=
+            analysisItem.detailInfo.trackIndex)
+    {
+        return false;
+    }
+    //Parse the album art.
+    parseAlbumArt(analysisItem);
+    //Reanlaysis complete.
+    return true;
 }
 
 bool KNMusicParser::findImageFile(const QString &baseName,

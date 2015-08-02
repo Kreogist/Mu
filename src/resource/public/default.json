@@ -6,6 +6,15 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "MusicSoloMenu" :{
+        "Parent" : "MainWindow",
+        "Base" : "#00000000",
+        "Window" : "#00000000",
+        "WindowText" : "#FFFFFF",
+        "Text" : "#FFFFFFFE",
+        "Highlight" : "#606060",
+        "HighlightedText" : "#f7cf3d"
+    },
     "MusicTreeViewHeaderMenu" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

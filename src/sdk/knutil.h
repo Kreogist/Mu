@@ -60,6 +60,25 @@ public:
      */
     static QString ensurePathValid(const QString &path);
 
+    /*!
+     * \brief Use the system default file association to open a local file.
+     * \param filePath The file path.
+     */
+    static void openLocalFile(const QString &filePath);
+
+    /*!
+     * \brief Show one file in graphical shell. Tried to locate that file in the
+     * graphics user interface.
+     * \param filePath The file path.
+     */
+    static void showInGraphicalShell(const QString &filePath);
+
+    /*!
+     * \brief Set text to system clipboard.
+     * \param text The text.
+     */
+    static void setClipboardText(const QString &text);
+
 private:
     KNUtil();
     KNUtil(const KNUtil &);

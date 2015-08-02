@@ -20,6 +20,7 @@
 #include "knglobal.h"
 #include "knutil.h"
 #include "knlocalemanager.h"
+#include "knconfigure.h"
 
 #include "knmusicparser.h"
 #include "knmusictagparser.h"
@@ -130,11 +131,14 @@ void KNMusicGlobal::retranslate()
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     QObject(parent),
     m_parentWidget(static_cast<QWidget *>(parent)),
-    m_detailDialog(new KNMusicDetailDialog(m_parentWidget)),
+    m_detailDialog(new KNMusicDetailDialog(knGlobal->mainWindow())),
     m_parser(new KNMusicParser),
+    m_soloMenu(nullptr),
     m_search(nullptr),
+    m_nowPlaying(nullptr),
     m_searcherThread(new QThread(this)),
-    m_analysisThread(new QThread(this))
+    m_analysisThread(new QThread(this)),
+    m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music"))
 {
     //Initial the file type.
     initialFileType();
@@ -378,6 +382,26 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Synthpop";
 }
 
+KNMusicSoloMenuBase *KNMusicGlobal::soloMenu() const
+{
+    return m_soloMenu;
+}
+
+void KNMusicGlobal::setSoloMenu(KNMusicSoloMenuBase *soloMenu)
+{
+    m_soloMenu = soloMenu;
+}
+
+KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying() const
+{
+    return m_nowPlaying;
+}
+
+void KNMusicGlobal::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
+{
+    m_nowPlaying = nowPlaying;
+}
+
 KNMusicSearchBase *KNMusicGlobal::search() const
 {
     return m_search;
@@ -386,6 +410,11 @@ KNMusicSearchBase *KNMusicGlobal::search() const
 void KNMusicGlobal::setSearch(KNMusicSearchBase *search)
 {
     m_search = search;
+}
+
+KNConfigure *KNMusicGlobal::configure()
+{
+    return m_musicConfigure;
 }
 
 QString KNMusicGlobal::musicLibPath() const

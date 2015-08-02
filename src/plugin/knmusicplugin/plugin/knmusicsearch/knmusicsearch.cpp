@@ -76,6 +76,21 @@ QAction *KNMusicSearch::activateAction()
     return m_activateAction;
 }
 
+void KNMusicSearch::search(const QList<KNMusicSearchBlock> &blocks)
+{
+    //Save the new blocks.
+    m_searchBlockList=blocks;
+    //Block the signal of the search box.
+    m_searchBox->blockSignals(true);
+    //Set the search text to search box.
+    m_searchBox->setText(m_engine->generateSearchText(m_searchBlockList));
+    qDebug()<<m_engine->generateSearchText(m_searchBlockList);
+    //Release the signal block.
+    m_searchBox->blockSignals(false);
+    //Ask to search the data.
+    emit requireSearch();
+}
+
 void KNMusicSearch::retranslate()
 {
     //Update the text of the search box.

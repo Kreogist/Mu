@@ -32,7 +32,9 @@
 #include "knmusicdetaildialogpanel.h"
 #include "knmusictagparser.h"
 #include "knmusicsearchbase.h"
+#include "knmusicsolomenubase.h"
 #include "knmusicplaylistbase.h"
+#include "knmusicnowplayingbase.h"
 
 //Plugins
 // Detail Dialog Panels.
@@ -40,8 +42,12 @@
 // Tag Parsers.
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
+// Solo Music Menu.
+#include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 // Search.
 #include "plugin/knmusicsearch/knmusicsearch.h"
+// Now Playing.
+#include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 // Playlist.
 #include "plugin/knmusicplaylist/knmusicplaylist.h"
 
@@ -71,14 +77,26 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     //Initial parser.
     initialParserPlugin();
     //Initial global menus.
+    initialSoloMenu(new KNMusicSoloMenu);
 
     //Initial the search.
     initialSearch(new KNMusicSearch);
+    //Initial the now playing.
+    initialNowPlaying(new KNMusicNowPlaying);
     //Initial the plugins.
     initialPlaylist(new KNMusicPlaylist);
 
     //Start working threads.
     knMusicGlobal->startThreads();
+}
+
+KNMusicPlugin::~KNMusicPlugin()
+{
+    //Recover the solo menu.
+    if(knMusicGlobal->soloMenu()->parent()==nullptr)
+    {
+        knMusicGlobal->soloMenu()->deleteLater();
+    }
 }
 
 QWidget *KNMusicPlugin::headerWidget()
@@ -176,6 +194,12 @@ void KNMusicPlugin::initialParserPlugin()
     parser->installTagParser(new KNMusicTagId3v2);
 }
 
+void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
+{
+    //Set the solo menu to the music global.
+    knMusicGlobal->setSoloMenu(soloMenu);
+}
+
 void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
 {
     //Set the parent of the search.
@@ -186,6 +210,16 @@ void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
     m_switcher->addAction(search->activateAction());
     //Set the search to music global.
     knMusicGlobal->setSearch(search);
+}
+
+void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
+{
+    //Set the parent of the now playing.
+    nowPlaying->setParent(this);
+    //Set the backend to now playing first.
+    nowPlaying->loadConfigure();
+    //Set the now playing to music global.
+    knMusicGlobal->setNowPlaying(nowPlaying);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

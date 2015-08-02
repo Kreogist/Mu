@@ -19,6 +19,13 @@
 
 #include "knconnectionhandler.h"
 
+KNConnectionHandler::~KNConnectionHandler()
+{
+    //If the connection handler is going to be destoryed, disconnect all the
+    //things.
+    disconnectAll();
+}
+
 void KNConnectionHandler::disconnectAll()
 {
     //If the linked list is not empty, then disconnect all of them.

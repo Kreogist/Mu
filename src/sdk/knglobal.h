@@ -150,6 +150,19 @@ public:
      */
     void setPreference(KNPreferencePlugin *preference);
 
+    /*!
+     * \brief Get the main window pointer.
+     * \return The main window pointer.
+     */
+    QWidget *mainWindow() const;
+
+    /*!
+     * \brief Set the main window widget. Many homeless widget will use this as
+     * parent widget.
+     * \param mainWindow The main window widget pointer.
+     */
+    void setMainWindow(QWidget *mainWindow);
+
 signals:
     /*!
      * \brief When the library directory's path is changed, this signal will be
@@ -190,6 +203,7 @@ private:
     inline void initialInfrastrcture();
     inline void initialBrushes();
 
+    QWidget *m_mainWindow;
     KNPreferencePlugin *m_preference;
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];

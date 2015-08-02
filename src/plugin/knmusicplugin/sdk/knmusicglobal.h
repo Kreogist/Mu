@@ -36,6 +36,9 @@ using namespace MusicUtil;
 class KNMusicDetailDialog;
 class KNMusicParser;
 class KNMusicSearchBase;
+class KNConfigure;
+class KNMusicNowPlayingBase;
+class KNMusicSoloMenuBase;
 /*!
  * \brief The KNMusicGlobal class provides some public instance and function of
  * the official music category plugin.\n
@@ -114,6 +117,26 @@ public:
     void startThreads();
 
     /*!
+     * \brief Check whether a suffix is in the music file suffix list.
+     * \param suffix The suffix text.
+     * \return If the suffix is in the list, then true.
+     */
+    bool isMusicFile(const QString &suffix) const
+    {
+        return m_suffixs.contains(suffix);
+    }
+
+    /*!
+     * \brief Check whether a suffix is in the music list file suffix list.
+     * \param suffix The file suffix text.
+     * \return If the suffix is in the list file suffix list, then true.
+     */
+    bool isMusicListFile(const QString &suffix) const
+    {
+        return m_listSuffixs.contains(suffix);
+    }
+
+    /*!
      * \brief Get the music library path.
      * \return The music library path.
      */
@@ -132,6 +155,27 @@ public:
      */
     void setSearch(KNMusicSearchBase *search);
 
+    /*!
+     * \brief Get the music configure.
+     * \return The music configure pointer.
+     */
+    KNConfigure *configure();
+
+    /*!
+     * \brief Get the now playing object class.
+     * \return The now playing object pointer.
+     */
+    KNMusicNowPlayingBase *nowPlaying() const;
+
+    /*!
+     * \brief Set the now playing object pointer.
+     * \param nowPlaying The object pointer.
+     */
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+
+    KNMusicSoloMenuBase *soloMenu() const;
+    void setSoloMenu(KNMusicSoloMenuBase *soloMenu);
+
 signals:
 
 public slots:
@@ -147,15 +191,19 @@ private slots:
 private:
     static KNMusicGlobal *m_instance;
     explicit KNMusicGlobal(QObject *parent = 0);
+    KNMusicGlobal(const KNMusicGlobal &);
     inline void initialFileType();
     inline void initialGenre();
 
     QWidget *m_parentWidget;
     KNMusicDetailDialog *m_detailDialog;
     KNMusicParser *m_parser;
+    KNMusicSoloMenuBase *m_soloMenu;
     KNMusicSearchBase *m_search;
+    KNMusicNowPlayingBase *m_nowPlaying;
 
     QThread *m_searcherThread, *m_analysisThread;
+    KNConfigure *m_musicConfigure;
     QString m_musicLibPath;
 
     QStringList m_suffixs, m_listSuffixs, m_suffixDescription,

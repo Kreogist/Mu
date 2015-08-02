@@ -17,12 +17,16 @@
  */
 #include <QScrollBar>
 #include <QTimeLine>
+#include <QMouseEvent>
 #include <QPainter>
 
 #include "knthememanager.h"
+#include "knconnectionhandler.h"
 
 #include "knmusicproxymodel.h"
 #include "knmusicmodel.h"
+#include "knmusicnowplayingbase.h"
+#include "knmusicsolomenubase.h"
 #include "knmusictreeviewheader.h"
 #include "knmusicratingdelegate.h"
 
@@ -38,7 +42,9 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     m_mouseIn(generateTimeLine(0x20)),
     m_mouseOut(generateTimeLine(0)),
     m_animate(true),
-    m_proxyModel(nullptr)
+    m_proxyModel(nullptr),
+    m_initialLoad(true),
+    m_pressed(false)
 {
     //Set properties.
     setAllColumnsShowFocus(true);
@@ -78,6 +84,11 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
     //Link with theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMusicTreeViewBase::onActionThemeUpdate);
+}
+
+KNMusicTreeViewBase::~KNMusicTreeViewBase()
+{
+    ;
 }
 
 void KNMusicTreeViewBase::enterEvent(QEvent *event)
@@ -123,6 +134,44 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
     QTreeView::drawRow(painter, options, index);
 }
 
+void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
+{
+    //Do the original pressed event.
+    QTreeView::mousePressEvent(event);
+    //Set pressed flag.
+    m_pressed=true;
+}
+
+void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
+{
+    //Do the original release event.
+    QTreeView::mouseReleaseEvent(event);
+    //Check we has been pressed on this widget before.
+    if(m_pressed)
+    {
+        //Reset the pressed flag.
+        m_pressed=false;
+        //Check is button right button and position is in the treeview.
+        if(event->button()==Qt::RightButton && rect().contains(event->pos()))
+        {
+            //Hide the detail tooltip first.
+            //!FIXME: add codes here.
+            //According to the selected rows, display different menu.
+            switch(selectionModel()->selectedRows().size())
+            {
+            case 0:
+                break;
+            case 1:
+                showSoloMenu(event->pos());
+                break;
+            default:
+//                showMultiMenu(event->pos());
+                break;
+            }
+        }
+    }
+}
+
 void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
 {
     //The overdriven function: move section.
@@ -155,6 +204,21 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
     pal.setColor(QPalette::Button, color);
     //Set the palette.
     setPalette(pal);
+}
+
+void KNMusicTreeViewBase::playCurrent()
+{
+    ;
+}
+
+void KNMusicTreeViewBase::removeCurrent()
+{
+    ;
+}
+
+void KNMusicTreeViewBase::renameCurrent()
+{
+    ;
 }
 
 inline QTimeLine *KNMusicTreeViewBase::generateTimeLine(const int &endFrame)
@@ -211,6 +275,41 @@ inline void KNMusicTreeViewBase::startAnime(QTimeLine *timeLine)
     timeLine->start();
 }
 
+void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
+{
+    //Get the index of the position where mouse pressed.
+    QModelIndex pressedIndex=indexAt(position);
+    //Check the valid of the index.
+    if(pressedIndex.isValid() && knMusicGlobal->soloMenu()!=nullptr)
+    {
+        //Get the solo menu.
+        KNMusicSoloMenuBase *soloMenu=knMusicGlobal->soloMenu();
+        //Generate the connection handler.
+        KNConnectionHandler connections;
+        //Link the menu require signal to this slot.
+        connections.append(
+                   connect(soloMenu, &KNMusicSoloMenuBase::requirePlayCurrent,
+                           this, &KNMusicTreeViewBase::playCurrent));
+        connections.append(
+                   connect(soloMenu, &KNMusicSoloMenuBase::requireRemoveCurrent,
+                           this, &KNMusicTreeViewBase::removeCurrent));
+        connections.append(
+                   connect(soloMenu, &KNMusicSoloMenuBase::requireRenameCurrent,
+                           this, &KNMusicTreeViewBase::renameCurrent));
+        //Set the information to the solo menu.
+        soloMenu->setMusicRow(m_proxyModel, pressedIndex);
+        //Get the menu position, fixed the bug which ignore the header's height.
+        QPoint menuPosition=mapToGlobal(position);
+        menuPosition.setY(menuPosition.y()+header()->height());
+        //Set the position to menu.
+        soloMenu->setMouseDownPos(menuPosition);
+        //Launch the menu.
+        soloMenu->exec(menuPosition);
+        //Disconnect the links.
+        connections.disconnectAll();
+    }
+}
+
 bool KNMusicTreeViewBase::animate() const
 {
     return m_animate;
@@ -241,10 +340,20 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
     //Hide the detail tooltip first.
-    ;
+    //!FIXME: add codes here.
     //Check before set the music model, if the current playing model is the
     //previous model, shadow the proxy model.
-    //!FIXME: add codes here.
+    if(knMusicGlobal->nowPlaying()!=nullptr)
+    {
+        //Get the now playing object.
+        KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
+        //Check the current playing model is the current proxy.
+        if(nowPlaying->playingMusicModel()==proxyModel()->musicModel())
+        {
+            //If so, shadow the proxy model.
+            nowPlaying->shadowPlayingModel();
+        }
+    }
     //Set the source model.
     proxyModel()->setSourceModel(musicModel);
     //Check if the music model nullptr.

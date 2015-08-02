@@ -21,16 +21,49 @@
 
 #include "knanimationmenu.h"
 
+class KNMusicProxyModel;
+/*!
+ * \brief The KNMusicSoloMenuBase class provide the basic port of a menu when
+ * user is requested to operate only one file.
+ */
 class KNMusicSoloMenuBase : public KNAnimationMenu
 {
     Q_OBJECT
 public:
     KNMusicSoloMenuBase(QWidget *parent = 0):KNAnimationMenu(parent){}
 
+    /*!
+     * \brief Set the music proxy model and the specfic row to the solo menu in
+     * order to locate the file.
+     * \param model The proxy music model.
+     * \param itemIndex The item index. This can help you to get the speicfic
+     * row and the column where the mouse pressed.
+     */
+    virtual void setMusicRow(KNMusicProxyModel *model,
+                             const QModelIndex &itemIndex)=0;
 
 signals:
+    /*!
+     * \brief When the menu is asked to play the current row, this signal will
+     * be emitted.
+     */
+    void requirePlayCurrent();
+
+    /*!
+     * \brief When the menu is asked to remove the current row, this signal will
+     * be emitted.
+     */
+    void requireRemoveCurrent();
+
+    /*!
+     * \brief When the menu is asked to rename the current row, this signal will
+     * be emitted.
+     * \param preferName The prefer name generate according to the row data.
+     */
+    void requireRenameCurrent(QString preferName);
 
 public slots:
+
 };
 
 #endif // KNMUSICSOLOMENUBASE_H

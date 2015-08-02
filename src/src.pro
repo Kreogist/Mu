@@ -136,7 +136,11 @@ SOURCES += \
     sdk/knsearchbox.cpp \
     plugin/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp \
     plugin/knmusicplugin/plugin/knmusicsearch/knmusicsearchsyntaxengine.cpp \
-    plugin/knmusicplugin/sdk/knmusictreeviewheadermenu.cpp
+    plugin/knmusicplugin/sdk/knmusictreeviewheadermenu.cpp \
+    plugin/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.cpp \
+    plugin/knmusicplugin/plugin/knmusicnowplaying/knmusictemporaryplaylistmodel.cpp \
+    sdk/knfilesearcher.cpp \
+    plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -231,7 +235,11 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicsearchbase.h \
     plugin/knmusicplugin/plugin/knmusicsearch/knmusicsearch.h \
     plugin/knmusicplugin/plugin/knmusicsearch/knmusicsearchsyntaxengine.h \
-    plugin/knmusicplugin/sdk/knmusictreeviewheadermenu.h
+    plugin/knmusicplugin/sdk/knmusictreeviewheadermenu.h \
+    plugin/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.h \
+    plugin/knmusicplugin/plugin/knmusicnowplaying/knmusictemporaryplaylistmodel.h \
+    sdk/knfilesearcher.h \
+    plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.h
 
 RESOURCES += \
     resource/res.qrc
