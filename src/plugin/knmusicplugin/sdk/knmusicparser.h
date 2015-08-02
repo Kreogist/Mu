@@ -46,16 +46,55 @@ public:
      */
     explicit KNMusicParser(QObject *parent = 0);
 
+    /*!
+     * \brief Install a music file analysiser to the parser.
+     * \param analysiser The analysiser pointer.
+     */
     void installAnalysiser(KNMusicAnalysiser *analysiser);
+
+    /*!
+     * \brief Install a tag parser to the parser.
+     * \param tagParser The tag parser pointer.
+     */
     void installTagParser(KNMusicTagParser *tagParser);
+
+    /*!
+     * \brief Install a list parser to the parser.
+     * \param listParser The list parser pointer.
+     */
     void installListParser(KNMusicListParser *listParser);
 
+    /*!
+     * \brief Parse a music file to a analysis item. This won't parse the album
+     * art data. If you want to parse that data, called parseAlbumArt() after.
+     * \param fileInfo The QFileInfo class of the music file.
+     * \param analysisItem The output analysis item.
+     */
     void parseFile(const QFileInfo &fileInfo,
                    KNMusicAnalysisItem &analysisItem);
+
+    /*!
+     * \brief Parse a track list file.
+     * \param filePath The track list file path.
+     * \param trackItemList The track analysis item list.
+     */
     void parseTrackList(const QString &filePath,
-                        QList<KNMusicAnalysisItem> &trackDetailList);
+                        QList<KNMusicAnalysisItem> &trackItemList);
+
+    /*!
+     * \brief Using the tag parser to parse the previous album art data in the
+     * item.
+     * \param analysisItem The item which should be parsed by parseFile() or get
+     * from parseTrackList().
+     */
     void parseAlbumArt(KNMusicAnalysisItem &analysisItem);
 
+    /*!
+     * \brief Analysis an item again. Update the data in the item.
+     * \param analysisItem An old analysis item. The file path should be correct
+     * to find the file.
+     * \return Re-analysis it successful, it will return true.
+     */
     bool reanalysisItem(KNMusicAnalysisItem &analysisItem);
 
 private:

@@ -239,7 +239,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicnowplaying/knmusicnowplaying.h \
     plugin/knmusicplugin/plugin/knmusicnowplaying/knmusictemporaryplaylistmodel.h \
     sdk/knfilesearcher.h \
-    plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.h
+    plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.h \
+    plugin/knmusicplugin/sdk/knmusicplayerbase.h
 
 RESOURCES += \
     resource/res.qrc

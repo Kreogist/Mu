@@ -145,7 +145,7 @@ void KNMusicParser::parseFile(const QFileInfo &fileInfo,
 }
 
 void KNMusicParser::parseTrackList(const QString &filePath,
-                                   QList<KNMusicAnalysisItem> &trackDetailList)
+                                   QList<KNMusicAnalysisItem> &trackItemList)
 {
     //Get the track list file.
     QFile listFile(filePath);
@@ -218,7 +218,7 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                     trackInfo.textLists[Time]=
                             KNMusicUtil::msecondToString(trackInfo.duration);
                     //Add track item to detail list.
-                    trackDetailList.append(trackItem);
+                    trackItemList.append(trackItem);
                 }
                 //Stop to try other parser, break the looping.
                 break;
