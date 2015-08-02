@@ -157,8 +157,12 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
     //Clear whether the previous model is the current model.
     if(m_playingProxyModel!=model)
     {
-        //Reset the previous proxy odel.
-        playingMusicModel()->setPlayingIndex(QPersistentModelIndex());
+        //Check the previous model null.
+        if(m_playingProxyModel!=nullptr)
+        {
+            //Reset the previous proxy odel.
+            playingMusicModel()->setPlayingIndex(QPersistentModelIndex());
+        }
         //Save the new proxy model.
         m_playingProxyModel=model;
         //Save the music tab.

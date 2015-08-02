@@ -150,7 +150,7 @@ public:
      */
     void addPlayingTimes(const QPersistentModelIndex &index);
 
-    QPersistentModelIndex playingIndex() const;
+    QModelIndex playingIndex() const;
 
     KNMusicDetailInfo rowDetailInfo(const int &row);
 
@@ -161,12 +161,12 @@ signals:
     void rowCountChanged();
 
 public slots:
-    void setPlayingIndex(const QPersistentModelIndex &playingIndex);
+    void setPlayingIndex(const QModelIndex &playingIndex);
 
 private:
     QList<KNMusicDetailInfo> m_detailInfos;
     quint64 m_totalDuration;
-    QPersistentModelIndex m_playingIndex;
+    QModelIndex m_playingIndex;
     QIcon m_playingIcon, m_cannotPlayIcon;
 };
 

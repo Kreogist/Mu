@@ -362,7 +362,7 @@ void KNMusicModel::addPlayingTimes(const QPersistentModelIndex &index)
             Qt::DisplayRole);
 }
 
-QPersistentModelIndex KNMusicModel::playingIndex() const
+QModelIndex KNMusicModel::playingIndex() const
 {
     return m_playingIndex;
 }
@@ -372,7 +372,7 @@ KNMusicDetailInfo KNMusicModel::rowDetailInfo(const int &row)
     return m_detailInfos.at(row);
 }
 
-void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)
+void KNMusicModel::setPlayingIndex(const QModelIndex &playingRow)
 {
     m_playingIndex = playingRow;
 }

@@ -25,7 +25,8 @@ class KNMusicPlaylistTreeView : public KNMusicTreeViewBase
 {
     Q_OBJECT
 public:
-    explicit KNMusicPlaylistTreeView(QWidget *parent = 0);
+    explicit KNMusicPlaylistTreeView(QWidget *parent = 0,
+                                     KNMusicTab *tab = 0);
 
 signals:
 

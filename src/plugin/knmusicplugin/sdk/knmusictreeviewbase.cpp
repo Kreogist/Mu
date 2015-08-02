@@ -37,8 +37,9 @@
 #define MaxOpacity 0x20
 #define FontBase 0xBF
 
-KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent) :
+KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     QTreeView(parent),
+    m_musicTab(tab),
     m_mouseIn(generateTimeLine(0x20)),
     m_mouseOut(generateTimeLine(0)),
     m_animate(true),
@@ -165,7 +166,7 @@ void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
                 showSoloMenu(event->pos());
                 break;
             default:
-//                showMultiMenu(event->pos());
+                showMultiMenu(event->pos());
                 break;
             }
         }
@@ -208,7 +209,8 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
 
 void KNMusicTreeViewBase::playCurrent()
 {
-    ;
+    //Play the current index.
+    playIndex(currentIndex());
 }
 
 void KNMusicTreeViewBase::removeCurrent()
@@ -275,6 +277,25 @@ inline void KNMusicTreeViewBase::startAnime(QTimeLine *timeLine)
     timeLine->start();
 }
 
+void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
+{
+    //Check the music row and the index is valid.
+    if(musicModel()==nullptr || !index.isValid())
+    {
+        //Ignore those invalid request.
+        return;
+    }
+    //Get the now playing from the music global.
+    KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
+    //Check null.
+    if(nowPlaying==nullptr)
+    {
+        return;
+    }
+    //Ask the now playing to play the index row.
+    nowPlaying->playMusicRow(proxyModel(), index.row(), m_musicTab);
+}
+
 void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
 {
     //Get the index of the position where mouse pressed.
@@ -308,6 +329,11 @@ void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
         //Disconnect the links.
         connections.disconnectAll();
     }
+}
+
+void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
+{
+    ;
 }
 
 bool KNMusicTreeViewBase::animate() const

@@ -36,9 +36,9 @@
 
 #define ShadowWidth 15
 
-KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent) :
+KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     QWidget(parent),
-    m_treeView(new KNMusicPlaylistTreeView(this)),
+    m_treeView(new KNMusicPlaylistTreeView(this, tab)),
     m_title(new QLabel(this)),
     m_detail(new QLabel(this)),
     m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow,

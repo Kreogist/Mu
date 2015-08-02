@@ -22,8 +22,9 @@
 
 using namespace MusicUtil;
 
-KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent) :
-    KNMusicTreeViewBase(parent)
+KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent,
+                                                 KNMusicTab *tab) :
+    KNMusicTreeViewBase(parent, tab)
 {
     setObjectName("PlaylistTreeView");
     //Update the palettle.

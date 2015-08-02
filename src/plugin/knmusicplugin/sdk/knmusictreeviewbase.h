@@ -24,6 +24,7 @@
 class QTimeLine;
 class KNMusicModel;
 class KNMusicProxyModel;
+class KNMusicTab;
 /*!
  * \brief The KNMusicTreeViewBase class is the basic tree view of all the music
  * tree view. It provides mouse sense alternative row color. It can
@@ -39,7 +40,8 @@ public:
      * \brief Construct a KNMusicTreeViewBase widget.
      * \param parent The parent widget.
      */
-    explicit KNMusicTreeViewBase(QWidget *parent = 0);
+    explicit KNMusicTreeViewBase(QWidget *parent = 0,
+                                 KNMusicTab *tab = 0);
     ~KNMusicTreeViewBase();
 
     /*!
@@ -134,8 +136,11 @@ private slots:
 private:
     inline QTimeLine *generateTimeLine(const int &endFrame);
     inline void startAnime(QTimeLine *timeLine);
+    inline void playIndex(const QModelIndex &index);
     void showSoloMenu(const QPoint &position);
+    void showMultiMenu(const QPoint &position);
 
+    KNMusicTab *m_musicTab;
     QTimeLine *m_mouseIn, *m_mouseOut;
     bool m_animate;
     KNMusicProxyModel *m_proxyModel;
