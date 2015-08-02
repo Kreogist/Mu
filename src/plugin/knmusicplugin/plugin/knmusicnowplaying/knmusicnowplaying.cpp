@@ -24,6 +24,8 @@
 
 #include "knmusicnowplaying.h"
 
+#include <QDebug>
+
 KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     KNMusicNowPlayingBase(parent),
     m_backend(nullptr),
@@ -371,6 +373,9 @@ void KNMusicNowPlaying::playRow(const int &proxyRow)
         //Check the backend before playing, if there's no parser, do nothing.
         if(m_backend==nullptr)
         {
+            //Treat this kind of features as load failed.
+            onActionLoadFailed();
+            //Finished.
             return;
         }
         //Get the detail info of the current playing anlaysis item.

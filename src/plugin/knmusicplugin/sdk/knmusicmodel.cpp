@@ -28,7 +28,6 @@ KNMusicModel::KNMusicModel(QObject *parent) :
     m_playingIcon(QIcon(":/plugin/music/public/playingicon.png")),
     m_cannotPlayIcon(QIcon(":/plugin/music/public/cannotplay.png"))
 {
-
 }
 
 void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
@@ -280,15 +279,15 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
         //icon.
         if(index.column()==MusicRowState)
         {
-            //If the row is playing, return the playing icon.
-            if(index.row()==m_playingIndex.row())
-            {
-                return m_playingIcon;
-            }
             //When the row cannot be played, return a cannot playing icon.
             if(detailInfo.cannotPlay)
             {
                 return m_cannotPlayIcon;
+            }
+            //If the row is playing, return the playing icon.
+            if(index.row()==m_playingIndex.row())
+            {
+                return m_playingIcon;
             }
             //Otherwise, nothing.
         }
@@ -314,14 +313,21 @@ bool KNMusicModel::setData(const QModelIndex &index,
     switch(role)
     {
     case CannotPlayFlagRole:
+    {
         //Set the cannot playing flag.
         detailInfo.cannotPlay=value.toBool();
         //Replace the detail info.
         m_detailInfos.replace(index.row(), detailInfo);
+        //For this situation, the changed column is the MusicRowState.
+        QModelIndex changedIndex=this->index(index.row(), MusicRowState);
         //Emit the data changed signal.
-        emit dataChanged(index, index, QVector<int>(1, Qt::DisplayRole));
+        emit dataChanged(changedIndex,
+                         changedIndex,
+                         QVector<int>(1, Qt::DecorationRole));
         //Set has been done.
         return true;
+
+    }
     case Qt::DisplayRole:
         //We will only support to change the display role data from 0 to
         //MusicDataCount.
@@ -362,7 +368,7 @@ void KNMusicModel::addPlayingTimes(const QPersistentModelIndex &index)
             Qt::DisplayRole);
 }
 
-QModelIndex KNMusicModel::playingIndex() const
+QPersistentModelIndex KNMusicModel::playingIndex() const
 {
     return m_playingIndex;
 }
@@ -372,7 +378,7 @@ KNMusicDetailInfo KNMusicModel::rowDetailInfo(const int &row)
     return m_detailInfos.at(row);
 }
 
-void KNMusicModel::setPlayingIndex(const QModelIndex &playingRow)
+void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)
 {
     m_playingIndex = playingRow;
 }
