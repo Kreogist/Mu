@@ -52,6 +52,20 @@ gcc: {
     }
 }
 
+# Platform Specific Configuration.
+macx: {
+    # Application icon.
+    RC_FILE += resource/icon/mu.icns
+    ICON = resource/icon/mu.icns
+    # Nearly all the audio library will use CoreAudio on Mac OS X, so import
+    # CoreAudio library to LFLAGS and LIBS.
+    QMAKE_LFLAGS += -framework CoreFoundation
+    LIBS += -framework CoreFoundation
+    # Brew configure. Use brew to install all your libs, e.g. FFMpeg.
+    INCLUDEPATH += /usr/local/include/
+    LIBS += -L/usr/local/lib/
+}
+
 # Add sdk directory to include path.
 INCLUDEPATH += \
 sdk \

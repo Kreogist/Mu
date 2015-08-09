@@ -447,9 +447,10 @@ bool KNMusicTagId3v2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
         //parse the album art.
         return false;
     }
-    //Get the total size of images, because the .
+    //Get the total size of images. The size of this group is the number of the
+    //image parsed from the raw tag data.
     QByteArray imageTypes=analysisItem.imageData["ID3v2"].takeLast();
-//    int imageCount=imageTypes.size();
+    //int imageCount=imageTypes.size();
     QHash<int, ID3v2PictureFrame> imageMap;
     //Parse all the images. Because of the standard has been changed, in the
     //earlier version of ID3v2(minor<=2.0), the frame name is PIC. Now it is
