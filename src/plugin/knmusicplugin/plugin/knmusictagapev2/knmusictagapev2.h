@@ -63,10 +63,25 @@ private:
         quint32 itemCount;
         quint32 flags;
     };
+    struct APETagItem
+    {
+        QString key;
+        quint32 flag;
+        QByteArray value;
+        APETagItem() :
+            key(QString()),
+            flag(0),
+            value(QByteArray())
+        {
+        }
+    };
 
     inline bool checkHeader(const int &position,
                             QDataStream &dataStream,
                             APEHeader &header);
+    inline void parseRawData(char *rawData,
+                             APEHeader &header,
+                             QList<APETagItem> &tagList);
 
     inline quint32 dataToSize(char *data)
     {
@@ -77,6 +92,8 @@ private:
     }
 
     const char *m_apePreamble;
+    static QHash<QString, int> m_keyIndex;
+    static QHash<int, QString> m_indexKey;
 };
 
 #endif // KNMUSICTAGAPEV2_H

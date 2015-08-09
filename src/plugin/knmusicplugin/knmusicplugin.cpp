@@ -42,6 +42,7 @@
 // Tag Parsers.
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
+#include "plugin/knmusictagapev2/knmusictagapev2.h"
 // Solo Music Menu.
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 // Search.
@@ -192,6 +193,7 @@ void KNMusicPlugin::initialParserPlugin()
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagId3v1);
     parser->installTagParser(new KNMusicTagId3v2);
+    parser->installTagParser(new KNMusicTagApev2);
 }
 
 void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)

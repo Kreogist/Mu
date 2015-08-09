@@ -48,11 +48,11 @@ KNMusicModel::KNMusicModel(QObject *parent) :
 void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
     //Follow the documentation, we have to do this.
-    //Remember the index here should be the same:
-    //Url link.
+    //Remember the index here should be the same.
+    //Url link:
     //https://forum.qt.io/topic/28850/qtreeview-with-qsortfilterproxymodel-displ
     //ays-an-empty-row-after-changing-the-qabstractitemmodel/5
-    //Text:
+    //Copy of the link:
     /*
      * The issue here is that you tell your model that you are inserting two
      *  rows:

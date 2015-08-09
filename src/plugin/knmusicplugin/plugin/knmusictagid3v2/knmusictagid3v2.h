@@ -12,8 +12,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef KNMUSICTAGID3V2_H
@@ -399,11 +399,15 @@ private:
         frameData.flags[0]=rawTagData[8];
         frameData.flags[1]=rawTagData[9];
     }
+    //APIC frame and PIC frame generator.
+    inline QByteArray generateAPICImageData(const QImage &image);
+    inline QByteArray generatePICImageData(const QImage &image);
     //APIC frame and PIC frame parser.
     inline void parseAPICImageData(QByteArray imageData,
                                    QHash<int, ID3v2PictureFrame> &imageMap);
     inline void parsePICImageData(QByteArray imageData,
                                   QHash<int, ID3v2PictureFrame> &imageMap);
+
     //Translate a ID3v2DataFrame to raw bytes.
     inline QByteArray frameToRawData(const QString frameID,
                                      const ID3v2FunctionSet &toolset,

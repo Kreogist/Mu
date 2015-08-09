@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBuffer>
 #include <QTextCodec>
 #include <QTemporaryFile>
 
@@ -333,14 +334,30 @@ bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
         //replace the old one, so it will keep the data to the latest one.
         frameMap.insert(frameID, dataFrame);
     }
+    //Get the toolset of the header.
+    ID3v2FunctionSet toolset;
+    getId3v2FunctionSet(header.major, toolset);
+    //If there's a cover image of the song in it, add the image frame to the
+    //frame map.
+    if(!analysisItem.coverImage.isNull())
+    {
+        //Generate a data frame.
+        ID3v2DataFrame dataFrame;
+        //Check the major.
+        if(toolset.frameHeaderSize==3)
+        {
+            dataFrame.data;
+        }
+        else
+        {
+            dataFrame.data=generateAPICImageData(analysisItem.coverImage);
+        }
+    }
 
     //Now translate the frame structure data to the raw data.
     QByteArray tagRawData;
     //Get all the keys of the hash map.
     QStringList frameIDs=frameMap.keys();
-    //Get the toolset of the header.
-    ID3v2FunctionSet toolset;
-    getId3v2FunctionSet(header.major, toolset);
     //Append the frame data to the raw data array.
     while(!frameIDs.isEmpty())
     {
@@ -802,6 +819,37 @@ void KNMusicTagId3v2::writeFrameToDetails(const QLinkedList<ID3v2Frame> &frames,
     {
         analysisItem.imageData["ID3v2"].append(imageTypeList);
     }
+}
+
+QByteArray KNMusicTagId3v2::generateAPICImageData(const QImage &image)
+{
+    //Generate a byte array to storage image data.
+    QByteArray frameData;
+    //Add encodec text. Use code 0 codec.
+    frameData.append(stringToContent("image/png", 0));
+    //Add 0x03 to make this image to be the album cover.
+    frameData.append((char)0x03);
+    //Add description empty data '0x00' as the description.
+    frameData.append((char)0x00);
+    frameData.append((char)0x00);
+    //Add the png raw data to image data.
+    QByteArray imageData;
+    QBuffer imageBuffer(&imageData);
+    //Open the image buffer.
+    imageBuffer.open(QIODevice::WriteOnly);
+    //Save the data to image data.
+    image.save(&imageBuffer, "PNG");
+    //Close the image buffer.
+    imageBuffer.close();
+    //Add image data to frame data.
+    frameData.append(imageData);
+    //Give back the frame data.
+    return frameData;
+}
+
+QByteArray KNMusicTagId3v2::generatePICImageData(const QImage &image)
+{
+    ;
 }
 
 inline void KNMusicTagId3v2::parseAPICImageData(
