@@ -27,5 +27,6 @@
         <file>music/public/unstar.png</file>
         <file>music/public/playingicon.png</file>
         <file>music/public/cannotplay.png</file>
+        <file>music/public/noalbum.png</file>
     </qresource>
 </RCC>

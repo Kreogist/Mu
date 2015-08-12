@@ -138,7 +138,8 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_nowPlaying(nullptr),
     m_searcherThread(new QThread(this)),
     m_analysisThread(new QThread(this)),
-    m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music"))
+    m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music")),
+    m_noAlbumArt(QPixmap(":/plugin/music/public/noalbum.png"))
 {
     //Initial the file type.
     initialFileType();
@@ -382,6 +383,11 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Anime"
                    <<"JPop"
                    <<"Synthpop";
+}
+
+QPixmap KNMusicGlobal::noAlbumArt() const
+{
+    return m_noAlbumArt;
 }
 
 KNMusicSoloMenuBase *KNMusicGlobal::soloMenu() const

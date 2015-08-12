@@ -15,30 +15,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QGraphicsOpacityEffect>
 
-#ifndef KNMUSICPLAYERBASE_H
-#define KNMUSICPLAYERBASE_H
+#include "knhighlightlabel.h"
 
-#include "kndropproxycontainer.h"
+#include "knmusicglobal.h"
 
-class KNMusicPlayerBase : public KNDropProxyContainer
+#include "knmusicheaderplayer.h"
+
+#define AlbumArtSize 61
+
+KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
+    KNMusicHeaderPlayerBase(parent),
+    m_albumArt(new KNHighLightLabel(this)),
+    m_informationEffect(new QGraphicsOpacityEffect(this))
 {
-    Q_OBJECT
-public:
-    KNMusicPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
+    //Set properties.
+    setContentsMargins(0, 0, 0, 0);
+    setFixedHeight(66);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-signals:
-    void requirePlayPrevious();
-    void requirePlayNext();
+    //Initial the UI elements.
+    // Graphics Effect;
+    m_informationEffect->setOpacity(1.0);
+    // Album Art;
+    m_albumArt->setFixedSize(AlbumArtSize, AlbumArtSize);
+    m_albumArt->move(13, 4);
+    m_albumArt->setGraphicsEffect(m_informationEffect);
+    // Title;
+}
 
-    void requireChangeLoopState();
-
-    void requireShowInSongs();
-    void requireShowInArtists();
-    void requireShowInAlbums();
-    void requireShowInGenres();
-
-public slots:
-};
-
-#endif // KNMUSICPLAYERBASE_H

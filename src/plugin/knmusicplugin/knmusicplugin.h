@@ -24,12 +24,15 @@
 class QBoxLayout;
 class KNMouseDetectHeader;
 class KNHWidgetSwitcher;
+class KNVWidgetSwitcher;
 class KNCategoryTabBar;
 class KNSideShadowWidget;
 class KNMusicDetailDialogPanel;
 class KNMusicSoloMenuBase;
 class KNMusicSearchBase;
 class KNMusicNowPlayingBase;
+class KNMusicHeaderPlayerBase;
+class KNMusicPlayerBase;
 class KNMusicPlaylistBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
@@ -87,11 +90,15 @@ private:
 
     void initialSearch(KNMusicSearchBase *search);
     void initialNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+    void initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
+
+    inline void initialPlayerWidget(KNMusicPlayerBase *player);
 
     //UI infrastructure elements.
     KNMouseDetectHeader *m_headerWidget;
-    QBoxLayout *m_headerLeftLayout, *m_headerRightLayout;
+    KNVWidgetSwitcher *m_headerWidgetContainer;
+    QBoxLayout *m_headerRightLayout;
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;
     KNSideShadowWidget *m_topShadow;

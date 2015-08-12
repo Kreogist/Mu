@@ -23,6 +23,7 @@
 #include "knhwidgetswitcher.h"
 #include "knmousedetectheader.h"
 #include "knsideshadowwidget.h"
+#include "knvwidgetswitcher.h"
 
 //SDK Dependence.
 #include "knmusicdetaildialog.h"
@@ -35,6 +36,8 @@
 #include "knmusicsolomenubase.h"
 #include "knmusicplaylistbase.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusicheaderplayerbase.h"
+#include "knmusicplayerbase.h"
 
 //Plugins
 // Detail Dialog Panels.
@@ -49,6 +52,8 @@
 #include "plugin/knmusicsearch/knmusicsearch.h"
 // Now Playing.
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+// Header Player.
+#include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 // Playlist.
 #include "plugin/knmusicplaylist/knmusicplaylist.h"
 
@@ -64,7 +69,7 @@
 KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     KNAbstractMusicPlugin(parent),
     m_headerWidget(new KNMouseDetectHeader(this)),
-    m_headerLeftLayout(nullptr),
+    m_headerWidgetContainer(new KNVWidgetSwitcher(m_headerWidget)),
     m_headerRightLayout(nullptr),
     m_tabBar(new KNCategoryTabBar(this)),
     m_switcher(new KNHWidgetSwitcher(this)),
@@ -84,6 +89,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     initialSearch(new KNMusicSearch);
     //Initial the now playing.
     initialNowPlaying(new KNMusicNowPlaying);
+    //Iniital the header player.
+    initialHeaderPlayer(new KNMusicHeaderPlayer);
     //Initial the plugins.
     initialPlaylist(new KNMusicPlaylist);
 
@@ -122,7 +129,11 @@ void KNMusicPlugin::saveConfigure()
 
 void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
 {
-    ;
+    //Check the now playing is valid.
+    if(knMusicGlobal->nowPlaying())
+    {
+        ;
+    }
 }
 
 void KNMusicPlugin::resizeEvent(QResizeEvent *event)
@@ -147,12 +158,8 @@ void KNMusicPlugin::initialInfrastructure()
     headerLayout->setContentsMargins(0,0,10,0);
     headerLayout->setSpacing(0);
     m_headerWidget->setLayout(headerLayout);
-    //Initial left layout.
-    m_headerLeftLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                      headerLayout->widget());
-    m_headerLeftLayout->setContentsMargins(0,0,0,0);
-    m_headerLeftLayout->setSpacing(0);
-    headerLayout->addLayout(m_headerLeftLayout, 1);
+    //Initial the vertical widget switcher.
+    headerLayout->addWidget(m_headerWidgetContainer, 1);
     //Initial right layout.
     m_headerRightLayout=new QBoxLayout(QBoxLayout::RightToLeft,
                                        headerLayout->widget());
@@ -222,6 +229,12 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     nowPlaying->loadConfigure();
     //Set the now playing to music global.
     knMusicGlobal->setNowPlaying(nowPlaying);
+}
+
+void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
+{
+    //Add the header player to the header left layout.
+    m_headerWidgetContainer->addWidget(headerPlayer);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

@@ -400,8 +400,8 @@ private:
         frameData.flags[1]=rawTagData[9];
     }
     //APIC frame and PIC frame generator.
-    inline QByteArray generateAPICImageData(const QImage &image);
-    inline QByteArray generatePICImageData(const QImage &image);
+    inline QByteArray generateImageData(const QImage &image,
+                                        const int &frameIDSize);
     //APIC frame and PIC frame parser.
     inline void parseAPICImageData(QByteArray imageData,
                                    QHash<int, ID3v2PictureFrame> &imageMap);

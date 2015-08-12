@@ -20,6 +20,7 @@
 #define KNMUSICGLOBAL_H
 
 #include <QStringList>
+#include <QPixmap>
 
 #include "knmusicutil.h"
 
@@ -198,6 +199,12 @@ public:
      */
     QStringList listSuffixList() const;
 
+    /*!
+     * \brief Get the default album art image when there's no album art.
+     * \return The no album art image.
+     */
+    QPixmap noAlbumArt() const;
+
 signals:
 
 public slots:
@@ -231,6 +238,7 @@ private:
     QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
                 m_listSuffixDescription, m_indexedGenres;
     QString m_treeViewHeaderText[MusicDataCount];
+    QPixmap m_noAlbumArt;
 };
 
 #endif // KNMUSICGLOBAL_H

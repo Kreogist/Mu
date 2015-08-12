@@ -36,6 +36,8 @@ KNMusicSearch::KNMusicSearch(QObject *parent) :
     m_engine(new KNMusicSearchSyntaxEngine(this)),
     m_activateAction(new QAction(this))
 {
+    //Configure the search box.
+    m_searchBox->setMinimumWidth(143);
     //Configure the action.
     m_activateAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     m_activateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -84,7 +86,6 @@ void KNMusicSearch::search(const QList<KNMusicSearchBlock> &blocks)
     m_searchBox->blockSignals(true);
     //Set the search text to search box.
     m_searchBox->setText(m_engine->generateSearchText(m_searchBlockList));
-    qDebug()<<m_engine->generateSearchText(m_searchBlockList);
     //Release the signal block.
     m_searchBox->blockSignals(false);
     //Ask to search the data.

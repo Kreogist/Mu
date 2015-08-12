@@ -16,29 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYERBASE_H
-#define KNMUSICPLAYERBASE_H
+#ifndef KNMUSICHEADERPLAYER_H
+#define KNMUSICHEADERPLAYER_H
 
-#include "kndropproxycontainer.h"
+#include "knmusicheaderplayerbase.h"
 
-class KNMusicPlayerBase : public KNDropProxyContainer
+class QGraphicsOpacityEffect;
+class KNHighLightLabel;
+class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
 {
     Q_OBJECT
 public:
-    KNMusicPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
+    explicit KNMusicHeaderPlayer(QWidget *parent = 0);
 
 signals:
-    void requirePlayPrevious();
-    void requirePlayNext();
-
-    void requireChangeLoopState();
-
-    void requireShowInSongs();
-    void requireShowInArtists();
-    void requireShowInAlbums();
-    void requireShowInGenres();
 
 public slots:
+
+private:
+    KNHighLightLabel *m_albumArt;
+    QGraphicsOpacityEffect *m_informationEffect;
 };
 
-#endif // KNMUSICPLAYERBASE_H
+#endif // KNMUSICHEADERPLAYER_H

@@ -343,15 +343,13 @@ bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
     {
         //Generate a data frame.
         ID3v2DataFrame dataFrame;
-        //Check the major.
-        if(toolset.frameHeaderSize==3)
-        {
-            dataFrame.data;
-        }
-        else
-        {
-            dataFrame.data=generateAPICImageData(analysisItem.coverImage);
-        }
+        //Generate the image data.
+        dataFrame.data=generateImageData(analysisItem.coverImage,
+                                         toolset.frameIDSize);
+        //Add the data frame to frame map.
+        frameMap.insert(toolset.frameIDSize==4?
+                            "APIC":"PIC",
+                        dataFrame);
     }
 
     //Now translate the frame structure data to the raw data.
@@ -822,12 +820,15 @@ void KNMusicTagId3v2::writeFrameToDetails(const QLinkedList<ID3v2Frame> &frames,
     }
 }
 
-QByteArray KNMusicTagId3v2::generateAPICImageData(const QImage &image)
+QByteArray KNMusicTagId3v2::generateImageData(const QImage &image,
+                                              const int &frameIDSize)
 {
     //Generate a byte array to storage image data.
     QByteArray frameData;
     //Add encodec text. Use code 0 codec.
-    frameData.append(stringToContent("image/png", 0));
+    frameData.append(stringToContent(frameIDSize==4?
+                                         QString("image/png"):
+                                         QString("PNG"), 0));
     //Add 0x03 to make this image to be the album cover.
     frameData.append((char)0x03);
     //Add description empty data '0x00' as the description.
@@ -846,11 +847,6 @@ QByteArray KNMusicTagId3v2::generateAPICImageData(const QImage &image)
     frameData.append(imageData);
     //Give back the frame data.
     return frameData;
-}
-
-QByteArray KNMusicTagId3v2::generatePICImageData(const QImage &image)
-{
-    ;
 }
 
 inline void KNMusicTagId3v2::parseAPICImageData(
