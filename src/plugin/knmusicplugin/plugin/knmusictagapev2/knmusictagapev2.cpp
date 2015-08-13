@@ -161,7 +161,7 @@ bool KNMusicTagApev2::parseTag(QFile &musicFile,
             if(splitterIndex==-1)
             {
                 //means it only contains track number.
-                detailInfo.textLists[TrackNumber]=trackText;
+                detailInfo.textLists[TrackNumber]=QVariant(trackText);
             }
             else
             {
@@ -258,7 +258,7 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
     for(int i=0; i<MusicDataCount; i++)
     {
         //Check if the text is empty.
-        if(detailInfo.textLists[i].isEmpty())
+        if(detailInfo.textLists[i].toString().isEmpty())
         {
             continue;
         }
@@ -279,13 +279,13 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
         case DiscNumber:
             //If disc count isn't empty, then add disc count to disc number
             //data.
-            item.value=detailInfo.textLists[DiscCount].isEmpty()?
-                                detailInfo.textLists[DiscNumber].toUtf8():
-                                (detailInfo.textLists[DiscNumber]+"/"+
-                                    detailInfo.textLists[DiscCount]).toUtf8();
+            item.value=detailInfo.textLists[DiscCount].toString().isEmpty()?
+                        detailInfo.textLists[DiscNumber].toString().toUtf8():
+                        (detailInfo.textLists[DiscNumber].toString()+"/"+
+                         detailInfo.textLists[DiscCount].toString()).toUtf8();
         default:
             //Add the whole data to the item.
-            item.value=detailInfo.textLists[i].toUtf8();
+            item.value=detailInfo.textLists[i].toString().toUtf8();
         }
         //Remove the all the original item.
         //We have to check the key from the back to the first, and we won't get

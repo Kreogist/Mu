@@ -45,7 +45,7 @@ public:
     /*!
      * \brief Reimplemented from QWidget::sizeHint().
      */
-    QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 signals:
 
@@ -55,12 +55,12 @@ protected:
     /*!
      * \brief Reimplement from QWidget::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplement from QWidget::resizeEvent().
      */
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     inline void updateHighLightArea();

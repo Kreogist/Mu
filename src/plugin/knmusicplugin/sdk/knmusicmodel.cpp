@@ -300,7 +300,7 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
     case Qt::EditRole:
         return index.column()>=MusicDataCount?
-                    QString():
+                    QVariant():
                     detailInfo.textLists[index.column()];
     case Qt::TextAlignmentRole:
         //Check the section.

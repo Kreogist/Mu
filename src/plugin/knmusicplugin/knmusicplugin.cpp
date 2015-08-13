@@ -132,7 +132,8 @@ void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
     //Check the now playing is valid.
     if(knMusicGlobal->nowPlaying())
     {
-        ;
+        //Ask the now playing to play those files as temporary files.
+        knMusicGlobal->nowPlaying()->playTemporaryFiles(data);
     }
 }
 

@@ -269,7 +269,7 @@ void KNMusicNowPlaying::setPlayingRating(int rating)
     //Get the detail info.
     KNMusicDetailInfo &detailInfo=m_playingAnalysisItem.detailInfo;
     //Set the rating number to the current analysis item.
-    detailInfo.textLists[Rating]=QString::number(rating);
+    detailInfo.textLists[Rating]=QVariant(QString::number(rating));
     //Update the detail info.
     playingMusicModel()->updateRow(m_playingIndex.row(), detailInfo);
 }

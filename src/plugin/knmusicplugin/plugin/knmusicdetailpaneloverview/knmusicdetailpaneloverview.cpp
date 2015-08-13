@@ -76,14 +76,15 @@ void KNMusicDetailPanelOverview::setAnalysisItem(
     //Get the detail info.
     const KNMusicDetailInfo &detailInfo=item.detailInfo;
     //Set the analysis item to the label.
-    m_information[DetailYear]->setText(detailInfo.textLists[Year]);
-    m_information[DetailGenre]->setText(detailInfo.textLists[Genre]);
-    m_information[DetailKind]->setText(detailInfo.textLists[Kind]);
-    m_information[DetailSize]->setText(detailInfo.textLists[Size]);
-    m_information[DetailBitRate]->setText(detailInfo.textLists[BitRate]);
-    m_information[DetailSampleRate]->setText(detailInfo.textLists[SampleRate]);
+    m_information[DetailYear]->setText(detailInfo.textLists[Year].toString());
+    m_information[DetailGenre]->setText(detailInfo.textLists[Genre].toString());
+    m_information[DetailKind]->setText(detailInfo.textLists[Kind].toString());
+    m_information[DetailSize]->setText(detailInfo.textLists[Size].toString());
+    m_information[DetailBitRate]->setText(detailInfo.textLists[BitRate].toString());
+    m_information[DetailSampleRate]->setText(
+                detailInfo.textLists[SampleRate].toString());
     m_information[DetailDateModified]->setText(
-                detailInfo.textLists[DateModified]);
+                detailInfo.textLists[DateModified].toString());
 }
 
 void KNMusicDetailPanelOverview::retranslate()

@@ -24,6 +24,10 @@
         "Highlight" : "#606060",
         "HighlightedText" : "#f7cf3d"
     },
+    "HeaderPlayerLabel" : {
+        "Parent" : "MainWindow",
+        "Text" : "#FFFFFF"
+    },
     "SearchBox" : {
         "Parent" : "MainWindow",
         "Base" : "#000000",

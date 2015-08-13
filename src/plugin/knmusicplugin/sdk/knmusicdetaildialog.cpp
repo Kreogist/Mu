@@ -126,10 +126,13 @@ void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem)
     //Get the detail information.
     const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Set the text basic information.
-    m_basicInfoLabel[LabelName]->setText(detailInfo.textLists[Name]);
-    m_basicInfoLabel[LabelDuration]->setText(detailInfo.textLists[Time]);
-    m_basicInfoLabel[LabelArtist]->setText(detailInfo.textLists[Artist]);
-    m_basicInfoLabel[LabelAlbum]->setText(detailInfo.textLists[Album]);
+    m_basicInfoLabel[LabelName]->setText(detailInfo.textLists[Name].toString());
+    m_basicInfoLabel[LabelDuration]->setText(
+                detailInfo.textLists[Time].toString());
+    m_basicInfoLabel[LabelArtist]->setText(
+                detailInfo.textLists[Artist].toString());
+    m_basicInfoLabel[LabelAlbum]->setText(
+                detailInfo.textLists[Album].toString());
 
     //Ask all the panel to update the information.
     for(QLinkedList<KNMusicDetailDialogPanel *>::iterator i=m_panelList.begin();

@@ -77,11 +77,11 @@ protected:
      * \param destination The destination string.
      * \param source The new data string.
      */
-    inline void setTextData(QString &destination, const QString &source)
+    inline void setTextData(QVariant &destination, const QString &source)
     {
         if(!source.isEmpty())
         {
-            destination=source;
+            destination=QVariant(source);
         }
     }
 };

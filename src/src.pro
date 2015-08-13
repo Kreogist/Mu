@@ -159,7 +159,9 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusicsearcher.cpp \
     plugin/knmusicplugin/sdk/knmusicanalysisqueue.cpp \
     plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp \
-    sdk/knhighlightlabel.cpp
+    sdk/knhighlightlabel.cpp \
+    sdk/knscrolllabel.cpp \
+    sdk/kngraphicsgloweffect.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -265,7 +267,9 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicanalysisqueue.h \
     plugin/knmusicplugin/sdk/knmusicheaderplayerbase.h \
     plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.h \
-    sdk/knhighlightlabel.h
+    sdk/knhighlightlabel.h \
+    sdk/knscrolllabel.h \
+    sdk/kngraphicsgloweffect.h
 
 RESOURCES += \
     resource/res.qrc

@@ -277,7 +277,7 @@ bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
     for(int i=0; i<MusicDataCount; i++)
     {
         //Check if the text is empty.
-        if(detailInfo.textLists[i].isEmpty())
+        if(detailInfo.textLists[i].toString().isEmpty())
         {
             continue;
         }
@@ -299,10 +299,10 @@ bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
             //data.
             dataFrame.data=
                     stringToContent(
-                        (detailInfo.textLists[DiscCount].isEmpty())?
-                            detailInfo.textLists[DiscNumber]:
-                            detailInfo.textLists[DiscNumber] + "/" +
-                                detailInfo.textLists[DiscCount],
+                        (detailInfo.textLists[DiscCount].toString().isEmpty())?
+                            detailInfo.textLists[DiscNumber].toString():
+                            detailInfo.textLists[DiscNumber].toString() + "/" +
+                                detailInfo.textLists[DiscCount].toString(),
                          encoding);
             break;
         }
@@ -312,10 +312,10 @@ bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
             //data.
             dataFrame.data=
                     stringToContent(
-                        (detailInfo.textLists[TrackCount].isEmpty())?
-                            detailInfo.textLists[TrackNumber]:
-                            detailInfo.textLists[TrackNumber] + "/" +
-                                detailInfo.textLists[TrackCount],
+                        (detailInfo.textLists[TrackCount].toString().isEmpty())?
+                            detailInfo.textLists[TrackNumber].toString():
+                            detailInfo.textLists[TrackNumber].toString() + "/" +
+                                detailInfo.textLists[TrackCount].toString(),
                          encoding);
             break;
         }
@@ -328,7 +328,8 @@ bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
         }
         default:
             //Treat it as a text frame.
-            dataFrame.data=stringToContent(detailInfo.textLists[i], encoding);
+            dataFrame.data=stringToContent(detailInfo.textLists[i].toString(),
+                                           encoding);
         }
         //Insert the data frame to frame map, because the insert function will
         //replace the old one, so it will keep the data to the latest one.

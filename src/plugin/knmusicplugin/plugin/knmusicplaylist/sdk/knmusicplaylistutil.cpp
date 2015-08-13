@@ -35,7 +35,7 @@ KNMusicDetailInfo KNMusicPlaylistUtil::objectToDetailInfo(
         for(int i=0; i<MusicDataCount; i++)
         {
             //Save the text caption.
-            detailInfo.textLists[i]=textData.at(i).toString();
+            detailInfo.textLists[i]=QVariant(textData.at(i).toString());
         }
     }
     //Read the other appendix data.
@@ -56,11 +56,11 @@ KNMusicDetailInfo KNMusicPlaylistUtil::objectToDetailInfo(
     detailInfo.samplingRate=object.value("SampleRate").toDouble();
     //Retranslate some text for multi-locale support.
     detailInfo.textLists[DateModified]=
-            KNMusicUtil::dateTimeToText(detailInfo.dateModified);
+            QVariant(KNMusicUtil::dateTimeToText(detailInfo.dateModified));
     detailInfo.textLists[DateAdded]=
-            KNMusicUtil::dateTimeToText(detailInfo.dateAdded);
+            QVariant(KNMusicUtil::dateTimeToText(detailInfo.dateAdded));
     detailInfo.textLists[LastPlayed]=
-            KNMusicUtil::dateTimeToText(detailInfo.dateLastPlayed);
+            QVariant(KNMusicUtil::dateTimeToText(detailInfo.dateLastPlayed));
     //Detail info loaded complete.
     return detailInfo;
 }

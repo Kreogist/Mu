@@ -106,7 +106,7 @@ namespace MusicUtil
         //Image hash data.
         QString coverImageHash;
         //Tag datas.
-        QString textLists[MusicDataCount];
+        QVariant textLists[MusicDataCount];
         //The cannot playing flag.
         bool cannotPlay;
         //Initial the values

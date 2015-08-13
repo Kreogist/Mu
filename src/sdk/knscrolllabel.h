@@ -16,28 +16,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICHEADERPLAYER_H
-#define KNMUSICHEADERPLAYER_H
+#ifndef KNSCROLLLABEL_H
+#define KNSCROLLLABEL_H
 
-#include "knmusicheaderplayerbase.h"
+#include <QWidget>
 
-class KNHighLightLabel;
-class KNScrollLabel;
-class QGraphicsOpacityEffect;
-class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
+class KNGraphicsGlowEffect;
+class KNScrollLabel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNMusicHeaderPlayer(QWidget *parent = 0);
+    explicit KNScrollLabel(QWidget *parent = 0);
+
+    QString text() const;
+    void setText(const QString &text);
+
+    QSize sizeHint() const;
 
 signals:
 
 public slots:
 
+protected:
+    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
+
+private slots:
+    void moveText();
+
 private:
-    KNHighLightLabel *m_albumArt;
-    KNScrollLabel *m_title, *m_artistAlbum;
-    QGraphicsOpacityEffect *m_informationEffect;
+    inline void stopTimers();
+    inline void updateAnimeParameters();
+    KNGraphicsGlowEffect *m_glowEffect;
+    QString m_text;
+    QTimer *m_move, *m_wait;
+    qreal m_opacity;
+    int m_textLeftMostX, m_textX;
+    bool m_movingLeft;
 };
 
-#endif // KNMUSICHEADERPLAYER_H
+#endif // KNSCROLLLABEL_H

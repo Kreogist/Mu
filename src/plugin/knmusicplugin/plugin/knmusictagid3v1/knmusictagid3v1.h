@@ -75,7 +75,7 @@ private:
     }
 
     inline void setRawTagData(char *rawTagData,
-                              const QString &text,
+                              const QVariant &text,
                               const int &length);
 
     inline void backupByte(char *rawTagData,
