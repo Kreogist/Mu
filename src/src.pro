@@ -161,7 +161,13 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp \
     sdk/knhighlightlabel.cpp \
     sdk/knscrolllabel.cpp \
-    sdk/kngraphicsgloweffect.cpp
+    sdk/kngraphicsgloweffect.cpp \
+    sdk/knabstractslider.cpp \
+    sdk/knprogressslider.cpp \
+    sdk/kneditablelabel.cpp \
+    sdk/kncancellineedit.cpp \
+    sdk/knopacitybutton.cpp \
+    sdk/knvolumeslider.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -269,7 +275,13 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.h \
     sdk/knhighlightlabel.h \
     sdk/knscrolllabel.h \
-    sdk/kngraphicsgloweffect.h
+    sdk/kngraphicsgloweffect.h \
+    sdk/knabstractslider.h \
+    sdk/knprogressslider.h \
+    sdk/kneditablelabel.h \
+    sdk/kncancellineedit.h \
+    sdk/knopacitybutton.h \
+    sdk/knvolumeslider.h
 
 RESOURCES += \
     resource/res.qrc

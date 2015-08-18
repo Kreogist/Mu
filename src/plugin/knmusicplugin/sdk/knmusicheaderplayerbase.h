@@ -30,6 +30,17 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief When the mouse entered, activate function should be called by the
+     * header.
+     */
+    virtual void activate()=0;
+
+    /*!
+     * \brief When the mouse leaved, inactivate function should be called by the
+     * header.
+     */
+    virtual void inactivate()=0;
 };
 
 #endif // KNMUSICHEADERPLAYERBASE_H

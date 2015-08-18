@@ -38,6 +38,7 @@ class KNMusicDetailDialog;
 class KNMusicParser;
 class KNMusicSearchBase;
 class KNConfigure;
+class KNMusicBackend;
 class KNMusicNowPlayingBase;
 class KNMusicSoloMenuBase;
 /*!
@@ -205,6 +206,18 @@ public:
      */
     QPixmap noAlbumArt() const;
 
+    /*!
+     * \brief Get the backend object class.
+     * \return The music backend class pointer.
+     */
+    KNMusicBackend *backend() const;
+
+    /*!
+     * \brief Set the backend class object.
+     * \param backend The backend class object pointer.
+     */
+    void setBackend(KNMusicBackend *backend);
+
 signals:
 
 public slots:
@@ -229,6 +242,7 @@ private:
     KNMusicParser *m_parser;
     KNMusicSoloMenuBase *m_soloMenu;
     KNMusicSearchBase *m_search;
+    KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
 
     QThread *m_searcherThread, *m_analysisThread;

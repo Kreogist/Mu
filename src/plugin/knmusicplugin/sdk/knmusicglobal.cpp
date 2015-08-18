@@ -385,6 +385,16 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Synthpop";
 }
 
+KNMusicBackend *KNMusicGlobal::backend() const
+{
+    return m_backend;
+}
+
+void KNMusicGlobal::setBackend(KNMusicBackend *backend)
+{
+    m_backend = backend;
+}
+
 QPixmap KNMusicGlobal::noAlbumArt() const
 {
     return m_noAlbumArt;

@@ -16,8 +16,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QLineEdit>
 #include <QPainter>
+
+#include "kncancellineedit.h"
 
 #include "knmusicplaylistlistdelegate.h"
 
@@ -82,7 +83,7 @@ QWidget *KNMusicPlaylistListDelegate::createEditor(
 {
     Q_UNUSED(index)
     //Generate the caption editor.
-    QLineEdit *captionEditor=new QLineEdit(parent);
+    KNCancelLineEdit *captionEditor=new KNCancelLineEdit(parent);
 
     //Hide the border of the editor.
     QPalette editorPalette=option.palette;
@@ -103,7 +104,7 @@ QWidget *KNMusicPlaylistListDelegate::createEditor(
                 option.rect.height());
     //Link the caption editor editing finished signal.
     //Sorry, but you cannot use lambda here.
-    connect(captionEditor, &QLineEdit::editingFinished,
+    connect(captionEditor, &KNCancelLineEdit::editingEnsure,
             this, &KNMusicPlaylistListDelegate::commitAndCloseEditor);
     //Give back the caption line edit.
     return captionEditor;
@@ -113,7 +114,7 @@ void KNMusicPlaylistListDelegate::setEditorData(QWidget *editor,
                                                 const QModelIndex &index) const
 {
     //Cast the editor to be the line edit.
-    (static_cast<QLineEdit *>(editor))->setText(
+    (static_cast<KNCancelLineEdit *>(editor))->setText(
                 //Set the text of the editor to be the edit role.
                 index.data(Qt::EditRole).toString());
 }
@@ -123,7 +124,7 @@ void KNMusicPlaylistListDelegate::setModelData(QWidget *editor,
                                                const QModelIndex &index) const
 {
     //Set model data to editor's text.
-    QLineEdit *captionEditor=static_cast<QLineEdit *>(editor);
+    KNCancelLineEdit *captionEditor=static_cast<KNCancelLineEdit *>(editor);
     //Check the data, avoid the empty data.
     if(!captionEditor->text().isEmpty())
     {
@@ -135,7 +136,7 @@ void KNMusicPlaylistListDelegate::setModelData(QWidget *editor,
 void KNMusicPlaylistListDelegate::commitAndCloseEditor()
 {
     //Cast the sender as line edit widget.
-    QLineEdit *editor=static_cast<QLineEdit *>(sender());
+    KNCancelLineEdit *editor=static_cast<KNCancelLineEdit *>(sender());
     //Commit the data to the model first.
     emit commitData(editor);
     //Close the editor.

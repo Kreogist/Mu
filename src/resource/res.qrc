@@ -28,5 +28,15 @@
         <file>music/public/playingicon.png</file>
         <file>music/public/cannotplay.png</file>
         <file>music/public/noalbum.png</file>
+        <file>music/player/NoRepeat.png</file>
+        <file>music/player/Random.png</file>
+        <file>music/player/Repeat.png</file>
+        <file>music/player/RepeatSingle.png</file>
+        <file>music/player/next.png</file>
+        <file>music/player/pause.png</file>
+        <file>music/player/play.png</file>
+        <file>music/player/previous.png</file>
+        <file>music/player/mute_false.png</file>
+        <file>music/player/mute_true.png</file>
     </qresource>
 </RCC>

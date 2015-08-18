@@ -121,7 +121,6 @@ bool KNMusicTagApev2::parseTag(QFile &musicFile,
         //Set the header found flag.
         foundHeader=true;
     }
-    qDebug()<<foundHeader;
     //Check if we have found the header. If we didn't find any header, then
     //failed to parse the APEv1/APEv2.
     if(!foundHeader)

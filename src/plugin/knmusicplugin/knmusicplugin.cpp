@@ -234,8 +234,18 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 
 void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
 {
+    //Check if the header player is nullptr.
+    if(headerPlayer==nullptr)
+    {
+        return;
+    }
     //Add the header player to the header left layout.
     m_headerWidgetContainer->addWidget(headerPlayer);
+    //Link the header and the header player.
+    connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
+            headerPlayer, &KNMusicHeaderPlayerBase::activate);
+    connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
+            headerPlayer, &KNMusicHeaderPlayerBase::inactivate);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

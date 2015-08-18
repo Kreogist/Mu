@@ -24,6 +24,9 @@
 #include <QDebug>
 
 QStringList KNMusicModel::m_dropMimeTypes=QStringList();
+QVariant KNMusicModel::m_alignLeft=QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+QVariant KNMusicModel::m_alignCenter=QVariant(Qt::AlignCenter);
+QVariant KNMusicModel::m_alignRight=QVariant(Qt::AlignRight | Qt::AlignVCenter);
 
 KNMusicModel::KNMusicModel(QObject *parent) :
     QAbstractTableModel(parent),
@@ -40,6 +43,8 @@ KNMusicModel::KNMusicModel(QObject *parent) :
         m_dropMimeTypes=QAbstractTableModel::mimeTypes();
         //Add url format.
         m_dropMimeTypes.append("text/uri-list");
+        //Initial cache data.
+
         //Add music detail info list.
         //!FIXME: add codes here.
     }
@@ -240,10 +245,10 @@ QVariant KNMusicModel::headerData(int section,
         //For Size and Time columns, make it right and vertical center.
         case Size:
         case Time:
-            return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+            return m_alignRight;
         default:
             //For other columns, make it left and vertical center.
-            return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+            return m_alignLeft;
         }
     default:
         return QAbstractTableModel::headerData(section, Qt::Horizontal, role);
@@ -309,10 +314,10 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
         //For Size and Time columns, make it right and vertical center.
         case Size:
         case Time:
-            return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+            return m_alignRight;
         default:
             //For other columns, make it left and vertical center.
-            return QVariant(Qt::AlignVCenter);
+            return m_alignLeft;
         }
     case Qt::DecorationRole:
         //Only when the column is MusicRowState column, it can have a decoration

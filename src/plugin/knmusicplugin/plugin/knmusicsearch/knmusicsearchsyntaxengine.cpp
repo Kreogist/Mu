@@ -23,8 +23,6 @@
 
 #include "knmusicsearchsyntaxengine.h"
 
-#include <QDebug>
-
 KNMusicSearchSyntaxEngine::KNMusicSearchSyntaxEngine(QObject *parent) :
     QObject(parent)
 {

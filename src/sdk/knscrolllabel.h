@@ -33,6 +33,9 @@ public:
 
     QSize sizeHint() const;
 
+    qreal opacity() const;
+    void setOpacity(const qreal &opacity);
+
 signals:
 
 public slots:

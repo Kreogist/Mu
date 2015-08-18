@@ -143,27 +143,41 @@ void KNScrollLabel::stopTimers()
 
 inline void KNScrollLabel::updateAnimeParameters()
 {
+    //Stop all the timer.
+    stopTimers();
     //Reset the text left.
     m_textX=contentsRect().x();
     //Get the text width.
     int textWidth=fontMetrics().width(m_text)+GlowRadius;
-    //Check the text width is longer than the width.
-    if(textWidth>width())
+    //Check the text width is longer than the maximum display width.
+    int maxDisplayWidth=rect().width()+GlowRadius/2+1;
+    if(textWidth>maxDisplayWidth)
     {
-        //Stop all the timer.
-        stopTimers();
         //Set the tooltip.
         setToolTip(m_text);
         //Calculate most left X. This can control the right spacing.
-        m_textLeftMostX=width()-textWidth;
+        m_textLeftMostX=maxDisplayWidth-textWidth;
         //Start waiting timer.
         m_wait->start();
         return;
     }
-    //When the text width is shorter than width.
-    m_textLeftMostX=0;
     //Clear the tooltip text.
     setToolTip("");
+    //When the text width is shorter than width.
+    m_textLeftMostX=0;
+}
+
+qreal KNScrollLabel::opacity() const
+{
+    return m_opacity;
+}
+
+void KNScrollLabel::setOpacity(const qreal &opacity)
+{
+    //Save the opacity.
+    m_opacity = opacity;
+    //Update the label.
+    update();
 }
 
 QString KNScrollLabel::text() const
@@ -187,5 +201,5 @@ void KNScrollLabel::setText(const QString &text)
 
 QSize KNScrollLabel::sizeHint() const
 {
-    return QSize(width(), GlowRadius*2+fontMetrics().height());
+    return QSize(width(), GlowRadius+fontMetrics().height());
 }

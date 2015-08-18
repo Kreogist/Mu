@@ -37,7 +37,7 @@ KNMusicSearch::KNMusicSearch(QObject *parent) :
     m_activateAction(new QAction(this))
 {
     //Configure the search box.
-    m_searchBox->setMinimumWidth(143);
+    m_searchBox->setMinimumWidth(220);
     //Configure the action.
     m_activateAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     m_activateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
