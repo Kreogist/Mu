@@ -167,7 +167,8 @@ SOURCES += \
     sdk/kneditablelabel.cpp \
     sdk/kncancellineedit.cpp \
     sdk/knopacitybutton.cpp \
-    sdk/knvolumeslider.cpp
+    sdk/knvolumeslider.cpp \
+    plugin/knmusicplugin/sdk/knmusicstandardbackend.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -281,7 +282,9 @@ HEADERS += \
     sdk/kneditablelabel.h \
     sdk/kncancellineedit.h \
     sdk/knopacitybutton.h \
-    sdk/knvolumeslider.h
+    sdk/knvolumeslider.h \
+    plugin/knmusicplugin/sdk/knmusicstandardbackend.h \
+    plugin/knmusicplugin/sdk/knmusicstandardbackendthread.h
 
 RESOURCES += \
     resource/res.qrc

@@ -47,7 +47,7 @@ public:
      * \return The duration of the main thread music in msecond. If there's no
      * music playing, return -1.
      */
-    virtual qint64 duration()=0;
+    virtual qint64 duration() const=0;
 
     /*!
      * \brief Get the current position of the main thread.
@@ -212,6 +212,11 @@ signals:
     void finished();
 
     /*!
+     * \brief When you stop the main thread, this signal will be emitted.
+     */
+    void stopped();
+
+    /*!
      * \brief When the playing of a file is changed, e.g.: from pausing or
      * stopped to playing, this signal will be emitted.
      * \param state The new state of the main thread.
@@ -249,6 +254,11 @@ signals:
      * this signal will be emitted.
      */
     void previewFinished();
+
+    /*!
+     * \brief When you stop the preview thread, this signal will be emitted.
+     */
+    void previewStopped();
 
     /*!
      * \brief When the playing of the preview file is changed, this signal will
