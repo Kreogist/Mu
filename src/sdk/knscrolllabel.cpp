@@ -19,8 +19,6 @@
 #include <QPainter>
 #include <QSizePolicy>
 
-#include "kngraphicsgloweffect.h"
-
 #include "knscrolllabel.h"
 
 #define GlowRadius 9.0
@@ -29,7 +27,6 @@
 
 KNScrollLabel::KNScrollLabel(QWidget *parent) :
     QWidget(parent),
-    m_glowEffect(new KNGraphicsGlowEffect(this)),
     m_text(QString()),
     m_move(new QTimer(this)),
     m_wait(new QTimer(this)),
@@ -50,11 +47,6 @@ KNScrollLabel::KNScrollLabel(QWidget *parent) :
     m_wait->setInterval(LongWaiting);
     m_wait->setSingleShot(true);
     connect(m_wait, &QTimer::timeout, [=]{m_move->start();});
-
-    //Configure the glow effect.
-    m_glowEffect->setColor(QColor(0,0,0));
-    m_glowEffect->setRadius(GlowRadius);
-    setGraphicsEffect(m_glowEffect);
 }
 
 void KNScrollLabel::paintEvent(QPaintEvent *event)

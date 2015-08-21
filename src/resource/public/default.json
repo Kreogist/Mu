@@ -6,6 +6,11 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "MusicDetailTooltip" : {
+        "Parent" : "MainWindow",
+        "Window" : "#FFFFFF",
+        "WindowText" : "#FFFFFF"
+    },
     "MusicSoloMenu" :{
         "Parent" : "MainWindow",
         "Base" : "#00000000",

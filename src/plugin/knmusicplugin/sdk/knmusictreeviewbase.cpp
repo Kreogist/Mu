@@ -17,6 +17,7 @@
  */
 #include <QScrollBar>
 #include <QTimeLine>
+#include <QHelpEvent>
 #include <QMouseEvent>
 #include <QPainter>
 
@@ -29,6 +30,7 @@
 #include "knmusicsolomenubase.h"
 #include "knmusictreeviewheader.h"
 #include "knmusicratingdelegate.h"
+#include "knmusicdetailtooltipbase.h"
 
 #include "knmusictreeviewbase.h"
 
@@ -81,6 +83,10 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
                              new KNMusicRatingDelegate(this));
     setItemDelegateForColumn(AlbumRating,
                              new KNMusicRatingDelegate(this));
+
+    //Link the tree view signal and slot.
+    connect(this, &KNMusicTreeViewBase::activated,
+            this, &KNMusicTreeViewBase::onActionActivate);
 
     //Link with theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
@@ -156,7 +162,10 @@ void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
         if(event->button()==Qt::RightButton && rect().contains(event->pos()))
         {
             //Hide the detail tooltip first.
-            //!FIXME: add codes here.
+            if(knMusicGlobal->detailTooltip())
+            {
+                knMusicGlobal->detailTooltip()->hide();
+            }
             //According to the selected rows, display different menu.
             switch(selectionModel()->selectedRows().size())
             {
@@ -177,6 +186,85 @@ void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
 {
     //The overdriven function: move section.
     header()->moveSection(header()->visualIndex(logicalIndex), 0);
+}
+
+bool KNMusicTreeViewBase::event(QEvent *event)
+{
+    switch(event->type())
+    {
+    case QEvent::ToolTip:
+    case QEvent::ToolTipChange:
+    {
+        //If the detail tooltip is not set, ignore the tooltip request.
+        if(!knMusicGlobal->detailTooltip())
+        {
+            return false;
+        }
+        //Cast the event as a help event.
+        QHelpEvent *helpEvent=static_cast<QHelpEvent *>(event);
+        //Get the position of the tooltip index.
+        QPoint indexPosition=QPoint(helpEvent->pos().x(),
+                                    helpEvent->pos().y()-header()->height());
+        //If the position is in the header, hide the detail tooltip.
+        if(indexPosition.y() < 0)
+        {
+            //Hide the detail tooltip widget.
+            knMusicGlobal->detailTooltip()->hide();
+            //Finished.
+            return false;
+        }
+        //Locate index at the position.
+        QModelIndex mouseIndex=indexAt(indexPosition);
+        //Check the validation of the index.
+        if(mouseIndex.isValid())
+        {
+            //If the position is on the vertical scrollbar, then hide the
+            //tooltip widget.
+            if(verticalScrollBar()->isVisible() &&
+                    indexPosition.x() > (viewport()->rect().right() -
+                                         verticalScrollBar()->width()))
+            {
+                //Hide the tooltip.
+                knMusicGlobal->detailTooltip()->hide();
+                //Finished.
+                return true;
+            }
+            //We don't need to check the proxy model. Because the indexAt() will
+            //get a invalid index if the proxy model is null.
+            //Set the index of the current music model to the detail tooltip.
+            knMusicGlobal->detailTooltip()->setPreviewIndex(
+                        musicModel(),
+                        m_proxyModel->mapToSource(mouseIndex));
+            //Show the tooltip at the specific position.
+            QRect indexRect=visualRect(mouseIndex);
+            knMusicGlobal->detailTooltip()->showTooltip(
+                        mapToGlobal(
+                            QPoint(helpEvent->pos().x(),
+                                   indexRect.y()+(indexRect.height()>>1))));
+            //Give the focus back to this tree view.
+            setFocus();
+        }
+        return true;
+    }
+    default:
+        //Process other kinds of events.
+        return QTreeView::event(event);
+    }
+}
+
+void KNMusicTreeViewBase::wheelEvent(QWheelEvent *event)
+{
+    //Do original wheel event.
+    QTreeView::wheelEvent(event);
+    //When user using wheel, means the user don't want to preview the current
+    //thing.
+    //Hide the preview tooltip.
+    if(knMusicGlobal->detailTooltip() &&
+            knMusicGlobal->detailTooltip()->isVisible())
+    {
+        knMusicGlobal->detailTooltip()->hide();
+    }
+
 }
 
 void KNMusicTreeViewBase::onActionThemeUpdate()
@@ -205,6 +293,17 @@ void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
     pal.setColor(QPalette::Button, color);
     //Set the palette.
     setPalette(pal);
+}
+
+void KNMusicTreeViewBase::onActionActivate(const QModelIndex &index)
+{
+    //Hide the detail tooltip.
+    if(knMusicGlobal->detailTooltip())
+    {
+        knMusicGlobal->detailTooltip()->hide();
+    }
+    //Play the activate index.
+    playIndex(index);
 }
 
 void KNMusicTreeViewBase::playCurrent()
@@ -336,6 +435,11 @@ void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
     ;
 }
 
+void KNMusicTreeViewBase::showDetailTooltip(const QModelIndex &index)
+{
+    ;
+}
+
 bool KNMusicTreeViewBase::animate() const
 {
     return m_animate;
@@ -366,7 +470,10 @@ KNMusicModel *KNMusicTreeViewBase::musicModel()
 void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
 {
     //Hide the detail tooltip first.
-    //!FIXME: add codes here.
+    if(knMusicGlobal->detailTooltip())
+    {
+        knMusicGlobal->detailTooltip()->hide();
+    }
     //Check before set the music model, if the current playing model is the
     //previous model, shadow the proxy model.
     if(knMusicGlobal->nowPlaying()!=nullptr)

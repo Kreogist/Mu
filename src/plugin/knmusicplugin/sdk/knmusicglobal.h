@@ -40,6 +40,7 @@ class KNMusicSearchBase;
 class KNConfigure;
 class KNMusicBackend;
 class KNMusicNowPlayingBase;
+class KNMusicDetailTooltipBase;
 class KNMusicSoloMenuBase;
 /*!
  * \brief The KNMusicGlobal class provides some public instance and function of
@@ -218,6 +219,18 @@ public:
      */
     void setBackend(KNMusicBackend *backend);
 
+    /*!
+     * \brief Get the detail tooltip object class.
+     * \return The music tree view detail tooltip widget pointer.
+     */
+    KNMusicDetailTooltipBase *detailTooltip() const;
+
+    /*!
+     * \brief Set the detail tooltip widget.
+     * \param detailTooltip The tooltip widget object pointer.
+     */
+    void setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip);
+
 signals:
 
 public slots:
@@ -244,6 +257,7 @@ private:
     KNMusicSearchBase *m_search;
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
+    KNMusicDetailTooltipBase *m_detailTooltip;
 
     QThread *m_searcherThread, *m_analysisThread;
     KNConfigure *m_musicConfigure;

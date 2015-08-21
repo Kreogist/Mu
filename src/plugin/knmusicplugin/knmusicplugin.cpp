@@ -24,6 +24,7 @@
 #include "knmousedetectheader.h"
 #include "knsideshadowwidget.h"
 #include "knvwidgetswitcher.h"
+#include "knglobal.h"
 
 //SDK Dependence.
 #include "knmusicdetaildialog.h"
@@ -35,7 +36,9 @@
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicplaylistbase.h"
+#include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusicdetailtooltipbase.h"
 #include "knmusicheaderplayerbase.h"
 #include "knmusicplayerbase.h"
 
@@ -52,6 +55,8 @@
 #include "plugin/knmusicsearch/knmusicsearch.h"
 // Now Playing.
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
+// Detail Tooltip.
+#include "plugin/knmusicdetailtooltip/knmusicdetailtooltip.h"
 // Header Player.
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 // Playlist.
@@ -89,6 +94,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     initialSearch(new KNMusicSearch);
     //Initial the now playing.
     initialNowPlaying(new KNMusicNowPlaying);
+    //Iniital the detail tooltip.
+    initialDetailTooltip(new KNMusicDetailTooltip);
     //Iniital the header player.
     initialHeaderPlayer(new KNMusicHeaderPlayer);
     //Initial the plugins.
@@ -222,6 +229,14 @@ void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
     knMusicGlobal->setSearch(search);
 }
 
+void KNMusicPlugin::initialBackend(KNMusicBackend *backend)
+{
+    //Set the parent of the backend.
+    backend->setParent(this);
+    //Set the backend to music global.
+    knMusicGlobal->setBackend(backend);
+}
+
 void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
     //Set the parent of the now playing.
@@ -230,6 +245,12 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     nowPlaying->loadConfigure();
     //Set the now playing to music global.
     knMusicGlobal->setNowPlaying(nowPlaying);
+}
+
+void KNMusicPlugin::initialDetailTooltip(KNMusicDetailTooltipBase *tooltip)
+{
+    //Set the detail tooltip to music global.
+    knMusicGlobal->setDetailTooltip(tooltip);
 }
 
 void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)

@@ -168,7 +168,9 @@ SOURCES += \
     sdk/kncancellineedit.cpp \
     sdk/knopacitybutton.cpp \
     sdk/knvolumeslider.cpp \
-    plugin/knmusicplugin/sdk/knmusicstandardbackend.cpp
+    plugin/knmusicplugin/sdk/knmusicstandardbackend.cpp \
+    plugin/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp \
+    plugin/knmusicplugin/sdk/knmusicalbumlabel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -284,7 +286,10 @@ HEADERS += \
     sdk/knopacitybutton.h \
     sdk/knvolumeslider.h \
     plugin/knmusicplugin/sdk/knmusicstandardbackend.h \
-    plugin/knmusicplugin/sdk/knmusicstandardbackendthread.h
+    plugin/knmusicplugin/sdk/knmusicstandardbackendthread.h \
+    plugin/knmusicplugin/sdk/knmusicdetailtooltipbase.h \
+    plugin/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.h \
+    plugin/knmusicplugin/sdk/knmusicalbumlabel.h
 
 RESOURCES += \
     resource/res.qrc

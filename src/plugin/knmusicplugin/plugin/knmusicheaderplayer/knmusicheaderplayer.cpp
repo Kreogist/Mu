@@ -29,6 +29,7 @@
 #include "knscrolllabel.h"
 #include "knthememanager.h"
 #include "knprogressslider.h"
+#include "kngraphicsgloweffect.h"
 
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
@@ -40,6 +41,7 @@
 #include <QDebug>
 
 #define AlbumArtSize 61
+#define GlowRadius 9.0
 #define panelY 11
 #define m_buttonSize 38
 
@@ -61,6 +63,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_volumePanel(new QWidget(this)),
     m_appendPanel(new QWidget(this)),
     m_informationEffect(new QGraphicsOpacityEffect(this)),
+    m_glowEffect(new KNGraphicsGlowEffect(this)),
     m_progressPressed(false),
     m_mouseIn(new QParallelAnimationGroup(this)),
     m_mouseOut(new QParallelAnimationGroup(this)),
@@ -88,7 +91,11 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_muteIcon[true]=QIcon(":/plugin/music/player/mute_true.png");
     //Initial the UI elements.
     //--Graphics Effect--
+    //Configure opacity effect.
     m_informationEffect->setOpacity(1.0);
+    //Configure the glow effect.
+    m_glowEffect->setColor(QColor(0,0,0));
+    m_glowEffect->setRadius(GlowRadius);
     // Album Art Label;
     m_albumArt->setFixedSize(AlbumArtSize, AlbumArtSize);
     m_albumArt->move(13, 4);
@@ -101,12 +108,14 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     knTheme->registerWidget(m_title);
     m_title->setFont(labelFont);
     m_title->setGeometry(80, 5, 215, m_title->sizeHint().height());
+    m_title->setGraphicsEffect(m_glowEffect);
 
     //--Artist - Album Label--
     m_artistAlbum->setObjectName("HeaderPlayerLabel");
     knTheme->registerWidget(m_artistAlbum);
     m_artistAlbum->setFont(labelFont);
     m_artistAlbum->setGeometry(80, 25, 215, m_artistAlbum->sizeHint().height());
+    m_artistAlbum->setGraphicsEffect(m_glowEffect);
 
     //Control panel.
     m_controlPanel->setGeometry(generateOutPosition());

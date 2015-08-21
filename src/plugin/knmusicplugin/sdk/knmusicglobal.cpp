@@ -136,6 +136,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_soloMenu(nullptr),
     m_search(nullptr),
     m_nowPlaying(nullptr),
+    m_detailTooltip(nullptr),
     m_searcherThread(new QThread(this)),
     m_analysisThread(new QThread(this)),
     m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music")),
@@ -383,6 +384,16 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Anime"
                    <<"JPop"
                    <<"Synthpop";
+}
+
+KNMusicDetailTooltipBase *KNMusicGlobal::detailTooltip() const
+{
+    return m_detailTooltip;
+}
+
+void KNMusicGlobal::setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip)
+{
+    m_detailTooltip = detailTooltip;
 }
 
 KNMusicBackend *KNMusicGlobal::backend() const

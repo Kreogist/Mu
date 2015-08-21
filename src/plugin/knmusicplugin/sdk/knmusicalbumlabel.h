@@ -16,24 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSCROLLLABEL_H
-#define KNSCROLLLABEL_H
+#ifndef KNMUSICALBUMLABEL_H
+#define KNMUSICALBUMLABEL_H
 
 #include <QWidget>
 
-class KNScrollLabel : public QWidget
+class KNMusicAlbumLabel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNScrollLabel(QWidget *parent = 0);
+    explicit KNMusicAlbumLabel(QWidget *parent = 0);
 
-    QString text() const;
-    void setText(const QString &text);
+    QPixmap artwork() const;
 
-    QSize sizeHint() const;
-
-    qreal opacity() const;
-    void setOpacity(const qreal &opacity);
+    void setArtwork(const QPixmap &artwork);
 
 signals:
 
@@ -43,17 +39,10 @@ protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
 
-private slots:
-    void moveText();
-
 private:
-    inline void stopTimers();
-    inline void updateAnimeParameters();
-    QString m_text;
-    QTimer *m_move, *m_wait;
-    qreal m_opacity;
-    int m_textLeftMostX, m_textX;
-    bool m_movingLeft;
+    inline void updateArtwork();
+    QTransform m_transform;
+    QPixmap m_artwork, m_originalArtwork;
 };
 
-#endif // KNSCROLLLABEL_H
+#endif // KNMUSICALBUMLABEL_H

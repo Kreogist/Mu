@@ -31,6 +31,7 @@ class QGraphicsOpacityEffect;
 class QParallelAnimationGroup;
 class QPropertyAnimation;
 class QLabel;
+class KNGraphicsGlowEffect;
 class KNEditableLabel;
 class KNHighLightLabel;
 class KNOpacityAnimeButton;
@@ -100,6 +101,7 @@ private:
 
     //Effects
     QGraphicsOpacityEffect *m_informationEffect;
+    KNGraphicsGlowEffect *m_glowEffect;
 
     //Status.
     bool m_progressPressed;

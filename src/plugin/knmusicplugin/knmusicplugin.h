@@ -30,7 +30,9 @@ class KNSideShadowWidget;
 class KNMusicDetailDialogPanel;
 class KNMusicSoloMenuBase;
 class KNMusicSearchBase;
+class KNMusicBackend;
 class KNMusicNowPlayingBase;
+class KNMusicDetailTooltipBase;
 class KNMusicHeaderPlayerBase;
 class KNMusicPlayerBase;
 class KNMusicPlaylistBase;
@@ -89,7 +91,9 @@ private:
     void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
 
     void initialSearch(KNMusicSearchBase *search);
+    void initialBackend(KNMusicBackend *backend);
     void initialNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+    void initialDetailTooltip(KNMusicDetailTooltipBase *tooltip);
     void initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
 

@@ -120,6 +120,13 @@ protected:
      */
     void moveToFirst(const int &logicalIndex);
 
+    /*!
+     * \brief Reimplement from QTreeView::event().
+     */
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
+
+    void wheelEvent(QWheelEvent *event);
+
 protected slots:
     /*!
      * \brief This slot is provide to update the palette when the tree view is
@@ -129,6 +136,7 @@ protected slots:
 
 private slots:
     void onActionMouseInOut(const int &frame);
+    void onActionActivate(const QModelIndex &index);
     void playCurrent();
     void removeCurrent();
     void renameCurrent();
@@ -139,6 +147,7 @@ private:
     inline void playIndex(const QModelIndex &index);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
+    void showDetailTooltip(const QModelIndex &index);
 
     KNMusicTab *m_musicTab;
     QTimeLine *m_mouseIn, *m_mouseOut;
