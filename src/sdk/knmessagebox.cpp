@@ -223,7 +223,7 @@ inline void KNMessageBox::initialBlocks()
 {
     //Configure the top block.
     QFont titleFont=m_topBlock->font();
-    titleFont.setFamily("sao");
+    titleFont.setFamily("SAO UI");
     titleFont.setPixelSize(15);
     m_topBlock->setFont(titleFont);
     m_topBlock->setAttribute(Qt::WA_TransparentForMouseEvents, true);

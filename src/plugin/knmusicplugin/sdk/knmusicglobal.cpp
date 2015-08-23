@@ -135,6 +135,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_parser(new KNMusicParser),
     m_soloMenu(nullptr),
     m_search(nullptr),
+    m_backend(nullptr),
     m_nowPlaying(nullptr),
     m_detailTooltip(nullptr),
     m_searcherThread(new QThread(this)),

@@ -183,7 +183,7 @@ bool KNMusicTagId3v2::parseTag(QFile &musicFile,
     return true;
 }
 
-bool KNMusicTagId3v2::writeTag(KNMusicAnalysisItem &analysisItem)
+bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
 {
     //Write the data according to the detail info.
     const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;

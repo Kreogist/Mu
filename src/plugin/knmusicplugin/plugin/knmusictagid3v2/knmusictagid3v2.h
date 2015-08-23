@@ -43,7 +43,7 @@ public:
     /*!
      * \brief Reimplement from KNMusicTagParser::writeTag.
      */
-    bool writeTag(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
+    bool writeTag(const KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplement from KNMusicTagParser::parseAlbumArt.

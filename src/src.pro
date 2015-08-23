@@ -53,6 +53,13 @@ gcc: {
 }
 
 # Platform Specific Configuration.
+win32 : {
+    # Application icon.
+    RC_FILE += resource/icon/win_resource.rc \
+               resource/icon/mu.ico
+    ICON = resource/icon/mu.ico
+}
+
 macx: {
     # Application icon.
     RC_FILE += resource/icon/mu.icns

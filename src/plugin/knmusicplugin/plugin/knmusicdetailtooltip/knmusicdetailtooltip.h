@@ -19,10 +19,13 @@
 #ifndef KNMUSICDETAILTOOLTIP_H
 #define KNMUSICDETAILTOOLTIP_H
 
-#include <QPersistentModelIndex>
 #include <QIcon>
 
+#include "knmusicutil.h"
+
 #include "knmusicdetailtooltipbase.h"
+
+using namespace MusicUtil;
 
 class QTimeLine;
 class QLabel;
@@ -77,7 +80,7 @@ protected:
 
 private slots:
     void onActionHide();
-    void onActionMouseInOut(const int &frame);
+    void onActionMouseInOut(int frame);
     void onActionThemeChanged();
 
 private:
@@ -107,8 +110,7 @@ private:
     QIcon m_playIcon, m_pauseIcon;
 
     bool m_isPlaying, m_progressPressed;
-    KNMusicModel *m_previewMusicModel;
-    QPersistentModelIndex m_previewIndex;
+    KNMusicDetailInfo m_detailInfo;
 
     KNMusicBackend *m_backend;
 };

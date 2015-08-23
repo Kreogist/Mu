@@ -112,7 +112,12 @@ void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem)
     //Check whether the album art is null.
     if(analysisItem.coverImage.isNull())
     {
-        ;
+        m_basicInfoLabel[LabelAlbumArt]->setPixmap(
+                    knMusicGlobal->noAlbumArt().scaled(
+                        albumArtSize,
+                        albumArtSize,
+                        Qt::KeepAspectRatio,
+                        Qt::SmoothTransformation));
     }
     else
     {

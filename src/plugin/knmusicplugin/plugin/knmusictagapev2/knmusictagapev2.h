@@ -45,7 +45,7 @@ public:
     /*!
      * \brief Reimplement from KNMusicTagParser::writeTag.
      */
-    bool writeTag(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
+    bool writeTag(const KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplement from KNMusicTagParser::parseAlbumArt.
@@ -82,13 +82,23 @@ private:
     inline void parseRawData(char *rawData,
                              APEHeader &header,
                              QList<APETagItem> &tagList);
+    inline QByteArray generateHeaderData(const APEHeader &header,
+                                         bool isHeader=true);
 
-    inline quint32 dataToSize(char *data)
+    inline quint32 dataToNumber(char *data)
     {
         return (((quint32)data[3]<<24) & 0xFF000000)+
                (((quint32)data[2]<<16) & 0x00FF0000)+
                (((quint32)data[1] <<8) & 0x0000FF00)+
                ( (quint32)data[0]      & 0x000000FF);
+    }
+
+    inline void numberToData(const quint32 &number, char *data)
+    {
+        data[0]=(number & 0x000000FF);
+        data[1]=(number & 0x0000FF00) >> 8;
+        data[2]=(number & 0x00FF0000) >> 16;
+        data[3]=(number & 0xFF000000) >> 24;
     }
 
     const char *m_apePreamble;

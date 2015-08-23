@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QTemporaryFile>
 
 #include "knmusictagapev2.h"
 
@@ -23,6 +24,8 @@
 #define APEv2HeaderSize 32
 #define ID3v1Size 128
 #define ID3v1nAPEv2 160
+//1MB music data cache copy size.
+#define DataCacheSize 1048576
 
 QHash<QString, int> KNMusicTagApev2::m_keyIndex=QHash<QString, int>();
 QHash<int, QString> KNMusicTagApev2::m_indexKey=QHash<int, QString>();
@@ -181,7 +184,7 @@ bool KNMusicTagApev2::parseTag(QFile &musicFile,
     return true;
 }
 
-bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
+bool KNMusicTagApev2::writeTag(const KNMusicAnalysisItem &analysisItem)
 {
     //Write the data according to the detail info.
     const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
@@ -194,26 +197,60 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
     }
 
     //Find the original tag data.
+    //ID3v1 header flag.
+    bool hasId3v1=false;
     //Generate a header structure.
     APEHeader header;
     //Generate the raw tag data list.
     QList<APETagItem> itemList;
     //Initial the tag start position.
-    int tagContentStart=-1;
+    qint64 tagDataStart=-1, tagDataLength=-1;
     //Open the file first.
     if(musicFile.open(QIODevice::ReadOnly))
     {
         //Generate a data stream.
         QDataStream musicDataStream(&musicFile);
+        if(musicFile.size() > 128)
+        {
+            //ID3v1 header cache.
+            char id3v1Header[3];
+            //Check whether there's ID3v1 tag in the music file.
+            musicDataStream.skipRawData(musicFile.size()-128);
+            //Read ID3v1 header.
+            musicDataStream.readRawData(id3v1Header, 3);
+            //Check the header, and we can know that whether there's ID3v1
+            //header.
+            hasId3v1=(id3v1Header[0]=='T' &&
+                        id3v1Header[1]=='A' &&
+                          id3v1Header[2]=='G');
+        }
         //Check the beginning of the file.
         if(checkHeader(0,
                        musicDataStream,
                        header))
         {
-            //Tag start right after the tag. So we don't need to move the
-            //position of the data stream.
-            //Set the tag start data.
-            tagContentStart=0;
+            //Set the tag data start.
+            tagDataStart=0;
+            //Set the tag length to header length.
+            tagDataLength=header.size;
+            //Check whether is a footer in the tag.
+            if(header.size > APEv2HeaderSize)
+            {
+                //Check the footer.
+                APEHeader footer;
+                //Tried to parse the footer.
+                if(checkHeader(header.size,
+                               musicDataStream,
+                               footer))
+                {
+                    //Update the tag length.
+                    tagDataLength+=APEv2HeaderSize;
+                }
+            }
+            //Reset the device to start.
+            musicDataStream.device()->reset();
+            //Skip the file data.
+            musicDataStream.skipRawData(APEv2HeaderSize);
         }
         //Check the end of the file.
         else if(checkHeader(musicFile.size()-APEv2HeaderSize,
@@ -221,7 +258,27 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
                             header))
         {
             //Save the tag start data.
-            tagContentStart=musicFile.size()-header.size;
+            int tagContentStart=musicFile.size()-header.size;
+            //Check the footer.
+            APEHeader footer;
+            //Check whether there's a header in the tag.
+            if(checkHeader(tagContentStart-APEv2HeaderSize,
+                           musicDataStream,
+                           footer))
+            {
+                //Save the tag data start position as the header start position.
+                //This is APEv2 tag.
+                tagDataStart=tagContentStart-APEv2HeaderSize;
+                //The tag length will be a header size + tag size.
+                tagDataLength=APEv2HeaderSize + header.size;
+            }
+            else
+            {
+                //This is APEv1 tag.
+                tagDataStart=tagContentStart;
+                //The tag length will be tag size.
+                tagDataLength=header.size;
+            }
             //Reset the device to start.
             musicDataStream.device()->reset();
             //Skip the file data.
@@ -229,20 +286,41 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
         }
         //Check the position before ID3v1. Some file may have both ID3v1 and
         //APEv1/APEv2.
-        else if(musicFile.size()>=ID3v1nAPEv2 && //File size first.
+        else if(musicFile.size()>=(ID3v1nAPEv2 + APEv2HeaderSize) &&
+                                                            //File size first.
                 checkHeader(musicFile.size()-ID3v1nAPEv2,
                             musicDataStream,
                             header))
         {
             //Save the tag start position.
-            tagContentStart=musicFile.size()-ID3v1Size-header.size;
+            int tagContentStart=musicFile.size()-ID3v1Size-header.size;
+            //Check the footer.
+            APEHeader footer;
+            //Check whether there's a header in the tag.
+            if(checkHeader(tagContentStart-APEv2HeaderSize,
+                           musicDataStream,
+                           footer))
+            {
+                //Save the tag data start position as the header start position.
+                //This is APEv2 tag.
+                tagDataStart=tagContentStart-APEv2HeaderSize;
+                //The tag length will be a header size + tag size.
+                tagDataLength=APEv2HeaderSize + header.size;
+            }
+            else
+            {
+                //This is APEv1 tag.
+                tagDataStart=tagContentStart;
+                //The tag length will be tag size.
+                tagDataLength=header.size;
+            }
             //Reset the device to start.
             musicDataStream.device()->reset();
             //Skip the file data.
             musicDataStream.skipRawData(tagContentStart);
         }
         //Parse the data if we find the header.
-        if(tagContentStart!=-1)
+        if(tagDataStart!=-1)
         {
             //Read the tag from the file.
             char *rawTagData=new char[header.size];
@@ -252,6 +330,8 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
             //Recover the memory.
             delete[] rawTagData;
         }
+        //Close the music file.
+        musicFile.close();
     }
     //Add all the text labels to detail frames if it's not empty.
     for(int i=0; i<MusicDataCount; i++)
@@ -304,26 +384,20 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
     //Now translate the frame structure data to the raw data.
     QByteArray contentData;
     //Prepare the cache size.
-    char cacheSize[4];
+    char numberCache[4];
     //Simply transfered the APETagItem to content data.
     for(auto i=itemList.constBegin(); i!=itemList.constEnd(); i++)
     {
         //Get the item size.
         quint32 size=(*i).value.size();
         //First transfer item size to raw data into cache.
-        cacheSize[0]=(size & 0x000000FF);
-        cacheSize[1]=(size & 0x0000FF00) >> 8;
-        cacheSize[2]=(size & 0x00FF0000) >> 16;
-        cacheSize[3]=(size & 0xFF000000) >> 24;
+        numberToData(size, numberCache);
         //Add item size to content data.
-        contentData.append(cacheSize, 4);
+        contentData.append(numberCache, 4);
         //Transfer the flag to raw data into cache.
-        cacheSize[0]=((*i).flag & 0x000000FF);
-        cacheSize[1]=((*i).flag & 0x0000FF00) >> 8;
-        cacheSize[2]=((*i).flag & 0x00FF0000) >> 16;
-        cacheSize[3]=((*i).flag & 0xFF000000) >> 24;
+        numberToData((*i).flag, numberCache);
         //Add flag data to content data.
-        contentData.append(cacheSize, 4);
+        contentData.append(numberCache, 4);
         //Add item key to content data.
         contentData.append((*i).key.toUtf8());
         //Add 0x00 for item key terminator.
@@ -331,47 +405,10 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
         //Add item value.
         contentData.append((*i).value);
     }
-    //Generate the header.
-    QByteArray headerData;
-    //--Preamble--
-    //Set the preamble first.
-    headerData.append(m_apePreamble);
-    //--Version--
-    //Add the version. Fixed APEv2(2.000).
-    headerData.append((char)0x20);
-    headerData.append((char)0x00);
-    headerData.append((char)0x00);
-    headerData.append((char)0x00);
-    //--Tag Size--
-    //Calculate the tag size data.
-    quint32 sizeNumber=contentData.size()+32;
-    //Set tag size to cache data.
-    cacheSize[0]=(sizeNumber & 0x000000FF);
-    cacheSize[1]=(sizeNumber & 0x0000FF00) >> 8;
-    cacheSize[2]=(sizeNumber & 0x00FF0000) >> 16;
-    cacheSize[3]=(sizeNumber & 0xFF000000) >> 24;
-    //Add the tag size to header data.
-    headerData.append(cacheSize, 4);
-    //--Item Count--
-    //Get the item list number.
-    sizeNumber=itemList.size();
-    //Set the number of items to cache data.
-    cacheSize[0]=(sizeNumber & 0x000000FF);
-    cacheSize[1]=(sizeNumber & 0x0000FF00) >> 8;
-    cacheSize[2]=(sizeNumber & 0x00FF0000) >> 16;
-    cacheSize[3]=(sizeNumber & 0xFF000000) >> 24;
-    //Add the item size to header data.
-    headerData.append(cacheSize, 4);
-    //--Tags Flags--
-    //Set the flags to cache data.
-    cacheSize[0]=(header.flags & 0xFF000000) >> 24;
-    cacheSize[1]=(header.flags & 0x00FF0000) >> 16;
-    cacheSize[2]=(header.flags & 0x0000FF00) >> 8;
-    cacheSize[3]=(header.flags & 0x000000FF);
-    //Add the tag flags to header data.
-    headerData.append(cacheSize, 4);
-    //--Reserved data--
-    headerData.append(QByteArray(8, '\0'));
+
+    //Update the header data.
+    header.size=contentData.size()+32;
+    header.itemCount=itemList.size();
 
     //We will write the APEv2 data to the end part of the file. Just before the
     //ID3v1.
@@ -382,9 +419,114 @@ bool KNMusicTagApev2::writeTag(KNMusicAnalysisItem &analysisItem)
         return false;
     }
     //Generate a temporary file, write the new data to the temporary file.
-    //QTemporaryFile updatedTagFile;
-    //C
-    return false;
+    QTemporaryFile updatedTagFile;
+    //Open the temporary file in write only mode, if we cannot open the
+    //temporary file it will be failed to write the tag.
+    if(!updatedTagFile.open())
+    {
+        //Close the opened music file.
+        musicFile.close();
+        return false;
+    }
+    //Initial the file size.
+    qint64 dataSurplusSize=musicFile.size();
+    /*
+     * Algorithm:
+     * We treat the file as these two kinds of format:
+     *          APEv2 | xxxx (Content) (| ID3v1)
+     * or
+     *          xxxx (Content) | APEv2 (| ID3v1)
+     * So we have to process the ID3v1 at first. Then the file should be like
+     * the following:
+     *                 APEv2 | xxxx (Content)
+     * or
+     *                 xxxx (Content) | APEv2
+     * And now, we only have to check if the APEv2 is at the beginning or the
+     * end of the content.
+     */
+    //If we have ID3v1, then remove the tag from the copying bytes.
+    if(hasId3v1)
+    {
+        //Reduce the ID3v1 tag size.
+        dataSurplusSize-=128;
+    }
+    //Check whether we have original APEv2 header.
+    if(tagDataStart!=-1)
+    {
+        //Reduce the tag size from the file size.
+        dataSurplusSize-=tagDataLength;
+        //Check whether the header is at the start of the music file.
+        if(tagDataStart==0)
+        {
+            //It's at the beginning of the file.
+            //Skip the Original APEv2 tag at the beginning of the file.
+            musicFile.seek(tagDataLength);
+        }
+    }
+    //Generate the music data cache.
+    char fileCache[DataCacheSize];
+    int bytesRead;
+    //Now copy all the content from the original file to temporary file.
+    while(dataSurplusSize>0)
+    {
+        //Read the original data.
+        bytesRead=musicFile.read(fileCache,
+                                 (DataCacheSize < dataSurplusSize ?
+                                      DataCacheSize : dataSurplusSize));
+        //Write the cache to temporary file.
+        updatedTagFile.write(fileCache, bytesRead);
+        //Reduce the surplus size.
+        dataSurplusSize-=bytesRead;
+    }
+    //According to the hydrogenaud.io, we have to put the APEv2 at the end of
+    //the file.
+    //Write new APEv2 tag to the file.
+    /*
+     * From http://wiki.hydrogenaud.io/index.php?title=Ape_Tags_Flags:
+     * Bit 29:
+     * 0: This is the footer, not the header
+     * 1: This is the header, not the footer
+     */
+    //First set the item flag to header in header data bytearray.
+    updatedTagFile.write(generateHeaderData(header, true));
+    //Then, write the content data.
+    updatedTagFile.write(contentData);
+    //Last, write the footer data.
+    updatedTagFile.write(generateHeaderData(header, false));
+    //If there's ID3v1 tag, then copy the ID3v1 data from the original file.
+    if(hasId3v1)
+    {
+        //Seek to the ID3v1 tag start.
+        musicFile.seek(musicFile.size()-128);
+        //Read 128 bytes ID3v1 tag.
+        musicFile.read(fileCache, 128);
+        //Write the cache to temporary file.
+        updatedTagFile.write(fileCache, 128);
+    }
+    //Close the music file.
+    musicFile.close();
+    //Reset the temporary file.
+    updatedTagFile.reset();
+    //Reopen the music file as write only mode, write all the udpated tag file
+    //data to the music file.
+    if(!musicFile.open(QIODevice::WriteOnly))
+    {
+        return false;
+    }
+    //Copy data from temporary file to music file.
+    bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+    while(bytesRead>0)
+    {
+        //Write the cache to music file.
+        musicFile.write(fileCache, bytesRead);
+        //Read new data from cache to the original file.
+        bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+    }
+    //Close the music file and temporary file.
+    musicFile.close();
+    updatedTagFile.close();
+    //The tag rewrite is finished.
+    return true;
 }
 
 bool KNMusicTagApev2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
@@ -430,10 +572,10 @@ inline bool KNMusicTagApev2::checkHeader(const int &position,
     if(memcmp(rawData, m_apePreamble, 8)==0)
     {
         //Save the information of the header.
-        header.version=dataToSize(rawData+8);
-        header.size=dataToSize(rawData+12);
-        header.itemCount=dataToSize(rawData+16);
-        header.flags=dataToSize(rawData+20);
+        header.version=dataToNumber(rawData+8);
+        header.size=dataToNumber(rawData+12);
+        header.itemCount=dataToNumber(rawData+16);
+        header.flags=dataToNumber(rawData+20);
         //Parse successfully.
         return true;
     }
@@ -471,10 +613,7 @@ inline void KNMusicTagApev2::parseRawData(char *rawData,
     while(sizeSurplus>0 && itemSurplus>0)
     {
         //Calculate current item size.
-        quint32 frameSize=(((quint32)rawData[3]<<24) & 0xFF000000)+
-                          (((quint32)rawData[2]<<16) & 0x00FF0000)+
-                          (((quint32)rawData[1]<<8)  & 0x0000FF00)+
-                          ( (quint32)rawData[0]      & 0x000000FF);
+        quint32 frameSize=dataToNumber(rawData);
         //Check whether the frame size is overflow.
         if(frameSize>sizeSurplus)
         {
@@ -483,10 +622,7 @@ inline void KNMusicTagApev2::parseRawData(char *rawData,
         //Generate item according to the frame size.
         APETagItem item;
         //Copy the flag to the item.
-        item.flag=(((quint32)rawData[7]<<24) & 0xFF000000)+
-                  (((quint32)rawData[6]<<16) & 0x00FF0000)+
-                  (((quint32)rawData[5]<<8)  & 0x0000FF00)+
-                  ( (quint32)rawData[4]      & 0x000000FF);
+        item.flag=dataToNumber(rawData+4);
         //Here is a magic:
         //QString can automatically terminate at the 0x00, so we don't need to
         //find 0x00 byte manually. Just use the key length to find the 0x00.
@@ -503,4 +639,58 @@ inline void KNMusicTagApev2::parseRawData(char *rawData,
         sizeSurplus-=frameSize;
         itemSurplus--;
     }
+}
+
+inline QByteArray KNMusicTagApev2::generateHeaderData(const APEHeader &header,
+                                                      bool isHeader)
+{
+    //Prepare the cache size.
+    char numberCache[4];
+    //Generate the header.
+    QByteArray headerData;
+    //--Preamble--
+    //Set the preamble first.
+    headerData.append(m_apePreamble);
+    //--Version--
+    //Add the version. Fixed APEv2(2.000).
+    headerData.append((char)0x20);
+    headerData.append((char)0x00);
+    headerData.append((char)0x00);
+    headerData.append((char)0x00);
+    //--Tag Size--
+    //Set tag size to cache data.
+    numberToData(header.size, numberCache);
+    //Add the tag size to header data.
+    headerData.append(numberCache, 4);
+    //--Item Count--
+    //Set the number of items to cache data.
+    numberToData(header.itemCount, numberCache);
+    //Add the item size to header data.
+    headerData.append(numberCache, 4);
+    //--Tags Flags--
+    //Update the header's flags.
+    quint32 flag=header.flags;
+    //Set flag to 'Tag contains a header'.
+    flag &= 0xFFFFFFFE;
+    //Set flag to 'Tag contains a footer'.
+    flag |= 0x00000002;
+    //Check if it's header.
+    if(isHeader)
+    {
+        //Set the flag to 'This is the header, not the footer'.
+        flag |= 0x00000004;
+    }
+    else
+    {
+        //Set the flag to 'This is the footer, not the header'.
+        flag &= 0xFFFFFFFB;
+    }
+    //Set the flags to cache data.
+    numberToData(flag, numberCache);
+    //Add the tag flags to header data.
+    headerData.append(numberCache, 4);
+    //--Reserved data--
+    headerData.append(QByteArray(8, '\0'));
+    //Give back the header data.
+    return headerData;
 }

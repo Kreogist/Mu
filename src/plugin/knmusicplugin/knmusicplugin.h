@@ -97,8 +97,6 @@ private:
     void initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
 
-    inline void initialPlayerWidget(KNMusicPlayerBase *player);
-
     //UI infrastructure elements.
     KNMouseDetectHeader *m_headerWidget;
     KNVWidgetSwitcher *m_headerWidgetContainer;

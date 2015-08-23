@@ -61,7 +61,7 @@ public:
      * \param analysisItem The information of the file.
      * \return If the parser write the tag successfully, then return true.
      */
-    virtual bool writeTag(KNMusicAnalysisItem &analysisItem)=0;
+    virtual bool writeTag(const KNMusicAnalysisItem &analysisItem)=0;
 
     /*!
      * \brief Parse the album art data from an analysised item.

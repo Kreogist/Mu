@@ -54,8 +54,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     m_pauseIcon(QIcon(":/plugin/music/player/pause.png")),
     m_isPlaying(false),
     m_progressPressed(false),
-    m_previewMusicModel(nullptr),
-    m_previewIndex(QPersistentModelIndex()),
+    m_detailInfo(KNMusicDetailInfo()),
     m_backend(nullptr)
 {
     setObjectName("MusicDetailTooltip");
@@ -127,9 +126,10 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Link the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMusicDetailTooltip::onActionThemeChanged);
-    onActionThemeChanged();
     //Initial the palette.
     onActionMouseInOut(0x20);
+    //Update the theme.
+    onActionThemeChanged();
 
     //Check the backend.
     if(knMusicGlobal->backend())
@@ -157,6 +157,7 @@ void KNMusicDetailTooltip::showTooltip(const QPoint &position)
 void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
                                            const QPersistentModelIndex &index)
 {
+    //Clear the label information.
     //Generate an analysis item.
     KNMusicAnalysisItem item;
     //Set the detail info to item.
@@ -164,9 +165,8 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
     //Reanalysis the item.
     if(knMusicGlobal->parser()->reanalysisItem(item))
     {
-        //Save the music model and the index.
-        m_previewMusicModel=musicModel;
-        m_previewIndex=index;
+        //Save the detail info.
+        m_detailInfo=item.detailInfo;
         //Check the cover image.
         if(item.coverImage.isNull())
         {
@@ -187,7 +187,17 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
         setEliedText(m_labels[ItemArtist],
                      detailInfo.textLists[Artist].toString());
     }
-
+    else
+    {
+        //Reset detail info.
+        m_detailInfo=KNMusicDetailInfo();
+        //Set album detail info to be no album art.
+        m_albumArt->setArtwork(knMusicGlobal->noAlbumArt());
+        //Clear all the labels.
+        m_labels[ItemTitle]->clear();
+        m_labels[ItemTime]->clear();
+        m_labels[ItemArtist]->clear();
+    }
 }
 
 void KNMusicDetailTooltip::enterEvent(QEvent *event)
@@ -204,11 +214,11 @@ void KNMusicDetailTooltip::enterEvent(QEvent *event)
     m_fadeOutCounter->setInterval(ShortFadeOutTime);
     //Start mouse in animation.
     startAnime(m_mouseIn);
-    //Set focus.
-    setFocus();
     //When mouse move in, it means user may want to preview the song, load the
     //music here.
     loadPreview();
+    //Set focus.
+    setFocus();
 }
 
 void KNMusicDetailTooltip::leaveEvent(QEvent *event)
@@ -239,7 +249,7 @@ void KNMusicDetailTooltip::onActionHide()
     hide();
 }
 
-void KNMusicDetailTooltip::onActionMouseInOut(const int &frame)
+void KNMusicDetailTooltip::onActionMouseInOut(int frame)
 {
     //Get the palette.
     QPalette pal=palette();
@@ -269,7 +279,7 @@ void KNMusicDetailTooltip::onActionThemeChanged()
     onActionMouseInOut(brightness);
 }
 
-QTimeLine *KNMusicDetailTooltip::generateTimeLine(const int &endFrame)
+inline QTimeLine *KNMusicDetailTooltip::generateTimeLine(const int &endFrame)
 {
     //Generate time line.
     QTimeLine *timeLine=new QTimeLine(200, this);
@@ -314,7 +324,8 @@ inline void KNMusicDetailTooltip::resetCounter()
     m_fadeOutCounter->setInterval(NormalFadeOutTime);
 }
 
-void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &text)
+inline void KNMusicDetailTooltip::setEliedText(QLabel *label,
+                                               const QString &text)
 {
     //Calculate the size of the text using the fontMetrics of the label.
     if(label->fontMetrics().width(text) > LabelWidth)
@@ -334,14 +345,11 @@ void KNMusicDetailTooltip::setEliedText(QLabel *label, const QString &text)
 void KNMusicDetailTooltip::loadPreview()
 {
     //Check if the backend, music model and current index is still valid.
-    if(m_backend && m_previewMusicModel && m_previewIndex.isValid())
+    if(m_backend && QFileInfo::exists(m_detailInfo.filePath))
     {
-        //Get the detail info of the model.
-        KNMusicDetailInfo detailInfo=
-                m_previewMusicModel->rowDetailInfo(m_previewIndex.row());
         //Load the music to preview thread.
-        m_backend->previewLoadMusic(detailInfo.filePath,
-                                    detailInfo.startPosition,
-                                    detailInfo.duration);
+        m_backend->previewLoadMusic(m_detailInfo.filePath,
+                                    m_detailInfo.startPosition,
+                                    m_detailInfo.duration);
     }
 }
