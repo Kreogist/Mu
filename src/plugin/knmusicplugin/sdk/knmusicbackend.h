@@ -158,13 +158,13 @@ public:
      * \brief Get the minimal volume size of the backend.
      * \return The minimal volume size of the backend.
      */
-    virtual quint32 minimalVolume()=0;
+    virtual int minimalVolume() const=0;
 
     /*!
      * \brief Get the maximum volume size of the backend.
      * \return The maximum volume size of the backend.
      */
-    virtual quint32 maximumVolume()=0;
+    virtual int maximumVolume() const=0;
 
     /*!
      * \brief Get whether the backend is in the mute state.
@@ -177,7 +177,7 @@ signals:
      * \brief When the volume size changed, this signal will be emitted.
      * \param volumeSize The size of the volume.
      */
-    void volumeChanged(quint32 volumeSize);
+    void volumeChanged(int volumeSize);
 
     /*!
      * \brief If the main thread is fail to load the current file, this signal

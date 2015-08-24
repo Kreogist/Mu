@@ -19,10 +19,15 @@
 
 #include "knmusicstandardbackend.h"
 
+#include <QDebug>
+
 KNMusicStandardBackend::KNMusicStandardBackend(QObject *parent) :
     KNMusicBackend(parent),
     m_main(nullptr),
-    m_preview(nullptr)
+    m_preview(nullptr),
+    m_volumeBeforeMute(-1),
+    m_originalVolume(-1),
+    m_mute(false)
 {
 }
 
@@ -100,6 +105,44 @@ void KNMusicStandardBackend::previewReset()
     threadReset(m_preview);
 }
 
+bool KNMusicStandardBackend::mute()
+{
+    return m_mute;
+}
+
+void KNMusicStandardBackend::changeMuteState()
+{
+    setMute(!m_mute);
+}
+
+void KNMusicStandardBackend::setMute(bool mute)
+{
+    //Check the state is the same or not, if is the same, do nothing.
+    if(m_mute==mute)
+    {
+        return;
+    }
+    //Save the new mute state.
+    m_mute=mute;
+    //Apply the mute state.
+    if(m_mute)
+    {
+        //Backup the original volume.
+        m_volumeBeforeMute=volume();
+        //Set all the volume to the minimal thread.
+        synchronizeThreadVolume(minimalVolume());
+    }
+    else
+    {
+        //Set the volume to the backup volume.
+        synchronizeThreadVolume(m_volumeBeforeMute);
+        //Clear up the backuped volume.
+        m_volumeBeforeMute=-1;
+    }
+    //Emit changed signal.
+    emit muteStateChanged(m_mute);
+}
+
 void KNMusicStandardBackend::setMainThread(KNMusicStandardBackendThread *thread)
 {
     //If there's already a main thread, ignore the later sets.
@@ -161,6 +204,39 @@ void KNMusicStandardBackend::setPosition(const qint64 &position)
 void KNMusicStandardBackend::setPreviewPosition(const qint64 &position)
 {
     threadSetPosition(m_preview, position);
+}
+
+void KNMusicStandardBackend::setVolume(int volumeSize)
+{
+    //If we want to change the volume, check the mute state first.
+    if(mute())
+    {
+        //Un-mute the backend.
+        setMute(false);
+    }
+    //Check the volume size.
+    if(volumeSize<minimalVolume())
+    {
+        volumeSize=minimalVolume();
+    }
+    else if(volumeSize>maximumVolume())
+    {
+        volumeSize=maximumVolume();
+    }
+    //Sync the thread volume.
+    synchronizeThreadVolume(volumeSize);
+}
+
+void KNMusicStandardBackend::volumeUp()
+{
+    //Raise up a volume level of the volume size.
+    setVolume(volume()+volumeLevel());
+}
+
+void KNMusicStandardBackend::volumeDown()
+{
+    //Reduce a volume level of the volume size.
+    setVolume(volume()-volumeLevel());
 }
 
 inline qint64 KNMusicStandardBackend::threadDuration(
@@ -249,4 +325,47 @@ void KNMusicStandardBackend::threadSetPosition(
         //Set the position of the thread.
         thread->setPosition(position);
     }
+}
+
+inline void KNMusicStandardBackend::synchronizeThreadVolume(const int &volume)
+{
+    //Check whether the preview smart volume is enabled.
+    bool smartVolumeEnabled=(m_originalVolume!=-1);
+    //If the smart volume is enabled, disabled it temporarily.
+    if(smartVolumeEnabled)
+    {
+        //Turn off the smart volume.
+        smartVolumeOff();
+    }
+    //Change the global volume size.
+    setGlobalVolume(volume);
+    //If the smart volume is enabled before, enabled it again.
+    if(smartVolumeEnabled)
+    {
+        //Turn on the smart volume.
+        smartVolumeOn();
+    }
+}
+
+inline void KNMusicStandardBackend::smartVolumeOn()
+{
+    //Backup the original volume.
+    m_originalVolume=m_main->volume()==0?volume():m_main->volume();
+    //Set the preview as the full volume.
+    m_preview->setVolume(m_originalVolume);
+    //Set the main volume as the smartVolumeScale of the full volume.
+    m_main->setVolume((int)((qreal)m_originalVolume*smartVolumeScale()));
+}
+
+inline void KNMusicStandardBackend::smartVolumeOff()
+{
+    //If the original volume is -1, means it's not turned on.
+    if(m_originalVolume==-1)
+    {
+        return;
+    }
+    //Set the main volume back to full volume.
+    m_main->setVolume(m_originalVolume);
+    //Reset the original volume.
+    m_originalVolume=-1;
 }

@@ -53,6 +53,10 @@
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 // Search.
 #include "plugin/knmusicsearch/knmusicsearch.h"
+// Backends.
+#ifdef ENABLE_BACKEND_BASS
+#include "plugin/knmusicbackendbass/knmusicbackendbass.h"
+#endif
 // Now Playing.
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 // Detail Tooltip.
@@ -92,6 +96,9 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
 
     //Initial the search.
     initialSearch(new KNMusicSearch);
+#ifdef ENABLE_BACKEND_BASS
+    initialBackend(new KNMusicBackendBass);
+#endif
     //Initial the now playing.
     initialNowPlaying(new KNMusicNowPlaying);
     //Iniital the detail tooltip.
@@ -242,6 +249,8 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     //Set the parent of the now playing.
     nowPlaying->setParent(this);
     //Set the backend to now playing first.
+    nowPlaying->setBackend(knMusicGlobal->backend());
+    //Load configure
     nowPlaying->loadConfigure();
     //Set the now playing to music global.
     knMusicGlobal->setNowPlaying(nowPlaying);
@@ -260,6 +269,9 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
     {
         return;
     }
+    //Set the backend and the now playing.
+    headerPlayer->setBackend(knMusicGlobal->backend());
+    headerPlayer->setNowPlaying(knMusicGlobal->nowPlaying());
     //Add the header player to the header left layout.
     m_headerWidgetContainer->addWidget(headerPlayer);
     //Link the header and the header player.

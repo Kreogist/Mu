@@ -113,9 +113,50 @@ public:
      */
     void previewReset() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicBackend::mute().
+     */
+    bool mute() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicBackend::changeMuteState().
+     */
+    void changeMuteState() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::setMute().
+     */
+    void setMute(bool mute) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::setPosition().
+     */
+    void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::setPreviewPosition().
+     */
+    void setPreviewPosition(const qint64 &position) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::setVolume().
+     */
+    void setVolume(int volumeSize) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::volumeUp().
+     */
+    void volumeUp() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::volumeDown().
+     */
+    void volumeDown() Q_DECL_OVERRIDE;
+
+protected:
     /*!
      * \brief Set the main backend thread.
      * \param thread The main standard backend thread object.
@@ -129,14 +170,23 @@ public slots:
     void setPreviewThread(KNMusicStandardBackendThread *thread);
 
     /*!
-     * \brief Reimplemented from KNMusicBackend::setPosition().
+     * \brief Set the global volume of the backend.
+     * \param volume The volume number.
      */
-    void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
+    virtual void setGlobalVolume(const int &volume)=0;
 
     /*!
-     * \brief Reimplemented from KNMusicBackend::setPreviewPosition().
+     * \brief Get the one level of the music backend. Normally, it should be
+     * 1/10 of the whole volume range.
+     * \return The volume level size.
      */
-    void setPreviewPosition(const qint64 &position) Q_DECL_OVERRIDE;
+    virtual int volumeLevel() const=0;
+
+    /*!
+     * \brief Get the scale of the global volume size for the smart volume.
+     * \return The volume scaled size.
+     */
+    virtual qreal smartVolumeScale() const=0;
 
 private:
     inline qint64 threadDuration(KNMusicStandardBackendThread *thread) const;
@@ -146,13 +196,18 @@ private:
                                 const qint64 &start,
                                 const qint64 &duration) const;
     inline void threadPlay(KNMusicStandardBackendThread *thread);
-    inline void threadPause(KNMusicStandardBackendThread *thread) ;
+    inline void threadPause(KNMusicStandardBackendThread *thread);
     inline void threadStop(KNMusicStandardBackendThread *thread);
     inline void threadReset(KNMusicStandardBackendThread *thread);
     inline void threadSetPosition(KNMusicStandardBackendThread *thread,
                                   const qint64 &position);
+    inline void synchronizeThreadVolume(const int &volume);
+    inline void smartVolumeOn();
+    inline void smartVolumeOff();
 
     KNMusicStandardBackendThread *m_main, *m_preview;
+    int m_originalVolume, m_volumeBeforeMute;
+    bool m_mute;
 };
 
 #endif // KNMUSICSTANDARDBACKEND_H

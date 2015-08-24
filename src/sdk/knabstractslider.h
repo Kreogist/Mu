@@ -106,14 +106,14 @@ signals:
      * \param min The minimum of the slider.
      * \param max The maximum of the slider.
      */
-    void rangeChanged(float min, float max);
+    void rangeChanged(qint64 min, qint64 max);
 
     /*!
      * \brief When the mouse moved the button of the slider, this signal will be
      * emitted.
      * \param value The value of the slider.
      */
-    void sliderMoved(float value);
+    void sliderMoved(qint64 value);
 
     /*!
      * \brief When the mouse pressed the button of the slider, this signal will

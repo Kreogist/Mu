@@ -451,5 +451,30 @@ QStringList KNMusicModel::mimeTypes() const
 
 void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)
 {
+    int previousPlayingRow=-1;
+    //Check the previous playing index.
+    if(m_playingIndex.isValid())
+    {
+        //Backup the previous playing row.
+        previousPlayingRow=m_playingIndex.row();
+    }
+    //Save the current playing index.
     m_playingIndex = playingRow;
+    //Check if the previous playing row is valid.
+    if(previousPlayingRow==-1)
+    {
+        //If it's valid, emit data update of the current playing row.
+        emit dataChanged(index(m_playingIndex.row(), MusicRowState),
+                         index(m_playingIndex.row(), MusicRowState),
+                         QVector<int>(1, Qt::DecorationRole));
+    }
+    else
+    {
+        //Update all the data of the previous one and the current row.
+        emit dataChanged(index(qMin(m_playingIndex.row(),
+                                    previousPlayingRow), MusicRowState),
+                         index(qMax(m_playingIndex.row(),
+                                    previousPlayingRow), MusicRowState),
+                         QVector<int>(1, Qt::DecorationRole));
+    }
 }

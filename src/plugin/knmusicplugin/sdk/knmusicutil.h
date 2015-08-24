@@ -79,6 +79,12 @@ namespace MusicUtil
     {
         SortDataRole=Qt::UserRole
     };
+    enum KNMusicPlayingState
+    {
+        Stopped,
+        Playing,
+        Paused
+    };
     enum KNMusicLoopState
     {
         NoRepeat,

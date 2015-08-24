@@ -1,0 +1,377 @@
+/*
+ * Copyright (C) Kreogist Dev Team
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+#include <QTimer>
+
+#include "knmusicbackendbassthread.h"
+
+#include <QDebug>
+
+KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
+    KNMusicStandardBackendThread(parent),
+    m_filePath(QString()),
+    m_channel(0),
+    m_channelFlags(0),
+    m_totalDuration(-1),
+    m_duration(-1),
+    m_startPosition(-1),
+    m_endPosition(-1),
+    m_state(Stopped),
+    m_volume(1.0),
+    m_positionUpdater(new QTimer(this)),
+    m_syncHandlers(QList<HSYNC>())
+{
+    //Configure the position updater.
+    m_positionUpdater->setInterval(5);
+    connect(m_positionUpdater, &QTimer::timeout,
+            this, &KNMusicBackendBassThread::checkPosition);
+}
+
+KNMusicBackendBassThread::~KNMusicBackendBassThread()
+{
+    //Stop the position updater.
+    m_positionUpdater->stop();
+    //Clear up the channel sync handle.
+    removeChannelSyncs();
+    //Free the channel.
+    freeChannel();
+}
+
+bool KNMusicBackendBassThread::loadFile(const QString &filePath)
+{
+    //Stop the current thread first.
+    stop();
+    //Remove all the previous sync handlers.
+    removeChannelSyncs();
+    //Check is the file the current file.
+    if(filePath==m_filePath)
+    {
+        //Reset the current state.
+        resetChannelInformation();
+        //Update the duration.
+        emit durationChanged(m_duration);
+        //Emit the load success signal.
+        emit loadSuccess();
+        //Mission complete.
+        return true;
+    }
+    //Clear the file path.
+    m_filePath.clear();
+    //Try to load the file.
+#ifdef Q_OS_WIN
+    std::wstring uniPath=filePath.toStdWString();
+#endif
+#ifdef Q_OS_UNIX
+    std::string uniPath=filePath.toStdString();
+#endif
+    //Create the file using the stream.
+    m_channel=BASS_StreamCreateFile(FALSE,
+                                    uniPath.data(),
+                                    0,
+                                    0,
+                                    m_channelFlags);
+    //Check if the stream create successful.
+    if(!m_channel)
+    {
+        //Create the file using the fixed music load.
+        m_channel=BASS_MusicLoad(FALSE,
+                                 uniPath.data(),
+                                 0,
+                                 0,
+                                 BASS_MUSIC_RAMPS | m_channelFlags,
+                                 1);
+        //Check if the music create successful.
+        if(!m_channel)
+        {
+            //Emit load failed signal.
+            emit loadFailed();
+            //Bass is failed to load the music file.
+            return false;
+        }
+    }
+    //Save the new file path.
+    m_filePath=filePath;
+    //Emit the load success signal.
+    emit loadSuccess();
+    //Set the sync handler.
+    setChannelSyncs();
+    //When loading the file complete, load the channel info to the thread.
+    //Get the duration of the whole file.
+    m_totalDuration=
+            BASS_ChannelBytes2Seconds(m_channel,
+                                      BASS_ChannelGetLength(m_channel,
+                                                            BASS_POS_BYTE))
+            *1000.0;
+    //Emit the duration changed signal.
+    emit durationChanged(m_totalDuration);
+    //Reset the thread information.
+    resetChannelInformation();
+    //Load complete.
+    return true;
+}
+
+void KNMusicBackendBassThread::reset()
+{
+    //Stop the position updater.
+    m_positionUpdater->stop();
+    //Clear up the channel sync handle.
+    removeChannelSyncs();
+    //Check if the channel is not null.
+    freeChannel();
+    //Reset the channel data.
+    m_filePath.clear();
+    //Reset the total duration.
+    m_totalDuration=-1;
+    //Reset the stream status data.
+    resetChannelInformation();
+    //Check the current state is stopped or not.
+    setPlayingState(Stopped);
+}
+
+void KNMusicBackendBassThread::stop()
+{
+    //Check:
+    // 1. The state is already stopped.
+    // 2. The channel is null.
+    if(m_state==Stopped || (!m_channel))
+    {
+        return;
+    }
+    //Stop the channel.
+    BASS_ChannelStop(m_channel);
+    //Stop the position updater.
+    m_positionUpdater->stop();
+    //Reset the position to the start position.
+    setPosition(0);
+    //Update the state.
+    setPlayingState(Stopped);
+    //Emit stopped signal.
+    emit stopped();
+}
+
+void KNMusicBackendBassThread::play()
+{
+    //Check:
+    // 1. The state is already playing.
+    // 2. The channel is null.
+    if(m_state==Playing || (!m_channel))
+    {
+        return;
+    }
+    //Start the position updater.
+    m_positionUpdater->start();
+    //Check the playing state before.
+    if(m_state==Stopped)
+    {
+        //Reset the position to fit track playing.
+        setPosition(0);
+        //Set the volume to the last volume, because of the reset, the
+        //volume is back to 1.0.
+        BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, m_volume);
+    }
+    //Play the thread.
+    BASS_ChannelPlay(m_channel, FALSE);
+    //Update the state.
+    setPlayingState(Playing);
+}
+
+void KNMusicBackendBassThread::pause()
+{
+    //Check:
+    // 1. The state is already paused.
+    // 2. The channel is null.
+    if(m_state==Paused || (!m_channel))
+    {
+        return;
+    }
+    //Pause the thread.
+    BASS_ChannelPause(m_channel);
+    //Stop the updater.
+    m_positionUpdater->stop();
+    //Reset the state.
+    setPlayingState(Paused);
+}
+
+int KNMusicBackendBassThread::volume()
+{
+    //Scale the float number.
+    return (int)(getChannelVolume()*100.0);
+}
+
+qint64 KNMusicBackendBassThread::duration()
+{
+    return m_duration;
+}
+
+qint64 KNMusicBackendBassThread::position()
+{
+    return getChannelPosition();
+}
+
+void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
+                                              const qint64 &duration)
+{
+    //Check the validation of the start position.
+    // 1. Start is not null(-1).
+    // 2. Start is lesser than duration.
+    if(start!=-1 && start<m_duration)
+    {
+        //Save the start position.
+        m_startPosition=start;
+        //Check the validation of the duration.
+        if(duration==-1 || start+duration>m_duration)
+        {
+            //We will treat the invalid duration when the start is valid to
+            //play to the end of the file.
+            m_duration-=m_startPosition;
+        }
+        else
+        {
+            //Or else, save the new duration.
+            m_duration=duration;
+        }
+        //Update the end position.
+        m_endPosition=m_startPosition+m_duration;
+        //Emit the new duration.
+        emit durationChanged(m_duration);
+    }
+}
+
+void KNMusicBackendBassThread::setVolume(const int &volume)
+{
+    //Check the channel is null.
+    if(!m_channel)
+    {
+        return;
+    }
+    //Set the volume to channel.
+    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, ((float)volume)/100.0);
+    //Save the latest volume size.
+    m_volume=getChannelVolume();
+}
+
+void KNMusicBackendBassThread::setPosition(const qint64 &position)
+{
+    //Check the channel is null.
+    if(!m_channel)
+    {
+        return;
+    }
+    //Change the position, the unit of the position should be translate into
+    //second.
+    BASS_ChannelSetPosition(
+                m_channel,
+                BASS_ChannelSeconds2Bytes(m_channel,
+                                          //The position here should be the
+                                          //'absolute' position.
+                                          //That means it should be the position
+                                          //plus the start position.
+                                          (double)(m_startPosition+position)
+                                          /1000.0),
+                BASS_POS_BYTE);
+    //Check the position.
+    checkPosition();
+}
+
+void KNMusicBackendBassThread::setCreateFlags(const DWORD &channelFlags)
+{
+    //Save the channel flags.
+    m_channelFlags=channelFlags;
+}
+
+void KNMusicBackendBassThread::checkPosition()
+{
+    //Get the current position.
+    qint64 currentPosition=getChannelPosition();
+    //Emit position changed signal.
+    emit positionChanged(currentPosition);
+    //Check the position is longer than the duration.
+    /*
+     * Q: Why we still need to do this?
+     * A: When cue is playing, it may not stopped at the end of the file.
+     *    The callback is only used to solve the position won't reach the end
+     *    bug, the track duration stopped will still process here.
+     */
+    if(currentPosition>=m_duration)
+    {
+        //Finished the playing.
+        finishPlaying();
+    }
+}
+
+void KNMusicBackendBassThread::threadReachesEnd(HSYNC handle,
+                                                DWORD channel,
+                                                DWORD data,
+                                                void *user)
+{
+    Q_UNUSED(handle)
+    Q_UNUSED(channel)
+    Q_UNUSED(data)
+    //Finished the playing of the thread.
+    static_cast<KNMusicBackendBassThread *>(user)->finishPlaying();
+}
+
+inline void KNMusicBackendBassThread::finishPlaying()
+{
+    //Stop playing.
+    stop();
+    //Emit finished signal.
+    emit finished();
+}
+
+inline void KNMusicBackendBassThread::resetChannelInformation()
+{
+    //Set the duration to the total duration.
+    m_duration=m_totalDuration;
+    //Set the start position at the very beginning.
+    m_startPosition=0;
+    //Set the default end position as the whole file.
+    m_endPosition=m_duration;
+}
+
+inline void KNMusicBackendBassThread::setPlayingState(const int &state)
+{
+    //Only process the calling when the state is different.
+    if(state!=m_state)
+    {
+        //Save the new state.
+        m_state=state;
+        //Emit state changed signal.
+        emit stateChanged(m_state);
+    }
+}
+
+inline void KNMusicBackendBassThread::setChannelSyncs()
+{
+    m_syncHandlers.append(BASS_ChannelSetSync(m_channel,
+                                              BASS_SYNC_END,
+                                              0,
+                                              threadReachesEnd,
+                                              this));
+}
+
+inline void KNMusicBackendBassThread::removeChannelSyncs()
+{
+    //Get all the handlers.
+    for(auto i=m_syncHandlers.begin(); i!=m_syncHandlers.end(); ++i)
+    {
+        //Remove all the sync from the list.
+        BASS_ChannelRemoveSync(m_channel, *i);
+    }
+    //Clear the hanlder list.
+    m_syncHandlers.clear();
+}

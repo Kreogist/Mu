@@ -39,8 +39,6 @@ class KNOpacityButton;
 class KNScrollLabel;
 class KNProgressSlider;
 class KNVolumeSlider;
-class KNMusicBackend;
-class KNMusicNowPlayingBase;
 /*!
  * \brief The KNMusicHeaderPlayer class
  */
@@ -49,6 +47,18 @@ class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
     Q_OBJECT
 public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
+
+    /*!
+     * \brief setBackend
+     * \param backend
+     */
+    void setBackend(KNMusicBackend *backend);
+
+    /*!
+     * \brief setNowPlaying
+     * \param nowPlaying
+     */
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
 
 signals:
 
@@ -88,6 +98,9 @@ private:
                            QPropertyAnimation *volume,
                            QPropertyAnimation *control,
                            QPropertyAnimation *append);
+
+    inline void updateDuration(const qint64 &duration);
+
     //Widgets
     KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next;
     KNHighLightLabel *m_albumArt;
@@ -107,7 +120,7 @@ private:
     bool m_progressPressed;
 
     //Icons.
-    QIcon m_loopStateIcon[LoopCount], m_muteIcon[2];
+    QIcon m_iconLoopState[LoopCount], m_iconMute[2], m_iconPlay, m_iconPause;
 
     //Animations
     QParallelAnimationGroup *m_mouseIn, *m_mouseOut;

@@ -21,11 +21,17 @@
 
 #include "kndropproxycontainer.h"
 
+class KNMusicBackend;
+class KNMusicNowPlayingBase;
 class KNMusicPlayerBase : public KNDropProxyContainer
 {
     Q_OBJECT
 public:
     KNMusicPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
+
+    virtual void setBackend(KNMusicBackend *backend)=0;
+
+    virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
 
 signals:
     void requirePlayPrevious();

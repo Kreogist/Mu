@@ -65,6 +65,8 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_informationEffect(new QGraphicsOpacityEffect(this)),
     m_glowEffect(new KNGraphicsGlowEffect(this)),
     m_progressPressed(false),
+    m_iconPlay(QIcon(":/plugin/music/player/play.png")),
+    m_iconPause(QIcon(":/plugin/music/player/pause.png")),
     m_mouseIn(new QParallelAnimationGroup(this)),
     m_mouseOut(new QParallelAnimationGroup(this)),
     m_showControl(generateAnime(m_controlPanel)),
@@ -82,13 +84,13 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
 
     //Initial the image sources.
     //--Loop State--
-    m_loopStateIcon[NoRepeat]=QIcon(":/plugin/music/player/NoRepeat.png");
-    m_loopStateIcon[RepeatAll]=QIcon(":/plugin/music/player/Repeat.png");
-    m_loopStateIcon[RepeatTrack]=QIcon(":/plugin/music/player/RepeatSingle.png");
-    m_loopStateIcon[Shuffle]=QIcon(":/plugin/music/player/Random.png");
+    m_iconLoopState[NoRepeat]=QIcon(":/plugin/music/player/NoRepeat.png");
+    m_iconLoopState[RepeatAll]=QIcon(":/plugin/music/player/Repeat.png");
+    m_iconLoopState[RepeatTrack]=QIcon(":/plugin/music/player/RepeatSingle.png");
+    m_iconLoopState[Shuffle]=QIcon(":/plugin/music/player/Random.png");
     //--Mute State--
-    m_muteIcon[false]=QIcon(":/plugin/music/player/mute_false.png");
-    m_muteIcon[true]=QIcon(":/plugin/music/player/mute_true.png");
+    m_iconMute[false]=QIcon(":/plugin/music/player/mute_false.png");
+    m_iconMute[true]=QIcon(":/plugin/music/player/mute_true.png");
     //Initial the UI elements.
     //--Graphics Effect--
     //Configure opacity effect.
@@ -150,7 +152,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     volumeLayout->setSpacing(0);
     m_volumePanel->setLayout(volumeLayout);
     //Configure the volume indicator.
-    m_volumeIndicator->setIcon(m_muteIcon[false]);
+    m_volumeIndicator->setIcon(m_iconMute[false]);
     m_volumeIndicator->setFixedSize(13,13);
     volumeLayout->addWidget(m_volumeIndicator);
     //Configure the volume slider.
@@ -266,25 +268,82 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_mouseOut->addAnimation(m_hideVolume);
     m_mouseOut->addAnimation(m_hideControl);
     m_mouseOut->addAnimation(m_hideAppend);
+}
 
-    //Link with the backend.
-    if(knMusicGlobal->backend())
+void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
+{
+    //Save the backend pointer.
+    m_backend=backend;
+    //Check whether the backend is null or not.
+    if(m_backend==nullptr)
     {
-        //Save the backend pointer.
-        m_backend=knMusicGlobal->backend();
+        return;
     }
-    //Link with the now playing.
-    if(knMusicGlobal->nowPlaying())
-    {
-        //Save the now playing pointer.
-        m_nowPlaying=knMusicGlobal->nowPlaying();
-        //Link the header player's control signal to now playing model.
-        connect(this, &KNMusicHeaderPlayer::requireChangeLoopState,
-                m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
-        //Link the now playing model's response to header player.
-        connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
-                this, &KNMusicHeaderPlayer::onActionLoopStateChange);
-    }
+    //Update the volume range.
+    m_volumeSlider->setRange(backend->minimalVolume(),
+                             backend->maximumVolume());
+    //Change the mouse step based on the range.
+    int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
+    m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
+    //
+    ;
+    //Connect request to the backend.
+    connect(m_volumeIndicator, &KNOpacityButton::clicked,
+            m_backend, &KNMusicBackend::changeMuteState);
+    //Connect the response.
+    connect(m_backend, &KNMusicBackend::positionChanged,
+            [=](const qint64 &position)
+            {
+                //Update the value of progress slider when the progress slider
+                //is not being edited.
+                if(!m_progressPressed)
+                {
+                    //Update the slider value.
+                    m_progressSlider->setValue(position);
+                }
+            });
+    connect(m_backend, &KNMusicBackend::durationChanged,
+            [=](const qint64 &duration)
+            {
+                //Update the duration of the slider and the label.
+                updateDuration(duration);
+            });
+    connect(m_backend, &KNMusicBackend::playingStateChanged,
+            [=](const int &state)
+            {
+                //If it's playing, then should display pause icon.
+                m_playNPause->setIcon((state==Playing)?m_iconPause:m_iconPlay);
+            });
+    connect(m_backend, &KNMusicBackend::volumeChanged,
+            [=](const int &volumeSize)
+            {
+                //Block the volume slider.
+                m_volumeSlider->blockSignals(true);
+                //Change the opacity.
+                m_volumeIndicator->setOpacity(0.5+m_volumeSlider->percentage()/2);
+                //Sync the value.
+                m_volumeSlider->setValue(volumeSize);
+                //Release the block.
+                m_volumeSlider->blockSignals(false);
+            });
+    connect(m_backend, &KNMusicBackend::muteStateChanged,
+                [=](const bool &mute)
+                {
+                    //Update the icon of volume indicator.
+                    m_volumeIndicator->setIcon(m_iconMute[mute]);
+                });
+}
+
+void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
+{
+    //Save the now playing pointer.
+    m_nowPlaying=nowPlaying;
+    //Link the header player's control signal to now playing model.
+    connect(this, &KNMusicHeaderPlayer::requireChangeLoopState,
+            m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
+    //Link the now playing model's response to header player.
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
+            this, &KNMusicHeaderPlayer::onActionLoopStateChange);
 }
 
 void KNMusicHeaderPlayer::activate()
@@ -330,7 +389,7 @@ void KNMusicHeaderPlayer::onActionLoopStateChange(const int &state)
     if(state>-1 && state<LoopCount)
     {
         //Change the icon of the loop state button.
-        m_loopState->setIcon(m_loopStateIcon[state]);
+        m_loopState->setIcon(m_iconLoopState[state]);
     }
 }
 
@@ -454,4 +513,12 @@ inline void KNMusicHeaderPlayer::startAnime(QParallelAnimationGroup *group,
     append->setStartValue(m_appendPanel->geometry());
     //Start animations.
     group->start();
+}
+
+inline void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)
+{
+    //Change the progress slider range.
+    m_progressSlider->setMaximum(duration);
+    //Set duration display text.
+    m_duration->setText(KNMusicUtil::msecondToString(duration));
 }
