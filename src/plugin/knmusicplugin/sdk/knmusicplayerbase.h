@@ -34,11 +34,6 @@ public:
     virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
 
 signals:
-    void requirePlayPrevious();
-    void requirePlayNext();
-
-    void requireChangeLoopState();
-
     void requireShowInSongs();
     void requireShowInArtists();
     void requireShowInAlbums();

@@ -94,8 +94,10 @@ inline void KNHighLightLabel::updateHighLightArea()
 inline void KNHighLightLabel::updateScaledContent()
 {
     //Check the content data first.
-    if(m_scaledContent.isNull())
+    if(m_rawContent.isNull())
     {
+        //Clear the scaled content.
+        m_scaledContent=QPixmap();
         //Ignore the null content data scaled.
         return;
     }

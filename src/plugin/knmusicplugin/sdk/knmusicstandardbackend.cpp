@@ -25,8 +25,8 @@ KNMusicStandardBackend::KNMusicStandardBackend(QObject *parent) :
     KNMusicBackend(parent),
     m_main(nullptr),
     m_preview(nullptr),
-    m_volumeBeforeMute(-1),
     m_originalVolume(-1),
+    m_volumeBeforeMute(-1),
     m_mute(false)
 {
 }
@@ -46,6 +46,11 @@ bool KNMusicStandardBackend::loadMusic(const QString &filePath,
                                        const qint64 &duration)
 {
     return threadLoadMusic(m_main, filePath, start, duration);
+}
+
+int KNMusicStandardBackend::state() const
+{
+    return threadState(m_main);
 }
 
 void KNMusicStandardBackend::play()
@@ -83,6 +88,11 @@ bool KNMusicStandardBackend::previewLoadMusic(const QString &filePath,
                                               const qint64 &duration)
 {
     return threadLoadMusic(m_preview, filePath, start, duration);
+}
+
+int KNMusicStandardBackend::previewState() const
+{
+    return threadState(m_preview);
 }
 
 void KNMusicStandardBackend::previewPlay()
@@ -251,6 +261,13 @@ inline qint64 KNMusicStandardBackend::threadPosition(
 {
     //The thread cannot be null.
     return thread?thread->position():-1;
+}
+
+inline int KNMusicStandardBackend::threadState(
+        KNMusicStandardBackendThread *thread) const
+{
+    //The thread cannot be null.
+    return thread?thread->state():-1;
 }
 
 inline bool KNMusicStandardBackend::threadLoadMusic(

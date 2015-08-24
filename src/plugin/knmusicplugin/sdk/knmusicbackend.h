@@ -103,6 +103,12 @@ public:
     virtual int volume() const=0;
 
     /*!
+     * \brief Get the state of the main thread.
+     * \return The main thread state.
+     */
+    virtual int state() const=0;
+
+    /*!
      * \brief Get the duration of the file loaded in preview thread.
      * \return The duration of the preview file. If there's no file in the
      * preview thread, it will be -1.
@@ -153,6 +159,12 @@ public:
      * memory resource of the preview thread will be cleared.
      */
     virtual void previewReset()=0;
+
+    /*!
+     * \brief Get the state of the preview thread.
+     * \return The state of the preview thread.
+     */
+    virtual int previewState() const=0;
 
     /*!
      * \brief Get the minimal volume size of the backend.

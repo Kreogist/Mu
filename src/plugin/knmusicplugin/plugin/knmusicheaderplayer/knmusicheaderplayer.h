@@ -31,7 +31,7 @@ class QGraphicsOpacityEffect;
 class QParallelAnimationGroup;
 class QPropertyAnimation;
 class QLabel;
-class KNGraphicsGlowEffect;
+class KNConfigure;
 class KNEditableLabel;
 class KNHighLightLabel;
 class KNOpacityAnimeButton;
@@ -49,14 +49,12 @@ public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
 
     /*!
-     * \brief setBackend
-     * \param backend
+     * \brief Reimplement from KNMusicHeaderPlayerBase::setBackend().
      */
     void setBackend(KNMusicBackend *backend);
 
     /*!
-     * \brief setNowPlaying
-     * \param nowPlaying
+     * \brief Reimplement from KNMusicHeaderPlayerBase::setNowPlaying().
      */
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
 
@@ -73,13 +71,25 @@ public slots:
      */
     void inactivate() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicHeaderPlayerBase::loadConfigure().
+     */
+    void loadConfigure() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicHeaderPlayerBase::saveConfigure().
+     */
+    void saveConfigure() Q_DECL_OVERRIDE;
+
+    void reset();
+
 private slots:
     void updatePositionText(const qint64 &position);
     void onActionLoopStateChange(const int &state);
     void onActionMouseInOut(const QVariant &value);
     void onActionPositionEdited();
     void onActionVolumeChanged(const qint64 &value);
-    void onActionPlayNPause();
+    void onActionNowPlayingChanged(const KNMusicAnalysisItem &analysisItem);
 
 private:
     inline void updateDurationPalette(const int &opacity);
@@ -98,6 +108,7 @@ private:
                            QPropertyAnimation *volume,
                            QPropertyAnimation *control,
                            QPropertyAnimation *append);
+    inline void setAristAndAlbum(const QString &artist, const QString &album);
 
     inline void updateDuration(const qint64 &duration);
 
@@ -114,7 +125,6 @@ private:
 
     //Effects
     QGraphicsOpacityEffect *m_informationEffect;
-    KNGraphicsGlowEffect *m_glowEffect;
 
     //Status.
     bool m_progressPressed;
@@ -131,6 +141,9 @@ private:
     //Plugins.
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
+
+    //Configures.
+    KNConfigure *m_cacheConfigure, *m_musicConfigure;
 };
 
 #endif // KNMUSICHEADERPLAYER_H

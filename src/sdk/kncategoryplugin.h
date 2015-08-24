@@ -47,7 +47,7 @@ public:
 
     /*!
      * \brief Provide the icon of the category.
-     * \return
+     * \return The category plugin icon.
      */
     virtual QPixmap icon()=0;
 

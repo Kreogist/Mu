@@ -20,6 +20,7 @@
 
 #include "knglobal.h"
 #include "knconfigure.h"
+#include "kncategoryplugin.h"
 #include "knpreferenceplugin.h"
 #include "knthememanager.h"
 #include "knmainwindowcontainer.h"
@@ -29,10 +30,13 @@
 
 #include "knmainwindow.h"
 
+#include <QDebug>
+
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
-    m_container(new KNMainWindowContainer(this))
+    m_container(new KNMainWindowContainer(this)),
+    m_categoryPlugin(nullptr)
 {
     setObjectName("MainWindow");
     //Set properties.
@@ -60,10 +64,12 @@ void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
             m_container, &KNMainWindowContainer::showPreference);
 }
 
-void KNMainWindow::setMainWidget(QWidget *mainWidget)
+void KNMainWindow::setMainWidget(KNCategoryPlugin *mainWidget)
 {
     //Save the main widget.
-    m_container->setMainWidget(mainWidget);
+    m_categoryPlugin=mainWidget;
+    //Set the new category plugin.
+    m_container->setMainWidget(m_categoryPlugin);
 }
 
 void KNMainWindow::setPreferencePanel(KNPreferencePlugin *preferencePanel)
@@ -77,6 +83,12 @@ void KNMainWindow::setPreferencePanel(KNPreferencePlugin *preferencePanel)
 
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
+    //Save the configure of the category plugin, if the category is valid.
+    if(m_categoryPlugin)
+    {
+        //Save the configure.
+        m_categoryPlugin->saveConfigure();
+    }
     //Save the geometry.
     backupGeometry();
     //Do the mainwindow close event.

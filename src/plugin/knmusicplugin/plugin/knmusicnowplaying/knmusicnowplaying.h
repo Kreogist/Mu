@@ -134,7 +134,6 @@ private slots:
 private:
     inline void resetShadowModel();
     inline void playNextRow(bool noLoopMode=false);
-    inline int previousRow(int proxyRow, bool noLoop=false);
 
     KNMusicBackend *m_backend;
     KNMusicProxyModel *m_playingProxyModel,

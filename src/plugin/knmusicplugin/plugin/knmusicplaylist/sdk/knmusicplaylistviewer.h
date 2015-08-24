@@ -22,11 +22,15 @@
 #include <QWidget>
 
 class QLabel;
+class KNScrollLabel;
 class KNConnectionHandler;
 class KNSideShadowWidget;
 class KNMusicPlaylistModel;
 class KNMusicTab;
 class KNMusicPlaylistTreeView;
+/*!
+ * \brief The KNMusicPlaylistViewer class
+ */
 class KNMusicPlaylistViewer : public QWidget
 {
     Q_OBJECT
@@ -52,7 +56,8 @@ private:
     inline void updateTitle();
     inline void updateDetailInfo();
     KNMusicPlaylistTreeView *m_treeView;
-    QLabel *m_title, *m_detail;
+    KNScrollLabel *m_title;
+    QLabel *m_detail;
     KNSideShadowWidget *m_leftShadow;
     KNConnectionHandler *m_modelLinkHandler;
 

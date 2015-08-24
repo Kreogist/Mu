@@ -104,6 +104,9 @@ private:
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;
     KNSideShadowWidget *m_topShadow;
+
+    //Plugins.
+    KNMusicHeaderPlayerBase *m_headerPlayer;
 };
 
 #endif // KNMUSICPLUGIN_H

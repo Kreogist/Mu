@@ -133,7 +133,7 @@ bool KNMusicModel::updateRow(int row, KNMusicDetailInfo detailInfo)
     //Check the row first.
     Q_ASSERT(row>-1 && row<m_detailInfos.size());
     //Get the original detail info.
-    KNMusicDetailInfo previousDetailInfo=m_detailInfos.at(row);
+    const KNMusicDetailInfo &previousDetailInfo=m_detailInfos.at(row);
     //Remove the old duration from the total duration.
     m_totalDuration-=previousDetailInfo.duration;
     //Copy some data from the previous detail info.
@@ -148,7 +148,7 @@ bool KNMusicModel::updateRow(int row, KNMusicDetailInfo detailInfo)
     m_totalDuration+=detailInfo.duration;
     //Emit the data changed signal.
     emit dataChanged(index(row, 0),
-                     index(row, columnCount()));
+                     index(row, columnCount()-1));
     return true;
 }
 
@@ -166,7 +166,7 @@ bool KNMusicModel::replaceRow(int row, const KNMusicDetailInfo &detailInfo)
     m_totalDuration+=detailInfo.duration;
     //Emit the data changed signal.
     emit dataChanged(index(row, 0),
-                     index(row, columnCount()));
+                     index(row, columnCount()-1));
     return true;
 }
 
@@ -451,30 +451,24 @@ QStringList KNMusicModel::mimeTypes() const
 
 void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)
 {
-    int previousPlayingRow=-1;
     //Check the previous playing index.
     if(m_playingIndex.isValid())
     {
-        //Backup the previous playing row.
-        previousPlayingRow=m_playingIndex.row();
+        //Save the previous row.
+        int previousRow=m_playingIndex.row();
+        //Reset the playing index.
+        m_playingIndex=QPersistentModelIndex();
+        //If it's valid, emit data update of the current playing row.
+        emit dataChanged(index(previousRow, MusicRowState),
+                         index(previousRow, MusicRowState));
     }
     //Save the current playing index.
     m_playingIndex = playingRow;
     //Check if the previous playing row is valid.
-    if(previousPlayingRow==-1)
-    {
-        //If it's valid, emit data update of the current playing row.
-        emit dataChanged(index(m_playingIndex.row(), MusicRowState),
-                         index(m_playingIndex.row(), MusicRowState),
-                         QVector<int>(1, Qt::DecorationRole));
-    }
-    else
+    if(m_playingIndex.isValid())
     {
         //Update all the data of the previous one and the current row.
-        emit dataChanged(index(qMin(m_playingIndex.row(),
-                                    previousPlayingRow), MusicRowState),
-                         index(qMax(m_playingIndex.row(),
-                                    previousPlayingRow), MusicRowState),
-                         QVector<int>(1, Qt::DecorationRole));
+        emit dataChanged(index(m_playingIndex.row(), MusicRowState),
+                         index(m_playingIndex.row(), MusicRowState));
     }
 }

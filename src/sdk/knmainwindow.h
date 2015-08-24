@@ -22,6 +22,7 @@
 #include <QMainWindow>
 
 class KNConfigure;
+class KNCategoryPlugin;
 class KNMainWindowContainer;
 class KNMainWindowHeaderBase;
 class KNPreferencePlugin;
@@ -58,7 +59,7 @@ public:
      * \param mainWidget The main widget pointer. It will only save the first
      * widget you set.
      */
-    void setMainWidget(QWidget *mainWidget);
+    void setMainWidget(KNCategoryPlugin *mainWidget);
 
     /*!
      * \brief Set the preference panel widget.
@@ -88,6 +89,7 @@ private:
 
     KNConfigure *m_cacheConfigure;
     KNMainWindowContainer *m_container;
+    KNCategoryPlugin *m_categoryPlugin;
 };
 
 #endif // KNMAINWINDOW_H

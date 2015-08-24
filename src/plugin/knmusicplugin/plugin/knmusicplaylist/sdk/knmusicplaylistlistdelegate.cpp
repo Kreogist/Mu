@@ -88,6 +88,7 @@ QWidget *KNMusicPlaylistListDelegate::createEditor(
     //Hide the border of the editor.
     QPalette editorPalette=option.palette;
     editorPalette.setColor(QPalette::WindowText, QColor(0,0,0,0));
+    editorPalette.setColor(QPalette::Button, QColor(0,0,0,0));
     captionEditor->setPalette(editorPalette);
     //Set the size of the editor.
     /*

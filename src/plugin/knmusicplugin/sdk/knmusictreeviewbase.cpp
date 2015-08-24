@@ -182,6 +182,28 @@ void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
+{
+    //Judge according to the released key.
+    switch(event->key())
+    {
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+    {
+        //Check the current index first.
+        if(currentIndex().isValid())
+        {
+            //Hack this as the activate action.
+            onActionActivate(currentIndex());
+        }
+        break;
+    }
+    default:
+        //Do the orignal key release event.
+        QTreeView::keyReleaseEvent(event);
+    }
+}
+
 void KNMusicTreeViewBase::moveToFirst(const int &logicalIndex)
 {
     //The overdriven function: move section.

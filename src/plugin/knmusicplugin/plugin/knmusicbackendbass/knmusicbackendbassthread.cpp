@@ -39,6 +39,9 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_positionUpdater->setInterval(5);
     connect(m_positionUpdater, &QTimer::timeout,
             this, &KNMusicBackendBassThread::checkPosition);
+    //Link the reachesFinished() signal.
+    connect(this, &KNMusicBackendBassThread::reachesFinished,
+            this, &KNMusicBackendBassThread::finishPlaying);
 }
 
 KNMusicBackendBassThread::~KNMusicBackendBassThread()
@@ -222,6 +225,11 @@ qint64 KNMusicBackendBassThread::position()
     return getChannelPosition();
 }
 
+int KNMusicBackendBassThread::state() const
+{
+    return m_state;
+}
+
 void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
                                               const qint64 &duration)
 {
@@ -322,7 +330,8 @@ void KNMusicBackendBassThread::threadReachesEnd(HSYNC handle,
     Q_UNUSED(channel)
     Q_UNUSED(data)
     //Finished the playing of the thread.
-    static_cast<KNMusicBackendBassThread *>(user)->finishPlaying();
+    //Call the signal function to emit this signal.
+    static_cast<KNMusicBackendBassThread *>(user)->reachesFinished();
 }
 
 inline void KNMusicBackendBassThread::finishPlaying()

@@ -41,6 +41,16 @@ public slots:
      * header.
      */
     virtual void inactivate()=0;
+
+    /*!
+     * \brief Load configure data to the header player.
+     */
+    virtual void loadConfigure()=0;
+
+    /*!
+     * \brief Save header player settings to configure data.
+     */
+    virtual void saveConfigure()=0;
 };
 
 #endif // KNMUSICHEADERPLAYERBASE_H

@@ -57,6 +57,11 @@ public:
                    const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNMusicBackend::state().
+     */
+    int state() const Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicBackend::play().
      */
     void play() Q_DECL_OVERRIDE;
@@ -92,6 +97,11 @@ public:
     bool previewLoadMusic(const QString &filePath,
                           const qint64 &start=-1,
                           const qint64 &duration=-1) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::previewState().
+     */
+    int previewState() const Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicBackend::previewPlay().
@@ -191,6 +201,7 @@ protected:
 private:
     inline qint64 threadDuration(KNMusicStandardBackendThread *thread) const;
     inline qint64 threadPosition(KNMusicStandardBackendThread *thread) const;
+    inline int threadState(KNMusicStandardBackendThread *thread) const;
     inline bool threadLoadMusic(KNMusicStandardBackendThread *thread,
                                 const QString &filePath,
                                 const qint64 &start,

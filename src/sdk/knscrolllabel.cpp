@@ -68,7 +68,7 @@ void KNScrollLabel::paintEvent(QPaintEvent *event)
     //Configure the opacity.
     painter.setOpacity(m_opacity);
     //Configure the pen.
-    painter.setPen(palette().color(QPalette::Text));
+    painter.setPen(palette().color(QPalette::WindowText));
     //Draw content text.
     painter.drawText(m_textX,
                      contentsRect().y(),

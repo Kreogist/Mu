@@ -21,6 +21,7 @@
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 
+#include "knglobal.h"
 #include "kneditablelabel.h"
 #include "knhighlightlabel.h"
 #include "knvolumeslider.h"
@@ -30,6 +31,7 @@
 #include "knthememanager.h"
 #include "knprogressslider.h"
 #include "kngraphicsgloweffect.h"
+#include "knconfigure.h"
 
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
@@ -44,6 +46,9 @@
 #define GlowRadius 9.0
 #define panelY 11
 #define m_buttonSize 38
+
+#define PlayerVolume QString("PlayerVolume")
+#define PlayerMute QString("Mute")
 
 KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent),
@@ -63,7 +68,6 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_volumePanel(new QWidget(this)),
     m_appendPanel(new QWidget(this)),
     m_informationEffect(new QGraphicsOpacityEffect(this)),
-    m_glowEffect(new KNGraphicsGlowEffect(this)),
     m_progressPressed(false),
     m_iconPlay(QIcon(":/plugin/music/player/play.png")),
     m_iconPause(QIcon(":/plugin/music/player/pause.png")),
@@ -76,7 +80,11 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_showAppend(generateAnime(m_appendPanel)),
     m_hideAppend(generateAnime(m_appendPanel)),
     m_backend(nullptr),
-    m_nowPlaying(nullptr)
+    m_nowPlaying(nullptr),
+    m_cacheConfigure(
+        knGlobal->cacheConfigure()->getConfigure("MusicHeaderPlayer")),
+    m_musicConfigure(
+        knMusicGlobal->configure()->getConfigure("MusicHeaderPlayer"))
 {
     //Set properties.
     setContentsMargins(0, 0, 0, 0);
@@ -95,9 +103,6 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //--Graphics Effect--
     //Configure opacity effect.
     m_informationEffect->setOpacity(1.0);
-    //Configure the glow effect.
-    m_glowEffect->setColor(QColor(0,0,0));
-    m_glowEffect->setRadius(GlowRadius);
     // Album Art Label;
     m_albumArt->setFixedSize(AlbumArtSize, AlbumArtSize);
     m_albumArt->move(13, 4);
@@ -110,14 +115,22 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     knTheme->registerWidget(m_title);
     m_title->setFont(labelFont);
     m_title->setGeometry(80, 5, 215, m_title->sizeHint().height());
-    m_title->setGraphicsEffect(m_glowEffect);
+    //Generate the glow effect for title text.
+    KNGraphicsGlowEffect *glowEffect=new KNGraphicsGlowEffect(this);
+    glowEffect->setColor(QColor(0,0,0));
+    glowEffect->setRadius(GlowRadius);
+    m_title->setGraphicsEffect(glowEffect);
 
     //--Artist - Album Label--
     m_artistAlbum->setObjectName("HeaderPlayerLabel");
     knTheme->registerWidget(m_artistAlbum);
     m_artistAlbum->setFont(labelFont);
     m_artistAlbum->setGeometry(80, 25, 215, m_artistAlbum->sizeHint().height());
-    m_artistAlbum->setGraphicsEffect(m_glowEffect);
+    //Generate the glow effect for artist and album text.
+    glowEffect=new KNGraphicsGlowEffect(this);
+    glowEffect->setColor(QColor(0,0,0));
+    glowEffect->setRadius(GlowRadius);
+    m_artistAlbum->setGraphicsEffect(glowEffect);
 
     //Control panel.
     m_controlPanel->setGeometry(generateOutPosition());
@@ -129,16 +142,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_controlPanel->setLayout(panelLayout);
     panelLayout->addStretch();
     //--Previous Button--
-    connect(m_previous, &KNOpacityAnimeButton::clicked,
-            this, &KNMusicHeaderPlayer::requirePlayPrevious);
     panelLayout->addWidget(m_previous, 0, Qt::AlignCenter);
     //--Play and Pause Button--
-    connect(m_playNPause, &KNOpacityAnimeButton::clicked,
-            this, &KNMusicHeaderPlayer::onActionPlayNPause);
     panelLayout->addWidget(m_playNPause, 0, Qt::AlignCenter);
     //--Next Button--
-    connect(m_next, &KNOpacityAnimeButton::clicked,
-            this, &KNMusicHeaderPlayer::requirePlayNext);
     panelLayout->addWidget(m_next, 0, Qt::AlignCenter);
     panelLayout->addStretch();
 
@@ -230,9 +237,6 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_loopState->setFixedSize(16, 16);
     //Set the default state of the loop state.
     onActionLoopStateChange(NoRepeat);
-    //Link the loop state button to loop change signal.
-    connect(m_loopState, &KNOpacityButton::clicked,
-            this, &KNMusicHeaderPlayer::requireChangeLoopState);
     progressLayout->addSpacing(5);
     progressLayout->addWidget(m_loopState);
 
@@ -285,11 +289,24 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     //Change the mouse step based on the range.
     int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
     m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
-    //
-    ;
+    //Reset the header player.
+    reset();
     //Connect request to the backend.
     connect(m_volumeIndicator, &KNOpacityButton::clicked,
             m_backend, &KNMusicBackend::changeMuteState);
+    connect(m_playNPause, &KNOpacityAnimeButton::clicked,
+            [=]
+            {
+                //Check the state of the backend.
+                //If the backend is now at the playing state, pause the backend.
+                if(m_backend->state()==Playing)
+                {
+                    m_backend->pause();
+                    return;
+                }
+                //Start to play the main thread.
+                m_backend->play();
+            });
     //Connect the response.
     connect(m_backend, &KNMusicBackend::positionChanged,
             [=](const qint64 &position)
@@ -338,12 +355,25 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
     //Save the now playing pointer.
     m_nowPlaying=nowPlaying;
+    //Check whether the now playing is null.
+    if(m_nowPlaying==nullptr)
+    {
+        return;
+    }
     //Link the header player's control signal to now playing model.
-    connect(this, &KNMusicHeaderPlayer::requireChangeLoopState,
+    connect(m_loopState, &KNOpacityButton::clicked,
             m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
+    connect(m_next, &KNOpacityAnimeButton::clicked,
+            m_nowPlaying, &KNMusicNowPlayingBase::playNext);
+    connect(m_previous, &KNOpacityAnimeButton::clicked,
+            m_nowPlaying, &KNMusicNowPlayingBase::playPrevious);
     //Link the now playing model's response to header player.
     connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
             this, &KNMusicHeaderPlayer::onActionLoopStateChange);
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
+            this, &KNMusicHeaderPlayer::onActionNowPlayingChanged);
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
+            this, &KNMusicHeaderPlayer::reset);
 }
 
 void KNMusicHeaderPlayer::activate()
@@ -356,6 +386,44 @@ void KNMusicHeaderPlayer::inactivate()
 {
     //Start mouse out and hide animations.
     startAnime(m_mouseOut, m_hideVolume, m_hideControl, m_hideAppend);
+}
+
+void KNMusicHeaderPlayer::loadConfigure()
+{
+    //--From cache configure--
+    if(m_backend)
+    {
+        //Load the previous volume settings.
+        m_volumeSlider->setValue(
+                    m_volumeSlider->minimal()+(double)(m_volumeSlider->range())*
+                    m_cacheConfigure->data(PlayerVolume, 0.5).toDouble());
+        //Get the mute state and set to backend.
+        m_backend->setMute(m_cacheConfigure->data(PlayerMute, false).toBool());
+    }
+}
+
+void KNMusicHeaderPlayer::saveConfigure()
+{
+    //--Write to cache configure--
+    //Write the volume range.
+    m_cacheConfigure->setData(PlayerVolume, m_volumeSlider->percentage());
+    //Write the mute state.
+    if(m_backend)
+    {
+        m_cacheConfigure->setData(PlayerMute, m_backend->mute());
+    }
+}
+
+void KNMusicHeaderPlayer::reset()
+{
+    //Clear the labels.
+    m_title->setText("");
+    m_artistAlbum->setText("");
+    //Set no album art icon.
+    m_albumArt->setPixmap(knMusicGlobal->noAlbumArt());
+    //Set the duration and position to 0.
+    updateDuration(0);
+    m_position->setText(KNMusicUtil::msecondToString(0));
 }
 
 void KNMusicHeaderPlayer::updatePositionText(const qint64 &position)
@@ -459,9 +527,19 @@ void KNMusicHeaderPlayer::onActionVolumeChanged(const qint64 &value)
     }
 }
 
-void KNMusicHeaderPlayer::onActionPlayNPause()
+void KNMusicHeaderPlayer::onActionNowPlayingChanged(
+        const KNMusicAnalysisItem &analysisItem)
 {
-    ;
+    //Get the current detail information.
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Update the label text data.
+    m_title->setText(detailInfo.textLists[Name].toString());
+    setAristAndAlbum(detailInfo.textLists[Artist].toString(),
+                     detailInfo.textLists[Album].toString());
+    //Update the cover album art image.
+    QPixmap albumArt=QPixmap::fromImage(analysisItem.coverImage);
+    m_albumArt->setPixmap(albumArt.isNull()?
+                              knMusicGlobal->noAlbumArt():albumArt);
 }
 
 inline void KNMusicHeaderPlayer::setPosition(const qint64 &position)
@@ -513,6 +591,33 @@ inline void KNMusicHeaderPlayer::startAnime(QParallelAnimationGroup *group,
     append->setStartValue(m_appendPanel->geometry());
     //Start animations.
     group->start();
+}
+
+inline void KNMusicHeaderPlayer::setAristAndAlbum(const QString &artist,
+                                                  const QString &album)
+{
+    //Clear the label first.
+    m_artistAlbum->setText("");
+    //Set the text.
+    if(artist.isEmpty())
+    {
+        //Set the label to display the 'Album'
+        m_artistAlbum->setText(album);
+    }
+    else
+    {
+        //Check if the album is empty.
+        if(album.isEmpty())
+        {
+            //Set the lable to display 'Artist'
+            m_artistAlbum->setText(artist);
+        }
+        else
+        {
+            //Set the lable to display 'Artist - Album'
+            m_artistAlbum->setText(artist + " - " + album);
+        }
+    }
 }
 
 inline void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)

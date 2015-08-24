@@ -23,6 +23,7 @@
 #include "knsideshadowwidget.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
+#include "knscrolllabel.h"
 
 #include "knmusicsearchbase.h"
 #include "knmusicplaylisttreeview.h"
@@ -39,14 +40,17 @@
 KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     QWidget(parent),
     m_treeView(new KNMusicPlaylistTreeView(this, tab)),
-    m_title(new QLabel(this)),
+    m_title(new KNScrollLabel(this)),
     m_detail(new QLabel(this)),
     m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow,
                                         this)),
     m_modelLinkHandler(new KNConnectionHandler())
 {
+    //Configure the tree view.
+    setFocusProxy(m_treeView);
     //Configure title label.
     m_title->setObjectName("PlaylistViewerLabel");
+    m_title->setContentsMargins(0,0,0,0);
     QFont labelFont=m_title->font();
     labelFont.setBold(true);
     labelFont.setPixelSize(17);
@@ -67,7 +71,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     //Initial the information container.
     KNMouseSenseWidget *infoContainer=new KNMouseSenseWidget(this);
     infoContainer->updateObjectName("PlaylistInformationContainer");
-    infoContainer->setContentsMargins(20, 12, 0, 8);
+    infoContainer->setContentsMargins(20, 12, 20, 8);
     //Add widget to layout.
     mainLayout->addWidget(infoContainer);
     mainLayout->addWidget(m_treeView, 1);
@@ -75,6 +79,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     QBoxLayout *informationLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                                  infoContainer);
     informationLayout->setContentsMargins(0,0,0,0);
+    informationLayout->setSpacing(0);
     infoContainer->setLayout(informationLayout);
     //Add labels to information layout.
     informationLayout->addWidget(m_title);
@@ -123,7 +128,7 @@ void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
     m_modelLinkHandler->append(
                 connect(model, &KNMusicPlaylistModel::titleChanged,
                         m_title,
-                        &QLabel::setText));
+                        &KNScrollLabel::setText));
     //Update the detail information.
     updateDetailInfo();
 }
@@ -186,7 +191,7 @@ void KNMusicPlaylistViewer::updateTitle()
     if(m_treeView->proxyModel()==nullptr)
     {
         //Clear the title.
-        m_title->clear();
+        m_title->setText("");
         //Ignore the title update request.
         return;
     }

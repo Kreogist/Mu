@@ -88,6 +88,12 @@ public:
     virtual qint64 position()=0;
 
     /*!
+     * \brief Get the playing state of the thread.
+     * \return The playing state.
+     */
+    virtual int state() const=0;
+
+    /*!
      * \brief Set the specific section of the music, treat the section as a
      * whole music file. The start position should be the whether -1 or a number
      * greater than 0 and lesser than duration(). The start position add the

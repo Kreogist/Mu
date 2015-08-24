@@ -84,12 +84,23 @@ public:
     qint64 position() Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::state().
+     */
+    int state() const Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::setPlaySection().
      */
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
 signals:
+    /*!
+     * \brief This signal is used only for threadReachesEnd(). It's used for
+     * avoid the 'QObject::killTimer: Timers cannot be stopped from another
+     * thread' bug.
+     */
+    void reachesFinished();
 
 public slots:
     /*!

@@ -108,6 +108,8 @@ protected:
      */
     void mouseReleaseEvent(QMouseEvent *event);
 
+    void keyReleaseEvent(QKeyEvent *event);
+
     /*!
      * \brief Reset the header column state to a default state. Including the
      * width and visible.

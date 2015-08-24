@@ -83,7 +83,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_tabBar(new KNCategoryTabBar(this)),
     m_switcher(new KNHWidgetSwitcher(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
-                                       this))
+                                       this)),
+    m_headerPlayer(nullptr)
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
@@ -138,7 +139,11 @@ QString KNMusicPlugin::title()
 
 void KNMusicPlugin::saveConfigure()
 {
-    ;
+    //--Header Player--
+    if(m_headerPlayer)
+    {
+        m_headerPlayer->saveConfigure();
+    }
 }
 
 void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
@@ -269,16 +274,20 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
     {
         return;
     }
+    //Save the header player.
+    m_headerPlayer=headerPlayer;
     //Set the backend and the now playing.
-    headerPlayer->setBackend(knMusicGlobal->backend());
-    headerPlayer->setNowPlaying(knMusicGlobal->nowPlaying());
+    m_headerPlayer->setBackend(knMusicGlobal->backend());
+    m_headerPlayer->setNowPlaying(knMusicGlobal->nowPlaying());
     //Add the header player to the header left layout.
-    m_headerWidgetContainer->addWidget(headerPlayer);
+    m_headerWidgetContainer->addWidget(m_headerPlayer);
     //Link the header and the header player.
     connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
-            headerPlayer, &KNMusicHeaderPlayerBase::activate);
+            m_headerPlayer, &KNMusicHeaderPlayerBase::activate);
     connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
-            headerPlayer, &KNMusicHeaderPlayerBase::inactivate);
+            m_headerPlayer, &KNMusicHeaderPlayerBase::inactivate);
+    //Load the configuration.
+    m_headerPlayer->loadConfigure();
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

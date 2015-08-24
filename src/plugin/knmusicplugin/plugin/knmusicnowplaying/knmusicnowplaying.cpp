@@ -209,10 +209,23 @@ void KNMusicNowPlaying::playPrevious()
         //!FIXME: Add shuffle code here.
         return;
     }
-    //Get the previous row.
+    //Calculate the previous row.
     int previousProxyRow=
-           previousRow(m_playingProxyModel->mapFromSource(m_playingIndex).row(),
-                       false);
+            m_playingProxyModel->mapFromSource(m_playingIndex).row();
+    //If the row is the first row in the model,
+    if(previousProxyRow==0)
+    {
+        //According to the loop mode, give out the row.
+        //Only Repeat All can go back from the last line of the proxy model.
+        previousProxyRow=
+                (m_loopState==RepeatAll)?m_playingProxyModel->rowCount()-1:-1;
+    }
+    else
+    {
+        //Normal case: the previous row of the current row.
+        --previousProxyRow;
+    }
+
     //Check if the row is available.
     if(previousProxyRow==-1)
     {
@@ -472,23 +485,4 @@ void KNMusicNowPlaying::playNextRow(bool noLoopMode)
     }
     //Play the new row.
     playRow(nextProxyRow);
-}
-
-inline int KNMusicNowPlaying::previousRow(int proxyRow, bool noLoop)
-{
-    Q_ASSERT(m_playingProxyModel!=nullptr);
-    //If the row is the first row in the model,
-    {
-        //If it doesn't in a loop mode,
-        if(noLoop)
-        {
-            //Then reach the begin of the model.
-            return -1;
-        }
-        //Now, according to the loop mode, give out the row.
-        //Only Repeat All can go back from the last line of the proxy model.
-        return (m_loopState==RepeatAll)?m_playingProxyModel->rowCount()-1:-1;
-    }
-    //Normal case: return the previous row of the current row.
-    return proxyRow-1;
 }

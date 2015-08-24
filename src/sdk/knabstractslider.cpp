@@ -134,6 +134,8 @@ void KNAbstractSlider::wheelEvent(QWheelEvent *event)
                      (value()+event->pixelDelta().y()*m_wheelStep):
                      (value()+event->pixelDelta().x()*m_wheelStep));
     }
+    //Emit slider moved signal.
+    emit sliderMoved(value());
 }
 
 inline void KNAbstractSlider::updateRange()

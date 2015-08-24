@@ -28,16 +28,16 @@ public:
     explicit KNScrollLabel(QWidget *parent = 0);
 
     QString text() const;
-    void setText(const QString &text);
 
     QSize sizeHint() const;
 
     qreal opacity() const;
-    void setOpacity(const qreal &opacity);
 
 signals:
 
 public slots:
+    void setOpacity(const qreal &opacity);
+    void setText(const QString &text);
 
 protected:
     void paintEvent(QPaintEvent *event);
