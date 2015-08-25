@@ -73,7 +73,8 @@ namespace MusicUtil
         ArtworkKeyRole,
         TrackFileRole,
         TrackIndexRole,
-        CannotPlayFlagRole
+        CannotPlayFlagRole,
+        DurationRole
     };
     enum MusicColumnRole
     {
@@ -199,6 +200,16 @@ public:
     static QDateTime dataToDateTime(const QString &data)
     {
         return QDateTime::fromString(data, "yyyyMMddHHmmss");
+    }
+
+    /*!
+     * \brief Translate a QDateTime class to a data string.
+     * \param dateTime The date time object.
+     * \return The data string.
+     */
+    static QString dateTimeToData(const QDateTime &dateTime)
+    {
+        return dateTime.toString("yyyyMMddHHmmss");
     }
 
     /*!

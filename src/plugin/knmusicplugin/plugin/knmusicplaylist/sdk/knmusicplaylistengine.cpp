@@ -25,3 +25,75 @@ KNMusicPlaylistEngine::KNMusicPlaylistEngine(QObject *parent) :
 {
 }
 
+void KNMusicPlaylistEngine::installPlaylistParser(KNMusicPlaylistParser *parser)
+{
+    //Change the working thread of the parser.
+    parser->moveToThread(thread());
+    //Change the parent relationship.
+    parser->setParent(this);
+    //Add the parser to the parser list.
+    m_parsers.append(parser);
+}
+
+KNMusicPlaylistModel *KNMusicPlaylistEngine::read(const QString &filePath)
+{
+    //Initial a empty playlist model pointer.
+    KNMusicPlaylistModel *playlistModel=nullptr;
+    //Try to parse the file using all parsers in the parser list.
+    for(auto i=m_parsers.begin(); i!=m_parsers.end(); ++i)
+    {
+        //Use the current parser to parse the file.
+        playlistModel=(*i)->read(filePath);
+        //If there's any one parser can parse this, that's it.
+        if(playlistModel)
+        {
+            //Give back the playlist model.
+            return playlistModel;
+        }
+    }
+    //If none of the parsers could parse the file, return a nullptr.
+    return nullptr;
+}
+
+bool KNMusicPlaylistEngine::write(KNMusicPlaylistModel *playlist,
+                                  const QString &filePath,
+                                  const QString &suffix)
+{
+    //Try to find the suffix in the parsers.
+    for(auto i=m_parsers.begin(); i!=m_parsers.end(); ++i)
+    {
+        //Match the suffix in the playlist model.
+        if((*i)->suffix().contains(suffix))
+        {
+            //Use the parser to write the playlist.
+            return (*i)->write(playlist, filePath);
+        }
+    }
+    //Or else, failed to write the playlist.
+    return false;
+}
+
+bool KNMusicPlaylistEngine::write(KNMusicPlaylistModel *playlist,
+                                  const QString &filePath,
+                                  const int &parserIndex)
+{
+    //Use the parser to write the playlist to the file.
+    return m_parsers.at(parserIndex)->write(playlist, filePath);
+}
+
+void KNMusicPlaylistEngine::getTypeAndSuffix(QStringList &types,
+                                             QStringList &suffixs)
+{
+    //Clear the types and the suffixs data.
+    types=QStringList();
+    suffixs=QStringList();
+    //Add data to the list.
+    for(auto i=m_parsers.constBegin(); i!=m_parsers.constEnd(); ++i)
+    {
+        //Add types(description) data.
+        types.append((*i)->description());
+        //Add suffix data.
+        suffixs.append((*i)->suffix());
+    }
+}
+

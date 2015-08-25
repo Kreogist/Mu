@@ -16,20 +16,28 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QSplitter>
+#include <QFileDialog>
 
 #include "kncategorytab.h"
 #include "knemptystatewidget.h"
 #include "knlocalemanager.h"
 
+// SDKs
 #include "sdk/knmusicplaylistemptyhint.h"
 #include "sdk/knmusicplaylistlist.h"
 #include "sdk/knmusicplaylistlistmodel.h"
 #include "sdk/knmusicplaylistviewer.h"
 #include "sdk/knmusicplaylistmanager.h"
+#include "sdk/knmusicplaylistmodel.h"
+
+// Plugins
+#include "plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.h"
 
 #include "knmusicglobal.h"
 
 #include "knmusicplaylist.h"
+
+#include <QDebug>
 
 KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     KNMusicPlaylistBase(parent),
@@ -47,6 +55,9 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     //Set the playlist list model to the playlist list.
     m_playlistList->setPlaylistList(m_playlistManager->playlistList());
 
+    //Install the playlist parser.
+    m_playlistManager->installPlaylistParser(new KNMusicPlaylistXspfParser);
+
     //Link the GUI with che playlist manager.
     connect(m_playlistManager, &KNMusicPlaylistManager::requireShowContent,
             m_container, &KNEmptyStateWidget::showContentWidget);
@@ -54,6 +65,10 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
             m_container, &KNEmptyStateWidget::showEmptyWidget);
     connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
             this, &KNMusicPlaylist::onActionCreatePlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireImportPlaylists,
+            this, &KNMusicPlaylist::onActionImportPlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireExportPlaylist,
+            this, &KNMusicPlaylist::onActionExportPlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireShowPlaylist,
             [=](const QModelIndex &index)
             {
@@ -66,6 +81,8 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     //Link the empty hint with the container.
     connect(emptyHint, &KNMusicPlaylistEmptyHint::requireAddPlaylist,
             this, &KNMusicPlaylist::onActionCreatePlaylist);
+    connect(emptyHint, &KNMusicPlaylistEmptyHint::requireImportPlaylists,
+            this, &KNMusicPlaylist::onActionImportPlaylist);
     //Set the empty widget and content widget.
     m_container->setEmptyWidget(emptyHint);
     //Get the splitter.
@@ -141,7 +158,75 @@ void KNMusicPlaylist::onActionCreatePlaylist()
     m_container->showContentWidget();
 }
 
-QSplitter *KNMusicPlaylist::generateSplitter()
+void KNMusicPlaylist::onActionImportPlaylist()
+{
+    //Generate a file dialog.
+    QFileDialog importPlaylists(this);
+    //Set the file mode and the name filters.
+    importPlaylists.setFileMode(QFileDialog::ExistingFiles);
+    importPlaylists.setNameFilters(m_playlistManager->playlistFilter());
+    //Launch the selector.
+    if(importPlaylists.exec() &&
+            !importPlaylists.selectedFiles().isEmpty())
+    {
+        //Import all the selected files to the playlist manager.
+        QModelIndex firstPlaylistIndex=
+            m_playlistManager->importPlaylists(importPlaylists.selectedFiles());
+        //Check whether the index is valid.
+        if(firstPlaylistIndex.isValid())
+        {
+            //Show that playlist.
+            m_playlistList->showPlaylist(firstPlaylistIndex);
+            //Make the container switch to the content widget.
+            m_container->showContentWidget();
+        }
+    }
+}
+
+void KNMusicPlaylist::onActionExportPlaylist()
+{
+    //Get the current playlist model form the viewer.
+    KNMusicPlaylistModel *playlist=m_playlistViewer->playlist();
+    //Check the current playlist model.
+    if(!playlist)
+    {
+        return;
+    }
+    //Generate a file dialog.
+    QFileDialog exportPlaylist(this);
+    //Set the file mode and the name filters.
+    exportPlaylist.setFileMode(QFileDialog::AnyFile);
+    exportPlaylist.setAcceptMode(QFileDialog::AcceptSave);
+    //Set the default playlist file name.
+    exportPlaylist.selectFile(playlist->title());
+    //Get the export filter.
+    QStringList fileFilter=m_playlistManager->playlistFilter();
+    //Remove the all support one.
+    fileFilter.removeFirst();
+    //Set the export filter.
+    exportPlaylist.setNameFilters(fileFilter);
+    //Launch the export file.
+    if(exportPlaylist.exec() &&
+            !exportPlaylist.selectedFiles().isEmpty())
+    {
+        //Get the index of the selected filter.
+        int selectedParserIndex=
+                fileFilter.indexOf(exportPlaylist.selectedNameFilter());
+        //Check the parser index.
+        if(selectedParserIndex==-1)
+        {
+            //Something wrong happened, we cannot continue.
+            return;
+        }
+        //Export the file.
+        m_playlistManager->exportPlaylist(
+                    playlist,
+                    exportPlaylist.selectedFiles().first(),
+                    selectedParserIndex);
+    }
+}
+
+inline QSplitter *KNMusicPlaylist::generateSplitter()
 {
     //Generate the splitter.
     QSplitter *splitter=new QSplitter(this);

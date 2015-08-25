@@ -21,10 +21,18 @@
 
 #include "knmusicplayerbase.h"
 
+/*!
+ * \brief The KNMusicHeaderPlayerBase class provided a basic interface for all
+ * the header player.
+ */
 class KNMusicHeaderPlayerBase : public KNMusicPlayerBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicHeaderPlayerBase widget.
+     * \param parent The parent widget.
+     */
     KNMusicHeaderPlayerBase(QWidget *parent = 0) : KNMusicPlayerBase(parent){}
 
 signals:

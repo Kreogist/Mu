@@ -64,7 +64,7 @@ void KNMusicPlaylistList::setPlaylistList(KNMusicPlaylistListModel *model)
             {
                 //Simply emit the signal is alright.
                 emit requireShowPlaylist(current);
-    });
+            });
 }
 
 void KNMusicPlaylistList::renamePlaylist(const QModelIndex &index)
@@ -160,8 +160,10 @@ inline void KNMusicPlaylistList::configureEditor()
     //Insert separator.
     addMenu->insertSeparator(m_addActions[ImportPlaylist]);
     //Link action signals.
-    connect(m_addActions[AddPlaylist], SIGNAL(triggered(bool)),
-            this, SIGNAL(requireCreatePlaylist()));
+    connect(m_addActions[AddPlaylist], &QAction::triggered,
+            this, &KNMusicPlaylistList::requireCreatePlaylist);
+    connect(m_addActions[ImportPlaylist], &QAction::triggered,
+            this, &KNMusicPlaylistList::requireImportPlaylists);
     //Initial the configure actions.
     for(int i=0; i<ConfigureMenuActionCount; i++)
     {
@@ -170,8 +172,11 @@ inline void KNMusicPlaylistList::configureEditor()
         //Add the action to configure menu.
         configureMenu->addAction(m_configureAction[i]);
     }
-    //Add  actions to menu.
+    //Add actions to menu.
     configureMenu->insertSeparator(m_configureAction[CopyPlaylist]);
+    //Link action signals.
+    connect(m_configureAction[ExportPlaylist], &QAction::triggered,
+            this, &KNMusicPlaylistList::requireExportPlaylist);
 
     //Initial the layout of the editor.
     QBoxLayout *editorLayout=new QBoxLayout(QBoxLayout::LeftToRight,

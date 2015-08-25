@@ -74,6 +74,10 @@
         "Parent" : "PlaylistInformationContainer",
         "WindowText" : "#FFFFFF"
     },
+    "PlaylistDetailLabel" : {
+        "Parent" : "PlaylistInformationContainer",
+        "WindowText" : "#FFFFFFA0"
+    },
     "PlaylistEmptyHint" : {
         "Parent" : "MainWindow",
         "Window" : "#353535",

@@ -22,7 +22,9 @@
 #include <QObject>
 
 class QThread;
+class KNMusicPlaylistParser;
 class KNMusicPlaylistModel;
+class KNMusicPlaylistEngine;
 class KNMusicPlaylistListModel;
 class KNMusicPlaylistManager : public QObject
 {
@@ -38,10 +40,31 @@ public:
     void setPlaylistDirPath(const QString &playlistDirPath);
     void loadPlaylistList();
     bool loadPlaylist(const QString &filePath);
+    bool savePlaylist(KNMusicPlaylistModel *model, QString filePath=QString());
+    QModelIndex importPlaylist(const QString &filePath);
+    /*!
+     * \brief Import a dozon of playlists for one time.
+     * \param filePaths The file paths.
+     * \return If any of the playlist file is import successfully, return the
+     * first model index of the playlist. Or else a null model index.
+     */
+    QModelIndex importPlaylists(const QStringList &filePaths);
+
+    bool exportPlaylist(KNMusicPlaylistModel *model,
+                        const QString &filePath,
+                        const int &parserIndex);
 
     bool isPlaylistListLoaded() const;
     void setPlaylistListLoaded(bool isPlaylistListLoaded);
     QModelIndex createPlaylist();
+
+    /*!
+     * \brief Add one playlist parser to the playlist parser engine.
+     * \param parser The parser object.
+     */
+    void installPlaylistParser(KNMusicPlaylistParser *parser);
+
+    QStringList playlistFilter();
 
 signals:
     void requireShowContent();
@@ -54,6 +77,7 @@ private:
     KNMusicPlaylistListModel *m_playlistList;
     QString m_playlistDirPath;
     bool m_isPlaylistListLoaded;
+    KNMusicPlaylistEngine *m_playlistEngine;
     QThread *m_workingThread;
 };
 

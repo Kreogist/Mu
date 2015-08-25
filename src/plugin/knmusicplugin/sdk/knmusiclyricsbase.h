@@ -12,15 +12,28 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knmusicplaylistparser.h"
+#ifndef KNMUSICLYRICSBASE_H
+#define KNMUSICLYRICSBASE_H
 
-KNMusicPlaylistParser::KNMusicPlaylistParser(QObject *parent) :
-    QObject(parent)
+#include <QWidget>
+
+/*!
+ * \brief The KNMusicLyricsBase class provides the basic interface of a lyrics
+ * widget should provided.
+ */
+class KNMusicLyricsBase : public QWidget
 {
+    Q_OBJECT
+public:
+    KNMusicLyricsBase(QWidget *parent = 0):QWidget(parent){}
 
-}
+signals:
 
+public slots:
+};
+
+#endif // KNMUSICLYRICSBASE_H

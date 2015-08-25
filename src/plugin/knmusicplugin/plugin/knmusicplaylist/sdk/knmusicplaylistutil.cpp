@@ -64,3 +64,38 @@ KNMusicDetailInfo KNMusicPlaylistUtil::objectToDetailInfo(
     //Detail info loaded complete.
     return detailInfo;
 }
+
+QJsonObject KNMusicPlaylistUtil::detailInfoToObject(
+        const KNMusicDetailInfo &detailInfo)
+{
+    //Generate a json object class.
+    QJsonObject object;
+    //Set the text data to the object.
+    QJsonArray textData;
+    //Write the data to text lists.
+    for(int i=0; i<MusicDataCount; i++)
+    {
+        //Save the text caption.
+        textData.append(detailInfo.textLists[i].toString());
+    }
+    //Insert the text data to json object.
+    object.insert("Text", textData);
+    //Read the other appendix data.
+    object.insert("FilePath", detailInfo.filePath);
+    object.insert("FileName", detailInfo.fileName);
+    object.insert("TrackFilePath", detailInfo.trackFilePath);
+    object.insert("TrackIndex", detailInfo.trackIndex);
+    object.insert("StartPosition", (double)detailInfo.startPosition);
+    object.insert("Size", (double)detailInfo.size);
+    object.insert("DateModified",
+                  KNMusicUtil::dateTimeToData(detailInfo.dateModified));
+    object.insert("DateAdded",
+                  KNMusicUtil::dateTimeToData(detailInfo.dateAdded));
+    object.insert("LastPlayed",
+                  KNMusicUtil::dateTimeToData(detailInfo.dateLastPlayed));
+    object.insert("Time", (double)detailInfo.duration);
+    object.insert("BitRate", (double)detailInfo.bitRate);
+    object.insert("SampleRate", (double)detailInfo.samplingRate);
+    //Object translated complete.
+    return object;
+}

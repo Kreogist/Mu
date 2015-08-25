@@ -166,7 +166,6 @@ SOURCES += \
     sdk/knmousesenseheader.cpp \
     sdk/knjsondatabase.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp \
-    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistparser.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistengine.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusicproxymodel.cpp \
@@ -198,7 +197,9 @@ SOURCES += \
     sdk/knvolumeslider.cpp \
     plugin/knmusicplugin/sdk/knmusicstandardbackend.cpp \
     plugin/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp \
-    plugin/knmusicplugin/sdk/knmusicalbumlabel.cpp
+    plugin/knmusicplugin/sdk/knmusicalbumlabel.cpp \
+    plugin/knmusicplugin/sdk/knmusicvscrolllyrics.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -317,7 +318,10 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicstandardbackendthread.h \
     plugin/knmusicplugin/sdk/knmusicdetailtooltipbase.h \
     plugin/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.h \
-    plugin/knmusicplugin/sdk/knmusicalbumlabel.h
+    plugin/knmusicplugin/sdk/knmusicalbumlabel.h \
+    plugin/knmusicplugin/sdk/knmusiclyricsbase.h \
+    plugin/knmusicplugin/sdk/knmusicvscrolllyrics.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.h
 
 RESOURCES += \
     resource/res.qrc

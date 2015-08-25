@@ -21,23 +21,45 @@
 
 #include <QWidget>
 
+/*!
+ * \brief The KNMusicAlbumLabel class provides a simple label widget for image
+ * only. And it will make the album art content a little bit rotate on z-axis.
+ */
 class KNMusicAlbumLabel : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicAlbumLabel widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicAlbumLabel(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the artwork of the album label.
+     * \return The QPixmap format artwork of the current label.
+     */
     QPixmap artwork() const;
-
-    void setArtwork(const QPixmap &artwork);
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the artwork of the album art.
+     * \param artwork The cover image of the album.
+     */
+    void setArtwork(const QPixmap &artwork);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
+    /*!
+     * \brief Reimplemented from QWidget::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     inline void updateArtwork();

@@ -36,7 +36,7 @@ public:
      * \brief Construct a KNMusicPlaylistParser class.
      * \param parent The parent widget.
      */
-    explicit KNMusicPlaylistParser(QObject *parent = 0);
+    KNMusicPlaylistParser(QObject *parent = 0):QObject(parent){}
 
     /*!
      * \brief Get the description of the playlist type.
@@ -64,7 +64,8 @@ public:
      * \param playlist The playlist model.
      * \return If write successfully, it will be true.
      */
-    virtual bool write(KNMusicPlaylistModel *playlist)=0;
+    virtual bool write(KNMusicPlaylistModel *playlist,
+                       const QString &filePath)=0;
 
 signals:
 

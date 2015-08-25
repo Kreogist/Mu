@@ -244,7 +244,7 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
                     //Parse the raw data.
                     parseID3v2RawData(rawTagData, header, functionSet, frames);
                     //Transfer frame list to frame hash.
-                    for(auto i=frames.begin(); i!=frames.end(); i++)
+                    for(auto i=frames.begin(); i!=frames.end(); ++i)
                     {
                         //Generate a data frame.
                         ID3v2DataFrame dataFrame;
@@ -454,7 +454,7 @@ bool KNMusicTagId3v2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
     //Parse all the images. Because of the standard has been changed, in the
     //earlier version of ID3v2(minor<=2.0), the frame name is PIC. Now it is
     //APIC.
-    for(auto i=imageTypes.constBegin(); i!=imageTypes.constEnd(); i++)
+    for(auto i=imageTypes.constBegin(); i!=imageTypes.constEnd(); ++i)
     {
         //Check the flag, 1 is for APIC, 0 is for PIC.
         if((*i)==1) //APIC

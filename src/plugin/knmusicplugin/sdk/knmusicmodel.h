@@ -46,6 +46,12 @@ public:
     explicit KNMusicModel(QObject *parent = 0);
 
     /*!
+     * \brief Append several files to the music model.
+     * \param filePaths The file path list.
+     */
+    void appendFiles(const QStringList &filePaths);
+
+    /*!
      * \brief Append a music to the end of the model.
      * \param detailInfo The KNMusicDetailInfo class of the music.
      */
@@ -176,6 +182,25 @@ public:
      * \brief Reimplemented from QAbstractTableModel::mimeTypes().
      */
     QStringList mimeTypes() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Get a property information of the row.
+     * \param i The row index.
+     * \param role The role of the property.
+     * \return The property value.
+     */
+    QVariant rowProperty(const int &i, const int &role) const
+    {
+        return data(index(i, 0), role);
+    }
+
+    /*!
+     * \brief Get the text data of at the specific row and column.
+     * \param row The specific row.
+     * \param column The specific column.
+     * \return The QString transfer data from the data(index(row, column)).
+     */
+    QString textData(const int &row, const int &column) const;
 
 signals:
     /*!

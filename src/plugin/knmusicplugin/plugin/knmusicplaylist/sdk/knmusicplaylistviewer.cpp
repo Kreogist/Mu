@@ -58,7 +58,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     //Link the theme manager with the label.
     knTheme->registerWidget(m_title);
     //Configure detail label.
-    m_detail->setObjectName("PlaylistViewerLabel");
+    m_detail->setObjectName("PlaylistDetailLabel");
     knTheme->registerWidget(m_detail);
 
     //Initial the main layout.
@@ -104,6 +104,18 @@ KNMusicPlaylistViewer::~KNMusicPlaylistViewer()
     m_modelLinkHandler->disconnectAll();
     //Delete the handler.
     delete m_modelLinkHandler;
+}
+
+KNMusicPlaylistModel *KNMusicPlaylistViewer::playlist()
+{
+    //Check the music model of the playlist treeview.
+    if(m_treeView->musicModel())
+    {
+        //Cast the music model as playlist model.
+        return static_cast<KNMusicPlaylistModel *>(m_treeView->musicModel());
+    }
+    //Or else just return a nullptr model.
+    return nullptr;
 }
 
 void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)

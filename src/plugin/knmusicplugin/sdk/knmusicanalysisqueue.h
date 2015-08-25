@@ -26,17 +26,40 @@
 
 #include <QObject>
 
+/*!
+ * \brief The KNMusicAnalysisQueue class provides the analysis queue for the
+ * music model. It should be used with a searcher, works with KNMusicParser. It
+ * will use the parser to parse all the file which is found from the searcher.
+ */
 class KNMusicAnalysisQueue : public QObject
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicAnalysisQueue object.
+     * \param parent The parent object.
+     */
     explicit KNMusicAnalysisQueue(QObject *parent = 0);
 
 signals:
+    /*!
+     * \brief When a file is parsed by the parser, this signal will be emitted.
+     * \param analysisItem The parsed result.
+     */
     void analysisComplete(KNMusicAnalysisItem analysisItem);
+
+    /*!
+     * \brief This is signal is only used to avoid the depth recursion.
+     */
     void analysisNext();
 
 public slots:
+    /*!
+     * \brief Add a new file to the analysis queue. This slot should be
+     * connected from the signal which the searcher give out a new file.
+     * \param fileInfo The file info of the file which was recognized by a
+     * searcher.
+     */
     void addFile(const QFileInfo &fileInfo);
 
 private slots:

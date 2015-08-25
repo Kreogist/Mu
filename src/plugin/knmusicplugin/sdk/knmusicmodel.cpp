@@ -50,6 +50,12 @@ KNMusicModel::KNMusicModel(QObject *parent) :
     }
 }
 
+void KNMusicModel::appendFiles(const QStringList &filePaths)
+{
+    //Simply ask to analysis files.
+    emit requireAnalysisFiles(filePaths);
+}
+
 void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
     //Follow the documentation, we have to do this.
@@ -287,6 +293,8 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
     {
     //For property role, no matther what the index is, the data should be all
     //the same.
+    case DurationRole:
+        return detailInfo.duration;
     case FilePathRole:
         return detailInfo.filePath;
     case FileNameRole:
@@ -447,6 +455,11 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
 QStringList KNMusicModel::mimeTypes() const
 {
     return m_dropMimeTypes;
+}
+
+QString KNMusicModel::textData(const int &row, const int &column) const
+{
+    return m_detailInfos.at(row).textLists[column].toString();
 }
 
 void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)

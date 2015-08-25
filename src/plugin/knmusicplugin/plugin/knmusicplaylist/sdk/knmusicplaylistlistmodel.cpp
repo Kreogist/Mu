@@ -57,6 +57,8 @@ QModelIndex KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
     beginInsertRows(QModelIndex(),
                     m_playlistList.size(),
                     m_playlistList.size() + 1);
+    //Change the parent relationship.
+    model->setParent(this);
     //Append this data at the end of the list.
     m_playlistList.append(model);
     //End the insertation.

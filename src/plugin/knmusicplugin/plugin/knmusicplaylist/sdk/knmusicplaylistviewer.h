@@ -38,6 +38,7 @@ public:
     explicit KNMusicPlaylistViewer(QWidget *parent = 0,
                                    KNMusicTab *tab = 0);
     ~KNMusicPlaylistViewer();
+    KNMusicPlaylistModel *playlist();
     void setPlaylist(KNMusicPlaylistModel *model);
 
 signals:

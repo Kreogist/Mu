@@ -28,7 +28,19 @@ using namespace MusicUtil;
 class KNMusicPlaylistUtil
 {
 public:
+    /*!
+     * \brief Translate a QJsonObject to a KNMusicDetailInfo class.
+     * \param object The json object class.
+     * \return The translated KNMusicDetailInfo class.
+     */
     static KNMusicDetailInfo objectToDetailInfo(const QJsonObject &object);
+
+    /*!
+     * \brief Translate a KNMusicDetailInfo to a QJsonObject class.
+     * \param detailInfo The KNMusicDetailInfo class.
+     * \return The translate QJsonObject class.
+     */
+    static QJsonObject detailInfoToObject(const KNMusicDetailInfo &detailInfo);
 
 private:
     KNMusicPlaylistUtil();
