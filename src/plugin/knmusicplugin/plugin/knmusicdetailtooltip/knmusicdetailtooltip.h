@@ -22,13 +22,14 @@
 #include <QIcon>
 
 #include "knmusicutil.h"
+#include "knconnectionhandler.h"
 
 #include "knmusicdetailtooltipbase.h"
 
 using namespace MusicUtil;
 
 class QTimeLine;
-class QLabel;
+class KNScrollLabel;
 class KNOpacityButton;
 class KNProgressSlider;
 class KNMusicBackend;
@@ -82,13 +83,17 @@ private slots:
     void onActionHide();
     void onActionMouseInOut(int frame);
     void onActionThemeChanged();
+    void onActionPlayNPauseClicked();
+
+    void onActionPreviewPositionChanged(const qint64 &position);
+    void onActionPreviewDurationChanged(const qint64 &position);
+    void onActionPreviewStateChange(const int &state);
 
 private:
     inline QTimeLine *generateTimeLine(const int &endFrame);
     inline void startAnime(QTimeLine *timeLine);
     inline void moveToPosition(const QPoint &position);
     inline void resetCounter();
-    inline void setEliedText(QLabel *label, const QString &text);
 
     void loadPreview();
 
@@ -104,15 +109,14 @@ private:
     QTimeLine *m_mouseIn, *m_mouseOut;
 
     KNMusicAlbumLabel *m_albumArt;
-    QLabel *m_labels[ToolTipItemsCount];
+    KNScrollLabel *m_labels[ToolTipItemsCount];
     KNOpacityButton *m_playNPause;
     KNProgressSlider *m_progress;
     QIcon m_playIcon, m_pauseIcon;
 
     bool m_isPlaying, m_progressPressed;
     KNMusicDetailInfo m_detailInfo;
-
-    KNMusicBackend *m_backend;
+    KNConnectionHandler m_backendHandler;
 };
 
 #endif // KNMUSICDETAILTOOLTIP_H

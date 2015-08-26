@@ -18,10 +18,10 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QDesktopWidget>
-#include <QLabel>
 #include <QTimer>
 #include <QTimeLine>
 
+#include "knscrolllabel.h"
 #include "knthememanager.h"
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
@@ -54,8 +54,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     m_pauseIcon(QIcon(":/plugin/music/player/pause.png")),
     m_isPlaying(false),
     m_progressPressed(false),
-    m_detailInfo(KNMusicDetailInfo()),
-    m_backend(nullptr)
+    m_detailInfo(KNMusicDetailInfo())
 {
     setObjectName("MusicDetailTooltip");
     //Set properties.
@@ -79,14 +78,17 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Initial the label layout.
     QBoxLayout *labelLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                            mainLayout->widget());
-    labelLayout->setContentsMargins(0,0,0,0);
+    labelLayout->setContentsMargins(0,5,0,5);
+    labelLayout->setSpacing(0);
     labelLayout->setSizeConstraint(QLayout::SetMaximumSize);
     labelContainer->setLayout(labelLayout);
     //Initial the detail info labels.
     for(int i=0; i<ToolTipItemsCount; i++)
     {
         //Initial the label.
-        m_labels[i]=new QLabel(this);
+        m_labels[i]=new KNScrollLabel(this);
+        //Configure the label.
+        m_labels[i]->setContentsMargins(0,0,0,0);
         //Resize the labels.
         m_labels[i]->setFixedWidth(LabelWidth);
         //Add the label to the layout.
@@ -108,6 +110,10 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     m_playNPause->setFocusProxy(this);
     m_playNPause->setFixedSize(20, 20);
     m_playNPause->setIcon(m_playIcon);
+    //Link clicked request.
+    connect(m_playNPause, &KNOpacityButton::clicked,
+            this, &KNMusicDetailTooltip::onActionPlayNPauseClicked);
+    //Add to player layout.
     previewPlayer->addWidget(m_playNPause);
     //Configure the progress slider.
     m_progress->setMaximum(0);
@@ -130,13 +136,6 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     onActionMouseInOut(0x20);
     //Update the theme.
     onActionThemeChanged();
-
-    //Check the backend.
-    if(knMusicGlobal->backend())
-    {
-        //Save the backend.
-        m_backend=knMusicGlobal->backend();
-    }
 }
 
 void KNMusicDetailTooltip::showTooltip(const QPoint &position)
@@ -180,12 +179,9 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
         //Get the detail info of the item.
         const KNMusicDetailInfo &detailInfo=item.detailInfo;
         //Set text data to labels.
-        setEliedText(m_labels[ItemTitle],
-                     detailInfo.textLists[Name].toString());
-        setEliedText(m_labels[ItemTime],
-                     detailInfo.textLists[Time].toString());
-        setEliedText(m_labels[ItemArtist],
-                     detailInfo.textLists[Artist].toString());
+        m_labels[ItemTitle]->setText(detailInfo.textLists[Name].toString());
+        m_labels[ItemTime]->setText(detailInfo.textLists[Time].toString());
+        m_labels[ItemArtist]->setText(detailInfo.textLists[Artist].toString());
     }
     else
     {
@@ -194,9 +190,9 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
         //Set album detail info to be no album art.
         m_albumArt->setArtwork(knMusicGlobal->noAlbumArt());
         //Clear all the labels.
-        m_labels[ItemTitle]->clear();
-        m_labels[ItemTime]->clear();
-        m_labels[ItemArtist]->clear();
+        m_labels[ItemTitle]->setText("");
+        m_labels[ItemTime]->setText("");
+        m_labels[ItemArtist]->setText("");
     }
 }
 
@@ -244,7 +240,17 @@ void KNMusicDetailTooltip::focusOutEvent(QFocusEvent *event)
 void KNMusicDetailTooltip::onActionHide()
 {
     //Reset the player.
-    ;
+    m_playNPause->setIcon(m_playIcon);
+    //Reset the progress.
+    m_progress->setMaximum(0);
+    //Disconnect all the connection handle.
+    m_backendHandler.disconnectAll();
+    //Reset the backend.
+    if(knMusicGlobal->backend())
+    {
+        //Reset the preview.
+        knMusicGlobal->backend()->previewReset();
+    }
     //Hide the tooltip.
     hide();
 }
@@ -277,6 +283,51 @@ void KNMusicDetailTooltip::onActionThemeChanged()
     setPalette(knTheme->getPalette(objectName()));
     //Update the brightness.
     onActionMouseInOut(brightness);
+}
+
+void KNMusicDetailTooltip::onActionPlayNPauseClicked()
+{
+    //Check the backend.
+    if(knMusicGlobal->backend())
+    {
+        //Get the backend.
+        KNMusicBackend *backend=knMusicGlobal->backend();
+        //Check the state.
+        if(backend->previewState()==Playing)
+        {
+            //Pause when playing.
+            backend->previewPause();
+        }
+        else
+        {
+            //Play when pausing or stopped.
+            backend->previewPlay();
+        }
+    }
+}
+
+void KNMusicDetailTooltip::onActionPreviewPositionChanged(
+        const qint64 &position)
+{
+    //Check and ensure the progress is not being pressed.
+    if(!m_progressPressed)
+    {
+        //Change the value of the progress.
+        m_progress->setValue(position);
+    }
+}
+
+void KNMusicDetailTooltip::onActionPreviewDurationChanged(
+        const qint64 &position)
+{
+    //Update the range of the progress.
+    m_progress->setMaximum(position);
+}
+
+void KNMusicDetailTooltip::onActionPreviewStateChange(const int &state)
+{
+    //Update the icon of the button.
+    m_playNPause->setIcon(state==Playing?m_pauseIcon:m_playIcon);
 }
 
 inline QTimeLine *KNMusicDetailTooltip::generateTimeLine(const int &endFrame)
@@ -324,32 +375,29 @@ inline void KNMusicDetailTooltip::resetCounter()
     m_fadeOutCounter->setInterval(NormalFadeOutTime);
 }
 
-inline void KNMusicDetailTooltip::setEliedText(QLabel *label,
-                                               const QString &text)
-{
-    //Calculate the size of the text using the fontMetrics of the label.
-    if(label->fontMetrics().width(text) > LabelWidth)
-    {
-        //Set the elied text to the label, add the text as tooltip of it.
-        label->setText(label->fontMetrics().elidedText(text,
-                                                       Qt::ElideRight,
-                                                       LabelWidth));
-        label->setToolTip(text);
-        return;
-    }
-    //Clear the tooltip and set text.
-    label->setText(text);
-    label->setToolTip("");
-}
-
 void KNMusicDetailTooltip::loadPreview()
 {
     //Check if the backend, music model and current index is still valid.
-    if(m_backend && QFileInfo::exists(m_detailInfo.filePath))
+    if(knMusicGlobal->backend() && QFileInfo::exists(m_detailInfo.filePath))
     {
+        //Get the backend.
+        KNMusicBackend *backend=knMusicGlobal->backend();
+        //Link the backend with the preview widget.
+        m_backendHandler.append(
+          connect(backend, &KNMusicBackend::previewPositionChanged,
+                  this, &KNMusicDetailTooltip::onActionPreviewPositionChanged));
+        m_backendHandler.append(
+          connect(backend, &KNMusicBackend::previewDurationChanged,
+                  this, &KNMusicDetailTooltip::onActionPreviewDurationChanged));
+        m_backendHandler.append(
+          connect(backend, &KNMusicBackend::previewPlayingStateChanged,
+                  this, &KNMusicDetailTooltip::onActionPreviewStateChange));
+        m_backendHandler.append(
+          connect(m_progress, &KNProgressSlider::sliderMoved,
+                  backend, &KNMusicBackend::setPreviewPosition));
         //Load the music to preview thread.
-        m_backend->previewLoadMusic(m_detailInfo.filePath,
-                                    m_detailInfo.startPosition,
-                                    m_detailInfo.duration);
+        backend->previewLoadMusic(m_detailInfo.filePath,
+                                  m_detailInfo.startPosition,
+                                  m_detailInfo.duration);
     }
 }

@@ -145,7 +145,12 @@ private:
     }
     inline qreal getChannelVolume()
     {
-        Q_ASSERT(m_channel);
+        //Check if the thread is loaded.
+        if(!m_channel)
+        {
+            //For a unloaded volume it will be 0.
+            return 0.0;
+        }
         //Initial a cache.
         float channelVolume;
         //Get the volume to the cache.

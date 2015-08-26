@@ -97,21 +97,37 @@ int KNMusicStandardBackend::previewState() const
 
 void KNMusicStandardBackend::previewPlay()
 {
+    //If the origial volume is not -1, means smart volume has been turned on.
+    if(m_originalVolume==-1)
+    {
+        //Turn on the smart volume.
+        smartVolumeOn();
+    }
+    //Play the preview thread.
     threadPlay(m_preview);
 }
 
 void KNMusicStandardBackend::previewPause()
 {
+    //Stop the smart volume.
+    smartVolumeOff();
+    //Pause the preview thread.
     threadPause(m_preview);
 }
 
 void KNMusicStandardBackend::previewStop()
 {
+    //Stop the smart volume.
+    smartVolumeOff();
+    //Stop the preview thread.
     threadStop(m_preview);
 }
 
 void KNMusicStandardBackend::previewReset()
 {
+    //Stop the smart volume.
+    smartVolumeOff();
+    //Reset the thread.
     threadReset(m_preview);
 }
 
