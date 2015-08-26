@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QFileInfo>
 
 #include "knmusicplaylistparser.h"
 
@@ -39,6 +40,27 @@ KNMusicPlaylistModel *KNMusicPlaylistEngine::read(const QString &filePath)
 {
     //Initial a empty playlist model pointer.
     KNMusicPlaylistModel *playlistModel=nullptr;
+    //Get the suffix of the file path.
+    QString suffix="*."+QFileInfo(filePath).suffix().toLower();
+    //Try to find the suffix whether the parser support to parse the suffix.
+    for(auto i=m_parsers.begin(); i!=m_parsers.end(); ++i)
+    {
+        //Check whether the suffix is supported by the parser.
+        if((*i)->suffix()==suffix)
+        {
+            //Use the current parser to parse the file.
+            playlistModel=(*i)->read(filePath);
+            //If the parser can parse this file, that's it.
+            if(playlistModel)
+            {
+                //Give back the playlist model.
+                return playlistModel;
+            }
+            //Or else, get out and tried all the parser.
+            break;
+        }
+    }
+
     //Try to parse the file using all parsers in the parser list.
     for(auto i=m_parsers.begin(); i!=m_parsers.end(); ++i)
     {

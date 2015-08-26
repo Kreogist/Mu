@@ -16,25 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTXSPFPARSER_H
-#define KNMUSICPLAYLISTXSPFPARSER_H
+#ifndef KNMUSICPLAYLISTM3UPARSER_H
+#define KNMUSICPLAYLISTM3UPARSER_H
 
 #include "../../sdk/knmusicplaylistparser.h"
 
 /*!
- * \brief The KNMusicPlaylistXspfParser class provides a Xspf format playlist
- * parser. It can parse a Xspf format playlist to a playlist model.\n
- * Xspf format playlist is used under Vox player under Mac OS X.
+ * \brief The KNMusicPlaylistM3uParser class provides a m3u playlist parser. M3U
+ * is a computer file format that contains multimedia playlists. It has some
+ * other branch verison: like m3u8, extm3u.
  */
-class KNMusicPlaylistXspfParser : public KNMusicPlaylistParser
+class KNMusicPlaylistM3uParser : public KNMusicPlaylistParser
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicPlaylistXspfParser object.
-     * \param parent The parent object.
+     * \brief Construct a KNMusicPlaylistM3uParser object.
+     * \param parent The given parent.
      */
-    explicit KNMusicPlaylistXspfParser(QObject *parent = 0);
+    explicit KNMusicPlaylistM3uParser(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNMusicPlaylistParser::description().
@@ -56,6 +56,19 @@ public:
      */
     bool write(KNMusicPlaylistModel *playlist,
                const QString &filePath) Q_DECL_OVERRIDE;
+
+protected:
+    /*!
+     * \brief This function can parse a m3u format playlist to a playlist model.
+     * The codec can be assigned. Or leave blank using the default settings of
+     * QTextCodec.
+     * \param filePath The file path.
+     * \param codec The codec name.
+     * \return If the playlist file can be parsed successfully, it will return
+     * the pointer of the playlist model. Or else it will return a nullptr.
+     */
+    KNMusicPlaylistModel *readPlaylist(const QString &filePath,
+                                       const char *codec=nullptr);
 };
 
-#endif // KNMUSICPLAYLISTXSPFPARSER_H
+#endif // KNMUSICPLAYLISTM3UPARSER_H

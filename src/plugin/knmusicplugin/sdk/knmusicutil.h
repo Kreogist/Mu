@@ -74,7 +74,8 @@ namespace MusicUtil
         TrackFileRole,
         TrackIndexRole,
         CannotPlayFlagRole,
-        DurationRole
+        DurationRole,
+        FileSizeRole
     };
     enum MusicColumnRole
     {

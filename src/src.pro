@@ -199,7 +199,13 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicdetailtooltip/knmusicdetailtooltip.cpp \
     plugin/knmusicplugin/sdk/knmusicalbumlabel.cpp \
     plugin/knmusicplugin/sdk/knmusicvscrolllyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.cpp
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistwplparser/knmusicplaylistwplparser.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistm3uparser/knmusicplaylistm3uparser.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistm3uparser/knmusicplaylistm3u8parser.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistm3uparser/knmusicplaylistextm3uparser.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistttplparser/knmusicplaylistttplparser.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistitunesxmlparser/knmusicplaylistitunesxmlparser.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -321,7 +327,13 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicalbumlabel.h \
     plugin/knmusicplugin/sdk/knmusiclyricsbase.h \
     plugin/knmusicplugin/sdk/knmusicvscrolllyrics.h \
-    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.h
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistwplparser/knmusicplaylistwplparser.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistm3uparser/knmusicplaylistm3uparser.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistm3uparser/knmusicplaylistm3u8parser.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistm3uparser/knmusicplaylistextm3uparser.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistttplparser/knmusicplaylistttplparser.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistitunesxmlparser/knmusicplaylistitunesxmlparser.h
 
 RESOURCES += \
     resource/res.qrc

@@ -291,24 +291,6 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
     //Get the data of the role.
     switch(role)
     {
-    //For property role, no matther what the index is, the data should be all
-    //the same.
-    case DurationRole:
-        return detailInfo.duration;
-    case FilePathRole:
-        return detailInfo.filePath;
-    case FileNameRole:
-        return detailInfo.fileName;
-    case StartPositionRole:
-        return detailInfo.startPosition;
-    case ArtworkKeyRole:
-        return detailInfo.coverImageHash;
-    case TrackFileRole:
-        return detailInfo.trackFilePath;
-    case TrackIndexRole:
-        return detailInfo.trackIndex;
-    case CannotPlayFlagRole:
-        return detailInfo.cannotPlay;
     //For display and edit role, return the same data from the text list.
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -346,6 +328,27 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
         }
         //All the default columns don't hold a icon.
         return QVariant();
+    //For property role, no matther what the index is, the data should be all
+    //the same.
+    case FileSizeRole:
+        return detailInfo.size;
+    case DurationRole:
+        return detailInfo.duration;
+    case FilePathRole:
+        return detailInfo.filePath;
+    case FileNameRole:
+        return detailInfo.fileName;
+    case StartPositionRole:
+        return detailInfo.startPosition;
+    case ArtworkKeyRole:
+        return detailInfo.coverImageHash;
+    case TrackFileRole:
+        return detailInfo.trackFilePath;
+    case TrackIndexRole:
+        return detailInfo.trackIndex;
+    case CannotPlayFlagRole:
+        return detailInfo.cannotPlay;
+
     default:
         return QVariant();
     }

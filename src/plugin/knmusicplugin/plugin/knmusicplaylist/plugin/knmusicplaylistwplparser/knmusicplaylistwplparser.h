@@ -16,25 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTXSPFPARSER_H
-#define KNMUSICPLAYLISTXSPFPARSER_H
+#ifndef KNMUSICPLAYLISTWPLPARSER_H
+#define KNMUSICPLAYLISTWPLPARSER_H
 
 #include "../../sdk/knmusicplaylistparser.h"
 
 /*!
- * \brief The KNMusicPlaylistXspfParser class provides a Xspf format playlist
- * parser. It can parse a Xspf format playlist to a playlist model.\n
- * Xspf format playlist is used under Vox player under Mac OS X.
+ * \brief The KNMusicPlaylistWplParser class provides a Wpl format playlist
+ * format parser.\n
+ * Wpl playlist is the format which Microsoft Windows Media Player uses. It's
+ * kinds of useless actually.
  */
-class KNMusicPlaylistXspfParser : public KNMusicPlaylistParser
+class KNMusicPlaylistWplParser : public KNMusicPlaylistParser
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicPlaylistXspfParser object.
+     * \brief Construct a KNMusicPlaylistWplParser object.
      * \param parent The parent object.
      */
-    explicit KNMusicPlaylistXspfParser(QObject *parent = 0);
+    explicit KNMusicPlaylistWplParser(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNMusicPlaylistParser::description().
@@ -58,4 +59,4 @@ public:
                const QString &filePath) Q_DECL_OVERRIDE;
 };
 
-#endif // KNMUSICPLAYLISTXSPFPARSER_H
+#endif // KNMUSICPLAYLISTWPLPARSER_H

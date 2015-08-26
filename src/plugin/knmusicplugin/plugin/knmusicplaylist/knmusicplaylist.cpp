@@ -31,7 +31,13 @@
 #include "sdk/knmusicplaylistmodel.h"
 
 // Plugins
+#include "plugin/knmusicplaylistitunesxmlparser/knmusicplaylistitunesxmlparser.h"
 #include "plugin/knmusicplaylistxspfparser/knmusicplaylistxspfparser.h"
+#include "plugin/knmusicplaylistwplparser/knmusicplaylistwplparser.h"
+#include "plugin/knmusicplaylistttplparser/knmusicplaylistttplparser.h"
+#include "plugin/knmusicplaylistm3uparser/knmusicplaylistm3uparser.h"
+#include "plugin/knmusicplaylistm3uparser/knmusicplaylistm3u8parser.h"
+#include "plugin/knmusicplaylistm3uparser/knmusicplaylistextm3uparser.h"
 
 #include "knmusicglobal.h"
 
@@ -56,7 +62,14 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_playlistList->setPlaylistList(m_playlistManager->playlistList());
 
     //Install the playlist parser.
+    m_playlistManager->installPlaylistParser(
+                                            new KNMusicPlaylistiTunesXMLParser);
     m_playlistManager->installPlaylistParser(new KNMusicPlaylistXspfParser);
+    m_playlistManager->installPlaylistParser(new KNMusicPlaylistWplParser);
+    m_playlistManager->installPlaylistParser(new KNMusicPlaylistTtplParser);
+    m_playlistManager->installPlaylistParser(new KNMusicPlaylistM3uParser);
+    m_playlistManager->installPlaylistParser(new KNMusicPlaylistM3u8Parser);
+    m_playlistManager->installPlaylistParser(new KNMusicPlaylistExtM3uParser);
 
     //Link the GUI with che playlist manager.
     connect(m_playlistManager, &KNMusicPlaylistManager::requireShowContent,

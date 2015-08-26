@@ -16,46 +16,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTXSPFPARSER_H
-#define KNMUSICPLAYLISTXSPFPARSER_H
+#ifndef KNMUSICPLAYLISTEXTM3UPARSER_H
+#define KNMUSICPLAYLISTEXTM3UPARSER_H
 
-#include "../../sdk/knmusicplaylistparser.h"
+#include "knmusicplaylistm3uparser.h"
 
 /*!
- * \brief The KNMusicPlaylistXspfParser class provides a Xspf format playlist
- * parser. It can parse a Xspf format playlist to a playlist model.\n
- * Xspf format playlist is used under Vox player under Mac OS X.
+ * \brief The KNMusicPlaylistExtM3uParser class provides a parser for extended
+ * m3u file.
  */
-class KNMusicPlaylistXspfParser : public KNMusicPlaylistParser
+class KNMusicPlaylistExtM3uParser : public KNMusicPlaylistM3uParser
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicPlaylistXspfParser object.
+     * \brief Constuct a KNMusicPlaylistExtM3uParser object.
      * \param parent The parent object.
      */
-    explicit KNMusicPlaylistXspfParser(QObject *parent = 0);
+    explicit KNMusicPlaylistExtM3uParser(QObject *parent = 0);
 
     /*!
-     * \brief Reimplemented from KNMusicPlaylistParser::description().
+     * \brief Reimplemented from KNMusicPlaylistM3uParser::description().
      */
     QString description() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMusicPlaylistParser::suffix().
-     */
-    QString suffix() Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from KNMusicPlaylistParser::read().
-     */
-    KNMusicPlaylistModel *read(const QString &filePath) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from KNMusicPlaylistParser::write().
+     * \brief Reimplemented from KNMusicPlaylistM3uParser::write().
      */
     bool write(KNMusicPlaylistModel *playlist,
                const QString &filePath) Q_DECL_OVERRIDE;
+
+private:
+    inline QString textCheck(const QString &text);
 };
 
-#endif // KNMUSICPLAYLISTXSPFPARSER_H
+#endif // KNMUSICPLAYLISTEXTM3UPARSER_H
