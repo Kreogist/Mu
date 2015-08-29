@@ -132,7 +132,7 @@ inline void KNMusicPlaylistList::configureEditor()
                     *configureMenu=generateEditorMenu();
 
     //Link the menu with the button.
-    connect(m_buttons[Add], &KNOpacityAnimeButton::released,
+    connect(m_buttons[Add], &KNOpacityAnimeButton::clicked,
             [=]
             {
                 //Set the mouse pressed position.
@@ -140,7 +140,9 @@ inline void KNMusicPlaylistList::configureEditor()
                 //Show the add menu.
                 addMenu->exec(QCursor::pos());
             });
-    connect(m_buttons[Configure], &KNOpacityAnimeButton::released,
+    connect(m_buttons[RemoveCurrent], &KNOpacityAnimeButton::clicked,
+            this, &KNMusicPlaylistList::requireRemovePlaylist);
+    connect(m_buttons[Configure], &KNOpacityAnimeButton::clicked,
             [=]
             {
                 //Set the mouse pressed position.

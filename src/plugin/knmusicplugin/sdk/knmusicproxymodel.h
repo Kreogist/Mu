@@ -52,6 +52,16 @@ public:
         return data(index(row, 0), role);
     }
 
+    inline void mapRowListToSource(QList<int> &rowList)
+    {
+        //Translate all the items in the row list.
+        for(auto i=rowList.begin(); i!=rowList.end(); ++i)
+        {
+            //Use mapToSource to map all the row list.
+            (*i)=mapToSource(index(*i, Name)).row();
+        }
+    }
+
 signals:
 
 public slots:

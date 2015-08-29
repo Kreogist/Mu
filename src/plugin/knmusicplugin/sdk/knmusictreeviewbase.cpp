@@ -28,6 +28,7 @@
 #include "knmusicmodel.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicsolomenubase.h"
+#include "knmusicmultimenubase.h"
 #include "knmusictreeviewheader.h"
 #include "knmusicratingdelegate.h"
 #include "knmusicdetailtooltipbase.h"
@@ -454,7 +455,49 @@ void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
 
 void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
 {
-    ;
+    //Get the selected indexes.
+    QModelIndexList dumpIndexes=selectedIndexes();
+    //Generate a temporary list.
+    QList<int> rowList;
+    //Check the indexes size.
+    if(dumpIndexes.isEmpty())
+    {
+        return;
+    }
+    //Check all the indexes list, we will only save one row.
+    for(auto i=dumpIndexes.constBegin(); i!=dumpIndexes.constEnd(); ++i)
+    {
+        //Check whether current row is in the row list.
+        if(rowList.contains((*i).row()))
+        {
+            continue;
+        }
+        //Add the new row to row list.
+        rowList.append((*i).row());
+    }
+    //Get the index of the position where mouse pressed.
+    QModelIndex pressedIndex=indexAt(position);
+    //Check the validation of the multi menu.
+    if(knMusicGlobal->multiMenu())
+    {
+        //Get the multi menu.
+        KNMusicMultiMenuBase *multiMenu=knMusicGlobal->multiMenu();
+        //Generate the connection handler.
+        KNConnectionHandler connections;
+        //Link the menu require signal to this slot.
+        ;
+        //Set information to menu.
+        multiMenu->setMusicRows(m_proxyModel, rowList, pressedIndex);
+        //Get the menu position, fixed the bug which ignore the header's height.
+        QPoint menuPosition=mapToGlobal(position);
+        menuPosition.setY(menuPosition.y()+header()->height());
+        //Set the position to menu.
+        multiMenu->setMouseDownPos(menuPosition);
+        //Launch the menu.
+        multiMenu->exec(menuPosition);
+        //Disconnect the links.
+        connections.disconnectAll();
+    }
 }
 
 void KNMusicTreeViewBase::showDetailTooltip(const QModelIndex &index)

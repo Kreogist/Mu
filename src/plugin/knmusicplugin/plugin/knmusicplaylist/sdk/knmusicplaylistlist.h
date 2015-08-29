@@ -38,6 +38,7 @@ signals:
     void requireCreatePlaylist();
     void requireImportPlaylists();
     void requireExportPlaylist();
+    void requireRemovePlaylist();
     void requireShowPlaylist(const QModelIndex &index);
 
 public slots:

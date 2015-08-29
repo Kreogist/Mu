@@ -41,7 +41,7 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
     //Link to the theme manager.
     knTheme->registerWidget(this);
     //Generate the actions.
-    for(int i=0; i<SoloMenuActionCount; i++)
+    for(int i=0; i<SoloMenuActionCount; ++i)
     {
         //Generate the action.
         m_actions[i]=new QAction(this);
@@ -61,6 +61,8 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
             this, &KNMusicSoloMenu::onActionCopyFilePath);
     connect(m_actions[CopyItemText], &QAction::triggered,
             this, &KNMusicSoloMenu::onActionCopyItemText);
+    connect(m_actions[Delete], &QAction::triggered,
+            this, &KNMusicSoloMenu::onActionRemove);
 
     //Add actions to the menu.
     addAction(m_actions[PlayCurrent]);
@@ -126,6 +128,15 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
         m_actions[SearchItemText]->setText(
                     m_actionTitles[SearchItemText].arg(m_itemText));
     }
+}
+
+void KNMusicSoloMenu::hideEvent(QHideEvent *event)
+{
+    //Do hide event.
+    KNMusicSoloMenuBase::hideEvent(event);
+    //Reset the model and the item index.
+    m_model=nullptr;
+    m_itemIndex=QModelIndex();
 }
 
 void KNMusicSoloMenu::retranslate()
@@ -212,4 +223,14 @@ void KNMusicSoloMenu::onActionCopyFilePath()
 void KNMusicSoloMenu::onActionCopyItemText()
 {
     KNUtil::setClipboardText(m_itemText);
+}
+
+void KNMusicSoloMenu::onActionRemove()
+{
+    //Remove the row from the model.
+    if(m_model && m_itemIndex.isValid())
+    {
+        //Remove the row.
+        m_model->removeRow(m_itemIndex.row());
+    }
 }

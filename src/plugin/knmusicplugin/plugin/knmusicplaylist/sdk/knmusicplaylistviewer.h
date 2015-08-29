@@ -52,9 +52,9 @@ private slots:
     void retranslate();
     void onActionModelRowCountChanged();
     void onActionSearch();
+    void updateTitle();
 
 private:
-    inline void updateTitle();
     inline void updateDetailInfo();
     KNMusicPlaylistTreeView *m_treeView;
     KNScrollLabel *m_title;

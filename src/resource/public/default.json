@@ -20,6 +20,9 @@
         "Highlight" : "#606060",
         "HighlightedText" : "#f7cf3d"
     },
+    "MusicMultiMenu" : {
+        "Parent" : "MusicSoloMenu"
+    },
     "MusicTreeViewHeaderMenu" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

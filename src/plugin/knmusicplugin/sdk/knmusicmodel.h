@@ -98,11 +98,18 @@ public:
      * removed.
      * \param rows The row count will be removed from the position.
      * \param index The parent index. Leave it to QModelIndex().
-     * \return If remove those rows successful, it will be true.
+     * \return If remove those rows successfully, it will be true.
      */
     bool removeRows(int position,
                     int rows,
                     const QModelIndex &index = QModelIndex()) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Remove several rows from the model at once.
+     * \param rows The rows list.
+     * \return If remove those rows successfully, returns true.
+     */
+    bool removeRowList(QList<int> rows);
 
     /*!
      * \brief Remove all the music rows in the model.

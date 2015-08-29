@@ -29,6 +29,7 @@ class KNCategoryTabBar;
 class KNSideShadowWidget;
 class KNMusicDetailDialogPanel;
 class KNMusicSoloMenuBase;
+class KNMusicMultiMenuBase;
 class KNMusicSearchBase;
 class KNMusicBackend;
 class KNMusicNowPlayingBase;
@@ -89,6 +90,7 @@ private:
     void initialDetailDialogPanel();
     void initialParserPlugin();
     void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
+    void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
 
     void initialSearch(KNMusicSearchBase *search);
     void initialBackend(KNMusicBackend *backend);

@@ -69,6 +69,15 @@ public:
     void setFilePath(const QString &filePath);
 
     /*!
+     * \brief Allcate a useable file path in the playlist diretory.
+     */
+    void allcateFilePath()
+    {
+        //Set the file path, allocate a new file path.
+        setFilePath(generateFilePath());
+    }
+
+    /*!
      * \brief Get whether this playlist has been built or it's still data in
      * json array.
      * \return If there's no content data in the json array, and the data has
@@ -111,6 +120,13 @@ public:
      */
     QVariant data(const QModelIndex &index, int role) const;
 
+    /*!
+     * \brief Set the playlist directory path for the whole playlist model. This
+     * directory is used to generate the file path.
+     * \param playlistDirPath The directory path.
+     */
+    static void setPlaylistDirPath(const QString &playlistDirPath);
+
 signals:
     /*!
      * \brief When the playlist title changed, this signal will be emitted.
@@ -125,6 +141,8 @@ private slots:
     void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
 
 private:
+    static QString generateFilePath();
+    static QString m_playlistDirPath;
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     QString m_title, m_filePath;

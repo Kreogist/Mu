@@ -23,6 +23,8 @@
 
 #include <QDebug>
 
+QString KNMusicPlaylistModel::m_playlistDirPath=QString();
+
 KNMusicPlaylistModel::KNMusicPlaylistModel(QThread *workingThread,
                                            QObject *parent) :
     KNMusicModel(parent),
@@ -179,4 +181,31 @@ void KNMusicPlaylistModel::onActionAnalysisComplete(
 {
     //Add the detail info to the playlist model.
     appendRow(analysisItem.detailInfo);
+}
+
+QString KNMusicPlaylistModel::generateFilePath()
+{
+    //Use the current time as the base name.
+    QString baseName=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"),
+            filePath=m_playlistDirPath+"/"+baseName;
+    //Check the existance of the file path.
+    if(QFileInfo::exists(filePath))
+    {
+        //If the file exist, change the file name by adding counter, until it
+        //doesn't exist anymore.
+        int count=0;
+        while(QFileInfo::exists(filePath))
+        {
+            //Update the file path.
+            filePath=m_playlistDirPath + "/" + baseName + " " +
+                     QString::number(++count);
+        }
+    }
+    //Give back the file path.
+    return filePath;
+}
+
+void KNMusicPlaylistModel::setPlaylistDirPath(const QString &playlistDirPath)
+{
+    m_playlistDirPath = playlistDirPath;
 }

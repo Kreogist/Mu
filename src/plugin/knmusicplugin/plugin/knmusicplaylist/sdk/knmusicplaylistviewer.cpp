@@ -122,25 +122,33 @@ void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
 {
     //Disconnect with the previous playlist.
     m_modelLinkHandler->disconnectAll();
-    //Check whether the model has been built from the stored data before.
-    if(!model->isBuilt())
+    //Check whether the model is null.
+    if(model)
     {
-        //Build the model.
-        model->buildModel();
+        //Check whether the model has been built from the stored data before.
+        if(!model->isBuilt())
+        {
+            //Build the model.
+            model->buildModel();
+        }
+        //Set the model to playlist tree view.
+        m_treeView->setMusicModel(model);
+        //Link the model with the details.
+        m_modelLinkHandler->append(
+                 connect(model, &KNMusicPlaylistModel::rowCountChanged,
+                         this,
+                         &KNMusicPlaylistViewer::onActionModelRowCountChanged));
+        m_modelLinkHandler->append(
+                    connect(model, &KNMusicPlaylistModel::titleChanged,
+                            this, &KNMusicPlaylistViewer::updateTitle));
+    }
+    else
+    {
+        //For nullptr model, we have to clear all the information.
+        m_treeView->setMusicModel(nullptr);
     }
     //Update the playlist information.
-    m_title->setText(model->title());
-    //Set the model to playlist tree view.
-    m_treeView->setMusicModel(model);
-    //Link the model with the details.
-    m_modelLinkHandler->append(
-                connect(model, &KNMusicPlaylistModel::rowCountChanged,
-                        this,
-                        &KNMusicPlaylistViewer::onActionModelRowCountChanged));
-    m_modelLinkHandler->append(
-                connect(model, &KNMusicPlaylistModel::titleChanged,
-                        m_title,
-                        &KNScrollLabel::setText));
+    updateTitle();
     //Update the detail information.
     updateDetailInfo();
 }
@@ -199,19 +207,31 @@ void KNMusicPlaylistViewer::onActionSearch()
 
 void KNMusicPlaylistViewer::updateTitle()
 {
+    //Clear the title.
+    m_title->setText("");
     //Check whether the proxy model is nullptr.
     if(m_treeView->proxyModel()==nullptr)
     {
-        //Clear the title.
-        m_title->setText("");
         //Ignore the title update request.
         return;
     }
     //Get the proxy model.
     KNMusicProxyModel *proxyModel=m_treeView->proxyModel();
+    //Check the proxy model.
+    if(!proxyModel)
+    {
+        //Ignore the null model.
+        return;
+    }
     //Get the playlist model of the tree view.
     KNMusicPlaylistModel *model=
             static_cast<KNMusicPlaylistModel *>(m_treeView->musicModel());
+    //Check the music model.
+    if(!model)
+    {
+        //Ignore the null model.
+        return;
+    }
     //Check whether the proxy model is in search mode.
     if(proxyModel->isSearchMode())
     {
@@ -223,19 +243,25 @@ void KNMusicPlaylistViewer::updateTitle()
     m_title->setText(model->title());
 }
 
-void KNMusicPlaylistViewer::updateDetailInfo()
+inline void KNMusicPlaylistViewer::updateDetailInfo()
 {
+    //Clear the detail label.
+    m_detail->clear();
     //Check the music model of the treeview first.
     if(m_treeView->musicModel()==nullptr)
     {
-        //Clear the detail label.
-        m_detail->clear();
         //Get back.
         return;
     }
     //Get the playlist model of the tree view.
     KNMusicPlaylistModel *model=
             static_cast<KNMusicPlaylistModel *>(m_treeView->musicModel());
+    //Check the music model.
+    if(!model)
+    {
+        //Ignore the request.
+        return;
+    }
     //Check if is now searching.
     if(m_treeView->proxyModel()->isSearchMode())
     {

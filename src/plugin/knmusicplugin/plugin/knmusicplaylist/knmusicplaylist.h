@@ -65,6 +65,7 @@ private slots:
     void retranslate();
     void onActionCreatePlaylist();
     void onActionImportPlaylist();
+    void onActionRemovePlaylist();
     void onActionExportPlaylist();
 
 private:

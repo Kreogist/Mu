@@ -53,10 +53,22 @@ KNMusicPlaylistModel *KNMusicPlaylistListModel::playlist(
 
 QModelIndex KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
 {
+    //Check the model
+    if(!model)
+    {
+        //Give back a null index.
+        return QModelIndex();
+    }
+    //We should check the model in the list first.
+    if(m_playlistList.contains(model))
+    {
+        //Give back the existing index.
+        return index(m_playlistList.indexOf(model), 0);
+    }
     //Follow the documentation, we have to do this.
     beginInsertRows(QModelIndex(),
                     m_playlistList.size(),
-                    m_playlistList.size() + 1);
+                    m_playlistList.size());
     //Change the parent relationship.
     model->setParent(this);
     //Append this data at the end of the list.
@@ -72,7 +84,27 @@ QModelIndex KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
     return index(m_playlistList.size()-1, 0);
 }
 
-void KNMusicPlaylistListModel::insert(int row, KNMusicPlaylistModel *model)
+bool KNMusicPlaylistListModel::removeModel(KNMusicPlaylistModel *model)
+{
+    //Check the model is null or not.
+    if(!model)
+    {
+        return false;
+    }
+    //Check the row of the model.
+    int rowIndex=m_playlistList.indexOf(model);
+    //If we cannot find the row, this mission is failed.
+    if(rowIndex==-1)
+    {
+        //Failed to remove the model.
+        return false;
+    }
+    //Remove the row.
+    return removeRow(rowIndex);
+}
+
+QModelIndex KNMusicPlaylistListModel::insert(int row,
+                                             KNMusicPlaylistModel *model)
 {
     //Ensure the row is valid.
     Q_ASSERT(row>-1 && row<m_playlistList.size());
@@ -87,6 +119,8 @@ void KNMusicPlaylistListModel::insert(int row, KNMusicPlaylistModel *model)
     {
         emit requireShowContent();
     }
+    //Give back the model index.
+    return index(row, 0);
 }
 
 bool KNMusicPlaylistListModel::removeRows(int row,
@@ -108,6 +142,11 @@ bool KNMusicPlaylistListModel::removeRows(int row,
     }
     //As the documentation said, called this after remove rows.
     endRemoveRows();
+    //Check the size of the playlist, if it's 0, the ask to hide the content.
+    if(m_playlistList.size()==0)
+    {
+        emit requireHideContent();
+    }
     //Remove complete.
     return true;
 }

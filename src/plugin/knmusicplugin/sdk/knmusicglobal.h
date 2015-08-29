@@ -42,6 +42,7 @@ class KNMusicBackend;
 class KNMusicNowPlayingBase;
 class KNMusicDetailTooltipBase;
 class KNMusicSoloMenuBase;
+class KNMusicMultiMenuBase;
 /*!
  * \brief The KNMusicGlobal class provides some public instance and function of
  * the official music category plugin.\n
@@ -231,6 +232,19 @@ public:
      */
     void setDetailTooltip(KNMusicDetailTooltipBase *detailTooltip);
 
+    /*!
+     * \brief Get the multi menu object class.
+     * \return The multi menu object pointer. It will be nullptr if you never
+     * set it before.
+     */
+    KNMusicMultiMenuBase *multiMenu() const;
+
+    /*!
+     * \brief Set the multi item menu object pointer.
+     * \param multiMenu The multi menu object pointer.
+     */
+    void setMultiMenu(KNMusicMultiMenuBase *multiMenu);
+
 signals:
 
 public slots:
@@ -254,6 +268,7 @@ private:
     KNMusicDetailDialog *m_detailDialog;
     KNMusicParser *m_parser;
     KNMusicSoloMenuBase *m_soloMenu;
+    KNMusicMultiMenuBase *m_multiMenu;
     KNMusicSearchBase *m_search;
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;

@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -62,6 +63,12 @@ KNMusicPlaylistManager::~KNMusicPlaylistManager()
     m_workingThread->wait();
     //Remove the working thread.
     m_workingThread->deleteLater();
+    //Save the playlist list if it is loaded.
+    if(m_isPlaylistListLoaded)
+    {
+        //Save the playlist list data.
+        savePlaylistList();
+    }
 }
 
 KNMusicPlaylistListModel *KNMusicPlaylistManager::playlistList()
@@ -81,6 +88,8 @@ QModelIndex KNMusicPlaylistManager::createPlaylist()
                                                          m_playlistList);
     //Set the generate the title.
     model->setTitle(generateTitle());
+    //Allocate a file path.
+    model->allcateFilePath();
     //Add the model to the playlist list, and give back the model index in the
     //model list model.
     return m_playlistList->append(model);
@@ -118,6 +127,93 @@ QStringList KNMusicPlaylistManager::playlistFilter()
     filter.prepend(allSupportFilter);
     //Give back the filter.
     return filter;
+}
+
+bool KNMusicPlaylistManager::writeModelToFile(KNMusicPlaylistModel *model,
+                                              const QString &filePath)
+{
+    //Check te model first.
+    if(!model)
+    {
+        return false;
+    }
+    //Get the playlist file.
+    QFile playlistFile(filePath);
+    //Try to open the file as write mode.
+    if(!playlistFile.open(QIODevice::WriteOnly))
+    {
+        return false;
+    }
+    //Create the playlist content.
+    QJsonArray songs;
+    //Write all the data to the content.
+    for(int row=0; row<model->rowCount(); ++row)
+    {
+        //Translate the detail info from the model to a QJsonObject, and add it
+        //to the playlist content.
+        songs.append(
+                    KNMusicPlaylistUtil::detailInfoToObject(
+                        model->rowDetailInfo(row)));
+    }
+    //Create the playlist object.
+    QJsonObject playlistObject;
+    //Set the data of the playlist.
+    playlistObject["Version"]=PlaylistListVersion;
+    playlistObject["Name"]=model->title();
+    playlistObject["Songs"]=songs;
+    //Create playlist document
+    QJsonDocument playlistDocument;
+    //Set the playlist object to document object.
+    playlistDocument.setObject(playlistObject);
+    //Write document data to the file.
+    playlistFile.write(playlistDocument.toJson(QJsonDocument::Indented));
+    //Close the file.
+    playlistFile.close();
+    //Export complete.
+    return true;
+}
+
+void KNMusicPlaylistManager::savePlaylistList()
+{
+    //Get the playlist list file.
+    QFile playlistListFile(m_playlistDirPath + PlaylistListFileName);
+    //Check the existance and try to open the file in write only mode.
+    if(!playlistListFile.open(QIODevice::WriteOnly))
+    {
+        //Return back.
+        return;
+    }
+    //Generate the playlist file path content.
+    QJsonArray playlistPaths;
+    //Save all the file path of the playlist models in the playlist model list
+    //to the playlist paths array.
+    for(int i=0; i<m_playlistList->rowCount(); ++i)
+    {
+        //Get the playlist model.
+        KNMusicPlaylistModel *model=m_playlistList->playlist(i);
+        //Check the model first.
+        if(model)
+        {
+            //Check the model is changed, or the playlist file doesn't exist.
+            if(model->changed() || (!QFileInfo::exists(model->filePath())))
+            {
+                //Save the changed model.
+                savePlaylist(model);
+            }
+            //Output the file path of model to json array.
+            playlistPaths.append(model->filePath());
+        }
+    }
+    //Generate the playlist list root object.
+    QJsonObject playlistListObject;
+    //Output basic information to the root object.
+    playlistListObject.insert("Version", PlaylistListVersion);
+    playlistListObject.insert("Playlists", playlistPaths);
+    //Generate the document for the root object.
+    //Write the data to file.
+    playlistListFile.write(QJsonDocument(playlistListObject).toJson());
+    //Close the playlist list file.
+    playlistListFile.close();
 }
 
 QString KNMusicPlaylistManager::generateTitle(const QString &preferName)
@@ -189,11 +285,6 @@ bool KNMusicPlaylistManager::isPlaylistListLoaded() const
     return m_isPlaylistListLoaded;
 }
 
-void KNMusicPlaylistManager::setPlaylistListLoaded(bool isPlaylistListLoaded)
-{
-    m_isPlaylistListLoaded = isPlaylistListLoaded;
-}
-
 QString KNMusicPlaylistManager::playlistDirPath() const
 {
     return m_playlistDirPath;
@@ -201,7 +292,10 @@ QString KNMusicPlaylistManager::playlistDirPath() const
 
 void KNMusicPlaylistManager::setPlaylistDirPath(const QString &playlistDirPath)
 {
+    //Save the directory path.
     m_playlistDirPath = playlistDirPath;
+    //Set the playlist directory path for all the playlist models.
+    KNMusicPlaylistModel::setPlaylistDirPath(m_playlistDirPath);
 }
 
 void KNMusicPlaylistManager::loadPlaylistList()
@@ -212,6 +306,9 @@ void KNMusicPlaylistManager::loadPlaylistList()
     if(!playlistListFile.exists() ||
             !playlistListFile.open(QIODevice::ReadOnly))
     {
+        //Set loaded flag.
+        m_isPlaylistListLoaded = true;
+        //Return back.
         return;
     }
     //Read and parse the json object from the playlist list file.
@@ -224,6 +321,9 @@ void KNMusicPlaylistManager::loadPlaylistList()
     if(playlistListObject.isEmpty() ||
             playlistListObject.value("Version").toInt()!=PlaylistListVersion)
     {
+        //Set the loaded flag.
+        m_isPlaylistListLoaded = true;
+        //Return back.
         return;
     }
     //Get the playlist file path content.
@@ -237,8 +337,16 @@ void KNMusicPlaylistManager::loadPlaylistList()
         QString playlistPath=(*i).toString();
         //Load the playlist file to a playlist model, but don't need to parse
         //it. If it's failed to load the playlist, add it to failed path list.
-        if(!loadPlaylist(playlistPath))
+        KNMusicPlaylistModel *model=loadPlaylist(playlistPath);
+        //Check the model.
+        if(model)
         {
+            //Set the file path to the playlist pointer.
+            model->setFilePath(playlistPath);
+        }
+        else
+        {
+            //Add the path to failed path list.
             failedPaths.append(playlistPath);
         }
     }
@@ -249,16 +357,19 @@ void KNMusicPlaylistManager::loadPlaylistList()
         //!FIXME: Raise message box to hint the user there's invalid playlist.
         ;
     }
+    //Set the loaded flag.
+    m_isPlaylistListLoaded = true;
 }
 
-bool KNMusicPlaylistManager::loadPlaylist(const QString &filePath)
+KNMusicPlaylistModel *KNMusicPlaylistManager::loadPlaylist(
+        const QString &filePath)
 {
     //Get the playlist file.
     QFile playlistFile(filePath);
     //Tried to open it as read only mode.
     if(!playlistFile.open(QIODevice::ReadOnly))
     {
-        return false;
+        return nullptr;
     }
     //Get playlist content object from the playlist file.
     QJsonObject contentObject=
@@ -274,82 +385,66 @@ bool KNMusicPlaylistManager::loadPlaylist(const QString &filePath)
             !contentObject.contains("Name") ||
             !contentObject.contains("Songs"))
     {
-        return false;
+        return nullptr;
     }
     //Generate the playlist.
     KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_workingThread,
                                                          m_playlistList);
-    //Set the file path of the playlist.
-    model->setFilePath(filePath);
     //Set the playlist meta data from the json object.
     model->setTitle(contentObject.value("Name").toString());
     model->setContentData(contentObject.value("Songs").toArray());
     //Reset the changed state.
     model->setChanged(false);
-    //Add this playlist model to playlist list.
+    //Add this playlist model to playlist list, give back the model index.
     m_playlistList->append(model);
-    //Load success.
-    return true;
+    //Give back the model.
+    return model;
 }
 
-bool KNMusicPlaylistManager::savePlaylist(KNMusicPlaylistModel *model,
-                                          QString filePath)
+bool KNMusicPlaylistManager::savePlaylist(KNMusicPlaylistModel *model)
 {
-    //Check te model first.
-    if(!model)
+    //Get the result of the playlist.
+    if(writeModelToFile(model, model->filePath()))
     {
-        return false;
+        //Set the changed flag to false.
+        model->setChanged(false);
+        //Give back the finished result.
+        return true;
     }
-    //Check if the file path is empty.
-    if(filePath.isEmpty())
-    {
-        //We will use the file path from the model.
-        filePath=model->filePath();
-    }
-    //Get the playlist file.
-    QFile playlistFile(filePath);
-    //Try to open the file as write mode.
-    if(!playlistFile.open(QIODevice::WriteOnly))
-    {
-        return false;
-    }
-    //Create the playlist content.
-    QJsonArray songs;
-    //Write all the data to the content.
-    for(int row=0; row<model->rowCount(); ++row)
-    {
-        //Translate the detail info from the model to a QJsonObject, and add it
-        //to the playlist content.
-        songs.append(
-                    KNMusicPlaylistUtil::detailInfoToObject(
-                        model->rowDetailInfo(row)));
-    }
-    //Create the playlist object.
-    QJsonObject playlistObject;
-    //Set the data of the playlist.
-    playlistObject["Version"]=PlaylistListVersion;
-    playlistObject["Name"]=model->title();
-    playlistObject["Songs"]=songs;
-    //Create playlist document
-    QJsonDocument playlistDocument;
-    //Set the playlist object to document object.
-    playlistDocument.setObject(playlistObject);
-    //Write document data to the file.
-    playlistFile.write(playlistDocument.toJson(QJsonDocument::Indented));
-    //Close the file.
-    playlistFile.close();
-    //Import complete.
-    return true;
+    //Give back the failed result.
+    return false;
+}
+
+bool KNMusicPlaylistManager::removePlaylist(KNMusicPlaylistModel *model)
+{
+    //Ask the list model to remove the playlist.
+    return m_playlistList->removeModel(model);
 }
 
 QModelIndex KNMusicPlaylistManager::importPlaylist(const QString &filePath)
 {
+    //Tried load the file first.
+    KNMusicPlaylistModel *model=loadPlaylist(filePath);
+    //Check if the model is loaded.
+    if(model)
+    {
+        //Allocate a file path to model.
+        model->allcateFilePath();
+        //Set the changed flag.
+        model->setChanged(true);
+        //Give back the index, import successfully.
+        return m_playlistList->append(model);
+    }
     //Use the playlist engine to parse the file.
-    KNMusicPlaylistModel *model=m_playlistEngine->read(filePath);
+    model=m_playlistEngine->read(filePath);
     //Check the model.
     if(model)
     {
-        //If it's not null, add to playlist list, Import successfully.
+        //Allocate a file path to model.
+        model->allcateFilePath();
+        //Set the changed flag.
+        model->setChanged(true);
+        //If it's not null, add to playlist list, import successfully.
         return m_playlistList->append(model);
     }
     //Or else failed.
@@ -385,11 +480,11 @@ bool KNMusicPlaylistManager::exportPlaylist(KNMusicPlaylistModel *model,
     if(parserIndex==0)
     {
         //When the parser is 0, we will export the playlist using mu playlist.
-        return savePlaylist(model, filePath);
+        return writeModelToFile(model, filePath);
     }
     //Or else, we will use the engine to export the playlist.
     //Notice that the parser index should -1. Because the index start inside the
     //playlist engine is 0. Here we start at 1.
     //The 0 of here is mu playlist.
-    m_playlistEngine->write(model, filePath, parserIndex-1);
+    return m_playlistEngine->write(model, filePath, parserIndex-1);
 }

@@ -35,6 +35,7 @@
 #include "knmusictagparser.h"
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
+#include "knmusicmultimenubase.h"
 #include "knmusicplaylistbase.h"
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
@@ -51,6 +52,8 @@
 #include "plugin/knmusictagapev2/knmusictagapev2.h"
 // Solo Music Menu.
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
+// Multi Music Menu.
+#include "plugin/knmusicmultimenu/knmusicmultimenu.h"
 // Search.
 #include "plugin/knmusicsearch/knmusicsearch.h"
 // Backends.
@@ -94,6 +97,7 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     initialParserPlugin();
     //Initial global menus.
     initialSoloMenu(new KNMusicSoloMenu);
+    initialMultiMenu(new KNMusicMultiMenu);
 
     //Initial the search.
     initialSearch(new KNMusicSearch);
@@ -116,9 +120,22 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
 KNMusicPlugin::~KNMusicPlugin()
 {
     //Recover the solo menu.
-    if(knMusicGlobal->soloMenu()->parent()==nullptr)
+    if(knMusicGlobal->soloMenu() &&
+            knMusicGlobal->soloMenu()->parent()==nullptr)
     {
         knMusicGlobal->soloMenu()->deleteLater();
+    }
+    //Recover the multi menu.
+    if(knMusicGlobal->multiMenu() &&
+            knMusicGlobal->multiMenu()->parent()==nullptr)
+    {
+        knMusicGlobal->multiMenu()->deleteLater();
+    }
+    //Recover the tooltip menu.
+    if(knMusicGlobal->detailTooltip() &&
+            knMusicGlobal->detailTooltip()->parent()==nullptr)
+    {
+        knMusicGlobal->detailTooltip()->deleteLater();
     }
 }
 
@@ -227,6 +244,12 @@ void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
 {
     //Set the solo menu to the music global.
     knMusicGlobal->setSoloMenu(soloMenu);
+}
+
+void KNMusicPlugin::initialMultiMenu(KNMusicMultiMenuBase *multiMenu)
+{
+    //Set the multi menu to the music global.
+    knMusicGlobal->setMultiMenu(multiMenu);
 }
 
 void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)

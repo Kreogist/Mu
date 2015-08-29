@@ -49,6 +49,7 @@
 
 #define PlayerVolume QString("PlayerVolume")
 #define PlayerMute QString("Mute")
+#define PlayerLoopState QString("LoopState")
 
 KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent),
@@ -400,6 +401,12 @@ void KNMusicHeaderPlayer::loadConfigure()
         //Get the mute state and set to backend.
         m_backend->setMute(m_cacheConfigure->data(PlayerMute, false).toBool());
     }
+    if(m_nowPlaying)
+    {
+        //Get the loop state.
+        m_nowPlaying->setLoopState(
+                    m_cacheConfigure->data(PlayerLoopState, NoRepeat).toInt());
+    }
 }
 
 void KNMusicHeaderPlayer::saveConfigure()
@@ -411,6 +418,11 @@ void KNMusicHeaderPlayer::saveConfigure()
     if(m_backend)
     {
         m_cacheConfigure->setData(PlayerMute, m_backend->mute());
+    }
+    //Write loop state.
+    if(m_nowPlaying)
+    {
+        m_cacheConfigure->setData(PlayerLoopState, m_nowPlaying->loopState());
     }
 }
 

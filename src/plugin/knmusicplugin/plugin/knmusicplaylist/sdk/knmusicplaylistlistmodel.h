@@ -25,35 +25,123 @@
 #include <QAbstractListModel>
 
 class KNMusicPlaylistModel;
+/*!
+ * \brief The KNMusicPlaylistListModel class is a manager of
+ * KNMusicPlaylsitModel. It's model itself and it can manage those models with
+ * MVC model. It provides such basic functions like append and remove for fast
+ * management.
+ */
 class KNMusicPlaylistListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistListModel object with parent object.
+     * \param parent The parent object.
+     */
     explicit KNMusicPlaylistListModel(QObject *parent = 0);
     ~KNMusicPlaylistListModel();
 
+    /*!
+     * \brief Get a playlist model according to the index.
+     * \param index The index of the playlist model.
+     * \return If the index is invalid, this will return nullptr. Or else the
+     * playlist model pointer.
+     */
     KNMusicPlaylistModel *playlist(const QModelIndex &index);
 
+    /*!
+     * \brief This is an override function. Get a playlist model according to
+     * the row.
+     * \param row The row of the playlist.
+     * \return If the index is invalid, this will return nullptr. Or else the
+     * playlist model pointer.
+     */
+    inline KNMusicPlaylistModel *playlist(int row)
+    {
+        return playlist(index(row, 0));
+    }
+
+    /*!
+     * \brief Append a playlist model at the end of the list.
+     * \param model The playlist model which is wait to add.
+     * \return The index of the playlist model inside the model. If the model is
+     * already in the model, it will return the model index where previously
+     * exist, and won't add it again. If you are trying to add a nullptr, it
+     * will return a null index and won't add the model into the list.
+     */
     QModelIndex append(KNMusicPlaylistModel *model);
-    void insert(int row, KNMusicPlaylistModel *model);
-    bool removeRows(int row, int count, const QModelIndex &parent);
 
-    int rowCount(const QModelIndex &parent=QModelIndex()) const;
+    /*!
+     * \brief Remove a playlist model from the list.
+     * \param model The model pointer.
+     * \return If the model never add to the list model, return false. Or else,
+     * return the result of delete the model from the list. If the model pointer
+     * is nullptr, it will always return a false.
+     */
+    bool removeModel(KNMusicPlaylistModel *model);
 
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    /*!
+     * \brief Insert a playlist model into a specific position.
+     * \param row The row where you'd like to insert the model.
+     * \param model The model pointer.
+     * \return The model index in the list.
+     */
+    QModelIndex insert(int row, KNMusicPlaylistModel *model);
 
-    QVariant data(const QModelIndex &index, int role) const;
+    /*!
+     * \brief Reimplemented from QAbstractListModel::removeRows().
+     */
+    bool removeRows(int row,
+                    int count,
+                    const QModelIndex &parent) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractListModel::rowCount().
+     */
+    int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractListModel::flags().
+     */
+    Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractListModel::data().
+     */
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractListModel::setData().
+     */
     bool setData(const QModelIndex &index,
                  const QVariant &value,
-                 int role = Qt::EditRole);
+                 int role = Qt::EditRole) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractListModel::headerData().
+     */
     QVariant headerData(int section,
                         Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
+                        int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Check all the title in the list, if we can find a playlist model
+     * which is named as the title, this function will return true.
+     * \param title The title text.
+     * \return If we can find the title in list, it will return true.
+     */
     bool findTitle(const QString &title);
 
 signals:
+    /*!
+     * \brief When the list is not empty any more, this signal will be emitted.
+     */
     void requireShowContent();
+
+    /*!
+     * \brief When the list is empty again, this signal will be emitted.
+     */
     void requireHideContent();
 
 public slots:

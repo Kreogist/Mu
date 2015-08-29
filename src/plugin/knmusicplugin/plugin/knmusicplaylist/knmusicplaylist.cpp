@@ -23,6 +23,9 @@
 #include "knlocalemanager.h"
 
 // SDKs
+#include "knmusicnowplayingbase.h"
+
+// SDKs of playlists
 #include "sdk/knmusicplaylistemptyhint.h"
 #include "sdk/knmusicplaylistlist.h"
 #include "sdk/knmusicplaylistlistmodel.h"
@@ -82,6 +85,8 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
             this, &KNMusicPlaylist::onActionImportPlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireExportPlaylist,
             this, &KNMusicPlaylist::onActionExportPlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireRemovePlaylist,
+            this, &KNMusicPlaylist::onActionRemovePlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireShowPlaylist,
             [=](const QModelIndex &index)
             {
@@ -127,8 +132,6 @@ void KNMusicPlaylist::showEvent(QShowEvent *event)
     {
         //Load the playlist list.
         m_playlistManager->loadPlaylistList();
-        //Set the load flag.
-        m_playlistManager->setPlaylistListLoaded(true);
         //Get the playlist list temporarily.
         KNMusicPlaylistListModel *playlistList=
                 m_playlistManager->playlistList();
@@ -194,6 +197,37 @@ void KNMusicPlaylist::onActionImportPlaylist()
             m_container->showContentWidget();
         }
     }
+}
+
+void KNMusicPlaylist::onActionRemovePlaylist()
+{
+    //Get the current model from the viewer.
+    if(!m_playlistViewer->playlist())
+    {
+        //Ignore when the playlist model is nullptr.
+        return;
+    }
+    //Get the model which is going to be removed.
+    KNMusicPlaylistModel *model=m_playlistViewer->playlist();
+    //Check the now playing first.
+    if(knMusicGlobal->nowPlaying())
+    {
+        //Ask the now playing to check the model which is going to be delete.
+        knMusicGlobal->nowPlaying()->onActionModelRemoved(model);
+    }
+    //Remove the playlist file.
+    //Check the existance of the file.
+    if(QFile::exists(model->filePath()))
+    {
+        //Remove the file.
+        if(QFile(model->filePath()).remove())
+        {
+            //!FIXME: We need to tell user that we cannot remove the file.
+            return;
+        }
+    }
+    //Remove the playlist model.
+    m_playlistManager->removePlaylist(model);
 }
 
 void KNMusicPlaylist::onActionExportPlaylist()

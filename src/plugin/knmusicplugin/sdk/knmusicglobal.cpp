@@ -134,6 +134,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_detailDialog(new KNMusicDetailDialog(knGlobal->mainWindow())),
     m_parser(new KNMusicParser),
     m_soloMenu(nullptr),
+    m_multiMenu(nullptr),
     m_search(nullptr),
     m_backend(nullptr),
     m_nowPlaying(nullptr),
@@ -386,6 +387,17 @@ inline void KNMusicGlobal::initialGenre()
                    <<"JPop"
                    <<"Synthpop";
 }
+
+KNMusicMultiMenuBase *KNMusicGlobal::multiMenu() const
+{
+    return m_multiMenu;
+}
+
+void KNMusicGlobal::setMultiMenu(KNMusicMultiMenuBase *multiMenu)
+{
+    m_multiMenu = multiMenu;
+}
+
 
 KNMusicDetailTooltipBase *KNMusicGlobal::detailTooltip() const
 {

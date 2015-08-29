@@ -27,12 +27,13 @@ KNAnimationMenu::KNAnimationMenu(QWidget *parent) :
     m_mouseDownPos(QPoint(0,0))
 {
     //Set properties.
+    setAutoFillBackground(true);
 #ifndef Q_OS_MAC
     setWindowOpacity(0.85);
 #endif
     //Configure the animation.
     m_showAnime->setEasingCurve(QEasingCurve::OutCubic);
-    m_showAnime->setDuration(200);
+    m_showAnime->setDuration(150);
     //When the show anime is finished, show the content.
     connect(m_showAnime, &QPropertyAnimation::finished,
             [=]
@@ -71,13 +72,14 @@ void KNAnimationMenu::paintEvent(QPaintEvent *event)
     //Only do the original paint event when show content data is true.
     if(m_showContent)
     {
+        //Draw the menu content.
         QMenu::paintEvent(event);
+        //Initial a painter.
+        QPainter painter(this);
+        //Draw a border around the menu.
+        painter.setPen(QColor(255,255,255,50));
+        painter.drawRect(0, 0, width()-1, height()-1);
     }
-    //Initial a painter.
-    QPainter painter(this);
-    //Draw a border around the menu.
-    painter.setPen(QColor(255,255,255,50));
-    painter.drawRect(0, 0, width()-1, height()-1);
 }
 
 void KNAnimationMenu::setMouseDownPos(const QPoint &mouseDownPos)
