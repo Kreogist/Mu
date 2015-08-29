@@ -75,6 +75,8 @@ private:
     KNMusicPlaylistList *m_playlistList;
     KNMusicPlaylistViewer *m_playlistViewer;
     KNMusicPlaylistManager *m_playlistManager;
+
+    QString m_cannotDeleteMessage;
 };
 
 #endif // KNMUSICPLAYLIST_H

@@ -107,9 +107,8 @@ public:
     /*!
      * \brief Remove several rows from the model at once.
      * \param rows The rows list.
-     * \return If remove those rows successfully, returns true.
      */
-    bool removeRowList(QList<int> rows);
+    void removeRowList(QList<int> rows);
 
     /*!
      * \brief Remove all the music rows in the model.

@@ -195,7 +195,7 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
     return true;
 }
 
-bool KNMusicModel::removeRowList(QList<int> rows)
+void KNMusicModel::removeRowList(QList<int> rows)
 {
     //Sort the rows, with lambda expressions.
     std::sort(rows.begin(), rows.end(),

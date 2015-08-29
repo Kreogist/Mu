@@ -60,6 +60,10 @@
 #ifdef ENABLE_BACKEND_BASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #endif
+// Analysiser
+#ifdef ENABLED_FFMPEG_ANALYSISER
+#include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
+#endif
 // Now Playing.
 #include "plugin/knmusicnowplaying/knmusicnowplaying.h"
 // Detail Tooltip.
@@ -238,6 +242,11 @@ void KNMusicPlugin::initialParserPlugin()
     parser->installTagParser(new KNMusicTagId3v1);
     parser->installTagParser(new KNMusicTagId3v2);
     parser->installTagParser(new KNMusicTagApev2);
+
+    //Add analysiser.
+#ifdef ENABLED_FFMPEG_ANALYSISER
+    parser->installAnalysiser(new KNMusicFfmpegAnalysiser);
+#endif
 }
 
 void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)

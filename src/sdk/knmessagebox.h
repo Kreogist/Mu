@@ -54,6 +54,17 @@ public:
      */
     bool showCancelButton() const;
 
+    /*!
+     * \brief Show up information using a KNMessageBox.
+     * \param text The text content of the message box.
+     * \param title The title of the message box. If you leave it empty, it will
+     * be "Message".
+     * \param alignment The alignment of the text message.
+     */
+    static void information(const QString &text,
+                            const QString &title=QString("Message"),
+                            const Qt::Alignment &alignment=Qt::AlignLeft);
+
 signals:
 
 public slots:

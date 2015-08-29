@@ -39,12 +39,6 @@ signals:
 
 public slots:
 
-protected:
-    /*!
-     * \brief Reimplemented from KNMusicSoloMenuBase::hideEvent().
-     */
-    void hideEvent(QHideEvent *event);
-
 private slots:
     void retranslate();
     void onActionOpen();

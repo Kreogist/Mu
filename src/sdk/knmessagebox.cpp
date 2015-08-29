@@ -22,6 +22,7 @@
 #include <QSequentialAnimationGroup>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
+#include <QScopedPointer>
 
 #include "sao/knmessageboxblock.h"
 #include "sao/knmessageboxcontent.h"
@@ -70,6 +71,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     //Set palette, the color of SAO style window cannot be changed.
     QPalette pal=palette();
     pal.setColor(QPalette::Window, QColor(240,240,240));
+    pal.setColor(QPalette::WindowText, QColor(100,100,100));
     setPalette(pal);
 
     //Initial elements.
@@ -86,6 +88,9 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     mainLayout->addWidget(m_topBlock, 1);
     mainLayout->addWidget(m_content);
     mainLayout->addWidget(m_bottomBlock, 1);
+
+    //Raise the widget.
+    m_content->raise();
 }
 
 void KNMessageBox::showEvent(QShowEvent *event)
@@ -339,6 +344,30 @@ bool KNMessageBox::showCancelButton() const
     return m_showCancelButton;
 }
 
+void KNMessageBox::information(const QString &text,
+                               const QString &title,
+                               const Qt::Alignment &alignment)
+{
+    //Generate a temporary message box.
+    QScopedPointer<KNMessageBox> messageBox(new KNMessageBox);
+    //Configure the message box.
+    messageBox->setTitleText(title);
+    //Generate the text holder label.
+    QLabel *textHolder=new QLabel(text, messageBox.data());
+    //Configure the text holder.
+    textHolder->setContentsMargins(17,12,17,12);
+    textHolder->setAlignment(alignment);
+    textHolder->setMinimumHeight(78);
+    //Set palette, the color of SAO style window cannot be changed.
+    QPalette pal=textHolder->palette();
+    pal.setColor(QPalette::WindowText, QColor(72,72,72));
+    textHolder->setPalette(pal);
+    //Set the content widget.
+    messageBox->setContentWidget(textHolder);
+    //Show up the message box.
+    messageBox->exec();
+}
+
 void KNMessageBox::setShowCancelButton(bool showCancelButton)
 {
     m_showCancelButton = showCancelButton;
@@ -358,5 +387,7 @@ void KNMessageBox::setContentWidget(QWidget *widget)
 {
     //Set the content widget.
     m_content->setContent(widget);
+    //Raise the widget.
+    widget->raise();
 }
 

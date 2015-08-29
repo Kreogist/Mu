@@ -41,8 +41,9 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     setLayout(mainLayout);
 
     //Initial the label palette.
-    QPalette pal=palette();
-    pal.setColor(QPalette::WindowText, QColor(0xa0, 0xa0, 0xa0));
+    QPalette captionPal=palette(), contentPal=palette();
+    captionPal.setColor(QPalette::WindowText, QColor(0xa0, 0xa0, 0xa0));
+    contentPal.setColor(QPalette::WindowText, QColor(72, 72, 72));
 
     //Initial the labels.
     for(int i=0; i<DetailInformationCount; i++)
@@ -52,9 +53,10 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
         //Configure caption.
         m_caption[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         m_caption[i]->setMinimumWidth(100);
-        m_caption[i]->setPalette(pal);
+        m_caption[i]->setPalette(captionPal);
         //Construct detail label.
         m_information[i]=new QLabel(this);
+        m_information[i]->setPalette(contentPal);
 
         //Add label to layout.
         mainLayout->addRow(m_caption[i], m_information[i]);

@@ -46,11 +46,16 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     connect(m_panelSwitcher, &KNHTabGroup::currentIndexChange,
             m_panelContainer, &KNHWidgetSwitcher::setCurrentIndex);
 
+    //Generate basic label palette.
+    QPalette labelPal=palette();
+    labelPal.setColor(QPalette::WindowText, QColor(72, 72, 72));
     //Initial the basic information labels
     for(int i=0; i<BasicInformationCount; i++)
     {
         //Simply initial the label.
         m_basicInfoLabel[i]=new QLabel(this);
+        //Set the palette.
+        m_basicInfoLabel[i]->setPalette(labelPal);
     }
     //Configure the basic information labels.
     m_basicInfoLabel[LabelAlbumArt]->setFixedSize(albumArtSize, albumArtSize);

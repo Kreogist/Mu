@@ -65,7 +65,7 @@ macx: {
     RC_FILE += resource/icon/mu.icns
     ICON = resource/icon/mu.icns
     # Enable the backend.
-    CONFIG += backend-bass
+    CONFIG += backend-bass analysiser-ffmpeg
     # Nearly all the audio library will use CoreAudio on Mac OS X, so import
     # CoreAudio library to LFLAGS and LIBS.
     QMAKE_LFLAGS += -framework CoreFoundation
@@ -92,6 +92,23 @@ backend-bass: {
     HEADERS += \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
+}
+
+# Analysiser Specific Configuration
+analysiser-ffmpeg: {
+    # Add libraries.
+    LIBS += -lavformat -lavcodec -lavutil
+    # For Mac OS X, we have to enabled swresample and swscale.
+    macx: {
+        LIBS += -lswresample -lswscale
+    }
+    # Define the ffmpeg enabled flag.
+    DEFINES += ENABLED_FFMPEG_ANALYSISER
+    # Add analysiser files to the project.
+    SOURCES += \
+        plugin/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.cpp
+    HEADERS += \
+        plugin/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h
 }
 
 # Add sdk directory to include path.

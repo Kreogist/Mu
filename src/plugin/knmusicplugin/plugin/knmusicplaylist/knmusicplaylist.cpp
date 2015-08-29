@@ -21,6 +21,7 @@
 #include "kncategorytab.h"
 #include "knemptystatewidget.h"
 #include "knlocalemanager.h"
+#include "knmessagebox.h"
 
 // SDKs
 #include "knmusicnowplayingbase.h"
@@ -159,6 +160,11 @@ void KNMusicPlaylist::retranslate()
 {
     //Update the tab title.
     m_tab->setText(tr("Playlist"));
+
+    //Update the error message.
+    m_cannotDeleteMessage=tr("Failed to delete the playlist file: \n"
+                             "\n"
+                             "%1");
 }
 
 void KNMusicPlaylist::onActionCreatePlaylist()
@@ -179,6 +185,9 @@ void KNMusicPlaylist::onActionImportPlaylist()
     //Generate a file dialog.
     QFileDialog importPlaylists(this);
     //Set the file mode and the name filters.
+#ifdef Q_OS_MACX
+    importPlaylists.setWindowFlags(Qt::Sheet);
+#endif
     importPlaylists.setFileMode(QFileDialog::ExistingFiles);
     importPlaylists.setNameFilters(m_playlistManager->playlistFilter());
     //Launch the selector.
@@ -220,9 +229,14 @@ void KNMusicPlaylist::onActionRemovePlaylist()
     if(QFile::exists(model->filePath()))
     {
         //Remove the file.
-        if(QFile(model->filePath()).remove())
+        if(!QFile::remove(model->filePath()))
         {
-            //!FIXME: We need to tell user that we cannot remove the file.
+            //Show up the error message.
+            KNMessageBox::information(
+                        m_cannotDeleteMessage.arg(model->filePath()),
+                        "Error",
+                        Qt::AlignCenter);
+            //Stop here.
             return;
         }
     }
@@ -242,6 +256,9 @@ void KNMusicPlaylist::onActionExportPlaylist()
     //Generate a file dialog.
     QFileDialog exportPlaylist(this);
     //Set the file mode and the name filters.
+#ifdef Q_OS_MACX
+    exportPlaylist.setWindowFlags(Qt::Sheet);
+#endif
     exportPlaylist.setFileMode(QFileDialog::AnyFile);
     exportPlaylist.setAcceptMode(QFileDialog::AcceptSave);
     //Set the default playlist file name.

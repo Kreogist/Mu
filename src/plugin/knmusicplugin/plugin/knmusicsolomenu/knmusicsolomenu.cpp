@@ -130,15 +130,6 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
     }
 }
 
-void KNMusicSoloMenu::hideEvent(QHideEvent *event)
-{
-    //Do hide event.
-    KNMusicSoloMenuBase::hideEvent(event);
-    //Reset the model and the item index.
-    m_model=nullptr;
-    m_itemIndex=QModelIndex();
-}
-
 void KNMusicSoloMenu::retranslate()
 {
     //Translate all the action caption. Save them in title caption string list.

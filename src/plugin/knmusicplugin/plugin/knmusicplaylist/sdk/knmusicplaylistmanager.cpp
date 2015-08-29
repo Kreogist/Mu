@@ -23,6 +23,7 @@
 #include <QThread>
 
 #include "knutil.h"
+#include "knmessagebox.h"
 
 #include "knmusicplaylistutil.h"
 #include "knmusicplaylistengine.h"
@@ -328,8 +329,8 @@ void KNMusicPlaylistManager::loadPlaylistList()
     }
     //Get the playlist file path content.
     QJsonArray playlistPaths=playlistListObject.value("Playlists").toArray();
-    //A string list used to storage the failed loaded file path.
-    QStringList failedPaths;
+    //A string used to storage the failed loaded file path.
+    QString failedPaths;
     //Generate those models.
     for(auto i=playlistPaths.constBegin(); i!=playlistPaths.constEnd(); ++i)
     {
@@ -347,15 +348,15 @@ void KNMusicPlaylistManager::loadPlaylistList()
         else
         {
             //Add the path to failed path list.
-            failedPaths.append(playlistPath);
+            failedPaths.append(playlistPath + "\n");
         }
     }
     //Check whether the failedPaths is empty, if it's not empty, a message box
     //should be display to hint the user there's invalid playlist.
     if(!failedPaths.isEmpty())
     {
-        //!FIXME: Raise message box to hint the user there's invalid playlist.
-        ;
+        //!FIXME: Show the failed paths.
+        //! WARNING: do not use KNMessageBox.
     }
     //Set the loaded flag.
     m_isPlaylistListLoaded = true;
@@ -367,8 +368,10 @@ KNMusicPlaylistModel *KNMusicPlaylistManager::loadPlaylist(
     //Get the playlist file.
     QFile playlistFile(filePath);
     //Tried to open it as read only mode.
-    if(!playlistFile.open(QIODevice::ReadOnly))
+    if((!playlistFile.exists()) || (!playlistFile.open(QIODevice::ReadOnly)))
     {
+        //For the file which is not exist, or we cannot open, treat it as failed
+        //to load.
         return nullptr;
     }
     //Get playlist content object from the playlist file.
