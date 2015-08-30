@@ -72,11 +72,11 @@ public slots:
      * inside recursive.
      * \param paths The path list.
      */
-    void analysisPaths(const QStringList &paths);
+    void analysisPaths(QStringList paths);
 
 private slots:
     void analysisNext();
-    void analysisFolder(const QFileInfo &folderInfo);
+    void analysisFolder(QFileInfo folderInfo);
 
 private:
     inline void analysisFile(const QFileInfo &fileInfo);

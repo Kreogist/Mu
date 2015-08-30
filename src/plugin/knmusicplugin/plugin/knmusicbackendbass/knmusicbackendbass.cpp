@@ -43,7 +43,10 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
     //placed at the same path of the executable file.
     loadPlugin(qApp->applicationDirPath());
 #else
-    ;
+    //Load the user plugins.
+    loadPlugin(knGlobal->dirPath(KNGlobal::PluginDir) + "/Bass");
+    //Load the plugins in the application folder.
+    loadPlugin(knGlobal->dirPath(KNGlobal::ResourceDir) + "/Plugins/Bass");
 #endif
     //Initial the main and preview thread.
     setMainThread(generateThread(threadFlag));

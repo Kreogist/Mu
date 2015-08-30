@@ -222,7 +222,7 @@ signals:
     void requireAnalysisFiles(QStringList fileList);
 
 public slots:
-    void setPlayingIndex(const QPersistentModelIndex &playingIndex);
+    void setPlayingIndex(const QModelIndex &playingIndex);
 
 private:
     QList<KNMusicDetailInfo> m_detailInfos;

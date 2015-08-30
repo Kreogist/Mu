@@ -74,6 +74,8 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_playlistManager->installPlaylistParser(new KNMusicPlaylistM3uParser);
     m_playlistManager->installPlaylistParser(new KNMusicPlaylistM3u8Parser);
     m_playlistManager->installPlaylistParser(new KNMusicPlaylistExtM3uParser);
+    //Start running the engine.
+    m_playlistManager->startParseEngine();
 
     //Link the GUI with che playlist manager.
     connect(m_playlistManager, &KNMusicPlaylistManager::requireShowContent,

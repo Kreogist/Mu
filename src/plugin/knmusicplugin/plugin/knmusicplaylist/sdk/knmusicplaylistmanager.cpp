@@ -45,16 +45,6 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_playlistEngine(new KNMusicPlaylistEngine()),
     m_workingThread(new QThread())
 {
-    //Move the playlist engine to working thread.
-    m_playlistEngine->moveToThread(m_workingThread);
-
-    //Link the playlist list model with the manager.
-    connect(m_playlistList, &KNMusicPlaylistListModel::requireShowContent,
-            this, &KNMusicPlaylistManager::requireShowContent);
-    connect(m_playlistList, &KNMusicPlaylistListModel::requireHideContent,
-            this, &KNMusicPlaylistManager::requireHideContent);
-    //Start working thread.
-    m_workingThread->start();
 }
 
 KNMusicPlaylistManager::~KNMusicPlaylistManager()
@@ -128,6 +118,26 @@ QStringList KNMusicPlaylistManager::playlistFilter()
     filter.prepend(allSupportFilter);
     //Give back the filter.
     return filter;
+}
+
+void KNMusicPlaylistManager::startParseEngine()
+{
+    //Check the thread running state.
+    if(m_workingThread->isRunning())
+    {
+        //The thread is already running.
+        return;
+    }
+    //Move the playlist engine to working thread.
+    m_playlistEngine->moveToThread(m_workingThread);
+    //Start working thread.
+    m_workingThread->start();
+
+    //Link the playlist list model with the manager.
+    connect(m_playlistList, &KNMusicPlaylistListModel::requireShowContent,
+            this, &KNMusicPlaylistManager::requireShowContent);
+    connect(m_playlistList, &KNMusicPlaylistListModel::requireHideContent,
+            this, &KNMusicPlaylistManager::requireHideContent);
 }
 
 bool KNMusicPlaylistManager::writeModelToFile(KNMusicPlaylistModel *model,
@@ -270,7 +280,7 @@ QString KNMusicPlaylistManager::generateTitle(const QString &preferName)
     QString countedName=baseName + " " + QString::number(counter);
     //Check if the counted name can be found in the list, if it cannot be find,
     //then add the counter, relink the name, and check it again.
-    while(!m_playlistList->findTitle(countedName))
+    while(m_playlistList->findTitle(countedName))
     {
         //Add counter.
         counter++;

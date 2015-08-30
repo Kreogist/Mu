@@ -478,7 +478,7 @@ QString KNMusicModel::textData(const int &row, const int &column) const
     return m_detailInfos.at(row).textLists[column].toString();
 }
 
-void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)
+void KNMusicModel::setPlayingIndex(const QModelIndex &playingRow)
 {
     //Check the previous playing index.
     if(m_playingIndex.isValid())
@@ -492,7 +492,7 @@ void KNMusicModel::setPlayingIndex(const QPersistentModelIndex &playingRow)
                          index(previousRow, MusicRowState));
     }
     //Save the current playing index.
-    m_playingIndex = playingRow;
+    m_playingIndex=playingRow;
     //Check if the previous playing row is valid.
     if(m_playingIndex.isValid())
     {

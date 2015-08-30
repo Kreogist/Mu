@@ -148,7 +148,16 @@ public:
      */
     void installPlaylistParser(KNMusicPlaylistParser *parser);
 
+    /*!
+     * \brief playlistFilter
+     * \return
+     */
     QStringList playlistFilter();
+
+    /*!
+     * \brief startEngineThread
+     */
+    void startParseEngine();
 
 signals:
     void requireShowContent();

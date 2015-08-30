@@ -19,6 +19,8 @@
 
 #include "knfilesearcher.h"
 
+#include <QDebug>
+
 QStringList KNFileSearcher::m_suffixList=QStringList();
 
 KNFileSearcher::KNFileSearcher(QObject *parent) :
@@ -30,10 +32,11 @@ KNFileSearcher::KNFileSearcher(QObject *parent) :
     //really really deep.
     //Link the analysis next item.
     connect(this, &KNFileSearcher::requireAnalysisNext,
-            this, &KNFileSearcher::analysisNext);
+            this, &KNFileSearcher::analysisNext,
+            Qt::QueuedConnection);
 }
 
-void KNFileSearcher::analysisPaths(const QStringList &paths)
+void KNFileSearcher::analysisPaths(QStringList paths)
 {
     //Append the urls to the waiting list.
     m_queue.append(paths);
@@ -67,7 +70,7 @@ void KNFileSearcher::analysisNext()
     emit requireAnalysisNext();
 }
 
-void KNFileSearcher::analysisFolder(const QFileInfo &folderInfo)
+void KNFileSearcher::analysisFolder(QFileInfo folderInfo)
 {
     //Get the entry file info under the folder.
     QFileInfoList contents=QDir(folderInfo.absoluteFilePath()).entryInfoList();
@@ -103,11 +106,11 @@ inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo)
         emit findFile(fileInfo);
     }
 }
+
 QStringList KNFileSearcher::suffixList()
 {
     return m_suffixList;
 }
-
 
 void KNFileSearcher::setSuffixList(const QStringList &suffixList)
 {

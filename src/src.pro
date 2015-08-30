@@ -58,13 +58,15 @@ win32 : {
     RC_FILE += resource/icon/win_resource.rc \
                resource/icon/mu.ico
     ICON = resource/icon/mu.ico
+    # Enable the backend and analysiser.
+    CONFIG += backend-bass analysiser-ffmpeg
 }
 
 macx: {
     # Application icon.
     RC_FILE += resource/icon/mu.icns
     ICON = resource/icon/mu.icns
-    # Enable the backend.
+    # Enable the backend and analysiser.
     CONFIG += backend-bass analysiser-ffmpeg
     # Nearly all the audio library will use CoreAudio on Mac OS X, so import
     # CoreAudio library to LFLAGS and LIBS.

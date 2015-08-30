@@ -107,7 +107,7 @@ void KNMusicNowPlaying::reset()
         m_backend->reset();
     }
     //Clear previous the now playing icon.
-    playingMusicModel()->setPlayingIndex(QPersistentModelIndex());
+    playingMusicModel()->setPlayingIndex(QModelIndex());
     //Clear the current playing index and the analysis item.
     m_playingIndex=QPersistentModelIndex();
     m_playingAnalysisItem=KNMusicAnalysisItem();
@@ -160,10 +160,10 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
     if(m_playingProxyModel!=model)
     {
         //Check the previous model null.
-        if(m_playingProxyModel!=nullptr)
+        if(playingMusicModel()!=nullptr)
         {
             //Reset the previous proxy odel.
-            playingMusicModel()->setPlayingIndex(QPersistentModelIndex());
+            playingMusicModel()->setPlayingIndex(QModelIndex());
         }
         //Save the new proxy model.
         m_playingProxyModel=model;

@@ -118,6 +118,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Configure the progress slider.
     m_progress->setMaximum(0);
     m_progress->setWheelStep(1000);
+    m_progress->setFocusProxy(this);
     connect(m_progress, &KNProgressSlider::sliderPressed,
             [=]{m_progressPressed=true;});
     connect(m_progress, &KNProgressSlider::sliderReleased,
