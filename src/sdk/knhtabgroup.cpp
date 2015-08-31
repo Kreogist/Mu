@@ -26,7 +26,7 @@ KNHTabGroup::KNHTabGroup(QWidget *parent) :
 {
     //Configure the main layout.
     m_mainLayout->setContentsMargins(0,0,0,0);
-    m_mainLayout->setSpacing(0);
+    m_mainLayout->setSpacing(5);
     setLayout(m_mainLayout);
 
     //Add a stretch to layout to make the item right align.

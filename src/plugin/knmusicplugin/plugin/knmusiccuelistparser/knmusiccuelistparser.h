@@ -23,7 +23,7 @@
 
 /*!
  * \brief The KNMusicCueListParser class provides a CUE sheet list parser. It
- * can parse a CUE sheet to the .
+ * can parse a CUE sheet to a detail info list.
  */
 class KNMusicCueListParser : public KNMusicListParser
 {
@@ -55,6 +55,8 @@ private:
     inline void parseCommand(const QString &rawLine,
                              QString &command,
                              QString &data);
+
+    inline QString generateLine(const QString &command, const QString &data);
 
     inline qint64 textToTime(const QString &cueTimeText);
 

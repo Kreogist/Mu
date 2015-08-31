@@ -38,5 +38,6 @@
         <file>music/player/previous.png</file>
         <file>music/player/mute_false.png</file>
         <file>music/player/mute_true.png</file>
+        <file>music/detaildialog/tab_icon/albumart.png</file>
     </qresource>
 </RCC>

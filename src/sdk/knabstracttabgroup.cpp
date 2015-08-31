@@ -93,8 +93,5 @@ void KNAbstractTabGroup::onActionMapped(const int &index)
     {
         return;
     }
-    //Save the new index.
-    m_currentIndex=index;
-    //Emit the current chagned signal.
-    emit currentIndexChange(m_currentIndex);
+    setCurrentIndex(index);
 }

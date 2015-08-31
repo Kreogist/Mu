@@ -18,10 +18,15 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QTemporaryFile>
+#include <QFile>
 
 #include "knmusiccuelistparser.h"
 
 #include <QDebug>
+
+//1MB data cache copy size.
+#define DataCacheSize 1048576
 
 QHash<QString, int> KNMusicCueListParser::m_trackCommandList=
         QHash<QString, int>();
@@ -292,7 +297,129 @@ bool KNMusicCueListParser::parseList(QFile &listFile,
 
 bool KNMusicCueListParser::writeDetail(const KNMusicAnalysisItem &analysisItem)
 {
-    return false;
+    //Get the track index.
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Prepare the orignial file data and the temporary file data.
+    QTemporaryFile updatedListFile;
+    QFile listFile(detailInfo.trackFilePath);
+    //Open the list file.
+    if(!listFile.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
+    //Open the list file.
+    if(!updatedListFile.open())
+    {
+        //Close the opened music file.
+        listFile.close();
+        return false;
+    }
+    //Read the list file.
+    //Initial the list file and temporary file stream as a text file.
+    QTextStream trackStream(&listFile), temporaryStream(&updatedListFile);
+    //Read until the track index comes to the track index.
+    QString rawLine=trackStream.readLine();
+    //Check the raw line.
+    while(!rawLine.isNull())
+    {
+        //Simplified the raw line.
+        QString commandRawLine=rawLine.simplified();
+        //Generate command part and data part cache.
+        QString rawCommand, rawData;
+        //Parse the command.
+        parseCommand(commandRawLine, rawCommand, rawData);
+        //Now we are only taken care about the TRACK.
+        qDebug()<<rawCommand;
+        if(rawCommand=="TRACK")
+        {
+            //Use the trackIndex variable find the space temporarily.
+            int trackIndex=rawData.indexOf(' ');
+            //Get the track index.
+            trackIndex=
+                    (trackIndex==-1?rawData:rawData.left(trackIndex)).toInt();
+            //Check the track index.
+            if(trackIndex==detailInfo.trackIndex)
+            {
+                //Hit the track.
+                //First we have to output the raw line data.
+                temporaryStream << rawLine << '\n';
+                //Then check the detail info data.
+                //We have to write out these informations:
+                // PERFORMER Artist
+                // TITLE Name
+                QString trackData;
+                trackData.append(generateLine(
+                                     "    TITLE ",
+                                     detailInfo.textLists[Name].toString()));
+                trackData.append(generateLine(
+                                     "    PERFORMER ",
+                                     detailInfo.textLists[Artist].toString()));
+                //Write the track data to temporary file.
+                temporaryStream << trackData;
+                //Read the original file again until to INDEX, skip all the
+                //other data.
+                rawLine=trackStream.readLine();
+                //Simplified the raw line.
+                commandRawLine=rawLine.simplified();
+                //Parse the raw line.
+                parseCommand(commandRawLine, rawCommand, rawData);
+                //Read until we get the INDEX.
+                while(!rawLine.isNull() && rawCommand!="INDEX")
+                {
+                    //Continue skip the file.
+                    rawLine=trackStream.readLine();
+                    //Simplified the raw line.
+                    commandRawLine=rawLine.simplified();
+                    //Parse the raw line.
+                    parseCommand(commandRawLine, rawCommand, rawData);
+                }
+                //So now the data should be the first INDEX.
+                //Output the data and continue copy the data.
+                temporaryStream << rawLine << '\n';
+            }
+            else
+            {
+                //Simply output the data.
+                temporaryStream << rawLine << '\n';
+            }
+        }
+        else
+        {
+            //Simply output the data.
+            temporaryStream << rawLine << '\n';
+        }
+        //Read the next line.
+        rawLine=trackStream.readLine();
+    }
+    //Flush the data.
+    temporaryStream << flush;
+    //Now the data should be all done.
+    //Close the list file.
+    listFile.close();
+    //Reset the temporary file.
+    updatedListFile.reset();
+    //Reopen the list file, open as write only mode.
+    if(!listFile.open(QIODevice::WriteOnly))
+    {
+        return false;
+    }
+    //Write all the data to list file.
+    //Generate the music data cache.
+    char fileCache[DataCacheSize];
+    //Now copy all the content from the original file to temporary file.
+    int bytesRead=updatedListFile.read(fileCache, DataCacheSize);
+    while(bytesRead>0)
+    {
+        //Write the cache to the list file.
+        listFile.write(fileCache, bytesRead);
+        //Read new data from the original file to cache.
+        bytesRead=updatedListFile.read(fileCache, DataCacheSize);
+    }
+    //Close the list file and temporary file.
+    listFile.close();
+    updatedListFile.close();
+    //Written finished.
+    return true;
 }
 
 inline int KNMusicCueListParser::parseMetaCommand(const QString &command,
@@ -384,6 +511,13 @@ inline void KNMusicCueListParser::parseCommand(const QString &rawLine,
         //Or else just simplified the data.
         data=data.simplified();
     }
+}
+
+inline QString KNMusicCueListParser::generateLine(const QString &command,
+                                                  const QString &data)
+{
+    //According to the data generate the total line.
+    return data.isEmpty()?QString():command+data+"\n";
 }
 
 inline qint64 KNMusicCueListParser::textToTime(const QString &cueTimeText)

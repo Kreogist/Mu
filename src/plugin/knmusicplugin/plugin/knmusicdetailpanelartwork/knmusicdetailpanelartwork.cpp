@@ -15,29 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kncircleiconbutton.h"
 
-#ifndef KNABSTRACTMUSICPLUGIN_H
-#define KNABSTRACTMUSICPLUGIN_H
+#include "knmusicdetailpanelartwork.h"
 
-#include "kncategoryplugin.h"
-
-/*!
- * \brief The KNAbstractMusicCategoryPlugin class is the port class of the music
- * plugin. Your own music plugin should provide these function.
- */
-class KNAbstractMusicPlugin : public KNCategoryPlugin
+KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
+    KNMusicDetailDialogPanel(parent),
+    m_button(new KNCircleIconButton(this))
 {
-    Q_OBJECT
-public:
-    /*!
-     * \brief Construct a KNAbstractMusicPlugin object.
-     * \param parent The parent object.
-     */
-    KNAbstractMusicPlugin(QWidget *parent=0):KNCategoryPlugin(parent){}
+    //Configure the button.
+    m_button->setIcon(
+                QIcon(":/plugin/music/detaildialog/tab_icon/albumart.png"));
+}
 
-signals:
+QAbstractButton *KNMusicDetailPanelArtwork::tabButton()
+{
+    return m_button;
+}
 
-public slots:
-};
+void KNMusicDetailPanelArtwork::setAnalysisItem(
+        const MusicUtil::KNMusicAnalysisItem &item)
+{
+    ;
+}
 
-#endif // KNABSTRACTMUSICPLUGIN_H

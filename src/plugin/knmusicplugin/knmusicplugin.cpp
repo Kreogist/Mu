@@ -46,6 +46,7 @@
 //Plugins
 // Detail Dialog Panels.
 #include "plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.h"
+#include "plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.h"
 // Tag Parsers.
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
@@ -97,30 +98,6 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
-    //Initial the detail dialog plugins.
-    initialDetailDialogPanel();
-    //Initial parser.
-    initialParserPlugin();
-    //Initial global menus.
-    initialSoloMenu(new KNMusicSoloMenu);
-    initialMultiMenu(new KNMusicMultiMenu);
-
-    //Initial the search.
-    initialSearch(new KNMusicSearch);
-#ifdef ENABLE_BACKEND_BASS
-    initialBackend(new KNMusicBackendBass);
-#endif
-    //Initial the now playing.
-    initialNowPlaying(new KNMusicNowPlaying);
-    //Iniital the detail tooltip.
-    initialDetailTooltip(new KNMusicDetailTooltip);
-    //Iniital the header player.
-    initialHeaderPlayer(new KNMusicHeaderPlayer);
-    //Initial the plugins.
-    initialPlaylist(new KNMusicPlaylist);
-
-    //Start working threads.
-    knMusicGlobal->startThreads();
 }
 
 KNMusicPlugin::~KNMusicPlugin()
@@ -158,6 +135,34 @@ QPixmap KNMusicPlugin::icon()
 QString KNMusicPlugin::title()
 {
     return tr("Music");
+}
+
+void KNMusicPlugin::loadPlugins()
+{
+    //Initial the detail dialog plugins.
+    initialDetailDialogPanel();
+    //Initial parser.
+    initialParserPlugin();
+    //Initial global menus.
+    initialSoloMenu(new KNMusicSoloMenu);
+    initialMultiMenu(new KNMusicMultiMenu);
+
+    //Initial the search.
+    initialSearch(new KNMusicSearch);
+#ifdef ENABLE_BACKEND_BASS
+    initialBackend(new KNMusicBackendBass);
+#endif
+    //Initial the now playing.
+    initialNowPlaying(new KNMusicNowPlaying);
+    //Iniital the detail tooltip.
+    initialDetailTooltip(new KNMusicDetailTooltip);
+    //Iniital the header player.
+    initialHeaderPlayer(new KNMusicHeaderPlayer);
+    //Initial the plugins.
+    initialPlaylist(new KNMusicPlaylist);
+
+    //Start working threads.
+    knMusicGlobal->startThreads();
 }
 
 void KNMusicPlugin::saveConfigure()
@@ -233,15 +238,13 @@ void KNMusicPlugin::initialDetailDialogPanel()
 {
     //Add panels to detail dialog.
     knMusicGlobal->detailDialog()->addPanel(new KNMusicDetailPanelOverview);
+    knMusicGlobal->detailDialog()->addPanel(new KNMusicDetailPanelArtwork);
 }
 
 void KNMusicPlugin::initialParserPlugin()
 {
     //Get the music parser.
     KNMusicParser *parser=knMusicGlobal->parser();
-
-    //Add list parsers.
-    parser->installListParser(new KNMusicCueListParser);
 
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagId3v1);
@@ -252,6 +255,9 @@ void KNMusicPlugin::initialParserPlugin()
 #ifdef ENABLED_FFMPEG_ANALYSISER
     parser->installAnalysiser(new KNMusicFfmpegAnalysiser);
 #endif
+
+    //Add list parsers.
+    parser->installListParser(new KNMusicCueListParser);
 }
 
 void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)

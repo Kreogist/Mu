@@ -420,8 +420,8 @@ bool KNMusicTagApev2::writeTag(const KNMusicAnalysisItem &analysisItem)
     }
     //Generate a temporary file, write the new data to the temporary file.
     QTemporaryFile updatedTagFile;
-    //Open the temporary file in write only mode, if we cannot open the
-    //temporary file it will be failed to write the tag.
+    //Open the temporary file, if we cannot open the temporary file it will be
+    //failed to write the tag.
     if(!updatedTagFile.open())
     {
         //Close the opened music file.
@@ -519,7 +519,7 @@ bool KNMusicTagApev2::writeTag(const KNMusicAnalysisItem &analysisItem)
     {
         //Write the cache to music file.
         musicFile.write(fileCache, bytesRead);
-        //Read new data from cache to the original file.
+        //Read new data from the original file to cache.
         bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
     }
     //Close the music file and temporary file.

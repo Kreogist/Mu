@@ -68,6 +68,11 @@ public:
      */
     QString title() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::loadPlugins().
+     */
+    void loadPlugins() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -83,6 +88,9 @@ public slots:
     void onArgumentsAvailable(const QStringList &data) Q_DECL_OVERRIDE;
 
 protected:
+    /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::resizeEvent().
+     */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:

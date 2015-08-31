@@ -112,6 +112,8 @@ void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
 
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 {
+    //Load the plugins of the plugin.
+    plugin->loadPlugins();
     //Set the category plugin.
     m_header->setCategoryPlugin(plugin);
     //Set the category to be the main widget.

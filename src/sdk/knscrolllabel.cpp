@@ -23,7 +23,7 @@
 
 #define GlowRadius 9.0
 #define ShortWaiting 2500
-#define LongWaiting 5000
+#define LongWaiting 3000
 
 KNScrollLabel::KNScrollLabel(QWidget *parent) :
     QWidget(parent),
@@ -42,7 +42,7 @@ KNScrollLabel::KNScrollLabel(QWidget *parent) :
                                   QSizePolicy::Label));
 
     //Configure the move and waiting timer.
-    m_move->setInterval(50);
+    m_move->setInterval(33);
     connect(m_move, &QTimer::timeout, this, &KNScrollLabel::moveText);
     m_wait->setInterval(LongWaiting);
     m_wait->setSingleShot(true);

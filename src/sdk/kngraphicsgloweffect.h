@@ -21,16 +21,44 @@
 
 #include <QGraphicsEffect>
 
+/*!
+ * \brief The KNGraphicsGlowEffect class provides a glow effect. This class is
+ * referenced from Tianchi Qt Shared Library Project
+ * (https://github.com/qtcn/tianchi). This effect will increase the size of the
+ * original widget.
+ */
 class KNGraphicsGlowEffect : public QGraphicsEffect
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNGraphicsGlowEffect graphics effect.
+     * \param parent The parent object.
+     */
     explicit KNGraphicsGlowEffect(QObject *parent = 0);
 
+    /*!
+     * \brief Get the radius of the glow.
+     * \return The glow radius. It will be 0 as default.
+     */
     qreal radius() const;
+
+    /*!
+     * \brief Set the radius of the glow.
+     * \param radius The new glow radius.
+     */
     void setRadius(const qreal &radius);
 
+    /*!
+     * \brief Get the glow color.
+     * \return The glow color. It will be white(#FFFFFFFF) as default.
+     */
     QColor color() const;
+
+    /*!
+     * \brief Set the glow color.
+     * \param color The new glow color.
+     */
     void setColor(const QColor &color);
 
     /*!

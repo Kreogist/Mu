@@ -16,28 +16,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNABSTRACTMUSICPLUGIN_H
-#define KNABSTRACTMUSICPLUGIN_H
+#ifndef KNMUSICDETAILPANELARTWORK_H
+#define KNMUSICDETAILPANELARTWORK_H
 
-#include "kncategoryplugin.h"
+#include "knmusicdetaildialogpanel.h"
 
-/*!
- * \brief The KNAbstractMusicCategoryPlugin class is the port class of the music
- * plugin. Your own music plugin should provide these function.
- */
-class KNAbstractMusicPlugin : public KNCategoryPlugin
+class KNCircleIconButton;
+
+class KNMusicDetailPanelArtwork : public KNMusicDetailDialogPanel
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNAbstractMusicPlugin object.
-     * \param parent The parent object.
+     * \brief Construct a KNMusicDetailPanelArtwork widget.
+     * \param parent The parent widget.
      */
-    KNAbstractMusicPlugin(QWidget *parent=0):KNCategoryPlugin(parent){}
+    explicit KNMusicDetailPanelArtwork(QWidget *parent = 0);
+
+    /*!
+     * \brief Reimplement from KNMusicDetailDialogPanel::tabButton.
+     */
+    QAbstractButton *tabButton() Q_DECL_OVERRIDE;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplement from KNMusicDetailDialogPanel::setAnalysisItem.
+     */
+    void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)
+    Q_DECL_OVERRIDE;
+
+private:
+    KNCircleIconButton *m_button;
 };
 
-#endif // KNABSTRACTMUSICPLUGIN_H
+#endif // KNMUSICDETAILPANELARTWORK_H

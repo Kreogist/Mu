@@ -51,7 +51,16 @@ public:
      */
     virtual QPixmap icon()=0;
 
+    /*!
+     * \brief Get the title of the cateogry.
+     * \return The category plugin title.
+     */
     virtual QString title()=0;
+
+    /*!
+     * \brief Load the plugins modules of the current plugin.
+     */
+    virtual void loadPlugins()=0;
 
 signals:
 
