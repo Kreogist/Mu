@@ -50,6 +50,8 @@
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
 #include "plugin/knmusictagapev2/knmusictagapev2.h"
+// List Parsers.
+#include "plugin/knmusiccuelistparser/knmusiccuelistparser.h"
 // Solo Music Menu.
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 // Multi Music Menu.
@@ -237,6 +239,9 @@ void KNMusicPlugin::initialParserPlugin()
 {
     //Get the music parser.
     KNMusicParser *parser=knMusicGlobal->parser();
+
+    //Add list parsers.
+    parser->installListParser(new KNMusicCueListParser);
 
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagId3v1);

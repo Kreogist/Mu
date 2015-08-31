@@ -11,6 +11,7 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 
 ## Dependencies
 * Qt (>=5.5)
+* FFMpeg
 
 ## Special Thanks
 * [WangBin](https://github.com/wang-bin)

@@ -165,39 +165,48 @@ void KNMusicParser::parseTrackList(const QString &filePath,
             //the right parser to do this.
             if((*i)->parseList(listFile, listDetailInfo))
             {
+                //Generate the current file path.
+                QString currentMusicFile;
                 //Parse the music file which the list point to.
-                //Step 1, prepare the analysis info.
+                //Prepare the analysis info.
                 KNMusicAnalysisItem currentItem;
-                //Parse the music file.
-                parseFile(listDetailInfo.musicFilePath, currentItem);
-                //Generate the template detail info.
+                //Prepare the detail info.
                 KNMusicDetailInfo &musicDetailInfo=currentItem.detailInfo;
-                musicDetailInfo.trackFilePath=filePath;
-                //Set the meta data to the template detail info.
-                while(!listDetailInfo.metaData.isEmpty())
-                {
-                    int firstKey=listDetailInfo.metaData.firstKey();
-                    musicDetailInfo.textLists[firstKey]=
-                            listDetailInfo.metaData.take(firstKey);
-                }
                 //Set track count.
                 musicDetailInfo.textLists[TrackCount]=
                         QString::number(listDetailInfo.trackList.size());
-                //Generate track data.
-                while(!listDetailInfo.trackList.isEmpty())
+                //Set the track file path.
+                musicDetailInfo.trackFilePath=filePath;
+                //Check all the track data.
+                for(auto track : listDetailInfo.trackList)
                 {
-                    //Take the track info.
-                    KNMusicListTrackDetailInfo track=
-                            listDetailInfo.trackList.takeFirst();
+                    //Check whether the file path change.
+                    if(currentMusicFile!=track.musicFilePath)
+                    {
+                        //Update the current music file.
+                        currentMusicFile=track.musicFilePath;
+                        //Update the current item.
+                        //Parse the music file.
+                        parseFile(currentMusicFile, currentItem);
+                        //Set the meta data to the template detail info.
+                        for(auto j=listDetailInfo.metaData.begin();
+                            j!=listDetailInfo.metaData.end();
+                            ++j)
+                        {
+                            //Set the global metadata to detail info.
+                            musicDetailInfo.textLists[j.key()]=j.value();
+                        }
+                    }
                     //Generate current track info from template.
                     KNMusicAnalysisItem trackItem=currentItem;
                     KNMusicDetailInfo &trackInfo=trackItem.detailInfo;
                     //Set the text data.
-                    while(!track.metaData.isEmpty())
+                    for(auto j=track.metaData.begin();
+                        j!=track.metaData.end();
+                        ++j)
                     {
-                        int firstKey=track.metaData.firstKey();
-                        trackInfo.textLists[firstKey]=
-                                track.metaData.take(firstKey);
+                        //Set the track metadata to detail info.
+                        trackInfo.textLists[j.key()]=j.value();
                     }
                     //Set the track number.
                     trackInfo.trackIndex=track.index;
@@ -215,6 +224,7 @@ void KNMusicParser::parseTrackList(const QString &filePath,
                     {
                         trackInfo.duration=0;
                     }
+                    //Update the time text.
                     trackInfo.textLists[Time]=
                             KNMusicUtil::msecondToString(trackInfo.duration);
                     //Add track item to detail list.
@@ -318,39 +328,26 @@ bool KNMusicParser::reanalysisItem(KNMusicAnalysisItem &analysisItem)
         return false;
     }
     //Get the original track index.
-    int targetIndex=detailInfo.trackIndex,
-        startIndex=0, endIndex=trackItemList.size()-1;
-    //Find the track index in the new track item list.
-    while(endIndex-startIndex>0)
+    int targetIndex=detailInfo.trackIndex;
+    bool hitTarget=false;
+    //Find the target index.
+    for(auto i : trackItemList)
     {
-        //Get the center item index, and the center item track index.
-        int centerIndex=(endIndex+startIndex)>>1,
-            trackIndex=trackItemList.at(centerIndex).detailInfo.trackIndex;
-        //Check if we hit the target.
-        if(trackIndex==targetIndex)
+        //If the index is the i.
+        if(i.detailInfo.trackIndex==targetIndex)
         {
-            //Get the copy of the analysis item.
-            analysisItem=trackItemList.at(centerIndex);
-            //Exit the item.
+            //Hit the target index.
+            analysisItem=i;
+            //Update the hit target flag.
+            hitTarget=true;
+            //Exit.
             break;
         }
-        //Tweak the start and the end.
-        if(trackIndex>targetIndex)
-        {
-            startIndex=centerIndex;
-        }
-        else
-        {
-            endIndex=centerIndex;
-        }
     }
-    //Now the start and end index should be the same, and we have to check the
-    //index is the same between the track list item at the startIndex and the
-    //analysisItem. Because the copy might not been executed. At this kind of
-    //moment, it will be false.
-    if(trackItemList.at(startIndex).detailInfo.trackIndex!=
-            analysisItem.detailInfo.trackIndex)
+    //Check whether we hit the target.
+    if(!hitTarget)
     {
+        //Failed to hit the target.
         return false;
     }
     //Parse the album art.

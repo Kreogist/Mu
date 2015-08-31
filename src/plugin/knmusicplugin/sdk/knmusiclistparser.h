@@ -49,6 +49,13 @@ public:
      */
     virtual bool parseList(QFile &listFile,
                            KNMusicListDetailInfo &listDetailInfo)=0;
+
+    /*!
+     * \brief Write a detail information to the list file.
+     * \param analysisItem The information of the music track.
+     * \return If the information written successfully, then return true.
+     */
+    virtual bool writeDetail(const KNMusicAnalysisItem &analysisItem)=0;
 };
 
 #endif // KNMUSICLISTPARSER_H

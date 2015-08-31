@@ -142,10 +142,13 @@ namespace MusicUtil
         //Track time.
         qint64 startPosition;
         qint64 trackDuration;
+        //File path.
+        QString musicFilePath;
         //Metadata map.
         QMap<int, QString> metaData;
         //Initial values.
         KNMusicListTrackDetailInfo() :
+            index(-1),
             startPosition(-1),
             trackDuration(-1)
         {
@@ -153,8 +156,6 @@ namespace MusicUtil
     };
     struct KNMusicListDetailInfo
     {
-        //Properties.
-        QString musicFilePath;
         //Metadata map.
         QMap<int, QString> metaData;
         //Track list.
