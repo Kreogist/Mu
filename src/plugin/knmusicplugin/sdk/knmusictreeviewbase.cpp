@@ -24,6 +24,7 @@
 #include "knthememanager.h"
 #include "knconnectionhandler.h"
 
+#include "knmusicsearchbase.h"
 #include "knmusicproxymodel.h"
 #include "knmusicmodel.h"
 #include "knmusicnowplayingbase.h"
@@ -43,8 +44,7 @@
 KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     QTreeView(parent),
     m_musicTab(tab),
-    m_mouseIn(generateTimeLine(0x20)),
-    m_mouseOut(generateTimeLine(0)),
+    m_mouseAnime(new QTimeLine(200, this)),
     m_animate(true),
     m_proxyModel(nullptr),
     m_initialLoad(true),
@@ -71,6 +71,13 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     verticalScrollBar()->setSingleStep(4);
     verticalScrollBar()->setPageStep(4);
 
+    //Configure the time line.
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    m_mouseAnime->setUpdateInterval(10);
+    //Link the time line.
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMusicTreeViewBase::onActionMouseInOut);
+
     //Generate the music tree view animation header.
     KNMusicTreeViewHeader *header=new KNMusicTreeViewHeader(this);
     //Link the reqirement.
@@ -84,6 +91,20 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
                              new KNMusicRatingDelegate(this));
     setItemDelegateForColumn(AlbumRating,
                              new KNMusicRatingDelegate(this));
+
+    //Set the search shortcut.
+    QAction *searchAction=new QAction(this);
+    searchAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    connect(searchAction, &QAction::triggered,
+            [=]
+            {
+                //Check whether the search plugin is loaded.
+                if(knMusicGlobal->search())
+                {
+                    knMusicGlobal->search()->onActionSearchShortcut(this);
+                }
+            });
+    addAction(searchAction);
 
     //Link the tree view signal and slot.
     connect(this, &KNMusicTreeViewBase::activated,
@@ -107,7 +128,7 @@ void KNMusicTreeViewBase::enterEvent(QEvent *event)
     if(m_animate)
     {
         //Start mouse in anime.
-        startAnime(m_mouseIn);
+        startAnime(MaxOpacity);
     }
 }
 
@@ -119,7 +140,7 @@ void KNMusicTreeViewBase::leaveEvent(QEvent *event)
     if(m_animate)
     {
         //Start mouse leave anime.
-        startAnime(m_mouseOut);
+        startAnime(0);
     }
 }
 
@@ -218,56 +239,13 @@ bool KNMusicTreeViewBase::event(QEvent *event)
     case QEvent::ToolTip:
     case QEvent::ToolTipChange:
     {
-        //If the detail tooltip is not set, ignore the tooltip request.
-        if(!knMusicGlobal->detailTooltip())
-        {
-            return false;
-        }
         //Cast the event as a help event.
         QHelpEvent *helpEvent=static_cast<QHelpEvent *>(event);
         //Get the position of the tooltip index.
         QPoint indexPosition=QPoint(helpEvent->pos().x(),
                                     helpEvent->pos().y()-header()->height());
-        //If the position is in the header, hide the detail tooltip.
-        if(indexPosition.y() < 0)
-        {
-            //Hide the detail tooltip widget.
-            knMusicGlobal->detailTooltip()->hide();
-            //Finished.
-            return false;
-        }
-        //Locate index at the position.
-        QModelIndex mouseIndex=indexAt(indexPosition);
-        //Check the validation of the index.
-        if(mouseIndex.isValid())
-        {
-            //If the position is on the vertical scrollbar, then hide the
-            //tooltip widget.
-            if(verticalScrollBar()->isVisible() &&
-                    indexPosition.x() > (viewport()->rect().right() -
-                                         verticalScrollBar()->width()))
-            {
-                //Hide the tooltip.
-                knMusicGlobal->detailTooltip()->hide();
-                //Finished.
-                return true;
-            }
-            //We don't need to check the proxy model. Because the indexAt() will
-            //get a invalid index if the proxy model is null.
-            //Set the index of the current music model to the detail tooltip.
-            knMusicGlobal->detailTooltip()->setPreviewIndex(
-                        musicModel(),
-                        m_proxyModel->mapToSource(mouseIndex));
-            //Show the tooltip at the specific position.
-            QRect indexRect=visualRect(mouseIndex);
-            knMusicGlobal->detailTooltip()->showTooltip(
-                        mapToGlobal(
-                            QPoint(helpEvent->pos().x(),
-                                   indexRect.y()+(indexRect.height()>>1))));
-            //Give the focus back to this tree view.
-            setFocus();
-        }
-        return true;
+        //Show the detail tooltip at the index position
+        return showDetailTooltip(indexPosition);
     }
     default:
         //Process other kinds of events.
@@ -345,21 +323,6 @@ void KNMusicTreeViewBase::renameCurrent()
     ;
 }
 
-inline QTimeLine *KNMusicTreeViewBase::generateTimeLine(const int &endFrame)
-{
-    //Generate the time line.
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    //Configure the time line.
-    timeLine->setEndFrame(endFrame);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(10);
-    //Link the time line.
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNMusicTreeViewBase::onActionMouseInOut);
-    //Return the time line.
-    return timeLine;
-}
-
 void KNMusicTreeViewBase::resetHeaderState()
 {
     //Hide all the data column first.
@@ -388,15 +351,16 @@ void KNMusicTreeViewBase::resetHeaderState()
     setColumnWidth(Name, 200);
 }
 
-inline void KNMusicTreeViewBase::startAnime(QTimeLine *timeLine)
+inline void KNMusicTreeViewBase::startAnime(const int &endFrame)
 {
-    //Stop all the animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
+    //Stop the mouse animations.
+    m_mouseAnime->stop();
     //Set the parameter of the time line.
-    timeLine->setStartFrame(palette().color(QPalette::AlternateBase).alpha());
+    m_mouseAnime->setFrameRange(
+                palette().color(QPalette::AlternateBase).alpha(),
+                endFrame);
     //Start the time line.
-    timeLine->start();
+    m_mouseAnime->start();
 }
 
 void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
@@ -500,9 +464,53 @@ void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
     }
 }
 
-void KNMusicTreeViewBase::showDetailTooltip(const QModelIndex &index)
+inline bool KNMusicTreeViewBase::showDetailTooltip(const QPoint &indexPosition)
 {
-    ;
+    //If the detail tooltip is not set, ignore the tooltip request.
+    if(!knMusicGlobal->detailTooltip())
+    {
+        return false;
+    }
+    //If the position is in the header, hide the detail tooltip.
+    if(indexPosition.y() < 0)
+    {
+        //Hide the detail tooltip widget.
+        knMusicGlobal->detailTooltip()->hide();
+        //Finished.
+        return false;
+    }
+    //Locate index at the position.
+    QModelIndex mouseIndex=indexAt(indexPosition);
+    //Check the validation of the index.
+    if(mouseIndex.isValid())
+    {
+        //If the position is on the vertical scrollbar, then hide the
+        //tooltip widget.
+        if(verticalScrollBar()->isVisible() &&
+                indexPosition.x() > (viewport()->rect().right() -
+                                     verticalScrollBar()->width()))
+        {
+            //Hide the tooltip.
+            knMusicGlobal->detailTooltip()->hide();
+            //Finished.
+            return true;
+        }
+        //We don't need to check the proxy model. Because the indexAt() will
+        //get a invalid index if the proxy model is null.
+        //Set the index of the current music model to the detail tooltip.
+        knMusicGlobal->detailTooltip()->setPreviewIndex(
+                    musicModel(),
+                    m_proxyModel->mapToSource(mouseIndex));
+        //Show the tooltip at the specific position.
+        QRect indexRect=visualRect(mouseIndex);
+        knMusicGlobal->detailTooltip()->showTooltip(
+                    mapToGlobal(
+                        QPoint(indexPosition.x(),
+                               indexRect.y()+(indexRect.height()>>1))));
+        //Give the focus back to this tree view.
+        setFocus();
+    }
+    return true;
 }
 
 bool KNMusicTreeViewBase::animate() const

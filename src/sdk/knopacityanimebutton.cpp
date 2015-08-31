@@ -25,15 +25,18 @@
 
 KNOpacityAnimeButton::KNOpacityAnimeButton(QWidget *parent) :
     QAbstractButton(parent),
-    m_mouseIn(generateTimeLine(HoverOpacity)),
-    m_mouseOut(generateTimeLine(BaseOpacity)),
-    m_mouseDown(generateTimeLine(1000)),
-    m_mouseUp(generateTimeLine(HoverOpacity)),
+    m_mouseAnime(new QTimeLine(200, this)),
     m_imageOpacity(BaseOpacity)
 {
     //Set properties.
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+
+    //Configure the time line.
+    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNOpacityAnimeButton::onActionOpacityChanged);
 }
 
 void KNOpacityAnimeButton::paintEvent(QPaintEvent *event)
@@ -70,7 +73,7 @@ void KNOpacityAnimeButton::enterEvent(QEvent *event)
     //Start the original enter event.
     QAbstractButton::enterEvent(event);
     //Start the mouse in animation.
-    startAnime(m_mouseIn);
+    startAnime(HoverOpacity);
 }
 
 void KNOpacityAnimeButton::leaveEvent(QEvent *event)
@@ -78,7 +81,7 @@ void KNOpacityAnimeButton::leaveEvent(QEvent *event)
     //Start the original leave event.
     QAbstractButton::leaveEvent(event);
     //Start the mouse out animation.
-    startAnime(m_mouseOut);
+    startAnime(BaseOpacity);
 }
 
 void KNOpacityAnimeButton::focusInEvent(QFocusEvent *event)
@@ -86,7 +89,7 @@ void KNOpacityAnimeButton::focusInEvent(QFocusEvent *event)
     //Start the original enter event.
     QAbstractButton::focusInEvent(event);
     //Start the mouse in animation.
-    startAnime(m_mouseIn);
+    startAnime(HoverOpacity);
 }
 
 void KNOpacityAnimeButton::focusOutEvent(QFocusEvent *event)
@@ -94,7 +97,7 @@ void KNOpacityAnimeButton::focusOutEvent(QFocusEvent *event)
     //Start the original enter event.
     QAbstractButton::focusOutEvent(event);
     //Start the mouse in animation.
-    startAnime(m_mouseOut);
+    startAnime(BaseOpacity);
 }
 
 void KNOpacityAnimeButton::mousePressEvent(QMouseEvent *event)
@@ -102,7 +105,7 @@ void KNOpacityAnimeButton::mousePressEvent(QMouseEvent *event)
     //Start the original enter event.
     QAbstractButton::mousePressEvent(event);
     //Start the mouse down animation.
-    startAnime(m_mouseDown);
+    startAnime(1000);
 }
 
 void KNOpacityAnimeButton::mouseReleaseEvent(QMouseEvent *event)
@@ -110,7 +113,7 @@ void KNOpacityAnimeButton::mouseReleaseEvent(QMouseEvent *event)
     //Start the original enter event.
     QAbstractButton::mouseReleaseEvent(event);
     //Start the mouse down animation.
-    startAnime(m_mouseUp);
+    startAnime(HoverOpacity);
 }
 
 void KNOpacityAnimeButton::onActionOpacityChanged(const int &opacity)
@@ -121,27 +124,12 @@ void KNOpacityAnimeButton::onActionOpacityChanged(const int &opacity)
     update();
 }
 
-void KNOpacityAnimeButton::startAnime(QTimeLine *timeLine)
+inline void KNOpacityAnimeButton::startAnime(const int &endFrame)
 {
-    //Stop all time line.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    m_mouseDown->stop();
-    m_mouseUp->stop();
+    //Stop the time line.
+    m_mouseAnime->stop();
     //Set the parameter of the time line.
-    timeLine->setStartFrame(m_imageOpacity);
+    m_mouseAnime->setFrameRange(m_imageOpacity, endFrame);
     //Start the time line.
-    timeLine->start();
+    m_mouseAnime->start();
 }
-
-QTimeLine *KNOpacityAnimeButton::generateTimeLine(const int &endFrame)
-{
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    timeLine->setEndFrame(endFrame);
-    timeLine->setUpdateInterval(10);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNOpacityAnimeButton::onActionOpacityChanged);
-    return timeLine;
-}
-

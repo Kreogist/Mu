@@ -18,7 +18,6 @@
 #include <QCoreApplication>
 #include <QInputMethodEvent>
 #include <QTextLayout>
-#include <QAction>
 
 #include "knsearchbox.h"
 #include "knlocalemanager.h"
@@ -33,17 +32,10 @@
 KNMusicSearch::KNMusicSearch(QObject *parent) :
     KNMusicSearchBase(parent),
     m_searchBox(new KNSearchBox()),
-    m_engine(new KNMusicSearchSyntaxEngine(this)),
-    m_activateAction(new QAction(this))
+    m_engine(new KNMusicSearchSyntaxEngine(this))
 {
     //Configure the search box.
     m_searchBox->setMinimumWidth(220);
-    //Configure the action.
-    m_activateAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
-    m_activateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    //Link the activate action to the line edit.
-    connect(m_activateAction, &QAction::triggered,
-            [=]{m_searchBox->setFocus();});
 
     //Link the search box to the search actions.
     connect(m_searchBox, &KNSearchBox::textChanged,
@@ -73,11 +65,6 @@ QList<KNMusicSearchBlock> KNMusicSearch::rules()
     return m_searchBlockList;
 }
 
-QAction *KNMusicSearch::activateAction()
-{
-    return m_activateAction;
-}
-
 void KNMusicSearch::search(const QList<KNMusicSearchBlock> &blocks)
 {
     //Save the new blocks.
@@ -90,6 +77,14 @@ void KNMusicSearch::search(const QList<KNMusicSearchBlock> &blocks)
     m_searchBox->blockSignals(false);
     //Ask to search the data.
     emit requireSearch();
+}
+
+void KNMusicSearch::onActionSearchShortcut(QWidget *sourceWidget)
+{
+    //Set the source widget.
+    m_searchBox->setFocusSource(sourceWidget);
+    //Set the focus to search box.
+    m_searchBox->setFocus();
 }
 
 void KNMusicSearch::retranslate()

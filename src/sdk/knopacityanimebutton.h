@@ -89,9 +89,8 @@ private slots:
     void onActionOpacityChanged(const int &opacity);
 
 private:
-    inline void startAnime(QTimeLine *timeLine);
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseDown, *m_mouseUp;
+    inline void startAnime(const int &endFrame);
+    QTimeLine *m_mouseAnime;
     qreal m_imageOpacity;
 };
 

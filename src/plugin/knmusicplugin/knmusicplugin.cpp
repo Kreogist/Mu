@@ -272,8 +272,6 @@ void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
     search->setParent(this);
     //Add the widget to the header widget.
     m_headerRightLayout->addWidget(search->widget());
-    //Set the activate action of the content widget.
-    m_switcher->addAction(search->activateAction());
     //Set the search to music global.
     knMusicGlobal->setSearch(search);
 }

@@ -54,12 +54,6 @@ public:
      */
     virtual QList<KNMusicSearchBlock> rules()=0;
 
-    /*!
-     * \brief Get the search action for the content widget.
-     * \return The search box active action.
-     */
-    virtual QAction *activateAction()=0;
-
 signals:
     /*!
      * \brief When the search rules update, this signal will be emitted.
@@ -73,6 +67,15 @@ public slots:
      * \param blocks The search rule blocks.
      */
     virtual void search(const QList<KNMusicSearchBlock> &blocks)=0;
+
+    /*!
+     * \brief When the user pressed shortcut key at somewhere else, they can use
+     * this slot to set the focus source widget and start searching.
+     * When user hit ESC, it will automatically give the focus back to the
+     * source widget.
+     * \param sourceWidget The widget where the focus comes from.
+     */
+    virtual void onActionSearchShortcut(QWidget *sourceWidget)=0;
 };
 
 #endif // KNMUSICSEARCHBASE_H

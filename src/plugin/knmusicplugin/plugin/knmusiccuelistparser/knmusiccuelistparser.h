@@ -21,10 +21,18 @@
 
 #include "knmusiclistparser.h"
 
+/*!
+ * \brief The KNMusicCueListParser class provides a CUE sheet list parser. It
+ * can parse a CUE sheet to the .
+ */
 class KNMusicCueListParser : public KNMusicListParser
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicCueListParser object.
+     * \param parent The parent object.
+     */
     explicit KNMusicCueListParser(QObject *parent = 0);
 
     /*!

@@ -16,11 +16,14 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
+#include <QKeyEvent>
 #include <QTimeLine>
 
 #include "knthememanager.h"
 
 #include "knsearchbox.h"
+
+#include <QDebug>
 
 #define SearchBoxHeight 20
 #define SearchBoxIconX 3
@@ -34,7 +37,8 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     m_searchIcon(QPixmap("://public/search.png")),
     m_baseColor(QColor(0,0,0,0)),
     m_mouseInOut(generateTimeLine()),
-    m_focusInOut(generateTimeLine())
+    m_focusInOut(generateTimeLine()),
+    m_focusSource(nullptr)
 {
     setObjectName("SearchBox");
     //Set properties.
@@ -127,6 +131,25 @@ void KNSearchBox::paintEvent(QPaintEvent *event)
     QLineEdit::paintEvent(event);
 }
 
+void KNSearchBox::keyPressEvent(QKeyEvent *event)
+{
+    //If pressed escape, means the user want to lose the focus.
+    if(event->key()==Qt::Key_Escape)
+    {
+        //Check the focus source widget.
+        if(m_focusSource!=nullptr)
+        {
+            //Give the focus to the source widget.
+            m_focusSource->setFocus(Qt::MouseFocusReason);
+            //Clear the source widget pointer.
+            m_focusSource=nullptr;
+        }
+        return;
+    }
+    //Or else, do the original one.
+    QLineEdit::keyPressEvent(event);
+}
+
 void KNSearchBox::onActionThemeChanged()
 {
     //Get the palette from the theme manager.
@@ -188,6 +211,16 @@ void KNSearchBox::startAnime(QTimeLine *timeLine, const int &end)
     timeLine->setFrameRange(m_baseColor.value(), end);
     //Start the time line.
     timeLine->start();
+}
+
+QWidget *KNSearchBox::focusSource() const
+{
+    return m_focusSource;
+}
+
+void KNSearchBox::setFocusSource(QWidget *focusSource)
+{
+    m_focusSource = focusSource;
 }
 
 QPixmap KNSearchBox::searchIcon() const

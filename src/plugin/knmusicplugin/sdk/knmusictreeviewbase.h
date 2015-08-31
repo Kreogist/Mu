@@ -127,6 +127,9 @@ protected:
      */
     bool event(QEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplement from QTreeView::wheelEvent().
+     */
     void wheelEvent(QWheelEvent *event);
 
 protected slots:
@@ -144,15 +147,14 @@ private slots:
     void renameCurrent();
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
+    inline void startAnime(const int &endFrame);
     inline void playIndex(const QModelIndex &index);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
-    void showDetailTooltip(const QModelIndex &index);
+    bool showDetailTooltip(const QPoint &indexPosition);
 
     KNMusicTab *m_musicTab;
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    QTimeLine *m_mouseAnime;
     bool m_animate;
     KNMusicProxyModel *m_proxyModel;
 
