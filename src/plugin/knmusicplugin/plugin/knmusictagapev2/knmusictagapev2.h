@@ -66,12 +66,12 @@ private:
     struct APETagItem
     {
         QString key;
-        quint32 flag;
         QByteArray value;
+        quint32 flag;
         APETagItem() :
             key(QString()),
-            flag(0),
-            value(QByteArray())
+            value(QByteArray()),
+            flag(0)
         {
         }
     };

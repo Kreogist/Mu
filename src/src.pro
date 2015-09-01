@@ -37,6 +37,9 @@ TRANSLATIONS += \
 
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
+msvc: {
+    QMAKE_CXXFLAGS_RELEASE += -GL -Qpar -Qpar-report:1  -favor:INTEL64 -LTCG
+}
 gcc: {
     CONFIG += mmx sse sse2 sse3
     QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3 -finline-functions
@@ -53,13 +56,13 @@ gcc: {
 }
 
 # Platform Specific Configuration.
-win32 : {
+win : {
     # Application icon.
     RC_FILE += resource/icon/win_resource.rc \
                resource/icon/mu.ico
     ICON = resource/icon/mu.ico
     # Enable the backend and analysiser.
-    CONFIG += backend-bass analysiser-ffmpeg
+    # CONFIG += backend-bass analysiser-ffmpeg
 }
 
 macx: {

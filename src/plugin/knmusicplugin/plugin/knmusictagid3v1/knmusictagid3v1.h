@@ -60,8 +60,13 @@ private:
     struct ID3v1Struct
     {
         QString tags[5];
-        int track=-1;
-        int genreIndex=-1;
+        int track;
+        int genreIndex;
+        ID3v1Struct() :
+            track(-1),
+            genreIndex(-1)
+        {
+        }
     };
 
     inline void parseRawData(char *rawTagData, ID3v1Struct &tagData);

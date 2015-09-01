@@ -98,16 +98,18 @@ protected:
      */
     struct ID3v2Header
     {
+        quint32 size;
         quint8 major;
         quint8 minor;
-        quint32 size;
         quint8 flag;
         ID3v2Header() :
-            major(0),
-            minor(0),
             size(0),
             flag(0)
         {
+            //We have to initial the major and minor in this ugly way because of
+            //the fucking GCC macros/functions define under Linux.
+            major=0;
+            minor=0;
         }
     };
     /*!
@@ -116,10 +118,14 @@ protected:
      */
     struct ID3v2Frame
     {
+        quint32 size;
         char frameID[5];
         char *start;
-        quint32 size=0;
         char flags[2];
+        ID3v2Frame() :
+            size(0)
+        {
+        }
     };
     /*!
      * \brief The ID3v2DataFrame struct will store a raw ID3v2 frame data. The
@@ -130,8 +136,8 @@ protected:
      */
     struct ID3v2DataFrame
     {
-        char flags[2];
         QByteArray data;
+        char flags[2];
         ID3v2DataFrame()
         {
             //Clear the flag bytes data.
@@ -150,17 +156,17 @@ protected:
      */
     struct ID3v2FunctionSet
     {
-        int frameIDSize;
-        int frameHeaderSize;
         FrameSizeCalculator toSize;
         FrameSizeWriter writeSize;
         FlagSaver saveFlag;
+        int frameIDSize;
+        int frameHeaderSize;
         ID3v2FunctionSet() :
-            frameIDSize(0),
-            frameHeaderSize(0),
             toSize(nullptr),
             writeSize(nullptr),
-            saveFlag(nullptr)
+            saveFlag(nullptr),
+            frameIDSize(0),
+            frameHeaderSize(0)
         {
         }
     };

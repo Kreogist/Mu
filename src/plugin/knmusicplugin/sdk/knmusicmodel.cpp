@@ -429,8 +429,8 @@ void KNMusicModel::addPlayingTimes(const QPersistentModelIndex &index)
     {
         return;
     }
-    //Get the rating data index.
-    QModelIndex ratingIndex=this->index(index.row(), Rating);
+    //Get the play times data index.
+    QModelIndex ratingIndex=this->index(index.row(), Plays);
     //It's a text format data, translate it to string first, then to numberous.
     setData(ratingIndex,
             data(ratingIndex, Qt::DisplayRole).toString().toLongLong() + 1,

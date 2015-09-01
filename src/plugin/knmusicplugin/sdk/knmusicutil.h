@@ -97,33 +97,29 @@ namespace MusicUtil
     };
     struct KNMusicDetailInfo
     {
-        //Properties.
-        int trackIndex;
-        QString fileName;
+        //Tag datas.
+        QVariant textLists[MusicDataCount];
+        QString fileName;           //Properties.
         QString filePath;
         QString trackFilePath;
         QDateTime dateModified;
         QDateTime dateLastPlayed;
         QDateTime dateAdded;
         quint64 size;
-        //Music properties.
-        qint64 startPosition;
+        qint64 startPosition;       //Music properties.
         qint64 duration;
         qint64 bitRate;
         qint64 samplingRate;
-        //Image hash data.
-        QString coverImageHash;
-        //Tag datas.
-        QVariant textLists[MusicDataCount];
-        //The cannot playing flag.
-        bool cannotPlay;
+        QString coverImageHash;     //Image hash data.
+        int trackIndex;
+        bool cannotPlay;            //The cannot playing flag.
         //Initial the values
         KNMusicDetailInfo():
-            trackIndex(-1),
             startPosition(-1),
             duration(0),
             bitRate(0),
             samplingRate(0),
+            trackIndex(-1),
             cannotPlay(false)
         {
         }
@@ -132,25 +128,25 @@ namespace MusicUtil
     {
         KNMusicDetailInfo detailInfo;
         //Album art data.
-        QImage coverImage;
         QMap<QString, QList<QByteArray>> imageData;
+        QImage coverImage;
     };
     struct KNMusicListTrackDetailInfo
     {
-        //Track index.
-        int index;
+        //Metadata map.
+        QMap<int, QString> metaData;
         //Track time.
         qint64 startPosition;
         qint64 trackDuration;
         //File path.
         QString musicFilePath;
-        //Metadata map.
-        QMap<int, QString> metaData;
+        //Track index.
+        int index;
         //Initial values.
         KNMusicListTrackDetailInfo() :
-            index(-1),
             startPosition(-1),
-            trackDuration(-1)
+            trackDuration(-1),
+            index(-1)
         {
         }
     };
@@ -163,18 +159,18 @@ namespace MusicUtil
     };
     struct KNMusicSearchBlock
     {
+        //Value of the block.
+        QVariant value;
         //Index of the column or the role.
         int index;
         //Actually there's two kinds of data, so using a bool to check the
         //whether the index means a column or a property.
         bool isColumn;
-        //Value of the block.
-        QVariant value;
         //Initial value.
         KNMusicSearchBlock():
+            value(QVariant()),
             index(-1),
-            isColumn(true),
-            value(QVariant())
+            isColumn(true)
         {
         }
     };
