@@ -279,6 +279,13 @@ void KNMusicBackendBassThread::setPosition(const qint64 &position)
     {
         return;
     }
+    //If the state is stopped and the position is not 0, then changed the state
+    //to pause.
+    if(m_state==Stopped && position!=0)
+    {
+        //Change to paused.
+        setPlayingState(Paused);
+    }
     //Change the position, the unit of the position should be translate into
     //second.
     BASS_ChannelSetPosition(

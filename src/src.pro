@@ -56,13 +56,13 @@ gcc: {
 }
 
 # Platform Specific Configuration.
-win : {
+win32 : {
     # Application icon.
     RC_FILE += resource/icon/win_resource.rc \
                resource/icon/mu.ico
     ICON = resource/icon/mu.ico
     # Enable the backend and analysiser.
-    # CONFIG += backend-bass analysiser-ffmpeg
+    CONFIG += backend-bass analysiser-ffmpeg
 }
 
 macx: {

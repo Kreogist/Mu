@@ -133,6 +133,7 @@ private slots:
 
 private:
     inline void resetShadowModel();
+    inline void resetCurrentPlaying();
     inline void playNextRow(bool noLoopMode=false);
 
     KNMusicBackend *m_backend;

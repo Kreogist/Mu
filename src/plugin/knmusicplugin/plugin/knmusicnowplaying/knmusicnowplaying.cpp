@@ -97,20 +97,12 @@ KNMusicAnalysisItem KNMusicNowPlaying::playingItem()
 
 void KNMusicNowPlaying::reset()
 {
-    //Emit now playing reset signal first.
-    emit nowPlayingReset();
-    //To reset the now playing, clear the backend first.
-    //Check whether the backend is valid.
-    if(m_backend)
-    {
-        //Reset the backend.
-        m_backend->reset();
-    }
-    //Clear previous the now playing icon.
-    playingMusicModel()->setPlayingIndex(QModelIndex());
-    //Clear the current playing index and the analysis item.
-    m_playingIndex=QPersistentModelIndex();
-    m_playingAnalysisItem=KNMusicAnalysisItem();
+    //Reset current playing.
+    resetCurrentPlaying();
+    //Reset the shadow playing model.
+    resetShadowModel();
+    //Reset the playing models.
+    m_playingProxyModel=nullptr;
 }
 
 void KNMusicNowPlaying::loadConfigure()
@@ -156,6 +148,7 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
                                      int row,
                                      KNMusicTab *tab)
 {
+    //Check the model and chech the music model of the model.
     //Clear whether the previous model is the current model.
     if(m_playingProxyModel!=model)
     {
@@ -182,7 +175,7 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
 void KNMusicNowPlaying::playNext()
 {
     //Play the next music with the repeat mode.
-    playNextRow(true);
+    playNextRow(false);
 }
 
 void KNMusicNowPlaying::playPrevious()
@@ -230,7 +223,7 @@ void KNMusicNowPlaying::playPrevious()
     if(previousProxyRow==-1)
     {
         //Clear the current playing.
-        reset();
+        resetCurrentPlaying();
         //Everything is done.
         return;
     }
@@ -309,7 +302,7 @@ void KNMusicNowPlaying::onActionModelRemoved(KNMusicModel *model)
 void KNMusicNowPlaying::onActionBackendFinished()
 {
     //Add play times on current row.
-    if(m_playingProxyModel!=nullptr && m_playingIndex.isValid())
+    if(playingMusicModel() && m_playingIndex.isValid())
     {
         //Add play times on the playing index.
         playingMusicModel()->addPlayingTimes(m_playingIndex);
@@ -328,7 +321,7 @@ void KNMusicNowPlaying::onActionBackendFinished()
         return;
     }
     //Or else, play next.
-    playNext();
+    playNextRow(false);
 }
 
 void KNMusicNowPlaying::onActionLoadSuccess()
@@ -351,10 +344,13 @@ void KNMusicNowPlaying::onActionLoadFailed()
     //Or else we stops here, let user to do the next thing.
     if(m_manualPlayed)
     {
+        //Emit reset flag.
+        resetCurrentPlaying();
+        //We don't need to tried continued.
         return;
     }
     //Play the next row without loop mode.
-    playNextRow(false);
+    playNextRow(true);
 }
 
 void KNMusicNowPlaying::playRow(const int &proxyRow)
@@ -414,7 +410,7 @@ void KNMusicNowPlaying::playRow(const int &proxyRow)
     }
 }
 
-void KNMusicNowPlaying::resetShadowModel()
+inline void KNMusicNowPlaying::resetShadowModel()
 {
     //Clear the shadow playing model.
     m_shadowPlayingModel->setSourceModel(nullptr);
@@ -422,7 +418,25 @@ void KNMusicNowPlaying::resetShadowModel()
     m_shadowPlayingModel->clearSearchBlock();
 }
 
-void KNMusicNowPlaying::playNextRow(bool noLoopMode)
+inline void KNMusicNowPlaying::resetCurrentPlaying()
+{
+    //Emit now playing reset signal first.
+    emit nowPlayingReset();
+    //To reset the now playing, clear the backend first.
+    //Check whether the backend is valid.
+    if(m_backend)
+    {
+        //Reset the backend.
+        m_backend->reset();
+    }
+    //Clear previous the now playing icon.
+    playingMusicModel()->setPlayingIndex(QModelIndex());
+    //Clear the current playing index and the analysis item.
+    m_playingIndex=QPersistentModelIndex();
+    m_playingAnalysisItem=KNMusicAnalysisItem();
+}
+
+inline void KNMusicNowPlaying::playNextRow(bool noLoopMode)
 {
     //Check the current playing index is avaliable or not.
     if(m_playingProxyModel==nullptr ||

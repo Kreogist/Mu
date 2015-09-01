@@ -553,8 +553,10 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     {
         //Get the now playing object.
         KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
-        //Check the current playing model is the current proxy.
-        if(nowPlaying->playingMusicModel()==proxyModel()->musicModel())
+        //Check the current playing model is the current proxy and the proxy
+        //model is copied from the treeview.
+        if(nowPlaying->playingMusicModel()==proxyModel()->musicModel() &&
+                nowPlaying->playingModel()==proxyModel())
         {
             //If so, shadow the proxy model.
             nowPlaying->shadowPlayingModel();
@@ -574,7 +576,7 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     //true, we have to reset the header state.
     if(m_initialLoad)
     {
-        //
+        //Reset the header state for first load.
         resetHeaderState();
         m_initialLoad=false;
     }

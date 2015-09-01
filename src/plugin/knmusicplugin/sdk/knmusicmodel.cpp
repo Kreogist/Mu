@@ -422,18 +422,18 @@ quint64 KNMusicModel::totalDuration() const
     return m_totalDuration;
 }
 
-void KNMusicModel::addPlayingTimes(const QPersistentModelIndex &index)
+void KNMusicModel::addPlayingTimes(const QPersistentModelIndex &playedRow)
 {
     //Check the index first. If it's invalid, ignore the add request.
-    if(!index.isValid())
+    if(!playedRow.isValid())
     {
         return;
     }
     //Get the play times data index.
-    QModelIndex ratingIndex=this->index(index.row(), Plays);
+    QModelIndex playedIndex=index(playedRow.row(), Plays);
     //It's a text format data, translate it to string first, then to numberous.
-    setData(ratingIndex,
-            data(ratingIndex, Qt::DisplayRole).toString().toLongLong() + 1,
+    setData(playedIndex,
+            data(playedIndex, Qt::DisplayRole).toString().toLongLong() + 1,
             Qt::DisplayRole);
 }
 

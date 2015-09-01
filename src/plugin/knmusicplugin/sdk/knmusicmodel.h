@@ -158,9 +158,9 @@ public:
 
     /*!
      * \brief Increase the playing times of one music row.
-     * \param index Any index of the row.
+     * \param playedRow Any valid index of the row.
      */
-    void addPlayingTimes(const QPersistentModelIndex &index);
+    void addPlayingTimes(const QPersistentModelIndex &playedRow);
 
     /*!
      * \brief Get the current playing index.
