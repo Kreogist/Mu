@@ -310,8 +310,9 @@ void KNMusicPlugin::initialDetailTooltip(KNMusicDetailTooltipBase *tooltip)
 
 void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
 {
-    //Check if the header player is nullptr.
-    if(headerPlayer==nullptr)
+    //Check if the header player is nullptr, or a header player is already
+    //loaded.
+    if(headerPlayer==nullptr || m_headerPlayer!=nullptr)
     {
         return;
     }
@@ -320,8 +321,19 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
     //Set the backend and the now playing.
     m_headerPlayer->setBackend(knMusicGlobal->backend());
     m_headerPlayer->setNowPlaying(knMusicGlobal->nowPlaying());
+    //Generate the header player's container.
+    QWidget *container=new QWidget(m_headerWidgetContainer);
+    //Generate the container layout.
+    QBoxLayout *containerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                               container);
+    containerLayout->setContentsMargins(0,0,0,0);
+    containerLayout->setSpacing(0);
+    container->setLayout(containerLayout);
+    //Add player and lyrics to the layout.
+    containerLayout->addWidget(m_headerPlayer);
+    containerLayout->addWidget(m_headerPlayer->lyrics(), 1);
     //Add the header player to the header left layout.
-    m_headerWidgetContainer->addWidget(m_headerPlayer);
+    m_headerWidgetContainer->addWidget(container);
     //Link the header and the header player.
     connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
             m_headerPlayer, &KNMusicHeaderPlayerBase::activate);

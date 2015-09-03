@@ -39,6 +39,7 @@ class KNOpacityButton;
 class KNScrollLabel;
 class KNProgressSlider;
 class KNVolumeSlider;
+class KNMusicScrollLyrics;
 /*!
  * \brief The KNMusicHeaderPlayer class
  */
@@ -51,12 +52,17 @@ public:
     /*!
      * \brief Reimplement from KNMusicHeaderPlayerBase::setBackend().
      */
-    void setBackend(KNMusicBackend *backend);
+    void setBackend(KNMusicBackend *backend) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplement from KNMusicHeaderPlayerBase::setNowPlaying().
      */
-    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplement from KNMusicHeaderPlayerBase::lyrics().
+     */
+    QWidget *lyrics() Q_DECL_OVERRIDE;
 
 signals:
 
@@ -113,6 +119,7 @@ private:
     inline void updateDuration(const qint64 &duration);
 
     //Widgets
+    KNMusicScrollLyrics *m_headerLyrics;
     KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next;
     KNHighLightLabel *m_albumArt;
     KNScrollLabel *m_title, *m_artistAlbum;

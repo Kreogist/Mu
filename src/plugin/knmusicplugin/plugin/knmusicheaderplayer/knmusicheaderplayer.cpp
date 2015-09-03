@@ -35,6 +35,7 @@
 
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusicscrolllyrics.h"
 
 #include "knmusicglobal.h"
 
@@ -53,6 +54,7 @@
 
 KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent),
+    m_headerLyrics(new KNMusicScrollLyrics(this)),
     m_previous(generateControlButton(":/plugin/music/player/previous.png")),
     m_playNPause(generateControlButton(":/plugin/music/player/play.png")),
     m_next(generateControlButton(":/plugin/music/player/next.png")),
@@ -375,6 +377,11 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             this, &KNMusicHeaderPlayer::onActionNowPlayingChanged);
     connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
             this, &KNMusicHeaderPlayer::reset);
+}
+
+QWidget *KNMusicHeaderPlayer::lyrics()
+{
+    return m_headerLyrics;
 }
 
 void KNMusicHeaderPlayer::activate()

@@ -230,7 +230,10 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicplaylist/plugin/knmusicplaylistitunesxmlparser/knmusicplaylistitunesxmlparser.cpp \
     plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp \
     plugin/knmusicplugin/plugin/knmusiccuelistparser/knmusiccuelistparser.cpp \
-    plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp
+    plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp \
+    plugin/knmusicplugin/sdk/knmusicscrolllyrics.cpp \
+    plugin/knmusicplugin/sdk/knmusiclyricsbackend.cpp \
+    plugin/knmusicplugin/sdk/knmusiclyricsmanager.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -362,7 +365,10 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicmultimenubase.h \
     plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.h \
     plugin/knmusicplugin/plugin/knmusiccuelistparser/knmusiccuelistparser.h \
-    plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.h
+    plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.h \
+    plugin/knmusicplugin/sdk/knmusicscrolllyrics.h \
+    plugin/knmusicplugin/sdk/knmusiclyricsbackend.h \
+    plugin/knmusicplugin/sdk/knmusiclyricsmanager.h
 
 RESOURCES += \
     resource/res.qrc
