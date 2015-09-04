@@ -51,6 +51,7 @@ public:
      * \brief Reimplement from KNMusicTagParser::parseAlbumArt.
      */
     bool parseAlbumArt(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

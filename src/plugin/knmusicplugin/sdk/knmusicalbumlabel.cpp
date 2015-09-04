@@ -26,7 +26,6 @@
 KNMusicAlbumLabel::KNMusicAlbumLabel(QWidget *parent) :
     QWidget(parent)
 {
-    ;
 }
 
 QPixmap KNMusicAlbumLabel::artwork() const
