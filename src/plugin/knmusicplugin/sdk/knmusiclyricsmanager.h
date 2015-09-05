@@ -16,32 +16,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICLYRICSBASE_H
-#define KNMUSICLYRICSBASE_H
+#ifndef KNMUSICLYRICSMANAGER_H
+#define KNMUSICLYRICSMANAGER_H
 
-#include <QWidget>
+#include "knmusicutil.h"
+
+#include <QObject>
+
+using namespace KNMusicUtil;
 
 class KNMusicLyricsBackend;
 /*!
- * \brief The KNMusicLyricsBase class provides the basic interface of a lyrics
- * widget should provided. You have to implemented it and provides all the ports
- * to your own widget.\n
- * This is a MVC-liked part for lyrics. Treat this part as a View part. It
- * decides how the data of the lyrics will be shown and the transfer animation.
+ * \brief The KNMusicLyricsManager class
  */
-class KNMusicLyricsBase : public QWidget
+class KNMusicLyricsManager : public QObject
 {
     Q_OBJECT
 public:
-    KNMusicLyricsBase(QWidget *parent = 0):QWidget(parent){}
+    explicit KNMusicLyricsManager(QObject *parent = 0);
 
-    virtual KNMusicLyricsBackend *backend()=0;
+    KNMusicLyricsBackend *managerBackend();
 
 signals:
 
 public slots:
-    virtual void setBackend(KNMusicLyricsBackend *backend)=0;
-    virtual void moveToLine(const int &lineIndex)=0;
+    void loadLyrics(const KNMusicAnalysisItem &analysisItem);
+
+private:
+    KNMusicLyricsBackend *m_backend;
 };
 
-#endif // KNMUSICLYRICSBASE_H
+#endif // KNMUSICLYRICSMANAGER_H

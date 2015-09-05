@@ -95,6 +95,7 @@ protected:
 
 private:
     inline void initialInfrastructure();
+    inline void initialPlayer(KNMusicPlayerBase *player);
     void initialDetailDialogPanel();
     void initialParserPlugin();
     void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);

@@ -35,6 +35,12 @@ public:
      */
     KNMusicHeaderPlayerBase(QWidget *parent = 0) : KNMusicPlayerBase(parent){}
 
+    /*!
+     * \brief Get the lyrics widget which is provided by the header player.
+     * \return The lyrics widget pointer of the header player.
+     */
+    virtual QWidget *lyrics()=0;
+
 signals:
 
 public slots:

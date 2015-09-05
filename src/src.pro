@@ -231,6 +231,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp \
     plugin/knmusicplugin/plugin/knmusiccuelistparser/knmusiccuelistparser.cpp \
     plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp \
+    plugin/knmusicplugin/sdk/knmusicscrolllyrics.cpp \
+    plugin/knmusicplugin/sdk/knmusiclyricsbackend.cpp \
+    plugin/knmusicplugin/sdk/knmusiclyricsmanager.cpp \
     plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.cpp
 
 HEADERS += \
@@ -364,6 +367,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.h \
     plugin/knmusicplugin/plugin/knmusiccuelistparser/knmusiccuelistparser.h \
     plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.h \
+    plugin/knmusicplugin/sdk/knmusicscrolllyrics.h \
+    plugin/knmusicplugin/sdk/knmusiclyricsbackend.h \
+    plugin/knmusicplugin/sdk/knmusiclyricsmanager.h \
     plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.h
 
 RESOURCES += \

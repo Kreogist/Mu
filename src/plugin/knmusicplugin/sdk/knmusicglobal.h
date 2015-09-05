@@ -43,6 +43,7 @@ class KNMusicNowPlayingBase;
 class KNMusicDetailTooltipBase;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
+class KNMusicLyricsManager;
 /*!
  * \brief The KNMusicGlobal class provides some public instance and function of
  * the official music category plugin.\n
@@ -245,6 +246,12 @@ public:
      */
     void setMultiMenu(KNMusicMultiMenuBase *multiMenu);
 
+    /*!
+     * \brief Get the lyrics manager object pointer provided by music global.
+     * \return The lyrics manager object pointer.
+     */
+    KNMusicLyricsManager *lyricsManager();
+
 signals:
 
 public slots:
@@ -266,6 +273,7 @@ private:
 
     QWidget *m_parentWidget;
     KNMusicDetailDialog *m_detailDialog;
+    KNMusicLyricsManager *m_lyricsManager;
     KNMusicParser *m_parser;
     KNMusicSoloMenuBase *m_soloMenu;
     KNMusicMultiMenuBase *m_multiMenu;

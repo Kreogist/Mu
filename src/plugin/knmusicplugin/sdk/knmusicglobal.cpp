@@ -25,6 +25,7 @@
 #include "knmusicparser.h"
 #include "knmusictagparser.h"
 #include "knmusicdetaildialog.h"
+#include "knmusiclyricsmanager.h"
 
 #include "knmusicglobal.h"
 
@@ -132,6 +133,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     QObject(parent),
     m_parentWidget(static_cast<QWidget *>(parent)),
     m_detailDialog(new KNMusicDetailDialog(knGlobal->mainWindow())),
+    m_lyricsManager(new KNMusicLyricsManager(this)),
     m_parser(new KNMusicParser),
     m_soloMenu(nullptr),
     m_multiMenu(nullptr),
@@ -388,6 +390,11 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Synthpop";
 }
 
+KNMusicLyricsManager *KNMusicGlobal::lyricsManager()
+{
+    return m_lyricsManager;
+}
+
 KNMusicMultiMenuBase *KNMusicGlobal::multiMenu() const
 {
     return m_multiMenu;
@@ -397,7 +404,6 @@ void KNMusicGlobal::setMultiMenu(KNMusicMultiMenuBase *multiMenu)
 {
     m_multiMenu = multiMenu;
 }
-
 
 KNMusicDetailTooltipBase *KNMusicGlobal::detailTooltip() const
 {
