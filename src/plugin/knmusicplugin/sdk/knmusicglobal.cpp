@@ -475,7 +475,7 @@ KNConfigure *KNMusicGlobal::configure()
     return m_musicConfigure;
 }
 
-QString KNMusicGlobal::musicLibPath() const
+QString KNMusicGlobal::musicLibraryPath() const
 {
     return m_musicLibPath;
 }

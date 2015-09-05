@@ -234,7 +234,8 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusicscrolllyrics.cpp \
     plugin/knmusicplugin/sdk/knmusiclyricsbackend.cpp \
     plugin/knmusicplugin/sdk/knmusiclyricsmanager.cpp \
-    plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.cpp
+    plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.cpp \
+    plugin/knmusicplugin/sdk/knmusiclrcparser.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -370,7 +371,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicscrolllyrics.h \
     plugin/knmusicplugin/sdk/knmusiclyricsbackend.h \
     plugin/knmusicplugin/sdk/knmusiclyricsmanager.h \
-    plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.h
+    plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.h \
+    plugin/knmusicplugin/sdk/knmusiclrcparser.h
 
 RESOURCES += \
     resource/res.qrc

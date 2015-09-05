@@ -215,3 +215,10 @@ QStringList KNUtil::urlListToPathList(const QList<QUrl> &urlList)
     //Give back the file path list.
     return filePathList;
 }
+
+QString KNUtil::legalFileName(QString fileName)
+{
+    //Remove the unavailable characters in the prefer string.
+    fileName.replace(QRegExp("[\\\\/:*?\"<>]"), "_");
+    return fileName;
+}

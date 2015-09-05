@@ -32,6 +32,11 @@
         "Highlight" : "#606060",
         "HighlightedText" : "#f7cf3d"
     },
+    "HeaderLyrics" : {
+        "Parent" : "MainWindow",
+        "Text" : "#646464",
+        "Highlight" : "#f7cf3d"
+    },
     "HeaderPlayerLabel" : {
         "Parent" : "MainWindow",
         "WindowText" : "#FFFFFF",

@@ -143,6 +143,7 @@ bool KNMusicTagFLAC::parseTag(QFile &musicFile,
 
 bool KNMusicTagFLAC::writeTag(const KNMusicAnalysisItem &analysisItem)
 {
+    Q_UNUSED(analysisItem)
     return false;
 }
 

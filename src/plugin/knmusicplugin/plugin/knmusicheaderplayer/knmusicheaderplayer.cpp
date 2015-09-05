@@ -33,6 +33,7 @@
 #include "kngraphicsgloweffect.h"
 #include "knconfigure.h"
 
+#include "knmusiclyricsmanager.h"
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicscrolllyrics.h"
@@ -242,6 +243,12 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     onActionLoopStateChange(NoRepeat);
     progressLayout->addSpacing(5);
     progressLayout->addWidget(m_loopState);
+
+    //Configure the lyrics.
+    //Use the lyrics manager backend.
+    m_headerLyrics->setObjectName("HeaderLyrics");
+    knTheme->registerWidget(m_headerLyrics);
+    m_headerLyrics->setBackend(knMusicGlobal->lyricsManager()->backend());
 
     //Configure the animations.
     //Link the value changed signals.

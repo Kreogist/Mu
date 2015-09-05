@@ -61,7 +61,7 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_tab->setIcon(QIcon(":/plugin/music/playlist/icon.png"));
     //Set the playlist folder path.
     m_playlistManager->setPlaylistDirPath(
-                knMusicGlobal->musicLibPath()+"/Playlist");
+                knMusicGlobal->musicLibraryPath()+"/Playlist");
     //Set the playlist list model to the playlist list.
     m_playlistList->setPlaylistList(m_playlistManager->playlistList());
 

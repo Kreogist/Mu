@@ -18,6 +18,8 @@
 
 #include "knmusiclyricsbackend.h"
 
+#include <QDebug>
+
 KNMusicLyricsBackend::KNMusicLyricsBackend(QObject *parent) :
     QObject(parent)
 {
@@ -85,13 +87,7 @@ void KNMusicLyricsBackend::setPosition(const qint64 &position)
         return;
     }
     //Now the line should be in the range.
-    //Check whether we need to move the lyrics.
-    //When the current line is the last, or the position is not larger than the
-    //next line, we will do nothing.
-    if(m_currentLine==m_lastLine || position<m_positions.at(m_currentLine+1))
-    {
-        return;
-    }
+    //Sept 5th, 2015: DO NOT change the order of the following lines.
     //The position may is much before the current one(like when user rewinding
     //the music).
     //Check the position is before the current timestamp.
@@ -106,6 +102,13 @@ void KNMusicLyricsBackend::setPosition(const qint64 &position)
         //Now we should find the right line, start the animation to move to it.
         emit requireMoveTo(m_currentLine);
         //Finish check.
+        return;
+    }
+    //Check whether we need to move the lyrics.
+    //When the current line is the last, or the position is not larger than the
+    //next line, we will do nothing.
+    if(m_currentLine==m_lastLine || position<m_positions.at(m_currentLine+1))
+    {
         return;
     }
     //Find the next position.
@@ -160,4 +163,3 @@ void KNMusicLyricsBackend::setLyricsData(const QList<qint64> &positions,
     //Emit lyrics changed signal to synchronise the data.
     emit lyricsChanged();
 }
-

@@ -22,6 +22,8 @@
 
 #include "knmusicscrolllyrics.h"
 
+#include <QDebug>
+
 #define MaximumDuration 200
 
 KNMusicScrollLyrics::KNMusicScrollLyrics(QWidget *parent) :
@@ -42,7 +44,7 @@ KNMusicScrollLyrics::KNMusicScrollLyrics(QWidget *parent) :
 }
 void KNMusicScrollLyrics::reset()
 {
-    //
+    //Reset the center offset.
     m_centerOffset=0;
     //Update the widget.
     update();
@@ -175,7 +177,7 @@ void KNMusicScrollLyrics::moveToLine(const int &lineIndex)
     if(lineIndex>m_currentLine)
     {
         //Calculate the distance of the lyrics lines which will be passed.
-        for(int i=m_currentLine; i<=lineIndex; ++i)
+        for(int i=m_currentLine+1; i<=lineIndex; ++i)
         {
             //Increase the height as the distance.
             lyricsDisplacement+=lyricsRect(m_backend->lyricsText(i)).height();

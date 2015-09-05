@@ -34,10 +34,11 @@ using namespace MusicUtil;
  */
 #define knMusicGlobal (KNMusicGlobal::instance())
 
+class KNConfigure;
 class KNMusicDetailDialog;
 class KNMusicParser;
 class KNMusicSearchBase;
-class KNConfigure;
+class KNMusicLyricsManager;
 class KNMusicBackend;
 class KNMusicNowPlayingBase;
 class KNMusicDetailTooltipBase;
@@ -145,7 +146,7 @@ public:
      * \brief Get the music library path.
      * \return The music library path.
      */
-    QString musicLibPath() const;
+    QString musicLibraryPath() const;
 
     /*!
      * \brief Get the music search object.
@@ -259,7 +260,7 @@ public slots:
      * \brief Set the path of the music library folder.
      * \param musicLibPath The folder path.
      */
-    void setMusicLibPath(const QString &musicLibPath);
+    void setMusicLibPath(const QString &musicLibraryPath);
 
 private slots:
     void retranslate();

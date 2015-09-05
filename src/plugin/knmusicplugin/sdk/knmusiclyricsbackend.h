@@ -40,26 +40,63 @@ public:
     explicit KNMusicLyricsBackend(QObject *parent = 0);
 
     /*!
-     * \brief lyricsDuration
-     * \param index
-     * \return
+     * \brief Get the duration of a specific line of lyrics.
+     * \param index The lyrics line index.
+     * \return The lyrics line duration.
      */
     int lyricsDuration(const int &index);
 
+    /*!
+     * \brief Get the text of the lyrics at a specific line.
+     * \param index The lyrics line index.
+     * \return The lyrics text.
+     */
     QString lyricsText(const int &index);
 
-
+    /*!
+     * \brief Get whether the backend is empty. That means it holds nothing.
+     * \return If there's no file loaded to the backend, return true.
+     */
     bool isEmpty() const;
 
+    /*!
+     * \brief Get the index of the last line.
+     * \return The last line index.
+     */
     int lastLine() const;
 
 signals:
+    /*!
+     * \brief When the position changed, and the line of the lyrics changed,
+     * this signal will be emitted.
+     * \param lineIndex The current lyrics line.
+     */
     void requireMoveTo(int lineIndex);
+
+    /*!
+     * \brief If the lyrics changed, that means a new lyrics is loaded, or the
+     * backend is reset, this signal will be emitted.
+     */
     void lyricsChanged();
 
 public slots:
+    /*!
+     * \brief Set the position of the song, and backend will automaticially
+     * locate the position to the specific line.
+     * \param position The position of the song.
+     */
     void setPosition(const qint64 &position);
+
+    /*!
+     * \brief Clear all the data of the lyrics backend.
+     */
     void reset();
+
+    /*!
+     * \brief Set the lyrics data to the backend.
+     * \param positions The lyrics time position lists.
+     * \param texts The text lists.
+     */
     void setLyricsData(const QList<qint64> &positions,
                        const QStringList &texts);
 

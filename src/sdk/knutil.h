@@ -88,6 +88,14 @@ public:
      */
     static QStringList urlListToPathList(const QList<QUrl> &urlList);
 
+    /*!
+     * \brief Change a string to a legal file name. This will change the file
+     * name to Windows style. Means some character will be replaced to '_'.
+     * \param fileName The original file name.
+     * \return The file name which you can use under Windows.
+     */
+    static QString legalFileName(QString fileName);
+
 private:
     KNUtil();
     KNUtil(const KNUtil &);

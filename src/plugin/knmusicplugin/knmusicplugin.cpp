@@ -29,6 +29,8 @@
 //SDK Dependence.
 #include "knmusicdetaildialog.h"
 #include "knmusicparser.h"
+#include "knmusiclyricsmanager.h"
+#include "knmusiclyricsbackend.h"
 
 //Ports
 #include "knmusicdetaildialogpanel.h"
@@ -295,6 +297,10 @@ void KNMusicPlugin::initialBackend(KNMusicBackend *backend)
 {
     //Set the parent of the backend.
     backend->setParent(this);
+    //Link the backend to lyrics manager's backend.
+    connect(backend, &KNMusicBackend::positionChanged,
+            knMusicGlobal->lyricsManager()->backend(),
+            &KNMusicLyricsBackend::setPosition);
     //Set the backend to music global.
     knMusicGlobal->setBackend(backend);
 }
@@ -305,8 +311,11 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     nowPlaying->setParent(this);
     //Set the backend to now playing first.
     nowPlaying->setBackend(knMusicGlobal->backend());
-    //Load configure
+    //Load configure.
     nowPlaying->loadConfigure();
+    //Link the now playing with the lyrics manager.
+    connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
+            knMusicGlobal->lyricsManager(), &KNMusicLyricsManager::loadLyrics);
     //Set the now playing to music global.
     knMusicGlobal->setNowPlaying(nowPlaying);
 }
