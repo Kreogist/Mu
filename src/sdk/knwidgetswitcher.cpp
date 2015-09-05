@@ -171,6 +171,7 @@ inline void KNWidgetSwitcher::setWidgetVisible(const int &index, bool visible)
     QWidget *widget=m_widgets.at(index);
     //Set the widget visible.
     widget->setVisible(visible);
+    widget->setEnabled(visible);
 }
 
 int KNWidgetSwitcher::outWidgetIndex() const

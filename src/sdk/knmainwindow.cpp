@@ -158,10 +158,10 @@ void KNMainWindow::backupGeometry()
     //Set the window state.
     setCacheValue("windowState", static_cast<int>(windowState()));
     //Set the window position.
-    setCacheValue("windowX", x());
-    setCacheValue("windowY", y());
-    setCacheValue("windowWidth", width());
-    setCacheValue("windowHeight", height());
+    setCacheValue("windowX", geometry().x());
+    setCacheValue("windowY", geometry().y());
+    setCacheValue("windowWidth", geometry().width());
+    setCacheValue("windowHeight", geometry().height());
     //Set the current desktop size.
     setCacheValue("desktopWidth", qApp->desktop()->width());
     setCacheValue("desktopHeight", qApp->desktop()->height());

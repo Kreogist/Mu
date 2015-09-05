@@ -23,6 +23,7 @@
 
 class KNCircleIconButton;
 
+class QLabel;
 class KNMusicDetailPanelArtwork : public KNMusicDetailDialogPanel
 {
     Q_OBJECT
@@ -49,6 +50,7 @@ public slots:
 
 private:
     KNCircleIconButton *m_button;
+    QLabel *m_albumArt;
 };
 
 #endif // KNMUSICDETAILPANELARTWORK_H

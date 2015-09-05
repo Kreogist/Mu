@@ -230,6 +230,19 @@ public:
     }
 
     /*!
+     * \brief Convert a 32-bit integer to char array which in the inverse order.
+     * \param rawTagData The char array pointer.
+     * \param data The 32-bit number.
+     */
+    static void int32ToInverseChar(char *rawTagData, const quint32 &data)
+    {
+        rawTagData[3]=(data & 0xFF000000) >> 24;
+        rawTagData[2]=(data & 0x00FF0000) >> 16;
+        rawTagData[1]=(data & 0x0000FF00) >> 8;
+        rawTagData[0]=(data & 0x000000FF);
+    }
+
+    /*!
      * \brief Convert a inverse char array to a 32-bit integer.
      * \param rawTagData The char array pointer.
      * \return The 32-bit integer.
@@ -240,6 +253,19 @@ public:
                (((quint32)rawTagData[2]<<16) & 0x00FF0000) +
                (((quint32)rawTagData[1]<<8)  & 0x0000FF00) +
                ( (quint32)rawTagData[0]      & 0x000000FF);
+    }
+
+    /*!
+     * \brief Convert a 32-bit integer to a char array.
+     * \param rawTagData The char array pointer.
+     * \param data The 32-bit number.
+     */
+    static void int32ToChar(char *rawTagData, const quint32 &data)
+    {
+        rawTagData[0]=(data & 0xFF000000) >> 24;
+        rawTagData[1]=(data & 0x00FF0000) >> 16;
+        rawTagData[2]=(data & 0x0000FF00) >> 8;
+        rawTagData[3]=(data & 0x000000FF);
     }
 
     /*!

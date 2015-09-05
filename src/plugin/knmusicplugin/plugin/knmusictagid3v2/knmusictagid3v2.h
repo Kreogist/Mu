@@ -362,10 +362,7 @@ private:
     //ID3v2.3 version(most popular) size calculator.
     static inline quint32 major3Size(char *rawTagData)
     {
-        return (((quint32)rawTagData[0]<<24) & 0xFF000000)+
-               (((quint32)rawTagData[1]<<16) & 0x00FF0000)+
-               (((quint32)rawTagData[2]<<8 ) & 0x0000FF00)+
-               ( (quint32)rawTagData[3]      & 0x000000FF);
+        return KNMusicUtil::charToInt32(rawTagData);
     }
     //ID3v2.4 version size calculator.
     static inline quint32 major4Size(char *rawTagData)
@@ -385,10 +382,7 @@ private:
     //ID3v2.3 version(most popular) size calculator.
     static inline void writeMajor3Size(char *rawTagData, const quint32 &size)
     {
-        rawTagData[0]=(size & 0xFF000000) >> 24;
-        rawTagData[1]=(size & 0x00FF0000) >> 16;
-        rawTagData[2]=(size & 0x0000FF00) >> 8;
-        rawTagData[3]=(size & 0x000000FF);
+        KNMusicUtil::int32ToChar(rawTagData, size);
     }
     //ID3v2.4 version size calculator.
     static inline void writeMajor4Size(char *rawTagData, const quint32 &size)
