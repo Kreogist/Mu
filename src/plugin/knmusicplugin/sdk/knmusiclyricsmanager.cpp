@@ -16,11 +16,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "knmusiclyricsbackend.h"
+
 #include "knmusiclyricsmanager.h"
 
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_backend(new KNMusicLyricsBackend(this))
 {
+    ;
+}
 
+KNMusicLyricsBackend *KNMusicLyricsManager::managerBackend()
+{
+    return m_backend;
 }
 

@@ -48,7 +48,6 @@ public:
 
     QString lyricsText(const int &index);
 
-    void setPosition(const qint64 &position);
 
     bool isEmpty() const;
 
@@ -59,6 +58,7 @@ signals:
     void lyricsChanged();
 
 public slots:
+    void setPosition(const qint64 &position);
     void reset();
     void setLyricsData(const QList<qint64> &positions,
                        const QStringList &texts);

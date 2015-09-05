@@ -19,17 +19,31 @@
 #ifndef KNMUSICLYRICSMANAGER_H
 #define KNMUSICLYRICSMANAGER_H
 
+#include "knmusicutil.h"
+
 #include <QObject>
 
+using namespace KNMusicUtil;
+
+class KNMusicLyricsBackend;
+/*!
+ * \brief The KNMusicLyricsManager class
+ */
 class KNMusicLyricsManager : public QObject
 {
     Q_OBJECT
 public:
     explicit KNMusicLyricsManager(QObject *parent = 0);
 
+    KNMusicLyricsBackend *managerBackend();
+
 signals:
 
 public slots:
+    void loadLyrics(const KNMusicAnalysisItem &analysisItem);
+
+private:
+    KNMusicLyricsBackend *m_backend;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H
