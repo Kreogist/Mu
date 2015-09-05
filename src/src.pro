@@ -38,7 +38,7 @@ TRANSLATIONS += \
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
 msvc: {
-    QMAKE_CXXFLAGS_RELEASE += -GL -Qpar -Qpar-report:1  -favor:INTEL64 -LTCG
+    QMAKE_CXXFLAGS_RELEASE += -GL -Qpar -Qpar-report:1  -favor:INTEL64
 }
 gcc: {
     CONFIG += mmx sse sse2 sse3
@@ -233,7 +233,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp \
     plugin/knmusicplugin/sdk/knmusicscrolllyrics.cpp \
     plugin/knmusicplugin/sdk/knmusiclyricsbackend.cpp \
-    plugin/knmusicplugin/sdk/knmusiclyricsmanager.cpp
+    plugin/knmusicplugin/sdk/knmusiclyricsmanager.cpp \
+    plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -368,7 +369,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.h \
     plugin/knmusicplugin/sdk/knmusicscrolllyrics.h \
     plugin/knmusicplugin/sdk/knmusiclyricsbackend.h \
-    plugin/knmusicplugin/sdk/knmusiclyricsmanager.h
+    plugin/knmusicplugin/sdk/knmusiclyricsmanager.h \
+    plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.h
 
 RESOURCES += \
     resource/res.qrc

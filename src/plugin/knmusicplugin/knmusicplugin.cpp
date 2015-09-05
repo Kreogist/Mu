@@ -51,6 +51,7 @@
 #include "plugin/knmusictagid3v1/knmusictagid3v1.h"
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
 #include "plugin/knmusictagapev2/knmusictagapev2.h"
+#include "plugin/knmusictagflac/knmusictagflac.h"
 // List Parsers.
 #include "plugin/knmusiccuelistparser/knmusiccuelistparser.h"
 // Solo Music Menu.
@@ -254,9 +255,10 @@ void KNMusicPlugin::initialParserPlugin()
     KNMusicParser *parser=knMusicGlobal->parser();
 
     //Add tag parsers.
+    parser->installTagParser(new KNMusicTagApev2);
     parser->installTagParser(new KNMusicTagId3v1);
     parser->installTagParser(new KNMusicTagId3v2);
-    parser->installTagParser(new KNMusicTagApev2);
+    parser->installTagParser(new KNMusicTagFLAC);
 
     //Add analysiser.
 #ifdef ENABLED_FFMPEG_ANALYSISER

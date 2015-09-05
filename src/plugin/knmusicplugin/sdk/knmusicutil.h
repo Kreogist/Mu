@@ -229,6 +229,32 @@ public:
                     QString::number(second/60)+":"+secondText;
     }
 
+    /*!
+     * \brief Convert a inverse char array to a 32-bit integer.
+     * \param rawTagData The char array pointer.
+     * \return The 32-bit integer.
+     */
+    static quint32 inverseCharToInt32(const char *rawTagData)
+    {
+        return (((quint32)rawTagData[3]<<24) & 0xFF000000) +
+               (((quint32)rawTagData[2]<<16) & 0x00FF0000) +
+               (((quint32)rawTagData[1]<<8)  & 0x0000FF00) +
+               ( (quint32)rawTagData[0]      & 0x000000FF);
+    }
+
+    /*!
+     * \brief Convert a char array to a 32-bit integer.
+     * \param rawTagData The char array pointer.
+     * \return The 32-bit integer.
+     */
+    static quint32 charToInt32(const char *rawTagData)
+    {
+        return (((quint32)rawTagData[0]<<24) & 0xFF000000) +
+               (((quint32)rawTagData[1]<<16) & 0x00FF0000) +
+               (((quint32)rawTagData[2]<<8)  & 0x0000FF00) +
+               ( (quint32)rawTagData[3]      & 0x000000FF);
+    }
+
 private:
     KNMusicUtil();
     KNMusicUtil(const KNMusicUtil &);
