@@ -112,6 +112,8 @@ void KNMusicLyricsManager::onActionLyricsDownloaded(
         const KNMusicDetailInfo &detailInfo,
         const QString &content)
 {
+    //Ensure the lyrics directory is exist.
+    KNUtil::ensurePathValid(m_lyricsDir);
     //Save the lyrics content.
     KNUtil::saveTextToFile(
                 //Generate the file path.

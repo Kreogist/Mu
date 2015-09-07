@@ -42,7 +42,17 @@ public:
     virtual QWidget *lyrics()=0;
 
 signals:
+    /*!
+     * \brief This signal is asked the main window to show up the main player
+     * widget.
+     */
     void requireShowMainPlayer();
+
+    /*!
+     * \brief This signal is used to ask the mouse sense header to check the
+     * cursor position to activate or inactivate the content of header player.
+     */
+    void requireCheckCursor();
 
 public slots:
     /*!

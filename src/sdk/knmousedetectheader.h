@@ -49,6 +49,12 @@ signals:
     void requireInactivateWidget();
 
 public slots:
+    /*!
+     * \brief When the GUI is getting stucked for some reasons like menu popup,
+     * called checkCursor() to check the mouse position and then activate
+     * or inavtivate the content.
+     */
+    void checkCursor();
 
 protected:
     /*!

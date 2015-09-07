@@ -44,7 +44,10 @@ KNMusicScrollLyrics::KNMusicScrollLyrics(QWidget *parent) :
 }
 void KNMusicScrollLyrics::reset()
 {
+    //Stop the time line.
+    m_moveToCurrentLine->stop();
     //Reset the center offset.
+    m_currentLine=-1;
     m_centerOffset=0;
     //Update the widget.
     update();
@@ -148,6 +151,8 @@ void KNMusicScrollLyrics::setBackend(KNMusicLyricsBackend *backend)
                    this, &KNMusicScrollLyrics::moveToLine);
         disconnect(m_backend, SIGNAL(lyricsChanged()),
                    this, SLOT(update()));
+        disconnect(m_backend, &KNMusicLyricsBackend::lyricsChanged,
+                   this, &KNMusicScrollLyrics::reset);
     }
     //Save the backend.
     m_backend = backend;
@@ -159,6 +164,8 @@ void KNMusicScrollLyrics::setBackend(KNMusicLyricsBackend *backend)
                 this, &KNMusicScrollLyrics::moveToLine);
         connect(m_backend, SIGNAL(lyricsChanged()),
                 this, SLOT(update()));
+        connect(m_backend, &KNMusicLyricsBackend::lyricsChanged,
+                this, &KNMusicScrollLyrics::reset);
     }
 }
 

@@ -729,15 +729,16 @@ void KNMusicHeaderPlayer::showAppendMenu()
     m_appendMenu->exec();
     //Reset the flag.
     m_appendMenuShown=false;
-    //
+    //Ask the header widget to check the cursor.
+    emit requireCheckCursor();
 }
 
 void KNMusicHeaderPlayer::appendActionTriggered(const int &actionIndex)
 {
     //Reset the flag.
     m_appendMenuShown=false;
-    //
-    ;
+    //Ask the header widget to check the cursor.
+    emit requireCheckCursor();
     //Prepare the playing item.
     KNMusicAnalysisItem playingItem;
     //Ensure that there's a file is playing.

@@ -380,6 +380,8 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
             m_headerPlayer, &KNMusicHeaderPlayerBase::activate);
     connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
             m_headerPlayer, &KNMusicHeaderPlayerBase::inactivate);
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireCheckCursor,
+            m_headerWidget, &KNMouseDetectHeader::checkCursor);
     //Load the configuration.
     m_headerPlayer->loadConfigure();
 }

@@ -15,12 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QCursor>
 
 #include "knmousedetectheader.h"
 
 KNMouseDetectHeader::KNMouseDetectHeader(QWidget *parent) :
     QWidget(parent)
 {
+}
+
+void KNMouseDetectHeader::checkCursor()
+{
+    //Check the global cursor is inside or outside the header.
+    if(rect().contains(mapFromGlobal(QCursor::pos())))
+    {
+        //Emit activate widget signal.
+        emit requireActivateWidget();
+    }
+    else
+    {
+        //Emit inactivate widget signal.
+        emit requireInactivateWidget();
+    }
 }
 
 void KNMouseDetectHeader::enterEvent(QEvent *event)
