@@ -96,6 +96,24 @@ public:
      */
     static QString legalFileName(QString fileName);
 
+    /*!
+     * \brief Calculate the similarity between the two string. This will return
+     * the Levenshtein distance of two string.
+     * \param string1 The first string.
+     * \param string2 The second string.
+     * \return The Levenshtein edit distance of those two string.
+     */
+    static int similarity(const QString &string1, const QString &string2);
+
+    /*!
+     * \brief Save text string to a local file via UTF-8 codec.
+     * \param filePath The file path.
+     * \param content The content data.
+     * \return If the data writes successfully, return true.
+     */
+    static bool saveTextToFile(const QString &filePath,
+                               const QString &content);
+
 private:
     KNUtil();
     KNUtil(const KNUtil &);

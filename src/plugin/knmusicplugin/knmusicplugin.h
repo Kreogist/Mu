@@ -98,6 +98,7 @@ private:
     inline void initialPlayer(KNMusicPlayerBase *player);
     void initialDetailDialogPanel();
     void initialParserPlugin();
+    void initialLyricsPlugin();
     void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
     void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
 

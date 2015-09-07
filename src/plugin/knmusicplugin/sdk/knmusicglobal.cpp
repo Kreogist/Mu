@@ -152,9 +152,13 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     initialGenre();
     //Register the queue arguments.
     qRegisterMetaType<KNMusicAnalysisItem>("KNMusicAnalysisItem");
+    qRegisterMetaType<KNMusicDetailInfo>("KNMusicDetailInfo");
 
     //Set the library path.
     setMusicLibPath(knGlobal->dirPath(KNGlobal::LibraryDir) + "/Music");
+
+    //Update the lyrics path.
+    m_lyricsManager->setLyricsDirectory(musicLibraryPath() + "/Lyrics");
 
     //Link to retranslate.
     knI18n->link(this, &KNMusicGlobal::retranslate);

@@ -16,12 +16,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QFileInfo>
+#include <QThread>
 
 #include "knutil.h"
 
 #include "knmusiclyricsbackend.h"
 #include "knmusiclrcparser.h"
 #include "knmusicglobal.h"
+#include "knmusiconlinelyrics.h"
 
 #include "knmusiclyricsmanager.h"
 
@@ -30,9 +32,11 @@
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent),
     m_detailInfo(KNMusicDetailInfo()),
+    m_onlineLyrics(new KNMusicOnlineLyrics),
     m_backend(new KNMusicLyricsBackend(this)),
     m_parser(new KNMusicLrcParser(this)),
-    m_lyricsDir(QString(knMusicGlobal->musicLibraryPath() + "/Lyrics"))
+    m_onlineThread(new QThread(this)),
+    m_lyricsDir(QString())
 {
     //Set the default loading policy.
     m_policyList << SameNameInLyricsDir << RelateNameInLyricsDir
@@ -41,6 +45,23 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_relateNamePolicyList << LyricsNamedArtistHyphonTitle
                            << LyricsNamedTitle
                            << LyricsNamedAlbumHyphonTitle;
+    //Move the online lyrics to online thread.
+    m_onlineLyrics->moveToThread(m_onlineThread);
+    //Link the online lyrics.
+    connect(m_onlineLyrics, &KNMusicOnlineLyrics::lyricsDownload,
+            this, &KNMusicLyricsManager::onActionLyricsDownloaded,
+            Qt::QueuedConnection);
+    //Start online thread.
+    m_onlineThread->start();
+}
+
+KNMusicLyricsManager::~KNMusicLyricsManager()
+{
+    //Quit the online thread.
+    m_onlineThread->quit();
+    m_onlineThread->wait();
+    //Delete online lyrics.
+    m_onlineLyrics->deleteLater();
 }
 
 KNMusicLyricsBackend *KNMusicLyricsManager::backend()
@@ -50,20 +71,18 @@ KNMusicLyricsBackend *KNMusicLyricsManager::backend()
 
 void KNMusicLyricsManager::loadLyrics(const KNMusicAnalysisItem &analysisItem)
 {
-    //Get the detail info.
-    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Save the detail info for current lyrics info.
+    m_detailInfo=analysisItem.detailInfo;
     //Reset the backend.
     m_backend->reset();
     //Load the local lyrics first.
-    if(loadLocalLyrics(detailInfo))
+    if(loadLocalLyrics(m_detailInfo))
     {
-        //Save the detail info for current lyrics info.
-        m_detailInfo=detailInfo;
         //Lyrics load complete.
         return;
     }
     //Or else we need to download the lyrics.
-    //!FIXME: add Internet download codes.
+    m_onlineLyrics->addToDownloadList(m_detailInfo);
 }
 
 bool KNMusicLyricsManager::loadLyricsFile(const QString &lyricsPath)
@@ -87,6 +106,33 @@ bool KNMusicLyricsManager::loadLyricsFile(const QString &lyricsPath)
     }
     //Failed to load the lrc file.
     return false;
+}
+
+void KNMusicLyricsManager::onActionLyricsDownloaded(
+        const KNMusicDetailInfo &detailInfo,
+        const QString &content)
+{
+    //Save the lyrics content.
+    KNUtil::saveTextToFile(
+                //Generate the file path.
+                m_lyricsDir + "/" + KNUtil::legalFileName(
+                            detailInfo.textLists[Artist].toString() + " - " +
+                            detailInfo.textLists[Name].toString() + ".lrc"),
+                //Lyrics content.
+                content);
+    //Check whether the detail info is still the current one.
+    if(detailInfo.filePath==m_detailInfo.filePath)
+    {
+        //Generate the data cache.
+        QList<qint64> timeList;
+        QStringList textList;
+        //Use the parser to parse the file.
+        if(m_parser->parseText(content, timeList, textList))
+        {
+            //Set the data to backend.
+            m_backend->setLyricsData(timeList, textList);
+        }
+    }
 }
 
 inline bool KNMusicLyricsManager::loadLocalLyrics(
@@ -177,6 +223,11 @@ bool KNMusicLyricsManager::loadRelatedLyrics(const QString &dirPath,
 QString KNMusicLyricsManager::lyricsDirectory() const
 {
     return m_lyricsDir;
+}
+
+void KNMusicLyricsManager::appendDownloader(KNMusicLyricsDownloader *downloader)
+{
+    m_onlineLyrics->appendDownloader(downloader);
 }
 
 void KNMusicLyricsManager::setLyricsDirectory(const QString &lyricsDir)

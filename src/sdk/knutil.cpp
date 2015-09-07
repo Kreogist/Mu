@@ -16,6 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QFileInfo>
+#include <QFile>
+#include <QTextStream>
+#include <QTextCodec>
 #include <QDir>
 #include <QDesktopServices>
 #include <QUrl>
@@ -221,4 +224,67 @@ QString KNUtil::legalFileName(QString fileName)
     //Remove the unavailable characters in the prefer string.
     fileName.replace(QRegExp("[\\\\/:*?\"<>]"), "_");
     return fileName;
+}
+
+int KNUtil::similarity(const QString &string1, const QString &string2)
+{
+    // Replace this into Sift4 algorithm.
+    //Wagner–Fischer algorithm Levenshtein distance.
+    //Based on
+    /* http://en.wikibooks.org/wiki/Algorithm_implementation/Strings/Levenshtein
+_distance#C.2B.2B*/
+    //And
+    /*http://www.codeproject.com/Articles/13525/Fast-memory-efficient-Levenshtei
+n-algorithm*/
+    //The original Levenshtein Algorithm will used a matrix whose size is
+    //length(string1) * length(string2), this is a common fast, memory efficient
+    //version. It can reduce the memory usage to length(string1) +
+    //length(string2). This won't reduce the time complexity.
+    //Thanks for QString and QChar, a chinese character will be description as
+    //a char.
+    //Initial the size.
+    const unsigned len1=string1.size(), len2=string2.size();
+    std::vector<size_t> col(len2+1), prevCol(len2+1);
+    //Fills the vector with ascending numbers, starting by 0
+    //Because of the FUCK clang, we can NOT use itoa, or else these thing
+    //following can be done in only one sentence:
+    for(unsigned i=0; i<prevCol.size(); i++)
+    {
+        prevCol[i]=i;
+    }
+    //Use double std::min instead of std::min({,,}).
+    for(unsigned i=0; i<len1; i++)
+    {
+        col[0]=i+1;
+        for(unsigned j=0; j<len2; j++)
+        {
+            col[j+1]=std::min(std::min(1+col[j],
+                                       1+prevCol[1+j]),
+                              prevCol[j]+(string1[i]!=string2[j]));
+        }
+        std::swap(col, prevCol);
+    }
+    return prevCol[len2];
+}
+
+bool KNUtil::saveTextToFile(const QString &filePath, const QString &content)
+{
+    //Generate the target file.
+    QFile targetFile(filePath);
+    //Open as write only mode.
+    if(!targetFile.open(QIODevice::WriteOnly))
+    {
+        //Or else written failed.
+        return false;
+    }
+    //Generate the text stream.
+    QTextStream textStream(&targetFile);
+    //Set the UTF-8 codec.
+    textStream.setCodec(QTextCodec::codecForName("UTF-8"));
+    //Save the content to the file.
+    textStream << content << flush;
+    //Close the file.
+    targetFile.close();
+    //Mission complete.
+    return true;
 }

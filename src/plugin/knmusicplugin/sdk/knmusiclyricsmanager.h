@@ -25,8 +25,10 @@
 
 using namespace MusicUtil;
 
+class KNMusicLyricsDownloader;
 class KNMusicLyricsBackend;
 class KNMusicLrcParser;
+class KNMusicOnlineLyrics;
 /*!
  * \brief The KNMusicLyricsManager class provides a seamless local and online
  * lyrics loader and downloader management.
@@ -40,6 +42,7 @@ public:
      * \param parent The parent object.
      */
     explicit KNMusicLyricsManager(QObject *parent = 0);
+    ~KNMusicLyricsManager();
 
     /*!
      * \brief Get the backend of lyrics manager provides.
@@ -53,6 +56,12 @@ public:
      * \return The lyrics directory path.
      */
     QString lyricsDirectory() const;
+
+    /*!
+     * \brief Append a downloader to the online downloader engine.
+     * \param downloader The online downloader engine.
+     */
+    void appendDownloader(KNMusicLyricsDownloader *downloader);
 
 signals:
 
@@ -77,6 +86,10 @@ public slots:
      */
     bool loadLyricsFile(const QString &lyricsPath);
 
+private slots:
+    void onActionLyricsDownloaded(const KNMusicDetailInfo &detailInfo,
+                                  const QString &content);
+
 private:
     enum SearchPolicy
     {
@@ -95,16 +108,19 @@ private:
     inline bool loadRelatedLyrics(const QString &dirPath,
                                   const KNMusicDetailInfo &detailInfo);
 
-    //Current state.
-    KNMusicDetailInfo m_detailInfo;
-    //Support objects.
-    KNMusicLyricsBackend *m_backend;
-    KNMusicLrcParser *m_parser;
-    //Lyrics directory path.
-    QString m_lyricsDir;
     //Policy list.
     QList<int> m_policyList;
     QList<int> m_relateNamePolicyList;
+    //Current state.
+    KNMusicDetailInfo m_detailInfo;
+    //Support objects.
+    KNMusicOnlineLyrics *m_onlineLyrics;
+    KNMusicLyricsBackend *m_backend;
+    KNMusicLrcParser *m_parser;
+    //Working thread for the downloader.
+    QThread *m_onlineThread;
+    //Lyrics directory path.
+    QString m_lyricsDir;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H

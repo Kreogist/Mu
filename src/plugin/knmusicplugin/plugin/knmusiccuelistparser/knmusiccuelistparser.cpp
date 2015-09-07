@@ -329,7 +329,6 @@ bool KNMusicCueListParser::writeDetail(const KNMusicAnalysisItem &analysisItem)
         //Parse the command.
         parseCommand(commandRawLine, rawCommand, rawData);
         //Now we are only taken care about the TRACK.
-        qDebug()<<rawCommand;
         if(rawCommand=="TRACK")
         {
             //Use the trackIndex variable find the space temporarily.

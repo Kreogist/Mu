@@ -33,14 +33,31 @@ class KNMusicLyricsBase : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLyricsBase object.
+     * \param parent The parent object.
+     */
     KNMusicLyricsBase(QWidget *parent = 0):QWidget(parent){}
 
+    /*!
+     * \brief Get the backend of the lyrics view.
+     * \return The lyrics backend pointer. If you haven't set it before
+     */
     virtual KNMusicLyricsBackend *backend()=0;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the lyrics backend of the lyrics view.
+     * \param backend The backend object pointer.
+     */
     virtual void setBackend(KNMusicLyricsBackend *backend)=0;
+
+    /*!
+     * \brief Move the view to the specific line.
+     * \param lineIndex The lyrics line index.
+     */
     virtual void moveToLine(const int &lineIndex)=0;
 };
 

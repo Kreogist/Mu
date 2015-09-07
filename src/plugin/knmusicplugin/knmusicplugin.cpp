@@ -56,6 +56,11 @@
 #include "plugin/knmusictagflac/knmusictagflac.h"
 // List Parsers.
 #include "plugin/knmusiccuelistparser/knmusiccuelistparser.h"
+// Lyrics Downloader.
+#include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
+#include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
+#include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
+#include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
 // Solo Music Menu.
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 // Multi Music Menu.
@@ -146,6 +151,8 @@ void KNMusicPlugin::loadPlugins()
     initialDetailDialogPanel();
     //Initial parser.
     initialParserPlugin();
+    //Initial lyrics download plugin.
+    initialLyricsPlugin();
     //Initial global menus.
     initialSoloMenu(new KNMusicSoloMenu);
     initialMultiMenu(new KNMusicMultiMenu);
@@ -269,6 +276,18 @@ void KNMusicPlugin::initialParserPlugin()
 
     //Add list parsers.
     parser->installListParser(new KNMusicCueListParser);
+}
+
+void KNMusicPlugin::initialLyricsPlugin()
+{
+    //Get the lyrics manager.
+    KNMusicLyricsManager *lyricsManager=knMusicGlobal->lyricsManager();
+
+    //Add the downloader to lyrics manager.
+    lyricsManager->appendDownloader(new KNMusicQQLyrics);
+    lyricsManager->appendDownloader(new KNMusicTTPlayerLyrics);
+    lyricsManager->appendDownloader(new KNMusicTTPodLyrics);
+    lyricsManager->appendDownloader(new KNMusicXiaMiLyrics);
 }
 
 void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
