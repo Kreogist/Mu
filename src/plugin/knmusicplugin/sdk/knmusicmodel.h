@@ -208,6 +208,20 @@ public:
      */
     QString textData(const int &row, const int &column) const;
 
+    /*!
+     * \brief Set the text data of a specific row and column.
+     * \param row The specific row.
+     * \param column The specific column.
+     * \param textData The QString data you want to set the index(row, column).
+     * \return If we can set data successfully, return true.
+     */
+    bool setTextData(const int &row,
+                     const int &column,
+                     const QString &textData)
+    {
+        return setData(index(row, column), textData, Qt::DisplayRole);
+    }
+
 signals:
     /*!
      * \brief When the row count is changed, this signal will be emitted.

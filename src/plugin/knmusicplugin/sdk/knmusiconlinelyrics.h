@@ -30,21 +30,59 @@ using namespace MusicUtil;
 
 class KNMusicLrcParser;
 class KNMusicLyricsDownloader;
+/*!
+ * \brief The KNMusicOnlineLyrics class provides you an online lyrics download
+ * interface. It won't work until there's a downloader plugin is added.\n
+ * The online lyrics holds all the online downloader. When there's a download
+ * request in, we will called all the downloaders to download the lyrics.\n
+ * When they we finished, we will sort the all the download lyrics items
+ * according to their similiarity.
+ */
 class KNMusicOnlineLyrics : public QObject
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicOnlineLyrics object.
+     * \param parent The parent object.
+     */
     explicit KNMusicOnlineLyrics(QObject *parent = 0);
     ~KNMusicOnlineLyrics();
 
+    /*!
+     * \brief Add a lyrics downloader to the online lyrics server.
+     * \param downloader The downloader plugin pointer.
+     */
     void appendDownloader(KNMusicLyricsDownloader *downloader);
 
 signals:
+    /*!
+     * \brief When a new lyrics is hit and download successfully, this signal
+     * will be emitted.
+     * \param detailInfo The detail info of the original song.
+     * \param content The lyrics content data.
+     */
     void lyricsDownload(KNMusicDetailInfo detailInfo, QString content);
+
+    /*!
+     * \brief This signal is used to download the next lyrics. Do NOT connect
+     * this signal to do anything else.
+     */
     void downloadNext();
 
 public slots:
+    /*!
+     * \brief Add a new song information to the download list of the lyrics.
+     * \param detailInfo The detail information of a song.
+     */
     void addToDownloadList(const KNMusicDetailInfo &detailInfo);
+
+    /*!
+     * \brief Download lyrics by given a detail info of a song, and write all
+     * the information into lyrics list. This function works in stucked way.
+     * \param detailInfo The detail info of a song.
+     * \param lyricsList The lyrics list.
+     */
     void downloadLyrics(
             const KNMusicDetailInfo &detailInfo,
             QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> &lyricsList);

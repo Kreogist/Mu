@@ -50,8 +50,8 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     m_albumArt(new KNMusicAlbumLabel(this)),
     m_playNPause(new KNOpacityButton(this)),
     m_progress(new KNProgressSlider(this)),
-    m_playIcon(QIcon(":/plugin/music/player/play.png")),
-    m_pauseIcon(QIcon(":/plugin/music/player/pause.png")),
+    m_playIcon(QIcon(":/plugin/music/player/play_light.png")),
+    m_pauseIcon(QIcon(":/plugin/music/player/pause_light.png")),
     m_isPlaying(false),
     m_progressPressed(false),
     m_detailInfo(KNMusicDetailInfo())

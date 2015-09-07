@@ -140,22 +140,14 @@ bool KNMusicModel::updateRow(int row, KNMusicDetailInfo detailInfo)
     Q_ASSERT(row>-1 && row<m_detailInfos.size());
     //Get the original detail info.
     const KNMusicDetailInfo &previousDetailInfo=m_detailInfos.at(row);
-    //Remove the old duration from the total duration.
-    m_totalDuration-=previousDetailInfo.duration;
     //Copy some data from the previous detail info.
     detailInfo.dateAdded=previousDetailInfo.dateAdded;
     detailInfo.textLists[AlbumRating]=previousDetailInfo.textLists[AlbumRating];
     detailInfo.textLists[DateAdded]=previousDetailInfo.textLists[DateAdded];
     detailInfo.textLists[Plays]=previousDetailInfo.textLists[Plays];
     detailInfo.textLists[Rating]=previousDetailInfo.textLists[Rating];
-    //Replace to the new detail info.
-    m_detailInfos.replace(row, detailInfo);
-    //Add the new duration to the total duration.
-    m_totalDuration+=detailInfo.duration;
-    //Emit the data changed signal.
-    emit dataChanged(index(row, 0),
-                     index(row, columnCount()-1));
-    return true;
+    //Replace the row with the new detail info.
+    return replaceRow(row, detailInfo);
 }
 
 bool KNMusicModel::replaceRow(int row, const KNMusicDetailInfo &detailInfo)

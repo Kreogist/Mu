@@ -10,6 +10,15 @@
         <file>public/cancel.png</file>
         <file>public/ok.png</file>
         <file>public/search.png</file>
+        <file>saomenuicons/get_info.png</file>
+        <file>saomenuicons/locate_albums.png</file>
+        <file>saomenuicons/locate_artists.png</file>
+        <file>saomenuicons/locate_genres.png</file>
+        <file>saomenuicons/locate_original.png</file>
+        <file>saomenuicons/locate_songs.png</file>
+        <file>saomenuicons/rating.png</file>
+        <file>saomenuicons/showInGraphicsShell.png</file>
+        <file>public/indicator.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>
@@ -32,12 +41,18 @@
         <file>music/player/Random.png</file>
         <file>music/player/Repeat.png</file>
         <file>music/player/RepeatSingle.png</file>
-        <file>music/player/next.png</file>
-        <file>music/player/pause.png</file>
-        <file>music/player/play.png</file>
-        <file>music/player/previous.png</file>
+        <file>music/player/next_dark.png</file>
+        <file>music/player/pause_dark.png</file>
+        <file>music/player/play_dark.png</file>
+        <file>music/player/previous_dark.png</file>
+        <file>music/player/next_light.png</file>
+        <file>music/player/pause_light.png</file>
+        <file>music/player/play_light.png</file>
+        <file>music/player/previous_light.png</file>
         <file>music/player/mute_false.png</file>
         <file>music/player/mute_true.png</file>
         <file>music/detaildialog/tab_icon/albumart.png</file>
+        <file>music/player/fullscreen.png</file>
+        <file>music/player/menu.png</file>
     </qresource>
 </RCC>

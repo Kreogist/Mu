@@ -27,10 +27,12 @@
 
 using namespace MusicUtil;
 
+class QSignalMapper;
 class QGraphicsOpacityEffect;
 class QParallelAnimationGroup;
 class QPropertyAnimation;
 class QLabel;
+class KNSaoSubMenu;
 class KNConfigure;
 class KNEditableLabel;
 class KNHighLightLabel;
@@ -41,12 +43,17 @@ class KNProgressSlider;
 class KNVolumeSlider;
 class KNMusicScrollLyrics;
 /*!
- * \brief The KNMusicHeaderPlayer class
+ * \brief The KNMusicHeaderPlayer class is a default header player implemented
+ * from the header player base. This is an example of the header player base.
  */
 class KNMusicHeaderPlayer : public KNMusicHeaderPlayerBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicHeaderPlayer widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
 
     /*!
@@ -87,17 +94,46 @@ public slots:
      */
     void saveConfigure() Q_DECL_OVERRIDE;
 
-    void reset();
+    /*!
+     * \brief Reimplemented from KNMusicHeaderPlayerBase::reset().
+     */
+    void reset() Q_DECL_OVERRIDE;
 
 private slots:
+    void retranslate();
     void updatePositionText(const qint64 &position);
     void onActionLoopStateChange(const int &state);
     void onActionMouseInOut(const QVariant &value);
     void onActionPositionEdited();
     void onActionVolumeChanged(const qint64 &value);
     void onActionNowPlayingChanged(const KNMusicAnalysisItem &analysisItem);
+    void showAppendMenu();
+    void appendActionTriggered(const int &actionIndex);
 
 private:
+    enum SubMenus
+    {
+        SubMenuRating,
+        SubMenuLocate,
+        SubMenuCount
+    };
+    enum MenuActions
+    {
+        AppendRatingNoStar,
+        AppendRatingOneStar,
+        AppendRatingTwoStar,
+        AppendRatingThreeStar,
+        AppendRatingFourStar,
+        AppendRatingFiveStar,
+        AppendShowInGraphicShell,
+        AppendShowDetail,
+        AppendLocateNowPlaying,
+        AppendShowInSongs,
+        AppendShowInArtists,
+        AppendShowInAlbums,
+        AppendShowInGenres,
+        MenuActionsCount
+    };
     inline void updateDurationPalette(const int &opacity);
     inline void setPosition(const qint64 &position);
     inline QRect generateOutPosition()
@@ -110,6 +146,7 @@ private:
     }
     inline QPropertyAnimation *generateAnime(QObject *target);
     inline KNOpacityAnimeButton *generateControlButton(const QString &iconPath);
+    inline KNOpacityAnimeButton *generateAppendButton(const QString &iconPath);
     inline void startAnime(QParallelAnimationGroup *group,
                            QPropertyAnimation *volume,
                            QPropertyAnimation *control,
@@ -120,7 +157,8 @@ private:
 
     //Widgets
     KNMusicScrollLyrics *m_headerLyrics;
-    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next;
+    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next, *m_showMainPlayer,
+                         *m_showAppendMenu;
     KNHighLightLabel *m_albumArt;
     KNScrollLabel *m_title, *m_artistAlbum;
     KNProgressSlider *m_progressSlider;
@@ -129,12 +167,14 @@ private:
     KNEditableLabel *m_position;
     KNOpacityButton *m_loopState, *m_volumeIndicator;
     QWidget *m_controlPanel, *m_volumePanel, *m_appendPanel;
+    //Append menu.
+    KNSaoSubMenu *m_appendMenu;
+    QSignalMapper *m_actionTrigger;
+    QAction *m_menuActions[MenuActionsCount];
+    KNSaoSubMenu *m_subMenus[SubMenuCount];
 
     //Effects
     QGraphicsOpacityEffect *m_informationEffect;
-
-    //Status.
-    bool m_progressPressed;
 
     //Icons.
     QIcon m_iconLoopState[LoopCount], m_iconMute[2], m_iconPlay, m_iconPause;
@@ -151,6 +191,9 @@ private:
 
     //Configures.
     KNConfigure *m_cacheConfigure, *m_musicConfigure;
+
+    //Status.
+    bool m_appendMenuShown, m_progressPressed;
 };
 
 #endif // KNMUSICHEADERPLAYER_H

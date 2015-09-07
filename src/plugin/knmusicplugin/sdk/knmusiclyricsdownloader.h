@@ -197,11 +197,26 @@ protected:
     }
 
     /*!
-     * \brief get
-     * \param url
-     * \param responseData
-     * \param cookie
-     * \param referer
+     * \brief Http get request via given the request. This function works in
+     * stucked way.
+     * \param request The requst of the get request.
+     * \param responseData The response data byte array which will be used to
+     * receive the data from the get request.
+     */
+    void get(QNetworkRequest &request,
+             QByteArray &responseData);
+
+    /*!
+     * \brief This is a override function.\n
+     * Http get request via given the url, cookie and referer. This
+     * function works in stucked way.\n
+     * The parameters provided in this function is used to generate the request.
+     * \param url The url of the get target.
+     * \param responseData The response data byte array which will be used to
+     * receive the data from the get request.
+     * \param cookie The cookie which will be use on the request header. By
+     * default it can leave blank to use the default one provided by Qt.
+     * \param referer The referer parameter.
      */
     inline void get(const QString &url,
                     QByteArray &responseData,
@@ -212,20 +227,31 @@ protected:
     }
 
     /*!
-     * \brief get
-     * \param request
-     * \param responseData
+     * \brief Http post request via given the request. This function works in
+     * stucked way.
+     * \param request The request of the post request.
+     * \param parameter The parameter which will be used when doing the post
+     * request.
+     * \param responseData The response data byte array which will be used to
+     * receive the data from the get request.
      */
-    void get(QNetworkRequest &request,
-             QByteArray &responseData);
+    void post(QNetworkRequest &request,
+              const QByteArray &parameter,
+              QByteArray &responseData);
 
     /*!
-     * \brief post
-     * \param url
-     * \param responseData
-     * \param parameter
-     * \param cookie
-     * \param referer
+     * \brief This is a override function.\n
+     * Http post request via given the request. This function works in stucked
+     * way. The url, cookie and referer is used to generate the request header.
+     * The 'parameter' is the parameter when doing the post.
+     * \param url The url of the post target.
+     * \param responseData The response data byte array which will be used to
+     * receive the data from the get request.
+     * \param parameter The parameter which will be used when doing the post
+     * request.
+     * \param cookie The cookie which will be use on the request header. By
+     * default it can leave blank to use the default one provided by Qt.
+     * \param referer The referer parameter.
      */
     inline void post(const QString &url,
                      QByteArray &responseData,
@@ -237,21 +263,14 @@ protected:
     }
 
     /*!
-     * \brief post
-     * \param request
-     * \param parameter
-     * \param responseData
-     */
-    void post(QNetworkRequest &request,
-              const QByteArray &parameter,
-              QByteArray &responseData);
-
-    /*!
-     * \brief generateRequest
-     * \param url
-     * \param cookie
-     * \param referer
-     * \return
+     * \brief Generate a request object by providing the url, cookie and the
+     * referer.
+     * \param url The request target url.
+     * \param cookie The custom cookie. Default it is null, it will the default
+     * cookie provided by Qt.
+     * \param referer The custom referer. Default it's null, it will use no
+     * referer to this request(Qt default).
+     * \return The request object.
      */
     QNetworkRequest generateRequest(const QString &url,
                                     const QVariant &cookie=QVariant(),

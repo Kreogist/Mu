@@ -16,12 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QSignalMapper>
 #include <QLabel>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
 
+#include "sao/knsaosubmenu.h"
 #include "knglobal.h"
+#include "knutil.h"
+#include "knlocalemanager.h"
 #include "kneditablelabel.h"
 #include "knhighlightlabel.h"
 #include "knvolumeslider.h"
@@ -33,6 +37,7 @@
 #include "kngraphicsgloweffect.h"
 #include "knconfigure.h"
 
+#include "knmusicdetaildialog.h"
 #include "knmusiclyricsmanager.h"
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
@@ -56,9 +61,14 @@
 KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent),
     m_headerLyrics(new KNMusicScrollLyrics(this)),
-    m_previous(generateControlButton(":/plugin/music/player/previous.png")),
-    m_playNPause(generateControlButton(":/plugin/music/player/play.png")),
-    m_next(generateControlButton(":/plugin/music/player/next.png")),
+    m_previous(generateControlButton(
+                   ":/plugin/music/player/previous_light.png")),
+    m_playNPause(generateControlButton(":/plugin/music/player/play_light.png")),
+    m_next(generateControlButton(":/plugin/music/player/next_light.png")),
+    m_showMainPlayer(generateAppendButton(
+                         ":/plugin/music/player/fullscreen.png")),
+    m_showAppendMenu(generateAppendButton(
+                         ":/plugin/music/player/menu.png")),
     m_albumArt(new KNHighLightLabel(this)),
     m_title(new KNScrollLabel(this)),
     m_artistAlbum(new KNScrollLabel(this)),
@@ -71,10 +81,11 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_controlPanel(new QWidget(this)),
     m_volumePanel(new QWidget(this)),
     m_appendPanel(new QWidget(this)),
+    m_appendMenu(new KNSaoSubMenu(m_showAppendMenu)),
+    m_actionTrigger(new QSignalMapper(this)),
     m_informationEffect(new QGraphicsOpacityEffect(this)),
-    m_progressPressed(false),
-    m_iconPlay(QIcon(":/plugin/music/player/play.png")),
-    m_iconPause(QIcon(":/plugin/music/player/pause.png")),
+    m_iconPlay(QIcon(":/plugin/music/player/play_light.png")),
+    m_iconPause(QIcon(":/plugin/music/player/pause_light.png")),
     m_mouseIn(new QParallelAnimationGroup(this)),
     m_mouseOut(new QParallelAnimationGroup(this)),
     m_showControl(generateAnime(m_controlPanel)),
@@ -88,7 +99,9 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_cacheConfigure(
         knGlobal->cacheConfigure()->getConfigure("MusicHeaderPlayer")),
     m_musicConfigure(
-        knMusicGlobal->configure()->getConfigure("MusicHeaderPlayer"))
+        knMusicGlobal->configure()->getConfigure("MusicHeaderPlayer")),
+    m_appendMenuShown(false),
+    m_progressPressed(false)
 {
     //Set properties.
     setContentsMargins(0, 0, 0, 0);
@@ -98,7 +111,8 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //--Loop State--
     m_iconLoopState[NoRepeat]=QIcon(":/plugin/music/player/NoRepeat.png");
     m_iconLoopState[RepeatAll]=QIcon(":/plugin/music/player/Repeat.png");
-    m_iconLoopState[RepeatTrack]=QIcon(":/plugin/music/player/RepeatSingle.png");
+    m_iconLoopState[RepeatTrack]=
+            QIcon(":/plugin/music/player/RepeatSingle.png");
     m_iconLoopState[Shuffle]=QIcon(":/plugin/music/player/Random.png");
     //--Mute State--
     m_iconMute[false]=QIcon(":/plugin/music/player/mute_false.png");
@@ -135,6 +149,32 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     glowEffect->setColor(QColor(0,0,0));
     glowEffect->setRadius(GlowRadius);
     m_artistAlbum->setGraphicsEffect(glowEffect);
+
+    //Append panel.
+    //Initial layout of the append panel.
+    QBoxLayout *appendLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            m_appendPanel);
+    appendLayout->setContentsMargins(0,0,0,0);
+    appendLayout->setSpacing(9);
+    m_appendPanel->setLayout(appendLayout);
+    appendLayout->addStretch();
+    //Configure the main player button.
+    connect(m_showMainPlayer, &KNOpacityButton::clicked,
+            this, &KNMusicHeaderPlayer::requireShowMainPlayer);
+//    connect(m_showMainPlayer, &KNOpacityButton::clicked,
+//            this, &KNMusicHeaderPlayer::hide);
+    //Add to append panel.
+    appendLayout->addWidget(m_showMainPlayer);
+    //Configure the append menu button.
+    connect(m_showAppendMenu, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicHeaderPlayer::showAppendMenu);
+    appendLayout->addWidget(m_showAppendMenu);
+    appendLayout->addStretch();
+    //Reset the append panel geometry.
+    m_appendPanel->setGeometry(QRect(-m_appendPanel->width(),
+                                     panelY,
+                                     m_appendPanel->width(),
+                                     m_appendPanel->height()));
 
     //Control panel.
     m_controlPanel->setGeometry(generateOutPosition());
@@ -244,6 +284,75 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     progressLayout->addSpacing(5);
     progressLayout->addWidget(m_loopState);
 
+    //Configure the append menu.
+    m_appendMenu->setFocusProxy(this);
+    //Generate the sub menus.
+    for(int i=0; i<SubMenuCount; i++)
+    {
+        m_subMenus[i]=new KNSaoSubMenu(m_appendMenu);
+    }
+    //Set the icons.
+    m_subMenus[SubMenuRating]->menuAction()->setIcon(
+                QIcon("://saomenuicons/rating.png"));
+    m_subMenus[SubMenuLocate]->menuAction()->setIcon(
+                QIcon("://saomenuicons/locate_original.png"));
+    //Link the action mapper.
+    connect(m_actionTrigger, SIGNAL(mapped(int)),
+            this, SLOT(appendActionTriggered(int)));
+    //Generate the actions.
+    for(int i=0; i<MenuActionsCount; i++)
+    {
+        //Generate the action.
+        m_menuActions[i]=new QAction(this);
+        //Link to the action trigger.
+        connect(m_menuActions[i], SIGNAL(triggered()),
+                m_actionTrigger, SLOT(map()));
+        //Mapped the action.
+        m_actionTrigger->setMapping(m_menuActions[i], i);
+    }
+    //Configure the rating menu.
+    QIcon ratingIcon=QIcon("://saomenuicons/rating.png");
+    QByteArray starTextData;
+    starTextData.append((char)226);
+    starTextData.append((char)152);
+    starTextData.append((char)133);
+    QString starText=starTextData;
+    for(int i=AppendRatingNoStar; i<=AppendRatingFiveStar; i++)
+    {
+        //Set action properties
+        m_menuActions[i]->setIcon(ratingIcon);
+        m_menuActions[i]->setText(starText.repeated(i-AppendRatingNoStar));
+        //Add to rating menu.
+        m_subMenus[SubMenuRating]->addAction(m_menuActions[i]);
+    }
+    m_appendMenu->addMenu(m_subMenus[SubMenuRating]);
+    //Configure the get info menu.
+    m_menuActions[AppendShowDetail]->setIcon(
+                QIcon("://saomenuicons/get_info.png"));
+    m_appendMenu->addAction(m_menuActions[AppendShowDetail]);
+    //Configure the show in graphics menu
+    m_menuActions[AppendShowInGraphicShell]->setIcon(
+                QIcon("://saomenuicons/showInGraphicsShell.png"));
+    m_appendMenu->addAction(m_menuActions[AppendShowInGraphicShell]);
+    //Add actions to locate menu.
+    m_menuActions[AppendLocateNowPlaying]->setIcon(
+                QIcon("://saomenuicons/locate_original.png"));
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendLocateNowPlaying]);
+    m_menuActions[AppendShowInSongs]->setIcon(
+                QIcon("://saomenuicons/locate_songs.png"));
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInSongs]);
+    m_menuActions[AppendShowInArtists]->setIcon(
+                QIcon("://saomenuicons/locate_artists.png"));
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInArtists]);
+    m_menuActions[AppendShowInAlbums]->setIcon(
+                QIcon("://saomenuicons/locate_albums.png"));
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInAlbums]);
+    m_menuActions[AppendShowInGenres]->setIcon(
+                QIcon("://saomenuicons/locate_genres.png"));
+    m_subMenus[SubMenuLocate]->addAction(m_menuActions[AppendShowInGenres]);
+    //Append locate menu.
+    m_appendMenu->addMenu(m_subMenus[SubMenuLocate]);
+
     //Configure the lyrics.
     //Use the lyrics manager backend.
     m_headerLyrics->setObjectName("HeaderLyrics");
@@ -282,6 +391,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_mouseOut->addAnimation(m_hideVolume);
     m_mouseOut->addAnimation(m_hideControl);
     m_mouseOut->addAnimation(m_hideAppend);
+
+    //Link the restranslate of the locale.
+    knI18n->link(this, &KNMusicHeaderPlayer::retranslate);
+    retranslate();
 }
 
 void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
@@ -399,6 +512,11 @@ void KNMusicHeaderPlayer::activate()
 
 void KNMusicHeaderPlayer::inactivate()
 {
+    //Check the shown status.
+    if(m_appendMenuShown)
+    {
+        return;
+    }
     //Start mouse out and hide animations.
     startAnime(m_mouseOut, m_hideVolume, m_hideControl, m_hideAppend);
 }
@@ -450,6 +568,34 @@ void KNMusicHeaderPlayer::reset()
     //Set the duration and position to 0.
     updateDuration(0);
     m_position->setText(KNMusicUtil::msecondToString(0));
+}
+
+void KNMusicHeaderPlayer::retranslate()
+{
+    //Set the sub menu title.
+    m_subMenus[SubMenuRating]->menuAction()->setText(tr("Rating"));
+    m_subMenus[SubMenuLocate]->menuAction()->setText(tr("Locate"));
+    //Set the no stars title.
+    m_menuActions[AppendRatingNoStar]->setText(tr("(No star)"));
+    //Set the detail info title.
+    m_menuActions[AppendShowDetail]->setText(tr("Get Info"));
+    //Set the action title.
+#ifdef Q_OS_WIN32
+    m_menuActions[AppendShowInGraphicShell]->setText(tr("Show in Explorer"));
+#endif
+#ifdef Q_OS_MAC
+    m_menuActions[AppendShowInGraphicShell]->setText(tr("Show in Finder"));
+#endif
+#ifdef Q_OS_LINUX
+    m_menuActions[AppendShowInGraphicShell]->setText(
+                tr("Show the contains folder"));
+#endif
+    m_menuActions[AppendLocateNowPlaying]->setText(tr("Locate the playing"
+                                                      " song"));
+    m_menuActions[AppendShowInSongs]->setText(tr("Show in songs"));
+    m_menuActions[AppendShowInArtists]->setText(tr("Show in artists"));
+    m_menuActions[AppendShowInAlbums]->setText(tr("Show in albums"));
+    m_menuActions[AppendShowInGenres]->setText(tr("Show in genres"));
 }
 
 void KNMusicHeaderPlayer::updatePositionText(const qint64 &position)
@@ -568,6 +714,90 @@ void KNMusicHeaderPlayer::onActionNowPlayingChanged(
                               knMusicGlobal->noAlbumArt():albumArt);
 }
 
+void KNMusicHeaderPlayer::showAppendMenu()
+{
+    //Ensure there's a file is playing.
+    //Check the playing file path.
+    if(m_nowPlaying==nullptr ||
+            m_nowPlaying->playingItem().detailInfo.filePath.isEmpty())
+    {
+        return;
+    }
+    //Set the menu shown flag.
+    m_appendMenuShown=true;
+    //Launch the menu.
+    m_appendMenu->exec();
+    //Reset the flag.
+    m_appendMenuShown=false;
+    //
+}
+
+void KNMusicHeaderPlayer::appendActionTriggered(const int &actionIndex)
+{
+    //Reset the flag.
+    m_appendMenuShown=false;
+    //
+    ;
+    //Prepare the playing item.
+    KNMusicAnalysisItem playingItem;
+    //Ensure that there's a file is playing.
+    if(m_nowPlaying==nullptr)
+    {
+        return;
+    }
+    //Save the playing item.
+    playingItem=m_nowPlaying->playingItem();
+    //Check the playing file path.
+    if(playingItem.detailInfo.filePath.isEmpty())
+    {
+        //Ignore the invalid playint item.
+        return;
+    }
+    //Check the action index.
+    switch(actionIndex)
+    {
+    case AppendRatingNoStar:
+    case AppendRatingOneStar:
+    case AppendRatingTwoStar:
+    case AppendRatingThreeStar:
+    case AppendRatingFourStar:
+    case AppendRatingFiveStar:
+        //Check the now playing.
+        if(m_nowPlaying)
+        {
+            //Set the plaing rating.
+            m_nowPlaying->setPlayingRating(actionIndex-AppendRatingNoStar);
+        }
+        break;
+    case AppendShowInGraphicShell:
+        KNUtil::showInGraphicalShell(playingItem.detailInfo.filePath);
+        break;
+    case AppendShowDetail:
+        //Check the now playing.
+        if(m_nowPlaying)
+        {
+            //Show the detail of the playing item.
+            knMusicGlobal->detailDialog()->showDialog(playingItem);
+        }
+        break;
+    case AppendLocateNowPlaying:
+//        m_nowPlaying->showCurrentIndexInOriginalTab();
+        break;
+    case AppendShowInSongs:
+        emit requireShowInSongs();
+        break;
+    case AppendShowInArtists:
+        emit requireShowInArtists();
+        break;
+    case AppendShowInAlbums:
+        emit requireShowInAlbums();
+        break;
+    case AppendShowInGenres:
+        emit requireShowInGenres();
+        break;
+    }
+}
+
 inline void KNMusicHeaderPlayer::setPosition(const qint64 &position)
 {
     //Check the backend before.
@@ -598,6 +828,18 @@ inline KNOpacityAnimeButton *KNMusicHeaderPlayer::generateControlButton(
     //Configure the button.
     button->setFixedSize(m_buttonSize, m_buttonSize);
     //Set the icon of the button.
+    button->setIcon(QIcon(iconPath));
+    //Give back the button.
+    return button;
+}
+
+inline KNOpacityAnimeButton *KNMusicHeaderPlayer::generateAppendButton(
+        const QString &iconPath)
+{
+    //Generate a opacity button.
+    KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
+    //Configure the button.
+    button->setFixedSize(14, 14);
     button->setIcon(QIcon(iconPath));
     //Give back the button.
     return button;

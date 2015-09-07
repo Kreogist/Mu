@@ -42,6 +42,7 @@ public:
     virtual QWidget *lyrics()=0;
 
 signals:
+    void requireShowMainPlayer();
 
 public slots:
     /*!
@@ -65,6 +66,11 @@ public slots:
      * \brief Save header player settings to configure data.
      */
     virtual void saveConfigure()=0;
+
+    /*!
+     * \brief Reset the header player.
+     */
+    virtual void reset()=0;
 };
 
 #endif // KNMUSICHEADERPLAYERBASE_H
