@@ -15,9 +15,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QMimeData>
+#include <QJsonDocument>
+
 #include "knmusicsearcher.h"
 #include "knmusicanalysisqueue.h"
-#include "knmusicplaylistutil.h"
 
 #include "knmusicplaylistmodel.h"
 
@@ -112,8 +114,7 @@ void KNMusicPlaylistModel::buildModel()
     for(auto i=m_contentData.constBegin(); i!=m_contentData.constEnd(); ++i)
     {
         //Parse and add the data to the model.
-        detailInfos.append(
-                    KNMusicPlaylistUtil::objectToDetailInfo((*i).toObject()));
+        detailInfos.append(KNMusicUtil::objectToDetailInfo((*i).toObject()));
     }
     //Clear the content data.
     m_contentData=QJsonArray();
@@ -208,4 +209,86 @@ QString KNMusicPlaylistModel::generateFilePath()
 void KNMusicPlaylistModel::setPlaylistDirPath(const QString &playlistDirPath)
 {
     m_playlistDirPath = playlistDirPath;
+}
+
+QMimeData *KNMusicPlaylistModel::mimeData(const QModelIndexList &indexes) const
+{
+    //First get the mime data from the music model.
+    QMimeData *mimeData=KNMusicModel::mimeData(indexes);
+    //Add the playlist type to the mime data.
+    mimeData->setData(ModelType, QString("Playlist").toUtf8());
+    //Give back the mime data.
+    return mimeData;
+}
+
+bool KNMusicPlaylistModel::dropMimeData(const QMimeData *data,
+                                        Qt::DropAction action,
+                                        int row,
+                                        int column,
+                                        const QModelIndex &parent)
+{
+    //Check move or copy action enabled.
+    if(action==Qt::MoveAction || action==Qt::CopyAction)
+    {
+        //Check if the drop operation is from a music model.
+        if(data->hasFormat(ModelMimeType))
+        {
+            //Check whether the data is from it self.
+            if(data->data(ModelMimeType).toLongLong()==(qint64)this)
+            {
+                qDebug()<<"Fuck it!!!";
+                //Generate the remove index list.
+                QList<QPersistentModelIndex> sourceRowIndexes;
+                //Translate the row list to source row indexes list.
+                //We have to move the source indexes to the target positions.
+                QJsonArray rawRowData=
+                        QJsonDocument::fromBinaryData(
+                            data->data(ModelRowList)).array();
+                //Translate all the row into persistant list.
+                for(auto i=rawRowData.begin(); i!=rawRowData.end(); ++i)
+                {
+                    //Add the target index to source row indexes.
+                    sourceRowIndexes.append(index((*i).toInt(), Name));
+                }
+                //Translate the target position to persistant index.
+                QPersistentModelIndex targetIndex=index(row, Name);
+                //Move all the rows to target position.
+                while(!sourceRowIndexes.isEmpty())
+                {
+                    //Move the source row to target row.
+                    moveRow(QModelIndex(), sourceRowIndexes.takeLast().row(),
+                            QModelIndex(), targetIndex.row());
+                }
+                return true;
+            }
+            //We can simply parse the row information.
+            QJsonArray rawRowData=
+                    QJsonDocument::fromBinaryData(
+                        data->data(ModelRowData)).array();
+            //Generate a detail info list.
+            QList<KNMusicDetailInfo> detailInfoList;
+            //Parse all the data inside the array list.
+            for(auto i=rawRowData.begin(); i!=rawRowData.end(); ++i)
+            {
+                //Add the detail info to the detail info list.
+                detailInfoList.append(
+                            KNMusicUtil::objectToDetailInfo((*i).toObject()));
+            }
+            //Check the row.
+            if(row==-1)
+            {
+                //We have to move all of these data to the end of the model.
+                appendRows(detailInfoList);
+            }
+            else
+            {
+                //We have to insert those rows to a specific positions.
+                insertMusicRows(row, detailInfoList);
+            }
+            //Accept.
+            return true;
+        }
+    }
+    //Or others, throw it to KNMusicModel.
+    return KNMusicModel::dropMimeData(data, action, row, column, parent);
 }

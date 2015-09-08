@@ -28,6 +28,7 @@ public:
     KNMusicMainPlayerBase(QWidget *parent = 0):KNMusicPlayerBase(parent){}
 
 signals:
+    void requireHide();
 
 public slots:
 };

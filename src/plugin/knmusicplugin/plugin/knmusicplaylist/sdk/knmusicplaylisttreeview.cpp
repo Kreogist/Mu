@@ -31,6 +31,9 @@ KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent,
     onActionThemeUpdate();
     //Enabled the drag and drop.
     setDragDropMode(QAbstractItemView::DragDrop);
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
     //Set the delegate.
     setItemDelegateForColumn(MusicRowState,
                              new KNMusicPlaylistIndexDelegate(this));

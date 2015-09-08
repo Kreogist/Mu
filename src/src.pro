@@ -7,7 +7,7 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
@@ -191,7 +191,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistengine.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusicproxymodel.cpp \
-    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistutil.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistindexdelegate.cpp \
     plugin/knmusicplugin/sdk/knmusicratingdelegate.cpp \
     plugin/knmusicplugin/sdk/knmusicratingeditor.cpp \
@@ -243,7 +242,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
     sdk/sao/knsaosubmenu.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
+    plugin/knmusicplugin/sdk/knmusicutil.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -329,7 +329,6 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicproxymodel.h \
     plugin/knmusicplugin/sdk/knmusicnowplayingbase.h \
     plugin/knmusicplugin/sdk/knmusicbackend.h \
-    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistutil.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistindexdelegate.h \
     plugin/knmusicplugin/sdk/knmusicratingdelegate.h \
     plugin/knmusicplugin/sdk/knmusicratingeditor.h \
@@ -393,3 +392,5 @@ HEADERS += \
 
 RESOURCES += \
     resource/res.qrc
+
+DISTFILES +=

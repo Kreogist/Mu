@@ -116,7 +116,7 @@ public:
     void setChanged(bool changed);
 
     /*!
-     * \brief Reimplemented from KNMusicPlaylistModel::data().
+     * \brief Reimplemented from KNMusicModel::data().
      */
     QVariant data(const QModelIndex &index, int role) const;
 
@@ -126,6 +126,20 @@ public:
      * \param playlistDirPath The directory path.
      */
     static void setPlaylistDirPath(const QString &playlistDirPath);
+
+    /*!
+     * \brief Reimplemented from KNMusicModel::mimeData().
+     */
+    QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicModel::dropMimeData().
+     */
+    bool dropMimeData(const QMimeData *data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex &parent) Q_DECL_OVERRIDE;
 
 signals:
     /*!

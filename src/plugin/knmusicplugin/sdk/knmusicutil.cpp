@@ -19,10 +19,9 @@
 
 #include "knmusicutil.h"
 
-#include "knmusicplaylistutil.h"
+using namespace MusicUtil;
 
-KNMusicDetailInfo KNMusicPlaylistUtil::objectToDetailInfo(
-        const QJsonObject &object)
+KNMusicDetailInfo KNMusicUtil::objectToDetailInfo(const QJsonObject &object)
 {
     //Generate a detail info struct.
     KNMusicDetailInfo detailInfo;
@@ -65,8 +64,7 @@ KNMusicDetailInfo KNMusicPlaylistUtil::objectToDetailInfo(
     return detailInfo;
 }
 
-QJsonObject KNMusicPlaylistUtil::detailInfoToObject(
-        const KNMusicDetailInfo &detailInfo)
+QJsonObject KNMusicUtil::detailInfoToObject(const KNMusicDetailInfo &detailInfo)
 {
     //Generate a json object class.
     QJsonObject object;

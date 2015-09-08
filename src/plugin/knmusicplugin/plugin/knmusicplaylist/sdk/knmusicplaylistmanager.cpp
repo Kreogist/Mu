@@ -25,7 +25,6 @@
 #include "knutil.h"
 #include "knmessagebox.h"
 
-#include "knmusicplaylistutil.h"
 #include "knmusicplaylistengine.h"
 #include "knmusicplaylistmodel.h"
 #include "knmusicplaylistlistmodel.h"
@@ -163,8 +162,7 @@ bool KNMusicPlaylistManager::writeModelToFile(KNMusicPlaylistModel *model,
         //Translate the detail info from the model to a QJsonObject, and add it
         //to the playlist content.
         songs.append(
-                    KNMusicPlaylistUtil::detailInfoToObject(
-                        model->rowDetailInfo(row)));
+                    KNMusicUtil::detailInfoToObject(model->rowDetailInfo(row)));
     }
     //Create the playlist object.
     QJsonObject playlistObject;

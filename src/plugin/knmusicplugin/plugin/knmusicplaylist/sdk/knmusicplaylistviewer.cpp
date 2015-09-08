@@ -48,6 +48,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
 {
     //Configure the tree view.
     setFocusProxy(m_treeView);
+    setAcceptDrops(true);
     //Configure title label.
     m_title->setObjectName("PlaylistViewerLabel");
     m_title->setContentsMargins(0,0,0,0);

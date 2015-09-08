@@ -78,6 +78,15 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Show up the main player widget.
+     */
+    void showMainPlayer();
+
+    /*!
+     * \brief Hide the main player widget.
+     */
+    void hideMainPlayer();
 
 protected:
     /*!

@@ -422,6 +422,9 @@ void KNMusicPlugin::initialMainPlayer(KNMusicMainPlayerBase *mainPlayer)
     }
     //Set the basic stuffs of a player.
     initialPlayer(m_mainPlayer);
+    //Link the request.
+    connect(m_mainPlayer, &KNMusicMainPlayerBase::requireHide,
+            this, &KNMusicPlugin::requireHideMainPlayer);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

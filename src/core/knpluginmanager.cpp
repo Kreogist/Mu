@@ -115,18 +115,40 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
 {
     //Load the music categroy plugin first.
     loadCategoryPlugin(plugin);
-    //Set the main player provided by the music plugin.
-    m_mainWindow->setMainPlayer(plugin->mainPlayer());
+    //Check the main window pointer.
+    if(m_mainWindow!=nullptr)
+    {
+        //Set the main player provided by the music plugin.
+        m_mainWindow->setMainPlayer(plugin->mainPlayer());
+        //Link the plugin and the main window.
+        connect(plugin, &KNAbstractMusicPlugin::requireShowMainPlayer,
+                m_mainWindow, &KNMainWindow::showMainPlayer);
+        connect(plugin, &KNAbstractMusicPlugin::requireHideMainPlayer,
+                m_mainWindow, &KNMainWindow::hideMainPlayer);
+    }
 }
 
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 {
+    //Check the plugin first.
+    if(plugin==nullptr)
+    {
+        return;
+    }
     //Load the plugins of the plugin.
     plugin->loadPlugins();
-    //Set the category plugin.
-    m_header->setCategoryPlugin(plugin);
-    //Set the category to be the main widget.
-    m_mainWindow->setMainWidget(plugin);
+    //Check the header.
+    if(m_header!=nullptr)
+    {
+        //Set the category plugin.
+        m_header->setCategoryPlugin(plugin);
+    }
+    //Check the main window pointer.
+    if(m_mainWindow!=nullptr)
+    {
+        //Set the category to be the main widget.
+        m_mainWindow->setMainWidget(plugin);
+    }
 }
 
 KNMainWindow *KNPluginManager::mainWindow() const

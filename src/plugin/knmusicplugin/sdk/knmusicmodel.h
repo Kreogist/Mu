@@ -28,11 +28,16 @@
 
 using namespace MusicUtil;
 
+#define ModelMimeType "application/org.kreogist.mu.musicmodel"
+#define ModelType "application/org.kreogist.mu.musicmodeltype"
+#define ModelRowData "application/org.kreogist.mu.musicmodelrowdata"
+#define ModelRowList "application/org.kreogist.mu.musicmodelrows"
+
 /*!
  * \brief The KNMusicModel class is the basic model of all the other models
  * which will be used in the music plugin. This provides a basic foundation for
  * the playlist, music library and current playing. It's has fixed column size.
- * You should display a KNMusicModel's implement with an implement of
+ * You should display a KNMusicModel's implement with an implementation of
  * KNMusicTreeViewBase.
  */
 class KNMusicModel : public QAbstractTableModel
@@ -70,6 +75,15 @@ public:
      * \return If insert the music successful, it will be true.
      */
     bool insertRow(int row, const KNMusicDetailInfo &detailInfo);
+
+    /*!
+     * \brief Insert several music detail infos to the specific position of the
+     * model.
+     * \param row The position of the music.
+     * \param detailInfos The KNMusicDetailInfo list of the music.
+     * \return If insert the music list successful, it will be true.
+     */
+    bool insertMusicRows(int row, const QList<KNMusicDetailInfo> &detailInfos);
 
     /*!
      * \brief Update one music row into a new one. Notice that this will update
@@ -139,9 +153,23 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QAbstractTableModel::canDropMimeData().
+     */
+    bool canDropMimeData(const QMimeData *data,
+                         Qt::DropAction action,
+                         int row,
+                         int column,
+                         const QModelIndex &parent) const Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QAbstractTableModel::data().
      */
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractTableModel::mimeData().
+     */
+    QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractTableModel::setData().
@@ -174,6 +202,11 @@ public:
      * \return The detail info structure of the song.
      */
     KNMusicDetailInfo rowDetailInfo(const int &row);
+
+    /*!
+     * \brief Reimplemented from QAbstractTableModel::supportedDropActions().
+     */
+    Qt::DropActions supportedDropActions() const Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractTableModel::dropMimeData().
@@ -222,6 +255,15 @@ public:
         return setData(index(row, column), textData, Qt::DisplayRole);
     }
 
+    /*!
+     * \brief Reimplemented from QAbstractTableModel::moveRows().
+     */
+    bool moveRows(const QModelIndex &sourceParent,
+                  int sourceRow,
+                  int count,
+                  const QModelIndex &destinationParent,
+                  int destinationChild);
+
 signals:
     /*!
      * \brief When the row count is changed, this signal will be emitted.
@@ -236,6 +278,10 @@ signals:
     void requireAnalysisFiles(QStringList fileList);
 
 public slots:
+    /*!
+     * \brief Set the playing index. It will display a playing index mark on it.
+     * \param playingIndex
+     */
     void setPlayingIndex(const QModelIndex &playingIndex);
 
 private:

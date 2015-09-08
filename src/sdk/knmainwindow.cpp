@@ -87,6 +87,18 @@ void KNMainWindow::setMainPlayer(QWidget *mainPlayer)
     m_container->setMainPlayer(mainPlayer);
 }
 
+void KNMainWindow::showMainPlayer()
+{
+    //Set the container to show the main player.
+    m_container->showMainPlayer();
+}
+
+void KNMainWindow::hideMainPlayer()
+{
+    //Hide the main player.
+    m_container->hideMainPlayer();
+}
+
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
     //Save the configure of the category plugin, if the category is valid.

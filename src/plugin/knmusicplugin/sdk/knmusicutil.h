@@ -26,6 +26,7 @@
 #include <QList>
 #include <QByteArray>
 #include <QVariant>
+#include <QJsonObject>
 
 namespace MusicUtil
 {
@@ -280,6 +281,22 @@ public:
                (((quint32)rawTagData[2]<<8)  & 0x0000FF00) +
                ( (quint32)rawTagData[3]      & 0x000000FF);
     }
+
+    /*!
+     * \brief Translate a QJsonObject to a KNMusicDetailInfo class.
+     * \param object The json object class.
+     * \return The translated KNMusicDetailInfo class.
+     */
+    static MusicUtil::KNMusicDetailInfo objectToDetailInfo(
+            const QJsonObject &object);
+
+    /*!
+     * \brief Translate a KNMusicDetailInfo to a QJsonObject class.
+     * \param detailInfo The KNMusicDetailInfo class.
+     * \return The translate QJsonObject class.
+     */
+    static QJsonObject detailInfoToObject(
+            const MusicUtil::KNMusicDetailInfo &detailInfo);
 
 private:
     KNMusicUtil();

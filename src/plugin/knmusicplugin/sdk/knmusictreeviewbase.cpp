@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QScrollBar>
+#include <QDrag>
 #include <QTimeLine>
 #include <QHelpEvent>
 #include <QMouseEvent>
@@ -55,6 +56,7 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     setAlternatingRowColors(false); //We will use our own alternating drawing.
     setContentsMargins(0, 0, 0, 0);
     setDragDropMode(QAbstractItemView::InternalMove);
+    setDragEnabled(true);
     setDropIndicatorShown(true);
     setFrameShape(QFrame::NoFrame);
     setIndentation(0);
@@ -64,6 +66,8 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setUniformRowHeights(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    //Enabled drop according to the help context.
+    viewport()->setAcceptDrops(true);
 
     //Set scroll bar policies.
     horizontalScrollBar()->setSingleStep(5);
@@ -161,6 +165,25 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
     }
     //Paint the other parts of the row.
     QTreeView::drawRow(painter, options, index);
+}
+
+void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
+{
+    Q_UNUSED(supportedActions)
+    //Get all the selections.
+    QModelIndexList indexes=selectionModel()->selectedRows(Name);
+    //Check the size of selected rows.
+    if(indexes.isEmpty())
+    {
+        //If there's no rows selected, ignore the drag operation.
+        return;
+    }
+    //Generate the mime data.
+    QScopedPointer<QDrag> drag(new QDrag(this));
+    //Set the mime data to the drag action.
+    drag->setMimeData(m_proxyModel->mimeData(indexes));
+    //Do the drag.
+    drag->exec();
 }
 
 void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)

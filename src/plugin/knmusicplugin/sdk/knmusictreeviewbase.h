@@ -102,34 +102,39 @@ protected:
     /*!
      * \brief Reimplemented from QTreeView::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::drawRow().
      */
     void drawRow(QPainter *painter,
                  const QStyleOptionViewItem &options,
-                 const QModelIndex &index) const;
+                 const QModelIndex &index) const  Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QTreeView::startDrag().
+     */
+    void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::mousePressEvent().
      */
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::mouseReleaseEvent().
      */
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::keyReleaseEvent().
      */
-    void keyReleaseEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reset the header column state to a default state. Including the
@@ -151,7 +156,7 @@ protected:
     /*!
      * \brief Reimplemented from QTreeView::wheelEvent().
      */
-    void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
 protected slots:
     /*!

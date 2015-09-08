@@ -47,6 +47,11 @@ signals:
      */
     void requireShowMainPlayer();
 
+    /*!
+     * \brief This signal will ask the main window to hide the main player.
+     */
+    void requireHideMainPlayer();
+
 public slots:
 };
 

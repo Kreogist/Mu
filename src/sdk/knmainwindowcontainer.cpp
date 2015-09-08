@@ -115,11 +115,6 @@ QWidget *KNMainWindowContainer::preferencePanel() const
     return m_elementWidget[PreferencePanel];
 }
 
-QWidget *KNMainWindowContainer::mainPlayer() const
-{
-    return m_elementWidget[MainPlayer];
-}
-
 void KNMainWindowContainer::setPreferencePanel(QWidget *preferencePanel)
 {
     //Check the pointer.
@@ -133,6 +128,11 @@ void KNMainWindowContainer::setPreferencePanel(QWidget *preferencePanel)
     m_elementAnime[AnimePreferencePanel]->setTargetObject(preferencePanel);
     //Set the opacity effect to the widget.
     preferencePanel->setGraphicsEffect(m_preferenceOpacityEffect);
+}
+
+QWidget *KNMainWindowContainer::mainPlayer() const
+{
+    return m_elementWidget[MainPlayer];
 }
 
 void KNMainWindowContainer::setMainPlayer(QWidget *mainPlayer)
@@ -199,7 +199,8 @@ void KNMainWindowContainer::hidePreference()
 void KNMainWindowContainer::showMainPlayer()
 {
     //Ignore the show request if the animation is running.
-    if(m_mainPlayerAnimeGroup->state()==QAbstractAnimation::Running)
+    if(m_elementWidget[MainPlayer]==nullptr ||
+            m_mainPlayerAnimeGroup->state()==QAbstractAnimation::Running)
     {
         return;
     }
@@ -211,6 +212,11 @@ void KNMainWindowContainer::showMainPlayer()
     //Update the container size related parameters.
     updateShowMainPlayer();
 
+    //Show the main player.
+    m_elementWidget[MainPlayer]->show();
+    //Disconnect the animation finished signal.
+    disconnect(m_mainPlayerAnimeGroup, &QParallelAnimationGroup::finished,
+               m_elementWidget[MainPlayer], &QWidget::hide);
     //Start the animation.
     m_mainPlayerAnimeGroup->start();
 }
@@ -218,7 +224,8 @@ void KNMainWindowContainer::showMainPlayer()
 void KNMainWindowContainer::hideMainPlayer()
 {
     //Ignore the show request if the animation is running.
-    if(m_mainPlayerAnimeGroup->state()==QAbstractAnimation::Running)
+    if(m_elementWidget[MainPlayer]==nullptr ||
+            m_mainPlayerAnimeGroup->state()==QAbstractAnimation::Running)
     {
         return;
     }
@@ -230,6 +237,9 @@ void KNMainWindowContainer::hideMainPlayer()
     //Update the container size related parameters.
     updateHideMainPlayer();
 
+    //Connect the animation finished signal to the hide slot of the main player.
+    connect(m_mainPlayerAnimeGroup, &QParallelAnimationGroup::finished,
+            m_elementWidget[MainPlayer], &QWidget::hide);
     //Start the animation.
     m_mainPlayerAnimeGroup->start();
 }
@@ -287,6 +297,12 @@ void KNMainWindowContainer::resizeEvent(QResizeEvent *event)
         {
             m_elementWidget[Header]->move(0, height());
         }
+    }
+    //Resize the main player.
+    if(m_elementWidget[MainPlayer]!=nullptr)
+    {
+        //Resize the main player.
+        m_elementWidget[MainPlayer]->resize(width(), height());
     }
     //Resize the main widget and reposition the main widget if there's no
     //animation running.

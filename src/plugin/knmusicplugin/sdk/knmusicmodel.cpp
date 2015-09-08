@@ -16,6 +16,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QMimeData>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 #include "knutil.h"
 
@@ -46,7 +48,10 @@ KNMusicModel::KNMusicModel(QObject *parent) :
         //Initial cache data.
 
         //Add music detail info list.
-        //!FIXME: add codes here.
+        m_dropMimeTypes.append(ModelMimeType);
+        m_dropMimeTypes.append(ModelType);
+        m_dropMimeTypes.append(ModelRowData);
+        m_dropMimeTypes.append(ModelRowList);
     }
 }
 
@@ -100,7 +105,7 @@ void KNMusicModel::appendRows(const QList<KNMusicDetailInfo> &detailInfos)
     //Follow the documentation, we have to do this.
     beginInsertRows(QModelIndex(),
                     m_detailInfos.size(),
-                    m_detailInfos.size() + detailInfos.size());
+                    m_detailInfos.size() + detailInfos.size() - 1);
     //Append the data at the end of the rows.
     m_detailInfos.append(detailInfos);
     //Add all the duration to the total duration counter.
@@ -121,11 +126,41 @@ bool KNMusicModel::insertRow(int row, const KNMusicDetailInfo &detailInfo)
     //Check the row first.
     Q_ASSERT(row>-1 && row<m_detailInfos.size());
     //Follow the documentation, we have to do this.
-    beginInsertRows(QModelIndex(), row, row + 1);
+    //The reason of why the row and row the same, see the comment in function
+    //appendRow().
+    beginInsertRows(QModelIndex(), row, row);
     //Insert the detail info into the list.
     m_detailInfos.insert(row, detailInfo);
     //Add the duration to the total duration counter.
     m_totalDuration+=detailInfo.duration;
+    //As the documentation said, called this after insert rows.
+    endInsertRows();
+    //Because this operation change the row count, the row count changed signal
+    //will be emitted.
+    emit rowCountChanged();
+    return true;
+}
+
+bool KNMusicModel::insertMusicRows(int row,
+                                   const QList<KNMusicDetailInfo> &detailInfos)
+{
+    //Check the row first.
+    Q_ASSERT(row>-1 && row<=m_detailInfos.size());
+    //Ignore the empty list.
+    if(detailInfos.isEmpty())
+    {
+        return true;
+    }
+    //Follow the documentation, we have to do this.
+    beginInsertRows(QModelIndex(), row, row + detailInfos.size() -1);
+    //Insert the data to the detail info list.
+    for(int i=detailInfos.size()-1; i>-1; --i)
+    {
+        //Insert the data to the specific position.
+        m_detailInfos.insert(row, detailInfos.at(i));
+        //Add the duration to the total duration counter.
+        m_totalDuration+=detailInfos.at(i).duration;
+    }
     //As the documentation said, called this after insert rows.
     endInsertRows();
     //Because this operation change the row count, the row count changed signal
@@ -176,7 +211,7 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
     //Remove those datas from the list.
     while(rows--)
     {
-        //Take away the detail info, and remove the duration .
+        //Take away the detail info, and remove the duration.
         m_totalDuration-=m_detailInfos.takeAt(position).duration;
     }
     //As the documentation said, called this after remove rows.
@@ -190,6 +225,7 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
 void KNMusicModel::removeRowList(QList<int> rows)
 {
     //Sort the rows, with lambda expressions.
+    //We want it to sort the list from greater one to lesser one.
     std::sort(rows.begin(), rows.end(),
               [](const int &a, const int &b){return a>b;});
     //Remove all the data in the rows.
@@ -276,12 +312,38 @@ Qt::ItemFlags KNMusicModel::flags(const QModelIndex &index) const
     case AlbumRating:
         return QAbstractTableModel::flags(index) |
                 Qt::ItemIsEditable |
-                Qt::ItemIsDropEnabled;
+                Qt::ItemIsDragEnabled |
+                Qt::ItemIsDropEnabled |
+                Qt::ItemNeverHasChildren;
 
     default:
         return QAbstractTableModel::flags(index) |
-                Qt::ItemIsDropEnabled;
+                Qt::ItemIsDragEnabled |
+                Qt::ItemIsDropEnabled |
+                Qt::ItemNeverHasChildren;
     }
+}
+
+bool KNMusicModel::canDropMimeData(const QMimeData *data,
+                                   Qt::DropAction action,
+                                   int row,
+                                   int column,
+                                   const QModelIndex &parent) const
+{
+    Q_UNUSED(action);
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+    //You cannot drop a data on a item.
+    if(!parent.isValid())
+    {
+        //For urls and mime type we can accept.
+        if (data->hasUrls() || data->hasFormat(ModelMimeType))
+        {
+            return true;
+        }
+    }
+    //Ignore the others.
+    return false;
 }
 
 QVariant KNMusicModel::data(const QModelIndex &index, int role) const
@@ -357,6 +419,44 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
     default:
         return QVariant();
     }
+}
+
+QMimeData *KNMusicModel::mimeData(const QModelIndexList &indexes) const
+{
+    //Check the indexes size.
+    if(indexes.count() <= 0)
+    {
+        return nullptr;
+    }
+    //Generate a mime data.
+    QMimeData *data=new QMimeData();
+    //Generate the detail info and url list.
+    QJsonArray detailInfoList, rowList;
+    QList<QUrl> urlList;
+    //Add all the detail info to the list.
+    for(auto i=indexes.begin(); i!=indexes.end(); ++i)
+    {
+        //Check the row is inside the range.
+        if((*i).row()>-1 && (*i).row()<m_detailInfos.size())
+        {
+            //Get the detail info.
+            const KNMusicDetailInfo &detailInfo=m_detailInfos.at((*i).row());
+            //Add all the detail info to the list.
+            detailInfoList.append(KNMusicUtil::detailInfoToObject(detailInfo));
+            //Add the url to the list.
+            urlList.append(QUrl::fromLocalFile(detailInfo.filePath));
+            //Add the row to row list.
+            rowList.append((*i).row());
+        }
+    }
+    //Set url list to mime data.
+    data->setUrls(urlList);
+    //Set the model data to mime data.
+    data->setData(ModelMimeType, QByteArray::number((qint64)this));
+    data->setData(ModelRowData, QJsonDocument(detailInfoList).toBinaryData());
+    data->setData(ModelRowList, QJsonDocument(rowList).toBinaryData());
+    //Give back the data.
+    return data;
 }
 
 bool KNMusicModel::setData(const QModelIndex &index,
@@ -439,12 +539,21 @@ KNMusicDetailInfo KNMusicModel::rowDetailInfo(const int &row)
     return m_detailInfos.at(row);
 }
 
+Qt::DropActions KNMusicModel::supportedDropActions() const
+{
+    return Qt::CopyAction | Qt::MoveAction;
+}
+
 bool KNMusicModel::dropMimeData(const QMimeData *data,
                                 Qt::DropAction action,
                                 int row,
                                 int column,
                                 const QModelIndex &parent)
 {
+    Q_UNUSED(row)
+    Q_UNUSED(column)
+    Q_UNUSED(parent)
+    qDebug()<<"Fuck here?!";
     //Check move or copy action enabled.
     if(action==Qt::MoveAction || action==Qt::CopyAction)
     {
@@ -468,6 +577,28 @@ QStringList KNMusicModel::mimeTypes() const
 QString KNMusicModel::textData(const int &row, const int &column) const
 {
     return m_detailInfos.at(row).textLists[column].toString();
+}
+
+bool KNMusicModel::moveRows(const QModelIndex &sourceParent,
+                            int sourceRow,
+                            int count,
+                            const QModelIndex &destinationParent,
+                            int destinationChild)
+{
+    //Follow the documentation, call this function first.
+    beginMoveRows(QModelIndex(),
+                  sourceRow,
+                  sourceRow+count-1,
+                  QModelIndex(),
+                  destinationChild);
+    //Get the destination child.
+    for(int i=0; i<count; ++i)
+    {
+        m_detailInfos.move;
+    }
+
+    //Follow the documentation, call this function after move all the rows.
+    endMoveRows();
 }
 
 void KNMusicModel::setPlayingIndex(const QModelIndex &playingRow)
