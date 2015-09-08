@@ -242,7 +242,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
-    sdk/sao/knsaosubmenu.cpp
+    sdk/sao/knsaosubmenu.cpp \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -386,7 +387,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
     plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h \
     plugin/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
-    sdk/sao/knsaosubmenu.h
+    sdk/sao/knsaosubmenu.h \
+    plugin/knmusicplugin/sdk/knmusicmainplayerbase.h \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.h
 
 RESOURCES += \
     resource/res.qrc

@@ -16,37 +16,30 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCONNECTIONHANDLER_H
-#define KNCONNECTIONHANDLER_H
+#ifndef KNMUSICMAINPLAYER_H
+#define KNMUSICMAINPLAYER_H
 
-#include <QMetaObject>
-#include <QLinkedList>
+#include "knmusicmainplayerbase.h"
 
-/*!
- * \brief The KNConnectionHandler class is a special linked list. The element
- * type is QMetaObject::Connection. This list is used to managed all the
- * connections. You can use the disconnectAll() function to disconnect all the
- * connection in the handler at one time. This is really handy sometimes.
- */
-class KNConnectionHandler : public QLinkedList<QMetaObject::Connection>
+class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
+    Q_OBJECT
 public:
-    virtual ~KNConnectionHandler();
+    explicit KNMusicMainPlayer(QWidget *parent = 0);
 
     /*!
-     * \brief Disconnect all the connection in the linked list.
+     * \brief Reimplemented from KNMusicPlayerBase::setBackend().
      */
-    void disconnectAll();
+    void setBackend(KNMusicBackend *backend) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from the QLinkedList::operator +=().
+     * \brief Reimplemented from KNMusicPlayerBase::setNowPlaying().
      */
-    KNConnectionHandler &operator += (
-            const QMetaObject::Connection &connection);
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying) Q_DECL_OVERRIDE;
 
 signals:
 
 public slots:
 };
 
-#endif // KNCONNECTIONHANDLER_H
+#endif // KNMUSICMAINPLAYER_H

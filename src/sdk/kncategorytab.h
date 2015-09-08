@@ -45,7 +45,7 @@ public:
     static int tabHeight();
 
     /*!
-     * \brief Set the text of category. Reimplement from
+     * \brief Set the text of category. Reimplemented from
      * QAbstractButton::setText(). It will update the UI elements when settings
      * a new text.
      * \param text The text of the tab.

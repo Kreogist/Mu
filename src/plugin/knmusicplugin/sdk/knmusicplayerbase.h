@@ -23,20 +23,53 @@
 
 class KNMusicBackend;
 class KNMusicNowPlayingBase;
+/*!
+ * \brief The KNMusicPlayerBase class provides the basic interface and signals
+ * of a player widget.
+ */
 class KNMusicPlayerBase : public KNDropProxyContainer
 {
     Q_OBJECT
 public:
     KNMusicPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
 
+    /*!
+     * \brief Get the backend of the music plugin. This will control the current
+     * music playing, including: play, pause, get information and set position.
+     * \param backend The backend pointer.
+     */
     virtual void setBackend(KNMusicBackend *backend)=0;
 
+    /*!
+     * \brief Get the now playing plugin. This will control the current playing
+     * list, including play previous/next, repeat mode, shuffle.
+     * \param nowPlaying The now playing plugin.
+     */
     virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
 
 signals:
+    /*!
+     * \brief Ask to show the current song in 'Songs' tab of the music library
+     * tab.
+     */
     void requireShowInSongs();
+
+    /*!
+     * \brief Ask to show the current song in 'Artists' tab of the music library
+     * tab.
+     */
     void requireShowInArtists();
+
+    /*!
+     * \brief Ask to show the current song in 'Albums' tab of the music library
+     * tab.
+     */
     void requireShowInAlbums();
+
+    /*!
+     * \brief Ask to show the current song in 'Genres' tab of the music library
+     * tab.
+     */
     void requireShowInGenres();
 
 public slots:

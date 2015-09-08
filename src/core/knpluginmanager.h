@@ -23,6 +23,7 @@
 class KNGlobal;
 class KNMainWindow;
 class KNMainWindowHeaderBase;
+class KNAbstractMusicPlugin;
 class KNPreferencePlugin;
 class KNCategoryPlugin;
 /*!
@@ -74,6 +75,7 @@ private:
     inline void setApplicationInformation();
     void loadHeader(KNMainWindowHeaderBase *header);
     void loadPreference(KNPreferencePlugin *plugin);
+    void loadMusicPlugin(KNAbstractMusicPlugin *plugin);
     void loadCategoryPlugin(KNCategoryPlugin *plugin);
     KNMainWindow *m_mainWindow;
     KNMainWindowHeaderBase *m_header;

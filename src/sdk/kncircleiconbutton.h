@@ -42,12 +42,12 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QAbstractButton::mouseReleaseEvent().
+     * \brief Reimplemented from QAbstractButton::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::paintEvent().
+     * \brief Reimplemented from QAbstractButton::paintEvent().
      */
     void paintEvent(QPaintEvent *event);
 

@@ -90,22 +90,22 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QDialog::showEvent().
+     * \brief Reimplemented from QDialog::showEvent().
      */
     void showEvent(QShowEvent *event);
 
     /*!
-     * \brief Reimplement from QDialog::mousePressEvent().
+     * \brief Reimplemented from QDialog::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event);
 
     /*!
-     * \brief Reimplement from QDialog::mouseMoveEvent().
+     * \brief Reimplemented from QDialog::mouseMoveEvent().
      */
     void mouseMoveEvent(QMouseEvent *event);
 
     /*!
-     * \brief Reimplement from QDialog::mouseReleaseEvent().
+     * \brief Reimplemented from QDialog::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event);
 

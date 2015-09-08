@@ -81,6 +81,8 @@
 #include "plugin/knmusicdetailtooltip/knmusicdetailtooltip.h"
 // Header Player.
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
+// Main Player.
+#include "plugin/knmusicmainplayer/knmusicmainplayer.h"
 // Playlist.
 #include "plugin/knmusicplaylist/knmusicplaylist.h"
 
@@ -102,7 +104,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_switcher(new KNHWidgetSwitcher(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
                                        this)),
-    m_headerPlayer(nullptr)
+    m_headerPlayer(nullptr),
+    m_mainPlayer(nullptr)
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
@@ -168,11 +171,18 @@ void KNMusicPlugin::loadPlugins()
     initialDetailTooltip(new KNMusicDetailTooltip);
     //Iniital the header player.
     initialHeaderPlayer(new KNMusicHeaderPlayer);
+    //Initial the main player.
+    initialMainPlayer(new KNMusicMainPlayer);
     //Initial the plugins.
     initialPlaylist(new KNMusicPlaylist);
 
     //Start working threads.
     knMusicGlobal->startThreads();
+}
+
+QWidget *KNMusicPlugin::mainPlayer()
+{
+    return m_mainPlayer;
 }
 
 void KNMusicPlugin::saveConfigure()
@@ -375,15 +385,43 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
     containerLayout->addWidget(m_headerPlayer->lyrics(), 1);
     //Add the header player to the header left layout.
     m_headerWidgetContainer->addWidget(container);
-    //Link the header and the header player.
+    //Link the header widget to the header player.
     connect(m_headerWidget, &KNMouseDetectHeader::requireActivateWidget,
             m_headerPlayer, &KNMusicHeaderPlayerBase::activate);
     connect(m_headerWidget, &KNMouseDetectHeader::requireInactivateWidget,
             m_headerPlayer, &KNMusicHeaderPlayerBase::inactivate);
+    //Link the header player request.
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowMainPlayer,
+            this, &KNMusicPlugin::requireShowMainPlayer);
     connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireCheckCursor,
             m_headerWidget, &KNMouseDetectHeader::checkCursor);
+    //Link the drop event.
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::urlsDropped,
+            [=](const QList<QUrl> &urlList)
+            {
+                onArgumentsAvailable(KNUtil::urlListToPathList(urlList));
+            });
     //Load the configuration.
     m_headerPlayer->loadConfigure();
+}
+
+void KNMusicPlugin::initialMainPlayer(KNMusicMainPlayerBase *mainPlayer)
+{
+    //Check if the header player is nullptr, or a header player is already
+    //loaded.
+    if(mainPlayer==nullptr || m_mainPlayer!=nullptr)
+    {
+        return;
+    }
+    //Save the header player.
+    m_mainPlayer=mainPlayer;
+    //Check the pointer.
+    if(m_mainPlayer==nullptr)
+    {
+        return;
+    }
+    //Set the basic stuffs of a player.
+    initialPlayer(m_mainPlayer);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

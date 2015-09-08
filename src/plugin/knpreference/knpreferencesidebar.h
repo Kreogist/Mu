@@ -66,7 +66,7 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QWidget::resizeEvent().
+     * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event);
 

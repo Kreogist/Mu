@@ -30,7 +30,7 @@ public:
     explicit KNMusicSoloMenu(QWidget *parent = 0);
 
     /*!
-     * \brief Reimplement from KNMusicSoloMenuBase::setMusicRow().
+     * \brief Reimplemented from KNMusicSoloMenuBase::setMusicRow().
      */
     void setMusicRow(KNMusicProxyModel *model,
                      const QModelIndex &itemIndex) Q_DECL_OVERRIDE;

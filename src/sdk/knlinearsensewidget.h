@@ -42,22 +42,22 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QWidget::enterEvent().
+     * \brief Reimplemented from QWidget::enterEvent().
      */
     void enterEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QWidget::leaveEvent().
+     * \brief Reimplemented from QWidget::leaveEvent().
      */
     void leaveEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QWidget::resizeEvent().
+     * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event);
 
     /*!
-     * \brief Reimplement from QWidget::paintEvent().
+     * \brief Reimplemented from QWidget::paintEvent().
      */
     void paintEvent(QPaintEvent *event);
 

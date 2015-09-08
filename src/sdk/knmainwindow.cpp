@@ -81,6 +81,12 @@ void KNMainWindow::setPreferencePanel(KNPreferencePlugin *preferencePanel)
             m_container, &KNMainWindowContainer::hidePreference);
 }
 
+void KNMainWindow::setMainPlayer(QWidget *mainPlayer)
+{
+    //Set the main player widget.
+    m_container->setMainPlayer(mainPlayer);
+}
+
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
     //Save the configure of the category plugin, if the category is valid.

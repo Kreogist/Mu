@@ -44,7 +44,7 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QAbstractButton::paintEvent(). the button should
+     * \brief Reimplemented from QAbstractButton::paintEvent(). the button should
      * provide the paint event.
      */
     void paintEvent(QPaintEvent *event);
@@ -56,32 +56,32 @@ protected:
     qreal imageOpacity();
 
     /*!
-     * \brief Reimplement from QAbstractButton::enterEvent().
+     * \brief Reimplemented from QAbstractButton::enterEvent().
      */
     void enterEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::leaveEvent().
+     * \brief Reimplemented from QAbstractButton::leaveEvent().
      */
     void leaveEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::focusInEvent().
+     * \brief Reimplemented from QAbstractButton::focusInEvent().
      */
     void focusInEvent(QFocusEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::focusOutEvent().
+     * \brief Reimplemented from QAbstractButton::focusOutEvent().
      */
     void focusOutEvent(QFocusEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::mousePressEvent().
+     * \brief Reimplemented from QAbstractButton::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::mouseReleaseEvent().
+     * \brief Reimplemented from QAbstractButton::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event);
 

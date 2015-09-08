@@ -37,6 +37,7 @@ class KNMusicDetailTooltipBase;
 class KNMusicHeaderPlayerBase;
 class KNMusicPlayerBase;
 class KNMusicPlaylistBase;
+class KNMusicMainPlayerBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
@@ -73,6 +74,11 @@ public:
      */
     void loadPlugins() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::mainPlayer().
+     */
+    QWidget *mainPlayer() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -107,6 +113,7 @@ private:
     void initialNowPlaying(KNMusicNowPlayingBase *nowPlaying);
     void initialDetailTooltip(KNMusicDetailTooltipBase *tooltip);
     void initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
+    void initialMainPlayer(KNMusicMainPlayerBase *mainPlayer);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
 
     //UI infrastructure elements.
@@ -119,6 +126,7 @@ private:
 
     //Plugins.
     KNMusicHeaderPlayerBase *m_headerPlayer;
+    KNMusicMainPlayerBase *m_mainPlayer;
 };
 
 #endif // KNMUSICPLUGIN_H

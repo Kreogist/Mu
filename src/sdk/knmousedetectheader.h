@@ -58,12 +58,12 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QWidget::enterEvent().
+     * \brief Reimplemented from QWidget::enterEvent().
      */
     void enterEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QWidget::leaveEvent().
+     * \brief Reimplemented from QWidget::leaveEvent().
      */
     void leaveEvent(QEvent *event);
 };

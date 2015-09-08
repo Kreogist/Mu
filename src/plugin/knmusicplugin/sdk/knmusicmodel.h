@@ -116,35 +116,35 @@ public:
     void clear();
 
     /*!
-     * \brief Reimplement from QAbstractTableModel::rowCount().
+     * \brief Reimplemented from QAbstractTableModel::rowCount().
      */
     int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QAbstractTableModel::columnCount().
+     * \brief Reimplemented from QAbstractTableModel::columnCount().
      */
     int columnCount(const QModelIndex &parent=QModelIndex()) const
     Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QAbstractTableModel::headerData().
+     * \brief Reimplemented from QAbstractTableModel::headerData().
      */
     QVariant headerData(int section,
                         Qt::Orientation orientation,
                         int role) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QAbstractTableModel::flags().
+     * \brief Reimplemented from QAbstractTableModel::flags().
      */
     Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QAbstractTableModel::data().
+     * \brief Reimplemented from QAbstractTableModel::data().
      */
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QAbstractTableModel::setData().
+     * \brief Reimplemented from QAbstractTableModel::setData().
      */
     bool setData(const QModelIndex &index,
                  const QVariant &value,

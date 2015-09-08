@@ -44,22 +44,22 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QHeaderView::enterEvent().
+     * \brief Reimplemented from QHeaderView::enterEvent().
      */
     void enterEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QHeaderView::leaveEvent().
+     * \brief Reimplemented from QHeaderView::leaveEvent().
      */
     void leaveEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QHeaderView::resizeEvent().
+     * \brief Reimplemented from QHeaderView::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event);
 
     /*!
-     * \brief Reimplement from QHeaderView::paintSection().
+     * \brief Reimplemented from QHeaderView::paintSection().
      */
     void paintSection(QPainter *painter,
                       const QRect &rect,

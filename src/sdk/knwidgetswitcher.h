@@ -76,7 +76,7 @@ public:
     QWidget *currentWidget();
 
     /*!
-     * \brief Reimplement from QWidget::sizeHint().
+     * \brief Reimplemented from QWidget::sizeHint().
      */
     QSize sizeHint() const;
 
@@ -99,7 +99,7 @@ protected:
     virtual void updateAnimationPosition()=0;
 
     /*!
-     * \brief Reimplement from QWidget::resizeEvent().
+     * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event);
 

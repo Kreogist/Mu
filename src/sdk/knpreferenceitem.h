@@ -42,22 +42,22 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QAbstractButton::enterEvent().
+     * \brief Reimplemented from QAbstractButton::enterEvent().
      */
     void enterEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::leaveEvent().
+     * \brief Reimplemented from QAbstractButton::leaveEvent().
      */
     void leaveEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::paintEvent().
+     * \brief Reimplemented from QAbstractButton::paintEvent().
      */
     void paintEvent(QPaintEvent *event);
 
     /*!
-     * \brief Reimplement from QAbstractButton::mouseReleaseEvent().
+     * \brief Reimplemented from QAbstractButton::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event);
 

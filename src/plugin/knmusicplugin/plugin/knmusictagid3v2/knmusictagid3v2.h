@@ -34,19 +34,19 @@ public:
     explicit KNMusicTagId3v2(QObject *parent = 0);
 
     /*!
-     * \brief Reimplement from KNMusicTagParser::parseTag.
+     * \brief Reimplemented from KNMusicTagParser::parseTag.
      */
     bool parseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
                   KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicTagParser::writeTag.
+     * \brief Reimplemented from KNMusicTagParser::writeTag.
      */
     bool writeTag(const KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicTagParser::parseAlbumArt.
+     * \brief Reimplemented from KNMusicTagParser::parseAlbumArt.
      */
     bool parseAlbumArt(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 

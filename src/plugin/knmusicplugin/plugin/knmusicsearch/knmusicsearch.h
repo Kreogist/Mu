@@ -40,12 +40,12 @@ public:
     ~KNMusicSearch();
 
     /*!
-     * \brief Reimplement from KNMusicSearchBase::widget().
+     * \brief Reimplemented from KNMusicSearchBase::widget().
      */
     QWidget *widget() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicSearchBase::rules().
+     * \brief Reimplemented from KNMusicSearchBase::rules().
      */
     QList<KNMusicSearchBlock> rules() Q_DECL_OVERRIDE;
 
@@ -53,12 +53,12 @@ signals:
 
 public slots:
     /*!
-     * \brief Reimplement from KNMusicSearchBase::search().
+     * \brief Reimplemented from KNMusicSearchBase::search().
      */
     void search(const QList<KNMusicSearchBlock> &blocks) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicSearchBase::onActionSearchShortcut().
+     * \brief Reimplemented from KNMusicSearchBase::onActionSearchShortcut().
      */
     void onActionSearchShortcut(QWidget *sourceWidget) Q_DECL_OVERRIDE;
 

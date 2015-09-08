@@ -57,6 +57,12 @@ public:
      */
     QWidget *preferencePanel() const;
 
+    /*!
+     * \brief Get the main player widget.
+     * \return The main player widget.
+     */
+    QWidget *mainPlayer() const;
+
 signals:
 
 public slots:
@@ -77,9 +83,16 @@ public slots:
     /*!
      * \brief Set the preference panel widget.
      * \param preferencePanel The perference panel widget pointer. It will only
-     * save the frist widget you set.
+     * save the first widget you set.
      */
     void setPreferencePanel(QWidget *preferencePanel);
+
+    /*!
+     * \brief Set the main player widget.
+     * \param mainPlayer The main player widget pointer. It will only save the
+     * first widget you set.
+     */
+    void setMainPlayer(QWidget *mainPlayer);
 
     /*!
      * \brief Show the preference widget via animation.
@@ -91,6 +104,16 @@ public slots:
      */
     void hidePreference();
 
+    /*!
+     * \brief Show the main player widget via animation.
+     */
+    void showMainPlayer();
+
+    /*!
+     * \brief Hide the main player widget via animation.
+     */
+    void hideMainPlayer();
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
@@ -100,19 +123,31 @@ protected:
 private:
     inline void updateTheStackRelationship();
     inline void setWidget(const int &index, QWidget *widget);
-    inline void updateShowAnimeParameters();
-    inline void updateHideAnimeParameters();
+    inline void updateShowPreference();
+    inline void updateHidePreference();
+    inline void updateShowMainPlayer();
+    inline void updateHideMainPlayer();
 
     inline QPropertyAnimation *generateAnime(const QByteArray &propertyName);
     enum ContainerWidgetElement
     {
         Header,
         MainWidget,
+        MainPlayer,
         PreferencePanel,
         ContainerWidgetCount
     };
-    QParallelAnimationGroup *m_preferenceAnimeGroup;
-    QPropertyAnimation *m_elementAnime[ContainerWidgetCount];
+    enum ContainerWidgetAnimations
+    {
+        AnimeHeader,
+        AnimeMainWidget,
+        AnimeMainPlayer,
+        AnimeMainPlayerHeader,
+        AnimePreferencePanel,
+        ContainerAnimeCount
+    };
+    QParallelAnimationGroup *m_preferenceAnimeGroup, *m_mainPlayerAnimeGroup;
+    QPropertyAnimation *m_elementAnime[ContainerAnimeCount];
     QWidget *m_elementWidget[ContainerWidgetCount];
     QPropertyAnimation *m_preferenceOpacity;
     QGraphicsOpacityEffect *m_preferenceOpacityEffect;

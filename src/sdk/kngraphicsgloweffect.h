@@ -62,7 +62,7 @@ public:
     void setColor(const QColor &color);
 
     /*!
-     * \brief Reimplement from QGraphicsEffect::boundingRectFor().
+     * \brief Reimplemented from QGraphicsEffect::boundingRectFor().
      */
     QRectF boundingRectFor(const QRectF &sourceRect) const Q_DECL_OVERRIDE;
 
@@ -72,12 +72,12 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QGraphicsEffect::draw().
+     * \brief Reimplemented from QGraphicsEffect::draw().
      */
     void draw(QPainter *painter) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QGraphicsEffect::sourceChanged().
+     * \brief Reimplemented from QGraphicsEffect::sourceChanged().
      */
     void sourceChanged(ChangeFlags flags) Q_DECL_OVERRIDE;
 

@@ -39,7 +39,7 @@ public:
     explicit KNMusicDetailPanelOverview(QWidget *parent = 0);
 
     /*!
-     * \brief Reimplement from KNMusicDetailDialogPanel::tabButton.
+     * \brief Reimplemented from KNMusicDetailDialogPanel::tabButton.
      */
     QAbstractButton *tabButton() Q_DECL_OVERRIDE;
 
@@ -47,7 +47,7 @@ signals:
 
 public slots:
     /*!
-     * \brief Reimplement from KNMusicDetailDialogPanel::setAnalysisItem.
+     * \brief Reimplemented from KNMusicDetailDialogPanel::setAnalysisItem.
      */
     void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)
     Q_DECL_OVERRIDE;

@@ -39,7 +39,7 @@ public:
     explicit KNPreference(QWidget *parent = 0);
 
     /*!
-     * \brief Reimplement from KNPreferencePlugin::addTab().
+     * \brief Reimplemented from KNPreferencePlugin::addTab().
      */
     void addTab(KNPreferenceItem *tabWidget, QWidget *content) Q_DECL_OVERRIDE;
 

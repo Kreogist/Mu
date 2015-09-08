@@ -42,12 +42,12 @@ public:
     explicit KNMusicPlaylist(QWidget *parent = 0);
 
     /*!
-     * \brief Reimplement from the KNMusicPlaylistBase::tab().
+     * \brief Reimplemented from the KNMusicPlaylistBase::tab().
      */
     QAbstractButton *tab() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from the KNMusicPlaylistBase::showIndex().
+     * \brief Reimplemented from the KNMusicPlaylistBase::showIndex().
      */
     void showIndex(KNMusicModel *musicModel,
                    const QModelIndex &index) Q_DECL_OVERRIDE;
@@ -58,12 +58,12 @@ public slots:
 
 protected:
     /*!
-     * \brief  Reimplement from the KNMusicPlaylistBase::showEvent().
+     * \brief  Reimplemented from the KNMusicPlaylistBase::showEvent().
      */
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief  Reimplement from the KNMusicPlaylistBase::resizeEvent().
+     * \brief  Reimplemented from the KNMusicPlaylistBase::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 

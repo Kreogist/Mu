@@ -64,9 +64,16 @@ public:
     /*!
      * \brief Set the preference panel widget.
      * \param preferencePanel The perference panel widget pointer. It will only
-     * save the frist widget you set.
+     * save the first widget you set.
      */
     void setPreferencePanel(KNPreferencePlugin *preferencePanel);
+
+    /*!
+     * \brief Set the main player widget.
+     * \param mainPlayer The main player widget pointer. It will only save the
+     * first widget you set.
+     */
+    void setMainPlayer(QWidget *mainPlayer);
 
 signals:
 

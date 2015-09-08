@@ -36,7 +36,7 @@ public:
 
 protected:
     /*!
-     * \brief Reimplement from KNAbstractTabGroup::isEmpty().
+     * \brief Reimplemented from KNAbstractTabGroup::isEmpty().
      */
     bool isEmpty();
 
@@ -46,17 +46,17 @@ protected:
     int addTabToWidget(QAbstractButton *tab);
 
     /*!
-     * \brief Reimplement from KNAbstractTabGroup::tabAt().
+     * \brief Reimplemented from KNAbstractTabGroup::tabAt().
      */
     QAbstractButton *tabAt(const int &index);
 
     /*!
-     * \brief Reimplement from KNAbstractTabGroup::enterEvent().
+     * \brief Reimplemented from KNAbstractTabGroup::enterEvent().
      */
     void enterEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from KNAbstractTabGroup::leaveEvent().
+     * \brief Reimplemented from KNAbstractTabGroup::leaveEvent().
      */
     void leaveEvent(QEvent *event);
 

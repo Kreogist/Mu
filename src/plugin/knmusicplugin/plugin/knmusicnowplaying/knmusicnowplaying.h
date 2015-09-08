@@ -31,37 +31,37 @@ public:
     explicit KNMusicNowPlaying(QObject *parent = 0);
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::setBackend().
+     * \brief Reimplemented from KNMusicNowPlayingBase::setBackend().
      */
     void setBackend(KNMusicBackend *backend) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playingModel().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playingModel().
      */
     KNMusicProxyModel *playingModel() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playingMusicModel().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playingMusicModel().
      */
     KNMusicModel *playingMusicModel() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::loopState().
+     * \brief Reimplemented from KNMusicNowPlayingBase::loopState().
      */
     int loopState() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playingIndex().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playingIndex().
      */
     QPersistentModelIndex playingIndex() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playingItem().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playingItem().
      */
     KNMusicAnalysisItem playingItem() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playingTab().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playingTab().
      */
     KNMusicTab *playingTab() Q_DECL_OVERRIDE;
 
@@ -69,64 +69,64 @@ signals:
 
 public slots:
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::reset().
+     * \brief Reimplemented from KNMusicNowPlayingBase::reset().
      */
     void reset() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::loadConfigure().
+     * \brief Reimplemented from KNMusicNowPlayingBase::loadConfigure().
      */
     void loadConfigure() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::saveConfigure().
+     * \brief Reimplemented from KNMusicNowPlayingBase::saveConfigure().
      */
     void saveConfigure() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::shadowPlayingModel().
+     * \brief Reimplemented from KNMusicNowPlayingBase::shadowPlayingModel().
      */
     void shadowPlayingModel() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playMusicRow().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playMusicRow().
      */
     void playMusicRow(KNMusicProxyModel *model,
                       int row,
                       KNMusicTab *tab) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playNext().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playNext().
      */
     void playNext() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playPrevious().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playPrevious().
      */
     void playPrevious() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::playTemporaryFiles().
+     * \brief Reimplemented from KNMusicNowPlayingBase::playTemporaryFiles().
      */
     void playTemporaryFiles(const QStringList &filePaths) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::changeLoopState().
+     * \brief Reimplemented from KNMusicNowPlayingBase::changeLoopState().
      */
     void changeLoopState() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::setLoopState().
+     * \brief Reimplemented from KNMusicNowPlayingBase::setLoopState().
      */
     void setLoopState(const int &state) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::setPlayingRating().
+     * \brief Reimplemented from KNMusicNowPlayingBase::setPlayingRating().
      */
     void setPlayingRating(int rating) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicNowPlayingBase::onActionModelRemoved().
+     * \brief Reimplemented from KNMusicNowPlayingBase::onActionModelRemoved().
      */
     void onActionModelRemoved(KNMusicModel *model) Q_DECL_OVERRIDE;
 

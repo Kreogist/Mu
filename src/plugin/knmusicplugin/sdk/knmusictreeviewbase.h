@@ -100,34 +100,34 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QTreeView::enterEvent().
+     * \brief Reimplemented from QTreeView::enterEvent().
      */
     void enterEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QTreeView::leaveEvent().
+     * \brief Reimplemented from QTreeView::leaveEvent().
      */
     void leaveEvent(QEvent *event);
 
     /*!
-     * \brief Reimplement from QTreeView::drawRow().
+     * \brief Reimplemented from QTreeView::drawRow().
      */
     void drawRow(QPainter *painter,
                  const QStyleOptionViewItem &options,
                  const QModelIndex &index) const;
 
     /*!
-     * \brief Reimplement from QTreeView::mousePressEvent().
+     * \brief Reimplemented from QTreeView::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event);
 
     /*!
-     * \brief Reimplement from QTreeView::mouseReleaseEvent().
+     * \brief Reimplemented from QTreeView::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event);
 
     /*!
-     * \brief Reimplement from QTreeView::keyReleaseEvent().
+     * \brief Reimplemented from QTreeView::keyReleaseEvent().
      */
     void keyReleaseEvent(QKeyEvent *event);
 
@@ -144,12 +144,12 @@ protected:
     void moveToFirst(const int &logicalIndex);
 
     /*!
-     * \brief Reimplement from QTreeView::event().
+     * \brief Reimplemented from QTreeView::event().
      */
     bool event(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QTreeView::wheelEvent().
+     * \brief Reimplemented from QTreeView::wheelEvent().
      */
     void wheelEvent(QWheelEvent *event);
 

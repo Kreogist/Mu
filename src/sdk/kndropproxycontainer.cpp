@@ -24,6 +24,8 @@
 KNDropProxyContainer::KNDropProxyContainer(QWidget *parent) :
     QWidget(parent)
 {
+    //Enabled drops
+    setAcceptDrops(true);
 }
 
 void KNDropProxyContainer::dragEnterEvent(QDragEnterEvent *event)

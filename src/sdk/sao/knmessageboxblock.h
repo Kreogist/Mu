@@ -54,7 +54,7 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QLabel::resizeEvent().
+     * \brief Reimplemented from QLabel::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event);
 

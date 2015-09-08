@@ -61,7 +61,7 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QWidget::paintEvent().
+     * \brief Reimplemented from QWidget::paintEvent().
      */
     void paintEvent(QPaintEvent *event);
 

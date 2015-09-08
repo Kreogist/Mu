@@ -43,7 +43,7 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QScrollArea::resizeEvent().
+     * \brief Reimplemented from QScrollArea::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 

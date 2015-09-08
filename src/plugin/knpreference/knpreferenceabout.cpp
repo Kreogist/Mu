@@ -28,30 +28,46 @@
 KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     QWidget(parent)
 {
-    //Initial the main layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                          this);
-    mainLayout->setContentsMargins(18,18,18,18);
-    mainLayout->setSpacing(15);
-    setLayout(mainLayout);
-
+    //Configure the label fonts.
+    QFont labelFonts=font();
+    labelFonts.setPixelSize(15);
     //Initial the labels.
-    for(int i=0; i<ContentIndexCount; i++)
+    for(int i=0; i<ContentIndexCount; ++i)
     {
         //Initial the label.
         m_textContent[i]=new QLabel(this);
         //Configure the label.
-        m_textContent[i]->setAlignment(Qt::AlignCenter);
-        //Add the label to main layout.
-        mainLayout->addWidget(m_textContent[i]);
+        m_textContent[i]->setAlignment(Qt::AlignLeft);
+        m_textContent[i]->setFont(labelFonts);
     }
-    mainLayout->addStretch();
 
+    //Initial the main layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                          this);
+    mainLayout->setContentsMargins(70, 26, 18, 18);
+    mainLayout->setSpacing(15);
+    setLayout(mainLayout);
+    //Add the icon to main layout.
+    mainLayout->addWidget(m_textContent[0], 0, Qt::AlignTop);
+    //Initial the content layout.
+    //Initial the main layout.
+    QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                             mainLayout->widget());
+    contentLayout->setContentsMargins(0,0,0,0);
+    contentLayout->setSpacing(5);
+    mainLayout->addLayout(contentLayout, 1);
+    //Add labels to the content layout.
+    for(int i=1; i<ContentIndexCount; ++i)
+    {
+        //Add content label to content layout.
+        contentLayout->addWidget(m_textContent[i], 0, Qt::AlignLeft);
+    }
+    contentLayout->addStretch();
 
     //Set the default label.
     m_textContent[Logo]->setPixmap(
-                QPixmap("://icon/mu.png").scaled(128,
-                                                 128,
+                QPixmap("://icon/mu.png").scaled(114,
+                                                 114,
                                                  Qt::KeepAspectRatio,
                                                  Qt::SmoothTransformation));
     m_textContent[Title]->setText(QApplication::applicationDisplayName());

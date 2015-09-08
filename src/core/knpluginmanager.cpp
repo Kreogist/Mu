@@ -28,6 +28,7 @@
 #include "knmainwindowheaderbase.h"
 #include "knpreferenceplugin.h"
 #include "kncategoryplugin.h"
+#include "knabstractmusicplugin.h"
 
 //Plugins
 #include "knmainwindowheader.h"
@@ -110,6 +111,14 @@ void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
     }
 }
 
+void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
+{
+    //Load the music categroy plugin first.
+    loadCategoryPlugin(plugin);
+    //Set the main player provided by the music plugin.
+    m_mainWindow->setMainPlayer(plugin->mainPlayer());
+}
+
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
 {
     //Load the plugins of the plugin.
@@ -143,7 +152,7 @@ void KNPluginManager::loadPlugins()
     loadPreference(new KNPreference);
 
     //Load the category plugin.
-    loadCategoryPlugin(new KNMusicPlugin);
+    loadMusicPlugin(new KNMusicPlugin);
 }
 
 void KNPluginManager::launchApplication()

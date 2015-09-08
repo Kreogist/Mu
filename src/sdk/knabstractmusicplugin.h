@@ -35,7 +35,17 @@ public:
      */
     KNAbstractMusicPlugin(QWidget *parent=0):KNCategoryPlugin(parent){}
 
+    /*!
+     * \brief Provides the main player widget pointer.
+     * \return The main player widget pointer.
+     */
+    virtual QWidget *mainPlayer()=0;
+
 signals:
+    /*!
+     * \brief This signal will ask the main window to show the main player.
+     */
+    void requireShowMainPlayer();
 
 public slots:
 };

@@ -116,7 +116,7 @@ public:
     void setChanged(bool changed);
 
     /*!
-     * \brief Reimplement from KNMusicPlaylistModel::data().
+     * \brief Reimplemented from KNMusicPlaylistModel::data().
      */
     QVariant data(const QModelIndex &index, int role) const;
 

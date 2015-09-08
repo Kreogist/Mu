@@ -53,12 +53,12 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QWidget::paintEvent().
+     * \brief Reimplemented from QWidget::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QWidget::resizeEvent().
+     * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 

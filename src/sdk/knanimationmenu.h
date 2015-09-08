@@ -67,12 +67,12 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplement from QMenu::showEvent().
+     * \brief Reimplemented from QMenu::showEvent().
      */
     void showEvent(QShowEvent *event);
 
     /*!
-     * \brief Reimplement from QMenu::paintEvent().
+     * \brief Reimplemented from QMenu::paintEvent().
      */
     void paintEvent(QPaintEvent *event);
 

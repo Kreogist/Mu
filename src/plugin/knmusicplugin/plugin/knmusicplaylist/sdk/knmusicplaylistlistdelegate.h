@@ -37,33 +37,33 @@ public:
     explicit KNMusicPlaylistListDelegate(QWidget *parent = 0);
 
     /*!
-     * \brief Reimplement from QStyledItemDelegate::paint().
+     * \brief Reimplemented from QStyledItemDelegate::paint().
      */
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
                const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from QStyledItemDelegate::sizeHint().
+     * \brief Reimplemented from QStyledItemDelegate::sizeHint().
      */
     QSize sizeHint(const QStyleOptionViewItem &option,
                    const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief  Reimplement from QStyledItemDelegate::createEditor().
+     * \brief  Reimplemented from QStyledItemDelegate::createEditor().
      */
     QWidget *createEditor(QWidget *parent,
                           const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
 
     /*!
-     * \brief  Reimplement from QStyledItemDelegate::setEditorData().
+     * \brief  Reimplemented from QStyledItemDelegate::setEditorData().
      */
     void setEditorData(QWidget *editor,
                        const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief  Reimplement from QStyledItemDelegate::setModelData().
+     * \brief  Reimplemented from QStyledItemDelegate::setModelData().
      */
     void setModelData(QWidget *editor,
                       QAbstractItemModel *model,

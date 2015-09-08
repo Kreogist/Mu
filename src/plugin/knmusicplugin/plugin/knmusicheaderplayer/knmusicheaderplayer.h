@@ -57,17 +57,17 @@ public:
     explicit KNMusicHeaderPlayer(QWidget *parent = 0);
 
     /*!
-     * \brief Reimplement from KNMusicHeaderPlayerBase::setBackend().
+     * \brief Reimplemented from KNMusicHeaderPlayerBase::setBackend().
      */
     void setBackend(KNMusicBackend *backend) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicHeaderPlayerBase::setNowPlaying().
+     * \brief Reimplemented from KNMusicHeaderPlayerBase::setNowPlaying().
      */
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplement from KNMusicHeaderPlayerBase::lyrics().
+     * \brief Reimplemented from KNMusicHeaderPlayerBase::lyrics().
      */
     QWidget *lyrics() Q_DECL_OVERRIDE;
 
