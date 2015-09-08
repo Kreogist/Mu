@@ -46,6 +46,12 @@ public:
      */
     QAbstractButton *tab() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplement from the KNMusicPlaylistBase::showIndex().
+     */
+    void showIndex(KNMusicModel *musicModel,
+                   const QModelIndex &index) Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

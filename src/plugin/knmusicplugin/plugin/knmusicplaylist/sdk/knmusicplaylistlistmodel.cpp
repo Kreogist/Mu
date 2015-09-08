@@ -51,6 +51,21 @@ KNMusicPlaylistModel *KNMusicPlaylistListModel::playlist(
     return m_playlistList.at(index.row());
 }
 
+QModelIndex KNMusicPlaylistListModel::playlistIndex(
+        KNMusicPlaylistModel *playlist)
+{
+    //Find the playlist model in the list.
+    int playlistIndex=m_playlistList.indexOf(playlist);
+    //Check the validation of the index.
+    if(playlistIndex==-1)
+    {
+        //Invalid index, return a invalid index.
+        return QModelIndex();
+    }
+    //Or else generate the index.
+    return index(playlistIndex, 0);
+}
+
 QModelIndex KNMusicPlaylistListModel::append(KNMusicPlaylistModel *model)
 {
     //Check the model

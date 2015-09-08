@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class QAbstractButton;
+class KNMusicModel;
 /*!
  * \brief The KNMusicTab class is a port class for all the tabs.\n
  * The music plugin will manage those tab widgets themselves. The tab widget
@@ -43,9 +44,20 @@ public:
      */
     virtual QAbstractButton *tab()=0;
 
-signals:
+    /*!
+     * \brief Show the index of the music model in this tab. If the model is not
+     * belongs to this tab, just ignore it.
+     * \param musicModel The music model pointer.
+     * \param index The index of the song.
+     */
+    virtual void showIndex(KNMusicModel *musicModel,
+                           const QModelIndex &index)=0;
 
-public slots:
+signals:
+    /*!
+     * \brief Ask the tab switcher to requireShowTab
+     */
+    void requireShowTab();
 };
 
 #endif // KNMUSICTAB_H

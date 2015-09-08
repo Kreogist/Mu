@@ -95,6 +95,11 @@ KNMusicAnalysisItem KNMusicNowPlaying::playingItem()
     return m_playingAnalysisItem;
 }
 
+KNMusicTab *KNMusicNowPlaying::playingTab()
+{
+    return m_playingTab;
+}
+
 void KNMusicNowPlaying::reset()
 {
     //Reset current playing.

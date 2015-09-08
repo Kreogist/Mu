@@ -582,6 +582,19 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     }
 }
 
+void KNMusicTreeViewBase::selectSourceSong(const int &sourceRow)
+{
+    //Ignore the request when there's no music model.
+    if(musicModel()==nullptr)
+    {
+        return;
+    }
+    //Select the row.
+    setCurrentIndex(
+                proxyModel()->mapFromSource(
+                    musicModel()->index(sourceRow, Name)));
+}
+
 void KNMusicTreeViewBase::setAnimate(bool animate)
 {
     m_animate = animate;

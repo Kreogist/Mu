@@ -86,6 +86,13 @@ public:
      */
     virtual KNMusicAnalysisItem playingItem()=0;
 
+    /*!
+     * \brief Get the playing music tab.
+     * \return The music tab pointer. If there's no music playing it should be
+     * return a nullptr.
+     */
+    virtual KNMusicTab *playingTab()=0;
+
 signals:
     /*!
      * \brief When the now playing is resetted, this signal will be emitted.

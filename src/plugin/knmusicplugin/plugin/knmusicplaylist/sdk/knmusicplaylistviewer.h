@@ -40,6 +40,7 @@ public:
     ~KNMusicPlaylistViewer();
     KNMusicPlaylistModel *playlist();
     void setPlaylist(KNMusicPlaylistModel *model);
+    void selectSong(const QModelIndex &sourceIndex);
 
 signals:
 

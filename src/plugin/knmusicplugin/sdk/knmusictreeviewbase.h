@@ -70,6 +70,24 @@ public:
      */
     void setMusicModel(KNMusicModel *musicModel);
 
+    /*!
+     * \brief Select a song by providing the song row of the source model.
+     * \param sourceRow The source row of the song. If the row is invalid or
+     * there's no valid model, it will do nothing.
+     */
+    void selectSourceSong(const int &sourceRow);
+
+    /*!
+     * \brief This is a override function.\n
+     * Select a song by providing one index of the the song row of the source
+     * model.
+     * \param index One of the index of the source row.
+     */
+    inline void selectSourceSong(const QModelIndex &index)
+    {
+        selectSourceSong(index.row());
+    }
+
 signals:
 
 public slots:
@@ -108,6 +126,9 @@ protected:
      */
     void mouseReleaseEvent(QMouseEvent *event);
 
+    /*!
+     * \brief Reimplement from QTreeView::keyReleaseEvent().
+     */
     void keyReleaseEvent(QKeyEvent *event);
 
     /*!

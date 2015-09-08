@@ -153,6 +153,12 @@ void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
     updateDetailInfo();
 }
 
+void KNMusicPlaylistViewer::selectSong(const QModelIndex &sourceIndex)
+{
+    //Select the index.
+    m_treeView->selectSourceSong(sourceIndex.row());
+}
+
 void KNMusicPlaylistViewer::resizeEvent(QResizeEvent *event)
 {
     //Resize the viewer.

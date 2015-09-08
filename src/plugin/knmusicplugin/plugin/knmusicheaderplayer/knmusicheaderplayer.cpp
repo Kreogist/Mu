@@ -37,6 +37,7 @@
 #include "kngraphicsgloweffect.h"
 #include "knconfigure.h"
 
+#include "knmusictab.h"
 #include "knmusicdetaildialog.h"
 #include "knmusiclyricsmanager.h"
 #include "knmusicbackend.h"
@@ -782,8 +783,18 @@ void KNMusicHeaderPlayer::appendActionTriggered(const int &actionIndex)
         }
         break;
     case AppendLocateNowPlaying:
-//        m_nowPlaying->showCurrentIndexInOriginalTab();
+    {
+        //Get the playing tab from now playing.
+        KNMusicTab *playingTab=m_nowPlaying->playingTab();
+        //Check the playing tab.
+        if(playingTab)
+        {
+            //Show the music model and the playing index.
+            playingTab->showIndex(m_nowPlaying->playingMusicModel(),
+                                  m_nowPlaying->playingIndex());
+        }
         break;
+    }
     case AppendShowInSongs:
         emit requireShowInSongs();
         break;

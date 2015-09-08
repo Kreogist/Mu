@@ -54,7 +54,7 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_tab(new KNCategoryTab(this)),
     m_container(new KNEmptyStateWidget(this)),
     m_playlistList(new KNMusicPlaylistList(this)),
-    m_playlistViewer(new KNMusicPlaylistViewer(this)),
+    m_playlistViewer(new KNMusicPlaylistViewer(this, this)),
     m_playlistManager(new KNMusicPlaylistManager(this))
 {
     //Configure the tab.
@@ -126,6 +126,31 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
 QAbstractButton *KNMusicPlaylist::tab()
 {
     return m_tab;
+}
+
+void KNMusicPlaylist::showIndex(KNMusicModel *musicModel,
+                                const QModelIndex &index)
+{
+    //Check the music model.
+    if(musicModel==nullptr)
+    {
+        return;
+    }
+    //Find the music model.
+    //Get the playlist list first.
+    KNMusicPlaylistListModel *playlistList=m_playlistManager->playlistList();
+    //Get the model index of the music model.
+    QModelIndex playlistIndex=
+            playlistList->playlistIndex(
+                static_cast<KNMusicPlaylistModel *>(musicModel));
+    //Check validatation of the model index.
+    if(playlistIndex.isValid())
+    {
+        //Select the music data.
+        m_playlistList->showPlaylist(playlistIndex);
+        //Select the index of the playlist index.
+        m_playlistViewer->selectSong(index);
+    }
 }
 
 void KNMusicPlaylist::showEvent(QShowEvent *event)

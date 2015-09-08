@@ -60,6 +60,11 @@ public:
      */
     KNMusicAnalysisItem playingItem() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplement from KNMusicNowPlayingBase::playingTab().
+     */
+    KNMusicTab *playingTab() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

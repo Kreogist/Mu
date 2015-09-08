@@ -63,6 +63,14 @@ public:
     }
 
     /*!
+     * \brief Find the playlist model inside the playlist list model.
+     * \param playlist The playlist model pointer.
+     * \return The playlist index. If the playlist model is not exist, return a
+     * invalid index.
+     */
+    QModelIndex playlistIndex(KNMusicPlaylistModel *playlist);
+
+    /*!
      * \brief Append a playlist model at the end of the list.
      * \param model The playlist model which is wait to add.
      * \return The index of the playlist model inside the model. If the model is

@@ -22,6 +22,7 @@
 #include <QObject>
 
 class QThread;
+class KNMusicModel;
 class KNMusicPlaylistParser;
 class KNMusicPlaylistModel;
 class KNMusicPlaylistEngine;
