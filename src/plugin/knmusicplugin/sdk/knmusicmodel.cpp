@@ -332,15 +332,15 @@ bool KNMusicModel::canDropMimeData(const QMimeData *data,
                                    const QModelIndex &parent) const
 {
     Q_UNUSED(action);
-//    Q_UNUSED(row);
-//    Q_UNUSED(column);
-    qDebug()<<row<<column<<parent;
-    //You cannot drop a data on a item.
-        //For urls and mime type we can accept.
-        if (data->hasUrls() || data->hasFormat(ModelMimeType))
-        {
-            return true;
-        }
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+    Q_UNUSED(parent);
+    //For urls and mime type we can accept.
+    if (data->hasUrls() ||
+            data->hasFormat(ModelMimeType))
+    {
+        return true;
+    }
     //Ignore the others.
     return false;
 }
@@ -552,7 +552,6 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
     Q_UNUSED(row)
     Q_UNUSED(column)
     Q_UNUSED(parent)
-    qDebug()<<"Fuck here?!";
     //Check move or copy action enabled.
     if(action==Qt::MoveAction || action==Qt::CopyAction)
     {
@@ -587,7 +586,8 @@ bool KNMusicModel::moveRows(const QModelIndex &sourceParent,
     Q_UNUSED(sourceParent)
     Q_UNUSED(destinationParent)
     //Check the source row and destination child.
-    if(sourceRow==destinationChild)
+    if(sourceRow==destinationChild ||
+            sourceRow==destinationChild-1)
     {
         //We don't need to move any thing.
         return true;
