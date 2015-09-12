@@ -166,6 +166,8 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                                 options.rect.height()),
                           palette().color(QPalette::AlternateBase));
     }
+    //Paint the other parts of the row.
+    QTreeView::drawRow(painter, options, index);
     //Check whether we need to draw the drop indicator.
     if(index.row()==m_dragMoveRow)
     {
@@ -176,13 +178,11 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                                     width(),
                                     2):
                               QRect(options.rect.x(),
-                                    options.rect.bottom(),
+                                    options.rect.bottom()+1,
                                     width(),
                                     2),
-                          QColor(255,255,255,100));
+                          palette().color(QPalette::HighlightedText));
     }
-    //Paint the other parts of the row.
-    QTreeView::drawRow(painter, options, index);
 }
 
 void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
