@@ -49,7 +49,7 @@ void KNMusicLyricsDownloader::setWorkingThread(QThread *thread)
     moveToThread(thread);
 }
 
-void KNMusicLyricsDownloader::get(QNetworkRequest &request,
+void KNMusicLyricsDownloader::get(const QNetworkRequest &request,
                                   QByteArray &responseData)
 {
     //Stop the timer to ensure it's not launching.
@@ -90,7 +90,7 @@ void KNMusicLyricsDownloader::get(QNetworkRequest &request,
     reply->deleteLater();
 }
 
-void KNMusicLyricsDownloader::post(QNetworkRequest &request,
+void KNMusicLyricsDownloader::post(QNetworkRequest request,
                                    const QByteArray &parameter,
                                    QByteArray &responseData)
 {

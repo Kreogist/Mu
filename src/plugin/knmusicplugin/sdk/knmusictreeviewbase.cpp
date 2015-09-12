@@ -21,6 +21,7 @@
 #include <QHelpEvent>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QMimeData>
 
 #include "knthememanager.h"
 #include "knconnectionhandler.h"
@@ -46,8 +47,10 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     QTreeView(parent),
     m_musicTab(tab),
     m_mouseAnime(new QTimeLine(200, this)),
-    m_animate(true),
     m_proxyModel(nullptr),
+    m_dragMoveRow(-1),
+    m_dragIndicatorPos(QAbstractItemView::OnViewport),
+    m_animate(true),
     m_initialLoad(true),
     m_pressed(false)
 {
@@ -163,6 +166,21 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                                 options.rect.height()),
                           palette().color(QPalette::AlternateBase));
     }
+    //Check whether we need to draw the drop indicator.
+    if(index.row()==m_dragMoveRow)
+    {
+        //Check the indicator posisiton.
+        painter->fillRect(m_dragIndicatorPos==QAbstractItemView::AboveItem?
+                              QRect(options.rect.x(),
+                                    options.rect.y(),
+                                    width(),
+                                    2):
+                              QRect(options.rect.x(),
+                                    options.rect.bottom(),
+                                    width(),
+                                    2),
+                          QColor(255,255,255,100));
+    }
     //Paint the other parts of the row.
     QTreeView::drawRow(painter, options, index);
 }
@@ -186,9 +204,113 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
     drag->exec();
 }
 
+void KNMusicTreeViewBase::dragEnterEvent(QDragEnterEvent *event)
+{
+    //Check the model.
+    if(musicModel()==nullptr)
+    {
+        //Ignore the drag event when the music model is null.
+        event->ignore();
+        return;
+    }
+    //For those accept.
+    event->accept();
+    //Set the state.
+    setState(DraggingState);
+}
+
 void KNMusicTreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 {
-    ;
+    //Ignore the event by default.
+    event->ignore();
+    //Check the model.
+    if(musicModel()==nullptr)
+    {
+        //Ignore the drag event when the music model is null.
+        return;
+    }
+    //Check mime type.
+    const QMimeData *dragMimeData=event->mimeData();
+    if(dragMimeData->hasUrls() ||
+            dragMimeData->hasFormat(ModelMimeType))
+    {
+        event->accept();
+    }
+    //Check the event state.
+    if(!event->isAccepted())
+    {
+        //Ignore the cannot accepted event.
+        return;
+    }
+    //Get the current Y position index.
+    QModelIndex dropIndex=indexAt(QPoint(0, event->pos().y()));
+    //Check whether the index is valid or not.
+    if(dropIndex.isValid())
+    {
+        //Save the new drag move index.
+        m_dragMoveRow=dropIndex.row();
+        //Update the drag indicator position.
+        m_dragIndicatorPos=dropPosition(event->pos(), visualRect(dropIndex));
+    }
+    else
+    {
+        //Set it to the end of the whole model.
+        //Set the drag move row to the last row.
+        m_dragMoveRow=proxyModel()->rowCount()-1;
+        //Update the drag indicator position to below item.
+        m_dragIndicatorPos=QAbstractItemView::BelowItem;
+    }
+    //Update the widget.
+    viewport()->update();
+}
+
+void KNMusicTreeViewBase::dragLeaveEvent(QDragLeaveEvent *)
+{
+    //Clear the state.
+    setState(NoState);
+    //Stop auto scroll.
+    stopAutoScroll();
+    //Clear the dragging hover.
+    m_dragMoveRow=-1;
+    m_dragIndicatorPos=QAbstractItemView::OnViewport;
+    //Update the viewport.
+    viewport()->update();
+}
+
+void KNMusicTreeViewBase::dropEvent(QDropEvent *event)
+{
+    //Check the model.
+    if(musicModel()==nullptr)
+    {
+        //Ignore the drop event when the music model is null.
+        event->ignore();
+        return;
+    }
+    //Clear the dragging hover.
+    m_dragMoveRow=-1;
+    m_dragIndicatorPos=QAbstractItemView::OnViewport;
+    //Drop the data.
+    int row=-1;
+    //Get the drop row.
+    if(dropOn(event, row))
+    {
+        //Check the music model, and do the drop mime data to the proxy model.
+        if(musicModel()!=nullptr &&
+                proxyModel()->dropMimeData(event->mimeData(),
+                                           Qt::MoveAction,
+                                           row,
+                                           Name,
+                                           QModelIndex()))
+        {
+            event->accept();
+        }
+    }
+    //Stop auto scroll.
+    stopAutoScroll();
+    //Set state.
+    setState(NoState);
+    //Update view port.
+    viewport()->update();
 }
 
 void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
@@ -351,6 +473,16 @@ void KNMusicTreeViewBase::renameCurrent()
     ;
 }
 
+QAbstractItemView::DropIndicatorPosition KNMusicTreeViewBase::dropPosition(
+        const QPoint &pos,
+        const QRect &rect) const
+{
+    //We only need to check it's above or below the center of the rect.
+    return (pos.y() < rect.center().y())?
+                QAbstractItemView::AboveItem :
+                QAbstractItemView::BelowItem;
+}
+
 void KNMusicTreeViewBase::resetHeaderState()
 {
     //Hide all the data column first.
@@ -408,6 +540,44 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
     }
     //Ask the now playing to play the index row.
     nowPlaying->playMusicRow(proxyModel(), index.row(), m_musicTab);
+}
+
+inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event,
+                                        int &dropRow)
+{
+    //Check the event.
+    if(event->isAccepted())
+    {
+        //Actually I don't know why we have to do it.
+        //If you understand this, or you are a developer of Qt, please mail me
+        //at tomguts@126.com to tell me why it works like this.
+        return false;
+    }
+
+    //Check the position of the event.
+    if(!viewport()->rect().contains(event->pos()))
+    {
+        //For the position out of the rect, return false.
+        return false;
+    }
+
+    //Get the index at the Y position of the pos.
+    QModelIndex dropIndex=indexAt(QPoint(0, event->pos().y()));
+    //Check the drop index.
+    if(dropIndex.isValid())
+    {
+        //Check drop on the top or the bottom part of the index.
+        dropRow=(dropPosition(event->pos(), visualRect(dropIndex))==
+                  QAbstractItemView::AboveItem)?
+                    dropIndex.row():
+                    dropIndex.row()+1;
+    }
+    else
+    {
+        //Treat the bottom area as the last row.
+        dropRow=proxyModel()->rowCount();
+    }
+    return true;
 }
 
 void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
@@ -554,7 +724,7 @@ KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()
         //Initial the proxy model.
         m_proxyModel=new KNMusicProxyModel(this);
         //Set the search text.
-        //!FIXME: Set search text here.
+        m_proxyModel->setSearchBlocks(knMusicGlobal->search()->rules());
         //Set the proxy model.
         setModel(m_proxyModel);
     }

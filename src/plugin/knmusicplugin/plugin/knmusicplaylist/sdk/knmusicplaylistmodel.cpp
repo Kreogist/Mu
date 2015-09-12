@@ -236,7 +236,6 @@ bool KNMusicPlaylistModel::dropMimeData(const QMimeData *data,
             //Check whether the data is from it self.
             if(data->data(ModelMimeType).toLongLong()==(qint64)this)
             {
-                qDebug()<<"Fuck it!!!";
                 //Generate the remove index list.
                 QList<QPersistentModelIndex> sourceRowIndexes;
                 //Translate the row list to source row indexes list.
@@ -259,12 +258,13 @@ bool KNMusicPlaylistModel::dropMimeData(const QMimeData *data,
                 int targetRow=(row==-1)?parent.row():row;
                 QPersistentModelIndex targetIndex=
                         index((targetRow==-1)?rowCount()-1:targetRow, Name);
-                qDebug()<<"Fuck it!"<<rowCount()<<targetRow<<"Result:"<<((targetRow==-1)?rowCount():targetRow);
                 //Move all the rows to target position.
                 while(!sourceRowIndexes.isEmpty())
                 {
+                    //Get the source row.
+                    int sourceRow=sourceRowIndexes.takeLast().row();
                     //Move the source row to target row.
-                    moveRow(QModelIndex(), sourceRowIndexes.takeLast().row(),
+                    moveRow(QModelIndex(), sourceRow,
                             QModelIndex(), targetIndex.row());
                 }
                 return true;

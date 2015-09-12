@@ -122,9 +122,24 @@ protected:
     void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QTreeView::dragEnterEvent().
+     */
+    void dragEnterEvent(QDragEnterEvent *event);
+
+    /*!
      * \brief Reimplemented from QTreeView::dragMoveEvent().
      */
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QTreeView::dragLeaveEvent().
+     */
+    void dragLeaveEvent(QDragLeaveEvent *);
+
+    /*!
+     * \brief Reimplemented from QTreeView::dropEvent().
+     */
+    void dropEvent(QDropEvent *event);
 
     /*!
      * \brief Reimplemented from QTreeView::mousePressEvent().
@@ -178,17 +193,22 @@ private slots:
     void renameCurrent();
 
 private:
+    QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
+            const QRect &rect) const;
     inline void startAnime(const int &endFrame);
     inline void playIndex(const QModelIndex &index);
+    inline bool dropOn(QDropEvent *event, int &dropRow);
     void showSoloMenu(const QPoint &positionOfRect);
     void showMultiMenu(const QPoint &positionOfRect);
     bool showDetailTooltip(const QPoint &indexPosition);
 
     KNMusicTab *m_musicTab;
     QTimeLine *m_mouseAnime;
-    bool m_animate;
     KNMusicProxyModel *m_proxyModel;
+    int m_dragMoveRow;
+    QAbstractItemView::DropIndicatorPosition m_dragIndicatorPos;
 
+    bool m_animate;
     bool m_initialLoad, m_pressed;
 };
 

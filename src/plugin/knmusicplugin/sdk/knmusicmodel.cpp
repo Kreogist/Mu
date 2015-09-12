@@ -18,6 +18,7 @@
 #include <QMimeData>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QLinkedList>
 
 #include "knutil.h"
 
@@ -585,27 +586,69 @@ bool KNMusicModel::moveRows(const QModelIndex &sourceParent,
 {
     Q_UNUSED(sourceParent)
     Q_UNUSED(destinationParent)
-    qDebug()<<sourceRow<<sourceRow+count-1<<destinationChild;
-    //Follow the documentation, call this function first.
-    beginMoveRows(QModelIndex(),
-                  sourceRow,
-                  sourceRow+count-1,
-                  QModelIndex(),
-                  destinationChild);
-    //Check if the destination child is greater than the source, we have to
-    //reduce once to match the move function.
-    if(destinationChild>sourceRow)
+    //Check the source row and destination child.
+    if(sourceRow==destinationChild)
     {
-        --destinationChild;
+        //We don't need to move any thing.
+        return true;
     }
-    //Get the destination child.
-    while(count--)
+    //Generate a temporary list.
+    QLinkedList<KNMusicDetailInfo> clipboardList;
+    //Check the destinationChild is valid or not.
+    if(destinationChild==-1)
     {
-        //Move the source row to desination child.
-        m_detailInfos.move(sourceRow, destinationChild);
+        //It is invalid, means we have to move to the end of the model.
+        beginMoveRows(QModelIndex(),
+                      sourceRow,
+                      sourceRow+count-1,
+                      QModelIndex(),
+                      m_detailInfos.size());
+        //Get the destination child.
+        while(count--)
+        {
+            //Take the item, add to clipboard list.
+            clipboardList.append(m_detailInfos.takeAt(sourceRow));
+        }
+        //Append the clipboard list to end of the raw list.
+        while(!clipboardList.isEmpty())
+        {
+            //Append the clipboard from the first to the last.
+            m_detailInfos.append(clipboardList.takeFirst());
+        }
+    }
+    else
+    {
+        //Follow the documentation, call this function first.
+        beginMoveRows(QModelIndex(),
+                      sourceRow,
+                      sourceRow+count-1,
+                      QModelIndex(),
+                      destinationChild);
+        //Calculate the target position.
+        int targetPosition=destinationChild;
+        //Get the destination child.
+        while(count--)
+        {
+            //Check the source row is greater or lesser than the target position.
+            if(sourceRow < targetPosition)
+            {
+                --targetPosition;
+            }
+            //Take the item, add to clipboard list.
+            clipboardList.append(m_detailInfos.takeAt(sourceRow));
+        }
+        //Insert the clipboard list to target position.
+        while(!clipboardList.isEmpty())
+        {
+            //Insert the clipboard from the first to the last.
+            m_detailInfos.insert(targetPosition, clipboardList.takeFirst());
+        }
     }
     //Follow the documentation, call this function after move all the rows.
     endMoveRows();
+    //Emit the data changed signal.
+    emit dataChanged(index(sourceRow, 0),
+                     index(destinationChild, columnCount()-1));
     //Mission complete.
     return true;
 }

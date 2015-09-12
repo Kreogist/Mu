@@ -203,7 +203,7 @@ protected:
      * \param responseData The response data byte array which will be used to
      * receive the data from the get request.
      */
-    void get(QNetworkRequest &request,
+    void get(const QNetworkRequest &request,
              QByteArray &responseData);
 
     /*!
@@ -235,7 +235,7 @@ protected:
      * \param responseData The response data byte array which will be used to
      * receive the data from the get request.
      */
-    void post(QNetworkRequest &request,
+    void post(QNetworkRequest request,
               const QByteArray &parameter,
               QByteArray &responseData);
 
