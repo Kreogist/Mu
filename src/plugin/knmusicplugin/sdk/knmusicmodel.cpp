@@ -331,17 +331,15 @@ bool KNMusicModel::canDropMimeData(const QMimeData *data,
                                    const QModelIndex &parent) const
 {
     Q_UNUSED(action);
-    Q_UNUSED(row);
-    Q_UNUSED(column);
+//    Q_UNUSED(row);
+//    Q_UNUSED(column);
+    qDebug()<<row<<column<<parent;
     //You cannot drop a data on a item.
-    if(!parent.isValid())
-    {
         //For urls and mime type we can accept.
         if (data->hasUrls() || data->hasFormat(ModelMimeType))
         {
             return true;
         }
-    }
     //Ignore the others.
     return false;
 }
@@ -585,20 +583,31 @@ bool KNMusicModel::moveRows(const QModelIndex &sourceParent,
                             const QModelIndex &destinationParent,
                             int destinationChild)
 {
+    Q_UNUSED(sourceParent)
+    Q_UNUSED(destinationParent)
+    qDebug()<<sourceRow<<sourceRow+count-1<<destinationChild;
     //Follow the documentation, call this function first.
     beginMoveRows(QModelIndex(),
                   sourceRow,
                   sourceRow+count-1,
                   QModelIndex(),
                   destinationChild);
-    //Get the destination child.
-    for(int i=0; i<count; ++i)
+    //Check if the destination child is greater than the source, we have to
+    //reduce once to match the move function.
+    if(destinationChild>sourceRow)
     {
-        m_detailInfos.move;
+        --destinationChild;
     }
-
+    //Get the destination child.
+    while(count--)
+    {
+        //Move the source row to desination child.
+        m_detailInfos.move(sourceRow, destinationChild);
+    }
     //Follow the documentation, call this function after move all the rows.
     endMoveRows();
+    //Mission complete.
+    return true;
 }
 
 void KNMusicModel::setPlayingIndex(const QModelIndex &playingRow)

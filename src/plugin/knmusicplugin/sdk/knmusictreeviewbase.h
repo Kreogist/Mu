@@ -122,6 +122,11 @@ protected:
     void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QTreeView::dragMoveEvent().
+     */
+    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QTreeView::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -175,8 +180,8 @@ private slots:
 private:
     inline void startAnime(const int &endFrame);
     inline void playIndex(const QModelIndex &index);
-    void showSoloMenu(const QPoint &position);
-    void showMultiMenu(const QPoint &position);
+    void showSoloMenu(const QPoint &positionOfRect);
+    void showMultiMenu(const QPoint &positionOfRect);
     bool showDetailTooltip(const QPoint &indexPosition);
 
     KNMusicTab *m_musicTab;

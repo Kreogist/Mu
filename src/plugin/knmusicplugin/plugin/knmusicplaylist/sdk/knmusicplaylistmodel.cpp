@@ -250,8 +250,16 @@ bool KNMusicPlaylistModel::dropMimeData(const QMimeData *data,
                     //Add the target index to source row indexes.
                     sourceRowIndexes.append(index((*i).toInt(), Name));
                 }
+                //Sort the indexes as the row.
+                //We want to sort the list from a greater row to lesser row.
+                std::sort(sourceRowIndexes.begin(), sourceRowIndexes.end(),
+                          [](const QModelIndex &left, const QModelIndex &right)
+                          {return left.row()>right.row();});
                 //Translate the target position to persistant index.
-                QPersistentModelIndex targetIndex=index(row, Name);
+                int targetRow=(row==-1)?parent.row():row;
+                QPersistentModelIndex targetIndex=
+                        index((targetRow==-1)?rowCount()-1:targetRow, Name);
+                qDebug()<<"Fuck it!"<<rowCount()<<targetRow<<"Result:"<<((targetRow==-1)?rowCount():targetRow);
                 //Move all the rows to target position.
                 while(!sourceRowIndexes.isEmpty())
                 {

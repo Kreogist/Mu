@@ -65,11 +65,21 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set the search block list to filter the music model.
+     * \param blockList The search block list.
+     */
     void setSearchBlocks(const QList<KNMusicSearchBlock> &blockList);
 
 protected:
+    /*!
+     * \brief Reimplemented from QSortFilterProxyModel::lessThan().
+     */
     bool lessThan(const QModelIndex &left,
                   const QModelIndex &right) const Q_DECL_OVERRIDE;
+    /*!
+     * \brief Reimplemented from QSortFilterProxyModel::filterAcceptsRow().
+     */
     bool filterAcceptsRow(int source_row,
                           const QModelIndex &source_parent) const
     Q_DECL_OVERRIDE;

@@ -186,6 +186,11 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
     drag->exec();
 }
 
+void KNMusicTreeViewBase::dragMoveEvent(QDragMoveEvent *event)
+{
+    ;
+}
+
 void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
 {
     //Do the original pressed event.

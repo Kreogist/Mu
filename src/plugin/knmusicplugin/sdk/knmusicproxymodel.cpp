@@ -101,11 +101,11 @@ bool KNMusicProxyModel::filterAcceptsRow(int source_row,
         return true;
     }
     //Check if the row comply with the limits.
-    for(auto i=m_searchBlocks.constBegin(); i!=m_searchBlocks.end(); ++i)
+    for(auto i : m_searchBlocks)
     {
         //Check the the rule, if the row can not match one rule, then it cannot
         //be accept.
-        if(!checkRule(model, source_row, *i))
+        if(!checkRule(model, source_row, i))
         {
             return false;
         }
