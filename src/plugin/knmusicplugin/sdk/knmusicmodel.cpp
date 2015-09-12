@@ -586,8 +586,9 @@ bool KNMusicModel::moveRows(const QModelIndex &sourceParent,
     Q_UNUSED(sourceParent)
     Q_UNUSED(destinationParent)
     //Check the source row and destination child.
-    if(sourceRow==destinationChild ||
-            sourceRow==destinationChild-1)
+    if(sourceRow==destinationChild ||  //If you didn't do any move.
+            sourceRow==destinationChild-1 ||
+            count==m_detailInfos.size()) //Or you are trying to move all rows.
     {
         //We don't need to move any thing.
         return true;
