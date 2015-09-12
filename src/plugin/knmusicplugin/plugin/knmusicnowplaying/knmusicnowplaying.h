@@ -132,6 +132,7 @@ public slots:
 
 private slots:
     void onActionBackendFinished();
+    void onActionPlayingItemRemoved();
     void onActionLoadSuccess();
     void onActionLoadFailed();
     void playRow(const int &proxyRow);

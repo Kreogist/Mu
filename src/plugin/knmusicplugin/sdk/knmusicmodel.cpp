@@ -21,6 +21,7 @@
 #include <QLinkedList>
 
 #include "knutil.h"
+#include "knmusicnowplayingbase.h"
 
 #include "knmusicmodel.h"
 
@@ -209,6 +210,14 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
     Q_UNUSED(index);
     //As the documentation said, called this function first.
     beginRemoveRows(QModelIndex(), position, position+rows-1);
+    //Check whether the playing index row is in the the position.
+    if(m_playingIndex.isValid() &&
+            (m_playingIndex.row() >= position &&
+             m_playingIndex.row() <= rows+position))
+    {
+        //We have to tell the now playing to reset the current playing.
+        emit playingItemRemoved();
+    }
     //Remove those datas from the list.
     while(rows--)
     {

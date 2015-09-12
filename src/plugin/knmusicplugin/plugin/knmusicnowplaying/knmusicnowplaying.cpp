@@ -160,6 +160,9 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
         //Check the previous model null.
         if(playingMusicModel()!=nullptr)
         {
+            //Disconnect all the monitor signals.
+            disconnect(playingMusicModel(), &KNMusicModel::playingItemRemoved,
+                       this, &KNMusicNowPlaying::onActionPlayingItemRemoved);
             //Reset the previous proxy odel.
             playingMusicModel()->setPlayingIndex(QModelIndex());
         }
@@ -167,6 +170,13 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
         m_playingProxyModel=model;
         //Save the music tab.
         m_playingTab=tab;
+        //Check the music model first, we can only connect when its not null.
+        if(playingMusicModel())
+        {
+            //Connect the monitor signals.
+            connect(playingMusicModel(), &KNMusicModel::playingItemRemoved,
+                    this, &KNMusicNowPlaying::onActionPlayingItemRemoved);
+        }
     }
     //Reset the current playing index to be empty.
     m_playingIndex=QPersistentModelIndex();
@@ -328,6 +338,12 @@ void KNMusicNowPlaying::onActionBackendFinished()
     }
     //Or else, play next.
     playNextRow(false);
+}
+
+void KNMusicNowPlaying::onActionPlayingItemRemoved()
+{
+    //Reset current playing.
+    resetCurrentPlaying();
 }
 
 void KNMusicNowPlaying::onActionLoadSuccess()

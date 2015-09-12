@@ -465,7 +465,14 @@ void KNMusicTreeViewBase::playCurrent()
 
 void KNMusicTreeViewBase::removeCurrent()
 {
-    ;
+    //Check whether the proxy model has a content music model.
+    //Check the current index is valid.
+    if(musicModel()!=nullptr &&
+            currentIndex().isValid())
+    {
+        //Remove the current index.
+        proxyModel()->removeRow(currentIndex().row());
+    }
 }
 
 void KNMusicTreeViewBase::renameCurrent()

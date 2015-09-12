@@ -266,6 +266,12 @@ public:
 
 signals:
     /*!
+     * \brief When the playing item is begin removed, this signal will be
+     * emitted.
+     */
+    void playingItemRemoved();
+
+    /*!
      * \brief When the row count is changed, this signal will be emitted.
      */
     void rowCountChanged();
