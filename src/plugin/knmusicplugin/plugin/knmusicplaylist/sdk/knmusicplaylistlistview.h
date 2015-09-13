@@ -67,6 +67,9 @@ protected:
 private:
     QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
             const QRect &rect) const;
+    inline bool dropOn(QDropEvent *event,
+                       int &dropRow,
+                       QModelIndex &dropIndex);
 };
 
 #endif // KNMUSICPLAYLISTLISTVIEW_H

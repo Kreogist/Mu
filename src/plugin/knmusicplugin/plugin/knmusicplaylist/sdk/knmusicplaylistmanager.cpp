@@ -38,12 +38,15 @@
 
 KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     QObject(parent),
-    m_playlistList(new KNMusicPlaylistListModel(this)),
+    m_playlistList(new KNMusicPlaylistListModel()),
     m_playlistDirPath(QString()),
     m_isPlaylistListLoaded(false),
     m_playlistEngine(new KNMusicPlaylistEngine()),
     m_workingThread(new QThread())
 {
+    //Link the playlist list to the slot.
+    connect(m_playlistList, &KNMusicPlaylistListModel::requireCreatePlaylist,
+            this, &KNMusicPlaylistManager::onActionCreatePlaylist);
 }
 
 KNMusicPlaylistManager::~KNMusicPlaylistManager()
@@ -71,7 +74,7 @@ KNMusicPlaylistModel *KNMusicPlaylistManager::playlist(const QModelIndex &index)
     return m_playlistList->playlist(index);
 }
 
-QModelIndex KNMusicPlaylistManager::createPlaylist()
+QModelIndex KNMusicPlaylistManager::createPlaylist(int playlistPosition)
 {
     //Generate the playlist.
     KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_workingThread,
@@ -82,7 +85,9 @@ QModelIndex KNMusicPlaylistManager::createPlaylist()
     model->allcateFilePath();
     //Add the model to the playlist list, and give back the model index in the
     //model list model.
-    return m_playlistList->append(model);
+    return playlistPosition<0 || playlistPosition>=m_playlistList->rowCount()?
+                m_playlistList->append(model):
+                m_playlistList->insert(playlistPosition, model);
 }
 
 void KNMusicPlaylistManager::installPlaylistParser(
@@ -137,6 +142,14 @@ void KNMusicPlaylistManager::startParseEngine()
             this, &KNMusicPlaylistManager::requireShowContent);
     connect(m_playlistList, &KNMusicPlaylistListModel::requireHideContent,
             this, &KNMusicPlaylistManager::requireHideContent);
+}
+
+void KNMusicPlaylistManager::onActionCreatePlaylist(const int &position)
+{
+    //Create the playlist.
+    QModelIndex playlistIndex=createPlaylist(position);
+    //Require rename the playlist index.
+    emit requireShowAndRenamePlaylist(playlistIndex);
 }
 
 bool KNMusicPlaylistManager::writeModelToFile(KNMusicPlaylistModel *model,

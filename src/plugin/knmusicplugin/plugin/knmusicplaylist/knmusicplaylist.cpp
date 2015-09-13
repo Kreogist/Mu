@@ -82,6 +82,9 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
             m_container, &KNEmptyStateWidget::showContentWidget);
     connect(m_playlistManager, &KNMusicPlaylistManager::requireHideContent,
             m_container, &KNEmptyStateWidget::showEmptyWidget);
+    connect(m_playlistManager,
+            &KNMusicPlaylistManager::requireShowAndRenamePlaylist,
+            this, &KNMusicPlaylist::showAndRenamePlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
             this, &KNMusicPlaylist::onActionCreatePlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireImportPlaylists,
@@ -194,15 +197,21 @@ void KNMusicPlaylist::retranslate()
                              "%1");
 }
 
+void KNMusicPlaylist::showAndRenamePlaylist(const QModelIndex &playlistIndex)
+{
+    //Show that playlist.
+    m_playlistList->showPlaylist(playlistIndex);
+    //Ask the list view to rename it.
+    m_playlistList->renamePlaylist(playlistIndex);
+}
+
 void KNMusicPlaylist::onActionCreatePlaylist()
 {
     //Generate a empty playlist model in the playlist manager, and get the index
     //of the model.
     QModelIndex playlistIndex=m_playlistManager->createPlaylist();
-    //Show that playlist.
-    m_playlistList->showPlaylist(playlistIndex);
-    //Ask the list view to rename it.
-    m_playlistList->renamePlaylist(playlistIndex);
+    //Show and replace the playlist.
+    showAndRenamePlaylist(playlistIndex);
     //Make the container switch to the content widget.
     m_container->showContentWidget();
 }

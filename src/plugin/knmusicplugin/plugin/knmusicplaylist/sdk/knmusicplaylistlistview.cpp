@@ -164,16 +164,112 @@ QAbstractItemView::DropIndicatorPosition KNMusicPlaylistListView::dropPosition(
     return QAbstractItemView::OnItem;
 }
 
+inline bool KNMusicPlaylistListView::dropOn(QDropEvent *event,
+                                            int &dropRow,
+                                            QModelIndex &dropIndex)
+{
+    //Check the event.
+    if(event->isAccepted())
+    {
+        //Actually I don't know why we have to do it.
+        //If you understand this, or you are a developer of Qt, please mail me
+        //at tomguts@126.com to tell me why it works like this.
+        return false;
+    }
+
+    //Check the position of the event.
+    if(!viewport()->rect().contains(event->pos()))
+    {
+        //For the position out of the rect, return false.
+        return false;
+    }
+
+    //Get the index at the Y position of the pos.
+    dropIndex=indexAt(QPoint(0, event->pos().y()));
+    //Check the drop index.
+    if(dropIndex.isValid())
+    {
+        //Get the indicator position.
+        QAbstractItemView::DropIndicatorPosition indicatorPosition=
+                dropPosition(event->pos(), visualRect(dropIndex));
+        //Check drop on the top or the bottom part of the index.
+        switch (indicatorPosition)
+        {
+        case QAbstractItemView::AboveItem:
+            //Set the row.
+            dropRow=dropIndex.row();
+            //Clear up the model index.
+            dropIndex=QModelIndex();
+            break;
+        case QAbstractItemView::OnItem:
+            //Reset the row.
+            dropRow=-1;
+            break;
+        case QAbstractItemView::BelowItem:
+            //Set the row.
+            dropRow=dropIndex.row()+1;
+            //Clear up the model index.
+            dropIndex=QModelIndex();
+            break;
+        default:
+            break;
+        }
+    }
+    else
+    {
+        //Check the model is null or not.
+        if(model()==nullptr)
+        {
+            dropRow=-1;
+        }
+        else
+        {
+            //Treat the bottom area as the last row.
+            dropRow=model()->rowCount();
+        }
+    }
+    return true;
+}
+
 void KNMusicPlaylistListView::dropEvent(QDropEvent *event)
 {
     //Clear the state.
     setState(NoState);
+    //Check the model.
+    if(model()==nullptr)
+    {
+        //Ignore the drop event when the music model is null.
+        event->ignore();
+        return;
+    }
     //Clear the dragging hover rect.
     //Reset the row to the delegate.
     KNMusicPlaylistListDelegate::setHoverRow(-1);
     //Update the indicator.
     KNMusicPlaylistListDelegate::setIndicator(
                 KNMusicPlaylistListDelegate::OutOfItem);
-    //Do the original drop event.
-    KNMusicCategoryListViewBase::dropEvent(event);
+    //Drop the data.
+    int row=-1;
+    QModelIndex droppedIndex;
+    //Get the drop row.
+    if(dropOn(event, row, droppedIndex))
+    {
+        //Check the music model, and do the drop mime data to the proxy model.
+        if(model()!=nullptr &&
+                model()->dropMimeData(event->mimeData(),
+                                      Qt::CopyAction,
+                                      row,
+                                      Name,
+                                      droppedIndex))
+        {
+            //Accept the drop event.
+            event->accept();
+        }
+    }
+    //Stop auto scroll.
+    stopAutoScroll();
+    //Set state.
+    setState(NoState);
+    //Update view port.
+    viewport()->update();
 }

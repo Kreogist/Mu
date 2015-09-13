@@ -69,6 +69,7 @@ protected:
 
 private slots:
     void retranslate();
+    void showAndRenamePlaylist(const QModelIndex &playlistIndex);
     void onActionCreatePlaylist();
     void onActionImportPlaylist();
     void onActionRemovePlaylist();

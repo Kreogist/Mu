@@ -175,6 +175,13 @@ signals:
      */
     void requireHideContent();
 
+    /*!
+     * \brief When the user dropped the data and the user want to create a new
+     * playlist at a specific position, this signal will emitted.
+     * \param position The prefer position.
+     */
+    void requireCreatePlaylist(int position);
+
 public slots:
 
 protected:

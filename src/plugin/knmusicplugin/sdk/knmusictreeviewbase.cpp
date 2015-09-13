@@ -551,8 +551,7 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
     nowPlaying->playMusicRow(proxyModel(), index.row(), m_musicTab);
 }
 
-inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event,
-                                        int &dropRow)
+inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event, int &dropRow)
 {
     //Check the event.
     if(event->isAccepted())

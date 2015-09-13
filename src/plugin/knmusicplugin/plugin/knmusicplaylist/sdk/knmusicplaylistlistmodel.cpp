@@ -145,7 +145,7 @@ QModelIndex KNMusicPlaylistListModel::insert(int row,
     //Ensure the row is valid.
     Q_ASSERT(row>-1 && row<m_playlistList.size());
     //Follow the documentation, we have to do this.
-    beginInsertRows(QModelIndex(), row, row + 1);
+    beginInsertRows(QModelIndex(), row, row);
     //Insert the data to the list.
     m_playlistList.insert(row, model);
     //End the insertation.
@@ -295,7 +295,6 @@ bool KNMusicPlaylistListModel::canDropMimeData(const QMimeData *data,
     if (data->hasUrls() ||
             data->hasFormat(ModelMimeType))
     {
-        qDebug()<<"Fuck here?!!!";
         return true;
     }
     //Or else, we cannot accept the drop.
@@ -308,6 +307,35 @@ bool KNMusicPlaylistListModel::dropMimeData(const QMimeData *data,
                                             int column,
                                             const QModelIndex &parent)
 {
+    Q_UNUSED(action)
+    Q_UNUSED(column)
+    //Generate the playlist model data.
+    KNMusicPlaylistModel *playlistModel;
     //Check whether it drops on a parent.
+    if(parent.isValid())
+    {
+        //Get the playlist.
+        //We will insert those data to the model.
+        playlistModel=playlist(parent);
+    }
+    else
+    {
+        //Emit a signal to create a new playlist.
+        emit requireCreatePlaylist(row);
+        //Get the new playlist.
+        playlistModel=playlist(row);
+    }
+    //Check whether it's built.
+    if(!playlistModel->isBuilt())
+    {
+        //Build the model.
+        playlistModel->buildModel();
+    }
+    //Drop the data to the playlist model.
+    playlistModel->dropMimeData(data,
+                                Qt::CopyAction,
+                                playlistModel->rowCount(),
+                                0,
+                                QModelIndex());
     return false;
 }

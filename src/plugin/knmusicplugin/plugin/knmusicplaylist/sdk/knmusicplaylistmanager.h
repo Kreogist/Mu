@@ -139,9 +139,10 @@ public:
 
     /*!
      * \brief Create a blank playlist model.
-     * \return
+     * \param playlistPosition The prefer position of the playlist.
+     * \return The playlist model index inside the playlist list model.
      */
-    QModelIndex createPlaylist();
+    QModelIndex createPlaylist(int playlistPosition=-1);
 
     /*!
      * \brief Add one playlist parser to the playlist parser engine.
@@ -150,21 +151,41 @@ public:
     void installPlaylistParser(KNMusicPlaylistParser *parser);
 
     /*!
-     * \brief playlistFilter
-     * \return
+     * \brief Get the playlist import filter. It will collect all the filter
+     * text from the parsing engine in real-time.
+     * \return The filter string list.
      */
     QStringList playlistFilter();
 
     /*!
-     * \brief startEngineThread
+     * \brief Start the playlist parsing engine thread.
      */
     void startParseEngine();
 
 signals:
+    /*!
+     * \brief When the model is not empty anymore, this signal will be emitted.
+     */
     void requireShowContent();
+
+    /*!
+     * \brief When the model is becoming to empty again, this signal will be
+     * emitted.
+     */
     void requireHideContent();
 
+    /*!
+     * \brief When a new playlist is created, sometimes it's from the list model
+     * and we can have to ask the list view to enabled the line edit to rename
+     * the new playlist.
+     * \param index The new playlist index.
+     */
+    void requireShowAndRenamePlaylist(const QModelIndex &index);
+
 public slots:
+
+private slots:
+    void onActionCreatePlaylist(const int &position);
 
 private:
     inline bool writeModelToFile(KNMusicPlaylistModel *model,
