@@ -213,7 +213,7 @@ void KNMusicTreeViewBase::dragEnterEvent(QDragEnterEvent *event)
         event->ignore();
         return;
     }
-    //For those accept.
+    //Accept all the other event.
     event->accept();
     //Set the state.
     setState(DraggingState);
@@ -279,6 +279,8 @@ void KNMusicTreeViewBase::dragLeaveEvent(QDragLeaveEvent *)
 
 void KNMusicTreeViewBase::dropEvent(QDropEvent *event)
 {
+    //Clear the state.
+    setState(NoState);
     //Check the model.
     if(musicModel()==nullptr)
     {

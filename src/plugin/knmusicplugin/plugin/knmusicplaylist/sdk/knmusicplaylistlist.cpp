@@ -82,9 +82,10 @@ void KNMusicPlaylistList::showPlaylist(const QModelIndex &index)
 void KNMusicPlaylistList::retranslate()
 {
     //Update the actions translation.
+    //Add Menu
     m_addActions[AddPlaylist]->setText(tr("New Playlist"));
     m_addActions[ImportPlaylist]->setText(tr("Import Playlist"));
-
+    //Configure Menu
     m_configureAction[ExportPlaylist]->setText(tr("Export"));
     m_configureAction[CopyPlaylist]->setText(tr("Copy"));
 }

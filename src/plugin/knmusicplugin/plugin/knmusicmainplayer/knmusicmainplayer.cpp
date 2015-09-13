@@ -16,15 +16,25 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knthememanager.h"
+#include "knopacityanimebutton.h"
 
 #include "knmusicmainplayer.h"
 
 KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
-    KNMusicMainPlayerBase(parent)
+    KNMusicMainPlayerBase(parent),
+    m_hideMainPlayer(new KNOpacityAnimeButton(this))
 {
     setObjectName("MainPlayer");
     //Set properties.
     setAutoFillBackground(true);
+
+    //Configure the main player.
+    m_hideMainPlayer->setFixedSize(32, 32);
+    m_hideMainPlayer->move(16, 16);
+    m_hideMainPlayer->setIcon(
+                QPixmap(":/plugin/music/player/hide_mainplayer.png"));
+    connect(m_hideMainPlayer, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicMainPlayer::requireHide);
 
     //Register the widget to the theme manager.
     knTheme->registerWidget(this);

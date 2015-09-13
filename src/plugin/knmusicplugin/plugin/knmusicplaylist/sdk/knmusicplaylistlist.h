@@ -26,6 +26,9 @@ class KNLinearSenseWidget;
 class KNOpacityAnimeButton;
 class KNMusicPlaylistListView;
 class KNMusicPlaylistListModel;
+/*!
+ * \brief The KNMusicPlaylistList class
+ */
 class KNMusicPlaylistList : public QWidget
 {
     Q_OBJECT

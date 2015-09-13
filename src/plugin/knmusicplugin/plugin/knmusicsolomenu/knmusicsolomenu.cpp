@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QFileInfo>
+
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "knutil.h"
@@ -33,7 +35,8 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
     m_model(nullptr),
     m_itemIndex(QModelIndex()),
     m_itemText(QString()),
-    m_filePath(QString())
+    m_filePath(QString()),
+    m_preferFileName(QString())
 {
     setObjectName("MusicSoloMenu");
     //Set the separator color.
@@ -101,15 +104,49 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
     m_itemIndex=itemIndex;
     //Save a copy of the row of the index.
     int row=m_itemIndex.row();
+    //Get the detail info from the model.
+    const KNMusicDetailInfo detailInfo=model->rowDetailInfo(row);
     //Get the current item text data and file path from the model.
     m_itemText=m_model->textData(row, m_itemIndex.column());
-    m_filePath=m_model->propertyData(row, FilePathRole).toString();
-    //Get the file name data from the model.
-    QString fileName=m_model->propertyData(row, FileNameRole).toString();
+    m_filePath=detailInfo.filePath;
     //Update action captions.
-    m_actions[PlayCurrent]->setText(
-                m_actionTitles[PlayCurrent].arg(m_model->textData(row, Name)));
-    m_actions[Open]->setText(m_actionTitles[Open].arg(fileName));
+    m_actions[PlayCurrent]->setText(detailInfo.textLists[Name].toString());
+    m_actions[Open]->setText(m_actionTitles[Open].arg(detailInfo.fileName));
+    //Get the prefer name.
+    //Check the aritist is empty or not.
+    QString artistText=detailInfo.textLists[Artist].toString();
+    if(artistText.isEmpty())
+    {
+        //Simply named it as Title.Suffix.
+        m_preferFileName=
+                KNUtil::legalFileName(detailInfo.textLists[Name].toString() +
+                                      "." +
+                                      QFileInfo(m_filePath).suffix());
+    }
+    else
+    {
+        //Named it as Artist - Title.Suffix.
+        m_preferFileName=
+                KNUtil::legalFileName(artistText +
+                                      " - " +
+                                      detailInfo.textLists[Name].toString() +
+                                      "." +
+                                      QFileInfo(m_filePath).suffix());
+    }
+    //Check the different between the prefer file name and the current one.
+    if(m_preferFileName==detailInfo.fileName)
+    {
+        //We have to hide the RenameToArtistHyphonName item.
+        m_actions[RenameToArtistHyphonName]->setVisible(false);
+    }
+    else
+    {
+        //Show the RenameToArtistHyphonName item.
+        m_actions[RenameToArtistHyphonName]->setVisible(true);
+        //Update the title.
+        m_actions[RenameToArtistHyphonName]->setText(
+                m_actionTitles[RenameToArtistHyphonName].arg(m_preferFileName));
+    }
     //Check the item text, set the visible of the item text related actions.
     if(m_itemText.isEmpty())
     {

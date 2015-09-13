@@ -54,5 +54,6 @@
         <file>music/detaildialog/tab_icon/albumart.png</file>
         <file>music/player/fullscreen.png</file>
         <file>music/player/menu.png</file>
+        <file>music/player/hide_mainplayer.png</file>
     </qresource>
 </RCC>

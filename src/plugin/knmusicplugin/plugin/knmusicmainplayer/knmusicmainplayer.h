@@ -21,10 +21,20 @@
 
 #include "knmusicmainplayerbase.h"
 
+class KNOpacityAnimeButton;
+/*!
+ * \brief The KNMusicMainPlayer class is a default realize of the main music
+ * player. It will use all the standard SDK file to build the main music player.
+ * You can treat this as an example of the main player.
+ */
 class KNMusicMainPlayer : public KNMusicMainPlayerBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicMainPlayer widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicMainPlayer(QWidget *parent = 0);
 
     /*!
@@ -40,6 +50,9 @@ public:
 signals:
 
 public slots:
+
+private:
+    KNOpacityAnimeButton *m_hideMainPlayer;
 };
 
 #endif // KNMUSICMAINPLAYER_H

@@ -15,15 +15,36 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QMimeData>
+
 #include "knmusicplaylistmodel.h"
 
 #include "knmusicplaylistlistmodel.h"
+
+#include <QDebug>
+
+QStringList KNMusicPlaylistListModel::m_dropMimeTypes=QStringList();
 
 KNMusicPlaylistListModel::KNMusicPlaylistListModel(QObject *parent) :
     QAbstractListModel(parent),
     m_playlistList(QList<KNMusicPlaylistModel *>()),
     m_icon(QIcon(":/plugin/music/playlist/playlist_icon.png"))
 {
+    //Build drop mime types for the first time.
+    if(m_dropMimeTypes.isEmpty())
+    {
+        //Set the drop mime types for original types first.
+        m_dropMimeTypes=QAbstractListModel::mimeTypes();
+        //Add url format.
+        m_dropMimeTypes.append("text/uri-list");
+        //Initial cache data.
+
+        //Add music detail info list.
+        m_dropMimeTypes.append(ModelMimeType);
+        m_dropMimeTypes.append(ModelType);
+        m_dropMimeTypes.append(ModelRowData);
+        m_dropMimeTypes.append(ModelRowList);
+    }
 }
 
 KNMusicPlaylistListModel::~KNMusicPlaylistListModel()
@@ -252,5 +273,41 @@ bool KNMusicPlaylistListModel::findTitle(const QString &title)
         }
     }
     //Or else, we cannot find this title, it will be false.
+    return false;
+}
+
+QStringList KNMusicPlaylistListModel::mimeTypes() const
+{
+    return m_dropMimeTypes;
+}
+
+bool KNMusicPlaylistListModel::canDropMimeData(const QMimeData *data,
+                                               Qt::DropAction action,
+                                               int row,
+                                               int column,
+                                               const QModelIndex &parent) const
+{
+    Q_UNUSED(action)
+    Q_UNUSED(row)
+    Q_UNUSED(column)
+    Q_UNUSED(parent)
+    //For urls and mime type we can accept.
+    if (data->hasUrls() ||
+            data->hasFormat(ModelMimeType))
+    {
+        qDebug()<<"Fuck here?!!!";
+        return true;
+    }
+    //Or else, we cannot accept the drop.
+    return false;
+}
+
+bool KNMusicPlaylistListModel::dropMimeData(const QMimeData *data,
+                                            Qt::DropAction action,
+                                            int row,
+                                            int column,
+                                            const QModelIndex &parent)
+{
+    //Check whether it drops on a parent.
     return false;
 }

@@ -30,6 +30,14 @@ class KNMusicPlaylistListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
+    enum IndicatorPosition
+    {
+        AboveItem,
+        OnItem,
+        BelowItem,
+        OutOfItem
+    };
+
     /*!
      * \brief Construct a KNMusicPlaylistListDelegate widget.
      * \param parent The parent widget.
@@ -69,6 +77,10 @@ public:
                       QAbstractItemModel *model,
                       const QModelIndex &index) const Q_DECL_OVERRIDE;
 
+    static void setHoverRow(int hoverRow);
+
+    static void setIndicator(const IndicatorPosition &indicator);
+
 signals:
 
 public slots:
@@ -77,6 +89,8 @@ private slots:
     void commitAndCloseEditor();
 
 private:
+    static int m_hoverRow;
+    static IndicatorPosition m_indicator;
 };
 
 #endif // KNMUSICPLAYLISTLISTDELEGATE_H

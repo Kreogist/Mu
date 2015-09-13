@@ -42,6 +42,31 @@ public:
      * \return The title text string.
      */
     QString currentPlaylistTitle() const;
+
+protected:
+    /*!
+     * \brief Reimplemented from KNMusicCategoryListViewBase::dragEnterEvent().
+     */
+    void dragEnterEvent(QDragEnterEvent *event);
+
+    /*!
+     * \brief Reimplemented from KNMusicCategoryListViewBase::dragMoveEvent().
+     */
+    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicCategoryListViewBase::dragLeaveEvent().
+     */
+    void dragLeaveEvent(QDragLeaveEvent *);
+
+    /*!
+     * \brief Reimplemented from KNMusicCategoryListViewBase::dropEvent().
+     */
+    void dropEvent(QDropEvent *event);
+
+private:
+    QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
+            const QRect &rect) const;
 };
 
 #endif // KNMUSICPLAYLISTLISTVIEW_H

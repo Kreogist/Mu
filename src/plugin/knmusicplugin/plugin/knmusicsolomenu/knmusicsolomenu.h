@@ -23,10 +23,17 @@
 
 #include "knmusicsolomenubase.h"
 
+/*!
+ * \brief The KNMusicSoloMenu class
+ */
 class KNMusicSoloMenu : public KNMusicSoloMenuBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicSoloMenu object.
+     * \param parent The parent widget.
+     */
     explicit KNMusicSoloMenu(QWidget *parent = 0);
 
     /*!
@@ -70,7 +77,7 @@ private:
 
     KNMusicProxyModel *m_model;
     QModelIndex m_itemIndex;
-    QString m_itemText, m_filePath;
+    QString m_itemText, m_filePath, m_preferFileName;
 };
 
 #endif // KNMUSICSOLOMENU_H

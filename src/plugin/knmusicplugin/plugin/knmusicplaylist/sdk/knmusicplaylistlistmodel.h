@@ -141,6 +141,29 @@ public:
      */
     bool findTitle(const QString &title);
 
+    /*!
+     * \brief Reimplemented from QAbstractListModel::mimeTypes().
+     */
+    QStringList mimeTypes() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractListModel::canDropMimeData().
+     */
+    bool canDropMimeData(const QMimeData *data,
+                         Qt::DropAction action,
+                         int row,
+                         int column,
+                         const QModelIndex &parent) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractListModel::dropMimeData().
+     */
+    bool dropMimeData(const QMimeData *data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex &parent) Q_DECL_OVERRIDE;
+
 signals:
     /*!
      * \brief When the list is not empty any more, this signal will be emitted.
@@ -154,9 +177,14 @@ signals:
 
 public slots:
 
+protected:
+
 private:
     QList<KNMusicPlaylistModel *> m_playlistList;
     QIcon m_icon;
+    QVariant m_itemSize;
+
+    static QStringList m_dropMimeTypes;
 };
 
 #endif // KNMUSICPLAYLISTLISTMODEL_H

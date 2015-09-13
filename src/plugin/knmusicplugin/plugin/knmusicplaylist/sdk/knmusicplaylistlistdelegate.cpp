@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include <QPen>
 #include <QPainter>
 
 #include "kncancellineedit.h"
@@ -25,6 +25,11 @@
 #define ItemHeight 26
 #define IconSize 24
 #define Spacing 3
+
+int KNMusicPlaylistListDelegate::m_hoverRow=-1;
+KNMusicPlaylistListDelegate::IndicatorPosition
+    KNMusicPlaylistListDelegate::m_indicator=
+        KNMusicPlaylistListDelegate::OutOfItem;
 
 KNMusicPlaylistListDelegate::KNMusicPlaylistListDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
@@ -54,7 +59,7 @@ void KNMusicPlaylistListDelegate::paint(QPainter *painter,
     index.data(Qt::DecorationRole).value<QIcon>().paint(
                 painter,
                 option.rect.x()+Spacing,
-                option.rect.y(),
+                option.rect.y()+((option.rect.height()-IconSize)>>1),
                 IconSize,
                 IconSize);
     //Draw the text.
@@ -66,6 +71,41 @@ void KNMusicPlaylistListDelegate::paint(QPainter *painter,
                             option.rect.height()),
                       Qt::AlignLeft | Qt::AlignVCenter,
                       index.data(Qt::DisplayRole).toString());
+
+    //Check whether the select item is the current item.
+    if(index.row()==m_hoverRow)
+    {
+        //Initial the pen.
+        QPen indicatorPen(option.palette.color(QPalette::HighlightedText));
+        //Configure the pen.
+        indicatorPen.setWidth(2);
+        //Set the pen.
+        painter->setPen(indicatorPen);
+        //Clear the brush.
+        painter->setBrush(Qt::NoBrush);
+        //Check the position.
+        switch(m_indicator)
+        {
+        case OnItem:
+            painter->setPen(indicatorPen);
+            painter->drawRect(option.rect);
+            break;
+        case AboveItem:
+            painter->drawLine(option.rect.x(),
+                              option.rect.y(),
+                              option.rect.width(),
+                              option.rect.y());
+            break;
+        case BelowItem:
+            painter->drawLine(option.rect.x(),
+                              option.rect.bottom()+1,
+                              option.rect.width(),
+                              option.rect.bottom()+1);
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 QSize KNMusicPlaylistListDelegate::sizeHint(const QStyleOptionViewItem &option,
@@ -142,4 +182,14 @@ void KNMusicPlaylistListDelegate::commitAndCloseEditor()
     emit commitData(editor);
     //Close the editor.
     emit closeEditor(editor, NoHint);
+}
+
+void KNMusicPlaylistListDelegate::setIndicator(const IndicatorPosition &indicator)
+{
+    m_indicator = indicator;
+}
+
+void KNMusicPlaylistListDelegate::setHoverRow(int hoverRow)
+{
+    m_hoverRow = hoverRow;
 }

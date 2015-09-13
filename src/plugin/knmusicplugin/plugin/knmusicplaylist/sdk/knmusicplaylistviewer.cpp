@@ -170,7 +170,7 @@ void KNMusicPlaylistViewer::resizeEvent(QResizeEvent *event)
 
 void KNMusicPlaylistViewer::retranslate()
 {
-    m_songCount[0]=tr("No song, ");
+    m_songCount[0]=tr("No song.");
     m_songCount[1]=tr("1 song, ");
     m_songCount[2]=tr("%1 songs, ");
 
@@ -288,6 +288,14 @@ inline void KNMusicPlaylistViewer::updateDetailInfo()
     playlistDetail=model->rowCount()<2?
                 m_songCount[model->rowCount()]:
                 m_songCount[2].arg(QString::number(model->rowCount()));
+    //If there's no song in the playlist, we will stop here.
+    if(model->rowCount()==0)
+    {
+        //Set the text to the detail label.
+        m_detail->setText(playlistDetail);
+        //Mission complete.
+        return;
+    }
     //Then calculate the minuates and the hours of the model.
     quint64 minuatePart=model->totalDuration()/60000,
             hourPart=minuatePart/60;

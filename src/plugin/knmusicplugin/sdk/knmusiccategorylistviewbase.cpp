@@ -41,7 +41,7 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     setLayoutMode(QListView::Batched); //For speed up.
     setMinimumWidth(200);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setSpacing(2);
+    setSpacing(0);
     setUniformItemSizes(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
