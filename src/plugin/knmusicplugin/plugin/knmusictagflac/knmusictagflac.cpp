@@ -21,9 +21,9 @@
 
 #include <QDebug>
 
-QHash<QString, int> KNMusicTagFLAC::m_fieldNameIndex=QHash<QString, int>();
+QHash<QString, int> KNMusicTagFlac::m_fieldNameIndex=QHash<QString, int>();
 
-KNMusicTagFLAC::KNMusicTagFLAC(QObject *parent) :
+KNMusicTagFlac::KNMusicTagFlac(QObject *parent) :
     KNMusicTagParser(parent)
 {
     //Check the field name hash has been built before.
@@ -45,7 +45,7 @@ KNMusicTagFLAC::KNMusicTagFLAC(QObject *parent) :
     }
 }
 
-bool KNMusicTagFLAC::parseTag(QFile &musicFile,
+bool KNMusicTagFlac::parseTag(QFile &musicFile,
                               QDataStream &musicDataStream,
                               KNMusicAnalysisItem &analysisItem)
 {
@@ -141,13 +141,13 @@ bool KNMusicTagFLAC::parseTag(QFile &musicFile,
     return true;
 }
 
-bool KNMusicTagFLAC::writeTag(const KNMusicAnalysisItem &analysisItem)
+bool KNMusicTagFlac::writeTag(const KNMusicAnalysisItem &analysisItem)
 {
     Q_UNUSED(analysisItem)
     return false;
 }
 
-bool KNMusicTagFLAC::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
+bool KNMusicTagFlac::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     //Check whether the image data contains the FLAC format album data.
     if(!analysisItem.imageData.contains("FLAC") ||
@@ -175,7 +175,7 @@ bool KNMusicTagFLAC::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
     return true;
 }
 
-inline void KNMusicTagFLAC::parseVorbisComment(QByteArray &blockData,
+inline void KNMusicTagFlac::parseVorbisComment(QByteArray &blockData,
                                                QLinkedList<VorbisFrame> &tagMap)
 {
     //There's a string like 'Lavf53.24.0' at the begin, should jump over.
@@ -204,7 +204,7 @@ inline void KNMusicTagFLAC::parseVorbisComment(QByteArray &blockData,
     }
 }
 
-inline void KNMusicTagFLAC::parsePictureList(const QList<QByteArray> &blocks,
+inline void KNMusicTagFlac::parsePictureList(const QList<QByteArray> &blocks,
                                              QHash<int, PictureFrame> &imageMap)
 {
     //Parse all the picture list.

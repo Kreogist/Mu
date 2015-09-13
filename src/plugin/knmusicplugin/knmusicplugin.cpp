@@ -54,6 +54,7 @@
 #include "plugin/knmusictagid3v2/knmusictagid3v2.h"
 #include "plugin/knmusictagapev2/knmusictagapev2.h"
 #include "plugin/knmusictagflac/knmusictagflac.h"
+#include "plugin/knmusictagm4a/knmusictagm4a.h"
 // List Parsers.
 #include "plugin/knmusiccuelistparser/knmusiccuelistparser.h"
 // Lyrics Downloader.
@@ -276,8 +277,9 @@ void KNMusicPlugin::initialParserPlugin()
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagApev2);
     parser->installTagParser(new KNMusicTagId3v1);
+    parser->installTagParser(new KNMusicTagM4a);
+    parser->installTagParser(new KNMusicTagFlac);
     parser->installTagParser(new KNMusicTagId3v2);
-    parser->installTagParser(new KNMusicTagFLAC);
 
     //Add analysiser.
 #ifdef ENABLED_FFMPEG_ANALYSISER

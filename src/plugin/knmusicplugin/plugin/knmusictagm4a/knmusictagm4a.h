@@ -12,30 +12,24 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICTAGFLAC_H
-#define KNMUSICTAGFLAC_H
+#ifndef KNMUSICTAGM4A_H
+#define KNMUSICTAGM4A_H
 
 #include "knmusictagparser.h"
 
-/*!
- * \brief The KNMusicTagFlac class provides the tag parser of the metadata of
- * the FLAC format file.\n
- * This is a read only tag parser, you cannot use the writeTag() function to
- * write any data to a FLAC file.
- */
-class KNMusicTagFlac : public KNMusicTagParser
+class KNMusicTagM4a : public KNMusicTagParser
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicTagFlac object with a given parent.
+     * \brief Construct a KNMusicTagM4a object.
      * \param parent The parent object.
      */
-    explicit KNMusicTagFlac(QObject *parent = 0);
+    explicit KNMusicTagM4a(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNMusicTagParser::parseTag.
@@ -59,24 +53,38 @@ signals:
 public slots:
 
 private:
-    struct VorbisFrame
+    struct M4ABox
     {
-        QString fieldName;
-        QString data;
+        quint32 size;
+        QString name;
+        //A box is independent is means:
+        //It holds its own data, the data is not shared by other box.
+        bool independence;
+        char *data;
+        M4ABox() :
+            independence(false),
+            data(nullptr)
+        {
+        }
+        ~M4ABox()
+        {
+            //Check if is a independence box, recover the memory
+            if(independence && data!=nullptr)
+            {
+                delete[] data;
+            }
+        }
     };
-    struct PictureFrame
-    {
-        QString mimeType;
-        QString description;
-        QImage image;
-    };
+    inline void clearBox(M4ABox &box);
+    inline bool getBox(QDataStream &musicDataStream,
+                       M4ABox &box,
+                       bool ignoreContent=false);
+    inline bool extractBox(M4ABox &source,
+                           QList<M4ABox> &boxes);
+    inline void independent(M4ABox &box);
+    inline bool extractMetaBox(const M4ABox &metaBox, M4ABox &ilstBox);
 
-    inline void parseVorbisComment(QByteArray &blockData,
-                                   QLinkedList<VorbisFrame> &tagMap);
-    inline void parsePictureList(const QList<QByteArray> &blocks,
-                                 QHash<int, PictureFrame> &imageMap);
-
-    static QHash<QString, int> m_fieldNameIndex;
+    static QHash<QString, int> m_atomIndexMap;
 };
 
-#endif // KNMUSICTAGFLAC_H
+#endif // KNMUSICTAGM4A_H

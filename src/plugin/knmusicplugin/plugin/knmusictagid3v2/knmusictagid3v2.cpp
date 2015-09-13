@@ -440,7 +440,7 @@ bool KNMusicTagId3v2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
     //Check the image data contains ID3v2 tag, and the data of the tag is empty
     //or not.
     if(!analysisItem.imageData.contains("ID3v2") ||
-            analysisItem.imageData["ID3v2"].isEmpty())
+            analysisItem.imageData.value("ID3v2").isEmpty())
     {
         //If it doesn't contain the ID3v2 tag or it's empty, it's failed to
         //parse the album art.
