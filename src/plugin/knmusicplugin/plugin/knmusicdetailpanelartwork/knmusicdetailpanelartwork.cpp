@@ -17,17 +17,23 @@
  */
 #include <QLabel>
 #include <QBoxLayout>
+#include <QFileDialog>
+#include <QFileInfo>
 
 #include "kncircleiconbutton.h"
+#include "knlocalemanager.h"
+#include "knopacityanimebutton.h"
 
 #include "knmusicglobal.h"
 
 #include "knmusicdetailpanelartwork.h"
 
-#define ArtworkSize 225
+#define ArtworkSize 261
 
 KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
     KNMusicDetailDialogPanel(parent),
+    m_fileTypeFilter(QString()),
+    m_lastDirectory(QString()),
     m_button(new KNCircleIconButton(this)),
     m_albumArt(new QLabel(this))
 {
@@ -39,11 +45,43 @@ KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
     m_albumArt->setFixedSize(ArtworkSize, ArtworkSize);
 
     //Initial the box layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
+    mainLayout->setContentsMargins(0,0,0,0);
     setLayout(mainLayout);
     //Add the label to the layout.
-    mainLayout->addWidget(m_albumArt);
+    mainLayout->addWidget(m_albumArt, 0, Qt::AlignHCenter);
+    //Add the button layouts.
+    QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            mainLayout->widget());
+    buttonLayout->setContentsMargins(0,0,0,0);
+    mainLayout->addLayout(buttonLayout, 0);
+    buttonLayout->addStretch();
+    //Initial the buttons.
+    for(int i=0; i<OperationCount; ++i)
+    {
+        //Generate operation button.
+        m_operations[i]=new KNOpacityAnimeButton(this);
+        //Set the fixed size of the button.
+        m_operations[i]->setFixedSize(26, 26);
+        //Add operation button to the layout.
+        buttonLayout->addWidget(m_operations[i]);
+    }
+    buttonLayout->addStretch();
+
+    //Set the icon.
+    m_operations[SetAlbumArt]->setIcon(
+                QIcon(":/plugin/music/detaildialog/albumart/edit.png"));
+    m_operations[ExportAlbumArt]->setIcon(
+                QIcon(":/plugin/music/detaildialog/albumart/save.png"));
+
+    //Link the operations.
+    connect(m_operations[ExportAlbumArt], &KNOpacityAnimeButton::clicked,
+            this, &KNMusicDetailPanelArtwork::onActionSaveImage);
+
+    //Link the locale manager.
+    knI18n->link(this, &KNMusicDetailPanelArtwork::retranslate);
+    retranslate();
 }
 
 QAbstractButton *KNMusicDetailPanelArtwork::tabButton()
@@ -53,8 +91,10 @@ QAbstractButton *KNMusicDetailPanelArtwork::tabButton()
 
 void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item)
 {
+    //Save the image.
+    m_currentItem=item;
     //Check the cover image is valid or not.
-    if(item.coverImage.isNull())
+    if(m_currentItem.coverImage.isNull())
     {
         //Set the no album image.
         m_albumArt->setPixmap(
@@ -67,11 +107,45 @@ void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item)
     else
     {
         //Load image from the item.
-        m_albumArt->setPixmap(QPixmap::fromImage(item.coverImage).scaled(
+        m_albumArt->setPixmap(QPixmap::fromImage(m_currentItem.coverImage).scaled(
                                   ArtworkSize,
                                   ArtworkSize,
                                   Qt::KeepAspectRatio,
                                   Qt::SmoothTransformation));
     }
+}
+
+void KNMusicDetailPanelArtwork::retranslate()
+{
+    //Update the album art.
+    m_operations[SetAlbumArt]->setToolTip(tr("Set new album cover"));
+    m_operations[ExportAlbumArt]->setToolTip(tr("Save album cover image"));
+
+    //Clear the string list.
+    m_fileTypeFilter.clear();
+    m_fileTypeFilter.append(tr("Portable Network Graphics"));
+    m_fileTypeFilter.append(" (*.png);;");
+    m_fileTypeFilter.append(tr("JPEG"));
+    m_fileTypeFilter.append(" (*.jpg)");
+}
+
+void KNMusicDetailPanelArtwork::onActionSaveImage()
+{
+    //Check whether the cover image is null or not.
+    if(m_currentItem.coverImage.isNull())
+    {
+        //We cannot save a null image.
+        return;
+    }
+    //Get the save image file path.
+    QString targetFilePath=QFileDialog::getSaveFileName(
+                this,
+                tr("Save album cover"),
+                m_lastDirectory,
+                m_fileTypeFilter);
+    //Save the image to the target file path.
+    m_currentItem.coverImage.save(targetFilePath);
+    //Save the last dirctory.
+    m_lastDirectory=QFileInfo(targetFilePath).absoluteFilePath();
 }
 

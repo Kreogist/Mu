@@ -244,7 +244,9 @@ SOURCES += \
     sdk/sao/knsaosubmenu.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
     plugin/knmusicplugin/sdk/knmusicutil.cpp \
-    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp
+    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
+    plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.cpp \
+    sdk/sao/knsaobutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -390,7 +392,9 @@ HEADERS += \
     sdk/sao/knsaosubmenu.h \
     plugin/knmusicplugin/sdk/knmusicmainplayerbase.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.h \
-    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h
+    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h \
+    plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.h \
+    sdk/sao/knsaobutton.h
 
 RESOURCES += \
     resource/res.qrc

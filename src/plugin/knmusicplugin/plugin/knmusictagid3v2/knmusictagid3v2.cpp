@@ -383,8 +383,8 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
     }
     //Generate a temporary file, write the new data to the temporary file.
     QTemporaryFile updatedTagFile;
-    //Open the temporary file in write only mode, if we cannot open the
-    //temporary file it will be failed to write the tag.
+    //Open the temporary file, if we cannot open the temporary file it will be
+    //failed to write the tag.
     if(!updatedTagFile.open())
     {
         //Close the opened music file.
@@ -417,6 +417,9 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
     //data to the music file.
     if(!musicFile.open(QIODevice::WriteOnly))
     {
+        //Close the updated tag file.
+        updatedTagFile.close();
+        //Failed to write data.
         return false;
     }
     //Copy data from temporary file to music file.

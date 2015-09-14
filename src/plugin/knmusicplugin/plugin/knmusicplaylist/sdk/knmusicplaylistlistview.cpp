@@ -113,6 +113,10 @@ void KNMusicPlaylistListView::dragMoveEvent(QDragMoveEvent *event)
             KNMusicPlaylistListDelegate::setIndicator(
                         KNMusicPlaylistListDelegate::BelowItem);
             break;
+        default:
+            //It shouldn't come to here, we write this is to avoid the
+            //enumeration not handled in switch warning.
+            break;
         }
     }
     else

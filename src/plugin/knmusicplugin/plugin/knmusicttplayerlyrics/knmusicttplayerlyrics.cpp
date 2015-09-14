@@ -133,7 +133,7 @@ inline QString KNMusicTTPlayerLyrics::generateCode(
     while(j>=0)
     {
         qint8 c=(qint8)code.at(j);
-        if(c>=(qint8)0x80)
+        if((quint8)c>=(quint8)0x80)
         {
             c-=(qint8)0x100;
         }
@@ -147,7 +147,7 @@ inline QString KNMusicTTPlayerLyrics::generateCode(
     while(j<len)
     {
         qint8 c=(qint8)code.at(j);
-        if(c>=(qint8)128)
+        if((quint8)c>=(quint8)128)
         {
             c-=(qint8)256;
         }
