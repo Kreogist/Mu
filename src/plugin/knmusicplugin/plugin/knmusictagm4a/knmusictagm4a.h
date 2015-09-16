@@ -21,6 +21,9 @@
 
 #include "knmusictagparser.h"
 
+/*!
+ * \brief The KNMusicTagM4a class provides you a m4a format file decode file.
+ */
 class KNMusicTagM4a : public KNMusicTagParser
 {
     Q_OBJECT
@@ -79,12 +82,28 @@ private:
     inline bool getBox(QDataStream &musicDataStream,
                        M4ABox &box,
                        bool ignoreContent=false);
-    inline bool extractBox(M4ABox &source,
+    inline bool extractBox(const M4ABox &source,
                            QList<M4ABox> &boxes);
     inline void independent(M4ABox &box);
-    inline bool extractMetaBox(const M4ABox &metaBox, M4ABox &ilstBox);
+    inline bool findIlstBox(const M4ABox &metaBox, M4ABox &ilstBox);
+    inline void writeBox(const M4ABox &source, QFile &targetFile);
+    inline bool extractMetaBox(const M4ABox &metaBox, QList<M4ABox> &boxes);
+    inline bool extractData(quint32 sourceSize,
+                            char *dataPosition,
+                            QList<M4ABox> &boxes);
+    inline bool findBox(const QString &targetName,
+                        M4ABox &targetBox,
+                        const QList<M4ABox> &boxList);
+    inline M4ABox generateItemBox(const int &column,
+                              const QString &atomName,
+                              const QByteArray &rawData);
+    inline M4ABox zipBox(const QString &name, const QList<M4ABox> &boxes);
+    inline QByteArray combineBoxList(const QList<M4ABox> &boxes);
+    inline QByteArray packBox(const M4ABox &box);
 
     static QHash<QString, int> m_atomIndexMap;
+    static QHash<int, QString> m_indexAtomMap;
+    static QHash<int, quint8> m_indexFlagMap;
 };
 
 #endif // KNMUSICTAGM4A_H

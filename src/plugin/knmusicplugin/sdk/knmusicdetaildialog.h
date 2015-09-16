@@ -29,6 +29,7 @@ class QLabel;
 class KNMusicDetailDialogPanel;
 class KNHTabGroup;
 class KNHWidgetSwitcher;
+class KNMusicDetailTagEditPanel;
 /*!
  * \brief The KNMusicDetailDialog class provides a dialog to display the basic
  * information of a selected music.
@@ -48,6 +49,18 @@ public:
      * \param panel The panel widget.
      */
     void addPanel(KNMusicDetailDialogPanel *panel);
+
+    /*!
+     * \brief Get the tag edit panel from the detail dialog.
+     * \return The tag edit panel pointer.
+     */
+    KNMusicDetailTagEditPanel *tagEditPanel() const;
+
+    /*!
+     * \brief Add the tag edit panel to the detail dialog.
+     * \param tagEditPanel The panel.
+     */
+    void addTagEditPanel(KNMusicDetailTagEditPanel *tagEditPanel);
 
 signals:
 
@@ -76,6 +89,8 @@ private:
     //Panel switcher and container.
     KNHTabGroup *m_panelSwitcher;
     KNHWidgetSwitcher *m_panelContainer;
+    //Special panels.
+    KNMusicDetailTagEditPanel *m_tagEditPanel;
 };
 
 #endif // KNMUSICDETAILDIALOG_H

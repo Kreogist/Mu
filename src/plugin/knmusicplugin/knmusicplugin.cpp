@@ -31,6 +31,7 @@
 #include "knmusicparser.h"
 #include "knmusiclyricsmanager.h"
 #include "knmusiclyricsbackend.h"
+#include "knmusicdetailtageditpanel.h"
 
 //Ports
 #include "knmusicdetaildialogpanel.h"
@@ -264,9 +265,13 @@ inline void KNMusicPlugin::initialPlayer(KNMusicPlayerBase *player)
 
 void KNMusicPlugin::initialDetailDialogPanel()
 {
+    //Get the detail dialog.
+    KNMusicDetailDialog *detailDialog=knMusicGlobal->detailDialog();
+
     //Add panels to detail dialog.
-    knMusicGlobal->detailDialog()->addPanel(new KNMusicDetailPanelOverview);
-    knMusicGlobal->detailDialog()->addPanel(new KNMusicDetailPanelArtwork);
+    detailDialog->addPanel(new KNMusicDetailPanelOverview);
+    detailDialog->addTagEditPanel(new KNMusicDetailTagEditPanel);
+    detailDialog->addPanel(new KNMusicDetailPanelArtwork);
 }
 
 void KNMusicPlugin::initialParserPlugin()

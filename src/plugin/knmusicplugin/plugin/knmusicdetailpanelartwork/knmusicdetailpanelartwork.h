@@ -24,6 +24,7 @@
 class KNCircleIconButton;
 
 class QLabel;
+class KNOpacityAnimeButton;
 class KNMusicDetailPanelArtwork : public KNMusicDetailDialogPanel
 {
     Q_OBJECT
@@ -48,7 +49,20 @@ public slots:
     void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)
     Q_DECL_OVERRIDE;
 
+private slots:
+    void retranslate();
+    void onActionSaveImage();
+
 private:
+    enum AlbumArtOperations
+    {
+        SetAlbumArt,
+        ExportAlbumArt,
+        OperationCount
+    };
+    MusicUtil::KNMusicAnalysisItem m_currentItem;
+    QString m_fileTypeFilter, m_lastDirectory;
+    KNOpacityAnimeButton *m_operations[OperationCount];
     KNCircleIconButton *m_button;
     QLabel *m_albumArt;
 };
