@@ -168,12 +168,18 @@ inline void KNGlobal::initialDefaultDirPath()
 #endif
 #ifdef Q_OS_MACX
     m_dirPath[UserDataDir]=
-            KNUtil::simplifiedPath(
-                QStandardPaths::writableLocation(
+            KNUtil::simplifiedPath(QStandardPaths::writableLocation(
                     QStandardPaths::DocumentsLocation)
                 +"/Kreogist/Mu");
     m_dirPath[ResourceDir]=
             KNUtil::simplifiedPath(qApp->applicationDirPath()+"/../Resources");
+#endif
+#ifdef Q_OS_LINUX
+    m_dirPath[UserDataDir]=
+            KNUtil::simplifiedPath(QStandardPaths::writableLocation(
+                                       QStandardPaths::HomeLocation))
+            + "/.kreogist/mu";
+    m_dirPath[ResourceDir]=m_dirPath[UserDataDir];
 #endif
     m_dirPath[LibraryDir]=
             KNUtil::simplifiedPath(m_dirPath[UserDataDir]+"/Library");
