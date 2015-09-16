@@ -114,6 +114,15 @@ public:
     static bool saveTextToFile(const QString &filePath,
                                const QString &content);
 
+    /*!
+     * \brief Rename a file to the new file name.
+     * \param filePath The original file path.
+     * \param newFileName The new name of the file.
+     * \return If the file has been renamed successfully, return true.
+     */
+    static bool renameFile(const QString &filePath,
+                           const QString &newFileName);
+
 private:
     KNUtil();
     KNUtil(const KNUtil &);

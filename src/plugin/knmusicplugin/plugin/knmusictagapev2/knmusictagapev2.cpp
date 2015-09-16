@@ -464,17 +464,17 @@ bool KNMusicTagApev2::writeTag(const KNMusicAnalysisItem &analysisItem)
         }
     }
     //Generate the music data cache.
-    char fileCache[DataCacheSize];
+    char *turboCache=new char[DataCacheSize];
     int bytesRead;
     //Now copy all the content from the original file to temporary file.
     while(dataSurplusSize>0)
     {
         //Read the original data.
-        bytesRead=musicFile.read(fileCache,
+        bytesRead=musicFile.read(turboCache,
                                  (DataCacheSize < dataSurplusSize ?
                                       DataCacheSize : dataSurplusSize));
         //Write the cache to temporary file.
-        updatedTagFile.write(fileCache, bytesRead);
+        updatedTagFile.write(turboCache, bytesRead);
         //Reduce the surplus size.
         dataSurplusSize-=bytesRead;
     }
@@ -499,9 +499,9 @@ bool KNMusicTagApev2::writeTag(const KNMusicAnalysisItem &analysisItem)
         //Seek to the ID3v1 tag start.
         musicFile.seek(musicFile.size()-128);
         //Read 128 bytes ID3v1 tag.
-        musicFile.read(fileCache, 128);
+        musicFile.read(turboCache, 128);
         //Write the cache to temporary file.
-        updatedTagFile.write(fileCache, 128);
+        updatedTagFile.write(turboCache, 128);
     }
     //Close the music file.
     musicFile.close();
@@ -514,17 +514,19 @@ bool KNMusicTagApev2::writeTag(const KNMusicAnalysisItem &analysisItem)
         return false;
     }
     //Copy data from temporary file to music file.
-    bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+    bytesRead=updatedTagFile.read(turboCache, DataCacheSize);
     while(bytesRead>0)
     {
         //Write the cache to music file.
-        musicFile.write(fileCache, bytesRead);
+        musicFile.write(turboCache, bytesRead);
         //Read new data from the original file to cache.
-        bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+        bytesRead=updatedTagFile.read(turboCache, DataCacheSize);
     }
     //Close the music file and temporary file.
     musicFile.close();
     updatedTagFile.close();
+    //Clear up the turbo cache.
+    delete[] turboCache;
     //The tag rewrite is finished.
     return true;
 }
@@ -533,6 +535,16 @@ bool KNMusicTagApev2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     Q_UNUSED(analysisItem)
     //APEv2 cannot contains album art.
+    return false;
+}
+
+bool KNMusicTagApev2::writable() const
+{
+    return true;
+}
+
+bool KNMusicTagApev2::writeCoverImage() const
+{
     return false;
 }
 

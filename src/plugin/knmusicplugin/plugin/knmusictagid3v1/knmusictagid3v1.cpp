@@ -157,6 +157,16 @@ bool KNMusicTagId3v1::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
     return false;
 }
 
+bool KNMusicTagId3v1::writable() const
+{
+    return true;
+}
+
+bool KNMusicTagId3v1::writeCoverImage() const
+{
+    return false;
+}
+
 void KNMusicTagId3v1::parseRawData(char *rawTagData,
                                    KNMusicTagId3v1::ID3v1Struct &tagData)
 {

@@ -23,12 +23,15 @@
 #include "kncircleiconbutton.h"
 #include "knlocalemanager.h"
 #include "knopacityanimebutton.h"
+#include "knmusicparser.h"
 
 #include "knmusicglobal.h"
 
 #include "knmusicdetailpanelartwork.h"
 
 #define ArtworkSize 261
+
+#include <QDebug>
 
 KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
     KNMusicDetailDialogPanel(parent),
@@ -76,6 +79,8 @@ KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
                 QIcon(":/plugin/music/detaildialog/albumart/save.png"));
 
     //Link the operations.
+    connect(m_operations[SetAlbumArt], &KNOpacityAnimeButton::clicked,
+            this, &KNMusicDetailPanelArtwork::onActionChangeImage);
     connect(m_operations[ExportAlbumArt], &KNOpacityAnimeButton::clicked,
             this, &KNMusicDetailPanelArtwork::onActionSaveImage);
 
@@ -107,7 +112,8 @@ void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item)
     else
     {
         //Load image from the item.
-        m_albumArt->setPixmap(QPixmap::fromImage(m_currentItem.coverImage).scaled(
+        m_albumArt->setPixmap(QPixmap::fromImage(
+                                  m_currentItem.coverImage).scaled(
                                   ArtworkSize,
                                   ArtworkSize,
                                   Qt::KeepAspectRatio,
@@ -129,6 +135,44 @@ void KNMusicDetailPanelArtwork::retranslate()
     m_fileTypeFilter.append(" (*.jpg)");
 }
 
+void KNMusicDetailPanelArtwork::onActionChangeImage()
+{
+    //Get the image.
+    QString targetFilePath=QFileDialog::getOpenFileName(
+                this,
+                tr("Select the new album cover image"),
+                m_lastDirectory,
+                tr("All supported files") +
+                "(*.png, *.jpg);;" +
+                m_fileTypeFilter);
+    //Prepare the new image.
+    QImage targetImage;
+    //Check out the image file's validation.
+    if(targetFilePath.isEmpty() ||
+            !targetImage.load(targetFilePath))
+    {
+        return;
+    }
+    //Now write the data, generate a new item.
+    KNMusicAnalysisItem item=m_currentItem;
+    //Set the new image.
+    item.coverImage=targetImage;
+    //Write the item.
+    if(knMusicGlobal->parser()!=nullptr &&
+            knMusicGlobal->parser()->writeAnalysisItem(item))
+    {
+        //If we can write successfully, update the data.
+        //Save the new analysis item.
+        m_currentItem=item;
+        //Save the new image.
+        m_albumArt->setPixmap(QPixmap::fromImage(targetImage).scaled(
+                                  ArtworkSize,
+                                  ArtworkSize,
+                                  Qt::KeepAspectRatio,
+                                  Qt::SmoothTransformation));
+    }
+}
+
 void KNMusicDetailPanelArtwork::onActionSaveImage()
 {
     //Check whether the cover image is null or not.
@@ -143,6 +187,12 @@ void KNMusicDetailPanelArtwork::onActionSaveImage()
                 tr("Save album cover"),
                 m_lastDirectory,
                 m_fileTypeFilter);
+    //Check out the target file path.
+    if(targetFilePath.isEmpty())
+    {
+        //Ignore the invalid file path.
+        return;
+    }
     //Save the image to the target file path.
     m_currentItem.coverImage.save(targetFilePath);
     //Save the last dirctory.

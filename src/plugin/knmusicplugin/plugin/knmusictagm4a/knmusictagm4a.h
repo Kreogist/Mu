@@ -51,6 +51,16 @@ public:
      */
     bool parseAlbumArt(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::writable().
+     */
+    bool writable() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::writeCoverImage().
+     */
+    bool writeCoverImage() const Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -95,8 +105,11 @@ private:
                         M4ABox &targetBox,
                         const QList<M4ABox> &boxList);
     inline M4ABox generateItemBox(const int &column,
-                              const QString &atomName,
-                              const QByteArray &rawData);
+                                  const QString &atomName,
+                                  const QByteArray &rawData);
+    M4ABox generateItemBox(char *atomFlags,
+                           const QString &atomName,
+                           const QByteArray &rawData);
     inline M4ABox zipBox(const QString &name, const QList<M4ABox> &boxes);
     inline QByteArray combineBoxList(const QList<M4ABox> &boxes);
     inline QByteArray packBox(const M4ABox &box);

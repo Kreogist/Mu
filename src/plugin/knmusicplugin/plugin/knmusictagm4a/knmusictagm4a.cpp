@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QTemporaryFile>
+#include <QBuffer>
 
 #include "knmusictagm4a.h"
 
@@ -509,6 +510,42 @@ bool KNMusicTagM4a::writeTag(const KNMusicAnalysisItem &analysisItem)
         //Generate the box.
         ilstExpandList.append(generateItemBox(i, atomName, rawData));
     }
+    //Remove all the album art atom.
+    for(int j=ilstExpandList.size()-1; j>-1; --j)
+    {
+        //Check the name of the item.
+        if(ilstExpandList.at(j).name=="covr")
+        {
+            //Remove it.
+            ilstExpandList.removeAt(j);
+        }
+    }
+    //Check album art.
+    if(!analysisItem.coverImage.isNull())
+    {
+        //Generate the raw data for the image.
+        //Add the png raw data to image data.
+        QByteArray imageData;
+        QBuffer imageBuffer(&imageData);
+        //Open the image buffer.
+        imageBuffer.open(QIODevice::WriteOnly);
+        //Save the data to image data.
+        analysisItem.coverImage.save(&imageBuffer, "PNG");
+        //Close the image buffer.
+        imageBuffer.close();
+        //Check the image data, if the data is not empty, then insert data.
+        if(imageData.isEmpty())
+        {
+            //Generate the flag data.
+            char covrFlag[5];
+            covrFlag[0]=0x00;
+            covrFlag[1]=0x00;
+            covrFlag[2]=0x00;
+            covrFlag[3]=14;
+            //Generate item box, insert to list.
+            ilstExpandList.append(generateItemBox(covrFlag, "covr", imageData));
+        }
+    }
     //Combine the ilst data together.
     M4ABox updatedIlstBox=zipBox("ilst", ilstExpandList);
     //Clear the list and original ilst box.
@@ -581,16 +618,16 @@ bool KNMusicTagM4a::writeTag(const KNMusicAnalysisItem &analysisItem)
     clearBox(updatedMoovBox);
     //Copy the left data to the updated tag file.
     //Generate the music data cache.
-    char fileCache[DataCacheSize];
+    char *turboCache=new char[DataCacheSize];
     //Copy the music data from the original music file, copy the
     //MusicDataCacheSize bytes once, until there's no bytes to copy.
-    int bytesRead=musicFile.read(fileCache, DataCacheSize);
+    int bytesRead=musicFile.read(turboCache, DataCacheSize);
     while(bytesRead>0)
     {
         //Write the cache to temporary file.
-        updatedTagFile.write(fileCache, bytesRead);
+        updatedTagFile.write(turboCache, bytesRead);
         //Read new data from the original file to cache.
-        bytesRead=musicFile.read(fileCache, DataCacheSize);
+        bytesRead=musicFile.read(turboCache, DataCacheSize);
     }
     //Close the music file.
     musicFile.close();
@@ -606,17 +643,19 @@ bool KNMusicTagM4a::writeTag(const KNMusicAnalysisItem &analysisItem)
         return false;
     }
     //Copy data from temporary file to music file.
-    bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+    bytesRead=updatedTagFile.read(turboCache, DataCacheSize);
     while(bytesRead>0)
     {
         //Write the cache to music file.
-        musicFile.write(fileCache, bytesRead);
+        musicFile.write(turboCache, bytesRead);
         //Read new data from cache to the original file.
-        bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+        bytesRead=updatedTagFile.read(turboCache, DataCacheSize);
     }
     //Close the music file and temporary file.
     musicFile.close();
     updatedTagFile.close();
+    //Clear up the turbo memory.
+    delete[] turboCache;
     //The tag rewrite is finished.
     return true;
 }
@@ -651,6 +690,16 @@ bool KNMusicTagM4a::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
     analysisItem.coverImage.loadFromData(QByteArray(expandList.first().data+8,
                                                     expandList.first().size-8));
     //Mission complete.
+    return true;
+}
+
+bool KNMusicTagM4a::writable() const
+{
+    return true;
+}
+
+bool KNMusicTagM4a::writeCoverImage() const
+{
     return true;
 }
 
@@ -857,6 +906,21 @@ inline KNMusicTagM4a::M4ABox KNMusicTagM4a::generateItemBox(
         const QString &atomName,
         const QByteArray &rawData)
 {
+    //Generate the atom flag array.
+    char atomFlags[5];
+    //For those default atoms, they will use only one byte flag.
+    atomFlags[0]=0x00;
+    atomFlags[1]=0x00;
+    atomFlags[2]=0x00;
+    atomFlags[3]=(char)m_indexFlagMap.value(column);
+    //Generate the item box.
+    return generateItemBox(atomFlags, atomName, rawData);
+}
+
+KNMusicTagM4a::M4ABox KNMusicTagM4a::generateItemBox(char *atomFlags,
+                                                     const QString &atomName,
+                                                     const QByteArray &rawData)
+{
     //Generate a M4A box.
     M4ABox itemBox;
     //Set the atom name.
@@ -873,10 +937,10 @@ inline KNMusicTagM4a::M4ABox KNMusicTagM4a::generateItemBox(
     temporaryData.append('a');
     //According to the data, there should be 1 byte version, then 3 bytes flag.
     //We simplified it to 3 bytes 0x00 and 1 byte flag data.
-    temporaryData.append((char)0x00);
-    temporaryData.append((char)0x00);
-    temporaryData.append((char)0x00);
-    temporaryData.append((char)m_indexFlagMap.value(column));
+    temporaryData.append(atomFlags[0]);
+    temporaryData.append(atomFlags[1]);
+    temporaryData.append(atomFlags[2]);
+    temporaryData.append(atomFlags[3]);
     //Append four bytes NULL space(0x00);
     temporaryData.append((char)0x00);
     temporaryData.append((char)0x00);

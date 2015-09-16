@@ -101,6 +101,9 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
 
 void KNMusicDetailDialog::addPanel(KNMusicDetailDialogPanel *panel)
 {
+    //Link the panel to detail panel.
+//    connect(panel, &KNMusicDetailDialogPanel::requireUpdateFile,
+//            this, &KNMusicDetailDialog);
     //Add panel to the panel container.
     m_panelContainer->addWidget(panel);
     //Add the switcher button to switcher.

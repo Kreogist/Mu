@@ -288,3 +288,8 @@ bool KNUtil::saveTextToFile(const QString &filePath, const QString &content)
     //Mission complete.
     return true;
 }
+
+bool KNUtil::renameFile(const QString &filePath, const QString &newFileName)
+{
+    return QFile::rename(filePath, newFileName);
+}

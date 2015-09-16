@@ -23,6 +23,12 @@
 
 #include "knmusictagparser.h"
 
+/*!
+ * \brief The KNMusicTagId3v2 class provides a tag parser to parse and write tag
+ * information to music file in ID3v2 format tag. The parser can automatically
+ * detect and use the corrsponding function to parse the ID3v2.0 to ID3v2.4
+ * format tag.
+ */
 class KNMusicTagId3v2 : public KNMusicTagParser
 {
     Q_OBJECT
@@ -49,6 +55,16 @@ public:
      * \brief Reimplemented from KNMusicTagParser::parseAlbumArt.
      */
     bool parseAlbumArt(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::writable().
+     */
+    bool writable() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::writeCoverImage().
+     */
+    bool writeCoverImage() const Q_DECL_OVERRIDE;
 
     /*!
      * \brief Translate a content data byte array to string. It starts with a
@@ -427,7 +443,7 @@ private:
     static QHash<int, QString> m_IndexFrameID3, m_IndexFrameID4;
     //Use the system default codec, for default it will be true.
     //Because most of codec is compatible with ISO-8859-1.
-    bool m_useDefaultCodec;
+    static bool m_useDefaultCodec;
 };
 
 #endif // KNMUSICTAGID3V2_H

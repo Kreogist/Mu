@@ -41,14 +41,14 @@ QTextCodec *KNMusicTagId3v2::m_utf8Codec=nullptr;
 QHash<QString, int> KNMusicTagId3v2::m_frameIDIndex=QHash<QString, int>();
 QHash<int, QString> KNMusicTagId3v2::m_IndexFrameID3=QHash<int, QString>();
 QHash<int, QString> KNMusicTagId3v2::m_IndexFrameID4=QHash<int, QString>();
+bool KNMusicTagId3v2::m_useDefaultCodec=true;
 
 //Initial the unsynchronisation data.
 QByteArray KNMusicTagId3v2::m_unsynchronisationRaw=QByteArray();
 QByteArray KNMusicTagId3v2::m_unsynchronisationTo=QByteArray();
 
 KNMusicTagId3v2::KNMusicTagId3v2(QObject *parent) :
-    KNMusicTagParser(parent),
-    m_useDefaultCodec(true)
+    KNMusicTagParser(parent)
 {
     //Check whether the static variables has been initial or not.
     //Use a codec pointer as a detecter. If any codec is nullptr, then initial
@@ -397,17 +397,18 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
     updatedTagFile.write(tagRawHeaderData, 10);
     //Write the tag data to the temporary file.
     updatedTagFile.write(tagRawData);
-    //Generate the music data cache.
-    char fileCache[DataCacheSize];
+    //Generate the music data cache, called turbo cache.
+    char *turboCache=new char[DataCacheSize];
+    //char turboCache[DataCacheSize];
     //Copy the music data from the original music file, copy the
     //MusicDataCacheSize bytes once, until there's no bytes to copy.
-    int bytesRead=musicFile.read(fileCache, DataCacheSize);
+    qint64 bytesRead=musicFile.read(turboCache, DataCacheSize);
     while(bytesRead>0)
     {
         //Write the cache to temporary file.
-        updatedTagFile.write(fileCache, bytesRead);
+        updatedTagFile.write(turboCache, bytesRead);
         //Read new data from the original file to cache.
-        bytesRead=musicFile.read(fileCache, DataCacheSize);
+        bytesRead=musicFile.read(turboCache, DataCacheSize);
     }
     //Close the music file.
     musicFile.close();
@@ -423,17 +424,19 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
         return false;
     }
     //Copy data from temporary file to music file.
-    bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+    bytesRead=updatedTagFile.read(turboCache, DataCacheSize);
     while(bytesRead>0)
     {
         //Write the cache to music file.
-        musicFile.write(fileCache, bytesRead);
+        musicFile.write(turboCache, bytesRead);
         //Read new data from cache to the original file.
-        bytesRead=updatedTagFile.read(fileCache, DataCacheSize);
+        bytesRead=updatedTagFile.read(turboCache, DataCacheSize);
     }
     //Close the music file and temporary file.
     musicFile.close();
     updatedTagFile.close();
+    //Recover the turbo cache.
+    delete[] turboCache;
     //The tag rewrite is finished.
     return true;
 }
@@ -488,6 +491,16 @@ bool KNMusicTagId3v2::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
     }
     //No matter what, return true here. Because the images in ID3v2 has been
     //parsed.
+    return true;
+}
+
+bool KNMusicTagId3v2::writable() const
+{
+    return true;
+}
+
+bool KNMusicTagId3v2::writeCoverImage() const
+{
     return true;
 }
 
@@ -830,21 +843,30 @@ QByteArray KNMusicTagId3v2::generateImageData(const QImage &image,
     //Generate a byte array to storage image data.
     QByteArray frameData;
     //Add encodec text. Use code 0 codec.
-    frameData.append(stringToContent(frameIDSize==4?
-                                         QString("image/png"):
-                                         QString("PNG"), 0));
+    if(frameIDSize==4)
+    {
+        //Simply use the codec as the first encode byte.
+        frameData.append(stringToContent("image/jpg", EncodeISO));
+    }
+    else
+    {
+        //Add codec byte.
+        frameData.append((char)0x00);
+        //Add 'PNG' to the frame data.
+        frameData.append("JPG");
+    }
     //Add 0x03 to make this image to be the album cover.
     frameData.append((char)0x03);
     //Add description empty data '0x00' as the description.
     frameData.append((char)0x00);
-    frameData.append((char)0x00);
+    //Check out data before the output.
     //Add the png raw data to image data.
     QByteArray imageData;
     QBuffer imageBuffer(&imageData);
     //Open the image buffer.
     imageBuffer.open(QIODevice::WriteOnly);
     //Save the data to image data.
-    image.save(&imageBuffer, "PNG");
+    image.save(&imageBuffer, "JPG");
     //Close the image buffer.
     imageBuffer.close();
     //Add image data to frame data.

@@ -52,6 +52,7 @@ private slots:
     void onActionGetInfo();
     void onActionShowInGraphicShell();
     void onActionSearchItemText();
+    void onActionRenameToPrefer();
     void onActionCopyFilePath();
     void onActionCopyItemText();
     void onActionRemove();

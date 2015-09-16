@@ -175,6 +175,16 @@ bool KNMusicTagFlac::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
     return true;
 }
 
+bool KNMusicTagFlac::writable() const
+{
+    return false;
+}
+
+bool KNMusicTagFlac::writeCoverImage() const
+{
+    return false;
+}
+
 inline void KNMusicTagFlac::parseVorbisComment(QByteArray &blockData,
                                                QLinkedList<VorbisFrame> &tagMap)
 {

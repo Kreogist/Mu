@@ -26,6 +26,8 @@
 
 #include "knmusicparser.h"
 
+#include <QDebug>
+
 KNMusicParser::KNMusicParser(QObject *parent) :
     QObject(parent)
 {
@@ -105,14 +107,12 @@ void KNMusicParser::parseFile(const QFileInfo &fileInfo,
         //Initial a binary data stream for music file reading.
         QDataStream dataStream(&file);
         //Using all the tag parser parse the data.
-        for(auto i=m_tagParsers.constBegin();
-            i!=m_tagParsers.constEnd();
-            ++i)
+        for(auto i : m_tagParsers)
         {
             //Seeks to the start of input.
             file.reset();
             //Parse the file using the tag parser.
-            (*i)->parseTag(file, dataStream, analysisItem);
+            i->parseTag(file, dataStream, analysisItem);
         }
         //Close the music file after parsing.
         file.close();
@@ -120,20 +120,18 @@ void KNMusicParser::parseFile(const QFileInfo &fileInfo,
     //Step 2, parse the detail information of the music file. e.g. duration.
     //Using all the analysiser to analysis file.
     //If there's one analysiser can analysis this, exit.
-    for(auto i=m_analysisers.constBegin();
-            i!=m_analysisers.constEnd();
-            ++i)
+    for(auto i: m_analysisers)
     {
-        if((*i)->analysis(detailInfo))
+        if(i->analysis(detailInfo))
         {
             break;
         }
     }
     //Check the duration. If the duration of the file is lesser than 0, make it
     //to 0.
-    if(detailInfo.duration<0)
+    if(detailInfo.duration < 0)
     {
-        detailInfo.duration=0;
+        detailInfo.duration = 0;
     }
     //Set the text data according to the analysis result.
     detailInfo.textLists[Time]=
@@ -354,6 +352,50 @@ bool KNMusicParser::reanalysisItem(KNMusicAnalysisItem &analysisItem)
     parseAlbumArt(analysisItem);
     //Reanlaysis complete.
     return true;
+}
+
+bool KNMusicParser::writeAnalysisItem(const KNMusicAnalysisItem &analysisItem)
+{
+    //Get the detail info.
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Generate the music file.
+    QFile musicFile(detailInfo.filePath);
+    //Open the music file as read only mode.
+    if(!musicFile.open(QIODevice::ReadOnly))
+    {
+        //Faild to write the analysis item.
+        return false;
+    }
+    //Generate a data stream for the music file.
+    QDataStream musicDataStream(&musicFile);
+    //Generate a empty analysis item.
+    KNMusicAnalysisItem item;
+    //Generate the written parser pointer.
+    KNMusicTagParser *tagParser=nullptr;
+    //Tried to parse the file.
+    for(auto i : m_tagParsers)
+    {
+        //Seeks to the start of input.
+        musicFile.reset();
+        //Check whether we can write the item.
+        if(i->parseTag(musicFile, musicDataStream, item) &&
+                i->writable())
+        {
+            //We can parse the file by this parser, check whether this parser is
+            //writable and it can save the image data.
+            tagParser=i;
+            //Finished finding.
+            break;
+        }
+    }
+    //Check the tag parser.
+    if(tagParser==nullptr)
+    {
+        //We cannot write the tag.
+        return false;
+    }
+    //Use the write tag function to write the tag.
+    return tagParser->writeTag(analysisItem);
 }
 
 bool KNMusicParser::findImageFile(const QString &baseName,

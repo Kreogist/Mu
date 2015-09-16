@@ -51,6 +51,7 @@ public slots:
 
 private slots:
     void retranslate();
+    void onActionChangeImage();
     void onActionSaveImage();
 
 private:
