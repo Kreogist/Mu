@@ -54,6 +54,18 @@ gcc: {
     }
 }
 
+# International Configureations.
+i10n {
+    # Add MAKE_QM_FILES to the extra compilers.
+    QMAKE_EXTRA_COMPILERS += MAKE_QM_FILES
+    # MAKE_QM_FILES is a extra execution to called the lrelease to update the
+    # qm file according to the original ts file real-time.
+    MAKE_QM_FILES.input = TRANSLATIONS
+    MAKE_QM_FILES.output = ${QMAKE_FILE_BASE}.qm
+    MAKE_QM_FILES.commands = lrelease ${QMAKE_FILE_BASE} -qm ${QMAKE_FILE_BASE}.qm
+    MAKE_QM_FILES.CONFIG += no_link target_predeps
+}
+
 # Platform Specific Configuration.
 win32 : {
     # Application icon.
@@ -81,7 +93,7 @@ macx: {
 
 linux: {
     # Enable the backend and analysiser.
-    CONFIG += analysiser-ffmpeg
+    CONFIG += backend-phonon analysiser-ffmpeg
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
@@ -105,6 +117,24 @@ backend-bass: {
     HEADERS += \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
+}
+
+backend-phonon: {
+    # Check whether there's a backend enabled already
+    contains(DEFINES, BACKEND_ENABLED){
+        error("You can't enable more than one backend at the same time.")
+    }
+    # Define the backend enabled flag.
+    DEFINES += ENABLE_BACKEND_PHONON BACKEND_ENABLED
+    # Add backend library to the project.
+    LIBS += -lphonon4qt5
+    # Add backend files to the project.
+    SOURCES += \
+        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphonon.cpp \
+        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.cpp
+    HEADERS += \
+        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphonon.h \
+        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.h
 }
 
 # Analysiser Specific Configuration

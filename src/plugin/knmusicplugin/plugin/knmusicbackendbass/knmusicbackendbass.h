@@ -20,6 +20,11 @@
 #define KNMUSICBACKENDBASS_H
 
 /*
+ * * July 24th, 2015:
+ *    This module has a known bug: it cannot play the complete m4a file under
+ * Mac OS X for some reason. I hope the latest version of bass can solve this
+ * bug.
+ *
  * Oct 2nd, 2014:
  *    This is only a optional module for Windows and Mac OS X. Because bass is
  * not a open source project, it's only free for non-commercial use. But it
@@ -30,11 +35,6 @@
  *    This module can also be used on Linux, but you should configure the binary
  * package yourself. And it works really bad under Ubuntu Linux 14.04 LTS under
  * VirtualBox 4.13. In one word, don't enable this module under Linux.
- *
- * July 24th, 2015:
- *    This module has a known bug: it cannot play the complete m4a file under
- * Mac OS X for some reason. I hope the latest version of bass can solve this
- * bug.
  */
 #include "bass.h"
 

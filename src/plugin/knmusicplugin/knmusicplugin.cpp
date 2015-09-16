@@ -73,6 +73,9 @@
 #ifdef ENABLE_BACKEND_BASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #endif
+#ifdef ENABLE_BACKEND_PHONON
+#include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
+#endif
 // Analysiser
 #ifdef ENABLED_FFMPEG_ANALYSISER
 #include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
@@ -166,6 +169,9 @@ void KNMusicPlugin::loadPlugins()
     initialSearch(new KNMusicSearch);
 #ifdef ENABLE_BACKEND_BASS
     initialBackend(new KNMusicBackendBass);
+#endif
+#ifdef ENABLE_BACKEND_PHONON
+    initialBackend(new KNMusicBackendPhonon);
 #endif
     //Initial the now playing.
     initialNowPlaying(new KNMusicNowPlaying);
