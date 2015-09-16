@@ -155,8 +155,10 @@ void KNMusicPlaylistManager::onActionCreatePlaylist(const int &position)
 bool KNMusicPlaylistManager::writeModelToFile(KNMusicPlaylistModel *model,
                                               const QString &filePath)
 {
-    //Check te model first.
-    if(!model)
+    //Check te model first, then check out the model folder path.
+    if(!model ||
+            (KNUtil::ensurePathValid(
+                 QFileInfo(filePath).absolutePath()).isEmpty()))
     {
         return false;
     }
@@ -197,6 +199,12 @@ bool KNMusicPlaylistManager::writeModelToFile(KNMusicPlaylistModel *model,
 
 void KNMusicPlaylistManager::savePlaylistList()
 {
+    //Check out the directory existance.
+    if(KNUtil::ensurePathValid(m_playlistDirPath).isEmpty())
+    {
+        //We cannot save it to a invalid path.
+        return;
+    }
     //Get the playlist list file.
     QFile playlistListFile(m_playlistDirPath + PlaylistListFileName);
     //Check the existance and try to open the file in write only mode.

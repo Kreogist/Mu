@@ -17,7 +17,6 @@
 # Basic informations about the main mu project.
 TEMPLATE = app
 TARGET = mu
-INSTALLS += target
 
 # Add Qt modules, the Qt major version should be greater than 5.
 QT += \
@@ -80,6 +79,15 @@ macx: {
     LIBS += -L/usr/local/lib/
 }
 
+linux: {
+    # Enable the backend and analysiser.
+    CONFIG += analysiser-ffmpeg
+    # Set the destination directory for the Linux special.
+    DESTDIR = ../bin
+    # This options is added for Linux specially.
+    INSTALLS += target
+}
+
 # Backend Specific Configuration
 backend-bass: {
     # Check whether there's a backend enabled already
@@ -118,8 +126,8 @@ analysiser-ffmpeg: {
 
 # Add sdk directory to include path.
 INCLUDEPATH += \
-sdk \
-plugin/knmusicplugin/sdk/
+    sdk \
+    plugin/knmusicplugin/sdk/
 
 # Source and Headers.
 SOURCES += \
