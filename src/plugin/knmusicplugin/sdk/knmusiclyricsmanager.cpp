@@ -123,7 +123,9 @@ void KNMusicLyricsManager::onActionLyricsDownloaded(
                 //Lyrics content.
                 content);
     //Check whether the detail info is still the current one.
-    if(detailInfo.filePath==m_detailInfo.filePath)
+    if(detailInfo.filePath==m_detailInfo.filePath &&
+            detailInfo.trackIndex==m_detailInfo.trackIndex &&
+            detailInfo.trackFilePath==m_detailInfo.trackFilePath)
     {
         //Generate the data cache.
         QList<qint64> timeList;

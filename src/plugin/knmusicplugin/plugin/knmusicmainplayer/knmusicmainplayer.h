@@ -29,7 +29,9 @@ using namespace MusicUtil;
 
 class QBoxLayout;
 class QLabel;
+class KNVolumeSlider;
 class KNEditableLabel;
+class KNOpacityButton;
 class KNOpacityAnimeButton;
 class KNProgressSlider;
 class KNGlassAnimeButton;
@@ -65,11 +67,16 @@ signals:
 public slots:
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    /*!
+     * \brief Reimplemented from KNMusicPlayerBase::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionAnalysisItemChanged(const KNMusicAnalysisItem &item);
     void onActionPlayNPauseClicked();
+    void onActionVolumeChanged(const int &volumeSize);
+    void onActionLoopStateChanged(const int &state);
     void updatePositionText(const qint64 &position);
     void updateDuration(const qint64 &duration);
 
@@ -95,7 +102,7 @@ private:
           m_volumeSizeIcon[VolumeSizeCount];
 
     //Layouts.
-    QBoxLayout *m_contentLayout;
+    QBoxLayout *m_contentLayout, *m_buttonLeftLayout, *m_buttonRightLayout;
 
     //Backends.
     KNMusicBackend *m_backend;
@@ -112,8 +119,12 @@ private:
     QLabel *m_duration;
     KNEditableLabel *m_position;
     KNOpacityAnimeButton *m_loopMode;
+    KNOpacityButton *m_volumeIcon;
+    KNVolumeSlider *m_volumeSlider;
     KNGlassAnimeButton *m_controlButtons[ControlButtonsCount];
 
+    //Volume stage data.
+    int m_firstStageVolume, m_secondStageVolume;
     //Status.
     bool m_progressPressed;
 };

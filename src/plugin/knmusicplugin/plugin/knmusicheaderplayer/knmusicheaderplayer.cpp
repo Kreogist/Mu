@@ -524,8 +524,9 @@ void KNMusicHeaderPlayer::loadConfigure()
     if(m_backend)
     {
         //Load the previous volume settings.
-        m_volumeSlider->setValue(
-                    m_volumeSlider->minimal()+(double)(m_volumeSlider->range())*
+        m_backend->setVolume(
+                    m_backend->minimalVolume()+
+                    (double)(m_volumeSlider->range())*
                     m_cacheConfigure->data(PlayerVolume, 0.5).toDouble());
         //Sync the volume indicator opacity.
         m_volumeIndicator->setOpacity(0.5+m_volumeSlider->percentage()/2);

@@ -25,7 +25,8 @@
 
 using namespace MusicUtil;
 
-class QLabel;
+class QBoxLayout;
+class KNOpacityAnimeButton;
 class KNLoopScrollLabel;
 class KNHighLightLabel;
 /*!
@@ -41,6 +42,7 @@ signals:
 
 public slots:
     void setAnalysisItem(const KNMusicAnalysisItem &item);
+    void updatePanelFont(const QFont &labelFont);
 
 protected:
     /*!
@@ -48,17 +50,22 @@ protected:
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
+private slots:
+    void onActionThemeChanged();
+
 private:
-    enum DetailLabels
+    enum GotoButtons
     {
-        SongLabel,
-        ArtistLabel,
-        AlbumLabel,
-        GenreLabel,
-        DetailLabelCount
+        GotoSong,
+        GotoArtist,
+        GotoAlbum,
+        GotoGenre,
+        GotoButtonCount
     };
-    QLabel *m_detailIcons[DetailLabelCount];
-    KNLoopScrollLabel *m_detailText[DetailLabelCount];
+    inline void setAristAndAlbum(const QString &artist, const QString &album);
+    KNOpacityAnimeButton *m_detailIcons[GotoButtonCount];
+    KNLoopScrollLabel *m_titleLabel, *m_artistAlbumLabel;
+    QBoxLayout *m_buttonLayout;
     QWidget *m_detailPanel;
     KNHighLightLabel *m_albumArt;
 };

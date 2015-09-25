@@ -23,6 +23,8 @@
 #include "knopacityanimebutton.h"
 #include "knprogressslider.h"
 #include "knglassanimebutton.h"
+#include "knvolumeslider.h"
+#include "knopacitybutton.h"
 
 #include "knmusiclyricsmanager.h"
 #include "knmusicbackend.h"
@@ -39,6 +41,8 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_playIcon(QIcon(":/plugin/music/player/play_dark.png")),
     m_pauseIcon(QIcon(":/plugin/music/player/pause_dark.png")),
     m_contentLayout(nullptr),
+    m_buttonLeftLayout(nullptr),
+    m_buttonRightLayout(nullptr),
     m_backend(nullptr),
     m_hideMainPlayer(new KNOpacityAnimeButton(this)),
     m_detailInfoPanel(new KNMusicMainPlayerPanel(this)),
@@ -49,6 +53,10 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_duration(new QLabel(this)),
     m_position(new KNEditableLabel(this)),
     m_loopMode(new KNOpacityAnimeButton(this)),
+    m_volumeIcon(new KNOpacityButton(this)),
+    m_volumeSlider(new KNVolumeSlider(this)),
+    m_firstStageVolume(-1),
+    m_secondStageVolume(-1),
     m_progressPressed(false)
 {
     setObjectName("MainPlayer");
@@ -92,6 +100,13 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
             this, &KNMusicMainPlayer::setPosition);
     connect(m_progressSlider, &KNProgressSlider::valueChanged,
             this, &KNMusicMainPlayer::updatePositionText);
+    // Configure loop mode button.
+    m_loopMode->setIcon(m_loopStateIcon[NoRepeat]);
+    // Configure the volume indicator and slider.
+    m_volumeIcon->setFixedSize(32, 32);
+    m_volumeIcon->setIcon(m_volumeSizeIcon[NoVolume]);
+    m_volumeSlider->setMinimumWidth(50);
+    m_volumeSlider->setMaximumWidth(100);
     // Initial and configure the buttons.
     for(int i=0; i<ControlButtonsCount; i++)
     {
@@ -148,6 +163,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              m_controlPanel);
     controlLayout->setContentsMargins(0,0,0,0);
+    controlLayout->setSpacing(0);
     m_controlPanel->setLayout(controlLayout);
     //Add widgets to control panels.
     controlLayout->addWidget(m_progressSlider);
@@ -156,17 +172,17 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     //Generate the button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             controlLayout->widget());
-    buttonLayout->setContentsMargins(2,0,2,0);
+    buttonLayout->setContentsMargins(5,0,5,0);
     buttonLayout->setSpacing(0);
     controlLayout->addLayout(buttonLayout, 1);
     //Add widgets to button layout.
     buttonLayout->addWidget(m_position, 0, Qt::AlignTop);
     //Generate the left part layout.
-    QBoxLayout *buttonLeftLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                                controlLayout->widget());
-    buttonLeftLayout->setSpacing(0);
-    buttonLeftLayout->addStretch();
-    buttonLayout->addLayout(buttonLeftLayout, 1);
+    m_buttonLeftLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                      controlLayout->widget());
+    m_buttonLeftLayout->setSpacing(0);
+    m_buttonLeftLayout->addStretch();
+    buttonLayout->addLayout(m_buttonLeftLayout, 1);
     //Add widgets to left layout.
     //Add control buttons.
     for(int i=0; i<ControlButtonsCount; i++)
@@ -174,11 +190,21 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
         buttonLayout->addWidget(m_controlButtons[i], 0, Qt::AlignBottom);
     }
     //Generate the right part layout.
-    QBoxLayout *buttonRightLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                                controlLayout->widget());
-    buttonRightLayout->setSpacing(0);
-    buttonRightLayout->addStretch();
-    buttonLayout->addLayout(buttonRightLayout, 1);
+    m_buttonRightLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                       controlLayout->widget());
+    m_buttonRightLayout->setSpacing(0);
+    //Add widgets to right layout.
+    m_buttonRightLayout->addWidget(m_loopMode);
+    QBoxLayout *volumeLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            buttonLayout->widget());
+    volumeLayout->setContentsMargins(0,0,0,0);
+    volumeLayout->setSpacing(5);
+    volumeLayout->addWidget(m_volumeIcon);
+    volumeLayout->addWidget(m_volumeSlider, 1);
+    //Add volume layout to right layout.
+    m_buttonRightLayout->addLayout(volumeLayout);
+    m_buttonRightLayout->addStretch();
+    buttonLayout->addLayout(m_buttonRightLayout, 1);
     buttonLayout->addWidget(m_duration, 0, Qt::AlignTop);
 }
 
@@ -192,8 +218,11 @@ void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
         return;
     }
     //Link to the backend.
-    ;
+    connect(m_volumeSlider, &KNVolumeSlider::valueChanged,
+            m_backend, &KNMusicBackend::setVolume);
     //Connect the response.
+    connect(m_backend, &KNMusicBackend::volumeChanged,
+            this, &KNMusicMainPlayer::onActionVolumeChanged);
     connect(m_backend, &KNMusicBackend::durationChanged,
             this, &KNMusicMainPlayer::updateDuration);
     connect(m_backend, &KNMusicBackend::positionChanged,
@@ -214,6 +243,18 @@ void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
                 m_controlButtons[ButtonPlayNPause]->setIcon(
                             (state==Playing)?m_pauseIcon:m_playIcon);
             });
+    //Calculate the volume stage data.
+    int volumeStage=(m_backend->maximumVolume()-m_backend->minimalVolume())/3;
+    m_firstStageVolume=m_backend->minimalVolume()+volumeStage;
+    m_secondStageVolume=m_firstStageVolume+volumeStage;
+    //Sync data from the backend.
+    m_volumeSlider->setRange(m_backend->minimalVolume(),
+                             m_backend->maximumVolume());
+    //Change the mouse step based on the range.
+    int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
+    m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
+    //Sync the volume data via called the slot.
+    onActionVolumeChanged(m_backend->volume());
 }
 
 void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
@@ -229,11 +270,17 @@ void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
                 //Set the analysis item to be the empty one.
                 onActionAnalysisItemChanged(item);
             });
+    connect(nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
+            this, &KNMusicMainPlayer::onActionLoopStateChanged);
     //Link the button controls to the now playing
     connect(m_controlButtons[ButtonPrev], &KNGlassAnimeButton::clicked,
             nowPlaying, &KNMusicNowPlayingBase::playPrevious);
     connect(m_controlButtons[ButtonNext], &KNGlassAnimeButton::clicked,
             nowPlaying, &KNMusicNowPlayingBase::playNext);
+    connect(m_loopMode, &KNOpacityAnimeButton::clicked,
+            nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
+    //Sync the states from the now playing.
+    onActionLoopStateChanged(nowPlaying->loopState());
 }
 
 void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
@@ -271,6 +318,30 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     //Set the new font.
     m_lyricsPanel->setFont(textFont);
     m_lyricsPanel->setSpacing(fontSize>>1);
+    m_detailInfoPanel->updatePanelFont(textFont);
+    //Resize the time font.
+    textFont=m_position->font();
+    textFont.setPixelSize(fontSize-5);
+    m_position->setFont(textFont);
+    m_duration->setFont(textFont);
+    //Calculate the button size.
+    int buttonSize=fontSize*3;
+    //Resize the control buttons.
+    for(int i=0; i<ControlButtonsCount; ++i)
+    {
+        m_controlButtons[i]->setFixedSize(buttonSize, buttonSize);
+    }
+    //Resize the loop mode button.
+    //Small button size.
+    int smallButtonSize=buttonSize>>1;
+    m_loopMode->setFixedSize(smallButtonSize, smallButtonSize);
+    m_volumeIcon->setFixedSize(smallButtonSize, smallButtonSize);
+    //Change the spacing of the layouts.
+    int controlLayoutSpacing=buttonSize>>2;
+    m_buttonLeftLayout->setContentsMargins(0,0,controlLayoutSpacing,0);
+    m_buttonLeftLayout->setSpacing(controlLayoutSpacing);
+    m_buttonRightLayout->setContentsMargins(controlLayoutSpacing,0,0,0);
+    m_buttonRightLayout->setSpacing(controlLayoutSpacing);
 }
 
 void KNMusicMainPlayer::onActionAnalysisItemChanged(
@@ -298,6 +369,52 @@ void KNMusicMainPlayer::onActionPlayNPauseClicked()
     }
     //Or else we have to play the backend.
     m_backend->play();
+}
+
+void KNMusicMainPlayer::onActionVolumeChanged(const int &volumeSize)
+{
+    //Check out the backend first.
+    if(!m_backend)
+    {
+        return;
+    }
+    //Check is the size is the minimum.
+    if(volumeSize==m_backend->minimalVolume())
+    {
+        //When the backend is the minimum, it should be treated as no volume.
+        m_volumeIcon->setIcon(m_volumeSizeIcon[NoVolume]);
+    }
+    //Check is the size in the first stage.
+    else if(volumeSize<m_firstStageVolume)
+    {
+        //Change the volume icon to stage 1.
+        m_volumeIcon->setIcon(m_volumeSizeIcon[Volume1]);
+    }
+    //Check is the size in the second stage.
+    else if(volumeSize<m_secondStageVolume)
+    {
+        //Change the volume icon to stage 2.
+        m_volumeIcon->setIcon(m_volumeSizeIcon[Volume2]);
+    }
+    else
+    {
+        //Then all the other volume is in the third stage.
+        m_volumeIcon->setIcon(m_volumeSizeIcon[Volume3]);
+    }
+    //Check the volume slider is the same as the current volume.
+    if(volumeSize!=m_volumeSlider->value())
+    {
+        //Block the value changed signal.
+        m_volumeSlider->blockSignals(true);
+        m_volumeSlider->setValue(volumeSize);
+        m_volumeSlider->blockSignals(false);
+    }
+}
+
+void KNMusicMainPlayer::onActionLoopStateChanged(const int &state)
+{
+    //Change the icon.
+    m_loopMode->setIcon(m_loopStateIcon[state]);
 }
 
 void KNMusicMainPlayer::updatePositionText(const qint64 &position)

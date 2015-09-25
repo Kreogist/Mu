@@ -33,9 +33,12 @@ public:
 
     qreal opacity() const;
 
+    int alignment() const;
+
 signals:
 
 public slots:
+    void setAlignment(int alignment);
     void setOpacity(const qreal &opacity);
     void setText(const QString &text);
 
@@ -54,7 +57,7 @@ private:
     QString m_text;
     QTimer *m_move, *m_wait;
     qreal m_opacity;
-    int m_textLeftMostX, m_textX;
+    int m_alignment, m_textLeftMostX, m_textX;
     bool m_looped;
 };
 

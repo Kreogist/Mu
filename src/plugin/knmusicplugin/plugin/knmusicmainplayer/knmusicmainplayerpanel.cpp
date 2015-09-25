@@ -21,6 +21,8 @@
 
 #include "knloopscrolllabel.h"
 #include "knhighlightlabel.h"
+#include "knopacityanimebutton.h"
+#include "knthememanager.h"
 
 #include "knmusicglobal.h"
 
@@ -30,37 +32,57 @@
 
 KNMusicMainPlayerPanel::KNMusicMainPlayerPanel(QWidget *parent) :
     QWidget(parent),
+    m_titleLabel(new KNLoopScrollLabel(this)),
+    m_artistAlbumLabel(new KNLoopScrollLabel(this)),
     m_detailPanel(new QWidget(this)),
     m_albumArt(new KNHighLightLabel(this))
 {
+    setObjectName("MainPlayerInfoPanel");
+    //Configure the label.
+    m_titleLabel->setAlignment(Qt::AlignHCenter);
+    m_artistAlbumLabel->setAlignment(Qt::AlignHCenter);
+    //Configure the panel widget.
+    m_detailPanel->setContentsMargins(5,10,5,0);
     //Initial the panel layout.
     QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                             m_detailPanel);
+    detailLayout->setContentsMargins(0,0,0,0);
+    detailLayout->setSpacing(0);
     m_detailPanel->setLayout(detailLayout);
     //Set the icon paths.
-    QString detailIconPath[DetailLabelCount];
-    detailIconPath[SongLabel]=":/plugin/music/category/song.png";
-    detailIconPath[ArtistLabel]=":/plugin/music/category/artist.png";
-    detailIconPath[AlbumLabel]=":/plugin/music/category/ablum.png";
-    detailIconPath[GenreLabel]=":/plugin/music/category/genre.png";
-    //Initial labels.
-    for(int i=0; i<DetailLabelCount; ++i)
+    QString detailIconPath[GotoButtonCount];
+    detailIconPath[GotoSong]=":/plugin/music/category/song.png";
+    detailIconPath[GotoArtist]=":/plugin/music/category/artist.png";
+    detailIconPath[GotoAlbum]=":/plugin/music/category/ablum.png";
+    detailIconPath[GotoGenre]=":/plugin/music/category/genre.png";
+    //Add the title and artist-album labels to layout.
+    detailLayout->addWidget(m_titleLabel);
+    detailLayout->addWidget(m_artistAlbumLabel);
+    //Initial the goto button layout.
+    m_buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                  detailLayout->widget());
+    m_buttonLayout->setContentsMargins(0,0,0,0);
+    m_buttonLayout->addStretch();
+    //Initial goto buttons.
+    for(int i=0; i<GotoButtonCount; ++i)
     {
-        //Generate row layout.
-        QBoxLayout *rowLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                             detailLayout->widget());
         //Initial detail info icon and text labels.
-        m_detailIcons[i]=new QLabel(m_detailPanel);
-        m_detailText[i]=new KNLoopScrollLabel(m_detailPanel);
+        m_detailIcons[i]=new KNOpacityAnimeButton(m_detailPanel);
         //Configure the detail icon label.
-        m_detailIcons[i]->setScaledContents(true);
+        m_detailIcons[i]->setFixedSize(16, 16);
         //Set icon data to the icon label.
-        m_detailIcons[i]->setPixmap(QPixmap(detailIconPath[i]));
+        m_detailIcons[i]->setIcon(QPixmap(detailIconPath[i]));
         //Add row to detail panel.
-        rowLayout->addWidget(m_detailIcons[i]);
-        rowLayout->addWidget(m_detailText[i], 1);
-        detailLayout->addLayout(rowLayout);
+        m_buttonLayout->addWidget(m_detailIcons[i]);
     }
+    m_buttonLayout->addStretch();
+    //Add the button layout to detailed layout.
+    detailLayout->addLayout(m_buttonLayout);
+
+    //Link to theme manager.
+    connect(knTheme, &KNThemeManager::themeChange,
+            this, &KNMusicMainPlayerPanel::onActionThemeChanged);
+    onActionThemeChanged();
 }
 
 void KNMusicMainPlayerPanel::setAnalysisItem(const KNMusicAnalysisItem &item)
@@ -68,10 +90,9 @@ void KNMusicMainPlayerPanel::setAnalysisItem(const KNMusicAnalysisItem &item)
     //Get the detail info.
     const KNMusicDetailInfo &detailInfo=item.detailInfo;
     //Set the analysis data to the labels.
-    m_detailText[SongLabel]->setText(detailInfo.textLists[Name].toString());
-    m_detailText[ArtistLabel]->setText(detailInfo.textLists[Artist].toString());
-    m_detailText[AlbumLabel]->setText(detailInfo.textLists[Album].toString());
-    m_detailText[GenreLabel]->setText(detailInfo.textLists[Genre].toString());
+    m_titleLabel->setText(detailInfo.textLists[Name].toString());
+    setAristAndAlbum(detailInfo.textLists[Artist].toString(),
+                     detailInfo.textLists[Album].toString());
     //Set the album art.
     //Check the validation of the cover image.
     if(item.coverImage.isNull())
@@ -84,24 +105,31 @@ void KNMusicMainPlayerPanel::setAnalysisItem(const KNMusicAnalysisItem &item)
     }
 }
 
+void KNMusicMainPlayerPanel::updatePanelFont(const QFont &labelFont)
+{
+    //Set the font.
+    setFont(labelFont);
+    //Update the icon size.
+    int iconSize=labelFont.pixelSize()+5;
+    for(int i=0; i<GotoButtonCount; ++i)
+    {
+        //Resize the icon size.
+        m_detailIcons[i]->setFixedSize(iconSize, iconSize);
+    }
+    //Resize the artist-album label font size.
+    QFont artistAlbumFont=labelFont;
+    artistAlbumFont.setPixelSize((labelFont.pixelSize()>>2)*3);
+    m_artistAlbumLabel->setFont(artistAlbumFont);
+    //Resize the spacing.
+    m_detailPanel->setContentsMargins(5, iconSize, 5, 0);
+    m_buttonLayout->setSpacing(iconSize/3);
+    m_buttonLayout->setContentsMargins(0, iconSize>>1, 0, 0);
+}
+
 void KNMusicMainPlayerPanel::resizeEvent(QResizeEvent *event)
 {
     //Resize the widge first.
     QWidget::resizeEvent(event);
-    //Calculate the font size.
-    int sizeParameter=qMin(width(), height()),
-        fontSize=sizeParameter/17;
-    //Generate the font.
-    QFont matchedFont=font();
-    matchedFont.setPixelSize(fontSize);
-    //Set size to the icon and text labels.
-    for(int i=0; i<DetailLabelCount; ++i)
-    {
-        //Resize the icon label.
-        m_detailIcons[i]->setFixedSize(fontSize, fontSize);
-        //Update the text label font size.
-        m_detailText[i]->setFont(matchedFont);
-    }
 
     //Check the width and height, and place the position of the detail panel.
     //When width is 1.5 larger than height, we will treat it as a horizontal
@@ -143,6 +171,47 @@ void KNMusicMainPlayerPanel::resizeEvent(QResizeEvent *event)
                                    albumArtTop+albumArtSize,
                                    width(),
                                    detailPanelHeight);
+    }
+}
+
+void KNMusicMainPlayerPanel::onActionThemeChanged()
+{
+    //Get the theme.
+    QPalette widgetPalette=knTheme->getPalette(objectName());
+    //Set the palette.
+    setPalette(widgetPalette);
+
+    //Generate the title label.
+    QPalette titlePalette=widgetPalette;
+    titlePalette.setColor(QPalette::WindowText,
+                          titlePalette.color(QPalette::Highlight));
+    m_titleLabel->setPalette(titlePalette);
+}
+
+void KNMusicMainPlayerPanel::setAristAndAlbum(const QString &artist,
+                                              const QString &album)
+{
+    //Clear the label first.
+    m_artistAlbumLabel->setText("");
+    //Set the text.
+    if(artist.isEmpty())
+    {
+        //Set the label to display the 'Album'
+        m_artistAlbumLabel->setText(album);
+    }
+    else
+    {
+        //Check if the album is empty.
+        if(album.isEmpty())
+        {
+            //Set the lable to display 'Artist'
+            m_artistAlbumLabel->setText(artist);
+        }
+        else
+        {
+            //Set the lable to display 'Artist - Album'
+            m_artistAlbumLabel->setText(artist + " - " + album);
+        }
     }
 }
 

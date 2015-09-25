@@ -53,10 +53,14 @@
         "Parent" : "MainPlayer",
         "WindowText" : "#FFFFFF"
     },
-    "MainPlayerLyrics" : {
+    "MainPlayerInfoPanel" :{
         "Parent" : "MainPlayerLabel",
-        "Text" : "#646464",
+        "WindowText" : "#A0A0A0",
+        "Text" : "#FFFFFF54",
         "Highlight" : "#f7cf3d"
+    },
+    "MainPlayerLyrics" : {
+        "Parent" : "MainPlayerInfoPanel"
     },
     "SearchBox" : {
         "Parent" : "MainWindow",

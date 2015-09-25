@@ -35,12 +35,16 @@ public:
      */
     explicit KNOpacityButton(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the current opacity of the opacity button.
+     * \return The opacity of the button.
+     */
     qreal opacity() const;
-    void setOpacity(const qreal &opacity);
 
 signals:
 
 public slots:
+    void setOpacity(const qreal &opacity);
 
 protected:
     /*!

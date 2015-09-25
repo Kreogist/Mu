@@ -22,7 +22,7 @@
 #include "knloopscrolllabel.h"
 
 #define GlowRadius 9.0
-#define Waiting 5000
+#define Waiting 3000
 
 KNLoopScrollLabel::KNLoopScrollLabel(QWidget *parent) :
     QWidget(parent),
@@ -30,6 +30,7 @@ KNLoopScrollLabel::KNLoopScrollLabel(QWidget *parent) :
     m_move(new QTimer(this)),
     m_wait(new QTimer(this)),
     m_opacity(1.0),
+    m_alignment(Qt::AlignLeft),
     m_textLeftMostX(0.0),
     m_textX(0.0),
     m_looped(true)
@@ -41,7 +42,7 @@ KNLoopScrollLabel::KNLoopScrollLabel(QWidget *parent) :
                                   QSizePolicy::Label));
 
     //Configure the move and waiting timer.
-    m_move->setInterval(16);
+    m_move->setInterval(25);
     connect(m_move, &QTimer::timeout, this, &KNLoopScrollLabel::moveText);
     m_wait->setInterval(Waiting);
     m_wait->setSingleShot(true);
@@ -69,12 +70,28 @@ void KNLoopScrollLabel::paintEvent(QPaintEvent *event)
     //Configure the pen.
     painter.setPen(palette().color(QPalette::WindowText));
     //Draw content text.
-    painter.drawText(m_textX,
-                     contentsRect().y(),
-                     fontMetrics().width(m_text)+GlowRadius,
-                     height(),
-                     Qt::AlignLeft,
-                     m_text);
+    //Checkout the textX.
+    if(m_textLeftMostX==0)
+    {
+        //Draw the text with the alignment.
+        painter.drawText(0,
+                         contentsRect().y(),
+                         width(),
+                         contentsRect().height(),
+                         m_alignment,
+                         m_text);
+    }
+    else
+    {
+        //Timer is running.
+        //Draw the text at the specific position.
+        painter.drawText(m_textX,
+                         contentsRect().y(),
+                         fontMetrics().width(m_text)+GlowRadius,
+                         contentsRect().height(),
+                         Qt::AlignLeft,
+                         m_text);
+    }
 }
 
 void KNLoopScrollLabel::resizeEvent(QResizeEvent *event)
@@ -179,6 +196,16 @@ inline void KNLoopScrollLabel::updateAnimeParameters()
     setToolTip("");
     //When the text width is shorter than width.
     m_textLeftMostX=0;
+}
+
+int KNLoopScrollLabel::alignment() const
+{
+    return m_alignment;
+}
+
+void KNLoopScrollLabel::setAlignment(int alignment)
+{
+    m_alignment = alignment;
 }
 
 qreal KNLoopScrollLabel::opacity() const
