@@ -55,6 +55,19 @@ public:
     int currentIndex() const;
 
     /*!
+     * \brief Remove a widget from the widget switcher.
+     * \param widget Check the widget.
+     * \return If we can find the widget and remove it from the switcher, return
+     * true.
+     */
+    bool removeWidget(QWidget *widget);
+
+    /*!
+     * \brief Remove all the widgets from the widget switcher.
+     */
+    void clear();
+
+    /*!
      * \brief Get the number of the widgets which is in the switcher stack.
      * \return The number of the stacked widgets.
      */

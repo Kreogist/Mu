@@ -81,6 +81,32 @@ int KNWidgetSwitcher::currentIndex() const
     return m_currentIndex;
 }
 
+bool KNWidgetSwitcher::removeWidget(QWidget *widget)
+{
+    //Check the widget ID in the list.
+    int widgetIndex=m_widgets.indexOf(widget);
+    //If we cannot find the widget, ignore it.
+    if(widgetIndex==-1)
+    {
+        return false;
+    }
+    //Check whether the current index is out of range.
+    if(m_currentIndex>m_widgets.size())
+    {
+        //Make the current index to be the -1.
+        m_currentIndex=m_widgets.size()-1;
+    }
+    return true;
+}
+
+void KNWidgetSwitcher::clear()
+{
+    //Clear all the widgets in the widgets list.
+    m_widgets.clear();
+    //Reset the current index.
+    m_currentIndex=-1;
+}
+
 int KNWidgetSwitcher::count() const
 {
     return m_widgets.size();

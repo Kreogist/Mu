@@ -12,46 +12,28 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNGLASSBUTTON_H
-#define KNGLASSBUTTON_H
-
-#include <QBitmap>
+#ifndef KNGLASSANIMEBUTTON_H
+#define KNGLASSANIMEBUTTON_H
 
 #include <QAbstractButton>
 
 class QTimeLine;
-/*!
- * \brief The KNGlassButton class provides a glass looked button. But It seems
- * that this button will cost a large memeory used. Don't use this button a lot.
- * \n
- * It's designed to copy the Aero Glass from the Window Media Center of Windows
- * 7.
- */
-class KNGlassButton : public QAbstractButton
+class KNGlassAnimeButton : public QAbstractButton
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNGlassButton widget.
-     * \param parent The given parent widget.
+     * \brief Construct a KNGlassAnimeButton widget.
+     * \param parent The parent widget.
      */
-    explicit KNGlassButton(QWidget *parent = 0);
+    explicit KNGlassAnimeButton(QWidget *parent = 0);
 
-    /*!
-     * \brief Get the spacing between the icon and the text.
-     * \return The spacing size.
-     */
-    int spacing() const;
-
-    /*!
-     * \brief Set the spacing size of the icon and the text.
-     * \param spacing The spacing size.
-     */
-    void setSpacing(int spacing);
+    bool showLeftLine() const;
+    void setShowLeftLine(bool showLeftLine);
 
 signals:
 
@@ -99,16 +81,14 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionOpacityChanged(const int &opacity);
+    void onActionMouseAnime(const int &frame);
 
 private:
-    inline void startAnime(QTimeLine *timeLine);
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    Qt::Alignment m_contentAlign;
-    int m_spacing, m_imageOpacity;
-    QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseDown, *m_mouseUp;
-    QLinearGradient m_highLight, m_highLightMask;
-    QPixmap m_maskImage;
+    inline void startAnimation(const int &endFrame);
+    QLinearGradient m_lineGradient, m_backGradient;
+    QTimeLine *m_mouseAnime;
+    int m_iconSize, m_currentHighlight;
+    bool m_leftLine;
 };
 
-#endif // KNGLASSBUTTON_H
+#endif // KNGLASSANIMEBUTTON_H

@@ -55,5 +55,14 @@
         <file>music/player/fullscreen.png</file>
         <file>music/player/menu.png</file>
         <file>music/player/hide_mainplayer.png</file>
+        <file>music/category/ablum.png</file>
+        <file>music/category/artist.png</file>
+        <file>music/category/genre.png</file>
+        <file>music/category/playlist.png</file>
+        <file>music/category/song.png</file>
+        <file>music/player/volume_1.png</file>
+        <file>music/player/volume_2.png</file>
+        <file>music/player/volume_3.png</file>
+        <file>music/player/volume_mute.png</file>
     </qresource>
 </RCC>

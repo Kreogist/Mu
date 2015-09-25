@@ -21,27 +21,75 @@
 
 #include <QWidget>
 
+/*!
+ * \brief The KNScrollLabel class provides a label widget which can scroll the
+ * text when the text is too long. When the text is too long it will set the
+ * whole text as the tooltip of the widget.\n
+ * You can set the opacity of the scroll label content by calling the
+ * setOpacity() function.
+ */
 class KNScrollLabel : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNScrollLabel widget.
+     * \param parent The parent widget.
+     */
     explicit KNScrollLabel(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the label text.
+     * \return The text of the label.
+     */
     QString text() const;
 
-    QSize sizeHint() const;
+    /*!
+     * \brief Reimplemented from QWidget::sizeHint().
+     */
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief The opacity of the scroll label.
+     * \return
+     */
     qreal opacity() const;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the opacity of the scroll label.
+     * \param opacity The opacity. It should be a real between 0.0 to 1.0.
+     */
     void setOpacity(const qreal &opacity);
+
+    /*!
+     * \brief Set the scroll label text.
+     * \param text The label content.
+     */
     void setText(const QString &text);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
+    /*!
+     * \brief Reimplemented from QWidget::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void moveText();

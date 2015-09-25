@@ -58,8 +58,8 @@ void KNHighLightLabel::paintEvent(QPaintEvent *event)
     //Set the rendering hints.
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::SmoothPixmapTransform, true);
-    //Fill the black background.
-    painter.fillRect(0,0,width(),height(),QColor(0,0,0));
+    //Fill the rect.
+    painter.fillRect(rect(), QColor(0,0,0));
     //Draw the contents.
     if(!m_scaledContent.isNull())
     {
@@ -68,6 +68,7 @@ void KNHighLightLabel::paintEvent(QPaintEvent *event)
     //Set pen and brush.
     painter.setPen(Qt::NoPen);
     painter.setBrush(m_highlight);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
     //Draw the high light.
     painter.drawPolygon(m_highLightArea, 3);
 }

@@ -27,7 +27,7 @@
 #define itemHeight 40
 #define shadowHeight 5
 #define textBaseX 15
-#define shadowOpacity 95
+#define shadowOpacity 65
 #define iconSize 30
 
 KNPreferenceItem::KNPreferenceItem(QWidget *parent) :

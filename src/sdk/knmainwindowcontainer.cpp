@@ -147,7 +147,7 @@ void KNMainWindowContainer::setMainPlayer(QWidget *mainPlayer)
     //Set the animation target.
     m_elementAnime[AnimeMainPlayer]->setTargetObject(mainPlayer);
     //Hide the main player as default.
-    mainPlayer->hide();
+    m_elementWidget[MainPlayer]->hide();
 }
 
 void KNMainWindowContainer::showPreference()
@@ -217,6 +217,8 @@ void KNMainWindowContainer::showMainPlayer()
     //Disconnect the animation finished signal.
     disconnect(m_mainPlayerAnimeGroup, &QParallelAnimationGroup::finished,
                m_elementWidget[MainPlayer], &QWidget::hide);
+    connect(m_mainPlayerAnimeGroup, &QParallelAnimationGroup::finished,
+            m_elementWidget[Header], &QWidget::hide);
     //Start the animation.
     m_mainPlayerAnimeGroup->start();
 }
@@ -237,6 +239,11 @@ void KNMainWindowContainer::hideMainPlayer()
     //Update the container size related parameters.
     updateHideMainPlayer();
 
+    //Show the header widget first.
+    m_elementWidget[Header]->show();
+    //Disconnect the header hide.
+    disconnect(m_mainPlayerAnimeGroup, &QParallelAnimationGroup::finished,
+               m_elementWidget[Header], &QWidget::hide);
     //Connect the animation finished signal to the hide slot of the main player.
     connect(m_mainPlayerAnimeGroup, &QParallelAnimationGroup::finished,
             m_elementWidget[MainPlayer], &QWidget::hide);

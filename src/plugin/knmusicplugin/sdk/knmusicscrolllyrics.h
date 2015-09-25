@@ -43,10 +43,22 @@ public:
      */
     KNMusicLyricsBackend *backend() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Get the spacing of the lyrics.
+     * \return The lyrics line spacing.
+     */
+    int spacing() const;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the spacing between two lyrics lines.
+     * \param spacing The spacing of two lines. This value should be positive.
+     * If the number is negative, it will be set to 0.
+     */
+    void setSpacing(int spacing);
+
     /*!
      * \brief setBackend
      * \param backend

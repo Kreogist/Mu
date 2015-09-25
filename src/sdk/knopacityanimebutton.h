@@ -44,10 +44,9 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from QAbstractButton::paintEvent(). the button should
-     * provide the paint event.
+     * \brief Reimplemented from QAbstractButton::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Get the current image opacity for painting.
@@ -58,32 +57,32 @@ protected:
     /*!
      * \brief Reimplemented from QAbstractButton::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::focusInEvent().
      */
-    void focusInEvent(QFocusEvent *event);
+    void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::focusOutEvent().
      */
-    void focusOutEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::mousePressEvent().
      */
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::mouseReleaseEvent().
      */
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionOpacityChanged(const int &opacity);

@@ -19,23 +19,20 @@
 #include <QPainter>
 #include <QSizePolicy>
 
-#include "knscrolllabel.h"
-
-#include <QDebug>
+#include "knloopscrolllabel.h"
 
 #define GlowRadius 9.0
-#define ShortWaiting 2500
-#define LongWaiting 3000
+#define Waiting 5000
 
-KNScrollLabel::KNScrollLabel(QWidget *parent) :
+KNLoopScrollLabel::KNLoopScrollLabel(QWidget *parent) :
     QWidget(parent),
     m_text(QString()),
     m_move(new QTimer(this)),
     m_wait(new QTimer(this)),
     m_opacity(1.0),
-    m_textLeftMostX(0),
-    m_textX(0),
-    m_movingLeft(true)
+    m_textLeftMostX(0.0),
+    m_textX(0.0),
+    m_looped(true)
 {
     //Set properties.
     setContentsMargins(GlowRadius/2, GlowRadius/2, GlowRadius/2, GlowRadius/2);
@@ -44,14 +41,14 @@ KNScrollLabel::KNScrollLabel(QWidget *parent) :
                                   QSizePolicy::Label));
 
     //Configure the move and waiting timer.
-    m_move->setInterval(33);
-    connect(m_move, &QTimer::timeout, this, &KNScrollLabel::moveText);
-    m_wait->setInterval(LongWaiting);
+    m_move->setInterval(16);
+    connect(m_move, &QTimer::timeout, this, &KNLoopScrollLabel::moveText);
+    m_wait->setInterval(Waiting);
     m_wait->setSingleShot(true);
     connect(m_wait, &QTimer::timeout, [=]{m_move->start();});
 }
 
-void KNScrollLabel::paintEvent(QPaintEvent *event)
+void KNLoopScrollLabel::paintEvent(QPaintEvent *event)
 {
     //Ignore the previous event.
     Q_UNUSED(event);
@@ -80,7 +77,7 @@ void KNScrollLabel::paintEvent(QPaintEvent *event)
                      m_text);
 }
 
-void KNScrollLabel::resizeEvent(QResizeEvent *event)
+void KNLoopScrollLabel::resizeEvent(QResizeEvent *event)
 {
     //Update the widget size.
     QWidget::resizeEvent(event);
@@ -88,43 +85,42 @@ void KNScrollLabel::resizeEvent(QResizeEvent *event)
     updateAnimeParameters();
 }
 
-void KNScrollLabel::showEvent(QShowEvent *event)
+void KNLoopScrollLabel::showEvent(QShowEvent *event)
 {
-    //Do the original show event.
+    //Show up the loop label.
     QWidget::showEvent(event);
-    //Check out the parameter, check whether we need to scroll the content.
+    //Check up the most left.
     if(m_textLeftMostX!=0)
     {
-        //Start long waiting timer.
-        m_wait->setInterval(LongWaiting);
+        //Start long wait timer.
         m_wait->start();
     }
 }
 
-void KNScrollLabel::hideEvent(QHideEvent *event)
+void KNLoopScrollLabel::hideEvent(QHideEvent *event)
 {
     //Do the original hide event.
     QWidget::hideEvent(event);
-    //Stop all the timers.
+    //Stop the timer.
     stopTimers();
-    //Reset the parameters.
+    //Reset the textX.
     m_textX=contentsRect().x();
 }
 
-void KNScrollLabel::moveText()
+void KNLoopScrollLabel::moveText()
 {
     //Check moving direction first.
-    if(m_movingLeft)
+    if(m_looped)
     {
         //If the current position is the most left,
-        if(m_textX<=m_textLeftMostX)
+        if(m_textX<=contentsRect().x())
         {
             //Change the direction.
-            m_movingLeft=false;
+            m_looped=false;
             //Stop moving timer.
             m_move->stop();
             //Start short waiting timer.
-            m_wait->setInterval(ShortWaiting);
+            m_wait->setInterval(Waiting);
             m_wait->start();
             return;
         }
@@ -135,30 +131,27 @@ void KNScrollLabel::moveText()
         return;
     }
     //Check if current position is the most right,
-    if(m_textX>=contentsRect().x())
+    if(m_textX<=m_textLeftMostX)
     {
         //Change the direction,
-        m_movingLeft=true;
-        //Stop moving timer.
-        m_move->stop();
-        //Start long waiting timer.
-        m_wait->setInterval(LongWaiting);
-        m_wait->start();
+        m_looped=true;
+        //Changed the textX to the most right.
+        m_textX=width()+GlowRadius;
         return;
     }
     //Update the text position parameter.
-    m_textX++;
+    m_textX--;
     update();
 }
 
-void KNScrollLabel::stopTimers()
+void KNLoopScrollLabel::stopTimers()
 {
     //Stop all the timers.
     m_move->stop();
     m_wait->stop();
 }
 
-inline void KNScrollLabel::updateAnimeParameters()
+inline void KNLoopScrollLabel::updateAnimeParameters()
 {
     //Stop all the timer.
     stopTimers();
@@ -173,12 +166,10 @@ inline void KNScrollLabel::updateAnimeParameters()
         //Set the tooltip.
         setToolTip(m_text);
         //Calculate most left X. This can control the right spacing.
-        m_textLeftMostX=maxDisplayWidth-textWidth;
+        m_textLeftMostX=-textWidth-GlowRadius;
         //Check out the visible.
         if(isVisible())
         {
-            //Reset the interval to long waiting.
-            m_wait->setInterval(LongWaiting);
             //Start waiting timer.
             m_wait->start();
         }
@@ -190,12 +181,12 @@ inline void KNScrollLabel::updateAnimeParameters()
     m_textLeftMostX=0;
 }
 
-qreal KNScrollLabel::opacity() const
+qreal KNLoopScrollLabel::opacity() const
 {
     return m_opacity;
 }
 
-void KNScrollLabel::setOpacity(const qreal &opacity)
+void KNLoopScrollLabel::setOpacity(const qreal &opacity)
 {
     //Save the opacity.
     m_opacity = opacity;
@@ -203,17 +194,17 @@ void KNScrollLabel::setOpacity(const qreal &opacity)
     update();
 }
 
-QString KNScrollLabel::text() const
+QString KNLoopScrollLabel::text() const
 {
     return m_text;
 }
 
-void KNScrollLabel::setText(const QString &text)
+void KNLoopScrollLabel::setText(const QString &text)
 {
     //Stop all the previous timer first.
     stopTimers();
     //Reset all the moving direction.
-    m_movingLeft=true;
+    m_looped=true;
     //Save the text data.
     m_text=text;
     //Update animation parameters.
@@ -222,7 +213,7 @@ void KNScrollLabel::setText(const QString &text)
     update();
 }
 
-QSize KNScrollLabel::sizeHint() const
+QSize KNLoopScrollLabel::sizeHint() const
 {
     return QSize(width(), GlowRadius+fontMetrics().height());
 }

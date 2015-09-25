@@ -136,6 +136,17 @@ void KNMusicScrollLyrics::onActionLyricsMoved(const int &frame)
     update();
 }
 
+int KNMusicScrollLyrics::spacing() const
+{
+    return m_spacing;
+}
+
+void KNMusicScrollLyrics::setSpacing(int spacing)
+{
+    //Only save the configure when spacing is greater than 0.
+    m_spacing=spacing>0?spacing:0;
+}
+
 KNMusicLyricsBackend *KNMusicScrollLyrics::backend()
 {
     return m_backend;

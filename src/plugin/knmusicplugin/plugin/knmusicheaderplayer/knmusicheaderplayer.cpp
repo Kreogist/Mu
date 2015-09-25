@@ -162,8 +162,6 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //Configure the main player button.
     connect(m_showMainPlayer, &KNOpacityButton::clicked,
             this, &KNMusicHeaderPlayer::requireShowMainPlayer);
-//    connect(m_showMainPlayer, &KNOpacityButton::clicked,
-//            this, &KNMusicHeaderPlayer::hide);
     //Add to append panel.
     appendLayout->addWidget(m_showMainPlayer);
     //Configure the append menu button.
@@ -213,15 +211,15 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     volumeLayout->addWidget(m_volumeSlider, 1);
 
     //Generate a progress panel.
-    QWidget *m_progressPanel=new QWidget(this);
-    m_progressPanel->move(0, 45);
-    m_progressPanel->setFixedWidth(302);
+    QWidget *progressPanel=new QWidget(this);
+    progressPanel->move(0, 45);
+    progressPanel->setFixedWidth(302);
     //Initial layout of the progress panel.
     QBoxLayout *progressLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                              m_progressPanel);
+                                              progressPanel);
     progressLayout->setContentsMargins(0,0,0,0);
     progressLayout->setSpacing(0);
-    m_progressPanel->setLayout(progressLayout);
+    progressPanel->setLayout(progressLayout);
     //Configure a font class.
     QFont timeFont=font();
     timeFont.setFamily("096MKSD");
@@ -443,12 +441,9 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
                     m_progressSlider->setValue(position);
                 }
             });
+    //Update the duration of the slider and the label.
     connect(m_backend, &KNMusicBackend::durationChanged,
-            [=](const qint64 &duration)
-            {
-                //Update the duration of the slider and the label.
-                updateDuration(duration);
-            });
+            this, &KNMusicHeaderPlayer::updateDuration);
     connect(m_backend, &KNMusicBackend::playingStateChanged,
             [=](const int &state)
             {
@@ -461,7 +456,8 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
                 //Block the volume slider.
                 m_volumeSlider->blockSignals(true);
                 //Change the opacity.
-                m_volumeIndicator->setOpacity(0.5+m_volumeSlider->percentage()/2);
+                m_volumeIndicator->setOpacity(0.5+
+                                              m_volumeSlider->percentage()/2);
                 //Sync the value.
                 m_volumeSlider->setValue(volumeSize);
                 //Release the block.
@@ -531,6 +527,8 @@ void KNMusicHeaderPlayer::loadConfigure()
         m_volumeSlider->setValue(
                     m_volumeSlider->minimal()+(double)(m_volumeSlider->range())*
                     m_cacheConfigure->data(PlayerVolume, 0.5).toDouble());
+        //Sync the volume indicator opacity.
+        m_volumeIndicator->setOpacity(0.5+m_volumeSlider->percentage()/2);
         //Get the mute state and set to backend.
         m_backend->setMute(m_cacheConfigure->data(PlayerMute, false).toBool());
     }
@@ -900,7 +898,7 @@ inline void KNMusicHeaderPlayer::setAristAndAlbum(const QString &artist,
     }
 }
 
-inline void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)
+void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)
 {
     //Change the progress slider range.
     m_progressSlider->setMaximum(duration);

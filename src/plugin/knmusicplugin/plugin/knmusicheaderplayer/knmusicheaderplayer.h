@@ -109,6 +109,7 @@ private slots:
     void onActionNowPlayingChanged(const KNMusicAnalysisItem &analysisItem);
     void showAppendMenu();
     void appendActionTriggered(const int &actionIndex);
+    void updateDuration(const qint64 &duration);
 
 private:
     enum SubMenus
@@ -152,8 +153,6 @@ private:
                            QPropertyAnimation *control,
                            QPropertyAnimation *append);
     inline void setAristAndAlbum(const QString &artist, const QString &album);
-
-    inline void updateDuration(const qint64 &duration);
 
     //Widgets
     KNMusicScrollLyrics *m_headerLyrics;

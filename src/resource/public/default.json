@@ -49,6 +49,15 @@
         "Parent" : "MainWindow",
         "MainWindow" : "#000000"
     },
+    "MainPlayerLabel" : {
+        "Parent" : "MainPlayer",
+        "WindowText" : "#FFFFFF"
+    },
+    "MainPlayerLyrics" : {
+        "Parent" : "MainPlayerLabel",
+        "Text" : "#646464",
+        "Highlight" : "#f7cf3d"
+    },
     "SearchBox" : {
         "Parent" : "MainWindow",
         "Base" : "#000000",
@@ -131,7 +140,7 @@
     "Preference" :
     {
         "Parent" : "MainWindow",
-        "Window" : "#171717"
+        "Window" : "#1e1e1e"
     },
     "PreferenceContent" :
     {
@@ -145,8 +154,8 @@
     "PreferenceItem" :
     {
         "Parent" : "PreferenceSidebar",
-        "Button" : "#F7CF3D",
-        "ButtonText" : "#FFFFFF"
+        "Button" : "#444444",
+        "ButtonText" : "#F7CF3D"
     },
     "PreferenceSidebarBottom" :
     {

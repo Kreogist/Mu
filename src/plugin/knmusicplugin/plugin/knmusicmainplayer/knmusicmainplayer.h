@@ -19,9 +19,22 @@
 #ifndef KNMUSICMAINPLAYER_H
 #define KNMUSICMAINPLAYER_H
 
+#include <QIcon>
+
+#include "knmusicglobal.h"
+
 #include "knmusicmainplayerbase.h"
 
+using namespace MusicUtil;
+
+class QBoxLayout;
+class QLabel;
+class KNEditableLabel;
 class KNOpacityAnimeButton;
+class KNProgressSlider;
+class KNGlassAnimeButton;
+class KNMusicScrollLyrics;
+class KNMusicMainPlayerPanel;
 /*!
  * \brief The KNMusicMainPlayer class is a default realize of the main music
  * player. It will use all the standard SDK file to build the main music player.
@@ -51,8 +64,58 @@ signals:
 
 public slots:
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private slots:
+    void onActionAnalysisItemChanged(const KNMusicAnalysisItem &item);
+    void onActionPlayNPauseClicked();
+    void updatePositionText(const qint64 &position);
+    void updateDuration(const qint64 &duration);
+
 private:
+    enum ControlButtons
+    {
+        ButtonPrev,
+        ButtonPlayNPause,
+        ButtonNext,
+        ControlButtonsCount
+    };
+    enum VolumeSizes
+    {
+        NoVolume,
+        Volume1,
+        Volume2,
+        Volume3,
+        VolumeSizeCount
+    };
+    inline void setPosition(const qint64 &position);
+    //Resources.
+    QIcon m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
+          m_volumeSizeIcon[VolumeSizeCount];
+
+    //Layouts.
+    QBoxLayout *m_contentLayout;
+
+    //Backends.
+    KNMusicBackend *m_backend;
+
+    //Global Controls/Panels.
     KNOpacityAnimeButton *m_hideMainPlayer;
+    KNMusicMainPlayerPanel *m_detailInfoPanel;
+    KNMusicScrollLyrics *m_lyricsPanel;
+    QWidget *m_playlistPanel;
+    QWidget *m_controlPanel;
+
+    //Controls.
+    KNProgressSlider *m_progressSlider;
+    QLabel *m_duration;
+    KNEditableLabel *m_position;
+    KNOpacityAnimeButton *m_loopMode;
+    KNGlassAnimeButton *m_controlButtons[ControlButtonsCount];
+
+    //Status.
+    bool m_progressPressed;
 };
 
 #endif // KNMUSICMAINPLAYER_H

@@ -17,6 +17,7 @@
  */
 #include <QTimeLine>
 #include <QPainter>
+#include <QCursor>
 
 #include "knopacityanimebutton.h"
 
@@ -120,6 +121,12 @@ void KNOpacityAnimeButton::onActionOpacityChanged(const int &opacity)
 {
     //Save the opacity.
     m_imageOpacity=opacity;
+    //Check the mouse is still in the rect.
+    if(!rect().contains(QWidget::mapFromGlobal(QCursor::pos())))
+    {
+        //Change the target.
+        m_mouseAnime->setEndFrame(BaseOpacity);
+    }
     //Update the widget.
     update();
 }
