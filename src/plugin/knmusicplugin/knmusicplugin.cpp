@@ -31,6 +31,7 @@
 #include "knmusicparser.h"
 #include "knmusiclyricsmanager.h"
 #include "knmusiclyricsbackend.h"
+#include "knmusicdetailtageditpanel.h"
 
 //Ports
 #include "knmusicdetaildialogpanel.h"
@@ -71,6 +72,9 @@
 // Backends.
 #ifdef ENABLE_BACKEND_BASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
+#endif
+#ifdef ENABLE_BACKEND_PHONON
+#include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
 #endif
 // Analysiser
 #ifdef ENABLED_FFMPEG_ANALYSISER
@@ -165,6 +169,9 @@ void KNMusicPlugin::loadPlugins()
     initialSearch(new KNMusicSearch);
 #ifdef ENABLE_BACKEND_BASS
     initialBackend(new KNMusicBackendBass);
+#endif
+#ifdef ENABLE_BACKEND_PHONON
+    initialBackend(new KNMusicBackendPhonon);
 #endif
     //Initial the now playing.
     initialNowPlaying(new KNMusicNowPlaying);
@@ -264,9 +271,13 @@ inline void KNMusicPlugin::initialPlayer(KNMusicPlayerBase *player)
 
 void KNMusicPlugin::initialDetailDialogPanel()
 {
+    //Get the detail dialog.
+    KNMusicDetailDialog *detailDialog=knMusicGlobal->detailDialog();
+
     //Add panels to detail dialog.
-    knMusicGlobal->detailDialog()->addPanel(new KNMusicDetailPanelOverview);
-    knMusicGlobal->detailDialog()->addPanel(new KNMusicDetailPanelArtwork);
+    detailDialog->addPanel(new KNMusicDetailPanelOverview);
+    detailDialog->addTagEditPanel(new KNMusicDetailTagEditPanel);
+    detailDialog->addPanel(new KNMusicDetailPanelArtwork);
 }
 
 void KNMusicPlugin::initialParserPlugin()

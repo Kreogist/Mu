@@ -97,6 +97,12 @@ public:
      */
     bool reanalysisItem(KNMusicAnalysisItem &analysisItem);
 
+    /*!
+     * \brief Write analysis item to file path.
+     * \param analysisItem The
+     */
+    bool writeAnalysisItem(const KNMusicAnalysisItem &analysisItem);
+
 private:
     inline bool findImageFile(const QString &baseName,
                               KNMusicAnalysisItem &item);

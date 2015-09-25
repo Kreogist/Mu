@@ -45,6 +45,11 @@ public:
     virtual QAbstractButton *tabButton()=0;
 
 signals:
+    /*!
+     * \brief When the file is updated, this signal will be emitted for detail
+     * info to updated the file.
+     */
+    void requireUpdateFile();
 
 public slots:
     /*!

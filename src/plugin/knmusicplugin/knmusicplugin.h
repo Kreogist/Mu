@@ -43,7 +43,7 @@ class KNMusicMainPlayerBase;
  * You can treat this as a example.\n
  * It will use the all the official sdk class.
  */
-class KNMusicPlugin : public KNAbstractMusicPlugin
+class  KNMusicPlugin : public KNAbstractMusicPlugin
 {
     Q_OBJECT
 public:

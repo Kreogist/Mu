@@ -64,5 +64,8 @@
         <file>music/player/volume_2.png</file>
         <file>music/player/volume_3.png</file>
         <file>music/player/volume_mute.png</file>
+        <file>music/detaildialog/tab_icon/tag.png</file>
+        <file>music/detaildialog/albumart/edit.png</file>
+        <file>music/detaildialog/albumart/save.png</file>
     </qresource>
 </RCC>

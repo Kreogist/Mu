@@ -49,7 +49,7 @@ protected:
     /*!
      * \brief Reimplemented from QAbstractButton::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionToggleChanged(const int &frame);

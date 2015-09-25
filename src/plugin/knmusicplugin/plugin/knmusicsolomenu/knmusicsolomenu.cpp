@@ -243,6 +243,12 @@ void KNMusicSoloMenu::onActionSearchItemText()
     searcher->search(blocks);
 }
 
+void KNMusicSoloMenu::onActionRenameToPrefer()
+{
+    //Rename the file to prefer file name.
+//    KNUtil::renameFile(m_filePath, m_preferFileName);
+}
+
 void KNMusicSoloMenu::onActionCopyFilePath()
 {
     KNUtil::setClipboardText(m_filePath);

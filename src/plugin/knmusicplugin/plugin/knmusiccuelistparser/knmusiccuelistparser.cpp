@@ -404,19 +404,21 @@ bool KNMusicCueListParser::writeDetail(const KNMusicAnalysisItem &analysisItem)
     }
     //Write all the data to list file.
     //Generate the music data cache.
-    char fileCache[DataCacheSize];
+    char *turboCache=new char[DataCacheSize];
     //Now copy all the content from the original file to temporary file.
-    int bytesRead=updatedListFile.read(fileCache, DataCacheSize);
+    int bytesRead=updatedListFile.read(turboCache, DataCacheSize);
     while(bytesRead>0)
     {
         //Write the cache to the list file.
-        listFile.write(fileCache, bytesRead);
+        listFile.write(turboCache, bytesRead);
         //Read new data from the original file to cache.
-        bytesRead=updatedListFile.read(fileCache, DataCacheSize);
+        bytesRead=updatedListFile.read(turboCache, DataCacheSize);
     }
     //Close the list file and temporary file.
     listFile.close();
     updatedListFile.close();
+    //Clear up the turbo cache.
+    delete[] turboCache;
     //Written finished.
     return true;
 }

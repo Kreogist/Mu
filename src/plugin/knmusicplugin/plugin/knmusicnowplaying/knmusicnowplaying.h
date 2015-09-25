@@ -28,6 +28,10 @@ class KNMusicNowPlaying : public KNMusicNowPlayingBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicNowPlaying object.
+     * \param parent The parent object.
+     */
     explicit KNMusicNowPlaying(QObject *parent = 0);
 
     /*!

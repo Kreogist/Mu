@@ -52,6 +52,16 @@ public:
      */
     bool parseAlbumArt(KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::writable().
+     */
+    bool writable() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::writeCoverImage().
+     */
+    bool writeCoverImage() const Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

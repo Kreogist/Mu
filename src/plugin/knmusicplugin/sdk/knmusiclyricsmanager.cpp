@@ -179,13 +179,15 @@ inline bool KNMusicLyricsManager::loadLocalLyrics(
     return false;
 }
 
-bool KNMusicLyricsManager::loadRelatedLyrics(const QString &dirPath,
-                                             const KNMusicDetailInfo &detailInfo)
+bool KNMusicLyricsManager::loadRelatedLyrics(
+        const QString &dirPath,
+        const KNMusicDetailInfo &detailInfo)
 {
     //Find the lyrics named with the following.
     for(int i=0; i<m_relateNamePolicyList.size(); i++)
     {
-        //Load the related lyrics according to the policy index in the policy list.
+        //Load the related lyrics according to the policy index in the policy
+        //list.
         switch(m_relateNamePolicyList.at(i))
         {
         case LyricsNamedArtistHyphonTitle:

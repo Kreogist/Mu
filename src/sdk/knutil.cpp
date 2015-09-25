@@ -271,6 +271,12 @@ bool KNUtil::saveTextToFile(const QString &filePath, const QString &content)
 {
     //Generate the target file.
     QFile targetFile(filePath);
+    //Ensure the path is valid.
+    if(!ensurePathValid(QFileInfo(targetFile).absoluteFilePath()).isEmpty())
+    {
+        //If there's no path to this file, how can we write the file?
+        return false;
+    }
     //Open as write only mode.
     if(!targetFile.open(QIODevice::WriteOnly))
     {
@@ -287,4 +293,9 @@ bool KNUtil::saveTextToFile(const QString &filePath, const QString &content)
     targetFile.close();
     //Mission complete.
     return true;
+}
+
+bool KNUtil::renameFile(const QString &filePath, const QString &newFileName)
+{
+    return QFile::rename(filePath, newFileName);
 }

@@ -70,6 +70,19 @@ public:
      */
     virtual bool parseAlbumArt(KNMusicAnalysisItem &analysisItem)=0;
 
+    /*!
+     * \brief Get whether we can write the tag by this parser.
+     * \return If this parser can write data, return true.
+     */
+    virtual bool writable() const=0;
+
+    /*!
+     * \brief Get whether we can write the tag with a cover image.
+     * \return If we can write a cover image by this parser, return true. If
+     * this parser is not writable, this will be false.
+     */
+    virtual bool writeCoverImage() const=0;
+
 protected:
     /*!
      * \brief Set the text data is a simple string setter. If the new string is

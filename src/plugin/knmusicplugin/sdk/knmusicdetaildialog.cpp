@@ -19,6 +19,7 @@
 #include <QLabel>
 
 #include "knmusicdetaildialogpanel.h"
+#include "knmusicdetailtageditpanel.h"
 #include "knhtabgroup.h"
 #include "knmusicparser.h"
 #include "knhwidgetswitcher.h"
@@ -35,7 +36,8 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     KNMessageBox(parent),
     m_panelList(QLinkedList<KNMusicDetailDialogPanel *>()),
     m_panelSwitcher(new KNHTabGroup(this)),
-    m_panelContainer(new KNHWidgetSwitcher(this))
+    m_panelContainer(new KNHWidgetSwitcher(this)),
+    m_tagEditPanel(nullptr)
 {
     //Set properties.
     setTitleText("Information");
@@ -63,11 +65,11 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
 
     //Initial the widget container.
     QWidget *widgetContainer=new QWidget(this);
-    widgetContainer->setFixedSize(460, 400);
+    widgetContainer->setFixedSize(400, 465);
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           widgetContainer);
-    mainLayout->setContentsMargins(17,12,17,12);
+    mainLayout->setContentsMargins(17,12,17,0);
     mainLayout->setSpacing(9);
     widgetContainer->setLayout(mainLayout);
     //Initial the basic information layout.
@@ -99,6 +101,9 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
 
 void KNMusicDetailDialog::addPanel(KNMusicDetailDialogPanel *panel)
 {
+    //Link the panel to detail panel.
+//    connect(panel, &KNMusicDetailDialogPanel::requireUpdateFile,
+//            this, &KNMusicDetailDialog);
     //Add panel to the panel container.
     m_panelContainer->addWidget(panel);
     //Add the switcher button to switcher.
@@ -154,4 +159,18 @@ void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem)
     }
     //Show the dialog.
     exec();
+}
+
+KNMusicDetailTagEditPanel *KNMusicDetailDialog::tagEditPanel() const
+{
+    return m_tagEditPanel;
+}
+
+void KNMusicDetailDialog::addTagEditPanel(
+        KNMusicDetailTagEditPanel *tagEditPanel)
+{
+    //Save the tag edit panel.
+    m_tagEditPanel = tagEditPanel;
+    //Add the panel to the detail dialog.
+    addPanel(m_tagEditPanel);
 }
