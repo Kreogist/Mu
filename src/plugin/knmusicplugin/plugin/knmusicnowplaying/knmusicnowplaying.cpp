@@ -108,6 +108,8 @@ void KNMusicNowPlaying::reset()
     resetShadowModel();
     //Reset the playing models.
     m_playingProxyModel=nullptr;
+    //Emit the proxy model changed signal.
+    emit nowPlayingModelChanged(m_playingProxyModel);
 }
 
 void KNMusicNowPlaying::loadConfigure()
@@ -147,6 +149,8 @@ void KNMusicNowPlaying::shadowPlayingModel()
     }
     //Set the current playing proxy model to shadow model.
     m_playingProxyModel=m_shadowPlayingModel;
+    //Emit the proxy model changed signal.
+    emit nowPlayingModelChanged(m_playingProxyModel);
 }
 
 void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
@@ -168,6 +172,8 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
         }
         //Save the new proxy model.
         m_playingProxyModel=model;
+        //Emit the proxy model changed signal.
+        emit nowPlayingModelChanged(m_playingProxyModel);
         //Save the music tab.
         m_playingTab=tab;
         //Check the music model first, we can only connect when its not null.
@@ -308,6 +314,8 @@ void KNMusicNowPlaying::onActionModelRemoved(KNMusicModel *model)
         reset();
         //Reset the playing models.
         m_playingProxyModel=nullptr;
+        //Emit the proxy model changed signal.
+        emit nowPlayingModelChanged(m_playingProxyModel);
         //Reset the shadow proxy model.
         resetShadowModel();
         //Reset the music tab pointer.

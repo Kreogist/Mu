@@ -25,7 +25,8 @@
 
 #include "knmusicratingdelegate.h"
 
-int KNMusicRatingDelegate::m_starSizeHint=20;
+#define StarSizeHint 20
+#define FiveStarSizeHint 100
 
 KNMusicRatingDelegate::KNMusicRatingDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
@@ -33,8 +34,8 @@ KNMusicRatingDelegate::KNMusicRatingDelegate(QWidget *parent) :
     //Initial the star size.
     m_star=QPixmap(":/plugin/music/public/star.png");
     //Scale the pixmap
-    m_star=m_star.scaled(m_starSizeHint,
-                         m_starSizeHint,
+    m_star=m_star.scaled(StarSizeHint,
+                         StarSizeHint,
                          Qt::KeepAspectRatio,
                          Qt::SmoothTransformation);
 }
@@ -57,7 +58,7 @@ void KNMusicRatingDelegate::paint(QPainter *painter,
     painter->translate(option.rect.topLeft());
     for(int i=0; i<starNum; i++)
     {
-        painter->drawPixmap(QPoint(m_starSizeHint*i, 0),
+        painter->drawPixmap(QPoint(StarSizeHint*i, 0),
                             m_star);
     }
     painter->restore();
@@ -69,7 +70,7 @@ QSize KNMusicRatingDelegate::sizeHint(const QStyleOptionViewItem &option,
     Q_UNUSED(option);
     Q_UNUSED(index);
     //Size is five stars' size.
-    return QSize(m_starSizeHint*5, m_starSizeHint);
+    return QSize(FiveStarSizeHint, StarSizeHint);
 }
 
 QWidget *KNMusicRatingDelegate::createEditor(QWidget *parent,
@@ -80,7 +81,7 @@ QWidget *KNMusicRatingDelegate::createEditor(QWidget *parent,
     Q_UNUSED(index);
     //Create the rating editor.
     KNMusicRatingEditor *editor=new KNMusicRatingEditor(parent);
-    editor->setStarSizeHint(m_starSizeHint);
+    editor->setStarSizeHint(StarSizeHint);
     connect(editor, &KNMusicRatingEditor::editingFinished,
             this, &KNMusicRatingDelegate::commitAndCloseEditor);
     return editor;
@@ -113,5 +114,5 @@ void KNMusicRatingDelegate::commitAndCloseEditor()
 
 int KNMusicRatingDelegate::starSizeHint()
 {
-    return m_starSizeHint;
+    return StarSizeHint;
 }

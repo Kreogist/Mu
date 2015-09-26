@@ -28,9 +28,11 @@
 
 #include "knmusiclyricsmanager.h"
 #include "knmusicbackend.h"
+#include "knmusicproxymodel.h"
 #include "knmusicscrolllyrics.h"
 #include "knmusicmainplayerpanel.h"
 #include "knmusicnowplayingbase.h"
+#include "knmusicnowplayinglistview.h"
 
 #include "knmusicmainplayer.h"
 
@@ -47,7 +49,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_hideMainPlayer(new KNOpacityAnimeButton(this)),
     m_detailInfoPanel(new KNMusicMainPlayerPanel(this)),
     m_lyricsPanel(new KNMusicScrollLyrics(this)),
-    m_playlistPanel(new QWidget(this)),
+    m_playlistPanel(new KNMusicNowPlayingListView(this)),
     m_controlPanel(new QWidget(this)),
     m_progressSlider(new KNProgressSlider(this)),
     m_duration(new QLabel(this)),
@@ -87,7 +89,11 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_lyricsPanel->setObjectName("MainPlayerLyrics");
     m_lyricsPanel->setBackend(knMusicGlobal->lyricsManager()->backend());
     knTheme->registerWidget(m_lyricsPanel);
-
+    //Configure the playlist panel.
+    m_playlistPanel->setSizePolicy(QSizePolicy::Minimum,
+                                   QSizePolicy::Minimum);
+    m_playlistPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_playlistPanel->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     //Configure control panel.
     // Configure progress slider.
     m_progressSlider->setWheelStep(1000);
@@ -272,6 +278,8 @@ void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             });
     connect(nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
             this, &KNMusicMainPlayer::onActionLoopStateChanged);
+    connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingModelChanged,
+            this, &KNMusicMainPlayer::onActionPlayingModelChanged);
     //Link the button controls to the now playing
     connect(m_controlButtons[ButtonPrev], &KNGlassAnimeButton::clicked,
             nowPlaying, &KNMusicNowPlayingBase::playPrevious);
@@ -433,6 +441,13 @@ void KNMusicMainPlayer::updateDuration(const qint64 &duration)
     m_progressSlider->setMaximum(duration);
     //Set duration display text.
     m_duration->setText(KNMusicUtil::msecondToString(duration));
+}
+
+void KNMusicMainPlayer::onActionPlayingModelChanged(
+        KNMusicProxyModel *proxyModel)
+{
+    //Set the new proxy model to the list view.
+    m_playlistPanel->setModel(proxyModel);
 }
 
 void KNMusicMainPlayer::setPosition(const qint64 &position)

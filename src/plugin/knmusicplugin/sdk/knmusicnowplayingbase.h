@@ -100,6 +100,11 @@ signals:
     void nowPlayingReset();
 
     /*!
+     * \brief When the playing model is changed, this signal will be emitted.
+     */
+    void nowPlayingModelChanged(KNMusicProxyModel *model);
+
+    /*!
      * \brief When the current playing index is changed, this signal will be
      * emitted.
      * \param analysisItem The new analysis item which is generated before

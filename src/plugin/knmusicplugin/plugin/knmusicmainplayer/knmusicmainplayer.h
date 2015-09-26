@@ -37,6 +37,8 @@ class KNProgressSlider;
 class KNGlassAnimeButton;
 class KNMusicScrollLyrics;
 class KNMusicMainPlayerPanel;
+class KNMusicNowPlayingListView;
+class KNMusicProxyModel;
 /*!
  * \brief The KNMusicMainPlayer class is a default realize of the main music
  * player. It will use all the standard SDK file to build the main music player.
@@ -79,6 +81,7 @@ private slots:
     void onActionLoopStateChanged(const int &state);
     void updatePositionText(const qint64 &position);
     void updateDuration(const qint64 &duration);
+    void onActionPlayingModelChanged(KNMusicProxyModel *proxyModel);
 
 private:
     enum ControlButtons
@@ -111,7 +114,7 @@ private:
     KNOpacityAnimeButton *m_hideMainPlayer;
     KNMusicMainPlayerPanel *m_detailInfoPanel;
     KNMusicScrollLyrics *m_lyricsPanel;
-    QWidget *m_playlistPanel;
+    KNMusicNowPlayingListView *m_playlistPanel;
     QWidget *m_controlPanel;
 
     //Controls.

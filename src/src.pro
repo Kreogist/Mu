@@ -287,7 +287,9 @@ SOURCES += \
     sdk/knglassanimebutton.cpp \
     sdk/knloopscrolllabel.cpp \
     plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.cpp \
-    sdk/sao/knsaobutton.cpp
+    sdk/sao/knsaobutton.cpp \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.cpp \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -438,7 +440,9 @@ HEADERS += \
     sdk/knglassanimebutton.h \
     sdk/knloopscrolllabel.h \
     plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.h \
-    sdk/sao/knsaobutton.h
+    sdk/sao/knsaobutton.h \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.h \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.h
 
 RESOURCES += \
     resource/res.qrc

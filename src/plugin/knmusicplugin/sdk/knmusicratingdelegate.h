@@ -30,19 +30,42 @@ class KNMusicRatingDelegate : public QStyledItemDelegate
 public:
     explicit KNMusicRatingDelegate(QWidget *parent = 0);
 
+    /*!
+     * \brief Reimplemented from QStyledItemDelegate::paint().
+     */
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
+               const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QStyledItemDelegate::sizeHint().
+     */
     QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
+                   const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QStyledItemDelegate::createEditor().
+     */
     QWidget *createEditor(QWidget *parent,
                           const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const;
+                          const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QStyledItemDelegate::setEditorData().
+     */
     void setEditorData(QWidget *editor,
-                       const QModelIndex &index) const;
+                       const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QStyledItemDelegate::setModelData().
+     */
     void setModelData(QWidget *editor,
                       QAbstractItemModel *model,
-                      const QModelIndex &index) const;
+                      const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief This is going to get the star size. It will be constant.
+     */
     static int starSizeHint();
 
 signals:
