@@ -108,6 +108,12 @@ bool KNMusicLyricsManager::loadLyricsFile(const QString &lyricsPath)
     return false;
 }
 
+void KNMusicLyricsManager::resetBackend()
+{
+    //Reset the backend.
+    m_backend->reset();
+}
+
 void KNMusicLyricsManager::onActionLyricsDownloaded(
         const KNMusicDetailInfo &detailInfo,
         const QString &content)

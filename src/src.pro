@@ -289,7 +289,8 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.cpp \
     sdk/sao/knsaobutton.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.cpp
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.cpp \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -442,7 +443,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.h \
     sdk/sao/knsaobutton.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.h
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.h \
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.h
 
 RESOURCES += \
     resource/res.qrc

@@ -43,6 +43,11 @@ public:
 signals:
 
 public slots:
+
+private:
+    inline QString textData(const QAbstractItemModel *model,
+                            const QModelIndex &rowIndex,
+                            const int &column) const;
 };
 
 #endif // KNMUSICNOWPLAYINGDELEGATE_H

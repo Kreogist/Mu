@@ -138,19 +138,19 @@ void KNMusicMainPlayerPanel::resizeEvent(QResizeEvent *event)
     {
         //Horizontal mode.
         //Calculate the album art size.
-        int halfWidth=width()>>1,
-            albumArtSize=qMin(halfWidth, height()),
+        int albumArtWidth=(qreal)width()*0.618,
+            albumArtSize=qMin(albumArtWidth, height()),
             detailPanelHeight=m_detailPanel->sizeHint().height();
         //Make the album art a little bit smaller.
         albumArtSize=(qreal)albumArtSize * 0.85;
-        m_albumArt->setGeometry((halfWidth-albumArtSize)>>1,
+        m_albumArt->setGeometry(albumArtWidth-albumArtSize,
                                 (height()-albumArtSize)>>1,
                                 albumArtSize,
                                 albumArtSize);
         //Get the panel size.
-        m_detailPanel->setGeometry(halfWidth,
+        m_detailPanel->setGeometry(albumArtWidth,
                                    (height()-detailPanelHeight)>>1,
-                                   halfWidth,
+                                   width()-albumArtWidth,
                                    detailPanelHeight);
     }
     else

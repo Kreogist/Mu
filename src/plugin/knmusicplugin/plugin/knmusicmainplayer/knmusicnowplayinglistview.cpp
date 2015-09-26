@@ -15,12 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QScrollBar>
+
+#include "sao/knsaostyle.h"
+
+#include "knmusicnowplayingdelegate.h"
 
 #include "knmusicnowplayinglistview.h"
 
 KNMusicNowPlayingListView::KNMusicNowPlayingListView(QWidget *parent) :
     QListView(parent)
 {
-
+    //Set item delegate.
+    setItemDelegate(new KNMusicNowPlayingDelegate(this));
+    KNSaoStyle::styleVerticalScrollBar(verticalScrollBar());
 }
 

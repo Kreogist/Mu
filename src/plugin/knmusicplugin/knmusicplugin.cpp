@@ -358,6 +358,9 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     //Link the now playing with the lyrics manager.
     connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
             knMusicGlobal->lyricsManager(), &KNMusicLyricsManager::loadLyrics);
+    connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
+            knMusicGlobal->lyricsManager(),
+            &KNMusicLyricsManager::resetBackend);
     //Set the now playing to music global.
     knMusicGlobal->setNowPlaying(nowPlaying);
 }

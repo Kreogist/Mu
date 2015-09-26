@@ -86,6 +86,11 @@ public slots:
      */
     bool loadLyricsFile(const QString &lyricsPath);
 
+    /*!
+     * \brief Reset the lyrics backend, clear all the data of the backend.
+     */
+    void resetBackend();
+
 private slots:
     void onActionLyricsDownloaded(const KNMusicDetailInfo &detailInfo,
                                   const QString &content);

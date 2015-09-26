@@ -38,6 +38,7 @@ class KNGlassAnimeButton;
 class KNMusicScrollLyrics;
 class KNMusicMainPlayerPanel;
 class KNMusicNowPlayingListView;
+class KNMusicMainPlayerContent;
 class KNMusicProxyModel;
 /*!
  * \brief The KNMusicMainPlayer class is a default realize of the main music
@@ -105,7 +106,7 @@ private:
           m_volumeSizeIcon[VolumeSizeCount];
 
     //Layouts.
-    QBoxLayout *m_contentLayout, *m_buttonLeftLayout, *m_buttonRightLayout;
+    QBoxLayout *m_buttonLeftLayout, *m_buttonRightLayout;
 
     //Backends.
     KNMusicBackend *m_backend;
@@ -115,6 +116,7 @@ private:
     KNMusicMainPlayerPanel *m_detailInfoPanel;
     KNMusicScrollLyrics *m_lyricsPanel;
     KNMusicNowPlayingListView *m_playlistPanel;
+    KNMusicMainPlayerContent *m_contentContainer;
     QWidget *m_controlPanel;
 
     //Controls.

@@ -33,6 +33,7 @@
 #include "knmusicmainplayerpanel.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicnowplayinglistview.h"
+#include "knmusicmainplayercontent.h"
 
 #include "knmusicmainplayer.h"
 
@@ -42,7 +43,6 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     KNMusicMainPlayerBase(parent),
     m_playIcon(QIcon(":/plugin/music/player/play_dark.png")),
     m_pauseIcon(QIcon(":/plugin/music/player/pause_dark.png")),
-    m_contentLayout(nullptr),
     m_buttonLeftLayout(nullptr),
     m_buttonRightLayout(nullptr),
     m_backend(nullptr),
@@ -50,6 +50,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_detailInfoPanel(new KNMusicMainPlayerPanel(this)),
     m_lyricsPanel(new KNMusicScrollLyrics(this)),
     m_playlistPanel(new KNMusicNowPlayingListView(this)),
+    m_contentContainer(new KNMusicMainPlayerContent(this)),
     m_controlPanel(new QWidget(this)),
     m_progressSlider(new KNProgressSlider(this)),
     m_duration(new QLabel(this)),
@@ -154,16 +155,12 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     mainLayout->addWidget(m_hideMainPlayer);
     mainLayout->addSpacing(16);
     setLayout(mainLayout);
-    //Initial the content layout.
-    m_contentLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                   mainLayout->widget());
-    m_contentLayout->setContentsMargins(0,0,0,0);
-    m_contentLayout->setSpacing(0);
-    mainLayout->addLayout(m_contentLayout, 1);
+    //Initial the strectch space for content layout.
+    mainLayout->addWidget(m_contentContainer, 1);
     //Add widget to content layout.
-    m_contentLayout->addWidget(m_detailInfoPanel);
-    m_contentLayout->addWidget(m_lyricsPanel);
-    m_contentLayout->addWidget(m_playlistPanel);
+    m_contentContainer->setColumnWidget(0, m_detailInfoPanel);
+    m_contentContainer->setColumnWidget(1, m_lyricsPanel);
+    m_contentContainer->setColumnWidget(2, m_playlistPanel);
     //Configure the control panel.
     //Generate the layout.
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -204,7 +201,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     QBoxLayout *volumeLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             buttonLayout->widget());
     volumeLayout->setContentsMargins(0,0,0,0);
-    volumeLayout->setSpacing(5);
+    volumeLayout->setSpacing(2);
     volumeLayout->addWidget(m_volumeIcon);
     volumeLayout->addWidget(m_volumeSlider, 1);
     //Add volume layout to right layout.
@@ -295,19 +292,6 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
 {
     //Do the resize.
     KNMusicMainPlayerBase::resizeEvent(event);
-    //Set the default mode to column 1.
-    int columnCount=1;
-    //Check the size of the main player.
-    //If the width is 1.5 times greater than the height, then column two.
-    if((height()+(height()>>2)) <= width())
-    {
-        columnCount=2;
-    }
-    //If the width is two times greater than the height, then column three.
-    if(height()+(height()>>1) <= width())
-    {
-        columnCount=3;
-    }
 
     //Get the smaller one of the width and height.
     int parameterSize=qMin(width(), height());
@@ -320,6 +304,8 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         fontSize=15;
     }
+    //Set maximum size of the playlist.
+    m_playlistPanel->setMaximumWidth(11.3*(qreal)fontSize);
     //Resize the font.
     QFont textFont=font();
     textFont.setPixelSize(fontSize);
@@ -327,13 +313,16 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_lyricsPanel->setFont(textFont);
     m_lyricsPanel->setSpacing(fontSize>>1);
     m_detailInfoPanel->updatePanelFont(textFont);
+    //Check out the font size.
+    textFont.setPixelSize(15);
+    m_playlistPanel->setFont(textFont);
     //Resize the time font.
     textFont=m_position->font();
     textFont.setPixelSize(fontSize-5);
     m_position->setFont(textFont);
     m_duration->setFont(textFont);
     //Calculate the button size.
-    int buttonSize=fontSize*3;
+    int buttonSize=(fontSize<<1)+(fontSize>>2)*3;
     //Resize the control buttons.
     for(int i=0; i<ControlButtonsCount; ++i)
     {
@@ -341,14 +330,14 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     }
     //Resize the loop mode button.
     //Small button size.
-    int smallButtonSize=buttonSize>>1;
+    int smallButtonSize=fontSize;
     m_loopMode->setFixedSize(smallButtonSize, smallButtonSize);
     m_volumeIcon->setFixedSize(smallButtonSize, smallButtonSize);
     //Change the spacing of the layouts.
-    int controlLayoutSpacing=buttonSize>>2;
-    m_buttonLeftLayout->setContentsMargins(0,0,controlLayoutSpacing,0);
+    int controlLayoutSpacing=buttonSize>>3;
+    m_buttonLeftLayout->setContentsMargins(0,0,controlLayoutSpacing<<1,0);
     m_buttonLeftLayout->setSpacing(controlLayoutSpacing);
-    m_buttonRightLayout->setContentsMargins(controlLayoutSpacing,0,0,0);
+    m_buttonRightLayout->setContentsMargins(controlLayoutSpacing<<1,0,0,0);
     m_buttonRightLayout->setSpacing(controlLayoutSpacing);
 }
 
@@ -459,4 +448,3 @@ void KNMusicMainPlayer::setPosition(const qint64 &position)
         m_backend->setPosition(position);
     }
 }
-

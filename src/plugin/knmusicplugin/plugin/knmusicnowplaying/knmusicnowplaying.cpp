@@ -374,8 +374,8 @@ void KNMusicNowPlaying::onActionLoadFailed()
     //Or else we stops here, let user to do the next thing.
     if(m_manualPlayed)
     {
-        //Emit reset flag.
-        resetCurrentPlaying();
+        //Reset the playing model data.
+        resetCurrentPlayingModelData();
         //We don't need to tried continued.
         return;
     }
@@ -450,6 +450,15 @@ inline void KNMusicNowPlaying::resetShadowModel()
 
 inline void KNMusicNowPlaying::resetCurrentPlaying()
 {
+    //Reset the playing model data.
+    resetCurrentPlayingModelData();
+    //Clear the current playing index and the analysis item.
+    m_playingIndex=QPersistentModelIndex();
+    m_playingAnalysisItem=KNMusicAnalysisItem();
+}
+
+void KNMusicNowPlaying::resetCurrentPlayingModelData()
+{
     //Emit now playing reset signal first.
     emit nowPlayingReset();
     //To reset the now playing, clear the backend first.
@@ -461,9 +470,6 @@ inline void KNMusicNowPlaying::resetCurrentPlaying()
     }
     //Clear previous the now playing icon.
     playingMusicModel()->setPlayingIndex(QModelIndex());
-    //Clear the current playing index and the analysis item.
-    m_playingIndex=QPersistentModelIndex();
-    m_playingAnalysisItem=KNMusicAnalysisItem();
 }
 
 inline void KNMusicNowPlaying::playNextRow(bool noLoopMode)
@@ -523,7 +529,7 @@ inline void KNMusicNowPlaying::playNextRow(bool noLoopMode)
     if(nextProxyRow==-1)
     {
         //Clear the current playing.
-        reset();
+        resetCurrentPlaying();
         //Everything is done.
         return;
     }

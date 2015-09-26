@@ -163,10 +163,11 @@ void KNGlassAnimeButton::paintEvent(QPaintEvent *event)
     //Draw the icon.
     if(!icon().isNull())
     {
+        QPixmap renderedIcon=icon().pixmap(m_iconSize, m_iconSize);
         //Draw the icon to the center of the button.
-        painter.drawPixmap((width()-m_iconSize)>>1,
-                           (height()-m_iconSize)>>1,
-                           icon().pixmap(m_iconSize, m_iconSize));
+        painter.drawPixmap((width()-renderedIcon.width())>>1,
+                           (height()-renderedIcon.height())>>1,
+                           renderedIcon);
     }
 }
 
