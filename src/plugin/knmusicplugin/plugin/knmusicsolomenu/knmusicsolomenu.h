@@ -24,7 +24,9 @@
 #include "knmusicsolomenubase.h"
 
 /*!
- * \brief The KNMusicSoloMenu class
+ * \brief The KNMusicSoloMenu class is a default realized of the
+ * KNMusicSoloMenuBase. This will use all the default sdk. This is a example of
+ * the solo menu.
  */
 class KNMusicSoloMenu : public KNMusicSoloMenuBase
 {
@@ -41,6 +43,16 @@ public:
      */
     void setMusicRow(KNMusicProxyModel *model,
                      const QModelIndex &itemIndex) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicSoloMenuBase::triggeredModel().
+     */
+    KNMusicProxyModel *triggeredModel() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicSoloMenuBase::triggeredIndex().
+     */
+    QModelIndex triggeredIndex() const Q_DECL_OVERRIDE;
 
 signals:
 

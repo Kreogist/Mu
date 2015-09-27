@@ -204,6 +204,15 @@ public:
     KNMusicDetailInfo rowDetailInfo(const int &row);
 
     /*!
+     * \brief Get the row of one detail info, it will return the first row where
+     * the detail info appears.
+     * \param detailInfo The detail info.
+     * \return The row of the detail info first appear. If we cannot find the
+     * detail info, it will return -1.
+     */
+    int detailInfoRow(const KNMusicDetailInfo &detailInfo);
+
+    /*!
      * \brief Reimplemented from QAbstractTableModel::supportedDropActions().
      */
     Qt::DropActions supportedDropActions() const Q_DECL_OVERRIDE;
@@ -289,6 +298,21 @@ public slots:
      * \param playingIndex
      */
     void setPlayingIndex(const QModelIndex &playingIndex);
+
+protected:
+    /*!
+     * \brief This will append a KNMusicDetailInfo structure in the model data
+     * list without the beginInsertRows funtion. The performance will be the
+     * best. When you called this funciton, you have to handle it manually.
+     * \param detailInfo The detail info data.
+     */
+    void appendDetailInfo(const KNMusicDetailInfo &detailInfo);
+
+    /*!
+     * \brief Initial the total duration to a specific number manually.
+     * \param totalDuration The total duration number.
+     */
+    void initialTotalDuration(const quint64 &totalDuration);
 
 private:
     QList<KNMusicDetailInfo> m_detailInfos;

@@ -492,6 +492,14 @@ QAbstractItemView::DropIndicatorPosition KNMusicTreeViewBase::dropPosition(
                 QAbstractItemView::BelowItem;
 }
 
+inline void KNMusicTreeViewBase::scrollToIndex(const QModelIndex &proxyIndex)
+{
+    //Set the current index to the specific row.
+    setCurrentIndex(proxyIndex);
+    //Use the default scrollTo function to locate that index.
+    scrollTo(proxyIndex, QAbstractItemView::PositionAtCenter);
+}
+
 void KNMusicTreeViewBase::resetHeaderState()
 {
     //Hide all the data column first.
@@ -799,6 +807,23 @@ void KNMusicTreeViewBase::selectSourceSong(const int &sourceRow)
     setCurrentIndex(
                 proxyModel()->mapFromSource(
                     musicModel()->index(sourceRow, Name)));
+}
+
+void KNMusicTreeViewBase::scrollToSourceRow(const int &sourceRow)
+{
+    //Check the music model first.
+    if(musicModel()!=nullptr)
+    {
+        //Scroll to the row.
+        scrollToIndex(m_proxyModel->mapFromSource(musicModel()->index(sourceRow,
+                                                                      Name)));
+    }
+}
+
+void KNMusicTreeViewBase::scrollToRow(const int &row)
+{
+    //Get the name item of the song row.
+    scrollToIndex(m_proxyModel->index(row, Name));
 }
 
 void KNMusicTreeViewBase::setAnimate(bool animate)

@@ -547,6 +547,11 @@ KNMusicDetailInfo KNMusicModel::rowDetailInfo(const int &row)
     return m_detailInfos.at(row);
 }
 
+int KNMusicModel::detailInfoRow(const KNMusicDetailInfo &detailInfo)
+{
+    return m_detailInfos.indexOf(detailInfo);
+}
+
 Qt::DropActions KNMusicModel::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
@@ -685,4 +690,16 @@ void KNMusicModel::setPlayingIndex(const QModelIndex &playingRow)
         emit dataChanged(index(m_playingIndex.row(), MusicRowState),
                          index(m_playingIndex.row(), MusicRowState));
     }
+}
+
+void KNMusicModel::appendDetailInfo(const KNMusicDetailInfo &detailInfo)
+{
+    //Add data to the detail info list.
+    m_detailInfos.append(detailInfo);
+}
+
+void KNMusicModel::initialTotalDuration(const quint64 &totalDuration)
+{
+    //Save the total duration.
+    m_totalDuration=totalDuration;
 }

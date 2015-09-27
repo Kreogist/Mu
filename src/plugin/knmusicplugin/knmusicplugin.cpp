@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QSignalMapper>
 
 //Dependence
 #include "kncategorytab.h"
@@ -39,12 +40,14 @@
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
-#include "knmusicplaylistbase.h"
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicdetailtooltipbase.h"
 #include "knmusicheaderplayerbase.h"
 #include "knmusicplayerbase.h"
+#include "knmusicplaylistbase.h"
+#include "knmusiclibrarybase.h"
+#include "knmusictab.h"
 
 //Plugins
 // Detail Dialog Panels.
@@ -88,6 +91,8 @@
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 // Main Player.
 #include "plugin/knmusicmainplayer/knmusicmainplayer.h"
+// Library.
+#include "plugin/knmusiclibrary/knmusiclibrary.h"
 // Playlist.
 #include "plugin/knmusicplaylist/knmusicplaylist.h"
 
@@ -109,11 +114,16 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_switcher(new KNHWidgetSwitcher(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
                                        this)),
+    m_showInMapper(new QSignalMapper(this)),
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr)
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
+    //Link the UI element assistants.
+    connect(m_showInMapper,
+            static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            m_tabBar, &KNCategoryTabBar::setCurrentIndex);
 }
 
 KNMusicPlugin::~KNMusicPlugin()
@@ -181,7 +191,9 @@ void KNMusicPlugin::loadPlugins()
     initialHeaderPlayer(new KNMusicHeaderPlayer);
     //Initial the main player.
     initialMainPlayer(new KNMusicMainPlayer);
-    //Initial the plugins.
+    //Initial the library tab.
+    initialLibrary(new KNMusicLibrary);
+    //Initial the playlist tab.
     initialPlaylist(new KNMusicPlaylist);
 
     //Start working threads.
@@ -267,6 +279,23 @@ inline void KNMusicPlugin::initialPlayer(KNMusicPlayerBase *player)
     //Set the backend and the now playing.
     player->setBackend(knMusicGlobal->backend());
     player->setNowPlaying(knMusicGlobal->nowPlaying());
+}
+
+void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
+{
+    //Check the music tab first.
+    if(musicTab==nullptr)
+    {
+        return;
+    }
+    //Link the tab show in signal to the show in mapper.
+    connect(musicTab, &KNMusicTab::requireShowTab,
+            m_showInMapper,
+            static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    m_showInMapper->setMapping(musicTab, m_switcher->count());
+    //Add playlist content to tab.
+    m_switcher->addWidget(musicTab);
+    m_tabBar->addTab(musicTab->tab());
 }
 
 void KNMusicPlugin::initialDetailDialogPanel()
@@ -445,7 +474,17 @@ void KNMusicPlugin::initialMainPlayer(KNMusicMainPlayerBase *mainPlayer)
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
 {
-    //Add playlist content to tab.
-    m_switcher->addWidget(playlist);
-    m_tabBar->addTab(playlist->tab());
+    //Add playlist content to music plugin.
+    addMusicTab(playlist);
+}
+
+void KNMusicPlugin::initialLibrary(KNMusicLibraryBase *library)
+{
+    //Set the library relationship.
+    library->setParent(this);
+    //Add tabs to the switcher.
+    addMusicTab(library->songTab());
+    addMusicTab(library->artistTab());
+    addMusicTab(library->albumTab());
+    addMusicTab(library->genreTab());
 }

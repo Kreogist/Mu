@@ -330,14 +330,14 @@ void KNMusicPlaylistManager::setPlaylistDirPath(const QString &playlistDirPath)
 
 void KNMusicPlaylistManager::loadPlaylistList()
 {
+    //Set the loaded flag.
+    m_isPlaylistListLoaded = true;
     //Get the playlist list file.
     QFile playlistListFile(m_playlistDirPath + PlaylistListFileName);
     //Check the existance and try to open the file in read only mode.
     if(!playlistListFile.exists() ||
             !playlistListFile.open(QIODevice::ReadOnly))
     {
-        //Set loaded flag.
-        m_isPlaylistListLoaded = true;
         //Return back.
         return;
     }
@@ -351,8 +351,6 @@ void KNMusicPlaylistManager::loadPlaylistList()
     if(playlistListObject.isEmpty() ||
             playlistListObject.value("Version").toInt()!=PlaylistListVersion)
     {
-        //Set the loaded flag.
-        m_isPlaylistListLoaded = true;
         //Return back.
         return;
     }
@@ -387,8 +385,6 @@ void KNMusicPlaylistManager::loadPlaylistList()
         //!FIXME: Show the failed paths.
         //! WARNING: do not use KNMessageBox.
     }
-    //Set the loaded flag.
-    m_isPlaylistListLoaded = true;
 }
 
 KNMusicPlaylistModel *KNMusicPlaylistManager::loadPlaylist(

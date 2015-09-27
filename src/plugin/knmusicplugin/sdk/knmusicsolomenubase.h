@@ -30,6 +30,10 @@ class KNMusicSoloMenuBase : public KNAnimationMenu
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Constrcut a KNMusicSoloMenuBase with the given parent widget.
+     * \param parent The parent widget pointer.
+     */
     KNMusicSoloMenuBase(QWidget *parent = 0):KNAnimationMenu(parent){}
 
     /*!
@@ -41,6 +45,18 @@ public:
      */
     virtual void setMusicRow(KNMusicProxyModel *model,
                              const QModelIndex &itemIndex)=0;
+
+    /*!
+     * \brief Get the triggered model pointer.
+     * \return The triggered model pointer.
+     */
+    virtual KNMusicProxyModel *triggeredModel()=0;
+
+    /*!
+     * \brief Get the triggered model index of the solo menu.
+     * \return The triggered index of the menu.
+     */
+    virtual QModelIndex triggeredIndex() const=0;
 
 signals:
     /*!

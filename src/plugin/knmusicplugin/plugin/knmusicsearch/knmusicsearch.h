@@ -53,6 +53,11 @@ signals:
 
 public slots:
     /*!
+     * \brief Reimplemented from KNMusicSearchBase::clear().
+     */
+    void clear() Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicSearchBase::search().
      */
     void search(const QList<KNMusicSearchBlock> &blocks) Q_DECL_OVERRIDE;

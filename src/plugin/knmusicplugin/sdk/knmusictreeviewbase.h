@@ -88,6 +88,10 @@ public:
         selectSourceSong(index.row());
     }
 
+    void scrollToSourceRow(const int &sourceRow);
+
+    void scrollToRow(const int &row);
+
 signals:
 
 public slots:
@@ -195,6 +199,7 @@ private slots:
 private:
     QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
             const QRect &rect) const;
+    inline void scrollToIndex(const QModelIndex &proxyIndex);
     inline void startAnime(const int &endFrame);
     inline void playIndex(const QModelIndex &index);
     inline bool dropOn(QDropEvent *event, int &dropRow);

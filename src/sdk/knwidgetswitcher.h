@@ -134,6 +134,9 @@ protected:
      */
     int outWidgetIndex() const;
 
+private slots:
+    void onActionMovingFinished();
+
 private:
     inline QPropertyAnimation *generateAnimation();
     inline void setWidgetVisible(const int &index, bool visible);

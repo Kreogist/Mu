@@ -22,11 +22,13 @@
 #include "knabstractmusicplugin.h"
 
 class QBoxLayout;
+class QSignalMapper;
 class KNMouseDetectHeader;
 class KNHWidgetSwitcher;
 class KNVWidgetSwitcher;
 class KNCategoryTabBar;
 class KNSideShadowWidget;
+class KNMusicTab;
 class KNMusicDetailDialogPanel;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
@@ -38,6 +40,7 @@ class KNMusicHeaderPlayerBase;
 class KNMusicPlayerBase;
 class KNMusicPlaylistBase;
 class KNMusicMainPlayerBase;
+class KNMusicLibraryBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
@@ -102,6 +105,7 @@ protected:
 private:
     inline void initialInfrastructure();
     inline void initialPlayer(KNMusicPlayerBase *player);
+    inline void addMusicTab(KNMusicTab *musicTab);
     void initialDetailDialogPanel();
     void initialParserPlugin();
     void initialLyricsPlugin();
@@ -115,6 +119,7 @@ private:
     void initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
     void initialMainPlayer(KNMusicMainPlayerBase *mainPlayer);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
+    void initialLibrary(KNMusicLibraryBase *library);
 
     //UI infrastructure elements.
     KNMouseDetectHeader *m_headerWidget;
@@ -123,6 +128,9 @@ private:
     KNCategoryTabBar *m_tabBar;
     KNHWidgetSwitcher *m_switcher;
     KNSideShadowWidget *m_topShadow;
+
+    //UI Element Assistants.
+    QSignalMapper *m_showInMapper;
 
     //Plugins.
     KNMusicHeaderPlayerBase *m_headerPlayer;

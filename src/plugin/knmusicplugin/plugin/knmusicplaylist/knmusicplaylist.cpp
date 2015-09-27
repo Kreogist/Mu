@@ -25,6 +25,7 @@
 
 // SDKs
 #include "knmusicnowplayingbase.h"
+#include "knmusicsearchbase.h"
 
 // SDKs of playlists
 #include "sdk/knmusicplaylistemptyhint.h"
@@ -139,6 +140,11 @@ void KNMusicPlaylist::showIndex(KNMusicModel *musicModel,
     {
         return;
     }
+    //Clear up the search model.
+    if(knMusicGlobal->search())
+    {
+        knMusicGlobal->search()->clear();
+    }
     //Find the music model.
     //Get the playlist list first.
     KNMusicPlaylistListModel *playlistList=m_playlistManager->playlistList();
@@ -153,6 +159,8 @@ void KNMusicPlaylist::showIndex(KNMusicModel *musicModel,
         m_playlistList->showPlaylist(playlistIndex);
         //Select the index of the playlist index.
         m_playlistViewer->selectSong(index);
+        //Ask to show the tab.
+        emit requireShowTab();
     }
 }
 

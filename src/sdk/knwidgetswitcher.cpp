@@ -39,6 +39,9 @@ KNWidgetSwitcher::KNWidgetSwitcher(QWidget *parent) :
     //Add the animation to animation group.
     m_movingAnimationGroup->addAnimation(m_inAnimation);
     m_movingAnimationGroup->addAnimation(m_outAnimation);
+    //Configure the moving animation gourp.
+    connect(m_movingAnimationGroup, &QParallelAnimationGroup::finished,
+            this, &KNWidgetSwitcher::onActionMovingFinished);
 }
 
 void KNWidgetSwitcher::addWidget(QWidget *widget)
@@ -149,13 +152,17 @@ void KNWidgetSwitcher::setCurrentIndex(const int &currentIndex)
     //Save the last widget index to out index, set the new current index.
     m_outWidgetIndex=m_currentIndex;
     m_currentIndex=currentIndex;
+    //Get the current widget.
+    QWidget *currentWidget=m_widgets.at(m_currentIndex);
     //Reset the animation target.
-    m_inAnimation->setTargetObject(m_widgets.at(m_currentIndex));
+    m_inAnimation->setTargetObject(currentWidget);
     m_outAnimation->setTargetObject(m_widgets.at(m_outWidgetIndex));
     //Update the start and end value.
     updateAnimationPosition();
     //Prepare the widget.
     setWidgetVisible(m_currentIndex, true);
+    //Raise the current widget.
+    currentWidget->raise();
     //Start animation.
     m_movingAnimationGroup->start();
 }
@@ -203,6 +210,20 @@ inline void KNWidgetSwitcher::setWidgetVisible(const int &index, bool visible)
 int KNWidgetSwitcher::outWidgetIndex() const
 {
     return m_outWidgetIndex;
+}
+
+void KNWidgetSwitcher::onActionMovingFinished()
+{
+    //Check out whether widget index is invalid.
+    if(m_outWidgetIndex<0 || (m_outWidgetIndex>m_widgets.size()))
+    {
+        //Ignore the calling.
+        return;
+    }
+    //Hide the widget.
+    setWidgetVisible(m_outWidgetIndex, false);
+    //Reset the out widget index to invalid.
+    m_outWidgetIndex=-1;
 }
 
 QPropertyAnimation *KNWidgetSwitcher::outAnimation() const

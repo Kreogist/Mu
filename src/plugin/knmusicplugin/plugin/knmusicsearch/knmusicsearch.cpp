@@ -65,6 +65,20 @@ QList<KNMusicSearchBlock> KNMusicSearch::rules()
     return m_searchBlockList;
 }
 
+void KNMusicSearch::clear()
+{
+    //Clear up the search block list.
+    m_searchBlockList.clear();
+    //Block the signal of the search box.
+    m_searchBox->blockSignals(true);
+    //Set the search text to search box.
+    m_searchBox->clear();
+    //Release the signal block.
+    m_searchBox->blockSignals(false);
+    //Ask to search the data.
+    emit requireSearch();
+}
+
 void KNMusicSearch::search(const QList<KNMusicSearchBlock> &blocks)
 {
     //Save the new blocks.

@@ -78,6 +78,23 @@ namespace MusicUtil
         DurationRole,
         FileSizeRole
     };
+    enum PropertyListIndex
+    {
+        PropertyFilePath,
+        PropertyFileName,
+        PropertyCoverImageHash,
+        PropertyBitRate,
+        PropertySamplingRate,
+        PropertySize,
+        PropertyDuration,
+        PropertyDateAdded,
+        PropertyDateModified,
+        PropertyLastPlayed,
+        PropertyTrackFilePath,
+        PropertyTrackIndex,
+        PropertyStartPosition,
+        PropertyListCount
+    };
     enum MusicColumnRole
     {
         SortDataRole=Qt::UserRole
@@ -123,6 +140,13 @@ namespace MusicUtil
             trackIndex(-1),
             cannotPlay(false)
         {
+        }
+        //Equal operation.
+        bool operator ==(const KNMusicDetailInfo &value)
+        {
+            return filePath==value.filePath &&
+                    trackFilePath==value.trackFilePath &&
+                    trackIndex==value.trackIndex;
         }
     };
     struct KNMusicAnalysisItem

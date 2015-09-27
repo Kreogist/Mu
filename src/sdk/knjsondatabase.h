@@ -146,6 +146,12 @@ public:
      */
     QJsonValue at(int i);
 
+    /*!
+     * \brief Get the size of the items which was data field.
+     * \return The number of the item which json array holds.
+     */
+    int size() const;
+
 signals:
 
 public slots:

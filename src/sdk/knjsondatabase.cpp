@@ -163,6 +163,11 @@ QJsonValue KNJsonDatabase::at(int i)
     return m_dataField.at(i);
 }
 
+int KNJsonDatabase::size() const
+{
+    return m_dataField.size();
+}
+
 inline void KNJsonDatabase::checkDatabaseDir()
 {
     //Check is the destination path is a real dir, and it's exist.

@@ -290,7 +290,15 @@ SOURCES += \
     sdk/sao/knsaobutton.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.cpp
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.cpp \
+    plugin/knmusicplugin/sdk/knmusiclibrarybase.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -444,7 +452,15 @@ HEADERS += \
     sdk/sao/knsaobutton.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.h
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.h \
+    plugin/knmusicplugin/sdk/knmusiclibrarybase.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.h
 
 RESOURCES += \
     resource/res.qrc

@@ -68,5 +68,9 @@
         <file>music/detaildialog/tab_icon/tag.png</file>
         <file>music/detaildialog/albumart/edit.png</file>
         <file>music/detaildialog/albumart/save.png</file>
+        <file>music/library/empty.png</file>
+        <file>music/library/library_add.png</file>
+        <file>music/library/library_import.png</file>
+        <file>music/library/library_scan.png</file>
     </qresource>
 </RCC>

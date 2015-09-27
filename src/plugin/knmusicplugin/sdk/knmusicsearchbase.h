@@ -62,6 +62,12 @@ signals:
 
 public slots:
     /*!
+     * \brief Clear up all the search and emit requireSearch() signal to update
+     * the data.
+     */
+    virtual void clear()=0;
+
+    /*!
      * \brief Search the particular rules. It should automatically replace the
      * current search.
      * \param blocks The search rule blocks.

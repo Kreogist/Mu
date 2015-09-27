@@ -167,6 +167,16 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
     }
 }
 
+KNMusicProxyModel *KNMusicSoloMenu::triggeredModel()
+{
+    return m_model;
+}
+
+QModelIndex KNMusicSoloMenu::triggeredIndex() const
+{
+    return m_itemIndex;
+}
+
 void KNMusicSoloMenu::retranslate()
 {
     //Translate all the action caption. Save them in title caption string list.
