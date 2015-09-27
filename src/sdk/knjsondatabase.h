@@ -17,7 +17,7 @@
  */
 /*
  * Code name:
- * 2.1 - Trueno.
+ * 3.0 - Trueno.
  * Previous version code name:
  * 2.0 - Cheater.
  * 1.0 - Beast.
@@ -138,6 +138,11 @@ public:
      * \param i The position.
      */
     void removeAt(int i);
+
+    /*!
+     * \brief Remove all the data in the database.
+     */
+    void clear();
 
     /*!
      * \brief Get the specific value at the position i.

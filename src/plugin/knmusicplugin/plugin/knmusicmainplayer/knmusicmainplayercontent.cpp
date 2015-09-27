@@ -59,9 +59,9 @@ void KNMusicMainPlayerContent::setColumnCount(const int &columnCount)
         if(m_columnWidgets[i]!=nullptr)
         {
             //Change the relationship.
-            m_columnWidgets[i]->setParent(this);
+            m_columnWidgets[i]->setParent(this, Qt::Widget);
             //Show the widget.
-            m_columnWidgets[i]->show();
+            m_columnWidgets[i]->setVisible(true);
         }
     }
     //Check out the column count.
@@ -80,12 +80,6 @@ void KNMusicMainPlayerContent::setColumnCount(const int &columnCount)
         }
         break;
     case 2:
-        //Reset the relationship.
-        if(m_columnWidgets[0]!=nullptr)
-        {
-            //Change the parent relationship.
-            m_columnWidgets[0]->setParent(this);
-        }
         //Add the No.1 and No.2 widgets to switcher.
         for(int i=1; i<3; ++i)
         {
@@ -98,15 +92,6 @@ void KNMusicMainPlayerContent::setColumnCount(const int &columnCount)
         }
         break;
     case 3:
-        //Reset the relationship.
-        if(m_columnWidgets[0]!=nullptr)
-        {
-            m_columnWidgets[0]->setParent(this);
-        }
-        if(m_columnWidgets[1]!=nullptr)
-        {
-            m_columnWidgets[1]->setParent(this);
-        }
         //Add playlist widget to the switcher.
         //Check the widget first.
         if(m_columnWidgets[2]!=nullptr)
@@ -181,6 +166,8 @@ inline void KNMusicMainPlayerContent::regeometryWidgets()
         //Check out the widget pointer.
         if(m_columnWidgets[0]!=nullptr)
         {
+            //Ensure the visible.
+            m_columnWidgets[0]->setVisible(true);
             //Resize the detail info panel widget.
             m_columnWidgets[0]->setGeometry(0,
                                             0,
@@ -195,6 +182,7 @@ inline void KNMusicMainPlayerContent::regeometryWidgets()
         break;
     }
     case 3:
+    {
         //Calculate detail info width.
         int detailInfoWidth=(qreal)width()*0.276;
         //Check out the widget pointer.
@@ -232,6 +220,7 @@ inline void KNMusicMainPlayerContent::regeometryWidgets()
                         height());
         }
         break;
+    }
     }
 }
 

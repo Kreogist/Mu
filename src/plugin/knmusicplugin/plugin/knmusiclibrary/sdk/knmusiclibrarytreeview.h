@@ -25,11 +25,19 @@ class KNMusicLibraryTreeView : public KNMusicTreeViewBase
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryTreeView(QWidget *parent = 0);
+    explicit KNMusicLibraryTreeView(QWidget *parent = 0,
+                                    KNMusicTab *tab = 0);
 
 signals:
 
 public slots:
+
+protected:
+    /*!
+     * \brief Reimplemented from KNMusicTreeViewBase::resetHeaderState().
+     */
+    void resetHeaderState() Q_DECL_OVERRIDE;
+
 };
 
 #endif // KNMUSICLIBRARYTREEVIEW_H

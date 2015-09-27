@@ -88,8 +88,17 @@ public:
         selectSourceSong(index.row());
     }
 
+    /*!
+     * \brief Scroll the tree view to position of a index via given the row in
+     * the source model.
+     * \param sourceRow The index row in source model.
+     */
     void scrollToSourceRow(const int &sourceRow);
 
+    /*!
+     * \brief Scroll the tree view to the position of a specific row.
+     * \param row The row of the index.
+     */
     void scrollToRow(const int &row);
 
 signals:

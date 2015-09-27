@@ -34,6 +34,8 @@ void KNMusicLibraryTab::showEvent(QShowEvent *event)
         //Change the visibility.
         showInAction()->setVisible(false);
     }
+    //Emit the load request.
+    emit requireLoadLibrary();
     //Do the original show event.
     KNMusicTab::showEvent(event);
 }

@@ -21,6 +21,8 @@
 
 #include <QThread>
 
+#include "knconnectionhandler.h"
+
 #include "knmusiclibrarybase.h"
 
 class KNJsonDatabase;
@@ -42,9 +44,14 @@ signals:
 
 public slots:
 
-private:
-    QThread m_databaseThread, m_imageThread;
+private slots:
+    void onActionLoadLibrary();
 
+private:
+    inline void linkLoadRequest(KNMusicLibraryTab *libraryTab);
+    QThread m_databaseThread, m_parseThread, m_imageThread;
+
+    KNConnectionHandler m_loadHandler;
     QString m_libraryPath;
     KNJsonDatabase *m_database;
     KNMusicLibraryModel *m_libraryModel;

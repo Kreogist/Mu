@@ -15,11 +15,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knthememanager.h"
+
+#include "knmusicutil.h"
 
 #include "knmusiclibrarytreeview.h"
 
-KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent) :
-    KNMusicTreeViewBase(parent)
+using namespace MusicUtil;
+
+KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent,
+                                               KNMusicTab *tab) :
+    KNMusicTreeViewBase(parent, tab)
 {
+    setObjectName("LibraryTreeView");
+    //Set properties.
+    setSortingEnabled(true);
+    //Link to theme manager.
+    knTheme->registerWidget(this);
+}
+
+void KNMusicLibraryTreeView::resetHeaderState()
+{
+    //Do the original header reset.
+    KNMusicTreeViewBase::resetHeaderState();
+    //I'd like to let plays to see at default.
+    setColumnHidden(Plays, false);
+    //No more hack here, move the display data index one by one.
+    moveToFirst(MusicRowState);
+    //Set the index
+    setColumnWidth(MusicRowState, fontMetrics().width('6')*4+30);
 }
 

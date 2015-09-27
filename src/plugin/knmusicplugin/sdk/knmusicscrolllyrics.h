@@ -71,13 +71,15 @@ public slots:
     void reset();
 
     /*!
-     * \brief moveToLine
-     * \param lineIndex
+     * \brief Reimplemented from KNMusicLyricsBase::moveToLine().
      */
     void moveToLine(const int &lineIndex) Q_DECL_OVERRIDE;
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    /*!
+     * \brief Reimplemented from KNMusicLyricsBase::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionLyricsMoved(const int &frame);

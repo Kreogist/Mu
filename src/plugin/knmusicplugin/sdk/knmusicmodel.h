@@ -20,6 +20,7 @@
 #define KNMUSICMODEL_H
 
 #include <QList>
+#include <QUrl>
 
 #include "knmusicglobal.h"
 #include <QStandardItemModel>
@@ -51,22 +52,16 @@ public:
     explicit KNMusicModel(QObject *parent = 0);
 
     /*!
-     * \brief Append several files to the music model.
-     * \param filePaths The file path list.
-     */
-    void appendFiles(const QStringList &filePaths);
-
-    /*!
      * \brief Append a music to the end of the model.
      * \param detailInfo The KNMusicDetailInfo class of the music.
      */
-    void appendRow(const KNMusicDetailInfo &detailInfo);
+    virtual void appendRow(const KNMusicDetailInfo &detailInfo);
 
     /*!
      * \brief Append several musics to the end of the model.
      * \param detailInfos The KNMusicDetailInfo list of the music.
      */
-    void appendRows(const QList<KNMusicDetailInfo> &detailInfos);
+    virtual void appendRows(const QList<KNMusicDetailInfo> &detailInfos);
 
     /*!
      * \brief Insert a music to the specific position of the model.
@@ -74,7 +69,7 @@ public:
      * \param detailInfo The KNMusicDetailInfo class of the music.
      * \return If insert the music successful, it will be true.
      */
-    bool insertRow(int row, const KNMusicDetailInfo &detailInfo);
+    virtual bool insertRow(int row, const KNMusicDetailInfo &detailInfo);
 
     /*!
      * \brief Insert several music detail infos to the specific position of the
@@ -83,7 +78,8 @@ public:
      * \param detailInfos The KNMusicDetailInfo list of the music.
      * \return If insert the music list successful, it will be true.
      */
-    bool insertMusicRows(int row, const QList<KNMusicDetailInfo> &detailInfos);
+    virtual bool insertMusicRows(int row,
+                                 const QList<KNMusicDetailInfo> &detailInfos);
 
     /*!
      * \brief Update one music row into a new one. Notice that this will update
@@ -94,7 +90,7 @@ public:
      * one.
      * \return If the row update successfully, it will be true.
      */
-    bool updateRow(int row, KNMusicDetailInfo detailInfo);
+    virtual bool updateRow(int row, KNMusicDetailInfo detailInfo);
 
     /*!
      * \brief Replace one music row into a new one. Different from update row,
@@ -104,7 +100,7 @@ public:
      * one.
      * \return If the row replace successfully, it will be true.
      */
-    bool replaceRow(int row, const KNMusicDetailInfo &detailInfo);
+    virtual bool replaceRow(int row, const KNMusicDetailInfo &detailInfo);
 
     /*!
      * \brief Remove several rows of music from the model.
@@ -127,7 +123,7 @@ public:
     /*!
      * \brief Remove all the music rows in the model.
      */
-    void clear();
+    virtual void clear();
 
     /*!
      * \brief Reimplemented from QAbstractTableModel::rowCount().
@@ -298,6 +294,18 @@ public slots:
      * \param playingIndex
      */
     void setPlayingIndex(const QModelIndex &playingIndex);
+
+    /*!
+     * \brief Append several files to the music model.
+     * \param filePaths The file path list.
+     */
+    void appendFiles(const QStringList &filePaths);
+
+    /*!
+     * \brief Append several urls to the music model.
+     * \param urls The url list.
+     */
+    void appendUrls(const QList<QUrl> &urls);
 
 protected:
     /*!

@@ -23,8 +23,8 @@
 
 #include <QDebug>
 
-#define MajorVersion 2
-#define MinorVersion 1
+#define MajorVersion 3
+#define MinorVersion 0
 #define MaxOperateCount 300
 
 KNJsonDatabase::KNJsonDatabase(QObject *parent) :
@@ -87,7 +87,7 @@ bool KNJsonDatabase::read()
         return false;
     }
     //Check the version of the database.
-    if(contentObject.value("Major").toInt()>MajorVersion ||
+    if(contentObject.value("Major").toInt()!=MajorVersion ||
             contentObject.value("Minor").toInt()>MinorVersion)
     {
         //This is crate by a higher version.
@@ -155,6 +155,12 @@ void KNJsonDatabase::removeAt(int i)
     m_dataField.removeAt(i);
     //Count a operate.
     count();
+}
+
+void KNJsonDatabase::clear()
+{
+    //Reset the data field.
+    m_dataField=QJsonArray();
 }
 
 QJsonValue KNJsonDatabase::at(int i)

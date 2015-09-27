@@ -34,20 +34,26 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent),
     m_libraryPath(knMusicGlobal->musicLibraryPath()+"/Library"),
     m_database(new KNJsonDatabase),
-    m_libraryModel(new KNMusicLibraryModel(this)),
+    m_libraryModel(new KNMusicLibraryModel(&m_parseThread, this)),
     m_songTab(new KNMusicLibrarySongTab)
 {
     //Configure the music database.
     // Move to working thread.
     m_database->moveToThread(&m_databaseThread);
+    // Set the database file.
     m_database->link(m_libraryPath+"/Music.db");
-    // Initial the music image manager.
 
     //Configure the library tabs.
     m_libraryModel->setDatabase(m_database);
 
+    //Configure the tabs.
+    // Song tab.
+    m_songTab->setLibraryModel(m_libraryModel);
+    linkLoadRequest(m_songTab);
+
     //Start up threads.
     m_databaseThread.start();
+    m_parseThread.start();
     m_imageThread.start();
 }
 
@@ -55,9 +61,11 @@ KNMusicLibrary::~KNMusicLibrary()
 {
     //Quit and wait for thread quit.
     m_databaseThread.quit();
+    m_parseThread.quit();
     m_imageThread.quit();
     //Wait for quitting.
     m_databaseThread.wait();
+    m_parseThread.wait();
     m_imageThread.wait();
 
     //Delete the database object.
@@ -82,6 +90,24 @@ KNMusicTab *KNMusicLibrary::albumTab()
 KNMusicTab *KNMusicLibrary::genreTab()
 {
     return nullptr;
+}
+
+void KNMusicLibrary::onActionLoadLibrary()
+{
+    //Disconnect all links.
+    m_loadHandler.disconnectAll();
+    //Recover the library model.
+    m_libraryModel->recoverModel();
+    //Emit the load signal.
+    ;
+}
+
+void KNMusicLibrary::linkLoadRequest(KNMusicLibraryTab *libraryTab)
+{
+    //Link the library tab, add to load request handler.
+    m_loadHandler.append(
+                connect(libraryTab, &KNMusicLibraryTab::requireLoadLibrary,
+                        this, &KNMusicLibrary::onActionLoadLibrary));
 }
 
 

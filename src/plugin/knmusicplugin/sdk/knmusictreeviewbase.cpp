@@ -727,6 +727,7 @@ inline bool KNMusicTreeViewBase::showDetailTooltip(const QPoint &indexPosition)
     return true;
 }
 
+
 bool KNMusicTreeViewBase::animate() const
 {
     return m_animate;

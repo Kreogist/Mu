@@ -30,6 +30,10 @@ class KNMusicLibrarySongTab : public KNMusicLibraryTab
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibrarySongTab widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLibrarySongTab(QWidget *parent = 0);
 
     /*!

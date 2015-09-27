@@ -31,6 +31,8 @@ public:
 signals:
 
 public slots:
+
+protected:
     void resetHeaderState();
 };
 

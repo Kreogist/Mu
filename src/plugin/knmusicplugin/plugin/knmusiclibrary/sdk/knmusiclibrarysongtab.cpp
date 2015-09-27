@@ -40,7 +40,7 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     m_dropProxy(new KNDropProxyContainer(this)),
     m_emptyHint(new KNMusicLibraryEmptyHint(this)),
     m_libraryModel(nullptr),
-    m_treeView(new KNMusicLibraryTreeView(this)),
+    m_treeView(new KNMusicLibraryTreeView(this, this)),
     m_showInSongTab(new QAction(this))
 {
     //Set properties.
@@ -50,8 +50,6 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     //Configure the show in action.
     connect(m_showInSongTab, &QAction::triggered,
             this, &KNMusicLibrarySongTab::onActionShowInSong);
-    //Configure the tree view.
-
     //Configure the drop proxy widget.
     m_dropProxy->setFocusProxy(m_treeView);
     m_dropProxy->installEventFilter(m_treeView);
@@ -143,9 +141,17 @@ void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
     //Give the library model to the tree view.
     m_treeView->setMusicModel(m_libraryModel);
     //Link the analysis requirement to the library model.
-    ;
+    connect(m_dropProxy, &KNDropProxyContainer::urlsDropped,
+            m_libraryModel, &KNMusicLibraryModel::appendUrls);
+    connect(m_emptyHint, &KNMusicLibraryEmptyHint::urlsDropped,
+            m_libraryModel, &KNMusicLibraryModel::appendUrls);
+    //Link the library model signal response to the widgets.
+    connect(m_libraryModel, &KNMusicLibraryModel::libraryNotEmpty,
+            m_emptyStateWidget, &KNEmptyStateWidget::showContentWidget);
+    connect(m_libraryModel, &KNMusicLibraryModel::libraryEmpty,
+            m_emptyStateWidget, &KNEmptyStateWidget::showEmptyWidget);
     //Set the default sort state.
-    //!FIXME: Add codes here.
+    m_treeView->sortByColumn(Name, Qt::AscendingOrder);
 }
 
 void KNMusicLibrarySongTab::resizeEvent(QResizeEvent *event)

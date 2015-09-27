@@ -63,6 +63,12 @@ void KNMusicModel::appendFiles(const QStringList &filePaths)
     emit requireAnalysisFiles(filePaths);
 }
 
+void KNMusicModel::appendUrls(const QList<QUrl> &urls)
+{
+    //Simply ask to analysis the urls.
+    emit requireAnalysisFiles(KNUtil::urlListToPathList(urls));
+}
+
 void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
     //Follow the documentation, we have to do this.

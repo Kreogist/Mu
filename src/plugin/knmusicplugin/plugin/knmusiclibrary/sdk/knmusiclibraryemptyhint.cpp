@@ -101,12 +101,13 @@ void KNMusicLibraryEmptyHint::retranslate()
 void KNMusicLibraryEmptyHint::onActionAddToLibrary()
 {
     //Get the added file list.
-    QStringList addedFiles=QFileDialog::getOpenFileNames(this,
-                                                         tr("Add To Library"));
+    QList<QUrl> addedUrls=QFileDialog::getOpenFileUrls(this,
+                                                       tr("Add To Library"));
     //If there's any file we can get, ask to analysis these files.
-    if(!addedFiles.isEmpty())
+    if(!addedUrls.isEmpty())
     {
-//        emit requireAnalysisFiles(addedFiles);
+        //Use urls dropped as the signal to ask for adding the files.
+        emit urlsDropped(addedUrls);
     }
 }
 

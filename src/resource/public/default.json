@@ -31,6 +31,16 @@
     "LibraryEmptyHintLabel" : {
         "Parent" : "LibraryEmptyHint"
     },
+    "LibraryTreeView" : {
+        "Parent" : "MainWindow",
+        "AlternateBase" : "#FFFFFF20",
+        "Base" : "#202020",
+        "Window" : "#202020",
+        "Text" : "#FFFFFF",
+        "Button" : "#FFFFFF",
+        "Highlight" : "#505050",
+        "HighlightedText" : "#F7CF3D"
+    },
     "MusicTreeViewHeaderMenu" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

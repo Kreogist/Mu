@@ -18,12 +18,173 @@
 
 #include "knjsondatabase.h"
 
+#include "knmusicsearcher.h"
+#include "knmusicanalysisqueue.h"
+
 #include "knmusiclibrarymodel.h"
 
-KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
-    KNMusicModel(parent)
+#include <QDebug>
+
+KNMusicLibraryModel::KNMusicLibraryModel(QThread *workingThread,
+                                         QObject *parent) :
+    KNMusicModel(parent),
+    m_database(nullptr),
+    m_searcher(new KNMusicSearcher),
+    m_analysisQueue(new KNMusicAnalysisQueue)
 {
-    ;
+    //Move the searcher to working thread.
+    m_searcher->moveToThread(workingThread);
+    //Link the require add signal to searcher.
+    connect(this, &KNMusicLibraryModel::requireAnalysisFiles,
+            m_searcher, &KNMusicSearcher::analysisPaths,
+            Qt::QueuedConnection);
+
+    //Move the analysis queue to wokring thread.
+    m_analysisQueue->moveToThread(workingThread);
+    //Link the searcher with the analysis queue.
+    connect(m_searcher, &KNMusicSearcher::findFile,
+            m_analysisQueue, &KNMusicAnalysisQueue::addFile,
+            Qt::QueuedConnection);
+    connect(m_analysisQueue, &KNMusicAnalysisQueue::analysisComplete,
+            this, &KNMusicLibraryModel::onActionAnalysisComplete,
+            Qt::QueuedConnection);
+}
+
+KNMusicLibraryModel::~KNMusicLibraryModel()
+{
+    //Write all the database data to the harddisk.
+    m_database->write();
+}
+
+void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
+{
+    //Append data to the database.
+    m_database->append(generateDataArray(detailInfo));
+    //Do the original append operations.
+    KNMusicModel::appendRow(detailInfo);
+    //Check out the row count.
+    if(rowCount()==1)
+    {
+        //This is the first record, emit the signal.
+        emit libraryNotEmpty();
+    }
+}
+
+void KNMusicLibraryModel::appendRows(
+        const QList<KNMusicDetailInfo> &detailInfos)
+{
+    //Append all the data to the databases.
+    for(auto i : detailInfos)
+    {
+        //Append all the detail info to the database.
+        m_database->append(generateDataArray(i));
+    }
+    //Do the original append operations.
+    KNMusicModel::appendRows(detailInfos);
+    //Check out the row count.
+    if(rowCount()==1)
+    {
+        //This is the first record, emit the signal.
+        emit libraryNotEmpty();
+    }
+}
+
+bool KNMusicLibraryModel::insertRow(int row,
+                                    const KNMusicDetailInfo &detailInfo)
+{
+    //Insert the array to the database.
+    m_database->insert(row, generateDataArray(detailInfo));
+    //Check out the database size.
+    if(m_database->size()==1)
+    {
+        //This is the first record, emit the signal.
+        emit libraryNotEmpty();
+    }
+    //Do the original append operation.
+    return KNMusicModel::insertRow(row, detailInfo);
+}
+
+bool KNMusicLibraryModel::insertMusicRows(int row,
+                                          const QList<KNMusicDetailInfo> &detailInfos)
+{
+    //Insert the array to the database.
+    for(int i=detailInfos.size()-1; i>-1; --i)
+    {
+        //Insert the data to the specific position.
+        m_database->insert(row, generateDataArray(detailInfos.at(i)));
+    }
+    //Check out the database size.
+    if(m_database->size()==1)
+    {
+        //This is the first record, emit the signal.
+        emit libraryNotEmpty();
+    }
+    //Do the original insert operation.
+    return KNMusicModel::insertMusicRows(row, detailInfos);
+}
+
+bool KNMusicLibraryModel::updateRow(int row, KNMusicDetailInfo detailInfo)
+{
+    //Do the original update operation.
+    bool result=KNMusicModel::updateRow(row, detailInfo);
+    //Update the data in the database.
+    m_database->replace(row, generateDataArray(rowDetailInfo(row)));
+    //Give the result back.
+    return result;
+}
+
+bool KNMusicLibraryModel::replaceRow(int row,
+                                     const KNMusicDetailInfo &detailInfo)
+{
+    //Replace the data in the database.
+    m_database->replace(row, generateDataArray(detailInfo));
+    //Do the original operation.
+    return KNMusicModel::replaceRow(row, detailInfo);
+}
+
+bool KNMusicLibraryModel::removeRows(int position,
+                                     int rows,
+                                     const QModelIndex &index)
+{
+    //Remove the data from the database.
+    int rowsWaitToRemove=rows;
+    //Remove 'rows' times from position in the database.
+    while(rowsWaitToRemove--)
+    {
+        //Remove the position row.
+        m_database->removeAt(position);
+    }
+    //Check out the database size.
+    if(m_database->size()==0)
+    {
+        //The model will be empty again, emit this signal.
+        emit libraryEmpty();
+    }
+    //Do the original remove rows operations.
+    return KNMusicModel::removeRows(position, rows, index);
+}
+
+void KNMusicLibraryModel::clear()
+{
+    //Clear up the database.
+    m_database->clear();
+    //Do the model clear.
+    KNMusicModel::clear();
+    //The library is empty, emit the signal.
+    emit libraryEmpty();
+}
+
+bool KNMusicLibraryModel::setData(const QModelIndex &index,
+                                  const QVariant &value,
+                                  int role)
+{
+    //Do the original data set operation.
+    bool result=KNMusicModel::setData(index, value, role);
+    //Update the data in the database.
+    m_database->replace(index.row(),
+                        generateDataArray(rowDetailInfo(index.row())));
+    //Give back the result.
+    return result;
 }
 
 void KNMusicLibraryModel::recoverModel()
@@ -36,6 +197,12 @@ void KNMusicLibraryModel::recoverModel()
     }
     //Read the database information.
     m_database->read();
+    //Check out whether the database is empty.
+    if(m_database->size()==0)
+    {
+        //Mission complete.
+        return;
+    }
     //Initial the total duration.
     quint64 totalDuration=0;
     //Start to insert data to the model.
@@ -59,9 +226,15 @@ void KNMusicLibraryModel::recoverModel()
     //Because this operation change the row count, the row count changed signal
     //will be emitted.
     emit rowCountChanged();
+    //Check out the data.
+    if(rowCount()>0)
+    {
+        //Before this the row count cannot be 0.
+        emit libraryNotEmpty();
+    }
 }
 
-KNMusicDetailInfo KNMusicLibraryModel::generateDetailInfo(
+inline KNMusicDetailInfo KNMusicLibraryModel::generateDetailInfo(
         const QJsonArray &dataArray)
 {
     //Generate a new detail info.
@@ -107,6 +280,51 @@ KNMusicDetailInfo KNMusicLibraryModel::generateDetailInfo(
     detailInfo.samplingRate=propertyArray.at(PropertySamplingRate).toInt();
     return detailInfo;
 }
+
+inline QJsonArray KNMusicLibraryModel::generateDataArray(
+        const KNMusicDetailInfo &detailInfo)
+{
+    //Generate text data JSON array.
+    QJsonArray textArray;
+    //Insert data to array.
+    for(int i=0; i<MusicDataCount; ++i)
+    {
+        //Add the text data of detail info to text array.
+        textArray.append(detailInfo.textLists[i].toString());
+    }
+    //Generate property data JSON array.
+    QJsonArray propertyArray;
+    //Append property data in order to the array.
+    propertyArray.append(detailInfo.filePath); //PropertyFilePath
+    propertyArray.append(detailInfo.fileName); //PropertyFileName,
+    propertyArray.append(detailInfo.coverImageHash); //PropertyCoverImageHash,
+    propertyArray.append(detailInfo.bitRate); //PropertyBitRate,
+    propertyArray.append(detailInfo.samplingRate); //PropertySamplingRate,
+    //PropertySize,
+    propertyArray.append(QString::number(detailInfo.size));
+    //PropertyDuration,
+    propertyArray.append(QString::number(detailInfo.duration));
+    //PropertyDateAdded,
+    propertyArray.append(KNMusicUtil::dateTimeToData(detailInfo.dateAdded));
+    //PropertyDateModified,
+    propertyArray.append(KNMusicUtil::dateTimeToData(detailInfo.dateModified));
+    //PropertyLastPlayed,
+    propertyArray.append(
+                KNMusicUtil::dateTimeToData(detailInfo.dateLastPlayed));
+    //PropertyTrackFilePath,
+    propertyArray.append(detailInfo.trackFilePath);
+    //PropertyTrackIndex,
+    propertyArray.append(detailInfo.trackIndex);
+    //PropertyStartPosition,
+    propertyArray.append(QString::number(detailInfo.startPosition));
+    //Generate the data array.
+    QJsonArray dataArray;
+    dataArray.append(textArray);
+    dataArray.append(propertyArray);
+    //Give back the data array.
+    return dataArray;
+}
+
 KNJsonDatabase *KNMusicLibraryModel::database() const
 {
     return m_database;
@@ -117,3 +335,26 @@ void KNMusicLibraryModel::setDatabase(KNJsonDatabase *database)
     m_database = database;
 }
 
+void KNMusicLibraryModel::onActionAnalysisComplete(
+        const KNMusicAnalysisItem &analysisItem)
+{
+    //Check out whether the detail info is existed in the model, find the detail
+    //info in the model.
+    int detailInfoIndex=detailInfoRow(analysisItem.detailInfo);
+    //Check out the index.
+    if(detailInfoIndex!=-1)
+    {
+        //Update the detail info.
+        updateRow(detailInfoIndex, analysisItem.detailInfo);
+        //Mission complete.
+        return;
+    }
+    //Add the detail info to the model.
+    appendRow(analysisItem.detailInfo);
+    //Check out the row after append the row.
+    if(rowCount()==1)
+    {
+        //Emit the library not empty signal.
+        ;
+    }
+}
