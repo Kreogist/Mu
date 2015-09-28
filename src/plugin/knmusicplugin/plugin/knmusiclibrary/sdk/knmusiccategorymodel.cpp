@@ -103,6 +103,8 @@ QVariant KNMusicCategoryModel::data(const QModelIndex &index, int role) const
         return item.albumArtHash.isEmpty()?
                     m_noAlbumArt:
                     item.albumArtHash.first();
+    case Qt::SizeHintRole:
+        return QSize(44, 44);
     case CategorySize:
         return item.count;
     default:
@@ -130,7 +132,9 @@ QVariant KNMusicCategoryModel::headerData(int section,
 void KNMusicCategoryModel::setNoAlbumArt(const QPixmap &noAlbumArt)
 {
     //Save the no album art icon data.
-    m_noAlbumArt = QVariant(noAlbumArt.scaled(40, 40));
+    m_noAlbumArt = QVariant(noAlbumArt.scaled(QSize(40, 40),
+                                              Qt::KeepAspectRatio,
+                                              Qt::SmoothTransformation));
 }
 
 QString KNMusicCategoryModel::noCategoryText() const
