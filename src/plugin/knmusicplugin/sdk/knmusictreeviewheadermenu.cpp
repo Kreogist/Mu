@@ -82,6 +82,7 @@ KNMusicTreeViewHeaderMenu::KNMusicTreeViewHeaderMenu(QWidget *parent) :
 void KNMusicTreeViewHeaderMenu::setVisibleState(const int &logicalIndex,
                                                 const bool &visible)
 {
+    //Set the check state to mark the visible.
     m_itemVisible[logicalIndex]->setChecked(visible);
 }
 
@@ -92,6 +93,13 @@ void KNMusicTreeViewHeaderMenu::setMouseDownLogicalIndex(const int &index)
     m_tweakWidth->setVisible(index!=-1 && index<MusicDataCount);
     //Save the current index.
     m_mouseDownLogicalIndex=index;
+}
+
+void KNMusicTreeViewHeaderMenu::setActionVisible(const int &index,
+                                                 const bool &actionVisible)
+{
+    //Change the visible of the action.
+    m_itemVisible[index]->setVisible(actionVisible);
 }
 
 void KNMusicTreeViewHeaderMenu::retranslate()

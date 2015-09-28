@@ -23,13 +23,15 @@
     "MusicMultiMenu" : {
         "Parent" : "MusicSoloMenu"
     },
-    "CategoryDisplayLabel" : {
-        "Parent" : "MainWindow",
-        "WindowText" : "#FFFFFF"
-    },
     "CategoryDisplayTreeView" : {
         "Parent" : "MainWindow",
-        "Base" : "#00000000"
+        "Base" : "#00000000",
+        "AlternateBase" : "#FFFFFF20",
+        "Window" : "#202020",
+        "Text" : "#FFFFFF",
+        "Button" : "#FFFFFF",
+        "Highlight" : "#505050",
+        "HighlightedText" : "#F7CF3D"
     },
     "LibraryEmptyHint" : {
         "Parent" : "MainWindow",
@@ -108,6 +110,17 @@
         "Button" : "#FFFFFF",
         "Highlight" : "#505050",
         "HighlightedText" : "#F7CF3D"
+    },
+    "CategoryInformationContainer" : {
+        "Parent" : "MainWindowHeader"
+    },
+    "CategoryViewerLabel" : {
+        "Parent" : "CategoryInformationContainer",
+        "WindowText" : "#FFFFFF"
+    },
+    "CategoryDetailLabel" : {
+        "Parent" : "CategoryInformationContainer",
+        "WindowText" : "#FFFFFFA0"
     },
     "CategoryListViewBase" : {
         "Parent" : "MainWindow",

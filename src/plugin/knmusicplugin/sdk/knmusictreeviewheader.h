@@ -47,6 +47,11 @@ signals:
     void requireResizeColumnToContents(int column);
 
 public slots:
+    /*!
+     * \brief Hide a Column visible control action from the menu.
+     * \param column The column index.
+     */
+    void hideColumnVisibleAction(const int &column);
 
 private slots:
     void resizeAllColumns();

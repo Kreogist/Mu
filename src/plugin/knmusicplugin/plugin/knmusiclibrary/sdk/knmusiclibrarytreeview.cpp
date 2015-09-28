@@ -18,6 +18,7 @@
 #include "knthememanager.h"
 
 #include "knmusicutil.h"
+#include "knmusictreeviewheader.h"
 #include "knmusicproxymodel.h"
 
 #include "knmusiclibrarytreeview.h"
@@ -37,6 +38,14 @@ KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent,
 
 void KNMusicLibraryTreeView::setCategoryColumn(const int &column)
 {
+    //Hide the column from the column visible control menu.
+    //Cast the header as music tree view header.
+    KNMusicTreeViewHeader *musicTreeViewHeader=
+            static_cast<KNMusicTreeViewHeader *>(header());
+    //Hide the column first.
+    musicTreeViewHeader->setSectionHidden(column, true);
+    //Hide the column action.
+    musicTreeViewHeader->hideColumnVisibleAction(column);
     //Set the proxy model category column.
     proxyModel()->setCategoryColumn(column);
 }
@@ -55,7 +64,13 @@ void KNMusicLibraryTreeView::resetHeaderState()
     setColumnHidden(Plays, false);
     //No more hack here, move the display data index one by one.
     moveToFirst(MusicRowState);
-    //Set the index
+    //Set enough width for the music row state data.
     setColumnWidth(MusicRowState, fontMetrics().width('6')*4+30);
+    //Check out the category column.
+    if(proxyModel()->categoryColumn()!=-1)
+    {
+        //Hide the category column.
+        header()->setSectionHidden(proxyModel()->categoryColumn(), true);
+    }
 }
 

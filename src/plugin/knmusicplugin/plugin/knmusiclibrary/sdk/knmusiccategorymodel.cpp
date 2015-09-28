@@ -130,7 +130,7 @@ QVariant KNMusicCategoryModel::headerData(int section,
 void KNMusicCategoryModel::setNoAlbumArt(const QPixmap &noAlbumArt)
 {
     //Save the no album art icon data.
-    m_noAlbumArt = QVariant(noAlbumArt.scaled(12, 12));
+    m_noAlbumArt = QVariant(noAlbumArt.scaled(40, 40));
 }
 
 QString KNMusicCategoryModel::noCategoryText() const
@@ -222,7 +222,7 @@ void KNMusicCategoryModel::onCategoryAdd(const KNMusicDetailInfo &detailInfo)
         if(m_categoryList.at(i).displayText==categoryText)
         {
             //Get the category list data.
-            CategoryItem item=m_categoryList.at(0);
+            CategoryItem item=m_categoryList.at(i);
             //Increase the count.
             ++(item.count);
             //Check out the cover image hash.

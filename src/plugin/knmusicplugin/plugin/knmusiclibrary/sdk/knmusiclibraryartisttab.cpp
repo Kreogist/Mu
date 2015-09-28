@@ -52,6 +52,8 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
     //Configure the show in action.
     connect(m_showInArtistTab, &QAction::triggered,
             this, &KNMusicLibraryArtistTab::onActionShowInArtist);
+    //Configure the artist display.
+    m_artistDisplay->setCategoryColumn(Artist);
     //Configure the tab order.
     m_artistList->setTabOrder(m_artistList, m_artistDisplay);
 
@@ -216,6 +218,20 @@ void KNMusicLibraryArtistTab::retranslate()
 {
     //Update the tab text.
     m_tab->setText(tr("Artists"));
+    //Set the action caption.
+    m_showInArtistTab->setText(tr("Go to Artist"));
+    //Update the no category text.
+    if(m_categoryModel!=nullptr)
+    {
+        //Set no category text.
+        m_categoryModel->setNoCategoryText(tr("No Artist"));
+        //Update the detail info, might update the translation.
+        if(m_artistList->currentIndex().isValid())
+        {
+            //Use category index changed signal to update labels.
+            onActionCategoryIndexChanged(m_artistList->currentIndex());
+        }
+    }
 }
 
 void KNMusicLibraryArtistTab::onActionShowInArtist()
@@ -242,7 +258,7 @@ void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(
     if(m_currentSourceIndex.row()==0)
     {
         //Ask the artist display to show the no category item.
-        ;
+        m_artistDisplay;
         //Mission complete.
         return;
     }

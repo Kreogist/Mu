@@ -36,6 +36,12 @@ KNMusicTreeViewHeader::KNMusicTreeViewHeader(QWidget *parent) :
             this, &KNMusicTreeViewHeader::requireResizeColumnToContents);
 }
 
+void KNMusicTreeViewHeader::hideColumnVisibleAction(const int &column)
+{
+    //Hide the specific column action.
+    m_headerMenu->setActionVisible(column, false);
+}
+
 void KNMusicTreeViewHeader::resizeAllColumns()
 {
     //Resize all the visible section.

@@ -23,8 +23,9 @@
 
 class QGraphicsOpacityEffect;
 class QLabel;
-class KNMusicTab;
+class KNScrollLabel;
 class KNSideShadowWidget;
+class KNMusicTab;
 class KNMusicLibraryTreeView;
 class KNMusicLibraryModel;
 class KNMusicCategoryDisplay : public QWidget
@@ -38,7 +39,10 @@ signals:
 public slots:
     void setLibraryModel(KNMusicLibraryModel *model);
     void scrollToSourceRow(const int &row);
+    void showNoCategoryItem(const QString &title);
+    void setCategoryColumn(const int &column);
     void setCategoryText(const QString &text);
+    void setCategoryIcon(const QPixmap &pixmap);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -48,13 +52,16 @@ private slots:
     void onActionSearch();
 
 private:
+    inline void updateDetailInfo();
     inline void updateBackgroundIcon();
+    inline void updateBackgroundIconContent();
     QRadialGradient m_iconGradient;
-    QString m_songCount[3], m_minuateCount[3], m_searchResultIn,
-            m_searchCount[3];
+    QPixmap m_categoryIcon;
+    QString m_songCount[3], m_searchResultIn, m_searchCount[3];
     QLabel *m_largeIcon;
     QGraphicsOpacityEffect *m_iconEffect;
-    QLabel *m_categoryTitle, *m_categoryInfo;
+    KNScrollLabel *m_categoryTitle;
+    QLabel *m_categoryInfo;
     KNMusicLibraryTreeView *m_categoryTreeView;
     KNSideShadowWidget *m_leftShadow;
 };

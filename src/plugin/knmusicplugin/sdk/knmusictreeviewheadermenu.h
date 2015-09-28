@@ -77,6 +77,13 @@ public slots:
      */
     void setMouseDownLogicalIndex(const int &index);
 
+    /*!
+     * \brief Set the visibility of the column control action.
+     * \param index The index of column.
+     * \param actionVisible The visible of the action.
+     */
+    void setActionVisible(const int &index, const bool &actionVisible);
+
 private slots:
     void retranslate();
     void onActionVisibleChange(const int &index);
