@@ -16,31 +16,38 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICLIBRARYTREEVIEW_H
-#define KNMUSICLIBRARYTREEVIEW_H
+#ifndef KNMUSICCATEGORYPROXYMODEL_H
+#define KNMUSICCATEGORYPROXYMODEL_H
 
-#include "knmusictreeviewbase.h"
+#include <QSortFilterProxyModel>
 
-class KNMusicLibraryTreeView : public KNMusicTreeViewBase
+class KNMusicCategoryProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryTreeView(QWidget *parent = 0,
-                                    KNMusicTab *tab = 0);
+    explicit KNMusicCategoryProxyModel(QObject *parent = 0);
+
+    QModelIndex categoryIndex(const QVariant &categoryText);
 
 signals:
 
 public slots:
-    void setCategoryColumn(const int &column);
-
-    void setCategoryText(const QVariant &text);
 
 protected:
     /*!
-     * \brief Reimplemented from KNMusicTreeViewBase::resetHeaderState().
+     * \brief Reimplemented from QSortFilterProxyModel::lessThan().
      */
-    void resetHeaderState() Q_DECL_OVERRIDE;
+    bool lessThan(const QModelIndex &source_left,
+                  const QModelIndex &source_right) const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QSortFilterProxyModel::filterAcceptsRow().
+     */
+    bool filterAcceptsRow(int source_row,
+                          const QModelIndex &source_parent) const
+    Q_DECL_OVERRIDE;
+
+private:
 };
 
-#endif // KNMUSICLIBRARYTREEVIEW_H
+#endif // KNMUSICCATEGORYPROXYMODEL_H

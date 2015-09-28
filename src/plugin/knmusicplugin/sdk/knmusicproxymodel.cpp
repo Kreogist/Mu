@@ -22,7 +22,8 @@
 #include <QDebug>
 
 KNMusicProxyModel::KNMusicProxyModel(QObject *parent) :
-    QSortFilterProxyModel(parent)
+    QSortFilterProxyModel(parent),
+    m_categoryColumn(-1)
 {
     //Set properties.
     setFilterKeyColumn(-1); //Search for all columns.
@@ -93,6 +94,18 @@ bool KNMusicProxyModel::filterAcceptsRow(int source_row,
     Q_UNUSED(source_parent)
     //Get the source model.
     QAbstractItemModel *model=sourceModel();
+    //Check the validation of category column.
+    if(m_categoryColumn!=-1)
+    {
+        //Check out the category column data.
+        if(model->index(source_row,
+                        m_categoryColumn).data(Qt::DisplayRole) !=
+                m_categoryContent)
+        {
+            //Abandon the data which didn't match the category content.
+            return false;
+        }
+    }
     //Check the model is null or not, treat the null tree view as accept all
     //rows. Check the block list is empty or not.
     if(m_searchBlocks.isEmpty() || model==nullptr)
@@ -158,4 +171,30 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
         return propertyData.toString().contains(block.value.toString(),
                                                 Qt::CaseInsensitive);
     }
+}
+
+QVariant KNMusicProxyModel::categoryContent() const
+{
+    return m_categoryContent;
+}
+
+void KNMusicProxyModel::setCategoryContent(const QVariant &categoryContent)
+{
+    //Save the category content.
+    m_categoryContent = categoryContent;
+    //Set a filter text to update the whole proxy model.
+    setFilterFixedString("");
+}
+
+int KNMusicProxyModel::categoryColumn() const
+{
+    return m_categoryColumn;
+}
+
+void KNMusicProxyModel::setCategoryColumn(int categoryColumn)
+{
+    //Save the categroy column.
+    m_categoryColumn = categoryColumn;
+    //Set a filter text to update the whole proxy model.
+    setFilterFixedString("");
 }

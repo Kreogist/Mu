@@ -64,9 +64,8 @@ private slots:
     void onActionMouseInOut(const int &frame);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    inline void startAnime(const int &endFrame);
+    QTimeLine *m_mouseAnime;
     QPalette m_palette;
     QColor m_backgroundColor, m_textColor;
 };

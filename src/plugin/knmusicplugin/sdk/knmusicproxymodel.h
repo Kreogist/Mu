@@ -62,6 +62,12 @@ public:
         }
     }
 
+    int categoryColumn() const;
+    void setCategoryColumn(int categoryColumn);
+
+    QVariant categoryContent() const;
+    void setCategoryContent(const QVariant &categoryContent);
+
 signals:
 
 public slots:
@@ -91,6 +97,8 @@ private:
                                 const int &row,
                                 const KNMusicSearchBlock &block) const;
     QList<KNMusicSearchBlock> m_searchBlocks;
+    int m_categoryColumn;
+    QVariant m_categoryContent;
 };
 
 #endif // KNMUSICPROXYMODEL_H

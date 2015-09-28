@@ -23,6 +23,14 @@
     "MusicMultiMenu" : {
         "Parent" : "MusicSoloMenu"
     },
+    "CategoryDisplayLabel" : {
+        "Parent" : "MainWindow",
+        "WindowText" : "#FFFFFF"
+    },
+    "CategoryDisplayTreeView" : {
+        "Parent" : "MainWindow",
+        "Base" : "#00000000"
+    },
     "LibraryEmptyHint" : {
         "Parent" : "MainWindow",
         "Window" : "#353535",

@@ -30,6 +30,7 @@
 #include "knmusiclibraryemptyhint.h"
 #include "knmusiclibrarytreeview.h"
 #include "knmusicsolomenubase.h"
+#include "knmusicsearchbase.h"
 
 #include "knmusiclibrarysongtab.h"
 
@@ -64,6 +65,10 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     m_emptyStateWidget->setEmptyWidget(m_emptyHint);
     m_emptyStateWidget->setContentWidget(m_dropProxy);
     m_emptyStateWidget->showEmptyWidget();
+
+    //Link the search.
+    connect(knMusicGlobal->search(), &KNMusicSearchBase::requireSearch,
+            this, &KNMusicLibrarySongTab::onActionSearch);
 
     //Link the retranslate.
     knI18n->link(this, &KNMusicLibrarySongTab::retranslate);
@@ -183,7 +188,19 @@ void KNMusicLibrarySongTab::onActionShowInSong()
     }
 }
 
-void KNMusicLibrarySongTab::showAndSelectRow(const int &musicRow)
+void KNMusicLibrarySongTab::onActionSearch()
+{
+    //Check whether the proxy model is nullptr.
+    if(m_treeView->proxyModel()==nullptr)
+    {
+        //Ignore the search request.
+        return;
+    }
+    //Set the search rules to the proxy model.
+    m_treeView->proxyModel()->setSearchBlocks(knMusicGlobal->search()->rules());
+}
+
+inline void KNMusicLibrarySongTab::showAndSelectRow(const int &musicRow)
 {
     //Simply scroll to the special position.
     m_treeView->scrollToSourceRow(musicRow);

@@ -27,8 +27,7 @@
 
 KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     QListView(parent),
-    m_mouseIn(generateTimeLine(InBrightness)),
-    m_mouseOut(generateTimeLine(OutBrightness))
+    m_mouseAnime(new QTimeLine(200, this))
 {
     setObjectName("CategoryListViewBase");
     //Set properties.
@@ -44,9 +43,16 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     setSpacing(0);
     setUniformItemSizes(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-
     //Set viewport properties.
     viewport()->setContentsMargins(0, 0, 0, 0);
+
+    //Configure the mouse anime time line.
+    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    //Link the time line.
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMusicCategoryListViewBase::onActionMouseInOut);
+
     //Monitor the theme change signal.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMusicCategoryListViewBase::onActionPaletteChange);
@@ -67,7 +73,7 @@ void KNMusicCategoryListViewBase::enabledDragDrop()
 void KNMusicCategoryListViewBase::enterEvent(QEvent *event)
 {
     //Start the mouse in anime.
-    startAnime(m_mouseIn);
+    startAnime(InBrightness);
     //Do the original enter event.
     QListView::enterEvent(event);
 }
@@ -75,7 +81,7 @@ void KNMusicCategoryListViewBase::enterEvent(QEvent *event)
 void KNMusicCategoryListViewBase::leaveEvent(QEvent *event)
 {
     //Start the mouse out anime.
-    startAnime(m_mouseOut);
+    startAnime(OutBrightness);
     //Do the original leave event.
     QListView::leaveEvent(event);
 }
@@ -109,31 +115,12 @@ void KNMusicCategoryListViewBase::onActionMouseInOut(const int &frame)
     setPalette(m_palette);
 }
 
-inline QTimeLine *KNMusicCategoryListViewBase::generateTimeLine(
-        const int &endFrame)
+inline void KNMusicCategoryListViewBase::startAnime(const int &endFrame)
 {
-    //Generate the time line,
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    //Set the end frame.
-    timeLine->setEndFrame(endFrame);
+    //Stop all the time line.
+    m_mouseAnime->stop();
     //Configure the time line.
-    timeLine->setUpdateInterval(10);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    //Link the time line.
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNMusicCategoryListViewBase::onActionMouseInOut);
-    //Give back the time line.
-    return timeLine;
-}
-
-inline void KNMusicCategoryListViewBase::startAnime(QTimeLine *timeLine)
-{
-    //Stop all the animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Configure the time line.
-    timeLine->setStartFrame(m_backgroundColor.value());
+    m_mouseAnime->setFrameRange(m_backgroundColor.value(), endFrame);
     //Start the time line.
-    timeLine->start();
+    m_mouseAnime->start();
 }
-

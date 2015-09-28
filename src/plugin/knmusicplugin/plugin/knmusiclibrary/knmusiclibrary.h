@@ -28,6 +28,8 @@
 class KNJsonDatabase;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
+class KNMusicCategoryModel;
+class KNMusicLibraryCategoryTab;
 class KNMusicLibrary : public KNMusicLibraryBase
 {
     Q_OBJECT
@@ -48,6 +50,13 @@ private slots:
     void onActionLoadLibrary();
 
 private:
+    enum CategoryTabs
+    {
+        TabArtists,
+        TabAlbums,
+        TabGenres,
+        CategoryTabsCount
+    };
     inline void linkLoadRequest(KNMusicLibraryTab *libraryTab);
     QThread m_databaseThread, m_parseThread, m_imageThread;
 
@@ -56,6 +65,8 @@ private:
     KNJsonDatabase *m_database;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_songTab;
+    KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
+    KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
 };
 
 #endif // KNMUSICLIBRARY_H

@@ -309,7 +309,7 @@ void KNMainWindowContainer::resizeEvent(QResizeEvent *event)
     if(m_elementWidget[MainPlayer]!=nullptr)
     {
         //Resize the main player.
-        m_elementWidget[MainPlayer]->resize(width(), height());
+        m_elementWidget[MainPlayer]->resize(size());
     }
     //Resize the main widget and reposition the main widget if there's no
     //animation running.

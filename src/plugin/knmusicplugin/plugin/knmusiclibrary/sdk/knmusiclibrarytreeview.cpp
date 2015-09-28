@@ -18,6 +18,7 @@
 #include "knthememanager.h"
 
 #include "knmusicutil.h"
+#include "knmusicproxymodel.h"
 
 #include "knmusiclibrarytreeview.h"
 
@@ -32,6 +33,18 @@ KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent,
     setSortingEnabled(true);
     //Link to theme manager.
     knTheme->registerWidget(this);
+}
+
+void KNMusicLibraryTreeView::setCategoryColumn(const int &column)
+{
+    //Set the proxy model category column.
+    proxyModel()->setCategoryColumn(column);
+}
+
+void KNMusicLibraryTreeView::setCategoryText(const QVariant &text)
+{
+    //Set the proxy model category text.
+    proxyModel()->setCategoryContent(text);
 }
 
 void KNMusicLibraryTreeView::resetHeaderState()

@@ -74,6 +74,7 @@ protected:
 private slots:
     void retranslate();
     void onActionShowInSong();
+    void onActionSearch();
 
 private:
     inline void showAndSelectRow(const int &musicRow);

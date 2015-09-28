@@ -112,8 +112,8 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     // Configure the volume indicator and slider.
     m_volumeIcon->setFixedSize(32, 32);
     m_volumeIcon->setIcon(m_volumeSizeIcon[NoVolume]);
-    m_volumeSlider->setMinimumWidth(50);
-    m_volumeSlider->setMaximumWidth(100);
+    m_volumeSlider->setMinimumWidth(100);
+    m_volumeSlider->setMaximumWidth(150);
     // Initial and configure the buttons.
     for(int i=0; i<ControlButtonsCount; i++)
     {

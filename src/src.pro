@@ -37,7 +37,7 @@ TRANSLATIONS += \
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
 msvc: {
-    QMAKE_CXXFLAGS_RELEASE += -GL -Qpar -Qpar-report:1  -favor:INTEL64 -GA -Oy-
+    QMAKE_CXXFLAGS_RELEASE += -GL -Gw -Qpar -Qpar-report:1 -arch:AVX -favor:INTEL64 -GA
 }
 gcc: {
     CONFIG += mmx sse sse2 sse3
@@ -298,7 +298,12 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodel.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -460,7 +465,12 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytab.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarytreeview.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorytab.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodel.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategoryproxymodel.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.h
 
 RESOURCES += \
     resource/res.qrc

@@ -18,6 +18,7 @@
 
 #include "knjsondatabase.h"
 
+#include "knmusiccategorymodel.h"
 #include "knmusicsearcher.h"
 #include "knmusicanalysisqueue.h"
 
@@ -60,6 +61,8 @@ void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
     //Append data to the database.
     m_database->append(generateDataArray(detailInfo));
+    //Add the detail info to category models.
+    addCategoryDetailInfo(detailInfo);
     //Do the original append operations.
     KNMusicModel::appendRow(detailInfo);
     //Check out the row count.
@@ -78,6 +81,8 @@ void KNMusicLibraryModel::appendRows(
     {
         //Append all the detail info to the database.
         m_database->append(generateDataArray(i));
+        //Add the detail info to category models.
+        addCategoryDetailInfo(i);
     }
     //Do the original append operations.
     KNMusicModel::appendRows(detailInfos);
@@ -94,6 +99,8 @@ bool KNMusicLibraryModel::insertRow(int row,
 {
     //Insert the array to the database.
     m_database->insert(row, generateDataArray(detailInfo));
+    //Add the detail info to category models.
+    addCategoryDetailInfo(detailInfo);
     //Check out the database size.
     if(m_database->size()==1)
     {
@@ -104,14 +111,17 @@ bool KNMusicLibraryModel::insertRow(int row,
     return KNMusicModel::insertRow(row, detailInfo);
 }
 
-bool KNMusicLibraryModel::insertMusicRows(int row,
-                                          const QList<KNMusicDetailInfo> &detailInfos)
+bool KNMusicLibraryModel::insertMusicRows(
+        int row,
+        const QList<KNMusicDetailInfo> &detailInfos)
 {
     //Insert the array to the database.
     for(int i=detailInfos.size()-1; i>-1; --i)
     {
         //Insert the data to the specific position.
         m_database->insert(row, generateDataArray(detailInfos.at(i)));
+        //Add the detail info to category models.
+        addCategoryDetailInfo(detailInfos.at(i));
     }
     //Check out the database size.
     if(m_database->size()==1)
@@ -154,6 +164,12 @@ bool KNMusicLibraryModel::removeRows(int position,
         //Remove the position row.
         m_database->removeAt(position);
     }
+    //Remove the detail info from the category models.
+    for(int i=0; i<rows; ++i)
+    {
+        //Remove the data from the category model.
+        removeCategoryDetailInfo(rowDetailInfo(position+i));
+    }
     //Check out the database size.
     if(m_database->size()==0)
     {
@@ -168,6 +184,13 @@ void KNMusicLibraryModel::clear()
 {
     //Clear up the database.
     m_database->clear();
+    //Reset the category models.
+    //For all the category models,
+    for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
+    {
+        //Called the on action remove slot.
+        (*i)->reset();
+    }
     //Do the model clear.
     KNMusicModel::clear();
     //The library is empty, emit the signal.
@@ -216,6 +239,8 @@ void KNMusicLibraryModel::recoverModel()
         KNMusicDetailInfo turboDetailInfo=generateDetailInfo((*i).toArray());
         //Append it to the model.
         appendDetailInfo(turboDetailInfo);
+        //Add to category models.
+        addCategoryDetailInfo(turboDetailInfo);
         //Calcualte the total duration.
         totalDuration+=turboDetailInfo.duration;
     }
@@ -330,6 +355,12 @@ KNJsonDatabase *KNMusicLibraryModel::database() const
     return m_database;
 }
 
+void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
+{
+    //Append the model to the category models.
+    m_categoryModels.append(model);
+}
+
 void KNMusicLibraryModel::setDatabase(KNJsonDatabase *database)
 {
     m_database = database;
@@ -355,6 +386,28 @@ void KNMusicLibraryModel::onActionAnalysisComplete(
     if(rowCount()==1)
     {
         //Emit the library not empty signal.
-        ;
+        emit libraryNotEmpty();
+    }
+}
+
+inline void KNMusicLibraryModel::addCategoryDetailInfo(
+        const KNMusicDetailInfo &detailInfo)
+{
+    //For all the category models,
+    for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
+    {
+        //Called the on action add slot.
+        (*i)->onCategoryAdd(detailInfo);
+    }
+}
+
+inline void KNMusicLibraryModel::removeCategoryDetailInfo(
+        const KNMusicDetailInfo &detailInfo)
+{
+    //For all the category models,
+    for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
+    {
+        //Called the on action remove slot.
+        (*i)->onCategoryRemove(detailInfo);
     }
 }

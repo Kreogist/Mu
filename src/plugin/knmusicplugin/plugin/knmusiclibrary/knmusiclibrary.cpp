@@ -19,16 +19,21 @@
 
 //Dependences.
 #include "sdk/knmusiclibrarymodel.h"
+#include "sdk/knmusiccategorymodel.h"
 
 //Library SDK Ports.
 #include "sdk/knmusiclibrarytab.h"
 
 //Library SDK Plugins.
 #include "sdk/knmusiclibrarysongtab.h"
+#include "sdk/knmusiclibraryartisttab.h"
 
+#include "knmusicutil.h"
 #include "knmusicglobal.h"
 
 #include "knmusiclibrary.h"
+
+using namespace MusicUtil;
 
 KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent),
@@ -50,6 +55,20 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     // Song tab.
     m_songTab->setLibraryModel(m_libraryModel);
     linkLoadRequest(m_songTab);
+    // Artist tab.
+    m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab;
+    m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
+    m_categoryModel[TabArtists]->setCategoryColumn(Artist);
+
+
+    //Install the category model to library model.
+    m_libraryModel->installCategoryModel(m_categoryModel[TabArtists]);
+    //Set the category model.
+    m_libraryTabs[TabArtists]->setCategoryModel(m_categoryModel[TabArtists]);
+    //Set the library model.
+    m_libraryTabs[TabArtists]->setLibraryModel(m_libraryModel);
+    //Link the load request.
+    linkLoadRequest(m_libraryTabs[TabArtists]);
 
     //Start up threads.
     m_databaseThread.start();
@@ -79,7 +98,7 @@ KNMusicTab *KNMusicLibrary::songTab()
 
 KNMusicTab *KNMusicLibrary::artistTab()
 {
-    return nullptr;
+    return m_libraryTabs[TabArtists];
 }
 
 KNMusicTab *KNMusicLibrary::albumTab()
@@ -109,5 +128,3 @@ void KNMusicLibrary::linkLoadRequest(KNMusicLibraryTab *libraryTab)
                 connect(libraryTab, &KNMusicLibraryTab::requireLoadLibrary,
                         this, &KNMusicLibrary::onActionLoadLibrary));
 }
-
-

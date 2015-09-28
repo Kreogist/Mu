@@ -19,10 +19,13 @@
 #ifndef KNMUSICLIBRARYMODEL_H
 #define KNMUSICLIBRARYMODEL_H
 
+#include <QLinkedList>
+
 #include "knmusicmodel.h"
 
 class KNJsonDatabase;
 class KNMusicSearcher;
+class KNMusicCategoryModel;
 class KNMusicAnalysisQueue;
 class KNMusicLibraryModel : public KNMusicModel
 {
@@ -85,6 +88,8 @@ public:
 
     KNJsonDatabase *database() const;
 
+    void installCategoryModel(KNMusicCategoryModel *model);
+
 signals:
     /*!
      * \brief When the library model has the first record, this signal will be
@@ -113,8 +118,11 @@ private slots:
     void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
 
 private:
+    inline void addCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
+    inline void removeCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
     inline KNMusicDetailInfo generateDetailInfo(const QJsonArray &dataArray);
     inline QJsonArray generateDataArray(const KNMusicDetailInfo &detailInfo);
+    QLinkedList<KNMusicCategoryModel *> m_categoryModels;
     KNJsonDatabase *m_database;
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
