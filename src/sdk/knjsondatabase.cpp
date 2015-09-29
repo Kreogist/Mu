@@ -94,7 +94,9 @@ bool KNJsonDatabase::read()
         return false;
     }
     //Get the data field.
-    m_dataField=contentObject.value("Database").toArray();
+    m_dataField=
+            QJsonArray::fromVariantList(
+                contentObject.value("Database").toArray().toVariantList());
     //Read complete.
     return true;
 }

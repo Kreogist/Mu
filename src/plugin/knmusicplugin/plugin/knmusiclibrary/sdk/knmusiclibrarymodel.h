@@ -20,6 +20,8 @@
 #define KNMUSICLIBRARYMODEL_H
 
 #include <QLinkedList>
+#include <QThread>
+#include <QHash>
 
 #include "knmusicmodel.h"
 
@@ -27,11 +29,13 @@ class KNJsonDatabase;
 class KNMusicSearcher;
 class KNMusicCategoryModel;
 class KNMusicAnalysisQueue;
+class KNMusicLibraryImageManager;
+class KNMusicLibraryImageSaver;
 class KNMusicLibraryModel : public KNMusicModel
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryModel(QThread *workingThread, QObject *parent = 0);
+    explicit KNMusicLibraryModel(QObject *parent = 0);
     ~KNMusicLibraryModel();
 
     /*!
@@ -61,7 +65,7 @@ public:
     /*!
      * \brief Reimplemented from KNMusicModel::updateRow().
      */
-    bool updateRow(int row, KNMusicDetailInfo detailInfo) Q_DECL_OVERRIDE;
+    bool updateRow(int row, KNMusicAnalysisItem analysisItem) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicModel::replaceRow().
@@ -81,10 +85,16 @@ public:
      */
     void clear() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicModel::setData().
+     */
     bool setData(const QModelIndex &index,
                  const QVariant &value,
-                 int role);
+                 int role) Q_DECL_OVERRIDE;
 
+    QPixmap artwork(const int &row);
+
+    QPixmap artwork(const QString &hashKey);
 
     KNJsonDatabase *database() const;
 
@@ -102,12 +112,21 @@ signals:
      */
     void libraryEmpty();
 
+    /*!
+     * \brief When the library has already recover the data, it will emit this
+     * signal to recover image from the album art folder. You won't need to use
+     * this signal to do anything.
+     */
+    void requireRecoverImage();
+
 public slots:
     /*!
      * \brief Set the database of the library model.
      * \param database The database model pointer.
      */
     void setDatabase(KNJsonDatabase *database);
+
+    void setLibraryPath(const QString &libraryPath);
 
     /*!
      * \brief Recover the library model from the json database.
@@ -116,16 +135,27 @@ public slots:
 
 private slots:
     void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
+    void onActionImageUpdateRow(const int &row,
+                                const KNMusicDetailInfo &detailInfo);
+    void onActionImageRecoverComplete();
 
 private:
     inline void addCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
+    inline bool updateModelRow(int row,
+                               const KNMusicAnalysisItem &analysisItem);
+    inline void updateCategoryDetailInfo(const KNMusicDetailInfo &before,
+                                         const KNMusicDetailInfo &after);
     inline void removeCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
     inline KNMusicDetailInfo generateDetailInfo(const QJsonArray &dataArray);
     inline QJsonArray generateDataArray(const KNMusicDetailInfo &detailInfo);
     QLinkedList<KNMusicCategoryModel *> m_categoryModels;
+    QHash<QString, QVariant> m_hashAlbumArt;
+    QThread m_searchThread, m_analysisThread, m_imageThread;
     KNJsonDatabase *m_database;
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
+    KNMusicLibraryImageManager *m_imageManager;
+    KNMusicLibraryImageSaver *m_imageSaver;
 };
 
 #endif // KNMUSICLIBRARYMODEL_H

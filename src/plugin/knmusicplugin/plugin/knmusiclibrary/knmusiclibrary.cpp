@@ -39,7 +39,7 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent),
     m_libraryPath(knMusicGlobal->musicLibraryPath()+"/Library"),
     m_database(new KNJsonDatabase),
-    m_libraryModel(new KNMusicLibraryModel(&m_parseThread, this)),
+    m_libraryModel(new KNMusicLibraryModel(this)),
     m_songTab(new KNMusicLibrarySongTab),
     m_nowPlaying(nullptr)
 {
@@ -51,6 +51,7 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
 
     //Configure the library tabs.
     m_libraryModel->setDatabase(m_database);
+    m_libraryModel->setLibraryPath(m_libraryPath);
 
     //Configure the tabs.
     // Song tab.
@@ -60,7 +61,6 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab;
     m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
     m_categoryModel[TabArtists]->setCategoryColumn(Artist);
-
 
     //Install the category model to library model.
     m_libraryModel->installCategoryModel(m_categoryModel[TabArtists]);
@@ -73,7 +73,6 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
 
     //Start up threads.
     m_databaseThread.start();
-    m_parseThread.start();
     m_imageThread.start();
 }
 
@@ -81,11 +80,9 @@ KNMusicLibrary::~KNMusicLibrary()
 {
     //Quit and wait for thread quit.
     m_databaseThread.quit();
-    m_parseThread.quit();
     m_imageThread.quit();
     //Wait for quitting.
     m_databaseThread.wait();
-    m_parseThread.wait();
     m_imageThread.wait();
 
     //Delete the database object.

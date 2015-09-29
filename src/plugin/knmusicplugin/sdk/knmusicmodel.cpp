@@ -177,12 +177,13 @@ bool KNMusicModel::insertMusicRows(int row,
     return true;
 }
 
-bool KNMusicModel::updateRow(int row, KNMusicDetailInfo detailInfo)
+bool KNMusicModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
 {
     //Check the row first.
     Q_ASSERT(row>-1 && row<m_detailInfos.size());
     //Get the original detail info.
     const KNMusicDetailInfo &previousDetailInfo=m_detailInfos.at(row);
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Copy some data from the previous detail info.
     detailInfo.dateAdded=previousDetailInfo.dateAdded;
     detailInfo.textLists[AlbumRating]=previousDetailInfo.textLists[AlbumRating];

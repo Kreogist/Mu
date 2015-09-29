@@ -99,7 +99,7 @@ private:
     inline void linkLoadRequest(KNMusicLibraryTab *libraryTab);
     KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
     KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
-    QThread m_databaseThread, m_parseThread, m_imageThread;
+    QThread m_databaseThread, m_imageThread;
 
     KNConnectionHandler m_loadHandler;
     QString m_libraryPath;

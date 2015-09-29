@@ -16,23 +16,21 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICLIBRARYIMAGEMANAGER_H
-#define KNMUSICLIBRARYIMAGEMANAGER_H
+#ifndef KNMUSICLIBRARYIMAGESAVER_H
+#define KNMUSICLIBRARYIMAGESAVER_H
 
-#include <QLinkedList>
-#include <QPersistentModelIndex>
+#include <QVariant>
+#include <QHash>
 
-#include "knmusicutil.h"
+#include <QStringList>
 
 #include <QObject>
 
-using namespace MusicUtil;
-
-class KNMusicLibraryImageManager : public QObject
+class KNMusicLibraryImageSaver : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNMusicLibraryImageManager(QObject *parent = 0);
+    explicit KNMusicLibraryImageSaver(QObject *parent = 0);
 
     QHash<QString, QVariant> *hashAlbumArt() const;
     void setHashAlbumArt(QHash<QString, QVariant> *hashAlbumArt);
@@ -41,29 +39,18 @@ public:
     void setImageFolderPath(const QString &imageFolderPath);
 
 signals:
-    void requireSaveImage(QString imageHashKey);
-    void requireAnalysisNext();
-    void requireUpdateRow(int row, KNMusicDetailInfo detailInfo);
-    void recoverImageComplete();
+    void requireSaveNext();
 
 public slots:
-    void analysisAlbumArt(QPersistentModelIndex itemIndex,
-                          KNMusicAnalysisItem item);
-    void recoverAlbumArt();
+    void saveImage(const QString &imageHashKey);
 
 private slots:
-    void analysisNext();
+    void onActionSaveNext();
 
 private:
-    struct AnalysisQueueItem
-    {
-        QPersistentModelIndex itemIndex;
-        KNMusicAnalysisItem item;
-    };
-    inline QString insertHashImage(const QImage &image);
-    QLinkedList<AnalysisQueueItem> m_analysisQueue;
+    QStringList m_savingQueue;
     QString m_imageFolderPath;
     QHash<QString, QVariant> *m_hashAlbumArt;
 };
 
-#endif // KNMUSICLIBRARYIMAGEMANAGER_H
+#endif // KNMUSICLIBRARYIMAGESAVER_H

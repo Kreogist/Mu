@@ -155,7 +155,7 @@ void KNMusicDetailTooltip::showTooltip(const QPoint &position)
 }
 
 void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
-                                           const QPersistentModelIndex &index)
+                                           const QModelIndex &index)
 {
     //Clear the label information.
     //Generate an analysis item.

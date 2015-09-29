@@ -51,7 +51,7 @@ public slots:
      * \param index The specific index of a music row.
      */
     virtual void setPreviewIndex(KNMusicModel *musicModel,
-                                 const QPersistentModelIndex &index)=0;
+                                 const QModelIndex &index)=0;
 };
 
 #endif // KNMUSICDETAILTOOLTIPBASE_H

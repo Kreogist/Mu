@@ -87,6 +87,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     connect(m_hideMainPlayer, &KNOpacityAnimeButton::clicked,
             this, &KNMusicMainPlayer::requireHide);
     //Configure the detail info panel.
+    // Link the require show signals.
     connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInSongs,
             this, &KNMusicMainPlayer::requireShowInSongs);
     connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInArtists,
@@ -95,6 +96,15 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
             this, &KNMusicMainPlayer::requireShowInAlbums);
     connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInGenres,
             this, &KNMusicMainPlayer::requireShowInGenres);
+    // When it require show, it will automatically hide the songs.
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInSongs,
+            this, &KNMusicMainPlayer::requireHide);
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInArtists,
+            this, &KNMusicMainPlayer::requireHide);
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInAlbums,
+            this, &KNMusicMainPlayer::requireHide);
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInGenres,
+            this, &KNMusicMainPlayer::requireHide);
     //Configure the lyrics.
     m_lyricsPanel->setObjectName("MainPlayerLyrics");
     m_lyricsPanel->setBackend(knMusicGlobal->lyricsManager()->backend());

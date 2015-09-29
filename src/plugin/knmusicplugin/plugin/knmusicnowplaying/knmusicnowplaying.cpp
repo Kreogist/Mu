@@ -408,7 +408,7 @@ void KNMusicNowPlaying::playRow(const int &proxyRow)
         //Save the current reanlaysis item.
         m_playingAnalysisItem=reanalysisItem;
         //Update the music model row.
-        musicModel->updateRow(m_playingIndex.row(), reanalysisItem.detailInfo);
+        musicModel->updateRow(m_playingIndex.row(), reanalysisItem);
         //Check the backend before playing, if there's no parser, do nothing.
         if(m_backend==nullptr)
         {

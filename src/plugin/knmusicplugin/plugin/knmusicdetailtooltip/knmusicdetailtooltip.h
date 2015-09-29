@@ -61,7 +61,7 @@ public slots:
      * \brief Reimplemented from KNMusicDetailTooltipBase::setPreviewIndex().
      */
     void setPreviewIndex(KNMusicModel *musicModel,
-                         const QPersistentModelIndex &index) Q_DECL_OVERRIDE;
+                         const QModelIndex &index) Q_DECL_OVERRIDE;
 
 protected:
     /*!

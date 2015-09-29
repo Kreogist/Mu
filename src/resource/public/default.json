@@ -29,7 +29,7 @@
         "AlternateBase" : "#FFFFFF20",
         "Window" : "#202020",
         "Text" : "#FFFFFF",
-        "Button" : "#FFFFFF",
+        "Button" : "#000000",
         "Highlight" : "#505050",
         "HighlightedText" : "#F7CF3D"
     },
@@ -47,7 +47,7 @@
         "Base" : "#202020",
         "Window" : "#202020",
         "Text" : "#FFFFFF",
-        "Button" : "#FFFFFF",
+        "Button" : "#000000",
         "Highlight" : "#505050",
         "HighlightedText" : "#F7CF3D"
     },
@@ -107,7 +107,7 @@
         "Base" : "#202020",
         "Window" : "#202020",
         "Text" : "#FFFFFF",
-        "Button" : "#FFFFFF",
+        "Button" : "#000000",
         "Highlight" : "#505050",
         "HighlightedText" : "#F7CF3D"
     },

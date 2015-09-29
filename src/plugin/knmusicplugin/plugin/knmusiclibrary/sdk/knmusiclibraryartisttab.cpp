@@ -23,6 +23,7 @@
 #include "kncategorytab.h"
 
 #include "knmusicsolomenubase.h"
+#include "knmusiclibrarycategorydelegate.h"
 #include "knmusicsearchbase.h"
 #include "knmusicproxymodel.h"
 #include "knmusiccategorylistviewbase.h"
@@ -54,9 +55,10 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
             this, &KNMusicLibraryArtistTab::onActionShowInArtist);
     //Configure the artist display.
     m_artistDisplay->setCategoryColumn(Artist);
-    //Configure the tab order.
+    //Configure the artist list.
     m_artistList->setTabOrder(m_artistList, m_artistDisplay);
-
+    m_artistList->setItemDelegate(
+                new KNMusicLibraryCategoryDelegate(m_artistList));
     //Set the drop proxy widget to the content widget.
     setContentWidget(m_dropProxy);
     //Initial the layout for the container, only for auto resize splitter.
@@ -152,7 +154,16 @@ void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
     //Do original set.
     KNMusicLibraryCategoryTab::setCategoryModel(model);
     //Link the artwork update signal.
-    //!FIXME: add codes here.
+    connect(m_categoryModel, &KNMusicCategoryModel::albumArtUpdate,
+            [=](const QModelIndex &updatedIndex)
+            {
+                //Check out the updated index.
+                if(updatedIndex==m_currentSourceIndex)
+                {
+                    //Update the category index.
+                    updateDisplayArtwork(m_currentSourceIndex);
+                }
+            });
     //Update the model.
     retranslate();
 
@@ -258,7 +269,7 @@ void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(
     if(m_currentSourceIndex.row()==0)
     {
         //Ask the artist display to show the no category item.
-        m_artistDisplay;
+        m_artistDisplay->showNoCategoryItem(m_categoryModel->noCategoryText());
         //Mission complete.
         return;
     }
@@ -268,7 +279,17 @@ void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(
                 m_categoryModel->data(m_currentSourceIndex,
                                       Qt::DisplayRole).toString());
     //Set the category artwork.
-    //!FIXME: Add codes here.
+    updateDisplayArtwork(m_currentSourceIndex);
+}
+
+void KNMusicLibraryArtistTab::updateDisplayArtwork(const QModelIndex &index)
+{
+    //Set the category icon right from the library model.
+    m_artistDisplay->setCategoryIcon(
+                m_libraryModel->artwork(
+                    m_categoryModel->data(
+                        index,
+                        KNMusicCategoryModel::CategoryArtworkKey).toString()));
 }
 
 void KNMusicLibraryArtistTab::checkCategorySelected()
@@ -303,4 +324,3 @@ inline void KNMusicLibraryArtistTab::showAndSelectRow(const int &musicRow)
     //Ask to show the tab.
     emit requireShowTab();
 }
-

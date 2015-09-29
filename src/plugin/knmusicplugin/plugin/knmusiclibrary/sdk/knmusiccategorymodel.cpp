@@ -23,7 +23,11 @@
 
 KNMusicCategoryModel::KNMusicCategoryModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_noAlbumArt(QVariant())
+    m_categoryList(QList<CategoryItem>()),
+    m_noAlbumArt(QVariant()),
+    m_noCategoryText(QString()),
+    m_hashAlbumArt(nullptr),
+    m_categoryColumn(0)
 {
     //Set the default no album art data.
     setNoAlbumArt(knMusicGlobal->noAlbumArt());
@@ -100,13 +104,16 @@ QVariant KNMusicCategoryModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole:
         return item.displayText;
     case Qt::DecorationRole:
-        return item.albumArtHash.isEmpty()?
+        return (m_hashAlbumArt==nullptr || item.albumArtHash.isEmpty())?
                     m_noAlbumArt:
-                    item.albumArtHash.first();
+                    m_hashAlbumArt->value(item.albumArtHash.first(),
+                                          m_noAlbumArt);
     case Qt::SizeHintRole:
         return QSize(44, 44);
     case CategorySize:
         return item.count;
+    case CategoryArtworkKey:
+        return item.albumArtHash.isEmpty()?QString():item.albumArtHash.first();
     default:
         return QVariant();
     }
@@ -290,6 +297,93 @@ void KNMusicCategoryModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
     //If we can get here...I mean WTF...
 }
 
+void KNMusicCategoryModel::onCategoryUpdate(const KNMusicDetailInfo &before,
+                                            const KNMusicDetailInfo &after)
+{
+    //Check out the category item have ever changed.
+    if(before.textLists[m_categoryColumn]==after.textLists[m_categoryColumn])
+    {
+        //We won't need to add or reduce count, but we have to check the artwork
+        //key.
+        if(after.coverImageHash!=before.coverImageHash)
+        {
+            //Get the category text.
+            QVariant categoryText=after.textLists[m_categoryColumn];
+            //Find the category item.
+            for(int i=0; i<m_categoryList.size(); ++i)
+            {
+                //If we could find the item.
+                if(m_categoryList.at(i).displayText==categoryText)
+                {
+                    //Get the category item.
+                    CategoryItem item=m_categoryList.at(i);
+                    //Remove the original cover image hash from the item.
+                    item.albumArtHash.removeOne(before.coverImageHash);
+                    //Insert the new cover image.
+                    item.albumArtHash.append(after.coverImageHash);
+                    //Replace the one.
+                    replaceItem(i, item);
+                    //Mission complete.
+                    return;
+                }
+            }
+        }
+        //Nothing changed, we will do nothing.
+        //Mission complete.
+        return;
+    }
+    //Or else, we have to remove the previous data.
+    onCategoryRemove(before);
+    //And then add the after category.
+    onCategoryAdd(after);
+}
+
+void KNMusicCategoryModel::onCategoryAlbumArtUpdate(
+        const KNMusicDetailInfo &detailInfo)
+{
+    //Check out the artwork key hash first.
+    if(detailInfo.coverImageHash.isEmpty())
+    {
+        return;
+    }
+    //Get the category text.
+    QVariant categoryText=detailInfo.textLists[m_categoryColumn];
+    //Check if the category is blank.
+    if(categoryText.toString().isEmpty())
+    {
+        //Mission complete, no artist don't need anything.
+        return;
+    }
+    //Find the category text.
+    for(int i=0; i<m_categoryList.size(); ++i)
+    {
+        //If we could find the item.
+        if(m_categoryList.at(i).displayText==categoryText)
+        {
+            //Get the category list data.
+            CategoryItem item=m_categoryList.at(i);
+            //Add the hash string to the category.
+            item.albumArtHash.append(detailInfo.coverImageHash);
+            //Replace the item.
+            replaceItem(i, item);
+            //Emit cover image update signal.
+            emit albumArtUpdate(index(i));
+            //Mission complete.
+            return;
+        }
+    }
+}
+
+void KNMusicCategoryModel::onActionImageRecoverComplete()
+{
+    //Well, with the brand new instructures, we won't need to save or change
+    //anything.
+    //The only thing we have to do is emit a data changed signal.
+    emit dataChanged(index(0),
+                     index(rowCount()-1),
+                     QVector<int>(1, Qt::DecorationRole));
+}
+
 inline KNMusicCategoryModel::CategoryItem
         KNMusicCategoryModel::generateNoCategoryItem()
 {
@@ -341,6 +435,12 @@ void KNMusicCategoryModel::reduceCount(const int &row)
     m_categoryList.replace(row, item);
     //Emit the data changed signal.
     emit dataChanged(index(row), index(row), QVector<int>(1, CategorySize));
+}
+
+void KNMusicCategoryModel::setHashAlbumArt(
+        QHash<QString, QVariant> *hashAlbumArt)
+{
+    m_hashAlbumArt = hashAlbumArt;
 }
 
 int KNMusicCategoryModel::categoryColumn() const

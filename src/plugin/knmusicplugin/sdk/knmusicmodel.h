@@ -90,7 +90,7 @@ public:
      * one.
      * \return If the row update successfully, it will be true.
      */
-    virtual bool updateRow(int row, KNMusicDetailInfo detailInfo);
+    virtual bool updateRow(int row, KNMusicAnalysisItem analysisItem);
 
     /*!
      * \brief Replace one music row into a new one. Different from update row,

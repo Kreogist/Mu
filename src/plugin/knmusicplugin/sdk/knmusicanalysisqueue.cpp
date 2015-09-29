@@ -24,7 +24,8 @@ KNMusicAnalysisQueue::KNMusicAnalysisQueue(QObject *parent) :
 {
     //Connect analysis loop.
     connect(this, &KNMusicAnalysisQueue::analysisNext,
-            this, &KNMusicAnalysisQueue::onActionAnalysisNext);
+            this, &KNMusicAnalysisQueue::onActionAnalysisNext,
+            Qt::QueuedConnection);
 }
 
 void KNMusicAnalysisQueue::addFile(const QFileInfo &fileInfo)

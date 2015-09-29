@@ -21,27 +21,31 @@
 #include "knmusiccategorymodel.h"
 #include "knmusicsearcher.h"
 #include "knmusicanalysisqueue.h"
+#include "knmusiclibraryimagemanager.h"
+#include "knmusiclibraryimagesaver.h"
 
 #include "knmusiclibrarymodel.h"
 
 #include <QDebug>
 
-KNMusicLibraryModel::KNMusicLibraryModel(QThread *workingThread,
-                                         QObject *parent) :
+KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     KNMusicModel(parent),
+    m_hashAlbumArt(QHash<QString, QVariant>()),
     m_database(nullptr),
     m_searcher(new KNMusicSearcher),
-    m_analysisQueue(new KNMusicAnalysisQueue)
+    m_analysisQueue(new KNMusicAnalysisQueue),
+    m_imageManager(new KNMusicLibraryImageManager),
+    m_imageSaver(new KNMusicLibraryImageSaver)
 {
     //Move the searcher to working thread.
-    m_searcher->moveToThread(workingThread);
+    m_searcher->moveToThread(&m_searchThread);
     //Link the require add signal to searcher.
     connect(this, &KNMusicLibraryModel::requireAnalysisFiles,
             m_searcher, &KNMusicSearcher::analysisPaths,
             Qt::QueuedConnection);
 
-    //Move the analysis queue to wokring thread.
-    m_analysisQueue->moveToThread(workingThread);
+    //Move the analysis queue to working thread.
+    m_analysisQueue->moveToThread(&m_analysisThread);
     //Link the searcher with the analysis queue.
     connect(m_searcher, &KNMusicSearcher::findFile,
             m_analysisQueue, &KNMusicAnalysisQueue::addFile,
@@ -49,12 +53,52 @@ KNMusicLibraryModel::KNMusicLibraryModel(QThread *workingThread,
     connect(m_analysisQueue, &KNMusicAnalysisQueue::analysisComplete,
             this, &KNMusicLibraryModel::onActionAnalysisComplete,
             Qt::QueuedConnection);
+
+    //Move the image manager to working thread.
+    m_imageManager->setHashAlbumArt(&m_hashAlbumArt);
+    m_imageManager->moveToThread(&m_imageThread);
+    //Link the signal from the library model.
+    connect(this, &KNMusicLibraryModel::requireRecoverImage,
+            m_imageManager, &KNMusicLibraryImageManager::recoverAlbumArt,
+            Qt::QueuedConnection);
+    connect(m_imageManager, &KNMusicLibraryImageManager::recoverImageComplete,
+            this, &KNMusicLibraryModel::onActionImageRecoverComplete,
+            Qt::QueuedConnection);
+    connect(m_imageManager, &KNMusicLibraryImageManager::requireUpdateRow,
+            this, &KNMusicLibraryModel::onActionImageUpdateRow,
+            Qt::QueuedConnection);
+
+    //Move the image saver to working thread.
+    m_imageSaver->setHashAlbumArt(&m_hashAlbumArt);
+    m_imageSaver->moveToThread(&m_imageThread);
+    //Link the signal from the image manager.
+    connect(m_imageManager, &KNMusicLibraryImageManager::requireSaveImage,
+            m_imageSaver, &KNMusicLibraryImageSaver::saveImage,
+            Qt::QueuedConnection);
+
+    //Start working threads.
+    m_searchThread.start();
+    m_analysisThread.start();
+    m_imageThread.start();
 }
 
 KNMusicLibraryModel::~KNMusicLibraryModel()
 {
+    //Quit and wait for the thread quit.
+    m_searchThread.quit();
+    m_analysisThread.quit();
+    m_imageThread.quit();
+    //Wait for thread quit.
+    m_searchThread.wait();
+    m_analysisThread.wait();
+    m_imageThread.wait();
+
     //Write all the database data to the harddisk.
     m_database->write();
+    //Recover the memory.
+    m_searcher->deleteLater();
+    m_analysisQueue->deleteLater();
+    m_imageManager->deleteLater();
 }
 
 void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
@@ -133,19 +177,19 @@ bool KNMusicLibraryModel::insertMusicRows(
     return KNMusicModel::insertMusicRows(row, detailInfos);
 }
 
-bool KNMusicLibraryModel::updateRow(int row, KNMusicDetailInfo detailInfo)
+bool KNMusicLibraryModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
 {
-    //Do the original update operation.
-    bool result=KNMusicModel::updateRow(row, detailInfo);
-    //Update the data in the database.
-    m_database->replace(row, generateDataArray(rowDetailInfo(row)));
-    //Give the result back.
-    return result;
+    //Update the cover image.
+    m_imageManager->analysisAlbumArt(index(row, 0), analysisItem);
+    //Update the model row.
+    return updateModelRow(row, analysisItem);
 }
 
 bool KNMusicLibraryModel::replaceRow(int row,
                                      const KNMusicDetailInfo &detailInfo)
 {
+    //Update the category data.
+    updateCategoryDetailInfo(rowDetailInfo(row), detailInfo);
     //Replace the data in the database.
     m_database->replace(row, generateDataArray(detailInfo));
     //Do the original operation.
@@ -210,6 +254,26 @@ bool KNMusicLibraryModel::setData(const QModelIndex &index,
     return result;
 }
 
+QPixmap KNMusicLibraryModel::artwork(const int &row)
+{
+    //Get the artwork from the hash list.
+    QVariant artworkPixmap=
+            m_hashAlbumArt.value(data(index(row,
+                                            Name),
+                                      ArtworkKeyRole).toString());
+    //Check out the variant is null or not.
+    return artworkPixmap.isNull()?knMusicGlobal->noAlbumArt():
+                                  artworkPixmap.value<QPixmap>();
+}
+
+QPixmap KNMusicLibraryModel::artwork(const QString &hashKey)
+{
+    //Give back the hash key image from the pixmap.
+    return m_hashAlbumArt.contains(hashKey)?
+                m_hashAlbumArt.value(hashKey).value<QPixmap>():
+                knMusicGlobal->noAlbumArt();
+}
+
 void KNMusicLibraryModel::recoverModel()
 {
     //Check out the row count first, if there's any data then we have to ignore
@@ -257,6 +321,8 @@ void KNMusicLibraryModel::recoverModel()
         //Before this the row count cannot be 0.
         emit libraryNotEmpty();
     }
+    //Ask to recover image.
+    emit requireRecoverImage();
 }
 
 inline KNMusicDetailInfo KNMusicLibraryModel::generateDetailInfo(
@@ -357,6 +423,8 @@ KNJsonDatabase *KNMusicLibraryModel::database() const
 
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
 {
+    //Set hash list to category model.
+    model->setHashAlbumArt(&m_hashAlbumArt);
     //Append the model to the category models.
     m_categoryModels.append(model);
 }
@@ -364,6 +432,16 @@ void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
 void KNMusicLibraryModel::setDatabase(KNJsonDatabase *database)
 {
     m_database = database;
+}
+
+void KNMusicLibraryModel::setLibraryPath(const QString &libraryPath)
+{
+    //Get the artwork folder.
+    QString artworkFolder=libraryPath + "/Artworks";
+    //Set the artwork folder to image saver.
+    m_imageSaver->setImageFolderPath(artworkFolder);
+    //Set the artwork folder to image manager.
+    m_imageManager->setImageFolderPath(artworkFolder);
 }
 
 void KNMusicLibraryModel::onActionAnalysisComplete(
@@ -376,17 +454,48 @@ void KNMusicLibraryModel::onActionAnalysisComplete(
     if(detailInfoIndex!=-1)
     {
         //Update the detail info.
-        updateRow(detailInfoIndex, analysisItem.detailInfo);
+        updateModelRow(detailInfoIndex, analysisItem);
         //Mission complete.
         return;
     }
     //Add the detail info to the model.
     appendRow(analysisItem.detailInfo);
+    //Emit the analysis signal.
+    m_imageManager->analysisAlbumArt(index(m_database->size()-1, 0),
+                                     analysisItem);
     //Check out the row after append the row.
     if(rowCount()==1)
     {
         //Emit the library not empty signal.
         emit libraryNotEmpty();
+    }
+}
+
+void KNMusicLibraryModel::onActionImageUpdateRow(
+        const int &row,
+        const KNMusicDetailInfo &detailInfo)
+{
+    //Generate a useless analysis item.
+    KNMusicAnalysisItem item;
+    //Set the detail info.
+    item.detailInfo=detailInfo;
+    //Update the data in the model.
+    updateModelRow(row, item);
+    //Called all the category model to add the image key hash.
+    for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
+    {
+        //Called onActionImageRecoverComplete() slot.
+        (*i)->onCategoryAlbumArtUpdate(detailInfo);
+    }
+}
+
+void KNMusicLibraryModel::onActionImageRecoverComplete()
+{
+    //Called all the category model to udpate their data.
+    for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
+    {
+        //Called onActionImageRecoverComplete() slot.
+        (*i)->onActionImageRecoverComplete();
     }
 }
 
@@ -398,6 +507,34 @@ inline void KNMusicLibraryModel::addCategoryDetailInfo(
     {
         //Called the on action add slot.
         (*i)->onCategoryAdd(detailInfo);
+    }
+}
+
+bool KNMusicLibraryModel::updateModelRow(
+        int row,
+        const KNMusicAnalysisItem &analysisItem)
+{
+    //Get the previous detail info.
+    const KNMusicDetailInfo &previousDetailInfo=rowDetailInfo(row);
+    //Update the category data.
+    updateCategoryDetailInfo(previousDetailInfo, analysisItem.detailInfo);
+    //Do the original update operation.
+    bool result=KNMusicModel::updateRow(row, analysisItem);
+    //Update the data in the database.
+    m_database->replace(row, generateDataArray(rowDetailInfo(row)));
+    //Give the result back.
+    return result;
+}
+
+inline void KNMusicLibraryModel::updateCategoryDetailInfo(
+        const KNMusicDetailInfo &before,
+        const KNMusicDetailInfo &after)
+{
+    //For all the category models,
+    for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
+    {
+        //Called the on action add slot.
+        (*i)->onCategoryUpdate(before, after);
     }
 }
 

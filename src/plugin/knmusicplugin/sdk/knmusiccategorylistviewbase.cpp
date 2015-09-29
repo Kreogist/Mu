@@ -24,6 +24,7 @@
 #define InBrightness 0x50
 #define OutBrightness 0x17
 #define TextBrightnessGap 0xAF
+#define ButtonBrightnessGap -0x10
 
 KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     QListView(parent),
@@ -94,6 +95,8 @@ void KNMusicCategoryListViewBase::onActionPaletteChange()
     m_backgroundColor=m_palette.color(QPalette::Base);
     //Update the text color.
     m_textColor=m_palette.color(QPalette::Text);
+    //Update the button color.
+    m_buttonColor=m_palette.color(QPalette::Button);
     //Use the mouse in out to update the palette.
     onActionMouseInOut(OutBrightness);
 }
@@ -108,8 +111,13 @@ void KNMusicCategoryListViewBase::onActionMouseInOut(const int &frame)
     m_textColor.setHsv(m_textColor.hue(),
                        m_textColor.saturation(),
                        frame+TextBrightnessGap);
+    //Update the button color's brightness.
+    m_buttonColor.setHsv(m_buttonColor.hue(),
+                         m_buttonColor.saturation(),
+                         frame+ButtonBrightnessGap);
     //Update the palette.
     m_palette.setColor(QPalette::Base, m_backgroundColor);
+    m_palette.setColor(QPalette::Button, m_buttonColor);
     m_palette.setColor(QPalette::Text, m_textColor);
     //Set the palette.
     setPalette(m_palette);

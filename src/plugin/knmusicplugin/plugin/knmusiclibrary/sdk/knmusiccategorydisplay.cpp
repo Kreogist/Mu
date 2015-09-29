@@ -133,7 +133,7 @@ void KNMusicCategoryDisplay::showNoCategoryItem(const QString &title)
     //Update the title.
     m_categoryTitle->setText(title);
     //Set the category text to empty
-    m_categoryTreeView->setCategoryText(QVariant(QString()));
+    m_categoryTreeView->setCategoryText(QVariant(QString("")));
     //Update the background to no album art.
     setCategoryIcon(QPixmap());
     //Update the detail info.

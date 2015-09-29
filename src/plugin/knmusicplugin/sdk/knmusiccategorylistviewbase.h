@@ -67,7 +67,7 @@ private:
     inline void startAnime(const int &endFrame);
     QTimeLine *m_mouseAnime;
     QPalette m_palette;
-    QColor m_backgroundColor, m_textColor;
+    QColor m_backgroundColor, m_textColor, m_buttonColor;
 };
 
 #endif // KNMUSICCATEGORYLISTVIEWBASE_H

@@ -33,7 +33,8 @@ class KNMusicCategoryModel : public QAbstractListModel
 public:
     enum CategoryRole
     {
-        CategorySize=Qt::UserRole
+        CategorySize=Qt::UserRole,
+        CategoryArtworkKey
     };
 
     explicit KNMusicCategoryModel(QObject *parent = 0);
@@ -87,7 +88,15 @@ public:
      */
     int categoryColumn() const;
 
+    void setHashAlbumArt(QHash<QString, QVariant> *hashAlbumArt);
+
 signals:
+    /*!
+     * \brief When the album art of the index is updated, this signal will be
+     * emitted.
+     * \param index The specific index.
+     */
+    void albumArtUpdate(QModelIndex index);
 
 public slots:
     /*!
@@ -112,6 +121,13 @@ public slots:
     void onCategoryAdd(const KNMusicDetailInfo &detailInfo);
 
     void onCategoryRemove(const KNMusicDetailInfo &detailInfo);
+
+    void onCategoryUpdate(const KNMusicDetailInfo &before,
+                          const KNMusicDetailInfo &after);
+
+    void onCategoryAlbumArtUpdate(const KNMusicDetailInfo &detailInfo);
+
+    virtual void onActionImageRecoverComplete();
 
 private:
     struct CategoryItem
@@ -140,6 +156,7 @@ private:
     QList<CategoryItem> m_categoryList;
     QVariant m_noAlbumArt;
     QString m_noCategoryText;
+    QHash<QString, QVariant> *m_hashAlbumArt;
     int m_categoryColumn;
 };
 

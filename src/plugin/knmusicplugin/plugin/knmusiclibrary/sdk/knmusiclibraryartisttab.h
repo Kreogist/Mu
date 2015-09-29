@@ -85,6 +85,7 @@ private slots:
     void onActionCategoryIndexChanged(const QModelIndex &index);
 
 private:
+    inline void updateDisplayArtwork(const QModelIndex &index);
     inline void showAndSelectRow(const int &musicRow);
     QMetaObject::Connection m_notEmptyCheck;
     QModelIndex m_currentSourceIndex;
