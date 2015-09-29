@@ -50,11 +50,11 @@ KNMusicMainPlayerPanel::KNMusicMainPlayerPanel(QWidget *parent) :
     detailLayout->setSpacing(0);
     m_detailPanel->setLayout(detailLayout);
     //Set the icon paths.
-    QString detailIconPath[GotoButtonCount];
-    detailIconPath[GotoSong]=":/plugin/music/category/song.png";
-    detailIconPath[GotoArtist]=":/plugin/music/category/artist.png";
-    detailIconPath[GotoAlbum]=":/plugin/music/category/ablum.png";
-    detailIconPath[GotoGenre]=":/plugin/music/category/genre.png";
+    QString gotoIconPath[GotoButtonCount];
+    gotoIconPath[GotoSong]=":/plugin/music/category/song.png";
+    gotoIconPath[GotoArtist]=":/plugin/music/category/artist.png";
+    gotoIconPath[GotoAlbum]=":/plugin/music/category/ablum.png";
+    gotoIconPath[GotoGenre]=":/plugin/music/category/genre.png";
     //Add the title and artist-album labels to layout.
     detailLayout->addWidget(m_titleLabel);
     detailLayout->addWidget(m_artistAlbumLabel);
@@ -67,15 +67,24 @@ KNMusicMainPlayerPanel::KNMusicMainPlayerPanel(QWidget *parent) :
     for(int i=0; i<GotoButtonCount; ++i)
     {
         //Initial detail info icon and text labels.
-        m_detailIcons[i]=new KNOpacityAnimeButton(m_detailPanel);
+        m_gotoIcons[i]=new KNOpacityAnimeButton(m_detailPanel);
         //Configure the detail icon label.
-        m_detailIcons[i]->setFixedSize(16, 16);
+        m_gotoIcons[i]->setFixedSize(16, 16);
         //Set icon data to the icon label.
-        m_detailIcons[i]->setIcon(QPixmap(detailIconPath[i]));
+        m_gotoIcons[i]->setIcon(QPixmap(gotoIconPath[i]));
         //Add row to detail panel.
-        m_buttonLayout->addWidget(m_detailIcons[i]);
+        m_buttonLayout->addWidget(m_gotoIcons[i]);
     }
     m_buttonLayout->addStretch();
+    //Link the buttons.
+    connect(m_gotoIcons[GotoSong], &KNOpacityAnimeButton::clicked,
+            this, &KNMusicMainPlayerPanel::requireShowInSongs);
+    connect(m_gotoIcons[GotoArtist], &KNOpacityAnimeButton::clicked,
+            this, &KNMusicMainPlayerPanel::requireShowInArtists);
+    connect(m_gotoIcons[GotoAlbum], &KNOpacityAnimeButton::clicked,
+            this, &KNMusicMainPlayerPanel::requireShowInAlbums);
+    connect(m_gotoIcons[GotoGenre], &KNOpacityAnimeButton::clicked,
+            this, &KNMusicMainPlayerPanel::requireShowInGenres);
     //Add the button layout to detailed layout.
     detailLayout->addLayout(m_buttonLayout);
 
@@ -114,7 +123,7 @@ void KNMusicMainPlayerPanel::updatePanelFont(const QFont &labelFont)
     for(int i=0; i<GotoButtonCount; ++i)
     {
         //Resize the icon size.
-        m_detailIcons[i]->setFixedSize(iconSize, iconSize);
+        m_gotoIcons[i]->setFixedSize(iconSize, iconSize);
     }
     //Resize the artist-album label font size.
     QFont artistAlbumFont=labelFont;

@@ -22,6 +22,7 @@
 #include <QObject>
 
 class KNMusicTab;
+class KNMusicNowPlayingBase;
 class KNMusicLibraryBase : public QObject
 {
     Q_OBJECT
@@ -36,6 +37,11 @@ public:
 signals:
 
 public slots:
+    virtual void showInSongTab()=0;
+    virtual void showInArtistTab()=0;
+    virtual void showInAlbumTab()=0;
+    virtual void showInGenreTab()=0;
+    virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
 
 private:
 };

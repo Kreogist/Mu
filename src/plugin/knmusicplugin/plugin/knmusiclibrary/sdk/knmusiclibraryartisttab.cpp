@@ -287,8 +287,9 @@ inline void KNMusicLibraryArtistTab::showAndSelectRow(const int &musicRow)
     //Show and select the index row.
     QModelIndex categoryIndex=
             categoryProxyModel()->categoryIndex(
-                      m_libraryModel->index(musicRow,
-                                            m_categoryModel->categoryColumn()));
+                m_libraryModel->index(musicRow,
+                                      m_categoryModel->categoryColumn()).data(
+                                                              Qt::DisplayRole));
     //Check is the category index valid.
     if(categoryIndex.isValid())
     {
@@ -299,5 +300,7 @@ inline void KNMusicLibraryArtistTab::showAndSelectRow(const int &musicRow)
         //Set the display widget to show the index of the song.
         m_artistDisplay->scrollToSourceRow(musicRow);
     }
+    //Ask to show the tab.
+    emit requireShowTab();
 }
 

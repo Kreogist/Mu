@@ -102,6 +102,12 @@ protected:
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
+private slots:
+    void onActionShowInSongs();
+    void onActionShowInArtists();
+    void onActionShowInAlbums();
+    void onActionShowInGenres();
+
 private:
     inline void initialInfrastructure();
     inline void initialPlayer(KNMusicPlayerBase *player);
@@ -135,6 +141,7 @@ private:
     //Plugins.
     KNMusicHeaderPlayerBase *m_headerPlayer;
     KNMusicMainPlayerBase *m_mainPlayer;
+    KNMusicLibraryBase *m_library;
 };
 
 #endif // KNMUSICPLUGIN_H

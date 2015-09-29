@@ -116,7 +116,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
                                        this)),
     m_showInMapper(new QSignalMapper(this)),
     m_headerPlayer(nullptr),
-    m_mainPlayer(nullptr)
+    m_mainPlayer(nullptr),
+    m_library(nullptr)
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
@@ -233,6 +234,46 @@ void KNMusicPlugin::resizeEvent(QResizeEvent *event)
                         m_topShadow->height());
 }
 
+void KNMusicPlugin::onActionShowInSongs()
+{
+    //Check out library pointer first.
+    if(m_library!=nullptr)
+    {
+        //Called show in songs slot of the library.
+        m_library->showInSongTab();
+    }
+}
+
+void KNMusicPlugin::onActionShowInArtists()
+{
+    //Check out library pointer first.
+    if(m_library!=nullptr)
+    {
+        //Called show in artists slot of the library.
+        m_library->showInArtistTab();
+    }
+}
+
+void KNMusicPlugin::onActionShowInAlbums()
+{
+    //Check out library pointer first.
+    if(m_library!=nullptr)
+    {
+        //Called show in albums slot of the library.
+        m_library->showInAlbumTab();
+    }
+}
+
+void KNMusicPlugin::onActionShowInGenres()
+{
+    //Check out library pointer first.
+    if(m_library!=nullptr)
+    {
+        //Called show in genre slot of the library.
+        m_library->showInGenreTab();
+    }
+}
+
 void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
@@ -279,6 +320,15 @@ inline void KNMusicPlugin::initialPlayer(KNMusicPlayerBase *player)
     //Set the backend and the now playing.
     player->setBackend(knMusicGlobal->backend());
     player->setNowPlaying(knMusicGlobal->nowPlaying());
+    //Link the player's signal to slot.
+    connect(player, &KNMusicPlayerBase::requireShowInSongs,
+            this, &KNMusicPlugin::onActionShowInSongs);
+    connect(player, &KNMusicPlayerBase::requireShowInArtists,
+            this, &KNMusicPlugin::onActionShowInArtists);
+    connect(player, &KNMusicPlayerBase::requireShowInAlbums,
+            this, &KNMusicPlugin::onActionShowInAlbums);
+    connect(player, &KNMusicPlayerBase::requireShowInGenres,
+            this, &KNMusicPlugin::onActionShowInGenres);
 }
 
 void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
@@ -480,11 +530,20 @@ void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
 
 void KNMusicPlugin::initialLibrary(KNMusicLibraryBase *library)
 {
+    //Save the library plugin.
+    m_library=library;
+    //Check the library plugin first.
+    if(m_library==nullptr)
+    {
+        return;
+    }
     //Set the library relationship.
-    library->setParent(this);
+    m_library->setParent(this);
+    //Set the now playing.
+    m_library->setNowPlaying(knMusicGlobal->nowPlaying());
     //Add tabs to the switcher.
-    addMusicTab(library->songTab());
-    addMusicTab(library->artistTab());
-    addMusicTab(library->albumTab());
-    addMusicTab(library->genreTab());
+    addMusicTab(m_library->songTab());
+    addMusicTab(m_library->artistTab());
+    addMusicTab(m_library->albumTab());
+    addMusicTab(m_library->genreTab());
 }

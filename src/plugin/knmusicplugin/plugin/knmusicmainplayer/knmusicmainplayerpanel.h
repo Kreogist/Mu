@@ -39,6 +39,29 @@ public:
     explicit KNMusicMainPlayerPanel(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief Ask to show the current song in 'Songs' tab of the music library
+     * tab.
+     */
+    void requireShowInSongs();
+
+    /*!
+     * \brief Ask to show the current song in 'Artists' tab of the music library
+     * tab.
+     */
+    void requireShowInArtists();
+
+    /*!
+     * \brief Ask to show the current song in 'Albums' tab of the music library
+     * tab.
+     */
+    void requireShowInAlbums();
+
+    /*!
+     * \brief Ask to show the current song in 'Genres' tab of the music library
+     * tab.
+     */
+    void requireShowInGenres();
 
 public slots:
     void setAnalysisItem(const KNMusicAnalysisItem &item);
@@ -63,7 +86,7 @@ private:
         GotoButtonCount
     };
     inline void setAristAndAlbum(const QString &artist, const QString &album);
-    KNOpacityAnimeButton *m_detailIcons[GotoButtonCount];
+    KNOpacityAnimeButton *m_gotoIcons[GotoButtonCount];
     KNLoopScrollLabel *m_titleLabel, *m_artistAlbumLabel;
     QBoxLayout *m_buttonLayout;
     QWidget *m_detailPanel;

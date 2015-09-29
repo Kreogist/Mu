@@ -18,6 +18,7 @@
 #include "knjsondatabase.h"
 
 //Dependences.
+#include "knmusicnowplayingbase.h"
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
 
@@ -29,7 +30,6 @@
 #include "sdk/knmusiclibraryartisttab.h"
 
 #include "knmusicutil.h"
-#include "knmusicglobal.h"
 
 #include "knmusiclibrary.h"
 
@@ -40,7 +40,8 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_libraryPath(knMusicGlobal->musicLibraryPath()+"/Library"),
     m_database(new KNJsonDatabase),
     m_libraryModel(new KNMusicLibraryModel(&m_parseThread, this)),
-    m_songTab(new KNMusicLibrarySongTab)
+    m_songTab(new KNMusicLibrarySongTab),
+    m_nowPlaying(nullptr)
 {
     //Configure the music database.
     // Move to working thread.
@@ -109,6 +110,43 @@ KNMusicTab *KNMusicLibrary::albumTab()
 KNMusicTab *KNMusicLibrary::genreTab()
 {
     return nullptr;
+}
+
+void KNMusicLibrary::showInSongTab()
+{
+    //Check out now playing pointer.
+    if(m_nowPlaying)
+    {
+        //Show the playing song in the song tab.
+        m_songTab->showInTab(m_nowPlaying->playingItem().detailInfo);
+    }
+}
+
+void KNMusicLibrary::showInArtistTab()
+{
+    //Check out now playing pointer.
+    if(m_nowPlaying)
+    {
+        //Show the playing song in the artist tab.
+        m_libraryTabs[TabArtists]->showInTab(
+                    m_nowPlaying->playingItem().detailInfo);
+    }
+}
+
+void KNMusicLibrary::showInAlbumTab()
+{
+    ;
+}
+
+void KNMusicLibrary::showInGenreTab()
+{
+    ;
+}
+
+void KNMusicLibrary::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
+{
+    //Save the now playing pointer.
+    m_nowPlaying=nowPlaying;
 }
 
 void KNMusicLibrary::onActionLoadLibrary()

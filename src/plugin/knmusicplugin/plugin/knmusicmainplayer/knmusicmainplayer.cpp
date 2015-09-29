@@ -86,6 +86,15 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
                 QPixmap(":/plugin/music/player/hide_mainplayer.png"));
     connect(m_hideMainPlayer, &KNOpacityAnimeButton::clicked,
             this, &KNMusicMainPlayer::requireHide);
+    //Configure the detail info panel.
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInSongs,
+            this, &KNMusicMainPlayer::requireShowInSongs);
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInArtists,
+            this, &KNMusicMainPlayer::requireShowInArtists);
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInAlbums,
+            this, &KNMusicMainPlayer::requireShowInAlbums);
+    connect(m_detailInfoPanel, &KNMusicMainPlayerPanel::requireShowInGenres,
+            this, &KNMusicMainPlayer::requireShowInGenres);
     //Configure the lyrics.
     m_lyricsPanel->setObjectName("MainPlayerLyrics");
     m_lyricsPanel->setBackend(knMusicGlobal->lyricsManager()->backend());

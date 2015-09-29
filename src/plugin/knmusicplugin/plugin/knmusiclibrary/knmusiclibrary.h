@@ -37,14 +37,53 @@ public:
     explicit KNMusicLibrary(QObject *parent = 0);
     ~KNMusicLibrary();
 
-    KNMusicTab *songTab();
-    KNMusicTab *artistTab();
-    KNMusicTab *albumTab();
-    KNMusicTab *genreTab();
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::songTab().
+     */
+    KNMusicTab *songTab() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::artistTab().
+     */
+    KNMusicTab *artistTab() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::albumTab().
+     */
+    KNMusicTab *albumTab() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::genreTab().
+     */
+    KNMusicTab *genreTab() Q_DECL_OVERRIDE;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::showInSongTab().
+     */
+    void showInSongTab() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::showInArtistTab().
+     */
+    void showInArtistTab() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::showInAlbumTab().
+     */
+    void showInAlbumTab() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::showInGenreTab().
+     */
+    void showInGenreTab() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::setNowPlaying().
+     */
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionLoadLibrary();
@@ -58,6 +97,8 @@ private:
         CategoryTabsCount
     };
     inline void linkLoadRequest(KNMusicLibraryTab *libraryTab);
+    KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
+    KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
     QThread m_databaseThread, m_parseThread, m_imageThread;
 
     KNConnectionHandler m_loadHandler;
@@ -65,8 +106,7 @@ private:
     KNJsonDatabase *m_database;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_songTab;
-    KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
-    KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
+    KNMusicNowPlayingBase *m_nowPlaying;
 };
 
 #endif // KNMUSICLIBRARY_H
