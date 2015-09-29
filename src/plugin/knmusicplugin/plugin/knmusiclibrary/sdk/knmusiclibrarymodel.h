@@ -27,7 +27,7 @@
 
 class KNJsonDatabase;
 class KNMusicSearcher;
-class KNMusicCategoryModel;
+class KNMusicCategoryModelBase;
 class KNMusicAnalysisQueue;
 class KNMusicLibraryImageManager;
 class KNMusicLibraryImageSaver;
@@ -98,7 +98,7 @@ public:
 
     KNJsonDatabase *database() const;
 
-    void installCategoryModel(KNMusicCategoryModel *model);
+    void installCategoryModel(KNMusicCategoryModelBase *model);
 
 signals:
     /*!
@@ -148,7 +148,7 @@ private:
     inline void removeCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
     inline KNMusicDetailInfo generateDetailInfo(const QJsonArray &dataArray);
     inline QJsonArray generateDataArray(const KNMusicDetailInfo &detailInfo);
-    QLinkedList<KNMusicCategoryModel *> m_categoryModels;
+    QLinkedList<KNMusicCategoryModelBase *> m_categoryModels;
     QHash<QString, QVariant> m_hashAlbumArt;
     QThread m_searchThread, m_analysisThread, m_imageThread;
     KNJsonDatabase *m_database;

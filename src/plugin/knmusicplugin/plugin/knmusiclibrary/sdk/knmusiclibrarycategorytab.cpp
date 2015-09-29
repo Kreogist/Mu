@@ -20,7 +20,7 @@
 #include "knmusiclibraryemptyhint.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiccategoryproxymodel.h"
-#include "knmusiccategorymodel.h"
+#include "knmusiccategorymodelbase.h"
 
 #include "knmusiclibrarycategorytab.h"
 
@@ -46,7 +46,8 @@ void KNMusicLibraryCategoryTab::setLibraryModel(KNMusicLibraryModel *model)
             m_emptyStateWidget, &KNEmptyStateWidget::showEmptyWidget);
 }
 
-void KNMusicLibraryCategoryTab::setCategoryModel(KNMusicCategoryModel *model)
+void KNMusicLibraryCategoryTab::setCategoryModel(
+        KNMusicCategoryModelBase *model)
 {
     //Default, we have to set the model to proxy model as source model.
     m_categoryProxyModel->setSourceModel(model);

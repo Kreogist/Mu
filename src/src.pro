@@ -478,7 +478,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagesaver.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorydelegate.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodelbase.h
 
 RESOURCES += \
     resource/res.qrc

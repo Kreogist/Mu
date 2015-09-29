@@ -28,7 +28,7 @@
 class KNJsonDatabase;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
-class KNMusicCategoryModel;
+class KNMusicCategoryModelBase;
 class KNMusicLibraryCategoryTab;
 class KNMusicLibrary : public KNMusicLibraryBase
 {
@@ -97,7 +97,7 @@ private:
         CategoryTabsCount
     };
     inline void linkLoadRequest(KNMusicLibraryTab *libraryTab);
-    KNMusicCategoryModel *m_categoryModel[CategoryTabsCount];
+    KNMusicCategoryModelBase *m_categoryModel[CategoryTabsCount];
     KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
     QThread m_databaseThread, m_imageThread;
 

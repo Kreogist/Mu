@@ -21,119 +21,119 @@
 
 #include <QList>
 
-#include "knmusicutil.h"
+#include "knmusiccategorymodelbase.h"
 
-#include <QAbstractListModel>
-
-using namespace MusicUtil;
-
-class KNMusicCategoryModel : public QAbstractListModel
+class KNMusicCategoryModel : public KNMusicCategoryModelBase
 {
     Q_OBJECT
 public:
-    enum CategoryRole
-    {
-        CategorySize=Qt::UserRole,
-        CategoryArtworkKey
-    };
-
+    /*!
+     * \brief Construct a KNMusicCategoryModel with a given parent object.
+     * \param parent The parent object pointer.
+     */
     explicit KNMusicCategoryModel(QObject *parent = 0);
 
     /*!
-     * \brief Reset the category model. This will add the no category item to
-     * the model.
+     * \brief Reimplemented from KNMusicCategoryModelBase::reset().
      */
     void reset();
 
-    QModelIndex categoryIndex(const QVariant &categoryText);
+    /*!
+     * \brief Reimplemented from KNMusicCategoryModelBase::categoryIndex().
+     */
+    QModelIndex categoryIndex(const QVariant &categoryText) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QAbstractListModel::rowCount().
+     * \brief Reimplemented from KNMusicCategoryModelBase::rowCount().
      */
     int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QAbstractListModel::data().
+     * \brief Reimplemented from KNMusicCategoryModelBase::data().
      */
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QAbstractListModel::flags().
+     * \brief Reimplemented from KNMusicCategoryModelBase::flags().
      */
     Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QAbstractListModel::headerData().
+     * \brief Reimplemented from KNMusicCategoryModelBase::headerData().
      */
     QVariant headerData(int section,
                         Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Get the no category text.
-     * \return The no category text.
+     * \brief Reimplemented from KNMusicCategoryModelBase::noCategoryText().
      */
-    QString noCategoryText() const;
+    QString noCategoryText() const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QAbstractListModel::setData().
+     * \brief Reimplemented from KNMusicCategoryModelBase::setData().
      */
     bool setData(const QModelIndex &index,
                  const QVariant &value,
                  int role) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Get the category column.
-     * \return The category column number.
+     * \brief Reimplemented from KNMusicCategoryModelBase::categoryColumn().
      */
-    int categoryColumn() const;
+    int categoryColumn() const Q_DECL_OVERRIDE;
 
-    void setHashAlbumArt(QHash<QString, QVariant> *hashAlbumArt);
-
+    /*!
+     * \brief Reimplemented from KNMusicCategoryModelBase::setHashAlbumArt().
+     */
+    void setHashAlbumArt(QHash<QString, QVariant> *hashAlbumArt)
+    Q_DECL_OVERRIDE;
 
 signals:
-    /*!
-     * \brief When the album art of the index is updated, this signal will be
-     * emitted.
-     * \param index The specific index.
-     */
-    void albumArtUpdate(QModelIndex index);
 
 public slots:
     /*!
-     * \brief Set the category column number, it will be used to category the
-     * detail info.
-     * \param categoryColumn The category column.
+     * \brief Reimplemented from KNMusicCategoryModelBase::setCategoryColumn().
      */
-    void setCategoryColumn(int categoryColumn);
+    void setCategoryColumn(int categoryColumn) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Set the no album art icon.
-     * \param noAlbumArt The no album art icon.
+     * \brief Reimplemented from KNMusicCategoryModelBase::setNoAlbumArt().
      */
-    void setNoAlbumArt(const QPixmap &noAlbumArt);
+    void setNoAlbumArt(const QPixmap &noAlbumArt) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Set no category text of the first data.
-     * \param noCategoryText
+     * \brief Reimplemented from KNMusicCategoryModelBase::setNoCategoryText().
      */
-    void setNoCategoryText(const QString &noCategoryText);
+    void setNoCategoryText(const QString &noCategoryText) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief When a new detail info is adding to the library, called this
-     * function to add it to cateogry model.
-     * \param detailInfo The detail info added to library model.
+     * \brief Reimplemented from KNMusicCategoryModelBase::onCategoryAdd().
      */
-    virtual void onCategoryAdd(const KNMusicDetailInfo &detailInfo);
+    void onCategoryAdd(const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
 
-    virtual void onCategoryRemove(const KNMusicDetailInfo &detailInfo);
+    /*!
+     * \brief Reimplemented from KNMusicCategoryModelBase::onCategoryRemove().
+     */
+    void onCategoryRemove(const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
 
-    virtual void onCategoryUpdate(const KNMusicDetailInfo &before,
-                                  const KNMusicDetailInfo &after);
+    /*!
+     * \brief Reimplemented from KNMusicCategoryModelBase::onCategoryUpdate().
+     */
+    void onCategoryUpdate(const KNMusicDetailInfo &before,
+                          const KNMusicDetailInfo &after) Q_DECL_OVERRIDE;
 
-    virtual void onCategoryAlbumArtUpdate(const KNMusicDetailInfo &detailInfo);
+    /*!
+     * \brief Reimplemented from
+     * KNMusicCategoryModelBase::onCategoryAlbumArtUpdate().
+     */
+    void onCategoryAlbumArtUpdate(const KNMusicDetailInfo &detailInfo)
+    Q_DECL_OVERRIDE;
 
-    virtual void onActionImageRecoverComplete();
+    /*!
+     * \brief Reimplemented from
+     * KNMusicCategoryModelBase::onActionImageRecoverComplete().
+     */
+    void onActionImageRecoverComplete() Q_DECL_OVERRIDE;
 
 protected:
     struct CategoryItem
@@ -161,6 +161,7 @@ protected:
     void reduceCount(const int &row);
 
 private:
+    inline void saveNoAlbumArt(const QPixmap &noAlbumArt);
     QList<CategoryItem> m_categoryList;
     QVariant m_noAlbumArt;
     QString m_noCategoryText;

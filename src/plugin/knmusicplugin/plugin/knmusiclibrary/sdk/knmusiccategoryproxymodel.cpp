@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knmusiccategorymodel.h"
+#include "knmusiccategorymodelbase.h"
 
 #include "knmusiccategoryproxymodel.h"
 
@@ -41,8 +41,8 @@ QModelIndex KNMusicCategoryProxyModel::categoryIndex(
         return index(0, 0);
     }
     //Or else, we have to find out the data.
-    KNMusicCategoryModel *categoryModel=
-            static_cast<KNMusicCategoryModel *>(sourceModel());
+    KNMusicCategoryModelBase *categoryModel=
+            static_cast<KNMusicCategoryModelBase *>(sourceModel());
     //Give out the category model.
     QModelIndex sourceCategoryIndex=categoryModel->categoryIndex(categoryText);
     //Check the validation of the source category index.
@@ -79,8 +79,9 @@ bool KNMusicCategoryProxyModel::filterAcceptsRow(
     //Check out the source row.
     //If the source row is 0 row and it has no data, we won't accept the row.
     if(source_row==0 &&
-            sourceModel()->data(sourceModel()->index(0, 0),
-                                KNMusicCategoryModel::CategorySize).toInt()==0)
+            sourceModel()->data(
+                sourceModel()->index(0, 0),
+                KNMusicCategoryModelBase::CategorySize).toInt()==0)
     {
         return false;
     }

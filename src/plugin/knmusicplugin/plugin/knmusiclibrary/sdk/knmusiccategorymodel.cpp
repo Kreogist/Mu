@@ -22,7 +22,7 @@
 #include <QDebug>
 
 KNMusicCategoryModel::KNMusicCategoryModel(QObject *parent) :
-    QAbstractListModel(parent),
+    KNMusicCategoryModelBase(parent),
     m_categoryList(QList<CategoryItem>()),
     m_noAlbumArt(QVariant()),
     m_noCategoryText(QString()),
@@ -30,7 +30,7 @@ KNMusicCategoryModel::KNMusicCategoryModel(QObject *parent) :
     m_categoryColumn(0)
 {
     //Set the default no album art data.
-    setNoAlbumArt(knMusicGlobal->noAlbumArt());
+    saveNoAlbumArt(knMusicGlobal->noAlbumArt());
 }
 
 void KNMusicCategoryModel::reset()
@@ -138,10 +138,8 @@ QVariant KNMusicCategoryModel::headerData(int section,
 
 void KNMusicCategoryModel::setNoAlbumArt(const QPixmap &noAlbumArt)
 {
-    //Save the no album art icon data.
-    m_noAlbumArt = QVariant(noAlbumArt.scaled(QSize(40, 40),
-                                              Qt::KeepAspectRatio,
-                                              Qt::SmoothTransformation));
+    //Save the no album art.
+    saveNoAlbumArt(noAlbumArt);
 }
 
 QString KNMusicCategoryModel::noCategoryText() const
@@ -441,6 +439,14 @@ void KNMusicCategoryModel::reduceCount(const int &row)
     m_categoryList.replace(row, item);
     //Emit the data changed signal.
     emit dataChanged(index(row), index(row), QVector<int>(1, CategorySize));
+}
+
+inline void KNMusicCategoryModel::saveNoAlbumArt(const QPixmap &noAlbumArt)
+{
+    //Save the no album art icon data.
+    m_noAlbumArt = QVariant(noAlbumArt.scaled(QSize(40, 40),
+                                              Qt::KeepAspectRatio,
+                                              Qt::SmoothTransformation));
 }
 
 QVariant KNMusicCategoryModel::noAlbumArt() const

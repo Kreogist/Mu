@@ -21,7 +21,7 @@
 
 #include "knmusiclibrarytab.h"
 
-class KNMusicCategoryModel;
+class KNMusicCategoryModelBase;
 class KNMusicCategoryProxyModel;
 class KNEmptyStateWidget;
 class KNMusicLibraryEmptyHint;
@@ -45,7 +45,7 @@ public slots:
      * \brief Set category model to the tab. You may need the proxy model.
      * \param model The category model.
      */
-    virtual void setCategoryModel(KNMusicCategoryModel *model);
+    virtual void setCategoryModel(KNMusicCategoryModelBase *model);
 
 protected:
     /*!

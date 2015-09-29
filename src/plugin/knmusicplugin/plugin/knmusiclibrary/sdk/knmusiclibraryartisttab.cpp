@@ -28,7 +28,7 @@
 #include "knmusicproxymodel.h"
 #include "knmusiccategorylistviewbase.h"
 #include "knmusiccategoryproxymodel.h"
-#include "knmusiccategorymodel.h"
+#include "knmusiccategorymodelbase.h"
 #include "knmusiccategorydisplay.h"
 #include "knmusiclibrarymodel.h"
 
@@ -135,7 +135,7 @@ void KNMusicLibraryArtistTab::showIndex(KNMusicModel *musicModel,
     showInTab(musicModel->rowDetailInfo(index.row()));
 }
 
-void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
+void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModelBase *model)
 {
     //Check whether the category model has been set before.
     if(m_categoryModel!=nullptr)
@@ -154,7 +154,7 @@ void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
     //Do original set.
     KNMusicLibraryCategoryTab::setCategoryModel(model);
     //Link the artwork update signal.
-    connect(m_categoryModel, &KNMusicCategoryModel::albumArtUpdate,
+    connect(m_categoryModel, &KNMusicCategoryModelBase::albumArtUpdate,
             [=](const QModelIndex &updatedIndex)
             {
                 //Check out the updated index.
@@ -288,8 +288,8 @@ void KNMusicLibraryArtistTab::updateDisplayArtwork(const QModelIndex &index)
     m_artistDisplay->setCategoryIcon(
                 m_libraryModel->artwork(
                     m_categoryModel->data(
-                        index,
-                        KNMusicCategoryModel::CategoryArtworkKey).toString()));
+                     index,
+                     KNMusicCategoryModelBase::CategoryArtworkKey).toString()));
 }
 
 void KNMusicLibraryArtistTab::checkCategorySelected()

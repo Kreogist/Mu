@@ -18,7 +18,7 @@
 
 #include "knjsondatabase.h"
 
-#include "knmusiccategorymodel.h"
+#include "knmusiccategorymodelbase.h"
 #include "knmusicsearcher.h"
 #include "knmusicanalysisqueue.h"
 #include "knmusiclibraryimagemanager.h"
@@ -421,7 +421,7 @@ KNJsonDatabase *KNMusicLibraryModel::database() const
     return m_database;
 }
 
-void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModel *model)
+void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)
 {
     //Set hash list to category model.
     model->setHashAlbumArt(&m_hashAlbumArt);

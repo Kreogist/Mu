@@ -60,7 +60,7 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicLibraryCategoryTab::setCategoryModel().
      */
-    void setCategoryModel(KNMusicCategoryModel *model) Q_DECL_OVERRIDE;
+    void setCategoryModel(KNMusicCategoryModelBase *model) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicLibraryCategoryTab::setLibraryModel().
@@ -94,7 +94,7 @@ private:
     KNDropProxyContainer *m_dropProxy;
     KNMusicCategoryListViewBase *m_artistList;
     KNMusicCategoryDisplay *m_artistDisplay;
-    KNMusicCategoryModel *m_categoryModel;
+    KNMusicCategoryModelBase *m_categoryModel;
     KNMusicLibraryModel *m_libraryModel;
 };
 

@@ -23,6 +23,7 @@
 
 //Library SDK Ports.
 #include "sdk/knmusiclibrarytab.h"
+#include "sdk/knmusiccategorymodelbase.h"
 
 //Library SDK Plugins.
 #include "sdk/knmusiclibrarymodel.h"
