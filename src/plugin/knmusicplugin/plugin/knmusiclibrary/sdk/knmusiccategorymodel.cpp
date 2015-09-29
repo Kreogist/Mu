@@ -276,7 +276,7 @@ void KNMusicCategoryModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
         return;
     }
     //Find the category text.
-    for(int i=0; i<m_categoryList.size(); ++i)
+    for(int i=0, bound=m_categoryList.size(); i<bound; ++i)
     {
         //If we could find the item.
         if(m_categoryList.at(i).displayText==categoryText)
@@ -384,6 +384,12 @@ void KNMusicCategoryModel::onActionImageRecoverComplete()
                      QVector<int>(1, Qt::DecorationRole));
 }
 
+KNMusicCategoryModel::CategoryItem KNMusicCategoryModel::itemAt(
+        const int &row) const
+{
+    return m_categoryList.at(row);
+}
+
 inline KNMusicCategoryModel::CategoryItem
         KNMusicCategoryModel::generateNoCategoryItem()
 {
@@ -437,10 +443,15 @@ void KNMusicCategoryModel::reduceCount(const int &row)
     emit dataChanged(index(row), index(row), QVector<int>(1, CategorySize));
 }
 
+QVariant KNMusicCategoryModel::noAlbumArt() const
+{
+    return m_noAlbumArt;
+}
+
 void KNMusicCategoryModel::setHashAlbumArt(
         QHash<QString, QVariant> *hashAlbumArt)
 {
-    m_hashAlbumArt = hashAlbumArt;
+    m_hashAlbumArt=hashAlbumArt;
 }
 
 int KNMusicCategoryModel::categoryColumn() const

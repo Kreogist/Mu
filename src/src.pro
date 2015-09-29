@@ -305,7 +305,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagesaver.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorydelegate.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorydelegate.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -474,7 +476,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagesaver.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorydelegate.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorydelegate.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.h
 
 RESOURCES += \
     resource/res.qrc

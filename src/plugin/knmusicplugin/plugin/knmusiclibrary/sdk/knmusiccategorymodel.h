@@ -90,6 +90,7 @@ public:
 
     void setHashAlbumArt(QHash<QString, QVariant> *hashAlbumArt);
 
+
 signals:
     /*!
      * \brief When the album art of the index is updated, this signal will be
@@ -118,18 +119,23 @@ public slots:
      */
     void setNoCategoryText(const QString &noCategoryText);
 
-    void onCategoryAdd(const KNMusicDetailInfo &detailInfo);
+    /*!
+     * \brief When a new detail info is adding to the library, called this
+     * function to add it to cateogry model.
+     * \param detailInfo The detail info added to library model.
+     */
+    virtual void onCategoryAdd(const KNMusicDetailInfo &detailInfo);
 
-    void onCategoryRemove(const KNMusicDetailInfo &detailInfo);
+    virtual void onCategoryRemove(const KNMusicDetailInfo &detailInfo);
 
-    void onCategoryUpdate(const KNMusicDetailInfo &before,
-                          const KNMusicDetailInfo &after);
+    virtual void onCategoryUpdate(const KNMusicDetailInfo &before,
+                                  const KNMusicDetailInfo &after);
 
-    void onCategoryAlbumArtUpdate(const KNMusicDetailInfo &detailInfo);
+    virtual void onCategoryAlbumArtUpdate(const KNMusicDetailInfo &detailInfo);
 
     virtual void onActionImageRecoverComplete();
 
-private:
+protected:
     struct CategoryItem
     {
         QVariant displayText;
@@ -146,13 +152,15 @@ private:
             return displayText==value.displayText;
         }
     };
+    QVariant noAlbumArt() const;
+    CategoryItem itemAt(const int &row) const;
+    CategoryItem generateNoCategoryItem();
+    void appendItem(const CategoryItem &item);
+    void removeItem(const int &row);
+    void replaceItem(const int &row, const CategoryItem &item);
+    void reduceCount(const int &row);
 
-    inline CategoryItem generateNoCategoryItem();
-    inline void appendItem(const CategoryItem &item);
-    inline void removeItem(const int &row);
-    inline void replaceItem(const int &row, const CategoryItem &item);
-    inline void reduceCount(const int &row);
-
+private:
     QList<CategoryItem> m_categoryList;
     QVariant m_noAlbumArt;
     QString m_noCategoryText;

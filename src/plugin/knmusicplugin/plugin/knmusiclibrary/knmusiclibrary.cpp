@@ -20,15 +20,17 @@
 //Dependences.
 #include "knmusicnowplayingbase.h"
 #include "knmusicsolomenubase.h"
-#include "sdk/knmusiclibrarymodel.h"
-#include "sdk/knmusiccategorymodel.h"
 
 //Library SDK Ports.
 #include "sdk/knmusiclibrarytab.h"
 
 //Library SDK Plugins.
+#include "sdk/knmusiclibrarymodel.h"
+#include "sdk/knmusiccategorymodel.h"
+#include "sdk/knmusicgenremodel.h"
 #include "sdk/knmusiclibrarysongtab.h"
 #include "sdk/knmusiclibraryartisttab.h"
+#include "sdk/knmusiclibrarygenretab.h"
 
 #include "knmusicutil.h"
 
@@ -62,6 +64,10 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab;
     m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
     m_categoryModel[TabArtists]->setCategoryColumn(Artist);
+    // Genre tab.
+    m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab;
+    m_categoryModel[TabGenres]=new KNMusicGenreModel(this);
+    m_categoryModel[TabGenres]->setCategoryColumn(Genre);
 
     //Install the category model to library model.
     m_libraryModel->installCategoryModel(m_categoryModel[TabArtists]);
@@ -72,11 +78,21 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Link the load request.
     linkLoadRequest(m_libraryTabs[TabArtists]);
 
+    //Install the category model to library model.
+    m_libraryModel->installCategoryModel(m_categoryModel[TabGenres]);
+    //Set the category model.
+    m_libraryTabs[TabGenres]->setCategoryModel(m_categoryModel[TabGenres]);
+    //Set the library model.
+    m_libraryTabs[TabGenres]->setLibraryModel(m_libraryModel);
+    //Link the load request.
+    linkLoadRequest(m_libraryTabs[TabGenres]);
+
     //Generate the show in action list.
     QList<QAction *> showInActionList;
     //Add the actions to the list.
     showInActionList.append(m_songTab->showInAction());
     showInActionList.append(m_libraryTabs[TabArtists]->showInAction());
+    showInActionList.append(m_libraryTabs[TabGenres]->showInAction());
     //Add the actions to solo menu.
     knMusicGlobal->soloMenu()->appendMusicActions(showInActionList);
 
@@ -115,7 +131,7 @@ KNMusicTab *KNMusicLibrary::albumTab()
 
 KNMusicTab *KNMusicLibrary::genreTab()
 {
-    return nullptr;
+    return m_libraryTabs[TabGenres];
 }
 
 void KNMusicLibrary::showInSongTab()
@@ -146,7 +162,13 @@ void KNMusicLibrary::showInAlbumTab()
 
 void KNMusicLibrary::showInGenreTab()
 {
-    ;
+    //Check out now playing pointer.
+    if(m_nowPlaying)
+    {
+        //Show the playing song in the artist tab.
+        m_libraryTabs[TabGenres]->showInTab(
+                    m_nowPlaying->playingItem().detailInfo);
+    }
 }
 
 void KNMusicLibrary::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)

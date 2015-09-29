@@ -32,33 +32,31 @@
 #include "knmusiccategorydisplay.h"
 #include "knmusiclibrarymodel.h"
 
-#include "knmusiclibraryartisttab.h"
+#include "knmusiclibrarygenretab.h"
 
-#include <QDebug>
-
-KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
+KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QWidget *parent) :
     KNMusicLibraryCategoryTab(parent),
     m_notEmptyCheck(QMetaObject::Connection()),
     m_currentSourceIndex(QModelIndex()),
     m_tab(new KNCategoryTab(this)),
-    m_showInArtistTab(new QAction(this)),
+    m_showInGenreTab(new QAction(this)),
     m_dropProxy(new KNDropProxyContainer(this)),
-    m_artistList(new KNMusicCategoryListViewBase(m_dropProxy)),
-    m_artistDisplay(new KNMusicCategoryDisplay(this, this)),
+    m_genreList(new KNMusicCategoryListViewBase(m_dropProxy)),
+    m_genreDisplay(new KNMusicCategoryDisplay(this, this)),
     m_categoryModel(nullptr),
     m_libraryModel(nullptr)
 {
     //Configure the tab button.
-    m_tab->setIcon(QIcon(":/plugin/music/category/artist.png"));
+    m_tab->setIcon(QIcon(":/plugin/music/category/genre.png"));
     //Configure the show in action.
-    connect(m_showInArtistTab, &QAction::triggered,
-            this, &KNMusicLibraryArtistTab::onActionShowInArtist);
-    //Configure the artist display.
-    m_artistDisplay->setCategoryColumn(Artist);
-    //Configure the artist list.
-    m_artistList->setTabOrder(m_artistList, m_artistDisplay);
-    m_artistList->setItemDelegate(
-                new KNMusicLibraryCategoryDelegate(m_artistList));
+    connect(m_showInGenreTab, &QAction::triggered,
+            this, &KNMusicLibraryGenreTab::onActionShowInGenre);
+    //Configure the genre display.
+    m_genreDisplay->setCategoryColumn(Genre);
+    //Configure the genre list.
+    m_genreList->setTabOrder(m_genreList, m_genreDisplay);
+    m_genreList->setItemDelegate(
+                new KNMusicLibraryCategoryDelegate(m_genreList));
     //Set the drop proxy widget to the content widget.
     setContentWidget(m_dropProxy);
     //Initial the layout for the container, only for auto resize splitter.
@@ -70,30 +68,30 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
     QSplitter *splitter=new QSplitter(m_dropProxy);
     splitter->setHandleWidth(0); //This is beautiful.
     splitter->setChildrenCollapsible(false);
-    splitter->setFocusProxy(m_artistList);
+    splitter->setFocusProxy(m_genreList);
     //Set drop proxy container widget's focus proxy to the splitter.
     m_dropProxy->setFocusProxy(splitter);
     //Add splitter to main splitter.
     mainLayout->addWidget(splitter);
     //Add widget to splitter.
-    splitter->addWidget(m_artistList);
-    splitter->addWidget(m_artistDisplay);
+    splitter->addWidget(m_genreList);
+    splitter->addWidget(m_genreDisplay);
     //Set viewer properties after add widgets.
     splitter->setCollapsible(1, false);
     splitter->setStretchFactor(1, 1);
 }
 
-QAction *KNMusicLibraryArtistTab::showInAction()
+QAction *KNMusicLibraryGenreTab::showInAction()
 {
-    return m_showInArtistTab;
+    return m_showInGenreTab;
 }
 
-QAbstractButton *KNMusicLibraryArtistTab::tab()
+QAbstractButton *KNMusicLibraryGenreTab::tab()
 {
     return m_tab;
 }
 
-void KNMusicLibraryArtistTab::showInTab(const KNMusicDetailInfo &detailInfo)
+void KNMusicLibraryGenreTab::showInTab(const KNMusicDetailInfo &detailInfo)
 {
     //Check out the library model has been set or not.
     if(!m_libraryModel)
@@ -113,8 +111,8 @@ void KNMusicLibraryArtistTab::showInTab(const KNMusicDetailInfo &detailInfo)
     showAndSelectRow(musicRow);
 }
 
-void KNMusicLibraryArtistTab::showIndex(KNMusicModel *musicModel,
-                                        const QModelIndex &index)
+void KNMusicLibraryGenreTab::showIndex(KNMusicModel *musicModel,
+                                       const QModelIndex &index)
 {
     //Check out the library model has been set or not.
     if((!m_libraryModel) || (!musicModel))
@@ -135,7 +133,7 @@ void KNMusicLibraryArtistTab::showIndex(KNMusicModel *musicModel,
     showInTab(musicModel->rowDetailInfo(index.row()));
 }
 
-void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
+void KNMusicLibraryGenreTab::setCategoryModel(KNMusicCategoryModel *model)
 {
     //Check whether the category model has been set before.
     if(m_categoryModel!=nullptr)
@@ -153,32 +151,21 @@ void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModel *model)
     }
     //Do original set.
     KNMusicLibraryCategoryTab::setCategoryModel(model);
-    //Link the artwork update signal.
-    connect(m_categoryModel, &KNMusicCategoryModel::albumArtUpdate,
-            [=](const QModelIndex &updatedIndex)
-            {
-                //Check out the updated index.
-                if(updatedIndex==m_currentSourceIndex)
-                {
-                    //Update the category index.
-                    updateDisplayArtwork(m_currentSourceIndex);
-                }
-            });
     //Update the model.
     retranslate();
 
     //! This should be done in constructor, but setModel() is a virtual
     //! function, so we moved here.
     //Set the proxy model to tree view.
-    m_artistList->setModel(categoryProxyModel());
+    m_genreList->setModel(categoryProxyModel());
     categoryProxyModel()->sort(0, Qt::AscendingOrder);
     //Link the selection model to display slot.
-    connect(m_artistList->selectionModel(),
+    connect(m_genreList->selectionModel(),
             &QItemSelectionModel::currentChanged,
-            this, &KNMusicLibraryArtistTab::onActionCategoryIndexChanged);
+            this, &KNMusicLibraryGenreTab::onActionCategoryIndexChanged);
 }
 
-void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
+void KNMusicLibraryGenreTab::setLibraryModel(KNMusicLibraryModel *model)
 {
     //Check whether the library model has been set before.
     if(m_libraryModel!=nullptr)
@@ -200,10 +187,10 @@ void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
     connect(m_dropProxy, &KNDropProxyContainer::urlsDropped,
             m_libraryModel, &KNMusicLibraryModel::appendUrls);
     //Set the model to display.
-    m_artistDisplay->setLibraryModel(m_libraryModel);
+    m_genreDisplay->setLibraryModel(m_libraryModel);
 }
 
-void KNMusicLibraryArtistTab::showEvent(QShowEvent *event)
+void KNMusicLibraryGenreTab::showEvent(QShowEvent *event)
 {
     //Do original show event.
     KNMusicLibraryCategoryTab::showEvent(event);
@@ -214,10 +201,10 @@ void KNMusicLibraryArtistTab::showEvent(QShowEvent *event)
     m_notEmptyCheck=connect(m_libraryModel,
                             &KNMusicLibraryModel::libraryNotEmpty,
                             this,
-                            &KNMusicLibraryArtistTab::checkCategorySelected);
+                            &KNMusicLibraryGenreTab::checkCategorySelected);
 }
 
-void KNMusicLibraryArtistTab::hideEvent(QHideEvent *event)
+void KNMusicLibraryGenreTab::hideEvent(QHideEvent *event)
 {
     //Do the original hide event.
     KNMusicLibraryCategoryTab::hideEvent(event);
@@ -225,27 +212,38 @@ void KNMusicLibraryArtistTab::hideEvent(QHideEvent *event)
     disconnect(m_notEmptyCheck);
 }
 
-void KNMusicLibraryArtistTab::retranslate()
+void KNMusicLibraryGenreTab::retranslate()
 {
     //Update the tab text.
-    m_tab->setText(tr("Artists"));
+    m_tab->setText(tr("Genres"));
     //Set the action caption.
-    m_showInArtistTab->setText(tr("Go to Artist"));
+    m_showInGenreTab->setText(tr("Go to Genre"));
     //Update the no category text.
     if(m_categoryModel!=nullptr)
     {
         //Set no category text.
-        m_categoryModel->setNoCategoryText(tr("No Artist"));
+        m_categoryModel->setNoCategoryText(tr("No Genre"));
         //Update the detail info, might update the translation.
-        if(m_artistList->currentIndex().isValid())
+        if(m_genreList->currentIndex().isValid())
         {
             //Use category index changed signal to update labels.
-            onActionCategoryIndexChanged(m_artistList->currentIndex());
+            onActionCategoryIndexChanged(m_genreList->currentIndex());
         }
     }
 }
 
-void KNMusicLibraryArtistTab::onActionShowInArtist()
+void KNMusicLibraryGenreTab::checkCategorySelected()
+{
+    //Check whether we have category to select, and is category selected or not.
+    if(categoryProxyModel()->rowCount() > 0 &&
+            !m_genreList->currentIndex().isValid())
+    {
+        //Select the first item in the proxy model.
+        m_genreList->setCurrentIndex(categoryProxyModel()->index(0,0));
+    }
+}
+
+void KNMusicLibraryGenreTab::onActionShowInGenre()
 {
     //Get the solo menu action.
     KNMusicSoloMenuBase *soloMenu=knMusicGlobal->soloMenu();
@@ -260,7 +258,7 @@ void KNMusicLibraryArtistTab::onActionShowInArtist()
     }
 }
 
-void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(
+void KNMusicLibraryGenreTab::onActionCategoryIndexChanged(
         const QModelIndex &index)
 {
     //Save the current source index.
@@ -268,57 +266,42 @@ void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(
     //CHeck whether it's the no item index.
     if(m_currentSourceIndex.row()==0)
     {
-        //Ask the artist display to show the no category item.
-        m_artistDisplay->showNoCategoryItem(m_categoryModel->noCategoryText());
+        //Ask the genre display to show the no category item.
+        m_genreDisplay->showNoCategoryItem(m_categoryModel->noCategoryText());
         //Mission complete.
         return;
     }
     //Or else we have to show the category.
     //Set the category text.
-    m_artistDisplay->setCategoryText(
+    m_genreDisplay->setCategoryText(
                 m_categoryModel->data(m_currentSourceIndex,
                                       Qt::DisplayRole).toString());
     //Set the category artwork.
-    updateDisplayArtwork(m_currentSourceIndex);
-}
-
-void KNMusicLibraryArtistTab::updateDisplayArtwork(const QModelIndex &index)
-{
     //Set the category icon right from the library model.
-    m_artistDisplay->setCategoryIcon(
+    m_genreDisplay->setCategoryIcon(
                 m_libraryModel->artwork(
                     m_categoryModel->data(
-                        index,
+                        m_currentSourceIndex,
                         KNMusicCategoryModel::CategoryArtworkKey).toString()));
 }
 
-void KNMusicLibraryArtistTab::checkCategorySelected()
-{
-    //Check whether we have category to select, and is category selected or not.
-    if(categoryProxyModel()->rowCount() > 0 &&
-            !m_artistList->currentIndex().isValid())
-    {
-        //Select the first item in the proxy model.
-        m_artistList->setCurrentIndex(categoryProxyModel()->index(0,0));
-    }
-}
-
-inline void KNMusicLibraryArtistTab::showAndSelectRow(const int &musicRow)
+inline void KNMusicLibraryGenreTab::showAndSelectRow(const int &musicRow)
 {
     //Show and select the index row.
     QModelIndex categoryIndex=
             categoryProxyModel()->categoryIndex(
-                m_libraryModel->index(musicRow, Artist).data(Qt::DisplayRole));
+                m_libraryModel->index(musicRow, Genre).data(Qt::DisplayRole));
     //Check is the category index valid.
     if(categoryIndex.isValid())
     {
-        //Change the current index of the artist list.
-        m_artistList->setCurrentIndex(categoryIndex);
-        m_artistList->scrollTo(categoryIndex,
+        //Change the current index of the genre list.
+        m_genreList->setCurrentIndex(categoryIndex);
+        m_genreList->scrollTo(categoryIndex,
                                QAbstractItemView::PositionAtCenter);
         //Set the display widget to show the index of the song.
-        m_artistDisplay->scrollToSourceRow(musicRow);
+        m_genreDisplay->scrollToSourceRow(musicRow);
     }
     //Ask to show the tab.
     emit requireShowTab();
 }
+
