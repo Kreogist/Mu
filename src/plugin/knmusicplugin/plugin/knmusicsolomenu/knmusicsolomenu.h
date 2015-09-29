@@ -57,6 +57,10 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicSoloMenuBase::appendMusicActions().
+     */
+    void appendMusicActions(const QList<QAction *> &actions) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

@@ -171,6 +171,8 @@ void KNMusicLibrarySongTab::retranslate()
 {
     //Update the tab text.
     m_tab->setText(tr("Songs"));
+    //Update the action text.
+    m_showInSongTab->setText(tr("Go to Songs"));
 }
 
 void KNMusicLibrarySongTab::onActionShowInSong()

@@ -19,6 +19,7 @@
 
 //Dependences.
 #include "knmusicnowplayingbase.h"
+#include "knmusicsolomenubase.h"
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
 
@@ -70,6 +71,14 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_libraryTabs[TabArtists]->setLibraryModel(m_libraryModel);
     //Link the load request.
     linkLoadRequest(m_libraryTabs[TabArtists]);
+
+    //Generate the show in action list.
+    QList<QAction *> showInActionList;
+    //Add the actions to the list.
+    showInActionList.append(m_songTab->showInAction());
+    showInActionList.append(m_libraryTabs[TabArtists]->showInAction());
+    //Add the actions to solo menu.
+    knMusicGlobal->soloMenu()->appendMusicActions(showInActionList);
 
     //Start up threads.
     m_databaseThread.start();

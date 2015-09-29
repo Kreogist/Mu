@@ -79,7 +79,11 @@ signals:
     void requireRenameCurrent(QString preferName);
 
 public slots:
-
+    /*!
+     * \brief Append music goto tab actions to the solo menu.
+     * \param actions The action list.
+     */
+    virtual void appendMusicActions(const QList<QAction *> &actions)=0;
 };
 
 #endif // KNMUSICSOLOMENUBASE_H

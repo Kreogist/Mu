@@ -177,6 +177,14 @@ QModelIndex KNMusicSoloMenu::triggeredIndex() const
     return m_itemIndex;
 }
 
+void KNMusicSoloMenu::appendMusicActions(const QList<QAction *> &actions)
+{
+    //Insert the actions before .
+    insertActions(m_actions[SearchItemText], actions);
+    //Insert seperator.
+    insertSeparator(m_actions[SearchItemText]);
+}
+
 void KNMusicSoloMenu::retranslate()
 {
     //Translate all the action caption. Save them in title caption string list.
