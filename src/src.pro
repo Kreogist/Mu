@@ -40,8 +40,19 @@ msvc: {
     QMAKE_CXXFLAGS_RELEASE += -GL -Gw -Qpar -Qpar-report:1 -arch:AVX -favor:INTEL64 -GA
 }
 gcc: {
+    # Instruction optimized
     CONFIG += mmx sse sse2 sse3
     QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3 -finline-functions
+    # Vectorize optimization
+    QMAKE_CXXFLAGS_RELEASE += -ftree-vectorize -ftree-vectorizer-verbose=2
+    # Concurrency
+    QMAKE_CXXFLAGS_RELEASE += -funroll-loops -floop-parallelize-all
+    # Loop optimization
+    QMAKE_CXXFLAGS_RELEASE += -ftree-loop-linear
+    # Cache optimization.
+    QMAKE_CXXFLAGS_RELEASE += -fbranch-target-load-optimize
+    # CPU Architecture.
+    QMAKE_CXXFLAGS_RELEASE += -march=core2
     # Qt will use clang on Mac OS X, but it seems that it treats the clang as
     # gcc, it will use all the flags we set to gcc on clang. In clang, it
     # doesn't have -fforce-addr switch, so we need to set the switcher

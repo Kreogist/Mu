@@ -398,7 +398,7 @@ inline KNMusicCategoryModel::CategoryItem
     return noCategory;
 }
 
-inline void KNMusicCategoryModel::appendItem(const CategoryItem &item)
+void KNMusicCategoryModel::appendItem(const CategoryItem &item)
 {
     //Follow the documentation, we have to do this.
     beginInsertRows(QModelIndex(),
