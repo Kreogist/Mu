@@ -154,7 +154,7 @@ private:
     KNMusicCategoryProxyModel *m_proxyModel;
     KNMusicAlbumModel *m_model;
     const int m_spacing, m_itemMinimalWidth, minimalWidth;
-    int m_lineCount, m_imageTextSpacing, m_itemHeight, m_itemWidth,
+    int m_lineCount, m_textSpacing, m_itemHeight, m_itemWidth,
         m_itemSpacingHeight, m_itemSpacingWidth, m_maxColumnCount,
         m_shadowIncrease;
 };

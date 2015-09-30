@@ -43,7 +43,7 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     m_itemMinimalWidth(124),
     minimalWidth(m_itemMinimalWidth+m_spacing),
     m_lineCount(0),
-    m_imageTextSpacing(5),
+    m_textSpacing(5),
     m_itemHeight(154),
     m_itemWidth(134),
     m_itemSpacingHeight(m_spacing+m_itemHeight),
@@ -482,7 +482,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     painter.setPen(textColor);
     //Draw the album caption, which contains album name and artist.
     //Draw the album name first.
-    int textY=y+m_itemWidth+m_imageTextSpacing;
+    int textY=y+m_itemWidth+m_textSpacing;
     painter.drawText(QRect(x,
                            textY,
                            m_itemWidth,
@@ -506,7 +506,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     painter.setPen(textColor);
     //Draw the text.
     painter.drawText(QRect(x,
-                           textY+fontMetrics().height(),
+                           textY+fontMetrics().height()+(m_textSpacing>>1),
                            m_itemWidth,
                            fontMetrics().height()),
                      Qt::AlignLeft,

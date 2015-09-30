@@ -37,7 +37,9 @@ TRANSLATIONS += \
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
 msvc: {
-    QMAKE_CXXFLAGS_RELEASE += -GL -Gw -Qpar -Qpar-report:1 -arch:AVX -favor:INTEL64 -GA
+    QMAKE_CXXFLAGS_RELEASE += -GL -Gw -Qpar -arch:AVX -favor:INTEL64 -GA
+
+    QMAKE_LFLAGS_RELEASE += -LTCG
 }
 gcc: {
     # Instruction optimized
