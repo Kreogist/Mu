@@ -99,7 +99,7 @@ bool KNMusicProxyModel::filterAcceptsRow(int source_row,
     {
         //Check out the category column data.
         if(model->index(source_row,
-                        m_categoryColumn).data(Qt::DisplayRole) !=
+                        m_categoryColumn).data(Qt::DisplayRole).toString() !=
                 m_categoryContent)
         {
             //Abandon the data which didn't match the category content.
@@ -173,12 +173,12 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
     }
 }
 
-QVariant KNMusicProxyModel::categoryContent() const
+QString KNMusicProxyModel::categoryContent() const
 {
     return m_categoryContent;
 }
 
-void KNMusicProxyModel::setCategoryContent(const QVariant &categoryContent)
+void KNMusicProxyModel::setCategoryContent(const QString &categoryContent)
 {
     //Save the category content.
     m_categoryContent = categoryContent;

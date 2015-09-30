@@ -53,7 +53,7 @@ void KNMusicLibraryTreeView::setCategoryColumn(const int &column)
 void KNMusicLibraryTreeView::setCategoryText(const QVariant &text)
 {
     //Set the proxy model category text.
-    proxyModel()->setCategoryContent(text);
+    proxyModel()->setCategoryContent(text.toString());
 }
 
 void KNMusicLibraryTreeView::resetHeaderState()

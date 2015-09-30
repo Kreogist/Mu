@@ -65,8 +65,8 @@ public:
     int categoryColumn() const;
     void setCategoryColumn(int categoryColumn);
 
-    QVariant categoryContent() const;
-    void setCategoryContent(const QVariant &categoryContent);
+    QString categoryContent() const;
+    void setCategoryContent(const QString &categoryContent);
 
 signals:
 
@@ -98,7 +98,7 @@ private:
                                 const KNMusicSearchBlock &block) const;
     QList<KNMusicSearchBlock> m_searchBlocks;
     int m_categoryColumn;
-    QVariant m_categoryContent;
+    QString m_categoryContent;
 };
 
 #endif // KNMUSICPROXYMODEL_H

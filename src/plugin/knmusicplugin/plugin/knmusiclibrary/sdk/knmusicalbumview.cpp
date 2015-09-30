@@ -379,8 +379,8 @@ void KNMusicAlbumView::updateGeometries()
                                        m_lineCount*m_itemSpacingHeight +
                                        m_spacing-height()));
     //Update the page and single step.
-    verticalScrollBar()->setPageStep(m_itemSpacingHeight>>1);
-    verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>1);
+    verticalScrollBar()->setPageStep(m_itemSpacingHeight>>2);
+    verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>2);
 }
 
 void KNMusicAlbumView::onActionScrolling()

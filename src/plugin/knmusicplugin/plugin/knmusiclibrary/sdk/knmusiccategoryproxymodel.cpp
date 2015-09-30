@@ -78,12 +78,11 @@ bool KNMusicCategoryProxyModel::filterAcceptsRow(
 {
     //Check out the source row.
     //If the source row is 0 row and it has no data, we won't accept the row.
-    if(source_row==0 &&
-            sourceModel()->data(
-                sourceModel()->index(0, 0),
-                KNMusicCategoryModelBase::CategorySizeRole).toInt()==0)
+    if(source_row==0)
     {
-        return false;
+        return sourceModel()->data(
+                    sourceModel()->index(0, 0),
+                    KNMusicCategoryModelBase::CategorySizeRole).toInt()!=0;
     }
     //Use the default accept.
     return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
