@@ -31,8 +31,8 @@ class KNMusicCategoryModelBase : public QAbstractListModel
 public:
     enum CategoryRole
     {
-        CategorySize=Qt::UserRole,
-        CategoryArtworkKey
+        CategorySizeRole=Qt::UserRole,
+        CategoryArtworkKeyRole
     };
     /*!
      * \brief Construct a KNMusicCategoryModelBase object.

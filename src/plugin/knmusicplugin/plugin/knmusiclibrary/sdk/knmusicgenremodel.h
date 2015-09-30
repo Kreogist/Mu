@@ -35,11 +35,16 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicCategoryModel::onCategoryAdd().
+     */
+    void onCategoryAdd(const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
 
-    void onCategoryAdd(const KNMusicDetailInfo &detailInfo);
-
+    /*!
+     * \brief Reimplemented from KNMusicCategoryModel::onCategoryUpdate().
+     */
     void onCategoryUpdate(const KNMusicDetailInfo &before,
-                                      const KNMusicDetailInfo &after);
+                          const KNMusicDetailInfo &after) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from

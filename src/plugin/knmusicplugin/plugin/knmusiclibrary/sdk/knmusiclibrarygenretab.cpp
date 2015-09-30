@@ -282,7 +282,7 @@ void KNMusicLibraryGenreTab::onActionCategoryIndexChanged(
                 m_libraryModel->artwork(
                     m_categoryModel->data(
                         m_currentSourceIndex,
-                        KNMusicCategoryModel::CategoryArtworkKey).toString()));
+                        KNMusicCategoryModel::CategoryArtworkKeyRole).toString()));
 }
 
 inline void KNMusicLibraryGenreTab::showAndSelectRow(const int &musicRow)

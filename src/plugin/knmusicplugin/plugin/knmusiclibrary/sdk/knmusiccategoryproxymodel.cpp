@@ -81,7 +81,7 @@ bool KNMusicCategoryProxyModel::filterAcceptsRow(
     if(source_row==0 &&
             sourceModel()->data(
                 sourceModel()->index(0, 0),
-                KNMusicCategoryModelBase::CategorySize).toInt()==0)
+                KNMusicCategoryModelBase::CategorySizeRole).toInt()==0)
     {
         return false;
     }

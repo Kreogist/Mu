@@ -28,9 +28,11 @@
 //Library SDK Plugins.
 #include "sdk/knmusiclibrarymodel.h"
 #include "sdk/knmusiccategorymodel.h"
+#include "sdk/knmusicalbummodel.h"
 #include "sdk/knmusicgenremodel.h"
 #include "sdk/knmusiclibrarysongtab.h"
 #include "sdk/knmusiclibraryartisttab.h"
+#include "sdk/knmusiclibraryalbumtab.h"
 #include "sdk/knmusiclibrarygenretab.h"
 
 #include "knmusicutil.h"
@@ -65,35 +67,32 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab;
     m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
     m_categoryModel[TabArtists]->setCategoryColumn(Artist);
+    // Album tab.
+    m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab;
+    m_categoryModel[TabAlbums]=new KNMusicAlbumModel(this);
     // Genre tab.
     m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab;
     m_categoryModel[TabGenres]=new KNMusicGenreModel(this);
     m_categoryModel[TabGenres]->setCategoryColumn(Genre);
 
-    //Install the category model to library model.
-    m_libraryModel->installCategoryModel(m_categoryModel[TabArtists]);
-    //Set the category model.
-    m_libraryTabs[TabArtists]->setCategoryModel(m_categoryModel[TabArtists]);
-    //Set the library model.
-    m_libraryTabs[TabArtists]->setLibraryModel(m_libraryModel);
-    //Link the load request.
-    linkLoadRequest(m_libraryTabs[TabArtists]);
-
-    //Install the category model to library model.
-    m_libraryModel->installCategoryModel(m_categoryModel[TabGenres]);
-    //Set the category model.
-    m_libraryTabs[TabGenres]->setCategoryModel(m_categoryModel[TabGenres]);
-    //Set the library model.
-    m_libraryTabs[TabGenres]->setLibraryModel(m_libraryModel);
-    //Link the load request.
-    linkLoadRequest(m_libraryTabs[TabGenres]);
-
     //Generate the show in action list.
     QList<QAction *> showInActionList;
     //Add the actions to the list.
     showInActionList.append(m_songTab->showInAction());
-    showInActionList.append(m_libraryTabs[TabArtists]->showInAction());
-    showInActionList.append(m_libraryTabs[TabGenres]->showInAction());
+    //Load the category tabs.
+    for(int i=0; i<CategoryTabsCount; ++i)
+    {
+        //Install the category model to library model.
+        m_libraryModel->installCategoryModel(m_categoryModel[i]);
+        //Set the category model.
+        m_libraryTabs[i]->setCategoryModel(m_categoryModel[i]);
+        //Set the library model.
+        m_libraryTabs[i]->setLibraryModel(m_libraryModel);
+        //Link the load request.
+        linkLoadRequest(m_libraryTabs[i]);
+        //Add show in action to show in list.
+        showInActionList.append(m_libraryTabs[i]->showInAction());
+    }
     //Add the actions to solo menu.
     knMusicGlobal->soloMenu()->appendMusicActions(showInActionList);
 
@@ -127,7 +126,7 @@ KNMusicTab *KNMusicLibrary::artistTab()
 
 KNMusicTab *KNMusicLibrary::albumTab()
 {
-    return nullptr;
+    return m_libraryTabs[TabAlbums];
 }
 
 KNMusicTab *KNMusicLibrary::genreTab()
@@ -158,7 +157,13 @@ void KNMusicLibrary::showInArtistTab()
 
 void KNMusicLibrary::showInAlbumTab()
 {
-    ;
+    //Check out now playing pointer.
+    if(m_nowPlaying)
+    {
+        //Show the playing song in the artist tab.
+        m_libraryTabs[TabAlbums]->showInTab(
+                    m_nowPlaying->playingItem().detailInfo);
+    }
 }
 
 void KNMusicLibrary::showInGenreTab()

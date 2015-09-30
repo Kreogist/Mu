@@ -66,7 +66,7 @@ gcc: {
 }
 
 # International Configureations.
-i10n {
+i10n: {
     # Add MAKE_QM_FILES to the extra compilers.
     QMAKE_EXTRA_COMPILERS += MAKE_QM_FILES
     # MAKE_QM_FILES is a extra execution to called the lrelease to update the
@@ -78,7 +78,7 @@ i10n {
 }
 
 # Platform Specific Configuration.
-win32 : {
+win32: {
     # Application icon.
     RC_FILE += resource/icon/win_resource.rc \
                resource/icon/mu.ico
@@ -318,7 +318,10 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagesaver.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorydelegate.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -490,7 +493,10 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarycategorydelegate.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicgenremodel.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodelbase.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorymodelbase.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.h
 
 RESOURCES += \
     resource/res.qrc

@@ -289,7 +289,7 @@ void KNMusicLibraryArtistTab::updateDisplayArtwork(const QModelIndex &index)
                 m_libraryModel->artwork(
                     m_categoryModel->data(
                      index,
-                     KNMusicCategoryModelBase::CategoryArtworkKey).toString()));
+                     KNMusicCategoryModelBase::CategoryArtworkKeyRole).toString()));
 }
 
 void KNMusicLibraryArtistTab::checkCategorySelected()

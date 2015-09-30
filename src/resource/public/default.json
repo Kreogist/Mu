@@ -6,6 +6,16 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "MusicAlbumView" : {
+        "Parent" : "MainWindow",
+        "Base" : "#303030",
+        "Window" : "#303030",
+        "Button" : "#303030",
+        "ButtonText" : "#FFFFFF",
+        "Text" : "#FFFFFF",
+        "Highlight" : "#606060",
+        "HighlightedText" : "#f7cf3d"
+    },
     "MusicDetailTooltip" : {
         "Parent" : "MainWindow",
         "Window" : "#FFFFFF",

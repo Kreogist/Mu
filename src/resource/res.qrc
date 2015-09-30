@@ -19,6 +19,7 @@
         <file>saomenuicons/rating.png</file>
         <file>saomenuicons/showInGraphicsShell.png</file>
         <file>public/indicator.png</file>
+        <file>public/shadow.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>
