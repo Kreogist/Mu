@@ -19,6 +19,8 @@
 
 #include "knhighlightlabel.h"
 
+#include <QDebug>
+
 KNHighLightLabel::KNHighLightLabel(QWidget *parent) :
     QWidget(parent),
     m_highlight(QLinearGradient(QPointF(0,0), QPointF(0, height()))),
@@ -58,19 +60,8 @@ void KNHighLightLabel::paintEvent(QPaintEvent *event)
     //Set the rendering hints.
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::SmoothPixmapTransform, true);
-    //Fill the rect.
-    painter.fillRect(rect(), QColor(0,0,0));
-    //Draw the contents.
-    if(!m_scaledContent.isNull())
-    {
-        painter.drawPixmap(m_contentPosition, m_scaledContent);
-    }
-    //Set pen and brush.
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(m_highlight);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-    //Draw the high light.
-    painter.drawPolygon(m_highLightArea, 3);
+    //Draw the content data.
+    painter.drawPixmap(0,0,m_scaledContent);
 }
 
 void KNHighLightLabel::resizeEvent(QResizeEvent *event)
@@ -94,19 +85,38 @@ inline void KNHighLightLabel::updateHighLightArea()
 
 inline void KNHighLightLabel::updateScaledContent()
 {
+    //Get the image size.
+    int contentWidth=size().width(), contentHeight=size().height();
+    //Clear the scaled content.
+    m_scaledContent=QPixmap(contentWidth, contentHeight);
+    //Fill up transparent to clear up the data.
+    m_scaledContent.fill(QColor(0,0,0,0));
+    //Generate the painter.
+    QPainter contentPainter(&m_scaledContent);
+    //Configure up the painter.
+    contentPainter.setRenderHints(QPainter::Antialiasing |
+                                  QPainter::SmoothPixmapTransform);
     //Check the content data first.
     if(m_rawContent.isNull())
     {
-        //Clear the scaled content.
-        m_scaledContent=QPixmap();
-        //Ignore the null content data scaled.
-        return;
+        //Fill up the scaled content use black color.
+        contentPainter.fillRect(m_scaledContent.rect(), QColor(0,0,0));
     }
-    //Scaled the content.
-    m_scaledContent=m_rawContent.scaled(size(),
-                                        Qt::KeepAspectRatio,
-                                        Qt::SmoothTransformation);
-    //Update the content position.
-    m_contentPosition=QPoint((width()-m_scaledContent.width())>>1,
-                             (height()-m_scaledContent.height())>>1);
+    else
+    {
+        QPixmap scaledAlbumArt=m_rawContent.scaled(contentWidth,
+                                                   contentHeight,
+                                                   Qt::KeepAspectRatio,
+                                                   Qt::SmoothTransformation);
+        //Draw the raw content on the scaled content.
+        contentPainter.drawPixmap((contentWidth-scaledAlbumArt.width())>>1,
+                                  (contentHeight-scaledAlbumArt.height())>>1,
+                                  scaledAlbumArt);
+    }
+    //Set pen and brush.
+    contentPainter.setPen(Qt::NoPen);
+    contentPainter.setBrush(m_highlight);
+    contentPainter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+    //Draw the high light.
+    contentPainter.drawPolygon(m_highLightArea, 3);
 }
