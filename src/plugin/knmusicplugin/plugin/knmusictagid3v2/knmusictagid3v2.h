@@ -276,7 +276,96 @@ protected:
                              const ID3v2FunctionSet &property,
                              KNMusicAnalysisItem &analysisItem);
 
+    /*!
+     * \brief Because the ID3v2 has so many version and the standard has been
+     * changed for many times, we have to use different calculate function to
+     * process these frames in different ways. This function can give the
+     * calculate functions according to the major version of ID3v2.
+     * \param major The major version of tag.
+     * \param toolSet The toolset structure.
+     */
+    inline void getId3v2FunctionSet(const quint8 &major,
+                                    ID3v2FunctionSet &toolSet)
+    {
+        switch(major)
+        {
+        case 0:
+        case 1:
+        case 2:
+            toolSet.frameIDSize=3;
+            toolSet.frameHeaderSize=6;
+            toolSet.toSize=KNMusicTagId3v2::major2Size;
+            toolSet.writeSize=KNMusicTagId3v2::writeMajor2Size;
+            toolSet.saveFlag=nullptr;
+            break;
+        case 3:
+            toolSet.frameIDSize=4;
+            toolSet.frameHeaderSize=10;
+            toolSet.toSize=KNMusicTagId3v2::major3Size;
+            toolSet.writeSize=KNMusicTagId3v2::writeMajor3Size;
+            toolSet.saveFlag=KNMusicTagId3v2::saveFlag;
+            break;
+        case 4:
+            toolSet.frameIDSize=4;
+            toolSet.frameHeaderSize=10;
+            toolSet.toSize=KNMusicTagId3v2::major4Size;
+            toolSet.writeSize=KNMusicTagId3v2::writeMajor4Size;
+            toolSet.saveFlag=KNMusicTagId3v2::saveFlag;
+            break;
+        default:
+            break;
+        }
+    }
+
 private:
+    //ID3v2.0, ID3v2.1 and ID3v2.2 version size calculator.
+    static inline quint32 major2Size(char *rawTagData)
+    {
+        return (((quint32)rawTagData[0]<<16) & 0x00FF0000)+
+               (((quint32)rawTagData[1]<<8)  & 0x0000FF00)+
+               ( (quint32)rawTagData[2]      & 0x000000FF);
+    }
+    //ID3v2.3 version(most popular) size calculator.
+    static inline quint32 major3Size(char *rawTagData)
+    {
+        return KNMusicUtil::charToInt32(rawTagData);
+    }
+    //ID3v2.4 version size calculator.
+    static inline quint32 major4Size(char *rawTagData)
+    {
+        return (((quint32)rawTagData[0]<<21) & 0x0FE00000)+
+               (((quint32)rawTagData[1]<<14) & 0x001FC000)+
+               (((quint32)rawTagData[2]<<7 ) & 0x00003F80)+
+               ( (quint32)rawTagData[3]      & 0x0000007F);
+    }
+    //Write ID3v2.0, ID3v2.1 and ID3v2.2 version size.
+    static inline void writeMajor2Size(char *rawTagData, const quint32 &size)
+    {
+        rawTagData[0]=(size >> 16) & 0x000000FF;
+        rawTagData[1]=(size >> 8 ) & 0x000000FF;
+        rawTagData[2]=(size      ) & 0x000000FF;
+    }
+    //ID3v2.3 version(most popular) size calculator.
+    static inline void writeMajor3Size(char *rawTagData, const quint32 &size)
+    {
+        KNMusicUtil::int32ToChar(rawTagData, size);
+    }
+    //ID3v2.4 version size calculator.
+    static inline void writeMajor4Size(char *rawTagData, const quint32 &size)
+    {
+        rawTagData[0]=(size & 0x0FE00000) >> 21;
+        rawTagData[1]=(size & 0x001FC000) >> 14;
+        rawTagData[2]=(size & 0x00003F80) >> 7 ;
+        rawTagData[3]=(size & 0x0000007F);
+    }
+    //Copy the flag from raw data to frame data.
+    static inline void saveFlag(char *rawTagData,
+                                ID3v2Frame &frameData)
+    {
+        frameData.flags[0]=rawTagData[8];
+        frameData.flags[1]=rawTagData[9];
+    }
+
     //Translate rating to 5-level star.
     static inline int ratingStars(const quint8 &hex)
     {
@@ -333,88 +422,6 @@ private:
         }
     }
 
-    //Because the ID3v2 has so many version and the standard has been changed
-    //for many times, we have to use different calculate function to process
-    //these frames in different ways.
-    inline void getId3v2FunctionSet(const quint8 &major,
-                                    ID3v2FunctionSet &toolSet)
-    {
-        switch(major)
-        {
-        case 0:
-        case 1:
-        case 2:
-            toolSet.frameIDSize=3;
-            toolSet.frameHeaderSize=6;
-            toolSet.toSize=KNMusicTagId3v2::major2Size;
-            toolSet.writeSize=KNMusicTagId3v2::writeMajor2Size;
-            toolSet.saveFlag=nullptr;
-            break;
-        case 3:
-            toolSet.frameIDSize=4;
-            toolSet.frameHeaderSize=10;
-            toolSet.toSize=KNMusicTagId3v2::major3Size;
-            toolSet.writeSize=KNMusicTagId3v2::writeMajor3Size;
-            toolSet.saveFlag=KNMusicTagId3v2::saveFlag;
-            break;
-        case 4:
-            toolSet.frameIDSize=4;
-            toolSet.frameHeaderSize=10;
-            toolSet.toSize=KNMusicTagId3v2::major4Size;
-            toolSet.writeSize=KNMusicTagId3v2::writeMajor4Size;
-            toolSet.saveFlag=KNMusicTagId3v2::saveFlag;
-            break;
-        default:
-            break;
-        }
-    }
-    //ID3v2.0, ID3v2.1 and ID3v2.2 version size calculator.
-    static inline quint32 major2Size(char *rawTagData)
-    {
-        return (((quint32)rawTagData[0]<<16) & 0x00FF0000)+
-               (((quint32)rawTagData[1]<<8)  & 0x0000FF00)+
-               ( (quint32)rawTagData[2]      & 0x000000FF);
-    }
-    //ID3v2.3 version(most popular) size calculator.
-    static inline quint32 major3Size(char *rawTagData)
-    {
-        return KNMusicUtil::charToInt32(rawTagData);
-    }
-    //ID3v2.4 version size calculator.
-    static inline quint32 major4Size(char *rawTagData)
-    {
-        return (((quint32)rawTagData[0]<<21) & 0x0FE00000)+
-               (((quint32)rawTagData[1]<<14) & 0x001FC000)+
-               (((quint32)rawTagData[2]<<7 ) & 0x00003F80)+
-               ( (quint32)rawTagData[3]      & 0x0000007F);
-    }
-    //Write ID3v2.0, ID3v2.1 and ID3v2.2 version size.
-    static inline void writeMajor2Size(char *rawTagData, const quint32 &size)
-    {
-        rawTagData[0]=(size >> 16) & 0x000000FF;
-        rawTagData[1]=(size >> 8 ) & 0x000000FF;
-        rawTagData[2]=(size      ) & 0x000000FF;
-    }
-    //ID3v2.3 version(most popular) size calculator.
-    static inline void writeMajor3Size(char *rawTagData, const quint32 &size)
-    {
-        KNMusicUtil::int32ToChar(rawTagData, size);
-    }
-    //ID3v2.4 version size calculator.
-    static inline void writeMajor4Size(char *rawTagData, const quint32 &size)
-    {
-        rawTagData[0]=(size & 0x0FE00000) >> 21;
-        rawTagData[1]=(size & 0x001FC000) >> 14;
-        rawTagData[2]=(size & 0x00003F80) >> 7 ;
-        rawTagData[3]=(size & 0x0000007F);
-    }
-    //Copy the flag from raw data to frame data.
-    static inline void saveFlag(char *rawTagData,
-                                ID3v2Frame &frameData)
-    {
-        frameData.flags[0]=rawTagData[8];
-        frameData.flags[1]=rawTagData[9];
-    }
     //APIC frame and PIC frame generator.
     inline QByteArray generateImageData(const QImage &image,
                                         const int &frameIDSize);

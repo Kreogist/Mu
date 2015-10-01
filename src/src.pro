@@ -338,7 +338,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.cpp \
     plugin/knmusicplugin/sdk/knmusiclistviewbase.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.cpp \
-    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp
+    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp \
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -521,7 +522,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.h \
     plugin/knmusicplugin/sdk/knmusiclistviewbase.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.h \
-    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h
+    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h \
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h
 
 RESOURCES += \
     resource/res.qrc
