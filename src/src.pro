@@ -37,8 +37,15 @@ TRANSLATIONS += \
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
 msvc: {
-    QMAKE_CXXFLAGS_RELEASE += -GL -Gw -Qpar -arch:AVX -favor:INTEL64 -GA
+    # Whole Program Optimization
+    QMAKE_CXXFLAGS_RELEASE += -GL -Gw -GA
+    # Auto-Parallelizer
+    QMAKE_CXXFLAGS_RELEASE += -Qpar
+    # CPU Architecture
+    QMAKE_CXXFLAGS_RELEASE += -arch:AVX -favor:INTEL64
 
+    # Linker Options.
+    # Link-time Code Generation, use with -GL
     QMAKE_LFLAGS_RELEASE += -LTCG
 }
 gcc: {
@@ -330,7 +337,8 @@ SOURCES += \
     sdk/knmouseunclickablewidget.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.cpp \
     plugin/knmusicplugin/sdk/knmusiclistviewbase.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.cpp \
+    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -512,7 +520,8 @@ HEADERS += \
     sdk/knmouseunclickablewidget.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.h \
     plugin/knmusicplugin/sdk/knmusiclistviewbase.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.h \
+    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h
 
 RESOURCES += \
     resource/res.qrc
