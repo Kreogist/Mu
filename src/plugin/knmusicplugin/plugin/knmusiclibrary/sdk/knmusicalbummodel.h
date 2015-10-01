@@ -92,6 +92,7 @@ public:
     Q_DECL_OVERRIDE;
 
 signals:
+    void albumRemoved(QModelIndex removedIndex);
 
 public slots:
     /*!
@@ -165,9 +166,8 @@ private:
     inline void appendItem(const AlbumItem &item);
     inline void removeItem(const int &row);
     inline void replaceItem(const int &row, const AlbumItem &item);
-    inline void saveNoAlbumArt(const QPixmap &noAlbumArt);
     QList<AlbumItem> m_categoryList;
-    QVariant m_noAlbumArt;
+    const QVariant m_nullData;
     QString m_noCategoryText, m_variousArtists;
     QHash<QString, QVariant> *m_hashAlbumArt;
 };

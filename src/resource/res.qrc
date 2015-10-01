@@ -73,5 +73,6 @@
         <file>music/library/library_add.png</file>
         <file>music/library/library_import.png</file>
         <file>music/library/library_scan.png</file>
+        <file>music/public/base.png</file>
     </qresource>
 </RCC>

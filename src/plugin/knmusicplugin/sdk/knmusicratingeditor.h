@@ -44,8 +44,8 @@ protected:
 
 private:
     int starAtPosition(int x);
-    int m_starSizeHint=0, m_editorWidth=0, m_starNum, m_halfStarSizeHint;
     QPixmap m_star, m_unstar, m_scaleStar, m_scaleUnstar;
+    int m_starSizeHint, m_editorWidth, m_starNum, m_halfStarSizeHint;
 };
 
 #endif // KNMUSICRATINGEDITOR_H

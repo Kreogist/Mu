@@ -43,6 +43,14 @@
         "Highlight" : "#505050",
         "HighlightedText" : "#F7CF3D"
     },
+    "MusicAlbumTitleLabel" : {
+        "Parent" : "MainWindow",
+        "WindowText" : "#000000"
+    },
+    "MusicAlbumDetailLabel" : {
+        "Parent" : "MainWindow",
+        "WindowText" : "#000000"
+    },
     "LibraryEmptyHint" : {
         "Parent" : "MainWindow",
         "Window" : "#353535",

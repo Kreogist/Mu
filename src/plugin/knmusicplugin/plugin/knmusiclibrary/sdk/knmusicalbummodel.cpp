@@ -24,11 +24,13 @@
 #include <QDebug>
 
 KNMusicAlbumModel::KNMusicAlbumModel(QObject *parent) :
-    KNMusicCategoryModelBase(parent)
+    KNMusicCategoryModelBase(parent),
+    m_categoryList(QList<AlbumItem>()),
+    m_nullData(QVariant()),
+    m_noCategoryText(QString()),
+    m_variousArtists(QString()),
+    m_hashAlbumArt(nullptr)
 {
-    //Set the default no album art data.
-    saveNoAlbumArt(knMusicGlobal->noAlbumArt());
-
     //Link retranslate signal.
     knI18n->link(this, &KNMusicAlbumModel::retranslate);
     retranslate();
@@ -94,7 +96,8 @@ QVariant KNMusicAlbumModel::data(const QModelIndex &index, int role) const
     //The invalid index data connot have any valid data.
     if(!index.isValid())
     {
-        return QVariant();
+        //Give the null data.
+        return m_nullData;
     }
     //Get the category item
     const AlbumItem &item=m_categoryList.at(index.row());
@@ -106,9 +109,9 @@ QVariant KNMusicAlbumModel::data(const QModelIndex &index, int role) const
         return item.title;
     case Qt::DecorationRole:
         return (m_hashAlbumArt==nullptr || item.albumArtHash.isEmpty())?
-                    m_noAlbumArt:
+                    m_nullData:
                     m_hashAlbumArt->value(item.albumArtHash.first(),
-                                          m_noAlbumArt);
+                                          m_nullData);
     case Qt::SizeHintRole:
         return QSize(44, 44);
     case CategorySizeRole:
@@ -117,12 +120,12 @@ QVariant KNMusicAlbumModel::data(const QModelIndex &index, int role) const
         return item.albumArtHash.isEmpty()?QString():item.albumArtHash.first();
     case AlbumArtistRole:
         return item.artists.isEmpty()?
-                    QVariant():
+                    m_nullData:
                     (item.artists.size()==1?
                          item.artists.keys().first():
                          m_variousArtists);
     default:
-        return QVariant();
+        return m_nullData;
     }
 }
 
@@ -140,7 +143,7 @@ QVariant KNMusicAlbumModel::headerData(int section,
     Q_UNUSED(orientation)
     Q_UNUSED(role)
     //No matter what, just simply return a null variant.
-    return QVariant();
+    return m_nullData;
 }
 
 QString KNMusicAlbumModel::noCategoryText() const
@@ -202,14 +205,14 @@ void KNMusicAlbumModel::setCategoryColumn(int categoryColumn)
 
 void KNMusicAlbumModel::setNoAlbumArt(const QPixmap &noAlbumArt)
 {
-    //Save the no album art.
-    saveNoAlbumArt(noAlbumArt);
+    //Ignore the no album art.
+    Q_UNUSED(noAlbumArt)
 }
 
 void KNMusicAlbumModel::setNoCategoryText(const QString &noCategoryText)
 {
     //Save the text first.
-    m_noCategoryText = noCategoryText;
+    m_noCategoryText=noCategoryText;
     //Check the list.
     if(m_categoryList.isEmpty())
     {
@@ -303,6 +306,12 @@ void KNMusicAlbumModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
         AlbumItem item=m_categoryList.at(0);
         //Increase the item counter.
         --(item.count);
+        //Check out the item count.
+        if(item.count==0)
+        {
+            //Emit the album removed signal.
+            emit albumRemoved(index(0));
+        }
         //Replace the original item.
         m_categoryList.replace(0, item);
         //Emit the data changed signal.
@@ -319,8 +328,11 @@ void KNMusicAlbumModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
             //Check out the counter.
             if(m_categoryList.at(i).count==1)
             {
+                //Emit the album removed signal.
+                emit albumRemoved(index(i));
                 //This is the last item, we will remove this category.
                 removeItem(i);
+                //Finished.
                 return;
             }
             //Get the category list data.
@@ -519,10 +531,4 @@ inline void KNMusicAlbumModel::replaceItem(const int &row,
     m_categoryList.replace(row, item);
     //Emit the data changed signal.
     emit dataChanged(index(row), index(row));
-}
-
-inline void KNMusicAlbumModel::saveNoAlbumArt(const QPixmap &noAlbumArt)
-{
-    //Save the no album art icon data.
-    m_noAlbumArt = QVariant(noAlbumArt);
 }

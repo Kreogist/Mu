@@ -25,6 +25,7 @@ class KNCategoryTab;
 class KNDropProxyContainer;
 class KNMusicAlbumView;
 class KNMusicAlbumModel;
+class KNMusicAlbumDetail;
 class KNMusicLibraryAlbumTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
@@ -76,6 +77,7 @@ private:
     KNCategoryTab *m_tab;
     QAction *m_showInAlbumTab;
     KNDropProxyContainer *m_dropProxy;
+    KNMusicAlbumDetail *m_albumDetail;
     KNMusicAlbumView *m_albumView;
     KNMusicAlbumModel *m_albumModel;
     KNMusicLibraryModel *m_libraryModel;

@@ -325,7 +325,12 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp \
-    sdk/kngraphicsextendgloweffect.cpp
+    sdk/kngraphicsextendgloweffect.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.cpp \
+    sdk/knmouseunclickablewidget.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.cpp \
+    plugin/knmusicplugin/sdk/knmusiclistviewbase.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -502,7 +507,12 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.h \
-    sdk/kngraphicsextendgloweffect.h
+    sdk/kngraphicsextendgloweffect.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.h \
+    sdk/knmouseunclickablewidget.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.h \
+    plugin/knmusicplugin/sdk/knmusiclistviewbase.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.h
 
 RESOURCES += \
     resource/res.qrc

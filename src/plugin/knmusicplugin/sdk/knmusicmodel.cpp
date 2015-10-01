@@ -37,8 +37,9 @@ KNMusicModel::KNMusicModel(QObject *parent) :
     m_detailInfos(QList<KNMusicDetailInfo>()),
     m_totalDuration(0),
     m_playingIndex(QPersistentModelIndex()),
-    m_playingIcon(QIcon(":/plugin/music/public/playingicon.png")),
-    m_cannotPlayIcon(QIcon(":/plugin/music/public/cannotplay.png"))
+    m_playingIcon(QVariant(QIcon(":/plugin/music/public/playingicon.png"))),
+    m_cannotPlayIcon(QVariant(QIcon(":/plugin/music/public/cannotplay.png"))),
+    m_nullValue(QVariant())
 {
     //Build drop mime types for the first time.
     if(m_dropMimeTypes.isEmpty())
@@ -377,7 +378,7 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
     case Qt::EditRole:
         return index.column()>=MusicDataCount?
-                    QVariant():
+                    m_nullValue:
                     detailInfo.textLists[index.column()];
     case Qt::TextAlignmentRole:
         //Check the section.
@@ -409,7 +410,7 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
             //Otherwise, nothing.
         }
         //All the default columns don't hold a icon.
-        return QVariant();
+        return m_nullValue;
     //For property role, no matther what the index is, the data should be all
     //the same.
     case FileSizeRole:
@@ -430,9 +431,8 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
         return detailInfo.trackIndex;
     case CannotPlayFlagRole:
         return detailInfo.cannotPlay;
-
     default:
-        return QVariant();
+        return m_nullValue;
     }
 }
 

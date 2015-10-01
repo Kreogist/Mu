@@ -326,7 +326,8 @@ private:
     QList<KNMusicDetailInfo> m_detailInfos;
     quint64 m_totalDuration;
     QPersistentModelIndex m_playingIndex;
-    QIcon m_playingIcon, m_cannotPlayIcon;
+    QVariant m_playingIcon, m_cannotPlayIcon;
+    const QVariant m_nullValue;
     static QVariant m_alignLeft, m_alignCenter, m_alignRight;
 
     static QStringList m_dropMimeTypes;

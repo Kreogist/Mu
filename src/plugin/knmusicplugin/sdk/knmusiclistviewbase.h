@@ -12,37 +12,24 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICTREEVIEWBASE_H
-#define KNMUSICTREEVIEWBASE_H
+#ifndef KNMUSICLISTVIEWBASE_H
+#define KNMUSICLISTVIEWBASE_H
 
-#include <QTreeView>
+#include <QListView>
 
-class QTimeLine;
+class KNMusicTab;
 class KNMusicModel;
 class KNMusicProxyModel;
-class KNMusicTab;
-/*!
- * \brief The KNMusicTreeViewBase class is the basic tree view of all the music
- * tree view. It provides mouse sense alternative row color. It can
- * automatically link to the solo and multi menu to process the music row.\n
- * Remember this is only a base class, it means you have to reimplement it. Set
- * the object name and called onActionThemeUpdate() slot.
- */
-class KNMusicTreeViewBase : public QTreeView
+class KNMusicListViewBase : public QListView
 {
     Q_OBJECT
 public:
-    /*!
-     * \brief Construct a KNMusicTreeViewBase widget.
-     * \param parent The parent widget.
-     */
-    explicit KNMusicTreeViewBase(QWidget *parent = 0,
-                                 KNMusicTab *tab = 0);
-    ~KNMusicTreeViewBase();
+    explicit KNMusicListViewBase(QWidget *parent = 0,
+                                  KNMusicTab *tab = 0);
 
     /*!
      * \brief Get the proxy of the model.
@@ -95,82 +82,40 @@ public:
      */
     void scrollToRow(const int &row);
 
+    /*!
+     * \brief sortByColumn
+     * \param column
+     * \param order
+     */
+    void sortByColumn(int column, Qt::SortOrder order);
+
 signals:
 
 public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from QTreeView::enterEvent().
-     */
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QTreeView::leaveEvent().
-     */
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QTreeView::drawRow().
-     */
-    void drawRow(QPainter *painter,
-                 const QStyleOptionViewItem &options,
-                 const QModelIndex &index) const  Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QTreeView::startDrag().
+     * \brief Reimplemented from QListView::startDrag().
      */
     void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::dragEnterEvent().
-     */
-    void dragEnterEvent(QDragEnterEvent *event);
-
-    /*!
-     * \brief Reimplemented from QTreeView::dragMoveEvent().
-     */
-    void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QTreeView::dragLeaveEvent().
-     */
-    void dragLeaveEvent(QDragLeaveEvent *);
-
-    /*!
-     * \brief Reimplemented from QTreeView::dropEvent().
-     */
-    void dropEvent(QDropEvent *event);
-
-    /*!
-     * \brief Reimplemented from QTreeView::mousePressEvent().
+     * \brief Reimplemented from QListView::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::mouseReleaseEvent().
+     * \brief Reimplemented from QListView::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::keyReleaseEvent().
+     * \brief Reimplemented from QListView::keyReleaseEvent().
      */
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reset the header column state to a default state. Including the
-     * width and visible.
-     */
-    virtual void resetHeaderState();
-
-    /*!
-     * \brief Move one column to the first column.
-     * \param logicalIndex The logical index of the header column.
-     */
-    void moveToFirst(const int &logicalIndex);
-
-    /*!
-     * \brief Reimplemented from QTreeView::event().
+     * \brief Reimplemented from QListView::event().
      */
     bool event(QEvent *event) Q_DECL_OVERRIDE;
 
@@ -179,38 +124,22 @@ protected:
      */
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
-protected slots:
-    /*!
-     * \brief This slot is provide to update the palette when the tree view is
-     * being constructed. Or else the UI will be very ugly.
-     */
-    void onActionThemeUpdate();
-
 private slots:
-    void onActionMouseInOut(const int &frame);
     void onActionActivate(const QModelIndex &index);
     void playCurrent();
     void removeCurrent();
     void renameCurrent();
 
 private:
-    QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
-            const QRect &rect) const;
     inline void scrollToIndex(const QModelIndex &proxyIndex);
-    inline void startAnime(const int &endFrame);
     inline void playIndex(const QModelIndex &index);
-    inline bool dropOn(QDropEvent *event, int &dropRow);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
     bool showDetailTooltip(const QPoint &indexPosition);
 
     KNMusicTab *m_musicTab;
-    QTimeLine *m_mouseAnime;
     KNMusicProxyModel *m_proxyModel;
-    int m_dragMoveRow;
-    QAbstractItemView::DropIndicatorPosition m_dragIndicatorPos;
-
-    bool m_initialLoad, m_pressed;
+    bool m_pressed;
 };
 
-#endif // KNMUSICTREEVIEWBASE_H
+#endif // KNMUSICLISTVIEWBASE_H

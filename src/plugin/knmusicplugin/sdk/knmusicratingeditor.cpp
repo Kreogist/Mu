@@ -21,12 +21,16 @@
 #include "knmusicratingeditor.h"
 
 KNMusicRatingEditor::KNMusicRatingEditor(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_star(QPixmap(":/plugin/music/public/star.png")),
+    m_unstar(QPixmap(":/plugin/music/public/unstar.png")),
+    m_scaleStar(QPixmap()),
+    m_scaleUnstar(QPixmap()),
+    m_starSizeHint(0),
+    m_editorWidth(0),
+    m_starNum(0),
+    m_halfStarSizeHint(0)
 {
-    //Set pixmap data.
-    m_star=QPixmap(":/plugin/music/public/star.png");
-    m_unstar=QPixmap(":/plugin/music/public/unstar.png");
-
     //Set properties.
     setContentsMargins(0,0,0,0);
     setMouseTracking(true);

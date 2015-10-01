@@ -22,7 +22,6 @@
 KNMusicCategoryProxyModel::KNMusicCategoryProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
-
 }
 
 QModelIndex KNMusicCategoryProxyModel::categoryIndex(

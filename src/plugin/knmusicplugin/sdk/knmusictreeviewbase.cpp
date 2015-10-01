@@ -50,7 +50,6 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     m_proxyModel(nullptr),
     m_dragMoveRow(-1),
     m_dragIndicatorPos(QAbstractItemView::OnViewport),
-    m_animate(true),
     m_initialLoad(true),
     m_pressed(false)
 {
@@ -131,24 +130,16 @@ void KNMusicTreeViewBase::enterEvent(QEvent *event)
 {
     //Do original enter event.
     QTreeView::enterEvent(event);
-    //Check if animate switch is on.
-    if(m_animate)
-    {
-        //Start mouse in anime.
-        startAnime(MaxOpacity);
-    }
+    //Start mouse in anime.
+    startAnime(MaxOpacity);
 }
 
 void KNMusicTreeViewBase::leaveEvent(QEvent *event)
 {
     //Do original leave event.
     QTreeView::leaveEvent(event);
-    //Check if animate switch is on.
-    if(m_animate)
-    {
-        //Start mouse leave anime.
-        startAnime(0);
-    }
+    //Start mouse leave anime.
+    startAnime(0);
 }
 
 void KNMusicTreeViewBase::drawRow(QPainter *painter,
@@ -319,6 +310,11 @@ void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
 {
     //Do the original pressed event.
     QTreeView::mousePressEvent(event);
+    //Hide the detail tooltip first.
+    if(knMusicGlobal->detailTooltip())
+    {
+        knMusicGlobal->detailTooltip()->hide();
+    }
     //Set pressed flag.
     m_pressed=true;
 }
@@ -417,7 +413,6 @@ void KNMusicTreeViewBase::wheelEvent(QWheelEvent *event)
     {
         knMusicGlobal->detailTooltip()->hide();
     }
-
 }
 
 void KNMusicTreeViewBase::onActionThemeUpdate()
@@ -678,7 +673,7 @@ void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
     }
 }
 
-inline bool KNMusicTreeViewBase::showDetailTooltip(const QPoint &indexPosition)
+bool KNMusicTreeViewBase::showDetailTooltip(const QPoint &indexPosition)
 {
     //If the detail tooltip is not set, ignore the tooltip request.
     if(!knMusicGlobal->detailTooltip())
@@ -727,12 +722,6 @@ inline bool KNMusicTreeViewBase::showDetailTooltip(const QPoint &indexPosition)
     return true;
 }
 
-
-bool KNMusicTreeViewBase::animate() const
-{
-    return m_animate;
-}
-
 KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()
 {
     //Check is the proxy model need to initial.
@@ -745,6 +734,7 @@ KNMusicProxyModel *KNMusicTreeViewBase::proxyModel()
         //Set the proxy model.
         setModel(m_proxyModel);
     }
+    //Give back the proxy model.
     return m_proxyModel;
 }
 
@@ -825,9 +815,4 @@ void KNMusicTreeViewBase::scrollToRow(const int &row)
 {
     //Get the name item of the song row.
     scrollToIndex(m_proxyModel->index(row, Name));
-}
-
-void KNMusicTreeViewBase::setAnimate(bool animate)
-{
-    m_animate = animate;
 }

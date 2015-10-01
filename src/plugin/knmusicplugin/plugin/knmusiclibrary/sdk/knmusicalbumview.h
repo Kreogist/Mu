@@ -24,6 +24,7 @@
 class QTimeLine;
 class KNMusicCategoryProxyModel;
 class KNMusicAlbumModel;
+class KNMusicAlbumDetail;
 class KNMusicAlbumView : public QAbstractItemView
 {
     Q_OBJECT
@@ -61,6 +62,8 @@ public:
 
     void selectAlbum(const QModelIndex &albumIndex);
 
+    KNMusicAlbumDetail *albumDetail() const;
+
 signals:
 
 public slots:
@@ -68,6 +71,8 @@ public slots:
      * \brief clearSelection
      */
     void clearSelection();
+
+    void setAlbumDetail(KNMusicAlbumDetail *albumDetail);
 
 protected:
     /*!
@@ -147,12 +152,14 @@ private:
                            const QModelIndex &index);
     inline void updateUIElements();
     inline QPixmap generateShadow(int shadowWidth, int shadowHeight);
-    QPixmap m_shadowSource, m_albumArtShadow;
+    QPixmap m_shadowSource, m_albumArtShadow, m_albumBase, m_scaledAlbumBase,
+            m_noAlbumArt, m_scaledNoAlbumArt;
     const QModelIndex m_nullIndex;
     QModelIndex m_selectedIndex, m_mouseDownIndex;
     QTimeLine *m_scrollAnime;
     KNMusicCategoryProxyModel *m_proxyModel;
     KNMusicAlbumModel *m_model;
+    KNMusicAlbumDetail *m_albumDetail;
     const int m_spacing, m_itemMinimalWidth, minimalWidth;
     int m_lineCount, m_textSpacing, m_itemHeight, m_itemWidth,
         m_itemSpacingHeight, m_itemSpacingWidth, m_maxColumnCount,

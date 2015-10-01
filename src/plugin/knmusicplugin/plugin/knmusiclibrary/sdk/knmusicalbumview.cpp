@@ -24,6 +24,8 @@
 
 #include "knmusiccategoryproxymodel.h"
 #include "knmusicalbummodel.h"
+#include "knmusicalbumdetail.h"
+#include "knmusicglobal.h"
 
 #include "knmusicalbumview.h"
 
@@ -33,12 +35,17 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     QAbstractItemView(parent),
     m_shadowSource(QPixmap("://public/shadow.png")),
     m_albumArtShadow(QPixmap()),
+    m_albumBase(QPixmap(":/plugin/music/public/base.png")),
+    m_scaledAlbumBase(QPixmap()),
+    m_noAlbumArt(knMusicGlobal->noAlbumArt()),
+    m_scaledNoAlbumArt(QPixmap()),
     m_nullIndex(QModelIndex()),
     m_selectedIndex(m_nullIndex),
     m_mouseDownIndex(m_nullIndex),
     m_scrollAnime(new QTimeLine(200, this)),
     m_proxyModel(nullptr),
     m_model(nullptr),
+    m_albumDetail(nullptr),
     m_spacing(30),
     m_itemMinimalWidth(124),
     minimalWidth(m_itemMinimalWidth+m_spacing),
@@ -60,7 +67,7 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     //Set the palette.
     knTheme->registerWidget(this);
 
-    //Initial the timeline.
+    //Configure the timeline.
     m_scrollAnime->setUpdateInterval(10);
     m_scrollAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_scrollAnime, &QTimeLine::frameChanged,
@@ -169,6 +176,36 @@ void KNMusicAlbumView::setModel(QAbstractItemModel *model)
     QAbstractItemView::setModel(m_proxyModel);
     //Update the geometries.
     updateGeometries();
+}
+
+void KNMusicAlbumView::selectAlbum(const QModelIndex &albumIndex)
+{
+    //If the index is vaild, set the initial animation parameters.
+    if(albumIndex.isValid())
+    {
+        //Set current index to the proxy index of the album index.
+        setCurrentIndex(m_proxyModel->mapFromSource(albumIndex));
+        //Set the selected index.
+        m_selectedIndex=albumIndex;
+        //Show the detail.
+        m_albumDetail->setAnimeParameter(
+                    visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
+                    m_itemWidth);
+        m_albumDetail->displayAlbumDetail(m_selectedIndex);
+        //Update the album view.
+        viewport()->update();
+        //Finished.
+        return;
+    }
+    //Show the detail.
+    m_albumDetail->setAnimeParameter(
+                visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
+                m_itemWidth);
+    //Do fold detail animation.
+    m_albumDetail->foldAlbumDetail();
+    //Update the viewport.
+    update();
+    viewport()->update();
 }
 
 void KNMusicAlbumView::clearSelection()
@@ -285,7 +322,8 @@ void KNMusicAlbumView::resizeEvent(QResizeEvent *event)
     //Do resize.
     QAbstractItemView::resizeEvent(event);
     //Resize the album detail.
-    //!FIXME: Add codes here.
+    m_albumDetail->resize(size());
+    m_albumDetail->setSizeParameter(qMin(width(), height()));
     //If the current index is not null, must ensure that we can display the
     //selected album.
     if(currentIndex().isValid())
@@ -385,12 +423,45 @@ void KNMusicAlbumView::updateGeometries()
 
 void KNMusicAlbumView::onActionScrolling()
 {
-    //!FIXME: add codes here
+    //Check out the album detail widget.
+    if(m_albumDetail && m_selectedIndex.isValid())
+    {
+        //Update the fold end value of the album detail.
+        m_albumDetail->updateFoldEndValue(
+                    visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
+                    m_itemWidth);
+    }
 }
 
 void KNMusicAlbumView::displayAlbum(const QPoint &point)
 {
-    //!FIXME: add codes here.
+    //Check out the display album.
+    if(m_albumDetail==nullptr)
+    {
+        //Ignore the display album operation.
+        return;
+    }
+    //Get the index from the point.
+    QModelIndex proxyIndex=indexAt(point),
+                sourceIndex=m_proxyModel->mapToSource(proxyIndex);
+    //Check out the proxy index of the proxy index.
+    if(proxyIndex.isValid() && m_selectedIndex!=sourceIndex)
+    {
+        //Scroll to the album.
+        scrollTo(proxyIndex);
+        //Select the album.
+        selectAlbum(sourceIndex);
+        //Finished.
+        return;
+    }
+    //Show the detail.
+    m_albumDetail->setAnimeParameter(
+                visualRect(m_proxyModel->mapFromSource(m_selectedIndex)),
+                m_itemWidth);
+    //Fold the album.
+    m_albumDetail->foldAlbumDetail();
+    //Update the viewport.
+    viewport()->update();
 }
 
 inline int KNMusicAlbumView::indexScrollBarValue(
@@ -457,28 +528,34 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     painter.drawPixmap(x-m_shadowIncrease,
                        y-m_shadowIncrease,
                        m_albumArtShadow);
-    //Fill up the background.
-    painter.fillRect(QRect(x,y,m_itemWidth,m_itemWidth),
-                     QColor(0,0,0));
     //Render and draw the album art image.
     QPixmap albumArtImage=
-            (m_proxyModel->data(
-                 index,
-                 Qt::DecorationRole).value<QPixmap>()).scaled(
-                QSize(m_itemWidth,
-                      m_itemWidth),
-                Qt::KeepAspectRatio,
-                Qt::SmoothTransformation);
-    //Draw the album art.
-    painter.drawPixmap(QRect(x+((m_itemWidth-albumArtImage.width())>>1),
-                             y+((m_itemWidth-albumArtImage.height())>>1),
-                             albumArtImage.width(),
-                             albumArtImage.height()),
-                       albumArtImage);
-    //Get the option view item.
-    QStyleOptionViewItem option=viewOptions();
+            m_proxyModel->data(index,
+                               Qt::DecorationRole).value<QPixmap>();
+    //Check out the album art is valid.
+    if(albumArtImage.isNull())
+    {
+        //Draw the no album art instead.
+        painter.drawPixmap(x, y, m_scaledNoAlbumArt);
+    }
+    else
+    {
+        //Scaled the album art image to item width and keep the aspect ratio.
+        albumArtImage=albumArtImage.scaled(QSize(m_itemWidth,
+                                                 m_itemWidth),
+                                           Qt::KeepAspectRatio,
+                                           Qt::SmoothTransformation);
+        //Draw the album art base.
+        painter.drawPixmap(x, y, m_scaledAlbumBase);
+        //Draw the album art.
+        painter.drawPixmap(QRect(x+((m_itemWidth-albumArtImage.width())>>1),
+                                 y+((m_itemWidth-albumArtImage.height())>>1),
+                                 albumArtImage.width(),
+                                 albumArtImage.height()),
+                           albumArtImage);
+    }
     //Set the pen as the text color.
-    QColor textColor=option.palette.color(QPalette::Text);
+    QColor textColor=viewOptions().palette.color(QPalette::Text);
     painter.setPen(textColor);
     //Draw the album caption, which contains album name and artist.
     //Draw the album name first.
@@ -539,6 +616,16 @@ inline void KNMusicAlbumView::updateUIElements()
     int shadowSize=m_itemWidth+(m_shadowIncrease<<1);
     //Update album art shadow.
     m_albumArtShadow=generateShadow(shadowSize, shadowSize);
+    //Update the album base.
+    m_scaledAlbumBase=m_albumBase.scaled(m_itemWidth,
+                                         m_itemWidth,
+                                         Qt::IgnoreAspectRatio,
+                                         Qt::SmoothTransformation);
+    //Update the no album art.
+    m_scaledNoAlbumArt=m_noAlbumArt.scaled(m_itemWidth,
+                                           m_itemWidth,
+                                           Qt::IgnoreAspectRatio,
+                                           Qt::SmoothTransformation);
     //The height of the item should be a item icon size and two text lines.
     m_itemHeight=m_itemWidth+(fontMetrics().height()<<1);
     //Calcualte the spacing item width and height.
@@ -609,3 +696,36 @@ inline QPixmap KNMusicAlbumView::generateShadow(int shadowWidth,
     return shadowPixmap;
 }
 
+KNMusicAlbumDetail *KNMusicAlbumView::albumDetail() const
+{
+    return m_albumDetail;
+}
+
+void KNMusicAlbumView::setAlbumDetail(KNMusicAlbumDetail *albumDetail)
+{
+    //Check we have set it before or not.
+    if(m_albumDetail!=nullptr)
+    {
+        //Ignore the secondary set.
+        return;
+    }
+    //Save the album detail widget.
+    m_albumDetail = albumDetail;
+    //Check the validation of the album detail.
+    if(m_albumDetail==nullptr)
+    {
+        //Ignore the null album detail.
+        return;
+    }
+    //Change the focus proxy to the album detail.
+    m_albumDetail->setFocusProxy(this);
+    //Link the album detail to the album view.
+    connect(m_albumDetail, &KNMusicAlbumDetail::requireShowAlbum,
+            this, &KNMusicAlbumView::displayAlbum);
+    connect(m_albumDetail, &KNMusicAlbumDetail::requireClearSelection,
+            this, &KNMusicAlbumView::clearSelection);
+    //Hide the detail widget.
+    m_albumDetail->hide();
+    //Raise it up.
+    m_albumDetail->raise();
+}

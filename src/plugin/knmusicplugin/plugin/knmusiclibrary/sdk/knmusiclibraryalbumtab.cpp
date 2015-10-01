@@ -26,6 +26,7 @@
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
 #include "knmusicalbumview.h"
+#include "knmusicalbumdetail.h"
 #include "knmusicalbummodel.h"
 #include "knmusiccategoryproxymodel.h"
 #include "knmusiclibrarymodel.h"
@@ -39,6 +40,7 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QWidget *parent) :
     m_tab(new KNCategoryTab(this)),
     m_showInAlbumTab(new QAction(this)),
     m_dropProxy(new KNDropProxyContainer(this)),
+    m_albumDetail(new KNMusicAlbumDetail(m_dropProxy, this)),
     m_albumView(new KNMusicAlbumView(m_dropProxy)),
     m_albumModel(nullptr),
     m_libraryModel(nullptr)
@@ -51,6 +53,8 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QWidget *parent) :
     //Configure the drop proxy container.
     m_dropProxy->setFocusProxy(m_albumView);
     setContentWidget(m_dropProxy);
+    //Configure the album view.
+    m_albumView->setAlbumDetail(m_albumDetail);
 
     //Initial the layout for the container, only for auto resize splitter.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_dropProxy);
@@ -104,25 +108,18 @@ void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModelBase *model)
     //Do original set.
     KNMusicLibraryCategoryTab::setCategoryModel(model);
     //Link the artwork update signal.
-//    connect(m_albumModel, &KNMusicAlbumModel::albumArtUpdate,
-//            [=](const QModelIndex &updatedIndex)
-//            {
-//                //Check out the updated index.
-//                if(updatedIndex==m_currentSourceIndex)
-//                {
-//                    //Update the category index.
-//                    updateDisplayArtwork(m_currentSourceIndex);
-//                }
-//            });
+    connect(m_albumModel, &KNMusicAlbumModel::albumRemoved,
+            m_albumDetail, &KNMusicAlbumDetail::onActionAlbumRemoved);
+    connect(m_albumModel, &KNMusicAlbumModel::albumArtUpdate,
+            m_albumDetail, &KNMusicAlbumDetail::onActionAlbumArtUpdate);
     //Update the model.
     retranslate();
 
     //! This should be done in constructor, but setModel() is a virtual
     //! function, so we moved here.
-    //Set the proxy model to album detail.
-//    m_albumDetail->setAlbumModel(m_categoryModel);
     //Set the proxy model to album view.
     m_albumView->setModel(categoryProxyModel());
+    //Set the default sort order.
     categoryProxyModel()->sort(0, Qt::AscendingOrder);
 }
 
@@ -149,7 +146,7 @@ void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
     connect(m_dropProxy, &KNDropProxyContainer::urlsDropped,
             m_libraryModel, &KNMusicLibraryModel::appendUrls);
     //Set the model to display.
-    //!FIXME: Add codes here.
+    m_albumDetail->setLibraryModel(m_libraryModel);
 }
 
 void KNMusicLibraryAlbumTab::retranslate()
