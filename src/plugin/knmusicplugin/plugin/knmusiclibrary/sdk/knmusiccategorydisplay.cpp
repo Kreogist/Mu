@@ -239,8 +239,9 @@ inline void KNMusicCategoryDisplay::updateBackgroundIconContent()
     //Set the pixmap to the label.
     m_largeIcon->setPixmap(m_categoryIcon.isNull()?
                                knMusicGlobal->noAlbumArt():
-                               m_categoryIcon.scaled(m_largeIcon->size(),
-                                                     Qt::KeepAspectRatio,
-                                                     Qt::SmoothTransformation));
+                               m_categoryIcon.scaled(
+                                   m_largeIcon->size(),
+                                   Qt::KeepAspectRatio,
+                                   Qt::SmoothTransformation));
 }
 

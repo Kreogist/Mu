@@ -45,6 +45,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_cancelButton(generateButton("://public/cancel.png")),
     m_titleText(QString()),
     m_showCancelButton(false),
+    m_showOkayButton(true),
     m_showAnime(new QSequentialAnimationGroup(this)),
     m_hideAnime(new QParallelAnimationGroup(this)),
     m_zoomIn(new QPropertyAnimation(this, "geometry", this)),
@@ -52,6 +53,7 @@ KNMessageBox::KNMessageBox(QWidget *parent) :
     m_expand(new QPropertyAnimation(this, "geometry", this)),
     m_fold(new QPropertyAnimation(this, "geometry", this)),
     m_fadeOut(new QPropertyAnimation(this, "windowOpacity", this)),
+    m_dialogResizing(new QPropertyAnimation(this, "geometry", this)),
     m_pressed(false)
 {
     //Set properties.
@@ -113,19 +115,19 @@ void KNMessageBox::showEvent(QShowEvent *event)
         yBase=parentWidget()->y()+(parentWidget()->height()>>1);
     }
     //Calculate the final width, final height and middle rect.
-    const int m_middleHeight=HeaderHeight+BottomHeight;
+    const int middleHeight=HeaderHeight+BottomHeight;
     const QSize preferSize=m_content->targetSize();
     int finalWidth=qMax(m_topBlock->widthHint(), preferSize.width()),
-            finalHeight=m_middleHeight+preferSize.height();
+        finalHeight=middleHeight+preferSize.height();
     QRect middleRect(xBase-(finalWidth>>1),
-                     yBase-(m_middleHeight>>1),
+                     yBase-(middleHeight>>1),
                      finalWidth,
-                     m_middleHeight);
+                     middleHeight);
     //Set the parameters of the animations.
     m_zoomIn->setStartValue(QRect(xBase-(finalWidth>>2),
-                                  yBase-(m_middleHeight>>2),
+                                  yBase-(middleHeight>>2),
                                   (finalWidth>>1),
-                                  (m_middleHeight>>1)));
+                                  (middleHeight>>1)));
     m_zoomIn->setEndValue(middleRect);
     m_expand->setStartValue(middleRect);
     m_expand->setEndValue(QRect(middleRect.x(),
@@ -181,12 +183,26 @@ void KNMessageBox::cancelPressed()
     //For default, it will do nothing.
 }
 
+void KNMessageBox::setButtonVisible(bool isOkayButton, bool isVisible)
+{
+    //Check is the user want to show the okay button.
+    if(isOkayButton)
+    {
+        //Set the okay button visible.
+        m_okayButton->setVisible(isVisible);
+        //Mission complete.
+        return;
+    }
+    //Set the cancel button visible.
+    m_cancelButton->setVisible(isVisible);
+}
+
 void KNMessageBox::onActionZoomFinished()
 {
     //Set the top block text.
     m_topBlock->setText(m_titleText.isEmpty()?"Information":m_titleText);
     //Set show the button.
-    m_okayButton->show();
+    m_okayButton->setVisible(m_showOkayButton);
     m_cancelButton->setVisible(m_showCancelButton);
 }
 
@@ -297,6 +313,10 @@ void KNMessageBox::initialAnimes()
     m_fadeOut->setEndValue(0.0);
     //Add opacity reduce part to hide anime.
     m_hideAnime->addAnimation(m_fadeOut);
+
+    //----Expand Animation----
+    m_dialogResizing->setEasingCurve(QEasingCurve::OutCubic);
+    m_dialogResizing->setDuration(120);
 }
 
 inline void KNMessageBox::configureElements()
@@ -339,6 +359,16 @@ void KNMessageBox::startCloseAnime()
     m_hideAnime->start();
 }
 
+bool KNMessageBox::showOkayButton() const
+{
+    return m_showOkayButton;
+}
+
+void KNMessageBox::setShowOkayButton(bool showOkayButton)
+{
+    m_showOkayButton = showOkayButton;
+}
+
 bool KNMessageBox::showCancelButton() const
 {
     return m_showCancelButton;
@@ -371,6 +401,23 @@ void KNMessageBox::information(const QString &text,
 void KNMessageBox::setShowCancelButton(bool showCancelButton)
 {
     m_showCancelButton = showCancelButton;
+}
+
+void KNMessageBox::resizeDialog(const QSize &contentSize)
+{
+    //Stop the resizing animation.
+    m_dialogResizing->stop();
+    //Set the start position to be the geometry.
+    m_dialogResizing->setStartValue(geometry());
+    //Set the target position.
+    int finalHeight=HeaderHeight + BottomHeight + contentSize.height();
+    m_dialogResizing->setEndValue(
+                QRect(geometry().center().x()-(contentSize.width()>>1),
+                      geometry().center().y()-(finalHeight>>1),
+                      contentSize.width(),
+                      finalHeight));
+    //Start the dialog resizing.
+    m_dialogResizing->start();
 }
 
 QString KNMessageBox::titleText() const

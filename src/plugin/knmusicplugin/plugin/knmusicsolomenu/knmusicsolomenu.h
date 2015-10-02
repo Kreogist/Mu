@@ -68,6 +68,7 @@ private slots:
     void onActionGetInfo();
     void onActionShowInGraphicShell();
     void onActionSearchItemText();
+    void onActionDownloadLyrics();
     void onActionRenameToPrefer();
     void onActionCopyFilePath();
     void onActionCopyItemText();

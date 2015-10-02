@@ -18,12 +18,16 @@
 #include <QBoxLayout>
 #include <QFileDialog>
 #include <QLabel>
+#include <QListView>
+#include <QTreeView>
 
 #include "knglassbutton.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 
 #include "knmusiclibraryemptyhint.h"
+
+#include <QDebug>
 
 KNMusicLibraryEmptyHint::KNMusicLibraryEmptyHint(QWidget *parent) :
     KNDropProxyContainer(parent),
@@ -100,14 +104,34 @@ void KNMusicLibraryEmptyHint::retranslate()
 
 void KNMusicLibraryEmptyHint::onActionAddToLibrary()
 {
-    //Get the added file list.
-    QList<QUrl> addedUrls=QFileDialog::getOpenFileUrls(this,
-                                                       tr("Add To Library"));
-    //If there's any file we can get, ask to analysis these files.
-    if(!addedUrls.isEmpty())
+    //!FIXME: Check the open button.
+    //Generate the file dialog.
+    QFileDialog fileDialog(this,
+                           tr("Add To Library"),
+                           QString("."));
+    fileDialog.setFileMode(QFileDialog::Directory);
+#ifdef Q_OS_MACX
+    fileDialog.setWindowFlags(Qt::Sheet);
+#endif
+
+    fileDialog.setOptions(QFileDialog::DontUseNativeDialog);
+
+    QListView *listView=fileDialog.findChild<QListView *>("listview");
+    if(nullptr!=listView)
     {
-        //Use urls dropped as the signal to ask for adding the files.
-        emit urlsDropped(addedUrls);
+        listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
+
+    QTreeView *treeView=fileDialog.findChild<QTreeView *>();
+    if(nullptr!=treeView)
+    {
+        treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
+
+    if(fileDialog.exec()==QDialog::Accepted &&
+            !fileDialog.selectedUrls().isEmpty())
+    {
+        emit urlsDropped(fileDialog.selectedUrls());
     }
 }
 

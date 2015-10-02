@@ -131,6 +131,13 @@ void KNMusicGlobal::retranslate()
 
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     QObject(parent),
+    m_suffixs(QStringList()),
+    m_listSuffixs(QStringList()),
+    m_suffixDescription(QStringList()),
+    m_listSuffixDescription(QStringList()),
+    m_indexedGenres(QStringList()),
+    m_noAlbumArt(QPixmap(":/plugin/music/public/noalbum.png")),
+    m_musicLibPath(QString()),
     m_parentWidget(static_cast<QWidget *>(parent)),
     m_detailDialog(new KNMusicDetailDialog(knGlobal->mainWindow())),
     m_lyricsManager(new KNMusicLyricsManager(this)),
@@ -141,10 +148,10 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_backend(nullptr),
     m_nowPlaying(nullptr),
     m_detailTooltip(nullptr),
+    m_lyricsDownloadDialog(nullptr),
     m_searcherThread(new QThread(this)),
     m_analysisThread(new QThread(this)),
-    m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music")),
-    m_noAlbumArt(QPixmap(":/plugin/music/public/noalbum.png"))
+    m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music"))
 {
     //Initial the file type.
     initialFileType();
@@ -392,6 +399,17 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Anime"
                    <<"JPop"
                    <<"Synthpop";
+}
+
+KNMusicLyricsDownloadDialogBase *KNMusicGlobal::lyricsDownloadDialog()
+{
+    return m_lyricsDownloadDialog;
+}
+
+void KNMusicGlobal::setLyricsDownloadDialog(
+        KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog)
+{
+    m_lyricsDownloadDialog = lyricsDownloadDialog;
 }
 
 KNMusicLyricsManager *KNMusicGlobal::lyricsManager()

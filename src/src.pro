@@ -330,7 +330,12 @@ SOURCES += \
     sdk/knmouseunclickablewidget.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.cpp \
     plugin/knmusicplugin/sdk/knmusiclistviewbase.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.cpp \
+    sdk/knlabellineedit.cpp \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.cpp \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp \
+    sdk/knclockwheel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -512,7 +517,13 @@ HEADERS += \
     sdk/knmouseunclickablewidget.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.h \
     plugin/knmusicplugin/sdk/knmusiclistviewbase.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistdelegate.h \
+    sdk/knlabellineedit.h \
+    plugin/knmusicplugin/sdk/knmusiclyricsdownloaddialogbase.h \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.h \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.h \
+    sdk/knclockwheel.h
 
 RESOURCES += \
     resource/res.qrc

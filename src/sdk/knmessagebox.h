@@ -65,6 +65,8 @@ public:
                             const QString &title=QString("Message"),
                             const Qt::Alignment &alignment=Qt::AlignLeft);
 
+    bool showOkayButton() const;
+
 signals:
 
 public slots:
@@ -81,12 +83,22 @@ public slots:
     void setContentWidget(QWidget *widget);
 
     /*!
+     * \brief Set whether the dialog show the cancel button. Sometimes you may
+     * only need the cancel button.
+     * \param showOkayButton To make the okay button visible, set it to true. It
+     * is true as default.
+     */
+    void setShowOkayButton(bool showOkayButton);
+
+    /*!
      * \brief Set whether the dialog show the cancel button. The dialog won't
      * need to display the cancel button at some time, like message box.
      * \param showCancelButton To make the cancel button visible, set it to
-     * true.
+     * true. It is false as default.
      */
     void setShowCancelButton(bool showCancelButton);
+
+    void resizeDialog(const QSize &contentSize);
 
 protected:
     /*!
@@ -124,6 +136,14 @@ protected:
      */
     virtual void cancelPressed();
 
+    /*!
+     * \brief Set the visiblility of okay or cancel button.
+     * \param isOkayButton If this is true, the visibility to okay button will
+     * changed.
+     * \param isVisible If this is true, button will be shown, or else hidden.
+     */
+    void setButtonVisible(bool isOkayButton, bool isVisible);
+
 private slots:
     void onActionZoomFinished();
     void onActionShowFinished();
@@ -141,12 +161,13 @@ private:
     KNMessageBoxContent *m_content;
     KNOpacityAnimeButton *m_okayButton, *m_cancelButton;
     QString m_titleText;
-    bool m_showCancelButton;
+    bool m_showCancelButton, m_showOkayButton;
 
     //Animations.
     QSequentialAnimationGroup *m_showAnime;
     QParallelAnimationGroup *m_hideAnime;
-    QPropertyAnimation *m_zoomIn, *m_fadeIn, *m_expand, *m_fold, *m_fadeOut;
+    QPropertyAnimation *m_zoomIn, *m_fadeIn, *m_expand, *m_fold, *m_fadeOut,
+                       *m_dialogResizing;
 
     //Move elements.
     bool m_pressed;

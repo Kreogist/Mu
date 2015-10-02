@@ -41,6 +41,7 @@ class KNMusicPlayerBase;
 class KNMusicPlaylistBase;
 class KNMusicMainPlayerBase;
 class KNMusicLibraryBase;
+class KNMusicLyricsDownloadDialogBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
@@ -117,6 +118,8 @@ private:
     void initialLyricsPlugin();
     void initialSoloMenu(KNMusicSoloMenuBase *soloMenu);
     void initialMultiMenu(KNMusicMultiMenuBase *multiMenu);
+    void initialLyricsDownloadDialog
+                              (KNMusicLyricsDownloadDialogBase *downloadDialog);
 
     void initialSearch(KNMusicSearchBase *search);
     void initialBackend(KNMusicBackend *backend);

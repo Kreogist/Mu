@@ -6,6 +6,12 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "LabelLineEdit" : {
+        "Parent" : "Application",
+        "Window" : "#000000",
+        "Highlight" : "#C0C0C0",
+        "HighlightedText" : "#000000"
+    },
     "MusicAlbumView" : {
         "Parent" : "MainWindow",
         "Base" : "#303030",

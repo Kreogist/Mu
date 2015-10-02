@@ -48,6 +48,7 @@
 #include "knmusicplaylistbase.h"
 #include "knmusiclibrarybase.h"
 #include "knmusictab.h"
+#include "knmusiclyricsdownloaddialogbase.h"
 
 //Plugins
 // Detail Dialog Panels.
@@ -66,6 +67,8 @@
 #include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
+// Lyrics Download Dialog.
+#include "plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h"
 // Solo Music Menu.
 #include "plugin/knmusicsolomenu/knmusicsolomenu.h"
 // Multi Music Menu.
@@ -141,6 +144,12 @@ KNMusicPlugin::~KNMusicPlugin()
     {
         knMusicGlobal->multiMenu()->deleteLater();
     }
+    //Recover the lyrics download menu.
+    if(knMusicGlobal->lyricsDownloadDialog() &&
+            knMusicGlobal->lyricsDownloadDialog()->parent()==nullptr)
+    {
+        knMusicGlobal->lyricsDownloadDialog()->deleteLater();
+    }
     //Recover the tooltip menu.
     if(knMusicGlobal->detailTooltip() &&
             knMusicGlobal->detailTooltip()->parent()==nullptr)
@@ -175,6 +184,8 @@ void KNMusicPlugin::loadPlugins()
     //Initial global menus.
     initialSoloMenu(new KNMusicSoloMenu);
     initialMultiMenu(new KNMusicMultiMenu);
+    //Initial the lyrics download dialog.
+    initialLyricsDownloadDialog(new KNMusicLyricsDownloadDialog);
 
     //Initial the search.
     initialSearch(new KNMusicSearch);
@@ -402,6 +413,13 @@ void KNMusicPlugin::initialMultiMenu(KNMusicMultiMenuBase *multiMenu)
 {
     //Set the multi menu to the music global.
     knMusicGlobal->setMultiMenu(multiMenu);
+}
+
+void KNMusicPlugin::initialLyricsDownloadDialog(
+        KNMusicLyricsDownloadDialogBase *downloadDialog)
+{
+    //Set the download dialog to the music global.
+    knMusicGlobal->setLyricsDownloadDialog(downloadDialog);
 }
 
 void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)

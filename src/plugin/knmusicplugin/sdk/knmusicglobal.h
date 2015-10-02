@@ -45,6 +45,7 @@ class KNMusicDetailTooltipBase;
 class KNMusicSoloMenuBase;
 class KNMusicMultiMenuBase;
 class KNMusicLyricsManager;
+class KNMusicLyricsDownloadDialogBase;
 /*!
  * \brief The KNMusicGlobal class provides some public instance and function of
  * the official music category plugin.\n
@@ -253,6 +254,20 @@ public:
      */
     KNMusicLyricsManager *lyricsManager();
 
+    /*!
+     * \brief Get the lyrics download dialog widget.
+     * \return The lyrics download dialog. If it was never set before, it will
+     * be nullptr.
+     */
+    KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog();
+
+    /*!
+     * \brief Set the lyrics download dialog widget pointer.
+     * \param lyricsDownloadDialog The pointer of the lyrics download dialog.
+     */
+    void setLyricsDownloadDialog(
+            KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog);
+
 signals:
 
 public slots:
@@ -272,6 +287,13 @@ private:
     inline void initialFileType();
     inline void initialGenre();
 
+    QString m_treeViewHeaderText[MusicDataCount];
+
+    QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
+                m_listSuffixDescription, m_indexedGenres;
+    QPixmap m_noAlbumArt;
+    QString m_musicLibPath;
+
     QWidget *m_parentWidget;
     KNMusicDetailDialog *m_detailDialog;
     KNMusicLyricsManager *m_lyricsManager;
@@ -282,15 +304,10 @@ private:
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
     KNMusicDetailTooltipBase *m_detailTooltip;
+    KNMusicLyricsDownloadDialogBase *m_lyricsDownloadDialog;
 
     QThread *m_searcherThread, *m_analysisThread;
     KNConfigure *m_musicConfigure;
-    QString m_musicLibPath;
-
-    QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
-                m_listSuffixDescription, m_indexedGenres;
-    QString m_treeViewHeaderText[MusicDataCount];
-    QPixmap m_noAlbumArt;
 };
 
 #endif // KNMUSICGLOBAL_H

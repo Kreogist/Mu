@@ -282,14 +282,15 @@ void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(
     updateDisplayArtwork(m_currentSourceIndex);
 }
 
-void KNMusicLibraryArtistTab::updateDisplayArtwork(const QModelIndex &index)
+inline void KNMusicLibraryArtistTab::updateDisplayArtwork(
+        const QModelIndex &index)
 {
     //Set the category icon right from the library model.
     m_artistDisplay->setCategoryIcon(
-                m_libraryModel->artwork(
-                    m_categoryModel->data(
-                     index,
-                     KNMusicCategoryModelBase::CategoryArtworkKeyRole).toString()));
+        m_libraryModel->artwork(
+            m_categoryModel->data(
+                index,
+                KNMusicCategoryModelBase::CategoryArtworkKeyRole).toString()));
 }
 
 void KNMusicLibraryArtistTab::checkCategorySelected()

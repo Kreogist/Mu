@@ -25,6 +25,7 @@
 #include "knmusicglobal.h"
 #include "knmusicsearchbase.h"
 #include "knmusicdetaildialog.h"
+#include "knmusiclyricsdownloaddialogbase.h"
 
 #include "knmusicsolomenu.h"
 
@@ -60,6 +61,8 @@ KNMusicSoloMenu::KNMusicSoloMenu(QWidget *parent) :
             this, &KNMusicSoloMenu::onActionShowInGraphicShell);
     connect(m_actions[SearchItemText], &QAction::triggered,
             this, &KNMusicSoloMenu::onActionSearchItemText);
+    connect(m_actions[DownloadLyrics], &QAction::triggered,
+            this, &KNMusicSoloMenu::onActionDownloadLyrics);
     connect(m_actions[CopyFilePath], &QAction::triggered,
             this, &KNMusicSoloMenu::onActionCopyFilePath);
     connect(m_actions[CopyItemText], &QAction::triggered,
@@ -259,6 +262,24 @@ void KNMusicSoloMenu::onActionSearchItemText()
     blocks.append(block);
     //Do search.
     searcher->search(blocks);
+}
+
+void KNMusicSoloMenu::onActionDownloadLyrics()
+{
+    //Check the pointer of download dialog and model.
+    //Check the validation of the item index.
+    if(knMusicGlobal->lyricsDownloadDialog() && m_model
+            && m_itemIndex.isValid())
+    {
+        //Get the download dialog.
+        KNMusicLyricsDownloadDialogBase *downloadDialog=
+                knMusicGlobal->lyricsDownloadDialog();
+        //Set the detail info to the download dialog.
+        downloadDialog->setDetailInfo(
+                    m_model->rowDetailInfo(m_itemIndex.row()));
+        //Show up the download lyrics dialog, and give it the detail info.
+        downloadDialog->exec();
+    }
 }
 
 void KNMusicSoloMenu::onActionRenameToPrefer()

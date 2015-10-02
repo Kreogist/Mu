@@ -12,8 +12,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
 #include <QKeyEvent>
@@ -21,50 +21,119 @@
 
 #include "knthememanager.h"
 
-#include "knsearchbox.h"
+#include "knlabellineedit.h"
 
-#include <QDebug>
+//#include <QDebug>
 
-#define SearchBoxHeight 20
-#define SearchBoxIconX 3
+#define LabelBoxHeight 20
+#define LabelBoxIconX 3
+#define LabelBoxRoundedRect 4
 
-#define MinimumLightness 0x3A
-#define MediumLightness 0x60
 #define MaximumLightness 0xFF
 
-KNSearchBox::KNSearchBox(QWidget *parent) :
+KNLabelLineEdit::KNLabelLineEdit(QWidget *parent) :
     QLineEdit(parent),
-    m_searchIcon(QPixmap("://public/search.png")),
+    m_labelIcon(QPixmap()),
     m_baseColor(QColor(0,0,0,0)),
     m_mouseInOut(generateTimeLine()),
     m_focusInOut(generateTimeLine()),
-    m_focusSource(nullptr)
+    m_focusSource(nullptr),
+    m_minimumLightness(0x3A),
+    m_mediumLightness(0x60)
 {
-    setObjectName("SearchBox");
+    setObjectName("LabelLineEdit");
     //Set properties.
     setFrame(false);
-    setContentsMargins(SearchBoxHeight+SearchBoxIconX,
+    setContentsMargins(LabelBoxIconX,
                        0,
-                       SearchBoxHeight>>1,
+                       LabelBoxHeight>>1,
                        0);
-    setFixedHeight(SearchBoxHeight);
+    setFixedHeight(LabelBoxHeight);
 
     //Configure the time line, link the frame change with the slot.
     connect(m_mouseInOut, &QTimeLine::frameChanged,
-            this, &KNSearchBox::onActionMouseInOut);
+            this, &KNLabelLineEdit::onActionMouseInOut);
     connect(m_focusInOut, &QTimeLine::frameChanged,
-            this, &KNSearchBox::onActionFocusInOut);
+            this, &KNLabelLineEdit::onActionFocusInOut);
 
     //Link with the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
-            this, &KNSearchBox::onActionThemeChanged);
+            this, &KNLabelLineEdit::onActionThemeChanged);
     //Intial the palette.
     onActionThemeChanged();
     //Update the palette.
-    onActionFocusInOut(MinimumLightness);
+    onActionFocusInOut(m_minimumLightness);
 }
 
-void KNSearchBox::enterEvent(QEvent *event)
+QPixmap KNLabelLineEdit::labelIcon() const
+{
+    return m_labelIcon;
+}
+
+void KNLabelLineEdit::setLabelIcon(const QPixmap &labelIcon)
+{
+    //Check the validation of the label icon.
+    if(labelIcon.isNull())
+    {
+        //Reset the label icon.
+        m_labelIcon=QPixmap();
+        //Reset the content margin.
+        setContentsMargins(LabelBoxIconX,
+                           0,
+                           LabelBoxHeight>>1,
+                           0);
+        //Mission complete.
+        return;
+    }
+    //Save the scaled icon.
+    m_labelIcon = labelIcon.scaled(LabelBoxHeight,
+                                   LabelBoxHeight,
+                                   Qt::KeepAspectRatio,
+                                   Qt::SmoothTransformation);
+    //Update the content margin.
+    setContentsMargins(LabelBoxHeight+LabelBoxIconX,
+                       0,
+                       LabelBoxHeight>>1,
+                       0);
+}
+
+QWidget *KNLabelLineEdit::focusSource() const
+{
+    return m_focusSource;
+}
+
+void KNLabelLineEdit::setFocusSource(QWidget *focusSource)
+{
+    m_focusSource = focusSource;
+}
+
+void KNLabelLineEdit::updateObjectName(const QString &itemName)
+{
+    //Change the object name.
+    setObjectName(itemName);
+    //Update the palette.
+    onActionThemeChanged();
+    //Update the lightness.
+    onActionFocusInOut(m_baseColor.value());
+}
+
+void KNLabelLineEdit::setMinimumLightness(int minimumLightness)
+{
+    //Set the minimum lightness.
+    m_minimumLightness=minimumLightness;
+    //Check out the base color value.
+    if(m_baseColor.value()<m_minimumLightness)
+    {
+        //Update the value of base color.
+        m_baseColor.setHsv(m_baseColor.hue(),
+                           m_baseColor.saturation(),
+                           m_minimumLightness);
+        //Update the lightness.
+        onActionFocusInOut(m_minimumLightness);
+    }
+}
+
+void KNLabelLineEdit::enterEvent(QEvent *event)
 {
     //Do the original enter event.
     QLineEdit::enterEvent(event);
@@ -74,10 +143,10 @@ void KNSearchBox::enterEvent(QEvent *event)
         return;
     }
     //Start the mouse in anime.
-    startAnime(m_mouseInOut, MediumLightness);
+    startAnime(m_mouseInOut, m_mediumLightness);
 }
 
-void KNSearchBox::leaveEvent(QEvent *event)
+void KNLabelLineEdit::leaveEvent(QEvent *event)
 {
     //Do the original leave event.
     QLineEdit::leaveEvent(event);
@@ -87,10 +156,10 @@ void KNSearchBox::leaveEvent(QEvent *event)
         return;
     }
     //Start the mouse out anime.
-    startAnime(m_mouseInOut, MinimumLightness);
+    startAnime(m_mouseInOut, m_minimumLightness);
 }
 
-void KNSearchBox::focusInEvent(QFocusEvent *event)
+void KNLabelLineEdit::focusInEvent(QFocusEvent *event)
 {
     //Start the focus in anime.
     startAnime(m_focusInOut, MaximumLightness);
@@ -98,15 +167,15 @@ void KNSearchBox::focusInEvent(QFocusEvent *event)
     QLineEdit::focusInEvent(event);
 }
 
-void KNSearchBox::focusOutEvent(QFocusEvent *event)
+void KNLabelLineEdit::focusOutEvent(QFocusEvent *event)
 {
     //Start the focus out anime.
-    startAnime(m_focusInOut, MinimumLightness);
+    startAnime(m_focusInOut, m_minimumLightness);
     //Do the original focus in event.
     QLineEdit::focusOutEvent(event);
 }
 
-void KNSearchBox::paintEvent(QPaintEvent *event)
+void KNLabelLineEdit::paintEvent(QPaintEvent *event)
 {
     //Draw the base first.
     //Initial the painter.
@@ -115,27 +184,31 @@ void KNSearchBox::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::SmoothPixmapTransform, true);
     //Configure the painter.
-    painter.setPen(Qt::NoPen);
+    painter.setPen(QColor(0,0,0,m_baseColor.value()>>1));
     painter.setBrush(m_baseColor);
     //Draw the back content first.
     painter.drawRoundedRect(rect(),
-                            height()>>1,
-                            height()>>1);
+                            LabelBoxRoundedRect,
+                            LabelBoxRoundedRect);
     //Draw the search icon.
-    painter.drawPixmap(SearchBoxIconX,
-                       0,
-                       SearchBoxHeight,
-                       SearchBoxHeight,
-                       m_searchIcon);
+    if(!m_labelIcon.isNull())
+    {
+        painter.drawPixmap(LabelBoxIconX,
+                           0,
+                           LabelBoxHeight,
+                           LabelBoxHeight,
+                           m_labelIcon);
+    }
     //Do the original paint event.
     QLineEdit::paintEvent(event);
 }
 
-void KNSearchBox::keyPressEvent(QKeyEvent *event)
+void KNLabelLineEdit::keyPressEvent(QKeyEvent *event)
 {
     //If pressed escape, means the user want to lose the focus.
-    if(event->key()==Qt::Key_Escape)
+    switch(event->key())
     {
+    case Qt::Key_Escape:
         //Check the focus source widget.
         if(m_focusSource!=nullptr)
         {
@@ -144,13 +217,18 @@ void KNSearchBox::keyPressEvent(QKeyEvent *event)
             //Clear the source widget pointer.
             m_focusSource=nullptr;
         }
-        return;
+        break;
+    case Qt::Key_Tab:
+        QLineEdit::keyPressEvent(event);
+        break;
+    default:
+        //Or else, do the original one.
+        QLineEdit::keyPressEvent(event);
+        break;
     }
-    //Or else, do the original one.
-    QLineEdit::keyPressEvent(event);
 }
 
-void KNSearchBox::onActionThemeChanged()
+void KNLabelLineEdit::onActionThemeChanged()
 {
     //Get the palette from the theme manager.
     QPalette pal=knTheme->getPalette(objectName());
@@ -162,7 +240,7 @@ void KNSearchBox::onActionThemeChanged()
     setPalette(pal);
 }
 
-void KNSearchBox::onActionMouseInOut(const int &frame)
+void KNLabelLineEdit::onActionMouseInOut(const int &frame)
 {
     //Use the frame as the new lightness of the base color.
     m_baseColor.setHsv(m_baseColor.hue(),
@@ -172,7 +250,7 @@ void KNSearchBox::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNSearchBox::onActionFocusInOut(const int &frame)
+void KNLabelLineEdit::onActionFocusInOut(const int &frame)
 {
     //Use the frame as the new lightness of the base color.
     m_baseColor.setHsv(m_baseColor.hue(),
@@ -191,7 +269,7 @@ void KNSearchBox::onActionFocusInOut(const int &frame)
     setPalette(pal);
 }
 
-inline QTimeLine *KNSearchBox::generateTimeLine()
+inline QTimeLine *KNLabelLineEdit::generateTimeLine()
 {
     //Generate the time line.
     QTimeLine *timeLine=new QTimeLine(200, this);
@@ -202,7 +280,7 @@ inline QTimeLine *KNSearchBox::generateTimeLine()
     return timeLine;
 }
 
-inline void KNSearchBox::startAnime(QTimeLine *timeLine, const int &end)
+inline void KNLabelLineEdit::startAnime(QTimeLine *timeLine, const int &end)
 {
     //Stop all the animations.
     m_mouseInOut->stop();
@@ -213,25 +291,8 @@ inline void KNSearchBox::startAnime(QTimeLine *timeLine, const int &end)
     timeLine->start();
 }
 
-QWidget *KNSearchBox::focusSource() const
+void KNLabelLineEdit::setMediumLightness(int mediumLightness)
 {
-    return m_focusSource;
-}
-
-void KNSearchBox::setFocusSource(QWidget *focusSource)
-{
-    m_focusSource = focusSource;
-}
-
-QPixmap KNSearchBox::searchIcon() const
-{
-    return m_searchIcon;
-}
-
-void KNSearchBox::setSearchIcon(const QPixmap &searchIcon)
-{
-    m_searchIcon = searchIcon.scaled(SearchBoxHeight,
-                                     SearchBoxHeight,
-                                     Qt::KeepAspectRatio,
-                                     Qt::SmoothTransformation);
+    //Set the medium lightness.
+    m_mediumLightness = mediumLightness;
 }
