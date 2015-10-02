@@ -84,6 +84,8 @@ bool KNMusicTagId3v1::writeTag(const KNMusicAnalysisItem &analysisItem)
 
     //Generate the tag cache.
     char rawTagData[128];
+    //Clear up the tag data cache.
+    memset(rawTagData, 128, 0);
     //Write the tag header.
     rawTagData[0]='T';
     rawTagData[1]='A';

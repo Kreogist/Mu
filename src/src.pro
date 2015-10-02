@@ -37,8 +37,15 @@ TRANSLATIONS += \
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
 msvc: {
-    QMAKE_CXXFLAGS_RELEASE += -GL -Gw -Qpar -arch:AVX -favor:INTEL64 -GA
+    # Whole Program Optimization
+    QMAKE_CXXFLAGS_RELEASE += -GL -Gw -GA
+    # Auto-Parallelizer
+    QMAKE_CXXFLAGS_RELEASE += -Qpar
+    # CPU Architecture
+    QMAKE_CXXFLAGS_RELEASE += -arch:AVX -favor:INTEL64
 
+    # Linker Options.
+    # Link-time Code Generation, use with -GL
     QMAKE_LFLAGS_RELEASE += -LTCG
 }
 gcc: {
@@ -335,7 +342,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.cpp \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp \
-    sdk/knclockwheel.cpp
+    sdk/knclockwheel.cpp \
+    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp \
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -523,7 +532,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.h \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.h \
-    sdk/knclockwheel.h
+    sdk/knclockwheel.h \
+    plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h \
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h
 
 RESOURCES += \
     resource/res.qrc
