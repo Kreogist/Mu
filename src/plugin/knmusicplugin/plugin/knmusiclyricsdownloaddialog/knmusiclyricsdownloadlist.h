@@ -43,8 +43,11 @@ class KNMusicLyricsDownloadList : public QWidget
     Q_OBJECT
 public:
     explicit KNMusicLyricsDownloadList(QWidget *parent = 0);
+    QString currentLyricsData();
 
 signals:
+    void requireShowOkay();
+    void requireHideOkay();
 
 public slots:
     void hideAllWidgets();
@@ -63,7 +66,7 @@ protected:
 
 private slots:
     void retranslate();
-    void onActionItemPressed(const QModelIndex &index);
+    void onActionCurrentChanged(const QModelIndex &index);
     void onActionPlayStateChanged(const int &state);
     void onActionPlayNPauseClick();
     void onActionPositionChanged(const qint64 &position);

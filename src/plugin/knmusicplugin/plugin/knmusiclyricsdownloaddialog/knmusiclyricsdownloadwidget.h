@@ -38,11 +38,14 @@ public:
 
 signals:
     void requireExpand();
-    void requireCnacel();
+    void requireCancel();
+    void requireShowOkayButton();
+    void requireHideOkayButton();
     void requireDownloadLyrics(KNMusicDetailInfo detailInfo);
 
 public slots:
     void setDetailInfo(const KNMusicDetailInfo &detailInfo);
+    void saveSelectLyrics();
 
 private slots:
     void retranslate();

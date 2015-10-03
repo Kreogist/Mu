@@ -272,15 +272,11 @@ bool KNUtil::saveTextToFile(const QString &filePath, const QString &content)
     //Generate the target file.
     QFile targetFile(filePath);
     //Ensure the path is valid.
-    if(!ensurePathValid(QFileInfo(targetFile).absoluteFilePath()).isEmpty())
+    //Open as write only mode.
+    if(ensurePathValid(QFileInfo(targetFile).absolutePath()).isEmpty() ||
+            !targetFile.open(QIODevice::WriteOnly))
     {
         //If there's no path to this file, how can we write the file?
-        return false;
-    }
-    //Open as write only mode.
-    if(!targetFile.open(QIODevice::WriteOnly))
-    {
-        //Or else written failed.
         return false;
     }
     //Generate the text stream.

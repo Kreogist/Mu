@@ -24,7 +24,7 @@
 #include "knmusicbackend.h"
 #include "knmusiclyricsdownloadlist.h"
 #include "knmusiclyricsmanager.h"
-#include "knmusiconlinelyricsdownlaoder.h"
+#include "knmusiconlinelyricsdownloader.h"
 #include "knmusicglobal.h"
 
 #include "knmusiclyricsdownloadwidget.h"
@@ -58,6 +58,10 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
             this, &KNMusicLyricsDownloadWidget::onActionSearch);
     //Configure the download list.
     m_downloadedLyrics->setVisible(false);
+    connect(m_downloadedLyrics, &KNMusicLyricsDownloadList::requireShowOkay,
+            this, &KNMusicLyricsDownloadWidget::requireShowOkayButton);
+    connect(m_downloadedLyrics, &KNMusicLyricsDownloadList::requireHideOkay,
+            this, &KNMusicLyricsDownloadWidget::requireHideOkayButton);
     //Link the online lyrics downloader.
     connect(this, &KNMusicLyricsDownloadWidget::requireDownloadLyrics,
             m_onlineDownloader,
@@ -131,6 +135,14 @@ void KNMusicLyricsDownloadWidget::setDetailInfo(
     }
 }
 
+void KNMusicLyricsDownloadWidget::saveSelectLyrics()
+{
+    //Save the lyrics file by calling the lyrics manager.
+    knMusicGlobal->lyricsManager()->saveLyricsAndUpdateBackend(
+                m_detailInfo,
+                m_downloadedLyrics->currentLyricsData());
+}
+
 void KNMusicLyricsDownloadWidget::retranslate()
 {
     //Update search lyrics.
@@ -153,11 +165,13 @@ void KNMusicLyricsDownloadWidget::onActionSearch()
     m_artist->setEnabled(false);
     //Show the download widget.
     m_downloadedLyrics->showDownloadWidgets();
+    //Get a deep copy of the detail info.
+    KNMusicDetailInfo detailInfo=m_detailInfo;
     //Update the detail info.
-    m_detailInfo.textLists[Name]=m_title->text();
-    m_detailInfo.textLists[Artist]=m_artist->text();
+    detailInfo.textLists[Name]=m_title->text();
+    detailInfo.textLists[Artist]=m_artist->text();
     //Ask to download the lyrics.
-    emit requireDownloadLyrics(m_detailInfo);
+    emit requireDownloadLyrics(detailInfo);
 }
 
 void KNMusicLyricsDownloadWidget::hideEvent(QHideEvent *event)

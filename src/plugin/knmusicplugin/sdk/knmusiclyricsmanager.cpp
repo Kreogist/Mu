@@ -24,7 +24,7 @@
 #include "knmusiclrcparser.h"
 #include "knmusicglobal.h"
 #include "knmusiconlinelyrics.h"
-#include "knmusiconlinelyricsdownlaoder.h"
+#include "knmusiconlinelyricsdownloader.h"
 
 #include "knmusiclyricsmanager.h"
 
@@ -53,7 +53,7 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_onlineLyricsDownloader->moveToThread(m_onlineThread);
     //Link the online lyrics.
     connect(m_onlineLyrics, &KNMusicOnlineLyrics::lyricsDownload,
-            this, &KNMusicLyricsManager::onActionLyricsDownloaded,
+            this, &KNMusicLyricsManager::saveLyricsAndUpdateBackend,
             Qt::QueuedConnection);
     //Start online thread.
     m_onlineThread->start();
@@ -118,24 +118,33 @@ void KNMusicLyricsManager::resetBackend()
     m_backend->reset();
 }
 
-void KNMusicLyricsManager::onActionLyricsDownloaded(
-        const KNMusicDetailInfo &detailInfo,
-        const QString &content)
+void KNMusicLyricsManager::saveLyrics(const QString &artist,
+                                      const QString &title,
+                                      const QString &content)
 {
     //Ensure the lyrics directory is exist.
     KNUtil::ensurePathValid(m_lyricsDir);
     //Save the lyrics content.
     KNUtil::saveTextToFile(
                 //Generate the file path.
-                m_lyricsDir + "/" + KNUtil::legalFileName(
-                            detailInfo.textLists[Artist].toString() + " - " +
-                            detailInfo.textLists[Name].toString() + ".lrc"),
+                m_lyricsDir + "/" + KNUtil::legalFileName(artist + " - " +
+                                                          title + ".lrc"),
                 //Lyrics content.
                 content);
+}
+
+void KNMusicLyricsManager::saveLyricsAndUpdateBackend(
+        const KNMusicDetailInfo &detailInfo,
+        const QString &content)
+{
+    //Save the lyrics.
+    saveLyrics(detailInfo.textLists[Artist].toString(),
+               detailInfo.textLists[Name].toString(),
+               content);
     //Check whether the detail info is still the current one.
     if(detailInfo.filePath==m_detailInfo.filePath &&
-            detailInfo.trackIndex==m_detailInfo.trackIndex &&
-            detailInfo.trackFilePath==m_detailInfo.trackFilePath)
+            detailInfo.trackFilePath==m_detailInfo.trackFilePath &&
+            detailInfo.trackIndex==m_detailInfo.trackIndex)
     {
         //Generate the data cache.
         QList<qint64> timeList;

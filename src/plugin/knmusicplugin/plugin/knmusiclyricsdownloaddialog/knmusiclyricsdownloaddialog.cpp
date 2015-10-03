@@ -37,6 +37,12 @@ KNMusicLyricsDownloadDialog::KNMusicLyricsDownloadDialog(QWidget *parent) :
     //Configure the download widget.
     connect(m_downloadWidget, &KNMusicLyricsDownloadWidget::requireExpand,
             this, &KNMusicLyricsDownloadDialog::onActionExpand);
+    connect(m_downloadWidget,
+            &KNMusicLyricsDownloadWidget::requireShowOkayButton,
+            [=]{setButtonVisible(true, true);});
+    connect(m_downloadWidget,
+            &KNMusicLyricsDownloadWidget::requireHideOkayButton,
+            [=]{setButtonVisible(true, false);});
 }
 
 void KNMusicLyricsDownloadDialog::setDetailInfo(
@@ -56,6 +62,8 @@ bool KNMusicLyricsDownloadDialog::okayPressed()
 {
     //Reset the preview thread.
     resetPreviewThread();
+    //Save the lyrics.
+    m_downloadWidget->saveSelectLyrics();
     //Give back the original settings.
     return KNMusicLyricsDownloadDialogBase::okayPressed();
 }

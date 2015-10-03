@@ -98,9 +98,24 @@ public slots:
      */
     void resetBackend();
 
-private slots:
-    void onActionLyricsDownloaded(const KNMusicDetailInfo &detailInfo,
-                                  const QString &content);
+    /*!
+     * \brief Save the lyrics data to the lyrics directory. Named as "Artist-
+     * Name.lrc".
+     * \param artist The artist name.
+     * \param title The title of the song.
+     * \param content Lyrics file content.
+     */
+    void saveLyrics(const QString &artist,
+                    const QString &title,
+                    const QString &content);
+
+    /*!
+     * \brief Save the lyrics data and update the main backend data.
+     * \param detailInfo The detail info of the lyrics.
+     * \param content The lyrics data.
+     */
+    void saveLyricsAndUpdateBackend(const KNMusicDetailInfo &detailInfo,
+                                    const QString &content);
 
 private:
     enum SearchPolicy

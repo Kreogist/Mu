@@ -73,7 +73,7 @@ KNMusicLyricsDownloadList::KNMusicLyricsDownloadList(QWidget *parent) :
     KNSaoStyle::styleVerticalScrollBar(m_lyricsList->verticalScrollBar());
     connect(m_lyricsList->selectionModel(),
             &QItemSelectionModel::currentChanged,
-            this, &KNMusicLyricsDownloadList::onActionItemPressed);
+            this, &KNMusicLyricsDownloadList::onActionCurrentChanged);
     //Register the lyrics list to theme manager.
     knTheme->registerWidget(m_lyricsList);
     //Configure the scroll lyrics.
@@ -130,6 +130,13 @@ KNMusicLyricsDownloadList::KNMusicLyricsDownloadList(QWidget *parent) :
     retranslate();
 }
 
+QString KNMusicLyricsDownloadList::currentLyricsData()
+{
+    //Get the content data from the model.
+    return m_lyricsDetailListModel->data(m_lyricsList->currentIndex(),
+                                         Qt::UserRole).toString();
+}
+
 void KNMusicLyricsDownloadList::hideAllWidgets()
 {
     //Cut all the connections.
@@ -174,6 +181,8 @@ void KNMusicLyricsDownloadList::setLyricsList(
     //Check out the lyrics size
     if(lyricsList.isEmpty())
     {
+        //Ask to hide okay button.
+        emit requireHideOkay();
         //Hide the lyrics list.
         m_lyricsList->setVisible(false);
         //Disconnect the backend.
@@ -194,6 +203,8 @@ void KNMusicLyricsDownloadList::setLyricsList(
     //Show the player and lyrics preview.
     m_previewPlayer->show();
     m_scrollLyrics->show();
+    //Ask to show okay button.
+    emit requireShowOkay();
 }
 
 void KNMusicLyricsDownloadList::resizeEvent(QResizeEvent *event)
@@ -210,7 +221,7 @@ void KNMusicLyricsDownloadList::retranslate()
     m_downloadServerText=tr("Searching lyrics on server (%1/%2)");
 }
 
-void KNMusicLyricsDownloadList::onActionItemPressed(const QModelIndex &index)
+void KNMusicLyricsDownloadList::onActionCurrentChanged(const QModelIndex &index)
 {
     //Get the lryics text from the index.
     QString lyricsData=index.data(Qt::UserRole).toString();
@@ -306,6 +317,10 @@ inline void KNMusicLyricsDownloadList::linkBackend()
                         backend, &KNMusicBackend::setPreviewPosition));
         //Sync the duration from the backend.
         m_progress->setMaximum(backend->previewDuration());
+        //Reset the progress value.
+        m_progress->setValue(0);
+        //Update the state.
+        onActionPlayStateChanged(backend->previewState());
     }
 }
 
