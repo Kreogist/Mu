@@ -43,8 +43,21 @@ void KNMusicTTPlayerLyrics::downloadLyrics(
         const KNMusicDetailInfo &detailInfo,
         QList<KNMusicLyricsDetails> &lyricsList)
 {
-    //Another address: http://ttlrccnc.qianqian.com
-    QString queryUrl="http://ttlrcct.qianqian.com"
+    //Download from both CNC and CT server of qianqian.com.
+    downloadLyricsFromUrl("http://ttlrccnc.qianqian.com",
+                          detailInfo,
+                          lyricsList);
+    downloadLyricsFromUrl("http://ttlrcct.qianqian.com",
+                          detailInfo,
+                          lyricsList);
+}
+
+void KNMusicTTPlayerLyrics::downloadLyricsFromUrl(
+        const QString &url,
+        const KNMusicDetailInfo &detailInfo,
+        QList<KNMusicLyricsDetails> &lyricsList)
+{
+    QString queryUrl=url+
                      "/dll/lyricsvr.dll?sh?Artist="+
                      utf16LEHex(
                        processKeywords(detailInfo.textLists[Artist].toString()))
@@ -82,7 +95,7 @@ void KNMusicTTPlayerLyrics::downloadLyrics(
         i!=lyricsInfoList.end();
         ++i)
     {
-        QString downloadUrl="http://ttlrcct.qianqian.com"
+        QString downloadUrl=url+
                             "/dll/lyricsvr.dll?dl?Id=" +
                             (*i).value("id") +
                             "&Code="+

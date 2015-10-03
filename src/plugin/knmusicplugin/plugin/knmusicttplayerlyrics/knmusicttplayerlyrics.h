@@ -54,6 +54,9 @@ private:
         QString artist;
         QString title;
     };
+    void downloadLyricsFromUrl(const QString &url,
+                               const KNMusicDetailInfo &detailInfo,
+                               QList<KNMusicLyricsDetails> &lyricsList);
     inline QString generateCode(const QHash<QString, QString> &info);
     inline QString utf8HexText(const QString &original);
     inline QString utf16LEHex(const QString &original);

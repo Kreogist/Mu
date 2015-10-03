@@ -18,6 +18,8 @@
 
 #include "knmusiconlinelyricsdownloader.h"
 
+#include <QDebug>
+
 KNMusicOnlineLyricsDownloader::KNMusicOnlineLyricsDownloader(QObject *parent) :
     QObject(parent),
     m_downloaders(QList<KNMusicLyricsDownloader *>()),

@@ -233,6 +233,13 @@ void KNMusicLyricsDownloadList::onActionCurrentChanged(const QModelIndex &index)
     {
         //Set parsed data to preview backend.
         m_previewBackend->setLyricsData(positionList, textList);
+        //Check the backend.
+        if(knMusicGlobal->backend())
+        {
+            //Sync the preview backend with the backend.
+            m_previewBackend->setPosition(
+                        knMusicGlobal->backend()->previewPosition());
+        }
     }
     else
     {
