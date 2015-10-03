@@ -18,16 +18,67 @@
 #include <QScrollBar>
 
 #include "sao/knsaostyle.h"
+#include "knthememanager.h"
 
+#include "knmusicglobal.h"
+#include "knmusicproxymodel.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusicnowplayingdelegate.h"
 
 #include "knmusicnowplayinglistview.h"
 
+using namespace MusicUtil;
+
 KNMusicNowPlayingListView::KNMusicNowPlayingListView(QWidget *parent) :
     QListView(parent)
 {
+    setObjectName("NowPlayingListView");
     //Set item delegate.
     setItemDelegate(new KNMusicNowPlayingDelegate(this));
     KNSaoStyle::styleVerticalScrollBar(verticalScrollBar());
+    //Add the widget the theme manager.
+    knTheme->registerWidget(this);
+
+    //Link the tree view signal and slot.
+    connect(this, &KNMusicNowPlayingListView::activated,
+            this, &KNMusicNowPlayingListView::onActionActivate);
 }
 
+KNMusicProxyModel *KNMusicNowPlayingListView::proxyModel()
+{
+    //Give back the model of this list view.
+    return static_cast<KNMusicProxyModel *>(model());
+}
+
+KNMusicModel *KNMusicNowPlayingListView::musicModel()
+{
+    //Check out the proxy model.
+    return proxyModel()==nullptr?nullptr:proxyModel()->musicModel();
+}
+
+void KNMusicNowPlayingListView::onActionActivate(const QModelIndex &index)
+{
+    //Play the activate index.
+    playIndex(index);
+}
+
+inline void KNMusicNowPlayingListView::playIndex(const QModelIndex &index)
+{
+    //Check the music row and the index is valid.
+    if(musicModel()==nullptr || !index.isValid())
+    {
+        //Ignore those invalid request.
+        return;
+    }
+    //Get the now playing from the music global.
+    KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
+    //Check null.
+    if(nowPlaying==nullptr)
+    {
+        return;
+    }
+    //Ask the now playing to play the index row.
+    nowPlaying->playMusicRow(proxyModel(),
+                             index.row(),
+                             nowPlaying->playingTab());
+}

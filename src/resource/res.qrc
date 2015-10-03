@@ -106,5 +106,7 @@
         <file>music/formats/format_vorbis.png</file>
         <file>music/formats/format_wav.png</file>
         <file>music/formats/format_wma.png</file>
+        <file>music/player/next_tab.png</file>
+        <file>music/player/previous_tab.png</file>
     </qresource>
 </RCC>

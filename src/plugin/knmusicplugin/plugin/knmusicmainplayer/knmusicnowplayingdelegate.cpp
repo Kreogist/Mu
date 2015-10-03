@@ -21,6 +21,8 @@
 
 #include "knmusicnowplayingdelegate.h"
 
+#include <QDebug>
+
 using namespace MusicUtil;
 
 KNMusicNowPlayingDelegate::KNMusicNowPlayingDelegate(QWidget *parent) :
@@ -50,17 +52,6 @@ void KNMusicNowPlayingDelegate::paint(QPainter *painter,
     }
     else
     {
-        //Draw the background.
-        QLinearGradient normalBackground;
-        normalBackground.setColorAt(0, QColor(0x41, 0x41, 0x41));
-        normalBackground.setColorAt(1, QColor(0x3a, 0x3a, 0x3a));
-        //Fill the background.
-        painter->fillRect(option.rect, normalBackground);
-
-        //Use the top line color.
-        painter->setPen(QColor(0x4e, 0x4e, 0x4e));
-        //Draw the top line.
-        painter->drawLine(option.rect.topLeft(), option.rect.topRight());
         //Use the bottom line color.
         painter->setPen(QColor(0x21, 0x21, 0x21));
         //Draw the bottom line.
@@ -72,23 +63,43 @@ void KNMusicNowPlayingDelegate::paint(QPainter *painter,
     //Get the model.
     const QAbstractItemModel *proxyModel=index.model();
 
+    //Draw the playing icon.
+    QIcon indicatorIcon=proxyModel->data(proxyModel->index(index.row(),
+                                                           MusicRowState),
+                                         Qt::DecorationRole).value<QIcon>();
+    //Check the valid of the decorate data.
+    if(!indicatorIcon.isNull())
+    {
+        //Rescaled the icon.
+        QPixmap rescaledPixmap=indicatorIcon.pixmap(option.rect.height());
+        //Calculate the offset.
+        int positionOffset=((option.rect.height()-rescaledPixmap.height())>>1);
+        //Draw the indicator icon.
+        painter->drawPixmap(option.rect.x()+positionOffset,
+                            option.rect.y()+positionOffset,
+                            rescaledPixmap);
+    }
     //Draw the music duraiton.
     QString timeText=textData(proxyModel, index, Time);
     painter->setFont(option.font);
-    painter->drawText(QRect(option.rect.x()+spacing,
-                            option.rect.y()+spacing,
-                            option.rect.width()-(spacing<<1),
-                            option.rect.height()-(spacing<<1)),
+    //Calculate the position for text.
+    int textX=option.rect.x()+(spacing<<1)+option.rect.height(),
+        textY=option.rect.y()+spacing,
+        textWidth=option.rect.width()-spacing-(spacing<<1)-option.rect.height(),
+        textHeight=option.rect.height()-(spacing<<1);
+    painter->drawText(QRect(textX,
+                            textY,
+                            textWidth,
+                            textHeight),
                       Qt::AlignRight | Qt::AlignVCenter,
                       timeText);
     //Get the time text width.
-    int nameTextWidth=option.rect.width()-((spacing<<2))-
-                                             option.fontMetrics.width(timeText);
+    int nameTextWidth=textWidth-spacing-option.fontMetrics.width(timeText);
     //Draw the music name.
-    painter->drawText(QRect(option.rect.x()+(spacing<<1),
-                            option.rect.y()+spacing,
+    painter->drawText(QRect(textX,
+                            textY,
                             nameTextWidth,
-                            option.rect.height()-(spacing<<1)),
+                            textHeight),
                       Qt::AlignLeft | Qt::AlignVCenter,
                       option.fontMetrics.elidedText(textData(proxyModel,
                                                              index,

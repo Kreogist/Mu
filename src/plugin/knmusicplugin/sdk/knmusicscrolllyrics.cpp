@@ -33,7 +33,8 @@ KNMusicScrollLyrics::KNMusicScrollLyrics(QWidget *parent) :
     m_currentLine(-1),
     m_centerOffset(0),
     m_leftSpacing(15),
-    m_spacing(2)
+    m_spacing(2),
+    m_alignment(Qt::AlignLeft)
 {
     //Configure the moving time line.
     m_moveToCurrentLine->setUpdateInterval(10);
@@ -79,8 +80,11 @@ void KNMusicScrollLyrics::paintEvent(QPaintEvent *event)
         lineRect.moveTop(currentLineTop);
         //Draw the text.
         painter.setPen(palette().color(QPalette::Highlight));
-        painter.drawText(lineRect,
-                         Qt::AlignLeft | Qt::TextWordWrap,
+        painter.drawText(lineRect.x(),
+                         lineRect.y(),
+                         width()-m_leftSpacing,
+                         lineRect.height(),
+                         m_alignment | Qt::TextWordWrap,
                          m_backend->lyricsText(paintingLine));
     }
     else
@@ -102,8 +106,11 @@ void KNMusicScrollLyrics::paintEvent(QPaintEvent *event)
         //Draw the current line.
         lineRect=lyricsRect(m_backend->lyricsText(paintingLine));
         lineRect.moveTop(otherLineTop);
-        painter.drawText(lineRect,
-                         Qt::AlignLeft | Qt::TextWordWrap,
+        painter.drawText(lineRect.x(),
+                         lineRect.y(),
+                         width()-m_leftSpacing,
+                         lineRect.height(),
+                         m_alignment | Qt::TextWordWrap,
                          m_backend->lyricsText(paintingLine));
         //Move to the next line.
         otherLineTop+=lineRect.height()+m_spacing;
@@ -120,8 +127,11 @@ void KNMusicScrollLyrics::paintEvent(QPaintEvent *event)
         // moving the calculation here.
         otherLineBottom-=lineRect.height()+m_spacing;
         lineRect.moveTop(otherLineBottom);
-        painter.drawText(lineRect,
-                         Qt::AlignLeft | Qt::TextWordWrap,
+        painter.drawText(lineRect.x(),
+                         lineRect.y(),
+                         width()-m_leftSpacing,
+                         lineRect.height(),
+                         m_alignment | Qt::TextWordWrap,
                          m_backend->lyricsText(paintingLine));
         //Move to previous line.
         paintingLine--;
@@ -135,6 +145,16 @@ void KNMusicScrollLyrics::onActionLyricsMoved(const int &frame)
     //Redraw the widget.
     update();
 }
+Qt::Alignment KNMusicScrollLyrics::alignment() const
+{
+    return m_alignment;
+}
+
+void KNMusicScrollLyrics::setAlignment(const Qt::Alignment &alignment)
+{
+    m_alignment = alignment;
+}
+
 
 int KNMusicScrollLyrics::spacing() const
 {

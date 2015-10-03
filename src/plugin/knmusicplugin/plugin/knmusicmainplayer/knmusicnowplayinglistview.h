@@ -21,15 +21,36 @@
 
 #include <QListView>
 
+class KNMusicModel;
+class KNMusicProxyModel;
 class KNMusicNowPlayingListView : public QListView
 {
     Q_OBJECT
 public:
     explicit KNMusicNowPlayingListView(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the proxy of the model.
+     * \return The proxy music model pointer.
+     */
+    KNMusicProxyModel *proxyModel();
+
+    /*!
+     * \brief Get the music model of the model. It will simply return the
+     * managing music model of the proxy model.
+     * \return The music model pointer.
+     */
+    KNMusicModel *musicModel();
+
 signals:
 
 public slots:
+
+private slots:
+    void onActionActivate(const QModelIndex &index);
+
+private:
+    inline void playIndex(const QModelIndex &index);
 };
 
 #endif // KNMUSICNOWPLAYINGLISTVIEW_H

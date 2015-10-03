@@ -49,6 +49,12 @@ public:
      */
     int spacing() const;
 
+    /*!
+     * \brief alignment
+     * \return
+     */
+    Qt::Alignment alignment() const;
+
 signals:
 
 public slots:
@@ -69,6 +75,12 @@ public slots:
      * \brief reset
      */
     void reset();
+
+    /*!
+     * \brief setAlignment
+     * \param alignment
+     */
+    void setAlignment(const Qt::Alignment &alignment);
 
     /*!
      * \brief Reimplemented from KNMusicLyricsBase::moveToLine().
@@ -104,6 +116,8 @@ private:
     int m_currentLine, m_centerOffset;
     //UI parameters.
     int m_leftSpacing, m_spacing;
+    //Alignment flags.
+    Qt::Alignment m_alignment;
 };
 
 #endif // KNMUSICSCROLLLYRICS_H

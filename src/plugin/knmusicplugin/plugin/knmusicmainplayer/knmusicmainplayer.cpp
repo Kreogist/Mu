@@ -111,6 +111,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     //Configure the lyrics.
     m_lyricsPanel->setObjectName("MainPlayerLyrics");
     m_lyricsPanel->setBackend(knMusicGlobal->lyricsManager()->backend());
+    m_lyricsPanel->setAlignment(Qt::AlignHCenter);
     knTheme->registerWidget(m_lyricsPanel);
     //Configure the playlist panel.
     m_playlistPanel->setSizePolicy(QSizePolicy::Minimum,
@@ -183,6 +184,13 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_contentContainer->setColumnWidget(0, m_detailInfoPanel);
     m_contentContainer->setColumnWidget(1, m_lyricsPanel);
     m_contentContainer->setColumnWidget(2, m_playlistPanel);
+    //Reset the widget visible.
+    //Use different column count to update the widget visible.
+    m_contentContainer->setColumnCount(3);
+    m_contentContainer->setColumnCount(1);
+    //Link the content container to main player.
+    connect(m_contentContainer, &KNMusicMainPlayerContent::columnCountChanged,
+            this, &KNMusicMainPlayer::onActionColumnCountChanged);
     //Configure the control panel.
     //Generate the layout.
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -328,8 +336,6 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         fontSize=15;
     }
-    //Set maximum size of the playlist.
-    m_playlistPanel->setMaximumWidth(11.3*(qreal)fontSize);
     //Resize the font.
     QFont textFont=font();
     textFont.setPixelSize(fontSize);
@@ -465,6 +471,12 @@ void KNMusicMainPlayer::onActionPlayingModelChanged(
 {
     //Set the new proxy model to the list view.
     m_playlistPanel->setModel(proxyModel);
+}
+
+void KNMusicMainPlayer::onActionColumnCountChanged(const int &columnCount)
+{
+    //Update the scroll alignment of the column count.
+    m_lyricsPanel->setAlignment(columnCount==1?Qt::AlignHCenter:Qt::AlignLeft);
 }
 
 void KNMusicMainPlayer::setPosition(const qint64 &position)

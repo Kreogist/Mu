@@ -112,6 +112,12 @@
         "Parent" : "MainWindow",
         "MainWindow" : "#000000"
     },
+    "NowPlayingListView" : {
+        "Parent" : "MainPlayer",
+        "Base" : "#00000000",
+        "Highlight" : "#505050",
+        "HighlightedText" : "#F7CF3D"
+    },
     "MainPlayerLabel" : {
         "Parent" : "MainPlayer",
         "WindowText" : "#FFFFFF"

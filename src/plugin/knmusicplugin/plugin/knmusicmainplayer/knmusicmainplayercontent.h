@@ -21,7 +21,8 @@
 
 #include <QWidget>
 
-class KNHWidgetSwitcher;
+class QParallelAnimationGroup;class QPropertyAnimation;
+class KNMusicMainPlayerContentSwitcher;
 class KNMusicMainPlayerContent : public QWidget
 {
     Q_OBJECT
@@ -29,19 +30,32 @@ public:
     explicit KNMusicMainPlayerContent(QWidget *parent = 0);
 
 signals:
+    void columnCountChanged(int columnCount);
 
 public slots:
-    void setColumnCount(const int &columnCount);
+    void setColumnCount(int columnCount);
     void setColumnWidget(const int &index, QWidget *widget);
 
 protected:
     void resizeEvent(QResizeEvent *event);
 
+private slots:
+    void onActionSingleToPrevious();
+    void onActionSingleToNext();
+    void onActionSingleFinished();
+
 private:
+    inline void setWidgetVisible(int index, bool visible);
     inline void regeometryWidgets();
-    KNHWidgetSwitcher *m_widgetSwicher;
+    inline void updateSinglePrevParameter();
+    inline void updateSingleNextParameter();
+    inline QPropertyAnimation *generateAnime();
+    QPropertyAnimation *m_singleIn, *m_singleOut, *m_doublePlaylist;
+    QParallelAnimationGroup *m_singleAnime;
+    KNMusicMainPlayerContentSwitcher *m_singleSwitcher;
     QWidget *m_columnWidgets[3];
-    int m_columnCount;
+    int m_columnCount, m_currentIndex;
+    bool m_movingPrevious;
 };
 
 #endif // KNMUSICMAINPLAYERCONTENT_H
