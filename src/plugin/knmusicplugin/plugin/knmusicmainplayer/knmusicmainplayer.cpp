@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QFileInfo>
 #include <QLabel>
 
 #include "kneditablelabel.h"
@@ -27,6 +28,7 @@
 #include "knopacitybutton.h"
 
 #include "knmusiclyricsmanager.h"
+#include "knmusiccodeclabel.h"
 #include "knmusicbackend.h"
 #include "knmusicproxymodel.h"
 #include "knmusicscrolllyrics.h"
@@ -55,6 +57,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_progressSlider(new KNProgressSlider(this)),
     m_duration(new QLabel(this)),
     m_position(new KNEditableLabel(this)),
+    m_codecLabel(new KNMusicCodecLabel(this)),
     m_loopMode(new KNOpacityAnimeButton(this)),
     m_volumeIcon(new KNOpacityButton(this)),
     m_volumeSlider(new KNVolumeSlider(this)),
@@ -204,6 +207,8 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
                                       controlLayout->widget());
     m_buttonLeftLayout->setSpacing(0);
     m_buttonLeftLayout->addStretch();
+    //Add codec label to left layout.
+    m_buttonLeftLayout->addWidget(m_codecLabel);
     buttonLayout->addLayout(m_buttonLeftLayout, 1);
     //Add widgets to left layout.
     //Add control buttons.
@@ -347,6 +352,8 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     {
         m_controlButtons[i]->setFixedSize(buttonSize, buttonSize);
     }
+    //Resize the codec label.
+    m_codecLabel->setFixedSize(buttonSize>>1, buttonSize>>1);
     //Resize the loop mode button.
     //Small button size.
     int smallButtonSize=fontSize;
@@ -365,6 +372,8 @@ void KNMusicMainPlayer::onActionAnalysisItemChanged(
 {
     //Update the panel data.
     m_detailInfoPanel->setAnalysisItem(item);
+    //Give the suffix to the codec label.
+    m_codecLabel->setSuffix(QFileInfo(item.detailInfo.filePath).suffix());
 }
 
 void KNMusicMainPlayer::onActionPlayNPauseClicked()

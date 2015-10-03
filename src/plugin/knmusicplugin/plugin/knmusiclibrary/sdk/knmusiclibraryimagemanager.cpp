@@ -41,6 +41,12 @@ void KNMusicLibraryImageManager::analysisAlbumArt(
         QPersistentModelIndex itemIndex,
         KNMusicAnalysisItem item)
 {
+    //Check out the validation of item index.
+    if(!itemIndex.isValid())
+    {
+        //Ignore the item index.
+        return;
+    }
     //Generate the queue item.
     AnalysisQueueItem queueItem;
     //Save the item information.

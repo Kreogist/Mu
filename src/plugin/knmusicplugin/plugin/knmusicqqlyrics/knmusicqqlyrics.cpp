@@ -41,10 +41,10 @@ void KNMusicQQLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
 {
     //Generate the url and get the data from the url.
     QString url="http://qqmusic.qq.com/fcgi-bin/qm_getLyricId.fcg?name="+
-            processKeywordsToGBK(detailInfo.textLists[Name].toString())+
-            "&singer="+
-            processKeywordsToGBK(detailInfo.textLists[Artist].toString())+
-            "&from=qqplayer";
+                processKeywordsToGBK(detailInfo.textLists[Name].toString())+
+                "&singer="+
+                processKeywordsToGBK(detailInfo.textLists[Artist].toString())+
+                "&from=qqplayer";
     QByteArray responseData;
     get(url, responseData);
     //Check the response.

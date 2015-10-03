@@ -35,6 +35,7 @@ class KNOpacityButton;
 class KNOpacityAnimeButton;
 class KNProgressSlider;
 class KNGlassAnimeButton;
+class KNMusicCodecLabel;
 class KNMusicScrollLyrics;
 class KNMusicMainPlayerPanel;
 class KNMusicNowPlayingListView;
@@ -123,6 +124,7 @@ private:
     KNProgressSlider *m_progressSlider;
     QLabel *m_duration;
     KNEditableLabel *m_position;
+    KNMusicCodecLabel *m_codecLabel;
     KNOpacityAnimeButton *m_loopMode;
     KNOpacityButton *m_volumeIcon;
     KNVolumeSlider *m_volumeSlider;

@@ -80,6 +80,7 @@
 // Backends.
 #ifdef ENABLE_BACKEND_BASS
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
+#include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
 #endif
 #ifdef ENABLE_BACKEND_PHONON
 #include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
@@ -387,6 +388,9 @@ void KNMusicPlugin::initialParserPlugin()
     parser->installTagParser(new KNMusicTagId3v2);
 
     //Add analysiser.
+#ifdef ENABLE_BACKEND_BASS
+    parser->installAnalysiser(new KNMusicBassAnalysiser);
+#endif
 #ifdef ENABLED_FFMPEG_ANALYSISER
     parser->installAnalysiser(new KNMusicFfmpegAnalysiser);
 #endif

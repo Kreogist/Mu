@@ -255,8 +255,7 @@ void KNMusicAlbumModel::onCategoryAdd(const KNMusicDetailInfo &detailInfo)
     for(int i=0; i<m_categoryList.size(); ++i)
     {
         //If we could find the item.
-        if(m_categoryList.at(i).title==titleText &&
-                m_categoryList.at(i).artists.contains(artistText))
+        if(m_categoryList.at(i).title==titleText)
         {
             //Get the category list data.
             AlbumItem item=m_categoryList.at(i);

@@ -34,75 +34,76 @@ KNMusicMainPlayerContent::KNMusicMainPlayerContent(QWidget *parent) :
 
 void KNMusicMainPlayerContent::setColumnCount(const int &columnCount)
 {
-    //Checkout the column count.
-    if(columnCount>3)
-    {
-        //Greater than 3 columns, take it as 3 column.
-        m_columnCount=3;
-        return;
-    }
-    //If the column is less than 1, there will be at least 1 column.
-    if(columnCount<1)
-    {
-        //Save the column count.
-        m_columnCount=1;
-        return;
-    }
-    //Save the column count.
-    m_columnCount=columnCount;
-    //Update the widget configure.
-    m_widgetSwicher->clear();
-    //Show up all the widgets.
-    for(int i=0; i<3; ++i)
-    {
-        //Check the pointer first.
-        if(m_columnWidgets[i]!=nullptr)
-        {
-            //Change the relationship.
-            m_columnWidgets[i]->setParent(this, Qt::Widget);
-            //Show the widget.
-            m_columnWidgets[i]->setVisible(true);
-        }
-    }
-    //Check out the column count.
-    switch(m_columnCount)
-    {
-    case 1:
-        //Add all widgets in order to the widget switcher.
-        for(int i=0; i<3; ++i)
-        {
-            //Check the widget first.
-            if(m_columnWidgets[i]!=nullptr)
-            {
-                //Add the widget to switcher.
-                m_widgetSwicher->addWidget(m_columnWidgets[i]);
-            }
-        }
-        break;
-    case 2:
-        //Add the No.1 and No.2 widgets to switcher.
-        for(int i=1; i<3; ++i)
-        {
-            //Check the widget first.
-            if(m_columnWidgets[i]!=nullptr)
-            {
-                //Add the widget to switcher.
-                m_widgetSwicher->addWidget(m_columnWidgets[i]);
-            }
-        }
-        break;
-    case 3:
-        //Add playlist widget to the switcher.
-        //Check the widget first.
-        if(m_columnWidgets[2]!=nullptr)
-        {
-            //Add the widget to switcher.
-            m_widgetSwicher->addWidget(m_columnWidgets[2]);
-        }
-        break;
-    }
-    //Update the geometry of the widgets.
-    regeometryWidgets();
+    qDebug()<<columnCount;
+//    //Checkout the column count.
+//    if(columnCount>3)
+//    {
+//        //Greater than 3 columns, take it as 3 column.
+//        m_columnCount=3;
+//        return;
+//    }
+//    //If the column is less than 1, there will be at least 1 column.
+//    if(columnCount<1)
+//    {
+//        //Save the column count.
+//        m_columnCount=1;
+//        return;
+//    }
+//    //Save the column count.
+//    m_columnCount=columnCount;
+//    //Update the widget configure.
+//    m_widgetSwicher->clear();
+//    //Show up all the widgets.
+//    for(int i=0; i<3; ++i)
+//    {
+//        //Check the pointer first.
+//        if(m_columnWidgets[i]!=nullptr)
+//        {
+//            //Change the relationship.
+//            m_columnWidgets[i]->setParent(this, Qt::Widget);
+//            //Show the widget.
+//            m_columnWidgets[i]->setVisible(true);
+//        }
+//    }
+//    //Check out the column count.
+//    switch(m_columnCount)
+//    {
+//    case 1:
+//        //Add all widgets in order to the widget switcher.
+//        for(int i=0; i<3; ++i)
+//        {
+//            //Check the widget first.
+//            if(m_columnWidgets[i]!=nullptr)
+//            {
+//                //Add the widget to switcher.
+//                m_widgetSwicher->addWidget(m_columnWidgets[i]);
+//            }
+//        }
+//        break;
+//    case 2:
+//        //Add the No.1 and No.2 widgets to switcher.
+//        for(int i=1; i<3; ++i)
+//        {
+//            //Check the widget first.
+//            if(m_columnWidgets[i]!=nullptr)
+//            {
+//                //Add the widget to switcher.
+//                m_widgetSwicher->addWidget(m_columnWidgets[i]);
+//            }
+//        }
+//        break;
+//    case 3:
+//        //Add playlist widget to the switcher.
+//        //Check the widget first.
+//        if(m_columnWidgets[2]!=nullptr)
+//        {
+//            //Add the widget to switcher.
+//            m_widgetSwicher->addWidget(m_columnWidgets[2]);
+//        }
+//        break;
+//    }
+//    //Update the geometry of the widgets.
+//    regeometryWidgets();
 }
 
 void KNMusicMainPlayerContent::setColumnWidget(const int &index,
@@ -137,16 +138,16 @@ void KNMusicMainPlayerContent::resizeEvent(QResizeEvent *event)
     {
         columnCount=3;
     }
-    if(columnCount==m_columnCount)
-    {
-        //Regeometry the widgets.
-        regeometryWidgets();
-    }
-    else
-    {
+//    if(columnCount==m_columnCount)
+//    {
+//        //Regeometry the widgets.
+//        regeometryWidgets();
+//    }
+//    else
+//    {
         //Set the column count and regeometry the widgets.
         setColumnCount(columnCount);
-    }
+//    }
 }
 
 inline void KNMusicMainPlayerContent::regeometryWidgets()
