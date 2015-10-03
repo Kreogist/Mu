@@ -93,6 +93,6 @@ QSize KNMusicAlbumListDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     //Calculate the size hint.
     return QSize(option.fontMetrics.width(index.data(Qt::DisplayRole).toString())+38,
-                 38);
+                 25);
 }
 

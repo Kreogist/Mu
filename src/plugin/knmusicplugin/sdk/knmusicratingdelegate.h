@@ -77,7 +77,6 @@ private slots:
 
 private:
     QPixmap m_star;
-    static int m_starSizeHint;
 };
 
 #endif // KNMUSICRATINGDELEGATE_H

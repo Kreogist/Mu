@@ -134,6 +134,11 @@ void KNMusicNowPlaying::shadowPlayingModel()
     m_shadowPlayingModel->setSourceModel(nullptr);
     //Do deep copy for the proxy playing model.
     m_shadowPlayingModel->setSearchBlocks(m_playingProxyModel->searchBlocks());
+    //Copy the category settings.
+    m_shadowPlayingModel->setCategoryColumn(
+                m_playingProxyModel->categoryColumn());
+    m_shadowPlayingModel->setCategoryContent(
+                m_playingProxyModel->categoryContent());
     //Copy the source model.
     m_shadowPlayingModel->setSourceModel(m_playingProxyModel->sourceModel());
     //Check if there's any available sort options, copy the sort options.

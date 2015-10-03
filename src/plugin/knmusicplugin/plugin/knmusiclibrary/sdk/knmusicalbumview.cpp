@@ -323,7 +323,6 @@ void KNMusicAlbumView::resizeEvent(QResizeEvent *event)
     QAbstractItemView::resizeEvent(event);
     //Resize the album detail.
     m_albumDetail->resize(size());
-    m_albumDetail->setSizeParameter(qMin(width(), height()));
     //If the current index is not null, must ensure that we can display the
     //selected album.
     if(currentIndex().isValid())

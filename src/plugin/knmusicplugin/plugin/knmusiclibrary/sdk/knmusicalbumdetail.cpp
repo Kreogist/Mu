@@ -28,7 +28,6 @@
 
 #include "knmusiclibrarymodel.h"
 #include "knmusicalbumlistview.h"
-#include "knmusicalbumlistdelegate.h"
 #include "knmusicalbumtitle.h"
 #include "knmusicalbummodel.h"
 
@@ -103,8 +102,6 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     //Configure the album artist label.
     m_albumDetails->setObjectName("MusicAlbumDetailLabel");
     knTheme->registerWidget(m_albumDetails);
-    //Configure the list view.
-    m_albumListView->setItemDelegate(new KNMusicAlbumListDelegate(this));
     //Configure the animations.
     connect(m_expandAnime, &QSequentialAnimationGroup::finished,
             this, &KNMusicAlbumDetail::onActionExpandFinished);
@@ -216,6 +213,7 @@ void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
 
 void KNMusicAlbumDetail::setSizeParameter(int sizeParameter)
 {
+    qDebug()<<m_sizeParameter;
     //Save the size parameter.
     m_sizeParameter=sizeParameter;
     //Update geometries using the new size parameter.
@@ -379,6 +377,8 @@ void KNMusicAlbumDetail::resizeEvent(QResizeEvent *event)
 {
     //Do original resize.
     QWidget::resizeEvent(event);
+    //Update the size parameter.
+    m_sizeParameter=qMin(width(), height());
     //Update the child widget geometries.
     updateWidgetGeometries();
 }

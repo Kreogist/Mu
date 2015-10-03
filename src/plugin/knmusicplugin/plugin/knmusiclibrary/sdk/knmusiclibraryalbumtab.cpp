@@ -22,6 +22,7 @@
 #include "kndropproxycontainer.h"
 #include "kncategorytab.h"
 
+#include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
@@ -81,13 +82,44 @@ QAbstractButton *KNMusicLibraryAlbumTab::tab()
 
 void KNMusicLibraryAlbumTab::showInTab(const KNMusicDetailInfo &detailInfo)
 {
-    ;
+    //Check out the library model has been set or not.
+    if(!m_libraryModel)
+    {
+        return;
+    }
+    //Clear up all the search result.
+    knMusicGlobal->search()->clear();
+    //Find the detail info in the model.
+    int musicRow=m_libraryModel->detailInfoRow(detailInfo);
+    //Check out the music row.
+    if(musicRow==-1)
+    {
+        return;
+    }
+    //Show and select the music row.
+    showAndSelectRow(musicRow);
 }
 
 void KNMusicLibraryAlbumTab::showIndex(KNMusicModel *musicModel,
                                        const QModelIndex &index)
 {
-    ;
+    //Check out the library model has been set or not.
+    if((!m_libraryModel) || (!musicModel))
+    {
+        return;
+    }
+    //Clear the search result.
+    knMusicGlobal->search()->clear();
+    //Check out the music model is the same as the library model.
+    if(musicModel==m_libraryModel)
+    {
+        //Show and select the index row.
+        showAndSelectRow(index.row());
+        //Mission complete.
+        return;
+    }
+    //Or else we have to find the detail info in the model.
+    showInTab(musicModel->rowDetailInfo(index.row()));
 }
 
 void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModelBase *model)
@@ -188,4 +220,24 @@ void KNMusicLibraryAlbumTab::onActionCategoryIndexChanged(
         const QModelIndex &index)
 {
     ;
+}
+
+inline void KNMusicLibraryAlbumTab::showAndSelectRow(const int &musicRow)
+{
+    //Show and select the index row.
+    QModelIndex categoryIndex=
+            categoryProxyModel()->categoryIndex(
+                m_libraryModel->index(musicRow, Album).data(Qt::DisplayRole));
+    //Check is the category index valid.
+    if(categoryIndex.isValid())
+    {
+        //Change the current index of the album view.
+        m_albumView->locateTo(categoryIndex);
+        m_albumView->selectAlbum(
+                    categoryProxyModel()->mapToSource(categoryIndex));
+        //Set the details to display the index of the song.
+        m_albumDetail->scrollToSourceRow(musicRow);
+    }
+    //Ask to show the tab.
+    emit requireShowTab();
 }

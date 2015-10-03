@@ -19,6 +19,8 @@
 
 #include "knmusiccategoryproxymodel.h"
 
+#include <QDebug>
+
 KNMusicCategoryProxyModel::KNMusicCategoryProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {

@@ -172,6 +172,15 @@
         "Highlight" : "#FFFFFF40",
         "HighlightedText" : "#F7CF3D"
     },
+    "AlbumListView" : {
+        "Parent" : "MainWindow",
+        "Base" : "#00000000",
+        "WindowText" : "#000000",
+        "Text" : "#000000",
+        "Button": "#FFFFFF",
+        "Highlight" : "#f7cf3d",
+        "HighlightedText" : "#000000"
+    },
     "PlaylistInformationContainer" : {
         "Parent" : "MainWindowHeader"
     },

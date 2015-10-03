@@ -94,7 +94,7 @@ void KNMainWindowIconButton::leaveEvent(QEvent *event)
 
 void KNMainWindowIconButton::paintEvent(QPaintEvent *event)
 {
-    ;
+    Q_UNUSED(event)
 }
 
 void KNMainWindowIconButton::retranslate()

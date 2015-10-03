@@ -18,9 +18,11 @@
 #include <QScrollBar>
 
 #include "sao/knsaostyle.h"
+#include "knthememanager.h"
 
 #include "knmusicutil.h"
 #include "knmusicproxymodel.h"
+#include "knmusicalbumlistdelegate.h"
 
 #include "knmusicalbumlistview.h"
 
@@ -29,7 +31,10 @@ using namespace MusicUtil;
 KNMusicAlbumListView::KNMusicAlbumListView(QWidget *parent, KNMusicTab *tab) :
     KNMusicListViewBase(parent, tab)
 {
-    //Styled the scroll bar.
+    setObjectName("AlbumListView");
+    //Set properties.
+    setItemDelegate(new KNMusicAlbumListDelegate(this));
+    knTheme->registerWidget(this);
     KNSaoStyle::styleVerticalScrollBar(verticalScrollBar());
     //Set the proxy model category column.
     proxyModel()->setCategoryColumn(Album);

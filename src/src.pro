@@ -332,7 +332,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.cpp \
-    sdk/kngraphicsextendgloweffect.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.cpp \
     sdk/knmouseunclickablewidget.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.cpp \
@@ -526,7 +525,6 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumview.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumdetail.h \
-    sdk/kngraphicsextendgloweffect.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumtitle.h \
     sdk/knmouseunclickablewidget.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistview.h \

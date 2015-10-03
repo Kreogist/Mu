@@ -74,6 +74,7 @@ private slots:
     void onActionCategoryIndexChanged(const QModelIndex &index);
 
 private:
+    inline void showAndSelectRow(const int &musicRow);
     KNCategoryTab *m_tab;
     QAction *m_showInAlbumTab;
     KNDropProxyContainer *m_dropProxy;

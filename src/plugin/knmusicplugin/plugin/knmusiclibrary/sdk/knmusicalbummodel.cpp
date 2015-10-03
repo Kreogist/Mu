@@ -113,7 +113,7 @@ QVariant KNMusicAlbumModel::data(const QModelIndex &index, int role) const
                     m_hashAlbumArt->value(item.albumArtHash.first(),
                                           m_nullData);
     case Qt::SizeHintRole:
-        return QSize(44, 44);
+        return QSize(25, 25);
     case CategorySizeRole:
         return item.count;
     case CategoryArtworkKeyRole:
