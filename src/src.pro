@@ -344,7 +344,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp \
     sdk/knclockwheel.cpp \
     plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.cpp \
-    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp \
+    plugin/knmusicplugin/sdk/knmusiconlinelyricsdownlaoder.cpp \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -534,7 +536,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.h \
     sdk/knclockwheel.h \
     plugin/knmusicplugin/plugin/knmusictagwma/knmusictagwma.h \
-    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h
+    plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h \
+    plugin/knmusicplugin/sdk/knmusiconlinelyricsdownlaoder.h \
+    plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.h
 
 RESOURCES += \
     resource/res.qrc

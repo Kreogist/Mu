@@ -138,7 +138,7 @@ void KNLabelLineEdit::enterEvent(QEvent *event)
     //Do the original enter event.
     QLineEdit::enterEvent(event);
     //If the text content gets the focus, ignore the mouse in.
-    if(hasFocus())
+    if(hasFocus() || !isEnabled())
     {
         return;
     }
@@ -151,7 +151,7 @@ void KNLabelLineEdit::leaveEvent(QEvent *event)
     //Do the original leave event.
     QLineEdit::leaveEvent(event);
     //If the text content gets the focus, ignore the mouse out.
-    if(hasFocus())
+    if(hasFocus() || !isEnabled())
     {
         return;
     }
@@ -161,16 +161,24 @@ void KNLabelLineEdit::leaveEvent(QEvent *event)
 
 void KNLabelLineEdit::focusInEvent(QFocusEvent *event)
 {
-    //Start the focus in anime.
-    startAnime(m_focusInOut, MaximumLightness);
+    //Check if the text content is enabled
+    if(isEnabled())
+    {
+        //Start the focus in anime.
+        startAnime(m_focusInOut, MaximumLightness);
+    }
     //Do the original focus in event.
     QLineEdit::focusInEvent(event);
 }
 
 void KNLabelLineEdit::focusOutEvent(QFocusEvent *event)
 {
-    //Start the focus out anime.
-    startAnime(m_focusInOut, m_minimumLightness);
+    //Check if the text content is enabled
+    if(isEnabled())
+    {
+        //Start the focus out anime.
+        startAnime(m_focusInOut, m_minimumLightness);
+    }
     //Do the original focus in event.
     QLineEdit::focusOutEvent(event);
 }

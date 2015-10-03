@@ -36,7 +36,13 @@ public slots:
 private slots:
     void onActionExpand();
 
+protected:
+    bool okayPressed();
+
+    void cancelPressed();
+
 private:
+    inline void resetPreviewThread();
     KNMusicLyricsDownloadWidget *m_downloadWidget;
 };
 

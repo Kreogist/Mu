@@ -26,6 +26,7 @@
 #include "knmusictagparser.h"
 #include "knmusicdetaildialog.h"
 #include "knmusiclyricsmanager.h"
+#include "knmusiclyricsdownloader.h"
 
 #include "knmusicglobal.h"
 
@@ -160,6 +161,8 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     //Register the queue arguments.
     qRegisterMetaType<KNMusicAnalysisItem>("KNMusicAnalysisItem");
     qRegisterMetaType<KNMusicDetailInfo>("KNMusicDetailInfo");
+    qRegisterMetaType<QList<KNMusicLyricsDownloader::KNMusicLyricsDetails>>(
+                "QList<KNMusicLyricsDownloader::KNMusicLyricsDetails>");
 
     //Set the library path.
     setMusicLibPath(knGlobal->dirPath(KNGlobal::LibraryDir) + "/Music");

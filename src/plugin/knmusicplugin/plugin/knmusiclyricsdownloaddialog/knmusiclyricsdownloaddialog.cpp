@@ -17,6 +17,8 @@
  */
 #include "knglobal.h"
 
+#include "knmusicglobal.h"
+#include "knmusicbackend.h"
 #include "knmusiclyricsdownloadwidget.h"
 
 #include "knmusiclyricsdownloaddialog.h"
@@ -41,12 +43,39 @@ void KNMusicLyricsDownloadDialog::setDetailInfo(
         const KNMusicDetailInfo &detailInfo)
 {
     //Set the title and artist text data to the panel.
-    m_downloadWidget->setParameter(detailInfo.textLists[Name].toString(),
-                                   detailInfo.textLists[Artist].toString());
+    m_downloadWidget->setDetailInfo(detailInfo);
 }
 
 void KNMusicLyricsDownloadDialog::onActionExpand()
 {
     //Resize the dialog.
     resizeDialog(QSize(400, 400));
+}
+
+bool KNMusicLyricsDownloadDialog::okayPressed()
+{
+    //Reset the preview thread.
+    resetPreviewThread();
+    //Give back the original settings.
+    return KNMusicLyricsDownloadDialogBase::okayPressed();
+}
+
+void KNMusicLyricsDownloadDialog::cancelPressed()
+{
+    //Reset the preview thread.
+    resetPreviewThread();
+    //Do original cancel.
+    KNMusicLyricsDownloadDialogBase::cancelPressed();
+}
+
+inline void KNMusicLyricsDownloadDialog::resetPreviewThread()
+{
+    //Get the backend.
+    KNMusicBackend *backend=knMusicGlobal->backend();
+    //Check the backend.
+    if(backend)
+    {
+        //Reset the preview thread.
+        backend->previewReset();
+    }
 }

@@ -37,7 +37,7 @@ KNMusicTagM4a::KNMusicTagM4a(QObject *parent) :
     {
         //Initial metadata atoms.
         char combineText[5]={0};
-        combineText[0]=0xA9;
+        combineText[0]=(char)0xA9;
         combineText[1]='a';combineText[2]='l';combineText[3]='b';
         m_atomIndexMap.insert(combineText, Album);
         m_indexAtomMap.insert(Album, combineText);

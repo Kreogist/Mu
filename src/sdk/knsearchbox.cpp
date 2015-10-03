@@ -43,6 +43,7 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     setObjectName("SearchBox");
     //Set properties.
     setFrame(false);
+    setClearButtonEnabled(true);
     setContentsMargins(SearchBoxHeight+SearchBoxIconX,
                        0,
                        SearchBoxHeight>>1,

@@ -217,6 +217,8 @@ QVariant KNMusicPlaylistListModel::data(const QModelIndex &index,
         return model->title();
     case Qt::DecorationRole:
         return m_icon;
+    case Qt::SizeHintRole:
+        return QSize(99, 30);
     default:
         return QVariant();
     }

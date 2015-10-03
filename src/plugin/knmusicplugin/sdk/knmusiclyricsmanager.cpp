@@ -24,6 +24,7 @@
 #include "knmusiclrcparser.h"
 #include "knmusicglobal.h"
 #include "knmusiconlinelyrics.h"
+#include "knmusiconlinelyricsdownlaoder.h"
 
 #include "knmusiclyricsmanager.h"
 
@@ -33,6 +34,7 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent),
     m_detailInfo(KNMusicDetailInfo()),
     m_onlineLyrics(new KNMusicOnlineLyrics),
+    m_onlineLyricsDownloader(new KNMusicOnlineLyricsDownloader),
     m_backend(new KNMusicLyricsBackend(this)),
     m_parser(new KNMusicLrcParser(this)),
     m_onlineThread(new QThread(this)),
@@ -47,6 +49,8 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
                            << LyricsNamedAlbumHyphonTitle;
     //Move the online lyrics to online thread.
     m_onlineLyrics->moveToThread(m_onlineThread);
+    //Move the online lyrics downloader to online thread.
+    m_onlineLyricsDownloader->moveToThread(m_onlineThread);
     //Link the online lyrics.
     connect(m_onlineLyrics, &KNMusicOnlineLyrics::lyricsDownload,
             this, &KNMusicLyricsManager::onActionLyricsDownloaded,
@@ -232,6 +236,11 @@ bool KNMusicLyricsManager::loadRelatedLyrics(
     return false;
 }
 
+KNMusicOnlineLyricsDownloader *KNMusicLyricsManager::onlineLyricsDownloader()
+{
+    return m_onlineLyricsDownloader;
+}
+
 QString KNMusicLyricsManager::lyricsDirectory() const
 {
     return m_lyricsDir;
@@ -239,7 +248,10 @@ QString KNMusicLyricsManager::lyricsDirectory() const
 
 void KNMusicLyricsManager::appendDownloader(KNMusicLyricsDownloader *downloader)
 {
+    //Add the downloader to the online lyrics server.
     m_onlineLyrics->appendDownloader(downloader);
+    //Add the downloader to the online lyrics downloader.
+    m_onlineLyricsDownloader->appendDownloader(downloader);
 }
 
 void KNMusicLyricsManager::setLyricsDirectory(const QString &lyricsDir)

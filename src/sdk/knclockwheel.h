@@ -19,8 +19,6 @@
 #ifndef KNCLOCKWHEEL_H
 #define KNCLOCKWHEEL_H
 
-#include <QIcon>
-
 #include <QWidget>
 
 class KNClockWheel : public QWidget
@@ -53,7 +51,7 @@ private slots:
     void tick();
 
 private:
-    static QIcon m_clockFrames[24];
+    QPixmap m_clockFrames[24];
     QTimer *m_tickTimer;
     int m_imageX, m_imageY, m_imageSize;
     quint8 m_frameCounter;

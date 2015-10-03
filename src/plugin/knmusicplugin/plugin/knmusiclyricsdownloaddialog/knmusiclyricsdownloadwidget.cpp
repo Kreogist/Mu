@@ -20,17 +20,26 @@
 
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
+
+#include "knmusicbackend.h"
 #include "knmusiclyricsdownloadlist.h"
+#include "knmusiclyricsmanager.h"
+#include "knmusiconlinelyricsdownlaoder.h"
+#include "knmusicglobal.h"
 
 #include "knmusiclyricsdownloadwidget.h"
 
+#include <QDebug>
+
 KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     QWidget(parent),
+    m_detailInfo(KNMusicDetailInfo()),
     m_title(generateLineEdit(":/plugin/music/lyrics/title.png")),
     m_artist(generateLineEdit(":/plugin/music/lyrics/artist.png")),
     m_searchLyrics(new QPushButton(this)),
     m_searchTextLayout(nullptr),
-    m_downloadLyrics(new KNMusicLyricsDownloadList(this))
+    m_downloadedLyrics(new KNMusicLyricsDownloadList(this)),
+    m_onlineDownloader(knMusicGlobal->lyricsManager()->onlineLyricsDownloader())
 {
     //Set properties.
     setContentsMargins(15, 15, 15, 15);
@@ -48,7 +57,20 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     connect(m_searchLyrics, &QPushButton::clicked,
             this, &KNMusicLyricsDownloadWidget::onActionSearch);
     //Configure the download list.
-    m_downloadLyrics->setVisible(false);
+    m_downloadedLyrics->setVisible(false);
+    //Link the online lyrics downloader.
+    connect(this, &KNMusicLyricsDownloadWidget::requireDownloadLyrics,
+            m_onlineDownloader,
+            &KNMusicOnlineLyricsDownloader::downloadLyrics);
+    connect(m_onlineDownloader, &KNMusicOnlineLyricsDownloader::serverChanged,
+            m_downloadedLyrics,
+            &KNMusicLyricsDownloadList::setDownloadServerText);
+    connect(m_onlineDownloader,
+            &KNMusicOnlineLyricsDownloader::downloadComplete,
+            this, &KNMusicLyricsDownloadWidget::onActionDownloadComplete);
+    connect(m_onlineDownloader,
+            &KNMusicOnlineLyricsDownloader::listContentChanged,
+            m_downloadedLyrics, &KNMusicLyricsDownloadList::setLyricsList);
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -70,7 +92,7 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     //Add search lyrics button to search text layout.
     m_searchTextLayout->addWidget(m_searchLyrics);
     //Add download lyrics to the main layout.
-    mainLayout->addWidget(m_downloadLyrics);
+    mainLayout->addWidget(m_downloadedLyrics);
 
     //Link the retranslate link.
     knI18n->link(this, &KNMusicLyricsDownloadWidget::retranslate);
@@ -80,23 +102,42 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     resize(400, m_searchTextLayout->sizeHint().height());
 }
 
-void KNMusicLyricsDownloadWidget::setParameter(const QString &title,
-                                               const QString &artist)
+void KNMusicLyricsDownloadWidget::setDetailInfo(
+        const KNMusicDetailInfo &detailInfo)
 {
+    //Save the detail info.
+    m_detailInfo=detailInfo;
     //Set the title and artist text.
-    m_title->setText(title);
-    m_artist->setText(artist);
+    m_title->setText(m_detailInfo.textLists[Name].toString());
+    m_artist->setText(m_detailInfo.textLists[Artist].toString());
     //Once we do this, means we have to show up in a new instance.
+    //Enabled search edits.
+    enableSearchEdit();
     //Hide the download list.
-    m_downloadLyrics->setVisible(false);
+    m_downloadedLyrics->setVisible(false);
+    //Hide all the widgets in the download lyrics.
+    m_downloadedLyrics->hideAllWidgets();
     //Resize the widget.
     resize(400, m_searchTextLayout->sizeHint().height());
+    //Get the backend.
+    KNMusicBackend *backend=knMusicGlobal->backend();
+    //Check the backend pointer.
+    if(backend)
+    {
+        //Load the music in the preview threads.
+        backend->previewLoadMusic(detailInfo.filePath,
+                                  detailInfo.startPosition,
+                                  detailInfo.duration);
+    }
 }
 
 void KNMusicLyricsDownloadWidget::retranslate()
 {
     //Update search lyrics.
     m_searchLyrics->setText(tr("Search"));
+    //Update the place holder text.
+    m_title->setPlaceholderText(tr("Name"));
+    m_artist->setPlaceholderText(tr("Artist"));
 }
 
 void KNMusicLyricsDownloadWidget::onActionSearch()
@@ -104,7 +145,55 @@ void KNMusicLyricsDownloadWidget::onActionSearch()
     //Expand the dialog.
     emit requireExpand();
     //Show up the download list.
-    m_downloadLyrics->setVisible(true);
+    m_downloadedLyrics->setVisible(true);
+    //Hide the search button.
+    m_searchLyrics->hide();
+    //Disabled the text edit.
+    m_title->setEnabled(false);
+    m_artist->setEnabled(false);
+    //Show the download widget.
+    m_downloadedLyrics->showDownloadWidgets();
+    //Update the detail info.
+    m_detailInfo.textLists[Name]=m_title->text();
+    m_detailInfo.textLists[Artist]=m_artist->text();
+    //Ask to download the lyrics.
+    emit requireDownloadLyrics(m_detailInfo);
+}
+
+void KNMusicLyricsDownloadWidget::hideEvent(QHideEvent *event)
+{
+    //Do the hide first.
+    QWidget::hideEvent(event);
+    //Hide all the widget of the download lyrics list.
+    m_downloadedLyrics->hideAllWidgets();
+    //Check out the online downloader status.
+    if(m_onlineDownloader->isRunning())
+    {
+        //Stop the online downloader.
+        m_onlineDownloader->cancelDownload();
+    }
+}
+
+void KNMusicLyricsDownloadWidget::onActionDownloadCancel()
+{
+    ;
+}
+
+void KNMusicLyricsDownloadWidget::onActionDownloadComplete()
+{
+    //Hide the download widgets.
+    m_downloadedLyrics->hideDownloadWidgets();
+    //Enabled the search edit.
+    enableSearchEdit();
+}
+
+inline void KNMusicLyricsDownloadWidget::enableSearchEdit()
+{
+    //Enabled text edits.
+    m_title->setEnabled(true);
+    m_artist->setEnabled(true);
+    //Show the search button.
+    m_searchLyrics->show();
 }
 
 inline KNLabelLineEdit *KNMusicLyricsDownloadWidget::generateLineEdit(

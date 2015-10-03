@@ -22,7 +22,7 @@
 
 #include "knmusicplaylistlistdelegate.h"
 
-#define ItemHeight 26
+#define ItemHeight 30
 #define IconSize 24
 #define Spacing 3
 

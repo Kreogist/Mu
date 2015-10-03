@@ -19,12 +19,17 @@
 #ifndef KNMUSICLYRICSDOWNLOADWIDGET_H
 #define KNMUSICLYRICSDOWNLOADWIDGET_H
 
+#include "knmusicutil.h"
+
 #include <QWidget>
+
+using namespace MusicUtil;
 
 class QBoxLayout;
 class QPushButton;
 class KNLabelLineEdit;
 class KNMusicLyricsDownloadList;
+class KNMusicOnlineLyricsDownloader;
 class KNMusicLyricsDownloadWidget : public QWidget
 {
     Q_OBJECT
@@ -33,21 +38,32 @@ public:
 
 signals:
     void requireExpand();
+    void requireCnacel();
+    void requireDownloadLyrics(KNMusicDetailInfo detailInfo);
 
 public slots:
-    void setParameter(const QString &title=QString(),
-                      const QString &artist=QString());
+    void setDetailInfo(const KNMusicDetailInfo &detailInfo);
 
 private slots:
     void retranslate();
     void onActionSearch();
 
+protected:
+    void hideEvent(QHideEvent *event);
+
+private slots:
+    void onActionDownloadCancel();
+    void onActionDownloadComplete();
+
 private:
+    inline void enableSearchEdit();
     inline KNLabelLineEdit *generateLineEdit(const QString &pixmapPath);
+    KNMusicDetailInfo m_detailInfo;
     KNLabelLineEdit *m_title, *m_artist;
     QPushButton *m_searchLyrics;
     QBoxLayout *m_searchTextLayout;
-    KNMusicLyricsDownloadList *m_downloadLyrics;
+    KNMusicLyricsDownloadList *m_downloadedLyrics;
+    KNMusicOnlineLyricsDownloader *m_onlineDownloader;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADWIDGET_H

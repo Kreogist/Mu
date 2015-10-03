@@ -6,15 +6,17 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 
 μ is a cross-platform application for media file managing. 
 
+* Incredible user interface from Kreogist Dev Team. 
 * Support manage all your music including the following formats: mp3, m4a, wav, flac, ape, ogg, tta, aiff, aifc, aif, mp4, mpa, mp2, mp1, midi, mid, mp3pro, mpc, aac, cda, wma, fla, tak, mp+, aa, ra, mac, rmi, dtswav, dts, snd, au, ac3, xm, and umx.
-* Support read and write ID3v1, ID3v2, APEv2 format tag. FLAC metadata for read-only.
+* Support read and write ID3v1, ID3v2, APEv2 format tag. FLAC, M4A, WAV, WMA metadata for read-only.
 * Support import and export iTunes xml, xspf, m3u, ttpl, and wpl format playlists.
 * Support advanced multiple condition search.
 
 ## Dependencies
 * Qt (>=5.5)
 * FFMpeg (>=2.5)
-* bass (Optional for Windows and Mac OS X, >=2.4)
+* bass (Windows and Mac OS X, >=2.4)
+* phonon4qt5 (Linux)
 
 ## Special Thanks
 * [WangBin](https://github.com/wang-bin)

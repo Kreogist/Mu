@@ -29,6 +29,7 @@ class KNMusicLyricsDownloader;
 class KNMusicLyricsBackend;
 class KNMusicLrcParser;
 class KNMusicOnlineLyrics;
+class KNMusicOnlineLyricsDownloader;
 /*!
  * \brief The KNMusicLyricsManager class provides a seamless local and online
  * lyrics loader and downloader management.
@@ -62,6 +63,12 @@ public:
      * \param downloader The online downloader engine.
      */
     void appendDownloader(KNMusicLyricsDownloader *downloader);
+
+    /*!
+     * \brief Get the online lyrics downloader object pointer.
+     * \return The object pointer of the online lyrics downloader.
+     */
+    KNMusicOnlineLyricsDownloader *onlineLyricsDownloader();
 
 signals:
 
@@ -120,6 +127,7 @@ private:
     KNMusicDetailInfo m_detailInfo;
     //Support objects.
     KNMusicOnlineLyrics *m_onlineLyrics;
+    KNMusicOnlineLyricsDownloader *m_onlineLyricsDownloader;
     KNMusicLyricsBackend *m_backend;
     KNMusicLrcParser *m_parser;
     //Working thread for the downloader.

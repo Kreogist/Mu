@@ -22,32 +22,6 @@
 
 #include <QDebug>
 
-QIcon KNClockWheel::m_clockFrames[24]={
-    QIcon("://public/clock/b0.png"),
-    QIcon("://public/clock/b1.png"),
-    QIcon("://public/clock/b2.png"),
-    QIcon("://public/clock/b3.png"),
-    QIcon("://public/clock/b4.png"),
-    QIcon("://public/clock/b5.png"),
-    QIcon("://public/clock/b6.png"),
-    QIcon("://public/clock/b7.png"),
-    QIcon("://public/clock/b8.png"),
-    QIcon("://public/clock/b9.png"),
-    QIcon("://public/clock/b10.png"),
-    QIcon("://public/clock/b11.png"),
-    QIcon("://public/clock/b12.png"),
-    QIcon("://public/clock/b13.png"),
-    QIcon("://public/clock/b14.png"),
-    QIcon("://public/clock/b15.png"),
-    QIcon("://public/clock/b16.png"),
-    QIcon("://public/clock/b17.png"),
-    QIcon("://public/clock/b18.png"),
-    QIcon("://public/clock/b19.png"),
-    QIcon("://public/clock/b20.png"),
-    QIcon("://public/clock/b21.png"),
-    QIcon("://public/clock/b22.png"),
-    QIcon("://public/clock/b23.png")};
-
 KNClockWheel::KNClockWheel(QWidget *parent) :
     QWidget(parent),
     m_tickTimer(new QTimer(this)),
@@ -58,6 +32,12 @@ KNClockWheel::KNClockWheel(QWidget *parent) :
 {
     //Set properties.
     setFixedSize(36, 36);
+    //Initial the clock frame image.
+    for(int i=0; i<24; ++i)
+    {
+        //Load the image.
+        m_clockFrames[i]=QPixmap("://public/clock/b"+QString::number(i)+".png");
+    }
     //Configure the tick timer.
     m_tickTimer->setInterval(20);
     connect(m_tickTimer, &QTimer::timeout, this, &KNClockWheel::tick);
@@ -89,13 +69,10 @@ void KNClockWheel::resizeEvent(QResizeEvent *event)
     //Resize the widget.
     QWidget::resizeEvent(event);
     //Get the prefer size of the icon.
-    int preferSize=qMin(width(), height());
-    //Get the actual size it can be, set as image size..
-    m_imageSize=m_clockFrames[0].pixmap(preferSize).width();
+    m_imageSize=qMin(width(), height());
     //Calculate the image x and y position.
     m_imageX=(width()-m_imageSize)>>1;
     m_imageY=(height()-m_imageSize)>>1;
-    qDebug()<<m_imageX<<m_imageY<<m_imageSize<<preferSize;
 }
 
 void KNClockWheel::paintEvent(QPaintEvent *event)
@@ -109,7 +86,11 @@ void KNClockWheel::paintEvent(QPaintEvent *event)
     //Paint the image at the counter.
     painter.drawPixmap(m_imageX,
                        m_imageY,
-                       m_clockFrames[m_frameCounter].pixmap(m_imageSize));
+                       m_clockFrames[m_frameCounter].scaled(
+                           m_imageSize,
+                           m_imageSize,
+                           Qt::KeepAspectRatio,
+                           Qt::SmoothTransformation));
 }
 
 void KNClockWheel::tick()
@@ -119,4 +100,3 @@ void KNClockWheel::tick()
     //Update the image.
     update();
 }
-

@@ -12,6 +12,17 @@
         "Highlight" : "#C0C0C0",
         "HighlightedText" : "#000000"
     },
+    "DownloadedLyricsListView" : {
+        "Base" : "#00000000",
+        "Window" : "#00000000",
+        "Highlight" : "#cd8032",
+        "HighlightedText" : "#FFFFFF"
+    },
+    "DownloadedLyricsPreview" : {
+        "Parent" : "DownloadedLyricsListView",
+        "Highlight" : "#cd8032",
+        "Text" : "#333333"
+    },
     "MusicAlbumView" : {
         "Parent" : "MainWindow",
         "Base" : "#303030",
