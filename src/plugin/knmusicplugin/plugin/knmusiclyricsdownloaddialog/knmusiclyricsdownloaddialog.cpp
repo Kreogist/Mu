@@ -23,6 +23,8 @@
 
 #include "knmusiclyricsdownloaddialog.h"
 
+#include <QDebug>
+
 KNMusicLyricsDownloadDialog::KNMusicLyricsDownloadDialog(QWidget *parent) :
     KNMusicLyricsDownloadDialogBase(knGlobal->mainWindow()),
     m_downloadWidget(new KNMusicLyricsDownloadWidget(this))

@@ -168,6 +168,10 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
         m_actions[SearchItemText]->setText(
                     m_actionTitles[SearchItemText].arg(m_itemText));
     }
+    //For 0.9.0 Only.
+    //!FIXME: Remove and realized this in 0.9.1
+    m_actions[Rename]->setVisible(false);
+    m_actions[RenameToArtistHyphonName]->setVisible(false);
 }
 
 KNMusicProxyModel *KNMusicSoloMenu::triggeredModel()

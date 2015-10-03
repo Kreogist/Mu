@@ -101,9 +101,6 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     //Link the retranslate link.
     knI18n->link(this, &KNMusicLyricsDownloadWidget::retranslate);
     retranslate();
-
-    //Set the initial size of the widget.
-    resize(400, m_searchTextLayout->sizeHint().height());
 }
 
 void KNMusicLyricsDownloadWidget::setDetailInfo(
@@ -122,7 +119,7 @@ void KNMusicLyricsDownloadWidget::setDetailInfo(
     //Hide all the widgets in the download lyrics.
     m_downloadedLyrics->hideAllWidgets();
     //Resize the widget.
-    resize(400, m_searchTextLayout->sizeHint().height());
+    resize(255, 76);
     //Get the backend.
     KNMusicBackend *backend=knMusicGlobal->backend();
     //Check the backend pointer.
