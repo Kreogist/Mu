@@ -97,6 +97,12 @@ public slots:
      */
     void onArgumentsAvailable(const QStringList &data) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from
+     * KNAbstractMusicCategoryPlugin::setPlatformExtras().
+     */
+    void setPlatformExtras(KNPlatformExtras *platformExtras) Q_DECL_OVERRIDE;
+
 protected:
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::resizeEvent().

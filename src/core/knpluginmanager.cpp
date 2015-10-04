@@ -29,11 +29,17 @@
 #include "knpreferenceplugin.h"
 #include "kncategoryplugin.h"
 #include "knabstractmusicplugin.h"
+#include "knplatformextras.h"
 
 //Plugins
 #include "knmainwindowheader.h"
 #include "plugin/knmusicplugin/knmusicplugin.h"
 #include "plugin/knpreference/knpreference.h"
+
+//Platform Extras.
+#ifdef Q_OS_WIN
+#include "plugin/knwindowsextras/knwindowsextras.h"
+#endif
 
 #include "knmessagebox.h"
 
@@ -42,7 +48,8 @@
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
-    m_header(nullptr)
+    m_header(nullptr),
+    m_platformExtra(nullptr)
 {
     //Set the application information.
     setApplicationInformation();
@@ -126,6 +133,8 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
         connect(plugin, &KNAbstractMusicPlugin::requireHideMainPlayer,
                 m_mainWindow, &KNMainWindow::hideMainPlayer);
     }
+    //Set the platform extra to the music plugin.
+    plugin->setPlatformExtras(m_platformExtra);
 }
 
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
@@ -151,6 +160,29 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     }
 }
 
+void KNPluginManager::loadPlatformExtras(KNPlatformExtras *plugin)
+{
+    //Check the plugin first.
+    if(m_platformExtra!=nullptr)
+    {
+        return;
+    }
+    //Set the main window.
+    m_platformExtra=plugin;
+    //Check the platform pointer.
+    if(m_platformExtra==nullptr)
+    {
+        //Ignore the null pointer.
+        return;
+    }
+    //Set parent relationship.
+    m_platformExtra->setParent(this);
+    //Set the main window.
+    m_platformExtra->setMainWindow(m_mainWindow);
+    //Load preference.
+    m_platformExtra->loadPreference();
+}
+
 KNMainWindow *KNPluginManager::mainWindow() const
 {
     return m_mainWindow;
@@ -172,6 +204,9 @@ void KNPluginManager::loadPlugins()
     //Initial the infrastructure;
     loadHeader(new KNMainWindowHeader);
     loadPreference(new KNPreference);
+#ifdef Q_OS_WIN
+    loadPlatformExtras(new KNWindowsExtras);
+#endif
 
     //Load the category plugin.
     loadMusicPlugin(new KNMusicPlugin);

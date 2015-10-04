@@ -41,8 +41,13 @@ msvc: {
     QMAKE_CXXFLAGS_RELEASE += -GL -Gw -GA
     # Auto-Parallelizer
     QMAKE_CXXFLAGS_RELEASE += -Qpar
-    # CPU Architecture
-    QMAKE_CXXFLAGS_RELEASE += -arch:AVX -favor:INTEL64
+    # CPU Instrcutions.
+    QMAKE_CXXFLAGS_RELEASE += -arch:AVX
+    # CPU Architecture, turn on for Mu's.
+    # Intel Processor, Sandy bridge or later.
+    QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
+    # AMD Processor,
+    #QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
 
     # Linker Options.
     # Link-time Code Generation, use with -GL
@@ -60,8 +65,6 @@ gcc: {
     QMAKE_CXXFLAGS_RELEASE += -ftree-loop-linear
     # Cache optimization.
     QMAKE_CXXFLAGS_RELEASE += -fbranch-target-load-optimize
-    # CPU Architecture.
-    QMAKE_CXXFLAGS_RELEASE += -march=core2
     # Qt will use clang on Mac OS X, but it seems that it treats the clang as
     # gcc, it will use all the flags we set to gcc on clang. In clang, it
     # doesn't have -fforce-addr switch, so we need to set the switcher
@@ -94,6 +97,10 @@ win32: {
     ICON = resource/icon/mu.ico
     # Enable the backend and analysiser.
     CONFIG += backend-bass analysiser-ffmpeg
+    # Add Windows platform special extras.
+    QT += winextras
+    SOURCES += plugin/knwindowsextras/knwindowsextras.cpp
+    HEADERS += plugin/knwindowsextras/knwindowsextras.h
 }
 
 macx: {
@@ -544,7 +551,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.h \
-    sdk/knlabelbutton.h
+    sdk/knlabelbutton.h \
+    sdk/knplatformextras.h
 
 RESOURCES += \
     resource/res.qrc

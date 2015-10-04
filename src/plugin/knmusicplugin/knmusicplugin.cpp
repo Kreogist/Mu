@@ -26,6 +26,7 @@
 #include "knsideshadowwidget.h"
 #include "knvwidgetswitcher.h"
 #include "knglobal.h"
+#include "knplatformextras.h"
 
 //SDK Dependence.
 #include "knmusicdetaildialog.h"
@@ -236,6 +237,79 @@ void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
     {
         //Ask the now playing to play those files as temporary files.
         knMusicGlobal->nowPlaying()->playTemporaryFiles(data);
+    }
+}
+
+void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *platformExtras)
+{
+    //Check out the pointer.
+    if(platformExtras==nullptr)
+    {
+        //Ignore the invalid pointer.
+        return;
+    }
+    //Get now playing.
+    KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
+    //Check the pointer.
+    if(nowPlaying!=nullptr)
+    {
+        connect(platformExtras, &KNPlatformExtras::requirePlayPrev,
+                nowPlaying, &KNMusicNowPlayingBase::playPrevious);
+        connect(platformExtras, &KNPlatformExtras::requirePlayNext,
+                nowPlaying, &KNMusicNowPlayingBase::playNext);
+        connect(platformExtras, &KNPlatformExtras::requireChangeLoopState,
+                nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
+        connect(nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
+                [=](const int &loopState)
+                {
+                    switch (loopState)
+                    {
+                    case NoRepeat:
+                        platformExtras->onActionLoopStateChanged(
+                                    KNPlatformExtras::ButtonNoRepeat);
+                        break;
+                    case RepeatAll:
+                        platformExtras->onActionLoopStateChanged(
+                                    KNPlatformExtras::ButtonRepeatAll);
+                        break;
+                    case RepeatTrack:
+                        platformExtras->onActionLoopStateChanged(
+                                    KNPlatformExtras::ButtonRepeat);
+                        break;
+                    case Shuffle:
+                        platformExtras->onActionLoopStateChanged(
+                                    KNPlatformExtras::ButtonShuffle);
+                        break;
+                    default:
+                        break;
+                    }
+                });
+        //Sync the loop state data by calling a fake loop state changed signal.
+        nowPlaying->loopStateChanged(nowPlaying->loopState());
+    }
+    //Get backend.
+    KNMusicBackend *backend=knMusicGlobal->backend();
+    //Check the pointer.
+    if(backend!=nullptr)
+    {
+        connect(platformExtras, &KNPlatformExtras::requirePlay,
+                backend, &KNMusicBackend::play);
+        connect(platformExtras, &KNPlatformExtras::requireVolumeUp,
+                backend, &KNMusicBackend::volumeUp);
+        connect(platformExtras, &KNPlatformExtras::requireVolumeDown,
+                backend, &KNMusicBackend::volumeDown);
+        connect(platformExtras, &KNPlatformExtras::requireChangeMuteState,
+                backend, &KNMusicBackend::changeMuteState);
+        connect(platformExtras, &KNPlatformExtras::requirePause,
+                backend, &KNMusicBackend::pause);
+        connect(backend, &KNMusicBackend::muteStateChanged,
+                platformExtras, &KNPlatformExtras::onActionMuteStateChanged);
+        connect(backend, &KNMusicBackend::playingStateChanged,
+                [=](const int &state)
+                {
+                    platformExtras->onActionPlayStateChanged(
+                                state==Playing);
+                });
     }
 }
 

@@ -69,5 +69,6 @@ QVariant KNMusicLyricsDetailListModel::data(const QModelIndex &index,
 
 int KNMusicLyricsDetailListModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return m_lyricsList.size();
 }

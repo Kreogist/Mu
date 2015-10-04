@@ -26,6 +26,7 @@ class KNMainWindowHeaderBase;
 class KNAbstractMusicPlugin;
 class KNPreferencePlugin;
 class KNCategoryPlugin;
+class KNPlatformExtras;
 /*!
  * \brief The KNPluginManager class is a port-class manager. It will create and
  * load all the plugin class with the specific port class. You should tweak the
@@ -77,8 +78,10 @@ private:
     void loadPreference(KNPreferencePlugin *plugin);
     void loadMusicPlugin(KNAbstractMusicPlugin *plugin);
     void loadCategoryPlugin(KNCategoryPlugin *plugin);
+    void loadPlatformExtras(KNPlatformExtras *plugin);
     KNMainWindow *m_mainWindow;
     KNMainWindowHeaderBase *m_header;
+    KNPlatformExtras *m_platformExtra;
 };
 
 #endif // KNPLUGINMANAGER_H

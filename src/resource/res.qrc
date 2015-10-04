@@ -111,4 +111,18 @@
         <file>music/player/next_tab.png</file>
         <file>music/player/previous_tab.png</file>
     </qresource>
+    <qresource prefix="/platform">
+        <file>platforms/windows/loopmode_norepeat.png</file>
+        <file>platforms/windows/loopmode_random.png</file>
+        <file>platforms/windows/loopmode_repeat.png</file>
+        <file>platforms/windows/loopmode_repeatsingle.png</file>
+        <file>platforms/windows/mute.png</file>
+        <file>platforms/windows/mute_on.png</file>
+        <file>platforms/windows/next.png</file>
+        <file>platforms/windows/pause.png</file>
+        <file>platforms/windows/play.png</file>
+        <file>platforms/windows/previous.png</file>
+        <file>platforms/windows/voldown.png</file>
+        <file>platforms/windows/volup.png</file>
+    </qresource>
 </RCC>

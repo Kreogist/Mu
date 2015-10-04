@@ -21,6 +21,7 @@
 
 #include "kncategoryplugin.h"
 
+class KNPlatformExtras;
 /*!
  * \brief The KNAbstractMusicCategoryPlugin class is the port class of the music
  * plugin. Your own music plugin should provide these function.
@@ -53,6 +54,11 @@ signals:
     void requireHideMainPlayer();
 
 public slots:
+    /*!
+     * \brief setPlatformExtras
+     * \param platformExtras
+     */
+    virtual void setPlatformExtras(KNPlatformExtras *platformExtras)=0;
 };
 
 #endif // KNABSTRACTMUSICPLUGIN_H

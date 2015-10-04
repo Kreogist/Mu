@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <array>
+
 #include "knmusicproxymodel.h"
 #include "knmusicmodel.h"
 #include "knmusicbackend.h"
@@ -41,6 +43,13 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
 {
     //Set the temporary playlist to the proxy model.
     m_temporaryProxyPlaylist->setSourceModel(m_temporaryPlaylist);
+    //Initial the random device and random generator.
+    std::array<int, std::mt19937::state_size> seedData;
+    std::random_device randomDevice;
+    std::generate_n(seedData.data(), seedData.size(), std::ref(randomDevice));
+    std::seed_seq seedSequence(std::begin(seedData), std::end(seedData));
+    //Initial the Mersenne twister seeds.
+    m_mersenneSeed=std::mt19937(seedSequence);
 }
 
 void KNMusicNowPlaying::setBackend(KNMusicBackend *backend)
@@ -225,7 +234,31 @@ void KNMusicNowPlaying::playPrevious()
     //index.
     if(Shuffle==m_loopState)
     {
-        //!FIXME: Add shuffle code here.
+        //Play the shuffle data.
+        //Generate the shuffle distribution.
+        std::uniform_int_distribution<> gapDistribution(
+                    0,
+                    m_playingProxyModel->rowCount()-1);
+        //Get the row index.
+        int preferRowGap=gapDistribution(m_mersenneSeed);
+        //Check out the prefer gap.
+        if(preferRowGap==0)
+        {
+            //Update the prefer gap.
+            preferRowGap=gapDistribution(m_mersenneSeed);
+        }
+        //Calculate the prefer row, reuse the prefer row gap.
+        preferRowGap=m_playingProxyModel->mapFromSource(m_playingIndex).row()-
+                preferRowGap;
+        //Make sure the number is valid.
+        if(preferRowGap<0)
+        {
+            //To fix it, it's simple, add row count.
+            preferRowGap+=(m_playingProxyModel->rowCount()-1);
+        }
+        //Play the row.
+        playRow(preferRowGap);
+        //Check out the prefer row is empty or not.
         return;
     }
     //Calculate the previous row.
@@ -503,7 +536,31 @@ inline void KNMusicNowPlaying::playNextRow(bool noLoopMode)
     //index.
     if(Shuffle==m_loopState)
     {
-        //!FIXME: Add shuffle code here.
+        //Play the shuffle data.
+        //Generate the shuffle distribution.
+        std::uniform_int_distribution<> gapDistribution(
+                    0,
+                    m_playingProxyModel->rowCount()-1);
+        //Get the row index.
+        int preferRowGap=gapDistribution(m_mersenneSeed);
+        //Check out the prefer gap.
+        if(preferRowGap==0)
+        {
+            //Update the prefer gap.
+            preferRowGap=gapDistribution(m_mersenneSeed);
+        }
+        //Calculate the prefer row, reuse the prefer row gap.
+        preferRowGap=m_playingProxyModel->mapFromSource(m_playingIndex).row()+
+                preferRowGap;
+        //Make sure the number is valid.
+        if(preferRowGap>=m_playingProxyModel->rowCount())
+        {
+            //To fix it, it's simple, reduce row count.
+            preferRowGap-=(m_playingProxyModel->rowCount()-1);
+        }
+        //Play the row.
+        playRow(preferRowGap);
+        //Check out the prefer row is empty or not.
         return;
     }
     //Get the next row.

@@ -19,6 +19,8 @@
 #ifndef KNMUSICNOWPLAYING_H
 #define KNMUSICNOWPLAYING_H
 
+#include <random>
+
 #include "knconnectionhandler.h"
 
 #include "knmusicnowplayingbase.h"
@@ -157,6 +159,8 @@ private:
 
     QPersistentModelIndex m_playingIndex;
     KNMusicAnalysisItem m_playingAnalysisItem;
+
+    std::mt19937 m_mersenneSeed;
 
     KNConnectionHandler m_backendConnections;
     bool m_manualPlayed;
