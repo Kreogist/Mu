@@ -70,9 +70,9 @@ private slots:
     void onActionMouseInOut(const int &frame);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    inline void startAnime(const int &endFrame);
+    QPixmap m_ascendingIcon, m_descendingIcon;
+    QTimeLine *m_mouseAnime;
     int m_lineBrightness;
     QLinearGradient m_buttonGradient;
 };

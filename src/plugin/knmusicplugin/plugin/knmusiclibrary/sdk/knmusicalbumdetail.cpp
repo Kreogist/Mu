@@ -72,7 +72,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_hideAlbumArtLabel(generateAnime(m_albumArt)),
     m_hideAlbumContent(generateAnime(m_albumContent)),
     m_iconSize(0),
-    m_sizeParameter(0),
+    m_panelSize(0),
     m_backgroundAnime(true),
     m_pressed(false)
 {
@@ -159,11 +159,6 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     contentLayout->addWidget(m_albumListView, 1);
 }
 
-int KNMusicAlbumDetail::sizeParameter() const
-{
-    return m_sizeParameter;
-}
-
 void KNMusicAlbumDetail::setLibraryModel(KNMusicLibraryModel *model)
 {
     //Check the library model has been set before.
@@ -213,15 +208,6 @@ void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
     }
 }
 
-void KNMusicAlbumDetail::setSizeParameter(int sizeParameter)
-{
-    qDebug()<<m_sizeParameter;
-    //Save the size parameter.
-    m_sizeParameter=sizeParameter;
-    //Update geometries using the new size parameter.
-    updateWidgetGeometries();
-}
-
 void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
 {
     //Cut all the connections.
@@ -251,23 +237,8 @@ void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
     //Set the album art and album content to the initial geometry.
     m_albumArt->setGeometry(albumArtStartRect);
     m_albumContent->setGeometry(albumArtStartRect);
-    //Set the start value of step 1.
-    m_albumArtIn1->setStartValue(albumArtStartRect);
-    m_albumContentIn1->setStartValue(albumArtStartRect);
-    //Set the step 1 animation final position.
-    QRect albumArtStepFinal, albumContentStepFinal;
-    generateStep1FinalPosition(albumArtStepFinal,
-                               albumContentStepFinal);
-    m_albumArtIn1->setEndValue(albumArtStepFinal);
-    m_albumContentIn1->setEndValue(albumContentStepFinal);
-    //Set the step 2 animation start position.
-    m_albumArtIn2->setStartValue(albumArtStepFinal);
-    m_albumContentIn2->setStartValue(albumContentStepFinal);
-    //Set the step 2 animation final position.
-    generateStep2FinalPosition(albumArtStepFinal,
-                               albumContentStepFinal);
-    m_albumArtIn2->setEndValue(albumArtStepFinal);
-    m_albumContentIn2->setEndValue(albumContentStepFinal);
+    //Update the parameter.
+    updateExpandAlbumParameter();
     //Make album art up.
     m_albumArt->raise();
     //Tweak the shadows.
@@ -295,16 +266,8 @@ void KNMusicAlbumDetail::foldAlbumDetail()
     {
         //Stop all the animations.
         stopAllAnimations();
-        //Set the position.
-        QRect albumArtEndRect(m_animeStartRect.x(),
-                              m_animeStartRect.y(),
-                              m_iconSize,
-                              m_iconSize);
-        //Set the animation start and end value.
-        m_albumArtOut->setStartValue(m_albumArt->geometry());
-        m_albumArtOut->setEndValue(albumArtEndRect);
-        m_albumContentOut->setStartValue(m_albumContent->geometry());
-        m_albumContentOut->setEndValue(albumArtEndRect);
+        //Update the fold animation.
+        updateFoldAlbumParameter();
         //Hide all the shadows.
         m_rightShadow->hide();
         m_leftShadow->hide();
@@ -379,8 +342,38 @@ void KNMusicAlbumDetail::resizeEvent(QResizeEvent *event)
 {
     //Do original resize.
     QWidget::resizeEvent(event);
-    //Update the size parameter.
-    m_sizeParameter=qMin(width(), height());
+    //Check the width and height of the widget.
+    if(width()>height())
+    {
+        //Calculate the panel size.
+        // First calculate the 3/4 of the height.
+        int preferSize=(height()>>2)*3;
+        //Check if the width can hold double of the prefer size.
+        if((preferSize<<1)<=width())
+        {
+            //Save it as the prefer size.
+            m_panelSize=preferSize;
+        }
+        else
+        {
+            //Half of the height. It must can be hold.
+            m_panelSize=(height()>>1);
+        }
+    }
+    else
+    {
+        // 1/2 of the width.
+        m_panelSize=(width()>>1);
+    }
+    //Check out the animation running state.
+    //Check expand animation state.
+    if(m_expandAnime->state()==QAbstractAnimation::Running)
+    {
+        //Update the parameter.
+        updateExpandAlbumParameter();
+        return;
+    }
+    //Check fly away animation state.
     //Update the child widget geometries.
     updateWidgetGeometries();
 }
@@ -586,33 +579,30 @@ inline void KNMusicAlbumDetail::generateStep1FinalPosition(
         QRect &albumArtGeometry,
         QRect &contentGeometry)
 {
-    //Calculate the final size of the album arts.
-    int finalSize=(m_sizeParameter>>2)*3;
     //Set the position of the
-    albumArtGeometry=QRect((width()-(finalSize<<1))>>1,
-                           (height()-finalSize)>>1,
-                           finalSize,
-                           finalSize);
+    albumArtGeometry=QRect((width()-(m_panelSize<<1))>>1,
+                           (height()-m_panelSize)>>1,
+                           m_panelSize,
+                           m_panelSize);
     contentGeometry=QRect(width()>>1,
-                          (height()-finalSize)>>1,
-                          finalSize,
-                          finalSize);
+                          (height()-m_panelSize)>>1,
+                          m_panelSize,
+                          m_panelSize);
 }
 
 inline void KNMusicAlbumDetail::generateStep2FinalPosition(
         QRect &albumArtGeometry,
         QRect &contentGeometry)
 {
-    int finalSizeParameter=(m_sizeParameter>>2)*3;
-    albumArtGeometry=QRect((width()-finalSizeParameter-
-                            (finalSizeParameter>>1))>>1,
-                           (height()-finalSizeParameter)>>1,
-                           finalSizeParameter,
-                           finalSizeParameter);
-    contentGeometry=QRect(albumArtGeometry.x()+(finalSizeParameter>>1),
+    albumArtGeometry=QRect((width()-m_panelSize-
+                            (m_panelSize>>1))>>1,
+                           (height()-m_panelSize)>>1,
+                           m_panelSize,
+                           m_panelSize);
+    contentGeometry=QRect(albumArtGeometry.x()+(m_panelSize>>1),
                           albumArtGeometry.y(),
-                          finalSizeParameter,
-                          finalSizeParameter);
+                          m_panelSize,
+                          m_panelSize);
 }
 
 inline void KNMusicAlbumDetail::stopAllAnimations()
@@ -671,6 +661,46 @@ inline void KNMusicAlbumDetail::updateShadowGeometries(
                               contentPosition.y(),
                               ShadowWidth,
                               contentPosition.height());
+}
+
+inline void KNMusicAlbumDetail::updateExpandAlbumParameter()
+{
+    //Set the position.
+    QRect albumArtStartRect(m_animeStartRect.x(),
+                            m_animeStartRect.y(),
+                            m_iconSize,
+                            m_iconSize);
+    //Set the start value of step 1.
+    m_albumArtIn1->setStartValue(albumArtStartRect);
+    m_albumContentIn1->setStartValue(albumArtStartRect);
+    //Set the step 1 animation final position.
+    QRect albumArtStepFinal, albumContentStepFinal;
+    generateStep1FinalPosition(albumArtStepFinal,
+                               albumContentStepFinal);
+    m_albumArtIn1->setEndValue(albumArtStepFinal);
+    m_albumContentIn1->setEndValue(albumContentStepFinal);
+    //Set the step 2 animation start position.
+    m_albumArtIn2->setStartValue(albumArtStepFinal);
+    m_albumContentIn2->setStartValue(albumContentStepFinal);
+    //Set the step 2 animation final position.
+    generateStep2FinalPosition(albumArtStepFinal,
+                               albumContentStepFinal);
+    m_albumArtIn2->setEndValue(albumArtStepFinal);
+    m_albumContentIn2->setEndValue(albumContentStepFinal);
+}
+
+inline void KNMusicAlbumDetail::updateFoldAlbumParameter()
+{
+    //Set the position.
+    QRect albumArtEndRect(m_animeStartRect.x(),
+                          m_animeStartRect.y(),
+                          m_iconSize,
+                          m_iconSize);
+    //Set the animation start and end value.
+    m_albumArtOut->setStartValue(m_albumArt->geometry());
+    m_albumArtOut->setEndValue(albumArtEndRect);
+    m_albumContentOut->setStartValue(m_albumContent->geometry());
+    m_albumContentOut->setEndValue(albumArtEndRect);
 }
 
 inline QPropertyAnimation *KNMusicAlbumDetail::generateAnime(

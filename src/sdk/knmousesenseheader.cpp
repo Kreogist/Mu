@@ -22,13 +22,16 @@
 
 #include "knmousesenseheader.h"
 
+#include <QDebug>
+
 #define InBrightness 0x80
 #define OutBrightness 0x40
 
 KNMouseSenseHeader::KNMouseSenseHeader(QWidget *parent) :
     QHeaderView(Qt::Horizontal, parent),
-    m_mouseIn(generateTimeLine(InBrightness)),
-    m_mouseOut(generateTimeLine(OutBrightness)),
+    m_ascendingIcon(QPixmap("://public/AscendingIndicator.png")),
+    m_descendingIcon(QPixmap("://public/DescendingIndicator.png")),
+    m_mouseAnime(new QTimeLine(200, this)),
     m_lineBrightness(OutBrightness),
     m_buttonGradient(QLinearGradient(QPoint(0,0), QPoint(0, height())))
 {
@@ -42,6 +45,12 @@ KNMouseSenseHeader::KNMouseSenseHeader(QWidget *parent) :
     setFrameShape(QFrame::NoFrame);
     setFrameShadow(QFrame::Plain);
     setSectionsMovable(true);
+    //Configure the mouse anime time line.
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    m_mouseAnime->setUpdateInterval(10);
+    //Link the time line.
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMouseSenseHeader::onActionMouseInOut);
 
     //Link with the theme changed signal.
     connect(knTheme, &KNThemeManager::themeChange,
@@ -53,7 +62,7 @@ KNMouseSenseHeader::KNMouseSenseHeader(QWidget *parent) :
 void KNMouseSenseHeader::enterEvent(QEvent *event)
 {
     //Start animation.
-    startAnime(m_mouseIn);
+    startAnime(InBrightness);
     //Do original enter event.
     QHeaderView::enterEvent(event);
 }
@@ -61,7 +70,7 @@ void KNMouseSenseHeader::enterEvent(QEvent *event)
 void KNMouseSenseHeader::leaveEvent(QEvent *event)
 {
     //Start animation.
-    startAnime(m_mouseOut);
+    startAnime(OutBrightness);
     //Do original leave event.
     QHeaderView::leaveEvent(event);
 }
@@ -90,7 +99,11 @@ void KNMouseSenseHeader::paintSection(QPainter *painter,
     //Draw sort indicator if it's shown, update the content rect.
     if(logicalIndex==sortIndicatorSection() && isSortIndicatorShown())
     {
-        //!FIXME: Draw indicator.
+        //Draw the indicator icon.
+        painter->drawPixmap(QPoint(rect.x()+rect.width()-20,
+                                   rect.y()+((rect.height()-20)>>1)),
+                            sortIndicatorOrder()==Qt::AscendingOrder?
+                                m_ascendingIcon:m_descendingIcon);
         //Change the content rect.
         contentRect=QRect(rect.x()+4,
                           rect.y()+1,
@@ -148,30 +161,13 @@ void KNMouseSenseHeader::onActionMouseInOut(const int &frame)
     setPalette(pal);
 }
 
-QTimeLine *KNMouseSenseHeader::generateTimeLine(const int &endFrame)
-{
-    //Generate the time line.
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    //Set parameters.
-    timeLine->setEndFrame(endFrame);
-    //Configure time line.
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(10);
-    //Link the time line.
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNMouseSenseHeader::onActionMouseInOut);
-    //Give back the time line.
-    return timeLine;
-}
-
-void KNMouseSenseHeader::startAnime(QTimeLine *timeLine)
+inline void KNMouseSenseHeader::startAnime(const int &endFrame)
 {
     //Stop animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
+    m_mouseAnime->stop();
     //Configure current animation.
-    timeLine->setStartFrame(m_lineBrightness);
+    m_mouseAnime->setFrameRange(m_lineBrightness, endFrame);
     //Start animation.
-    timeLine->start();
+    m_mouseAnime->start();
 }
 

@@ -41,7 +41,6 @@ class KNMusicAlbumDetail : public QWidget
     Q_OBJECT
 public:
     explicit KNMusicAlbumDetail(QWidget *parent = 0, KNMusicTab *tab = 0);
-    int sizeParameter() const;
 
 signals:
     void requireShowAlbum(QPoint indexPoint);
@@ -51,7 +50,6 @@ public slots:
     void setLibraryModel(KNMusicLibraryModel *model);
     void setAnimeParameter(const QRect &albumRect, const int &iconSize);
     void updateFoldEndValue(const QRect &position, const int &iconSize);
-    void setSizeParameter(int sizeParameter);
     void displayAlbumDetail(const QModelIndex &index);
     void foldAlbumDetail();
     void flyAwayAlbumDetail();
@@ -100,6 +98,8 @@ private:
     inline void updateAlbumArtwork();
     inline void updateWidgetGeometries();
     inline void updateShadowGeometries(const QRect &contentPosition);
+    inline void updateExpandAlbumParameter();
+    inline void updateFoldAlbumParameter();
     inline QPropertyAnimation *generateAnime(
             QObject *target,
             QEasingCurve::Type type=QEasingCurve::OutCubic);
@@ -124,7 +124,7 @@ private:
                        *m_showAlbumArtLabel, *m_showAlbumContent,
                        *m_hideAlbumArtLabel, *m_hideAlbumContent;
 
-    int m_iconSize, m_sizeParameter;
+    int m_iconSize, m_panelSize;
     bool m_backgroundAnime, m_pressed;
 };
 
