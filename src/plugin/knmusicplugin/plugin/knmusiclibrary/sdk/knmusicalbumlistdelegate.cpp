@@ -21,7 +21,10 @@
 
 #include "knmusicalbumlistdelegate.h"
 
-#define IconSize 24
+#define IconSize 16
+#define ItemHeight 25
+#define TextMarginX 45
+#define Spacing 5
 
 using namespace MusicUtil;
 
@@ -47,14 +50,9 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
         //Paint the selection base.
         painter->fillRect(option.rect,
                           option.palette.color(QPalette::Highlight));
-        //Change the pen.
-        painter->setPen(option.palette.color(QPalette::HighlightedText));
     }
-    else
-    {
-        //Use the normal text.
-        painter->setPen(option.palette.color(QPalette::WindowText));
-    }
+    //Use the normal text.
+    painter->setPen(option.palette.color(QPalette::WindowText));
     //Draw the playing icon.
     QIcon icon=proxyModel->data(proxyModel->index(index.row(),
                                                   MusicRowState),
@@ -62,22 +60,49 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
     //Check out the validation of icon.
     if(!icon.isNull())
     {
-        painter->drawPixmap(option.rect.x(),
-                            option.rect.y(),
-                            icon.pixmap(IconSize, IconSize));
+        //Scaled playing icon.
+        QPixmap scaledIcon=icon.pixmap(IconSize);
+        //Draw the scaled icon.
+        painter->drawPixmap(option.rect.x()+Spacing,
+                            option.rect.y()+
+                            ((ItemHeight-scaledIcon.height())>>1),
+                            scaledIcon);
     }
-    //Draw the duration text.
+    //Get text color.
+    QColor textColor=option.palette.color(QPalette::Text);
+    //Set the color for others.
+    textColor.setAlpha(0x9A);
+    painter->setPen(textColor);
+    //Calculate the text x.
+    int textX=option.rect.x()+TextMarginX+Spacing,
+        textWidth=option.rect.width()-TextMarginX-(Spacing<<1);
+    //Get the duration text.
     QString durationText=proxyModel->data(proxyModel->index(index.row(),
                                                             Time),
                                   Qt::DisplayRole).toString();
-    painter->drawText(option.rect,
+    //Draw the duration text.
+    painter->drawText(textX,
+                      option.rect.y(),
+                      textWidth,
+                      option.rect.height(),
                       Qt::AlignRight | Qt::AlignVCenter,
                       durationText);
+    //Draw the track index.
+    painter->drawText(option.rect.x(),
+                      option.rect.y(),
+                      TextMarginX,
+                      ItemHeight,
+                      Qt::AlignRight | Qt::AlignVCenter,
+                      proxyModel->data(proxyModel->index(index.row(),
+                                                         TrackNumber),
+                                       Qt::DisplayRole).toString());
+
     //Draw the title text.
-    int titleWidth=option.rect.width()-IconSize-option.fontMetrics.width(durationText);
-    painter->drawText(QRect(option.rect.x()+IconSize,
+    painter->setPen(option.palette.color(QPalette::Text));
+    textWidth-=option.fontMetrics.width(durationText);
+    painter->drawText(QRect(textX,
                             option.rect.y(),
-                            titleWidth,
+                            textWidth,
                             option.rect.height()),
                       Qt::AlignLeft | Qt::AlignVCenter,
                       option.fontMetrics.elidedText(
@@ -85,7 +110,7 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
                                                              Name),
                                                     Qt::DisplayRole).toString(),
                           Qt::ElideRight,
-                          titleWidth));
+                          textWidth));
 }
 
 QSize KNMusicAlbumListDelegate::sizeHint(const QStyleOptionViewItem &option,

@@ -23,6 +23,7 @@
 #include "knthememanager.h"
 
 #include "knmusiccategoryproxymodel.h"
+#include "knmusicsearchbase.h"
 #include "knmusicalbummodel.h"
 #include "knmusicalbumdetail.h"
 #include "knmusicglobal.h"
@@ -76,9 +77,12 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     //Link the scrolling event.
     connect(verticalScrollBar(), &QScrollBar::valueChanged,
                 this, &KNMusicAlbumView::onActionScrolling);
-
     //Update the painting parameters.
     updateUIElements();
+
+    //Link the search.
+    connect(knMusicGlobal->search(), &KNMusicSearchBase::requireSearch,
+            this, &KNMusicAlbumView::onActionSearch);
 }
 
 QModelIndex KNMusicAlbumView::indexAt(const QPoint &point) const
@@ -183,6 +187,12 @@ void KNMusicAlbumView::selectAlbum(const QModelIndex &albumIndex)
     //If the index is vaild, set the initial animation parameters.
     if(albumIndex.isValid())
     {
+        //Check whether the album index is the same as the current one.
+        if(albumIndex==m_selectedIndex)
+        {
+            //We don't need to expand the same album.
+            return;
+        }
         //Set current index to the proxy index of the album index.
         setCurrentIndex(m_proxyModel->mapFromSource(albumIndex));
         //Set the selected index.
@@ -387,7 +397,6 @@ void KNMusicAlbumView::mousePressEvent(QMouseEvent *event)
     QAbstractItemView::mousePressEvent(event);
     //Get the mouse down index.
     m_mouseDownIndex=indexAt(event->pos());
-
 }
 
 void KNMusicAlbumView::mouseReleaseEvent(QMouseEvent *event)
@@ -459,6 +468,23 @@ void KNMusicAlbumView::displayAlbum(const QPoint &point)
                 m_itemWidth);
     //Fold the album.
     m_albumDetail->foldAlbumDetail();
+    //Update the viewport.
+    viewport()->update();
+}
+
+void KNMusicAlbumView::onActionSearch()
+{
+    //Check whether the proxy model is nullptr.
+    if(m_proxyModel==nullptr || m_albumDetail==nullptr)
+    {
+        //Ignore the search request.
+        return;
+    }
+
+    //Hide the detail and clear the selection first.
+    m_albumDetail->flyAwayAlbumDetail();
+    //Set the search text to proxy model simply.
+    m_proxyModel->setSearchBlocks(knMusicGlobal->search()->rules());
     //Update the viewport.
     viewport()->update();
 }

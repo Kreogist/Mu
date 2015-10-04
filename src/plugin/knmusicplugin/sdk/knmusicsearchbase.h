@@ -54,6 +54,12 @@ public:
      */
     virtual QList<KNMusicSearchBlock> rules()=0;
 
+    /*!
+     * \brief Get the raw text of the search text box.
+     * \return The content of search text box.
+     */
+    virtual QString rawText() const=0;
+
 signals:
     /*!
      * \brief When the search rules update, this signal will be emitted.

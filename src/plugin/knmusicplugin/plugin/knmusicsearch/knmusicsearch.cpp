@@ -65,6 +65,11 @@ QList<KNMusicSearchBlock> KNMusicSearch::rules()
     return m_searchBlockList;
 }
 
+QString KNMusicSearch::rawText() const
+{
+    return m_searchBox->text();
+}
+
 void KNMusicSearch::clear()
 {
     //Clear up the search block list.

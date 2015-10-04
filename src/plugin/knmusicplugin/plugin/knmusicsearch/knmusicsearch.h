@@ -49,6 +49,11 @@ public:
      */
     QList<KNMusicSearchBlock> rules() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicSearchBase::rawText().
+     */
+    QString rawText() const Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

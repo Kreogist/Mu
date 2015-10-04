@@ -141,6 +141,7 @@ protected slots:
 private slots:
     void onActionScrolling();
     void displayAlbum(const QPoint &point);
+    void onActionSearch();
 
 private:
     inline int indexScrollBarValue(const QModelIndex &index,

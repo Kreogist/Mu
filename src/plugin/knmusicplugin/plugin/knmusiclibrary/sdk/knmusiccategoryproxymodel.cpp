@@ -56,6 +56,15 @@ QModelIndex KNMusicCategoryProxyModel::categoryIndex(
     return QModelIndex();
 }
 
+void KNMusicCategoryProxyModel::setSearchBlocks(
+        const QList<KNMusicSearchBlock> &blockList)
+{
+    //Save the blocks.
+    m_searchBlocks=blockList;
+    //Set a filter text to update the whole proxy model.
+    setFilterFixedString("");
+}
+
 bool KNMusicCategoryProxyModel::lessThan(const QModelIndex &source_left,
                                          const QModelIndex &source_right) const
 {
@@ -77,15 +86,64 @@ bool KNMusicCategoryProxyModel::filterAcceptsRow(
         int source_row,
         const QModelIndex &source_parent) const
 {
+    Q_UNUSED(source_parent)
     //Check out the source row.
     //If the source row is 0 row and it has no data, we won't accept the row.
     if(source_row==0)
     {
-        return sourceModel()->data(
+        //Abandon when it's 0.
+        if(sourceModel()->data(
                     sourceModel()->index(0, 0),
-                    KNMusicCategoryModelBase::CategorySizeRole).toInt()!=0;
+                    KNMusicCategoryModelBase::CategorySizeRole).toInt()==0)
+        {
+            return false;
+        }
     }
-    //Use the default accept.
-    return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
+    //Check out the filter.
+    if(m_searchBlocks.isEmpty())
+    {
+        //All the row will become accept if there's no blocks filter.
+        return true;
+    }
+    //Cast the source model to category model.
+    KNMusicCategoryModelBase *categoryModel=
+            static_cast<KNMusicCategoryModelBase *>(sourceModel());
+    //Check out the model is null or not.
+    if(categoryModel==nullptr)
+    {
+        //All the row will become accept, because there's no row.
+        return true;
+    }
+    //Get the category index.
+    int categoryIndex=categoryModel->categoryColumn();
+    //Check all the blocks.
+    for(auto i : m_searchBlocks)
+    {
+        //Check if this block a common search block.
+        if(i.index==-1)
+        {
+            //Search the rule text in the display role.
+            if(!categoryModel->index(source_row).data(Qt::DisplayRole).toString(
+                        ).contains(i.value.toString(), Qt::CaseInsensitive))
+            {
+                //Abandon the failed row.
+                return false;
+            }
+            //Go to next rule.
+            continue;
+        }
+        //Check if the blocks is related to the current category.
+        if(i.isColumn && i.index==categoryIndex &&
+                //Check if the filter data is contained in the text.
+                (!categoryModel->data(categoryModel->index(source_row),
+                                    Qt::DisplayRole).toString().contains(
+                    i.value.toString(), Qt::CaseInsensitive)))
+        {
+            //Abandon the row doesn't contain the data.
+            return false;
+        }
+    }
+    //Or else, that what we want.
+    return true;
 }
 

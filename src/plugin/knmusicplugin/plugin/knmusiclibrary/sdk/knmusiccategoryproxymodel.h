@@ -19,7 +19,11 @@
 #ifndef KNMUSICCATEGORYPROXYMODEL_H
 #define KNMUSICCATEGORYPROXYMODEL_H
 
+#include "knmusicutil.h"
+
 #include <QSortFilterProxyModel>
+
+using namespace MusicUtil;
 
 class KNMusicCategoryProxyModel : public QSortFilterProxyModel
 {
@@ -32,6 +36,11 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set the search block list to filter the music model.
+     * \param blockList The search block list.
+     */
+    void setSearchBlocks(const QList<KNMusicSearchBlock> &blockList);
 
 protected:
     /*!
@@ -48,6 +57,7 @@ protected:
     Q_DECL_OVERRIDE;
 
 private:
+    QList<KNMusicSearchBlock> m_searchBlocks;
 };
 
 #endif // KNMUSICCATEGORYPROXYMODEL_H
