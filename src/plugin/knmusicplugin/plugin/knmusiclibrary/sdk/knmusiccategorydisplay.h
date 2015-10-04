@@ -52,12 +52,13 @@ private slots:
     void onActionSearch();
 
 private:
+    inline void updateTitle();
     inline void updateDetailInfo();
     inline void updateBackgroundIcon();
     inline void updateBackgroundIconContent();
     QRadialGradient m_iconGradient;
     QPixmap m_categoryIcon;
-    QString m_songCount[3], m_searchResultIn, m_searchCount[3];
+    QString m_songCount[3], m_searchCount[3], m_searchResultIn, m_titleText;
     QLabel *m_largeIcon;
     QGraphicsOpacityEffect *m_iconEffect;
     KNScrollLabel *m_categoryTitle;

@@ -22,6 +22,7 @@
 #include "knmusicdetaildialogpanel.h"
 
 class QLabel;
+class KNLabelButton;
 class KNCircleIconButton;
 /*!
  * \brief The KNMusicDetailPanelOverview class is used to show the basic detail
@@ -54,6 +55,7 @@ public slots:
 
 private slots:
     void retranslate();
+    void onActionPathClicked();
 
 private:
     enum DetailInformation
@@ -69,7 +71,9 @@ private:
     };
 
     QLabel *m_caption[DetailInformationCount],
-           *m_information[DetailInformationCount];
+           *m_information[DetailInformationCount],
+           *m_pathCaption;
+    KNLabelButton *m_pathInformation;
     KNCircleIconButton *m_button;
 
 };

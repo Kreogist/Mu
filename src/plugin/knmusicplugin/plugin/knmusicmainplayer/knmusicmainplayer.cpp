@@ -174,9 +174,13 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
     mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->addSpacing(16);
-    mainLayout->addWidget(m_hideMainPlayer);
-    mainLayout->addSpacing(16);
+    QBoxLayout *headerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            mainLayout->widget());
+    headerLayout->setContentsMargins(16,16,16,16);
+    //Add widget to header layout.
+    headerLayout->addWidget(m_hideMainPlayer);
+    headerLayout->addStretch();
+    mainLayout->addLayout(headerLayout);
     setLayout(mainLayout);
     //Initial the strectch space for content layout.
     mainLayout->addWidget(m_contentContainer, 1);

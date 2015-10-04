@@ -348,7 +348,8 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.cpp \
     plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.cpp
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.cpp \
+    sdk/knlabelbutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -542,7 +543,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.h \
     plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.h
+    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.h \
+    sdk/knlabelbutton.h
 
 RESOURCES += \
     resource/res.qrc

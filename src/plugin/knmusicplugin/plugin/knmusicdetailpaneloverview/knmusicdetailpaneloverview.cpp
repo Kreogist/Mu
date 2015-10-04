@@ -18,7 +18,9 @@
 #include <QFormLayout>
 #include <QLabel>
 
+#include "knutil.h"
 #include "knlocalemanager.h"
+#include "knlabelbutton.h"
 #include "kncircleiconbutton.h"
 
 #include "knmusicdetailpaneloverview.h"
@@ -27,6 +29,8 @@ using namespace MusicUtil;
 
 KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     KNMusicDetailDialogPanel(parent),
+    m_pathCaption(new QLabel(this)),
+    m_pathInformation(new KNLabelButton(this)),
     m_button(new KNCircleIconButton(this))
 {
     //Configure the button.
@@ -44,7 +48,15 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     QPalette captionPal=palette(), contentPal=palette();
     captionPal.setColor(QPalette::WindowText, QColor(0xa0, 0xa0, 0xa0));
     contentPal.setColor(QPalette::WindowText, QColor(72, 72, 72));
-
+    //Configure the path information.
+    m_pathInformation->setWordWrap(true);
+    m_pathInformation->setCursor(Qt::PointingHandCursor);
+    connect(m_pathInformation, &KNLabelButton::clicked,
+            this, &KNMusicDetailPanelOverview::onActionPathClicked);
+    //Configure the path caption.
+    m_pathCaption->setAlignment(Qt::AlignRight | Qt::AlignTop);
+    m_pathCaption->setMinimumWidth(100);
+    m_pathCaption->setPalette(captionPal);
     //Initial the labels.
     for(int i=0; i<DetailInformationCount; i++)
     {
@@ -61,6 +73,8 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
         //Add label to layout.
         mainLayout->addRow(m_caption[i], m_information[i]);
     }
+    //Add path information to layout.
+    mainLayout->addRow(m_pathCaption, m_pathInformation);
 
     //Link retranslate.
     knI18n->link(this, &KNMusicDetailPanelOverview::retranslate);
@@ -82,11 +96,14 @@ void KNMusicDetailPanelOverview::setAnalysisItem(
     m_information[DetailGenre]->setText(detailInfo.textLists[Genre].toString());
     m_information[DetailKind]->setText(detailInfo.textLists[Kind].toString());
     m_information[DetailSize]->setText(detailInfo.textLists[Size].toString());
-    m_information[DetailBitRate]->setText(detailInfo.textLists[BitRate].toString());
+    m_information[DetailBitRate]->setText(
+                detailInfo.textLists[BitRate].toString());
     m_information[DetailSampleRate]->setText(
                 detailInfo.textLists[SampleRate].toString());
     m_information[DetailDateModified]->setText(
                 detailInfo.textLists[DateModified].toString());
+    //Set the file path.
+    m_pathInformation->setText(detailInfo.filePath);
 }
 
 void KNMusicDetailPanelOverview::retranslate()
@@ -99,4 +116,11 @@ void KNMusicDetailPanelOverview::retranslate()
     m_caption[DetailBitRate]->setText(tr("Bit Rate"));
     m_caption[DetailSampleRate]->setText(tr("Sample Rate"));
     m_caption[DetailDateModified]->setText(tr("Date Modified"));
+    m_pathCaption->setText(tr("Path"));
+}
+
+void KNMusicDetailPanelOverview::onActionPathClicked()
+{
+    //Show the file in graphics shell.
+    KNUtil::showInGraphicalShell(m_pathInformation->text());
 }

@@ -36,6 +36,9 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent,
                                                KNMusicTab *tab) :
     QWidget(parent),
     m_iconGradient(QRadialGradient()),
+    m_categoryIcon(QPixmap()),
+    m_searchResultIn(QString()),
+    m_titleText(QString()),
     m_largeIcon(new QLabel(this)),
     m_iconEffect(new QGraphicsOpacityEffect(m_largeIcon)),
     m_categoryTitle(new KNScrollLabel(this)),
@@ -130,14 +133,18 @@ void KNMusicCategoryDisplay::scrollToSourceRow(const int &row)
 
 void KNMusicCategoryDisplay::showNoCategoryItem(const QString &title)
 {
+    //Save the title text.
+    m_titleText=title;
     //Update the title.
-    m_categoryTitle->setText(title);
+    updateTitle();
     //Set the category text to empty
     m_categoryTreeView->setCategoryText(QVariant(QString("")));
     //Update the background to no album art.
     setCategoryIcon(QPixmap());
     //Update the detail info.
     updateDetailInfo();
+    //Move the tree view to the top.
+    m_categoryTreeView->scrollToTop();
 }
 
 void KNMusicCategoryDisplay::setCategoryColumn(const int &column)
@@ -148,12 +155,16 @@ void KNMusicCategoryDisplay::setCategoryColumn(const int &column)
 
 void KNMusicCategoryDisplay::setCategoryText(const QString &text)
 {
+    //Save the text.
+    m_titleText=text;
     //Update the title.
-    m_categoryTitle->setText(text);
+    updateTitle();
     //Set the category to treeview.
     m_categoryTreeView->setCategoryText(QVariant(text));
     //Update the detail info.
     updateDetailInfo();
+    //Move the tree view to the top.
+    m_categoryTreeView->scrollToTop();
 }
 
 void KNMusicCategoryDisplay::setCategoryIcon(const QPixmap &pixmap)
@@ -180,6 +191,12 @@ void KNMusicCategoryDisplay::retranslate()
     m_songCount[0]=tr("No song.");
     m_songCount[1]=tr("1 song.");
     m_songCount[2]=tr("%1 songs.");
+    //Update the search result.
+    m_searchCount[0]=tr("No result.");
+    m_searchCount[1]=tr("1 result.");
+    m_searchCount[2]=tr("%1 results.");
+    //Update the search result title.
+    m_searchResultIn=tr("Search result in %1");
     //Update the detail info.
     updateDetailInfo();
 }
@@ -195,6 +212,23 @@ void KNMusicCategoryDisplay::onActionSearch()
     //Set the search rules to the proxy model.
     m_categoryTreeView->proxyModel()->setSearchBlocks(
                 knMusicGlobal->search()->rules());
+    //Update the title and detail info.
+    updateTitle();
+    updateDetailInfo();
+}
+
+inline void KNMusicCategoryDisplay::updateTitle()
+{
+    //Check whether the proxy model is in search mode.
+    if(m_categoryTreeView->proxyModel()->isSearchMode())
+    {
+        //Update the title caption with result text.
+        m_categoryTitle->setText(m_searchResultIn.arg(m_titleText));
+        //Mission complete.
+        return;
+    }
+    //Or else we have to simply set the title text.
+    m_categoryTitle->setText(m_titleText);
 }
 
 inline void KNMusicCategoryDisplay::updateDetailInfo()
@@ -202,6 +236,18 @@ inline void KNMusicCategoryDisplay::updateDetailInfo()
     //Get the proxy model.
     KNMusicProxyModel *model=m_categoryTreeView->proxyModel();
     //The model cannot be null, we don't need to check it.
+    //Check whether the model is in search mode.
+    if(model->isSearchMode())
+    {
+        //Set the category info data to search result.
+        int searchResult=model->rowCount();
+        //Set the detail text.
+        m_categoryInfo->setText(searchResult<2?
+                                    m_searchCount[searchResult]:
+                                    m_searchCount[2].arg(
+                                        QString::number(searchResult)));
+        return;
+    }
     //Get the row count.
     int songCount=model->rowCount();
     //Check out the song count.

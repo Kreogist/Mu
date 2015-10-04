@@ -25,7 +25,7 @@
 
 #define MajorVersion 3
 #define MinorVersion 0
-#define MaxOperateCount 300
+#define MaxOperateCount 400
 
 KNJsonDatabase::KNJsonDatabase(QObject *parent) :
     QObject(parent),

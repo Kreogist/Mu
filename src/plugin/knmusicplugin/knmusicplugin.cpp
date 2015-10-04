@@ -369,7 +369,7 @@ void KNMusicPlugin::initialDetailDialogPanel()
 
     //Add panels to detail dialog.
     detailDialog->addPanel(new KNMusicDetailPanelOverview);
-    detailDialog->addTagEditPanel(new KNMusicDetailTagEditPanel);
+//    detailDialog->addTagEditPanel(new KNMusicDetailTagEditPanel);
     detailDialog->addPanel(new KNMusicDetailPanelArtwork);
 }
 

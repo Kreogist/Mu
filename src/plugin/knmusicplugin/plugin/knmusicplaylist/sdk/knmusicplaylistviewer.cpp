@@ -148,6 +148,8 @@ void KNMusicPlaylistViewer::setPlaylist(KNMusicPlaylistModel *model)
         //For nullptr model, we have to clear all the information.
         m_treeView->setMusicModel(nullptr);
     }
+    //Move the tree view to the top.
+    m_treeView->scrollToTop();
     //Update the playlist information.
     updateTitle();
     //Update the detail information.

@@ -71,7 +71,7 @@ void KNMusicNowPlayingDelegate::paint(QPainter *painter,
     if(!indicatorIcon.isNull())
     {
         //Rescaled the icon.
-        QPixmap rescaledPixmap=indicatorIcon.pixmap(option.rect.height());
+        QPixmap rescaledPixmap=indicatorIcon.pixmap(16);
         //Calculate the offset.
         int positionOffset=((option.rect.height()-rescaledPixmap.height())>>1);
         //Draw the indicator icon.
