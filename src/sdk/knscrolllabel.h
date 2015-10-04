@@ -55,6 +55,8 @@ public:
      */
     qreal opacity() const;
 
+    qreal glowRadius() const;
+
 signals:
 
 public slots:
@@ -69,6 +71,7 @@ public slots:
      * \param text The label content.
      */
     void setText(const QString &text);
+    void setGlowRadius(const qreal &glowRadius);
 
 protected:
     /*!
@@ -99,7 +102,7 @@ private:
     inline void updateAnimeParameters();
     QString m_text;
     QTimer *m_move, *m_wait;
-    qreal m_opacity;
+    qreal m_opacity, m_glowRadius;
     int m_textLeftMostX, m_textX;
     bool m_movingLeft;
 };

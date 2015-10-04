@@ -93,6 +93,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_albumContent->setPalette(contentPalette);
     //Configure the album title label.
     m_albumTitle->setObjectName("MusicAlbumTitleLabel");
+    m_albumTitle->setGlowRadius(4.0);
     knTheme->registerWidget(m_albumTitle);
     // Set the font.
     QFont captionFont=m_albumTitle->font();
@@ -101,6 +102,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_albumTitle->setFont(captionFont);
     //Configure the album artist label.
     m_albumDetails->setObjectName("MusicAlbumDetailLabel");
+    m_albumDetails->setGlowRadius(4.0);
     knTheme->registerWidget(m_albumDetails);
     //Configure the animations.
     connect(m_expandAnime, &QSequentialAnimationGroup::finished,
@@ -147,7 +149,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     //Initial the caption layout for the title and detail label.
     QBoxLayout *captionLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              contentLayout->widget());
-    captionLayout->setContentsMargins(8,20,8,14);
+    captionLayout->setContentsMargins(21,21,21,14);
     captionLayout->setSpacing(0);
     contentLayout->addLayout(captionLayout);
     //Add widget to caption layout.

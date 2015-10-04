@@ -76,7 +76,10 @@ namespace MusicUtil
         TrackIndexRole,
         CannotPlayFlagRole,
         DurationRole,
-        FileSizeRole
+        FileSizeRole,
+        DateAddedRole,
+        DateModifiedRole,
+        DateLastPlayedRole
     };
     enum PropertyListIndex
     {

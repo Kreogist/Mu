@@ -85,6 +85,31 @@ void KNMusicProxyModel::setSearchBlocks(
 bool KNMusicProxyModel::lessThan(const QModelIndex &left,
                                  const QModelIndex &right) const
 {
+    //Check out the column.
+    switch(left.column())
+    {
+    case Time:
+        return left.data(DurationRole).toLongLong() <
+                right.data(DurationRole).toLongLong();
+    case Size:
+        return left.data(FileSizeRole).toLongLong() <
+                right.data(FileSizeRole).toLongLong();
+    case DiscNumber:
+    case DiscCount:
+    case TrackNumber:
+    case TrackCount:
+        return left.data(Qt::DisplayRole).toString().toInt()
+                <right.data(Qt::DisplayRole).toString().toInt();
+    case DateAdded:
+        return left.data(DateAddedRole).toDateTime()
+                < right.data(DateAddedRole).toDateTime();
+    case DateModified:
+        return left.data(DateModifiedRole).toDateTime()
+                < right.data(DateModifiedRole).toDateTime();
+    case LastPlayed:
+        return left.data(DateLastPlayedRole).toDateTime()
+                < right.data(DateLastPlayedRole).toDateTime();
+    }
     return QSortFilterProxyModel::lessThan(left, right);
 }
 

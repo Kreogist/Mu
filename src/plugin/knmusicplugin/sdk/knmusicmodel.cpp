@@ -431,6 +431,12 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
         return detailInfo.trackIndex;
     case CannotPlayFlagRole:
         return detailInfo.cannotPlay;
+    case DateAddedRole:
+        return detailInfo.dateAdded;
+    case DateModifiedRole:
+        return detailInfo.dateModified;
+    case DateLastPlayedRole:
+        return detailInfo.dateLastPlayed;
     default:
         return m_nullValue;
     }

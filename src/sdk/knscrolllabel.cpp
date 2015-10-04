@@ -23,7 +23,6 @@
 
 #include <QDebug>
 
-#define GlowRadius 9.0
 #define ShortWaiting 2500
 #define LongWaiting 3000
 
@@ -33,12 +32,16 @@ KNScrollLabel::KNScrollLabel(QWidget *parent) :
     m_move(new QTimer(this)),
     m_wait(new QTimer(this)),
     m_opacity(1.0),
+    m_glowRadius(9.0),
     m_textLeftMostX(0),
     m_textX(0),
     m_movingLeft(true)
 {
     //Set properties.
-    setContentsMargins(GlowRadius/2, GlowRadius/2, GlowRadius/2, GlowRadius/2);
+    setContentsMargins(m_glowRadius/2,
+                       m_glowRadius/2,
+                       m_glowRadius/2,
+                       m_glowRadius/2);
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,
                                   QSizePolicy::Minimum,
                                   QSizePolicy::Label));
@@ -74,7 +77,7 @@ void KNScrollLabel::paintEvent(QPaintEvent *event)
     //Draw content text.
     painter.drawText(m_textX,
                      contentsRect().y(),
-                     fontMetrics().width(m_text)+GlowRadius,
+                     fontMetrics().width(m_text)+m_glowRadius,
                      height(),
                      Qt::AlignLeft,
                      m_text);
@@ -165,9 +168,9 @@ inline void KNScrollLabel::updateAnimeParameters()
     //Reset the text left.
     m_textX=contentsRect().x();
     //Get the text width.
-    int textWidth=fontMetrics().width(m_text)+GlowRadius;
+    int textWidth=fontMetrics().width(m_text)+m_glowRadius;
     //Check the text width is longer than the maximum display width.
-    int maxDisplayWidth=rect().width()+GlowRadius/2+1;
+    int maxDisplayWidth=rect().width()+m_glowRadius/2+1;
     if(textWidth>maxDisplayWidth)
     {
         //Set the tooltip.
@@ -189,6 +192,16 @@ inline void KNScrollLabel::updateAnimeParameters()
     //When the text width is shorter than width.
     m_textLeftMostX=0;
 }
+qreal KNScrollLabel::glowRadius() const
+{
+    return m_glowRadius;
+}
+
+void KNScrollLabel::setGlowRadius(const qreal &glowRadius)
+{
+    m_glowRadius = glowRadius;
+}
+
 
 qreal KNScrollLabel::opacity() const
 {
@@ -224,5 +237,5 @@ void KNScrollLabel::setText(const QString &text)
 
 QSize KNScrollLabel::sizeHint() const
 {
-    return QSize(width(), GlowRadius+fontMetrics().height());
+    return QSize(width(), m_glowRadius+fontMetrics().height());
 }

@@ -63,10 +63,8 @@ public:
     }
 
     int categoryColumn() const;
-    void setCategoryColumn(int categoryColumn);
 
     QString categoryContent() const;
-    void setCategoryContent(const QString &categoryContent);
 
 signals:
 
@@ -76,6 +74,18 @@ public slots:
      * \param blockList The search block list.
      */
     void setSearchBlocks(const QList<KNMusicSearchBlock> &blockList);
+
+    /*!
+     * \brief setCategoryContent
+     * \param categoryContent
+     */
+    void setCategoryContent(const QString &categoryContent);
+
+    /*!
+     * \brief setCategoryColumn
+     * \param categoryColumn
+     */
+    void setCategoryColumn(int categoryColumn);
 
 protected:
     /*!
