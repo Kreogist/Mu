@@ -147,8 +147,8 @@ void KNMusicLibraryAlbumTab::setCategoryModel(KNMusicCategoryModelBase *model)
     //Update the model.
     retranslate();
 
-    //! This should be done in constructor, but setModel() is a virtual
-    //! function, so we moved here.
+    //This should be done in constructor, but setModel() is a virtual
+    //function, so we moved here.
     //Set the proxy model to album view.
     m_albumView->setModel(categoryProxyModel());
     //Set the default sort order.

@@ -3,23 +3,24 @@ Changes between 0.9 and 0.8
 Core:
 1. Simplified the KNPluginManager.
 2. Update the KNJsonDatabase module to 3.0. Support fast data reading.
-3. Increase the write data operation maximum bound to 400.
-4. Use brand new KNMusicModel module, no more QStandardItemModel.
-5. Change the policy to load images from hard disk.
-6. Change the policy to parse and find files in music library.
-. Fixed the drag and drop bug in playlist caused by the QTreeView can only drop one data.
-. Fixed the crashed bug caused by use Qt::AutoConnection and overflow the call stack in the library.
-. 
+3. Support clear up the image directory when loading the images.
+4. Increase the write data operation maximum bound to 400.
+5. Use brand new KNMusicModel module, no more QStandardItemModel.
+6. Change the policy to load images from hard disk, optimized the start up speed.
+7. Change the policy to parse and find files in music library.
+8. Fixed the drag and drop bug in playlist caused by the QTreeView can only drop one data.
+9. Fixed the crashed bug caused by use Qt::AutoConnection and overflow the call stack in the library. 
 
 GUI:
-. Support show the current playing model.
-. Support change the layout in different layout.
-. Support display codec of the file in main player.
-. Tweak the album art display in Artist and Genre tab.
-. Tweak the album expand size in Album tab.
-. 
+1. Support show the current playing playlist.
+2. Support change the layout in different layout.
+3. Support display codec of the file in main player.
+4. Tweak the album art display in Artist and Genre tab.
+5. Tweak the album expand size in Album tab.
+6. Tweak the album display layout and color.
+7. Fixed the album art won't scaled correctly in artist and genre tab. 
 
 Search:
 1. Support multiple condition search.
 2. Use brand new KNMusicProxyModel for fast searching. 
-3. Now search in the artist and genre won't search artists or genre any more. Will search the content of artist or genre.
+3. Now search in the artist and genre won't search artists or genre any more. Will search the content of artist or genre. 

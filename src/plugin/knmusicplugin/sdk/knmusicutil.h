@@ -201,6 +201,13 @@ namespace MusicUtil
             isColumn(true)
         {
         }
+
+        bool operator ==(const KNMusicSearchBlock &block) const
+        {
+            return index==block.index &&
+                    isColumn==block.isColumn &&
+                    value==block.value;
+        }
     };
 }
 

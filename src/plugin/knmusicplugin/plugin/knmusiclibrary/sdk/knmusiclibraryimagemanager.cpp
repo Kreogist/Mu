@@ -58,7 +58,7 @@ void KNMusicLibraryImageManager::analysisAlbumArt(
     emit requireAnalysisNext();
 }
 
-void KNMusicLibraryImageManager::recoverAlbumArt()
+void KNMusicLibraryImageManager::recoverAlbumArt(const QStringList &hashList)
 {
     //Check out the image hash list has been set or not.
     if(m_hashAlbumArt==nullptr)
@@ -80,7 +80,7 @@ void KNMusicLibraryImageManager::recoverAlbumArt()
     {
         //Generate the folder.
         imageDir.mkpath(imageDir.absolutePath());
-        //Do nothing, return.
+        //Do nothing, return. Because the folder is just created.
         return;
     }
     //Check the existance again, if the path is still not exist, then failed.
@@ -96,21 +96,26 @@ void KNMusicLibraryImageManager::recoverAlbumArt()
         //Check the information of all the file and the suffix.
         if(i.isFile() && i.suffix().toLower()=="png")
         {
-            //Load the image.
-            QPixmap currentPixmap=QPixmap(i.absoluteFilePath(), "png");
-            //If there's image data is not null.
-            if(currentPixmap.isNull())
+            //Get the hash key, which is the base name.
+            QString hashKey=i.completeBaseName();
+            //Check whether the file is in the hash list.
+            if(hashList.contains(hashKey))
             {
-                //Remove the file away.
-                QFile::remove(i.absoluteFilePath());
-            }
-            else
-            {
-                //Insert the image to the hash list.
-                m_hashAlbumArt->insert(i.completeBaseName(),
-                                       QVariant(currentPixmap));
+                //Load the image.
+                QPixmap currentPixmap=QPixmap(i.absoluteFilePath(), "png");
+                //If there's image data is not null.
+                if(!currentPixmap.isNull())
+                {
+                    //Insert the image to the hash list.
+                    m_hashAlbumArt->insert(i.completeBaseName(),
+                                           QVariant(currentPixmap));
+                    //Continue to next file.
+                    continue;
+                }
             }
         }
+        //Remove the no use file.
+        QFile::remove(i.absoluteFilePath());
     }
     //After loading the images, emit recover signal.
     emit recoverImageComplete();
@@ -147,7 +152,7 @@ void KNMusicLibraryImageManager::analysisNext()
     emit requireAnalysisNext();
 }
 
-inline QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
+QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
 {
     //Calculate the meta data of the image(MD4 of image content).
     QByteArray hashResult=
@@ -166,7 +171,7 @@ inline QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
                                                 currentByteText);
     }
     //Check whether the hash is already exists in image list.
-    if(!m_hashAlbumArt->contains(imageHashKey))
+    if(m_hashAlbumArt!=nullptr && !m_hashAlbumArt->contains(imageHashKey))
     {
         //If this image is first time exist in the hash list, save the image
         //first.
@@ -176,6 +181,12 @@ inline QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
         emit requireSaveImage(imageHashKey);
     }
     return imageHashKey;
+}
+
+void KNMusicLibraryImageManager::removeHashImage(const QString &hashKey)
+{
+    //Remove the file, simply combine the path.
+    QFile::remove(m_imageFolderPath + "/" + hashKey + ".png");
 }
 
 QString KNMusicLibraryImageManager::imageFolderPath() const

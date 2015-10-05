@@ -146,4 +146,9 @@ bool KNMusicCategoryProxyModel::filterAcceptsRow(
     //Or else, that what we want.
     return true;
 }
+QList<KNMusicSearchBlock> KNMusicCategoryProxyModel::searchBlocks() const
+{
+    return m_searchBlocks;
+}
+
 

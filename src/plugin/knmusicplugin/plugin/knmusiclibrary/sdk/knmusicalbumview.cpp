@@ -481,10 +481,18 @@ void KNMusicAlbumView::onActionSearch()
         return;
     }
 
-    //Hide the detail and clear the selection first.
-    m_albumDetail->flyAwayAlbumDetail();
+    //Get the search.
+    KNMusicSearchBase *search=knMusicGlobal->search();
+    //Check the rules are the same or not.
+    if(search->rules()==m_proxyModel->searchBlocks())
+    {
+        //The proxy model is the same as the search block.
+        return;
+    }
     //Set the search text to proxy model simply.
     m_proxyModel->setSearchBlocks(knMusicGlobal->search()->rules());
+    //Hide the detail and clear the selection first.
+    m_albumDetail->flyAwayAlbumDetail();
     //Update the viewport.
     viewport()->update();
 }

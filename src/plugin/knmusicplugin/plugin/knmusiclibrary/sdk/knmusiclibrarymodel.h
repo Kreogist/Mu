@@ -116,8 +116,9 @@ signals:
      * \brief When the library has already recover the data, it will emit this
      * signal to recover image from the album art folder. You won't need to use
      * this signal to do anything.
+     * \param imageHashList The hash list which is cover
      */
-    void requireRecoverImage();
+    void requireRecoverImage(QStringList imageHashList);
 
 public slots:
     /*!
@@ -146,10 +147,12 @@ private:
     inline void updateCategoryDetailInfo(const KNMusicDetailInfo &before,
                                          const KNMusicDetailInfo &after);
     inline void removeCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
+    inline void reduceHashImage(const QString &imageKey);
     inline KNMusicDetailInfo generateDetailInfo(const QJsonArray &dataArray);
     inline QJsonArray generateDataArray(const KNMusicDetailInfo &detailInfo);
     QLinkedList<KNMusicCategoryModelBase *> m_categoryModels;
     QHash<QString, QVariant> m_hashAlbumArt;
+    QHash<QString, int> m_hashAlbumArtCounter;
     QThread m_searchThread, m_analysisThread, m_imageThread;
     KNJsonDatabase *m_database;
     KNMusicSearcher *m_searcher;

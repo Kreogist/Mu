@@ -303,32 +303,32 @@ void KNMusicCategoryModel::onCategoryUpdate(const KNMusicDetailInfo &before,
     {
         //We won't need to add or reduce count, but we have to check the artwork
         //key.
-        if(after.coverImageHash!=before.coverImageHash)
+        if(after.coverImageHash==before.coverImageHash)
         {
-            //Get the category text.
-            QVariant categoryText=after.textLists[m_categoryColumn];
-            //Find the category item.
-            for(int i=0; i<m_categoryList.size(); ++i)
+            //Nothing changed, we will do nothing.
+            //Mission complete.
+            return;
+        }
+        //Get the category text.
+        QVariant categoryText=after.textLists[m_categoryColumn];
+        //Find the category item.
+        for(int i=0; i<m_categoryList.size(); ++i)
+        {
+            //If we could find the item.
+            if(m_categoryList.at(i).displayText==categoryText)
             {
-                //If we could find the item.
-                if(m_categoryList.at(i).displayText==categoryText)
-                {
-                    //Get the category item.
-                    CategoryItem item=m_categoryList.at(i);
-                    //Remove the original cover image hash from the item.
-                    item.albumArtHash.removeOne(before.coverImageHash);
-                    //Insert the new cover image.
-                    item.albumArtHash.append(after.coverImageHash);
-                    //Replace the one.
-                    replaceItem(i, item);
-                    //Mission complete.
-                    return;
-                }
+                //Get the category item.
+                CategoryItem item=m_categoryList.at(i);
+                //Remove the original cover image hash from the item.
+                item.albumArtHash.removeOne(before.coverImageHash);
+                //Insert the new cover image.
+                item.albumArtHash.append(after.coverImageHash);
+                //Replace the one.
+                replaceItem(i, item);
+                //Mission complete.
+                return;
             }
         }
-        //Nothing changed, we will do nothing.
-        //Mission complete.
-        return;
     }
     //Or else, we have to remove the previous data.
     onCategoryRemove(before);

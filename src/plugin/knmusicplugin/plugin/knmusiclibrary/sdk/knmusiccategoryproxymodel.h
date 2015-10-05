@@ -33,6 +33,8 @@ public:
 
     QModelIndex categoryIndex(const QVariant &categoryText);
 
+    QList<KNMusicSearchBlock> searchBlocks() const;
+
 signals:
 
 public slots:

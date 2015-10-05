@@ -49,7 +49,9 @@ signals:
 public slots:
     void analysisAlbumArt(QPersistentModelIndex itemIndex,
                           KNMusicAnalysisItem item);
-    void recoverAlbumArt();
+    void recoverAlbumArt(const QStringList &hashList);
+    QString insertHashImage(const QImage &image);
+    void removeHashImage(const QString &hashKey);
 
 private slots:
     void analysisNext();
@@ -60,7 +62,6 @@ private:
         QPersistentModelIndex itemIndex;
         KNMusicAnalysisItem item;
     };
-    inline QString insertHashImage(const QImage &image);
     QLinkedList<AnalysisQueueItem> m_analysisQueue;
     QString m_imageFolderPath;
     QHash<QString, QVariant> *m_hashAlbumArt;

@@ -105,6 +105,14 @@ void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
     //Append data to the database.
     m_database->append(generateDataArray(detailInfo));
+    //Check the image cover image hash.
+    if(!detailInfo.coverImageHash.isEmpty())
+    {
+        //Increase the new cover image hash.
+        m_hashAlbumArtCounter.insert(
+                    detailInfo.coverImageHash,
+                    m_hashAlbumArtCounter.value(detailInfo.coverImageHash)+1);
+    }
     //Add the detail info to category models.
     addCategoryDetailInfo(detailInfo);
     //Do the original append operations.
@@ -125,6 +133,14 @@ void KNMusicLibraryModel::appendRows(
     {
         //Append all the detail info to the database.
         m_database->append(generateDataArray(i));
+        //Check the image cover image hash.
+        if(!i.coverImageHash.isEmpty())
+        {
+            //Increase the new cover image hash.
+            m_hashAlbumArtCounter.insert(
+                        i.coverImageHash,
+                        m_hashAlbumArtCounter.value(i.coverImageHash)+1);
+        }
         //Add the detail info to category models.
         addCategoryDetailInfo(i);
     }
@@ -143,6 +159,14 @@ bool KNMusicLibraryModel::insertRow(int row,
 {
     //Insert the array to the database.
     m_database->insert(row, generateDataArray(detailInfo));
+    //Check the image cover image hash.
+    if(!detailInfo.coverImageHash.isEmpty())
+    {
+        //Increase the new cover image hash.
+        m_hashAlbumArtCounter.insert(
+                    detailInfo.coverImageHash,
+                    m_hashAlbumArtCounter.value(detailInfo.coverImageHash)+1);
+    }
     //Add the detail info to category models.
     addCategoryDetailInfo(detailInfo);
     //Check out the database size.
@@ -162,10 +186,21 @@ bool KNMusicLibraryModel::insertMusicRows(
     //Insert the array to the database.
     for(int i=detailInfos.size()-1; i>-1; --i)
     {
+        //Get the detail info.
+        const KNMusicDetailInfo &detailInfo=detailInfos.at(i);
         //Insert the data to the specific position.
-        m_database->insert(row, generateDataArray(detailInfos.at(i)));
+        m_database->insert(row, generateDataArray(detailInfo));
+        //Check the image cover image hash.
+        if(!detailInfo.coverImageHash.isEmpty())
+        {
+            //Increase the new cover image hash.
+            m_hashAlbumArtCounter.insert(
+                        detailInfo.coverImageHash,
+                        m_hashAlbumArtCounter.value(
+                            detailInfo.coverImageHash)+1);
+        }
         //Add the detail info to category models.
-        addCategoryDetailInfo(detailInfos.at(i));
+        addCategoryDetailInfo(detailInfo);
     }
     //Check out the database size.
     if(m_database->size()==1)
@@ -179,8 +214,31 @@ bool KNMusicLibraryModel::insertMusicRows(
 
 bool KNMusicLibraryModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
 {
-    //Update the cover image.
-    m_imageManager->analysisAlbumArt(index(row, 0), analysisItem);
+    //This function will be called only from the now playing, and the analysis
+    //item should contains the image.
+    //So, the only thing we have to do with the image hash key is to check the
+    //size.
+    //Get the detail info.
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo,
+    //Get the original detail info.
+                      &originalDetailInfo=rowDetailInfo(row);
+    //Check the current image.
+    if(!analysisItem.coverImage.isNull())
+    {
+        //Get the latest image hash.
+        detailInfo.coverImageHash=
+                m_imageManager->insertHashImage(analysisItem.coverImage);
+    }
+    //Check the cover image hash is changed or not.
+    if(detailInfo.coverImageHash!=originalDetailInfo.coverImageHash)
+    {
+        //Reduce the original cover image.
+        reduceHashImage(originalDetailInfo.coverImageHash);
+        //Increase the new cover image hash.
+        m_hashAlbumArtCounter.insert(
+                    detailInfo.coverImageHash,
+                    m_hashAlbumArtCounter.value(detailInfo.coverImageHash)+1);
+    }
     //Update the model row.
     return updateModelRow(row, analysisItem);
 }
@@ -211,8 +269,12 @@ bool KNMusicLibraryModel::removeRows(int position,
     //Remove the detail info from the category models.
     for(int i=0; i<rows; ++i)
     {
+        //Get the row detail info.
+        const KNMusicDetailInfo &detailInfo=rowDetailInfo(position+i);
+        //Reduce the original cover image.
+        reduceHashImage(detailInfo.coverImageHash);
         //Remove the data from the category model.
-        removeCategoryDetailInfo(rowDetailInfo(position+i));
+        removeCategoryDetailInfo(detailInfo);
     }
     //Check out the database size.
     if(m_database->size()==0)
@@ -307,6 +369,11 @@ void KNMusicLibraryModel::recoverModel()
         addCategoryDetailInfo(turboDetailInfo);
         //Calcualte the total duration.
         totalDuration+=turboDetailInfo.duration;
+        //Add hash list to image hash list counter.
+        m_hashAlbumArtCounter.insert(
+                    turboDetailInfo.coverImageHash,
+                    m_hashAlbumArtCounter.value(turboDetailInfo.coverImageHash,
+                                                0)+1);
     }
     //Set the total duration.
     initialTotalDuration(totalDuration);
@@ -322,7 +389,7 @@ void KNMusicLibraryModel::recoverModel()
         emit libraryNotEmpty();
     }
     //Ask to recover image.
-    emit requireRecoverImage();
+    emit requireRecoverImage(m_hashAlbumArtCounter.keys());
 }
 
 inline KNMusicDetailInfo KNMusicLibraryModel::generateDetailInfo(
@@ -463,12 +530,6 @@ void KNMusicLibraryModel::onActionAnalysisComplete(
     //Emit the analysis signal.
     m_imageManager->analysisAlbumArt(index(m_database->size()-1, 0),
                                      analysisItem);
-    //Check out the row after append the row.
-    if(rowCount()==1)
-    {
-        //Emit the library not empty signal.
-        emit libraryNotEmpty();
-    }
 }
 
 void KNMusicLibraryModel::onActionImageUpdateRow(
@@ -546,5 +607,29 @@ inline void KNMusicLibraryModel::removeCategoryDetailInfo(
     {
         //Called the on action remove slot.
         (*i)->onCategoryRemove(detailInfo);
+    }
+}
+
+inline void KNMusicLibraryModel::reduceHashImage(const QString &imageKey)
+{
+    //Check the size of the original cover image, if it's 1, then remove the
+    //image.
+    int originalCount=m_hashAlbumArtCounter.value(imageKey, 0);
+    //If the original count is 0, means the image is not exist, ignore it.
+    switch(originalCount)
+    {
+    case 0:
+        break;
+    case 1:
+        //Remove the count.
+        m_hashAlbumArtCounter.remove(imageKey);
+        //Remove the image.
+        m_hashAlbumArt.remove(imageKey);
+        //Delete the file.
+        m_imageManager->removeHashImage(imageKey);
+        break;
+    default:
+        //Reduce the hash album art counter down.
+        m_hashAlbumArtCounter.insert(imageKey, originalCount-1);
     }
 }
