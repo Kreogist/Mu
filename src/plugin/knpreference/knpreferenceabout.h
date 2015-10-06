@@ -40,6 +40,12 @@ signals:
 
 public slots:
 
+protected:
+    /*!
+     * \brief resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event);
+
 private slots:
     void retranslate();
 

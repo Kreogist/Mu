@@ -37,6 +37,7 @@ TRANSLATIONS += \
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
 msvc: {
+    # MSVC will only used for Windows 64-bit version.
     # Whole Program Optimization
     QMAKE_CXXFLAGS_RELEASE += -GL -Gw -GA
     # Auto-Parallelizer

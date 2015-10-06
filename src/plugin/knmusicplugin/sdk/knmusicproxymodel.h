@@ -91,8 +91,8 @@ protected:
     /*!
      * \brief Reimplemented from QSortFilterProxyModel::lessThan().
      */
-    bool lessThan(const QModelIndex &left,
-                  const QModelIndex &right) const Q_DECL_OVERRIDE;
+    bool lessThan(const QModelIndex &source_left,
+                  const QModelIndex &source_right) const Q_DECL_OVERRIDE;
     /*!
      * \brief Reimplemented from QSortFilterProxyModel::filterAcceptsRow().
      */

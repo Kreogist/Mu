@@ -82,35 +82,69 @@ void KNMusicProxyModel::setSearchBlocks(
     setFilterFixedString("");
 }
 
-bool KNMusicProxyModel::lessThan(const QModelIndex &left,
-                                 const QModelIndex &right) const
+bool KNMusicProxyModel::lessThan(const QModelIndex &source_left,
+                                 const QModelIndex &source_right) const
 {
     //Check out the column.
-    switch(left.column())
+    switch(source_left.column())
     {
     case Time:
-        return left.data(DurationRole).toLongLong() <
-                right.data(DurationRole).toLongLong();
+    {
+        qlonglong &&leftData=source_left.data(DurationRole).toLongLong(),
+                  &&rightData=source_right.data(DurationRole).toLongLong();
+        return (leftData == rightData) ?
+                    (source_left.row() < source_right.row()) :
+                    (leftData < rightData);
+    }
     case Size:
-        return left.data(FileSizeRole).toLongLong() <
-                right.data(FileSizeRole).toLongLong();
+    {
+        qlonglong &&leftData=source_left.data(FileSizeRole).toLongLong(),
+                &&rightData=source_right.data(FileSizeRole).toLongLong();
+        return (leftData == rightData) ?
+                    (source_left.row() < source_right.row()) :
+                    (leftData < rightData);
+    }
     case DiscNumber:
     case DiscCount:
     case TrackNumber:
     case TrackCount:
-        return left.data(Qt::DisplayRole).toString().toInt()
-                <right.data(Qt::DisplayRole).toString().toInt();
-    case DateAdded:
-        return left.data(DateAddedRole).toDateTime()
-                < right.data(DateAddedRole).toDateTime();
-    case DateModified:
-        return left.data(DateModifiedRole).toDateTime()
-                < right.data(DateModifiedRole).toDateTime();
-    case LastPlayed:
-        return left.data(DateLastPlayedRole).toDateTime()
-                < right.data(DateLastPlayedRole).toDateTime();
+    {
+        int &&leftData=source_left.data(Qt::DisplayRole).toString().toInt(),
+            &&rightData=source_right.data(Qt::DisplayRole).toString().toInt();
+        return (leftData == rightData) ?
+                    (source_left.row() < source_right.row()) :
+                    (leftData < rightData);
     }
-    return QSortFilterProxyModel::lessThan(left, right);
+    case DateAdded:
+    {
+        QDateTime &&leftData=source_left.data(DateAddedRole).toDateTime(),
+                  &&rightData=source_right.data(DateAddedRole).toDateTime();
+        return (leftData == rightData) ?
+                    (source_left.row() < source_right.row()) :
+                    (leftData < rightData);
+    }
+    case DateModified:
+    {
+        QDateTime &&leftData=source_left.data(DateModifiedRole).toDateTime(),
+                  &&rightData=source_right.data(DateModifiedRole).toDateTime();
+        return (leftData == rightData) ?
+                    (source_left.row() < source_right.row()) :
+                    (leftData < rightData);
+    }
+    case LastPlayed:
+    {
+        QDateTime &&leftData=source_left.data(DateLastPlayedRole).toDateTime(),
+                  &&rightData=source_right.data(DateLastPlayedRole).toDateTime();
+        return (leftData == rightData) ?
+                    (source_left.row() < source_right.row()) :
+                    (leftData < rightData);
+    }
+    }
+    QString &&leftData=source_left.data(Qt::DisplayRole).toString(),
+            &&rightData=source_right.data(Qt::DisplayRole).toString();
+    return (leftData == rightData) ?
+                (source_left.row() < source_right.row()) :
+                (leftData < rightData);
 }
 
 bool KNMusicProxyModel::filterAcceptsRow(int source_row,

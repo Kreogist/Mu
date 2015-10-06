@@ -37,44 +37,69 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
         //Initial the label.
         m_textContent[i]=new QLabel(this);
         //Configure the label.
-        m_textContent[i]->setAlignment(Qt::AlignLeft);
+        m_textContent[i]->setAlignment(Qt::AlignHCenter);
         m_textContent[i]->setFont(labelFonts);
     }
 
     //Initial the main layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
-    mainLayout->setContentsMargins(70, 26, 18, 18);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(15);
     setLayout(mainLayout);
+    //Add the stretch.
+    mainLayout->addStretch();
     //Add the icon to main layout.
-    mainLayout->addWidget(m_textContent[0], 0, Qt::AlignTop);
+    mainLayout->addWidget(m_textContent[0], 0, Qt::AlignHCenter);
     //Initial the content layout.
     //Initial the main layout.
     QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              mainLayout->widget());
     contentLayout->setContentsMargins(0,0,0,0);
-    contentLayout->setSpacing(5);
-    mainLayout->addLayout(contentLayout, 1);
-    //Add labels to the content layout.
-    for(int i=1; i<ContentIndexCount; ++i)
-    {
-        //Add content label to content layout.
-        contentLayout->addWidget(m_textContent[i], 0, Qt::AlignLeft);
-    }
+    contentLayout->setSpacing(8);
+    mainLayout->addLayout(contentLayout);
+    //Add the stretch to bottom.
+    mainLayout->addStretch();
+    //Add version and copyright labels to content layout.
+    contentLayout->addWidget(m_textContent[Title], 0, Qt::AlignHCenter);
+    contentLayout->addSpacing(8);
+    contentLayout->addWidget(m_textContent[Version], 0, Qt::AlignHCenter);
+    contentLayout->addWidget(m_textContent[Copyright], 0, Qt::AlignHCenter);
     contentLayout->addStretch();
 
     //Set the default label.
-    m_textContent[Logo]->setPixmap(
-                QPixmap("://icon/mu.png").scaled(114,
-                                                 114,
-                                                 Qt::KeepAspectRatio,
-                                                 Qt::SmoothTransformation));
+    m_textContent[Logo]->setPixmap(QPixmap("://icon/mu.png"));
+    //Configure the label.
+    m_textContent[Logo]->setFixedSize(16, 16);
+    m_textContent[Logo]->setScaledContents(true);
     m_textContent[Title]->setText(QApplication::applicationDisplayName());
 
     //Link the retranslate.
     knI18n->link(this, &KNPreferenceAbout::retranslate);
     retranslate();
+}
+
+void KNPreferenceAbout::resizeEvent(QResizeEvent *event)
+{
+    //Do resize.
+    QWidget::resizeEvent(event);
+    //Calculate Icon size.
+    int iconSize=(qreal)qMin(width(), height())*0.236;
+    //Resize the icon.
+    m_textContent[Logo]->setFixedSize(iconSize, iconSize);
+    //Change the caption size.
+    QFont captionFont=m_textContent[Title]->font();
+    //Calculate the title size.
+    iconSize=(qreal)iconSize*0.236;
+    captionFont.setPixelSize(iconSize);
+    //Set to caption font.
+    m_textContent[Title]->setFont(captionFont);
+    //Calculate the caption size.
+    iconSize=iconSize>>2;
+    captionFont.setPixelSize(iconSize<13?13:iconSize);
+    //Set font to those captions.
+    m_textContent[Version]->setFont(captionFont);
+    m_textContent[Copyright]->setFont(captionFont);
 }
 
 void KNPreferenceAbout::retranslate()

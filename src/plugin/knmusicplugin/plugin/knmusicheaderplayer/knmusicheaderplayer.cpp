@@ -572,6 +572,8 @@ void KNMusicHeaderPlayer::reset()
 
 void KNMusicHeaderPlayer::retranslate()
 {
+    //Set tooltip for all the buttons.
+    ;
     //Set the sub menu title.
     m_subMenus[SubMenuRating]->menuAction()->setText(tr("Rating"));
     m_subMenus[SubMenuLocate]->menuAction()->setText(tr("Locate"));
