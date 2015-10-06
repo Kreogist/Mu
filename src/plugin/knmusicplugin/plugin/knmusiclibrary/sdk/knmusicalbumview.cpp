@@ -236,16 +236,12 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform,
                            true);
-    //Get the option view item.
-    QStyleOptionViewItem option=viewOptions();
     //Check if we need to paint the background.
     if(autoFillBackground())
     {
-        painter.fillRect(rect(), option.palette.base());
+        painter.fillRect(rect(), viewOptions().palette.base());
     }
 
-    //Update the parameters of the view first.
-    updateUIElements();
     //Check the model first.
     if(m_proxyModel==nullptr)
     {
@@ -302,14 +298,14 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
             paintAlbum(painter, currentLeft, currentTop, proxyIndex);
         }
         //Add current row to the next album model row.
-        currentRow++;
+        ++currentRow;
         //Add current column to the next position.
-        currentColumn++;
+        ++currentColumn;
         //Check if we need to move to next row.
         if(currentColumn>=m_maxColumnCount)
         {
             //Add current line.
-            currentLine++;
+            ++currentLine;
             //Reset the column.
             currentColumn=0;
             //Change the position.
@@ -331,6 +327,8 @@ void KNMusicAlbumView::resizeEvent(QResizeEvent *event)
 {
     //Do resize.
     QAbstractItemView::resizeEvent(event);
+    //Update the parameters of the view first.
+    updateUIElements();
     //Resize the album detail.
     m_albumDetail->resize(size());
     //If the current index is not null, must ensure that we can display the
@@ -581,10 +579,8 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
         //Draw the album art base.
         painter.drawPixmap(x, y, m_scaledAlbumBase);
         //Draw the album art.
-        painter.drawPixmap(QRect(x+((m_itemWidth-albumArtImage.width())>>1),
-                                 y+((m_itemWidth-albumArtImage.height())>>1),
-                                 albumArtImage.width(),
-                                 albumArtImage.height()),
+        painter.drawPixmap(QPoint(x+((m_itemWidth-albumArtImage.width())>>1),
+                                  y+((m_itemWidth-albumArtImage.height())>>1)),
                            albumArtImage);
     }
     //Set the pen as the text color.
@@ -603,7 +599,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
                          Qt::ElideRight,
                          m_itemWidth));
     //Draw the album artist name.
-    QString artistText=
+    QString &&artistText=
             index.data(KNMusicAlbumModel::AlbumArtistRole).toString();
     //Check artist text is empty or not.
     if(artistText.isEmpty())

@@ -54,14 +54,14 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
     //Use the normal text.
     painter->setPen(option.palette.color(QPalette::WindowText));
     //Draw the playing icon.
-    QIcon icon=proxyModel->data(proxyModel->index(index.row(),
-                                                  MusicRowState),
-                                Qt::DecorationRole).value<QIcon>();
+    QIcon &&icon=proxyModel->data(proxyModel->index(index.row(),
+                                                    MusicRowState),
+                                  Qt::DecorationRole).value<QIcon>();
     //Check out the validation of icon.
     if(!icon.isNull())
     {
         //Scaled playing icon.
-        QPixmap scaledIcon=icon.pixmap(IconSize);
+        QPixmap &&scaledIcon=icon.pixmap(IconSize);
         //Draw the scaled icon.
         painter->drawPixmap(option.rect.x()+Spacing,
                             option.rect.y()+
@@ -77,9 +77,9 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
     int textX=option.rect.x()+TextMarginX+Spacing,
         textWidth=option.rect.width()-TextMarginX-(Spacing<<1)-Spacing;
     //Get the duration text.
-    QString durationText=proxyModel->data(proxyModel->index(index.row(),
-                                                            Time),
-                                  Qt::DisplayRole).toString();
+    QString &&durationText=proxyModel->data(proxyModel->index(index.row(),
+                                                              Time),
+                                            Qt::DisplayRole).toString();
     //Draw the duration text.
     painter->drawText(textX,
                       option.rect.y(),

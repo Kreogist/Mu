@@ -816,3 +816,11 @@ void KNMusicTreeViewBase::scrollToRow(const int &row)
     //Get the name item of the song row.
     scrollToIndex(m_proxyModel->index(row, Name));
 }
+
+void KNMusicTreeViewBase::updateObjectName(const QString &name)
+{
+    //Set the object name.
+    setObjectName(name);
+    //Update the frame.
+    onActionThemeUpdate();
+}

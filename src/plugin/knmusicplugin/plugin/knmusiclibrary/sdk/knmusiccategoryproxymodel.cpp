@@ -115,7 +115,7 @@ bool KNMusicCategoryProxyModel::filterAcceptsRow(
         return true;
     }
     //Get the category index.
-    int categoryIndex=categoryModel->categoryColumn();
+    int &&categoryIndex=categoryModel->categoryColumn();
     //Check all the blocks.
     for(auto i : m_searchBlocks)
     {
@@ -146,9 +146,8 @@ bool KNMusicCategoryProxyModel::filterAcceptsRow(
     //Or else, that what we want.
     return true;
 }
+
 QList<KNMusicSearchBlock> KNMusicCategoryProxyModel::searchBlocks() const
 {
     return m_searchBlocks;
 }
-
-

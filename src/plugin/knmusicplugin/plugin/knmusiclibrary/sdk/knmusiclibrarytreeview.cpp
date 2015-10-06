@@ -15,8 +15,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knthememanager.h"
-
 #include "knmusicutil.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicglobal.h"
@@ -25,18 +23,19 @@
 
 #include "knmusiclibrarytreeview.h"
 
+#include <QDebug>
+
 using namespace MusicUtil;
 
 KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent,
                                                KNMusicTab *tab) :
     KNMusicTreeViewBase(parent, tab)
 {
-    setObjectName("LibraryTreeView");
+    //Update the object name.
+    updateObjectName("LibraryTreeView");
     //Set properties.
     setSortingEnabled(true);
     header()->setSortIndicatorShown(true);
-    //Link to theme manager.
-    knTheme->registerWidget(this);
 }
 
 void KNMusicLibraryTreeView::setCategoryColumn(const int &column)

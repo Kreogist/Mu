@@ -44,7 +44,7 @@ void KNMusicLibraryCategoryDelegate::paint(QPainter *painter,
         textColor=option.palette.color(QPalette::HighlightedText);
     }
     //Draw the decoration icon.
-    QPixmap categoryIcon=
+    QPixmap &&categoryIcon=
             (index.data(Qt::DecorationRole).value<QPixmap>()).scaled(
                 IconSize,
                 IconSize,

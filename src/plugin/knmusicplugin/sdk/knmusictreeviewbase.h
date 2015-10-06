@@ -95,6 +95,12 @@ public:
      */
     void scrollToRow(const int &row);
 
+    /*!
+     * \brief Update the object name set up the new palette from theme manager.
+     * \param name The new object name.
+     */
+    void updateObjectName(const QString &name);
+
 signals:
 
 public slots:

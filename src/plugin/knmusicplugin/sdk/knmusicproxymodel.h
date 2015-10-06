@@ -101,8 +101,6 @@ protected:
     Q_DECL_OVERRIDE;
 
 private:
-    inline bool checkColumnRule(const QModelIndex &index,
-                                const KNMusicSearchBlock &block) const;
     inline bool checkRule(QAbstractItemModel *model,
                                 const int &row,
                                 const KNMusicSearchBlock &block) const;
