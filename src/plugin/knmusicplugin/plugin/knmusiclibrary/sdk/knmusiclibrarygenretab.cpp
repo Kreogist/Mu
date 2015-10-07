@@ -332,6 +332,9 @@ inline void KNMusicLibraryGenreTab::clearSearchRequest()
     knMusicGlobal->search()->clear();
     //Hide the search bar.
     m_genreList->hideSearchBar();
+    //Ensure show the current index.
+    m_genreList->scrollTo(m_genreList->currentIndex(),
+                          QAbstractItemView::PositionAtCenter);
 }
 
 inline void KNMusicLibraryGenreTab::showAndSelectRow(const int &musicRow)

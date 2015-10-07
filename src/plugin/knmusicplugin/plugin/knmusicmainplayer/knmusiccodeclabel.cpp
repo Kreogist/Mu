@@ -21,8 +21,8 @@
 
 KNMusicCodecLabel::KNMusicCodecLabel(QWidget *parent) :
     QWidget(parent),
-    m_currentIndex(-1),
-    m_imageSize(0)
+    m_imageSize(0),
+    m_currentIndex(-1)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     //Load the format icon.

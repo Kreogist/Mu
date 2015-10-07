@@ -48,7 +48,7 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     //Generate the random device.
     std::random_device randomDevice;
     //Get the seed array size.
-    int &&seedCount=std::mt19937::state_size;
+    const size_t seedCount=std::mt19937::state_size;
     //Resize the seed data.
     seedData.resize(seedCount);
     //Set the data to the seed data.

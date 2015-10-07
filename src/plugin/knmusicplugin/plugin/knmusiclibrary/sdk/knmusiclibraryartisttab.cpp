@@ -329,6 +329,9 @@ inline void KNMusicLibraryArtistTab::clearSearchRequest()
     knMusicGlobal->search()->clear();
     //Hide the search bar.
     m_artistList->hideSearchBar();
+    //Ensure show the current index.
+    m_artistList->scrollTo(m_artistList->currentIndex(),
+                           QAbstractItemView::PositionAtCenter);
 }
 
 inline void KNMusicLibraryArtistTab::updateDisplayArtwork(

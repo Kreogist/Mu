@@ -59,7 +59,8 @@ gcc: {
     CONFIG += mmx sse sse2 sse3
     QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3 -finline-functions
     # Vectorize optimization
-    QMAKE_CXXFLAGS_RELEASE += -ftree-vectorize -ftree-vectorizer-verbose=2
+    QMAKE_CXXFLAGS_RELEASE += -fivopts -ftree-vectorize
+    QMAKE_CXXFLAGS_RELEASE += -ftree-vectorizer-verbose=2
     # Concurrency
     QMAKE_CXXFLAGS_RELEASE += -funroll-loops -floop-parallelize-all
     # Loop optimization
@@ -71,10 +72,19 @@ gcc: {
     # doesn't have -fforce-addr switch, so we need to set the switcher
     # especially for Windows and Linux.
     win32:{
+        # GCC will only used for Windows 32-bit version.
         QMAKE_CXXFLAGS_RELEASE += -fforce-addr
     }
     linux:{
+        # GCC will only used for Linux 64-bit version.
+        # Enabled force-addr.
         QMAKE_CXXFLAGS_RELEASE += -fforce-addr
+        # Use sse to calculate the float operation.
+        QMAKE_CXXFLAGS_RELEASE += -mfpmath=sse
+        # Enabled 64-bit.
+        QMAKE_CXXFLAGS_RELEASE += -m64
+        # Others
+        QMAKE_CXXFLAGS_RELEASE += -ftracer
     }
 }
 
@@ -141,10 +151,12 @@ backend-bass: {
     # Add backend files to the project.
     SOURCES += \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
-        plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.cpp
+        plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.cpp \
+        plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp
     HEADERS += \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
-        plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h
+        plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h \
+        plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h
 }
 
 backend-phonon: {
@@ -354,7 +366,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.cpp \
-    plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.cpp \
     sdk/knlabelbutton.cpp \
@@ -550,7 +561,6 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.h \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.h \
-    plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.h \
     sdk/knlabelbutton.h \
