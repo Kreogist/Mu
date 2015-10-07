@@ -172,6 +172,11 @@
         "Highlight" : "#FFFFFF40",
         "HighlightedText" : "#F7CF3D"
     },
+    "MusicCategorySearch" : {
+        "Parent" : "CategoryListViewBase",
+        "Button" : "#303030",
+        "ButtonText" : "#AAAAAA"
+    },
     "AlbumListView" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

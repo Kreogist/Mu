@@ -101,7 +101,7 @@ void KNMusicLibraryArtistTab::showInTab(const KNMusicDetailInfo &detailInfo)
         return;
     }
     //Clear up all the search result.
-    knMusicGlobal->search()->clear();
+    clearSearchRequest();
     //Find the detail info in the model.
     int musicRow=m_libraryModel->detailInfoRow(detailInfo);
     //Check out the music row.
@@ -122,7 +122,7 @@ void KNMusicLibraryArtistTab::showIndex(KNMusicModel *musicModel,
         return;
     }
     //Clear the search result.
-    knMusicGlobal->search()->clear();
+    clearSearchRequest();
     //Check out the music model is the same as the library model.
     if(musicModel==m_libraryModel)
     {
@@ -171,6 +171,10 @@ void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModelBase *model)
     //! function, so we moved here.
     //Set the proxy model to tree view.
     m_artistList->setModel(categoryProxyModel());
+    //Connect the requirement here.
+    connect(m_artistList, &KNMusicCategoryListViewBase::requireSearchCategory,
+            this, &KNMusicLibraryArtistTab::onActionSearchCategory);
+    //Set the default sort order.
     categoryProxyModel()->sort(0, Qt::AscendingOrder);
     //Link the selection model to display slot.
     connect(m_artistList->selectionModel(),
@@ -229,6 +233,8 @@ void KNMusicLibraryArtistTab::retranslate()
 {
     //Update the tab text.
     m_tab->setText(tr("Artists"));
+    //Set the search place holder text.
+    m_artistList->setSearchPlaceHolderText(tr("Search in artist"));
     //Set the action caption.
     m_showInArtistTab->setText(tr("Go to Artist"));
     //Update the no category text.
@@ -280,6 +286,49 @@ void KNMusicLibraryArtistTab::onActionCategoryIndexChanged(
                                       Qt::DisplayRole).toString());
     //Set the category artwork.
     updateDisplayArtwork(m_currentSourceIndex);
+}
+
+void KNMusicLibraryArtistTab::onActionSearchCategory(const QString &text)
+{
+    //Generate a search block.
+    KNMusicSearchBlock categoryBlock;
+    //Configure the block.
+    categoryBlock.value=text;
+    //Set to the block list.
+    QList<KNMusicSearchBlock> blockList;
+    //Add to list.
+    blockList.append(categoryBlock);
+    //Set to category proxy model.
+    categoryProxyModel()->setSearchBlocks(blockList);
+    //Check out the proxy model.
+    if(categoryProxyModel()->rowCount()==0)
+    {
+        //Hide all staffs.
+        m_artistDisplay->hideAllStaffs();
+        return;
+    }
+    //Check out the text is blank or not.
+    if(text.isEmpty())
+    {
+        //Check the current index is valid or not.
+        if(m_artistList->currentIndex().isValid())
+        {
+            //Let the select one to be the center of the category view.
+            m_artistList->scrollTo(m_artistList->currentIndex());
+            //Complete the mission.
+            return;
+        }
+    }
+    //Or else, select the first item in the proxy model.
+    m_artistList->setCurrentIndex(categoryProxyModel()->index(0,0));
+}
+
+inline void KNMusicLibraryArtistTab::clearSearchRequest()
+{
+    //Clear up the music search.
+    knMusicGlobal->search()->clear();
+    //Hide the search bar.
+    m_artistList->hideSearchBar();
 }
 
 inline void KNMusicLibraryArtistTab::updateDisplayArtwork(

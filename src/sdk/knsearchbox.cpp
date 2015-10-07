@@ -34,7 +34,7 @@
 
 KNSearchBox::KNSearchBox(QWidget *parent) :
     QLineEdit(parent),
-    m_searchIcon(QPixmap("://public/search.png")),
+    m_searchIcon(QPixmap()),
     m_baseColor(QColor(0,0,0,0)),
     m_mouseInOut(generateTimeLine()),
     m_focusInOut(generateTimeLine()),
@@ -50,6 +50,8 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
                        0);
     setFixedHeight(SearchBoxHeight);
 
+    //Configure the initialized image.
+    setSearchIcon(QPixmap("://public/search.png"));
     //Configure the time line, link the frame change with the slot.
     connect(m_mouseInOut, &QTimeLine::frameChanged,
             this, &KNSearchBox::onActionMouseInOut);
@@ -125,8 +127,6 @@ void KNSearchBox::paintEvent(QPaintEvent *event)
     //Draw the search icon.
     painter.drawPixmap(SearchBoxIconX,
                        0,
-                       SearchBoxHeight,
-                       SearchBoxHeight,
                        m_searchIcon);
     //Do the original paint event.
     QLineEdit::paintEvent(event);
@@ -145,6 +145,9 @@ void KNSearchBox::keyPressEvent(QKeyEvent *event)
             //Clear the source widget pointer.
             m_focusSource=nullptr;
         }
+        //Emit the signal.
+        emit escapePressed();
+        //Mission complete.
         return;
     }
     //Or else, do the original one.
@@ -231,8 +234,11 @@ QPixmap KNSearchBox::searchIcon() const
 
 void KNSearchBox::setSearchIcon(const QPixmap &searchIcon)
 {
+    //Update the search icon.
     m_searchIcon = searchIcon.scaled(SearchBoxHeight,
                                      SearchBoxHeight,
                                      Qt::KeepAspectRatio,
                                      Qt::SmoothTransformation);
+    //Update the widget.
+    update();
 }

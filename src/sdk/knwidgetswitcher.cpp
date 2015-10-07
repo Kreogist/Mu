@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
 #include <QParallelAnimationGroup>
 #include <QPropertyAnimation>
 
@@ -42,6 +43,11 @@ KNWidgetSwitcher::KNWidgetSwitcher(QWidget *parent) :
     //Configure the moving animation gourp.
     connect(m_movingAnimationGroup, &QParallelAnimationGroup::finished,
             this, &KNWidgetSwitcher::onActionMovingFinished);
+
+    //Add the go previous and back actions.
+    QAction *goPrevTab=new QAction(this);
+    goPrevTab->setShortcut(QKeySequence::Back);
+    goPrevTab->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 }
 
 void KNWidgetSwitcher::addWidget(QWidget *widget)

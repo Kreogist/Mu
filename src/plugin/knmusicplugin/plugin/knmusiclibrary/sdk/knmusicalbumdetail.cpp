@@ -216,6 +216,8 @@ void KNMusicAlbumDetail::displayAlbumDetail(const QModelIndex &index)
     stopAllAnimations();
     //Hide the contents.
     hideContentWidgets();
+    //Update the panel size.
+    updatePanelSize();
     //Save the index.
     m_currentIndex=index;
     //Update the artwork.
@@ -342,29 +344,8 @@ void KNMusicAlbumDetail::resizeEvent(QResizeEvent *event)
 {
     //Do original resize.
     QWidget::resizeEvent(event);
-    //Check the width and height of the widget.
-    if(width()>height())
-    {
-        //Calculate the panel size.
-        // First calculate the 3/4 of the height.
-        int preferSize=(height()>>2)*3;
-        //Check if the width can hold double of the prefer size.
-        if((preferSize<<1)<=width())
-        {
-            //Save it as the prefer size.
-            m_panelSize=preferSize;
-        }
-        else
-        {
-            //Half of the height. It must can be hold.
-            m_panelSize=(height()>>1);
-        }
-    }
-    else
-    {
-        // 1/2 of the width.
-        m_panelSize=(width()>>1);
-    }
+    //Update the panel size.
+    updatePanelSize();
     //Check out the animation running state.
     //Check expand animation state.
     if(m_expandAnime->state()==QAbstractAnimation::Running)
@@ -376,6 +357,21 @@ void KNMusicAlbumDetail::resizeEvent(QResizeEvent *event)
     //Check fly away animation state.
     //Update the child widget geometries.
     updateWidgetGeometries();
+}
+
+void KNMusicAlbumDetail::showEvent(QShowEvent *event)
+{
+    //Show the widget.
+    QWidget::showEvent(event);
+    //Update the panel size.
+    updatePanelSize();
+    //Check out the animation running state.
+    //Check expand animation state.
+    if(m_expandAnime->state()==QAbstractAnimation::Running)
+    {
+        //Update the parameter.
+        updateExpandAlbumParameter();
+    }
 }
 
 void KNMusicAlbumDetail::mousePressEvent(QMouseEvent *event)
@@ -560,7 +556,7 @@ inline void KNMusicAlbumDetail::hideContentWidgets()
     m_albumListView->hide();
 }
 
-inline void KNMusicAlbumDetail::updateAlbumCaptions()
+void KNMusicAlbumDetail::updateAlbumCaptions()
 {
     //Check is current index vaild.
     if(!m_currentIndex.isValid())
@@ -621,7 +617,7 @@ inline void KNMusicAlbumDetail::stopShowHideArtworkAnimations()
     m_hideAlbumArt->stop();
 }
 
-inline void KNMusicAlbumDetail::updateAlbumArtwork()
+void KNMusicAlbumDetail::updateAlbumArtwork()
 {
     //Check the index is valid.
     if(m_currentIndex.isValid())
@@ -630,6 +626,27 @@ inline void KNMusicAlbumDetail::updateAlbumArtwork()
         m_albumArt->setAlbumArt(
                     m_currentIndex.data(Qt::DecorationRole).value<QPixmap>());
     }
+}
+
+inline void KNMusicAlbumDetail::updatePanelSize()
+{
+    //Check the width and height of the widget.
+    if(width()>height())
+    {
+        //Calculate the panel size.
+        // First calculate the 3/4 of the height.
+        int preferSize=(height()>>2)*3;
+        //Check if the width can hold double of the prefer size.
+        m_panelSize=((preferSize<<1)<=width())?
+                    //Save it as the prefer size.
+                    preferSize:
+                    //Half of the height. It must can be hold.
+                    (height()>>1);
+        //Complete.
+        return;
+    }
+    // 1/2 of the width.
+    m_panelSize=(width()>>1);
 }
 
 inline void KNMusicAlbumDetail::updateWidgetGeometries()

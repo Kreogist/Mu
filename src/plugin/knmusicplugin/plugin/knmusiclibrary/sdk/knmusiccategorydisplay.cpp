@@ -132,6 +132,12 @@ void KNMusicCategoryDisplay::scrollToSourceRow(const int &row)
 
 void KNMusicCategoryDisplay::showNoCategoryItem(const QString &title)
 {
+    //Check the visible.
+    if(!m_categoryTreeView->isVisible())
+    {
+        //Show up all the staffs.
+        showAllStaffs();
+    }
     //Save the title text.
     m_titleText=title;
     //Update the title.
@@ -154,6 +160,12 @@ void KNMusicCategoryDisplay::setCategoryColumn(const int &column)
 
 void KNMusicCategoryDisplay::setCategoryText(const QString &text)
 {
+    //Check the visible of widgets.
+    if(!m_categoryTreeView->isVisible())
+    {
+        //Show up all the staffs.
+        showAllStaffs();
+    }
     //Save the text.
     m_titleText=text;
     //Update the title.
@@ -172,6 +184,18 @@ void KNMusicCategoryDisplay::setCategoryIcon(const QPixmap &pixmap)
     m_categoryIcon=pixmap;
     //Update the icon content.
     updateBackgroundIconContent();
+}
+
+void KNMusicCategoryDisplay::hideAllStaffs()
+{
+    //Hide all the data display widgets.
+    //Hide icon.
+    m_largeIcon->hide();
+    //Hide labels.
+    m_categoryTitle->hide();
+    m_categoryInfo->hide();
+    //Hide treeview.
+    m_categoryTreeView->hide();
 }
 
 void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)
@@ -214,6 +238,17 @@ void KNMusicCategoryDisplay::onActionSearch()
     //Update the title and detail info.
     updateTitle();
     updateDetailInfo();
+}
+
+inline void KNMusicCategoryDisplay::showAllStaffs()
+{
+    //Hide icon.
+    m_largeIcon->show();
+    //Hide labels.
+    m_categoryTitle->show();
+    m_categoryInfo->show();
+    //Hide treeview.
+    m_categoryTreeView->show();
 }
 
 inline void KNMusicCategoryDisplay::updateTitle()

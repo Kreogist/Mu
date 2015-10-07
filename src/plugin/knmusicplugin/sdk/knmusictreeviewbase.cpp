@@ -101,6 +101,7 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     //Set the search shortcut.
     QAction *searchAction=new QAction(this);
     searchAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    searchAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(searchAction, &QAction::triggered,
             [=]
             {

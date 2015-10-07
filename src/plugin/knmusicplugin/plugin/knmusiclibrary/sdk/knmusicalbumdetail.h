@@ -41,6 +41,8 @@ class KNMusicAlbumDetail : public QWidget
     Q_OBJECT
 public:
     explicit KNMusicAlbumDetail(QWidget *parent = 0, KNMusicTab *tab = 0);
+    void updateAlbumCaptions();
+    void updateAlbumArtwork();
 
 signals:
     void requireShowAlbum(QPoint indexPoint);
@@ -62,6 +64,11 @@ protected:
      * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief mousePressEvent
@@ -88,14 +95,13 @@ private slots:
 private:
     inline void showContentWidgets();
     inline void hideContentWidgets();
-    inline void updateAlbumCaptions();
     inline void generateStep1FinalPosition(QRect &albumArtGeometry,
                                            QRect &contentGeometry);
     inline void generateStep2FinalPosition(QRect &albumArtGeometry,
                                            QRect &contentGeometry);
     inline void stopAllAnimations();
     inline void stopShowHideArtworkAnimations();
-    inline void updateAlbumArtwork();
+    inline void updatePanelSize();
     inline void updateWidgetGeometries();
     inline void updateShadowGeometries(const QRect &contentPosition);
     inline void updateExpandAlbumParameter();

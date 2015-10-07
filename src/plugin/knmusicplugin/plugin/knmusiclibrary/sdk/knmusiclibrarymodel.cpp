@@ -221,7 +221,7 @@ bool KNMusicLibraryModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
     //Get the detail info.
     KNMusicDetailInfo &detailInfo=analysisItem.detailInfo,
     //Get the original detail info.
-                      &originalDetailInfo=rowDetailInfo(row);
+                      &&originalDetailInfo=rowDetailInfo(row);
     //Check the current image.
     if(!analysisItem.coverImage.isNull())
     {

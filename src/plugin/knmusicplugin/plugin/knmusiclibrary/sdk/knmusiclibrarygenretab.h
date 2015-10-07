@@ -83,8 +83,10 @@ private slots:
     void checkCategorySelected();
     void onActionShowInGenre();
     void onActionCategoryIndexChanged(const QModelIndex &index);
+    void onActionSearchCategory(const QString &text);
 
 private:
+    inline void clearSearchRequest();
     inline void showAndSelectRow(const int &musicRow);
     QMetaObject::Connection m_notEmptyCheck;
     QModelIndex m_currentSourceIndex;

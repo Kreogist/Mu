@@ -52,7 +52,10 @@ private slots:
     void onActionSearch();
 
 protected:
-    void hideEvent(QHideEvent *event);
+    /*!
+     * \brief Reimplemented from QWidget::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionDownloadCancel();

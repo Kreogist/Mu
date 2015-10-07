@@ -196,7 +196,7 @@ void KNMusicLibraryAlbumTab::retranslate()
         if(m_albumView->currentIndex().isValid())
         {
             //Use category index changed signal to update labels.
-            onActionCategoryIndexChanged(m_albumView->currentIndex());
+            m_albumDetail->updateAlbumCaptions();
         }
     }
 }
@@ -216,16 +216,10 @@ void KNMusicLibraryAlbumTab::onActionShowInAlbum()
     }
 }
 
-void KNMusicLibraryAlbumTab::onActionCategoryIndexChanged(
-        const QModelIndex &index)
-{
-    ;
-}
-
 inline void KNMusicLibraryAlbumTab::showAndSelectRow(const int &musicRow)
 {
     //Show and select the index row.
-    QModelIndex categoryIndex=
+    QModelIndex &&categoryIndex=
             categoryProxyModel()->categoryIndex(
                 m_libraryModel->index(musicRow, Album).data(Qt::DisplayRole));
     //Check is the category index valid.

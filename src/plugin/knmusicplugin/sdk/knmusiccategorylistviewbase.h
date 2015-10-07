@@ -22,6 +22,7 @@
 #include <QListView>
 
 class QTimeLine;
+class KNMusicCategorySearch;
 /*!
  * \brief The KNMusicCategoryListViewBase class provides the mouse in and out
  * background detection and drag n drop enabled switcher. Many music category
@@ -38,9 +39,24 @@ public:
      */
     explicit KNMusicCategoryListViewBase(QWidget *parent = 0);
 
+    /*!
+     * \brief Set the search place holder text when the text box is empty.
+     * \param text The place holder text.
+     */
+    void setSearchPlaceHolderText(const QString &text);
+
 signals:
+    /*!
+     * \brief Ask for searching in the category model.
+     * \param text The keyword to search.
+     */
+    void requireSearchCategory(const QString &text);
 
 public slots:
+    /*!
+     * \brief Hide the search staff.
+     */
+    void hideSearchBar();
 
 protected:
     /*!
@@ -52,22 +68,37 @@ protected:
     /*!
      * \brief Reimpelemnt from QListView::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimpelemnt from QListView::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimpelemnt from QListView::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief keyPressEvent
+     * \param event
+     */
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionPaletteChange();
+    void onActionSearch();
     void onActionMouseInOut(const int &frame);
+    void onActionSearchInOut(const int &frame);
 
 private:
-    inline void startAnime(const int &endFrame);
-    QTimeLine *m_mouseAnime;
+    inline void startMouseAnime(const int &endFrame);
+    inline void startSearchAnime(const int &endFrame);
     QPalette m_palette;
     QColor m_backgroundColor, m_textColor, m_buttonColor;
+    QTimeLine *m_mouseAnime, *m_searchAnime;
+    KNMusicCategorySearch *m_searchBox;
 };
 
 #endif // KNMUSICCATEGORYLISTVIEWBASE_H

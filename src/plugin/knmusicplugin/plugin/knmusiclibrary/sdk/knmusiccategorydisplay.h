@@ -43,6 +43,7 @@ public slots:
     void setCategoryColumn(const int &column);
     void setCategoryText(const QString &text);
     void setCategoryIcon(const QPixmap &pixmap);
+    void hideAllStaffs();
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -52,6 +53,7 @@ private slots:
     void onActionSearch();
 
 private:
+    inline void showAllStaffs();
     inline void updateTitle();
     inline void updateDetailInfo();
     inline void updateBackgroundIcon();

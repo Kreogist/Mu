@@ -25,10 +25,17 @@ class KNMusicCategoryModelBase;
 class KNMusicCategoryProxyModel;
 class KNEmptyStateWidget;
 class KNMusicLibraryEmptyHint;
+/*!
+ * \brief The KNMusicLibraryCategoryTab class
+ */
 class KNMusicLibraryCategoryTab : public KNMusicLibraryTab
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryCategoryTab widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLibraryCategoryTab(QWidget *parent = 0);
 
 signals:

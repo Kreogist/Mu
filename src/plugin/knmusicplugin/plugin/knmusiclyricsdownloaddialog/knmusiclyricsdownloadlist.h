@@ -59,8 +59,7 @@ public slots:
 
 protected:
     /*!
-     * \brief resizeEvent
-     * \param event
+     * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 

@@ -64,6 +64,10 @@ public:
     void setFocusSource(QWidget *focusSource);
 
 signals:
+    /*!
+     * \brief When user pressed escape key(ESC), this signal will be emitted.
+     */
+    void escapePressed();
 
 public slots:
 
@@ -71,32 +75,32 @@ protected:
     /*!
      * \brief Reimplemented from QLineEdit::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QLineEdit::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QLineEdit::focusInEvent().
      */
-    void focusInEvent(QFocusEvent *event);
+    void focusInEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QLineEdit::focusOutEvent().
      */
-    void focusOutEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QLineEdit::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QLineEdit::keyPressEvent().
      */
-    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionThemeChanged();

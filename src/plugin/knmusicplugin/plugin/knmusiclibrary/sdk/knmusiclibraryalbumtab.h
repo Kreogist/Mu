@@ -71,7 +71,6 @@ protected:
 private slots:
     void retranslate();
     void onActionShowInAlbum();
-    void onActionCategoryIndexChanged(const QModelIndex &index);
 
 private:
     inline void showAndSelectRow(const int &musicRow);

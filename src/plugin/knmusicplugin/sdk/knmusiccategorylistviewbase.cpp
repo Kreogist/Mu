@@ -15,9 +15,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
 #include <QTimeLine>
+#include <QScrollBar>
+#include <QKeyEvent>
 
 #include "knthememanager.h"
+
+#include "knmusiccategorysearch.h"
 
 #include "knmusiccategorylistviewbase.h"
 
@@ -28,7 +33,9 @@
 
 KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     QListView(parent),
-    m_mouseAnime(new QTimeLine(200, this))
+    m_mouseAnime(new QTimeLine(200, this)),
+    m_searchAnime(new QTimeLine(200, this)),
+    m_searchBox(new KNMusicCategorySearch(this))
 {
     setObjectName("CategoryListViewBase");
     //Set properties.
@@ -54,11 +61,40 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNMusicCategoryListViewBase::onActionMouseInOut);
 
+    //Configure the search anime time line.
+    m_searchAnime->setUpdateInterval(10);
+    m_searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+    //Link time line.
+    connect(m_searchAnime, &QTimeLine::frameChanged,
+            this, &KNMusicCategoryListViewBase::onActionSearchInOut);
+
+    //Hide the category search widget.
+    m_searchBox->move(0, -m_searchBox->height());
+    //Link requirements.
+    connect(m_searchBox, &KNMusicCategorySearch::requireSearch,
+            this, &KNMusicCategoryListViewBase::requireSearchCategory);
+    connect(m_searchBox, &KNMusicCategorySearch::requireCancel,
+            this, &KNMusicCategoryListViewBase::hideSearchBar);
+
+    //Generate the search action.
+    QAction *searchAction=new QAction(this);
+    searchAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    searchAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(searchAction, &QAction::triggered,
+            this, &KNMusicCategoryListViewBase::onActionSearch);
+    addAction(searchAction);
+
     //Monitor the theme change signal.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMusicCategoryListViewBase::onActionPaletteChange);
     //Set the palette.
     onActionPaletteChange();
+}
+
+void KNMusicCategoryListViewBase::setSearchPlaceHolderText(const QString &text)
+{
+    //Set the text to the search place holder.
+    m_searchBox->setPlaceHolderText(text);
 }
 
 void KNMusicCategoryListViewBase::enabledDragDrop()
@@ -74,7 +110,7 @@ void KNMusicCategoryListViewBase::enabledDragDrop()
 void KNMusicCategoryListViewBase::enterEvent(QEvent *event)
 {
     //Start the mouse in anime.
-    startAnime(InBrightness);
+    startMouseAnime(InBrightness);
     //Do the original enter event.
     QListView::enterEvent(event);
 }
@@ -82,9 +118,31 @@ void KNMusicCategoryListViewBase::enterEvent(QEvent *event)
 void KNMusicCategoryListViewBase::leaveEvent(QEvent *event)
 {
     //Start the mouse out anime.
-    startAnime(OutBrightness);
+    startMouseAnime(OutBrightness);
     //Do the original leave event.
     QListView::leaveEvent(event);
+}
+
+void KNMusicCategoryListViewBase::resizeEvent(QResizeEvent *event)
+{
+    //Resize the list view.
+    QListView::resizeEvent(event);
+    //Resize the search box widget width.
+    m_searchBox->setFixedWidth(verticalScrollBar()->isVisible()?
+                                   width()-verticalScrollBar()->width():
+                                   width());
+}
+
+void KNMusicCategoryListViewBase::keyPressEvent(QKeyEvent *event)
+{
+    //Check out the current key.
+    if(event->key()==Qt::Key_Escape)
+    {
+        //Hide the search box.
+        hideSearchBar();
+    }
+    //Do the original key press event.
+    QListView::keyPressEvent(event);
 }
 
 void KNMusicCategoryListViewBase::onActionPaletteChange()
@@ -99,6 +157,24 @@ void KNMusicCategoryListViewBase::onActionPaletteChange()
     m_buttonColor=m_palette.color(QPalette::Button);
     //Use the mouse in out to update the palette.
     onActionMouseInOut(OutBrightness);
+}
+
+void KNMusicCategoryListViewBase::onActionSearch()
+{
+    //Give the focus on the search box.
+    m_searchBox->setFocus();
+    //Show the search widget on the widget via animation.
+    startSearchAnime(m_searchBox->height());
+}
+
+void KNMusicCategoryListViewBase::hideSearchBar()
+{
+    //Set the focus on the list view.
+    setFocus();
+    //Clear the search box.
+    m_searchBox->clear();
+    //Hide the search widget on the widget via animation.
+    startSearchAnime(0);
 }
 
 void KNMusicCategoryListViewBase::onActionMouseInOut(const int &frame)
@@ -123,12 +199,31 @@ void KNMusicCategoryListViewBase::onActionMouseInOut(const int &frame)
     setPalette(m_palette);
 }
 
-inline void KNMusicCategoryListViewBase::startAnime(const int &endFrame)
+void KNMusicCategoryListViewBase::onActionSearchInOut(const int &frame)
 {
-    //Stop all the time line.
+    //Update the margin of the category view.
+    setViewportMargins(0, frame, 0, 0);
+    //Move the search box.
+    m_searchBox->move(0, frame-m_searchBox->height());
+}
+
+inline void KNMusicCategoryListViewBase::startMouseAnime(const int &endFrame)
+{
+    //Stop mouse time line.
     m_mouseAnime->stop();
     //Configure the time line.
     m_mouseAnime->setFrameRange(m_backgroundColor.value(), endFrame);
     //Start the time line.
     m_mouseAnime->start();
+}
+
+void KNMusicCategoryListViewBase::startSearchAnime(const int &endFrame)
+{
+    //Stop search anime.
+    m_searchAnime->stop();
+    //Configure the time line.
+    m_searchAnime->setFrameRange(m_searchBox->height()+m_searchBox->y(),
+                                 endFrame);
+    //Start up the anime.
+    m_searchAnime->start();
 }

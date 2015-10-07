@@ -26,20 +26,35 @@ class KNMusicLyricsDownloadDialog : public KNMusicLyricsDownloadDialogBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLyricsDownloadDialog widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLyricsDownloadDialog(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void setDetailInfo(const KNMusicDetailInfo &detailInfo);
+    /*!
+     * \brief Reimplemented from
+     * KNMusicLyricsDownloadDialogBase::setDetailInfo().
+     */
+    void setDetailInfo(const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionExpand();
 
 protected:
-    bool okayPressed();
+    /*!
+     * \brief Reimplemented from KNMusicLyricsDownloadDialogBase::okayPressed().
+     */
+    bool okayPressed() Q_DECL_OVERRIDE;
 
-    void cancelPressed();
+    /*!
+     * \brief Reimplemented from
+     * KNMusicLyricsDownloadDialogBase::cancelPressed().
+     */
+    void cancelPressed() Q_DECL_OVERRIDE;
 
 private:
     inline void resetPreviewThread();

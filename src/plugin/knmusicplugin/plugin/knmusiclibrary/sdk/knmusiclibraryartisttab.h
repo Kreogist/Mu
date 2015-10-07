@@ -71,20 +71,22 @@ protected:
     /*!
      * \brief Reimplemented from KNMusicLibraryCategoryTab::showEvent().
      */
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicLibraryCategoryTab::hideEvent().
      */
-    void hideEvent(QHideEvent *event);
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
     void checkCategorySelected();
     void onActionShowInArtist();
     void onActionCategoryIndexChanged(const QModelIndex &index);
+    void onActionSearchCategory(const QString &text);
 
 private:
+    inline void clearSearchRequest();
     inline void updateDisplayArtwork(const QModelIndex &index);
     inline void showAndSelectRow(const int &musicRow);
     QMetaObject::Connection m_notEmptyCheck;

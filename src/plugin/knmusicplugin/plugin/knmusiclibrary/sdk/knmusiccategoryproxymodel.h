@@ -44,6 +44,11 @@ public slots:
      */
     void setSearchBlocks(const QList<KNMusicSearchBlock> &blockList);
 
+    /*!
+     * \brief Remove all the search blocks in the list.
+     */
+    void clearSearchBlocks();
+
 protected:
     /*!
      * \brief Reimplemented from QSortFilterProxyModel::lessThan().

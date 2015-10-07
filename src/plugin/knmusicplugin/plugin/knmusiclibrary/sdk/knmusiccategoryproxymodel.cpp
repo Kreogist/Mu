@@ -65,6 +65,14 @@ void KNMusicCategoryProxyModel::setSearchBlocks(
     setFilterFixedString("");
 }
 
+void KNMusicCategoryProxyModel::clearSearchBlocks()
+{
+    //Clear up the blocks.
+    m_searchBlocks.clear();
+    //Set a filter text to update the whole proxy model.
+    setFilterFixedString("");
+}
+
 bool KNMusicCategoryProxyModel::lessThan(const QModelIndex &source_left,
                                          const QModelIndex &source_right) const
 {
