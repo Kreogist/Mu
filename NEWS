@@ -10,6 +10,8 @@ Core:
 7. Change the policy to parse and find files in music library.
 8. Fixed the drag and drop bug in playlist caused by the QTreeView can only drop one data.
 9. Fixed the crashed bug caused by use Qt::AutoConnection and overflow the call stack in the library. 
+10. Fixed the proxy model sort unstable bug.
+11. Fixed the library tree view bug.
 
 GUI:
 1. Support show the current playing playlist.
