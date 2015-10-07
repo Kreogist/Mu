@@ -44,14 +44,18 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     //Set the temporary playlist to the proxy model.
     m_temporaryProxyPlaylist->setSourceModel(m_temporaryPlaylist);
     //Initial the random device and random generator.
-    QList<int> seedData;
+    QVector<int> seedData;
     //Generate the random device.
     std::random_device randomDevice;
+    //Get the seed array size.
+    int &&seedCount=std::mt19937::state_size;
+    //Resize the seed data.
+    seedData.resize(seedCount);
     //Set the data to the seed data.
-    for(int i=0, seedCount=std::mt19937::state_size; i<seedCount; ++i)
+    for(int i=0; i<seedCount; ++i)
     {
         //Replace the seed data.
-        seedData.append(randomDevice());
+        seedData.replace(i, randomDevice());
     }
     //Transform list to seed sequence.
     std::seed_seq seedSequence(std::begin(seedData), std::end(seedData));
