@@ -37,6 +37,12 @@ KNPreferenceItemList::KNPreferenceItemList(QWidget *parent) :
     setLayout(m_mainLayout);
 }
 
+QPixmap KNPreferenceItemList::itemHeaderIcon(const int &index)
+{
+    //Give back the header icon.
+    return static_cast<KNPreferenceItem *>(tabAt(index))->headerIcon();
+}
+
 QString KNPreferenceItemList::itemText(const int &index)
 {
     //Return the item text.

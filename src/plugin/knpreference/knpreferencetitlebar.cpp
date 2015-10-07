@@ -101,3 +101,11 @@ void KNPreferenceTitleBar::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(0x08, 0x08, 0x08));
     painter.drawLine(QPointF(0, lineY), QPointF(width(), lineY));
 }
+
+void KNPreferenceTitleBar::resizeEvent(QResizeEvent *event)
+{
+    //Resize the widget.
+    QWidget::resizeEvent(event);
+    //Resize the title label.
+    m_title->resize(width()-93, m_title->height());
+}

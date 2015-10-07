@@ -50,7 +50,6 @@ KNLocaleManager::KNLocaleManager(QObject *parent) :
     m_noLanguageIcon(QPixmap("://public/noIcon.png")),
     m_currentLangauge(-1)
 {
-    ;
 }
 
 void KNLocaleManager::loadLanguageFiles(const QString &languageDir)
@@ -105,6 +104,32 @@ QTextCodec *KNLocaleManager::localeCodec()
     }
 }
 
+int KNLocaleManager::languageCount() const
+{
+    //Give back the list size.
+    return m_languageList.size();
+}
+
+int KNLocaleManager::currentLanguageIndex() const
+{
+    return m_currentLangauge;
+}
+
+QPixmap KNLocaleManager::languageIcon(int index) const
+{
+    //Check out the validation of the language item.
+    return m_languageList.at(index).icon.isNull()?
+                //Give back the no language icon for null.
+                m_noLanguageIcon:
+                //Or else give back the icon.
+                m_languageList.at(index).icon;
+}
+
+QString KNLocaleManager::languageName(int index) const
+{
+    return m_languageList.at(index).name;
+}
+
 void KNLocaleManager::setLanguage(const QString &key)
 {
     //Generate a fake item.
@@ -136,6 +161,9 @@ void KNLocaleManager::setLanguage(const int &index)
 
 void KNLocaleManager::setDefaultLanguage()
 {
+    //First of all, set the default language to English, which should be number
+    //0.
+    setLanguage(0);
     //Generate the default locale, get the system data.
     QLocale locale;
     //Set the language accroding to locale.
@@ -169,9 +197,6 @@ void KNLocaleManager::setDefaultLanguage()
         break;
     case QLocale::Spain:
         setLanguage("Spanish");
-        break;
-    default:
-        setLanguage("English");
         break;
     }
 }

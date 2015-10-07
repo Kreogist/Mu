@@ -103,6 +103,8 @@ void KNPreferenceSidebar::retranslate()
 
 void KNPreferenceSidebar::onActionIndexChanged(const int &index)
 {
+    //Change the title icon.
+    m_titleBar->setIcon(m_itemList->itemHeaderIcon(index));
     //Change the title text.
     m_titleBar->setText(m_itemList->itemText(index));
     //Emit content change requirement.

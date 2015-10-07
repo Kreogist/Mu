@@ -63,7 +63,12 @@ protected:
     /*!
      * \brief Reimplemented from QWidget::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     KNPreferenceHeaderButton *m_button;

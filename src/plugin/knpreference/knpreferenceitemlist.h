@@ -37,6 +37,13 @@ public:
     explicit KNPreferenceItemList(QWidget *parent = 0);
 
     /*!
+     * \brief Get item icon of the item at index.
+     * \param index The item index.
+     * \return The item header icon.
+     */
+    QPixmap itemHeaderIcon(const int &index);
+
+    /*!
      * \brief Get the specific text of the item at index.
      * \param index The item index.
      * \return The item caption text.

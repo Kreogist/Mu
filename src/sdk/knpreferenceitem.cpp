@@ -24,27 +24,28 @@
 
 #include <QDebug>
 
-#define itemHeight 40
-#define shadowHeight 5
-#define textBaseX 15
-#define shadowOpacity 65
-#define iconSize 30
+#define ItemHeight 40
+#define ShadowHeight 5
+#define TextBaseX 15
+#define ShadowOpacity 65
+#define IconSize 30
 
 KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     QAbstractButton(parent),
-    m_shadowGradient(QLinearGradient(QPointF(0,0), QPointF(0, shadowHeight))),
+    m_headerIcon(QPixmap()),
+    m_shadowGradient(QLinearGradient(QPointF(0,0), QPointF(0, ShadowHeight))),
+    m_backgroundOpacity(0.0),
     m_mouseIn(generateTimeLine(100)),
     m_mouseOut(generateTimeLine(0)),
     m_progress(0),
-    m_textX(textBaseX),
-    m_backgroundOpacity(0.0)
+    m_textX(TextBaseX)
 {
     setObjectName("PreferenceItem");
     //Set properties.
     setAutoExclusive(true);
     setCheckable(true);
     setContentsMargins(0,0,0,0);
-    setFixedHeight(itemHeight);
+    setFixedHeight(ItemHeight);
 
     //Set the font.
     QFont itemFont=font();
@@ -91,53 +92,36 @@ void KNPreferenceItem::paintEvent(QPaintEvent *event)
     painter.setOpacity(m_backgroundOpacity);
     painter.fillRect(rect(), palette().button());
 
-    //Draw the icon if icon is not null.
-    if(!icon().isNull())
-    {
-        //Change the opacity.
-        painter.setOpacity(m_backgroundOpacity*2);
-        //Draw the icon.
-        painter.drawPixmap(width()-(m_textX<<1),
-                           (height()-iconSize)>>1,
-                           iconSize,
-                           iconSize,
-                           icon().pixmap(iconSize, iconSize));
-    }
-
-    //Draw the text.
+    //Restore the opacity.
     painter.setOpacity(1.0);
-    painter.setPen(palette().color(QPalette::ButtonText));
-    painter.setFont(font());
-    painter.drawText(m_textX,
-                     0,
-                     width()-m_textX,
-                     height(),
-                     Qt::AlignLeft | Qt::AlignVCenter,
-                     text());
+    //Draw the content.
+    paintContent(&painter);
 
     //If checked, draw the shadow.
     if(isChecked())
     {
+        //Restore the opacity.
+        painter.setOpacity(1.0);
         //Configure the painter.
         painter.setPen(Qt::NoPen);
         //Configure the up shadow.
-        m_shadowGradient.setColorAt(0, QColor(0,0,0,shadowOpacity));
+        m_shadowGradient.setColorAt(0, QColor(0,0,0,ShadowOpacity));
         m_shadowGradient.setColorAt(1, QColor(0,0,0,0));
         //Draw the shadow.
         painter.fillRect(QRect(0,
                                0,
                                width(),
-                               shadowHeight), m_shadowGradient);
+                               ShadowHeight), m_shadowGradient);
         //Configure the down shadow.
         m_shadowGradient.setColorAt(0, QColor(0,0,0,0));
-        m_shadowGradient.setColorAt(1, QColor(0,0,0,shadowOpacity));
+        m_shadowGradient.setColorAt(1, QColor(0,0,0,ShadowOpacity));
         //Change the coordinate.
-        painter.translate(0, height()-shadowHeight);
+        painter.translate(0, ItemHeight-ShadowHeight);
         //Draw the shadow.
         painter.fillRect(QRect(0,
                                0,
                                width(),
-                               shadowHeight), m_shadowGradient);
+                               ShadowHeight), m_shadowGradient);
     }
 }
 
@@ -149,12 +133,41 @@ void KNPreferenceItem::mouseReleaseEvent(QMouseEvent *event)
     setChecked(true);
 }
 
+void KNPreferenceItem::paintContent(QPainter *painter)
+{
+    //Draw the icon if icon is not null.
+    if(!icon().isNull())
+    {
+        //Change the opacity.
+        painter->setOpacity(m_backgroundOpacity*2);
+        //Draw the icon.
+        painter->drawPixmap(width()-(m_textX<<1),
+                            (ItemHeight-IconSize)>>1,
+                            IconSize,
+                            IconSize,
+                            icon().pixmap(IconSize, IconSize));
+    }
+
+    //Draw the text.
+    painter->setOpacity(1.0);
+    painter->setPen(isChecked()?
+                        palette().color(QPalette::ButtonText):
+                        palette().color(QPalette::WindowText));
+    painter->setFont(font());
+    painter->drawText(m_textX,
+                      0,
+                      width()-m_textX,
+                      ItemHeight,
+                      Qt::AlignLeft | Qt::AlignVCenter,
+                      text());
+}
+
 void KNPreferenceItem::onActionMouseInOut(const int &frame)
 {
     //Save the progress, progress is a number between 1-100.
     m_progress=frame;
     //Update the parameters.
-    m_textX=textBaseX+(m_progress>>3);
+    m_textX=TextBaseX+(m_progress>>3);
     m_backgroundOpacity=(qreal)frame/200.0;
     //Redraw the widget.
     update();
@@ -185,4 +198,14 @@ inline void KNPreferenceItem::startAnime(QTimeLine *timeLine)
     //Change the start frame of the time line and start the anime.
     timeLine->setStartFrame(m_progress);
     timeLine->start();
+}
+
+QPixmap KNPreferenceItem::headerIcon() const
+{
+    return m_headerIcon;
+}
+
+void KNPreferenceItem::setHeaderIcon(const QPixmap &headerIcon)
+{
+    m_headerIcon = headerIcon;
 }

@@ -369,7 +369,10 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.cpp \
     sdk/knlabelbutton.cpp \
-    plugin/knmusicplugin/sdk/knmusiccategorysearch.cpp
+    plugin/knmusicplugin/sdk/knmusiccategorysearch.cpp \
+    plugin/knpreference/knpreferencelanguagepanel.cpp \
+    plugin/knpreference/knpreferencelanguagepanelitem.cpp \
+    plugin/knpreference/knpreferencelanguageitem.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -565,7 +568,10 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.h \
     sdk/knlabelbutton.h \
     sdk/knplatformextras.h \
-    plugin/knmusicplugin/sdk/knmusiccategorysearch.h
+    plugin/knmusicplugin/sdk/knmusiccategorysearch.h \
+    plugin/knpreference/knpreferencelanguagepanel.h \
+    plugin/knpreference/knpreferencelanguagepanelitem.h \
+    plugin/knpreference/knpreferencelanguageitem.h
 
 RESOURCES += \
     resource/res.qrc

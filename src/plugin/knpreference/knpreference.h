@@ -24,6 +24,7 @@
 class KNPreferenceSidebar;
 class KNVWidgetSwitcher;
 class KNPreferenceAbout;
+class KNPreferenceLanguagePanel;
 /*!
  * \brief The KNPreference class is a official preference panel. It provides the
  * standard item panels.
@@ -57,6 +58,7 @@ private:
     KNVWidgetSwitcher *m_content;
     KNPreferenceItem *m_aboutItem;
     KNPreferenceAbout *m_about;
+    KNPreferenceLanguagePanel *m_languagePanel;
 };
 
 #endif // KNPREFERENCE_H

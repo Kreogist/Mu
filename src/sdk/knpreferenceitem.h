@@ -36,9 +36,22 @@ public:
      */
     explicit KNPreferenceItem(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the header icon pixmap.
+     * \return The header icon. If you never set it before, it will return a
+     * null QPixmap.
+     */
+    QPixmap headerIcon() const;
+
 signals:
 
 public slots:
+    /*!
+     * \brief Set the header icon which will be displayed on the top of the
+     * header.
+     * \param headerIcon The header icon pixmap.
+     */
+    void setHeaderIcon(const QPixmap &headerIcon);
 
 protected:
     /*!
@@ -61,6 +74,12 @@ protected:
      */
     void mouseReleaseEvent(QMouseEvent *event);
 
+    /*!
+     * \brief Paint the preference item content.
+     * \param painter The antialias painter generate in the paint event.
+     */
+    virtual void paintContent(QPainter *painter);
+
 private slots:
     void onActionMouseInOut(const int &frame);
     void onActionToggled(bool checked);
@@ -68,10 +87,11 @@ private slots:
 private:
     inline QTimeLine *generateTimeLine(const int &endFrame);
     inline void startAnime(QTimeLine *timeLine);
+    QPixmap m_headerIcon;
     QLinearGradient m_shadowGradient;
+    qreal m_backgroundOpacity;
     QTimeLine *m_mouseIn, *m_mouseOut;
     int m_progress, m_textX;
-    qreal m_backgroundOpacity;
 };
 
 #endif // KNPREFERENCEITEM_H

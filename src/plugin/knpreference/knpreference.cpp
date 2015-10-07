@@ -18,11 +18,13 @@
 #include <QBoxLayout>
 
 #include "knpreferenceitem.h"
+#include "knpreferencelanguageitem.h"
 #include "knvwidgetswitcher.h"
 #include "knpreferencesidebar.h"
 #include "knpreferenceabout.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
+#include "knpreferencelanguagepanel.h"
 
 #include "knpreference.h"
 
@@ -31,7 +33,8 @@ KNPreference::KNPreference(QWidget *parent) :
     m_sidebar(new KNPreferenceSidebar(this)),
     m_content(new KNVWidgetSwitcher(this)),
     m_aboutItem(new KNPreferenceItem(this)),
-    m_about(new KNPreferenceAbout(this))
+    m_about(new KNPreferenceAbout(this)),
+    m_languagePanel(new KNPreferenceLanguagePanel(this))
 {
     setObjectName("Preference");
     //Set properties.
@@ -40,6 +43,11 @@ KNPreference::KNPreference(QWidget *parent) :
     //Configure preference content.
     m_content->setObjectName("PreferenceContent");
     m_content->setAutoFillBackground(true);
+    //Configure the about item.
+    m_aboutItem->setIcon(QPixmap(":/plugin/preference/about.png"));
+    m_aboutItem->setHeaderIcon(QPixmap(":/plugin/preference/header/about.png"));
+    //Configure the language panel.
+    m_languagePanel->generateLanguageList();
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -69,6 +77,9 @@ KNPreference::KNPreference(QWidget *parent) :
 
     //Add about item and content to preference.
     addPreferenceTab(m_aboutItem, m_about);
+    //Add language item and content to preference.
+    addPreferenceTab(m_languagePanel->languageListItem(),
+                     m_languagePanel);
 }
 
 void KNPreference::addTab(KNPreferenceItem *tabWidget, QWidget *content)

@@ -63,6 +63,33 @@ public:
      */
     QTextCodec *localeCodec();
 
+    /*!
+     * \brief Get the number of the language files which is loaded in to the
+     * locale manager.
+     * \return The language file size.
+     */
+    int languageCount() const;
+
+    /*!
+     * \brief Get the current language index.
+     * \return The language index.
+     */
+    int currentLanguageIndex() const;
+
+    /*!
+     * \brief Get the language icon of the language.
+     * \param index The language index.
+     * \return The language icon.
+     */
+    QPixmap languageIcon(int index) const;
+
+    /*!
+     * \brief Get the language name in the translation of the language.
+     * \param index The language index.
+     * \return The language name in the target language.
+     */
+    QString languageName(int index) const;
+
     template<typename Func2>
     /*!
      * \brief Link the language change signal with the retranslate slot which

@@ -245,6 +245,12 @@
         "Parent" : "Preference",
         "Window" : "#2A2A2A"
     },
+    "PreferenceLanguagePanelItem" :
+    {
+        "Parent" : "PreferenceContent",
+        "Window" : "#404040",
+        "WindowText" : "#FFFFFF"
+    },
     "PreferenceSidebar" :
     {
         "Parent" : "Preference"
