@@ -130,6 +130,11 @@ QString KNLocaleManager::languageName(int index) const
     return m_languageList.at(index).name;
 }
 
+QString KNLocaleManager::languageKey(int index) const
+{
+    return m_languageList.at(index).key;
+}
+
 void KNLocaleManager::setLanguage(const QString &key)
 {
     //Generate a fake item.

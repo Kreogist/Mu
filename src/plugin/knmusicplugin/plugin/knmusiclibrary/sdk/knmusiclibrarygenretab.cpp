@@ -291,10 +291,7 @@ void KNMusicLibraryGenreTab::onActionCategoryIndexChanged(
     //Set the category artwork.
     //Set the category icon right from the library model.
     m_genreDisplay->setCategoryIcon(
-                m_libraryModel->artwork(
-                    m_categoryModel->data(
-                        m_currentSourceIndex,
-                        KNMusicCategoryModel::CategoryArtworkKeyRole).toString()));
+                m_currentSourceIndex.data(Qt::DecorationRole).value<QPixmap>());
 }
 
 void KNMusicLibraryGenreTab::onActionSearchCategory(const QString &text)

@@ -23,6 +23,7 @@
 
 class QBoxLayout;
 class QSignalMapper;
+class KNConfigure;
 class KNPreferenceLanguageItem;
 class KNPreferenceLanguagePanel : public QScrollArea
 {
@@ -46,6 +47,7 @@ private:
     KNPreferenceLanguageItem *m_languageListItem;
     QBoxLayout *m_mainLayout;
     QSignalMapper *m_languageRequests;
+    KNConfigure *m_userConfigure;
 };
 
 #endif // KNPREFERENCELANGUAGEPANEL_H

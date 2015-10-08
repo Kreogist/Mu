@@ -19,6 +19,8 @@
 #include <QSignalMapper>
 
 #include "knlocalemanager.h"
+#include "knconfigure.h"
+#include "knglobal.h"
 
 #include "knpreferencelanguageitem.h"
 #include "knpreferencelanguagepanelitem.h"
@@ -31,7 +33,8 @@ KNPreferenceLanguagePanel::KNPreferenceLanguagePanel(QWidget *parent) :
     QScrollArea(parent),
     m_languageListItem(new KNPreferenceLanguageItem(this)),
     m_mainLayout(nullptr),
-    m_languageRequests(new QSignalMapper(this))
+    m_languageRequests(new QSignalMapper(this)),
+    m_userConfigure(knGlobal->userConfigure())
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -99,6 +102,8 @@ void KNPreferenceLanguagePanel::setCurrentLanguage(const int &index)
                         ))->widget())->setChecked(false);
     //Ask the locale manager to change the language.
     knI18n->setLanguage(index);
+    //Save the language in the user configure.
+    m_userConfigure->setData("Language", knI18n->languageKey(index));
     //Update the language panel item.
     syncLanguageItem(index);
 }

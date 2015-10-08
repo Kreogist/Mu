@@ -90,6 +90,13 @@ public:
      */
     QString languageName(int index) const;
 
+    /*!
+     * \brief Get the language key of a specific index.
+     * \param index The language index.
+     * \return The language key text.
+     */
+    QString languageKey(int index) const;
+
     template<typename Func2>
     /*!
      * \brief Link the language change signal with the retranslate slot which

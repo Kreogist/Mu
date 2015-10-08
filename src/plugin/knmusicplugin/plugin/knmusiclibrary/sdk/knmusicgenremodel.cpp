@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QDir>
+#include <QIcon>
 
 #include "knglobal.h"
 #include "knutil.h"
@@ -29,6 +30,8 @@
 KNMusicGenreModel::KNMusicGenreModel(QObject *parent) :
     KNMusicCategoryModel(parent)
 {
+    //Clear the hash list.
+    m_genreIconMap.clear();
     //Load all the genre icons.
     loadGenreIcons(KNUtil::ensurePathValid(
                        knGlobal->dirPath(KNGlobal::ResourceDir)+"/Genres/"));
@@ -44,14 +47,15 @@ QVariant KNMusicGenreModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     //Get the category item.
-    const CategoryItem &item=itemAt(index.row());
+    CategoryItem &&item=itemAt(index.row());
     //Check out the role, we will hack the decoration role data.
     if(role==Qt::DecorationRole)
     {
         //Check out the validation of the album art hash.
-        return item.albumArtHash.size()!=0?
-                    m_genreIconMap.value(item.albumArtHash.first(), noAlbumArt()):
-                    noAlbumArt();
+        return item.albumArtHash.isEmpty()?
+                    knMusicGlobal->noAlbumArt():
+                    m_genreIconMap.value(item.albumArtHash.first(),
+                                         knMusicGlobal->noAlbumArt());
     }
     //Otherwise, do the original one.
     return KNMusicCategoryModel::data(index, role);
@@ -129,12 +133,10 @@ void KNMusicGenreModel::onActionImageRecoverComplete()
 
 inline void KNMusicGenreModel::loadGenreIcons(const QString &folderPath)
 {
-    //Clear the hash list.
-    m_genreIconMap.clear();
     //Initial the genre directory.
     QDir genreIconDir(folderPath);
     //Initial the icon file info list.
-    QFileInfoList iconInfoList=genreIconDir.entryInfoList();
+    QFileInfoList iconInfoList=genreIconDir.entryInfoList(QDir::Files);
     //Read throught the info list.
     for(auto i : iconInfoList)
     {
