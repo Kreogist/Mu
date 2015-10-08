@@ -31,7 +31,7 @@
 
 KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     QWidget(parent),
-    m_copyrightText(new QTextEdit(this))
+    m_otherText(new QTextEdit(this))
 {
     //Configure the label fonts.
     QFont labelFonts=font();
@@ -43,17 +43,19 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
         m_textContent[i]=new QLabel(this);
         //Configure the label.
         m_textContent[i]->setObjectName("PreferenceAboutLabel");
-        knTheme->registerWidget(m_textContent[i]);
         m_textContent[i]->setAlignment(Qt::AlignHCenter);
         m_textContent[i]->setFont(labelFonts);
     }
-    //Configure the copyright text edit.
-    m_copyrightText->setObjectName("PreferenceAboutCopyright");
-    m_copyrightText->setFrameStyle(QFrame::NoFrame);
-    m_copyrightText->setReadOnly(true);
-    m_copyrightText->viewport()->setCursor(Qt::ArrowCursor);
-    knTheme->registerWidget(m_copyrightText);
-    KNSaoStyle::styleVerticalScrollBar(m_copyrightText->verticalScrollBar());
+    //Register the version and copyright label.
+    knTheme->registerWidget(m_textContent[Version]);
+    knTheme->registerWidget(m_textContent[Copyright]);
+    //Configure the other text edit.
+    m_otherText->setObjectName("PreferenceAboutCopyright");
+    m_otherText->setFrameStyle(QFrame::NoFrame);
+    m_otherText->setReadOnly(true);
+    m_otherText->viewport()->setCursor(Qt::ArrowCursor);
+    knTheme->registerWidget(m_otherText);
+    KNSaoStyle::styleVerticalScrollBar(m_otherText->verticalScrollBar());
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -79,7 +81,7 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     contentLayout->addSpacing(8);
     contentLayout->addWidget(m_textContent[Version], 0, Qt::AlignHCenter);
     contentLayout->addWidget(m_textContent[Copyright], 0, Qt::AlignHCenter);
-    contentLayout->addWidget(m_copyrightText, 0, Qt::AlignHCenter);
+    contentLayout->addWidget(m_otherText, 0, Qt::AlignHCenter);
     contentLayout->addStretch();
 
     //Set the default label.
@@ -102,6 +104,8 @@ void KNPreferenceAbout::resizeEvent(QResizeEvent *event)
     int iconSize=(qreal)qMin(width(), height())*0.236;
     //Resize the icon.
     m_textContent[Logo]->setFixedSize(iconSize, iconSize);
+    //Resize the maximum width of the text content.
+    m_otherText->setMinimumWidth(iconSize+(iconSize<<1));
     //Change the caption size.
     QFont captionFont=m_textContent[Title]->font();
     //Calculate the title size.
@@ -110,7 +114,7 @@ void KNPreferenceAbout::resizeEvent(QResizeEvent *event)
     //Set to caption font.
     m_textContent[Title]->setFont(captionFont);
     //Set the maximum height of the title.
-    m_copyrightText->setMaximumHeight(iconSize<<2);
+    m_otherText->setMaximumHeight(iconSize<<2);
     //Calculate the caption size.
     iconSize=iconSize>>2;
     captionFont.setPixelSize(iconSize<13?13:iconSize);
@@ -127,8 +131,30 @@ void KNPreferenceAbout::retranslate()
                                       tr(" 2013-2015 Kreogist Dev Team\n"
                                       "All rights reserved."));
     //Update the thank list.
-    m_copyrightText->setPlainText(
-                tr("Staffs\n"
-                    "Special Thanks"));
+    m_otherText->setPlainText(
+                tr("Tojo Saki <tomguts@126.com>\n"
+                   "Luming Wang <wlm199558@126.com>\n"
+                   "Dayou Zhang <1079286704@qq.com>\n"
+                   "Jiayi Zhang <bf109g2@126.com>\n"
+                   "Youraku <1497667718@qq.com>\n"
+                   "Joe Johnson <liquanquan123@vip.qq.com>\n"
+                   "Freddie <freddie.wanah@gmail.com>\n"
+                   "Nick Tang <1953547787@qq.com>\n"
+                   "\n"
+                   "Special Thanks\n"
+                   "WangBin\n"
+                   "Sou Bunnbu\n"
+                   "darkblackswords\n"
+                   "\n"
+                   "This program uses Qt Version ")+
+                   QT_VERSION_STR+
+                tr("\n"
+                   "Qt is a C++ toolkit for cross-platform application developm"
+                   "ent.\n"
+                   "Copyright (C) 2015 The Qt Company Ltd and other contributors"
+                   ".\n"
+                   "Qt and the Qt logo are trademarks of The Qt Company Ltd.\n"
+                   "Qt is The Qt Company Ltd product developed as an open sourc"
+                   "e project. See qt.io for more information."));
 }
 

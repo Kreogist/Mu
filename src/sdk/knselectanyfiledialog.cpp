@@ -29,15 +29,11 @@ KNSelectAnyFileDialog::KNSelectAnyFileDialog(QWidget *parent,
                                              const QString &caption,
                                              const QString &directory,
                                              const QString &filter) :
-    QFileDialog(parent, caption, directory, filter),
+    KNFileDialog(parent, caption, directory, filter),
     m_buttonBox(nullptr)
 {
     //Configure the dialog.
     setFileMode(QFileDialog::Directory);
-#ifdef Q_OS_MACX
-    setWindowFlags(Qt::Sheet);
-#endif
-    setOptions(QFileDialog::DontUseNativeDialog);
 
     //Configure the listview.
     //Get the list view.

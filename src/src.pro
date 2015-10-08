@@ -32,7 +32,8 @@ CONFIG += c++11
 # Add translation paths for Qt Linguist to generate translation files.
 TRANSLATIONS += \
     i18n/Simplified_Chinese.ts \
-    i18n/Traditional_Chinese.ts
+    i18n/Traditional_Chinese.ts \
+    i18n/Japanese.ts
 
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
@@ -386,7 +387,8 @@ SOURCES += \
     plugin/knpreference/knpreferencelanguageitem.cpp \
     sdk/knpreferencepanel.cpp \
     sdk/knpreferencepanelitem.cpp \
-    sdk/knselectanyfiledialog.cpp
+    sdk/knselectanyfiledialog.cpp \
+    sdk/knfiledialog.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -588,7 +590,8 @@ HEADERS += \
     plugin/knpreference/knpreferencelanguageitem.h \
     sdk/knpreferencepanel.h \
     sdk/knpreferencepanelitem.h \
-    sdk/knselectanyfiledialog.h
+    sdk/knselectanyfiledialog.h \
+    sdk/knfiledialog.h
 
 RESOURCES += \
     resource/res.qrc

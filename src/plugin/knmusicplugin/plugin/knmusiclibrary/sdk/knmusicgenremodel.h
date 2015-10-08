@@ -60,7 +60,7 @@ public slots:
     void onActionImageRecoverComplete() Q_DECL_OVERRIDE;
 
 private:
-    inline void loadGenreIcons();
+    inline void loadGenreIcons(const QString &folderPath);
     QHash<QString, QVariant> m_genreIconMap;
 };
 

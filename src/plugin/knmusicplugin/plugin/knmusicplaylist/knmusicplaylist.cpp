@@ -16,8 +16,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QSplitter>
-#include <QFileDialog>
 
+#include "knfiledialog.h"
 #include "kncategorytab.h"
 #include "knemptystatewidget.h"
 #include "knlocalemanager.h"
@@ -229,9 +229,6 @@ void KNMusicPlaylist::onActionImportPlaylist()
     //Generate a file dialog.
     QFileDialog importPlaylists(this);
     //Set the file mode and the name filters.
-#ifdef Q_OS_MACX
-    importPlaylists.setWindowFlags(Qt::Sheet);
-#endif
     importPlaylists.setFileMode(QFileDialog::ExistingFiles);
     importPlaylists.setNameFilters(m_playlistManager->playlistFilter());
     //Launch the selector.
@@ -300,9 +297,6 @@ void KNMusicPlaylist::onActionExportPlaylist()
     //Generate a file dialog.
     QFileDialog exportPlaylist(this);
     //Set the file mode and the name filters.
-#ifdef Q_OS_MACX
-    exportPlaylist.setWindowFlags(Qt::Sheet);
-#endif
     exportPlaylist.setFileMode(QFileDialog::AnyFile);
     exportPlaylist.setAcceptMode(QFileDialog::AcceptSave);
     //Set the default playlist file name.

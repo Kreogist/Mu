@@ -33,6 +33,7 @@ public:
     KNPreferenceLanguageItem *languageListItem() const;
 
 signals:
+    void requireUpdateTitle(const QString &headerText);
 
 public slots:
     void generateLanguageList();

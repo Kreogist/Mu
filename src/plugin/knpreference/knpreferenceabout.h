@@ -61,7 +61,7 @@ private:
     };
 
     QLabel *m_textContent[ContentIndexCount];
-    QTextEdit *m_copyrightText;
+    QTextEdit *m_otherText;
 };
 
 #endif // KNPREFERENCEABOUT_H

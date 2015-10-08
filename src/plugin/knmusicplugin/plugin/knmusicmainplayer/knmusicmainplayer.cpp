@@ -166,6 +166,9 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     timeFont.setFamily("096MKSD");
     m_duration->setFont(timeFont);
     m_position->setFont(timeFont);
+    //Configure position label.
+    connect(m_position, &KNEditableLabel::contentChanged,
+            this, &KNMusicMainPlayer::onActionPositionEdited);
 
     //Register the widget to the theme manager.
     knTheme->registerWidget(this);
@@ -481,6 +484,36 @@ void KNMusicMainPlayer::onActionColumnCountChanged(const int &columnCount)
 {
     //Update the scroll alignment of the column count.
     m_lyricsPanel->setAlignment(columnCount==1?Qt::AlignHCenter:Qt::AlignLeft);
+}
+
+void KNMusicMainPlayer::onActionPositionEdited()
+{
+    //Get the latest text from the position.
+    QString positionText=m_position->text();
+    //Find the colon.
+    int colonPosition=positionText.indexOf(':');
+    //If we cannot find the colon, means it's not format as 'xx:xx'.
+    if(-1==colonPosition)
+    {
+        //This might be a number, we treat it as second time.
+        //Translate it to a number.
+        bool translateSuccess=false;
+        qint64 triedPositon=positionText.toLongLong(&translateSuccess);
+        //If we succeed, set the position to that second.
+        if(translateSuccess)
+        {
+            setPosition(triedPositon*1000);
+        }
+        return;
+    }
+    //Calculate the ms.
+    qint64 minuatePart=positionText.left(colonPosition).toInt(),
+           secondPart=positionText.mid(colonPosition+1).toInt(),
+           preferPosition=(minuatePart*60+secondPart)*1000;
+    if(preferPosition>0 && preferPosition<m_progressSlider->maximum())
+    {
+        setPosition(preferPosition);
+    }
 }
 
 void KNMusicMainPlayer::setPosition(const qint64 &position)

@@ -85,6 +85,7 @@ private slots:
     void updateDuration(const qint64 &duration);
     void onActionPlayingModelChanged(KNMusicProxyModel *proxyModel);
     void onActionColumnCountChanged(const int &columnCount);
+    void onActionPositionEdited();
 
 private:
     enum ControlButtons

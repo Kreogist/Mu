@@ -21,6 +21,7 @@
 
 #include "kndropproxycontainer.h"
 #include "kncategorytab.h"
+#include "knlocalemanager.h"
 
 #include "knmusicsolomenubase.h"
 #include "knmusiclibrarycategorydelegate.h"
@@ -79,6 +80,10 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QWidget *parent) :
     //Set viewer properties after add widgets.
     splitter->setCollapsible(1, false);
     splitter->setStretchFactor(1, 1);
+
+    //Link the locale manager.
+    knI18n->link(this, &KNMusicLibraryGenreTab::retranslate);
+    retranslate();
 }
 
 QAction *KNMusicLibraryGenreTab::showInAction()

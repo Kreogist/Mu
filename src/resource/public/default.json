@@ -6,6 +6,19 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "FileDialog" : {
+        "Parent" : "MainWindow",
+        "Base" : "#353535",
+        "Window" : "#202020",
+        "WindowText" : "#C0C0C0",
+        "ToolTipBase" : "#202020",
+        "ToolTipText" : "#C0C0C0",
+        "Button" : "#202020",
+        "ButtonText" : "#C0C0C0",
+        "Text" : "#C0C0C0",
+        "Highlight" : "#505050",
+        "HighlightedText" : "#F7CF3D"
+    },
     "LabelLineEdit" : {
         "Parent" : "Application",
         "Window" : "#000000",
@@ -120,7 +133,11 @@
     },
     "MainPlayerLabel" : {
         "Parent" : "MainPlayer",
-        "WindowText" : "#FFFFFF"
+        "WindowText" : "#FFFFFF",
+        "Base" : "#000000",
+        "Text" : "#FFFFFFFE",
+        "Highlight" : "#606060",
+        "HighlightedText" : "#f7cf3d"
     },
     "MainPlayerInfoPanel" :{
         "Parent" : "MainPlayerLabel",

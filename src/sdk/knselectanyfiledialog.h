@@ -19,13 +19,20 @@
 #ifndef KNSELECTANYFILEDIALOG_H
 #define KNSELECTANYFILEDIALOG_H
 
-#include <QFileDialog>
+#include "knfiledialog.h"
 
 class QDialogButtonBox;
-class KNSelectAnyFileDialog : public QFileDialog
+class KNSelectAnyFileDialog : public KNFileDialog
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNSelectAnyFileDialog widget.
+     * \param parent The parent widget.
+     * \param caption The caption of the dialog.
+     * \param directory
+     * \param filter
+     */
     explicit KNSelectAnyFileDialog(QWidget *parent = 0,
                                    const QString &caption = QString(),
                                    const QString &directory = QString(),

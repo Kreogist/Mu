@@ -17,8 +17,10 @@
  */
 #include <QDir>
 
-#include "knmusicglobal.h"
+#include "knglobal.h"
 #include "knutil.h"
+
+#include "knmusicglobal.h"
 
 #include "knmusicgenremodel.h"
 
@@ -28,7 +30,10 @@ KNMusicGenreModel::KNMusicGenreModel(QObject *parent) :
     KNMusicCategoryModel(parent)
 {
     //Load all the genre icons.
-    loadGenreIcons();
+    loadGenreIcons(KNUtil::ensurePathValid(
+                       knGlobal->dirPath(KNGlobal::ResourceDir)+"/Genres/"));
+    loadGenreIcons(KNUtil::ensurePathValid(
+                       knMusicGlobal->musicLibraryPath()+"/Genres/"));
 }
 
 QVariant KNMusicGenreModel::data(const QModelIndex &index, int role) const
@@ -122,14 +127,12 @@ void KNMusicGenreModel::onActionImageRecoverComplete()
     //In genre model, we won't need to do anything.
 }
 
-inline void KNMusicGenreModel::loadGenreIcons()
+inline void KNMusicGenreModel::loadGenreIcons(const QString &folderPath)
 {
     //Clear the hash list.
     m_genreIconMap.clear();
     //Initial the genre directory.
-    QDir genreIconDir(
-                KNUtil::ensurePathValid(
-                    knMusicGlobal->musicLibraryPath()+"/Genres/"));
+    QDir genreIconDir(folderPath);
     //Initial the icon file info list.
     QFileInfoList iconInfoList=genreIconDir.entryInfoList();
     //Read throught the info list.

@@ -63,6 +63,11 @@ signals:
     void requireChangeContent(int tabIndex);
 
 public slots:
+    /*!
+     * \brief Set the header text of the title bar.
+     * \param text The header text.
+     */
+    void setHeaderText(const QString &text);
 
 protected:
     /*!

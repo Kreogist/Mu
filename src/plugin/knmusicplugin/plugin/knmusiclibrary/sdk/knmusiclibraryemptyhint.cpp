@@ -17,8 +17,8 @@
  */
 #include <QBoxLayout>
 #include <QLabel>
+#include <QFileDialog>
 
-#include "knselectanyfiledialog.h"
 #include "knglassbutton.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
@@ -103,9 +103,11 @@ void KNMusicLibraryEmptyHint::retranslate()
 void KNMusicLibraryEmptyHint::onActionAddToLibrary()
 {
     //Generate the file dialog.
-    KNSelectAnyFileDialog fileDialog(this,
-                                     tr("Add To Library"),
-                                     QString("."));
+    QFileDialog fileDialog(this,
+                           tr("Add To Library"),
+                           QString("."));
+    //Configure the file dialog.
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
     //Launch the file dialog.
     if(fileDialog.exec()==QDialog::Accepted &&
             !fileDialog.selectedUrls().isEmpty())

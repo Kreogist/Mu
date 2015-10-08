@@ -81,6 +81,12 @@ void KNCategoryTab::setText(const QString &text)
 {
     //Update the text width.
     m_textFullWidth=fontMetrics().width(text);
+    //Check out whether the current one is selected.
+    if(isChecked())
+    {
+        //Update the select width.
+        m_textWidth=m_textFullWidth;
+    }
     //Set the text.
     QAbstractButton::setText(text);
 }

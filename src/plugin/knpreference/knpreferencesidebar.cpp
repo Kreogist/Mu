@@ -81,6 +81,12 @@ void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
     m_itemList->addTab(item);
 }
 
+void KNPreferenceSidebar::setHeaderText(const QString &text)
+{
+    //Set the header text to header label.
+    m_titleBar->setText(text);
+}
+
 void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)
 {
     //Do the original resize.

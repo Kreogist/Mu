@@ -48,6 +48,8 @@ KNPreference::KNPreference(QWidget *parent) :
     m_aboutItem->setHeaderIcon(QPixmap(":/plugin/preference/header/about.png"));
     //Configure the language panel.
     m_languagePanel->generateLanguageList();
+    connect(m_languagePanel, &KNPreferenceLanguagePanel::requireUpdateTitle,
+            m_sidebar, &KNPreferenceSidebar::setHeaderText);
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
