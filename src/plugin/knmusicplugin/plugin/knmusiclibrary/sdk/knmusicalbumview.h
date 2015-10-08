@@ -139,6 +139,7 @@ protected slots:
     void updateGeometries() Q_DECL_OVERRIDE;
 
 private slots:
+    void retranslate();
     void onActionScrolling();
     void displayAlbum(const QPoint &point);
     void onActionSearch();

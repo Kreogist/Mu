@@ -84,7 +84,15 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     infoContainer->setLayout(informationLayout);
     //Add labels to information layout.
     informationLayout->addWidget(m_title);
-    informationLayout->addWidget(m_detail);
+    //Initial the detail layout.
+    QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            informationLayout->widget());
+    detailLayout->setContentsMargins(0,0,0,0);
+    detailLayout->setSpacing(0);
+    informationLayout->addLayout(detailLayout);
+    //Add widget to detail layout.
+    detailLayout->addWidget(m_detail);
+    detailLayout->addStretch();
 
     //Link the search.
     connect(knMusicGlobal->search(), &KNMusicSearchBase::requireSearch,

@@ -21,6 +21,7 @@
 #include <QTimeLine>
 
 #include "knthememanager.h"
+#include "knlocalemanager.h"
 
 #include "knmusiccategoryproxymodel.h"
 #include "knmusicsearchbase.h"
@@ -83,6 +84,9 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     //Link the search.
     connect(knMusicGlobal->search(), &KNMusicSearchBase::requireSearch,
             this, &KNMusicAlbumView::onActionSearch);
+    //Link the locale manager.
+    knI18n->link(this, &KNMusicAlbumView::retranslate);
+    retranslate();
 }
 
 QModelIndex KNMusicAlbumView::indexAt(const QPoint &point) const
@@ -425,6 +429,16 @@ void KNMusicAlbumView::updateGeometries()
     //Update the page and single step.
     verticalScrollBar()->setPageStep(m_itemSpacingHeight>>2);
     verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>2);
+}
+
+void KNMusicAlbumView::retranslate()
+{
+    //Check out the album detail widget.
+    if(m_albumDetail && m_selectedIndex.isValid())
+    {
+        //Update the album detail.
+        m_albumDetail->updateAlbumCaptions();
+    }
 }
 
 void KNMusicAlbumView::onActionScrolling()

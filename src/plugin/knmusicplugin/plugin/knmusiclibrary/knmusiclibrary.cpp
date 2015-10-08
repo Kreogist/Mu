@@ -64,16 +64,16 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_songTab->setLibraryModel(m_libraryModel);
     linkLoadRequest(m_songTab);
     // Artist tab.
-    m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab;
     m_categoryModel[TabArtists]=new KNMusicCategoryModel(this);
     m_categoryModel[TabArtists]->setCategoryColumn(Artist);
+    m_libraryTabs[TabArtists]=new KNMusicLibraryArtistTab;
     // Album tab.
-    m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab;
     m_categoryModel[TabAlbums]=new KNMusicAlbumModel(this);
+    m_libraryTabs[TabAlbums]=new KNMusicLibraryAlbumTab;
     // Genre tab.
-    m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab;
     m_categoryModel[TabGenres]=new KNMusicGenreModel(this);
     m_categoryModel[TabGenres]->setCategoryColumn(Genre);
+    m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab;
 
     //Generate the show in action list.
     QList<QAction *> showInActionList;
