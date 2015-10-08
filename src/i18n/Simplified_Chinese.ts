@@ -74,37 +74,37 @@
 <context>
     <name>KNMusicDetailPanelArtwork</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="127"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="129"/>
         <source>Set new album cover</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="128"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="130"/>
         <source>Save album cover image</source>
-        <translation type="unfinished"></translation>
+        <translation>保存专辑图片</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="132"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="134"/>
         <source>Portable Network Graphics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="134"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="136"/>
         <source>JPEG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="143"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="145"/>
         <source>Select the new album cover image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="145"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="147"/>
         <source>All supported files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="187"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="189"/>
         <source>Save album cover</source>
         <translation type="unfinished"></translation>
     </message>
@@ -612,74 +612,94 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistViewer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="175"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="203"/>
         <source>No song.</source>
         <translation>没有歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="176"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="204"/>
         <source>1 song, </source>
         <translation>1 首歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="177"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="205"/>
         <source>%1 songs, </source>
         <translation>%1 首歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="179"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="207"/>
         <source>0 minuate.</source>
         <translation>0 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="180"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="208"/>
         <source>1 minuate.</source>
         <translation>1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="181"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="209"/>
         <source>%1 minuates.</source>
         <translation>%1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="183"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="211"/>
         <source>1 hour and </source>
         <translation>1 小时 </translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="184"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="212"/>
         <source>%1 hours and </source>
         <translation>%1 小时 </translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="186"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="214"/>
         <source>1 hour.</source>
         <translation>1 小时。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="187"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="215"/>
         <source>%1 hours.</source>
         <translation>%1 小时。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="189"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="217"/>
         <source>No result.</source>
         <translation>找不到符合条件的歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="190"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="218"/>
         <source>1 result.</source>
         <translation>找到 1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="191"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="219"/>
         <source>%1 results.</source>
         <translation>找到 %1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="193"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="221"/>
         <source>Search result in %1</source>
         <translation>%1 中的搜索结果</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="223"/>
+        <source>Play the playlist</source>
+        <translation>播放当前播放列表</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="224"/>
+        <source>Shuffle the playlist</source>
+        <translation>乱序播放当前播放列表</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="225"/>
+        <source>Add songs to playlist</source>
+        <translation>添加歌曲到播放列表</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="300"/>
+        <source>Add to playlist %1</source>
+        <translation>添加歌曲到播放列表 %1</translation>
     </message>
 </context>
 <context>

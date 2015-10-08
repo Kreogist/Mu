@@ -134,6 +134,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_expandAnime->addAnimation(m_expandStep2);
     m_foldAnime->addAnimation(m_albumArtOut);
     m_foldAnime->addAnimation(m_albumContentOut);
+    m_flyAwayAnime->addAnimation(m_albumArtFlyAway);
     m_flyAwayAnime->addAnimation(m_albumContentFlyAway);
     m_showAlbumArt->addAnimation(m_showAlbumArtLabel);
     m_showAlbumArt->addAnimation(m_showAlbumContent);
@@ -301,7 +302,7 @@ void KNMusicAlbumDetail::flyAwayAlbumDetail()
         //Set the animation start and end value.
         m_albumArtFlyAway->setStartValue(m_albumArt->geometry());
         m_albumArtFlyAway->setEndValue(albumArtEndRect);
-        m_albumContentFlyAway->setStartValue(m_albumArt->geometry());
+        m_albumContentFlyAway->setStartValue(m_albumContent->geometry());
         m_albumContentFlyAway->setEndValue(albumArtEndRect);
         //Hide all the shadows.
         m_rightShadow->hide();

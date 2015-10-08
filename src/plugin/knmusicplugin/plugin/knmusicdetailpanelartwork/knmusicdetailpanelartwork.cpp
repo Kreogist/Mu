@@ -77,6 +77,8 @@ KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
                 QIcon(":/plugin/music/detaildialog/albumart/edit.png"));
     m_operations[ExportAlbumArt]->setIcon(
                 QIcon(":/plugin/music/detaildialog/albumart/save.png"));
+    //Hide the set album art button, for 0.9.
+    m_operations[SetAlbumArt]->hide();
 
     //Link the operations.
     connect(m_operations[SetAlbumArt], &KNOpacityAnimeButton::clicked,

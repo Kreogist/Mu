@@ -221,7 +221,7 @@ void KNMusicPlaylistViewer::retranslate()
     m_searchResultIn=tr("Search result in %1");
     //Update the tooltip data.
     m_playPlaylist->setToolTip(tr("Play the playlist"));
-    m_shufflePlaylist->setToolTip(tr("shuffle the playlist"));
+    m_shufflePlaylist->setToolTip(tr("Shuffle the playlist"));
     m_addToPlaylist->setToolTip(tr("Add songs to playlist"));
     //Update the detail info and title text.
     updateTitle();
