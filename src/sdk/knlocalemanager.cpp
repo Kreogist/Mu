@@ -209,7 +209,7 @@ void KNLocaleManager::setDefaultLanguage()
     }
 }
 
-void KNLocaleManager::loadLanguage(const QString &filePath)
+inline void KNLocaleManager::loadLanguage(const QString &filePath)
 {
     //Remove the current translator.
     if(!m_translator->isEmpty())
@@ -227,7 +227,7 @@ void KNLocaleManager::loadLanguage(const QString &filePath)
     emit languageChange();
 }
 
-void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
+inline void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
 {
     //Check the folder exist. If no, return.
     QDir languageFolder(dirPath);
@@ -237,13 +237,12 @@ void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
     }
     //Get all the folder in the language list.
     QFileInfoList folderList=languageFolder.entryInfoList();
-    for(QFileInfoList::iterator i=folderList.begin();
-            i!=folderList.end();
-            ++i)
+    for(auto i : folderList)
     {
-        QString key=(*i).fileName();
+        //Use the file name as key.
+        QString &&key=i.fileName();
         //Ignore if the current info is not folder, dot(.) and dot-dot(..).
-        if(!(*i).isDir() || key=="." || key=="..")
+        if(!i.isDir() || key=="." || key=="..")
         {
             continue;
         }
@@ -253,8 +252,8 @@ void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
         // | |-Simplified_Chinese.qm        Translation file (.qm)
         // | |-Simplified_Chinese.png       Translation icon (.png)
         //Get the language file and the icon file.
-        QFileInfo qmInfo((*i).absoluteFilePath()+"/"+key+".qm"),
-                  iconInfo((*i).absoluteFilePath()+"/"+key+".png");
+        QFileInfo qmInfo(i.absoluteFilePath()+"/"+key+".qm"),
+                  iconInfo(i.absoluteFilePath()+"/"+key+".png");
         //If there's no qm file, then ignore this folder.
         if(qmInfo.exists())
         {

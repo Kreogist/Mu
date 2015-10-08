@@ -108,12 +108,14 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
     //Save a copy of the row of the index.
     int row=m_itemIndex.row();
     //Get the detail info from the model.
-    const KNMusicDetailInfo detailInfo=model->rowDetailInfo(row);
+    KNMusicDetailInfo &&detailInfo=model->rowDetailInfo(row);
     //Get the current item text data and file path from the model.
     m_itemText=m_model->textData(row, m_itemIndex.column());
     m_filePath=detailInfo.filePath;
     //Update action captions.
-    m_actions[PlayCurrent]->setText(detailInfo.textLists[Name].toString());
+    m_actions[PlayCurrent]->setText(
+                m_actionTitles[PlayCurrent].arg(
+                    detailInfo.textLists[Name].toString()));
     m_actions[Open]->setText(m_actionTitles[Open].arg(detailInfo.fileName));
     //Get the prefer name.
     //Check the aritist is empty or not.

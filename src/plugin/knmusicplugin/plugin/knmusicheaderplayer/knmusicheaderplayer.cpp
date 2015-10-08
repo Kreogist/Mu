@@ -568,6 +568,9 @@ void KNMusicHeaderPlayer::reset()
     //Set the duration and position to 0.
     updateDuration(0);
     m_position->setText(KNMusicUtil::msecondToString(0));
+    //Hide the main player and append menu button.
+    m_showMainPlayer->hide();
+    m_showAppendMenu->hide();
 }
 
 void KNMusicHeaderPlayer::retranslate()
@@ -715,6 +718,9 @@ void KNMusicHeaderPlayer::onActionNowPlayingChanged(
     QPixmap albumArt=QPixmap::fromImage(analysisItem.coverImage);
     m_albumArt->setPixmap(albumArt.isNull()?
                               knMusicGlobal->noAlbumArt():albumArt);
+    //When it has been asked to update player info, then show the buttons.
+    m_showMainPlayer->show();
+    m_showAppendMenu->show();
 }
 
 void KNMusicHeaderPlayer::showAppendMenu()
