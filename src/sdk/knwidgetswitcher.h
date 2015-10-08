@@ -136,6 +136,8 @@ protected:
 
 private slots:
     void onActionMovingFinished();
+    void onActionMoveToPrevious();
+    void onActionMoveToNext();
 
 private:
     inline QPropertyAnimation *generateAnimation();

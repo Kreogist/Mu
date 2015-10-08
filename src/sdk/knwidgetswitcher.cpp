@@ -47,7 +47,17 @@ KNWidgetSwitcher::KNWidgetSwitcher(QWidget *parent) :
     //Add the go previous and back actions.
     QAction *goPrevTab=new QAction(this);
     goPrevTab->setShortcut(QKeySequence::Back);
-    goPrevTab->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    goPrevTab->setShortcutContext(Qt::WidgetShortcut);
+    connect(goPrevTab, &QAction::triggered,
+            this, &KNWidgetSwitcher::onActionMoveToPrevious);
+    addAction(goPrevTab);
+
+    QAction *goNextTab=new QAction(this);
+    goNextTab->setShortcut(QKeySequence::Forward);
+    goNextTab->setShortcutContext(Qt::WidgetShortcut);
+    connect(goNextTab, &QAction::triggered,
+            this, &KNWidgetSwitcher::onActionMoveToNext);
+    addAction(goNextTab);
 }
 
 void KNWidgetSwitcher::addWidget(QWidget *widget)
@@ -230,6 +240,26 @@ void KNWidgetSwitcher::onActionMovingFinished()
     setWidgetVisible(m_outWidgetIndex, false);
     //Reset the out widget index to invalid.
     m_outWidgetIndex=-1;
+}
+
+void KNWidgetSwitcher::onActionMoveToPrevious()
+{
+    //Check out the current index, if it's greater than the first one.
+    if(m_currentIndex>0)
+    {
+        //Set current index to the next one.
+        setCurrentIndex(m_currentIndex-1);
+    }
+}
+
+void KNWidgetSwitcher::onActionMoveToNext()
+{
+    //Check out the current index, if it's less than the last one
+    if(m_currentIndex<m_widgets.size()-1)
+    {
+        //Set current index to the previous one.
+        setCurrentIndex(m_currentIndex+1);
+    }
 }
 
 QPropertyAnimation *KNWidgetSwitcher::outAnimation() const

@@ -245,11 +245,24 @@
         "Parent" : "Preference",
         "Window" : "#2A2A2A"
     },
+    "PreferenceAboutLabel" :
+    {
+        "Parent" : "PreferenceContent",
+        "WindowText" : "#A0A0A0"
+    },
+    "PreferenceAboutCopyright" :
+    {
+        "Parent" : "PreferenceContent",
+        "Base" : "#00000000",
+        "Text" : "#A0A0A0",
+        "Highlight" : "#00000000",
+        "HighlightedText" : "#A0A0A0"
+    },
     "PreferenceLanguagePanelItem" :
     {
         "Parent" : "PreferenceContent",
-        "Window" : "#404040",
-        "WindowText" : "#FFFFFF"
+        "Highlight" : "#606060",
+        "HighlightedText" : "#F7CF3D"
     },
     "PreferenceSidebar" :
     {

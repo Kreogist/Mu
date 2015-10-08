@@ -83,19 +83,28 @@ void KNPreferenceLanguagePanel::generateLanguageList()
     }
     //Sync the language item.
     syncLanguageItem(knI18n->currentLanguageIndex());
+    //Remove the previous index checked state.
+    static_cast<KNPreferenceLanguagePanelItem *>(
+                m_mainLayout->itemAt(
+                    knI18n->currentLanguageIndex(
+                        ))->widget())->setChecked(true);
 }
 
 void KNPreferenceLanguagePanel::setCurrentLanguage(const int &index)
 {
     //Update the language panel item.
     syncLanguageItem(index);
+    //Remove the previous index checked state.
+    static_cast<KNPreferenceLanguagePanelItem *>(
+                m_mainLayout->itemAt(
+                    knI18n->currentLanguageIndex(
+                        ))->widget())->setChecked(false);
     //Ask the locale manager to change the language.
     knI18n->setLanguage(index);
 }
 
 inline void KNPreferenceLanguagePanel::syncLanguageItem(const int &index)
 {
-    qDebug()<<index;
     //Set the item title.
     m_languageListItem->setText(tr("International"));
     //Set the language name.

@@ -18,15 +18,20 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QLabel>
+#include <QScrollBar>
+#include <QTextEdit>
 
 #include "knlocalemanager.h"
+#include "knthememanager.h"
+#include "sao/knsaostyle.h"
 
 #include "knpreferenceabout.h"
 
 #include <QDebug>
 
 KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_copyrightText(new QTextEdit(this))
 {
     //Configure the label fonts.
     QFont labelFonts=font();
@@ -37,9 +42,18 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
         //Initial the label.
         m_textContent[i]=new QLabel(this);
         //Configure the label.
+        m_textContent[i]->setObjectName("PreferenceAboutLabel");
+        knTheme->registerWidget(m_textContent[i]);
         m_textContent[i]->setAlignment(Qt::AlignHCenter);
         m_textContent[i]->setFont(labelFonts);
     }
+    //Configure the copyright text edit.
+    m_copyrightText->setObjectName("PreferenceAboutCopyright");
+    m_copyrightText->setFrameStyle(QFrame::NoFrame);
+    m_copyrightText->setReadOnly(true);
+    m_copyrightText->viewport()->setCursor(Qt::ArrowCursor);
+    knTheme->registerWidget(m_copyrightText);
+    KNSaoStyle::styleVerticalScrollBar(m_copyrightText->verticalScrollBar());
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -65,6 +79,7 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     contentLayout->addSpacing(8);
     contentLayout->addWidget(m_textContent[Version], 0, Qt::AlignHCenter);
     contentLayout->addWidget(m_textContent[Copyright], 0, Qt::AlignHCenter);
+    contentLayout->addWidget(m_copyrightText, 0, Qt::AlignHCenter);
     contentLayout->addStretch();
 
     //Set the default label.
@@ -94,6 +109,8 @@ void KNPreferenceAbout::resizeEvent(QResizeEvent *event)
     captionFont.setPixelSize(iconSize);
     //Set to caption font.
     m_textContent[Title]->setFont(captionFont);
+    //Set the maximum height of the title.
+    m_copyrightText->setMaximumHeight(iconSize<<2);
     //Calculate the caption size.
     iconSize=iconSize>>2;
     captionFont.setPixelSize(iconSize<13?13:iconSize);
@@ -109,5 +126,9 @@ void KNPreferenceAbout::retranslate()
     m_textContent[Copyright]->setText(QString(QChar(169)) +
                                       tr(" 2013-2015 Kreogist Dev Team\n"
                                       "All rights reserved."));
+    //Update the thank list.
+    m_copyrightText->setPlainText(
+                tr("Staffs\n"
+                    "Special Thanks"));
 }
 

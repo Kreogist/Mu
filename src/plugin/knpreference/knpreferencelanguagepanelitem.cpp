@@ -17,6 +17,7 @@
  */
 #include <QTimeLine>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include "knthememanager.h"
 
@@ -24,7 +25,8 @@
 
 #define m_itemHeight 40
 #define m_iconX 10
-#define m_iconSize 40
+#define m_iconSize 34
+#define m_iconY 3
 #define m_textX 60 //Default: IconX+IconSize+Spacing(10)
 
 KNPreferenceLanguagePanelItem::KNPreferenceLanguagePanelItem(QWidget *parent) :
@@ -39,8 +41,10 @@ KNPreferenceLanguagePanelItem::KNPreferenceLanguagePanelItem(QWidget *parent) :
     setObjectName("PreferenceLanguagePanelItem");
     //Set properties.
     setAutoFillBackground(true);
+    setCheckable(true);
     setContentsMargins(0,0,0,0);
     setFixedHeight(m_itemHeight);
+    knTheme->registerWidget(this);
 
     //Configure the high light.
     m_highlight.setColorAt(0, QColor(0xff, 0xff, 0xff, 0x79));
@@ -50,6 +54,8 @@ KNPreferenceLanguagePanelItem::KNPreferenceLanguagePanelItem(QWidget *parent) :
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNPreferenceLanguagePanelItem::onActionChangeHighlight);
+    connect(this, &KNPreferenceLanguagePanelItem::released,
+            [=]{m_highLightOpacity=0.0;});
 }
 
 void KNPreferenceLanguagePanelItem::paintEvent(QPaintEvent *event)
@@ -61,20 +67,32 @@ void KNPreferenceLanguagePanelItem::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
-    //Draw the backend.
-    painter.fillRect(rect(), palette().color(QPalette::Window));
-    painter.setOpacity(m_highLightOpacity);
-    painter.fillRect(rect(), m_highLightOpacity);
+    //Check out the checked state.
+    if(isChecked())
+    {
+        //Draw the high light background.
+        painter.fillRect(rect(), palette().color(QPalette::Highlight));
+        //Draw the text.
+        painter.setPen(palette().color(QPalette::HighlightedText));
+    }
+    else
+    {
+        //Draw the background.
+        painter.fillRect(rect(), palette().color(QPalette::Window));
+        //Draw the high light cover.
+        painter.setOpacity(m_highLightOpacity);
+        painter.fillRect(rect(), m_highlight);
+        //Draw the text.
+        painter.setPen(palette().color(QPalette::WindowText));
+    }
     //Restore the opacity.
     painter.setOpacity(1.0);
     //Draw the icon.
     if(!m_languageIcon.isNull())
     {
         //Update the language icon.
-        painter.drawPixmap(m_iconX, 0, m_languageIcon);
+        painter.drawPixmap(m_iconX, m_iconY, m_languageIcon);
     }
-    //Draw the text.
-    painter.setPen(palette().color(QPalette::WindowText));
     painter.drawText(m_textX, 0, width()-m_textX, m_itemHeight,
                      Qt::AlignLeft | Qt::AlignVCenter,
                      m_languageName);
@@ -131,14 +149,50 @@ void KNPreferenceLanguagePanelItem::enterEvent(QEvent *event)
 {
     //Do original enter event.
     QAbstractButton::enterEvent(event);
-    //Start the animation to high light.
-    startAnime(100);
+    //Check checked state.
+    if(!isChecked())
+    {
+        //Start the animation to high light.
+        startAnime(100);
+    }
 }
 
 void KNPreferenceLanguagePanelItem::leaveEvent(QEvent *event)
 {
     //Do original leave event.
     QAbstractButton::leaveEvent(event);
-    //Start the animation to high light.
-    startAnime(0);
+    //Check checked state.
+    if(!isChecked())
+    {
+        //Start the animation to high light.
+        startAnime(0);
+    }
+}
+
+void KNPreferenceLanguagePanelItem::mousePressEvent(QMouseEvent *event)
+{
+    //Check the checked state.
+    if(isChecked())
+    {
+        //Ignore the mouse press event.
+        event->ignore();
+        //Back.
+        return;
+    }
+    //Do original press event.
+    QAbstractButton::mousePressEvent(event);
+}
+
+void KNPreferenceLanguagePanelItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    //Check the checked state.
+    if(isChecked())
+    {
+        //Ignore the mouse release event.
+        event->ignore();
+        //Back.
+        return;
+    }
+    //Do original release event.
+    QAbstractButton::mouseReleaseEvent(event);
 }

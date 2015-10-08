@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class QLabel;
+class QTextEdit;
 /*!
  * \brief The KNPreferenceAbout class is a simple class which provides the
  * version information and some other links about this product.
@@ -42,9 +43,9 @@ public slots:
 
 protected:
     /*!
-     * \brief resizeEvent().
+     * \brief Reimplemented from QWidget::resizeEvent().
      */
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
@@ -60,6 +61,7 @@ private:
     };
 
     QLabel *m_textContent[ContentIndexCount];
+    QTextEdit *m_copyrightText;
 };
 
 #endif // KNPREFERENCEABOUT_H

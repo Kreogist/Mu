@@ -71,6 +71,16 @@ protected:
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QAbstractButton::mousePressEvent().
+     */
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractButton::mouseReleaseEvent().
+     */
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QAbstractButton::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
