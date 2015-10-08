@@ -16,11 +16,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
-#include <QFileDialog>
 #include <QLabel>
-#include <QListView>
-#include <QTreeView>
 
+#include "knselectanyfiledialog.h"
 #include "knglassbutton.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
@@ -104,30 +102,11 @@ void KNMusicLibraryEmptyHint::retranslate()
 
 void KNMusicLibraryEmptyHint::onActionAddToLibrary()
 {
-    //!FIXME: Check the open button.
     //Generate the file dialog.
-    QFileDialog fileDialog(this,
-                           tr("Add To Library"),
-                           QString("."));
-    fileDialog.setFileMode(QFileDialog::Directory);
-#ifdef Q_OS_MACX
-    fileDialog.setWindowFlags(Qt::Sheet);
-#endif
-
-    fileDialog.setOptions(QFileDialog::DontUseNativeDialog);
-
-    QListView *listView=fileDialog.findChild<QListView *>("listview");
-    if(nullptr!=listView)
-    {
-        listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    }
-
-    QTreeView *treeView=fileDialog.findChild<QTreeView *>();
-    if(nullptr!=treeView)
-    {
-        treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    }
-
+    KNSelectAnyFileDialog fileDialog(this,
+                                     tr("Add To Library"),
+                                     QString("."));
+    //Launch the file dialog.
     if(fileDialog.exec()==QDialog::Accepted &&
             !fileDialog.selectedUrls().isEmpty())
     {

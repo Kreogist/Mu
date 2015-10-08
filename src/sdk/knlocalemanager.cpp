@@ -198,6 +198,9 @@ void KNLocaleManager::setDefaultLanguage()
     case QLocale::Spain:
         setLanguage("Spanish");
         break;
+    default:
+        //Doing nothing, I don't want to see the warning.
+        break;
     }
 }
 

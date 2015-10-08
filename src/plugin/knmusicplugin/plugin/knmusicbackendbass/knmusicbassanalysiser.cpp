@@ -44,7 +44,7 @@ bool KNMusicBassAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
                                   BASS_MUSIC_DECODE);
 #endif
     //Check the channel.
-    if(NULL==analysisChannel)
+    if((DWORD)NULL==analysisChannel)
     {
         return false;
     }

@@ -15,8 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <array>
-
 #include "knmusicproxymodel.h"
 #include "knmusicmodel.h"
 #include "knmusicbackend.h"
@@ -48,7 +46,7 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     //Generate the random device.
     std::random_device randomDevice;
     //Get the seed array size.
-    const size_t seedCount=std::mt19937::state_size;
+    const int seedCount=(int)std::mt19937::state_size;
     //Resize the seed data.
     seedData.resize(seedCount);
     //Set the data to the seed data.

@@ -60,22 +60,33 @@ gcc: {
     QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3 -finline-functions
     # Vectorize optimization
     QMAKE_CXXFLAGS_RELEASE += -fivopts -ftree-vectorize
-    QMAKE_CXXFLAGS_RELEASE += -ftree-vectorizer-verbose=2
     # Concurrency
-    QMAKE_CXXFLAGS_RELEASE += -funroll-loops -floop-parallelize-all
-    # Loop optimization
-    QMAKE_CXXFLAGS_RELEASE += -ftree-loop-linear
-    # Cache optimization.
-    QMAKE_CXXFLAGS_RELEASE += -fbranch-target-load-optimize
+    QMAKE_CXXFLAGS_RELEASE += -funroll-loops
     # Qt will use clang on Mac OS X, but it seems that it treats the clang as
     # gcc, it will use all the flags we set to gcc on clang. In clang, it
     # doesn't have -fforce-addr switch, so we need to set the switcher
     # especially for Windows and Linux.
     win32:{
+        # Vectorize optimization
+        QMAKE_CXXFLAGS_RELEASE += -ftree-vectorizer-verbose=2
+        # Concurrency
+        QMAKE_CXXFLAGS_RELEASE += -floop-parallelize-all
+        # Cache optimization.
+        QMAKE_CXXFLAGS_RELEASE += -fbranch-target-load-optimize
+        # Loop optimization
+        QMAKE_CXXFLAGS_RELEASE += -ftree-loop-linear
         # GCC will only used for Windows 32-bit version.
         QMAKE_CXXFLAGS_RELEASE += -fforce-addr
     }
     linux:{
+        # Vectorize optimization
+        QMAKE_CXXFLAGS_RELEASE += -ftree-vectorizer-verbose=2
+        # Loop optimization
+        QMAKE_CXXFLAGS_RELEASE += -ftree-loop-linear
+        # Cache optimization.
+        QMAKE_CXXFLAGS_RELEASE += -fbranch-target-load-optimize
+        # Concurrency
+        QMAKE_CXXFLAGS_RELEASE += -floop-parallelize-all
         # GCC will only used for Linux 64-bit version.
         # Enabled force-addr.
         QMAKE_CXXFLAGS_RELEASE += -fforce-addr
@@ -372,7 +383,10 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusiccategorysearch.cpp \
     plugin/knpreference/knpreferencelanguagepanel.cpp \
     plugin/knpreference/knpreferencelanguagepanelitem.cpp \
-    plugin/knpreference/knpreferencelanguageitem.cpp
+    plugin/knpreference/knpreferencelanguageitem.cpp \
+    sdk/knpreferencepanel.cpp \
+    sdk/knpreferencepanelitem.cpp \
+    sdk/knselectanyfiledialog.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -571,7 +585,10 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusiccategorysearch.h \
     plugin/knpreference/knpreferencelanguagepanel.h \
     plugin/knpreference/knpreferencelanguagepanelitem.h \
-    plugin/knpreference/knpreferencelanguageitem.h
+    plugin/knpreference/knpreferencelanguageitem.h \
+    sdk/knpreferencepanel.h \
+    sdk/knpreferencepanelitem.h \
+    sdk/knselectanyfiledialog.h
 
 RESOURCES += \
     resource/res.qrc

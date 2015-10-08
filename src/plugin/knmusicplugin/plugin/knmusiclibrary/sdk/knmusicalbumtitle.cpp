@@ -23,9 +23,9 @@
 
 KNMusicAlbumTitle::KNMusicAlbumTitle(QWidget *parent) :
     QWidget(parent),
-    m_mouseIn(false),
     m_albumArt(QPixmap()),
-    m_scaledAlbumArt(QPixmap())
+    m_scaledAlbumArt(QPixmap()),
+    m_mouseIn(false)
 {
     //Set properties.
     setFocusPolicy(Qt::StrongFocus);
