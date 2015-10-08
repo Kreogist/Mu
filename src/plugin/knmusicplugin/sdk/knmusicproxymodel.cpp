@@ -193,7 +193,7 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
     if(block.index==-1)
     {
         //Translate the format of the search block data to QString.
-        QString ruleText=block.value.toString();
+        QString &&ruleText=block.value.toString();
         //Search the text in all column.
         for(int i=0; i<MusicColumnCount; i++)
         {
@@ -222,7 +222,7 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
     }
     //So now it should be a property of the data.
     //Get the data from the Name column.
-    QVariant propertyData=model->data(model->index(row, 0), block.index);
+    QVariant &&propertyData=model->data(model->index(row, 0), block.index);
     //Check the data.
     switch(block.index)
     {

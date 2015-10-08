@@ -31,6 +31,12 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Play the current playlist model.
+     * \return If the playlist is already playing, then return false. Or else
+     * return true.
+     */
+    bool playCurrentPlaylist();
 
 protected:
     void resetHeaderState();

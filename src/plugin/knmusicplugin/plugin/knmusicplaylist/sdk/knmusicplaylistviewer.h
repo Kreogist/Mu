@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class QLabel;
+class KNOpacityAnimeButton;
 class KNScrollLabel;
 class KNConnectionHandler;
 class KNSideShadowWidget;
@@ -53,15 +54,20 @@ private slots:
     void retranslate();
     void onActionModelRowCountChanged();
     void onActionSearch();
+    void onActionPlayCurrent();
+    void onActionShuffle();
+    void onActionAddToPlaylist();
     void updateTitle();
 
 private:
     inline void updateDetailInfo();
+    inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
     KNMusicPlaylistTreeView *m_treeView;
     KNScrollLabel *m_title;
     QLabel *m_detail;
     KNSideShadowWidget *m_leftShadow;
     KNConnectionHandler *m_modelLinkHandler;
+    KNOpacityAnimeButton *m_playPlaylist, *m_shufflePlaylist, *m_addToPlaylist;
 
     QString m_songCount[3],
             m_minuateCount[3],

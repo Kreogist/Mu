@@ -185,6 +185,12 @@ protected:
      */
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Ask to play an index of the music model.
+     * \param index The music proxy index in the music model.
+     */
+    void playIndex(const QModelIndex &index);
+
 protected slots:
     /*!
      * \brief This slot is provide to update the palette when the tree view is
@@ -204,7 +210,6 @@ private:
             const QRect &rect) const;
     inline void scrollToIndex(const QModelIndex &proxyIndex);
     inline void startAnime(const int &endFrame);
-    inline void playIndex(const QModelIndex &index);
     inline bool dropOn(QDropEvent *event, int &dropRow);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);

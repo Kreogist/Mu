@@ -16,9 +16,15 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knmusicutil.h"
+#include "knmusicmodel.h"
+#include "knmusicproxymodel.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusicplaylistindexdelegate.h"
+#include "knmusicbackend.h"
 
 #include "knmusicplaylisttreeview.h"
+
+#include <QDebug>
 
 using namespace MusicUtil;
 
@@ -37,6 +43,37 @@ KNMusicPlaylistTreeView::KNMusicPlaylistTreeView(QWidget *parent,
     //Set the delegate.
     setItemDelegateForColumn(MusicRowState,
                              new KNMusicPlaylistIndexDelegate(this));
+}
+
+bool KNMusicPlaylistTreeView::playCurrentPlaylist()
+{
+    //Check several things.
+    //1. Is now playing loaded?
+    if((!knMusicGlobal->nowPlaying()) ||
+    //2. Is music model nullptr?.
+            musicModel()==nullptr ||
+    //3. Check the playlist is empty or not.
+            musicModel()->rowCount()==0)
+    {
+        //Ignore the playing request.
+        return false;
+    }
+    //Get the now playing model.
+    KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
+    //Check whether the current playing model is the current one.
+    if(nowPlaying->playingMusicModel()==musicModel())
+    {
+        //Check the current playing index is valid or not.
+        if(nowPlaying->playingIndex().isValid())
+        {
+            //Give back false.
+            return false;
+        }
+    }
+    //So, now we need to play the first song in the playlist.
+    playIndex(proxyModel()->index(0, 0));
+    //Give back true.
+    return true;
 }
 
 void KNMusicPlaylistTreeView::resetHeaderState()

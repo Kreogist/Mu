@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QFileDialog>
 #include <QLabel>
 
 #include "knconnectionhandler.h"
@@ -24,8 +25,10 @@
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "knscrolllabel.h"
+#include "knopacityanimebutton.h"
 
 #include "knmusicsearchbase.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusicplaylisttreeview.h"
 #include "knmusicplaylistmodel.h"
 #include "knmusicproxymodel.h"
@@ -44,7 +47,13 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     m_detail(new QLabel(this)),
     m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow,
                                         this)),
-    m_modelLinkHandler(new KNConnectionHandler())
+    m_modelLinkHandler(new KNConnectionHandler()),
+    m_playPlaylist(
+        generateButton(":/plugin/music/playlist/playlist_control_play.png")),
+    m_shufflePlaylist(
+        generateButton(":/plugin/music/playlist/playlist_control_random.png")),
+    m_addToPlaylist(
+        generateButton(":/plugin/music/playlist/playlist_control_add.png"))
 {
     //Configure the tree view.
     setFocusProxy(m_treeView);
@@ -56,6 +65,13 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     labelFont.setBold(true);
     labelFont.setPixelSize(17);
     m_title->setFont(labelFont);
+    //Configure the buttons.
+    connect(m_playPlaylist, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicPlaylistViewer::onActionPlayCurrent);
+    connect(m_shufflePlaylist, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicPlaylistViewer::onActionShuffle);
+    connect(m_addToPlaylist, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicPlaylistViewer::onActionAddToPlaylist);
     //Link the theme manager with the label.
     knTheme->registerWidget(m_title);
     //Configure detail label.
@@ -88,10 +104,13 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             informationLayout->widget());
     detailLayout->setContentsMargins(0,0,0,0);
-    detailLayout->setSpacing(0);
+    detailLayout->setSpacing(5);
     informationLayout->addLayout(detailLayout);
     //Add widget to detail layout.
     detailLayout->addWidget(m_detail);
+    detailLayout->addWidget(m_playPlaylist);
+    detailLayout->addWidget(m_shufflePlaylist);
+    detailLayout->addWidget(m_addToPlaylist);
     detailLayout->addStretch();
 
     //Link the search.
@@ -180,6 +199,7 @@ void KNMusicPlaylistViewer::resizeEvent(QResizeEvent *event)
 
 void KNMusicPlaylistViewer::retranslate()
 {
+    //Update resource text.
     m_songCount[0]=tr("No song.");
     m_songCount[1]=tr("1 song, ");
     m_songCount[2]=tr("%1 songs, ");
@@ -199,6 +219,13 @@ void KNMusicPlaylistViewer::retranslate()
     m_searchCount[2]=tr("%1 results.");
 
     m_searchResultIn=tr("Search result in %1");
+    //Update the tooltip data.
+    m_playPlaylist->setToolTip(tr("Play the playlist"));
+    m_shufflePlaylist->setToolTip(tr("shuffle the playlist"));
+    m_addToPlaylist->setToolTip(tr("Add songs to playlist"));
+    //Update the detail info and title text.
+    updateTitle();
+    updateDetailInfo();
 }
 
 void KNMusicPlaylistViewer::onActionModelRowCountChanged()
@@ -220,6 +247,65 @@ void KNMusicPlaylistViewer::onActionSearch()
     //Update the title and detail info.
     updateTitle();
     updateDetailInfo();
+}
+
+void KNMusicPlaylistViewer::onActionPlayCurrent()
+{
+    //Check now playing first.
+    if(!knMusicGlobal->nowPlaying())
+    {
+        //Now now playing, ignore the request.
+        return;
+    }
+    //Play the playlist.
+    if(m_treeView->playCurrentPlaylist())
+    {
+        //Change the now playing to shuffle mode.
+        knMusicGlobal->nowPlaying()->setLoopState(MusicUtil::NoRepeat);
+    }
+}
+
+void KNMusicPlaylistViewer::onActionShuffle()
+{
+    //Check now playing first.
+    if(!knMusicGlobal->nowPlaying())
+    {
+        //Now now playing, ignore the request.
+        return;
+    }
+    //Get the now playing.
+    KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
+    //Then, change the now playing to shuffle mode.
+    nowPlaying->setLoopState(MusicUtil::Shuffle);
+    //Play the playlist.
+    m_treeView->playCurrentPlaylist();
+    //Play the next music.
+    nowPlaying->playNext();
+}
+
+void KNMusicPlaylistViewer::onActionAddToPlaylist()
+{
+    //Check the tree view.
+    if(m_treeView->musicModel()==nullptr)
+    {
+        //Ignore the add request.
+        return;
+    }
+    //Get the music model.
+    KNMusicModel *playlistModel=m_treeView->musicModel();
+    //Get the file list.
+    QList<QUrl> addFileList=
+            QFileDialog::getOpenFileUrls(
+                this,
+                tr("Add to playlist %1").arg(m_title->text()));
+    //Check the list.
+    if(addFileList.isEmpty())
+    {
+        //Ignore the request.
+        return;
+    }
+    //Add the music to playlist model.
+    playlistModel->appendUrls(addFileList);
 }
 
 void KNMusicPlaylistViewer::updateTitle()
@@ -349,4 +435,17 @@ inline void KNMusicPlaylistViewer::updateDetailInfo()
     }
     //Set the text to the detail label.
     m_detail->setText(playlistDetail);
+}
+
+inline KNOpacityAnimeButton *KNMusicPlaylistViewer::generateButton(
+        const QString &iconPath)
+{
+    //Generate the button.
+    KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
+    //Set the button size.
+    button->setFixedSize(16, 16);
+    //Configure the icon.
+    button->setIcon(QIcon(iconPath));
+    //Give back the button.
+    return button;
 }
