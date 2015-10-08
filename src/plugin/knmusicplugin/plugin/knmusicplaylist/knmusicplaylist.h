@@ -74,6 +74,7 @@ private slots:
     void onActionImportPlaylist();
     void onActionRemovePlaylist();
     void onActionExportPlaylist();
+    void onActionCopyPlaylist();
 
 private:
     inline QSplitter *generateSplitter();

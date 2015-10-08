@@ -90,6 +90,33 @@ QModelIndex KNMusicPlaylistManager::createPlaylist(int playlistPosition)
                 m_playlistList->insert(playlistPosition, model);
 }
 
+QModelIndex KNMusicPlaylistManager::copyPlaylist(const QModelIndex &index)
+{
+    //Check the validation of the index.
+    if(!index.isValid())
+    {
+        //Ignore the invalid operation.
+        return QModelIndex();
+    }
+    //Generate the playlist.
+    KNMusicPlaylistModel *model=new KNMusicPlaylistModel(m_workingThread,
+                                                         m_playlistList),
+    //Get the source playlist model.
+                         *sourceModel=playlist(index);
+    //Set the copy model title.
+    model->setTitle(generateTitle(sourceModel->title()));
+    //Copy the playlist data.
+    model->appendRows(sourceModel->playlistDetailInfos());
+    //Allocate a file path.
+    model->allcateFilePath();
+    //Save the source model.
+    writeModelToFile(sourceModel, sourceModel->filePath());
+    //Save the copied model.
+    writeModelToFile(model, model->filePath());
+    //Add the model to the playlist.
+    return m_playlistList->insert(index.row()+1, model);
+}
+
 void KNMusicPlaylistManager::installPlaylistParser(
         KNMusicPlaylistParser *parser)
 {

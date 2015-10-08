@@ -36,11 +36,13 @@ public:
     explicit KNMusicPlaylistList(QWidget *parent = 0);
     void setPlaylistList(KNMusicPlaylistListModel *model);
     void renamePlaylist(const QModelIndex &index);
+    QModelIndex currentIndex() const;
 
 signals:
     void requireCreatePlaylist();
     void requireImportPlaylists();
     void requireExportPlaylist();
+    void requireCopyPlaylist();
     void requireRemovePlaylist();
     void requireShowPlaylist(const QModelIndex &index);
 

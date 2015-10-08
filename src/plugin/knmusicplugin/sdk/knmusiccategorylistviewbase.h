@@ -45,6 +45,12 @@ public:
      */
     void setSearchPlaceHolderText(const QString &text);
 
+    /*!
+     * \brief Enabled a search action to the list view.\n
+     * Notice: You can only call this function once.
+     */
+    void enabledSearch();
+
 signals:
     /*!
      * \brief Ask for searching in the category model.

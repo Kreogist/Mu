@@ -76,14 +76,6 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     connect(m_searchBox, &KNMusicCategorySearch::requireCancel,
             this, &KNMusicCategoryListViewBase::hideSearchBar);
 
-    //Generate the search action.
-    QAction *searchAction=new QAction(this);
-    searchAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
-    searchAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(searchAction, &QAction::triggered,
-            this, &KNMusicCategoryListViewBase::onActionSearch);
-    addAction(searchAction);
-
     //Monitor the theme change signal.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMusicCategoryListViewBase::onActionPaletteChange);
@@ -95,6 +87,17 @@ void KNMusicCategoryListViewBase::setSearchPlaceHolderText(const QString &text)
 {
     //Set the text to the search place holder.
     m_searchBox->setPlaceHolderText(text);
+}
+
+void KNMusicCategoryListViewBase::enabledSearch()
+{
+    //Generate the search action.
+    QAction *searchAction=new QAction(this);
+    searchAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    searchAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(searchAction, &QAction::triggered,
+            this, &KNMusicCategoryListViewBase::onActionSearch);
+    addAction(searchAction);
 }
 
 void KNMusicCategoryListViewBase::enabledDragDrop()

@@ -300,3 +300,9 @@ bool KNMusicPlaylistModel::dropMimeData(const QMimeData *data,
     //Or others, throw it to KNMusicModel.
     return KNMusicModel::dropMimeData(data, action, row, column, parent);
 }
+
+QList<KNMusicDetailInfo> KNMusicPlaylistModel::playlistDetailInfos() const
+{
+    //Give back the detail info list.
+    return detailInfos();
+}

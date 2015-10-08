@@ -141,6 +141,12 @@ public:
                       int column,
                       const QModelIndex &parent) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Get the playlist model detail info list.
+     * \return The detail info list.
+     */
+    QList<KNMusicDetailInfo> playlistDetailInfos() const;
+
 signals:
     /*!
      * \brief When the playlist title changed, this signal will be emitted.

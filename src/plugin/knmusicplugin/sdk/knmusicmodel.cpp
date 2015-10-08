@@ -716,3 +716,8 @@ void KNMusicModel::initialTotalDuration(const quint64 &totalDuration)
     //Save the total duration.
     m_totalDuration=totalDuration;
 }
+QList<KNMusicDetailInfo> KNMusicModel::detailInfos() const
+{
+    return m_detailInfos;
+}
+

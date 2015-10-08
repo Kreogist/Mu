@@ -56,6 +56,7 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QWidget *parent) :
     m_genreDisplay->setCategoryColumn(Genre);
     //Configure the genre list.
     m_genreList->setTabOrder(m_genreList, m_genreDisplay);
+    m_genreList->enabledSearch();
     m_genreList->setItemDelegate(
                 new KNMusicLibraryCategoryDelegate(m_genreList));
     //Set the drop proxy widget to the content widget.

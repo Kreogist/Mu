@@ -322,6 +322,12 @@ protected:
      */
     void initialTotalDuration(const quint64 &totalDuration);
 
+    /*!
+     * \brief Get the detail info list from the model.
+     * \return The total detail info list from the model.
+     */
+    QList<KNMusicDetailInfo> detailInfos() const;
+
 private:
     QList<KNMusicDetailInfo> m_detailInfos;
     quint64 m_totalDuration;

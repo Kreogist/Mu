@@ -73,6 +73,11 @@ void KNMusicPlaylistList::renamePlaylist(const QModelIndex &index)
     m_playlistListView->edit(index);
 }
 
+QModelIndex KNMusicPlaylistList::currentIndex() const
+{
+    return m_playlistListView->currentIndex();
+}
+
 void KNMusicPlaylistList::showPlaylist(const QModelIndex &index)
 {
     //Set the current index to the prefer index.
@@ -180,6 +185,8 @@ inline void KNMusicPlaylistList::configureEditor()
     //Link action signals.
     connect(m_configureAction[ExportPlaylist], &QAction::triggered,
             this, &KNMusicPlaylistList::requireExportPlaylist);
+    connect(m_configureAction[CopyPlaylist], &QAction::triggered,
+            this, &KNMusicPlaylistList::requireCopyPlaylist);
 
     //Initial the layout of the editor.
     QBoxLayout *editorLayout=new QBoxLayout(QBoxLayout::LeftToRight,

@@ -58,6 +58,7 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
     m_artistDisplay->setCategoryColumn(Artist);
     //Configure the artist list.
     m_artistList->setTabOrder(m_artistList, m_artistDisplay);
+    m_artistList->enabledSearch();
     m_artistList->setItemDelegate(
                 new KNMusicLibraryCategoryDelegate(m_artistList));
     //Set the drop proxy widget to the content widget.

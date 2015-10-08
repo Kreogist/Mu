@@ -145,6 +145,13 @@ public:
     QModelIndex createPlaylist(int playlistPosition=-1);
 
     /*!
+     * \brief Generate a copy of playlist at a specific index.
+     * \param index The source playlist index.
+     * \return The copy playlist index.
+     */
+    QModelIndex copyPlaylist(const QModelIndex &index);
+
+    /*!
      * \brief Add one playlist parser to the playlist parser engine.
      * \param parser The parser object.
      */

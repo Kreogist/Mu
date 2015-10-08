@@ -92,6 +92,8 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
             this, &KNMusicPlaylist::onActionImportPlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireExportPlaylist,
             this, &KNMusicPlaylist::onActionExportPlaylist);
+    connect(m_playlistList, &KNMusicPlaylistList::requireCopyPlaylist,
+            this, &KNMusicPlaylist::onActionCopyPlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireRemovePlaylist,
             this, &KNMusicPlaylist::onActionRemovePlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireShowPlaylist,
@@ -218,7 +220,7 @@ void KNMusicPlaylist::onActionCreatePlaylist()
     //Generate a empty playlist model in the playlist manager, and get the index
     //of the model.
     QModelIndex playlistIndex=m_playlistManager->createPlaylist();
-    //Show and replace the playlist.
+    //Show and rename the playlist.
     showAndRenamePlaylist(playlistIndex);
     //Make the container switch to the content widget.
     m_container->showContentWidget();
@@ -326,6 +328,21 @@ void KNMusicPlaylist::onActionExportPlaylist()
                     exportPlaylist.selectedFiles().first(),
                     selectedParserIndex);
     }
+}
+
+void KNMusicPlaylist::onActionCopyPlaylist()
+{
+    //Check the current select playlist.
+    if(!m_playlistList->currentIndex().isValid())
+    {
+        //Ignore the invalid request.
+        return;
+    }
+    //Ask to copy the current selected playlist.
+    QModelIndex playlistIndex=m_playlistManager->copyPlaylist(
+                m_playlistList->currentIndex());
+    //Show and rename the playlist.
+    showAndRenamePlaylist(playlistIndex);
 }
 
 inline QSplitter *KNMusicPlaylist::generateSplitter()
