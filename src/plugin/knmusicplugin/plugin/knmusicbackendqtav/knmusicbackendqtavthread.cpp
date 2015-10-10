@@ -57,20 +57,20 @@ bool KNMusicBackendQtAVThread::loadFile(const QString &filePath)
 void KNMusicBackendQtAVThread::reset()
 {
     //Stop the player.
-    m_player->stop();
+    stopPlayer();
     //Unload the data.
     m_player->unload();
     //Reset the position value.
     m_startPosition=-1;
     m_endPosition=-1;
+    //Emit the state changed signal.
+    emit stateChanged(m_status);
 }
 
 void KNMusicBackendQtAVThread::stop()
 {
-    //Set the player to stop state.
-    m_player->stop();
-    //Reset the state data.
-    m_status=MusicUtil::Stopped;
+    //Stop the player.
+    stopPlayer();
     //Update the position as soon as possible.
     emit positionChanged(m_startPosition);
     //Emit the state changed signal.
@@ -152,6 +152,12 @@ void KNMusicBackendQtAVThread::setPlaySection(const qint64 &start,
         m_player->setStartPosition(m_startPosition);
         //Set the end position.
         m_player->setStopPosition(m_endPosition);
+        //Check out the end position is 0 or not.
+        if(m_endPosition==0)
+        {
+            //Change the end position to the media stop position.
+            m_endPosition=m_player->mediaStopPosition()-100;
+        }
     }
 }
 
@@ -169,13 +175,29 @@ void KNMusicBackendQtAVThread::setVolume(const int &volume)
 
 void KNMusicBackendQtAVThread::setPosition(const qint64 &position)
 {
-    m_player->seek(m_startPosition+position);
+    //Calculate the prefer position.
+    qint64 preferPosition=m_startPosition+position;
+    //Check the position and the duration is valid or not.
+    if(m_player->duration() > 0 && m_status!=MusicUtil::Stopped)
+    {
+        m_player->seek(preferPosition>=m_endPosition?
+                           m_endPosition:
+                           preferPosition);
+    }
 }
 
 void KNMusicBackendQtAVThread::onActionPositionChanged(const qint64 &position)
 {
     //Emit the position changed signal.
     emit positionChanged(position-m_startPosition);
+    //Check whether the position reach the end position.
+    if(position>=m_endPosition)
+    {
+        //Stop the player.
+        stopPlayer();
+        //Emit a finished signal.
+        emit finished();
+    }
 }
 
 void KNMusicBackendQtAVThread::onActionMediaStateChanged(
@@ -190,7 +212,12 @@ void KNMusicBackendQtAVThread::onActionMediaStateChanged(
         break;
     case QtAV::EndOfMedia:
         //This should means we have played to the end of the file.
+        //Stop the player.
+        stopPlayer();
+        //Emit finished signal.
         emit finished();
+        break;
+    default:
         break;
     }
 }
@@ -207,10 +234,22 @@ void KNMusicBackendQtAVThread::onActionLoaded()
     m_player->setStartPosition(m_startPosition);
     //Set the end position.
     m_player->setStopPosition(m_endPosition);
+    //Check out the end position is 0 or not.
+    if(m_endPosition==0)
+    {
+        //Change the end position to the media stop position.
+        m_endPosition=m_player->mediaStopPosition()-100;
+    }
     //Get the duration of the player.
-    emit durationChanged(((m_endPosition==0)?
-                             m_player->mediaStopPosition():m_endPosition) -
-                         m_startPosition);
+    emit durationChanged(m_endPosition - m_startPosition);
     //Emit the loaded success signal.
     emit loadSuccess();
+}
+
+inline void KNMusicBackendQtAVThread::stopPlayer()
+{
+    //Set the player to stop state.
+    m_player->stop();
+    //Reset the state data.
+    m_status=MusicUtil::Stopped;
 }

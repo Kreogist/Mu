@@ -100,6 +100,7 @@ private slots:
     void onActionLoaded();
 
 private:
+    inline void stopPlayer();
     QtAV::AVPlayer *m_player;
     qint64 m_startPosition,
            m_endPosition;
