@@ -145,6 +145,7 @@ void KNMusicScrollLyrics::onActionLyricsMoved(const int &frame)
     //Redraw the widget.
     update();
 }
+
 Qt::Alignment KNMusicScrollLyrics::alignment() const
 {
     return m_alignment;

@@ -48,15 +48,16 @@ void KNMusicBackendQtAV::setGlobalVolume(const int &volume)
 {
     //Set the volume to main thread.
     m_main->setVolume(volume);
+    //Emit the volume changed signal.
+    emit volumeChanged(m_main->volume());
 }
 
 int KNMusicBackendQtAV::volumeLevel() const
 {
-    return 100;
+    return 1000;
 }
 
 qreal KNMusicBackendQtAV::smartVolumeScale() const
 {
-    return 0.5;
+    return 0.125;
 }
-

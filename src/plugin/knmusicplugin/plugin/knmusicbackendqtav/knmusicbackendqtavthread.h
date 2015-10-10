@@ -103,6 +103,7 @@ private:
     QtAV::AVPlayer *m_player;
     qint64 m_startPosition,
            m_endPosition;
+    qreal m_volumeSize;
     int m_status;
 };
 

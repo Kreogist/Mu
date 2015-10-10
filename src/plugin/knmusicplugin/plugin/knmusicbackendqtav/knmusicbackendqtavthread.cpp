@@ -24,8 +24,12 @@ KNMusicBackendQtAVThread::KNMusicBackendQtAVThread(QObject *parent) :
     KNMusicStandardBackendThread(parent),
     m_player(new QtAV::AVPlayer(this)),
     m_startPosition(-1),
+    m_endPosition(-1),
+    m_volumeSize(1.0),
     m_status(MusicUtil::Stopped)
 {
+    //Change the notify interval.
+    m_player->setNotifyInterval(16);
     //Link the player to the signals.
     connect(m_player, &QtAV::AVPlayer::positionChanged,
             this, &KNMusicBackendQtAVThread::onActionPositionChanged);
@@ -52,7 +56,13 @@ bool KNMusicBackendQtAVThread::loadFile(const QString &filePath)
 
 void KNMusicBackendQtAVThread::reset()
 {
-    ;
+    //Stop the player.
+    m_player->stop();
+    //Unload the data.
+    m_player->unload();
+    //Reset the position value.
+    m_startPosition=-1;
+    m_endPosition=-1;
 }
 
 void KNMusicBackendQtAVThread::stop()
@@ -76,7 +86,7 @@ void KNMusicBackendQtAVThread::play()
         return;
     }
     //Check out previous status.
-    if(m_status==MusicUtil::Paused)
+    if(m_player->isPaused())
     {
         //Disabled the pause state.
         m_player->pause(false);
@@ -109,9 +119,7 @@ void KNMusicBackendQtAVThread::pause()
 int KNMusicBackendQtAVThread::volume()
 {
     //Check audio from the avplayer is null or not.
-    return m_player->audio()==nullptr?
-                //Give back 0 for default.
-                0:m_player->audio()->volume()*10000;
+    return m_volumeSize*10000;
 }
 
 qint64 KNMusicBackendQtAVThread::duration()
@@ -121,7 +129,7 @@ qint64 KNMusicBackendQtAVThread::duration()
 
 qint64 KNMusicBackendQtAVThread::position()
 {
-    return m_player->position();
+    return m_player->position()-m_startPosition;
 }
 
 int KNMusicBackendQtAVThread::state() const
@@ -134,7 +142,7 @@ void KNMusicBackendQtAVThread::setPlaySection(const qint64 &start,
                                               const qint64 &duration)
 {
     //Update the start position to the start.
-    m_startPosition=(start!=-1)?0:start;
+    m_startPosition=(start==-1)?0:start;
     //Check out the duration, that should be the position.
     m_endPosition=(duration==-1)?0:m_startPosition+duration;
     //Check out the media loading state.
@@ -149,17 +157,19 @@ void KNMusicBackendQtAVThread::setPlaySection(const qint64 &start,
 
 void KNMusicBackendQtAVThread::setVolume(const int &volume)
 {
+    //Save the volumn size.
+    m_volumeSize=(qreal)volume/10000.0;
     //Check out the audio pointer.
     if(m_player->audio())
     {
         //Set the volumn to the player.
-        m_player->audio()->setVolume((qreal)volume/10000.0);
+        m_player->audio()->setVolume(m_volumeSize);
     }
 }
 
 void KNMusicBackendQtAVThread::setPosition(const qint64 &position)
 {
-    m_player->seek(position);
+    m_player->seek(m_startPosition+position);
 }
 
 void KNMusicBackendQtAVThread::onActionPositionChanged(const qint64 &position)
@@ -174,6 +184,10 @@ void KNMusicBackendQtAVThread::onActionMediaStateChanged(
     //Check out the status.
     switch(status)
     {
+    case QtAV::InvalidMedia:
+        //Because the media is invalid, loaded should be failed.
+        emit loadFailed();
+        break;
     case QtAV::EndOfMedia:
         //This should means we have played to the end of the file.
         emit finished();
@@ -183,14 +197,16 @@ void KNMusicBackendQtAVThread::onActionMediaStateChanged(
 
 void KNMusicBackendQtAVThread::onActionLoaded()
 {
-    //Check out the media loading state.
-    if(m_player->isLoaded())
+    //Update the volume size.
+    if(m_player->audio())
     {
-        //Set the start and end position.
-        m_player->setStartPosition(m_startPosition);
-        //Set the end position.
-        m_player->setStopPosition(m_endPosition);
+        //Set the volume size.
+        m_player->audio()->setVolume(m_volumeSize);
     }
+    //Set the start and end position.
+    m_player->setStartPosition(m_startPosition);
+    //Set the end position.
+    m_player->setStopPosition(m_endPosition);
     //Get the duration of the player.
     emit durationChanged(((m_endPosition==0)?
                              m_player->mediaStopPosition():m_endPosition) -
