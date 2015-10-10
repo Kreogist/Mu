@@ -191,6 +191,13 @@ protected:
      */
     void playIndex(const QModelIndex &index);
 
+    /*!
+     * \brief Set whether we should process the drag move event.
+     * \param dropInline To let the tree view process the drag move event,
+     * return true. Or else return false.
+     */
+    void setAcceptDragMove(bool dropInline);
+
 protected slots:
     /*!
      * \brief This slot is provide to update the palette when the tree view is
@@ -221,7 +228,7 @@ private:
     int m_dragMoveRow;
     QAbstractItemView::DropIndicatorPosition m_dragIndicatorPos;
 
-    bool m_initialLoad, m_pressed;
+    bool m_initialLoad, m_pressed, m_notAcceptDragMove;
 };
 
 #endif // KNMUSICTREEVIEWBASE_H

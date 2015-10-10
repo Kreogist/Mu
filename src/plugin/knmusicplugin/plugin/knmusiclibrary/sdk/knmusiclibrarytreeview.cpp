@@ -34,6 +34,7 @@ KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent,
     //Update the object name.
     updateObjectName("LibraryTreeView");
     //Set properties.
+    setAcceptDrops(false);
     setSortingEnabled(true);
     header()->setSortIndicatorShown(true);
 }

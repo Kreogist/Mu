@@ -51,7 +51,8 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     m_dragMoveRow(-1),
     m_dragIndicatorPos(QAbstractItemView::OnViewport),
     m_initialLoad(true),
-    m_pressed(false)
+    m_pressed(false),
+    m_notAcceptDragMove(false)
 {
     //Set properties.
     setAllColumnsShowFocus(true);
@@ -68,8 +69,6 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setUniformRowHeights(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    //Enabled drop according to the help context.
-    viewport()->setAcceptDrops(true);
 
     //Set scroll bar policies.
     horizontalScrollBar()->setSingleStep(5);
@@ -199,7 +198,7 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
 void KNMusicTreeViewBase::dragEnterEvent(QDragEnterEvent *event)
 {
     //Check the model.
-    if(musicModel()==nullptr)
+    if(musicModel()==nullptr || m_notAcceptDragMove)
     {
         //Ignore the drag event when the music model is null.
         event->ignore();
@@ -216,17 +215,37 @@ void KNMusicTreeViewBase::dragMoveEvent(QDragMoveEvent *event)
     //Ignore the event by default.
     event->ignore();
     //Check the model.
-    if(musicModel()==nullptr)
+    if(musicModel()==nullptr || m_notAcceptDragMove)
     {
         //Ignore the drag event when the music model is null.
         return;
     }
     //Check mime type.
     const QMimeData *dragMimeData=event->mimeData();
-    if(dragMimeData->hasUrls() ||
-            dragMimeData->hasFormat(ModelMimeType))
+    //Check whether this data is from another music model.
+    if(dragMimeData->hasFormat(ModelMimeType))
     {
+        //Accept this format drag and drop.
         event->accept();
+    }
+    else
+    {
+        //Check whether we have urls from file viewers, like Explorer(Windows)
+        //or Finder(Mac OS X).
+        if(dragMimeData->hasUrls())
+        {
+            //Accept it first.
+            event->accept();
+            //Set it to the end of the whole model.
+            //Set the drag move row to the last row.
+            m_dragMoveRow=proxyModel()->rowCount()-1;
+            //Update the drag indicator position to below item.
+            m_dragIndicatorPos=QAbstractItemView::BelowItem;
+            //Update the widget.
+            viewport()->update();
+            //Mission complete.
+            return;
+        }
     }
     //Check the event state.
     if(!event->isAccepted())
@@ -553,6 +572,12 @@ void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
     }
     //Ask the now playing to play the index row.
     nowPlaying->playMusicRow(proxyModel(), index.row(), m_musicTab);
+}
+
+void KNMusicTreeViewBase::setAcceptDragMove(bool dropInline)
+{
+    //Save the switcher.
+    m_notAcceptDragMove=!dropInline;
 }
 
 inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event, int &dropRow)
