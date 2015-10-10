@@ -19,6 +19,8 @@
 #ifndef KNMUSICLYRICSBACKEND_H
 #define KNMUSICLYRICSBACKEND_H
 
+#include <QStringList>
+
 #include <QObject>
 
 /*!

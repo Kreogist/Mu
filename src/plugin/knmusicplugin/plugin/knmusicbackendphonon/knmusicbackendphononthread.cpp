@@ -18,6 +18,8 @@
 
 #include "knmusicbackendphononthread.h"
 
+#include <QDebug>
+
 KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
     KNMusicStandardBackendThread(parent),
     m_volumeCurve(QEasingCurve(QEasingCurve::OutCubic)),
@@ -28,6 +30,8 @@ KNMusicBackendPhononThread::KNMusicBackendPhononThread(QObject *parent) :
     m_duration(-1),
     m_startPosition(-1),
     m_endPosition(-1),
+    m_pausedPosition(-1),
+    m_state(Stopped),
     m_ticking(false)
 {
     //Configure the media object.
@@ -98,14 +102,21 @@ void KNMusicBackendPhononThread::stop()
 
 void KNMusicBackendPhononThread::play()
 {
-    //Play the media object.
-    m_mediaObject->play();
+    //Seek the media object.
+    m_mediaObject->seek(m_pausedPosition);
 }
 
 void KNMusicBackendPhononThread::pause()
 {
-    //Pause the media object.
-    m_mediaObject->pause();
+    qDebug()<<"Paused!";
+    //Check the playing state.
+    if(m_mediaObject->state()!=Phonon::PausedState)
+    {
+        //Pause the media object.
+        m_mediaObject->pause();
+        //Get the playing time, saved as paused position.
+        m_pausedPosition=m_mediaObject->currentTime();
+    }
 }
 
 int KNMusicBackendPhononThread::volume()

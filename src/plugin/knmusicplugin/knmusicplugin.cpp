@@ -86,6 +86,9 @@
 #ifdef ENABLE_BACKEND_PHONON
 #include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
 #endif
+#ifdef ENABLE_BACKEND_QTAV
+#include "plugin/knmusicbackendqtav/knmusicbackendqtav.h"
+#endif
 // Analysiser
 #ifdef ENABLED_FFMPEG_ANALYSISER
 #include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
@@ -198,6 +201,9 @@ void KNMusicPlugin::loadPlugins()
 #endif
 #ifdef ENABLE_BACKEND_PHONON
     initialBackend(new KNMusicBackendPhonon);
+#endif
+#ifdef ENABLE_BACKEND_QTAV
+    initialBackend(new KNMusicBackendQtAV);
 #endif
     //Initial the now playing.
     initialNowPlaying(new KNMusicNowPlaying);

@@ -143,7 +143,7 @@ macx: {
 
 linux: {
     # Enable the backend and analysiser.
-    CONFIG += backend-phonon analysiser-ffmpeg
+    CONFIG += backend-av analysiser-ffmpeg
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
@@ -151,6 +151,24 @@ linux: {
 }
 
 # Backend Specific Configuration
+backend-av: {
+    # Check whether there's a backend enabled already
+    contains(DEFINES, BACKEND_ENABLED){
+        error("You can't enable more than one backend at the same time.")
+    }
+    # Define the backend enabled flag.
+    DEFINES += ENABLE_BACKEND_QTAV BACKEND_ENABLED
+    # Add QT modules.
+    QT += av
+    # Add backend files to the project.
+    SOURCES += \
+        plugin/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtav.cpp \
+        plugin/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtavthread.cpp
+    HEADERS += \
+        plugin/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtav.h \
+        plugin/knmusicplugin/plugin/knmusicbackendqtav/knmusicbackendqtavthread.h
+}
+
 backend-bass: {
     # Check whether there's a backend enabled already
     contains(DEFINES, BACKEND_ENABLED){

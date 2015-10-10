@@ -43,7 +43,6 @@ public:
      */
     qint64 duration() const Q_DECL_OVERRIDE;
 
-
     /*!
      * \brief  Reimplemented from KNMusicBackend::position().
      */
