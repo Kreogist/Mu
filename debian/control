@@ -13,7 +13,8 @@ Homepage: http://kreogist.github.io/Mu/
 Package: mu
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: phonon4qt5-backend-gstreamer
+Recommends: phonon4qt5-backend-gstreamer,
+            phonon4qt5-backend-vlc
 Suggests:   gstreamer1.0-plugins-bad,
             gstreamer1.0-plugins-ugly,
             gstreamer1.0-plugins-libav
