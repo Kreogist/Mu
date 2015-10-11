@@ -48,6 +48,8 @@ void KNMusicBackendPhonon::setGlobalVolume(const int &volume)
 {
     //Change the main thread volume as system volume.
     m_main->setVolume(volume);
+    //Update the volume size.
+    emit volumeChanged(volume);
 }
 
 int KNMusicBackendPhonon::volumeLevel() const

@@ -1,0 +1,51 @@
+mu (0.9) unstable; urgency=medium
+
+  * Simplified the KNPluginManager.
+  * Update the KNJsonDatabase module to 3.0. Support fast data reading.
+  * Support clear up the image directory when loading the images.
+  * Increase the write data operation maximum bound to 400.
+  * Use brand new KNMusicModel module, no more QStandardItemModel.
+  * Change the policy to load images from hard disk, optimized the start up speed.
+  * Change the policy to parse and find files in music library.
+  * Fixed the drag and drop bug in playlist caused by the QTreeView can only drop one data.
+  * Fixed the crashed bug caused by use AutoConnection and overflow the call stack in the library. 
+  * Fixed the proxy model sort unstable bug.
+  * Fixed the library tree view bug.
+  * More in NEWS
+
+ -- Saki Tojo <tomguts@126.com> Tue, 11 Oct 2015 11:32:00 +1100
+
+mu (0.8) unstable; urgency=medium
+
+  * New main player UI.
+  * New shuffle loop mode.
+  * New lyrics download dialog.
+  * New preference item cancel button for canceling single option.
+  * New Mac OS X tray controls.
+  * New Windows taskbar controls for up/down volume, slient and loop mode.
+  * Support minimized to tray icon on Windows.
+  * Improve UI performance by replaced QOpacityGraphicsEffect to QPainter.
+  * Fixed the wrong lyrics information provided bug in TTPod server module.
+  * Fixed the mouse penetrate bug in album art mode.
+
+ -- Saki Tojo <tomguts@126.com> Tue, 17 Mar 2015 08:30:00 +0800
+
+mu (0.7) unstable; urgency=medium
+
+  * Improve initial running speed. (Project S)
+  * Improve music playing speed. (Project S)
+  * Improve lyrics search speed. (Project S)
+  * Optimized lyrics download policy. (Project S)
+  * Optimized music switch policy. (Project S)
+  * Add import files and play current playlist button on playlist panel.
+  * Support rename the file for any name. (experimental)
+  * Fixed the image update bug.
+
+ -- Saki Tojo <tomguts@126.com> Sat, 14 Feb 2015 21:46:40 +0800
+
+mu (0.6.3) unstable; urgency=medium
+
+  * Initial release.
+
+ -- 宋文武 <iyzsong@gmail.com>  Fri, 30 Jan 2015 17:57:44 +0800
+

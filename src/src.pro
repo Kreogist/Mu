@@ -100,18 +100,6 @@ gcc: {
     }
 }
 
-# International Configureations.
-i10n: {
-    # Add MAKE_QM_FILES to the extra compilers.
-    QMAKE_EXTRA_COMPILERS += MAKE_QM_FILES
-    # MAKE_QM_FILES is a extra execution to called the lrelease to update the
-    # qm file according to the original ts file real-time.
-    MAKE_QM_FILES.input = TRANSLATIONS
-    MAKE_QM_FILES.output = ${QMAKE_FILE_BASE}.qm
-    MAKE_QM_FILES.commands = lrelease ${QMAKE_FILE_BASE} -qm ${QMAKE_FILE_BASE}.qm
-    MAKE_QM_FILES.CONFIG += no_link target_predeps
-}
-
 # Platform Specific Configuration.
 win32: {
     # Application icon.
@@ -143,14 +131,43 @@ macx: {
 
 linux: {
     # Enable the backend and analysiser.
-    CONFIG += backend-av analysiser-ffmpeg
+    CONFIG += backend-phonon analysiser-ffmpeg i18n
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
     INSTALLS += target
 }
 
+# International Configureations.
+i18n: {
+    # MAKE_QM_FILES is a extra execution to called the lrelease to update the
+    # qm file according to the original ts file real-time.
+    MAKE_QM_FILES.input = TRANSLATIONS
+    MAKE_QM_FILES.output = ${QMAKE_FILE_BASE}.qm
+    MAKE_QM_FILES.commands = lrelease ${QMAKE_FILE_NAME} -qm i18n/${QMAKE_FILE_BASE}.qm
+    MAKE_QM_FILES.CONFIG += no_link target_predeps
+    # Add MAKE_QM_FILES to the extra compilers.
+    QMAKE_EXTRA_COMPILERS += MAKE_QM_FILES
+}
+
 # Backend Specific Configuration
+backend-mpv: {
+    # Check whether there's a backend enabled already
+    contains(DEFINES, BACKEND_ENABLED){
+        error("You can't enable more than one backend at the same time.")
+    }
+    # Define the backend enabled flag.
+    DEFINES += ENABLE_BACKEND_MPV BACKEND_ENABLED
+    # Add backend library to the project.
+    LIBS += -lmpv
+    # Add backend files to the project.
+    SOURCES += \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpv.cpp \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpvthread.cpp
+    HEADERS += \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpv.h \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpvthread.h
+}
 backend-av: {
     # Check whether there's a backend enabled already
     contains(DEFINES, BACKEND_ENABLED){

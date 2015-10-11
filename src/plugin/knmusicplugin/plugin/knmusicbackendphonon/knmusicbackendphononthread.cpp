@@ -102,13 +102,16 @@ void KNMusicBackendPhononThread::stop()
 
 void KNMusicBackendPhononThread::play()
 {
-    //Seek the media object.
-    m_mediaObject->seek(m_pausedPosition);
+    //Check the playing state.
+    if(m_mediaObject->state()!=Phonon::PlayingState)
+    {
+        //Play the media.
+        m_mediaObject->play();
+    }
 }
 
 void KNMusicBackendPhononThread::pause()
 {
-    qDebug()<<"Paused!";
     //Check the playing state.
     if(m_mediaObject->state()!=Phonon::PausedState)
     {
@@ -158,7 +161,7 @@ void KNMusicBackendPhononThread::setPlaySection(const qint64 &start,
     }
     //Check out the total duration, it the file is loaded, we have to check the
     //start and end position.
-    if(m_totalDuration==-1)
+    if(m_totalDuration!=-1)
     {
         //Check and update the positions.
         checkStartAndEndPosition();

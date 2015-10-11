@@ -238,7 +238,7 @@ void KNMusicBackendQtAVThread::onActionLoaded()
     if(m_endPosition==0)
     {
         //Change the end position to the media stop position.
-        m_endPosition=m_player->mediaStopPosition()-100;
+        m_endPosition=m_player->duration()-100;
     }
     //Get the duration of the player.
     emit durationChanged(m_endPosition - m_startPosition);

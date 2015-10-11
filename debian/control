@@ -1,0 +1,20 @@
+Source: mu
+Section: sound
+Priority: optional
+Maintainer: Tojo Saki <tomguts@126.com>
+Build-Depends: debhelper (>= 9),
+               qt5-default, libphonon4qt5-dev,
+               libavformat-dev,
+               libavcodec-dev,
+               libavutil-dev
+Standards-Version: 3.9.5
+Homepage: http://kreogist.github.io/Mu/
+
+Package: mu
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: phonon4qt5-backend-gstreamer
+Suggests:   gstreamer1.0-plugins-bad,
+            gstreamer1.0-plugins-ugly,
+            gstreamer1.0-plugins-libav
+Description: Kreogist Mu is a cross-platform music manager based on Qt 5. It will use bass as playing backend under Windows and Mac OS X, support multiple music format via bass plugins. It will use phonon(libphonon4qt5) as playing backend under Linux releases. You have to configure the phonon for supporting multiple file support.

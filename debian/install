@@ -1,0 +1,4 @@
+bin/mu /usr/bin
+src/resource/icon/mu.png /usr/share/icons/hicolor/256x256/apps
+debian/mu.desktop /usr/share/applications
+
