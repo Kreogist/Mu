@@ -19,6 +19,8 @@
 #ifndef KNMUSICBACKENDMPV_H
 #define KNMUSICBACKENDMPV_H
 
+#include <QThread>
+
 #include "knmusicstandardbackend.h"
 
 class KNMusicBackendMpvThread;
@@ -27,6 +29,7 @@ class KNMusicBackendMpv : public KNMusicStandardBackend
     Q_OBJECT
 public:
     explicit KNMusicBackendMpv(QObject *parent = 0);
+    ~KNMusicBackendMpv();
 
     /*!
      * \brief Reimplemented from KNMusicStandardBackend::volume().
@@ -64,6 +67,7 @@ protected:
     qreal smartVolumeScale() const Q_DECL_OVERRIDE;
 
 private:
+    QThread m_mainThread, m_previewThread;
     KNMusicBackendMpvThread *m_main, *m_preview;
 };
 

@@ -23,17 +23,36 @@
 
 KNMusicBackendMpv::KNMusicBackendMpv(QObject *parent) :
     KNMusicStandardBackend(parent),
-    m_main(new KNMusicBackendMpvThread(this)),
-    m_preview(new KNMusicBackendMpvThread(this))
+    m_main(new KNMusicBackendMpvThread()),
+    m_preview(new KNMusicBackendMpvThread())
 {
+    //Move to work thread.
+    m_main->moveToThread(&m_mainThread);
+    m_preview->moveToThread(&m_previewThread);
     //Set threads.
     setMainThread(m_main);
     setPreviewThread(m_preview);
+    //Start thread.
+    m_mainThread.start();
+    m_previewThread.start();
+}
+
+KNMusicBackendMpv::~KNMusicBackendMpv()
+{
+    //Quit the working threads.
+    m_mainThread.quit();
+    m_previewThread.quit();
+    //Wait for quitting.
+    m_mainThread.wait();
+    m_previewThread.wait();
+    //Recover memory.
+    m_main->deleteLater();
+    m_preview->deleteLater();
 }
 
 int KNMusicBackendMpv::volume() const
 {
-    ;
+    return m_main->volume();
 }
 
 int KNMusicBackendMpv::minimalVolume() const
@@ -48,7 +67,10 @@ int KNMusicBackendMpv::maximumVolume() const
 
 void KNMusicBackendMpv::setGlobalVolume(const int &volume)
 {
-    ;
+    //Set the volume size to main thread.
+    m_main->setVolume(volume);
+    //Emit the volume changed signal.
+    emit volumeChanged(m_main->volume());
 }
 
 int KNMusicBackendMpv::volumeLevel() const

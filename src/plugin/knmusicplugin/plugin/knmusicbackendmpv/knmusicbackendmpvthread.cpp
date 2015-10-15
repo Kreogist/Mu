@@ -17,219 +17,412 @@
  */
 #include <clocale>
 
+#include <QCoreApplication>
+
 #include "knmusicbackendmpvthread.h"
 
 #include <QDebug>
 
 KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     KNMusicStandardBackendThread(parent),
+    m_volumeCurve(QEasingCurve(QEasingCurve::OutQuad)),
+    m_filePath(QString()),
     m_totalDuration(-1),
     m_duration(-1),
     m_startPosition(-1),
     m_endPosition(-1),
-    mpv(nullptr),
-    m_state(MusicUtil::Stopped)
+    m_mpvHandle(nullptr),
+    m_state(MusicUtil::Stopped),
+    m_volumeSize(100)
 {
-    // Qt sets the locale in the QApplication constructor, but libmpv requires
-    // the LC_NUMERIC category to be set to "C", so change it back.
-    std::setlocale(LC_NUMERIC, "C");
-    //Initial the mpv instance.
-    mpv=mpv_create();
-    //Check out the mpv pointer.
-    if(mpv==nullptr)
+    //Initial the locale settings.
+    setlocale(LC_NUMERIC, "C");
+    //Create the mpv handle.
+    m_mpvHandle=mpv_create();
+    //Check out the mpv handle.
+    if(!m_mpvHandle)
     {
-        //The backend thread start failed.
+        //Cannot create an instance for mpv.
         return;
     }
-    //Enable default bindings, because we're lazy. Normally, a player using
-    //mpv as backend would implement its own key bindings.
-    mpv_set_option_string(mpv, "input-default-bindings", "yes");
-    //Disable keyboard input on the X11 window.
-    mpv_set_option_string(mpv, "input-vo-keyboard", "no");
-    //Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
-    //this property changes.
-    mpv_observe_property(mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
+    //Set mpv options.
+    // No mouse handling.
+    mpv_set_option_string(m_mpvHandle, "input-cursor", "no");
+    // No cursor-autohide.
+    mpv_set_option_string(m_mpvHandle, "cursor-autohide", "no");
+    mpv_set_option_string(m_mpvHandle, "no-video", NULL);
 
-    //From this point on, the wakeup function will be called. The callback
-    //can come from any thread, so we use the QueuedConnection mechanism to
-    //relay the wakeup in a thread-safe way.
-    connect(this, &KNMusicBackendMpvThread::mpv_events,
-            this, &KNMusicBackendMpvThread::on_mpv_events,
-            Qt::QueuedConnection);
-    //Set wake up callback.
-    mpv_set_wakeup_callback(mpv, wakeup, this);
-    //Initialize the mpv instance.
-    mpv_initialize(mpv);
+    // get updates when these properties change
+    mpv_observe_property(m_mpvHandle, 0, "time-pos", MPV_FORMAT_DOUBLE);
+
+    // setup callback event handling
+    mpv_set_wakeup_callback(m_mpvHandle,
+                            KNMusicBackendMpvThread::instanceWakeUp,
+                            this);
+    //Initialize the mpv handler.
+    mpv_initialize(m_mpvHandle);
+}
+
+KNMusicBackendMpvThread::~KNMusicBackendMpvThread()
+{
+    //Destory mpv to recover memory.
+    if(m_mpvHandle)
+    {
+        //Terminate and destory.
+        mpv_terminate_destroy(m_mpvHandle);
+    }
 }
 
 bool KNMusicBackendMpvThread::loadFile(const QString &filePath)
 {
-    //Check mpv instance first.
-    if(mpv==nullptr)
+    //Check out the file path.
+    if(m_filePath==filePath)
     {
-        //If the mpv instance is not loaded, then it cannot be true.
-        return false;
+        ;
     }
-    //Reset the state.
-    setState(MusicUtil::Stopped);
-    //Get the file name.
-    const QByteArray c_filename=filePath.toUtf8();
-    //Generate the commands.
-    const char *loadArgs[]={"loadfile", c_filename.data(), NULL};
-    //Write the data to mpv.
-    if(mpv_command(mpv, loadArgs)<0)
-    {
-        //Emit failed.
-        emit loadFailed();
-        //Failed to load the file.
-        return false;
-    }
-    //Pause the mpv instance.
-//    pause();
-    //Get the duration.
-
-    //Emit loaded success signal.
-//    emit loadSuccess();
+    //Save the load file path.
+    m_filePath=filePath;
+    //Reset the thread data first.
+    m_totalDuration=-1;
+    resetParameter();
+    //Open file path in the mpv handle.
+    //Prepare load file commands.
+    const char *args[] = {"loadfile",
+                          filePath.toUtf8().constData(),
+                          NULL};
+    //Launch command.
+    exeCommand(args);
+    //Give back loaded signal.
     return true;
 }
 
 void KNMusicBackendMpvThread::reset()
 {
-    ;
+    //Stop the instance.
+    //!FIXME: change to real reset.
+    pause();
 }
 
 void KNMusicBackendMpvThread::stop()
 {
-
+    //It seems that I did the same thing as BakaMPlayer.
+    //Restart the thread.
+    setPosition(0);
+    //Pause the thread.
+    pause();
 }
 
 void KNMusicBackendMpvThread::play()
 {
-    //Check the mpv instance first.
-    //Check out the state.
-    if(mpv==nullptr)
+    //Check out the playing state.
+    if(m_state!=MusicUtil::Playing && m_mpvHandle)
     {
-        //If the mpv instance is not loaded, then it cannot be true.
-        return;
+        //Prepare the property data.
+        int f=0;
+        //Use async way to play the handle.
+        mpv_set_property_async(m_mpvHandle,
+                               0,
+                               "pause",
+                               MPV_FORMAT_FLAG,
+                               &f);
     }
-    //Disable the pause.
-    bool pauseFlag=false;
-    mpv_set_property(mpv, "pause", MPV_FORMAT_FLAG, &pauseFlag);
-    //Set state to playing state.
-    setState(MusicUtil::Playing);
 }
 
 void KNMusicBackendMpvThread::pause()
 {
-    //Check the mpv instance first.
-    if(mpv==nullptr)
+    //Check out playing state.
+    if(m_state==MusicUtil::Playing && m_mpvHandle)
     {
-        //If the mpv instance is not loaded, then it cannot be true.
-        return;
+        //Prepare the property data.
+        int f=1;
+        //Use async way to pause the handle.
+        mpv_set_property_async(m_mpvHandle,
+                               0,
+                               "pause",
+                               MPV_FORMAT_FLAG,
+                               &f);
     }
-    //Enable the pause.
-    bool pauseFlag=true;
-    mpv_set_property(mpv, "pause", MPV_FORMAT_FLAG, &pauseFlag);
-    //Set state to pausd.
-    setState(MusicUtil::Paused);
 }
 
 int KNMusicBackendMpvThread::volume()
 {
+    return m_volumeSize;
 }
 
 qint64 KNMusicBackendMpvThread::duration()
 {
-    ;
+    //Give back the duration data.
+    return m_duration;
 }
 
 qint64 KNMusicBackendMpvThread::position()
 {
+    ;
 }
 
 int KNMusicBackendMpvThread::state() const
 {
-    ;
+    //Give back the state.
+    return m_state;
 }
 
 void KNMusicBackendMpvThread::setPlaySection(const qint64 &start,
                                              const qint64 &duration)
 {
-//    //Save the start position and duration.
-//    m_startPosition=start;
-//    //Check out the duration.
-//    if(duration!=-1)
-//    {
-//        //Save the valid position, and calculate the new end position.
-//        m_duration=duration;
-//        //Calculate the end position of the file.
-//        m_endPosition=m_startPosition+m_duration;
-//    }
-//    //Check out the total duration, it the file is loaded, we have to check the
-//    //start and end position.
-//    if(m_totalDuration!=-1)
-//    {
-//        //Check and update the positions.
-//        checkStartAndEndPosition();
-//    }
+    //Save up the start and end duration.
+    m_startPosition=start;
+    //Check out the duration.
+    if(duration!=-1)
+    {
+        //Save the valid position.
+        m_duration=duration;
+        //Calculate the end position.
+        m_endPosition=m_startPosition+m_duration;
+    }
+    //Check out the total duration here.
+    if(m_totalDuration!=-1)
+    {
+        //Check and update the positions.
+        checkStartAndEndPosition();
+    }
 }
 
 void KNMusicBackendMpvThread::setVolume(const int &volume)
 {
+    //Check out the volume size.
+    if(volume>100)
+    {
+        m_volumeSize=100;
+    }
+    else if(volume<0)
+    {
+        m_volumeSize=0;
+    }
+    else
+    {
+        m_volumeSize=volume;
+    }
+    //Set the volume size.
+    //Generate the volume size data.
+    const char *args[]=
+    {
+        "set",
+        "volume",
+        QString::number((int)(m_volumeCurve.valueForProgress(
+            (qreal)m_volumeSize/100.0)*100.0)).toUtf8().constData(),
+        NULL
+    };
+    //Use async command to set volume.
+    exeAsyncCommand(args);
 }
 
 void KNMusicBackendMpvThread::setPosition(const qint64 &position)
 {
-}
-
-void KNMusicBackendMpvThread::on_mpv_events()
-{
-    while (mpv)
+    //Check out the mpv handler.
+    if(m_mpvHandle) //!FIXME: Check file as well.
     {
-        //Get the mpv_event from the mpv.
-        mpv_event *event=mpv_wait_event(mpv, 0);
-        //Check out the event.
-        if(event->event_id==MPV_EVENT_NONE)
+        qDebug()<<"Here?!"<<QString::number((double)(m_startPosition+position)/1000.0,
+                                            'g',
+                                            6);
+        //Use async to seek the file.
+        QByteArray seekTarget=
+                QString::number((double)(m_startPosition+position)/1000.0,
+                                'g',
+                                6).toUtf8();
+        //Prepare the command.
+        const char *args[]=
         {
-            //All the event has been proessed.
-            break;
-        }
-        //Handle the mpv event.
-        switch(event->event_id)
-        {
-        case MPV_EVENT_PROPERTY_CHANGE:
-        {
-            //Get the event property.
-            mpv_event_property *prop=(mpv_event_property *)event->data;
-            //Check out the name of prop.
-            if(strcmp(prop->name, "time-pos")==0)
-            {
-                //Get the prop data.
-                double time=*(double *)prop->data;
-                //Emit the time as the position changed signal.
-//                emit positionChanged(time*1000.0);
-            }
-            break;
-        }
-        default:
-            //Ignore uninteresting or unknown events.
-            break;
-        }
+            "seek",
+            seekTarget.constData(),
+            "absolute"
+        };
+        //Execute async command.
+        exeAsyncCommand(args);
     }
 }
 
-void KNMusicBackendMpvThread::wakeup(void *ctx)
+bool KNMusicBackendMpvThread::event(QEvent *event)
 {
-    //Recast this to mpv thread.
-    KNMusicBackendMpvThread *mpvThread=(KNMusicBackendMpvThread *)ctx;
-    //Emit the process event signal.
-    emit mpvThread->mpv_events();
+    //Check out the event type.
+    if(event->type()==QEvent::User)
+    {
+        //Get all the event until there no event.
+        while(m_mpvHandle)
+        {
+            //Get the mpv event.
+            mpv_event *mpvEvent=mpv_wait_event(m_mpvHandle, 0);
+            //Check out the event pointer.
+            if(mpvEvent==nullptr ||
+                    MPV_EVENT_NONE == mpvEvent->event_id)
+            {
+                //All the event has been processed.
+                break;
+            }
+            //Check out whether there's an error occurs.
+            if(mpvEvent->error < 0)
+            {
+                //!FIXME: Do something here.
+            }
+            switch(mpvEvent->event_id)
+            {
+            case MPV_EVENT_PROPERTY_CHANGE:
+            {
+                //Cast the mpv event data to event property.
+                mpv_event_property *prop=(mpv_event_property *)mpvEvent->data;
+                //Check out the property name.
+                // From bakamplayer:
+                // playback-time does the same thing as time-pos but works for
+                // streaming media
+                if(strcmp(prop->name, "time-pos") == 0)
+                {
+                    //Cehck the format.
+                    if(MPV_FORMAT_DOUBLE==prop->format)
+                    {
+                        //Output the playback time.
+                        emit positionChanged((qint64)((*(double *)prop->data)*1000.0)-m_startPosition);
+                    }
+                }
+                //Mission finished.
+                break;
+            }
+                //This event is totally different, though I don't know why.
+                //BakaMPlayer says it is.
+            case MPV_EVENT_START_FILE:
+            {
+                break;
+            }
+            case MPV_EVENT_FILE_LOADED:
+            {
+                //Pause it right after the file loaded.
+                pause();
+                //Reset the playing state.
+                m_state=MusicUtil::Stopped;
+                //Emit the state changed signal.
+                emit stateChanged(m_state);
+                //We have to update all the file inforamtion here.
+                //Get the duration of the file.
+                double mediaDuration;
+                //Get the property.
+                mpv_get_property(m_mpvHandle,
+                                 "length",
+                                 MPV_FORMAT_DOUBLE,
+                                 &mediaDuration);
+                //Save the total duration.
+                qint64 propertyDuration=(qint64)(mediaDuration*1000.0);
+                //Check property duration
+                if(propertyDuration>0)
+                {
+                    //For valid duration.
+                    m_totalDuration=propertyDuration;
+                    //Update the end position.
+                    checkStartAndEndPosition();
+                    //Emit the loaded signal.
+                    emit loadSuccess();
+                }
+                //Mission complete.
+                break;
+            }
+            case MPV_EVENT_PAUSE:
+            {
+                //We should save the state as pause.
+                //We may never have stop.
+                m_state=MusicUtil::Paused;
+                //Emit the state changed signal.
+                emit stateChanged(m_state);
+                break;
+            }
+            case MPV_EVENT_UNPAUSE:
+            {
+                //We should save the state as playing.
+                m_state=MusicUtil::Playing;
+                //Emit the state changed signal.
+                emit stateChanged(m_state);
+                //Sync the playing volume.
+                setVolume(m_volumeSize);
+                break;
+            }
+            case MPV_EVENT_END_FILE:
+            {
+                //It should be stopped.
+                m_state=MusicUtil::Stopped;
+                //Emit the state changed signal.
+                emit stateChanged(m_state);
+                break;
+            }
+            }
+        }
+    }
+    //For others, do the defualt event.
+    return KNMusicStandardBackendThread::event(event);
 }
 
-inline void KNMusicBackendMpvThread::setState(int state)
+void KNMusicBackendMpvThread::instanceWakeUp(void *context)
 {
-    //Save the state.
-    m_state=state;
-    //Emit the state changed signal.
-    emit stateChanged(m_state);
+    //Recast the context as a mpv thread.
+    KNMusicBackendMpvThread *mpvThread=(KNMusicBackendMpvThread *)context;
+    //Post up a user event.
+    QCoreApplication::postEvent(mpvThread, new QEvent(QEvent::User));
+}
+
+inline void KNMusicBackendMpvThread::resetParameter()
+{
+    //Reset the parameter.
+    m_duration=m_totalDuration;
+    //Reset the start and end position.
+    m_startPosition=-1;
+    m_endPosition=-1;
+}
+
+inline void KNMusicBackendMpvThread::exeCommand(const char *args[])
+{
+    //Check mpv pointer first.
+    if(m_mpvHandle)
+    {
+        //Launch mpv command.
+        mpv_command(m_mpvHandle, args);
+    }
+}
+
+inline void KNMusicBackendMpvThread::exeAsyncCommand(const char *args[])
+{
+    //Check mpv pointer first.
+    if(m_mpvHandle)
+    {
+        //Launch mpv async command.
+        mpv_command_async(m_mpvHandle, 0, args);
+    }
+}
+
+inline void KNMusicBackendMpvThread::checkStartAndEndPosition()
+{
+    //Check out the start position.
+    if(m_startPosition==-1)
+    {
+        //Start position is invalid, then play the whole file.
+        m_startPosition=0;
+        //Set the whole file as the end position.
+        m_duration=m_totalDuration;
+        m_endPosition=m_totalDuration;
+    }
+    else
+    {
+        //Check out the end position and the start position.
+        if(m_endPosition>m_totalDuration)
+        {
+            //The end position cannot the greater than the total duration.
+            m_endPosition=m_totalDuration;
+        }
+        //Check out the start position to the end position.
+        if(m_startPosition > m_endPosition)
+        {
+            //Set the start position lesser than the end position.
+            m_startPosition=m_endPosition;
+        }
+        //Calculate the duration.
+        m_duration=m_endPosition-m_startPosition;
+    }
+    //Emit the duration changed signal.
+    emit durationChanged(m_duration);
+    //Move the player to the start position.
+    setPosition(0);
 }

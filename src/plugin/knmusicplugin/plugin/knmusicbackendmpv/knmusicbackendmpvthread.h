@@ -19,6 +19,8 @@
 #ifndef KNMUSICBACKENDMPVTHREAD_H
 #define KNMUSICBACKENDMPVTHREAD_H
 
+#include <QEasingCurve>
+
 #include <mpv/client.h>
 
 #include "knmusicutil.h"
@@ -30,6 +32,7 @@ class KNMusicBackendMpvThread : public KNMusicStandardBackendThread
     Q_OBJECT
 public:
     explicit KNMusicBackendMpvThread(QObject *parent = 0);
+    ~KNMusicBackendMpvThread();
 
     /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::loadFile().
@@ -83,9 +86,6 @@ public:
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
-signals:
-    void mpv_events();
-
 public slots:
     /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::setVolume().
@@ -97,19 +97,26 @@ public slots:
      */
     void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
 
-private slots:
-    void on_mpv_events();
+protected:
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::event().
+     */
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    static void wakeup(void *ctx);
-    inline void setState(int state);
-    //Player information.
+    static void instanceWakeUp(void *context);
+    inline void resetParameter();
+    inline void exeCommand(const char *args[]);
+    inline void exeAsyncCommand(const char *args[]);
+    inline void checkStartAndEndPosition();
+    QEasingCurve m_volumeCurve;
+    QString m_filePath;
     qint64 m_totalDuration,
            m_duration,
            m_startPosition,
            m_endPosition;
-    mpv_handle *mpv;
-    int m_state;
+    mpv_handle *m_mpvHandle;
+    int m_state, m_volumeSize;
 };
 
 #endif // KNMUSICBACKENDMPVTHREAD_H

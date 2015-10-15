@@ -407,7 +407,7 @@ void KNMusicNowPlaying::onActionLoadSuccess()
     playingMusicModel()->setData(m_playingIndex,
                                  false,
                                  CannotPlayFlagRole);
-    //Give out the current .
+    //Give out the current.
     emit nowPlayingChanged(m_playingAnalysisItem);
 }
 
