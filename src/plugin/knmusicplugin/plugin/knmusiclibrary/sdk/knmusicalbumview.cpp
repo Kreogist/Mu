@@ -294,7 +294,7 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
     while(currentRow < albumCount && heightSurplus > 0)
     {
         //Get the source index of the item.
-        QModelIndex proxyIndex=m_proxyModel->index(currentRow, 0);
+        QModelIndex &&proxyIndex=m_proxyModel->index(currentRow, 0);
         //If the source index is not the current index, then draw the album.
         if(m_proxyModel->mapToSource(proxyIndex)!=m_selectedIndex)
         {
@@ -574,7 +574,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
                        y-m_shadowIncrease,
                        m_albumArtShadow);
     //Render and draw the album art image.
-    QPixmap albumArtImage=
+    QPixmap &&albumArtImage=
             m_proxyModel->data(index,
                                Qt::DecorationRole).value<QPixmap>();
     //Check out the album art is valid.
@@ -585,14 +585,15 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     }
     else
     {
-        //Scaled the album art image to item width and keep the aspect ratio.
+        //Draw the album art base.
+        painter.fillRect(QRect(x, y, m_itemWidth, m_itemWidth),
+                         QColor(0,0,0));
+        //Update the album art image.
         albumArtImage=albumArtImage.scaled(QSize(m_itemWidth,
                                                  m_itemWidth),
                                            Qt::KeepAspectRatio,
                                            Qt::SmoothTransformation);
-        //Draw the album art base.
-        painter.drawPixmap(x, y, m_scaledAlbumBase);
-        //Draw the album art.
+        //Scaled the album art image to item width and keep the aspect ratio.
         painter.drawPixmap(QPoint(x+((m_itemWidth-albumArtImage.width())>>1),
                                   y+((m_itemWidth-albumArtImage.height())>>1)),
                            albumArtImage);
