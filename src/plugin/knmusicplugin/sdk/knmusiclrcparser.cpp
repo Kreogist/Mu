@@ -173,13 +173,13 @@ inline void KNMusicLrcParser::parseFrames(QString frame,
     }
     //Tried to translate the data before colon to a number.
     bool translateResult=false;
-    qint64 minuatePart=frame.left(colonPos).toLongLong(&translateResult);
+    qint64 minutePart=frame.left(colonPos).toLongLong(&translateResult);
     if(!translateResult)
     {
         return;
     }
     LyricsLine currentFrame;
-    currentFrame.position=minuatePart*60000;
+    currentFrame.position=minutePart*60000;
     //Find the second char, and there are three types of LRC frames:
     // [MM:ss.xx]
     // [MM:ss]

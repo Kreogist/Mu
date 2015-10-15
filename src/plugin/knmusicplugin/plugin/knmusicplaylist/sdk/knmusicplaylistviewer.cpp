@@ -204,9 +204,9 @@ void KNMusicPlaylistViewer::retranslate()
     m_songCount[1]=tr("1 song, ");
     m_songCount[2]=tr("%1 songs, ");
 
-    m_minuateCount[0]=tr("0 minuate.");
-    m_minuateCount[1]=tr("1 minuate.");
-    m_minuateCount[2]=tr("%1 minuates.");
+    m_minuteCount[0]=tr("0 minute.");
+    m_minuteCount[1]=tr("1 minute.");
+    m_minuteCount[2]=tr("%1 minutes.");
 
     m_hourCount[0]=tr("1 hour and ");
     m_hourCount[1]=tr("%1 hours and ");
@@ -392,18 +392,18 @@ inline void KNMusicPlaylistViewer::updateDetailInfo()
         //Mission complete.
         return;
     }
-    //Then calculate the minuates and the hours of the model.
-    quint64 minuatePart=model->totalDuration()/60000,
-            hourPart=minuatePart/60;
-    minuatePart-=hourPart*60;
+    //Then calculate the minutes and the hours of the model.
+    quint64 minutePart=model->totalDuration()/60000,
+            hourPart=minutePart/60;
+    minutePart-=hourPart*60;
     //Check whether the hour part is bigger than 0.
     if(hourPart>0)
     {
-        //Check the minuates part, if minuate is 0, use the hour without
-        //minuate.
-        if(minuatePart==0)
+        //Check the minutes part, if minute is 0, use the hour without
+        //minute.
+        if(minutePart==0)
         {
-            //Use the hour without minuate part.
+            //Use the hour without minute part.
             playlistDetail.append(hourPart==1?
                                      m_hourCountWithoutMinuate[0]:
                                      m_hourCountWithoutMinuate[1].arg(
@@ -415,23 +415,23 @@ inline void KNMusicPlaylistViewer::updateDetailInfo()
                                   m_hourCount[1].arg(
                                     QString::number(hourPart)));
     }
-    //Check the minuate part.
-    if(minuatePart==0)
+    //Check the minute part.
+    if(minutePart==0)
     {
         //If the hour part is 0 as well,
         if(hourPart==0)
         {
-            //then append the 0 minuate to the detail.
-            playlistDetail.append(m_minuateCount[0]);
+            //then append the 0 minute to the detail.
+            playlistDetail.append(m_minuteCount[0]);
         }
     }
     else
     {
-        //Add the minuate part to the detail info text string.
-        playlistDetail.append(minuatePart<2?
-                                  m_minuateCount[minuatePart]:
-                                  m_minuateCount[2].arg(
-                                      QString::number(minuatePart)));
+        //Add the minute part to the detail info text string.
+        playlistDetail.append(minutePart<2?
+                                  m_minuteCount[minutePart]:
+                                  m_minuteCount[2].arg(
+                                      QString::number(minutePart)));
     }
     //Set the text to the detail label.
     m_detail->setText(playlistDetail);

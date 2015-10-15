@@ -258,7 +258,7 @@ public:
         //Calculate the second(ss) part.
         QString secondText=QString::number(second%60);
         //If second is 0-9, add a 0 before the number.
-        //The minuate part(mm) will be the second divided by 60.
+        //The minute part(mm) will be the second divided by 60.
         return secondText.length()==1?
                     QString::number(second/60)+":0"+secondText:
                     QString::number(second/60)+":"+secondText;

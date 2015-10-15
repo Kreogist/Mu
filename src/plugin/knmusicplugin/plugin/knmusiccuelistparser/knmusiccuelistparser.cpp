@@ -525,7 +525,7 @@ inline qint64 KNMusicCueListParser::textToTime(const QString &cueTimeText)
 {
     //CUE's time is a very strange time:
     //  mm:ss:ff
-    //mm=minuate, ss=second, ff=frame. and 1second = 75frames.
+    //mm=minute, ss=second, ff=frame. and 1second = 75frames.
     //WTF?! Why not 1000ms?!
     //Check is the cue time text format correct.
     if(cueTimeText.at(2)==':' && cueTimeText.at(5)==':')
