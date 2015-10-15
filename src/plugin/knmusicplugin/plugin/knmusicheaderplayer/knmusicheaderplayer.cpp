@@ -684,9 +684,9 @@ void KNMusicHeaderPlayer::onActionPositionEdited()
         return;
     }
     //Calculate the ms.
-    qint64 minuatePart=positionText.left(colonPosition).toInt(),
+    qint64 minutePart=positionText.left(colonPosition).toInt(),
            secondPart=positionText.mid(colonPosition+1).toInt(),
-           preferPosition=(minuatePart*60+secondPart)*1000;
+           preferPosition=(minutePart*60+secondPart)*1000;
     if(preferPosition>0 && preferPosition<m_progressSlider->maximum())
     {
         setPosition(preferPosition);

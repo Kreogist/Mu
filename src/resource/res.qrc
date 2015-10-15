@@ -46,6 +46,7 @@
         <file>public/clock/b23.png</file>
         <file>public/AscendingIndicator.png</file>
         <file>public/DescendingIndicator.png</file>
+        <file>public/anonymous.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

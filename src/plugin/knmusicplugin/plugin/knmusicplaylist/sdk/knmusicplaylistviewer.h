@@ -70,7 +70,7 @@ private:
     KNOpacityAnimeButton *m_playPlaylist, *m_shufflePlaylist, *m_addToPlaylist;
 
     QString m_songCount[3],
-            m_minuateCount[3],
+            m_minuteCount[3],
             m_hourCount[2],
             m_hourCountWithoutMinuate[2],
             m_searchCount[3];
