@@ -111,7 +111,7 @@ void KNPreferenceLanguagePanel::setCurrentLanguage(const int &index)
 inline void KNPreferenceLanguagePanel::syncLanguageItem(const int &index)
 {
     //Get the international translate in current language.
-    QString headerTitle=tr("International");
+    QString headerTitle=tr("Languages");
     //Update the header title.
     emit requireUpdateTitle(headerTitle);
     //Set the item title.

@@ -288,72 +288,72 @@
 <context>
     <name>KNMusicHeaderPlayer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="576"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="579"/>
         <source>Show main player</source>
         <translation>メイン画面を参照する</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="577"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="580"/>
         <source>More</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="579"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="582"/>
         <source>Rating</source>
         <translation>評価</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="580"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="583"/>
         <source>Locate</source>
         <translation>探す</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="582"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="585"/>
         <source>(No star)</source>
         <translation>評価なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="584"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="587"/>
         <source>Get Info</source>
         <translation>詳細情報</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="587"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="590"/>
         <source>Show in Explorer</source>
         <translation>Windowsエクスプローラーで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="590"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="593"/>
         <source>Show in Finder</source>
         <translation>Finderで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="594"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="597"/>
         <source>Show the contains folder</source>
         <translation>コンテンツフォルダーを表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="596"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="599"/>
         <source>Locate the playing song</source>
         <translation>再生中の曲を表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="598"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="601"/>
         <source>Show in songs</source>
         <translation>曲のカテゴリで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="599"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="602"/>
         <source>Show in artists</source>
         <translation>アーティストのカテゴリで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="600"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="603"/>
         <source>Show in albums</source>
         <translation>アルバムのカテゴリで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="601"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="604"/>
         <source>Show in genres</source>
         <translation>ジャンルのタブで表示</translation>
     </message>
@@ -627,18 +627,30 @@ To create a playlist, drag your songs here.</source>
         <translation>%1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="207"/>
         <source>0 minuate.</source>
+        <translation type="vanished">0分</translation>
+    </message>
+    <message>
+        <source>1 minuate.</source>
+        <translation type="vanished">1分</translation>
+    </message>
+    <message>
+        <source>%1 minuates.</source>
+        <translation type="vanished">%1分</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="207"/>
+        <source>0 minute.</source>
         <translation>0分</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="208"/>
-        <source>1 minuate.</source>
+        <source>1 minute.</source>
         <translation>1分</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="209"/>
-        <source>%1 minuates.</source>
+        <source>%1 minutes.</source>
         <translation>%1分</translation>
     </message>
     <message>
@@ -729,7 +741,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="177"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="183"/>
         <source>Music</source>
         <translation>音楽</translation>
     </message>
@@ -771,67 +783,67 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicSoloMenu</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="198"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="200"/>
         <source>Play %1</source>
         <translation>%1を再生</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="199"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="201"/>
         <source>Open %1</source>
         <translation>%1を開く</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="200"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="202"/>
         <source>Get Info</source>
         <translation>詳細情報</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="202"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="204"/>
         <source>Show in Explorer</source>
         <translation>Windowsエクスプローラーで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="205"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="207"/>
         <source>Show in Finder</source>
         <translation>Finderで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="208"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="210"/>
         <source>Show the contains folder</source>
         <translation>コンテンツフォルダーを表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="210"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="212"/>
         <source>Download Lyrics</source>
         <translation>歌詞をダウンロード</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="211"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="213"/>
         <source>Rename</source>
         <translation>名前の変更</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="212"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="214"/>
         <source>Rename to %1</source>
         <translation>%1に名前を変更</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="213"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="215"/>
         <source>Copy location</source>
         <translation>ファイルのディレクトリをコピー</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="214"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="216"/>
         <source>Copy &quot;%1&quot;</source>
         <translation>%1をコピー</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="215"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="217"/>
         <source>Search %1</source>
         <translation>%1を検索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="216"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="218"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
@@ -879,7 +891,8 @@ To create a playlist, drag your songs here.</source>
         <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="131"/>
         <source> 2013-2015 Kreogist Dev Team
 All rights reserved.</source>
-        <translation type="unfinished"></translation>
+        <translation> 2013-2015 Kreogist Dev Team
+全著作権所有。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="135"/>
@@ -891,30 +904,58 @@ Youraku &lt;1497667718@qq.com&gt;
 Joe Johnson &lt;liquanquan123@vip.qq.com&gt;
 Freddie &lt;freddie.wanah@gmail.com&gt;
 Nick Tang &lt;1953547787@qq.com&gt;
+Frantic &lt;frantic1048@163.com&gt;
 
 Special Thanks
 WangBin
 Sou Bunnbu
 darkblackswords
+Yuri Ogawara
 
 This program uses Qt Version </source>
-        <translation type="unfinished"></translation>
+        <translation>Tojo Saki &lt;tomguts@126.com&gt;
+Luming Wang &lt;wlm199558@126.com&gt;
+Dayou Zhang &lt;1079286704@qq.com&gt;
+Jiayi Zhang &lt;bf109g2@126.com&gt;
+Youraku &lt;1497667718@qq.com&gt;
+Joe Johnson &lt;liquanquan123@vip.qq.com&gt;
+Freddie &lt;freddie.wanah@gmail.com&gt;
+Nick Tang &lt;1953547787@qq.com&gt;
+Frantic &lt;frantic1048@163.com&gt;
+
+特別な感謝
+WangBin
+Sou Bunnbu
+darkblackswords
+Yuri Ogawara
+
+このプログラムは Qt バージョン</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="151"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="153"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
 Qt and the Qt logo are trademarks of The Qt Company Ltd.
 Qt is The Qt Company Ltd product developed as an open source project. See qt.io for more information.</source>
-        <translation type="unfinished"></translation>
+        <translation>を使用しています。
+
+Qt はクロスプラットフォームアプリケーション開発用の C++ ツールキットです。
+
+Copyright (C) 2015 The Qt Company Ltd and other contributors
+
+Qt においてオープンソースプロジェクトとして開発されています。Qt は The Qt Company Ltd 社の製品です。詳しい情報は qt.io をご覧ください。</translation>
     </message>
 </context>
 <context>
     <name>KNPreferenceLanguagePanel</name>
     <message>
-        <location filename="../plugin/knpreference/knpreferencelanguagepanel.cpp" line="114"/>
         <source>International</source>
+        <translation type="vanished">言語設定</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreferencelanguagepanel.cpp" line="114"/>
+        <source>Languages</source>
         <translation>言語設定</translation>
     </message>
 </context>

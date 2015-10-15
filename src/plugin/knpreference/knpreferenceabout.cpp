@@ -140,11 +140,13 @@ void KNPreferenceAbout::retranslate()
                    "Joe Johnson <liquanquan123@vip.qq.com>\n"
                    "Freddie <freddie.wanah@gmail.com>\n"
                    "Nick Tang <1953547787@qq.com>\n"
+                   "Frantic <frantic1048@163.com>\n"
                    "\n"
                    "Special Thanks\n"
                    "WangBin\n"
                    "Sou Bunnbu\n"
                    "darkblackswords\n"
+                   "Yuri Ogawara\n"
                    "\n"
                    "This program uses Qt Version ")+
                    QT_VERSION_STR+
