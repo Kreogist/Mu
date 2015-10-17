@@ -32,7 +32,17 @@ public:
      */
     explicit KNGlassAnimeButton(QWidget *parent = 0);
 
+    /*!
+     * \brief Whether will the button show the left border line of the button.
+     * \return If the button line will be shown, return true. It will be false
+     * as default.
+     */
     bool showLeftLine() const;
+
+    /*!
+     * \brief Set whether the left border line will be shown.
+     * \param If you want to show the left border line, set this to be true.
+     */
     void setShowLeftLine(bool showLeftLine);
 
 signals:

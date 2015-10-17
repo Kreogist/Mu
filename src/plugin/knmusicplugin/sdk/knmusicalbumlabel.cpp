@@ -77,18 +77,31 @@ void KNMusicAlbumLabel::resizeEvent(QResizeEvent *event)
     target.append(QPointF(0, height()));
     //Generate the transform.
     QTransform::quadToQuad(original, target, m_transform);
+
     //Update the artwork.
     updateArtwork();
 }
 
 inline void KNMusicAlbumLabel::updateArtwork()
 {
+    //Initial a whole size of pixmap, scaled the artwork.
+    QPixmap originalArtwork(size()),
+            scaledArtwork(m_originalArtwork.scaled(size(),
+                                                   Qt::KeepAspectRatio,
+                                                   Qt::SmoothTransformation));
+    //Fill up the pixmap with transparent pixels.
+    originalArtwork.fill(QColor(0, 0, 0, 0));
+    //Paint the scaled data on the original artwork.
+    QPainter rawArtworkPainter(&originalArtwork);
+    //Paint the data on the raw artwork.
+    rawArtworkPainter.setRenderHints(QPainter::Antialiasing |
+                                     QPainter::SmoothPixmapTransform, true);
+    //Paint the pixmap;
+    rawArtworkPainter.drawPixmap((width()-scaledArtwork.width())>>1,
+                                 (height()-scaledArtwork.height())>>1,
+                                 scaledArtwork);
     //Save the artwork with translation.
-    m_artwork=
-            m_originalArtwork.scaled(size(),
-                                     Qt::KeepAspectRatio,
-                                     Qt::SmoothTransformation).
-            transformed(m_transform,
-                        Qt::SmoothTransformation);
+    m_artwork=originalArtwork.transformed(m_transform,
+                                          Qt::SmoothTransformation);
 }
 
