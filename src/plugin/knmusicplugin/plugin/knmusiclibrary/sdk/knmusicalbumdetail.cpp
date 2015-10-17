@@ -104,7 +104,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_albumDetails->setObjectName("MusicAlbumDetailLabel");
     m_albumDetails->setGlowRadius(4.0);
     knTheme->registerWidget(m_albumDetails);
-    //Configure the animations.
+    //Link signals.
     connect(m_expandAnime, &QSequentialAnimationGroup::finished,
             this, &KNMusicAlbumDetail::onActionExpandFinished);
     connect(m_albumContentIn1, &QPropertyAnimation::valueChanged,

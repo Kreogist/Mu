@@ -53,6 +53,7 @@ public:
     void setButtonText(const QString &text);
 
 signals:
+    void buttonSizeChange();
 
 public slots:
 
@@ -72,23 +73,34 @@ protected:
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief resizeEvent
+     * \param event
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void retranslate();
     void onActionMouseInOut(const int &frame);
+    void onActionPaletteChanged();
 
 private:
     inline void initialLabels();
-    inline void initialTimeLines();
+    inline void configureTimeLines();
     inline void startInOutAnime(QTimeLine *timeLine);
     inline void updateTitleLabel();
     inline QTimeLine *generateTimeLine();
 
-    QLabel *m_icon[2], *m_title[2];
-    QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseUp, *m_mouseDown;
-    int m_mouseInOutParameter;
+    QPixmap m_iconImage[2];
+    QString m_titleText[2];
+    QFont m_titleTextFont[2];
+    QPalette m_titleTextPalette;
+    QLabel *m_title[2];
+    QTimeLine *m_mouseIn, *m_mouseOut;
+    int m_mouseInOutParameter, m_iconX, m_preferenceIconX, m_preferenceIconY,
+        m_preferenceTextY, m_normalWidth, m_widthExpand;
     QGraphicsOpacityEffect *m_textEffect;
     QLinearGradient m_effectGradient;
-    QString m_preferenceText;
 };
 
 #endif // KNMAINWINDOWICONBUTTON_H

@@ -22,6 +22,7 @@
 #include "knmainwindowheaderbase.h"
 
 class QBoxLayout;
+class QSpacerItem;
 class KNMainWindowIconButton;
 /*!
  * \brief The KNMainWindowHeader class is a default realize of the main window
@@ -52,7 +53,17 @@ public:
 private slots:
     void retranslate();
 
+protected:
+    /*!
+     * \brief Reimplemented from KNMainWindowHeaderBase::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+private slots:
+    void updateContainerSize();
+
 private:
+    QWidget *m_widgetContainer;
     QBoxLayout *m_widgetLayout;
     KNCategoryPlugin *m_categoryPlugin;
     KNMainWindowIconButton *m_iconButton;

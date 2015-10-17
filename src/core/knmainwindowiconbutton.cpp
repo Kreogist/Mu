@@ -36,14 +36,19 @@
 #define TextSize 40
 #define TextLeft 63
 #define TextY 20
+#define PreferenceStartY 90
 
 KNMainWindowIconButton::KNMainWindowIconButton(QWidget *parent) :
     QAbstractButton(parent),
     m_mouseIn(generateTimeLine()),
     m_mouseOut(generateTimeLine()),
-    m_mouseUp(generateTimeLine()),
-    m_mouseDown(generateTimeLine()),
     m_mouseInOutParameter(0),
+    m_iconX(IconX),
+    m_preferenceIconX(-IconSize),
+    m_preferenceIconY(PreferenceStartY),
+    m_preferenceTextY(PreferenceStartY),
+    m_normalWidth(0),
+    m_widthExpand(0),
     m_textEffect(new QGraphicsOpacityEffect(this)),
     m_effectGradient(QLinearGradient(QPointF(0,0), QPointF(0,50)))
 {
@@ -51,12 +56,18 @@ KNMainWindowIconButton::KNMainWindowIconButton(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     setFixedHeight(70);
     setMinimumWidth(182);
+    //Update the preference icon Y.
+    m_preferenceIconY=(height()-(IconSize>>1))>>1;
 
     //Initial the labels of the main button.
     initialLabels();
     //Initial the timeline animations.
-    initialTimeLines();
+    configureTimeLines();
 
+    //Link theme manager.
+    connect(knTheme, &KNThemeManager::themeChange,
+            this, &KNMainWindowIconButton::onActionPaletteChanged);
+    onActionPaletteChanged();
     //Link retranslate.
     knI18n->link(this, &KNMainWindowIconButton::retranslate);
     retranslate();
@@ -65,7 +76,12 @@ KNMainWindowIconButton::KNMainWindowIconButton(QWidget *parent) :
 void KNMainWindowIconButton::setButtonIcon(const QPixmap &icon)
 {
     //Set the icon to label.
-    m_icon[IndexApp]->setPixmap(icon);
+    m_iconImage[IndexApp]=icon.scaled(IconSize,
+                                      IconSize,
+                                      Qt::KeepAspectRatio,
+                                      Qt::SmoothTransformation);
+    //Update the button.
+    update();
 }
 
 void KNMainWindowIconButton::setButtonText(const QString &text)
@@ -95,12 +111,43 @@ void KNMainWindowIconButton::leaveEvent(QEvent *event)
 void KNMainWindowIconButton::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
+    //Initial the paint event.
+    QPainter painter(this);
+    //Configure the painter.
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform, true);
+    //Check icon image pixmap.
+    if(!m_iconImage[IndexApp].isNull())
+    {
+        //Draw the icon of the music disk.
+        painter.drawPixmap(m_iconX, IconY, m_iconImage[IndexApp]);
+    }
+    //Paint the preference icon.
+    painter.drawPixmap(m_preferenceIconX,
+                       m_preferenceIconY,
+                       m_iconImage[IndexPreference]);
+    //Draw the text above the images.
+    //Draw the preference text.
+    painter.setFont(m_titleTextFont[IndexPreference]);
+    painter.setPen(m_titleTextPalette.color(QPalette::WindowText));
+    painter.drawText(TextLeft,
+                     m_preferenceTextY,
+                     m_titleText[IndexPreference]);
+}
+
+void KNMainWindowIconButton::resizeEvent(QResizeEvent *event)
+{
+    //Resize the button.
+    QAbstractButton::resizeEvent(event);
+    //Emit the size changed signal.
+    emit buttonSizeChange();
 }
 
 void KNMainWindowIconButton::retranslate()
 {
     //Update the preference label position.
-    m_title[IndexPreference]->setText(tr("Preference"));
+    m_titleText[IndexPreference]=tr("Preference");
 
     //Update the label width.
     updateTitleLabel();
@@ -109,10 +156,9 @@ void KNMainWindowIconButton::retranslate()
 void KNMainWindowIconButton::onActionMouseInOut(const int &frame)
 {
     //Move the app icon label.
-    m_icon[IndexApp]->move(frame, m_icon[IndexApp]->y());
+    m_iconX=frame;
     //Move the configure icon label.
-    m_icon[IndexPreference]->move(m_mouseInOutParameter-frame,
-                                  m_icon[IndexPreference]->y());
+    m_preferenceIconX=m_mouseInOutParameter-frame;
 
     //Get the base number.
     int baseNumber=frame-IconX;
@@ -123,23 +169,21 @@ void KNMainWindowIconButton::onActionMouseInOut(const int &frame)
     appFont.setPixelSize(TextSize+(baseNumber>>3));
     m_title[IndexApp]->setFont(appFont);
     //Move the preference lable.
-    m_title[IndexPreference]->move(m_title[IndexPreference]->x(),
-                                   height()+(baseNumber>>3)*3+9);
+    m_preferenceTextY=PreferenceStartY+(baseNumber>>2);
+    //Update the widget.
+    update();
+}
+
+void KNMainWindowIconButton::onActionPaletteChanged()
+{
+    //Update the button text.
+    m_titleTextPalette=knTheme->getPalette("MainWindowButtonText");
+    //Update the widget.
+    update();
 }
 
 void KNMainWindowIconButton::initialLabels()
 {
-    //Construct two icon label: one for application icon, the other one for
-    //preference icon.
-    for(int i=0; i<2; i++)
-    {
-        //Generate the icon label.
-        m_icon[i]=new QLabel(this);
-        //Configure the icon label.
-        m_icon[i]->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-        m_icon[i]->setScaledContents(true);
-    }
-
     //Generate the label font.
     //Construct two text label.
     for(int i=0; i<2; i++)
@@ -151,7 +195,7 @@ void KNMainWindowIconButton::initialLabels()
         knTheme->registerWidget(m_title[i]);
         m_title[i]->setAttribute(Qt::WA_TransparentForMouseEvents, true);
         m_title[i]->move(TextLeft, TextY);
-        m_title[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        m_title[i]->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     }
     //Configure the mask gradient.
     m_effectGradient.setColorAt(0, QColor(0,0,0,255));
@@ -159,13 +203,13 @@ void KNMainWindowIconButton::initialLabels()
     m_textEffect->setOpacityMask(m_effectGradient);
     m_title[IndexApp]->setGraphicsEffect(m_textEffect);
 
-    //Configure the icon label of application.
-    m_icon[IndexApp]->move(IconX, IconY);
-    m_icon[IndexApp]->setFixedSize(IconSize, IconSize);
     //Configure the icon label of preference.
-    m_icon[IndexPreference]->setPixmap(QPixmap(":/plugin/preference/icon.png"));
-    m_icon[IndexPreference]->setFixedSize(IconSize>>1,
-                                          IconSize>>1);
+    m_iconImage[IndexPreference]=
+            QPixmap(":/plugin/preference/icon.png").scaled(
+                IconSize>>1,
+                IconSize>>1,
+                Qt::KeepAspectRatio,
+                Qt::SmoothTransformation);
     //Configure the text label of application.
     QFont textFont=font();
     textFont.setBold(true);
@@ -173,15 +217,10 @@ void KNMainWindowIconButton::initialLabels()
     m_title[IndexApp]->setFont(textFont);
     //Configure the text label of the preference.
     textFont.setPixelSize(TextSize>>1);
-    m_title[IndexPreference]->setFont(textFont);
-    m_title[IndexPreference]->move(m_title[IndexPreference]->x(),
-                                   height());
-
-    //Hide the preference labels.
-    m_icon[IndexPreference]->move(-IconSize, (height()-(IconSize>>1))>>1);
+    m_titleTextFont[IndexPreference]=textFont;
 }
 
-void KNMainWindowIconButton::initialTimeLines()
+inline void KNMainWindowIconButton::configureTimeLines()
 {
     //Update the mouse in/out parameter.
     m_mouseInOutParameter=(IconX<<1)-34;
@@ -195,18 +234,28 @@ void KNMainWindowIconButton::initialTimeLines()
             [=](const qreal &progress)
             {
                 //Update the gradient.
-                m_effectGradient.setColorAt(1, QColor(0,0,0,255.0*progress));
+                m_effectGradient.setColorAt(1, QColor(0, 0, 0, 255.0*progress));
                 m_textEffect->setOpacityMask(m_effectGradient);
                 m_title[IndexApp]->setGraphicsEffect(m_textEffect);
+                //Resize the button size.
+                resize(m_normalWidth+((qreal)m_widthExpand*progress),
+                       height());
             });
     connect(m_mouseOut, &QTimeLine::frameChanged,
             this, &KNMainWindowIconButton::onActionMouseInOut);
     connect(m_mouseOut, &QTimeLine::valueChanged,
             [=](const qreal &progress)
             {
-                m_effectGradient.setColorAt(1, QColor(0,0,0,255.0*(1.0-progress)));
+                //Calculate the progress level.
+                qreal progressLevel=1.0-progress;
+                //Set the effect size.
+                m_effectGradient.setColorAt(1, QColor(0, 0, 0,
+                                                      255.0*progressLevel));
                 m_textEffect->setOpacityMask(m_effectGradient);
                 m_title[IndexApp]->setGraphicsEffect(m_textEffect);
+                //Resize the button size.
+                resize(m_normalWidth+((qreal)m_widthExpand*progressLevel),
+                       height());
             });
 }
 
@@ -216,7 +265,7 @@ inline void KNMainWindowIconButton::startInOutAnime(QTimeLine *timeLine)
     m_mouseIn->stop();
     m_mouseOut->stop();
     //Set the start range of the time line.
-    timeLine->setStartFrame(m_icon[IndexApp]->x());
+    timeLine->setStartFrame(m_iconX);
     //Set the animation.
     timeLine->start();
 }
@@ -224,18 +273,18 @@ inline void KNMainWindowIconButton::startInOutAnime(QTimeLine *timeLine)
 inline void KNMainWindowIconButton::updateTitleLabel()
 {
     //Get the maximum label width.
-    int titleLabelWidth=
-            qMax(m_title[IndexApp]->fontMetrics().width(
-                     m_title[IndexApp]->text()),
-                 m_title[IndexPreference]->fontMetrics().width(
-                     m_title[IndexPreference]->text()));
+    int musicLabelWidth=m_title[IndexApp]->fontMetrics().width(
+                            m_title[IndexApp]->text());
     //Resize the button.
-    resize(titleLabelWidth+TextLeft, height());
+    m_normalWidth=musicLabelWidth+TextLeft;
+    m_widthExpand=qMax(musicLabelWidth,
+                       QFontMetrics(m_titleTextFont[IndexPreference]).width(
+                           m_titleText[IndexPreference]))-musicLabelWidth;
+    //Resize the button the initial size.
+    resize(m_normalWidth, height());
     //Update the size of the title labels.
-    m_title[IndexApp]->resize(titleLabelWidth,
+    m_title[IndexApp]->resize(musicLabelWidth+m_widthExpand,
                               m_title[IndexApp]->fontMetrics().height());
-    m_title[IndexPreference]->resize(titleLabelWidth,
-                                     m_title[IndexPreference]->height());
 }
 
 inline QTimeLine *KNMainWindowIconButton::generateTimeLine()

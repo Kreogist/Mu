@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QSpacerItem>
 
 #include "knmainwindowiconbutton.h"
 #include "kncategoryplugin.h"
@@ -27,30 +28,30 @@
 
 KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     KNMainWindowHeaderBase(parent),
-    m_widgetLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
+    m_widgetContainer(new QWidget(this)),
+    m_widgetLayout(new QBoxLayout(QBoxLayout::LeftToRight, m_widgetContainer)),
     m_categoryPlugin(nullptr),
     m_iconButton(new KNMainWindowIconButton(this))
 {
     updateObjectName("MainWindowHeader");
     //Set properties.
     setFixedHeight(70);
+    //Initial the button position.
+    m_iconButton->move(0, 0);
 
-    //Initial the layout of the header.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(0);
-    setLayout(mainLayout);
-    //Add button to main layout.
-    mainLayout->addWidget(m_iconButton);
     //Configure the widget layout.
     m_widgetLayout->setContentsMargins(0,0,0,0);
     m_widgetLayout->setSpacing(0);
-    //Add the widget layout to header.
-    mainLayout->addLayout(m_widgetLayout, 1);
+    //Add the widget layout to container.
+    m_widgetContainer->setLayout(m_widgetLayout);
 
     //Link the icon button.
-    connect(m_iconButton, SIGNAL(clicked(bool)),
-            this, SIGNAL(requireShowPreference()));
+    connect(m_iconButton, &KNMainWindowIconButton::clicked,
+            this, &KNMainWindowHeader::requireShowPreference);
+    connect(m_iconButton, &KNMainWindowIconButton::buttonSizeChange,
+            this, &KNMainWindowHeader::updateContainerSize);
+    //Update the container size right now.
+    updateContainerSize();
 
     //Link retranlsate.
     knI18n->link(this, &KNMainWindowHeader::retranslate);
@@ -75,10 +76,31 @@ void KNMainWindowHeader::retranslate()
     }
 }
 
+void KNMainWindowHeader::resizeEvent(QResizeEvent *event)
+{
+    //Do the original resize event.
+    KNMainWindowHeaderBase::resizeEvent(event);
+    //Change the size of widget container.
+    updateContainerSize();
+}
+
+void KNMainWindowHeader::updateContainerSize()
+{
+    //Calculate the prefer widget size.
+    int containerWidth=width()-m_iconButton->width();
+    //Check the validation of the widget.
+    containerWidth=(containerWidth<0)?0:containerWidth;
+    //Update the widget size.
+    m_widgetContainer->setGeometry(width()-containerWidth,
+                                   0,
+                                   containerWidth,
+                                   height());
+}
+
 void KNMainWindowHeader::setCategoryPlugin(KNCategoryPlugin *categoryPlugin)
 {
     //Save the category plugin.
-    m_categoryPlugin = categoryPlugin;
+    m_categoryPlugin=categoryPlugin;
     //Ensure this is not a null widget.
     if(m_categoryPlugin==nullptr)
     {
