@@ -46,6 +46,13 @@ signals:
 
 public slots:
 
+protected:
+    /*!
+     * \brief showEvent
+     * \param event
+     */
+    void showEvent(QShowEvent *event);
+
 private slots:
     void onActionActivate(const QModelIndex &index);
 
