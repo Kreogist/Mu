@@ -18,6 +18,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QGraphicsOpacityEffect>
+#include <QPainter>
 
 #include "knmousesensewidget.h"
 #include "knthememanager.h"
@@ -39,25 +40,18 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent,
     m_categoryIcon(QPixmap()),
     m_searchResultIn(QString()),
     m_titleText(QString()),
-    m_largeIcon(new QLabel(this)),
-    m_iconEffect(new QGraphicsOpacityEffect(m_largeIcon)),
     m_categoryTitle(new KNScrollLabel(this)),
     m_categoryInfo(new QLabel(this)),
     m_categoryTreeView(new KNMusicLibraryTreeView(this, tab)),
     m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow,
-                                        this))
+                                        this)),
+    m_backgroundSize(0)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
     setFocusPolicy(Qt::StrongFocus);
 
-    //Configure the large icon.
-    m_largeIcon->installEventFilter(this);
-    m_largeIcon->setScaledContents(true);
-    //Configure the icon effect.
-    m_iconEffect->setOpacity(0.9);
-    m_largeIcon->setGraphicsEffect(m_iconEffect);
     //Configure the icon gradient.
     m_iconGradient.setColorAt(0.0, Qt::black);
     m_iconGradient.setColorAt(1.0, Qt::transparent);
@@ -189,8 +183,8 @@ void KNMusicCategoryDisplay::setCategoryIcon(const QPixmap &pixmap)
 void KNMusicCategoryDisplay::hideAllStaffs()
 {
     //Hide all the data display widgets.
-    //Hide icon.
-    m_largeIcon->hide();
+    //Update the background image to a null one.
+    m_backgroundImage=QPixmap();
     //Hide labels.
     m_categoryTitle->hide();
     m_categoryInfo->hide();
@@ -206,6 +200,26 @@ void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)
     m_leftShadow->resize(15, height());
     //Update the background icon.
     updateBackgroundIcon();
+}
+
+void KNMusicCategoryDisplay::paintEvent(QPaintEvent *event)
+{
+    //Do the original paint event.
+    QWidget::paintEvent(event);
+    //Check background image is null or not.
+    if(!m_backgroundImage.isNull())
+    {
+        //Initial a antialiasing painter.
+        QPainter painter(this);
+        painter.setRenderHints(QPainter::Antialiasing |
+                               QPainter::SmoothPixmapTransform, true);
+        //Initial the opacity of the painter.
+        painter.setOpacity(0.9);
+        //Draw the scaled background image.
+        painter.drawPixmap(width()-m_backgroundSize,
+                           height()-m_backgroundSize,
+                           m_backgroundImage);
+    }
 }
 
 void KNMusicCategoryDisplay::retranslate()
@@ -242,12 +256,10 @@ void KNMusicCategoryDisplay::onActionSearch()
 
 inline void KNMusicCategoryDisplay::showAllStaffs()
 {
-    //Hide icon.
-    m_largeIcon->show();
-    //Hide labels.
+    //Show labels.
     m_categoryTitle->show();
     m_categoryInfo->show();
-    //Hide treeview.
+    //Show treeview.
     m_categoryTreeView->show();
 }
 
@@ -297,19 +309,12 @@ inline void KNMusicCategoryDisplay::updateDetailInfo()
 inline void KNMusicCategoryDisplay::updateBackgroundIcon()
 {
     //Get the tree view height.
-    int viewHeight=qMin(m_categoryTreeView->width(),
-                        m_categoryTreeView->height());
-    //Update the geometry.
-    m_largeIcon->setGeometry(width()-viewHeight,
-                             height()-viewHeight,
-                             viewHeight,
-                             viewHeight);
+    m_backgroundSize=qMin(m_categoryTreeView->width(),
+                          m_categoryTreeView->height());
     //Update the gradient.
-    m_iconGradient.setCenter(QPointF(viewHeight, viewHeight));
-    m_iconGradient.setFocalPoint(QPointF(viewHeight, viewHeight));
-    m_iconGradient.setRadius(viewHeight);
-    //Set the gradient as the mask of the opacity effect.
-    m_iconEffect->setOpacityMask(m_iconGradient);
+    m_iconGradient.setCenter(QPointF(m_backgroundSize, m_backgroundSize));
+    m_iconGradient.setFocalPoint(QPointF(m_backgroundSize, m_backgroundSize));
+    m_iconGradient.setRadius(m_backgroundSize);
     //Update the icon content.
     updateBackgroundIconContent();
 }
@@ -317,11 +322,24 @@ inline void KNMusicCategoryDisplay::updateBackgroundIcon()
 inline void KNMusicCategoryDisplay::updateBackgroundIconContent()
 {
     //Set the pixmap to the label.
-    m_largeIcon->setPixmap(m_categoryIcon.isNull()?
-                               knMusicGlobal->noAlbumArt():
-                               m_categoryIcon.scaled(
-                                   m_largeIcon->size(),
-                                   Qt::KeepAspectRatio,
-                                   Qt::SmoothTransformation));
+    m_backgroundImage=m_categoryIcon.isNull()?
+                knMusicGlobal->noAlbumArt().scaled(
+                    QSize(m_backgroundSize, m_backgroundSize),
+                    Qt::KeepAspectRatio,
+                    Qt::SmoothTransformation):
+                m_categoryIcon.scaled(
+                    QSize(m_backgroundSize, m_backgroundSize),
+                    Qt::KeepAspectRatioByExpanding,
+                    Qt::SmoothTransformation);
+    //Start the draw the mask and blur on the background image.
+    QPainter contentPainter(&m_backgroundImage);
+    //Configure up the painter.
+    contentPainter.setRenderHints(QPainter::Antialiasing |
+                                  QPainter::SmoothPixmapTransform);
+    //Draw the mask on the background image.
+    contentPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    //Draw the mask.
+    contentPainter.fillRect(QRect(0, 0, m_backgroundSize, m_backgroundSize),
+                            m_iconGradient);
 }
 

@@ -170,11 +170,21 @@ void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModelBase *model)
                     updateDisplayArtwork(m_currentSourceIndex);
                 }
             });
+    connect(m_categoryModel, &KNMusicCategoryModelBase::albumArtRecoverd,
+            [=]
+            {
+                //Check out the validation of the index.
+                if(m_currentSourceIndex.isValid())
+                {
+                    //Update the current index artwork.
+                    updateDisplayArtwork(m_currentSourceIndex);
+                }
+            });
     //Update the model.
     retranslate();
 
-    //! This should be done in constructor, but setModel() is a virtual
-    //! function, so we moved here.
+    //This should be done in constructor, but setModel() is a virtual function,
+    //so we moved here.
     //Set the proxy model to tree view.
     m_artistList->setModel(categoryProxyModel());
     //Connect the requirement here.

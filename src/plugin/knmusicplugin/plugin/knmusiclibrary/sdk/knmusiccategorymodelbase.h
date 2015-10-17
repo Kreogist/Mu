@@ -79,6 +79,12 @@ signals:
      */
     void albumArtUpdate(QModelIndex index);
 
+    /*!
+     * \brief When album art recoverd, this signal can be recoverd by the model.
+     * It depends on whether the model need it or not.
+     */
+    void albumArtRecoverd();
+
 public slots:
     /*!
      * \brief Set the category column number, it will be used to category the

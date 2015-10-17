@@ -380,6 +380,8 @@ void KNMusicCategoryModel::onActionImageRecoverComplete()
     emit dataChanged(index(0),
                      index(rowCount()-1),
                      QVector<int>(1, Qt::DecorationRole));
+    //Emit the album recovered signal.
+    emit albumArtRecoverd();
 }
 
 KNMusicCategoryModel::CategoryItem KNMusicCategoryModel::itemAt(

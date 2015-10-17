@@ -32,6 +32,11 @@ class KNMusicCategoryDisplay : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicCategoryDisplay widget.
+     * \param parent The parent widget.
+     * \param tab The music tab of the tree view.
+     */
     explicit KNMusicCategoryDisplay(QWidget *parent = 0, KNMusicTab *tab = 0);
 
 signals:
@@ -46,7 +51,15 @@ public slots:
     void hideAllStaffs();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    /*!
+     * \brief Reimplemented from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
@@ -59,14 +72,13 @@ private:
     inline void updateBackgroundIcon();
     inline void updateBackgroundIconContent();
     QRadialGradient m_iconGradient;
-    QPixmap m_categoryIcon;
+    QPixmap m_categoryIcon, m_backgroundImage;
     QString m_songCount[3], m_searchCount[3], m_searchResultIn, m_titleText;
-    QLabel *m_largeIcon;
-    QGraphicsOpacityEffect *m_iconEffect;
     KNScrollLabel *m_categoryTitle;
     QLabel *m_categoryInfo;
     KNMusicLibraryTreeView *m_categoryTreeView;
     KNSideShadowWidget *m_leftShadow;
+    int m_backgroundSize;
 };
 
 #endif // KNMUSICCATEGORYDISPLAY_H
