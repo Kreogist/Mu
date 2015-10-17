@@ -118,6 +118,8 @@ macx: {
     # Application icon.
     RC_FILE += resource/icon/mu.icns
     ICON = resource/icon/mu.icns
+    # Set the info plist.
+    QMAKE_INFO_PLIST = resource/platforms/mac/Info.plist
     # Enable the backend and analysiser.
     CONFIG += backend-bass analysiser-ffmpeg
     # Nearly all the audio library will use CoreAudio on Mac OS X, so import
@@ -423,7 +425,8 @@ SOURCES += \
     sdk/knpreferencepanel.cpp \
     sdk/knpreferencepanelitem.cpp \
     sdk/knselectanyfiledialog.cpp \
-    sdk/knfiledialog.cpp
+    sdk/knfiledialog.cpp \
+    plugin/knmacextras/knmacextras.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -626,7 +629,8 @@ HEADERS += \
     sdk/knpreferencepanel.h \
     sdk/knpreferencepanelitem.h \
     sdk/knselectanyfiledialog.h \
-    sdk/knfiledialog.h
+    sdk/knfiledialog.h \
+    plugin/knmacextras/knmacextras.h
 
 RESOURCES += \
     resource/res.qrc

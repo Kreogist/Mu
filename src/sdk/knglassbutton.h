@@ -64,6 +64,11 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QAbstractButton::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QAbstractButton::enterEvent().
      */
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
@@ -102,13 +107,13 @@ private slots:
     void onActionOpacityChanged(const int &opacity);
 
 private:
-    inline void startAnime(QTimeLine *timeLine);
-    inline QTimeLine *generateTimeLine(const int &endFrame);
+    inline void startAnime(const int &endFrame);
+    QPixmap m_maskImage;
+    QLinearGradient m_highLight, m_highLightMask;
+    qreal m_halfWidth, m_indicatorX;
     Qt::Alignment m_contentAlign;
     int m_spacing, m_imageOpacity;
-    QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseDown, *m_mouseUp;
-    QLinearGradient m_highLight, m_highLightMask;
-    QPixmap m_maskImage;
+    QTimeLine *m_mouseAnime;
 };
 
 #endif // KNGLASSBUTTON_H

@@ -158,13 +158,14 @@ void KNGlassAnimeButton::paintEvent(QPaintEvent *event)
     //If the user wants a left line, then draw it.
     if(m_leftLine)
     {
-        painter.drawRect(0,0,1,height());
+        //Draw the left line.
+        painter.drawRect(0, 0, 1, height());
     }
     //Draw the icon.
     if(!icon().isNull())
     {
         //Get the pixmap from the icon.
-        QPixmap renderedIcon=icon().pixmap(m_iconSize, m_iconSize);
+        QPixmap &&renderedIcon=icon().pixmap(m_iconSize);
         //Draw the icon to the center of the button.
         painter.drawPixmap((width()-renderedIcon.width())>>1,
                            (height()-renderedIcon.height())>>1,

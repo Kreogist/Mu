@@ -12,28 +12,23 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNWINDOWSEXTRAS_H
-#define KNWINDOWSEXTRAS_H
+#ifndef KNMACEXTRAS_H
+#define KNMACEXTRAS_H
 
 #include <QSystemTrayIcon>
 
 #include "knplatformextras.h"
 
 class QMenu;
-class QAction;
-class QSystemTrayIcon;
-class QWinThumbnailToolBar;
-class QWinThumbnailToolButton;
-class KNMainWindow;
-class KNWindowsExtras : public KNPlatformExtras
+class KNMacExtras : public KNPlatformExtras
 {
     Q_OBJECT
 public:
-    explicit KNWindowsExtras(QObject *parent = 0);
+    explicit KNMacExtras(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNPlatformExtras::setMainWindow().
@@ -69,39 +64,25 @@ public slots:
     void savePreference() Q_DECL_OVERRIDE;
 
 private slots:
-    void retranslate();
-    void onActionPlayAndPause();
-    void onActionTrayIconActivate(
-            const QSystemTrayIcon::ActivationReason &reason);
-    void onActionTrayMenuActionTriggered(const int &index);
+    void prevActivated(const QSystemTrayIcon::ActivationReason &reason);
+    void playNPauseActivated(const QSystemTrayIcon::ActivationReason &reason);
+    void nextActivated(const QSystemTrayIcon::ActivationReason &reason);
+
 
 private:
-    inline void setButtonIcon(const int &index, const QPixmap &icon);
+    inline void initialTrayIconControls();
+
     enum ThumbnailActions
     {
         PlayPrev,
         PlayAndPause,
         PlayNext,
-        VolumeUp,
-        VolumeDown,
-        Mute,
-        LoopMode,
         ThumbnailActionsCount
     };
-    enum TrayIconMenuActions
-        {
-            Exit,
-            TrayIconMenuActionCount
-        };
-    QPixmap m_playIcon, m_pauseIcon, m_muteOn, m_muteOff,
-            m_loopStates[LoopStateButtonStateCount];
-    QAction *m_trayIconActions[TrayIconMenuActionCount];
-    QWinThumbnailToolButton *m_thumbnailButtons[ThumbnailActionsCount];
-    QWinThumbnailToolBar *m_thumbnailToolbar;
-    QSystemTrayIcon *m_trayIcon;
-    QMenu *m_trayIconMenu;
-    KNMainWindow *m_mainWindow;
-    bool m_isStatePlay;
+    QSystemTrayIcon *m_actionButtons[ThumbnailActionsCount];
+    QMenu *m_dummyMenu;
+    QIcon m_playIcon, m_pauseIcon;
+    bool m_isPlay=false;
 };
 
-#endif // KNWINDOWSEXTRAS_H
+#endif // KNMACEXTRAS_H

@@ -131,5 +131,9 @@
         <file>platforms/windows/previous.png</file>
         <file>platforms/windows/voldown.png</file>
         <file>platforms/windows/volup.png</file>
+        <file>platforms/mac/next.png</file>
+        <file>platforms/mac/pause.png</file>
+        <file>platforms/mac/play.png</file>
+        <file>platforms/mac/prev.png</file>
     </qresource>
 </RCC>

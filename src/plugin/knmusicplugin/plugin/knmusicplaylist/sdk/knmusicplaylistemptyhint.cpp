@@ -70,11 +70,12 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     //Initial the hint text and button layout.
     QBoxLayout *textButtonLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                                 mainLayout->widget());
-    textButtonLayout->setSpacing(20);
+    textButtonLayout->setSpacing(3);
     contentLayout->addLayout(textButtonLayout);
     //Add hint label to content layout.
     textButtonLayout->addStretch();
     textButtonLayout->addWidget(m_hintText);
+    textButtonLayout->addSpacing(20);
     textButtonLayout->addWidget(m_addPlaylist);
     textButtonLayout->addWidget(m_importPlaylist);
     textButtonLayout->addStretch();
