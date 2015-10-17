@@ -78,7 +78,9 @@ protected:
 
 private:
     bool m_showContent;
+#ifndef Q_OS_MACX
     QPropertyAnimation *m_showAnime;
+#endif
     QPoint m_mouseDownPos;
 };
 
