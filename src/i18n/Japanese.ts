@@ -12,7 +12,7 @@
 <context>
     <name>KNMainWindowIconButton</name>
     <message>
-        <location filename="../core/knmainwindowiconbutton.cpp" line="103"/>
+        <location filename="../core/knmainwindowiconbutton.cpp" line="150"/>
         <source>Preference</source>
         <translation>お気に入り</translation>
     </message>
@@ -28,37 +28,37 @@
 <context>
     <name>KNMusicCategoryDisplay</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="214"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="228"/>
         <source>No song.</source>
         <translation>曲なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="215"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="229"/>
         <source>1 song.</source>
         <translation>1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="216"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="230"/>
         <source>%1 songs.</source>
         <translation>%1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="218"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="232"/>
         <source>No result.</source>
         <translation>該当結果なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="219"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="233"/>
         <source>1 result.</source>
         <translation>1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="220"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="234"/>
         <source>%1 results.</source>
         <translation>%1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="222"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="236"/>
         <source>Search result in %1</source>
         <translation>%1の検索結果</translation>
     </message>
@@ -379,22 +379,22 @@
 <context>
     <name>KNMusicLibraryArtistTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="241"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="251"/>
         <source>Artists</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="243"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="253"/>
         <source>Search in artist</source>
         <translation>アーティストで検索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="245"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="255"/>
         <source>Go to Artist</source>
         <translation>アーティストへ移動</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="250"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="260"/>
         <source>No Artist</source>
         <translation>アーティストなし</translation>
     </message>
@@ -519,19 +519,19 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistEmptyHint</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="92"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="93"/>
         <source>Songs you add to playlists and the import playlists appears in Playlist.
 To create a playlist, drag your songs here.</source>
         <translation>追加した曲と取り込んた曲は、プレイリストに表示されます。
 プレイリストを作るには、曲をここにドラッグしてください。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="97"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="98"/>
         <source>New playlist</source>
         <translation>新しいプレイリスト</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="98"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="99"/>
         <source>Import playlists</source>
         <translation>プレイリストの取り込み</translation>
     </message>
@@ -895,7 +895,21 @@ All rights reserved.</source>
 全著作権所有。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="135"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="145"/>
+        <source>Special Thanks</source>
+        <translation>特別な感謝</translation>
+    </message>
+    <message>
+        <source>Special Thanks
+</source>
+        <translation type="vanished">特別な感謝</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="152"/>
+        <source>This program uses Qt Version </source>
+        <translation>このプログラムは Qt バージョン </translation>
+    </message>
+    <message>
         <source>Tojo Saki &lt;tomguts@126.com&gt;
 Luming Wang &lt;wlm199558@126.com&gt;
 Dayou Zhang &lt;1079286704@qq.com&gt;
@@ -913,7 +927,7 @@ darkblackswords
 Yuri Ogawara
 
 This program uses Qt Version </source>
-        <translation>Tojo Saki &lt;tomguts@126.com&gt;
+        <translation type="vanished">Tojo Saki &lt;tomguts@126.com&gt;
 Luming Wang &lt;wlm199558@126.com&gt;
 Dayou Zhang &lt;1079286704@qq.com&gt;
 Jiayi Zhang &lt;bf109g2@126.com&gt;
@@ -932,13 +946,13 @@ Yuri Ogawara
 このプログラムは Qt バージョン</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="153"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="154"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
 Qt and the Qt logo are trademarks of The Qt Company Ltd.
 Qt is The Qt Company Ltd product developed as an open source project. See qt.io for more information.</source>
-        <translation>を使用しています。
+        <translation> を使用しています。
 
 Qt はクロスプラットフォームアプリケーション開発用の C++ ツールキットです。
 

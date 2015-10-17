@@ -12,7 +12,7 @@
 <context>
     <name>KNMainWindowIconButton</name>
     <message>
-        <location filename="../core/knmainwindowiconbutton.cpp" line="103"/>
+        <location filename="../core/knmainwindowiconbutton.cpp" line="150"/>
         <source>Preference</source>
         <translation>自訂選項</translation>
     </message>
@@ -28,37 +28,37 @@
 <context>
     <name>KNMusicCategoryDisplay</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="214"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="228"/>
         <source>No song.</source>
         <translation>沒有歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="215"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="229"/>
         <source>1 song.</source>
         <translation>1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="216"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="230"/>
         <source>%1 songs.</source>
         <translation>%1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="218"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="232"/>
         <source>No result.</source>
         <translation>找不到符合條件的歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="219"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="233"/>
         <source>1 result.</source>
         <translation>找到 1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="220"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="234"/>
         <source>%1 results.</source>
         <translation>找到 %1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="222"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="236"/>
         <source>Search result in %1</source>
         <translation>%1 中的搜索結果</translation>
     </message>
@@ -379,22 +379,22 @@
 <context>
     <name>KNMusicLibraryArtistTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="241"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="251"/>
         <source>Artists</source>
         <translation>藝術家</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="243"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="253"/>
         <source>Search in artist</source>
         <translation>在藝術家中搜索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="245"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="255"/>
         <source>Go to Artist</source>
         <translation>在藝術家中顯示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="250"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="260"/>
         <source>No Artist</source>
         <translation>沒有藝術家</translation>
     </message>
@@ -519,19 +519,19 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistEmptyHint</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="92"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="93"/>
         <source>Songs you add to playlists and the import playlists appears in Playlist.
 To create a playlist, drag your songs here.</source>
         <translation>您創建、導入的播放清單以及播放清單中的歌曲將顯示在播放清單中。
 如需創建播放清單，將歌曲拖拽至此。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="97"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="98"/>
         <source>New playlist</source>
         <translation>新建播放清單</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="98"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistemptyhint.cpp" line="99"/>
         <source>Import playlists</source>
         <translation>導入播放清單</translation>
     </message>
@@ -895,7 +895,21 @@ All rights reserved.</source>
 保留一切權利。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="135"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="145"/>
+        <source>Special Thanks</source>
+        <translation>特別鳴謝</translation>
+    </message>
+    <message>
+        <source>Special Thanks
+</source>
+        <translation type="vanished">特別鳴謝</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="152"/>
+        <source>This program uses Qt Version </source>
+        <translation>這個程式使用 Qt </translation>
+    </message>
+    <message>
         <source>Tojo Saki &lt;tomguts@126.com&gt;
 Luming Wang &lt;wlm199558@126.com&gt;
 Dayou Zhang &lt;1079286704@qq.com&gt;
@@ -913,7 +927,7 @@ darkblackswords
 Yuri Ogawara
 
 This program uses Qt Version </source>
-        <translation>Tojo Saki &lt;tomguts@126.com&gt;
+        <translation type="vanished">Tojo Saki &lt;tomguts@126.com&gt;
 Luming Wang &lt;wlm199558@126.com&gt;
 Dayou Zhang &lt;1079286704@qq.com&gt;
 Jiayi Zhang &lt;bf109g2@126.com&gt;
@@ -964,13 +978,13 @@ darkblackswords
 這個程式使用 Qt  </translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="153"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="154"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
 Qt and the Qt logo are trademarks of The Qt Company Ltd.
 Qt is The Qt Company Ltd product developed as an open source project. See qt.io for more information.</source>
-        <translation>
+        <translation> 。
 Qt 是一個跨平臺的 C++ 應用開發工具集。
 版權所有 (C) 2015 The Qt Company Ltd 和其他貢獻者。
 Qt 和 Qt 的會標是 The Qt Company Ltd 的注冊商標。
