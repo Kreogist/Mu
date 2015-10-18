@@ -16,53 +16,55 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNPREFERENCEABOUT_H
-#define KNPREFERENCEABOUT_H
+#ifndef KNIMAGELABEL_H
+#define KNIMAGELABEL_H
 
 #include <QWidget>
 
-class QLabel;
-class QTextEdit;
-class KNImageLabel;
 /*!
- * \brief The KNPreferenceAbout class is a simple class which provides the
- * version information and some other links about this product.
+ * \brief The KNImageLabel class.
  */
-class KNPreferenceAbout : public QWidget
+class KNImageLabel : public QWidget
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct KNPreferenceAbout widget.
+     * \brief Construct a KNImageLabel widget.
      * \param parent The parent widget.
      */
-    explicit KNPreferenceAbout(QWidget *parent = 0);
+    explicit KNImageLabel(QWidget *parent = 0);
+
+    /*!
+     * \brief Get the pixmap of the label.
+     * \return The pixmap. If the pixmap is not been set before, it will be a
+     * null image.
+     */
+    QPixmap pixmap() const;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the lable pixmap.
+     * \param pixmap The pixmap image.
+     */
+    void setPixmap(const QPixmap &pixmap);
 
 protected:
+    /*!
+     * \brief Reimplemented from QWidget::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
-private slots:
-    void retranslate();
-
 private:
-    enum ContentIndex
-    {
-        Title,
-        Version,
-        Copyright,
-        ContentIndexCount
-    };
-
-    KNImageLabel *m_iconContent;
-    QLabel *m_textContent[ContentIndexCount];
-    QTextEdit *m_otherText;
+    inline void updateScaledPixmap();
+    QPixmap m_pixmap, m_scaledPixmap;
+    int m_pixmapX, m_pixmapY;
 };
 
-#endif // KNPREFERENCEABOUT_H
+#endif // KNIMAGELABEL_H

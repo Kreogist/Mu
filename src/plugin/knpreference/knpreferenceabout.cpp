@@ -21,6 +21,7 @@
 #include <QScrollBar>
 #include <QTextEdit>
 
+#include "knimagelabel.h"
 #include "knlocalemanager.h"
 #include "knthememanager.h"
 #include "sao/knsaostyle.h"
@@ -31,6 +32,7 @@
 
 KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     QWidget(parent),
+    m_iconContent(new KNImageLabel(this)),
     m_otherText(new QTextEdit(this))
 {
     //Configure the label fonts.
@@ -66,7 +68,7 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     //Add the stretch.
     mainLayout->addStretch();
     //Add the icon to main layout.
-    mainLayout->addWidget(m_textContent[0], 0, Qt::AlignHCenter);
+    mainLayout->addWidget(m_iconContent, 0, Qt::AlignHCenter);
     //Initial the content layout.
     //Initial the main layout.
     QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -85,10 +87,9 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     contentLayout->addStretch();
 
     //Set the default label.
-    m_textContent[Logo]->setPixmap(QPixmap("://icon/mu.png"));
+    m_iconContent->setPixmap(QPixmap("://icon/mu.png"));
     //Configure the label.
-    m_textContent[Logo]->setFixedSize(16, 16);
-    m_textContent[Logo]->setScaledContents(true);
+    m_iconContent->setFixedSize(16, 16);
     m_textContent[Title]->setText(QApplication::applicationDisplayName());
 
     //Link the retranslate.
@@ -103,7 +104,7 @@ void KNPreferenceAbout::resizeEvent(QResizeEvent *event)
     //Calculate Icon size.
     int iconSize=(qreal)qMin(width(), height())*0.236;
     //Resize the icon.
-    m_textContent[Logo]->setFixedSize(iconSize, iconSize);
+    m_iconContent->setFixedSize(iconSize, iconSize);
     //Resize the maximum width of the text content.
     m_otherText->setMinimumWidth(iconSize+(iconSize<<1));
     //Change the caption size.

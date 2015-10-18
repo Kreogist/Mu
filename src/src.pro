@@ -426,7 +426,8 @@ SOURCES += \
     sdk/knpreferencepanelitem.cpp \
     sdk/knselectanyfiledialog.cpp \
     sdk/knfiledialog.cpp \
-    plugin/knmacextras/knmacextras.cpp
+    plugin/knmacextras/knmacextras.cpp \
+    sdk/knimagelabel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -630,7 +631,8 @@ HEADERS += \
     sdk/knpreferencepanelitem.h \
     sdk/knselectanyfiledialog.h \
     sdk/knfiledialog.h \
-    plugin/knmacextras/knmacextras.h
+    plugin/knmacextras/knmacextras.h \
+    sdk/knimagelabel.h
 
 RESOURCES += \
     resource/res.qrc

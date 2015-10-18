@@ -125,6 +125,12 @@ inline KNGlassButton *KNMusicLibraryEmptyHint::generateButton(
     button->setIconSize(QSize(28, 28));
     button->setMinimumHeight(34);
     button->setIcon(QIcon(iconPath));
+    //Get the button font.
+    QFont buttonFont=button->font();
+    //Tweak the font.
+    buttonFont.setPixelSize(15);
+    //Set the font back.
+    button->setFont(buttonFont);
     //Give back the button.
     return button;
 }
