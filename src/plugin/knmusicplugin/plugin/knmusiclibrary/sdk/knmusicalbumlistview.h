@@ -24,19 +24,31 @@
 class KNMusicTab;
 class KNMusicModel;
 class KNMusicProxyModel;
+/*!
+ * \brief The KNMusicAlbumListView class is a special music list view for album
+ * views. It will support set category text to show a special album data.\n
+ * It will force to select the album.
+ */
 class KNMusicAlbumListView : public KNMusicListViewBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Constrcut a KNMusicAlbumListView widget.
+     * \param parent The parent widget.
+     * \param tab The music tab widget of this widget should belongs to.
+     */
     explicit KNMusicAlbumListView(QWidget *parent = 0,
                                   KNMusicTab *tab = 0);
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the album title to filter all the song.
+     * \param text The album title.
+     */
     void setCategoryText(const QVariant &text);
-
-protected:
 
 };
 

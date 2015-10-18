@@ -349,6 +349,8 @@ void KNMusicLibraryModel::recoverModel()
     //Check out whether the database is empty.
     if(m_database->size()==0)
     {
+        //Ask to recover image, clear out the no used art counter.
+        emit requireRecoverImage(QStringList());
         //Mission complete.
         return;
     }

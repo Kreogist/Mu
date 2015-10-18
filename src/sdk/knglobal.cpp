@@ -273,7 +273,6 @@ void KNGlobal::setMainWindow(QWidget *mainWindow)
     m_mainWindow = mainWindow;
 }
 
-
 void KNGlobal::setPreference(KNPreferencePlugin *preference)
 {
     //Check the preference has been set before or not.
