@@ -65,7 +65,7 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
         //Draw the scaled icon.
         painter->drawPixmap(option.rect.x()+Spacing,
                             option.rect.y()+
-                            ((ItemHeight-scaledIcon.height())>>1),
+                            ((option.rect.height()-scaledIcon.height())>>1),
                             scaledIcon);
     }
     //Get text color.

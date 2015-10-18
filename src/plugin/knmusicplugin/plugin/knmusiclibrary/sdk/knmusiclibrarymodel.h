@@ -31,10 +31,19 @@ class KNMusicCategoryModelBase;
 class KNMusicAnalysisQueue;
 class KNMusicLibraryImageManager;
 class KNMusicLibraryImageSaver;
+/*!
+ * \brief The KNMusicLibraryModel class is the standard library model. It can
+ * holds a image manager to read cached album art from the library folder, and
+ * write new album art cache to the image folder.
+ */
 class KNMusicLibraryModel : public KNMusicModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryModel object.
+     * \param parent The parent object.
+     */
     explicit KNMusicLibraryModel(QObject *parent = 0);
     ~KNMusicLibraryModel();
 
@@ -92,12 +101,35 @@ public:
                  const QVariant &value,
                  int role) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Get the artwork from a row.
+     * \param row The specific row.
+     * \return The album artwork of the row, if there's no album art in the row,
+     * the no album art pixmap will be return.
+     */
     QPixmap artwork(const int &row);
 
+    /*!
+     * \brief Get the artwork via providing the hash key.
+     * \param hashKey The hash key of the image.
+     * \return The image from the image manager. If there's no hash key in the
+     * image manager, it will return the no album art image.
+     */
     QPixmap artwork(const QString &hashKey);
 
+    /*!
+     * \brief Get the database object of the library model.
+     * \return The database object pointer. If you never set it before, it will
+     * be nullptr.
+     */
     KNJsonDatabase *database() const;
 
+    /*!
+     * \brief Add a category model to the library model. When the music model is
+     * modified, it will call the specific function of the category model to
+     * apply the modification.
+     * \param model The model pointer.
+     */
     void installCategoryModel(KNMusicCategoryModelBase *model);
 
 signals:
@@ -127,6 +159,11 @@ public slots:
      */
     void setDatabase(KNJsonDatabase *database);
 
+    /*!
+     * \brief Set the library folder path, it will set the album art cache
+     * folder to the image manager.
+     * \param libraryPath The library path.
+     */
     void setLibraryPath(const QString &libraryPath);
 
     /*!
