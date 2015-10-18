@@ -35,6 +35,8 @@ public:
      */
     explicit KNGlassAnimeButton(QWidget *parent = 0);
 
+    void setIcon(const QIcon &icon);
+
     /*!
      * \brief Whether will the button show the left border line of the button.
      * \return If the button line will be shown, return true. It will be false
@@ -98,9 +100,11 @@ private slots:
 
 private:
     inline void startAnimation(const int &endFrame);
+    inline void updateScaledIcon();
     QLinearGradient m_lineGradient, m_backGradient;
+    QPixmap m_scaledIcon;
     QTimeLine *m_mouseAnime;
-    int m_iconSize, m_currentHighlight;
+    int m_iconSize, m_currentHighlight, m_iconX, m_iconY;
     bool m_leftLine;
 };
 

@@ -32,6 +32,8 @@ KNGlassAnimeButton::KNGlassAnimeButton(QWidget *parent) :
     m_mouseAnime(new QTimeLine(100, this)),
     m_iconSize(0),
     m_currentHighlight(0),
+    m_iconX(0),
+    m_iconY(0),
     m_leftLine(false)
 {
     //Set properties.
@@ -49,6 +51,14 @@ KNGlassAnimeButton::KNGlassAnimeButton(QWidget *parent) :
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNGlassAnimeButton::onActionMouseAnime);
+}
+
+void KNGlassAnimeButton::setIcon(const QIcon &icon)
+{
+    //Do the original set icon.
+    QAbstractButton::setIcon(icon);
+    //Update the scaled icon.
+    updateScaledIcon();
 }
 
 void KNGlassAnimeButton::onActionMouseAnime(const int &frame)
@@ -69,6 +79,24 @@ inline void KNGlassAnimeButton::startAnimation(const int &endFrame)
     m_mouseAnime->setFrameRange(m_currentHighlight, endFrame);
     //Start the anime.
     m_mouseAnime->start();
+}
+
+inline void KNGlassAnimeButton::updateScaledIcon()
+{
+    //Check icon is valid or not.
+    if(icon().isNull())
+    {
+        //Reset the scaled icon.
+        m_scaledIcon=QPixmap();
+        //Reset the x and y.
+        m_iconX=0;
+        m_iconY=0;
+    }
+    //Scaled the icon.
+    m_scaledIcon=icon().pixmap(m_iconSize);
+    //Calculate the position of icon.
+    m_iconX=(width()-m_scaledIcon.width())>>1;
+    m_iconY=(height()-m_scaledIcon.height())>>1;
 }
 
 bool KNGlassAnimeButton::showLeftLine() const
@@ -162,14 +190,10 @@ void KNGlassAnimeButton::paintEvent(QPaintEvent *event)
         painter.drawRect(0, 0, 1, height());
     }
     //Draw the icon.
-    if(!icon().isNull())
+    if(!m_scaledIcon.isNull())
     {
-        //Get the pixmap from the icon.
-        QPixmap &&renderedIcon=icon().pixmap(m_iconSize);
-        //Draw the icon to the center of the button.
-        painter.drawPixmap((width()-renderedIcon.width())>>1,
-                           (height()-renderedIcon.height())>>1,
-                           renderedIcon);
+        //Draw the scaled icon.
+        painter.drawPixmap(m_iconX, m_iconY, m_scaledIcon);
     }
 }
 
@@ -182,4 +206,6 @@ void KNGlassAnimeButton::resizeEvent(QResizeEvent *event)
     m_backGradient.setFinalStop(0,height());
     //Update the icon size.
     m_iconSize=(qMin(width(), height())>>2)*3;
+    //Update the icon.
+    updateScaledIcon();
 }
