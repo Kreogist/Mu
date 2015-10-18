@@ -22,6 +22,8 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 * [WangBin](https://github.com/wang-bin)
 * [Sou Bunnbu](https://github.com/iyzsong)
 * [darkblackswords](http://darkblackswords.deviantart.com/)
+* [Yuri Ogawara]()
+* [1dot75cm](https://github.com/1dot75cm)
 
 ## License
 

@@ -132,7 +132,7 @@ void KNPreferenceAbout::retranslate()
                                       "All rights reserved."));
     //Update the thank list.
     m_otherText->setPlainText(
-                tr("Tojo Saki <tomguts@126.com>\n"
+                   "Tojo Saki <tomguts@126.com>\n"
                    "Luming Wang <wlm199558@126.com>\n"
                    "Dayou Zhang <1079286704@qq.com>\n"
                    "Jiayi Zhang <bf109g2@126.com>\n"
@@ -140,15 +140,16 @@ void KNPreferenceAbout::retranslate()
                    "Joe Johnson <liquanquan123@vip.qq.com>\n"
                    "Freddie <freddie.wanah@gmail.com>\n"
                    "Nick Tang <1953547787@qq.com>\n"
-                   "Frantic <frantic1048@163.com>\n"
-                   "\n"
-                   "Special Thanks\n"
+                   "Frantic1048 <frantic1048@163.com>\n"
+                   "\n"+
+                tr("Special Thanks")+"\n"
                    "WangBin\n"
                    "Sou Bunnbu\n"
                    "darkblackswords\n"
                    "Yuri Ogawara\n"
-                   "\n"
-                   "This program uses Qt Version ")+
+                   "1dot75cm\n"
+                   "\n"+
+                tr("This program uses Qt Version ")+
                    QT_VERSION_STR+
                 tr("\n"
                    "Qt is a C++ toolkit for cross-platform application developm"

@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
+#include <QCursor>
 #include <QTimeLine>
 #include <QGraphicsOpacityEffect>
 
@@ -24,23 +25,27 @@
 #include <QDebug>
 
 #define BaseOpacity 500
-#define HoverOpacity 800
+#define PressedOpacity 800
+#define HoverOpacity 1000
+#define IndicatorLength 16
 
 KNGlassButton::KNGlassButton(QWidget *parent) :
     QAbstractButton(parent),
+    m_maskImage(QPixmap()),
+    m_highLight(QLinearGradient(0.0, 0.0, 0.0, 0.0)),
+    m_highLightMask(QLinearGradient(0.0, 0.0, 0.0, 0.0)),
     m_contentAlign(Qt::AlignLeft | Qt::AlignVCenter),
     m_spacing(10),
     m_imageOpacity(BaseOpacity),
-    m_mouseIn(generateTimeLine(HoverOpacity)),
-    m_mouseOut(generateTimeLine(BaseOpacity)),
-    m_mouseDown(generateTimeLine(1000)),
-    m_mouseUp(generateTimeLine(HoverOpacity)),
-    m_highLight(QLinearGradient(0.0, 0.0, 0.0, 0.0)),
-    m_highLightMask(QLinearGradient(0.0, 0.0, 0.0, 0.0)),
-    m_maskImage(QPixmap())
+    m_mouseAnime(new QTimeLine(200, this))
 {
     //Set properties.
     setContentsMargins(20, 5, 20, 5);
+    //Configure the time line.
+    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNGlassButton::onActionOpacityChanged);
     //Update the high light gradient.
     m_highLight.setColorAt(0, QColor(255,255,255));
     m_highLight.setColorAt(0.7, QColor(255,255,255,0));
@@ -63,13 +68,21 @@ void KNGlassButton::paintEvent(QPaintEvent *event)
     //Calculate the basic opacity.
     qreal basePaintOpacity=(qreal)m_imageOpacity/1000.0;
     //Set the painter opacity.
-    painter.setOpacity(basePaintOpacity/2.0);
+    painter.setOpacity((basePaintOpacity-0.5)*2);
     //Draw the border.
-    QPen pen(QColor(255, 255, 255));
-    pen.setWidth(2);
-    painter.setPen(pen);
+    painter.setPen(QColor(255, 255, 255));
     painter.setBrush(Qt::NoBrush);
-    painter.drawRoundedRect(rect(), 6, 6);
+    //Paint the indicator.
+    qreal rightPosition=m_halfWidth+m_indicatorX;
+    painter.drawLine(QPointF(rightPosition, height()),
+                     QPointF(rightPosition, height()-IndicatorLength));
+    painter.drawLine(QPointF(rightPosition-1, height()),
+                     QPointF(rightPosition-IndicatorLength, height()));
+    qreal leftPosition=m_halfWidth-m_indicatorX;
+    painter.drawLine(QPointF(leftPosition, 0),
+                     QPointF(leftPosition, IndicatorLength));
+    painter.drawLine(QPointF(leftPosition+1, 0),
+                     QPointF(leftPosition+IndicatorLength, 0));
 
     //Set the opacity.
     painter.setOpacity(basePaintOpacity);
@@ -89,9 +102,19 @@ void KNGlassButton::paintEvent(QPaintEvent *event)
                      text());
 
     //Set the painter opacity.
-    painter.setOpacity(basePaintOpacity-((qreal)BaseOpacity/1000.0));
+    painter.setOpacity((basePaintOpacity-((qreal)BaseOpacity/1000.0))/4.0);
     //Draw the high light image.
     painter.drawPixmap(0, 0, m_maskImage);
+}
+
+void KNGlassButton::hideEvent(QHideEvent *event)
+{
+    //Hide the widget.
+    QAbstractButton::hideEvent(event);
+    //Stop all the animation.
+    m_mouseAnime->stop();
+    //Reset the opacity.
+    onActionOpacityChanged(BaseOpacity);
 }
 
 void KNGlassButton::enterEvent(QEvent *event)
@@ -99,7 +122,7 @@ void KNGlassButton::enterEvent(QEvent *event)
     //Start the original enter event.
     QAbstractButton::enterEvent(event);
     //Start the mouse in animation.
-    startAnime(m_mouseIn);
+    startAnime(HoverOpacity);
 }
 
 void KNGlassButton::leaveEvent(QEvent *event)
@@ -107,7 +130,7 @@ void KNGlassButton::leaveEvent(QEvent *event)
     //Start the original leave event.
     QAbstractButton::leaveEvent(event);
     //Start the mouse out animation.
-    startAnime(m_mouseOut);
+    startAnime(BaseOpacity);
 }
 
 void KNGlassButton::focusInEvent(QFocusEvent *event)
@@ -115,7 +138,7 @@ void KNGlassButton::focusInEvent(QFocusEvent *event)
     //Start the original enter event.
     QAbstractButton::focusInEvent(event);
     //Start the mouse in animation.
-    startAnime(m_mouseIn);
+    startAnime(HoverOpacity);
 }
 
 void KNGlassButton::focusOutEvent(QFocusEvent *event)
@@ -123,7 +146,7 @@ void KNGlassButton::focusOutEvent(QFocusEvent *event)
     //Start the original enter event.
     QAbstractButton::focusOutEvent(event);
     //Start the mouse in animation.
-    startAnime(m_mouseOut);
+    startAnime(BaseOpacity);
 }
 
 void KNGlassButton::mousePressEvent(QMouseEvent *event)
@@ -131,7 +154,7 @@ void KNGlassButton::mousePressEvent(QMouseEvent *event)
     //Start the original enter event.
     QAbstractButton::mousePressEvent(event);
     //Start the mouse down animation.
-    startAnime(m_mouseDown);
+    startAnime(PressedOpacity);
 }
 
 void KNGlassButton::mouseReleaseEvent(QMouseEvent *event)
@@ -139,71 +162,59 @@ void KNGlassButton::mouseReleaseEvent(QMouseEvent *event)
     //Start the original enter event.
     QAbstractButton::mouseReleaseEvent(event);
     //Start the mouse down animation.
-    startAnime(m_mouseUp);
+    startAnime(HoverOpacity);
 }
 
 void KNGlassButton::resizeEvent(QResizeEvent *event)
 {
     //Resize the button.
     QAbstractButton::resizeEvent(event);
+    //Update the half width.
+    m_halfWidth=(qreal)(width()>>1);
     //Update the high light gradient.
     m_highLight.setFinalStop(QPoint(0, height()));
     //Update the high light mask gradient.
     m_highLightMask.setFinalStop(QPoint(width(), 0));
     //Generate a QImage.
-    QPixmap maskPixmap(size());
-    maskPixmap.fill(QColor(0,0,0,0));
+    m_maskImage=QPixmap(size());
+    m_maskImage.fill(QColor(0,0,0,0));
     //Draw things on the mask image.
-    QPainter maskPainter(&maskPixmap);
+    QPainter maskPainter(&m_maskImage);
     maskPainter.setRenderHints(QPainter::Antialiasing |
                                QPainter::TextAntialiasing |
                                QPainter::SmoothPixmapTransform, true);
-    maskPainter.setPen(Qt::NoPen);
-    maskPainter.setBrush(m_highLight);
-    QRect roundRect=QRect(rect().x()+2,
-                          rect().y()+2,
-                          rect().width()-4,
-                          rect().height()-4);
-    maskPainter.drawRoundedRect(roundRect, 4, 4);
+    //Draw the high light.
+    maskPainter.fillRect(rect(), m_highLight);
     //Change the composition mode.
     maskPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     //Draw the mask.
-    maskPainter.setBrush(m_highLightMask);
-    maskPainter.drawRoundedRect(roundRect, 4, 4);
-    //Save the mask pixmap.
-    m_maskImage=maskPixmap;
+    maskPainter.fillRect(rect(), m_highLightMask);
 }
 
 void KNGlassButton::onActionOpacityChanged(const int &opacity)
 {
     //Save the opacity.
     m_imageOpacity=opacity;
+    //Change the indicator size.
+    m_indicatorX=(qreal)m_imageOpacity/1000.0*m_halfWidth;
+    //Check mouse position.
+    if(!rect().contains(mapFromGlobal(QCursor::pos())))
+    {
+        //Restart the animation to base opacity.
+        startAnime(BaseOpacity);
+    }
     //Update the widget.
     update();
 }
 
-void KNGlassButton::startAnime(QTimeLine *timeLine)
+inline void KNGlassButton::startAnime(const int &endFrame)
 {
-    //Stop all time line.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    m_mouseDown->stop();
-    m_mouseUp->stop();
+    //Stop the time line.
+    m_mouseAnime->stop();
     //Set the parameter of the time line.
-    timeLine->setStartFrame(m_imageOpacity);
+    m_mouseAnime->setFrameRange(m_imageOpacity, endFrame);
     //Start the time line.
-    timeLine->start();
-}
-
-QTimeLine *KNGlassButton::generateTimeLine(const int &endFrame)
-{
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    timeLine->setEndFrame(endFrame);
-    timeLine->setUpdateInterval(10);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNGlassButton::onActionOpacityChanged);
-    return timeLine;
+    m_mouseAnime->start();
 }
 
 int KNGlassButton::spacing() const

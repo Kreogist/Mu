@@ -22,6 +22,9 @@
 #include <QAbstractButton>
 
 class QTimeLine;
+/*!
+ * \brief The KNGlassAnimeButton class
+ */
 class KNGlassAnimeButton : public QAbstractButton
 {
     Q_OBJECT

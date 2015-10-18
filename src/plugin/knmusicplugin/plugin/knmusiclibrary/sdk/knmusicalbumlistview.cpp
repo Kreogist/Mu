@@ -21,6 +21,8 @@
 #include "knthememanager.h"
 
 #include "knmusicutil.h"
+#include "knmusicglobal.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusicproxymodel.h"
 #include "knmusicalbumlistdelegate.h"
 
@@ -42,6 +44,19 @@ KNMusicAlbumListView::KNMusicAlbumListView(QWidget *parent, KNMusicTab *tab) :
 
 void KNMusicAlbumListView::setCategoryText(const QVariant &text)
 {
+    //Check the proxy model is being played or not.
+    if(knMusicGlobal->nowPlaying())
+    {
+        //Get the now playing object.
+        KNMusicNowPlayingBase *nowPlaying=knMusicGlobal->nowPlaying();
+        //Check the current playing model is the current proxy and the proxy
+        //model is copied from the treeview.
+        if(nowPlaying->playingModel()==proxyModel())
+        {
+            //If so, shadow the proxy model.
+            nowPlaying->shadowPlayingModel();
+        }
+    }
     //Set the proxy model category text.
     proxyModel()->setCategoryContent(text.toString());
 }
