@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -84,6 +85,21 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     //Link the search.
     connect(knMusicGlobal->search(), &KNMusicSearchBase::requireSearch,
             this, &KNMusicAlbumView::onActionSearch);
+    //Set the search shortcut.
+    QAction *searchAction=new QAction(this);
+    searchAction->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    searchAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(searchAction, &QAction::triggered,
+            [=]
+            {
+                //Check whether the search plugin is loaded.
+                if(knMusicGlobal->search())
+                {
+                    knMusicGlobal->search()->onActionSearchShortcut(this);
+                }
+            });
+    addAction(searchAction);
+
     //Link the locale manager.
     knI18n->link(this, &KNMusicAlbumView::retranslate);
     retranslate();
@@ -91,7 +107,6 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
 
 QModelIndex KNMusicAlbumView::indexAt(const QPoint &point) const
 {
-
     //Calculate the point content position and the line of the point.
     int pointContentY=verticalScrollBar()->value()+point.y(),
         itemLine=pointContentY/m_itemSpacingHeight;

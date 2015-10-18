@@ -25,10 +25,19 @@ class QTimeLine;
 class KNMusicCategoryProxyModel;
 class KNMusicAlbumModel;
 class KNMusicAlbumDetail;
+/*!
+ * \brief The KNMusicAlbumView class is a special category view for album
+ * category. It can display all the album with a block. When you click on one
+ * album, it will expand it to show the detail of the album.
+ */
 class KNMusicAlbumView : public QAbstractItemView
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicAlbumView widget with given parent.
+     * \param parent The parent widget.
+     */
     explicit KNMusicAlbumView(QWidget *parent = 0);
 
     /*!
@@ -43,9 +52,11 @@ public:
                   ScrollHint hint = EnsureVisible) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief locateTo
-     * \param index
-     * \param hint
+     * \brief This function works very familiar with the scrollTo function. But
+     * this function won't move to the target position by animation. It will
+     * simply change the value of vertical scroll bar.
+     * \param index The target index.
+     * \param hint The shown hint.
      */
     void locateTo(const QModelIndex &index,
                   ScrollHint hint = EnsureVisible);
@@ -60,6 +71,11 @@ public:
      */
     void setModel(QAbstractItemModel *model) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Select an album to display the detail. It will launch the
+     * animation right after calling this function.
+     * \param albumIndex The index of the album in album model.
+     */
     void selectAlbum(const QModelIndex &albumIndex);
 
     KNMusicAlbumDetail *albumDetail() const;
