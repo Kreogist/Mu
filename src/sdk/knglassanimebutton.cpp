@@ -104,6 +104,8 @@ void KNGlassAnimeButton::setIcon(const QPixmap &icon)
     m_icon = icon;
     //Update the scaled icon.
     updateScaledIcon();
+    //Update the painting.
+    update();
 }
 
 bool KNGlassAnimeButton::showLeftLine() const
