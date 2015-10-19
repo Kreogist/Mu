@@ -95,6 +95,7 @@ protected:
     void closeEvent(QCloseEvent *event);
 
 private slots:
+    void onActionFullScreen();
 
 private:
     inline void recoverGeometry();
@@ -106,6 +107,7 @@ private:
     KNConfigure *m_cacheConfigure;
     KNMainWindowContainer *m_container;
     KNCategoryPlugin *m_categoryPlugin;
+    Qt::WindowStates m_originalWindowState;
 };
 
 #endif // KNMAINWINDOW_H

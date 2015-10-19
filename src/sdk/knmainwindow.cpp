@@ -17,6 +17,7 @@
  */
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QAction>
 
 #include "knglobal.h"
 #include "knconfigure.h"
@@ -36,7 +37,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
     m_container(new KNMainWindowContainer(this)),
-    m_categoryPlugin(nullptr)
+    m_categoryPlugin(nullptr),
+    m_originalWindowState(Qt::WindowNoState)
 {
     setObjectName("MainWindow");
     //Set properties.
@@ -51,6 +53,12 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 #endif
     //Add main window to theme list.
     knTheme->registerWidget(this);
+    //Add full screen short cut actions.
+    QAction *fullScreen=new QAction(this);
+    fullScreen->setShortcut(QKeySequence(QKeySequence::FullScreen));
+    connect(fullScreen, &QAction::triggered,
+            this, &KNMainWindow::onActionFullScreen);
+    addAction(fullScreen);
     //Recover the geometry.
     recoverGeometry();
 }
@@ -111,6 +119,29 @@ void KNMainWindow::closeEvent(QCloseEvent *event)
     backupGeometry();
     //Do the mainwindow close event.
     QMainWindow::closeEvent(event);
+}
+
+void KNMainWindow::onActionFullScreen()
+{
+    //Check out the full screen state.
+    if(isFullScreen())
+    {
+        //Check the original window state.
+        if(m_originalWindowState==Qt::WindowFullScreen)
+        {
+            //Set it to be no state.
+            m_originalWindowState=Qt::WindowNoState;
+        }
+        //Set the window to normal state.
+        setWindowState(m_originalWindowState);
+    }
+    else
+    {
+        //Save the original window state.
+        m_originalWindowState=windowState();
+        //Full screen the window.
+        setWindowState(Qt::WindowFullScreen);
+    }
 }
 
 void KNMainWindow::recoverGeometry()
