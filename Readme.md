@@ -24,7 +24,7 @@ Copyright © 2013-2015 Kreogist Dev Team. All rights reserved.
 * [darkblackswords](http://darkblackswords.deviantart.com/)
 * [Yuri Ogawara]()
 * [1dot75cm](https://github.com/1dot75cm)
-* [Lin Yuan]()
+* [Lin Yuan](https://github.com/SphericalHarnomics)
 
 ## License
 

@@ -1,3 +1,13 @@
+mu (0.9.1) unstable; urgency=medium
+
+  * Retina Display support for Mac OS X and even all other platforms.
+  * Add one more language for International support.
+  * Support one key full screen for all platform.
+  * Fixed the Mac OS X tooltip stucked bug caused by Qt 5.5.0.
+  * Fixed the album search will change the now playing model bug.
+
+ -- Saki Tojo <tomguts@126.com> Mon, 19 Oct 2015 17:14:00 +1100
+
 mu (0.9) unstable; urgency=medium
 
   * Simplified the KNPluginManager.
