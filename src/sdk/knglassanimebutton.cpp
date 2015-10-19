@@ -53,14 +53,6 @@ KNGlassAnimeButton::KNGlassAnimeButton(QWidget *parent) :
             this, &KNGlassAnimeButton::onActionMouseAnime);
 }
 
-void KNGlassAnimeButton::setIcon(const QIcon &icon)
-{
-    //Do the original set icon.
-    QAbstractButton::setIcon(icon);
-    //Update the scaled icon.
-    updateScaledIcon();
-}
-
 void KNGlassAnimeButton::onActionMouseAnime(const int &frame)
 {
     //Save the high light parameter.
@@ -84,7 +76,7 @@ inline void KNGlassAnimeButton::startAnimation(const int &endFrame)
 inline void KNGlassAnimeButton::updateScaledIcon()
 {
     //Check icon is valid or not.
-    if(icon().isNull())
+    if(m_icon.isNull())
     {
         //Reset the scaled icon.
         m_scaledIcon=QPixmap();
@@ -93,10 +85,25 @@ inline void KNGlassAnimeButton::updateScaledIcon()
         m_iconY=0;
     }
     //Scaled the icon.
-    m_scaledIcon=icon().pixmap(m_iconSize);
+    m_scaledIcon=m_icon.scaled(m_iconSize, m_iconSize,
+                               Qt::KeepAspectRatio,
+                               Qt::SmoothTransformation);
     //Calculate the position of icon.
     m_iconX=(width()-m_scaledIcon.width())>>1;
     m_iconY=(height()-m_scaledIcon.height())>>1;
+}
+
+QPixmap KNGlassAnimeButton::icon() const
+{
+    return m_icon;
+}
+
+void KNGlassAnimeButton::setIcon(const QPixmap &icon)
+{
+    //Update the icon.
+    m_icon = icon;
+    //Update the scaled icon.
+    updateScaledIcon();
 }
 
 bool KNGlassAnimeButton::showLeftLine() const

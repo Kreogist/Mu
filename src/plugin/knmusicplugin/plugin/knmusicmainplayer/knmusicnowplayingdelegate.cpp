@@ -25,6 +25,8 @@
 
 using namespace MusicUtil;
 
+#define IconSize 16
+
 KNMusicNowPlayingDelegate::KNMusicNowPlayingDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
 {
@@ -64,23 +66,21 @@ void KNMusicNowPlayingDelegate::paint(QPainter *painter,
     const QAbstractItemModel *proxyModel=index.model();
 
     //Draw the playing icon.
-    QIcon indicatorIcon=proxyModel->data(proxyModel->index(index.row(),
-                                                           MusicRowState),
-                                         Qt::DecorationRole).value<QIcon>();
+    QIcon &&icon=proxyModel->data(proxyModel->index(index.row(),
+                                                    MusicRowState),
+                                  Qt::DecorationRole).value<QIcon>();
     //Check the valid of the decorate data.
-    if(!indicatorIcon.isNull())
+    if(!icon.isNull())
     {
-        //Rescaled the icon.
-        QPixmap rescaledPixmap=indicatorIcon.pixmap(16);
         //Calculate the offset.
-        int positionOffset=((option.rect.height()-rescaledPixmap.height())>>1);
+        int positionOffset=((option.rect.height()-IconSize)>>1);
         //Draw the indicator icon.
         painter->drawPixmap(option.rect.x()+positionOffset,
                             option.rect.y()+positionOffset,
-                            rescaledPixmap);
+                            icon.pixmap(IconSize));
     }
     //Draw the music duraiton.
-    QString timeText=textData(proxyModel, index, Time);
+    QString &&timeText=textData(proxyModel, index, Time);
     painter->setFont(option.font);
     //Calculate the position for text.
     int textX=option.rect.x()+(spacing<<1)+option.rect.height(),

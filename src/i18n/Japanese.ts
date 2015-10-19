@@ -482,6 +482,29 @@ To add songs to library, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicMainPlayerPanel</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.cpp" line="194"/>
+        <source>Show in songs</source>
+        <translation>曲のカテゴリで表示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.cpp" line="195"/>
+        <source>Show in artists</source>
+        <translation>アーティストのカテゴリで表示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.cpp" line="196"/>
+        <source>Show in albums</source>
+        <translation>アルバムのカテゴリで表示</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.cpp" line="197"/>
+        <source>Show in genres</source>
+        <translation>ジャンルのタブで表示</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicMultiMenu</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="88"/>
@@ -888,14 +911,14 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceAbout</name>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="131"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="132"/>
         <source> 2013-2015 Kreogist Dev Team
 All rights reserved.</source>
         <translation> 2013-2015 Kreogist Dev Team
 全著作権所有。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="145"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="146"/>
         <source>Special Thanks</source>
         <translation>特別な感謝</translation>
     </message>
@@ -905,7 +928,7 @@ All rights reserved.</source>
         <translation type="vanished">特別な感謝</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="152"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="153"/>
         <source>This program uses Qt Version </source>
         <translation>このプログラムは Qt バージョン </translation>
     </message>
@@ -946,7 +969,7 @@ Yuri Ogawara
 このプログラムは Qt バージョン</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="154"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="155"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.

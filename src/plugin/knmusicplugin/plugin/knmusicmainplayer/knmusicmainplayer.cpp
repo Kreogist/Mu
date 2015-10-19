@@ -43,8 +43,8 @@
 
 KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     KNMusicMainPlayerBase(parent),
-    m_playIcon(QIcon(":/plugin/music/player/play_dark.png")),
-    m_pauseIcon(QIcon(":/plugin/music/player/pause_dark.png")),
+    m_playIcon(QPixmap(":/plugin/music/player/play_dark.png")),
+    m_pauseIcon(QPixmap(":/plugin/music/player/pause_dark.png")),
     m_buttonLeftLayout(nullptr),
     m_buttonRightLayout(nullptr),
     m_backend(nullptr),
@@ -71,17 +71,17 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
 
     //Initial the resources.
     m_loopStateIcon[NoRepeat]    =
-            QIcon(":/plugin/music/player/NoRepeat.png");
+            QPixmap(":/plugin/music/player/NoRepeat.png");
     m_loopStateIcon[RepeatTrack] =
-            QIcon(":/plugin/music/player/RepeatSingle.png");
+            QPixmap(":/plugin/music/player/RepeatSingle.png");
     m_loopStateIcon[RepeatAll]   =
-            QIcon(":/plugin/music/player/Repeat.png");
+            QPixmap(":/plugin/music/player/Repeat.png");
     m_loopStateIcon[Shuffle]     =
-            QIcon(":/plugin/music/player/Random.png");
-    m_volumeSizeIcon[NoVolume]=QIcon(":/plugin/music/player/volume_0.png");
-    m_volumeSizeIcon[Volume1] =QIcon(":/plugin/music/player/volume_1.png");
-    m_volumeSizeIcon[Volume2] =QIcon(":/plugin/music/player/volume_2.png");
-    m_volumeSizeIcon[Volume3] =QIcon(":/plugin/music/player/volume_3.png");
+            QPixmap(":/plugin/music/player/Random.png");
+    m_volumeSizeIcon[NoVolume]=QPixmap(":/plugin/music/player/volume_0.png");
+    m_volumeSizeIcon[Volume1] =QPixmap(":/plugin/music/player/volume_1.png");
+    m_volumeSizeIcon[Volume2] =QPixmap(":/plugin/music/player/volume_2.png");
+    m_volumeSizeIcon[Volume3] =QPixmap(":/plugin/music/player/volume_3.png");
 
     //Configure the hide main player button.
     m_hideMainPlayer->setFixedSize(32, 32);

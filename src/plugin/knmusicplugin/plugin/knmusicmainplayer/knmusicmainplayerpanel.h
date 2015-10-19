@@ -36,6 +36,10 @@ class KNMusicMainPlayerPanel : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief KNMusicMainPlayerPanel
+     * \param parent
+     */
     explicit KNMusicMainPlayerPanel(QWidget *parent = 0);
 
 signals:
@@ -64,7 +68,16 @@ signals:
     void requireShowInGenres();
 
 public slots:
+    /*!
+     * \brief Set the display analysis item data to the panel.
+     * \param item The analysis item.
+     */
     void setAnalysisItem(const KNMusicAnalysisItem &item);
+
+    /*!
+     * \brief Update the panel font when the main player font is changed.
+     * \param labelFont The label font.
+     */
     void updatePanelFont(const QFont &labelFont);
 
 protected:
@@ -74,6 +87,7 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void retranslate();
     void onActionThemeChanged();
 
 private:

@@ -23,6 +23,7 @@
 #include "knhighlightlabel.h"
 #include "knopacityanimebutton.h"
 #include "knthememanager.h"
+#include "knlocalemanager.h"
 
 #include "knmusicglobal.h"
 
@@ -92,6 +93,10 @@ KNMusicMainPlayerPanel::KNMusicMainPlayerPanel(QWidget *parent) :
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMusicMainPlayerPanel::onActionThemeChanged);
     onActionThemeChanged();
+
+    //Link to the locale manager.
+    knI18n->link(this, &KNMusicMainPlayerPanel::retranslate);
+    retranslate();
 }
 
 void KNMusicMainPlayerPanel::setAnalysisItem(const KNMusicAnalysisItem &item)
@@ -181,6 +186,15 @@ void KNMusicMainPlayerPanel::resizeEvent(QResizeEvent *event)
                                    width(),
                                    detailPanelHeight);
     }
+}
+
+void KNMusicMainPlayerPanel::retranslate()
+{
+    //Set tooltips for the goto icons.
+    m_gotoIcons[GotoSong]->setToolTip(tr("Show in songs"));
+    m_gotoIcons[GotoArtist]->setToolTip(tr("Show in artists"));
+    m_gotoIcons[GotoAlbum]->setToolTip(tr("Show in albums"));
+    m_gotoIcons[GotoGenre]->setToolTip(tr("Show in genres"));
 }
 
 void KNMusicMainPlayerPanel::onActionThemeChanged()

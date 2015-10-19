@@ -105,8 +105,8 @@ private:
     };
     inline void setPosition(const qint64 &position);
     //Resources.
-    QIcon m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
-          m_volumeSizeIcon[VolumeSizeCount];
+    QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
+            m_volumeSizeIcon[VolumeSizeCount];
 
     //Layouts.
     QBoxLayout *m_buttonLeftLayout, *m_buttonRightLayout;

@@ -60,13 +60,12 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
     //Check out the validation of icon.
     if(!icon.isNull())
     {
-        //Scaled playing icon.
-        QPixmap &&scaledIcon=icon.pixmap(IconSize);
+        //Calculate the offset.
+        int positionOffset=((option.rect.height()-IconSize)>>1);
         //Draw the scaled icon.
-        painter->drawPixmap(option.rect.x()+Spacing,
-                            option.rect.y()+
-                            ((option.rect.height()-scaledIcon.height())>>1),
-                            scaledIcon);
+        painter->drawPixmap(option.rect.x()+positionOffset,
+                            option.rect.y()+positionOffset,
+                            icon.pixmap(IconSize));
     }
     //Get text color.
     QColor textColor=option.palette.color(QPalette::Text);
