@@ -142,6 +142,7 @@ void KNPreferenceAbout::retranslate()
                    "Freddie <freddie.wanah@gmail.com>\n"
                    "Nick Tang <1953547787@qq.com>\n"
                    "Frantic1048 <frantic1048@163.com>\n"
+                   "Yayuan Yan <yy1119@nyu.edu>\n"
                    "\n"+
                 tr("Special Thanks")+"\n"
                    "WangBin\n"
@@ -149,6 +150,7 @@ void KNPreferenceAbout::retranslate()
                    "darkblackswords\n"
                    "Yuri Ogawara\n"
                    "1dot75cm\n"
+                   "Lin Yuan\n"
                    "\n"+
                 tr("This program uses Qt Version ")+
                    QT_VERSION_STR+

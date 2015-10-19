@@ -918,7 +918,7 @@ All rights reserved.</source>
 全著作権所有。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="146"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="147"/>
         <source>Special Thanks</source>
         <translation>特別な感謝</translation>
     </message>
@@ -928,7 +928,7 @@ All rights reserved.</source>
         <translation type="vanished">特別な感謝</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="153"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="155"/>
         <source>This program uses Qt Version </source>
         <translation>このプログラムは Qt バージョン </translation>
     </message>
@@ -969,7 +969,7 @@ Yuri Ogawara
 このプログラムは Qt バージョン</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="155"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="157"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.

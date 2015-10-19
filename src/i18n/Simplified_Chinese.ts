@@ -918,7 +918,7 @@ All rights reserved.</source>
 保留一切权利。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="146"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="147"/>
         <source>Special Thanks</source>
         <translation>特别鸣谢</translation>
     </message>
@@ -928,7 +928,7 @@ All rights reserved.</source>
         <translation type="vanished">特别鸣谢</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="153"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="155"/>
         <source>This program uses Qt Version </source>
         <translation>这个程序使用 Qt </translation>
     </message>
@@ -1001,7 +1001,7 @@ darkblackswords
 这个程序使用 Qt  </translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="155"/>
+        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="157"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
@@ -1010,7 +1010,7 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
         <translation> 。
 Qt 是一个跨平台的 C++ 应用开发工具集。
 版权所有 (C) 2015 The Qt Company Ltd 和其他贡献者。
-Qt 和 Qt 的会标是 The Qt Company Ltd 的注册商标。
+Qt 和 Qt 的徽标是 The Qt Company Ltd 的注册商标。
 Qt 是 The Qt Company Ltd 开发的开源项目。请访问 qt.io 获取更多信息。</translation>
     </message>
 </context>
