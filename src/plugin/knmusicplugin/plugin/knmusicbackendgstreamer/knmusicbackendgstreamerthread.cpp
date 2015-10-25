@@ -38,6 +38,7 @@ KNMusicBackendGStreamerThread::KNMusicBackendGStreamerThread(QObject *parent) :
     m_playbin(NULL),
     m_seekFlag((GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT)),
     m_state(MusicUtil::Stopped),
+    m_volume(10000),
     m_sectionSet(false)
 {
     //Link the process event.
@@ -155,7 +156,8 @@ void KNMusicBackendGStreamerThread::pause()
 
 int KNMusicBackendGStreamerThread::volume()
 {
-    ;
+    //Give back the main volume.
+    return m_volume;
 }
 
 qint64 KNMusicBackendGStreamerThread::duration()
@@ -206,6 +208,7 @@ void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
     }
     //Set the flag.
     m_sectionSet=true;
+    qDebug()<<"m_sectionSet is"<<m_sectionSet;
     //Check out the total duration, it the file is loaded, we have to check the
     //start and end position.
     if(m_totalDuration!=-1)
@@ -218,15 +221,24 @@ void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
 
 void KNMusicBackendGStreamerThread::setVolume(const int &volume)
 {
-    ;
+    //Save the volume size.
+    m_volume=volume;
+    //Check the playbin is null or not.
+    if(m_playbin)
+    {
+        //Translate the volume to gdouble.
+        gdouble playbinVolume=(gdouble)volume/10000.0;
+        //Set the volume
+        g_object_set(G_OBJECT(m_playbin), "volume", playbinVolume, NULL);
+    }
 }
 
 void KNMusicBackendGStreamerThread::setPosition(const qint64 &position)
 {
     //Check the playbin pointer first
-    if(m_playbin)
+    if(m_playbin && m_startPosition!=-1)
     {
-        qDebug()<<"Set the position to "<<m_startPosition+position;
+        qDebug()<<"Set the position to "<<+position;
         //Seek the playbin pipeline.
         gst_element_seek_simple(m_playbin,
                                 GST_FORMAT_TIME,
@@ -354,6 +366,8 @@ inline bool KNMusicBackendGStreamerThread::rebuildPipeline()
         //Remove the bus reference.
         gst_object_unref(bus);
     }
+    //Reset the volume size.
+    setVolume(m_volume);
     //Finished.
     return true;
 }

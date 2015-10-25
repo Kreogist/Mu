@@ -44,7 +44,7 @@ KNMusicBackendGStreamer::~KNMusicBackendGStreamer()
 
 int KNMusicBackendGStreamer::volume() const
 {
-    return 0;
+    return m_main->volume();
 }
 
 int KNMusicBackendGStreamer::minimalVolume() const
@@ -54,12 +54,15 @@ int KNMusicBackendGStreamer::minimalVolume() const
 
 int KNMusicBackendGStreamer::maximumVolume() const
 {
-    return 0;
+    return 10000;
 }
 
 void KNMusicBackendGStreamer::setGlobalVolume(const int &volume)
 {
-    ;
+    //Set to the main thread.
+    m_main->setVolume(volume);
+    //Emit the volume changed signal.
+    emit volumeChanged(volume);
 }
 
 int KNMusicBackendGStreamer::volumeLevel() const

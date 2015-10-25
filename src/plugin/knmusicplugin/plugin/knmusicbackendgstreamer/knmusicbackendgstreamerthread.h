@@ -37,6 +37,8 @@
  *    But now it should be
  *         gst_element_query_duration (data.playbin2, fmt, &data.duration)
  *    No more pointer needed.
+ * 3. Not all formats audio will give out a DURATION_CHANGED message, but all of
+ *    them will give out a GST_MESSAGE_NEW_CLOCK message.
  *
  * Oct 24th, 2015
  * There're playbin and playbin2 in GStreamer 0.10. But when it comes to 1.0
@@ -140,7 +142,7 @@ private:
            m_totalDuration;
     GstElement *m_playbin;
     const GstSeekFlags m_seekFlag;
-    int m_state;
+    int m_state, m_volume;
     bool m_sectionSet;
 };
 
