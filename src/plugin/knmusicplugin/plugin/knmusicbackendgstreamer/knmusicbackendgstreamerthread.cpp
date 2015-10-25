@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QUrl>
+#include <QTimer>
 
 #include "knmusicbackendgstreamerthread.h"
 
@@ -35,12 +36,17 @@ KNMusicBackendGStreamerThread::KNMusicBackendGStreamerThread(QObject *parent) :
     m_endPosition(-1),
     m_duration(-1),
     m_totalDuration(-1),
+    m_tick(new QTimer(this)),
     m_playbin(NULL),
     m_seekFlag((GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT)),
     m_state(MusicUtil::Stopped),
     m_volume(10000),
     m_sectionSet(false)
 {
+    //Configure the timer.
+    m_tick->setInterval(16);
+    connect(m_tick, &QTimer::timeout,
+            this, &KNMusicBackendGStreamerThread::onActionTick);
     //Link the process event.
     connect(this, &KNMusicBackendGStreamerThread::requireProcessEvent,
             this, &KNMusicBackendGStreamerThread::processEvents,
@@ -62,6 +68,10 @@ bool KNMusicBackendGStreamerThread::loadFile(const QString &filePath)
         stop();
         //Reset the parameter.
         resetParameter();
+        //Update the duration.
+        emit durationChanged(m_duration);
+        //Emit the load success signal.
+        emit loadSuccess();
         return true;
     }
     //Reset the pipeline.
@@ -83,7 +93,8 @@ bool KNMusicBackendGStreamerThread::loadFile(const QString &filePath)
         //Set the uri to the playbin.
         g_object_set(m_playbin, "uri", localUrl.data(), NULL);
     }
-    return false;
+    //Load the file successfully.
+    return true;
 }
 
 void KNMusicBackendGStreamerThread::reset()
@@ -110,6 +121,8 @@ void KNMusicBackendGStreamerThread::stop()
         //Check out the result.
         if (GST_STATE_CHANGE_FAILURE != stateResult)
         {
+            //Stop ticking.
+            m_tick->stop();
             //Reset the position.
             setPosition(0);
             //Then the result is success, we can change the state.
@@ -130,6 +143,8 @@ void KNMusicBackendGStreamerThread::play()
         //Check out the result.
         if (GST_STATE_CHANGE_FAILURE != stateResult)
         {
+            //Start ticking.
+            m_tick->start();
             //Then the result is success, we can change the state.
             setPlayingState(MusicUtil::Playing);
         }
@@ -150,6 +165,8 @@ void KNMusicBackendGStreamerThread::pause()
         {
             //Then the result is success, we can change the state.
             setPlayingState(MusicUtil::Paused);
+            //Stop ticking.
+            m_tick->stop();
         }
     }
 }
@@ -177,7 +194,7 @@ qint64 KNMusicBackendGStreamerThread::position()
                                                    GST_FORMAT_TIME,
                                                    &position);
         //Check the result.
-        if(!result)
+        if(result)
         {
             //Give back the position data.
             //Remember it will use nanosecond but not msecond.
@@ -196,6 +213,7 @@ int KNMusicBackendGStreamerThread::state() const
 void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
                                                    const qint64 &duration)
 {
+    qDebug()<<"Did I go here?!";
     //Save the start position and duration.
     m_startPosition=start;
     //Check out the duration.
@@ -247,6 +265,37 @@ void KNMusicBackendGStreamerThread::setPosition(const qint64 &position)
     }
 }
 
+void KNMusicBackendGStreamerThread::onActionTick()
+{
+    //Check out the pipeline.
+    if(m_playbin)
+    {
+        //Generate the gstreamer position.
+        gint64 position;
+        //Output the data.
+        gboolean result=gst_element_query_position(m_playbin,
+                                                   GST_FORMAT_TIME,
+                                                   &position);
+        //Check the result.
+        if(result)
+        {
+            //Give back the position data.
+            //Remember it will use nanosecond but not msecond.
+            qint64 totalPosition=position/1000000;
+            //Emit the position changed signal.
+            emit positionChanged(totalPosition-m_startPosition);
+            //Check the total position is greater than end position.
+            if(m_endPosition>0 && totalPosition>=m_endPosition)
+            {
+                //Stop the pipeline
+                stop();
+                //Emit finished signal.
+                emit finished();
+            }
+        }
+    }
+}
+
 void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
                                                   GstMessage *message)
 {
@@ -270,8 +319,7 @@ void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
         //Save the total duration, we are using millisecond while gstreamer is
         //using nanosecond.
         m_totalDuration=totalDuration/1000000;
-        //If we comes to here, that means the file is loaded.
-        emit loadSuccess();
+        qDebug()<<"Fuck?! and flag is"<<m_sectionSet;
         //Check if section has been set then update the position.
         if(m_sectionSet)
         {
@@ -279,6 +327,8 @@ void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
             //Check out the start and end position.
             updateStartAndEndPosition();
         }
+        //If we comes to here, that means the file is loaded.
+        emit loadSuccess();
         //Complete.
         break;
     }

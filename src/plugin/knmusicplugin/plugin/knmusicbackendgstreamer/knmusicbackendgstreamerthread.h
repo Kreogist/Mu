@@ -126,6 +126,7 @@ public slots:
     void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
 
 private slots:
+    void onActionTick();
     void processEvents(GstBus *bus, GstMessage *message);
 
 private:
@@ -140,6 +141,7 @@ private:
            m_endPosition,
            m_duration,
            m_totalDuration;
+    QTimer *m_tick;
     GstElement *m_playbin;
     const GstSeekFlags m_seekFlag;
     int m_state, m_volume;
