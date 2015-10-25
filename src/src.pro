@@ -133,7 +133,7 @@ macx: {
 
 linux: {
     # Enable the backend and analysiser.
-    CONFIG += backend-phonon analysiser-ffmpeg
+    CONFIG += backend-gstreamer analysiser-ffmpeg
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
@@ -153,6 +153,30 @@ i18n: {
 }
 
 # Backend Specific Configuration
+backend-gstreamer: {
+    # Check whether there's a backend enabled already
+    contains(DEFINES, BACKEND_ENABLED){
+        error("You can't enable more than one backend at the same time.")
+    }
+    # Define the backend enabled flag.
+    DEFINES += ENABLE_BACKEND_GSTREAMER BACKEND_ENABLED
+    # These pathes are from Ubuntu 15.04, setup with apt-get.
+    # Add backend library to the project.
+    LIBS += -L/usr/lib/x86_64-linux-gnu -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
+    # Add backend include path to the project.
+    INCLUDEPATH += \
+        /usr/include/gstreamer-1.0 \
+        /usr/include/glib-2.0 \
+        /usr/lib/x86_64-linux-gnu/glib-2.0/include
+    # Add backend files to the project.
+    SOURCES += \
+        plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamer.cpp \
+        plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamerthread.cpp
+    HEADERS += \
+        plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamer.h \
+        plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamerthread.h
+}
+
 backend-mpv: {
     # Check whether there's a backend enabled already
     contains(DEFINES, BACKEND_ENABLED){

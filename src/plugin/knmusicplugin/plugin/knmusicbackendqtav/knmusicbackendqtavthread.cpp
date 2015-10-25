@@ -191,10 +191,11 @@ void KNMusicBackendQtAVThread::onActionPositionChanged(const qint64 &position)
     //Emit the position changed signal.
     emit positionChanged(position-m_startPosition);
     //Check whether the position reach the end position.
-    if(position>=m_endPosition)
+    if(m_endPosition!=0 && position>=m_endPosition)
     {
         //Stop the player.
         stopPlayer();
+        qDebug()<<"Fuck here?!";
         //Emit a finished signal.
         emit finished();
     }
@@ -209,13 +210,6 @@ void KNMusicBackendQtAVThread::onActionMediaStateChanged(
     case QtAV::InvalidMedia:
         //Because the media is invalid, loaded should be failed.
         emit loadFailed();
-        break;
-    case QtAV::EndOfMedia:
-        //This should means we have played to the end of the file.
-        //Stop the player.
-        stopPlayer();
-        //Emit finished signal.
-        emit finished();
         break;
     default:
         break;

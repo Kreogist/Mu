@@ -206,8 +206,8 @@ void KNMusicBackendPhononThread::onActionDurationChanged(
         //Ignore the invalid duration changed signal.
         return;
     }
-    //If we comes to here, that means the file is loaded.
-    emit loadSuccess();
+        //If we comes to here, that means the file is loaded.
+        emit loadSuccess();
     //Save the duration as the total duration.
     m_totalDuration=totalTime;
     //Check the start and the end position.
