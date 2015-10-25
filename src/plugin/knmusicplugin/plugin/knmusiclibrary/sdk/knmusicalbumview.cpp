@@ -588,6 +588,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     painter.drawPixmap(x-m_shadowIncrease,
                        y-m_shadowIncrease,
                        m_albumArtShadow);
+
     //Render and draw the album art image.
     QPixmap &&albumArtImage=
             m_proxyModel->data(index,
@@ -600,9 +601,6 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     }
     else
     {
-        //Draw the album art base.
-        painter.fillRect(QRect(x, y, m_itemWidth, m_itemWidth),
-                         QColor(0,0,0));
         //Update the album art image.
         albumArtImage=albumArtImage.scaled(QSize(m_itemWidth,
                                                  m_itemWidth),
@@ -751,6 +749,12 @@ inline QPixmap KNMusicAlbumView::generateShadow(int shadowWidth,
                              blockSize),
                        m_shadowSource,
                        QRect(blockSize2x,blockSize2x,blockSize,blockSize));
+    //Draw the black central content.
+    painter.fillRect(QRect(m_shadowIncrease,
+                           m_shadowIncrease,
+                           m_itemWidth,
+                           m_itemWidth),
+                     QColor(0, 0, 0));
     painter.end();
     return shadowPixmap;
 }
