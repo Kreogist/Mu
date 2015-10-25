@@ -213,7 +213,6 @@ int KNMusicBackendGStreamerThread::state() const
 void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
                                                    const qint64 &duration)
 {
-    qDebug()<<"Did I go here?!";
     //Save the start position and duration.
     m_startPosition=start;
     //Check out the duration.
@@ -226,12 +225,10 @@ void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
     }
     //Set the flag.
     m_sectionSet=true;
-    qDebug()<<"m_sectionSet is"<<m_sectionSet;
     //Check out the total duration, it the file is loaded, we have to check the
     //start and end position.
     if(m_totalDuration!=-1)
     {
-        qDebug()<<"In setSection we update the start and end!";
         //Check and update the positions.
         updateStartAndEndPosition();
     }
@@ -256,7 +253,6 @@ void KNMusicBackendGStreamerThread::setPosition(const qint64 &position)
     //Check the playbin pointer first
     if(m_playbin && m_startPosition!=-1)
     {
-        qDebug()<<"Set the position to "<<+position;
         //Seek the playbin pipeline.
         gst_element_seek_simple(m_playbin,
                                 GST_FORMAT_TIME,
@@ -299,6 +295,7 @@ void KNMusicBackendGStreamerThread::onActionTick()
 void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
                                                   GstMessage *message)
 {
+    Q_UNUSED(bus)
     //Get the message type.
     GstMessageType messageType=GST_MESSAGE_TYPE(message);
     //Check out the message type
@@ -319,11 +316,9 @@ void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
         //Save the total duration, we are using millisecond while gstreamer is
         //using nanosecond.
         m_totalDuration=totalDuration/1000000;
-        qDebug()<<"Fuck?! and flag is"<<m_sectionSet;
         //Check if section has been set then update the position.
         if(m_sectionSet)
         {
-            qDebug()<<"In duration update we update the start and end!";
             //Check out the start and end position.
             updateStartAndEndPosition();
         }
@@ -332,8 +327,10 @@ void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
         //Complete.
         break;
     }
-    case GST_MESSAGE_PROGRESS:
+    case GST_MESSAGE_ERROR:
     {
+        //File will be loaded failed.
+        emit loadFailed();
         break;
     }
     default:

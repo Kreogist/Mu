@@ -27,6 +27,7 @@
 
 /*
  * Oct 25th, 2015
+ * There're something no one will tell you, I write it down here.
  * 1. Find a good example written in pure C.
  *         https://github.com/felipec/gst-player/blob/master/gst-backend.c
  *    This example helps me a lot on understanding GStreamer.
@@ -39,6 +40,8 @@
  *    No more pointer needed.
  * 3. Not all formats audio will give out a DURATION_CHANGED message, but all of
  *    them will give out a GST_MESSAGE_NEW_CLOCK message.
+ * 4. If you want to change volume of a playbin, set the volume property of the
+ *    playbin.
  *
  * Oct 24th, 2015
  * There're playbin and playbin2 in GStreamer 0.10. But when it comes to 1.0
@@ -109,8 +112,8 @@ signals:
     /*!
      * \brief This is a private signals. You Shouldn't use this signal.\n
      * This signal is used to process the event from the
-     * \param bus
-     * \param message
+     * \param bus The GstBut pointer.
+     * \param message The message pointer, this is the thing we need.
      */
     void requireProcessEvent(GstBus *bus, GstMessage *message);
 

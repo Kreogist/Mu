@@ -67,10 +67,10 @@ void KNMusicBackendGStreamer::setGlobalVolume(const int &volume)
 
 int KNMusicBackendGStreamer::volumeLevel() const
 {
-    return 0;
+    return 1000;
 }
 
 qreal KNMusicBackendGStreamer::smartVolumeScale() const
 {
-    return 0.0;
+    return 0.25;
 }
