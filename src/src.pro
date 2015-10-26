@@ -160,14 +160,9 @@ backend-gstreamer: {
     }
     # Define the backend enabled flag.
     DEFINES += ENABLE_BACKEND_GSTREAMER BACKEND_ENABLED
-    # These pathes are from Ubuntu 15.04, setup with apt-get.
     # Add backend library to the project.
-    LIBS += -L/usr/lib/x86_64-linux-gnu -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
-    # Add backend include path to the project.
-    INCLUDEPATH += \
-        /usr/include/gstreamer-1.0 \
-        /usr/include/glib-2.0 \
-        /usr/lib/x86_64-linux-gnu/glib-2.0/include
+    CONFIG += link_pkgconfig
+    PKGCONFIG += gstreamer-1.0
     # Add backend files to the project.
     SOURCES += \
         plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamer.cpp \
