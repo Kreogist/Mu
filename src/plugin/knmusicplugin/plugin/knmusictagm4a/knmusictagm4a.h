@@ -28,10 +28,6 @@ class KNMusicTagM4a : public KNMusicTagParser
 {
     Q_OBJECT
 public:
-    /*!
-     * \brief Construct a KNMusicTagM4a object.
-     * \param parent The parent object.
-     */
     explicit KNMusicTagM4a(QObject *parent = 0);
 
     /*!
@@ -68,51 +64,23 @@ public slots:
 private:
     struct M4ABox
     {
-        quint32 size;
         QString name;
-        //A box is independent is means:
-        //It holds its own data, the data is not shared by other box.
-        bool independence;
-        char *data;
-        M4ABox() :
-            independence(false),
-            data(nullptr)
-        {
-        }
-        ~M4ABox()
-        {
-            //Check if is a independence box, recover the memory
-            if(independence && data!=nullptr)
-            {
-                delete[] data;
-            }
-        }
+        QByteArray data;
     };
-    inline void clearBox(M4ABox &box);
     inline bool getBox(QDataStream &musicDataStream,
                        M4ABox &box,
                        bool ignoreContent=false);
+    inline bool parseBox(const M4ABox &source,
+                         QHash<QString, QByteArray> &boxes);
+    inline bool parseData(quint32 sourceSize,
+                          char *dataPosition,
+                          QHash<QString, QByteArray> &boxes);
     inline bool extractBox(const M4ABox &source,
-                           QList<M4ABox> &boxes);
-    inline void independent(M4ABox &box);
-    inline bool findIlstBox(const M4ABox &metaBox, M4ABox &ilstBox);
-    inline void writeBox(const M4ABox &source, QFile &targetFile);
-    inline bool extractMetaBox(const M4ABox &metaBox, QList<M4ABox> &boxes);
+                           QHash<QString, QByteArray> &boxes);
     inline bool extractData(quint32 sourceSize,
                             char *dataPosition,
-                            QList<M4ABox> &boxes);
-    inline bool findBox(const QString &targetName,
-                        M4ABox &targetBox,
-                        const QList<M4ABox> &boxList);
-    inline M4ABox generateItemBox(const int &column,
-                                  const QString &atomName,
-                                  const QByteArray &rawData);
-    M4ABox generateItemBox(char *atomFlags,
-                           const QString &atomName,
-                           const QByteArray &rawData);
-    inline M4ABox zipBox(const QString &name, const QList<M4ABox> &boxes);
-    inline QByteArray combineBoxList(const QList<M4ABox> &boxes);
-    inline QByteArray packBox(const M4ABox &box);
+                            QHash<QString, QByteArray> &boxes);
+    inline bool findIlstBox(const QByteArray &metaBox, M4ABox &ilstBox);
 
     static QHash<QString, int> m_atomIndexMap;
     static QHash<int, QString> m_indexAtomMap;

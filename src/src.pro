@@ -395,7 +395,6 @@ SOURCES += \
     sdk/sao/knsaosubmenu.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
     plugin/knmusicplugin/sdk/knmusicutil.cpp \
-    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.cpp \
     sdk/knglassanimebutton.cpp \
     sdk/knloopscrolllabel.cpp \
@@ -451,7 +450,8 @@ SOURCES += \
     sdk/knselectanyfiledialog.cpp \
     sdk/knfiledialog.cpp \
     plugin/knmacextras/knmacextras.cpp \
-    sdk/knimagelabel.cpp
+    sdk/knimagelabel.cpp \
+    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -597,7 +597,6 @@ HEADERS += \
     sdk/sao/knsaosubmenu.h \
     plugin/knmusicplugin/sdk/knmusicmainplayerbase.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.h \
-    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.h \
     sdk/knglassanimebutton.h \
     sdk/knloopscrolllabel.h \
@@ -656,7 +655,8 @@ HEADERS += \
     sdk/knselectanyfiledialog.h \
     sdk/knfiledialog.h \
     plugin/knmacextras/knmacextras.h \
-    sdk/knimagelabel.h
+    sdk/knimagelabel.h \
+    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h
 
 RESOURCES += \
     resource/res.qrc
