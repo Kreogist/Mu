@@ -278,7 +278,6 @@ protected:
 
 private:
     QNetworkAccessManager *m_networkManager;
-    QTimer *m_timeout;
     KNConnectionHandler m_timeoutHandler;
 };
 
