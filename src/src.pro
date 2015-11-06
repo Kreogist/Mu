@@ -160,14 +160,9 @@ backend-gstreamer: {
     }
     # Define the backend enabled flag.
     DEFINES += ENABLE_BACKEND_GSTREAMER BACKEND_ENABLED
-    # These pathes are from Ubuntu 15.04, setup with apt-get.
     # Add backend library to the project.
-    LIBS += -L/usr/lib/x86_64-linux-gnu -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
-    # Add backend include path to the project.
-    INCLUDEPATH += \
-        /usr/include/gstreamer-1.0 \
-        /usr/include/glib-2.0 \
-        /usr/lib/x86_64-linux-gnu/glib-2.0/include
+    CONFIG += link_pkgconfig
+    PKGCONFIG += gstreamer-1.0
     # Add backend files to the project.
     SOURCES += \
         plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamer.cpp \
@@ -395,7 +390,6 @@ SOURCES += \
     sdk/sao/knsaosubmenu.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
     plugin/knmusicplugin/sdk/knmusicutil.cpp \
-    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.cpp \
     sdk/knglassanimebutton.cpp \
     sdk/knloopscrolllabel.cpp \
@@ -451,7 +445,8 @@ SOURCES += \
     sdk/knselectanyfiledialog.cpp \
     sdk/knfiledialog.cpp \
     plugin/knmacextras/knmacextras.cpp \
-    sdk/knimagelabel.cpp
+    sdk/knimagelabel.cpp \
+    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -597,7 +592,6 @@ HEADERS += \
     sdk/sao/knsaosubmenu.h \
     plugin/knmusicplugin/sdk/knmusicmainplayerbase.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.h \
-    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.h \
     sdk/knglassanimebutton.h \
     sdk/knloopscrolllabel.h \
@@ -656,7 +650,8 @@ HEADERS += \
     sdk/knselectanyfiledialog.h \
     sdk/knfiledialog.h \
     plugin/knmacextras/knmacextras.h \
-    sdk/knimagelabel.h
+    sdk/knimagelabel.h \
+    plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h
 
 RESOURCES += \
     resource/res.qrc
