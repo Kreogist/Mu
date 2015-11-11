@@ -40,6 +40,7 @@ class KNMusicHeaderPlayerBase;
 class KNMusicPlayerBase;
 class KNMusicPlaylistBase;
 class KNMusicMainPlayerBase;
+class KNMusicMiniPlayerBase;
 class KNMusicLibraryBase;
 class KNMusicLyricsDownloadDialogBase;
 /*!
@@ -133,6 +134,7 @@ private:
     void initialDetailTooltip(KNMusicDetailTooltipBase *tooltip);
     void initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer);
     void initialMainPlayer(KNMusicMainPlayerBase *mainPlayer);
+    void initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
     void initialLibrary(KNMusicLibraryBase *library);
 
@@ -150,6 +152,7 @@ private:
     //Plugins.
     KNMusicHeaderPlayerBase *m_headerPlayer;
     KNMusicMainPlayerBase *m_mainPlayer;
+    KNMusicMiniPlayerBase *m_miniPlayer;
     KNMusicLibraryBase *m_library;
 };
 

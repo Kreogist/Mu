@@ -180,8 +180,7 @@ private:
     KNMusicAlbumDetail *m_albumDetail;
     const int m_spacing, m_itemMinimalWidth, minimalWidth;
     int m_lineCount, m_textSpacing, m_itemHeight, m_itemWidth,
-        m_itemSpacingHeight, m_itemSpacingWidth, m_maxColumnCount,
-        m_shadowIncrease;
+        m_itemSpacingHeight, m_itemSpacingWidth, m_maxColumnCount;
 };
 
 #endif // KNMUSICALBUMVIEW_H

@@ -19,6 +19,7 @@
 #include <QKeyEvent>
 #include <QTimeLine>
 
+#include "knopacitybutton.h"
 #include "knthememanager.h"
 
 #include "knsearchbox.h"
@@ -26,6 +27,8 @@
 #include <QDebug>
 
 #define SearchBoxHeight 20
+#define SearchBoxClearButtonSize 14
+#define SearchBoxClearButtonTop 3
 #define SearchBoxIconX 3
 
 #define MinimumLightness 0x3A
@@ -35,6 +38,7 @@
 KNSearchBox::KNSearchBox(QWidget *parent) :
     QLineEdit(parent),
     m_searchIcon(QPixmap()),
+    m_closeButton(new KNOpacityButton(this)),
     m_baseColor(QColor(0,0,0,0)),
     m_mouseInOut(generateTimeLine()),
     m_focusInOut(generateTimeLine()),
@@ -43,13 +47,22 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     setObjectName("SearchBox");
     //Set properties.
     setFrame(false);
-    setClearButtonEnabled(true);
     setContentsMargins(SearchBoxHeight+SearchBoxIconX,
                        0,
-                       SearchBoxHeight>>1,
+                       (SearchBoxHeight>>1)+SearchBoxClearButtonSize,
                        0);
     setFixedHeight(SearchBoxHeight);
 
+    //Configure the button.
+    m_closeButton->setIcon(QIcon("://public/search_close.png"));
+    m_closeButton->setFixedSize(SearchBoxClearButtonSize,
+                                SearchBoxClearButtonSize);
+    m_closeButton->setFocusProxy(this);
+    m_closeButton->setCursor(Qt::ArrowCursor);
+    m_closeButton->hide();
+    //Link the close button to clear slot.
+    connect(m_closeButton, &KNOpacityButton::clicked,
+            this, &KNSearchBox::clear);
     //Configure the initialized image.
     setSearchIcon(QPixmap("://public/search.png"));
     //Configure the time line, link the frame change with the slot.
@@ -57,6 +70,9 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
             this, &KNSearchBox::onActionMouseInOut);
     connect(m_focusInOut, &QTimeLine::frameChanged,
             this, &KNSearchBox::onActionFocusInOut);
+    //Connect the text checker.
+    connect(this, &KNSearchBox::textChanged,
+            this, &KNSearchBox::onActionTextChanged);
 
     //Link with the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
@@ -154,6 +170,16 @@ void KNSearchBox::keyPressEvent(QKeyEvent *event)
     QLineEdit::keyPressEvent(event);
 }
 
+void KNSearchBox::resizeEvent(QResizeEvent *event)
+{
+    //Resize the line edit.
+    QLineEdit::resizeEvent(event);
+    //Reset the position of close button.
+    m_closeButton->move(
+                width()-SearchBoxClearButtonSize-8,
+                SearchBoxClearButtonTop);
+}
+
 void KNSearchBox::onActionThemeChanged()
 {
     //Get the palette from the theme manager.
@@ -164,6 +190,12 @@ void KNSearchBox::onActionThemeChanged()
     pal.setColor(QPalette::Base, QColor(0,0,0,0));
     //Set the palette.
     setPalette(pal);
+}
+
+void KNSearchBox::onActionTextChanged(const QString &text)
+{
+    //When the text is empty, hide the close button.
+    m_closeButton->setVisible(!text.isEmpty());
 }
 
 void KNSearchBox::onActionMouseInOut(const int &frame)

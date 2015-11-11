@@ -34,6 +34,8 @@
 
 #include <QDebug>
 
+#define m_shadowIncrease 15
+
 KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     QAbstractItemView(parent),
     m_shadowSource(QPixmap("://public/shadow.png")),
@@ -58,8 +60,7 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     m_itemWidth(134),
     m_itemSpacingHeight(m_spacing+m_itemHeight),
     m_itemSpacingWidth(m_spacing+m_itemWidth),
-    m_maxColumnCount(0),
-    m_shadowIncrease(15)
+    m_maxColumnCount(0)
 {
     setObjectName("MusicAlbumView");
     //Set properties.
@@ -585,8 +586,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
         return;
     }
     //Draw the shadow first.
-    painter.drawPixmap(x-m_shadowIncrease,
-                       y-m_shadowIncrease,
+    painter.drawPixmap(x-m_shadowIncrease, y-m_shadowIncrease,
                        m_albumArtShadow);
 
     //Render and draw the album art image.
@@ -601,12 +601,12 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     }
     else
     {
-        //Update the album art image.
+        //Scaled the album art image to item width and keep the aspect ratio.
         albumArtImage=albumArtImage.scaled(QSize(m_itemWidth,
                                                  m_itemWidth),
                                            Qt::KeepAspectRatio,
                                            Qt::SmoothTransformation);
-        //Scaled the album art image to item width and keep the aspect ratio.
+        //Draw the album art to the specific position.
         painter.drawPixmap(QPoint(x+((m_itemWidth-albumArtImage.width())>>1),
                                   y+((m_itemWidth-albumArtImage.height())>>1)),
                            albumArtImage);

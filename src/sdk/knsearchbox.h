@@ -22,6 +22,7 @@
 #include <QLineEdit>
 
 class QTimeLine;
+class KNOpacityButton;
 /*!
  * \brief The KNSearchBox class provides you a mouse sense search box. The icon
  * of the search box can be tweaked by setSearchIcon() function.\n
@@ -102,8 +103,14 @@ protected:
      */
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QLineEdit::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void onActionThemeChanged();
+    void onActionTextChanged(const QString &text);
     void onActionMouseInOut(const int &frame);
     void onActionFocusInOut(const int &frame);
 
@@ -112,6 +119,7 @@ private:
     inline void startAnime(QTimeLine *timeLine, const int &end);
     QPixmap m_searchIcon;
     QColor m_baseColor;
+    KNOpacityButton *m_closeButton;
     QTimeLine *m_mouseInOut, *m_focusInOut;
     QWidget *m_focusSource;
 };

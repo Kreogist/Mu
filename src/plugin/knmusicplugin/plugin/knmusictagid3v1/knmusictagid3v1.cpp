@@ -265,8 +265,10 @@ inline void KNMusicTagId3v1::setRawTagData(char *rawTagData,
                                            const QVariant &text,
                                            const int &length)
 {
+    //Clear the data.
+    memset(rawTagData, 0, length);
     //Encode the text with the codec.
     QByteArray codecData=m_codec->fromUnicode(text.toString());
     //Simply copy the data to the char array.
-    memcpy(rawTagData, codecData.data(), length);
+    memcpy(rawTagData, codecData.data(), qMin(length, codecData.size()));
 }

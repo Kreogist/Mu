@@ -50,6 +50,7 @@
 #include "knmusiclibrarybase.h"
 #include "knmusictab.h"
 #include "knmusiclyricsdownloaddialogbase.h"
+#include "knmusicminiplayerbase.h"
 
 //Plugins
 // Detail Dialog Panels.
@@ -107,6 +108,8 @@
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 // Main Player.
 #include "plugin/knmusicmainplayer/knmusicmainplayer.h"
+// Mini Player.
+#include "plugin/knmusicminiplayer/knmusicminiplayer.h"
 // Library.
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 // Playlist.
@@ -225,6 +228,8 @@ void KNMusicPlugin::loadPlugins()
     initialHeaderPlayer(new KNMusicHeaderPlayer);
     //Initial the main player.
     initialMainPlayer(new KNMusicMainPlayer);
+    //Initial the mini player.
+    initialMiniPlayer(new KNMusicMiniPlayer);
     //Initial the library tab.
     initialLibrary(new KNMusicLibrary);
     //Initial the playlist tab.
@@ -472,11 +477,11 @@ void KNMusicPlugin::initialParserPlugin()
 
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagId3v1);
-    parser->installTagParser(new KNMusicTagWma);
-    parser->installTagParser(new KNMusicTagWav);
+//    parser->installTagParser(new KNMusicTagWma);
+//    parser->installTagParser(new KNMusicTagWav);
     parser->installTagParser(new KNMusicTagApev2);
-    parser->installTagParser(new KNMusicTagM4a);
-    parser->installTagParser(new KNMusicTagFlac);
+//    parser->installTagParser(new KNMusicTagM4a);
+//    parser->installTagParser(new KNMusicTagFlac);
     parser->installTagParser(new KNMusicTagId3v2);
 
     //Add analysiser.
@@ -620,24 +625,31 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
 
 void KNMusicPlugin::initialMainPlayer(KNMusicMainPlayerBase *mainPlayer)
 {
-    //Check if the header player is nullptr, or a header player is already
-    //loaded.
+    //Check if the header player is nullptr.
     if(mainPlayer==nullptr || m_mainPlayer!=nullptr)
     {
         return;
     }
     //Save the header player.
     m_mainPlayer=mainPlayer;
-    //Check the pointer.
-    if(m_mainPlayer==nullptr)
-    {
-        return;
-    }
     //Set the basic stuffs of a player.
     initialPlayer(m_mainPlayer);
     //Link the request.
     connect(m_mainPlayer, &KNMusicMainPlayerBase::requireHide,
             this, &KNMusicPlugin::requireHideMainPlayer);
+}
+
+void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
+{
+    //Check if the mini player is nullptr.
+    if(miniPlayer==nullptr || m_miniPlayer!=nullptr)
+    {
+        return;
+    }
+    //Save the mini player.
+    m_miniPlayer=miniPlayer;
+    //Set the basic stuffs of a player.
+    initialPlayer(m_miniPlayer);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
