@@ -447,7 +447,8 @@ SOURCES += \
     plugin/knmacextras/knmacextras.cpp \
     sdk/knimagelabel.cpp \
     plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
-    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.cpp
+    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.cpp \
+    plugin/knmusicplugin/sdk/knmusichscrolllyrics.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -654,7 +655,8 @@ HEADERS += \
     sdk/knimagelabel.h \
     plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h \
     plugin/knmusicplugin/sdk/knmusicminiplayerbase.h \
-    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.h
+    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.h \
+    plugin/knmusicplugin/sdk/knmusichscrolllyrics.h
 
 RESOURCES += \
     resource/res.qrc

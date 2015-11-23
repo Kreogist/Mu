@@ -253,8 +253,7 @@ void KNMusicAlbumView::paintEvent(QPaintEvent *event)
     //Initial the painter.
     QPainter painter(viewport());
     painter.setRenderHints(QPainter::Antialiasing |
-                           QPainter::TextAntialiasing |
-                           QPainter::SmoothPixmapTransform,
+                           QPainter::TextAntialiasing,
                            true);
     //Check if we need to paint the background.
     if(autoFillBackground())

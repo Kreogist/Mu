@@ -21,7 +21,13 @@
 
 #include "knmusicminiplayerbase.h"
 
+class KNImageLabel;
+class KNEditableLabel;
 class KNOpacityAnimeButton;
+class KNMusicHScrollLyrics;
+/*!
+ * \brief The KNMusicMiniPlayer class
+ */
 class KNMusicMiniPlayer : public KNMusicMiniPlayerBase
 {
     Q_OBJECT
@@ -42,8 +48,25 @@ signals:
 
 public slots:
 
+protected:
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::enterEvent.
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::leaveEvent.
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
 private:
-    KNOpacityAnimeButton *m_close;
+    inline KNOpacityAnimeButton *generateButton(
+            const QString &iconPath=QString());
+    QWidget *m_container;
+    KNImageLabel *m_icon;
+    KNEditableLabel *m_position;
+    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next, *m_mute, *m_close;
+    KNMusicHScrollLyrics *m_lyrics;
 };
 
 #endif // KNMUSICMINIPLAYER_H

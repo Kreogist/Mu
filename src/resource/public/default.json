@@ -113,6 +113,9 @@
         "Text" : "#646464",
         "Highlight" : "#f7cf3d"
     },
+    "MiniLyrics" : {
+        "Parent" : "HeaderLyrics"
+    },
     "HeaderPlayerLabel" : {
         "Parent" : "MainWindow",
         "WindowText" : "#FFFFFF",
@@ -120,6 +123,10 @@
         "Text" : "#FFFFFFFE",
         "Highlight" : "#606060",
         "HighlightedText" : "#f7cf3d"
+    },
+    "MiniPlayer" : {
+        "Parent" : "MainWindow",
+        "MainWindow" : "#000000"
     },
     "MainPlayer" : {
         "Parent" : "MainWindow",

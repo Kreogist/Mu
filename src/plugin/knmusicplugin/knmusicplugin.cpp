@@ -136,6 +136,7 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_showInMapper(new QSignalMapper(this)),
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr),
+    m_miniPlayer(nullptr),
     m_library(nullptr)
 {
     //Initial the basic infrastructure.
@@ -171,6 +172,12 @@ KNMusicPlugin::~KNMusicPlugin()
             knMusicGlobal->detailTooltip()->parent()==nullptr)
     {
         knMusicGlobal->detailTooltip()->deleteLater();
+    }
+    //Recover the mini player.
+    if(m_miniPlayer &&
+            m_miniPlayer->parent()==nullptr)
+    {
+        m_miniPlayer->deleteLater();
     }
 }
 
@@ -648,6 +655,8 @@ void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
     }
     //Save the mini player.
     m_miniPlayer=miniPlayer;
+    //Show the mini player.
+    m_miniPlayer->show();
     //Set the basic stuffs of a player.
     initialPlayer(m_miniPlayer);
 }

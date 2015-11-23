@@ -22,7 +22,8 @@
 #include <QWidget>
 
 /*!
- * \brief The KNImageLabel class.
+ * \brief The KNImageLabel class is used to fixed the QLabel image scroll bug
+ * under the Retina Mac OS X. It can be used as a image display widget.
  */
 class KNImageLabel : public QWidget
 {
