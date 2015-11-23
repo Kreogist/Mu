@@ -85,6 +85,12 @@ public slots:
      */
     void moveToLine(const int &lineIndex) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Pause/Resume the time line if possible.
+     * \param pause Pause or unpause the time line.
+     */
+    void setPause(bool pause);
+
 protected:
     /*!
      * \brief Reimplemented from KNMusicLyricsBase::paintEvent().

@@ -33,7 +33,7 @@ KNMusicHScrollLyrics::KNMusicHScrollLyrics(QWidget *parent) :
     m_moveToCurrentLine(new QTimeLine(MaximumDuration, this)),
     m_currentLine(-1),
     m_centerOffset(0),
-    m_spacing(5),
+    m_spacing(10),
     m_alignment(Qt::AlignLeft)
 {
     //Configure the moving time line.
@@ -241,4 +241,9 @@ void KNMusicHScrollLyrics::moveToLine(const int &lineIndex)
     m_moveToCurrentLine->setEndFrame(lyricsDisplacement);
     //Start the animation.
     m_moveToCurrentLine->start();
+}
+
+void KNMusicHScrollLyrics::setPause(bool pause)
+{
+    m_moveToCurrentLine->setPaused(pause);
 }

@@ -19,8 +19,12 @@
 #ifndef KNMUSICMINIPLAYER_H
 #define KNMUSICMINIPLAYER_H
 
+#include <QIcon>
+
 #include "knmusicminiplayerbase.h"
 
+class QTimeLine;
+class KNProgressSlider;
 class KNImageLabel;
 class KNEditableLabel;
 class KNOpacityAnimeButton;
@@ -50,23 +54,52 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from KNMusicMiniPlayerBase::enterEvent.
+     * \brief Reimplemented from KNMusicMiniPlayerBase::enterEvent().
      */
     void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMusicMiniPlayerBase::leaveEvent.
+     * \brief Reimplemented from KNMusicMiniPlayerBase::leaveEvent().
      */
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::mousePressEvent().
+     */
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::mouseMoveEvent().
+     */
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::mouseReleaseEvent().
+     */
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    void onActionMouseInOut(int frame);
 
 private:
     inline KNOpacityAnimeButton *generateButton(
             const QString &iconPath=QString());
+    inline void startAnime(int targetFrame);
+    inline void setPosition(const qint64 &position);
+    QIcon m_muteIcon[2], m_iconPause, m_iconPlay;
+    QPoint m_pressedPoint, m_originalPos;
     QWidget *m_container;
     KNImageLabel *m_icon;
     KNEditableLabel *m_position;
-    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next, *m_mute, *m_close;
+    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next, *m_mute,
+                         *m_restore, *m_close;
+    KNProgressSlider *m_progressSlider;
     KNMusicHScrollLyrics *m_lyrics;
+    QTimeLine *m_moving;
+
+    KNMusicBackend *m_backend;
+
+    bool m_progressPressed, m_pressed;
 };
 
 #endif // KNMUSICMINIPLAYER_H
