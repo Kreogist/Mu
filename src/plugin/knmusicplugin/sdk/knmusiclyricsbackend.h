@@ -49,6 +49,13 @@ public:
     int lyricsDuration(const int &index);
 
     /*!
+     * \brief Get the lyrics position.
+     * \param index The lyrics line.
+     * \return The lyrics display position.
+     */
+    qint64 lyricsPosition(const int &index);
+
+    /*!
      * \brief Get the text of the lyrics at a specific line.
      * \param index The lyrics line index.
      * \return The lyrics text.
@@ -72,8 +79,9 @@ signals:
      * \brief When the position changed, and the line of the lyrics changed,
      * this signal will be emitted.
      * \param lineIndex The current lyrics line.
+     * \param position The position of current line.
      */
-    void requireMoveTo(int lineIndex);
+    void requireMoveTo(int lineIndex, qint64 position);
 
     /*!
      * \brief If the lyrics changed, that means a new lyrics is loaded, or the

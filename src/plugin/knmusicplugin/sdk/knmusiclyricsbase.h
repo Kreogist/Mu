@@ -57,8 +57,10 @@ public slots:
     /*!
      * \brief Move the view to the specific line.
      * \param lineIndex The lyrics line index.
+     * \param position The lyrics position.
      */
-    virtual void moveToLine(const int &lineIndex)=0;
+    virtual void moveToLine(int lineIndex,
+                            const qint64 &position)=0;
 };
 
 #endif // KNMUSICLYRICSBASE_H

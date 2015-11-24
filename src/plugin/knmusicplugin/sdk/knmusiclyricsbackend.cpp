@@ -48,6 +48,18 @@ int KNMusicLyricsBackend::lyricsDuration(const int &index)
     return m_positions.at(index+1)-m_positions.at(index);
 }
 
+qint64 KNMusicLyricsBackend::lyricsPosition(const int &index)
+{
+    //Check the index range.
+    if(index>-1 && index<m_positions.size())
+    {
+        //Give back the position.
+        return m_positions.at(index);
+    }
+    //Give an invalid value when the index is invalid.
+    return -1;
+}
+
 QString KNMusicLyricsBackend::lyricsText(const int &index)
 {
     //Check and ensure the index is valid.
@@ -82,7 +94,7 @@ void KNMusicLyricsBackend::setPosition(const qint64 &position)
         //Or else, now it should be start at the first line.
         m_currentLine=0;
         //Ask lyrics widget to move the first line of lyrics to the center.
-        emit requireMoveTo(0);
+        emit requireMoveTo(0, position);
         //Finish check.
         return;
     }
@@ -100,7 +112,7 @@ void KNMusicLyricsBackend::setPosition(const qint64 &position)
             m_currentLine--;
         }
         //Now we should find the right line, start the animation to move to it.
-        emit requireMoveTo(m_currentLine);
+        emit requireMoveTo(m_currentLine, position);
         //Finish check.
         return;
     }
@@ -119,7 +131,7 @@ void KNMusicLyricsBackend::setPosition(const qint64 &position)
         m_currentLine++;
     }
     //Start moving lyrics.
-    emit requireMoveTo(m_currentLine);
+    emit requireMoveTo(m_currentLine, position);
 }
 
 bool KNMusicLyricsBackend::isEmpty() const

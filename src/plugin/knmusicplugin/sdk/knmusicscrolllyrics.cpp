@@ -201,8 +201,9 @@ void KNMusicScrollLyrics::setBackend(KNMusicLyricsBackend *backend)
     }
 }
 
-void KNMusicScrollLyrics::moveToLine(const int &lineIndex)
+void KNMusicScrollLyrics::moveToLine(int lineIndex, const qint64 &position)
 {
+    Q_UNUSED(position)
     //If the line index is the same as the current, we won't need to move.
     if(lineIndex==m_currentLine || (m_backend==nullptr))
     {

@@ -85,7 +85,8 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicLyricsBase::moveToLine().
      */
-    void moveToLine(const int &lineIndex) Q_DECL_OVERRIDE;
+    void moveToLine(int lineIndex,
+                    const qint64 &position) Q_DECL_OVERRIDE;
 
 protected:
     /*!

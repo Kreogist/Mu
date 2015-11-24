@@ -22,6 +22,7 @@
 #include "knmusiclyricsbase.h"
 
 class QTimeLine;
+class KNMusicBackend;
 /*!
  * \brief The KNMusicHScrollLyrics class provides a lyrics display in horizontal
  * mode, and it can scroll to the specific line if you give the widget the
@@ -83,7 +84,8 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicLyricsBase::moveToLine().
      */
-    void moveToLine(const int &lineIndex) Q_DECL_OVERRIDE;
+    void moveToLine(int lineIndex,
+                    const qint64 &position) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Pause/Resume the time line if possible.

@@ -61,7 +61,11 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     setObjectName("MiniPlayer");
     //Set property.
     setAutoFillBackground(true);
+#ifdef Q_OS_MACX
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+#else
     setWindowFlags(Qt::ToolTip | Qt::WindowStaysOnTopHint);
+#endif
     setFixedSize(fontMetrics().height()*28, fontMetrics().height()<<1);
     //Initial the resource.
     // Mute icons.

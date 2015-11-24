@@ -19,6 +19,7 @@
 #include <QPainter>
 
 #include "knmusiclyricsbackend.h"
+#include "knmusicglobal.h"
 
 #include "knmusichscrolllyrics.h"
 
@@ -191,7 +192,7 @@ void KNMusicHScrollLyrics::setBackend(KNMusicLyricsBackend *backend)
     }
 }
 
-void KNMusicHScrollLyrics::moveToLine(const int &lineIndex)
+void KNMusicHScrollLyrics::moveToLine(int lineIndex, const qint64 &position)
 {
     //If the line index is the same as the current, we won't need to move.
     if(lineIndex==m_currentLine || (m_backend==nullptr))
@@ -200,29 +201,6 @@ void KNMusicHScrollLyrics::moveToLine(const int &lineIndex)
     }
     //Stop the time line first.
     m_moveToCurrentLine->stop();
-    //Calculate the displacement.
-    int lyricsDisplacement=0;
-    //Check the line index is greater or smaller than the current index.
-    if(lineIndex>m_currentLine)
-    {
-        //Calculate the distance of the lyrics lines which will be passed.
-        for(int i=m_currentLine+1; i<=lineIndex; ++i)
-        {
-            //Increase the height as the distance.
-            lyricsDisplacement+=
-                    (fontMetrics().width(m_backend->lyricsText(i)) + m_spacing);
-        }
-    }
-    else
-    {
-        //Calculate the distance of the lyrics lines which will be passed.
-        for(int i=lineIndex; i<m_currentLine; ++i)
-        {
-            //Reduce the width as the distance.
-            lyricsDisplacement-=
-                    (fontMetrics().width(m_backend->lyricsText(i)) + m_spacing);
-        }
-    }
     //Save the current line.
     m_currentLine=lineIndex;
     //Update the duration of the animation.
@@ -234,16 +212,29 @@ void KNMusicHScrollLyrics::moveToLine(const int &lineIndex)
      * lyrics duration, but if the lyrics duration is to small(like 0), just set
      * it to the minimum update interval.
      */
-    m_moveToCurrentLine->setDuration(
-                qMax(m_backend->lyricsDuration(m_currentLine),
-                     MaximumDuration));
+    //Calculate the duration.
+    qint64 targetDuration=qMax(m_backend->lyricsDuration(m_currentLine),
+                               MaximumDuration),
+           currentPosition=position-m_backend->lyricsPosition(m_currentLine);
+    m_moveToCurrentLine->setDuration(targetDuration-currentPosition);
+    //Calculate the total width.
+    int totalWidth=fontMetrics().width(m_backend->lyricsText(lineIndex)) +
+                   m_spacing;
     //Set the start position.
-    m_moveToCurrentLine->setEndFrame(lyricsDisplacement);
+    m_moveToCurrentLine->setStartFrame(
+                (qreal)totalWidth*(qreal)currentPosition/(qreal)targetDuration);
+    //Set the end position.
+    m_moveToCurrentLine->setEndFrame(totalWidth);
     //Start the animation.
     m_moveToCurrentLine->start();
 }
 
 void KNMusicHScrollLyrics::setPause(bool pause)
 {
-    m_moveToCurrentLine->setPaused(pause);
+    //Check the running state.
+    if(m_moveToCurrentLine->state()!=QTimeLine::NotRunning)
+    {
+        //Change the pausing state.
+        m_moveToCurrentLine->setPaused(pause);
+    }
 }
