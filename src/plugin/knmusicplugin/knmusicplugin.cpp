@@ -484,11 +484,11 @@ void KNMusicPlugin::initialParserPlugin()
 
     //Add tag parsers.
     parser->installTagParser(new KNMusicTagId3v1);
-//    parser->installTagParser(new KNMusicTagWma);
-//    parser->installTagParser(new KNMusicTagWav);
+    parser->installTagParser(new KNMusicTagWma);
+    parser->installTagParser(new KNMusicTagWav);
     parser->installTagParser(new KNMusicTagApev2);
-//    parser->installTagParser(new KNMusicTagM4a);
-//    parser->installTagParser(new KNMusicTagFlac);
+    parser->installTagParser(new KNMusicTagM4a);
+    parser->installTagParser(new KNMusicTagFlac);
     parser->installTagParser(new KNMusicTagId3v2);
 
     //Add analysiser.

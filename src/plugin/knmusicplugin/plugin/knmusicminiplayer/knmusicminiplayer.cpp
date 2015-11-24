@@ -28,6 +28,7 @@
 #include "kneditablelabel.h"
 
 #include "knmusicbackend.h"
+#include "knmusicnowplayingbase.h"
 #include "knmusichscrolllyrics.h"
 #include "knmusicglobal.h"
 #include "knmusiclyricsmanager.h"
@@ -193,7 +194,27 @@ void KNMusicMiniPlayer::setBackend(KNMusicBackend *backend)
 
 void KNMusicMiniPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
-    ;
+    //Save the now playing pointer.
+    m_nowPlaying=nowPlaying;
+    //Check whether the now playing is null.
+    if(m_nowPlaying==nullptr)
+    {
+        return;
+    }
+    //Link the header player's control signal to now playing model.
+//    connect(m_loopState, &KNOpacityButton::clicked,
+//            m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
+    connect(m_next, &KNOpacityAnimeButton::clicked,
+            m_nowPlaying, &KNMusicNowPlayingBase::playNext);
+    connect(m_previous, &KNOpacityAnimeButton::clicked,
+            m_nowPlaying, &KNMusicNowPlayingBase::playPrevious);
+    //Link the now playing model's response to header player.
+//    connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
+//            this, &KNMusicHeaderPlayer::onActionLoopStateChange);
+//    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
+//            this, &KNMusicHeaderPlayer::onActionNowPlayingChanged);
+//    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
+//            this, &KNMusicHeaderPlayer::reset);
 }
 
 void KNMusicMiniPlayer::enterEvent(QEvent *event)

@@ -20,18 +20,19 @@
 
 #include "knmusiclyricsbackend.h"
 #include "knmusicglobal.h"
+#include "knmusicbackend.h"
 
 #include "knmusichscrolllyrics.h"
 
 #include <QDebug>
 
-#define MaximumDuration 200
+#define MinimumDuration 50
 #define MinimumWidth 10
 
 KNMusicHScrollLyrics::KNMusicHScrollLyrics(QWidget *parent) :
     KNMusicLyricsBase(parent),
     m_backend(nullptr),
-    m_moveToCurrentLine(new QTimeLine(MaximumDuration, this)),
+    m_moveToCurrentLine(new QTimeLine(MinimumDuration, this)),
     m_currentLine(-1),
     m_centerOffset(0),
     m_spacing(10),
@@ -97,7 +98,9 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
     while(otherLineLeft<width() && paintingLine<=m_backend->lastLine())
     {
         //Draw the current line.
-        lineWidth=fontMetrics().width(m_backend->lyricsText(paintingLine));
+        lineWidth=
+                qMax(MinimumWidth,
+                     fontMetrics().width(m_backend->lyricsText(paintingLine)));
         painter.drawText(otherLineLeft,
                          0,
                          lineWidth,
@@ -114,7 +117,9 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
     while(otherLineRight>0 && paintingLine>-1)
     {
         //Draw the current line.
-        lineWidth=fontMetrics().width(m_backend->lyricsText(paintingLine));
+        lineWidth=
+                qMax(MinimumWidth,
+                     fontMetrics().width(m_backend->lyricsText(paintingLine)));
         //MAGIC: the 'next' previous line's right is the current line's left,
         // moving the calculation here.
         otherLineRight-=lineWidth+m_spacing;
@@ -146,7 +151,6 @@ void KNMusicHScrollLyrics::setAlignment(Qt::Alignment alignment)
 {
     m_alignment = alignment;
 }
-
 
 int KNMusicHScrollLyrics::spacing() const
 {
@@ -214,11 +218,21 @@ void KNMusicHScrollLyrics::moveToLine(int lineIndex, const qint64 &position)
      */
     //Calculate the duration.
     qint64 targetDuration=qMax(m_backend->lyricsDuration(m_currentLine),
-                               MaximumDuration),
+                               MinimumDuration),
            currentPosition=position-m_backend->lyricsPosition(m_currentLine);
+    //Check out the target duration, if it's the last line, then make the
+    //duration to be the whole left.
+    if(m_currentLine==m_backend->lastLine() && knMusicGlobal->backend())
+    {
+        //Calculate the new duration.
+        targetDuration=
+                knMusicGlobal->backend()->duration() -
+                m_backend->lyricsPosition(m_currentLine);
+    }
     m_moveToCurrentLine->setDuration(targetDuration-currentPosition);
     //Calculate the total width.
-    int totalWidth=fontMetrics().width(m_backend->lyricsText(lineIndex)) +
+    int totalWidth=qMax(MinimumWidth,
+                        fontMetrics().width(m_backend->lyricsText(lineIndex))) +
                    m_spacing;
     //Set the start position.
     m_moveToCurrentLine->setStartFrame(

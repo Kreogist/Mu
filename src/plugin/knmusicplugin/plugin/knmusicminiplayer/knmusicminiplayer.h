@@ -36,6 +36,10 @@ class KNMusicMiniPlayer : public KNMusicMiniPlayerBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct KNMusicMiniPlayer widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicMiniPlayer(QWidget *parent = 0);
 
     /*!
@@ -98,6 +102,7 @@ private:
     QTimeLine *m_moving;
 
     KNMusicBackend *m_backend;
+    KNMusicNowPlayingBase *m_nowPlaying;
 
     bool m_progressPressed, m_pressed;
 };
