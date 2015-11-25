@@ -33,6 +33,8 @@ signals:
      */
     void requireHidePlayer();
 
+    void requireCloseMainWindow();
+
 public slots:
     /*!
      * \brief reset

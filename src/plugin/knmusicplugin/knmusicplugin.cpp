@@ -709,6 +709,8 @@ void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
     //Link the player request.
     connect(m_miniPlayer, &KNMusicMiniPlayerBase::requireHidePlayer,
             this, &KNMusicPlugin::onActionHideMiniPlayer);
+    connect(m_miniPlayer, &KNMusicMiniPlayerBase::requireCloseMainWindow,
+            this, &KNMusicPlugin::requireCloseMainWindow);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

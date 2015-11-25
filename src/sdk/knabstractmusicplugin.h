@@ -63,6 +63,12 @@ signals:
      */
     void requireHideMainWindow();
 
+    /*!
+     * \brief When user click the close button on mini player, this signal will
+     * be emitted to ask to close the main window.
+     */
+    void requireCloseMainWindow();
+
 public slots:
     /*!
      * \brief setPlatformExtras

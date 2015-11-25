@@ -130,7 +130,7 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     connect(m_restore, &KNOpacityButton::clicked,
             this, &KNMusicMiniPlayer::requireHidePlayer);
     connect(m_close, &KNOpacityButton::clicked,
-            this, &KNMusicMiniPlayer::requireHidePlayer);
+            this, &KNMusicMiniPlayer::requireCloseMainWindow);
     //Configure the scroll lyrics.
     m_lyrics->setObjectName("MiniLyrics");
     m_lyrics->setBackend(knMusicGlobal->lyricsManager()->backend());
