@@ -24,13 +24,14 @@
 #include "knmusicminiplayerbase.h"
 
 class QTimeLine;
+class KNConfigure;
 class KNProgressSlider;
 class KNImageLabel;
 class KNEditableLabel;
 class KNOpacityAnimeButton;
 class KNOpacityButton;
-class KNMusicHScrollLyrics;
 class KNLoopScrollLabel;
+class KNMusicHScrollLyrics;
 /*!
  * \brief The KNMusicMiniPlayer class provide the offical mini desktop player.
  * It will use all the default widget provided via SDK.
@@ -62,6 +63,16 @@ public slots:
      * \brief Reimplemented from KNMusicMiniPlayerBase::reset().
      */
     void reset() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::saveConfigure().
+     */
+    void saveConfigure() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::loadConfigure().
+     */
+    void loadConfigure() Q_DECL_OVERRIDE;
 
 protected:
     /*!
@@ -99,6 +110,9 @@ private:
     inline void thawAnime();
     inline void startAnime(int targetFrame);
     inline void setPosition(const qint64 &position);
+    inline void setCacheValue(const QString &valueName, const int &value);
+    inline void zoomParameter(int &parameter, const qreal &ratio);
+    inline int getCacheValue(const QString &valueName);
     QIcon m_muteIcon[2], m_iconPause, m_iconPlay;
     QPoint m_pressedPoint, m_originalPos;
     QWidget *m_container;
@@ -113,6 +127,7 @@ private:
 
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
+    KNConfigure *m_cacheConfigure;
 
     bool m_progressPressed, m_pressed, m_freeze;
 };

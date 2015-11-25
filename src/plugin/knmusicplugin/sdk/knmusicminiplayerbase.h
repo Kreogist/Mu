@@ -38,6 +38,16 @@ public slots:
      * \brief reset
      */
     virtual void reset()=0;
+
+    /*!
+     * \brief saveConfigure
+     */
+    virtual void saveConfigure()=0;
+
+    /*!
+     * \brief loadConfigure
+     */
+    virtual void loadConfigure()=0;
 };
 
 #endif // KNMUSICMINIPLAYERBASE_H

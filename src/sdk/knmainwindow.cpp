@@ -144,7 +144,7 @@ void KNMainWindow::onActionFullScreen()
     }
 }
 
-void KNMainWindow::recoverGeometry()
+inline void KNMainWindow::recoverGeometry()
 {
     //Check is the last record is complete. If there's no windowWidth property
     //in the configure, means we don't save the last geometry. Ignore the
@@ -202,7 +202,7 @@ void KNMainWindow::recoverGeometry()
     setGeometry(lastX, lastY, lastWidth, lastHeight);
 }
 
-void KNMainWindow::backupGeometry()
+inline void KNMainWindow::backupGeometry()
 {
     //Set the window state.
     setCacheValue("windowState", static_cast<int>(windowState()));

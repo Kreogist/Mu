@@ -15,11 +15,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QApplication>
 #include <QBoxLayout>
 #include <QTimeLine>
 #include <QMouseEvent>
 #include <QDesktopWidget>
-#include <QApplication>
 #include <QCursor>
 
 #include "knimagelabel.h"
@@ -29,6 +29,8 @@
 #include "knprogressslider.h"
 #include "kneditablelabel.h"
 #include "knloopscrolllabel.h"
+#include "knglobal.h"
+#include "knconfigure.h"
 
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
@@ -61,6 +63,8 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     m_lyrics(new KNMusicHScrollLyrics(this)),
     m_moving(new QTimeLine(200, this)),
     m_backend(nullptr),
+    m_nowPlaying(nullptr),
+    m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MiniPlayer")),
     m_progressPressed(false),
     m_pressed(false),
     m_freeze(false)
@@ -161,6 +165,8 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
 
     //Register the theme.
     knTheme->registerWidget(this);
+    //Move to default position: top right of the desktop.
+    move(0, qApp->desktop()->width() - width());
 }
 
 void KNMusicMiniPlayer::setBackend(KNMusicBackend *backend)
@@ -303,6 +309,56 @@ void KNMusicMiniPlayer::reset()
     m_detailLabel->setText("Kreogist " + qApp->applicationName());
     //Reset the lyrics place holder text.
     m_lyrics->setPlaceHolderText("Kreogist " + qApp->applicationName());
+}
+
+void KNMusicMiniPlayer::saveConfigure()
+{
+    //Set the window position.
+    setCacheValue("miniPlayerX", geometry().x());
+    setCacheValue("miniPlayerY", geometry().y());
+    //Set the current desktop size.
+    setCacheValue("desktopWidth", qApp->desktop()->width());
+    setCacheValue("desktopHeight", qApp->desktop()->height());
+}
+
+void KNMusicMiniPlayer::loadConfigure()
+{
+    //Check is the last record is complete. If there's no windowWidth property
+    //in the configure, means we don't save the last geometry. Ignore the
+    //recover request.
+    if(m_cacheConfigure->data("miniPlayerX").isNull())
+    {
+        return;
+    }
+
+    //Read the resolution data of the last time closed.
+    int lastScreenWidth=getCacheValue("desktopWidth"),
+        lastScreenHeight=getCacheValue("desktopHeight"),
+        currentScreenWidth=qApp->desktop()->width(),
+        currentScreenHeight=qApp->desktop()->height(),
+            lastX=getCacheValue("miniPlayerX"),
+            lastY=getCacheValue("miniPlayerY");
+    //Check is the resolution is the same as the last closed time.
+    if(!(lastScreenWidth==currentScreenWidth &&
+         lastScreenHeight==currentScreenHeight))
+    {
+        //The resolution has been changed, recalculate the size parameters.
+        //Get the width ratio and the height ratio.
+        qreal widthRatio=(qreal)currentScreenWidth/(qreal)lastScreenWidth,
+              heightRatio=(qreal)currentScreenHeight/(qreal)lastScreenHeight;
+        //Recalculate the last parameters.
+        zoomParameter(lastX, widthRatio);
+        zoomParameter(lastY, heightRatio);
+    }
+    //Check the parameter, ensure that one part of the window must be inside
+    //screen.
+    //If it's not inside the screen, make the top of the window 0.
+    if(lastY<0 || lastY>currentScreenHeight)
+    {
+        lastY=0;
+    }
+    //Set the geometry.
+    move(lastX, lastY);
 }
 
 void KNMusicMiniPlayer::enterEvent(QEvent *event)
@@ -473,4 +529,20 @@ void KNMusicMiniPlayer::setPosition(const qint64 &position)
         //Call the set position of the backend.
         m_backend->setPosition(position);
     }
+}
+
+inline void KNMusicMiniPlayer::setCacheValue(const QString &valueName,
+                                             const int &value)
+{
+    m_cacheConfigure->setData(valueName, value);
+}
+
+inline void KNMusicMiniPlayer::zoomParameter(int &parameter, const qreal &ratio)
+{
+    parameter=(qreal)parameter*ratio;
+}
+
+inline int KNMusicMiniPlayer::getCacheValue(const QString &valueName)
+{
+    return m_cacheConfigure->data(valueName).toInt();
 }

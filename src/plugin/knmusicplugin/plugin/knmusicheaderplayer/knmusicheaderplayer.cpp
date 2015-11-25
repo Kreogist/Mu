@@ -576,6 +576,7 @@ void KNMusicHeaderPlayer::reset()
     m_position->setText(KNMusicUtil::msecondToString(0));
     //Hide the main player and append menu button.
     m_showMainPlayer->hide();
+    m_showMiniPlayer->hide();
     m_showAppendMenu->hide();
 }
 
@@ -727,6 +728,7 @@ void KNMusicHeaderPlayer::onActionNowPlayingChanged(
                               knMusicGlobal->noAlbumArt():albumArt);
     //When it has been asked to update player info, then show the buttons.
     m_showMainPlayer->show();
+    m_showMiniPlayer->show();
     m_showAppendMenu->show();
 }
 

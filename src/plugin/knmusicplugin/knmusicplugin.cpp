@@ -258,6 +258,11 @@ void KNMusicPlugin::saveConfigure()
     {
         m_headerPlayer->saveConfigure();
     }
+    //--Mini Player--
+    if(m_miniPlayer)
+    {
+        m_miniPlayer->saveConfigure();
+    }
 }
 
 void KNMusicPlugin::onArgumentsAvailable(const QStringList &data)
@@ -687,6 +692,8 @@ void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
     m_miniPlayer=miniPlayer;
     //Set the basic stuffs of a player.
     initialPlayer(m_miniPlayer);
+    //Load the configure.
+    m_miniPlayer->loadConfigure();
     //Hide the mini player.
     m_miniPlayer->hide();
     //Link the player request.
