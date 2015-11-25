@@ -61,16 +61,21 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
 {
     //Ignore the original event.
     Q_UNUSED(event);
-    //Check the test list is empty or not.
-    if(m_backend==nullptr || m_backend->isEmpty())
-    {
-        return;
-    }
     //Initial the painter.
     QPainter painter(this);
     //Set the painter's hints.
     painter.setRenderHints(QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
+    //Check the test list is empty or not.
+    if(m_backend==nullptr || m_backend->isEmpty())
+    {
+        //Draw the place holder text.
+        painter.drawText(rect(),
+                         Qt::AlignCenter,
+                         m_placeHolderText);
+        //Finished painting.
+        return;
+    }
     //Initial parameters.
     int currentLineLeft=(width()>>1)-m_centerOffset, paintingLine=m_currentLine,
         lineWidth=MinimumWidth;
@@ -141,6 +146,19 @@ void KNMusicHScrollLyrics::onActionLyricsMoved(const int &frame)
     //Update the current line offset.
     m_centerOffset=frame;
     //Redraw the widget.
+    update();
+}
+
+QString KNMusicHScrollLyrics::placeHolderText() const
+{
+    return m_placeHolderText;
+}
+
+void KNMusicHScrollLyrics::setPlaceHolderText(const QString &placeHolderText)
+{
+    //Save the place holder text.
+    m_placeHolderText = placeHolderText;
+    //Update the widget.
     update();
 }
 

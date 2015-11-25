@@ -49,6 +49,12 @@ signals:
     void requireShowMainPlayer();
 
     /*!
+     * \brief This signal is used to ask to hide the main window, and show the
+     * mini player.
+     */
+    void requireShowMiniPlayer();
+
+    /*!
      * \brief This signal is used to ask the mouse sense header to check the
      * cursor position to activate or inactivate the content of header player.
      */

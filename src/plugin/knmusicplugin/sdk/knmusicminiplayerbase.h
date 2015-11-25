@@ -27,10 +27,16 @@ class KNMusicMiniPlayerBase : public KNMusicPlayerBase
 public:
     KNMusicMiniPlayerBase(QWidget *parent = 0) : KNMusicPlayerBase(parent){}
 
-
 signals:
+    /*!
+     * \brief requireHidePlayer
+     */
+    void requireHidePlayer();
 
 public slots:
+    /*!
+     * \brief reset
+     */
     virtual void reset()=0;
 };
 

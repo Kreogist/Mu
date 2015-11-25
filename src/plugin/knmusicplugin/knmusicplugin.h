@@ -115,6 +115,8 @@ private slots:
     void onActionShowInArtists();
     void onActionShowInAlbums();
     void onActionShowInGenres();
+    void onActionHideMiniPlayer();
+    void onActionShowMiniPlayer();
 
 private:
     inline void initialInfrastructure();

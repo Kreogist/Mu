@@ -53,6 +53,16 @@ signals:
      */
     void requireHideMainPlayer();
 
+    /*!
+     * \brief This signal will ask the main window to show itself.
+     */
+    void requireShowMainWindow();
+
+    /*!
+     * \brief This signal will ask the main window to hide itself.
+     */
+    void requireHideMainWindow();
+
 public slots:
     /*!
      * \brief setPlatformExtras

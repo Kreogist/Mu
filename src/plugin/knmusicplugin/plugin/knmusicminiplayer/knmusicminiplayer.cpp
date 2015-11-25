@@ -122,6 +122,11 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
                     m_position->setText(KNMusicUtil::msecondToString(position));
                 }
             });
+    //Configure the restore and close buttons.
+    connect(m_restore, &KNOpacityButton::clicked,
+            this, &KNMusicMiniPlayer::requireHidePlayer);
+    connect(m_close, &KNOpacityButton::clicked,
+            this, &KNMusicMiniPlayer::requireHidePlayer);
     //Configure the scroll lyrics.
     m_lyrics->setObjectName("MiniLyrics");
     m_lyrics->setBackend(knMusicGlobal->lyricsManager()->backend());
@@ -273,12 +278,14 @@ void KNMusicMiniPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             {
                 //Get the artist.
                 QString &&artistText=
-                        analysisItem.detailInfo.textLists[Artist].toString();
+                        analysisItem.detailInfo.textLists[Artist].toString(),
+                        playingSongData =
+                        (artistText.isEmpty() ? "" : (artistText+" - ")) +
+                            analysisItem.detailInfo.textLists[Name].toString();
                 //Set the detail label text.
-                m_detailLabel->setText(
-                    //Check the artist name.
-                    (artistText.isEmpty() ? "" : (artistText+" - ")) +
-                            analysisItem.detailInfo.textLists[Name].toString());
+                m_detailLabel->setText(playingSongData);
+                //Check the artist name.
+                m_lyrics->setPlaceHolderText(playingSongData);
             });
     connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
             this, &KNMusicMiniPlayer::reset);
@@ -293,7 +300,9 @@ void KNMusicMiniPlayer::reset()
     //Reset the label.
     m_position->setText("0:00");
     //Reset the detail text.
-    m_detailLabel->setText("");
+    m_detailLabel->setText("Kreogist " + qApp->applicationName());
+    //Reset the lyrics place holder text.
+    m_lyrics->setPlaceHolderText("Kreogist " + qApp->applicationName());
 }
 
 void KNMusicMiniPlayer::enterEvent(QEvent *event)

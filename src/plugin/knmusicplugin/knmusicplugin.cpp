@@ -392,6 +392,34 @@ void KNMusicPlugin::onActionShowInGenres()
     }
 }
 
+void KNMusicPlugin::onActionHideMiniPlayer()
+{
+    //Check mini player first.
+    if(!m_miniPlayer)
+    {
+        //If there's no mini player, then do nothing.
+        return;
+    }
+    //Ask to show the main window.
+    emit requireShowMainWindow();
+    //Hide the mini player.
+    m_miniPlayer->hide();
+}
+
+void KNMusicPlugin::onActionShowMiniPlayer()
+{
+    //Check mini player first.
+    if(!m_miniPlayer)
+    {
+        //If there's no mini player, then do nothing.
+        return;
+    }
+    //Ask to hide the main window.
+    emit requireHideMainWindow();
+    //Show the mini player.
+    m_miniPlayer->show();
+}
+
 void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
@@ -618,6 +646,8 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
     //Link the header player request.
     connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowMainPlayer,
             this, &KNMusicPlugin::requireShowMainPlayer);
+    connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireShowMiniPlayer,
+            this, &KNMusicPlugin::onActionShowMiniPlayer);
     connect(m_headerPlayer, &KNMusicHeaderPlayerBase::requireCheckCursor,
             m_headerWidget, &KNMouseDetectHeader::checkCursor);
     //Link the drop event.
@@ -655,10 +685,13 @@ void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
     }
     //Save the mini player.
     m_miniPlayer=miniPlayer;
-    //Show the mini player.
-    m_miniPlayer->show();
     //Set the basic stuffs of a player.
     initialPlayer(m_miniPlayer);
+    //Hide the mini player.
+    m_miniPlayer->hide();
+    //Link the player request.
+    connect(m_miniPlayer, &KNMusicMiniPlayerBase::requireHidePlayer,
+            this, &KNMusicPlugin::onActionHideMiniPlayer);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

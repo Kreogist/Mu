@@ -157,7 +157,7 @@ private:
     //Widgets
     KNMusicScrollLyrics *m_headerLyrics;
     KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next, *m_showMainPlayer,
-                         *m_showAppendMenu;
+                         *m_showMiniPlayer, *m_showAppendMenu;
     KNHighLightLabel *m_albumArt;
     KNScrollLabel *m_title, *m_artistAlbum;
     KNProgressSlider *m_progressSlider;

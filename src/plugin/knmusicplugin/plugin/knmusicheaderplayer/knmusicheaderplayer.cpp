@@ -68,6 +68,8 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_next(generateControlButton(":/plugin/music/player/next_light.png")),
     m_showMainPlayer(generateAppendButton(
                          ":/plugin/music/player/fullscreen.png")),
+    m_showMiniPlayer(generateAppendButton(
+                         ":/plugin/music/player/showmini.png")),
     m_showAppendMenu(generateAppendButton(
                          ":/plugin/music/player/menu.png")),
     m_albumArt(new KNHighLightLabel(this)),
@@ -164,6 +166,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
             this, &KNMusicHeaderPlayer::requireShowMainPlayer);
     //Add to append panel.
     appendLayout->addWidget(m_showMainPlayer);
+    //Configure the mini player button.
+    connect(m_showMiniPlayer, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicHeaderPlayer::requireShowMiniPlayer);
+    appendLayout->addWidget(m_showMiniPlayer);
     //Configure the append menu button.
     connect(m_showAppendMenu, &KNOpacityAnimeButton::clicked,
             this, &KNMusicHeaderPlayer::showAppendMenu);
@@ -577,6 +583,7 @@ void KNMusicHeaderPlayer::retranslate()
 {
     //Set tooltip for all the buttons.
     m_showMainPlayer->setToolTip(tr("Show main player"));
+    m_showMiniPlayer->setToolTip(tr("Show mini player"));
     m_showAppendMenu->setToolTip(tr("More"));
     //Set the sub menu title.
     m_subMenus[SubMenuRating]->menuAction()->setText(tr("Rating"));

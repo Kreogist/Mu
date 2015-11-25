@@ -135,6 +135,10 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
                 m_mainWindow, &KNMainWindow::showMainPlayer);
         connect(plugin, &KNAbstractMusicPlugin::requireHideMainPlayer,
                 m_mainWindow, &KNMainWindow::hideMainPlayer);
+        connect(plugin, &KNAbstractMusicPlugin::requireHideMainWindow,
+                m_mainWindow, &KNMainWindow::hide);
+        connect(plugin, &KNAbstractMusicPlugin::requireShowMainWindow,
+                m_mainWindow, &KNMainWindow::show);
     }
     //Set the platform extra to the music plugin.
     plugin->setPlatformExtras(m_platformExtra);

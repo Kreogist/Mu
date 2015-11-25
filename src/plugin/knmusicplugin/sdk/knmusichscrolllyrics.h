@@ -55,9 +55,22 @@ public:
      */
     Qt::Alignment alignment() const;
 
+    /*!
+     * \brief Get the place holder text. When there's no lyrics, this text will
+     * be displayed.
+     * \return The place holder text.
+     */
+    QString placeHolderText() const;
+
 signals:
 
 public slots:
+    /*!
+     * \brief Set the place holder text.
+     * \param placeHolderText The text will be displayed.
+     */
+    void setPlaceHolderText(const QString &placeHolderText);
+
     /*!
      * \brief Set the spacing between two lyrics lines.
      * \param spacing The spacing of two lines. This value should be positive.
@@ -106,6 +119,7 @@ private:
     //Backend.
     KNMusicLyricsBackend *m_backend;
     //UI parameters.
+    QString m_placeHolderText;
     QTimeLine *m_moveToCurrentLine;
     //Lyrics status.
     int m_currentLine, m_centerOffset;
