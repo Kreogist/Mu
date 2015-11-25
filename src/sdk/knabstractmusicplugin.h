@@ -69,6 +69,12 @@ public slots:
      * \param platformExtras
      */
     virtual void setPlatformExtras(KNPlatformExtras *platformExtras)=0;
+
+    /*!
+     * \brief Show the mini player if the music plugin provide a mini player.\n
+     * This function should be only called when application launched.
+     */
+    virtual void showMiniPlayer()=0;
 };
 
 #endif // KNABSTRACTMUSICPLUGIN_H

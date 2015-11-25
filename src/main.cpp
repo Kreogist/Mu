@@ -39,6 +39,11 @@ int main(int argc, char *argv[])
     pluginManager.setMainWindow(&mainWindow);
     //Load plugins.
     pluginManager.loadPlugins();
+    //Link the application instance to the plugin manager.
+    QObject::connect(&app, &KNSingletonApplication::messageAvailable,
+                     &pluginManager,
+                     &KNPluginManager::onActionArgumentsAvaliable,
+                     Qt::QueuedConnection);
     //Launch the application.
     pluginManager.launchApplication();
     //Spread message loop.

@@ -348,6 +348,16 @@ void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *platformExtras)
     }
 }
 
+void KNMusicPlugin::showMiniPlayer()
+{
+    //Check and show the mini player.
+    if(m_miniPlayer)
+    {
+        //Show the mini player.
+        m_miniPlayer->show();
+    }
+}
+
 void KNMusicPlugin::resizeEvent(QResizeEvent *event)
 {
     //Do original resize event.

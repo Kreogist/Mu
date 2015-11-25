@@ -62,7 +62,6 @@ bool KNMusicTagFlac::parseTag(QFile &musicFile,
         //This file is not a flac format file.
         return false;
     }
-    qDebug()<<"Fuck pass!";
     //Prepare some temporary data.
     bool lastMetadataBlock=false;       //The last metadata block flag.
     char *rawTagData;                   //Tag data cache.

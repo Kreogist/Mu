@@ -72,6 +72,13 @@ public slots:
      */
     void launchApplication();
 
+    /*!
+     * \brief When there's a new arguments valid, this slot will be called. It
+     * will send the arguments to the category plugin.
+     * \param arguments The arguments from system or from other instance.
+     */
+    void onActionArgumentsAvaliable(QStringList arguments);
+
 private:
     inline void setApplicationInformation();
     void loadHeader(KNMainWindowHeaderBase *header);
@@ -81,6 +88,7 @@ private:
     void loadPlatformExtras(KNPlatformExtras *plugin);
     KNMainWindow *m_mainWindow;
     KNMainWindowHeaderBase *m_header;
+    KNAbstractMusicPlugin *m_musicPlugin;
     KNPlatformExtras *m_platformExtra;
 };
 

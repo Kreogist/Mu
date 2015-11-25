@@ -22,6 +22,8 @@
 
 #include "knsingletonapplication.h"
 
+#include <QDebug>
+
 KNSingletonApplication::KNSingletonApplication(int &argc,
                                                char **argv,
                                                const QString uniqueKey) :
@@ -38,17 +40,11 @@ KNSingletonApplication::KNSingletonApplication(int &argc,
         //We detect another instance running.
         m_isInstanceRunning=false;
         //Get the arguments.
-        QStringList pendingMessages=arguments();
-        //According to the document in QCoreApplication::arguments():
-        //   Usually arguments().at(0) is the program name, arguments().at(1) is
-        //   the first argument, and arguments().last() is the last argument.
-        //We will only send the arguments and ignore the program name.
-        //If the message list has no messages or even it's empty, we won't send
-        //any thing.
+        QStringList &&pendingMessages=arguments();
+        //Check out the pending message. If there's valid file path, then it
+        //will be send to the main instance.
         if(pendingMessages.size()>1)
         {
-            //Remove the program name(application path).
-            pendingMessages.removeFirst();
             //Send the messages.
             sendMessages(uniqueKey, pendingMessages);
         }
@@ -68,7 +64,8 @@ KNSingletonApplication::KNSingletonApplication(int &argc,
     //When there's another instance which is being created, it will send the
     //arguments to message server from the other instance.
     connect(m_messageServer, &QLocalServer::newConnection,
-            this, &KNSingletonApplication::onMessageReceive);
+            this, &KNSingletonApplication::onMessageReceive,
+            Qt::QueuedConnection);
     //The unique key will be used as the connections name as well.
     if(!m_messageServer->listen(uniqueKey))
     {

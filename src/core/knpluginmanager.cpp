@@ -48,10 +48,13 @@
 
 #include "knpluginmanager.h"
 
+#include <QDebug>
+
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
     m_header(nullptr),
+    m_musicPlugin(nullptr),
     m_platformExtra(nullptr)
 {
     //Set the application information.
@@ -123,25 +126,36 @@ void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
 
 void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
 {
+    //Check the plugin pointer first.
+    if(plugin==nullptr)
+    {
+        return;
+    }
+    //Save the plugin pointer.
+    m_musicPlugin=plugin;
     //Load the music categroy plugin first.
-    loadCategoryPlugin(plugin);
+    loadCategoryPlugin(m_musicPlugin);
     //Check the main window pointer.
     if(m_mainWindow!=nullptr)
     {
         //Set the main player provided by the music plugin.
-        m_mainWindow->setMainPlayer(plugin->mainPlayer());
+        m_mainWindow->setMainPlayer(m_musicPlugin->mainPlayer());
         //Link the plugin and the main window.
-        connect(plugin, &KNAbstractMusicPlugin::requireShowMainPlayer,
+        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireShowMainPlayer,
                 m_mainWindow, &KNMainWindow::showMainPlayer);
-        connect(plugin, &KNAbstractMusicPlugin::requireHideMainPlayer,
+        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireHideMainPlayer,
                 m_mainWindow, &KNMainWindow::hideMainPlayer);
-        connect(plugin, &KNAbstractMusicPlugin::requireHideMainWindow,
+        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireHideMainWindow,
                 m_mainWindow, &KNMainWindow::hide);
-        connect(plugin, &KNAbstractMusicPlugin::requireShowMainWindow,
+        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireShowMainWindow,
                 m_mainWindow, &KNMainWindow::show);
     }
-    //Set the platform extra to the music plugin.
-    plugin->setPlatformExtras(m_platformExtra);
+    //Check the platform extra pointer.
+    if(!m_platformExtra)
+    {
+        //Set the platform extra to the music plugin.
+        m_musicPlugin->setPlatformExtras(m_platformExtra);
+    }
 }
 
 void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
@@ -224,6 +238,31 @@ void KNPluginManager::loadPlugins()
 
 void KNPluginManager::launchApplication()
 {
+    //Check out the argument size.
+    if(qApp->arguments().size() > 1)
+    {
+        //Process the arguments from system.
+        onActionArgumentsAvaliable(qApp->arguments());
+        //Start mini player.
+        m_musicPlugin->showMiniPlayer();
+        //Don't need to show the main window, it will start for mini player.
+        return;
+    }
     //Show the main window.
     m_mainWindow->show();
+}
+
+void KNPluginManager::onActionArgumentsAvaliable(QStringList arguments)
+{
+    //If there's only one item in arguments list, it means no arguments get
+    //from system.
+    if(arguments.size()<2 && (!m_musicPlugin))
+    {
+        return;
+    }
+    //Remove the first item in the arguments list.
+    //That's the file path of the application execution.
+    arguments.removeFirst();
+    //Ask the music plugin to process the arguments.
+    m_musicPlugin->onArgumentsAvailable(arguments);
 }

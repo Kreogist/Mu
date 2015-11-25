@@ -328,8 +328,6 @@ void KNMusicNowPlaying::setLoopState(const int &state)
     m_loopState=state % LoopCount;
     //Emit the loop state changed signal.
     emit loopStateChanged(m_loopState);
-    //Check if the loop state is shuffle, generate the suffix list.
-    //!FIXME: add shuffle list generate code;
 }
 
 void KNMusicNowPlaying::setPlayingRating(int rating)

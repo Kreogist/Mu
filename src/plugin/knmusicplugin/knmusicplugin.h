@@ -104,6 +104,12 @@ public slots:
      */
     void setPlatformExtras(KNPlatformExtras *platformExtras) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from
+     * KNAbstractMusicCategoryPlugin::showMiniPlayer().
+     */
+    void showMiniPlayer() Q_DECL_OVERRIDE;
+
 protected:
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::resizeEvent().
