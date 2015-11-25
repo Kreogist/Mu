@@ -128,6 +128,14 @@
         "Parent" : "MainWindow",
         "MainWindow" : "#000000"
     },
+    "MiniPosition" : {
+        "Parent" : "MiniPlayer",
+        "Base" : "#000000",
+        "WindowText" : "#AAAAAA",
+        "Text" : "#FFFFFF",
+        "Highlight" : "#606060",
+        "HighlightedText" : "#f7cf3d"
+    },
     "MainPlayer" : {
         "Parent" : "MainWindow",
         "MainWindow" : "#000000"

@@ -77,10 +77,12 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
     //Check if the current line is vaild.
     if(paintingLine>-1 && paintingLine<=m_backend->lastLine())
     {
+        //Get the painting line.
+        QString &&currentText=m_backend->lyricsText(paintingLine).simplified();
         //Draw the current line text.
         lineWidth=
                 qMax(MinimumWidth,
-                     fontMetrics().width(m_backend->lyricsText(paintingLine)));
+                     fontMetrics().width(currentText));
         //Draw the text.
         painter.setPen(palette().color(QPalette::Highlight));
         painter.drawText(currentLineLeft,
@@ -88,7 +90,7 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
                          lineWidth,
                          height(),
                          Qt::AlignVCenter,
-                         m_backend->lyricsText(paintingLine));
+                         currentText);
     }
     //Draw the normal text.
     painter.setPen(palette().color(QPalette::Text));
@@ -97,16 +99,16 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
     paintingLine++; //Move to the next line.
     while(otherLineLeft<width() && paintingLine<=m_backend->lastLine())
     {
+        //Get the painting line.
+        QString &&currentText=m_backend->lyricsText(paintingLine).simplified();
         //Draw the current line.
-        lineWidth=
-                qMax(MinimumWidth,
-                     fontMetrics().width(m_backend->lyricsText(paintingLine)));
+        lineWidth=qMax(MinimumWidth, fontMetrics().width(currentText));
         painter.drawText(otherLineLeft,
                          0,
                          lineWidth,
                          height(),
                          Qt::AlignVCenter,
-                         m_backend->lyricsText(paintingLine));
+                         currentText);
         //Move to the next line.
         otherLineLeft+=lineWidth+m_spacing;
         paintingLine++;
@@ -116,10 +118,10 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
     int otherLineRight=currentLineLeft;
     while(otherLineRight>0 && paintingLine>-1)
     {
+        //Get the painting line.
+        QString &&currentText=m_backend->lyricsText(paintingLine).simplified();
         //Draw the current line.
-        lineWidth=
-                qMax(MinimumWidth,
-                     fontMetrics().width(m_backend->lyricsText(paintingLine)));
+        lineWidth=qMax(MinimumWidth, fontMetrics().width(currentText));
         //MAGIC: the 'next' previous line's right is the current line's left,
         // moving the calculation here.
         otherLineRight-=lineWidth+m_spacing;
@@ -128,7 +130,7 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
                          lineWidth,
                          height(),
                          Qt::AlignVCenter,
-                         m_backend->lyricsText(paintingLine));
+                         currentText);
         //Move to previous line.
         paintingLine--;
     }

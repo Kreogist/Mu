@@ -28,9 +28,12 @@ class KNProgressSlider;
 class KNImageLabel;
 class KNEditableLabel;
 class KNOpacityAnimeButton;
+class KNOpacityButton;
 class KNMusicHScrollLyrics;
+class KNLoopScrollLabel;
 /*!
- * \brief The KNMusicMiniPlayer class
+ * \brief The KNMusicMiniPlayer class provide the offical mini desktop player.
+ * It will use all the default widget provided via SDK.
  */
 class KNMusicMiniPlayer : public KNMusicMiniPlayerBase
 {
@@ -55,6 +58,10 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicMiniPlayerBase::reset().
+     */
+    void reset() Q_DECL_OVERRIDE;
 
 protected:
     /*!
@@ -82,12 +89,14 @@ protected:
      */
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
-private:
+private slots:
     void onActionMouseInOut(int frame);
 
 private:
-    inline KNOpacityAnimeButton *generateButton(
+    inline KNOpacityAnimeButton *generateControlButton(
             const QString &iconPath=QString());
+    inline KNOpacityButton *generateButton(const QString &iconPath=QString());
+    inline void thawAnime();
     inline void startAnime(int targetFrame);
     inline void setPosition(const qint64 &position);
     QIcon m_muteIcon[2], m_iconPause, m_iconPlay;
@@ -95,8 +104,9 @@ private:
     QWidget *m_container;
     KNImageLabel *m_icon;
     KNEditableLabel *m_position;
-    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next, *m_mute,
-                         *m_restore, *m_close;
+    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next, *m_mute;
+    KNOpacityButton *m_restore, *m_close;
+    KNLoopScrollLabel *m_detailLabel;
     KNProgressSlider *m_progressSlider;
     KNMusicHScrollLyrics *m_lyrics;
     QTimeLine *m_moving;
@@ -104,7 +114,7 @@ private:
     KNMusicBackend *m_backend;
     KNMusicNowPlayingBase *m_nowPlaying;
 
-    bool m_progressPressed, m_pressed;
+    bool m_progressPressed, m_pressed, m_freeze;
 };
 
 #endif // KNMUSICMINIPLAYER_H

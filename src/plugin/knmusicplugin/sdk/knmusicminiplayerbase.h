@@ -27,9 +27,11 @@ class KNMusicMiniPlayerBase : public KNMusicPlayerBase
 public:
     KNMusicMiniPlayerBase(QWidget *parent = 0) : KNMusicPlayerBase(parent){}
 
+
 signals:
 
 public slots:
+    virtual void reset()=0;
 };
 
 #endif // KNMUSICMINIPLAYERBASE_H

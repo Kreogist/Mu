@@ -21,32 +21,86 @@
 
 #include <QWidget>
 
+/*!
+ * \brief The KNLoopScrollLabel class is a scroll label which could provide the
+ * scroll effect just like music label from the iPhone OS 1.0 to iOS 6.
+ */
 class KNLoopScrollLabel : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNLoopScrollLabel widget.
+     * \param parent The parent widget pointer.
+     */
     explicit KNLoopScrollLabel(QWidget *parent = 0);
 
+    /*!
+     * \brief The text of the label holds.
+     * \return The text in QString.
+     */
     QString text() const;
 
-    QSize sizeHint() const;
+    /*!
+     * \brief Reimplemented from QWidget::sizeHint().
+     */
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief The opacity value of the label.
+     * \return The opacity of the label widget. The value will be ranged 0.0 to
+     * 1.0.
+     */
     qreal opacity() const;
 
+    /*!
+     * \brief Get the alignment of the label if the text is not full enough to
+     * be scroll.
+     * \return The text alignment.
+     */
     int alignment() const;
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set the new text alignment.
+     * \param alignment The text alignement. It uses the same as QLabel.
+     */
     void setAlignment(int alignment);
+
+    /*!
+     * \brief Set the label text opacity.
+     * \param opacity The opacity. It should between 0.0 to 1.0.
+     */
     void setOpacity(const qreal &opacity);
+
+    /*!
+     * \brief Set the label text.
+     * \param text The label text.
+     */
     void setText(const QString &text);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
+    /*!
+     * \brief Reimplemented from QWidget::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void moveText();

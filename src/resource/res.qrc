@@ -118,12 +118,14 @@
         <file>music/playlist/playlist_control_add.png</file>
         <file>music/playlist/playlist_control_play.png</file>
         <file>music/playlist/playlist_control_random.png</file>
-        <file>music/player/close_mini.png</file>
-        <file>music/player/mini_backward.png</file>
-        <file>music/player/mini_forward.png</file>
+        <file>music/player/mini_close.png</file>
+        <file>music/player/mini_maximum.png</file>
+        <file>music/player/mini_mute.png</file>
+        <file>music/player/mini_mute_false.png</file>
+        <file>music/player/mini_next.png</file>
         <file>music/player/mini_pause.png</file>
         <file>music/player/mini_play.png</file>
-        <file>music/player/maximal_mini.png</file>
+        <file>music/player/mini_previous.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>platforms/windows/loopmode_norepeat.png</file>

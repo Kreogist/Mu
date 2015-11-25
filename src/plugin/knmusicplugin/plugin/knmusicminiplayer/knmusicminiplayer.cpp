@@ -20,12 +20,15 @@
 #include <QMouseEvent>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QCursor>
 
 #include "knimagelabel.h"
 #include "knopacityanimebutton.h"
+#include "knopacitybutton.h"
 #include "knthememanager.h"
 #include "knprogressslider.h"
 #include "kneditablelabel.h"
+#include "knloopscrolllabel.h"
 
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
@@ -46,18 +49,21 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     m_container(new QWidget(this)),
     m_icon(new KNImageLabel(this)),
     m_position(new KNEditableLabel(this)),
-    m_previous(generateButton(":/plugin/music/player/mini_backward.png")),
-    m_playNPause(generateButton()),
-    m_next(generateButton(":/plugin/music/player/mini_forward.png")),
-    m_mute(generateButton()),
-    m_restore(generateButton(":/plugin/music/player/maximal_mini.png")),
-    m_close(generateButton(":/plugin/music/player/close_mini.png")),
+    m_previous(
+        generateControlButton(":/plugin/music/player/mini_previous.png")),
+    m_playNPause(generateControlButton()),
+    m_next(generateControlButton(":/plugin/music/player/mini_next.png")),
+    m_mute(generateControlButton()),
+    m_restore(generateButton(":/plugin/music/player/mini_maximum.png")),
+    m_close(generateButton(":/plugin/music/player/mini_close.png")),
+    m_detailLabel(new KNLoopScrollLabel(this)),
     m_progressSlider(new KNProgressSlider(this)),
     m_lyrics(new KNMusicHScrollLyrics(this)),
     m_moving(new QTimeLine(200, this)),
     m_backend(nullptr),
     m_progressPressed(false),
-    m_pressed(false)
+    m_pressed(false),
+    m_freeze(false)
 {
     setObjectName("MiniPlayer");
     //Set property.
@@ -67,11 +73,11 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
 #else
     setWindowFlags(Qt::ToolTip | Qt::WindowStaysOnTopHint);
 #endif
-    setFixedSize(fontMetrics().height()*28, fontMetrics().height()<<1);
+    setFixedSize(fontMetrics().height()*36, fontMetrics().height()<<1);
     //Initial the resource.
     // Mute icons.
-    m_muteIcon[0]=QIcon(":/plugin/music/player/mute_false.png");
-    m_muteIcon[1]=QIcon(":/plugin/music/player/mute_true.png");
+    m_muteIcon[0]=QIcon(":/plugin/music/player/mini_mute_false.png");
+    m_muteIcon[1]=QIcon(":/plugin/music/player/mini_mute.png");
     // Play and pause icons.
     m_iconPause=QIcon(":/plugin/music/player/mini_pause.png");
     m_iconPlay=QIcon(":/plugin/music/player/mini_play.png");
@@ -79,6 +85,17 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     //Configure the container.
     m_container->setFixedSize(size());
     m_container->move(0, -height());
+    //Configure the position label.
+    m_position->setObjectName("MiniPosition");
+    m_position->setFixedHeight(fontMetrics().height());
+    QFont timeFont=font();
+    timeFont.setFamily("096MKSD");
+    m_position->setFont(timeFont);
+    knTheme->registerWidget(m_position);
+    connect(m_position, &KNEditableLabel::startEditing,
+            [=]{m_freeze=true;});
+    connect(m_position, &KNEditableLabel::endEditing,
+            this, &KNMusicMiniPlayer::thawAnime);
     //Configure the icon label.
     m_icon->setPixmap(QPixmap(":/plugin/preference/about.png"));
     m_icon->setFixedSize(16, 16);
@@ -87,6 +104,8 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     m_playNPause->setIcon(m_iconPlay);
     m_mute->setIcon(m_muteIcon[false]);
     //Configure progress bar.
+    m_progressSlider->setWheelStep(1000);
+    m_progressSlider->setFixedWidth(100);
     connect(m_progressSlider, &KNProgressSlider::sliderPressed,
             [=]{m_progressPressed=true;});
     connect(m_progressSlider, &KNProgressSlider::sliderReleased,
@@ -117,17 +136,21 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     QBoxLayout *containerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                                this);
     containerLayout->setContentsMargins(8,0,8,0);
-    containerLayout->setSpacing(0);
+    containerLayout->setSpacing(4);
     m_container->setLayout(containerLayout);
     //Add widgets to container layout.
     containerLayout->addWidget(m_icon);
-    containerLayout->addWidget(m_previous);
-    containerLayout->addWidget(m_playNPause);
-    containerLayout->addWidget(m_next);
-    containerLayout->addWidget(m_mute);
-    containerLayout->addStretch();
+    containerLayout->addWidget(m_detailLabel, 1, Qt::AlignVCenter);
     containerLayout->addWidget(m_position);
     containerLayout->addWidget(m_progressSlider);
+    containerLayout->addWidget(m_previous);
+    containerLayout->addSpacing(4);
+    containerLayout->addWidget(m_playNPause);
+    containerLayout->addSpacing(4);
+    containerLayout->addWidget(m_next);
+    containerLayout->addSpacing(4);
+    containerLayout->addWidget(m_mute);
+    containerLayout->addSpacing(4);
     containerLayout->addWidget(m_restore);
     containerLayout->addWidget(m_close);
 
@@ -144,7 +167,7 @@ void KNMusicMiniPlayer::setBackend(KNMusicBackend *backend)
     {
         return;
     }
-    //Link the play and pause button.
+    //Link controls.
     connect(m_playNPause, &KNOpacityAnimeButton::clicked,
             [=]
             {
@@ -157,6 +180,44 @@ void KNMusicMiniPlayer::setBackend(KNMusicBackend *backend)
                 }
                 //Start to play the main thread.
                 m_backend->play();
+            });
+    connect(m_mute, &KNOpacityAnimeButton::clicked,
+            [=]
+            {
+                //Change the mute state.
+                m_backend->changeMuteState();
+            });
+    connect(m_position, &KNEditableLabel::contentChanged,
+            [=]
+            {
+                //Get the latest text from the position.
+                QString positionText=m_position->text();
+                //Find the colon.
+                int colonPosition=positionText.indexOf(':');
+                //If we cannot find the colon, means it's not format as 'xx:xx'.
+                if(-1==colonPosition)
+                {
+                    //This might be a number, we treat it as second time.
+                    //Translate it to a number.
+                    bool translated=false;
+                    qint64 triedPositon=positionText.toLongLong(&translated);
+                    //If we succeed, set the position to that second.
+                    if(translated)
+                    {
+                        m_backend->setPosition(triedPositon*1000);
+                    }
+                    return;
+                }
+                //Calculate the ms.
+                qint64 minutePart=positionText.left(colonPosition).toInt(),
+                       secondPart=positionText.mid(colonPosition+1).toInt(),
+                       preferPosition=(minutePart*60+secondPart)*1000;
+                //Check result.
+                if(preferPosition>-1 &&
+                        preferPosition<m_progressSlider->maximum())
+                {
+                    m_backend->setPosition(preferPosition);
+                }
             });
     //Connect the response.
     connect(m_backend, &KNMusicBackend::positionChanged,
@@ -202,35 +263,61 @@ void KNMusicMiniPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
         return;
     }
     //Link the header player's control signal to now playing model.
-//    connect(m_loopState, &KNOpacityButton::clicked,
-//            m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
     connect(m_next, &KNOpacityAnimeButton::clicked,
             m_nowPlaying, &KNMusicNowPlayingBase::playNext);
     connect(m_previous, &KNOpacityAnimeButton::clicked,
             m_nowPlaying, &KNMusicNowPlayingBase::playPrevious);
     //Link the now playing model's response to header player.
-//    connect(m_nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
-//            this, &KNMusicHeaderPlayer::onActionLoopStateChange);
-//    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
-//            this, &KNMusicHeaderPlayer::onActionNowPlayingChanged);
-//    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
-//            this, &KNMusicHeaderPlayer::reset);
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
+            [=](const KNMusicAnalysisItem &analysisItem)
+            {
+                //Get the artist.
+                QString &&artistText=
+                        analysisItem.detailInfo.textLists[Artist].toString();
+                //Set the detail label text.
+                m_detailLabel->setText(
+                    //Check the artist name.
+                    (artistText.isEmpty() ? "" : (artistText+" - ")) +
+                            analysisItem.detailInfo.textLists[Name].toString());
+            });
+    connect(m_nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
+            this, &KNMusicMiniPlayer::reset);
+    //Reset the mini player.
+    reset();
+}
+
+void KNMusicMiniPlayer::reset()
+{
+    //Clear the slider range.
+    m_progressSlider->setMaximum(0);
+    //Reset the label.
+    m_position->setText("0:00");
+    //Reset the detail text.
+    m_detailLabel->setText("");
 }
 
 void KNMusicMiniPlayer::enterEvent(QEvent *event)
 {
     //Do original event.
     KNMusicMiniPlayerBase::enterEvent(event);
-    //Move to hide the lyrics widget.
-    startAnime(height());
+    //Check freeze state first.
+    if(!m_freeze)
+    {
+        //Move to hide the lyrics widget.
+        startAnime(height());
+    }
 }
 
 void KNMusicMiniPlayer::leaveEvent(QEvent *event)
 {
     //Do original event
     KNMusicMiniPlayerBase::leaveEvent(event);
-    //Move to show the lyrics widget.
-    startAnime(0);
+    //Check freeze state first.
+    if(!m_freeze)
+    {
+        //Move to show the lyrics widget.
+        startAnime(0);
+    }
 }
 
 void KNMusicMiniPlayer::mousePressEvent(QMouseEvent *event)
@@ -242,6 +329,8 @@ void KNMusicMiniPlayer::mousePressEvent(QMouseEvent *event)
     //Save the pressed point.
     m_pressedPoint=event->globalPos();
     m_originalPos=pos();
+    //Freeze the window.
+    m_freeze=true;
 }
 
 void KNMusicMiniPlayer::mouseMoveEvent(QMouseEvent *event)
@@ -283,6 +372,12 @@ void KNMusicMiniPlayer::mouseReleaseEvent(QMouseEvent *event)
     KNMusicMiniPlayerBase::mouseReleaseEvent(event);
     //Release the pressed flag.
     m_pressed=false;
+    //Check the edit state.
+    if(!m_position->isEditing())
+    {
+        //Thaw the mini player.
+        thawAnime();
+    }
 }
 
 void KNMusicMiniPlayer::onActionMouseInOut(int frame)
@@ -297,10 +392,10 @@ void KNMusicMiniPlayer::onActionMouseInOut(int frame)
 //                     backColor.saturation(),
 //                     (qreal)frame/(qreal)height()*255.0);
 //    pal.setColor(QPalette::Window, backColor);
-//    setPalette(pal);
+    //    setPalette(pal);
 }
 
-inline KNOpacityAnimeButton *KNMusicMiniPlayer::generateButton(
+inline KNOpacityAnimeButton *KNMusicMiniPlayer::generateControlButton(
         const QString &iconPath)
 {
     //Generate the button.
@@ -314,6 +409,41 @@ inline KNOpacityAnimeButton *KNMusicMiniPlayer::generateButton(
     button->setFixedSize(16, 16);
     //Give back the button.
     return button;
+}
+
+inline KNOpacityButton *KNMusicMiniPlayer::generateButton(
+        const QString &iconPath)
+{
+    //Generate the button.
+    KNOpacityButton *button=new KNOpacityButton(this);
+    //Set the icon.
+    if(!iconPath.isEmpty())
+    {
+        button->setIcon(QIcon(iconPath));
+    }
+    //Resize the button.
+    button->setFixedSize(16, 16);
+    //Give back the button.
+    return button;
+}
+
+inline void KNMusicMiniPlayer::thawAnime()
+{
+    //Check the freezing state.
+    if(!m_freeze)
+    {
+        //If the mini player is not freeze, we don't need to thaw.
+        return;
+    }
+    //Reset the freeze state.
+    m_freeze=false;
+    //Check the position.
+    if(!rect().contains(mapFromGlobal(QCursor::pos())))
+    {
+        //When the mouse is not inside the mini player, then start the hiding
+        //anime.
+        startAnime(0);
+    }
 }
 
 inline void KNMusicMiniPlayer::startAnime(int targetFrame)

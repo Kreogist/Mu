@@ -49,6 +49,17 @@ signals:
      */
     void contentChanged();
 
+    /*!
+     * \brief When user start to edit the label content, this signal will be
+     * emitted.
+     */
+    void startEditing();
+
+    /*!
+     * \brief When user press Escape or Enter, this signal will be emitted.
+     */
+    void endEditing();
+
 public slots:
 
 protected:

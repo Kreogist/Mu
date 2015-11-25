@@ -68,6 +68,7 @@ void KNEditableLabel::mouseReleaseEvent(QMouseEvent *event)
         //If mouse release in the widget, show editor.
         if(rect().contains(event->pos()))
         {
+            //Show the editor.
             showEditor();
         }
     }
@@ -86,6 +87,8 @@ void KNEditableLabel::showEditor()
     m_editor->show();
     //Set focus on the editor.
     m_editor->setFocus();
+    //Emit the start edit signal.
+    emit startEditing();
 }
 
 void KNEditableLabel::hideEdior()
@@ -94,4 +97,6 @@ void KNEditableLabel::hideEdior()
     m_editor->setEnabled(false);
     //Hide edit widget.
     m_editor->hide();
+    //Emit the end edit signal.
+    emit endEditing();
 }

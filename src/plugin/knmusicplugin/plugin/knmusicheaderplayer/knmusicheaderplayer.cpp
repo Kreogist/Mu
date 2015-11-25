@@ -687,7 +687,7 @@ void KNMusicHeaderPlayer::onActionPositionEdited()
     qint64 minutePart=positionText.left(colonPosition).toInt(),
            secondPart=positionText.mid(colonPosition+1).toInt(),
            preferPosition=(minutePart*60+secondPart)*1000;
-    if(preferPosition>0 && preferPosition<m_progressSlider->maximum())
+    if(preferPosition>-1 && preferPosition<m_progressSlider->maximum())
     {
         setPosition(preferPosition);
     }
