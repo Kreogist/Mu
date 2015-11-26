@@ -24,7 +24,7 @@
  * \brief The KNMusicXiaMiLyrics class provide the policy to download lyrics
  * files from the server of the famous web site in China named XiaMi.
  */
-class KNMusicXiaMiLyrics : public KNMusicLyricsDownloader
+class KNMusicXiamiLyrics : public KNMusicLyricsDownloader
 {
     Q_OBJECT
 public:
@@ -32,7 +32,7 @@ public:
      * \brief Construct a KNMusicXiaMiLyrics object.
      * \param parent The parent object.
      */
-    explicit KNMusicXiaMiLyrics(QObject *parent = 0);
+    explicit KNMusicXiamiLyrics(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNMusicLyricsDownloader::downloaderName().

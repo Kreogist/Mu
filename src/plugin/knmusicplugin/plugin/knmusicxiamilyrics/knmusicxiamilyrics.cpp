@@ -23,17 +23,17 @@
 
 #include <QDebug>
 
-KNMusicXiaMiLyrics::KNMusicXiaMiLyrics(QObject *parent) :
+KNMusicXiamiLyrics::KNMusicXiamiLyrics(QObject *parent) :
     KNMusicLyricsDownloader(parent)
 {
 }
 
-QString KNMusicXiaMiLyrics::downloaderName()
+QString KNMusicXiamiLyrics::downloaderName()
 {
     return "XiaMi Music";
 }
 
-void KNMusicXiaMiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
+void KNMusicXiamiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
                                         QList<KNMusicLyricsDetails> &lyricsList)
 {
     //Generate the url.

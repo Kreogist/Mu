@@ -23,22 +23,22 @@
 
 #include <QDebug>
 
-KNMusicTTPodLyrics::KNMusicTTPodLyrics(QObject *parent) :
+KNMusicTtpodLyrics::KNMusicTtpodLyrics(QObject *parent) :
     KNMusicLyricsDownloader(parent)
 {
 }
 
-KNMusicTTPodLyrics::~KNMusicTTPodLyrics()
+KNMusicTtpodLyrics::~KNMusicTtpodLyrics()
 {
     ;
 }
 
-QString KNMusicTTPodLyrics::downloaderName()
+QString KNMusicTtpodLyrics::downloaderName()
 {
     return tr("TTPod");
 }
 
-void KNMusicTTPodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
+void KNMusicTtpodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
                                         QList<KNMusicLyricsDetails> &lyricsList)
 {
     QString searchUrl="http://so.ard.iyyin.com/s/song_with_out?q=" +

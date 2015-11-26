@@ -71,6 +71,7 @@
 #include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
+#include "plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h"
 // Lyrics Download Dialog.
 #include "plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h"
 // Solo Music Menu.
@@ -553,9 +554,10 @@ void KNMusicPlugin::initialLyricsPlugin()
 
     //Add the downloader to lyrics manager.
     lyricsManager->appendDownloader(new KNMusicQQLyrics);
-    lyricsManager->appendDownloader(new KNMusicTTPlayerLyrics);
-    lyricsManager->appendDownloader(new KNMusicTTPodLyrics);
-    lyricsManager->appendDownloader(new KNMusicXiaMiLyrics);
+    lyricsManager->appendDownloader(new KNMusicTtplayerLyrics);
+    lyricsManager->appendDownloader(new KNMusicTtpodLyrics);
+    lyricsManager->appendDownloader(new KNMusicXiamiLyrics);
+    lyricsManager->appendDownloader(new KNMusicKgmusicLyrics);
 }
 
 void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)

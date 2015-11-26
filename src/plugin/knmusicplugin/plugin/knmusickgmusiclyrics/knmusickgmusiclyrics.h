@@ -12,27 +12,32 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICTTPODLYRICS_H
-#define KNMUSICTTPODLYRICS_H
+
+#ifndef KNMUSICKGMUSICLYRICS_H
+#define KNMUSICKGMUSICLYRICS_H
 
 #include "knmusiclyricsdownloader.h"
 
 /*!
- * \brief The KNMusicTTPodLyrics class provide the policy to download lyrics
- * files from the server of TTPod.
+ * \brief The KNMusicKgmusicLyrics class can download lyrics from the KuGou
+ * server. And parse the krc format lyrics to lrc format.\n
+ * Thanks for the script from Anonymous. The script is provided by miaolapd.\n
+ * This module is not simply translate all the raw javascript. It should works
+ * much better than the script. It will check the JSON strcuture before using
+ * it.
  */
-class KNMusicTtpodLyrics : public KNMusicLyricsDownloader
+class KNMusicKgmusicLyrics : public KNMusicLyricsDownloader
 {
+    Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicTTPodLyrics object.
+     * \brief Construct KNMusicKgmusicLyrics object with specific parent object.
      * \param parent The parent object.
      */
-    explicit KNMusicTtpodLyrics(QObject *parent = 0);
-    ~KNMusicTtpodLyrics();
+    explicit KNMusicKgmusicLyrics(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNMusicLyricsDownloader::downloaderName().
@@ -45,6 +50,15 @@ public:
     void downloadLyrics(
             const KNMusicDetailInfo &detailInfo,
             QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
+
+signals:
+
+public slots:
+
+private:
+    QString parseKRC(const QByteArray &krcData);
+    unsigned char m_magicBytes[4], m_encKey[16];
+    QStringList m_lyricsAttributeHeader;
 };
 
-#endif // KNMUSICTTPODLYRICS_H
+#endif // KNMUSICKGMUSICLYRICS_H

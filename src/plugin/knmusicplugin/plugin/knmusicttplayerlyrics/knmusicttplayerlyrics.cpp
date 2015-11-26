@@ -23,23 +23,23 @@
 
 #include <QDebug>
 
-KNMusicTTPlayerLyrics::KNMusicTTPlayerLyrics(QObject *parent) :
+KNMusicTtplayerLyrics::KNMusicTtplayerLyrics(QObject *parent) :
     KNMusicLyricsDownloader(parent)
 {
     m_utf16LE=QTextCodec::codecForName("UTF-16LE");
 }
 
-KNMusicTTPlayerLyrics::~KNMusicTTPlayerLyrics()
+KNMusicTtplayerLyrics::~KNMusicTtplayerLyrics()
 {
 
 }
 
-QString KNMusicTTPlayerLyrics::downloaderName()
+QString KNMusicTtplayerLyrics::downloaderName()
 {
     return tr("TTPlayer");
 }
 
-void KNMusicTTPlayerLyrics::downloadLyrics(
+void KNMusicTtplayerLyrics::downloadLyrics(
         const KNMusicDetailInfo &detailInfo,
         QList<KNMusicLyricsDetails> &lyricsList)
 {
@@ -52,7 +52,7 @@ void KNMusicTTPlayerLyrics::downloadLyrics(
                           lyricsList);
 }
 
-void KNMusicTTPlayerLyrics::downloadLyricsFromUrl(
+void KNMusicTtplayerLyrics::downloadLyricsFromUrl(
         const QString &url,
         const KNMusicDetailInfo &detailInfo,
         QList<KNMusicLyricsDetails> &lyricsList)
@@ -114,7 +114,7 @@ void KNMusicTTPlayerLyrics::downloadLyricsFromUrl(
     }
 }
 
-inline QString KNMusicTTPlayerLyrics::generateCode(
+inline QString KNMusicTtplayerLyrics::generateCode(
         const QHash<QString, QString> &info)
 {
     QString utf8hex=utf8HexText(info.value("artist")+info.value("title"));
@@ -180,7 +180,7 @@ inline QString KNMusicTTPlayerLyrics::generateCode(
     return QString::number(t5, 10);
 }
 
-QString KNMusicTTPlayerLyrics::utf8HexText(const QString &original)
+QString KNMusicTtplayerLyrics::utf8HexText(const QString &original)
 {
     QByteArray utf8Array=original.toUtf8();
     //Read the data, and translate to string.
@@ -197,7 +197,7 @@ QString KNMusicTTPlayerLyrics::utf8HexText(const QString &original)
     return utf8Text;
 }
 
-QString KNMusicTTPlayerLyrics::utf16LEHex(const QString &original)
+QString KNMusicTtplayerLyrics::utf16LEHex(const QString &original)
 {
     //Get the UTF-16 LE data of the original text.
     QByteArray leArray=m_utf16LE->fromUnicode(original);
@@ -221,7 +221,7 @@ QString KNMusicTTPlayerLyrics::utf16LEHex(const QString &original)
     return leText;
 }
 
-inline qint64 KNMusicTTPlayerLyrics::conv(qint64 i)
+inline qint64 KNMusicTtplayerLyrics::conv(qint64 i)
 {
     i&=0xFFFFFFFF;
     qint64 r=(qint64)i%0x100000000;

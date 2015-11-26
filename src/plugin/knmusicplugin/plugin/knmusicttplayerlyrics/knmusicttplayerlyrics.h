@@ -25,7 +25,7 @@
  * files from the server of TTPlayer, now it should be named as Baidu Music.\n
  * This module is written to remember the genius music player - TTPlayer.
  */
-class KNMusicTTPlayerLyrics : public KNMusicLyricsDownloader
+class KNMusicTtplayerLyrics : public KNMusicLyricsDownloader
 {
     Q_OBJECT
 public:
@@ -33,8 +33,8 @@ public:
      * \brief Construct a KNMusicTTPlayerLyrics object.
      * \param parent The parent object.
      */
-    explicit KNMusicTTPlayerLyrics(QObject *parent=0);
-    ~KNMusicTTPlayerLyrics();
+    explicit KNMusicTtplayerLyrics(QObject *parent=0);
+    ~KNMusicTtplayerLyrics();
     /*!
      * \brief Reimplemented from KNMusicLyricsDownloader::downloaderName().
      */
