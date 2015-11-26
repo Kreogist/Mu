@@ -45,12 +45,6 @@ public:
     void downloadLyrics(
             const KNMusicDetailInfo &detailInfo,
             QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
-
-private:
-    inline QString process_code(const QVariant &str);
-    inline qint32 crc32(const QString &str);
-    inline QString utf8HexText(const QString &original);
-    QString m_table;
 };
 
 #endif // KNMUSICTTPODLYRICS_H
