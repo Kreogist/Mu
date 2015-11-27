@@ -19,13 +19,29 @@
 #ifndef KNMUSICBACKENDGSTREAMER_H
 #define KNMUSICBACKENDGSTREAMER_H
 
+/*
+ * * Nov 27, 2015
+ *   This is the standard module under Linux.
+ *   The reason why I don't use QtGStreamer is very simple. I can't set it up on
+ * Ubuntu 15.04, or it couldn't be used after I set it up.
+ */
+
 #include "knmusicstandardbackend.h"
 
 class KNMusicBackendGStreamerThread;
+/*!
+ * \brief The KNMusicBackendGStreamer class provides you a backend interface of
+ * the famous multimedia framework - GStreamer.\n
+ * All the codes based on GStreamer 1.0.
+ */
 class KNMusicBackendGStreamer : public KNMusicStandardBackend
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicBackendGStreamer object with parent object.
+     * \param parent The parent object.
+     */
     explicit KNMusicBackendGStreamer(QObject *parent = 0);
     ~KNMusicBackendGStreamer();
 

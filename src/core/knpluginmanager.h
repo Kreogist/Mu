@@ -18,6 +18,8 @@
 #ifndef KNPLUGINMANAGER_H
 #define KNPLUGINMANAGER_H
 
+#include <QStringList>
+
 #include <QObject>
 
 class KNGlobal;

@@ -165,8 +165,8 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
 
     //Register the theme.
     knTheme->registerWidget(this);
-    //Move to default position: top right of the desktop.
-    move(0, qApp->desktop()->width() - width());
+    //Move to default position: top left of the desktop.
+    move(0, 0);
 }
 
 void KNMusicMiniPlayer::setBackend(KNMusicBackend *backend)

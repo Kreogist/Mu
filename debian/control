@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: Tojo Saki <tomguts@126.com>
 Build-Depends: debhelper (>= 9),
-               qt5-default, libphonon4qt5-dev,
+               qt5-default, libgstreamer1.0-dev,
                libavformat-dev,
                libavcodec-dev,
                libavutil-dev
@@ -13,9 +13,7 @@ Homepage: http://kreogist.github.io/Mu/
 Package: mu
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: phonon4qt5-backend-gstreamer,
-            phonon4qt5-backend-vlc
-Suggests:   gstreamer1.0-plugins-bad,
+Recommends: gstreamer1.0-plugins-bad,
             gstreamer1.0-plugins-ugly,
             gstreamer1.0-plugins-libav
 Description: Incredible music manager.
