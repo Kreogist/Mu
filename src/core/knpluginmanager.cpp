@@ -40,9 +40,6 @@
 #ifdef Q_OS_WIN
 #include "plugin/knwindowsextras/knwindowsextras.h"
 #endif
-#ifdef Q_OS_MACX
-#include "plugin/knmacextras/knmacextras.h"
-#endif
 
 #include "knmessagebox.h"
 
@@ -229,9 +226,6 @@ void KNPluginManager::loadPlugins()
     loadPreference(new KNPreference);
 #ifdef Q_OS_WIN
     loadPlatformExtras(new KNWindowsExtras);
-#endif
-#ifdef Q_OS_MACX
-    loadPlatformExtras(new KNMacExtras);
 #endif
 
     //Load the category plugin.

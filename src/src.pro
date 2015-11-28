@@ -444,7 +444,6 @@ SOURCES += \
     sdk/knpreferencepanelitem.cpp \
     sdk/knselectanyfiledialog.cpp \
     sdk/knfiledialog.cpp \
-    plugin/knmacextras/knmacextras.cpp \
     sdk/knimagelabel.cpp \
     plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.cpp \
@@ -652,7 +651,6 @@ HEADERS += \
     sdk/knpreferencepanelitem.h \
     sdk/knselectanyfiledialog.h \
     sdk/knfiledialog.h \
-    plugin/knmacextras/knmacextras.h \
     sdk/knimagelabel.h \
     plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.h \
     plugin/knmusicplugin/sdk/knmusicminiplayerbase.h \

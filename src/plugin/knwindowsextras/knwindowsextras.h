@@ -29,6 +29,10 @@ class QSystemTrayIcon;
 class QWinThumbnailToolBar;
 class QWinThumbnailToolButton;
 class KNMainWindow;
+/*!
+ * \brief The KNWindowsExtras class provides some extra interface under Windows.
+ * Including task bar button and tray icon.
+ */
 class KNWindowsExtras : public KNPlatformExtras
 {
     Q_OBJECT

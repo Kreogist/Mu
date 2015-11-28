@@ -131,6 +131,10 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
             this, &KNMusicMiniPlayer::requireHidePlayer);
     connect(m_close, &KNOpacityButton::clicked,
             this, &KNMusicMiniPlayer::requireCloseMainWindow);
+    //If the platform is Mac OS X, hide the close button.
+#ifdef Q_OS_MACX
+    m_close->hide();
+#endif
     //Configure the scroll lyrics.
     m_lyrics->setObjectName("MiniLyrics");
     m_lyrics->setBackend(knMusicGlobal->lyricsManager()->backend());
