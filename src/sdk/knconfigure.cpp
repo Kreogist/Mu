@@ -178,7 +178,7 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         //Generate the font object.
         QFont font=value.value<QFont>();
         QJsonObject fontObject;
-        fontObject.insert("Type", "Font");
+        fontObject.insert("Type", QString("Font"));
         fontObject.insert("Family", font.family());
         fontObject.insert("Size", font.pixelSize());
         fontObject.insert("Bold", font.bold());
