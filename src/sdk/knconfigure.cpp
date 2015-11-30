@@ -29,19 +29,18 @@ KNConfigure::KNConfigure(QObject *parent) :
     m_dataObject(QJsonObject()),
     m_caption(QString())
 {
-    //Check whether the type list has been built before.
-    if(m_typeList.isEmpty())
-    {
-        buildTypeList();
-    }
+    //Check and build type list.
+    buildTypeList();
 }
 
 KNConfigure::KNConfigure(const QJsonObject &data,
                          QObject *parent) :
-    KNConfigure(parent)
+    QObject(parent),
+    m_dataObject(data),
+    m_caption(QString())
 {
-    //Save the data object.
-    m_dataObject=data;
+    //Check and build type list.
+    buildTypeList();
 }
 
 QJsonObject KNConfigure::dataObject()
@@ -211,5 +210,9 @@ void KNConfigure::setDataObject(const QJsonObject &dataObject)
 
 inline void KNConfigure::buildTypeList()
 {
-    m_typeList.insert("Font", Font);
+    //Check whether the type list has been built before.
+    if(m_typeList.isEmpty())
+    {
+        m_typeList.insert("Font", Font);
+    }
 }
