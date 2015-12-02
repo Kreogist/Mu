@@ -318,10 +318,12 @@ void KNGlobal::setMainWindow(QWidget *mainWindow)
     m_mainWindow = mainWindow;
 }
 
+#ifdef Q_OS_UNIX
 int KNGlobal::desktopEnvironment() const
 {
     return m_desktopEnviroment;
 }
+#endif
 
 void KNGlobal::setPreference(KNPreferencePlugin *preference)
 {

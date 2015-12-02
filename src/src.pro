@@ -44,12 +44,12 @@ msvc: {
     # Auto-Parallelizer
     QMAKE_CXXFLAGS_RELEASE += -Qpar
     # CPU Instrcutions.
-    #QMAKE_CXXFLAGS_RELEASE += -arch:AVX
+    QMAKE_CXXFLAGS_RELEASE += -arch:AVX
     # CPU Architecture, turn on for Mu's.
     # Intel Processor, Sandy bridge or later.
     #QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
     # AMD Processor,
-    #QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
+    QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
 
     # Linker Options.
     # Link-time Code Generation, use with -GL
@@ -93,8 +93,6 @@ gcc: {
         QMAKE_CXXFLAGS_RELEASE += -fforce-addr
         # Use sse to calculate the float operation.
         QMAKE_CXXFLAGS_RELEASE += -mfpmath=sse
-        # Enabled 64-bit.
-        QMAKE_CXXFLAGS_RELEASE += -m64
         # Others
         QMAKE_CXXFLAGS_RELEASE += -ftracer
     }
