@@ -99,7 +99,7 @@ bool KNMusicBackendMpvThread::loadFile(const QString &filePath)
 void KNMusicBackendMpvThread::reset()
 {
     //Stop the instance.
-    //!FIXME: change to real reset.
+    //! FIXME: change to real reset.
     pause();
 }
 
@@ -219,7 +219,7 @@ void KNMusicBackendMpvThread::setVolume(const int &volume)
 void KNMusicBackendMpvThread::setPosition(const qint64 &position)
 {
     //Check out the mpv handler.
-    if(m_mpvHandle) //!FIXME: Check file as well.
+    if(m_mpvHandle) //! FIXME: Check file as well.
     {
         qDebug()<<"Here?!"<<QString::number((double)(m_startPosition+position)/1000.0,
                                             'g',
@@ -261,7 +261,7 @@ bool KNMusicBackendMpvThread::event(QEvent *event)
             //Check out whether there's an error occurs.
             if(mpvEvent->error < 0)
             {
-                //!FIXME: Do something here.
+                //! FIXME: Do something here.
             }
             switch(mpvEvent->event_id)
             {

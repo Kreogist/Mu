@@ -38,8 +38,8 @@
 KNSearchBox::KNSearchBox(QWidget *parent) :
     QLineEdit(parent),
     m_searchIcon(QPixmap()),
-    m_closeButton(new KNOpacityButton(this)),
     m_baseColor(QColor(0,0,0,0)),
+    m_closeButton(new KNOpacityButton(this)),
     m_mouseInOut(generateTimeLine()),
     m_focusInOut(generateTimeLine()),
     m_focusSource(nullptr)

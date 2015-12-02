@@ -84,10 +84,14 @@ signals:
 
 public slots:
     /*!
-     * \brief clearSelection
+     * \brief Clear up the selection.
      */
     void clearSelection();
 
+    /*!
+     * \brief setAlbumDetail
+     * \param albumDetail
+     */
     void setAlbumDetail(KNMusicAlbumDetail *albumDetail);
 
 protected:

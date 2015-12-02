@@ -22,12 +22,17 @@
 #include "knmusictagparser.h"
 
 /*!
- * \brief The KNMusicTagM4a class provides you a m4a format file decode file.
+ * \brief The KNMusicTagM4a class provides you a m4a format file decode file. It
+ * will decode the ilst box of the m4a format.
  */
 class KNMusicTagM4a : public KNMusicTagParser
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct KNMusicTagM4a object with given parent.
+     * \param parent The parent object.
+     */
     explicit KNMusicTagM4a(QObject *parent = 0);
 
     /*!

@@ -126,13 +126,13 @@ void KNThemeManager::loadThemeFiles(const QString &themeDirPath)
                 previewImage.load(previewFile.absoluteFilePath());
                 if(previewImage.isNull())
                 {
-                    //!FIXME: Set the preview to no image.
+                    //! FIXME: Set the preview to no image.
                     ;
                 }
             }
             else
             {
-                //!FIXME: Set the preview to no image.
+                //! FIXME: Set the preview to no image.
                 ;
             }
             //Add the new theme

@@ -150,7 +150,7 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
                 m_mainWindow, &KNMainWindow::close);
     }
     //Check the platform extra pointer.
-    if(!m_platformExtra)
+    if(m_platformExtra!=nullptr)
     {
         //Set the platform extra to the music plugin.
         m_musicPlugin->setPlatformExtras(m_platformExtra);

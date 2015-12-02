@@ -362,7 +362,7 @@ QModelIndex KNMusicAlbumView::moveCursor(
         QAbstractItemView::CursorAction cursorAction,
         Qt::KeyboardModifiers modifiers)
 {
-    //!FIXME: Add operation here.
+    //! FIXME: Add operation here.
     Q_UNUSED(cursorAction)
     Q_UNUSED(modifiers)
     return currentIndex();

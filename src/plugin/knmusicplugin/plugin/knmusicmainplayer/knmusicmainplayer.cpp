@@ -337,7 +337,7 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     //Calculate the font size.
     int fontSize=parameterSize/30;
     //Use the original font size as the spacing of the layout.
-    //!FIXME: add codes here.
+    //! FIXME: add codes here.
     //Set the minimum size of the font to 15.
     if(fontSize<15)
     {

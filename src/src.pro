@@ -44,10 +44,10 @@ msvc: {
     # Auto-Parallelizer
     QMAKE_CXXFLAGS_RELEASE += -Qpar
     # CPU Instrcutions.
-    QMAKE_CXXFLAGS_RELEASE += -arch:AVX
+    #QMAKE_CXXFLAGS_RELEASE += -arch:AVX
     # CPU Architecture, turn on for Mu's.
     # Intel Processor, Sandy bridge or later.
-    QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
+    #QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
     # AMD Processor,
     #QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
 

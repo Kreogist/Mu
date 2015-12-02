@@ -88,7 +88,7 @@ void KNMusicLyricsBackend::setPosition(const qint64 &position)
         if(position<m_positions.at(0))
         {
             //Require update all the widget.
-            //!FIXME: called all the update() function;
+            //! FIXME: called all the update() function;
             return;
         }
         //Or else, now it should be start at the first line.

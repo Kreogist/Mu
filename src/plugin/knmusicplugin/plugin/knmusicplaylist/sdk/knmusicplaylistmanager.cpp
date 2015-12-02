@@ -409,7 +409,7 @@ void KNMusicPlaylistManager::loadPlaylistList()
     //should be display to hint the user there's invalid playlist.
     if(!failedPaths.isEmpty())
     {
-        //!FIXME: Show the failed paths.
+        //! FIXME: Show the failed paths.
         //! WARNING: do not use KNMessageBox.
     }
 }

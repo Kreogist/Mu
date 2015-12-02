@@ -58,7 +58,7 @@ bool KNMusicLrcParser::parseFile(const QString &filePath,
         //If we still cannot decode it, ask user to select a codec.
         if(convState.invalidChars>0)
         {
-            //!FIXME: add ask user to choice the text codec.
+            //! FIXME: add ask user to choice the text codec.
             ;
         }
     }

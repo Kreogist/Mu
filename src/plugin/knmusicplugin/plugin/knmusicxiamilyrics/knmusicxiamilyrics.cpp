@@ -87,7 +87,7 @@ void KNMusicXiamiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
                     {
                         //Save the lyrics information.
                         KNMusicLyricsDetails currentDetail;
-                        //!FIXME: This is a ugly part, tried to fixed it with no error part.
+                        //! FIXME: This is a ugly part, tried to fixed it with no error part.
                         currentDetail.title=
                                 currentTrack.elementsByTagName("title").at(0).toElement().childNodes().at(0).nodeValue();
                         currentDetail.artist=currentTrack.elementsByTagName("artist").at(0).toElement().childNodes().at(0).nodeValue();
