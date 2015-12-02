@@ -107,6 +107,9 @@ private:
     inline KNOpacityAnimeButton *generateControlButton(
             const QString &iconPath=QString());
     inline KNOpacityButton *generateButton(const QString &iconPath=QString());
+#ifdef Q_OS_UNIX
+    inline void configureMinimalXAndY();
+#endif
     inline void thawAnime();
     inline void startAnime(int targetFrame);
     inline void setPosition(const qint64 &position);
@@ -129,6 +132,7 @@ private:
     KNMusicNowPlayingBase *m_nowPlaying;
     KNConfigure *m_cacheConfigure;
 
+    int m_minimalX, m_minimalY;
     bool m_progressPressed, m_pressed, m_freeze;
 };
 

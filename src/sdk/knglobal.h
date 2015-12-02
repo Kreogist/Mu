@@ -163,6 +163,21 @@ public:
      */
     void setMainWindow(QWidget *mainWindow);
 
+#ifdef Q_OS_UNIX
+    enum DesktopEnvironments
+    {
+        NullShell,
+        GnomeShell
+    };
+
+    /*!
+     * \brief Get the desktop environment name.
+     * \return It will be one of the DesktopEnvironments. For default it will be
+     * NullShell.
+     */
+    int desktopEnvironment() const;
+#endif
+
 signals:
     /*!
      * \brief When the library directory's path is changed, this signal will be
@@ -202,7 +217,13 @@ private:
     inline void initialDefaultDirPath();
     inline void initialInfrastrcture();
     inline void initialBrushes();
+#ifdef Q_OS_UNIX
+    inline void initialDesktopEnvironment();
+#endif
 
+#ifdef Q_OS_UNIX
+    int m_desktopEnviroment;
+#endif
     QWidget *m_mainWindow;
     KNPreferencePlugin *m_preference;
     QString m_dirPath[DefaultDirCount];

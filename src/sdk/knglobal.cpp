@@ -17,6 +17,7 @@
  */
 #include <QStandardPaths>
 #include <QApplication>
+#include <QProcess>
 
 #include "knutil.h"
 #include "knconfigure.h"
@@ -104,6 +105,10 @@ void KNGlobal::retranslate()
 
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent),
+    #ifdef Q_OS_UNIX
+    m_desktopEnviroment(NullShell),
+    #endif
+    m_mainWindow(nullptr),
     m_preference(nullptr),
     m_globalConfigure(nullptr)
 {
@@ -197,6 +202,10 @@ void KNGlobal::initialInfrastrcture()
     initialDefaultDirPath();
     //Initial the global pixmaps.
     initialBrushes();
+#ifdef Q_OS_UNIX
+    //Check out the desktop environment.
+    initialDesktopEnvironment();
+#endif
 
     //Initial the configure manager.
     //Set the configure folder path.
@@ -263,6 +272,42 @@ inline void KNGlobal::initialBrushes()
         m_brushes[i].setTexture(QPixmap(textures[i]));
     }
 }
+
+#ifdef Q_OS_UNIX
+inline void KNGlobal::initialDesktopEnvironment()
+{
+#ifdef Q_OS_MACX
+    return;
+#endif
+#ifdef Q_OS_LINUX
+    //Check Gnome Shell.
+    //Get system environment.
+    QStringList &&systemEnvironment=QProcess::systemEnvironment();
+    //If the desktop is gnome shell, then it should contains a DESKTOP_SESSION
+    //which is gnome.
+    for(auto item : systemEnvironment)
+    {
+        //Check out the line.
+        if(item.startsWith("DESKTOP_SESSION="))
+        {
+            //Get the data of the item line.
+            QString &&itemValue=item.mid(16).toLower();
+            //Chekc the item value.
+            if(itemValue=="gnome")
+            {
+                //Save the gnome shell.
+                m_desktopEnviroment=GnomeShell;
+                //Mission compelte.
+                return;
+            }
+            //We find nothing, but mission complete.
+            break;
+        }
+    }
+#endif
+}
+#endif
+
 QWidget *KNGlobal::mainWindow() const
 {
     return m_mainWindow;
@@ -271,6 +316,11 @@ QWidget *KNGlobal::mainWindow() const
 void KNGlobal::setMainWindow(QWidget *mainWindow)
 {
     m_mainWindow = mainWindow;
+}
+
+int KNGlobal::desktopEnvironment() const
+{
+    return m_desktopEnviroment;
 }
 
 void KNGlobal::setPreference(KNPreferencePlugin *preference)

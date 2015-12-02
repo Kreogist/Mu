@@ -65,6 +65,8 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     m_backend(nullptr),
     m_nowPlaying(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MiniPlayer")),
+    m_minimalX(0),
+    m_minimalY(0),
     m_progressPressed(false),
     m_pressed(false),
     m_freeze(false)
@@ -139,6 +141,7 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     m_lyrics->setObjectName("MiniLyrics");
     m_lyrics->setBackend(knMusicGlobal->lyricsManager()->backend());
     m_lyrics->setFixedSize(size());
+    m_lyrics->setAttribute(Qt::WA_TransparentForMouseEvents);
     knTheme->registerWidget(m_lyrics);
     //Configure the time line.
     m_moving->setEasingCurve(QEasingCurve::OutCubic);
@@ -169,8 +172,12 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
 
     //Register the theme.
     knTheme->registerWidget(this);
+    //If the system is UNIX-like, we have to check out the desktop environment.
+#ifdef Q_OS_UNIX
+    configureMinimalXAndY();
+#endif
     //Move to default position: top left of the desktop.
-    move(0, 0);
+    move(m_minimalX, m_minimalY);
 }
 
 void KNMusicMiniPlayer::setBackend(KNMusicBackend *backend)
@@ -357,9 +364,13 @@ void KNMusicMiniPlayer::loadConfigure()
     //Check the parameter, ensure that one part of the window must be inside
     //screen.
     //If it's not inside the screen, make the top of the window 0.
-    if(lastY<0 || lastY>currentScreenHeight)
+    if(lastX<m_minimalX || lastX>currentScreenWidth)
     {
-        lastY=0;
+        lastX=m_minimalX;
+    }
+    if(lastY<m_minimalY || lastY>currentScreenHeight)
+    {
+        lastY=m_minimalY;
     }
     //Set the geometry.
     move(lastX, lastY);
@@ -414,17 +425,17 @@ void KNMusicMiniPlayer::mouseMoveEvent(QMouseEvent *event)
         //Get the desktop widget.
         QDesktopWidget *desktop=qApp->desktop();
         //Check target position.
-        if(targetPosition.y()<DetectMargin)
+        if(targetPosition.y()<m_minimalY+DetectMargin)
         {
-            targetPosition.setY(0);
+            targetPosition.setY(m_minimalY);
         }
         else if(targetPosition.y()+height()+DetectMargin>desktop->height())
         {
             targetPosition.setY(desktop->height()-height());
         }
-        if(targetPosition.x()<DetectMargin)
+        if(targetPosition.x()<m_minimalX+DetectMargin)
         {
-            targetPosition.setX(0);
+            targetPosition.setX(m_minimalX);
         }
         else if(targetPosition.x()+width()+DetectMargin>desktop->width())
         {
@@ -495,6 +506,27 @@ inline KNOpacityButton *KNMusicMiniPlayer::generateButton(
     //Give back the button.
     return button;
 }
+
+#ifdef Q_OS_UNIX
+inline void KNMusicMiniPlayer::configureMinimalXAndY()
+{
+    //Get the shell information.
+    int desktopShell=knGlobal->desktopEnvironment();
+    //Check the validation of the desktop shell.
+    if(desktopShell==KNGlobal::NullShell)
+    {
+        //We cannot detect the shell, ignore the process.
+        return;
+    }
+    //Check the desktop shell.
+    switch(desktopShell)
+    {
+    case KNGlobal::GnomeShell:
+        m_minimalY=20;
+        break;
+    }
+}
+#endif
 
 inline void KNMusicMiniPlayer::thawAnime()
 {
