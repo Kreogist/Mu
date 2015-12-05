@@ -118,6 +118,7 @@ void KNMusicGlobal::retranslate()
     m_treeViewHeaderText[DiscCount]=tr("Disc Count");
     m_treeViewHeaderText[DiscNumber]=tr("Disc Number");
     m_treeViewHeaderText[Genre]=tr("Genre");
+    m_treeViewHeaderText[ISRC]=tr("ISRC");
     m_treeViewHeaderText[Kind]=tr("Kind");
     m_treeViewHeaderText[LastPlayed]=tr("Last Played");
     m_treeViewHeaderText[Plays]=tr("Plays");

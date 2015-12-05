@@ -48,6 +48,7 @@ namespace MusicUtil
         DiscCount,
         DiscNumber,
         Genre,
+        ISRC,
         Kind,
         LastPlayed,
         Plays,

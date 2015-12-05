@@ -39,8 +39,8 @@ QTextCodec *KNMusicTagId3v2::m_utf8Codec=nullptr;
 
 //Initial the map list.
 QHash<QString, int> KNMusicTagId3v2::m_frameIDIndex=QHash<QString, int>();
-QHash<int, QString> KNMusicTagId3v2::m_IndexFrameID3=QHash<int, QString>();
-QHash<int, QString> KNMusicTagId3v2::m_IndexFrameID4=QHash<int, QString>();
+QHash<int, QString> KNMusicTagId3v2::m_indexFrameID3=QHash<int, QString>();
+QHash<int, QString> KNMusicTagId3v2::m_indexFrameID4=QHash<int, QString>();
 bool KNMusicTagId3v2::m_useDefaultCodec=true;
 
 //Initial the unsynchronisation data.
@@ -78,22 +78,24 @@ KNMusicTagId3v2::KNMusicTagId3v2(QObject *parent) :
         m_frameIDIndex.insert("TRCK", TrackNumber);
         m_frameIDIndex.insert("TPOS", DiscNumber);
         m_frameIDIndex.insert("POPM", Rating);
+        m_frameIDIndex.insert("TSRC", ISRC);
         m_frameIDIndex.insert("TYER", Year);
 
-        m_IndexFrameID4.insert(Name           , "TIT2");
-        m_IndexFrameID4.insert(Artist         , "TPE1");
-        m_IndexFrameID4.insert(Album          , "TALB");
-        m_IndexFrameID4.insert(AlbumArtist    , "TPE2");
-        m_IndexFrameID4.insert(BeatsPerMinuate, "TBPM");
-        m_IndexFrameID4.insert(Category       , "TIT1");
-        m_IndexFrameID4.insert(Comments       , "COMM");
-        m_IndexFrameID4.insert(Composer       , "TCOM");
-        m_IndexFrameID4.insert(Description    , "TIT3");
-        m_IndexFrameID4.insert(Genre          , "TCON");
-        m_IndexFrameID4.insert(TrackNumber    , "TRCK");
-        m_IndexFrameID4.insert(DiscNumber     , "TPOS");
-        m_IndexFrameID4.insert(Rating         , "POPM");
-        m_IndexFrameID4.insert(Year           , "TYER");
+        m_indexFrameID4.insert(Name           , "TIT2");
+        m_indexFrameID4.insert(Artist         , "TPE1");
+        m_indexFrameID4.insert(Album          , "TALB");
+        m_indexFrameID4.insert(AlbumArtist    , "TPE2");
+        m_indexFrameID4.insert(BeatsPerMinuate, "TBPM");
+        m_indexFrameID4.insert(Category       , "TIT1");
+        m_indexFrameID4.insert(Comments       , "COMM");
+        m_indexFrameID4.insert(Composer       , "TCOM");
+        m_indexFrameID4.insert(Description    , "TIT3");
+        m_indexFrameID4.insert(Genre          , "TCON");
+        m_indexFrameID4.insert(TrackNumber    , "TRCK");
+        m_indexFrameID4.insert(DiscNumber     , "TPOS");
+        m_indexFrameID4.insert(Rating         , "POPM");
+        m_indexFrameID4.insert(ISRC           , "TSRC");
+        m_indexFrameID4.insert(Year           , "TYER");
 
         //Three chars frame ID for ID3v2.2 and previous.
         m_frameIDIndex.insert("TT2", Name);
@@ -109,22 +111,24 @@ KNMusicTagId3v2::KNMusicTagId3v2(QObject *parent) :
         m_frameIDIndex.insert("TRK", TrackNumber);
         m_frameIDIndex.insert("TPA", DiscNumber);
         m_frameIDIndex.insert("POP", Rating);
+        m_frameIDIndex.insert("TRC", ISRC);
         m_frameIDIndex.insert("TYE", Year);
 
-        m_IndexFrameID3.insert(Name           , "TT2");
-        m_IndexFrameID3.insert(Artist         , "TP1");
-        m_IndexFrameID3.insert(Album          , "TAL");
-        m_IndexFrameID3.insert(AlbumArtist    , "TP2");
-        m_IndexFrameID3.insert(BeatsPerMinuate, "TBP");
-        m_IndexFrameID3.insert(Category       , "TT1");
-        m_IndexFrameID3.insert(Comments       , "COM");
-        m_IndexFrameID3.insert(Composer       , "TCM");
-        m_IndexFrameID3.insert(Description    , "TT3");
-        m_IndexFrameID3.insert(Genre          , "TCO");
-        m_IndexFrameID3.insert(TrackNumber    , "TRK");
-        m_IndexFrameID3.insert(DiscNumber     , "TPA");
-        m_IndexFrameID3.insert(Rating         , "POP");
-        m_IndexFrameID3.insert(Year           , "TYE");
+        m_indexFrameID3.insert(Name           , "TT2");
+        m_indexFrameID3.insert(Artist         , "TP1");
+        m_indexFrameID3.insert(Album          , "TAL");
+        m_indexFrameID3.insert(AlbumArtist    , "TP2");
+        m_indexFrameID3.insert(BeatsPerMinuate, "TBP");
+        m_indexFrameID3.insert(Category       , "TT1");
+        m_indexFrameID3.insert(Comments       , "COM");
+        m_indexFrameID3.insert(Composer       , "TCM");
+        m_indexFrameID3.insert(Description    , "TT3");
+        m_indexFrameID3.insert(Genre          , "TCO");
+        m_indexFrameID3.insert(TrackNumber    , "TRK");
+        m_indexFrameID3.insert(DiscNumber     , "TPA");
+        m_indexFrameID3.insert(Rating         , "POP");
+        m_indexFrameID3.insert(ISRC           , "TRC");
+        m_indexFrameID3.insert(Year           , "TYE");
 
         //Initial unsynchronisation data.
         //Using forced conversation to ignore the ambiguous calling.
@@ -272,7 +276,7 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
     //Generate the item mapper.
     //Get the frame matcher.
     const QHash<int, QString> &frameMatcher=
-            (header.major>2)?m_IndexFrameID4:m_IndexFrameID3;
+            (header.major>2)?m_indexFrameID4:m_indexFrameID3;
     //Add all the text labels to detail frames if it's not empty.
     for(int i=0; i<MusicDataCount; i++)
     {
@@ -399,7 +403,6 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
     updatedTagFile.write(tagRawData);
     //Generate the music data cache, called turbo cache.
     char *turboCache=new char[DataCacheSize];
-    //char turboCache[DataCacheSize];
     //Copy the music data from the original music file, copy the
     //MusicDataCacheSize bytes once, until there's no bytes to copy.
     qint64 bytesRead=musicFile.read(turboCache, DataCacheSize);

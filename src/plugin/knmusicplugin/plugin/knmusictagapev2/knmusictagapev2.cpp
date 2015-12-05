@@ -46,6 +46,7 @@ KNMusicTagApev2::KNMusicTagApev2(QObject *parent) :
         m_keyIndex.insert("COMMENT", Comments);
         m_keyIndex.insert("YEAR", Year);
         m_keyIndex.insert("ALBUM ARTIST", AlbumArtist);
+        m_keyIndex.insert("ISRC", ISRC);
         m_keyIndex.insert("GENRE", Genre);
 
         //Insert the string and key to index-key map hash group.
@@ -57,6 +58,7 @@ KNMusicTagApev2::KNMusicTagApev2(QObject *parent) :
         m_indexKey.insert(Comments, "COMMENT");
         m_indexKey.insert(Year, "YEAR");
         m_indexKey.insert(AlbumArtist, "ALBUM ARTIST");
+        m_indexKey.insert(ISRC, "ISRC");
         m_indexKey.insert(Genre, "GENRE");
     }
 }

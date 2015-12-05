@@ -24,7 +24,7 @@
 #include <QDebug>
 
 #define MajorVersion 3
-#define MinorVersion 0
+#define MinorVersion 1
 #define MaxOperateCount 400
 
 KNJsonDatabase::KNJsonDatabase(QObject *parent) :

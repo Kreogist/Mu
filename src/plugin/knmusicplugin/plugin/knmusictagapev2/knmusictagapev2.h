@@ -21,9 +21,19 @@
 
 #include "knmusictagparser.h"
 
+/*
+ * There's no official APEv2 and APEv1 documents. We find another one which is
+ * pretty good from hydrogenaud.io:
+ * Structure: http://wiki.hydrogenaud.io/index.php?title=APEv2_specification
+ * Header & Footer: http://wiki.hydrogenaud.io/index.php?title=APE_Tags_Header
+ * Tag Item: http://wiki.hydrogenaud.io/index.php?title=APE_Tag_Item
+ */
+
 /*!
  * \brief The KNMusicTagApev2 class is used to parse APEv1 and APEv2 tag. It can
- * automatically detect the APEv1 and APEv2.
+ * automatically detect the APEv1 and APEv2. The parser support write APEv2 tag
+ * to the music file.\n
+ * Notice that APEv1 or APEv2 doesn't support insert album art.
  */
 class KNMusicTagApev2 : public KNMusicTagParser
 {

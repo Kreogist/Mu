@@ -23,6 +23,14 @@
 
 #include "knmusictagparser.h"
 
+/*
+ * The official definiation of those version are here:
+ * ID3v2.0-ID2v2.2:    http://id3.org/id3v2-00
+ * ID3v2.3:            http://id3.org/id3v2.3.0
+ * ID3v2.4: Frame:     http://id3.org/id3v2.4.0-frames
+ *          Structure: http://id3.org/id3v2.4.0-structure
+ */
+
 /*!
  * \brief The KNMusicTagId3v2 class provides a tag parser to parse and write tag
  * information to music file in ID3v2 format tag. The parser can automatically
@@ -447,7 +455,7 @@ private:
     static QByteArray m_unsynchronisationRaw, m_unsynchronisationTo;
     //The frame hash list.
     static QHash<QString, int> m_frameIDIndex;
-    static QHash<int, QString> m_IndexFrameID3, m_IndexFrameID4;
+    static QHash<int, QString> m_indexFrameID3, m_indexFrameID4;
     //Use the system default codec, for default it will be true.
     //Because most of codec is compatible with ISO-8859-1.
     static bool m_useDefaultCodec;
