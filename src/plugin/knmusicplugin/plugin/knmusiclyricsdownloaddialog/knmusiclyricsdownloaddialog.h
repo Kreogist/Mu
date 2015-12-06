@@ -22,6 +22,11 @@
 #include "knmusiclyricsdownloaddialogbase.h"
 
 class KNMusicLyricsDownloadWidget;
+/*!
+ * \brief The KNMusicLyricsDownloadDialog class provides the lyrics downlaod
+ * dialog with all official SDK widgets.\n
+ * You can treat this as a example of download dialog base.
+ */
 class KNMusicLyricsDownloadDialog : public KNMusicLyricsDownloadDialogBase
 {
     Q_OBJECT
@@ -41,9 +46,6 @@ public slots:
      */
     void setDetailInfo(const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
 
-private slots:
-    void onActionExpand();
-
 protected:
     /*!
      * \brief Reimplemented from KNMusicLyricsDownloadDialogBase::okayPressed().
@@ -55,6 +57,9 @@ protected:
      * KNMusicLyricsDownloadDialogBase::cancelPressed().
      */
     void cancelPressed() Q_DECL_OVERRIDE;
+
+private slots:
+    void onActionExpand();
 
 private:
     inline void resetPreviewThread();

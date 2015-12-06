@@ -30,21 +30,60 @@ class QPushButton;
 class KNLabelLineEdit;
 class KNMusicLyricsDownloadList;
 class KNMusicOnlineLyricsDownloader;
+/*!
+ * \brief The KNMusicLyricsDownloadWidget class is the content of the official
+ * lyrics download dialog.
+ */
 class KNMusicLyricsDownloadWidget : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct KNMusicLyricsDownloadWidget widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLyricsDownloadWidget(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When user clicked the search, this signal will be emitted for
+     * requiring the message box to expand.
+     */
     void requireExpand();
+
+    /*!
+     * \brief When user clicked cancel, this signal will be emitted for the
+     * message box to launch cancel slot.
+     */
     void requireCancel();
+
+    /*!
+     * \brief When there's any lyrics valid, this signal will be emitted to show
+     * the okay button.
+     */
     void requireShowOkayButton();
+
+    /*!
+     * \brief requireHideOkayButton
+     */
     void requireHideOkayButton();
+
+    /*!
+     * \brief requireDownloadLyrics
+     * \param detailInfo
+     */
     void requireDownloadLyrics(KNMusicDetailInfo detailInfo);
 
 public slots:
+    /*!
+     * \brief setDetailInfo
+     * \param detailInfo
+     */
     void setDetailInfo(const KNMusicDetailInfo &detailInfo);
+
+    /*!
+     * \brief saveSelectLyrics
+     */
     void saveSelectLyrics();
 
 private slots:

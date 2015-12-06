@@ -21,21 +21,52 @@
 
 #include "knmusicdetaildialogpanel.h"
 
+class QLabel;
 class KNCircleIconButton;
+class KNLabelLineEdit;
+/*!
+ * \brief The KNMusicDetailTagEditPanel class provide the tag editor panel
+ * widget.\n
+ * It will have two modes: Basic and Advanced. In the basic mode, you can simply
+ * edit all kinds of tags without worry about which kind of tag you are editing.
+ * In the advanced mode, you can edit definitly one type of the tag.
+ */
 class KNMusicDetailTagEditPanel : public KNMusicDetailDialogPanel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct KNMusicDetailTagEditPanel widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicDetailTagEditPanel(QWidget *parent = 0);
 
+    /*!
+     * \brief Reimplemented from KNMusicDetailDialogPanel::tabButton().
+     */
     QAbstractButton *tabButton();
 
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicDetailDialogPanel::setAnalysisItem().
+     */
     void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item);
 
+private slots:
+    void retranslate();
+
 private:
+    enum DetailRows
+    {
+        NameRow,
+        DetailRowsCount
+    };
+
+    inline KNLabelLineEdit *generateLineEdit();
+    QLabel *m_rowLabel[DetailRowsCount];
+    KNLabelLineEdit *m_rowEditor[DetailRowsCount];
     KNCircleIconButton *m_button;
 
 };

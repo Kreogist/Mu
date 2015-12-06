@@ -51,13 +51,13 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     m_proxyModel(nullptr),
     m_model(nullptr),
     m_albumDetail(nullptr),
-    m_spacing(30),
-    m_itemMinimalWidth(124),
-    minimalWidth(m_itemMinimalWidth+m_spacing),
+    m_itemWidth(138),
+    m_itemMinimalSpacing(20),
+    m_minimalWidth(m_itemMinimalSpacing+m_itemWidth),
     m_lineCount(0),
     m_textSpacing(5),
     m_itemHeight(154),
-    m_itemWidth(134),
+    m_spacing(30),
     m_itemSpacingHeight(m_spacing+m_itemHeight),
     m_itemSpacingWidth(m_spacing+m_itemWidth),
     m_maxColumnCount(0)
@@ -79,9 +79,27 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
 
     //Link the scrolling event.
     connect(verticalScrollBar(), &QScrollBar::valueChanged,
-                this, &KNMusicAlbumView::onActionScrolling);
+            this, &KNMusicAlbumView::onActionScrolling);
+
+    //The icon size should be the item width.
     //Update the painting parameters.
     updateUIElements();
+    //Generate the album art shadow pixmap.
+    int shadowSize=m_itemWidth+(m_shadowIncrease<<1);
+    //Update album art shadow.
+    m_albumArtShadow=generateShadow(shadowSize, shadowSize);
+    //Update the album base.
+    m_scaledAlbumBase=m_albumBase.scaled(m_itemWidth,
+                                         m_itemWidth,
+                                         Qt::IgnoreAspectRatio,
+                                         Qt::SmoothTransformation);
+    //Update the no album art.
+    m_scaledNoAlbumArt=m_noAlbumArt.scaled(m_itemWidth,
+                                           m_itemWidth,
+                                           Qt::IgnoreAspectRatio,
+                                           Qt::SmoothTransformation);
+    //The height of the item should be a item icon size and two text lines.
+    m_itemHeight=m_itemWidth+(fontMetrics().height()<<1);
 
     //Link the search.
     connect(knMusicGlobal->search(), &KNMusicSearchBase::requireSearch,
@@ -651,39 +669,24 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
 inline void KNMusicAlbumView::updateUIElements()
 {
     //Get the usable width.
-    int usableWidth=width()-m_spacing;
+    int usableWidth=viewport()->width();
     //When the usable width is lesser than the minimal width,
-    if(usableWidth<minimalWidth)
+    if(usableWidth<m_minimalWidth)
     {
         //Force set the max column count to 1.
         m_maxColumnCount=1;
-        //Item width will be the whole width.
-        m_itemWidth=width();
+        //Reset the spacing.
+        m_spacing=30;
     }
     else
     {
         //Calculate how many column we can put in one row(m_maxColumnCount).
-        m_maxColumnCount=usableWidth/minimalWidth;
-        //Calculate the real item width, it's must be larger than minimal width.
-        m_itemWidth=usableWidth/m_maxColumnCount-m_spacing;
+        m_maxColumnCount=(usableWidth-m_itemMinimalSpacing)/m_minimalWidth;
+        //Calculate the new spacing.
+        m_spacing=(usableWidth-m_itemWidth*m_maxColumnCount)/
+                    (m_maxColumnCount+1);
     }
-    //The icon size should be the item width.
-    //Generate the album art shadow pixmap.
-    int shadowSize=m_itemWidth+(m_shadowIncrease<<1);
-    //Update album art shadow.
-    m_albumArtShadow=generateShadow(shadowSize, shadowSize);
-    //Update the album base.
-    m_scaledAlbumBase=m_albumBase.scaled(m_itemWidth,
-                                         m_itemWidth,
-                                         Qt::IgnoreAspectRatio,
-                                         Qt::SmoothTransformation);
-    //Update the no album art.
-    m_scaledNoAlbumArt=m_noAlbumArt.scaled(m_itemWidth,
-                                           m_itemWidth,
-                                           Qt::IgnoreAspectRatio,
-                                           Qt::SmoothTransformation);
-    //The height of the item should be a item icon size and two text lines.
-    m_itemHeight=m_itemWidth+(fontMetrics().height()<<1);
+
     //Calcualte the spacing item width and height.
     m_itemSpacingHeight=m_spacing+m_itemHeight;
     m_itemSpacingWidth=m_spacing+m_itemWidth;
