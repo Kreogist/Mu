@@ -26,10 +26,20 @@ class KNDropProxyContainer;
 class KNMusicAlbumView;
 class KNMusicAlbumModel;
 class KNMusicAlbumDetail;
+/*!
+ * \brief The KNMusicLibraryAlbumTab class is one of the music category tab. It
+ * is specific designed for album tab.\n
+ * It contains a category model, a category view and album detail display
+ * widget. You should set the.
+ */
 class KNMusicLibraryAlbumTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryAlbumTab widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLibraryAlbumTab(QWidget *parent = 0);
 
     /*!
@@ -65,6 +75,12 @@ public slots:
      * \brief Reimplemented from KNMusicLibraryCategoryTab::setLibraryModel().
      */
     void setLibraryModel(KNMusicLibraryModel *model) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Set the album art hash to get the image of the album.
+     * \param hashAlbumArt The album art key-image hash map.
+     */
+    void setAlbumArtHash(QHash<QString, QVariant> *hashAlbumArt);
 
 protected:
 

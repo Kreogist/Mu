@@ -181,6 +181,13 @@ void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
     m_albumDetail->setLibraryModel(m_libraryModel);
 }
 
+void KNMusicLibraryAlbumTab::setAlbumArtHash(
+        QHash<QString, QVariant> *hashAlbumArt)
+{
+    //Give the hash album art to album detail.
+    m_albumDetail->setAlbumArtHash(hashAlbumArt);
+}
+
 void KNMusicLibraryAlbumTab::retranslate()
 {
     //Update the tab text.

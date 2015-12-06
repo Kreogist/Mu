@@ -36,11 +36,28 @@ class KNSideShadowWidget;
 class KNScrollLabel;
 class KNMusicAlbumListView;
 class KNMusicLibraryModel;
+/*!
+ * \brief The KNMusicAlbumDetail widget can display a specific album detail
+ * information and it could also contains the ability to work as a music tree
+ * view.\n
+ * This is the official album detail display widget. It should work with album
+ * view.
+ */
 class KNMusicAlbumDetail : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicAlbumDetail widget with given parent and music
+     * tab.
+     * \param parent The parent widget pointer.
+     * \param tab The album music tab pointer.
+     */
     explicit KNMusicAlbumDetail(QWidget *parent = 0, KNMusicTab *tab = 0);
+
+    /*!
+     * \brief updateAlbumCaptions
+     */
     void updateAlbumCaptions();
     void updateAlbumArtwork();
 
@@ -56,6 +73,7 @@ public slots:
     void foldAlbumDetail();
     void flyAwayAlbumDetail();
     void scrollToSourceRow(const int &row);
+    void setAlbumArtHash(QHash<QString, QVariant> *hashAlbumArt);
     void onActionAlbumArtUpdate(const QModelIndex &updatedIndex);
     void onActionAlbumRemoved(const QModelIndex &removedIndex);
 
@@ -130,6 +148,7 @@ private:
                        *m_showAlbumArtLabel, *m_showAlbumContent,
                        *m_hideAlbumArtLabel, *m_hideAlbumContent;
 
+    QHash<QString, QVariant> *m_hashAlbumArt;
     int m_iconSize, m_panelSize;
     bool m_backgroundAnime, m_pressed;
 };

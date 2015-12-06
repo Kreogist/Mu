@@ -132,6 +132,12 @@ public:
      */
     void installCategoryModel(KNMusicCategoryModelBase *model);
 
+    /*!
+     * \brief Get the album art hash map pointer.
+     * \return The album art hash map pointer.
+     */
+    QHash<QString, QVariant> *hashAlbumArt();
+
 signals:
     /*!
      * \brief When the library model has the first record, this signal will be
@@ -188,7 +194,7 @@ private:
     inline KNMusicDetailInfo generateDetailInfo(const QJsonArray &dataArray);
     inline QJsonArray generateDataArray(const KNMusicDetailInfo &detailInfo);
     QLinkedList<KNMusicCategoryModelBase *> m_categoryModels;
-    QHash<QString, QVariant> m_hashAlbumArt;
+    QHash<QString, QVariant> m_hashAlbumArt, m_scaledHashAlbumArt;
     QHash<QString, int> m_hashAlbumArtCounter;
     QThread m_searchThread, m_analysisThread, m_imageThread;
     KNJsonDatabase *m_database;

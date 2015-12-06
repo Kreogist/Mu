@@ -51,8 +51,8 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     m_proxyModel(nullptr),
     m_model(nullptr),
     m_albumDetail(nullptr),
-    m_itemWidth(138),
-    m_itemMinimalSpacing(20),
+    m_itemWidth(135),
+    m_itemMinimalSpacing(30),
     m_minimalWidth(m_itemMinimalSpacing+m_itemWidth),
     m_lineCount(0),
     m_textSpacing(5),
@@ -618,11 +618,6 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
     }
     else
     {
-        //Scaled the album art image to item width and keep the aspect ratio.
-        albumArtImage=albumArtImage.scaled(QSize(m_itemWidth,
-                                                 m_itemWidth),
-                                           Qt::KeepAspectRatio,
-                                           Qt::SmoothTransformation);
         //Draw the album art to the specific position.
         painter.drawPixmap(QPoint(x+((m_itemWidth-albumArtImage.width())>>1),
                                   y+((m_itemWidth-albumArtImage.height())>>1)),

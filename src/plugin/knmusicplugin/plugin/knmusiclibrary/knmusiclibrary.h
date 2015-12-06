@@ -30,10 +30,19 @@ class KNMusicLibraryModel;
 class KNMusicLibraryTab;
 class KNMusicCategoryModelBase;
 class KNMusicLibraryCategoryTab;
+/*!
+ * \brief The KNMusicLibrary class is the official plugin for provide a full
+ * functional music library. All the plugins for music library can be treated as
+ * an ofiicial plugin example.
+ */
 class KNMusicLibrary : public KNMusicLibraryBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibrary object with given parent object.
+     * \param parent The parent object.
+     */
     explicit KNMusicLibrary(QObject *parent = 0);
     ~KNMusicLibrary();
 

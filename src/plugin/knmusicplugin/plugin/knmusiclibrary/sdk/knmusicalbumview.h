@@ -89,8 +89,8 @@ public slots:
     void clearSelection();
 
     /*!
-     * \brief setAlbumDetail
-     * \param albumDetail
+     * \brief Set the album detail widget.
+     * \param albumDetail The album detail widget pointer.
      */
     void setAlbumDetail(KNMusicAlbumDetail *albumDetail);
 

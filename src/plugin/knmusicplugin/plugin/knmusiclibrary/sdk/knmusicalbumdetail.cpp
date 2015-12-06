@@ -71,6 +71,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_showAlbumContent(generateAnime(m_albumContent)),
     m_hideAlbumArtLabel(generateAnime(m_albumArt)),
     m_hideAlbumContent(generateAnime(m_albumContent)),
+    m_hashAlbumArt(nullptr),
     m_iconSize(0),
     m_panelSize(0),
     m_backgroundAnime(true),
@@ -319,6 +320,12 @@ void KNMusicAlbumDetail::flyAwayAlbumDetail()
 void KNMusicAlbumDetail::scrollToSourceRow(const int &row)
 {
     m_albumListView->scrollToSourceRow(row);
+}
+
+void KNMusicAlbumDetail::setAlbumArtHash(QHash<QString, QVariant> *hashAlbumArt)
+{
+    //Save the pointer.
+    m_hashAlbumArt=hashAlbumArt;
 }
 
 void KNMusicAlbumDetail::onActionAlbumArtUpdate(const QModelIndex &updatedIndex)
@@ -621,11 +628,26 @@ inline void KNMusicAlbumDetail::stopShowHideArtworkAnimations()
 void KNMusicAlbumDetail::updateAlbumArtwork()
 {
     //Check the index is valid.
-    if(m_currentIndex.isValid())
+    if(m_currentIndex.isValid() && m_hashAlbumArt)
     {
+        //Get the artwork key.
+        QString &&albumHashKey=
+                m_currentIndex.data(
+                    KNMusicAlbumModel::CategoryArtworkKeyRole).toString();
+        //Check album hash key.
+        if(albumHashKey.isEmpty())
+        {
+            //Set the album art.
+            m_albumArt->setAlbumArt(knMusicGlobal->noAlbumArt());
+        }
+        //Get the variant image.
+        QPixmap &&albumArtImage=
+                m_hashAlbumArt->value(albumHashKey,
+                                      QVariant()).value<QPixmap>();
         //Set the album art.
-        m_albumArt->setAlbumArt(
-                    m_currentIndex.data(Qt::DecorationRole).value<QPixmap>());
+        m_albumArt->setAlbumArt(albumArtImage.isNull()?
+                                    knMusicGlobal->noAlbumArt():
+                                    albumArtImage);
     }
 }
 

@@ -74,6 +74,11 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_categoryModel[TabGenres]=new KNMusicGenreModel(this);
     m_categoryModel[TabGenres]->setCategoryColumn(Genre);
     m_libraryTabs[TabGenres]=new KNMusicLibraryGenreTab;
+    //Configure the album art tabs.
+    KNMusicLibraryAlbumTab *albumTab=
+            static_cast<KNMusicLibraryAlbumTab *>(m_libraryTabs[TabAlbums]);
+    //Set the album art hash.
+    albumTab->setAlbumArtHash(m_libraryModel->hashAlbumArt());
 
     //Generate the show in action list.
     QList<QAction *> showInActionList;

@@ -31,6 +31,7 @@
 KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     KNMusicModel(parent),
     m_hashAlbumArt(QHash<QString, QVariant>()),
+    m_scaledHashAlbumArt(QHash<QString, QVariant>()),
     m_database(nullptr),
     m_searcher(new KNMusicSearcher),
     m_analysisQueue(new KNMusicAnalysisQueue),
@@ -55,7 +56,7 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
             Qt::QueuedConnection);
 
     //Move the image manager to working thread.
-    m_imageManager->setHashAlbumArt(&m_hashAlbumArt);
+    m_imageManager->setHashAlbumArt(&m_hashAlbumArt, &m_scaledHashAlbumArt);
     m_imageManager->moveToThread(&m_imageThread);
     //Link the signal from the library model.
     connect(this, &KNMusicLibraryModel::requireRecoverImage,
@@ -485,6 +486,11 @@ inline QJsonArray KNMusicLibraryModel::generateDataArray(
     return dataArray;
 }
 
+QHash<QString, QVariant> *KNMusicLibraryModel::hashAlbumArt()
+{
+    return &m_hashAlbumArt;
+}
+
 KNJsonDatabase *KNMusicLibraryModel::database() const
 {
     return m_database;
@@ -493,7 +499,7 @@ KNJsonDatabase *KNMusicLibraryModel::database() const
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)
 {
     //Set hash list to category model.
-    model->setHashAlbumArt(&m_hashAlbumArt);
+    model->setHashAlbumArt(&m_scaledHashAlbumArt);
     //Append the model to the category models.
     m_categoryModels.append(model);
 }

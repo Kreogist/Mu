@@ -29,7 +29,9 @@
 KNMusicLibraryImageManager::KNMusicLibraryImageManager(QObject *parent) :
     QObject(parent),
     m_analysisQueue(QLinkedList<AnalysisQueueItem>()),
-    m_hashAlbumArt(nullptr)
+    m_imageFolderPath(QString()),
+    m_hashAlbumArt(nullptr),
+    m_scaledHashAlbumArt(nullptr)
 {
     //Link the analysis request signal and response slot in queue connection.
     connect(this, &KNMusicLibraryImageManager::requireAnalysisNext,
@@ -107,8 +109,7 @@ void KNMusicLibraryImageManager::recoverAlbumArt(const QStringList &hashList)
                 if(!currentPixmap.isNull())
                 {
                     //Insert the image to the hash list.
-                    m_hashAlbumArt->insert(i.completeBaseName(),
-                                           QVariant(currentPixmap));
+                    insertImage(i.completeBaseName(), currentPixmap);
                     //Continue to next file.
                     continue;
                 }
@@ -152,6 +153,24 @@ void KNMusicLibraryImageManager::analysisNext()
     emit requireAnalysisNext();
 }
 
+inline void KNMusicLibraryImageManager::insertImage(const QString &hashKey,
+                                                    const QPixmap &pixmap)
+{
+    //We won't do pointer check here.
+    m_hashAlbumArt->insert(hashKey, QVariant(pixmap));
+    m_scaledHashAlbumArt->insert(hashKey,
+                                 QVariant(pixmap.scaled(
+                                     138,
+                                     138,
+                                     Qt::KeepAspectRatio,
+                                     Qt::SmoothTransformation)));
+}
+
+QHash<QString, QVariant> *KNMusicLibraryImageManager::scaledHashAlbumArt() const
+{
+    return m_scaledHashAlbumArt;
+}
+
 QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
 {
     //Calculate the meta data of the image(MD4 of image content).
@@ -175,8 +194,7 @@ QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
     {
         //If this image is first time exist in the hash list, save the image
         //first.
-        m_hashAlbumArt->insert(imageHashKey,
-                               QVariant(QPixmap::fromImage(image)));
+        insertImage(imageHashKey, QPixmap::fromImage(image));
         //Ask to save the image.
         emit requireSaveImage(imageHashKey);
     }
@@ -206,7 +224,10 @@ QHash<QString, QVariant> *KNMusicLibraryImageManager::hashAlbumArt() const
 }
 
 void KNMusicLibraryImageManager::setHashAlbumArt(
-        QHash<QString, QVariant> *hashAlbumArt)
+        QHash<QString, QVariant> *hashAlbumArt,
+        QHash<QString, QVariant> *scaledHashAlbumArt)
 {
+    //Save the two pointer.
     m_hashAlbumArt = hashAlbumArt;
+    m_scaledHashAlbumArt = scaledHashAlbumArt;
 }

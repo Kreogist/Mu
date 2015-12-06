@@ -21,6 +21,10 @@
 
 #include "knmusiccategorymodelbase.h"
 
+/*!
+ * \brief The KNMusicAlbumModel class is the specific category model for albums.
+ * It could store all the basic information of an album.
+ */
 class KNMusicAlbumModel : public KNMusicCategoryModelBase
 {
     Q_OBJECT
