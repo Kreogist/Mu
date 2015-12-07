@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+using namespace MusicUtil;
+
 class QAbstractButton;
 /*!
  * \brief The KNMusicDetailDialogPanel class provides the basic functions of a
@@ -57,7 +59,7 @@ public slots:
      * basic parameters.
      * \param item The analysis item. It will be provided by the detail dialog.
      */
-    virtual void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)=0;
+    virtual void setAnalysisItem(const KNMusicAnalysisItem &item)=0;
 };
 
 #endif // KNMUSICDETAILDIALOGPANEL_H

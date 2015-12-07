@@ -200,10 +200,16 @@ public:
     QStringList suffixList() const;
 
     /*!
-     * \brief Get all the avaliable music list file suffixs.
+     * \brief Get all the avaliable music list file suffixes.
      * \return The suffix list.
      */
     QStringList listSuffixList() const;
+
+    /*!
+     * \brief Get the indexed genre list.
+     * \return The index genre list.
+     */
+    QStringList genreList() const;
 
     /*!
      * \brief Get the default album art image when there's no album art.

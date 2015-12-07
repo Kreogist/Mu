@@ -25,8 +25,6 @@
 
 #include "knmusicdetailpaneloverview.h"
 
-using namespace MusicUtil;
-
 KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     KNMusicDetailDialogPanel(parent),
     m_pathCaption(new QLabel(this)),
@@ -87,11 +85,13 @@ QAbstractButton *KNMusicDetailPanelOverview::tabButton()
 }
 
 void KNMusicDetailPanelOverview::setAnalysisItem(
-        const MusicUtil::KNMusicAnalysisItem &item)
+        const KNMusicAnalysisItem &item)
 {
     //Get the detail info.
     const KNMusicDetailInfo &detailInfo=item.detailInfo;
     //Set the analysis item to the label.
+    m_information[DetailPlayCount]->setText(
+                detailInfo.textLists[Plays].toString());
     m_information[DetailYear]->setText(detailInfo.textLists[Year].toString());
     m_information[DetailGenre]->setText(detailInfo.textLists[Genre].toString());
     m_information[DetailKind]->setText(detailInfo.textLists[Kind].toString());
@@ -109,6 +109,7 @@ void KNMusicDetailPanelOverview::setAnalysisItem(
 void KNMusicDetailPanelOverview::retranslate()
 {
     //Update the captions.
+    m_caption[DetailPlayCount]->setText(tr("Play Count"));
     m_caption[DetailYear]->setText(tr("Year"));
     m_caption[DetailGenre]->setText(tr("Genre"));
     m_caption[DetailKind]->setText(tr("Kind"));

@@ -56,12 +56,20 @@ public:
     explicit KNMusicAlbumDetail(QWidget *parent = 0, KNMusicTab *tab = 0);
 
     /*!
-     * \brief updateAlbumCaptions
+     * \brief Update the album captions if any of it is changed.
      */
     void updateAlbumCaptions();
+
+    /*!
+     * \brief Update the album artwork when the artwork is changed.
+     */
     void updateAlbumArtwork();
 
 signals:
+    /*!
+     * \brief When the user click on any other point outside the
+     * \param indexPoint
+     */
     void requireShowAlbum(QPoint indexPoint);
     void requireClearSelection();
 

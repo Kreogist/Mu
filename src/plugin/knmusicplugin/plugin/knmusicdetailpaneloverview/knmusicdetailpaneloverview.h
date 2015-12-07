@@ -50,8 +50,7 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicDetailDialogPanel::setAnalysisItem.
      */
-    void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)
-    Q_DECL_OVERRIDE;
+    void setAnalysisItem(const KNMusicAnalysisItem &item) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
@@ -60,6 +59,7 @@ private slots:
 private:
     enum DetailInformation
     {
+        DetailPlayCount,
         DetailYear,
         DetailGenre,
         DetailKind,

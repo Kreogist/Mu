@@ -22,6 +22,7 @@
 #include "knmusicdetaildialogpanel.h"
 
 class QLabel;
+class QComboBox;
 class KNCircleIconButton;
 class KNLabelLineEdit;
 /*!
@@ -52,7 +53,7 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicDetailDialogPanel::setAnalysisItem().
      */
-    void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item);
+    void setAnalysisItem(const KNMusicAnalysisItem &item);
 
 private slots:
     void retranslate();
@@ -61,14 +62,36 @@ private:
     enum DetailRows
     {
         NameRow,
-        DetailRowsCount
+        ArtistRow,
+        AlbumRow,
+        AlbumArtistRow,
+        ComposerRow,
+        CommentRow,
+        DetailRowCount
+    };
+    enum LeftColumnRows
+    {
+        GenreRow,
+        RatingRow,
+        BpmRow,
+        LeftColumnRowCount
+    };
+    enum RightColumnRows
+    {
+        YearRow,
+        TrackRow,
+        DiscRow,
+        RightColumnRowCount
     };
 
     inline KNLabelLineEdit *generateLineEdit();
-    QLabel *m_rowLabel[DetailRowsCount];
-    KNLabelLineEdit *m_rowEditor[DetailRowsCount];
+    QLabel *m_rowLabel[DetailRowCount], *m_leftRowLabel[LeftColumnRowCount],
+           *m_rightRowLabel[RightColumnRowCount];
+    KNLabelLineEdit *m_rowEditor[DetailRowCount], *m_trackEditor[2],
+                    *m_discEditor[2], *m_yearEditor, *m_bpmEditor;
+    QLabel *m_trackEditorOf, *m_discEditorOf;
+    QComboBox *m_genreEditor;
     KNCircleIconButton *m_button;
-
 };
 
 #endif // KNMUSICDETAILTAGEDITPANEL_H

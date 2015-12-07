@@ -21,10 +21,13 @@
 
 #include "knmusicdetaildialogpanel.h"
 
-class KNCircleIconButton;
-
 class QLabel;
+class KNCircleIconButton;
 class KNOpacityAnimeButton;
+/*!
+ * \brief The KNMusicDetailPanelArtwork class provides a single panel page for
+ * detail dialog to edit and save the single file's album art cover.
+ */
 class KNMusicDetailPanelArtwork : public KNMusicDetailDialogPanel
 {
     Q_OBJECT
@@ -46,8 +49,7 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicDetailDialogPanel::setAnalysisItem.
      */
-    void setAnalysisItem(const MusicUtil::KNMusicAnalysisItem &item)
-    Q_DECL_OVERRIDE;
+    void setAnalysisItem(const KNMusicAnalysisItem &item) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

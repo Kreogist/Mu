@@ -476,6 +476,11 @@ QStringList KNMusicGlobal::listSuffixList() const
     return m_listSuffixs;
 }
 
+QStringList KNMusicGlobal::genreList() const
+{
+    return m_indexedGenres;
+}
+
 KNMusicNowPlayingBase *KNMusicGlobal::nowPlaying() const
 {
     return m_nowPlaying;
