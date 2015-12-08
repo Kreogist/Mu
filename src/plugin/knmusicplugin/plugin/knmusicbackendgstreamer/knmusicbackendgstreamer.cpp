@@ -72,5 +72,5 @@ int KNMusicBackendGStreamer::volumeLevel() const
 
 qreal KNMusicBackendGStreamer::smartVolumeScale() const
 {
-    return 0.25;
+    return 0.1;
 }

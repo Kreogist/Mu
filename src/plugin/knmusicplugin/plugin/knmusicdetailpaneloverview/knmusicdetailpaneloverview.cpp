@@ -91,7 +91,8 @@ void KNMusicDetailPanelOverview::setAnalysisItem(
     const KNMusicDetailInfo &detailInfo=item.detailInfo;
     //Set the analysis item to the label.
     m_information[DetailPlayCount]->setText(
-                detailInfo.textLists[Plays].toString());
+                QString::number(
+                    detailInfo.textLists[Plays].toString().toLongLong()));
     m_information[DetailYear]->setText(detailInfo.textLists[Year].toString());
     m_information[DetailGenre]->setText(detailInfo.textLists[Genre].toString());
     m_information[DetailKind]->setText(detailInfo.textLists[Kind].toString());

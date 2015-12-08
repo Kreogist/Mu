@@ -44,7 +44,6 @@ KNMusicBackendGStreamerThread::KNMusicBackendGStreamerThread(QObject *parent) :
     m_sectionSet(false)
 {
     //Configure the timer.
-    m_tick->setInterval(16);
     connect(m_tick, &QTimer::timeout,
             this, &KNMusicBackendGStreamerThread::onActionTick);
     //Link the process event.
@@ -116,18 +115,15 @@ void KNMusicBackendGStreamerThread::stop()
     {
         //Set the state to be play.
         //And get the state changed result.
-        GstStateChangeReturn stateResult=
-                gst_element_set_state(m_playbin, GST_STATE_PAUSED);
-        //Check out the result.
-        if (GST_STATE_CHANGE_FAILURE != stateResult)
-        {
-            //Stop ticking.
-            m_tick->stop();
-            //Reset the position.
-            setPosition(0);
-            //Then the result is success, we can change the state.
-            setPlayingState(MusicUtil::Stopped);
-        }
+        gst_element_set_state(m_playbin, GST_STATE_PAUSED);
+        //Stop ticking.
+        m_tick->stop();
+        //Emit the position changed signal.
+        emit positionChanged(0);
+        //Reset the position.
+        setPosition(0);
+        //Then the result is success, we can change the state.
+        setPlayingState(MusicUtil::Stopped);
     }
 }
 
@@ -334,6 +330,15 @@ void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
     //Check out the message type
     switch (messageType)
     {
+    case GST_MESSAGE_EOS:
+    {
+        //The pipeline stopped playing, stop the pipeline, emit finished signal.
+        //Stop the pipeline
+        stop();
+        //Emit finished signal.
+        emit finished();
+        break;
+    }
     case GST_MESSAGE_ERROR:
     {
         //File will be loaded failed.
@@ -350,7 +355,8 @@ gboolean KNMusicBackendGStreamerThread::busWatch(GstBus *bus,
                                                  GstMessage *message,
                                                  gpointer data)
 {
-    switch (GST_MESSAGE_TYPE (message)) {
+    switch (GST_MESSAGE_TYPE (message))
+    {
     case GST_MESSAGE_STATE_CHANGED:
     {
         //Target thread.
