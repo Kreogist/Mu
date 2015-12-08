@@ -170,23 +170,6 @@ backend-gstreamer: {
         plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamerthread.h
 }
 
-backend-mpv: {
-    # Check whether there's a backend enabled already
-    contains(DEFINES, BACKEND_ENABLED){
-        error("You can't enable more than one backend at the same time.")
-    }
-    # Define the backend enabled flag.
-    DEFINES += ENABLE_BACKEND_MPV BACKEND_ENABLED
-    # Add backend library to the project.
-    LIBS += -lmpv
-    # Add backend files to the project.
-    SOURCES += \
-        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpv.cpp \
-        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpvthread.cpp
-    HEADERS += \
-        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpv.h \
-        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpvthread.h
-}
 backend-av: {
     # Check whether there's a backend enabled already
     contains(DEFINES, BACKEND_ENABLED){
@@ -223,24 +206,6 @@ backend-bass: {
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.h \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbassthread.h \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbassanalysiser.h
-}
-
-backend-phonon: {
-    # Check whether there's a backend enabled already
-    contains(DEFINES, BACKEND_ENABLED){
-        error("You can't enable more than one backend at the same time.")
-    }
-    # Define the backend enabled flag.
-    DEFINES += ENABLE_BACKEND_PHONON BACKEND_ENABLED
-    # Add backend library to the project.
-    LIBS += -lphonon4qt5
-    # Add backend files to the project.
-    SOURCES += \
-        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphonon.cpp \
-        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.cpp
-    HEADERS += \
-        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphonon.h \
-        plugin/knmusicplugin/plugin/knmusicbackendphonon/knmusicbackendphononthread.h
 }
 
 # Analysiser Specific Configuration

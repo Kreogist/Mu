@@ -49,10 +49,17 @@
  * playbin2 in GStreamer 0.10.
  */
 
+/*!
+ * \brief The KNMusicBackendGStreamerThread class
+ */
 class KNMusicBackendGStreamerThread : public KNMusicStandardBackendThread
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct KNMusicBackendGStreamerThread object.
+     * \param parent The parent object.
+     */
     explicit KNMusicBackendGStreamerThread(QObject *parent = 0);
     ~KNMusicBackendGStreamerThread();
 
@@ -108,6 +115,8 @@ public:
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
+    GstElement *playbin();
+
 signals:
     /*!
      * \brief This is a private signals. You Shouldn't use this signal.\n
@@ -127,6 +136,8 @@ public slots:
      * \brief Reimplemented from KNMusicStandardBackendThread::setPosition().
      */
     void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
+
+    void updateDuration();
 
 private slots:
     void onActionTick();

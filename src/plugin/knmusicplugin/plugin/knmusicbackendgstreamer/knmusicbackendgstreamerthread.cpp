@@ -234,6 +234,11 @@ void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
     }
 }
 
+GstElement *KNMusicBackendGStreamerThread::playbin()
+{
+    return m_playbin;
+}
+
 void KNMusicBackendGStreamerThread::setVolume(const int &volume)
 {
     //Save the volume size.
@@ -259,6 +264,34 @@ void KNMusicBackendGStreamerThread::setPosition(const qint64 &position)
                                 m_seekFlag,
                                 (m_startPosition + position) * GST_MSECOND);
     }
+}
+
+void KNMusicBackendGStreamerThread::updateDuration()
+{
+    //Prepare the fake total duration.
+    gint64 totalDuration;
+    //Query the duration, because it can could be played, so it's 100% we could
+    //get the duration..
+    while(!gst_element_query_duration(m_playbin,
+                                      GST_FORMAT_TIME,
+                                      &totalDuration));
+    //Check out the total duration.
+    if(totalDuration==0)
+    {
+        //Ignore the invalid value.
+        return;
+    }
+    //Save the total duration, we are using millisecond while gstreamer is
+    //using nanosecond.
+    m_totalDuration=(qint64)(totalDuration)/1000000;
+    //Check if section has been set then update the position.
+    if(m_sectionSet)
+    {
+        //Check out the start and end position.
+        updateStartAndEndPosition();
+    }
+    //If we comes to here, that means the file is loaded.
+    emit loadSuccess();
 }
 
 void KNMusicBackendGStreamerThread::onActionTick()
@@ -301,32 +334,6 @@ void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
     //Check out the message type
     switch (messageType)
     {
-    case GST_MESSAGE_NEW_CLOCK:
-    {
-        //Prepare the fake total duration.
-        gint64 totalDuration;
-        //Query the duration.
-        gst_element_query_duration(m_playbin, GST_FORMAT_TIME, &totalDuration);
-        //Check out the total duration.
-        if(totalDuration==0)
-        {
-            //Ignore the invalid value.
-            break;
-        }
-        //Save the total duration, we are using millisecond while gstreamer is
-        //using nanosecond.
-        m_totalDuration=totalDuration/1000000;
-        //Check if section has been set then update the position.
-        if(m_sectionSet)
-        {
-            //Check out the start and end position.
-            updateStartAndEndPosition();
-        }
-        //If we comes to here, that means the file is loaded.
-        emit loadSuccess();
-        //Complete.
-        break;
-    }
     case GST_MESSAGE_ERROR:
     {
         //File will be loaded failed.
@@ -343,13 +350,40 @@ gboolean KNMusicBackendGStreamerThread::busWatch(GstBus *bus,
                                                  GstMessage *message,
                                                  gpointer data)
 {
-    //Retranslate the data to a gstreamer-thread.
-    //Emit the process event signal.
-    static_cast<KNMusicBackendGStreamerThread *>(data)->requireProcessEvent(
-                bus,
-                message);
+    switch (GST_MESSAGE_TYPE (message)) {
+    case GST_MESSAGE_STATE_CHANGED:
+    {
+        //Target thread.
+        KNMusicBackendGStreamerThread *thread=
+                static_cast<KNMusicBackendGStreamerThread *>(data);
+        if(GST_MESSAGE_SRC(message)==GST_OBJECT(thread->playbin()))
+        {
+            //Get the threads.
+            GstState previousState, currentState, pendingState;
+            gst_message_parse_state_changed(message,
+                                            &previousState,
+                                            &currentState,
+                                            &pendingState);
+            //Check the previous state and current state.
+            if(previousState==GST_STATE_NULL &&
+                    currentState==GST_STATE_READY)
+            {
+                //Update the duration.
+                thread->updateDuration();
+            }
+        }
+    }
+    default:
+        //Retranslate the data to a gstreamer-thread.
+        //Emit the process event signal.
+        static_cast<KNMusicBackendGStreamerThread *>(data)->requireProcessEvent(
+                    bus,
+                    message);
+
+    }
     //Give back successful.
     return TRUE;
+
 }
 
 inline void KNMusicBackendGStreamerThread::resetPipeline()
