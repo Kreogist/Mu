@@ -469,7 +469,7 @@ inline void KNMusicBackendGStreamerThread::updateStartAndEndPosition()
         m_startPosition=0;
         //Set the whole file as the end position and the duration is the total.
         m_duration=m_totalDuration;
-        m_endPosition=m_totalDuration;
+        m_endPosition=-1;
     }
     else
     {
