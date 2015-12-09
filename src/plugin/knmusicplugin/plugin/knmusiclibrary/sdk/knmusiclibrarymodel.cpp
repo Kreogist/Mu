@@ -16,7 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knjsondatabase.h"
+#include "knutil.h"
 
 #include "knmusiccategorymodelbase.h"
 #include "knmusicsearcher.h"
@@ -28,11 +28,16 @@
 
 #include <QDebug>
 
+#define MajorVersion 4
+#define MinorVersion 0
+#define MaxOperateCount 900
+
 KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     KNMusicModel(parent),
     m_hashAlbumArt(QHash<QString, QVariant>()),
     m_scaledHashAlbumArt(QHash<QString, QVariant>()),
-    m_database(nullptr),
+    m_databasePath(QString()),
+    m_operateCounter(0),
     m_searcher(new KNMusicSearcher),
     m_analysisQueue(new KNMusicAnalysisQueue),
     m_imageManager(new KNMusicLibraryImageManager),
@@ -94,8 +99,8 @@ KNMusicLibraryModel::~KNMusicLibraryModel()
     m_analysisThread.wait();
     m_imageThread.wait();
 
-    //Write all the database data to the harddisk.
-    m_database->write();
+    //Write all the database data to the hard disk.
+    writeDatabase();
     //Recover the memory.
     m_searcher->deleteLater();
     m_analysisQueue->deleteLater();
@@ -104,8 +109,6 @@ KNMusicLibraryModel::~KNMusicLibraryModel()
 
 void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
 {
-    //Append data to the database.
-    m_database->append(generateDataArray(detailInfo));
     //Check the image cover image hash.
     if(!detailInfo.coverImageHash.isEmpty())
     {
@@ -124,6 +127,8 @@ void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
         //This is the first record, emit the signal.
         emit libraryNotEmpty();
     }
+    //Increase the operation counter.
+    count();
 }
 
 void KNMusicLibraryModel::appendRows(
@@ -132,8 +137,6 @@ void KNMusicLibraryModel::appendRows(
     //Append all the data to the databases.
     for(auto i : detailInfos)
     {
-        //Append all the detail info to the database.
-        m_database->append(generateDataArray(i));
         //Check the image cover image hash.
         if(!i.coverImageHash.isEmpty())
         {
@@ -153,13 +156,13 @@ void KNMusicLibraryModel::appendRows(
         //This is the first record, emit the signal.
         emit libraryNotEmpty();
     }
+    //Increase the operation counter.
+    count(detailInfos.size());
 }
 
 bool KNMusicLibraryModel::insertRow(int row,
                                     const KNMusicDetailInfo &detailInfo)
 {
-    //Insert the array to the database.
-    m_database->insert(row, generateDataArray(detailInfo));
     //Check the image cover image hash.
     if(!detailInfo.coverImageHash.isEmpty())
     {
@@ -171,13 +174,17 @@ bool KNMusicLibraryModel::insertRow(int row,
     //Add the detail info to category models.
     addCategoryDetailInfo(detailInfo);
     //Check out the database size.
-    if(m_database->size()==1)
+    if(rowCount()==0)
     {
         //This is the first record, emit the signal.
         emit libraryNotEmpty();
     }
     //Do the original append operation.
-    return KNMusicModel::insertRow(row, detailInfo);
+    bool &&result=KNMusicModel::insertRow(row, detailInfo);
+    //Increase the count.
+    count();
+    //Give back the result.
+    return result;
 }
 
 bool KNMusicLibraryModel::insertMusicRows(
@@ -189,8 +196,6 @@ bool KNMusicLibraryModel::insertMusicRows(
     {
         //Get the detail info.
         const KNMusicDetailInfo &detailInfo=detailInfos.at(i);
-        //Insert the data to the specific position.
-        m_database->insert(row, generateDataArray(detailInfo));
         //Check the image cover image hash.
         if(!detailInfo.coverImageHash.isEmpty())
         {
@@ -204,13 +209,17 @@ bool KNMusicLibraryModel::insertMusicRows(
         addCategoryDetailInfo(detailInfo);
     }
     //Check out the database size.
-    if(m_database->size()==1)
+    if(rowCount()==0)
     {
         //This is the first record, emit the signal.
         emit libraryNotEmpty();
     }
     //Do the original insert operation.
-    return KNMusicModel::insertMusicRows(row, detailInfos);
+    bool &&result=KNMusicModel::insertMusicRows(row, detailInfos);
+    //Increase the count.
+    count(detailInfos.size());
+    //Give back the result.
+    return result;
 }
 
 bool KNMusicLibraryModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
@@ -241,7 +250,11 @@ bool KNMusicLibraryModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
                     m_hashAlbumArtCounter.value(detailInfo.coverImageHash)+1);
     }
     //Update the model row.
-    return updateModelRow(row, analysisItem);
+    bool &&result=updateModelRow(row, analysisItem);
+    //Increase the operation counter.
+    count();
+    //Give back the result.
+    return result;
 }
 
 bool KNMusicLibraryModel::replaceRow(int row,
@@ -249,24 +262,18 @@ bool KNMusicLibraryModel::replaceRow(int row,
 {
     //Update the category data.
     updateCategoryDetailInfo(rowDetailInfo(row), detailInfo);
-    //Replace the data in the database.
-    m_database->replace(row, generateDataArray(detailInfo));
     //Do the original operation.
-    return KNMusicModel::replaceRow(row, detailInfo);
+    bool &&result=KNMusicModel::replaceRow(row, detailInfo);
+    //Increase the operation counter.
+    count();
+    //Give back the result.
+    return result;
 }
 
 bool KNMusicLibraryModel::removeRows(int position,
                                      int rows,
                                      const QModelIndex &index)
 {
-    //Remove the data from the database.
-    int rowsWaitToRemove=rows;
-    //Remove 'rows' times from position in the database.
-    while(rowsWaitToRemove--)
-    {
-        //Remove the position row.
-        m_database->removeAt(position);
-    }
     //Remove the detail info from the category models.
     for(int i=0; i<rows; ++i)
     {
@@ -278,19 +285,21 @@ bool KNMusicLibraryModel::removeRows(int position,
         removeCategoryDetailInfo(detailInfo);
     }
     //Check out the database size.
-    if(m_database->size()==0)
+    if(rowCount()==rows)
     {
         //The model will be empty again, emit this signal.
         emit libraryEmpty();
     }
     //Do the original remove rows operations.
-    return KNMusicModel::removeRows(position, rows, index);
+    bool &&result=KNMusicModel::removeRows(position, rows, index);
+    //Increase the operation counter.
+    count(rows);
+    //Give back the result.
+    return result;
 }
 
 void KNMusicLibraryModel::clear()
 {
-    //Clear up the database.
-    m_database->clear();
     //Reset the category models.
     //For all the category models,
     for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
@@ -302,6 +311,8 @@ void KNMusicLibraryModel::clear()
     KNMusicModel::clear();
     //The library is empty, emit the signal.
     emit libraryEmpty();
+    //Actually, we can simply write the database here.
+    writeDatabase();
 }
 
 bool KNMusicLibraryModel::setData(const QModelIndex &index,
@@ -309,10 +320,9 @@ bool KNMusicLibraryModel::setData(const QModelIndex &index,
                                   int role)
 {
     //Do the original data set operation.
-    bool result=KNMusicModel::setData(index, value, role);
-    //Update the data in the database.
-    m_database->replace(index.row(),
-                        generateDataArray(rowDetailInfo(index.row())));
+    bool &&result=KNMusicModel::setData(index, value, role);
+    //Increase the count.
+    count();
     //Give back the result.
     return result;
 }
@@ -341,15 +351,54 @@ void KNMusicLibraryModel::recoverModel()
 {
     //Check out the row count first, if there's any data then we have to ignore
     //this calling.
-    if(rowCount()>0)
+    if(rowCount()>0 || m_databasePath.isEmpty())
     {
         return;
     }
-    //Read the database information.
-    m_database->read();
-    //Check out whether the database is empty.
-    if(m_database->size()==0)
+    //Get the database file.
+    QFile databaseFile(m_databasePath);
+    //Check out the file existance.
+    if(!databaseFile.exists())
     {
+        //Database file doesn't exist, ignore it.
+        return;
+    }
+    //Open the file as read only mode.
+    if(!databaseFile.open(QIODevice::ReadOnly))
+    {
+        //Open failed.
+        return;
+    }
+    //Initial a data stream.
+    QDataStream databaseStream(&databaseFile);
+    //The file format should be:
+    /*
+     * |Major Version (unsigned 32-bit int)|
+     * |Minor Version (unsigned 32-bit int)|
+     * |rowCount() (unsigned 64-bit int)   |
+     * |Detail Info Data Block 0           |
+     * | ...                               |
+     */
+    //Initial the version data.
+    quint32 major, minor;
+    //Read the version data.
+    databaseStream >> major >> minor;
+    //Check the major and minor version.
+    if(major!=MajorVersion && minor!=MinorVersion)
+    {
+        //Close the file, the database file version is not correct.
+        databaseFile.close();
+        //Mission complete.
+        return;
+    }
+    //Read the row count.
+    quint64 listSize;
+    databaseStream >> listSize;
+    //Check out whether the database is empty.
+    if(listSize==0)
+    {
+        //Close the file.
+        databaseFile.close();
         //Ask to recover image, clear out the no used art counter.
         emit requireRecoverImage(QStringList());
         //Mission complete.
@@ -360,12 +409,14 @@ void KNMusicLibraryModel::recoverModel()
     //Start to insert data to the model.
     beginInsertRows(QModelIndex(),
                     0,
-                    m_database->size() - 1);
+                    listSize - 1);
+    //Generate a detail info.
+    KNMusicDetailInfo turboDetailInfo;
     //Read the data through the database.
-    for(auto i=m_database->begin(); i!=m_database->end(); ++i)
+    while(listSize--)
     {
-        //Generate the detail info.
-        KNMusicDetailInfo turboDetailInfo=generateDetailInfo((*i).toArray());
+        //Read the detail info.
+        databaseStream >> turboDetailInfo;
         //Append it to the model.
         appendDetailInfo(turboDetailInfo);
         //Add to category models.
@@ -378,6 +429,8 @@ void KNMusicLibraryModel::recoverModel()
                     m_hashAlbumArtCounter.value(turboDetailInfo.coverImageHash,
                                                 0)+1);
     }
+    //Close the database file.
+    databaseFile.close();
     //Set the total duration.
     initialTotalDuration(totalDuration);
     //End to insert data.
@@ -395,105 +448,9 @@ void KNMusicLibraryModel::recoverModel()
     emit requireRecoverImage(m_hashAlbumArtCounter.keys());
 }
 
-inline KNMusicDetailInfo KNMusicLibraryModel::generateDetailInfo(
-        const QJsonArray &dataArray)
-{
-    //Generate a new detail info.
-    KNMusicDetailInfo detailInfo;
-    //Get the information and property array.
-    QJsonArray textArray=dataArray.at(0).toArray(),
-               propertyArray=dataArray.at(1).toArray();
-    //Set the detail info data.
-    for(int i=0; i<MusicDataCount; ++i)
-    {
-        //Save the text list.
-        detailInfo.textLists[i]=textArray.at(i).toString();
-    }
-    //Save the property data.
-    detailInfo.filePath=propertyArray.at(PropertyFilePath).toString();
-    //Check out the existance of the file path.
-    if(!QFileInfo::exists(detailInfo.filePath))
-    {
-        //Set the cannot play flag to true if the file isn't exist.
-        detailInfo.cannotPlay=true;
-    }
-    detailInfo.fileName=propertyArray.at(PropertyFileName).toString();
-    detailInfo.trackFilePath=propertyArray.at(PropertyTrackFilePath).toString();
-    detailInfo.trackIndex=propertyArray.at(PropertyTrackIndex).toInt();
-    detailInfo.coverImageHash=
-            propertyArray.at(PropertyCoverImageHash).toString();
-    detailInfo.startPosition=
-            propertyArray.at(PropertyStartPosition).toString().toLongLong();
-    detailInfo.size=
-            propertyArray.at(PropertySize).toString().toLongLong();
-    detailInfo.dateModified=
-            KNMusicUtil::dataToDateTime(
-                propertyArray.at(PropertyDateModified).toString());
-    detailInfo.dateAdded=
-            KNMusicUtil::dataToDateTime(
-                propertyArray.at(PropertyDateAdded).toString());
-    detailInfo.dateLastPlayed=
-            KNMusicUtil::dataToDateTime(
-                propertyArray.at(PropertyLastPlayed).toString());
-    detailInfo.duration=
-            propertyArray.at(PropertyDuration).toString().toLongLong();
-    detailInfo.bitRate=propertyArray.at(PropertyBitRate).toInt();
-    detailInfo.samplingRate=propertyArray.at(PropertySamplingRate).toInt();
-    return detailInfo;
-}
-
-inline QJsonArray KNMusicLibraryModel::generateDataArray(
-        const KNMusicDetailInfo &detailInfo)
-{
-    //Generate text data JSON array.
-    QJsonArray textArray;
-    //Insert data to array.
-    for(int i=0; i<MusicDataCount; ++i)
-    {
-        //Add the text data of detail info to text array.
-        textArray.append(detailInfo.textLists[i].toString());
-    }
-    //Generate property data JSON array.
-    QJsonArray propertyArray;
-    //Append property data in order to the array.
-    propertyArray.append(detailInfo.filePath); //PropertyFilePath
-    propertyArray.append(detailInfo.fileName); //PropertyFileName,
-    propertyArray.append(detailInfo.coverImageHash); //PropertyCoverImageHash,
-    propertyArray.append(detailInfo.bitRate); //PropertyBitRate,
-    propertyArray.append(detailInfo.samplingRate); //PropertySamplingRate,
-    //PropertySize,
-    propertyArray.append(QString::number(detailInfo.size));
-    //PropertyDuration,
-    propertyArray.append(QString::number(detailInfo.duration));
-    //PropertyDateAdded,
-    propertyArray.append(KNMusicUtil::dateTimeToData(detailInfo.dateAdded));
-    //PropertyDateModified,
-    propertyArray.append(KNMusicUtil::dateTimeToData(detailInfo.dateModified));
-    //PropertyLastPlayed,
-    propertyArray.append(
-                KNMusicUtil::dateTimeToData(detailInfo.dateLastPlayed));
-    //PropertyTrackFilePath,
-    propertyArray.append(detailInfo.trackFilePath);
-    //PropertyTrackIndex,
-    propertyArray.append(detailInfo.trackIndex);
-    //PropertyStartPosition,
-    propertyArray.append(QString::number(detailInfo.startPosition));
-    //Generate the data array.
-    QJsonArray dataArray;
-    dataArray.append(textArray);
-    dataArray.append(propertyArray);
-    //Give back the data array.
-    return dataArray;
-}
-
 QHash<QString, QVariant> *KNMusicLibraryModel::hashAlbumArt()
 {
     return &m_hashAlbumArt;
-}
-
-KNJsonDatabase *KNMusicLibraryModel::database() const
-{
-    return m_database;
 }
 
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)
@@ -504,9 +461,9 @@ void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)
     m_categoryModels.append(model);
 }
 
-void KNMusicLibraryModel::setDatabase(KNJsonDatabase *database)
+void KNMusicLibraryModel::setDatabase(const QString &databasePath)
 {
-    m_database = database;
+    m_databasePath = databasePath;
 }
 
 void KNMusicLibraryModel::setLibraryPath(const QString &libraryPath)
@@ -536,7 +493,7 @@ void KNMusicLibraryModel::onActionAnalysisComplete(
     //Add the detail info to the model.
     appendRow(analysisItem.detailInfo);
     //Emit the analysis signal.
-    m_imageManager->analysisAlbumArt(index(m_database->size()-1, 0),
+    m_imageManager->analysisAlbumArt(index(rowCount()-1, 0),
                                      analysisItem);
 }
 
@@ -589,8 +546,8 @@ bool KNMusicLibraryModel::updateModelRow(
     updateCategoryDetailInfo(previousDetailInfo, analysisItem.detailInfo);
     //Do the original update operation.
     bool result=KNMusicModel::updateRow(row, analysisItem);
-    //Update the data in the database.
-    m_database->replace(row, generateDataArray(rowDetailInfo(row)));
+    //Count down.
+    count();
     //Give the result back.
     return result;
 }
@@ -640,4 +597,53 @@ inline void KNMusicLibraryModel::reduceHashImage(const QString &imageKey)
         //Reduce the hash album art counter down.
         m_hashAlbumArtCounter.insert(imageKey, originalCount-1);
     }
+}
+
+inline void KNMusicLibraryModel::count(int counts)
+{
+    //Increase the counter.
+    m_operateCounter+=counts;
+    //Check out the operate counter is greater than limit.
+    if(m_operateCounter >= MaxOperateCount)
+    {
+        //Clear the operate counter.
+        m_operateCounter = 0;
+        //Write the database to hard disk.
+        writeDatabase();
+    }
+}
+
+inline void KNMusicLibraryModel::writeDatabase()
+{
+    //Check out the database path.
+    if(m_databasePath.isEmpty())
+    {
+        return;
+    }
+    //Initial the file info.
+    QFileInfo fileInfo(m_databasePath);
+    //Check the database file environment.
+    KNUtil::ensurePathValid(fileInfo.absolutePath());
+    //Open the database file.
+    QFile databaseFile(m_databasePath);
+    //Open the database file.
+    if(!databaseFile.open(QIODevice::WriteOnly))
+    {
+        //Failed to open the database file.
+        return;
+    }
+    //Geneate the data stream for data writing.
+    QDataStream databaseStream(&databaseFile);
+    //Write the version of database.
+    databaseStream << (quint32)MajorVersion << (quint32)MinorVersion
+                   //Write the row count.
+                   << (quint64)rowCount();
+    //Write all the detail infos.
+    for(int i=0, rows=rowCount(); i<rows; ++i)
+    {
+        //Write the detail info data.
+        databaseStream << rowDetailInfo(i);
+    }
+    //Close the file.
+    databaseFile.close();
 }

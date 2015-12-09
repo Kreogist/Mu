@@ -47,9 +47,9 @@ msvc: {
     QMAKE_CXXFLAGS_RELEASE += -arch:AVX
     # CPU Architecture, turn on for Mu's.
     # Intel Processor, Sandy bridge or later.
-    #QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
+    QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
     # AMD Processor,
-    QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
+    #QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
 
     # Linker Options.
     # Link-time Code Generation, use with -GL
@@ -295,7 +295,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusictreeviewheader.cpp \
     sdk/knmousesenseheader.cpp \
-    sdk/knjsondatabase.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistengine.cpp \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlistmodel.cpp \
@@ -489,7 +488,6 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmodel.h \
     plugin/knmusicplugin/sdk/knmusictreeviewheader.h \
     sdk/knmousesenseheader.h \
-    sdk/knjsondatabase.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistparser.h \
     plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistengine.h \

@@ -15,8 +15,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knjsondatabase.h"
-
 //Dependences.
 #include "knmusicnowplayingbase.h"
 #include "knmusicsolomenubase.h"
@@ -44,19 +42,12 @@ using namespace MusicUtil;
 KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent),
     m_libraryPath(knMusicGlobal->musicLibraryPath()+"/Library"),
-    m_database(new KNJsonDatabase),
     m_libraryModel(new KNMusicLibraryModel(this)),
     m_songTab(new KNMusicLibrarySongTab),
     m_nowPlaying(nullptr)
 {
-    //Configure the music database.
-    // Move to working thread.
-    m_database->moveToThread(&m_databaseThread);
-    // Set the database file.
-    m_database->link(m_libraryPath+"/Music.db");
-
     //Configure the library tabs.
-    m_libraryModel->setDatabase(m_database);
+    m_libraryModel->setDatabase(m_libraryPath+"/Music.db");
     m_libraryModel->setLibraryPath(m_libraryPath);
 
     //Configure the tabs.
@@ -100,23 +91,6 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     }
     //Add the actions to solo menu.
     knMusicGlobal->soloMenu()->appendMusicActions(showInActionList);
-
-    //Start up threads.
-    m_databaseThread.start();
-    m_imageThread.start();
-}
-
-KNMusicLibrary::~KNMusicLibrary()
-{
-    //Quit and wait for thread quit.
-    m_databaseThread.quit();
-    m_imageThread.quit();
-    //Wait for quitting.
-    m_databaseThread.wait();
-    m_imageThread.wait();
-
-    //Delete the database object.
-    m_database->deleteLater();
 }
 
 KNMusicTab *KNMusicLibrary::songTab()

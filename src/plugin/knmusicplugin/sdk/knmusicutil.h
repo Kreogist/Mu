@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <QVariant>
 #include <QJsonObject>
+#include <QDataStream>
 
 namespace MusicUtil
 {
@@ -124,16 +125,17 @@ namespace MusicUtil
         QString fileName;           //Properties.
         QString filePath;
         QString trackFilePath;
-        QDateTime dateModified;
+        QString url;
+        QString coverImageHash;     //Image hash data.
+        QDateTime dateModified;     //Dates
         QDateTime dateLastPlayed;
         QDateTime dateAdded;
         quint64 size;
         qint64 startPosition;       //Music properties.
         qint64 duration;
-        qint64 bitRate;
-        qint64 samplingRate;
-        QString coverImageHash;     //Image hash data.
-        int trackIndex;
+        quint32 bitRate;
+        quint32 samplingRate;
+        quint32 trackIndex;
         bool cannotPlay;            //The cannot playing flag.
         //Initial the values
         KNMusicDetailInfo():
@@ -338,5 +340,57 @@ private:
     KNMusicUtil(const KNMusicUtil &);
 };
 
-#endif // KNMUSICUTIL
+inline QDataStream &operator <<(QDataStream &out,
+                                const MusicUtil::KNMusicDetailInfo &detailInfo)
+{
+    //Output the text messages.
+    for(int i=0; i<MusicUtil::MusicDataCount; ++i)
+    {
+        out << detailInfo.textLists[i].toString();
+    }
+    //Output other properties.
+    out << detailInfo.fileName << detailInfo.filePath
+        << detailInfo.trackFilePath << detailInfo.url
+        << detailInfo.coverImageHash
+        << KNMusicUtil::dateTimeToData(detailInfo.dateModified)
+        << KNMusicUtil::dateTimeToData(detailInfo.dateLastPlayed)
+        << KNMusicUtil::dateTimeToData(detailInfo.dateAdded)
+        << detailInfo.size << detailInfo.startPosition << detailInfo.duration
+        << detailInfo.bitRate << detailInfo.samplingRate
+        << detailInfo.trackIndex
+        << detailInfo.cannotPlay;
+    //Give the stream back.
+    return out;
+}
 
+inline QDataStream &operator >>(QDataStream &in,
+                                MusicUtil::KNMusicDetailInfo &detailInfo)
+{
+    //Generate the data cache.
+    QString dataCache, modifiedDate, lastPlayedDate, addedDate;
+    //Input the text messages.
+    for(int i=0; i<MusicUtil::MusicDataCount; ++i)
+    {
+        //Input the string to data cache.
+        in >> dataCache;
+        //Save it to variant.
+        detailInfo.textLists[i]=dataCache;
+    }
+    //Input other properties.
+    in >> detailInfo.fileName >> detailInfo.filePath
+       >> detailInfo.trackFilePath >> detailInfo.url
+       >> detailInfo.coverImageHash
+       >> modifiedDate >> lastPlayedDate >> addedDate
+       >> detailInfo.size >> detailInfo.startPosition >> detailInfo.duration
+       >> detailInfo.bitRate >> detailInfo.samplingRate
+       >> detailInfo.trackIndex
+       >> detailInfo.cannotPlay;
+    //Calculate the correct date.
+    detailInfo.dateModified=KNMusicUtil::dataToDateTime(modifiedDate);
+    detailInfo.dateLastPlayed=KNMusicUtil::dataToDateTime(lastPlayedDate);
+    detailInfo.dateAdded=KNMusicUtil::dataToDateTime(addedDate);
+    //Give the stream back.
+    return in;
+}
+
+#endif // KNMUSICUTIL

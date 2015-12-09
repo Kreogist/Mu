@@ -25,7 +25,6 @@
 
 #include "knmusiclibrarybase.h"
 
-class KNJsonDatabase;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
 class KNMusicCategoryModelBase;
@@ -44,7 +43,6 @@ public:
      * \param parent The parent object.
      */
     explicit KNMusicLibrary(QObject *parent = 0);
-    ~KNMusicLibrary();
 
     /*!
      * \brief Reimplemented from KNMusicLibraryBase::songTab().
@@ -108,11 +106,9 @@ private:
     inline void linkLoadRequest(KNMusicLibraryTab *libraryTab);
     KNMusicCategoryModelBase *m_categoryModel[CategoryTabsCount];
     KNMusicLibraryCategoryTab *m_libraryTabs[CategoryTabsCount];
-    QThread m_databaseThread, m_imageThread;
 
     KNConnectionHandler m_loadHandler;
     QString m_libraryPath;
-    KNJsonDatabase *m_database;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_songTab;
     KNMusicNowPlayingBase *m_nowPlaying;

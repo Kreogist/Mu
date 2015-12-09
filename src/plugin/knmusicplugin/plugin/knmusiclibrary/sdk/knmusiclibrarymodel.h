@@ -25,7 +25,15 @@
 
 #include "knmusicmodel.h"
 
-class KNJsonDatabase;
+/*
+ * Code name:
+ * 4.0 - BNR32.
+ * Previous version code name (KNJsonDatabase):
+ * 3.0 - Trueno.
+ * 2.0 - Cheater.
+ * 1.0 - Beast.
+ */
+
 class KNMusicSearcher;
 class KNMusicCategoryModelBase;
 class KNMusicAnalysisQueue;
@@ -118,13 +126,6 @@ public:
     QPixmap artwork(const QString &hashKey);
 
     /*!
-     * \brief Get the database object of the library model.
-     * \return The database object pointer. If you never set it before, it will
-     * be nullptr.
-     */
-    KNJsonDatabase *database() const;
-
-    /*!
      * \brief Add a category model to the library model. When the music model is
      * modified, it will call the specific function of the category model to
      * apply the modification.
@@ -160,10 +161,10 @@ signals:
 
 public slots:
     /*!
-     * \brief Set the database of the library model.
-     * \param database The database model pointer.
+     * \brief Set the database file path of the library model.
+     * \param databasePath The database file path.
      */
-    void setDatabase(KNJsonDatabase *database);
+    void setDatabase(const QString &databasePath);
 
     /*!
      * \brief Set the library folder path, it will set the album art cache
@@ -191,13 +192,14 @@ private:
                                          const KNMusicDetailInfo &after);
     inline void removeCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
     inline void reduceHashImage(const QString &imageKey);
-    inline KNMusicDetailInfo generateDetailInfo(const QJsonArray &dataArray);
-    inline QJsonArray generateDataArray(const KNMusicDetailInfo &detailInfo);
+    inline void count(int counts=1);
+    inline void writeDatabase();
     QLinkedList<KNMusicCategoryModelBase *> m_categoryModels;
     QHash<QString, QVariant> m_hashAlbumArt, m_scaledHashAlbumArt;
     QHash<QString, int> m_hashAlbumArtCounter;
     QThread m_searchThread, m_analysisThread, m_imageThread;
-    KNJsonDatabase *m_database;
+    QString m_databasePath;
+    int m_operateCounter;
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     KNMusicLibraryImageManager *m_imageManager;

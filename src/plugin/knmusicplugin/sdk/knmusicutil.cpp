@@ -82,7 +82,7 @@ QJsonObject KNMusicUtil::detailInfoToObject(const KNMusicDetailInfo &detailInfo)
     object.insert("FilePath", detailInfo.filePath);
     object.insert("FileName", detailInfo.fileName);
     object.insert("TrackFilePath", detailInfo.trackFilePath);
-    object.insert("TrackIndex", detailInfo.trackIndex);
+    object.insert("TrackIndex", (int)detailInfo.trackIndex);
     object.insert("StartPosition", (double)detailInfo.startPosition);
     object.insert("Size", (double)detailInfo.size);
     object.insert("DateModified",
