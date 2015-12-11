@@ -131,6 +131,16 @@ signals:
 
 public slots:
     /*!
+     * \brief Reimplemented from KNMusicBackend::save().
+     */
+    void save() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicBackend::restore().
+     */
+    void restore(const QString &updatedFilePath=QString()) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicBackend::changeMuteState().
      */
     void changeMuteState() Q_DECL_OVERRIDE;

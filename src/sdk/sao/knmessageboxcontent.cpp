@@ -27,10 +27,11 @@
 
 KNMessageBoxContent::KNMessageBoxContent(QWidget *parent) :
     QWidget(parent),
-    m_content(nullptr),
-    m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this)),
     m_upShadowGradient(QLinearGradient(0, 0, 0, ShadowHeight)),
-    m_downShadowGradient(QLinearGradient(0, 0, 0, ShadowHeight))
+    m_downShadowGradient(QLinearGradient(0, 0, 0, ShadowHeight)),
+    m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this)),
+    m_content(nullptr),
+    m_autoDelete(true)
 {
     //Set properties.
     setFocusPolicy(Qt::StrongFocus);
@@ -64,7 +65,7 @@ QWidget *KNMessageBoxContent::content()
     return m_content;
 }
 
-void KNMessageBoxContent::setContent(QWidget *content)
+void KNMessageBoxContent::setContent(QWidget *content, bool autoDelete)
 {
     //Check the content widget is null.
     if(m_content==nullptr)
@@ -75,6 +76,8 @@ void KNMessageBoxContent::setContent(QWidget *content)
         setFocusProxy(m_content);
         //Add the content to layout.
         m_mainLayout->addWidget(m_content);
+        //Save the auto delete flag.
+        m_autoDelete=autoDelete;
     }
 }
 
@@ -101,6 +104,16 @@ void KNMessageBoxContent::hideContent()
     m_content->hide();
 }
 
+void KNMessageBoxContent::checkAutoDelete()
+{
+    //Check out the auto delete flag.
+    if(!m_autoDelete)
+    {
+        //Reset the parent of the content widget.
+        m_content->setParent(nullptr);
+    }
+}
+
 void KNMessageBoxContent::paintEvent(QPaintEvent *event)
 {
     //Do the original painting.
@@ -123,5 +136,3 @@ void KNMessageBoxContent::paintEvent(QPaintEvent *event)
     painter.fillRect(QRect(0, 0, width(), ShadowHeight),
                      m_downShadowGradient);
 }
-
-

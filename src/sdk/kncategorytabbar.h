@@ -32,6 +32,10 @@ class KNCategoryTabBar : public KNAbstractTabGroup
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNCategoryTabBar widget.
+     * \param parent The parent widget.
+     */
     explicit KNCategoryTabBar(QWidget *parent = 0);
 
 protected:

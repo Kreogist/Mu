@@ -25,19 +25,27 @@
 
 using namespace MusicUtil;
 
+/*!
+ * \brief The KNMusicLyricsDownloadDialogBase class provide all the basic
+ * function of the lyrics download wildget. The lyrics download dialog should be
+ * implemented from this class.
+ */
 class KNMusicLyricsDownloadDialogBase : public KNMessageBox
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLyricsDownloadDialogBase dialog widget.
+     * \param parent The parent widget.
+     */
     KNMusicLyricsDownloadDialogBase(QWidget *parent = 0):KNMessageBox(parent){}
 
-signals:
-
 public slots:
+    /*!
+     * \brief Set the detail info of the song which will be download.
+     * \param detailInfo The detail info structure.
+     */
     virtual void setDetailInfo(const KNMusicDetailInfo &detailInfo)=0;
-
-private:
-
 };
 
 #endif // KNMUSICLYRICSDOWNLOADDIALOGBASE_H

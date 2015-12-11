@@ -22,24 +22,49 @@
 #include <QLineEdit>
 
 class QTimeLine;
+/*!
+ * \brief The KNLabelLineEdit class provide an enhanced line edit widget. It
+ * could provide a rounded rectangle border and
+ */
 class KNLabelLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Constrcut a KNLabelLineEdit widget with parent widget.
+     * \param parent The parent widget pointer.
+     */
     explicit KNLabelLineEdit(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the label icon of the line edit.
+     * \return The left icon of the line edit. If you never set the icon before,
+     * it will stay null QPixmap.
+     */
     QPixmap labelIcon() const;
 
-    void setLabelIcon(const QPixmap &labelIcon);
-
+    /*!
+     * \brief Get the focus source widget. The focus source widget pointer will
+     * point one widget. When you pressed ESC, it will set focus to the widget
+     * pointer.
+     * \return The focus source widget pointer. If you never set it before, it
+     * will be nullptr.
+     */
     QWidget *focusSource() const;
 
+public slots:
+    /*!
+     * \brief Set the source focus widget.
+     * \param focusSource The widget pointer.
+     */
     void setFocusSource(QWidget *focusSource);
 
+    /*!
+     * \brief Set the label icon.
+     * \param labelIcon The icon pixmap.
+     */
+    void setLabelIcon(const QPixmap &labelIcon);
 
-signals:
-
-public slots:
     /*!
      * \brief Use this slot to update the object name. Do NOT use
      * setObjectName().
@@ -47,13 +72,21 @@ public slots:
      */
     void updateObjectName(const QString &itemName);
 
+    /*!
+     * \brief Set the minimum lightness of the background. When the widget
+     * doesn't get focus. The background lightness will be this one.\n
+     * Notice: This won't changed any color. Set this before you really show the
+     * widget. Never called this function when you have show the line edit.
+     * \param minimumLightness The lightness level. It should be 0 to 255.
+     */
     void setMinimumLightness(int minimumLightness);
 
     /*!
-     * \brief setMediumLightness.\n
+     * \brief Set the maximum lightness of the background. When the widget
+     * gets focus. The background lightness will be this one.\n
      * Notice: This won't changed any color. Set this before you really show the
-     * widget. Never called this function when you have show the button.
-     * \param mediumLightness
+     * widget. Never called this function when you have show the line edit.
+     * \param mediumLightness The lightness level. It should be 0 to 255.
      */
     void setMediumLightness(int mediumLightness);
 

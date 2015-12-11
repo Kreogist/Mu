@@ -104,6 +104,16 @@ signals:
 
 public slots:
     /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::save().
+     */
+    void save();
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::restore().
+     */
+    void restore(const QString &updatedFilePath=QString());
+
+    /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::setVolume().
      */
     void setVolume(const int &volume) Q_DECL_OVERRIDE;
@@ -170,6 +180,51 @@ private:
             }
         }
     }
+    inline bool loadBassThread(const QString &filePath)
+    {
+        //Clear the file path.
+        m_filePath.clear();
+        //Try to load the file.
+    #ifdef Q_OS_WIN
+        std::wstring uniPath=filePath.toStdWString();
+    #endif
+    #ifdef Q_OS_UNIX
+        std::string uniPath=filePath.toStdString();
+    #endif
+        //Create the file using the stream.
+        m_channel=BASS_StreamCreateFile(FALSE,
+                                        uniPath.data(),
+                                        0,
+                                        0,
+                                        m_channelFlags);
+        //Check if the stream create successful.
+        if(!m_channel)
+        {
+            //Create the file using the fixed music load.
+            m_channel=BASS_MusicLoad(FALSE,
+                                     uniPath.data(),
+                                     0,
+                                     0,
+                                     BASS_MUSIC_RAMPS | m_channelFlags,
+                                     1);
+            //Check if the music create successful.
+            if(!m_channel)
+            {
+                //Emit load failed signal.
+                emit loadFailed();
+                //Bass is failed to load the music file.
+                return false;
+            }
+        }
+        //Save the new file path.
+        m_filePath=filePath;
+        //Emit the load success signal.
+        emit loadSuccess();
+        //Set the sync handler.
+        setChannelSyncs();
+        //Load success.
+        return true;
+    }
 
     //Channel data.
     QString m_filePath;
@@ -181,8 +236,9 @@ private:
            m_duration,
            m_startPosition,
            m_endPosition;
-    int m_state;
+    qint64 m_savedPosition;
     qreal m_volume;
+    int m_state;
 
     //Updater.
     QTimer *m_positionUpdater;

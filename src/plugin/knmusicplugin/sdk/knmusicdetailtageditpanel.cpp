@@ -64,7 +64,8 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     {
         //Generate the label.
         m_rowLabel[i]=new QLabel(this);
-        //Set the label.
+        //Configure the label.
+        m_rowLabel[i]->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
         m_rowLabel[i]->setPalette(captionPal);
         //Generate the widget.
         m_rowEditor[i]=generateLineEdit();
@@ -88,7 +89,8 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     {
         //Generate the label.
         m_leftRowLabel[i]=new QLabel(this);
-        //Set the label.
+        //Configure the label.
+        m_leftRowLabel[i]->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
         m_leftRowLabel[i]->setPalette(captionPal);
     }
     //Generate different widgets for the left column.
@@ -200,6 +202,30 @@ void KNMusicDetailTagEditPanel::retranslate()
     m_rightRowLabel[YearRow]->setText(tr("Year"));
     m_rightRowLabel[TrackRow]->setText(tr("Track"));
     m_rightRowLabel[DiscRow]->setText(tr("Disc Number"));
+    //Initial the maximum width.
+    int maximumLabelWidth=0;
+    //Find the maximum size of the row labels.
+    for(int i=0; i<DetailRowCount; ++i)
+    {
+        //Find the maximum width of the label.
+        maximumLabelWidth=qMax(maximumLabelWidth, m_rowLabel[i]->width());
+    }
+    //Find the maximum size of the left labels.
+    for(int i=0; i<LeftColumnRowCount; ++i)
+    {
+        //Find the maximum width of the label.
+        maximumLabelWidth=qMax(maximumLabelWidth, m_leftRowLabel[i]->width());
+    }
+    //Update the left row label width.
+    for(int i=0; i<DetailRowCount; ++i)
+    {
+        //Set it to be the maximum label width.
+        m_rowLabel[i]->setFixedWidth(maximumLabelWidth);
+    }
+    for(int i=0; i<LeftColumnRowCount; ++i)
+    {
+        m_leftRowLabel[i]->setFixedWidth(maximumLabelWidth);
+    }
 
     m_trackEditorOf->setText(tr("of"));
     m_discEditorOf->setText(tr("of"));

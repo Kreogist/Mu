@@ -136,6 +136,18 @@ bool KNMusicStandardBackend::mute()
     return m_mute;
 }
 
+void KNMusicStandardBackend::save()
+{
+    //Call the save function of the main thread.
+    ;
+}
+
+void KNMusicStandardBackend::restore(const QString &updatedFilePath)
+{
+    //Call the restore of the main thread.
+    ;
+}
+
 void KNMusicStandardBackend::changeMuteState()
 {
     setMute(!m_mute);

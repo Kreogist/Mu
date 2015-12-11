@@ -288,6 +288,26 @@ signals:
 
 public slots:
     /*!
+     * \brief Save the current state of the backend, it must be used with a
+     * restore. It will only saved for the runtime of the application.\n
+     * This function is used for renaming files or write to the file which is
+     * currently playing. Call save() first and then the state will be reset,
+     * but current state will save. Then you can do the rename or tag editing to
+     * the file. After doing all the things, call the restore() function.
+     */
+    virtual void save()=0;
+
+    /*!
+     * \brief Restore the saving state. Function save() must be called first.\n
+     * If the playing file is renamed, then the updatedFilePath parameter should
+     * be passed the new file path. Or else just stay empty, it will
+     * automatically reload the file.
+     * \param updatedFilePath The renamed file path. If the file is not renamed,
+     * stay empty.
+     */
+    virtual void restore(const QString &updatedFilePath=QString())=0;
+
+    /*!
      * \brief Change the mute state to the different side.
      */
     virtual void changeMuteState()=0;

@@ -147,6 +147,17 @@ signals:
 
 public slots:
     /*!
+     * \brief Save the state of the current thread. The definition of the save
+     * and restore state here is the same as KNMusicBackend.
+     */
+    virtual void save()=0;
+
+    /*!
+     * \brief Restore the state of the current thread.
+     */
+    virtual void restore(const QString &updatedFilePath=QString())=0;
+
+    /*!
      * \brief Set the volume size of this thread.
      * \param volume The volume size of the thread.
      */

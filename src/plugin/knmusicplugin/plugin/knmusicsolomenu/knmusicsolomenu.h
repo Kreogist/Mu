@@ -70,6 +70,7 @@ private slots:
     void onActionSearchItemText();
     void onActionDownloadLyrics();
     void onActionRenameToPrefer();
+    void onActionRename();
     void onActionCopyFilePath();
     void onActionCopyItemText();
     void onActionRemove();

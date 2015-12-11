@@ -65,7 +65,28 @@ public:
                             const QString &title=QString("Message"),
                             const Qt::Alignment &alignment=Qt::AlignLeft);
 
-    bool showOkayButton() const;
+    /*!
+     * \brief Show up the message box, and it could provide a line edit box to
+     * get some sample input data from user. It's good for asking some basic
+     * information, like file name. It provides a hint text label and it could
+     * display the hint text.
+     * \param text The hint text. It will be display on the message box.
+     * \param title The message box title.
+     * \param originalText The original text. Leave it blank if you don't have
+     * the raw text.
+     * \return If the okay button is clicked, it will return the new text in the
+     * line edit box. Or else it will return a null QString object. Check it
+     * with isEmpty() function of the QString.
+     */
+    static QString getText(const QString &text,
+                           const QString &title,
+                           const QString &originalText=QString());
+
+    /*!
+     * \brief Whether the okay button is visible.
+     * \return If the okay button is visible, it will be true, or else false.
+     */
+    bool okayButtonVisible() const;
 
 signals:
 
@@ -79,8 +100,12 @@ public slots:
     /*!
      * \brief Set the content widget.
      * \param widget The widget pointer.
+     * \param autoDelete Automatically recover the memory of the widget. The
+     * widget at the pointer will be recovered after the message box delete.\n
+     * If the auto delete is false, the parent of the widget will be nullptr.
+     * The widget will be hide as well.
      */
-    void setContentWidget(QWidget *widget);
+    void setContentWidget(QWidget *widget, bool autoDelete=true);
 
     /*!
      * \brief Set whether the dialog show the cancel button. Sometimes you may
@@ -88,7 +113,7 @@ public slots:
      * \param showOkayButton To make the okay button visible, set it to true. It
      * is true as default.
      */
-    void setShowOkayButton(bool showOkayButton);
+    void setOkayButtonVisible(bool okayButtonVisible);
 
     /*!
      * \brief Set whether the dialog show the cancel button. The dialog won't
@@ -98,6 +123,11 @@ public slots:
      */
     void setShowCancelButton(bool showCancelButton);
 
+    /*!
+     * \brief Resize the size of the message dialog box.
+     * \param contentSize The new size of the content. Message box will
+     * calculate the message box size to fit the content.
+     */
     void resizeDialog(const QSize &contentSize);
 
 protected:

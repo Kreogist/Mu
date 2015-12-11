@@ -30,8 +30,9 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_duration(-1),
     m_startPosition(-1),
     m_endPosition(-1),
-    m_state(Stopped),
+    m_savedPosition(-1),
     m_volume(1.0),
+    m_state(Stopped),
     m_positionUpdater(new QTimer(this)),
     m_syncHandlers(QList<HSYNC>())
 {
@@ -72,46 +73,12 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
         //Mission complete.
         return true;
     }
-    //Clear the file path.
-    m_filePath.clear();
-    //Try to load the file.
-#ifdef Q_OS_WIN
-    std::wstring uniPath=filePath.toStdWString();
-#endif
-#ifdef Q_OS_UNIX
-    std::string uniPath=filePath.toStdString();
-#endif
-    //Create the file using the stream.
-    m_channel=BASS_StreamCreateFile(FALSE,
-                                    uniPath.data(),
-                                    0,
-                                    0,
-                                    m_channelFlags);
-    //Check if the stream create successful.
-    if(!m_channel)
+    //Load the file path.
+    if(!loadBassThread(filePath))
     {
-        //Create the file using the fixed music load.
-        m_channel=BASS_MusicLoad(FALSE,
-                                 uniPath.data(),
-                                 0,
-                                 0,
-                                 BASS_MUSIC_RAMPS | m_channelFlags,
-                                 1);
-        //Check if the music create successful.
-        if(!m_channel)
-        {
-            //Emit load failed signal.
-            emit loadFailed();
-            //Bass is failed to load the music file.
-            return false;
-        }
+        //Load the file failed.
+        return false;
     }
-    //Save the new file path.
-    m_filePath=filePath;
-    //Emit the load success signal.
-    emit loadSuccess();
-    //Set the sync handler.
-    setChannelSyncs();
     //When loading the file complete, load the channel info to the thread.
     //Get the duration of the whole file.
     m_totalDuration=
@@ -257,6 +224,38 @@ void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
         //Emit the new duration.
         emit durationChanged(m_duration);
     }
+}
+
+void KNMusicBackendBassThread::save()
+{
+    //Pause the thread first.
+    pause();
+    //Save the position of the current thread.
+    m_savedPosition=position();
+    //Reset the current playing thread, but saved all the other parameter.
+    //Clear up the channel sync handle.
+    removeChannelSyncs();
+    //Check if the channel is not null.
+    freeChannel();
+}
+
+void KNMusicBackendBassThread::restore(const QString &updatedFilePath)
+{
+    //Check out the saved position, if it's -1, means it never saved before.
+    //Ignore the invalid call.
+    if(m_savedPosition==-1)
+    {
+        return;
+    }
+    //Check out the updated file path.
+    QString restoreFilePath=
+            updatedFilePath.isEmpty()?m_filePath:updatedFilePath;
+    //Reload the bass thread.
+    loadBassThread(restoreFilePath);
+    //Reset the postion.
+    setPosition(m_savedPosition);
+    //Reset the saved position.
+    m_savedPosition=-1;
 }
 
 void KNMusicBackendBassThread::setVolume(const int &volume)

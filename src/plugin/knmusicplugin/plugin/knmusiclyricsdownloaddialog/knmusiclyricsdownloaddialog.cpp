@@ -34,7 +34,7 @@ KNMusicLyricsDownloadDialog::KNMusicLyricsDownloadDialog(QWidget *parent) :
     setContentWidget(m_downloadWidget);
     setTitleText("Lyrics");
     setShowCancelButton(true);
-    setShowOkayButton(false);
+    setOkayButtonVisible(false);
 
     //Configure the download widget.
     connect(m_downloadWidget, &KNMusicLyricsDownloadWidget::requireExpand,

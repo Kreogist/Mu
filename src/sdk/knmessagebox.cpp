@@ -27,6 +27,7 @@
 #include "sao/knmessageboxblock.h"
 #include "sao/knmessageboxcontent.h"
 #include "knopacityanimebutton.h"
+#include "knlabellineedit.h"
 
 #include "knmessagebox.h"
 
@@ -221,7 +222,7 @@ void KNMessageBox::onActionOkayClicked()
         connect(m_hideAnime, &QParallelAnimationGroup::finished,
                 this, &KNMessageBox::accept);
         //Set the result data.
-        setResult(true);
+        setResult(QDialog::Accepted);
         //Launch the close anime.
         startCloseAnime();
     }
@@ -235,7 +236,7 @@ void KNMessageBox::onActionCancelClicked()
     connect(m_hideAnime, &QParallelAnimationGroup::finished,
             this, &KNMessageBox::reject);
     //Set the result data.
-    setResult(false);
+    setResult(QDialog::Rejected);
     //Launch the close anime.
     startCloseAnime();
 }
@@ -331,9 +332,12 @@ inline void KNMessageBox::configureElements()
 inline KNOpacityAnimeButton *KNMessageBox::generateButton(
         const QString &iconPath)
 {
+    //Initial the button.
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(m_bottomBlock);
+    //Configure the button.
     button->setIcon(QIcon(iconPath));
     button->setFixedSize(ButtonSize, ButtonSize);
+    //Give back the button.
     return button;
 }
 
@@ -341,6 +345,8 @@ void KNMessageBox::startCloseAnime()
 {
     //Hide the content first.
     m_content->hideContent();
+    //Release the content according to the auto remove flag.
+    m_content->checkAutoDelete();
     //Stop all the animations.
     m_showAnime->stop();
     m_hideAnime->stop();
@@ -359,12 +365,12 @@ void KNMessageBox::startCloseAnime()
     m_hideAnime->start();
 }
 
-bool KNMessageBox::showOkayButton() const
+bool KNMessageBox::okayButtonVisible() const
 {
     return m_showOkayButton;
 }
 
-void KNMessageBox::setShowOkayButton(bool showOkayButton)
+void KNMessageBox::setOkayButtonVisible(bool showOkayButton)
 {
     m_showOkayButton = showOkayButton;
 }
@@ -396,6 +402,44 @@ void KNMessageBox::information(const QString &text,
     messageBox->setContentWidget(textHolder);
     //Show up the message box.
     messageBox->exec();
+}
+
+QString KNMessageBox::getText(const QString &text,
+                              const QString &title,
+                              const QString &originalText)
+{
+    //Generate a temporary message box.
+    QScopedPointer<KNMessageBox> messageBox(new KNMessageBox);
+    //Configure the message box.
+    messageBox->setTitleText(title);
+    messageBox->setShowCancelButton(true);
+    //Generate a temporary widget.
+    QScopedPointer<QWidget> container(new QWidget);
+    //Initial the layout of the container.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          container.data());
+    //Set the main layout to container.
+    container->setLayout(mainLayout);
+    //Initial a label.
+    QLabel *hintText=new QLabel(text, container.data());
+    //Configure the hint text.
+    hintText->setAlignment(Qt::AlignCenter);
+    //Add the hint text to main layout.
+    mainLayout->addWidget(hintText);
+    //Generate a new line edit.
+    KNLabelLineEdit *lineEdit=new KNLabelLineEdit(container.data());
+    //Configure the line edit.
+    lineEdit->setMinimumLightness(0xC0);
+    lineEdit->setMediumLightness(0xE0);
+    lineEdit->setText(originalText);
+    lineEdit->selectAll();
+    //Add line edit to main layout.
+    mainLayout->addWidget(lineEdit);
+    //Set the content widget to message box.
+    messageBox->setContentWidget(container.data(), false);
+    //Show up the message box.
+    return (messageBox->exec()==QDialog::Accepted)?
+                lineEdit->text():QString();
 }
 
 void KNMessageBox::setShowCancelButton(bool showCancelButton)
@@ -430,10 +474,10 @@ void KNMessageBox::setTitleText(const QString &titleText)
     m_titleText=titleText;
 }
 
-void KNMessageBox::setContentWidget(QWidget *widget)
+void KNMessageBox::setContentWidget(QWidget *widget, bool autoDelete)
 {
     //Set the content widget.
-    m_content->setContent(widget);
+    m_content->setContent(widget, autoDelete);
     //Raise the widget.
     widget->raise();
 }

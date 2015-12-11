@@ -52,8 +52,9 @@ public:
     /*!
      * \brief Set the content widget.
      * \param content The content widget.
+     * \param autoDelete The auto delete flag. It will be true as default.
      */
-    void setContent(QWidget *content);
+    void setContent(QWidget *content, bool autoDelete=true);
 
 
 signals:
@@ -71,6 +72,12 @@ public slots:
      */
     void hideContent();
 
+    /*!
+     * \brief Check the auto delete flag, and reset the parent widget of the
+     * content widget.
+     */
+    void checkAutoDelete();
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::paintEvent().
@@ -78,9 +85,10 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QWidget *m_content;
-    QBoxLayout *m_mainLayout;
     QLinearGradient m_upShadowGradient, m_downShadowGradient;
+    QBoxLayout *m_mainLayout;
+    QWidget *m_content;
+    bool m_autoDelete;
 };
 
 #endif // KNMESSAGEBOXCONTENT_H

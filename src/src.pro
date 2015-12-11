@@ -410,7 +410,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.cpp \
     plugin/knmusicplugin/sdk/knmusichscrolllyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp
+    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp \
+    sdk/knfilenamelineedit.cpp \
+    sdk/knfilenamemessagebox.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -617,7 +619,9 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicminiplayerbase.h \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.h \
     plugin/knmusicplugin/sdk/knmusichscrolllyrics.h \
-    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h
+    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h \
+    sdk/knfilenamelineedit.h \
+    sdk/knfilenamemessagebox.h
 
 RESOURCES += \
     resource/res.qrc
