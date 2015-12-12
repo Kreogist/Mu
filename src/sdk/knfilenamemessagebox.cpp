@@ -17,10 +17,13 @@
  */
 #include <QBoxLayout>
 #include <QLabel>
+#include <QScopedPointer>
 
 #include "knfilenamelineedit.h"
 
 #include "knfilenamemessagebox.h"
+
+#include <QDebug>
 
 KNFileNameMessageBox::KNFileNameMessageBox(QWidget *parent) :
     KNMessageBox(parent),
@@ -41,6 +44,8 @@ KNFileNameMessageBox::KNFileNameMessageBox(QWidget *parent) :
     QWidget *container=new QWidget(this);
     //Set the content widget to message box.
     setContentWidget(container);
+    //Configure the container widget.
+    container->setFocusProxy(m_lineEdit);
     //Initial the layout of the container.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           container);
@@ -50,12 +55,46 @@ KNFileNameMessageBox::KNFileNameMessageBox(QWidget *parent) :
     mainLayout->addWidget(m_hintText);
     //Add line edit to main layout.
     mainLayout->addWidget(m_lineEdit);
+    //Show the cancel button.
+    setCancelButtonVisible(true);
+}
+
+QString KNFileNameMessageBox::getFileName(const QString &text,
+                                          const QString &title,
+                                          const QString &filePath)
+{
+    //Generate a file name message box.
+    QScopedPointer<KNFileNameMessageBox> messageBox(new KNFileNameMessageBox);
+    //Set the file path.
+    messageBox->setFilePath(filePath);
+    //Configure the message box.
+    messageBox->setTitleText(title);
+    messageBox->setHintText(text);
+    //Launch the message box.
+    messageBox->exec();
+    //Give back the latest file name.
+    return messageBox->fileName();
+}
+
+QString KNFileNameMessageBox::fileName() const
+{
+    return m_newFileName;
 }
 
 void KNFileNameMessageBox::setFilePath(const QString &filePath)
 {
     //Set the file path to line edit.
     m_lineEdit->setFilePath(filePath);
+    //Set foucs on line edit.
+    m_lineEdit->setFocus();
+    //Hide the okay button.
+    setOkayButtonVisible(false);
+}
+
+void KNFileNameMessageBox::setHintText(const QString &hintText)
+{
+    //Set the hint text.
+    m_hintText->setText(hintText);
 }
 
 bool KNFileNameMessageBox::okayPressed()
@@ -65,7 +104,11 @@ bool KNFileNameMessageBox::okayPressed()
     {
         //Save the line edit string.
         m_newFileName=m_lineEdit->text();
+        //Give back true.
+        return true;
     }
+    //Or else failed.
+    return false;
 }
 
 void KNFileNameMessageBox::cancelPressed()
@@ -78,5 +121,5 @@ void KNFileNameMessageBox::onActionStateChanged(int state)
 {
     //Check out the state.
     //Change the okay button shown state.
-    setOkayButtonVisible(state==KNFileNameLineEdit::Valid);
+    setButtonVisible(true, (state==KNFileNameLineEdit::Valid));
 }

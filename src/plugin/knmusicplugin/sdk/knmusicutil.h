@@ -135,7 +135,7 @@ namespace MusicUtil
         qint64 duration;
         quint32 bitRate;
         quint32 samplingRate;
-        quint32 trackIndex;
+        qint32 trackIndex;
         bool cannotPlay;            //The cannot playing flag.
         //Initial the values
         KNMusicDetailInfo():

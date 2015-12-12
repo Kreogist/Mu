@@ -21,8 +21,10 @@
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "knutil.h"
+#include "knfilenamemessagebox.h"
 
 #include "knmusicproxymodel.h"
+#include "knmusicmodel.h"
 #include "knmusicglobal.h"
 #include "knmusicsearchbase.h"
 #include "knmusicbackend.h"
@@ -126,14 +128,28 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
     m_actions[Open]->setText(m_actionTitles[Open].arg(detailInfo.fileName));
     //Get the prefer name.
     //Check the aritist is empty or not.
-    QString artistText=detailInfo.textLists[Artist].toString();
+    QString &&artistText=detailInfo.textLists[Artist].toString();
     if(artistText.isEmpty())
     {
-        //Simply named it as Title.Suffix.
-        m_preferFileName=
-                KNUtil::legalFileName(detailInfo.textLists[Name].toString() +
-                                      "." +
-                                      QFileInfo(m_filePath).suffix());
+        //When the artist is empty, there's a thing we have to check.
+        //If the title is the file name, means there's no tag in the file.
+        //We won't make it to be CutiePanther.flac.flac, simply set the file
+        //name to be prefer file name.
+        //Get the file name.
+        QString &&titleText=detailInfo.textLists[Name].toString();
+        //Check the title text is the same or not.
+        if(titleText==detailInfo.fileName)
+        {
+            //We won't change the prefer name text.
+            m_preferFileName=detailInfo.fileName;
+        }
+        else
+        {
+            //Simply named it as Title.Suffix.
+            m_preferFileName=
+                    KNUtil::legalFileName(titleText + "." +
+                                          QFileInfo(m_filePath).suffix());
+        }
     }
     else
     {
@@ -145,20 +161,17 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
                                       "." +
                                       QFileInfo(m_filePath).suffix());
     }
-    //Check the different between the prefer file name and the current one.
-    if(m_preferFileName==detailInfo.fileName)
-    {
-        //We have to hide the RenameToArtistHyphonName item.
-        m_actions[RenameToArtistHyphonName]->setVisible(false);
-    }
-    else
-    {
-        //Show the RenameToArtistHyphonName item.
-        m_actions[RenameToArtistHyphonName]->setVisible(true);
-        //Update the title.
-        m_actions[RenameToArtistHyphonName]->setText(
+    //Check the track file path row, if the item contains track list file, hide
+    //the rename action.
+    bool renameGlobalFlag=detailInfo.trackFilePath.isEmpty();
+    //Set the rename flag
+    m_actions[Rename]->setVisible(renameGlobalFlag);
+    //Check out the prefer name.
+    m_actions[RenameToArtistHyphonName]->setVisible(
+                !(m_preferFileName==detailInfo.fileName) && renameGlobalFlag);
+    //Update the title.
+    m_actions[RenameToArtistHyphonName]->setText(
                 m_actionTitles[RenameToArtistHyphonName].arg(m_preferFileName));
-    }
     //Check the item text, set the visible of the item text related actions.
     if(m_itemText.isEmpty())
     {
@@ -176,18 +189,6 @@ void KNMusicSoloMenu::setMusicRow(KNMusicProxyModel *model,
                     m_actionTitles[CopyItemText].arg(m_itemText));
         m_actions[SearchItemText]->setText(
                     m_actionTitles[SearchItemText].arg(m_itemText));
-    }
-    //Check the track file path row, if the item contains track list file, hide
-    //the rename action.
-    if(detailInfo.trackFilePath.isEmpty())
-    {
-        m_actions[Rename]->setVisible(true);
-        m_actions[RenameToArtistHyphonName]->setVisible(true);
-    }
-    else
-    {
-        m_actions[Rename]->setVisible(false);
-        m_actions[RenameToArtistHyphonName]->setVisible(false);
     }
 }
 
@@ -295,36 +296,60 @@ void KNMusicSoloMenu::onActionDownloadLyrics()
         //Get the download dialog.
         KNMusicLyricsDownloadDialogBase *downloadDialog=
                 knMusicGlobal->lyricsDownloadDialog();
-        //Check out the download lyrics pointer.
-        if(!downloadDialog)
-        {
-            //Set the detail info to the download dialog.
-            downloadDialog->setDetailInfo(
-                        m_model->rowDetailInfo(m_itemIndex.row()));
-            //Show up the download lyrics dialog, and give it the detail info.
-            downloadDialog->exec();
-        }
+        //Set the detail info to the download dialog.
+        downloadDialog->setDetailInfo(
+                    m_model->rowDetailInfo(m_itemIndex.row()));
+        //Show up the download lyrics dialog, and give it the detail info.
+        downloadDialog->exec();
     }
 }
 
 void KNMusicSoloMenu::onActionRenameToPrefer()
 {
     //Rename the file to prefer file name.
-    //    KNUtil::renameFile(m_filePath, m_preferFileName);
+    renameFile(m_preferFileName);
 }
 
 void KNMusicSoloMenu::onActionRename()
 {
     //Get the file name.
-    QString &&newName=KNMessageBox::getText(
+    QString &&newName=KNFileNameMessageBox::getFileName(
                 tr("Please input the new file name"),
                 "Rename",
-                m_itemIndex.data(FileNameRole).toString());
+                m_filePath);
     //Check out the new file name.
     if(newName.isEmpty())
     {
         return;
     }
+    //Rename the file to the new file.
+    renameFile(newName);
+}
+
+void KNMusicSoloMenu::onActionCopyFilePath()
+{
+    //Set the clipboard text to be the file path.
+    KNUtil::setClipboardText(m_filePath);
+}
+
+void KNMusicSoloMenu::onActionCopyItemText()
+{
+    //Set the item text to clipboard.
+    KNUtil::setClipboardText(m_itemText);
+}
+
+void KNMusicSoloMenu::onActionRemove()
+{
+    //Remove the row from the model.
+    if(m_model && m_itemIndex.isValid())
+    {
+        //Remove the row.
+        m_model->removeRow(m_itemIndex.row());
+    }
+}
+
+inline void KNMusicSoloMenu::renameFile(const QString &newName)
+{
     //Check whether the new name is valid.
     //Get the file info.
     QFileInfo fileInfo(m_filePath),
@@ -334,7 +359,10 @@ void KNMusicSoloMenu::onActionRename()
     if(newNameFile.exists())
     {
         //Show up the message.
-        KNMessageBox::information(tr("File %1 already exists."));
+        KNMessageBox::information(
+                    tr("File %1 already exists.").arg(newNameFile.fileName()),
+                    "Error",
+                    Qt::AlignCenter);
         //Mission complete.
         return;
     }
@@ -357,34 +385,36 @@ void KNMusicSoloMenu::onActionRename()
         //Save the backend.
         backend->save();
     }
+    //Get the current file path.
+    QString &&currentPath=fileInfo.absoluteDir().filePath(newName);
     //Rename the file to the new name.
-    ;
+    QFile::rename(m_filePath, currentPath);
+    //Get the file info.
+    QFileInfo currentFileInfo(currentPath);
+    //Check existance.
+    if(currentFileInfo.exists())
+    {
+        //Get the current detail info.
+        KNMusicDetailInfo detailInfo=m_model->rowDetailInfo(m_itemIndex);
+        //Change the file path.
+        detailInfo.filePath=currentFileInfo.absoluteFilePath();
+        //Change the file name.
+        detailInfo.fileName=currentFileInfo.fileName();
+        //Check out the title string.
+        if(detailInfo.textLists[Name].toString()==fileInfo.fileName())
+        {
+            //Change the name to be the new file name.
+            detailInfo.textLists[Name]=currentFileInfo.fileName();
+        }
+        //Update the detail info.
+        m_model->musicModel()->replaceRow(
+                    m_model->mapToSource(m_itemIndex).row(),
+                    detailInfo);
+    }
     //Check the save flag.
     if(saveFlag)
     {
-        //Restore the backend.
-        backend->restore();
-    }
-}
-
-void KNMusicSoloMenu::onActionCopyFilePath()
-{
-    //Set the clipboard text to be the file path.
-    KNUtil::setClipboardText(m_filePath);
-}
-
-void KNMusicSoloMenu::onActionCopyItemText()
-{
-    //Set the item text to clipboard.
-    KNUtil::setClipboardText(m_itemText);
-}
-
-void KNMusicSoloMenu::onActionRemove()
-{
-    //Remove the row from the model.
-    if(m_model && m_itemIndex.isValid())
-    {
-        //Remove the row.
-        m_model->removeRow(m_itemIndex.row());
+        //Restore the backend, give the new file path.
+        backend->restore(currentFileInfo.absoluteFilePath());
     }
 }

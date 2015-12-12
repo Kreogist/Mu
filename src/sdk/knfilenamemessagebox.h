@@ -29,10 +29,16 @@ class KNFileNameMessageBox : public KNMessageBox
 public:
     explicit KNFileNameMessageBox(QWidget *parent = 0);
 
+    static QString getFileName(const QString &text,
+                               const QString &title,
+                               const QString &filePath);
+
     QString fileName() const;
 
 public slots:
     void setFilePath(const QString &filePath);
+
+    void setHintText(const QString &hintText);
 
 protected:
     /*!

@@ -91,6 +91,7 @@ private:
         Delete,
         SoloMenuActionCount
     };
+    inline void renameFile(const QString &newName);
     QAction *m_actions[SoloMenuActionCount];
     QString m_actionTitles[SoloMenuActionCount];
 

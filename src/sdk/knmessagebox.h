@@ -82,12 +82,6 @@ public:
                            const QString &title,
                            const QString &originalText=QString());
 
-    /*!
-     * \brief Whether the okay button is visible.
-     * \return If the okay button is visible, it will be true, or else false.
-     */
-    bool okayButtonVisible() const;
-
 signals:
 
 public slots:
@@ -121,7 +115,7 @@ public slots:
      * \param showCancelButton To make the cancel button visible, set it to
      * true. It is false as default.
      */
-    void setShowCancelButton(bool showCancelButton);
+    void setCancelButtonVisible(bool showCancelButton);
 
     /*!
      * \brief Resize the size of the message dialog box.

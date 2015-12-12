@@ -365,11 +365,6 @@ void KNMessageBox::startCloseAnime()
     m_hideAnime->start();
 }
 
-bool KNMessageBox::okayButtonVisible() const
-{
-    return m_showOkayButton;
-}
-
 void KNMessageBox::setOkayButtonVisible(bool showOkayButton)
 {
     m_showOkayButton = showOkayButton;
@@ -412,7 +407,7 @@ QString KNMessageBox::getText(const QString &text,
     QScopedPointer<KNMessageBox> messageBox(new KNMessageBox);
     //Configure the message box.
     messageBox->setTitleText(title);
-    messageBox->setShowCancelButton(true);
+    messageBox->setCancelButtonVisible(true);
     //Generate a temporary widget.
     QScopedPointer<QWidget> container(new QWidget);
     //Initial the layout of the container.
@@ -442,7 +437,7 @@ QString KNMessageBox::getText(const QString &text,
                 lineEdit->text():QString();
 }
 
-void KNMessageBox::setShowCancelButton(bool showCancelButton)
+void KNMessageBox::setCancelButtonVisible(bool showCancelButton)
 {
     m_showCancelButton = showCancelButton;
 }

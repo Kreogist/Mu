@@ -38,6 +38,8 @@ public:
         Valid,
         Invalid,
         Exist,
+        NoFileName,
+        Empty,
         SuffixChange
     };
 
@@ -73,19 +75,7 @@ private slots:
     void onActionTextChanged(const QString &fileName);
 
 private:
-    inline void setState(int state)
-    {
-        //Check the state.
-        if(state==m_state)
-        {
-            //Ignore the same state.
-            return;
-        }
-        //Save the state.
-        m_state=state;
-        //Emit the state changed signal.
-        emit stateChanged(m_state);
-    }
+    inline void setState(int state);
 
     QString m_fileName, m_suffix;
     QDir m_directory;

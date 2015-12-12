@@ -139,13 +139,13 @@ bool KNMusicStandardBackend::mute()
 void KNMusicStandardBackend::save()
 {
     //Call the save function of the main thread.
-    ;
+    m_main->save();
 }
 
 void KNMusicStandardBackend::restore(const QString &updatedFilePath)
 {
     //Call the restore of the main thread.
-    ;
+    m_main->restore(updatedFilePath);
 }
 
 void KNMusicStandardBackend::changeMuteState()

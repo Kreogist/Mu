@@ -229,7 +229,9 @@ void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
 void KNMusicBackendBassThread::save()
 {
     //Pause the thread first.
-    pause();
+    BASS_ChannelPause(m_channel);
+    //Stop the updater.
+    m_positionUpdater->stop();
     //Save the position of the current thread.
     m_savedPosition=position();
     //Reset the current playing thread, but saved all the other parameter.
@@ -254,6 +256,17 @@ void KNMusicBackendBassThread::restore(const QString &updatedFilePath)
     loadBassThread(restoreFilePath);
     //Reset the postion.
     setPosition(m_savedPosition);
+    //Set the volume to the last volume, because of the reset, the
+    //volume is back to 1.0.
+    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, m_volume);
+    //Check out the state.
+    if(m_state==Playing)
+    {
+        //Start the updater.
+        m_positionUpdater->start();
+        //Play the thread.
+        BASS_ChannelPlay(m_channel, FALSE);
+    }
     //Reset the saved position.
     m_savedPosition=-1;
 }
@@ -368,15 +381,6 @@ inline void KNMusicBackendBassThread::setPlayingState(const int &state)
         //Emit state changed signal.
         emit stateChanged(m_state);
     }
-}
-
-inline void KNMusicBackendBassThread::setChannelSyncs()
-{
-    m_syncHandlers.append(BASS_ChannelSetSync(m_channel,
-                                              BASS_SYNC_END,
-                                              0,
-                                              threadReachesEnd,
-                                              this));
 }
 
 inline void KNMusicBackendBassThread::removeChannelSyncs()

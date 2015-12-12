@@ -140,7 +140,15 @@ private:
     inline void finishPlaying();
     inline void resetChannelInformation();
     inline void setPlayingState(const int &state);
-    inline void setChannelSyncs();
+    inline void setChannelSyncs()
+    {
+        m_syncHandlers.append(BASS_ChannelSetSync(m_channel,
+                                                  BASS_SYNC_END,
+                                                  0,
+                                                  threadReachesEnd,
+                                                  this));
+    }
+
     inline void removeChannelSyncs();
     inline qint64 getChannelPosition()
     {

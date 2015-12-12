@@ -19,6 +19,8 @@
 
 #include "knfilenamelineedit.h"
 
+#include <QDebug>
+
 KNFileNameLineEdit::KNFileNameLineEdit(QWidget *parent) :
     KNLabelLineEdit(parent),
     m_fileName(QString()),
@@ -63,6 +65,22 @@ void KNFileNameLineEdit::onActionTextChanged(const QString &fileName)
         //Mission complete.
         return;
     }
+    //Check whether the file name is empty.
+    if(fileName.isEmpty())
+    {
+        //Set the state to be empty.
+        setState(Empty);
+        //Mission complete.
+        return;
+    }
+    //Check whether the file name is empty. (Suffix only)
+    if(fileName.startsWith('.'))
+    {
+        //Set the state to be no file name.
+        setState(NoFileName);
+        //Misson complete.
+        return;
+    }
     //Get the file info of the new file name.
     QFileInfo changedFile(m_directory.filePath(fileName));
     //Check out the file name is already exist in the folder.
@@ -74,7 +92,7 @@ void KNFileNameLineEdit::onActionTextChanged(const QString &fileName)
         return;
     }
     //Check out the validation of the file name.
-    if(fileName.contains(QRegExp("/[@#\\$%\\^&\\*]+/g")) ||
+    if(fileName.contains(QRegExp("[@#\\$%\\^&\\*]")) ||
             fileName=="." || fileName=="..")
     {
         //Invalid file name.
@@ -90,6 +108,20 @@ void KNFileNameLineEdit::onActionTextChanged(const QString &fileName)
     }
     //Ok, then all the other is valid.
     setState(Valid);
+}
+
+inline void KNFileNameLineEdit::setState(int state)
+{
+    //Check the state.
+    if(state==m_state)
+    {
+        //Ignore the same state.
+        return;
+    }
+    //Save the state.
+    m_state=state;
+    //Emit the state changed signal.
+    emit stateChanged(m_state);
 }
 
 int KNFileNameLineEdit::state() const
