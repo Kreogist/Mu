@@ -255,7 +255,7 @@ void KNMusicSoloMenu::onActionGetInfo()
     //Set the detail info to item.
     item.detailInfo=m_model->rowDetailInfo(m_itemIndex);
     //Show the detail dialog.
-    knMusicGlobal->detailDialog()->showDialog(item);
+    knMusicGlobal->detailDialog()->showDialog(item, m_model, m_itemIndex);
 }
 
 void KNMusicSoloMenu::onActionShowInGraphicShell()

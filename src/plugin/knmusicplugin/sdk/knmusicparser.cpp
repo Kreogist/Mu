@@ -371,7 +371,7 @@ bool KNMusicParser::writeAnalysisItem(const KNMusicAnalysisItem &analysisItem)
     //Generate a empty analysis item.
     KNMusicAnalysisItem item;
     //Generate the written parser pointer.
-    KNMusicTagParser *tagParser=nullptr;
+    QList<KNMusicTagParser *> tagParserList;
     //Tried to parse the file.
     for(auto i : m_tagParsers)
     {
@@ -383,19 +383,25 @@ bool KNMusicParser::writeAnalysisItem(const KNMusicAnalysisItem &analysisItem)
         {
             //We can parse the file by this parser, check whether this parser is
             //writable and it can save the image data.
-            tagParser=i;
-            //Finished finding.
-            break;
+            tagParserList.append(i);
         }
     }
     //Check the tag parser.
-    if(tagParser==nullptr)
+    if(tagParserList.isEmpty())
     {
         //We cannot write the tag.
         return false;
     }
+    //First we will set the result to be true.
+    bool writeResult=true;
+    //Write the tag with all the information.
+    for(auto i : tagParserList)
+    {
+        //Write the tag.
+        writeResult=writeResult && (i->writeTag(analysisItem));
+    }
     //Use the write tag function to write the tag.
-    return tagParser->writeTag(analysisItem);
+    return writeResult;
 }
 
 bool KNMusicParser::findImageFile(const QString &baseName,

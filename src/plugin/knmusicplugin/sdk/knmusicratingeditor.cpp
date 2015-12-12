@@ -29,7 +29,8 @@ KNMusicRatingEditor::KNMusicRatingEditor(QWidget *parent) :
     m_starSizeHint(0),
     m_editorWidth(0),
     m_starNum(0),
-    m_halfStarSizeHint(0)
+    m_halfStarSizeHint(0),
+    m_detectOnMove(true)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -44,6 +45,12 @@ KNMusicRatingEditor::KNMusicRatingEditor(QWidget *parent) :
 
 void KNMusicRatingEditor::paintEvent(QPaintEvent *event)
 {
+    //Check out the star pixmap.
+    if(m_scaleStar.isNull())
+    {
+        //Ignore the null painting event.
+        return;
+    }
     //Do the original paint.
     QWidget::paintEvent(event);
     //Set the painter.
@@ -59,34 +66,62 @@ void KNMusicRatingEditor::paintEvent(QPaintEvent *event)
     {
         painter.drawPixmap(i*m_starSizeHint,
                            0,
-                           m_star);
+                           m_scaleStar);
     }
     for(int i=m_starNum; i<5; i++)
     {
         painter.drawPixmap(i*m_starSizeHint,
                            0,
-                           m_unstar);
+                           m_scaleUnstar);
+    }
+}
+
+void KNMusicRatingEditor::mousePressEvent(QMouseEvent *event)
+{
+    //Check the detecting switcher.
+    if(!m_detectOnMove)
+    {
+        //When the mouse moving detecting is disabled, mouse press will be the
+        //most important things.
+        int star=starAtPosition(event->x());
+        //If the star number is valid, change the star number.
+        if(star!=-1)
+        {
+            //Change the star number.
+            setStarNum(star);
+            //Repaint the widget.
+            update();
+        }
     }
 }
 
 void KNMusicRatingEditor::mouseMoveEvent(QMouseEvent *event)
 {
-    //When the mouse is moving, change the value.
-    int star=starAtPosition(event->x());
-    if(star!=-1)
+    //Check the detecting switcher.
+    if(m_detectOnMove)
     {
-        setStarNum(star);
-        update();
+        //When the mouse is moving, change the value.
+        int star=starAtPosition(event->x());
+        //If the star number is valid, change the star number.
+        if(star!=-1)
+        {
+            //Change the star number.
+            setStarNum(star);
+            //Repaint the widget.
+            update();
+        }
     }
 }
 
 void KNMusicRatingEditor::mouseReleaseEvent(QMouseEvent *event)
 {
+    //Do original release event.
     QWidget::mouseReleaseEvent(event);
+    //When the mouse released, means the editing is complete.
     emit editingFinished();
 }
 
-int KNMusicRatingEditor::starAtPosition(int x)
+inline int KNMusicRatingEditor::starAtPosition(int x)
 {
     //If mouse's x is less than a half star, it should be 0.
     int starNum=x<m_halfStarSizeHint?0:(x/m_starSizeHint+1);
@@ -97,6 +132,11 @@ int KNMusicRatingEditor::starAtPosition(int x)
     return starNum>5?5:starNum;
 }
 
+void KNMusicRatingEditor::setDetectOnMove(bool detectOnMove)
+{
+    m_detectOnMove = detectOnMove;
+}
+
 int KNMusicRatingEditor::starNum() const
 {
     return m_starNum;
@@ -104,7 +144,10 @@ int KNMusicRatingEditor::starNum() const
 
 void KNMusicRatingEditor::setStarNum(int starNum)
 {
+    //Save the star number.
     m_starNum = starNum;
+    //Update the widget.
+    update();
 }
 
 int KNMusicRatingEditor::starSizeHint() const

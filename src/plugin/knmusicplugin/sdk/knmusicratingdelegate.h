@@ -22,12 +22,17 @@
 #include <QStyledItemDelegate>
 
 /*!
- * \brief The KNMusicRatingDelegate class
+ * \brief The KNMusicRatingDelegate class provides a rating style view delegate.
+ * This will use the rating editor.
  */
 class KNMusicRatingDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicRatingDelegate object.
+     * \param parent The parent object.
+     */
     explicit KNMusicRatingDelegate(QWidget *parent = 0);
 
     /*!
@@ -67,10 +72,6 @@ public:
      * \brief This is going to get the star size. It will be constant.
      */
     static int starSizeHint();
-
-signals:
-
-public slots:
 
 private slots:
     void commitAndCloseEditor();

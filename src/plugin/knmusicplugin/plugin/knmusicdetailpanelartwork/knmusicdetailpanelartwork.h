@@ -49,7 +49,9 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicDetailDialogPanel::setAnalysisItem.
      */
-    void setAnalysisItem(const KNMusicAnalysisItem &item) Q_DECL_OVERRIDE;
+    void setAnalysisItem(const KNMusicAnalysisItem &item,
+                         KNMusicProxyModel *proxyModel,
+                         const QModelIndex &proxyIndex) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

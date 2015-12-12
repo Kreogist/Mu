@@ -18,6 +18,8 @@
 #ifndef KNMUSICDETAILDIALOGPANEL_H
 #define KNMUSICDETAILDIALOGPANEL_H
 
+#include <QModelIndex>
+
 #include "knmusicutil.h"
 
 #include <QWidget>
@@ -25,6 +27,7 @@
 using namespace MusicUtil;
 
 class QAbstractButton;
+class KNMusicProxyModel;
 /*!
  * \brief The KNMusicDetailDialogPanel class provides the basic functions of a
  * detail dialog panel should have. It's a pure virtual port class.
@@ -51,15 +54,19 @@ signals:
      * \brief When the file is updated, this signal will be emitted for detail
      * info to updated the file.
      */
-    void requireUpdateFile();
+    void requireUpdateFileInfo();
 
 public slots:
     /*!
      * \brief Set the analysis item. It provides the file path and some other
      * basic parameters.
      * \param item The analysis item. It will be provided by the detail dialog.
+     * \param proxyModel The proxy model of the item.
+     * \param proxyIndex The index of the item in the proxy model.
      */
-    virtual void setAnalysisItem(const KNMusicAnalysisItem &item)=0;
+    virtual void setAnalysisItem(const KNMusicAnalysisItem &item,
+                                 KNMusicProxyModel *proxyModel,
+                                 const QModelIndex &proxyIndex)=0;
 };
 
 #endif // KNMUSICDETAILDIALOGPANEL_H

@@ -99,7 +99,7 @@ public:
 
     /*!
      * \brief Write analysis item to file path.
-     * \param analysisItem The
+     * \param analysisItem The analysis item.
      */
     bool writeAnalysisItem(const KNMusicAnalysisItem &analysisItem);
 

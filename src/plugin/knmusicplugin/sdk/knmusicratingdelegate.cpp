@@ -29,15 +29,13 @@
 #define FiveStarSizeHint 100
 
 KNMusicRatingDelegate::KNMusicRatingDelegate(QWidget *parent) :
-    QStyledItemDelegate(parent)
+    QStyledItemDelegate(parent),
+    m_star(QPixmap(":/plugin/music/public/star.png").scaled(
+               StarSizeHint,
+               StarSizeHint,
+               Qt::KeepAspectRatio,
+               Qt::SmoothTransformation))
 {
-    //Initial the star size.
-    m_star=QPixmap(":/plugin/music/public/star.png");
-    //Scale the pixmap
-    m_star=m_star.scaled(StarSizeHint,
-                         StarSizeHint,
-                         Qt::KeepAspectRatio,
-                         Qt::SmoothTransformation);
 }
 
 void KNMusicRatingDelegate::paint(QPainter *painter,
@@ -107,7 +105,9 @@ void KNMusicRatingDelegate::setModelData(QWidget *editor,
 
 void KNMusicRatingDelegate::commitAndCloseEditor()
 {
+    //Cast the sender as a widget.
     QWidget *editor=static_cast<QWidget *>(sender());
+    //Emit the commit data and close signal.
     emit commitData(editor);
     emit closeEditor(editor);
 }

@@ -85,8 +85,12 @@ QAbstractButton *KNMusicDetailPanelOverview::tabButton()
 }
 
 void KNMusicDetailPanelOverview::setAnalysisItem(
-        const KNMusicAnalysisItem &item)
+        const KNMusicAnalysisItem &item,
+        KNMusicProxyModel *proxyModel,
+        const QModelIndex &proxyIndex)
 {
+    Q_UNUSED(proxyModel)
+    Q_UNUSED(proxyIndex)
     //Get the detail info.
     const KNMusicDetailInfo &detailInfo=item.detailInfo;
     //Set the analysis item to the label.

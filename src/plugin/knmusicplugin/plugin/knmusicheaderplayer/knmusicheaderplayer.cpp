@@ -38,6 +38,7 @@
 #include "knconfigure.h"
 
 #include "knmusictab.h"
+#include "knmusicproxymodel.h"
 #include "knmusicdetaildialog.h"
 #include "knmusiclyricsmanager.h"
 #include "knmusicbackend.h"
@@ -793,10 +794,14 @@ void KNMusicHeaderPlayer::appendActionTriggered(const int &actionIndex)
         break;
     case AppendShowDetail:
         //Check the now playing.
-        if(m_nowPlaying)
+        if(m_nowPlaying && m_nowPlaying->playingModel())
         {
             //Show the detail of the playing item.
-            knMusicGlobal->detailDialog()->showDialog(playingItem);
+            knMusicGlobal->detailDialog()->showDialog(
+                        playingItem,
+                        m_nowPlaying->playingModel(),
+                        m_nowPlaying->playingModel()->mapFromSource(
+                            m_nowPlaying->playingIndex()));
         }
         break;
     case AppendLocateNowPlaying:

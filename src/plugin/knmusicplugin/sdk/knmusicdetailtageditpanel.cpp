@@ -15,33 +15,60 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QLabel>
-#include <QFormLayout>
+#include <QAbstractItemView>
 #include <QBoxLayout>
 #include <QComboBox>
+#include <QFormLayout>
+#include <QLabel>
+#include <QPushButton>
 
 #include "knlabellineedit.h"
 #include "kncircleiconbutton.h"
 #include "knlocalemanager.h"
 
+#include "knmusicparser.h"
+#include "knmusicratingeditor.h"
 #include "knmusicglobal.h"
 
 #include "knmusicdetailtageditpanel.h"
 
 KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     KNMusicDetailDialogPanel(parent),
+    m_proxyIndex(QModelIndex()),
+    m_proxyModel(nullptr),
     m_yearEditor(generateLineEdit()),
     m_bpmEditor(generateLineEdit()),
     m_trackEditorOf(new QLabel(this)),
     m_discEditorOf(new QLabel(this)),
     m_genreEditor(new QComboBox(this)),
-    m_button(new KNCircleIconButton(this))
+    m_ratingEditor(new KNMusicRatingEditor(this)),
+    m_button(new KNCircleIconButton(this)),
+    m_writeTag(new QPushButton(this))
 {
     //Configure the genre editor.
     m_genreEditor->setEditable(true);
     m_genreEditor->addItems(knMusicGlobal->genreList());
+    connect(m_genreEditor, &QComboBox::currentTextChanged,
+            this, &KNMusicDetailTagEditPanel::onActionItemChanged);
+    QPalette pal=m_genreEditor->palette();
+    pal.setColor(QPalette::Highlight, QColor(192, 192, 192));
+    m_genreEditor->setPalette(pal);
+    pal=m_genreEditor->view()->palette();
+    pal.setColor(QPalette::HighlightedText, QColor(0,0,0));
+    m_genreEditor->view()->setPalette(pal);
     //Configure the button.
     m_button->setIcon(QIcon(":/plugin/music/detaildialog/tab_icon/tag.png"));
+    //Configure the rating editor.
+    m_ratingEditor->setStarSizeHint(20);
+    m_ratingEditor->setDetectOnMove(false);
+    connect(m_ratingEditor, &KNMusicRatingEditor::editingFinished,
+            this, &KNMusicDetailTagEditPanel::onActionItemChanged);
+    pal=m_ratingEditor->palette();
+    pal.setColor(QPalette::Window, QColor(0,0,0,0));
+    m_ratingEditor->setPalette(pal);
+    //Configure the write tag button.
+    connect(m_writeTag, &QPushButton::clicked,
+            this, &KNMusicDetailTagEditPanel::onActionWriteTag);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -96,7 +123,7 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     //Generate different widgets for the left column.
     //Add to left column layout.
     leftLayout->addRow(m_leftRowLabel[GenreRow], m_genreEditor);
-    leftLayout->addRow(m_leftRowLabel[RatingRow]);
+    leftLayout->addRow(m_leftRowLabel[RatingRow], m_ratingEditor);
     leftLayout->addRow(m_leftRowLabel[BpmRow], m_bpmEditor);
     //Initial the right column layout.
     QFormLayout *rightLayout=new QFormLayout(mainLayout->widget());
@@ -146,8 +173,13 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     rightLayout->addRow(m_rightRowLabel[DiscRow], discLayout);
     //Add edit button and control buttons.
     mainLayout->addStretch();
-    ;
-
+    //Insert the push button to the main layout.
+    QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            this);
+    //Add button layout to main layout.
+    mainLayout->addLayout(buttonLayout);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(m_writeTag);
 
     //Link with the locale manager.
     knI18n->link(this, &KNMusicDetailTagEditPanel::retranslate);
@@ -159,10 +191,17 @@ QAbstractButton *KNMusicDetailTagEditPanel::tabButton()
     return m_button;
 }
 
-void KNMusicDetailTagEditPanel::setAnalysisItem(const KNMusicAnalysisItem &item)
+void KNMusicDetailTagEditPanel::setAnalysisItem(const KNMusicAnalysisItem &item,
+                                                KNMusicProxyModel *proxyModel,
+                                                const QModelIndex &proxyIndex)
 {
+    //Save the item.
+    m_analysisItem=item;
+    //Save the proxy model and index.
+    m_proxyModel=proxyModel;
+    m_proxyIndex=proxyIndex;
     //Get the detail info.
-    const KNMusicDetailInfo &detailInfo=item.detailInfo;
+    const KNMusicDetailInfo &detailInfo=m_analysisItem.detailInfo;
     //Set the item deta to editors.
     m_rowEditor[NameRow]->setText(detailInfo.textLists[Name].toString());
     m_rowEditor[ArtistRow]->setText(detailInfo.textLists[Artist].toString());
@@ -173,6 +212,7 @@ void KNMusicDetailTagEditPanel::setAnalysisItem(const KNMusicAnalysisItem &item)
                 detailInfo.textLists[Composer].toString());
 
     m_genreEditor->setEditText(detailInfo.textLists[Genre].toString());
+    m_ratingEditor->setStarNum(detailInfo.textLists[Rating].toString().toInt());
     m_bpmEditor->setText(detailInfo.textLists[BeatsPerMinuate].toString());
     m_yearEditor->setText(detailInfo.textLists[Year].toString());
     m_trackEditor[0]->setText(detailInfo.textLists[TrackNumber].toString());
@@ -185,6 +225,8 @@ void KNMusicDetailTagEditPanel::setAnalysisItem(const KNMusicAnalysisItem &item)
         //The beginning is 0.
         m_rowEditor[i]->setCursorPosition(0);
     }
+    //Hide the write tag button.
+    m_writeTag->setVisible(false);
 }
 
 void KNMusicDetailTagEditPanel::retranslate()
@@ -219,16 +261,64 @@ void KNMusicDetailTagEditPanel::retranslate()
     //Update the left row label width.
     for(int i=0; i<DetailRowCount; ++i)
     {
-        //Set it to be the maximum label width.
+        //Set it to be the fixed label width.
         m_rowLabel[i]->setFixedWidth(maximumLabelWidth);
     }
     for(int i=0; i<LeftColumnRowCount; ++i)
     {
         m_leftRowLabel[i]->setFixedWidth(maximumLabelWidth);
     }
-
+    //Update the tags.
     m_trackEditorOf->setText(tr("of"));
     m_discEditorOf->setText(tr("of"));
+
+    //Update the write tag button.
+    m_writeTag->setText(tr("Save"));
+}
+
+void KNMusicDetailTagEditPanel::onActionItemChanged()
+{
+    //Show the write tag button.
+    m_writeTag->setVisible(true);
+}
+
+void KNMusicDetailTagEditPanel::onActionWriteTag()
+{
+    //Get the tag parser.
+    KNMusicParser *parser=knMusicGlobal->parser();
+    //Check is null or not.
+    if(!parser)
+    {
+        //Ignore the write state.
+        return;
+    }
+    //Generate a new write tag information.
+    //Get the detail info from the analysis item.
+    KNMusicDetailInfo &detailInfo=m_analysisItem.detailInfo;
+    //Update the detail info.
+    detailInfo.textLists[Name]=m_rowEditor[NameRow]->text();
+    detailInfo.textLists[Artist]=m_rowEditor[ArtistRow]->text();
+    detailInfo.textLists[Album]=m_rowEditor[AlbumRow]->text();
+    detailInfo.textLists[AlbumArtist]=m_rowEditor[AlbumArtistRow]->text();
+    detailInfo.textLists[Composer]=m_rowEditor[ComposerRow]->text();
+    detailInfo.textLists[Genre]=m_genreEditor->currentText();
+    detailInfo.textLists[Rating]=QString::number(m_ratingEditor->starNum());
+    detailInfo.textLists[BeatsPerMinuate]=m_bpmEditor->text();
+    detailInfo.textLists[Year]=m_yearEditor->text();
+    detailInfo.textLists[TrackNumber]=m_trackEditor[0]->text();
+    detailInfo.textLists[TrackCount]=m_trackEditor[1]->text();
+    detailInfo.textLists[DiscNumber]=m_discEditor[0]->text();
+    detailInfo.textLists[DiscCount]=m_discEditor[1]->text();
+    //Okay, write this detail info, using the tag parser to write the tag.
+    if(!parser->writeAnalysisItem(m_analysisItem))
+    {
+        //We cannot write the tag. Simply return.
+        return;
+    }
+    //We have to update the file information.
+    emit requireUpdateFileInfo();
+    //Hide the write tag button.
+    m_writeTag->hide();
 }
 
 inline KNLabelLineEdit *KNMusicDetailTagEditPanel::generateLineEdit()
@@ -238,6 +328,9 @@ inline KNLabelLineEdit *KNMusicDetailTagEditPanel::generateLineEdit()
     //Configure the line edit.
     lineEdit->setMinimumLightness(0xC0);
     lineEdit->setMediumLightness(0xE0);
+    //Link with the item changed slot.
+    connect(lineEdit, &KNLabelLineEdit::textChanged,
+            this, &KNMusicDetailTagEditPanel::onActionItemChanged);
     //Give back the line edit.
     return lineEdit;
 }

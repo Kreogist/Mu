@@ -18,23 +18,28 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+#include "knhtabgroup.h"
+#include "knhwidgetswitcher.h"
+
+#include "knmusicparser.h"
+#include "knmusicproxymodel.h"
+#include "knmusicmodel.h"
 #include "knmusicdetaildialogpanel.h"
 #include "knmusicdetailtageditpanel.h"
-#include "knhtabgroup.h"
-#include "knmusicparser.h"
-#include "knhwidgetswitcher.h"
 
 #include "knmusicdetaildialog.h"
 
 #include <QDebug>
 
-#define albumArtSize 100
+#define AlbumArtSize 100
 
 using namespace MusicUtil;
 
 KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     KNMessageBox(parent),
     m_panelList(QLinkedList<KNMusicDetailDialogPanel *>()),
+    m_proxyIndex(QModelIndex()),
+    m_proxyModel(nullptr),
     m_panelSwitcher(new KNHTabGroup(this)),
     m_panelContainer(new KNHWidgetSwitcher(this)),
     m_tagEditPanel(nullptr)
@@ -60,7 +65,7 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
         m_basicInfoLabel[i]->setPalette(labelPal);
     }
     //Configure the basic information labels.
-    m_basicInfoLabel[LabelAlbumArt]->setFixedSize(albumArtSize, albumArtSize);
+    m_basicInfoLabel[LabelAlbumArt]->setFixedSize(AlbumArtSize, AlbumArtSize);
     m_basicInfoLabel[LabelAlbumArt]->setAlignment(Qt::AlignCenter);
 
     //Initial the widget container.
@@ -102,8 +107,8 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
 void KNMusicDetailDialog::addPanel(KNMusicDetailDialogPanel *panel)
 {
     //Link the panel to detail panel.
-//    connect(panel, &KNMusicDetailDialogPanel::requireUpdateFile,
-//            this, &KNMusicDetailDialog);
+    connect(panel, &KNMusicDetailDialogPanel::requireUpdateFileInfo,
+            this, &KNMusicDetailDialog::onActionUpdateFileInfo);
     //Add panel to the panel container.
     m_panelContainer->addWidget(panel);
     //Add the switcher button to switcher.
@@ -112,32 +117,75 @@ void KNMusicDetailDialog::addPanel(KNMusicDetailDialogPanel *panel)
     m_panelList.append(panel);
 }
 
-void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem)
+void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem,
+                                     KNMusicProxyModel *proxyModel,
+                                     const QModelIndex &proxyIndex)
 {
+    //Save the proxy model and proxy index.
+    m_proxyIndex=proxyIndex;
+    m_proxyModel=proxyModel;
     //Get the parser.
     KNMusicParser *parser=knMusicGlobal->parser();
     //Reanalysis the analysis item.
     parser->reanalysisItem(analysisItem);
 
+    //Update the analysis item information.
+    updateAnalysisItem(analysisItem);
+    //Show the dialog.
+    exec();
+}
+
+void KNMusicDetailDialog::onActionUpdateFileInfo()
+{
+    //Reload the detail info from the proxy model and current item.
+    if(m_proxyModel==nullptr || !m_proxyIndex.isValid())
+    {
+        //Ignore the process.
+        return;
+    }
+    //Get the raw detail info.
+    KNMusicDetailInfo &&originalDetailInfo=
+            m_proxyModel->rowDetailInfo(m_proxyIndex.row());
+    //Generate the analysis item.
+    KNMusicAnalysisItem currentItem;
+    //Get the detail info.
+    currentItem.detailInfo.filePath=originalDetailInfo.filePath;
+    currentItem.detailInfo.trackFilePath=originalDetailInfo.trackFilePath;
+    currentItem.detailInfo.trackIndex=originalDetailInfo.trackIndex;
+    //Update the current item.
+    KNMusicParser *parser=knMusicGlobal->parser();
+    //Check out the parser pointer.
+    if(!parser)
+    {
+        //Ignore the parser.
+        return;
+    }
+    //Reanalysis the parser.
+    parser->reanalysisItem(currentItem);
+    //Update the model.
+    if(m_proxyModel->musicModel())
+    {
+        //Update the music model.
+        m_proxyModel->musicModel()->updateRow(
+                    m_proxyModel->mapToSource(m_proxyIndex).row(),
+                    currentItem);
+    }
+    //Update the analysis item.
+    updateAnalysisItem(currentItem);
+}
+
+inline void KNMusicDetailDialog::updateAnalysisItem(
+        const KNMusicAnalysisItem &analysisItem)
+{
     //Check whether the album art is null.
-    if(analysisItem.coverImage.isNull())
-    {
-        m_basicInfoLabel[LabelAlbumArt]->setPixmap(
-                    knMusicGlobal->noAlbumArt().scaled(
-                        albumArtSize,
-                        albumArtSize,
-                        Qt::KeepAspectRatio,
-                        Qt::SmoothTransformation));
-    }
-    else
-    {
-        m_basicInfoLabel[LabelAlbumArt]->setPixmap(
-                    QPixmap::fromImage(analysisItem.coverImage).scaled(
-                        albumArtSize,
-                        albumArtSize,
-                        Qt::KeepAspectRatio,
-                        Qt::SmoothTransformation));
-    }
+    m_basicInfoLabel[LabelAlbumArt]->setPixmap(
+                ((analysisItem.coverImage.isNull())?
+                    knMusicGlobal->noAlbumArt():
+                    QPixmap::fromImage(analysisItem.coverImage)).scaled(
+                    AlbumArtSize,
+                    AlbumArtSize,
+                    Qt::KeepAspectRatio,
+                    Qt::SmoothTransformation));
     //Get the detail information.
     const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Set the text basic information.
@@ -150,15 +198,12 @@ void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem)
                 detailInfo.textLists[Album].toString());
 
     //Ask all the panel to update the information.
-    for(QLinkedList<KNMusicDetailDialogPanel *>::iterator i=m_panelList.begin();
-        i!=m_panelList.end();
-        ++i)
+    for(auto i : m_panelList)
     {
         //Update the panel information.
-        (*i)->setAnalysisItem(analysisItem);
+        //Set the model and item index to the tag.
+        i->setAnalysisItem(analysisItem, m_proxyModel, m_proxyIndex);
     }
-    //Show the dialog.
-    exec();
 }
 
 KNMusicDetailTagEditPanel *KNMusicDetailDialog::tagEditPanel() const

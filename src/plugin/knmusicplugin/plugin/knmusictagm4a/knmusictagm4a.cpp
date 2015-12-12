@@ -280,6 +280,8 @@ bool KNMusicTagM4a::parseTag(QFile &musicFile,
 
 bool KNMusicTagM4a::writeTag(const KNMusicAnalysisItem &analysisItem)
 {
+    Q_UNUSED(analysisItem)
+    //Do not support write M4A yet.
     return false;
 }
 

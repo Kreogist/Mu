@@ -139,6 +139,15 @@ namespace MusicUtil
         bool cannotPlay;            //The cannot playing flag.
         //Initial the values
         KNMusicDetailInfo():
+            fileName(QString()),
+            filePath(QString()),
+            trackFilePath(QString()),
+            url(QString()),
+            coverImageHash(QString()),
+            dateModified(QDateTime()),
+            dateLastPlayed(QDateTime()),
+            dateAdded(QDateTime()),
+            size(0),
             startPosition(-1),
             duration(0),
             bitRate(0),

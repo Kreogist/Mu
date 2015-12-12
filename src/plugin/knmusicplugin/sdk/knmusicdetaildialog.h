@@ -20,15 +20,17 @@
 #define KNMUSICDETAILDIALOG_H
 
 #include <QLinkedList>
+#include <QModelIndex>
 
 #include "knmusicglobal.h"
 
 #include "knmessagebox.h"
 
 class QLabel;
-class KNMusicDetailDialogPanel;
 class KNHTabGroup;
 class KNHWidgetSwitcher;
+class KNMusicProxyModel;
+class KNMusicDetailDialogPanel;
 class KNMusicDetailTagEditPanel;
 /*!
  * \brief The KNMusicDetailDialog class provides a dialog to display the basic
@@ -68,8 +70,15 @@ public slots:
     /*!
      * \brief Show the dialog and display the detail info of the specific file.
      * \param analysisItem The analysis item of the file.
+     * \param proxyModel The proxy model of the item.
+     * \param proxyIndex The index of the item in the proxy model.
      */
-    void showDialog(KNMusicAnalysisItem analysisItem);
+    void showDialog(KNMusicAnalysisItem analysisItem,
+                    KNMusicProxyModel *proxyModel,
+                    const QModelIndex &proxyIndex);
+
+private slots:
+    void onActionUpdateFileInfo();
 
 private:
     //Basic Information.
@@ -84,8 +93,12 @@ private:
     };
     QLabel *m_basicInfoLabel[BasicInformationCount];
 
+    inline void updateAnalysisItem(const KNMusicAnalysisItem &analysisItem);
     //Panel list.
     QLinkedList<KNMusicDetailDialogPanel *> m_panelList;
+    //Proxy model and current index.
+    QModelIndex m_proxyIndex;
+    KNMusicProxyModel *m_proxyModel;
     //Panel switcher and container.
     KNHTabGroup *m_panelSwitcher;
     KNHWidgetSwitcher *m_panelContainer;

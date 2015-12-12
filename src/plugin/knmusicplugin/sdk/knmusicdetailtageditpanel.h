@@ -21,10 +21,12 @@
 
 #include "knmusicdetaildialogpanel.h"
 
-class QLabel;
 class QComboBox;
+class QLabel;
+class QPushButton;
 class KNCircleIconButton;
 class KNLabelLineEdit;
+class KNMusicRatingEditor;
 /*!
  * \brief The KNMusicDetailTagEditPanel class provide the tag editor panel
  * widget.\n
@@ -45,7 +47,7 @@ public:
     /*!
      * \brief Reimplemented from KNMusicDetailDialogPanel::tabButton().
      */
-    QAbstractButton *tabButton();
+    QAbstractButton *tabButton() Q_DECL_OVERRIDE;
 
 signals:
 
@@ -53,10 +55,14 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicDetailDialogPanel::setAnalysisItem().
      */
-    void setAnalysisItem(const KNMusicAnalysisItem &item);
+    void setAnalysisItem(const KNMusicAnalysisItem &item,
+                         KNMusicProxyModel *proxyModel,
+                         const QModelIndex &proxyIndex) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
+    void onActionItemChanged();
+    void onActionWriteTag();
 
 private:
     enum DetailRows
@@ -85,13 +91,18 @@ private:
     };
 
     inline KNLabelLineEdit *generateLineEdit();
+    KNMusicAnalysisItem m_analysisItem;
+    QModelIndex m_proxyIndex;
+    KNMusicProxyModel *m_proxyModel;
     QLabel *m_rowLabel[DetailRowCount], *m_leftRowLabel[LeftColumnRowCount],
            *m_rightRowLabel[RightColumnRowCount];
     KNLabelLineEdit *m_rowEditor[DetailRowCount], *m_trackEditor[2],
                     *m_discEditor[2], *m_yearEditor, *m_bpmEditor;
     QLabel *m_trackEditorOf, *m_discEditorOf;
     QComboBox *m_genreEditor;
+    KNMusicRatingEditor *m_ratingEditor;
     KNCircleIconButton *m_button;
+    QPushButton *m_writeTag;
 };
 
 #endif // KNMUSICDETAILTAGEDITPANEL_H

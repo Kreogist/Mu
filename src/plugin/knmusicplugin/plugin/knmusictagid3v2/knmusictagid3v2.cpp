@@ -280,16 +280,19 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
     //Add all the text labels to detail frames if it's not empty.
     for(int i=0; i<MusicDataCount; i++)
     {
-        //Check if the text is empty.
-        if(detailInfo.textLists[i].toString().isEmpty())
-        {
-            continue;
-        }
         //Get the frame id if the frame index is valid in the hash list.
         QString frameID=frameMatcher.value(i, "");
         //If the frame id is empty, means you cannot write this data to ID3v2.
         if(frameID.isEmpty())
         {
+            continue;
+        }
+        //Check if the text is empty.
+        if(detailInfo.textLists[i].toString().isEmpty())
+        {
+            //Remove the frame ID from the hash list.
+            frameMap.remove(frameID);
+            //Go to the next one.
             continue;
         }
         //Generate a data frame.

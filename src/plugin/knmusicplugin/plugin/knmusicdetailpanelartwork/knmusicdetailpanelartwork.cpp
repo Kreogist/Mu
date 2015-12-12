@@ -96,31 +96,25 @@ QAbstractButton *KNMusicDetailPanelArtwork::tabButton()
     return m_button;
 }
 
-void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item)
+void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item,
+                                                KNMusicProxyModel *proxyModel,
+                                                const QModelIndex &proxyIndex)
 {
+    Q_UNUSED(proxyIndex)
+    //Check out the proxy model, if it's nullptr, then we cannot set the album
+    //art.
+    m_operations[SetAlbumArt]->setVisible(proxyModel!=nullptr);
     //Save the image.
     m_currentItem=item;
     //Check the cover image is valid or not.
-    if(m_currentItem.coverImage.isNull())
-    {
-        //Set the no album image.
-        m_albumArt->setPixmap(
-                    knMusicGlobal->noAlbumArt().scaled(
-                        ArtworkSize,
-                        ArtworkSize,
-                        Qt::KeepAspectRatio,
-                        Qt::SmoothTransformation));
-    }
-    else
-    {
-        //Load image from the item.
-        m_albumArt->setPixmap(QPixmap::fromImage(
-                                  m_currentItem.coverImage).scaled(
-                                  ArtworkSize,
-                                  ArtworkSize,
-                                  Qt::KeepAspectRatio,
-                                  Qt::SmoothTransformation));
-    }
+    m_albumArt->setPixmap(
+                ((m_currentItem.coverImage.isNull())?
+                    knMusicGlobal->noAlbumArt():
+                    QPixmap::fromImage(m_currentItem.coverImage)).scaled(
+                    ArtworkSize,
+                    ArtworkSize,
+                    Qt::KeepAspectRatio,
+                    Qt::SmoothTransformation));
 }
 
 void KNMusicDetailPanelArtwork::retranslate()
@@ -156,7 +150,13 @@ void KNMusicDetailPanelArtwork::onActionChangeImage()
         return;
     }
     //Now write the data, generate a new item.
-    KNMusicAnalysisItem item=m_currentItem;
+    KNMusicAnalysisItem item;
+    //Get the detail info.
+    KNMusicDetailInfo &detailInfo=item.detailInfo;
+    //Set the file path, file name, file track and index.
+    detailInfo.filePath=m_currentItem.detailInfo.filePath;
+    detailInfo.trackFilePath=m_currentItem.detailInfo.trackFilePath;
+    detailInfo.trackIndex=m_currentItem.detailInfo.trackIndex;
     //Set the new image.
     item.coverImage=targetImage;
     //Write the item.
