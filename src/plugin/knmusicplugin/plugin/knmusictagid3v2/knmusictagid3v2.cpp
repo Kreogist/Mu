@@ -352,7 +352,12 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
     getId3v2FunctionSet(header.major, toolset);
     //If there's a cover image of the song in it, add the image frame to the
     //frame map.
-    if(!analysisItem.coverImage.isNull())
+    if(analysisItem.coverImage.isNull())
+    {
+        //Remove the APIC or PIC information.
+        frameMap.remove((toolset.frameIDSize==4)?"APIC":"PIC");
+    }
+    else
     {
         //Generate a data frame.
         ID3v2DataFrame dataFrame;
@@ -360,8 +365,7 @@ bool KNMusicTagId3v2::writeTag(const KNMusicAnalysisItem &analysisItem)
         dataFrame.data=generateImageData(analysisItem.coverImage,
                                          toolset.frameIDSize);
         //Add the data frame to frame map.
-        frameMap.insert(toolset.frameIDSize==4?
-                            "APIC":"PIC",
+        frameMap.insert((toolset.frameIDSize==4)?"APIC":"PIC",
                         dataFrame);
     }
 

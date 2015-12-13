@@ -188,8 +188,7 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
         if(playingMusicModel()!=nullptr)
         {
             //Disconnect all the monitor signals.
-            disconnect(playingMusicModel(), &KNMusicModel::playingItemRemoved,
-                       this, &KNMusicNowPlaying::onActionPlayingItemRemoved);
+            m_musicModelConnections.disconnectAll();
             //Reset the previous proxy odel.
             playingMusicModel()->setPlayingIndex(QModelIndex());
         }
@@ -203,8 +202,16 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
         if(playingMusicModel())
         {
             //Connect the monitor signals.
-            connect(playingMusicModel(), &KNMusicModel::playingItemRemoved,
-                    this, &KNMusicNowPlaying::onActionPlayingItemRemoved);
+            m_musicModelConnections.append(
+                    connect(playingMusicModel(),
+                            &KNMusicModel::playingItemRemoved,
+                            this,
+                            &KNMusicNowPlaying::onActionPlayingItemRemoved));
+            m_musicModelConnections.append(
+                    connect(playingMusicModel(),
+                            &KNMusicModel::dataChanged,
+                            this,
+                            &KNMusicNowPlaying::onActionModelDataChanged));
         }
     }
     //Reset the current playing index to be empty.
@@ -426,6 +433,27 @@ void KNMusicNowPlaying::onActionLoadFailed()
     }
     //Play the next row without loop mode.
     playNextRow(true);
+}
+
+void KNMusicNowPlaying::onActionModelDataChanged(const QModelIndex &topLeft,
+                                                 const QModelIndex &bottomRight)
+{
+    //Get the current row.
+    int currentRow=m_playingIndex.row();
+    //Check whether the current index is in the range.
+    if(currentRow >= topLeft.row() && currentRow <= bottomRight.row())
+    {
+        //Get the new detail info.
+        m_playingAnalysisItem.detailInfo=
+                playingMusicModel()->rowDetailInfo(currentRow);
+        //Reanalysis row.
+        if(knMusicGlobal->parser() &&
+                knMusicGlobal->parser()->reanalysisItem(m_playingAnalysisItem))
+        {
+            //Give out the current.
+            emit nowPlayingChanged(m_playingAnalysisItem);
+        }
+    }
 }
 
 void KNMusicNowPlaying::playRow(const int &proxyRow)

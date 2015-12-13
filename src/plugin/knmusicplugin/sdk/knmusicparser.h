@@ -100,8 +100,16 @@ public:
     /*!
      * \brief Write analysis item to file path.
      * \param analysisItem The analysis item.
+     * \return If we could write the analysis item successfully, return true.
      */
     bool writeAnalysisItem(const KNMusicAnalysisItem &analysisItem);
+
+    /*!
+     * \brief Write album art in the analysis item into the file path.
+     * \param analysisItem The analysis item.
+     * \return If we could write the analysis item sucessfully, return true.
+     */
+    bool writeAlbumArt(const KNMusicAnalysisItem &analysisItem);
 
 private:
     inline bool findImageFile(const QString &baseName,

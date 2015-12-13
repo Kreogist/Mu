@@ -424,6 +424,71 @@ bool KNMusicParser::writeAnalysisItem(const KNMusicAnalysisItem &analysisItem)
     return writeResult;
 }
 
+bool KNMusicParser::writeAlbumArt(const KNMusicAnalysisItem &analysisItem)
+{
+    //Get the detail info.
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Generate the music file.
+    QFile musicFile(detailInfo.filePath);
+    //Open the music file as read only mode.
+    if(!musicFile.open(QIODevice::ReadOnly))
+    {
+        //Faild to write the analysis item.
+        return false;
+    }
+    //Generate a data stream for the music file.
+    QDataStream musicDataStream(&musicFile);
+    //Generate a empty analysis item.
+    KNMusicAnalysisItem item;
+    //Generate the written parser pointer.
+    QList<KNMusicTagParser *> tagParserList;
+    //Tried to parse the file.
+    for(auto i : m_tagParsers)
+    {
+        //Seeks to the start of input.
+        musicFile.reset();
+        //Check whether we can write the item.
+        if(i->parseTag(musicFile, musicDataStream, item) &&
+                i->writeCoverImage())
+        {
+            //We can parse the file by this parser, check whether this parser is
+            //writable and it can save the image data.
+            tagParserList.append(i);
+        }
+    }
+    //Check the tag parser.
+    if(tagParserList.isEmpty())
+    {
+        //There's no tagging in the file.
+        //We have to detect the file suffix to write new tag into the file.
+        //Get the suffix.
+        QString &&suffix=QFileInfo(musicFile).suffix().toLower();
+        //Check out the suffix.
+        if(suffix=="mp3")
+        {
+            //MP3 file format can write ID3v1, ID3v2 and APEv2 format tag.
+            //But we only want ID3v2, because it's the most powerful.
+            tagParser("id3v2", tagParserList);
+        }
+        //Check whether the tag parser list is still empty.
+        if(tagParserList.isEmpty())
+        {
+            //We cannot write any data.
+            return false;
+        }
+    }
+    //First we will set the result to be true.
+    bool writeResult=true;
+    //Write the tag with all the information.
+    for(auto i : tagParserList)
+    {
+        //Write the tag.
+        writeResult=writeResult && (i->writeTag(analysisItem));
+    }
+    //Use the write tag function to write the tag.
+    return writeResult;
+}
+
 bool KNMusicParser::findImageFile(const QString &baseName,
                                   KNMusicAnalysisItem &item)
 {

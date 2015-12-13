@@ -100,6 +100,7 @@ void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item,
                                                 KNMusicProxyModel *proxyModel,
                                                 const QModelIndex &proxyIndex)
 {
+    Q_UNUSED(proxyModel)
     Q_UNUSED(proxyIndex)
     //Save the image.
     m_currentItem=item;
@@ -139,7 +140,7 @@ void KNMusicDetailPanelArtwork::onActionChangeImage()
                 tr("Select the new album cover image"),
                 m_lastDirectory,
                 tr("All supported files") +
-                "(*.png, *.jpg);;" +
+                " (*.png *.jpg);;" +
                 m_fileTypeFilter);
     //Prepare the new image.
     QImage targetImage;
@@ -149,29 +150,14 @@ void KNMusicDetailPanelArtwork::onActionChangeImage()
     {
         return;
     }
-    //Now write the data, generate a new item.
-    KNMusicAnalysisItem item;
-    //Get the detail info.
-    KNMusicDetailInfo &detailInfo=item.detailInfo;
-    //Set the file path, file name, file track and index.
-    detailInfo.filePath=m_currentItem.detailInfo.filePath;
-    detailInfo.trackFilePath=m_currentItem.detailInfo.trackFilePath;
-    detailInfo.trackIndex=m_currentItem.detailInfo.trackIndex;
     //Set the new image.
-    item.coverImage=targetImage;
+    m_currentItem.coverImage=targetImage;
     //Write the item.
     if(knMusicGlobal->parser()!=nullptr &&
-            knMusicGlobal->parser()->writeAnalysisItem(item))
+            knMusicGlobal->parser()->writeAlbumArt(m_currentItem))
     {
-        //If we can write successfully, update the data.
-        //Save the new analysis item.
-        m_currentItem=item;
-        //Save the new image.
-        m_albumArt->setPixmap(QPixmap::fromImage(targetImage).scaled(
-                                  ArtworkSize,
-                                  ArtworkSize,
-                                  Qt::KeepAspectRatio,
-                                  Qt::SmoothTransformation));
+        //We have to update the file information.
+        emit requireUpdateFileInfo();
     }
 }
 

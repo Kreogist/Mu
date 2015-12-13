@@ -26,6 +26,11 @@
 #include "knmusicnowplayingbase.h"
 
 class KNMusicTemporaryPlaylistModel;
+/*!
+ * \brief The KNMusicNowPlaying class provides a default now playing. Though the
+ * algorithms using in the module is too naive, it's a kind of steady version
+ * of the now playing.
+ */
 class KNMusicNowPlaying : public KNMusicNowPlayingBase
 {
     Q_OBJECT
@@ -141,6 +146,8 @@ private slots:
     void onActionPlayingItemRemoved();
     void onActionLoadSuccess();
     void onActionLoadFailed();
+    void onActionModelDataChanged(const QModelIndex &topLeft,
+                                  const QModelIndex &bottomRight);
     void playRow(const int &proxyRow);
 
 private:
@@ -162,7 +169,7 @@ private:
 
     std::mt19937 m_mersenneSeed;
 
-    KNConnectionHandler m_backendConnections;
+    KNConnectionHandler m_backendConnections, m_musicModelConnections;
     bool m_manualPlayed;
 };
 
