@@ -52,10 +52,9 @@ public:
 
     /*!
      * \brief Load the information about languages, load all the data about the
-     * language file.
-     * \param languageDir The language directory.
+     * language file. According to langauge directory list.
      */
-    void loadLanguageFiles(const QString &languageDir);
+    void loadLanguageFiles();
 
     /*!
      * \brief Get the local codec according to the locale.
@@ -96,6 +95,14 @@ public:
      * \return The language key text.
      */
     QString languageKey(int index) const;
+
+    /*!
+     * \brief Add one language directory to the directory list, when calling the
+     * loadLanguageFiles() function, it will automatically check all the sub
+     * folder in the directory folder.
+     * \param dirPath The langauge folder path.
+     */
+    void addLanguageDirectory(const QString &dirPath);
 
     template<typename Func2>
     /*!
@@ -162,6 +169,7 @@ private:
     int m_currentLangauge;
     QHash<QString, QString> m_languageTranslation;
     QList<LanguageItem> m_languageList;
+    QStringList m_languageDirectoryList;
 };
 
 #endif // KNLOCALEMANAGER_H

@@ -226,12 +226,18 @@ void KNGlobal::initialInfrastrcture()
     //Initial the locale manager.
     //Load the language in language folder.
 #ifdef Q_OS_LINUX
-    //Thanks for Sou Bunnbu:
-    //For Linux, we should also find langauges at /usr/share/Kreogist/mu, here's
-    //the default package resource provide place.
-    knI18n->loadLanguageFiles("/usr/share/Kreogist/mu/Language");
+    //Thanks for Sou Bunnbu, amazingfate:
+    //For Linux, we should also find langauges at /usr/share/Kreogist/mu.
+    knI18n->addLanguageDirectory("/usr/share/Kreogist/mu/Language");
+    //And the user installed languages, thanks for 1dot75cm.
+    knI18n->addLanguageDirectory(m_dirPath[UserDataDir]+"/Language");
+    knI18n->loadLanguageFiles();
 #else
-    knI18n->loadLanguageFiles(m_dirPath[ResourceDir]+"/Language");
+    //For Windows and Mac OS X, we can simply check the resource folder and
+    //application dir.
+    knI18n->addLanguageDirectory(m_dirPath[ResourceDir]+"/Language");
+    knI18n->addLanguageDirectory(qApp->applicationDirPath()+"/Language");
+    knI18n->loadLanguageFiles();
 #endif
     //Load the current language file.
     //We will load the langauge file twice, for the first time, we have to load

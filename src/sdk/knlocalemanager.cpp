@@ -52,7 +52,7 @@ KNLocaleManager::KNLocaleManager(QObject *parent) :
 {
 }
 
-void KNLocaleManager::loadLanguageFiles(const QString &languageDir)
+void KNLocaleManager::loadLanguageFiles()
 {
     //Clear the previous language list.
     m_languageList.clear();
@@ -80,10 +80,12 @@ void KNLocaleManager::loadLanguageFiles(const QString &languageDir)
     //Add English language item, English will always be the first language, it's
     //the default embedded language.
     addLanguage("English", "English", "", QPixmap("://public/English.png"));
-    //Load the language in application default folder.
-    loadLanguageInFolder(qApp->applicationDirPath()+"/Language");
-    //Load the language in the language folder.
-    loadLanguageInFolder(languageDir);
+    //Load all the language in the directory lists.
+    for(auto i : m_languageDirectoryList)
+    {
+        //Load the language in the folder i.
+        loadLanguageInFolder(i);
+    }
 }
 
 QTextCodec *KNLocaleManager::localeCodec()
@@ -133,6 +135,12 @@ QString KNLocaleManager::languageName(int index) const
 QString KNLocaleManager::languageKey(int index) const
 {
     return m_languageList.at(index).key;
+}
+
+void KNLocaleManager::addLanguageDirectory(const QString &dirPath)
+{
+    //Add the dir path to the directory list.
+    m_languageDirectoryList.append(dirPath);
 }
 
 void KNLocaleManager::setLanguage(const QString &key)
