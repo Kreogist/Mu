@@ -389,8 +389,28 @@ bool KNMusicParser::writeAnalysisItem(const KNMusicAnalysisItem &analysisItem)
     //Check the tag parser.
     if(tagParserList.isEmpty())
     {
-        //We cannot write the tag.
-        return false;
+        //There's no tagging in the file.
+        //We have to detect the file suffix to write new tag into the file.
+        //Get the suffix.
+        QString &&suffix=QFileInfo(musicFile).suffix().toLower();
+        //Check out the suffix.
+        if(suffix=="mp3")
+        {
+            //MP3 file format can write ID3v1, ID3v2 and APEv2 format tag.
+            //But we only want ID3v2, because it's the most powerful.
+            tagParser("id3v2", tagParserList);
+        }
+        else if(suffix=="ape")
+        {
+            //Add APEv2 parser.
+            tagParser("apev2", tagParserList);
+        }
+        //Check whether the tag parser list is still empty.
+        if(tagParserList.isEmpty())
+        {
+            //We cannot write any data.
+            return false;
+        }
     }
     //First we will set the result to be true.
     bool writeResult=true;
@@ -438,4 +458,21 @@ bool KNMusicParser::checkImageFile(const QString &filePath,
     }
     //If the file doesn't exist, of course not load success.
     return false;
+}
+
+inline void KNMusicParser::tagParser(const QString &parserName,
+                                     QList<KNMusicTagParser *> &tagParserList)
+{
+    //Find all the parser.
+    for(auto i : m_tagParsers)
+    {
+        //Check out the parser name.
+        if(i->tagParserName()==parserName)
+        {
+            //We have find the tag parser, add it to tag parser list.
+            tagParserList.append(i);
+            //Mission complete.
+            return;
+        }
+    }
 }

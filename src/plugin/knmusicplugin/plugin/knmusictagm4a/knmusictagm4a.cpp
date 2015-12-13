@@ -90,6 +90,11 @@ KNMusicTagM4a::KNMusicTagM4a(QObject *parent) :
     }
 }
 
+QString KNMusicTagM4a::tagParserName()
+{
+    return "m4a";
+}
+
 bool KNMusicTagM4a::parseTag(QFile &musicFile,
                               QDataStream &musicDataStream,
                               KNMusicAnalysisItem &analysisItem)

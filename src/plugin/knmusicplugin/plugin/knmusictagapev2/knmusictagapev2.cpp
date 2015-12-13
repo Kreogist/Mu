@@ -63,6 +63,11 @@ KNMusicTagApev2::KNMusicTagApev2(QObject *parent) :
     }
 }
 
+QString KNMusicTagApev2::tagParserName()
+{
+    return "apev2";
+}
+
 bool KNMusicTagApev2::parseTag(QFile &musicFile,
                                QDataStream &musicDataStream,
                                KNMusicAnalysisItem &analysisItem)

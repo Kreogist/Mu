@@ -202,6 +202,8 @@ void KNMusicDetailTagEditPanel::setAnalysisItem(const KNMusicAnalysisItem &item,
     m_proxyIndex=proxyIndex;
     //Get the detail info.
     const KNMusicDetailInfo &detailInfo=m_analysisItem.detailInfo;
+    //Check out the item track list file.
+    m_button->setVisible(detailInfo.trackFilePath.isEmpty());
     //Set the item deta to editors.
     m_rowEditor[NameRow]->setText(detailInfo.textLists[Name].toString());
     m_rowEditor[ArtistRow]->setText(detailInfo.textLists[Artist].toString());

@@ -36,6 +36,11 @@ public:
     explicit KNMusicTagId3v1(QObject *parent = 0);
 
     /*!
+     * \brief Reimplemented from KNMusicTagParser::tagParserName().
+     */
+    QString tagParserName() Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicTagParser::parseTag.
      */
     bool parseTag(QFile &musicFile,

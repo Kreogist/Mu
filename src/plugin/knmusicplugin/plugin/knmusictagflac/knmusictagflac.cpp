@@ -45,6 +45,11 @@ KNMusicTagFlac::KNMusicTagFlac(QObject *parent) :
     }
 }
 
+QString KNMusicTagFlac::tagParserName()
+{
+    return "flac";
+}
+
 bool KNMusicTagFlac::parseTag(QFile &musicFile,
                               QDataStream &musicDataStream,
                               KNMusicAnalysisItem &analysisItem)

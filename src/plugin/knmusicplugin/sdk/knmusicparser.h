@@ -108,6 +108,8 @@ private:
                               KNMusicAnalysisItem &item);
     inline bool checkImageFile(const QString &filePath,
                                KNMusicAnalysisItem &item);
+    inline void tagParser(const QString &parserName,
+                          QList<KNMusicTagParser *> &tagParserList);
     QList<QString> m_imageTypes;
     QLinkedList<KNMusicAnalysiser *> m_analysisers;
     QLinkedList<KNMusicTagParser *> m_tagParsers;

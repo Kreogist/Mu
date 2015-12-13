@@ -21,10 +21,18 @@
 
 #include "knmusictagparser.h"
 
+/*!
+ * \brief The KNMusicTagWma class provides the Windows Media Audio (WMA format)
+ * audio tag reading parser.
+ */
 class KNMusicTagWma : public KNMusicTagParser
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicTagWma parser object.
+     * \param parent The parent object.
+     */
     explicit KNMusicTagWma(QObject *parent = 0);
 
     /*!
@@ -33,6 +41,11 @@ public:
     bool parseTag(QFile &musicFile,
                   QDataStream &musicDataStream,
                   KNMusicAnalysisItem &analysisItem) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::tagParserName().
+     */
+    QString tagParserName() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicTagParser::writeTag.

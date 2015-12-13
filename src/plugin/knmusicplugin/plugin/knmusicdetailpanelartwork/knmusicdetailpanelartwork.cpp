@@ -101,11 +101,11 @@ void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item,
                                                 const QModelIndex &proxyIndex)
 {
     Q_UNUSED(proxyIndex)
-    //Check out the proxy model, if it's nullptr, then we cannot set the album
-    //art.
-    m_operations[SetAlbumArt]->setVisible(proxyModel!=nullptr);
     //Save the image.
     m_currentItem=item;
+    //Check out the track of the detail info.
+    m_operations[SetAlbumArt]->setVisible(
+                m_currentItem.detailInfo.trackFilePath.isEmpty());
     //Check the cover image is valid or not.
     m_albumArt->setPixmap(
                 ((m_currentItem.coverImage.isNull())?

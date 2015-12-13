@@ -40,6 +40,11 @@ KNMusicTagId3v1::KNMusicTagId3v1(QObject *parent) :
     m_codec=knI18n->localeCodec();
 }
 
+QString KNMusicTagId3v1::tagParserName()
+{
+    return "id3v1";
+}
+
 bool KNMusicTagId3v1::parseTag(QFile &musicFile,
                                QDataStream &musicDataStream,
                                KNMusicAnalysisItem &analysisItem)

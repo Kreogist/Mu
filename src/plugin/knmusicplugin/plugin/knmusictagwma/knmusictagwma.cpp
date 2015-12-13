@@ -180,6 +180,11 @@ bool KNMusicTagWma::parseTag(QFile &musicFile,
     return true;
 }
 
+QString KNMusicTagWma::tagParserName()
+{
+    return "wma";
+}
+
 bool KNMusicTagWma::writeTag(const KNMusicAnalysisItem &analysisItem)
 {
     Q_UNUSED(analysisItem)

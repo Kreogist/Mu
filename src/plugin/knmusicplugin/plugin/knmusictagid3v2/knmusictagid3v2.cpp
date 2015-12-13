@@ -138,6 +138,11 @@ KNMusicTagId3v2::KNMusicTagId3v2(QObject *parent) :
     }
 }
 
+QString KNMusicTagId3v2::tagParserName()
+{
+    return "id3v2";
+}
+
 bool KNMusicTagId3v2::parseTag(QFile &musicFile,
                                QDataStream &musicDataStream,
                                KNMusicAnalysisItem &analysisItem)

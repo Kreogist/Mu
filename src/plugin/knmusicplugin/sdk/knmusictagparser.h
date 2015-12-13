@@ -44,6 +44,12 @@ public:
     KNMusicTagParser(QObject *parent = 0):QObject(parent){}
 
     /*!
+     * \brief Get the name of the current tag.
+     * \return The tag format name. Some might be the music format.
+     */
+    virtual QString tagParserName()=0;
+
+    /*!
      * \brief Parse the tag in the file. If we cannot find the tag in the file,
      * it should return false immediately.
      * \param musicFile The target music file.

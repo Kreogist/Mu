@@ -43,6 +43,11 @@ KNMusicTagWav::KNMusicTagWav(QObject *parent) :
     }
 }
 
+QString KNMusicTagWav::tagParserName()
+{
+    return "wav";
+}
+
 bool KNMusicTagWav::parseTag(QFile &musicFile,
                              QDataStream &musicDataStream,
                              KNMusicAnalysisItem &analysisItem)

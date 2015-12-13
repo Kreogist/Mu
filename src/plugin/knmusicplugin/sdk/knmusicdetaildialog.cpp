@@ -131,6 +131,8 @@ void KNMusicDetailDialog::showDialog(KNMusicAnalysisItem analysisItem,
 
     //Update the analysis item information.
     updateAnalysisItem(analysisItem);
+    //Reset the current button to the first one, it should be the overview tab.
+    m_panelSwitcher->setCurrentIndex(0);
     //Show the dialog.
     exec();
 }

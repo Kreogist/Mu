@@ -21,11 +21,27 @@
 
 #include "knmusictagid3v2.h"
 
+/*!
+ * \brief The KNMusicTagWav class provides the ability to read the WAV format
+ * file tag information. It contains two parts of the WAV file contains tag
+ * information. One is the part of the WAV structure 'list' chunk, and the one
+ * Foobar write called 'id32' chunk. The 'id32' chunk will use ID3v2 parser to
+ * parse.
+ */
 class KNMusicTagWav : public KNMusicTagId3v2
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicTagWav class.
+     * \param parent The parent object.
+     */
     explicit KNMusicTagWav(QObject *parent = 0);
+
+    /*!
+     * \brief Reimplemented from KNMusicTagParser::tagParserName().
+     */
+    QString tagParserName() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicTagParser::parseTag.
