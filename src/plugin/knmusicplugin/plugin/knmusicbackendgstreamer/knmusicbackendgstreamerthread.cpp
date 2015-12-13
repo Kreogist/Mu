@@ -36,6 +36,7 @@ KNMusicBackendGStreamerThread::KNMusicBackendGStreamerThread(QObject *parent) :
     m_endPosition(-1),
     m_duration(-1),
     m_totalDuration(-1),
+    m_savedPosition(-1),
     m_tick(new QTimer(this)),
     m_playbin(NULL),
     m_seekFlag((GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT)),
@@ -98,6 +99,8 @@ bool KNMusicBackendGStreamerThread::loadFile(const QString &filePath)
 
 void KNMusicBackendGStreamerThread::reset()
 {
+    //Stop the ticker.
+    m_tick->stop();
     //Clear up the pipeline.
     resetPipeline();
     //Reset the total duration.
@@ -233,6 +236,65 @@ void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
 GstElement *KNMusicBackendGStreamerThread::playbin()
 {
     return m_playbin;
+}
+
+void KNMusicBackendGStreamerThread::save()
+{
+    //Stop the ticker.
+    m_tick->stop();
+    //Save the position of the current thread.
+    gst_element_query_position(m_playbin,
+                               GST_FORMAT_TIME,
+                               &m_savedPosition);
+    //Playbin has to be reset first.
+    //Check playbin is null or not.
+    if(m_playbin!=NULL)
+    {
+        //If it's not null, reset the state.
+        gst_element_set_state(m_playbin, GST_STATE_NULL);
+        //Reduce the ref of the playbin.
+        gst_object_unref(m_playbin);
+        //Reset the playbin pointer.
+        m_playbin=NULL;
+    }
+}
+
+void KNMusicBackendGStreamerThread::restore(const QString &updatedFilePath)
+{
+    //Check out the saved position, if it's -1, means it never saved before.
+    //Ignore the invalid call.
+    if(m_savedPosition==-1)
+    {
+        return;
+    }
+    //Rebuild the pipeline.
+    rebuildPipeline();
+    //Check out the updated file path.
+    QString restoreFilePath=
+            updatedFilePath.isEmpty()?m_filePath:updatedFilePath;
+    //Reload the playbin.
+    {
+        //Get the file url from the file path.
+        QByteArray localUrl=
+                QUrl::fromLocalFile(restoreFilePath).toString().toUtf8();
+        //Set the uri to the playbin.
+        g_object_set(m_playbin, "uri", localUrl.data(), NULL);
+    }
+    //Reset the position, seek the playbin pipeline.
+    gst_element_seek_simple(m_playbin,
+                            GST_FORMAT_TIME,
+                            m_seekFlag,
+                            m_savedPosition);
+    //Check out the state.
+    if(m_state==Playing)
+    {
+        //Start the updater.
+        m_tick->start();
+        //Play the playbin.
+        gst_element_set_state(m_playbin, GST_STATE_PLAYING);
+    }
+    //Reset the saved position.
+    m_savedPosition=-1;
 }
 
 void KNMusicBackendGStreamerThread::setVolume(const int &volume)

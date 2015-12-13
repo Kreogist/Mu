@@ -50,7 +50,9 @@
  */
 
 /*!
- * \brief The KNMusicBackendGStreamerThread class
+ * \brief The KNMusicBackendGStreamerThread class is the standard playing thread
+ * for the GStreamer backend provided as official plugin.\n
+ * It should only be used and constructed by KNMusicBackendGStreamer.
  */
 class KNMusicBackendGStreamerThread : public KNMusicStandardBackendThread
 {
@@ -115,6 +117,11 @@ public:
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Get the playbin of the playing thread. This function shouldn't be
+     * called by any other class.
+     * \return The playbin pointer.
+     */
     GstElement *playbin();
 
 signals:
@@ -128,6 +135,16 @@ signals:
 
 public slots:
     /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::save().
+     */
+    void save();
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::restore().
+     */
+    void restore(const QString &updatedFilePath=QString());
+
+    /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::setVolume().
      */
     void setVolume(const int &volume) Q_DECL_OVERRIDE;
@@ -137,6 +154,10 @@ public slots:
      */
     void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief This slot will be called from the call back function. It shouldn't
+     * be called by other classes.
+     */
     void updateDuration();
 
 private slots:
@@ -155,6 +176,7 @@ private:
            m_endPosition,
            m_duration,
            m_totalDuration;
+    gint64 m_savedPosition;
     QTimer *m_tick;
     GstElement *m_playbin;
     const GstSeekFlags m_seekFlag;
