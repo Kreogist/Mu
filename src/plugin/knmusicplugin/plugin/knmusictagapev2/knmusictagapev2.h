@@ -88,6 +88,13 @@ private:
         quint32 size;
         quint32 itemCount;
         quint32 flags;
+        APEHeader() :
+            version(0),
+            size(0),
+            itemCount(0),
+            flags(0)
+        {
+        }
     };
     struct APETagItem
     {

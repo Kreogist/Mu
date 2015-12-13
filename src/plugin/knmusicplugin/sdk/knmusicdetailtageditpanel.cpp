@@ -175,7 +175,7 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     mainLayout->addStretch();
     //Insert the push button to the main layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                            this);
+                                            mainLayout->widget());
     //Add button layout to main layout.
     mainLayout->addLayout(buttonLayout);
     buttonLayout->addStretch();

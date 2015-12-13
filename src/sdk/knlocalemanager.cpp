@@ -80,6 +80,8 @@ void KNLocaleManager::loadLanguageFiles()
     //Add English language item, English will always be the first language, it's
     //the default embedded language.
     addLanguage("English", "English", "", QPixmap("://public/English.png"));
+    //Generate an empty installed language list.
+    QStringList installedLangauge;
     //Load all the language in the directory lists.
     for(auto i : m_languageDirectoryList)
     {
@@ -235,7 +237,8 @@ inline void KNLocaleManager::loadLanguage(const QString &filePath)
     emit languageChange();
 }
 
-inline void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
+inline void KNLocaleManager::loadLanguageInFolder(const QString &dirPath,
+                                                  QStringList &installedList)
 {
     //Check the folder exist. If no, return.
     QDir languageFolder(dirPath);
@@ -263,8 +266,10 @@ inline void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
         QFileInfo qmInfo(i.absoluteFilePath()+"/"+key+".qm"),
                   iconInfo(i.absoluteFilePath()+"/"+key+".png");
         //If there's no qm file, then ignore this folder.
-        if(qmInfo.exists())
+        if(qmInfo.exists() && (!installedList.contains(key)))
         {
+            //Insert the key to installed language list.
+            installedList.append(key);
             //Prepare the information of the language.
             //  Name
             //Get the matched name from the translation file.

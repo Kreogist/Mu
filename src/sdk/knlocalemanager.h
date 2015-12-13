@@ -159,7 +159,8 @@ private:
     };
 
     inline void loadLanguage(const QString &filePath);
-    inline void loadLanguageInFolder(const QString &dirPath);
+    inline void loadLanguageInFolder(const QString &dirPath,
+                                     QStringList &installedList);
     inline void addLanguage(const QString &key,
                             const QString &name,
                             const QString &filePath,

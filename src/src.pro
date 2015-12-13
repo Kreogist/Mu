@@ -131,7 +131,7 @@ macx: {
 
 linux: {
     # Enable the backend and analysiser.
-    CONFIG += backend-gstreamer analysiser-ffmpeg
+    CONFIG += backend-gstreamer analysiser-ffmpeg i18n
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
@@ -144,7 +144,7 @@ i18n: {
     # qm file according to the original ts file real-time.
     MAKE_QM_FILES.input = TRANSLATIONS
     MAKE_QM_FILES.output = ${QMAKE_FILE_BASE}.qm
-    MAKE_QM_FILES.commands = lrelease ${QMAKE_FILE_NAME} -qm i18n/${QMAKE_FILE_BASE}.qm
+    MAKE_QM_FILES.commands = lrelease ${QMAKE_FILE_NAME} -qm ../bin/${QMAKE_FILE_BASE}.qm
     MAKE_QM_FILES.CONFIG += no_link target_predeps
     # Add MAKE_QM_FILES to the extra compilers.
     QMAKE_EXTRA_COMPILERS += MAKE_QM_FILES
