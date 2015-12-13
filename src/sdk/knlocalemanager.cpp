@@ -86,7 +86,7 @@ void KNLocaleManager::loadLanguageFiles()
     for(auto i : m_languageDirectoryList)
     {
         //Load the language in the folder i.
-        loadLanguageInFolder(i);
+        loadLanguageInFolder(i, installedLangauge);
     }
 }
 

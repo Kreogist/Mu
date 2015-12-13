@@ -532,8 +532,6 @@ inline void KNMusicNowPlaying::resetCurrentPlaying()
 
 void KNMusicNowPlaying::resetCurrentPlayingModelData()
 {
-    //Emit now playing reset signal first.
-    emit nowPlayingReset();
     //To reset the now playing, clear the backend first.
     //Check whether the backend is valid.
     if(m_backend)
@@ -543,6 +541,8 @@ void KNMusicNowPlaying::resetCurrentPlayingModelData()
     }
     //Clear previous the now playing icon.
     playingMusicModel()->setPlayingIndex(QModelIndex());
+    //Emit now playing reset signal.
+    emit nowPlayingReset();
 }
 
 inline void KNMusicNowPlaying::playNextRow(bool noLoopMode)
