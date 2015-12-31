@@ -131,7 +131,7 @@ signals:
      * \param bus The GstBut pointer.
      * \param message The message pointer, this is the thing we need.
      */
-    void requireProcessEvent(GstBus *bus, GstMessage *message);
+    void requireProcessEvent(int type);
 
 public slots:
     /*!
@@ -162,7 +162,7 @@ public slots:
 
 private slots:
     void onActionTick();
-    void processEvents(GstBus *bus, GstMessage *message);
+    void processEvents(int type);
 
 private:
     static gboolean busWatch(GstBus *bus, GstMessage *message, gpointer data);

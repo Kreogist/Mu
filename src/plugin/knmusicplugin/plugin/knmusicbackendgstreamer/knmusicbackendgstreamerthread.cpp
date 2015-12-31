@@ -383,14 +383,10 @@ void KNMusicBackendGStreamerThread::onActionTick()
     }
 }
 
-void KNMusicBackendGStreamerThread::processEvents(GstBus *bus,
-                                                  GstMessage *message)
+void KNMusicBackendGStreamerThread::processEvents(int type)
 {
-    Q_UNUSED(bus)
-    //Get the message type.
-    GstMessageType messageType=GST_MESSAGE_TYPE(message);
     //Check out the message type
-    switch (messageType)
+    switch(type)
     {
     case GST_MESSAGE_EOS:
     {
@@ -417,7 +413,11 @@ gboolean KNMusicBackendGStreamerThread::busWatch(GstBus *bus,
                                                  GstMessage *message,
                                                  gpointer data)
 {
-    switch (GST_MESSAGE_TYPE (message))
+    Q_UNUSED(bus)
+    //Get the event.
+    GstMessageType type=GST_MESSAGE_TYPE(message);
+    //Process the event.
+    switch(type)
     {
     case GST_MESSAGE_STATE_CHANGED:
     {
@@ -445,8 +445,7 @@ gboolean KNMusicBackendGStreamerThread::busWatch(GstBus *bus,
         //Retranslate the data to a gstreamer-thread.
         //Emit the process event signal.
         static_cast<KNMusicBackendGStreamerThread *>(data)->requireProcessEvent(
-                    bus,
-                    message);
+                    (int)type);
 
     }
     //Give back successful.
