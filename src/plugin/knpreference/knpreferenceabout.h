@@ -24,6 +24,7 @@
 class QLabel;
 class QTextEdit;
 class KNImageLabel;
+class KNLabelButton;
 /*!
  * \brief The KNPreferenceAbout class is a simple class which provides the
  * version information and some other links about this product.
@@ -50,18 +51,19 @@ protected:
 
 private slots:
     void retranslate();
+    void onActionShowUpdate();
 
 private:
     enum ContentIndex
     {
         Title,
-        Version,
         Copyright,
         ContentIndexCount
     };
 
-    KNImageLabel *m_iconContent;
     QLabel *m_textContent[ContentIndexCount];
+    KNImageLabel *m_iconContent;
+    KNLabelButton *m_checkUpdate;
     QTextEdit *m_otherText;
 };
 

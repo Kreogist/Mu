@@ -24,6 +24,7 @@
 #include "knimagelabel.h"
 #include "knlocalemanager.h"
 #include "knthememanager.h"
+#include "knlabelbutton.h"
 #include "sao/knsaostyle.h"
 
 #include "knpreferenceabout.h"
@@ -33,6 +34,7 @@
 KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     QWidget(parent),
     m_iconContent(new KNImageLabel(this)),
+    m_checkUpdate(new KNLabelButton(this)),
     m_otherText(new QTextEdit(this))
 {
     //Configure the label fonts.
@@ -49,7 +51,6 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
         m_textContent[i]->setFont(labelFonts);
     }
     //Register the version and copyright label.
-    knTheme->registerWidget(m_textContent[Version]);
     knTheme->registerWidget(m_textContent[Copyright]);
     //Configure the other text edit.
     m_otherText->setObjectName("PreferenceAboutCopyright");
@@ -58,6 +59,12 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     m_otherText->viewport()->setCursor(Qt::ArrowCursor);
     knTheme->registerWidget(m_otherText);
     KNSaoStyle::styleVerticalScrollBar(m_otherText->verticalScrollBar());
+    //Configure check update button.
+    m_checkUpdate->setText(QApplication::applicationVersion());
+    m_checkUpdate->setObjectName("PreferenceAboutLabel");
+    m_checkUpdate->setAlignment(Qt::AlignCenter);
+    m_checkUpdate->setCursor(Qt::PointingHandCursor);
+    knTheme->registerWidget(m_checkUpdate);
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -81,7 +88,7 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     //Add version and copyright labels to content layout.
     contentLayout->addWidget(m_textContent[Title], 0, Qt::AlignHCenter);
     contentLayout->addSpacing(8);
-    contentLayout->addWidget(m_textContent[Version], 0, Qt::AlignHCenter);
+    contentLayout->addWidget(m_checkUpdate, 0, Qt::AlignHCenter);
     contentLayout->addWidget(m_textContent[Copyright], 0, Qt::AlignHCenter);
     contentLayout->addWidget(m_otherText, 0, Qt::AlignHCenter);
     contentLayout->addStretch();
@@ -120,47 +127,52 @@ void KNPreferenceAbout::resizeEvent(QResizeEvent *event)
     iconSize=iconSize>>2;
     captionFont.setPixelSize(iconSize<13?13:iconSize);
     //Set font to those captions.
-    m_textContent[Version]->setFont(captionFont);
+    m_checkUpdate->setFont(captionFont);
     m_textContent[Copyright]->setFont(captionFont);
 }
 
 void KNPreferenceAbout::retranslate()
 {
     //Update the content data.
-    m_textContent[Version]->setText(QApplication::applicationVersion());
     m_textContent[Copyright]->setText(QString(QChar(169)) +
                                       tr(" 2013-2015 Kreogist Dev Team\n"
                                       "All rights reserved."));
     //Update the thank list.
     m_otherText->setPlainText(
-                   "Tojo Saki <tomguts@126.com>\n"
-                   "Luming Wang <wlm199558@126.com>\n"
-                   "Dayou Zhang <1079286704@qq.com>\n"
-                   "Jiayi Zhang <bf109g2@126.com>\n"
-                   "Youraku <1497667718@qq.com>\n"
-                   "Joe Johnson <liquanquan123@vip.qq.com>\n"
-                   "Freddie <freddie.wanah@gmail.com>\n"
-                   "Nick Tang <1953547787@qq.com>\n"
-                   "Frantic1048 <frantic1048@163.com>\n"
-                   "Yayuan Yan <yy1119@nyu.edu>\n"
-                   "\n"+
-                tr("Special Thanks")+"\n"
-                   "WangBin\n"
-                   "Sou Bunnbu\n"
-                   "darkblackswords\n"
-                   "Yuri Ogawara\n"
-                   "1dot75cm\n"
-                   "Lin Yuan\n"
-                   "\n"+
+                "Tojo Saki <tomguts@126.com>\n"
+                "Luming Wang <wlm199558@126.com>\n"
+                "Dayou Zhang <1079286704@qq.com>\n"
+                "Jiayi Zhang <bf109g2@126.com>\n"
+                "Youraku <1497667718@qq.com>\n"
+                "Joe Johnson <liquanquan123@vip.qq.com>\n"
+                "Freddie <freddie.wanah@gmail.com>\n"
+                "Nick Tang <1953547787@qq.com>\n"
+                "Frantic1048 <frantic1048@163.com>\n"
+                "Yayuan Yan <yy1119@nyu.edu>\n"
+                "\n"+
+                tr("Special Thanks") +
+                "\n"
+                "WangBin\n"
+                "Sou Bunnbu\n"
+                "darkblackswords\n"
+                "Yuri Ogawara\n"
+                "1dot75cm\n"
+                "Lin Yuan\n"
+                "miaolapd\n"
+                "\n"+
                 tr("This program uses Qt Version ")+
-                   QT_VERSION_STR+
+                QT_VERSION_STR+
                 tr("\n"
                    "Qt is a C++ toolkit for cross-platform application developm"
                    "ent.\n"
-                   "Copyright (C) 2015 The Qt Company Ltd and other contributors"
-                   ".\n"
+                   "Copyright (C) 2015 The Qt Company Ltd and other contributor"
+                   "s.\n"
                    "Qt and the Qt logo are trademarks of The Qt Company Ltd.\n"
                    "Qt is The Qt Company Ltd product developed as an open sourc"
                    "e project. See qt.io for more information."));
 }
 
+void KNPreferenceAbout::onActionShowUpdate()
+{
+    ;
+}

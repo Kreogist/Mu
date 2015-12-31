@@ -37,7 +37,7 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_syncHandlers(QList<HSYNC>())
 {
     //Configure the position updater.
-    m_positionUpdater->setInterval(5);
+    m_positionUpdater->setInterval(17);
     connect(m_positionUpdater, &QTimer::timeout,
             this, &KNMusicBackendBassThread::checkPosition);
     //Link the reachesFinished() signal.
