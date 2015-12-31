@@ -1,3 +1,12 @@
+mu (0.9.3) unstable; urgency=medium
+
+  * Support tag editing for ID3v1, ID3v2 and APEv2.
+  * Support album cover editing for MP3 files.
+  * Change the album view rendering policy.
+  * Change the library database read and write policy.
+
+ -- Saki Tojo <tomguts@126.com> Thu, 31 Dec 2015 14:11:00 +0800
+
 mu (0.9.2) unstable; urgency=medium
 
   * Use GStreamer instead of Phonon under Linux.
