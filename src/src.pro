@@ -35,6 +35,24 @@ TRANSLATIONS += \
     i18n/Traditional_Chinese.ts \
     i18n/Japanese.ts
 
+intel64: {
+    msvc: {
+    # Intel Processor, Sandy bridge or later.
+    QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
+    # CPU Instrcutions.
+    QMAKE_CXXFLAGS_RELEASE += -arch:AVX
+    }
+}
+
+amd64: {
+    msvc: {
+    # AMD Processor,
+    QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
+    # CPU Instrcutions.
+    QMAKE_CXXFLAGS_RELEASE += -arch:AVX
+    }
+}
+
 # Enabled processor instruction sets compile switches when using release mode
 # for different compilers.
 msvc: {
@@ -43,13 +61,6 @@ msvc: {
     QMAKE_CXXFLAGS_RELEASE += -GL -Gw -GA
     # Auto-Parallelizer
     QMAKE_CXXFLAGS_RELEASE += -Qpar
-    # CPU Instrcutions.
-    QMAKE_CXXFLAGS_RELEASE += -arch:AVX
-    # CPU Architecture, turn on for Mu's.
-    # Intel Processor, Sandy bridge or later.
-    QMAKE_CXXFLAGS_RELEASE += -favor:INTEL64
-    # AMD Processor,
-    #QMAKE_CXXFLAGS_RELEASE += -favor:AMD64
 
     # Linker Options.
     # Link-time Code Generation, use with -GL
