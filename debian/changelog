@@ -1,9 +1,15 @@
 mu (0.9.3) unstable; urgency=medium
 
-  * Support tag editing for ID3v1, ID3v2 and APEv2.
-  * Support album cover editing for MP3 files.
-  * Change the album view rendering policy.
-  * Change the library database read and write policy.
+  * Support editing ID3v1, ID3v2 and APEv2 tag.
+  * Support renaming music file.
+  * Imporve GStreamer working backend.
+  * Improve the database reading and write performance.
+  * Improve the album view widget rendering performance.
+  * Improve the language files searching under Linux.
+  * Fixed the debian package doesn't contains language file bug.
+  * Fixed the GStreamer duration bug.
+  * Removed Phonon and MPV backend[Abandon].
+  * Removed JSON database.
 
  -- Saki Tojo <tomguts@126.com> Thu, 31 Dec 2015 14:11:00 +0800
 
