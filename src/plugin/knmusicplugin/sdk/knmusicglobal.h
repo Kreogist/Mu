@@ -75,7 +75,7 @@ public:
      * \param index The genre index.
      * \return The genre text. If index is out of range, it will be "Unknown".
      */
-    QString indexedGenre(const int &index);
+    QString indexedGenre(int index);
 
     /*!
      * \brief Get the genre index in the list. It is the same as the index in

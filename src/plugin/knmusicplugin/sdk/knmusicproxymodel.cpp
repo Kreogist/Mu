@@ -27,17 +27,19 @@ KNMusicProxyModel::KNMusicProxyModel(QObject *parent) :
 {
     //Set properties.
     setFilterKeyColumn(-1); //Search for all columns.
-    setFilterCaseSensitivity(Qt::CaseInsensitive);
-    setSortCaseSensitivity(Qt::CaseInsensitive);
+    setFilterCaseSensitivity(Qt::CaseInsensitive); //Filter won't care the case.
+    setSortCaseSensitivity(Qt::CaseInsensitive); //Sorter will care the case.
 }
 
 KNMusicModel *KNMusicProxyModel::musicModel()
 {
+    //This function is simply recast the source model as a music model.
     return static_cast<KNMusicModel *>(sourceModel());
 }
 
 bool KNMusicProxyModel::isSearchMode() const
 {
+    //Check out the search rule list.
     return !m_searchBlocks.isEmpty();
 }
 
@@ -46,6 +48,7 @@ KNMusicDetailInfo KNMusicProxyModel::rowDetailInfo(int row)
     //Check the music model. If it's null, return a null detail info.
     if(musicModel()==nullptr)
     {
+        //Give back a null detail info.
         return KNMusicDetailInfo();
     }
     //Return the specific detail info.
@@ -65,12 +68,16 @@ KNMusicDetailInfo KNMusicProxyModel::rowDetailInfo(const QModelIndex &index)
 
 QList<KNMusicSearchBlock> KNMusicProxyModel::searchBlocks() const
 {
+    //Give back the search block list.
     return m_searchBlocks;
 }
 
 void KNMusicProxyModel::clearSearchBlock()
 {
+    //Clear all the search blocks.
     m_searchBlocks.clear();
+    //Set a filter text to update the whole proxy model.
+    setFilterFixedString("");
 }
 
 void KNMusicProxyModel::setSearchBlocks(
@@ -88,18 +95,25 @@ bool KNMusicProxyModel::lessThan(const QModelIndex &source_left,
     //Check out the column.
     switch(source_left.column())
     {
+    //For the time role, we have to get the total duration of the row.
     case Time:
     {
+        //Get the duration role.
         qlonglong &&leftData=source_left.data(DurationRole).toLongLong(),
                   &&rightData=source_right.data(DurationRole).toLongLong();
+        //Compare the size, if they are the same, then the adding order is the
+        //right order.
         return (leftData == rightData) ?
                     (source_left.row() < source_right.row()) :
                     (leftData < rightData);
     }
     case Size:
     {
+        //Get the file size role.
         qlonglong &&leftData=source_left.data(FileSizeRole).toLongLong(),
                 &&rightData=source_right.data(FileSizeRole).toLongLong();
+        //Compare the size, if they are the same, then the adding order is the
+        //right order.
         return (leftData == rightData) ?
                     (source_left.row() < source_right.row()) :
                     (leftData < rightData);
@@ -109,39 +123,54 @@ bool KNMusicProxyModel::lessThan(const QModelIndex &source_left,
     case TrackNumber:
     case TrackCount:
     {
+        //Get the display role, translate it into an integer.
         int &&leftData=source_left.data(Qt::DisplayRole).toString().toInt(),
             &&rightData=source_right.data(Qt::DisplayRole).toString().toInt();
+        //Compare the size, if they are the same, then the adding order is the
+        //right order.
         return (leftData == rightData) ?
                     (source_left.row() < source_right.row()) :
                     (leftData < rightData);
     }
     case DateAdded:
     {
+        //Get the date added role, translate it into date time.
         QDateTime &&leftData=source_left.data(DateAddedRole).toDateTime(),
                   &&rightData=source_right.data(DateAddedRole).toDateTime();
+        //Compare the size, if they are the same, then the adding order is the
+        //right order.
         return (leftData == rightData) ?
                     (source_left.row() < source_right.row()) :
                     (leftData < rightData);
     }
     case DateModified:
     {
+        //Get the date modified role, translate it into date time.
         QDateTime &&leftData=source_left.data(DateModifiedRole).toDateTime(),
                   &&rightData=source_right.data(DateModifiedRole).toDateTime();
+        //Compare the size, if they are the same, then the adding order is the
+        //right order.
         return (leftData == rightData) ?
                     (source_left.row() < source_right.row()) :
                     (leftData < rightData);
     }
     case LastPlayed:
     {
+        //Get the date last played role, translate it into date time.
         QDateTime &&leftData=source_left.data(DateLastPlayedRole).toDateTime(),
-                  &&rightData=source_right.data(DateLastPlayedRole).toDateTime();
+                 &&rightData=source_right.data(DateLastPlayedRole).toDateTime();
+        //Compare the size, if they are the same, then the adding order is the
+        //right order.
         return (leftData == rightData) ?
                     (source_left.row() < source_right.row()) :
                     (leftData < rightData);
     }
     }
+    //Get the display role, translate it into text.
     QString &&leftData=source_left.data(Qt::DisplayRole).toString(),
             &&rightData=source_right.data(Qt::DisplayRole).toString();
+    //Compare the size, if they are the same, then the adding order is the
+    //right order.
     return (leftData == rightData) ?
                 (source_left.row() < source_right.row()) :
                 (leftData < rightData);
@@ -234,6 +263,7 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
 
 QString KNMusicProxyModel::categoryContent() const
 {
+    //Get the content of the category.
     return m_categoryContent;
 }
 

@@ -22,34 +22,46 @@
 
 #include "knsaostyle.h"
 
+KNSaoStyle *KNSaoStyle::m_instance=nullptr;
+
 KNSaoStyle::KNSaoStyle() :
     QCommonStyle()
 {
+    //Construct the fusion style.
     m_fusionStyle=QStyleFactory::create("fusion");
 }
 
-KNSaoStyle *KNSaoStyle::m_instance=nullptr;
-
 KNSaoStyle *KNSaoStyle::instance()
 {
+    //Construct the style instance if the style pointer is null.
     return m_instance==nullptr?m_instance=new KNSaoStyle:m_instance;
 }
 
 KNSaoStyle::~KNSaoStyle()
 {
+    //Remove the fusion style.
     delete m_fusionStyle;
 }
 
 void KNSaoStyle::styleVerticalScrollBar(QWidget *widget)
 {
+    //The widget should be a QScrollBar or inherited from QScrollBar, and it
+    //should should be vertical.
     widget->setStyleSheet("QScrollBar:vertical {"
+                          //Clear the border.
                           "   border: 0px solid grey;"
+                          //Clear the background.
                           "   background: rgba(0, 0, 0, 0);"
+                          //Set the fixed width of the scroll bar.
                           "   width: 8px;"
                           "}"
+                          //Configure the handle.
                           "QScrollBar::handle:vertical {"
+                          //Reset the handle color.
                           "   background: rgba(100, 100, 100);"
+                          //Set the minimal height of the handle.
                           "   min-height: 10px;"
+                          //Make the handle to be a rounded rectangle.
                           "   border-radius: 4px;"
                           "}"
                           "QScrollBar::add-line:vertical {"
@@ -76,62 +88,73 @@ void KNSaoStyle::drawControl(ControlElement element,
     //Initial the rendering hints.
     p->setRenderHints(QPainter::Antialiasing |
                       QPainter::TextAntialiasing, true);
+    //Check out the element type
     switch(element)
     {
+    //SAO style will repaint the menu item.
     case CE_MenuItem:
     {
-        const QStyleOptionMenuItem *menuItemOption=
-                qstyleoption_cast<const QStyleOptionMenuItem *>(opt);
-        if(menuItemOption != nullptr)
+        //Recast the menu style option as a menu item.
+        //Check the pointer first.
+        if(opt!=nullptr)
         {
-            drawMenuItem(menuItemOption, p, w);
+            //Draw the menu item.
+            drawMenuItem(qstyleoption_cast<const QStyleOptionMenuItem *>(opt),
+                         p,
+                         w);
         }
         break;
     }
+    //For all the other controls, simply use fustion style to draw the control.
     default:
         m_fusionStyle->drawControl(element,opt,p,w);
-        break;
     }
 }
 
-void KNSaoStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
-                              QPainter *p,
-                              const QWidget *w) const
+inline void KNSaoStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
+                                     QPainter *p,
+                                     const QWidget *w) const
 {
+    //Check out the menu item type.
     switch(opt->menuItemType)
     {
+    //For all the sub menu and main menu, it should be paint as SAO style.
     case QStyleOptionMenuItem::SubMenu:
     case QStyleOptionMenuItem::Normal:
     {
         //Ok, it's a hack-way to accomplished our design.
         QStyleOptionMenuItem tmp=*opt;
+        //Clear the original icon.
         tmp.icon=QIcon();
+        //Force the highlight color.
         tmp.palette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
-
+        //Use fusion style to draw the control.
         m_fusionStyle->drawControl(CE_MenuItem, &tmp, p, w);
-        int rectX=opt->rect.x(),
-            rectY=opt->rect.y(),
-            rectW=opt->rect.width(),
+        //Get the rect position.
+        int rectX=opt->rect.x(), rectY=opt->rect.y(), rectW=opt->rect.width(),
             rectH=opt->rect.height();
-
+        //Check the original icon, if it's not null, then draw the icon.
         if(!opt->icon.isNull())
         {
+            //We have to force the image size to be 30x30.
             p->drawPixmap(11,
-                          rectY + (rectH - 30)/2,
+                          rectY + ((rectH-30)>>1),
                           30,
                           30,
                           opt->icon.pixmap(30, 30));
         }
-
+        //Check out whether is the item is the last one, if the item is not the
+        //last one, we have to draw the split line.
         if(rectX+rectH -1 < opt->menuRect.y() + opt->menuRect.height())
         {
+            //Draw the bottom line.
             p->drawLine(rectX,rectY+rectH-1,rectX+rectW,rectY+rectH-1);
         }
         break;
     }
-
     default:
-        m_fusionStyle->drawControl(CE_MenuItem,opt,p,w);
+        //For all the other kinds of menu item, draw the item.
+        m_fusionStyle->drawControl(CE_MenuItem, opt, p, w);
     }
 }
 
@@ -140,6 +163,7 @@ void KNSaoStyle::drawPrimitive(PrimitiveElement pe,
                                QPainter *p,
                                const QWidget *w) const
 {
+    //Simply called the fusion style function to do the same thing.
     m_fusionStyle->drawPrimitive(pe,opt,p,w);
 }
 
@@ -148,6 +172,7 @@ void KNSaoStyle::drawComplexControl(ComplexControl cc,
                                     QPainter *p,
                                     const QWidget *w) const
 {
+    //Simply called the fusion style function to do the same thing.
     m_fusionStyle->drawComplexControl(cc,opt,p,w);
 }
 
@@ -159,6 +184,7 @@ void KNSaoStyle::drawItemText(QPainter *painter,
                               const QString &text,
                               QPalette::ColorRole textRole) const
 {
+    //Simply called the fusion style function to do the same thing.
     m_fusionStyle->drawItemText(painter,rect,flags,pal,enabled,text,textRole);
 }
 
@@ -167,24 +193,29 @@ QSize KNSaoStyle::sizeFromContents(ContentsType ct,
                                    const QSize &contentsSize,
                                    const QWidget *widget) const
 {
-
+    //Check the content item type.
     switch(ct)
     {
+    //For all the menu item.
     case CT_MenuItem:
     {
-        const QStyleOptionMenuItem *menuItemOption=
-                qstyleoption_cast<const QStyleOptionMenuItem *>(opt);
-        QSize menuItemSize=m_fusionStyle->sizeFromContents(ct,opt,contentsSize,widget);
-        return QSize(menuItemSize.width()<210?210:menuItemSize.width(),
-                     menuItemOption->menuItemType==QStyleOptionMenuItem::Separator?
+        //Get the original item size.
+        QSize menuItemSize=m_fusionStyle->sizeFromContents(ct,
+                                                           opt,
+                                                           contentsSize,
+                                                           widget);
+        //Check out the menu item size.
+        //The minimum size of the SAO style menu, it should be 210.
+        return QSize(menuItemSize.width()<210 ? 210 : menuItemSize.width(),
+                     //If the item is a separator, then the height will be 0.
+                     qstyleoption_cast<const QStyleOptionMenuItem *>(opt)->
+                                menuItemType==QStyleOptionMenuItem::Separator?
                          0:
                          46);
-        break;
     }
     default:
-    {
+        //For all the other widget, it should be the original one.
         return m_fusionStyle->sizeFromContents(ct,opt,contentsSize,widget);
-    }
     }
 }
 
@@ -192,15 +223,20 @@ int KNSaoStyle::pixelMetric(PixelMetric metric,
                             const QStyleOption *option,
                             const QWidget *widget) const
 {
+    //Check out the metric type.
     switch(metric)
     {
+    //For small icon, it should be 40.
     case QStyle::PM_SmallIconSize:
         return 40;
+    //I don't know why I change this value.
     case QStyle::PM_ButtonIconSize:
         return 25;
+    //Ignore the menu margin, make it 0.
     case QStyle::PM_MenuHMargin:
     case QStyle::PM_MenuVMargin:
         return 0;
+    //For all the other metric, be the original one.
     default:
         return m_fusionStyle->pixelMetric(metric,option,widget);
     }
@@ -210,26 +246,34 @@ QRect KNSaoStyle::subElementRect(SubElement r,
                                  const QStyleOption *opt,
                                  const QWidget *widget) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->subElementRect(r,opt,widget);
 }
-QStyle::SubControl KNSaoStyle::hitTestComplexControl(ComplexControl cc,
-                                                     const QStyleOptionComplex *opt,
-                                                     const QPoint &pt,
-                                                     const QWidget *w) const
+
+QStyle::SubControl KNSaoStyle::hitTestComplexControl(
+        ComplexControl cc,
+        const QStyleOptionComplex *opt,
+        const QPoint &pt,
+        const QWidget *w) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->hitTestComplexControl(cc,opt,pt,w);
 }
+
 QRect KNSaoStyle::subControlRect(ComplexControl cc,
                                  const QStyleOptionComplex *opt,
                                  SubControl sc,
                                  const QWidget *widget) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->subControlRect(cc,opt,sc,widget);
 }
+
 QPixmap KNSaoStyle::generatedIconPixmap(QIcon::Mode iconMode,
                                         const QPixmap &pixmap,
                                         const QStyleOption *opt) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->generatedIconPixmap(iconMode,pixmap,opt);
 }
 
@@ -238,6 +282,7 @@ int KNSaoStyle::styleHint(StyleHint hint,
                           const QWidget *widget,
                           QStyleHintReturn *returnData) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->styleHint(hint,option,widget,returnData);
 }
 
@@ -245,6 +290,7 @@ QRect KNSaoStyle::itemPixmapRect(const QRect &r,
                                  int flags,
                                  const QPixmap &pixmap) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->itemPixmapRect(r,flags,pixmap);
 }
 
@@ -252,42 +298,51 @@ QIcon KNSaoStyle::standardIcon(StandardPixmap standardIcon,
                                const QStyleOption *option,
                                const QWidget *widget) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->standardIcon(standardIcon,option,widget);
 }
+
 QPixmap KNSaoStyle::standardPixmap(StandardPixmap standardPixmap,
                                    const QStyleOption *opt,
                                    const QWidget *widget) const
 {
+    //Simply called the fusion style function to get the same value.
     return m_fusionStyle->standardPixmap(standardPixmap,opt,widget);
 }
 
 void KNSaoStyle::drawItemPixmap(QPainter *painter, const QRect &rect,
                                 int alignment, const QPixmap &pixmap) const
 {
-    return m_fusionStyle->drawItemPixmap(painter,rect,alignment,pixmap);
+    //Simply called the fusion style function to do the same thing.
+    m_fusionStyle->drawItemPixmap(painter,rect,alignment,pixmap);
 }
 
 void KNSaoStyle::polish(QWidget *widget)
 {
-    return m_fusionStyle->polish(widget);
+    //Simply called the fusion style function to do the same thing.
+    m_fusionStyle->polish(widget);
 }
 
 void KNSaoStyle::polish(QApplication *app)
 {
-    return m_fusionStyle->polish(app);
+    //Simply called the fusion style function to do the same thing.
+    m_fusionStyle->polish(app);
 }
 
 void KNSaoStyle::polish(QPalette &pal)
 {
-    return m_fusionStyle->polish(pal);
+    //Simply called the fusion style function to do the same thing.
+    m_fusionStyle->polish(pal);
 }
 
 void KNSaoStyle::unpolish(QWidget *widget)
 {
-    return m_fusionStyle->unpolish(widget);
+    //Simply called the fusion style function to do the same thing.
+    m_fusionStyle->unpolish(widget);
 }
 
 void KNSaoStyle::unpolish(QApplication *app)
 {
-    return m_fusionStyle->unpolish(app);
+    //Simply called the fusion style function to do the same thing.
+    m_fusionStyle->unpolish(app);
 }
