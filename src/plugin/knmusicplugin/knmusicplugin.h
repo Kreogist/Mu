@@ -110,6 +110,12 @@ public slots:
      */
     void showMiniPlayer() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from
+     * KNAbstractMusicCategoryPlugin::hideMiniPlayer().
+     */
+    void hideMiniPlayer() Q_DECL_OVERRIDE;
+
 protected:
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::resizeEvent().

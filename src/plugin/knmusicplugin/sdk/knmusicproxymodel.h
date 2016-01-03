@@ -52,7 +52,7 @@ public:
 
     void clearSearchBlock();
 
-    inline QString textData(int row, int column) const Q_DECL_OVERRIDE
+    inline QString textData(int row, int column) const
     {
         return data(index(row, column), Qt::DisplayRole).toString();
     }

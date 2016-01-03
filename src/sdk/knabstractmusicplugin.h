@@ -81,6 +81,12 @@ public slots:
      * This function should be only called when application launched.
      */
     virtual void showMiniPlayer()=0;
+
+    /*!
+     * \brief Hide the mini player if the music plugin provide a mini player.\n
+     * This function should only be called when the main window is showing.
+     */
+    virtual void hideMiniPlayer()=0;
 };
 
 #endif // KNABSTRACTMUSICPLUGIN_H

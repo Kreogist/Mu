@@ -148,6 +148,9 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
                 m_mainWindow, &KNMainWindow::show);
         connect(m_musicPlugin, &KNAbstractMusicPlugin::requireCloseMainWindow,
                 m_mainWindow, &KNMainWindow::close);
+
+        connect(m_mainWindow, &KNMainWindow::mainWindowShown,
+                m_musicPlugin, &KNAbstractMusicPlugin::hideMiniPlayer);
     }
     //Check the platform extra pointer.
     if(m_platformExtra!=nullptr)

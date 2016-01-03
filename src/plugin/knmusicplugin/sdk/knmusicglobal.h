@@ -115,7 +115,7 @@ public:
      * \param index The index of the column.
      * \return The text of the column title.
      */
-    QString treeViewHeaderText(const int &index) const;
+    QString treeViewHeaderText(int index) const;
 
     /*!
      * \brief Move the parser and searcher to their own working threads. All the
