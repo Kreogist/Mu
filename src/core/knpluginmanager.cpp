@@ -68,7 +68,7 @@ KNPluginManager::~KNPluginManager()
     knConf->saveConfigure();
 }
 
-void KNPluginManager::setApplicationInformation()
+inline void KNPluginManager::setApplicationInformation()
 {
     //Generate the application name.
     QString applicationName=QChar(0x03BC);

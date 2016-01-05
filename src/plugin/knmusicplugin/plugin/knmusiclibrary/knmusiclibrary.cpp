@@ -69,7 +69,7 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryAlbumTab *albumTab=
             static_cast<KNMusicLibraryAlbumTab *>(m_libraryTabs[TabAlbums]);
     //Set the album art hash.
-    albumTab->setAlbumArtHash(m_libraryModel->hashAlbumArt());
+    albumTab->setImageManager(m_libraryModel->imageManager());
 
     //Generate the show in action list.
     QList<QAction *> showInActionList;

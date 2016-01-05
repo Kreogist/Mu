@@ -22,7 +22,6 @@
 #include "knmusicsearcher.h"
 #include "knmusicanalysisqueue.h"
 #include "knmusiclibraryimagemanager.h"
-#include "knmusiclibraryimagesaver.h"
 
 #include "knmusiclibrarymodel.h"
 
@@ -34,14 +33,12 @@
 
 KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     KNMusicModel(parent),
-    m_hashAlbumArt(QHash<QString, QVariant>()),
     m_scaledHashAlbumArt(QHash<QString, QVariant>()),
     m_databasePath(QString()),
     m_operateCounter(0),
     m_searcher(new KNMusicSearcher),
     m_analysisQueue(new KNMusicAnalysisQueue),
-    m_imageManager(new KNMusicLibraryImageManager),
-    m_imageSaver(new KNMusicLibraryImageSaver)
+    m_imageManager(new KNMusicLibraryImageManager)
 {
     //Move the searcher to working thread.
     m_searcher->moveToThread(&m_searchThread);
@@ -61,7 +58,7 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
             Qt::QueuedConnection);
 
     //Move the image manager to working thread.
-    m_imageManager->setHashAlbumArt(&m_hashAlbumArt, &m_scaledHashAlbumArt);
+    m_imageManager->setHashAlbumArt(&m_scaledHashAlbumArt);
     m_imageManager->moveToThread(&m_imageThread);
     //Link the signal from the library model.
     connect(this, &KNMusicLibraryModel::requireRecoverImage,
@@ -72,14 +69,6 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
             Qt::QueuedConnection);
     connect(m_imageManager, &KNMusicLibraryImageManager::requireUpdateRow,
             this, &KNMusicLibraryModel::onActionImageUpdateRow,
-            Qt::QueuedConnection);
-
-    //Move the image saver to working thread.
-    m_imageSaver->setHashAlbumArt(&m_hashAlbumArt);
-    m_imageSaver->moveToThread(&m_imageThread);
-    //Link the signal from the image manager.
-    connect(m_imageManager, &KNMusicLibraryImageManager::requireSaveImage,
-            m_imageSaver, &KNMusicLibraryImageSaver::saveImage,
             Qt::QueuedConnection);
 
     //Start working threads.
@@ -330,20 +319,19 @@ bool KNMusicLibraryModel::setData(const QModelIndex &index,
 QPixmap KNMusicLibraryModel::artwork(const int &row)
 {
     //Get the artwork from the hash list.
-    QVariant artworkPixmap=
-            m_hashAlbumArt.value(data(index(row,
-                                            Name),
-                                      ArtworkKeyRole).toString());
+    QPixmap &&artworkPixmap=
+            m_imageManager->artwork(data(index(row,
+                                               Name),
+                                         ArtworkKeyRole).toString());
     //Check out the variant is null or not.
-    return artworkPixmap.isNull()?knMusicGlobal->noAlbumArt():
-                                  artworkPixmap.value<QPixmap>();
+    return artworkPixmap.isNull()?knMusicGlobal->noAlbumArt():artworkPixmap;
 }
 
 QPixmap KNMusicLibraryModel::artwork(const QString &hashKey)
 {
     //Give back the hash key image from the pixmap.
-    return m_hashAlbumArt.contains(hashKey)?
-                m_hashAlbumArt.value(hashKey).value<QPixmap>():
+    return m_scaledHashAlbumArt.contains(hashKey)?
+                m_imageManager->artwork(hashKey):
                 knMusicGlobal->noAlbumArt();
 }
 
@@ -448,11 +436,6 @@ void KNMusicLibraryModel::recoverModel()
     emit requireRecoverImage(m_hashAlbumArtCounter.keys());
 }
 
-QHash<QString, QVariant> *KNMusicLibraryModel::hashAlbumArt()
-{
-    return &m_hashAlbumArt;
-}
-
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)
 {
     //Set hash list to category model.
@@ -470,8 +453,6 @@ void KNMusicLibraryModel::setLibraryPath(const QString &libraryPath)
 {
     //Get the artwork folder.
     QString artworkFolder=libraryPath + "/Artworks";
-    //Set the artwork folder to image saver.
-    m_imageSaver->setImageFolderPath(artworkFolder);
     //Set the artwork folder to image manager.
     m_imageManager->setImageFolderPath(artworkFolder);
 }
@@ -589,7 +570,7 @@ inline void KNMusicLibraryModel::reduceHashImage(const QString &imageKey)
         //Remove the count.
         m_hashAlbumArtCounter.remove(imageKey);
         //Remove the image.
-        m_hashAlbumArt.remove(imageKey);
+        m_scaledHashAlbumArt.remove(imageKey);
         //Delete the file.
         m_imageManager->removeHashImage(imageKey);
         break;
@@ -646,4 +627,9 @@ inline void KNMusicLibraryModel::writeDatabase()
     }
     //Close the file.
     databaseFile.close();
+}
+
+KNMusicLibraryImageManager *KNMusicLibraryModel::imageManager() const
+{
+    return m_imageManager;
 }

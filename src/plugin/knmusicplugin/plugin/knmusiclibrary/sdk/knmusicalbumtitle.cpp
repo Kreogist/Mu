@@ -121,3 +121,11 @@ void KNMusicAlbumTitle::setAlbumArt(const QPixmap &albumArt)
     //Update the scaled image.
     updateScaledAlbumArt();
 }
+
+void KNMusicAlbumTitle::clearAlbumArt()
+{
+    //Clear the album art.
+    m_albumArt=QPixmap();
+    //Update the scaled image.
+    updateScaledAlbumArt();
+}

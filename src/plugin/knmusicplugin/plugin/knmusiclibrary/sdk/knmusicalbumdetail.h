@@ -36,6 +36,7 @@ class KNSideShadowWidget;
 class KNScrollLabel;
 class KNMusicAlbumListView;
 class KNMusicLibraryModel;
+class KNMusicLibraryImageManager;
 /*!
  * \brief The KNMusicAlbumDetail widget can display a specific album detail
  * information and it could also contains the ability to work as a music tree
@@ -67,8 +68,10 @@ public:
 
 signals:
     /*!
-     * \brief When the user click on any other point outside the
-     * \param indexPoint
+     * \brief When the user click on any other point outside of the album detail
+     * widget, this signal will be emitted for asking showing the album at the
+     * specific point.
+     * \param indexPoint The mouse clicked point.
      */
     void requireShowAlbum(QPoint indexPoint);
     void requireClearSelection();
@@ -81,7 +84,7 @@ public slots:
     void foldAlbumDetail();
     void flyAwayAlbumDetail();
     void scrollToSourceRow(const int &row);
-    void setAlbumArtHash(QHash<QString, QVariant> *hashAlbumArt);
+    void setImageManager(KNMusicLibraryImageManager *imageManager);
     void onActionAlbumArtUpdate(const QModelIndex &updatedIndex);
     void onActionAlbumRemoved(const QModelIndex &removedIndex);
 
@@ -97,12 +100,17 @@ protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief mousePressEvent
+     * \brief Reimplemented from QWidget::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief mouseReleaseEvent
+     * \brief Reimplemented from QWidget::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
@@ -156,7 +164,7 @@ private:
                        *m_showAlbumArtLabel, *m_showAlbumContent,
                        *m_hideAlbumArtLabel, *m_hideAlbumContent;
 
-    QHash<QString, QVariant> *m_hashAlbumArt;
+    KNMusicLibraryImageManager *m_imageManager;
     int m_iconSize, m_panelSize;
     bool m_backgroundAnime, m_pressed;
 };

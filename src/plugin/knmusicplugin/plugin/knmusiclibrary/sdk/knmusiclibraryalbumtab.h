@@ -26,6 +26,7 @@ class KNDropProxyContainer;
 class KNMusicAlbumView;
 class KNMusicAlbumModel;
 class KNMusicAlbumDetail;
+class KNMusicLibraryImageManager;
 /*!
  * \brief The KNMusicLibraryAlbumTab class is one of the music category tab. It
  * is specific designed for album tab.\n
@@ -77,10 +78,10 @@ public slots:
     void setLibraryModel(KNMusicLibraryModel *model) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Set the album art hash to get the image of the album.
-     * \param hashAlbumArt The album art key-image hash map.
+     * \brief Set the album image manager to album details.
+     * \param imageManager The image manager pointer.
      */
-    void setAlbumArtHash(QHash<QString, QVariant> *hashAlbumArt);
+    void setImageManager(KNMusicLibraryImageManager *imageManager);
 
 protected:
 
