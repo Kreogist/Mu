@@ -61,11 +61,6 @@ public:
      */
     void updateAlbumCaptions();
 
-    /*!
-     * \brief Update the album artwork when the artwork is changed.
-     */
-    void updateAlbumArtwork();
-
 signals:
     /*!
      * \brief When the user click on any other point outside of the album detail
@@ -74,19 +69,87 @@ signals:
      * \param indexPoint The mouse clicked point.
      */
     void requireShowAlbum(QPoint indexPoint);
+
+    /*!
+     * \brief When the album detail is hiding, this signal will be emitted to
+     * ask clear the selection of the album view.
+     */
     void requireClearSelection();
 
 public slots:
+    /*!
+     * \brief Set the library model to detail list.
+     * \param model The music library model.
+     */
     void setLibraryModel(KNMusicLibraryModel *model);
-    void setAnimeParameter(const QRect &albumRect, const int &iconSize);
-    void updateFoldEndValue(const QRect &position, const int &iconSize);
+
+    /*!
+     * \brief Set the anime parameter from the album view.
+     * \param albumRect The clicked album rect.
+     * \param iconSize The icon size of the album
+     */
+    void setAnimeParameter(const QRect &albumRect, int iconSize);
+
+    /*!
+     * \brief When the album view moved, the fold position should be updated
+     * sync. This function will update the end position of the fold animation.
+     * \param position The new position.
+     * \param iconSize The icon size.
+     */
+    void updateFoldEndValue(const QRect &position, int iconSize);
+
+    /*!
+     * \brief Show the specific album detail information.
+     * \param index The album index in the album model.
+     */
     void displayAlbumDetail(const QModelIndex &index);
+
+    /*!
+     * \brief Fold the album detail to the original position.
+     */
     void foldAlbumDetail();
+
+    /*!
+     * \brief When the album is removed, this slot will be called. The album
+     * detail will be fly away to the left most of the window if the album
+     * detail is shown.\n
+     * When user is doing searching, the displaying album detail will be fly
+     * away as well.
+     */
     void flyAwayAlbumDetail();
-    void scrollToSourceRow(const int &row);
+
+    /*!
+     * \brief Scroll the album detail list view to specific row via given the
+     * source row of the music.
+     * \param row The source row the music.
+     */
+    void scrollToSourceRow(int row);
+
+    /*!
+     * \brief Set the image manager pointer for showing the original album art.
+     * \param imageManager The image manager pointer.
+     */
     void setImageManager(KNMusicLibraryImageManager *imageManager);
+
+    /*!
+     * \brief When the album art image is updated, this slot should be called to
+     * check the new album art.
+     * \param updatedIndex The updated album index.
+     */
     void onActionAlbumArtUpdate(const QModelIndex &updatedIndex);
+
+    /*!
+     * \brief When any album is removed, this slot should be called to check
+     * whether the album is the one displayed. If so, the album detail should be
+     * fly away.
+     * \param removedIndex Removed album index.
+     */
     void onActionAlbumRemoved(const QModelIndex &removedIndex);
+
+    /*!
+     * \brief Update the album artwork when the artwork is changed.
+     */
+    void updateAlbumArtwork();
 
 protected:
     /*!
@@ -125,6 +188,7 @@ private slots:
     void onActionFold(const QVariant &position);
     void onActionFlyAwayFinished();
     void onActionFlyAway(const QVariant &position);
+    void onActionImageInserted(const QString &hashKey);
 
 private:
     inline void showContentWidgets();
@@ -134,7 +198,6 @@ private:
     inline void generateStep2FinalPosition(QRect &albumArtGeometry,
                                            QRect &contentGeometry);
     inline void stopAllAnimations();
-    inline void stopShowHideArtworkAnimations();
     inline void updatePanelSize();
     inline void updateWidgetGeometries();
     inline void updateShadowGeometries(const QRect &contentPosition);

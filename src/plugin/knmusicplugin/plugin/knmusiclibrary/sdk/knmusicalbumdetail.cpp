@@ -185,7 +185,7 @@ void KNMusicAlbumDetail::setLibraryModel(KNMusicLibraryModel *model)
 }
 
 void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
-                                           const int &iconSize)
+                                           int iconSize)
 {
     //Save the icon size and the album position.
     m_iconSize=iconSize;
@@ -193,7 +193,7 @@ void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
 }
 
 void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
-                                            const int &iconSize)
+                                            int iconSize)
 {
     //Check the running state of the fold anime.
     if(m_foldAnime->state()==QAbstractAnimation::Running)
@@ -318,7 +318,7 @@ void KNMusicAlbumDetail::flyAwayAlbumDetail()
     }
 }
 
-void KNMusicAlbumDetail::scrollToSourceRow(const int &row)
+void KNMusicAlbumDetail::scrollToSourceRow(int row)
 {
     m_albumListView->scrollToSourceRow(row);
 }
@@ -328,6 +328,10 @@ void KNMusicAlbumDetail::setImageManager(
 {
     //Save the pointer.
     m_imageManager=imageManager;
+    //Link the image manager with the album detail.
+    connect(m_imageManager, &KNMusicLibraryImageManager::imageInserted,
+            this, &KNMusicAlbumDetail::onActionImageInserted,
+            Qt::QueuedConnection);
 }
 
 void KNMusicAlbumDetail::onActionAlbumArtUpdate(const QModelIndex &updatedIndex)
@@ -555,6 +559,25 @@ void KNMusicAlbumDetail::onActionFlyAway(const QVariant &position)
     m_albumContent->setPalette(pal);
 }
 
+void KNMusicAlbumDetail::onActionImageInserted(const QString &hashKey)
+{
+    //When there's a new image insert, check out the hash key.
+    //Check the index is valid.
+    if(m_currentIndex.isValid() && m_imageManager)
+    {
+        //Get the artwork key.
+        QString &&albumHashKey=
+                m_currentIndex.data(
+                    KNMusicAlbumModel::CategoryArtworkKeyRole).toString();
+        //Check album hash key.
+        if(albumHashKey==hashKey)
+        {
+            //Set the album art.
+            m_albumArt->setAlbumArt(m_imageManager->artwork(albumHashKey));
+        }
+    }
+}
+
 inline void KNMusicAlbumDetail::showContentWidgets()
 {
     //Set the data.
@@ -626,11 +649,6 @@ inline void KNMusicAlbumDetail::stopAllAnimations()
     m_expandAnime->stop();
     m_flyAwayAnime->stop();
     //Stop the hide artwork animations.
-    stopShowHideArtworkAnimations();
-}
-
-inline void KNMusicAlbumDetail::stopShowHideArtworkAnimations()
-{
     m_showAlbumArt->stop();
     m_hideAlbumArt->stop();
 }

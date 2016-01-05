@@ -107,6 +107,8 @@ inline void KNMusicAlbumTitle::updateScaledAlbumArt()
     m_scaledAlbumArt=m_albumArt.scaled(size(),
                                        Qt::KeepAspectRatio,
                                        Qt::SmoothTransformation);
+    //We should update the widget.
+    update();
 }
 
 QPixmap KNMusicAlbumTitle::albumArt() const

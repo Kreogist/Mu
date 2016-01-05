@@ -442,6 +442,7 @@ void KNMusicAlbumModel::onCategoryUpdate(const KNMusicDetailInfo &before,
 void KNMusicAlbumModel::onCategoryAlbumArtUpdate(
         const KNMusicDetailInfo &detailInfo)
 {
+    qDebug()<<"Do you update album art?";
     //Check out the artwork key hash first.
     if(detailInfo.coverImageHash.isEmpty())
     {

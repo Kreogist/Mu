@@ -141,7 +141,7 @@ void KNMusicLibraryImageManager::analysisNext()
     {
         //The cover image is not null, get the hash key.
         analysisItem.detailInfo.coverImageHash=
-                insertHashImage(analysisItem.coverImage);
+                insertArtwork(analysisItem.coverImage);
         //Ask to update the row, check the index first.
         if(currentItem.itemIndex.isValid())
         {
@@ -172,7 +172,7 @@ QHash<QString, QVariant> *KNMusicLibraryImageManager::scaledHashAlbumArt() const
     return m_scaledHashAlbumArt;
 }
 
-QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
+QString KNMusicLibraryImageManager::insertArtwork(const QImage &image)
 {
     //Calculate the meta data of the image(MD4 of image content).
     QByteArray hashResult=
@@ -201,6 +201,8 @@ QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
         image.save(KNUtil::ensurePathValid(m_imageFolderPath) +
                    "/" + imageHashKey + ".png",
                    "PNG");
+        //Emit the inserted signal.
+        emit imageInserted(imageHashKey);
     }
     return imageHashKey;
 }

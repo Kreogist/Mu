@@ -226,7 +226,7 @@ bool KNMusicLibraryModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
     {
         //Get the latest image hash.
         detailInfo.coverImageHash=
-                m_imageManager->insertHashImage(analysisItem.coverImage);
+                m_imageManager->insertArtwork(analysisItem.coverImage);
     }
     //Check the cover image hash is changed or not.
     if(detailInfo.coverImageHash!=originalDetailInfo.coverImageHash)

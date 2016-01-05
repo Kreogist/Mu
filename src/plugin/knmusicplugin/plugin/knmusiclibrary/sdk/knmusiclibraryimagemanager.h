@@ -78,6 +78,13 @@ public:
      */
     QPixmap artwork(const QString &hashKey);
 
+    /*!
+     * \brief Insert album art image to image manager.
+     * \param image The album art image.
+     * \return The album art image hash key.
+     */
+    QString insertArtwork(const QImage &image);
+
 signals:
     /*!
      * \brief This signal is actually private, it is used for inner processing
@@ -99,16 +106,33 @@ signals:
      */
     void recoverImageComplete();
 
+    /*!
+     * \brief When there's a new image is inserted, this signal will be emitted.
+     * \param hashKey The new image hash key.
+     */
+    void imageInserted(const QString &hashKey);
+
 public slots:
     /*!
-     * \brief analysisAlbumArt
-     * \param itemIndex
-     * \param item
+     * \brief When there's a new item finished analysised, this slot will be
+     * called to add the item into parsing list. The album art will be parsed
+     * and add to hash map.
+     * \param itemIndex The analysis item index.
+     * \param item The analysis item.
      */
     void analysisAlbumArt(QPersistentModelIndex itemIndex,
                           KNMusicAnalysisItem item);
+
+    /*!
+     * \brief Reload the album art image from the specific folder.
+     * \param hashList Loading file name list.
+     */
     void recoverAlbumArt(const QStringList &hashList);
-    QString insertHashImage(const QImage &image);
+
+    /*!
+     * \brief Remove the album art via hash key.
+     * \param hashKey The hash key of the removed image.
+     */
     void removeHashImage(const QString &hashKey);
 
 private slots:
