@@ -106,22 +106,16 @@ void KNLoopScrollLabel::showEvent(QShowEvent *event)
 {
     //Show up the loop label.
     QWidget::showEvent(event);
-    //Check up the most left.
-    if(m_textLeftMostX!=0)
-    {
-        //Start long wait timer.
-        m_wait->start();
-    }
+    //Start the scroll anime.
+    startAnime();
 }
 
 void KNLoopScrollLabel::hideEvent(QHideEvent *event)
 {
     //Do the original hide event.
     QWidget::hideEvent(event);
-    //Stop the timer.
-    stopTimers();
-    //Reset the textX.
-    m_textX=contentsRect().x();
+    //Stop the animation.
+    stopAnime();
 }
 
 void KNLoopScrollLabel::moveText()
@@ -238,6 +232,24 @@ void KNLoopScrollLabel::setText(const QString &text)
     updateAnimeParameters();
     //Update the text data.
     update();
+}
+
+void KNLoopScrollLabel::startAnime()
+{
+    //Check up the most left.
+    if(m_textLeftMostX!=0 && (!m_wait->isActive()) && (!m_move->isActive()))
+    {
+        //Start long wait timer.
+        m_wait->start();
+    }
+}
+
+void KNLoopScrollLabel::stopAnime()
+{
+    //Stop the timer.
+    stopTimers();
+    //Reset the textX.
+    m_textX=contentsRect().x();
 }
 
 QSize KNLoopScrollLabel::sizeHint() const

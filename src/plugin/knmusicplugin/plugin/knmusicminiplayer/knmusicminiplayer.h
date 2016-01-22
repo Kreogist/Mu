@@ -21,6 +21,8 @@
 
 #include <QIcon>
 
+#include "knconnectionhandler.h"
+
 #include "knmusicminiplayerbase.h"
 
 class QTimeLine;
@@ -102,6 +104,8 @@ protected:
 
 private slots:
     void onActionMouseInOut(int frame);
+    void onActionShowLyrics();
+    void onActionHideLyrics();
 
 private:
     inline KNOpacityAnimeButton *generateControlButton(
@@ -118,6 +122,7 @@ private:
     inline int getCacheValue(const QString &valueName);
     QIcon m_muteIcon[2], m_iconPause, m_iconPlay;
     QPoint m_pressedPoint, m_originalPos;
+    KNConnectionHandler m_animeHandler;
     QWidget *m_container;
     KNImageLabel *m_icon;
     KNEditableLabel *m_position;

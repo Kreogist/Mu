@@ -81,6 +81,20 @@ public slots:
      */
     void setText(const QString &text);
 
+    /*!
+     * \brief Start the scroll anime when animation is valid. If animation is
+     * not valid, this function will do nothing.\n
+     * When the widget visible change to true, this function will be
+     * automatically called.
+     */
+    void startAnime();
+
+    /*!
+     * \brief Reset the scroll animation and stop the timer.\n
+     * When the widget is hiding, this function will be automatically called.
+     */
+    void stopAnime();
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::paintEvent().

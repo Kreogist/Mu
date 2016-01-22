@@ -50,11 +50,16 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief The opacity of the scroll label.
-     * \return
+     * \brief The opacity of the scroll label. It will be
+     * \return Opacity of the text. Default value is 1.0.
      */
     qreal opacity() const;
 
+    /*!
+     * \brief Get the glow radius of the label. Scroll label will provide you a
+     * space area to show the glow.
+     * \return The glow radius of the space area.
+     */
     qreal glowRadius() const;
 
 signals:
@@ -71,7 +76,26 @@ public slots:
      * \param text The label content.
      */
     void setText(const QString &text);
+
+    /*!
+     * \brief Set the glow area radius.
+     * \param glowRadius The glow area radius.
+     */
     void setGlowRadius(const qreal &glowRadius);
+
+    /*!
+     * \brief Start the scroll anime when animation is valid. If animation is
+     * not valid, this function will do nothing.\n
+     * When the widget visible change to true, this function will be
+     * automatically called.
+     */
+    void startAnime();
+
+    /*!
+     * \brief Reset the scroll animation and stop the timer.\n
+     * When the widget is hiding, this function will be automatically called.
+     */
+    void stopAnime();
 
 protected:
     /*!
