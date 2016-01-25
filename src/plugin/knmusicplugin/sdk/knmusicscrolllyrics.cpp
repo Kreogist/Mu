@@ -183,6 +183,8 @@ void KNMusicScrollLyrics::setBackend(KNMusicLyricsBackend *backend)
                    this, &KNMusicScrollLyrics::moveToLine);
         disconnect(m_backend, SIGNAL(lyricsChanged()),
                    this, SLOT(update()));
+        disconnect(m_backend, SIGNAL(updateWidget()),
+                   this, SLOT(update()));
         disconnect(m_backend, &KNMusicLyricsBackend::lyricsChanged,
                    this, &KNMusicScrollLyrics::reset);
     }
@@ -195,6 +197,8 @@ void KNMusicScrollLyrics::setBackend(KNMusicLyricsBackend *backend)
         connect(m_backend, &KNMusicLyricsBackend::requireMoveTo,
                 this, &KNMusicScrollLyrics::moveToLine);
         connect(m_backend, SIGNAL(lyricsChanged()),
+                this, SLOT(update()));
+        connect(m_backend, SIGNAL(updateWidget()),
                 this, SLOT(update()));
         connect(m_backend, &KNMusicLyricsBackend::lyricsChanged,
                 this, &KNMusicScrollLyrics::reset);

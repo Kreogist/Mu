@@ -87,10 +87,10 @@ void KNMusicXiamiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
                     {
                         //Save the lyrics information.
                         KNMusicLyricsDetails currentDetail;
-                        //! FIXME: This is a ugly part, tried to fixed it with no error part.
-                        currentDetail.title=
-                                currentTrack.elementsByTagName("title").at(0).toElement().childNodes().at(0).nodeValue();
-                        currentDetail.artist=currentTrack.elementsByTagName("artist").at(0).toElement().childNodes().at(0).nodeValue();
+                        currentDetail.title=getContentText(&currentTrack,
+                                                           "title");
+                        currentDetail.artist=getContentText(&currentTrack,
+                                                            "artist");
                         //Add the lyrics information and url to the list.
                         rawLyricsDetail.append(currentDetail);
                         lyricsUrlList.append(lyricsUrl.at(0).nodeValue());
@@ -117,4 +117,27 @@ void KNMusicXiamiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
             }
         }
     }
+}
+
+inline QString KNMusicXiamiLyrics::getContentText(QDomElement *currentTrack,
+                                                  const QString &tagName)
+{
+    //Get the tag name element.
+    QDomNodeList &&elementList=currentTrack->elementsByTagName(tagName);
+    //Check element list.
+    if(elementList.isEmpty())
+    {
+        //There should be only 1 element in the list.
+        return QString();
+    }
+    //Translate the first one into element, and get the child nodes.
+    elementList=elementList.at(0).toElement().childNodes();
+    //Check the element list once more.
+    if(elementList.isEmpty())
+    {
+        //There should be only 1 element in the list.
+        return QString();
+    }
+    //Get the element node value.
+    return elementList.at(0).nodeValue();
 }
