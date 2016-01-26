@@ -3,7 +3,7 @@ Section: sound
 Priority: optional
 Maintainer: Tojo Saki <tomguts@126.com>
 Build-Depends: debhelper (>= 9),
-               qt5-default, libgstreamer1.0-dev,
+               qt5-default, qttools5-dev-tools, libgstreamer1.0-dev,
                libavformat-dev,
                libavcodec-dev,
                libavutil-dev
