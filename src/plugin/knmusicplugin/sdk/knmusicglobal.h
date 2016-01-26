@@ -75,7 +75,7 @@ public:
      * \param index The genre index.
      * \return The genre text. If index is out of range, it will be "Unknown".
      */
-    QString indexedGenre(const int &index);
+    QString indexedGenre(int index);
 
     /*!
      * \brief Get the genre index in the list. It is the same as the index in
@@ -115,7 +115,7 @@ public:
      * \param index The index of the column.
      * \return The text of the column title.
      */
-    QString treeViewHeaderText(const int &index) const;
+    QString treeViewHeaderText(int index) const;
 
     /*!
      * \brief Move the parser and searcher to their own working threads. All the

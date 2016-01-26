@@ -95,23 +95,16 @@ void KNScrollLabel::showEvent(QShowEvent *event)
 {
     //Do the original show event.
     QWidget::showEvent(event);
-    //Check out the parameter, check whether we need to scroll the content.
-    if(m_textLeftMostX!=0)
-    {
-        //Start long waiting timer.
-        m_wait->setInterval(LongWaiting);
-        m_wait->start();
-    }
+    //Start the animation if it could.
+    startAnime();
 }
 
 void KNScrollLabel::hideEvent(QHideEvent *event)
 {
     //Do the original hide event.
     QWidget::hideEvent(event);
-    //Stop all the timers.
-    stopTimers();
-    //Reset the parameters.
-    m_textX=contentsRect().x();
+    //Stop the animation.
+    stopAnime();
 }
 
 void KNScrollLabel::moveText()
@@ -202,6 +195,24 @@ void KNScrollLabel::setGlowRadius(const qreal &glowRadius)
     m_glowRadius = glowRadius;
 }
 
+void KNScrollLabel::startAnime()
+{
+    //Check out the parameter, check whether we need to scroll the content.
+    if(m_textLeftMostX!=0)
+    {
+        //Start long waiting timer.
+        m_wait->setInterval(LongWaiting);
+        m_wait->start();
+    }
+}
+
+void KNScrollLabel::stopAnime()
+{
+    //Stop all timers.
+    stopTimers();
+    //Reset the parameters.
+    m_textX=contentsRect().x();
+}
 
 qreal KNScrollLabel::opacity() const
 {

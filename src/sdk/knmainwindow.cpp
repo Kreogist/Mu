@@ -107,6 +107,14 @@ void KNMainWindow::hideMainPlayer()
     m_container->hideMainPlayer();
 }
 
+void KNMainWindow::showEvent(QShowEvent *event)
+{
+    //Emit the main window show signal.
+    emit mainWindowShown();
+    //Show the main window.
+    QMainWindow::showEvent(event);
+}
+
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
     //Save the configure of the category plugin, if the category is valid.

@@ -25,6 +25,10 @@ class KNMusicGenreModel : public KNMusicCategoryModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Constrcut a KNMusicGenreModel object.
+     * \param parent The parent object.
+     */
     explicit KNMusicGenreModel(QObject *parent = 0);
 
     /*!

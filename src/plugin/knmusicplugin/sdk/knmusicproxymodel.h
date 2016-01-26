@@ -30,7 +30,17 @@ class KNMusicProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicProxyModel object with parent object.
+     * \param parent The parent object.
+     */
     explicit KNMusicProxyModel(QObject *parent = 0);
+
+    /*!
+     * \brief Get the source model as a music model.
+     * \return The source music model pointer. If you have never set a source
+     * model, it will be nullptr.
+     */
     KNMusicModel *musicModel();
     bool isSearchMode() const;
 

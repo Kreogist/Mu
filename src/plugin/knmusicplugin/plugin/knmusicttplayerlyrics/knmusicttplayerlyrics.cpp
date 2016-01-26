@@ -57,22 +57,25 @@ void KNMusicTtplayerLyrics::downloadLyricsFromUrl(
         const KNMusicDetailInfo &detailInfo,
         QList<KNMusicLyricsDetails> &lyricsList)
 {
+    //Generate the query url.
     QString queryUrl=url+
                      "/dll/lyricsvr.dll?sh?Artist="+
                      utf16LEHex(
                        processKeywords(detailInfo.textLists[Artist].toString()))
                      + "&Title="+
                      utf16LEHex(
-                        processKeywords(detailInfo.textLists[Name].toString())) +
-                     "&Flags=0";
+                        processKeywords(detailInfo.textLists[Name].toString()))
+                     + "&Flags=0";
     //Get the xml data from the url.
     QByteArray responseData;
     get(queryUrl, responseData);
     //Found song lyrics info.
     QDomDocument songInfoDocument;
     songInfoDocument.setContent(responseData);
+    //Get the lrc element.
     QDomNodeList lyrics=
             songInfoDocument.documentElement().elementsByTagName("lrc");
+    //Check out the lrc dom content.
     if(lyrics.isEmpty())
     {
         return;
@@ -81,6 +84,7 @@ void KNMusicTtplayerLyrics::downloadLyricsFromUrl(
     QList<QHash<QString, QString>> lyricsInfoList;
     for(int i=0; i<lyrics.size(); i++)
     {
+        //Get on element.
         QDomElement currentLyrics=lyrics.at(i).toElement();
         //Generate the lyrics info.
         QHash<QString, QString> lyricsInfo;
@@ -95,6 +99,7 @@ void KNMusicTtplayerLyrics::downloadLyricsFromUrl(
         i!=lyricsInfoList.end();
         ++i)
     {
+        //Generate the url.
         QString downloadUrl=url+
                             "/dll/lyricsvr.dll?dl?Id=" +
                             (*i).value("id") +
@@ -102,13 +107,16 @@ void KNMusicTtplayerLyrics::downloadLyricsFromUrl(
                             generateCode(*i);
         //Download data.
         get(downloadUrl, responseData);
+        //Check out the response data.
         if(!responseData.isEmpty() &&
                 !responseData.contains("errmsg"))
         {
             //Generate the lyrics details data.
             KNMusicLyricsDetails currentDetails;
+            //Set the title and artist.
             currentDetails.title=(*i).value("title");
             currentDetails.artist=(*i).value("artist");
+            //Save the lyrics.
             saveLyrics(detailInfo, responseData, currentDetails, lyricsList);
         }
     }
@@ -117,6 +125,8 @@ void KNMusicTtplayerLyrics::downloadLyricsFromUrl(
 inline QString KNMusicTtplayerLyrics::generateCode(
         const QHash<QString, QString> &info)
 {
+    //Actually, I don't know what the following fuck of the following codes.
+    //I just simply translate them from js to C++.
     QString utf8hex=utf8HexText(info.value("artist")+info.value("title"));
     QList<quint8> code;
     int len=utf8hex.length()/2;

@@ -68,7 +68,7 @@ KNPluginManager::~KNPluginManager()
     knConf->saveConfigure();
 }
 
-void KNPluginManager::setApplicationInformation()
+inline void KNPluginManager::setApplicationInformation()
 {
     //Generate the application name.
     QString applicationName=QChar(0x03BC);
@@ -148,6 +148,9 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
                 m_mainWindow, &KNMainWindow::show);
         connect(m_musicPlugin, &KNAbstractMusicPlugin::requireCloseMainWindow,
                 m_mainWindow, &KNMainWindow::close);
+
+        connect(m_mainWindow, &KNMainWindow::mainWindowShown,
+                m_musicPlugin, &KNAbstractMusicPlugin::hideMiniPlayer);
     }
     //Check the platform extra pointer.
     if(m_platformExtra!=nullptr)

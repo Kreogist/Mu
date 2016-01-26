@@ -30,6 +30,7 @@
 #include "knmusicalbumlistview.h"
 #include "knmusicalbumtitle.h"
 #include "knmusicalbummodel.h"
+#include "knmusiclibraryimagemanager.h"
 
 #include "knmusicalbumdetail.h"
 
@@ -71,7 +72,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_showAlbumContent(generateAnime(m_albumContent)),
     m_hideAlbumArtLabel(generateAnime(m_albumArt)),
     m_hideAlbumContent(generateAnime(m_albumContent)),
-    m_hashAlbumArt(nullptr),
+    m_imageManager(nullptr),
     m_iconSize(0),
     m_panelSize(0),
     m_backgroundAnime(true),
@@ -184,7 +185,7 @@ void KNMusicAlbumDetail::setLibraryModel(KNMusicLibraryModel *model)
 }
 
 void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
-                                           const int &iconSize)
+                                           int iconSize)
 {
     //Save the icon size and the album position.
     m_iconSize=iconSize;
@@ -192,7 +193,7 @@ void KNMusicAlbumDetail::setAnimeParameter(const QRect &albumRect,
 }
 
 void KNMusicAlbumDetail::updateFoldEndValue(const QRect &position,
-                                            const int &iconSize)
+                                            int iconSize)
 {
     //Check the running state of the fold anime.
     if(m_foldAnime->state()==QAbstractAnimation::Running)
@@ -317,15 +318,20 @@ void KNMusicAlbumDetail::flyAwayAlbumDetail()
     }
 }
 
-void KNMusicAlbumDetail::scrollToSourceRow(const int &row)
+void KNMusicAlbumDetail::scrollToSourceRow(int row)
 {
     m_albumListView->scrollToSourceRow(row);
 }
 
-void KNMusicAlbumDetail::setAlbumArtHash(QHash<QString, QVariant> *hashAlbumArt)
+void KNMusicAlbumDetail::setImageManager(
+        KNMusicLibraryImageManager *imageManager)
 {
     //Save the pointer.
-    m_hashAlbumArt=hashAlbumArt;
+    m_imageManager=imageManager;
+    //Link the image manager with the album detail.
+    connect(m_imageManager, &KNMusicLibraryImageManager::imageInserted,
+            this, &KNMusicAlbumDetail::onActionImageInserted,
+            Qt::QueuedConnection);
 }
 
 void KNMusicAlbumDetail::onActionAlbumArtUpdate(const QModelIndex &updatedIndex)
@@ -380,6 +386,14 @@ void KNMusicAlbumDetail::showEvent(QShowEvent *event)
         //Update the parameter.
         updateExpandAlbumParameter();
     }
+}
+
+void KNMusicAlbumDetail::hideEvent(QHideEvent *event)
+{
+    //Hide the widget first.
+    QWidget::hideEvent(event);
+    //Clear the album art image, set the null pixmap to album art.
+    m_albumArt->clearAlbumArt();
 }
 
 void KNMusicAlbumDetail::mousePressEvent(QMouseEvent *event)
@@ -545,6 +559,25 @@ void KNMusicAlbumDetail::onActionFlyAway(const QVariant &position)
     m_albumContent->setPalette(pal);
 }
 
+void KNMusicAlbumDetail::onActionImageInserted(const QString &hashKey)
+{
+    //When there's a new image insert, check out the hash key.
+    //Check the index is valid.
+    if(m_currentIndex.isValid() && m_imageManager)
+    {
+        //Get the artwork key.
+        QString &&albumHashKey=
+                m_currentIndex.data(
+                    KNMusicAlbumModel::CategoryArtworkKeyRole).toString();
+        //Check album hash key.
+        if(albumHashKey==hashKey)
+        {
+            //Set the album art.
+            m_albumArt->setAlbumArt(m_imageManager->artwork(albumHashKey));
+        }
+    }
+}
+
 inline void KNMusicAlbumDetail::showContentWidgets()
 {
     //Set the data.
@@ -616,11 +649,6 @@ inline void KNMusicAlbumDetail::stopAllAnimations()
     m_expandAnime->stop();
     m_flyAwayAnime->stop();
     //Stop the hide artwork animations.
-    stopShowHideArtworkAnimations();
-}
-
-inline void KNMusicAlbumDetail::stopShowHideArtworkAnimations()
-{
     m_showAlbumArt->stop();
     m_hideAlbumArt->stop();
 }
@@ -628,7 +656,7 @@ inline void KNMusicAlbumDetail::stopShowHideArtworkAnimations()
 void KNMusicAlbumDetail::updateAlbumArtwork()
 {
     //Check the index is valid.
-    if(m_currentIndex.isValid() && m_hashAlbumArt)
+    if(m_currentIndex.isValid() && m_imageManager)
     {
         //Get the artwork key.
         QString &&albumHashKey=
@@ -641,9 +669,7 @@ void KNMusicAlbumDetail::updateAlbumArtwork()
             m_albumArt->setAlbumArt(knMusicGlobal->noAlbumArt());
         }
         //Get the variant image.
-        QPixmap &&albumArtImage=
-                m_hashAlbumArt->value(albumHashKey,
-                                      QVariant()).value<QPixmap>();
+        QPixmap &&albumArtImage=m_imageManager->artwork(albumHashKey);
         //Set the album art.
         m_albumArt->setAlbumArt(albumArtImage.isNull()?
                                     knMusicGlobal->noAlbumArt():

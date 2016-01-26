@@ -63,14 +63,17 @@ void KNMusicGlobal::initial(QObject *parent)
     }
 }
 
-QString KNMusicGlobal::indexedGenre(const int &index)
+QString KNMusicGlobal::indexedGenre(int index)
 {
+    //Check out the index range, if the index is in the range,
     return (index>0 && index<m_indexedGenres.size())?
+                //Give back the genre text, or else unknown.
                 m_indexedGenres.at(index):"Unknown";
 }
 
 int KNMusicGlobal::genreIndex(const QString &genre)
 {
+    //Get the index of the genre.
     return m_indexedGenres.indexOf(genre);
 }
 
@@ -82,9 +85,11 @@ QString KNMusicGlobal::typeDescription(const QString &suffix) const
     return suffixIndex==-1?QString():m_suffixDescription.at(suffixIndex);
 }
 
-QString KNMusicGlobal::treeViewHeaderText(const int &index) const
+QString KNMusicGlobal::treeViewHeaderText(int index) const
 {
+    //Check out the index range.
     return index<MusicDataCount?
+                //Give back the header text.
                 m_treeViewHeaderText[index]:
                 QString();
 }
@@ -407,12 +412,14 @@ inline void KNMusicGlobal::initialGenre()
 
 KNMusicLyricsDownloadDialogBase *KNMusicGlobal::lyricsDownloadDialog()
 {
+    //Get the lyrics dialog pointer.
     return m_lyricsDownloadDialog;
 }
 
 void KNMusicGlobal::setLyricsDownloadDialog(
         KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog)
 {
+    //Save the download dialog pointer.
     m_lyricsDownloadDialog = lyricsDownloadDialog;
 }
 

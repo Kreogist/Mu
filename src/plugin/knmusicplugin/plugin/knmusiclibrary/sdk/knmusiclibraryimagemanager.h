@@ -44,13 +44,6 @@ public:
     explicit KNMusicLibraryImageManager(QObject *parent = 0);
 
     /*!
-     * \brief Get the current managed hash album art hash map.
-     * \return The hash map pointer. It will return a nullptr if you never set
-     * it before.
-     */
-    QHash<QString, QVariant> *hashAlbumArt() const;
-
-    /*!
      * \brief Get the scaled album art hash map. This will automatically scaled
      * the parsed image into a smaller one for album art view to paint up.
      * \return The scaled hash map pointer. It will return a nullptr if you
@@ -60,12 +53,10 @@ public:
 
     /*!
      * \brief Set the album art hash map for manager to manage.
-     * \param hashAlbumArt The image hash map. It will store the original image.
      * \param scaledHashAlbumArt The scaled image hash map. It will store the
      * scaled image hash map.
      */
-    void setHashAlbumArt(QHash<QString, QVariant> *hashAlbumArt,
-                         QHash<QString, QVariant> *scaledHashAlbumArt);
+    void setHashAlbumArt(QHash<QString, QVariant> *scaledHashAlbumArt);
 
     /*!
      * \brief Get the image folder path.
@@ -80,15 +71,21 @@ public:
      */
     void setImageFolderPath(const QString &imageFolderPath);
 
-signals:
     /*!
-     * \brief When an image is parsed, this signal will be emitted to ask for
-     * save the image.
-     * \param imageHashKey The image hash, the saving pointer can get it from
-     * the hash map.
+     * \brief Get the raw artwork via hash key from the image folder.
+     * \param hashKey The artwork hash key.
+     * \return The artwork image in QPixmap.
      */
-    void requireSaveImage(QString imageHashKey);
+    QPixmap artwork(const QString &hashKey);
 
+    /*!
+     * \brief Insert album art image to image manager.
+     * \param image The album art image.
+     * \return The album art image hash key.
+     */
+    QString insertArtwork(const QImage &image);
+
+signals:
     /*!
      * \brief This signal is actually private, it is used for inner processing
      * loop.
@@ -109,16 +106,33 @@ signals:
      */
     void recoverImageComplete();
 
+    /*!
+     * \brief When there's a new image is inserted, this signal will be emitted.
+     * \param hashKey The new image hash key.
+     */
+    void imageInserted(const QString &hashKey);
+
 public slots:
     /*!
-     * \brief analysisAlbumArt
-     * \param itemIndex
-     * \param item
+     * \brief When there's a new item finished analysised, this slot will be
+     * called to add the item into parsing list. The album art will be parsed
+     * and add to hash map.
+     * \param itemIndex The analysis item index.
+     * \param item The analysis item.
      */
     void analysisAlbumArt(QPersistentModelIndex itemIndex,
                           KNMusicAnalysisItem item);
+
+    /*!
+     * \brief Reload the album art image from the specific folder.
+     * \param hashList Loading file name list.
+     */
     void recoverAlbumArt(const QStringList &hashList);
-    QString insertHashImage(const QImage &image);
+
+    /*!
+     * \brief Remove the album art via hash key.
+     * \param hashKey The hash key of the removed image.
+     */
     void removeHashImage(const QString &hashKey);
 
 private slots:

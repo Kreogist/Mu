@@ -359,6 +359,18 @@ void KNMusicPlugin::showMiniPlayer()
     }
 }
 
+void KNMusicPlugin::hideMiniPlayer()
+{
+    //Check mini player first.
+    if(!m_miniPlayer)
+    {
+        //If there's no mini player, then do nothing.
+        return;
+    }
+    //Hide the mini player.
+    m_miniPlayer->hide();
+}
+
 void KNMusicPlugin::resizeEvent(QResizeEvent *event)
 {
     //Do original resize event.
@@ -410,30 +422,18 @@ void KNMusicPlugin::onActionShowInGenres()
 
 void KNMusicPlugin::onActionHideMiniPlayer()
 {
-    //Check mini player first.
-    if(!m_miniPlayer)
-    {
-        //If there's no mini player, then do nothing.
-        return;
-    }
     //Ask to show the main window.
     emit requireShowMainWindow();
     //Hide the mini player.
-    m_miniPlayer->hide();
+    hideMiniPlayer();
 }
 
 void KNMusicPlugin::onActionShowMiniPlayer()
 {
-    //Check mini player first.
-    if(!m_miniPlayer)
-    {
-        //If there's no mini player, then do nothing.
-        return;
-    }
     //Ask to hide the main window.
     emit requireHideMainWindow();
     //Show the mini player.
-    m_miniPlayer->show();
+    showMiniPlayer();
 }
 
 void KNMusicPlugin::initialInfrastructure()

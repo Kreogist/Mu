@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QIcon>
 
+#include "knutil.h"
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
 
@@ -63,7 +64,7 @@ void KNMusicLibraryImageManager::analysisAlbumArt(
 void KNMusicLibraryImageManager::recoverAlbumArt(const QStringList &hashList)
 {
     //Check out the image hash list has been set or not.
-    if(m_hashAlbumArt==nullptr)
+    if(m_scaledHashAlbumArt==nullptr)
     {
         return;
     }
@@ -136,11 +137,11 @@ void KNMusicLibraryImageManager::analysisNext()
     //Use the parser to parse the analysis item.
     knMusicGlobal->parser()->parseAlbumArt(analysisItem);
     //Check the result of the cover image.
-    if(!analysisItem.coverImage.isNull() && m_hashAlbumArt!=nullptr)
+    if(!analysisItem.coverImage.isNull() && m_scaledHashAlbumArt!=nullptr)
     {
         //The cover image is not null, get the hash key.
         analysisItem.detailInfo.coverImageHash=
-                insertHashImage(analysisItem.coverImage);
+                insertArtwork(analysisItem.coverImage);
         //Ask to update the row, check the index first.
         if(currentItem.itemIndex.isValid())
         {
@@ -156,8 +157,8 @@ void KNMusicLibraryImageManager::analysisNext()
 inline void KNMusicLibraryImageManager::insertImage(const QString &hashKey,
                                                     const QPixmap &pixmap)
 {
-    //We won't do pointer check here.
-    m_hashAlbumArt->insert(hashKey, QVariant(pixmap));
+    //We won't do pointer check here, for speed reason.
+    //We will only saved the scaled album art.
     m_scaledHashAlbumArt->insert(hashKey,
                                  QVariant(pixmap.scaled(
                                      138,
@@ -171,7 +172,7 @@ QHash<QString, QVariant> *KNMusicLibraryImageManager::scaledHashAlbumArt() const
     return m_scaledHashAlbumArt;
 }
 
-QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
+QString KNMusicLibraryImageManager::insertArtwork(const QImage &image)
 {
     //Calculate the meta data of the image(MD4 of image content).
     QByteArray hashResult=
@@ -190,13 +191,18 @@ QString KNMusicLibraryImageManager::insertHashImage(const QImage &image)
                                                 currentByteText);
     }
     //Check whether the hash is already exists in image list.
-    if(m_hashAlbumArt!=nullptr && !m_hashAlbumArt->contains(imageHashKey))
+    if(m_scaledHashAlbumArt!=nullptr &&
+            !m_scaledHashAlbumArt->contains(imageHashKey))
     {
         //If this image is first time exist in the hash list, save the image
         //first.
         insertImage(imageHashKey, QPixmap::fromImage(image));
-        //Ask to save the image.
-        emit requireSaveImage(imageHashKey);
+        //Save the image.
+        image.save(KNUtil::ensurePathValid(m_imageFolderPath) +
+                   "/" + imageHashKey + ".png",
+                   "PNG");
+        //Emit the inserted signal.
+        emit imageInserted(imageHashKey);
     }
     return imageHashKey;
 }
@@ -215,19 +221,19 @@ QString KNMusicLibraryImageManager::imageFolderPath() const
 void KNMusicLibraryImageManager::setImageFolderPath(
         const QString &imageFolderPath)
 {
+    //Save the image folder path.
     m_imageFolderPath = imageFolderPath;
 }
 
-QHash<QString, QVariant> *KNMusicLibraryImageManager::hashAlbumArt() const
+QPixmap KNMusicLibraryImageManager::artwork(const QString &hashKey)
 {
-    return m_hashAlbumArt;
+    //Combine the folder path with the hash key to load the image.
+    return QPixmap(m_imageFolderPath + "/" + hashKey + ".png");
 }
 
 void KNMusicLibraryImageManager::setHashAlbumArt(
-        QHash<QString, QVariant> *hashAlbumArt,
         QHash<QString, QVariant> *scaledHashAlbumArt)
 {
     //Save the two pointer.
-    m_hashAlbumArt = hashAlbumArt;
     m_scaledHashAlbumArt = scaledHashAlbumArt;
 }

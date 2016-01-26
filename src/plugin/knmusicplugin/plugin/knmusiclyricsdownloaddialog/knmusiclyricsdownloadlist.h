@@ -38,22 +38,67 @@ class KNMusicLrcParser;
 class KNMusicScrollLyrics;
 class KNMusicLyricsBackend;
 class KNMusicLyricsDetailListModel;
+/*!
+ * \brief The KNMusicLyricsDownloadList class is a content widget which could
+ * getting the search keywords and display the searching progress and result.
+ */
 class KNMusicLyricsDownloadList : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLyricsDownloadList widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLyricsDownloadList(QWidget *parent = 0);
+
+    /*!
+     * \brief Get the current lyrics text data.
+     * \return The select lyrics text.
+     */
     QString currentLyricsData();
 
 signals:
+    /*!
+     * \brief This signal is emitted when there's any lyrics is valid for user.
+     * And the okay button of the dialog should be shown.
+     */
     void requireShowOkay();
+
+    /*!
+     * \brief This signal is emitted when there's none lyrics is valid. The okay
+     * button should be hidden.
+     */
     void requireHideOkay();
 
 public slots:
+    /*!
+     * \brief Hide all the content widgets.
+     */
     void hideAllWidgets();
+
+    /*!
+     * \brief Show the download widgets. Which means hide the lyrics lists and
+     * show the waiting wheels.
+     */
     void showDownloadWidgets();
+
+    /*!
+     * \brief Hide all the download widgets. Show the lyrics result list.
+     */
     void hideDownloadWidgets();
+
+    /*!
+     * \brief Update the server searching progress.
+     * \param current The current server number.
+     * \param total The total server count.
+     */
     void setDownloadServerText(int current, int total);
+
+    /*!
+     * \brief Set the lyrics search result list.
+     * \param lyricsList The lyrics detail lists.
+     */
     void setLyricsList(
         const QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> &lyricsList);
 

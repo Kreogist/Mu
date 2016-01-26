@@ -76,6 +76,10 @@ public:
     void setMainPlayer(QWidget *mainPlayer);
 
 signals:
+    /*!
+     * \brief When the main window is showing, this signal will be emitted.
+     */
+    void mainWindowShown();
 
 public slots:
     /*!
@@ -90,9 +94,14 @@ public slots:
 
 protected:
     /*!
+     * \brief Reimplemented from QMainWindow::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QMainWindow::closeEvent().
      */
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionFullScreen();

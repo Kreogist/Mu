@@ -301,6 +301,12 @@ void KNMusicMiniPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
                             analysisItem.detailInfo.textLists[Name].toString();
                 //Set the detail label text.
                 m_detailLabel->setText(playingSongData);
+                //Stop label animation if it's not shown.
+                if(m_lyrics->y()==0)
+                {
+                    //Stop label animation.
+                    m_detailLabel->stopAnime();
+                }
                 //Check the artist name.
                 m_lyrics->setPlaceHolderText(playingSongData);
             });
@@ -481,6 +487,22 @@ void KNMusicMiniPlayer::onActionMouseInOut(int frame)
     //    setPalette(pal);
 }
 
+void KNMusicMiniPlayer::onActionShowLyrics()
+{
+    //Stop the scroll label animation.
+    m_detailLabel->stopAnime();
+    //Disconnect the time line finish signal.
+    m_animeHandler.disconnectAll();
+}
+
+void KNMusicMiniPlayer::onActionHideLyrics()
+{
+    //Start the scroll label animation.
+    m_detailLabel->startAnime();
+    //Disconnect the time line finish signal.
+    m_animeHandler.disconnectAll();
+}
+
 inline KNOpacityAnimeButton *KNMusicMiniPlayer::generateControlButton(
         const QString &iconPath)
 {
@@ -555,10 +577,27 @@ inline void KNMusicMiniPlayer::thawAnime()
 
 inline void KNMusicMiniPlayer::startAnime(int targetFrame)
 {
+    //Disconnect all.
+    m_animeHandler.disconnectAll();
     //Stop the time line.
     m_moving->stop();
     //Configure the time line.
     m_moving->setFrameRange(m_lyrics->y(), targetFrame);
+    //Link the time line with specific finish slot.
+    if(targetFrame==0)
+    {
+        //When target frame is 0, means the lyrics will be shown.
+        m_animeHandler.append(
+                    connect(m_moving, &QTimeLine::finished,
+                            this, &KNMusicMiniPlayer::onActionShowLyrics));
+    }
+    else
+    {
+        //When target frame is not 0, means the lyrics will be hidden.
+        m_animeHandler.append(
+                    connect(m_moving, &QTimeLine::finished,
+                            this, &KNMusicMiniPlayer::onActionHideLyrics));
+    }
     //Start the time line.
     m_moving->start();
 }

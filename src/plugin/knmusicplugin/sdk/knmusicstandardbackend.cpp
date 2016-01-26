@@ -33,11 +33,13 @@ KNMusicStandardBackend::KNMusicStandardBackend(QObject *parent) :
 
 qint64 KNMusicStandardBackend::duration() const
 {
+    //Get the main thread duration.
     return threadDuration(m_main);
 }
 
 qint64 KNMusicStandardBackend::position() const
 {
+    //Get the main thread position.
     return threadPosition(m_main);
 }
 
@@ -45,41 +47,49 @@ bool KNMusicStandardBackend::loadMusic(const QString &filePath,
                                        const qint64 &start,
                                        const qint64 &duration)
 {
+    //Load the music to the main thread.
     return threadLoadMusic(m_main, filePath, start, duration);
 }
 
 int KNMusicStandardBackend::state() const
 {
+    //Get the main thread playing state.
     return threadState(m_main);
 }
 
 void KNMusicStandardBackend::play()
 {
+    //Play the main thread.
     threadPlay(m_main);
 }
 
 void KNMusicStandardBackend::pause()
 {
+    //Pause the main thread.
     threadPause(m_main);
 }
 
 void KNMusicStandardBackend::stop()
 {
+    //Stop the main thread.
     threadStop(m_main);
 }
 
 void KNMusicStandardBackend::reset()
 {
+    //Reset the main thread.
     threadReset(m_main);
 }
 
 qint64 KNMusicStandardBackend::previewDuration() const
 {
+    //Get the preview thread duration.
     return threadDuration(m_preview);
 }
 
 qint64 KNMusicStandardBackend::previewPosition() const
 {
+    //Get the preview thread position.
     return threadPosition(m_preview);
 }
 
@@ -87,11 +97,13 @@ bool KNMusicStandardBackend::previewLoadMusic(const QString &filePath,
                                               const qint64 &start,
                                               const qint64 &duration)
 {
+    //Load the music to preview thread.
     return threadLoadMusic(m_preview, filePath, start, duration);
 }
 
 int KNMusicStandardBackend::previewState() const
 {
+    //Get the preview thread state.
     return threadState(m_preview);
 }
 
@@ -133,6 +145,7 @@ void KNMusicStandardBackend::previewReset()
 
 bool KNMusicStandardBackend::mute()
 {
+    //Get the global mute state.
     return m_mute;
 }
 
@@ -150,6 +163,7 @@ void KNMusicStandardBackend::restore(const QString &updatedFilePath)
 
 void KNMusicStandardBackend::changeMuteState()
 {
+    //Set the mute state to the different side.
     setMute(!m_mute);
 }
 
@@ -236,11 +250,13 @@ void KNMusicStandardBackend::setPreviewThread(
 
 void KNMusicStandardBackend::setPosition(const qint64 &position)
 {
+    //Set the main thread position to a specific value.
     threadSetPosition(m_main, position);
 }
 
 void KNMusicStandardBackend::setPreviewPosition(const qint64 &position)
 {
+    //Set the preview thread position to a specific value.
     threadSetPosition(m_preview, position);
 }
 

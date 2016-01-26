@@ -21,20 +21,50 @@
 
 #include <QWidget>
 
+/*!
+ * \brief The KNMusicAlbumTitle class provides the album art label widget which
+ * could display the album art image and auto scaled it to fit the size.
+ */
 class KNMusicAlbumTitle : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicAlbumTitle widget with given parent.
+     * \param parent The parent widget.
+     */
     explicit KNMusicAlbumTitle(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the current album art pixmap.
+     * \return The album art image.
+     */
     QPixmap albumArt() const;
 
 signals:
+    /*!
+     * \brief When the mouse is moving on this widget, this signal is emitted to
+     * ask to show the album art.
+     */
     void requireShowAlbumArt();
+
+    /*!
+     * \brief When the mouse is moving out from this widget, the signal is
+     * emitted to ask to hide the album art widget.
+     */
     void requireHideAlbumArt();
 
 public slots:
+    /*!
+     * \brief Set the album art image.
+     * \param albumArt The album art pixmap image.
+     */
     void setAlbumArt(const QPixmap &albumArt);
+
+    /*!
+     * \brief Clear the album art image, release the memory resource.
+     */
+    void clearAlbumArt();
 
 protected:
     /*!

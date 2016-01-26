@@ -89,6 +89,12 @@ signals:
      */
     void lyricsChanged();
 
+    /*!
+     * \brief When the view of the backend should be update itself, this signal
+     * will be emitted.
+     */
+    void updateWidget();
+
 public slots:
     /*!
      * \brief Set the position of the song, and backend will automaticially

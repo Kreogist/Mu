@@ -20,6 +20,7 @@
 
 #include "knmusiclyricsdownloader.h"
 
+class QDomElement;
 /*!
  * \brief The KNMusicXiaMiLyrics class provide the policy to download lyrics
  * files from the server of the famous web site in China named XiaMi.
@@ -45,6 +46,10 @@ public:
     void downloadLyrics(
             const KNMusicDetailInfo &detailInfo,
             QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
+
+private:
+    inline QString getContentText(QDomElement *currentTrack,
+                                  const QString &tagName);
 };
 
 #endif // KNMUSICXIAMILYRICS_H

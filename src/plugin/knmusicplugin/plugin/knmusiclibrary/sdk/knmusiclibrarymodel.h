@@ -38,7 +38,6 @@ class KNMusicSearcher;
 class KNMusicCategoryModelBase;
 class KNMusicAnalysisQueue;
 class KNMusicLibraryImageManager;
-class KNMusicLibraryImageSaver;
 /*!
  * \brief The KNMusicLibraryModel class is the standard library model. It can
  * holds a image manager to read cached album art from the library folder, and
@@ -139,6 +138,13 @@ public:
      */
     QHash<QString, QVariant> *hashAlbumArt();
 
+    /*!
+     * \brief Get the image manager, the image manager could provide the
+     * original quality image which is read from hard disk.
+     * \return The image manager pointer.
+     */
+    KNMusicLibraryImageManager *imageManager() const;
+
 signals:
     /*!
      * \brief When the library model has the first record, this signal will be
@@ -195,7 +201,7 @@ private:
     inline void count(int counts=1);
     inline void writeDatabase();
     QLinkedList<KNMusicCategoryModelBase *> m_categoryModels;
-    QHash<QString, QVariant> m_hashAlbumArt, m_scaledHashAlbumArt;
+    QHash<QString, QVariant> m_scaledHashAlbumArt;
     QHash<QString, int> m_hashAlbumArtCounter;
     QThread m_searchThread, m_analysisThread, m_imageThread;
     QString m_databasePath;
@@ -203,7 +209,6 @@ private:
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     KNMusicLibraryImageManager *m_imageManager;
-    KNMusicLibraryImageSaver *m_imageSaver;
 };
 
 #endif // KNMUSICLIBRARYMODEL_H
