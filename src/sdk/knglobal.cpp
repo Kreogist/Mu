@@ -194,7 +194,7 @@ inline void KNGlobal::initialDefaultDirPath()
             KNUtil::simplifiedPath(m_dirPath[UserDataDir]+"/Plugins");
 }
 
-void KNGlobal::initialInfrastrcture()
+inline void KNGlobal::initialInfrastrcture()
 {
     //Initial storage unit.
     initialStorageUnit();

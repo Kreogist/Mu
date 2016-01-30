@@ -84,7 +84,7 @@ QString KNUtil::ensurePathValid(const QString &path)
     {
         return detectInfo.absoluteFilePath();
     }
-    //CHeck if there's a file named the same as the path.
+    //Check if there's a file named the same as the path.
     if(detectInfo.isFile())
     {
         //Remove the file first.
