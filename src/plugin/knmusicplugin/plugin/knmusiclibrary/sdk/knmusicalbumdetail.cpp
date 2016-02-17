@@ -388,14 +388,6 @@ void KNMusicAlbumDetail::showEvent(QShowEvent *event)
     }
 }
 
-void KNMusicAlbumDetail::hideEvent(QHideEvent *event)
-{
-    //Hide the widget first.
-    QWidget::hideEvent(event);
-    //Clear the album art image, set the null pixmap to album art.
-    m_albumArt->clearAlbumArt();
-}
-
 void KNMusicAlbumDetail::mousePressEvent(QMouseEvent *event)
 {
     //Do original pressed event.

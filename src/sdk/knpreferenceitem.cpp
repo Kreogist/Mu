@@ -30,10 +30,15 @@
 #define ShadowOpacity 65
 #define IconSize 30
 
+QLinearGradient KNPreferenceItem::m_upShadowGradient=
+        QLinearGradient(QPointF(0,0), QPointF(0, ShadowHeight));
+QLinearGradient KNPreferenceItem::m_downShadowGradient=
+        QLinearGradient(QPointF(0,0), QPointF(0, ShadowHeight));
+bool KNPreferenceItem::m_initial=false;
+
 KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     QAbstractButton(parent),
     m_headerIcon(QPixmap()),
-    m_shadowGradient(QLinearGradient(QPointF(0,0), QPointF(0, ShadowHeight))),
     m_backgroundOpacity(0.0),
     m_mouseIn(generateTimeLine(100)),
     m_mouseOut(generateTimeLine(0)),
@@ -41,6 +46,18 @@ KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     m_textX(TextBaseX)
 {
     setObjectName("PreferenceItem");
+    //Check static variables initial.
+    if(!m_initial)
+    {
+        //Configure the up shadow.
+        m_upShadowGradient.setColorAt(0, QColor(0,0,0,ShadowOpacity));
+        m_upShadowGradient.setColorAt(1, QColor(0,0,0,0));
+        //Configure the down shadow.
+        m_downShadowGradient.setColorAt(0, QColor(0,0,0,0));
+        m_downShadowGradient.setColorAt(1, QColor(0,0,0,ShadowOpacity));
+        //Set the flag.
+        m_initial=true;
+    }
     //Set properties.
     setAutoExclusive(true);
     setCheckable(true);
@@ -104,24 +121,18 @@ void KNPreferenceItem::paintEvent(QPaintEvent *event)
         painter.setOpacity(1.0);
         //Configure the painter.
         painter.setPen(Qt::NoPen);
-        //Configure the up shadow.
-        m_shadowGradient.setColorAt(0, QColor(0,0,0,ShadowOpacity));
-        m_shadowGradient.setColorAt(1, QColor(0,0,0,0));
         //Draw the shadow.
         painter.fillRect(QRect(0,
                                0,
                                width(),
-                               ShadowHeight), m_shadowGradient);
-        //Configure the down shadow.
-        m_shadowGradient.setColorAt(0, QColor(0,0,0,0));
-        m_shadowGradient.setColorAt(1, QColor(0,0,0,ShadowOpacity));
+                               ShadowHeight), m_upShadowGradient);
         //Change the coordinate.
         painter.translate(0, ItemHeight-ShadowHeight);
         //Draw the shadow.
         painter.fillRect(QRect(0,
                                0,
                                width(),
-                               ShadowHeight), m_shadowGradient);
+                               ShadowHeight), m_downShadowGradient);
     }
 }
 

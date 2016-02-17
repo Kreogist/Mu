@@ -104,9 +104,12 @@ inline void KNMusicAlbumTitle::updateScaledAlbumArt()
         return;
     }
     //Scaled the image.
-    m_scaledAlbumArt=m_albumArt.scaled(size(),
-                                       Qt::KeepAspectRatio,
-                                       Qt::SmoothTransformation);
+    m_scaledAlbumArt=
+            size().isEmpty()?
+                m_albumArt:
+                m_albumArt.scaled(size(),
+                                  Qt::KeepAspectRatio,
+                                  Qt::SmoothTransformation);
     //We should update the widget.
     update();
 }

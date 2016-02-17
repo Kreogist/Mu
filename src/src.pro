@@ -422,7 +422,9 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusichscrolllyrics.cpp \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp \
     sdk/knfilenamelineedit.cpp \
-    sdk/knfilenamemessagebox.cpp
+    sdk/knfilenamemessagebox.cpp \
+    sdk/notification/knnotificationbutton.cpp \
+    sdk/knnotificationcenter.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -630,7 +632,9 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusichscrolllyrics.h \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h \
     sdk/knfilenamelineedit.h \
-    sdk/knfilenamemessagebox.h
+    sdk/knfilenamemessagebox.h \
+    sdk/notification/knnotificationbutton.h \
+    sdk/knnotificationcenter.h
 
 RESOURCES += \
     resource/res.qrc

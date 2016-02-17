@@ -220,6 +220,7 @@ private:
 #ifdef Q_OS_UNIX
     inline void initialDesktopEnvironment();
 #endif
+    inline void initialNotificationCenter();
 
 #ifdef Q_OS_UNIX
     int m_desktopEnviroment;

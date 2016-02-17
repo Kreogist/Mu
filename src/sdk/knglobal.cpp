@@ -25,6 +25,7 @@
 #include "knfontmanager.h"
 #include "knlocalemanager.h"
 #include "knpreferenceplugin.h"
+#include "knnotificationcenter.h"
 #include "knthememanager.h"
 
 #include "knglobal.h"
@@ -206,6 +207,8 @@ inline void KNGlobal::initialInfrastrcture()
     //Check out the desktop environment.
     initialDesktopEnvironment();
 #endif
+    //Initial notification center.
+    ;
 
     //Initial the configure manager.
     //Set the configure folder path.
@@ -277,6 +280,11 @@ inline void KNGlobal::initialBrushes()
         //Set the texture of the brush.
         m_brushes[i].setTexture(QPixmap(textures[i]));
     }
+}
+
+inline void KNGlobal::initialNotificationCenter()
+{
+    ;
 }
 
 #ifdef Q_OS_UNIX

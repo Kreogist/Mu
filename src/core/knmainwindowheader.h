@@ -50,9 +50,6 @@ public:
      */
     void setCategoryPlugin(KNCategoryPlugin *categoryPlugin) Q_DECL_OVERRIDE;
 
-private slots:
-    void retranslate();
-
 protected:
     /*!
      * \brief Reimplemented from KNMainWindowHeaderBase::resizeEvent().
@@ -60,6 +57,7 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void retranslate();
     void updateContainerSize();
 
 private:

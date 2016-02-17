@@ -16,42 +16,46 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNPREFERENCELANGUAGEITEM_H
-#define KNPREFERENCELANGUAGEITEM_H
+#ifndef KNNOTIFICATIONBUTTON_H
+#define KNNOTIFICATIONBUTTON_H
 
-#include "knpreferenceitem.h"
+#include "knimagelabel.h"
 
 /*!
- * \brief The KNPreferenceLanguageItem class
+ * \brief The KNNotificationButton class provides the notification center
+ * customized button.
  */
-class KNPreferenceLanguageItem : public KNPreferenceItem
+class KNNotificationButton : public KNImageLabel
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNPreferenceLanguageItem widget.
+     * \brief Construct the KNNotificationButton class.
      * \param parent The parent widget.
      */
-    explicit KNPreferenceLanguageItem(QWidget *parent = 0);
-
-    /*!
-     * \brief Set the language display name.
-     * \param languageName The language display name.
-     */
-    void setLanguageName(const QString &languageName);
+    explicit KNNotificationButton(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief Ask to show the requireShowNotificationCenter widget.
+     */
+    void requireShowNotificationCenter();
 
 public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from KNPreferenceItem::paintContent().
+     * \brief Reimplemented from KNImageLabel::mousePressEvent().
      */
-    void paintContent(QPainter *painter) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event);
+
+    /*!
+     * \brief Reimplemented from KNImageLabel::mouseReleaseEvent().
+     */
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    QString m_languageName;
+    bool m_pressed;
 };
 
-#endif // KNPREFERENCELANGUAGEITEM_H
+#endif // KNNOTIFICATIONBUTTON_H

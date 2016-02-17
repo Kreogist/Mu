@@ -60,8 +60,6 @@ signals:
      * panel.
      */
     void requireShowPreference();
-
-public slots:
 };
 
 #endif // KNMAINWINDOWHEADERBASE_H

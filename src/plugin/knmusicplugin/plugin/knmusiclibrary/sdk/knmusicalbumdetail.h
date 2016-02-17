@@ -163,11 +163,6 @@ protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QWidget::hideEvent().
-     */
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
      * \brief Reimplemented from QWidget::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

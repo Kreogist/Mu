@@ -16,42 +16,38 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNPREFERENCELANGUAGEITEM_H
-#define KNPREFERENCELANGUAGEITEM_H
+#ifndef KNNOTIFICATIONCENTER_H
+#define KNNOTIFICATIONCENTER_H
 
-#include "knpreferenceitem.h"
+#include <QWidget>
 
+class KNNotificationButton;
 /*!
- * \brief The KNPreferenceLanguageItem class
+ * \brief The KNNotificationCenter class provides the ability to show all the
+ * information in a single place.
  */
-class KNPreferenceLanguageItem : public KNPreferenceItem
+class KNNotificationCenter : public QWidget
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNPreferenceLanguageItem widget.
+     * \brief Construct the KNNotificationCenter widget.
      * \param parent The parent widget.
      */
-    explicit KNPreferenceLanguageItem(QWidget *parent = 0);
+    explicit KNNotificationCenter(QWidget *parent = 0);
 
     /*!
-     * \brief Set the language display name.
-     * \param languageName The language display name.
+     * \brief Get the notification header button.
+     * \return The button widget pointer.
      */
-    void setLanguageName(const QString &languageName);
+    QWidget *headerButton();
 
 signals:
 
 public slots:
 
-protected:
-    /*!
-     * \brief Reimplemented from KNPreferenceItem::paintContent().
-     */
-    void paintContent(QPainter *painter) Q_DECL_OVERRIDE;
-
 private:
-    QString m_languageName;
+    KNNotificationButton *m_button;
 };
 
-#endif // KNPREFERENCELANGUAGEITEM_H
+#endif // KNNOTIFICATIONCENTER_H

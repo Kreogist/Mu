@@ -87,8 +87,9 @@ private slots:
 private:
     inline QTimeLine *generateTimeLine(const int &endFrame);
     inline void startAnime(QTimeLine *timeLine);
+    static QLinearGradient m_upShadowGradient, m_downShadowGradient;
+    static bool m_initial;
     QPixmap m_headerIcon;
-    QLinearGradient m_shadowGradient;
     qreal m_backgroundOpacity;
     QTimeLine *m_mouseIn, *m_mouseOut;
     int m_progress, m_textX;
