@@ -12,6 +12,10 @@ Copyright © 2013-2016 Kreogist Dev Team. All rights reserved.
 * Support import and export iTunes xml, xspf, m3u, ttpl, and wpl format playlists.
 * Support advanced multiple condition search.
 
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/Kreogist/kreogist.github.com/master/Mu/images/screenshot.png)
+
 ## Dependencies
 * Qt (>=5.5)
 * FFMpeg (>=2.5)

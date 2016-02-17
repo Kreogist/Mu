@@ -320,10 +320,15 @@ inline void KNMusicTagWma::parseExtendFrame(char *frameStart,
 bool KNMusicTagWma::parseImageData(QByteArray imageData,
                                    QImage &albumArt)
 {
-    //! FIXME: Check this module once more.
     //Get mime end and description end.
     int mimeTypeEnd=imageData.indexOf('\0', 1),
         descriptionEnd=imageData.indexOf('\0', mimeTypeEnd+2);
+    //Check validation of the position.
+    if(mimeTypeEnd<0 || descriptionEnd<mimeTypeEnd)
+    {
+        //Failed to parse.
+        return false;
+    }
     //We will simply ignore all the text data.
     //Get the image.
     imageData.remove(0, descriptionEnd+1);

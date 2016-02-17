@@ -266,23 +266,25 @@ inline void KNMusicMainPlayerContent::regeometryWidgets()
     case 2:
     {
         //Follow up the golden ratio.
-        int detailInfoWidth=(qreal)width()*0.382;
+        int detailInfoWidth=(qreal)width()*0.382,
+                //Use the lyrics font size as the spacing of the layout.
+                fontSize=(m_columnWidgets[1]->font().pixelSize())>>1;
         //Check out the first widget pointer.
         if(m_columnWidgets[0]!=nullptr)
         {
             //Resize the detail info panel widget.
             m_columnWidgets[0]->setGeometry(0,
                                             0,
-                                            detailInfoWidth,
+                                            detailInfoWidth-fontSize,
                                             height());
         }
         //Resize the second widget.
         if(m_columnWidgets[1]!=nullptr)
         {
             //Update the second widget geometry.
-            m_columnWidgets[1]->setGeometry(detailInfoWidth,
+            m_columnWidgets[1]->setGeometry(detailInfoWidth+fontSize,
                                             0,
-                                            width()-detailInfoWidth,
+                                            width()-detailInfoWidth-fontSize,
                                             height());
         }
         break;
@@ -290,14 +292,16 @@ inline void KNMusicMainPlayerContent::regeometryWidgets()
     case 3:
     {
         //Calculate detail info width.
-        int detailInfoWidth=(qreal)width()*0.276;
+        int detailInfoWidth=(qreal)width()*0.276,
+                //Use the lyrics font size as the spacing of the layout.
+                fontSize=m_columnWidgets[1]->font().pixelSize();
         //Check out the widget pointer.
         if(m_columnWidgets[0]!=nullptr)
         {
             //Resize the detail info panel widget.
             m_columnWidgets[0]->setGeometry(0,
                                             0,
-                                            detailInfoWidth,
+                                            detailInfoWidth-(fontSize>>1),
                                             height());
         }
         //Initial the playlist widget width.
@@ -308,9 +312,9 @@ inline void KNMusicMainPlayerContent::regeometryWidgets()
             //Calculate the switcher width.
             playlistWidth=qMax((detailInfoWidth>>2)+(detailInfoWidth>>1), 178);
             //Resize the widget switcher.
-            m_columnWidgets[2]->setGeometry(width()-playlistWidth,
+            m_columnWidgets[2]->setGeometry(width()-playlistWidth+(fontSize>>1),
                                             0,
-                                            playlistWidth,
+                                            playlistWidth-(fontSize>>1),
                                             height());
         }
         //Calculate the lyrics widget width, and resize the lyrics widget.
@@ -319,9 +323,9 @@ inline void KNMusicMainPlayerContent::regeometryWidgets()
         {
             //Resize the lyrics widget.
             m_columnWidgets[1]->setGeometry(
-                        detailInfoWidth,
+                        detailInfoWidth+(fontSize>>1),
                         0,
-                        width()-playlistWidth-detailInfoWidth,
+                        width()-playlistWidth-detailInfoWidth-fontSize,
                         height());
         }
         break;
