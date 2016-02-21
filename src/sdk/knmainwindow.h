@@ -25,6 +25,7 @@ class KNConfigure;
 class KNCategoryPlugin;
 class KNMainWindowContainer;
 class KNMainWindowHeaderBase;
+class KNNotificationCenter;
 class KNPreferencePlugin;
 /*!
  * \brief The KNMainWindow class provides a main application window for mu.\n
@@ -105,6 +106,7 @@ protected:
 
 private slots:
     void onActionFullScreen();
+    void onActionShowNotificationCenter();
 
 private:
     inline void recoverGeometry();
@@ -112,10 +114,12 @@ private:
     inline int getCacheValue(const QString &valueName);
     inline void setCacheValue(const QString &valueName, const int &value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
+    inline void regeometryNotificationCenter();
 
     KNConfigure *m_cacheConfigure;
     KNMainWindowContainer *m_container;
     KNCategoryPlugin *m_categoryPlugin;
+    KNNotificationCenter *m_notificationCenter;
     Qt::WindowStates m_originalWindowState;
 };
 

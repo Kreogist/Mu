@@ -19,14 +19,14 @@
 #ifndef KNNOTIFICATIONCENTER_H
 #define KNNOTIFICATIONCENTER_H
 
-#include <QWidget>
+#include <QFrame>
 
 class KNNotificationButton;
 /*!
  * \brief The KNNotificationCenter class provides the ability to show all the
  * information in a single place.
  */
-class KNNotificationCenter : public QWidget
+class KNNotificationCenter : public QFrame
 {
     Q_OBJECT
 public:
@@ -40,13 +40,34 @@ public:
      * \brief Get the notification header button.
      * \return The button widget pointer.
      */
-    QWidget *headerButton();
+    KNNotificationButton *headerButton();
+
+    /*!
+     * \brief Get the indicator widget of the notification center.
+     * \return The indicator widget pointer.
+     */
+    QWidget *indicator();
 
 signals:
 
 public slots:
 
+protected:
+    /*!
+     * \brief Reimplemented from QFrame::showEvent().
+     */
+    void showEvent(QShowEvent *event)  Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QFrame::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+
+private slots:
+    void retranslate();
+
 private:
+    QWidget *m_notificationIndicator;
     KNNotificationButton *m_button;
 };
 

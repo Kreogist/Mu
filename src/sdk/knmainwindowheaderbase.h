@@ -49,6 +49,12 @@ public:
                                  Qt::Alignment alignment=0)=0;
 
     /*!
+     * \brief Add notification button widget to header widget.
+     * \param widget The button widget pointer.
+     */
+    virtual void addNotificationButton(QWidget *widget)=0;
+
+    /*!
      * \brief Set the category plugin. It is used to update the button caption.
      * \param plugin The category plugin.
      */

@@ -253,7 +253,9 @@ void KNMusicHScrollLyrics::moveToLine(int lineIndex, const qint64 &position)
                 knMusicGlobal->backend()->duration() -
                 m_backend->lyricsPosition(m_currentLine);
     }
-    m_moveToCurrentLine->setDuration(targetDuration-currentPosition);
+    //Set the duration, make the minimum duration to be 2 miliseconds.
+    m_moveToCurrentLine->setDuration(qMax(targetDuration-currentPosition,
+                                          (qint64)2));
     //Calculate the total width.
     int totalWidth=qMax(MinimumWidth,
                         fontMetrics().width(m_backend->lyricsText(lineIndex))) +

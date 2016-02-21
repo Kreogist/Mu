@@ -25,6 +25,8 @@
 #include "knpreferenceplugin.h"
 #include "knthememanager.h"
 #include "knmainwindowcontainer.h"
+#include "knnotificationcenter.h"
+#include "notification/knnotificationbutton.h"
 
 //Ports
 #include "knmainwindowheaderbase.h"
@@ -33,11 +35,14 @@
 
 #include <QDebug>
 
+#define NotificationPatch 22
+
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
     m_container(new KNMainWindowContainer(this)),
     m_categoryPlugin(nullptr),
+    m_notificationCenter(new KNNotificationCenter(this)),
     m_originalWindowState(Qt::WindowNoState)
 {
     setObjectName("MainWindow");
@@ -45,12 +50,21 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     setAutoFillBackground(true);
     setCentralWidget(m_container);
     setContentsMargins(0,0,0,0);
-    setMinimumSize(730, 432);
+    setMinimumSize(772, 432);
     setWindowIcon(QIcon("://icon/mu.png"));
     //Mac OS X title hack.
 #ifdef Q_OS_MACX
     setWindowTitle(qApp->applicationDisplayName());
 #endif
+
+    //Reset the parent relationship of indicator.
+    m_notificationCenter->indicator()->setParent(this);
+    //Hide the notification center.
+    m_notificationCenter->hide();
+    //Link the notification center button to show slots.
+    connect(m_notificationCenter->headerButton(),
+            &KNNotificationButton::requireShowNotificationCenter,
+            this, &KNMainWindow::onActionShowNotificationCenter);
     //Add main window to theme list.
     knTheme->registerWidget(this);
     //Add full screen short cut actions.
@@ -65,8 +79,16 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 
 void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
 {
+    //Check header pointer.
+    if(header==nullptr)
+    {
+        //If the header pointer is null, then failed to load the header.
+        return;
+    }
     //Set the header widget.
     m_container->setHeader(header);
+    //Add notification center button to header.
+    header->addNotificationButton(m_notificationCenter->headerButton());
     //Link the header show preference signal to container.
     connect(header, &KNMainWindowHeaderBase::requireShowPreference,
             m_container, &KNMainWindowContainer::showPreference);
@@ -150,6 +172,14 @@ void KNMainWindow::onActionFullScreen()
         //Full screen the window.
         setWindowState(Qt::WindowFullScreen);
     }
+}
+
+void KNMainWindow::onActionShowNotificationCenter()
+{
+    //Reset the geometry.
+    regeometryNotificationCenter();
+    //Show notification center.
+    m_notificationCenter->show();
 }
 
 inline void KNMainWindow::recoverGeometry()
@@ -238,4 +268,23 @@ inline void KNMainWindow::setCacheValue(const QString &valueName,
 inline void KNMainWindow::zoomParameter(int &parameter, const qreal &ratio)
 {
     parameter=(qreal)parameter*ratio;
+}
+
+inline void KNMainWindow::regeometryNotificationCenter()
+{
+    //Get header button.
+    QWidget *headerButton=m_notificationCenter->headerButton();
+    //Resize the notification center.
+    m_notificationCenter->resize(320, height()-150);
+    //Move the notification center.
+    m_notificationCenter->move(
+                QPoint(geometry().x() + width() - m_notificationCenter->width(),
+                       geometry().y() + headerButton->geometry().bottom() +
+                       NotificationPatch));
+    //Move tyhe notification indicator.
+    m_notificationCenter->indicator()->move(
+                headerButton->mapTo(this, QPoint(0,0)) +
+                QPoint((headerButton->width()>>1) -
+                       (m_notificationCenter->indicator()->width()>>1),
+                       headerButton->height()));
 }

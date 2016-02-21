@@ -46,6 +46,12 @@ public:
                          Qt::Alignment alignment=0) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from
+     * KNMainWindowHeaderBase::addNotificationButton().
+     */
+    void addNotificationButton(QWidget *widget) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMainWindowHeaderBase::setCategoryPlugin().
      */
     void setCategoryPlugin(KNCategoryPlugin *categoryPlugin) Q_DECL_OVERRIDE;
@@ -62,7 +68,7 @@ private slots:
 
 private:
     QWidget *m_widgetContainer;
-    QBoxLayout *m_widgetLayout;
+    QBoxLayout *m_notificationLayout, *m_widgetLayout;
     KNCategoryPlugin *m_categoryPlugin;
     KNMainWindowIconButton *m_iconButton;
 };

@@ -21,8 +21,34 @@
 
 KNNotificationButton::KNNotificationButton(QWidget *parent) :
     KNImageLabel(parent),
-    m_pressed(false)
+    m_anonymousPixmap(QPixmap("://public/anonymous.png")),
+    m_pressed(false),
+    m_isLogin(false)
 {
+    //Set properties.
+    setFixedSize(110, 110);
+    setPixmap(m_anonymousPixmap);
+}
+
+void KNNotificationButton::setAccountAvatar(const QPixmap &avatar)
+{
+    //Check avatar.
+    //Set the pixmap.
+    setPixmap(avatar.isNull()?
+                  m_anonymousPixmap:
+                  avatar.scaled(size(),
+                                Qt::IgnoreAspectRatio,
+                                Qt::SmoothTransformation));
+    //Change the login state.
+    m_isLogin=true;
+}
+
+void KNNotificationButton::resetAccountAvatar()
+{
+    //Reset the pixmap to anonymous pixmap.
+    setPixmap(m_anonymousPixmap);
+    //Reset the login state.
+    m_isLogin=false;
 }
 
 void KNNotificationButton::mousePressEvent(QMouseEvent *event)
@@ -49,5 +75,10 @@ void KNNotificationButton::mouseReleaseEvent(QMouseEvent *event)
             emit requireShowNotificationCenter();
         }
     }
+}
+
+bool KNNotificationButton::isLogin() const
+{
+    return m_isLogin;
 }
 

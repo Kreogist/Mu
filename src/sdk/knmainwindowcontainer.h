@@ -146,9 +146,9 @@ private:
         AnimePreferencePanel,
         ContainerAnimeCount
     };
-    QParallelAnimationGroup *m_preferenceAnimeGroup, *m_mainPlayerAnimeGroup;
     QPropertyAnimation *m_elementAnime[ContainerAnimeCount];
     QWidget *m_elementWidget[ContainerWidgetCount];
+    QParallelAnimationGroup *m_preferenceAnimeGroup, *m_mainPlayerAnimeGroup;
     QPropertyAnimation *m_preferenceOpacity;
     QGraphicsOpacityEffect *m_preferenceOpacityEffect;
     int m_headerHeight;

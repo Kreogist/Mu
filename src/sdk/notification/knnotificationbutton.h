@@ -35,6 +35,13 @@ public:
      */
     explicit KNNotificationButton(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the current login state.
+     * \return The login state. If user has been set an avatar, then it will be
+     * true. After reset the avatar, it will be false.
+     */
+    bool isLogin() const;
+
 signals:
     /*!
      * \brief Ask to show the requireShowNotificationCenter widget.
@@ -42,6 +49,16 @@ signals:
     void requireShowNotificationCenter();
 
 public slots:
+    /*!
+     * \brief Set the account avatar pixmap.
+     * \param avatar The avatar image pixmap.
+     */
+    void setAccountAvatar(const QPixmap &avatar);
+
+    /*!
+     * \brief Reset the account avatar, and clear up the login state.
+     */
+    void resetAccountAvatar();
 
 protected:
     /*!
@@ -55,7 +72,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    bool m_pressed;
+    QPixmap m_anonymousPixmap;
+    bool m_pressed, m_isLogin;
 };
 
 #endif // KNNOTIFICATIONBUTTON_H
