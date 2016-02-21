@@ -50,7 +50,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     setAutoFillBackground(true);
     setCentralWidget(m_container);
     setContentsMargins(0,0,0,0);
-    setMinimumSize(772, 432);
+    setMinimumSize(772, 477);
     setWindowIcon(QIcon("://icon/mu.png"));
     //Mac OS X title hack.
 #ifdef Q_OS_MACX

@@ -42,7 +42,7 @@ KNLoopScrollLabel::KNLoopScrollLabel(QWidget *parent) :
                                   QSizePolicy::Label));
 
     //Configure the move and waiting timer.
-    m_move->setInterval(20);
+    m_move->setInterval(33);
     connect(m_move, &QTimer::timeout, this, &KNLoopScrollLabel::moveText);
     m_wait->setInterval(Waiting);
     m_wait->setSingleShot(true);

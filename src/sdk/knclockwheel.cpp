@@ -39,7 +39,7 @@ KNClockWheel::KNClockWheel(QWidget *parent) :
         m_clockFrames[i]=QPixmap("://public/clock/b"+QString::number(i)+".png");
     }
     //Configure the tick timer.
-    m_tickTimer->setInterval(20);
+    m_tickTimer->setInterval(33);
     connect(m_tickTimer, &QTimer::timeout, this, &KNClockWheel::tick);
 }
 
