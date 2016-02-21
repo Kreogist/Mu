@@ -71,12 +71,12 @@ protected:
     /*!
      * \brief Reimplemented from KNMusicLibraryCategoryTab::showEvent().
      */
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicLibraryCategoryTab::hideEvent().
      */
-    void hideEvent(QHideEvent *event);
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

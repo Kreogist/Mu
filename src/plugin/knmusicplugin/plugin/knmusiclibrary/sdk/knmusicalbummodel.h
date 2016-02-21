@@ -43,7 +43,7 @@ public:
     /*!
      * \brief Reimplemented from KNMusicCategoryModelBase::reset().
      */
-    void reset();
+    void reset() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicCategoryModelBase::categoryIndex().

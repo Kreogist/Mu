@@ -44,7 +44,7 @@ protected:
     /*!
      * \brief Reimplemented from QAbstractButton::mouseReleaseEvent().
      */
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::paintEvent().

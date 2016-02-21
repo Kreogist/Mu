@@ -106,12 +106,12 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::save().
      */
-    void save();
+    void save() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::restore().
      */
-    void restore(const QString &updatedFilePath=QString());
+    void restore(const QString &updatedFilePath=QString()) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::setVolume().

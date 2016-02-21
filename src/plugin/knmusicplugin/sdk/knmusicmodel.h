@@ -267,7 +267,7 @@ public:
                   int sourceRow,
                   int count,
                   const QModelIndex &destinationParent,
-                  int destinationChild);
+                  int destinationChild) Q_DECL_OVERRIDE;
 
 signals:
     /*!

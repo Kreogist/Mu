@@ -118,7 +118,7 @@ public:
     /*!
      * \brief Reimplemented from KNMusicModel::data().
      */
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
     /*!
      * \brief Set the playlist directory path for the whole playlist model. This

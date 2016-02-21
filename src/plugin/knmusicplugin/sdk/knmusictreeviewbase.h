@@ -131,7 +131,7 @@ protected:
     /*!
      * \brief Reimplemented from QTreeView::dragEnterEvent().
      */
-    void dragEnterEvent(QDragEnterEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::dragMoveEvent().
@@ -141,12 +141,12 @@ protected:
     /*!
      * \brief Reimplemented from QTreeView::dragLeaveEvent().
      */
-    void dragLeaveEvent(QDragLeaveEvent *);
+    void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::dropEvent().
      */
-    void dropEvent(QDropEvent *event);
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QTreeView::mousePressEvent().

@@ -47,7 +47,7 @@ protected:
     /*!
      * \brief Reimplemented from KNMusicCategoryListViewBase::dragEnterEvent().
      */
-    void dragEnterEvent(QDragEnterEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicCategoryListViewBase::dragMoveEvent().
@@ -57,12 +57,12 @@ protected:
     /*!
      * \brief Reimplemented from KNMusicCategoryListViewBase::dragLeaveEvent().
      */
-    void dragLeaveEvent(QDragLeaveEvent *);
+    void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicCategoryListViewBase::dropEvent().
      */
-    void dropEvent(QDropEvent *event);
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,

@@ -26,9 +26,16 @@ class KNSaoButton : public QAbstractButton
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNSaoButton widget with given parent.
+     * \param parent The parent widget.
+     */
     explicit KNSaoButton(QWidget *parent = 0);
 
-    QSize sizeHint() const;
+    /*!
+     * \brief Reimplemented from QAbstractButton::sizeHint().
+     */
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 signals:
 
@@ -43,13 +50,12 @@ protected:
     /*!
      * \brief Reimplemented from QAbstractButton::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractButton::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
-
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionMouseAnime(const int &frame);

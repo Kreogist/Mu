@@ -62,7 +62,7 @@ public:
      */
     QWidget *createEditor(QWidget *parent,
                           const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const;
+                          const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
      * \brief  Reimplemented from QStyledItemDelegate::setEditorData().
