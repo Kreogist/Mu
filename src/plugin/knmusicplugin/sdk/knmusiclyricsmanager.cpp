@@ -33,12 +33,12 @@
 KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     QObject(parent),
     m_detailInfo(KNMusicDetailInfo()),
+    m_lyricsDir(QString()),
     m_onlineLyrics(new KNMusicOnlineLyrics),
     m_onlineLyricsDownloader(new KNMusicOnlineLyricsDownloader),
     m_backend(new KNMusicLyricsBackend(this)),
     m_parser(new KNMusicLrcParser(this)),
-    m_onlineThread(new QThread(this)),
-    m_lyricsDir(QString())
+    m_onlineThread(new QThread(this))
 {
     //Set the default loading policy.
     m_policyList << SameNameInLyricsDir << RelateNameInLyricsDir
@@ -52,8 +52,11 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     //Move the online lyrics downloader to online thread.
     m_onlineLyricsDownloader->moveToThread(m_onlineThread);
     //Link the online lyrics.
+    connect(this, &KNMusicLyricsManager::requireDownloadLyrics,
+            m_onlineLyrics, &KNMusicOnlineLyrics::addToDownloadList,
+            Qt::QueuedConnection);
     connect(m_onlineLyrics, &KNMusicOnlineLyrics::lyricsDownload,
-            this, &KNMusicLyricsManager::saveLyricsAndUpdateBackend,
+            this, &KNMusicLyricsManager::checkAndSaveLyrics,
             Qt::QueuedConnection);
     //Start online thread.
     m_onlineThread->start();
@@ -66,6 +69,7 @@ KNMusicLyricsManager::~KNMusicLyricsManager()
     m_onlineThread->wait();
     //Delete online lyrics.
     m_onlineLyrics->deleteLater();
+    m_onlineLyricsDownloader->deleteLater();
 }
 
 KNMusicLyricsBackend *KNMusicLyricsManager::backend()
@@ -86,7 +90,7 @@ void KNMusicLyricsManager::loadLyrics(const KNMusicAnalysisItem &analysisItem)
         return;
     }
     //Or else we need to download the lyrics.
-    m_onlineLyrics->addToDownloadList(m_detailInfo);
+    emit requireDownloadLyrics(m_detailInfo);
 }
 
 bool KNMusicLyricsManager::loadLyricsFile(const QString &lyricsPath)
@@ -118,19 +122,13 @@ void KNMusicLyricsManager::resetBackend()
     m_backend->reset();
 }
 
-void KNMusicLyricsManager::saveLyrics(const QString &artist,
-                                      const QString &title,
+void KNMusicLyricsManager::saveLyrics(const KNMusicDetailInfo &detailInfo,
                                       const QString &content)
 {
     //Ensure the lyrics directory is exist.
     KNUtil::ensurePathValid(m_lyricsDir);
     //Save the lyrics content.
-    KNUtil::saveTextToFile(
-                //Generate the file path.
-                m_lyricsDir + "/" + KNUtil::legalFileName(artist + " - " +
-                                                          title + ".lrc"),
-                //Lyrics content.
-                content);
+    KNUtil::saveTextToFile(generateLyricsPath(detailInfo), content);
 }
 
 void KNMusicLyricsManager::saveLyricsAndUpdateBackend(
@@ -138,9 +136,7 @@ void KNMusicLyricsManager::saveLyricsAndUpdateBackend(
         const QString &content)
 {
     //Save the lyrics.
-    saveLyrics(detailInfo.textLists[Artist].toString(),
-               detailInfo.textLists[Name].toString(),
-               content);
+    saveLyrics(detailInfo, content);
     //Check whether the detail info is still the current one.
     if(detailInfo.filePath==m_detailInfo.filePath &&
             detailInfo.trackFilePath==m_detailInfo.trackFilePath &&
@@ -156,6 +152,29 @@ void KNMusicLyricsManager::saveLyricsAndUpdateBackend(
             m_backend->setLyricsData(timeList, textList);
         }
     }
+}
+
+void KNMusicLyricsManager::checkAndSaveLyrics(
+        const KNMusicDetailInfo &detailInfo,
+        const QString &content)
+{
+    //Simply check the file is already exist.
+    if(QFileInfo::exists(generateLyricsPath(detailInfo)))
+    {
+        //The lyrics has already been downloaded.
+        return;
+    }
+    //Save the lyrics.
+    saveLyricsAndUpdateBackend(detailInfo, content);
+}
+
+inline QString KNMusicLyricsManager::generateLyricsPath(
+        const KNMusicDetailInfo &detailInfo)
+{
+    //Generate the file path.
+    return m_lyricsDir + "/" + KNUtil::legalFileName(
+                detailInfo.textLists[Artist].toString() + " - " +
+                detailInfo.textLists[Name].toString() + ".lrc");
 }
 
 inline bool KNMusicLyricsManager::loadLocalLyrics(

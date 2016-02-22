@@ -71,6 +71,7 @@ public:
     KNMusicOnlineLyricsDownloader *onlineLyricsDownloader();
 
 signals:
+    void requireDownloadLyrics(KNMusicDetailInfo detailInfo);
 
 public slots:
     /*!
@@ -101,12 +102,10 @@ public slots:
     /*!
      * \brief Save the lyrics data to the lyrics directory. Named as "Artist-
      * Name.lrc".
-     * \param artist The artist name.
-     * \param title The title of the song.
+     * \param detailInfo The detail info of the song for the lyrics.
      * \param content Lyrics file content.
      */
-    void saveLyrics(const QString &artist,
-                    const QString &title,
+    void saveLyrics(const KNMusicDetailInfo &detailInfo,
                     const QString &content);
 
     /*!
@@ -116,6 +115,10 @@ public slots:
      */
     void saveLyricsAndUpdateBackend(const KNMusicDetailInfo &detailInfo,
                                     const QString &content);
+
+private slots:
+    void checkAndSaveLyrics(const KNMusicDetailInfo &detailInfo,
+                            const QString &content);
 
 private:
     enum SearchPolicy
@@ -131,6 +134,7 @@ private:
         LyricsNamedArtistHyphonTitle,
         LyricsNamedAlbumHyphonTitle
     };
+    inline QString generateLyricsPath(const KNMusicDetailInfo &detailInfo);
     inline bool loadLocalLyrics(const KNMusicDetailInfo &detailInfo);
     inline bool loadRelatedLyrics(const QString &dirPath,
                                   const KNMusicDetailInfo &detailInfo);
@@ -140,6 +144,8 @@ private:
     QList<int> m_relateNamePolicyList;
     //Current state.
     KNMusicDetailInfo m_detailInfo;
+    //Lyrics directory path.
+    QString m_lyricsDir;
     //Support objects.
     KNMusicOnlineLyrics *m_onlineLyrics;
     KNMusicOnlineLyricsDownloader *m_onlineLyricsDownloader;
@@ -147,8 +153,6 @@ private:
     KNMusicLrcParser *m_parser;
     //Working thread for the downloader.
     QThread *m_onlineThread;
-    //Lyrics directory path.
-    QString m_lyricsDir;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H

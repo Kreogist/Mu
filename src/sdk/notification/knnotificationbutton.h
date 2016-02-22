@@ -44,7 +44,7 @@ public:
 
 signals:
     /*!
-     * \brief Ask to show the requireShowNotificationCenter widget.
+     * \brief Ask to show the notification center widget.
      */
     void requireShowNotificationCenter();
 

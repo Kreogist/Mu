@@ -27,6 +27,11 @@ class KNMusicOnlineLyricsDownloader : public QObject
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicOnlineLyricsDownloader object with given
+     * parent.
+     * \param parent The parent object pointer.
+     */
     explicit KNMusicOnlineLyricsDownloader(QObject *parent = 0);
 
     /*!
