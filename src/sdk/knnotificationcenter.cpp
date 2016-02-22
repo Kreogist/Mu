@@ -26,7 +26,7 @@
 
 KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     QFrame(parent),
-    m_notificationIndicator(new QWidget(this)),
+    m_notificationIndicator(new QLabel(this)),
     m_button(new KNNotificationButton(this))
 {
     setObjectName("NotificationCenter");
@@ -35,11 +35,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     setWindowFlags(Qt::Popup);
 
     //Configure the indicator.
-    m_notificationIndicator->setWindowFlags(Qt::ToolTip |
-                                            Qt::FramelessWindowHint);
     m_notificationIndicator->setAutoFillBackground(true);
-    m_notificationIndicator->setAttribute(Qt::WA_NoBackground, true);
-    m_notificationIndicator->setAttribute(Qt::WA_TranslucentBackground, true);
     m_notificationIndicator->setAttribute(Qt::WA_TransparentForMouseEvents,
                                           true);
     //Set palette.
@@ -53,14 +49,10 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     pal.setColor(QPalette::Button, QColor(255,255,255,0));
     pal.setColor(QPalette::ButtonText, QColor(255,255,255,0));
     m_notificationIndicator->setPalette(pal);
-    //Generate the image label.
-    QLabel *indicatorLabel=new QLabel(m_notificationIndicator);
-    indicatorLabel->setPalette(pal);
+    //Set the pixmap.
     QPixmap indicatorPixmap=QPixmap("://public/notification_indicator.png");
-    indicatorLabel->setPixmap(indicatorPixmap);
-#ifdef Q_OS_WIN32
-    m_notificationIndicator->setMask(indicatorPixmap.mask());
-#endif
+    m_notificationIndicator->setPixmap(indicatorPixmap);
+    //Configure the indicator.
     m_notificationIndicator->setFixedSize(indicatorPixmap.size());
     m_notificationIndicator->hide();
 

@@ -21,6 +21,7 @@
 
 #include <QFrame>
 
+class QLabel;
 class KNNotificationButton;
 /*!
  * \brief The KNNotificationCenter class provides the ability to show all the
@@ -67,7 +68,7 @@ private slots:
     void retranslate();
 
 private:
-    QWidget *m_notificationIndicator;
+    QLabel *m_notificationIndicator;
     KNNotificationButton *m_button;
 };
 
