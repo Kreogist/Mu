@@ -77,6 +77,10 @@ public:
                       QAbstractItemModel *model,
                       const QModelIndex &index) const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief setHoverRow
+     * \param hoverRow
+     */
     static void setHoverRow(int hoverRow);
 
     static void setIndicator(const IndicatorPosition &indicator);

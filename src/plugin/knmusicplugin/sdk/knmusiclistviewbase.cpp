@@ -147,6 +147,8 @@ void KNMusicListViewBase::sortByColumn(int column, Qt::SortOrder order)
 void KNMusicListViewBase::startDrag(Qt::DropActions supportedActions)
 {
     Q_UNUSED(supportedActions)
+    //Emit the start dragging signal.
+    emit startDraggingSong();
     //Get all the selections.
     QModelIndexList indexes=selectionModel()->selectedRows(Name);
     //Check the size of selected rows.
@@ -161,6 +163,8 @@ void KNMusicListViewBase::startDrag(Qt::DropActions supportedActions)
     drag->setMimeData(m_proxyModel->mimeData(indexes));
     //Do the drag.
     drag->exec();
+    //Emit the end dragging signal.
+    emit endDraggingSong();
 }
 
 void KNMusicListViewBase::mousePressEvent(QMouseEvent *event)

@@ -76,6 +76,18 @@ signals:
      */
     void requireClearSelection();
 
+    /*!
+     * \brief When treeview is draging the song out, this signal should be emit
+     * to ask the music plugin to show the playlist list.
+     */
+    void requireShowPlaylistList();
+
+    /*!
+     * \brief When the draging of treeview is finished, this signal should be
+     * emit to ask the music plugin to hide the playlist list.
+     */
+    void requireHidePlaylistList();
+
 public slots:
     /*!
      * \brief Set the library model to detail list.

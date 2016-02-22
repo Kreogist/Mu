@@ -238,6 +238,16 @@
         "Parent" : "PlaylistEmptyHint",
         "WindowText" : "#A0A0A0"
     },
+    "PlaylistListDelegateEditor" : {
+        "Parent" : "PlaylistEmptyHint",
+        "Base" : "#505050",
+        "Window" : "#ff303030",
+        "WindowText" : "#00000000",
+        "Button" : "#00000000",
+        "Text" : "#c6c6c6",
+        "Highlight" : "#ffffff40",
+        "HighlightedText" : "#f7cf3d"
+    },
     "PlaylistListEditorMenu" : {
         "Parent" : "PlaylistEmptyHint",
         "Base" : "#000000",

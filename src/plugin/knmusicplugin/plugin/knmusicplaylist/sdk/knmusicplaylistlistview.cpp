@@ -277,3 +277,11 @@ void KNMusicPlaylistListView::dropEvent(QDropEvent *event)
     //Update view port.
     viewport()->update();
 }
+
+void KNMusicPlaylistListView::showEvent(QShowEvent *event)
+{
+    //Emit initial signal.
+    emit requireInitialPlaylist();
+    //Show the widget.
+    KNMusicCategoryListViewBase::showEvent(event);
+}

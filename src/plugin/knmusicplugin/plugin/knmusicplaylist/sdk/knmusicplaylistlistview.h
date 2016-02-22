@@ -43,6 +43,13 @@ public:
      */
     QString currentPlaylistTitle() const;
 
+signals:
+    /*!
+     * \brief When this widget is shown, this signal is called for asking to
+     * initial the playlist.
+     */
+    void requireInitialPlaylist();
+
 protected:
     /*!
      * \brief Reimplemented from KNMusicCategoryListViewBase::dragEnterEvent().
@@ -63,6 +70,11 @@ protected:
      * \brief Reimplemented from KNMusicCategoryListViewBase::dropEvent().
      */
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicCategoryListViewBase::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,

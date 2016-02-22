@@ -136,7 +136,7 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
                                        this)),
     m_showInMapper(new QSignalMapper(this)),
-    m_flowPlaylistList(nullptr),
+    m_floatPlaylistList(nullptr),
     m_flowPlaylistListAnime(new QPropertyAnimation(this)),
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr),
@@ -382,12 +382,12 @@ void KNMusicPlugin::resizeEvent(QResizeEvent *event)
     m_topShadow->resize(width(),
                         m_topShadow->height());
     //Check the flow playlist list widget.
-    if(m_flowPlaylistList)
+    if(m_floatPlaylistList)
     {
         //Reset the widget geometry.
-        m_flowPlaylistList->setGeometry(width(),
+        m_floatPlaylistList->setGeometry(width(),
                                         0,
-                                        m_flowPlaylistList->width(),
+                                        m_floatPlaylistList->width(),
                                         height());
     }
 }
@@ -451,19 +451,24 @@ void KNMusicPlugin::onActionShowMiniPlayer()
 void KNMusicPlugin::onActionShowPlaylistFlow()
 {
     //Check pointer first.
-    if(m_flowPlaylistList==nullptr)
+    if(m_floatPlaylistList==nullptr)
     {
         //Failed to start the animation.
         return;
     }
+    //Reset the connections.
+    disconnect(m_flowPlaylistListAnime, &QPropertyAnimation::finished, 0, 0);
+    //Show the widget.
+    m_floatPlaylistList->show();
+    m_floatPlaylistList->setEnabled(true);
     //Stop the animation.
     m_flowPlaylistListAnime->stop();
     //Configure the start and end value of the animation.
-    m_flowPlaylistListAnime->setStartValue(m_flowPlaylistList->geometry());
+    m_flowPlaylistListAnime->setStartValue(m_floatPlaylistList->geometry());
     m_flowPlaylistListAnime->setEndValue(
-                QRect(width()-m_flowPlaylistList->width(),
+                QRect(width()-m_floatPlaylistList->width(),
                       0,
-                      m_flowPlaylistList->width(),
+                      m_floatPlaylistList->width(),
                       height()));
     //Start the animation.
     m_flowPlaylistListAnime->start();
@@ -473,19 +478,23 @@ void KNMusicPlugin::onActionHidePlaylistFlow()
 {
     //Check the pointer first.
     //Check pointer first.
-    if(!m_flowPlaylistList)
+    if(!m_floatPlaylistList)
     {
         //Failed to start the animation.
         return;
     }
+    //Add hide connection.
+    connect(m_flowPlaylistListAnime, &QPropertyAnimation::finished,
+            m_floatPlaylistList, &QWidget::hide);
+    m_floatPlaylistList->setEnabled(false);
     //Stop the animation.
     m_flowPlaylistListAnime->stop();
     //Configure the start and end value of the animation.
-    m_flowPlaylistListAnime->setStartValue(m_flowPlaylistList->geometry());
+    m_flowPlaylistListAnime->setStartValue(m_floatPlaylistList->geometry());
     m_flowPlaylistListAnime->setEndValue(
                 QRect(width(),
                       0,
-                      m_flowPlaylistList->width(),
+                      m_floatPlaylistList->width(),
                       height()));
     //Start the animation.
     m_flowPlaylistListAnime->start();
@@ -780,16 +789,19 @@ void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
     //Add playlist content to music plugin.
     addMusicTab(playlist);
     //Save the playlist list display widget.
-    m_flowPlaylistList=playlist->playlistFloatList();
+    m_floatPlaylistList=playlist->playlistFloatList();
     //Configure the playlist list.
-    if(m_flowPlaylistList)
+    if(m_floatPlaylistList)
     {
         //Reset the properties.
-        m_flowPlaylistList->setParent(this);
+        m_floatPlaylistList->setParent(this);
+        //Hide the list.
+        m_floatPlaylistList->hide();
+        m_floatPlaylistList->setEnabled(false);
         //Regeometry the playlist list.
-        m_flowPlaylistList->setGeometry(width(), 0, 100, height());
+        m_floatPlaylistList->setGeometry(width(), 0, 100, height());
         //Configure the animation object.
-        m_flowPlaylistListAnime->setTargetObject(m_flowPlaylistList);
+        m_flowPlaylistListAnime->setTargetObject(m_floatPlaylistList);
     }
 }
 

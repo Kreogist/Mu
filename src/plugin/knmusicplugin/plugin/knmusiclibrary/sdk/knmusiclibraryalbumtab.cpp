@@ -56,6 +56,11 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QWidget *parent) :
     setContentWidget(m_dropProxy);
     //Configure the album view.
     m_albumView->setAlbumDetail(m_albumDetail);
+    //Configure the album detail.
+    connect(m_albumDetail, &KNMusicAlbumDetail::requireShowPlaylistList,
+            this, &KNMusicLibraryAlbumTab::requireShowPlaylistList);
+    connect(m_albumDetail, &KNMusicAlbumDetail::requireHidePlaylistList,
+            this, &KNMusicLibraryAlbumTab::requireHidePlaylistList);
 
     //Initial the layout for the container, only for auto resize splitter.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, m_dropProxy);

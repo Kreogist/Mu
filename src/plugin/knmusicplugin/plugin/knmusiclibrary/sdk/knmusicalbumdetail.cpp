@@ -143,6 +143,12 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_hideAlbumArt->addAnimation(m_hideAlbumArtLabel);
     m_hideAlbumArt->addAnimation(m_hideAlbumContent);
 
+    //Initial the album list view.
+    connect(m_albumListView, &KNMusicAlbumListView::startDraggingSong,
+            this, &KNMusicAlbumDetail::requireShowPlaylistList);
+    connect(m_albumListView, &KNMusicAlbumListView::endDraggingSong,
+            this, &KNMusicAlbumDetail::requireHidePlaylistList);
+
     //Initial the content layout for album content.
     QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              m_albumContent);

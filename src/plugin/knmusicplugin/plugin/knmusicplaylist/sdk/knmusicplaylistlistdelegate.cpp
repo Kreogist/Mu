@@ -19,8 +19,11 @@
 #include <QPainter>
 
 #include "kncancellineedit.h"
+#include "knthememanager.h"
 
 #include "knmusicplaylistlistdelegate.h"
+
+#include <QDebug>
 
 #define ItemHeight 30
 #define IconSize 24
@@ -126,10 +129,8 @@ QWidget *KNMusicPlaylistListDelegate::createEditor(
     KNCancelLineEdit *captionEditor=new KNCancelLineEdit(parent);
 
     //Hide the border of the editor.
-    QPalette editorPalette=option.palette;
-    editorPalette.setColor(QPalette::WindowText, QColor(0,0,0,0));
-    editorPalette.setColor(QPalette::Button, QColor(0,0,0,0));
-    captionEditor->setPalette(editorPalette);
+    captionEditor->setPalette(
+                knTheme->getPalette("PlaylistListDelegateEditor"));
     //Set the size of the editor.
     /*
      * This resize is meant to fixed this bug:

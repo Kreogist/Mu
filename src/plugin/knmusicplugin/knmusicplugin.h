@@ -165,7 +165,7 @@ private:
 
     //UI Element Assistants.
     QSignalMapper *m_showInMapper;
-    QWidget *m_flowPlaylistList;
+    QWidget *m_floatPlaylistList;
     QPropertyAnimation *m_flowPlaylistListAnime;
 
     //Plugins.

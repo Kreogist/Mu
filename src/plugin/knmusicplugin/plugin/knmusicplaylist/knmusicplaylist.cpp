@@ -68,6 +68,10 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     //Set the playlist list model to the playlist list.
     m_playlistList->setPlaylistList(m_playlistManager->playlistList());
     m_floatPlaylistList->setModel(m_playlistManager->playlistList());
+    //Link float playlist list loading request.
+    connect(m_floatPlaylistList,
+            &KNMusicPlaylistListView::requireInitialPlaylist,
+            this, &KNMusicPlaylist::initialPlaylistList);
 
     //Install the playlist parser.
     m_playlistManager->installPlaylistParser(
@@ -175,22 +179,8 @@ QWidget *KNMusicPlaylist::playlistFloatList()
 
 void KNMusicPlaylist::showEvent(QShowEvent *event)
 {
-    //If the playlist list has never been load before, load it.
-    if(!m_playlistManager->isPlaylistListLoaded())
-    {
-        //Load the playlist list.
-        m_playlistManager->loadPlaylistList();
-        //Get the playlist list temporarily.
-        KNMusicPlaylistListModel *playlistList=
-                m_playlistManager->playlistList();
-        //Check if there's any playlist exist in the playlist list, select the
-        //first one.
-        if(playlistList->rowCount()>0)
-        {
-            //Select the first index.
-            m_playlistList->showPlaylist(playlistList->index(0));
-        }
-    }
+    //Initial the playlist list when the widget is shown.
+    initialPlaylistList();
     //Do the original show event.
     KNMusicPlaylistBase::showEvent(event);
 }
@@ -212,6 +202,26 @@ void KNMusicPlaylist::retranslate()
     m_cannotDeleteMessage=tr("Failed to delete the playlist file: \n"
                              "\n"
                              "%1");
+}
+
+void KNMusicPlaylist::initialPlaylistList()
+{
+    //If the playlist list has never been load before, load it.
+    if(m_playlistManager->isPlaylistListLoaded())
+    {
+        return;
+    }
+    //Load the playlist list.
+    m_playlistManager->loadPlaylistList();
+    //Get the playlist list temporarily.
+    KNMusicPlaylistListModel *playlistList=m_playlistManager->playlistList();
+    //Check if there's any playlist exist in the playlist list, select the
+    //first one.
+    if(playlistList->rowCount()>0)
+    {
+        //Select the first index.
+        m_playlistList->showPlaylist(playlistList->index(0));
+    }
 }
 
 void KNMusicPlaylist::showAndRenamePlaylist(const QModelIndex &playlistIndex)
