@@ -36,6 +36,12 @@ public:
      */
     KNMusicPlaylistBase(QWidget *parent = 0):KNMusicTab(parent){}
 
+    /*!
+     * \brief Get the Float playlist list widget pointer.
+     * \return The float playlist list widget pointer.
+     */
+    virtual QWidget *playlistFloatList()=0;
+
 signals:
 
 public slots:

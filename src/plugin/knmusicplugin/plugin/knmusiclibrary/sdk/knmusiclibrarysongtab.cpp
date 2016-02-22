@@ -34,6 +34,8 @@
 
 #include "knmusiclibrarysongtab.h"
 
+#include <QDebug>
+
 KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     KNMusicLibraryTab(parent),
     m_tab(new KNCategoryTab(this)),
@@ -48,6 +50,11 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     setFocusProxy(m_dropProxy);
     //Configure the tab button.
     m_tab->setIcon(QIcon(":/plugin/music/category/song.png"));
+    //Configure the tree view.
+    connect(m_treeView, &KNMusicLibraryTreeView::startDraggingSong,
+            this, &KNMusicLibrarySongTab::requireShowPlaylistList);
+    connect(m_treeView, &KNMusicLibraryTreeView::endDraggingSong,
+            this, &KNMusicLibrarySongTab::requireHidePlaylistList);
     //Configure the show in action.
     connect(m_showInSongTab, &QAction::triggered,
             this, &KNMusicLibrarySongTab::onActionShowInSong);

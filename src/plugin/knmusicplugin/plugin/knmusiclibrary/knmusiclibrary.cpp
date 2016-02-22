@@ -178,4 +178,9 @@ void KNMusicLibrary::linkLoadRequest(KNMusicLibraryTab *libraryTab)
     m_loadHandler.append(
                 connect(libraryTab, &KNMusicLibraryTab::requireLoadLibrary,
                         this, &KNMusicLibrary::onActionLoadLibrary));
+    //Simply link the show playlist list to require signal.
+    connect(libraryTab, &KNMusicLibraryTab::requireShowPlaylistList,
+            this, &KNMusicLibrary::requireShowPlaylistList);
+    connect(libraryTab, &KNMusicLibraryTab::requireHidePlaylistList,
+            this, &KNMusicLibrary::requireHidePlaylistList);
 }

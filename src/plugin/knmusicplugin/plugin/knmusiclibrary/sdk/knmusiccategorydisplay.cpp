@@ -72,6 +72,10 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent,
     //Configure the tree view.
     setFocusProxy(m_categoryTreeView);
     m_categoryTreeView->updateObjectName("CategoryDisplayTreeView");
+    connect(m_categoryTreeView, &KNMusicLibraryTreeView::startDraggingSong,
+            this, &KNMusicCategoryDisplay::requireShowPlaylistList);
+    connect(m_categoryTreeView, &KNMusicLibraryTreeView::endDraggingSong,
+            this, &KNMusicCategoryDisplay::requireHidePlaylistList);
 
     //Add main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,

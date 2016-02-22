@@ -25,6 +25,7 @@ class QSplitter;
 class KNCategoryTab;
 class KNEmptyStateWidget;
 class KNMusicPlaylistList;
+class KNMusicPlaylistListView;
 class KNMusicPlaylistViewer;
 class KNMusicPlaylistManager;
 /*!
@@ -52,6 +53,11 @@ public:
     void showIndex(KNMusicModel *musicModel,
                    const QModelIndex &index) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from the KNMusicPlaylistBase::playlistFloatList().
+     */
+    QWidget *playlistFloatList() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -70,6 +76,7 @@ protected:
 private slots:
     void retranslate();
     void showAndRenamePlaylist(const QModelIndex &playlistIndex);
+    void onActionShowPlaylist(const QModelIndex &index);
     void onActionCreatePlaylist();
     void onActionImportPlaylist();
     void onActionRemovePlaylist();
@@ -77,10 +84,10 @@ private slots:
     void onActionCopyPlaylist();
 
 private:
-    inline QSplitter *generateSplitter();
     KNCategoryTab *m_tab;
     KNEmptyStateWidget *m_container;
     KNMusicPlaylistList *m_playlistList;
+    KNMusicPlaylistListView *m_floatPlaylistList;
     KNMusicPlaylistViewer *m_playlistViewer;
     KNMusicPlaylistManager *m_playlistManager;
 

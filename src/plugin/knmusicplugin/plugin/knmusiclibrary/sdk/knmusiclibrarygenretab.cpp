@@ -54,6 +54,10 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QWidget *parent) :
             this, &KNMusicLibraryGenreTab::onActionShowInGenre);
     //Configure the genre display.
     m_genreDisplay->setCategoryColumn(Genre);
+    connect(m_genreDisplay, &KNMusicCategoryDisplay::requireShowPlaylistList,
+            this, &KNMusicLibraryGenreTab::requireShowPlaylistList);
+    connect(m_genreDisplay, &KNMusicCategoryDisplay::requireHidePlaylistList,
+            this, &KNMusicLibraryGenreTab::requireHidePlaylistList);
     //Configure the genre list.
     m_genreList->setTabOrder(m_genreList, m_genreDisplay);
     m_genreList->enabledSearch();
@@ -359,4 +363,3 @@ inline void KNMusicLibraryGenreTab::showAndSelectRow(const int &musicRow)
     //Ask to show the tab.
     emit requireShowTab();
 }
-

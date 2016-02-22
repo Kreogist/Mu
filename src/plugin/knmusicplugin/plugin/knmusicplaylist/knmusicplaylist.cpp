@@ -34,6 +34,7 @@
 #include "sdk/knmusicplaylistviewer.h"
 #include "sdk/knmusicplaylistmanager.h"
 #include "sdk/knmusicplaylistmodel.h"
+#include "sdk/knmusicplaylistlistview.h"
 
 // Plugins
 #include "plugin/knmusicplaylistitunesxmlparser/knmusicplaylistitunesxmlparser.h"
@@ -55,6 +56,7 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     m_tab(new KNCategoryTab(this)),
     m_container(new KNEmptyStateWidget(this)),
     m_playlistList(new KNMusicPlaylistList(this)),
+    m_floatPlaylistList(new KNMusicPlaylistListView()),
     m_playlistViewer(new KNMusicPlaylistViewer(this, this)),
     m_playlistManager(new KNMusicPlaylistManager(this))
 {
@@ -65,6 +67,7 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
                 knMusicGlobal->musicLibraryPath()+"/Playlist");
     //Set the playlist list model to the playlist list.
     m_playlistList->setPlaylistList(m_playlistManager->playlistList());
+    m_floatPlaylistList->setModel(m_playlistManager->playlistList());
 
     //Install the playlist parser.
     m_playlistManager->installPlaylistParser(
@@ -86,6 +89,7 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     connect(m_playlistManager,
             &KNMusicPlaylistManager::requireShowAndRenamePlaylist,
             this, &KNMusicPlaylist::showAndRenamePlaylist);
+    //Link playlist list to playlist manager.
     connect(m_playlistList, &KNMusicPlaylistList::requireCreatePlaylist,
             this, &KNMusicPlaylist::onActionCreatePlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireImportPlaylists,
@@ -97,11 +101,7 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     connect(m_playlistList, &KNMusicPlaylistList::requireRemovePlaylist,
             this, &KNMusicPlaylist::onActionRemovePlaylist);
     connect(m_playlistList, &KNMusicPlaylistList::requireShowPlaylist,
-            [=](const QModelIndex &index)
-            {
-                m_playlistViewer->setPlaylist(
-                            m_playlistManager->playlist(index));
-            });
+            this, &KNMusicPlaylist::onActionShowPlaylist);
 
     //Generate the empty hint widget.
     KNMusicPlaylistEmptyHint *emptyHint=new KNMusicPlaylistEmptyHint(this);
@@ -113,8 +113,9 @@ KNMusicPlaylist::KNMusicPlaylist(QWidget *parent) :
     //Set the empty widget and content widget.
     m_container->setEmptyWidget(emptyHint);
     //Get the splitter.
-    QSplitter *contentContainer=generateSplitter();
+    QSplitter *contentContainer=new QSplitter(this);
     //Configure the splitter.
+    contentContainer->setHandleWidth(0);
     contentContainer->setChildrenCollapsible(false);
     //Set the content widget as the splitter.
     m_container->setContentWidget(contentContainer);
@@ -166,6 +167,12 @@ void KNMusicPlaylist::showIndex(KNMusicModel *musicModel,
     }
 }
 
+QWidget *KNMusicPlaylist::playlistFloatList()
+{
+    //Give the float list widget.
+    return m_floatPlaylistList;
+}
+
 void KNMusicPlaylist::showEvent(QShowEvent *event)
 {
     //If the playlist list has never been load before, load it.
@@ -209,10 +216,20 @@ void KNMusicPlaylist::retranslate()
 
 void KNMusicPlaylist::showAndRenamePlaylist(const QModelIndex &playlistIndex)
 {
+    //When this function is called, we need to switch to playlist tab.
+    emit requireShowTab();
+    //Set focus to playlist list.
+    m_playlistList->setFocus(Qt::MouseFocusReason);
     //Show that playlist.
     m_playlistList->showPlaylist(playlistIndex);
     //Ask the list view to rename it.
     m_playlistList->renamePlaylist(playlistIndex);
+}
+
+void KNMusicPlaylist::onActionShowPlaylist(const QModelIndex &index)
+{
+    //Show the playlist in viewer.
+    m_playlistViewer->setPlaylist(m_playlistManager->playlist(index));
 }
 
 void KNMusicPlaylist::onActionCreatePlaylist()
@@ -343,14 +360,4 @@ void KNMusicPlaylist::onActionCopyPlaylist()
                 m_playlistList->currentIndex());
     //Show and rename the playlist.
     showAndRenamePlaylist(playlistIndex);
-}
-
-inline QSplitter *KNMusicPlaylist::generateSplitter()
-{
-    //Generate the splitter.
-    QSplitter *splitter=new QSplitter(this);
-    //Configure the splitter.
-    splitter->setHandleWidth(0);
-    //Return the splitter.
-    return splitter;
 }

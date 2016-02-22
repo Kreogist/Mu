@@ -40,6 +40,17 @@ public:
     explicit KNMusicCategoryDisplay(QWidget *parent = 0, KNMusicTab *tab = 0);
 
 signals:
+    /*!
+     * \brief When the tree view is dragging song row, this signal should be
+     * emitted to show the playlist list widget.
+     */
+    void requireShowPlaylistList();
+
+    /*!
+     * \brief When the tree view stops dragging song row, this signal should be
+     * emitted to hide the playlist list widget.
+     */
+    void requireHidePlaylistList();
 
 public slots:
     void setLibraryModel(KNMusicLibraryModel *model);

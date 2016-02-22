@@ -35,6 +35,8 @@ public:
     virtual KNMusicTab *genreTab()=0;
 
 signals:
+    void requireShowPlaylistList();
+    void requireHidePlaylistList();
 
 public slots:
     virtual void showInSongTab()=0;

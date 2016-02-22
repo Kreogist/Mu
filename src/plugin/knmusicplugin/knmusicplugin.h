@@ -22,6 +22,7 @@
 #include "knabstractmusicplugin.h"
 
 class QBoxLayout;
+class QPropertyAnimation;
 class QSignalMapper;
 class KNMouseDetectHeader;
 class KNHWidgetSwitcher;
@@ -129,6 +130,8 @@ private slots:
     void onActionShowInGenres();
     void onActionHideMiniPlayer();
     void onActionShowMiniPlayer();
+    void onActionShowPlaylistFlow();
+    void onActionHidePlaylistFlow();
 
 private:
     inline void initialInfrastructure();
@@ -162,6 +165,8 @@ private:
 
     //UI Element Assistants.
     QSignalMapper *m_showInMapper;
+    QWidget *m_flowPlaylistList;
+    QPropertyAnimation *m_flowPlaylistListAnime;
 
     //Plugins.
     KNMusicHeaderPlayerBase *m_headerPlayer;

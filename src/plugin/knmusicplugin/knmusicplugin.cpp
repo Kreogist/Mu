@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QPropertyAnimation>
 #include <QSignalMapper>
 
 //Dependence
@@ -135,6 +136,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
                                        this)),
     m_showInMapper(new QSignalMapper(this)),
+    m_flowPlaylistList(nullptr),
+    m_flowPlaylistListAnime(new QPropertyAnimation(this)),
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr),
     m_miniPlayer(nullptr),
@@ -378,6 +381,15 @@ void KNMusicPlugin::resizeEvent(QResizeEvent *event)
     //Resize the shadow.
     m_topShadow->resize(width(),
                         m_topShadow->height());
+    //Check the flow playlist list widget.
+    if(m_flowPlaylistList)
+    {
+        //Reset the widget geometry.
+        m_flowPlaylistList->setGeometry(width(),
+                                        0,
+                                        m_flowPlaylistList->width(),
+                                        height());
+    }
 }
 
 void KNMusicPlugin::onActionShowInSongs()
@@ -436,6 +448,49 @@ void KNMusicPlugin::onActionShowMiniPlayer()
     showMiniPlayer();
 }
 
+void KNMusicPlugin::onActionShowPlaylistFlow()
+{
+    //Check pointer first.
+    if(m_flowPlaylistList==nullptr)
+    {
+        //Failed to start the animation.
+        return;
+    }
+    //Stop the animation.
+    m_flowPlaylistListAnime->stop();
+    //Configure the start and end value of the animation.
+    m_flowPlaylistListAnime->setStartValue(m_flowPlaylistList->geometry());
+    m_flowPlaylistListAnime->setEndValue(
+                QRect(width()-m_flowPlaylistList->width(),
+                      0,
+                      m_flowPlaylistList->width(),
+                      height()));
+    //Start the animation.
+    m_flowPlaylistListAnime->start();
+}
+
+void KNMusicPlugin::onActionHidePlaylistFlow()
+{
+    //Check the pointer first.
+    //Check pointer first.
+    if(!m_flowPlaylistList)
+    {
+        //Failed to start the animation.
+        return;
+    }
+    //Stop the animation.
+    m_flowPlaylistListAnime->stop();
+    //Configure the start and end value of the animation.
+    m_flowPlaylistListAnime->setStartValue(m_flowPlaylistList->geometry());
+    m_flowPlaylistListAnime->setEndValue(
+                QRect(width(),
+                      0,
+                      m_flowPlaylistList->width(),
+                      height()));
+    //Start the animation.
+    m_flowPlaylistListAnime->start();
+}
+
 void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
@@ -475,6 +530,11 @@ void KNMusicPlugin::initialInfrastructure()
     //Add widget to layout.
     mainLayout->addWidget(m_tabBar);
     mainLayout->addWidget(m_switcher, 1);
+
+    //Initial the animation.
+    m_flowPlaylistListAnime->setDuration(200);
+    m_flowPlaylistListAnime->setEasingCurve(QEasingCurve::OutCubic);
+    m_flowPlaylistListAnime->setPropertyName("geometry");
 }
 
 inline void KNMusicPlugin::initialPlayer(KNMusicPlayerBase *player)
@@ -505,7 +565,7 @@ void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
             m_showInMapper,
             static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     m_showInMapper->setMapping(musicTab, m_switcher->count());
-    //Add playlist content to tab.
+    //Add music content to tab manager.
     m_switcher->addWidget(musicTab);
     m_tabBar->addTab(musicTab->tab());
 }
@@ -719,6 +779,18 @@ void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
 {
     //Add playlist content to music plugin.
     addMusicTab(playlist);
+    //Save the playlist list display widget.
+    m_flowPlaylistList=playlist->playlistFloatList();
+    //Configure the playlist list.
+    if(m_flowPlaylistList)
+    {
+        //Reset the properties.
+        m_flowPlaylistList->setParent(this);
+        //Regeometry the playlist list.
+        m_flowPlaylistList->setGeometry(width(), 0, 100, height());
+        //Configure the animation object.
+        m_flowPlaylistListAnime->setTargetObject(m_flowPlaylistList);
+    }
 }
 
 void KNMusicPlugin::initialLibrary(KNMusicLibraryBase *library)
@@ -734,6 +806,11 @@ void KNMusicPlugin::initialLibrary(KNMusicLibraryBase *library)
     m_library->setParent(this);
     //Set the now playing.
     m_library->setNowPlaying(knMusicGlobal->nowPlaying());
+    //Link the library show request to music plugin.
+    connect(m_library, &KNMusicLibraryBase::requireShowPlaylistList,
+            this, &KNMusicPlugin::onActionShowPlaylistFlow);
+    connect(m_library, &KNMusicLibraryBase::requireHidePlaylistList,
+            this, &KNMusicPlugin::onActionHidePlaylistFlow);
     //Add tabs to the switcher.
     addMusicTab(m_library->songTab());
     addMusicTab(m_library->artistTab());

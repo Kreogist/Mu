@@ -102,6 +102,15 @@ public:
     void updateObjectName(const QString &name);
 
 signals:
+    /*!
+     * \brief When dragging is started, this signal will be emitted.
+     */
+    void startDraggingSong();
+
+    /*!
+     * \brief When dragging is stopped, this signal will be emitted.
+     */
+    void endDraggingSong();
 
 public slots:
 

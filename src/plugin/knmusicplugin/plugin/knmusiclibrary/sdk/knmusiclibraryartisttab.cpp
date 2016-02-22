@@ -56,6 +56,10 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
             this, &KNMusicLibraryArtistTab::onActionShowInArtist);
     //Configure the artist display.
     m_artistDisplay->setCategoryColumn(Artist);
+    connect(m_artistDisplay, &KNMusicCategoryDisplay::requireShowPlaylistList,
+            this, &KNMusicLibraryArtistTab::requireShowPlaylistList);
+    connect(m_artistDisplay, &KNMusicCategoryDisplay::requireHidePlaylistList,
+            this, &KNMusicLibraryArtistTab::requireHidePlaylistList);
     //Configure the artist list.
     m_artistList->setTabOrder(m_artistList, m_artistDisplay);
     m_artistList->enabledSearch();
