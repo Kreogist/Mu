@@ -146,6 +146,9 @@ public slots:
 private:
     static KNLocaleManager *m_instance;
     explicit KNLocaleManager(QObject *parent = 0);
+    //Disable the copy of the instance.
+    KNLocaleManager(const KNLocaleManager &);
+    KNLocaleManager(KNLocaleManager &&);
     struct LanguageItem
     {
         QString key;

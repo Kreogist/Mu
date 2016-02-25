@@ -21,6 +21,8 @@
 
 #include <QMainWindow>
 
+class QPropertyAnimation;
+class QSequentialAnimationGroup;
 class KNConfigure;
 class KNCategoryPlugin;
 class KNMainWindowContainer;
@@ -82,6 +84,12 @@ signals:
      */
     void mainWindowShown();
 
+    /*!
+     * \brief When the notification widget has been shown completely, this
+     * signal will be emitted to notify the notification backends.
+     */
+    void notificationComplete();
+
 public slots:
     /*!
      * \brief Show up the main player widget.
@@ -100,6 +108,11 @@ protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QMainWindow::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QMainWindow::closeEvent().
      */
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
@@ -107,19 +120,25 @@ protected:
 private slots:
     void onActionFullScreen();
     void onActionShowNotificationCenter();
+    void onActionHideComplete();
+    void onActionPopupNotification();
 
 private:
     inline void recoverGeometry();
     inline void backupGeometry();
+    inline QPropertyAnimation *generateAnime();
+    inline void updateAnimeStartAndEnd();
     inline int getCacheValue(const QString &valueName);
     inline void setCacheValue(const QString &valueName, const int &value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
-    inline void regeometryNotificationCenter();
 
     KNConfigure *m_cacheConfigure;
     KNMainWindowContainer *m_container;
     KNCategoryPlugin *m_categoryPlugin;
     KNNotificationCenter *m_notificationCenter;
+    QPropertyAnimation *m_inAnime, *m_outAnime;
+    QSequentialAnimationGroup *m_outAndInAnime;
+    QTimer *m_notificationWaiter;
     Qt::WindowStates m_originalWindowState;
 };
 

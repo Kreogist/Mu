@@ -17,17 +17,25 @@
  */
 #include <QLabel>
 #include <QBitmap>
+#include <QBoxLayout>
+#include <QPainter>
 
 #include "knlocalemanager.h"
 #include "knimagelabel.h"
-#include "notification/knnotificationbutton.h"
+#include "knnotificationbutton.h"
+#include "knnotificationview.h"
+#include "knnotification.h"
+#include "knnotificationmodel.h"
+#include "knnotificationwidget.h"
 
 #include "knnotificationcenter.h"
 
 KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     QFrame(parent),
     m_notificationIndicator(new QLabel(this)),
-    m_button(new KNNotificationButton(this))
+    m_button(new KNNotificationButton(this)),
+    m_notificationView(new KNNotificationView(this)),
+    m_notificationWidget(new KNNotificationWidget(this))
 {
     setObjectName("NotificationCenter");
     //Set properties.
@@ -59,6 +67,15 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     //Configure the button.
     m_button->setCursor(Qt::PointingHandCursor);
     m_button->setFixedSize(32, 32);
+    //Configure the view.
+    m_notificationView->setModel(knNotification->model());
+
+    //Initial the layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(5, 5, 5, 5);
+    setLayout(mainLayout);
+    //Add widget to layout.
+    mainLayout->addWidget(m_notificationView);
 
     //Link retranslate.
     knI18n->link(this, &KNNotificationCenter::retranslate);
@@ -73,6 +90,11 @@ KNNotificationButton *KNNotificationCenter::headerButton()
 QWidget *KNNotificationCenter::indicator()
 {
     return m_notificationIndicator;
+}
+
+int KNNotificationCenter::heightHint(int maximum)
+{
+    return qMin(maximum, m_notificationView->heightHint()+10);
 }
 
 void KNNotificationCenter::showEvent(QShowEvent *event)
@@ -91,10 +113,29 @@ void KNNotificationCenter::hideEvent(QHideEvent *event)
     QFrame::hideEvent(event);
 }
 
+void KNNotificationCenter::resizeEvent(QResizeEvent *event)
+{
+    //Resize the frame.
+    QFrame::resizeEvent(event);
+    QBitmap objBitmap(size());
+    QPainter painter(&objBitmap);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::SmoothPixmapTransform, true);
+    painter.fillRect(rect(),Qt::white);
+    painter.setBrush(QColor(0,0,0));
+    painter.drawRoundedRect(rect(),10,10);
+    setMask(objBitmap);
+}
+
 void KNNotificationCenter::retranslate()
 {
     //Check button state.
     m_button->setToolTip(m_button->isLogin()?
                              tr("Show Kreogist Account details"):
                              tr("Login"));
+}
+
+KNNotificationWidget *KNNotificationCenter::notificationWidget()
+{
+    return m_notificationWidget;
 }

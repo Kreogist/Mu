@@ -101,6 +101,9 @@ public slots:
 
 private:
     explicit KNConfigureManager(QObject *parent = 0);
+    //Disable the copy of the instance.
+    KNConfigureManager(const KNConfigureManager &);
+    KNConfigureManager(KNConfigureManager &&);
     inline void loadConfigureFile(const QString &filePath, int type);
     inline void saveConfigureFile(const QString &filePath, int type);
 

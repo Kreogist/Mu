@@ -29,6 +29,7 @@
 #define knGlobal (KNGlobal::instance())
 
 class KNConfigure;
+class KNNotificationModel;
 class KNPreferencePlugin;
 class KNPreferenceItem;
 /*!
@@ -211,6 +212,9 @@ private:
     };
 
     explicit KNGlobal(QObject *parent = 0);
+    //Disable the copy of the instance.
+    KNGlobal(const KNGlobal &);
+    KNGlobal(KNGlobal &&);
     static KNGlobal *m_instance;
 
     inline void initialStorageUnit();
@@ -222,16 +226,17 @@ private:
 #endif
     inline void initialNotificationCenter();
 
+    QString m_dirPath[DefaultDirCount];
+    QString m_storageUnit[StorageUnitCount];
+    QBrush m_brushes[TextureBrushCount];
 #ifdef Q_OS_UNIX
     int m_desktopEnviroment;
 #endif
     QWidget *m_mainWindow;
     KNPreferencePlugin *m_preference;
-    QString m_dirPath[DefaultDirCount];
-    QString m_storageUnit[StorageUnitCount];
-    QBrush m_brushes[TextureBrushCount];
 
     KNConfigure *m_globalConfigure;
+    KNNotificationModel *m_notificationModel;
 };
 
 #endif // KNGLOBAL_H

@@ -16,17 +16,25 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QAction>
+#include <QDesktopWidget>
+#include <QPropertyAnimation>
+#include <QTimer>
+#include <QSequentialAnimationGroup>
 
+//Dependences
 #include "knglobal.h"
 #include "knconfigure.h"
 #include "kncategoryplugin.h"
 #include "knpreferenceplugin.h"
+#include "knnotification.h"
 #include "knthememanager.h"
 #include "knmainwindowcontainer.h"
-#include "knnotificationcenter.h"
+
+//Notifications
+#include "notification/knnotificationcenter.h"
 #include "notification/knnotificationbutton.h"
+#include "notification/knnotificationwidget.h"
 
 //Ports
 #include "knmainwindowheaderbase.h"
@@ -36,6 +44,7 @@
 #include <QDebug>
 
 #define NotificationPatch 22
+#define NotificationWidgetPatch 10
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,6 +52,10 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_container(new KNMainWindowContainer(this)),
     m_categoryPlugin(nullptr),
     m_notificationCenter(new KNNotificationCenter(this)),
+    m_inAnime(generateAnime()),
+    m_outAnime(generateAnime()),
+    m_outAndInAnime(new QSequentialAnimationGroup(this)),
+    m_notificationWaiter(new QTimer(this)),
     m_originalWindowState(Qt::WindowNoState)
 {
     setObjectName("MainWindow");
@@ -65,6 +78,40 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     connect(m_notificationCenter->headerButton(),
             &KNNotificationButton::requireShowNotificationCenter,
             this, &KNMainWindow::onActionShowNotificationCenter);
+    //Reset the parent relationship of the notification widget.
+    m_notificationCenter->notificationWidget()->setParent(this);
+    m_notificationCenter->notificationWidget()->raise();
+    //Move the notification center.
+    m_notificationCenter->notificationWidget()->move(
+                0,
+                -m_notificationCenter->notificationWidget()->height() -
+                NotificationWidgetPatch);
+
+    //Configure the in and out animation.
+    connect(m_outAnime, &QPropertyAnimation::finished,
+            this, &KNMainWindow::onActionHideComplete);
+    //Configure the animation queue.
+    m_outAndInAnime->addAnimation(m_outAnime);
+    m_outAndInAnime->addAnimation(m_inAnime);
+    //Configure the waiter.
+    m_notificationWaiter->setInterval(3000);
+    m_notificationWaiter->setSingleShot(true);
+    //Link the start slot with in anime.
+    connect(m_inAnime, &QPropertyAnimation::finished,
+            m_notificationWaiter,
+            static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_notificationWaiter, &QTimer::timeout,
+            [=]
+            {
+                m_outAnime->start();
+            });
+
+    //Link the notification backend.
+    connect(knNotification, &KNNotification::requirePushNotification,
+            this, &KNMainWindow::onActionPopupNotification);
+    connect(this, &KNMainWindow::notificationComplete,
+            knNotification, &KNNotification::onActionPushNextNotification);
+
     //Add main window to theme list.
     knTheme->registerWidget(this);
     //Add full screen short cut actions.
@@ -75,6 +122,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     addAction(fullScreen);
     //Recover the geometry.
     recoverGeometry();
+    //Update the animation positions.
+    updateAnimeStartAndEnd();
 }
 
 void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
@@ -137,6 +186,27 @@ void KNMainWindow::showEvent(QShowEvent *event)
     QMainWindow::showEvent(event);
 }
 
+void KNMainWindow::resizeEvent(QResizeEvent *event)
+{
+    //Resize the main window.
+    QMainWindow::resizeEvent(event);
+    //Update the position.
+    updateAnimeStartAndEnd();
+    //Check animation and notification widget position.
+    if(m_inAnime->state()==QAbstractAnimation::Running ||
+            m_outAnime->state()==QAbstractAnimation::Running ||
+            m_outAndInAnime->state()==QAbstractAnimation::Running)
+    {
+        //Mission complete.
+        return;
+    }
+    //Move the notification widget to target position.
+    m_notificationCenter->notificationWidget()->move(
+                width() - m_notificationCenter->notificationWidget()->width() -
+                NotificationWidgetPatch,
+                m_notificationCenter->notificationWidget()->y());
+}
+
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
     //Save the configure of the category plugin, if the category is valid.
@@ -177,9 +247,61 @@ void KNMainWindow::onActionFullScreen()
 void KNMainWindow::onActionShowNotificationCenter()
 {
     //Reset the geometry.
-    regeometryNotificationCenter();
+    //Get header button.
+    QWidget *headerButton=m_notificationCenter->headerButton();
+    //Resize the notification center.
+    m_notificationCenter->resize(
+                324,
+                m_notificationCenter->heightHint(height()-150));
+    //Move the notification center.
+    m_notificationCenter->move(
+                QPoint(geometry().x() + width() - m_notificationCenter->width(),
+                       geometry().y() + headerButton->geometry().bottom() +
+                       NotificationPatch));
+    //Move tyhe notification indicator.
+    m_notificationCenter->indicator()->move(
+                headerButton->mapTo(this, QPoint(0,0)) +
+                QPoint((headerButton->width()>>1) -
+                       (m_notificationCenter->indicator()->width()>>1),
+                       headerButton->height()));
     //Show notification center.
     m_notificationCenter->show();
+}
+
+void KNMainWindow::onActionHideComplete()
+{
+    //Move the notification widget to the top of the window.
+    m_notificationCenter->notificationWidget()->move(
+                width()-m_notificationCenter->notificationWidget()->width()
+                - NotificationWidgetPatch,
+                - NotificationWidgetPatch - m_notificationCenter->height());
+    //Emit the notification finished signal to notice the notification backend
+    //to push the next notification.
+    emit notificationComplete();
+}
+
+void KNMainWindow::onActionPopupNotification()
+{
+    //Check whether the timer is running.
+    if(m_notificationWaiter->isActive())
+    {
+        //Stop the waiting.
+        m_notificationWaiter->stop();
+        //Start the queue animation.
+        m_outAndInAnime->start();
+        //Complete.
+        return;
+    }
+    //Check whether the animation is running.
+    if(m_inAnime->state()==QAbstractAnimation::Running ||
+            m_outAnime->state()==QAbstractAnimation::Running ||
+            m_outAndInAnime->state()==QAbstractAnimation::Running)
+    {
+        //Ignore the wrong calling.
+        return;
+    }
+    //Them we need to start the in anime.
+    m_inAnime->start();
 }
 
 inline void KNMainWindow::recoverGeometry()
@@ -254,6 +376,39 @@ inline void KNMainWindow::backupGeometry()
     setCacheValue("desktopHeight", qApp->desktop()->height());
 }
 
+inline QPropertyAnimation *KNMainWindow::generateAnime()
+{
+    //Generate the anime.
+    QPropertyAnimation *anime=new QPropertyAnimation(
+                m_notificationCenter->notificationWidget(),
+                "pos",
+                this);
+    //Configure the animation.
+    anime->setEasingCurve(QEasingCurve::OutCubic);
+    //Give back anime pointer.
+    return anime;
+}
+
+inline void KNMainWindow::updateAnimeStartAndEnd()
+{
+    //Calculate the target position.
+    QPoint targetPosition(
+                width() -
+                m_notificationCenter->notificationWidget()->width() -
+                NotificationWidgetPatch,
+                NotificationWidgetPatch);
+    //Reset the end start position.
+    m_inAnime->setStartValue(
+                QPoint(
+                    targetPosition.x(),
+                    -m_notificationCenter->notificationWidget()->height() -
+                    NotificationWidgetPatch));
+    m_inAnime->setEndValue(targetPosition);
+    m_outAnime->setStartValue(targetPosition);
+    m_outAnime->setEndValue(QPoint(width()+NotificationWidgetPatch,
+                                   NotificationWidgetPatch));
+}
+
 inline int KNMainWindow::getCacheValue(const QString &valueName)
 {
     return m_cacheConfigure->data(valueName).toInt();
@@ -268,23 +423,4 @@ inline void KNMainWindow::setCacheValue(const QString &valueName,
 inline void KNMainWindow::zoomParameter(int &parameter, const qreal &ratio)
 {
     parameter=(qreal)parameter*ratio;
-}
-
-inline void KNMainWindow::regeometryNotificationCenter()
-{
-    //Get header button.
-    QWidget *headerButton=m_notificationCenter->headerButton();
-    //Resize the notification center.
-    m_notificationCenter->resize(320, height()-150);
-    //Move the notification center.
-    m_notificationCenter->move(
-                QPoint(geometry().x() + width() - m_notificationCenter->width(),
-                       geometry().y() + headerButton->geometry().bottom() +
-                       NotificationPatch));
-    //Move tyhe notification indicator.
-    m_notificationCenter->indicator()->move(
-                headerButton->mapTo(this, QPoint(0,0)) +
-                QPoint((headerButton->width()>>1) -
-                       (m_notificationCenter->indicator()->width()>>1),
-                       headerButton->height()));
 }

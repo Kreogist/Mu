@@ -97,13 +97,14 @@ public:
     static QString legalFileName(QString fileName);
 
     /*!
-     * \brief Calculate the similarity between the two string. This will return
-     * the Levenshtein distance of two string.
+     * \brief Calculate the similarity between the two string. It will use
+     * Sift-4 algorithm.
      * \param string1 The first string.
      * \param string2 The second string.
-     * \return The Levenshtein edit distance of those two string.
+     * \return The quantized similiarity of two string. When they are the same,
+     * it will return 0.
      */
-    static int similarity(const QString &string1, const QString &string2);
+    static int similarity(QString string1, QString string2);
 
     /*!
      * \brief Save text string to a local file via UTF-8 codec.

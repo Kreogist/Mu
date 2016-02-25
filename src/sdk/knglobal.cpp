@@ -25,8 +25,8 @@
 #include "knfontmanager.h"
 #include "knlocalemanager.h"
 #include "knpreferenceplugin.h"
-#include "knnotificationcenter.h"
 #include "knthememanager.h"
+#include "knnotification.h"
 
 #include "knglobal.h"
 
@@ -122,6 +122,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     KNLocaleManager::initial(this);
     //Generate the theme manager.
     KNThemeManager::initial(this);
+    //Generate the notification manager.
+    KNNotification::initial(this);
 
     //Initial the infrastructure.
     initialInfrastrcture();
@@ -207,8 +209,6 @@ inline void KNGlobal::initialInfrastrcture()
     //Check out the desktop environment.
     initialDesktopEnvironment();
 #endif
-    //Initial notification center.
-    ;
 
     //Initial the configure manager.
     //Set the configure folder path.

@@ -23,6 +23,8 @@
 
 class QLabel;
 class KNNotificationButton;
+class KNNotificationView;
+class KNNotificationWidget;
 /*!
  * \brief The KNNotificationCenter class provides the ability to show all the
  * information in a single place.
@@ -49,6 +51,18 @@ public:
      */
     QWidget *indicator();
 
+    /*!
+     * \brief The prefer height of the notification height.
+     * \return The prefer height of the notification center widget.
+     */
+    int heightHint(int maximum);
+
+    /*!
+     * \brief Get the notification widget.
+     * \return The notification widget pointer.
+     */
+    KNNotificationWidget *notificationWidget();
+
 signals:
 
 public slots:
@@ -64,12 +78,19 @@ protected:
      */
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QFrame::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void retranslate();
 
 private:
     QLabel *m_notificationIndicator;
     KNNotificationButton *m_button;
+    KNNotificationView *m_notificationView;
+    KNNotificationWidget *m_notificationWidget;
 };
 
 #endif // KNNOTIFICATIONCENTER_H

@@ -6,6 +6,11 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "NotificationView" : {
+        "Parent" : "MainWindow",
+        "Base" : "#00000000",
+        "Window" : "#00000000"
+    },
     "FileDialog" : {
         "Parent" : "MainWindow",
         "Base" : "#353535",

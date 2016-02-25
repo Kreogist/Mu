@@ -86,6 +86,9 @@ public slots:
 
 private:
     explicit KNFontManager(QObject *parent = 0);
+    //Disable the copy of the instance.
+    KNFontManager(const KNFontManager &);
+    KNFontManager(KNFontManager &&);
     static KNFontManager *m_instance;
 };
 

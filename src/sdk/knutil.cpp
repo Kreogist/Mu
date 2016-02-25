@@ -226,45 +226,84 @@ QString KNUtil::legalFileName(QString fileName)
     return fileName;
 }
 
-int KNUtil::similarity(const QString &string1, const QString &string2)
+int KNUtil::similarity(QString string1, QString string2)
 {
-    // Replace this into Sift4 algorithm.
-    //Wagner–Fischer algorithm Levenshtein distance.
-    //Based on
-    /* http://en.wikibooks.org/wiki/Algorithm_implementation/Strings/Levenshtein
-_distance#C.2B.2B*/
-    //And
-    /*http://www.codeproject.com/Articles/13525/Fast-memory-efficient-Levenshtei
-n-algorithm*/
-    //The original Levenshtein Algorithm will used a matrix whose size is
-    //length(string1) * length(string2), this is a common fast, memory efficient
-    //version. It can reduce the memory usage to length(string1) +
-    //length(string2). This won't reduce the time complexity.
-    //Thanks for QString and QChar, a chinese character will be description as
-    //a char.
-    //Initial the size.
-    const unsigned len1=string1.size(), len2=string2.size();
-    std::vector<size_t> col(len2+1), prevCol(len2+1);
-    //Fills the vector with ascending numbers, starting by 0
-    //Because of the FUCK clang, we can NOT use itoa, or else these thing
-    //following can be done in only one sentence:
-    for(unsigned i=0; i<prevCol.size(); i++)
+    //Siderite Zackwehdex's Sift-4 string distance algorithm.
+    //Transfer to the lower case.
+    string1=string1.toLower(); string2=string2.toLower();
+    //Compare to Levenshtein distance algorithm, it's much swift and low memory
+    //cost.
+    int l1=string1.length(), l2=string2.length();
+    //Check the special states for speed up.
+    //Check out the distance of l1.
+    if(l1==0)
     {
-        prevCol[i]=i;
+        //The distance will be the length of string 2.
+        return l2;
     }
-    //Use double std::min instead of std::min({,,}).
-    for(unsigned i=0; i<len1; i++)
+    //Check out the distance of l2.
+    if(l2==0)
     {
-        col[0]=i+1;
-        for(unsigned j=0; j<len2; j++)
+        //The distance will be the length of string 1.
+        return l1;
+    }
+
+    int c1 = 0,  //cursor for string 1
+        c2 = 0,  //cursor for string 2
+        lcss = 0,  //largest common subsequence
+        local_cs = 0; //local common substring
+    //Make sure the cursor is not be out-of-range.
+    while ((c1 < l1) && (c2 < l2))
+    {
+        //Compare the cursor character.
+        if (string1.at(c1)==string2.at(c2))
         {
-            col[j+1]=std::min(std::min(1+col[j],
-                                       1+prevCol[1+j]),
-                              prevCol[j]+(string1[i]!=string2[j]));
+            //Increase the common substring length.
+            local_cs++;
         }
-        std::swap(col, prevCol);
+        else
+        {
+            //Add local common substring length to largest common subsequence.
+            lcss+=local_cs;
+            //Reset the local common substring length.
+            local_cs=0;
+            //Check the pointer position.
+            if(c1!=c2)
+            {
+                //Reset the pointer to be the later one.
+                c1=c2=qMax(c1, c2);
+            }
+            //If matching tokens are found, remove 1 from both cursors (they get
+            //incremented at the end of the loop).
+            //So that we can have only one code block handling matches.
+            //The original Sift-4 has maximum offset, we will ignore the offset
+            //and check out the entire string.
+            for(int i=0; (c1+i<l1) && (c2+i<l2); ++i)
+            {
+                //Check pointer of string 1.
+                if((c1+i<l1) && string1.at(c1+i)==string2.at(c2))
+                {
+                    c1+=i-1;
+                    --c2;
+                    break;
+                }
+                //Check pointer of string 2.
+                if((c2 + i < l2) && string1.at(c1)==string2.at(c2+i))
+                {
+                    --c1;
+                    c2+=i-1;
+                    break;
+                }
+            }
+        }
+        //Move the cursor.
+        ++c1;
+        ++c2;
     }
-    return prevCol[len2];
+    //Add local common substring length to largest common subsequence.
+    lcss+=local_cs;
+    //Calculate the length.
+    return (l1-lcss)+(l2-lcss);
 }
 
 bool KNUtil::saveTextToFile(const QString &filePath, const QString &content)

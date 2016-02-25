@@ -424,7 +424,12 @@ SOURCES += \
     sdk/knfilenamelineedit.cpp \
     sdk/knfilenamemessagebox.cpp \
     sdk/notification/knnotificationbutton.cpp \
-    sdk/knnotificationcenter.cpp
+    sdk/notification/knnotificationmodel.cpp \
+    sdk/notification/knnotificationcenter.cpp \
+    sdk/knnotification.cpp \
+    sdk/notification/knnotificationview.cpp \
+    sdk/notification/knnotificationdelegate.cpp \
+    sdk/notification/knnotificationwidget.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -634,7 +639,12 @@ HEADERS += \
     sdk/knfilenamelineedit.h \
     sdk/knfilenamemessagebox.h \
     sdk/notification/knnotificationbutton.h \
-    sdk/knnotificationcenter.h
+    sdk/notification/knnotificationmodel.h \
+    sdk/notification/knnotificationcenter.h \
+    sdk/knnotification.h \
+    sdk/notification/knnotificationview.h \
+    sdk/notification/knnotificationdelegate.h \
+    sdk/notification/knnotificationwidget.h
 
 RESOURCES += \
     resource/res.qrc

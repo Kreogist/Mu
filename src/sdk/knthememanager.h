@@ -89,6 +89,9 @@ public slots:
 private:
     static KNThemeManager *m_instance;
     explicit KNThemeManager(QObject *parent = 0);
+    //Disable the copy of the instance.
+    KNThemeManager(const KNThemeManager &);
+    KNThemeManager(KNThemeManager &&);
     inline void addTheme(const QString &name,
                          const QString &path,
                          const QPixmap &preview);
