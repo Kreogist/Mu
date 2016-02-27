@@ -20,11 +20,19 @@
 
 #include "knnotificationwidget.h"
 
+#define ImageSize 45
+#define Spacing 5
+#define ContentY 22
+#define TitleY 7
+#define TextLeft (ImageSize + (Spacing<<1))
+
 KNNotificationWidget::KNNotificationWidget(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_defaultIcon(QPixmap(":/public/notification_default.png")),
+    m_pressed(false)
 {
     //Set properties.
-    setFixedSize(270, 54);
+    setFixedSize(270, 57);
 
     //Initial graphics effect.
     QGraphicsDropShadowEffect *effect=new QGraphicsDropShadowEffect(this);
@@ -44,11 +52,101 @@ void KNNotificationWidget::paintEvent(QPaintEvent *event)
                            QPainter::SmoothPixmapTransform, true);
     //Set color.
     painter.setOpacity(0.8);
-    painter.setPen(QColor(100, 100, 100));
     painter.setBrush(Qt::white);
     //Draw the background.
     painter.drawRoundedRect(rect(), 10, 10);
-    //Draw the content.
+    //Calculate content width.
+    int contentWidth=width()-TextLeft-Spacing;
+    //Draw the icon.
     painter.setOpacity(1.0);
-    painter.drawText(rect(), Qt::AlignLeft | Qt::AlignTop, m_title);
+    painter.drawPixmap(Spacing,
+                       Spacing+1,
+                       m_currentIcon.isNull()?m_defaultIcon:m_currentIcon);
+    //Draw the content.
+    painter.setPen(QColor(0x8a, 0x8a, 0x8a));
+    painter.drawText(QRect(TextLeft,
+                           ContentY,
+                           contentWidth,
+                           height() - ContentY - Spacing),
+                     Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap,
+                     fontMetrics().elidedText(m_content,
+                                              Qt::ElideRight,
+                                              contentWidth<<1));
+    //Draw the title.
+    painter.setPen(QColor(0x61, 0x61, 0x61));
+    painter.drawText(QRect(TextLeft,
+                           TitleY,
+                           contentWidth,
+                           ContentY - TitleY),
+                     Qt::AlignLeft | Qt::AlignTop,
+                     fontMetrics().elidedText(m_title,
+                                              Qt::ElideRight,
+                                              contentWidth));
+}
+
+void KNNotificationWidget::mousePressEvent(QMouseEvent *event)
+{
+    //Do original press event.
+    QWidget::mousePressEvent(event);
+    //Set flag.
+    m_pressed=true;
+}
+
+void KNNotificationWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    //Check flag.
+    if(m_pressed)
+    {
+        //Reset flag.
+        m_pressed=false;
+        //Emit signal.
+        emit requireHideNotification();
+    }
+    //Do original event.
+    QWidget::mouseReleaseEvent(event);
+}
+
+QPixmap KNNotificationWidget::currentIcon() const
+{
+    return m_currentIcon;
+}
+
+void KNNotificationWidget::setCurrentIcon(const QPixmap &currentIcon)
+{
+    //Check current icon first.
+    if(currentIcon.isNull())
+    {
+        //Reset the current icon.
+        m_currentIcon=QPixmap();
+        //Complete.
+        return;
+    }
+    //Save the icon.
+    m_currentIcon = currentIcon;
+}
+
+QString KNNotificationWidget::content() const
+{
+    return m_content;
+}
+
+void KNNotificationWidget::setContent(const QString &content)
+{
+    m_content = content;
+}
+
+void KNNotificationWidget::resetPressedFlag()
+{
+    //Reset the flag.
+    m_pressed=false;
+}
+
+QString KNNotificationWidget::title() const
+{
+    return m_title;
+}
+
+void KNNotificationWidget::setTitle(const QString &title)
+{
+    m_title = title;
 }

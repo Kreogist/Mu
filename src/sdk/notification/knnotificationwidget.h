@@ -34,9 +34,54 @@ public:
      */
     explicit KNNotificationWidget(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the title of the notification.
+     * \return The title text.
+     */
+    QString title() const;
+
+    /*!
+     * \brief Get the content of the notification.
+     * \return The content text.
+     */
+    QString content() const;
+
+    /*!
+     * \brief Get the current icon of the notification.
+     * \return The notificaiton icon pixmap.
+     */
+    QPixmap currentIcon() const;
+
 signals:
+    /*!
+     * \brief When the widget is clicked, this signal will be emitted.
+     */
+    void requireHideNotification();
 
 public slots:
+    /*!
+     * \brief Set the notification widget current icon.
+     * \param currentIcon The notification icon. If the icon is null, will use
+     * the default icon instead. But it won't replace the current icon property.
+     */
+    void setCurrentIcon(const QPixmap &currentIcon);
+
+    /*!
+     * \brief Reset the pressed flag when the hide animation start.
+     */
+    void resetPressedFlag();
+
+    /*!
+     * \brief Set the title of the notification.
+     * \param title Notification title text.
+     */
+    void setTitle(const QString &title);
+
+    /*!
+     * \brief Set the content of the notification.
+     * \param content Notification content text.
+     */
+    void setContent(const QString &content);
 
 protected:
     /*!
@@ -44,8 +89,20 @@ protected:
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNNotificationWidget::mousePressEvent().
+     */
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNNotificationWidget::mouseReleaseEvent().
+     */
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
 private:
+    QPixmap m_defaultIcon, m_currentIcon;
     QString m_title, m_content;
+    bool m_pressed;
 };
 
 #endif // KNNOTIFICATIONWIDGET_H

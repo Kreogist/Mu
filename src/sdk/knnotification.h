@@ -24,6 +24,7 @@
 #define knNotification (KNNotification::instance())
 
 class KNNotificationModel;
+class KNNotificationWidget;
 /*!
  * \brief The KNNotification class is a global static object which provides the
  * notification push services for the whole application. All the message will be
@@ -88,6 +89,12 @@ public slots:
      */
     void onActionPushNextNotification();
 
+    /*!
+     * \brief Set the notification widget for notification backend to manage.
+     * \param notificationWidget The notification widget.
+     */
+    void setNotificationWidget(KNNotificationWidget *notificationWidget);
+
 private slots:
     void onActionPushNotification();
 
@@ -108,6 +115,7 @@ private:
 
     QList<PopupNotification> m_popupNotifications;
     KNNotificationModel *m_model;
+    KNNotificationWidget *m_notificationWidget;
     bool m_pushing;
 };
 

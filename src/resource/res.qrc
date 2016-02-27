@@ -49,6 +49,7 @@
         <file>public/anonymous.png</file>
         <file>public/search_close.png</file>
         <file>public/notification_indicator.png</file>
+        <file>public/notification_default.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

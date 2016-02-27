@@ -45,8 +45,6 @@
 
 #include "knpluginmanager.h"
 
-#include <QDebug>
-
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
@@ -219,8 +217,6 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
         m_mainWindow = mainWindow;
         //Set the main window to global.
         knGlobal->setMainWindow(m_mainWindow);
-        //Add notification button to main window.
-        ;
     }
 }
 

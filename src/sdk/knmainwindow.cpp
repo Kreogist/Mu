@@ -78,14 +78,16 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     connect(m_notificationCenter->headerButton(),
             &KNNotificationButton::requireShowNotificationCenter,
             this, &KNMainWindow::onActionShowNotificationCenter);
+    //Configure the notification widget.
+    KNNotificationWidget *notificationWidget=
+            m_notificationCenter->notificationWidget();
     //Reset the parent relationship of the notification widget.
-    m_notificationCenter->notificationWidget()->setParent(this);
-    m_notificationCenter->notificationWidget()->raise();
+    notificationWidget->setParent(this);
+    notificationWidget->raise();
     //Move the notification center.
-    m_notificationCenter->notificationWidget()->move(
-                0,
-                -m_notificationCenter->notificationWidget()->height() -
-                NotificationWidgetPatch);
+    notificationWidget->move(0,
+                             -notificationWidget->height() -
+                             NotificationWidgetPatch);
 
     //Configure the in and out animation.
     connect(m_outAnime, &QPropertyAnimation::finished,
@@ -94,7 +96,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_outAndInAnime->addAnimation(m_outAnime);
     m_outAndInAnime->addAnimation(m_inAnime);
     //Configure the waiter.
-    m_notificationWaiter->setInterval(3000);
+    m_notificationWaiter->setInterval(4000);
     m_notificationWaiter->setSingleShot(true);
     //Link the start slot with in anime.
     connect(m_inAnime, &QPropertyAnimation::finished,
@@ -103,9 +105,24 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     connect(m_notificationWaiter, &QTimer::timeout,
             [=]
             {
+                //Reset the notification widget.
+                m_notificationCenter->notificationWidget()->resetPressedFlag();
+                //Start the out anime.
+                m_outAnime->start();
+            });
+    connect(notificationWidget, &KNNotificationWidget::requireHideNotification,
+            [=]
+            {
+                //Stop the timer.
+                m_notificationWaiter->stop();
+                //Reset the notification widget.
+                m_notificationCenter->notificationWidget()->resetPressedFlag();
+                //Start the out anime.
                 m_outAnime->start();
             });
 
+    //Give the notification widget to backend.
+    knNotification->setNotificationWidget(notificationWidget);
     //Link the notification backend.
     connect(knNotification, &KNNotification::requirePushNotification,
             this, &KNMainWindow::onActionPopupNotification);
@@ -200,11 +217,13 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
         //Mission complete.
         return;
     }
+    //Get notification widget.
+    KNNotificationWidget *notificationWidget=
+            m_notificationCenter->notificationWidget();
     //Move the notification widget to target position.
-    m_notificationCenter->notificationWidget()->move(
-                width() - m_notificationCenter->notificationWidget()->width() -
-                NotificationWidgetPatch,
-                m_notificationCenter->notificationWidget()->y());
+    notificationWidget->move(width() - notificationWidget->width() -
+                             NotificationWidgetPatch,
+                             notificationWidget->y());
 }
 
 void KNMainWindow::closeEvent(QCloseEvent *event)

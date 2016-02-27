@@ -41,6 +41,7 @@ void KNNotification::initial(QObject *parent)
 KNNotification::KNNotification(QObject *parent) :
     QObject(parent),
     m_model(new KNNotificationModel(this)),
+    m_notificationWidget(nullptr),
     m_pushing(false)
 {
 }
@@ -111,7 +112,18 @@ void KNNotification::onActionPushNotification()
 
 void KNNotification::setNotification(const PopupNotification &item)
 {
-    //! FIXME: Add codes here.
-    Q_UNUSED(item);
+    //Check notification widget.
+    if(!m_notificationWidget)
+    {
+        return;
+    }
+    //Set the title and content.
+    m_notificationWidget->setTitle(item.title);
+    m_notificationWidget->setContent(item.content);
 }
 
+void KNNotification::setNotificationWidget(
+        KNNotificationWidget *notificationWidget)
+{
+    m_notificationWidget = notificationWidget;
+}
