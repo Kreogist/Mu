@@ -4,7 +4,7 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="103"/>
+        <location filename="../sdk/knglobal.cpp" line="104"/>
         <source>Byte</source>
         <translation>バイト</translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>KNMusicAlbumModel</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp" line="491"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp" line="492"/>
         <source>Various Artists</source>
         <translation>様々なアーティスト</translation>
     </message>
@@ -28,37 +28,37 @@
 <context>
     <name>KNMusicCategoryDisplay</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="228"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="232"/>
         <source>No song.</source>
         <translation>曲なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="229"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="233"/>
         <source>1 song.</source>
         <translation>1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="230"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="234"/>
         <source>%1 songs.</source>
         <translation>%1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="232"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="236"/>
         <source>No result.</source>
         <translation>該当結果なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="233"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="237"/>
         <source>1 result.</source>
         <translation>1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="234"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="238"/>
         <source>%1 results.</source>
         <translation>%1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="236"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="240"/>
         <source>Search result in %1</source>
         <translation>%1の検索結果</translation>
     </message>
@@ -234,137 +234,137 @@
 <context>
     <name>KNMusicGlobal</name>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="105"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="110"/>
         <source>Name</source>
         <translation>名前</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="106"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="111"/>
         <source>Album</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="107"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="112"/>
         <source>Album Artist</source>
         <translation>アルバム-アーティスト</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="108"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="113"/>
         <source>Album Rating</source>
         <translation>アルバムの評価</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="109"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="114"/>
         <source>Artist</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="110"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="115"/>
         <source>Beats Per Minuate</source>
         <translation>BPM</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="111"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="116"/>
         <source>Bit Rate</source>
         <translation>ビットレート</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="112"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="117"/>
         <source>Category</source>
         <translation>カテゴリー</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="113"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="118"/>
         <source>Comments</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="114"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="119"/>
         <source>Composer</source>
         <translation>作曲者</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="115"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="120"/>
         <source>Date Added</source>
         <translation>追加した日</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="116"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="121"/>
         <source>Date Modified</source>
         <translation>編集した日</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="117"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="122"/>
         <source>Description</source>
         <translation>説明</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="118"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="123"/>
         <source>Disc Count</source>
         <translation>ディスク数</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="119"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="124"/>
         <source>Disc Number</source>
         <translation>ディスク番号</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="120"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="125"/>
         <source>Genre</source>
         <translation>ジャンル</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="121"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="126"/>
         <source>ISRC</source>
         <translation>ISRC</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="122"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="127"/>
         <source>Kind</source>
         <translation>種類</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="123"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="128"/>
         <source>Last Played</source>
         <translation>最終再生日</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="124"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="129"/>
         <source>Plays</source>
         <translation>再生回数</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="125"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="130"/>
         <source>Rating</source>
         <translation>評価</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="126"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="131"/>
         <source>Sample Rate</source>
         <translation>サンプル・レート</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="127"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="132"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="128"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="133"/>
         <source>Time</source>
         <translation>時間</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="129"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="134"/>
         <source>Track Count</source>
         <translation>トラック数</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="130"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="135"/>
         <source>Track Number</source>
         <translation>トラック番号</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="131"/>
+        <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="136"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
@@ -458,17 +458,17 @@
 <context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="194"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="199"/>
         <source>Albums</source>
         <translation>アルバム</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="196"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="201"/>
         <source>Go to Albums</source>
         <translation>アルバムへ移動</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="201"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="206"/>
         <source>No Album</source>
         <translation>アルバムなし</translation>
     </message>
@@ -476,22 +476,22 @@
 <context>
     <name>KNMusicLibraryArtistTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="251"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="255"/>
         <source>Artists</source>
         <translation>アーティスト</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="253"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="257"/>
         <source>Search in artist</source>
         <translation>アーティストで検索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="255"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="259"/>
         <source>Go to Artist</source>
         <translation>アーティストへ移動</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="260"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="264"/>
         <source>No Artist</source>
         <translation>アーティストなし</translation>
     </message>
@@ -519,22 +519,22 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibraryGenreTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="228"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="232"/>
         <source>Genres</source>
         <translation>ジャンル</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="230"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="234"/>
         <source>Search in genre</source>
         <translation>ジャンルで検索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="232"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="236"/>
         <source>Go to Genre</source>
         <translation>ジャンルへ移動</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="237"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="241"/>
         <source>No Genre</source>
         <translation>ジャンルなし</translation>
     </message>
@@ -542,12 +542,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibrarySongTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="173"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="180"/>
         <source>Songs</source>
         <translation>曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="175"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="182"/>
         <source>Go to Songs</source>
         <translation>曲へ移動</translation>
     </message>
@@ -622,12 +622,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylist</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="202"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="199"/>
         <source>Playlist</source>
         <translation>プレイリスト</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="205"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="202"/>
         <source>Failed to delete the playlist file: 
 
 %1</source>
@@ -861,7 +861,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="197"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="200"/>
         <source>Music</source>
         <translation>音楽</translation>
     </message>
@@ -1004,6 +1004,27 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp" line="38"/>
         <source>TTPod</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNNotificationCenter</name>
+    <message>
+        <location filename="../sdk/notification/knnotificationcenter.cpp" line="134"/>
+        <source>Show Kreogist Account details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/notification/knnotificationcenter.cpp" line="135"/>
+        <source>Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNNotificationView</name>
+    <message>
+        <location filename="../sdk/notification/knnotificationview.cpp" line="75"/>
+        <source>No Notifications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
