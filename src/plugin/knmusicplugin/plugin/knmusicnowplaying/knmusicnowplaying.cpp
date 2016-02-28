@@ -510,7 +510,12 @@ void KNMusicNowPlaying::playRow(const int &proxyRow)
         }
         //Play the main thread.
         m_backend->play();
+        //Mission complete.
+        return;
     }
+    //Or else, this song should be failed to play, we cannot even analysis it,
+    //how could we play it?.
+    onActionLoadFailed();
 }
 
 inline void KNMusicNowPlaying::resetShadowModel()
