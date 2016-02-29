@@ -69,9 +69,9 @@ msvc: {
 gcc: {
     # Instruction optimized
     CONFIG += mmx sse sse2 sse3
-    QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3 -finline-functions
+    QMAKE_CXXFLAGS_RELEASE += -mmmx -msse -msse2 -msse3
     # Vectorize optimization
-    QMAKE_CXXFLAGS_RELEASE += -fivopts -ftree-vectorize
+    QMAKE_CXXFLAGS_RELEASE += -ftree-vectorize
     # Concurrency
     QMAKE_CXXFLAGS_RELEASE += -funroll-loops
     # Qt will use clang on Mac OS X, but it seems that it treats the clang as
@@ -79,8 +79,10 @@ gcc: {
     # doesn't have -fforce-addr switch, so we need to set the switcher
     # especially for Windows and Linux.
     win32:{
+        # Instruction optimized
+        QMAKE_CXXFLAGS_RELEASE += -finline-functions
         # Vectorize optimization
-        QMAKE_CXXFLAGS_RELEASE += -ftree-vectorizer-verbose=2
+        QMAKE_CXXFLAGS_RELEASE += -fivopts -ftree-vectorizer-verbose=2
         # Concurrency
         QMAKE_CXXFLAGS_RELEASE += -floop-parallelize-all
         # Cache optimization.
@@ -92,7 +94,7 @@ gcc: {
     }
     linux:{
         # Vectorize optimization
-        QMAKE_CXXFLAGS_RELEASE += -ftree-vectorizer-verbose=2
+        QMAKE_CXXFLAGS_RELEASE += -fivopts -ftree-vectorizer-verbose=2
         # Loop optimization
         QMAKE_CXXFLAGS_RELEASE += -ftree-loop-linear
         # Cache optimization.
