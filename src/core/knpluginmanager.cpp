@@ -41,9 +41,9 @@
 #include "plugin/knwindowsextras/knwindowsextras.h"
 #endif
 
-#include "knmessagebox.h"
-
 #include "knpluginmanager.h"
+
+#include "knnotification.h"
 
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
@@ -247,6 +247,13 @@ void KNPluginManager::launchApplication()
     }
     //Show the main window.
     m_mainWindow->show();
+
+    knNotification->addToStack("Test Notification",
+                               "Normal Notification length.");
+    knNotification->addToStack("Test Notification",
+                               "Normal Notification length.");
+    knNotification->addToStack("Test Notification",
+                               "Super Long Long Long Long and Long Long Long Long Long Long Long Long Notification Test.");
 }
 
 void KNPluginManager::onActionArgumentsAvaliable(QStringList arguments)

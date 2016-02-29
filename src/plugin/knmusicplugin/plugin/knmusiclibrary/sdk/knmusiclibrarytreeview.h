@@ -21,18 +21,37 @@
 
 #include "knmusictreeviewbase.h"
 
+/*!
+ * \brief The KNMusicLibraryTreeView class provides the library optimized tree
+ * view. You could set a category column for fixed on column to be only specific
+ * data. This could be used for artist and genre tab.
+ */
 class KNMusicLibraryTreeView : public KNMusicTreeViewBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryTreeView widget.
+     * \param parent The parent widget pointer.
+     * \param tab The tab pointer.
+     */
     explicit KNMusicLibraryTreeView(QWidget *parent = 0,
                                     KNMusicTab *tab = 0);
 
 signals:
 
 public slots:
-    void setCategoryColumn(const int &column);
+    /*!
+     * \brief Set the category column index.
+     * \param column The column index.
+     */
+    void setCategoryColumn(int column);
 
+    /*!
+     * \brief Set the category specific text.
+     * \param text The category text. Tree view will autocamtically filter the
+     * music model.
+     */
     void setCategoryText(const QVariant &text);
 
 protected:

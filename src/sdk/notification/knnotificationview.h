@@ -51,6 +51,11 @@ protected:
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QListView::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void retranslate();
 

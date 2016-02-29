@@ -17,12 +17,19 @@
  */
 #include <QPainter>
 
+#include "knnotificationmodel.h"
+
 #include "knnotificationdelegate.h"
+
+#define ImageSize 35
+#define Spacing 5
+#define ContentY 22
+#define TitleY 7
+#define TextLeft (ImageSize + (Spacing<<1))
 
 KNNotificationDelegate::KNNotificationDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
 {
-
 }
 
 QSize KNNotificationDelegate::sizeHint(const QStyleOptionViewItem &option,
@@ -40,6 +47,9 @@ void KNNotificationDelegate::paint(QPainter *painter,
     painter->setRenderHints(QPainter::Antialiasing |
                             QPainter::TextAntialiasing |
                             QPainter::SmoothPixmapTransform, true);
+    //Reset painter font.
+    painter->setFont(option.font);
+    painter->setOpacity(1.0);
     //Set the default text color.
     QColor textColor=option.palette.color(QPalette::Text);
     //Check selection state.
@@ -54,11 +64,39 @@ void KNNotificationDelegate::paint(QPainter *painter,
     }
     //Set the text color.
     painter->setPen(textColor);
+    painter->setOpacity(0.5);
+    //Calculate the text width.
+    int textWidth=option.rect.width()-TextLeft;
+    //Draw the pixmap.
+    painter->drawPixmap(Spacing,
+                        option.rect.top() + Spacing,
+                        index.data(Qt::DecorationRole).value<QPixmap>());
+    //Draw content.
+    painter->drawText(QRect(TextLeft,
+                            option.rect.top()+ContentY,
+                            textWidth,
+                            option.fontMetrics.height()),
+                      option.fontMetrics.elidedText(
+                          index.data(
+                              KNNotificationModel::ContentRole).toString(),
+                          Qt::ElideRight,
+                          textWidth));
+    //Draw the border line.
+    painter->drawLine(QPoint(TextLeft, option.rect.bottom()),
+                      QPoint(option.rect.right()-1, option.rect.bottom()));
+    painter->setOpacity(1.0);
     //Set the font bold.
     QFont boldFont=option.font;
     boldFont.setBold(true);
     painter->setFont(boldFont);
     //Draw title.
-    painter->drawText(option.rect, index.data(Qt::DisplayRole).toString());
+    painter->drawText(QRect(TextLeft,
+                            option.rect.top()+TitleY,
+                            textWidth,
+                            option.fontMetrics.height()),
+                      option.fontMetrics.elidedText(
+                          index.data(Qt::DisplayRole).toString(),
+                          Qt::ElideRight,
+                          textWidth));
 }
 

@@ -9,7 +9,10 @@
     "NotificationView" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",
-        "Window" : "#00000000"
+        "Window" : "#00000000",
+        "Text" : "#616161",
+        "Highlight" : "#F7CF3D",
+        "HighlightedText" : "#616161"
     },
     "FileDialog" : {
         "Parent" : "MainWindow",

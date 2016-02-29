@@ -39,7 +39,7 @@ KNMusicLibraryTreeView::KNMusicLibraryTreeView(QWidget *parent,
     header()->setSortIndicatorShown(true);
 }
 
-void KNMusicLibraryTreeView::setCategoryColumn(const int &column)
+void KNMusicLibraryTreeView::setCategoryColumn(int column)
 {
     //Hide the column from the column visible control menu.
     //Cast the header as music tree view header.

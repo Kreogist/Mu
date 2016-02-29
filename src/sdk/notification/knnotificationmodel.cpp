@@ -18,19 +18,30 @@
 
 #include "knnotificationmodel.h"
 
+#define ImageSize 35
+
 KNNotificationModel::KNNotificationModel(QObject *parent) :
-    QAbstractListModel(parent)
+    QAbstractListModel(parent),
+    m_notifications(QList<NotificationData>())
 {
+    //Initial the icon image.
+    m_icon[Information]=
+            QPixmap("://public/notification_default.png").scaled(
+                ImageSize, ImageSize,
+                Qt::KeepAspectRatio,
+                Qt::SmoothTransformation);
 }
 
 void KNNotificationModel::prependRow(const QString &title,
-                                     const QString &content)
+                                     const QString &content,
+                                     int type)
 {
     //Generate the notification.
     NotificationData notification;
     //Set the data.
     notification.title=title;
     notification.content=content;
+    notification.type=type;
     //Begin to append row.
     beginInsertRows(QModelIndex(), 0, 0);
     //Insert data to list.
@@ -61,12 +72,13 @@ QVariant KNNotificationModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
         //Give back the title as display role.
         return targetData.title;
+    case Qt::DecorationRole:
+        //Give back the icon.
+        return m_icon[targetData.type];
     case ContentRole:
         //Give back the content data.
         return targetData.content;
     default:
         return QVariant();
     }
-
-    ;
 }

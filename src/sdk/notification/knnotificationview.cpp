@@ -70,6 +70,14 @@ void KNNotificationView::paintEvent(QPaintEvent *event)
     QListView::paintEvent(event);
 }
 
+void KNNotificationView::hideEvent(QHideEvent *event)
+{
+    //Hide the widget.
+    QListView::hideEvent(event);
+    //Clear selection.
+    selectionModel()->clear();
+}
+
 void KNNotificationView::retranslate()
 {
     m_emptyHint=tr("No Notifications");

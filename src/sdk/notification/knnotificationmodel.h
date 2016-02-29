@@ -19,6 +19,7 @@
 #ifndef KNNOTIFICATIONMODEL_H
 #define KNNOTIFICATIONMODEL_H
 
+#include <QPixmap>
 #include <QList>
 
 #include <QAbstractListModel>
@@ -36,6 +37,12 @@ public:
         ContentRole = Qt::UserRole+1
     };
 
+    enum NotificationType
+    {
+        Information = 0,
+        NotificationTypeCount
+    };
+
     /*!
      * \brief Construct a KNNotificationModel with given object.
      * \param parent The parent object.
@@ -44,11 +51,12 @@ public:
 
     /*!
      * \brief Preppend a notification to model.
-     * \param title
-     * \param content
+     * \param title Notification title.
+     * \param content Notification content.
      */
     void prependRow(const QString &title,
-                    const QString &content);
+                    const QString &content,
+                    int type=Information);
 
     /*!
      * \brief Reimplemented from QAbstractListModel::rowCount().
@@ -69,7 +77,10 @@ private:
     {
         QString title;
         QString content;
+        int type=Information;
     };
+
+    QPixmap m_icon[NotificationTypeCount];
     QList<NotificationData> m_notifications;
 };
 
