@@ -1,3 +1,15 @@
+mu (0.9.4) unstable; urgency=medium
+
+  * playlist float panel will be shown. Now you can create playlist or add to playlist directly when dragging.
+  * Optimized for all UI animations.
+  * Adapt for OS X 10.11 compiler.
+  * Fixed the exception bug when playlist the deleted CUE file.
+  * Fixed the automatically downloaded lyrics will replace the manually download lyrics.
+  * Fixed the main window might be shown as well as the mini player.
+  * Fixed the album art image won't be shown at album detail widget.
+
+ -- Saki Tojo <tomguts@126.com> Mon, 29 Feb 2016 12:22:00 +1100
+
 mu (0.9.3) unstable; urgency=medium
 
   * Support editing ID3v1, ID3v2 and APEv2 tag.
