@@ -51,13 +51,16 @@ KNNotificationModel *KNNotification::model() const
     return m_model;
 }
 
-void KNNotification::push(const QString &title, const QString &content)
+QModelIndex KNNotification::push(const QString &title,
+                                 const QString &content,
+                                 int type,
+                                 int iconType)
 {
     //Push means we need to show the notification and add to notification center
     //stack.
     pushOnly(title, content);
     //Add to stack.
-    addToStack(title, content);
+    return addToStack(title, content, type, iconType);
 }
 
 void KNNotification::pushOnly(const QString &title, const QString &content)
@@ -72,10 +75,19 @@ void KNNotification::pushOnly(const QString &title, const QString &content)
     onActionPushNotification();
 }
 
-void KNNotification::addToStack(const QString &title, const QString &content)
+QModelIndex KNNotification::addToStack(const QString &title,
+                                       const QString &content,
+                                       int type,
+                                       int iconType)
 {
     //Add notification to model.
-    m_model->prependRow(title, content);
+    return m_model->prependRow(title, content, type, iconType);
+}
+
+void KNNotification::removeNotification(const QModelIndex &index)
+{
+    //Remove the notification.
+    m_model->removeNotification(index);
 }
 
 void KNNotification::onActionPushNextNotification()

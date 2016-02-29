@@ -17,6 +17,7 @@
  */
 
 #include "knutil.h"
+#include "knnotification.h"
 
 #include "knmusiccategorymodelbase.h"
 #include "knmusicsearcher.h"
@@ -46,6 +47,14 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     connect(this, &KNMusicLibraryModel::requireAnalysisFiles,
             m_searcher, &KNMusicSearcher::analysisPaths,
             Qt::QueuedConnection);
+    connect(m_searcher, &KNMusicSearcher::searchFinish,
+            [=](const qint64 &count)
+            {
+                knNotification->pushOnly(
+                            tr("Search complete"),
+                            tr("%1 files have been to music library.").arg(
+                                QString::number(count)));
+            });
 
     //Move the analysis queue to working thread.
     m_analysisQueue->moveToThread(&m_analysisThread);

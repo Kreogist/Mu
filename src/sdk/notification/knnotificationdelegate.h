@@ -21,7 +21,7 @@
 
 #include <QStyledItemDelegate>
 
-#define NotificationItemHeight 45
+#define NotificationItemHeight 54
 
 /*!
  * \brief The KNNotificationDelegate class provides the way to display a

@@ -17,7 +17,7 @@
  */
 #include <QPainter>
 
-#include "knnotificationmodel.h"
+#include "knnotificationutil.h"
 
 #include "knnotificationdelegate.h"
 
@@ -64,28 +64,31 @@ void KNNotificationDelegate::paint(QPainter *painter,
     }
     //Set the text color.
     painter->setPen(textColor);
-    painter->setOpacity(0.5);
     //Calculate the text width.
     int textWidth=option.rect.width()-TextLeft;
     //Draw the pixmap.
     painter->drawPixmap(Spacing,
                         option.rect.top() + Spacing,
                         index.data(Qt::DecorationRole).value<QPixmap>());
+    painter->setOpacity(0.5);
     //Draw content.
     painter->drawText(QRect(TextLeft,
                             option.rect.top()+ContentY,
                             textWidth,
-                            option.fontMetrics.height()),
+                            option.fontMetrics.height()<<1),
                       option.fontMetrics.elidedText(
                           index.data(
-                              KNNotificationModel::ContentRole).toString(),
+                              KNNotificationUtil::ContentRole).toString(),
                           Qt::ElideRight,
-                          textWidth));
-    //Draw the border line.
-    painter->drawLine(QPoint(TextLeft, option.rect.bottom()),
-                      QPoint(option.rect.right()-1, option.rect.bottom()));
-    painter->setOpacity(1.0);
+                          textWidth<<1));
+    //Draw the border line except the last one.
+    if(index.model()->rowCount()!=index.row()+1)
+    {
+        painter->drawLine(QPoint(TextLeft, option.rect.bottom()),
+                          QPoint(option.rect.right()-1, option.rect.bottom()));
+    }
     //Set the font bold.
+    painter->setOpacity(1.0);
     QFont boldFont=option.font;
     boldFont.setBold(true);
     painter->setFont(boldFont);

@@ -646,7 +646,8 @@ HEADERS += \
     sdk/knnotification.h \
     sdk/notification/knnotificationview.h \
     sdk/notification/knnotificationdelegate.h \
-    sdk/notification/knnotificationwidget.h
+    sdk/notification/knnotificationwidget.h \
+    sdk/notification/knnotificationutil.h
 
 RESOURCES += \
     resource/res.qrc

@@ -24,6 +24,7 @@
 
 #include "knutil.h"
 #include "knmessagebox.h"
+#include "knnotification.h"
 
 #include "knmusicplaylistengine.h"
 #include "knmusicplaylistmodel.h"
@@ -383,8 +384,8 @@ void KNMusicPlaylistManager::loadPlaylistList()
     }
     //Get the playlist file path content.
     QJsonArray playlistPaths=playlistListObject.value("Playlists").toArray();
-    //A string used to storage the failed loaded file path.
-    QString failedPaths;
+    //A counter for those failed loaded file path.
+    int failedCounter=0;
     //Generate those models.
     for(auto i=playlistPaths.constBegin(); i!=playlistPaths.constEnd(); ++i)
     {
@@ -402,15 +403,18 @@ void KNMusicPlaylistManager::loadPlaylistList()
         else
         {
             //Add the path to failed path list.
-            failedPaths.append(playlistPath + "\n");
+            ++failedCounter;
         }
     }
     //Check whether the failedPaths is empty, if it's not empty, a message box
     //should be display to hint the user there's invalid playlist.
-    if(!failedPaths.isEmpty())
+    if(failedCounter>0)
     {
-        //! FIXME: Show the failed paths.
-        //! WARNING: do not use KNMessageBox.
+        //Push notifications for failed loaded playlist.
+        knNotification->push(
+                    tr("%1 playlists cannot be loaded.").arg(
+                        QString::number(failedCounter)),
+                    tr("Those playlists may be moved, deleted or renamed."));
     }
 }
 

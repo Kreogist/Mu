@@ -19,6 +19,8 @@
 #ifndef KNNOTIFICATION_H
 #define KNNOTIFICATION_H
 
+#include "notification/knnotificationutil.h"
+
 #include <QObject>
 
 #define knNotification (KNNotification::instance())
@@ -57,9 +59,14 @@ public:
      * \brief Push an notification here, and add the notification to the stack.
      * \param title The title of notification.
      * \param content The notification content.
+     * \param type The notification type.
+     * \param iconType The icon of the notification will be used.
+     * \return Notificaiton item index of the notification in the model.
      */
-    void push(const QString &title,
-              const QString &content);
+    QModelIndex push(const QString &title,
+                     const QString &content,
+                     int type=KNNotificationUtil::Information,
+                     int iconType=KNNotificationUtil::Message);
 
     /*!
      * \brief Push an notification, but not add this notification to stack.
@@ -73,9 +80,19 @@ public:
      * \brief Add the notification to stack, but this notification won't pop up.
      * \param title The title of notificaiton.
      * \param content The notification content.
+     * \param type The notification type.
+     * \param iconType The icon of the notification will be used.
+     * \return Notificaiton item index of the notification in the model.
      */
-    void addToStack(const QString &title,
-                    const QString &content);
+    QModelIndex addToStack(const QString &title,
+                           const QString &content,
+                           int type=KNNotificationUtil::Information,
+                           int iconType=KNNotificationUtil::Message);
+
+    /*!
+     * \brief Remove one notification via its index.
+     */
+    void removeNotification(const QModelIndex &index);
 
 signals:
     /*!

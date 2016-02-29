@@ -59,6 +59,17 @@ signals:
      */
     void findFile(QFileInfo fileInfo);
 
+    /*!
+     * \brief Start to do the search.
+     */
+    void searchStart();
+
+    /*!
+     * \brief When the search queue is complete, this signal will be emitted.
+     * \param counts Amount of the files is finding.
+     */
+    void searchFinish(qint64 counts);
+
 public slots:
     /*!
      * \brief Set the suffix filter list.
@@ -82,6 +93,7 @@ private:
     inline void analysisFile(const QFileInfo &fileInfo);
     static QStringList m_suffixList;
     QStringList m_queue;
+    qint64 m_counter;
 };
 
 #endif // KNFILESEARCHER_H

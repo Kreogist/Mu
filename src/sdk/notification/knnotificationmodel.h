@@ -22,6 +22,8 @@
 #include <QPixmap>
 #include <QList>
 
+#include "knnotificationutil.h"
+
 #include <QAbstractListModel>
 
 /*!
@@ -32,17 +34,6 @@ class KNNotificationModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum NotificationRole
-    {
-        ContentRole = Qt::UserRole+1
-    };
-
-    enum NotificationType
-    {
-        Information = 0,
-        NotificationTypeCount
-    };
-
     /*!
      * \brief Construct a KNNotificationModel with given object.
      * \param parent The parent object.
@@ -53,10 +44,14 @@ public:
      * \brief Preppend a notification to model.
      * \param title Notification title.
      * \param content Notification content.
+     * \param type Notification type. It should be one of the NotificationType
+     * data.
+     * \return Notificaiton item index of the notification in the model.
      */
-    void prependRow(const QString &title,
-                    const QString &content,
-                    int type=Information);
+    QModelIndex prependRow(const QString &title,
+                           const QString &content,
+                           int type=KNNotificationUtil::Information,
+                           int iconType=KNNotificationUtil::Message);
 
     /*!
      * \brief Reimplemented from QAbstractListModel::rowCount().
@@ -68,6 +63,20 @@ public:
      */
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QAbstractListModel::removeRows().
+     */
+    bool removeRows(int row,
+                    int count,
+                    const QModelIndex &parent) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Remove one notification from the model.
+     * \param index The notification index.
+     * \return If remove the notificaiton successfully, then return true;
+     */
+    bool removeNotification(const QModelIndex &index);
+
 signals:
 
 public slots:
@@ -77,10 +86,16 @@ private:
     {
         QString title;
         QString content;
-        int type=Information;
+        int type;
+        int iconType;
+        NotificationData() :
+            type(KNNotificationUtil::Information),
+            iconType(KNNotificationUtil::Message)
+        {
+        }
     };
 
-    QPixmap m_icon[NotificationTypeCount];
+    QPixmap m_icon[KNNotificationUtil::NotificationIconCount];
     QList<NotificationData> m_notifications;
 };
 

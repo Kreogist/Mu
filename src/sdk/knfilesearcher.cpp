@@ -25,7 +25,8 @@ QStringList KNFileSearcher::m_suffixList=QStringList();
 
 KNFileSearcher::KNFileSearcher(QObject *parent) :
     QObject(parent),
-    m_queue(QStringList())
+    m_queue(QStringList()),
+    m_counter(0)
 {
     //These signals are only used to avoid a deep calling stack.
     //Calling funcion directly may caused a deep , and that will make the stack
@@ -38,6 +39,14 @@ KNFileSearcher::KNFileSearcher(QObject *parent) :
 
 void KNFileSearcher::analysisPaths(QStringList paths)
 {
+    //Check the queue before.
+    if(m_queue.isEmpty())
+    {
+        //Emit the search start signal.
+        emit searchStart();
+        //Reset the counter.
+        m_counter=0;
+    }
     //Append the urls to the waiting list.
     m_queue.append(paths);
     //Check the queue, if the queue is not empty then ask to analysis one.
@@ -53,6 +62,9 @@ void KNFileSearcher::analysisNext()
     //Check the queue first.
     if(m_queue.isEmpty())
     {
+        //Mission complete.
+        emit searchFinish(m_counter);
+        //Finish.
         return;
     }
     //Get the first path in the queue, use QFileInfo to parse it.
@@ -60,10 +72,12 @@ void KNFileSearcher::analysisNext()
     //Check whether it's a dir.
     if(typeChecker.isDir())
     {
+        //Analysis item as a folder.
         analysisFolder(typeChecker);
     }
     else if(typeChecker.isFile())
     {
+        //Analysis item as a file.
         analysisFile(typeChecker);
     }
     //Emit the parse next signal.
@@ -102,6 +116,8 @@ inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo)
     //Check whether the suffix is in the suffix list.
     if(m_suffixList.contains(fileInfo.suffix().toLower()))
     {
+        //Increase the counter.
+        ++m_counter;
         //If we can find the suffix, emit the find out signal.
         emit findFile(fileInfo);
     }

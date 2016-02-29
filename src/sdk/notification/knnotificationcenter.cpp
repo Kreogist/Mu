@@ -117,6 +117,7 @@ void KNNotificationCenter::resizeEvent(QResizeEvent *event)
 {
     //Resize the frame.
     QFrame::resizeEvent(event);
+    //Set the rendering.
     QBitmap objBitmap(size());
     QPainter painter(&objBitmap);
     painter.setRenderHints(QPainter::Antialiasing |
