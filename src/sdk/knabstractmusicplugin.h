@@ -42,6 +42,12 @@ public:
      */
     virtual QWidget *mainPlayer()=0;
 
+    /*!
+     * \brief Provides whether current music pluign is working.
+     * \return Whether the music plugin is still working.
+     */
+    virtual bool isWorking()=0;
+
 signals:
     /*!
      * \brief This signal will ask the main window to show the main player.

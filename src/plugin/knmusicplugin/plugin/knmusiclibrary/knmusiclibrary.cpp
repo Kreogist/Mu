@@ -113,6 +113,12 @@ KNMusicTab *KNMusicLibrary::genreTab()
     return m_libraryTabs[TabGenres];
 }
 
+bool KNMusicLibrary::isWorking()
+{
+    //The working state is the same as the music library working state.
+    return m_libraryModel->isWorking();
+}
+
 void KNMusicLibrary::showInSongTab()
 {
     //Check out now playing pointer.

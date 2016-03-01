@@ -17,12 +17,14 @@
  */
 #include <QApplication>
 #include <QAction>
+#include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QSequentialAnimationGroup>
 
 //Dependences
+#include "knabstractmusicplugin.h"
 #include "knglobal.h"
 #include "knconfigure.h"
 #include "kncategoryplugin.h"
@@ -30,6 +32,7 @@
 #include "knnotification.h"
 #include "knthememanager.h"
 #include "knmainwindowcontainer.h"
+#include "knnotification.h"
 
 //Notifications
 #include "notification/knnotificationcenter.h"
@@ -177,10 +180,26 @@ void KNMainWindow::setPreferencePanel(KNPreferencePlugin *preferencePanel)
             m_container, &KNMainWindowContainer::hidePreference);
 }
 
-void KNMainWindow::setMainPlayer(QWidget *mainPlayer)
+void KNMainWindow::setMusicPlugin(KNAbstractMusicPlugin *musicPlugin)
 {
+    //Save the music player plugin.
+    m_musicPlugin=musicPlugin;
     //Set the main player widget.
-    m_container->setMainPlayer(mainPlayer);
+    m_container->setMainPlayer(m_musicPlugin->mainPlayer());
+    //Link the plugin and the main window.
+    connect(m_musicPlugin, &KNAbstractMusicPlugin::requireShowMainPlayer,
+            this, &KNMainWindow::showMainPlayer);
+    connect(m_musicPlugin, &KNAbstractMusicPlugin::requireHideMainPlayer,
+            this, &KNMainWindow::hideMainPlayer);
+    connect(m_musicPlugin, &KNAbstractMusicPlugin::requireHideMainWindow,
+            this, &KNMainWindow::hide);
+    connect(m_musicPlugin, &KNAbstractMusicPlugin::requireShowMainWindow,
+            this, &KNMainWindow::show);
+    connect(m_musicPlugin, &KNAbstractMusicPlugin::requireCloseMainWindow,
+            this, &KNMainWindow::close);
+
+    connect(this, &KNMainWindow::mainWindowShown,
+            m_musicPlugin, &KNAbstractMusicPlugin::hideMiniPlayer);
 }
 
 void KNMainWindow::showMainPlayer()
@@ -228,6 +247,19 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
 
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
+    //Check music plugin working state.
+    if(m_musicPlugin->isWorking())
+    {
+        //Ignore the close request.
+        event->ignore();
+        //Push notification.
+        knNotification->pushOnly(
+                    tr("Cannot quit now"),
+                    tr("Music library is still adding music to your music "
+                       "library, please wait until it complete."));
+        //Finished.
+        return;
+    }
     //Save the configure of the category plugin, if the category is valid.
     if(m_categoryPlugin)
     {

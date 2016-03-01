@@ -64,6 +64,11 @@ public:
      */
     KNMusicTab *genreTab() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::isWorking().
+     */
+    bool isWorking() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

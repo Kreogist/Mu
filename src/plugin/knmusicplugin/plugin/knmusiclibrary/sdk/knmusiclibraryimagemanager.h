@@ -85,6 +85,13 @@ public:
      */
     QString insertArtwork(const QImage &image);
 
+    /*!
+     * \brief Get whether the image manager is working for saving artworks and
+     * maintaining hash map.
+     * \return If the image manager is working, then return true.
+     */
+    bool isWorking() const;
+
 signals:
     /*!
      * \brief This signal is actually private, it is used for inner processing
@@ -148,6 +155,7 @@ private:
     QLinkedList<AnalysisQueueItem> m_analysisQueue;
     QString m_imageFolderPath;
     QHash<QString, QVariant> *m_hashAlbumArt, *m_scaledHashAlbumArt;
+    bool m_isWorking;
 };
 
 #endif // KNMUSICLIBRARYIMAGEMANAGER_H

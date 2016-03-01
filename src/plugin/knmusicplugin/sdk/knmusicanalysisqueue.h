@@ -41,6 +41,12 @@ public:
      */
     explicit KNMusicAnalysisQueue(QObject *parent = 0);
 
+    /*!
+     * \brief Check whether the analysis queue is working.
+     * \return If the queue is working, then return true.
+     */
+    bool isWorking() const;
+
 signals:
     /*!
      * \brief When a file is parsed by the parser, this signal will be emitted.
@@ -67,6 +73,7 @@ private slots:
 
 private:
     QLinkedList<QFileInfo> m_filePathQueue;
+    bool m_isWorking;
 };
 
 #endif // KNMUSICANALYSISQUEUE_H

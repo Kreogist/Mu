@@ -45,6 +45,12 @@ public:
      */
     static QStringList suffixList();
 
+    /*!
+     * \brief Get the file searcher work state.
+     * \return If searcher is working, then it will be true.
+     */
+    bool isWorking() const;
+
 signals:
     /*!
      * \brief This signal is used privately. It's only used for avoid a deep
@@ -94,6 +100,7 @@ private:
     static QStringList m_suffixList;
     QStringList m_queue;
     qint64 m_counter;
+    bool m_working;
 };
 
 #endif // KNFILESEARCHER_H

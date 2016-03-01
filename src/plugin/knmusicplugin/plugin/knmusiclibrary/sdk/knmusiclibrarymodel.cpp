@@ -642,3 +642,9 @@ KNMusicLibraryImageManager *KNMusicLibraryModel::imageManager() const
 {
     return m_imageManager;
 }
+
+bool KNMusicLibraryModel::isWorking()
+{
+    return m_searcher->isWorking() || m_analysisQueue->isWorking() ||
+            m_imageManager->isWorking();
+}

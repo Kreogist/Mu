@@ -20,7 +20,8 @@
 #include "knmusicanalysisqueue.h"
 
 KNMusicAnalysisQueue::KNMusicAnalysisQueue(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_isWorking(false)
 {
     //Connect analysis loop.
     connect(this, &KNMusicAnalysisQueue::analysisNext,
@@ -28,8 +29,19 @@ KNMusicAnalysisQueue::KNMusicAnalysisQueue(QObject *parent) :
             Qt::QueuedConnection);
 }
 
+bool KNMusicAnalysisQueue::isWorking() const
+{
+    return m_isWorking;
+}
+
 void KNMusicAnalysisQueue::addFile(const QFileInfo &fileInfo)
 {
+    //Check file path queue first.
+    if(m_filePathQueue.isEmpty())
+    {
+        //Set working flag.
+        m_isWorking=true;
+    }
     //Add the file path to the analysis item list.
     m_filePathQueue.append(fileInfo);
     //Start analysis queue.
@@ -41,6 +53,9 @@ void KNMusicAnalysisQueue::onActionAnalysisNext()
     //Check the analysis queue first.
     if(m_filePathQueue.isEmpty())
     {
+        //Clear the working flag.
+        m_isWorking=false;
+        //Mission complete.
         return;
     }
     //Get the parser.

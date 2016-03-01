@@ -132,21 +132,7 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
     if(m_mainWindow!=nullptr)
     {
         //Set the main player provided by the music plugin.
-        m_mainWindow->setMainPlayer(m_musicPlugin->mainPlayer());
-        //Link the plugin and the main window.
-        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireShowMainPlayer,
-                m_mainWindow, &KNMainWindow::showMainPlayer);
-        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireHideMainPlayer,
-                m_mainWindow, &KNMainWindow::hideMainPlayer);
-        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireHideMainWindow,
-                m_mainWindow, &KNMainWindow::hide);
-        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireShowMainWindow,
-                m_mainWindow, &KNMainWindow::show);
-        connect(m_musicPlugin, &KNAbstractMusicPlugin::requireCloseMainWindow,
-                m_mainWindow, &KNMainWindow::close);
-
-        connect(m_mainWindow, &KNMainWindow::mainWindowShown,
-                m_musicPlugin, &KNAbstractMusicPlugin::hideMiniPlayer);
+        m_mainWindow->setMusicPlugin(m_musicPlugin);
     }
     //Check the platform extra pointer.
     if(m_platformExtra!=nullptr)

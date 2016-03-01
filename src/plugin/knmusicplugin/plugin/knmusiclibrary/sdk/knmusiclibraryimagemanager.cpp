@@ -32,7 +32,8 @@ KNMusicLibraryImageManager::KNMusicLibraryImageManager(QObject *parent) :
     m_analysisQueue(QLinkedList<AnalysisQueueItem>()),
     m_imageFolderPath(QString()),
     m_hashAlbumArt(nullptr),
-    m_scaledHashAlbumArt(nullptr)
+    m_scaledHashAlbumArt(nullptr),
+    m_isWorking(false)
 {
     //Link the analysis request signal and response slot in queue connection.
     connect(this, &KNMusicLibraryImageManager::requireAnalysisNext,
@@ -49,6 +50,12 @@ void KNMusicLibraryImageManager::analysisAlbumArt(
     {
         //Ignore the item index.
         return;
+    }
+    //Check analysis queue is empty before.
+    if(m_analysisQueue.isEmpty())
+    {
+        //Set working flag.
+        m_isWorking=true;
     }
     //Generate the queue item.
     AnalysisQueueItem queueItem;
@@ -128,6 +135,9 @@ void KNMusicLibraryImageManager::analysisNext()
     //Check is there no item in the queue.
     if(m_analysisQueue.isEmpty())
     {
+        //Reset the working flag.
+        m_isWorking=false;
+        //Mission complete.
         return;
     }
     //Get the first item from the queue.
@@ -205,6 +215,11 @@ QString KNMusicLibraryImageManager::insertArtwork(const QImage &image)
         emit imageInserted(imageHashKey);
     }
     return imageHashKey;
+}
+
+bool KNMusicLibraryImageManager::isWorking() const
+{
+    return m_isWorking;
 }
 
 void KNMusicLibraryImageManager::removeHashImage(const QString &hashKey)

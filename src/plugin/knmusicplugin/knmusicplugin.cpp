@@ -255,6 +255,12 @@ QWidget *KNMusicPlugin::mainPlayer()
     return m_mainPlayer;
 }
 
+bool KNMusicPlugin::isWorking()
+{
+    //If the library or playlist is working, the music library is working.
+    return m_library->isWorking();
+}
+
 void KNMusicPlugin::saveConfigure()
 {
     //--Header Player--

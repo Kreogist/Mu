@@ -145,6 +145,11 @@ public:
      */
     KNMusicLibraryImageManager *imageManager() const;
 
+    /*!
+     * \brief Reimplemented from KNMusicModel::isWorking().
+     */
+    bool isWorking() Q_DECL_OVERRIDE;
+
 signals:
     /*!
      * \brief When the library model has the first record, this signal will be

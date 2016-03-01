@@ -681,6 +681,11 @@ bool KNMusicModel::moveRows(const QModelIndex &sourceParent,
     return true;
 }
 
+bool KNMusicModel::isWorking()
+{
+    return false;
+}
+
 void KNMusicModel::setPlayingIndex(const QModelIndex &playingRow)
 {
     //Check the previous playing index.

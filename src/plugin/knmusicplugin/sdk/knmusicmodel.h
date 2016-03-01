@@ -269,6 +269,12 @@ public:
                   const QModelIndex &destinationParent,
                   int destinationChild) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Get whether this music model is searching and adding songs.
+     * \return If the current model is working, then it should return true.
+     */
+    virtual bool isWorking();
+
 signals:
     /*!
      * \brief When the playing item is begin removed, this signal will be

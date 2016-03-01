@@ -85,6 +85,11 @@ public:
      */
     QWidget *mainPlayer() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::isWorking().
+     */
+    bool isWorking() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

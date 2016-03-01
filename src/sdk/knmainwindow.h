@@ -23,6 +23,7 @@
 
 class QPropertyAnimation;
 class QSequentialAnimationGroup;
+class KNAbstractMusicPlugin;
 class KNConfigure;
 class KNCategoryPlugin;
 class KNMainWindowContainer;
@@ -72,11 +73,11 @@ public:
     void setPreferencePanel(KNPreferencePlugin *preferencePanel);
 
     /*!
-     * \brief Set the main player widget.
-     * \param mainPlayer The main player widget pointer. It will only save the
-     * first widget you set.
+     * \brief Set the music plugin to main window for main player and close
+     * checking.
+     * \param musicPlugin The music plugin plugin pointer.
      */
-    void setMainPlayer(QWidget *mainPlayer);
+    void setMusicPlugin(KNAbstractMusicPlugin *musicPlugin);
 
 signals:
     /*!
@@ -132,6 +133,7 @@ private:
     inline void setCacheValue(const QString &valueName, const int &value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
 
+    KNAbstractMusicPlugin *m_musicPlugin;
     KNConfigure *m_cacheConfigure;
     KNMainWindowContainer *m_container;
     KNCategoryPlugin *m_categoryPlugin;

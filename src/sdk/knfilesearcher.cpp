@@ -26,7 +26,8 @@ QStringList KNFileSearcher::m_suffixList=QStringList();
 KNFileSearcher::KNFileSearcher(QObject *parent) :
     QObject(parent),
     m_queue(QStringList()),
-    m_counter(0)
+    m_counter(0),
+    m_working(false)
 {
     //These signals are only used to avoid a deep calling stack.
     //Calling funcion directly may caused a deep , and that will make the stack
@@ -46,6 +47,8 @@ void KNFileSearcher::analysisPaths(QStringList paths)
         emit searchStart();
         //Reset the counter.
         m_counter=0;
+        //Reset the working state.
+        m_working=true;
     }
     //Append the urls to the waiting list.
     m_queue.append(paths);
@@ -62,6 +65,8 @@ void KNFileSearcher::analysisNext()
     //Check the queue first.
     if(m_queue.isEmpty())
     {
+        //Clear the working state.
+        m_working=false;
         //Mission complete.
         emit searchFinish(m_counter);
         //Finish.
@@ -126,6 +131,11 @@ inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo)
 QStringList KNFileSearcher::suffixList()
 {
     return m_suffixList;
+}
+
+bool KNFileSearcher::isWorking() const
+{
+    return m_working;
 }
 
 void KNFileSearcher::setSuffixList(const QStringList &suffixList)
