@@ -12,8 +12,8 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QUrl>
 #include <QEventLoop>
@@ -21,21 +21,21 @@
 #include <QNetworkReply>
 #include <QTimer>
 
-#include "knmusiclyricsdownloader.h"
+#include "knrestapibase.h"
 
-KNMusicLyricsDownloader::KNMusicLyricsDownloader(QObject *parent) :
+KNRestApiBase::KNRestApiBase(QObject *parent) :
     QObject(parent),
     m_networkManager(new QNetworkAccessManager)
 {
 }
 
-KNMusicLyricsDownloader::~KNMusicLyricsDownloader()
+KNRestApiBase::~KNRestApiBase()
 {
     //Recover the memory.
     m_networkManager->deleteLater();
 }
 
-void KNMusicLyricsDownloader::setWorkingThread(QThread *thread)
+void KNRestApiBase::setWorkingThread(QThread *thread)
 {
     //Move the children to the thread.
     m_networkManager->moveToThread(thread);
@@ -43,8 +43,8 @@ void KNMusicLyricsDownloader::setWorkingThread(QThread *thread)
     moveToThread(thread);
 }
 
-void KNMusicLyricsDownloader::get(const QNetworkRequest &request,
-                                  QByteArray &responseData)
+void KNRestApiBase::get(const QNetworkRequest &request,
+                        QByteArray &responseData)
 {
     //Clear the response data array and clear the access cache.
     responseData.clear();
@@ -76,9 +76,9 @@ void KNMusicLyricsDownloader::get(const QNetworkRequest &request,
     }
 }
 
-void KNMusicLyricsDownloader::post(QNetworkRequest request,
-                                   const QByteArray &parameter,
-                                   QByteArray &responseData)
+void KNRestApiBase::post(QNetworkRequest request,
+                         const QByteArray &parameter,
+                         QByteArray &responseData)
 {
     //Clear the response data array and clear the access cache.
     responseData.clear();
@@ -115,9 +115,9 @@ void KNMusicLyricsDownloader::post(QNetworkRequest request,
     }
 }
 
-QNetworkRequest KNMusicLyricsDownloader::generateRequest(const QString &url,
-                                                         const QVariant &cookie,
-                                                         const QString &referer)
+QNetworkRequest KNRestApiBase::generateRequest(const QString &url,
+                                               const QVariant &cookie,
+                                               const QString &referer)
 {
     //Generate the network request, initial it with the url.
     QNetworkRequest request;

@@ -19,22 +19,18 @@
 #ifndef KNMUSICLYRICSDOWNLOADER_H
 #define KNMUSICLYRICSDOWNLOADER_H
 
-#include <QNetworkRequest>
-
 #include "knutil.h"
 #include "knmusicutil.h"
-#include "knconnectionhandler.h"
 
-#include <QObject>
+#include "knrestapibase.h"
 
 using namespace MusicUtil;
 
-class QNetworkAccessManager;
 /*!
  * \brief The KNMusicLyricsDownloader class provides the interface function of a
  * lyrics download plugin and some handy function to download the lyrics.
  */
-class KNMusicLyricsDownloader : public QObject
+class KNMusicLyricsDownloader : public KNRestApiBase
 {
     Q_OBJECT
 public:
@@ -61,21 +57,13 @@ public:
      * downloaders plugins.
      * \param parent The parent object.
      */
-    explicit KNMusicLyricsDownloader(QObject *parent = 0);
-    ~KNMusicLyricsDownloader();
+    KNMusicLyricsDownloader(QObject *parent = 0) : KNRestApiBase(parent){}
 
     /*!
      * \brief Provide the name of the lyrics downloader.
      * \return The name of the downloader.
      */
     virtual QString downloaderName()=0;
-
-    /*!
-     * \brief Chagne the working thread of the downloader. Do NOT use
-     * moveToThread() function, use this function instead.
-     * \param thread The working thread of the downloader.
-     */
-    void setWorkingThread(QThread *thread);
 
     /*!
      * \brief This function provide how to compare a lyrics details. Check the
@@ -195,90 +183,6 @@ protected:
         //Add to list.
         lyricsList.append(lyricsDetails);
     }
-
-    /*!
-     * \brief Http get request via given the request. This function works in
-     * stucked way.
-     * \param request The requst of the get request.
-     * \param responseData The response data byte array which will be used to
-     * receive the data from the get request.
-     */
-    void get(const QNetworkRequest &request,
-             QByteArray &responseData);
-
-    /*!
-     * \brief This is a override function.\n
-     * Http get request via given the url, cookie and referer. This
-     * function works in stucked way.\n
-     * The parameters provided in this function is used to generate the request.
-     * \param url The url of the get target.
-     * \param responseData The response data byte array which will be used to
-     * receive the data from the get request.
-     * \param cookie The cookie which will be use on the request header. By
-     * default it can leave blank to use the default one provided by Qt.
-     * \param referer The referer parameter.
-     */
-    inline void get(const QString &url,
-                    QByteArray &responseData,
-                    const QVariant &cookie=QVariant(),
-                    const QString &referer=QString())
-    {
-        get(generateRequest(url, cookie, referer), responseData);
-    }
-
-    /*!
-     * \brief Http post request via given the request. This function works in
-     * stucked way.
-     * \param request The request of the post request.
-     * \param parameter The parameter which will be used when doing the post
-     * request.
-     * \param responseData The response data byte array which will be used to
-     * receive the data from the get request.
-     */
-    void post(QNetworkRequest request,
-              const QByteArray &parameter,
-              QByteArray &responseData);
-
-    /*!
-     * \brief This is a override function.\n
-     * Http post request via given the request. This function works in stucked
-     * way. The url, cookie and referer is used to generate the request header.
-     * The 'parameter' is the parameter when doing the post.
-     * \param url The url of the post target.
-     * \param responseData The response data byte array which will be used to
-     * receive the data from the get request.
-     * \param parameter The parameter which will be used when doing the post
-     * request.
-     * \param cookie The cookie which will be use on the request header. By
-     * default it can leave blank to use the default one provided by Qt.
-     * \param referer The referer parameter.
-     */
-    inline void post(const QString &url,
-                     QByteArray &responseData,
-                     const QByteArray &parameter,
-                     const QVariant &cookie=QVariant(),
-                     const QString &referer=QString())
-    {
-        post(generateRequest(url, cookie, referer), parameter, responseData);
-    }
-
-    /*!
-     * \brief Generate a request object by providing the url, cookie and the
-     * referer.
-     * \param url The request target url.
-     * \param cookie The custom cookie. Default it is null, it will the default
-     * cookie provided by Qt.
-     * \param referer The custom referer. Default it's null, it will use no
-     * referer to this request(Qt default).
-     * \return The request object.
-     */
-    QNetworkRequest generateRequest(const QString &url,
-                                    const QVariant &cookie=QVariant(),
-                                    const QString &referer=QString());
-
-private:
-    QNetworkAccessManager *m_networkManager;
-    KNConnectionHandler m_timeoutHandler;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADER_H

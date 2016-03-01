@@ -357,7 +357,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.cpp \
     plugin/knmusicplugin/sdk/knmusiclrcparser.cpp \
     plugin/knmusicplugin/sdk/knmusiconlinelyrics.cpp \
-    plugin/knmusicplugin/sdk/knmusiclyricsdownloader.cpp \
     plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
@@ -431,7 +430,8 @@ SOURCES += \
     sdk/knnotification.cpp \
     sdk/notification/knnotificationview.cpp \
     sdk/notification/knnotificationdelegate.cpp \
-    sdk/notification/knnotificationwidget.cpp
+    sdk/notification/knnotificationwidget.cpp \
+    sdk/knrestapibase.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -647,7 +647,8 @@ HEADERS += \
     sdk/notification/knnotificationview.h \
     sdk/notification/knnotificationdelegate.h \
     sdk/notification/knnotificationwidget.h \
-    sdk/notification/knnotificationutil.h
+    sdk/notification/knnotificationutil.h \
+    sdk/knrestapibase.h
 
 RESOURCES += \
     resource/res.qrc
