@@ -21,29 +21,46 @@
 
 #include <QWidget>
 
+/*!
+ * \brief The KNClockWheel class provides a waiting animation loop widget for
+ * waiting loop.
+ */
 class KNClockWheel : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNClockWheel widget.
+     * \param parent The parent widget.
+     */
     explicit KNClockWheel(QWidget *parent = 0);
 
 signals:
 
 public slots:
+    /*!
+     * \brief Start the tick animation.
+     */
     void startTick();
+
+    /*!
+     * \brief Pause the tick animation.
+     */
     void pauseTick();
+
+    /*!
+     * \brief Stop the tick animation.
+     */
     void stopTick();
 
 protected:
     /*!
-     * \brief resizeEvent
-     * \param event
+     * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief paintEvent
-     * \param event
+     * \brief Reimplemented from QWidget::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 

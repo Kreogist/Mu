@@ -37,14 +37,90 @@ KNRestApiBase::~KNRestApiBase()
 
 void KNRestApiBase::setWorkingThread(QThread *thread)
 {
-    //Move the children to the thread.
-    m_networkManager->moveToThread(thread);
     //Move the downloader to the thread.
     moveToThread(thread);
+    //Move the children to the thread.
+    m_networkManager->moveToThread(thread);
 }
 
-void KNRestApiBase::get(const QNetworkRequest &request,
-                        QByteArray &responseData)
+int KNRestApiBase::deleteResource(const QNetworkRequest &request)
+{
+    //Clear the access cache.
+    m_networkManager->clearAccessCache();
+    //Generate the quit handler and the reply pointer.
+    QNetworkReply *reply=nullptr;
+    //Generate the waiting loop.
+    QEventLoop stuckWatingLoop;
+    //Launch the network manager.
+    reply=m_networkManager->deleteResource(request);
+    //Check reply pointer.
+    if(reply)
+    {
+        //Link the reply with the wating loop.
+        m_timeoutHandler.append(
+                    connect(reply, &QNetworkReply::finished,
+                            &stuckWatingLoop, &QEventLoop::quit));
+        m_timeoutHandler.append(
+                    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                            &stuckWatingLoop, SLOT(quit())));
+        //Start stucked loop.
+        stuckWatingLoop.exec();
+        //Disconnect all.
+        m_timeoutHandler.disconnectAll();
+        //Get the response code.
+        int responseCode=reply->attribute(
+                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        //Clear the reply.
+        reply->deleteLater();
+        //Complete.
+        return responseCode;
+    }
+    //Failed if no reply.
+    return -1;
+}
+
+int KNRestApiBase::put(const QNetworkRequest &request,
+                       const QByteArray &parameter,
+                       QByteArray &responseData)
+{
+    //Clear the response data array and clear the access cache.
+    responseData.clear();
+    m_networkManager->clearAccessCache();
+    //Generate the quit handler and the reply pointer.
+    QNetworkReply *reply=nullptr;
+    //Generate the waiting loop.
+    QEventLoop stuckWatingLoop;
+    //Launch the network manager.
+    reply=m_networkManager->put(request, parameter);
+    //Check reply pointer.
+    if(reply)
+    {
+        //Link the reply with the wating loop.
+        m_timeoutHandler.append(
+                    connect(reply, &QNetworkReply::finished,
+                            &stuckWatingLoop, &QEventLoop::quit));
+        m_timeoutHandler.append(
+                    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                            &stuckWatingLoop, SLOT(quit())));
+        //Start stucked loop.
+        stuckWatingLoop.exec();
+        //Disconnect all.
+        m_timeoutHandler.disconnectAll();
+        //Get the data from the reply.
+        responseData=reply->readAll();
+        //Get the response code.
+        int responseCode=reply->attribute(
+                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        //Clear the reply.
+        reply->deleteLater();
+        //Complete.
+        return responseCode;
+    }
+    //Failed if no reply.
+    return -1;
+}
+
+int KNRestApiBase::get(const QNetworkRequest &request, QByteArray &responseData)
 {
     //Clear the response data array and clear the access cache.
     responseData.clear();
@@ -69,16 +145,23 @@ void KNRestApiBase::get(const QNetworkRequest &request,
         stuckWatingLoop.exec();
         //Disconnect all.
         m_timeoutHandler.disconnectAll();
+        //Get the response code.
+        int responseCode=reply->attribute(
+                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
         //Get the data from the reply.
         responseData=reply->readAll();
         //Clear the reply.
         reply->deleteLater();
+        //Mission complete.
+        return responseCode;
     }
+    //Failed to connect to server.
+    return -1;
 }
 
-void KNRestApiBase::post(QNetworkRequest request,
-                         const QByteArray &parameter,
-                         QByteArray &responseData)
+int KNRestApiBase::post(QNetworkRequest request,
+                        const QByteArray &parameter,
+                        QByteArray &responseData)
 {
     //Clear the response data array and clear the access cache.
     responseData.clear();
@@ -86,8 +169,6 @@ void KNRestApiBase::post(QNetworkRequest request,
     //Generate the quit handler and the reply pointer.
     QNetworkReply *reply=nullptr;
     //Configure the header of the request.
-    request.setHeader(QNetworkRequest::ContentTypeHeader,
-                      "application/x-www-form-urlencoded");
     request.setHeader(QNetworkRequest::ContentLengthHeader,
                       parameter.size());
     //Generate the waiting loop.
@@ -110,9 +191,16 @@ void KNRestApiBase::post(QNetworkRequest request,
         m_timeoutHandler.disconnectAll();
         //Get the data from the reply.
         responseData=reply->readAll();
+        //Get the response code.
+        int responseCode=reply->attribute(
+                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
         //Clear the reply.
         reply->deleteLater();
+        //Complete.
+        return responseCode;
     }
+    //Failed if no reply.
+    return -1;
 }
 
 QNetworkRequest KNRestApiBase::generateRequest(const QString &url,
@@ -121,6 +209,9 @@ QNetworkRequest KNRestApiBase::generateRequest(const QString &url,
 {
     //Generate the network request, initial it with the url.
     QNetworkRequest request;
+    //Set default content type header.
+    request.setHeader(QNetworkRequest::ContentTypeHeader,
+                      "application/x-www-form-urlencoded");
     //Set url of the request.
     request.setUrl(QUrl(url));
     //If there's cookie, set the cookie.

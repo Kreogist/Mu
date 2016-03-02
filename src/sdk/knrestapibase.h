@@ -46,7 +46,7 @@ public:
      * moveToThread() function, use this function instead.
      * \param thread The working thread of the downloader.
      */
-    void setWorkingThread(QThread *thread);
+    virtual void setWorkingThread(QThread *thread);
 
 signals:
 
@@ -54,14 +54,40 @@ public slots:
 
 protected:
     /*!
+     * \brief Http delete request via given the request. This function works in
+     * stucked way.
+     * \param request The request of the get request.
+     * \return HTTP response code. If we cannot send the post, then it will be
+     * -1.
+     */
+    int deleteResource(const QNetworkRequest &request);
+
+    /*!
+     * \brief Http put request via given the request. This function works in
+     * stucked way.
+     * \param request The request of the get request.
+     * \param parameter The parameter which will be used when doing the get
+     * request.
+     * \param responseData The response data byte array which will be used to
+     * receive the data from the get request.
+     * \return HTTP response code. If we cannot send the post, then it will be
+     * -1.
+     */
+    int put(const QNetworkRequest &request,
+            const QByteArray &parameter,
+            QByteArray &responseData);
+
+    /*!
      * \brief Http get request via given the request. This function works in
      * stucked way.
      * \param request The requst of the get request.
      * \param responseData The response data byte array which will be used to
      * receive the data from the get request.
+     * \return HTTP response code. If we cannot send the get, then it will be
+     * -1.
      */
-    void get(const QNetworkRequest &request,
-             QByteArray &responseData);
+    int get(const QNetworkRequest &request,
+            QByteArray &responseData);
 
     /*!
      * \brief This is a override function.\n
@@ -74,13 +100,15 @@ protected:
      * \param cookie The cookie which will be use on the request header. By
      * default it can leave blank to use the default one provided by Qt.
      * \param referer The referer parameter.
+     * \return HTTP response code. If we cannot send the post, then it will be
+     * -1.
      */
-    inline void get(const QString &url,
-                    QByteArray &responseData,
-                    const QVariant &cookie=QVariant(),
-                    const QString &referer=QString())
+    inline int get(const QString &url,
+                   QByteArray &responseData,
+                   const QVariant &cookie=QVariant(),
+                   const QString &referer=QString())
     {
-        get(generateRequest(url, cookie, referer), responseData);
+        return get(generateRequest(url, cookie, referer), responseData);
     }
 
     /*!
@@ -90,11 +118,13 @@ protected:
      * \param parameter The parameter which will be used when doing the post
      * request.
      * \param responseData The response data byte array which will be used to
-     * receive the data from the get request.
+     * receive the data from the post request.
+     * \return HTTP response code. If we cannot send the post, then it will be
+     * -1.
      */
-    void post(QNetworkRequest request,
-              const QByteArray &parameter,
-              QByteArray &responseData);
+    int post(QNetworkRequest request,
+             const QByteArray &parameter,
+             QByteArray &responseData);
 
     /*!
      * \brief This is a override function.\n
@@ -109,14 +139,18 @@ protected:
      * \param cookie The cookie which will be use on the request header. By
      * default it can leave blank to use the default one provided by Qt.
      * \param referer The referer parameter.
+     * \return HTTP response code. If we cannot send the post, then it will be
+     * -1.
      */
-    inline void post(const QString &url,
+    inline int post(const QString &url,
                      QByteArray &responseData,
                      const QByteArray &parameter,
                      const QVariant &cookie=QVariant(),
                      const QString &referer=QString())
     {
-        post(generateRequest(url, cookie, referer), parameter, responseData);
+        return post(generateRequest(url, cookie, referer),
+                    parameter,
+                    responseData);
     }
 
     /*!

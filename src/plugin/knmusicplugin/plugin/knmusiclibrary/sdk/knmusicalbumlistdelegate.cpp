@@ -31,7 +31,6 @@ using namespace MusicUtil;
 KNMusicAlbumListDelegate::KNMusicAlbumListDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
 {
-
 }
 
 void KNMusicAlbumListDelegate::paint(QPainter *painter,
@@ -116,7 +115,8 @@ QSize KNMusicAlbumListDelegate::sizeHint(const QStyleOptionViewItem &option,
                                         const QModelIndex &index) const
 {
     //Calculate the size hint.
-    return QSize(option.fontMetrics.width(index.data(Qt::DisplayRole).toString())+38,
+    return QSize(option.fontMetrics.width(
+                     index.data(Qt::DisplayRole).toString())+38,
                  25);
 }
 

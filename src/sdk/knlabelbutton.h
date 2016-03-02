@@ -21,36 +21,60 @@
 
 #include <QLabel>
 
+/*!
+ * \brief The KNLabelButton class provides a label which could be clicked. It
+ * extends the QLabel widget and could operate with the mouse click and double
+ * click event.
+ */
 class KNLabelButton : public QLabel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNLabelButton widget with given label.
+     * \param parent The parent widget.
+     */
     explicit KNLabelButton(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When the widget is clicked, this signal will be emitted.
+     */
     void clicked();
+
+    /*!
+     * \brief When the mouse is pressed on this widget, this signal will be
+     * emitted.
+     */
     void pressed();
+
+    /*!
+     * \brief When the pressed mouse released on this widget, this signal will
+     * be emitted.
+     */
     void released();
-    void dblClicked();
+
+    /*!
+     * \brief When user double clicked mouse on this widget, this signal will be
+     * emitted.
+     */
+    void doubleClicked();
 
 public slots:
 
 protected:
     /*!
-     * \brief mousePressEvent
-     * \param event
+     * \brief Reimplemented from QLabel::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief mouseDoubleClickEvent
-     * \param event
+     * \brief Reimplemented from QLabel::mouseDoubleClickEvent().
      */
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief mouseReleaseEvent
-     * \param event
+     * \brief Reimplemented from QLabel::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 

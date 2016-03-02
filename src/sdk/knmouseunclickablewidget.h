@@ -21,10 +21,19 @@
 
 #include <QWidget>
 
+/*!
+ * \brief The KNMouseUnclickableWidget class provides the widget which doesn't
+ * access mouse event.
+ */
 class KNMouseUnclickableWidget : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMouseUnclickableWidget widget with given parent
+     * widget.
+     * \param parent The parent widge pointer.
+     */
     KNMouseUnclickableWidget(QWidget *parent = 0):QWidget(parent){}
 
 signals:

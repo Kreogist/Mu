@@ -122,7 +122,7 @@ void KNMusicCategoryDisplay::setLibraryModel(KNMusicLibraryModel *model)
     m_categoryTreeView->sortByColumn(Name, Qt::AscendingOrder);
 }
 
-void KNMusicCategoryDisplay::scrollToSourceRow(const int &row)
+void KNMusicCategoryDisplay::scrollToSourceRow(int row)
 {
     //Scroll to the source row.
     m_categoryTreeView->scrollToSourceRow(row);

@@ -18,7 +18,9 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QProcess>
+#include <QThread>
 
+#include "account/knaccount.h"
 #include "knutil.h"
 #include "knconfigure.h"
 #include "knconfiguremanager.h"
@@ -30,8 +32,20 @@
 
 #include "knglobal.h"
 
+#include <QDebug>
+
 //Initial the instance pointer to null.
 KNGlobal *KNGlobal::m_instance=nullptr;
+
+KNGlobal::~KNGlobal()
+{
+    //Stop account working thread.
+    m_accountThread->quit();
+    m_accountThread->wait();
+
+    //Remove account system.
+    knAccount->deleteLater();
+}
 
 KNGlobal *KNGlobal::instance()
 {
@@ -111,7 +125,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     #endif
     m_mainWindow(nullptr),
     m_preference(nullptr),
-    m_globalConfigure(nullptr)
+    m_globalConfigure(nullptr),
+    m_accountThread(new QThread(this))
 {
     //Initial the managers.
     //Gerenate the configure manager.
@@ -124,6 +139,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     KNThemeManager::initial(this);
     //Generate the notification manager.
     KNNotification::initial(this);
+    //Generate the account system.
+    KNAccount::initial();
 
     //Initial the infrastructure.
     initialInfrastrcture();
@@ -262,6 +279,11 @@ inline void KNGlobal::initialInfrastrcture()
     //Load the theme in the configure file.
     knTheme->setTheme(m_globalConfigure->data("Theme").toString());
 
+    //Initial the account system.
+    knAccount->setWorkingThread(m_accountThread);
+    //Start account working thread.
+    m_accountThread->start();
+
     //Update infrastructure, update the path of the library directory.
     updateInfrastructure();
 }
@@ -280,11 +302,6 @@ inline void KNGlobal::initialBrushes()
         //Set the texture of the brush.
         m_brushes[i].setTexture(QPixmap(textures[i]));
     }
-}
-
-inline void KNGlobal::initialNotificationCenter()
-{
-    ;
 }
 
 #ifdef Q_OS_UNIX

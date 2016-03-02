@@ -28,6 +28,10 @@ class KNSideShadowWidget;
 class KNMusicTab;
 class KNMusicLibraryTreeView;
 class KNMusicLibraryModel;
+/*!
+ * \brief The KNMusicCategoryDisplay class provides a widget which could display
+ * the detail of one category information of the song library.
+ */
 class KNMusicCategoryDisplay : public QWidget
 {
     Q_OBJECT
@@ -53,8 +57,18 @@ signals:
     void requireHidePlaylistList();
 
 public slots:
+    /*!
+     * \brief Set the library model to the detail tree view.
+     * \param model The library model pointer.
+     */
     void setLibraryModel(KNMusicLibraryModel *model);
-    void scrollToSourceRow(const int &row);
+
+    /*!
+     * \brief Scroll to specific row by given the row of song in the music
+     * library model.
+     * \param row The row of the song in music library model.
+     */
+    void scrollToSourceRow(int row);
     void showNoCategoryItem(const QString &title);
     void setCategoryColumn(const int &column);
     void setCategoryText(const QString &text);

@@ -29,7 +29,6 @@
 #define knGlobal (KNGlobal::instance())
 
 class KNConfigure;
-class KNNotificationModel;
 class KNPreferencePlugin;
 class KNPreferenceItem;
 /*!
@@ -64,6 +63,8 @@ public:
         DullPolish,
         TextureBrushCount
     };
+
+    ~KNGlobal();
 
     /*!
      * \brief Get the singleton instance of class KNGlobal.
@@ -224,7 +225,6 @@ private:
 #ifdef Q_OS_UNIX
     inline void initialDesktopEnvironment();
 #endif
-    inline void initialNotificationCenter();
 
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];
@@ -236,7 +236,7 @@ private:
     KNPreferencePlugin *m_preference;
 
     KNConfigure *m_globalConfigure;
-    KNNotificationModel *m_notificationModel;
+    QThread *m_accountThread;
 };
 
 #endif // KNGLOBAL_H

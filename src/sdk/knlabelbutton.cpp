@@ -38,7 +38,7 @@ void KNLabelButton::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QLabel::mouseDoubleClickEvent(event);
     //Emit the double clicked signal.
-    emit dblClicked();
+    emit doubleClicked();
 }
 
 void KNLabelButton::mouseReleaseEvent(QMouseEvent *event)

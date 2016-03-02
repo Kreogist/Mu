@@ -21,10 +21,19 @@
 
 #include <QStyledItemDelegate>
 
+/*!
+ * \brief The KNMusicAlbumListDelegate class is the item delegate which is used
+ * in the album list view. It will simply shows the data of a song instead of
+ * using a complex tree view.
+ */
 class KNMusicAlbumListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicAlbumListDelegate object.
+     * \param parent The parent object pointer.
+     */
     explicit KNMusicAlbumListDelegate(QWidget *parent = 0);
 
     /*!
@@ -39,10 +48,6 @@ public:
      */
     QSize sizeHint(const QStyleOptionViewItem &option,
                    const QModelIndex &index) const Q_DECL_OVERRIDE;
-
-signals:
-
-public slots:
 };
 
 #endif // KNMUSICALBUMLISTDELEGATE_H
