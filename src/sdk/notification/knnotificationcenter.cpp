@@ -27,6 +27,8 @@
 
 //Kreogist Account
 #include "account/knaccountpanel.h"
+#include "account/knaccountdetails.h"
+#include "account/knaccount.h"
 
 #include "knnotificationview.h"
 #include "knnotification.h"
@@ -75,6 +77,15 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     m_button->setButtonSize(32);
     //Configure the view.
     m_notificationView->setModel(knNotification->model());
+
+    //Link account avatar change signal with button updater.
+    connect(knAccount->accountDetails(), &KNAccountDetails::accountAvatarUpdate,
+            [=]
+            {
+                //Update the notification center button.
+                m_button->setAccountAvatar(
+                            knAccount->accountDetails()->accountAvatar());
+            });
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);

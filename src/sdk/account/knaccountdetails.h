@@ -53,6 +53,7 @@ public:
 
 signals:
     void accountReset();
+    void accountAvatarUpdate();
     void accountUpdate();
 
 public slots:

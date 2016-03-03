@@ -43,8 +43,6 @@
 
 #include "knpluginmanager.h"
 
-#include "account/knaccount.h"
-
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),

@@ -87,7 +87,10 @@ QPixmap KNAccountDetails::accountAvatar() const
 
 void KNAccountDetails::setAccountAvatar(const QPixmap &accountAvatar)
 {
+    //Save the avatar.
     m_accountAvatar = accountAvatar;
+    //Emit the update the avatar signal.
+    emit accountAvatarUpdate();
 }
 
 bool KNAccountDetails::isLogin() const
@@ -108,6 +111,7 @@ void KNAccountDetails::resetAccountDetail()
     m_accountAvatar=QPixmap();
     //Emit reset signal.
     emit accountReset();
+    emit accountAvatarUpdate();
 }
 
 void KNAccountDetails::setIsLogin(bool isLogin)
