@@ -16,39 +16,37 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNACCOUNTPANEL_H
-#define KNACCOUNTPANEL_H
+#ifndef KNACCOUNTWAITINGPANEL_H
+#define KNACCOUNTWAITINGPANEL_H
 
 #include <QWidget>
 
-class KNHWidgetSwitcher;
+class QLabel;
+class KNClockWheel;
 /*!
- * \brief The KNAccountPanel class provide a widget which could manage the
- * Kreogist Account. It could login, register and display the account
- * information.
+ * \brief The KNAccountWaitingPanel class provides a wheel widget for waiting
+ * widget.
  */
-class KNAccountPanel : public QWidget
+class KNAccountWaitingPanel : public QWidget
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNAccountPanel widget.
-     * \param parent The parent widget.s
+     * \brief Construct a KNAccountWaitingPanel widget.
+     * \param parent The parent widget.
      */
-    explicit KNAccountPanel(QWidget *parent = 0);
+    explicit KNAccountWaitingPanel(QWidget *parent = 0);
 
 signals:
 
 public slots:
 
-protected:
-    /*!
-     * \brief Reimplemented from QWidget::resizeEvent().
-     */
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+private slots:
+    void retranslate();
 
 private:
-    KNHWidgetSwitcher *m_switcher;
+    KNClockWheel *m_waitingWheel;
+    QLabel *m_waitingHint;
 };
 
-#endif // KNACCOUNTPANEL_H
+#endif // KNACCOUNTWAITINGPANEL_H

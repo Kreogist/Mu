@@ -15,27 +15,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#ifndef KNACCOUNTPANEL_H
-#define KNACCOUNTPANEL_H
+#ifndef KNACCOUNTLOGINPANEL_H
+#define KNACCOUNTLOGINPANEL_H
 
 #include <QWidget>
 
-class KNHWidgetSwitcher;
+class QLabel;
+class KNLabelLineEdit;
+class KNOpacityAnimeButton;
 /*!
- * \brief The KNAccountPanel class provide a widget which could manage the
- * Kreogist Account. It could login, register and display the account
- * information.
+ * \brief The KNAccountLoginPanel class provides a widget to login to Kreogist
+ * Account. The widget style is SAO style, notice this widget could only be used
+ * in notification center.
  */
-class KNAccountPanel : public QWidget
+class KNAccountLoginPanel : public QWidget
 {
     Q_OBJECT
 public:
     /*!
      * \brief Construct a KNAccountPanel widget.
-     * \param parent The parent widget.s
+     * \param parent The parent widget.
      */
-    explicit KNAccountPanel(QWidget *parent = 0);
+    explicit KNAccountLoginPanel(QWidget *parent = 0);
 
 signals:
 
@@ -43,12 +44,18 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from QWidget::resizeEvent().
+     * \brief Reimplemented from QWidget::hideEvent().
      */
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+
+private slots:
+    void retranslate();
 
 private:
-    KNHWidgetSwitcher *m_switcher;
+    inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
+    QLabel *m_title, *m_subTitle;
+    KNLabelLineEdit *m_username, *m_password;
+    KNOpacityAnimeButton *m_login, *m_others;
 };
 
-#endif // KNACCOUNTPANEL_H
+#endif // KNACCOUNTLOGINPANEL_H

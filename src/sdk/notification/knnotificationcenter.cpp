@@ -101,8 +101,8 @@ QWidget *KNNotificationCenter::indicator()
 
 int KNNotificationCenter::heightHint(int maximum)
 {
-    return qMin(maximum, m_notificationView->heightHint()+10) +
-            m_accountPanel->sizeHint().height();
+    return qMin(maximum, m_notificationView->heightHint()+10 +
+                m_accountPanel->height());
 }
 
 void KNNotificationCenter::showEvent(QShowEvent *event)

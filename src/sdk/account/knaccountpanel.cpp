@@ -15,41 +15,38 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QBoxLayout>
+//Account widget.
+#include "account/knaccountloginpanel.h"
+#include "account/knaccountregisterpanel.h"
+#include "account/knaccountwaitingpanel.h"
 
-#include "knlabellineedit.h"
-#include "knlocalemanager.h"
+#include "knhwidgetswitcher.h"
 
 #include "knaccountpanel.h"
 
 KNAccountPanel::KNAccountPanel(QWidget *parent) :
     QWidget(parent),
-    m_username(new KNLabelLineEdit(this)),
-    m_password(new KNLabelLineEdit(this))
+    m_switcher(new KNHWidgetSwitcher(this))
 {
-    //Configure the user name line edit.
-    m_username->setMinimumLightness(0xC0);
-    m_username->setMediumLightness(0xE0);
-    //Configure password line edit.
-    m_password->setMinimumLightness(0xC0);
-    m_password->setMediumLightness(0xE0);
-    m_password->setEchoMode(QLineEdit::Password);
-
-    //Initial the box layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    setLayout(mainLayout);
-    //Add widget to layout
-    mainLayout->addWidget(m_username);
-    mainLayout->addWidget(m_password);
-
-    //Link the retranslator.
-    knI18n->link(this, &KNAccountPanel::retranslate);
-    retranslate();
+    //Set property.
+    setFixedHeight(270);
+    //Login the panel.
+    KNAccountLoginPanel *loginPanel=new KNAccountLoginPanel(this);
+    //Register panel.
+    KNAccountRegisterPanel *generatePanel=new KNAccountRegisterPanel(this);
+    //Wating panel.
+    KNAccountWaitingPanel *waitingPanel=new KNAccountWaitingPanel(this);
+    //Add widget to switcher.
+    m_switcher->addWidget(waitingPanel);
+    m_switcher->addWidget(generatePanel);
+    m_switcher->addWidget(loginPanel);
 }
 
-void KNAccountPanel::retranslate()
+void KNAccountPanel::resizeEvent(QResizeEvent *event)
 {
-    m_username->setPlaceholderText(tr("User Name/E-mail"));
-    m_password->setPlaceholderText(tr("Password"));
+    //Resize the widget.
+    QWidget::resizeEvent(event);
+    //Resize the switcher,
+    m_switcher->resize(size());
 }
 

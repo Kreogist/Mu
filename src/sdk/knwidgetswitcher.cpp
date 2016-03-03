@@ -179,6 +179,8 @@ void KNWidgetSwitcher::setCurrentIndex(const int &currentIndex)
     setWidgetVisible(m_currentIndex, true);
     //Raise the current widget.
     currentWidget->raise();
+    //Emit start to move signal.
+    emit moveStart();
     //Start animation.
     m_movingAnimationGroup->start();
 }
@@ -230,6 +232,8 @@ int KNWidgetSwitcher::outWidgetIndex() const
 
 void KNWidgetSwitcher::onActionMovingFinished()
 {
+    //Emit move finished signal.
+    emit moveEnd();
     //Check out whether widget index is invalid.
     if(m_outWidgetIndex<0 || (m_outWidgetIndex>m_widgets.size()))
     {

@@ -94,6 +94,15 @@ public:
     QSize sizeHint() const;
 
 signals:
+    /*!
+     * \brief Start to move the widget.
+     */
+    void moveStart();
+
+    /*!
+     * \brief Widget moved complete.
+     */
+    void moveEnd();
 
 public slots:
     /*!

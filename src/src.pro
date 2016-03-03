@@ -434,7 +434,10 @@ SOURCES += \
     sdk/knrestapibase.cpp \
     sdk/account/knaccount.cpp \
     sdk/account/knaccountdetails.cpp \
-    sdk/account/knaccountpanel.cpp
+    sdk/account/knaccountloginpanel.cpp \
+    sdk/account/knaccountpanel.cpp \
+    sdk/account/knaccountregisterpanel.cpp \
+    sdk/account/knaccountwaitingpanel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -654,7 +657,10 @@ HEADERS += \
     sdk/knrestapibase.h \
     sdk/account/knaccount.h \
     sdk/account/knaccountdetails.h \
-    sdk/account/knaccountpanel.h
+    sdk/account/knaccountloginpanel.h \
+    sdk/account/knaccountpanel.h \
+    sdk/account/knaccountregisterpanel.h \
+    sdk/account/knaccountwaitingpanel.h
 
 RESOURCES += \
     resource/res.qrc
