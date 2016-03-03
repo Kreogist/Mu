@@ -433,7 +433,8 @@ SOURCES += \
     sdk/notification/knnotificationwidget.cpp \
     sdk/knrestapibase.cpp \
     sdk/account/knaccount.cpp \
-    sdk/account/knaccountdetails.cpp
+    sdk/account/knaccountdetails.cpp \
+    sdk/account/knaccountpanel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -652,7 +653,8 @@ HEADERS += \
     sdk/notification/knnotificationutil.h \
     sdk/knrestapibase.h \
     sdk/account/knaccount.h \
-    sdk/account/knaccountdetails.h
+    sdk/account/knaccountdetails.h \
+    sdk/account/knaccountpanel.h
 
 RESOURCES += \
     resource/res.qrc
