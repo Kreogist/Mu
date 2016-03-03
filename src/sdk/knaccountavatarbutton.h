@@ -15,24 +15,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNNOTIFICATIONBUTTON_H
-#define KNNOTIFICATIONBUTTON_H
+#ifndef KNACCOUNTAVATARBUTTON_H
+#define KNACCOUNTAVATARBUTTON_H
 
-#include "knimagelabel.h"
+#include <QWidget>
 
 /*!
- * \brief The KNNotificationButton class provides the notification center
+ * \brief The KNRoundedImageButton class provides the notification center
  * customized button.
  */
-class KNNotificationButton : public KNImageLabel
+class KNAccountAvatarButton : public QWidget
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct the KNNotificationButton class.
+     * \brief Construct the KNRoundedImageButton class.
      * \param parent The parent widget.
      */
-    explicit KNNotificationButton(QWidget *parent = 0);
+    explicit KNAccountAvatarButton(QWidget *parent = 0);
 
     /*!
      * \brief Get the current login state.
@@ -59,20 +59,31 @@ public slots:
      */
     void resetAccountAvatar();
 
+    /*!
+     * \brief Set the button size.
+     * \param buttonSize The avatar button size.
+     */
+    void setButtonSize(int buttonSize);
+
 protected:
     /*!
      * \brief Reimplemented from KNImageLabel::mousePressEvent().
      */
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNImageLabel::mouseReleaseEvent().
      */
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNImageLabel::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    QPixmap m_anonymousPixmap;
+    QPixmap m_anonymousPixmap, m_scaledPixmap;
     bool m_pressed, m_isLogin;
 };
 
-#endif // KNNOTIFICATIONBUTTON_H
+#endif // KNACCOUNTAVATARBUTTON_H

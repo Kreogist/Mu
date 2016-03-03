@@ -424,7 +424,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp \
     sdk/knfilenamelineedit.cpp \
     sdk/knfilenamemessagebox.cpp \
-    sdk/notification/knnotificationbutton.cpp \
     sdk/notification/knnotificationmodel.cpp \
     sdk/notification/knnotificationcenter.cpp \
     sdk/knnotification.cpp \
@@ -437,7 +436,9 @@ SOURCES += \
     sdk/account/knaccountloginpanel.cpp \
     sdk/account/knaccountpanel.cpp \
     sdk/account/knaccountregisterpanel.cpp \
-    sdk/account/knaccountwaitingpanel.cpp
+    sdk/account/knaccountwaitingpanel.cpp \
+    sdk/account/knaccountdetailpanel.cpp \
+    sdk/knaccountavatarbutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -646,7 +647,6 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h \
     sdk/knfilenamelineedit.h \
     sdk/knfilenamemessagebox.h \
-    sdk/notification/knnotificationbutton.h \
     sdk/notification/knnotificationmodel.h \
     sdk/notification/knnotificationcenter.h \
     sdk/knnotification.h \
@@ -660,7 +660,9 @@ HEADERS += \
     sdk/account/knaccountloginpanel.h \
     sdk/account/knaccountpanel.h \
     sdk/account/knaccountregisterpanel.h \
-    sdk/account/knaccountwaitingpanel.h
+    sdk/account/knaccountwaitingpanel.h \
+    sdk/account/knaccountdetailpanel.h \
+    sdk/knaccountavatarbutton.h
 
 RESOURCES += \
     resource/res.qrc

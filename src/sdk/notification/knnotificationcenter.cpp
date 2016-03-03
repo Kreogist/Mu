@@ -23,11 +23,11 @@
 //Dependencies.
 #include "knlocalemanager.h"
 #include "knimagelabel.h"
+#include "knaccountavatarbutton.h"
 
 //Kreogist Account
 #include "account/knaccountpanel.h"
 
-#include "knnotificationbutton.h"
 #include "knnotificationview.h"
 #include "knnotification.h"
 #include "knnotificationmodel.h"
@@ -38,7 +38,7 @@
 KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     QFrame(parent),
     m_notificationIndicator(new QLabel(this)),
-    m_button(new KNNotificationButton(this)),
+    m_button(new KNAccountAvatarButton(this)),
     m_notificationView(new KNNotificationView(this)),
     m_notificationWidget(new KNNotificationWidget(this)),
     m_accountPanel(new KNAccountPanel(this))
@@ -72,7 +72,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
 
     //Configure the button.
     m_button->setCursor(Qt::PointingHandCursor);
-    m_button->setFixedSize(32, 32);
+    m_button->setButtonSize(32);
     //Configure the view.
     m_notificationView->setModel(knNotification->model());
 
@@ -89,7 +89,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     retranslate();
 }
 
-KNNotificationButton *KNNotificationCenter::headerButton()
+KNAccountAvatarButton *KNNotificationCenter::headerButton()
 {
     return m_button;
 }

@@ -16,9 +16,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 //Account widget.
-#include "account/knaccountloginpanel.h"
-#include "account/knaccountregisterpanel.h"
-#include "account/knaccountwaitingpanel.h"
+#include "knaccountloginpanel.h"
+#include "knaccountregisterpanel.h"
+#include "knaccountwaitingpanel.h"
+#include "knaccountdetailpanel.h"
 
 #include "knhwidgetswitcher.h"
 
@@ -36,10 +37,13 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     KNAccountRegisterPanel *generatePanel=new KNAccountRegisterPanel(this);
     //Wating panel.
     KNAccountWaitingPanel *waitingPanel=new KNAccountWaitingPanel(this);
+    //Detail panel.
+    KNAccountDetailPanel *detailPanel=new KNAccountDetailPanel(this);
     //Add widget to switcher.
-    m_switcher->addWidget(waitingPanel);
+    m_switcher->addWidget(detailPanel);
     m_switcher->addWidget(generatePanel);
     m_switcher->addWidget(loginPanel);
+    m_switcher->addWidget(waitingPanel);
 }
 
 void KNAccountPanel::resizeEvent(QResizeEvent *event)

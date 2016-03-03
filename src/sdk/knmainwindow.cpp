@@ -33,10 +33,10 @@
 #include "knthememanager.h"
 #include "knmainwindowcontainer.h"
 #include "knnotification.h"
+#include "knaccountavatarbutton.h"
 
 //Notifications
 #include "notification/knnotificationcenter.h"
-#include "notification/knnotificationbutton.h"
 #include "notification/knnotificationwidget.h"
 
 //Ports
@@ -79,7 +79,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_notificationCenter->hide();
     //Link the notification center button to show slots.
     connect(m_notificationCenter->headerButton(),
-            &KNNotificationButton::requireShowNotificationCenter,
+            &KNAccountAvatarButton::requireShowNotificationCenter,
             this, &KNMainWindow::onActionShowNotificationCenter);
     //Configure the notification widget.
     KNNotificationWidget *notificationWidget=

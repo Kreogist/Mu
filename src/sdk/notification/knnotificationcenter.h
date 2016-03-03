@@ -23,7 +23,7 @@
 
 class QLabel;
 class KNAccountPanel;
-class KNNotificationButton;
+class KNAccountAvatarButton;
 class KNNotificationView;
 class KNNotificationWidget;
 /*!
@@ -44,7 +44,7 @@ public:
      * \brief Get the notification header button.
      * \return The button widget pointer.
      */
-    KNNotificationButton *headerButton();
+    KNAccountAvatarButton *headerButton();
 
     /*!
      * \brief Get the indicator widget of the notification center.
@@ -89,7 +89,7 @@ private slots:
 
 private:
     QLabel *m_notificationIndicator;
-    KNNotificationButton *m_button;
+    KNAccountAvatarButton *m_button;
     KNNotificationView *m_notificationView;
     KNNotificationWidget *m_notificationWidget;
     KNAccountPanel *m_accountPanel;
