@@ -20,8 +20,13 @@
 #include <QBoxLayout>
 #include <QPainter>
 
+//Dependencies.
 #include "knlocalemanager.h"
 #include "knimagelabel.h"
+
+//Kreogist Account
+#include "account/knaccountpanel.h"
+
 #include "knnotificationbutton.h"
 #include "knnotificationview.h"
 #include "knnotification.h"
@@ -35,7 +40,8 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     m_notificationIndicator(new QLabel(this)),
     m_button(new KNNotificationButton(this)),
     m_notificationView(new KNNotificationView(this)),
-    m_notificationWidget(new KNNotificationWidget(this))
+    m_notificationWidget(new KNNotificationWidget(this)),
+    m_accountPanel(new KNAccountPanel(this))
 {
     setObjectName("NotificationCenter");
     //Set properties.
@@ -75,7 +81,8 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     mainLayout->setContentsMargins(5, 5, 5, 5);
     setLayout(mainLayout);
     //Add widget to layout.
-    mainLayout->addWidget(m_notificationView);
+    mainLayout->addWidget(m_accountPanel);
+    mainLayout->addWidget(m_notificationView, 1);
 
     //Link retranslate.
     knI18n->link(this, &KNNotificationCenter::retranslate);
@@ -94,7 +101,8 @@ QWidget *KNNotificationCenter::indicator()
 
 int KNNotificationCenter::heightHint(int maximum)
 {
-    return qMin(maximum, m_notificationView->heightHint()+10);
+    return qMin(maximum, m_notificationView->heightHint()+10) +
+            m_accountPanel->sizeHint().height();
 }
 
 void KNNotificationCenter::showEvent(QShowEvent *event)

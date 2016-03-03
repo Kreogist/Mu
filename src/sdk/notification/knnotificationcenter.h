@@ -22,6 +22,7 @@
 #include <QFrame>
 
 class QLabel;
+class KNAccountPanel;
 class KNNotificationButton;
 class KNNotificationView;
 class KNNotificationWidget;
@@ -91,6 +92,7 @@ private:
     KNNotificationButton *m_button;
     KNNotificationView *m_notificationView;
     KNNotificationWidget *m_notificationWidget;
+    KNAccountPanel *m_accountPanel;
 };
 
 #endif // KNNOTIFICATIONCENTER_H

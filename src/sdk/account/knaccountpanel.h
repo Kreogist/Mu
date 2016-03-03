@@ -40,6 +40,9 @@ signals:
 
 public slots:
 
+private slots:
+    void retranslate();
+
 private:
     KNLabelLineEdit *m_username, *m_password;
 };
