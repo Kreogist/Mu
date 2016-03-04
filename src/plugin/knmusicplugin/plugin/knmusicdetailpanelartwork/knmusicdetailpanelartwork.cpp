@@ -45,7 +45,7 @@ KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
                 QIcon(":/plugin/music/detaildialog/tab_icon/albumart.png"));
 
     //Configure the label.
-    m_albumArt->setFixedSize(ArtworkSize, ArtworkSize);
+    m_albumArt->setMaximumSize(ArtworkSize, ArtworkSize);
 
     //Initial the box layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -108,14 +108,16 @@ void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item,
     m_operations[SetAlbumArt]->setVisible(
                 m_currentItem.detailInfo.trackFilePath.isEmpty());
     //Check the cover image is valid or not.
-    m_albumArt->setPixmap(
-                ((m_currentItem.coverImage.isNull())?
-                    knMusicGlobal->noAlbumArt():
-                    QPixmap::fromImage(m_currentItem.coverImage)).scaled(
-                    ArtworkSize,
-                    ArtworkSize,
-                    Qt::KeepAspectRatio,
-                    Qt::SmoothTransformation));
+    QPixmap &&scaledPixmap=
+            ((m_currentItem.coverImage.isNull())?
+                 knMusicGlobal->noAlbumArt():
+                 QPixmap::fromImage(m_currentItem.coverImage)).scaled(
+                ArtworkSize,
+                ArtworkSize,
+                Qt::KeepAspectRatio,
+                Qt::SmoothTransformation);
+    m_albumArt->setPixmap(scaledPixmap);
+    m_albumArt->resize(scaledPixmap.size());
 }
 
 void KNMusicDetailPanelArtwork::retranslate()
