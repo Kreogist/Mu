@@ -98,6 +98,8 @@ bool KNAccount::generateAccount(const QString &userName,
         m_accountDetails->setIsLogin(true);
         //Emit register success signal.
         emit generateSuccess();
+        //Update the account information.
+        refreshAccountInfo();
         //Mission complete.
         return true;
     }
@@ -284,9 +286,9 @@ bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
     //Generate response data.
     QByteArray responseData;
     //PUT the json data.
-    if(put(updateRequest,
-           QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
-           responseData)!=200)
+    if(accountPut(updateRequest,
+                  QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
+                  responseData)!=200)
     {
         //Failed to update info.
         return false;
@@ -303,6 +305,92 @@ bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
     updateDetails(QJsonDocument::fromJson(responseData).object());
     //Mission complete.
     return true;
+}
+
+bool KNAccount::refreshAccountInfo()
+{
+    //Check login state.
+    if(m_accountDetails->isLogin())
+    {
+        //Login first.
+        return false;
+    }
+    //Prepare the response data cache.
+    QByteArray responseData;
+    //Get the account information.
+    if(get(generateKreogistRequest("classes/_User/" +
+                                   m_accountDetails->objectId()),
+           responseData)!=200)
+    {
+        //Failed to fetch account information.
+        return false;
+    }
+    //Update account detail information.
+    updateDetails(QJsonDocument::fromJson(responseData).object());
+    //Mission complete.
+    return true;
+}
+
+inline bool KNAccount::updateTokenSession()
+{
+    //Generate the login request.
+    QNetworkRequest loginRequest=generateKreogistRequest("login");
+    //Construct the json struct.
+    //Try to login with encrypted password first.
+    QUrlQuery loginQuery;
+    //Insert user name.
+    loginQuery.addQueryItem("username", m_accountDetails->cacheUserName());
+    loginQuery.addQueryItem("password", m_accountDetails->cachePassword());
+    //Insert login query to login url.
+    QUrl loginUrl=loginRequest.url();
+    loginUrl.setQuery(loginQuery);
+    loginRequest.setUrl(loginUrl);
+    //Get the login result.
+    //Generate the response cache.
+    QByteArray responseCache;
+    //Send the JSON data to Kreogist Cloud.
+    if(get(loginRequest, responseCache)!=200)
+    {
+        //Failed to fetch the new token session.
+        return false;
+    }
+    //Check the response data.
+    QJsonObject loginData=QJsonDocument::fromJson(responseCache).object();
+    //Save the session token data.
+    m_accountDetails->setSessionToken(
+                loginData.value("sessionToken").toString());
+    //Update the account details.
+    updateAccountInfo(loginData);
+    //Update success.
+    return true;
+}
+
+inline int KNAccount::accountPut(QNetworkRequest &request,
+                                 const QByteArray &parameter,
+                                 QByteArray &responseData)
+{
+    //Do original put.
+    int result=put(request, parameter, responseData);
+    //Check whether the result is failed.
+    if(result==404)
+    {
+        //Check the response data code.
+        //Code 206 means: User cannot be altered without sessionToken Error.
+        //We have to relogin with the cache data.
+        if(QJsonDocument::fromJson(responseData).object().value("code").toInt()
+                ==206 && updateTokenSession())
+        {
+            //Update request session token.
+            request.setRawHeader("X-Bmob-Session-Token",
+                                 m_accountDetails->sessionToken().toUtf8());
+            //Give back the new data.
+            return put(request, parameter, responseData);
+        }
+        //Give the original.
+        return result;
+    }
+    //Or else we will simply give back the result.
+    return result;
 }
 
 inline QNetworkRequest KNAccount::generateKreogistRequest(const QString &url)
@@ -326,8 +414,9 @@ inline QString KNAccount::accessPassword(const QString &rawPassword)
     //Use MD5 and SHA-3 to combine the access password.
     return QCryptographicHash::hash(rawPassword.toUtf8(),
                                     QCryptographicHash::Sha3_512).toBase64()
-            .append(QCryptographicHash::hash(rawPassword.toUtf8(),
-                                             QCryptographicHash::Md5).toBase64());
+            .append(QCryptographicHash::hash(
+                        rawPassword.toUtf8(),
+                        QCryptographicHash::Md5).toBase64());
 }
 
 inline void KNAccount::updateDetails(const QJsonObject &userInfo)

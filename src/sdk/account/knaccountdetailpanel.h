@@ -23,6 +23,7 @@
 
 class QLabel;
 class KNAccountAvatarButton;
+class KNAccountDetails;
 class KNLabelButton;
 class KNOpacityAnimeButton;
 /*!
@@ -45,6 +46,8 @@ public slots:
 
 private slots:
     void retranslate();
+    void onActionDetailUpdate();
+    void onActionAvatarUpdate();
 
 private:
     enum ControlButtons
@@ -66,6 +69,7 @@ private:
     KNLabelButton *m_labelButton[LabelControlButtonCount];
     KNAccountAvatarButton *m_avatarImage;
     QLabel *m_nickName;
+    KNAccountDetails *m_accountDetails;
 };
 
 #endif // KNACCOUNTDETAILPANEL_H

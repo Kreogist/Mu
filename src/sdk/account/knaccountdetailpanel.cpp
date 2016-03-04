@@ -21,14 +21,18 @@
 #include "knlocalemanager.h"
 #include "knlabelbutton.h"
 #include "knopacityanimebutton.h"
+
 #include "knaccountavatarbutton.h"
+#include "knaccountdetails.h"
+#include "knaccount.h"
 
 #include "knaccountdetailpanel.h"
 
 KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     QWidget(parent),
     m_avatarImage(new KNAccountAvatarButton(this)),
-    m_nickName(new QLabel(this))
+    m_nickName(new QLabel(this)),
+    m_accountDetails(knAccount->accountDetails())
 {
     //Configure the avatar image.
     m_avatarImage->setButtonSize(100);
@@ -58,6 +62,11 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
         //Set the label button.
         m_labelButton[i]->setPalette(labelButtonPal);
     }
+    //Link detail requests.
+    connect(m_accountDetails, &KNAccountDetails::accountAvatarUpdate,
+            this, &KNAccountDetailPanel::onActionAvatarUpdate);
+    connect(m_accountDetails, &KNAccountDetails::accountUpdate,
+            this, &KNAccountDetailPanel::onActionDetailUpdate);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -104,6 +113,18 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
 void KNAccountDetailPanel::retranslate()
 {
     m_labelButton[ChangePassword]->setText(tr("Change password"));
+}
+
+void KNAccountDetailPanel::onActionDetailUpdate()
+{
+    //Set account display name
+    m_nickName->setText(m_accountDetails->displayName());
+}
+
+void KNAccountDetailPanel::onActionAvatarUpdate()
+{
+    //Get avatar from account detail.
+    m_avatarImage->setAccountAvatar(m_accountDetails->accountAvatar());
 }
 
 inline KNOpacityAnimeButton *KNAccountDetailPanel::generateButton()

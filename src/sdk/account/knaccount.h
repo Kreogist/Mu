@@ -118,7 +118,18 @@ public slots:
      */
     bool updateAccountInfo(const QJsonObject &userInfo);
 
+    /*!
+     * \brief Get the account information from server, update the detail info.
+     * \return If we could update the account info successfully, return true.
+     */
+    bool refreshAccountInfo();
+
 private:
+    inline bool updateTokenSession();
+    inline int accountPut(QNetworkRequest &request,
+                          const QByteArray &parameter,
+                          QByteArray &responseData);
+
     inline QNetworkRequest generateKreogistRequest(const QString &url);
     inline QString accessPassword(const QString &rawPassword);
     inline void updateDetails(const QJsonObject &userInfo);
