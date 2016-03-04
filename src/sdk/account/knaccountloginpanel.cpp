@@ -18,6 +18,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+#include "sao/knsaosubmenu.h"
 #include "knimagelabel.h"
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
@@ -34,7 +35,8 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     m_username(new KNLabelLineEdit(this)),
     m_password(new KNLabelLineEdit(this)),
     m_login(generateButton("://public/ok.png")),
-    m_others(generateButton("://public/others.png"))
+    m_others(generateButton("://public/others.png")),
+    m_actionMenu(new KNSaoSubMenu(m_others))
 {
     //Set properties.
     setFixedHeight(270);
@@ -51,6 +53,25 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     m_password->setMinimumLightness(0xC0);
     m_password->setMediumLightness(0xE0);
     m_password->setEchoMode(QLineEdit::Password);
+    //Initial the action.
+    for(int i=0; i<AccountActionCount; ++i)
+    {
+        //Initial the action.
+        m_menuActions[i]=new QAction(this);
+        //Add action to menu.
+        m_actionMenu->addAction(m_menuActions[i]);
+    }
+    //Set the icon to the actions.
+    m_menuActions[RegisterAccount]->setIcon(QIcon("://saomenuicons/user.png"));
+    m_menuActions[ForgetPassword]->setIcon(
+                QIcon("://saomenuicons/question.png"));
+    //Link the other button.
+    connect(m_others, &KNOpacityAnimeButton::clicked,
+            [=]
+            {
+                //Show the action menu.
+                m_actionMenu->exec();
+            });
 
     //Initial the box layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -101,9 +122,12 @@ void KNAccountLoginPanel::retranslate()
     //Update label.
     m_title->setText(tr("Sign in"));
     m_subTitle->setText(tr("with Your Kreogist Account"));
-    //Set the
+    //Set the place holder text.
     m_username->setPlaceholderText(tr("Username/E-mail"));
     m_password->setPlaceholderText(tr("Password"));
+    //Initial the actions.
+    m_menuActions[RegisterAccount]->setText(tr("Create an account"));
+    m_menuActions[ForgetPassword]->setText(tr("Forget password?"));
 }
 
 inline KNOpacityAnimeButton *KNAccountLoginPanel::generateButton(
@@ -117,4 +141,3 @@ inline KNOpacityAnimeButton *KNAccountLoginPanel::generateButton(
     //Give back the button.
     return button;
 }
-

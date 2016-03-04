@@ -22,19 +22,26 @@
 #include <QBitmap>
 #include <QDesktopWidget>
 #include <QLabel>
+#include <QPainter>
 
 #include "knsaostyle.h"
 
 #include "knsaosubmenu.h"
 
 #include <QDebug>
+#define TopHeight 20
+#define CenterStart 100
+#define CenterEnd 130
+#define BottomHeight 217
 
 KNSaoSubMenu::KNSaoSubMenu(QWidget *parent) :
     QMenu(parent),
+    m_rawIndicator(QPixmap("://public/indicator.png")),
     #ifndef Q_OS_MACX
     m_start(new QPropertyAnimation(this, "geometry", this)),
     #endif
-    m_indicator(new QWidget)
+    m_indicator(new QWidget),
+    m_indicatorLabel(new QLabel(m_indicator))
 {
     //Initial the object name.
     setObjectName("SAOSubMenu");
@@ -56,20 +63,13 @@ KNSaoSubMenu::KNSaoSubMenu(QWidget *parent) :
     pal.setColor(QPalette::Window, QColor(0,0,0,0));
     pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
     pal.setColor(QPalette::AlternateBase, QColor(0,0,0,0));
-    pal.setColor(QPalette::ToolTipBase, QColor(255,255,255,0));
-    pal.setColor(QPalette::ToolTipText, QColor(255,255,255,0));
-    pal.setColor(QPalette::Button, QColor(255,255,255,0));
-    pal.setColor(QPalette::ButtonText, QColor(255,255,255,0));
+    pal.setColor(QPalette::ToolTipBase, QColor(0,0,0,0));
+    pal.setColor(QPalette::ToolTipText, QColor(0,0,0,0));
+    pal.setColor(QPalette::Button, QColor(0,0,0,0));
+    pal.setColor(QPalette::ButtonText, QColor(0,0,0,0));
     m_indicator->setPalette(pal);
     //Generate the image label.
-    QLabel *indicatorLabel=new QLabel(m_indicator);
-    indicatorLabel->setPalette(pal);
-    QPixmap indicatorPixmap=QPixmap("://public/indicator.png");
-    indicatorLabel->setPixmap(indicatorPixmap);
-#ifdef Q_OS_WIN32
-    m_indicator->setMask(indicatorPixmap.mask());
-#endif
-    m_indicator->setFixedSize(indicatorPixmap.size());
+    m_indicatorLabel->setPalette(pal);
     m_indicator->hide();
 
 #ifndef Q_OS_MACX
@@ -90,6 +90,8 @@ void KNSaoSubMenu::showEvent(QShowEvent *event)
     //Stop the animation.
     m_start->stop();
 #endif
+    //Repaint the indicator.
+    renderingIndicator();
     //Move and show the indicator.
     int menuX=QCursor::pos().x()+m_indicator->width(),
         centerPosition=QCursor::pos().y();
@@ -168,3 +170,79 @@ void KNSaoSubMenu::hideEvent(QHideEvent *event)
     QMenu::hideEvent(event);
 }
 
+inline void KNSaoSubMenu::renderingIndicator()
+{
+    //Get the indicator width.
+    int indicatorWidth=m_rawIndicator.width();
+    //Rendering the indicator pixmap.
+    QPixmap indicatorPixmap(indicatorWidth,
+                            qMax(qMin(m_rawIndicator.height(),
+                                      height()),
+                                 63));
+    //Check indicator pixmap height.
+    if(indicatorPixmap.height()==m_rawIndicator.height())
+    {
+        indicatorPixmap=m_rawIndicator;
+    }
+    else
+    {
+        //Fill up the indicator pixmap.
+        indicatorPixmap.fill(QColor(0, 0, 0, 0));
+        //Rerendering the indicator pixmap.
+        QPainter painter(&indicatorPixmap);
+        //Paint the top to the indicator.
+        painter.drawPixmap(QRect(0, 0, indicatorWidth, TopHeight),
+                           m_rawIndicator,
+                           QRect(0, 0, indicatorWidth, TopHeight));
+        //Calculate the indicator filler height.
+        int fillerHeight=(indicatorPixmap.height()-63)>>1;
+        //Paint the filler.
+        painter.drawPixmap(QRect(0, TopHeight, indicatorWidth, fillerHeight),
+                           m_rawIndicator,
+                           QRect(0,
+                                 TopHeight,
+                                 indicatorWidth,
+                                 CenterStart-TopHeight));
+        //Paint the center.
+        painter.drawPixmap(QRect(0,
+                                 TopHeight+fillerHeight,
+                                 indicatorWidth,
+                                 CenterEnd - CenterStart),
+                           m_rawIndicator,
+                           QRect(0,
+                                 CenterStart,
+                                 indicatorWidth,
+                                 CenterEnd - CenterStart));
+        //Paint the filler II.
+        painter.drawPixmap(QRect(0,
+                                 TopHeight+fillerHeight+(CenterEnd-CenterStart),
+                                 indicatorWidth,
+                                 fillerHeight),
+                           m_rawIndicator,
+                           QRect(0,
+                                 CenterEnd,
+                                 indicatorWidth,
+                                 BottomHeight-CenterEnd));
+        //Paint the bottom.
+        painter.drawPixmap(QRect(0,
+                                 TopHeight+(fillerHeight<<1)+
+                                 (CenterEnd-CenterStart),
+                                 indicatorWidth,
+                                 indicatorPixmap.height()-BottomHeight),
+                           m_rawIndicator,
+                           QRect(0,
+                                 BottomHeight,
+                                 indicatorWidth,
+                                 indicatorPixmap.height()-BottomHeight));
+        //Finish painting.
+        painter.end();
+    }
+
+    //Check indicator pixmap height.
+    m_indicatorLabel->setPixmap(indicatorPixmap);
+    //Change the mask of the indicator.
+#ifdef Q_OS_WIN
+    m_indicator->setMask(indicatorPixmap.mask());
+#endif
+    m_indicator->setFixedSize(indicatorPixmap.size());
+}

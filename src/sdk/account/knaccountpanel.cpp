@@ -40,10 +40,10 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     //Detail panel.
     KNAccountDetailPanel *detailPanel=new KNAccountDetailPanel(this);
     //Add widget to switcher.
-    m_switcher->addWidget(detailPanel);
-    m_switcher->addWidget(generatePanel);
     m_switcher->addWidget(loginPanel);
+    m_switcher->addWidget(generatePanel);
     m_switcher->addWidget(waitingPanel);
+    m_switcher->addWidget(detailPanel);
 }
 
 void KNAccountPanel::resizeEvent(QResizeEvent *event)

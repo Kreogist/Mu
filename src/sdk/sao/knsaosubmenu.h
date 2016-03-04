@@ -21,6 +21,7 @@
 
 #include <QMenu>
 
+class QLabel;
 class QPropertyAnimation;
 /*!
  * \brief The KNSaoSubMenu class provides a Sword Art Online style sub menu.
@@ -52,10 +53,13 @@ protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    inline void renderingIndicator();
+    QPixmap m_rawIndicator;
 #ifndef Q_OS_MACX
     QPropertyAnimation *m_start;
 #endif
     QWidget *m_indicator;
+    QLabel *m_indicatorLabel;
 };
 
 #endif // KNSAOSUBMENU_H

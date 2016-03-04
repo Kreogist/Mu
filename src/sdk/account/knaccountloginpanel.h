@@ -21,6 +21,7 @@
 #include <QWidget>
 
 class QLabel;
+class KNSaoSubMenu;
 class KNLabelLineEdit;
 class KNOpacityAnimeButton;
 /*!
@@ -52,10 +53,18 @@ private slots:
     void retranslate();
 
 private:
+    enum AccountActions
+    {
+        RegisterAccount,
+        ForgetPassword,
+        AccountActionCount
+    };
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
+    QAction *m_menuActions[AccountActionCount];
     QLabel *m_title, *m_subTitle;
     KNLabelLineEdit *m_username, *m_password;
     KNOpacityAnimeButton *m_login, *m_others;
+    KNSaoSubMenu *m_actionMenu;
 };
 
 #endif // KNACCOUNTLOGINPANEL_H

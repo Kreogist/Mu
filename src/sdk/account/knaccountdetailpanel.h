@@ -21,7 +21,10 @@
 
 #include <QWidget>
 
+class QLabel;
 class KNAccountAvatarButton;
+class KNLabelButton;
+class KNOpacityAnimeButton;
 /*!
  * \brief The KNAccountDetailPanel class provides the detail of Kreogist Account
  * information.
@@ -40,8 +43,29 @@ signals:
 
 public slots:
 
+private slots:
+    void retranslate();
+
 private:
+    enum ControlButtons
+    {
+        EditInformation,
+        Logout,
+        ControlButtonCount
+    };
+    enum LabelControlButtons
+    {
+        ChangePassword,
+        LabelControlButtonCount
+    };
+
+    inline KNOpacityAnimeButton *generateButton();
+    inline KNLabelButton *generateLabelButton();
+
+    KNOpacityAnimeButton *m_controls[ControlButtonCount];
+    KNLabelButton *m_labelButton[LabelControlButtonCount];
     KNAccountAvatarButton *m_avatarImage;
+    QLabel *m_nickName;
 };
 
 #endif // KNACCOUNTDETAILPANEL_H

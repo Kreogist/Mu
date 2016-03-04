@@ -48,6 +48,14 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    enum AccountPanelIndex
+    {
+        LoginPanel,
+        RegisterPanel,
+        WaitingPanel,
+        DetailPanel
+    };
+
     KNHWidgetSwitcher *m_switcher;
 };
 

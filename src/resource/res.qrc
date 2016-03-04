@@ -52,6 +52,10 @@
         <file>public/notification_default.png</file>
         <file>public/Kreogist.png</file>
         <file>public/others.png</file>
+        <file>public/account_logout.png</file>
+        <file>public/account_edit_info.png</file>
+        <file>saomenuicons/question.png</file>
+        <file>saomenuicons/user.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>
