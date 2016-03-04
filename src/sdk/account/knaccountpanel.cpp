@@ -143,11 +143,13 @@ void KNAccountPanel::onActionLoginSuccess()
     m_loginPanel->clearInputData();
 }
 
-void KNAccountPanel::onActionLoginFailed()
+void KNAccountPanel::onActionLoginFailed(int errorCode)
 {
     //Stop ticking.
     m_waitingPanel->stopTicking();
     //Show the login panel again.
     m_switcher->setCurrentWidget(LoginPanel);
+    //Set the error code to register panel.
+    m_loginPanel->onActionLoginError(errorCode);
 }
 

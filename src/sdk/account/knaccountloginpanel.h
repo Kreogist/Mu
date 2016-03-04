@@ -18,6 +18,8 @@
 #ifndef KNACCOUNTLOGINPANEL_H
 #define KNACCOUNTLOGINPANEL_H
 
+#include "account/knaccountutil.h"
+
 #include <QWidget>
 
 class QLabel;
@@ -68,6 +70,13 @@ public slots:
      */
     void clearInputData();
 
+    /*!
+     * \brief When there's error occur, show the error.
+     * \param errorCode The error code. It should be in the enumeration
+     * KNAccountUtil::LoginErrorCode.
+     */
+    void onActionLoginError(int errorCode);
+
 private slots:
     void retranslate();
     void onActionForgetPassword();
@@ -82,6 +91,9 @@ private:
     };
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
     QAction *m_menuActions[AccountActionCount];
+    QPalette m_errorPal;
+    QString m_subTitleText,
+            m_errorDescription[KNAccountUtil::LoginErrorCodeCount];
     QLabel *m_title, *m_subTitle;
     KNLabelLineEdit *m_username, *m_password;
     KNOpacityAnimeButton *m_login, *m_others;

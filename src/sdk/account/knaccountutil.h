@@ -29,10 +29,17 @@ class KNAccountUtil
 public:
     enum RegisterErrorCode
     {
-        UnknownError,
+        UnknownRegisterError,
         UserNameAlreadyTaken,
         EmailAlreadyTaken,
         RegisterErrorCodeCount
+    };
+
+    enum LoginErrorCode
+    {
+        LoginConnectionError,
+        InfoIncorrect,
+        LoginErrorCodeCount
     };
 
 private:

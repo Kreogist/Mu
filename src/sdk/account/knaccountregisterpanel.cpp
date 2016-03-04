@@ -153,7 +153,7 @@ void KNAccountRegisterPanel::retranslate()
     //Set the check box.
     m_agreeLicense->setText(tr("I agree to the Terms of Service."));
     //Set error description.
-    m_errorDescription[KNAccountUtil::UnknownError]=
+    m_errorDescription[KNAccountUtil::UnknownRegisterError]=
             tr("Unknown error. Please check your Internet connection.");
     m_errorDescription[KNAccountUtil::UserNameAlreadyTaken]=
             tr("Username is already taken, try another one.");

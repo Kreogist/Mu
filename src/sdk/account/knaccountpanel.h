@@ -77,7 +77,7 @@ private slots:
 
     void onActionLogin();
     void onActionLoginSuccess();
-    void onActionLoginFailed();
+    void onActionLoginFailed(int errorCode);
 
 private:
     enum AccountPanelIndex

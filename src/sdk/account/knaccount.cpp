@@ -62,7 +62,6 @@ bool KNAccount::generateAccount(const QString &userName,
                 QJsonDocument(registerData).toJson(QJsonDocument::Compact),
                 responseCache)!=201 || responseCache.isEmpty())
         {
-            qDebug()<<responseCache;
             //Emit the register error.
             switch(QJsonDocument::fromJson(responseCache).object().value(
                        "code").toInt())
@@ -74,7 +73,7 @@ bool KNAccount::generateAccount(const QString &userName,
                 emit generateFailed(KNAccountUtil::EmailAlreadyTaken);
                 break;
             default:
-                emit generateFailed(KNAccountUtil::UnknownError);
+                emit generateFailed(KNAccountUtil::UnknownRegisterError);
                 break;
             }
             //Failed to post then failed.
@@ -82,7 +81,6 @@ bool KNAccount::generateAccount(const QString &userName,
         }
         //Check the response data.
         registerData=QJsonDocument::fromJson(responseCache).object();
-        qDebug()<<"Fuck off?";
     }
     //Check register response data.
     if(registerData.contains("objectId"))
@@ -98,15 +96,13 @@ bool KNAccount::generateAccount(const QString &userName,
                     registerData.value("sessionToken").toString());
         //Set the login.
         m_accountDetails->setIsLogin(true);
-        qDebug()<<"Success?";
         //Emit register success signal.
         emit generateSuccess();
         //Mission complete.
         return true;
     }
-    qDebug()<<"Total Failed?";
     //Emit failed for unknown reason.
-    emit generateFailed(KNAccountUtil::UnknownError);
+    emit generateFailed(KNAccountUtil::UnknownRegisterError);
     //Or else failed to login.
     return false;
 }
@@ -118,7 +114,7 @@ bool KNAccount::login(const QString &userName,
     if(m_accountDetails->isLogin())
     {
         //Emit failed signal.
-        emit loginFailed();
+        emit loginFailed(KNAccountUtil::InfoIncorrect);
         //You cannot login two account at the same time.
         return false;
     }
@@ -159,7 +155,7 @@ bool KNAccount::login(const QString &userName,
         if(get(loginRequest, responseCache)!=200)
         {
             //Emit failed signal.
-            emit loginFailed();
+            emit loginFailed(KNAccountUtil::InfoIncorrect);
             //Failed to login, password is wrong.
             return false;
         }
@@ -185,7 +181,7 @@ bool KNAccount::login(const QString &userName,
                passwordUpdateResponse)!=200)
         {
             //Emit failed signal.
-            emit loginFailed();
+            emit loginFailed(KNAccountUtil::InfoIncorrect);
             //Failed to change the password, failed to login.
             return false;
         }

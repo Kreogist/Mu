@@ -59,8 +59,9 @@ signals:
 
     /*!
      * \brief When login failed, this signal will be emitted.
+     * \param errorCode The login error code.
      */
-    void loginFailed();
+    void loginFailed(int errorCode);
 
     /*!
      * \brief Generate request has been successfully done.
@@ -69,7 +70,7 @@ signals:
 
     /*!
      * \brief Generate request failed, and the error code will show the reason.
-     * \param errorCode The generate error code.
+     * \param errorCode The register error code.
      */
     void generateFailed(int errorCode);
 

@@ -46,6 +46,8 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     titleFont.setPixelSize(18);
     m_title->setFont(titleFont);
     m_subTitle->setAlignment(Qt::AlignCenter);
+    m_errorPal=palette();
+    m_errorPal.setColor(QPalette::WindowText, QColor(0x9a, 0x25, 0x38));
     //Configure the user name line edit.
     m_username->setMinimumLightness(0xC0);
     m_username->setMediumLightness(0xE0);
@@ -132,11 +134,36 @@ void KNAccountLoginPanel::clearInputData()
     m_password->clear();
 }
 
+void KNAccountLoginPanel::onActionLoginError(int errorCode)
+{
+    //Show the only reason for login error.
+    m_subTitle->setText(m_errorDescription[errorCode]);
+    m_subTitle->setPalette(m_errorPal);
+    //Check error code.
+    switch(errorCode)
+    {
+    case KNAccountUtil::InfoIncorrect:
+        //Select all of the user name.
+        m_username->selectAll();
+        m_password->selectAll();
+        m_username->setFocus(Qt::MouseFocusReason);
+        break;
+    default:
+        break;
+    }
+}
+
 void KNAccountLoginPanel::retranslate()
 {
+    //Update title text.
+    m_errorDescription[KNAccountUtil::LoginConnectionError]=
+            tr("Check your Internet connection.");
+    m_errorDescription[KNAccountUtil::InfoIncorrect]=
+            tr("Username or password incorrect.");
+    m_subTitleText=tr("with Your Kreogist Account");
     //Update label.
     m_title->setText(tr("Sign in"));
-    m_subTitle->setText(tr("with Your Kreogist Account"));
+    m_subTitle->setText(m_subTitleText);
     //Set the place holder text.
     m_username->setPlaceholderText(tr("Username/E-mail"));
     m_password->setPlaceholderText(tr("Password"));
@@ -152,6 +179,10 @@ void KNAccountLoginPanel::onActionForgetPassword()
 
 void KNAccountLoginPanel::onActionCheckInput()
 {
+    //Reset the sub title.
+    m_subTitle->setText(m_subTitleText);
+    m_subTitle->setPalette(palette());
+    //Reset the login visible.
     m_login->setVisible(!(m_username->text().isEmpty() ||
                           m_password->text().isEmpty()));
 }
