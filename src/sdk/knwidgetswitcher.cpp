@@ -187,8 +187,19 @@ void KNWidgetSwitcher::setCurrentIndex(const int &currentIndex)
 
 void KNWidgetSwitcher::setCurrentWidget(int currentIndex)
 {
-    //Change the current
-    ;
+    //Ensure the current index is in the range.
+    Q_ASSERT(currentIndex>-1 && currentIndex<m_widgets.size());
+    //Change the current index widget to be the target widget without animation.
+    //Hide the widget.
+    setWidgetVisible(m_currentIndex, false);
+    //Reset the out widget index to invalid.
+    m_outWidgetIndex=-1;
+    //Save current index.
+    m_currentIndex=currentIndex;
+    //Show the widget.
+    setWidgetVisible(m_currentIndex, true);
+    //Move the current widget.
+    m_widgets.at(m_currentIndex)->setGeometry(rect());
 }
 
 void KNWidgetSwitcher::resizeEvent(QResizeEvent *event)

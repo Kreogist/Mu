@@ -52,6 +52,26 @@ public:
     KNAccountDetails *accountDetails();
 
 signals:
+    /*!
+     * \brief When login success, this signal will be emitted.
+     */
+    void loginSuccess();
+
+    /*!
+     * \brief When login failed, this signal will be emitted.
+     */
+    void loginFailed();
+
+    /*!
+     * \brief Generate request has been successfully done.
+     */
+    void generateSuccess();
+
+    /*!
+     * \brief Generate request failed, and the error code will show the reason.
+     * \param errorCode The generate error code.
+     */
+    void generateFailed(int errorCode);
 
 public slots:
     /*!
@@ -89,9 +109,11 @@ public slots:
     void logout();
 
     /*!
-     * \brief updateAccountInfo
-     * \param userInfo
-     * \return
+     * \brief Update the account information.
+     * \param userInfo All the new information about the account stored in JSON
+     * format.
+     * \return If we could update the account data successfully, then return
+     * true.
      */
     bool updateAccountInfo(const QJsonObject &userInfo);
 

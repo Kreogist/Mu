@@ -662,7 +662,8 @@ HEADERS += \
     sdk/account/knaccountregisterpanel.h \
     sdk/account/knaccountwaitingpanel.h \
     sdk/account/knaccountdetailpanel.h \
-    sdk/knaccountavatarbutton.h
+    sdk/knaccountavatarbutton.h \
+    sdk/account/knaccountutil.h
 
 RESOURCES += \
     resource/res.qrc

@@ -39,23 +39,39 @@ public:
      */
     explicit KNAccountLoginPanel(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the username.
+     * \return Username line edit box text.
+     */
+    QString username() const;
+
+    /*!
+     * \brief Get the password.
+     * \return Password line edit box text.
+     */
+    QString password() const;
+
 signals:
     /*!
      * \brief Ask to show the register panel.
      */
     void requireRegister();
 
-public slots:
-
-protected:
     /*!
-     * \brief Reimplemented from QWidget::hideEvent().
+     * \brief Ask to do the login.
      */
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+    void requireLogin();
+
+public slots:
+    /*!
+     * \brief Clear all the data of the text box.
+     */
+    void clearInputData();
 
 private slots:
     void retranslate();
     void onActionForgetPassword();
+    void onActionCheckInput();
 
 private:
     enum AccountActions

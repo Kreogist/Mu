@@ -16,46 +16,29 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNACCOUNTWAITINGPANEL_H
-#define KNACCOUNTWAITINGPANEL_H
+#ifndef KNACCOUNTUTIL_H
+#define KNACCOUNTUTIL_H
 
-#include <QWidget>
-
-class QLabel;
-class KNClockWheel;
 /*!
- * \brief The KNAccountWaitingPanel class provides a wheel widget for waiting
- * widget.
+ * \brief The KNAccountUtil class is used to provide several account
+ * enumerations, especially for error codes. It will also provides some public
+ * static functions for account.
  */
-class KNAccountWaitingPanel : public QWidget
+class KNAccountUtil
 {
-    Q_OBJECT
 public:
-    /*!
-     * \brief Construct a KNAccountWaitingPanel widget.
-     * \param parent The parent widget.
-     */
-    explicit KNAccountWaitingPanel(QWidget *parent = 0);
-
-signals:
-
-public slots:
-    /*!
-     * \brief Let the ticking ring start ticking.
-     */
-    void startTicking();
-
-    /*!
-     * \brief Stop the ticking ring.
-     */
-    void stopTicking();
-
-private slots:
-    void retranslate();
+    enum RegisterErrorCode
+    {
+        UnknownError,
+        UserNameAlreadyTaken,
+        EmailAlreadyTaken,
+        RegisterErrorCodeCount
+    };
 
 private:
-    KNClockWheel *m_waitingWheel;
-    QLabel *m_waitingHint;
+    KNAccountUtil();
+    KNAccountUtil(const KNAccountUtil &);
+    KNAccountUtil(KNAccountUtil &&);
 };
 
-#endif // KNACCOUNTWAITINGPANEL_H
+#endif // KNACCOUNTUTIL_H

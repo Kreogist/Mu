@@ -49,10 +49,16 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     //Configure the user name line edit.
     m_username->setMinimumLightness(0xC0);
     m_username->setMediumLightness(0xE0);
+    connect(m_username, &KNLabelLineEdit::textChanged,
+            this, &KNAccountLoginPanel::onActionCheckInput);
     //Configure password line edit.
     m_password->setMinimumLightness(0xC0);
     m_password->setMediumLightness(0xE0);
     m_password->setEchoMode(QLineEdit::Password);
+    connect(m_password, &KNLabelLineEdit::textChanged,
+            this, &KNAccountLoginPanel::onActionCheckInput);
+    //Configure the button.
+    m_login->hide();
     //Initial the action.
     for(int i=0; i<AccountActionCount; ++i)
     {
@@ -69,6 +75,8 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     connect(m_menuActions[RegisterAccount], SIGNAL(triggered(bool)),
             this, SIGNAL(requireRegister()));
     //Link the other button.
+    connect(m_login, &KNOpacityAnimeButton::clicked,
+            this, &KNAccountLoginPanel::requireLogin);
     connect(m_others, &KNOpacityAnimeButton::clicked,
             [=]
             {
@@ -100,22 +108,26 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     mainLayout->addLayout(buttonLayout);
     mainLayout->addStretch();
     //Add all buttons.
-    buttonLayout->addStretch();
     buttonLayout->addWidget(m_login);
-    buttonLayout->addSpacing(45);
     buttonLayout->addWidget(m_others);
-    buttonLayout->addStretch();
 
     //Link the retranslator.
     knI18n->link(this, &KNAccountLoginPanel::retranslate);
     retranslate();
 }
 
-void KNAccountLoginPanel::hideEvent(QHideEvent *event)
+QString KNAccountLoginPanel::username() const
 {
-    //Hide the widget first.
-    QWidget::hideEvent(event);
-    //CLear the data.
+    return m_username->text();
+}
+
+QString KNAccountLoginPanel::password() const
+{
+    return m_password->text();
+}
+
+void KNAccountLoginPanel::clearInputData()
+{
     m_username->clear();
     m_password->clear();
 }
@@ -136,6 +148,12 @@ void KNAccountLoginPanel::retranslate()
 void KNAccountLoginPanel::onActionForgetPassword()
 {
     ;
+}
+
+void KNAccountLoginPanel::onActionCheckInput()
+{
+    m_login->setVisible(!(m_username->text().isEmpty() ||
+                          m_password->text().isEmpty()));
 }
 
 inline KNOpacityAnimeButton *KNAccountLoginPanel::generateButton(

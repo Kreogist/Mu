@@ -19,6 +19,8 @@
 #ifndef KNACCOUNTREGISTERPANEL_H
 #define KNACCOUNTREGISTERPANEL_H
 
+#include "knaccountutil.h"
+
 #include <QWidget>
 
 class QLabel;
@@ -41,25 +43,63 @@ public:
      */
     explicit KNAccountRegisterPanel(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the username line edit box text.
+     * \return The user preferred username.
+     */
+    QString username() const;
+
+    /*!
+     * \brief Get the password line edit box text.
+     * \return The user preferred password.
+     */
+    QString password() const;
+
+    /*!
+     * \brief Get the E-mail line edit box text.
+     * \return The user preferred E-mail address.
+     */
+    QString email() const;
+
 signals:
+    /*!
+     * \brief Ask account to register the user with the current information.
+     */
+    void requireRegister();
+
+    /*!
+     * \brief Cancel the register process, ask to show login panel.
+     */
+    void cancelRegister();
 
 public slots:
-
-protected:
     /*!
-     * \brief Reimplemented from QWidget::hideEvent().
+     * \brief Clear all the input data of register panel.
      */
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+    void clearInputData();
+
+    /*!
+     * \brief When error is happened, this slot should be called to handle the
+     * error.
+     * \param errorCode The error code. It should be in the enumeration
+     * KNAccountUtil::RegisterErrorCode.
+     */
+    void onActionRegisterError(int errorCode);
 
 private slots:
     void retranslate();
+    void onActionCancel();
+    void onActionCheckValid();
 
 private:
+    inline bool isInformationValid();
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
-    QLabel *m_title, *m_emailHint, *m_passwordHint;
+    QString m_errorDescription[KNAccountUtil::RegisterErrorCodeCount];
+    QLabel *m_title, *m_emailHint, *m_passwordHint, *m_errorHint;
     QCheckBox *m_agreeLicense;
     KNLabelLineEdit *m_username, *m_password, *m_email;
-    KNOpacityAnimeButton *m_login, *m_cancel;
+    KNOpacityAnimeButton *m_okay, *m_cancel;
+    int m_errorCode;
 };
 
 #endif // KNACCOUNTREGISTERPANEL_H

@@ -29,6 +29,8 @@
 
 #include "knaccountpanel.h"
 
+#include <QDebug>
+
 KNAccountPanel::KNAccountPanel(QWidget *parent) :
     QWidget(parent),
     m_switcher(new KNHWidgetSwitcher(this)),
@@ -39,26 +41,34 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
 {
     //Set property.
     setFixedHeight(270);
+    //Link current panel to account backend.
+    connect(this, &KNAccountPanel::requireLogin,
+            knAccount, &KNAccount::login);
+    connect(this, &KNAccountPanel::requireGenerate,
+            knAccount, &KNAccount::generateAccount);
+    connect(knAccount, &KNAccount::generateFailed,
+            this, &KNAccountPanel::onActionRegisterFailed);
+    connect(knAccount, &KNAccount::generateSuccess,
+            this, &KNAccountPanel::onActionRegisterSuccess);
+    connect(knAccount, &KNAccount::loginFailed,
+            this, &KNAccountPanel::onActionLoginFailed);
+    connect(knAccount, &KNAccount::loginSuccess,
+            this, &KNAccountPanel::onActionLoginSuccess);
     //Link panel signal.
     connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
             this, &KNAccountPanel::onActionShowRegister);
+    connect(m_loginPanel, &KNAccountLoginPanel::requireLogin,
+            this, &KNAccountPanel::onActionLogin);
+
+    connect(m_generatePanel, &KNAccountRegisterPanel::requireRegister,
+            this, &KNAccountPanel::onActionRegister);
+    connect(m_generatePanel, &KNAccountRegisterPanel::cancelRegister,
+            this, &KNAccountPanel::onActionShowLogin);
     //Add widget to switcher.
     m_switcher->addWidget(m_loginPanel);
     m_switcher->addWidget(m_generatePanel);
     m_switcher->addWidget(m_waitingPanel);
     m_switcher->addWidget(m_detailPanel);
-}
-
-void KNAccountPanel::showEvent(QShowEvent *event)
-{
-    //Check whether account is login.
-    if(m_switcher->currentIndex()==RegisterPanel)
-    {
-        //Reset the switcher to
-        m_switcher->setCurrentIndex(LoginPanel);
-    }
-    //Show the panel.
-    QWidget::showEvent(event);
 }
 
 void KNAccountPanel::resizeEvent(QResizeEvent *event)
@@ -73,5 +83,71 @@ void KNAccountPanel::onActionShowRegister()
 {
     //Switch the widget selector to register panel.
     m_switcher->setCurrentIndex(RegisterPanel);
+}
+
+void KNAccountPanel::onActionShowLogin()
+{
+    //Switch the widget selector to login panel.
+    m_switcher->setCurrentIndex(LoginPanel);
+}
+
+void KNAccountPanel::onActionRegister()
+{
+    //Switch to waiting panel.
+    m_switcher->setCurrentWidget(WaitingPanel);
+    //Launch waiting panel animation.
+    m_waitingPanel->startTicking();
+    //Emit register signal.
+    emit requireGenerate(m_generatePanel->username(),
+                         m_generatePanel->password(),
+                         m_generatePanel->email());
+}
+
+void KNAccountPanel::onActionRegisterSuccess()
+{
+    //Stop ticking.
+    m_waitingPanel->stopTicking();
+    //Show the user detail panel.
+    m_switcher->setCurrentWidget(DetailPanel);
+    //Clear the register panel.
+    m_generatePanel->clearInputData();
+}
+
+void KNAccountPanel::onActionRegisterFailed(int errorCode)
+{
+    //Stop ticking.
+    m_waitingPanel->stopTicking();
+    //Show the register panel again.
+    m_switcher->setCurrentWidget(RegisterPanel);
+    //Set the error code to register panel.
+    m_generatePanel->onActionRegisterError(errorCode);
+}
+
+void KNAccountPanel::onActionLogin()
+{
+    //Switch to waiting panel.
+    m_switcher->setCurrentWidget(WaitingPanel);
+    //Launch waiting panel animation.
+    m_waitingPanel->startTicking();
+    //Emit login signal.
+    emit requireLogin(m_loginPanel->username(), m_loginPanel->password());
+}
+
+void KNAccountPanel::onActionLoginSuccess()
+{
+    //Stop ticking.
+    m_waitingPanel->stopTicking();
+    //Show the user detail panel.
+    m_switcher->setCurrentIndex(DetailPanel);
+    //Clear the login panel.
+    m_loginPanel->clearInputData();
+}
+
+void KNAccountPanel::onActionLoginFailed()
+{
+    //Stop ticking.
+    m_waitingPanel->stopTicking();
+    //Show the login panel again.
+    m_switcher->setCurrentWidget(LoginPanel);
 }
 

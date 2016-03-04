@@ -22,6 +22,7 @@
 #include <QUrlQuery>
 
 #include "knaccountdetails.h"
+#include "knaccountutil.h"
 
 #include "knaccount.h"
 
@@ -61,11 +62,27 @@ bool KNAccount::generateAccount(const QString &userName,
                 QJsonDocument(registerData).toJson(QJsonDocument::Compact),
                 responseCache)!=201 || responseCache.isEmpty())
         {
+            qDebug()<<responseCache;
+            //Emit the register error.
+            switch(QJsonDocument::fromJson(responseCache).object().value(
+                       "code").toInt())
+            {
+            case 202:
+                emit generateFailed(KNAccountUtil::UserNameAlreadyTaken);
+                break;
+            case 203:
+                emit generateFailed(KNAccountUtil::EmailAlreadyTaken);
+                break;
+            default:
+                emit generateFailed(KNAccountUtil::UnknownError);
+                break;
+            }
             //Failed to post then failed.
             return false;
         }
         //Check the response data.
         registerData=QJsonDocument::fromJson(responseCache).object();
+        qDebug()<<"Fuck off?";
     }
     //Check register response data.
     if(registerData.contains("objectId"))
@@ -81,9 +98,15 @@ bool KNAccount::generateAccount(const QString &userName,
                     registerData.value("sessionToken").toString());
         //Set the login.
         m_accountDetails->setIsLogin(true);
+        qDebug()<<"Success?";
+        //Emit register success signal.
+        emit generateSuccess();
         //Mission complete.
         return true;
     }
+    qDebug()<<"Total Failed?";
+    //Emit failed for unknown reason.
+    emit generateFailed(KNAccountUtil::UnknownError);
     //Or else failed to login.
     return false;
 }
@@ -94,6 +117,8 @@ bool KNAccount::login(const QString &userName,
     //Check out whether user is already login.
     if(m_accountDetails->isLogin())
     {
+        //Emit failed signal.
+        emit loginFailed();
         //You cannot login two account at the same time.
         return false;
     }
@@ -133,6 +158,8 @@ bool KNAccount::login(const QString &userName,
         //Retry the get data from Kreogist Cloud.
         if(get(loginRequest, responseCache)!=200)
         {
+            //Emit failed signal.
+            emit loginFailed();
             //Failed to login, password is wrong.
             return false;
         }
@@ -157,6 +184,8 @@ bool KNAccount::login(const QString &userName,
                QJsonDocument(passwordSetter).toJson(QJsonDocument::Compact),
                passwordUpdateResponse)!=200)
         {
+            //Emit failed signal.
+            emit loginFailed();
             //Failed to change the password, failed to login.
             return false;
         }
@@ -176,6 +205,8 @@ bool KNAccount::login(const QString &userName,
     m_accountDetails->setIsLogin(true);
     //Update the user information.
     updateDetails(loginData);
+    //Emit success signal.
+    emit loginSuccess();
     //Successfully login.
     return true;
 }

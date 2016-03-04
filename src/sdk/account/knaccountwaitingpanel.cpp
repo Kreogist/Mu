@@ -48,6 +48,18 @@ KNAccountWaitingPanel::KNAccountWaitingPanel(QWidget *parent) :
     retranslate();
 }
 
+void KNAccountWaitingPanel::startTicking()
+{
+    //Start to tick.
+    m_waitingWheel->startTick();
+}
+
+void KNAccountWaitingPanel::stopTicking()
+{
+    //Stop tick.
+    m_waitingWheel->stopTick();
+}
+
 void KNAccountWaitingPanel::retranslate()
 {
     //Update the waiting hint.

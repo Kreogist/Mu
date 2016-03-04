@@ -42,15 +42,26 @@ public:
     explicit KNAccountPanel(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief Ask the Kreogist Account to login with specific username and
+     * password.
+     * \param username Username or email of Kreogist Account.
+     * \param password The raw password.
+     */
+    void requireLogin(QString username, QString password);
+
+    /*!
+     * \brief Ask the Kreogist Account to register a new account information
+     * with given parameters.
+     * \param username The prefer username.
+     * \param password User password.
+     * \param email User preferred E-mail account.
+     */
+    void requireGenerate(QString username, QString password, QString email);
 
 public slots:
 
 protected:
-    /*!
-     * \brief Reimplemented from QWidget::showEvent().
-     */
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
-
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
      */
@@ -58,6 +69,15 @@ protected:
 
 private slots:
     void onActionShowRegister();
+    void onActionShowLogin();
+
+    void onActionRegister();
+    void onActionRegisterSuccess();
+    void onActionRegisterFailed(int errorCode);
+
+    void onActionLogin();
+    void onActionLoginSuccess();
+    void onActionLoginFailed();
 
 private:
     enum AccountPanelIndex
