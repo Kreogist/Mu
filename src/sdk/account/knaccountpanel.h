@@ -22,6 +22,10 @@
 #include <QWidget>
 
 class KNHWidgetSwitcher;
+class KNAccountLoginPanel;
+class KNAccountRegisterPanel;
+class KNAccountWaitingPanel;
+class KNAccountDetailPanel;
 /*!
  * \brief The KNAccountPanel class provide a widget which could manage the
  * Kreogist Account. It could login, register and display the account
@@ -43,9 +47,17 @@ public slots:
 
 protected:
     /*!
+     * \brief Reimplemented from QWidget::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QWidget::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+private slots:
+    void onActionShowRegister();
 
 private:
     enum AccountPanelIndex
@@ -57,6 +69,14 @@ private:
     };
 
     KNHWidgetSwitcher *m_switcher;
+    //Login the panel.
+    KNAccountLoginPanel *m_loginPanel;
+    //Register panel.
+    KNAccountRegisterPanel *m_generatePanel;
+    //Wating panel.
+    KNAccountWaitingPanel *m_waitingPanel;
+    //Detail panel.
+    KNAccountDetailPanel *m_detailPanel;
 };
 
 #endif // KNACCOUNTPANEL_H

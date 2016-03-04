@@ -15,6 +15,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+//
+#include "knaccount.h"
+#include "knaccountdetails.h"
+
 //Account widget.
 #include "knaccountloginpanel.h"
 #include "knaccountregisterpanel.h"
@@ -27,23 +31,34 @@
 
 KNAccountPanel::KNAccountPanel(QWidget *parent) :
     QWidget(parent),
-    m_switcher(new KNHWidgetSwitcher(this))
+    m_switcher(new KNHWidgetSwitcher(this)),
+    m_loginPanel(new KNAccountLoginPanel(this)),
+    m_generatePanel(new KNAccountRegisterPanel(this)),
+    m_waitingPanel(new KNAccountWaitingPanel(this)),
+    m_detailPanel(new KNAccountDetailPanel(this))
 {
     //Set property.
     setFixedHeight(270);
-    //Login the panel.
-    KNAccountLoginPanel *loginPanel=new KNAccountLoginPanel(this);
-    //Register panel.
-    KNAccountRegisterPanel *generatePanel=new KNAccountRegisterPanel(this);
-    //Wating panel.
-    KNAccountWaitingPanel *waitingPanel=new KNAccountWaitingPanel(this);
-    //Detail panel.
-    KNAccountDetailPanel *detailPanel=new KNAccountDetailPanel(this);
+    //Link panel signal.
+    connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
+            this, &KNAccountPanel::onActionShowRegister);
     //Add widget to switcher.
-    m_switcher->addWidget(loginPanel);
-    m_switcher->addWidget(generatePanel);
-    m_switcher->addWidget(waitingPanel);
-    m_switcher->addWidget(detailPanel);
+    m_switcher->addWidget(m_loginPanel);
+    m_switcher->addWidget(m_generatePanel);
+    m_switcher->addWidget(m_waitingPanel);
+    m_switcher->addWidget(m_detailPanel);
+}
+
+void KNAccountPanel::showEvent(QShowEvent *event)
+{
+    //Check whether account is login.
+    if(m_switcher->currentIndex()==RegisterPanel)
+    {
+        //Reset the switcher to
+        m_switcher->setCurrentIndex(LoginPanel);
+    }
+    //Show the panel.
+    QWidget::showEvent(event);
 }
 
 void KNAccountPanel::resizeEvent(QResizeEvent *event)
@@ -52,5 +67,11 @@ void KNAccountPanel::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
     //Resize the switcher,
     m_switcher->resize(size());
+}
+
+void KNAccountPanel::onActionShowRegister()
+{
+    //Switch the widget selector to register panel.
+    m_switcher->setCurrentIndex(RegisterPanel);
 }
 

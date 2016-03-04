@@ -111,6 +111,8 @@ public slots:
      */
     void setCurrentIndex(const int &currentIndex);
 
+    void setCurrentWidget(int currentIndex);
+
 protected:
     /*!
      * \brief In this function, the widget should update the start and final

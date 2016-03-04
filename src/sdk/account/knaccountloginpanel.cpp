@@ -65,6 +65,9 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     m_menuActions[RegisterAccount]->setIcon(QIcon("://saomenuicons/user.png"));
     m_menuActions[ForgetPassword]->setIcon(
                 QIcon("://saomenuicons/question.png"));
+    //Link the actions.
+    connect(m_menuActions[RegisterAccount], SIGNAL(triggered(bool)),
+            this, SIGNAL(requireRegister()));
     //Link the other button.
     connect(m_others, &KNOpacityAnimeButton::clicked,
             [=]
@@ -128,6 +131,11 @@ void KNAccountLoginPanel::retranslate()
     //Initial the actions.
     m_menuActions[RegisterAccount]->setText(tr("Create an account"));
     m_menuActions[ForgetPassword]->setText(tr("Forget password?"));
+}
+
+void KNAccountLoginPanel::onActionForgetPassword()
+{
+    ;
 }
 
 inline KNOpacityAnimeButton *KNAccountLoginPanel::generateButton(

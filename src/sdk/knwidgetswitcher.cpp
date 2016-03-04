@@ -185,6 +185,12 @@ void KNWidgetSwitcher::setCurrentIndex(const int &currentIndex)
     m_movingAnimationGroup->start();
 }
 
+void KNWidgetSwitcher::setCurrentWidget(int currentIndex)
+{
+    //Change the current
+    ;
+}
+
 void KNWidgetSwitcher::resizeEvent(QResizeEvent *event)
 {
     //Do original resize.

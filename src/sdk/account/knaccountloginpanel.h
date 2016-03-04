@@ -40,6 +40,10 @@ public:
     explicit KNAccountLoginPanel(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief Ask to show the register panel.
+     */
+    void requireRegister();
 
 public slots:
 
@@ -51,6 +55,7 @@ protected:
 
 private slots:
     void retranslate();
+    void onActionForgetPassword();
 
 private:
     enum AccountActions
