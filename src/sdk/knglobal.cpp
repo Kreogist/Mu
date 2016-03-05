@@ -115,7 +115,43 @@ KNConfigure *KNGlobal::userConfigure()
 
 void KNGlobal::retranslate()
 {
+    //Update storeage unit.
     m_storageUnit[Byte]=tr("Byte");
+
+    //Update image filter.
+    QString readWriteImageFilter;
+    readWriteImageFilter.append(tr("Portable Network Graphics"));
+    readWriteImageFilter.append(" (*.png);;");
+    readWriteImageFilter.append(tr("Joint Photographic Experts Group"));
+    readWriteImageFilter.append(" (*.jpg *.jpeg);;");
+    readWriteImageFilter.append(tr("Windows Bitmap"));
+    readWriteImageFilter.append(" (*.bmp);;");
+    readWriteImageFilter.append(tr("Portable Pixmap"));
+    readWriteImageFilter.append(" (*.ppm);;");
+    readWriteImageFilter.append(tr("X11 Bitmap"));
+    readWriteImageFilter.append(" (*.xbm);;");
+    readWriteImageFilter.append(tr("X11 Pixmap"));
+    readWriteImageFilter.append(" (*.xpm)");
+    //Get all supported files text.
+    QString allSupportedFiles=tr("All supported files");
+    //Compose write image filter.
+    m_writeImageFilter.clear();
+    m_writeImageFilter.append(allSupportedFiles);
+    m_writeImageFilter.append(" (*.png *.jpg *.jpeg *.bmp *.ppm *.xbm "
+                                "*.xpm);;");
+    m_writeImageFilter.append(readWriteImageFilter);
+    //Compose the read image filter.
+    m_readImageFilter.clear();
+    m_readImageFilter.append(allSupportedFiles);
+    m_readImageFilter.append(" (*.png *.jpg *.jpeg *.bmp *.ppm *.xbm "
+                               "*.xpm *.gif *.pbm *.pgm);;");
+    m_readImageFilter.append(readWriteImageFilter + ";;");
+    m_readImageFilter.append(tr("Graphic Interchange Format"));
+    m_readImageFilter.append(" (*.gif);;");
+    m_readImageFilter.append(tr("Portable Bitmap"));
+    m_readImageFilter.append(" (*.pbm);;");
+    m_readImageFilter.append(tr("Portable Graymap"));
+    m_readImageFilter.append(" (*.pgm);;");
 }
 
 KNGlobal::KNGlobal(QObject *parent) :
@@ -123,6 +159,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     #ifdef Q_OS_UNIX
     m_desktopEnviroment(NullShell),
     #endif
+    m_writeImageFilter(QString()),
     m_mainWindow(nullptr),
     m_preference(nullptr),
     m_globalConfigure(nullptr),
@@ -302,6 +339,16 @@ inline void KNGlobal::initialBrushes()
         //Set the texture of the brush.
         m_brushes[i].setTexture(QPixmap(textures[i]));
     }
+}
+
+QString KNGlobal::readImageFilter() const
+{
+    return m_readImageFilter;
+}
+
+QString KNGlobal::writeImageFilter() const
+{
+    return m_writeImageFilter;
 }
 
 #ifdef Q_OS_UNIX

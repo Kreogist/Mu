@@ -215,6 +215,8 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
     if(avatarImage.width()>100 || avatarImage.height()>100 ||
             (!m_accountDetails->isLogin()))
     {
+        //Failed to update the avatar.
+        emit avatarUpdatedFailed();
         //Rescaled the image before uploading.
         return false;
     }
@@ -233,6 +235,8 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         //Open the buffer.
         if(!imageBuffer.open(QIODevice::WriteOnly))
         {
+            //Failed to update the avatar.
+            emit avatarUpdatedFailed();
             //Failed to save image.
             return false;
         }
@@ -249,6 +253,8 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
     //Post the request.
     if(post(avatarRequest, imageBytes, responseBytes)!=201)
     {
+        //Failed to update the avatar.
+        emit avatarUpdatedFailed();
         //Failed to upload the image.
         return false;
     }
@@ -260,6 +266,8 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
                         responseObject.value("url").toString());
     //Send update request.
     updateAccountInfo(updateObject);
+    //Update the avatar successfully.
+    emit avatarUpdatedSuccess();
     return true;
 }
 

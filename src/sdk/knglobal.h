@@ -180,6 +180,18 @@ public:
     int desktopEnvironment() const;
 #endif
 
+    /*!
+     * \brief Get the public writeable image format file filter for QFileDialog.
+     * \return The writeable file filter for QFileDialog.
+     */
+    QString writeImageFilter() const;
+
+    /*!
+     * \brief Get the public readable image format file filter for QFileDialog.
+     * \return The readable file filter for QFileDialog.
+     */
+    QString readImageFilter() const;
+
 signals:
     /*!
      * \brief When the library directory's path is changed, this signal will be
@@ -232,6 +244,7 @@ private:
 #ifdef Q_OS_UNIX
     int m_desktopEnviroment;
 #endif
+    QString m_writeImageFilter, m_readImageFilter;
     QWidget *m_mainWindow;
     KNPreferencePlugin *m_preference;
 

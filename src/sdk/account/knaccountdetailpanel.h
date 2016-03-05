@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class QLabel;
+class QTimeLine;
 class KNAccountAvatarButton;
 class KNAccountDetails;
 class KNLabelButton;
@@ -34,6 +35,14 @@ class KNAccountDetailPanel : public QWidget
 {
     Q_OBJECT
 public:
+    enum StateText
+    {
+        OperateSuccess,
+        FailedToUpdateData,
+        FailedToUpdateAvatar,
+        StateTextCount
+    };
+
     /*!
      * \brief Construct a KNAccountDetailPanel widget.
      * \param parent The parent widget.
@@ -42,9 +51,16 @@ public:
 
 signals:
     /*!
-     * \brief When user is asking for logout, this signal will be emit.
+     * \brief When user is asking for logout, this signal will be emitted.
      */
     void requireLogout();
+
+    /*!
+     * \brief When user is asking for update avatar, this signal will be
+     * emitted.
+     * \param pixmap Avatar pixmap. Size should be 100x100 px.
+     */
+    void requireUpdateAvatar(QPixmap pixmap);
 
 public slots:
     /*!
@@ -52,32 +68,47 @@ public slots:
      */
     void clearUserInfo();
 
+    /*!
+     * \brief Display a state text.
+     * \param state State in StateText enumerate.
+     */
+    void setStateText(int state);
+
 private slots:
     void retranslate();
     void onActionDetailUpdate();
     void onActionAvatarUpdate();
 
+    void onActionChangeStateAlpha(int frame);
+    void startFadeOut();
+
+    void onActionEditInformation();
+    void onActionChangePassword();
+    void onActionSelectAvatar();
+
 private:
     enum ControlButtons
     {
         EditInformation,
+        ChangePassword,
+        SetAvatar,
         Logout,
         ControlButtonCount
     };
-    enum LabelControlButtons
-    {
-        ChangePassword,
-        LabelControlButtonCount
-    };
 
     inline KNOpacityAnimeButton *generateButton();
-    inline KNLabelButton *generateLabelButton();
+    inline void disableAllControls();
+    inline void enabledAllControls();
 
+    QString m_stateText[StateTextCount];
     KNOpacityAnimeButton *m_controls[ControlButtonCount];
-    KNLabelButton *m_labelButton[LabelControlButtonCount];
+    QColor m_failedColor, m_successColor;
+    QString m_lastDirectory;
     KNAccountAvatarButton *m_avatarImage;
-    QLabel *m_nickName;
+    QLabel *m_nickName, *m_state;
     KNAccountDetails *m_accountDetails;
+    QTimeLine *m_fadeInAnime, *m_fadeOutAnime;
+    QTimer *m_stateFadeTimer;
 };
 
 #endif // KNACCOUNTDETAILPANEL_H

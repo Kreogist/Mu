@@ -56,6 +56,8 @@
         <file>public/account_edit_info.png</file>
         <file>saomenuicons/question.png</file>
         <file>saomenuicons/user.png</file>
+        <file>public/account_avatar.png</file>
+        <file>public/account_password.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

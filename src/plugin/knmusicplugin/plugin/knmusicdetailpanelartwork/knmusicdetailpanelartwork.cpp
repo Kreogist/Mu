@@ -23,9 +23,10 @@
 #include "kncircleiconbutton.h"
 #include "knlocalemanager.h"
 #include "knopacityanimebutton.h"
-#include "knmusicparser.h"
+#include "knglobal.h"
 
 #include "knmusicglobal.h"
+#include "knmusicparser.h"
 
 #include "knmusicdetailpanelartwork.h"
 
@@ -35,7 +36,6 @@
 
 KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
     KNMusicDetailDialogPanel(parent),
-    m_fileTypeFilter(QString()),
     m_lastDirectory(QString()),
     m_button(new KNCircleIconButton(this)),
     m_albumArt(new QLabel(this))
@@ -125,13 +125,6 @@ void KNMusicDetailPanelArtwork::retranslate()
     //Update the album art.
     m_operations[SetAlbumArt]->setToolTip(tr("Set new album cover"));
     m_operations[ExportAlbumArt]->setToolTip(tr("Save album cover image"));
-
-    //Clear the string list.
-    m_fileTypeFilter.clear();
-    m_fileTypeFilter.append(tr("Portable Network Graphics"));
-    m_fileTypeFilter.append(" (*.png);;");
-    m_fileTypeFilter.append(tr("JPEG"));
-    m_fileTypeFilter.append(" (*.jpg)");
 }
 
 void KNMusicDetailPanelArtwork::onActionChangeImage()
@@ -141,9 +134,7 @@ void KNMusicDetailPanelArtwork::onActionChangeImage()
                 this,
                 tr("Select the new album cover image"),
                 m_lastDirectory,
-                tr("All supported files") +
-                " (*.png *.jpg);;" +
-                m_fileTypeFilter);
+                knGlobal->writeImageFilter());
     //Prepare the new image.
     QImage targetImage;
     //Check out the image file's validation.
@@ -176,7 +167,7 @@ void KNMusicDetailPanelArtwork::onActionSaveImage()
                 this,
                 tr("Save album cover"),
                 m_lastDirectory,
-                m_fileTypeFilter);
+                knGlobal->writeImageFilter());
     //Check out the target file path.
     if(targetFilePath.isEmpty())
     {

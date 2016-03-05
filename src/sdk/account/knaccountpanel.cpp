@@ -56,6 +56,11 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             this, &KNAccountPanel::onActionLoginFailed);
     connect(knAccount, &KNAccount::loginSuccess,
             this, &KNAccountPanel::onActionLoginSuccess);
+
+    connect(knAccount, &KNAccount::avatarUpdatedSuccess,
+            this, &KNAccountPanel::onActionOperateSuccess);
+    connect(knAccount, &KNAccount::avatarUpdatedFailed,
+            this, &KNAccountPanel::onActionAvatarUpdatedFailed);
     //Link panel signal.
     connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
             this, &KNAccountPanel::onActionShowRegister);
@@ -69,6 +74,22 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
 
     connect(m_detailPanel, &KNAccountDetailPanel::requireLogout,
             this, &KNAccountPanel::onActionLogout);
+    connect(m_detailPanel, &KNAccountDetailPanel::requireUpdateAvatar,
+            knAccount, &KNAccount::setAvatar);
+    connect(knAccount, &KNAccount::avatarUpdatedFailed,
+            [=]
+            {
+                //Update the state text.
+                m_detailPanel->setStateText(
+                            KNAccountDetailPanel::FailedToUpdateAvatar);
+            });
+    connect(knAccount, &KNAccount::avatarUpdatedFailed,
+            [=]
+            {
+                //Update the state text.
+                m_detailPanel->setStateText(
+                            KNAccountDetailPanel::OperateSuccess);
+            });
     //Add widget to switcher.
     m_switcher->addWidget(m_loginPanel);
     m_switcher->addWidget(m_generatePanel);
@@ -174,5 +195,17 @@ void KNAccountPanel::onActionLogout()
     setFixedHeight(270);
     //Emit resize signal.
     emit requireResize();
+}
+
+void KNAccountPanel::onActionOperateSuccess()
+{
+    //Update the state text.
+    m_detailPanel->setStateText(KNAccountDetailPanel::OperateSuccess);
+}
+
+void KNAccountPanel::onActionAvatarUpdatedFailed()
+{
+    //Update the state text.
+    m_detailPanel->setStateText(KNAccountDetailPanel::FailedToUpdateAvatar);
 }
 

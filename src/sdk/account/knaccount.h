@@ -74,6 +74,16 @@ signals:
      */
     void generateFailed(int errorCode);
 
+    /*!
+     * \brief When avatar is being updated, this signal will be emitted.
+     */
+    void avatarUpdatedSuccess();
+
+    /*!
+     * \brief When avatar updated failed, this signal will be emitted.
+     */
+    void avatarUpdatedFailed();
+
 public slots:
     /*!
      * \brief Generate a Kreogist Account with the basic information.

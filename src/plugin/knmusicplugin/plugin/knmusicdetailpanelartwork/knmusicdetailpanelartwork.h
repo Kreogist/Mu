@@ -66,7 +66,7 @@ private:
         OperationCount
     };
     MusicUtil::KNMusicAnalysisItem m_currentItem;
-    QString m_fileTypeFilter, m_lastDirectory;
+    QString m_lastDirectory;
     KNOpacityAnimeButton *m_operations[OperationCount];
     KNCircleIconButton *m_button;
     QLabel *m_albumArt;
