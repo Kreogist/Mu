@@ -59,6 +59,17 @@ signals:
      */
     void requireGenerate(QString username, QString password, QString email);
 
+    /*!
+     * \brief When user is asking for logout, this signal will be emit.
+     */
+    void requireLogout();
+
+    /*!
+     * \brief This signal is asked for notification to resize it to fit the
+     * account panel.
+     */
+    void requireResize();
+
 public slots:
 
 protected:
@@ -78,6 +89,8 @@ private slots:
     void onActionLogin();
     void onActionLoginSuccess();
     void onActionLoginFailed(int errorCode);
+
+    void onActionLogout();
 
 private:
     enum AccountPanelIndex

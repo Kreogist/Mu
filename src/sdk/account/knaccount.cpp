@@ -412,11 +412,26 @@ inline QNetworkRequest KNAccount::generateKreogistRequest(const QString &url)
 inline QString KNAccount::accessPassword(const QString &rawPassword)
 {
     //Use MD5 and SHA-3 to combine the access password.
-    return QCryptographicHash::hash(rawPassword.toUtf8(),
-                                    QCryptographicHash::Sha3_512).toBase64()
-            .append(QCryptographicHash::hash(
-                        rawPassword.toUtf8(),
-                        QCryptographicHash::Md5).toBase64());
+    return bytesToHex(QCryptographicHash::hash(
+                          rawPassword.toUtf8(),
+                          QCryptographicHash::Sha3_512).append
+                      (QCryptographicHash::hash(
+                           rawPassword.toUtf8(),
+                           QCryptographicHash::Md5)));
+}
+
+QString KNAccount::bytesToHex(const QByteArray &bytes)
+{
+    //Create the cache string.
+    QString hexCache;
+    //For all the bytes.
+    for(int i=0; i<bytes.size(); ++i)
+    {
+        //Add all bytes to hex cache.
+        hexCache.append(QString::number(static_cast<quint8>(bytes.at(i)), 16));
+    }
+    //Give back the hex cache.
+    return hexCache;
 }
 
 inline void KNAccount::updateDetails(const QJsonObject &userInfo)

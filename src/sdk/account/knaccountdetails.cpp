@@ -72,7 +72,7 @@ void KNAccountDetails::setCachePassword(const QString &cachePassword)
 
 QString KNAccountDetails::displayName() const
 {
-    return m_displayName;
+    return m_displayName.isEmpty() ? m_cacheUserName : m_displayName;
 }
 
 void KNAccountDetails::setDisplayName(const QString &displayName)

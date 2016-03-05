@@ -23,6 +23,8 @@
 KNAccountAvatarButton::KNAccountAvatarButton(QWidget *parent) :
     QWidget(parent),
     m_anonymousPixmap(QPixmap("://public/anonymous.png")),
+    m_scaledPixmap(QPixmap()),
+    m_graphicsMargin(0),
     m_pressed(false),
     m_isLogin(false)
 {
@@ -38,8 +40,11 @@ void KNAccountAvatarButton::setAccountAvatar(const QPixmap &avatar)
     }
     else
     {
+        //Calculate image width and height.
+        int imageWidth=width()-(m_graphicsMargin<<1),
+            imageHeight=height()-(m_graphicsMargin<<1);
         //Reset the pixmap
-        m_scaledPixmap=QPixmap(width(), height());
+        m_scaledPixmap=QPixmap(imageWidth, imageHeight);
         //Clear the pixmap.
         m_scaledPixmap.fill(QColor(0, 0, 0, 0));
         //Initial the painter.
@@ -50,13 +55,13 @@ void KNAccountAvatarButton::setAccountAvatar(const QPixmap &avatar)
         //Set the color.
         painter.setBrush(QColor(0, 0, 0));
         //Draw rounded rect.
-        painter.drawRoundedRect(QRect(0,0,width(),height()),
+        painter.drawRoundedRect(QRect(0, 0, imageWidth, imageHeight),
                                 4.0,
                                 4.0);
         //Reset the composition mode.
         painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
         //Draw the image.
-        painter.drawPixmap(0, 0, avatar.scaled(size(),
+        painter.drawPixmap(0, 0, avatar.scaled(QSize(imageWidth, imageHeight),
                                                Qt::KeepAspectRatioByExpanding,
                                                Qt::SmoothTransformation));
         //Painting finsihed.
@@ -81,9 +86,11 @@ void KNAccountAvatarButton::setButtonSize(int buttonSize)
     //Set properties.
     setFixedSize(buttonSize, buttonSize);
     //Scaled the anonymous pixmap.
-    m_anonymousPixmap=m_anonymousPixmap.scaled(size(),
-                                               Qt::KeepAspectRatio,
-                                               Qt::SmoothTransformation);
+    m_anonymousScaledPixmap=
+            m_anonymousPixmap.scaled(buttonSize-m_graphicsMargin,
+                                     buttonSize-m_graphicsMargin,
+                                     Qt::KeepAspectRatio,
+                                     Qt::SmoothTransformation);
 }
 
 void KNAccountAvatarButton::mousePressEvent(QMouseEvent *event)
@@ -121,9 +128,16 @@ void KNAccountAvatarButton::paintEvent(QPaintEvent *event)
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
     //Simply painter the anonymous image.
-    painter.drawPixmap(0, 0, m_scaledPixmap.isNull() ?
-                                m_anonymousPixmap:
-                                m_scaledPixmap);
+    painter.drawPixmap(m_graphicsMargin, m_graphicsMargin,
+                       m_scaledPixmap.isNull() ?
+                           m_anonymousScaledPixmap:
+                           m_scaledPixmap);
+}
+
+void KNAccountAvatarButton::setGraphicsMargin(int graphicsMargin)
+{
+    //Save the graphics margin.
+    m_graphicsMargin = graphicsMargin;
 }
 
 bool KNAccountAvatarButton::isLogin() const

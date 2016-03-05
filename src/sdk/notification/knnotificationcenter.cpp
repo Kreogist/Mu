@@ -19,6 +19,7 @@
 #include <QBitmap>
 #include <QBoxLayout>
 #include <QPainter>
+#include <QPropertyAnimation>
 
 //Dependencies.
 #include "knlocalemanager.h"
@@ -40,10 +41,12 @@
 KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     QFrame(parent),
     m_notificationIndicator(new QLabel(this)),
+    m_resizeAnime(new QPropertyAnimation(this, "size", this)),
     m_button(new KNAccountAvatarButton(this)),
     m_notificationView(new KNNotificationView(this)),
     m_notificationWidget(new KNNotificationWidget(this)),
-    m_accountPanel(new KNAccountPanel(this))
+    m_accountPanel(new KNAccountPanel(this)),
+    m_heightHint(-1)
 {
     setObjectName("NotificationCenter");
     //Set properties.
@@ -71,13 +74,13 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     //Configure the indicator.
     m_notificationIndicator->setFixedSize(indicatorPixmap.size());
     m_notificationIndicator->hide();
-
+    //Configure animation.
+    m_resizeAnime->setEasingCurve(QEasingCurve::OutCubic);
     //Configure the button.
     m_button->setCursor(Qt::PointingHandCursor);
     m_button->setButtonSize(32);
     //Configure the view.
     m_notificationView->setModel(knNotification->model());
-
     //Link account avatar change signal with button updater.
     connect(knAccount->accountDetails(), &KNAccountDetails::accountAvatarUpdate,
             [=]
@@ -86,6 +89,9 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
                 m_button->setAccountAvatar(
                             knAccount->accountDetails()->accountAvatar());
             });
+    //Link the account panel to notification.
+    connect(m_accountPanel, &KNAccountPanel::requireResize,
+            this, &KNNotificationCenter::resizeNotificationCenter);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -110,10 +116,9 @@ QWidget *KNNotificationCenter::indicator()
     return m_notificationIndicator;
 }
 
-int KNNotificationCenter::heightHint(int maximum)
+int KNNotificationCenter::heightHint()
 {
-    return qMin(maximum, m_notificationView->heightHint()+10 +
-                m_accountPanel->height());
+    return m_notificationView->heightHint()+10 + m_accountPanel->height();
 }
 
 void KNNotificationCenter::showEvent(QShowEvent *event)
@@ -153,6 +158,18 @@ void KNNotificationCenter::retranslate()
     m_button->setToolTip(m_button->isLogin()?
                              tr("Show Kreogist Account details"):
                              tr("Login"));
+}
+
+void KNNotificationCenter::resizeNotificationCenter()
+{
+    //Stop the anime.
+    m_resizeAnime->stop();
+    //Set the initial size and end size.
+    m_resizeAnime->setStartValue(size());
+    m_resizeAnime->setEndValue(QSize(width(), qMin(heightHint(),
+                                                   maximumHeight())));
+    //Start the anime.
+    m_resizeAnime->start();
 }
 
 KNNotificationWidget *KNNotificationCenter::notificationWidget()

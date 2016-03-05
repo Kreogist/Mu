@@ -41,8 +41,16 @@ public:
     explicit KNAccountDetailPanel(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When user is asking for logout, this signal will be emit.
+     */
+    void requireLogout();
 
 public slots:
+    /*!
+     * \brief Clear all the user information stored in detail panel.
+     */
+    void clearUserInfo();
 
 private slots:
     void retranslate();

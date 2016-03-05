@@ -46,6 +46,8 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             knAccount, &KNAccount::login);
     connect(this, &KNAccountPanel::requireGenerate,
             knAccount, &KNAccount::generateAccount);
+    connect(this, &KNAccountPanel::requireLogout,
+            knAccount, &KNAccount::logout);
     connect(knAccount, &KNAccount::generateFailed,
             this, &KNAccountPanel::onActionRegisterFailed);
     connect(knAccount, &KNAccount::generateSuccess,
@@ -64,6 +66,9 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             this, &KNAccountPanel::onActionRegister);
     connect(m_generatePanel, &KNAccountRegisterPanel::cancelRegister,
             this, &KNAccountPanel::onActionShowLogin);
+
+    connect(m_detailPanel, &KNAccountDetailPanel::requireLogout,
+            this, &KNAccountPanel::onActionLogout);
     //Add widget to switcher.
     m_switcher->addWidget(m_loginPanel);
     m_switcher->addWidget(m_generatePanel);
@@ -141,6 +146,10 @@ void KNAccountPanel::onActionLoginSuccess()
     m_switcher->setCurrentIndex(DetailPanel);
     //Clear the login panel.
     m_loginPanel->clearInputData();
+    //Resize the account panel.
+    setFixedHeight(120);
+    //Emit resize signal.
+    emit requireResize();
 }
 
 void KNAccountPanel::onActionLoginFailed(int errorCode)
@@ -151,5 +160,19 @@ void KNAccountPanel::onActionLoginFailed(int errorCode)
     m_switcher->setCurrentWidget(LoginPanel);
     //Set the error code to register panel.
     m_loginPanel->onActionLoginError(errorCode);
+}
+
+void KNAccountPanel::onActionLogout()
+{
+    //Show the login panel again.
+    m_switcher->setCurrentWidget(LoginPanel);
+    //Clear detail panel.
+    m_detailPanel->clearUserInfo();
+    //Emit logout signal.
+    emit requireLogout();
+    //Resize the account panel.
+    setFixedHeight(270);
+    //Emit resize signal.
+    emit requireResize();
 }
 

@@ -65,6 +65,14 @@ public slots:
      */
     void setButtonSize(int buttonSize);
 
+    /*!
+     * \brief Set the graphics margin of the button.\n
+     * Notice: This function has be set first. It won't change any other
+     * component.
+     * \param graphicsMargin Graphics margin of the button contents.
+     */
+    void setGraphicsMargin(int graphicsMargin);
+
 protected:
     /*!
      * \brief Reimplemented from KNImageLabel::mousePressEvent().
@@ -82,7 +90,8 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    QPixmap m_anonymousPixmap, m_scaledPixmap;
+    QPixmap m_anonymousPixmap, m_anonymousScaledPixmap, m_scaledPixmap;
+    int m_graphicsMargin;
     bool m_pressed, m_isLogin;
 };
 

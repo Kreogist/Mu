@@ -22,6 +22,7 @@
 #include <QFrame>
 
 class QLabel;
+class QPropertyAnimation;
 class KNAccountPanel;
 class KNAccountAvatarButton;
 class KNNotificationView;
@@ -54,9 +55,8 @@ public:
 
     /*!
      * \brief The prefer height of the notification height.
-     * \return The prefer height of the notification center widget.
      */
-    int heightHint(int maximum);
+    int heightHint();
 
     /*!
      * \brief Get the notification widget.
@@ -86,13 +86,16 @@ protected:
 
 private slots:
     void retranslate();
+    void resizeNotificationCenter();
 
 private:
     QLabel *m_notificationIndicator;
+    QPropertyAnimation *m_resizeAnime;
     KNAccountAvatarButton *m_button;
     KNNotificationView *m_notificationView;
     KNNotificationWidget *m_notificationWidget;
     KNAccountPanel *m_accountPanel;
+    int m_heightHint;
 };
 
 #endif // KNNOTIFICATIONCENTER_H

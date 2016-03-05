@@ -18,6 +18,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+#include "kngraphicsgloweffect.h"
 #include "knlocalemanager.h"
 #include "knlabelbutton.h"
 #include "knopacityanimebutton.h"
@@ -35,7 +36,12 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_accountDetails(knAccount->accountDetails())
 {
     //Configure the avatar image.
-    m_avatarImage->setButtonSize(100);
+    m_avatarImage->setGraphicsMargin(5);
+    m_avatarImage->setButtonSize(110);
+    KNGraphicsGlowEffect *shadowEffect=new KNGraphicsGlowEffect(m_avatarImage);
+    shadowEffect->setColor(QColor(0,0,0));
+    shadowEffect->setRadius(10.0);
+    m_avatarImage->setGraphicsEffect(shadowEffect);
     //Configure the nick name label.
     QFont titleFont=font();
     titleFont.setPixelSize(18);
@@ -51,6 +57,9 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_controls[EditInformation]->setIcon(
                 QIcon("://public/account_edit_info.png"));
     m_controls[Logout]->setIcon(QIcon("://public/account_logout.png"));
+    //Link controls.
+    connect(m_controls[Logout], &KNOpacityAnimeButton::clicked,
+            this, &KNAccountDetailPanel::requireLogout);
     //Initial the label button palette.
     QPalette labelButtonPal=palette();
     labelButtonPal.setColor(QPalette::WindowText, QColor(0x44, 0x66, 0xbb));
@@ -71,6 +80,7 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                           this);
+    mainLayout->setSpacing(11);
     //Set layout to panel.
     setLayout(mainLayout);
     //Initial the avatar layout.
@@ -83,12 +93,14 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Initial the detail layout.
     QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                             mainLayout->widget());
+    detailLayout->setContentsMargins(2, 4, 2, 2);
     mainLayout->addLayout(detailLayout, 1);
     //Add widget to detail layout.
     detailLayout->addWidget(m_nickName);
     //Initial the control layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
+    buttonLayout->setSpacing(5);
     detailLayout->addLayout(buttonLayout);
     //Add controls to button layout.
     buttonLayout->addStretch();
@@ -108,6 +120,14 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Link retranslator.
     knI18n->link(this, &KNAccountDetailPanel::retranslate);
     retranslate();
+}
+
+void KNAccountDetailPanel::clearUserInfo()
+{
+    //Clear label.
+    m_nickName->clear();
+    //Clear avatar.
+    m_avatarImage->resetAccountAvatar();
 }
 
 void KNAccountDetailPanel::retranslate()

@@ -132,6 +132,7 @@ private:
 
     inline QNetworkRequest generateKreogistRequest(const QString &url);
     inline QString accessPassword(const QString &rawPassword);
+    inline QString bytesToHex(const QByteArray &bytes);
     inline void updateDetails(const QJsonObject &userInfo);
 
     static KNAccount *m_instance;
