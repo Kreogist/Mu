@@ -151,7 +151,7 @@ void KNGlobal::retranslate()
     m_readImageFilter.append(tr("Portable Bitmap"));
     m_readImageFilter.append(" (*.pbm);;");
     m_readImageFilter.append(tr("Portable Graymap"));
-    m_readImageFilter.append(" (*.pgm);;");
+    m_readImageFilter.append(" (*.pgm)");
 }
 
 KNGlobal::KNGlobal(QObject *parent) :

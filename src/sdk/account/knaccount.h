@@ -18,6 +18,8 @@
 #ifndef KNACCOUNT_H
 #define KNACCOUNT_H
 
+#include <QImage>
+
 #include "knrestapibase.h"
 
 #define knAccount (KNAccount::instance())
@@ -150,6 +152,13 @@ public slots:
      * \return Give back the raw password.
      */
     static QString accessPassword(const QString &rawPassword);
+
+    /*!
+     * \brief Change a byte array into a string which is the hex text of the
+     * bytes.
+     * \param bytes The byte array.
+     * \return The Hex string.
+     */
     static QString bytesToHex(const QByteArray &bytes);
 
 private:

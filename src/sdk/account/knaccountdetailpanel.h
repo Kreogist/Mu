@@ -117,7 +117,7 @@ private:
     QString m_lastDirectory;
     KNAccountPasswordBox *m_passwordModify;
     KNAccountAvatarButton *m_avatarImage;
-    QLabel *m_nickName, *m_state, *m_username;
+    QLabel *m_nickName, *m_username, *m_state;
     KNAccountDetails *m_accountDetails;
     QTimeLine *m_fadeInAnime, *m_fadeOutAnime;
     QTimer *m_stateFadeTimer;

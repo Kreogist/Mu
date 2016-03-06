@@ -402,8 +402,10 @@ QString KNAccount::bytesToHex(const QByteArray &bytes)
     //For all the bytes.
     for(int i=0; i<bytes.size(); ++i)
     {
+        //Get the text string of the current number.
+        QString currentByte=QString::number((quint8)bytes.at(i), 16);
         //Add all bytes to hex cache.
-        hexCache.append(QString::number(static_cast<quint8>(bytes.at(i)), 16));
+        hexCache.append(bytes.at(i)<16?"0"+currentByte:currentByte);
     }
     //Give back the hex cache.
     return hexCache;

@@ -35,6 +35,8 @@
 
 #include "knaccountdetailpanel.h"
 
+#include <QDebug>
+
 KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     QWidget(parent),
     m_failedColor(QColor(0x9c, 0x22, 0x39)),
@@ -43,8 +45,8 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_passwordModify(new KNAccountPasswordBox(knGlobal->mainWindow())),
     m_avatarImage(new KNAccountAvatarButton(this)),
     m_nickName(new QLabel(this)),
-    m_state(new QLabel(this)),
     m_username(new QLabel(this)),
+    m_state(new QLabel(this)),
     m_accountDetails(knAccount->accountDetails()),
     m_fadeInAnime(new QTimeLine(200, this)),
     m_fadeOutAnime(new QTimeLine(200, this)),
@@ -97,6 +99,9 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     QPalette pal=m_state->palette();
     pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
     m_state->setPalette(pal);
+    //Update user name palette.
+    pal.setColor(QPalette::WindowText, QColor(0xA0, 0xA0, 0xA0));
+    m_username->setPalette(pal);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -193,7 +198,7 @@ void KNAccountDetailPanel::retranslate()
 {
     //Update the state text.
     m_stateText[OperateSuccess]=
-            tr("Success.");
+            tr("Account update success.");
     m_stateText[FailedToUpdateData]=
             tr("Failed to update account info. Try again.");
     m_stateText[FailedToUpdateAvatar]=
@@ -259,12 +264,18 @@ void KNAccountDetailPanel::onActionSelectAvatar()
         //Ignore the invalid file path.
         return;
     }
+    //Get the pixmap information.
+    QImage &&scaledAvatar=
+            QImage(targetFilePath).scaled(
+                100, 100,
+                Qt::KeepAspectRatioByExpanding,
+                Qt::SmoothTransformation);
+    scaledAvatar=scaledAvatar.copy(QRect((scaledAvatar.width()-100)>>1,
+                                         (scaledAvatar.height()-100)>>1,
+                                         100,
+                                         100));
     //Save the image to the target file path.
-    emit requireUpdateAvatar(QPixmap(targetFilePath).scaled(
-                                 100,
-                                 100,
-                                 Qt::KeepAspectRatioByExpanding,
-                                 Qt::SmoothTransformation));
+    emit requireUpdateAvatar(QPixmap::fromImage(scaledAvatar));
     //Save the last dirctory.
     m_lastDirectory=QFileInfo(targetFilePath).absoluteFilePath();
     //Disable all the controls.

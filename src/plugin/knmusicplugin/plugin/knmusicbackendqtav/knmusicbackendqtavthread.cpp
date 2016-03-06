@@ -195,7 +195,6 @@ void KNMusicBackendQtAVThread::onActionPositionChanged(const qint64 &position)
     {
         //Stop the player.
         stopPlayer();
-        qDebug()<<"Fuck here?!";
         //Emit a finished signal.
         emit finished();
     }

@@ -157,12 +157,13 @@ void KNAccountLoginPanel::retranslate()
 {
     //Update title text.
     m_errorDescription[KNAccountUtil::LoginConnectionError]=
-            tr("Check your Internet connection.");
+            tr("Cannot connect to server. Please check your Internet "
+               "connection.");
     m_errorDescription[KNAccountUtil::InfoIncorrect]=
             tr("Username or password incorrect.");
-    m_subTitleText=tr("with Your Kreogist Account");
     //Update label.
     m_title->setText(tr("Sign in"));
+    m_subTitleText=tr("with Your Kreogist Account");
     m_subTitle->setText(m_subTitleText);
     //Set the place holder text.
     m_username->setPlaceholderText(tr("Username/E-mail"));

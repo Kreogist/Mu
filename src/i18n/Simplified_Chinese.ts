@@ -2,11 +2,274 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>KNAccountDetailPanel</name>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="199"/>
+        <source>Account update success.</source>
+        <translation>信息更新成功。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="201"/>
+        <source>Failed to update account info. Try again.</source>
+        <translation>更新用户信息失败，请重试。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="203"/>
+        <source>Failed to update new avatar. Try again.</source>
+        <translation>更新头像图片失败，请重试。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="256"/>
+        <source>Select avatar file</source>
+        <translation>选择头像图片</translation>
+    </message>
+</context>
+<context>
+    <name>KNAccountLoginPanel</name>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="163"/>
+        <source>Username or password incorrect.</source>
+        <translation>用户名或密码错误。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="166"/>
+        <source>with Your Kreogist Account</source>
+        <translation>以同步您的用户信息及设置</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="165"/>
+        <source>Sign in</source>
+        <translation>登录</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="160"/>
+        <source>Cannot connect to server. Please check your Internet connection.</source>
+        <translation>无法连接到服务器。请检查您的网络连接。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="169"/>
+        <source>Username/E-mail</source>
+        <translation>用户名/邮箱</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="170"/>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="172"/>
+        <source>Create an account</source>
+        <translation>创建 Kreogist 用户</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="173"/>
+        <source>Forget password?</source>
+        <translation>忘记密码了？</translation>
+    </message>
+</context>
+<context>
+    <name>KNAccountPanel</name>
+    <message>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="212"/>
+        <source>Account Update Success</source>
+        <translation>账户更新成功</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="213"/>
+        <source>The user data of %1 has been updated successfully.</source>
+        <translation>%1 的用户信息已经被成功更新。</translation>
+    </message>
+</context>
+<context>
+    <name>KNAccountPasswordBox</name>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="145"/>
+        <source>Set new password</source>
+        <translation>设置新的密码</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="146"/>
+        <source>Input your new password for %1.</source>
+        <translation>为 %1 设置新的密码。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="150"/>
+        <source>New Password</source>
+        <translation>新密码</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="151"/>
+        <source>Input New Password Again</source>
+        <translation>再次输入新的密码</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="154"/>
+        <source>Password must be at least 6 characters.</source>
+        <translation>密码长度至少6位。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
+        <source>Password must include a number.</source>
+        <translation>密码必须包含一个数字。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
+        <source>Password must include an upper and lower case letter.</source>
+        <translation>密码必须包含一个大写以及一个小写字母。</translation>
+    </message>
+</context>
+<context>
+    <name>KNAccountPasswordVerification</name>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="114"/>
+        <source>Enter your password to perform administrative tasks</source>
+        <translation>输入您的密码以验证身份</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="117"/>
+        <source>An action is attempting to perform an action that requires privileges. Authentication is required to perform this action.</source>
+        <translation>您的请求需要进行验证才可以继续。请输入密码以验证您的身份。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="121"/>
+        <source>Password is not correct, try again.</source>
+        <translation>密码不正确，请重新输入。</translation>
+    </message>
+</context>
+<context>
+    <name>KNAccountRegisterPanel</name>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="142"/>
+        <source>Create Kreogist Account</source>
+        <translation>创建 Kreogist 账户</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="144"/>
+        <source>1. Passwords must be at least 6 characters.
+2. Passwords must include a number.
+3. Passwords must include an upper and lower case letter.</source>
+        <translation>1、密码长度至少6位。
+2、密码必须包含一个数字。
+3、密码必须包含一个大写以及一个小写字母。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="148"/>
+        <source>Your E-mail will be verified.</source>
+        <translation>您的电子邮件将会被验证是否可用。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="150"/>
+        <source>Username</source>
+        <translation>用户名</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="151"/>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="152"/>
+        <source>E-mail</source>
+        <translation>电子邮件</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="154"/>
+        <source>I agree to the Terms of Service.</source>
+        <translation>我同意服务条款。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="157"/>
+        <source>Unknown error. Please check your Internet connection.</source>
+        <translation>未知错误。请检查您的互联网连接。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="159"/>
+        <source>Username is already taken, try another one.</source>
+        <translation>用户名已经被使用，请使用其它用户名。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="161"/>
+        <source>E-mail is already taken, use another E-mail address.</source>
+        <translation>电子邮件已经被使用，请使用其它电子邮件地址。</translation>
+    </message>
+</context>
+<context>
+    <name>KNAccountWaitingPanel</name>
+    <message>
+        <location filename="../sdk/account/knaccountwaitingpanel.cpp" line="66"/>
+        <source>Please wait</source>
+        <translation>请稍后</translation>
+    </message>
+</context>
+<context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="104"/>
+        <location filename="../sdk/knglobal.cpp" line="119"/>
         <source>Byte</source>
         <translation>字节</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="123"/>
+        <source>Portable Network Graphics</source>
+        <translation>便携式网络图形</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="125"/>
+        <source>Joint Photographic Experts Group</source>
+        <translation>JPEG 格式图像</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="127"/>
+        <source>Windows Bitmap</source>
+        <translation>Windows 位图图像</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="129"/>
+        <source>Portable Pixmap</source>
+        <translation>可移植像素图格式</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="131"/>
+        <source>X11 Bitmap</source>
+        <translation>X11 位图</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="133"/>
+        <source>X11 Pixmap</source>
+        <translation>X11 像素图</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="136"/>
+        <source>All supported files</source>
+        <translation>所有支持的文件</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="149"/>
+        <source>Graphic Interchange Format</source>
+        <translation>图像互换格式</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="151"/>
+        <source>Portable Bitmap</source>
+        <translation>可移植位图格式</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="153"/>
+        <source>Portable Graymap</source>
+        <translation>可移植灰度图格式</translation>
+    </message>
+</context>
+<context>
+    <name>KNMainWindow</name>
+    <message>
+        <location filename="../sdk/knmainwindow.cpp" line="257"/>
+        <source>Cannot quit now</source>
+        <translation>当前无法退出</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knmainwindow.cpp" line="258"/>
+        <source>Music library is still adding music to your music library, please wait until it complete.</source>
+        <translation>仍有文件正在添加到音乐库中，请等待其添加完毕。</translation>
     </message>
 </context>
 <context>
@@ -20,7 +283,7 @@
 <context>
     <name>KNMusicAlbumModel</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp" line="492"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp" line="491"/>
         <source>Various Artists</source>
         <translation>多个艺术家</translation>
     </message>
@@ -74,37 +337,34 @@
 <context>
     <name>KNMusicDetailPanelArtwork</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="124"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="126"/>
         <source>Set new album cover</source>
         <translation>设置新的专辑封面</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="125"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="127"/>
         <source>Save album cover image</source>
         <translation>保存专辑图片</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="129"/>
         <source>Portable Network Graphics</source>
-        <translation>便携式网络图形</translation>
+        <translation type="vanished">便携式网络图形</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="131"/>
         <source>JPEG</source>
-        <translation>JPEG 图像</translation>
+        <translation type="vanished">JPEG 图像</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="140"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="135"/>
         <source>Select the new album cover image</source>
         <translation>选择新的封面图像文件</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="142"/>
         <source>All supported files</source>
-        <translation>所有支持的文件</translation>
+        <translation type="vanished">所有支持的文件</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="175"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="168"/>
         <source>Save album cover</source>
         <translation>保存专辑封面</translation>
     </message>
@@ -540,6 +800,19 @@ To add songs to library, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicLibraryModel</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="54"/>
+        <source>Search complete</source>
+        <translation>音乐检索完成</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="55"/>
+        <source>%1 files have been to music library.</source>
+        <translation>检索到 %1 个音乐文件，已被添加到数据库。</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLibrarySongTab</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="180"/>
@@ -706,19 +979,29 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistManager</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="132"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="133"/>
         <source>All Support Playlist</source>
         <translation>所有支持的播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="134"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="135"/>
         <source>Mu playlist</source>
         <translation>Mu 播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="293"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="294"/>
         <source>New Playlist</source>
         <translation>新播放列表</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="415"/>
+        <source>%1 playlists cannot be loaded.</source>
+        <translation>%1 个播放列表无法加载。</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="417"/>
+        <source>Those playlists may be moved, deleted or renamed.</source>
+        <translation>这些播放列表可能被移动、删除或者重命名。</translation>
     </message>
 </context>
 <context>
@@ -1024,20 +1307,23 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNNotificationCenter</name>
     <message>
-        <location filename="../sdk/notification/knnotificationcenter.cpp" line="134"/>
         <source>Show Kreogist Account details</source>
-        <translation>显示 Kreogist 账户信息</translation>
+        <translation type="vanished">显示 Kreogist 账户信息</translation>
     </message>
     <message>
-        <location filename="../sdk/notification/knnotificationcenter.cpp" line="135"/>
         <source>Login</source>
-        <translation>登录</translation>
+        <translation type="vanished">登录</translation>
+    </message>
+    <message>
+        <location filename="../sdk/notification/knnotificationcenter.cpp" line="160"/>
+        <source>Show Notification Center and Kreogist Account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNNotificationView</name>
     <message>
-        <location filename="../sdk/notification/knnotificationview.cpp" line="75"/>
+        <location filename="../sdk/notification/knnotificationview.cpp" line="83"/>
         <source>No Notifications</source>
         <translation>没有通知</translation>
     </message>
