@@ -141,9 +141,9 @@ void KNAccountRegisterPanel::retranslate()
     //Update label.
     m_title->setText(tr("Create Kreogist Account"));
     //Update hint.
-    m_passwordHint->setText(tr("Passwords must be at least 6 characters.\n"
-                               "  1. Must include a number.\n"
-                               "  2. Must include an upper and lower case "
+    m_passwordHint->setText(tr("1. Passwords must be at least 6 characters.\n"
+                               "2. Passwords must include a number.\n"
+                               "3. Passwords must include an upper and lower case "
                                "letter."));
     m_emailHint->setText(tr("Your E-mail will be verified."));
     //Set the text edit.

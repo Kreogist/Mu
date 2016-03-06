@@ -265,7 +265,7 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
     updateObject.insert("avatarPath",
                         responseObject.value("url").toString());
     //Send update request.
-    updateAccountInfo(updateObject);
+    updateOnlineAccount(updateObject, false);
     //Update the avatar successfully.
     emit avatarUpdatedSuccess();
     return true;
@@ -279,40 +279,7 @@ void KNAccount::logout()
 
 bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
 {
-    //Check login first.
-    if(!m_accountDetails->isLogin())
-    {
-        //Failed to update account info.
-        return false;
-    }
-    //Tring to update account info.
-    QNetworkRequest updateRequest=generateKreogistRequest(
-                "users/"+m_accountDetails->objectId());
-    //Set the session token.
-    updateRequest.setRawHeader("X-Bmob-Session-Token",
-                               m_accountDetails->sessionToken().toUtf8());
-    //Generate response data.
-    QByteArray responseData;
-    //PUT the json data.
-    if(accountPut(updateRequest,
-                  QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
-                  responseData)!=200)
-    {
-        //Failed to update info.
-        return false;
-    }
-    //Successfully update user data.
-    //Get current user latest data.
-    if(get(generateKreogistRequest("users/"+m_accountDetails->objectId()),
-           responseData)!=200)
-    {
-        //Failed to update info.
-        return false;
-    }
-    //Update user info.
-    updateDetails(QJsonDocument::fromJson(responseData).object());
-    //Mission complete.
-    return true;
+    return updateOnlineAccount(userInfo, true);
 }
 
 bool KNAccount::refreshAccountInfo()
@@ -368,7 +335,7 @@ inline bool KNAccount::updateTokenSession()
     m_accountDetails->setSessionToken(
                 loginData.value("sessionToken").toString());
     //Update the account details.
-    updateAccountInfo(loginData);
+    updateDetails(loginData);
     //Update success.
     return true;
 }
@@ -417,7 +384,7 @@ inline QNetworkRequest KNAccount::generateKreogistRequest(const QString &url)
     return request;
 }
 
-inline QString KNAccount::accessPassword(const QString &rawPassword)
+QString KNAccount::accessPassword(const QString &rawPassword)
 {
     //Use MD5 and SHA-3 to combine the access password.
     return bytesToHex(QCryptographicHash::hash(
@@ -440,6 +407,69 @@ QString KNAccount::bytesToHex(const QByteArray &bytes)
     }
     //Give back the hex cache.
     return hexCache;
+}
+
+bool KNAccount::updateOnlineAccount(const QJsonObject &userInfo,
+                                    bool withSignal)
+{
+    //Check login first.
+    if(!m_accountDetails->isLogin())
+    {
+        //Check signal flags.
+        if(withSignal)
+        {
+            //Failed to update user info.
+            emit userInfoUpdateFailed();
+        }
+        //Failed to update account info.
+        return false;
+    }
+    //Tring to update account info.
+    QNetworkRequest updateRequest=generateKreogistRequest(
+                "users/"+m_accountDetails->objectId());
+    //Set the session token.
+    updateRequest.setRawHeader("X-Bmob-Session-Token",
+                               m_accountDetails->sessionToken().toUtf8());
+    //Generate response data.
+    QByteArray responseData;
+    //PUT the json data.
+    if(accountPut(updateRequest,
+                  QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
+                  responseData)!=200)
+    {
+        //Check signal flags.
+        if(withSignal)
+        {
+            //Failed to update user info.
+            emit userInfoUpdateFailed();
+        }
+        //Failed to update info.
+        return false;
+    }
+    //Successfully update user data.
+    //Get current user latest data.
+    if(get(generateKreogistRequest("users/"+m_accountDetails->objectId()),
+           responseData)!=200)
+    {
+        //Check signal flags.
+        if(withSignal)
+        {
+            //Failed to update user info.
+            emit userInfoUpdateFailed();
+        }
+        //Failed to update info.
+        return false;
+    }
+    //Update user info.
+    updateDetails(QJsonDocument::fromJson(responseData).object());
+    //Check signal flags.
+    if(withSignal)
+    {
+        //Emit success signal.
+        emit userInfoUpdateSuccess();
+    }
+    //Mission complete.
+    return true;
 }
 
 inline void KNAccount::updateDetails(const QJsonObject &userInfo)

@@ -93,7 +93,6 @@ private slots:
     void onActionLogout();
 
     void onActionOperateSuccess();
-    void onActionAvatarUpdatedFailed();
 
 private:
     enum AccountPanelIndex

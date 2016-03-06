@@ -19,10 +19,13 @@
 #ifndef KNACCOUNTDETAILPANEL_H
 #define KNACCOUNTDETAILPANEL_H
 
+#include <QJsonObject>
+
 #include <QWidget>
 
 class QLabel;
 class QTimeLine;
+class KNAccountPasswordBox;
 class KNAccountAvatarButton;
 class KNAccountDetails;
 class KNLabelButton;
@@ -62,6 +65,12 @@ signals:
      */
     void requireUpdateAvatar(QPixmap pixmap);
 
+    /*!
+     * \brief Ask for update user information.
+     * \param userInfo User information json object.
+     */
+    void requireUpdateInfo(QJsonObject userInfo);
+
 public slots:
     /*!
      * \brief Clear all the user information stored in detail panel.
@@ -86,6 +95,8 @@ private slots:
     void onActionChangePassword();
     void onActionSelectAvatar();
 
+    void onActionAskChangePassword(const QString &encryptedPassword);
+
 private:
     enum ControlButtons
     {
@@ -104,8 +115,9 @@ private:
     KNOpacityAnimeButton *m_controls[ControlButtonCount];
     QColor m_failedColor, m_successColor;
     QString m_lastDirectory;
+    KNAccountPasswordBox *m_passwordModify;
     KNAccountAvatarButton *m_avatarImage;
-    QLabel *m_nickName, *m_state;
+    QLabel *m_nickName, *m_state, *m_username;
     KNAccountDetails *m_accountDetails;
     QTimeLine *m_fadeInAnime, *m_fadeOutAnime;
     QTimer *m_stateFadeTimer;

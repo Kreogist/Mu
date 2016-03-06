@@ -84,6 +84,16 @@ signals:
      */
     void avatarUpdatedFailed();
 
+    /*!
+     * \brief userInfoUpdateSuccess
+     */
+    void userInfoUpdateSuccess();
+
+    /*!
+     * \brief userInfoUpdateFailed
+     */
+    void userInfoUpdateFailed();
+
 public slots:
     /*!
      * \brief Generate a Kreogist Account with the basic information.
@@ -134,15 +144,23 @@ public slots:
      */
     bool refreshAccountInfo();
 
+    /*!
+     * \brief Get the access password by input the raw password.
+     * \param rawPassword The raw password.
+     * \return Give back the raw password.
+     */
+    static QString accessPassword(const QString &rawPassword);
+    static QString bytesToHex(const QByteArray &bytes);
+
 private:
+    inline bool updateOnlineAccount(const QJsonObject &userInfo,
+                                    bool withSignal=true);
     inline bool updateTokenSession();
     inline int accountPut(QNetworkRequest &request,
                           const QByteArray &parameter,
                           QByteArray &responseData);
 
     inline QNetworkRequest generateKreogistRequest(const QString &url);
-    inline QString accessPassword(const QString &rawPassword);
-    inline QString bytesToHex(const QByteArray &bytes);
     inline void updateDetails(const QJsonObject &userInfo);
 
     static KNAccount *m_instance;

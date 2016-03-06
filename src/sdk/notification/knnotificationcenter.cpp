@@ -81,8 +81,10 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     m_button->setButtonSize(32);
     //Configure the view.
     m_notificationView->setModel(knNotification->model());
+    //Get account details.
+    KNAccountDetails *accountDetails=knAccount->accountDetails();
     //Link account avatar change signal with button updater.
-    connect(knAccount->accountDetails(), &KNAccountDetails::accountAvatarUpdate,
+    connect(accountDetails, &KNAccountDetails::accountAvatarUpdate,
             [=]
             {
                 //Update the notification center button.
@@ -154,10 +156,8 @@ void KNNotificationCenter::resizeEvent(QResizeEvent *event)
 
 void KNNotificationCenter::retranslate()
 {
-    //Check button state.
-    m_button->setToolTip(m_button->isLogin()?
-                             tr("Show Kreogist Account details"):
-                             tr("Login"));
+    //Update the tooltip.
+    m_button->setToolTip(tr("Show Notification Center and Kreogist Account"));
 }
 
 void KNNotificationCenter::resizeNotificationCenter()

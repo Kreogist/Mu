@@ -116,6 +116,7 @@ void KNAccountDetails::resetAccountDetail()
 
 void KNAccountDetails::setIsLogin(bool isLogin)
 {
+    //Save login state.
     m_isLogin = isLogin;
 }
 

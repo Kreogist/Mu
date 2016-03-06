@@ -28,6 +28,7 @@
 #include "knlabelbutton.h"
 #include "knopacityanimebutton.h"
 
+#include "knaccountpasswordbox.h"
 #include "knaccountavatarbutton.h"
 #include "knaccountdetails.h"
 #include "knaccount.h"
@@ -39,9 +40,11 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_failedColor(QColor(0x9c, 0x22, 0x39)),
     m_successColor(QColor(0x41, 0x92, 0x57)),
     m_lastDirectory(QString()),
+    m_passwordModify(new KNAccountPasswordBox(knGlobal->mainWindow())),
     m_avatarImage(new KNAccountAvatarButton(this)),
     m_nickName(new QLabel(this)),
     m_state(new QLabel(this)),
+    m_username(new QLabel(this)),
     m_accountDetails(knAccount->accountDetails()),
     m_fadeInAnime(new QTimeLine(200, this)),
     m_fadeOutAnime(new QTimeLine(200, this)),
@@ -87,6 +90,9 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
             this, &KNAccountDetailPanel::onActionAvatarUpdate);
     connect(m_accountDetails, &KNAccountDetails::accountUpdate,
             this, &KNAccountDetailPanel::onActionDetailUpdate);
+    //Link password editor request.
+    connect(m_passwordModify, &KNAccountPasswordBox::requireUpdatePassword,
+            this, &KNAccountDetailPanel::onActionAskChangePassword);
     //Update state alpha.
     QPalette pal=m_state->palette();
     pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
@@ -108,10 +114,12 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Initial the detail layout.
     QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                             mainLayout->widget());
+    detailLayout->setSpacing(5);
     detailLayout->setContentsMargins(2, 4, 2, 2);
     mainLayout->addLayout(detailLayout, 1);
     //Add widget to detail layout.
     detailLayout->addWidget(m_nickName);
+    detailLayout->addWidget(m_username);
     detailLayout->addWidget(m_state);
     //Initial the control layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -196,6 +204,7 @@ void KNAccountDetailPanel::onActionDetailUpdate()
 {
     //Set account display name
     m_nickName->setText(m_accountDetails->displayName());
+    m_username->setText(m_accountDetails->cacheUserName());
 }
 
 void KNAccountDetailPanel::onActionAvatarUpdate()
@@ -232,7 +241,8 @@ void KNAccountDetailPanel::onActionEditInformation()
 
 void KNAccountDetailPanel::onActionChangePassword()
 {
-    ;
+    //Show the password edit message box.
+    m_passwordModify->exec();
 }
 
 void KNAccountDetailPanel::onActionSelectAvatar()
@@ -259,6 +269,17 @@ void KNAccountDetailPanel::onActionSelectAvatar()
     m_lastDirectory=QFileInfo(targetFilePath).absoluteFilePath();
     //Disable all the controls.
     disableAllControls();
+}
+
+void KNAccountDetailPanel::onActionAskChangePassword(
+        const QString &encryptedPassword)
+{
+    //Generate setter request.
+    QJsonObject passwordSetter;
+    //Set the password.
+    passwordSetter.insert("password", encryptedPassword);
+    //Ask to update password.
+    emit requireUpdateInfo(passwordSetter);
 }
 
 inline KNOpacityAnimeButton *KNAccountDetailPanel::generateButton()

@@ -16,9 +16,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 //
+#include "knnotification.h"
+
 #include "knaccount.h"
 #include "knaccountdetails.h"
-
 //Account widget.
 #include "knaccountloginpanel.h"
 #include "knaccountregisterpanel.h"
@@ -57,10 +58,24 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     connect(knAccount, &KNAccount::loginSuccess,
             this, &KNAccountPanel::onActionLoginSuccess);
 
+    connect(knAccount, &KNAccount::userInfoUpdateSuccess,
+            this, &KNAccountPanel::onActionOperateSuccess);
     connect(knAccount, &KNAccount::avatarUpdatedSuccess,
             this, &KNAccountPanel::onActionOperateSuccess);
     connect(knAccount, &KNAccount::avatarUpdatedFailed,
-            this, &KNAccountPanel::onActionAvatarUpdatedFailed);
+            [=]
+            {
+                //Update the state text.
+                m_detailPanel->setStateText(
+                            KNAccountDetailPanel::FailedToUpdateAvatar);
+            });
+    connect(knAccount, &KNAccount::userInfoUpdateFailed,
+            [=]
+            {
+                //Update the state text.
+                m_detailPanel->setStateText(
+                            KNAccountDetailPanel::FailedToUpdateData);
+            });
     //Link panel signal.
     connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
             this, &KNAccountPanel::onActionShowRegister);
@@ -75,21 +90,9 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     connect(m_detailPanel, &KNAccountDetailPanel::requireLogout,
             this, &KNAccountPanel::onActionLogout);
     connect(m_detailPanel, &KNAccountDetailPanel::requireUpdateAvatar,
-            knAccount, &KNAccount::setAvatar);
-    connect(knAccount, &KNAccount::avatarUpdatedFailed,
-            [=]
-            {
-                //Update the state text.
-                m_detailPanel->setStateText(
-                            KNAccountDetailPanel::FailedToUpdateAvatar);
-            });
-    connect(knAccount, &KNAccount::avatarUpdatedFailed,
-            [=]
-            {
-                //Update the state text.
-                m_detailPanel->setStateText(
-                            KNAccountDetailPanel::OperateSuccess);
-            });
+            knAccount, &KNAccount::setAvatar, Qt::QueuedConnection);
+    connect(m_detailPanel, &KNAccountDetailPanel::requireUpdateInfo,
+            knAccount, &KNAccount::updateAccountInfo, Qt::QueuedConnection);
     //Add widget to switcher.
     m_switcher->addWidget(m_loginPanel);
     m_switcher->addWidget(m_generatePanel);
@@ -201,11 +204,14 @@ void KNAccountPanel::onActionOperateSuccess()
 {
     //Update the state text.
     m_detailPanel->setStateText(KNAccountDetailPanel::OperateSuccess);
+    //Check whether panel is visible.
+    if(!isVisible())
+    {
+        //When the panel is hide, emit an notification.
+        knNotification->pushOnly(
+                    tr("Account Update Success"),
+                    tr("The user data of %1 has been updated "
+                       "successfully.").arg(
+                        knAccount->accountDetails()->cacheUserName()));
+    }
 }
-
-void KNAccountPanel::onActionAvatarUpdatedFailed()
-{
-    //Update the state text.
-    m_detailPanel->setStateText(KNAccountDetailPanel::FailedToUpdateAvatar);
-}
-
