@@ -25,6 +25,7 @@
 #define knAccount (KNAccount::instance())
 
 class KNAccountDetails;
+class KNConfigure;
 /*!
  * \brief The KNAccount class provides the backend for Kreogist Account. It
  * supports all the operations user will do for Kreogist Account.
@@ -178,6 +179,7 @@ private:
     KNAccount(const KNAccount &);
     KNAccount(KNAccount &&);
 
+    KNConfigure *m_cacheConfigure;
     KNAccountDetails *m_accountDetails;
 };
 

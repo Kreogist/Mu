@@ -23,6 +23,7 @@
 
 #include "knaccountdetails.h"
 #include "knaccountutil.h"
+#include "knconfigure.h"
 
 #include "knaccount.h"
 
@@ -32,6 +33,7 @@ KNAccount *KNAccount::m_instance=nullptr;
 
 KNAccount::KNAccount(QObject *parent) :
     KNRestApiBase(parent),
+    m_cacheConfigure(nullptr),
     m_accountDetails(new KNAccountDetails(this))
 {
 }
@@ -502,6 +504,27 @@ inline void KNAccount::updateDetails(const QJsonObject &userInfo)
 
 KNAccount::~KNAccount()
 {
+    //Save account detail cache in cache configure.
+    if(m_accountDetails->isLogin() && m_cacheConfigure)
+    {
+        //Save the detail info into cache configure.
+        m_cacheConfigure->setData("Username",
+                                  m_accountDetails->cacheUserName());
+        m_cacheConfigure->setData("Password",
+                                  m_accountDetails->cachePassword());
+        //Check the header pixmap.
+        if(m_accountDetails->accountAvatar().isNull())
+        {
+            //Remove the cached header icon.
+            ;
+        }
+        else
+        {
+            //Save the cached header icon.
+            ;
+        }
+    }
+    //Remove the account detail pointer.
     m_accountDetails->deleteLater();
 }
 
