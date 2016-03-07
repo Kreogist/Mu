@@ -90,7 +90,9 @@ private slots:
 
 private:
     QLabel *m_notificationIndicator;
+#ifndef Q_OS_MACX
     QPropertyAnimation *m_resizeAnime;
+#endif
     KNAccountAvatarButton *m_button;
     KNNotificationView *m_notificationView;
     KNNotificationWidget *m_notificationWidget;

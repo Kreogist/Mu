@@ -41,7 +41,9 @@
 KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     QFrame(parent),
     m_notificationIndicator(new QLabel(this)),
+    #ifndef Q_OS_MACX
     m_resizeAnime(new QPropertyAnimation(this, "size", this)),
+    #endif
     m_button(new KNAccountAvatarButton(this)),
     m_notificationView(new KNNotificationView(this)),
     m_notificationWidget(new KNNotificationWidget(this)),
@@ -75,7 +77,9 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     m_notificationIndicator->setFixedSize(indicatorPixmap.size());
     m_notificationIndicator->hide();
     //Configure animation.
+#ifndef Q_OS_MACX
     m_resizeAnime->setEasingCurve(QEasingCurve::OutCubic);
+#endif
     //Configure the button.
     m_button->setCursor(Qt::PointingHandCursor);
     m_button->setButtonSize(32);
@@ -162,6 +166,10 @@ void KNNotificationCenter::retranslate()
 
 void KNNotificationCenter::resizeNotificationCenter()
 {
+#ifdef Q_OS_MACX
+    //For Mac OS X, we will use no animation.
+    resize(QSize(width(), qMin(heightHint(), maximumHeight())));
+#else
     //Stop the anime.
     m_resizeAnime->stop();
     //Set the initial size and end size.
@@ -170,6 +178,7 @@ void KNNotificationCenter::resizeNotificationCenter()
                                                    maximumHeight())));
     //Start the anime.
     m_resizeAnime->start();
+#endif
 }
 
 KNNotificationWidget *KNNotificationCenter::notificationWidget()

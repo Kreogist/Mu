@@ -51,6 +51,8 @@ class KNGlobal : public QObject
 public:
     enum DefaultPath
     {
+        KreogistDir,
+        AccountDir,
         UserDataDir,
         ResourceDir,
         LibraryDir,
@@ -100,7 +102,7 @@ public:
      * \param index The directory enumerate number.
      * \return The path of the directory.
      */
-    QString dirPath(const int &index);
+    QString dirPath(int index);
 
     /*!
      * \brief Add a pair of preference tab and content to preference panel.
@@ -201,7 +203,15 @@ signals:
      */
     void libraryPathChanged(QString originalPath, QString currentPath);
 
+    /*!
+     * \brief Ask for global manager to start working.
+     */
+    void startWorking();
+
 public slots:
+    /*!
+     * \brief updateInfrastructure
+     */
     void updateInfrastructure();
 
 private slots:

@@ -17,10 +17,14 @@
  */
 #include <QBuffer>
 #include <QCryptographicHash>
+#include <QDir>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrlQuery>
 
+#include "knutil.h"
+#include "knglobal.h"
 #include "knaccountdetails.h"
 #include "knaccountutil.h"
 #include "knconfigure.h"
@@ -29,13 +33,115 @@
 
 #include <QDebug>
 
+#define CacheUsernameField "Username"
+#define CachePasswordField "Password"
+
 KNAccount *KNAccount::m_instance=nullptr;
 
 KNAccount::KNAccount(QObject *parent) :
     KNRestApiBase(parent),
     m_cacheConfigure(nullptr),
-    m_accountDetails(new KNAccountDetails(this))
+    m_accountDetails(new KNAccountDetails)
 {
+}
+
+void KNAccount::setCacheConfigure(KNConfigure *cacheConfigure)
+{
+    //Save the cache configure.
+    m_cacheConfigure = cacheConfigure;
+    //Set the data from cache configure.
+    if(m_cacheConfigure==nullptr)
+    {
+        //Mission complete, still cannot use.
+        return;
+    }
+    //Set data to user detail.
+    QString cacheUsername=m_cacheConfigure->data(CacheUsernameField).toString();
+    //Check whether the cache username is valid.
+    if(cacheUsername.isEmpty())
+    {
+        //Mission complete.
+        return;
+    }
+    //Save the user name information to data.
+    m_accountDetails->setCacheUserName(cacheUsername);
+    m_accountDetails->setCachePassword(
+                m_cacheConfigure->data(CachePasswordField).toString());
+}
+
+void KNAccount::startToWork()
+{
+    //Load the cache image.
+    QString cachedAvatarPath=
+            knGlobal->dirPath(KNGlobal::KreogistDir)+"/avatar.png";
+    //Check whether the image is exist and valid.
+    if(QFileInfo::exists(cachedAvatarPath))
+    {
+        //Load the image.
+        QPixmap cachedImage(cachedAvatarPath, "PNG");
+        //If the cached image is not null, load it to account details.
+        if(!cachedImage.isNull())
+        {
+            //Set the avatar.
+            m_accountDetails->setAccountAvatar(cachedImage);
+        }
+    }
+    //Check whether the account details contains user name and password.
+    if((!m_accountDetails->cacheUserName().isEmpty()) &&
+            (!m_accountDetails->cachePassword().isEmpty()))
+    {
+        //Emit start auto login signal.
+        emit startAutoLogin();
+        //Prepare the response cache.
+        QByteArray responseData;
+        //Tried to login with cache username and password.
+        if(loginWith(m_accountDetails->cacheUserName(),
+                     m_accountDetails->cachePassword(),
+                     responseData)==200)
+        {
+            //Check the response data.
+            QJsonObject loginData=
+                    QJsonDocument::fromJson(responseData).object();
+            //Save the contact information.
+            m_accountDetails->setObjectId(
+                        loginData.value("objectId").toString());
+            m_accountDetails->setSessionToken(
+                        loginData.value("sessionToken").toString());
+            //Set the login.
+            m_accountDetails->setIsLogin(true);
+            //Update account detail information.
+            updateDetails(loginData);
+            //Emit success signal.
+            emit loginSuccess();
+        }
+        else
+        {
+            //Emit failed signal.
+            emit loginFailed(KNAccountUtil::InfoIncorrect);
+            //Clear the cache user name and cache password.
+            m_accountDetails->resetAccountDetail();
+        }
+    }
+}
+
+inline int KNAccount::loginWith(const QString &username,
+                                const QString &password,
+                                QByteArray &responseCache)
+{
+    //Generate the login request.
+    QNetworkRequest loginRequest=generateKreogistRequest("login");
+    //Construct the json struct.
+    //Try to login with encrypted password first.
+    QUrlQuery loginQuery;
+    //Insert user name.
+    loginQuery.addQueryItem("username", username);
+    loginQuery.addQueryItem("password", password);
+    //Insert login query to login url.
+    QUrl loginUrl=loginRequest.url();
+    loginUrl.setQuery(loginQuery);
+    loginRequest.setUrl(loginUrl);
+    //Get the login result.
+    return get(loginRequest, responseCache);
 }
 
 bool KNAccount::generateAccount(const QString &userName,
@@ -122,25 +228,13 @@ bool KNAccount::login(const QString &userName,
         //You cannot login two account at the same time.
         return false;
     }
-    //Generate the login request.
-    QNetworkRequest loginRequest=generateKreogistRequest("login");
+
     //Encrypt the password.
     QString encryptedPassword=accessPassword(password);
-    //Construct the json struct.
-    //Try to login with encrypted password first.
-    QUrlQuery loginQuery;
-    //Insert user name.
-    loginQuery.addQueryItem("username", userName);
-    loginQuery.addQueryItem("password", encryptedPassword);
-    //Insert login query to login url.
-    QUrl loginUrl=loginRequest.url();
-    loginUrl.setQuery(loginQuery);
-    loginRequest.setUrl(loginUrl);
-    //Get the login result.
     //Generate the response cache.
     QByteArray responseCache;
     //Send the JSON data to Kreogist Cloud.
-    if(get(loginRequest, responseCache)==200)
+    if(loginWith(userName, encryptedPassword, responseCache)==200)
     {
         //Save the password as encrypt password.
         password=encryptedPassword;
@@ -150,13 +244,8 @@ bool KNAccount::login(const QString &userName,
         //Tried to use the original password.
         //Because when they are tring to reset the password, it will use
         //their original password.
-        QUrlQuery rawLoginQuery;
-        rawLoginQuery.addQueryItem("username", userName);
-        rawLoginQuery.addQueryItem("password", password);
-        loginUrl.setQuery(rawLoginQuery);
-        loginRequest.setUrl(loginUrl);
         //Retry the get data from Kreogist Cloud.
-        if(get(loginRequest, responseCache)!=200)
+        if(loginWith(userName, password, responseCache)!=200)
         {
             //Emit failed signal.
             emit loginFailed(KNAccountUtil::InfoIncorrect);
@@ -174,13 +263,14 @@ bool KNAccount::login(const QString &userName,
         passwordSetter.insert("password", encryptedPassword);
         //Generate the udpate response.
         QByteArray passwordUpdateResponse;
+        //Generate the update request.
+        QNetworkRequest updateRequest=
+                generateKreogistRequest("users/"+objectId);
         //Update the password.
-        loginRequest.setRawHeader("X-Bmob-Session-Token",
+        updateRequest.setRawHeader("X-Bmob-Session-Token",
                                   sessionToken.toUtf8());
-        //Update the url to user's url.
-        loginRequest.setUrl("https://api.bmob.cn/1/users/" + objectId);
         //Put the new information.
-        if(put(loginRequest,
+        if(put(updateRequest,
                QJsonDocument(passwordSetter).toJson(QJsonDocument::Compact),
                passwordUpdateResponse)!=200)
         {
@@ -277,6 +367,11 @@ void KNAccount::logout()
 {
     //Reset the account details.
     m_accountDetails->resetAccountDetail();
+    //Clear the caching data.
+    m_cacheConfigure->setData(CacheUsernameField, "");
+    m_cacheConfigure->setData(CachePasswordField, "");
+    //Clear the cached image.
+    QFile::remove(knGlobal->dirPath(KNGlobal::KreogistDir)+"/avatar.png");
 }
 
 bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
@@ -504,26 +599,6 @@ inline void KNAccount::updateDetails(const QJsonObject &userInfo)
 
 KNAccount::~KNAccount()
 {
-    //Save account detail cache in cache configure.
-    if(m_accountDetails->isLogin() && m_cacheConfigure)
-    {
-        //Save the detail info into cache configure.
-        m_cacheConfigure->setData("Username",
-                                  m_accountDetails->cacheUserName());
-        m_cacheConfigure->setData("Password",
-                                  m_accountDetails->cachePassword());
-        //Check the header pixmap.
-        if(m_accountDetails->accountAvatar().isNull())
-        {
-            //Remove the cached header icon.
-            ;
-        }
-        else
-        {
-            //Save the cached header icon.
-            ;
-        }
-    }
     //Remove the account detail pointer.
     m_accountDetails->deleteLater();
 }
@@ -546,4 +621,57 @@ KNAccount *KNAccount::instance()
 KNAccountDetails *KNAccount::accountDetails()
 {
     return m_accountDetails;
+}
+
+void KNAccount::saveConfigure()
+{
+    //Check cache configure.
+    if(m_cacheConfigure==nullptr)
+    {
+        //Ignore the cache configure.
+        return;
+    }
+    //Get the avatar image cache path.
+    QString avatarPath=
+            knGlobal->dirPath(KNGlobal::KreogistDir)+"/avatar.png";
+    //Check whether the cache data is empty.
+    if(m_accountDetails->cacheUserName().isEmpty())
+    {
+        //Clear the cache configure.
+        m_cacheConfigure->setData(CacheUsernameField, "");
+        m_cacheConfigure->setData(CachePasswordField, "");
+        //Remove the avatar.
+        QFile::remove(avatarPath);
+        //Misson complete.
+        return;
+    }
+    //Save the detail info into cache configure.
+    m_cacheConfigure->setData(CacheUsernameField,
+                              m_accountDetails->cacheUserName());
+    m_cacheConfigure->setData(CachePasswordField,
+                              m_accountDetails->cachePassword());
+    //Check the header pixmap.
+    if(m_accountDetails->accountAvatar().isNull())
+    {
+        //Remove the cached header icon.
+        //Check existance.
+        if(QFileInfo::exists(avatarPath))
+        {
+            //Remove the file.
+            QFile::remove(avatarPath);
+        }
+    }
+    else
+    {
+        //Save the cached header icon.
+        QFileInfo targetFile(avatarPath);
+        //Generate the dir, ensure the directory is valid..
+        if(!KNUtil::ensurePathValid(targetFile.absolutePath()).isEmpty())
+        {
+            //Save the pixmap to the target file.
+            m_accountDetails->accountAvatar().save(
+                        targetFile.absoluteFilePath(),
+                        "png");
+        }
+    }
 }

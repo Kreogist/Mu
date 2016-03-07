@@ -94,6 +94,8 @@ private slots:
 
     void onActionOperateSuccess();
 
+    void onActionStartAutoLogin();
+
 private:
     enum AccountPanelIndex
     {

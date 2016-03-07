@@ -62,7 +62,9 @@ KNPluginManager::KNPluginManager(QObject *parent) :
 
 KNPluginManager::~KNPluginManager()
 {
-    //Save the configure.
+    //Save account preference.
+    knAccount->saveConfigure();
+    //Save the configure, this must be done at last.
     knConf->saveConfigure();
 }
 
@@ -221,6 +223,8 @@ void KNPluginManager::loadPlugins()
 
 void KNPluginManager::launchApplication()
 {
+    //Start the global manager to work.
+    emit knGlobal->startWorking();
     //Check out the argument size.
     if(qApp->arguments().size() > 1)
     {

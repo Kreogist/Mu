@@ -54,6 +54,11 @@ public:
      */
     KNAccountDetails *accountDetails();
 
+    /*!
+     * \brief Save configure to cache configure.
+     */
+    void saveConfigure();
+
 signals:
     /*!
      * \brief When login success, this signal will be emitted.
@@ -96,6 +101,11 @@ signals:
      * \brief userInfoUpdateFailed
      */
     void userInfoUpdateFailed();
+
+    /*!
+     * \brief When auto login start, this signal will be emitted.
+     */
+    void startAutoLogin();
 
 public slots:
     /*!
@@ -162,7 +172,21 @@ public slots:
      */
     static QString bytesToHex(const QByteArray &bytes);
 
+    /*!
+     * \brief Set the account cache configure to the account manager.
+     * \param cacheConfigure Account cache configure.
+     */
+    void setCacheConfigure(KNConfigure *cacheConfigure);
+
+    /*!
+     * \brief This is the initial online working slots for global instance to
+     * start up.
+     */
+    void startToWork();
+
 private:
+    inline int loginWith(const QString &username,
+                         const QString &password, QByteArray &responseCache);
     inline bool updateOnlineAccount(const QJsonObject &userInfo,
                                     bool withSignal=true);
     inline bool updateTokenSession();

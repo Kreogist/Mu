@@ -57,6 +57,8 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             this, &KNAccountPanel::onActionLoginFailed);
     connect(knAccount, &KNAccount::loginSuccess,
             this, &KNAccountPanel::onActionLoginSuccess);
+    connect(knAccount, &KNAccount::startAutoLogin,
+            this, &KNAccountPanel::onActionStartAutoLogin);
 
     connect(knAccount, &KNAccount::userInfoUpdateSuccess,
             this, &KNAccountPanel::onActionOperateSuccess);
@@ -214,4 +216,12 @@ void KNAccountPanel::onActionOperateSuccess()
                        "successfully.").arg(
                         knAccount->accountDetails()->cacheUserName()));
     }
+}
+
+void KNAccountPanel::onActionStartAutoLogin()
+{
+    //Launch waiting panel animation.
+    m_waitingPanel->startTicking();
+    //Set current widget to looping widget.
+    m_switcher->setCurrentWidget(WaitingPanel);
 }

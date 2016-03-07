@@ -63,7 +63,7 @@ void KNGlobal::initial(QObject *parent)
     }
 }
 
-QString KNGlobal::dirPath(const int &index)
+QString KNGlobal::dirPath(int index)
 {
     Q_ASSERT(index>-1 && index<DefaultDirCount);
     return m_dirPath[index];
@@ -210,6 +210,10 @@ inline void KNGlobal::initialDefaultDirPath()
 {
     /*
      * Initial the default path of the dirs.
+     * Kreogist Dir:
+     *     Windows: My documents/Kreogist/
+     *    Mac OS X: Documents/Kreogist/
+     *       Linux: ~/.kreogist/
      * User Data Dir:
      *     Windows: My documents/Kreogist/Mu
      *    Mac OS X: Documents/Kreogist/Mu
@@ -224,27 +228,32 @@ inline void KNGlobal::initialDefaultDirPath()
      *      $UserDataDir$/Plugins
      */
 #ifdef Q_OS_WIN //No matter Win32/Win64
-    m_dirPath[UserDataDir]=
+    m_dirPath[KreogistDir]=
             KNUtil::simplifiedPath(QStandardPaths::writableLocation(
                                        QStandardPaths::DocumentsLocation)
-                                   +"/Kreogist/Mu");
+                                   +"/Kreogist");
+    m_dirPath[UserDataDir]=m_dirPath[KreogistDir]+"/Mu";
     m_dirPath[ResourceDir]=qApp->applicationDirPath();
 #endif
 #ifdef Q_OS_MACX
-    m_dirPath[UserDataDir]=
-            KNUtil::simplifiedPath(QStandardPaths::writableLocation(
-                    QStandardPaths::DocumentsLocation)
-                +"/Kreogist/Mu");
+    m_dirPath[KreogistDir]=
+                KNUtil::simplifiedPath(QStandardPaths::writableLocation(
+                                           QStandardPaths::DocumentsLocation)
+                                       +"/Kreogist");
+    m_dirPath[UserDataDir]=m_dirPath[KreogistDir]+"/Mu";
     m_dirPath[ResourceDir]=
             KNUtil::simplifiedPath(qApp->applicationDirPath()+"/../Resources");
 #endif
 #ifdef Q_OS_LINUX
-    m_dirPath[UserDataDir]=
+    m_dirPath[KreogistDir]=
             KNUtil::simplifiedPath(QStandardPaths::writableLocation(
                                        QStandardPaths::HomeLocation))
-            + "/.kreogist/mu";
+            + "/.kreogist";
+    m_dirPath[UserDataDir]=m_dirPath[KreogistDir]+"/mu";
     m_dirPath[ResourceDir]=m_dirPath[UserDataDir];
 #endif
+    m_dirPath[AccountDir]=
+            KNUtil::simplifiedPath(m_dirPath[KreogistDir]+"/Account");
     m_dirPath[LibraryDir]=
             KNUtil::simplifiedPath(m_dirPath[UserDataDir]+"/Library");
     m_dirPath[PluginDir]=
@@ -316,8 +325,13 @@ inline void KNGlobal::initialInfrastrcture()
     //Load the theme in the configure file.
     knTheme->setTheme(m_globalConfigure->data("Theme").toString());
 
+    //Set the configure.
+    knAccount->setCacheConfigure(cacheConfigure()->getConfigure("Account"));
     //Initial the account system.
     knAccount->setWorkingThread(m_accountThread);
+    //Link the account.
+    connect(this, &KNGlobal::startWorking, knAccount, &KNAccount::startToWork,
+            Qt::QueuedConnection);
     //Start account working thread.
     m_accountThread->start();
 
