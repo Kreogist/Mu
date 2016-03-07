@@ -19,6 +19,7 @@
 #include <QLabel>
 
 #include "sao/knsaosubmenu.h"
+#include "knnotification.h"
 #include "knimagelabel.h"
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
@@ -147,6 +148,14 @@ void KNAccountLoginPanel::onActionLoginError(int errorCode)
         m_username->selectAll();
         m_password->selectAll();
         m_username->setFocus(Qt::MouseFocusReason);
+        //Check visible.
+        if(!isVisible())
+        {
+            //When panel is hidden, push a message.
+            knNotification->pushOnly(
+                        tr("Kreogiat Account login failed."),
+                        m_errorDescription[KNAccountUtil::InfoIncorrect]);
+        }
         break;
     default:
         break;
