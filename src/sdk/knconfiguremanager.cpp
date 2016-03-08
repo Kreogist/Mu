@@ -21,6 +21,7 @@
 #include <QFileInfo>
 #include <QJsonDocument>
 
+#include "knutil.h"
 #include "knconfigure.h"
 
 #include "knconfiguremanager.h"
@@ -63,16 +64,24 @@ KNConfigure *KNConfigureManager::configure(int index)
     return m_configures[index];
 }
 
-void KNConfigureManager::setFolderPath(const QString &folderPath)
+void KNConfigureManager::setFolderPath(const QString &folderPath,
+                                       const QString &accountFolderPath)
 {
     //Check if the folder path is vaild.
     if((!folderPath.isEmpty()) && !QFileInfo::exists(folderPath))
     {
         //Build the director.
-        QDir().mkpath(folderPath);
+        KNUtil::ensurePathValid(folderPath);
+    }
+    //Check if account folder path is valid.
+    if((!accountFolderPath.isEmpty()) && !QFileInfo::exists(accountFolderPath))
+    {
+        //Build the director.
+        KNUtil::ensurePathValid(accountFolderPath);
     }
     //Save the folder path.
     m_folderPath=folderPath;
+    m_accountFolderPath=accountFolderPath;
     //Reload the configure.
     reloadConfigure();
 }
@@ -87,6 +96,12 @@ void KNConfigureManager::reloadConfigure()
     loadConfigureFile(configureDir.filePath("cache.json"), Cache);
     loadConfigureFile(configureDir.filePath("system.json"), System);
     loadConfigureFile(configureDir.filePath("user.json"), User);
+    //If the account folder is empty, then set the folder path to application
+    //dir.
+    QDir accountDir(m_accountFolderPath.isEmpty()?
+                        qApp->applicationDirPath():
+                        m_accountFolderPath);
+    loadConfigureFile(accountDir.filePath("account.json"), Account);
 }
 
 void KNConfigureManager::saveConfigure()
@@ -99,6 +114,12 @@ void KNConfigureManager::saveConfigure()
     saveConfigureFile(configureDir.filePath("cache.json"), Cache);
     saveConfigureFile(configureDir.filePath("system.json"), System);
     saveConfigureFile(configureDir.filePath("user.json"), User);
+    //If the account folder is empty, then set the folder path to application
+    //dir.
+    QDir accountDir(m_accountFolderPath.isEmpty()?
+                        qApp->applicationDirPath():
+                        m_accountFolderPath);
+    saveConfigureFile(accountDir.filePath("account.json"), Account);
 }
 
 void KNConfigureManager::loadConfigureFile(const QString &filePath, int type)

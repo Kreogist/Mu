@@ -149,6 +149,12 @@ public:
     KNConfigure *userConfigure();
 
     /*!
+     * \brief Get the account configure class.
+     * \return The account KNConfigure class.
+     */
+    KNConfigure *accountConfigure();
+
+    /*!
      * \brief Set the global preference plugin.
      * \param preference The preference plugin.
      */

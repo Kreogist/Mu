@@ -73,7 +73,7 @@ void KNAccount::startToWork()
 {
     //Load the cache image.
     QString cachedAvatarPath=
-            knGlobal->dirPath(KNGlobal::KreogistDir)+"/avatar.png";
+            knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png";
     //Check whether the image is exist and valid.
     if(QFileInfo::exists(cachedAvatarPath))
     {
@@ -371,7 +371,7 @@ void KNAccount::logout()
     m_cacheConfigure->setData(CacheUsernameField, "");
     m_cacheConfigure->setData(CachePasswordField, "");
     //Clear the cached image.
-    QFile::remove(knGlobal->dirPath(KNGlobal::KreogistDir)+"/avatar.png");
+    QFile::remove(knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png");
 }
 
 bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
@@ -633,7 +633,7 @@ void KNAccount::saveConfigure()
     }
     //Get the avatar image cache path.
     QString avatarPath=
-            knGlobal->dirPath(KNGlobal::KreogistDir)+"/avatar.png";
+            knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png";
     //Check whether the cache data is empty.
     if(m_accountDetails->cacheUserName().isEmpty())
     {

@@ -76,9 +76,11 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     //Configure the indicator.
     m_notificationIndicator->setFixedSize(indicatorPixmap.size());
     m_notificationIndicator->hide();
-    //Configure animation.
 #ifndef Q_OS_MACX
+    //Configure animation.
     m_resizeAnime->setEasingCurve(QEasingCurve::OutCubic);
+    connect(m_resizeAnime, &QPropertyAnimation::finished,
+            [=]{resize(m_resizeAnime->endValue().toSize());});
 #endif
     //Configure the button.
     m_button->setCursor(Qt::PointingHandCursor);

@@ -48,6 +48,7 @@ public:
         Cache,
         System,
         User,
+        Account,
         ConfigureTypeCount
     };
 
@@ -86,8 +87,10 @@ public slots:
      * If you set the folder path to empty, it will load the configure under the
      * application path.
      * \param folderPath The configure file folder path.
+     * \param accountFolderPath The account configure file folder path.
      */
-    void setFolderPath(const QString &folderPath);
+    void setFolderPath(const QString &folderPath,
+                       const QString &accountFolderPath);
 
     /*!
      * \brief Reload the configure from the folder path.
@@ -109,7 +112,7 @@ private:
 
     static KNConfigureManager *m_instance;
 
-    QString m_folderPath;
+    QString m_folderPath, m_accountFolderPath;
     KNConfigure *m_configures[ConfigureTypeCount];
 };
 

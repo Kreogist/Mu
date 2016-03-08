@@ -113,6 +113,11 @@ KNConfigure *KNGlobal::userConfigure()
     return knConf->configure(KNConfigureManager::User);
 }
 
+KNConfigure *KNGlobal::accountConfigure()
+{
+    return knConf->configure(KNConfigureManager::Account);
+}
+
 void KNGlobal::retranslate()
 {
     //Update storeage unit.
@@ -279,7 +284,8 @@ inline void KNGlobal::initialInfrastrcture()
     //   A: Because we won't change the configure path.
     //Because KNConfigureManager will automatically reload the configure, so we
     //don't need to load the configure here.
-    knConf->setFolderPath(m_dirPath[UserDataDir]+"/Configure");
+    knConf->setFolderPath(m_dirPath[UserDataDir]+"/Configure",
+                          m_dirPath[AccountDir]);
     //Get the global configure.
     m_globalConfigure=userConfigure()->getConfigure("Global");
 
@@ -326,7 +332,7 @@ inline void KNGlobal::initialInfrastrcture()
     knTheme->setTheme(m_globalConfigure->data("Theme").toString());
 
     //Set the configure.
-    knAccount->setCacheConfigure(cacheConfigure()->getConfigure("Account"));
+    knAccount->setCacheConfigure(accountConfigure());
     //Initial the account system.
     knAccount->setWorkingThread(m_accountThread);
     //Link the account.
