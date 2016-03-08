@@ -21,6 +21,7 @@
 
 #include "knopacityanimebutton.h"
 
+#define DisabledOpacity 0.1
 #define BaseOpacity 400
 #define HoverOpacity 800
 
@@ -34,7 +35,7 @@ KNOpacityAnimeButton::KNOpacityAnimeButton(QWidget *parent) :
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 
     //Configure the time line.
-    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setUpdateInterval(33);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNOpacityAnimeButton::onActionOpacityChanged);
@@ -51,8 +52,10 @@ void KNOpacityAnimeButton::paintEvent(QPaintEvent *event)
         QPainter painter(this);
         painter.setRenderHints(QPainter::Antialiasing |
                                QPainter::SmoothPixmapTransform, true);
-        //Set the opacity.
-        painter.setOpacity(imageOpacity());
+        //Check whether the button is disabled and set the opacity.
+        painter.setOpacity(isEnabled()?
+                               imageOpacity():
+                               DisabledOpacity);
         //Calcualte the icon size.
         int iconSize=qMin(width(), height());
         //Draw the icon.

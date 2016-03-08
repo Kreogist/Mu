@@ -70,6 +70,11 @@ public slots:
 
 protected:
     /*!
+     * \brief Reimplemented from QFrame::event().
+     */
+    bool event(QEvent *e) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QFrame::showEvent().
      */
     void showEvent(QShowEvent *event)  Q_DECL_OVERRIDE;

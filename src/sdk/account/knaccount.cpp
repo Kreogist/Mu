@@ -573,6 +573,8 @@ bool KNAccount::updateOnlineAccount(const QJsonObject &userInfo,
 
 inline void KNAccount::updateDetails(const QJsonObject &userInfo)
 {
+    //Sace the user info.
+    m_accountDetails->setAccountInfo(userInfo);
     //Save the important data.
     m_accountDetails->setDisplayName(userInfo.value("displayName").toString());
     m_accountDetails->setAvatarPath(userInfo.value("avatarPath").toString());

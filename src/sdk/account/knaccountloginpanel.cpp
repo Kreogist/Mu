@@ -49,6 +49,9 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     m_subTitle->setAlignment(Qt::AlignCenter);
     m_errorPal=palette();
     m_errorPal.setColor(QPalette::WindowText, QColor(0x9a, 0x25, 0x38));
+    m_hintPal=palette();
+    m_hintPal.setColor(QPalette::WindowText, QColor(157, 157, 157));
+    m_subTitle->setPalette(m_hintPal);
     //Configure the user name line edit.
     m_username->setMinimumLightness(0xC0);
     m_username->setMediumLightness(0xE0);
@@ -191,7 +194,7 @@ void KNAccountLoginPanel::onActionCheckInput()
 {
     //Reset the sub title.
     m_subTitle->setText(m_subTitleText);
-    m_subTitle->setPalette(palette());
+    m_subTitle->setPalette(m_hintPal);
     //Reset the login visible.
     m_login->setVisible(!(m_username->text().isEmpty() ||
                           m_password->text().isEmpty()));

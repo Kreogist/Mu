@@ -42,6 +42,9 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
 {
     //Set property.
     setFixedHeight(270);
+    //Configure the panel.
+    m_detailPanel->setAccountDetails(knAccount->accountDetails());
+
     //Link current panel to account backend.
     connect(this, &KNAccountPanel::requireLogin,
             knAccount, &KNAccount::login);
@@ -214,7 +217,7 @@ void KNAccountPanel::onActionOperateSuccess()
                     tr("Account Update Success"),
                     tr("The user data of %1 has been updated "
                        "successfully.").arg(
-                        knAccount->accountDetails()->cacheUserName()));
+                        knAccount->accountDetails()->displayName()));
     }
 }
 

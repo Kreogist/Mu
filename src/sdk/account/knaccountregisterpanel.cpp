@@ -70,7 +70,7 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
             this, &KNAccountRegisterPanel::onActionCheckValid);
     //Configure the hint label.
     QPalette hintPal=palette();
-    hintPal.setColor(QPalette::WindowText, QColor(138, 155, 168));
+    hintPal.setColor(QPalette::WindowText, QColor(157, 157, 157));
     // E-mail Hint.
     m_emailHint->setPalette(hintPal);
     // Password Hint.
