@@ -316,7 +316,7 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
     if(!m_accountDetails->avatarPath().isEmpty())
     {
         //Clear the raw image.
-        deleteResource(generateRequest(
+        deleteResource(generateKreogistRequest(
                            "files/"+m_accountDetails->avatarPath()));
     }
     //Generate image cache.
@@ -593,6 +593,11 @@ inline void KNAccount::updateDetails(const QJsonObject &userInfo)
             //Set the image image resource.
             m_accountDetails->setAccountAvatar(
                         QPixmap::fromImage(QImage::fromData(imageResponse)));
+        }
+        else
+        {
+            //Reset the account details avatar.
+            m_accountDetails->setAccountAvatar(QPixmap());
         }
     }
     //We have to notify the account is update.
