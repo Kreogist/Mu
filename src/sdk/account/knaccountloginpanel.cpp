@@ -158,7 +158,7 @@ void KNAccountLoginPanel::onActionLoginError(int errorCode)
         {
             //When panel is hidden, push a message.
             knNotification->pushOnly(
-                        tr("Kreogiat Account login failed."),
+                        tr("Kreogist Account login failed."),
                         m_errorDescription[KNAccountUtil::InfoIncorrect]);
         }
         break;

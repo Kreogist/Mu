@@ -2,24 +2,42 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_HK">
 <context>
+    <name>KNAccountDetailBox</name>
+    <message>
+        <location filename="../sdk/account/knaccountdetailbox.cpp" line="101"/>
+        <source>Username</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailbox.cpp" line="102"/>
+        <source>Nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailbox.cpp" line="103"/>
+        <source>E-mail</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNAccountDetailPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="199"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="211"/>
         <source>Account update success.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="201"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="213"/>
         <source>Failed to update account info. Try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="203"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="215"/>
         <source>Failed to update new avatar. Try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="256"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="289"/>
         <source>Select avatar file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -27,42 +45,47 @@
 <context>
     <name>KNAccountLoginPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="163"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="177"/>
         <source>Username or password incorrect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="166"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="180"/>
         <source>with Your Kreogist Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="165"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="179"/>
         <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="160"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="161"/>
+        <source>Kreogist Account login failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="174"/>
         <source>Cannot connect to server. Please check your Internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="169"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="183"/>
         <source>Username/E-mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="170"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="184"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="172"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="186"/>
         <source>Create an account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="173"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="187"/>
         <source>Forget password?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -70,12 +93,12 @@
 <context>
     <name>KNAccountPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="212"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="217"/>
         <source>Account Update Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="213"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="218"/>
         <source>The user data of %1 has been updated successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -83,37 +106,37 @@
 <context>
     <name>KNAccountPasswordBox</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="145"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="147"/>
         <source>Set new password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="146"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="148"/>
         <source>Input your new password for %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="150"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="152"/>
         <source>New Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="151"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="153"/>
         <source>Input New Password Again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="154"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
         <source>Password must be at least 6 characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
         <source>Password must include a number.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="160"/>
         <source>Password must include an upper and lower case letter.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -121,17 +144,17 @@
 <context>
     <name>KNAccountPasswordVerification</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="114"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="115"/>
         <source>Enter your password to perform administrative tasks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="117"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="118"/>
         <source>An action is attempting to perform an action that requires privileges. Authentication is required to perform this action.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="121"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="122"/>
         <source>Password is not correct, try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -139,54 +162,62 @@
 <context>
     <name>KNAccountRegisterPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="142"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="165"/>
         <source>Create Kreogist Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="144"/>
-        <source>1. Passwords must be at least 6 characters.
-2. Passwords must include a number.
-3. Passwords must include an upper and lower case letter.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="148"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="166"/>
         <source>Your E-mail will be verified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="150"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="169"/>
+        <source>Password must be at least 6 characters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="171"/>
+        <source>Password must include a number.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="173"/>
+        <source>Password must include an upper and lower case letter.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="175"/>
         <source>Username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="151"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="176"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="152"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="177"/>
         <source>E-mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="154"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="179"/>
         <source>I agree to the Terms of Service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="157"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="182"/>
         <source>Unknown error. Please check your Internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="159"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="184"/>
         <source>Username is already taken, try another one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="161"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="186"/>
         <source>E-mail is already taken, use another E-mail address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,7 +225,7 @@
 <context>
     <name>KNAccountWaitingPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountwaitingpanel.cpp" line="66"/>
+        <location filename="../sdk/account/knaccountwaitingpanel.cpp" line="70"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
@@ -202,57 +233,57 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="119"/>
+        <location filename="../sdk/knglobal.cpp" line="124"/>
         <source>Byte</source>
         <translation>位元組</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="123"/>
+        <location filename="../sdk/knglobal.cpp" line="128"/>
         <source>Portable Network Graphics</source>
         <translation type="unfinished">可擕式網路圖形</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="125"/>
+        <location filename="../sdk/knglobal.cpp" line="130"/>
         <source>Joint Photographic Experts Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="127"/>
+        <location filename="../sdk/knglobal.cpp" line="132"/>
         <source>Windows Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="129"/>
+        <location filename="../sdk/knglobal.cpp" line="134"/>
         <source>Portable Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="131"/>
+        <location filename="../sdk/knglobal.cpp" line="136"/>
         <source>X11 Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="133"/>
+        <location filename="../sdk/knglobal.cpp" line="138"/>
         <source>X11 Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="136"/>
+        <location filename="../sdk/knglobal.cpp" line="141"/>
         <source>All supported files</source>
         <translation type="unfinished">所有支持的檔</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="149"/>
+        <location filename="../sdk/knglobal.cpp" line="154"/>
         <source>Graphic Interchange Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="151"/>
+        <location filename="../sdk/knglobal.cpp" line="156"/>
         <source>Portable Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="153"/>
+        <location filename="../sdk/knglobal.cpp" line="158"/>
         <source>Portable Graymap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1313,7 +1344,7 @@ To create a playlist, drag your songs here.</source>
         <translation type="vanished">登錄</translation>
     </message>
     <message>
-        <location filename="../sdk/notification/knnotificationcenter.cpp" line="160"/>
+        <location filename="../sdk/notification/knnotificationcenter.cpp" line="172"/>
         <source>Show Notification Center and Kreogist Account</source>
         <translation type="unfinished"></translation>
     </message>

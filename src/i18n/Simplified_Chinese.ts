@@ -2,24 +2,42 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>KNAccountDetailBox</name>
+    <message>
+        <location filename="../sdk/account/knaccountdetailbox.cpp" line="101"/>
+        <source>Username</source>
+        <translation>用户名</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailbox.cpp" line="102"/>
+        <source>Nickname</source>
+        <translation>昵称</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailbox.cpp" line="103"/>
+        <source>E-mail</source>
+        <translation>电子邮件</translation>
+    </message>
+</context>
+<context>
     <name>KNAccountDetailPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="199"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="211"/>
         <source>Account update success.</source>
         <translation>信息更新成功。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="201"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="213"/>
         <source>Failed to update account info. Try again.</source>
         <translation>更新用户信息失败，请重试。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="203"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="215"/>
         <source>Failed to update new avatar. Try again.</source>
         <translation>更新头像图片失败，请重试。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="256"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="289"/>
         <source>Select avatar file</source>
         <translation>选择头像图片</translation>
     </message>
@@ -27,42 +45,47 @@
 <context>
     <name>KNAccountLoginPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="163"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="177"/>
         <source>Username or password incorrect.</source>
         <translation>用户名或密码错误。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="166"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="180"/>
         <source>with Your Kreogist Account</source>
         <translation>以同步您的用户信息及设置</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="165"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="179"/>
         <source>Sign in</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="160"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="161"/>
+        <source>Kreogist Account login failed.</source>
+        <translation>Kreogist 账户登录失败。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="174"/>
         <source>Cannot connect to server. Please check your Internet connection.</source>
         <translation>无法连接到服务器。请检查您的网络连接。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="169"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="183"/>
         <source>Username/E-mail</source>
         <translation>用户名/邮箱</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="170"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="184"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="172"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="186"/>
         <source>Create an account</source>
         <translation>创建 Kreogist 用户</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="173"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="187"/>
         <source>Forget password?</source>
         <translation>忘记密码了？</translation>
     </message>
@@ -70,12 +93,12 @@
 <context>
     <name>KNAccountPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="212"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="217"/>
         <source>Account Update Success</source>
         <translation>账户更新成功</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="213"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="218"/>
         <source>The user data of %1 has been updated successfully.</source>
         <translation>%1 的用户信息已经被成功更新。</translation>
     </message>
@@ -83,37 +106,37 @@
 <context>
     <name>KNAccountPasswordBox</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="145"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="147"/>
         <source>Set new password</source>
         <translation>设置新的密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="146"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="148"/>
         <source>Input your new password for %1.</source>
         <translation>为 %1 设置新的密码。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="150"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="152"/>
         <source>New Password</source>
         <translation>新密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="151"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="153"/>
         <source>Input New Password Again</source>
         <translation>再次输入新的密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="154"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
         <source>Password must be at least 6 characters.</source>
         <translation>密码长度至少6位。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
         <source>Password must include a number.</source>
         <translation>密码必须包含一个数字。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="160"/>
         <source>Password must include an upper and lower case letter.</source>
         <translation>密码必须包含一个大写以及一个小写字母。</translation>
     </message>
@@ -121,17 +144,17 @@
 <context>
     <name>KNAccountPasswordVerification</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="114"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="115"/>
         <source>Enter your password to perform administrative tasks</source>
         <translation>输入您的密码以验证身份</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="117"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="118"/>
         <source>An action is attempting to perform an action that requires privileges. Authentication is required to perform this action.</source>
         <translation>您的请求需要进行验证才可以继续。请输入密码以验证您的身份。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="121"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="122"/>
         <source>Password is not correct, try again.</source>
         <translation>密码不正确，请重新输入。</translation>
     </message>
@@ -139,56 +162,70 @@
 <context>
     <name>KNAccountRegisterPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="142"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="165"/>
         <source>Create Kreogist Account</source>
         <translation>创建 Kreogist 账户</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="144"/>
         <source>1. Passwords must be at least 6 characters.
 2. Passwords must include a number.
 3. Passwords must include an upper and lower case letter.</source>
-        <translation>1、密码长度至少6位。
+        <translation type="vanished">1、密码长度至少6位。
 2、密码必须包含一个数字。
 3、密码必须包含一个大写以及一个小写字母。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="148"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="166"/>
         <source>Your E-mail will be verified.</source>
         <translation>您的电子邮件将会被验证是否可用。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="150"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="169"/>
+        <source>Password must be at least 6 characters.</source>
+        <translation>密码长度至少6位。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="171"/>
+        <source>Password must include a number.</source>
+        <translation>密码必须包含一个数字。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="173"/>
+        <source>Password must include an upper and lower case letter.</source>
+        <translation>密码必须包含一个大写以及一个小写字母。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="175"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="151"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="176"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="152"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="177"/>
         <source>E-mail</source>
         <translation>电子邮件</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="154"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="179"/>
         <source>I agree to the Terms of Service.</source>
         <translation>我同意服务条款。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="157"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="182"/>
         <source>Unknown error. Please check your Internet connection.</source>
         <translation>未知错误。请检查您的互联网连接。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="159"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="184"/>
         <source>Username is already taken, try another one.</source>
         <translation>用户名已经被使用，请使用其它用户名。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="161"/>
+        <location filename="../sdk/account/knaccountregisterpanel.cpp" line="186"/>
         <source>E-mail is already taken, use another E-mail address.</source>
         <translation>电子邮件已经被使用，请使用其它电子邮件地址。</translation>
     </message>
@@ -196,7 +233,7 @@
 <context>
     <name>KNAccountWaitingPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountwaitingpanel.cpp" line="66"/>
+        <location filename="../sdk/account/knaccountwaitingpanel.cpp" line="70"/>
         <source>Please wait</source>
         <translation>请稍后</translation>
     </message>
@@ -204,57 +241,57 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="119"/>
+        <location filename="../sdk/knglobal.cpp" line="124"/>
         <source>Byte</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="123"/>
+        <location filename="../sdk/knglobal.cpp" line="128"/>
         <source>Portable Network Graphics</source>
         <translation>便携式网络图形</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="125"/>
+        <location filename="../sdk/knglobal.cpp" line="130"/>
         <source>Joint Photographic Experts Group</source>
         <translation>JPEG 格式图像</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="127"/>
+        <location filename="../sdk/knglobal.cpp" line="132"/>
         <source>Windows Bitmap</source>
         <translation>Windows 位图图像</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="129"/>
+        <location filename="../sdk/knglobal.cpp" line="134"/>
         <source>Portable Pixmap</source>
         <translation>可移植像素图格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="131"/>
+        <location filename="../sdk/knglobal.cpp" line="136"/>
         <source>X11 Bitmap</source>
         <translation>X11 位图</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="133"/>
+        <location filename="../sdk/knglobal.cpp" line="138"/>
         <source>X11 Pixmap</source>
         <translation>X11 像素图</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="136"/>
+        <location filename="../sdk/knglobal.cpp" line="141"/>
         <source>All supported files</source>
         <translation>所有支持的文件</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="149"/>
+        <location filename="../sdk/knglobal.cpp" line="154"/>
         <source>Graphic Interchange Format</source>
         <translation>图像互换格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="151"/>
+        <location filename="../sdk/knglobal.cpp" line="156"/>
         <source>Portable Bitmap</source>
         <translation>可移植位图格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="153"/>
+        <location filename="../sdk/knglobal.cpp" line="158"/>
         <source>Portable Graymap</source>
         <translation>可移植灰度图格式</translation>
     </message>
@@ -1315,9 +1352,9 @@ To create a playlist, drag your songs here.</source>
         <translation type="vanished">登录</translation>
     </message>
     <message>
-        <location filename="../sdk/notification/knnotificationcenter.cpp" line="160"/>
+        <location filename="../sdk/notification/knnotificationcenter.cpp" line="172"/>
         <source>Show Notification Center and Kreogist Account</source>
-        <translation type="unfinished"></translation>
+        <translation>显示通知中心和 Kreogist 账户</translation>
     </message>
 </context>
 <context>
