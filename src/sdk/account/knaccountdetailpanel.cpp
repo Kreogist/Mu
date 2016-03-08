@@ -26,6 +26,7 @@
 #include "kngraphicsgloweffect.h"
 #include "knlocalemanager.h"
 #include "knlabelbutton.h"
+#include "knwaitingwheel.h"
 #include "knopacityanimebutton.h"
 
 #include "knaccountdetailbox.h"
@@ -48,6 +49,7 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_nickName(new QLabel(this)),
     m_username(new QLabel(this)),
     m_state(new QLabel(this)),
+    m_waitingWheel(new KNWaitingWheel(this)),
     m_accountDetails(nullptr),
     m_fadeInAnime(new QTimeLine(200, this)),
     m_fadeOutAnime(new QTimeLine(200, this)),
@@ -98,6 +100,8 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     QPalette pal=m_state->palette();
     pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
     m_state->setPalette(pal);
+    //Set the wating wheel.
+    m_waitingWheel->hide();
     //Update user name palette.
     pal.setColor(QPalette::WindowText, QColor(0xA0, 0xA0, 0xA0));
     m_username->setPalette(pal);
@@ -121,8 +125,15 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     detailLayout->setSpacing(5);
     detailLayout->setContentsMargins(2, 4, 2, 2);
     mainLayout->addLayout(detailLayout, 1);
+    //Initial the layout for state.
+    QBoxLayout *titleLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                           detailLayout->widget());
+    //Add state layout to detail layout.
+    detailLayout->addLayout(titleLayout);
+    //Add widget to state layout.
+    titleLayout->addWidget(m_nickName, 1);
+    titleLayout->addWidget(m_waitingWheel);
     //Add widget to detail layout.
-    detailLayout->addWidget(m_nickName);
     detailLayout->addWidget(m_username);
     detailLayout->addWidget(m_state);
     //Initial the control layout.
@@ -342,6 +353,9 @@ inline void KNAccountDetailPanel::disableAllControls()
         //Disable all the button.
         m_controls[i]->setEnabled(false);
     }
+    //Show the wheel.
+    m_waitingWheel->show();
+    m_waitingWheel->startTick();
 }
 
 inline void KNAccountDetailPanel::enabledAllControls()
@@ -352,6 +366,9 @@ inline void KNAccountDetailPanel::enabledAllControls()
         //Disable all the button.
         m_controls[i]->setEnabled(true);
     }
+    //Stop and hide the wheel.
+    m_waitingWheel->hide();
+    m_waitingWheel->stopTick();
 }
 
 void KNAccountDetailPanel::setAccountDetails(KNAccountDetails *accountDetails)

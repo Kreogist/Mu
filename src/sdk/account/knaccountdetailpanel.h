@@ -29,6 +29,7 @@ class KNAccountDetailBox;
 class KNAccountPasswordBox;
 class KNAccountAvatarButton;
 class KNAccountDetails;
+class KNWaitingWheel;
 class KNLabelButton;
 class KNOpacityAnimeButton;
 /*!
@@ -123,6 +124,7 @@ private:
     KNAccountPasswordBox *m_passwordModify;
     KNAccountAvatarButton *m_avatarImage;
     QLabel *m_nickName, *m_username, *m_state;
+    KNWaitingWheel *m_waitingWheel;
     KNAccountDetails *m_accountDetails;
     QTimeLine *m_fadeInAnime, *m_fadeOutAnime;
     QTimer *m_stateFadeTimer;

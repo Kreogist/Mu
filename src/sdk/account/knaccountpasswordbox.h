@@ -78,7 +78,7 @@ private:
     inline KNLabelLineEdit *generatePassword();
     QLabel *m_passwordHint[PasswordHintTypeCount];
     QString m_hintText;
-    QColor m_validColor, m_invalidColor;
+    QColor m_validColor, m_invalidColor, m_emptyColor;
     QLabel *m_resetTitle, *m_resetHint;
     KNHWidgetSwitcher *m_passwordContainer;
     KNAccountPasswordVerification *m_passwordVerification;

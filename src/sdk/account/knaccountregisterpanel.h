@@ -92,10 +92,19 @@ private slots:
     void onActionCheckValid();
 
 private:
+    enum PasswordHintType
+    {
+        LengthRequest,
+        NumberRequest,
+        LetterRequest,
+        PasswordHintTypeCount
+    };
     inline bool isInformationValid();
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
+    QLabel *m_passwordHint[PasswordHintTypeCount];
     QString m_errorDescription[KNAccountUtil::RegisterErrorCodeCount];
-    QLabel *m_title, *m_emailHint, *m_passwordHint, *m_errorHint;
+    QColor m_validColor, m_invalidColor, m_emptyColor;
+    QLabel *m_title, *m_emailHint, *m_errorHint;
     QCheckBox *m_agreeLicense;
     KNLabelLineEdit *m_username, *m_password, *m_email;
     KNOpacityAnimeButton *m_okay, *m_cancel;

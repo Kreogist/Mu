@@ -59,6 +59,17 @@
         <file>public/account_avatar.png</file>
         <file>public/account_password.png</file>
         <file>public/next.png</file>
+        <file>public/generate_email.png</file>
+        <file>public/generate_password.png</file>
+        <file>public/generate_username.png</file>
+        <file>public/waiting/w0.png</file>
+        <file>public/waiting/w1.png</file>
+        <file>public/waiting/w2.png</file>
+        <file>public/waiting/w3.png</file>
+        <file>public/waiting/w4.png</file>
+        <file>public/waiting/w5.png</file>
+        <file>public/waiting/w6.png</file>
+        <file>public/waiting/w7.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

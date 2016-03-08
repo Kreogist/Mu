@@ -30,9 +30,11 @@
 
 KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     QWidget(parent),
+    m_validColor(QColor(0x41, 0x92, 0x57)),
+    m_invalidColor(QColor(0x9a, 0x25, 0x38)),
+    m_emptyColor(QColor(0x9D, 0x9D, 0x9D)),
     m_title(new QLabel(this)),
     m_emailHint(new QLabel(this)),
-    m_passwordHint(new QLabel(this)),
     m_errorHint(new QLabel(this)),
     m_agreeLicense(new QCheckBox(this)),
     m_username(new KNLabelLineEdit(this)),
@@ -52,17 +54,20 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     //Configure the user name line edit.
     m_username->setMinimumLightness(0xC0);
     m_username->setMediumLightness(0xE0);
+    m_username->setLabelIcon(QPixmap("://public/generate_username.png"));
     connect(m_username, &KNLabelLineEdit::textChanged,
             this, &KNAccountRegisterPanel::onActionCheckValid);
     //Configure password line edit.
     m_password->setMinimumLightness(0xC0);
     m_password->setMediumLightness(0xE0);
+    m_password->setLabelIcon(QPixmap("://public/generate_password.png"));
     m_password->setEchoMode(QLineEdit::Password);
     connect(m_password, &KNLabelLineEdit::textChanged,
             this, &KNAccountRegisterPanel::onActionCheckValid);
     //Configure the E-mail.
     m_email->setMinimumLightness(0xC0);
     m_email->setMediumLightness(0xE0);
+    m_email->setLabelIcon(QPixmap("://public/generate_email.png"));
     connect(m_email, &KNLabelLineEdit::textChanged,
             this, &KNAccountRegisterPanel::onActionCheckValid);
     //Configure the check box.
@@ -73,8 +78,8 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     hintPal.setColor(QPalette::WindowText, QColor(157, 157, 157));
     // E-mail Hint.
     m_emailHint->setPalette(hintPal);
-    // Password Hint.
-    m_passwordHint->setPalette(hintPal);
+    m_emailHint->setContentsMargins(5, 0, 0, 0);
+    // Error Hint.
     m_errorHint->setAlignment(Qt::AlignCenter);
     // Error Hint.
     QPalette errorPal=m_errorHint->palette();
@@ -88,7 +93,7 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
 
     //Initial the box layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    mainLayout->setSpacing(2);
+    mainLayout->setSpacing(0);
     setLayout(mainLayout);
     //Add widget to layout
     mainLayout->addSpacing(7);
@@ -97,19 +102,37 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     mainLayout->addWidget(m_errorHint);
     mainLayout->addSpacing(3);
     mainLayout->addWidget(m_username);
+    mainLayout->addSpacing(5);
     mainLayout->addWidget(m_password);
-    mainLayout->addWidget(m_passwordHint);
+    mainLayout->addSpacing(5);
+    //Generate the label palette.
+    QPalette labelPalette=palette();
+    labelPalette.setColor(QPalette::WindowText, m_emptyColor);
+    //Initial the hint label.
+    for(int i=0; i<PasswordHintTypeCount; ++i)
+    {
+        //Initial the password hint.
+        m_passwordHint[i]=new QLabel(this);
+        //Set porperties.
+        m_passwordHint[i]->setContentsMargins(5, 0, 0, 0);
+        m_passwordHint[i]->setWordWrap(true);
+        //Set the palette.
+        m_passwordHint[i]->setPalette(labelPalette);
+        //Add hint to main layout.
+        mainLayout->addWidget(m_passwordHint[i]);
+    }
     mainLayout->addSpacing(5);
     mainLayout->addWidget(m_email);
-    mainLayout->addWidget(m_emailHint);
-    mainLayout->addSpacing(6);
-    mainLayout->addWidget(m_agreeLicense, 0, Qt::AlignHCenter);
     mainLayout->addSpacing(2);
+    mainLayout->addWidget(m_emailHint);
+    mainLayout->addSpacing(5);
+    mainLayout->addWidget(m_agreeLicense, 0, Qt::AlignHCenter);
+    mainLayout->addSpacing(1);
 
     //Initial button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
-    buttonLayout->setContentsMargins(1,4,1,4);
+    buttonLayout->setContentsMargins(1,3,1,3);
     mainLayout->addLayout(buttonLayout);
     mainLayout->addStretch();
     //Add all buttons.
@@ -140,12 +163,14 @@ void KNAccountRegisterPanel::retranslate()
 {
     //Update label.
     m_title->setText(tr("Create Kreogist Account"));
-    //Update hint.
-    m_passwordHint->setText(tr("1. Passwords must be at least 6 characters.\n"
-                               "2. Passwords must include a number.\n"
-                               "3. Passwords must include an upper and lower case "
-                               "letter."));
     m_emailHint->setText(tr("Your E-mail will be verified."));
+    //Update the password label.
+    m_passwordHint[LengthRequest]->setText(
+                tr("Password must be at least 6 characters."));
+    m_passwordHint[NumberRequest]->setText(
+                tr("Password must include a number."));
+    m_passwordHint[LetterRequest]->setText(
+                tr("Password must include an upper and lower case letter."));
     //Set the text edit.
     m_username->setPlaceholderText(tr("Username"));
     m_password->setPlaceholderText(tr("Password"));
@@ -220,6 +245,52 @@ void KNAccountRegisterPanel::onActionRegisterError(int errorCode)
 
 inline bool KNAccountRegisterPanel::isInformationValid()
 {
+    //Get the password.
+    QString &&password=m_password->text();
+    //Check whether the password is empty.
+    if(password.isEmpty())
+    {
+        //Of course we couldn't accept it.
+        //Get the palette.
+        QPalette pal=m_passwordHint[0]->palette();
+        pal.setColor(QPalette::WindowText, m_emptyColor);
+        //Set the result to label.
+        for(int i=0; i<PasswordHintTypeCount; ++i)
+        {
+            //Set the palette.
+            m_passwordHint[i]->setPalette(pal);
+        }
+        //Failed to use.
+        return false;
+    }
+    //Initial the password checker.
+    bool validPassword=true;
+    //Check password validation.
+    bool passwordValidation[PasswordHintTypeCount];
+    passwordValidation[LengthRequest]=(password.length()>5),
+    passwordValidation[NumberRequest]=password.contains(QRegExp("[0-9]")),
+    passwordValidation[LetterRequest]=(password.contains(QRegExp("[A-Z]")) &&
+                                       password.contains(QRegExp("[a-z]")));
+    //Get the palette.
+    QPalette pal=m_passwordHint[0]->palette();
+    //Set the result to label.
+    for(int i=0; i<PasswordHintTypeCount; ++i)
+    {
+        //Configure the pal.
+        pal.setColor(QPalette::WindowText,
+                     passwordValidation[i] ? m_validColor : m_invalidColor);
+        //Set the palette.
+        m_passwordHint[i]->setPalette(pal);
+        //Update total validation.
+        validPassword = validPassword && passwordValidation[i];
+    }
+    //Check password validation.
+    if(!validPassword)
+    {
+        //Failed to pass to validation check.
+        return false;
+    }
+
     //Check E-mail first, because it's complex.
     if(m_email->text().isEmpty())
     {
@@ -249,14 +320,6 @@ inline bool KNAccountRegisterPanel::isInformationValid()
     }
             //User Name cannot be empty.
     return (!m_username->text().isEmpty()) &&
-            //Password must be at least 6 chars.
-            m_password->text().length()>5 &&
-            //Must include a number.
-            m_password->text().contains(QRegExp("[0-9]")) &&
-            //Must include an upper case letter.
-            m_password->text().contains(QRegExp("[A-Z]")) &&
-            //Must include a lower case letter.
-            m_password->text().contains(QRegExp("[a-z]")) &&
             //User agree the license.
             m_agreeLicense->isChecked();
 }

@@ -54,7 +54,7 @@ KNAccountDetailBox::KNAccountDetailBox(QWidget *parent) :
     QFormLayout *containerLayout=new QFormLayout(container);
     //Configure layout.
     containerLayout->setVerticalSpacing(10);
-    containerLayout->setContentsMargins(20,15,20,10);
+    containerLayout->setContentsMargins(20, 15, 20, 10);
     containerLayout->setLabelAlignment(Qt::AlignRight | Qt::AlignTop);
     //Set the container.
     container->setLayout(containerLayout);

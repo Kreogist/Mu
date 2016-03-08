@@ -33,7 +33,8 @@ KNAccountPasswordBox::KNAccountPasswordBox(QWidget *parent) :
     KNMessageBox(parent),
     m_hintText(QString()),
     m_validColor(QColor(0x41, 0x92, 0x57)),
-    m_invalidColor(QColor(0xA0, 0xA0, 0xA0)),
+    m_invalidColor(QColor(0x9a, 0x25, 0x38)),
+    m_emptyColor(QColor(0x9D, 0x9D, 0x9D)),
     m_resetTitle(new QLabel(this)),
     m_resetHint(new QLabel(this)),
     m_passwordContainer(new KNHWidgetSwitcher(this)),
@@ -47,14 +48,15 @@ KNAccountPasswordBox::KNAccountPasswordBox(QWidget *parent) :
     setOkayButtonVisible(false);
     setTitleText("Password");
     //Configure the password container.
-    m_passwordContainer->setFixedSize(332, 200);
+    m_passwordContainer->setFixedSize(342, 200);
     //Configure the verification widget.
+    m_passwordVerification->setContentsMargins(5, 0, 5, 0);
     connect(m_passwordVerification,
             &KNAccountPasswordVerification::passwordCorrect,
             this, &KNAccountPasswordBox::onActionAcceptPassword);
     //Generate the label palette.
     QPalette labelPalette=palette();
-    labelPalette.setColor(QPalette::WindowText, m_invalidColor);
+    labelPalette.setColor(QPalette::WindowText, m_emptyColor);
     //Initial the hint label.
     for(int i=0; i<PasswordHintTypeCount; ++i)
     {
@@ -87,7 +89,7 @@ KNAccountPasswordBox::KNAccountPasswordBox(QWidget *parent) :
     QBoxLayout *changeLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                             changeContainer);
     //Configure and set layout.
-    changeLayout->setContentsMargins(10, 10, 10, 0);
+    changeLayout->setContentsMargins(20, 10, 20, 0);
     changeLayout->setSpacing(0);
     changeContainer->setLayout(changeLayout);
     //Add widget to main layout.
@@ -166,6 +168,24 @@ void KNAccountPasswordBox::onActionAcceptPassword()
 
 void KNAccountPasswordBox::onActionPassword1Change(const QString &password)
 {
+    //Check whether the password is empty.
+    if(password.isEmpty())
+    {
+        //Of course failed.
+        m_validPassword=false;
+        //Get the palette.
+        QPalette pal=m_passwordHint[0]->palette();
+        pal.setColor(QPalette::WindowText, m_emptyColor);
+        //Set the result to label.
+        for(int i=0; i<PasswordHintTypeCount; ++i)
+        {
+            //Set the palette.
+            m_passwordHint[i]->setPalette(pal);
+        }
+        //Check okay button.
+        checkOkayButton();
+        return;
+    }
     //Reset total validtion.
     m_validPassword=true;
     //Check password validation.

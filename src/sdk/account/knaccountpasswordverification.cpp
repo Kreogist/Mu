@@ -61,6 +61,7 @@ KNAccountPasswordVerification::KNAccountPasswordVerification(QWidget *parent) :
     m_checkButton->setFixedSize(32, 32);
     //Set password edit properties.
     m_passwordEdit->setEchoMode(QLineEdit::Password);
+    m_passwordEdit->setLabelIcon(QPixmap("://public/generate_password.png"));
     //Configure the password line edit.
     m_passwordEdit->setMinimumLightness(0xC0);
     m_passwordEdit->setMediumLightness(0xE0);

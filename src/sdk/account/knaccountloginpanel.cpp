@@ -55,11 +55,13 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     //Configure the user name line edit.
     m_username->setMinimumLightness(0xC0);
     m_username->setMediumLightness(0xE0);
+    m_username->setLabelIcon(QPixmap("://public/generate_username.png"));
     connect(m_username, &KNLabelLineEdit::textChanged,
             this, &KNAccountLoginPanel::onActionCheckInput);
     //Configure password line edit.
     m_password->setMinimumLightness(0xC0);
     m_password->setMediumLightness(0xE0);
+    m_password->setLabelIcon(QPixmap("://public/generate_password.png"));
     m_password->setEchoMode(QLineEdit::Password);
     connect(m_password, &KNLabelLineEdit::textChanged,
             this, &KNAccountLoginPanel::onActionCheckInput);

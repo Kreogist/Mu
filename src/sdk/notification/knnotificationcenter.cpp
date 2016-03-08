@@ -56,13 +56,8 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     setObjectName("NotificationCenter");
     //Set properties.
     setAutoFillBackground(true);
-#ifndef Q_OS_MACX
-    setWindowFlags(Qt::Popup);
-#else
-    //Mac OS X window hack.
     setWindowFlags(Qt::WindowSystemMenuHint | Qt::Tool |
                    Qt::FramelessWindowHint);
-#endif
 
     //Configure the indicator.
     m_notificationIndicator->setAutoFillBackground(true);
@@ -142,6 +137,8 @@ void KNNotificationCenter::showEvent(QShowEvent *event)
 {
     //Show the indicator.
     m_notificationIndicator->show();
+    //Set focus on this widget.
+    activateWindow();
     //Do the original show event.
     QFrame::showEvent(event);
 }
