@@ -19,6 +19,8 @@
 #define KNACCOUNTDETAILS_H
 
 #include <QPixmap>
+#include <QJsonObject>
+#include <QVariant>
 
 #include <QObject>
 
@@ -85,6 +87,13 @@ public:
      * \return The avatar file path.
      */
     QString avatarPath() const;
+
+    /*!
+     * \brief Get a data from the account info via the key.
+     * \param key The data key.
+     * \return The data.
+     */
+    QVariant data(const QString &key);
 
 signals:
     /*!
@@ -158,8 +167,16 @@ public slots:
      */
     void setAvatarPath(const QString &avatarPath);
 
+    /*!
+     * \brief Set the account information, we could get data from here for
+     * extension.
+     * \param accountInfo Account information JSON object.
+     */
+    void setAccountInfo(const QJsonObject &accountInfo);
+
 private:
     //Account information.
+    QJsonObject m_accountInfo;
     //Account IDs.
     QString m_objectId, m_sessionToken, m_cacheUserName, m_cachePassword;
     //Account details.

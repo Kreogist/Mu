@@ -109,6 +109,7 @@ void KNAccountDetails::resetAccountDetail()
     m_isLogin=false;
     m_displayName.clear();
     m_accountAvatar=QPixmap();
+    m_accountInfo=QJsonObject();
     //Emit reset signal.
     emit accountReset();
     emit accountAvatarUpdate();
@@ -125,7 +126,40 @@ QString KNAccountDetails::avatarPath() const
     return m_avatarPath;
 }
 
+QVariant KNAccountDetails::data(const QString &key)
+{
+    //Check whether the object contains the key.
+    if(!m_accountInfo.contains(key))
+    {
+        //Return a null value.
+        return QVariant();
+    }
+    //Get the data back.
+    QJsonValue value=m_accountInfo.value(key);
+    //Check the type of the value.
+    switch(value.type())
+    {
+    //If the value type is bool, double, string and array, translate the
+    //data to the specific type and use the default construct function of
+    //the QVariant to build the value.
+    case QJsonValue::Bool:
+        return value.toBool();
+    case QJsonValue::Double:
+        return value.toDouble();
+    case QJsonValue::String:
+        return value.toString();
+    default:
+        //Ignore the object, it should never have object.
+        return QVariant();
+    }
+}
+
 void KNAccountDetails::setAvatarPath(const QString &avatarPath)
 {
     m_avatarPath = avatarPath;
+}
+
+void KNAccountDetails::setAccountInfo(const QJsonObject &accountInfo)
+{
+    m_accountInfo = accountInfo;
 }

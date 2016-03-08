@@ -91,7 +91,7 @@ private:
     };
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
     QAction *m_menuActions[AccountActionCount];
-    QPalette m_errorPal;
+    QPalette m_errorPal, m_hintPal;
     QString m_subTitleText,
             m_errorDescription[KNAccountUtil::LoginErrorCodeCount];
     QLabel *m_title, *m_subTitle;

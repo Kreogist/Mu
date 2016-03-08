@@ -25,6 +25,7 @@
 
 class QLabel;
 class QTimeLine;
+class KNAccountDetailBox;
 class KNAccountPasswordBox;
 class KNAccountAvatarButton;
 class KNAccountDetails;
@@ -51,6 +52,8 @@ public:
      * \param parent The parent widget.
      */
     explicit KNAccountDetailPanel(QWidget *parent = 0);
+
+    void setAccountDetails(KNAccountDetails *accountDetails);
 
 signals:
     /*!
@@ -96,6 +99,7 @@ private slots:
     void onActionSelectAvatar();
 
     void onActionAskChangePassword(const QString &encryptedPassword);
+    void onActionAskUpdateInfo(const QJsonObject &userInfo);
 
 private:
     enum ControlButtons
@@ -115,6 +119,7 @@ private:
     KNOpacityAnimeButton *m_controls[ControlButtonCount];
     QColor m_failedColor, m_successColor;
     QString m_lastDirectory;
+    KNAccountDetailBox *m_detailModify;
     KNAccountPasswordBox *m_passwordModify;
     KNAccountAvatarButton *m_avatarImage;
     QLabel *m_nickName, *m_username, *m_state;

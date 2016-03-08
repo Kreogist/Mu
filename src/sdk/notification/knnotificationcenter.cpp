@@ -20,6 +20,7 @@
 #include <QBoxLayout>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QEvent>
 
 //Dependencies.
 #include "knlocalemanager.h"
@@ -38,6 +39,8 @@
 
 #include "knnotificationcenter.h"
 
+#include <QDebug>
+
 KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     QFrame(parent),
     m_notificationIndicator(new QLabel(this)),
@@ -53,7 +56,13 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     setObjectName("NotificationCenter");
     //Set properties.
     setAutoFillBackground(true);
+#ifndef Q_OS_MACX
     setWindowFlags(Qt::Popup);
+#else
+    //Mac OS X window hack.
+    setWindowFlags(Qt::WindowSystemMenuHint | Qt::Tool |
+                   Qt::FramelessWindowHint);
+#endif
 
     //Configure the indicator.
     m_notificationIndicator->setAutoFillBackground(true);
@@ -186,4 +195,20 @@ void KNNotificationCenter::resizeNotificationCenter()
 KNNotificationWidget *KNNotificationCenter::notificationWidget()
 {
     return m_notificationWidget;
+}
+
+bool KNNotificationCenter::event(QEvent *e)
+{
+    //Check the type of e.
+    switch(e->type())
+    {
+    case QEvent::WindowDeactivate:
+        //We need to hide the window.
+        hide();
+        return true;
+    default:
+        //Do the default event.
+        return QFrame::event(e);
+    }
+
 }

@@ -32,6 +32,10 @@ KNAccountWaitingPanel::KNAccountWaitingPanel(QWidget *parent) :
     setFixedHeight(270);
     //Configure the wheel.
     m_waitingWheel->setFixedSize(80, 80);
+    //Configure the hint text.
+    QPalette pal=m_waitingHint->palette();
+    pal.setColor(QPalette::WindowText, QColor(157, 157, 157));
+    m_waitingHint->setPalette(pal);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);

@@ -28,10 +28,10 @@
 #include "knlabelbutton.h"
 #include "knopacityanimebutton.h"
 
+#include "knaccountdetailbox.h"
 #include "knaccountpasswordbox.h"
 #include "knaccountavatarbutton.h"
 #include "knaccountdetails.h"
-#include "knaccount.h"
 
 #include "knaccountdetailpanel.h"
 
@@ -42,12 +42,13 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_failedColor(QColor(0x9c, 0x22, 0x39)),
     m_successColor(QColor(0x41, 0x92, 0x57)),
     m_lastDirectory(QString()),
+    m_detailModify(new KNAccountDetailBox(knGlobal->mainWindow())),
     m_passwordModify(new KNAccountPasswordBox(knGlobal->mainWindow())),
     m_avatarImage(new KNAccountAvatarButton(this)),
     m_nickName(new QLabel(this)),
     m_username(new QLabel(this)),
     m_state(new QLabel(this)),
-    m_accountDetails(knAccount->accountDetails()),
+    m_accountDetails(nullptr),
     m_fadeInAnime(new QTimeLine(200, this)),
     m_fadeOutAnime(new QTimeLine(200, this)),
     m_stateFadeTimer(new QTimer(this))
@@ -87,14 +88,12 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
             this, &KNAccountDetailPanel::onActionSelectAvatar);
     connect(m_controls[Logout], &KNOpacityAnimeButton::clicked,
             this, &KNAccountDetailPanel::requireLogout);
-    //Link detail requests.
-    connect(m_accountDetails, &KNAccountDetails::accountAvatarUpdate,
-            this, &KNAccountDetailPanel::onActionAvatarUpdate);
-    connect(m_accountDetails, &KNAccountDetails::accountUpdate,
-            this, &KNAccountDetailPanel::onActionDetailUpdate);
     //Link password editor request.
     connect(m_passwordModify, &KNAccountPasswordBox::requireUpdatePassword,
             this, &KNAccountDetailPanel::onActionAskChangePassword);
+    //Link detail updater.
+    connect(m_detailModify, &KNAccountDetailBox::requireUpdateInfo,
+            this, &KNAccountDetailPanel::onActionAskUpdateInfo);
     //Update state alpha.
     QPalette pal=m_state->palette();
     pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
@@ -207,6 +206,12 @@ void KNAccountDetailPanel::retranslate()
 
 void KNAccountDetailPanel::onActionDetailUpdate()
 {
+    //Check out the account details.
+    if(m_accountDetails==nullptr)
+    {
+        //Doesn't set account details before.
+        return;
+    }
     //Set account display name
     m_nickName->setText(m_accountDetails->displayName());
     m_username->setText(m_accountDetails->cacheUserName());
@@ -214,6 +219,12 @@ void KNAccountDetailPanel::onActionDetailUpdate()
 
 void KNAccountDetailPanel::onActionAvatarUpdate()
 {
+    //Check out the account details.
+    if(m_accountDetails==nullptr)
+    {
+        //Doesn't set account details before.
+        return;
+    }
     //Get avatar from account detail.
     m_avatarImage->setAccountAvatar(m_accountDetails->accountAvatar());
 }
@@ -241,7 +252,16 @@ void KNAccountDetailPanel::startFadeOut()
 
 void KNAccountDetailPanel::onActionEditInformation()
 {
-    ;
+    //Check out the account details.
+    if(m_accountDetails==nullptr)
+    {
+        //Doesn't set account details before.
+        return;
+    }
+    //Set the account detail.
+    m_detailModify->setAccountDetails(m_accountDetails);
+    //Show the detail edit message box.
+    m_detailModify->exec();
 }
 
 void KNAccountDetailPanel::onActionChangePassword()
@@ -291,6 +311,16 @@ void KNAccountDetailPanel::onActionAskChangePassword(
     passwordSetter.insert("password", encryptedPassword);
     //Ask to update password.
     emit requireUpdateInfo(passwordSetter);
+    //Disable all the controls.
+    disableAllControls();
+}
+
+void KNAccountDetailPanel::onActionAskUpdateInfo(const QJsonObject &userInfo)
+{
+    //Ask to update info.
+    emit requireUpdateInfo(userInfo);
+    //Disable all the controls.
+    disableAllControls();
 }
 
 inline KNOpacityAnimeButton *KNAccountDetailPanel::generateButton()
@@ -321,5 +351,20 @@ inline void KNAccountDetailPanel::enabledAllControls()
     {
         //Disable all the button.
         m_controls[i]->setEnabled(true);
+    }
+}
+
+void KNAccountDetailPanel::setAccountDetails(KNAccountDetails *accountDetails)
+{
+    //Save the account details.
+    m_accountDetails = accountDetails;
+    //Check pointer.
+    if(m_accountDetails)
+    {
+        //Link detail requests.
+        connect(m_accountDetails, &KNAccountDetails::accountAvatarUpdate,
+                this, &KNAccountDetailPanel::onActionAvatarUpdate);
+        connect(m_accountDetails, &KNAccountDetails::accountUpdate,
+                this, &KNAccountDetailPanel::onActionDetailUpdate);
     }
 }

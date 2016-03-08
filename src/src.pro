@@ -440,7 +440,8 @@ SOURCES += \
     sdk/account/knaccountdetailpanel.cpp \
     sdk/knaccountavatarbutton.cpp \
     sdk/account/knaccountpasswordbox.cpp \
-    sdk/account/knaccountpasswordverification.cpp
+    sdk/account/knaccountpasswordverification.cpp \
+    sdk/account/knaccountdetailbox.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -667,7 +668,8 @@ HEADERS += \
     sdk/knaccountavatarbutton.h \
     sdk/account/knaccountutil.h \
     sdk/account/knaccountpasswordbox.h \
-    sdk/account/knaccountpasswordverification.h
+    sdk/account/knaccountpasswordverification.h \
+    sdk/account/knaccountdetailbox.h
 
 RESOURCES += \
     resource/res.qrc
