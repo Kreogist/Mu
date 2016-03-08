@@ -43,6 +43,7 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     //Set property.
     setFixedHeight(270);
     //Configure the panel.
+    m_loginPanel->setAccountDetails(knAccount->accountDetails());
     m_detailPanel->setAccountDetails(knAccount->accountDetails());
 
     //Link current panel to account backend.
@@ -58,6 +59,8 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             this, &KNAccountPanel::onActionRegisterSuccess);
     connect(knAccount, &KNAccount::loginFailed,
             this, &KNAccountPanel::onActionLoginFailed);
+    connect(knAccount, &KNAccount::autoLoginFailed,
+            this, &KNAccountPanel::onActionAutoLoginFailed);
     connect(knAccount, &KNAccount::loginSuccess,
             this, &KNAccountPanel::onActionLoginSuccess);
     connect(knAccount, &KNAccount::startAutoLogin,
@@ -86,6 +89,8 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             this, &KNAccountPanel::onActionShowRegister);
     connect(m_loginPanel, &KNAccountLoginPanel::requireLogin,
             this, &KNAccountPanel::onActionLogin);
+    connect(m_loginPanel, &KNAccountLoginPanel::requireRelogin,
+            knAccount, &KNAccount::autoLogin);
 
     connect(m_generatePanel, &KNAccountRegisterPanel::requireRegister,
             this, &KNAccountPanel::onActionRegister);
@@ -185,10 +190,20 @@ void KNAccountPanel::onActionLoginFailed(int errorCode)
 {
     //Stop ticking.
     m_waitingPanel->stopTicking();
-    //Show the login panel again.
-    m_switcher->setCurrentWidget(LoginPanel);
     //Set the error code to register panel.
     m_loginPanel->onActionLoginError(errorCode);
+    //Show the login panel again.
+    m_switcher->setCurrentWidget(LoginPanel);
+}
+
+void KNAccountPanel::onActionAutoLoginFailed(int errorCode)
+{
+    //Stop ticking.
+    m_waitingPanel->stopTicking();
+    //Set the error code to register panel.
+    m_loginPanel->onActionAutoLoginError(errorCode);
+    //Show the login panel again.
+    m_switcher->setCurrentWidget(LoginPanel);
 }
 
 void KNAccountPanel::onActionLogout()

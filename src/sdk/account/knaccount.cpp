@@ -35,6 +35,7 @@
 
 #define CacheUsernameField "Username"
 #define CachePasswordField "Password"
+#define CacheNicknameField "DisplayName"
 
 KNAccount *KNAccount::m_instance=nullptr;
 
@@ -67,6 +68,8 @@ void KNAccount::setCacheConfigure(KNConfigure *cacheConfigure)
     m_accountDetails->setCacheUserName(cacheUsername);
     m_accountDetails->setCachePassword(
                 m_cacheConfigure->data(CachePasswordField).toString());
+    m_accountDetails->setDisplayName(
+                m_cacheConfigure->data(CacheNicknameField).toString());
 }
 
 void KNAccount::startToWork()
@@ -86,42 +89,8 @@ void KNAccount::startToWork()
             m_accountDetails->setAccountAvatar(cachedImage);
         }
     }
-    //Check whether the account details contains user name and password.
-    if((!m_accountDetails->cacheUserName().isEmpty()) &&
-            (!m_accountDetails->cachePassword().isEmpty()))
-    {
-        //Emit start auto login signal.
-        emit startAutoLogin();
-        //Prepare the response cache.
-        QByteArray responseData;
-        //Tried to login with cache username and password.
-        if(loginWith(m_accountDetails->cacheUserName(),
-                     m_accountDetails->cachePassword(),
-                     responseData)==200)
-        {
-            //Check the response data.
-            QJsonObject loginData=
-                    QJsonDocument::fromJson(responseData).object();
-            //Save the contact information.
-            m_accountDetails->setObjectId(
-                        loginData.value("objectId").toString());
-            m_accountDetails->setSessionToken(
-                        loginData.value("sessionToken").toString());
-            //Set the login.
-            m_accountDetails->setIsLogin(true);
-            //Update account detail information.
-            updateDetails(loginData);
-            //Emit success signal.
-            emit loginSuccess();
-        }
-        else
-        {
-            //Emit failed signal.
-            emit loginFailed(KNAccountUtil::InfoIncorrect);
-            //Clear the cache user name and cache password.
-            m_accountDetails->resetAccountDetail();
-        }
-    }
+    //Do auto login
+    autoLogin();
 }
 
 inline int KNAccount::loginWith(const QString &username,
@@ -234,18 +203,37 @@ bool KNAccount::login(const QString &userName,
     //Generate the response cache.
     QByteArray responseCache;
     //Send the JSON data to Kreogist Cloud.
-    if(loginWith(userName, encryptedPassword, responseCache)==200)
+    int result=loginWith(userName, encryptedPassword, responseCache);
+    //When result is 0, then the Internet connection is a kind of bug.
+    switch(result)
     {
+    case 0:
+        //Ask user to check Internet connection.
+        emit loginFailed(KNAccountUtil::LoginConnectionError);
+        //Failed to login.
+        return false;
+    case 200:
         //Save the password as encrypt password.
         password=encryptedPassword;
-    }
-    else
+        break;
+    default:
     {
+        //Treat all the other error as info incorrect.
         //Tried to use the original password.
         //Because when they are tring to reset the password, it will use
         //their original password.
         //Retry the get data from Kreogist Cloud.
-        if(loginWith(userName, password, responseCache)!=200)
+        int originalResult=loginWith(userName, password, responseCache);
+        //Check Internet connection signal.
+        if(originalResult==0)
+        {
+            //Ask user to check Internet connection.
+            emit loginFailed(KNAccountUtil::LoginConnectionError);
+            //Failed to login.
+            return false;
+        }
+        //Check whether we login successful.
+        if(originalResult!=200)
         {
             //Emit failed signal.
             emit loginFailed(KNAccountUtil::InfoIncorrect);
@@ -275,12 +263,13 @@ bool KNAccount::login(const QString &userName,
                passwordUpdateResponse)!=200)
         {
             //Emit failed signal.
-            emit loginFailed(KNAccountUtil::InfoIncorrect);
+            emit loginFailed(KNAccountUtil::LoginConnectionError);
             //Failed to change the password, failed to login.
             return false;
         }
         //Change the password.
         password=encryptedPassword;
+    }
     }
     //Check the response data.
     QJsonObject loginData=QJsonDocument::fromJson(responseCache).object();
@@ -299,6 +288,53 @@ bool KNAccount::login(const QString &userName,
     emit loginSuccess();
     //Successfully login.
     return true;
+}
+
+void KNAccount::autoLogin()
+{
+    //Check whether the account details contains user name and password.
+    if((!m_accountDetails->cacheUserName().isEmpty()) &&
+            (!m_accountDetails->cachePassword().isEmpty()))
+    {
+        //Emit start auto login signal.
+        emit startAutoLogin();
+        //Prepare the response cache.
+        QByteArray responseData;
+        //Tried to login with cache username and password.
+        int loginResult=loginWith(m_accountDetails->cacheUserName(),
+                                  m_accountDetails->cachePassword(),
+                                  responseData);
+        //Check the login result.
+        if(loginResult==0)
+        {
+            //For auto login failed.
+            emit autoLoginFailed(KNAccountUtil::LoginConnectionError);
+        }
+        else if(loginResult==200)
+        {
+            //Check the response data.
+            QJsonObject loginData=
+                    QJsonDocument::fromJson(responseData).object();
+            //Save the contact information.
+            m_accountDetails->setObjectId(
+                        loginData.value("objectId").toString());
+            m_accountDetails->setSessionToken(
+                        loginData.value("sessionToken").toString());
+            //Set the login.
+            m_accountDetails->setIsLogin(true);
+            //Update account detail information.
+            updateDetails(loginData);
+            //Emit success signal.
+            emit loginSuccess();
+        }
+        else
+        {
+            //Emit failed signal.
+            emit autoLoginFailed(KNAccountUtil::InfoIncorrect);
+            //Clear the cache user name and cache password.
+            m_accountDetails->resetAccountDetail();
+        }
+    }
 }
 
 bool KNAccount::setAvatar(const QPixmap &avatarImage)
@@ -370,6 +406,7 @@ void KNAccount::logout()
     //Clear the caching data.
     m_cacheConfigure->setData(CacheUsernameField, "");
     m_cacheConfigure->setData(CachePasswordField, "");
+    m_cacheConfigure->setData(CacheNicknameField, "");
     //Clear the cached image.
     QFile::remove(knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png");
 }
@@ -647,6 +684,7 @@ void KNAccount::saveConfigure()
         //Clear the cache configure.
         m_cacheConfigure->setData(CacheUsernameField, "");
         m_cacheConfigure->setData(CachePasswordField, "");
+        m_cacheConfigure->setData(CacheNicknameField, "");
         //Remove the avatar.
         QFile::remove(avatarPath);
         //Misson complete.
@@ -657,6 +695,8 @@ void KNAccount::saveConfigure()
                               m_accountDetails->cacheUserName());
     m_cacheConfigure->setData(CachePasswordField,
                               m_accountDetails->cachePassword());
+    m_cacheConfigure->setData(CacheNicknameField,
+                              m_accountDetails->displayName());
     //Check the header pixmap.
     if(m_accountDetails->accountAvatar().isNull())
     {

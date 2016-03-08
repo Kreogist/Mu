@@ -54,6 +54,10 @@ public:
      */
     explicit KNAccountDetailPanel(QWidget *parent = 0);
 
+    /*!
+     * \brief Set the account details class pointer to the panel.
+     * \param accountDetails The account details object pointer.
+     */
     void setAccountDetails(KNAccountDetails *accountDetails);
 
 signals:

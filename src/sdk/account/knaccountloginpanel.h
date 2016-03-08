@@ -23,6 +23,8 @@
 #include <QWidget>
 
 class QLabel;
+class KNAccountDetails;
+class KNImageLabel;
 class KNSaoSubMenu;
 class KNLabelLineEdit;
 class KNOpacityAnimeButton;
@@ -64,6 +66,11 @@ signals:
      */
     void requireLogin();
 
+    /*!
+     * \brief This signal will only be asked when auto login failed.
+     */
+    void requireRelogin();
+
 public slots:
     /*!
      * \brief Clear all the data of the text box.
@@ -71,15 +78,29 @@ public slots:
     void clearInputData();
 
     /*!
-     * \brief When there's error occur, show the error.
+     * \brief When there's error occur on login, show the error.
      * \param errorCode The error code. It should be in the enumeration
      * KNAccountUtil::LoginErrorCode.
      */
     void onActionLoginError(int errorCode);
 
+    /*!
+     * \brief When there's error occur on auto login, show the error.
+     * \param errorCode The error code. It should be in the enumeration
+     * KNAccountUtil::LoginErrorCode.
+     */
+    void onActionAutoLoginError(int errorCode);
+
+    /*!
+     * \brief Set the account details class pointer to the panel.
+     * \param accountDetails The account details object pointer.
+     */
+    void setAccountDetails(KNAccountDetails *accountDetails);
+
 private slots:
     void retranslate();
     void onActionForgetPassword();
+    void onActionLoginWithAnotherAccount();
     void onActionCheckInput();
 
 private:
@@ -87,16 +108,20 @@ private:
     {
         RegisterAccount,
         ForgetPassword,
+        LoginWithAnotherAccount,
         AccountActionCount
     };
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
     QAction *m_menuActions[AccountActionCount];
+    QPixmap m_kreogistLogo, m_anonymousLogo;
     QPalette m_errorPal, m_hintPal;
-    QString m_subTitleText,
+    QString m_loginFailedTitle, m_subTitleText,
             m_errorDescription[KNAccountUtil::LoginErrorCodeCount];
-    QLabel *m_title, *m_subTitle;
+    KNAccountDetails *m_accountDetails;
+    KNImageLabel *m_avatarLabel;
+    QLabel *m_title, *m_subTitle, *m_accountDisplayName;
     KNLabelLineEdit *m_username, *m_password;
-    KNOpacityAnimeButton *m_login, *m_others;
+    KNOpacityAnimeButton *m_login, *m_relogin, *m_others;
     KNSaoSubMenu *m_actionMenu;
 };
 

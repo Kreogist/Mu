@@ -20,24 +20,27 @@
 
 #include "knwaitingwheel.h"
 
+#define WaitingWheelSize 13
+
 KNWaitingWheel::KNWaitingWheel(QWidget *parent) :
     QWidget(parent),
     m_tickTimer(new QTimer(this)),
     m_frameCounter(0)
 {
     //Set properties.
-    setFixedSize(18, 18);
+    setFixedSize(WaitingWheelSize, WaitingWheelSize);
     //Initial the clock frame image.
     for(int i=0; i<8; ++i)
     {
         //Load the image.
         m_clockFrames[i]=QPixmap("://public/waiting/w" + QString::number(i) +
-                                 ".png").scaled(18, 18,
+                                 ".png").scaled(WaitingWheelSize,
+                                                WaitingWheelSize,
                                                 Qt::KeepAspectRatio,
                                                 Qt::SmoothTransformation);
     }
     //Configure the tick timer.
-    m_tickTimer->setInterval(33);
+    m_tickTimer->setInterval(100);
     connect(m_tickTimer, &QTimer::timeout, this, &KNWaitingWheel::tick);
 }
 

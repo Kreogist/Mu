@@ -89,6 +89,7 @@ private slots:
     void onActionLogin();
     void onActionLoginSuccess();
     void onActionLoginFailed(int errorCode);
+    void onActionAutoLoginFailed(int errorCode);
 
     void onActionLogout();
 

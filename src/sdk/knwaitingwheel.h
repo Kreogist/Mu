@@ -23,7 +23,8 @@
 
 /*!
  * \brief The KNWaitingWheel class provides a smaller waiting wheel. It will be
- * fixed size as 18px x 18px. It's especially for small size waiting wheel.
+ * fixed size, and do not try to change the size. It's especially for small size
+ * waiting wheel.
  */
 class KNWaitingWheel : public QWidget
 {

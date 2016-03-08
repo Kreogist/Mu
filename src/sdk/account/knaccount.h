@@ -61,6 +61,13 @@ public:
 
 signals:
     /*!
+     * \brief When auto login failed, this signal will be emitted and show the
+     * reason.
+     * \param errorCode The login error code.
+     */
+    void autoLoginFailed(int errorCode);
+
+    /*!
      * \brief When login success, this signal will be emitted.
      */
     void loginSuccess();
@@ -128,6 +135,12 @@ public slots:
      *  return true.
      */
     bool login(const QString &userName, QString password);
+
+    /*!
+     * \brief Do login with the cache username and password in the user detail
+     * cache.
+     */
+    void autoLogin();
 
     /*!
      * \brief Set avatar pixmap to the account.
