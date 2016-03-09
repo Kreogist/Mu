@@ -71,26 +71,11 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     connect(knAccount, &KNAccount::avatarUpdatedSuccess,
             this, &KNAccountPanel::onActionOperateSuccess);
     connect(knAccount, &KNAccount::avatarUpdatedFailed,
-            [=]
-            {
-                //Update the state text.
-                m_detailPanel->setStateText(
-                            KNAccountDetailPanel::FailedToUpdateAvatar);
-            });
+            this, &KNAccountPanel::onActionAvatarUpdatedFailed);
     connect(knAccount, &KNAccount::userInfoUpdateFailed,
-            [=]
-            {
-                //Update the state text.
-                m_detailPanel->setStateText(
-                            KNAccountDetailPanel::FailedToUpdateData);
-            });
+            this, &KNAccountPanel::onActionUserInfoUpdateFailed);
     connect(knAccount, &KNAccount::updateInternetError,
-            [=]
-            {
-        //Update the state text.
-        m_detailPanel->setStateText(
-                    KNAccountDetailPanel::InternetConnectionError);
-            });
+            this, &KNAccountPanel::onActionUpdateInternetError);
     //Link panel signal.
     connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
             this, &KNAccountPanel::onActionShowRegister);
@@ -192,7 +177,7 @@ void KNAccountPanel::onActionLoginSuccess()
     //Clear the login panel.
     m_loginPanel->clearInputData();
     //Resize the account panel.
-    setFixedHeight(120);
+    setFixedHeight(140);
     //Emit resize signal.
     emit requireResize();
 }
@@ -245,6 +230,27 @@ void KNAccountPanel::onActionOperateSuccess()
                        "successfully.").arg(
                         knAccount->accountDetails()->displayName()));
     }
+}
+
+void KNAccountPanel::onActionAvatarUpdatedFailed()
+{
+    //Update the state text.
+    m_detailPanel->setStateText(
+                KNAccountDetailPanel::FailedToUpdateAvatar);
+}
+
+void KNAccountPanel::onActionUserInfoUpdateFailed()
+{
+    //Update the state text.
+    m_detailPanel->setStateText(
+                KNAccountDetailPanel::FailedToUpdateData);
+}
+
+void KNAccountPanel::onActionUpdateInternetError()
+{
+    //Update the state text.
+    m_detailPanel->setStateText(
+                KNAccountDetailPanel::InternetConnectionError);
 }
 
 void KNAccountPanel::onActionStartAutoLogin()

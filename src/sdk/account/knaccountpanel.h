@@ -94,6 +94,9 @@ private slots:
     void onActionLogout();
 
     void onActionOperateSuccess();
+    void onActionAvatarUpdatedFailed();
+    void onActionUserInfoUpdateFailed();
+    void onActionUpdateInternetError();
 
     void onActionStartAutoLogin();
 

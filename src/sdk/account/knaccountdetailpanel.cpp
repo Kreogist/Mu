@@ -102,6 +102,8 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
     m_state->setPalette(pal);
     m_state->setFixedHeight(fontMetrics().height()<<1);
+    m_state->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_state->setWordWrap(true);
     //Set the wating wheel.
     m_waitingWheel->hide();
     //Update user name palette.
@@ -158,7 +160,9 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_fadeInAnime->setEndFrame(255);
     connect(m_fadeInAnime, &QTimeLine::frameChanged,
             this, &KNAccountDetailPanel::onActionChangeStateAlpha);
-    connect(m_fadeInAnime, SIGNAL(finished()), m_stateFadeTimer, SLOT(start()));
+    connect(m_fadeInAnime, &QTimeLine::finished,
+            m_stateFadeTimer,
+            static_cast<void (QTimer::*)()>(&QTimer::start));
     m_fadeOutAnime->setUpdateInterval(33);
     m_fadeOutAnime->setEndFrame(0);
     m_fadeOutAnime->setEasingCurve(QEasingCurve::OutCubic);

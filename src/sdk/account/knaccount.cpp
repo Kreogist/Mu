@@ -110,7 +110,7 @@ inline int KNAccount::loginWith(const QString &username,
     loginUrl.setQuery(loginQuery);
     loginRequest.setUrl(loginUrl);
     //Get the login result.
-    return get(loginRequest, responseCache);
+    return get(loginRequest, responseCache, false);
 }
 
 bool KNAccount::generateAccount(const QString &userName,
@@ -137,7 +137,8 @@ bool KNAccount::generateAccount(const QString &userName,
         //Send the JSON document to Kreogist cloud.
         if(post(generateKreogistRequest("users"),
                 QJsonDocument(registerData).toJson(QJsonDocument::Compact),
-                responseCache)!=201 || responseCache.isEmpty())
+                responseCache,
+                false)!=201 || responseCache.isEmpty())
         {
             //Emit the register error.
             switch(QJsonDocument::fromJson(responseCache).object().value(
@@ -224,7 +225,7 @@ bool KNAccount::login(const QString &userName,
         //Retry the get data from Kreogist Cloud.
         int originalResult=loginWith(userName, password, responseCache);
         //Check Internet connection signal.
-        if(originalResult==0)
+        if(originalResult<1)
         {
             //Ask user to check Internet connection.
             emit loginFailed(KNAccountUtil::LoginConnectionError);
@@ -259,7 +260,8 @@ bool KNAccount::login(const QString &userName,
         //Put the new information.
         if(put(updateRequest,
                QJsonDocument(passwordSetter).toJson(QJsonDocument::Compact),
-               passwordUpdateResponse)!=200)
+               passwordUpdateResponse,
+               false)!=200)
         {
             //Emit failed signal.
             emit loginFailed(KNAccountUtil::LoginConnectionError);
@@ -304,7 +306,7 @@ void KNAccount::autoLogin()
                                   m_accountDetails->cachePassword(),
                                   responseData);
         //Check the login result.
-        if(loginResult==0)
+        if(loginResult<1)
         {
             //For auto login failed.
             emit autoLoginFailed(KNAccountUtil::LoginConnectionError);
@@ -347,13 +349,29 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         //Rescaled the image before uploading.
         return false;
     }
+    qDebug()<<"Step 1";
     //Check whether it contains image before.
     if(!m_accountDetails->avatarPath().isEmpty())
     {
+        qDebug()<<"Step 2";
         //Clear the raw image.
-        deleteResource(generateKreogistRequest(
-                           "files/"+m_accountDetails->avatarPath()));
+        int removeResult=
+                deleteResource(generateKreogistRequest(
+                                   "files/"+m_accountDetails->avatarPath()),
+                               false);
+        qDebug()<<"Step 2.5";
+        //If the avatar is already deleted(404), nor remove it successfully(200)
+        //there should be an Internet connection error.
+        if(removeResult!=200 && removeResult!=404)
+        {
+            //Emit the failed connection signal.
+            emit updateInternetError();
+            //Failed to upload the image.
+            return false;
+        }
+        qDebug()<<"Step 3";
     }
+    qDebug()<<"Step 4";
     //Generate image cache.
     QByteArray imageBytes, responseBytes;
     {
@@ -372,30 +390,54 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         //Close buffer.
         imageBuffer.close();
     }
+    qDebug()<<"Step 5";
     //Upload the account data.
     QNetworkRequest avatarRequest=generateKreogistRequest(
                 "files/" + m_accountDetails->objectId() + "/avatar.jpg");
     //Configure the image.
     avatarRequest.setHeader(QNetworkRequest::ContentTypeHeader, "image/jpeg");
+    qDebug()<<"Step 6";
     //Post the request.
-    if(post(avatarRequest, imageBytes, responseBytes)!=201)
+    int postResult=post(avatarRequest, imageBytes, responseBytes, false);
+    qDebug()<<"Step 7";
+    //Check Internet connection first.
+    if(postResult<0)
     {
+        qDebug()<<"Step 8";
+        //Emit the failed connection signal.
+        emit updateInternetError();
+        //Failed to upload the image.
+        return false;
+    }
+    //Check post result.
+    else if(postResult!=201)
+    {
+        qDebug()<<"Step 9";
         //Failed to update the avatar.
         emit avatarUpdatedFailed();
         //Failed to upload the image.
         return false;
     }
+    qDebug()<<"Step 10";
     //Check the response data.
     QJsonObject responseObject=QJsonDocument::fromJson(responseBytes).object(),
             updateObject;
     //Update account details.
     updateObject.insert("avatarPath",
                         responseObject.value("url").toString());
+    qDebug()<<"Step 11";
     //Send update request.
-    updateOnlineAccount(updateObject, false);
-    //Update the avatar successfully.
-    emit avatarUpdatedSuccess();
-    return true;
+    if(updateOnlineAccount(updateObject, false))
+    {
+        qDebug()<<"Step 12";
+        //Update the avatar successfully.
+        emit avatarUpdatedSuccess();
+        return true;
+    }
+    //Else is failed.
+    emit avatarUpdatedFailed();
+    //Mission failed.
+    return false;
 }
 
 void KNAccount::logout()
@@ -428,7 +470,8 @@ bool KNAccount::refreshAccountInfo()
     //Get the account information.
     if(get(generateKreogistRequest("classes/_User/" +
                                    m_accountDetails->objectId()),
-           responseData)!=200)
+           responseData,
+           false)!=200)
     {
         //Failed to fetch account information.
         return false;
@@ -457,7 +500,7 @@ inline bool KNAccount::updateTokenSession()
     //Generate the response cache.
     QByteArray responseCache;
     //Send the JSON data to Kreogist Cloud.
-    if(get(loginRequest, responseCache)!=200)
+    if(get(loginRequest, responseCache, false)!=200)
     {
         //Failed to fetch the new token session.
         return false;
@@ -481,7 +524,7 @@ inline int KNAccount::accountPut(QNetworkRequest &request,
     request.setRawHeader("X-Bmob-Session-Token",
                          m_accountDetails->sessionToken().toUtf8());
     //Do original put.
-    int result=put(request, parameter, responseData);
+    int result=put(request, parameter, responseData, false);
     //Check whether the result is failed.
     if(result==404)
     {
@@ -495,7 +538,7 @@ inline int KNAccount::accountPut(QNetworkRequest &request,
             request.setRawHeader("X-Bmob-Session-Token",
                                  m_accountDetails->sessionToken().toUtf8());
             //Give back the new data.
-            return put(request, parameter, responseData);
+            return put(request, parameter, responseData, false);
         }
         //Give the original.
         return result;
@@ -573,7 +616,7 @@ bool KNAccount::updateOnlineAccount(const QJsonObject &userInfo,
                        QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
                        responseData);
     //Check the Internet connection error.
-    if(putResult==0)
+    if(putResult<1)
     {
         //It caused an Internet error.
         emit updateInternetError();
@@ -603,9 +646,10 @@ bool KNAccount::updateOnlineAccount(const QJsonObject &userInfo,
     //Get current user latest data.
     int getResult=
             get(generateKreogistRequest("users/"+m_accountDetails->objectId()),
-                responseData);
+                responseData,
+                false);
     //Check Internet connection error.
-    if(getResult==0)
+    if(getResult<1)
     {
         //There's an connection error.
         emit updateInternetError();
@@ -653,7 +697,7 @@ inline void KNAccount::updateDetails(const QJsonObject &userInfo)
                              m_accountDetails->avatarPath());
         QByteArray imageResponse;
         //Get the account avatar file.
-        if(get(avatarRequest, imageResponse)==200)
+        if(get(avatarRequest, imageResponse, false)==200)
         {
             //Set the image image resource.
             m_accountDetails->setAccountAvatar(

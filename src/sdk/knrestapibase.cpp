@@ -23,10 +23,19 @@
 
 #include "knrestapibase.h"
 
+#include <QDebug>
+
 KNRestApiBase::KNRestApiBase(QObject *parent) :
     QObject(parent),
+    m_downloadedSize(-1),
+    m_lastDownloadedSize(-1),
+    m_currentReply(nullptr),
+    m_timeout(new QTimer),
     m_networkManager(new QNetworkAccessManager)
 {
+    //Configure timeout timer.
+    m_timeout->setInterval(30000);
+    m_timeout->setSingleShot(true);
 }
 
 KNRestApiBase::~KNRestApiBase()
@@ -41,37 +50,62 @@ void KNRestApiBase::setWorkingThread(QThread *thread)
     moveToThread(thread);
     //Move the children to the thread.
     m_networkManager->moveToThread(thread);
+    m_timeout->moveToThread(thread);
 }
 
-int KNRestApiBase::deleteResource(const QNetworkRequest &request)
+int KNRestApiBase::deleteResource(const QNetworkRequest &request,
+                                  bool clearCache)
 {
     //Clear the access cache.
-    m_networkManager->clearAccessCache();
-    //Generate the quit handler and the reply pointer.
-    QNetworkReply *reply=nullptr;
+    if(clearCache)
+    {
+        m_networkManager->clearAccessCache();
+    }
+    //Reset the reply pointer.
+    m_currentReply=nullptr;
     //Generate the waiting loop.
     QEventLoop stuckWatingLoop;
     //Launch the network manager.
-    reply=m_networkManager->deleteResource(request);
+    m_currentReply=m_networkManager->deleteResource(request);
     //Check reply pointer.
-    if(reply)
+    if(m_currentReply)
     {
         //Link the reply with the wating loop.
+        linkHandler(m_currentReply, &stuckWatingLoop);
+        //Link the timeout to event lop.
         m_timeoutHandler.append(
-                    connect(reply, &QNetworkReply::finished,
+                    connect(m_timeout, &QTimer::timeout,
                             &stuckWatingLoop, &QEventLoop::quit));
-        m_timeoutHandler.append(
-                    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                            &stuckWatingLoop, SLOT(quit())));
-        //Start stucked loop.
-        stuckWatingLoop.exec();
+        //Before we start the loop, we need to check whether the reply is done.
+        if(m_currentReply->isRunning())
+        {
+            //Start timer.
+            m_timeout->start();
+            //Start stucked loop.
+            stuckWatingLoop.exec();
+        }
+        //Stop the time out timer.
+        m_timeout->stop();
         //Disconnect all.
         m_timeoutHandler.disconnectAll();
-        //Get the response code.
-        int responseCode=reply->attribute(
-                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        //Initial the response code.
+        int responseCode=-1;
+        //Check the reply running result, get the response code.
+        if(m_currentReply->isRunning())
+        {
+            //Abord the reply, timeout.
+            m_currentReply->abort();
+        }
+        else
+        {
+            //Update the response code.
+            responseCode=m_currentReply->attribute(
+                QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        }
         //Clear the reply.
-        reply->deleteLater();
+        m_currentReply->deleteLater();
+        //Reset the current reply pointer.
+        m_currentReply=nullptr;
         //Complete.
         return responseCode;
     }
@@ -81,38 +115,61 @@ int KNRestApiBase::deleteResource(const QNetworkRequest &request)
 
 int KNRestApiBase::put(const QNetworkRequest &request,
                        const QByteArray &parameter,
-                       QByteArray &responseData)
+                       QByteArray &responseData,
+                       bool clearCache)
 {
-    //Clear the response data array and clear the access cache.
+    //Clear the response data array.
     responseData.clear();
-    m_networkManager->clearAccessCache();
+    //Clear the access cache.
+    if(clearCache)
+    {
+        m_networkManager->clearAccessCache();
+    }
     //Generate the quit handler and the reply pointer.
-    QNetworkReply *reply=nullptr;
+    m_currentReply=nullptr;
     //Generate the waiting loop.
     QEventLoop stuckWatingLoop;
     //Launch the network manager.
-    reply=m_networkManager->put(request, parameter);
+    m_currentReply=m_networkManager->put(request, parameter);
     //Check reply pointer.
-    if(reply)
+    if(m_currentReply)
     {
         //Link the reply with the wating loop.
+        linkHandler(m_currentReply, &stuckWatingLoop);
+        //Link the timeout to event lop.
         m_timeoutHandler.append(
-                    connect(reply, &QNetworkReply::finished,
+                    connect(m_timeout, &QTimer::timeout,
                             &stuckWatingLoop, &QEventLoop::quit));
-        m_timeoutHandler.append(
-                    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                            &stuckWatingLoop, SLOT(quit())));
-        //Start stucked loop.
-        stuckWatingLoop.exec();
+        //Before we start the loop, we need to check whether the reply is done.
+        if(!m_currentReply->isFinished())
+        {
+            //Start stucked loop.
+            stuckWatingLoop.exec();
+        }
+        //Stop the timer.
+        m_timeout->stop();
         //Disconnect all.
         m_timeoutHandler.disconnectAll();
-        //Get the data from the reply.
-        responseData=reply->readAll();
-        //Get the response code.
-        int responseCode=reply->attribute(
-                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        //Initial the response code.
+        int responseCode=-1;
+        //Check out the reply.
+        if(m_currentReply->isRunning())
+        {
+            //It should be timeout.
+            m_currentReply->abort();
+        }
+        else
+        {
+            //Get the data from the reply.
+            responseData=m_currentReply->readAll();
+            //Get the response code.
+            responseCode=m_currentReply->attribute(
+                        QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        }
         //Clear the reply.
-        reply->deleteLater();
+        m_currentReply->deleteLater();
+        //Reset reply pointer.
+        m_currentReply=nullptr;
         //Complete.
         return responseCode;
     }
@@ -120,38 +177,73 @@ int KNRestApiBase::put(const QNetworkRequest &request,
     return -1;
 }
 
-int KNRestApiBase::get(const QNetworkRequest &request, QByteArray &responseData)
+int KNRestApiBase::get(const QNetworkRequest &request,
+                       QByteArray &responseData,
+                       bool clearCache)
 {
-    //Clear the response data array and clear the access cache.
+    //Clear the response data array.
     responseData.clear();
-    m_networkManager->clearAccessCache();
+    //Clear the access cache.
+    if(clearCache)
+    {
+        m_networkManager->clearAccessCache();
+    }
+    //Reset downloaded size.
+    m_downloadedSize=-1;
+    m_lastDownloadedSize=-1;
     //Generate the quit handler and the reply pointer.
-    QNetworkReply *reply=nullptr;
+    m_currentReply=nullptr;
     //Generate the waiting loop.
     QEventLoop stuckWatingLoop;
     //Launch the network manager.
-    reply=m_networkManager->get(request);
+    m_currentReply=m_networkManager->get(request);
     //Check reply pointer.
-    if(reply)
+    if(m_currentReply)
     {
         //Link the reply with the wating loop.
+        linkHandler(m_currentReply, &stuckWatingLoop);
+        //Link the current reply downloaded signal to updater.
         m_timeoutHandler.append(
-                    connect(reply, &QNetworkReply::finished,
+                    connect(m_currentReply, &QNetworkReply::downloadProgress,
+                            this, &KNRestApiBase::onActionGetDownloading));
+        m_timeoutHandler.append(
+                    connect(this, &KNRestApiBase::timeout,
                             &stuckWatingLoop, &QEventLoop::quit));
+        //Link the timeout to downloaded check.
         m_timeoutHandler.append(
-                    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                            &stuckWatingLoop, SLOT(quit())));
-        //Start stucked loop.
-        stuckWatingLoop.exec();
+                    connect(m_timeout, &QTimer::timeout,
+                            this, &KNRestApiBase::onActionDownloadCheck,
+                            Qt::QueuedConnection));
+        //Before we start the loop, we need to check whether the reply is done.
+        if(!m_currentReply->isFinished())
+        {
+            //Start stucked loop.
+            stuckWatingLoop.exec();
+        }
+        //Stop the timer.
+        m_timeout->stop();
         //Disconnect all.
         m_timeoutHandler.disconnectAll();
-        //Get the response code.
-        int responseCode=reply->attribute(
-                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        //Get the data from the reply.
-        responseData=reply->readAll();
+        //Initial the response code.
+        int responseCode=-1;
+        //Check out whether it's timeout.
+        if(m_currentReply->isRunning())
+        {
+            //It should be time out.
+            m_currentReply->abort();
+        }
+        else
+        {
+            //Get the response code.
+            responseCode=m_currentReply->attribute(
+                        QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            //Get the data from the reply.
+            responseData=m_currentReply->readAll();
+        }
         //Clear the reply.
-        reply->deleteLater();
+        m_currentReply->deleteLater();
+        //Reset the current reply.
+        m_currentReply=nullptr;
         //Mission complete.
         return responseCode;
     }
@@ -161,11 +253,16 @@ int KNRestApiBase::get(const QNetworkRequest &request, QByteArray &responseData)
 
 int KNRestApiBase::post(QNetworkRequest request,
                         const QByteArray &parameter,
-                        QByteArray &responseData)
+                        QByteArray &responseData,
+                        bool clearCache)
 {
-    //Clear the response data array and clear the access cache.
+    //Clear the response data array.
     responseData.clear();
-    m_networkManager->clearAccessCache();
+    //Clear the access cache.
+    if(clearCache)
+    {
+        m_networkManager->clearAccessCache();
+    }
     //Generate the quit handler and the reply pointer.
     QNetworkReply *reply=nullptr;
     //Configure the header of the request.
@@ -179,14 +276,13 @@ int KNRestApiBase::post(QNetworkRequest request,
     if(reply)
     {
         //Link the reply with the wating loop.
-        m_timeoutHandler.append(
-                    connect(reply, &QNetworkReply::finished,
-                            &stuckWatingLoop, &QEventLoop::quit));
-        m_timeoutHandler.append(
-                    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                            &stuckWatingLoop, SLOT(quit())));
-        //Start stucked loop.
-        stuckWatingLoop.exec();
+        linkHandler(reply, &stuckWatingLoop);
+        //Before we start the loop, we need to check whether the reply is done.
+        if(!reply->isFinished())
+        {
+            //Start stucked loop.
+            stuckWatingLoop.exec();
+        }
         //Disconnect all.
         m_timeoutHandler.disconnectAll();
         //Get the data from the reply.
@@ -229,4 +325,41 @@ QNetworkRequest KNRestApiBase::generateRequest(const QString &url,
     }
     //Give back the request.
     return request;
+}
+
+void KNRestApiBase::onActionGetDownloading(const qint64 &size, const qint64 &)
+{
+    //Save the downloaded size.
+    m_downloadedSize=size;
+}
+
+void KNRestApiBase::onActionDownloadCheck()
+{
+    //If there's no data downloaded, timeout.
+    if(m_downloadedSize==m_lastDownloadedSize)
+    {
+        //Emit timeout signal.
+        emit timeout();
+        //Failed to download.
+        return;
+    }
+    //If there's any data downloaded, then continue waiting.
+    m_lastDownloadedSize=m_downloadedSize;
+    //Start timer.
+    m_timeout->start();
+}
+
+inline void KNRestApiBase::linkHandler(QNetworkReply *reply,
+                                       QEventLoop *eventLoop)
+{
+    //Link the reply with the wating loop.
+    m_timeoutHandler.append(
+                connect(reply, &QNetworkReply::finished,
+                        eventLoop, &QEventLoop::quit));
+    m_timeoutHandler.append(
+                connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                        eventLoop, SLOT(quit())));
+    m_timeoutHandler.append(
+                connect(reply, SIGNAL(sslErrors(QList<QSslError>)),
+                        eventLoop, SLOT(quit())));
 }

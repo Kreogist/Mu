@@ -18,12 +18,15 @@
 #ifndef KNRESTAPIBASE_H
 #define KNRESTAPIBASE_H
 
+#include <QTimer>
 #include <QNetworkRequest>
 
 #include "knconnectionhandler.h"
 
 #include <QObject>
 
+class QEventLoop;
+class QNetworkReply;
 class QNetworkAccessManager;
 /*!
  * \brief The KNRestApiBase class provides the basic functions for all the
@@ -49,6 +52,11 @@ public:
     virtual void setWorkingThread(QThread *thread);
 
 signals:
+    /*!
+     * \brief This signal is used privately, do not use it.\n
+     * This signal is emitted for checking downloaded data for get request.
+     */
+    void timeout();
 
 public slots:
 
@@ -57,10 +65,12 @@ protected:
      * \brief Http delete request via given the request. This function works in
      * stucked way.
      * \param request The request of the get request.
+     * \param clearCache Clear the access cache when doing this connection.
      * \return HTTP response code. If we cannot send the post, then it will be
      * -1.
      */
-    int deleteResource(const QNetworkRequest &request);
+    int deleteResource(const QNetworkRequest &request,
+                       bool clearCache=true);
 
     /*!
      * \brief Http put request via given the request. This function works in
@@ -70,12 +80,14 @@ protected:
      * request.
      * \param responseData The response data byte array which will be used to
      * receive the data from the get request.
+     * \param clearCache Clear the access cache when doing this connection.
      * \return HTTP response code. If we cannot send the post, then it will be
      * -1.
      */
     int put(const QNetworkRequest &request,
             const QByteArray &parameter,
-            QByteArray &responseData);
+            QByteArray &responseData,
+            bool clearCache=true);
 
     /*!
      * \brief Http get request via given the request. This function works in
@@ -83,11 +95,13 @@ protected:
      * \param request The requst of the get request.
      * \param responseData The response data byte array which will be used to
      * receive the data from the get request.
+     * \param clearCache Clear the access cache when doing this connection.
      * \return HTTP response code. If we cannot send the get, then it will be
      * -1.
      */
     int get(const QNetworkRequest &request,
-            QByteArray &responseData);
+            QByteArray &responseData,
+            bool clearCache=true);
 
     /*!
      * \brief This is a override function.\n
@@ -119,12 +133,14 @@ protected:
      * request.
      * \param responseData The response data byte array which will be used to
      * receive the data from the post request.
+     * \param clearCache Clear the access cache when doing this connection.
      * \return HTTP response code. If we cannot send the post, then it will be
      * -1.
      */
     int post(QNetworkRequest request,
              const QByteArray &parameter,
-             QByteArray &responseData);
+             QByteArray &responseData,
+             bool clearCache=true);
 
     /*!
      * \brief This is a override function.\n
@@ -167,9 +183,17 @@ protected:
                                     const QVariant &cookie=QVariant(),
                                     const QString &referer=QString());
 
+private slots:
+    void onActionGetDownloading(const qint64 &size, const qint64 &);
+    void onActionDownloadCheck();
+
 private:
-    QNetworkAccessManager *m_networkManager;
+    inline void linkHandler(QNetworkReply *reply, QEventLoop *eventLoop);
     KNConnectionHandler m_timeoutHandler;
+    qint64 m_downloadedSize, m_lastDownloadedSize;
+    QNetworkReply *m_currentReply;
+    QTimer *m_timeout;
+    QNetworkAccessManager *m_networkManager;
 };
 
 #endif // KNRESTAPIBASE_H
