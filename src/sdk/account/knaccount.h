@@ -114,6 +114,12 @@ signals:
      */
     void startAutoLogin();
 
+    /*!
+     * \brief When an Internet error is detected in updating user info, this
+     * signal will be emit.
+     */
+    void updateInternetError();
+
 public slots:
     /*!
      * \brief Generate a Kreogist Account with the basic information.

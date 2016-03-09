@@ -84,6 +84,13 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
                 m_detailPanel->setStateText(
                             KNAccountDetailPanel::FailedToUpdateData);
             });
+    connect(knAccount, &KNAccount::updateInternetError,
+            [=]
+            {
+        //Update the state text.
+        m_detailPanel->setStateText(
+                    KNAccountDetailPanel::InternetConnectionError);
+            });
     //Link panel signal.
     connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
             this, &KNAccountPanel::onActionShowRegister);
@@ -150,6 +157,10 @@ void KNAccountPanel::onActionRegisterSuccess()
     m_switcher->setCurrentWidget(DetailPanel);
     //Clear the register panel.
     m_generatePanel->clearInputData();
+    //Resize the account panel.
+    setFixedHeight(120);
+    //Emit resize signal.
+    emit requireResize();
 }
 
 void KNAccountPanel::onActionRegisterFailed(int errorCode)

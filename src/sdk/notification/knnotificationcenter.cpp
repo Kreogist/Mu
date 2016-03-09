@@ -20,6 +20,7 @@
 #include <QBoxLayout>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QResizeEvent>
 #include <QEvent>
 
 //Dependencies.
@@ -56,6 +57,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     setObjectName("NotificationCenter");
     //Set properties.
     setAutoFillBackground(true);
+    setFixedWidth(324);
     setWindowFlags(Qt::WindowSystemMenuHint | Qt::Tool |
                    Qt::FramelessWindowHint);
 
@@ -135,6 +137,8 @@ int KNNotificationCenter::heightHint()
 
 void KNNotificationCenter::showEvent(QShowEvent *event)
 {
+    //Resize the notification center.
+    resize(width(), qMin(maximumHeight(), heightHint()));
     //Show the indicator.
     m_notificationIndicator->show();
     //Set focus on this widget.
@@ -160,9 +164,9 @@ void KNNotificationCenter::resizeEvent(QResizeEvent *event)
     QPainter painter(&objBitmap);
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::SmoothPixmapTransform, true);
-    painter.fillRect(rect(),Qt::white);
+    painter.fillRect(objBitmap.rect(),Qt::white);
     painter.setBrush(QColor(0,0,0));
-    painter.drawRoundedRect(rect(),10,10);
+    painter.drawRoundedRect(objBitmap.rect(),10,10);
     setMask(objBitmap);
 }
 
@@ -176,7 +180,7 @@ void KNNotificationCenter::resizeNotificationCenter()
 {
 #ifdef Q_OS_MACX
     //For Mac OS X, we will use no animation.
-    resize(QSize(width(), qMin(heightHint(), maximumHeight())));
+    resize(width(), qMin(heightHint(), maximumHeight()));
 #else
     //Stop the anime.
     m_resizeAnime->stop();

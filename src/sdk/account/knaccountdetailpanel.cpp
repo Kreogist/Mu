@@ -28,6 +28,7 @@
 #include "knlabelbutton.h"
 #include "knwaitingwheel.h"
 #include "knopacityanimebutton.h"
+#include "knnotification.h"
 
 #include "knaccountdetailbox.h"
 #include "knaccountpasswordbox.h"
@@ -96,10 +97,11 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Link detail updater.
     connect(m_detailModify, &KNAccountDetailBox::requireUpdateInfo,
             this, &KNAccountDetailPanel::onActionAskUpdateInfo);
-    //Update state alpha.
+    //Update state property.
     QPalette pal=m_state->palette();
     pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
     m_state->setPalette(pal);
+    m_state->setFixedHeight(fontMetrics().height()<<1);
     //Set the wating wheel.
     m_waitingWheel->hide();
     //Update user name palette.
@@ -202,6 +204,18 @@ void KNAccountDetailPanel::setStateText(int state)
     //Start animation.
     m_fadeInAnime->setStartFrame(textAlpha);
     m_fadeInAnime->start();
+    //Check whether the widget is visible.
+    if(!isVisible())
+    {
+        //For failed information.
+        if(state!=OperateSuccess)
+        {
+            //Push notification. Check the result.
+            knNotification->pushOnly(tr("Account Update Failed."),
+                                     m_stateText[state]);
+        }
+
+    }
 }
 
 void KNAccountDetailPanel::retranslate()
@@ -209,6 +223,9 @@ void KNAccountDetailPanel::retranslate()
     //Update the state text.
     m_stateText[OperateSuccess]=
             tr("Account update success.");
+    m_stateText[InternetConnectionError]=
+            tr("Cannot connect to server. Please check your Internet "
+               "connection.");
     m_stateText[FailedToUpdateData]=
             tr("Failed to update account info. Try again.");
     m_stateText[FailedToUpdateAvatar]=

@@ -302,8 +302,6 @@ void KNMainWindow::onActionShowNotificationCenter()
     QWidget *headerButton=m_notificationCenter->headerButton();
     //Resize the notification center.
     m_notificationCenter->setMaximumHeight(height()-150);
-    m_notificationCenter->resize(324,
-                                 m_notificationCenter->heightHint());
     //Move the notification center.
     m_notificationCenter->move(
                 QPoint(geometry().x() + width() - m_notificationCenter->width(),

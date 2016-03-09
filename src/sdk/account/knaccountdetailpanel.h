@@ -43,6 +43,7 @@ public:
     enum StateText
     {
         OperateSuccess,
+        InternetConnectionError,
         FailedToUpdateData,
         FailedToUpdateAvatar,
         StateTextCount

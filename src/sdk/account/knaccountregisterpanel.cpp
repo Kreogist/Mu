@@ -102,9 +102,9 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     mainLayout->addWidget(m_errorHint);
     mainLayout->addSpacing(3);
     mainLayout->addWidget(m_username);
-    mainLayout->addSpacing(5);
+    mainLayout->addSpacing(3);
     mainLayout->addWidget(m_password);
-    mainLayout->addSpacing(5);
+    mainLayout->addSpacing(2);
     //Generate the label palette.
     QPalette labelPalette=palette();
     labelPalette.setColor(QPalette::WindowText, m_emptyColor);
@@ -125,7 +125,7 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     mainLayout->addWidget(m_email);
     mainLayout->addSpacing(2);
     mainLayout->addWidget(m_emailHint);
-    mainLayout->addSpacing(5);
+    mainLayout->addSpacing(3);
     mainLayout->addWidget(m_agreeLicense, 0, Qt::AlignHCenter);
     mainLayout->addSpacing(1);
 

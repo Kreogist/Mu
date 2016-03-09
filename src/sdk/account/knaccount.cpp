@@ -162,7 +162,6 @@ bool KNAccount::generateAccount(const QString &userName,
     //Check register response data.
     if(registerData.contains("objectId"))
     {
-        //Successfully register the user id.
         //Save the user name and password for auto login.
         m_accountDetails->setCacheUserName(userName);
         m_accountDetails->setCachePassword(password);
@@ -173,10 +172,10 @@ bool KNAccount::generateAccount(const QString &userName,
                     registerData.value("sessionToken").toString());
         //Set the login.
         m_accountDetails->setIsLogin(true);
-        //Emit register success signal.
-        emit generateSuccess();
         //Update the account information.
         refreshAccountInfo();
+        //Emit register success signal.
+        emit generateSuccess();
         //Mission complete.
         return true;
     }
@@ -419,7 +418,7 @@ bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
 bool KNAccount::refreshAccountInfo()
 {
     //Check login state.
-    if(m_accountDetails->isLogin())
+    if(!m_accountDetails->isLogin())
     {
         //Login first.
         return false;
@@ -478,6 +477,9 @@ inline int KNAccount::accountPut(QNetworkRequest &request,
                                  const QByteArray &parameter,
                                  QByteArray &responseData)
 {
+    //Set the session token.
+    request.setRawHeader("X-Bmob-Session-Token",
+                         m_accountDetails->sessionToken().toUtf8());
     //Do original put.
     int result=put(request, parameter, responseData);
     //Check whether the result is failed.
@@ -563,15 +565,23 @@ bool KNAccount::updateOnlineAccount(const QJsonObject &userInfo,
     //Tring to update account info.
     QNetworkRequest updateRequest=generateKreogistRequest(
                 "users/"+m_accountDetails->objectId());
-    //Set the session token.
-    updateRequest.setRawHeader("X-Bmob-Session-Token",
-                               m_accountDetails->sessionToken().toUtf8());
     //Generate response data.
     QByteArray responseData;
     //PUT the json data.
-    if(accountPut(updateRequest,
-                  QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
-                  responseData)!=200)
+    int putResult=
+            accountPut(updateRequest,
+                       QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
+                       responseData);
+    //Check the Internet connection error.
+    if(putResult==0)
+    {
+        //It caused an Internet error.
+        emit updateInternetError();
+        //Failed to get the result.
+        return false;
+    }
+    //Check if update failed.
+    if(putResult!=200)
     {
         //Check signal flags.
         if(withSignal)
@@ -583,9 +593,27 @@ bool KNAccount::updateOnlineAccount(const QJsonObject &userInfo,
         return false;
     }
     //Successfully update user data.
+    //Check whether the data contains password field.
+    if(userInfo.contains("password"))
+    {
+        //Update the cache password.
+        m_accountDetails->setCachePassword(
+                    userInfo.value("password").toString());
+    }
     //Get current user latest data.
-    if(get(generateKreogistRequest("users/"+m_accountDetails->objectId()),
-           responseData)!=200)
+    int getResult=
+            get(generateKreogistRequest("users/"+m_accountDetails->objectId()),
+                responseData);
+    //Check Internet connection error.
+    if(getResult==0)
+    {
+        //There's an connection error.
+        emit updateInternetError();
+        //Failed to get latest info.
+        return false;
+    }
+    //Check if get the data from server.
+    if(getResult!=200)
     {
         //Check signal flags.
         if(withSignal)
