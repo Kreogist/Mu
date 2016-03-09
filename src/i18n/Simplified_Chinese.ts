@@ -22,22 +22,32 @@
 <context>
     <name>KNAccountDetailPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="211"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="218"/>
+        <source>Account Update Failed.</source>
+        <translation>账户信息更新失败。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="229"/>
         <source>Account update success.</source>
         <translation>信息更新成功。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="213"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="231"/>
+        <source>Cannot connect to server. Please check your Internet connection.</source>
+        <translation>无法连接到服务器。请检查您的网络连接。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="234"/>
         <source>Failed to update account info. Try again.</source>
         <translation>更新用户信息失败，请重试。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="215"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="236"/>
         <source>Failed to update new avatar. Try again.</source>
         <translation>更新头像图片失败，请重试。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="289"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="310"/>
         <source>Select avatar file</source>
         <translation>选择头像图片</translation>
     </message>
@@ -45,60 +55,73 @@
 <context>
     <name>KNAccountLoginPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="177"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="266"/>
         <source>Username or password incorrect.</source>
         <translation>用户名或密码错误。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="180"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="270"/>
         <source>with Your Kreogist Account</source>
         <translation>以同步您的用户信息及设置</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="179"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="269"/>
         <source>Sign in</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="161"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="264"/>
+        <source>Connection Error. Please check Internet connection.</source>
+        <translation>连接错误。请检查您的互联网连接。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="267"/>
         <source>Kreogist Account login failed.</source>
         <translation>Kreogist 账户登录失败。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="174"/>
         <source>Cannot connect to server. Please check your Internet connection.</source>
-        <translation>无法连接到服务器。请检查您的网络连接。</translation>
+        <translation type="vanished">无法连接到服务器。请检查您的网络连接。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="183"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="273"/>
         <source>Username/E-mail</source>
         <translation>用户名/邮箱</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="184"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="274"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="186"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="276"/>
         <source>Create an account</source>
         <translation>创建 Kreogist 用户</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="187"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="277"/>
         <source>Forget password?</source>
         <translation>忘记密码了？</translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="279"/>
+        <source>Login with another account</source>
+        <translation>使用其它的账户登录</translation>
+    </message>
+    <message>
+        <source>Login with another account.</source>
+        <translation type="obsolete">使用其它的账户登录</translation>
     </message>
 </context>
 <context>
     <name>KNAccountPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="217"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="228"/>
         <source>Account Update Success</source>
         <translation>账户更新成功</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="218"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="229"/>
         <source>The user data of %1 has been updated successfully.</source>
         <translation>%1 的用户信息已经被成功更新。</translation>
     </message>
@@ -1352,7 +1375,7 @@ To create a playlist, drag your songs here.</source>
         <translation type="vanished">登录</translation>
     </message>
     <message>
-        <location filename="../sdk/notification/knnotificationcenter.cpp" line="172"/>
+        <location filename="../sdk/notification/knnotificationcenter.cpp" line="176"/>
         <source>Show Notification Center and Kreogist Account</source>
         <translation>显示通知中心和 Kreogist 账户</translation>
     </message>

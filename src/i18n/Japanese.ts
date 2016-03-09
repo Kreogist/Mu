@@ -22,22 +22,32 @@
 <context>
     <name>KNAccountDetailPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="211"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="218"/>
+        <source>Account Update Failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="229"/>
         <source>Account update success.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="213"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="231"/>
+        <source>Cannot connect to server. Please check your Internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="234"/>
         <source>Failed to update account info. Try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="215"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="236"/>
         <source>Failed to update new avatar. Try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="289"/>
+        <location filename="../sdk/account/knaccountdetailpanel.cpp" line="310"/>
         <source>Select avatar file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -45,60 +55,65 @@
 <context>
     <name>KNAccountLoginPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="177"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="266"/>
         <source>Username or password incorrect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="180"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="270"/>
         <source>with Your Kreogist Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="179"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="269"/>
         <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="161"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="264"/>
+        <source>Connection Error. Please check Internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="267"/>
         <source>Kreogist Account login failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="174"/>
-        <source>Cannot connect to server. Please check your Internet connection.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="183"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="273"/>
         <source>Username/E-mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="184"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="274"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="186"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="276"/>
         <source>Create an account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="187"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="277"/>
         <source>Forget password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="279"/>
+        <source>Login with another account</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNAccountPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="217"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="228"/>
         <source>Account Update Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="218"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="229"/>
         <source>The user data of %1 has been updated successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1322,7 +1337,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNNotificationCenter</name>
     <message>
-        <location filename="../sdk/notification/knnotificationcenter.cpp" line="172"/>
+        <location filename="../sdk/notification/knnotificationcenter.cpp" line="176"/>
         <source>Show Notification Center and Kreogist Account</source>
         <translation type="unfinished"></translation>
     </message>

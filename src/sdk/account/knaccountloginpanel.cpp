@@ -276,7 +276,7 @@ void KNAccountLoginPanel::retranslate()
     m_menuActions[RegisterAccount]->setText(tr("Create an account"));
     m_menuActions[ForgetPassword]->setText(tr("Forget password?"));
     m_menuActions[LoginWithAnotherAccount]->setText(
-                tr("Login with another account."));
+                tr("Login with another account"));
 }
 
 void KNAccountLoginPanel::onActionForgetPassword()
