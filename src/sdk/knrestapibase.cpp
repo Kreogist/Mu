@@ -40,8 +40,20 @@ KNRestApiBase::KNRestApiBase(QObject *parent) :
 
 KNRestApiBase::~KNRestApiBase()
 {
+    //Check out the current reply is running.
+    if(m_currentReply)
+    {
+        //Abort the reply.
+        m_currentReply->abort();
+        //Delete the reply.
+        m_currentReply->deleteLater();
+        //Reset the pointer.
+        m_currentReply=nullptr;
+    }
     //Recover the memory.
     m_networkManager->deleteLater();
+    //Stop the timer.
+    m_timeout->deleteLater();
 }
 
 void KNRestApiBase::setWorkingThread(QThread *thread)
@@ -90,6 +102,12 @@ int KNRestApiBase::deleteResource(const QNetworkRequest &request,
         m_timeoutHandler.disconnectAll();
         //Initial the response code.
         int responseCode=-1;
+        //Check whether reply is still available.
+        if(!m_currentReply)
+        {
+            //Failed when current reply is not valid at all.
+            return -1;
+        }
         //Check the reply running result, get the response code.
         if(m_currentReply->isRunning())
         {
@@ -152,6 +170,12 @@ int KNRestApiBase::put(const QNetworkRequest &request,
         m_timeoutHandler.disconnectAll();
         //Initial the response code.
         int responseCode=-1;
+        //Check whether reply is still available.
+        if(!m_currentReply)
+        {
+            //Failed when current reply is not valid at all.
+            return -1;
+        }
         //Check out the reply.
         if(m_currentReply->isRunning())
         {
@@ -226,6 +250,12 @@ int KNRestApiBase::get(const QNetworkRequest &request,
         m_timeoutHandler.disconnectAll();
         //Initial the response code.
         int responseCode=-1;
+        //Check whether reply is still available.
+        if(!m_currentReply)
+        {
+            //Failed when current reply is not valid at all.
+            return -1;
+        }
         //Check out whether it's timeout.
         if(m_currentReply->isRunning())
         {
@@ -293,6 +323,12 @@ int KNRestApiBase::post(QNetworkRequest request,
         m_timeoutHandler.disconnectAll();
         //Initial the response code.
         int responseCode=-1;
+        //Check whether reply is still available.
+        if(!m_currentReply)
+        {
+            //Failed when current reply is not valid at all.
+            return -1;
+        }
         //Check out whether it's timeout.
         if(m_currentReply->isRunning())
         {
