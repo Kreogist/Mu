@@ -264,34 +264,53 @@ int KNRestApiBase::post(QNetworkRequest request,
         m_networkManager->clearAccessCache();
     }
     //Generate the quit handler and the reply pointer.
-    QNetworkReply *reply=nullptr;
+    m_currentReply=nullptr;
     //Configure the header of the request.
     request.setHeader(QNetworkRequest::ContentLengthHeader,
                       parameter.size());
     //Generate the waiting loop.
     QEventLoop stuckWatingLoop;
     //Launch the network manager.
-    reply=m_networkManager->post(request, parameter);
+    m_currentReply=m_networkManager->post(request, parameter);
     //Check reply pointer.
-    if(reply)
+    if(m_currentReply)
     {
         //Link the reply with the wating loop.
-        linkHandler(reply, &stuckWatingLoop);
+        linkHandler(m_currentReply, &stuckWatingLoop);
+        //Link the timeout to event lop.
+        m_timeoutHandler.append(
+                    connect(m_timeout, &QTimer::timeout,
+                            &stuckWatingLoop, &QEventLoop::quit));
         //Before we start the loop, we need to check whether the reply is done.
-        if(!reply->isFinished())
+        if(!m_currentReply->isFinished())
         {
             //Start stucked loop.
             stuckWatingLoop.exec();
         }
+        //Stop the timer.
+        m_timeout->stop();
         //Disconnect all.
         m_timeoutHandler.disconnectAll();
-        //Get the data from the reply.
-        responseData=reply->readAll();
-        //Get the response code.
-        int responseCode=reply->attribute(
-                    QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        //Initial the response code.
+        int responseCode=-1;
+        //Check out whether it's timeout.
+        if(m_currentReply->isRunning())
+        {
+            //It should be time out.
+            m_currentReply->abort();
+        }
+        else
+        {
+            //Get the response code.
+            responseCode=m_currentReply->attribute(
+                        QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            //Get the data from the reply.
+            responseData=m_currentReply->readAll();
+        }
         //Clear the reply.
-        reply->deleteLater();
+        m_currentReply->deleteLater();
+        //Reset the current reply.
+        m_currentReply=nullptr;
         //Complete.
         return responseCode;
     }
