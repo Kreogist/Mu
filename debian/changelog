@@ -1,3 +1,10 @@
+mu (0.9.9) unstable; urgency=medium
+
+  * Add Kreogist Account.
+  * Fixed the potential crash bug caused by running music plugin.
+
+ -- Saki Tojo <tomguts@126.com> Mon, 9 Mar 2016 18:00:00 +1100
+
 mu (0.9.4) unstable; urgency=medium
 
   * playlist float panel will be shown. Now you can create playlist or add to playlist directly when dragging.
