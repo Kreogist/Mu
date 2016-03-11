@@ -223,8 +223,6 @@ void KNPluginManager::loadPlugins()
 
 void KNPluginManager::launchApplication()
 {
-    //Start the global manager to work.
-    emit knGlobal->startWorking();
     //Check out the argument size.
     if(qApp->arguments().size() > 1)
     {
@@ -232,11 +230,15 @@ void KNPluginManager::launchApplication()
         onActionArgumentsAvaliable(qApp->arguments());
         //Start mini player.
         m_musicPlugin->showMiniPlayer();
+        //Start the global manager to work.
+        emit knGlobal->startWorking();
         //Don't need to show the main window, it will start for mini player.
         return;
     }
     //Show the main window.
     m_mainWindow->show();
+    //Start the global manager to work.
+    emit knGlobal->startWorking();
 }
 
 void KNPluginManager::onActionArgumentsAvaliable(QStringList arguments)
