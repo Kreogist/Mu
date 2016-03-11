@@ -457,6 +457,11 @@ bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
     return updateOnlineAccount(userInfo, true);
 }
 
+void KNAccount::resetPassword(const QString &emailAddress)
+{
+    ;
+}
+
 bool KNAccount::refreshAccountInfo()
 {
     //Check login state.

@@ -21,10 +21,17 @@
 
 #include "knmusicanalysiser.h"
 
+/*!
+ * \brief The KNMusicBassAnalysiser class
+ */
 class KNMusicBassAnalysiser : public KNMusicAnalysiser
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicBassAnalysiser object.
+     * \param parent The parent object pointer.
+     */
     explicit KNMusicBassAnalysiser(QObject *parent = 0);
 
     /*!

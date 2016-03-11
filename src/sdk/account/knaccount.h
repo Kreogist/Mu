@@ -171,6 +171,12 @@ public slots:
     bool updateAccountInfo(const QJsonObject &userInfo);
 
     /*!
+     * \brief Ask to reset one user password.
+     * \param emailAddress User E-mail account.
+     */
+    void resetPassword(const QString &emailAddress);
+
+    /*!
      * \brief Get the account information from server, update the detail info.
      * \return If we could update the account info successfully, return true.
      */

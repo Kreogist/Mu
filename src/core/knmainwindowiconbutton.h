@@ -53,6 +53,10 @@ public:
     void setButtonText(const QString &text);
 
 signals:
+    /*!
+     * \brief When the main window button size is changed, this signal will be
+     * emitted.
+     */
     void buttonSizeChange();
 
 public slots:
@@ -74,8 +78,7 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief resizeEvent
-     * \param event
+     * \brief Reimplemented from QAbstractButton::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 

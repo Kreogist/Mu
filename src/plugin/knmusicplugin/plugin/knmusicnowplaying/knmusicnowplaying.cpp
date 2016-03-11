@@ -389,7 +389,8 @@ void KNMusicNowPlaying::onActionBackendFinished()
     if(RepeatTrack==m_loopState)
     {
         //Check the backend first.
-        if(m_backend!=nullptr)
+        if(m_backend!=nullptr &&
+                m_playingAnalysisItem.detailInfo.duration>0)
         {
             m_backend->play();
         }

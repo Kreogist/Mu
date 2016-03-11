@@ -147,6 +147,14 @@ void KNMusicBackendBassThread::play()
     //Check the playing state before.
     if(m_state==Stopped)
     {
+        //Check out the duration of the song.
+        if(m_duration==0)
+        {
+            //Finished playing, to on action finished.
+            finishPlaying();
+            //Mission complete.
+            return;
+        }
         //Reset the position to fit track playing.
         setPosition(0);
         //Set the volume to the last volume, because of the reset, the

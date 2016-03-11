@@ -71,6 +71,11 @@ public:
     KNMusicOnlineLyricsDownloader *onlineLyricsDownloader();
 
 signals:
+    /*!
+     * \brief When the lyrics manager need to download lyrics from Internet,
+     * this signal will be emitted for asking download the lyrics.
+     * \param detailInfo The detail info structure of the song.
+     */
     void requireDownloadLyrics(KNMusicDetailInfo detailInfo);
 
 public slots:

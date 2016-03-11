@@ -47,8 +47,12 @@ void KNMusicOnlineLyrics::appendDownloader(KNMusicLyricsDownloader *downloader)
 
 void KNMusicOnlineLyrics::addToDownloadList(const KNMusicDetailInfo &detailInfo)
 {
-    //Add the detail info to the download queue.
-    m_downloadQueue.append(detailInfo);
+    //Check detail info first, if the detail info is not in the list.
+    if(!m_downloadQueue.contains(detailInfo))
+    {
+        //Add the detail info to the download queue.
+        m_downloadQueue.append(detailInfo);
+    }
     //Execute the download list.
     emit downloadNext();
 }
@@ -80,6 +84,7 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
     //Check the download queue.
     if(m_downloadQueue.isEmpty())
     {
+        //We won't process anything for empty queue.
         return;
     }
     //Get the last item in the download queue.
