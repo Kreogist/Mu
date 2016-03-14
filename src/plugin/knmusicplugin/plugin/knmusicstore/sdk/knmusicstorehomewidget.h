@@ -16,11 +16,32 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knmusiclibrarybase.h"
+#ifndef KNMUSICSTOREHOMEWIDGET_H
+#define KNMUSICSTOREHOMEWIDGET_H
 
-KNMusicLibraryBase::KNMusicLibraryBase(QObject *parent) :
-    QObject(parent)
+#include <QWidget>
+
+/*!
+ * \brief The KNMusicStoreHomeWidget class is used to show the homepage image
+ * and song information from the backend.
+ */
+class KNMusicStoreHomeWidget : public QWidget
 {
+    Q_OBJECT
+public:
+    /*!
+     * \brief Construct a KNMusicStoreHomeWidget widget.
+     * \param parent The parent widget pointer.
+     */
+    explicit KNMusicStoreHomeWidget(QWidget *parent = 0);
 
-}
+signals:
 
+public slots:
+
+protected:
+
+private:
+};
+
+#endif // KNMUSICSTOREHOMEWIDGET_H

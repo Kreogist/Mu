@@ -6,6 +6,10 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "MusicStoreWidget" : {
+        "Parent" : "MainWindow",
+        "Window" : "#202020"
+    },
     "NotificationView" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

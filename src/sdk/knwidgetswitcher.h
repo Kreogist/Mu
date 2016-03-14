@@ -111,6 +111,11 @@ public slots:
      */
     void setCurrentIndex(const int &currentIndex);
 
+    /*!
+     * \brief Set the current widget to be the central widget without any
+     * animation.
+     * \param currentIndex The current index of the widget.
+     */
     void setCurrentWidget(int currentIndex);
 
 protected:

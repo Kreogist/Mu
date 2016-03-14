@@ -372,7 +372,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.cpp \
-    plugin/knmusicplugin/sdk/knmusiclibrarybase.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp \
@@ -442,7 +441,13 @@ SOURCES += \
     sdk/account/knaccountpasswordbox.cpp \
     sdk/account/knaccountpasswordverification.cpp \
     sdk/account/knaccountdetailbox.cpp \
-    sdk/knwaitingwheel.cpp
+    sdk/knwaitingwheel.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresultwidget.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -671,7 +676,14 @@ HEADERS += \
     sdk/account/knaccountpasswordbox.h \
     sdk/account/knaccountpasswordverification.h \
     sdk/account/knaccountdetailbox.h \
-    sdk/knwaitingwheel.h
+    sdk/knwaitingwheel.h \
+    plugin/knmusicplugin/sdk/knmusicstorebase.h \
+    plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresultwidget.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.h
 
 RESOURCES += \
     resource/res.qrc

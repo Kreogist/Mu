@@ -52,6 +52,7 @@
 #include "knmusictab.h"
 #include "knmusiclyricsdownloaddialogbase.h"
 #include "knmusicminiplayerbase.h"
+#include "knmusicstorebase.h"
 
 //Plugins
 // Detail Dialog Panels.
@@ -116,6 +117,8 @@
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 // Playlist.
 #include "plugin/knmusicplaylist/knmusicplaylist.h"
+// Music Store.
+#include "plugin/knmusicstore/knmusicstore.h"
 
 //Globals.
 #include "knmusicglobal.h"
@@ -141,7 +144,8 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr),
     m_miniPlayer(nullptr),
-    m_library(nullptr)
+    m_library(nullptr),
+    m_store(nullptr)
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
@@ -245,6 +249,8 @@ void KNMusicPlugin::loadPlugins()
     initialLibrary(new KNMusicLibrary);
     //Initial the playlist tab.
     initialPlaylist(new KNMusicPlaylist);
+    //Initial the store tab.
+    initialStore(new KNMusicStore);
 
     //Start working threads.
     knMusicGlobal->startThreads();
@@ -834,4 +840,18 @@ void KNMusicPlugin::initialLibrary(KNMusicLibraryBase *library)
     addMusicTab(m_library->artistTab());
     addMusicTab(m_library->albumTab());
     addMusicTab(m_library->genreTab());
+}
+
+void KNMusicPlugin::initialStore(KNMusicStoreBase *store)
+{
+    //Save the store plugin.
+    m_store=store;
+    //Check the store plugin first.
+    if(m_store==nullptr)
+    {
+        //Mission complete.
+        return;
+    }
+    //Add tabs to switcher.
+    addMusicTab(m_store);
 }

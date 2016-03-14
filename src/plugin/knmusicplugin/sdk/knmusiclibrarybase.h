@@ -38,7 +38,7 @@ public:
      * \brief Construct a KNMusicLibraryBase object.
      * \param parent The parent object.
      */
-    explicit KNMusicLibraryBase(QObject *parent = 0);
+    KNMusicLibraryBase(QObject *parent = 0) : QObject(parent){}
 
     /*!
      * \brief Get the song tab widget pointer.

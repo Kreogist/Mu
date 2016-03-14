@@ -44,6 +44,7 @@ class KNMusicMainPlayerBase;
 class KNMusicMiniPlayerBase;
 class KNMusicLibraryBase;
 class KNMusicLyricsDownloadDialogBase;
+class KNMusicStoreBase;
 /*!
  * \brief The KNMusicCategoryPlugin class is the official music category plugin.
  * You can treat this as a example.\n
@@ -159,6 +160,7 @@ private:
     void initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer);
     void initialPlaylist(KNMusicPlaylistBase *playlist);
     void initialLibrary(KNMusicLibraryBase *library);
+    void initialStore(KNMusicStoreBase *store);
 
     //UI infrastructure elements.
     KNMouseDetectHeader *m_headerWidget;
@@ -178,6 +180,7 @@ private:
     KNMusicMainPlayerBase *m_mainPlayer;
     KNMusicMiniPlayerBase *m_miniPlayer;
     KNMusicLibraryBase *m_library;
+    KNMusicStoreBase *m_store;
 };
 
 #endif // KNMUSICPLUGIN_H

@@ -21,7 +21,7 @@
 #include "kncategorytab.h"
 #include "knemptystatewidget.h"
 #include "knlocalemanager.h"
-#include "knmessagebox.h"
+#include "knnotification.h"
 
 // SDKs
 #include "knmusicnowplayingbase.h"
@@ -301,11 +301,10 @@ void KNMusicPlaylist::onActionRemovePlaylist()
         //Remove the file.
         if(!QFile::remove(model->filePath()))
         {
-            //Show up the error message.
-            KNMessageBox::information(
-                        m_cannotDeleteMessage.arg(model->filePath()),
-                        "Error",
-                        Qt::AlignCenter);
+            //Push a notification.
+            knNotification->pushOnly(
+                        tr("Error"),
+                        m_cannotDeleteMessage.arg(model->filePath()));
             //Stop here.
             return;
         }
