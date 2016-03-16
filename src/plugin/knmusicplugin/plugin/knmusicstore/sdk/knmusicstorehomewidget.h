@@ -21,6 +21,9 @@
 
 #include <QWidget>
 
+class QLabel;
+class KNMusicStoreAlbumList;
+class KNMusicStoreBackend;
 /*!
  * \brief The KNMusicStoreHomeWidget class is used to show the homepage image
  * and song information from the backend.
@@ -38,10 +41,25 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set backend to home widget.
+     * \param backend The music store backend.
+     */
+    void setBackend(KNMusicStoreBackend *backend);
 
 protected:
 
+private slots:
+    void retranslate();
+
 private:
+    enum HomePageBlocks
+    {
+        NewMusicBlock,
+        HomePageBlockCount
+    };
+    QLabel *m_blockTitle[HomePageBlockCount];
+    KNMusicStoreAlbumList *m_newMusicList;
 };
 
 #endif // KNMUSICSTOREHOMEWIDGET_H

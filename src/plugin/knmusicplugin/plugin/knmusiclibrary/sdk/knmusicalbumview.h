@@ -78,6 +78,11 @@ public:
      */
     void selectAlbum(const QModelIndex &albumIndex);
 
+    /*!
+     * \brief Get the album detail widget pointer.
+     * \return The album detail widget pointer. If you never set before, it will
+     * be nullptr.
+     */
     KNMusicAlbumDetail *albumDetail() const;
 
 signals:

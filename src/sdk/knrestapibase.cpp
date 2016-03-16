@@ -89,7 +89,7 @@ int KNRestApiBase::deleteResource(const QNetworkRequest &request,
                     connect(m_timeout, &QTimer::timeout,
                             &stuckWatingLoop, &QEventLoop::quit));
         //Before we start the loop, we need to check whether the reply is done.
-        if(m_currentReply->isRunning())
+        if(m_currentReply && m_currentReply->isRunning())
         {
             //Start timer.
             m_timeout->start();
@@ -159,8 +159,10 @@ int KNRestApiBase::put(const QNetworkRequest &request,
                     connect(m_timeout, &QTimer::timeout,
                             &stuckWatingLoop, &QEventLoop::quit));
         //Before we start the loop, we need to check whether the reply is done.
-        if(!m_currentReply->isFinished())
+        if(m_currentReply && m_currentReply->isRunning())
         {
+            //Start timer.
+            m_timeout->start();
             //Start stucked loop.
             stuckWatingLoop.exec();
         }
@@ -239,8 +241,11 @@ int KNRestApiBase::get(const QNetworkRequest &request,
                             this, &KNRestApiBase::onActionDownloadCheck,
                             Qt::QueuedConnection));
         //Before we start the loop, we need to check whether the reply is done.
-        if(!m_currentReply->isFinished())
+        if(m_currentReply &&
+                (!m_currentReply->isFinished()))
         {
+            //Start timer.
+            m_timeout->start();
             //Start stucked loop.
             stuckWatingLoop.exec();
         }
@@ -312,8 +317,11 @@ int KNRestApiBase::post(QNetworkRequest request,
                     connect(m_timeout, &QTimer::timeout,
                             &stuckWatingLoop, &QEventLoop::quit));
         //Before we start the loop, we need to check whether the reply is done.
-        if(!m_currentReply->isFinished())
+        if(m_currentReply &&
+                (!m_currentReply->isFinished()))
         {
+            //Start timer.
+            m_timeout->start();
             //Start stucked loop.
             stuckWatingLoop.exec();
         }

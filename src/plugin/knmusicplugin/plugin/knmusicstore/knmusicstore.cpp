@@ -18,18 +18,25 @@
 #include <QScrollArea>
 #include <QScrollBar>
 
+//Include infrastructure.
 #include "knlocalemanager.h"
 #include "kncategorytab.h"
 #include "knhwidgetswitcher.h"
 #include "sao/knsaostyle.h"
 
+//Include store sdk.
 #include "sdk/knmusicstoreglobal.h"
 #include "sdk/knmusicstorehomewidget.h"
 #include "sdk/knmusicstorelistwidget.h"
 #include "sdk/knmusicstoresearchresultwidget.h"
 #include "sdk/knmusicstoresinglesongwidget.h"
 
+//Include plugins.
+#include "plugin/knmusicstorenetease/knmusicstorenetease.h"
+
 #include "knmusicstore.h"
+
+#include <QDebug>
 
 KNMusicStore::KNMusicStore(QWidget *parent) :
     KNMusicStoreBase(parent),
@@ -46,6 +53,8 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Configure the scroll area.
     m_storeSwitcher->setAlignment(Qt::AlignHCenter);
     m_storeSwitcher->setSizeAdjustPolicy(QScrollArea::AdjustToContents);
+    KNSaoStyle::styleHorizontalScrollBar(
+                m_storeSwitcher->horizontalScrollBar());
     KNSaoStyle::styleVerticalScrollBar(m_storeSwitcher->verticalScrollBar());
     //Hide the content widgets.
     m_home->hide();
@@ -55,6 +64,10 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Show the home widget.
     m_home->show();
     m_storeSwitcher->setWidget(m_home);
+
+    KNMusicStoreNetease *test=new KNMusicStoreNetease(this);
+    test->fetchHomeWidgetInfo();
+    m_home->setBackend(test);
 
     //Link retranslator.
     knI18n->link(this, &KNMusicStore::retranslate);

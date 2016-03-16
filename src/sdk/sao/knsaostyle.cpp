@@ -80,6 +80,48 @@ void KNSaoStyle::styleVerticalScrollBar(QWidget *widget)
                           "}");
 }
 
+void KNSaoStyle::styleHorizontalScrollBar(QWidget *widget)
+{
+    //The widget should be a QScrollBar or inherited from QScrollBar, and it
+    //should should be horizontal.
+    widget->setStyleSheet("QScrollBar:horizontal {"
+                          //Clear the border.
+                          "   border: 0px solid grey;"
+                          //Clear the background.
+                          "   background: rgba(0, 0, 0, 0);"
+                          //Set the fixed width of the scroll bar.
+                          "   height: 8px;"
+                          "}"
+                          //Configure the handle.
+                          "QScrollBar::handle:horizontal {"
+                          //Reset the handle color.
+                          "   background: rgba(100, 100, 100);"
+                          //Set the minimal height of the handle.
+                          "   min-width: 10px;"
+                          //Make the handle to be a rounded rectangle.
+                          "   border-radius: 4px;"
+                          "}"
+                          "QScrollBar::add-line:horizontal {"
+                          "   border: 0px solid grey;"
+                          "   background: rgba(0, 0, 0, 100);"
+                          "   width: 0px;"
+                          "   subcontrol-position: right;"
+                          "   subcontrol-origin: margin;"
+                          "}"
+                          "QScrollBar::sub-line:horizontal {"
+                          "   border: 0px solid grey;"
+                          "   background: rgba(0, 0, 0, 100);"
+                          "   width: 0px;"
+                          "   subcontrol-position: left;"
+                          "   subcontrol-origin: margin;"
+                          "}");
+}
+
+int KNSaoStyle::scrollBarWidth()
+{
+    return 8;
+}
+
 void KNSaoStyle::drawControl(ControlElement element,
                              const QStyleOption *opt,
                              QPainter *p,

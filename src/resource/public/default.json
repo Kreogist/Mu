@@ -8,7 +8,13 @@
     },
     "MusicStoreWidget" : {
         "Parent" : "MainWindow",
-        "Window" : "#202020"
+        "Window" : "#202020",
+        "WindowText" : "#9D9D9D"
+    },
+    "MusicStoreAlbumList" : {
+        "Parent" : "MusicStoreWidget",
+        "Base" : "#00000000",
+        "Text" : "#FFFFFF"
     },
     "NotificationView" : {
         "Parent" : "MainWindow",

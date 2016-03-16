@@ -51,6 +51,7 @@
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
+    m_musicPlugin(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
     m_container(new KNMainWindowContainer(this)),
     m_categoryPlugin(nullptr),
@@ -248,7 +249,8 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
     //Check music plugin working state.
-    if(m_musicPlugin->isWorking())
+    if(m_musicPlugin &&
+            m_musicPlugin->isWorking())
     {
         //Ignore the close request.
         event->ignore();

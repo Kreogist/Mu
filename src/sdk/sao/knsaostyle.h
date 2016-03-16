@@ -47,6 +47,18 @@ public:
     static void styleVerticalScrollBar(QWidget *widget);
 
     /*!
+     * \brief Set the SAO style style sheet to a horizontal QScrollBar.
+     * \param widget The QScrollBar widget pointer.
+     */
+    static void styleHorizontalScrollBar(QWidget *widget);
+
+    /*!
+     * \brief Get the fixed scroll bar width of the data.
+     * \return The width of the scroll bar.
+     */
+    static int scrollBarWidth();
+
+    /*!
      * \brief Reimplemented from QCommonStyle::drawControl().
      */
     void drawControl(ControlElement element,

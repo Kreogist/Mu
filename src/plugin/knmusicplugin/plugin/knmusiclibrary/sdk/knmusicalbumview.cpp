@@ -126,6 +126,12 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
 
 QModelIndex KNMusicAlbumView::indexAt(const QPoint &point) const
 {
+    //Check model first.
+    if(!m_model)
+    {
+        //For a null model, return null data.
+        return m_nullIndex;
+    }
     //Calculate the point content position and the line of the point.
     int pointContentY=verticalScrollBar()->value()+point.y(),
         itemLine=pointContentY/m_itemSpacingHeight;
@@ -183,7 +189,7 @@ void KNMusicAlbumView::locateTo(const QModelIndex &index,
     {
         return;
     }
-    //Use timeline to move to the position.
+    //Set the vertical scroll bar value directly.
     verticalScrollBar()->setValue(indexScrollBarValue(index, hint));
     //Update.
     viewport()->update();
@@ -223,7 +229,7 @@ void KNMusicAlbumView::setModel(QAbstractItemModel *model)
 void KNMusicAlbumView::selectAlbum(const QModelIndex &albumIndex)
 {
     //If the index is vaild, set the initial animation parameters.
-    if(albumIndex.isValid())
+    if(albumIndex.isValid() && m_albumDetail)
     {
         //Check whether the album index is the same as the current one.
         if(albumIndex==m_selectedIndex)

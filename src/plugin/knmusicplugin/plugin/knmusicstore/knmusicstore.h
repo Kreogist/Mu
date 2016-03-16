@@ -60,7 +60,10 @@ signals:
 public slots:
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    /*!
+     * \brief Reimplemented from KNMusicStoreBase::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
