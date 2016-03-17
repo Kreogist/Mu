@@ -42,6 +42,12 @@ public:
      */
     virtual KNMusicStoreAlbumListModel *newAlbumModel()=0;
 
+    /*!
+     * \brief Provides the hotest music model.
+     * \return The hotest music model.
+     */
+    virtual KNMusicStoreAlbumListModel *hotSongModel()=0;
+
 signals:
 
 public slots:

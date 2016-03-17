@@ -30,7 +30,8 @@
 
 KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     QWidget(parent),
-    m_newMusicList(new KNMusicStoreAlbumList(this))
+    m_newMusicList(new KNMusicStoreAlbumList(this)),
+    m_hotTracks(new KNMusicStoreAlbumList(this))
 {
     setObjectName("MusicStoreWidget");
     //Set properties.
@@ -63,6 +64,8 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     //Add widgets to layouts.
     mainLayout->addWidget(m_blockTitle[NewMusicBlock]);
     mainLayout->addWidget(m_newMusicList);
+    mainLayout->addWidget(m_blockTitle[HotTracksBlock]);
+    mainLayout->addWidget(m_hotTracks);
     mainLayout->addStretch();
 
     //Link retranslator.
@@ -74,11 +77,13 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
 {
     //Set the album model to list view.
     m_newMusicList->setModel(backend->newAlbumModel());
+    m_hotTracks->setModel(backend->hotSongModel());
 }
 
 void KNMusicStoreHomeWidget::retranslate()
 {
     //Update the title.
     m_blockTitle[NewMusicBlock]->setText(tr("New Music"));
+    m_blockTitle[HotTracksBlock]->setText(tr("Hot Tracks"));
 }
 

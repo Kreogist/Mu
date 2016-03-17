@@ -42,7 +42,7 @@ public:
      * \brief Append an album item to the end of the model.
      * \param item The item of the album.
      */
-    void appendAlbum(const KNMusicStoreUtil::StoreAlbumListItem &item);
+    void appendItem(const KNMusicStoreUtil::StoreAlbumListItem &item);
 
     /*!
      * \brief Clear all the data.

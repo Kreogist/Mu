@@ -56,10 +56,11 @@ private:
     enum HomePageBlocks
     {
         NewMusicBlock,
+        HotTracksBlock,
         HomePageBlockCount
     };
     QLabel *m_blockTitle[HomePageBlockCount];
-    KNMusicStoreAlbumList *m_newMusicList;
+    KNMusicStoreAlbumList *m_newMusicList, *m_hotTracks;
 };
 
 #endif // KNMUSICSTOREHOMEWIDGET_H

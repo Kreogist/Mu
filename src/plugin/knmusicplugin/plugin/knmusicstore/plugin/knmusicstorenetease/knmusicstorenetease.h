@@ -18,6 +18,8 @@
 #ifndef KNMUSICSTORENETEASE_H
 #define KNMUSICSTORENETEASE_H
 
+#include <QJsonObject>
+
 #include "../../sdk/knmusicstorebackend.h"
 
 /*!
@@ -41,6 +43,11 @@ public:
      */
     KNMusicStoreAlbumListModel *newAlbumModel() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::hotSongModel().
+     */
+    KNMusicStoreAlbumListModel *hotSongModel() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -51,7 +58,9 @@ public slots:
 
 private:
     inline QNetworkRequest generateNeteaseRequest(const QString &url);
-    KNMusicStoreAlbumListModel *m_newAlbumModel;
+    inline QJsonObject getSongDetails(const QString &songId);
+    inline QPixmap generateAlbumArt(const QByteArray &albumArtData);
+    KNMusicStoreAlbumListModel *m_newAlbumModel, *m_hotSongModel;
 };
 
 #endif // KNMUSICSTORENETEASE_H

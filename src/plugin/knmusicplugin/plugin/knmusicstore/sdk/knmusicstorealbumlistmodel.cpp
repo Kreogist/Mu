@@ -23,7 +23,7 @@ KNMusicStoreAlbumListModel::KNMusicStoreAlbumListModel(QObject *parent) :
 
 }
 
-void KNMusicStoreAlbumListModel::appendAlbum(
+void KNMusicStoreAlbumListModel::appendItem(
         const KNMusicStoreUtil::StoreAlbumListItem &item)
 {
     //Add this sentence before appending.
