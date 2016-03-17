@@ -18,6 +18,7 @@
 #ifndef KNMUSICSTORENETEASE_H
 #define KNMUSICSTORENETEASE_H
 
+#include <QtConcurrent/QtConcurrent>
 #include <QJsonObject>
 
 #include "../../sdk/knmusicstorebackend.h"
@@ -48,6 +49,21 @@ public:
      */
     KNMusicStoreAlbumListModel *hotSongModel() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::listCount().
+     */
+    int listCount() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::listName().
+     */
+    QString listName(int listIndex) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::listModel().
+     */
+    KNMusicStoreAlbumListModel *listModel(int listIndex)  Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -56,10 +72,25 @@ public slots:
      */
     void fetchHomeWidgetInfo() Q_DECL_OVERRIDE;
 
+private slots:
+    void updateLatestAlbumsList();
+
 private:
+    inline void updateNeteaseList(KNMusicStoreAlbumListModel *model,
+                                  const QString &listUrl);
     inline QNetworkRequest generateNeteaseRequest(const QString &url);
     inline QJsonObject getSongDetails(const QString &songId);
     inline QPixmap generateAlbumArt(const QByteArray &albumArtData);
+    enum NeteaseLists
+    {
+        BillboardList,
+        iTunesList,
+        OriconList,
+        NeteaseListCount
+    };
+
+    QFuture<void> m_listThreads[NeteaseListCount+2];
+    KNMusicStoreAlbumListModel *m_listModel[NeteaseListCount];
     KNMusicStoreAlbumListModel *m_newAlbumModel, *m_hotSongModel;
 };
 

@@ -19,8 +19,11 @@
 #ifndef KNMUSICSTOREHOMEWIDGET_H
 #define KNMUSICSTOREHOMEWIDGET_H
 
+#include <QList>
+
 #include <QWidget>
 
+class QBoxLayout;
 class QLabel;
 class KNMusicStoreAlbumList;
 class KNMusicStoreBackend;
@@ -51,6 +54,7 @@ protected:
 
 private slots:
     void retranslate();
+    void updateListTitle();
 
 private:
     enum HomePageBlocks
@@ -59,8 +63,12 @@ private:
         HotTracksBlock,
         HomePageBlockCount
     };
+    QList<QLabel *> m_listNames;
     QLabel *m_blockTitle[HomePageBlockCount];
     KNMusicStoreAlbumList *m_newMusicList, *m_hotTracks;
+    KNMusicStoreBackend *m_backend;
+    QBoxLayout *m_listLayout;
+    int m_widgetHeight;
 };
 
 #endif // KNMUSICSTOREHOMEWIDGET_H

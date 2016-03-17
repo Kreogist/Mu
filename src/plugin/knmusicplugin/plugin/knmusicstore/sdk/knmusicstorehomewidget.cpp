@@ -28,10 +28,16 @@
 
 #include "knmusicstorehomewidget.h"
 
+#include <QDebug>
+
+#define ExtraSpacing 20
+
 KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     QWidget(parent),
     m_newMusicList(new KNMusicStoreAlbumList(this)),
-    m_hotTracks(new KNMusicStoreAlbumList(this))
+    m_hotTracks(new KNMusicStoreAlbumList(this)),
+    m_backend(nullptr),
+    m_listLayout(nullptr)
 {
     setObjectName("MusicStoreWidget");
     //Set properties.
@@ -61,18 +67,21 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     bodyLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(bodyLayout);
     //Initial the layouts.
-    QBoxLayout *listLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                          bodyLayout->widget());
-    listLayout->setContentsMargins(20, 20, 20, 20);
+    m_listLayout=new QBoxLayout(QBoxLayout::TopToBottom, bodyLayout->widget());
+    m_listLayout->setContentsMargins(20, 20, 20, 20);
     //Add the layout.
-    bodyLayout->addLayout(listLayout);
+    bodyLayout->addLayout(m_listLayout);
     //Add widgets to layouts.
-    listLayout->addWidget(m_blockTitle[NewMusicBlock]);
-    listLayout->addWidget(m_newMusicList);
-    listLayout->addSpacing(10);
-    listLayout->addWidget(m_blockTitle[HotTracksBlock]);
-    listLayout->addWidget(m_hotTracks);
-    listLayout->addStretch();
+    m_listLayout->addWidget(m_blockTitle[NewMusicBlock]);
+    m_listLayout->addWidget(m_newMusicList);
+    m_listLayout->addSpacing(ExtraSpacing);
+    m_listLayout->addWidget(m_blockTitle[HotTracksBlock]);
+    m_listLayout->addWidget(m_hotTracks);
+    m_listLayout->addStretch();
+    //Initial the widget size.
+    m_widgetHeight=bodyLayout->sizeHint().height();
+    qDebug()<<m_widgetHeight;
+    setFixedHeight(m_widgetHeight);
 
     //Link retranslator.
     knI18n->link(this, &KNMusicStoreHomeWidget::retranslate);
@@ -81,9 +90,41 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
 
 void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
 {
+    //Save the backend pointer.
+    m_backend=backend;
     //Set the album model to list view.
-    m_newMusicList->setModel(backend->newAlbumModel());
-    m_hotTracks->setModel(backend->hotSongModel());
+    m_newMusicList->setModel(m_backend->newAlbumModel());
+    m_hotTracks->setModel(m_backend->hotSongModel());
+    //Prepare title fonts.
+    QFont titleFont=font();
+    titleFont.setPixelSize(18);
+    //Generate list for all backend provides.
+    for(int i=0; i<m_backend->listCount(); ++i)
+    {
+        //Initial the list title.
+        QLabel *listTitle=new QLabel(this);
+        //Configure the list title.
+        listTitle->setFont(titleFont);
+        //Save the label.
+        m_listNames.append(listTitle);
+        //Add the label to the list layout.
+        m_listLayout->insertSpacing(m_listLayout->count()-1, ExtraSpacing);
+        m_listLayout->insertWidget(m_listLayout->count()-1,
+                                   listTitle);
+        //Initial the list view.
+        KNMusicStoreAlbumList *listView=new KNMusicStoreAlbumList(this);
+        //Configure the list view.
+        listView->setModel(m_backend->listModel(i));
+        //Add list view to layout.
+        m_listLayout->insertWidget(m_listLayout->count()-1,
+                                   listView);
+        //Incrase the widget height.
+        m_widgetHeight+=(18+ExtraSpacing+listView->height());
+    }
+    //Update the list title.
+    updateListTitle();
+    //Resize the widget.
+    setFixedHeight(m_widgetHeight);
 }
 
 void KNMusicStoreHomeWidget::retranslate()
@@ -91,5 +132,23 @@ void KNMusicStoreHomeWidget::retranslate()
     //Update the title.
     m_blockTitle[NewMusicBlock]->setText(tr("New Music"));
     m_blockTitle[HotTracksBlock]->setText(tr("Hot Tracks"));
+    //Update list title.
+    updateListTitle();
+}
+
+void KNMusicStoreHomeWidget::updateListTitle()
+{
+    //Check pointer.
+    if(m_backend==nullptr)
+    {
+        //Ignore the request.
+        return;
+    }
+    //Update the label in the list name list.
+    for(int i=0; i<m_backend->listCount(); ++i)
+    {
+        //Update the label.
+        m_listNames.at(i)->setText(m_backend->listName(i));
+    }
 }
 

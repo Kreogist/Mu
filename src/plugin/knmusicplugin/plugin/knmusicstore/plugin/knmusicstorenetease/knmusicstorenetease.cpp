@@ -29,18 +29,30 @@
 
 #include <QDebug>
 
+#define ListMaximumSize 18
+
 KNMusicStoreNetease::KNMusicStoreNetease(QObject *parent) :
     KNMusicStoreBackend(parent),
     m_newAlbumModel(new KNMusicStoreAlbumListModel),
     m_hotSongModel(new KNMusicStoreAlbumListModel)
 {
+    //Initial the list model.
+    for(int i=0; i<NeteaseListCount; ++i)
+    {
+        m_listModel[i]=new KNMusicStoreAlbumListModel;
+    }
 }
 
 KNMusicStoreNetease::~KNMusicStoreNetease()
 {
-    //Remove the new album model.
+    //Remove the new album model and hot song model.
     m_newAlbumModel->deleteLater();
     m_hotSongModel->deleteLater();
+    //Remove the list model.
+    for(int i=0; i<NeteaseListCount; ++i)
+    {
+        m_listModel[i]->deleteLater();
+    }
 }
 
 KNMusicStoreAlbumListModel *KNMusicStoreNetease::newAlbumModel()
@@ -55,13 +67,56 @@ KNMusicStoreAlbumListModel *KNMusicStoreNetease::hotSongModel()
     return m_hotSongModel;
 }
 
+int KNMusicStoreNetease::listCount()
+{
+    //Give back the list count.
+    return NeteaseListCount;
+}
+
+QString KNMusicStoreNetease::listName(int listIndex)
+{
+    //Check the list index.
+    switch (listIndex)
+    {
+    case BillboardList:
+        return tr("Billboard Week List");
+    case iTunesList:
+        return tr("iTunes Hot List");
+    case OriconList:
+        return tr("Oricon Week List");
+    default:
+        return QString();
+    }
+}
+
+KNMusicStoreAlbumListModel *KNMusicStoreNetease::listModel(int listIndex)
+{
+    Q_ASSERT(listIndex < NeteaseListCount && listIndex > -1);
+    //Give back the pointer.
+    return m_listModel[listIndex];
+}
+
 void KNMusicStoreNetease::fetchHomeWidgetInfo()
+{
+    updateLatestAlbumsList();
+    updateNeteaseList(m_hotSongModel,
+                      "http://music.163.com/discover/toplist?id=3778678");
+    updateNeteaseList(m_listModel[BillboardList],
+                      "http://music.163.com/discover/toplist?id=60198");
+    updateNeteaseList(m_listModel[iTunesList],
+                      "http://music.163.com/discover/toplist?id=11641012");
+    updateNeteaseList(m_listModel[OriconList],
+                      "http://music.163.com/discover/toplist?id=60131");
+}
+
+void KNMusicStoreNetease::updateLatestAlbumsList()
 {
     //Prepare the response data.
     QByteArray responseData;
     //Get the new albums.
     if(get(generateNeteaseRequest("http://music.163.com/api/album/new?area=ALL&"
-                                  "offset=0&total=true&limit=18"),
+                                  "offset=0&total=true&limit=" +
+                                  QString::number(ListMaximumSize)),
            responseData,
            false)==200)
     {
@@ -101,14 +156,21 @@ void KNMusicStoreNetease::fetchHomeWidgetInfo()
             }
         }
     }
+}
+
+inline void KNMusicStoreNetease::updateNeteaseList(
+        KNMusicStoreAlbumListModel *model,
+        const QString &listUrl)
+{
+    //Prepare the response data.
+    QByteArray responseData;
     //Get the new hot songs.
-    if(get(generateNeteaseRequest("http://music.163.com/discover/toplist?"
-                                  "id=3778678"),
+    if(get(generateNeteaseRequest(listUrl),
            responseData,
            false)==200)
     {
         //Clear new artist model.
-        m_hotSongModel->clear();
+        model->clear();
         //We will parse all the data from the song ids.
         QRegularExpression rex("/song\\?id=(\\d+)");
         QRegularExpressionMatchIterator i=rex.globalMatch(responseData);
@@ -123,7 +185,7 @@ void KNMusicStoreNetease::fetchHomeWidgetInfo()
             songIdList.append(match.captured(1));
         }
         //Get song detail information.
-        for(int songCount=18, i=0;
+        for(int songCount=ListMaximumSize, i=0;
             i<songIdList.size() && songCount > 0;
             ++i)
         {
@@ -174,13 +236,12 @@ void KNMusicStoreNetease::fetchHomeWidgetInfo()
                         }
                         currentSong.artist=artistNames.join(tr(", "));
                         //Add current song to model.
-                        m_hotSongModel->appendItem(currentSong);
+                        model->appendItem(currentSong);
                     }
                 }
             }
         }
     }
-    qDebug()<<"Done!";
 }
 
 inline QNetworkRequest KNMusicStoreNetease::generateNeteaseRequest(

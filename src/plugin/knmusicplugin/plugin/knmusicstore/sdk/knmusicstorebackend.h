@@ -48,6 +48,26 @@ public:
      */
     virtual KNMusicStoreAlbumListModel *hotSongModel()=0;
 
+    /*!
+     * \brief Get how many list of this backend could provide.
+     * \return Provided list number.
+     */
+    virtual int listCount()=0;
+
+    /*!
+     * \brief Get the name of the list.
+     * \param listIndex List index.
+     * \return The list name.
+     */
+    virtual QString listName(int listIndex)=0;
+
+    /*!
+     * \brief Get the list album model.
+     * \param listIndex List index.
+     * \return The list model.
+     */
+    virtual KNMusicStoreAlbumListModel *listModel(int listIndex)=0;
+
 signals:
 
 public slots:
