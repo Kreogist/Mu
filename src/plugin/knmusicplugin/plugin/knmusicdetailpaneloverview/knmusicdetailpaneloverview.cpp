@@ -49,6 +49,9 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     //Configure the path information.
     m_pathInformation->setWordWrap(true);
     m_pathInformation->setCursor(Qt::PointingHandCursor);
+    m_pathInformation->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_pathInformation->setTextInteractionFlags(Qt::TextSelectableByMouse |
+                                               Qt::TextSelectableByKeyboard);
     connect(m_pathInformation, &KNLabelButton::clicked,
             this, &KNMusicDetailPanelOverview::onActionPathClicked);
     //Configure the path caption.

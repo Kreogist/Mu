@@ -3,7 +3,8 @@
         <file>public/language.json</file>
         <file>public/English.png</file>
         <file>public/noIcon.png</file>
-        <file>public/default.json</file>
+        <file>public/default_theme.json</file>
+        <file>public/default_font.json</file>
         <file>icon/mu.png</file>
         <file>public/close.png</file>
         <file>public/dull_polish_texture.png</file>

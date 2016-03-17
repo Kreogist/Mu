@@ -19,6 +19,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFontDatabase>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "knfontmanager.h"
 
@@ -81,8 +83,29 @@ void KNFontManager::loadCustomFont(const QString &filePath)
     QFontDatabase::addApplicationFont(filePath);
 }
 
+void KNFontManager::loadDefaultFont()
+{
+    //Get the font configuration.
+    QJsonObject fontConfig;
+    {
+        //Get the default font configuration file.
+        QFile defaultFontFile(":/public/default_font.json");
+        //Open the file in readonly mode.
+        if(defaultFontFile.open(QIODevice::ReadOnly))
+        {
+            //Save the json data.
+            fontConfig=QJsonDocument::fromJson(
+                        defaultFontFile.readAll()).object();
+            //Close the file.
+            defaultFontFile.close();
+        }
+    }
+    //Set the global font.
+    setGlobalFont(fontConfig.value("FamilyName").toString());
+}
+
 void KNFontManager::setGlobalFont(const QString &fontName,
-                                  const qreal &pointSize)
+                                  const qreal &pixelSize)
 {
     //Ignore the invalid request.
     if(fontName.isEmpty())
@@ -92,7 +115,7 @@ void KNFontManager::setGlobalFont(const QString &fontName,
     //Generate the font from the application font.
     QFont globalFont=QApplication::font();
     globalFont.setFamily(fontName);
-    globalFont.setPixelSize(pointSize);
+    globalFont.setPixelSize(pixelSize);
     //Set the font.
     QApplication::setFont(globalFont);
 }

@@ -122,7 +122,6 @@ void KNMusicStoreAlbumList::setModel(QAbstractItemModel *model)
 void KNMusicStoreAlbumList::mouseMoveEvent(QMouseEvent *event)
 {
     //Set the cursor to be a clickable pointer.
-    qDebug()<<indexAt(event->pos()).isValid();
     setCursor(indexAt(event->pos()).isValid()?
                   Qt::PointingHandCursor :
                   Qt::ArrowCursor);

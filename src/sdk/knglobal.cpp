@@ -293,7 +293,7 @@ inline void KNGlobal::initialInfrastrcture()
     //Set the font resource folder.
     knFont->loadCustomFontFolder(m_dirPath[ResourceDir]+"/Fonts");
     //Set the default font.
-//    knFont->setGlobalFont("WenQuanYi Micro Hei");
+    knFont->loadDefaultFont();
 
     //Initial the locale manager.
     //Load the language in language folder.

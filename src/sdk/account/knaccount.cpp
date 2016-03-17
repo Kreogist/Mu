@@ -349,17 +349,14 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         //Rescaled the image before uploading.
         return false;
     }
-    qDebug()<<"Step 1";
     //Check whether it contains image before.
     if(!m_accountDetails->avatarPath().isEmpty())
     {
-        qDebug()<<"Step 2";
         //Clear the raw image.
         int removeResult=
                 deleteResource(generateKreogistRequest(
                                    "files/"+m_accountDetails->avatarPath()),
                                false);
-        qDebug()<<"Step 2.5";
         //If the avatar is already deleted(404), nor remove it successfully(200)
         //there should be an Internet connection error.
         if(removeResult!=200 && removeResult!=404)
@@ -369,9 +366,7 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
             //Failed to upload the image.
             return false;
         }
-        qDebug()<<"Step 3";
     }
-    qDebug()<<"Step 4";
     //Generate image cache.
     QByteArray imageBytes, responseBytes;
     {
@@ -390,20 +385,16 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         //Close buffer.
         imageBuffer.close();
     }
-    qDebug()<<"Step 5";
     //Upload the account data.
     QNetworkRequest avatarRequest=generateKreogistRequest(
                 "files/" + m_accountDetails->objectId() + "/avatar.jpg");
     //Configure the image.
     avatarRequest.setHeader(QNetworkRequest::ContentTypeHeader, "image/jpeg");
-    qDebug()<<"Step 6";
     //Post the request.
     int postResult=post(avatarRequest, imageBytes, responseBytes, false);
-    qDebug()<<"Step 7";
     //Check Internet connection first.
     if(postResult<0)
     {
-        qDebug()<<"Step 8";
         //Emit the failed connection signal.
         emit updateInternetError();
         //Failed to upload the image.
@@ -412,24 +403,20 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
     //Check post result.
     else if(postResult!=201)
     {
-        qDebug()<<"Step 9";
         //Failed to update the avatar.
         emit avatarUpdatedFailed();
         //Failed to upload the image.
         return false;
     }
-    qDebug()<<"Step 10";
     //Check the response data.
     QJsonObject responseObject=QJsonDocument::fromJson(responseBytes).object(),
             updateObject;
     //Update account details.
     updateObject.insert("avatarPath",
                         responseObject.value("url").toString());
-    qDebug()<<"Step 11";
     //Send update request.
     if(updateOnlineAccount(updateObject, false))
     {
-        qDebug()<<"Step 12";
         //Update the avatar successfully.
         emit avatarUpdatedSuccess();
         return true;

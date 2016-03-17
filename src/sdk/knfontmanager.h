@@ -72,13 +72,18 @@ public:
     void loadCustomFont(const QString &filePath);
 
     /*!
+     * \brief Load default font from inner configuration file for global font.
+     */
+    void loadDefaultFont();
+
+    /*!
      * \brief A shortcut function to set global font.
      * \param fontName The global font family name.
-     * \param pointSize The point size of the global font. The default value of
+     * \param pixelSize The pixel size of the global font. The default value of
      * this parameter is 12.
      */
     void setGlobalFont(const QString &fontName,
-                       const qreal &pointSize=12.00);
+                       const qreal &pixelSize=12.00);
 
 signals:
 

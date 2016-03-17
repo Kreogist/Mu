@@ -89,7 +89,7 @@ void KNThemeManager::loadThemeFiles(const QString &themeDirPath)
     //Clear the previous theme list.
     m_themeList.clear();
     //Add the default theme as the first item in the list.
-    addTheme("Default", "://public/default.json", QPixmap());
+    addTheme("Default", "://public/default_theme.json", QPixmap());
     //The structure of a theme directory.
     /* Theme
      * |-<Theme Name>
