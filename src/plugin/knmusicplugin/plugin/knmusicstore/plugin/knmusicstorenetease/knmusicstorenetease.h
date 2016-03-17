@@ -20,9 +20,11 @@
 
 #include <QtConcurrent/QtConcurrent>
 #include <QJsonObject>
+#include <QNetworkRequest>
 
 #include "../../sdk/knmusicstorebackend.h"
 
+class KNRestApiBase;
 /*!
  * \brief The KNMusicStoreNetease class provides the netease plugin for download
  * music information from netease cloud music store.\n
@@ -74,12 +76,13 @@ public slots:
 
 private slots:
     void updateLatestAlbumsList();
+    void updateNeteaseList(QPointer<KNMusicStoreAlbumListModel> model,
+                           const QString &listNo);
 
 private:
-    inline void updateNeteaseList(KNMusicStoreAlbumListModel *model,
-                                  const QString &listUrl);
     inline QNetworkRequest generateNeteaseRequest(const QString &url);
-    inline QJsonObject getSongDetails(const QString &songId);
+    inline QJsonObject getSongDetails(KNRestApiBase *curl,
+                                      const QString &songId);
     inline QPixmap generateAlbumArt(const QByteArray &albumArtData);
     enum NeteaseLists
     {
@@ -87,6 +90,12 @@ private:
         iTunesList,
         OriconList,
         NeteaseListCount
+    };
+    enum NeteaseWorkThreads
+    {
+        LatestAlbumList=NeteaseListCount,
+        HotSongList,
+        NeteaseWorkThreadCount
     };
 
     QFuture<void> m_listThreads[NeteaseListCount+2];

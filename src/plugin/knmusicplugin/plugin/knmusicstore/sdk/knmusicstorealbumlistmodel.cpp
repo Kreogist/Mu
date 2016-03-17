@@ -17,6 +17,8 @@
  */
 #include "knmusicstorealbumlistmodel.h"
 
+#include <QDebug>
+
 KNMusicStoreAlbumListModel::KNMusicStoreAlbumListModel(QObject *parent) :
     QAbstractListModel(parent)
 {

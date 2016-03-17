@@ -196,6 +196,8 @@ void KNMusicStoreAlbumList::paintEvent(QPaintEvent *event)
         currentX += (StoreAlbumSize + StoreAlbumSpacing);
         ++currentModelRow;
     }
+    //Update the scroll bar value.
+    updateGeometries();
 }
 
 QModelIndex KNMusicStoreAlbumList::moveCursor(

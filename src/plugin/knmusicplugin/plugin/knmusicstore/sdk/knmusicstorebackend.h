@@ -18,7 +18,7 @@
 #ifndef KNMUSICSTOREBACKEND_H
 #define KNMUSICSTOREBACKEND_H
 
-#include "knrestapibase.h"
+#include <QObject>
 
 class KNMusicStoreAlbumListModel;
 /*!
@@ -26,7 +26,7 @@ class KNMusicStoreAlbumListModel;
  * store plugin. It could get the data from a music store and update the data
  * into Kreogist format.
  */
-class KNMusicStoreBackend : public KNRestApiBase
+class KNMusicStoreBackend : public QObject
 {
     Q_OBJECT
 public:
@@ -34,7 +34,7 @@ public:
      * \brief Construct a NMusicStoreBackend object.
      * \param parent The parent object.
      */
-    KNMusicStoreBackend(QObject *parent = 0) : KNRestApiBase(parent){}
+    KNMusicStoreBackend(QObject *parent = 0) : QObject(parent){}
 
     /*!
      * \brief Provides the new album model.

@@ -21,6 +21,9 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QImage>
+#include <QScopedPointer>
+
+#include "knrestapibase.h"
 
 #include "../../sdk/knmusicstoreutil.h"
 #include "../../sdk/knmusicstorealbumlistmodel.h"
@@ -46,12 +49,30 @@ KNMusicStoreNetease::KNMusicStoreNetease(QObject *parent) :
 KNMusicStoreNetease::~KNMusicStoreNetease()
 {
     //Remove the new album model and hot song model.
-    m_newAlbumModel->deleteLater();
-    m_hotSongModel->deleteLater();
+    delete m_newAlbumModel;
+    m_newAlbumModel=nullptr;
+    delete m_hotSongModel;
+    m_hotSongModel=nullptr;
     //Remove the list model.
     for(int i=0; i<NeteaseListCount; ++i)
     {
-        m_listModel[i]->deleteLater();
+        //Reset the pointer.
+        delete m_listModel[i];
+        m_listModel[i]=nullptr;
+    }
+
+    //Cancel all the list threads.
+    //Remove the list model.
+    for(int i=0; i<NeteaseWorkThreadCount; ++i)
+    {
+        //Cancel and wait for thread stop.
+        m_listThreads[i].cancel();
+    }
+    //Wait for thread quit.
+    for(int i=0; i<NeteaseWorkThreadCount; ++i)
+    {
+        //Cancel and wait for thread stop.
+        m_listThreads[i].waitForFinished();
     }
 }
 
@@ -98,28 +119,55 @@ KNMusicStoreAlbumListModel *KNMusicStoreNetease::listModel(int listIndex)
 
 void KNMusicStoreNetease::fetchHomeWidgetInfo()
 {
-    updateLatestAlbumsList();
-    updateNeteaseList(m_hotSongModel,
-                      "http://music.163.com/discover/toplist?id=3778678");
-    updateNeteaseList(m_listModel[BillboardList],
-                      "http://music.163.com/discover/toplist?id=60198");
-    updateNeteaseList(m_listModel[iTunesList],
-                      "http://music.163.com/discover/toplist?id=11641012");
-    updateNeteaseList(m_listModel[OriconList],
-                      "http://music.163.com/discover/toplist?id=60131");
+    //Update the latest albums.
+    m_listThreads[LatestAlbumList]=
+            QtConcurrent::run(this,
+                              &KNMusicStoreNetease::updateLatestAlbumsList);
+    //Update the hot songs list.
+    m_listThreads[HotSongList]=
+            QtConcurrent::run(this,
+                              &KNMusicStoreNetease::updateNeteaseList,
+                              m_hotSongModel,
+                              QString("3778678"));
+    //Update lists.
+    m_listThreads[BillboardList]=
+            QtConcurrent::run(this,
+                              &KNMusicStoreNetease::updateNeteaseList,
+                              m_listModel[BillboardList],
+                              QString("60198"));
+    m_listThreads[iTunesList]=
+            QtConcurrent::run(this,
+                              &KNMusicStoreNetease::updateNeteaseList,
+                              m_listModel[iTunesList],
+                              QString("11641012"));
+    m_listThreads[OriconList]=
+            QtConcurrent::run(this,
+                              &KNMusicStoreNetease::updateNeteaseList,
+                              m_listModel[OriconList],
+                              QString("60131"));
 }
 
 void KNMusicStoreNetease::updateLatestAlbumsList()
 {
+    //Prepare the rest api.
+    QScopedPointer<KNRestApiBase> curl;
+    //Initial the rest api.
+    curl.reset(new KNRestApiBase);
     //Prepare the response data.
     QByteArray responseData;
     //Get the new albums.
-    if(get(generateNeteaseRequest("http://music.163.com/api/album/new?area=ALL&"
-                                  "offset=0&total=true&limit=" +
-                                  QString::number(ListMaximumSize)),
-           responseData,
-           false)==200)
+    if(curl->get(generateNeteaseRequest("http://music.163.com/api/album/new?"
+                                        "area=ALL&offset=0&total=true&limit=" +
+                                        QString::number(ListMaximumSize)),
+                 responseData,
+                 false)==200)
     {
+        //Check pointer first.
+        if(m_newAlbumModel==nullptr)
+        {
+            //If the model is failed, then ignore current work.
+            return;
+        }
         //Clear the new album model.
         m_newAlbumModel->clear();
         //Get the album list of from the response data.
@@ -139,8 +187,8 @@ void KNMusicStoreNetease::updateLatestAlbumsList()
                 if(albumObject.contains("name") &&
                         albumObject.contains("picUrl") &&
                         albumObject.contains("artist") &&
-                        get(albumObject.value("picUrl").toString(),
-                            responseData)==200)
+                        curl->get(albumObject.value("picUrl").toString(),
+                                  responseData)==200)
                 {
                     //Construct a album object.
                     KNMusicStoreUtil::StoreAlbumListItem currentAlbum;
@@ -150,6 +198,12 @@ void KNMusicStoreNetease::updateLatestAlbumsList()
                             albumObject.value(
                                 "artist").toObject().value("name").toString();
                     currentAlbum.albumArt=generateAlbumArt(responseData);
+                    //Check pointer first.
+                    if(m_newAlbumModel==nullptr)
+                    {
+                        //If the model is failed, then ignore current work.
+                        return;
+                    }
                     //Add current album to model.
                     m_newAlbumModel->appendItem(currentAlbum);
                 }
@@ -158,19 +212,30 @@ void KNMusicStoreNetease::updateLatestAlbumsList()
     }
 }
 
-inline void KNMusicStoreNetease::updateNeteaseList(
-        KNMusicStoreAlbumListModel *model,
-        const QString &listUrl)
+void KNMusicStoreNetease::updateNeteaseList(
+        QPointer<KNMusicStoreAlbumListModel> model,
+        const QString &listNo)
 {
+    //Prepare the rest api.
+    QScopedPointer<KNRestApiBase> curl;
+    //Initial the rest api.
+    curl.reset(new KNRestApiBase);
     //Prepare the response data.
     QByteArray responseData;
     //Get the new hot songs.
-    if(get(generateNeteaseRequest(listUrl),
-           responseData,
-           false)==200)
+    if(curl->get(generateNeteaseRequest("http://music.163.com/discover/toplist?"
+                                        "id="+QString(listNo)),
+                 responseData,
+                 false)==200)
     {
+        //Check model first.
+        if(model.isNull())
+        {
+            //Stop to downloading data.
+            return;
+        }
         //Clear new artist model.
-        model->clear();
+        model.data()->clear();
         //We will parse all the data from the song ids.
         QRegularExpression rex("/song\\?id=(\\d+)");
         QRegularExpressionMatchIterator i=rex.globalMatch(responseData);
@@ -190,7 +255,8 @@ inline void KNMusicStoreNetease::updateNeteaseList(
             ++i)
         {
             //Get the song detail information.
-            QJsonObject songDetail=getSongDetails(songIdList.at(i));
+            QJsonObject songDetail=getSongDetails(curl.data(),
+                                                  songIdList.at(i));
             //Check validation.
             if(songDetail.isEmpty())
             {
@@ -212,9 +278,9 @@ inline void KNMusicStoreNetease::updateNeteaseList(
                     if(songData.contains("name") &&
                             songData.contains("artists") &&
                             songData.contains("album") &&
-                            get(songData.value("album").toObject().value(
-                                    "picUrl").toString(),
-                                responseData)==200)
+                            curl->get(songData.value("album").toObject().value(
+                                          "picUrl").toString(),
+                                      responseData)==200)
                     {
                         //Reduce the counter.
                         --songCount;
@@ -235,8 +301,14 @@ inline void KNMusicStoreNetease::updateNeteaseList(
                                                    ).value("name").toString());
                         }
                         currentSong.artist=artistNames.join(tr(", "));
+                        //Check model first.
+                        if(model.isNull())
+                        {
+                            //Stop to downloading data.
+                            return;
+                        }
                         //Add current song to model.
-                        model->appendItem(currentSong);
+                        model.data()->appendItem(currentSong);
                     }
                 }
             }
@@ -270,15 +342,16 @@ inline QNetworkRequest KNMusicStoreNetease::generateNeteaseRequest(
     return request;
 }
 
-inline QJsonObject KNMusicStoreNetease::getSongDetails(const QString &songId)
+inline QJsonObject KNMusicStoreNetease::getSongDetails(KNRestApiBase *curl,
+                                                       const QString &songId)
 {
     //Generate the response data.
     QByteArray responseData;
     //Get the song object.
-    if(get(generateNeteaseRequest(QString("http://music.163.com/api/song/detail"
-                                          "?ids=[%1]").arg(songId)),
-        responseData,
-        false)==200)
+    if(curl->get(generateNeteaseRequest(QString("http://music.163.com/api/song/"
+                                                "detail?ids=[%1]").arg(songId)),
+                 responseData,
+                 false)==200)
     {
         //If we could get the data, the return the json object.
         return QJsonDocument::fromJson(responseData).object();

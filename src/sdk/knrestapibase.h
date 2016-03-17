@@ -51,6 +51,20 @@ public:
      */
     virtual void setWorkingThread(QThread *thread);
 
+    /*!
+     * \brief Generate a request object by providing the url, cookie and the
+     * referer.
+     * \param url The request target url.
+     * \param cookie The custom cookie. Default it is null, it will the default
+     * cookie provided by Qt.
+     * \param referer The custom referer. Default it's null, it will use no
+     * referer to this request(Qt default).
+     * \return The request object.
+     */
+    QNetworkRequest generateRequest(const QString &url,
+                                    const QVariant &cookie=QVariant(),
+                                    const QString &referer=QString());
+
 signals:
     /*!
      * \brief This signal is used privately, do not use it.\n
@@ -59,8 +73,6 @@ signals:
     void timeout();
 
 public slots:
-
-protected:
     /*!
      * \brief Http delete request via given the request. This function works in
      * stucked way.
@@ -117,10 +129,10 @@ protected:
      * \return HTTP response code. If we cannot send the post, then it will be
      * -1.
      */
-    inline int get(const QString &url,
-                   QByteArray &responseData,
-                   const QVariant &cookie=QVariant(),
-                   const QString &referer=QString())
+    int get(const QString &url,
+            QByteArray &responseData,
+            const QVariant &cookie=QVariant(),
+            const QString &referer=QString())
     {
         return get(generateRequest(url, cookie, referer), responseData);
     }
@@ -158,30 +170,16 @@ protected:
      * \return HTTP response code. If we cannot send the post, then it will be
      * -1.
      */
-    inline int post(const QString &url,
-                     QByteArray &responseData,
-                     const QByteArray &parameter,
-                     const QVariant &cookie=QVariant(),
-                     const QString &referer=QString())
+    int post(const QString &url,
+             QByteArray &responseData,
+             const QByteArray &parameter,
+             const QVariant &cookie=QVariant(),
+             const QString &referer=QString())
     {
         return post(generateRequest(url, cookie, referer),
                     parameter,
                     responseData);
     }
-
-    /*!
-     * \brief Generate a request object by providing the url, cookie and the
-     * referer.
-     * \param url The request target url.
-     * \param cookie The custom cookie. Default it is null, it will the default
-     * cookie provided by Qt.
-     * \param referer The custom referer. Default it's null, it will use no
-     * referer to this request(Qt default).
-     * \return The request object.
-     */
-    QNetworkRequest generateRequest(const QString &url,
-                                    const QVariant &cookie=QVariant(),
-                                    const QString &referer=QString());
 
 private slots:
     void onActionGetDownloading(const qint64 &size, const qint64 &);
