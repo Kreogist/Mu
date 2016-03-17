@@ -56,17 +56,23 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
         m_blockTitle[i]->setFont(titleFont);
     }
     //Initial the layouts.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+    QBoxLayout *bodyLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                           this);
-    mainLayout->setContentsMargins(20, 20, 20, 20);
-    //Set the layout.
-    setLayout(mainLayout);
+    bodyLayout->setContentsMargins(0, 0, 0, 0);
+    setLayout(bodyLayout);
+    //Initial the layouts.
+    QBoxLayout *listLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          bodyLayout->widget());
+    listLayout->setContentsMargins(20, 20, 20, 20);
+    //Add the layout.
+    bodyLayout->addLayout(listLayout);
     //Add widgets to layouts.
-    mainLayout->addWidget(m_blockTitle[NewMusicBlock]);
-    mainLayout->addWidget(m_newMusicList);
-    mainLayout->addWidget(m_blockTitle[HotTracksBlock]);
-    mainLayout->addWidget(m_hotTracks);
-    mainLayout->addStretch();
+    listLayout->addWidget(m_blockTitle[NewMusicBlock]);
+    listLayout->addWidget(m_newMusicList);
+    listLayout->addSpacing(10);
+    listLayout->addWidget(m_blockTitle[HotTracksBlock]);
+    listLayout->addWidget(m_hotTracks);
+    listLayout->addStretch();
 
     //Link retranslator.
     knI18n->link(this, &KNMusicStoreHomeWidget::retranslate);

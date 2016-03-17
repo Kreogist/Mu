@@ -38,6 +38,12 @@ void KNMusicStoreAlbumListModel::appendItem(
 
 void KNMusicStoreAlbumListModel::clear()
 {
+    //Check album list is empty first.
+    if(m_albumList.isEmpty())
+    {
+        //If it's empty, then we don't need to check.
+        return;
+    }
     //As the documentation said, called this function first.
     beginRemoveRows(QModelIndex(), 0, m_albumList.size()-1);
     //Remove all the data.
