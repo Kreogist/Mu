@@ -45,6 +45,25 @@ public:
         QVariant albumData;
     };
 
+    enum StoreAlbumDetail
+    {
+        AlbumTitle,
+        AlbumArtist,
+        AlbumReleaseTime,
+        AlbumReleaseCompany
+    };
+
+    struct StoreSongItem
+    {
+        int index;
+        QString name;
+        QString duration;
+        QString artist;
+        QString urlLossless;
+        QString urlHigh;
+        QString urlOnline;
+    };
+
 private:
     KNMusicStoreUtil();
     KNMusicStoreUtil(const KNMusicStoreUtil &);

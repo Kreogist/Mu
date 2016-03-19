@@ -20,6 +20,7 @@
 
 #include <QObject>
 
+class KNMusicStoreAlbumModel;
 class KNMusicStoreAlbumListModel;
 /*!
  * \brief The KNMusicStoreBackend class provides the basic framework for a music
@@ -68,6 +69,12 @@ public:
      */
     virtual KNMusicStoreAlbumListModel *listModel(int listIndex)=0;
 
+    /*!
+     * \brief Get the album detail information model.
+     * \return The album detail information model.
+     */
+    virtual KNMusicStoreAlbumModel *albumDetailModel()=0;
+
 signals:
 
 public slots:
@@ -75,6 +82,11 @@ public slots:
      * \brief Get the home page information to local.
      */
     virtual void fetchHomeWidgetInfo()=0;
+
+    /*!
+     * \brief Get the album detail information to local.
+     */
+    virtual void fetchAlbumDetail(const QString &albumId)=0;
 };
 
 #endif // KNMUSICSTOREBACKEND_H

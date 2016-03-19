@@ -21,15 +21,51 @@
 
 #include <QWidget>
 
+class QLabel;
+class KNHighLightLabel;
+class KNMusicStoreBackend;
+class KNMusicStoreAlbumModel;
+class KNMusicStoreAlbumTreeView;
+/*!
+ * \brief The KNMusicStoreListWidget class provides the widget which could
+ * display the album data.
+ */
 class KNMusicStoreListWidget : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicStoreListWidget widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicStoreListWidget(QWidget *parent = 0);
 
 signals:
 
 public slots:
+    /*!
+     * \brief Set backend to home widget.
+     * \param backend The music store backend.
+     */
+    void setBackend(KNMusicStoreBackend *backend);
+
+private slots:
+    void retranslate();
+    void onActionUpdateInfo();
+
+private:
+    enum PropertyNames
+    {
+        PropertyArtist,
+        PropertyReleaseDate,
+        PropertyCompany,
+        PropertyCount
+    };
+    QLabel *m_properties[PropertyCount], *m_propertiesLabel[PropertyCount],
+            *m_titleLabel;
+    KNHighLightLabel *m_albumArt;
+    KNMusicStoreAlbumModel *m_albumDetailModel;
+    KNMusicStoreAlbumTreeView *m_albumSongView;
 };
 
 #endif // KNMUSICSTORELISTWIDGET_H

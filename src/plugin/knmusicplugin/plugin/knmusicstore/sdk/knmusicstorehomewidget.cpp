@@ -31,6 +31,7 @@
 #include <QDebug>
 
 #define ExtraSpacing 20
+#define ContentSpacing 6
 
 KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     QWidget(parent),
@@ -73,15 +74,16 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     bodyLayout->addLayout(m_listLayout);
     //Add widgets to layouts.
     m_listLayout->addWidget(m_blockTitle[NewMusicBlock]);
+    m_listLayout->addSpacing(ContentSpacing);
     m_listLayout->addWidget(m_newMusicList);
     m_listLayout->addSpacing(ExtraSpacing);
     m_listLayout->addWidget(m_blockTitle[HotTracksBlock]);
+    m_listLayout->addSpacing(ContentSpacing);
     m_listLayout->addWidget(m_hotTracks);
     m_listLayout->addStretch();
     //Initial the widget size.
     m_widgetHeight=bodyLayout->sizeHint().height();
-    qDebug()<<m_widgetHeight;
-    setFixedHeight(m_widgetHeight);
+    setMinimumHeight(m_widgetHeight);
 
     //Link retranslator.
     knI18n->link(this, &KNMusicStoreHomeWidget::retranslate);
@@ -111,6 +113,7 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
         m_listLayout->insertSpacing(m_listLayout->count()-1, ExtraSpacing);
         m_listLayout->insertWidget(m_listLayout->count()-1,
                                    listTitle);
+        m_listLayout->addSpacing(ContentSpacing);
         //Initial the list view.
         KNMusicStoreAlbumList *listView=new KNMusicStoreAlbumList(this);
         //Configure the list view.
@@ -119,7 +122,7 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
         m_listLayout->insertWidget(m_listLayout->count()-1,
                                    listView);
         //Incrase the widget height.
-        m_widgetHeight+=(18+ExtraSpacing+listView->height());
+        m_widgetHeight+=(18+ExtraSpacing+ContentSpacing+listView->height());
     }
     //Update the list title.
     updateListTitle();

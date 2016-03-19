@@ -17,16 +17,20 @@
  */
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QDateTime>
 #include <QNetworkCookie>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QImage>
 #include <QScopedPointer>
+#include <QCryptographicHash>
 
 #include "knrestapibase.h"
 
-#include "../../sdk/knmusicstoreutil.h"
+#include "knmusicutil.h"
+
 #include "../../sdk/knmusicstorealbumlistmodel.h"
+#include "../../sdk/knmusicstorealbummodel.h"
 
 #include "knmusicstorenetease.h"
 
@@ -36,8 +40,11 @@
 
 KNMusicStoreNetease::KNMusicStoreNetease(QObject *parent) :
     KNMusicStoreBackend(parent),
+    m_magicData(QByteArray("3go8&$8*3*3h0k(2)2")),
+    m_magicDataLength(m_magicData.size()),
     m_newAlbumModel(new KNMusicStoreAlbumListModel),
-    m_hotSongModel(new KNMusicStoreAlbumListModel)
+    m_hotSongModel(new KNMusicStoreAlbumListModel),
+    m_albumDetail(new KNMusicStoreAlbumModel)
 {
     //Initial the list model.
     for(int i=0; i<NeteaseListCount; ++i)
@@ -53,6 +60,9 @@ KNMusicStoreNetease::~KNMusicStoreNetease()
     m_newAlbumModel=nullptr;
     delete m_hotSongModel;
     m_hotSongModel=nullptr;
+    //Remove album detail model.
+    delete m_albumDetail;
+    m_albumDetail=nullptr;
     //Remove the list model.
     for(int i=0; i<NeteaseListCount; ++i)
     {
@@ -117,6 +127,12 @@ KNMusicStoreAlbumListModel *KNMusicStoreNetease::listModel(int listIndex)
     return m_listModel[listIndex];
 }
 
+KNMusicStoreAlbumModel *KNMusicStoreNetease::albumDetailModel()
+{
+    //Give back the model.
+    return m_albumDetail;
+}
+
 void KNMusicStoreNetease::fetchHomeWidgetInfo()
 {
     //Update the latest albums.
@@ -145,6 +161,125 @@ void KNMusicStoreNetease::fetchHomeWidgetInfo()
                               &KNMusicStoreNetease::updateNeteaseList,
                               m_listModel[OriconList],
                               QString("60131"));
+}
+
+void KNMusicStoreNetease::fetchAlbumDetail(const QString &albumId)
+{
+    //Prepare the rest api.
+    QScopedPointer<KNRestApiBase> curl;
+    //Initial the rest api.
+    curl.reset(new KNRestApiBase);
+    //Prepare the response data.
+    QByteArray responseData;
+    //Get the album detail info.
+    if(curl->get(generateNeteaseRequest(QString("http://music.163.com/api/"
+                                                "album/%1/").arg(albumId)),
+                 responseData,
+                 false)==200)
+    {
+        //Parse the response data to JSON object.
+        QJsonObject albumData=QJsonDocument::fromJson(responseData).object();
+        //The only important data is the album data.
+        if(!albumData.contains("album"))
+        {
+            //Failed to fetch album data.
+            return;
+        }
+        //Get the album data.
+        albumData=albumData.value("album").toObject();
+        //Save the information to album model.
+        if(m_albumDetail==nullptr)
+        {
+            //Ignore the settings.
+            return;
+        }
+        //Save the information to album detail model.
+        m_albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumTitle,
+                                    albumData.value("name").toString());
+        m_albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumArtist,
+                                    albumData.value("artist").toObject()
+                                    .value("name").toString());
+        m_albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumReleaseCompany,
+                                    albumData.value("company").toString());
+        m_albumDetail->setAlbumInfo(
+                    KNMusicStoreUtil::AlbumReleaseTime,
+                    QDateTime::fromMSecsSinceEpoch(
+                        albumData.value("publishTime").toDouble()).toString(
+                        "yyyy-MM-dd"));
+        //Get the music song data.
+        QJsonArray songArray=albumData.value("songs").toArray();
+        //Loop for all information.
+        for(int i=0; i<songArray.size(); ++i)
+        {
+            //Get the song object.
+            QJsonObject songItem=songArray.at(i).toObject();
+            //Generate the song detail info.
+            KNMusicStoreUtil::StoreSongItem item;
+            //Save the song information.
+            item.name=songItem.value("name").toString();
+            {
+                //Get artist objects.
+                QJsonArray songArtists=songItem.value("artists").toArray();
+                //Generate artist names list.
+                QStringList artistsNames;
+                //Get the artist names.
+                for(int j=0; j<songArtists.size(); ++j)
+                {
+                    //Add name to artist names.
+                    artistsNames.append(songArtists.at(j).toObject().value(
+                                            "name").toString());
+                }
+                //Combine the artists names.
+                item.artist=artistsNames.join(", ");
+            }
+            item.duration=KNMusicUtil::msecondToString(
+                        songItem.value("duration").toDouble());
+            item.index=songItem.value("no").toInt();
+            //Save the online url for all first.
+            QString songUrl=songItem.value("mp3Url").toString();
+            item.urlOnline=songUrl;
+            item.urlHigh=songUrl;
+            item.urlLossless=songUrl;
+            //Save the high quality url.
+            if(songItem.contains("hMusic"))
+            {
+                //Get the high quality object.
+                QJsonObject highMusic=songItem.value("hMusic").toObject();
+                //Get the encrypted id.
+                QString songId=QString::number(
+                            highMusic.value("dfsId").toDouble()),
+                        encId=encryptedId(songId);
+                //Then the url will be compose as
+                QString highUrl=
+                        QString("http://m%1.music.126.net/%2/%3.mp3").arg(
+                            QString::number((qrand() % 3)+1),
+                            encId,
+                            songId);
+                //Save the high url for url high and url lossless.
+                item.urlHigh=highUrl;
+                item.urlLossless=highUrl;
+            }
+            //Check detail information.
+            if(m_albumDetail==nullptr)
+            {
+                //Ignore the information.
+                return;
+            }
+            //Append item to album detail.
+            m_albumDetail->appendItem(item);
+        }
+        //Download the image.
+        if(curl->get(albumData.value("picUrl").toString(),
+                     responseData)==200 &&
+                m_albumDetail!=nullptr)
+        {
+            //Save the album data.
+            m_albumDetail->setAlbumArt(generateAlbumArt(responseData,
+                                                        219, 219));
+            //Emit finished signal.
+            emit m_albumDetail->albumDetailUpdated();
+        }
+    }
 }
 
 void KNMusicStoreNetease::updateLatestAlbumsList()
@@ -198,6 +333,8 @@ void KNMusicStoreNetease::updateLatestAlbumsList()
                             albumObject.value(
                                 "artist").toObject().value("name").toString();
                     currentAlbum.albumArt=generateAlbumArt(responseData);
+                    currentAlbum.albumData=
+                            QString::number(albumObject.value("id").toDouble());
                     //Check pointer first.
                     if(m_newAlbumModel==nullptr)
                     {
@@ -301,6 +438,7 @@ void KNMusicStoreNetease::updateNeteaseList(
                                                    ).value("name").toString());
                         }
                         currentSong.artist=artistNames.join(tr(", "));
+                        qDebug()<<songData;
                         //Check model first.
                         if(model.isNull())
                         {
@@ -361,11 +499,45 @@ inline QJsonObject KNMusicStoreNetease::getSongDetails(KNRestApiBase *curl,
 }
 
 inline QPixmap KNMusicStoreNetease::generateAlbumArt(
-        const QByteArray &albumArtData)
+        const QByteArray &albumArtData,
+        int width,
+        int height)
 {
     return QPixmap::fromImage(QImage::fromData(albumArtData)).scaled(
-                StoreAlbumSize,
-                StoreAlbumSize,
+                width,
+                height,
                 Qt::KeepAspectRatio,
                 Qt::SmoothTransformation);
+}
+
+inline QString KNMusicStoreNetease::timeToText(const double &time)
+{
+    //Translate the time to string.
+    QString timeText=QString::number(time);
+}
+
+QString KNMusicStoreNetease::encryptedId(const QString &songId)
+{
+    //Based on https://github.com/yanunon/NeteaseCloudMusic
+    //Translate song id into byte array.
+    QByteArray rawId=songId.toLatin1(),
+               encryptedData;
+    //For all char in song id, do ^ with magic data.
+    for(int i=0; i<rawId.size(); ++i)
+    {
+        //Encrypted the raw id.
+        encryptedData.append(rawId.at(i) ^
+                             m_magicData.at(i % m_magicDataLength));
+    }
+    //Do MD5 with the encrypted data. Encode the middle with Base64.
+    QByteArray middle=
+            QCryptographicHash::hash(encryptedData,
+                                     QCryptographicHash::Md5).toBase64();
+    //Remove the last byte.
+    middle.resize(middle.size()-1);
+    //Replace the specific byte.
+    middle.replace('/', '_');
+    middle.replace('+', '-');
+    //Give back the result.
+    return middle;
 }

@@ -22,9 +22,12 @@
 #include <QJsonObject>
 #include <QNetworkRequest>
 
+#include "../../sdk/knmusicstoreutil.h"
+
 #include "../../sdk/knmusicstorebackend.h"
 
 class KNRestApiBase;
+class KNMusicStoreAlbumModel;
 /*!
  * \brief The KNMusicStoreNetease class provides the netease plugin for download
  * music information from netease cloud music store.\n
@@ -66,6 +69,11 @@ public:
      */
     KNMusicStoreAlbumListModel *listModel(int listIndex)  Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::albumDetailModel().
+     */
+    KNMusicStoreAlbumModel *albumDetailModel() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -73,6 +81,11 @@ public slots:
      * \brief Reimplemented from KNMusicStoreBackend::fetchHomeWidgetInfo().
      */
     void fetchHomeWidgetInfo() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::fetchAlbumDetail().
+     */
+    void fetchAlbumDetail(const QString &albumId) Q_DECL_OVERRIDE;
 
 private slots:
     void updateLatestAlbumsList();
@@ -83,7 +96,11 @@ private:
     inline QNetworkRequest generateNeteaseRequest(const QString &url);
     inline QJsonObject getSongDetails(KNRestApiBase *curl,
                                       const QString &songId);
-    inline QPixmap generateAlbumArt(const QByteArray &albumArtData);
+    inline QPixmap generateAlbumArt(const QByteArray &albumArtData,
+                                    int width=StoreAlbumSize,
+                                    int height=StoreAlbumSize);
+    inline QString timeToText(const double &time);
+    inline QString encryptedId(const QString &songId);
     enum NeteaseLists
     {
         BillboardList,
@@ -99,8 +116,11 @@ private:
     };
 
     QFuture<void> m_listThreads[NeteaseListCount+2];
+    QByteArray m_magicData;
+    int m_magicDataLength;
     KNMusicStoreAlbumListModel *m_listModel[NeteaseListCount];
     KNMusicStoreAlbumListModel *m_newAlbumModel, *m_hotSongModel;
+    KNMusicStoreAlbumModel *m_albumDetail;
 };
 
 #endif // KNMUSICSTORENETEASE_H
