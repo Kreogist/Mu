@@ -71,7 +71,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
 //    m_home->setBackend(test);
     m_list->setBackend(test);
 //    test->fetchHomeWidgetInfo();
-    test->fetchAlbumDetail("34515142");
+//    test->fetchAlbumDetail("34515142");
 //    test->fetchAlbumDetail("497011");
 
     //Link retranslator.
