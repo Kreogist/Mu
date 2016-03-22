@@ -18,6 +18,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QFormLayout>
+#include <QHeaderView>
 
 #include "knhighlightlabel.h"
 #include "knthememanager.h"
@@ -73,6 +74,10 @@ KNMusicStoreListWidget::KNMusicStoreListWidget(QWidget *parent) :
     //Configure title label.
     m_titleLabel->setObjectName("MusicStoreTextLabel");
     knTheme->registerWidget(m_titleLabel);
+    m_titleLabel->setWordWrap(true);
+    //Configure the song view.
+    m_albumSongView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_albumSongView->updateObjectName("MusicStoreAlbumView");
 
     //Initial the global layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -164,4 +169,10 @@ void KNMusicStoreListWidget::onActionUpdateInfo()
     m_properties[PropertyCompany]->setText(
                 m_albumDetailModel->albumInfo(
                     KNMusicStoreUtil::AlbumReleaseCompany));
+    //Update treeview size.
+    m_albumSongView->setMinimumHeight(m_albumSongView->header()->height() +
+                                      m_albumDetailModel->rowCount() *
+                                      AlbumSongItemHeight);
+    //Resize current widget size.
+    setMinimumHeight(sizeHint().height());
 }

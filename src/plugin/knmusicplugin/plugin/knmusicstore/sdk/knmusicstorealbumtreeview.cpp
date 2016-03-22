@@ -15,12 +15,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QPainter>
+#include <QTimeLine>
+
+#include "knthememanager.h"
 #include "knmousesenseheader.h"
 
 #include "knmusicstorealbumtreeview.h"
 
+#define MaxOpacity 0x20
+#define FontBase 0xBF
+
 KNMusicStoreAlbumTreeView::KNMusicStoreAlbumTreeView(QWidget *parent) :
-    QTreeView(parent)
+    QTreeView(parent),
+    m_mouseAnime(new QTimeLine(200, this))
 {
     //Set properties.
     setAllColumnsShowFocus(true);
@@ -34,8 +42,115 @@ KNMusicStoreAlbumTreeView::KNMusicStoreAlbumTreeView(QWidget *parent) :
     setUniformRowHeights(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
+    //Configure the time line.
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    m_mouseAnime->setUpdateInterval(10);
+    //Link the time line.
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMusicStoreAlbumTreeView::onActionMouseInOut);
+
     //Initial the sense header.
     KNMouseSenseHeader *header=new KNMouseSenseHeader(this);
+    header->setSectionsMovable(false);
+    header->setSectionsClickable(false);
     header->setFixedHeight(38);
     setHeader(header);
+
+    //Link with theme manager.
+    connect(knTheme, &KNThemeManager::themeChange,
+            this, &KNMusicStoreAlbumTreeView::onActionThemeUpdate);
+}
+
+void KNMusicStoreAlbumTreeView::updateObjectName(const QString &name)
+{
+    //Set the object name.
+    setObjectName(name);
+    //Update the frame.
+    onActionThemeUpdate();
+}
+
+void KNMusicStoreAlbumTreeView::setModel(QAbstractItemModel *model)
+{
+    //Set the model.
+    QTreeView::setModel(model);
+    //Set the resize mode.
+    header()->setSectionResizeMode(0, QHeaderView::Fixed);
+    header()->setSectionResizeMode(1, QHeaderView::Stretch);
+    header()->setSectionResizeMode(2, QHeaderView::Fixed);
+    header()->setSectionResizeMode(3, QHeaderView::Fixed);
+}
+
+void KNMusicStoreAlbumTreeView::enterEvent(QEvent *event)
+{
+    //Do original enter event.
+    QTreeView::enterEvent(event);
+    //Start mouse in anime.
+    startAnime(MaxOpacity);
+}
+
+void KNMusicStoreAlbumTreeView::leaveEvent(QEvent *event)
+{
+    //Do original leave event.
+    QTreeView::leaveEvent(event);
+    //Start mouse leave anime.
+    startAnime(0);
+}
+
+void KNMusicStoreAlbumTreeView::drawRow(QPainter *painter,
+                                        const QStyleOptionViewItem &options,
+                                        const QModelIndex &index) const
+{
+    //Check if this row is odd or oven, and then take one row to have
+    //alternative background.
+    if(index.row() & 1)
+    {
+        //Draw the alternative background.
+        painter->fillRect(QRect(options.rect.x(),
+                                options.rect.y(),
+                                width(),
+                                options.rect.height()),
+                          palette().color(QPalette::AlternateBase));
+    }
+    //Paint the other parts of the row.
+    QTreeView::drawRow(painter, options, index);
+}
+
+void KNMusicStoreAlbumTreeView::onActionThemeUpdate()
+{
+    //Get the new palette from theme manager, and set it.
+    setPalette(knTheme->getPalette(objectName()));
+    //Update the palette.
+    onActionMouseInOut(0);
+}
+
+void KNMusicStoreAlbumTreeView::onActionMouseInOut(int frame)
+{
+    //Get the palette.
+    QPalette pal=palette();
+    //Update the text palette color.
+    QColor color=pal.color(QPalette::Text);
+    color.setAlpha(FontBase+(frame<<1));
+    pal.setColor(QPalette::Text, color);
+    //Update the alternating base color.
+    color=pal.color(QPalette::AlternateBase);
+    color.setAlpha(frame);
+    pal.setColor(QPalette::AlternateBase, color);
+    //Update the button color.
+    color=pal.color(QPalette::Button);
+    color.setHsv(color.hue(), color.saturation(), frame<<1);
+    pal.setColor(QPalette::Button, color);
+    //Set the palette.
+    setPalette(pal);
+}
+
+inline void KNMusicStoreAlbumTreeView::startAnime(int endFrame)
+{
+    //Stop the mouse animations.
+    m_mouseAnime->stop();
+    //Set the parameter of the time line.
+    m_mouseAnime->setFrameRange(
+                palette().color(QPalette::AlternateBase).alpha(),
+                endFrame);
+    //Start the time line.
+    m_mouseAnime->start();
 }

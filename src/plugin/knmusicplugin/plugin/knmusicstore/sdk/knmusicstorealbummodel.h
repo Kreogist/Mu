@@ -25,6 +25,8 @@
 
 #include <QAbstractTableModel>
 
+#define AlbumSongItemHeight 30
+
 /*!
  * \brief The KNMusicStoreAlbumModel class provides a model which could be used
  * to describe an album.
@@ -53,7 +55,7 @@ public:
     /*!
      * \brief Reimplemented from QAbstractItemModel::rowCount().
      */
-    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractItemModel::columnCount().

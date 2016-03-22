@@ -88,13 +88,14 @@ QVariant KNMusicStoreAlbumModel::data(const QModelIndex &index, int role) const
     //Give back the accounding to the index.
     const KNMusicStoreUtil::StoreSongItem &item=m_songList.at(index.row());
     //Return the information.
-    if(role==Qt::DisplayRole)
+    switch(role)
     {
+    case Qt::DisplayRole:
         //Check the column.
         switch(index.column())
         {
         case 0: //0 for index.
-            return QString::number(item.index);
+            return QString::number(item.index) + "    ";
         case 1: //1 for name.
             return item.name;
         case 2: //2 for duration.
@@ -102,9 +103,16 @@ QVariant KNMusicStoreAlbumModel::data(const QModelIndex &index, int role) const
         case 3: //3 for artist.
             return item.artist;
         }
+    case Qt::SizeHintRole:
+        return QSize(0, AlbumSongItemHeight);
+    case Qt::TextAlignmentRole:
+        return index.column()==0?
+                    QVariant(Qt::AlignRight | Qt::AlignVCenter):
+                    QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+    default:
+        //Failed for all the else data.
+        return QVariant();
     }
-    //Failed for all the else data.
-    return QVariant();
 }
 
 QVariant KNMusicStoreAlbumModel::headerData(int section,

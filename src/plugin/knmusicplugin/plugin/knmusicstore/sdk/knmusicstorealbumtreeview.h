@@ -20,15 +20,64 @@
 
 #include <QTreeView>
 
+class QTimeLine;
+/*!
+ * \brief The KNMusicStoreAlbumTreeView class provides a tree view for music
+ * store only.
+ */
 class KNMusicStoreAlbumTreeView : public QTreeView
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicStoreAlbumTreeView widget.
+     * \param parent The parent widget pointer.
+     */
     explicit KNMusicStoreAlbumTreeView(QWidget *parent = 0);
+
+    /*!
+     * \brief Update the object name set up the new palette from theme manager.
+     * \param name The new object name.
+     */
+    void updateObjectName(const QString &name);
+
+    void setModel(QAbstractItemModel *model);
 
 signals:
 
 public slots:
+
+protected:
+    /*!
+     * \brief Reimplemented from QTreeView::enterEvent().
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QTreeView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QTreeView::drawRow().
+     */
+    void drawRow(QPainter *painter,
+                 const QStyleOptionViewItem &options,
+                 const QModelIndex &index) const  Q_DECL_OVERRIDE;
+
+protected slots:
+    /*!
+     * \brief This slot is provide to update the palette when the tree view is
+     * being constructed. Or else the UI will be very ugly.
+     */
+    void onActionThemeUpdate();
+
+private slots:
+    void onActionMouseInOut(int frame);
+
+private:
+    inline void startAnime(int endFrame);
+    QTimeLine *m_mouseAnime;
 };
 
 #endif // KNMUSICSTOREALBUMTREEVIEW_H

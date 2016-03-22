@@ -20,6 +20,16 @@
         "Base" : "#00000000",
         "Text" : "#FFFFFF"
     },
+    "MusicStoreAlbumView" : {
+        "Parent" : "MusicStoreAlbumList",
+        "AlternateBase" : "#FFFFFF20",
+        "Base" : "#00000000",
+        "Window" : "#202020",
+        "Text" : "#FFFFFF",
+        "Button" : "#000000",
+        "Highlight" : "#505050",
+        "HighlightedText" : "#F7CF3D"
+    },
     "NotificationView" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

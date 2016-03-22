@@ -447,7 +447,7 @@ void KNMusicTreeViewBase::onActionThemeUpdate()
     onActionMouseInOut(0);
 }
 
-void KNMusicTreeViewBase::onActionMouseInOut(const int &frame)
+void KNMusicTreeViewBase::onActionMouseInOut(int frame)
 {
     //Get the palette.
     QPalette pal=palette();
@@ -547,7 +547,7 @@ void KNMusicTreeViewBase::resetHeaderState()
     setColumnWidth(Name, 200);
 }
 
-inline void KNMusicTreeViewBase::startAnime(const int &endFrame)
+inline void KNMusicTreeViewBase::startAnime(int endFrame)
 {
     //Stop the mouse animations.
     m_mouseAnime->stop();

@@ -215,7 +215,7 @@ protected slots:
     void onActionThemeUpdate();
 
 private slots:
-    void onActionMouseInOut(const int &frame);
+    void onActionMouseInOut(int frame);
     void onActionActivate(const QModelIndex &index);
     void playCurrent();
     void removeCurrent();
@@ -225,7 +225,7 @@ private:
     QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
             const QRect &rect) const;
     inline void scrollToIndex(const QModelIndex &proxyIndex);
-    inline void startAnime(const int &endFrame);
+    inline void startAnime(int endFrame);
     inline bool dropOn(QDropEvent *event, int &dropRow);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
