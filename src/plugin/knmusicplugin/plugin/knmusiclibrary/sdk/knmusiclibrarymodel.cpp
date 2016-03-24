@@ -39,7 +39,8 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     m_operateCounter(0),
     m_searcher(new KNMusicSearcher),
     m_analysisQueue(new KNMusicAnalysisQueue),
-    m_imageManager(new KNMusicLibraryImageManager)
+    m_imageManager(new KNMusicLibraryImageManager),
+    m_databaseLoaded(false)
 {
     //Move the searcher to working thread.
     m_searcher->moveToThread(&m_searchThread);
@@ -432,6 +433,8 @@ void KNMusicLibraryModel::recoverModel()
     initialTotalDuration(totalDuration);
     //End to insert data.
     endInsertRows();
+    //Change the database loaded flag.
+    m_databaseLoaded=true;
     //Because this operation change the row count, the row count changed signal
     //will be emitted.
     emit rowCountChanged();
@@ -606,7 +609,8 @@ inline void KNMusicLibraryModel::count(int counts)
 inline void KNMusicLibraryModel::writeDatabase()
 {
     //Check out the database path.
-    if(m_databasePath.isEmpty())
+    //Or the database is not loaded.
+    if(m_databasePath.isEmpty() || (!m_databaseLoaded))
     {
         return;
     }

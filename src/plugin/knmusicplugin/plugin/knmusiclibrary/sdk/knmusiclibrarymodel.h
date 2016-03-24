@@ -214,6 +214,7 @@ private:
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     KNMusicLibraryImageManager *m_imageManager;
+    bool m_databaseLoaded;
 };
 
 #endif // KNMUSICLIBRARYMODEL_H
