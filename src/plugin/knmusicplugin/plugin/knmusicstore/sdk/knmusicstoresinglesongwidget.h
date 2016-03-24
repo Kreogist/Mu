@@ -21,6 +21,11 @@
 
 #include <QWidget>
 
+class QLabel;
+class QBoxLayout;
+class KNHighLightLabel;
+class KNMusicStoreBackend;
+class KNMusicStoreSongDetailInfo;
 /*!
  * \brief The KNMusicStoreSingleSongWidget class provides the a widget which
  * could show the song.
@@ -38,6 +43,27 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set backend to home widget.
+     * \param backend The music store backend.
+     */
+    void setBackend(KNMusicStoreBackend *backend);
+
+private slots:
+    void retranslate();
+    void onActionDataUpdate();
+
+private:
+    enum PropertyNames
+    {
+        PropertyArtist,
+        PropertyAlbum,
+        PropertyCount
+    };
+    QLabel *m_properties[PropertyCount], *m_propertiesLabel[PropertyCount],
+            *m_titleLabel, *m_lyricsLabel;
+    KNHighLightLabel *m_albumArt;
+    KNMusicStoreSongDetailInfo *m_songDetail;
 };
 
 #endif // KNMUSICSTORESINGLESONGWIDGET_H

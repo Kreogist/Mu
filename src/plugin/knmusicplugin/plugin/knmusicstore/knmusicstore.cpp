@@ -64,15 +64,19 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Show the home widget.
 //    m_home->show();
 //    m_storeSwitcher->setWidget(m_home);
-    m_list->show();
-    m_storeSwitcher->setWidget(m_list);
+//    m_list->show();
+//    m_storeSwitcher->setWidget(m_list);
+    m_singleSong->show();
+    m_storeSwitcher->setWidget(m_singleSong);
 
     KNMusicStoreNetease *test=new KNMusicStoreNetease(this);
 //    m_home->setBackend(test);
-    m_list->setBackend(test);
+//    m_list->setBackend(test);
+    m_singleSong->setBackend(test);
 //    test->fetchHomeWidgetInfo();
-    test->fetchAlbumDetail("34515142");
-//    test->fetchAlbumDetail("497011");
+//    test->fetchAlbumDetail("34515142");
+//    test->fetchSongDetail("404543841");
+    test->fetchSearchResult("Top");
 
     //Link retranslator.
     knI18n->link(this, &KNMusicStore::retranslate);

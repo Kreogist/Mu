@@ -18,20 +18,15 @@
 #ifndef KNMUSICSTOREALBUMMODEL_H
 #define KNMUSICSTOREALBUMMODEL_H
 
-#include <QList>
 #include <QMap>
 
-#include "knmusicstoreutil.h"
-
-#include <QAbstractTableModel>
-
-#define AlbumSongItemHeight 30
+#include "knmusicstoresonglistmodel.h"
 
 /*!
  * \brief The KNMusicStoreAlbumModel class provides a model which could be used
  * to describe an album.
  */
-class KNMusicStoreAlbumModel : public QAbstractTableModel
+class KNMusicStoreAlbumModel : public KNMusicStoreSongListModel
 {
     Q_OBJECT
 public:
@@ -42,37 +37,9 @@ public:
     explicit KNMusicStoreAlbumModel(QObject *parent = 0);
 
     /*!
-     * \brief Append a song item to the end of the model.
-     * \param item The item of the song.
+     * \brief Reimplemented from KNMusicStoreSongListModel::clear().
      */
-    void appendItem(const KNMusicStoreUtil::StoreSongItem &item);
-
-    /*!
-     * \brief Clear all the data.
-     */
-    void clear();
-
-    /*!
-     * \brief Reimplemented from QAbstractItemModel::rowCount().
-     */
-    int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QAbstractItemModel::columnCount().
-     */
-    int columnCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QAbstractItemModel::data().
-     */
-    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QAbstractItemModel::headerData().
-     */
-    QVariant headerData(int section,
-                        Qt::Orientation orientation,
-                        int role) const Q_DECL_OVERRIDE;
+    void clear() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Get the album detail info.
@@ -108,13 +75,8 @@ public slots:
     void setAlbumInfo(KNMusicStoreUtil::StoreAlbumDetail albumInfoField,
                       const QString &albumInfoData);
 
-private slots:
-    void retranslate();
-
 private:
-    QString m_titles[4];
-    QMap<KNMusicStoreUtil::StoreAlbumDetail, QString> m_albumDetail;
-    QList<KNMusicStoreUtil::StoreSongItem> m_songList;
+    QString m_albumDetail[KNMusicStoreUtil::StoreAlbumDetailCount];
     QPixmap m_albumArt;
 };
 

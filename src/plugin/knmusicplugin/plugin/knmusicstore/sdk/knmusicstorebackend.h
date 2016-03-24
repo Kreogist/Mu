@@ -22,6 +22,9 @@
 
 class KNMusicStoreAlbumModel;
 class KNMusicStoreAlbumListModel;
+class KNMusicStoreSongDetailInfo;
+class KNMusicStoreSongListModel;
+class KNMusicStoreSearchModel;
 /*!
  * \brief The KNMusicStoreBackend class provides the basic framework for a music
  * store plugin. It could get the data from a music store and update the data
@@ -75,6 +78,12 @@ public:
      */
     virtual KNMusicStoreAlbumModel *albumDetailModel()=0;
 
+    /*!
+     * \brief Get the song detail information mode.
+     * \return The song detail object information.
+     */
+    virtual KNMusicStoreSongDetailInfo *getSongDetail()=0;
+
 signals:
 
 public slots:
@@ -85,8 +94,21 @@ public slots:
 
     /*!
      * \brief Get the album detail information to local.
+     * \param albumId The album index.
      */
     virtual void fetchAlbumDetail(const QString &albumId)=0;
+
+    /*!
+     * \brief Get the song detail information to local.
+     * \param songId Song index.
+     */
+    virtual void fetchSongDetail(const QString &songId)=0;
+
+    /*!
+     * \brief Get the specific search result information to local.
+     * \param keyword The keyword of search request.
+     */
+    virtual void fetchSearchResult(const QString &keyword)=0;
 };
 
 #endif // KNMUSICSTOREBACKEND_H

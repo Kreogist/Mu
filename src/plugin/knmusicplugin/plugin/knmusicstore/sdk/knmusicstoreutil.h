@@ -45,12 +45,21 @@ public:
         QVariant albumData;
     };
 
+    enum StoreSearchCategories
+    {
+        CategorySong,
+        CategoryArtist,
+        CategoryAlbum,
+        StoreSearchCategoryCount
+    };
+
     enum StoreAlbumDetail
     {
         AlbumTitle,
         AlbumArtist,
         AlbumReleaseTime,
-        AlbumReleaseCompany
+        AlbumReleaseCompany,
+        StoreAlbumDetailCount
     };
 
     struct StoreSongItem

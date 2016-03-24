@@ -27,7 +27,7 @@
 #include "../../sdk/knmusicstorebackend.h"
 
 class KNRestApiBase;
-class KNMusicStoreAlbumModel;
+class KNMusicStoreSearchResult;
 /*!
  * \brief The KNMusicStoreNetease class provides the netease plugin for download
  * music information from netease cloud music store.\n
@@ -74,6 +74,11 @@ public:
      */
     KNMusicStoreAlbumModel *albumDetailModel() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::getSongDetail().
+     */
+    KNMusicStoreSongDetailInfo *getSongDetail() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -87,10 +92,24 @@ public slots:
      */
     void fetchAlbumDetail(const QString &albumId) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::fetchSongDetail().
+     */
+    void fetchSongDetail(const QString &songId) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::fetchSearchResult().
+     */
+    void fetchSearchResult(const QString &keyword) Q_DECL_OVERRIDE;
+
 private slots:
     void updateLatestAlbumsList();
     void updateNeteaseList(QPointer<KNMusicStoreAlbumListModel> model,
                            const QString &listNo);
+    void updateSearchResult(QPointer<KNMusicStoreSearchModel> model,
+                            const QString &keyword,
+                            int type,
+                            int offset);
 
 private:
     inline QNetworkRequest generateNeteaseRequest(const QString &url);
@@ -99,8 +118,11 @@ private:
     inline QPixmap generateAlbumArt(const QByteArray &albumArtData,
                                     int width=StoreAlbumSize,
                                     int height=StoreAlbumSize);
-    inline QString timeToText(const double &time);
     inline QString encryptedId(const QString &songId);
+    inline void setDownloadUrl(const QJsonObject &songItem,
+                               QString &urlOnline,
+                               QString &urlHigh,
+                               QString &urlLossless);
     enum NeteaseLists
     {
         BillboardList,
@@ -115,12 +137,15 @@ private:
         NeteaseWorkThreadCount
     };
 
-    QFuture<void> m_listThreads[NeteaseListCount+2];
+    QFuture<void> m_listThreads[NeteaseListCount+2],
+                  m_searchThreads[KNMusicStoreUtil::StoreSearchCategoryCount];
     QByteArray m_magicData;
     int m_magicDataLength;
     KNMusicStoreAlbumListModel *m_listModel[NeteaseListCount];
     KNMusicStoreAlbumListModel *m_newAlbumModel, *m_hotSongModel;
     KNMusicStoreAlbumModel *m_albumDetail;
+    KNMusicStoreSongDetailInfo *m_songDetail;
+    KNMusicStoreSearchResult *m_searchResult;
 };
 
 #endif // KNMUSICSTORENETEASE_H

@@ -172,7 +172,7 @@ void KNMusicStoreListWidget::onActionUpdateInfo()
     //Update treeview size.
     m_albumSongView->setMinimumHeight(m_albumSongView->header()->height() +
                                       m_albumDetailModel->rowCount() *
-                                      AlbumSongItemHeight);
+                                      SongItemHeight);
     //Resize current widget size.
     setMinimumHeight(sizeHint().height());
 }

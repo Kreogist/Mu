@@ -452,7 +452,11 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumlistmodel.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumtreeview.cpp
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumtreeview.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresongdetailinfo.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchmodel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -695,7 +699,11 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumlistmodel.h \
     plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumtreeview.h
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumtreeview.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresongdetailinfo.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchmodel.h
 
 RESOURCES += \
     resource/res.qrc

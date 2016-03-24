@@ -21,15 +21,25 @@
 
 #include <QWidget>
 
+/*!
+ * \brief The KNMusicStoreSearchResultWidget class provide a list to display all
+ * the search result from the backend.
+ */
 class KNMusicStoreSearchResultWidget : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicStoreSearchResultWidget widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicStoreSearchResultWidget(QWidget *parent = 0);
 
 signals:
 
 public slots:
+
+private:
 };
 
 #endif // KNMUSICSTORESEARCHRESULTWIDGET_H
