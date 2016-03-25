@@ -347,6 +347,8 @@ QPixmap KNMusicLibraryModel::artwork(const QString &hashKey)
 
 void KNMusicLibraryModel::recoverModel()
 {
+    //Change the database loaded flag.
+    m_databaseLoaded=true;
     //Check out the row count first, if there's any data then we have to ignore
     //this calling.
     if(rowCount()>0 || m_databasePath.isEmpty())
@@ -433,8 +435,6 @@ void KNMusicLibraryModel::recoverModel()
     initialTotalDuration(totalDuration);
     //End to insert data.
     endInsertRows();
-    //Change the database loaded flag.
-    m_databaseLoaded=true;
     //Because this operation change the row count, the row count changed signal
     //will be emitted.
     emit rowCountChanged();
