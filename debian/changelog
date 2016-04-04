@@ -1,3 +1,9 @@
+mu (0.9.9.1) unstable; urgency=medium
+
+  * Fixed several critical bugs.
+
+ -- Saki Tojo <tomguts@126.com> Fri, 1 Apr 2016 21:12:00 +1100
+
 mu (0.9.9) unstable; urgency=medium
 
   * Add Kreogist Account.
