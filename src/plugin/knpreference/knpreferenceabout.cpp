@@ -147,7 +147,7 @@ void KNPreferenceAbout::retranslate()
                 "Joe Johnson <liquanquan123@vip.qq.com>\n"
                 "Freddie <freddie.wanah@gmail.com>\n"
                 "Nick Tang <1953547787@qq.com>\n"
-                "Frantic1048 <frantic1048@163.com>\n"
+                "Frantic1048 <archer@frantic1048.com>\n"
                 "Yayuan Yan <yy1119@nyu.edu>\n"
                 "\n"+
                 tr("Special Thanks") +

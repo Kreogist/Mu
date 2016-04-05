@@ -1429,7 +1429,7 @@ Youraku &lt;1497667718@qq.com&gt;
 Joe Johnson &lt;liquanquan123@vip.qq.com&gt;
 Freddie &lt;freddie.wanah@gmail.com&gt;
 Nick Tang &lt;1953547787@qq.com&gt;
-Frantic &lt;frantic1048@163.com&gt;
+Frantic1048 &lt;archer@frantic1048.com&gt;
 
 Special Thanks
 WangBin
@@ -1446,7 +1446,7 @@ Youraku &lt;1497667718@qq.com&gt;
 Joe Johnson &lt;liquanquan123@vip.qq.com&gt;
 Freddie &lt;freddie.wanah@gmail.com&gt;
 Nick Tang &lt;1953547787@qq.com&gt;
-Frantic &lt;frantic1048@163.com&gt;
+Frantic1048 &lt;archer@frantic1048.com&gt;
 
 特別鳴謝
 WangBin
