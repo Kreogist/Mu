@@ -52,7 +52,7 @@ KNMusicStoreNetease::KNMusicStoreNetease(QObject *parent) :
     m_albumDetail(new KNMusicStoreAlbumModel),
     m_songDetail(new KNMusicStoreSongDetailInfo),
     m_searchResult(new KNMusicStoreSearchResult),
-    m_launching(false)
+    m_launchingInstance(StateNull)
 {
     //Initial the list model.
     for(int i=0; i<NeteaseListCount; ++i)
@@ -92,8 +92,16 @@ KNMusicStoreNetease::~KNMusicStoreNetease()
         m_listModel[i]=nullptr;
     }
 
-    //Cancel all the list threads.
-    quitHomeThreads();
+    //Quit all the working threads.
+    // Home Threads.
+    for(int i=0; i<NeteaseWorkThreadCount; ++i)
+    {
+        //Quit the home working threads.
+        quitWorkingThread(m_listThreads[i]);
+    }
+    // Album Thread.
+    quitWorkingThread(m_albumThread);
+    quitWorkingThread(m_songThread);
 }
 
 KNMusicStoreAlbumListModel *KNMusicStoreNetease::newAlbumModel()
@@ -157,6 +165,21 @@ KNMusicStoreSearchModel *KNMusicStoreNetease::searchResultModel(int index)
 
 void KNMusicStoreNetease::fetchHomeInfo()
 {
+    //Check the launching state.
+    switch(m_launchingInstance)
+    {
+    case StateNull:
+        //Change the launching instance to state home.
+        m_launchingInstance=StateHome;
+        break;
+    case StateHome:
+        //Launching home fetch functions, do not need to launch it again.
+        return;
+    default:
+        //When launching others, we cannot doing anything but wait.
+        return;
+    }
+
     //Update the latest albums.
     m_listThreads[LatestAlbumList]=
             QtConcurrent::run(this,
@@ -193,209 +216,54 @@ void KNMusicStoreNetease::fetchHomeInfo()
     }
 }
 
-void KNMusicStoreNetease::fetchAlbumDetail(const QString &albumId)
+void KNMusicStoreNetease::fetchAlbumDetail(const QVariant &albumId)
 {
-    //Prepare the rest api.
-    QScopedPointer<KNRestApiBase> curl;
-    //Initial the rest api.
-    curl.reset(new KNRestApiBase);
-    //Prepare the response data.
-    QByteArray responseData;
-    //Get the album detail info.
-    if(curl->get(generateNeteaseRequest(QString("http://music.163.com/api/"
-                                                "album/%1/").arg(albumId)),
-                 responseData,
-                 false)==200)
+    //Check the launching state.
+    switch(m_launchingInstance)
     {
-        //Parse the response data to JSON object.
-        QJsonObject albumData=QJsonDocument::fromJson(responseData).object();
-        //The only important data is the album data.
-        if(!albumData.contains("album"))
-        {
-            //Failed to fetch album data.
-            return;
-        }
-        //Get the album data.
-        albumData=albumData.value("album").toObject();
-        //Save the information to album model.
-        if(m_albumDetail==nullptr)
-        {
-            //Ignore the settings.
-            return;
-        }
-        //Save the information to album detail model.
-        m_albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumTitle,
-                                    albumData.value("name").toString());
-        m_albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumArtist,
-                                    albumData.value("artist").toObject()
-                                    .value("name").toString());
-        m_albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumReleaseCompany,
-                                    albumData.value("company").toString());
-        m_albumDetail->setAlbumInfo(
-                    KNMusicStoreUtil::AlbumReleaseTime,
-                    QDateTime::fromMSecsSinceEpoch(
-                        albumData.value("publishTime").toDouble()).toString(
-                        "yyyy-MM-dd"));
-        //Get the music song data.
-        QJsonArray songArray=albumData.value("songs").toArray();
-        //Loop for all information.
-        for(int i=0; i<songArray.size(); ++i)
-        {
-            //Get the song object.
-            QJsonObject songData=songArray.at(i).toObject();
-            //Generate the song detail info.
-            KNMusicStoreUtil::StoreSongItem item;
-            //Save the song information.
-            item.name=songData.value("name").toString();
-            //Combine the artists names.
-            item.artist=getArtistNames(songData);
-            item.duration=getDuration(songData);
-            item.index=songData.value("no").toInt();
-            //Set the download url.
-            setDownloadUrl(songData,
-                           item.urlOnline,
-                           item.urlHigh,
-                           item.urlLossless);
-            //Check detail information.
-            if(m_albumDetail==nullptr)
-            {
-                //Ignore the information.
-                return;
-            }
-            //Append item to album detail.
-            m_albumDetail->appendItem(item);
-        }
-        //Download the image.
-        if(curl->get(albumData.value("picUrl").toString(),
-                     responseData)==200 &&
-                m_albumDetail!=nullptr)
-        {
-            //Save the album data.
-            m_albumDetail->setAlbumArt(generateAlbumArt(responseData,
-                                                        219, 219));
-            //Emit finished signal.
-            emit m_albumDetail->albumDetailUpdated();
-        }
+    case StateNull:
+        //Change the launching instance to state home.
+        m_launchingInstance=StateAlbumDetail;
+        break;
+    case StateAlbumDetail:
+        //Launching home fetch functions, do not need to launch it again.
+        return;
+    default:
+        //When launching others, we cannot doing anything but wait.
+        return;
     }
+
+    //Update the album thread.
+    m_albumThread=
+            QtConcurrent::run(this,
+                              &KNMusicStoreNetease::updateAlbumDetail,
+                              m_albumDetail,
+                              albumId.toString());
 }
 
-void KNMusicStoreNetease::fetchSongDetail(const QString &songId)
+void KNMusicStoreNetease::fetchSongDetail(const QVariant &songId)
 {
-    //Reset the song detail.
-    m_songDetail->reset();
-    //Prepare the rest api.
-    QScopedPointer<KNRestApiBase> curl;
-    //Initial the rest api.
-    curl.reset(new KNRestApiBase);
-    //Get the song detail.
-    QJsonObject songDetail=getSongDetails(curl.data(), songId);
-    //Check the pointer.
-    if(!m_songDetail)
+    //Check the launching state.
+    switch(m_launchingInstance)
     {
-        //Song detail model has been removed.
+    case StateNull:
+        //Change the launching instance to state home.
+        m_launchingInstance=StateSongDetail;
+        break;
+    case StateSongDetail:
+        //Launching home fetch functions, do not need to launch it again.
+        return;
+    default:
+        //When launching others, we cannot doing anything but wait.
         return;
     }
-    //Parse the song detail.
-    //Check the song data.
-    if(!songDetail.contains("songs"))
-    {
-        //Failed to fetch the songs.
-        return;
-    }
-    //Get the songs list
-    QJsonArray songsArray=songDetail.value("songs").toArray();
-    //Check the size.
-    if(songsArray.isEmpty())
-    {
-        //Failed to fetch the songs.
-        return;
-    }
-    //Get song data.
-    QJsonObject songData=songsArray.at(0).toObject();
-    //Prepare the album data and lyrics data.
-    QByteArray albumArtData, lyricsData;
-    //Check information and download album data & lyrics.
-    if(songData.contains("album") &&
-            curl->get(songData.value("album").toObject().value(
-                          "picUrl").toString(),
-                      albumArtData)==200 &&
-            curl->get(generateNeteaseRequest(
-                          QString("http://music.163.com/api/song/lyric?os=osx"
-                                  "&id=%1&lv=-1&kv=-1&tv=-1").arg(
-                              QString::number(
-                                  qint64(songData.value("id").toDouble())))),
-                      lyricsData)==200)
-    {
-        //Check the pointer.
-        if(!m_songDetail)
-        {
-            //Song detail model has been removed.
-            return;
-        }
-        //Get the lyrics response data.
-        QJsonObject lyricsResponse=QJsonDocument::fromJson(lyricsData).object();
-        //Check the lyrics response data.
-        if(lyricsResponse.contains("lrc"))
-        {
-            //Get the lrc object.
-            lyricsResponse=lyricsResponse.value("lrc").toObject();
-            //Get the lyrics data from the object.
-            m_songDetail->setSongData(KNMusicStoreSongDetailInfo::Lyrics,
-                                      lyricsResponse.value("lyric").toString());
-        }
-        //Set the pixmap data.
-        m_songDetail->setAlbumArt(generateAlbumArt(albumArtData, 219, 219));
-        //Save all the other information.
-        m_songDetail->setSongData(KNMusicStoreSongDetailInfo::Name,
-                                  songData.value("name").toString());
-        {
-            //Get artist list.
-            QJsonArray artistList=songData.value("artists").toArray();
-            //Get the artist information.
-            QStringList artistNames, artistIds;
-            for(auto j=0; j<artistList.size(); ++j)
-            {
-                //Get the current artist.
-                QJsonObject artistObject=artistList.at(j).toObject();
-                //Add name to artist list.
-                artistNames.append(artistObject.value("name").toString());
-                artistIds.append(QString::number(static_cast<qint64>(
-                                         artistObject.value("id").toDouble())));
-            }
-            //Set the artist information.
-            m_songDetail->setArtists(artistNames);
-            m_songDetail->setArtistsId(artistIds);
-        }
-        //Get the album information.
-        {
-            //Get album object.
-            QJsonObject albumObject=songData.value("album").toObject();
-            //Get the album id and name.
-            m_songDetail->setSongData(KNMusicStoreSongDetailInfo::AlbumName,
-                                      albumObject.value("name").toString());
-            m_songDetail->setSongData(KNMusicStoreSongDetailInfo::AlbumId,
-                                      QString::number(static_cast<qint64>(
-                                          albumObject.value("id").toDouble())));
-        }
-        //Get the url information.
-        {
-            QString urlOnline, urlHigh, urlLossless;
-            //Set the download url to cache string.
-            setDownloadUrl(songData,
-                           urlOnline,
-                           urlHigh,
-                           urlLossless);
-            //Set the data to song detail.
-            m_songDetail->setSongData(KNMusicStoreSongDetailInfo::OnlineUrl,
-                                      urlOnline);
-            m_songDetail->setSongData(KNMusicStoreSongDetailInfo::HighUrl,
-                                      urlHigh);
-            m_songDetail->setSongData(KNMusicStoreSongDetailInfo::LossLessUrl,
-                                      urlLossless);
-        }
-        //Emit the complete signal.
-        emit m_songDetail->songDataUpdated();
-    }
+
+    //Update the album thread.
+    m_songThread=
+            QtConcurrent::run(this,
+                              &KNMusicStoreNetease::updateSongDetail,
+                              m_songDetail,
+                              songId.toString());
 }
 
 void KNMusicStoreNetease::fetchSearchResult(const QString &keyword)
@@ -555,6 +423,8 @@ void KNMusicStoreNetease::updateNeteaseList(
                         currentSong.name=songData.value("name").toString();
                         currentSong.albumArt=generateAlbumArt(responseData);
                         currentSong.artist=getArtistNames(songData);
+                        currentSong.albumData=
+                                qint64(songData.value("id").toDouble());
                         //Check model first.
                         if(model.isNull())
                         {
@@ -659,6 +529,234 @@ void KNMusicStoreNetease::updateSearchResult(
     }
 }
 
+void KNMusicStoreNetease::updateAlbumDetail(
+        QPointer<KNMusicStoreAlbumModel> albumDetail,
+        const QString &albumId)
+{
+    qDebug()<<"Album Fetch Start.";
+    //Prepare the rest api.
+    QScopedPointer<KNRestApiBase> curl;
+    //Initial the rest api.
+    curl.reset(new KNRestApiBase);
+    //Prepare the response data.
+    QByteArray responseData;
+    //Get the album detail info.
+    if(curl->get(generateNeteaseRequest(QString("http://music.163.com/api/"
+                                                "album/%1/").arg(albumId)),
+                 responseData,
+                 false)==200)
+    {
+        qDebug()<<"Fetching song detail information.";
+        //Parse the response data to JSON object.
+        QJsonObject albumData=QJsonDocument::fromJson(responseData).object();
+        //The only important data is the album data.
+        if(!albumData.contains("album"))
+        {
+            //Failed to fetch album data.
+            return;
+        }
+        //Get the album data.
+        albumData=albumData.value("album").toObject();
+        //Save the information to album model.
+        if(albumDetail.isNull())
+        {
+            //Ignore the settings.
+            return;
+        }
+        //Save the information to album detail model.
+        albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumTitle,
+                                  albumData.value("name").toString());
+        albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumArtist,
+                                  albumData.value("artist").toObject().value(
+                                      "name").toString());
+        albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumReleaseCompany,
+                                  albumData.value("company").toString());
+        albumDetail->setAlbumInfo(
+                    KNMusicStoreUtil::AlbumReleaseTime,
+                    QDateTime::fromMSecsSinceEpoch(
+                        albumData.value("publishTime").toDouble()).toString(
+                        "yyyy-MM-dd"));
+        //Get the music song data.
+        QJsonArray songArray=albumData.value("songs").toArray();
+        //Loop for all information.
+        for(int i=0; i<songArray.size(); ++i)
+        {
+            qDebug()<<"Fetching song"<<i;
+            //Get the song object.
+            QJsonObject songData=songArray.at(i).toObject();
+            //Generate the song detail info.
+            KNMusicStoreUtil::StoreSongItem item;
+            //Save the song information.
+            item.name=songData.value("name").toString();
+            //Combine the artists names.
+            item.artist=getArtistNames(songData);
+            item.duration=getDuration(songData);
+            item.index=songData.value("no").toInt();
+            item.songData=qint64(songData.value("id").toDouble());
+            //Set the download url.
+            setDownloadUrl(songData,
+                           item.urlOnline,
+                           item.urlHigh,
+                           item.urlLossless);
+            //Check detail information.
+            if(albumDetail.isNull())
+            {
+                //Ignore the information.
+                return;
+            }
+            //Append item to album detail.
+            albumDetail->appendItem(item);
+        }
+        qDebug()<<"Fetching album art.";
+        //Download the image.
+        if(curl->get(albumData.value("picUrl").toString(),
+                     responseData)==200 &&
+                (!albumDetail.isNull()))
+        {
+            //Save the album data.
+            albumDetail->setAlbumArt(generateAlbumArt(responseData,
+                                                      219, 219));
+            //Emit finished signal.
+            emit albumFetchComplete();
+            qDebug()<<"Album Fetch Finished.";
+            //Reset the launching instance to null.
+            m_launchingInstance=StateNull;
+        }
+    }
+}
+
+void KNMusicStoreNetease::updateSongDetail(
+        QPointer<KNMusicStoreSongDetailInfo> songDetail,
+        const QString &songId)
+{
+    qDebug()<<"Song Fetch Start.";
+    //Check song detail pointer.
+    if(songDetail.isNull())
+    {
+        //Failed to fetch the song detail.
+        return;
+    }
+    //Reset the song detail.
+    songDetail->reset();
+    //Prepare the rest api.
+    QScopedPointer<KNRestApiBase> curl;
+    //Initial the rest api.
+    curl.reset(new KNRestApiBase);
+    //Get the song detail.
+    QJsonObject songInfo=getSongDetails(curl.data(), songId);
+    //Check the pointer.
+    if(songDetail.isNull())
+    {
+        //Song detail model has been removed.
+        return;
+    }
+    //Parse the song detail.
+    //Check the song data.
+    if(!songInfo.contains("songs"))
+    {
+        //Failed to fetch the songs.
+        return;
+    }
+    //Get the songs list
+    QJsonArray songsArray=songInfo.value("songs").toArray();
+    //Check the size.
+    if(songsArray.isEmpty())
+    {
+        //Failed to fetch the songs.
+        return;
+    }
+    //Get song data.
+    QJsonObject songData=songsArray.at(0).toObject();
+    //Prepare the album data and lyrics data.
+    QByteArray albumArtData, lyricsData;
+    //Check information and download album data & lyrics.
+    if(songData.contains("album") &&
+            curl->get(songData.value("album").toObject().value(
+                          "picUrl").toString(),
+                      albumArtData)==200 &&
+            curl->get(generateNeteaseRequest(
+                          QString("http://music.163.com/api/song/lyric?os=osx"
+                                  "&id=%1&lv=-1&kv=-1&tv=-1").arg(
+                              QString::number(
+                                  qint64(songData.value("id").toDouble())))),
+                      lyricsData)==200)
+    {
+        //Check the pointer.
+        if(songDetail.isNull())
+        {
+            //Song detail model has been removed.
+            return;
+        }
+        //Get the lyrics response data.
+        QJsonObject lyricsResponse=QJsonDocument::fromJson(lyricsData).object();
+        //Check the lyrics response data.
+        if(lyricsResponse.contains("lrc"))
+        {
+            //Get the lrc object.
+            lyricsResponse=lyricsResponse.value("lrc").toObject();
+            //Get the lyrics data from the object.
+            songDetail->setSongData(KNMusicStoreSongDetailInfo::Lyrics,
+                                    lyricsResponse.value("lyric").toString());
+        }
+        //Set the pixmap data.
+        songDetail->setAlbumArt(generateAlbumArt(albumArtData, 219, 219));
+        //Save all the other information.
+        songDetail->setSongData(KNMusicStoreSongDetailInfo::Name,
+                                  songData.value("name").toString());
+        {
+            //Get artist list.
+            QJsonArray artistList=songData.value("artists").toArray();
+            //Get the artist information.
+            QStringList artistNames, artistIds;
+            for(auto j=0; j<artistList.size(); ++j)
+            {
+                //Get the current artist.
+                QJsonObject artistObject=artistList.at(j).toObject();
+                //Add name to artist list.
+                artistNames.append(artistObject.value("name").toString());
+                artistIds.append(QString::number(static_cast<qint64>(
+                                         artistObject.value("id").toDouble())));
+            }
+            //Set the artist information.
+            songDetail->setArtists(artistNames);
+            songDetail->setArtistsId(artistIds);
+        }
+        //Get the album information.
+        {
+            //Get album object.
+            QJsonObject albumObject=songData.value("album").toObject();
+            //Get the album id and name.
+            songDetail->setSongData(KNMusicStoreSongDetailInfo::AlbumName,
+                                    albumObject.value("name").toString());
+            songDetail->setSongData(
+                        KNMusicStoreSongDetailInfo::AlbumId,
+                        QString::number(
+                            static_cast<qint64>(albumObject.value(
+                                                    "id").toDouble())));
+        }
+        //Get the url information.
+        {
+            QString urlOnline, urlHigh, urlLossless;
+            //Set the download url to cache string.
+            setDownloadUrl(songData,
+                           urlOnline,
+                           urlHigh,
+                           urlLossless);
+            //Set the data to song detail.
+            songDetail->setSongData(KNMusicStoreSongDetailInfo::OnlineUrl,
+                                    urlOnline);
+            songDetail->setSongData(KNMusicStoreSongDetailInfo::HighUrl,
+                                    urlHigh);
+            songDetail->setSongData(KNMusicStoreSongDetailInfo::LossLessUrl,
+                                    urlLossless);
+        }
+        //Emit the complete signal.
+        emit songFetchComplete();
+        //Reset the launching instance to null.
+        m_launchingInstance=StateNull;
+    }
+}
+
 void KNMusicStoreNetease::onActionWatcherFinished()
 {
     //Lock for the home widget.
@@ -666,23 +764,28 @@ void KNMusicStoreNetease::onActionWatcherFinished()
     //Increase the counter.
     ++m_homeLocking;
     qDebug()<<m_homeLocking;
+    //Check home locking counter.
+    if(m_homeLocking==NeteaseWorkThreadCount)
+    {
+        //Emit the home fetching signal.
+        emit homeFetchComplete();
+        qDebug()<<"Finished!";
+        //Reset the launching instance to null.
+        m_launchingInstance=StateNull;
+    }
     //Release the lock.
     m_homeFeteching.unlock();
 }
 
-inline void KNMusicStoreNetease::quitHomeThreads()
+inline void KNMusicStoreNetease::quitWorkingThread(QFuture<void> &workThread)
 {
-    //Remove the list model.
-    for(int i=0; i<NeteaseWorkThreadCount; ++i)
+    //Check list threads working thread.
+    if(workThread.isRunning())
     {
-        //Check list threads working thread.
-        if(m_listThreads[i].isRunning())
-        {
-            //Cancel and wait for thread stop.
-            m_listThreads[i].cancel();
-            //Wait for cancel.
-            m_listThreads[i].waitForFinished();
-        }
+        //Cancel and wait for thread stop.
+        workThread.cancel();
+        //Wait for cancel.
+        workThread.waitForFinished();
     }
 }
 

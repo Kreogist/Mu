@@ -19,6 +19,8 @@
 #ifndef KNMUSICSTORELISTWIDGET_H
 #define KNMUSICSTORELISTWIDGET_H
 
+#include <QVariant>
+
 #include <QWidget>
 
 class QLabel;
@@ -41,6 +43,11 @@ public:
     explicit KNMusicStoreListWidget(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief Ask to show song detail information with given id.
+     * \param songId The song index.
+     */
+    void requireShowSong(QVariant songId);
 
 public slots:
     /*!
@@ -52,6 +59,7 @@ public slots:
 private slots:
     void retranslate();
     void onActionUpdateInfo();
+    void onActionShowSongInfo(const QModelIndex &currentIndex);
 
 private:
     enum PropertyNames

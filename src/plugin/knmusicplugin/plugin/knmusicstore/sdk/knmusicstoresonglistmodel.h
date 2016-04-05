@@ -73,6 +73,24 @@ public:
                         Qt::Orientation orientation,
                         int role) const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief This is an override function. Get the song describe data with
+     * given index.
+     * \param index The song index.
+     * \return The song describe data.
+     */
+    QVariant songData(const QModelIndex &index)
+    {
+        return songData(index.row());
+    }
+
+    /*!
+     * \brief Get the song describe data with given index.
+     * \param row The song row.
+     * \return The song describe data.
+     */
+    QVariant songData(int row);
+
 signals:
 
 public slots:

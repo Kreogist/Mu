@@ -64,13 +64,14 @@ public:
 
     struct StoreSongItem
     {
-        int index;
+        QVariant songData;
         QString name;
         QString duration;
         QString artist;
         QString urlLossless;
         QString urlHigh;
         QString urlOnline;
+        int index;
     };
 
 private:

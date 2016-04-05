@@ -67,20 +67,11 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_singleSong->hide();
     m_storeSwitcher->setWidget(m_emptyWidget);
     //Show the home widget.
-//    m_home->show();
-//    m_storeSwitcher->setWidget(m_home);
-//    m_list->show();
-//    m_storeSwitcher->setWidget(m_list);
-//    m_singleSong->show();
-//    m_storeSwitcher->setWidget(m_singleSong);
 //    m_searchResult->show();
 //    m_storeSwitcher->setWidget(m_searchResult);
 
     //Initial the backend.
     loadBackend(new KNMusicStoreNetease);
-//    test->fetchAlbumDetail("34515142");
-//    test->fetchSongDetail("404543841");
-//    test->fetchSearchResult("Top");
 
     //Link retranslator.
     knI18n->link(this, &KNMusicStore::retranslate);
@@ -126,7 +117,7 @@ void KNMusicStore::showEvent(QShowEvent *event)
     //Show the widget.
     KNMusicStoreBase::showEvent(event);
     //Check the switcher.
-    if(m_emptyWidget->isVisible() && m_backend)
+    if(m_emptyWidget->isVisible() && m_backend!=nullptr)
     {
         //Start to fetch home content.
         m_backend->fetchHomeInfo();
@@ -141,18 +132,30 @@ void KNMusicStore::retranslate()
 
 void KNMusicStore::onActionShowHome()
 {
-    //Check backend pointer.
-    if(!m_backend)
-    {
-        //Ignore the null backend.
-        return;
-    }
-    //Fetch home widget information.
-    m_backend->fetchHomeInfo();
+    //Show the home widget.
+    showWidget(m_home);
+}
+
+void KNMusicStore::onActionShowList()
+{
+    //Show the list widget.
+    showWidget(m_list);
+}
+
+void KNMusicStore::onActionShowSongDetail()
+{
+    //Show the song detail widget.
+    showWidget(m_singleSong);
 }
 
 void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
 {
+    //Check the backend pointer.
+    if(m_backend!=nullptr)
+    {
+        //Ignore the new backend.
+        return;
+    }
     //Save the backend.
     m_backend=backend;
     //Check the backend pointer.
@@ -168,4 +171,36 @@ void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
     m_list->setBackend(m_backend);
     m_singleSong->setBackend(m_backend);
     m_searchResult->setBackend(m_backend);
+    //Link backend to store widget.
+    connect(m_backend, &KNMusicStoreBackend::homeFetchComplete,
+            this, &KNMusicStore::onActionShowHome);
+    connect(m_backend, &KNMusicStoreBackend::albumFetchComplete,
+            this, &KNMusicStore::onActionShowList);
+    connect(m_backend, &KNMusicStoreBackend::songFetchComplete,
+            this, &KNMusicStore::onActionShowSongDetail);
+    //Link store widget to backend.
+    connect(m_home, &KNMusicStoreHomeWidget::requireShowAlbum,
+            m_backend, &KNMusicStoreBackend::fetchAlbumDetail);
+    connect(m_home, &KNMusicStoreHomeWidget::requireShowSong,
+            m_backend, &KNMusicStoreBackend::fetchSongDetail);
+    connect(m_list, &KNMusicStoreListWidget::requireShowSong,
+            m_backend, &KNMusicStoreBackend::fetchSongDetail);
+}
+
+inline void KNMusicStore::showWidget(QWidget *widget)
+{
+    //Take the widget away.
+    QWidget *currentWidget=m_storeSwitcher->takeWidget();
+    //Check current widget.
+    if(currentWidget!=nullptr)
+    {
+        //Recover the control of the widget.
+        currentWidget->setParent(this);
+        //Hide the widget.
+        currentWidget->hide();
+    }
+    //Show the home widget.
+    widget->show();
+    //Set the home widget to be the switcher widget.
+    m_storeSwitcher->setWidget(widget);
 }

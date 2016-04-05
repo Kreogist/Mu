@@ -91,6 +91,24 @@ public:
      */
     QString artist(int row);
 
+    /*!
+     * \brief This is an override function. Get the album describe data with
+     * given index.
+     * \param index The album index.
+     * \return The album describe data.
+     */
+    QVariant albumData(const QModelIndex &index)
+    {
+        return albumData(index.row());
+    }
+
+    /*!
+     * \brief Get the album describe data with given index.
+     * \param row The album row.
+     * \return The album describe data.
+     */
+    QVariant albumData(int row);
+
 signals:
 
 public slots:

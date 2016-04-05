@@ -147,3 +147,10 @@ void KNMusicStoreSongListModel::retranslate()
     m_titles[2]=tr("Time");
     m_titles[3]=tr("Artist");
 }
+
+QVariant KNMusicStoreSongListModel::songData(int row)
+{
+    //Check the validation of the index.
+    return (row<m_songList.size()) ?
+                m_songList.at(row).songData : QVariant();
+}

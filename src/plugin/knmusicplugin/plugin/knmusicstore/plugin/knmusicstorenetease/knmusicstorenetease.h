@@ -97,12 +97,12 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicStoreBackend::fetchAlbumDetail().
      */
-    void fetchAlbumDetail(const QString &albumId) Q_DECL_OVERRIDE;
+    void fetchAlbumDetail(const QVariant &albumId) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicStoreBackend::fetchSongDetail().
      */
-    void fetchSongDetail(const QString &songId) Q_DECL_OVERRIDE;
+    void fetchSongDetail(const QVariant &songId) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicStoreBackend::fetchSearchResult().
@@ -133,9 +133,22 @@ private slots:
                            const QString &listNo);
     void updateSearchResult(QPointer<KNMusicStoreSearchModel> model,
                             const SearchRequest &request);
+    void updateAlbumDetail(QPointer<KNMusicStoreAlbumModel> albumDetail,
+                           const QString &albumId);
+    void updateSongDetail(QPointer<KNMusicStoreSongDetailInfo> songDetail,
+                          const QString &songId);
     void onActionWatcherFinished();
 
 private:
+    enum NeteaseWorkingState
+    {
+        StateNull,
+        StateHome,
+        StateAlbumDetail,
+        StateSongDetail,
+        StateSearchResult
+    };
+
     enum NeteaseLists
     {
         BillboardList,
@@ -150,6 +163,7 @@ private:
         NeteaseWorkThreadCount
     };
     inline void quitHomeThreads();
+    inline void quitWorkingThread(QFuture<void> &workThread);
     inline QNetworkRequest generateNeteaseRequest(const QString &url);
     inline QJsonObject getSongDetails(KNRestApiBase *curl,
                                       const QString &songId);
@@ -165,8 +179,10 @@ private:
     inline QString getDuration(const QJsonObject &songData);
 
     QFuture<void> m_listThreads[NeteaseWorkThreadCount],
-                  m_searchThreads[KNMusicStoreUtil::StoreSearchCategoryCount];
-    QFutureWatcher<void> m_listThreadWatcher[NeteaseWorkThreadCount];
+                  m_searchThreads[KNMusicStoreUtil::StoreSearchCategoryCount],
+                  m_albumThread, m_songThread;
+    QFutureWatcher<void> m_listThreadWatcher[NeteaseWorkThreadCount],
+                         m_albumThreadWatcher, m_songThreadWatcher;
     QByteArray m_magicData;
     QMutex m_homeFeteching;
     int m_magicDataLength, m_homeLocking;
@@ -175,7 +191,7 @@ private:
     KNMusicStoreAlbumModel *m_albumDetail;
     KNMusicStoreSongDetailInfo *m_songDetail;
     KNMusicStoreSearchResult *m_searchResult;
-    bool m_launching;
+    int m_launchingInstance;
 };
 
 #endif // KNMUSICSTORENETEASE_H

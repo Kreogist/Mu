@@ -113,3 +113,10 @@ QString KNMusicStoreAlbumListModel::artist(int row)
     //Check the validation of the index.
     return (row<m_albumList.size()) ? m_albumList.at(row).artist : QString();
 }
+
+QVariant KNMusicStoreAlbumListModel::albumData(int row)
+{
+    //Check the validation of the index.
+    return (row<m_albumList.size()) ?
+                m_albumList.at(row).albumData : QVariant();
+}

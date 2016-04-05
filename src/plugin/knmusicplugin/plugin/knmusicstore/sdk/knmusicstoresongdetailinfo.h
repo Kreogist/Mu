@@ -78,10 +78,6 @@ public:
     QStringList artistsId() const;
 
 signals:
-    /*!
-     * \brief When the song detail data is updated, this signal will be emitted.
-     */
-    void songDataUpdated();
 
 public slots:
     /*!

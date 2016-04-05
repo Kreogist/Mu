@@ -21,6 +21,7 @@
 #include <QAbstractItemView>
 
 class KNHighLightLabel;
+class KNSideShadowWidget;
 class KNMusicStoreAlbumListModel;
 /*!
  * \brief The KNMusicStoreAlbumList class provides a five album graphics display
@@ -59,6 +60,11 @@ public:
     void setModel(QAbstractItemModel *model) Q_DECL_OVERRIDE;
 
 signals:
+    /*!
+     * \brief When user clicked an album, this signal will be emitted.
+     * \param albumData THe album information data.
+     */
+    void albumClick(QVariant albumData);
 
 public slots:
 
@@ -72,6 +78,11 @@ protected:
      * \brief Reimplemented from QAbstractItemView::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractItemView::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QAbstractItemView::moveCursor().
@@ -110,6 +121,16 @@ protected:
     QRegion visualRegionForSelection(const QItemSelection &selection) const
     Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QAbstractItemView::mousePressEvent().
+     */
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractItemView::mouseReleaseEvent().
+     */
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
 protected slots:
     /*!
      * \brief Reimplemented from QAbstractItemView::updateGeometries().
@@ -121,7 +142,9 @@ private:
                                    QAbstractItemView::ScrollHint hint);
     inline QRect itemContentRect(const QModelIndex &index) const;
 
+    QPersistentModelIndex m_pressedIndex;
     KNMusicStoreAlbumListModel *m_model;
+    KNSideShadowWidget *m_leftShadow, *m_rightShadow;
     int m_itemHeight;
 };
 

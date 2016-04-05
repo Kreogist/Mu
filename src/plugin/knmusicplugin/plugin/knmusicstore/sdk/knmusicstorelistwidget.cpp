@@ -139,8 +139,11 @@ void KNMusicStoreListWidget::setBackend(KNMusicStoreBackend *backend)
     m_albumSongView->header()->setSectionResizeMode(2, QHeaderView::Fixed);
     m_albumSongView->header()->setSectionResizeMode(3, QHeaderView::Fixed);
     //Link the backend.
-    connect(m_albumDetailModel, &KNMusicStoreAlbumModel::albumDetailUpdated,
+    connect(backend, &KNMusicStoreBackend::albumFetchComplete,
             this, &KNMusicStoreListWidget::onActionUpdateInfo);
+    connect(m_albumSongView->selectionModel(),
+            &QItemSelectionModel::currentChanged,
+            this, &KNMusicStoreListWidget::onActionShowSongInfo);
 }
 
 void KNMusicStoreListWidget::retranslate()
@@ -180,4 +183,21 @@ void KNMusicStoreListWidget::onActionUpdateInfo()
                                       SongItemHeight);
     //Resize current widget size.
     setMinimumHeight(sizeHint().height());
+}
+
+void KNMusicStoreListWidget::onActionShowSongInfo(
+        const QModelIndex &currentIndex)
+{
+    //Get the current index.
+    if(m_albumDetailModel==nullptr)
+    {
+        //Ignore the null the pointer.
+        return;
+    }
+    //Get the index from the model.
+    if(currentIndex.isValid())
+    {
+        //Ask to show the song information.
+        emit requireShowSong(m_albumDetailModel->songData(currentIndex));
+    }
 }

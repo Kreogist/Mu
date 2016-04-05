@@ -120,7 +120,7 @@ void KNMusicStoreSingleSongWidget::setBackend(KNMusicStoreBackend *backend)
         return;
     }
     //Link the update information.
-    connect(m_songDetail, &KNMusicStoreSongDetailInfo::songDataUpdated,
+    connect(backend, &KNMusicStoreBackend::songFetchComplete,
             this, &KNMusicStoreSingleSongWidget::onActionDataUpdate);
 }
 

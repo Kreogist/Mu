@@ -98,6 +98,18 @@ signals:
      */
     void homeFetchComplete();
 
+    /*!
+     * \brief When the album information has been fetchde complete, this signal
+     * will be emitted.
+     */
+    void albumFetchComplete();
+
+    /*!
+     * \brief When the song information has been fetchde complete, this signal
+     * will be emitted.
+     */
+    void songFetchComplete();
+
 public slots:
     /*!
      * \brief Get the home page information to local.
@@ -108,13 +120,13 @@ public slots:
      * \brief Get the album detail information to local.
      * \param albumId The album index.
      */
-    virtual void fetchAlbumDetail(const QString &albumId)=0;
+    virtual void fetchAlbumDetail(const QVariant &albumId)=0;
 
     /*!
      * \brief Get the song detail information to local.
      * \param songId Song index.
      */
-    virtual void fetchSongDetail(const QString &songId)=0;
+    virtual void fetchSongDetail(const QVariant &songId)=0;
 
     /*!
      * \brief Get the specific search result information to local.

@@ -75,9 +75,13 @@ protected:
 private slots:
     void retranslate();
     void onActionShowHome();
+    void onActionShowList();
+    void onActionShowSongDetail();
 
 private:
     void loadBackend(KNMusicStoreBackend *backend);
+
+    inline void showWidget(QWidget *widget);
 
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;

@@ -20,6 +20,7 @@
 #define KNMUSICSTOREHOMEWIDGET_H
 
 #include <QList>
+#include <QVariant>
 
 #include <QWidget>
 
@@ -42,6 +43,17 @@ public:
     explicit KNMusicStoreHomeWidget(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief Ask to show the album with the given album Id.
+     * \param albumId The album index.
+     */
+    void requireShowAlbum(QVariant albumId);
+
+    /*!
+     * \brief Ask to show the song detail info with the given song Id.
+     * \param songId The song index.
+     */
+    void requireShowSong(QVariant songId);
 
 public slots:
     /*!

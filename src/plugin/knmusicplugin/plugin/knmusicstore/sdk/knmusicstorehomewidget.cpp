@@ -47,6 +47,12 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     //Register this widget to theme manager.
     knTheme->registerWidget(this);
 
+    //Link the widget signal.
+    connect(m_newMusicList, &KNMusicStoreAlbumList::albumClick,
+            this, &KNMusicStoreHomeWidget::requireShowAlbum);
+    connect(m_hotTracks, &KNMusicStoreAlbumList::albumClick,
+            this, &KNMusicStoreHomeWidget::requireShowSong);
+
     //Initial the widgets.
     // Titles
     //Prepare title fonts.
@@ -116,6 +122,9 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
         m_listLayout->addSpacing(ContentSpacing);
         //Initial the list view.
         KNMusicStoreAlbumList *listView=new KNMusicStoreAlbumList(this);
+        //Link the list view to show song info.
+        connect(listView, &KNMusicStoreAlbumList::albumClick,
+                this, &KNMusicStoreHomeWidget::requireShowSong);
         //Configure the list view.
         listView->setModel(m_backend->listModel(i));
         //Add list view to layout.

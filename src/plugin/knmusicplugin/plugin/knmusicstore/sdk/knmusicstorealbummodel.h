@@ -55,10 +55,6 @@ public:
     QPixmap albumArt() const;
 
 signals:
-    /*!
-     * \brief This signal will be emitted when album detail updated completely.
-     */
-    void albumDetailUpdated();
 
 public slots:
     /*!

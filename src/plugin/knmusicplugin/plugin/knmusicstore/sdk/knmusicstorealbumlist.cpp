@@ -18,9 +18,11 @@
 #include <QScrollBar>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QPersistentModelIndex>
 
 #include "sao/knsaostyle.h"
 #include "knthememanager.h"
+#include "knsideshadowwidget.h"
 
 #include "knmusicstoreutil.h"
 #include "knmusicstorealbumlistmodel.h"
@@ -31,10 +33,15 @@
 
 #define StoreAlbumArtTextSpacing 5
 #define StoreAlbumSpacing 20
+#define StoreAlbumShadow 15
+#define StoreAlbumTopSpacing 8
 
 KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     QAbstractItemView(parent),
     m_model(nullptr),
+    m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow, this)),
+    m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
+                                         this)),
     m_itemHeight(0)
 {
     setObjectName("MusicStoreAlbumList");
@@ -51,7 +58,11 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
                  fontMetrics().height() * 3 +
                  KNSaoStyle::scrollBarWidth();
     //Set the fixed size of the album list.
-    setFixedHeight(m_itemHeight);
+    setFixedHeight(StoreAlbumTopSpacing + m_itemHeight);
+
+    //Configure left and right shadow.
+    m_leftShadow->setFixedSize(StoreAlbumShadow, m_itemHeight);
+    m_rightShadow->setFixedSize(StoreAlbumShadow, m_itemHeight);
 }
 
 QModelIndex KNMusicStoreAlbumList::indexAt(const QPoint &point) const
@@ -67,9 +78,10 @@ QModelIndex KNMusicStoreAlbumList::indexAt(const QPoint &point) const
     //Calculate which album this point is locate on.
         albumIndex=pointContentX/(StoreAlbumSize + StoreAlbumSpacing);
     //Check whether the point is click on space or album itself.
-    return (point.x()-albumIndex*(StoreAlbumSize + StoreAlbumSpacing) >
-            StoreAlbumSize) || (albumIndex>=m_model->rowCount()) ?
-                QModelIndex():m_model->index(albumIndex, 0);
+    return (pointContentX-albumIndex*(StoreAlbumSize + StoreAlbumSpacing) <
+            StoreAlbumSize) && (albumIndex<m_model->rowCount()) &&
+            (point.y() > StoreAlbumTopSpacing) ?
+                m_model->index(albumIndex, 0) : QModelIndex();
 }
 
 void KNMusicStoreAlbumList::scrollTo(const QModelIndex &index,
@@ -157,7 +169,8 @@ void KNMusicStoreAlbumList::paintEvent(QPaintEvent *event)
     while(currentX < width() && currentModelRow < m_model->rowCount())
     {
         //Draw the current item.
-        painter.drawPixmap(currentX, 0, m_model->albumArt(currentModelRow));
+        painter.drawPixmap(currentX, StoreAlbumTopSpacing,
+                           m_model->albumArt(currentModelRow));
         //Get the elied album name.
         QString albumName=fontMetrics().elidedText(
                     m_model->albumTitle(currentModelRow),
@@ -166,7 +179,8 @@ void KNMusicStoreAlbumList::paintEvent(QPaintEvent *event)
         //Get the bounding rect.
         QRect albumNameRect=fontMetrics().boundingRect(
                     QRect(currentX,
-                          StoreAlbumSize + StoreAlbumArtTextSpacing,
+                          StoreAlbumSize + StoreAlbumArtTextSpacing +
+                          StoreAlbumTopSpacing,
                           StoreAlbumSize,
                           fontMetrics().height()<<1),
                     Qt::TextWordWrap | Qt::TextWrapAnywhere,
@@ -175,7 +189,8 @@ void KNMusicStoreAlbumList::paintEvent(QPaintEvent *event)
         painter.setPen(textColor);
         //Save the draw text.
         painter.drawText(QRect(currentX,
-                               StoreAlbumSize + StoreAlbumArtTextSpacing,
+                               StoreAlbumSize + StoreAlbumArtTextSpacing +
+                               StoreAlbumTopSpacing,
                                StoreAlbumSize,
                                albumNameRect.height()),
                          Qt::TextWordWrap | Qt::TextWrapAnywhere,
@@ -200,6 +215,15 @@ void KNMusicStoreAlbumList::paintEvent(QPaintEvent *event)
     updateGeometries();
 }
 
+void KNMusicStoreAlbumList::resizeEvent(QResizeEvent *event)
+{
+    //Resize the widget.
+    QAbstractItemView::resizeEvent(event);
+    //Move the right.
+    m_rightShadow->move(width()-m_rightShadow->width(),
+                        0);
+}
+
 QModelIndex KNMusicStoreAlbumList::moveCursor(
         QAbstractItemView::CursorAction cursorAction,
         Qt::KeyboardModifiers modifiers)
@@ -211,6 +235,7 @@ QModelIndex KNMusicStoreAlbumList::moveCursor(
 
 int KNMusicStoreAlbumList::horizontalOffset() const
 {
+    //Horizontal offset scroll bar provides the offset.
     return horizontalScrollBar()->value();
 }
 
@@ -250,6 +275,12 @@ QRegion KNMusicStoreAlbumList::visualRegionForSelection(
     return region;
 }
 
+void KNMusicStoreAlbumList::mousePressEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event)
+    //Disabled all the event of previous.
+}
+
 void KNMusicStoreAlbumList::updateGeometries()
 {
     //Check model.
@@ -263,7 +294,8 @@ void KNMusicStoreAlbumList::updateGeometries()
     horizontalScrollBar()->setRange(0,
                                     qMax(0,
                                          (StoreAlbumSize + StoreAlbumSpacing) *
-                                         m_model->rowCount() - width()));
+                                         m_model->rowCount() - width() -
+                                         StoreAlbumSpacing));
     //Update the page and single step.
     int albumFullWidth=(StoreAlbumSize + StoreAlbumSpacing);
     horizontalScrollBar()->setPageStep(albumFullWidth);
@@ -315,4 +347,24 @@ inline QRect KNMusicStoreAlbumList::itemContentRect(
                  0,
                  StoreAlbumSize,
                  m_itemHeight);
+}
+
+void KNMusicStoreAlbumList::mouseReleaseEvent(QMouseEvent *event)
+{
+    //Get the current pressed position.
+    QPoint position=event->pos();
+    //Check the selection model and state.
+    if(!selectionModel() || m_model==nullptr)
+    {
+        //If there's no selection model, ignore the press event.
+        return;
+    }
+    //Get the clicked index.
+    QPersistentModelIndex clickedIndex=indexAt(position);
+    //Check the validation of the index.
+    if(clickedIndex.isValid())
+    {
+        //Emit the clicked index.
+        emit albumClick(m_model->albumData(clickedIndex));
+    }
 }
