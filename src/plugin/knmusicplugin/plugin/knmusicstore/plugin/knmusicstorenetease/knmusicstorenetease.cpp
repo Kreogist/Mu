@@ -46,16 +46,25 @@ KNMusicStoreNetease::KNMusicStoreNetease(QObject *parent) :
     KNMusicStoreBackend(parent),
     m_magicData(QByteArray("3go8&$8*3*3h0k(2)2")),
     m_magicDataLength(m_magicData.size()),
+    m_homeLocking(0),
     m_newAlbumModel(new KNMusicStoreAlbumListModel),
     m_hotSongModel(new KNMusicStoreAlbumListModel),
     m_albumDetail(new KNMusicStoreAlbumModel),
     m_songDetail(new KNMusicStoreSongDetailInfo),
-    m_searchResult(new KNMusicStoreSearchResult)
+    m_searchResult(new KNMusicStoreSearchResult),
+    m_launching(false)
 {
     //Initial the list model.
     for(int i=0; i<NeteaseListCount; ++i)
     {
         m_listModel[i]=new KNMusicStoreAlbumListModel;
+    }
+    //Configure the watchers.
+    for(int i=0; i<NeteaseWorkThreadCount; ++i)
+    {
+        //Link the watcher signals to the counter.
+        connect(&m_listThreadWatcher[i], SIGNAL(finished()),
+                this, SLOT(onActionWatcherFinished()));
     }
 }
 
@@ -84,18 +93,7 @@ KNMusicStoreNetease::~KNMusicStoreNetease()
     }
 
     //Cancel all the list threads.
-    //Remove the list model.
-    for(int i=0; i<NeteaseWorkThreadCount; ++i)
-    {
-        //Cancel and wait for thread stop.
-        m_listThreads[i].cancel();
-    }
-    //Wait for thread quit.
-    for(int i=0; i<NeteaseWorkThreadCount; ++i)
-    {
-        //Cancel and wait for thread stop.
-        m_listThreads[i].waitForFinished();
-    }
+    quitHomeThreads();
 }
 
 KNMusicStoreAlbumListModel *KNMusicStoreNetease::newAlbumModel()
@@ -151,12 +149,19 @@ KNMusicStoreSongDetailInfo *KNMusicStoreNetease::getSongDetail()
     return m_songDetail;
 }
 
-void KNMusicStoreNetease::fetchHomeWidgetInfo()
+KNMusicStoreSearchModel *KNMusicStoreNetease::searchResultModel(int index)
+{
+    //Get the search result model.
+    return m_searchResult->searchResultModel(index);
+}
+
+void KNMusicStoreNetease::fetchHomeInfo()
 {
     //Update the latest albums.
     m_listThreads[LatestAlbumList]=
             QtConcurrent::run(this,
                               &KNMusicStoreNetease::updateLatestAlbumsList);
+
     //Update the hot songs list.
     m_listThreads[HotSongList]=
             QtConcurrent::run(this,
@@ -179,6 +184,13 @@ void KNMusicStoreNetease::fetchHomeWidgetInfo()
                               &KNMusicStoreNetease::updateNeteaseList,
                               m_listModel[OriconList],
                               QString("60131"));
+
+    //Set update the future.
+    for(int i=0; i<NeteaseWorkThreadCount; ++i)
+    {
+        //Set the watcher.
+        m_listThreadWatcher[i].setFuture(m_listThreads[i]);
+    }
 }
 
 void KNMusicStoreNetease::fetchAlbumDetail(const QString &albumId)
@@ -230,31 +242,17 @@ void KNMusicStoreNetease::fetchAlbumDetail(const QString &albumId)
         for(int i=0; i<songArray.size(); ++i)
         {
             //Get the song object.
-            QJsonObject songItem=songArray.at(i).toObject();
+            QJsonObject songData=songArray.at(i).toObject();
             //Generate the song detail info.
             KNMusicStoreUtil::StoreSongItem item;
             //Save the song information.
-            item.name=songItem.value("name").toString();
-            {
-                //Get artist objects.
-                QJsonArray songArtists=songItem.value("artists").toArray();
-                //Generate artist names list.
-                QStringList artistsNames;
-                //Get the artist names.
-                for(int j=0; j<songArtists.size(); ++j)
-                {
-                    //Add name to artist names.
-                    artistsNames.append(songArtists.at(j).toObject().value(
-                                            "name").toString());
-                }
-                //Combine the artists names.
-                item.artist=artistsNames.join(", ");
-            }
-            item.duration=KNMusicUtil::msecondToString(
-                        songItem.value("duration").toDouble());
-            item.index=songItem.value("no").toInt();
+            item.name=songData.value("name").toString();
+            //Combine the artists names.
+            item.artist=getArtistNames(songData);
+            item.duration=getDuration(songData);
+            item.index=songData.value("no").toInt();
             //Set the download url.
-            setDownloadUrl(songItem,
+            setDownloadUrl(songData,
                            item.urlOnline,
                            item.urlHigh,
                            item.urlLossless);
@@ -402,7 +400,20 @@ void KNMusicStoreNetease::fetchSongDetail(const QString &songId)
 
 void KNMusicStoreNetease::fetchSearchResult(const QString &keyword)
 {
-    updateSearchResult(nullptr, keyword, 1, 0);
+    QList<int> songSearchFilter;
+    songSearchFilter.append(NameField);
+    songSearchFilter.append(ArtistField);
+    songSearchFilter.append(AlbumField);
+    songSearchFilter.append(DurationField);
+    //Construct search request.
+    SearchRequest request;
+    request.keyword=keyword;
+    request.offset=0;
+    request.type=1;
+    request.filter=songSearchFilter;
+    updateSearchResult(m_searchResult->searchResultModel(
+                           KNMusicStoreUtil::CategorySong),
+                       request);
 }
 
 void KNMusicStoreNetease::updateLatestAlbumsList()
@@ -543,18 +554,7 @@ void KNMusicStoreNetease::updateNeteaseList(
                         //Set data.
                         currentSong.name=songData.value("name").toString();
                         currentSong.albumArt=generateAlbumArt(responseData);
-                        //Get artist list.
-                        QJsonArray artistList=
-                                songData.value("artists").toArray();
-                        //Get the artist names.
-                        QStringList artistNames;
-                        for(auto j=0; j<artistList.size(); ++j)
-                        {
-                            //Add name to artist list.
-                            artistNames.append(artistList.at(j).toObject(
-                                                   ).value("name").toString());
-                        }
-                        currentSong.artist=artistNames.join(tr(", "));
+                        currentSong.artist=getArtistNames(songData);
                         //Check model first.
                         if(model.isNull())
                         {
@@ -572,9 +572,7 @@ void KNMusicStoreNetease::updateNeteaseList(
 
 void KNMusicStoreNetease::updateSearchResult(
         QPointer<KNMusicStoreSearchModel> model,
-        const QString &keyword,
-        int type,
-        int offset)
+        const SearchRequest &request)
 {
     //Prepare the rest api.
     QScopedPointer<KNRestApiBase> curl;
@@ -583,35 +581,108 @@ void KNMusicStoreNetease::updateSearchResult(
     //Prepare the response data.
     QByteArray responseData;
     //Get the search result.
-    if(curl->post(generateNeteaseRequest("http://music.163.com/api/search/get/"
-                                         "?s="+keyword+"&"
-                                         "limit=20&" +
-                                         "type="+QString::number(type)+"&"
-                                         "offset="+QString::number(offset)),
+    if(curl->post(generateNeteaseRequest(
+                      "http://music.163.com/api/search/get/"
+                      "?s="+request.keyword+"&"
+                      "limit=20&" +
+                      "type="+QString::number(request.type)+"&"
+                      "offset="+QString::number(request.offset)),
                   QByteArray(),
                   responseData)==200)
     {
-//        //Check model first.
-//        if(model.isNull())
-//        {
-//            //Stop to downloading data.
-//            return;
-//        }
-//        //Parse the data.
-//        QJsonObject dataObject=QJsonDocument::fromJson(responseData).object();
-//        //Get the result.
-//        if(!dataObject.contains("result"))
-//        {
-//            //The data object is failed.
-//            return;
-//        }
-//        //Get the result object.
-//        dataObject=dataObject.value("result").toObject();
-//        //Get the song count, set it to the model.
-//        model->setTotalCount(dataObject.value("songCount").toInt());
+        //Check model first.
+        if(model.isNull())
+        {
+            //Stop to downloading data.
+            return;
+        }
+        //Parse the data.
+        QJsonObject dataObject=QJsonDocument::fromJson(responseData).object();
+        //Get the result.
+        if(!dataObject.contains("result"))
+        {
+            //The data object is failed.
+            return;
+        }
+        //Get the result object.
+        dataObject=dataObject.value("result").toObject();
+        //Get the song count, set it to the model.
+        model->setTotalCount(dataObject.value("songCount").toInt());
         //Get the songs items array.
-//        QJsonArray songList=dataObject.value("songs").toArray();
-//        qDebug()<<;
+        QJsonArray searchItemList=dataObject.value("songs").toArray();
+        //Generate the song id list and song data list.
+        QList<QVariant> itemIdList;
+        QList<QStringList> itemList;
+        //Construct the song item.
+        for(auto i=searchItemList.begin(); i!=searchItemList.end(); ++i)
+        {
+            //Get the song item.
+            QJsonObject songData=(*i).toObject();
+            //Check the song data.
+            itemIdList.append(QString::number(
+                              qint64(songData.value("id").toDouble())));
+            //Insert the data to stringlist.
+            QStringList itemInfoList;
+            //Append data to item info list according to filter.
+            for(int j=0; j<request.filter.size(); ++j)
+            {
+                switch(j)
+                {
+                case NameField:
+                    itemInfoList.append(songData.value("name").toString());
+                    break;
+                case ArtistField:
+                    itemInfoList.append(getArtistNames(songData));
+                    break;
+                case AlbumField:
+                    itemInfoList.append(songData.value(
+                                            "album").toObject().value(
+                                            "name").toString());
+                    break;
+                case DurationField:
+                    itemInfoList.append(getDuration(songData));
+                    break;
+                }
+            }
+            //Insert data to song list.
+            itemList.append(itemInfoList);
+        }
+        //Check model.
+        if(model.isNull())
+        {
+            //Failed.
+            return;
+        }
+        //Set song list data and song id data.
+        model->setSearchResult(itemList);
+        model->setSearchResultId(itemIdList);
+    }
+}
+
+void KNMusicStoreNetease::onActionWatcherFinished()
+{
+    //Lock for the home widget.
+    m_homeFeteching.lock();
+    //Increase the counter.
+    ++m_homeLocking;
+    qDebug()<<m_homeLocking;
+    //Release the lock.
+    m_homeFeteching.unlock();
+}
+
+inline void KNMusicStoreNetease::quitHomeThreads()
+{
+    //Remove the list model.
+    for(int i=0; i<NeteaseWorkThreadCount; ++i)
+    {
+        //Check list threads working thread.
+        if(m_listThreads[i].isRunning())
+        {
+            //Cancel and wait for thread stop.
+            m_listThreads[i].cancel();
+            //Wait for cancel.
+            m_listThreads[i].waitForFinished();
+        }
     }
 }
 
@@ -726,4 +797,25 @@ inline void KNMusicStoreNetease::setDownloadUrl(const QJsonObject &songItem,
         urlHigh=highUrl;
         urlLossless=highUrl;
     }
+}
+
+inline QString KNMusicStoreNetease::getArtistNames(const QJsonObject &songData)
+{
+    //Get the artist list.
+    const QJsonArray &artists=songData.value("artists").toArray();
+    //Generate artist names list.
+    QStringList artistsNames;
+    //Get the artist names.
+    for(int j=0; j<artists.size(); ++j)
+    {
+        //Add name to artist names.
+        artistsNames.append(artists.at(j).toObject().value("name").toString());
+    }
+    //Give back the join data.
+    return artistsNames.join(", ");
+}
+
+QString KNMusicStoreNetease::getDuration(const QJsonObject &songData)
+{
+    return KNMusicUtil::msecondToString(songData.value("duration").toDouble());
 }

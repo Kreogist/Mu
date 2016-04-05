@@ -133,6 +133,11 @@ void KNMusicStoreListWidget::setBackend(KNMusicStoreBackend *backend)
     m_albumDetailModel=backend->albumDetailModel();
     //Set the model to tree view.
     m_albumSongView->setModel(m_albumDetailModel);
+    //Set the resize mode.
+    m_albumSongView->header()->setSectionResizeMode(0, QHeaderView::Fixed);
+    m_albumSongView->header()->setSectionResizeMode(1, QHeaderView::Stretch);
+    m_albumSongView->header()->setSectionResizeMode(2, QHeaderView::Fixed);
+    m_albumSongView->header()->setSectionResizeMode(3, QHeaderView::Fixed);
     //Link the backend.
     connect(m_albumDetailModel, &KNMusicStoreAlbumModel::albumDetailUpdated,
             this, &KNMusicStoreListWidget::onActionUpdateInfo);

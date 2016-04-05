@@ -48,6 +48,9 @@ signals:
 
 public slots:
 
+private slots:
+    void retranslate();
+
 private:
     KNMusicStoreSearchModel *m_searchResults[
                         KNMusicStoreUtil::StoreSearchCategoryCount];

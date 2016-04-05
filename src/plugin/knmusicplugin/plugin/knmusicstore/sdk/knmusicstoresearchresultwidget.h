@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class KNMusicStoreAlbumTreeView;
+class KNMusicStoreBackend;
 /*!
  * \brief The KNMusicStoreSearchResultWidget class provide a list to display all
  * the search result from the backend.
@@ -38,8 +40,14 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set backend to search result widget.
+     * \param backend The music store backend.
+     */
+    void setBackend(KNMusicStoreBackend *backend);
 
 private:
+    KNMusicStoreAlbumTreeView *m_songTreeView;
 };
 
 #endif // KNMUSICSTORESEARCHRESULTWIDGET_H

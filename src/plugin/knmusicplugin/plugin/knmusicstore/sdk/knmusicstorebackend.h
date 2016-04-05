@@ -84,13 +84,25 @@ public:
      */
     virtual KNMusicStoreSongDetailInfo *getSongDetail()=0;
 
+    /*!
+     * \brief Get the search result model pointer.
+     * \param index The index of the model.
+     * \return The search result model pointer.
+     */
+    virtual KNMusicStoreSearchModel *searchResultModel(int index)=0;
+
 signals:
+    /*!
+     * \brief When home information has been fetched complete, this signal will
+     * be emitted.
+     */
+    void homeFetchComplete();
 
 public slots:
     /*!
      * \brief Get the home page information to local.
      */
-    virtual void fetchHomeWidgetInfo()=0;
+    virtual void fetchHomeInfo()=0;
 
     /*!
      * \brief Get the album detail information to local.

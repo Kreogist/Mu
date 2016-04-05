@@ -18,44 +18,99 @@
 #ifndef KNMUSICSTORESEARCHMODEL_H
 #define KNMUSICSTORESEARCHMODEL_H
 
-#include "knmusicstoresonglistmodel.h"
+#include <QJsonArray>
+
+#include <QAbstractTableModel>
+
+#define SearchItemHeight 30
 
 /*!
- * \brief The KNMusicStoreSearchModel class provides a model to show the result
- * of search.\n
- * It could be reused for several times. It contains the total count.
+ * \brief The KNMusicStoreSearchSongModel class provides the model which could
+ * display the search result of a music store backend in a standard treeview
+ * widget.
  */
-class KNMusicStoreSearchModel : public KNMusicStoreSongListModel
+class KNMusicStoreSearchModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Constructu a KNMusicStoreSearchModel object.
-     * \param parent The parent object pointer.
+     * \brief Construct a KNMusicStoreSearchSongModel object.
+     * \param parent The parent pointer.
      */
     explicit KNMusicStoreSearchModel(QObject *parent = 0);
 
     /*!
-     * \brief Get the total count.
-     * \return The total count of the search result.
+     * \brief Reimplemented from QAbstractTableModel::data().
      */
-    int totalCount() const;
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reset the total count.
+     * \brief Reimplemented from QAbstractTableModel::headerData().
      */
-    void resetTotalCount();
+    QVariant headerData(int section,
+                        Qt::Orientation orientation,
+                        int role) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractTableModel::rowCount().
+     */
+    int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractTableModel::columnCount().
+     */
+    int columnCount(const QModelIndex &parent=QModelIndex()) const
+    Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Clear the search result model data.
+     */
+    void clear();
+
+    /*!
+     * \brief Get the id of one search resuilt by providing its item row.
+     * \param row The item row of the search result.
+     * \return The item search id.
+     */
+    QVariant searchResultId(int row) const;
+
+    /*!
+     * \brief Get the total search count of the model.
+     * \return The total items of the search result.
+     */
+    int totalCount() const;
 
 signals:
 
 public slots:
     /*!
-     * \brief Set the total count.
-     * \param totalCount The total count of the search result.
+     * \brief Set the column title field name list.
+     * \param columnFieldNames The field name string list.
+     */
+    void setColumnFieldNames(const QStringList &columnFieldNames);
+
+    /*!
+     * \brief Set the search result data array to the model.
+     * \param searchResult The search result data.
+     */
+    void setSearchResult(const QList<QStringList> &searchResult);
+
+    /*!
+     * \brief Set the search result item id for search result data.
+     * \param searchResultId The id list.
+     */
+    void setSearchResultId(const QList<QVariant> &searchResultId);
+
+    /*!
+     * \brief Set the total search item count.
+     * \param totalCount Total search item count.
      */
     void setTotalCount(int totalCount);
 
 private:
+    QList<QStringList> m_searchResult;
+    QList<QVariant> m_searchResultId;
+    QStringList m_columnFieldNames;
     int m_totalCount;
 };
 

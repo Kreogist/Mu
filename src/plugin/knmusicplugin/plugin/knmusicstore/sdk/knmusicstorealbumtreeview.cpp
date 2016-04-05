@@ -69,17 +69,6 @@ void KNMusicStoreAlbumTreeView::updateObjectName(const QString &name)
     onActionThemeUpdate();
 }
 
-void KNMusicStoreAlbumTreeView::setModel(QAbstractItemModel *model)
-{
-    //Set the model.
-    QTreeView::setModel(model);
-    //Set the resize mode.
-    header()->setSectionResizeMode(0, QHeaderView::Fixed);
-    header()->setSectionResizeMode(1, QHeaderView::Stretch);
-    header()->setSectionResizeMode(2, QHeaderView::Fixed);
-    header()->setSectionResizeMode(3, QHeaderView::Fixed);
-}
-
 void KNMusicStoreAlbumTreeView::enterEvent(QEvent *event)
 {
     //Do original enter event.

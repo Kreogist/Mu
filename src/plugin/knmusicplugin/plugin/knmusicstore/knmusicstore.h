@@ -25,11 +25,13 @@
 
 class KNCategoryTab;
 class QScrollArea;
+class KNMusicStoreBackend;
 class KNMusicStoreGlobal;
 class KNMusicStoreHomeWidget;
 class KNMusicStoreSearchResultWidget;
 class KNMusicStoreListWidget;
 class KNMusicStoreSingleSongWidget;
+class KNMusicStoreEmptyWidget;
 /*!
  * \brief The KNMusicStore class provides a official standard music store plugin
  * realize. You can treat this plugin module as a standard module.
@@ -65,10 +67,18 @@ protected:
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBase::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void retranslate();
+    void onActionShowHome();
 
 private:
+    void loadBackend(KNMusicStoreBackend *backend);
+
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;
     QScrollArea *m_storeSwitcher;
@@ -76,6 +86,8 @@ private:
     KNMusicStoreSearchResultWidget *m_searchResult;
     KNMusicStoreListWidget *m_list;
     KNMusicStoreSingleSongWidget *m_singleSong;
+    KNMusicStoreEmptyWidget *m_emptyWidget;
+    KNMusicStoreBackend *m_backend;
 };
 
 #endif // KNMUSICSTORE_H

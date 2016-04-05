@@ -15,12 +15,48 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
+
+#include "knthememanager.h"
+
+#include "knmusicstoresearchmodel.h"
+#include "knmusicstoreglobal.h"
+#include "knmusicstoreutil.h"
+#include "knmusicstorebackend.h"
+#include "knmusicstorealbumtreeview.h"
 
 #include "knmusicstoresearchresultwidget.h"
 
 KNMusicStoreSearchResultWidget::KNMusicStoreSearchResultWidget(QWidget *parent):
-    QWidget(parent)
+    QWidget(parent),
+    m_songTreeView(new KNMusicStoreAlbumTreeView(this))
 {
+    setObjectName("MusicStoreWidget");
+    //Set properties.
+    setAutoFillBackground(true);
+    setFixedWidth(knMusicStoreGlobal->storeContentWidth());
+    //Register this widget to theme manager.
+    knTheme->registerWidget(this);
 
+    //Configure the song view.
+    m_songTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_songTreeView->updateObjectName("MusicStoreAlbumView");
+
+    QBoxLayout *test=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    setLayout(test);
+    test->addWidget(m_songTreeView);
+}
+
+void KNMusicStoreSearchResultWidget::setBackend(KNMusicStoreBackend *backend)
+{
+    //Check backend pointer first.
+    if(backend==nullptr)
+    {
+        //Ignore the pointer.
+        return;
+    }
+    //Get the model, set the search model to the specific view.
+    m_songTreeView->setModel(
+                backend->searchResultModel(KNMusicStoreUtil::CategorySong));
 }
 

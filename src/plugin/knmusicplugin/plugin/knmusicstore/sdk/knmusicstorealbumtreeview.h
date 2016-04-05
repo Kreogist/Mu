@@ -41,8 +41,6 @@ public:
      */
     void updateObjectName(const QString &name);
 
-    void setModel(QAbstractItemModel *model);
-
 signals:
 
 public slots:

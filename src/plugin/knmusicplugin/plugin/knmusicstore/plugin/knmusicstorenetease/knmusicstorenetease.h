@@ -21,6 +21,8 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QJsonObject>
 #include <QNetworkRequest>
+#include <QFutureWatcher>
+#include <QMutex>
 
 #include "../../sdk/knmusicstoreutil.h"
 
@@ -79,13 +81,18 @@ public:
      */
     KNMusicStoreSongDetailInfo *getSongDetail() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBackend::searchResultModel().
+     */
+    KNMusicStoreSearchModel *searchResultModel(int index) Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
     /*!
      * \brief Reimplemented from KNMusicStoreBackend::fetchHomeWidgetInfo().
      */
-    void fetchHomeWidgetInfo() Q_DECL_OVERRIDE;
+    void fetchHomeInfo() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicStoreBackend::fetchAlbumDetail().
@@ -102,27 +109,33 @@ public slots:
      */
     void fetchSearchResult(const QString &keyword) Q_DECL_OVERRIDE;
 
+private:
+    struct SearchRequest
+    {
+        int type;
+        int offset;
+        QString keyword;
+        QList<int> filter;
+    };
+
+    enum SearchResultField
+    {
+        NameField,
+        ArtistField,
+        AlbumField,
+        DurationField,
+        SearchResultFieldCount
+    };
+
 private slots:
     void updateLatestAlbumsList();
     void updateNeteaseList(QPointer<KNMusicStoreAlbumListModel> model,
                            const QString &listNo);
     void updateSearchResult(QPointer<KNMusicStoreSearchModel> model,
-                            const QString &keyword,
-                            int type,
-                            int offset);
+                            const SearchRequest &request);
+    void onActionWatcherFinished();
 
 private:
-    inline QNetworkRequest generateNeteaseRequest(const QString &url);
-    inline QJsonObject getSongDetails(KNRestApiBase *curl,
-                                      const QString &songId);
-    inline QPixmap generateAlbumArt(const QByteArray &albumArtData,
-                                    int width=StoreAlbumSize,
-                                    int height=StoreAlbumSize);
-    inline QString encryptedId(const QString &songId);
-    inline void setDownloadUrl(const QJsonObject &songItem,
-                               QString &urlOnline,
-                               QString &urlHigh,
-                               QString &urlLossless);
     enum NeteaseLists
     {
         BillboardList,
@@ -136,16 +149,33 @@ private:
         HotSongList,
         NeteaseWorkThreadCount
     };
+    inline void quitHomeThreads();
+    inline QNetworkRequest generateNeteaseRequest(const QString &url);
+    inline QJsonObject getSongDetails(KNRestApiBase *curl,
+                                      const QString &songId);
+    inline QPixmap generateAlbumArt(const QByteArray &albumArtData,
+                                    int width=StoreAlbumSize,
+                                    int height=StoreAlbumSize);
+    inline QString encryptedId(const QString &songId);
+    inline void setDownloadUrl(const QJsonObject &songItem,
+                               QString &urlOnline,
+                               QString &urlHigh,
+                               QString &urlLossless);
+    inline QString getArtistNames(const QJsonObject &songData);
+    inline QString getDuration(const QJsonObject &songData);
 
-    QFuture<void> m_listThreads[NeteaseListCount+2],
+    QFuture<void> m_listThreads[NeteaseWorkThreadCount],
                   m_searchThreads[KNMusicStoreUtil::StoreSearchCategoryCount];
+    QFutureWatcher<void> m_listThreadWatcher[NeteaseWorkThreadCount];
     QByteArray m_magicData;
-    int m_magicDataLength;
+    QMutex m_homeFeteching;
+    int m_magicDataLength, m_homeLocking;
     KNMusicStoreAlbumListModel *m_listModel[NeteaseListCount];
     KNMusicStoreAlbumListModel *m_newAlbumModel, *m_hotSongModel;
     KNMusicStoreAlbumModel *m_albumDetail;
     KNMusicStoreSongDetailInfo *m_songDetail;
     KNMusicStoreSearchResult *m_searchResult;
+    bool m_launching;
 };
 
 #endif // KNMUSICSTORENETEASE_H

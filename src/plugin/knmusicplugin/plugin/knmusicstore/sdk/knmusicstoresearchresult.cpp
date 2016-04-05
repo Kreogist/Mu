@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knlocalemanager.h"
+
 #include "knmusicstoresearchmodel.h"
 
 #include "knmusicstoresearchresult.h"
@@ -28,6 +30,10 @@ KNMusicStoreSearchResult::KNMusicStoreSearchResult(QObject *parent) :
         //Generate the model.
         m_searchResults[i]=new KNMusicStoreSearchModel(this);
     }
+
+    //Link the locale manager.
+    knI18n->link(this, &KNMusicStoreSearchResult::retranslate);
+    retranslate();
 }
 
 KNMusicStoreSearchModel *KNMusicStoreSearchResult::searchResultModel(
@@ -36,4 +42,18 @@ KNMusicStoreSearchModel *KNMusicStoreSearchResult::searchResultModel(
     Q_ASSERT(index>-1 && index<KNMusicStoreUtil::StoreSearchCategoryCount);
     //Give back the pointer.
     return m_searchResults[index];
+}
+
+void KNMusicStoreSearchResult::retranslate()
+{
+    //Prepare the string list.
+    QStringList songColumn, artistColumn, albumColumn;
+    //Update song model column title text.
+    songColumn.append(tr("Name"));
+    songColumn.append(tr("Artist"));
+    songColumn.append(tr("Album"));
+    songColumn.append(tr("Duration"));
+    //Set the data to search result.
+    m_searchResults[KNMusicStoreUtil::CategorySong]->setColumnFieldNames(
+                songColumn);
 }
