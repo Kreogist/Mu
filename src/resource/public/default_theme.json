@@ -11,6 +11,10 @@
         "Window" : "#202020",
         "WindowText" : "#9D9D9D"
     },
+    "MusicStoreTitle" : {
+        "Parent" : "MusicStoreWidget",
+        "Window" : "#252525"
+    },
     "MusicStoreTextLabel" :{
         "Parent" : "MusicStoreWidget",
         "WindowText" : "#FFFFFF"

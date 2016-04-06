@@ -64,9 +64,13 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
         m_blockTitle[i]=new QLabel(this);
         //Set the title as the music store widget.
         m_blockTitle[i]->setObjectName("MusicStoreWidget");
-        knTheme->registerWidget(m_blockTitle[i]);
         //Configure the title.
+        knTheme->registerWidget(m_blockTitle[i]);
         m_blockTitle[i]->setFont(titleFont);
+        m_blockTitle[i]->setContentsMargins(StoreAlbumShadow,
+                                            0,
+                                            StoreAlbumShadow,
+                                            0);
     }
     //Initial the layouts.
     QBoxLayout *bodyLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -113,6 +117,10 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
         QLabel *listTitle=new QLabel(this);
         //Configure the list title.
         listTitle->setFont(titleFont);
+        listTitle->setContentsMargins(StoreAlbumShadow,
+                                      0,
+                                      StoreAlbumShadow,
+                                      0);
         //Save the label.
         m_listNames.append(listTitle);
         //Add the label to the list layout.

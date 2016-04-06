@@ -20,6 +20,9 @@
 
 #include <QAbstractItemView>
 
+#define StoreAlbumShadow 15
+
+class QScrollBar;
 class KNHighLightLabel;
 class KNSideShadowWidget;
 class KNMusicStoreAlbumListModel;
@@ -137,12 +140,16 @@ protected slots:
      */
     void updateGeometries() Q_DECL_OVERRIDE;
 
+private slots:
+    void onActionUpdateOpacity(int value);
+
 private:
     inline int indexScrollBarValue(const QModelIndex &index,
                                    QAbstractItemView::ScrollHint hint);
     inline QRect itemContentRect(const QModelIndex &index) const;
 
     QPersistentModelIndex m_pressedIndex;
+    QScrollBar *m_scrollBar;
     KNMusicStoreAlbumListModel *m_model;
     KNSideShadowWidget *m_leftShadow, *m_rightShadow;
     int m_itemHeight;

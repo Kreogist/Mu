@@ -33,11 +33,11 @@
 
 #define StoreAlbumArtTextSpacing 5
 #define StoreAlbumSpacing 20
-#define StoreAlbumShadow 15
 #define StoreAlbumTopSpacing 8
 
 KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     QAbstractItemView(parent),
+    m_scrollBar(new QScrollBar(Qt::Horizontal, this)),
     m_model(nullptr),
     m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow, this)),
     m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
@@ -48,21 +48,38 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     //Set properties.
     setFrameStyle(QFrame::NoFrame);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //Add to theme manager.
     knTheme->registerWidget(this);
     //Configure the horizontal scroll bar.
-    KNSaoStyle::styleHorizontalScrollBar(horizontalScrollBar());
+    KNSaoStyle::styleHorizontalScrollBar(m_scrollBar);
+    //Link the scroll bar.
+    connect(horizontalScrollBar(), &QScrollBar::valueChanged,
+            this, &KNMusicStoreAlbumList::onActionUpdateOpacity);
+    connect(m_scrollBar, &QScrollBar::valueChanged,
+            horizontalScrollBar(), &QScrollBar::setValue);
     //Update item height.
     m_itemHeight=StoreAlbumSize + (StoreAlbumArtTextSpacing << 1) +
                  fontMetrics().height() * 3 +
                  KNSaoStyle::scrollBarWidth();
     //Set the fixed size of the album list.
     setFixedHeight(StoreAlbumTopSpacing + m_itemHeight);
+    //Update the page and single step.
+    int albumFullWidth=(StoreAlbumSize + StoreAlbumSpacing);
+    horizontalScrollBar()->setPageStep(albumFullWidth);
+    horizontalScrollBar()->setSingleStep(albumFullWidth>>1);
+    //Update the visible scroll bar page and single step.
+    m_scrollBar->setPageStep(albumFullWidth);
+    m_scrollBar->setSingleStep(albumFullWidth>>1);
+    //Configure the scroll bar.
+    m_scrollBar->move(StoreAlbumShadow, m_itemHeight);
+    m_scrollBar->setFixedHeight(StoreAlbumTopSpacing);
 
     //Configure left and right shadow.
-    m_leftShadow->setFixedSize(StoreAlbumShadow, m_itemHeight);
-    m_rightShadow->setFixedSize(StoreAlbumShadow, m_itemHeight);
+    m_leftShadow->setFixedSize(StoreAlbumShadow, height());
+    m_rightShadow->setFixedSize(StoreAlbumShadow, height());
+    //Change the opacity 0.
+    onActionUpdateOpacity(0);
 }
 
 QModelIndex KNMusicStoreAlbumList::indexAt(const QPoint &point) const
@@ -73,13 +90,17 @@ QModelIndex KNMusicStoreAlbumList::indexAt(const QPoint &point) const
         //Give a null index.
         return QModelIndex();
     }
-    //Calculate the X of the content.
+        //Calculate the X of the content.
     int pointContentX=horizontalScrollBar()->value() + point.x(),
-    //Calculate which album this point is locate on.
-        albumIndex=pointContentX/(StoreAlbumSize + StoreAlbumSpacing);
+        //Calculate which album this point is locate on.
+        albumIndex=pointContentX/(StoreAlbumSize + StoreAlbumSpacing),
+        //Calculate the clicked position.
+        clickedPosition=
+            pointContentX - albumIndex * (StoreAlbumSize + StoreAlbumSpacing);
     //Check whether the point is click on space or album itself.
-    return (pointContentX-albumIndex*(StoreAlbumSize + StoreAlbumSpacing) <
-            StoreAlbumSize) && (albumIndex<m_model->rowCount()) &&
+    return (clickedPosition > StoreAlbumSpacing) &&
+            (clickedPosition < StoreAlbumSpacing + StoreAlbumSize) &&
+            (albumIndex<m_model->rowCount()) &&
             (point.y() > StoreAlbumTopSpacing) ?
                 m_model->index(albumIndex, 0) : QModelIndex();
 }
@@ -158,7 +179,7 @@ void KNMusicStoreAlbumList::paintEvent(QPaintEvent *event)
     int currentModelRow=horizontalScrollBar()->value() /
                         (StoreAlbumSize + StoreAlbumSpacing),
         currentX=currentModelRow * (StoreAlbumSize + StoreAlbumSpacing) -
-            horizontalScrollBar()->value();
+            horizontalScrollBar()->value() + StoreAlbumSpacing;
     //Get the text color.
     static QColor textColor=palette().color(QPalette::Text),
                   artistColor=textColor;
@@ -220,8 +241,11 @@ void KNMusicStoreAlbumList::resizeEvent(QResizeEvent *event)
     //Resize the widget.
     QAbstractItemView::resizeEvent(event);
     //Move the right.
-    m_rightShadow->move(width()-m_rightShadow->width(),
+    m_rightShadow->move(width()-StoreAlbumShadow,
                         0);
+    //Resize the scroll bar.
+    m_scrollBar->resize(width()-(StoreAlbumShadow<<1),
+                        m_scrollBar->height());
 }
 
 QModelIndex KNMusicStoreAlbumList::moveCursor(
@@ -287,19 +311,32 @@ void KNMusicStoreAlbumList::updateGeometries()
     if(!m_model)
     {
         //Reset the range.
+        m_scrollBar->setRange(0, 0);
         horizontalScrollBar()->setRange(0, 0);
         return;
     }
     //Update the range of the vertical scroll bar.
-    horizontalScrollBar()->setRange(0,
-                                    qMax(0,
-                                         (StoreAlbumSize + StoreAlbumSpacing) *
-                                         m_model->rowCount() - width() -
-                                         StoreAlbumSpacing));
-    //Update the page and single step.
-    int albumFullWidth=(StoreAlbumSize + StoreAlbumSpacing);
-    horizontalScrollBar()->setPageStep(albumFullWidth);
-    horizontalScrollBar()->setSingleStep(albumFullWidth>>1);
+    m_scrollBar->setRange(0,
+                          qMax(0,
+                               (StoreAlbumSize + StoreAlbumSpacing) *
+                               m_model->rowCount() - width() +
+                               StoreAlbumSpacing));
+    horizontalScrollBar()->setRange(m_scrollBar->minimum(),
+                                    m_scrollBar->maximum());
+}
+
+void KNMusicStoreAlbumList::onActionUpdateOpacity(int value)
+{
+    //Update the opacity according to value.
+    // Left Darkness.
+    m_leftShadow->setDarkness((value>70)?70:value);
+    // Right Darkness.
+    int rightDarkness=m_scrollBar->maximum()-value;
+    m_rightShadow->setDarkness((rightDarkness>70)?70:rightDarkness);
+    //Update scroll bar value.
+    m_scrollBar->blockSignals(true);
+    m_scrollBar->setValue(value);
+    m_scrollBar->blockSignals(false);
 }
 
 inline int KNMusicStoreAlbumList::indexScrollBarValue(

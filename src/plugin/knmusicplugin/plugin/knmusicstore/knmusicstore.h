@@ -23,8 +23,10 @@
 
 #include "knmusicstorebase.h"
 
+class QLabel;
 class KNCategoryTab;
-class QScrollArea;
+class KNMusicStoreContainer;
+class KNMusicStoreTitleBar;
 class KNMusicStoreBackend;
 class KNMusicStoreGlobal;
 class KNMusicStoreHomeWidget;
@@ -82,10 +84,12 @@ private:
     void loadBackend(KNMusicStoreBackend *backend);
 
     inline void showWidget(QWidget *widget);
+    inline QLabel *generateBulletWidget();
 
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;
-    QScrollArea *m_storeSwitcher;
+    KNMusicStoreTitleBar *m_titleBar;
+    KNMusicStoreContainer *m_storeSwitcher;
     KNMusicStoreHomeWidget *m_home;
     KNMusicStoreSearchResultWidget *m_searchResult;
     KNMusicStoreListWidget *m_list;

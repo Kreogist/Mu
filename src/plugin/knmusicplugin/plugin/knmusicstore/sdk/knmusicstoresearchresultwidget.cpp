@@ -18,6 +18,8 @@
 #include <QBoxLayout>
 
 #include "knthememanager.h"
+#include "knlocalemanager.h"
+#include "knanimelabelbutton.h"
 
 #include "knmusicstoresearchmodel.h"
 #include "knmusicstoreglobal.h"
@@ -29,6 +31,8 @@
 
 KNMusicStoreSearchResultWidget::KNMusicStoreSearchResultWidget(QWidget *parent):
     QWidget(parent),
+    m_bulletWidget(nullptr),
+    m_headerLabel(new KNAnimeLabelButton(this)),
     m_songTreeView(new KNMusicStoreAlbumTreeView(this))
 {
     setObjectName("MusicStoreWidget");
@@ -41,6 +45,8 @@ KNMusicStoreSearchResultWidget::KNMusicStoreSearchResultWidget(QWidget *parent):
     //Configure the song view.
     m_songTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_songTreeView->updateObjectName("MusicStoreAlbumView");
+    //Configure the header label.
+    m_headerLabel->hide();
 
     QBoxLayout *test=new QBoxLayout(QBoxLayout::LeftToRight, this);
     setLayout(test);
@@ -55,8 +61,35 @@ void KNMusicStoreSearchResultWidget::setBackend(KNMusicStoreBackend *backend)
         //Ignore the pointer.
         return;
     }
+    //Save the backend.
+    m_backend=backend;
     //Get the model, set the search model to the specific view.
     m_songTreeView->setModel(
-                backend->searchResultModel(KNMusicStoreUtil::CategorySong));
+                m_backend->searchResultModel(KNMusicStoreUtil::CategorySong));
+    //Link the backend with the signal.
+}
+
+void KNMusicStoreSearchResultWidget::retranslate()
+{
+    //Update the label text.
+    m_headerLabel->setText(tr("Search %1").arg(""));
+}
+
+void KNMusicStoreSearchResultWidget::onActionSearchComplete()
+{
+    ;
+}
+
+void KNMusicStoreSearchResultWidget::setBulletWidget(QLabel *bulletWidget)
+{
+    //Set the bullet widget.
+    m_bulletWidget = bulletWidget;
+    //Hide the bullet widget.
+    m_bulletWidget->hide();
+}
+
+KNAnimeLabelButton *KNMusicStoreSearchResultWidget::headerLabel()
+{
+    return m_headerLabel;
 }
 

@@ -15,39 +15,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knsideshadowwidget.h"
 
-#include "knmusicstoreglobal.h"
+#include "knmusicstorecontainer.h"
 
-KNMusicStoreGlobal *KNMusicStoreGlobal::m_instance=nullptr;
+#define ShadowSize 15
 
-KNMusicStoreGlobal *KNMusicStoreGlobal::instance()
+KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
+    QScrollArea(parent),
+    m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
+                                       this))
 {
-    return m_instance;
 }
 
-KNMusicStoreGlobal *KNMusicStoreGlobal::initial(QObject *parent)
+void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
 {
-    //Check instance pointer.
-    if(m_instance==nullptr)
-    {
-        //Initial the instance.
-        m_instance=new KNMusicStoreGlobal(parent);
-    }
-    //Give back the instance.
-    return m_instance;
-}
-
-int KNMusicStoreGlobal::storeContentWidth() const
-{
-    return 980;
-}
-
-int KNMusicStoreGlobal::storeHeaderLabelWidth() const
-{
-    return 130;
-}
-
-KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
-    QObject(parent)
-{
+    //Resize the widget.
+    QScrollArea::resizeEvent(event);
+    //Resize the scroll bar.
+    m_topShadow->resize(width(), ShadowSize);
 }

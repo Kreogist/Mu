@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class QLabel;
+class KNAnimeLabelButton;
 class KNMusicStoreAlbumTreeView;
 class KNMusicStoreBackend;
 /*!
@@ -37,6 +39,18 @@ public:
      */
     explicit KNMusicStoreSearchResultWidget(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the title label of the search result.
+     * \return The search result.
+     */
+    KNAnimeLabelButton *headerLabel();
+
+    /*!
+     * \brief setBullectWidget
+     * \param bullectWidget
+     */
+    void setBulletWidget(QLabel *bulletWidget);
+
 signals:
 
 public slots:
@@ -46,7 +60,14 @@ public slots:
      */
     void setBackend(KNMusicStoreBackend *backend);
 
+private slots:
+    void retranslate();
+    void onActionSearchComplete();
+
 private:
+    QLabel *m_bulletWidget;
+    KNMusicStoreBackend *m_backend;
+    KNAnimeLabelButton *m_headerLabel;
     KNMusicStoreAlbumTreeView *m_songTreeView;
 };
 

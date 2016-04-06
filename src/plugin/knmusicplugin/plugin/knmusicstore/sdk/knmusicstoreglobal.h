@@ -53,6 +53,12 @@ public:
      */
     int storeContentWidth() const;
 
+    /*!
+     * \brief Get the maximum header label size.
+     * \return The maximum header label width.
+     */
+    int storeHeaderLabelWidth() const;
+
 signals:
 
 public slots:

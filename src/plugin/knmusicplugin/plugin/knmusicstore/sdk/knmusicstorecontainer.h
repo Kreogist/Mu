@@ -15,39 +15,38 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KNMUSICSTORECONTAINER_H
+#define KNMUSICSTORECONTAINER_H
 
-#include "knmusicstoreglobal.h"
+#include <QScrollArea>
 
-KNMusicStoreGlobal *KNMusicStoreGlobal::m_instance=nullptr;
-
-KNMusicStoreGlobal *KNMusicStoreGlobal::instance()
+class KNSideShadowWidget;
+/*!
+ * \brief The KNMusicStoreContainer class provides the scroll area for the store
+ * widgets.
+ */
+class KNMusicStoreContainer : public QScrollArea
 {
-    return m_instance;
-}
+    Q_OBJECT
+public:
+    /*!
+     * \brief Construct a KNMusicStoreContainer widget.
+     * \param parent The parent widget.
+     */
+    explicit KNMusicStoreContainer(QWidget *parent = 0);
 
-KNMusicStoreGlobal *KNMusicStoreGlobal::initial(QObject *parent)
-{
-    //Check instance pointer.
-    if(m_instance==nullptr)
-    {
-        //Initial the instance.
-        m_instance=new KNMusicStoreGlobal(parent);
-    }
-    //Give back the instance.
-    return m_instance;
-}
+signals:
 
-int KNMusicStoreGlobal::storeContentWidth() const
-{
-    return 980;
-}
+public slots:
 
-int KNMusicStoreGlobal::storeHeaderLabelWidth() const
-{
-    return 130;
-}
+protected:
+    /*!
+     * \brief Reimplemented from QScrollArea::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
-KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
-    QObject(parent)
-{
-}
+private:
+    KNSideShadowWidget *m_topShadow;
+};
+
+#endif // KNMUSICSTORECONTAINER_H

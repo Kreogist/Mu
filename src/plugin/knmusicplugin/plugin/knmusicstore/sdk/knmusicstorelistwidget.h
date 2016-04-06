@@ -24,6 +24,7 @@
 #include <QWidget>
 
 class QLabel;
+class KNAnimeLabelButton;
 class KNHighLightLabel;
 class KNMusicStoreBackend;
 class KNMusicStoreAlbumModel;
@@ -41,6 +42,18 @@ public:
      * \param parent The parent widget.
      */
     explicit KNMusicStoreListWidget(QWidget *parent = 0);
+
+    /*!
+     * \brief Get the header label.
+     * \return The header label pointer.
+     */
+    KNAnimeLabelButton *headerLabel();
+
+    /*!
+     * \brief Set the bullet widget to list widget.
+     * \param bulletWidget The bullet widget pointer.
+     */
+    void setBulletWidget(QLabel *bulletWidget);
 
 signals:
     /*!
@@ -70,7 +83,8 @@ private:
         PropertyCount
     };
     QLabel *m_properties[PropertyCount], *m_propertiesLabel[PropertyCount],
-            *m_titleLabel;
+            *m_titleLabel, *m_bulletWidget;
+    KNAnimeLabelButton *m_headerLabel;
     KNHighLightLabel *m_albumArt;
     KNMusicStoreAlbumModel *m_albumDetailModel;
     KNMusicStoreAlbumTreeView *m_albumSongView;
