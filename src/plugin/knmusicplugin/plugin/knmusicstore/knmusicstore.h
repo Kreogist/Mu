@@ -21,10 +21,13 @@
 
 #include <QModelIndex>
 
+#include "sdk/knmusicstoreutil.h"
+
 #include "knmusicstorebase.h"
 
 class QLabel;
 class KNCategoryTab;
+class KNMusicStorePanel;
 class KNMusicStoreContainer;
 class KNMusicStoreTitleBar;
 class KNMusicStoreBackend;
@@ -76,24 +79,18 @@ protected:
 
 private slots:
     void retranslate();
-    void onActionShowHome();
-    void onActionShowList();
-    void onActionShowSongDetail();
+    void onActionShowPanel(int category);
 
 private:
     void loadBackend(KNMusicStoreBackend *backend);
 
     inline void showWidget(QWidget *widget);
-    inline QLabel *generateBulletWidget();
 
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;
     KNMusicStoreTitleBar *m_titleBar;
     KNMusicStoreContainer *m_storeSwitcher;
-    KNMusicStoreHomeWidget *m_home;
-    KNMusicStoreSearchResultWidget *m_searchResult;
-    KNMusicStoreListWidget *m_list;
-    KNMusicStoreSingleSongWidget *m_singleSong;
+    KNMusicStorePanel *m_panels[KNMusicStoreUtil::StorePanelCount];
     KNMusicStoreEmptyWidget *m_emptyWidget;
     KNMusicStoreBackend *m_backend;
 };

@@ -460,7 +460,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreemptywidget.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoretitlebar.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorecontainer.cpp \
-    sdk/knanimelabelbutton.cpp
+    sdk/knanimelabelbutton.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepanel.cpp \
+    sdk/kndarkwaitingwheel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -711,7 +713,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreemptywidget.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoretitlebar.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorecontainer.h \
-    sdk/knanimelabelbutton.h
+    sdk/knanimelabelbutton.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepanel.h \
+    sdk/kndarkwaitingwheel.h
 
 RESOURCES += \
     resource/res.qrc

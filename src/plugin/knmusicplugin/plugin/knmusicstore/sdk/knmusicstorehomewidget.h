@@ -20,9 +20,8 @@
 #define KNMUSICSTOREHOMEWIDGET_H
 
 #include <QList>
-#include <QVariant>
 
-#include <QWidget>
+#include "knmusicstorepanel.h"
 
 class QBoxLayout;
 class QLabel;
@@ -32,7 +31,7 @@ class KNMusicStoreBackend;
  * \brief The KNMusicStoreHomeWidget class is used to show the homepage image
  * and song information from the backend.
  */
-class KNMusicStoreHomeWidget : public QWidget
+class KNMusicStoreHomeWidget : public KNMusicStorePanel
 {
     Q_OBJECT
 public:
@@ -43,24 +42,12 @@ public:
     explicit KNMusicStoreHomeWidget(QWidget *parent = 0);
 
 signals:
-    /*!
-     * \brief Ask to show the album with the given album Id.
-     * \param albumId The album index.
-     */
-    void requireShowAlbum(QVariant albumId);
-
-    /*!
-     * \brief Ask to show the song detail info with the given song Id.
-     * \param songId The song index.
-     */
-    void requireShowSong(QVariant songId);
 
 public slots:
     /*!
-     * \brief Set backend to home widget.
-     * \param backend The music store backend.
+     * \brief Reimplemented from KNMusicStorePanel::setBackend().
      */
-    void setBackend(KNMusicStoreBackend *backend);
+    void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
 
 protected:
 

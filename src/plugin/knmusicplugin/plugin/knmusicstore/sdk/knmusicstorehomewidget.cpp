@@ -34,7 +34,7 @@
 #define ContentSpacing 6
 
 KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
-    QWidget(parent),
+    KNMusicStorePanel(parent),
     m_newMusicList(new KNMusicStoreAlbumList(this)),
     m_hotTracks(new KNMusicStoreAlbumList(this)),
     m_backend(nullptr),
@@ -47,7 +47,12 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
     //Register this widget to theme manager.
     knTheme->registerWidget(this);
 
-    //Link the widget signal.
+    //Link the activity notification signal.
+    connect(m_newMusicList, &KNMusicStoreAlbumList::albumClick,
+            this, &KNMusicStoreHomeWidget::startNetworkActivity);
+    connect(m_hotTracks, &KNMusicStoreAlbumList::albumClick,
+            this, &KNMusicStoreHomeWidget::startNetworkActivity);
+    //Link the request signal.
     connect(m_newMusicList, &KNMusicStoreAlbumList::albumClick,
             this, &KNMusicStoreHomeWidget::requireShowAlbum);
     connect(m_hotTracks, &KNMusicStoreAlbumList::albumClick,
@@ -115,6 +120,10 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
     {
         //Initial the list title.
         QLabel *listTitle=new QLabel(this);
+        //Set the title as the music store widget.
+        listTitle->setObjectName("MusicStoreWidget");
+        //Configure the title.
+        knTheme->registerWidget(listTitle);
         //Configure the list title.
         listTitle->setFont(titleFont);
         listTitle->setContentsMargins(StoreAlbumShadow,
@@ -133,6 +142,8 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
         //Link the list view to show song info.
         connect(listView, &KNMusicStoreAlbumList::albumClick,
                 this, &KNMusicStoreHomeWidget::requireShowSong);
+        connect(listView, &KNMusicStoreAlbumList::albumClick,
+                this, &KNMusicStoreHomeWidget::startNetworkActivity);
         //Configure the list view.
         listView->setModel(m_backend->listModel(i));
         //Add list view to layout.

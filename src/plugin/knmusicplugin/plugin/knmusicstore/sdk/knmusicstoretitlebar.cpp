@@ -19,8 +19,10 @@
 
 #include "knanimelabelbutton.h"
 #include "knlocalemanager.h"
+#include "kndarkwaitingwheel.h"
 
 #include "knmusicstoreglobal.h"
+#include "knmusicstoreutil.h"
 
 #include "knmusicstoretitlebar.h"
 
@@ -29,11 +31,14 @@
 KNMusicStoreTitleBar::KNMusicStoreTitleBar(QWidget *parent) :
     KNMouseSenseWidget(parent),
     m_buttonLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
-    m_homeButton(new KNAnimeLabelButton(this))
+    m_homeButton(new KNAnimeLabelButton(this)),
+    m_networkState(new KNDarkWaitingWheel(this))
 {
     updateObjectName("MusicStoreTitle");
     //Set properties.
     setFixedHeight(TitleBarHeight);
+    //Configure state widgets.
+    m_networkState->hide();
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -53,6 +58,8 @@ KNMusicStoreTitleBar::KNMusicStoreTitleBar(QWidget *parent) :
     containerLayout->addStretch();
     //Add the label to the layout.
     m_buttonLayout->addWidget(m_homeButton);
+    //Add state widget to container layout.
+    containerLayout->addWidget(m_networkState);
 
     //Link translator.
     knI18n->link(this, &KNMusicStoreTitleBar::retranslate);
@@ -70,15 +77,49 @@ void KNMusicStoreTitleBar::appendLabel(QWidget *indicator,
     m_buttonLayout->addWidget(label);
 }
 
+void KNMusicStoreTitleBar::setStatesButton(int state, bool value)
+{
+    switch(state)
+    {
+    case KNMusicStoreUtil::StateNetwork:
+        //Show and start the value.
+        if(value)
+        {
+            //Start and show the icon.
+            m_networkState->show();
+            m_networkState->startTick();
+        }
+        else
+        {
+            //Stop and hide the icon.
+            m_networkState->hide();
+            m_networkState->stopTick();
+        }
+        break;
+    default:
+        break;
+    }
+}
+
 void KNMusicStoreTitleBar::retranslate()
 {
     //Update the home button label.
     m_homeButton->setText(tr("Store"));
 }
 
-void KNMusicStoreTitleBar::onActionLabelPress(int index)
+void KNMusicStoreTitleBar::setNavigationLevel(int index)
 {
-    //Show hide the labels after the index.
+    //Show the label. Because there's no home label, the target label will be
+    //index-1.
+    int targetIndex=index-1;
+    //Chekc the target index validation.
+    if(targetIndex>0)
+    {
+        //Show the widget and indicator.
+        m_indicatorStack.at(targetIndex)->show();
+        m_labelStack.at(targetIndex)->show();
+    }
+    //Hide the labels after the index.
     for(int i=index; i<m_indicatorStack.size(); ++i)
     {
         //Hide the widget and indicator.

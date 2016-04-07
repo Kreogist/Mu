@@ -18,6 +18,8 @@
 #ifndef KNMUSICSTOREBACKEND_H
 #define KNMUSICSTOREBACKEND_H
 
+#include "knmusicstoreutil.h"
+
 #include <QObject>
 
 class KNMusicStoreAlbumModel;
@@ -93,22 +95,12 @@ public:
 
 signals:
     /*!
-     * \brief When home information has been fetched complete, this signal will
-     * be emitted.
+     * \brief When any kinds of information has been fetched complete, this
+     * signal will be emitted.
+     * \param category The category type. It should be one of the
+     * KNMusicStoreUtil::StorePanels.
      */
-    void homeFetchComplete();
-
-    /*!
-     * \brief When the album information has been fetchde complete, this signal
-     * will be emitted.
-     */
-    void albumFetchComplete();
-
-    /*!
-     * \brief When the song information has been fetchde complete, this signal
-     * will be emitted.
-     */
-    void songFetchComplete();
+    void fetchComplete(int category);
 
 public slots:
     /*!

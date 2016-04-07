@@ -22,6 +22,7 @@
 
 class QBoxLayout;
 class QSignalMapper;
+class KNDarkWaitingWheel;
 class KNAnimeLabelButton;
 /*!
  * \brief The KNMusicStoreTitleBar class provides a header of all the title
@@ -47,16 +48,29 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set the state button to display the specific value.
+     * \param state The state index.
+     * \param value The state display value.
+     */
+    void setStatesButton(int state, bool value);
+
+    /*!
+     * \brief Set the navigation label visible about the index.
+     * \param index The index of the label.
+     */
+    void setNavigationLevel(int index);
 
 private slots:
     void retranslate();
-    void onActionLabelPress(int index);
 
 private:
     QList<QWidget *> m_indicatorStack;
     QList<KNAnimeLabelButton *> m_labelStack;
     QBoxLayout *m_buttonLayout;
     KNAnimeLabelButton *m_homeButton;
+
+    KNDarkWaitingWheel *m_networkState;
 };
 
 #endif // KNMUSICSTORETITLEBAR_H

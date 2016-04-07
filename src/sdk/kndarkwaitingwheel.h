@@ -16,43 +16,54 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTORESEARCHRESULTWIDGET_H
-#define KNMUSICSTORESEARCHRESULTWIDGET_H
+#ifndef KNDARKWAITINGWHEEL_H
+#define KNDARKWAITINGWHEEL_H
 
-#include "knmusicstorepanel.h"
+#include <QWidget>
 
-class KNAnimeLabelButton;
-class KNMusicStoreAlbumTreeView;
-class KNMusicStoreBackend;
 /*!
- * \brief The KNMusicStoreSearchResultWidget class provide a list to display all
- * the search result from the backend.
+ * \brief The KNDarkWaitingWheel is only the same version as the white
+ * background version.
  */
-class KNMusicStoreSearchResultWidget : public KNMusicStorePanel
+class KNDarkWaitingWheel : public QWidget
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStoreSearchResultWidget widget.
+     * \brief Construct a KNWaitingWheel widget.
      * \param parent The parent widget.
      */
-    explicit KNMusicStoreSearchResultWidget(QWidget *parent = 0);
-
-signals:
+    explicit KNDarkWaitingWheel(QWidget *parent = 0);
 
 public slots:
     /*!
-     * \brief Reimplemented from KNMusicStorePanel::setBackend().
+     * \brief Start the tick animation.
      */
-    void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
+    void startTick();
+
+    /*!
+     * \brief Pause the tick animation.
+     */
+    void pauseTick();
+
+    /*!
+     * \brief Stop the tick animation.
+     */
+    void stopTick();
+
+protected:
+    /*!
+     * \brief Reimplemented from QWidget::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void retranslate();
-    void onActionSearchComplete();
+    void tick();
 
 private:
-    KNMusicStoreBackend *m_backend;
-    KNMusicStoreAlbumTreeView *m_songTreeView;
+    QPixmap m_clockFrames[8];
+    QTimer *m_tickTimer;
+    quint8 m_frameCounter;
 };
 
-#endif // KNMUSICSTORESEARCHRESULTWIDGET_H
+#endif // KNDARKWAITINGWHEEL_H

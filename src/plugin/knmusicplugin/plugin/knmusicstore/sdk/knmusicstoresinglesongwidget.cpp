@@ -23,6 +23,7 @@
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "knanimelabelbutton.h"
+#include "knlabelbutton.h"
 
 #include "knmusicstoreglobal.h"
 #include "knmusicstorebackend.h"
@@ -31,11 +32,9 @@
 #include "knmusicstoresinglesongwidget.h"
 
 KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
-    QWidget(parent),
+    KNMusicStorePanel(parent),
     m_titleLabel(new QLabel(this)),
     m_lyricsLabel(new QLabel(this)),
-    m_bulletWidget(nullptr),
-    m_headerLabel(new KNAnimeLabelButton(this)),
     m_albumArt(new KNHighLightLabel(this)),
     m_songDetail(nullptr)
 {
@@ -54,7 +53,7 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     for(int i=0; i<PropertyCount; ++i)
     {
         //Initial the labels.
-        m_properties[i]=new QLabel(this);
+        m_properties[i]=new KNLabelButton(this);
         m_propertiesLabel[i]=new QLabel(this);
         //Set object name.
         m_propertiesLabel[i]->setObjectName("MusicStoreWidget");
@@ -77,10 +76,6 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     m_titleLabel->setWordWrap(true);
     //Configure the lyrics label.
     m_lyricsLabel->setWordWrap(true);
-    //Configure the header label.
-    m_headerLabel->setMaximumWidth(knMusicStoreGlobal->storeHeaderLabelWidth());
-    //Hide the title.
-    m_headerLabel->hide();
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -101,6 +96,7 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     QFormLayout *metaLayout=new QFormLayout(mainLayout->widget());
     metaLayout->setContentsMargins(0,0,0,0);
     metaLayout->setLabelAlignment(Qt::AlignTop | Qt::AlignRight);
+    metaLayout->setHorizontalSpacing(0);
     metaLayout->setVerticalSpacing(11);
     metaDataLayout->addLayout(metaLayout);
     //Configure meta layout.
@@ -109,6 +105,9 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
                        m_properties[PropertyArtist]);
     metaLayout->addRow(m_propertiesLabel[PropertyAlbum],
                        m_properties[PropertyAlbum]);
+    //Link the album as one button.
+    connect(m_properties[PropertyAlbum], &KNLabelButton::clicked,
+            this, &KNMusicStoreSingleSongWidget::onActionShowAlbum);
     //Add lyrics label.
     metaDataLayout->addWidget(m_lyricsLabel, 3);
 
@@ -127,7 +126,7 @@ void KNMusicStoreSingleSongWidget::setBackend(KNMusicStoreBackend *backend)
         return;
     }
     //Link the update information.
-    connect(backend, &KNMusicStoreBackend::songFetchComplete,
+    connect(backend, &KNMusicStoreBackend::fetchComplete,
             this, &KNMusicStoreSingleSongWidget::onActionDataUpdate);
 }
 
@@ -138,24 +137,25 @@ void KNMusicStoreSingleSongWidget::retranslate()
     m_propertiesLabel[PropertyAlbum]->setText(tr("Album: "));
 }
 
-void KNMusicStoreSingleSongWidget::onActionDataUpdate()
+void KNMusicStoreSingleSongWidget::onActionDataUpdate(int category)
 {
+    //Check category.
+    if(category!=KNMusicStoreUtil::PanelSong)
+    {
+        //Ignore the category if the data is not mine.
+        return;
+    }
     //Update the title.
     m_titleLabel->setText(m_songDetail->songData(
                               KNMusicStoreSongDetailInfo::Name));
     //Update the header label text.
-    m_headerLabel->setText(fontMetrics().elidedText(
+    headerLabel()->setText(fontMetrics().elidedText(
                                m_titleLabel->text(),
                                Qt::ElideRight,
                                knMusicStoreGlobal->storeHeaderLabelWidth()));
     //Show header widget.
-    m_headerLabel->show();
-    //Check the bullet widget.
-    if(m_bulletWidget)
-    {
-        //Show the bullet widget.
-        m_bulletWidget->show();
-    }
+    headerLabel()->show();
+    bulletLabel()->show();
     //Update the album art.
     m_albumArt->setPixmap(m_songDetail->albumArt());
     //Update the content data.
@@ -178,16 +178,17 @@ void KNMusicStoreSingleSongWidget::onActionDataUpdate()
                      217);
 }
 
-void KNMusicStoreSingleSongWidget::setBulletWidget(QLabel *bulletWidget)
+void KNMusicStoreSingleSongWidget::onActionShowAlbum()
 {
-    //Save the widget pointer.
-    m_bulletWidget = bulletWidget;
-    //Hide the widget.
-    m_bulletWidget->hide();
+    //Check detail pointer first.
+    if(!m_songDetail)
+    {
+        //Failed.
+        return;
+    }
+    //Emit the start signal.
+    emit startNetworkActivity();
+    //Emit the show album signal.
+    emit requireShowAlbum(m_songDetail->songData(
+                              KNMusicStoreSongDetailInfo::AlbumId));
 }
-
-KNAnimeLabelButton *KNMusicStoreSingleSongWidget::headerLabel()
-{
-    return m_headerLabel;
-}
-

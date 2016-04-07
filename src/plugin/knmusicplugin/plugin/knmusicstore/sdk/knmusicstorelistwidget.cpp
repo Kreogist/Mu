@@ -34,10 +34,8 @@
 #include "knmusicstorelistwidget.h"
 
 KNMusicStoreListWidget::KNMusicStoreListWidget(QWidget *parent) :
-    QWidget(parent),
+    KNMusicStorePanel(parent),
     m_titleLabel(new QLabel(this)),
-    m_bulletWidget(nullptr),
-    m_headerLabel(new KNAnimeLabelButton(this)),
     m_albumArt(new KNHighLightLabel(this)),
     m_albumDetailModel(nullptr),
     m_albumSongView(new KNMusicStoreAlbumTreeView(this))
@@ -81,8 +79,6 @@ KNMusicStoreListWidget::KNMusicStoreListWidget(QWidget *parent) :
     //Configure the song view.
     m_albumSongView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_albumSongView->updateObjectName("MusicStoreAlbumView");
-    //Hide the title.
-    m_headerLabel->hide();
 
     //Initial the global layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -144,7 +140,7 @@ void KNMusicStoreListWidget::setBackend(KNMusicStoreBackend *backend)
     m_albumSongView->header()->setSectionResizeMode(2, QHeaderView::Fixed);
     m_albumSongView->header()->setSectionResizeMode(3, QHeaderView::Fixed);
     //Link the backend.
-    connect(backend, &KNMusicStoreBackend::albumFetchComplete,
+    connect(backend, &KNMusicStoreBackend::fetchComplete,
             this, &KNMusicStoreListWidget::onActionUpdateInfo);
     connect(m_albumSongView->selectionModel(),
             &QItemSelectionModel::currentChanged,
@@ -154,7 +150,7 @@ void KNMusicStoreListWidget::setBackend(KNMusicStoreBackend *backend)
 void KNMusicStoreListWidget::retranslate()
 {
     //Update the header label.
-    m_headerLabel->setText(fontMetrics().elidedText(
+    headerLabel()->setText(fontMetrics().elidedText(
                                m_titleLabel->text(),
                                Qt::ElideRight,
                                knMusicStoreGlobal->storeHeaderLabelWidth()));
@@ -164,10 +160,10 @@ void KNMusicStoreListWidget::retranslate()
     m_propertiesLabel[PropertyCompany]->setText(tr("Published: "));
 }
 
-void KNMusicStoreListWidget::onActionUpdateInfo()
+void KNMusicStoreListWidget::onActionUpdateInfo(int category)
 {
-    //Check model pointer first.
-    if(m_albumDetailModel==nullptr)
+    //Check model pointer and category first.
+    if(m_albumDetailModel==nullptr || category!=KNMusicStoreUtil::PanelList)
     {
         //Ignore invalid model settings.
         return;
@@ -179,18 +175,13 @@ void KNMusicStoreListWidget::onActionUpdateInfo()
     //Set the label title.
     m_titleLabel->setText(
                 m_albumDetailModel->albumInfo(KNMusicStoreUtil::AlbumTitle));
-    m_headerLabel->setText(fontMetrics().elidedText(
+    headerLabel()->setText(fontMetrics().elidedText(
                                m_titleLabel->text(),
                                Qt::ElideRight,
                                knMusicStoreGlobal->storeHeaderLabelWidth()));
     //Show header widgets.
-    m_headerLabel->show();
-    //Check the bullect widget first.
-    if(m_bulletWidget)
-    {
-        //Show the bullet widget.
-        m_bulletWidget->show();
-    }
+    headerLabel()->show();
+    bulletLabel()->show();
     //Set the content data.
     m_properties[PropertyArtist]->setText(
                 m_albumDetailModel->albumInfo(KNMusicStoreUtil::AlbumArtist));
@@ -222,18 +213,7 @@ void KNMusicStoreListWidget::onActionShowSongInfo(
     {
         //Ask to show the song information.
         emit requireShowSong(m_albumDetailModel->songData(currentIndex));
+        //Ask to start the network activity.
+        emit startNetworkActivity();
     }
-}
-
-void KNMusicStoreListWidget::setBulletWidget(QLabel *bulletWidget)
-{
-    //Save the bullect widget.
-    m_bulletWidget = bulletWidget;
-    //Hide the bullet widget.
-    m_bulletWidget->hide();
-}
-
-KNAnimeLabelButton *KNMusicStoreListWidget::headerLabel()
-{
-    return m_headerLabel;
 }

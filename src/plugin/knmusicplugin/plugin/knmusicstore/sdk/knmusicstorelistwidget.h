@@ -21,10 +21,9 @@
 
 #include <QVariant>
 
-#include <QWidget>
+#include "knmusicstorepanel.h"
 
 class QLabel;
-class KNAnimeLabelButton;
 class KNHighLightLabel;
 class KNMusicStoreBackend;
 class KNMusicStoreAlbumModel;
@@ -33,7 +32,7 @@ class KNMusicStoreAlbumTreeView;
  * \brief The KNMusicStoreListWidget class provides the widget which could
  * display the album data.
  */
-class KNMusicStoreListWidget : public QWidget
+class KNMusicStoreListWidget : public KNMusicStorePanel
 {
     Q_OBJECT
 public:
@@ -43,35 +42,17 @@ public:
      */
     explicit KNMusicStoreListWidget(QWidget *parent = 0);
 
-    /*!
-     * \brief Get the header label.
-     * \return The header label pointer.
-     */
-    KNAnimeLabelButton *headerLabel();
-
-    /*!
-     * \brief Set the bullet widget to list widget.
-     * \param bulletWidget The bullet widget pointer.
-     */
-    void setBulletWidget(QLabel *bulletWidget);
-
 signals:
-    /*!
-     * \brief Ask to show song detail information with given id.
-     * \param songId The song index.
-     */
-    void requireShowSong(QVariant songId);
 
 public slots:
     /*!
-     * \brief Set backend to home widget.
-     * \param backend The music store backend.
+     * \brief Reimplemented from KNMusicStorePanel::setBackend().
      */
-    void setBackend(KNMusicStoreBackend *backend);
+    void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
-    void onActionUpdateInfo();
+    void onActionUpdateInfo(int category);
     void onActionShowSongInfo(const QModelIndex &currentIndex);
 
 private:
@@ -83,8 +64,7 @@ private:
         PropertyCount
     };
     QLabel *m_properties[PropertyCount], *m_propertiesLabel[PropertyCount],
-            *m_titleLabel, *m_bulletWidget;
-    KNAnimeLabelButton *m_headerLabel;
+            *m_titleLabel;
     KNHighLightLabel *m_albumArt;
     KNMusicStoreAlbumModel *m_albumDetailModel;
     KNMusicStoreAlbumTreeView *m_albumSongView;

@@ -19,11 +19,11 @@
 #ifndef KNMUSICSTORESINGLESONGWIDGET_H
 #define KNMUSICSTORESINGLESONGWIDGET_H
 
-#include <QWidget>
+#include "knmusicstorepanel.h"
 
 class QLabel;
 class QBoxLayout;
-class KNAnimeLabelButton;
+class KNLabelButton;
 class KNHighLightLabel;
 class KNMusicStoreBackend;
 class KNMusicStoreSongDetailInfo;
@@ -31,7 +31,7 @@ class KNMusicStoreSongDetailInfo;
  * \brief The KNMusicStoreSingleSongWidget class provides the a widget which
  * could show the song.
  */
-class KNMusicStoreSingleSongWidget : public QWidget
+class KNMusicStoreSingleSongWidget : public KNMusicStorePanel
 {
     Q_OBJECT
 public:
@@ -41,30 +41,18 @@ public:
      */
     explicit KNMusicStoreSingleSongWidget(QWidget *parent = 0);
 
-    /*!
-     * \brief Get the header text label widget pointer.
-     * \return The header label pointer.
-     */
-    KNAnimeLabelButton *headerLabel();
-
-    /*!
-     * \brief Set the bullet widget to list widget.
-     * \param bulletWidget The bullet widget pointer.
-     */
-    void setBulletWidget(QLabel *bulletWidget);
-
 signals:
 
 public slots:
     /*!
-     * \brief Set backend to home widget.
-     * \param backend The music store backend.
+     * \brief Reimplemented from KNMusicStorePanel::setBackend().
      */
-    void setBackend(KNMusicStoreBackend *backend);
+    void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();
-    void onActionDataUpdate();
+    void onActionDataUpdate(int category);
+    void onActionShowAlbum();
 
 private:
     enum PropertyNames
@@ -73,9 +61,9 @@ private:
         PropertyAlbum,
         PropertyCount
     };
-    QLabel *m_properties[PropertyCount], *m_propertiesLabel[PropertyCount],
-            *m_titleLabel, *m_lyricsLabel, *m_bulletWidget;
-    KNAnimeLabelButton *m_headerLabel;
+    QLabel *m_propertiesLabel[PropertyCount],
+            *m_titleLabel, *m_lyricsLabel;
+    KNLabelButton *m_properties[PropertyCount];
     KNHighLightLabel *m_albumArt;
     KNMusicStoreSongDetailInfo *m_songDetail;
 };

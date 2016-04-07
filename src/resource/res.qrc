@@ -72,6 +72,14 @@
         <file>public/waiting/w6.png</file>
         <file>public/waiting/w7.png</file>
         <file>public/bullet.png</file>
+        <file>public/white_waiting/w0.png</file>
+        <file>public/white_waiting/w1.png</file>
+        <file>public/white_waiting/w2.png</file>
+        <file>public/white_waiting/w3.png</file>
+        <file>public/white_waiting/w4.png</file>
+        <file>public/white_waiting/w5.png</file>
+        <file>public/white_waiting/w6.png</file>
+        <file>public/white_waiting/w7.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

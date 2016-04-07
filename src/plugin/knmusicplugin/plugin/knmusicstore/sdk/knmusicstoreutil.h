@@ -24,6 +24,12 @@
 
 #define StoreAlbumSize 140
 
+//! FIXME: Move all the enum and struct here.
+namespace MusicStoreUtil
+{
+;
+}
+
 /*!
  * \brief The KNMusicStoreUtil class provides several public value for music
  * store.
@@ -72,6 +78,21 @@ public:
         QString urlHigh;
         QString urlOnline;
         int index;
+    };
+
+    enum StoreStates
+    {
+        StateNetwork,
+        StoreStateCount
+    };
+
+    enum StorePanels
+    {
+        PanelHome,
+        PanelSearch,
+        PanelList,
+        PanelSong,
+        StorePanelCount
     };
 
 private:

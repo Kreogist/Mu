@@ -30,9 +30,7 @@
 #include "knmusicstoresearchresultwidget.h"
 
 KNMusicStoreSearchResultWidget::KNMusicStoreSearchResultWidget(QWidget *parent):
-    QWidget(parent),
-    m_bulletWidget(nullptr),
-    m_headerLabel(new KNAnimeLabelButton(this)),
+    KNMusicStorePanel(parent),
     m_songTreeView(new KNMusicStoreAlbumTreeView(this))
 {
     setObjectName("MusicStoreWidget");
@@ -45,8 +43,6 @@ KNMusicStoreSearchResultWidget::KNMusicStoreSearchResultWidget(QWidget *parent):
     //Configure the song view.
     m_songTreeView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_songTreeView->updateObjectName("MusicStoreAlbumView");
-    //Configure the header label.
-    m_headerLabel->hide();
 
     QBoxLayout *test=new QBoxLayout(QBoxLayout::LeftToRight, this);
     setLayout(test);
@@ -72,24 +68,10 @@ void KNMusicStoreSearchResultWidget::setBackend(KNMusicStoreBackend *backend)
 void KNMusicStoreSearchResultWidget::retranslate()
 {
     //Update the label text.
-    m_headerLabel->setText(tr("Search %1").arg(""));
+    headerLabel()->setText(tr("Search %1").arg(""));
 }
 
 void KNMusicStoreSearchResultWidget::onActionSearchComplete()
 {
     ;
 }
-
-void KNMusicStoreSearchResultWidget::setBulletWidget(QLabel *bulletWidget)
-{
-    //Set the bullet widget.
-    m_bulletWidget = bulletWidget;
-    //Hide the bullet widget.
-    m_bulletWidget->hide();
-}
-
-KNAnimeLabelButton *KNMusicStoreSearchResultWidget::headerLabel()
-{
-    return m_headerLabel;
-}
-

@@ -49,10 +49,6 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_storeGlobal(KNMusicStoreGlobal::initial(this)),
     m_titleBar(new KNMusicStoreTitleBar(this)),
     m_storeSwitcher(new KNMusicStoreContainer(this)),
-    m_home(new KNMusicStoreHomeWidget(this)),
-    m_searchResult(new KNMusicStoreSearchResultWidget(this)),
-    m_list(new KNMusicStoreListWidget(this)),
-    m_singleSong(new KNMusicStoreSingleSongWidget(this)),
     m_emptyWidget(new KNMusicStoreEmptyWidget(this)),
     m_backend(nullptr)
 {
@@ -65,26 +61,33 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     KNSaoStyle::styleHorizontalScrollBar(
                 m_storeSwitcher->horizontalScrollBar());
     KNSaoStyle::styleVerticalScrollBar(m_storeSwitcher->verticalScrollBar());
+    //Initial the widgets.
+    m_panels[KNMusicStoreUtil::PanelHome]=new KNMusicStoreHomeWidget(this);
+    m_panels[KNMusicStoreUtil::PanelSearch]=
+            new KNMusicStoreSearchResultWidget(this);
+    m_panels[KNMusicStoreUtil::PanelList]=
+            new KNMusicStoreListWidget(this);
+    m_panels[KNMusicStoreUtil::PanelSong]=
+            new KNMusicStoreSingleSongWidget(this);
     //Hide the content widgets.
-    m_home->hide();
-    m_searchResult->hide();
-    m_list->hide();
-    m_singleSong->hide();
-    //Set the bullet widget and add title widget to title bar.
-    QLabel *bulletWidget=generateBulletWidget();
-    m_searchResult->setBulletWidget(bulletWidget);
-    m_titleBar->appendLabel(bulletWidget,
-                            m_searchResult->headerLabel());
-
-    bulletWidget=generateBulletWidget();
-    m_list->setBulletWidget(bulletWidget);
-    m_titleBar->appendLabel(bulletWidget,
-                            m_list->headerLabel());
-
-    bulletWidget=generateBulletWidget();
-    m_singleSong->setBulletWidget(bulletWidget);
-    m_titleBar->appendLabel(bulletWidget,
-                            m_singleSong->headerLabel());
+    for(int i=0; i<KNMusicStoreUtil::StorePanelCount; ++i)
+    {
+        //Hide the widget.
+        m_panels[i]->hide();
+        //Link the panel request.
+        connect(m_panels[i], &KNMusicStorePanel::startNetworkActivity,
+                [=]{m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
+                                                true);});
+    }
+    //Add the bullet widget and add title widget to title bar.
+    for(int i=KNMusicStoreUtil::PanelSearch;
+        i<KNMusicStoreUtil::StorePanelCount;
+        ++i)
+    {
+        //Hide the widget.
+        m_titleBar->appendLabel(m_panels[i]->bulletLabel(),
+                                m_panels[i]->headerLabel());
+    }
     //Set the empty widget.
     m_storeSwitcher->setWidget(m_emptyWidget);
     //Initial the layout.
@@ -143,6 +146,9 @@ void KNMusicStore::showEvent(QShowEvent *event)
     //Check the switcher.
     if(m_emptyWidget->isVisible() && m_backend!=nullptr)
     {
+        //Set the network activity to start.
+        m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
+                                    true);
         //Start to fetch home content.
         m_backend->fetchHomeInfo();
     }
@@ -154,22 +160,15 @@ void KNMusicStore::retranslate()
     m_tab->setText(tr("Store"));
 }
 
-void KNMusicStore::onActionShowHome()
+void KNMusicStore::onActionShowPanel(int category)
 {
-    //Show the home widget.
-    showWidget(m_home);
-}
-
-void KNMusicStore::onActionShowList()
-{
-    //Show the list widget.
-    showWidget(m_list);
-}
-
-void KNMusicStore::onActionShowSongDetail()
-{
-    //Show the song detail widget.
-    showWidget(m_singleSong);
+    //Show the widget.
+    showWidget(m_panels[category]);
+    //Hide the network mission.
+    m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
+                                false);
+    //Reset the navigator.
+    m_titleBar->setNavigationLevel(category);
 }
 
 void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
@@ -191,24 +190,28 @@ void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
     //Change relationship.
     m_backend->setParent(this);
     //Set backends to all the widget.
-    m_home->setBackend(m_backend);
-    m_list->setBackend(m_backend);
-    m_singleSong->setBackend(m_backend);
-    m_searchResult->setBackend(m_backend);
+    for(int i=0; i<KNMusicStoreUtil::StorePanelCount; ++i)
+    {
+        //Set the backend.
+        m_panels[i]->setBackend(m_backend);
+        //Link the requirement to backend.
+        connect(m_panels[i], &KNMusicStorePanel::requireShowAlbum,
+                m_backend, &KNMusicStoreBackend::fetchAlbumDetail,
+                Qt::QueuedConnection);
+        connect(m_panels[i], &KNMusicStorePanel::requireShowSong,
+                m_backend, &KNMusicStoreBackend::fetchSongDetail,
+                Qt::QueuedConnection);
+        connect(m_panels[i], &KNMusicStorePanel::requireSearch,
+                m_backend, &KNMusicStoreBackend::fetchSearchResult,
+                Qt::QueuedConnection);
+
+    }
     //Link backend to store widget.
-    connect(m_backend, &KNMusicStoreBackend::homeFetchComplete,
-            this, &KNMusicStore::onActionShowHome);
-    connect(m_backend, &KNMusicStoreBackend::albumFetchComplete,
-            this, &KNMusicStore::onActionShowList);
-    connect(m_backend, &KNMusicStoreBackend::songFetchComplete,
-            this, &KNMusicStore::onActionShowSongDetail);
+    connect(m_backend, &KNMusicStoreBackend::fetchComplete,
+            this, &KNMusicStore::onActionShowPanel,
+            Qt::QueuedConnection);
     //Link store widget to backend.
-    connect(m_home, &KNMusicStoreHomeWidget::requireShowAlbum,
-            m_backend, &KNMusicStoreBackend::fetchAlbumDetail);
-    connect(m_home, &KNMusicStoreHomeWidget::requireShowSong,
-            m_backend, &KNMusicStoreBackend::fetchSongDetail);
-    connect(m_list, &KNMusicStoreListWidget::requireShowSong,
-            m_backend, &KNMusicStoreBackend::fetchSongDetail);
+    ;
 }
 
 inline void KNMusicStore::showWidget(QWidget *widget)
@@ -227,14 +230,4 @@ inline void KNMusicStore::showWidget(QWidget *widget)
     widget->show();
     //Set the home widget to be the switcher widget.
     m_storeSwitcher->setWidget(widget);
-}
-
-inline QLabel *KNMusicStore::generateBulletWidget()
-{
-    //Generate the bullect widget.
-    QLabel *bulletWidget=new QLabel(this);
-    //Set the pixmap.
-    bulletWidget->setPixmap(QPixmap("://public/bullet.png"));
-    //Give the bullet pixmap widget back.
-    return bulletWidget;
 }

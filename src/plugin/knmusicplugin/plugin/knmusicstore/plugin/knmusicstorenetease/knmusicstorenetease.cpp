@@ -534,6 +534,14 @@ void KNMusicStoreNetease::updateAlbumDetail(
         const QString &albumId)
 {
     qDebug()<<"Album Fetch Start.";
+    //Check album detail model first.
+    if(albumDetail.isNull())
+    {
+        //Ignore the settings.
+        return;
+    }
+    //Clear the album detail info.
+    albumDetail->clear();
     //Prepare the rest api.
     QScopedPointer<KNRestApiBase> curl;
     //Initial the rest api.
@@ -557,7 +565,7 @@ void KNMusicStoreNetease::updateAlbumDetail(
         }
         //Get the album data.
         albumData=albumData.value("album").toObject();
-        //Save the information to album model.
+        //Check album detail model first.
         if(albumDetail.isNull())
         {
             //Ignore the settings.
@@ -617,7 +625,7 @@ void KNMusicStoreNetease::updateAlbumDetail(
             albumDetail->setAlbumArt(generateAlbumArt(responseData,
                                                       219, 219));
             //Emit finished signal.
-            emit albumFetchComplete();
+            emit fetchComplete(KNMusicStoreUtil::PanelList);
             qDebug()<<"Album Fetch Finished.";
             //Reset the launching instance to null.
             m_launchingInstance=StateNull;
@@ -751,7 +759,7 @@ void KNMusicStoreNetease::updateSongDetail(
                                     urlLossless);
         }
         //Emit the complete signal.
-        emit songFetchComplete();
+        emit fetchComplete(KNMusicStoreUtil::PanelSong);
         //Reset the launching instance to null.
         m_launchingInstance=StateNull;
     }
@@ -768,7 +776,7 @@ void KNMusicStoreNetease::onActionWatcherFinished()
     if(m_homeLocking==NeteaseWorkThreadCount)
     {
         //Emit the home fetching signal.
-        emit homeFetchComplete();
+        emit fetchComplete(KNMusicStoreUtil::PanelHome);
         qDebug()<<"Finished!";
         //Reset the launching instance to null.
         m_launchingInstance=StateNull;
