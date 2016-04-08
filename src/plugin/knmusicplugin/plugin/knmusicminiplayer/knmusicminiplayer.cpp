@@ -435,23 +435,34 @@ void KNMusicMiniPlayer::mouseMoveEvent(QMouseEvent *event)
         //Calculate the moving position.
         QPoint targetPosition(m_originalPos+event->globalPos()-m_pressedPoint);
         //Get the desktop widget.
-        QDesktopWidget *desktop=qApp->desktop();
+        int desktopWidth, desktopHeight;
+        {
+            //FIXED 8th Apr, 2016
+            //On OS X 10.11, desktop size will be fixed 640x480. It should be a
+            //bug under OS X 10.11 for Qt 5.6. (Untest for Qt 5.5)
+            //Fixed by using screenGeometry() of desktop widget.
+            //Get the desktop size.
+            QSize desktopSize=qApp->desktop()->screenGeometry().size();
+            //Save the width and height.
+            desktopWidth=desktopSize.width();
+            desktopHeight=desktopSize.height();
+        }
         //Check target position.
         if(targetPosition.y()<m_minimalY+DetectMargin)
         {
             targetPosition.setY(m_minimalY);
         }
-        else if(targetPosition.y()+height()+DetectMargin>desktop->height())
+        else if(targetPosition.y()+height()+DetectMargin>desktopHeight)
         {
-            targetPosition.setY(desktop->height()-height());
+            targetPosition.setY(desktopHeight-height());
         }
         if(targetPosition.x()<m_minimalX+DetectMargin)
         {
             targetPosition.setX(m_minimalX);
         }
-        else if(targetPosition.x()+width()+DetectMargin>desktop->width())
+        else if(targetPosition.x()+width()+DetectMargin>desktopWidth)
         {
-            targetPosition.setX(desktop->width()-width());
+            targetPosition.setX(desktopWidth-width());
         }
         //Move to the position.
         move(targetPosition);
