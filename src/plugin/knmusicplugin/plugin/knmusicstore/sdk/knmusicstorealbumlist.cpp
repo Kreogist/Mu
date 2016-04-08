@@ -33,7 +33,7 @@
 
 #define StoreAlbumArtTextSpacing 5
 #define StoreAlbumSpacing 20
-#define StoreAlbumTopSpacing 8
+#define StoreAlbumTopSpacing 16
 
 KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     QAbstractItemView(parent),

@@ -73,21 +73,17 @@ void KNAnimationMenu::showEvent(QShowEvent *event)
 
 void KNAnimationMenu::paintEvent(QPaintEvent *event)
 {
-#ifndef Q_OS_MACX
     //Only do the original paint event when show content data is true.
     if(m_showContent)
     {
-#endif
         //Draw the menu content.
         QMenu::paintEvent(event);
-#ifndef Q_OS_MACX
         //Initial a painter.
         QPainter painter(this);
         //Draw a border around the menu.
         painter.setPen(QColor(255,255,255,50));
         painter.drawRect(0, 0, width()-1, height()-1);
     }
-#endif
 }
 
 void KNAnimationMenu::setMouseDownPos(const QPoint &mouseDownPos)
