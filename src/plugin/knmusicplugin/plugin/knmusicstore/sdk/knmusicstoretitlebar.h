@@ -22,6 +22,7 @@
 
 class QBoxLayout;
 class QSignalMapper;
+class KNSearchBox;
 class KNDarkWaitingWheel;
 class KNAnimeLabelButton;
 /*!
@@ -46,6 +47,10 @@ public:
     void appendLabel(QWidget *indicator, KNAnimeLabelButton *label);
 
 signals:
+    /*!
+     * \brief Ask to show the home widget.
+     */
+    void requireShowHome();
 
 public slots:
     /*!
@@ -69,6 +74,7 @@ private:
     QList<KNAnimeLabelButton *> m_labelStack;
     QBoxLayout *m_buttonLayout;
     KNAnimeLabelButton *m_homeButton;
+    KNSearchBox *m_searchBox;
 
     KNDarkWaitingWheel *m_networkState;
 };

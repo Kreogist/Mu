@@ -152,6 +152,12 @@ void KNMusicStoreAlbumList::setModel(QAbstractItemModel *model)
     updateGeometries();
 }
 
+void KNMusicStoreAlbumList::resetPostion()
+{
+    //Reset the value.
+    horizontalScrollBar()->setValue(0);
+}
+
 void KNMusicStoreAlbumList::mouseMoveEvent(QMouseEvent *event)
 {
     //Set the cursor to be a clickable pointer.

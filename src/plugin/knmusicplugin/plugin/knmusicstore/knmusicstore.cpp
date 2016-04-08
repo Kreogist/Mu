@@ -125,18 +125,8 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
 {
     //Resize the widget.
     KNMusicStoreBase::resizeEvent(event);
-    //Resize the content widget.
-    if(m_storeSwitcher->widget())
-    {
-        //Resize the switcher.
-        m_storeSwitcher->widget()->resize(
-                    m_storeSwitcher->widget()->width(),
-                    qMax(m_storeSwitcher->sizeHint().height(),
-                         m_storeSwitcher->height()-2-
-                         (m_storeSwitcher->horizontalScrollBar()->isVisible()?
-                              m_storeSwitcher->horizontalScrollBar()->height():
-                              0)));
-    }
+    //Update the content size.
+    updateContentWidget();
 }
 
 void KNMusicStore::showEvent(QShowEvent *event)
@@ -146,11 +136,8 @@ void KNMusicStore::showEvent(QShowEvent *event)
     //Check the switcher.
     if(m_emptyWidget->isVisible() && m_backend!=nullptr)
     {
-        //Set the network activity to start.
-        m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
-                                    true);
-        //Start to fetch home content.
-        m_backend->fetchHomeInfo();
+        //Fetch the home widget.
+        onActionFetchHome();
     }
 }
 
@@ -164,11 +151,22 @@ void KNMusicStore::onActionShowPanel(int category)
 {
     //Show the widget.
     showWidget(m_panels[category]);
+    //Update the content size.
+    updateContentWidget();
     //Hide the network mission.
     m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
                                 false);
     //Reset the navigator.
     m_titleBar->setNavigationLevel(category);
+}
+
+void KNMusicStore::onActionFetchHome()
+{
+    //Set the network activity to start.
+    m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
+                                true);
+    //Start to fetch home content.
+    m_backend->fetchHomeInfo();
 }
 
 void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
@@ -195,6 +193,9 @@ void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
         //Set the backend.
         m_panels[i]->setBackend(m_backend);
         //Link the requirement to backend.
+        connect(m_panels[i], &KNMusicStorePanel::requireShowHome,
+                m_backend, &KNMusicStoreBackend::fetchHomeInfo,
+                Qt::QueuedConnection);
         connect(m_panels[i], &KNMusicStorePanel::requireShowAlbum,
                 m_backend, &KNMusicStoreBackend::fetchAlbumDetail,
                 Qt::QueuedConnection);
@@ -204,14 +205,15 @@ void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
         connect(m_panels[i], &KNMusicStorePanel::requireSearch,
                 m_backend, &KNMusicStoreBackend::fetchSearchResult,
                 Qt::QueuedConnection);
-
     }
+    //Link store widget to backend.
+    connect(m_titleBar, &KNMusicStoreTitleBar::requireShowHome,
+            this, &KNMusicStore::onActionFetchHome,
+            Qt::QueuedConnection);
     //Link backend to store widget.
     connect(m_backend, &KNMusicStoreBackend::fetchComplete,
             this, &KNMusicStore::onActionShowPanel,
             Qt::QueuedConnection);
-    //Link store widget to backend.
-    ;
 }
 
 inline void KNMusicStore::showWidget(QWidget *widget)
@@ -230,4 +232,20 @@ inline void KNMusicStore::showWidget(QWidget *widget)
     widget->show();
     //Set the home widget to be the switcher widget.
     m_storeSwitcher->setWidget(widget);
+}
+
+inline void KNMusicStore::updateContentWidget()
+{
+    //Resize the content widget.
+    if(m_storeSwitcher->widget())
+    {
+        //Resize the switcher.
+        m_storeSwitcher->widget()->resize(
+                    m_storeSwitcher->widget()->width(),
+                    qMax(m_storeSwitcher->sizeHint().height(),
+                         m_storeSwitcher->height()-2-
+                         (m_storeSwitcher->horizontalScrollBar()->isVisible()?
+                              m_storeSwitcher->horizontalScrollBar()->height():
+                              0)));
+    }
 }

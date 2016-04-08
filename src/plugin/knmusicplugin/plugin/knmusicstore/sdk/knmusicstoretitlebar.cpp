@@ -20,6 +20,7 @@
 #include "knanimelabelbutton.h"
 #include "knlocalemanager.h"
 #include "kndarkwaitingwheel.h"
+#include "knsearchbox.h"
 
 #include "knmusicstoreglobal.h"
 #include "knmusicstoreutil.h"
@@ -39,6 +40,10 @@ KNMusicStoreTitleBar::KNMusicStoreTitleBar(QWidget *parent) :
     setFixedHeight(TitleBarHeight);
     //Configure state widgets.
     m_networkState->hide();
+    //Link the home button with the signal.
+    m_homeButton->setChangeCursor(true);
+    connect(m_homeButton, &KNAnimeLabelButton::clicked,
+            this, &KNMusicStoreTitleBar::requireShowHome);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);

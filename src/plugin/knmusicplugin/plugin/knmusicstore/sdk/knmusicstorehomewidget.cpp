@@ -20,6 +20,7 @@
 
 #include "knthememanager.h"
 #include "knlocalemanager.h"
+#include "knanimelabelbutton.h"
 
 #include "knmusicstorealbumlistmodel.h"
 #include "knmusicstoreglobal.h"
@@ -57,6 +58,11 @@ KNMusicStoreHomeWidget::KNMusicStoreHomeWidget(QWidget *parent) :
             this, &KNMusicStoreHomeWidget::requireShowAlbum);
     connect(m_hotTracks, &KNMusicStoreAlbumList::albumClick,
             this, &KNMusicStoreHomeWidget::requireShowSong);
+    //LInk the reset signal.
+    connect(this, &KNMusicStoreHomeWidget::requireResetPosition,
+            m_newMusicList, &KNMusicStoreAlbumList::resetPostion);
+    connect(this, &KNMusicStoreHomeWidget::requireResetPosition,
+            m_hotTracks, &KNMusicStoreAlbumList::resetPostion);
 
     //Initial the widgets.
     // Titles
@@ -144,6 +150,9 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
                 this, &KNMusicStoreHomeWidget::requireShowSong);
         connect(listView, &KNMusicStoreAlbumList::albumClick,
                 this, &KNMusicStoreHomeWidget::startNetworkActivity);
+        //Link the reset position.
+        connect(this, &KNMusicStoreHomeWidget::requireResetPosition,
+                listView, &KNMusicStoreAlbumList::resetPostion);
         //Configure the list view.
         listView->setModel(m_backend->listModel(i));
         //Add list view to layout.
@@ -156,12 +165,14 @@ void KNMusicStoreHomeWidget::setBackend(KNMusicStoreBackend *backend)
     updateListTitle();
     //Resize the widget.
     setFixedHeight(m_widgetHeight);
+    //Reset the position of the list views.
+    emit requireResetPosition();
 }
 
 void KNMusicStoreHomeWidget::retranslate()
 {
     //Update the title.
-    m_blockTitle[NewMusicBlock]->setText(tr("New Music"));
+    m_blockTitle[NewMusicBlock]->setText(tr("New Albums"));
     m_blockTitle[HotTracksBlock]->setText(tr("Hot Tracks"));
     //Update list title.
     updateListTitle();
@@ -182,4 +193,3 @@ void KNMusicStoreHomeWidget::updateListTitle()
         m_listNames.at(i)->setText(m_backend->listName(i));
     }
 }
-

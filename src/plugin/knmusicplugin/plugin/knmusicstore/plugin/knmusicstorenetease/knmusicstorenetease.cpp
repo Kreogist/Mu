@@ -179,7 +179,8 @@ void KNMusicStoreNetease::fetchHomeInfo()
         //When launching others, we cannot doing anything but wait.
         return;
     }
-
+    //Reset the counter.
+    m_homeLocking=0;
     //Update the latest albums.
     m_listThreads[LatestAlbumList]=
             QtConcurrent::run(this,
@@ -572,6 +573,9 @@ void KNMusicStoreNetease::updateAlbumDetail(
             return;
         }
         //Save the information to album detail model.
+        albumDetail->setAlbumInfo(
+                    KNMusicStoreUtil::AlbumId,
+                    QString::number(qint64(albumData.value("id").toDouble())));
         albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumTitle,
                                   albumData.value("name").toString());
         albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumArtist,
@@ -710,7 +714,10 @@ void KNMusicStoreNetease::updateSongDetail(
         songDetail->setAlbumArt(generateAlbumArt(albumArtData, 219, 219));
         //Save all the other information.
         songDetail->setSongData(KNMusicStoreSongDetailInfo::Name,
-                                  songData.value("name").toString());
+                                songData.value("name").toString());
+        songDetail->setSongData(KNMusicStoreSongDetailInfo::SongId,
+                                QString::number(
+                                    qint64(songData.value("id").toDouble())));
         {
             //Get artist list.
             QJsonArray artistList=songData.value("artists").toArray();

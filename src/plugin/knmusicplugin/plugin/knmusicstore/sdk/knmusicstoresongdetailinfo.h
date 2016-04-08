@@ -37,6 +37,7 @@ public:
         Name,
         AlbumName,
         AlbumId,
+        SongId,
         Lyrics,
         OnlineUrl,
         HighUrl,

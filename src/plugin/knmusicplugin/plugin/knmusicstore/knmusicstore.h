@@ -80,11 +80,13 @@ protected:
 private slots:
     void retranslate();
     void onActionShowPanel(int category);
+    void onActionFetchHome();
 
 private:
     void loadBackend(KNMusicStoreBackend *backend);
 
     inline void showWidget(QWidget *widget);
+    inline void updateContentWidget();
 
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;

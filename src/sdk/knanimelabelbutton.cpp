@@ -48,8 +48,6 @@ void KNAnimeLabelButton::enterEvent(QEvent *event)
 {
     //Do the original enter event.
     KNLabelButton::enterEvent(event);
-    //Change the cursor.
-    setCursor(Qt::PointingHandCursor);
     //Start the anime.
     startAnime(m_maxBrightness);
 }
@@ -58,8 +56,6 @@ void KNAnimeLabelButton::leaveEvent(QEvent *event)
 {
     //Do the original leave event.
     KNLabelButton::leaveEvent(event);
-    //Change the cursor.
-    setCursor(Qt::ArrowCursor);
     //Start the anime.
     startAnime(m_minBrightness);
 }

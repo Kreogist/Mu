@@ -70,6 +70,10 @@ signals:
     void albumClick(QVariant albumData);
 
 public slots:
+    /*!
+     * \brief Reset the postion of the scroll bar.
+     */
+    void resetPostion();
 
 protected:
     /*!

@@ -79,6 +79,9 @@ KNMusicStoreListWidget::KNMusicStoreListWidget(QWidget *parent) :
     //Configure the song view.
     m_albumSongView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_albumSongView->updateObjectName("MusicStoreAlbumView");
+    //Link the header label.
+    connect(headerLabel(), &KNAnimeLabelButton::clicked,
+            this, &KNMusicStoreListWidget::onActionRefresh);
 
     //Initial the global layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -158,6 +161,15 @@ void KNMusicStoreListWidget::retranslate()
     m_propertiesLabel[PropertyArtist]->setText(tr("Artist: "));
     m_propertiesLabel[PropertyReleaseDate]->setText(tr("Released: "));
     m_propertiesLabel[PropertyCompany]->setText(tr("Published: "));
+}
+
+void KNMusicStoreListWidget::onActionRefresh()
+{
+    //Ask to reload the album information.
+    emit requireShowAlbum(
+                m_albumDetailModel->albumInfo(KNMusicStoreUtil::AlbumId));
+    //Start network activity.
+    emit startNetworkActivity();
 }
 
 void KNMusicStoreListWidget::onActionUpdateInfo(int category)

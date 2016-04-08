@@ -52,6 +52,7 @@ public slots:
 
 private slots:
     void retranslate();
+    void onActionRefresh();
     void onActionUpdateInfo(int category);
     void onActionShowSongInfo(const QModelIndex &currentIndex);
 

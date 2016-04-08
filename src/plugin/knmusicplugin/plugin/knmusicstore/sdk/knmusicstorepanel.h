@@ -59,6 +59,11 @@ signals:
     void startNetworkActivity();
 
     /*!
+     * \brief Ask to show the home widget.
+     */
+    void requireShowHome();
+
+    /*!
      * \brief Ask to show the album with the given album Id.
      * \param albumId The album index.
      */

@@ -29,6 +29,7 @@ KNMusicStorePanel::KNMusicStorePanel(QWidget *parent) :
     //Configure the header label.
     m_headerLabel->hide();
     m_headerLabel->setMaximumWidth(knMusicStoreGlobal->storeHeaderLabelWidth());
+    m_headerLabel->setChangeCursor(true);
     //Configure the bullet widget.
     m_bulletWidget->setPixmap(QPixmap("://public/bullet.png"));
     m_bulletWidget->hide();

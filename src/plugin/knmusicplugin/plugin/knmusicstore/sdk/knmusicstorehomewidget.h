@@ -42,14 +42,17 @@ public:
     explicit KNMusicStoreHomeWidget(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When the data is updated, this signal is emitted to reset the
+     * position.
+     */
+    void requireResetPosition();
 
 public slots:
     /*!
      * \brief Reimplemented from KNMusicStorePanel::setBackend().
      */
     void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
-
-protected:
 
 private slots:
     void retranslate();

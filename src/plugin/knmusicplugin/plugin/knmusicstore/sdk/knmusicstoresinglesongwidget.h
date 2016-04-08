@@ -51,6 +51,7 @@ public slots:
 
 private slots:
     void retranslate();
+    void onActionRefresh();
     void onActionDataUpdate(int category);
     void onActionShowAlbum();
 

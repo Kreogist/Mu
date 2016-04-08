@@ -65,6 +65,7 @@ public:
         AlbumArtist,
         AlbumReleaseTime,
         AlbumReleaseCompany,
+        AlbumId,
         StoreAlbumDetailCount
     };
 

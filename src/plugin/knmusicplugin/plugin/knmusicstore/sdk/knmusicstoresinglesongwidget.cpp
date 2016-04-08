@@ -31,6 +31,8 @@
 
 #include "knmusicstoresinglesongwidget.h"
 
+#include <QDebug>
+
 KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     KNMusicStorePanel(parent),
     m_titleLabel(new QLabel(this)),
@@ -56,14 +58,19 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
         m_properties[i]=new KNLabelButton(this);
         m_propertiesLabel[i]=new QLabel(this);
         //Set object name.
+        // Property hint label.
         m_propertiesLabel[i]->setObjectName("MusicStoreWidget");
         knTheme->registerWidget(m_propertiesLabel[i]);
+        // Property value label.
         m_properties[i]->setObjectName("MusicStoreTextLabel");
         knTheme->registerWidget(m_properties[i]);
         //Configure label.
+        // Property hint label.
         m_propertiesLabel[i]->setAlignment(Qt::AlignRight);
         m_propertiesLabel[i]->setFont(labelFont);
+        // Property value label.
         m_properties[i]->setFont(labelFont);
+        m_properties[i]->setChangeCursor(true);
     }
     //Change the font size of title label.
     QFont titleFont=m_titleLabel->font();
@@ -76,6 +83,10 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     m_titleLabel->setWordWrap(true);
     //Configure the lyrics label.
     m_lyricsLabel->setWordWrap(true);
+    m_lyricsLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    //Link the header label.
+    connect(headerLabel(), &KNAnimeLabelButton::clicked,
+            this, &KNMusicStoreSingleSongWidget::onActionRefresh);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -135,6 +146,15 @@ void KNMusicStoreSingleSongWidget::retranslate()
     //Retranslate the song label.
     m_propertiesLabel[PropertyArtist]->setText(tr("Artist: "));
     m_propertiesLabel[PropertyAlbum]->setText(tr("Album: "));
+}
+
+void KNMusicStoreSingleSongWidget::onActionRefresh()
+{
+    //Update the reload the current information.
+    emit requireShowSong(
+                m_songDetail->songData(KNMusicStoreSongDetailInfo::SongId));
+    //Start the Internet activity.
+    emit startNetworkActivity();
 }
 
 void KNMusicStoreSingleSongWidget::onActionDataUpdate(int category)
