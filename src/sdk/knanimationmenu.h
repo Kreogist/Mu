@@ -69,16 +69,16 @@ protected:
     /*!
      * \brief Reimplemented from QMenu::showEvent().
      */
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QMenu::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    bool m_showContent;
 #ifndef Q_OS_MACX
+    bool m_showContent;
     QPropertyAnimation *m_showAnime;
 #endif
     QPoint m_mouseDownPos;

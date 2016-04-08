@@ -89,7 +89,7 @@
     },
     "MusicSoloMenu" :{
         "Parent" : "MainWindow",
-        "Base" : "#00000000",
+        "Base" : "#000000",
         "Window" : "#00000000",
         "WindowText" : "#FFFFFF",
         "Text" : "#FFFFFFFE",
