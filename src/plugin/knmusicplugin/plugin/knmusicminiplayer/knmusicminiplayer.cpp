@@ -419,8 +419,7 @@ void KNMusicMiniPlayer::mousePressEvent(QMouseEvent *event)
     //Set pressed flag.
     m_pressed=true;
     //Save the pressed point.
-    m_pressedPoint=event->globalPos();
-    m_originalPos=pos();
+    m_pressedPoint=event->pos();
     //Freeze the window.
     m_freeze=true;
 }
@@ -433,19 +432,39 @@ void KNMusicMiniPlayer::mouseMoveEvent(QMouseEvent *event)
     if(m_pressed)
     {
         //Calculate the moving position.
-        QPoint targetPosition(m_originalPos+event->globalPos()-m_pressedPoint);
+        QPoint globalClickPos(event->globalPos()),
+               targetPosition(globalClickPos-m_pressedPoint);
         //Get the desktop widget.
-        int desktopWidth, desktopHeight;
+        int desktopRight, desktopHeight, desktopLeft=0;
         {
             //FIXED 8th Apr, 2016
             //On OS X 10.11, desktop size will be fixed 640x480. It should be a
             //bug under OS X 10.11 for Qt 5.6. (Untest for Qt 5.5)
             //Fixed by using screenGeometry() of desktop widget.
-            //Get the desktop size.
-            QSize desktopSize=qApp->desktop()->screenGeometry().size();
-            //Save the width and height.
-            desktopWidth=desktopSize.width();
-            desktopHeight=desktopSize.height();
+            //Get the desktop widget.
+            QDesktopWidget *desktop=qApp->desktop();
+            //Check desktop is null or not.
+            if(!desktop)
+            {
+                //Failed to read the desktop information.
+                return;
+            }
+            //Check the mouse is in which screen.
+            for(int i=0; i<desktop->screenCount(); ++i)
+            {
+                //Check mouse position.
+                QRect currentScreen=desktop->screenGeometry(i);
+                //Check whether current screen is include the pointer.
+                if(currentScreen.contains(globalClickPos))
+                {
+                    //Save the desktop left.
+                    desktopLeft=currentScreen.left();
+                    //Save the width and height.
+                    desktopRight=currentScreen.right();
+                    desktopHeight=currentScreen.height();
+                    break;
+                }
+            }
         }
         //Check target position.
         if(targetPosition.y()<m_minimalY+DetectMargin)
@@ -456,13 +475,13 @@ void KNMusicMiniPlayer::mouseMoveEvent(QMouseEvent *event)
         {
             targetPosition.setY(desktopHeight-height());
         }
-        if(targetPosition.x()<m_minimalX+DetectMargin)
+        if(targetPosition.x()<desktopLeft+m_minimalX+DetectMargin)
         {
-            targetPosition.setX(m_minimalX);
+            targetPosition.setX(desktopLeft+m_minimalX);
         }
-        else if(targetPosition.x()+width()+DetectMargin>desktopWidth)
+        else if(targetPosition.x()+width()+DetectMargin>desktopRight)
         {
-            targetPosition.setX(desktopWidth-width());
+            targetPosition.setX(desktopRight-width()+1);
         }
         //Move to the position.
         move(targetPosition);
