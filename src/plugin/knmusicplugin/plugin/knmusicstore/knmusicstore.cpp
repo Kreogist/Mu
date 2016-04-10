@@ -22,6 +22,7 @@
 //Include infrastructure.
 #include "knlocalemanager.h"
 #include "kncategorytab.h"
+#include "knopacityanimebutton.h"
 #include "knhwidgetswitcher.h"
 #include "sao/knsaostyle.h"
 
@@ -35,6 +36,7 @@
 #include "sdk/knmusicstoreemptywidget.h"
 #include "sdk/knmusicstorebackend.h"
 #include "sdk/knmusicstoretitlebar.h"
+#include "sdk/knmusicstoredownloadlist.h"
 
 //Include plugins.
 #include "plugin/knmusicstorenetease/knmusicstorenetease.h"
@@ -48,6 +50,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_tab(new KNCategoryTab(this)),
     m_storeGlobal(KNMusicStoreGlobal::initial(this)),
     m_titleBar(new KNMusicStoreTitleBar(this)),
+    m_downloadList(new KNMusicStoreDownloadList(this)),
     m_storeSwitcher(new KNMusicStoreContainer(this)),
     m_emptyWidget(new KNMusicStoreEmptyWidget(this)),
     m_backend(nullptr)
@@ -90,6 +93,9 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     }
     //Set the empty widget.
     m_storeSwitcher->setWidget(m_emptyWidget);
+    //Add download list to title bar.
+    m_titleBar->appendIcon(m_downloadList->iconButton());
+
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     mainLayout->setContentsMargins(0,0,0,0);

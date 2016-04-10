@@ -21,8 +21,7 @@
 
 KNLabelButton::KNLabelButton(QWidget *parent) :
     QLabel(parent),
-    m_pressed(false),
-    m_changeCursor(false)
+    m_pressed(false)
 {
 }
 
@@ -59,38 +58,4 @@ void KNLabelButton::mouseReleaseEvent(QMouseEvent *event)
             emit clicked();
         }
     }
-}
-
-void KNLabelButton::enterEvent(QEvent *event)
-{
-    //Launch the original event.
-    QLabel::enterEvent(event);
-    //Check the change flag.
-    if(m_changeCursor)
-    {
-        //Change the cursor.
-        setCursor(Qt::PointingHandCursor);
-    }
-}
-
-void KNLabelButton::leaveEvent(QEvent *event)
-{
-    //Launch the leave event.
-    QLabel::leaveEvent(event);
-    //Check the change flag.
-    if(m_changeCursor)
-    {
-        //Change the cursor.
-        setCursor(Qt::ArrowCursor);
-    }
-}
-
-bool KNLabelButton::changeCursor() const
-{
-    return m_changeCursor;
-}
-
-void KNLabelButton::setChangeCursor(bool changeCursor)
-{
-    m_changeCursor = changeCursor;
 }

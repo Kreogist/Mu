@@ -32,6 +32,7 @@
 KNMusicStoreTitleBar::KNMusicStoreTitleBar(QWidget *parent) :
     KNMouseSenseWidget(parent),
     m_buttonLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
+    m_containerLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
     m_homeButton(new KNAnimeLabelButton(this)),
     m_networkState(new KNDarkWaitingWheel(this))
 {
@@ -41,7 +42,7 @@ KNMusicStoreTitleBar::KNMusicStoreTitleBar(QWidget *parent) :
     //Configure state widgets.
     m_networkState->hide();
     //Link the home button with the signal.
-    m_homeButton->setChangeCursor(true);
+    m_homeButton->setCursor(Qt::PointingHandCursor);
     connect(m_homeButton, &KNAnimeLabelButton::clicked,
             this, &KNMusicStoreTitleBar::requireShowHome);
 
@@ -50,21 +51,21 @@ KNMusicStoreTitleBar::KNMusicStoreTitleBar(QWidget *parent) :
     mainLayout->addStretch();
     //Initial the container.
     QWidget *container=new QWidget(this);
-    mainLayout->addWidget(container);
+    mainLayout->addWidget(container, 1);
     mainLayout->addStretch();
     //Configure the container.
-    container->setFixedWidth(knMusicStoreGlobal->storeContentWidth());
+    container->setMaximumWidth(knMusicStoreGlobal->storeContentWidth());
 
-    //Initial the container layout.
-    QBoxLayout *containerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                               container);
+    //Configure the container layout.
+    m_containerLayout->setSpacing(5);
+    container->setLayout(m_containerLayout);
     //Add button layout to container layout.
-    containerLayout->addLayout(m_buttonLayout);
-    containerLayout->addStretch();
+    m_containerLayout->addLayout(m_buttonLayout);
+    m_containerLayout->addStretch();
     //Add the label to the layout.
     m_buttonLayout->addWidget(m_homeButton);
     //Add state widget to container layout.
-    containerLayout->addWidget(m_networkState);
+    m_containerLayout->addWidget(m_networkState);
 
     //Link translator.
     knI18n->link(this, &KNMusicStoreTitleBar::retranslate);
@@ -80,6 +81,12 @@ void KNMusicStoreTitleBar::appendLabel(QWidget *indicator,
     //Append widget to layout.
     m_buttonLayout->addWidget(indicator);
     m_buttonLayout->addWidget(label);
+}
+
+void KNMusicStoreTitleBar::appendIcon(QWidget *iconWidget)
+{
+    //Append widget to the end of the container layout.
+    m_containerLayout->addWidget(iconWidget);
 }
 
 void KNMusicStoreTitleBar::setStatesButton(int state, bool value)

@@ -330,12 +330,21 @@ void KNMusicMiniPlayer::reset()
 
 void KNMusicMiniPlayer::saveConfigure()
 {
-    //Set the window position.
+    //Get the desktop widget.
+    QDesktopWidget *desktopWidget=qApp->desktop();
+    //Get the screen index.
+    int screenIndex=desktopWidget->screenNumber(this);
+    //Save the index.
+    setCacheValue("miniPlayerScreenIndex", screenIndex);
+    //Get the screen.
+    QRect screenSize=desktopWidget->screenGeometry(screenIndex);
+    //Save the screen size.
+    setCacheValue("miniPlayerScreenLeft", screenSize.left());
+    setCacheValue("miniPlayerScreenWidth", screenSize.width());
+    setCacheValue("miniPlayerScreenHeight", screenSize.height());
+    //Save the current player position.
     setCacheValue("miniPlayerX", geometry().x());
     setCacheValue("miniPlayerY", geometry().y());
-    //Set the current desktop size.
-    setCacheValue("desktopWidth", qApp->desktop()->width());
-    setCacheValue("desktopHeight", qApp->desktop()->height());
 }
 
 void KNMusicMiniPlayer::loadConfigure()
@@ -348,13 +357,33 @@ void KNMusicMiniPlayer::loadConfigure()
         return;
     }
 
+    //Read the screen information.
+    int screenIndex=getCacheValue("miniPlayerScreenIndex"),
+        lastScreenWidth=getCacheValue("miniPlayerScreenWidth"),
+        lastScreenHeight=getCacheValue("miniPlayerScreenHeight"),
+        lastX=getCacheValue("miniPlayerX"),
+        lastY=getCacheValue("miniPlayerY");
+    //Check whether we have this screen anymore or not.
+    //Get the desktop widget.
+    QDesktopWidget *desktopWidget=qApp->desktop();
+    //Check the desktop screen size.
+    if(screenIndex<desktopWidget->screenCount())
+    {
+        //The screen is still exist.
+        //Get the screen rect.
+        QRect screenRect=desktopWidget->screenGeometry(screenIndex);
+        //Check the resolution of the screen.
+        //Compare the resolution.
+        if(screenRect.width()==lastScreenWidth &&
+                screenRect.height()==lastScreenHeight)
+        {
+            //Move the position to the target position.
+            ;
+        }
+    }
     //Read the resolution data of the last time closed.
-    int lastScreenWidth=getCacheValue("desktopWidth"),
-        lastScreenHeight=getCacheValue("desktopHeight"),
-        currentScreenWidth=qApp->desktop()->width(),
-        currentScreenHeight=qApp->desktop()->height(),
-            lastX=getCacheValue("miniPlayerX"),
-            lastY=getCacheValue("miniPlayerY");
+    int currentScreenWidth=qApp->desktop()->width(),
+        currentScreenHeight=qApp->desktop()->height();
     //Check is the resolution is the same as the last closed time.
     if(!(lastScreenWidth==currentScreenWidth &&
          lastScreenHeight==currentScreenHeight))

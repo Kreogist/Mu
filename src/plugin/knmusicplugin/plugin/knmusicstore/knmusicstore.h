@@ -30,6 +30,7 @@ class KNCategoryTab;
 class KNMusicStorePanel;
 class KNMusicStoreContainer;
 class KNMusicStoreTitleBar;
+class KNMusicStoreDownloadList;
 class KNMusicStoreBackend;
 class KNMusicStoreGlobal;
 class KNMusicStoreHomeWidget;
@@ -91,6 +92,7 @@ private:
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;
     KNMusicStoreTitleBar *m_titleBar;
+    KNMusicStoreDownloadList *m_downloadList;
     KNMusicStoreContainer *m_storeSwitcher;
     KNMusicStorePanel *m_panels[KNMusicStoreUtil::StorePanelCount];
     KNMusicStoreEmptyWidget *m_emptyWidget;

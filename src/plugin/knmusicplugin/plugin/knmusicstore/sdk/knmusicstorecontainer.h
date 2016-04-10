@@ -38,6 +38,7 @@ public:
 signals:
 
 public slots:
+    void setTitleBar(QWidget *titleBar);
 
 protected:
     /*!
@@ -47,6 +48,7 @@ protected:
 
 private:
     KNSideShadowWidget *m_topShadow;
+    QWidget *m_titleBar;
 };
 
 #endif // KNMUSICSTORECONTAINER_H

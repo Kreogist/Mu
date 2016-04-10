@@ -16,19 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QWidget>
+#include <QString>
 #include <QStyleFactory>
 #include <QPainter>
 #include <QStyleOptionMenuItem>
 
 #include "knsaostyle.h"
 
+#include <QDebug>
+
 KNSaoStyle *KNSaoStyle::m_instance=nullptr;
 
 KNSaoStyle::KNSaoStyle() :
-    QCommonStyle()
+    QCommonStyle(),
+    m_slideLeft(QPixmap("://public/left_arrow.png")),
+    m_slideRight(QPixmap("://public/right_arrow.png")),
+    m_fusionStyle(QStyleFactory::create("fusion"))
 {
-    //Construct the fusion style.
-    m_fusionStyle=QStyleFactory::create("fusion");
 }
 
 KNSaoStyle *KNSaoStyle::instance()
@@ -80,11 +84,14 @@ void KNSaoStyle::styleVerticalScrollBar(QWidget *widget)
                           "}");
 }
 
-void KNSaoStyle::styleHorizontalScrollBar(QWidget *widget)
+void KNSaoStyle::styleHorizontalScrollBar(QWidget *widget, int brightness)
 {
+    //Get the brightness string.
+    QString brightnessValue=QString::number(brightness);
     //The widget should be a QScrollBar or inherited from QScrollBar, and it
     //should should be horizontal.
-    widget->setStyleSheet("QScrollBar:horizontal {"
+    widget->setStyleSheet(QString(
+                          "QScrollBar:horizontal {"
                           //Clear the border.
                           "   border: 0px solid grey;"
                           //Clear the background.
@@ -95,7 +102,7 @@ void KNSaoStyle::styleHorizontalScrollBar(QWidget *widget)
                           //Configure the handle.
                           "QScrollBar::handle:horizontal {"
                           //Reset the handle color.
-                          "   background: rgba(100, 100, 100);"
+                          "   background: rgba(255, 255, 255, %1);"
                           //Set the minimal height of the handle.
                           "   min-width: 10px;"
                           //Make the handle to be a rounded rectangle.
@@ -114,7 +121,7 @@ void KNSaoStyle::styleHorizontalScrollBar(QWidget *widget)
                           "   width: 0px;"
                           "   subcontrol-position: left;"
                           "   subcontrol-origin: margin;"
-                          "}");
+                          "}").arg(brightnessValue));
 }
 
 int KNSaoStyle::scrollBarWidth()
@@ -214,6 +221,66 @@ void KNSaoStyle::drawComplexControl(ComplexControl cc,
                                     QPainter *p,
                                     const QWidget *w) const
 {
+    //Check out the complex control type.
+    if(cc==CC_ScrollBar)
+    {
+        //Draw the control.
+        const QStyleOptionSlider *slider=
+                qstyleoption_cast<const QStyleOptionSlider *>(opt);
+        //Check slider first.
+        if(!slider || (slider->maximum == slider->minimum))
+        {
+            //Failed to draw the slider.
+            return;
+        }
+        //Save the painter.
+        p->save();
+        //Set the rendering hint.
+        p->setRenderHints(QPainter::Antialiasing |
+                          QPainter::SmoothPixmapTransform, true);
+        //Calculate the parameter.
+        int roundedRadius=(opt->rect.height() < opt->rect.width()?
+                               opt->rect.height():
+                               opt->rect.width())>>1;
+        //Set the brush to painter, clear the pen.
+        p->setPen(Qt::NoPen);
+        //Draw the base.
+        p->setBrush(opt->palette.color(QPalette::Base));
+        p->drawRoundedRect(opt->rect, roundedRadius, roundedRadius);
+        //Draw the button slider.
+        p->setBrush(opt->palette.color(QPalette::Button));
+        //Get the control rect.
+        QRect sliderRect=subControlRect(CC_ScrollBar,
+                                        opt,
+                                        SC_ScrollBarSlider,
+                                        w);
+        p->drawRoundedRect(sliderRect, roundedRadius, roundedRadius);
+        //Draw the button.
+        // Draw left button first.
+        sliderRect=subControlRect(CC_ScrollBar,
+                                  opt,
+                                  SC_ScrollBarAddLine,
+                                  w);
+        //Draw the pixmap.
+        p->drawPixmap(QPoint(sliderRect.x()+
+                             ((sliderRect.width()-m_slideRight.width())>>1),
+                             sliderRect.y()+
+                             ((sliderRect.height()-m_slideRight.height())>>1)),
+                      m_slideRight);
+        //Draw right button.
+        sliderRect=subControlRect(CC_ScrollBar,
+                                  opt,
+                                  SC_ScrollBarSubLine,
+                                  w);
+        p->drawPixmap(QPoint(sliderRect.x()+
+                             ((sliderRect.width()-m_slideLeft.width())>>1),
+                             sliderRect.y()+
+                             ((sliderRect.height()-m_slideLeft.height())>>1)),
+                      m_slideLeft);
+        //Restore the painter.
+        p->restore();
+        return;
+    }
     //Simply called the fusion style function to do the same thing.
     m_fusionStyle->drawComplexControl(cc,opt,p,w);
 }

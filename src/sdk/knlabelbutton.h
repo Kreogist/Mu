@@ -36,12 +36,6 @@ public:
      */
     explicit KNLabelButton(QWidget *parent = 0);
 
-    /*!
-     * \brief Get whether the cursor will be changed when mouse is in.
-     * \return If the cursor will change to hand, this will return true.
-     */
-    bool changeCursor() const;
-
 signals:
     /*!
      * \brief When the widget is clicked, this signal will be emitted.
@@ -67,11 +61,6 @@ signals:
     void doubleClicked();
 
 public slots:
-    /*!
-     * \brief Set whether the mouse will be changed to hand shape.
-     * \param changeCursor To change the moving cursor, set to true.
-     */
-    void setChangeCursor(bool changeCursor);
 
 protected:
     /*!
@@ -89,18 +78,8 @@ protected:
      */
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
-    /*!
-     * \brief Reimplemented from KNLabelButton::enterEvent().
-     */
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from KNLabelButton::leaveEvent().
-     */
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
-
 private:
-    bool m_pressed, m_changeCursor;
+    bool m_pressed;
 };
 
 #endif // KNLABELBUTTON_H

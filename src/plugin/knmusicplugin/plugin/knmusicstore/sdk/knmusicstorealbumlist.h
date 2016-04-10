@@ -23,6 +23,7 @@
 #define StoreAlbumShadow 15
 
 class QScrollBar;
+class QTimeLine;
 class KNHighLightLabel;
 class KNSideShadowWidget;
 class KNMusicStoreAlbumListModel;
@@ -76,6 +77,16 @@ public slots:
     void resetPostion();
 
 protected:
+    /*!
+     * \brief Reimplemented from QAbstractItemView::enterEvent().
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractItemView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
     /*!
      * \brief Reimplemented from QAbstractItemView::mouseMoveEvent().
      */
@@ -146,17 +157,20 @@ protected slots:
 
 private slots:
     void onActionUpdateOpacity(int value);
+    void onActionUpdateBrightness(int opacity);
 
 private:
     inline int indexScrollBarValue(const QModelIndex &index,
                                    QAbstractItemView::ScrollHint hint);
     inline QRect itemContentRect(const QModelIndex &index) const;
+    inline void startAnime(int endFrame);
 
     QPersistentModelIndex m_pressedIndex;
     QScrollBar *m_scrollBar;
     KNMusicStoreAlbumListModel *m_model;
     KNSideShadowWidget *m_leftShadow, *m_rightShadow;
-    int m_itemHeight;
+    QTimeLine *m_mouseAnime;
+    int m_itemHeight, m_scrollBarBrightness;
 };
 
 #endif // KNMUSICSTOREALBUMLIST_H

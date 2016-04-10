@@ -46,6 +46,12 @@ public:
      */
     void appendLabel(QWidget *indicator, KNAnimeLabelButton *label);
 
+    /*!
+     * \brief Append and icon button to the title bar.
+     * \param icon The icon widget.
+     */
+    void appendIcon(QWidget *iconWidget);
+
 signals:
     /*!
      * \brief Ask to show the home widget.
@@ -72,7 +78,7 @@ private slots:
 private:
     QList<QWidget *> m_indicatorStack;
     QList<KNAnimeLabelButton *> m_labelStack;
-    QBoxLayout *m_buttonLayout;
+    QBoxLayout *m_buttonLayout, *m_containerLayout;
     KNAnimeLabelButton *m_homeButton;
     KNSearchBox *m_searchBox;
 

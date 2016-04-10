@@ -20,19 +20,34 @@
 
 #include <QWidget>
 
+class KNOpacityAnimeButton;
 /*!
  * \brief The KNMusicStoreDownloadList class provides a widget which could hold
- * a download list view and download .
+ * a download list view and download button. This widget will be used on store
+ * widget to show the download queue and download states.
  */
 class KNMusicStoreDownloadList : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicStoreDownloadList widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicStoreDownloadList(QWidget *parent = 0);
+
+    /*!
+     * \brief Get the download status button.
+     * \return The button widget pointer.
+     */
+    KNOpacityAnimeButton *iconButton();
 
 signals:
 
 public slots:
+
+private:
+    KNOpacityAnimeButton *m_button;
 };
 
 #endif // KNMUSICSTOREDOWNLOADLIST_H

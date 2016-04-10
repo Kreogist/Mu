@@ -70,7 +70,7 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
         m_propertiesLabel[i]->setFont(labelFont);
         // Property value label.
         m_properties[i]->setFont(labelFont);
-        m_properties[i]->setChangeCursor(true);
+        m_properties[i]->setCursor(Qt::PointingHandCursor);
     }
     //Change the font size of title label.
     QFont titleFont=m_titleLabel->font();

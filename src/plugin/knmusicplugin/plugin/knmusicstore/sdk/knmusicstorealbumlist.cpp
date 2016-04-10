@@ -19,6 +19,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QPersistentModelIndex>
+#include <QTimeLine>
 
 #include "sao/knsaostyle.h"
 #include "knthememanager.h"
@@ -33,7 +34,8 @@
 
 #define StoreAlbumArtTextSpacing 5
 #define StoreAlbumSpacing 20
-#define StoreAlbumTopSpacing 16
+#define StoreAlbumTopSpacing 19
+#define StoreAlbumScrollBarHeight 12
 
 KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     QAbstractItemView(parent),
@@ -42,7 +44,9 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     m_leftShadow(new KNSideShadowWidget(KNSideShadowWidget::LeftShadow, this)),
     m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
                                          this)),
-    m_itemHeight(0)
+    m_mouseAnime(new QTimeLine(200, this)),
+    m_itemHeight(0),
+    m_scrollBarBrightness(0)
 {
     setObjectName("MusicStoreAlbumList");
     //Set properties.
@@ -52,7 +56,7 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     //Add to theme manager.
     knTheme->registerWidget(this);
     //Configure the horizontal scroll bar.
-    KNSaoStyle::styleHorizontalScrollBar(m_scrollBar);
+    m_scrollBar->setStyle(KNSaoStyle::instance());
     //Link the scroll bar.
     connect(horizontalScrollBar(), &QScrollBar::valueChanged,
             this, &KNMusicStoreAlbumList::onActionUpdateOpacity);
@@ -60,26 +64,30 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
             horizontalScrollBar(), &QScrollBar::setValue);
     //Update item height.
     m_itemHeight=StoreAlbumSize + (StoreAlbumArtTextSpacing << 1) +
-                 fontMetrics().height() * 3 +
-                 KNSaoStyle::scrollBarWidth();
+                 fontMetrics().height() * 3;
     //Set the fixed size of the album list.
-    setFixedHeight(StoreAlbumTopSpacing + m_itemHeight);
+    setFixedHeight((StoreAlbumTopSpacing << 1) + m_itemHeight);
     //Update the page and single step.
     int albumFullWidth=(StoreAlbumSize + StoreAlbumSpacing);
     horizontalScrollBar()->setPageStep(albumFullWidth);
-    horizontalScrollBar()->setSingleStep(albumFullWidth>>1);
+    horizontalScrollBar()->setSingleStep(albumFullWidth);
     //Update the visible scroll bar page and single step.
     m_scrollBar->setPageStep(albumFullWidth);
-    m_scrollBar->setSingleStep(albumFullWidth>>1);
+    m_scrollBar->setSingleStep(albumFullWidth);
     //Configure the scroll bar.
-    m_scrollBar->move(StoreAlbumShadow, m_itemHeight);
-    m_scrollBar->setFixedHeight(StoreAlbumTopSpacing);
+    m_scrollBar->move(StoreAlbumShadow,
+                      height() - StoreAlbumScrollBarHeight);
+    m_scrollBar->setFixedHeight((StoreAlbumTopSpacing>>2)*3);
+    //Link time line.
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMusicStoreAlbumList::onActionUpdateBrightness);
 
     //Configure left and right shadow.
     m_leftShadow->setFixedSize(StoreAlbumShadow, height());
     m_rightShadow->setFixedSize(StoreAlbumShadow, height());
     //Change the opacity 0.
     onActionUpdateOpacity(0);
+    onActionUpdateBrightness(0);
 }
 
 QModelIndex KNMusicStoreAlbumList::indexAt(const QPoint &point) const
@@ -101,7 +109,8 @@ QModelIndex KNMusicStoreAlbumList::indexAt(const QPoint &point) const
     return (clickedPosition > StoreAlbumSpacing) &&
             (clickedPosition < StoreAlbumSpacing + StoreAlbumSize) &&
             (albumIndex<m_model->rowCount()) &&
-            (point.y() > StoreAlbumTopSpacing) ?
+            (point.y() > StoreAlbumTopSpacing) &&
+            (point.y() < StoreAlbumTopSpacing + m_itemHeight) ?
                 m_model->index(albumIndex, 0) : QModelIndex();
 }
 
@@ -156,6 +165,22 @@ void KNMusicStoreAlbumList::resetPostion()
 {
     //Reset the value.
     horizontalScrollBar()->setValue(0);
+}
+
+void KNMusicStoreAlbumList::enterEvent(QEvent *event)
+{
+    //Do original event.
+    QAbstractItemView::enterEvent(event);
+    //Update the horizontal scroll bar.
+    startAnime(100);
+}
+
+void KNMusicStoreAlbumList::leaveEvent(QEvent *event)
+{
+    //Do original event
+    QAbstractItemView::leaveEvent(event);
+    //Update the horizontal scroll bar.
+    startAnime(0);
 }
 
 void KNMusicStoreAlbumList::mouseMoveEvent(QMouseEvent *event)
@@ -252,6 +277,11 @@ void KNMusicStoreAlbumList::resizeEvent(QResizeEvent *event)
     //Resize the scroll bar.
     m_scrollBar->resize(width()-(StoreAlbumShadow<<1),
                         m_scrollBar->height());
+    //Update the page and single step.
+    horizontalScrollBar()->setPageStep(width());
+    //Update the visible scroll bar page and single step.
+    m_scrollBar->setPageStep(width());
+    m_scrollBar->setSingleStep(width());
 }
 
 QModelIndex KNMusicStoreAlbumList::moveCursor(
@@ -345,6 +375,25 @@ void KNMusicStoreAlbumList::onActionUpdateOpacity(int value)
     m_scrollBar->blockSignals(false);
 }
 
+void KNMusicStoreAlbumList::onActionUpdateBrightness(int opacity)
+{
+    //Configure the horizontal scroll bar.
+    QPalette pal=m_scrollBar->palette();
+    QColor buttonColor=pal.color(QPalette::Button);
+    //Change the alpha.
+    buttonColor.setAlpha(opacity);
+    //Set back the button color
+    pal.setColor(QPalette::Button, buttonColor);
+    //Change the alpha for base color.
+    buttonColor.setAlpha(opacity>>1);
+    //Update the palette.
+    pal.setColor(QPalette::Base, buttonColor);
+    //Reset the color.
+    m_scrollBar->setPalette(pal);
+    //Save the opacity.
+    m_scrollBarBrightness=opacity;
+}
+
 inline int KNMusicStoreAlbumList::indexScrollBarValue(
         const QModelIndex &index, QAbstractItemView::ScrollHint hint)
 {
@@ -390,6 +439,16 @@ inline QRect KNMusicStoreAlbumList::itemContentRect(
                  0,
                  StoreAlbumSize,
                  m_itemHeight);
+}
+
+inline void KNMusicStoreAlbumList::startAnime(int endFrame)
+{
+    //Stop the mouse anime.
+    m_mouseAnime->stop();
+    //Set the frame of the time line.
+    m_mouseAnime->setFrameRange(m_scrollBarBrightness, endFrame);
+    //Start the animation.
+    m_mouseAnime->start();
 }
 
 void KNMusicStoreAlbumList::mouseReleaseEvent(QMouseEvent *event)

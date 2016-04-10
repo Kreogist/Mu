@@ -24,14 +24,45 @@
 KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     QScrollArea(parent),
     m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow,
-                                       this))
+                                       this)),
+    m_titleBar(nullptr)
 {
+}
+
+void KNMusicStoreContainer::setTitleBar(QWidget *titleBar)
+{
+    //Check pointer first.
+    if(m_titleBar)
+    {
+        //Already has a title bar, ignore the operation.
+        return;
+    }
+    //Save the title bar.
+    m_titleBar=titleBar;
+    //Check title bar.
+    if(!m_titleBar)
+    {
+        //We cannot do anything about a null thing.
+        return;
+    }
+    //Change the relationship.
+    m_titleBar->setParent(this);
+    //Reset the view port margin.
+    setViewportMargins(0, m_titleBar->height(), 0, 0);
+    //Resize the title bar.
+    m_titleBar->resize(width(), m_titleBar->height());
 }
 
 void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
 {
     //Resize the widget.
     QScrollArea::resizeEvent(event);
+    //Check title bar first.
+    if(m_titleBar)
+    {
+        //Resize the title bar.
+        m_titleBar->resize(width(), m_titleBar->height());
+    }
     //Resize the scroll bar.
     m_topShadow->resize(width(), ShadowSize);
 }

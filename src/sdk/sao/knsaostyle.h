@@ -49,8 +49,10 @@ public:
     /*!
      * \brief Set the SAO style style sheet to a horizontal QScrollBar.
      * \param widget The QScrollBar widget pointer.
+     * \param brightness The brightness of the scroll bar.
      */
-    static void styleHorizontalScrollBar(QWidget *widget);
+    static void styleHorizontalScrollBar(QWidget *widget,
+                                         int brightness=100);
 
     /*!
      * \brief Get the fixed scroll bar width of the data.
@@ -200,6 +202,7 @@ private:
     inline void drawMenuItem(const QStyleOptionMenuItem *opt,
                              QPainter *p,
                              const QWidget *w) const;
+    QPixmap m_slideLeft, m_slideRight;
     QStyle *m_fusionStyle;
 };
 

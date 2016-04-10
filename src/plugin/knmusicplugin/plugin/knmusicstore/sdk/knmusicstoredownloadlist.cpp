@@ -15,10 +15,21 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knopacityanimebutton.h"
+
 #include "knmusicstoredownloadlist.h"
 
 KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_button(new KNOpacityAnimeButton(this))
 {
+    //Configure the button.
+    m_button->setIcon(QPixmap(":/plugin/music/store/download_list.png"));
+    m_button->setCursor(Qt::PointingHandCursor);
+    m_button->setFixedSize(13, 13);
+}
 
+KNOpacityAnimeButton *KNMusicStoreDownloadList::iconButton()
+{
+    return m_button;
 }

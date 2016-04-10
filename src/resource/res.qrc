@@ -80,6 +80,8 @@
         <file>public/white_waiting/w5.png</file>
         <file>public/white_waiting/w6.png</file>
         <file>public/white_waiting/w7.png</file>
+        <file>public/left_arrow.png</file>
+        <file>public/right_arrow.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>
@@ -160,6 +162,7 @@
         <file>music/player/mini_play.png</file>
         <file>music/player/mini_previous.png</file>
         <file>music/player/showmini.png</file>
+        <file>music/store/download_list.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>platforms/windows/loopmode_norepeat.png</file>
