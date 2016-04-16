@@ -15,10 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
+#include <QLabel>
+
 #include "knmusicstoreemptywidget.h"
 
 KNMusicStoreEmptyWidget::KNMusicStoreEmptyWidget(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    m_title(new QLabel(this))
 {
+    //Configure the title label.
+    QFont titleFont=m_title->font();
+    titleFont.setPixelSize(41);
+    m_title->setFont(titleFont);
+    m_title->setText(QChar(0x03BC)+QString("'sic Store"));
 
+    //Initial the box layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    setLayout(mainLayout);
+    //Add widget to layout.
+    mainLayout->addStretch();
+    mainLayout->addWidget(m_title);
+    mainLayout->addStretch();
 }

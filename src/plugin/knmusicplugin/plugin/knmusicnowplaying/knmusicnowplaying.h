@@ -148,7 +148,7 @@ private slots:
     void onActionLoadFailed();
     void onActionModelDataChanged(const QModelIndex &topLeft,
                                   const QModelIndex &bottomRight);
-    void playRow(const int &proxyRow);
+    void playRow(int proxyRow);
 
 private:
     inline void resetShadowModel();

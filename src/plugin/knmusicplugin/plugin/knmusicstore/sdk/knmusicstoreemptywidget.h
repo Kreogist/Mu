@@ -20,15 +20,23 @@
 
 #include <QWidget>
 
+class QLabel;
 class KNMusicStoreEmptyWidget : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicStoreEmptyWidget widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicStoreEmptyWidget(QWidget *parent = 0);
 
 signals:
 
 public slots:
+
+private:
+    QLabel *m_title;
 };
 
 #endif // KNMUSICSTOREEMPTYWIDGET_H

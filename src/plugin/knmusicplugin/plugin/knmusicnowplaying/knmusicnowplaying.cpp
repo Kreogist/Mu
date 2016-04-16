@@ -409,12 +409,20 @@ void KNMusicNowPlaying::onActionPlayingItemRemoved()
 
 void KNMusicNowPlaying::onActionLoadSuccess()
 {
-    //Clear out the cannot playing flag.
-    playingMusicModel()->setData(m_playingIndex,
-                                 false,
-                                 CannotPlayFlagRole);
-    //Give out the current.
-    emit nowPlayingChanged(m_playingAnalysisItem);
+    //Check the model first.
+    if(playingMusicModel())
+    {
+        //Block model signal first.
+        playingMusicModel()->blockSignals(true);
+        //Clear out the cannot playing flag.
+        playingMusicModel()->setData(m_playingIndex,
+                                     false,
+                                     CannotPlayFlagRole);
+        //Block model signal first.
+        playingMusicModel()->blockSignals(false);
+        //Give out the current.
+        emit nowPlayingChanged(m_playingAnalysisItem);
+    }
 }
 
 void KNMusicNowPlaying::onActionLoadFailed()
@@ -457,7 +465,7 @@ void KNMusicNowPlaying::onActionModelDataChanged(const QModelIndex &topLeft,
     }
 }
 
-void KNMusicNowPlaying::playRow(const int &proxyRow)
+void KNMusicNowPlaying::playRow(int proxyRow)
 {
     //Assert the pre-check.
     Q_ASSERT(m_playingProxyModel!=nullptr &&

@@ -51,6 +51,7 @@ public:
      * \param parent The parent widget pointer.
      */
     explicit KNMusicStore(QWidget *parent = 0);
+    ~KNMusicStore();
 
     /*!
      * \brief Reimplemented from KNMusicStoreBase::tab().
@@ -82,6 +83,7 @@ private slots:
     void retranslate();
     void onActionShowPanel(int category);
     void onActionFetchHome();
+    void onActionFirstFetch();
 
 private:
     void loadBackend(KNMusicStoreBackend *backend);
@@ -89,6 +91,7 @@ private:
     inline void showWidget(QWidget *widget);
     inline void updateContentWidget();
 
+    QTimer *m_firstFetch;
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;
     KNMusicStoreTitleBar *m_titleBar;

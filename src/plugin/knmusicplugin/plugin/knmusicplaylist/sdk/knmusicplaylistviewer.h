@@ -30,17 +30,39 @@ class KNMusicPlaylistModel;
 class KNMusicTab;
 class KNMusicPlaylistTreeView;
 /*!
- * \brief The KNMusicPlaylistViewer class
+ * \brief The KNMusicPlaylistViewer class provides a widget which could display
+ * the detail information of a playlist. Set the playlist model to this widget
+ * it will automatically update the data from the playlist model.
  */
 class KNMusicPlaylistViewer : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistViewer widget.
+     * \param parent The parent widget pointer.
+     * \param tab The tab pointer, this will be given to the tree view.
+     */
     explicit KNMusicPlaylistViewer(QWidget *parent = 0,
                                    KNMusicTab *tab = 0);
     ~KNMusicPlaylistViewer();
+
+    /*!
+     * \brief Get the current playlist model pointer.
+     * \return The playlist model pointer of the tree view widget.
+     */
     KNMusicPlaylistModel *playlist();
+
+    /*!
+     * \brief Set the playlist model to the tree view widget.
+     * \param model The model pointer.
+     */
     void setPlaylist(KNMusicPlaylistModel *model);
+
+    /*!
+     * \brief Select a specific song on the tree view.
+     * \param sourceIndex The index of the song in the source music model.
+     */
     void selectSong(const QModelIndex &sourceIndex);
 
 signals:
@@ -48,7 +70,10 @@ signals:
 public slots:
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    /*!
+     * \brief Reimplemented from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

@@ -20,6 +20,7 @@
 
 #include <QWidget>
 
+class QLabel;
 class KNOpacityAnimeButton;
 /*!
  * \brief The KNMusicStoreDownloadList class provides a widget which could hold
@@ -46,8 +47,12 @@ signals:
 
 public slots:
 
+private slots:
+    void retranslate();
+
 private:
     KNOpacityAnimeButton *m_button;
+    QLabel *m_title;
 };
 
 #endif // KNMUSICSTOREDOWNLOADLIST_H

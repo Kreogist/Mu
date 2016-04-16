@@ -339,7 +339,8 @@ void KNMusicMiniPlayer::saveConfigure()
     //Get the screen.
     QRect screenSize=desktopWidget->screenGeometry(screenIndex);
     //Save the screen size.
-    setCacheValue("miniPlayerScreenLeft", screenSize.left());
+    setCacheValue("miniPlayerScreenX", screenSize.x());
+    setCacheValue("miniPlayerScreenY", screenSize.y());
     setCacheValue("miniPlayerScreenWidth", screenSize.width());
     setCacheValue("miniPlayerScreenHeight", screenSize.height());
     //Save the current player position.
@@ -359,10 +360,15 @@ void KNMusicMiniPlayer::loadConfigure()
 
     //Read the screen information.
     int screenIndex=getCacheValue("miniPlayerScreenIndex"),
+        lastScreenX=getCacheValue("miniPlayerScreenX"),
+        lastScreenY=getCacheValue("miniPlayerScreenY"),
         lastScreenWidth=getCacheValue("miniPlayerScreenWidth"),
         lastScreenHeight=getCacheValue("miniPlayerScreenHeight"),
         lastX=getCacheValue("miniPlayerX"),
-        lastY=getCacheValue("miniPlayerY");
+        lastY=getCacheValue("miniPlayerY"),
+        targetScreenX, targetScreenY, targetScreenWidth, targetScreenHeight,
+        playerWidth=width(),
+        playerHeight=height();
     //Check whether we have this screen anymore or not.
     //Get the desktop widget.
     QDesktopWidget *desktopWidget=qApp->desktop();
@@ -372,43 +378,107 @@ void KNMusicMiniPlayer::loadConfigure()
         //The screen is still exist.
         //Get the screen rect.
         QRect screenRect=desktopWidget->screenGeometry(screenIndex);
-        //Check the resolution of the screen.
-        //Compare the resolution.
-        if(screenRect.width()==lastScreenWidth &&
-                screenRect.height()==lastScreenHeight)
+        //Check whether the screen is still valid.
+        if(!screenRect.isEmpty())
         {
-            //Move the position to the target position.
-            ;
+            //Check the resolution of the screen.
+            //Compare the resolution.
+            if(screenRect.width()==lastScreenWidth &&
+                    screenRect.height()==lastScreenHeight)
+            {
+                //Move the position to the target position.
+                move(lastX, lastY);
+                return;
+            }
+            //Or else, the resolution is changed, then we need to recalculate the
+            //size according to the new resolution.
+            targetScreenX=screenRect.x();
+            targetScreenY=screenRect.y();
+            targetScreenWidth=screenRect.width();
+            targetScreenHeight=screenRect.height();
         }
     }
-    //Read the resolution data of the last time closed.
-    int currentScreenWidth=qApp->desktop()->width(),
-        currentScreenHeight=qApp->desktop()->height();
-    //Check is the resolution is the same as the last closed time.
-    if(!(lastScreenWidth==currentScreenWidth &&
-         lastScreenHeight==currentScreenHeight))
+    else
     {
-        //The resolution has been changed, recalculate the size parameters.
-        //Get the width ratio and the height ratio.
-        qreal widthRatio=(qreal)currentScreenWidth/(qreal)lastScreenWidth,
-              heightRatio=(qreal)currentScreenHeight/(qreal)lastScreenHeight;
-        //Recalculate the last parameters.
-        zoomParameter(lastX, widthRatio);
-        zoomParameter(lastY, heightRatio);
+        //The screen is not exist anymore, set the target screen to be the
+        //default screen.
+        QRect screenRect=desktopWidget->screenGeometry();
+        //Check default screen rect is empty or not.
+        if(screenRect.isEmpty())
+        {
+            //If the screen is invalid, then igonre the request.
+            return;
+        }
+        //Set the current screen information.
+        targetScreenX=screenRect.x();
+        targetScreenY=screenRect.y();
+        targetScreenWidth=screenRect.width();
+        targetScreenHeight=screenRect.height();
     }
+    //Update the last X and Y to screen position.
+    lastX-=lastScreenX;
+    lastY-=lastScreenY;
+    //Check special position.
+    //Left.
+    if(lastX==0)
+    {
+        //Top.
+        if(lastY==0)
+        {
+            //Move to top left.
+            move(targetScreenX, targetScreenY);
+            return;
+        }
+        //Bottom.
+        if(lastY==lastScreenHeight-playerHeight)
+        {
+            //Move to bottom left.
+            move(targetScreenX, targetScreenHeight-playerHeight);
+            return;
+        }
+    }
+    //Right.
+    if(lastX==lastScreenWidth-playerWidth)
+    {
+        //Top.
+        if(lastY==0)
+        {
+            //Move to top left.
+            move(targetScreenX-playerWidth, targetScreenY);
+            return;
+        }
+        //Bottom.
+        if(lastY==lastScreenHeight-playerHeight)
+        {
+            //Move to bottom left.
+            move(targetScreenX-playerWidth, targetScreenHeight-playerHeight);
+            return;
+        }
+    }
+    //Recalculate the last parameters.
+    zoomParameter(lastX, (qreal)targetScreenWidth/(qreal)lastScreenWidth);
+    zoomParameter(lastY, (qreal)targetScreenHeight/(qreal)lastScreenHeight);
     //Check the parameter, ensure that one part of the window must be inside
     //screen.
     //If it's not inside the screen, make the top of the window 0.
-    if(lastX<m_minimalX || lastX>currentScreenWidth)
+    if(lastX<m_minimalX)
     {
         lastX=m_minimalX;
     }
-    if(lastY<m_minimalY || lastY>currentScreenHeight)
+    else if(lastX>targetScreenWidth)
+    {
+        lastX=targetScreenWidth-playerWidth;
+    }
+    if(lastY<m_minimalY)
     {
         lastY=m_minimalY;
     }
+    else if(lastY>targetScreenHeight)
+    {
+        lastY=targetScreenHeight-playerHeight;
+    }
     //Set the geometry.
-    move(lastX, lastY);
+    move(targetScreenX+lastX, targetScreenY+lastY);
 }
 
 void KNMusicMiniPlayer::enterEvent(QEvent *event)

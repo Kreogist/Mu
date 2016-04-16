@@ -18,6 +18,7 @@
 #include <QBoxLayout>
 #include <QScrollBar>
 #include <QLabel>
+#include <QTimer>
 
 //Include infrastructure.
 #include "knlocalemanager.h"
@@ -47,6 +48,7 @@
 
 KNMusicStore::KNMusicStore(QWidget *parent) :
     KNMusicStoreBase(parent),
+    m_firstFetch(new QTimer),
     m_tab(new KNCategoryTab(this)),
     m_storeGlobal(KNMusicStoreGlobal::initial(this)),
     m_titleBar(new KNMusicStoreTitleBar(this)),
@@ -95,6 +97,15 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_storeSwitcher->setWidget(m_emptyWidget);
     //Add download list to title bar.
     m_titleBar->appendIcon(m_downloadList->iconButton());
+    //Configure the title bar.
+    m_titleBar->hide();
+    //Configure the download list.
+    m_downloadList->hide();
+    //Configure the first fetch.
+    m_firstFetch->setInterval(200);
+    m_firstFetch->setSingleShot(true);
+    connect(m_firstFetch, &QTimer::timeout,
+            this, &KNMusicStore::onActionFirstFetch);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -111,6 +122,18 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Link retranslator.
     knI18n->link(this, &KNMusicStore::retranslate);
     retranslate();
+}
+
+KNMusicStore::~KNMusicStore()
+{
+    //Check first fetch pointer.
+    if(m_firstFetch)
+    {
+        //Remove the first fetch pointer.
+        m_firstFetch->deleteLater();
+        //Reset the pointer.
+        m_firstFetch=nullptr;
+    }
 }
 
 QAbstractButton *KNMusicStore::tab()
@@ -133,6 +156,12 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
     KNMusicStoreBase::resizeEvent(event);
     //Update the content size.
     updateContentWidget();
+    //Update the download list widget if it is visible.
+    if(m_downloadList->isVisible())
+    {
+        //Resize the download list.
+        //! FIXME: Add code here.
+    }
 }
 
 void KNMusicStore::showEvent(QShowEvent *event)
@@ -140,10 +169,10 @@ void KNMusicStore::showEvent(QShowEvent *event)
     //Show the widget.
     KNMusicStoreBase::showEvent(event);
     //Check the switcher.
-    if(m_emptyWidget->isVisible() && m_backend!=nullptr)
+    if(m_firstFetch && (!m_firstFetch->isActive()))
     {
-        //Fetch the home widget.
-        onActionFetchHome();
+        //Start the first fetch.
+        m_firstFetch->start();
     }
 }
 
@@ -155,6 +184,8 @@ void KNMusicStore::retranslate()
 
 void KNMusicStore::onActionShowPanel(int category)
 {
+    //Show the title bar.
+    m_titleBar->show();
     //Show the widget.
     showWidget(m_panels[category]);
     //Update the content size.
@@ -173,6 +204,18 @@ void KNMusicStore::onActionFetchHome()
                                 true);
     //Start to fetch home content.
     m_backend->fetchHomeInfo();
+}
+
+void KNMusicStore::onActionFirstFetch()
+{
+    //Disconnect the timer.
+    disconnect(m_firstFetch, 0, 0, 0);
+    //Remove the first fetch timer.
+    m_firstFetch->deleteLater();
+    //Reset the first fetch pointer.
+    m_firstFetch=nullptr;
+    //Fetch the home widget.
+    onActionFetchHome();
 }
 
 void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
