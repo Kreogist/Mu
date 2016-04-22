@@ -390,8 +390,8 @@ void KNMusicMiniPlayer::loadConfigure()
                 move(lastX, lastY);
                 return;
             }
-            //Or else, the resolution is changed, then we need to recalculate the
-            //size according to the new resolution.
+            //Or else, the resolution is changed, then we need to recalculate
+            //the size according to the new resolution.
             targetScreenX=screenRect.x();
             targetScreenY=screenRect.y();
             targetScreenWidth=screenRect.width();

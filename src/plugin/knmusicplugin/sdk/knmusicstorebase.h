@@ -37,8 +37,16 @@ public:
     KNMusicStoreBase(QWidget *parent = 0) : KNMusicTab(parent){}
 
 signals:
+    /*!
+     * \brief Ask backend to fetch home information.
+     */
+    void requireFetchHome();
 
 public slots:
+    /*!
+     * \brief Load all music store plugins.
+     */
+    virtual void loadPlugins()=0;
 };
 
 #endif // KNMUSICSTOREBASE_H

@@ -26,6 +26,7 @@
 #include "knmusicstorebase.h"
 
 class QLabel;
+class QPropertyAnimation;
 class KNCategoryTab;
 class KNMusicStorePanel;
 class KNMusicStoreContainer;
@@ -67,6 +68,10 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicStoreBase::loadPlugins().
+     */
+    void loadPlugins() Q_DECL_OVERRIDE;
 
 protected:
     /*!
@@ -84,6 +89,8 @@ private slots:
     void onActionShowPanel(int category);
     void onActionFetchHome();
     void onActionFirstFetch();
+    void onActionShowDownloadList();
+    void onActionHideDownloadList();
 
 private:
     void loadBackend(KNMusicStoreBackend *backend);
@@ -92,6 +99,7 @@ private:
     inline void updateContentWidget();
 
     QTimer *m_firstFetch;
+    QPropertyAnimation *m_downloadListAnime;
     KNCategoryTab *m_tab;
     KNMusicStoreGlobal *m_storeGlobal;
     KNMusicStoreTitleBar *m_titleBar;
