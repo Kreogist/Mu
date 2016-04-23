@@ -27,7 +27,7 @@ KNMusicStoreAlbumModel::KNMusicStoreAlbumModel(QObject *parent) :
 void KNMusicStoreAlbumModel::clear()
 {
     //Clear the album detail resource.
-    for(int i=0; i<KNMusicStoreUtil::StoreAlbumDetailCount; ++i)
+    for(int i=0; i<StoreAlbumDetailCount; ++i)
     {
         //Reset the description information.
         m_albumDetail[i]=QString();
@@ -38,16 +38,14 @@ void KNMusicStoreAlbumModel::clear()
     KNMusicStoreSongListModel::clear();
 }
 
-QString KNMusicStoreAlbumModel::albumInfo(
-        KNMusicStoreUtil::StoreAlbumDetail albumInfoField) const
+QString KNMusicStoreAlbumModel::albumInfo(StoreAlbumDetail albumInfoField) const
 {
     //Give back the detail data.
     return m_albumDetail[albumInfoField];
 }
 
-void KNMusicStoreAlbumModel::setAlbumInfo(
-        KNMusicStoreUtil::StoreAlbumDetail albumInfoField,
-        const QString &albumInfoData)
+void KNMusicStoreAlbumModel::setAlbumInfo(StoreAlbumDetail albumInfoField,
+                                          const QString &albumInfoData)
 {
     //Save the information.
     m_albumDetail[albumInfoField]=albumInfoData;

@@ -24,31 +24,12 @@
 
 #define StoreAlbumSize 140
 
-//! FIXME: Move all the enum and struct here.
 namespace MusicStoreUtil
 {
-;
-}
-
-/*!
- * \brief The KNMusicStoreUtil class provides several public value for music
- * store.
- */
-class KNMusicStoreUtil
-{
-public:
     enum StoreAlbumRole
     {
         AlbumArtistRole = Qt::UserRole + 1,
         AlbumFetchDataRole
-    };
-
-    struct StoreAlbumListItem
-    {
-        QPixmap albumArt;
-        QString name;
-        QString artist;
-        QVariant albumData;
     };
 
     enum StoreSearchCategories
@@ -61,14 +42,58 @@ public:
 
     enum StoreAlbumDetail
     {
-        AlbumTitle,
-        AlbumArtist,
-        AlbumReleaseTime,
-        AlbumReleaseCompany,
-        AlbumId,
+        StoreAlbumTitle,
+        StoreAlbumArtist,
+        StoreAlbumReleaseTime,
+        StoreAlbumReleaseCompany,
+        StoreAlbumId,
         StoreAlbumDetailCount
     };
 
+    enum StorePanels
+    {
+        PanelHome,
+        PanelSearch,
+        PanelList,
+        PanelSong,
+        StorePanelCount
+    };
+
+    enum StoreStates
+    {
+        StateNetwork,
+        StoreStateCount
+    };
+
+    enum SongProperties
+    {
+        StoreSongName,
+        StoreSongAlbumName,
+        StoreSongAlbumId,
+        StoreSongId,
+        StoreSongLyrics,
+        StoreSongOnlineUrl,
+        StoreSongHighUrl,
+        StoreSongLossLessUrl,
+        SongPropertiesCount
+    };
+
+    struct StoreAlbumListItem
+    {
+        QPixmap albumArt;
+        QString name;
+        QString artist;
+        QVariant albumData;
+    };
+}
+
+/*!
+ * \brief The KNMusicStoreUtil class provides several public value for music
+ * store.
+ */
+class KNMusicStoreUtil
+{
+public:
     struct StoreSongItem
     {
         QVariant songData;
@@ -79,21 +104,6 @@ public:
         QString urlHigh;
         QString urlOnline;
         int index;
-    };
-
-    enum StoreStates
-    {
-        StateNetwork,
-        StoreStateCount
-    };
-
-    enum StorePanels
-    {
-        PanelHome,
-        PanelSearch,
-        PanelList,
-        PanelSong,
-        StorePanelCount
     };
 
 private:

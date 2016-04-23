@@ -29,6 +29,8 @@
 
 #define TitleBarHeight 50
 
+using namespace MusicStoreUtil;
+
 KNMusicStoreTitleBar::KNMusicStoreTitleBar(QWidget *parent) :
     KNMouseSenseWidget(parent),
     m_buttonLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
@@ -93,7 +95,7 @@ void KNMusicStoreTitleBar::setStatesButton(int state, bool value)
 {
     switch(state)
     {
-    case KNMusicStoreUtil::StateNetwork:
+    case StateNetwork:
         //Show and start the value.
         if(value)
         {

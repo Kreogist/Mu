@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+using namespace MusicStoreUtil;
+
 class KNMusicStoreSearchModel;
 /*!
  * \brief The KNMusicStoreSearchResult class provides several models which is
@@ -52,8 +54,7 @@ private slots:
     void retranslate();
 
 private:
-    KNMusicStoreSearchModel *m_searchResults[
-                        KNMusicStoreUtil::StoreSearchCategoryCount];
+    KNMusicStoreSearchModel *m_searchResults[StoreSearchCategoryCount];
 };
 
 #endif // KNMUSICSTORESEARCHRESULT_H

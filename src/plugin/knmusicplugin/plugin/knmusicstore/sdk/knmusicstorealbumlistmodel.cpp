@@ -19,6 +19,8 @@
 
 #include <QDebug>
 
+using namespace MusicStoreUtil;
+
 KNMusicStoreAlbumListModel::KNMusicStoreAlbumListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -26,7 +28,7 @@ KNMusicStoreAlbumListModel::KNMusicStoreAlbumListModel(QObject *parent) :
 }
 
 void KNMusicStoreAlbumListModel::appendItem(
-        const KNMusicStoreUtil::StoreAlbumListItem &item)
+        const StoreAlbumListItem &item)
 {
     //Add this sentence before appending.
     beginInsertRows(QModelIndex(),
@@ -72,8 +74,7 @@ QVariant KNMusicStoreAlbumListModel::data(const QModelIndex &index,
         return QVariant();
     }
     //Get the item.
-    const KNMusicStoreUtil::StoreAlbumListItem &currentItem=
-            m_albumList.at(index.row());
+    const StoreAlbumListItem &currentItem=m_albumList.at(index.row());
     //Check the row.
     switch(role)
     {
@@ -81,9 +82,9 @@ QVariant KNMusicStoreAlbumListModel::data(const QModelIndex &index,
         return currentItem.name;
     case Qt::DecorationRole:
         return currentItem.albumArt;
-    case KNMusicStoreUtil::AlbumArtistRole:
+    case AlbumArtistRole:
         return currentItem.artist;
-    case KNMusicStoreUtil::AlbumFetchDataRole:
+    case AlbumFetchDataRole:
         return currentItem.albumData;
     default:
         return QVariant();

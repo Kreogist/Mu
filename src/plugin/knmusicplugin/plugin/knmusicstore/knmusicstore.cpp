@@ -17,7 +17,6 @@
  */
 #include <QBoxLayout>
 #include <QScrollBar>
-#include <QPropertyAnimation>
 #include <QLabel>
 #include <QTimer>
 
@@ -47,10 +46,11 @@
 
 #include <QDebug>
 
+using namespace MusicStoreUtil;
+
 KNMusicStore::KNMusicStore(QWidget *parent) :
     KNMusicStoreBase(parent),
     m_firstFetch(new QTimer),
-    m_downloadListAnime(new QPropertyAnimation(this)),
     m_tab(new KNCategoryTab(this)),
     m_storeGlobal(KNMusicStoreGlobal::initial(this)),
     m_titleBar(new KNMusicStoreTitleBar(this)),
@@ -69,27 +69,24 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
                 m_storeSwitcher->horizontalScrollBar());
     KNSaoStyle::styleVerticalScrollBar(m_storeSwitcher->verticalScrollBar());
     //Initial the widgets.
-    m_panels[KNMusicStoreUtil::PanelHome]=new KNMusicStoreHomeWidget(this);
-    m_panels[KNMusicStoreUtil::PanelSearch]=
+    m_panels[PanelHome]=new KNMusicStoreHomeWidget(this);
+    m_panels[PanelSearch]=
             new KNMusicStoreSearchResultWidget(this);
-    m_panels[KNMusicStoreUtil::PanelList]=
+    m_panels[PanelList]=
             new KNMusicStoreListWidget(this);
-    m_panels[KNMusicStoreUtil::PanelSong]=
+    m_panels[PanelSong]=
             new KNMusicStoreSingleSongWidget(this);
     //Hide the content widgets.
-    for(int i=0; i<KNMusicStoreUtil::StorePanelCount; ++i)
+    for(int i=0; i<StorePanelCount; ++i)
     {
         //Hide the widget.
         m_panels[i]->hide();
         //Link the panel request.
         connect(m_panels[i], &KNMusicStorePanel::startNetworkActivity,
-                [=]{m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
-                                                true);});
+                [=]{m_titleBar->setStatesButton(StateNetwork, true);});
     }
     //Add the bullet widget and add title widget to title bar.
-    for(int i=KNMusicStoreUtil::PanelSearch;
-        i<KNMusicStoreUtil::StorePanelCount;
-        ++i)
+    for(int i=PanelSearch; i<StorePanelCount; ++i)
     {
         //Hide the widget.
         m_titleBar->appendLabel(m_panels[i]->bulletLabel(),
@@ -102,18 +99,15 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Configure the download list.
     m_downloadList->hide();
     m_downloadList->raise();
+    m_downloadList->move(0, m_titleBar->height());
     //Configure the title bar.
-    m_titleBar->hide();
+//    m_titleBar->hide();
     m_titleBar->raise();
     //Configure the first fetch.
     m_firstFetch->setInterval(200);
     m_firstFetch->setSingleShot(true);
     connect(m_firstFetch, &QTimer::timeout,
             this, &KNMusicStore::onActionFirstFetch);
-    //Configure the animation.
-    m_downloadListAnime->setTargetObject(m_downloadList);
-    m_downloadListAnime->setPropertyName("pos");
-    m_downloadListAnime->setEasingCurve(QEasingCurve::OutCubic);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -167,12 +161,8 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
     KNMusicStoreBase::resizeEvent(event);
     //Update the content size.
     updateContentWidget();
-    //Update the download list widget if it is visible.
-    if(m_downloadList->isVisible())
-    {
-        //Resize the download list.
-        m_downloadList->resize(width(), height()-m_titleBar->height());
-    }
+    //Resize the download list.
+    m_downloadList->resize(width(), height()-m_titleBar->height());
 }
 
 void KNMusicStore::showEvent(QShowEvent *event)
@@ -202,8 +192,7 @@ void KNMusicStore::onActionShowPanel(int category)
     //Update the content size.
     updateContentWidget();
     //Hide the network mission.
-    m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
-                                false);
+    m_titleBar->setStatesButton(StateNetwork, false);
     //Reset the navigator.
     m_titleBar->setNavigationLevel(category);
 }
@@ -211,8 +200,7 @@ void KNMusicStore::onActionShowPanel(int category)
 void KNMusicStore::onActionFetchHome()
 {
     //Set the network activity to start.
-    m_titleBar->setStatesButton(KNMusicStoreUtil::StateNetwork,
-                                true);
+    m_titleBar->setStatesButton(StateNetwork, true);
     //Emit the fetch home signal.
     emit requireFetchHome();
 }
@@ -227,16 +215,6 @@ void KNMusicStore::onActionFirstFetch()
     m_firstFetch=nullptr;
     //Fetch the home widget.
     onActionFetchHome();
-}
-
-void KNMusicStore::onActionShowDownloadList()
-{
-    ;
-}
-
-void KNMusicStore::onActionHideDownloadList()
-{
-    ;
 }
 
 void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
@@ -262,7 +240,7 @@ void KNMusicStore::loadBackend(KNMusicStoreBackend *backend)
             m_backend, &KNMusicStoreBackend::fetchHomeInfo,
             Qt::QueuedConnection);
     //Set backends to all the widget.
-    for(int i=0; i<KNMusicStoreUtil::StorePanelCount; ++i)
+    for(int i=0; i<StorePanelCount; ++i)
     {
         //Set the backend.
         m_panels[i]->setBackend(m_backend);

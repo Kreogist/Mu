@@ -22,7 +22,11 @@
 #include <QPixmap>
 #include <QStringList>
 
+#include "knmusicstoreutil.h"
+
 #include <QObject>
+
+using namespace MusicStoreUtil;
 
 /*!
  * \brief The KNMusicSongDetailInfo class provides a object which could describe
@@ -32,19 +36,6 @@ class KNMusicStoreSongDetailInfo : public QObject
 {
     Q_OBJECT
 public:
-    enum SongProperties
-    {
-        Name,
-        AlbumName,
-        AlbumId,
-        SongId,
-        Lyrics,
-        OnlineUrl,
-        HighUrl,
-        LossLessUrl,
-        SongPropertiesCount
-    };
-
     /*!
      * \brief Construct a KNMusicSongDetailInfo object.
      * \param parent The parent object.

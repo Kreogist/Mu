@@ -21,7 +21,9 @@
 #include <QWidget>
 
 class QLabel;
+class QPropertyAnimation;
 class KNOpacityAnimeButton;
+class KNMouseUnclickableWidget;
 /*!
  * \brief The KNMusicStoreDownloadList class provides a widget which could hold
  * a download list view and download button. This widget will be used on store
@@ -47,12 +49,28 @@ signals:
 
 public slots:
 
+protected:
+    /*!
+     * \brief Reimplemented from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::mousePressEvent().
+     */
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void retranslate();
+    void onActionShowHideDownloadList();
+    void onActionChangeOpacity(const QVariant &position);
 
 private:
+    inline void updaterAnimeParameter(bool isShown);
     KNOpacityAnimeButton *m_button;
+    KNMouseUnclickableWidget *m_container;
     QLabel *m_title;
+    QPropertyAnimation *m_showHideAnime;
 };
 
 #endif // KNMUSICSTOREDOWNLOADLIST_H

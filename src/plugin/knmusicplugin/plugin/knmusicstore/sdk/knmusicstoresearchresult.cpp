@@ -25,7 +25,7 @@ KNMusicStoreSearchResult::KNMusicStoreSearchResult(QObject *parent) :
     QObject(parent)
 {
     //Initial the models.
-    for(int i=0; i<KNMusicStoreUtil::StoreSearchCategoryCount; ++i)
+    for(int i=0; i<StoreSearchCategoryCount; ++i)
     {
         //Generate the model.
         m_searchResults[i]=new KNMusicStoreSearchModel(this);
@@ -39,7 +39,7 @@ KNMusicStoreSearchResult::KNMusicStoreSearchResult(QObject *parent) :
 KNMusicStoreSearchModel *KNMusicStoreSearchResult::searchResultModel(
         int index)
 {
-    Q_ASSERT(index>-1 && index<KNMusicStoreUtil::StoreSearchCategoryCount);
+    Q_ASSERT(index>-1 && index<StoreSearchCategoryCount);
     //Give back the pointer.
     return m_searchResults[index];
 }
@@ -54,6 +54,5 @@ void KNMusicStoreSearchResult::retranslate()
     songColumn.append(tr("Album"));
     songColumn.append(tr("Duration"));
     //Set the data to search result.
-    m_searchResults[KNMusicStoreUtil::CategorySong]->setColumnFieldNames(
-                songColumn);
+    m_searchResults[CategorySong]->setColumnFieldNames(songColumn);
 }

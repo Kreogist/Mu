@@ -27,6 +27,7 @@ KNLabelButton::KNLabelButton(QWidget *parent) :
 
 void KNLabelButton::mousePressEvent(QMouseEvent *event)
 {
+    //Do the press event.
     QLabel::mousePressEvent(event);
     //Set the pressed flag.
     m_pressed=true;

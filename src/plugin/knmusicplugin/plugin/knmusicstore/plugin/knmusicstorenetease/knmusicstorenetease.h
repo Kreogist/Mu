@@ -28,6 +28,8 @@
 
 #include "../../sdk/knmusicstorebackend.h"
 
+using namespace MusicStoreUtil;
+
 class KNRestApiBase;
 class KNMusicStoreSearchResult;
 /*!
@@ -179,7 +181,7 @@ private:
     inline QString getDuration(const QJsonObject &songData);
 
     QFuture<void> m_listThreads[NeteaseWorkThreadCount],
-                  m_searchThreads[KNMusicStoreUtil::StoreSearchCategoryCount],
+                  m_searchThreads[StoreSearchCategoryCount],
                   m_albumThread, m_songThread;
     QFutureWatcher<void> m_listThreadWatcher[NeteaseWorkThreadCount],
                          m_albumThreadWatcher, m_songThreadWatcher;

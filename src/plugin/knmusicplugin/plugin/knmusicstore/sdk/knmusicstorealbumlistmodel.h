@@ -24,6 +24,8 @@
 
 #include <QAbstractListModel>
 
+using namespace MusicStoreUtil;
+
 /*!
  * \brief The KNMusicAlbumListModel class provides the model for albums which
  * could be stored the informations of albums.
@@ -42,7 +44,7 @@ public:
      * \brief Append an album item to the end of the model.
      * \param item The item of the album.
      */
-    void appendItem(const KNMusicStoreUtil::StoreAlbumListItem &item);
+    void appendItem(const StoreAlbumListItem &item);
 
     /*!
      * \brief Clear all the data.
@@ -114,7 +116,7 @@ signals:
 public slots:
 
 private:
-    QList<KNMusicStoreUtil::StoreAlbumListItem> m_albumList;
+    QList<StoreAlbumListItem> m_albumList;
 };
 
 #endif // KNMUSICSTOREALBUMLISTMODEL_H

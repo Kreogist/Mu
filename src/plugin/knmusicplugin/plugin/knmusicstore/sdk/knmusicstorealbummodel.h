@@ -22,6 +22,8 @@
 
 #include "knmusicstoresonglistmodel.h"
 
+using namespace MusicStoreUtil;
+
 /*!
  * \brief The KNMusicStoreAlbumModel class provides a model which could be used
  * to describe an album.
@@ -46,7 +48,7 @@ public:
      * \param albumInfoField The info type.
      * \return The album information.
      */
-    QString albumInfo(KNMusicStoreUtil::StoreAlbumDetail albumInfoField) const;
+    QString albumInfo(StoreAlbumDetail albumInfoField) const;
 
     /*!
      * \brief Get the album art image.
@@ -68,11 +70,11 @@ public slots:
      * \param albumInfoField Album information type.
      * \param albumInfoData The album information.
      */
-    void setAlbumInfo(KNMusicStoreUtil::StoreAlbumDetail albumInfoField,
+    void setAlbumInfo(StoreAlbumDetail albumInfoField,
                       const QString &albumInfoData);
 
 private:
-    QString m_albumDetail[KNMusicStoreUtil::StoreAlbumDetailCount];
+    QString m_albumDetail[StoreAlbumDetailCount];
     QPixmap m_albumArt;
 };
 

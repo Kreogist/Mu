@@ -29,6 +29,8 @@
 
 #include "knmusicstoresearchresultwidget.h"
 
+using namespace MusicStoreUtil;
+
 KNMusicStoreSearchResultWidget::KNMusicStoreSearchResultWidget(QWidget *parent):
     KNMusicStorePanel(parent),
     m_songTreeView(new KNMusicStoreAlbumTreeView(this))
@@ -60,8 +62,7 @@ void KNMusicStoreSearchResultWidget::setBackend(KNMusicStoreBackend *backend)
     //Save the backend.
     m_backend=backend;
     //Get the model, set the search model to the specific view.
-    m_songTreeView->setModel(
-                m_backend->searchResultModel(KNMusicStoreUtil::CategorySong));
+    m_songTreeView->setModel(m_backend->searchResultModel(CategorySong));
     //Link the backend with the signal.
 }
 

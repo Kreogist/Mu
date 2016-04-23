@@ -105,6 +105,12 @@ public:
     virtual void setPlaySection(const qint64 &start=-1,
                                 const qint64 &duration=-1)=0;
 
+    /*!
+     * \brief Play an Internet URL link music data.
+     * \param url The Internet URL.
+     */
+//    virtual void playUrl(const QUrl &url)=0;
+
 signals:
     /*!
      * \brief When load the file failed, this signal will emitted.

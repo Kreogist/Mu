@@ -42,6 +42,8 @@
 
 #define ListMaximumSize 18
 
+using namespace MusicStoreUtil;
+
 KNMusicStoreNetease::KNMusicStoreNetease(QObject *parent) :
     KNMusicStoreBackend(parent),
     m_magicData(QByteArray("3go8&$8*3*3h0k(2)2")),
@@ -280,8 +282,7 @@ void KNMusicStoreNetease::fetchSearchResult(const QString &keyword)
     request.offset=0;
     request.type=1;
     request.filter=songSearchFilter;
-    updateSearchResult(m_searchResult->searchResultModel(
-                           KNMusicStoreUtil::CategorySong),
+    updateSearchResult(m_searchResult->searchResultModel(CategorySong),
                        request);
 }
 
@@ -329,7 +330,7 @@ void KNMusicStoreNetease::updateLatestAlbumsList()
                                   responseData)==200)
                 {
                     //Construct a album object.
-                    KNMusicStoreUtil::StoreAlbumListItem currentAlbum;
+                    StoreAlbumListItem currentAlbum;
                     //Set the album data.
                     currentAlbum.name=songObject.value("name").toString();
                     currentAlbum.artist=
@@ -419,7 +420,7 @@ void KNMusicStoreNetease::updateNeteaseList(
                         //Reduce the counter.
                         --songCount;
                         //Construct a album object.
-                        KNMusicStoreUtil::StoreAlbumListItem currentSong;
+                        StoreAlbumListItem currentSong;
                         //Set data.
                         currentSong.name=songData.value("name").toString();
                         currentSong.albumArt=generateAlbumArt(responseData);
@@ -574,17 +575,17 @@ void KNMusicStoreNetease::updateAlbumDetail(
         }
         //Save the information to album detail model.
         albumDetail->setAlbumInfo(
-                    KNMusicStoreUtil::AlbumId,
+                    StoreAlbumId,
                     QString::number(qint64(albumData.value("id").toDouble())));
-        albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumTitle,
+        albumDetail->setAlbumInfo(StoreAlbumTitle,
                                   albumData.value("name").toString());
-        albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumArtist,
+        albumDetail->setAlbumInfo(StoreAlbumArtist,
                                   albumData.value("artist").toObject().value(
                                       "name").toString());
-        albumDetail->setAlbumInfo(KNMusicStoreUtil::AlbumReleaseCompany,
+        albumDetail->setAlbumInfo(StoreAlbumReleaseCompany,
                                   albumData.value("company").toString());
         albumDetail->setAlbumInfo(
-                    KNMusicStoreUtil::AlbumReleaseTime,
+                    StoreAlbumReleaseTime,
                     QDateTime::fromMSecsSinceEpoch(
                         albumData.value("publishTime").toDouble()).toString(
                         "yyyy-MM-dd"));
@@ -629,7 +630,7 @@ void KNMusicStoreNetease::updateAlbumDetail(
             albumDetail->setAlbumArt(generateAlbumArt(responseData,
                                                       219, 219));
             //Emit finished signal.
-            emit fetchComplete(KNMusicStoreUtil::PanelList);
+            emit fetchComplete(PanelList);
             qDebug()<<"Album Fetch Finished.";
             //Reset the launching instance to null.
             m_launchingInstance=StateNull;
@@ -707,15 +708,15 @@ void KNMusicStoreNetease::updateSongDetail(
             //Get the lrc object.
             lyricsResponse=lyricsResponse.value("lrc").toObject();
             //Get the lyrics data from the object.
-            songDetail->setSongData(KNMusicStoreSongDetailInfo::Lyrics,
+            songDetail->setSongData(StoreSongLyrics,
                                     lyricsResponse.value("lyric").toString());
         }
         //Set the pixmap data.
         songDetail->setAlbumArt(generateAlbumArt(albumArtData, 219, 219));
         //Save all the other information.
-        songDetail->setSongData(KNMusicStoreSongDetailInfo::Name,
+        songDetail->setSongData(StoreSongName,
                                 songData.value("name").toString());
-        songDetail->setSongData(KNMusicStoreSongDetailInfo::SongId,
+        songDetail->setSongData(StoreSongId,
                                 QString::number(
                                     qint64(songData.value("id").toDouble())));
         {
@@ -741,10 +742,10 @@ void KNMusicStoreNetease::updateSongDetail(
             //Get album object.
             QJsonObject albumObject=songData.value("album").toObject();
             //Get the album id and name.
-            songDetail->setSongData(KNMusicStoreSongDetailInfo::AlbumName,
+            songDetail->setSongData(StoreSongAlbumName,
                                     albumObject.value("name").toString());
             songDetail->setSongData(
-                        KNMusicStoreSongDetailInfo::AlbumId,
+                        StoreSongAlbumId,
                         QString::number(
                             static_cast<qint64>(albumObject.value(
                                                     "id").toDouble())));
@@ -753,20 +754,15 @@ void KNMusicStoreNetease::updateSongDetail(
         {
             QString urlOnline, urlHigh, urlLossless;
             //Set the download url to cache string.
-            setDownloadUrl(songData,
-                           urlOnline,
-                           urlHigh,
-                           urlLossless);
+            setDownloadUrl(songData, urlOnline, urlHigh, urlLossless);
             //Set the data to song detail.
-            songDetail->setSongData(KNMusicStoreSongDetailInfo::OnlineUrl,
-                                    urlOnline);
-            songDetail->setSongData(KNMusicStoreSongDetailInfo::HighUrl,
-                                    urlHigh);
-            songDetail->setSongData(KNMusicStoreSongDetailInfo::LossLessUrl,
-                                    urlLossless);
+            songDetail->setSongData(StoreSongOnlineUrl, urlOnline);
+            songDetail->setSongData(StoreSongHighUrl, urlHigh);
+            songDetail->setSongData(StoreSongLossLessUrl, urlLossless);
+            qDebug()<<urlOnline;
         }
         //Emit the complete signal.
-        emit fetchComplete(KNMusicStoreUtil::PanelSong);
+        emit fetchComplete(PanelSong);
         //Reset the launching instance to null.
         m_launchingInstance=StateNull;
     }
@@ -783,7 +779,7 @@ void KNMusicStoreNetease::onActionWatcherFinished()
     if(m_homeLocking==NeteaseWorkThreadCount)
     {
         //Emit the home fetching signal.
-        emit fetchComplete(KNMusicStoreUtil::PanelHome);
+        emit fetchComplete(PanelHome);
         qDebug()<<"Finished!";
         //Reset the launching instance to null.
         m_launchingInstance=StateNull;
@@ -906,11 +902,10 @@ inline void KNMusicStoreNetease::setDownloadUrl(const QJsonObject &songItem,
                     highMusic.value("dfsId").toDouble()),
                 encId=encryptedId(songId);
         //Then the url will be compose as
-        QString highUrl=
-                QString("http://m%1.music.126.net/%2/%3.mp3").arg(
-                    QString::number((qrand() % 3)+1),
-                    encId,
-                    songId);
+        QString highUrl=QString("http://m%1.music.126.net/%2/%3.mp3").arg(
+                            QString::number((qrand() % 3)+1),
+                            encId,
+                            songId);
         //Save the high url for url high and url lossless.
         urlHigh=highUrl;
         urlLossless=highUrl;

@@ -33,6 +33,8 @@
 
 #include "knmusicstorelistwidget.h"
 
+using namespace MusicStoreUtil;
+
 KNMusicStoreListWidget::KNMusicStoreListWidget(QWidget *parent) :
     KNMusicStorePanel(parent),
     m_titleLabel(new QLabel(this)),
@@ -167,7 +169,7 @@ void KNMusicStoreListWidget::onActionRefresh()
 {
     //Ask to reload the album information.
     emit requireShowAlbum(
-                m_albumDetailModel->albumInfo(KNMusicStoreUtil::AlbumId));
+                m_albumDetailModel->albumInfo(StoreAlbumId));
     //Start network activity.
     emit startNetworkActivity();
 }
@@ -175,7 +177,7 @@ void KNMusicStoreListWidget::onActionRefresh()
 void KNMusicStoreListWidget::onActionUpdateInfo(int category)
 {
     //Check model pointer and category first.
-    if(m_albumDetailModel==nullptr || category!=KNMusicStoreUtil::PanelList)
+    if(m_albumDetailModel==nullptr || category!=PanelList)
     {
         //Ignore invalid model settings.
         return;
@@ -185,8 +187,7 @@ void KNMusicStoreListWidget::onActionUpdateInfo(int category)
                               knMusicGlobal->noAlbumArt() :
                               m_albumDetailModel->albumArt());
     //Set the label title.
-    m_titleLabel->setText(
-                m_albumDetailModel->albumInfo(KNMusicStoreUtil::AlbumTitle));
+    m_titleLabel->setText(m_albumDetailModel->albumInfo(StoreAlbumTitle));
     headerLabel()->setText(fontMetrics().elidedText(
                                m_titleLabel->text(),
                                Qt::ElideRight,
@@ -196,13 +197,11 @@ void KNMusicStoreListWidget::onActionUpdateInfo(int category)
     bulletLabel()->show();
     //Set the content data.
     m_properties[PropertyArtist]->setText(
-                m_albumDetailModel->albumInfo(KNMusicStoreUtil::AlbumArtist));
+                m_albumDetailModel->albumInfo(StoreAlbumArtist));
     m_properties[PropertyReleaseDate]->setText(
-                m_albumDetailModel->albumInfo(
-                    KNMusicStoreUtil::AlbumReleaseTime));
+                m_albumDetailModel->albumInfo(StoreAlbumReleaseTime));
     m_properties[PropertyCompany]->setText(
-                m_albumDetailModel->albumInfo(
-                    KNMusicStoreUtil::AlbumReleaseCompany));
+                m_albumDetailModel->albumInfo(StoreAlbumReleaseCompany));
     //Update treeview size.
     m_albumSongView->setMinimumHeight(m_albumSongView->header()->height() +
                                       m_albumDetailModel->rowCount() *

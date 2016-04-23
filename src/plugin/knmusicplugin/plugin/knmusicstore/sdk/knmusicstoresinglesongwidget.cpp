@@ -33,6 +33,8 @@
 
 #include <QDebug>
 
+using namespace MusicStoreUtil;
+
 KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     KNMusicStorePanel(parent),
     m_titleLabel(new QLabel(this)),
@@ -151,8 +153,7 @@ void KNMusicStoreSingleSongWidget::retranslate()
 void KNMusicStoreSingleSongWidget::onActionRefresh()
 {
     //Update the reload the current information.
-    emit requireShowSong(
-                m_songDetail->songData(KNMusicStoreSongDetailInfo::SongId));
+    emit requireShowSong(m_songDetail->songData(StoreSongId));
     //Start the Internet activity.
     emit startNetworkActivity();
 }
@@ -160,14 +161,13 @@ void KNMusicStoreSingleSongWidget::onActionRefresh()
 void KNMusicStoreSingleSongWidget::onActionDataUpdate(int category)
 {
     //Check category.
-    if(category!=KNMusicStoreUtil::PanelSong)
+    if(category!=PanelSong)
     {
         //Ignore the category if the data is not mine.
         return;
     }
     //Update the title.
-    m_titleLabel->setText(m_songDetail->songData(
-                              KNMusicStoreSongDetailInfo::Name));
+    m_titleLabel->setText(m_songDetail->songData(StoreSongName));
     //Update the header label text.
     headerLabel()->setText(fontMetrics().elidedText(
                                m_titleLabel->text(),
@@ -181,12 +181,10 @@ void KNMusicStoreSingleSongWidget::onActionDataUpdate(int category)
     //Update the content data.
     m_properties[PropertyArtist]->setText(m_songDetail->artists().join(
                                               tr(", ")));
-    m_properties[PropertyAlbum]->setText(
-                m_songDetail->songData(
-                    KNMusicStoreSongDetailInfo::AlbumName));
+    m_properties[PropertyAlbum]->setText(m_songDetail->songData(
+                                             StoreSongAlbumName));
     //Update the lyrics.
-    QString lyricsText=m_songDetail->songData(
-                KNMusicStoreSongDetailInfo::Lyrics);
+    QString lyricsText=m_songDetail->songData(StoreSongLyrics);
     //Remove tags.
     lyricsText.remove(QRegExp("\\[[^\\]]*\\]"));
     m_lyricsLabel->setText(lyricsText);
@@ -209,6 +207,5 @@ void KNMusicStoreSingleSongWidget::onActionShowAlbum()
     //Emit the start signal.
     emit startNetworkActivity();
     //Emit the show album signal.
-    emit requireShowAlbum(m_songDetail->songData(
-                              KNMusicStoreSongDetailInfo::AlbumId));
+    emit requireShowAlbum(m_songDetail->songData(StoreSongAlbumId));
 }
