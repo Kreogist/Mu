@@ -94,6 +94,11 @@ public:
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::playUrl().
+     */
+    void playUrl(const QUrl &url) Q_DECL_OVERRIDE;
+
 signals:
     /*!
      * \brief This signal is used only for threadReachesEnd(). It's used for
@@ -186,6 +191,8 @@ private:
             {
                 BASS_MusicFree(m_channel);
             }
+            //Reset the channel.
+            m_channel=0;
         }
     }
     inline bool loadBassThread(const QString &filePath)

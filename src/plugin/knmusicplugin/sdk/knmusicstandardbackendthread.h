@@ -109,7 +109,7 @@ public:
      * \brief Play an Internet URL link music data.
      * \param url The Internet URL.
      */
-//    virtual void playUrl(const QUrl &url)=0;
+    virtual void playUrl(const QUrl &url)=0;
 
 signals:
     /*!

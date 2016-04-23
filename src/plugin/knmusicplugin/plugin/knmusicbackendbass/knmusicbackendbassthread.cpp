@@ -73,6 +73,8 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
         //Mission complete.
         return true;
     }
+    //Clear up all the previous data.
+    reset();
     //Load the file path.
     if(!loadBassThread(filePath))
     {
@@ -232,6 +234,19 @@ void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
         //Emit the new duration.
         emit durationChanged(m_duration);
     }
+}
+
+void KNMusicBackendBassThread::playUrl(const QUrl &url)
+{
+    //Stop the current thread first.
+    stop();
+    //Remove all the previous sync handlers.
+    removeChannelSyncs();
+    //! FIXME: Set proxy here.
+    ;
+    //Clear up all the previous data.
+    reset();
+    //
 }
 
 void KNMusicBackendBassThread::save()
