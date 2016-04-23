@@ -108,8 +108,9 @@ public:
     /*!
      * \brief Play an Internet URL link music data.
      * \param url The Internet URL.
+     * \return If the thread load the URL successful, then return true.
      */
-    virtual void playUrl(const QUrl &url)=0;
+    virtual bool loadUrl(const QUrl &url)=0;
 
 signals:
     /*!

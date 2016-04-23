@@ -97,7 +97,7 @@ public:
     /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::playUrl().
      */
-    void playUrl(const QUrl &url) Q_DECL_OVERRIDE;
+    bool loadUrl(const QUrl &url) Q_DECL_OVERRIDE;
 
 signals:
     /*!

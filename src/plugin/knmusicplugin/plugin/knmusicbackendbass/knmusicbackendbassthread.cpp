@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QTimer>
+#include <QUrl>
 
 #include "knmusicbackendbassthread.h"
 
@@ -59,8 +60,6 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
 {
     //Stop the current thread first.
     stop();
-    //Remove all the previous sync handlers.
-    removeChannelSyncs();
     //Check is the file the current file.
     if(filePath==m_filePath)
     {
@@ -236,7 +235,7 @@ void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
     }
 }
 
-void KNMusicBackendBassThread::playUrl(const QUrl &url)
+bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
 {
     //Stop the current thread first.
     stop();
@@ -246,7 +245,36 @@ void KNMusicBackendBassThread::playUrl(const QUrl &url)
     ;
     //Clear up all the previous data.
     reset();
-    //
+    //Get the url plain text.
+#ifdef Q_OS_WIN
+    std::wstring uniPath=url.toString().toStdWString();
+#endif
+#ifdef Q_OS_UNIX
+    std::string uniPath=url.toString().toStdString();
+#endif
+    //Create the url channel.
+    m_channel=BASS_StreamCreateURL(uniPath.data(),
+                                   0,
+                                   BASS_STREAM_BLOCK | //Streaming.
+                                   BASS_STREAM_STATUS | //Get info.
+                                   BASS_STREAM_AUTOFREE | //Auto recovery mem.
+                                   m_channelFlags,
+                                   nullptr,
+                                   nullptr);
+    //Check the channel pointer is created or not.
+    if(!m_channel)
+    {
+        //Emit load failed signal.
+        emit loadFailed();
+        //Bass is failed to load the music file.
+        return false;
+    }
+    //Emit the load success signal.
+    emit loadSuccess();
+    //Set sync handler.
+    ;
+    //Load success.
+    return true;
 }
 
 void KNMusicBackendBassThread::save()
