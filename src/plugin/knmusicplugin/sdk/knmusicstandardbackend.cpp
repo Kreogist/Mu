@@ -217,8 +217,6 @@ void KNMusicStandardBackend::setMainThread(KNMusicStandardBackendThread *thread)
             this, &KNMusicStandardBackend::positionChanged);
     connect(m_main, &KNMusicStandardBackendThread::loadFailed,
             this, &KNMusicStandardBackend::loadFailed);
-    connect(m_main, &KNMusicStandardBackendThread::loadSuccess,
-            this, &KNMusicStandardBackend::loadSuccess);
     connect(m_main, &KNMusicStandardBackendThread::finished,
             this, &KNMusicStandardBackend::finished);
     connect(m_main, &KNMusicStandardBackendThread::stopped,
@@ -324,13 +322,15 @@ inline bool KNMusicStandardBackend::threadLoadMusic(
         KNMusicStandardBackendThread *thread,
         const QString &filePath,
         const qint64 &start,
-        const qint64 &duration) const
+        const qint64 &duration)
 {
     //Check thread first, if thread exist, load the music.
     if(thread && thread->loadFile(filePath))
     {
         //Set the section for thread.
         thread->setPlaySection(start, duration);
+        //Emit load success signal.
+        emit loadSuccess();
         //Load the music compelte.
         return true;
     }

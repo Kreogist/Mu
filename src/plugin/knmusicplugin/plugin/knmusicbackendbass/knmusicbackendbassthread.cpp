@@ -91,6 +91,8 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
     emit durationChanged(m_totalDuration);
     //Reset the thread information.
     resetChannelInformation();
+    //Emit the load success signal.
+    emit loadSuccess();
     //Load complete.
     return true;
 }
@@ -143,8 +145,6 @@ void KNMusicBackendBassThread::play()
     {
         return;
     }
-    //Start the position updater.
-    m_positionUpdater->start();
     //Check the playing state before.
     if(m_state==Stopped)
     {
@@ -162,6 +162,8 @@ void KNMusicBackendBassThread::play()
         //volume is back to 1.0.
         BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, m_volume);
     }
+    //Start the position updater.
+    m_positionUpdater->start();
     //Play the thread.
     BASS_ChannelPlay(m_channel, FALSE);
     //Update the state.

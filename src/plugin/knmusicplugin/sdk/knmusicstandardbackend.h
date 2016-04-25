@@ -219,7 +219,7 @@ private:
     inline bool threadLoadMusic(KNMusicStandardBackendThread *thread,
                                 const QString &filePath,
                                 const qint64 &start,
-                                const qint64 &duration) const;
+                                const qint64 &duration);
     inline void threadPlay(KNMusicStandardBackendThread *thread);
     inline void threadPause(KNMusicStandardBackendThread *thread);
     inline void threadStop(KNMusicStandardBackendThread *thread);

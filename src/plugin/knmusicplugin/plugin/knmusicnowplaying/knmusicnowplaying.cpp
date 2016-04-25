@@ -223,6 +223,11 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
     playRow(row);
 }
 
+void KNMusicNowPlaying::playUrl(const QUrl &url)
+{
+    ;
+}
+
 void KNMusicNowPlaying::playNext()
 {
     //Play the next music with the repeat mode.
@@ -423,6 +428,8 @@ void KNMusicNowPlaying::onActionLoadSuccess()
         //Give out the current.
         emit nowPlayingChanged(m_playingAnalysisItem);
     }
+    //Play the backend.
+    m_backend->play();
 }
 
 void KNMusicNowPlaying::onActionLoadFailed()
@@ -455,13 +462,8 @@ void KNMusicNowPlaying::onActionModelDataChanged(const QModelIndex &topLeft,
         //Get the new detail info.
         m_playingAnalysisItem.detailInfo=
                 playingMusicModel()->rowDetailInfo(currentRow);
-        //Reanalysis row.
-        if(knMusicGlobal->parser() &&
-                knMusicGlobal->parser()->reanalysisItem(m_playingAnalysisItem))
-        {
-            //Give out the current.
-            emit nowPlayingChanged(m_playingAnalysisItem);
-        }
+        //Give out the current.
+        emit nowPlayingChanged(m_playingAnalysisItem);
     }
 }
 
@@ -517,8 +519,6 @@ void KNMusicNowPlaying::playRow(int proxyRow)
                                  detailInfo.startPosition,
                                  detailInfo.duration);
         }
-        //Play the main thread.
-        m_backend->play();
         //Mission complete.
         return;
     }

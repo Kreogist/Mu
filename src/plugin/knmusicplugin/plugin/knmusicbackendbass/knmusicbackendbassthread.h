@@ -233,8 +233,6 @@ private:
         }
         //Save the new file path.
         m_filePath=filePath;
-        //Emit the load success signal.
-        emit loadSuccess();
         //Set the sync handler.
         setChannelSyncs();
         //Load success.

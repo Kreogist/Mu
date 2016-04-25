@@ -21,11 +21,25 @@
 
 #include "knmusicmodel.h"
 
+/*!
+ * \brief The KNMusicTemporaryPlaylistModel class provides a simple playlist for
+ * temporary playing.\n
+ * This model should be use only for now playing module.
+ */
 class KNMusicTemporaryPlaylistModel : public KNMusicModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicTemporaryPlaylistModel object.
+     * \param parent The parent object.
+     */
     explicit KNMusicTemporaryPlaylistModel(QObject *parent = 0);
+
+    /*!
+     * \brief Append local music files to the model.
+     * \param filePaths The file paths.
+     */
     void appendTemporaryFiles(QStringList filePaths);
 
 signals:
