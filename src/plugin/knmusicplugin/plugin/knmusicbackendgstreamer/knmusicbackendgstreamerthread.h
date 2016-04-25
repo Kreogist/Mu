@@ -118,6 +118,11 @@ public:
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::loadUrl().
+     */
+    bool loadUrl(const QUrl &url) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Get the playbin of the playing thread. This function shouldn't be
      * called by any other class.
      * \return The playbin pointer.
