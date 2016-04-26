@@ -20,7 +20,6 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonDocument>
-#include <QJsonObject>
 #include <QUrlQuery>
 
 #include "knutil.h"
@@ -352,13 +351,26 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
     //Check whether it contains image before.
     if(!m_accountDetails->avatarPath().isEmpty())
     {
-        //Clear the raw image.
-        int removeResult=
-                deleteResource(generateKreogistRequest(
-                                   "files/"+m_accountDetails->avatarPath()),
-                               false);
-        //If the avatar is already deleted(404), nor remove it successfully(200)
-        //there should be an Internet connection error.
+        //Generate the result.
+        QNetworkRequest request=generateKreogistRequest(
+                                    "files/"+m_accountDetails->avatarPath());
+        //Check the avatar path, if it's starts with http, then we will use the
+        //new API to remove the previous image.
+        if(m_accountDetails->avatarPath().startsWith("http"))
+        {
+            //Save the avatar data.
+            const QJsonObject &avatarData=m_accountDetails->avatarData();
+            //Combine the remove URL.
+            QString fileUrl=avatarData.value("url").toString();
+            //Reset the url.
+            request.setUrl("https://api.bmob.cn/2/files/" +
+                           avatarData.value("cdn").toString() +
+                           fileUrl.mid(fileUrl.indexOf('/', 8)));
+        }
+        //Delete the resource.
+        int removeResult=deleteResource(request, false);
+        //If the avatar is already deleted(404), nor remove it successfully
+        //(200) there should be an Ineternet connection error.
         if(removeResult!=200 && removeResult!=404)
         {
             //Emit the failed connection signal.
@@ -386,8 +398,10 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         imageBuffer.close();
     }
     //Upload the account data.
-    QNetworkRequest avatarRequest=generateKreogistRequest(
-                "files/" + m_accountDetails->objectId() + "/avatar.jpg");
+    QNetworkRequest avatarRequest=generateKreogistRequest("");
+    //Set the url.
+    avatarRequest.setUrl("https://api.bmob.cn/2/files/" +
+                         m_accountDetails->objectId() + "/avatar.jpg");
     //Configure the image.
     avatarRequest.setHeader(QNetworkRequest::ContentTypeHeader, "image/jpeg");
     //Post the request.
@@ -401,7 +415,7 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         return false;
     }
     //Check post result.
-    else if(postResult!=201)
+    else if(postResult!=200)
     {
         //Failed to update the avatar.
         emit avatarUpdatedFailed();
@@ -409,16 +423,16 @@ bool KNAccount::setAvatar(const QPixmap &avatarImage)
         return false;
     }
     //Check the response data.
-    QJsonObject responseObject=QJsonDocument::fromJson(responseBytes).object(),
-            updateObject;
+    QJsonObject updateObject;
     //Update account details.
-    updateObject.insert("avatarPath",
-                        responseObject.value("url").toString());
+    updateObject.insert("avatarPath", QString(responseBytes));
     //Send update request.
     if(updateOnlineAccount(updateObject, false))
     {
         //Update the avatar successfully.
         emit avatarUpdatedSuccess();
+        //Set the data to detail info.
+        m_accountDetails->setAvatarPath(responseBytes);
         return true;
     }
     //Else is failed.
@@ -684,9 +698,12 @@ inline void KNAccount::updateDetails(const QJsonObject &userInfo)
     {
         //Tring to get avatar from the paths.
         QNetworkRequest avatarRequest;
+        //Check the avatar path.
         //Set the url.
-        avatarRequest.setUrl("http://file.bmob.cn/"+
-                             m_accountDetails->avatarPath());
+        avatarRequest.setUrl(m_accountDetails->avatarPath().startsWith("http")?
+                                 m_accountDetails->avatarPath():
+                                 ("http://file.bmob.cn/" +
+                                 m_accountDetails->avatarPath()));
         QByteArray imageResponse;
         //Get the account avatar file.
         if(get(avatarRequest, imageResponse, false)==200)

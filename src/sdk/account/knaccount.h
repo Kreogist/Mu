@@ -19,6 +19,7 @@
 #define KNACCOUNT_H
 
 #include <QImage>
+#include <QJsonObject>
 
 #include "knrestapibase.h"
 

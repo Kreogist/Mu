@@ -15,10 +15,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QJsonDocument>
+
 #include "knaccountdetails.h"
 
 KNAccountDetails::KNAccountDetails(QObject *parent) :
     QObject(parent),
+    m_accountInfo(QJsonObject()),
+    m_avatarData(QJsonObject()),
     m_objectId(QString()),
     m_sessionToken(QString()),
     m_cacheUserName(QString()),
@@ -156,10 +160,29 @@ QVariant KNAccountDetails::data(const QString &key)
 
 void KNAccountDetails::setAvatarPath(const QString &avatarPath)
 {
+    //Clear the avatar data.
+    m_avatarData=QJsonObject();
+    //Check avatar path type.
+    if(avatarPath.startsWith('{'))
+    {
+        //Then it should be all the new data.
+        m_avatarData=QJsonDocument::fromJson(avatarPath.toLatin1()).object();
+        //Parse the avatar data.
+        m_avatarPath=m_avatarData.value("url").toString();
+        //Mission compelte.
+        return;
+    }
+    //This is the old API.
+    //Save the avatar path as string.
     m_avatarPath = avatarPath;
 }
 
 void KNAccountDetails::setAccountInfo(const QJsonObject &accountInfo)
 {
     m_accountInfo = accountInfo;
+}
+
+QJsonObject KNAccountDetails::avatarData() const
+{
+    return m_avatarData;
 }

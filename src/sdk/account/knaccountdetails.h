@@ -95,6 +95,13 @@ public:
      */
     QVariant data(const QString &key);
 
+    /*!
+     * \brief Get avatar data object, this is only for the second verison of
+     * bmob backend.
+     * \return The avatar data object.
+     */
+    QJsonObject avatarData() const;
+
 signals:
     /*!
      * \brief When the account information is reseted, this signal will be
@@ -176,7 +183,7 @@ public slots:
 
 private:
     //Account information.
-    QJsonObject m_accountInfo;
+    QJsonObject m_accountInfo, m_avatarData;
     //Account IDs.
     QString m_objectId, m_sessionToken, m_cacheUserName, m_cachePassword;
     //Account details.
