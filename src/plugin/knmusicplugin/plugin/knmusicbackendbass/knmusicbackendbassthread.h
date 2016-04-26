@@ -99,6 +99,11 @@ public:
      */
     bool loadUrl(const QUrl &url) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackendThread::isUsingProxy().
+     */
+    bool isUsingProxy() Q_DECL_OVERRIDE;
+
 signals:
     /*!
      * \brief This signal is used only for threadReachesEnd(). It's used for
@@ -129,6 +134,12 @@ public slots:
     void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from
+     * KNMusicStandardBackendThread::setProxyEnabled().
+     */
+    void setProxyEnabled(bool enabled) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Set the flags when using at creating a stream.
      * \param channelFlags The new channel flags.
      */
@@ -136,6 +147,7 @@ public slots:
 
 private slots:
     void checkPosition();
+    void checkBuffering();
 
 private:
     static void CALLBACK threadReachesEnd(HSYNC handle,
@@ -143,7 +155,16 @@ private:
                                           DWORD data,
                                           void *user);
     inline void finishPlaying();
-    inline void resetChannelInformation();
+    inline void resetChannelDuration()
+    {
+        //Set the duration to the total duration.
+        m_duration=m_totalDuration;
+        //Set the start position at the very beginning.
+        m_startPosition=0;
+        //Set the default end position as the whole file.
+        m_endPosition=m_duration;
+    }
+
     inline void setPlayingState(const int &state);
     inline void setChannelSyncs()
     {
@@ -235,6 +256,8 @@ private:
         m_filePath=filePath;
         //Set the sync handler.
         setChannelSyncs();
+        //Set the URL flag to be false.
+        m_isChannelUrl=false;
         //Load success.
         return true;
     }
@@ -252,12 +275,17 @@ private:
     qint64 m_savedPosition;
     qreal m_volume;
     int m_state;
+    bool m_isChannelUrl, m_playable;
 
     //Updater.
-    QTimer *m_positionUpdater;
+    QTimer *m_positionUpdater, *m_bufferingUpdater;
 
     //Sync Handlers.
     QList<HSYNC> m_syncHandlers;
+
+    //Proxy enabler.
+    QByteArray m_proxyUrl;
+    bool m_usingProxy;
 };
 
 #endif // KNMUSICBACKENDBASSTHREAD_H

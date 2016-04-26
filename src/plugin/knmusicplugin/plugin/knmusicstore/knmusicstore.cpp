@@ -101,7 +101,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_downloadList->raise();
     m_downloadList->move(0, m_titleBar->height());
     //Configure the title bar.
-//    m_titleBar->hide();
+    m_titleBar->hide();
     m_titleBar->raise();
     //Configure the first fetch.
     m_firstFetch->setInterval(200);

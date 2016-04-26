@@ -18,6 +18,8 @@
 #include <QTimer>
 #include <QUrl>
 
+#include "knmusicglobal.h"
+
 #include "knmusicbackendbassthread.h"
 
 #include <QDebug>
@@ -34,14 +36,23 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_savedPosition(-1),
     m_volume(1.0),
     m_state(Stopped),
+    m_isChannelUrl(false),
+    m_playable(false),
     m_positionUpdater(new QTimer(this)),
-    m_syncHandlers(QList<HSYNC>())
+    m_bufferingUpdater(new QTimer(this)),
+    m_syncHandlers(QList<HSYNC>()),
+    m_proxyUrl(QByteArray()),
+    m_usingProxy(false)
 {
     //Configure the position updater.
     m_positionUpdater->setInterval(50);
     connect(m_positionUpdater, &QTimer::timeout,
             this, &KNMusicBackendBassThread::checkPosition);
-    //Link the reachesFinished() signal.
+    //Configure the buffering updater.
+    m_bufferingUpdater->setInterval(10);
+    connect(m_bufferingUpdater, &QTimer::timeout,
+            this, &KNMusicBackendBassThread::checkBuffering);
+    //Link the reachesFinished) signal.
     connect(this, &KNMusicBackendBassThread::reachesFinished,
             this, &KNMusicBackendBassThread::finishPlaying);
 }
@@ -64,7 +75,7 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
     if(filePath==m_filePath)
     {
         //Reset the current state.
-        resetChannelInformation();
+        resetChannelDuration();
         //Update the duration.
         emit durationChanged(m_duration);
         //Emit the load success signal.
@@ -90,9 +101,11 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
     //Emit the duration changed signal.
     emit durationChanged(m_totalDuration);
     //Reset the thread information.
-    resetChannelInformation();
+    resetChannelDuration();
     //Emit the load success signal.
     emit loadSuccess();
+    //It's not a URL playing channel.
+    m_isChannelUrl=false;
     //Load complete.
     return true;
 }
@@ -110,13 +123,22 @@ void KNMusicBackendBassThread::reset()
     //Reset the total duration.
     m_totalDuration=-1;
     //Reset the stream status data.
-    resetChannelInformation();
+    resetChannelDuration();
     //Check the current state is stopped or not.
     setPlayingState(Stopped);
 }
 
 void KNMusicBackendBassThread::stop()
 {
+    //Check url state first.
+    if(m_isChannelUrl)
+    {
+        //If it's not ready for playing.
+        if(!m_playable)
+        {
+            return;
+        }
+    }
     //Check:
     // 1. The state is already stopped.
     // 2. The channel is null.
@@ -138,6 +160,15 @@ void KNMusicBackendBassThread::stop()
 
 void KNMusicBackendBassThread::play()
 {
+    //Check url state first.
+    if(m_isChannelUrl)
+    {
+        //If it's not ready for playing.
+        if(!m_playable)
+        {
+            return;
+        }
+    }
     //Check:
     // 1. The state is already playing.
     // 2. The channel is null.
@@ -172,6 +203,15 @@ void KNMusicBackendBassThread::play()
 
 void KNMusicBackendBassThread::pause()
 {
+    //Check url state first.
+    if(m_isChannelUrl)
+    {
+        //If it's not ready for playing.
+        if(!m_playable)
+        {
+            return;
+        }
+    }
     //Check:
     // 1. The state is already paused.
     // 2. The channel is null.
@@ -243,8 +283,34 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
     stop();
     //Remove all the previous sync handlers.
     removeChannelSyncs();
-    //! FIXME: Set proxy here.
-    ;
+    //Check proxy settings here.
+    if(m_usingProxy)
+    {
+        //Get the proxy settings from the music global.
+        QNetworkProxy proxy=knMusicGlobal->playerProxy();
+        //Reset the proxy url.
+        m_proxyUrl=QByteArray();
+        //Check whether we have the user and password for the proxy.
+        if(!proxy.user().isEmpty())
+        {
+            //Append the user name and password first.
+            m_proxyUrl.append(proxy.user().toLatin1() +
+                              ":" +
+                              proxy.password().toLatin1() +
+                              "@");
+        }
+        //Append the url of the server and port to the server.
+        m_proxyUrl.append(proxy.hostName() +
+                          ":" +
+                          QString::number(proxy.port()));
+        //Enabled the proxy settings.
+        BASS_SetConfigPtr(BASS_CONFIG_NET_PROXY, m_proxyUrl.data());
+    }
+    else
+    {
+        //Disabled the proxy settings.
+        BASS_SetConfigPtr(BASS_CONFIG_NET_PROXY, NULL);
+    }
     //Clear up all the previous data.
     reset();
     //Get the url plain text.
@@ -254,6 +320,7 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
 #ifdef Q_OS_UNIX
     std::string uniPath=url.toString().toStdString();
 #endif
+    qDebug()<<"URL is"<<uniPath.data();
     //Create the url channel.
     m_channel=BASS_StreamCreateURL(uniPath.data(),
                                    0,
@@ -271,12 +338,23 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
         //Bass is failed to load the music file.
         return false;
     }
+    qDebug()<<"Load success.";
     //Emit the load success signal.
     emit loadSuccess();
     //Set sync handler.
     ;
+    //Set the URL flag to be true.
+    m_isChannelUrl=true;
+    m_playable=false;
+    //Start the buffering checking timer.
+    m_bufferingUpdater->start();
     //Load success.
     return true;
+}
+
+bool KNMusicBackendBassThread::isUsingProxy()
+{
+    return m_usingProxy;
 }
 
 void KNMusicBackendBassThread::save()
@@ -339,6 +417,15 @@ void KNMusicBackendBassThread::setVolume(const int &volume)
 
 void KNMusicBackendBassThread::setPosition(const qint64 &position)
 {
+    //Check url state first.
+    if(m_isChannelUrl)
+    {
+        //If it's not ready for playing.
+        if(!m_playable)
+        {
+            return;
+        }
+    }
     //Check the channel is null.
     if(!m_channel)
     {
@@ -367,6 +454,12 @@ void KNMusicBackendBassThread::setPosition(const qint64 &position)
     checkPosition();
 }
 
+void KNMusicBackendBassThread::setProxyEnabled(bool enabled)
+{
+    //Save the flag.
+    m_usingProxy=enabled;
+}
+
 void KNMusicBackendBassThread::setCreateFlags(const DWORD &channelFlags)
 {
     //Save the channel flags.
@@ -393,6 +486,45 @@ void KNMusicBackendBassThread::checkPosition()
     }
 }
 
+void KNMusicBackendBassThread::checkBuffering()
+{
+    //Calculate the percentage.
+    DWORD endFilePosition=BASS_StreamGetFilePosition(m_channel,
+                                                     BASS_FILEPOS_END),
+          progress=BASS_StreamGetFilePosition(m_channel,BASS_FILEPOS_BUFFER) *
+                    100 / endFilePosition;
+    qDebug()<<"Progress:"<<progress;
+    //Check progress.
+    if(progress > 75 || //Progress downloaded over 75%
+            !BASS_StreamGetFilePosition(m_channel, BASS_FILEPOS_CONNECTED))
+    {
+        qDebug()<<"Already here!";
+        //Stop the timer.
+        m_bufferingUpdater->stop();
+        //Update the durations.
+        m_totalDuration=
+                BASS_ChannelBytes2Seconds(m_channel,
+                                          BASS_ChannelGetLength(m_channel,
+                                                                BASS_POS_BYTE))
+                        *1000.0;
+        qDebug()<<"Total duration is"<<m_totalDuration;
+        //Reset the duration.
+        resetChannelDuration();
+        //Emit the new duration.
+        emit durationChanged(m_duration);
+        //Link the sync.
+        m_syncHandlers.append(BASS_ChannelSetSync(m_channel,
+                                                  BASS_SYNC_END,
+                                                  0,
+                                                  threadReachesEnd,
+                                                  this));
+        //Now its valid for playing.
+        m_playable=true;
+        //Start play the channel.
+        play();
+    }
+}
+
 void KNMusicBackendBassThread::threadReachesEnd(HSYNC handle,
                                                 DWORD channel,
                                                 DWORD data,
@@ -412,16 +544,6 @@ inline void KNMusicBackendBassThread::finishPlaying()
     stop();
     //Emit finished signal.
     emit finished();
-}
-
-inline void KNMusicBackendBassThread::resetChannelInformation()
-{
-    //Set the duration to the total duration.
-    m_duration=m_totalDuration;
-    //Set the start position at the very beginning.
-    m_startPosition=0;
-    //Set the default end position as the whole file.
-    m_endPosition=m_duration;
 }
 
 inline void KNMusicBackendBassThread::setPlayingState(const int &state)

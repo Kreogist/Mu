@@ -195,6 +195,13 @@ public:
      */
     virtual bool mute()=0;
 
+    /*!
+     * \brief Get whether the current proxy is using proxy to playing URL.
+     * \return If the backend is using proxy to playing the online data, this
+     * function will return true.
+     */
+    virtual bool isUsingProxy()=0;
+
 signals:
     /*!
      * \brief When the volume size changed, this signal will be emitted.
@@ -317,6 +324,12 @@ public slots:
      * stay empty.
      */
     virtual void restore(const QString &updatedFilePath=QString())=0;
+
+    /*!
+     * \brief Enabled or disable the proxy server when playing URL.
+     * \param enabled To enable the proxy server, set true to enabled.
+     */
+    virtual void setProxyEnabled(bool enabled)=0;
 
     /*!
      * \brief Change the mute state to the different side.

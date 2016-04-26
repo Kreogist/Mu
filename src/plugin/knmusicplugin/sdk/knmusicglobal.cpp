@@ -410,6 +410,17 @@ inline void KNMusicGlobal::initialGenre()
                    <<"Synthpop";
 }
 
+QNetworkProxy KNMusicGlobal::playerProxy() const
+{
+    return m_playerProxy;
+}
+
+void KNMusicGlobal::setPlayerProxy(const QNetworkProxy &onlineProxy)
+{
+    //Save the proxy settings.
+    m_playerProxy = onlineProxy;
+}
+
 KNMusicLyricsDownloadDialogBase *KNMusicGlobal::lyricsDownloadDialog()
 {
     //Get the lyrics dialog pointer.

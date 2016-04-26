@@ -40,7 +40,7 @@ KNWaitingWheel::KNWaitingWheel(QWidget *parent) :
                                                 Qt::SmoothTransformation);
     }
     //Configure the tick timer.
-    m_tickTimer->setInterval(100);
+    m_tickTimer->setInterval(33);
     connect(m_tickTimer, &QTimer::timeout, this, &KNWaitingWheel::tick);
 }
 

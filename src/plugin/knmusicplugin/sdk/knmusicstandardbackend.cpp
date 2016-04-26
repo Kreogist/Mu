@@ -155,6 +155,12 @@ bool KNMusicStandardBackend::mute()
     return m_mute;
 }
 
+bool KNMusicStandardBackend::isUsingProxy()
+{
+    //Get the proxy using state.
+    return m_usingProxy;
+}
+
 void KNMusicStandardBackend::save()
 {
     //Call the save function of the main thread.
@@ -165,6 +171,12 @@ void KNMusicStandardBackend::restore(const QString &updatedFilePath)
 {
     //Call the restore of the main thread.
     m_main->restore(updatedFilePath);
+}
+
+void KNMusicStandardBackend::setProxyEnabled(bool enabled)
+{
+    //Save the enabled states.
+    ;
 }
 
 void KNMusicStandardBackend::changeMuteState()

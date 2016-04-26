@@ -192,7 +192,7 @@ private:
     KNConfigure *m_cacheConfigure, *m_musicConfigure;
 
     //Status.
-    bool m_appendMenuShown, m_progressPressed;
+    bool m_appendMenuShown, m_progressPressed, m_useProxy;
 };
 
 #endif // KNMUSICHEADERPLAYER_H

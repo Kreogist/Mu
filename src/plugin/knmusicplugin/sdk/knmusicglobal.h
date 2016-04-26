@@ -21,6 +21,7 @@
 
 #include <QStringList>
 #include <QPixmap>
+#include <QNetworkProxy>
 
 #include "knmusicutil.h"
 
@@ -274,9 +275,21 @@ public:
     void setLyricsDownloadDialog(
             KNMusicLyricsDownloadDialogBase *lyricsDownloadDialog);
 
+    /*!
+     * \brief Get the online music proxy settings.
+     * \return The online proxy.
+     */
+    QNetworkProxy playerProxy() const;
+
 signals:
 
 public slots:
+    /*!
+     * \brief Set the online music playing proxy settings.
+     * \param playerProxy The online proxy.
+     */
+    void setPlayerProxy(const QNetworkProxy &playerProxy);
+
     /*!
      * \brief Set the path of the music library folder.
      * \param musicLibPath The folder path.
@@ -295,6 +308,7 @@ private:
 
     QString m_treeViewHeaderText[MusicDataCount];
 
+    QNetworkProxy m_playerProxy;
     QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
                 m_listSuffixDescription, m_indexedGenres;
     QPixmap m_noAlbumArt;
