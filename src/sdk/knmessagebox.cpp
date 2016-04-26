@@ -28,6 +28,7 @@
 #include "sao/knmessageboxcontent.h"
 #include "knopacityanimebutton.h"
 #include "knlabellineedit.h"
+#include "knglobal.h"
 
 #include "knmessagebox.h"
 
@@ -107,8 +108,13 @@ void KNMessageBox::showEvent(QShowEvent *event)
     int xBase, yBase;
     if(parentWidget()==nullptr)
     {
-        xBase=QApplication::desktop()->width()>>1;
-        yBase=QApplication::desktop()->height()>>1;
+        //Get the main window locate screen.
+        QDesktopWidget *desktop=qApp->desktop();
+        //Get the target screen position.
+        QRect targetGeometry=desktop->screenGeometry(knGlobal->mainWindow());
+        //Calculate the X and Y base.
+        xBase=targetGeometry.left() + (targetGeometry.width()>>1);
+        yBase=targetGeometry.top() + (targetGeometry.height()>>1);
     }
     else
     {
