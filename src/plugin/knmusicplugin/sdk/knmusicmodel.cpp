@@ -240,6 +240,13 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
     return true;
 }
 
+QPixmap KNMusicModel::artwork(int row)
+{
+    Q_UNUSED(row)
+    //Give back a null pixmap, this function won't provide any data.
+    return QPixmap();
+}
+
 void KNMusicModel::removeRowList(QList<int> rows)
 {
     //Sort the rows, with lambda expressions.

@@ -109,12 +109,9 @@ public:
                  int role) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Get the artwork from a row.
-     * \param row The specific row.
-     * \return The album artwork of the row, if there's no album art in the row,
-     * the no album art pixmap will be return.
+     * \brief Reimplemented from KNMusicModel::artwork().
      */
-    QPixmap artwork(const int &row);
+    QPixmap artwork(int row) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Get the artwork via providing the hash key.

@@ -223,11 +223,6 @@ void KNMusicNowPlaying::playMusicRow(KNMusicProxyModel *model,
     playRow(row);
 }
 
-void KNMusicNowPlaying::playUrl(const QUrl &url)
-{
-    ;
-}
-
 void KNMusicNowPlaying::playNext()
 {
     //Play the next music with the repeat mode.
@@ -491,8 +486,14 @@ void KNMusicNowPlaying::playRow(int proxyRow)
     {
         //Save the current reanlaysis item.
         m_playingAnalysisItem=reanalysisItem;
-        //Update the music model row.
-        musicModel->updateRow(m_playingIndex.row(), reanalysisItem);
+        //Get the detail info of the current playing anlaysis item.
+        const KNMusicDetailInfo &detailInfo=m_playingAnalysisItem.detailInfo;
+        //Update the model if the item is not an url item.
+        if(!detailInfo.url.isEmpty())
+        {
+            //Update the music model row.
+            musicModel->updateRow(m_playingIndex.row(), m_playingAnalysisItem);
+        }
         //Check the backend before playing, if there's no parser, do nothing.
         if(m_backend==nullptr)
         {
@@ -501,12 +502,14 @@ void KNMusicNowPlaying::playRow(int proxyRow)
             //Finished.
             return;
         }
-        //Get the detail info of the current playing anlaysis item.
-        const KNMusicDetailInfo &detailInfo=
-                m_playingAnalysisItem.detailInfo;
         //Play the music, according to the detail information. Check the track
         //file path is empty.
-        if(detailInfo.trackFilePath.isEmpty())
+        if(!detailInfo.url.isEmpty())
+        {
+            //Load the url.
+            m_backend->loadUrl(detailInfo.url);
+        }
+        else if(detailInfo.trackFilePath.isEmpty())
         {
             //Load the whole file.
             m_backend->loadMusic(detailInfo.filePath);

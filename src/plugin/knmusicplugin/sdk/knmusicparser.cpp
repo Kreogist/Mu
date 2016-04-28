@@ -304,6 +304,13 @@ bool KNMusicParser::reanalysisItem(KNMusicAnalysisItem &analysisItem)
 {
     //Get the detail info of the item.
     KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+    //Check whether this file is an URL detail info, if so, then ignore the
+    //detail info checking.
+    if(!detailInfo.url.isEmpty())
+    {
+        //Reanalysis complete.
+        return true;
+    }
     //Check the type of the anlaysis item, if it's a single file, then we will
     //use the parseFile() and parseAlbumArt() to parse the file.
     if(-1==detailInfo.trackIndex)

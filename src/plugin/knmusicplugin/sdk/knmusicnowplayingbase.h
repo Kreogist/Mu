@@ -152,12 +152,6 @@ public slots:
                               KNMusicTab *tab)=0;
 
     /*!
-     * \brief Play URL link music file. It could be net radio.
-     * \param url Music URL link.
-     */
-    virtual void playUrl(const QUrl &url)=0;
-
-    /*!
      * \brief Play the next music row according to the loop state.
      */
     virtual void playNext()=0;

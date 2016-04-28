@@ -235,6 +235,8 @@ void KNMusicStandardBackend::setMainThread(KNMusicStandardBackendThread *thread)
             this, &KNMusicStandardBackend::stopped);
     connect(m_main, &KNMusicStandardBackendThread::stateChanged,
             this, &KNMusicStandardBackend::playingStateChanged);
+    connect(m_main, &KNMusicStandardBackendThread::urlLoadComplete,
+            this, &KNMusicStandardBackend::loadSuccess);
 }
 
 void KNMusicStandardBackend::setPreviewThread(

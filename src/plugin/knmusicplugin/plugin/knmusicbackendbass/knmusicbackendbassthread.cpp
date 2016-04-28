@@ -341,8 +341,6 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
     qDebug()<<"Load success.";
     //Emit the load success signal.
     emit loadSuccess();
-    //Set sync handler.
-    ;
     //Set the URL flag to be true.
     m_isChannelUrl=true;
     m_playable=false;
@@ -520,8 +518,8 @@ void KNMusicBackendBassThread::checkBuffering()
                                                   this));
         //Now its valid for playing.
         m_playable=true;
-        //Start play the channel.
-        play();
+        //Emit url load complete signal.
+        emit urlLoadComplete();
     }
 }
 

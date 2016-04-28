@@ -115,6 +115,16 @@ public:
                     const QModelIndex &index = QModelIndex()) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Get the artwork from a row. The original music model won't provide
+     * any data, you have to implemented this model and release this function
+     * for specific model.
+     * \param row The specific row.
+     * \return The album artwork of the row, if there's no album art in the row,
+     * the no album art pixmap will be return.
+     */
+    virtual QPixmap artwork(int row);
+
+    /*!
      * \brief Remove several rows from the model at once.
      * \param rows The rows list.
      */

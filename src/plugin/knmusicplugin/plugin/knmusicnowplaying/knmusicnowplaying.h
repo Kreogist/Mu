@@ -107,11 +107,6 @@ public slots:
                       KNMusicTab *tab) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMusicNowPlayingBase::playUrl().
-     */
-    void playUrl(const QUrl &url) Q_DECL_OVERRIDE;
-
-    /*!
      * \brief Reimplemented from KNMusicNowPlayingBase::playNext().
      */
     void playNext() Q_DECL_OVERRIDE;

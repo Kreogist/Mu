@@ -24,6 +24,7 @@ KNMusicStoreEmptyWidget::KNMusicStoreEmptyWidget(QWidget *parent) :
     QWidget(parent),
     m_title(new QLabel(this))
 {
+    setObjectName("MusicStoreEmptyWidget");
     //Configure the title label.
     QFont titleFont=m_title->font();
     titleFont.setPixelSize(41);

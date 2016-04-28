@@ -48,6 +48,8 @@ void KNMusicTemporaryPlaylistModel::appendTemporaryFiles(QStringList filePaths)
             KNMusicAnalysisItem item;
             //Parse the file.
             parser->parseFile(fileInfo, item);
+            //Increase artwork list.
+            m_artworkLists.append(QPixmap());
             //Add the detail info to the model.
             appendRow(item.detailInfo);
         }
@@ -63,11 +65,51 @@ void KNMusicTemporaryPlaylistModel::appendTemporaryFiles(QStringList filePaths)
             //Translate that to detail info.
             for(auto i=items.begin(); i!=items.end(); ++i)
             {
+                //Add to detail info list.
                 detailInfos.append((*i).detailInfo);
+                //Increase artwork list.
+                m_artworkLists.append(QPixmap());
             }
             //Add the items to the model.
             appendRows(detailInfos);
         }
     }
+}
+
+void KNMusicTemporaryPlaylistModel::appendOnlineUrl(
+        KNMusicAnalysisItem urlItem)
+{
+    //Add artwork to artwork list.
+    m_artworkLists.append(QPixmap::fromImage(urlItem.coverImage));
+    //Add the item to model.
+    appendRow(urlItem.detailInfo);
+}
+
+void KNMusicTemporaryPlaylistModel::appendOnlineUrls(
+        QList<KNMusicAnalysisItem> urlList)
+{
+    //Translate the list to detail list.
+    QList<KNMusicDetailInfo> detailInfos;
+    //Add artwork to artwork lists.
+    for(auto i=urlList.begin(); i!=urlList.end(); ++i)
+    {
+        //Add the item to artwork lists.
+        m_artworkLists.append(QPixmap::fromImage((*i).coverImage));
+        //Add to detail list.
+        detailInfos.append((*i).detailInfo);
+    }
+    //Append the items to model.
+    appendRows(detailInfos);
+}
+
+void KNMusicTemporaryPlaylistModel::setOnlineUrls(
+        QList<KNMusicAnalysisItem> urlList)
+{
+    //Clear the model first.
+    clear();
+    //Clear the artwork lists.
+    m_artworkLists.clear();
+    //Append the url list.
+    appendOnlineUrls(urlList);
 }
 

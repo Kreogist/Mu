@@ -121,6 +121,11 @@ public:
 
 signals:
     /*!
+     * \brief When url is fully loaded, this signal will emitted.
+     */
+    void urlLoadComplete();
+
+    /*!
      * \brief When load the file failed, this signal will emitted.
      */
     void loadFailed();

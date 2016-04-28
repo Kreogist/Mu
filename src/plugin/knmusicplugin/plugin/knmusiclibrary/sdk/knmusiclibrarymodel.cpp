@@ -326,7 +326,7 @@ bool KNMusicLibraryModel::setData(const QModelIndex &index,
     return result;
 }
 
-QPixmap KNMusicLibraryModel::artwork(const int &row)
+QPixmap KNMusicLibraryModel::artwork(int row)
 {
     //Get the artwork from the hash list.
     QPixmap &&artworkPixmap=

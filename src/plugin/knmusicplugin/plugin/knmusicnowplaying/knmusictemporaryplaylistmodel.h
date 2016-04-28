@@ -42,11 +42,30 @@ public:
      */
     void appendTemporaryFiles(QStringList filePaths);
 
+    /*!
+     * \brief Append an online URL item to the temporary model.
+     * \param url The analysis item which contains a URL item.
+     */
+    void appendOnlineUrl(KNMusicAnalysisItem urlItem);
+
+    /*!
+     * \brief Append several online URL items to the temporary model.
+     * \param urlList The analysis item list which contains a URL item.
+     */
+    void appendOnlineUrls(QList<KNMusicAnalysisItem> urlList);
+
+
 signals:
 
 public slots:
+    /*!
+     * \brief Set the online URL list to the model.
+     * \param urlList The url lists.
+     */
+    void setOnlineUrls(QList<KNMusicAnalysisItem> urlList);
 
 private:
+    QList<QPixmap> m_artworkLists;
 };
 
 #endif // KNMUSICTEMPORARYPLAYLISTMODEL_H
