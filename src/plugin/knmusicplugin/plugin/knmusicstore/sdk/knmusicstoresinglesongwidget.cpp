@@ -40,6 +40,8 @@
 
 using namespace MusicStoreUtil;
 
+#define ActionButtonSize 30
+
 KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     KNMusicStorePanel(parent),
     m_titleLabel(new QLabel(this)),
@@ -85,8 +87,10 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
         //Initial the button.
         m_actions[i]=new QPushButton(this);
         //Configure the widget.
-        m_actions[i]->setObjectName("");
+        m_actions[i]->setObjectName("MusicStoreActionButton");
         knTheme->registerWidget(m_actions[i]);
+        //Update the button.
+        m_actions[i]->setFixedHeight(ActionButtonSize);
     }
     //Configure the action buttons.
     connect(m_actions[ActionPlay], &QPushButton::clicked,
@@ -141,6 +145,7 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     //Add button lyrics.
     QBoxLayout *actionLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
+    actionLayout->setSpacing(5);
     //Add the layout.
     metaDataLayout->addLayout(actionLayout);
     //Configure the action layout.
@@ -226,6 +231,7 @@ void KNMusicStoreSingleSongWidget::onActionDataUpdate(int category)
                      m_properties[PropertyArtist]->height() +
                      m_properties[PropertyAlbum]->height() +
                      m_lyricsLabel->sizeHint().height() +
+                     ActionButtonSize +
                      217);
 }
 

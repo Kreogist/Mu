@@ -11,6 +11,11 @@
         "Window" : "#202020",
         "WindowText" : "#9D9D9D"
     },
+    "MusicStoreActionButton" : {
+        "Parent" : "MusicStoreWidget",
+        "Button" : "#202020",
+        "ButtonText" : "#9D9D9D"
+    },
     "MusicStoreEmptyWidget" : {
         "Parent" : "MusicStoreWidget",
         "Window" : "#000000"
