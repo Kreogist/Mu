@@ -82,6 +82,7 @@
         <file>public/white_waiting/w7.png</file>
         <file>public/left_arrow.png</file>
         <file>public/right_arrow.png</file>
+        <file>saomenuicons/download_lyrics.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

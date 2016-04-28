@@ -19,6 +19,8 @@
 #ifndef KNMUSICPLUGIN_H
 #define KNMUSICPLUGIN_H
 
+#include <QUrl>
+
 #include "knabstractmusicplugin.h"
 
 class QBoxLayout;
@@ -138,6 +140,7 @@ private slots:
     void onActionShowMiniPlayer();
     void onActionShowPlaylistFlow();
     void onActionHidePlaylistFlow();
+    void onMusicFileDropped(const QList<QUrl> &urlList);
 
 private:
     inline void initialInfrastructure();

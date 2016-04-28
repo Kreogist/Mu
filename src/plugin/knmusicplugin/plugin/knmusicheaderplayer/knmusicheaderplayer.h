@@ -128,6 +128,7 @@ private:
         AppendRatingFiveStar,
         AppendShowInGraphicShell,
         AppendShowDetail,
+        AppendDownloadLyrics,
         AppendLocateNowPlaying,
         AppendShowInSongs,
         AppendShowInArtists,
