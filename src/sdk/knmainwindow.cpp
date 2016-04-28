@@ -249,8 +249,7 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
     //Check music plugin working state.
-    if(m_musicPlugin &&
-            m_musicPlugin->isWorking())
+    if(m_musicPlugin && m_musicPlugin->isWorking())
     {
         //Ignore the close request.
         event->ignore();
@@ -262,6 +261,7 @@ void KNMainWindow::closeEvent(QCloseEvent *event)
         //Finished.
         return;
     }
+    qDebug()<<"Did this";
     //Save the configure of the category plugin, if the category is valid.
     if(m_categoryPlugin)
     {

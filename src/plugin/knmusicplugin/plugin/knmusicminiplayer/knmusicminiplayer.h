@@ -106,6 +106,7 @@ private slots:
     void onActionMouseInOut(int frame);
     void onActionShowLyrics();
     void onActionHideLyrics();
+    void onActionClose();
 
 private:
     inline KNOpacityAnimeButton *generateControlButton(

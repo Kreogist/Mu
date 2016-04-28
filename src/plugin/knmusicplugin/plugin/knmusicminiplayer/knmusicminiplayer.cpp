@@ -133,7 +133,7 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     connect(m_restore, &KNOpacityButton::clicked,
             this, &KNMusicMiniPlayer::requireHidePlayer);
     connect(m_close, &KNOpacityButton::clicked,
-            this, &KNMusicMiniPlayer::requireCloseMainWindow);
+            this, &KNMusicMiniPlayer::onActionClose);
     //If the platform is Mac OS X, hide the close button.
 #ifdef Q_OS_MACX
     m_close->hide();
@@ -634,6 +634,16 @@ void KNMusicMiniPlayer::onActionHideLyrics()
     m_detailLabel->startAnime();
     //Disconnect the time line finish signal.
     m_animeHandler.disconnectAll();
+}
+
+void KNMusicMiniPlayer::onActionClose()
+{
+#ifndef Q_OS_LINUX
+    //Close mini player first.
+    close();
+#endif
+    //Ask to close the main window.
+    emit requireCloseMainWindow();
 }
 
 inline KNOpacityAnimeButton *KNMusicMiniPlayer::generateControlButton(
