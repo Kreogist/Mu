@@ -73,22 +73,22 @@ protected:
     /*!
      * \brief Reimpelment from QWidget::dragEnterEvent().
      */
-    void dragEnterEvent(QDragEnterEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimpelment from QWidget::dropEvent().
      */
-    void dropEvent(QDropEvent *event);
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimpelment from QWidget::showEvent().
      */
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimpelment from QWidget::hideEvent().
      */
-    void hideEvent(QHideEvent *event);
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif // KNDROPPROXYCONTAINER_H
