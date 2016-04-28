@@ -510,7 +510,7 @@ void KNMusicMiniPlayer::mousePressEvent(QMouseEvent *event)
     //Do original pressed event.
     KNMusicMiniPlayerBase::mousePressEvent(event);
     //Check lyrics widget position.
-    if(m_lyrics->y()>0)
+    if(m_lyrics->y()==0)
     {
         //Show up the control panel.
         startAnime(height());

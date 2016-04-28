@@ -74,6 +74,12 @@ signals:
 
 public slots:
     /*!
+     * \brief Set the timeout for all the event.
+     * \param timeout The timeout milliseconds. Default it's 30,000. (30s)
+     */
+    void setTimeout(int timeout);
+
+    /*!
      * \brief Http delete request via given the request. This function works in
      * stucked way.
      * \param request The request of the get request.

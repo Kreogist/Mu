@@ -23,28 +23,43 @@
 
 #include <QAbstractListModel>
 
+/*!
+ * \brief The KNMusicLyricsDetailListModel class provides a managing model for
+ * lyrics list. It will be used in the lyrics download dialog.
+ */
 class KNMusicLyricsDetailListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Constrcut a KNMusicLyricsDetailListModel object.
+     * \param parent The parent object.
+     */
     explicit KNMusicLyricsDetailListModel(QObject *parent = 0);
 
     /*!
-     * \brief lyricsList
-     * \return
+     * \brief Get the current lyrics list.
+     * \return The managed lyrics list.
      */
     QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList() const;
 
     /*!
-     * \brief setLyricsList
-     * \param lyricsList
+     * \brief Set the lyrics list information to the model.
+     * \param lyricsList The new lyrics list information.
      */
     void setLyricsList(
         const QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> &lyricsList);
 
-    QVariant data(const QModelIndex &index, int role) const;
+    /*!
+     * \brief Reimplemented from QAbstractListModel::data().
+     */
+    QVariant data(const QModelIndex &index,
+                  int role=Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
-    int rowCount(const QModelIndex &parent) const;
+    /*!
+     * \brief Reimplemented from QAbstractListModel::rowCount().
+     */
+    int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
 
 signals:
 

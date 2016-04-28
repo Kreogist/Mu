@@ -59,6 +59,12 @@ signals:
 
 public slots:
     /*!
+     * \brief Set the online URL to the model.
+     * \param item The url analysis item.
+     */
+    void setOnlineUrl(KNMusicAnalysisItem item);
+
+    /*!
      * \brief Set the online URL list to the model.
      * \param urlList The url lists.
      */

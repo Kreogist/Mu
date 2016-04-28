@@ -46,6 +46,7 @@ KNMusicLyricsDownloadList::KNMusicLyricsDownloadList(QWidget *parent) :
     m_previewPlayer(new QWidget(this)),
     m_clockWheel(new KNClockWheel(this)),
     m_downloadServer(new QLabel(this)),
+    m_emptyLyrics(new QLabel(this)),
     m_lyricsList(new QListView(this)),
     m_lrcParser(new KNMusicLrcParser(this)),
     m_lyricsDetailListModel(new KNMusicLyricsDetailListModel(this)),
@@ -60,6 +61,7 @@ KNMusicLyricsDownloadList::KNMusicLyricsDownloadList(QWidget *parent) :
     m_clockWheel->hide();
     //Configure the label.
     m_downloadServer->hide();
+    m_emptyLyrics->hide();
     //Configure the list view.
     m_lyricsList->setObjectName("DownloadedLyricsListView");
     m_lyricsList->hide();
@@ -111,6 +113,7 @@ KNMusicLyricsDownloadList::KNMusicLyricsDownloadList(QWidget *parent) :
     mainLayout->addStretch();
     mainLayout->addWidget(m_clockWheel, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_downloadServer, 0, Qt::AlignHCenter);
+    mainLayout->addWidget(m_emptyLyrics, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_lyricsList, 1);
     //Initial the player layout.
     QBoxLayout *playerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -137,12 +140,26 @@ QString KNMusicLyricsDownloadList::currentLyricsData()
                                          Qt::UserRole).toString();
 }
 
+void KNMusicLyricsDownloadList::setEmptyHintVisible(bool on)
+{
+    //Change the empty lyrics hint.
+    m_emptyLyrics->setVisible(on);
+}
+
+void KNMusicLyricsDownloadList::updateEmptyHintVisible()
+{
+    //Update the visible according to the model.
+    m_emptyLyrics->setVisible(m_lyricsDetailListModel->rowCount()==0);
+}
+
 void KNMusicLyricsDownloadList::hideAllWidgets()
 {
     //Cut all the connections.
     cutLinkBackend();
     //Hide the download widget first.
     hideDownloadWidgets();
+    //Hide the empty lyrics widget.
+    m_emptyLyrics->hide();
     //Hide the player and lyrics widget.
     m_previewPlayer->hide();
     m_lyricsList->hide();
@@ -219,6 +236,7 @@ void KNMusicLyricsDownloadList::retranslate()
 {
     //Update the download status and download server text.
     m_downloadServerText=tr("Searching lyrics on server (%1/%2)");
+    m_emptyLyrics->setText(tr("No lyrics"));
 }
 
 void KNMusicLyricsDownloadList::onActionCurrentChanged(const QModelIndex &index)

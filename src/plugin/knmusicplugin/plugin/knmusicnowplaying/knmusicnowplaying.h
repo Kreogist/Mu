@@ -117,6 +117,11 @@ public slots:
     void playPrevious() Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNMusicNowPlayingBase::playUrl().
+     */
+    void playUrl(const KNMusicAnalysisItem &item) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicNowPlayingBase::playTemporaryFiles().
      */
     void playTemporaryFiles(const QStringList &filePaths) Q_DECL_OVERRIDE;

@@ -18,13 +18,19 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+#include "knthememanager.h"
+#include "kndarkwaitingwheel.h"
+
 #include "knmusicstoreemptywidget.h"
 
 KNMusicStoreEmptyWidget::KNMusicStoreEmptyWidget(QWidget *parent) :
     QWidget(parent),
+    m_waitingWheel(new KNDarkWaitingWheel(this)),
     m_title(new QLabel(this))
 {
     setObjectName("MusicStoreEmptyWidget");
+    //Set properties.
+    knTheme->registerWidget(this);
     //Configure the title label.
     QFont titleFont=m_title->font();
     titleFont.setPixelSize(41);
@@ -38,6 +44,23 @@ KNMusicStoreEmptyWidget::KNMusicStoreEmptyWidget(QWidget *parent) :
     setLayout(mainLayout);
     //Add widget to layout.
     mainLayout->addStretch();
+    mainLayout->addWidget(m_waitingWheel, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_title);
     mainLayout->addStretch();
+}
+
+void KNMusicStoreEmptyWidget::showEvent(QShowEvent *event)
+{
+    //Show the widget.
+    QWidget::showEvent(event);
+    //Show the widget.
+    m_waitingWheel->startTick();
+}
+
+void KNMusicStoreEmptyWidget::hideEvent(QHideEvent *event)
+{
+    //Hide the widget.
+    QWidget::hideEvent(event);
+    //Stop the waiting wheel.
+    m_waitingWheel->stopTick();
 }

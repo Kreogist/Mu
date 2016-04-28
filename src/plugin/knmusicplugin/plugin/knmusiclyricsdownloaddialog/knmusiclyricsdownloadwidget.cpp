@@ -162,6 +162,8 @@ void KNMusicLyricsDownloadWidget::onActionSearch()
     m_artist->setEnabled(false);
     //Show the download widget.
     m_downloadedLyrics->showDownloadWidgets();
+    //Hide the empty hint label.
+    m_downloadedLyrics->setEmptyHintVisible(false);
     //Get a deep copy of the detail info.
     KNMusicDetailInfo detailInfo=m_detailInfo;
     //Update the detail info.
@@ -194,6 +196,8 @@ void KNMusicLyricsDownloadWidget::onActionDownloadComplete()
 {
     //Hide the download widgets.
     m_downloadedLyrics->hideDownloadWidgets();
+    //Update the empty hint visible.
+    m_downloadedLyrics->updateEmptyHintVisible();
     //Enabled the search edit.
     enableSearchEdit();
 }

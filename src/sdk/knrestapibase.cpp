@@ -390,6 +390,12 @@ QNetworkRequest KNRestApiBase::generateRequest(const QString &url,
     return request;
 }
 
+void KNRestApiBase::setTimeout(int timeout)
+{
+    //Update the timeout timer.
+    m_timeout->setInterval(timeout);
+}
+
 void KNRestApiBase::onActionGetDownloading(const qint64 &size, const qint64 &)
 {
     //Save the downloaded size.

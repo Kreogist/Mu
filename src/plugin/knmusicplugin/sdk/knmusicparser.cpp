@@ -306,6 +306,7 @@ bool KNMusicParser::reanalysisItem(KNMusicAnalysisItem &analysisItem)
     KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Check whether this file is an URL detail info, if so, then ignore the
     //detail info checking.
+    qDebug()<<detailInfo.url;
     if(!detailInfo.url.isEmpty())
     {
         //Reanalysis complete.

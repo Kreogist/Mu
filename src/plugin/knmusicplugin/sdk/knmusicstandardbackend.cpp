@@ -53,6 +53,7 @@ bool KNMusicStandardBackend::loadMusic(const QString &filePath,
 
 bool KNMusicStandardBackend::loadUrl(const QUrl &url)
 {
+    qDebug()<<"Start load the url";
     //Load the music to the main thread.
     return m_main->loadUrl(url);
 }
@@ -158,7 +159,7 @@ bool KNMusicStandardBackend::mute()
 bool KNMusicStandardBackend::isUsingProxy()
 {
     //Get the proxy using state.
-    return m_usingProxy;
+    return m_main->isUsingProxy();
 }
 
 void KNMusicStandardBackend::save()
@@ -176,7 +177,7 @@ void KNMusicStandardBackend::restore(const QString &updatedFilePath)
 void KNMusicStandardBackend::setProxyEnabled(bool enabled)
 {
     //Save the enabled states.
-    ;
+    m_main->setProxyEnabled(enabled);
 }
 
 void KNMusicStandardBackend::changeMuteState()

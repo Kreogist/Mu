@@ -283,6 +283,7 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
     stop();
     //Remove all the previous sync handlers.
     removeChannelSyncs();
+    qDebug()<<"Use proxy?"<<m_usingProxy;
     //Check proxy settings here.
     if(m_usingProxy)
     {
@@ -303,6 +304,7 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
         m_proxyUrl.append(proxy.hostName() +
                           ":" +
                           QString::number(proxy.port()));
+        qDebug()<<m_proxyUrl.data();
         //Enabled the proxy settings.
         BASS_SetConfigPtr(BASS_CONFIG_NET_PROXY, m_proxyUrl.data());
     }
@@ -320,14 +322,13 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
 #ifdef Q_OS_UNIX
     std::string uniPath=url.toString().toStdString();
 #endif
-    qDebug()<<"URL is"<<uniPath.data();
+    qDebug()<<"Backend load URL is"<<uniPath.data();
     //Create the url channel.
     m_channel=BASS_StreamCreateURL(uniPath.data(),
                                    0,
                                    BASS_STREAM_BLOCK | //Streaming.
                                    BASS_STREAM_STATUS | //Get info.
-                                   BASS_STREAM_AUTOFREE | //Auto recovery mem.
-                                   m_channelFlags,
+                                   BASS_STREAM_AUTOFREE,
                                    nullptr,
                                    nullptr);
     //Check the channel pointer is created or not.

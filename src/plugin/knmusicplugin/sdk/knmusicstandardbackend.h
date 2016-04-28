@@ -242,7 +242,7 @@ private:
 
     KNMusicStandardBackendThread *m_main, *m_preview;
     int m_originalVolume, m_volumeBeforeMute;
-    bool m_mute, m_usingProxy;
+    bool m_mute;
 };
 
 #endif // KNMUSICSTANDARDBACKEND_H

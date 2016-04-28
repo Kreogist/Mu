@@ -18,12 +18,17 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QFormLayout>
+#include <QPushButton>
 
 #include "knhighlightlabel.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "knanimelabelbutton.h"
 #include "knlabelbutton.h"
+
+#include "knmusicnowplayingbase.h"
+#include "knmusicglobal.h"
+#include "knmusicutil.h"
 
 #include "knmusicstoreglobal.h"
 #include "knmusicstorebackend.h"
@@ -74,6 +79,18 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
         m_properties[i]->setFont(labelFont);
         m_properties[i]->setCursor(Qt::PointingHandCursor);
     }
+    //Initial the action buttons.
+    for(int i=0; i<SingleSongActionCount; ++i)
+    {
+        //Initial the button.
+        m_actions[i]=new QPushButton(this);
+        //Configure the widget.
+        m_actions[i]->setObjectName("");
+        knTheme->registerWidget(m_actions[i]);
+    }
+    //Configure the action buttons.
+    connect(m_actions[ActionPlay], &QPushButton::clicked,
+            this, &KNMusicStoreSingleSongWidget::onActionPlay);
     //Change the font size of title label.
     QFont titleFont=m_titleLabel->font();
     titleFont.setPixelSize(21);
@@ -121,6 +138,19 @@ KNMusicStoreSingleSongWidget::KNMusicStoreSingleSongWidget(QWidget *parent) :
     //Link the album as one button.
     connect(m_properties[PropertyAlbum], &KNLabelButton::clicked,
             this, &KNMusicStoreSingleSongWidget::onActionShowAlbum);
+    //Add button lyrics.
+    QBoxLayout *actionLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                            mainLayout->widget());
+    //Add the layout.
+    metaDataLayout->addLayout(actionLayout);
+    //Configure the action layout.
+    actionLayout->addStretch();
+    //Add widget to the layout.
+    for(int i=0; i<SingleSongActionCount; ++i)
+    {
+        //Add widget to the layout.
+        actionLayout->addWidget(m_actions[i]);
+    }
     //Add lyrics label.
     metaDataLayout->addWidget(m_lyricsLabel, 3);
 
@@ -148,6 +178,9 @@ void KNMusicStoreSingleSongWidget::retranslate()
     //Retranslate the song label.
     m_propertiesLabel[PropertyArtist]->setText(tr("Artist: "));
     m_propertiesLabel[PropertyAlbum]->setText(tr("Album: "));
+    //Update the action buttons.
+    m_actions[ActionPlay]->setText(tr("Play"));
+    m_actions[ActionDownload]->setText(tr("Download"));
 }
 
 void KNMusicStoreSingleSongWidget::onActionRefresh()
@@ -208,4 +241,25 @@ void KNMusicStoreSingleSongWidget::onActionShowAlbum()
     emit startNetworkActivity();
     //Emit the show album signal.
     emit requireShowAlbum(m_songDetail->songData(StoreSongAlbumId));
+}
+
+void KNMusicStoreSingleSongWidget::onActionPlay()
+{
+    //Generate the analysis item.
+    MusicUtil::KNMusicAnalysisItem currentItem;
+    //Configure the item.
+    MusicUtil::KNMusicDetailInfo &detailInfo=currentItem.detailInfo;
+    //Configure the item.
+    currentItem.coverImage=m_songDetail->albumArt().toImage();
+    //Configure the detail info.
+    detailInfo.textLists[Name]=m_songDetail->songData(StoreSongName);
+    detailInfo.textLists[Artist]=m_properties[PropertyArtist]->text();
+    detailInfo.textLists[Album]=m_songDetail->songData(StoreSongAlbumName);
+    detailInfo.url=m_songDetail->songData(StoreSongOnlineUrl);
+    //Play the current item.
+    if(knMusicGlobal->nowPlaying())
+    {
+        //Play the current URL.
+        knMusicGlobal->nowPlaying()->playUrl(currentItem);
+    }
 }

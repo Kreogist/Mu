@@ -73,6 +73,17 @@ signals:
 
 public slots:
     /*!
+     * \brief Whether we should show the empty lyrics hint label.
+     * \param on To show the label, set on to true.
+     */
+    void setEmptyHintVisible(bool on);
+
+    /*!
+     * \brief Update the empty lyrics hint label visiblility.
+     */
+    void updateEmptyHintVisible();
+
+    /*!
      * \brief Hide all the content widgets.
      */
     void hideAllWidgets();
@@ -123,7 +134,7 @@ private:
     QWidget *m_container;
     QWidget *m_previewPlayer;
     KNClockWheel *m_clockWheel;
-    QLabel *m_downloadServer;
+    QLabel *m_downloadServer, *m_emptyLyrics;
     QString m_downloadServerText;
     QListView *m_lyricsList;
     KNMusicLrcParser *m_lrcParser;

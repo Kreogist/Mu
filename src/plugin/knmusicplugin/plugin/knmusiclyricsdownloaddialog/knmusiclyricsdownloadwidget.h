@@ -76,13 +76,14 @@ signals:
 
 public slots:
     /*!
-     * \brief setDetailInfo
-     * \param detailInfo
+     * \brief Set the music detail information to the download widget, it will
+     * automatically fill the line edit to the information provided by music.
+     * \param detailInfo The music detail info.
      */
     void setDetailInfo(const KNMusicDetailInfo &detailInfo);
 
     /*!
-     * \brief saveSelectLyrics
+     * \brief Save the select lyrics in the list view.
      */
     void saveSelectLyrics();
 

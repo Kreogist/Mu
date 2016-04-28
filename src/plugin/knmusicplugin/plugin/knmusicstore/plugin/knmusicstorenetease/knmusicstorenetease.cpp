@@ -41,6 +41,7 @@
 #include <QDebug>
 
 #define ListMaximumSize 18
+#define Timeout 15000
 
 using namespace MusicStoreUtil;
 
@@ -217,6 +218,7 @@ void KNMusicStoreNetease::fetchHomeInfo()
         //Set the watcher.
         m_listThreadWatcher[i].setFuture(m_listThreads[i]);
     }
+//    m_listThreadWatcher[OriconList].setFuture(m_listThreads[OriconList]);
 }
 
 void KNMusicStoreNetease::fetchAlbumDetail(const QVariant &albumId)
@@ -292,6 +294,8 @@ void KNMusicStoreNetease::updateLatestAlbumsList()
     QScopedPointer<KNRestApiBase> curl;
     //Initial the rest api.
     curl.reset(new KNRestApiBase);
+    //Configure the rest operator.
+    curl->setTimeout(Timeout);
     //Prepare the response data.
     QByteArray responseData;
     //Get the new albums.
@@ -361,6 +365,8 @@ void KNMusicStoreNetease::updateNeteaseList(
     QScopedPointer<KNRestApiBase> curl;
     //Initial the rest api.
     curl.reset(new KNRestApiBase);
+    //Configure the rest operator.
+    curl->setTimeout(Timeout);
     //Prepare the response data.
     QByteArray responseData;
     //Get the new hot songs.
@@ -450,6 +456,8 @@ void KNMusicStoreNetease::updateSearchResult(
     QScopedPointer<KNRestApiBase> curl;
     //Initial the rest api.
     curl.reset(new KNRestApiBase);
+    //Configure the rest operator.
+    curl->setTimeout(Timeout);
     //Prepare the response data.
     QByteArray responseData;
     //Get the search result.
@@ -548,6 +556,8 @@ void KNMusicStoreNetease::updateAlbumDetail(
     QScopedPointer<KNRestApiBase> curl;
     //Initial the rest api.
     curl.reset(new KNRestApiBase);
+    //Configure the rest operator.
+    curl->setTimeout(Timeout);
     //Prepare the response data.
     QByteArray responseData;
     //Get the album detail info.

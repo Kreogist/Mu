@@ -102,6 +102,16 @@ void KNMusicTemporaryPlaylistModel::appendOnlineUrls(
     appendRows(detailInfos);
 }
 
+void KNMusicTemporaryPlaylistModel::setOnlineUrl(KNMusicAnalysisItem item)
+{
+    //Clear the model first.
+    clear();
+    //Clear the artwork lists.
+    m_artworkLists.clear();
+    //Append the url list.
+    appendOnlineUrl(item);
+}
+
 void KNMusicTemporaryPlaylistModel::setOnlineUrls(
         QList<KNMusicAnalysisItem> urlList)
 {
@@ -112,4 +122,3 @@ void KNMusicTemporaryPlaylistModel::setOnlineUrls(
     //Append the url list.
     appendOnlineUrls(urlList);
 }
-

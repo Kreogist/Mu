@@ -162,6 +162,12 @@ public slots:
     virtual void playPrevious()=0;
 
     /*!
+     * \brief Play the URL analysis item.
+     * \param item The analysis item generate from the online store.
+     */
+    virtual void playUrl(const KNMusicAnalysisItem &item)=0;
+
+    /*!
      * \brief Play some music files temporarily. This will add those files to a
      * temporary music model and then play it right then.
      * \param filePaths The music file path list.

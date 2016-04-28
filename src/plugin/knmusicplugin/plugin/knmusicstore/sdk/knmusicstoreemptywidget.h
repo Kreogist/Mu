@@ -21,6 +21,12 @@
 #include <QWidget>
 
 class QLabel;
+class KNDarkWaitingWheel;
+/*!
+ * \brief The KNMusicStoreEmptyWidget class provides a state widget for music
+ * store to initial the home page. This page will do nothing but display loading
+ * and waiting information for music store.
+ */
 class KNMusicStoreEmptyWidget : public QWidget
 {
     Q_OBJECT
@@ -35,7 +41,19 @@ signals:
 
 public slots:
 
+protected:
+    /*!
+     * \brief Reimplemented from QWidget::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QWidget::hideEvent().
+     */
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+
 private:
+    KNDarkWaitingWheel *m_waitingWheel;
     QLabel *m_title;
 };
 

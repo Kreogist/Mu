@@ -23,6 +23,7 @@
 
 class QLabel;
 class QBoxLayout;
+class QPushButton;
 class KNLabelButton;
 class KNHighLightLabel;
 class KNMusicStoreBackend;
@@ -54,6 +55,7 @@ private slots:
     void onActionRefresh();
     void onActionDataUpdate(int category);
     void onActionShowAlbum();
+    void onActionPlay();
 
 private:
     enum PropertyNames
@@ -62,8 +64,16 @@ private:
         PropertyAlbum,
         PropertyCount
     };
+    enum SingleSongActions
+    {
+        ActionPlay,
+        ActionDownload,
+        SingleSongActionCount
+    };
+
     QLabel *m_propertiesLabel[PropertyCount],
             *m_titleLabel, *m_lyricsLabel;
+    QPushButton *m_actions[SingleSongActionCount];
     KNLabelButton *m_properties[PropertyCount];
     KNHighLightLabel *m_albumArt;
     KNMusicStoreSongDetailInfo *m_songDetail;
