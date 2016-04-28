@@ -261,7 +261,6 @@ void KNMainWindow::closeEvent(QCloseEvent *event)
         //Finished.
         return;
     }
-    qDebug()<<"Did this";
     //Save the configure of the category plugin, if the category is valid.
     if(m_categoryPlugin)
     {
