@@ -54,6 +54,10 @@ public:
      */
     void appendOnlineUrls(QList<KNMusicAnalysisItem> urlList);
 
+    /*!
+     * \brief Reimplemented from KNMusicModel::artwork().
+     */
+    QPixmap artwork(int row) Q_DECL_OVERRIDE;
 
 signals:
 

@@ -102,6 +102,11 @@ void KNMusicTemporaryPlaylistModel::appendOnlineUrls(
     appendRows(detailInfos);
 }
 
+QPixmap KNMusicTemporaryPlaylistModel::artwork(int row)
+{
+    return m_artworkLists.at(row);
+}
+
 void KNMusicTemporaryPlaylistModel::setOnlineUrl(KNMusicAnalysisItem item)
 {
     //Clear the model first.

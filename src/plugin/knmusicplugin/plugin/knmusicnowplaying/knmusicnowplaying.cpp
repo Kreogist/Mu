@@ -501,10 +501,16 @@ void KNMusicNowPlaying::playRow(int proxyRow)
         //Get the detail info of the current playing anlaysis item.
         const KNMusicDetailInfo &detailInfo=m_playingAnalysisItem.detailInfo;
         //Update the model if the item is not an url item.
-        if(!detailInfo.url.isEmpty())
+        if(detailInfo.url.isEmpty())
         {
             //Update the music model row.
             musicModel->updateRow(m_playingIndex.row(), m_playingAnalysisItem);
+        }
+        else
+        {
+            //Update the artwork from the model.
+            m_playingAnalysisItem.coverImage=
+                    musicModel->artwork(m_playingIndex.row()).toImage();
         }
         //Check the backend before playing, if there's no parser, do nothing.
         if(m_backend==nullptr)
