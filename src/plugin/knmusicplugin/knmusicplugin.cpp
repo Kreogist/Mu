@@ -512,6 +512,11 @@ void KNMusicPlugin::onActionHidePlaylistFlow()
     m_flowPlaylistListAnime->start();
 }
 
+void KNMusicPlugin::onMusicFileDropped(const QList<QUrl> &urlList)
+{
+    onArgumentsAvailable(KNUtil::urlListToPathList(urlList));
+}
+
 void KNMusicPlugin::initialInfrastructure()
 {
     //Initial the music global.
@@ -750,10 +755,7 @@ void KNMusicPlugin::initialHeaderPlayer(KNMusicHeaderPlayerBase *headerPlayer)
             m_headerWidget, &KNMouseDetectHeader::checkCursor);
     //Link the drop event.
     connect(m_headerPlayer, &KNMusicHeaderPlayerBase::urlsDropped,
-            [=](const QList<QUrl> &urlList)
-            {
-                onArgumentsAvailable(KNUtil::urlListToPathList(urlList));
-            });
+            this, &KNMusicPlugin::onMusicFileDropped);
     //Load the configuration.
     m_headerPlayer->loadConfigure();
 }
@@ -772,6 +774,9 @@ void KNMusicPlugin::initialMainPlayer(KNMusicMainPlayerBase *mainPlayer)
     //Link the request.
     connect(m_mainPlayer, &KNMusicMainPlayerBase::requireHide,
             this, &KNMusicPlugin::requireHideMainPlayer);
+    //Link the drop event.
+    connect(m_mainPlayer, &KNMusicMainPlayerBase::urlsDropped,
+            this, &KNMusicPlugin::onMusicFileDropped);
 }
 
 void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
@@ -794,6 +799,9 @@ void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
             this, &KNMusicPlugin::onActionHideMiniPlayer);
     connect(m_miniPlayer, &KNMusicMiniPlayerBase::requireCloseMainWindow,
             this, &KNMusicPlugin::requireCloseMainWindow);
+    //Link the drop event.
+    connect(m_miniPlayer, &KNMusicMiniPlayerBase::urlsDropped,
+            this, &KNMusicPlugin::onMusicFileDropped);
 }
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)

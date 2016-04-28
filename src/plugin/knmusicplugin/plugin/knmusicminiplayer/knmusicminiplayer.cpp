@@ -34,9 +34,9 @@
 
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
-#include "knmusichscrolllyrics.h"
 #include "knmusicglobal.h"
 #include "knmusiclyricsmanager.h"
+#include "knmusicminiplayerlyrics.h"
 
 #include "knmusicminiplayer.h"
 
@@ -60,7 +60,7 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     m_close(generateButton(":/plugin/music/player/mini_close.png")),
     m_detailLabel(new KNLoopScrollLabel(this)),
     m_progressSlider(new KNProgressSlider(this)),
-    m_lyrics(new KNMusicHScrollLyrics(this)),
+    m_lyrics(new KNMusicMiniPlayerLyrics(this)),
     m_moving(new QTimeLine(200, this)),
     m_backend(nullptr),
     m_nowPlaying(nullptr),
@@ -74,10 +74,11 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
     setObjectName("MiniPlayer");
     //Set property.
     setAutoFillBackground(true);
-#ifdef Q_OS_MACX
-    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-#else
+    setAcceptDrops(true);
+#ifdef Q_OS_LINUX
     setWindowFlags(Qt::ToolTip | Qt::WindowStaysOnTopHint);
+#else
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 #endif
     setFixedSize(fontMetrics().height()*36, fontMetrics().height()<<1);
     //Initial the resource.
@@ -139,10 +140,13 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
 #endif
     //Configure the scroll lyrics.
     m_lyrics->setObjectName("MiniLyrics");
+    m_lyrics->setAttribute(Qt::WA_TransparentForMouseEvents);
     m_lyrics->setBackend(knMusicGlobal->lyricsManager()->backend());
     m_lyrics->setFixedSize(size());
-    m_lyrics->setAttribute(Qt::WA_TransparentForMouseEvents);
+    m_lyrics->setFocusProxy(this);
     knTheme->registerWidget(m_lyrics);
+    connect(m_lyrics, &KNMusicMiniPlayerLyrics::urlsDropped,
+            this, &KNMusicMiniPlayer::urlsDropped);
     //Configure the time line.
     m_moving->setEasingCurve(QEasingCurve::OutCubic);
     m_moving->setUpdateInterval(10);

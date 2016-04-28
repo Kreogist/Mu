@@ -44,6 +44,7 @@
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicscrolllyrics.h"
+#include "knmusiclyricsdownloaddialogbase.h"
 
 #include "knmusicglobal.h"
 
@@ -342,6 +343,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_menuActions[AppendShowDetail]->setIcon(
                 QIcon("://saomenuicons/get_info.png"));
     m_appendMenu->addAction(m_menuActions[AppendShowDetail]);
+    //Configure the download lyrics.
+    m_menuActions[AppendDownloadLyrics]->setIcon(
+                QIcon("://saomenuicons/download_lyrics.png"));
+    m_appendMenu->addAction(m_menuActions[AppendDownloadLyrics]);
     //Configure the show in graphics menu
     m_menuActions[AppendShowInGraphicShell]->setIcon(
                 QIcon("://saomenuicons/showInGraphicsShell.png"));
@@ -621,6 +626,8 @@ void KNMusicHeaderPlayer::retranslate()
     m_menuActions[AppendRatingNoStar]->setText(tr("(No star)"));
     //Set the detail info title.
     m_menuActions[AppendShowDetail]->setText(tr("Get Info"));
+    //Set the download lyrics title.
+    m_menuActions[AppendDownloadLyrics]->setText(tr("Download Lyrics"));
     //Set the action title.
 #ifdef Q_OS_WIN32
     m_menuActions[AppendShowInGraphicShell]->setText(tr("Show in Explorer"));
@@ -818,6 +825,22 @@ void KNMusicHeaderPlayer::appendActionTriggered(const int &actionIndex)
         break;
     case AppendShowInGraphicShell:
         KNUtil::showInGraphicalShell(playingItem.detailInfo.filePath);
+        break;
+    case AppendDownloadLyrics:
+        //Check the pointer of download dialog and model.
+        //Check the validation of the item index.
+        if(knMusicGlobal->lyricsDownloadDialog() && m_nowPlaying
+                && m_nowPlaying->playingIndex().isValid())
+        {
+            //Get the download dialog.
+            KNMusicLyricsDownloadDialogBase *downloadDialog=
+                    knMusicGlobal->lyricsDownloadDialog();
+            //Set the detail info to the download dialog.
+            downloadDialog->setDetailInfo(
+                        m_nowPlaying->playingItem().detailInfo);
+            //Show up the download lyrics dialog, and give it the detail info.
+            downloadDialog->exec();
+        }
         break;
     case AppendShowDetail:
         //Check the now playing.

@@ -33,7 +33,7 @@ class KNEditableLabel;
 class KNOpacityAnimeButton;
 class KNOpacityButton;
 class KNLoopScrollLabel;
-class KNMusicHScrollLyrics;
+class KNMusicMiniPlayerLyrics;
 /*!
  * \brief The KNMusicMiniPlayer class provide the offical mini desktop player.
  * It will use all the default widget provided via SDK.
@@ -130,7 +130,7 @@ private:
     KNOpacityButton *m_restore, *m_close;
     KNLoopScrollLabel *m_detailLabel;
     KNProgressSlider *m_progressSlider;
-    KNMusicHScrollLyrics *m_lyrics;
+    KNMusicMiniPlayerLyrics *m_lyrics;
     QTimeLine *m_moving;
 
     KNMusicBackend *m_backend;
