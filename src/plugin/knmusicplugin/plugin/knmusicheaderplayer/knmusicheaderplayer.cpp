@@ -764,7 +764,9 @@ void KNMusicHeaderPlayer::onActionNowPlayingChanged(
     //When it has been asked to update player info, then show the buttons.
     m_showMainPlayer->show();
     m_showMiniPlayer->show();
-    m_showAppendMenu->show();
+    m_showAppendMenu->setVisible(detailInfo.url.isEmpty());
+    //Configure the loop button.
+    m_loopState->setVisible(detailInfo.url.isEmpty());
 }
 
 void KNMusicHeaderPlayer::showAppendMenu()
@@ -974,6 +976,7 @@ inline void KNMusicHeaderPlayer::setAristAndAlbum(const QString &artist,
 
 void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)
 {
+    qDebug()<<duration;
     //Change the progress slider range.
     m_progressSlider->setMaximum(duration);
     //Set duration display text.

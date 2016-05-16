@@ -19,7 +19,11 @@
 #ifndef KNACCOUNTPASSWORDBOX_H
 #define KNACCOUNTPASSWORDBOX_H
 
+#include "knaccountutil.h"
+
 #include "knmessagebox.h"
+
+using namespace AccountUtil;
 
 class QLabel;
 class KNAccountPasswordVerification;
@@ -67,13 +71,6 @@ private slots:
     void checkOkayButton();
 
 private:
-    enum PasswordHintType
-    {
-        LengthRequest,
-        NumberRequest,
-        LetterRequest,
-        PasswordHintTypeCount
-    };
 
     inline KNLabelLineEdit *generatePassword();
     QLabel *m_passwordHint[PasswordHintTypeCount];

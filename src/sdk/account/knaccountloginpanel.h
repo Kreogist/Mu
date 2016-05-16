@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+using namespace AccountUtil;
+
 class QLabel;
 class KNAccountDetails;
 class KNImageLabel;
@@ -116,7 +118,7 @@ private:
     QPixmap m_kreogistLogo, m_anonymousLogo;
     QPalette m_errorPal, m_hintPal;
     QString m_loginFailedTitle, m_subTitleText,
-            m_errorDescription[KNAccountUtil::LoginErrorCodeCount];
+            m_errorDescription[LoginErrorCodeCount];
     KNAccountDetails *m_accountDetails;
     KNImageLabel *m_avatarLabel;
     QLabel *m_title, *m_subTitle, *m_accountDisplayName;

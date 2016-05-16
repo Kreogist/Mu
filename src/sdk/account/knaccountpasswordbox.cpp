@@ -186,14 +186,11 @@ void KNAccountPasswordBox::onActionPassword1Change(const QString &password)
         checkOkayButton();
         return;
     }
-    //Reset total validtion.
-    m_validPassword=true;
     //Check password validation.
     bool passwordValidation[PasswordHintTypeCount];
-    passwordValidation[LengthRequest]=(password.length()>5),
-    passwordValidation[NumberRequest]=password.contains(QRegExp("[0-9]")),
-    passwordValidation[LetterRequest]=(password.contains(QRegExp("[A-Z]")) &&
-                                       password.contains(QRegExp("[a-z]")));
+    //Get the validation result, save the result.
+    m_validPassword=
+            KNAccountUtil::isPasswordValid(password, passwordValidation);
     //Get the palette.
     QPalette pal=m_passwordHint[0]->palette();
     //Set the result to label.
@@ -204,8 +201,6 @@ void KNAccountPasswordBox::onActionPassword1Change(const QString &password)
                      passwordValidation[i] ? m_validColor : m_invalidColor);
         //Set the palette.
         m_passwordHint[i]->setPalette(pal);
-        //Update total validation.
-        m_validPassword = m_validPassword && passwordValidation[i];
     }
     //Check okay button.
     checkOkayButton();

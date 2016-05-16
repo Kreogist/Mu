@@ -263,6 +263,12 @@ void KNMusicModel::removeRowList(QList<int> rows)
 
 void KNMusicModel::clear()
 {
+    //Check whether the detail info is already empty.
+    if(m_detailInfos.isEmpty())
+    {
+        //We won't need to clear.
+        return;
+    }
     //As the documentation said, called this function first.
     beginRemoveRows(QModelIndex(), 0, m_detailInfos.size()-1);
     //Clear the detail info list.

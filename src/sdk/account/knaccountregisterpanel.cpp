@@ -178,11 +178,11 @@ void KNAccountRegisterPanel::retranslate()
     //Set the check box.
     m_agreeLicense->setText(tr("I agree to the Terms of Service."));
     //Set error description.
-    m_errorDescription[KNAccountUtil::UnknownRegisterError]=
+    m_errorDescription[UnknownRegisterError]=
             tr("Unknown error. Please check your Internet connection.");
-    m_errorDescription[KNAccountUtil::UserNameAlreadyTaken]=
+    m_errorDescription[UserNameAlreadyTaken]=
             tr("Username is already taken, try another one.");
-    m_errorDescription[KNAccountUtil::EmailAlreadyTaken]=
+    m_errorDescription[EmailAlreadyTaken]=
             tr("E-mail is already taken, use another E-mail address.");
     //Check error code.
     if(m_errorCode!=-1)
@@ -228,12 +228,12 @@ void KNAccountRegisterPanel::onActionRegisterError(int errorCode)
     //Check error code.
     switch(m_errorCode)
     {
-    case KNAccountUtil::UserNameAlreadyTaken:
+    case UserNameAlreadyTaken:
         //Set focus on user name line edit.
         m_username->selectAll();
         m_username->setFocus(Qt::MouseFocusReason);
         break;
-    case KNAccountUtil::EmailAlreadyTaken:
+    case EmailAlreadyTaken:
         //Set focus on E-mail.
         m_email->selectAll();
         m_email->setFocus(Qt::MouseFocusReason);
@@ -263,14 +263,11 @@ inline bool KNAccountRegisterPanel::isInformationValid()
         //Failed to use.
         return false;
     }
-    //Initial the password checker.
-    bool validPassword=true;
     //Check password validation.
-    bool passwordValidation[PasswordHintTypeCount];
-    passwordValidation[LengthRequest]=(password.length()>5),
-    passwordValidation[NumberRequest]=password.contains(QRegExp("[0-9]")),
-    passwordValidation[LetterRequest]=(password.contains(QRegExp("[A-Z]")) &&
-                                       password.contains(QRegExp("[a-z]")));
+    bool passwordValidation[PasswordHintTypeCount],
+        //Get the password validation check result.
+        validPassword=KNAccountUtil::isPasswordValid(password,
+                                                     passwordValidation);
     //Get the palette.
     QPalette pal=m_passwordHint[0]->palette();
     //Set the result to label.
@@ -281,8 +278,6 @@ inline bool KNAccountRegisterPanel::isInformationValid()
                      passwordValidation[i] ? m_validColor : m_invalidColor);
         //Set the palette.
         m_passwordHint[i]->setPalette(pal);
-        //Update total validation.
-        validPassword = validPassword && passwordValidation[i];
     }
     //Check password validation.
     if(!validPassword)

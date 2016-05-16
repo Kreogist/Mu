@@ -23,7 +23,8 @@
 
 KNMusicOnlineLyrics::KNMusicOnlineLyrics(QObject *parent) :
     QObject(parent),
-    m_lrcParser(new KNMusicLrcParser(this))
+    m_lrcParser(new KNMusicLrcParser(this)),
+    m_isWorking(false)
 {
     //Link the download signal and slot.
     connect(this, &KNMusicOnlineLyrics::downloadNext,
@@ -53,8 +54,12 @@ void KNMusicOnlineLyrics::addToDownloadList(const KNMusicDetailInfo &detailInfo)
         //Add the detail info to the download queue.
         m_downloadQueue.append(detailInfo);
     }
-    //Execute the download list.
-    emit downloadNext();
+    //Check the working state.
+    if(!m_isWorking)
+    {
+        //Execute the download list.
+        emit downloadNext();
+    }
 }
 
 void KNMusicOnlineLyrics::downloadLyrics(
@@ -84,8 +89,23 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
     //Check the download queue.
     if(m_downloadQueue.isEmpty())
     {
+        //Lock the state.
+        m_workingLock.lock();
+        //Reset the working state to be false.
+        m_isWorking=false;
+        //Release the lock.
+        m_workingLock.unlock();
         //We won't process anything for empty queue.
         return;
+    }
+    else
+    {
+        //Update working state, lock the working state.
+        m_workingLock.lock();
+        //Reset the working state to be false.
+        m_isWorking=true;
+        //Release the lock.
+        m_workingLock.unlock();
     }
     //Get the last item in the download queue.
     KNMusicDetailInfo detailInfo=m_downloadQueue.takeLast();

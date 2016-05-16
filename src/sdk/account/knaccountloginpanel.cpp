@@ -184,7 +184,7 @@ void KNAccountLoginPanel::onActionLoginError(int errorCode)
     //Check error code.
     switch(errorCode)
     {
-    case KNAccountUtil::LoginConnectionError:
+    case LoginConnectionError:
         //Set focus to password.
         m_password->setFocus(Qt::MouseFocusReason);
         //Check visible.
@@ -194,10 +194,10 @@ void KNAccountLoginPanel::onActionLoginError(int errorCode)
             knNotification->pushOnly(
                         m_loginFailedTitle,
                         m_errorDescription[
-                        KNAccountUtil::LoginConnectionError]);
+                        LoginConnectionError]);
         }
         break;
-    case KNAccountUtil::InfoIncorrect:
+    case InfoIncorrect:
         //Set focus to user name.
         m_username->setFocus(Qt::MouseFocusReason);
         //Check visible.
@@ -206,7 +206,7 @@ void KNAccountLoginPanel::onActionLoginError(int errorCode)
             //When panel is hidden, push a message.
             knNotification->pushOnly(
                         m_loginFailedTitle,
-                        m_errorDescription[KNAccountUtil::InfoIncorrect]);
+                        m_errorDescription[InfoIncorrect]);
         }
         break;
     default:
@@ -219,7 +219,7 @@ void KNAccountLoginPanel::onActionAutoLoginError(int errorCode)
     //Check error code.
     switch(errorCode)
     {
-    case KNAccountUtil::LoginConnectionError:
+    case LoginConnectionError:
         //Show relogin button.
         m_relogin->show();
         //Show the only reason for login error.
@@ -245,11 +245,10 @@ void KNAccountLoginPanel::onActionAutoLoginError(int errorCode)
             //When panel is hidden, push a message.
             knNotification->pushOnly(
                         m_loginFailedTitle,
-                        m_errorDescription[
-                        KNAccountUtil::LoginConnectionError]);
+                        m_errorDescription[LoginConnectionError]);
         }
         break;
-    case KNAccountUtil::InfoIncorrect:
+    case InfoIncorrect:
         onActionLoginError(errorCode);
         break;
     default:
@@ -260,9 +259,9 @@ void KNAccountLoginPanel::onActionAutoLoginError(int errorCode)
 void KNAccountLoginPanel::retranslate()
 {
     //Update title text.
-    m_errorDescription[KNAccountUtil::LoginConnectionError]=
+    m_errorDescription[LoginConnectionError]=
             tr("Connection Error. Please check Internet connection.");
-    m_errorDescription[KNAccountUtil::InfoIncorrect]=
+    m_errorDescription[InfoIncorrect]=
             tr("Username or password incorrect.");
     m_loginFailedTitle=tr("Kreogist Account login failed.");
     //Update label.

@@ -171,9 +171,24 @@ backend-gstreamer: {
     }
     # Define the backend enabled flag.
     DEFINES += ENABLE_BACKEND_GSTREAMER BACKEND_ENABLED
-    # Add backend library to the project.
-    CONFIG += link_pkgconfig
-    PKGCONFIG += gstreamer-1.0
+    # For Linux's distributions, we will use pkg-config to manage the lib.
+    linux:{
+        # Add backend library to the project.
+        CONFIG += link_pkgconfig
+        PKGCONFIG += gstreamer-1.0
+    }
+    # For Windows, we will find the lib manually.
+    win32:{
+        # The default directory is the Qt installation dir.
+        GStreamerDir=$$(QTDIR)
+        # Configure the include path.
+        INCLUDEPATH += $${GStreamerDir}/include/gstreamer-1.0 \
+                       $${GStreamerDir}/lib/gstreamer-1.0/include \
+                       $${GStreamerDir}/include/glib-2.0 \
+                       $${GStreamerDir}/lib/glib-2.0/include
+        # Configure the library.
+        LIBS += -lglib-2.0 -lgobject-2.0 -lgstreamer-1.0
+    }
     # Add backend files to the project.
     SOURCES += \
         plugin/knmusicplugin/plugin/knmusicbackendgstreamer/knmusicbackendgstreamer.cpp \

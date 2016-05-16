@@ -23,6 +23,8 @@
 
 #include <QWidget>
 
+using namespace AccountUtil;
+
 class QLabel;
 class QCheckBox;
 class KNLabelLineEdit;
@@ -92,17 +94,10 @@ private slots:
     void onActionCheckValid();
 
 private:
-    enum PasswordHintType
-    {
-        LengthRequest,
-        NumberRequest,
-        LetterRequest,
-        PasswordHintTypeCount
-    };
     inline bool isInformationValid();
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
     QLabel *m_passwordHint[PasswordHintTypeCount];
-    QString m_errorDescription[KNAccountUtil::RegisterErrorCodeCount];
+    QString m_errorDescription[RegisterErrorCodeCount];
     QColor m_validColor, m_invalidColor, m_emptyColor;
     QLabel *m_title, *m_emailHint, *m_errorHint;
     QCheckBox *m_agreeLicense;

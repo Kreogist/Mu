@@ -121,6 +121,20 @@ signals:
      */
     void updateInternetError();
 
+    /*!
+     * \brief When the reset email has been send successfully, this signal will
+     * be emitted.
+     */
+    void resetEmailSendSuccess();
+
+    /*!
+     * \brief If the reset e-mail contains any error, this signal will be
+     * emitted.
+     * \param errorCode The error code of ResetPasswordErrorCode defines in the
+     * account util.
+     */
+    void resetEmailError(int errorCode);
+
 public slots:
     /*!
      * \brief Generate a Kreogist Account with the basic information.
@@ -174,8 +188,10 @@ public slots:
     /*!
      * \brief Ask to reset one user password.
      * \param emailAddress User E-mail account.
+     * \return If we could send the reset request successfully, then return
+     * true.
      */
-    void resetPassword(const QString &emailAddress);
+    bool resetPassword(const QString &emailAddress);
 
     /*!
      * \brief Get the account information from server, update the detail info.

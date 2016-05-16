@@ -310,7 +310,6 @@ void KNMusicNowPlaying::playUrl(const KNMusicAnalysisItem &item)
 {
     //Update the temporary files.
     m_temporaryPlaylist->setOnlineUrl(item);
-    qDebug()<<"URL is:"<<item.detailInfo.url;
     //The online url is alread add to playlist, play the music row.
     playMusicRow(m_temporaryProxyPlaylist, 0, nullptr);
 }
@@ -401,7 +400,17 @@ void KNMusicNowPlaying::onActionBackendFinished()
         if(m_backend!=nullptr &&
                 m_playingAnalysisItem.detailInfo.duration>0)
         {
-            m_backend->play();
+            //Check it's URL.
+            if(m_playingAnalysisItem.detailInfo.url.isEmpty())
+            {
+                //Replay the backend.
+                m_backend->play();
+            }
+            else
+            {
+                //Simply reset the model.
+                reset();
+            }
         }
         //Action finished.
         return;
@@ -488,14 +497,11 @@ void KNMusicNowPlaying::playRow(int proxyRow)
     //First we need to reanalysis that row, if we cannot analysis that row,
     //means we cannot play that row.
     KNMusicAnalysisItem reanalysisItem;
-    qDebug()<<"Get detail info.";
     //Get a copy from the music model.
     reanalysisItem.detailInfo=musicModel->rowDetailInfo(m_playingIndex.row());
-    qDebug()<<"Before reanalysis item.";
     //Check the parser first, if you cannot play
     if(knMusicGlobal->parser()->reanalysisItem(reanalysisItem))
     {
-        qDebug()<<"Already here?!";
         //Save the current reanlaysis item.
         m_playingAnalysisItem=reanalysisItem;
         //Get the detail info of the current playing anlaysis item.
@@ -524,7 +530,6 @@ void KNMusicNowPlaying::playRow(int proxyRow)
         //file path is empty.
         if(!detailInfo.url.isEmpty())
         {
-            qDebug()<<"Load the url?!";
             //Load the url.
             m_backend->loadUrl(detailInfo.url);
         }

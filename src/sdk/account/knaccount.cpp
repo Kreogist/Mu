@@ -36,6 +36,8 @@
 #define CachePasswordField "Password"
 #define CacheNicknameField "DisplayName"
 
+using namespace AccountUtil;
+
 KNAccount *KNAccount::m_instance=nullptr;
 
 KNAccount::KNAccount(QObject *parent) :
@@ -144,13 +146,13 @@ bool KNAccount::generateAccount(const QString &userName,
                        "code").toInt())
             {
             case 202:
-                emit generateFailed(KNAccountUtil::UserNameAlreadyTaken);
+                emit generateFailed(UserNameAlreadyTaken);
                 break;
             case 203:
-                emit generateFailed(KNAccountUtil::EmailAlreadyTaken);
+                emit generateFailed(EmailAlreadyTaken);
                 break;
             default:
-                emit generateFailed(KNAccountUtil::UnknownRegisterError);
+                emit generateFailed(UnknownRegisterError);
                 break;
             }
             //Failed to post then failed.
@@ -180,7 +182,7 @@ bool KNAccount::generateAccount(const QString &userName,
         return true;
     }
     //Emit failed for unknown reason.
-    emit generateFailed(KNAccountUtil::UnknownRegisterError);
+    emit generateFailed(UnknownRegisterError);
     //Or else failed to login.
     return false;
 }
@@ -192,7 +194,7 @@ bool KNAccount::login(const QString &userName,
     if(m_accountDetails->isLogin())
     {
         //Emit failed signal.
-        emit loginFailed(KNAccountUtil::InfoIncorrect);
+        emit loginFailed(InfoIncorrect);
         //You cannot login two account at the same time.
         return false;
     }
@@ -208,7 +210,7 @@ bool KNAccount::login(const QString &userName,
     {
     case 0:
         //Ask user to check Internet connection.
-        emit loginFailed(KNAccountUtil::LoginConnectionError);
+        emit loginFailed(LoginConnectionError);
         //Failed to login.
         return false;
     case 200:
@@ -227,7 +229,7 @@ bool KNAccount::login(const QString &userName,
         if(originalResult<1)
         {
             //Ask user to check Internet connection.
-            emit loginFailed(KNAccountUtil::LoginConnectionError);
+            emit loginFailed(LoginConnectionError);
             //Failed to login.
             return false;
         }
@@ -235,7 +237,7 @@ bool KNAccount::login(const QString &userName,
         if(originalResult!=200)
         {
             //Emit failed signal.
-            emit loginFailed(KNAccountUtil::InfoIncorrect);
+            emit loginFailed(InfoIncorrect);
             //Failed to login, password is wrong.
             return false;
         }
@@ -263,7 +265,7 @@ bool KNAccount::login(const QString &userName,
                false)!=200)
         {
             //Emit failed signal.
-            emit loginFailed(KNAccountUtil::LoginConnectionError);
+            emit loginFailed(LoginConnectionError);
             //Failed to change the password, failed to login.
             return false;
         }
@@ -308,7 +310,7 @@ void KNAccount::autoLogin()
         if(loginResult<1)
         {
             //For auto login failed.
-            emit autoLoginFailed(KNAccountUtil::LoginConnectionError);
+            emit autoLoginFailed(LoginConnectionError);
         }
         else if(loginResult==200)
         {
@@ -330,7 +332,7 @@ void KNAccount::autoLogin()
         else
         {
             //Emit failed signal.
-            emit autoLoginFailed(KNAccountUtil::InfoIncorrect);
+            emit autoLoginFailed(InfoIncorrect);
             //Clear the cache user name and cache password.
             m_accountDetails->resetAccountDetail();
         }
@@ -458,9 +460,44 @@ bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
     return updateOnlineAccount(userInfo, true);
 }
 
-void KNAccount::resetPassword(const QString &emailAddress)
+bool KNAccount::resetPassword(const QString &emailAddress)
 {
-    ;
+    //Generate the reset password request data and response cache.
+    QByteArray resetRequestData, responseCache;
+    {
+        //Generate the post data.
+        QJsonObject resetBody;
+        //Insert the email data.
+        resetBody.insert("email", emailAddress);
+        //Translate the reset body to reset data.
+        resetRequestData=QJsonDocument(resetBody).toJson(
+                    QJsonDocument::Compact);
+    }
+    //Post the data, get the result.
+    int postResult=post(generateKreogistRequest("requestPasswordReset"),
+                        resetRequestData,
+                        responseCache,
+                        false);
+    //Check the post result.
+    if(postResult==200)
+    {
+        //Then success, the reset E-mail has been sent.
+        emit resetEmailSendSuccess();
+        //Mission complete.
+        return true;
+    }
+    qDebug()<<postResult<<responseCache;
+    //Check all the possibility errors.
+    if(postResult<0)
+    {
+        //Internet error.
+        emit resetEmailError(ResetConnectionError);
+    }
+    else
+    {
+        //Unknown Internet error, ask user to try to send the email again.
+        emit resetEmailError(ResetUnknownError);
+    }
 }
 
 bool KNAccount::refreshAccountInfo()

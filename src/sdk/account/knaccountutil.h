@@ -19,14 +19,18 @@
 #ifndef KNACCOUNTUTIL_H
 #define KNACCOUNTUTIL_H
 
-/*!
- * \brief The KNAccountUtil class is used to provide several account
- * enumerations, especially for error codes. It will also provides some public
- * static functions for account.
- */
-class KNAccountUtil
+#include <QRegExp>
+#include <QString>
+
+namespace AccountUtil
 {
-public:
+    enum LoginErrorCode
+    {
+        LoginConnectionError,
+        InfoIncorrect,
+        LoginErrorCodeCount
+    };
+
     enum RegisterErrorCode
     {
         UnknownRegisterError,
@@ -35,12 +39,74 @@ public:
         RegisterErrorCodeCount
     };
 
-    enum LoginErrorCode
+    enum ResetPasswordErrorCode
     {
-        LoginConnectionError,
-        InfoIncorrect,
-        LoginErrorCodeCount
+        ResetConnectionError,
+        ResetUnknownError,
+        ResetPasswordCount
     };
+
+    enum PasswordHintType
+    {
+        LengthRequest,
+        NumberRequest,
+        LetterRequest,
+        PasswordHintTypeCount
+    };
+}
+
+/*!
+ * \brief The KNAccountUtil class is used to provide several account
+ * enumerations, especially for error codes. It will also provides some public
+ * static functions for account.
+ */
+class KNAccountUtil
+{
+public:
+    /*!
+     * \brief isPasswordValid
+     * \param password
+     * \param passwordValidResult
+     * \return
+     */
+    static bool isPasswordValid(const QString &password,
+                                bool *passwordValidResult=nullptr)
+    {
+        //Check whether the password is empty.
+        if(password.isEmpty())
+        {
+            //Empty password is not valid.
+            return false;
+        }
+        //Check password validation.
+        bool passwordValidation[AccountUtil::PasswordHintTypeCount],
+                validResult=true;
+        passwordValidation[AccountUtil::LengthRequest]=
+                (password.length()>5),
+        passwordValidation[AccountUtil::NumberRequest]=
+                password.contains(QRegExp("[0-9]")),
+        passwordValidation[AccountUtil::LetterRequest]=
+                (password.contains(QRegExp("[A-Z]")) &&
+                 password.contains(QRegExp("[a-z]")));
+        //Check the result pointer.
+        if(!passwordValidResult)
+        {
+            //If the result is not null, output the result.
+            for(int i=0; i<AccountUtil::PasswordHintTypeCount; ++i)
+            {
+                //Save the result to the pointer.
+                passwordValidResult[i]=passwordValidation[i];
+            }
+        }
+        //Calculate the final result by combine all the sub parts together.
+        for(int i=0; i<AccountUtil::PasswordHintTypeCount; ++i)
+        {
+            //Calcualte the result.
+            validResult = validResult && passwordValidation[i];
+        }
+        //Give the result back.
+        return validResult;
+    }
 
 private:
     KNAccountUtil();
