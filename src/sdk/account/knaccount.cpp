@@ -457,6 +457,7 @@ void KNAccount::logout()
 
 bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
 {
+    //Call the update function.
     return updateOnlineAccount(userInfo, true);
 }
 
@@ -486,18 +487,29 @@ bool KNAccount::resetPassword(const QString &emailAddress)
         //Mission complete.
         return true;
     }
-    qDebug()<<postResult<<responseCache;
     //Check all the possibility errors.
     if(postResult<0)
     {
         //Internet error.
         emit resetEmailError(ResetConnectionError);
+        //Mission Failed.
+        return false;
     }
-    else
+    //Check the response of the code.
+    QJsonObject errorMessage=QJsonDocument::fromJson(responseCache).object();
+    //If the error message code is 205, it means no user found with E-mail.
+    if(errorMessage.contains("code") &&
+            errorMessage.value("code").toInt()==205)
     {
-        //Unknown Internet error, ask user to try to send the email again.
-        emit resetEmailError(ResetUnknownError);
+        //Emit the no E-mail error.
+        emit resetEmailError(ResetCannotFindEmail);
+        //Mission Failed.
+        return false;
     }
+    //Unknown Internet error, ask user to try to send the email again.
+    emit resetEmailError(ResetUnknownError);
+    //Failed to send the reset password E-mail.
+    return false;
 }
 
 bool KNAccount::refreshAccountInfo()

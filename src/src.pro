@@ -480,7 +480,8 @@ SOURCES += \
     sdk/kndarkwaitingwheel.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.cpp \
-    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.cpp
+    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.cpp \
+    sdk/account/knaccountresetpanel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -736,7 +737,8 @@ HEADERS += \
     sdk/kndarkwaitingwheel.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.h \
-    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.h
+    plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.h \
+    sdk/account/knaccountresetpanel.h
 
 RESOURCES += \
     resource/res.qrc

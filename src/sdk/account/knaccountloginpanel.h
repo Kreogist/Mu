@@ -73,11 +73,22 @@ signals:
      */
     void requireRelogin();
 
+    /*!
+     * \brief This signal will be emitted when the user is asking to reset the
+     * password.
+     */
+    void requireResetPassword();
+
 public slots:
     /*!
      * \brief Clear all the data of the text box.
      */
     void clearInputData();
+
+    /*!
+     * \brief When the account password E-mail reset request has been sent.
+     */
+    void onActionResetSuccess();
 
     /*!
      * \brief When there's error occur on login, show the error.
@@ -116,8 +127,8 @@ private:
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
     QAction *m_menuActions[AccountActionCount];
     QPixmap m_kreogistLogo, m_anonymousLogo;
-    QPalette m_errorPal, m_hintPal;
-    QString m_loginFailedTitle, m_subTitleText,
+    QPalette m_okayPal, m_errorPal, m_hintPal;
+    QString m_resetPasswordComplete, m_loginFailedTitle, m_subTitleText,
             m_errorDescription[LoginErrorCodeCount];
     KNAccountDetails *m_accountDetails;
     KNImageLabel *m_avatarLabel;

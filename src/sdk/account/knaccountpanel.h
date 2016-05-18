@@ -23,6 +23,7 @@
 
 class KNHWidgetSwitcher;
 class KNAccountLoginPanel;
+class KNAccountResetPanel;
 class KNAccountRegisterPanel;
 class KNAccountWaitingPanel;
 class KNAccountDetailPanel;
@@ -37,7 +38,7 @@ class KNAccountPanel : public QWidget
 public:
     /*!
      * \brief Construct a KNAccountPanel widget.
-     * \param parent The parent widget.s
+     * \param parent The parent widget.
      */
     explicit KNAccountPanel(QWidget *parent = 0);
 
@@ -81,6 +82,7 @@ protected:
 private slots:
     void onActionShowRegister();
     void onActionShowLogin();
+    void onActionShowResetPassword();
 
     void onActionRegister();
     void onActionRegisterSuccess();
@@ -93,6 +95,7 @@ private slots:
 
     void onActionLogout();
 
+    void onActionResetSentFinished();
     void onActionOperateSuccess();
     void onActionAvatarUpdatedFailed();
     void onActionUserInfoUpdateFailed();
@@ -104,6 +107,7 @@ private:
     enum AccountPanelIndex
     {
         LoginPanel,
+        ResetPasswordPanel,
         RegisterPanel,
         WaitingPanel,
         DetailPanel
@@ -112,6 +116,8 @@ private:
     KNHWidgetSwitcher *m_switcher;
     //Login the panel.
     KNAccountLoginPanel *m_loginPanel;
+    //Reset password panel.
+    KNAccountResetPanel *m_resetPanel;
     //Register panel.
     KNAccountRegisterPanel *m_generatePanel;
     //Wating panel.

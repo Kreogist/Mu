@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-//
+//The notification stuffs.
 #include "knnotification.h"
 
 #include "knaccount.h"
@@ -25,6 +25,7 @@
 #include "knaccountregisterpanel.h"
 #include "knaccountwaitingpanel.h"
 #include "knaccountdetailpanel.h"
+#include "knaccountresetpanel.h"
 
 #include "knhwidgetswitcher.h"
 
@@ -36,6 +37,7 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     QWidget(parent),
     m_switcher(new KNHWidgetSwitcher(this)),
     m_loginPanel(new KNAccountLoginPanel(this)),
+    m_resetPanel(new KNAccountResetPanel(this)),
     m_generatePanel(new KNAccountRegisterPanel(this)),
     m_waitingPanel(new KNAccountWaitingPanel(this)),
     m_detailPanel(new KNAccountDetailPanel(this))
@@ -76,9 +78,13 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             this, &KNAccountPanel::onActionUserInfoUpdateFailed);
     connect(knAccount, &KNAccount::updateInternetError,
             this, &KNAccountPanel::onActionUpdateInternetError);
+    connect(knAccount, &KNAccount::resetEmailSendSuccess,
+            this, &KNAccountPanel::onActionResetSentFinished);
     //Link panel signal.
     connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
             this, &KNAccountPanel::onActionShowRegister);
+    connect(m_loginPanel, &KNAccountLoginPanel::requireResetPassword,
+            this, &KNAccountPanel::onActionShowResetPassword);
     connect(m_loginPanel, &KNAccountLoginPanel::requireLogin,
             this, &KNAccountPanel::onActionLogin);
     connect(m_loginPanel, &KNAccountLoginPanel::requireRelogin,
@@ -89,6 +95,15 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     connect(m_generatePanel, &KNAccountRegisterPanel::cancelRegister,
             this, &KNAccountPanel::onActionShowLogin);
 
+    connect(m_resetPanel, &KNAccountResetPanel::requireCancel,
+            this, &KNAccountPanel::onActionShowLogin);
+    connect(m_resetPanel, &KNAccountResetPanel::resetMailSentSuccess,
+            this, &KNAccountPanel::onActionResetSentFinished);
+    connect(m_resetPanel, &KNAccountResetPanel::requireSendEmail,
+            knAccount, &KNAccount::resetPassword);
+    connect(knAccount, &KNAccount::resetEmailError,
+            m_resetPanel, &KNAccountResetPanel::onActionSentFailed);
+
     connect(m_detailPanel, &KNAccountDetailPanel::requireLogout,
             this, &KNAccountPanel::onActionLogout);
     connect(m_detailPanel, &KNAccountDetailPanel::requireUpdateAvatar,
@@ -97,6 +112,7 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
             knAccount, &KNAccount::updateAccountInfo, Qt::QueuedConnection);
     //Add widget to switcher.
     m_switcher->addWidget(m_loginPanel);
+    m_switcher->addWidget(m_resetPanel);
     m_switcher->addWidget(m_generatePanel);
     m_switcher->addWidget(m_waitingPanel);
     m_switcher->addWidget(m_detailPanel);
@@ -120,6 +136,12 @@ void KNAccountPanel::onActionShowLogin()
 {
     //Switch the widget selector to login panel.
     m_switcher->setCurrentIndex(LoginPanel);
+}
+
+void KNAccountPanel::onActionShowResetPassword()
+{
+    //Switch the widget selector to reset password panel.
+    m_switcher->setCurrentIndex(ResetPasswordPanel);
 }
 
 void KNAccountPanel::onActionRegister()
@@ -214,6 +236,16 @@ void KNAccountPanel::onActionLogout()
     setFixedHeight(270);
     //Emit resize signal.
     emit requireResize();
+}
+
+void KNAccountPanel::onActionResetSentFinished()
+{
+    //Called the reset panel action slot.
+    m_resetPanel->onActionSentSuccess();
+    //Called the reset success slot.
+    m_loginPanel->onActionResetSuccess();
+    //Show the login panel again.
+    m_switcher->setCurrentIndex(LoginPanel);
 }
 
 void KNAccountPanel::onActionOperateSuccess()

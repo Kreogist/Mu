@@ -35,6 +35,7 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     QWidget(parent),
     m_kreogistLogo(QPixmap(":/public/Kreogist.png")),
     m_anonymousLogo(QPixmap("://public/anonymous.png")),
+    m_okayPal(palette()),
     m_errorPal(palette()),
     m_hintPal(palette()),
     m_loginFailedTitle(QString()),
@@ -67,6 +68,7 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     m_title->setFont(titleFont);
     m_subTitle->setAlignment(Qt::AlignCenter);
     //Configure palettes.
+    m_okayPal.setColor(QPalette::WindowText, QColor(0x41, 0x92, 0x57));
     m_errorPal.setColor(QPalette::WindowText, QColor(0x9a, 0x25, 0x38));
     m_hintPal.setColor(QPalette::WindowText, QColor(157, 157, 157));
     m_subTitle->setPalette(m_hintPal);
@@ -111,6 +113,8 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     //Link the actions.
     connect(m_menuActions[RegisterAccount], SIGNAL(triggered(bool)),
             this, SIGNAL(requireRegister()));
+    connect(m_menuActions[ForgetPassword], SIGNAL(triggered(bool)),
+            this, SIGNAL(requireResetPassword()));
     connect(m_menuActions[LoginWithAnotherAccount], SIGNAL(triggered(bool)),
             this, SLOT(onActionLoginWithAnotherAccount()));
     //Link the other button.
@@ -174,6 +178,13 @@ void KNAccountLoginPanel::clearInputData()
 {
     m_username->clear();
     m_password->clear();
+}
+
+void KNAccountLoginPanel::onActionResetSuccess()
+{
+    //Update the hint of the panel to reset success hint.
+    m_subTitle->setText(m_resetPasswordComplete);
+    m_subTitle->setPalette(m_okayPal);
 }
 
 void KNAccountLoginPanel::onActionLoginError(int errorCode)
@@ -264,10 +275,13 @@ void KNAccountLoginPanel::retranslate()
     m_errorDescription[InfoIncorrect]=
             tr("Username or password incorrect.");
     m_loginFailedTitle=tr("Kreogist Account login failed.");
+    m_resetPasswordComplete=tr("Check your email for a link to reset your "
+                               "password.");
     //Update label.
     m_title->setText(tr("Sign in"));
     m_subTitleText=tr("with Your Kreogist Account");
     m_subTitle->setText(m_subTitleText);
+    m_subTitle->setPalette(m_hintPal);
     //Set the place holder text.
     m_username->setPlaceholderText(tr("Username/E-mail"));
     m_password->setPlaceholderText(tr("Password"));

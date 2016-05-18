@@ -42,6 +42,7 @@ namespace AccountUtil
     enum ResetPasswordErrorCode
     {
         ResetConnectionError,
+        ResetCannotFindEmail,
         ResetUnknownError,
         ResetPasswordCount
     };
