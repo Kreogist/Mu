@@ -23,6 +23,7 @@
 
 #include "knthememanager.h"
 #include "knlocalemanager.h"
+#include "sao/knsaostyle.h"
 
 #include "knmusiccategoryproxymodel.h"
 #include "knmusicsearchbase.h"
@@ -34,7 +35,10 @@
 
 #include <QDebug>
 
-#define m_shadowIncrease 15
+#define MaxOpacity 0x40
+#define ShadowIncrease 15
+#define ScrollBarWidth 10
+#define ScrollBarSpacing 1
 
 KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     QAbstractItemView(parent),
@@ -48,9 +52,11 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     m_selectedIndex(m_nullIndex),
     m_mouseDownIndex(m_nullIndex),
     m_scrollAnime(new QTimeLine(200, this)),
+    m_mouseAnime(new QTimeLine(200, this)),
     m_proxyModel(nullptr),
     m_model(nullptr),
     m_albumDetail(nullptr),
+    m_scrollBar(new QScrollBar(this)),
     m_itemWidth(135),
     m_itemMinimalSpacing(30),
     m_minimalWidth(m_itemMinimalSpacing+m_itemWidth),
@@ -65,6 +71,7 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     setObjectName("MusicAlbumView");
     //Set properties.
     setFocusPolicy(Qt::WheelFocus);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //Set default scrollbar properties.
     verticalScrollBar()->setRange(0, 0);
 
@@ -72,9 +79,40 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     knTheme->registerWidget(this);
 
     //Configure the timeline.
-    m_scrollAnime->setUpdateInterval(10);
+    m_scrollAnime->setUpdateInterval(33);
     m_scrollAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_scrollAnime, &QTimeLine::frameChanged,
+            verticalScrollBar(), &QScrollBar::setValue);
+    //Configure the timeline.
+    m_mouseAnime->setUpdateInterval(33);
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMusicAlbumView::onActionMouseInOut);
+    //Configure the scroll bar.
+    m_scrollBar->setObjectName("MusicAlbumView");
+    m_scrollBar->setStyle(KNSaoStyle::instance());
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged,
+            [=](int min, int max)
+            {
+                //Update the range first.
+                m_scrollBar->setRange(min, max);
+                //Check whether the scroll bar is still valid.
+                m_scrollBar->setVisible(min!=max);
+                //Update scrollbar state parameters.
+                m_scrollBar->setPageStep(verticalScrollBar()->pageStep());
+                m_scrollBar->setSingleStep(verticalScrollBar()->singleStep());
+            });
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            [=](int value)
+            {
+                //Block the signal.
+                m_scrollBar->blockSignals(true);
+                //Reset the value.
+                m_scrollBar->setValue(value);
+                //Release the block
+                m_scrollBar->blockSignals(false);
+            });
+    connect(m_scrollBar, &QScrollBar::valueChanged,
             verticalScrollBar(), &QScrollBar::setValue);
 
     //Link the scrolling event.
@@ -85,7 +123,7 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     //Update the painting parameters.
     updateUIElements();
     //Generate the album art shadow pixmap.
-    int shadowSize=m_itemWidth+(m_shadowIncrease<<1);
+    int shadowSize=m_itemWidth+(ShadowIncrease<<1);
     //Update album art shadow.
     m_albumArtShadow=generateShadow(shadowSize, shadowSize);
     //Update the album base.
@@ -370,6 +408,11 @@ void KNMusicAlbumView::resizeEvent(QResizeEvent *event)
 {
     //Do resize.
     QAbstractItemView::resizeEvent(event);
+    //Update the scroll bar position.
+    m_scrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
+                             0,
+                             ScrollBarWidth,
+                             height());
     //Update the parameters of the view first.
     updateUIElements();
     //Resize the album detail.
@@ -456,6 +499,22 @@ void KNMusicAlbumView::mouseReleaseEvent(QMouseEvent *event)
     }
     //If goes here, we need to fold the expanded album.
     displayAlbum(QPoint(-1,-1));
+}
+
+void KNMusicAlbumView::enterEvent(QEvent *event)
+{
+    //Enter the list view.
+    QAbstractItemView::enterEvent(event);
+    //Start mouse in anime.
+    startAnime(MaxOpacity);
+}
+
+void KNMusicAlbumView::leaveEvent(QEvent *event)
+{
+    //Leave the list view.
+    QAbstractItemView::leaveEvent(event);
+    //Start mouse leave anime.
+    startAnime(0);
 }
 
 void KNMusicAlbumView::updateGeometries()
@@ -548,6 +607,20 @@ void KNMusicAlbumView::onActionSearch()
     viewport()->update();
 }
 
+void KNMusicAlbumView::onActionMouseInOut(int frame)
+{
+    //Update the scroll bar color.
+    QPalette pal=m_scrollBar->palette();
+    QColor color=pal.color(QPalette::Base);
+    color.setAlpha(frame>>1);
+    pal.setColor(QPalette::Base, color);
+    color=pal.color(QPalette::Button);
+    color.setAlpha(frame);
+    pal.setColor(QPalette::Button, color);
+    //Set the palette to scroll bar.
+    m_scrollBar->setPalette(pal);
+}
+
 inline int KNMusicAlbumView::indexScrollBarValue(
         const QModelIndex &index,
         QAbstractItemView::ScrollHint hint)
@@ -609,7 +682,7 @@ inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
         return;
     }
     //Draw the shadow first.
-    painter.drawPixmap(x-m_shadowIncrease, y-m_shadowIncrease,
+    painter.drawPixmap(x-ShadowIncrease, y-ShadowIncrease,
                        m_albumArtShadow);
 
     //Render and draw the album art image.
@@ -753,13 +826,25 @@ inline QPixmap KNMusicAlbumView::generateShadow(int shadowWidth,
                        m_shadowSource,
                        QRect(blockSize2x,blockSize2x,blockSize,blockSize));
     //Draw the black central content.
-    painter.fillRect(QRect(m_shadowIncrease,
-                           m_shadowIncrease,
+    painter.fillRect(QRect(ShadowIncrease,
+                           ShadowIncrease,
                            m_itemWidth,
                            m_itemWidth),
                      QColor(0, 0, 0));
     painter.end();
     return shadowPixmap;
+}
+
+inline void KNMusicAlbumView::startAnime(int endFrame)
+{
+    //Stop the mouse animations.
+    m_mouseAnime->stop();
+    //Set the parameter of the time line.
+    m_mouseAnime->setFrameRange(
+                m_scrollBar->palette().color(QPalette::Button).alpha(),
+                endFrame);
+    //Start the time line.
+    m_mouseAnime->start();
 }
 
 KNMusicAlbumDetail *KNMusicAlbumView::albumDetail() const

@@ -976,7 +976,6 @@ inline void KNMusicHeaderPlayer::setAristAndAlbum(const QString &artist,
 
 void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)
 {
-    qDebug()<<duration;
     //Change the progress slider range.
     m_progressSlider->setMaximum(duration);
     //Set duration display text.

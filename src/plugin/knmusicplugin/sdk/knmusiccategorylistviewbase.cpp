@@ -180,7 +180,7 @@ void KNMusicCategoryListViewBase::hideSearchBar()
     startSearchAnime(0);
 }
 
-void KNMusicCategoryListViewBase::onActionMouseInOut(const int &frame)
+void KNMusicCategoryListViewBase::onActionMouseInOut(int frame)
 {
     //Update the background color's brightness.
     m_backgroundColor.setHsv(m_backgroundColor.hue(),
@@ -202,7 +202,7 @@ void KNMusicCategoryListViewBase::onActionMouseInOut(const int &frame)
     setPalette(m_palette);
 }
 
-void KNMusicCategoryListViewBase::onActionSearchInOut(const int &frame)
+void KNMusicCategoryListViewBase::onActionSearchInOut(int frame)
 {
     //Update the margin of the category view.
     setViewportMargins(0, frame, 0, 0);
@@ -210,7 +210,7 @@ void KNMusicCategoryListViewBase::onActionSearchInOut(const int &frame)
     m_searchBox->move(0, frame-m_searchBox->height());
 }
 
-inline void KNMusicCategoryListViewBase::startMouseAnime(const int &endFrame)
+inline void KNMusicCategoryListViewBase::startMouseAnime(int endFrame)
 {
     //Stop mouse time line.
     m_mouseAnime->stop();
@@ -220,7 +220,7 @@ inline void KNMusicCategoryListViewBase::startMouseAnime(const int &endFrame)
     m_mouseAnime->start();
 }
 
-void KNMusicCategoryListViewBase::startSearchAnime(const int &endFrame)
+void KNMusicCategoryListViewBase::startSearchAnime(int endFrame)
 {
     //Stop search anime.
     m_searchAnime->stop();

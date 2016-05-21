@@ -31,6 +31,8 @@ KNSaoStyle::KNSaoStyle() :
     QCommonStyle(),
     m_slideLeft(QPixmap("://public/left_arrow.png")),
     m_slideRight(QPixmap("://public/right_arrow.png")),
+    m_slideUp(QPixmap("://public/top_arrow.png")),
+    m_slideDown(QPixmap("://public/down_arrow.png")),
     m_fusionStyle(QStyleFactory::create("fusion"))
 {
 }
@@ -262,21 +264,26 @@ void KNSaoStyle::drawComplexControl(ComplexControl cc,
                                   SC_ScrollBarAddLine,
                                   w);
         //Draw the pixmap.
+        const bool isHorizontal = opt->state & State_Horizontal;
+        //When the scroll bar is horizontal draw the right button, or else draw
+        //the left button.
+        const QPixmap &slideAdd=isHorizontal?m_slideRight:m_slideDown;
         p->drawPixmap(QPoint(sliderRect.x()+
-                             ((sliderRect.width()-m_slideRight.width())>>1),
+                             ((sliderRect.width()-slideAdd.width())>>1),
                              sliderRect.y()+
-                             ((sliderRect.height()-m_slideRight.height())>>1)),
-                      m_slideRight);
+                             ((sliderRect.height()-slideAdd.height())>>1)),
+                      slideAdd);
         //Draw right button.
         sliderRect=subControlRect(CC_ScrollBar,
                                   opt,
                                   SC_ScrollBarSubLine,
                                   w);
+        const QPixmap &slideSub=isHorizontal?m_slideLeft:m_slideUp;
         p->drawPixmap(QPoint(sliderRect.x()+
-                             ((sliderRect.width()-m_slideLeft.width())>>1),
+                             ((sliderRect.width()-slideSub.width())>>1),
                              sliderRect.y()+
-                             ((sliderRect.height()-m_slideLeft.height())>>1)),
-                      m_slideLeft);
+                             ((sliderRect.height()-slideSub.height())>>1)),
+                      slideSub);
         //Restore the painter.
         p->restore();
         return;

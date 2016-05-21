@@ -89,7 +89,7 @@
         "Parent" : "MainWindow",
         "Base" : "#303030",
         "Window" : "#303030",
-        "Button" : "#303030",
+        "Button" : "#FFFFFF00",
         "ButtonText" : "#FFFFFF",
         "Text" : "#FFFFFF",
         "Highlight" : "#606060",

@@ -95,12 +95,12 @@ protected:
 private slots:
     void onActionPaletteChange();
     void onActionSearch();
-    void onActionMouseInOut(const int &frame);
-    void onActionSearchInOut(const int &frame);
+    void onActionMouseInOut(int frame);
+    void onActionSearchInOut(int frame);
 
 private:
-    inline void startMouseAnime(const int &endFrame);
-    inline void startSearchAnime(const int &endFrame);
+    inline void startMouseAnime(int endFrame);
+    inline void startSearchAnime(int endFrame);
     QPalette m_palette;
     QColor m_backgroundColor, m_textColor, m_buttonColor;
     QTimeLine *m_mouseAnime, *m_searchAnime;

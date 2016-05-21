@@ -157,6 +157,16 @@ protected:
      */
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QAbstractItemView::enterEvent().
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractItemView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
 protected slots:
     /*!
      * \brief Reimplemented from QAbstractItemView::updateGeometries().
@@ -168,6 +178,7 @@ private slots:
     void onActionScrolling();
     void displayAlbum(const QPoint &point);
     void onActionSearch();
+    void onActionMouseInOut(int frame);
 
 private:
     inline int indexScrollBarValue(const QModelIndex &index,
@@ -179,14 +190,16 @@ private:
                            const QModelIndex &index);
     inline void updateUIElements();
     inline QPixmap generateShadow(int shadowWidth, int shadowHeight);
+    inline void startAnime(int endFrame);
     QPixmap m_shadowSource, m_albumArtShadow, m_albumBase, m_scaledAlbumBase,
             m_noAlbumArt, m_scaledNoAlbumArt;
     const QModelIndex m_nullIndex;
     QModelIndex m_selectedIndex, m_mouseDownIndex;
-    QTimeLine *m_scrollAnime;
+    QTimeLine *m_scrollAnime, *m_mouseAnime;
     KNMusicCategoryProxyModel *m_proxyModel;
     KNMusicAlbumModel *m_model;
     KNMusicAlbumDetail *m_albumDetail;
+    QScrollBar *m_scrollBar;
     const int m_itemWidth, m_itemMinimalSpacing, m_minimalWidth;
     int m_lineCount, m_textSpacing, m_itemHeight, m_spacing,
         m_itemSpacingHeight, m_itemSpacingWidth, m_maxColumnCount;

@@ -84,6 +84,8 @@
         <file>public/right_arrow.png</file>
         <file>saomenuicons/download_lyrics.png</file>
         <file>public/reset-password.png</file>
+        <file>public/down_arrow.png</file>
+        <file>public/top_arrow.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

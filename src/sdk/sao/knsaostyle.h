@@ -202,7 +202,7 @@ private:
     inline void drawMenuItem(const QStyleOptionMenuItem *opt,
                              QPainter *p,
                              const QWidget *w) const;
-    QPixmap m_slideLeft, m_slideRight;
+    QPixmap m_slideLeft, m_slideRight, m_slideUp, m_slideDown;
     QStyle *m_fusionStyle;
 };
 

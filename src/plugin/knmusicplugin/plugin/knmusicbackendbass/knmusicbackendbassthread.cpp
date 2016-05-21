@@ -328,7 +328,6 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
 #ifdef Q_OS_UNIX
     std::string uniPath=url.toString().toStdString();
 #endif
-    qDebug()<<"Backend load URL is"<<url.toString();
     //Create the url channel.
     m_channel=BASS_StreamCreateURL(uniPath.data(),
                                    0,
@@ -344,7 +343,6 @@ bool KNMusicBackendBassThread::loadUrl(const QUrl &url)
         //Bass is failed to load the music file.
         return false;
     }
-    qDebug()<<"Load success.";
     //Emit the load success signal.
     emit loadSuccess();
     //Set the URL flag to be true.
