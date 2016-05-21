@@ -191,7 +191,11 @@ bool KNAccount::login(const QString &userName,
                       QString password)
 {
     //Check out whether user is already login.
-    if(m_accountDetails->isLogin())
+    if(m_accountDetails->isLogin() ||
+            //To avoid user copy and paste the hash result of the account
+            //directly to the password to login, we will check out the length of
+            //the password.
+            password.length()>151)
     {
         //Emit failed signal.
         emit loginFailed(InfoIncorrect);
