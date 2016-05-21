@@ -82,24 +82,26 @@ private slots:
     void onActionPlayCurrent();
     void onActionShuffle();
     void onActionAddToPlaylist();
+    void onActionRemoveFromPlaylist();
     void updateTitle();
 
 private:
     inline void updateDetailInfo();
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
-    KNMusicPlaylistTreeView *m_treeView;
-    KNScrollLabel *m_title;
-    QLabel *m_detail;
-    KNSideShadowWidget *m_leftShadow;
-    KNConnectionHandler *m_modelLinkHandler;
-    KNOpacityAnimeButton *m_playPlaylist, *m_shufflePlaylist, *m_addToPlaylist;
-
     QString m_songCount[3],
             m_minuteCount[3],
             m_hourCount[2],
             m_hourCountWithoutMinuate[2],
             m_searchCount[3];
     QString m_searchResultIn;
+
+    KNMusicPlaylistTreeView *m_treeView;
+    KNScrollLabel *m_title;
+    QLabel *m_detail;
+    KNSideShadowWidget *m_leftShadow;
+    KNConnectionHandler *m_modelLinkHandler;
+    KNOpacityAnimeButton *m_playPlaylist, *m_shufflePlaylist, *m_addToPlaylist,
+                         *m_removeFromPlaylist;
 };
 
 #endif // KNMUSICPLAYLISTVIEWER_H

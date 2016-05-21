@@ -165,6 +165,7 @@
         <file>music/player/mini_previous.png</file>
         <file>music/player/showmini.png</file>
         <file>music/store/download_list.png</file>
+        <file>music/playlist/playlist_control_remote.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>platforms/windows/loopmode_norepeat.png</file>

@@ -53,7 +53,9 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     m_shufflePlaylist(
         generateButton(":/plugin/music/playlist/playlist_control_random.png")),
     m_addToPlaylist(
-        generateButton(":/plugin/music/playlist/playlist_control_add.png"))
+        generateButton(":/plugin/music/playlist/playlist_control_add.png")),
+    m_removeFromPlaylist(
+        generateButton(":/plugin/music/playlist/playlist_control_remote.png"))
 {
     //Configure the tree view.
     setFocusProxy(m_treeView);
@@ -72,6 +74,8 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
             this, &KNMusicPlaylistViewer::onActionShuffle);
     connect(m_addToPlaylist, &KNOpacityAnimeButton::clicked,
             this, &KNMusicPlaylistViewer::onActionAddToPlaylist);
+    connect(m_removeFromPlaylist, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicPlaylistViewer::onActionRemoveFromPlaylist);
     //Link the theme manager with the label.
     knTheme->registerWidget(m_title);
     //Configure detail label.
@@ -111,6 +115,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     detailLayout->addWidget(m_playPlaylist);
     detailLayout->addWidget(m_shufflePlaylist);
     detailLayout->addWidget(m_addToPlaylist);
+    detailLayout->addWidget(m_removeFromPlaylist);
     detailLayout->addStretch();
 
     //Link the search.
@@ -223,6 +228,7 @@ void KNMusicPlaylistViewer::retranslate()
     m_playPlaylist->setToolTip(tr("Play the playlist"));
     m_shufflePlaylist->setToolTip(tr("Shuffle the playlist"));
     m_addToPlaylist->setToolTip(tr("Add songs to playlist"));
+    m_removeFromPlaylist->setToolTip(tr("Remove from the playlist"));
     //Update the detail info and title text.
     updateTitle();
     updateDetailInfo();
@@ -306,6 +312,39 @@ void KNMusicPlaylistViewer::onActionAddToPlaylist()
     }
     //Add the music to playlist model.
     playlistModel->appendUrls(addFileList);
+}
+
+void KNMusicPlaylistViewer::onActionRemoveFromPlaylist()
+{
+    //Check the tree view first.
+    if(m_treeView->musicModel()==nullptr)
+    {
+        //Ignore the remove request.
+        return;
+    }
+    //Get the selected indexes.
+    QModelIndexList dumpIndexes=m_treeView->selectionModel()->selectedRows();
+    //Generate a temporary list.
+    QList<int> rowList;
+    //Check the indexes size.
+    if(dumpIndexes.isEmpty())
+    {
+        //Ignore the remove request when there's no selection.
+        return;
+    }
+    //Check all the indexes list, we will only save one row.
+    for(auto i=dumpIndexes.constBegin(); i!=dumpIndexes.constEnd(); ++i)
+    {
+        //Check whether current row is in the row list.
+        if(rowList.contains((*i).row()))
+        {
+            continue;
+        }
+        //Add the new row to row list.
+        rowList.append((*i).row());
+    }
+    //Remove all the selections from the playlist.
+    m_treeView->musicModel()->removeRowList(rowList);
 }
 
 void KNMusicPlaylistViewer::updateTitle()
