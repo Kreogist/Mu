@@ -212,6 +212,11 @@ protected:
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QTreeView::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
 protected slots:
     /*!
      * \brief This slot is provide to update the palette when the tree view is

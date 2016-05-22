@@ -658,6 +658,14 @@ void KNMusicTreeViewBase::resizeEvent(QResizeEvent *event)
     updateVerticalScrollBarGeometry();
 }
 
+void KNMusicTreeViewBase::showEvent(QShowEvent *event)
+{
+    //Show the treeview widget.
+    QTreeView::showEvent(event);
+    //Update the scroll bar position.
+    updateVerticalScrollBarGeometry();
+}
+
 inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event, int &dropRow)
 {
     //Check the event.
