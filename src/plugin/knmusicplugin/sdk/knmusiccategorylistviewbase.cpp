@@ -245,7 +245,7 @@ void KNMusicCategoryListViewBase::onActionMouseInOut(int frame)
     color.setAlpha((frame-OutBrightness)>>1);
     pal.setColor(QPalette::Base, color);
     color=pal.color(QPalette::Button);
-    color.setAlpha(frame-OutBrightness);
+    color.setAlpha((frame-OutBrightness)<<1);
     pal.setColor(QPalette::Button, color);
     //Set the palette to scroll bar.
     m_scrollBar->setPalette(pal);

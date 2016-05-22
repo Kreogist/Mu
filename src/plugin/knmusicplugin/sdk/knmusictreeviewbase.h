@@ -207,6 +207,11 @@ protected:
      */
     void setAcceptDragMove(bool dropInline);
 
+    /*!
+     * \brief Reimplemented from QTreeView::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 protected slots:
     /*!
      * \brief This slot is provide to update the palette when the tree view is
@@ -227,6 +232,7 @@ private:
     inline void scrollToIndex(const QModelIndex &proxyIndex);
     inline void startAnime(int endFrame);
     inline bool dropOn(QDropEvent *event, int &dropRow);
+    inline void updateVerticalScrollBarGeometry();
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
     bool showDetailTooltip(const QPoint &indexPosition);
@@ -234,6 +240,7 @@ private:
     KNMusicTab *m_musicTab;
     QTimeLine *m_mouseAnime;
     KNMusicProxyModel *m_proxyModel;
+    QScrollBar *m_hScrollBar, *m_vScrollBar;
     int m_dragMoveRow;
     QAbstractItemView::DropIndicatorPosition m_dragIndicatorPos;
 

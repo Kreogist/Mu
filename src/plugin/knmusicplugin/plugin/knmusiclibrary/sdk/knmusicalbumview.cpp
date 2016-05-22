@@ -35,7 +35,7 @@
 
 #include <QDebug>
 
-#define MaxOpacity 0x40
+#define MaxOpacity 0x80
 #define ShadowIncrease 15
 #define ScrollBarWidth 10
 #define ScrollBarSpacing 1
@@ -614,7 +614,7 @@ void KNMusicAlbumView::onActionMouseInOut(int frame)
     //Update the scroll bar color.
     QPalette pal=m_scrollBar->palette();
     QColor color=pal.color(QPalette::Base);
-    color.setAlpha(frame>>1);
+    color.setAlpha(frame>>2);
     pal.setColor(QPalette::Base, color);
     color=pal.color(QPalette::Button);
     color.setAlpha(frame);

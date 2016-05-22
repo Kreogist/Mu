@@ -25,6 +25,7 @@
 
 #include "knthememanager.h"
 #include "knconnectionhandler.h"
+#include "sao/knsaostyle.h"
 
 #include "knmusicsearchbase.h"
 #include "knmusicproxymodel.h"
@@ -42,12 +43,16 @@
 
 #define MaxOpacity 0x20
 #define FontBase 0xBF
+#define ScrollBarWidth 10
+#define ScrollBarSpacing 1
 
 KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     QTreeView(parent),
     m_musicTab(tab),
     m_mouseAnime(new QTimeLine(200, this)),
     m_proxyModel(nullptr),
+    m_hScrollBar(new QScrollBar(Qt::Horizontal, this)),
+    m_vScrollBar(new QScrollBar(Qt::Vertical, this)),
     m_dragMoveRow(-1),
     m_dragIndicatorPos(QAbstractItemView::OnViewport),
     m_initialLoad(true),
@@ -69,12 +74,50 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setUniformRowHeights(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //Set scroll bar policies.
     horizontalScrollBar()->setSingleStep(5);
     horizontalScrollBar()->setPageStep(5);
     verticalScrollBar()->setSingleStep(4);
     verticalScrollBar()->setPageStep(4);
+    //Configure the horizontal scroll bar.
+    m_hScrollBar->setObjectName("MusicScrollBar");
+    m_hScrollBar->setStyle(KNSaoStyle::instance());
+    m_hScrollBar->hide();
+    m_hScrollBar->setFixedHeight(ScrollBarWidth);
+    knTheme->registerWidget(m_hScrollBar);
+    setHorizontalScrollBar(m_hScrollBar);
+    //Configure the vertical scroll bar.
+    m_vScrollBar->setObjectName("MusicScrollBar");
+    m_vScrollBar->setStyle(KNSaoStyle::instance());
+    m_vScrollBar->hide();
+    knTheme->registerWidget(m_vScrollBar);
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged,
+            [=](int min, int max)
+            {
+                //Update the range first.
+                m_vScrollBar->setRange(min, max);
+                //Check whether the scroll bar is still valid.
+                m_vScrollBar->setVisible(min!=max);
+                //Update scrollbar state parameters.
+                m_vScrollBar->setPageStep(verticalScrollBar()->pageStep());
+                m_vScrollBar->setSingleStep(verticalScrollBar()->singleStep());
+                //Update the geometry.
+                updateVerticalScrollBarGeometry();
+            });
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            [=](int value)
+            {
+                //Block the signal.
+                m_vScrollBar->blockSignals(true);
+                //Reset the value.
+                m_vScrollBar->setValue(value);
+                //Release the block
+                m_vScrollBar->blockSignals(false);
+            });
+    connect(m_vScrollBar, &QScrollBar::valueChanged,
+            verticalScrollBar(), &QScrollBar::setValue);
 
     //Configure the time line.
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
@@ -465,6 +508,29 @@ void KNMusicTreeViewBase::onActionMouseInOut(int frame)
     pal.setColor(QPalette::Button, color);
     //Set the palette.
     setPalette(pal);
+    //Calculate scroll bar alpha.
+    int buttonAlpha=frame<<2,
+        baseAlpha=frame;
+    //Update the horizontal scroll bar palette.
+    pal=m_hScrollBar->palette();
+    color=pal.color(QPalette::Base);
+    color.setAlpha(baseAlpha);
+    pal.setColor(QPalette::Base, color);
+    color=pal.color(QPalette::Button);
+    color.setAlpha(buttonAlpha);
+    pal.setColor(QPalette::Button, color);
+    //Set the palette to horizontal scroll bar.
+    m_hScrollBar->setPalette(pal);
+    //Update the vertical scroll bar palette.
+    pal=m_vScrollBar->palette();
+    color=pal.color(QPalette::Base);
+    color.setAlpha(baseAlpha);
+    pal.setColor(QPalette::Base, color);
+    color=pal.color(QPalette::Button);
+    color.setAlpha(buttonAlpha);
+    pal.setColor(QPalette::Button, color);
+    //Set the palette to vertical scroll bar.
+    m_vScrollBar->setPalette(pal);
 }
 
 void KNMusicTreeViewBase::onActionActivate(const QModelIndex &index)
@@ -584,6 +650,14 @@ void KNMusicTreeViewBase::setAcceptDragMove(bool dropInline)
     m_notAcceptDragMove=!dropInline;
 }
 
+void KNMusicTreeViewBase::resizeEvent(QResizeEvent *event)
+{
+    //Resize the tree view widget.
+    QTreeView::resizeEvent(event);
+    //Update the scroll bar position.
+    updateVerticalScrollBarGeometry();
+}
+
 inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event, int &dropRow)
 {
     //Check the event.
@@ -619,6 +693,32 @@ inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event, int &dropRow)
         dropRow=proxyModel()->rowCount();
     }
     return true;
+}
+
+inline void KNMusicTreeViewBase::updateVerticalScrollBarGeometry()
+{
+    //Check scroll bar visiblility.
+    if(m_vScrollBar->isVisible())
+    {
+        //Check whether horizontal scroll is need to be visible.
+        if(m_hScrollBar->isVisible())
+        {
+            //Both of the scroll bar is visible.
+            m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
+                                      header()->height(),
+                                      ScrollBarWidth,
+                                      height()-ScrollBarWidth-ScrollBarSpacing-
+                                      header()->height());
+        }
+        else
+        {
+            //Only vertical scroll bar is visible.
+            m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
+                                      header()->height(),
+                                      ScrollBarWidth,
+                                      height()-header()->height());
+        }
+    }
 }
 
 void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
