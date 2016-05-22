@@ -69,11 +69,37 @@ public slots:
      * \param row The row of the song in music library model.
      */
     void scrollToSourceRow(int row);
+
+    /*!
+     * \brief Show the no category item.
+     * \param title The title text of the no category item.
+     */
     void showNoCategoryItem(const QString &title);
+
+    /*!
+     * \brief Set the category filter column.
+     * \param column The column index.
+     */
     void setCategoryColumn(const int &column);
+
+    /*!
+     * \brief Set the category fitler text, after setting the category filter
+     * and the viewer will display items belong to this category.
+     * \param text The category content text.
+     */
     void setCategoryText(const QString &text);
+
+    /*!
+     * \brief Set the category display pixmap icon.
+     * \param pixmap The category album art.
+     */
     void setCategoryIcon(const QPixmap &pixmap);
-    void hideAllStaffs();
+
+    /*!
+     * \brief When the viewer need to hide all stuffs, like no search result, we
+     * have to hide all the widgets.
+     */
+    void hideAllStuffs();
 
 protected:
     /*!

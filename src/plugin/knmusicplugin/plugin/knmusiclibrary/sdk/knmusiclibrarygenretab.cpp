@@ -287,15 +287,15 @@ void KNMusicLibraryGenreTab::onActionCategoryIndexChanged(
         //Mission complete.
         return;
     }
+    //Set the category artwork.
+    //Set the category icon right from the library model.
+    m_genreDisplay->setCategoryIcon(
+                m_currentSourceIndex.data(Qt::DecorationRole).value<QPixmap>());
     //Or else we have to show the category.
     //Set the category text.
     m_genreDisplay->setCategoryText(
                 m_categoryModel->data(m_currentSourceIndex,
                                       Qt::DisplayRole).toString());
-    //Set the category artwork.
-    //Set the category icon right from the library model.
-    m_genreDisplay->setCategoryIcon(
-                m_currentSourceIndex.data(Qt::DecorationRole).value<QPixmap>());
 }
 
 void KNMusicLibraryGenreTab::onActionSearchCategory(const QString &text)
@@ -314,7 +314,7 @@ void KNMusicLibraryGenreTab::onActionSearchCategory(const QString &text)
     if(categoryProxyModel()->rowCount()==0)
     {
         //Hide all the staffs.
-        m_genreDisplay->hideAllStaffs();
+        m_genreDisplay->hideAllStuffs();
         return;
     }
     //Check out the text is blank or not.

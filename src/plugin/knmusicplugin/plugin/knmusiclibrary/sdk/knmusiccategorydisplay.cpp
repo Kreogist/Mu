@@ -182,9 +182,11 @@ void KNMusicCategoryDisplay::setCategoryIcon(const QPixmap &pixmap)
     m_categoryIcon=pixmap;
     //Update the icon content.
     updateBackgroundIconContent();
+    //Update the tree view to fixed the scroll bar bug.
+    m_categoryTreeView->update();
 }
 
-void KNMusicCategoryDisplay::hideAllStaffs()
+void KNMusicCategoryDisplay::hideAllStuffs()
 {
     //Hide all the data display widgets.
     //Update the background image to a null one.

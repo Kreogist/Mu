@@ -324,7 +324,7 @@ void KNMusicLibraryArtistTab::onActionSearchCategory(const QString &text)
     if(categoryProxyModel()->rowCount()==0)
     {
         //Hide all staffs.
-        m_artistDisplay->hideAllStaffs();
+        m_artistDisplay->hideAllStuffs();
         return;
     }
     //Check out the text is blank or not.
