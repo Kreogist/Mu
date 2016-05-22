@@ -1,4 +1,24 @@
-mu (0.9.9.1-wily) wily; urgency=medium
+mu (0.9.9.2) unstable; urgency=medium
+
+  * New scroll bar for album view, all tree view and list view.
+  * Mini Player is now support for multiple display maganet border.
+  * Mini Player is now support for multiple display position recovery.
+  * Message box is now support for multiple display.
+  * Labels in detail info dialog is now support selection.
+  * Add download lyrics option for current playing song.
+  * Add remove button for playlists.
+  * Main Player and Mini Player now support drag and drop.
+  * Support close button for Mini player under OS X.
+  * Forget password is now working.
+  * Update the Kreogist Account API to the latest version.
+  * Tweak the menu style for OS X 10.10 and later.
+  * Fixed the mini player movable problem on OS X 10.10 and later.
+  * Fixed the memory leaking under Windows and OS X.
+  * Fixed the potential password attack for simply input the Hash result.
+
+ -- Saki Tojo <tomguts@126.com> Fri, 1 Apr 2016 21:12:00 +1100
+
+mu (0.9.9.1) unstable; urgency=medium
 
   * Fixed several critical bugs.
 

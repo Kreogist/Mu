@@ -55,52 +55,57 @@
 <context>
     <name>KNAccountLoginPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="266"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="276"/>
         <source>Username or password incorrect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="270"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="282"/>
         <source>with Your Kreogist Account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="269"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="281"/>
         <source>Sign in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="264"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="274"/>
         <source>Connection Error. Please check Internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="267"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="277"/>
         <source>Kreogist Account login failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="273"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="278"/>
+        <source>Check your email for a link to reset your password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="286"/>
         <source>Username/E-mail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="274"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="287"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="276"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="289"/>
         <source>Create an account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="277"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="290"/>
         <source>Forget password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountloginpanel.cpp" line="279"/>
+        <location filename="../sdk/account/knaccountloginpanel.cpp" line="292"/>
         <source>Login with another account</source>
         <translation type="unfinished"></translation>
     </message>
@@ -108,12 +113,12 @@
 <context>
     <name>KNAccountPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="228"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="260"/>
         <source>Account Update Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="229"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="261"/>
         <source>The user data of %1 has been updated successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -238,6 +243,39 @@
     </message>
 </context>
 <context>
+    <name>KNAccountResetPanel</name>
+    <message>
+        <location filename="../sdk/account/knaccountresetpanel.cpp" line="124"/>
+        <source>Reset your password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountresetpanel.cpp" line="126"/>
+        <source>Enter your email address and we will send you a link to reset your password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountresetpanel.cpp" line="129"/>
+        <source>Can&apos;t connect to Internet, please check your Internet connections.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountresetpanel.cpp" line="131"/>
+        <source>Can&apos;t find that email, please check the E-mail address again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountresetpanel.cpp" line="133"/>
+        <source>Unknown error happens, please try it again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/account/knaccountresetpanel.cpp" line="138"/>
+        <source>Enter your E-mail address</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNAccountWaitingPanel</name>
     <message>
         <location filename="../sdk/account/knaccountwaitingpanel.cpp" line="70"/>
@@ -306,12 +344,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="257"/>
+        <location filename="../sdk/knmainwindow.cpp" line="258"/>
         <source>Cannot quit now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="258"/>
+        <location filename="../sdk/knmainwindow.cpp" line="259"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -335,37 +373,37 @@
 <context>
     <name>KNMusicCategoryDisplay</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="232"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="234"/>
         <source>No song.</source>
         <translation>曲なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="233"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="235"/>
         <source>1 song.</source>
         <translation>1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="234"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="236"/>
         <source>%1 songs.</source>
         <translation>%1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="236"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="238"/>
         <source>No result.</source>
         <translation>該当結果なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="237"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="239"/>
         <source>1 result.</source>
         <translation>1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="238"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="240"/>
         <source>%1 results.</source>
         <translation>%1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="240"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="242"/>
         <source>Search result in %1</source>
         <translation>%1の検索結果</translation>
     </message>
@@ -416,47 +454,47 @@
 <context>
     <name>KNMusicDetailPanelOverview</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="117"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="122"/>
         <source>Play Count</source>
         <translation>再生回数</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="118"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="123"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="119"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="124"/>
         <source>Genre</source>
         <translation>ジャンル</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="120"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="125"/>
         <source>Kind</source>
         <translation>種類</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="121"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="126"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="122"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="127"/>
         <source>Bit Rate</source>
         <translation>ビットレート</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="123"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="128"/>
         <source>Sample Rate</source>
         <translation>サンプル・レート</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="124"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="129"/>
         <source>Date Modified</source>
         <translation>編集した日</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="125"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="130"/>
         <source>Path</source>
         <translation>ディレクトリ</translation>
     </message>
@@ -676,77 +714,82 @@
 <context>
     <name>KNMusicHeaderPlayer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="587"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="619"/>
         <source>Show main player</source>
         <translation>メイン画面を参照する</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="588"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="620"/>
         <source>Show mini player</source>
         <translation>ミニ画面を参照する</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="589"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="621"/>
         <source>More</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="591"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="623"/>
         <source>Rating</source>
         <translation>評価</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="592"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="624"/>
         <source>Locate</source>
         <translation>探す</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="594"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="626"/>
         <source>(No star)</source>
         <translation>評価なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="596"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="628"/>
         <source>Get Info</source>
         <translation>詳細情報</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="599"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="630"/>
+        <source>Download Lyrics</source>
+        <translation type="unfinished">歌詞をダウンロード</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="633"/>
         <source>Show in Explorer</source>
         <translation>Windowsエクスプローラーで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="602"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="636"/>
         <source>Show in Finder</source>
         <translation>Finderで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="606"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="640"/>
         <source>Show the contains folder</source>
         <translation>コンテンツフォルダーを表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="608"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="642"/>
         <source>Locate the playing song</source>
         <translation>再生中の曲を表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="610"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="644"/>
         <source>Show in songs</source>
         <translation>曲のカテゴリで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="611"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="645"/>
         <source>Show in artists</source>
         <translation>アーティストのカテゴリで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="612"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="646"/>
         <source>Show in albums</source>
         <translation>アルバムのカテゴリで表示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="613"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="647"/>
         <source>Show in genres</source>
         <translation>ジャンルのタブで表示</translation>
     </message>
@@ -846,12 +889,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibraryModel</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="54"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="55"/>
         <source>Search complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="55"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="56"/>
         <source>%1 files have been to music library.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -872,9 +915,14 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLyricsDownloadList</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="221"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="238"/>
         <source>Searching lyrics on server (%1/%2)</source>
         <translation>歌詞をネットで検索 (%1/%2)</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="239"/>
+        <source>No lyrics</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -951,6 +999,11 @@ To add songs to library, drag your songs here.</source>
         <translation>プレイリストの削除に失敗しました
 
 %1</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="306"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1059,17 +1112,17 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistViewer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="203"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="208"/>
         <source>No song.</source>
         <translation>曲なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="204"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="209"/>
         <source>1 song, </source>
         <translation>1曲　</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="205"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="210"/>
         <source>%1 songs, </source>
         <translation>%1曲　</translation>
     </message>
@@ -1086,77 +1139,82 @@ To create a playlist, drag your songs here.</source>
         <translation type="vanished">%1分</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="207"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="212"/>
         <source>0 minute.</source>
         <translation>0分</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="208"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="213"/>
         <source>1 minute.</source>
         <translation>1分</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="209"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="214"/>
         <source>%1 minutes.</source>
         <translation>%1分</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="211"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="216"/>
         <source>1 hour and </source>
         <translation>1時間</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="212"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="217"/>
         <source>%1 hours and </source>
         <translation>%1時間</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="214"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="219"/>
         <source>1 hour.</source>
         <translation>1時間</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="215"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="220"/>
         <source>%1 hours.</source>
         <translation>%1時間</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="217"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="222"/>
         <source>No result.</source>
         <translation>該当結果なし</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="218"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="223"/>
         <source>1 result.</source>
         <translation>1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="219"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="224"/>
         <source>%1 results.</source>
         <translation>%1つの結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="221"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="226"/>
         <source>Search result in %1</source>
         <translation>%1の検索結果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="223"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="228"/>
         <source>Play the playlist</source>
         <translation>プレイリストを再生</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="224"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="229"/>
         <source>Shuffle the playlist</source>
         <translation>プレイリストをシャッフル</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="225"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="230"/>
         <source>Add songs to playlist</source>
         <translation>プレイリストに曲を追加</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="300"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="231"/>
+        <source>Remove from the playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="306"/>
         <source>Add to playlist %1</source>
         <translation>プレイリスト%1に追加</translation>
     </message>
@@ -1188,7 +1246,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="200"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="204"/>
         <source>Music</source>
         <translation>音楽</translation>
     </message>
@@ -1302,6 +1360,156 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="363"/>
         <source>File %1 already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStore</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="183"/>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreDownloadList</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp" line="120"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreHomeWidget</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.cpp" line="175"/>
+        <source>New Albums</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.cpp" line="176"/>
+        <source>Hot Tracks</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreListWidget</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp" line="163"/>
+        <source>Artist: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp" line="164"/>
+        <source>Released: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp" line="165"/>
+        <source>Published: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreNetease</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp" line="134"/>
+        <source>Billboard Week List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp" line="136"/>
+        <source>iTunes Hot List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp" line="138"/>
+        <source>Oricon Week List</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreSearchResult</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="52"/>
+        <source>Name</source>
+        <translation type="unfinished">名前</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="53"/>
+        <source>Artist</source>
+        <translation type="unfinished">アーティスト</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="54"/>
+        <source>Album</source>
+        <translation type="unfinished">アルバム</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="55"/>
+        <source>Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreSearchResultWidget</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresultwidget.cpp" line="72"/>
+        <source>Search %1</source>
+        <translation type="unfinished">%1を検索</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreSingleSongWidget</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="184"/>
+        <source>Artist: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="185"/>
+        <source>Album: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="187"/>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="188"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="221"/>
+        <source>, </source>
+        <translation type="unfinished">、</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreSongListModel</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp" line="146"/>
+        <source>Name</source>
+        <translation type="unfinished">名前</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp" line="147"/>
+        <source>Time</source>
+        <translation type="unfinished">時間</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp" line="148"/>
+        <source>Artist</source>
+        <translation type="unfinished">アーティスト</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreTitleBar</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoretitlebar.cpp" line="121"/>
+        <source>Store</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
