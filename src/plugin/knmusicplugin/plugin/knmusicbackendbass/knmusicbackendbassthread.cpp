@@ -37,9 +37,7 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_volume(1.0),
     m_state(Stopped),
     m_positionUpdater(new QTimer(this)),
-    m_syncHandlers(QList<HSYNC>()),
-    m_proxyUrl(QByteArray()),
-    m_usingProxy(false)
+    m_syncHandlers(QList<HSYNC>())
 {
     //Configure the position updater.
     m_positionUpdater->setInterval(50);
@@ -241,11 +239,6 @@ void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
     }
 }
 
-bool KNMusicBackendBassThread::isUsingProxy()
-{
-    return m_usingProxy;
-}
-
 void KNMusicBackendBassThread::save()
 {
     //Pause the thread first.
@@ -333,12 +326,6 @@ void KNMusicBackendBassThread::setPosition(const qint64 &position)
                 BASS_POS_BYTE);
     //Check the position.
     checkPosition();
-}
-
-void KNMusicBackendBassThread::setProxyEnabled(bool enabled)
-{
-    //Save the flag.
-    m_usingProxy=enabled;
 }
 
 void KNMusicBackendBassThread::setCreateFlags(const DWORD &channelFlags)

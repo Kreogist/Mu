@@ -94,11 +94,6 @@ public:
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
-    /*!
-     * \brief Reimplemented from KNMusicStandardBackendThread::isUsingProxy().
-     */
-    bool isUsingProxy() Q_DECL_OVERRIDE;
-
 signals:
     /*!
      * \brief This signal is used only for threadReachesEnd(). It's used for
@@ -127,12 +122,6 @@ public slots:
      * \brief Reimplemented from KNMusicStandardBackendThread::setPosition().
      */
     void setPosition(const qint64 &position) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from
-     * KNMusicStandardBackendThread::setProxyEnabled().
-     */
-    void setProxyEnabled(bool enabled) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Set the flags when using at creating a stream.
@@ -273,10 +262,6 @@ private:
 
     //Sync Handlers.
     QList<HSYNC> m_syncHandlers;
-
-    //Proxy enabler.
-    QByteArray m_proxyUrl;
-    bool m_usingProxy;
 };
 
 #endif // KNMUSICBACKENDBASSTHREAD_H
