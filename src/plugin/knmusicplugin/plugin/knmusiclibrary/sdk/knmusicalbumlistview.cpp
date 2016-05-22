@@ -17,7 +17,6 @@
  */
 #include <QScrollBar>
 
-#include "sao/knsaostyle.h"
 #include "knthememanager.h"
 
 #include "knmusicutil.h"
@@ -37,7 +36,6 @@ KNMusicAlbumListView::KNMusicAlbumListView(QWidget *parent, KNMusicTab *tab) :
     //Set properties.
     setItemDelegate(new KNMusicAlbumListDelegate(this));
     knTheme->registerWidget(this);
-    KNSaoStyle::styleVerticalScrollBar(verticalScrollBar());
     //Set the proxy model category column.
     proxyModel()->setCategoryColumn(Album);
 }

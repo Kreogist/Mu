@@ -73,7 +73,7 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
     painter->setPen(textColor);
     //Calculate the text x.
     int textX=option.rect.x()+TextMarginX+Spacing,
-        textWidth=option.rect.width()-TextMarginX-(Spacing<<1)-Spacing;
+        textWidth=option.rect.width()-TextMarginX-(Spacing<<2);
     //Get the duration text.
     QString &&durationText=proxyModel->data(proxyModel->index(index.row(),
                                                               Time),

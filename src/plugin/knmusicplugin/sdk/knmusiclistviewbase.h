@@ -21,6 +21,7 @@
 
 #include <QListView>
 
+class QTimeLine;
 class KNMusicTab;
 class KNMusicModel;
 class KNMusicProxyModel;
@@ -119,6 +120,21 @@ protected:
     void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimpelemnt from QListView::enterEvent().
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimpelemnt from QListView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimpelemnt from QListView::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QListView::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -145,6 +161,7 @@ protected:
 
 private slots:
     void onActionActivate(const QModelIndex &index);
+    void onActionMouseInOut(int frame);
     void playCurrent();
     void removeCurrent();
     void renameCurrent();
@@ -152,12 +169,15 @@ private slots:
 private:
     inline void scrollToIndex(const QModelIndex &proxyIndex);
     inline void playIndex(const QModelIndex &index);
+    inline void startAnime(int endFrame);
     void showSoloMenu(const QPoint &position);
     void showMultiMenu(const QPoint &position);
     bool showDetailTooltip(const QPoint &indexPosition);
 
     KNMusicTab *m_musicTab;
     KNMusicProxyModel *m_proxyModel;
+    QTimeLine *m_mouseAnime;
+    QScrollBar *m_scrollBar;
     bool m_pressed;
 };
 

@@ -19,8 +19,10 @@
 #include <QScrollBar>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QTimeLine>
 
 #include "knconnectionhandler.h"
+#include "sao/knsaostyle.h"
 
 #include "knmusicglobal.h"
 #include "knmusicmodel.h"
@@ -33,10 +35,16 @@
 
 #include "knmusiclistviewbase.h"
 
+#define MaxOpacity 0x40
+#define ScrollBarWidth 10
+#define ScrollBarSpacing 1
+
 KNMusicListViewBase::KNMusicListViewBase(QWidget *parent, KNMusicTab *tab) :
     QListView(parent),
     m_musicTab(tab),
     m_proxyModel(nullptr),
+    m_mouseAnime(new QTimeLine(200, this)),
+    m_scrollBar(new QScrollBar(this)),
     m_pressed(false)
 {
     //Set properties.
@@ -49,10 +57,45 @@ KNMusicListViewBase::KNMusicListViewBase(QWidget *parent, KNMusicTab *tab) :
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //Set scroll bar policies.
     verticalScrollBar()->setSingleStep(4);
     verticalScrollBar()->setPageStep(4);
+
+    //Configure the scroll bar.
+    m_scrollBar->setStyle(KNSaoStyle::instance());
+    m_scrollBar->hide();
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged,
+            [=](int min, int max)
+            {
+                //Update the range first.
+                m_scrollBar->setRange(min, max);
+                //Check whether the scroll bar is still valid.
+                m_scrollBar->setVisible(min!=max);
+                //Update scrollbar state parameters.
+                m_scrollBar->setPageStep(verticalScrollBar()->pageStep());
+                m_scrollBar->setSingleStep(verticalScrollBar()->singleStep());
+            });
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            [=](int value)
+            {
+                //Block the signal.
+                m_scrollBar->blockSignals(true);
+                //Reset the value.
+                m_scrollBar->setValue(value);
+                //Release the block
+                m_scrollBar->blockSignals(false);
+            });
+    connect(m_scrollBar, &QScrollBar::valueChanged,
+            verticalScrollBar(), &QScrollBar::setValue);
+
+    //Configure the mouse anime time line.
+    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    //Link the time line.
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMusicListViewBase::onActionMouseInOut);
 
     //Link the tree view signal and slot.
     connect(this, &KNMusicListViewBase::activated,
@@ -167,6 +210,33 @@ void KNMusicListViewBase::startDrag(Qt::DropActions supportedActions)
     emit endDraggingSong();
 }
 
+void KNMusicListViewBase::enterEvent(QEvent *event)
+{
+    //Do the original enter event.
+    QListView::enterEvent(event);
+    //Start mouse in anime.
+    startAnime(MaxOpacity);
+}
+
+void KNMusicListViewBase::leaveEvent(QEvent *event)
+{
+    //Do the original enter event.
+    QListView::leaveEvent(event);
+    //Start mouse in anime.
+    startAnime(0);
+}
+
+void KNMusicListViewBase::resizeEvent(QResizeEvent *event)
+{
+    //Resize the list view.
+    QListView::resizeEvent(event);
+    //Update the scroll bar position.
+    m_scrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
+                             0,
+                             ScrollBarWidth,
+                             height());
+}
+
 void KNMusicListViewBase::mousePressEvent(QMouseEvent *event)
 {
     //Do the original pressed event.
@@ -278,6 +348,20 @@ void KNMusicListViewBase::onActionActivate(const QModelIndex &index)
     playIndex(index);
 }
 
+void KNMusicListViewBase::onActionMouseInOut(int frame)
+{
+    //Update the scroll bar palette.
+    QPalette pal=m_scrollBar->palette();
+    QColor color=pal.color(QPalette::Button);
+    color.setAlpha(frame);
+    pal.setColor(QPalette::Button, color);
+    color=pal.color(QPalette::Base);
+    color.setAlpha(frame>>1);
+    pal.setColor(QPalette::Base, color);
+    //Set the palette to scroll bar.
+    m_scrollBar->setPalette(pal);
+}
+
 void KNMusicListViewBase::playCurrent()
 {
     //Play the current index.
@@ -326,6 +410,18 @@ void KNMusicListViewBase::playIndex(const QModelIndex &index)
     }
     //Ask the now playing to play the index row.
     nowPlaying->playMusicRow(proxyModel(), index.row(), m_musicTab);
+}
+
+inline void KNMusicListViewBase::startAnime(int endFrame)
+{
+    //Stop the mouse animations.
+    m_mouseAnime->stop();
+    //Set the parameter of the time line.
+    m_mouseAnime->setFrameRange(
+                m_scrollBar->palette().color(QPalette::Button).alpha(),
+                endFrame);
+    //Start the time line.
+    m_mouseAnime->start();
 }
 
 void KNMusicListViewBase::showSoloMenu(const QPoint &position)

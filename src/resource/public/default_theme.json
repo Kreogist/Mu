@@ -269,7 +269,7 @@
         "Base" : "#00000000",
         "WindowText" : "#000000",
         "Text" : "#000000",
-        "Button": "#FFFFFF",
+        "Button": "#00000000",
         "Highlight" : "#f7cf3d",
         "HighlightedText" : "#000000"
     },
