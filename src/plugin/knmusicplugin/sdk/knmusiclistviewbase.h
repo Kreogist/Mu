@@ -24,10 +24,20 @@
 class KNMusicTab;
 class KNMusicModel;
 class KNMusicProxyModel;
+/*!
+ * \brief The KNMusicListViewBase class provides a listview which will be used
+ * for display a music model. It supports all the basic operation of the music
+ * models.
+ */
 class KNMusicListViewBase : public QListView
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicListViewBase widget.
+     * \param parent The parent widget.
+     * \param tab The music tab object.
+     */
     explicit KNMusicListViewBase(QWidget *parent = 0,
                                   KNMusicTab *tab = 0);
 
