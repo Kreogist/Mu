@@ -366,7 +366,8 @@ void KNMusicMiniPlayer::loadConfigure()
         lastScreenHeight=getCacheValue("miniPlayerScreenHeight"),
         lastX=getCacheValue("miniPlayerX"),
         lastY=getCacheValue("miniPlayerY"),
-        targetScreenX, targetScreenY, targetScreenWidth, targetScreenHeight,
+        targetScreenX=0,
+        targetScreenY=0, targetScreenWidth, targetScreenHeight,
         playerWidth=width(),
         playerHeight=height();
     //Check whether we have this screen anymore or not.
@@ -381,21 +382,45 @@ void KNMusicMiniPlayer::loadConfigure()
         //Check whether the screen is still valid.
         if(!screenRect.isEmpty())
         {
-            //Check the resolution of the screen.
-            //Compare the resolution.
-            if(screenRect.width()==lastScreenWidth &&
-                    screenRect.height()==lastScreenHeight)
-            {
-                //Move the position to the target position.
-                move(lastX, lastY);
-                return;
-            }
-            //Or else, the resolution is changed, then we need to recalculate
-            //the size according to the new resolution.
+            //The resolution may be changed or not, if changed, we need to
+            //recalculate the size according to the new resolution.
+            //If it is not changed, we just move the player to there.
             targetScreenX=screenRect.x();
             targetScreenY=screenRect.y();
             targetScreenWidth=screenRect.width();
             targetScreenHeight=screenRect.height();
+            //Check the resolution of the screen.
+            //Compare the resolution.
+            if(targetScreenWidth==lastScreenWidth &&
+                    targetScreenHeight==lastScreenHeight)
+            {
+                //Check last X and last Y validation.
+                //Check last X is out of border.
+                if(lastX<targetScreenX)
+                {
+                    //Update the last X to 0.
+                    lastX=targetScreenX;
+                }
+                else if(lastX>targetScreenX+targetScreenWidth-playerWidth)
+                {
+                    //Update the last X to right most.
+                    lastX=targetScreenX+targetScreenWidth-playerWidth;
+                }
+                //Check last Y is out of border.
+                if(lastY<targetScreenY)
+                {
+                    //Update the last Y to top.
+                    lastY=targetScreenY;
+                }
+                else if(lastY>targetScreenHeight-playerHeight)
+                {
+                    //Update the last Y to bottom.
+                    lastY=targetScreenHeight-playerHeight;
+                }
+                //Move the position to the target position.
+                move(lastX, lastY);
+                return;
+            }
         }
     }
     else
@@ -606,14 +631,14 @@ void KNMusicMiniPlayer::onActionMouseInOut(int frame)
     //Move the widgets.
     m_lyrics->move(0, frame);
     m_container->move(0, frame-height());
-//    //Change the background color.
-//    QPalette pal=palette();
-//    QColor backColor=pal.color(QPalette::Window);
-//    backColor.setHsv(backColor.hue(),
-//                     backColor.saturation(),
-//                     (qreal)frame/(qreal)height()*255.0);
-//    pal.setColor(QPalette::Window, backColor);
-    //    setPalette(pal);
+    //Change the background color.
+    QPalette pal=palette();
+    QColor backColor=pal.color(QPalette::Window);
+    backColor.setHsv(backColor.hue(),
+                     backColor.saturation(),
+                     (qreal)frame/(qreal)height()*70.0);
+    pal.setColor(QPalette::Window, backColor);
+    setPalette(pal);
 }
 
 void KNMusicMiniPlayer::onActionShowLyrics()
