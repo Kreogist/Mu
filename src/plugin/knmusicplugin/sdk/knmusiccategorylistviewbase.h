@@ -87,8 +87,7 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief keyPressEvent
-     * \param event
+     * \brief Reimpelemnt from QListView::keyPressEvent().
      */
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
@@ -104,6 +103,7 @@ private:
     QPalette m_palette;
     QColor m_backgroundColor, m_textColor, m_buttonColor;
     QTimeLine *m_mouseAnime, *m_searchAnime;
+    QScrollBar *m_scrollBar;
     KNMusicCategorySearch *m_searchBox;
 };
 

@@ -61,6 +61,10 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     {
         //Simply initial the label.
         m_basicInfoLabel[i]=new QLabel(this);
+        //Set properties.
+        m_basicInfoLabel[i]->setTextInteractionFlags(
+                    Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+        m_basicInfoLabel[i]->setFixedWidth(256);
         //Set the palette.
         m_basicInfoLabel[i]->setPalette(labelPal);
     }

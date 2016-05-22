@@ -70,6 +70,8 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
         //Construct detail label.
         m_information[i]=new QLabel(this);
         m_information[i]->setPalette(contentPal);
+        m_information[i]->setTextInteractionFlags(
+                    Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
 
         //Add label to layout.
         mainLayout->addRow(m_caption[i], m_information[i]);

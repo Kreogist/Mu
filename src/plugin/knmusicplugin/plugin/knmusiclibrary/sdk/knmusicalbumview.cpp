@@ -74,6 +74,8 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //Set default scrollbar properties.
     verticalScrollBar()->setRange(0, 0);
+    verticalScrollBar()->setSingleStep(m_itemSpacingHeight);
+    verticalScrollBar()->setPageStep((m_itemSpacingHeight>>3)*3);
 
     //Set the palette.
     knTheme->registerWidget(this);
@@ -89,8 +91,12 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNMusicAlbumView::onActionMouseInOut);
     //Configure the scroll bar.
-    m_scrollBar->setObjectName("MusicAlbumView");
+    m_scrollBar->setObjectName("MusicScrollBar");
     m_scrollBar->setStyle(KNSaoStyle::instance());
+    m_scrollBar->setSingleStep(verticalScrollBar()->singleStep());
+    m_scrollBar->setPageStep(verticalScrollBar()->pageStep());
+    m_scrollBar->hide();
+    knTheme->registerWidget(m_scrollBar);
     connect(verticalScrollBar(), &QScrollBar::rangeChanged,
             [=](int min, int max)
             {
@@ -100,7 +106,6 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
                 m_scrollBar->setVisible(min!=max);
                 //Update scrollbar state parameters.
                 m_scrollBar->setPageStep(verticalScrollBar()->pageStep());
-                m_scrollBar->setSingleStep(verticalScrollBar()->singleStep());
             });
     connect(verticalScrollBar(), &QScrollBar::valueChanged,
             [=](int value)
@@ -524,9 +529,6 @@ void KNMusicAlbumView::updateGeometries()
                                   qMax(0,
                                        m_lineCount*m_itemSpacingHeight +
                                        m_spacing-height()));
-    //Update the page and single step.
-    verticalScrollBar()->setPageStep(m_itemSpacingHeight>>2);
-    verticalScrollBar()->setSingleStep(m_itemSpacingHeight>>2);
 }
 
 void KNMusicAlbumView::retranslate()

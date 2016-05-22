@@ -21,6 +21,7 @@
 #include <QKeyEvent>
 
 #include "knthememanager.h"
+#include "sao/knsaostyle.h"
 
 #include "knmusiccategorysearch.h"
 
@@ -30,11 +31,14 @@
 #define OutBrightness 0x17
 #define TextBrightnessGap 0xAF
 #define ButtonBrightnessGap -0x10
+#define ScrollBarWidth 10
+#define ScrollBarSpacing 1
 
 KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     QListView(parent),
     m_mouseAnime(new QTimeLine(200, this)),
     m_searchAnime(new QTimeLine(200, this)),
+    m_scrollBar(new QScrollBar(this)),
     m_searchBox(new KNMusicCategorySearch(this))
 {
     setObjectName("CategoryListViewBase");
@@ -51,8 +55,38 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     setSpacing(0);
     setUniformItemSizes(true);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //Set viewport properties.
     viewport()->setContentsMargins(0, 0, 0, 0);
+
+    //Configure the scroll bar.
+    m_scrollBar->setObjectName("MusicScrollBar");
+    m_scrollBar->setStyle(KNSaoStyle::instance());
+    m_scrollBar->hide();
+    knTheme->registerWidget(m_scrollBar);
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged,
+            [=](int min, int max)
+            {
+                //Update the range first.
+                m_scrollBar->setRange(min, max);
+                //Check whether the scroll bar is still valid.
+                m_scrollBar->setVisible(min!=max);
+                //Update scrollbar state parameters.
+                m_scrollBar->setPageStep(verticalScrollBar()->pageStep());
+                m_scrollBar->setSingleStep(verticalScrollBar()->singleStep());
+            });
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            [=](int value)
+            {
+                //Block the signal.
+                m_scrollBar->blockSignals(true);
+                //Reset the value.
+                m_scrollBar->setValue(value);
+                //Release the block
+                m_scrollBar->blockSignals(false);
+            });
+    connect(m_scrollBar, &QScrollBar::valueChanged,
+            verticalScrollBar(), &QScrollBar::setValue);
 
     //Configure the mouse anime time line.
     m_mouseAnime->setUpdateInterval(10);
@@ -134,6 +168,11 @@ void KNMusicCategoryListViewBase::resizeEvent(QResizeEvent *event)
     m_searchBox->setFixedWidth(verticalScrollBar()->isVisible()?
                                    width()-verticalScrollBar()->width():
                                    width());
+    //Resize the scroll bar position.
+    m_scrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
+                             m_searchBox->geometry().bottom(),
+                             ScrollBarWidth,
+                             height()-m_searchBox->geometry().bottom());
 }
 
 void KNMusicCategoryListViewBase::keyPressEvent(QKeyEvent *event)
@@ -200,6 +239,16 @@ void KNMusicCategoryListViewBase::onActionMouseInOut(int frame)
     m_palette.setColor(QPalette::Text, m_textColor);
     //Set the palette.
     setPalette(m_palette);
+    //Update the scroll bar palette.
+    QPalette pal=m_scrollBar->palette();
+    QColor color=pal.color(QPalette::Base);
+    color.setAlpha((frame-OutBrightness)>>1);
+    pal.setColor(QPalette::Base, color);
+    color=pal.color(QPalette::Button);
+    color.setAlpha(frame-OutBrightness);
+    pal.setColor(QPalette::Button, color);
+    //Set the palette to scroll bar.
+    m_scrollBar->setPalette(pal);
 }
 
 void KNMusicCategoryListViewBase::onActionSearchInOut(int frame)
