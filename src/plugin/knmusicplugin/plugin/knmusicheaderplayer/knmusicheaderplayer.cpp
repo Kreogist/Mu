@@ -566,9 +566,6 @@ void KNMusicHeaderPlayer::loadConfigure()
                         m_musicConfigure->data(PlayerProxyPassword).toString());
     //Set the proxy.
     knMusicGlobal->setPlayerProxy(proxy);
-    //Set enabled state to backend.
-    m_backend->setProxyEnabled(
-                m_musicConfigure->data(PlayerProxyEnabled).toBool());
 }
 
 void KNMusicHeaderPlayer::saveConfigure()
@@ -590,7 +587,6 @@ void KNMusicHeaderPlayer::saveConfigure()
     //Get the proxy from global settings.
     QNetworkProxy proxy=knMusicGlobal->playerProxy();
     //Write the online playing proxy settings.
-    m_musicConfigure->setData(PlayerProxyEnabled, m_backend->isUsingProxy());
     m_musicConfigure->setData(PlayerProxyAddress, proxy.hostName());
     m_musicConfigure->setData(PlayerProxyPort, proxy.port());
     m_musicConfigure->setData(PlayerProxyUser, proxy.user());

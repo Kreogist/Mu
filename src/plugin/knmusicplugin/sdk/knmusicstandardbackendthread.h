@@ -105,13 +105,6 @@ public:
     virtual void setPlaySection(const qint64 &start=-1,
                                 const qint64 &duration=-1)=0;
 
-    /*!
-     * \brief Get whether the current proxy is using proxy to playing URL.
-     * \return If the backend is using proxy to playing the online data, this
-     * function will return true.
-     */
-    virtual bool isUsingProxy()=0;
-
 signals:
     /*!
      * \brief When url is fully loaded, this signal will emitted.
@@ -180,12 +173,6 @@ public slots:
      * \param position The position of the specifc song.
      */
     virtual void setPosition(const qint64 &position)=0;
-
-    /*!
-     * \brief Enabled or disable the proxy server when playing URL.
-     * \param enabled To enable the proxy server, set true to enabled.
-     */
-    virtual void setProxyEnabled(bool enabled)=0;
 };
 
 #endif // KNMUSICSTANDARDBACKENDTHREAD_H

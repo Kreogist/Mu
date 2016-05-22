@@ -127,11 +127,6 @@ public:
      */
     bool mute() Q_DECL_OVERRIDE;
 
-    /*!
-     * \brief Reimplemented from KNMusicBackend::isUsingProxy().
-     */
-    bool isUsingProxy() Q_DECL_OVERRIDE;
-
 signals:
 
 public slots:
@@ -144,11 +139,6 @@ public slots:
      * \brief Reimplemented from KNMusicBackend::restore().
      */
     void restore(const QString &updatedFilePath=QString()) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from KNMusicBackend::setProxyEnabled().
-     */
-    void setProxyEnabled(bool enabled) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicBackend::changeMuteState().

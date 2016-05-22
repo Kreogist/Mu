@@ -16,7 +16,7 @@ mu (0.9.9.2) unstable; urgency=medium
   * Fixed the memory leaking under Windows and OS X.
   * Fixed the potential password attack for simply input the Hash result.
 
- -- Saki Tojo <tomguts@126.com> Fri, 1 Apr 2016 21:12:00 +1100
+ -- Saki Tojo <tomguts@126.com> Fri, 22 May 2016 17:15:00 +1100
 
 mu (0.9.9.1) unstable; urgency=medium
 
