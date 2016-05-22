@@ -75,17 +75,6 @@ public:
                            const qint64 &duration=-1)=0;
 
     /*!
-     * \brief Load music from an online URL. All the URL send to this function
-     * will be treat at Internet.\n
-     * When this function is called, the main thread will be used to play the
-     * online URL. All the previous music playing states in the main thread will
-     * be reset.
-     * \param url The online music URL in QUrl format.
-     * \return If we can load the file, then it will return true.
-     */
-    virtual bool loadUrl(const QUrl &url)=0;
-
-    /*!
      * \brief Play the main thread.
      */
     virtual void play()=0;

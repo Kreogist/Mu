@@ -531,7 +531,7 @@ void KNMusicNowPlaying::playRow(int proxyRow)
         if(!detailInfo.url.isEmpty())
         {
             //Load the url.
-            m_backend->loadUrl(detailInfo.url);
+            ;
         }
         else if(detailInfo.trackFilePath.isEmpty())
         {

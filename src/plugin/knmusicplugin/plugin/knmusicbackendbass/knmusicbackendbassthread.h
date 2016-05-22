@@ -95,11 +95,6 @@ public:
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMusicStandardBackendThread::playUrl().
-     */
-    bool loadUrl(const QUrl &url) Q_DECL_OVERRIDE;
-
-    /*!
      * \brief Reimplemented from KNMusicStandardBackendThread::isUsingProxy().
      */
     bool isUsingProxy() Q_DECL_OVERRIDE;
@@ -147,7 +142,6 @@ public slots:
 
 private slots:
     void checkPosition();
-    void checkBuffering();
 
 private:
     static void CALLBACK threadReachesEnd(HSYNC handle,
@@ -256,8 +250,6 @@ private:
         m_filePath=filePath;
         //Set the sync handler.
         setChannelSyncs();
-        //Set the URL flag to be false.
-        m_isChannelUrl=false;
         //Load success.
         return true;
     }
@@ -275,10 +267,9 @@ private:
     qint64 m_savedPosition;
     qreal m_volume;
     int m_state;
-    bool m_isChannelUrl, m_playable;
 
     //Updater.
-    QTimer *m_positionUpdater, *m_bufferingUpdater;
+    QTimer *m_positionUpdater;
 
     //Sync Handlers.
     QList<HSYNC> m_syncHandlers;

@@ -51,13 +51,6 @@ bool KNMusicStandardBackend::loadMusic(const QString &filePath,
     return threadLoadMusic(m_main, filePath, start, duration);
 }
 
-bool KNMusicStandardBackend::loadUrl(const QUrl &url)
-{
-    qDebug()<<"Start load the url";
-    //Load the music to the main thread.
-    return m_main->loadUrl(url);
-}
-
 int KNMusicStandardBackend::state() const
 {
     //Get the main thread playing state.

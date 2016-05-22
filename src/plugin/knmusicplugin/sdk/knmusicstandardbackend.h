@@ -56,11 +56,6 @@ public:
                    const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMusicBackend::loadUrl().
-     */
-    bool loadUrl(const QUrl &url) Q_DECL_OVERRIDE;
-
-    /*!
      * \brief Reimplemented from KNMusicBackend::state().
      */
     int state() const Q_DECL_OVERRIDE;

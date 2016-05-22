@@ -106,13 +106,6 @@ public:
                                 const qint64 &duration=-1)=0;
 
     /*!
-     * \brief Play an Internet URL link music data.
-     * \param url The Internet URL.
-     * \return If the thread load the URL successful, then return true.
-     */
-    virtual bool loadUrl(const QUrl &url)=0;
-
-    /*!
      * \brief Get whether the current proxy is using proxy to playing URL.
      * \return If the backend is using proxy to playing the online data, this
      * function will return true.

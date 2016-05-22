@@ -233,11 +233,6 @@ void KNMusicBackendGStreamerThread::setPlaySection(const qint64 &start,
     }
 }
 
-bool KNMusicBackendGStreamerThread::loadUrl(const QUrl &url)
-{
-    ;
-}
-
 GstElement *KNMusicBackendGStreamerThread::playbin()
 {
     return m_playbin;
