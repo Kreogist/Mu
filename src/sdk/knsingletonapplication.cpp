@@ -43,17 +43,20 @@ KNSingletonApplication::KNSingletonApplication(int &argc,
         QStringList &&pendingMessages=arguments();
         //Check out the pending message. If there's valid file path, then it
         //will be send to the main instance.
-        if(pendingMessages.size()>1)
+        //Send the messages.
+        if(pendingMessages.size()>1 && sendMessages(uniqueKey, pendingMessages))
         {
-            //Send the messages.
-            sendMessages(uniqueKey, pendingMessages);
+            //Complete the mission.
+            return;
         }
-        return;
     }
+    //If we could go here, then means we couldn't send the message to the
+    //previous instance.
     //Set running instance
     m_isInstanceRunning=true;
+    qDebug()<<"Shared memeory size:"<<m_uniqueKeyMemeory->size();
     //Create a small part of shared memory for instance flag.
-    if(!m_uniqueKeyMemeory->create(1))
+    if(m_uniqueKeyMemeory->size()==0 && (!m_uniqueKeyMemeory->create(1)))
     {
         //Unable to create single instance.
         qDebug("Unable to create the single instance.");

@@ -35,6 +35,7 @@
 #define CacheUsernameField "Username"
 #define CachePasswordField "Password"
 #define CacheNicknameField "DisplayName"
+#define MaximumPasswordLength 151
 
 using namespace AccountUtil;
 
@@ -195,7 +196,7 @@ bool KNAccount::login(const QString &userName,
             //To avoid user copy and paste the hash result of the account
             //directly to the password to login, we will check out the length of
             //the password.
-            password.length()>151)
+            password.length()>MaximumPasswordLength)
     {
         //Emit failed signal.
         emit loginFailed(InfoIncorrect);
