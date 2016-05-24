@@ -48,7 +48,15 @@ bool KNMusicStandardBackend::loadMusic(const QString &filePath,
                                        const qint64 &duration)
 {
     //Load the music to the main thread.
-    return threadLoadMusic(m_main, filePath, start, duration);
+    bool loadMainResult=threadLoadMusic(m_main, filePath, start, duration);
+    //Check load result.
+    if(loadMainResult)
+    {
+        //Emit load success signal.
+        emit loadSuccess();
+    }
+    //Give back the result.
+    return loadMainResult;
 }
 
 int KNMusicStandardBackend::state() const
@@ -325,8 +333,6 @@ inline bool KNMusicStandardBackend::threadLoadMusic(
     {
         //Set the section for thread.
         thread->setPlaySection(start, duration);
-        //Emit load success signal.
-        emit loadSuccess();
         //Load the music compelte.
         return true;
     }
