@@ -24,6 +24,8 @@
 
 #include <QDebug>
 
+#define TimeoutLimit 1000
+
 KNSingletonApplication::KNSingletonApplication(int &argc,
                                                char **argv,
                                                const QString uniqueKey) :
@@ -54,7 +56,6 @@ KNSingletonApplication::KNSingletonApplication(int &argc,
     //previous instance.
     //Set running instance
     m_isInstanceRunning=true;
-    qDebug()<<"Shared memeory size:"<<m_uniqueKeyMemeory->size();
     //Create a small part of shared memory for instance flag.
     if(m_uniqueKeyMemeory->size()==0 && (!m_uniqueKeyMemeory->create(1)))
     {
@@ -92,11 +93,10 @@ bool KNSingletonApplication::isInstanceRunning() const
 
 void KNSingletonApplication::onMessageReceive()
 {
-    const int timeoutLimit=1000;
     //Get the socket from the sender.
     QLocalSocket *client=m_messageServer->nextPendingConnection();
     //Waiting for reading client data.
-    if(!client->waitForReadyRead(timeoutLimit))
+    if(!client->waitForReadyRead(TimeoutLimit))
     {
         qDebug("Cannot read the client data.");
         return;
@@ -116,13 +116,12 @@ void KNSingletonApplication::onMessageReceive()
 bool KNSingletonApplication::sendMessages(const QString &uniqueKey,
                                           const QStringList &messages)
 {
-    const int timeoutLimit=1000;
     //Create sender client.
     QLocalSocket client;
     //Link to the server which is listening to the unique key.
     client.connectToServer(uniqueKey, QIODevice::WriteOnly);
     //If connecting failed, return false.
-    if(!client.waitForConnected(timeoutLimit))
+    if(!client.waitForConnected(TimeoutLimit))
     {
         qDebug("Cannot connect to the local server.");
         //Disconnect from the server.
@@ -136,7 +135,7 @@ bool KNSingletonApplication::sendMessages(const QString &uniqueKey,
     //Send the data to local server.
     client.write(messageData);
     //Check sending status.
-    if(!client.waitForBytesWritten(timeoutLimit))
+    if(!client.waitForBytesWritten(TimeoutLimit))
     {
         qDebug("Send arguments failed.");
         client.disconnectFromServer();
