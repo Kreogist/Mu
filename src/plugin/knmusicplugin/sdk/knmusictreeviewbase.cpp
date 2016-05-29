@@ -510,7 +510,7 @@ void KNMusicTreeViewBase::onActionMouseInOut(int frame)
     setPalette(pal);
     //Calculate scroll bar alpha.
     int buttonAlpha=frame<<2,
-        baseAlpha=frame*5;
+        baseAlpha=frame*3;
     //Update the horizontal scroll bar palette.
     pal=m_hScrollBar->palette();
     color=pal.color(QPalette::Base);
