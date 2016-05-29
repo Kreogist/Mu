@@ -25,6 +25,7 @@
 #include "knthememanager.h"
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
+#include "knglobal.h"
 
 #include "knmusicbackend.h"
 #include "knmusicalbumlabel.h"
@@ -358,10 +359,14 @@ inline void KNMusicDetailTooltip::startAnime(QTimeLine *timeLine)
 
 inline void KNMusicDetailTooltip::moveToPosition(const QPoint &position)
 {
+    //Get the desktop widget.
+    QDesktopWidget *desktopWidget=qApp->desktop();
+    //Get the screen.
+    QRect screenRect=desktopWidget->screenGeometry(knGlobal->mainWindow());
     //Move right of the tooltip for a little to avoid the mouse pointer.
     int preferX=position.x()+14, preferY=position.y()-(TooltipHeight>>1),
-        screenHeight=QApplication::desktop()->height(),
-        screenWidth=QApplication::desktop()->width();
+        screenHeight=screenRect.bottom(),
+        screenWidth=screenRect.right();
     //Move to the right position.
     move(preferX+TooltipWidth>screenWidth?
              screenWidth-TooltipWidth-5:preferX,

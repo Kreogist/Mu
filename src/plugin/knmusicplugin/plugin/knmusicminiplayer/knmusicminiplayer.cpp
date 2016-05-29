@@ -337,12 +337,12 @@ void KNMusicMiniPlayer::saveConfigure()
     //Save the index.
     setCacheValue("miniPlayerScreenIndex", screenIndex);
     //Get the screen.
-    QRect screenSize=desktopWidget->screenGeometry(screenIndex);
+    QRect screenRect=desktopWidget->screenGeometry(screenIndex);
     //Save the screen size.
-    setCacheValue("miniPlayerScreenX", screenSize.x());
-    setCacheValue("miniPlayerScreenY", screenSize.y());
-    setCacheValue("miniPlayerScreenWidth", screenSize.width());
-    setCacheValue("miniPlayerScreenHeight", screenSize.height());
+    setCacheValue("miniPlayerScreenX", screenRect.x());
+    setCacheValue("miniPlayerScreenY", screenRect.y());
+    setCacheValue("miniPlayerScreenWidth", screenRect.width());
+    setCacheValue("miniPlayerScreenHeight", screenRect.height());
     //Save the current player position.
     setCacheValue("miniPlayerX", geometry().x());
     setCacheValue("miniPlayerY", geometry().y());

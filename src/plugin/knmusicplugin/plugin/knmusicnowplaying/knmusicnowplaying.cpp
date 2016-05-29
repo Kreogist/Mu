@@ -356,9 +356,14 @@ void KNMusicNowPlaying::setPlayingRating(int rating)
     //Update the detail info.
     if(playingMusicModel())
     {
+        //Block now playing signals.
+        blockSignals(true);
+        //Update playing music model data.
         playingMusicModel()->setTextData(m_playingIndex.row(),
                                          Rating,
                                          QString::number(rating));
+        //Release now playing signal blocking.
+        blockSignals(false);
     }
 }
 
@@ -430,14 +435,14 @@ void KNMusicNowPlaying::onActionLoadSuccess()
     //Check the model first.
     if(playingMusicModel())
     {
-        //Block model signal first.
-        playingMusicModel()->blockSignals(true);
+        //Block now playing.
+        blockSignals(true);
         //Clear out the cannot playing flag.
         playingMusicModel()->setData(m_playingIndex,
                                      false,
                                      CannotPlayFlagRole);
-        //Block model signal first.
-        playingMusicModel()->blockSignals(false);
+        //Release blocking.
+        blockSignals(false);
         //Give out the current.
         emit nowPlayingChanged(m_playingAnalysisItem);
     }
@@ -467,6 +472,7 @@ void KNMusicNowPlaying::onActionLoadFailed()
 void KNMusicNowPlaying::onActionModelDataChanged(const QModelIndex &topLeft,
                                                  const QModelIndex &bottomRight)
 {
+
     //Get the current row.
     int currentRow=m_playingIndex.row();
     //Check whether the current index is in the range.
@@ -492,8 +498,12 @@ void KNMusicNowPlaying::playRow(int proxyRow)
     m_playingIndex=
             QPersistentModelIndex(m_playingProxyModel->mapToSource(
                                       m_playingProxyModel->index(proxyRow, 0)));
+    //Block the now playing signals.
+    blockSignals(true);
     //Set the playing index.
     musicModel->setPlayingIndex(m_playingIndex);
+    //Release blocking.
+    blockSignals(false);
     //First we need to reanalysis that row, if we cannot analysis that row,
     //means we cannot play that row.
     KNMusicAnalysisItem reanalysisItem;
@@ -509,8 +519,12 @@ void KNMusicNowPlaying::playRow(int proxyRow)
         //Update the model if the item is not an url item.
         if(detailInfo.url.isEmpty())
         {
+            //Block the now playing signals.
+            blockSignals(true);
             //Update the music model row.
             musicModel->updateRow(m_playingIndex.row(), m_playingAnalysisItem);
+            //Release the block.
+            blockSignals(false);
         }
         else
         {

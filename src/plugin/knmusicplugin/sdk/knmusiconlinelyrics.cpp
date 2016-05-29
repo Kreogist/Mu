@@ -71,7 +71,6 @@ void KNMusicOnlineLyrics::downloadLyrics(
     //Download the lyrics data via all the plugins.
     for(auto i=m_downloaders.begin(); i!=m_downloaders.end(); ++i)
     {
-        qDebug()<<(*i)->downloaderName();
         //Try to download the lyrics from all the remote server.
         (*i)->downloadLyrics(detailInfo, lyricsList);
     }
@@ -109,7 +108,7 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
         m_workingLock.unlock();
     }
     //Get the last item in the download queue.
-    KNMusicDetailInfo detailInfo=m_downloadQueue.takeLast();
+    const KNMusicDetailInfo &detailInfo=m_downloadQueue.last();
     //Generate the lyrics list.
     QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList;
     //Download the lyrics.
@@ -134,6 +133,8 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
             }
         }
     }
+    //Remove last.
+    m_downloadQueue.removeLast();
     //Parse the next item.
     emit downloadNext();
 }
