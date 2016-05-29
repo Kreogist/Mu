@@ -45,7 +45,8 @@ KNMusicListViewBase::KNMusicListViewBase(QWidget *parent, KNMusicTab *tab) :
     m_proxyModel(nullptr),
     m_mouseAnime(new QTimeLine(200, this)),
     m_scrollBar(new QScrollBar(this)),
-    m_pressed(false)
+    m_pressed(false),
+    m_autoBuildProxy(true)
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -105,7 +106,7 @@ KNMusicListViewBase::KNMusicListViewBase(QWidget *parent, KNMusicTab *tab) :
 KNMusicProxyModel *KNMusicListViewBase::proxyModel()
 {
     //Check is the proxy model need to initial.
-    if(m_proxyModel==nullptr)
+    if(m_proxyModel==nullptr && m_autoBuildProxy)
     {
         //Initial the proxy model.
         m_proxyModel=new KNMusicProxyModel(this);
@@ -262,23 +263,8 @@ void KNMusicListViewBase::mouseReleaseEvent(QMouseEvent *event)
         //Check is button right button and position is in the treeview.
         if(event->button()==Qt::RightButton && rect().contains(event->pos()))
         {
-            //Hide the detail tooltip first.
-            if(knMusicGlobal->detailTooltip())
-            {
-                knMusicGlobal->detailTooltip()->hide();
-            }
-            //According to the selected rows, display different menu.
-            switch(selectionModel()->selectedRows().size())
-            {
-            case 0:
-                break;
-            case 1:
-                showSoloMenu(event->pos());
-                break;
-            default:
-                showMultiMenu(event->pos());
-                break;
-            }
+            //Show the menu at the position.
+            showMenu(event->pos(), indexAt(event->pos()));
         }
     }
 }
@@ -296,6 +282,33 @@ void KNMusicListViewBase::keyReleaseEvent(QKeyEvent *event)
         {
             //Hack this as the activate action.
             onActionActivate(currentIndex());
+        }
+        break;
+    }
+    case Qt::Key_Menu:
+    {
+        //Check the current index first.
+        if(currentIndex().isValid())
+        {
+            //Get the current rect of the item.
+            QRect currentRect=visualRect(currentIndex());
+            //Get the target Y position.
+            int targetY=currentRect.y()+(currentRect.height()>>1);
+            //Check the target Y.
+            //Over the bottom.
+            if(targetY>=height())
+            {
+                //Force to set the target Y to be the bottom of the widget.
+                targetY=height();
+            }
+            //Over the top.
+            if(targetY<0)
+            {
+                //Force to set the target Y to be 0.
+                targetY=0;
+            }
+            //Show the menu.
+            showMenu(QPoint(currentRect.height()>>1, targetY), currentIndex());
         }
         break;
     }
@@ -380,11 +393,6 @@ void KNMusicListViewBase::removeCurrent()
     }
 }
 
-void KNMusicListViewBase::renameCurrent()
-{
-    ;
-}
-
 inline void KNMusicListViewBase::scrollToIndex(const QModelIndex &proxyIndex)
 {
     //Set the current index to the specific row.
@@ -424,10 +432,31 @@ inline void KNMusicListViewBase::startAnime(int endFrame)
     m_mouseAnime->start();
 }
 
-void KNMusicListViewBase::showSoloMenu(const QPoint &position)
+void KNMusicListViewBase::showMenu(QPoint position,
+                                   const QModelIndex &pressedIndex)
 {
-    //Get the index of the position where mouse pressed.
-    QModelIndex pressedIndex=indexAt(position);
+    //Hide the detail tooltip first.
+    if(knMusicGlobal->detailTooltip())
+    {
+        knMusicGlobal->detailTooltip()->hide();
+    }
+    //According to the selected rows, display different menu.
+    switch(selectionModel()->selectedRows().size())
+    {
+    case 0:
+        break;
+    case 1:
+        showSoloMenu(position, pressedIndex);
+        break;
+    default:
+        showMultiMenu(position);
+        break;
+    }
+}
+
+void KNMusicListViewBase::showSoloMenu(const QPoint &position,
+                                       const QModelIndex &pressedIndex)
+{
     //Check the valid of the index.
     if(pressedIndex.isValid() && knMusicGlobal->soloMenu()!=nullptr)
     {
@@ -442,13 +471,11 @@ void KNMusicListViewBase::showSoloMenu(const QPoint &position)
         connections.append(
                    connect(soloMenu, &KNMusicSoloMenuBase::requireRemoveCurrent,
                            this, &KNMusicListViewBase::removeCurrent));
-        connections.append(
-                   connect(soloMenu, &KNMusicSoloMenuBase::requireRenameCurrent,
-                           this, &KNMusicListViewBase::renameCurrent));
         //Set the information to the solo menu.
         soloMenu->setMusicRow(m_proxyModel, pressedIndex);
         //Get the menu position, fixed the bug which ignore the header's height.
         QPoint menuPosition=mapToGlobal(position);
+        menuPosition.setY(menuPosition.y());
         //Set the position to menu.
         soloMenu->setMouseDownPos(menuPosition);
         //Launch the menu.
@@ -551,5 +578,10 @@ bool KNMusicListViewBase::showDetailTooltip(const QPoint &indexPosition)
         setFocus();
     }
     return true;
+}
+
+void KNMusicListViewBase::setAutoBuildProxy(bool autoBuildProxy)
+{
+    m_autoBuildProxy = autoBuildProxy;
 }
 

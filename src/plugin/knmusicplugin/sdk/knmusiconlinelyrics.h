@@ -20,7 +20,6 @@
 #define KNMUSICONLINELYRICS_H
 
 #include <QMutex>
-#include <QLinkedList>
 
 #include "knmusicutil.h"
 #include "knmusiclyricsdownloader.h"
@@ -92,7 +91,7 @@ private slots:
     void onActionDownloadLyrics();
 
 private:
-    QLinkedList<KNMusicDetailInfo> m_downloadQueue;
+    QList<KNMusicDetailInfo> m_downloadQueue;
     QList<KNMusicLyricsDownloader *> m_downloaders;
     QMutex m_workingLock;
     KNMusicLrcParser *m_lrcParser;

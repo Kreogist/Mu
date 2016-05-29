@@ -71,13 +71,6 @@ signals:
      */
     void requireRemoveCurrent();
 
-    /*!
-     * \brief When the menu is asked to rename the current row, this signal will
-     * be emitted.
-     * \param preferName The prefer name generate according to the row data.
-     */
-    void requireRenameCurrent(QString preferName);
-
 public slots:
     /*!
      * \brief Append music goto tab actions to the solo menu.

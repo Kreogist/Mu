@@ -57,6 +57,7 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     knTheme->registerWidget(this);
     //Configure the horizontal scroll bar.
     m_scrollBar->setStyle(KNSaoStyle::instance());
+    m_scrollBar->hide();
     //Link the scroll bar.
     connect(horizontalScrollBar(), &QScrollBar::valueChanged,
             this, &KNMusicStoreAlbumList::onActionUpdateOpacity);

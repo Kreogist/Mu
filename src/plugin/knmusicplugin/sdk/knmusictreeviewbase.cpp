@@ -398,23 +398,8 @@ void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
         //Check is button right button and position is in the treeview.
         if(event->button()==Qt::RightButton && rect().contains(event->pos()))
         {
-            //Hide the detail tooltip first.
-            if(knMusicGlobal->detailTooltip())
-            {
-                knMusicGlobal->detailTooltip()->hide();
-            }
-            //According to the selected rows, display different menu.
-            switch(selectionModel()->selectedRows().size())
-            {
-            case 0:
-                break;
-            case 1:
-                showSoloMenu(event->pos());
-                break;
-            default:
-                showMultiMenu(event->pos());
-                break;
-            }
+            //Show the menu at the specific position.
+            showMenu(event->pos(), indexAt(event->pos()));
         }
     }
 }
@@ -432,6 +417,33 @@ void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
         {
             //Hack this as the activate action.
             onActionActivate(currentIndex());
+        }
+        break;
+    }
+    case Qt::Key_Menu:
+    {
+        //Check the current index first.
+        if(currentIndex().isValid())
+        {
+            //Get the current rect of the item.
+            QRect currentRect=visualRect(currentIndex());
+            //Get the target Y position.
+            int targetY=currentRect.y()+(currentRect.height()>>1);
+            //Check the target Y.
+            //Over the bottom.
+            if(targetY>=height()-header()->height())
+            {
+                //Force to set the target Y to be the bottom of the widget.
+                targetY=height()-header()->height();
+            }
+            //Over the top.
+            if(targetY<0)
+            {
+                //Force to set the target Y to be 0.
+                targetY=0;
+            }
+            //Show the menu.
+            showMenu(QPoint(currentRect.height()>>1, targetY), currentIndex());
         }
         break;
     }
@@ -560,11 +572,6 @@ void KNMusicTreeViewBase::removeCurrent()
         //Remove the current index.
         proxyModel()->removeRow(currentIndex().row());
     }
-}
-
-void KNMusicTreeViewBase::renameCurrent()
-{
-    ;
 }
 
 QAbstractItemView::DropIndicatorPosition KNMusicTreeViewBase::dropPosition(
@@ -729,10 +736,31 @@ inline void KNMusicTreeViewBase::updateVerticalScrollBarGeometry()
     }
 }
 
-void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
+inline void KNMusicTreeViewBase::showMenu(QPoint position,
+                                          const QModelIndex &pressedIndex)
 {
-    //Get the index of the position where mouse pressed.
-    QModelIndex pressedIndex=indexAt(position);
+    //Hide the detail tooltip first.
+    if(knMusicGlobal->detailTooltip())
+    {
+        knMusicGlobal->detailTooltip()->hide();
+    }
+    //According to the selected rows, display different menu.
+    switch(selectionModel()->selectedRows().size())
+    {
+    case 0:
+        break;
+    case 1:
+        showSoloMenu(position, pressedIndex);
+        break;
+    default:
+        showMultiMenu(position);
+        break;
+    }
+}
+
+void KNMusicTreeViewBase::showSoloMenu(const QPoint &position,
+                                       const QModelIndex &pressedIndex)
+{
     //Check the valid of the index.
     if(pressedIndex.isValid() && knMusicGlobal->soloMenu()!=nullptr)
     {
@@ -747,9 +775,6 @@ void KNMusicTreeViewBase::showSoloMenu(const QPoint &position)
         connections.append(
                    connect(soloMenu, &KNMusicSoloMenuBase::requireRemoveCurrent,
                            this, &KNMusicTreeViewBase::removeCurrent));
-        connections.append(
-                   connect(soloMenu, &KNMusicSoloMenuBase::requireRenameCurrent,
-                           this, &KNMusicTreeViewBase::renameCurrent));
         //Set the information to the solo menu.
         soloMenu->setMusicRow(m_proxyModel, pressedIndex);
         //Get the menu position, fixed the bug which ignore the header's height.

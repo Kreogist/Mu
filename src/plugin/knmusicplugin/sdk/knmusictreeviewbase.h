@@ -229,7 +229,6 @@ private slots:
     void onActionActivate(const QModelIndex &index);
     void playCurrent();
     void removeCurrent();
-    void renameCurrent();
 
 private:
     QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
@@ -238,7 +237,9 @@ private:
     inline void startAnime(int endFrame);
     inline bool dropOn(QDropEvent *event, int &dropRow);
     inline void updateVerticalScrollBarGeometry();
-    void showSoloMenu(const QPoint &position);
+    inline void showMenu(QPoint position,
+                         const QModelIndex &pressedIndex=QModelIndex());
+    void showSoloMenu(const QPoint &position, const QModelIndex &pressedIndex);
     void showMultiMenu(const QPoint &position);
     bool showDetailTooltip(const QPoint &indexPosition);
 

@@ -159,18 +159,26 @@ protected:
      */
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Set whether the list view will generate proxy model automatically.
+     * \param autoBuildProxy When the property is true, list view will
+     * automatically generate a proxy model when trying to access it.
+     */
+    void setAutoBuildProxy(bool autoBuildProxy);
+
 private slots:
     void onActionActivate(const QModelIndex &index);
     void onActionMouseInOut(int frame);
     void playCurrent();
     void removeCurrent();
-    void renameCurrent();
 
 private:
     inline void scrollToIndex(const QModelIndex &proxyIndex);
     inline void playIndex(const QModelIndex &index);
     inline void startAnime(int endFrame);
-    void showSoloMenu(const QPoint &position);
+    inline void showMenu(QPoint position,
+                         const QModelIndex &pressedIndex=QModelIndex());
+    void showSoloMenu(const QPoint &position, const QModelIndex &pressedIndex);
     void showMultiMenu(const QPoint &position);
     bool showDetailTooltip(const QPoint &indexPosition);
 
@@ -178,7 +186,7 @@ private:
     KNMusicProxyModel *m_proxyModel;
     QTimeLine *m_mouseAnime;
     QScrollBar *m_scrollBar;
-    bool m_pressed;
+    bool m_pressed, m_autoBuildProxy;
 };
 
 #endif // KNMUSICLISTVIEWBASE_H

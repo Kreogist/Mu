@@ -108,7 +108,8 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
         m_workingLock.unlock();
     }
     //Get the last item in the download queue.
-    const KNMusicDetailInfo &detailInfo=m_downloadQueue.last();
+    int itemIndex=m_downloadQueue.size()-1;
+    const KNMusicDetailInfo &detailInfo=m_downloadQueue.at(itemIndex);
     //Generate the lyrics list.
     QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList;
     //Download the lyrics.
@@ -134,7 +135,7 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
         }
     }
     //Remove last.
-    m_downloadQueue.removeLast();
+    m_downloadQueue.removeAt(itemIndex);
     //Parse the next item.
     emit downloadNext();
 }

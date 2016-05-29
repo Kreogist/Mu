@@ -329,7 +329,7 @@ void KNMusicSoloMenu::onActionRename()
 void KNMusicSoloMenu::onActionCopyFilePath()
 {
     //Set the clipboard text to be the file path.
-    KNUtil::setClipboardText(m_filePath);
+    KNUtil::setClipboardText(QDir::toNativeSeparators(m_filePath));
 }
 
 void KNMusicSoloMenu::onActionCopyItemText()
