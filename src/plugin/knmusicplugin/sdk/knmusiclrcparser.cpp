@@ -23,6 +23,8 @@
 
 #include "knmusiclrcparser.h"
 
+#include <QDebug>
+
 KNMusicLrcParser::KNMusicLrcParser(QObject *parent) :
     QObject(parent),
     m_frameCatchRegExp(QRegularExpression("\\[[^\\]]*\\]")),
@@ -209,15 +211,22 @@ inline void KNMusicLrcParser::parseFrames(QString frame,
         {
             return;
         }
-        qint64 thirdPart=
-                frame.mid(secondCharPos+1).toLongLong(&translateResult);
+        //Get the raw data of third part.
+        QString &&rawThirdPart=frame.mid(secondCharPos+1);
+        qint64 thirdPart=rawThirdPart.toLongLong(&translateResult);
         //No millisecond is larger than 999. Due to the xx can only be to 990.
-        if(!translateResult || thirdPart>99)
+        if(!translateResult || thirdPart>999)
         {
             return;
         }
+        //Check the third part, if the length of third part is 2,
+        if(rawThirdPart.length()==2)
+        {
+            //Then multiply 10. Because it should be xx0.
+            thirdPart*=10;
+        }
         //Add the second part and third part to frame position.
-        currentFrame.position+=secondPart*1000+thirdPart*10;
+        currentFrame.position+=secondPart*1000+thirdPart;
     }
     //Set the text and add the lyrics line to the list.
     currentFrame.text=text;

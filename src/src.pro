@@ -481,7 +481,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.cpp \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.cpp \
-    sdk/account/knaccountresetpanel.cpp
+    sdk/account/knaccountresetpanel.cpp \
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -738,7 +739,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.h \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.h \
-    sdk/account/knaccountresetpanel.h
+    sdk/account/knaccountresetpanel.h \
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h
 
 RESOURCES += \
     resource/res.qrc
