@@ -87,82 +87,56 @@ void KNMusicKgmusicLyrics::downloadLyrics(
     }
     //Get the lyrics search result.
     QByteArray responseData;
-    get("http://lib9.service.kugou.com/websearch/index.php?"
-        "page=1&cmd=100&keyword="+QUrl::toPercentEncoding(searchCode)+
-        "&pagesize=3",
+    get("http://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword="+
+        QUrl::toPercentEncoding(searchCode)+
+        "&duration="+
+        QString::number(detailInfo.duration)+"&hash=",
         responseData);
-    //Check out the response data.
-    if(responseData.isEmpty())
-    {
-        //Mission complete.
-        return;
-    }
-    /*
-     * The response data should be the following structure:
-     *  {
-     *      "status":1,
-     *      "data":
-     *      {
-     *          "total":3,
-     *          "songs":
-     *          [
-     *              {
-     *                  "singername":"Fripside",
-     *                  "songname":"Flower Of Bravery",
-     *                  "filename":"fripside - flower of bravery",
-     *                  "hash":"1C62244B29E7CBA931163B68E5A153A5",
-     *                  "filesize":3757465,
-     *                  "bitrate":128,
-     *                  "timelength":234000,
-     *                  "extname":"mp3",
-     *                  "ownercount":1390
-     *              },
-     *              {
-     *                  ...
-     *              },
-     *              {
-     *                  ...
-     *              }
-     *          ]
-     *      },
-     *      "error":""
-     *  }
+    //Response data should be in the following format.
+    /* {
+     *     "candidates":
+     *     [
+     *         {
+     *             "accesskey":"5BBCB7BDC8E9D8D7E2C38DF447D676DD",
+     *             "adjust":0,
+     *             "duration":234000,
+     *             "id":"19811472",
+     *             "krctype":2,
+     *             "language":"",
+     *             "score":60,
+     *             "singer":"fripside",
+     *             "song":"flower of bravery",
+     *             "uid":"1000000010"
+     *         },
+     *         ...
+     *     ],
+     *     "info":"OK",
+     *     "keyword":"fripSide-flower of bravery",
+     *     "proposal":"19811472",
+     *     "status":200
+     * }
      */
-    //Prepare a json list.
-    QJsonArray resultList;
     //It returns a json object, parse it.
     QJsonObject resultObject=QJsonDocument::fromJson(responseData).object();
     //Check whether it contains data object.
-    if(!resultObject.contains("data"))
+    if(!resultObject.contains("candidates"))
     {
         //Failed if it doesn't contains data.
         return;
     }
-    //Get the data item.
-    resultObject=resultObject.value("data").toObject();
     //Get the songs list.
-    resultList=resultObject.value("songs").toArray();
-    //Check out the result object.
-    if(resultObject.value("total").toInt()!=resultList.size())
-    {
-        //Failed to parse the information.
-        return;
-    }
+    QJsonArray resultList=resultObject.value("candidates").toArray();
     //Translate the item of reuslt list to result object.
     for(auto i=resultList.begin(); i!=resultList.end(); ++i)
     {
         //Get the song object.
         resultObject=(*i).toObject();
         //Get the lyrics from server.
-        get("http://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=" +
-            QUrl::toPercentEncoding(
-                resultObject.value("singername").toString()) +
-            "-"+
-            QUrl::toPercentEncoding(resultObject.value("songname").toString())+
-            "&duration="+
-            QString::number(resultObject.value("timelength").toInt())+
-            "&hash="+
-            resultObject.value("hash").toString(),
+        get("http://lyrics.kugou.com/download?ver=1&client=pc&id=" +
+            resultObject.value("id").toString()+
+            "&accesskey="+
+            resultObject.value("accesskey").toString()+
+            "&fmt=krc&charset=utf8",
             responseData);
         //Check out response data.
         if(responseData.isEmpty())
@@ -170,176 +144,127 @@ void KNMusicKgmusicLyrics::downloadLyrics(
             //Goto next item
             continue;
         }
+        //Save the title and artist information.
+        KNMusicLyricsDetails currentDetails;
+        //Set data to current details.
+        currentDetails.title=resultObject.value("song").toString();
+        currentDetails.artist=resultObject.value("singer").toString();
+        //Response data should be:
         /*
-         * The response data structure should be
-         *  {
-         *      "candidates":
-         *      [
-         *          {
-         *              "accesskey":"1F4053C63399083E798E8A00269E099A",
-         *              "adjust":0,
-         *              "duration":234000,
-         *              "id":"16617584",
-         *              "score":60,
-         *              "singer":"fripSide",
-         *              "song":"flower of bravery",
-         *              "uid":"1000000010"
-         *          },
-         *          {
-         *              ...
-         *          },
-         *          ...
-         *      ],
-         *      "info":"OK",
-         *      "keyword":"Fripside-Flower Of Bravery",
-         *      "proposal":"16617584",
-         *      "status":200
-         *  }
+         * {
+         *     "charset":"",
+         *     "content":"(Base64 Encoded UTF-8 KRC format lyrics)",
+         *     "fmt":"krc",
+         *     "info":"OK",
+         *     "status":200
+         * }
          */
         //Parse the json object.
         resultObject=QJsonDocument::fromJson(responseData).object();
         //Check out whether it contains 'info' item and it should be "OK", and
         //it contains a candidates list.
         if(resultObject.value("info").toString()!="OK" ||
-                !resultObject.contains("candidates"))
+                !resultObject.contains("content"))
         {
             //Try next one.
             continue;
         }
-        //Save the title and artist information.
-        KNMusicLyricsDetails currentDetails;
-        //Parse the list.
-        QJsonArray &&candidateList=resultObject.value("candidates").toArray();
-        //Check out each item.
-        for(auto j=candidateList.begin(); j!=candidateList.end(); ++j)
+        //The content is in KRC format which is a specific format made
+        //by kugoo, we have to parse it.
+        //Parse the content from Base64 encoding and uncompress the
+        //data.
+        QString rawKRCContent=
+               parseKRC(QByteArray::fromBase64(
+                            resultObject.value("content").toString().toUtf8())),
+               lyricsCache;
+        //First remove all the <xx,xxx,xx> item in the content.
+        rawKRCContent.replace(QRegExp("<\\d*,\\d*,\\d*>"), "");
+        //Split the lyrics into rows.
+        QStringList &&dataResult=rawKRCContent.split("\n");
+        //Check each line of the data result.
+        for(auto i : dataResult)
         {
-            //Translate j to item.
-            resultObject=(*j).toObject();
-            //Save the title and artist data.
-            currentDetails.title=resultObject.value("song").toString();
-            currentDetails.artist=resultObject.value("singer").toString();
-            //Get lyrics according to the item candidates.
-            get("http://lyrics.kugou.com/download?ver=1&client=pc&id=" +
-                resultObject.value("id").toString() +
-                "&accesskey=" +
-                resultObject.value("accesskey").toString() +
-                "&fmt=krc&charset=utf8",
-                responseData);
-            /*
-             * The structure of response data is
-             *  {
-             *      "charset":"",
-             *      "content":"Base 64 Encoded content",
-             *      "fmt":"krc",
-             *      "info":"OK",
-             *      "status":200
-             *  }
-             */
-            //Parse the response data.
-            resultObject=QJsonDocument::fromJson(responseData).object();
-            //Check whether it contains content or not.
-            if(resultObject.contains("content"))
+            //Get the simplified result of the i, remove the \r and \n.
+            QString &&lyricsLine=i.simplified();
+            //Check the result.
+            if(lyricsLine.length()<2)
             {
-                //The content is in KRC format which is a specific format made
-                //by kugoo, we have to parse it.
-                //Parse the content from Base64 encoding and uncompress the
-                //data.
-                QString rawKRCContent=
-                        parseKRC(QByteArray::fromBase64(
-                                     resultObject.value("content").toString(
-                                         ).toUtf8())),
-                        lyricsCache;
-                //First remove all the <xx,xxx,xx> item in the content.
-                rawKRCContent.replace(QRegExp("<\\d*,\\d*,\\d*>"), "");
-                //Split the lyrics into rows.
-                QStringList &&dataResult=rawKRCContent.split("\n");
-                //Check each line of the data result.
-                for(auto i : dataResult)
+                //Ignore the empty line.
+                continue;
+            }
+            //Check is the lyrics line coverd by a [].
+            if(lyricsLine.at(0)=='[')
+            {
+                //Check the last character.
+                if(lyricsLine.at(lyricsLine.size()-1)==']')
                 {
-                    //Get the simplified result of the i, remove the \r and \n.
-                    QString &&lyricsLine=i.simplified();
-                    //Check the result.
-                    if(lyricsLine.length()<2)
+                    //Find the colon ':' in the string.
+                    int colonPosition=lyricsLine.indexOf(':');
+                    //Check colon position.
+                    if(colonPosition==-1)
                     {
-                        //Ignore the empty line.
+                        //Ignore the line and find next one.
                         continue;
                     }
-                    //Check is the lyrics line coverd by a [].
-                    if(lyricsLine.at(0)=='[')
+                    //Then check the header.
+                    //If the attribute is in the data list, then throw
+                    //it into the lyrics cache.
+                    if(m_lyricsAttributeHeader.contains(
+                                lyricsLine.mid(
+                                    1,
+                                    colonPosition-1).toLower()))
                     {
-                        //Check the last character.
-                        if(lyricsLine.at(lyricsLine.size()-1)==']')
-                        {
-                            //Find the colon ':' in the string.
-                            int colonPosition=lyricsLine.indexOf(':');
-                            //Check colon position.
-                            if(colonPosition==-1)
-                            {
-                                //Ignore the line and find next one.
-                                continue;
-                            }
-                            //Then check the header.
-                            //If the attribute is in the data list, then throw
-                            //it into the lyrics cache.
-                            if(m_lyricsAttributeHeader.contains(
-                                        lyricsLine.mid(
-                                            1,
-                                            colonPosition-1).toLower()))
-                            {
-                                //Append line.
-                                lyricsCache.append(lyricsLine);
-                                //Append enter char.
-                                lyricsCache.append("\n");
-                            }
-                            //Go to the next line.
-                            continue;
-                        }
-                        //Find the ']' position.
-                        int rightBracketPosition=lyricsLine.indexOf(']'),
+                        //Append line.
+                        lyricsCache.append(lyricsLine);
+                        //Append enter char.
+                        lyricsCache.append("\n");
+                    }
+                    //Go to the next line.
+                    continue;
+                }
+                //Find the ']' position.
+                int rightBracketPosition=lyricsLine.indexOf(']'),
                         //Parse the inside of the bracket, find the ms pos.
                         //Find the splitter ','.
-                                commaPosition=lyricsLine.indexOf(',');
-                        //If we cannot find the ']' or ',', then we could ignore
-                        //the line.
-                        if(rightBracketPosition==-1 || commaPosition==-1)
-                        {
-                            //Go to next line.
-                            continue;
-                        }
-                        //Translate the number.
-                        bool translateResult=false;
-                        //Translate to longlong.
-                        qint64 position=
-                                lyricsLine.mid(1,
-                                               commaPosition-1).toLongLong(
-                                    &translateResult, 10);
-                        //Check the result.
-                        if(!translateResult)
-                        {
-                            //Ignore the line.
-                            continue;
-                        }
-                        //The position is in ms unit, translate to LRC format
-                        //time.
-                        qint64 minuate=position/60000,
-                               second=(position-minuate*60000)/1000,
-                               msecond=
-                                ((position-minuate*60000)-second*1000)/10;
-                        //Translate them back to lyrics line.
-                        lyricsCache.append("["+
-                                  (minuate<10?"0":QString())+
-                                  QString::number(minuate)+":"+
-                                  (second<10?"0":QString())+
-                                  QString::number(second)+":"+
-                                  (msecond<10?"0":QString())+
-                                  QString::number(msecond)+
-                                  lyricsLine.mid(rightBracketPosition)+"\n");
-                    }
+                        commaPosition=lyricsLine.indexOf(',');
+                //If we cannot find the ']' or ',', then we could ignore
+                //the line.
+                if(rightBracketPosition==-1 || commaPosition==-1)
+                {
+                    //Go to next line.
+                    continue;
                 }
-                //Save the current detail to the list.
-                saveLyrics(detailInfo, lyricsCache, currentDetails, lyricsList);
+                //Translate the number.
+                bool translateResult=false;
+                //Translate to longlong.
+                qint64 position=
+                        lyricsLine.mid(1,commaPosition-1).toLongLong(
+                            &translateResult, 10);
+                //Check the result.
+                if(!translateResult)
+                {
+                    //Ignore the line.
+                    continue;
+                }
+                //The position is in ms unit, translate to LRC format
+                //time.
+                qint64 minuate=position/60000,
+                        second=(position-minuate*60000)/1000,
+                        msecond=
+                        ((position-minuate*60000)-second*1000)/10;
+                //Translate them back to lyrics line.
+                lyricsCache.append("["+
+                                   (minuate<10?"0":QString())+
+                                   QString::number(minuate)+":"+
+                                   (second<10?"0":QString())+
+                                   QString::number(second)+":"+
+                                   (msecond<10?"0":QString())+
+                                   QString::number(msecond)+
+                                   lyricsLine.mid(rightBracketPosition)+"\n");
             }
         }
+        //Save the current detail to the list.
+        saveLyrics(detailInfo, lyricsCache, currentDetails, lyricsList);
     }
 }
 

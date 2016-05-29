@@ -71,6 +71,7 @@ void KNMusicOnlineLyrics::downloadLyrics(
     //Download the lyrics data via all the plugins.
     for(auto i=m_downloaders.begin(); i!=m_downloaders.end(); ++i)
     {
+        qDebug()<<(*i)->downloaderName();
         //Try to download the lyrics from all the remote server.
         (*i)->downloadLyrics(detailInfo, lyricsList);
     }
