@@ -41,6 +41,14 @@ public:
      */
     QPixmap albumArt() const;
 
+    /*!
+     * \brief Check the mouse position, whether the mouse is inside the widget.
+     * If so, emit show album art signal.
+     * \return If the mouse pointer is inside the title, then it will return
+     * true.
+     */
+    bool checkMousePosition();
+
 signals:
     /*!
      * \brief When the mouse is moving on this widget, this signal is emitted to

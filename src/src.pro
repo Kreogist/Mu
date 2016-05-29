@@ -27,7 +27,7 @@ QT += \
     network
 
 # Enabled C++ 11 configures.
-CONFIG += c++11
+CONFIG += c++11 INTEL64
 
 # Add translation paths for Qt Linguist to generate translation files.
 TRANSLATIONS += \

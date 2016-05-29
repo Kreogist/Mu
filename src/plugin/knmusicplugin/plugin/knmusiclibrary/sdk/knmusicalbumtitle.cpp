@@ -16,10 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
+#include <QCursor>
 
 #include "knmusicglobal.h"
 
 #include "knmusicalbumtitle.h"
+
+#include <QDebug>
 
 KNMusicAlbumTitle::KNMusicAlbumTitle(QWidget *parent) :
     QWidget(parent),
@@ -133,4 +136,10 @@ void KNMusicAlbumTitle::clearAlbumArt()
     m_albumArt=QPixmap();
     //Update the scaled image.
     updateScaledAlbumArt();
+}
+
+bool KNMusicAlbumTitle::checkMousePosition()
+{
+    //Check the mouse position.
+    return rect().contains(mapFromGlobal(QCursor::pos()));
 }

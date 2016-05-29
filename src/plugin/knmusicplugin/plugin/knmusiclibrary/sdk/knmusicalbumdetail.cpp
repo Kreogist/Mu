@@ -429,6 +429,12 @@ void KNMusicAlbumDetail::onActionExpandFinished()
     m_detailHandler.append(
                 connect(m_albumArt, &KNMusicAlbumTitle::requireHideAlbumArt,
                         this, &KNMusicAlbumDetail::onActionHideAlbumArt));
+    //Check mouse position.
+    if(m_albumArt->checkMousePosition())
+    {
+        //Get the album art.
+        onActionShowAlbumArt();
+    }
 }
 
 void KNMusicAlbumDetail::onActionShowAlbumArt()
