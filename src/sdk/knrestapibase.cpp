@@ -25,6 +25,10 @@
 
 #include <QDebug>
 
+#define PermanentlyMoved 301
+#define TemporarilyMoved 302
+#define MaxRedirectCount 5
+
 KNRestApiBase::KNRestApiBase(QObject *parent) :
     QObject(parent),
     m_downloadedSize(-1),
@@ -203,7 +207,7 @@ int KNRestApiBase::put(const QNetworkRequest &request,
     return -1;
 }
 
-int KNRestApiBase::get(const QNetworkRequest &request,
+int KNRestApiBase::get(QNetworkRequest request,
                        QByteArray &responseData,
                        bool clearCache)
 {
@@ -219,68 +223,95 @@ int KNRestApiBase::get(const QNetworkRequest &request,
     m_lastDownloadedSize=-1;
     //Generate the quit handler and the reply pointer.
     m_currentReply=nullptr;
+    //Initial the response code.
+    int responseCode=-1, redirectCountDown=MaxRedirectCount;
     //Generate the waiting loop.
     QEventLoop stuckWatingLoop;
-    //Launch the network manager.
-    m_currentReply=m_networkManager->get(request);
-    //Check reply pointer.
-    if(m_currentReply)
+    //Do until there's no redirect.
+    while(redirectCountDown--)
     {
-        //Link the reply with the wating loop.
-        linkHandler(m_currentReply, &stuckWatingLoop);
-        //Link the current reply downloaded signal to updater.
-        m_timeoutHandler.append(
-                    connect(m_currentReply, &QNetworkReply::downloadProgress,
-                            this, &KNRestApiBase::onActionGetDownloading));
-        m_timeoutHandler.append(
-                    connect(this, &KNRestApiBase::timeout,
-                            &stuckWatingLoop, &QEventLoop::quit));
-        //Link the timeout to downloaded check.
-        m_timeoutHandler.append(
-                    connect(m_timeout, &QTimer::timeout,
-                            this, &KNRestApiBase::onActionDownloadCheck,
-                            Qt::QueuedConnection));
-        //Before we start the loop, we need to check whether the reply is done.
-        if(m_currentReply &&
-                (!m_currentReply->isFinished()))
+        //Launch the network manager.
+        m_currentReply=m_networkManager->get(request);
+        //Check reply pointer.
+        if(m_currentReply)
         {
-            //Start timer.
-            m_timeout->start();
-            //Start stucked loop.
-            stuckWatingLoop.exec();
+            //Link the reply with the wating loop.
+            linkHandler(m_currentReply, &stuckWatingLoop);
+            //Link the current reply downloaded signal to updater.
+            m_timeoutHandler.append(
+                        connect(m_currentReply, &QNetworkReply::downloadProgress,
+                                this, &KNRestApiBase::onActionGetDownloading));
+            m_timeoutHandler.append(
+                        connect(this, &KNRestApiBase::timeout,
+                                &stuckWatingLoop, &QEventLoop::quit));
+            //Link the timeout to downloaded check.
+            m_timeoutHandler.append(
+                        connect(m_timeout, &QTimer::timeout,
+                                this, &KNRestApiBase::onActionDownloadCheck,
+                                Qt::QueuedConnection));
+            //Before we start the loop, we need to check whether the reply is done.
+            if(m_currentReply &&
+                    (!m_currentReply->isFinished()))
+            {
+                //Start timer.
+                m_timeout->start();
+                //Start stucked loop.
+                stuckWatingLoop.exec();
+            }
+            //Stop the timer.
+            m_timeout->stop();
+            //Disconnect all.
+            m_timeoutHandler.disconnectAll();
+            //Check whether reply is still available.
+            if(!m_currentReply)
+            {
+                //Failed when current reply is not valid at all.
+                return -1;
+            }
+            //Check out whether it's timeout.
+            if(m_currentReply->isRunning())
+            {
+                //It should be time out.
+                m_currentReply->abort();
+            }
+            else
+            {
+                //Get the response code.
+                responseCode=m_currentReply->attribute(
+                            QNetworkRequest::HttpStatusCodeAttribute).toInt();
+                //Get the data from the reply.
+                responseData=m_currentReply->readAll();
+            }
+            //Check response code.
+            bool redirectFlag=(responseCode==PermanentlyMoved ||
+                               responseCode==TemporarilyMoved);
+            //If need to redirect,
+            if(redirectFlag)
+            {
+                //Get the new url.
+                QString targetUrl=
+                        m_currentReply->header(QNetworkRequest::LocationHeader)
+                        .toString();
+                qDebug()<<"Redirect to"<<targetUrl;
+                //Check out the target url is the same as original.
+                if(targetUrl==request.url().toString())
+                {
+                    //Infinite recursion.
+                    return -1;
+                }
+                //Update the request url.
+                request.setUrl(QUrl(targetUrl));
+            }
+            //Clear the reply.
+            m_currentReply->deleteLater();
+            //Reset the current reply.
+            m_currentReply=nullptr;
+            //Mission complete when we don't need to update url.
+            if(!redirectFlag)
+            {
+                return responseCode;
+            }
         }
-        //Stop the timer.
-        m_timeout->stop();
-        //Disconnect all.
-        m_timeoutHandler.disconnectAll();
-        //Initial the response code.
-        int responseCode=-1;
-        //Check whether reply is still available.
-        if(!m_currentReply)
-        {
-            //Failed when current reply is not valid at all.
-            return -1;
-        }
-        //Check out whether it's timeout.
-        if(m_currentReply->isRunning())
-        {
-            //It should be time out.
-            m_currentReply->abort();
-        }
-        else
-        {
-            //Get the response code.
-            responseCode=m_currentReply->attribute(
-                        QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            //Get the data from the reply.
-            responseData=m_currentReply->readAll();
-        }
-        //Clear the reply.
-        m_currentReply->deleteLater();
-        //Reset the current reply.
-        m_currentReply=nullptr;
-        //Mission complete.
-        return responseCode;
     }
     //Failed to connect to server.
     return -1;

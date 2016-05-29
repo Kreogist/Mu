@@ -117,7 +117,7 @@ public slots:
      * \return HTTP response code. If we cannot send the get, then it will be
      * -1.
      */
-    int get(const QNetworkRequest &request,
+    int get(QNetworkRequest request,
             QByteArray &responseData,
             bool clearCache=true);
 
