@@ -482,6 +482,8 @@ QRegion KNMusicAlbumView::visualRegionForSelection(
 
 void KNMusicAlbumView::mousePressEvent(QMouseEvent *event)
 {
+    //Stop the animation as soon as possible.
+    m_scrollAnime->stop();
     //Do the original press event.
     QAbstractItemView::mousePressEvent(event);
     //Get the mouse down index.
@@ -520,6 +522,61 @@ void KNMusicAlbumView::leaveEvent(QEvent *event)
     QAbstractItemView::leaveEvent(event);
     //Start mouse leave anime.
     startAnime(0);
+}
+
+void KNMusicAlbumView::keyReleaseEvent(QKeyEvent *event)
+{
+    //Check the key press code.
+    switch(event->key())
+    {
+    case Qt::Key_PageDown:
+        //Use timeline to move to the position.
+        m_scrollAnime->stop();
+        m_scrollAnime->setFrameRange(verticalScrollBar()->value(),
+                                     verticalScrollBar()->value() +
+                                     (height()>>1));
+        m_scrollAnime->start();
+        break;
+    case Qt::Key_PageUp:
+        //Use timeline to move to the position.
+        m_scrollAnime->stop();
+        m_scrollAnime->setFrameRange(verticalScrollBar()->value(),
+                                     verticalScrollBar()->value() -
+                                     (height()>>1));
+        m_scrollAnime->start();
+        break;
+    case Qt::Key_Down:
+        //Stop the scroll anime.
+        m_scrollAnime->stop();
+        //Manually update the position.
+        verticalScrollBar()->setValue(verticalScrollBar()->value() +
+                                      (m_itemSpacingHeight>>2));
+        break;
+    case Qt::Key_Up:
+        //Use timeline to move to the position.
+        m_scrollAnime->stop();
+        //Manually update the position.
+        verticalScrollBar()->setValue(verticalScrollBar()->value() -
+                                      (m_itemSpacingHeight>>2));
+        break;
+    case Qt::Key_Home:
+        //Use timeline to move to the position.
+        m_scrollAnime->stop();
+        m_scrollAnime->setFrameRange(verticalScrollBar()->value(),
+                                     0);
+        m_scrollAnime->start();
+        break;
+    case Qt::Key_End:
+        //Use timeline to move to the position.
+        m_scrollAnime->stop();
+        m_scrollAnime->setFrameRange(verticalScrollBar()->value(),
+                                     verticalScrollBar()->maximum());
+        m_scrollAnime->start();
+        break;
+    default:
+        //Do original key press event.
+        QAbstractItemView::keyReleaseEvent(event);
+    }
 }
 
 void KNMusicAlbumView::updateGeometries()

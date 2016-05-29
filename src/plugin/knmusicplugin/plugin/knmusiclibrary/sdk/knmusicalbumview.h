@@ -167,6 +167,11 @@ protected:
      */
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QAbstractItemView::keyReleaseEvent().
+     */
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+
 protected slots:
     /*!
      * \brief Reimplemented from QAbstractItemView::updateGeometries().
