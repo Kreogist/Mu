@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QSharedMemory>
+#include <QFileOpenEvent>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QDataStream>
@@ -89,6 +90,26 @@ KNSingletonApplication::KNSingletonApplication(int &argc,
 bool KNSingletonApplication::isInstanceRunning() const
 {
     return m_isInstanceRunning;
+}
+
+bool KNSingletonApplication::event(QEvent *e)
+{
+    //Under Mac OS X, we have to handle open file event as a new argument.
+    if(e->type()==QEvent::FileOpen)
+    {
+        //Cast event as file open event.
+        QFileOpenEvent *fileOpenEvent=static_cast<QFileOpenEvent *>(e);
+        //Prepare the message stringlist.
+        QStringList parameters;
+        //Insert an empty string for the first part, follow the file path.
+        parameters << "" << fileOpenEvent->file();
+        //Emit the file open information.
+        emit messageAvailable(parameters);
+        //Mission complete.
+        return true;
+    }
+    //Do original event.
+    return QApplication::event(e);
 }
 
 void KNSingletonApplication::onMessageReceive()

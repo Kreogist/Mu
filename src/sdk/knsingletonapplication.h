@@ -65,6 +65,12 @@ signals:
 
 public slots:
 
+protected:
+    /*!
+     * \brief Reimplemented from QApplication::event().
+     */
+    bool event(QEvent *e) Q_DECL_OVERRIDE;
+
 private slots:
     void onMessageReceive();
 
