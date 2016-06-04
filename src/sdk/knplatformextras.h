@@ -41,6 +41,22 @@ public:
         ButtonShuffle,
         LoopStateButtonStateCount
     };
+
+    struct PlatformPlayingInfo
+    {
+        bool isNull;
+        QString name;
+        QString artist;
+        QString album;
+        PlatformPlayingInfo() :
+            isNull(true),
+            name(QString()),
+            artist(QString()),
+            album(QString())
+        {
+        }
+    };
+
     /*!
      * \brief Construct a KNPlatformExtras object.
      * \param parent The parent object.
@@ -123,6 +139,12 @@ public slots:
      * \param loopState Current loop state. Defined in LoopStateButtonState.
      */
     virtual void onActionLoopStateChanged(const int &loopState)=0;
+
+    /*!
+     * \brief When the playing song is changed, this slot must be called.
+     * \param info The playing song information struct.
+     */
+    virtual void onActionNowPlayingChanged(const PlatformPlayingInfo &info)=0;
 
     /*!
      * \brief Load preference of platform special from the configure files.

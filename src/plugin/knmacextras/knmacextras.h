@@ -12,39 +12,30 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#ifndef KNWINDOWSEXTRAS_H
-#define KNWINDOWSEXTRAS_H
-
-#include <QSystemTrayIcon>
+#ifndef KNMACEXTRAS_H
+#define KNMACEXTRAS_H
 
 #include "knplatformextras.h"
 
-class QMenu;
 class QAction;
-class QSystemTrayIcon;
-class QWinThumbnailToolBar;
-class QWinThumbnailToolButton;
-class KNMainWindow;
+class QMenu;
 /*!
- * \brief The KNWindowsExtras class provides some extra features under Windows.
- * \n
- * Including the following special functions:
- *  - Task bar control button for Windows Vista/7 and above.
- *  - Tray icon.
+ * \brief The KNMacExtras class provides some extra interface under Mac OS X.\n
+ * Including the following features:
+ *  - Dock bar menu.
  */
-class KNWindowsExtras : public KNPlatformExtras
+class KNMacExtras : public KNPlatformExtras
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNWindowsExtras object with given parent.
+     * \brief Construct a KNMacExtras object with given parent.
      * \param parent The parent object.
      */
-    explicit KNWindowsExtras(QObject *parent = 0);
+    explicit KNMacExtras(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNPlatformExtras::setMainWindow().
@@ -87,38 +78,30 @@ public slots:
 
 private slots:
     void retranslate();
-    void onActionPlayAndPause();
-    void onActionTrayIconActivate(
-            const QSystemTrayIcon::ActivationReason &reason);
-    void onActionTrayMenuActionTriggered(const int &index);
 
 private:
-    inline void setButtonIcon(const int &index, const QPixmap &icon);
-    enum ThumbnailActions
+    enum MacDockMenuActions
     {
-        PlayPrev,
-        PlayAndPause,
-        PlayNext,
-        VolumeUp,
-        VolumeDown,
-        Mute,
-        LoopMode,
-        ThumbnailActionsCount
+        NowPlaying,
+        SongName,
+        ArtistAndAlbumName,
+        PlayNPause,
+        NextSong,
+        PreviousSong,
+        MacDockMenuActionCount
     };
-    enum TrayIconMenuActions
+    enum MacDockSubMenus
     {
-        Exit,
-        TrayIconMenuActionCount
+        Repeat,
+        MacDockSubMenuCount
     };
-    QPixmap m_playIcon, m_pauseIcon, m_muteOn, m_muteOff,
-            m_loopStates[LoopStateButtonStateCount];
-    QAction *m_trayIconActions[TrayIconMenuActionCount];
-    QWinThumbnailToolButton *m_thumbnailButtons[ThumbnailActionsCount];
-    QWinThumbnailToolBar *m_thumbnailToolbar;
-    QSystemTrayIcon *m_trayIcon;
-    QMenu *m_trayIconMenu;
-    KNMainWindow *m_mainWindow;
+    inline void updatePlayingInfo();
+    inline void updatePlayState();
+    QMenu *m_subMenus[MacDockSubMenuCount];
+    QAction *m_menuAction[MacDockMenuActionCount];
+    QString m_playText, m_pauseText, m_noArtistText, m_noAlbumText;
+    PlatformPlayingInfo m_nowPlaying;
     bool m_isStatePlay;
 };
 
-#endif // KNWINDOWSEXTRAS_H
+#endif // KNMACEXTRAS_H

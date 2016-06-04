@@ -140,6 +140,9 @@ macx: {
     # Brew configure. Use brew to install all your libs, e.g. FFMpeg.
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
+    # Add Mac OS X platform special extras.
+    SOURCES += plugin/knmacextras/knmacextras.cpp
+    HEADERS += plugin/knmacextras/knmacextras.h
 }
 
 linux: {

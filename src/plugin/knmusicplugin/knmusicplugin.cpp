@@ -336,6 +336,29 @@ void KNMusicPlugin::setPlatformExtras(KNPlatformExtras *platformExtras)
                         break;
                     }
                 });
+        connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
+                [=](const KNMusicAnalysisItem &analysisItem)
+                {
+                    //Construct a platform playing items.
+                    KNPlatformExtras::PlatformPlayingInfo playingInfo;
+                    //Check the item can't be null.
+                    playingInfo.isNull=false;
+                    //Save the information.
+                    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
+                    //Set the information.
+                    playingInfo.name=detailInfo.textLists[Name].toString();
+                    playingInfo.artist=detailInfo.textLists[Artist].toString();
+                    playingInfo.album=detailInfo.textLists[Album].toString();
+                    //Set the platform extras information.
+                    platformExtras->onActionNowPlayingChanged(playingInfo);
+                });
+        connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
+                [=]
+                {
+                    //Set a null information.
+                    platformExtras->onActionNowPlayingChanged(
+                                KNPlatformExtras::PlatformPlayingInfo());
+                });
         //Sync the loop state data by calling a fake loop state changed signal.
         nowPlaying->loopStateChanged(nowPlaying->loopState());
     }

@@ -151,6 +151,11 @@ void KNWindowsExtras::onActionLoopStateChanged(const int &loopState)
     setButtonIcon(LoopMode, m_loopStates[loopState]);
 }
 
+void KNWindowsExtras::onActionNowPlayingChanged(const PlatformPlayingInfo &info)
+{
+    Q_UNUSED(info)
+}
+
 void KNWindowsExtras::savePreference()
 {
     ;
