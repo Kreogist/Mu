@@ -140,6 +140,8 @@ void KNMusicAlbumTitle::clearAlbumArt()
 
 bool KNMusicAlbumTitle::checkMousePosition()
 {
+    //Get the cursor relative position.
+    QPoint mousePosition=mapFromGlobal(QCursor::pos());
     //Check the mouse position.
-    return rect().contains(mapFromGlobal(QCursor::pos()));
+    return rect().contains(mousePosition) && (mousePosition.x()<(width()>>1));
 }
