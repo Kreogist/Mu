@@ -37,6 +37,10 @@ class KNWindowsExtras : public KNPlatformExtras
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNWindowsExtras object with given parent.
+     * \param parent The parent object.
+     */
     explicit KNWindowsExtras(QObject *parent = 0);
 
     /*!
