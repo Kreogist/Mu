@@ -1,3 +1,20 @@
+mu(0.9.9.3) unstable; urgency=medium
+
+  * Support Netease online lyrics module.
+  * Support Key controls on album view tab including arrows and PGUP/DOWN.
+  * Support menu key under all platform for opening menu.
+  * Support Mac OS X dock menu.
+  * Support Mac OS X file association type.
+  * Update the scroll bar base color policy.
+  * Improve the debian changelog file format to the correct one.
+  * Fixed the album detail widget won't expand bug.
+  * Fixed the online lyrics might download several times bug.
+  * Fixed the download lyrics will resume playing bug.
+  * Fixed the application cannot be launched after a crash.
+  * Fixed the scroll bar initial wrong position bug.
+
+ -- Kreogist Dev Team <kreogistdevteam@126.com>  Fri, 09 Apr 2016 00:00:00 +1100  
+
 mu (0.9.9.2) unstable; urgency=medium
 
   * New scroll bar for album view, all tree view and list view.
