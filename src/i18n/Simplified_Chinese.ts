@@ -358,6 +358,44 @@
     </message>
 </context>
 <context>
+    <name>KNMacExtras</name>
+    <message>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="111"/>
+        <source>Now Playing</source>
+        <translation>正在播放</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="112"/>
+        <source>Next</source>
+        <translation>下一个</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="113"/>
+        <source>Previous</source>
+        <translation>上一个</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="115"/>
+        <source>Play</source>
+        <translation>播放</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="116"/>
+        <source>Pause</source>
+        <translation>暂停</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="117"/>
+        <source>No Artist</source>
+        <translation>没有艺术家</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="118"/>
+        <source>No Album</source>
+        <translation>没有专辑</translation>
+    </message>
+</context>
+<context>
     <name>KNMainWindow</name>
     <message>
         <location filename="../sdk/knmainwindow.cpp" line="258"/>
@@ -730,82 +768,82 @@
 <context>
     <name>KNMusicHeaderPlayer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="619"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="615"/>
         <source>Show main player</source>
         <translation>显示主播放器</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="620"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="616"/>
         <source>Show mini player</source>
         <translation>显示迷你播放器</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="621"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="617"/>
         <source>More</source>
         <translation>更多选项</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="623"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="619"/>
         <source>Rating</source>
         <translation>评分</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="624"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="620"/>
         <source>Locate</source>
         <translation>定位歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="626"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="622"/>
         <source>(No star)</source>
         <translation>（无星级）</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="628"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="624"/>
         <source>Get Info</source>
         <translation>查看信息</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="630"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="626"/>
         <source>Download Lyrics</source>
         <translation>下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="633"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="629"/>
         <source>Show in Explorer</source>
         <translation>打开文件位置</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="636"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="632"/>
         <source>Show in Finder</source>
         <translation>在 Finder 中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="640"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="636"/>
         <source>Show the contains folder</source>
         <translation>打开文件所在文件夹</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="642"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="638"/>
         <source>Locate the playing song</source>
         <translation>定位正在播放歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="644"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="640"/>
         <source>Show in songs</source>
         <translation>在歌曲标签中显示歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="645"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="641"/>
         <source>Show in artists</source>
         <translation>在艺术家标签中显示歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="646"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="642"/>
         <source>Show in albums</source>
         <translation>在专辑标签中显示歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="647"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="643"/>
         <source>Show in genres</source>
         <translation>在流派中显示歌曲</translation>
     </message>
@@ -998,6 +1036,14 @@ To add songs to library, drag your songs here.</source>
         <location filename="../plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="90"/>
         <source>Delete %1 items</source>
         <translation>移除 %1 首歌曲</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicNeteaseLyrics</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp" line="34"/>
+        <source>Netease Cloud Music</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1262,7 +1308,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="204"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="205"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -1725,7 +1771,7 @@ Qt 是 The Qt Company Ltd 开发的开源项目。请访问 qt.io 获取更多�
 <context>
     <name>KNWindowsExtras</name>
     <message>
-        <location filename="../plugin/knwindowsextras/knwindowsextras.cpp" line="167"/>
+        <location filename="../plugin/knwindowsextras/knwindowsextras.cpp" line="172"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>

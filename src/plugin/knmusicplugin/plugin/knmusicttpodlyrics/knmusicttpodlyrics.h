@@ -26,6 +26,7 @@
  */
 class KNMusicTtpodLyrics : public KNMusicLyricsDownloader
 {
+    Q_OBJECT
 public:
     /*!
      * \brief Construct a KNMusicTTPodLyrics object.
