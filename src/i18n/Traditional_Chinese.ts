@@ -362,37 +362,37 @@
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="111"/>
         <source>Now Playing</source>
-        <translation type="unfinished"></translation>
+        <translation>正在播放</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="112"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>下一個</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="113"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>上一個</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="115"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>播放</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="116"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>暫停</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="117"/>
         <source>No Artist</source>
-        <translation type="unfinished">沒有藝術家</translation>
+        <translation>沒有藝術家</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="118"/>
         <source>No Album</source>
-        <translation type="unfinished">沒有專輯</translation>
+        <translation>沒有專輯</translation>
     </message>
 </context>
 <context>
