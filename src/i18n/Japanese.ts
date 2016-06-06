@@ -6,17 +6,17 @@
     <message>
         <location filename="../sdk/account/knaccountdetailbox.cpp" line="101"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountdetailbox.cpp" line="102"/>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>ニックネーム</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountdetailbox.cpp" line="103"/>
         <source>E-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>電子メイル</translation>
     </message>
 </context>
 <context>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="276"/>
         <source>Username or password incorrect.</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名またはパスワードが正しくありません。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="282"/>
@@ -67,17 +67,17 @@
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="281"/>
         <source>Sign in</source>
-        <translation type="unfinished"></translation>
+        <translation>ログイン</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="274"/>
         <source>Connection Error. Please check Internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバーへ接続できません。インターネット接続を確認してください。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="277"/>
         <source>Kreogist Account login failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kreogist アカウントのログインに失敗しました.</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="278"/>
@@ -87,27 +87,27 @@
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="286"/>
         <source>Username/E-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名またはメールアドレス</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="287"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワード</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="289"/>
         <source>Create an account</source>
-        <translation type="unfinished"></translation>
+        <translation>新規会員登録</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="290"/>
         <source>Forget password?</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワードをお忘れですか？</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="292"/>
         <source>Login with another account</source>
-        <translation type="unfinished"></translation>
+        <translation>別のアカウントでログインします</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@
     <message>
         <location filename="../sdk/account/knaccountpanel.cpp" line="260"/>
         <source>Account Update Success</source>
-        <translation type="unfinished"></translation>
+        <translation>アカウントは正常に更新されました</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountpanel.cpp" line="261"/>
@@ -128,7 +128,7 @@
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="147"/>
         <source>Set new password</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいパスワードを設定してください</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="148"/>
@@ -138,12 +138,12 @@
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="152"/>
         <source>New Password</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいパスワード</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="153"/>
         <source>Input New Password Again</source>
-        <translation type="unfinished"></translation>
+        <translation>新しいパスワード再入力</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
@@ -209,17 +209,17 @@
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="175"/>
         <source>Username</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザー名</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="176"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>パスワード</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="177"/>
         <source>E-mail</source>
-        <translation type="unfinished"></translation>
+        <translation>電子メイル</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="179"/>
@@ -229,7 +229,7 @@
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="182"/>
         <source>Unknown error. Please check your Internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバーへ接続できません。インターネット接続を確認してください。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="184"/>
@@ -280,7 +280,7 @@
     <message>
         <location filename="../sdk/account/knaccountwaitingpanel.cpp" line="70"/>
         <source>Please wait</source>
-        <translation type="unfinished"></translation>
+        <translation>今しばらくお待ち頂きますようお願い申し上げます</translation>
     </message>
 </context>
 <context>
@@ -293,17 +293,17 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="128"/>
         <source>Portable Network Graphics</source>
-        <translation type="unfinished">ポータブル・ネットワーク・グラフィックス</translation>
+        <translation>ポータブル・ネットワーク・グラフィックス</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="130"/>
         <source>Joint Photographic Experts Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Joint Photographic Experts Group</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="132"/>
         <source>Windows Bitmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows Bitmap</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="134"/>
@@ -323,12 +323,12 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="141"/>
         <source>All supported files</source>
-        <translation type="unfinished">全てのフォーマット</translation>
+        <translation>全てのフォーマット</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="154"/>
         <source>Graphic Interchange Format</source>
-        <translation type="unfinished"></translation>
+        <translation>グラフィックス・インターチェンジ・フォーマット</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="156"/>
@@ -346,37 +346,37 @@
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="111"/>
         <source>Now Playing</source>
-        <translation type="unfinished"></translation>
+        <translation>再生中</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="112"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>次へ</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="113"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>前へ</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="115"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>再生</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="116"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>一時停止</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="117"/>
         <source>No Artist</source>
-        <translation type="unfinished">アーティストなし</translation>
+        <translation>アーティストなし</translation>
     </message>
     <message>
         <location filename="../plugin/knmacextras/knmacextras.cpp" line="118"/>
         <source>No Album</source>
-        <translation type="unfinished">アルバムなし</translation>
+        <translation>アルバムなし</translation>
     </message>
 </context>
 <context>
@@ -789,7 +789,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="626"/>
         <source>Download Lyrics</source>
-        <translation type="unfinished">歌詞をダウンロード</translation>
+        <translation>歌詞をダウンロード</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="629"/>
@@ -960,7 +960,7 @@ To add songs to library, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="239"/>
         <source>No lyrics</source>
-        <translation type="unfinished"></translation>
+        <translation>結果はありません</translation>
     </message>
 </context>
 <context>
