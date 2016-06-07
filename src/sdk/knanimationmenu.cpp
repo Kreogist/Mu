@@ -78,9 +78,9 @@ void KNAnimationMenu::paintEvent(QPaintEvent *event)
     if(m_showContent)
     {
 #endif
+#ifdef Q_OS_MACX
         //Initial a painter.
         QPainter painter(this);
-#ifdef Q_OS_MACX
         //For Mac OS X, we have to force change the alpha of the back color to
         //be 255.
         QColor baseColor=palette().color(QPalette::Base);
@@ -94,6 +94,8 @@ void KNAnimationMenu::paintEvent(QPaintEvent *event)
         //Draw the menu content.
         QMenu::paintEvent(event);
 #ifndef Q_OS_MACX
+        //Initial a painter.
+        QPainter painter(this);
         //Draw a border around the menu.
         painter.setPen(QColor(255,255,255,50));
         painter.drawRect(0, 0, width()-1, height()-1);
