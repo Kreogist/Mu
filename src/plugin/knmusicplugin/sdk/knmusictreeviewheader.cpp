@@ -16,6 +16,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knmusictreeviewheadermenu.h"
+#include "knthememanager.h"
 
 #include "knmusictreeviewheader.h"
 
@@ -23,6 +24,9 @@ KNMusicTreeViewHeader::KNMusicTreeViewHeader(QWidget *parent) :
     KNMouseSenseHeader(parent),
     m_headerMenu(new KNMusicTreeViewHeaderMenu(this))
 {
+    //Configure the header menu.
+    m_headerMenu->setObjectName("MusicTreeViewHeaderMenu");
+    knTheme->registerWidget(m_headerMenu);
     //Connect the custom context menu show request.
     connect(this, &KNMusicTreeViewHeader::customContextMenuRequested,
             this, &KNMusicTreeViewHeader::showCustomContextMenu);

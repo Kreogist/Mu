@@ -229,6 +229,15 @@
         "Base" : "#00000000",
         "Window" : "#FFFFFF00"
     },
+    "MusicTreeViewHeaderMenu" : {
+        "Parent" : "MouseSenseHeader",
+        "Base" : "#00000000",
+        "Window" : "#00000000",
+        "WindowText" : "#FFFFFF",
+        "Text" : "#FFFFFFFE",
+        "Highlight" : "#606060",
+        "HighlightedText" : "#f7cf3d"
+    },
     "PlaylistTreeView" :{
         "Parent" : "MainWindow",
         "AlternateBase" : "#FFFFFF20",
