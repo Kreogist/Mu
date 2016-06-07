@@ -1,4 +1,4 @@
-mu(0.9.9.3) unstable; urgency=medium
+mu (0.9.9.3) unstable; urgency=medium
 
   * Support Netease online lyrics module.
   * Support Key controls on album view tab including arrows and PGUP/DOWN.
