@@ -136,11 +136,20 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     //Add main window to theme list.
     knTheme->registerWidget(this);
     //Add full screen short cut actions.
+#ifdef Q_OS_LINUX
+    QAction *fullScreen=new QAction(this);
+    fullScreen->setShortcut(QKeySequence(Qt::Key_F11));
+    fullScreen->setShortcutContext(Qt::WindowShortcut);
+    connect(fullScreen, &QAction::triggered,
+            this, &KNMainWindow::onActionFullScreen);
+    addAction(fullScreen);
+#else
     QAction *fullScreen=new QAction(this);
     fullScreen->setShortcut(QKeySequence(QKeySequence::FullScreen));
     connect(fullScreen, &QAction::triggered,
             this, &KNMainWindow::onActionFullScreen);
     addAction(fullScreen);
+#endif
     //Recover the geometry.
     recoverGeometry();
     //Update the animation positions.
