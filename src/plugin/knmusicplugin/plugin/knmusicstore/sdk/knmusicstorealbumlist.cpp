@@ -384,7 +384,6 @@ void KNMusicStoreAlbumList::onActionUpdateOpacity(int value)
 
 void KNMusicStoreAlbumList::onActionUpdateBrightness(int opacity)
 {
-    qDebug()<<"Opacity is:"<<opacity;
     //Configure the horizontal scroll bar.
     QPalette pal=m_scrollBar->palette();
     QColor buttonColor=pal.color(QPalette::Button);
