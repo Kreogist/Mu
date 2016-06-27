@@ -58,6 +58,8 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     //Configure the horizontal scroll bar.
     m_scrollBar->setStyle(KNSaoStyle::instance());
     m_scrollBar->hide();
+    m_scrollBar->setObjectName("MusicStoreAlbumListScrollBar");
+    knTheme->registerWidget(m_scrollBar);
     //Link the scroll bar.
     connect(horizontalScrollBar(), &QScrollBar::valueChanged,
             this, &KNMusicStoreAlbumList::onActionUpdateOpacity);
@@ -68,6 +70,7 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
                  fontMetrics().height() * 3;
     //Set the fixed size of the album list.
     setFixedHeight((StoreAlbumTopSpacing << 1) + m_itemHeight);
+
     //Update the page and single step.
     int albumFullWidth=(StoreAlbumSize + StoreAlbumSpacing);
     horizontalScrollBar()->setPageStep(albumFullWidth);
@@ -78,7 +81,8 @@ KNMusicStoreAlbumList::KNMusicStoreAlbumList(QWidget *parent) :
     //Configure the scroll bar.
     m_scrollBar->move(StoreAlbumShadow,
                       height() - StoreAlbumScrollBarHeight);
-    m_scrollBar->setFixedHeight((StoreAlbumTopSpacing>>2)*3);
+    m_scrollBar->setFixedHeight(12);
+
     //Link time line.
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNMusicStoreAlbumList::onActionUpdateBrightness);
@@ -358,6 +362,8 @@ void KNMusicStoreAlbumList::updateGeometries()
                                (StoreAlbumSize + StoreAlbumSpacing) *
                                m_model->rowCount() - width() +
                                StoreAlbumSpacing));
+    //Check visiblility.
+    m_scrollBar->setVisible(m_scrollBar->maximum()!=0);
     horizontalScrollBar()->setRange(m_scrollBar->minimum(),
                                     m_scrollBar->maximum());
 }
@@ -378,6 +384,7 @@ void KNMusicStoreAlbumList::onActionUpdateOpacity(int value)
 
 void KNMusicStoreAlbumList::onActionUpdateBrightness(int opacity)
 {
+    qDebug()<<"Opacity is:"<<opacity;
     //Configure the horizontal scroll bar.
     QPalette pal=m_scrollBar->palette();
     QColor buttonColor=pal.color(QPalette::Button);

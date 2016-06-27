@@ -20,6 +20,8 @@
 
 #include <QTreeView>
 
+#define StoreAlbumHeaderHeight 38
+
 class QTimeLine;
 /*!
  * \brief The KNMusicStoreAlbumTreeView class provides a tree view for music

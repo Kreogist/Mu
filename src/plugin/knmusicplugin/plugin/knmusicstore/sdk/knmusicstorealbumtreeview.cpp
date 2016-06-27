@@ -53,7 +53,7 @@ KNMusicStoreAlbumTreeView::KNMusicStoreAlbumTreeView(QWidget *parent) :
     KNMouseSenseHeader *header=new KNMouseSenseHeader(this);
     header->setSectionsMovable(false);
     header->setSectionsClickable(false);
-    header->setFixedHeight(38);
+//    header->setFixedHeight(StoreAlbumHeaderHeight);
     setHeader(header);
 
     //Link with theme manager.

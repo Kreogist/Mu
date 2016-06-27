@@ -203,9 +203,11 @@ void KNMusicStoreListWidget::onActionUpdateInfo(int category)
     m_properties[PropertyCompany]->setText(
                 m_albumDetailModel->albumInfo(StoreAlbumReleaseCompany));
     //Update treeview size.
-    m_albumSongView->setMinimumHeight(m_albumSongView->header()->height() +
+    m_albumSongView->setMinimumHeight(StoreAlbumHeaderHeight +
                                       m_albumDetailModel->rowCount() *
                                       SongItemHeight);
+    //Enable the tree view widget.
+    m_albumSongView->setEnabled(true);
     //Resize current widget size.
     setMinimumHeight(sizeHint().height());
 }
@@ -222,6 +224,8 @@ void KNMusicStoreListWidget::onActionShowSongInfo(
     //Get the index from the model.
     if(currentIndex.isValid())
     {
+        //Disable the tree view widget.
+        m_albumSongView->setEnabled(false);
         //Ask to show the song information.
         emit requireShowSong(m_albumDetailModel->songData(currentIndex));
         //Ask to start the network activity.

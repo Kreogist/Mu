@@ -43,6 +43,11 @@
         "Base" : "#00000000",
         "Text" : "#FFFFFF"
     },
+    "MusicStoreAlbumListScrollBar" : {
+        "Parent" : "MusicStoreAlbumList",
+        "Base" : "#FFFFFF",
+        "Button" : "#FFFFFF"
+    },
     "MusicStoreAlbumView" : {
         "Parent" : "MusicStoreAlbumList",
         "AlternateBase" : "#FFFFFF20",
