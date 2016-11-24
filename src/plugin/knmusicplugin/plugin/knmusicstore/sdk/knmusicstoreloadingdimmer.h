@@ -12,23 +12,40 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
+ * along with this program; if not, write to the Free Software
+Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICSTOREDOWNLOADDELEGATE_H
-#define KNMUSICSTOREDOWNLOADDELEGATE_H
 
-#include <QStyledItemDelegate>
+#ifndef KNMUSICSTORELOADINGDIMMER_H
+#define KNMUSICSTORELOADINGDIMMER_H
 
-class KNMusicStoreDownloadDelegate : public QWidget
+#include <QWidget>
+
+class QLabel;
+/*!
+ * \brief The KNMusicStoreLoadingDimmer class provides the initial loading page
+ * for the music store loading page.
+ */
+class KNMusicStoreLoadingDimmer : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNMusicStoreDownloadDelegate(QWidget *parent = 0);
+    /*!
+     * \brief Construct a KNMusicStoreLoadingDimmer widget.
+     * \param parent The parent widget.
+     */
+    explicit KNMusicStoreLoadingDimmer(QWidget *parent = 0);
 
 signals:
 
 public slots:
+
+private slots:
+    void retranslate();
+
+private:
+    QLabel *m_title;
 };
 
-#endif // KNMUSICSTOREDOWNLOADDELEGATE_H
+#endif // KNMUSICSTORELOADINGDIMMER_H

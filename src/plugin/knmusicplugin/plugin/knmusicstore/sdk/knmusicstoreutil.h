@@ -13,98 +13,29 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #ifndef KNMUSICSTOREUTIL_H
 #define KNMUSICSTOREUTIL_H
 
-#include <QPixmap>
-#include <QString>
-#include <QVariant>
-
-#define StoreAlbumSize 140
 
 namespace MusicStoreUtil
 {
-    enum StoreAlbumRole
+    enum MusicStoreError
     {
-        AlbumArtistRole = Qt::UserRole + 1,
-        AlbumFetchDataRole
-    };
-
-    enum StoreSearchCategories
-    {
-        CategorySong,
-        CategoryArtist,
-        CategoryAlbum,
-        StoreSearchCategoryCount
-    };
-
-    enum StoreAlbumDetail
-    {
-        StoreAlbumTitle,
-        StoreAlbumArtist,
-        StoreAlbumReleaseTime,
-        StoreAlbumReleaseCompany,
-        StoreAlbumId,
-        StoreAlbumDetailCount
-    };
-
-    enum StorePanels
-    {
-        PanelHome,
-        PanelSearch,
-        PanelList,
-        PanelSong,
-        StorePanelCount
-    };
-
-    enum StoreStates
-    {
-        StateNetwork,
-        StoreStateCount
-    };
-
-    enum SongProperties
-    {
-        StoreSongName,
-        StoreSongAlbumName,
-        StoreSongAlbumId,
-        StoreSongId,
-        StoreSongLyrics,
-        StoreSongOnlineUrl,
-        StoreSongHighUrl,
-        StoreSongLossLessUrl,
-        SongPropertiesCount
-    };
-
-    struct StoreAlbumListItem
-    {
-        QPixmap albumArt;
-        QString name;
-        QString artist;
-        QVariant albumData;
+        MusicStoreErrorCount
     };
 }
 
 /*!
- * \brief The KNMusicStoreUtil class provides several public value for music
- * store.
+ * \brief The KNMusicStoreUtil class provides several data and static functions.
+ * All the enumeration and structures will be defines here.
  */
 class KNMusicStoreUtil
 {
 public:
-    struct StoreSongItem
-    {
-        QVariant songData;
-        QString name;
-        QString duration;
-        QString artist;
-        QString urlLossless;
-        QString urlHigh;
-        QString urlOnline;
-        int index;
-    };
 
 private:
     KNMusicStoreUtil();

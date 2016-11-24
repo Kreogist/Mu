@@ -460,32 +460,15 @@ SOURCES += \
     sdk/account/knaccountpasswordverification.cpp \
     sdk/account/knaccountdetailbox.cpp \
     sdk/knwaitingwheel.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresultwidget.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumlist.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumlistmodel.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumtreeview.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresongdetailinfo.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchmodel.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreemptywidget.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoretitlebar.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorecontainer.cpp \
     sdk/knanimelabelbutton.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepanel.cpp \
     sdk/kndarkwaitingwheel.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.cpp \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.cpp \
     sdk/account/knaccountresetpanel.cpp \
-    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreloadingdimmer.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -715,35 +698,17 @@ HEADERS += \
     sdk/account/knaccountpasswordverification.h \
     sdk/account/knaccountdetailbox.h \
     sdk/knwaitingwheel.h \
-    plugin/knmusicplugin/sdk/knmusicstorebase.h \
-    plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresultwidget.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorebackend.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumlist.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreutil.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumlistmodel.h \
-    plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbumtreeview.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresongdetailinfo.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchmodel.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreemptywidget.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoretitlebar.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorecontainer.h \
     sdk/knanimelabelbutton.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepanel.h \
     sdk/kndarkwaitingwheel.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.h \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.h \
     sdk/account/knaccountresetpanel.h \
-    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
+    plugin/knmusicplugin/sdk/knmusicstorebase.h \
+    plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreloadingdimmer.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreutil.h
 
 RESOURCES += \
     resource/res.qrc

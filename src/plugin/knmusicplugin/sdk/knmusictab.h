@@ -55,7 +55,7 @@ public:
 
 signals:
     /*!
-     * \brief Ask the tab switcher to requireShowTab
+     * \brief Ask the tab switcher to show the current tab.
      */
     void requireShowTab();
 };

@@ -88,14 +88,8 @@
 #include "plugin/knmusicbackendbass/knmusicbackendbass.h"
 #include "plugin/knmusicbackendbass/knmusicbassanalysiser.h"
 #endif
-#ifdef ENABLE_BACKEND_PHONON
-#include "plugin/knmusicbackendphonon/knmusicbackendphonon.h"
-#endif
 #ifdef ENABLE_BACKEND_QTAV
 #include "plugin/knmusicbackendqtav/knmusicbackendqtav.h"
-#endif
-#ifdef ENABLE_BACKEND_MPV
-#include "plugin/knmusicbackendmpv/knmusicbackendmpv.h"
 #endif
 #ifdef ENABLE_BACKEND_GSTREAMER
 #include "plugin/knmusicbackendgstreamer/knmusicbackendgstreamer.h"
@@ -118,7 +112,7 @@
 #include "plugin/knmusiclibrary/knmusiclibrary.h"
 // Playlist.
 #include "plugin/knmusicplaylist/knmusicplaylist.h"
-// Music Store.
+// Store
 #include "plugin/knmusicstore/knmusicstore.h"
 
 //Globals.
@@ -145,8 +139,7 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr),
     m_miniPlayer(nullptr),
-    m_library(nullptr),
-    m_store(nullptr)
+    m_library(nullptr)
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
@@ -879,14 +872,6 @@ void KNMusicPlugin::initialStore(KNMusicStoreBase *store)
 {
     //Save the store plugin.
     m_store=store;
-    //Check the store plugin first.
-    if(m_store==nullptr)
-    {
-        //Mission complete.
-        return;
-    }
-    //Add tabs to switcher.
-    addMusicTab(m_store);
-    //Load plugins.
-    m_store->loadPlugins();
+    //Add tabs to the switcher.
+    addMusicTab(store);
 }

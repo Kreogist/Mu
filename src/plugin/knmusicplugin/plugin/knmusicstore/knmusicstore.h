@@ -12,49 +12,43 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
+ * along with this program; if not, write to the Free Software
+Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef KNMUSICSTORE_H
 #define KNMUSICSTORE_H
 
-#include <QModelIndex>
-
-#include "sdk/knmusicstoreutil.h"
-
 #include "knmusicstorebase.h"
 
-using namespace MusicStoreUtil;
-
-class QLabel;
-class QPropertyAnimation;
 class KNCategoryTab;
-class KNMusicStorePanel;
-class KNMusicStoreContainer;
-class KNMusicStoreTitleBar;
-class KNMusicStoreDownloadList;
-class KNMusicStoreBackend;
-class KNMusicStoreGlobal;
-class KNMusicStoreHomeWidget;
-class KNMusicStoreSearchResultWidget;
-class KNMusicStoreListWidget;
-class KNMusicStoreSingleSongWidget;
-class KNMusicStoreEmptyWidget;
+class KNMusicStoreLoadingDimmer;
 /*!
- * \brief The KNMusicStore class provides a official standard music store plugin
- * realize. You can treat this plugin module as a standard module.
+ * \brief The KNMusicStore class provides the official music store plugin. The
+ * official plugin provides four pages,and it will be increased in the future:\n
+ *   1. The home page, for provides the several list and some other information.
+ *   2. The search result page, for provides the category search result
+ * information.
+ *   3. The list page, for provides 'list' format data, for example, artist,
+ * albums and collection list.
+ *   4. The single page, for provides single song data.
+ * Besides, the following page should be provided as well:
+ *   1. The loading page, for the initial loading scene.
+ *   2. The error page, for the Internet error display.
+ * All these widget should be provide as a part of the official sdks. This
+ * plugin is only a framework of the music store. The content data will be
+ * provided by plugins, like the lyrics system.
  */
 class KNMusicStore : public KNMusicStoreBase
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStore plugin widget.
-     * \param parent The parent widget pointer.
+     * \brief Construct a KNMusicStore tab widget.
+     * \param parent The parent widget.
      */
     explicit KNMusicStore(QWidget *parent = 0);
-    ~KNMusicStore();
 
     /*!
      * \brief Reimplemented from KNMusicStoreBase::tab().
@@ -65,15 +59,11 @@ public:
      * \brief Reimplemented from KNMusicStoreBase::showIndex().
      */
     void showIndex(KNMusicModel *musicModel,
-                   const QModelIndex &index) Q_DECL_OVERRIDE;
+                   const QModelIndex &index);
 
 signals:
 
 public slots:
-    /*!
-     * \brief Reimplemented from KNMusicStoreBase::loadPlugins().
-     */
-    void loadPlugins() Q_DECL_OVERRIDE;
 
 protected:
     /*!
@@ -81,32 +71,13 @@ protected:
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
-    /*!
-     * \brief Reimplemented from KNMusicStoreBase::showEvent().
-     */
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
-
 private slots:
     void retranslate();
-    void onActionShowPanel(int category);
-    void onActionFetchHome();
-    void onActionFirstFetch();
 
 private:
-    void loadBackend(KNMusicStoreBackend *backend);
-
-    inline void showWidget(QWidget *widget);
-    inline void updateContentWidget();
-
-    QTimer *m_firstFetch;
     KNCategoryTab *m_tab;
-    KNMusicStoreGlobal *m_storeGlobal;
-    KNMusicStoreTitleBar *m_titleBar;
-    KNMusicStoreDownloadList *m_downloadList;
-    KNMusicStoreContainer *m_storeSwitcher;
-    KNMusicStorePanel *m_panels[StorePanelCount];
-    KNMusicStoreEmptyWidget *m_emptyWidget;
-    KNMusicStoreBackend *m_backend;
+    QWidget *m_errorDimmer;
+    KNMusicStoreLoadingDimmer *m_loadingDimmer;
 };
 
 #endif // KNMUSICSTORE_H

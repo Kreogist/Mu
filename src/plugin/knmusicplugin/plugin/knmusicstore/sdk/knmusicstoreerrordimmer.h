@@ -12,43 +12,39 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
+ * along with this program; if not, write to the Free Software
+Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNMUSICSTORECONTAINER_H
-#define KNMUSICSTORECONTAINER_H
 
-#include <QScrollArea>
+#ifndef KNMUSICSTOREERRORDIMMER_H
+#define KNMUSICSTOREERRORDIMMER_H
 
-class KNSideShadowWidget;
+#include <QWidget>
+
 /*!
- * \brief The KNMusicStoreContainer class provides the scroll area for the store
- * widgets.
+ * \brief The KNMusicStoreErrorDimmer class is designed to be used as two ways.
+ * First, it will be used as the shadow widget for the content, second, it will
+ * display the error information.\n
+ * The show and hide of the widget will be animation in and out. The icon will
+ * be only one error icon, and the button will be only retry and okay. The retry
+ * button could be hidden.
  */
-class KNMusicStoreContainer : public QScrollArea
+class KNMusicStoreErrorDimmer : public QWidget
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStoreContainer widget.
+     * \brief Construc a KNMusicStoreErrorDimmer widget.
      * \param parent The parent widget.
      */
-    explicit KNMusicStoreContainer(QWidget *parent = 0);
+    explicit KNMusicStoreErrorDimmer(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void setTitleBar(QWidget *titleBar);
-
-protected:
-    /*!
-     * \brief Reimplemented from QScrollArea::resizeEvent().
-     */
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    KNSideShadowWidget *m_topShadow;
-    QWidget *m_titleBar;
 };
 
-#endif // KNMUSICSTORECONTAINER_H
+#endif // KNMUSICSTOREERRORDIMMER_H

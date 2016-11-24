@@ -141,6 +141,14 @@
         "Parent" : "MainWindow",
         "WindowText" : "#0000009A"
     },
+    "MusicStore" : {
+        "Parent" : "MainWindow"
+    },
+    "MusicStoreLoadingDimmer" : {
+        "Parent" : "MusicStore",
+        "Window" : "#171717",
+        "WindowText" : "#A0A0A0"
+    },
     "LibraryEmptyHint" : {
         "Parent" : "MainWindow",
         "Window" : "#353535",
@@ -161,7 +169,7 @@
     },
     "MusicTreeViewHeaderMenu" : {
         "Parent" : "MainWindow",
-        "Base" : "#00000000",
+        "Base" : "#000000",
         "Window" : "#00000000",
         "WindowText" : "#FFFFFF",
         "Text" : "#FFFFFFFE",

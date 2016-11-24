@@ -12,9 +12,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
+ * along with this program; if not, write to the Free Software
+Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knlocalemanager.h"
 
 #include "knmusicstoreglobal.h"
 
@@ -25,29 +27,25 @@ KNMusicStoreGlobal *KNMusicStoreGlobal::instance()
     return m_instance;
 }
 
-KNMusicStoreGlobal *KNMusicStoreGlobal::initial(QObject *parent)
+void KNMusicStoreGlobal::initial(QObject *parent)
 {
-    //Check instance pointer.
+    //Check the instance.
     if(m_instance==nullptr)
     {
-        //Initial the instance.
+        //Construct the object.
         m_instance=new KNMusicStoreGlobal(parent);
     }
-    //Give back the instance.
-    return m_instance;
 }
 
-int KNMusicStoreGlobal::storeContentWidth() const
+void KNMusicStoreGlobal::retranslate()
 {
-    return 980;
-}
-
-int KNMusicStoreGlobal::storeHeaderLabelWidth() const
-{
-    return 130;
+    ;
 }
 
 KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
     QObject(parent)
 {
+    //Link the retranslator.
+    knI18n->link(this, &KNMusicStoreGlobal::retranslate);
+    retranslate();
 }

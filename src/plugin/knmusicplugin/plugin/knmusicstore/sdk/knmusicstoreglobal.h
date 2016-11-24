@@ -12,60 +12,61 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
+ * along with this program; if not, write to the Free Software
+Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #ifndef KNMUSICSTOREGLOBAL_H
 #define KNMUSICSTOREGLOBAL_H
 
+#include "knmusicstoreutil.h"
+
 #include <QObject>
 
 /*!
- * \def knMusicStoreGlobal
+ * \def knGlobal
  * A global pointer referring to the unique music store global object.
  */
 #define knMusicStoreGlobal (KNMusicStoreGlobal::instance())
 
+using namespace MusicStoreUtil;
+
 /*!
- * \brief The KNMusicStoreGlobal class provides the global items for music
- * widget store.
+ * \brief The KNMusicStoreGlobal class provides some public resources for the
+ * music store framework:\n
+ *  1. The error message id and translated text.
  */
 class KNMusicStoreGlobal : public QObject
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Get the music store global instance pointer.
-     * \return The global instance pointer.
+     * \brief Get the global public instance.
+     * \return The instance object pointer.
      */
     static KNMusicStoreGlobal *instance();
 
     /*!
-     * \brief Initial the music store global object.
-     * \param parent The parent object pointer.
+     * \brief Construct the global instance.
+     * \param parent The parent object of the instance.
      */
-    static KNMusicStoreGlobal *initial(QObject *parent=0);
-
-    /*!
-     * \brief Get the store widget content width.
-     * \return The store widget content width.
-     */
-    int storeContentWidth() const;
-
-    /*!
-     * \brief Get the maximum header label size.
-     * \return The maximum header label width.
-     */
-    int storeHeaderLabelWidth() const;
+    static void initial(QObject *parent = 0);
 
 signals:
 
 public slots:
 
+private slots:
+    void retranslate();
+
 private:
-    explicit KNMusicStoreGlobal(QObject *parent = 0);
     static KNMusicStoreGlobal *m_instance;
+    explicit KNMusicStoreGlobal(QObject *parent = 0);
+    KNMusicStoreGlobal(const KNMusicStoreGlobal &);
+    KNMusicStoreGlobal(KNMusicStoreGlobal &&);
+
+    QString m_errorText[MusicStoreErrorCount];
 };
 
 #endif // KNMUSICSTOREGLOBAL_H
