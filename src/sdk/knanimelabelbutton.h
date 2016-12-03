@@ -23,7 +23,9 @@
 class QTimeLine;
 /*!
  * \brief The KNAnimeLabelButton class provides a opacity change of the label
- * button. We will change the palette when the mouse move in and out.
+ * button. We will change the palette when the mouse move in and out.\n
+ * This widget is bundled with the theme manager, it will automatically detect
+ * the palette changed signal from the theme manager and update itself.
  */
 class KNAnimeLabelButton : public KNLabelButton
 {

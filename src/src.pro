@@ -468,7 +468,12 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreloadingdimmer.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorecontainer.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp \
+    sdk/knscrollarea.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongpage.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -708,7 +713,13 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreloadingdimmer.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreutil.h
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreutil.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorecontainer.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.h \
+    sdk/knscrollarea.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepage.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongpage.h
 
 RESOURCES += \
     resource/res.qrc

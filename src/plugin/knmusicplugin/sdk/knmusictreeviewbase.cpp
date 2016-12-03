@@ -77,10 +77,10 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //Set scroll bar policies.
-    horizontalScrollBar()->setSingleStep(5);
-    horizontalScrollBar()->setPageStep(5);
-    verticalScrollBar()->setSingleStep(4);
-    verticalScrollBar()->setPageStep(4);
+//    horizontalScrollBar()->setSingleStep(5);
+//    horizontalScrollBar()->setPageStep(5);
+//    verticalScrollBar()->setSingleStep(4);
+//    verticalScrollBar()->setPageStep(4);
     //Configure the horizontal scroll bar.
     m_hScrollBar->setObjectName("MusicScrollBar");
     m_hScrollBar->setStyle(KNSaoStyle::instance());

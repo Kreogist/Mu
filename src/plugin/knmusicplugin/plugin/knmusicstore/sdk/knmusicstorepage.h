@@ -17,37 +17,29 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREUTIL_H
-#define KNMUSICSTOREUTIL_H
+#ifndef KNMUSICSTOREPAGE_H
+#define KNMUSICSTOREPAGE_H
 
-namespace MusicStoreUtil
-{
-    enum MusicStoreError
-    {
-        MusicStoreErrorCount
-    };
-}
+#include <QWidget>
 
 /*!
- * \brief The KNMusicStoreUtil class provides several data and static functions.
- * All the enumeration and structures will be defines here.
+ * \brief The KNMusicStorePage class provides a page used for the abstract ports
+ * of all the pages for the music store. These pages include home page, search
+ * results, artist & album and single song.
  */
-class KNMusicStoreUtil
+class KNMusicStorePage : public QWidget
 {
+    Q_OBJECT
 public:
     /*!
-     * \brief Get the store header widget height.
-     * \return The height of the header. It is a fixed number.
+     * \brief Construct a KNMusicStorePage widget.
+     * \param parent The parent widget.
      */
-    static int headerHeight()
-    {
-        return 48;
-    }
+    KNMusicStorePage(QWidget *parent = 0) : QWidget(parent) {}
 
-private:
-    KNMusicStoreUtil();
-    KNMusicStoreUtil(const KNMusicStoreUtil &);
-    KNMusicStoreUtil(KNMusicStoreUtil &&);
+signals:
+
+public slots:
 };
 
-#endif // KNMUSICSTOREUTIL_H
+#endif // KNMUSICSTOREPAGE_H

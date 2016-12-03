@@ -24,6 +24,7 @@ Foundation,
 
 class KNCategoryTab;
 class KNMusicStoreLoadingDimmer;
+class KNMusicStoreContainer;
 /*!
  * \brief The KNMusicStore class provides the official music store plugin. The
  * official plugin provides four pages,and it will be increased in the future:\n
@@ -76,6 +77,7 @@ private slots:
 
 private:
     KNCategoryTab *m_tab;
+    KNMusicStoreContainer *m_container;
     QWidget *m_errorDimmer;
     KNMusicStoreLoadingDimmer *m_loadingDimmer;
 };

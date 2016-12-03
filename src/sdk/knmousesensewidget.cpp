@@ -25,7 +25,10 @@ KNMouseSenseWidget::KNMouseSenseWidget(QWidget *parent) :
     QWidget(parent),
     m_mouseInOut(generateTimeline()),
     m_rangeStart(0),
-    m_rangeEnd(0)
+    m_rangeEnd(0),
+    m_rangeAlpha(255),
+    m_changeAlpha(false),
+    m_manualRange(false)
 {
     //Set properties.
     setAutoFillBackground(true);
@@ -64,9 +67,18 @@ void KNMouseSenseWidget::changeBackgroundColor(const int &frame)
     QPalette pal=palette();
     //Get the background ground color, change the background color.
     QColor backgroundColor=pal.color(QPalette::Window);
-    backgroundColor.setHsv(backgroundColor.hue(),
-                           backgroundColor.saturation(),
-                           frame);
+    //Check the flag.
+    if(m_changeAlpha)
+    {
+        backgroundColor.setAlpha(frame);
+    }
+    else
+    {
+        backgroundColor.setHsv(backgroundColor.hue(),
+                               backgroundColor.saturation(),
+                               frame,
+                               m_rangeAlpha);
+    }
     pal.setColor(QPalette::Window, backgroundColor);
     //Set the palette.
     setPalette(pal);
@@ -77,7 +89,18 @@ void KNMouseSenseWidget::onActionPaletteChanged()
     //Set the palette.
     setPalette(knTheme->getPalette(objectName()));
     //Update the palette information.
-    QColor backgroundColor=palette().color(QPalette::Window).toHsv();
+    QColor backgroundColor=palette().color(QPalette::Window);
+    //Backup the alpha of the color.
+    m_rangeAlpha=backgroundColor.alpha();
+    //Check the manual state is set or not.
+    if(m_manualRange)
+    {
+        //The current range has been manually set, then the range won't be reset
+        //to default value.
+        return;
+    }
+    //Translate the color to hsv model.
+    backgroundColor=backgroundColor.toHsv();
     //The start brightness is the current brightness.
     m_rangeStart=backgroundColor.value();
     //If the color is a light color, the end of the range will be darker.
@@ -109,3 +132,31 @@ inline void KNMouseSenseWidget::startAnime(const int &endFrame)
     m_mouseInOut->start();
 }
 
+bool KNMouseSenseWidget::changeOpacity() const
+{
+    return m_changeAlpha;
+}
+
+void KNMouseSenseWidget::setChangeOpacity(bool changeAlpha)
+{
+    m_changeAlpha = changeAlpha;
+}
+
+void KNMouseSenseWidget::setSenseRange(int start, int end)
+{
+    //Save the start and end value.
+    m_rangeStart=start;
+    m_rangeEnd=end;
+    //Set the manually flag.
+    m_manualRange=true;
+}
+
+int KNMouseSenseWidget::senseRangeStart() const
+{
+    return m_rangeStart;
+}
+
+int KNMouseSenseWidget::senseRangeEnd() const
+{
+    return m_rangeEnd;
+}

@@ -20,6 +20,8 @@ Foundation,
 #include "kncategorytab.h"
 #include "knthememanager.h"
 
+#include "sdk/knmusicstoreglobal.h"
+#include "sdk/knmusicstorecontainer.h"
 #include "sdk/knmusicstoreloadingdimmer.h"
 
 #include "knmusicstore.h"
@@ -27,18 +29,22 @@ Foundation,
 KNMusicStore::KNMusicStore(QWidget *parent) :
     KNMusicStoreBase(parent),
     m_tab(new KNCategoryTab(this)),
+    m_container(nullptr),
     m_errorDimmer(new QWidget(this)),
     m_loadingDimmer(new KNMusicStoreLoadingDimmer(this))
 {
     setObjectName("MusicStore");
+    //Initial the global object.
+    KNMusicStoreGlobal::initial(this);
     //Configure the tab.
     m_tab->setIcon(QIcon(":/plugin/music/category/store.png"));
-    //Configure the container.
-    ;
+    //Initial and configure the container.
+    //The container must be initialized after initial the global object.
+    m_container=new KNMusicStoreContainer(this);
     //Configure the error dimmer.
     ;
     //Configure the loading dimmer.
-    m_loadingDimmer;
+    ;
 
     //Add to theme manager.
     knTheme->registerWidget(this);
@@ -46,6 +52,9 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Link retranslate.
     knI18n->link(this, &KNMusicStore::retranslate);
     retranslate();
+
+    //Debug
+    m_container->raise();
 }
 
 QAbstractButton *KNMusicStore::tab()
@@ -55,6 +64,8 @@ QAbstractButton *KNMusicStore::tab()
 
 void KNMusicStore::showIndex(KNMusicModel *musicModel, const QModelIndex &index)
 {
+    Q_UNUSED(musicModel)
+    Q_UNUSED(index)
 }
 
 void KNMusicStore::resizeEvent(QResizeEvent *event)
@@ -62,8 +73,11 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
     //Resize the base widget.
     KNMusicStoreBase::resizeEvent(event);
     //Resize the content widgets.
-    // Loading dimmer.
+    // Widgets container.
+    m_container->resize(size());
+    // Error dimmer.
     m_errorDimmer->resize(size());
+    // Loading dimmer.
     m_loadingDimmer->resize(size());
 }
 

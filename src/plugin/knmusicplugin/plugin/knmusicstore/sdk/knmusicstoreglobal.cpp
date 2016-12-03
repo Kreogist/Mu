@@ -17,10 +17,21 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knlocalemanager.h"
+#include "kndarkwaitingwheel.h"
 
 #include "knmusicstoreglobal.h"
 
 KNMusicStoreGlobal *KNMusicStoreGlobal::m_instance=nullptr;
+
+KNMusicStoreGlobal::~KNMusicStoreGlobal()
+{
+    //Check the widget parent.
+    if(m_connectStateWheel->parent()==nullptr)
+    {
+        //Remove the widget when no one manage it.
+        m_connectStateWheel->deleteLater();
+    }
+}
 
 KNMusicStoreGlobal *KNMusicStoreGlobal::instance()
 {
@@ -43,9 +54,42 @@ void KNMusicStoreGlobal::retranslate()
 }
 
 KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_connectStateWheel(new KNDarkWaitingWheel())
 {
+    //Update the wheel widget.
+    m_connectStateWheel->hide();
+
     //Link the retranslator.
     knI18n->link(this, &KNMusicStoreGlobal::retranslate);
     retranslate();
+}
+
+QWidget *KNMusicStoreGlobal::connectStateWheel()
+{
+    return static_cast<QWidget *>(m_connectStateWheel);
+}
+
+void KNMusicStoreGlobal::addConnectionCounter(int counter)
+{
+    //Set the widget to be the visit one.
+    m_connectStateWheel->show();
+    //Start ticking.
+    m_connectStateWheel->startTick();
+    //Add number to semaphore.
+    m_connectSemaphore.release(counter);
+}
+
+void KNMusicStoreGlobal::reduceConnectionCounter(int counter)
+{
+    //Reduce the number.
+    m_connectSemaphore.acquire(counter);
+    //Check the value.
+    if(m_connectSemaphore.available()==0)
+    {
+        //Hide the wheel.
+        m_connectStateWheel->hide();
+        //Stop ticking.
+        m_connectStateWheel->stopTick();
+    }
 }

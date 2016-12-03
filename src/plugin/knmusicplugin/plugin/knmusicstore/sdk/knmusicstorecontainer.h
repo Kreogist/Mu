@@ -17,37 +17,41 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREUTIL_H
-#define KNMUSICSTOREUTIL_H
+#ifndef KNMUSICSTORECONTAINER_H
+#define KNMUSICSTORECONTAINER_H
 
-namespace MusicStoreUtil
-{
-    enum MusicStoreError
-    {
-        MusicStoreErrorCount
-    };
-}
+#include <QWidget>
 
+class KNScrollArea;
+class KNMusicStoreHeader;
 /*!
- * \brief The KNMusicStoreUtil class provides several data and static functions.
- * All the enumeration and structures will be defines here.
+ * \brief The KNMusicStoreContainer class provides the container of all the
+ * widgets. It will manage all the page widgets.
  */
-class KNMusicStoreUtil
+class KNMusicStoreContainer : public QWidget
 {
+    Q_OBJECT
 public:
     /*!
-     * \brief Get the store header widget height.
-     * \return The height of the header. It is a fixed number.
+     * \brief Construct a KNMusicStoreContainer widget.
+     * \param parent The parent widget.
      */
-    static int headerHeight()
-    {
-        return 48;
-    }
+    explicit KNMusicStoreContainer(QWidget *parent = 0);
+
+signals:
+
+public slots:
+
+protected:
+    /*!
+     * \brief Reimplemented from QWidget::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    KNMusicStoreUtil();
-    KNMusicStoreUtil(const KNMusicStoreUtil &);
-    KNMusicStoreUtil(KNMusicStoreUtil &&);
+    KNScrollArea *m_pageContainer;
+    QWidget *m_headerContainer;
+    KNMusicStoreHeader *m_header;
 };
 
-#endif // KNMUSICSTOREUTIL_H
+#endif // KNMUSICSTORECONTAINER_H

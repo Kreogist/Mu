@@ -20,6 +20,8 @@ Foundation,
 #ifndef KNMUSICSTOREGLOBAL_H
 #define KNMUSICSTOREGLOBAL_H
 
+#include <QSemaphore>
+
 #include "knmusicstoreutil.h"
 
 #include <QObject>
@@ -32,6 +34,7 @@ Foundation,
 
 using namespace MusicStoreUtil;
 
+class KNDarkWaitingWheel;
 /*!
  * \brief The KNMusicStoreGlobal class provides some public resources for the
  * music store framework:\n
@@ -41,6 +44,8 @@ class KNMusicStoreGlobal : public QObject
 {
     Q_OBJECT
 public:
+    ~KNMusicStoreGlobal();
+
     /*!
      * \brief Get the global public instance.
      * \return The instance object pointer.
@@ -52,6 +57,24 @@ public:
      * \param parent The parent object of the instance.
      */
     static void initial(QObject *parent = 0);
+
+    /*!
+     * \brief Get the connect state wheel widget pointer.
+     * \return The widget pointer.
+     */
+    QWidget *connectStateWheel();
+
+    /*!
+     * \brief Add several connection counter to the state counter.
+     * \param counter The pending request number.
+     */
+    void addConnectionCounter(int counter);
+
+    /*!
+     * \brief Reduce several connection counter to the state counter.
+     * \param counter The finished request number.
+     */
+    void reduceConnectionCounter(int counter);
 
 signals:
 
@@ -67,6 +90,8 @@ private:
     KNMusicStoreGlobal(KNMusicStoreGlobal &&);
 
     QString m_errorText[MusicStoreErrorCount];
+    QSemaphore m_connectSemaphore;
+    KNDarkWaitingWheel *m_connectStateWheel;
 };
 
 #endif // KNMUSICSTOREGLOBAL_H

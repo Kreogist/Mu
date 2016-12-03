@@ -30,6 +30,7 @@ KNMusicStoreLoadingDimmer::KNMusicStoreLoadingDimmer(QWidget *parent) :
 {
     setObjectName("MusicStoreLoadingDimmer");
     //Set properties.
+    setAutoFillBackground(true);
     // Title label
     QFont titleFont=m_title->font();
     titleFont.setBold(true);

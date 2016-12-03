@@ -12,6 +12,9 @@
         "Button" : "#FFFFFF00",
         "ButtonText" : "#FFFFFF"
     },
+    "MusicStoreScrollBar" :{
+        "Parent" : "MusicScrollBar"
+    },
     "MusicStoreWidget" : {
         "Parent" : "MainWindow",
         "Window" : "#202020",
@@ -21,6 +24,10 @@
         "Parent" : "MusicStoreWidget",
         "Button" : "#202020",
         "ButtonText" : "#9D9D9D"
+    },
+    "MusicStoreNavigator" : {
+        "Parent" : "MusicStoreWidget",
+        "WindowText" : "#FFFFFF"
     },
     "MusicStoreEmptyWidget" : {
         "Parent" : "MusicStoreWidget",
@@ -146,8 +153,20 @@
     },
     "MusicStoreLoadingDimmer" : {
         "Parent" : "MusicStore",
-        "Window" : "#171717",
+        "Window" : "#202020",
         "WindowText" : "#A0A0A0"
+    },
+    "MusicStoreContainer" : {
+        "Parent" : "MusicStore",
+        "Window" : "#101010"
+    },
+    "MusicStoreHeaderContainer" : {
+        "Parent" : "MusicStoreContainer",
+        "Window" : "#313131A0"
+    },
+    "MusicStoreHeader" : {
+        "Parent" : "MusicStoreHeaderContainer",
+        "Window" : "#FFFFFF00"
     },
     "LibraryEmptyHint" : {
         "Parent" : "MainWindow",
@@ -166,6 +185,9 @@
         "Button" : "#000000",
         "Highlight" : "#505050",
         "HighlightedText" : "#F7CF3D"
+    },
+    "MusicStorePageContainer" : {
+        "Parent" : "LibraryTreeView"
     },
     "MusicTreeViewHeaderMenu" : {
         "Parent" : "MainWindow",
