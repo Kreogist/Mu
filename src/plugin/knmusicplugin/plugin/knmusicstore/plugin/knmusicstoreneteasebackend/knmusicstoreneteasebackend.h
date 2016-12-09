@@ -17,37 +17,32 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREPAGE_H
-#define KNMUSICSTOREPAGE_H
+#ifndef KNMUSICSTORENETEASEBACKEND_H
+#define KNMUSICSTORENETEASEBACKEND_H
 
-#include <QVariant>
-
-#include "knmousesensewidget.h"
+#include "../../sdk/knmusicstorebackend.h"
 
 /*!
- * \brief The KNMusicStorePage class provides a page used for the abstract ports
- * of all the pages for the music store. These pages include home page, search
- * results, artist & album and single song.
+ * \brief The KNMusicStoreNeteaseBackend class provides the music store backend
+ * plugin for Netease cloud music. The API is not provided by the offcial
+ * documentation. Those APIs come from the following projects:
+ *   1. wu-nerd/dmusic-plugin-NeteaseCloudMusic
  */
-class KNMusicStorePage : public KNMouseSenseWidget
+class KNMusicStoreNeteaseBackend : public KNMusicStoreBackend
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStorePage widget.
-     * \param parent The parent widget.
+     * \brief Construct a KNMusicStoreNeteaseBackend object.
+     * \param parent The parent object.
      */
-    KNMusicStorePage(QWidget *parent = 0) :
-        KNMouseSenseWidget(parent)
-    {
-        //Set properties.
-        setChangeOpacity(true);
-        setSenseRange(0x09, 0x19);
-    }
+    explicit KNMusicStoreNeteaseBackend(QObject *parent = 0);
 
 signals:
 
 public slots:
+
+private:
 };
 
-#endif // KNMUSICSTOREPAGE_H
+#endif // KNMUSICSTORENETEASEBACKEND_H

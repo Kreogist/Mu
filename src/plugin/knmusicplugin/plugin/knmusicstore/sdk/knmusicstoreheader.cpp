@@ -55,7 +55,6 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
         //Initial the label text.
         m_navigatorItem[i]=new KNAnimeLabelButton(this);
         //Set the properties.
-        m_navigatorItem[i]->updateObjectName("MusicStoreNavigator");
         m_navigatorItem[i]->setCursor(Qt::PointingHandCursor);
     }
     //Configure the tray layout.
@@ -90,13 +89,15 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
     m_mainLayout->addStretch();
     //Add the connection state widget.
     m_mainLayout->addWidget(knMusicStoreGlobal->connectStateWheel());
-    knMusicStoreGlobal->addConnectionCounter(1);
     //Add tray layout.
     m_mainLayout->addLayout(m_pluginTray);
 
     //Link the retranslator.
     knI18n->link(this, &KNMusicStoreHeader::retranslate);
     retranslate();
+
+    //Debug
+//    knMusicStoreGlobal->addConnectionCounter(1);
 }
 
 void KNMusicStoreHeader::addHeaderWidget(QWidget *widget,
@@ -127,16 +128,21 @@ void KNMusicStoreHeader::paintEvent(QPaintEvent *event)
     painter.fillRect(width()-1, 0, 1, height(), m_borderGradient);
 }
 
-void KNMusicStoreHeader::onActionPaletteChanged()
+void KNMusicStoreHeader::onPaletteChanged()
 {
     //Do the original palette changed.
-    KNMouseSenseWidget::onActionPaletteChanged();
+    KNMouseSenseWidget::onPaletteChanged();
     //Save the new color of window.
     QColor borderColor=palette().color(QPalette::Window);
     borderColor.setAlpha(senseRangeStart());
     m_borderGradient.setColorAt(0, borderColor);
     borderColor.setAlpha(senseRangeEnd());
     m_borderGradient.setColorAt(1, borderColor);
+    //Update all the navigator item palette.
+    for(int i=0; i<NavigatorItemCount; ++i)
+    {
+        m_navigatorItem[i]->updateObjectName("MusicStoreNavigator");
+    }
 }
 
 void KNMusicStoreHeader::retranslate()

@@ -31,7 +31,7 @@ KNAnimeLabelButton::KNAnimeLabelButton(QWidget *parent) :
     m_timeLine->setUpdateInterval(33);
     m_timeLine->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_timeLine, &QTimeLine::frameChanged,
-            this, &KNAnimeLabelButton::onActionUpdatePalette);
+            this, &KNAnimeLabelButton::onUpdatePalette);
 }
 
 void KNAnimeLabelButton::updateObjectName(const QString &name)
@@ -41,7 +41,16 @@ void KNAnimeLabelButton::updateObjectName(const QString &name)
     //Update the palette.
     setPalette(knTheme->getPalette(name));
     //Update the brightness.
-    onActionUpdatePalette(m_minBrightness);
+    onUpdatePalette(m_minBrightness);
+}
+
+void KNAnimeLabelButton::setRange(int min, int max)
+{
+    //Save the min and max brightness.
+    m_minBrightness=min;
+    m_maxBrightness=max;
+    //update the brightness.
+    onUpdatePalette(m_minBrightness);
 }
 
 void KNAnimeLabelButton::enterEvent(QEvent *event)
@@ -60,7 +69,7 @@ void KNAnimeLabelButton::leaveEvent(QEvent *event)
     startAnime(m_minBrightness);
 }
 
-void KNAnimeLabelButton::onActionUpdatePalette(int frame)
+void KNAnimeLabelButton::onUpdatePalette(int frame)
 {
     //Get the palette.
     QPalette pal=palette();

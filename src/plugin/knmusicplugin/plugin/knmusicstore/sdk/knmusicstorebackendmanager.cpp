@@ -17,37 +17,10 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREPAGE_H
-#define KNMUSICSTOREPAGE_H
+#include "knmusicstorebackendmanager.h"
 
-#include <QVariant>
-
-#include "knmousesensewidget.h"
-
-/*!
- * \brief The KNMusicStorePage class provides a page used for the abstract ports
- * of all the pages for the music store. These pages include home page, search
- * results, artist & album and single song.
- */
-class KNMusicStorePage : public KNMouseSenseWidget
+KNMusicStoreBackendManager::KNMusicStoreBackendManager(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    /*!
-     * \brief Construct a KNMusicStorePage widget.
-     * \param parent The parent widget.
-     */
-    KNMusicStorePage(QWidget *parent = 0) :
-        KNMouseSenseWidget(parent)
-    {
-        //Set properties.
-        setChangeOpacity(true);
-        setSenseRange(0x09, 0x19);
-    }
 
-signals:
-
-public slots:
-};
-
-#endif // KNMUSICSTOREPAGE_H
+}

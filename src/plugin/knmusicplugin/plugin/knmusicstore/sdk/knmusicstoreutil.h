@@ -26,6 +26,17 @@ namespace MusicStoreUtil
     {
         MusicStoreErrorCount
     };
+
+    enum MusicStoreSingleLabel
+    {
+        SingleAlbumArt,
+        SingleName,
+        SingleSubheading,
+        SingleArtist,
+        SingleAlbum,
+        SingleLyrics,
+        SingleLabelCount
+    };
 }
 
 /*!

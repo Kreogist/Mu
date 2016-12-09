@@ -70,9 +70,9 @@ protected:
 
 protected slots:
     /*!
-     * \brief Reimplemented from KNMouseSenseWidget::onActionPaletteChanged().
+     * \brief Reimplemented from KNMouseSenseWidget::onPaletteChanged().
      */
-    void onActionPaletteChanged() Q_DECL_OVERRIDE;
+    void onPaletteChanged() Q_DECL_OVERRIDE;
 
 private slots:
     void retranslate();

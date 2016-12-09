@@ -24,6 +24,7 @@ Foundation,
 
 class KNScrollArea;
 class KNMusicStoreHeader;
+class KNMusicStorePage;
 /*!
  * \brief The KNMusicStoreContainer class provides the container of all the
  * widgets. It will manage all the page widgets.
@@ -49,6 +50,16 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    enum MusicStorePages
+    {
+        PageHome,
+        PageSearchResult,
+        PageList,
+        PageSingleSong,
+        PagesCount
+    };
+
+    KNMusicStorePage *m_pages[PagesCount];
     KNScrollArea *m_pageContainer;
     QWidget *m_headerContainer;
     KNMusicStoreHeader *m_header;

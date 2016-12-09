@@ -34,7 +34,7 @@ KNMouseSenseWidget::KNMouseSenseWidget(QWidget *parent) :
     setAutoFillBackground(true);
     //Add header to theme list.
     connect(knTheme, &KNThemeManager::themeChange,
-            this, &KNMouseSenseWidget::onActionPaletteChanged);
+            this, &KNMouseSenseWidget::onPaletteChanged);
 }
 
 void KNMouseSenseWidget::updateObjectName(const QString &name)
@@ -42,7 +42,7 @@ void KNMouseSenseWidget::updateObjectName(const QString &name)
     //Set the object name.
     setObjectName(name);
     //Update the palette.
-    onActionPaletteChanged();
+    onPaletteChanged();
 }
 
 void KNMouseSenseWidget::enterEvent(QEvent *event)
@@ -61,7 +61,7 @@ void KNMouseSenseWidget::leaveEvent(QEvent *event)
     QWidget::leaveEvent(event);
 }
 
-void KNMouseSenseWidget::changeBackgroundColor(const int &frame)
+void KNMouseSenseWidget::changeBackgroundColor(int frame)
 {
     //Get the palette.
     QPalette pal=palette();
@@ -84,7 +84,7 @@ void KNMouseSenseWidget::changeBackgroundColor(const int &frame)
     setPalette(pal);
 }
 
-void KNMouseSenseWidget::onActionPaletteChanged()
+void KNMouseSenseWidget::onPaletteChanged()
 {
     //Set the palette.
     setPalette(knTheme->getPalette(objectName()));
@@ -95,6 +95,8 @@ void KNMouseSenseWidget::onActionPaletteChanged()
     //Check the manual state is set or not.
     if(m_manualRange)
     {
+        //Update the palette to range start.
+        changeBackgroundColor(m_rangeStart);
         //The current range has been manually set, then the range won't be reset
         //to default value.
         return;
@@ -105,6 +107,8 @@ void KNMouseSenseWidget::onActionPaletteChanged()
     m_rangeStart=backgroundColor.value();
     //If the color is a light color, the end of the range will be darker.
     m_rangeEnd=m_rangeStart+((backgroundColor.value()>0xBE)?-0x40:0x40);
+    //Update the palette to range start.
+    changeBackgroundColor(m_rangeStart);
 }
 
 inline QTimeLine *KNMouseSenseWidget::generateTimeline()
@@ -149,6 +153,8 @@ void KNMouseSenseWidget::setSenseRange(int start, int end)
     m_rangeEnd=end;
     //Set the manually flag.
     m_manualRange=true;
+    //Update the widget.
+    changeBackgroundColor(m_rangeStart);
 }
 
 int KNMouseSenseWidget::senseRangeStart() const

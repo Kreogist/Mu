@@ -17,9 +17,30 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knmusicstoresinglesongpage.h"
+#ifndef KNMUSICSTOREBACKENDMANAGER_H
+#define KNMUSICSTOREBACKENDMANAGER_H
 
-KNMusicStoreSingleSongPage::KNMusicStoreSingleSongPage(QWidget *parent) : QWidget(parent)
+#include <QObject>
+
+/*!
+ * \brief The KNMusicStoreBackendManager class manages all the backends and
+ * connect the using backend to the front end widgets.
+ */
+class KNMusicStoreBackendManager : public QObject
 {
+    Q_OBJECT
+public:
+    /*!
+     * \brief Construct a KNMusicStoreBackendManager object.
+     * \param parent The parent object.
+     */
+    explicit KNMusicStoreBackendManager(QObject *parent = 0);
 
-}
+signals:
+
+public slots:
+
+private:
+};
+
+#endif // KNMUSICSTOREBACKENDMANAGER_H

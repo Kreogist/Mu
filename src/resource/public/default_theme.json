@@ -162,11 +162,23 @@
     },
     "MusicStoreHeaderContainer" : {
         "Parent" : "MusicStoreContainer",
-        "Window" : "#313131A0"
+        "Window" : "#414141F0"
     },
     "MusicStoreHeader" : {
         "Parent" : "MusicStoreHeaderContainer",
         "Window" : "#FFFFFF00"
+    },
+    "MusicStoreSingleSong" : {
+        "Parent" : "MusicStoreHeader",
+        "WindowText" : "#FFFFFF"
+    },
+    "MusicStoreSingleSongLabel" : {
+        "Parent" : "MusicStoreSingleSong",
+        "WindowText" : "#707070"
+    },
+    "MusicStoreSingleSongText" : {
+        "Parent" : "MusicStoreSingleSong",
+        "WindowText" : "#B0B0B0"
     },
     "LibraryEmptyHint" : {
         "Parent" : "MainWindow",
@@ -187,7 +199,8 @@
         "HighlightedText" : "#F7CF3D"
     },
     "MusicStorePageContainer" : {
-        "Parent" : "LibraryTreeView"
+        "Parent" : "LibraryTreeView",
+        "AlternateBase" : "#FFFFFF00"
     },
     "MusicTreeViewHeaderMenu" : {
         "Parent" : "MainWindow",

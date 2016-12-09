@@ -90,7 +90,7 @@ inline void KNHighLightLabel::updateScaledContent()
     //Clear the scaled content.
     m_scaledContent=QPixmap(contentWidth, contentHeight);
     //Fill up transparent to clear up the data.
-    m_scaledContent.fill(QColor(0,0,0,0));
+    m_scaledContent.fill(QColor(0, 0, 0, 0));
     //Generate the painter.
     QPainter contentPainter(&m_scaledContent);
     //Configure up the painter.

@@ -17,24 +17,9 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTORESINGLESONGPAGE_H
-#define KNMUSICSTORESINGLESONGPAGE_H
+#include "knmusicstorebackend.h"
 
-#include "knmusicstorepage.h"
-
-class KNMusicStoreSingleSongPage : public KNMusicStorePage
+KNMusicStoreBackend::KNMusicStoreBackend(QObject *parent) : QObject(parent)
 {
-    Q_OBJECT
-public:
-    /*!
-     * \brief Construct a KNMusicStoreSingleSongPage widget.
-     * \param parent The parent page.
-     */
-    explicit KNMusicStoreSingleSongPage(QWidget *parent = 0);
 
-signals:
-
-public slots:
-};
-
-#endif // KNMUSICSTORESINGLESONGPAGE_H
+}

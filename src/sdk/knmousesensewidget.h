@@ -102,10 +102,10 @@ protected slots:
      * \brief When the palette changed, this slot will be called. It needs to
      * handle all the request.
      */
-    virtual void onActionPaletteChanged();
+    virtual void onPaletteChanged();
 
 private slots:
-    void changeBackgroundColor(const int &frame);
+    void changeBackgroundColor(int frame);
 
 private:
     inline QTimeLine *generateTimeline();

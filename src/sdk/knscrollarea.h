@@ -46,6 +46,19 @@ public:
      */
     void updateObjectName(const QString &name);
 
+
+    /*!
+     * \brief Get the customized horizontal scroll bar.
+     * \return The horizontal scroll bar widget.
+     */
+    QScrollBar *hScrollBar() const;
+
+    /*!
+     * \brief Get the vertical scroll bar widget pointer.
+     * \return The veritical scroll bar widget.
+     */
+    QScrollBar *vScrollBar() const;
+
 signals:
 
 public slots:
@@ -86,6 +99,7 @@ private:
     inline void startAnime(int endFrame);
     QScrollBar *m_hScrollBar, *m_vScrollBar;
     QTimeLine *m_mouseAnime;
+    int m_currentFrame;
 };
 
 #endif // KNSCROLLAREA_H

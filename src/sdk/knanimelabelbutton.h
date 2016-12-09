@@ -43,6 +43,13 @@ public:
      */
     void updateObjectName(const QString &name);
 
+    /*!
+     * \brief Set the text brightness chaning range, from min to max.
+     * \param min The minimum brightness.
+     * \param max The maximum brightness.
+     */
+    void setRange(int min, int max);
+
 signals:
 
 public slots:
@@ -59,7 +66,7 @@ protected:
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionUpdatePalette(int frame);
+    void onUpdatePalette(int frame);
 
 private:
     inline void startAnime(int endFrame);

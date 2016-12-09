@@ -24,6 +24,8 @@ Foundation,
 
 #include "knscrollarea.h"
 
+#include <QDebug>
+
 #define MaxOpacity 0x20
 #define ScrollBarWidth 10
 #define ScrollBarSpacing 1
@@ -32,7 +34,8 @@ KNScrollArea::KNScrollArea(QWidget *parent) :
     QScrollArea(parent),
     m_hScrollBar(new QScrollBar(Qt::Horizontal, this)),
     m_vScrollBar(new QScrollBar(Qt::Vertical, this)),
-    m_mouseAnime(new QTimeLine(200, this))
+    m_mouseAnime(new QTimeLine(200, this)),
+    m_currentFrame(0)
 {
     //Set properties.
     setContentsMargins(0, 0, 0, 0);
@@ -47,17 +50,14 @@ KNScrollArea::KNScrollArea(QWidget *parent) :
             this, &KNScrollArea::onActionMouseInOut);
 
     //Configure the horizontal scroll bar.
-    m_hScrollBar->setObjectName("MusicStoreScrollBar");
     m_hScrollBar->setStyle(KNSaoStyle::instance());
     m_hScrollBar->hide();
     m_hScrollBar->setFixedHeight(ScrollBarWidth);
-    knTheme->registerWidget(m_hScrollBar);
     setHorizontalScrollBar(m_hScrollBar);
     //Configure the vertical scroll bar.
-    m_vScrollBar->setObjectName("MusicStoreScrollBar");
     m_vScrollBar->setStyle(KNSaoStyle::instance());
     m_vScrollBar->hide();
-    knTheme->registerWidget(m_vScrollBar);
+    m_vScrollBar->setFixedWidth(ScrollBarWidth);
     connect(verticalScrollBar(), &QScrollBar::rangeChanged,
             [=](int min, int max)
             {
@@ -104,9 +104,9 @@ void KNScrollArea::enterEvent(QEvent *event)
 void KNScrollArea::leaveEvent(QEvent *event)
 {
     //Do original enter event.
-    QScrollArea::enterEvent(event);
+    QScrollArea::leaveEvent(event);
     //Start mouse in anime.
-    startAnime(MaxOpacity);
+    startAnime(0);
 }
 
 void KNScrollArea::showEvent(QShowEvent *event)
@@ -135,9 +135,11 @@ void KNScrollArea::onActionThemeUpdate()
 
 void KNScrollArea::onActionMouseInOut(int frame)
 {
+    //Save the frame.
+    m_currentFrame=frame;
     //Calculate scroll bar alpha.
-    int buttonAlpha=frame<<2,
-        baseAlpha=frame*3;
+    int buttonAlpha=m_currentFrame<<2,
+        baseAlpha=m_currentFrame*3;
     //Update the horizontal scroll bar palette.
     QPalette pal=m_hScrollBar->palette();
     QColor color=pal.color(QPalette::Base);
@@ -160,7 +162,7 @@ void KNScrollArea::onActionMouseInOut(int frame)
     m_vScrollBar->setPalette(pal);
 }
 
-void KNScrollArea::updateVerticalScrollBarGeometry()
+inline void KNScrollArea::updateVerticalScrollBarGeometry()
 {
     //Check scroll bar visiblility.
     if(m_vScrollBar->isVisible())
@@ -185,14 +187,22 @@ void KNScrollArea::updateVerticalScrollBarGeometry()
     }
 }
 
-void KNScrollArea::startAnime(int endFrame)
+inline void KNScrollArea::startAnime(int endFrame)
 {
     //Stop the mouse animations.
     m_mouseAnime->stop();
     //Set the parameter of the time line.
-    m_mouseAnime->setFrameRange(
-                palette().color(QPalette::AlternateBase).alpha(),
-                endFrame);
+    m_mouseAnime->setFrameRange(m_currentFrame, endFrame);
     //Start the time line.
     m_mouseAnime->start();
+}
+
+QScrollBar *KNScrollArea::vScrollBar() const
+{
+    return m_vScrollBar;
+}
+
+QScrollBar *KNScrollArea::hScrollBar() const
+{
+    return m_hScrollBar;
 }

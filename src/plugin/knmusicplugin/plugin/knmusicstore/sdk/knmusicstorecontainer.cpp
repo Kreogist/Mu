@@ -17,10 +17,13 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QScrollBar>
 
 #include "knthememanager.h"
 #include "knscrollarea.h"
 
+#include "knmusicstorepagehome.h"
+#include "knmusicstorepagesinglesong.h"
 #include "knmusicstoreheader.h"
 #include "knmusicstoreutil.h"
 
@@ -55,7 +58,20 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     m_header->setSenseRange(0x00, 0x15);
     m_header->updateObjectName("MusicStoreHeader");
     //Configure the page container.
+    m_pageContainer->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    //Configure the scroll bar.
+    QScrollBar *containerScrollBar=m_pageContainer->vScrollBar();
+    containerScrollBar->setObjectName("MusicStoreScrollBar");
+    knTheme->registerWidget(containerScrollBar);
+    containerScrollBar=m_pageContainer->hScrollBar();
+    containerScrollBar->setObjectName("MusicStoreScrollBar");
+    knTheme->registerWidget(containerScrollBar);
+    //Update the page container object name.
     m_pageContainer->updateObjectName("MusicStorePageContainer");
+    //Initial the pages.
+    m_pages[PageSingleSong]=new KNMusicStorePageSingleSong(m_pageContainer);
+    //Debug
+    m_pageContainer->setWidget(m_pages[PageSingleSong]);
 
     //Register the widget.
     knTheme->registerWidget(this);
@@ -75,4 +91,12 @@ void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
     m_headerContainer->resize(width(), KNMusicStoreUtil::headerHeight());
     //Update the page container width.
     m_pageContainer->resize(size());
+    //Update the content widget.
+    KNMusicStorePage *pageWidget=
+            static_cast<KNMusicStorePage *>(m_pageContainer->widget());
+    //Resize the page widget.
+    pageWidget->setFixedWidth(contentWidth);
+    //Check the size hint.
+    pageWidget->setFixedHeight(qMax(height(),
+                                    pageWidget->sizeHint().height()));
 }
