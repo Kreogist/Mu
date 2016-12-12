@@ -23,6 +23,10 @@ Foundation,
 #include "sdk/knmusicstoreglobal.h"
 #include "sdk/knmusicstorecontainer.h"
 #include "sdk/knmusicstoreloadingdimmer.h"
+#include "sdk/knmusicstorebackendmanager.h"
+
+//Music store plugins.
+#include "plugin/knmusicstoreneteasebackend/knmusicstoreneteasebackend.h"
 
 #include "knmusicstore.h"
 
@@ -41,6 +45,12 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Initial and configure the container.
     //The container must be initialized after initial the global object.
     m_container=new KNMusicStoreContainer(this);
+    //Give the page container to the backend manager.
+    knMusicStoreBackendManager->setPageContainer(m_container);
+    //Configure backend manager.
+    connect(knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::requireSetNavigatorItem,
+            m_container, &KNMusicStoreContainer::setNavigatorText);
     //Configure the error dimmer.
     ;
     //Configure the loading dimmer.
@@ -66,6 +76,17 @@ void KNMusicStore::showIndex(KNMusicModel *musicModel, const QModelIndex &index)
 {
     Q_UNUSED(musicModel)
     Q_UNUSED(index)
+}
+
+void KNMusicStore::loadPlugins()
+{
+    //Add music store backend to the backend manager.
+    knMusicStoreBackendManager->addBackend(
+                new KNMusicStoreNeteaseBackend(this));
+
+    //Debug
+    knMusicStoreBackendManager->showAlbum("MusicStoreNeteaseBackend",
+                                          "2080402");
 }
 
 void KNMusicStore::resizeEvent(QResizeEvent *event)

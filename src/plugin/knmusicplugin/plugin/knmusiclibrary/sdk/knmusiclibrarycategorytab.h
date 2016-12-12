@@ -26,7 +26,10 @@ class KNMusicCategoryProxyModel;
 class KNEmptyStateWidget;
 class KNMusicLibraryEmptyHint;
 /*!
- * \brief The KNMusicLibraryCategoryTab class
+ * \brief The KNMusicLibraryCategoryTab class provides the music tab for a
+ * single category.\n
+ * A category is one column in the music library. It needs one view for the
+ * indexed category, and a tree view to display all the other content.
  */
 class KNMusicLibraryCategoryTab : public KNMusicLibraryTab
 {

@@ -17,36 +17,20 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREBASE_H
-#define KNMUSICSTOREBASE_H
+#ifndef KNMUSICSTOREPAGEALBUM_H
+#define KNMUSICSTOREPAGEALBUM_H
 
-#include "knmusictab.h"
+#include <QWidget>
 
-/*!
- * \brief The KNMusicStoreBase class provides all the basic ports for the online
- * music store. The music store should be a information collection. Currently,
- * it will collect all the music from the plugins and provide information to
- * user.\n
- * Basiclly, a music store tab should provide a home widget. All the other
- * widget is not forced required.
- */
-class KNMusicStoreBase : public KNMusicTab
+class KNMusicStorePageAlbum : public QWidget
 {
     Q_OBJECT
 public:
-    /*!
-     * \brief Construct a KNMusicStoreBase tab widget.
-     * \param parent The parent object.
-     */
-    KNMusicStoreBase(QWidget *parent = 0) : KNMusicTab(parent) {}
+    explicit KNMusicStorePageAlbum(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    /*!
-     * \brief Load all the plugins of the music store.
-     */
-    virtual void loadPlugins()=0;
 };
 
-#endif // KNMUSICSTOREBASE_H
+#endif // KNMUSICSTOREPAGEALBUM_H

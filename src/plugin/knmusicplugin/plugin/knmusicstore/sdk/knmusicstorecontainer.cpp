@@ -23,13 +23,14 @@ Foundation,
 #include "knscrollarea.h"
 
 #include "knmusicstorepagehome.h"
+#include "knmusicstorepagealbum.h"
 #include "knmusicstorepagesinglesong.h"
 #include "knmusicstoreheader.h"
 #include "knmusicstoreutil.h"
 
 #include "knmusicstorecontainer.h"
 
-#define MaxContentWidth 1008
+#define MaxContentWidth 1108
 
 KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     QWidget(parent),
@@ -70,11 +71,25 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     m_pageContainer->updateObjectName("MusicStorePageContainer");
     //Initial the pages.
     m_pages[PageSingleSong]=new KNMusicStorePageSingleSong(m_pageContainer);
+    m_pages[PageAlbum]=new KNMusicStorePageAlbum(m_pageContainer);
+    //Hide all widgets.
+    m_pages[PageSingleSong]->hide();
     //Debug
-    m_pageContainer->setWidget(m_pages[PageSingleSong]);
+    m_pageContainer->setWidget(m_pages[PageAlbum]);
 
     //Register the widget.
     knTheme->registerWidget(this);
+}
+
+KNMusicStorePage *KNMusicStoreContainer::page(int pageIndex)
+{
+    return m_pages[pageIndex];
+}
+
+void KNMusicStoreContainer::setNavigatorText(int itemIndex, const QString &text)
+{
+    //Update the header navigator text.
+    m_header->setNavigatorText(itemIndex, text);
 }
 
 void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)

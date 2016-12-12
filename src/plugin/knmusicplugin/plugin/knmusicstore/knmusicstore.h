@@ -65,6 +65,10 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplemented from KNMusicStoreBase::loadPlugins().
+     */
+    void loadPlugins() Q_DECL_OVERRIDE;
 
 protected:
     /*!

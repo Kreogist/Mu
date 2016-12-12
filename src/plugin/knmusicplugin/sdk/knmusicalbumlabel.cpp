@@ -37,6 +37,8 @@ void KNMusicAlbumLabel::setArtwork(const QPixmap &artwork)
 {
     //Save the original artwork.
     m_originalArtwork=artwork;
+    //Clear the scaled artwork.
+    m_artwork=QPixmap();
     //Update the artwork.
     updateArtwork();
     //Update the label.
@@ -84,6 +86,12 @@ void KNMusicAlbumLabel::resizeEvent(QResizeEvent *event)
 
 inline void KNMusicAlbumLabel::updateArtwork()
 {
+    //Check original artwork.
+    if(m_originalArtwork.isNull())
+    {
+        //No need to operate.
+        return;
+    }
     //Initial a whole size of pixmap, scaled the artwork.
     QPixmap originalArtwork(size()),
             scaledArtwork(m_originalArtwork.scaled(size(),

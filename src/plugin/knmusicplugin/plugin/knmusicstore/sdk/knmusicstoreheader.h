@@ -20,7 +20,11 @@ Foundation,
 #ifndef KNMUSICSTOREHEADER_H
 #define KNMUSICSTOREHEADER_H
 
+#include "knmusicstoreutil.h"
+
 #include "knmousesensewidget.h"
+
+using namespace MusicStoreUtil;
 
 class QBoxLayout;
 class QLabel;
@@ -61,6 +65,12 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set the navigator label text.
+     * \param itemIndex The item index.
+     * \param text The navigator text.
+     */
+    void setNavigatorText(int itemIndex, const QString &text);
 
 protected:
     /*!
@@ -78,14 +88,7 @@ private slots:
     void retranslate();
 
 private:
-    enum NavigatorItems
-    {
-        ItemHome,
-        ItemSearchResult,
-        ItemList,
-        ItemSong,
-        NavigatorItemCount
-    };
+    inline void updateSearchLabel();
     //Linear gradient.
     QLinearGradient m_borderGradient;
     //Header text.
@@ -95,8 +98,8 @@ private:
     //Plugin tray.
     QBoxLayout *m_mainLayout, *m_pluginTray;
     //Widgets
-    KNAnimeLabelButton *m_navigatorItem[NavigatorItemCount];
-    QLabel *m_indicator[NavigatorItemCount-1];
+    KNAnimeLabelButton *m_navigatorItem[PagesCount];
+    QLabel *m_indicator[PagesCount-1];
 };
 
 #endif // KNMUSICSTOREHEADER_H

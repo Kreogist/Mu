@@ -56,11 +56,19 @@ signals:
 
 public slots:
     /*!
-     * \brief Set the text at the single song page.
-     * \param labelIndex The index recorded in the util class.
-     * \param value The value of the label.
+     * \brief Reimplemented from KNMusicStorePage::setPageLabel().
      */
-    void setSingleSong(int labelIndex, const QVariant &value);
+    void setPageLabel(int labelIndex, const QVariant &value) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStorePage::reset().
+     */
+    void reset() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStorePage::setBackend().
+     */
+    void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
 
 protected slots:
     /*!
@@ -78,9 +86,11 @@ private:
         HintAlbum,
         LabelHintsCount
     };
+    inline void clearArtistList();
     inline void insertArtistLabel(const QString &artistName);
     inline void updateArtistHintLabel();
     inline void updateArtistLabelPalette();
+    KNConnectionHandler m_backendConnection;
     QList<KNAnimeLabelButton *> m_artistLabels;
     QList<QLabel *> m_artistSplitLabels;
     QString m_artistHintText, m_artistsHintText;

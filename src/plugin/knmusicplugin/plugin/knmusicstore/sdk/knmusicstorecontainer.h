@@ -20,7 +20,11 @@ Foundation,
 #ifndef KNMUSICSTORECONTAINER_H
 #define KNMUSICSTORECONTAINER_H
 
+#include "knmusicstoreutil.h"
+
 #include <QWidget>
+
+using namespace MusicStoreUtil;
 
 class KNScrollArea;
 class KNMusicStoreHeader;
@@ -39,9 +43,22 @@ public:
      */
     explicit KNMusicStoreContainer(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the music store page widget.
+     * \param pageIndex The page index.
+     * \return The specific page index widget pointer.
+     */
+    KNMusicStorePage *page(int pageIndex);
+
 signals:
 
 public slots:
+    /*!
+     * \brief Set the header navigator label text.
+     * \param itemIndex The item index.
+     * \param text The navigator text.
+     */
+    void setNavigatorText(int itemIndex, const QString &text);
 
 protected:
     /*!
@@ -50,15 +67,6 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    enum MusicStorePages
-    {
-        PageHome,
-        PageSearchResult,
-        PageList,
-        PageSingleSong,
-        PagesCount
-    };
-
     KNMusicStorePage *m_pages[PagesCount];
     KNScrollArea *m_pageContainer;
     QWidget *m_headerContainer;

@@ -50,13 +50,17 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
     setContentsMargins(0, 0, 0, 0);
     setFixedHeight(KNMusicStoreUtil::headerHeight());
     //Initial navigators.
-    for(int i=0; i<NavigatorItemCount; ++i)
+    for(int i=0; i<PagesCount; ++i)
     {
         //Initial the label text.
         m_navigatorItem[i]=new KNAnimeLabelButton(this);
         //Set the properties.
         m_navigatorItem[i]->setCursor(Qt::PointingHandCursor);
+        //Hide the navigator item.
+        m_navigatorItem[i]->hide();
     }
+    //Show the home page item.
+    m_navigatorItem[PageHome]->show();
     //Configure the tray layout.
     m_pluginTray->setContentsMargins(0, 0, 0, 0);
     m_pluginTray->setSpacing(LayoutItemSpacing);
@@ -70,15 +74,17 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
     setLayout(m_mainLayout);
     m_mainLayout->addSpacing(LayoutBorderSpacing);
     //Add widget to layout.
-    for(int i=0; i<NavigatorItemCount; ++i)
+    for(int i=0; i<PagesCount; ++i)
     {
         //Add the label.
         m_mainLayout->addWidget(m_navigatorItem[i]);
         //Add navigator.
-        if(i!=NavigatorItemCount-1)
+        if(i!=PagesCount-1)
         {
             //Create the indicator of the label.
             m_indicator[i]=new QLabel(this);
+            //Hide the indicator.
+            m_indicator[i]->hide();
             //Set the pixmap.
             m_indicator[i]->setPixmap(QPixmap("://public/bullet.png"));
             //Add to layout.
@@ -114,6 +120,42 @@ void KNMusicStoreHeader::addStateWidget(QWidget *widget)
     m_pluginTray->addWidget(widget);
 }
 
+void KNMusicStoreHeader::setNavigatorText(int itemIndex, const QString &text)
+{
+    //Show the changed text.
+    m_navigatorItem[itemIndex]->show();
+    //Check whether the item has indicator.
+    if(itemIndex!=0)
+    {
+        //Show the indicator.
+        m_indicator[itemIndex-1]->show();
+    }
+    //Hide all the labels after the current index.
+    for(int i=itemIndex+1; i<PagesCount; ++i)
+    {
+        //Hide the navigator item.
+        m_navigatorItem[i]->hide();
+        //Hide the indicator.
+        m_indicator[i-1]->hide();
+    }
+    //Check the item index.
+    switch(itemIndex)
+    {
+    case PageAlbum:
+    case PageSingleSong:
+        m_navigatorItem[itemIndex]->setText(text);
+        break;
+    case PageSearchResult:
+        //Update the keyword.
+        m_searchKeyword=text;
+        //Update the search label text.
+        updateSearchLabel();
+        break;
+    default:
+        break;
+    }
+}
+
 void KNMusicStoreHeader::paintEvent(QPaintEvent *event)
 {
     //Paint the raw data.
@@ -139,7 +181,7 @@ void KNMusicStoreHeader::onPaletteChanged()
     borderColor.setAlpha(senseRangeEnd());
     m_borderGradient.setColorAt(1, borderColor);
     //Update all the navigator item palette.
-    for(int i=0; i<NavigatorItemCount; ++i)
+    for(int i=0; i<PagesCount; ++i)
     {
         m_navigatorItem[i]->updateObjectName("MusicStoreNavigator");
     }
@@ -150,7 +192,14 @@ void KNMusicStoreHeader::retranslate()
     //Update the string text.
     m_searchText=tr("Search Result for '%1'");
     //Update the label.
-    m_navigatorItem[ItemHome]->setText(tr("Store"));
-    m_navigatorItem[ItemSearchResult]->setText(
-                m_searchText.arg(m_searchKeyword));
+    m_navigatorItem[PageHome]->setText(tr("Store"));
+    //Update the search label text.
+    updateSearchLabel();
+}
+
+inline void KNMusicStoreHeader::updateSearchLabel()
+{
+    //Update to the latest search text.
+    m_navigatorItem[PageSearchResult]->setText(m_searchText.arg(
+                                                   m_searchKeyword));
 }

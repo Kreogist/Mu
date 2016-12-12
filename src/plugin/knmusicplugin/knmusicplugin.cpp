@@ -872,6 +872,8 @@ void KNMusicPlugin::initialStore(KNMusicStoreBase *store)
 {
     //Save the store plugin.
     m_store=store;
+    //Load all the plugins.
+    m_store->loadPlugins();
     //Add tabs to the switcher.
     addMusicTab(store);
 }

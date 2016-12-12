@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <zlib.h>
+
 #include <QFileInfo>
 #include <QFile>
 #include <QTextStream>
@@ -27,6 +29,9 @@
 #include <QProcess>
 
 #include "knutil.h"
+
+#define GZIP_WINDOWS_BIT 15 + 16
+#define GZIP_CHUNK_SIZE 32 * 1024
 
 QColor KNUtil::parseColor(const QString &data)
 {

@@ -15,17 +15,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QScrollBar>
 #include <QDrag>
-#include <QTimeLine>
 #include <QHelpEvent>
+#include <QMimeData>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QMimeData>
+#include <QScrollBar>
 
-#include "knthememanager.h"
 #include "knconnectionhandler.h"
-#include "sao/knsaostyle.h"
 
 #include "knmusicsearchbase.h"
 #include "knmusicproxymodel.h"
@@ -41,18 +38,10 @@
 
 #include <QDebug>
 
-#define MaxOpacity 0x20
-#define FontBase 0xBF
-#define ScrollBarWidth 10
-#define ScrollBarSpacing 1
-
 KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
-    QTreeView(parent),
+    KNMouseSenseTreeView(parent),
     m_musicTab(tab),
-    m_mouseAnime(new QTimeLine(200, this)),
     m_proxyModel(nullptr),
-    m_hScrollBar(new QScrollBar(Qt::Horizontal, this)),
-    m_vScrollBar(new QScrollBar(Qt::Vertical, this)),
     m_dragMoveRow(-1),
     m_dragIndicatorPos(QAbstractItemView::OnViewport),
     m_initialLoad(true),
@@ -61,70 +50,12 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
 {
     //Set properties.
     setAllColumnsShowFocus(true);
-    setAlternatingRowColors(false); //We will use our own alternating drawing.
-    setContentsMargins(0, 0, 0, 0);
     setDragDropMode(QAbstractItemView::InternalMove);
     setDragEnabled(true);
     setDropIndicatorShown(true);
-    setFrameShape(QFrame::NoFrame);
-    setIndentation(0);
-    setMouseTracking(true);
     setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-    setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setUniformRowHeights(true);
-    setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    //Set scroll bar policies.
-//    horizontalScrollBar()->setSingleStep(5);
-//    horizontalScrollBar()->setPageStep(5);
-//    verticalScrollBar()->setSingleStep(4);
-//    verticalScrollBar()->setPageStep(4);
-    //Configure the horizontal scroll bar.
-    m_hScrollBar->setObjectName("MusicScrollBar");
-    m_hScrollBar->setStyle(KNSaoStyle::instance());
-    m_hScrollBar->hide();
-    m_hScrollBar->setFixedHeight(ScrollBarWidth);
-    knTheme->registerWidget(m_hScrollBar);
-    setHorizontalScrollBar(m_hScrollBar);
-    //Configure the vertical scroll bar.
-    m_vScrollBar->setObjectName("MusicScrollBar");
-    m_vScrollBar->setStyle(KNSaoStyle::instance());
-    m_vScrollBar->hide();
-    knTheme->registerWidget(m_vScrollBar);
-    connect(verticalScrollBar(), &QScrollBar::rangeChanged,
-            [=](int min, int max)
-            {
-                //Update the range first.
-                m_vScrollBar->setRange(min, max);
-                //Check whether the scroll bar is still valid.
-                m_vScrollBar->setVisible(min!=max);
-                //Update scrollbar state parameters.
-                m_vScrollBar->setPageStep(verticalScrollBar()->pageStep());
-                m_vScrollBar->setSingleStep(verticalScrollBar()->singleStep());
-                //Update the geometry.
-                updateVerticalScrollBarGeometry();
-            });
-    connect(verticalScrollBar(), &QScrollBar::valueChanged,
-            [=](int value)
-            {
-                //Block the signal.
-                m_vScrollBar->blockSignals(true);
-                //Reset the value.
-                m_vScrollBar->setValue(value);
-                //Release the block
-                m_vScrollBar->blockSignals(false);
-            });
-    connect(m_vScrollBar, &QScrollBar::valueChanged,
-            verticalScrollBar(), &QScrollBar::setValue);
-
-    //Configure the time line.
-    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
-    m_mouseAnime->setUpdateInterval(10);
-    //Link the time line.
-    connect(m_mouseAnime, &QTimeLine::frameChanged,
-            this, &KNMusicTreeViewBase::onActionMouseInOut);
 
     //Generate the music tree view animation header.
     KNMusicTreeViewHeader *header=new KNMusicTreeViewHeader(this);
@@ -158,50 +89,18 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     //Link the tree view signal and slot.
     connect(this, &KNMusicTreeViewBase::activated,
             this, &KNMusicTreeViewBase::onActionActivate);
-
-    //Link with theme manager.
-    connect(knTheme, &KNThemeManager::themeChange,
-            this, &KNMusicTreeViewBase::onActionThemeUpdate);
 }
 
 KNMusicTreeViewBase::~KNMusicTreeViewBase()
 {
-    ;
-}
-
-void KNMusicTreeViewBase::enterEvent(QEvent *event)
-{
-    //Do original enter event.
-    QTreeView::enterEvent(event);
-    //Start mouse in anime.
-    startAnime(MaxOpacity);
-}
-
-void KNMusicTreeViewBase::leaveEvent(QEvent *event)
-{
-    //Do original leave event.
-    QTreeView::leaveEvent(event);
-    //Start mouse leave anime.
-    startAnime(0);
 }
 
 void KNMusicTreeViewBase::drawRow(QPainter *painter,
                                   const QStyleOptionViewItem &options,
                                   const QModelIndex &index) const
 {
-    //Check if this row is odd or oven, and then take one row to have
-    //alternative background.
-    if(index.row() & 1)
-    {
-        //Draw the alternative background.
-        painter->fillRect(QRect(options.rect.x(),
-                                options.rect.y(),
-                                width(),
-                                options.rect.height()),
-                          palette().color(QPalette::AlternateBase));
-    }
-    //Paint the other parts of the row.
-    QTreeView::drawRow(painter, options, index);
+    //Do original draw row.
+    KNMouseSenseTreeView::drawRow(painter, options, index);
     //Check whether we need to draw the drop indicator.
     if(index.row()==m_dragMoveRow)
     {
@@ -376,7 +275,7 @@ void KNMusicTreeViewBase::dropEvent(QDropEvent *event)
 void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
 {
     //Do the original pressed event.
-    QTreeView::mousePressEvent(event);
+    KNMouseSenseTreeView::mousePressEvent(event);
     //Hide the detail tooltip first.
     if(knMusicGlobal->detailTooltip())
     {
@@ -389,7 +288,7 @@ void KNMusicTreeViewBase::mousePressEvent(QMouseEvent *event)
 void KNMusicTreeViewBase::mouseReleaseEvent(QMouseEvent *event)
 {
     //Do the original release event.
-    QTreeView::mouseReleaseEvent(event);
+    KNMouseSenseTreeView::mouseReleaseEvent(event);
     //Check we has been pressed on this widget before.
     if(m_pressed)
     {
@@ -449,7 +348,7 @@ void KNMusicTreeViewBase::keyReleaseEvent(QKeyEvent *event)
     }
     default:
         //Do the orignal key release event.
-        QTreeView::keyReleaseEvent(event);
+        KNMouseSenseTreeView::keyReleaseEvent(event);
     }
 }
 
@@ -476,14 +375,14 @@ bool KNMusicTreeViewBase::event(QEvent *event)
     }
     default:
         //Process other kinds of events.
-        return QTreeView::event(event);
+        return KNMouseSenseTreeView::event(event);
     }
 }
 
 void KNMusicTreeViewBase::wheelEvent(QWheelEvent *event)
 {
     //Do original wheel event.
-    QTreeView::wheelEvent(event);
+    KNMouseSenseTreeView::wheelEvent(event);
     //When user using wheel, means the user don't want to preview the current
     //thing.
     //Hide the preview tooltip.
@@ -492,57 +391,6 @@ void KNMusicTreeViewBase::wheelEvent(QWheelEvent *event)
     {
         knMusicGlobal->detailTooltip()->hide();
     }
-}
-
-void KNMusicTreeViewBase::onActionThemeUpdate()
-{
-    //Get the new palette from theme manager, and set it.
-    setPalette(knTheme->getPalette(objectName()));
-    //Update the palette.
-    onActionMouseInOut(0);
-}
-
-void KNMusicTreeViewBase::onActionMouseInOut(int frame)
-{
-    //Get the palette.
-    QPalette pal=palette();
-    //Update the text palette color.
-    QColor color=pal.color(QPalette::Text);
-    color.setAlpha(FontBase+(frame<<1));
-    pal.setColor(QPalette::Text, color);
-    //Update the alternating base color.
-    color=pal.color(QPalette::AlternateBase);
-    color.setAlpha(frame);
-    pal.setColor(QPalette::AlternateBase, color);
-    //Update the button color.
-    color=pal.color(QPalette::Button);
-    color.setHsv(color.hue(), color.saturation(), frame<<1);
-    pal.setColor(QPalette::Button, color);
-    //Set the palette.
-    setPalette(pal);
-    //Calculate scroll bar alpha.
-    int buttonAlpha=frame<<2,
-        baseAlpha=frame*3;
-    //Update the horizontal scroll bar palette.
-    pal=m_hScrollBar->palette();
-    color=pal.color(QPalette::Base);
-    color.setAlpha(baseAlpha);
-    pal.setColor(QPalette::Base, color);
-    color=pal.color(QPalette::Button);
-    color.setAlpha(buttonAlpha);
-    pal.setColor(QPalette::Button, color);
-    //Set the palette to horizontal scroll bar.
-    m_hScrollBar->setPalette(pal);
-    //Update the vertical scroll bar palette.
-    pal=m_vScrollBar->palette();
-    color=pal.color(QPalette::Base);
-    color.setAlpha(baseAlpha);
-    pal.setColor(QPalette::Base, color);
-    color=pal.color(QPalette::Button);
-    color.setAlpha(buttonAlpha);
-    pal.setColor(QPalette::Button, color);
-    //Set the palette to vertical scroll bar.
-    m_vScrollBar->setPalette(pal);
 }
 
 void KNMusicTreeViewBase::onActionActivate(const QModelIndex &index)
@@ -620,18 +468,6 @@ void KNMusicTreeViewBase::resetHeaderState()
     setColumnWidth(Name, 200);
 }
 
-inline void KNMusicTreeViewBase::startAnime(int endFrame)
-{
-    //Stop the mouse animations.
-    m_mouseAnime->stop();
-    //Set the parameter of the time line.
-    m_mouseAnime->setFrameRange(
-                palette().color(QPalette::AlternateBase).alpha(),
-                endFrame);
-    //Start the time line.
-    m_mouseAnime->start();
-}
-
 void KNMusicTreeViewBase::playIndex(const QModelIndex &index)
 {
     //Check the music row and the index is valid.
@@ -655,22 +491,6 @@ void KNMusicTreeViewBase::setAcceptDragMove(bool dropInline)
 {
     //Save the switcher.
     m_notAcceptDragMove=!dropInline;
-}
-
-void KNMusicTreeViewBase::resizeEvent(QResizeEvent *event)
-{
-    //Resize the tree view widget.
-    QTreeView::resizeEvent(event);
-    //Update the scroll bar position.
-    updateVerticalScrollBarGeometry();
-}
-
-void KNMusicTreeViewBase::showEvent(QShowEvent *event)
-{
-    //Show the treeview widget.
-    QTreeView::showEvent(event);
-    //Update the scroll bar position.
-    updateVerticalScrollBarGeometry();
 }
 
 inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event, int &dropRow)
@@ -710,31 +530,6 @@ inline bool KNMusicTreeViewBase::dropOn(QDropEvent *event, int &dropRow)
     return true;
 }
 
-inline void KNMusicTreeViewBase::updateVerticalScrollBarGeometry()
-{
-    //Check scroll bar visiblility.
-    if(m_vScrollBar->isVisible())
-    {
-        //Check whether horizontal scroll is need to be visible.
-        if(m_hScrollBar->isVisible())
-        {
-            //Both of the scroll bar is visible.
-            m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
-                                      header()->height(),
-                                      ScrollBarWidth,
-                                      height()-ScrollBarWidth-ScrollBarSpacing-
-                                      header()->height());
-        }
-        else
-        {
-            //Only vertical scroll bar is visible.
-            m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
-                                      header()->height(),
-                                      ScrollBarWidth,
-                                      height()-header()->height());
-        }
-    }
-}
 
 inline void KNMusicTreeViewBase::showMenu(QPoint position,
                                           const QModelIndex &pressedIndex)
@@ -978,12 +773,4 @@ void KNMusicTreeViewBase::scrollToRow(const int &row)
 {
     //Get the name item of the song row.
     scrollToIndex(m_proxyModel->index(row, Name));
-}
-
-void KNMusicTreeViewBase::updateObjectName(const QString &name)
-{
-    //Set the object name.
-    setObjectName(name);
-    //Update the frame.
-    onActionThemeUpdate();
 }

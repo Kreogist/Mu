@@ -19,6 +19,9 @@ Foundation,
 #include "knlocalemanager.h"
 #include "kndarkwaitingwheel.h"
 
+#include "knmusicstorebackendmanager.h"
+#include "knmusicstorealbummodel.h"
+
 #include "knmusicstoreglobal.h"
 
 KNMusicStoreGlobal *KNMusicStoreGlobal::m_instance=nullptr;
@@ -55,14 +58,23 @@ void KNMusicStoreGlobal::retranslate()
 
 KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
     QObject(parent),
-    m_connectStateWheel(new KNDarkWaitingWheel())
+    m_connectStateWheel(new KNDarkWaitingWheel()),
+    m_albumModel(new KNMusicStoreAlbumModel(this))
 {
+    //Initial the backend manager.
+    KNMusicStoreBackendManager::initial(this);
+
     //Update the wheel widget.
     m_connectStateWheel->hide();
 
     //Link the retranslator.
     knI18n->link(this, &KNMusicStoreGlobal::retranslate);
     retranslate();
+}
+
+KNMusicStoreAlbumModel *KNMusicStoreGlobal::albumModel() const
+{
+    return m_albumModel;
 }
 
 QWidget *KNMusicStoreGlobal::connectStateWheel()

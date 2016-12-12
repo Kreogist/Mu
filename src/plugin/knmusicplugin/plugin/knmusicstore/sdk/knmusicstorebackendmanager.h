@@ -20,8 +20,18 @@ Foundation,
 #ifndef KNMUSICSTOREBACKENDMANAGER_H
 #define KNMUSICSTOREBACKENDMANAGER_H
 
+#include <QHash>
+
 #include <QObject>
 
+/*!
+ * \def knMusicStoreBackendManager
+ * A global pointer referring to the unique music store backend manager object.
+ */
+#define knMusicStoreBackendManager (KNMusicStoreBackendManager::instance())
+
+class KNMusicStoreBackend;
+class KNMusicStoreContainer;
 /*!
  * \brief The KNMusicStoreBackendManager class manages all the backends and
  * connect the using backend to the front end widgets.
@@ -31,16 +41,62 @@ class KNMusicStoreBackendManager : public QObject
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStoreBackendManager object.
+     * \brief Get the global instance object pointer.
+     * \return The instance object pointer.
+     */
+    static KNMusicStoreBackendManager *instance();
+
+    /*!
+     * \brief Construct the global KNMusicStoreBackendManager object.
      * \param parent The parent object.
      */
-    explicit KNMusicStoreBackendManager(QObject *parent = 0);
+    static void initial(QObject *parent = 0);
+
+    /*!
+     * \brief Add one backend to the backend manager.
+     * \param backend The backend instance.
+     */
+    void addBackend(KNMusicStoreBackend *backend);
+
+    /*!
+     * \brief Set the page container for the backend.
+     * \param pageContainer The page container widget.
+     */
+    void setPageContainer(KNMusicStoreContainer *pageContainer);
 
 signals:
+    /*!
+     * \brief Set the navigator item text in the header text.
+     * \param navigatorIndex The navigator item index.
+     * \param caption The text of the navigator item.
+     */
+    void requireSetNavigatorItem(int navigatorIndex, const QString &caption);
 
 public slots:
+    /*!
+     * \brief Fetch the album information according to the information it
+     * provides to a specific backend.
+     * \param backendId The ID of the backend, i.e. its object name.
+     * \param albumInfo The album identical information.
+     */
+    void showAlbum(const QString &backendId, const QString &albumInfo);
+
+    /*!
+     * \brief Fetch the single song information according to the information it
+     * provides to the backend.
+     * \param backendId The ID of the backend, i.e. its object name.
+     * \param songInfo The single song information.
+     */
+    void showSingleSong(const QString &backendId, const QString &songInfo);
 
 private:
+    static KNMusicStoreBackendManager *m_instance;
+    explicit KNMusicStoreBackendManager(QObject *parent = 0);
+    KNMusicStoreBackendManager(const KNMusicStoreBackendManager &);
+    KNMusicStoreBackendManager(KNMusicStoreBackendManager &&);
+
+    QHash<QString, KNMusicStoreBackend *> m_backendMap;
+    KNMusicStoreContainer *m_pageContainer;
 };
 
 #endif // KNMUSICSTOREBACKENDMANAGER_H

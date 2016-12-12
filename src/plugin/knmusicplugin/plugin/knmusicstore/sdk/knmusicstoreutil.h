@@ -20,6 +20,8 @@ Foundation,
 #ifndef KNMUSICSTOREUTIL_H
 #define KNMUSICSTOREUTIL_H
 
+#include <QString>
+
 namespace MusicStoreUtil
 {
     enum MusicStoreError
@@ -27,15 +29,47 @@ namespace MusicStoreUtil
         MusicStoreErrorCount
     };
 
+    enum MusicStorePages
+    {
+        PageHome,
+        PageSearchResult,
+        PageList,
+        PageAlbum,
+        PageSingleSong,
+        PagesCount
+    };
+
+    enum MusicStoreAlbumLabel
+    {
+        AlbumMetadata,
+        AlbumArt
+    };
+
     enum MusicStoreSingleLabel
     {
         SingleAlbumArt,
-        SingleName,
-        SingleSubheading,
+        SingleMetadata,
         SingleArtist,
-        SingleAlbum,
-        SingleLyrics,
-        SingleLabelCount
+        SingleLyrics
+    };
+
+    struct KNMusicStoreSongInfo
+    {
+        QString index;
+        QString name;
+        QString artist;
+        QString artistId;
+        QString duration;
+        QString customData;
+        KNMusicStoreSongInfo() :
+            index(QString()),
+            name(QString()),
+            artist(QString()),
+            artistId(QString()),
+            duration(QString()),
+            customData(QString())
+        {
+        }
     };
 }
 

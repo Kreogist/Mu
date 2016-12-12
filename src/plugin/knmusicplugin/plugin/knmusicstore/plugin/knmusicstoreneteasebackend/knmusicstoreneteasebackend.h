@@ -20,6 +20,12 @@ Foundation,
 #ifndef KNMUSICSTORENETEASEBACKEND_H
 #define KNMUSICSTORENETEASEBACKEND_H
 
+#include <QNetworkAccessManager>
+#include <QScopedPointer>
+#include <QMap>
+
+#include "knconnectionhandler.h"
+
 #include "../../sdk/knmusicstorebackend.h"
 
 /*!
@@ -41,8 +47,32 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Reimplmented from KNMusicStoreBackend::showAlbum().
+     */
+    void showAlbum(const QString &albumInfo) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplmented from KNMusicStoreBackend::showSingleSong().
+     */
+    void showSingleSong(const QString &songInfo) Q_DECL_OVERRIDE;
+
+private slots:
+    void onReplyFinished(QNetworkReply *reply);
+    void onAlbumDetailReply(QNetworkReply *reply);
 
 private:
+    enum NeteaseReplyTypes
+    {
+        NeteaseAlbumDetails,
+        NeteaseAlbumArt
+    };
+    inline QByteArray getRawData(QNetworkReply *reply);
+    inline QNetworkRequest generateRequest();
+    inline void resetManager();
+    KNConnectionHandler m_accessManagerHandler;
+    QScopedPointer<QNetworkAccessManager> m_accessManager;
+    QMap<QNetworkReply *, int> m_replyMap;
 };
 
 #endif // KNMUSICSTORENETEASEBACKEND_H

@@ -16,11 +16,88 @@
 Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusicstorecontainer.h"
+#include "knmusicstorebackend.h"
+#include "knmusicstoreutil.h"
+#include "knmusicstorepage.h"
 
 #include "knmusicstorebackendmanager.h"
 
-KNMusicStoreBackendManager::KNMusicStoreBackendManager(QObject *parent) :
-    QObject(parent)
-{
+using namespace MusicStoreUtil;
 
+KNMusicStoreBackendManager *KNMusicStoreBackendManager::m_instance=nullptr;
+
+KNMusicStoreBackendManager::KNMusicStoreBackendManager(QObject *parent) :
+    QObject(parent),
+    m_pageContainer(nullptr)
+{
+}
+
+void KNMusicStoreBackendManager::setPageContainer(
+        KNMusicStoreContainer *pageContainer)
+{
+    //Save the page container.
+    m_pageContainer = pageContainer;
+}
+
+void KNMusicStoreBackendManager::showAlbum(const QString &backendId,
+                                           const QString &albumInfo)
+{
+    Q_ASSERT(m_pageContainer);
+    //Get the backend.
+    KNMusicStoreBackend *backend=m_backendMap.value(backendId, nullptr);
+    //Check backend pointer.
+    if(!backend)
+    {
+        //Failed to operate the backend.
+        return;
+    }
+    //Set the backend to the page.
+    m_pageContainer->page(PageAlbum)->setBackend(backend);
+    //Ask the backend to show the information.
+    backend->showAlbum(albumInfo);
+}
+
+void KNMusicStoreBackendManager::showSingleSong(const QString &backendId,
+                                                const QString &songInfo)
+{
+    Q_ASSERT(m_pageContainer);
+    //Get the backend.
+    KNMusicStoreBackend *backend=m_backendMap.value(backendId, nullptr);
+    //Check backend pointer.
+    if(!backend)
+    {
+        //Failed to operate the backend.
+        return;
+    }
+    //Set the backend to the page.
+    m_pageContainer->page(PageSingleSong)->setBackend(backend);
+    //Ask the backend to show the information.
+    backend->showAlbum(songInfo);
+}
+
+KNMusicStoreBackendManager *KNMusicStoreBackendManager::instance()
+{
+    return m_instance;
+}
+
+void KNMusicStoreBackendManager::initial(QObject *parent)
+{
+    //Check the instance pointer.
+    if(m_instance)
+    {
+        //Ignore the useless function call.
+        return;
+    }
+    //Create the instance.
+    m_instance=new KNMusicStoreBackendManager(parent);
+}
+
+void KNMusicStoreBackendManager::addBackend(KNMusicStoreBackend *backend)
+{
+    //Add backend to the map.
+    m_backendMap.insert(backend->objectName(), backend);
+    //Link the backend request to the header.
+    connect(backend, &KNMusicStoreBackend::requireSetNavigatorItem,
+            this, &KNMusicStoreBackendManager::requireSetNavigatorItem);
 }

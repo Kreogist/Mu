@@ -17,36 +17,46 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREBASE_H
-#define KNMUSICSTOREBASE_H
+#ifndef KNMUSICSTORELISTVIEW_H
+#define KNMUSICSTORELISTVIEW_H
 
-#include "knmusictab.h"
+#include "knmusicstoreutil.h"
+
+#include "knmousesensetreeview.h"
+
+using namespace MusicStoreUtil;
 
 /*!
- * \brief The KNMusicStoreBase class provides all the basic ports for the online
- * music store. The music store should be a information collection. Currently,
- * it will collect all the music from the plugins and provide information to
- * user.\n
- * Basiclly, a music store tab should provide a home widget. All the other
- * widget is not forced required.
+ * \brief The KNMusicStoreListView class provides the album list view for the
+ * store album songs.
  */
-class KNMusicStoreBase : public KNMusicTab
+class KNMusicStoreListView : public KNMouseSenseTreeView
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStoreBase tab widget.
-     * \param parent The parent object.
+     * \brief Construct a KNMusicStoreListView widget.
+     * \param parent The parent widget.
      */
-    KNMusicStoreBase(QWidget *parent = 0) : KNMusicTab(parent) {}
+    explicit KNMusicStoreListView(QWidget *parent = 0);
+
+    /*!
+     * \brief Get the fixed row height.
+     * \return The row height, unit is pixel.
+     */
+    static int fixedRowHeight();
 
 signals:
 
 public slots:
+
+protected:
     /*!
-     * \brief Load all the plugins of the music store.
+     * \brief Reimplemented from KNMouseSenseTreeView::wheelEvent().
      */
-    virtual void loadPlugins()=0;
+    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
+
+private:
 };
 
-#endif // KNMUSICSTOREBASE_H
+#endif // KNMUSICSTORELISTVIEW_H

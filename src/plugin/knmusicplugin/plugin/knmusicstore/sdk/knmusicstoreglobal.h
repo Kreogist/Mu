@@ -27,7 +27,7 @@ Foundation,
 #include <QObject>
 
 /*!
- * \def knGlobal
+ * \def knMusicStoreGlobal
  * A global pointer referring to the unique music store global object.
  */
 #define knMusicStoreGlobal (KNMusicStoreGlobal::instance())
@@ -35,6 +35,7 @@ Foundation,
 using namespace MusicStoreUtil;
 
 class KNDarkWaitingWheel;
+class KNMusicStoreAlbumModel;
 /*!
  * \brief The KNMusicStoreGlobal class provides some public resources for the
  * music store framework:\n
@@ -76,6 +77,13 @@ public:
      */
     void reduceConnectionCounter(int counter);
 
+    /*!
+     * \brief Get the music store global album model. This is used for album
+     * songs displaying.
+     * \return The album model pointer.
+     */
+    KNMusicStoreAlbumModel *albumModel() const;
+
 signals:
 
 public slots:
@@ -92,6 +100,7 @@ private:
     QString m_errorText[MusicStoreErrorCount];
     QSemaphore m_connectSemaphore;
     KNDarkWaitingWheel *m_connectStateWheel;
+    KNMusicStoreAlbumModel *m_albumModel;
 };
 
 #endif // KNMUSICSTOREGLOBAL_H

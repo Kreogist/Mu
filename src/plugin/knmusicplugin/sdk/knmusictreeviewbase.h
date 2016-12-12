@@ -19,9 +19,8 @@
 #ifndef KNMUSICTREEVIEWBASE_H
 #define KNMUSICTREEVIEWBASE_H
 
-#include <QTreeView>
+#include "knmousesensetreeview.h"
 
-class QTimeLine;
 class KNMusicModel;
 class KNMusicProxyModel;
 class KNMusicTab;
@@ -32,7 +31,7 @@ class KNMusicTab;
  * Remember this is only a base class, it means you have to reimplement it. Set
  * the object name and called onActionThemeUpdate() slot.
  */
-class KNMusicTreeViewBase : public QTreeView
+class KNMusicTreeViewBase : public KNMouseSenseTreeView
 {
     Q_OBJECT
 public:
@@ -95,12 +94,6 @@ public:
      */
     void scrollToRow(const int &row);
 
-    /*!
-     * \brief Update the object name set up the new palette from theme manager.
-     * \param name The new object name.
-     */
-    void updateObjectName(const QString &name);
-
 signals:
     /*!
      * \brief When dragging is started, this signal will be emitted.
@@ -116,59 +109,49 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from QTreeView::enterEvent().
-     */
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QTreeView::leaveEvent().
-     */
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QTreeView::drawRow().
+     * \brief Reimplemented from KNMouseSenseTreeView::drawRow().
      */
     void drawRow(QPainter *painter,
                  const QStyleOptionViewItem &options,
                  const QModelIndex &index) const  Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::startDrag().
+     * \brief Reimplemented from KNMouseSenseTreeView::startDrag().
      */
     void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::dragEnterEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::dragEnterEvent().
      */
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::dragMoveEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::dragMoveEvent().
      */
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::dragLeaveEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::dragLeaveEvent().
      */
     void dragLeaveEvent(QDragLeaveEvent *) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::dropEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::dropEvent().
      */
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::mousePressEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::mousePressEvent().
      */
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::mouseReleaseEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::mouseReleaseEvent().
      */
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::keyReleaseEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::keyReleaseEvent().
      */
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
@@ -185,12 +168,12 @@ protected:
     void moveToFirst(const int &logicalIndex);
 
     /*!
-     * \brief Reimplemented from QTreeView::event().
+     * \brief Reimplemented from KNMouseSenseTreeView::event().
      */
     bool event(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QTreeView::wheelEvent().
+     * \brief Reimplemented from KNMouseSenseTreeView::wheelEvent().
      */
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
@@ -207,25 +190,7 @@ protected:
      */
     void setAcceptDragMove(bool dropInline);
 
-    /*!
-     * \brief Reimplemented from QTreeView::resizeEvent().
-     */
-    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QTreeView::showEvent().
-     */
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
-
-protected slots:
-    /*!
-     * \brief This slot is provide to update the palette when the tree view is
-     * being constructed. Or else the UI will be very ugly.
-     */
-    void onActionThemeUpdate();
-
 private slots:
-    void onActionMouseInOut(int frame);
     void onActionActivate(const QModelIndex &index);
     void playCurrent();
     void removeCurrent();
@@ -234,9 +199,7 @@ private:
     QAbstractItemView::DropIndicatorPosition dropPosition(const QPoint &pos,
             const QRect &rect) const;
     inline void scrollToIndex(const QModelIndex &proxyIndex);
-    inline void startAnime(int endFrame);
     inline bool dropOn(QDropEvent *event, int &dropRow);
-    inline void updateVerticalScrollBarGeometry();
     inline void showMenu(QPoint position,
                          const QModelIndex &pressedIndex=QModelIndex());
     void showSoloMenu(const QPoint &position, const QModelIndex &pressedIndex);
@@ -244,9 +207,7 @@ private:
     bool showDetailTooltip(const QPoint &indexPosition);
 
     KNMusicTab *m_musicTab;
-    QTimeLine *m_mouseAnime;
     KNMusicProxyModel *m_proxyModel;
-    QScrollBar *m_hScrollBar, *m_vScrollBar;
     int m_dragMoveRow;
     QAbstractItemView::DropIndicatorPosition m_dragIndicatorPos;
 

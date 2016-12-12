@@ -41,6 +41,20 @@ public:
 
 signals:
     /*!
+     * \brief Set the navigator item text in the header text.
+     * \param navigatorIndex The navigator item index.
+     * \param caption The text of the navigator item.
+     */
+    void requireSetNavigatorItem(int navigatorIndex, const QString &caption);
+
+    /*!
+     * \brief Require to change the album song page.
+     * \param labelIndex The index of label.
+     * \param value The value of the data.
+     */
+    void requireSetAlbum(int labelIndex, QVariant value);
+
+    /*!
      * \brief Require to change the single song page.
      * \param labelIndex The index of label.
      * \param value The value of the data.
@@ -48,6 +62,19 @@ signals:
     void requireSetSingleSong(int labelIndex, QVariant value);
 
 public slots:
+    /*!
+     * \brief Fetch the album information according to the information it
+     * provides to the backend.
+     * \param albumInfo The album identical information.
+     */
+    virtual void showAlbum(const QString &albumInfo)=0;
+
+    /*!
+     * \brief Fetch the single song information according to the information it
+     * provides to the backend.
+     * \param songInfo The single song information.
+     */
+    virtual void showSingleSong(const QString &songInfo)=0;
 
 private:
 

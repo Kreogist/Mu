@@ -27,10 +27,21 @@ class KNDropProxyContainer;
 class KNCategoryTab;
 class KNMusicCategoryDisplay;
 class KNMusicCategoryListViewBase;
+/*!
+ * \brief The KNMusicLibraryArtistTab class provides the tab for artist category
+ * view. This is a standard category tab (Actually, it is designed for this
+ * category).\n
+ * The widget provides a list view for all the artists, and a tree view for the
+ * current artist to display its songs.
+ */
 class KNMusicLibraryArtistTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryArtistTab widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLibraryArtistTab(QWidget *parent = 0);
 
     /*!

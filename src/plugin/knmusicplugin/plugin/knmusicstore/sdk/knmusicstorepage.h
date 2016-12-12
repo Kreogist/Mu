@@ -22,8 +22,11 @@ Foundation,
 
 #include <QVariant>
 
+#include "knconnectionhandler.h"
+
 #include "knmousesensewidget.h"
 
+class KNMusicStoreBackend;
 /*!
  * \brief The KNMusicStorePage class provides a page used for the abstract ports
  * of all the pages for the music store. These pages include home page, search
@@ -37,17 +40,29 @@ public:
      * \brief Construct a KNMusicStorePage widget.
      * \param parent The parent widget.
      */
-    KNMusicStorePage(QWidget *parent = 0) :
-        KNMouseSenseWidget(parent)
-    {
-        //Set properties.
-        setChangeOpacity(true);
-        setSenseRange(0x09, 0x19);
-    }
+    KNMusicStorePage(QWidget *parent = 0);
 
 signals:
 
 public slots:
+    /*!
+     * \brief Clear all the data on the current page, reset the page to the very
+     * beginning.
+     */
+    virtual void reset()=0;
+
+    /*!
+     * \brief Set the linked backend to the target page.
+     * \param backend The backend object pointer.
+     */
+    virtual void setBackend(KNMusicStoreBackend *backend)=0;
+
+    /*!
+     * \brief Set the label data at specific page.
+     * \param labelIndex The index recorded in the util class.
+     * \param value The value of the label.
+     */
+    virtual void setPageLabel(int labelIndex, const QVariant &value)=0;
 };
 
 #endif // KNMUSICSTOREPAGE_H
