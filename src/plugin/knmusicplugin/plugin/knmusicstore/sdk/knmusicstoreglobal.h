@@ -20,7 +20,7 @@ Foundation,
 #ifndef KNMUSICSTOREGLOBAL_H
 #define KNMUSICSTOREGLOBAL_H
 
-#include <QSemaphore>
+#include <QMutex>
 
 #include "knmusicstoreutil.h"
 
@@ -97,8 +97,9 @@ private:
     KNMusicStoreGlobal(const KNMusicStoreGlobal &);
     KNMusicStoreGlobal(KNMusicStoreGlobal &&);
 
-    QString m_errorText[MusicStoreErrorCount];
-    QSemaphore m_connectSemaphore;
+//    QString m_errorText[MusicStoreErrorCount];
+    QMutex m_connectLock;
+    int m_connectSemaphore;
     KNDarkWaitingWheel *m_connectStateWheel;
     KNMusicStoreAlbumModel *m_albumModel;
 };
