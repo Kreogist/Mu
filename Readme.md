@@ -31,6 +31,10 @@ Copyright © 2013-2016 Kreogist Dev Team. All rights reserved.
 * [Lin Yuan](https://github.com/SphericalHarnomics)
 * [miaolapd](https://github.com/miaolapd)
 
+## Compile and Build
+
+To compile and build μ from the source code, we suggest you to visit the [Compile](https://github.com/Kreogist/Mu/wiki/Compile) and [Build](https://github.com/Kreogist/Mu/wiki/Build) page at wiki.
+
 ## License
 
 μ is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.
