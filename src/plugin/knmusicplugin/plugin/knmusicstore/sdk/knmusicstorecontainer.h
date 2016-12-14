@@ -80,7 +80,9 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void showPage(KNMusicStorePage *pageWidget);
     void onShowPage();
+    void onShowPageIndex(int index);
     void onShowAlbum(const QString &metadata);
     void onShowSingleSong(const QString &metadata);
 

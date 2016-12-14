@@ -20,6 +20,7 @@ Foundation,
 #include <QLabel>
 #include <QTimeLine>
 #include <QPainter>
+#include <QSignalMapper>
 
 #include "knanimelabelbutton.h"
 #include "knlocalemanager.h"
@@ -50,6 +51,10 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0, 0, 0, 0);
     setFixedHeight(KNMusicStoreUtil::headerHeight());
+    //Initial navigator mapper.
+    QSignalMapper *navigatorMapper=new QSignalMapper(this);
+    connect(navigatorMapper, SIGNAL(mapped(int)),
+            this, SLOT(onNavigatorClick(int)));
     //Initial navigators.
     for(int i=0; i<PagesCount; ++i)
     {
@@ -59,6 +64,10 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
         m_navigatorItem[i]->setCursor(Qt::PointingHandCursor);
         //Hide the navigator item.
         m_navigatorItem[i]->hide();
+        //Add the item to mapper.
+        connect(m_navigatorItem[i], SIGNAL(clicked()),
+                navigatorMapper, SLOT(map()));
+        navigatorMapper->setMapping(m_navigatorItem[i], i);
     }
     //Show the home page item.
     m_navigatorItem[PageHome]->show();
@@ -221,6 +230,20 @@ void KNMusicStoreHeader::retranslate()
     m_navigatorItem[PageHome]->setText(tr("Store"));
     //Update the search label text.
     updateSearchLabel();
+}
+
+void KNMusicStoreHeader::onNavigatorClick(int index)
+{
+    //Hide the indicator and label after index.
+    for(int i=index+1; i<PagesCount; ++i)
+    {
+        //Hide the label.
+        m_navigatorItem[i]->hide();
+        //Hide the indicator.
+        m_indicator[i-1]->hide();
+    }
+    //Emit the page display requirement.
+    emit requireShowPage(index);
 }
 
 inline void KNMusicStoreHeader::updateSearchLabel()

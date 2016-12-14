@@ -58,6 +58,8 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     m_header->setChangeOpacity(true);
     m_header->setSenseRange(0x00, 0x15);
     m_header->updateObjectName("MusicStoreHeader");
+    connect(m_header, &KNMusicStoreHeader::requireShowPage,
+            this, &KNMusicStoreContainer::onShowPageIndex);
     //Configure the page container.
     m_pageContainer->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     m_pageContainer->setVScrollBarTopMargin(KNMusicStoreUtil::headerHeight());
@@ -110,13 +112,17 @@ void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
     updatePageWidth();
 }
 
-void KNMusicStoreContainer::onShowPage()
+void KNMusicStoreContainer::showPage(KNMusicStorePage *pageWidget)
 {
-    //The check the sender, cast it as page widget.
-    KNMusicStorePage *pageWidget=static_cast<KNMusicStorePage *>(sender());
     //Check the page container.
     if(m_pageContainer->widget())
     {
+        //Check those two widget.
+        if(m_pageContainer->widget()==pageWidget)
+        {
+            //No need to change.
+            return;
+        }
         //Clear the widget.
         KNMusicStorePage *originalPageWidget=
                 static_cast<KNMusicStorePage *>(m_pageContainer->takeWidget());
@@ -127,6 +133,18 @@ void KNMusicStoreContainer::onShowPage()
     m_pageContainer->setWidget(pageWidget);
     //Update the page widget size.
     updatePageWidth();
+}
+
+void KNMusicStoreContainer::onShowPage()
+{
+    //The check the sender, cast it as page widget.
+    showPage(static_cast<KNMusicStorePage *>(sender()));
+}
+
+void KNMusicStoreContainer::onShowPageIndex(int index)
+{
+    //Show the specific page via index.
+    showPage(m_pages[index]);
 }
 
 void KNMusicStoreContainer::onShowAlbum(const QString &metadata)

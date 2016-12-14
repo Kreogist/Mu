@@ -63,6 +63,11 @@ public:
     void addStateWidget(QWidget *widget);
 
 signals:
+    /*!
+     * \brief Require to show one page.
+     * \param index The page index.
+     */
+    void requireShowPage(int index);
 
 public slots:
     /*!
@@ -86,6 +91,7 @@ protected slots:
 
 private slots:
     void retranslate();
+    void onNavigatorClick(int index);
 
 private:
     inline void updateSearchLabel();
