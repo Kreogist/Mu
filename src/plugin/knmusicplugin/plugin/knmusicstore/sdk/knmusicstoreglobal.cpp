@@ -19,6 +19,8 @@ Foundation,
 #include "knlocalemanager.h"
 #include "kndarkwaitingwheel.h"
 
+#include "knmusiclrcparser.h"
+
 #include "knmusicstorebackendmanager.h"
 #include "knmusicstorealbummodel.h"
 
@@ -60,7 +62,8 @@ KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
     QObject(parent),
     m_connectSemaphore(0),
     m_connectStateWheel(new KNDarkWaitingWheel()),
-    m_albumModel(new KNMusicStoreAlbumModel(this))
+    m_albumModel(new KNMusicStoreAlbumModel(this)),
+    m_lrcParser(new KNMusicLrcParser(this))
 {
     //Initial the backend manager.
     KNMusicStoreBackendManager::initial(this);
@@ -71,6 +74,11 @@ KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
     //Link the retranslator.
     knI18n->link(this, &KNMusicStoreGlobal::retranslate);
     retranslate();
+}
+
+KNMusicLrcParser *KNMusicStoreGlobal::lrcParser() const
+{
+    return m_lrcParser;
 }
 
 KNMusicStoreAlbumModel *KNMusicStoreGlobal::albumModel() const
@@ -89,10 +97,14 @@ void KNMusicStoreGlobal::addConnectionCounter(int counter)
     m_connectLock.lock();
     //Set the widget to be the visit one.
     m_connectStateWheel->show();
-    //Start ticking.
-    m_connectStateWheel->startTick();
+    //Check the wheel working state.
+    if(!m_connectStateWheel->isTick())
+    {
+        //Start ticking.
+        m_connectStateWheel->startTick();
+    }
     //Add number to semaphore.
-    ++m_connectSemaphore;
+    m_connectSemaphore+=counter;
     //Unlock.
     m_connectLock.unlock();
 }
@@ -102,7 +114,7 @@ void KNMusicStoreGlobal::reduceConnectionCounter(int counter)
     //Lock the semaphore.
     m_connectLock.lock();
     //Reduce the number.
-    --m_connectSemaphore;
+    m_connectSemaphore-=counter;
     //Check the value.
     if(m_connectSemaphore==0)
     {

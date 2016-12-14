@@ -35,7 +35,8 @@ KNScrollArea::KNScrollArea(QWidget *parent) :
     m_hScrollBar(new QScrollBar(Qt::Horizontal, this)),
     m_vScrollBar(new QScrollBar(Qt::Vertical, this)),
     m_mouseAnime(new QTimeLine(200, this)),
-    m_currentFrame(0)
+    m_currentFrame(0),
+    m_vScrollBarTopMargin(0)
 {
     //Set properties.
     setContentsMargins(0, 0, 0, 0);
@@ -172,17 +173,18 @@ inline void KNScrollArea::updateVerticalScrollBarGeometry()
         {
             //Both of the scroll bar is visible.
             m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
-                                      0,
+                                      m_vScrollBarTopMargin,
                                       ScrollBarWidth,
-                                      height()-ScrollBarWidth-ScrollBarSpacing);
+                                      height()-ScrollBarWidth-ScrollBarSpacing
+                                      -m_vScrollBarTopMargin);
         }
         else
         {
             //Only vertical scroll bar is visible.
             m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
-                                      0,
+                                      m_vScrollBarTopMargin,
                                       ScrollBarWidth,
-                                      height());
+                                      height()-m_vScrollBarTopMargin);
         }
     }
 }
@@ -195,6 +197,11 @@ inline void KNScrollArea::startAnime(int endFrame)
     m_mouseAnime->setFrameRange(m_currentFrame, endFrame);
     //Start the time line.
     m_mouseAnime->start();
+}
+
+void KNScrollArea::setVScrollBarTopMargin(int vScrollBarTopMargin)
+{
+    m_vScrollBarTopMargin = vScrollBarTopMargin;
 }
 
 QScrollBar *KNScrollArea::vScrollBar() const

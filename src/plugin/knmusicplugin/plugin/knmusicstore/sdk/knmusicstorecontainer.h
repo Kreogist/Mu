@@ -52,6 +52,13 @@ public:
 
 signals:
     /*!
+     * \brief Ask the backend to fetch information about one album.
+     * \param backendId The backend name which will process the metadata.
+     * \param metadata The album's metadata.
+     */
+    void requireShowAlbum(QString backendId, QString metadata);
+
+    /*!
      * \brief Ask the backend to fetch information about single song.
      * \param backendId The backend name which will process the metadata.
      * \param metadata The song's metadata.
@@ -74,6 +81,7 @@ protected:
 
 private slots:
     void onShowPage();
+    void onShowAlbum(const QString &metadata);
     void onShowSingleSong(const QString &metadata);
 
 private:

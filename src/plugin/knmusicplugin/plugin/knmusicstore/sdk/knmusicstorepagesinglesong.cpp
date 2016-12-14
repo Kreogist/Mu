@@ -61,6 +61,8 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     //Configure the album label.
     m_albumLabel->setCursor(Qt::PointingHandCursor);
     m_albumLabel->setRange(MinLabelBrightness, MaxLabelBrightness);
+    connect(m_albumLabel, &KNAnimeLabelButton::clicked,
+            this, &KNMusicStorePageSingleSong::onAlbumClicked);
     //Configure the album art label.
     m_albumArt->setFixedSize(200, 200);
     //Configure the artist layout.
@@ -194,15 +196,17 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
             //Update all the label palette.
             updateArtistLabelPalette();
         }
-        //Show the page.
-        emit requireShowPage();
         break;
     }
     case SingleLyrics:
         // Song lyrics, the value should be a string type value.
         m_lyrics->setText(value.toString());
+        //Show the page.
+        emit requireShowPage();
         break;
     case SingleAlbumArt:
+        //Parse the value as pixmap.
+        m_albumArt->setPixmap(value.value<QPixmap>());
         break;
     }
 }
@@ -213,7 +217,7 @@ void KNMusicStorePageSingleSong::reset()
     m_headerLabel->clear();
     m_subheadingLabel->clear();
     m_albumLabel->clear();
-    m_albumArt->setArtwork(QPixmap(":/plugin/music/public/noalbum.png"));
+    m_albumArt->setPixmap(QPixmap(":/plugin/music/public/noalbum.png"));
     m_lyrics->clear();
     //Clear the artist list.
     clearArtistList();
@@ -221,12 +225,24 @@ void KNMusicStorePageSingleSong::reset()
 
 void KNMusicStorePageSingleSong::setBackend(KNMusicStoreBackend *backend)
 {
+    //Do the parent set backend.
+    KNMusicStorePage::setBackend(backend);
     //Break all the previous connections.
     m_backendConnection.disconnectAll();
     //Link the backend to this page.
     m_backendConnection.append(
                 connect(backend, &KNMusicStoreBackend::requireSetSingleSong,
                         this, &KNMusicStorePageSingleSong::setPageLabel));
+    //Reset the current page.
+    reset();
+}
+
+void KNMusicStorePageSingleSong::showEvent(QShowEvent *event)
+{
+    //Show the widget.
+    KNMusicStorePage::showEvent(event);
+    //Enable the widget.
+    setEnabled(true);
 }
 
 void KNMusicStorePageSingleSong::onPaletteChanged()
@@ -247,6 +263,14 @@ void KNMusicStorePageSingleSong::retranslate()
     m_labelHints[HintAlbum]->setText(tr("Album"));
     //Update the artist hint label.
     updateArtistHintLabel();
+}
+
+void KNMusicStorePageSingleSong::onAlbumClicked()
+{
+    //Ask to show the album.
+    emit requireShowAlbum(m_albumMetadata);
+    //Disable the widget.
+    setEnabled(false);
 }
 
 inline void KNMusicStorePageSingleSong::clearArtistList()

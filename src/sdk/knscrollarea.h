@@ -62,6 +62,11 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set the top margin of the vertical scroll bar.
+     * \param vScrollBarTopMargin The margin value.
+     */
+    void setVScrollBarTopMargin(int vScrollBarTopMargin);
 
 protected:
     /*!
@@ -99,7 +104,7 @@ private:
     inline void startAnime(int endFrame);
     QScrollBar *m_hScrollBar, *m_vScrollBar;
     QTimeLine *m_mouseAnime;
-    int m_currentFrame;
+    int m_currentFrame, m_vScrollBarTopMargin;
 };
 
 #endif // KNSCROLLAREA_H

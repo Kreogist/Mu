@@ -23,7 +23,10 @@ Foundation,
 #include <QNetworkReply>
 #include <QPixmap>
 
+#include "knmusiclrcparser.h"
 #include "knmusicutil.h"
+
+#include "../../sdk/knmusicstoreglobal.h"
 #include "../../sdk/knmusicstoreutil.h"
 
 #include "knmusicstoreneteasebackend.h"
@@ -53,6 +56,8 @@ void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
     albumRequest.setUrl(QUrl("http://music.163.com/api/album/"+albumInfo));
     //Get the request, insert the request in the map.
     m_replyMap.insert(m_accessManager->get(albumRequest), NeteaseAlbumDetails);
+    //Increase Internet counter.
+    knMusicStoreGlobal->addConnectionCounter(1);
 }
 
 void KNMusicStoreNeteaseBackend::showSingleSong(const QString &songInfo)
@@ -95,13 +100,33 @@ void KNMusicStoreNeteaseBackend::showSingleSong(const QString &songInfo)
     QJsonObject albumObject=songObject.value("album").toObject();
     songMetadata.insert("album", albumObject.value("name").toString());
     songMetadata.insert("album_meta",
-                        QString(QJsonDocument(albumObject).toJson()));
+                        QString::number(
+                            qint64(albumObject.value("id").toDouble())));
+    //Fetch the album art.
+    QString albumArtUrl=albumObject.value("picUrl").toString();
+    QNetworkRequest albumArtRequest(QUrl::fromEncoded(
+                                        albumArtUrl.toLocal8Bit()));
+    //Get the request, insert the request in the map.
+    m_replyMap.insert(m_accessManager->get(albumArtRequest),
+                      NeteaseSingleAlbumArt);
     //Most of the information is already in the song object.
     emit requireSetSingleSong(SingleMetadata, songMetadata);
+    //Get the lyrics of the song.
+    QNetworkRequest singleLyrics=generateRequest();
+    singleLyrics.setUrl(QUrl("http://music.163.com/api/song/lyric?os=osx&id="+
+                             QString::number(
+                                 qint64(songObject.value("id").toDouble()))+
+                             "&lv=-1&kv=-1&tv=-1"));
+    m_replyMap.insert(m_accessManager->get(singleLyrics),
+                      NeteaseSingleLyricsText);
+    //Increase Internet counter.
+    knMusicStoreGlobal->addConnectionCounter(2);
 }
 
 void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
 {
+    //Reduce reply counter.
+    knMusicStoreGlobal->reduceConnectionCounter(1);
     //Check the reply in the hash list.
     int replyOperation=m_replyMap.value(reply, -1);
     //Check the operation.
@@ -131,6 +156,22 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
         albumArtPixmap.loadFromData(replyData);
         //Emit the album set data.
         emit requireSetAlbum(AlbumArt, QVariant(albumArtPixmap));
+        break;
+    }
+    case NeteaseSingleLyricsText:
+        //Single song lyrics reply.
+        onSingleLyricsReply(reply);
+        break;
+    case NeteaseSingleAlbumArt:
+    {
+        //Album art fetched.
+        //Load QPixmap from the result.
+        QPixmap albumArtPixmap;
+        //Load the data to a pixmap.
+        QByteArray replyData=reply->readAll();
+        albumArtPixmap.loadFromData(replyData);
+        //Emit the album set data.
+        emit requireSetSingleSong(SingleAlbumArt, QVariant(albumArtPixmap));
         break;
     }
     default:
@@ -199,6 +240,45 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
     //Get the request, insert the request in the map.
     m_replyMap.insert(m_accessManager->get(albumArtRequest),
                       NeteaseAlbumArt);
+    //Increase Internet counter.
+    knMusicStoreGlobal->addConnectionCounter(1);
+}
+
+void KNMusicStoreNeteaseBackend::onSingleLyricsReply(QNetworkReply *reply)
+{
+    //Read the reply data.
+    QJsonObject lyricsObject=QJsonDocument::fromJson(reply->readAll()).object();
+    //All the data is in its lrc object.
+    QString lrcLyrics;
+    {
+        //Get the raw text.
+        QJsonObject lrcObject=lyricsObject.value("lrc").toObject();
+        //Check whether it contains lyric key.
+        if(lrcObject.contains("lyric"))
+        {
+            //Add text to LRC lyrics.
+            lrcLyrics.append(lrcObject.value("lyric").toString());
+        }
+        //Get the translate text.
+        lrcObject=lyricsObject.value("tlyric").toObject();
+        //Check whether it contains lyric key.
+        if(lrcObject.contains("lyric"))
+        {
+            //Add translated text to LRC lyrics.
+            lrcLyrics.append(lrcObject.value("lyric").toString());
+        }
+    }
+    //Parse the lyrics.
+    QStringList textList;
+    {
+        //Prepare the position list.
+        QList<qint64> positionList;
+        knMusicStoreGlobal->lrcParser()->parseText(lrcLyrics,
+                                                   positionList,
+                                                   textList);
+    }
+    //Combine the text list with next line.
+    emit requireSetSingleSong(SingleLyrics, textList.join('\n'));
 }
 
 inline QNetworkRequest KNMusicStoreNeteaseBackend::generateRequest()

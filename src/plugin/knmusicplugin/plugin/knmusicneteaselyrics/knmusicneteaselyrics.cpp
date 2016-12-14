@@ -77,10 +77,6 @@ void KNMusicNeteaseLyrics::downloadLyrics(
          *                "size":4,
          *                "status":1
          *            },
-         *        "alias":
-         *            [
-         *                "TV动画《科学超电磁炮》片头曲"
-         *            ],
          *        "artists":
          *            [
          *                {

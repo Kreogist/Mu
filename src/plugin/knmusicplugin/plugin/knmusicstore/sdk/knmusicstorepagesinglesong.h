@@ -70,6 +70,12 @@ public slots:
      */
     void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
 
+protected:
+    /*!
+     * \brief Reimplemented from KNMusicStorePage::showEvent().
+     */
+    void showEvent(QShowEvent *event)  Q_DECL_OVERRIDE;
+
 protected slots:
     /*!
      * \brief Reimplemented from KNMusicStorePage::onPaletteChanged().
@@ -78,6 +84,7 @@ protected slots:
 
 private slots:
     void retranslate();
+    void onAlbumClicked();
 
 private:
     enum LabelHints

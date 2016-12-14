@@ -63,6 +63,12 @@ public slots:
      */
     void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
 
+protected:
+    /*!
+     * \brief Reimplemented from KNMusicStorePage::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void onAlbumRowCountChanged(int row);
     void onViewIndexClicked(const QModelIndex &index);

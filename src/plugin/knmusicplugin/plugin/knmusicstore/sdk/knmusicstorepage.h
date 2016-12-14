@@ -58,7 +58,13 @@ signals:
     void requireShowPage();
 
     /*!
-     * \brief Ask the backend to fetch information about single song.
+     * \brief Ask the backend to fetch information about one album.
+     * \param metadata The song's metadata.
+     */
+    void requireShowAlbum(QString metadata);
+
+    /*!
+     * \brief Ask the backend to fetch information about one single song.
      * \param metadata The song's metadata.
      */
     void requireShowSingleSong(QString metadata);

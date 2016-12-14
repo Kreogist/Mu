@@ -39,7 +39,7 @@ public:
      * \brief Get the artwork of the album label.
      * \return The QPixmap format artwork of the current label.
      */
-    QPixmap artwork() const;
+    QPixmap pixmap() const;
 
 signals:
 
@@ -48,7 +48,7 @@ public slots:
      * \brief Set the artwork of the album art.
      * \param artwork The cover image of the album.
      */
-    void setArtwork(const QPixmap &artwork);
+    void setPixmap(const QPixmap &pixmap);
 
 protected:
     /*!

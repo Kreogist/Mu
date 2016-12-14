@@ -121,13 +121,21 @@ void KNMusicStoreHeader::addStateWidget(QWidget *widget)
     m_pluginTray->addWidget(widget);
 }
 
-void KNMusicStoreHeader::setNavigatorText(int itemIndex, QString text)
+void KNMusicStoreHeader::setNavigatorText(int itemIndex, const QString &text)
 {
+    bool elided=false;
     //Show the changed text.
     m_navigatorItem[itemIndex]->show();
     //Update the text for elided text.
-    text=m_navigatorItem[itemIndex]->fontMetrics().elidedText(
+    QString elidedText=
+            m_navigatorItem[itemIndex]->fontMetrics().elidedText(
                 text, Qt::ElideRight, MaxNavigatorWidth);
+    //Check elided text length.
+    if(elidedText.length()<text.length())
+    {
+        //Set the tooltip flag to be true.
+        elided=true;
+    }
     //Check whether the item has indicator.
     if(itemIndex!=0)
     {
@@ -147,7 +155,21 @@ void KNMusicStoreHeader::setNavigatorText(int itemIndex, QString text)
     {
     case PageAlbum:
     case PageSingleSong:
-        m_navigatorItem[itemIndex]->setText(text);
+        //Check the result.
+        if(elided)
+        {
+            //Set the elided text as the text.
+            m_navigatorItem[itemIndex]->setText(elidedText);
+            //Set the original text as tooltip.
+            m_navigatorItem[itemIndex]->setToolTip(text);
+        }
+        else
+        {
+            //Set the original text as the text.
+            m_navigatorItem[itemIndex]->setText(text);
+            //Clear the elided text.
+            m_navigatorItem[itemIndex]->setToolTip("");
+        }
         break;
     case PageSearchResult:
         //Update the keyword.

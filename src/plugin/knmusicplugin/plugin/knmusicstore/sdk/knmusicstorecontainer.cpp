@@ -60,6 +60,7 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     m_header->updateObjectName("MusicStoreHeader");
     //Configure the page container.
     m_pageContainer->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    m_pageContainer->setVScrollBarTopMargin(KNMusicStoreUtil::headerHeight());
     //Configure the scroll bar.
     QScrollBar *containerScrollBar=m_pageContainer->vScrollBar();
     containerScrollBar->setObjectName("MusicStoreScrollBar");
@@ -128,6 +129,15 @@ void KNMusicStoreContainer::onShowPage()
     updatePageWidth();
 }
 
+void KNMusicStoreContainer::onShowAlbum(const QString &metadata)
+{
+    //The check the sender, cast it as page widget.
+    KNMusicStorePage *pageWidget=static_cast<KNMusicStorePage *>(sender());
+    //Resent the signal with name of backend.
+    emit requireShowAlbum(pageWidget->backendName(),
+                          metadata);
+}
+
 void KNMusicStoreContainer::onShowSingleSong(const QString &metadata)
 {
     //The check the sender, cast it as page widget.
@@ -160,6 +170,8 @@ inline void KNMusicStoreContainer::configurePage(KNMusicStorePage *pageWidget)
     //Link the page signals.
     connect(pageWidget, &KNMusicStorePage::requireShowPage,
             this, &KNMusicStoreContainer::onShowPage);
+    connect(pageWidget, &KNMusicStorePage::requireShowAlbum,
+            this, &KNMusicStoreContainer::onShowAlbum);
     connect(pageWidget, &KNMusicStorePage::requireShowSingleSong,
             this, &KNMusicStoreContainer::onShowSingleSong);
     //Hide the page.

@@ -60,13 +60,15 @@ public slots:
 private slots:
     void onReplyFinished(QNetworkReply *reply);
     void onAlbumDetailReply(QNetworkReply *reply);
+    void onSingleLyricsReply(QNetworkReply *reply);
 
 private:
     enum NeteaseReplyTypes
     {
         NeteaseAlbumDetails,
         NeteaseAlbumArt,
-        NeteaseSingleLyricsText
+        NeteaseSingleLyricsText,
+        NeteaseSingleAlbumArt
     };
     inline QByteArray getRawData(QNetworkReply *reply);
     inline QNetworkRequest generateRequest();

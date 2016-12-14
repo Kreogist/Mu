@@ -28,12 +28,12 @@ KNMusicAlbumLabel::KNMusicAlbumLabel(QWidget *parent) :
 {
 }
 
-QPixmap KNMusicAlbumLabel::artwork() const
+QPixmap KNMusicAlbumLabel::pixmap() const
 {
     return m_originalArtwork;
 }
 
-void KNMusicAlbumLabel::setArtwork(const QPixmap &artwork)
+void KNMusicAlbumLabel::setPixmap(const QPixmap &artwork)
 {
     //Save the original artwork.
     m_originalArtwork=artwork;

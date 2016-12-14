@@ -44,6 +44,12 @@ KNDarkWaitingWheel::KNDarkWaitingWheel(QWidget *parent) :
     connect(m_tickTimer, &QTimer::timeout, this, &KNDarkWaitingWheel::tick);
 }
 
+bool KNDarkWaitingWheel::isTick() const
+{
+    //The timer object work state is the widget work state.
+    return m_tickTimer->isActive();
+}
+
 void KNDarkWaitingWheel::startTick()
 {
     //Start the ticking timer.

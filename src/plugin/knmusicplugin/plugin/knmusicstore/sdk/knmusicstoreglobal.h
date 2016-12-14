@@ -35,6 +35,7 @@ Foundation,
 using namespace MusicStoreUtil;
 
 class KNDarkWaitingWheel;
+class KNMusicLrcParser;
 class KNMusicStoreAlbumModel;
 /*!
  * \brief The KNMusicStoreGlobal class provides some public resources for the
@@ -84,6 +85,12 @@ public:
      */
     KNMusicStoreAlbumModel *albumModel() const;
 
+    /*!
+     * \brief Provides the music store LRC parser for lyrics parsing.
+     * \return The LRC parsing object.
+     */
+    KNMusicLrcParser *lrcParser() const;
+
 signals:
 
 public slots:
@@ -102,6 +109,7 @@ private:
     int m_connectSemaphore;
     KNDarkWaitingWheel *m_connectStateWheel;
     KNMusicStoreAlbumModel *m_albumModel;
+    KNMusicLrcParser *m_lrcParser;
 };
 
 #endif // KNMUSICSTOREGLOBAL_H

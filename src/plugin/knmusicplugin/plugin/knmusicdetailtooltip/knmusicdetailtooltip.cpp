@@ -171,12 +171,12 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
         //Check the cover image.
         if(item.coverImage.isNull())
         {
-            m_albumArt->setArtwork(knMusicGlobal->noAlbumArt());
+            m_albumArt->setPixmap(knMusicGlobal->noAlbumArt());
         }
         else
         {
             //Set the image to the album art.
-            m_albumArt->setArtwork(QPixmap::fromImage(item.coverImage));
+            m_albumArt->setPixmap(QPixmap::fromImage(item.coverImage));
         }
         //Get the detail info of the item.
         const KNMusicDetailInfo &detailInfo=item.detailInfo;
@@ -190,7 +190,7 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
         //Reset detail info.
         m_detailInfo=KNMusicDetailInfo();
         //Set album detail info to be no album art.
-        m_albumArt->setArtwork(knMusicGlobal->noAlbumArt());
+        m_albumArt->setPixmap(knMusicGlobal->noAlbumArt());
         //Clear all the labels.
         m_labels[ItemTitle]->setText("");
         m_labels[ItemTime]->setText("");

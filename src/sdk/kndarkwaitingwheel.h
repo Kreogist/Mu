@@ -35,6 +35,12 @@ public:
      */
     explicit KNDarkWaitingWheel(QWidget *parent = 0);
 
+    /*!
+     * \brief Get whether the wheel is now ticking.
+     * \return If the widget is ticking, return true.
+     */
+    bool isTick() const;
+
 public slots:
     /*!
      * \brief Start the tick animation.

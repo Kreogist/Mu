@@ -54,6 +54,9 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
             &KNMusicStoreBackendManager::requireSetNavigatorItem,
             m_container, &KNMusicStoreContainer::setNavigatorText);
     //Link the container fetch data signals.
+    connect(m_container, &KNMusicStoreContainer::requireShowAlbum,
+            knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::showAlbum);
     connect(m_container, &KNMusicStoreContainer::requireShowSingleSong,
             knMusicStoreBackendManager,
             &KNMusicStoreBackendManager::showSingleSong);
@@ -92,7 +95,8 @@ void KNMusicStore::loadPlugins()
 
     //Debug
     knMusicStoreBackendManager->showAlbum("MusicStoreNeteaseBackend",
-                                          "2389423");
+//                                          "2389423");
+                                          "2080402");
 }
 
 void KNMusicStore::resizeEvent(QResizeEvent *event)
