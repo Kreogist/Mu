@@ -49,10 +49,14 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_container=new KNMusicStoreContainer(this);
     //Give the page container to the backend manager.
     knMusicStoreBackendManager->setPageContainer(m_container);
-    //Configure backend manager.
+    //Link the backend set value signals.
     connect(knMusicStoreBackendManager,
             &KNMusicStoreBackendManager::requireSetNavigatorItem,
             m_container, &KNMusicStoreContainer::setNavigatorText);
+    //Link the container fetch data signals.
+    connect(m_container, &KNMusicStoreContainer::requireShowSingleSong,
+            knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::showSingleSong);
     //Configure the error dimmer.
     ;
     //Configure the loading dimmer.
@@ -88,7 +92,7 @@ void KNMusicStore::loadPlugins()
 
     //Debug
     knMusicStoreBackendManager->showAlbum("MusicStoreNeteaseBackend",
-                                          "2080402");
+                                          "2389423");
 }
 
 void KNMusicStore::resizeEvent(QResizeEvent *event)

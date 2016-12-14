@@ -87,13 +87,15 @@ private:
         LabelHintsCount
     };
     inline void clearArtistList();
-    inline void insertArtistLabel(const QString &artistName);
+    inline void insertArtistLabel(const QString &artistName,
+                                  const QString &artistMetadata);
     inline void updateArtistHintLabel();
     inline void updateArtistLabelPalette();
     KNConnectionHandler m_backendConnection;
     QList<KNAnimeLabelButton *> m_artistLabels;
     QList<QLabel *> m_artistSplitLabels;
-    QString m_artistHintText, m_artistsHintText;
+    QStringList m_artistList;
+    QString m_artistHintText, m_artistsHintText, m_albumMetadata;
     QLabel *m_labelHints[LabelHintsCount], *m_headerLabel, *m_subheadingLabel,
            *m_lyrics;
     QBoxLayout *m_artistLayout;

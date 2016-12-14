@@ -74,6 +74,12 @@ void KNMusicStoreAlbumModel::replace(int i,
     emit dataChanged(index(i, 0), index(i, columnCount()));
 }
 
+QString KNMusicStoreAlbumModel::metadata(int i) const
+{
+    //Give back the custom data.
+    return m_songInfoList.at(i).customData;
+}
+
 int KNMusicStoreAlbumModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)

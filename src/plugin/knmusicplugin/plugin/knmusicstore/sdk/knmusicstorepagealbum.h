@@ -65,6 +65,7 @@ public slots:
 
 private slots:
     void onAlbumRowCountChanged(int row);
+    void onViewIndexClicked(const QModelIndex &index);
 
 private:
     KNConnectionHandler m_backendConnection;

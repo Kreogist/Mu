@@ -51,6 +51,12 @@ public:
     KNMusicStorePage *page(int pageIndex);
 
 signals:
+    /*!
+     * \brief Ask the backend to fetch information about single song.
+     * \param backendId The backend name which will process the metadata.
+     * \param metadata The song's metadata.
+     */
+    void requireShowSingleSong(QString backendId, QString metadata);
 
 public slots:
     /*!
@@ -66,7 +72,13 @@ protected:
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
+private slots:
+    void onShowPage();
+    void onShowSingleSong(const QString &metadata);
+
 private:
+    inline void updatePageWidth();
+    inline void configurePage(KNMusicStorePage *pageWidget);
     KNMusicStorePage *m_pages[PagesCount];
     KNScrollArea *m_pageContainer;
     QWidget *m_headerContainer;

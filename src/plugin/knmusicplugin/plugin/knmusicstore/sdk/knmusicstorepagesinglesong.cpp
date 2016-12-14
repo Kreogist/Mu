@@ -40,6 +40,7 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     KNMusicStorePage(parent),
     m_artistHintText(QString()),
     m_artistsHintText(QString()),
+    m_albumMetadata(QString()),
     m_headerLabel(new QLabel(this)),
     m_subheadingLabel(new QLabel(this)),
     m_lyrics(new QLabel(this)),
@@ -128,7 +129,7 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
 }
 
 void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
-                                                    const QVariant &value)
+                                              const QVariant &value)
 {
     //Check the label index.
     switch(labelIndex)
@@ -145,11 +146,14 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
         m_subheadingLabel->setText(metadata.value("subheading").toString());
         // Song album, the value should be a string type value.
         m_albumLabel->setText(metadata.value("album").toString());
+        m_albumMetadata=metadata.value("album_meta").toString();
         // Song artist list, the value should a string list.
         //Clear the artist layout widgets.
         clearArtistList();
         //Translate the artist list to a json list.
-        QJsonArray artistList=value.toJsonArray();
+        QJsonArray artistList=metadata.value("artist").toArray();
+        //Clear the string list.
+        m_artistList.clear();
         //Check the size of the artist list.
         if(artistList.isEmpty())
         {
@@ -160,13 +164,20 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
         {
             //Clear the cache list.
             m_artistLabels.clear();
+            //Update the artist list size.
+            m_artistList.reserve(artistList.size());
+            //Get the artist metadata.
+            QJsonArray artistMetadata=metadata.value("artist_meta").toArray();
             //For each artist in the list, construct the mouse sense label.
             //The last one need to be process specially.
             while(artistList.size() > 1)
             {
+                //Get the current artist position.
+                int artistPosition=artistList.size()-1;
                 //Access the artist in the list, construct the artist name label.
-                insertArtistLabel(artistList.takeAt(
-                                      artistList.size()-1).toString());
+                insertArtistLabel(artistList.takeAt(artistPosition).toString(),
+                                  artistMetadata.takeAt(
+                                      artistPosition).toString());
                 //Construct the sperate label.
                 QLabel *sperateLabel=new QLabel(" / ", this);
                 //Add the split label to the list.
@@ -176,16 +187,21 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
             }
             //For the last one, we only need to the construct the label button.
             //Access the artist in the list, insert the artist name label.
-            insertArtistLabel(artistList.first().toString());
+            insertArtistLabel(artistList.first().toString(),
+                              artistMetadata.first().toString());
             //Update the artist hint label.
             updateArtistHintLabel();
             //Update all the label palette.
             updateArtistLabelPalette();
         }
-        // Song lyrics, the value should be a string type value.
-        m_lyrics->setText(metadata.value("lyrics").toString());
+        //Show the page.
+        emit requireShowPage();
         break;
     }
+    case SingleLyrics:
+        // Song lyrics, the value should be a string type value.
+        m_lyrics->setText(value.toString());
+        break;
     case SingleAlbumArt:
         break;
     }
@@ -253,8 +269,10 @@ inline void KNMusicStorePageSingleSong::clearArtistList()
 }
 
 inline void KNMusicStorePageSingleSong::insertArtistLabel(
-        const QString &artistName)
+        const QString &artistName, const QString &artistMetadata)
 {
+    //Insert the data to the list,
+    m_artistList.prepend(artistMetadata);
     //Construct a label.
     KNAnimeLabelButton *artistLabel=new KNAnimeLabelButton(this);
     //Set the text.

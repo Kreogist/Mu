@@ -34,6 +34,7 @@ Foundation,
 
 #define LayoutItemSpacing   7
 #define LayoutBorderSpacing 21
+#define MaxNavigatorWidth   150
 
 KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
     KNMouseSenseWidget(parent),
@@ -120,10 +121,13 @@ void KNMusicStoreHeader::addStateWidget(QWidget *widget)
     m_pluginTray->addWidget(widget);
 }
 
-void KNMusicStoreHeader::setNavigatorText(int itemIndex, const QString &text)
+void KNMusicStoreHeader::setNavigatorText(int itemIndex, QString text)
 {
     //Show the changed text.
     m_navigatorItem[itemIndex]->show();
+    //Update the text for elided text.
+    text=m_navigatorItem[itemIndex]->fontMetrics().elidedText(
+                text, Qt::ElideRight, MaxNavigatorWidth);
     //Check whether the item has indicator.
     if(itemIndex!=0)
     {

@@ -42,7 +42,26 @@ public:
      */
     KNMusicStorePage(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the name of the backend which provides the data for the
+     * current page.
+     * \return The backend name. If there's no backend for the current page, it
+     * will return a null string.
+     */
+    QString backendName() const;
+
 signals:
+    /*!
+     * \brief When the page data is ready, this signal should be emit to show
+     * the page.
+     */
+    void requireShowPage();
+
+    /*!
+     * \brief Ask the backend to fetch information about single song.
+     * \param metadata The song's metadata.
+     */
+    void requireShowSingleSong(QString metadata);
 
 public slots:
     /*!
@@ -55,7 +74,7 @@ public slots:
      * \brief Set the linked backend to the target page.
      * \param backend The backend object pointer.
      */
-    virtual void setBackend(KNMusicStoreBackend *backend)=0;
+    virtual void setBackend(KNMusicStoreBackend *backend);
 
     /*!
      * \brief Set the label data at specific page.
@@ -63,6 +82,9 @@ public slots:
      * \param value The value of the label.
      */
     virtual void setPageLabel(int labelIndex, const QVariant &value)=0;
+
+private:
+    QString m_backendName;
 };
 
 #endif // KNMUSICSTOREPAGE_H

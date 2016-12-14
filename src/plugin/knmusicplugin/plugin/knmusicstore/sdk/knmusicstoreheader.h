@@ -70,7 +70,7 @@ public slots:
      * \param itemIndex The item index.
      * \param text The navigator text.
      */
-    void setNavigatorText(int itemIndex, const QString &text);
+    void setNavigatorText(int itemIndex, QString text);
 
 protected:
     /*!

@@ -57,8 +57,47 @@ void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
 
 void KNMusicStoreNeteaseBackend::showSingleSong(const QString &songInfo)
 {
-    //The song info should be one string which is the song id.
-    Q_UNUSED(songInfo);
+    //The song info is an json object of the song.
+    QJsonObject songObject=QJsonDocument::fromJson(songInfo.toUtf8()).object(),
+                songMetadata;
+    //Construct the song metadata.
+    songMetadata.insert("name", songObject.value("name"));
+    emit requireSetNavigatorItem(PageSingleSong,
+                                 songObject.value("name").toString());
+    //Alias.
+    QJsonArray alias=songObject.value("alias").toArray();
+    QString subheading;
+    //Join all the data in alias.
+    for(auto i : alias)
+    {
+        //Append data to subheading.
+        subheading.append(i.toString());
+        subheading.append(" ");
+    }
+    songMetadata.insert("subheading", subheading);
+    //Artist information.
+    QJsonArray artists=songObject.value("artists").toArray(),
+            artistName, artistList;
+    //Go through the artist list.
+    for(auto i : artists)
+    {
+        //Get the artist object.
+        QJsonObject artistObject=i.toObject();
+        //Insert the artist name.
+        artistName.append(artistObject.value("name").toString());
+        //Insert the artist list.
+        artistList.append(QString(QJsonDocument(artistObject).toJson()));
+    }
+    //Set the artist info.
+    songMetadata.insert("artist", artistName);
+    songMetadata.insert("artist_meta", artistList);
+    //Album information.
+    QJsonObject albumObject=songObject.value("album").toObject();
+    songMetadata.insert("album", albumObject.value("name").toString());
+    songMetadata.insert("album_meta",
+                        QString(QJsonDocument(albumObject).toJson()));
+    //Most of the information is already in the song object.
+    emit requireSetSingleSong(SingleMetadata, songMetadata);
 }
 
 void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)

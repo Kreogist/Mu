@@ -65,7 +65,8 @@ private:
     enum NeteaseReplyTypes
     {
         NeteaseAlbumDetails,
-        NeteaseAlbumArt
+        NeteaseAlbumArt,
+        NeteaseSingleLyricsText
     };
     inline QByteArray getRawData(QNetworkReply *reply);
     inline QNetworkRequest generateRequest();

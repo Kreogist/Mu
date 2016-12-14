@@ -75,6 +75,8 @@ KNMusicStorePageAlbum::KNMusicStorePageAlbum(QWidget *parent) :
     m_albumView->setColumnWidth(KNMusicStoreAlbumModel::AlbumModelDuration,
                                 60);
     m_albumView->updateObjectName("MusicStoreAlbumTreeView");
+    connect(m_albumView, &KNMusicStoreListView::clicked,
+            this, &KNMusicStorePageAlbum::onViewIndexClicked);
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -149,6 +151,9 @@ void KNMusicStorePageAlbum::setPageLabel(int labelIndex, const QVariant &value)
             //Set the song info to model.
             albumModel->replace(i, songInfo);
         }
+        //Ask for show the page.
+        emit requireShowPage();
+        //When this part is down.
         break;
     }
     case AlbumArt:
@@ -160,6 +165,8 @@ void KNMusicStorePageAlbum::setPageLabel(int labelIndex, const QVariant &value)
 
 void KNMusicStorePageAlbum::setBackend(KNMusicStoreBackend *backend)
 {
+    //Call the parent set backend.
+    KNMusicStorePage::setBackend(backend);
     //Break all the previous connections.
     m_backendConnection.disconnectAll();
     //Link the backend to this page.
@@ -172,4 +179,26 @@ void KNMusicStorePageAlbum::onAlbumRowCountChanged(int row)
 {
     //Resize the album tree view.
     m_albumView->setFixedHeight(m_albumView->fixedRowHeight()*(row+1));
+}
+
+void KNMusicStorePageAlbum::onViewIndexClicked(const QModelIndex &index)
+{
+    //Check the index validation.
+    if(!index.isValid())
+    {
+        //Ignore the invalid index.
+        return;
+    }
+    //Get the model.
+    KNMusicStoreAlbumModel *albumModel=knMusicStoreGlobal->albumModel();
+    //Check the index column.
+    switch(index.column())
+    {
+    case KNMusicStoreAlbumModel::AlbumModelName:
+        //Ask the backend to show the song information.
+        emit requireShowSingleSong(albumModel->metadata(index.row()));
+        break;
+    default:
+        return;
+    }
 }

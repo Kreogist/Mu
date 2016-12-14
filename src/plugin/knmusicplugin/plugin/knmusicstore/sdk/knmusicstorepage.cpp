@@ -21,9 +21,22 @@ Foundation,
 #include "knmusicstorepage.h"
 
 KNMusicStorePage::KNMusicStorePage(QWidget *parent) :
-    KNMouseSenseWidget(parent)
+    KNMouseSenseWidget(parent),
+    m_backendName(QString())
 {
     //Set properties.
     setChangeOpacity(true);
     setSenseRange(0x09, 0x19);
+}
+
+void KNMusicStorePage::setBackend(KNMusicStoreBackend *backend)
+{
+    //Save the backend object name.
+    m_backendName=backend->objectName();
+}
+
+QString KNMusicStorePage::backendName() const
+{
+    //Give the backend name.
+    return m_backendName;
 }

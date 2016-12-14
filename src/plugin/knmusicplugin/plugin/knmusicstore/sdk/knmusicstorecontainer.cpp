@@ -72,10 +72,9 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     //Initial the pages.
     m_pages[PageSingleSong]=new KNMusicStorePageSingleSong(m_pageContainer);
     m_pages[PageAlbum]=new KNMusicStorePageAlbum(m_pageContainer);
-    //Hide all widgets.
-    m_pages[PageSingleSong]->hide();
-    //Debug
-    m_pageContainer->setWidget(m_pages[PageAlbum]);
+    //Configure all widgets.
+    configurePage(m_pages[PageSingleSong]);
+    configurePage(m_pages[PageAlbum]);
 
     //Register the widget.
     knTheme->registerWidget(this);
@@ -106,12 +105,63 @@ void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
     m_headerContainer->resize(width(), KNMusicStoreUtil::headerHeight());
     //Update the page container width.
     m_pageContainer->resize(size());
+    //Update the page widget size.
+    updatePageWidth();
+}
+
+void KNMusicStoreContainer::onShowPage()
+{
+    //The check the sender, cast it as page widget.
+    KNMusicStorePage *pageWidget=static_cast<KNMusicStorePage *>(sender());
+    //Check the page container.
+    if(m_pageContainer->widget())
+    {
+        //Clear the widget.
+        KNMusicStorePage *originalPageWidget=
+                static_cast<KNMusicStorePage *>(m_pageContainer->takeWidget());
+        //Hide the page widget, set the page parent to this.
+        originalPageWidget->setParent(this);
+    }
+    //Set the container to manage page widget.
+    m_pageContainer->setWidget(pageWidget);
+    //Update the page widget size.
+    updatePageWidth();
+}
+
+void KNMusicStoreContainer::onShowSingleSong(const QString &metadata)
+{
+    //The check the sender, cast it as page widget.
+    KNMusicStorePage *pageWidget=static_cast<KNMusicStorePage *>(sender());
+    //Resent the signal with name of backend.
+    emit requireShowSingleSong(pageWidget->backendName(),
+                               metadata);
+}
+
+inline void KNMusicStoreContainer::updatePageWidth()
+{
     //Update the content widget.
     KNMusicStorePage *pageWidget=
             static_cast<KNMusicStorePage *>(m_pageContainer->widget());
+    //Check the page widget.
+    if(pageWidget==nullptr)
+    {
+        //Ignore the page widget.
+        return;
+    }
     //Resize the page widget.
-    pageWidget->setFixedWidth(contentWidth);
+    pageWidget->setFixedWidth(m_header->width());
     //Check the size hint.
     pageWidget->setFixedHeight(qMax(height(),
                                     pageWidget->sizeHint().height()));
+}
+
+inline void KNMusicStoreContainer::configurePage(KNMusicStorePage *pageWidget)
+{
+    //Link the page signals.
+    connect(pageWidget, &KNMusicStorePage::requireShowPage,
+            this, &KNMusicStoreContainer::onShowPage);
+    connect(pageWidget, &KNMusicStorePage::requireShowSingleSong,
+            this, &KNMusicStoreContainer::onShowSingleSong);
+    //Hide the page.
+    pageWidget->hide();
 }

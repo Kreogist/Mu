@@ -73,7 +73,7 @@ void KNMusicStoreBackendManager::showSingleSong(const QString &backendId,
     //Set the backend to the page.
     m_pageContainer->page(PageSingleSong)->setBackend(backend);
     //Ask the backend to show the information.
-    backend->showAlbum(songInfo);
+    backend->showSingleSong(songInfo);
 }
 
 KNMusicStoreBackendManager *KNMusicStoreBackendManager::instance()

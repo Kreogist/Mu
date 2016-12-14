@@ -70,6 +70,13 @@ public:
     void replace(int i, const KNMusicStoreSongInfo &songInfo);
 
     /*!
+     * \brief Get the metadata of a specific song.
+     * \param i The song row.
+     * \return The metadata saved by the backend.
+     */
+    QString metadata(int i) const;
+
+    /*!
      * \brief Reimplemented from QAbstractTableModel::rowCount().
      */
     int rowCount(const QModelIndex &parent=QModelIndex()) const Q_DECL_OVERRIDE;
