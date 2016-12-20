@@ -181,8 +181,6 @@ void KNMusicStorePageAlbum::showEvent(QShowEvent *event)
 {
     //Do the parent show event.
     KNMusicStorePage::showEvent(event);
-    //Unlock the album view enable.
-    setEnabled(true);
 }
 
 void KNMusicStorePageAlbum::onAlbumRowCountChanged(int row)
@@ -207,8 +205,6 @@ void KNMusicStorePageAlbum::onViewIndexClicked(const QModelIndex &index)
     case KNMusicStoreAlbumModel::AlbumModelName:
         //Ask the backend to show the song information.
         emit requireShowSingleSong(albumModel->metadata(index.row()));
-        //Disable the view widget.
-        setEnabled(false);
         break;
     default:
         return;

@@ -26,6 +26,8 @@ Foundation,
 
 #include "knmusicstoreglobal.h"
 
+#include <QDebug>
+
 KNMusicStoreGlobal *KNMusicStoreGlobal::m_instance=nullptr;
 
 KNMusicStoreGlobal::~KNMusicStoreGlobal()
@@ -36,6 +38,11 @@ KNMusicStoreGlobal::~KNMusicStoreGlobal()
         //Remove the widget when no one manage it.
         m_connectStateWheel->deleteLater();
     }
+    //Quit the working thread.
+    m_backendThread.quit();
+    m_backendThread.wait();
+    //Remove the backend manager.
+    knMusicStoreBackendManager->deleteLater();
 }
 
 KNMusicStoreGlobal *KNMusicStoreGlobal::instance()
@@ -66,7 +73,18 @@ KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
     m_lrcParser(new KNMusicLrcParser(this))
 {
     //Initial the backend manager.
-    KNMusicStoreBackendManager::initial(this);
+    KNMusicStoreBackendManager::initial(&m_backendThread);
+    //Link the backend manager.
+    connect(knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::requireAddConnectionCount,
+            this, &KNMusicStoreGlobal::addConnectionCounter,
+            Qt::QueuedConnection);
+    connect(knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::requireReduceConnectionCount,
+            this, &KNMusicStoreGlobal::reduceConnectionCounter,
+            Qt::QueuedConnection);
+    //Start the working thread.
+    m_backendThread.start();
 
     //Update the wheel widget.
     m_connectStateWheel->hide();
@@ -116,8 +134,10 @@ void KNMusicStoreGlobal::reduceConnectionCounter(int counter)
     //Reduce the number.
     m_connectSemaphore-=counter;
     //Check the value.
-    if(m_connectSemaphore==0)
+    if(m_connectSemaphore<=0)
     {
+        //Reset to 0, minus could be a bug.
+        m_connectSemaphore=0;
         //Hide the wheel.
         m_connectStateWheel->hide();
         //Stop ticking.

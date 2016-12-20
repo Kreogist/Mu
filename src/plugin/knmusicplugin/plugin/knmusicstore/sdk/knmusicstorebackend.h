@@ -39,13 +39,39 @@ public:
      */
     explicit KNMusicStoreBackend(QObject *parent = 0);
 
+    /*!
+     * \brief Set the backend working thread. Do not use moveToThread() function
+     * to change the working thread. This function will operate the thread.
+     * \param thread The target working thread pointer.
+     */
+    virtual void setWorkingThread(QThread *thread);
+
 signals:
+    /*!
+     * \brief Add Internet connection count to the GUI connection status.
+     * \param count The number of the connections.
+     */
+    void requireAddConnectionCount(int count);
+
+    /*!
+     * \brief Reduce Internet connection count to the GUI connection status.
+     * \param count The number of the connections.
+     */
+    void requireReduceConnectionCount(int count);
+
     /*!
      * \brief Set the navigator item text in the header text.
      * \param navigatorIndex The navigator item index.
      * \param caption The text of the navigator item.
      */
     void requireSetNavigatorItem(int navigatorIndex, const QString &caption);
+
+    /*!
+     * \brief Ask to set the home page data.
+     * \param dataIndex The home page information data.
+     * \param value Specific home page data.
+     */
+    void requireSetHome(int dataIndex, QVariant value);
 
     /*!
      * \brief Require to change the album song page.
@@ -63,6 +89,20 @@ signals:
 
 public slots:
     /*!
+     * \brief Fetch the home page data, set the data to the home page.\n
+     * For the home page, we need to fetch 6 different areas:
+     *  1. New albums.
+     *  2. New songs.
+     *  3. Billboard ranking list.
+     *  4. Oricon ranking list.
+     *  5. iTunes ranking list.
+     *  6. Top songs on the backend.
+     * These are the information we need, so for each backend, they need to
+     * provides these information.
+     */
+    virtual void showHome()=0;
+
+    /*!
      * \brief Fetch the album information according to the information it
      * provides to the backend.
      * \param albumInfo The album identical information.
@@ -75,6 +115,12 @@ public slots:
      * \param songInfo The single song information.
      */
     virtual void showSingleSong(const QString &songInfo)=0;
+
+    /*!
+     * \brief Set the timeout maximum seconds.
+     * \param seconds The timeout counting seconds.
+     */
+    virtual void setTimeout(int seconds)=0;
 
 private:
 

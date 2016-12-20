@@ -24,6 +24,7 @@ Foundation,
 
 class KNCategoryTab;
 class KNMusicStoreLoadingDimmer;
+class KNMusicStoreErrorDimmer;
 class KNMusicStoreContainer;
 /*!
  * \brief The KNMusicStore class provides the official music store plugin. The
@@ -63,6 +64,18 @@ public:
                    const QModelIndex &index);
 
 signals:
+    /*!
+     * \brief This signal is used to ask the backend manager to start fetching
+     * the home page information.
+     */
+    void requireShowHome();
+
+    /*!
+     * \brief Ask the backend manager to load all the backend to the manager,
+     * because the thread cannot control the timer created at another thread, so
+     * we need to create the backend at the manager thread.
+     */
+    void requireLoadPlugin();
 
 public slots:
     /*!
@@ -76,13 +89,18 @@ protected:
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStoreBase::showEvent().
+     */
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void retranslate();
 
 private:
     KNCategoryTab *m_tab;
     KNMusicStoreContainer *m_container;
-    QWidget *m_errorDimmer;
+    KNMusicStoreErrorDimmer *m_errorDimmer;
     KNMusicStoreLoadingDimmer *m_loadingDimmer;
 };
 

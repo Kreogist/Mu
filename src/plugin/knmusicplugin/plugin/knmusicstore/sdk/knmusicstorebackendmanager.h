@@ -48,9 +48,9 @@ public:
 
     /*!
      * \brief Construct the global KNMusicStoreBackendManager object.
-     * \param parent The parent object.
+     * \param workingThread The working thread of the manager.
      */
-    static void initial(QObject *parent = 0);
+    static void initial(QThread *workingThread);
 
     /*!
      * \brief Add one backend to the backend manager.
@@ -72,7 +72,30 @@ signals:
      */
     void requireSetNavigatorItem(int navigatorIndex, const QString &caption);
 
+    /*!
+     * \brief Add Internet connection count to the GUI connection status.
+     * \param count The number of the connections.
+     */
+    void requireAddConnectionCount(int count);
+
+    /*!
+     * \brief Reduce Internet connection count to the GUI connection status.
+     * \param count The number of the connections.
+     */
+    void requireReduceConnectionCount(int count);
+
 public slots:
+    /*!
+     * \brief Load all the backend to the manager. Because all the timer must be
+     * loaded here.
+     */
+    void loadPlugins();
+
+    /*!
+     * \brief Fetch the home page information and show the home page.
+     */
+    void showHomePage();
+
     /*!
      * \brief Fetch the album information according to the information it
      * provides to a specific backend.
@@ -91,7 +114,7 @@ public slots:
 
 private:
     static KNMusicStoreBackendManager *m_instance;
-    explicit KNMusicStoreBackendManager(QObject *parent = 0);
+    explicit KNMusicStoreBackendManager(QThread *workingThread);
     KNMusicStoreBackendManager(const KNMusicStoreBackendManager &);
     KNMusicStoreBackendManager(KNMusicStoreBackendManager &&);
 

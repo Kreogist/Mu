@@ -69,6 +69,11 @@ signals:
      */
     void requireShowSingleSong(QString metadata);
 
+    /*!
+     * \brief Ask the page container to update the page size.
+     */
+    void requireUpdateHeight();
+
 public slots:
     /*!
      * \brief Clear all the data on the current page, reset the page to the very

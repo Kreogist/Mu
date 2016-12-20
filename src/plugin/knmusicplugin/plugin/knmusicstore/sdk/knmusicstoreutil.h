@@ -20,6 +20,7 @@ Foundation,
 #ifndef KNMUSICSTOREUTIL_H
 #define KNMUSICSTOREUTIL_H
 
+#include <QPixmap>
 #include <QString>
 
 namespace MusicStoreUtil
@@ -39,6 +40,22 @@ namespace MusicStoreUtil
         PagesCount
     };
 
+    enum HomeSongList
+    {
+        ListNewAlbum,
+        ListNewSongs,
+        ListBillboard,
+        ListOricon,
+        ListItunes,
+        ListTopSongs,
+        HomeSongListCount
+    };
+
+    enum MusicStoreHomeLabel
+    {
+        HomeNewAlbumData
+    };
+
     enum MusicStoreAlbumLabel
     {
         AlbumMetadata,
@@ -51,6 +68,21 @@ namespace MusicStoreUtil
         SingleMetadata,
         SingleArtist,
         SingleLyrics
+    };
+
+    struct KNMusicStoreHomeItem
+    {
+        QPixmap artwork;
+        QString title;
+        QString subheading;
+        QString customData;
+        KNMusicStoreHomeItem() :
+            artwork(QPixmap()),
+            title(QString()),
+            subheading(QString()),
+            customData(QString())
+        {
+        }
     };
 
     struct KNMusicStoreSongInfo

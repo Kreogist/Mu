@@ -20,6 +20,10 @@
         "Window" : "#202020",
         "WindowText" : "#9D9D9D"
     },
+    "MusicStoreErrorDimmer" : {
+        "Parent" : "MusicStoreWidget",
+        "Window" : "#00000000"
+    },
     "MusicStoreActionButton" : {
         "Parent" : "MusicStoreWidget",
         "Button" : "#202020",

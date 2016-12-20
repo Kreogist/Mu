@@ -17,15 +17,26 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knmusicstorebackend.h"
+#include "knmusicstorepagesearchresult.h"
 
-KNMusicStoreBackend::KNMusicStoreBackend(QObject *parent) :
-    QObject(parent)
+KNMusicStorePageSearchResult::KNMusicStorePageSearchResult(QWidget *parent) :
+    KNMusicStorePage(parent)
 {
+    ;
 }
 
-void KNMusicStoreBackend::setWorkingThread(QThread *thread)
+void KNMusicStorePageSearchResult::reset()
 {
-    //The default operation is to move to working thread.
-    moveToThread(thread);
+    ;
+}
+
+void KNMusicStorePageSearchResult::setPageLabel(int labelIndex,
+                                                const QVariant &value)
+{
+    ;
+}
+
+void KNMusicStorePageSearchResult::setBackend(KNMusicStoreBackend *backend)
+{
+    ;
 }

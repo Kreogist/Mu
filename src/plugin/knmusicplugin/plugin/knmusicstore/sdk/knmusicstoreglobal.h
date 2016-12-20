@@ -21,6 +21,7 @@ Foundation,
 #define KNMUSICSTOREGLOBAL_H
 
 #include <QMutex>
+#include <QThread>
 
 #include "knmusicstoreutil.h"
 
@@ -105,6 +106,7 @@ private:
     KNMusicStoreGlobal(KNMusicStoreGlobal &&);
 
 //    QString m_errorText[MusicStoreErrorCount];
+    QThread m_backendThread;
     QMutex m_connectLock;
     int m_connectSemaphore;
     KNDarkWaitingWheel *m_connectStateWheel;

@@ -128,6 +128,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
 
     //Configure the timer.
     m_fadeOutCounter->setSingleShot(true);
+    m_fadeOutCounter->setTimerType(Qt::VeryCoarseTimer);
     connect(m_fadeOutCounter, &QTimer::timeout,
             this, &KNMusicDetailTooltip::onActionHide);
 
@@ -171,6 +172,7 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
         //Check the cover image.
         if(item.coverImage.isNull())
         {
+            //Draw the no album art.
             m_albumArt->setPixmap(knMusicGlobal->noAlbumArt());
         }
         else

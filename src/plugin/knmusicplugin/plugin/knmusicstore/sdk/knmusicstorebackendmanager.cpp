@@ -16,21 +16,30 @@
 Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QThread>
+
 #include "knmusicstorecontainer.h"
 #include "knmusicstorebackend.h"
 #include "knmusicstoreutil.h"
 #include "knmusicstorepage.h"
 
+//Music store backends
+#include "../plugin/knmusicstoreneteasebackend/knmusicstoreneteasebackend.h"
+
 #include "knmusicstorebackendmanager.h"
+
+#include <QDebug>
 
 using namespace MusicStoreUtil;
 
 KNMusicStoreBackendManager *KNMusicStoreBackendManager::m_instance=nullptr;
 
-KNMusicStoreBackendManager::KNMusicStoreBackendManager(QObject *parent) :
-    QObject(parent),
+KNMusicStoreBackendManager::KNMusicStoreBackendManager(QThread *workingThread) :
+    QObject(nullptr),
     m_pageContainer(nullptr)
 {
+    //Move to the thread.
+    moveToThread(workingThread);
 }
 
 void KNMusicStoreBackendManager::setPageContainer(
@@ -38,6 +47,32 @@ void KNMusicStoreBackendManager::setPageContainer(
 {
     //Save the page container.
     m_pageContainer = pageContainer;
+}
+
+void KNMusicStoreBackendManager::loadPlugins()
+{
+    //Add plugins.
+    addBackend(new KNMusicStoreNeteaseBackend(this));
+}
+
+void KNMusicStoreBackendManager::showHomePage()
+{
+    Q_ASSERT(m_pageContainer);
+    //Get the backend. The home page data is provided by Netease. This could be
+    //changed later in the settings.
+    //! FIXME: Home backend could be changed in the settings.
+    KNMusicStoreBackend *backend=m_backendMap.value("MusicStoreNeteaseBackend",
+                                                    nullptr);
+    //Check backend pointer.
+    if(!backend)
+    {
+        //Failed to operate the backend.
+        return;
+    }
+    //Set the backend to the page.
+    m_pageContainer->page(PageHome)->setBackend(backend);
+    //Ask the backend to fetch those information.
+    backend->showHome();
 }
 
 void KNMusicStoreBackendManager::showAlbum(const QString &backendId,
@@ -81,7 +116,7 @@ KNMusicStoreBackendManager *KNMusicStoreBackendManager::instance()
     return m_instance;
 }
 
-void KNMusicStoreBackendManager::initial(QObject *parent)
+void KNMusicStoreBackendManager::initial(QThread *workingThread)
 {
     //Check the instance pointer.
     if(m_instance)
@@ -90,14 +125,18 @@ void KNMusicStoreBackendManager::initial(QObject *parent)
         return;
     }
     //Create the instance.
-    m_instance=new KNMusicStoreBackendManager(parent);
+    m_instance=new KNMusicStoreBackendManager(workingThread);
 }
 
 void KNMusicStoreBackendManager::addBackend(KNMusicStoreBackend *backend)
 {
     //Add backend to the map.
     m_backendMap.insert(backend->objectName(), backend);
-    //Link the backend request to the header.
+    //Link the backend request to the manager.
     connect(backend, &KNMusicStoreBackend::requireSetNavigatorItem,
             this, &KNMusicStoreBackendManager::requireSetNavigatorItem);
+    connect(backend, &KNMusicStoreBackend::requireAddConnectionCount,
+            this, &KNMusicStoreBackendManager::requireAddConnectionCount);
+    connect(backend, &KNMusicStoreBackend::requireReduceConnectionCount,
+            this, &KNMusicStoreBackendManager::requireReduceConnectionCount);
 }

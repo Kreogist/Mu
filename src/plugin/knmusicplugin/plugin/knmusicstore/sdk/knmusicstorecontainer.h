@@ -27,6 +27,7 @@ Foundation,
 using namespace MusicStoreUtil;
 
 class KNScrollArea;
+class KNSideShadowWidget;
 class KNMusicStoreHeader;
 class KNMusicStorePage;
 /*!
@@ -85,14 +86,16 @@ private slots:
     void onShowPageIndex(int index);
     void onShowAlbum(const QString &metadata);
     void onShowSingleSong(const QString &metadata);
+    void onUpdatePageWidth();
 
 private:
-    inline void updatePageWidth();
+    inline void updatePageWidth(KNMusicStorePage *pageWidget);
     inline void configurePage(KNMusicStorePage *pageWidget);
     KNMusicStorePage *m_pages[PagesCount];
     KNScrollArea *m_pageContainer;
     QWidget *m_headerContainer;
     KNMusicStoreHeader *m_header;
+    KNSideShadowWidget *m_topShadow;
 };
 
 #endif // KNMUSICSTORECONTAINER_H

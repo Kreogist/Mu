@@ -54,17 +54,17 @@ protected:
     /*!
      * \brief Reimplemented from KNAbstractTabGroup::isEmpty().
      */
-    bool isEmpty();
+    bool isEmpty() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemnt from KNAbstractTabGroup::addTabToWidget().
      */
-    int addTabToWidget(QAbstractButton *tab);
+    int addTabToWidget(QAbstractButton *tab) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNAbstractTabGroup::tabAt().
      */
-    QAbstractButton *tabAt(const int &index);
+    QAbstractButton *tabAt(const int &index) Q_DECL_OVERRIDE;
 
 private:
     QBoxLayout *m_mainLayout;

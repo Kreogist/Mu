@@ -24,6 +24,7 @@ Foundation,
 
 #include "sdk/knmusicstoreglobal.h"
 #include "sdk/knmusicstorecontainer.h"
+#include "sdk/knmusicstoreerrordimmer.h"
 #include "sdk/knmusicstoreloadingdimmer.h"
 #include "sdk/knmusicstorebackendmanager.h"
 
@@ -32,11 +33,13 @@ Foundation,
 
 #include "knmusicstore.h"
 
+#include <QDebug>
+
 KNMusicStore::KNMusicStore(QWidget *parent) :
     KNMusicStoreBase(parent),
     m_tab(new KNCategoryTab(this)),
     m_container(nullptr),
-    m_errorDimmer(new QWidget(this)),
+    m_errorDimmer(new KNMusicStoreErrorDimmer(this)),
     m_loadingDimmer(new KNMusicStoreLoadingDimmer(this))
 {
     setObjectName("MusicStore");
@@ -47,21 +50,37 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Initial and configure the container.
     //The container must be initialized after initial the global object.
     m_container=new KNMusicStoreContainer(this);
+    //Configure container.
+    m_container->hide();
     //Give the page container to the backend manager.
     knMusicStoreBackendManager->setPageContainer(m_container);
     //Link the backend set value signals.
     connect(knMusicStoreBackendManager,
             &KNMusicStoreBackendManager::requireSetNavigatorItem,
-            m_container, &KNMusicStoreContainer::setNavigatorText);
+            m_container, &KNMusicStoreContainer::setNavigatorText,
+            Qt::QueuedConnection);
     //Link the container fetch data signals.
+    connect(this, &KNMusicStore::requireShowHome,
+            knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::showHomePage,
+            Qt::QueuedConnection);
+    connect(this, &KNMusicStore::requireLoadPlugin,
+            knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::loadPlugins,
+            Qt::QueuedConnection);
     connect(m_container, &KNMusicStoreContainer::requireShowAlbum,
             knMusicStoreBackendManager,
-            &KNMusicStoreBackendManager::showAlbum);
+            &KNMusicStoreBackendManager::showAlbum,
+            Qt::QueuedConnection);
     connect(m_container, &KNMusicStoreContainer::requireShowSingleSong,
             knMusicStoreBackendManager,
-            &KNMusicStoreBackendManager::showSingleSong);
+            &KNMusicStoreBackendManager::showSingleSong,
+            Qt::QueuedConnection);
     //Configure the error dimmer.
-    ;
+    m_errorDimmer->setObjectName("MusicStoreErrorDimmer");
+    m_errorDimmer->raise();
+    //Raise the container to top.
+    m_container->raise();
     //Configure the loading dimmer.
     ;
 
@@ -73,7 +92,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     retranslate();
 
     //Debug
-    m_container->raise();
+    m_container->show();
 }
 
 QAbstractButton *KNMusicStore::tab()
@@ -90,13 +109,7 @@ void KNMusicStore::showIndex(KNMusicModel *musicModel, const QModelIndex &index)
 void KNMusicStore::loadPlugins()
 {
     //Add music store backend to the backend manager.
-    knMusicStoreBackendManager->addBackend(
-                new KNMusicStoreNeteaseBackend(this));
-
-    //Debug
-    knMusicStoreBackendManager->showAlbum("MusicStoreNeteaseBackend",
-//                                          "2389423");
-                                          "2080402");
+    emit requireLoadPlugin();
 }
 
 void KNMusicStore::resizeEvent(QResizeEvent *event)
@@ -104,12 +117,21 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
     //Resize the base widget.
     KNMusicStoreBase::resizeEvent(event);
     //Resize the content widgets.
+    //Check the container is shown or not.
     // Widgets container.
     m_container->resize(size());
     // Error dimmer.
     m_errorDimmer->resize(size());
     // Loading dimmer.
     m_loadingDimmer->resize(size());
+}
+
+void KNMusicStore::showEvent(QShowEvent *event)
+{
+    //Show the page.
+    KNMusicStoreBase::showEvent(event);
+    //Emit the feteching signal.
+    emit requireShowHome();
 }
 
 void KNMusicStore::retranslate()

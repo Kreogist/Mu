@@ -203,6 +203,8 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
         m_lyrics->setText(value.toString());
         //Show the page.
         emit requireShowPage();
+        //Update the page size.
+        emit requireUpdateHeight();
         break;
     case SingleAlbumArt:
         //Parse the value as pixmap.
@@ -241,8 +243,6 @@ void KNMusicStorePageSingleSong::showEvent(QShowEvent *event)
 {
     //Show the widget.
     KNMusicStorePage::showEvent(event);
-    //Enable the widget.
-    setEnabled(true);
 }
 
 void KNMusicStorePageSingleSong::onPaletteChanged()
@@ -269,8 +269,6 @@ void KNMusicStorePageSingleSong::onAlbumClicked()
 {
     //Ask to show the album.
     emit requireShowAlbum(m_albumMetadata);
-    //Disable the widget.
-    setEnabled(false);
 }
 
 inline void KNMusicStorePageSingleSong::clearArtistList()

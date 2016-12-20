@@ -17,15 +17,31 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knmusicstorebackend.h"
+#ifndef KNMUSICSTOREDOWNLOADLIST_H
+#define KNMUSICSTOREDOWNLOADLIST_H
 
-KNMusicStoreBackend::KNMusicStoreBackend(QObject *parent) :
-    QObject(parent)
-{
-}
+#include <QWidget>
 
-void KNMusicStoreBackend::setWorkingThread(QThread *thread)
+/*!
+ * \brief The KNMusicStoreDownloadList class provides a download list widget to
+ * show the information.
+ */
+class KNMusicStoreDownloadList : public QWidget
 {
-    //The default operation is to move to working thread.
-    moveToThread(thread);
-}
+    Q_OBJECT
+public:
+    /*!
+     * \brief Construct a KNMusicStoreDownloadList widget.
+     * \param parent The parent widget.
+     */
+    explicit KNMusicStoreDownloadList(QWidget *parent = 0);
+
+signals:
+
+public slots:
+
+private:
+    ;
+};
+
+#endif // KNMUSICSTOREDOWNLOADLIST_H

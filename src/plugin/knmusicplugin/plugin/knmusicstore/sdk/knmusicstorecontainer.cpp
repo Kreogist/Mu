@@ -21,6 +21,7 @@ Foundation,
 
 #include "knthememanager.h"
 #include "knscrollarea.h"
+#include "knsideshadowwidget.h"
 
 #include "knmusicstorepagehome.h"
 #include "knmusicstorepagealbum.h"
@@ -31,12 +32,14 @@ Foundation,
 #include "knmusicstorecontainer.h"
 
 #define MaxContentWidth 1108
+#define ShadowHeight    15
 
 KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     QWidget(parent),
     m_pageContainer(new KNScrollArea(this)),
     m_headerContainer(new QWidget(this)),
-    m_header(new KNMusicStoreHeader(this))
+    m_header(new KNMusicStoreHeader(this)),
+    m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow, this))
 {
     setObjectName("MusicStoreContainer");
     //Set the properties.
@@ -46,6 +49,8 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     m_headerContainer->setAutoFillBackground(true);
     m_headerContainer->setObjectName("MusicStoreHeaderContainer");
     knTheme->registerWidget(m_headerContainer);
+    //Configure the side shadow.
+    m_topShadow->move(0, KNMusicStoreUtil::headerHeight());
     //Initial the header container layout.
     QBoxLayout *headerLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     headerLayout->setContentsMargins(0, 0, 0, 0);
@@ -73,14 +78,19 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     //Update the page container object name.
     m_pageContainer->updateObjectName("MusicStorePageContainer");
     //Initial the pages.
+    m_pages[PageHome]=new KNMusicStorePageHome(m_pageContainer);
     m_pages[PageSingleSong]=new KNMusicStorePageSingleSong(m_pageContainer);
     m_pages[PageAlbum]=new KNMusicStorePageAlbum(m_pageContainer);
     //Configure all widgets.
+    configurePage(m_pages[PageHome]);
     configurePage(m_pages[PageSingleSong]);
     configurePage(m_pages[PageAlbum]);
 
     //Register the widget.
     knTheme->registerWidget(this);
+
+    //Debug.
+    showPage(m_pages[PageHome]);
 }
 
 KNMusicStorePage *KNMusicStoreContainer::page(int pageIndex)
@@ -108,8 +118,10 @@ void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
     m_headerContainer->resize(width(), KNMusicStoreUtil::headerHeight());
     //Update the page container width.
     m_pageContainer->resize(size());
+    //Update the shadow size.
+    m_topShadow->resize(width(), ShadowHeight);
     //Update the page widget size.
-    updatePageWidth();
+    updatePageWidth(static_cast<KNMusicStorePage *>(m_pageContainer->widget()));
 }
 
 void KNMusicStoreContainer::showPage(KNMusicStorePage *pageWidget)
@@ -128,11 +140,14 @@ void KNMusicStoreContainer::showPage(KNMusicStorePage *pageWidget)
                 static_cast<KNMusicStorePage *>(m_pageContainer->takeWidget());
         //Hide the page widget, set the page parent to this.
         originalPageWidget->setParent(this);
+        //Disconnect the previous page resize signal.
+        disconnect(originalPageWidget, &KNMusicStorePage::requireUpdateHeight,
+                   0, 0);
     }
     //Set the container to manage page widget.
     m_pageContainer->setWidget(pageWidget);
     //Update the page widget size.
-    updatePageWidth();
+    updatePageWidth(pageWidget);
 }
 
 void KNMusicStoreContainer::onShowPage()
@@ -165,11 +180,14 @@ void KNMusicStoreContainer::onShowSingleSong(const QString &metadata)
                                metadata);
 }
 
-inline void KNMusicStoreContainer::updatePageWidth()
+void KNMusicStoreContainer::onUpdatePageWidth()
 {
-    //Update the content widget.
-    KNMusicStorePage *pageWidget=
-            static_cast<KNMusicStorePage *>(m_pageContainer->widget());
+    //Recast the sender as the page, update its width and height.
+    updatePageWidth(static_cast<KNMusicStorePage *>(sender()));
+}
+
+inline void KNMusicStoreContainer::updatePageWidth(KNMusicStorePage *pageWidget)
+{
     //Check the page widget.
     if(pageWidget==nullptr)
     {
@@ -192,6 +210,9 @@ inline void KNMusicStoreContainer::configurePage(KNMusicStorePage *pageWidget)
             this, &KNMusicStoreContainer::onShowAlbum);
     connect(pageWidget, &KNMusicStorePage::requireShowSingleSong,
             this, &KNMusicStoreContainer::onShowSingleSong);
+    //Link the resize signals.
+    connect(pageWidget, &KNMusicStorePage::requireUpdateHeight,
+            this, &KNMusicStoreContainer::onUpdatePageWidth);
     //Hide the page.
     pageWidget->hide();
 }

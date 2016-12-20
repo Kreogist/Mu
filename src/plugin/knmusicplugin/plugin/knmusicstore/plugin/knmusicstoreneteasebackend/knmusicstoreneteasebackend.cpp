@@ -12,8 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
-Foundation,
+ * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QJsonDocument>
@@ -22,23 +21,77 @@ Foundation,
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QPixmap>
+#include <QTimerEvent>
+#include <QTimer>
 
 #include "knmusiclrcparser.h"
 #include "knmusicutil.h"
 
 #include "../../sdk/knmusicstoreglobal.h"
-#include "../../sdk/knmusicstoreutil.h"
 
 #include "knmusicstoreneteasebackend.h"
-
-using namespace MusicStoreUtil;
 
 #include <QDebug>
 
 KNMusicStoreNeteaseBackend::KNMusicStoreNeteaseBackend(QObject *parent) :
-    KNMusicStoreBackend(parent)
+    KNMusicStoreBackend(parent),
+    m_timeout(new QTimer(this)),
+    m_timeoutLimit(5) //Default 5 seconds timeout.
 {
     setObjectName("MusicStoreNeteaseBackend");
+    //Initial the list urls.
+    // New albums, special API.
+    m_listUrls[ListNewAlbum]="http://music.163.com/api/album/new?area=ALL&"
+                             "offset=%1&total=true&limit=%2";
+    // New songs, actually the New song ranking.
+    m_listUrls[ListNewSongs]="http://music.163.com/discover/toplist?id=3779629";
+    // Billboard, Oricon and iTunes ranking, the discover toplist API.
+    m_listUrls[ListBillboard]="http://music.163.com/discover/toplist?id=60198";
+    m_listUrls[ListOricon]="http://music.163.com/discover/toplist?id=60131";
+    m_listUrls[ListItunes]="http://music.163.com/discover/toplist?id=11641012";
+    // Top song ranking, actually the hot song ranking.
+    m_listUrls[ListTopSongs]="http://music.163.com/discover/toplist?id=3778678";
+
+    //Configure the timeout timer.
+    m_timeout->setInterval(1000);
+    m_timeout->setTimerType(Qt::VeryCoarseTimer);
+    connect(m_timeout, &QTimer::timeout,
+            this, &KNMusicStoreNeteaseBackend::onTimeoutTick);
+}
+
+KNMusicStoreNeteaseBackend::~KNMusicStoreNeteaseBackend()
+{
+    //Stop the ticking.
+    stopTimeoutTick();
+}
+
+void KNMusicStoreNeteaseBackend::setWorkingThread(QThread *thread)
+{
+    //Do original moving.
+    KNMusicStoreBackend::setWorkingThread(thread);
+}
+
+void KNMusicStoreNeteaseBackend::showHome()
+{
+    //Reset the network access manager.
+    resetManager();
+    //Fetch the list before HomeSongListCount.
+    //Insert the GET request.
+    //Because the data could be changed, this part we won't use loop to do this.
+    insertRequest(m_listUrls[ListNewAlbum].arg("0", "32"),
+                  NeteaseHomeListNewAlbum, NeteaseGet);
+//    insertRequest(m_listUrls[ListNewSongs],
+//                  NeteaseHomeListNewSongs, NeteaseGet);
+//    insertRequest(m_listUrls[ListBillboard],
+//                  NeteaseHomeListBillboard, NeteaseGet);
+//    insertRequest(m_listUrls[ListOricon],
+//                  NeteaseHomeListOricon, NeteaseGet);
+//    insertRequest(m_listUrls[ListItunes],
+//                  NeteaseHomeListItunes, NeteaseGet);
+//    insertRequest(m_listUrls[ListTopSongs],
+//                  NeteaseHomeListTopSongs, NeteaseGet);
+    //Increase Internet counter.
+    emit requireAddConnectionCount(1);
 }
 
 void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
@@ -48,16 +101,11 @@ void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
     //  http://music.163.com/api/artist/(album id)
     //Reset the network access manager.
     resetManager();
-    //Construct the request.
-    QNetworkRequest albumRequest=generateRequest();
-    //Configure the accept encoding.
-    albumRequest.setRawHeader("Accept-Encoding", "plain-text");
-    //Set the url.
-    albumRequest.setUrl(QUrl("http://music.163.com/api/album/"+albumInfo));
-    //Get the request, insert the request in the map.
-    m_replyMap.insert(m_accessManager->get(albumRequest), NeteaseAlbumDetails);
+    //Get the data.
+    insertRequest("http://music.163.com/api/album/"+albumInfo,
+                  NeteaseGet, NeteaseAlbumDetails);
     //Increase Internet counter.
-    knMusicStoreGlobal->addConnectionCounter(1);
+    emit requireAddConnectionCount(1);
 }
 
 void KNMusicStoreNeteaseBackend::showSingleSong(const QString &songInfo)
@@ -102,31 +150,32 @@ void KNMusicStoreNeteaseBackend::showSingleSong(const QString &songInfo)
     songMetadata.insert("album_meta",
                         QString::number(
                             qint64(albumObject.value("id").toDouble())));
-    //Fetch the album art.
-    QString albumArtUrl=albumObject.value("picUrl").toString();
-    QNetworkRequest albumArtRequest(QUrl::fromEncoded(
-                                        albumArtUrl.toLocal8Bit()));
-    //Get the request, insert the request in the map.
-    m_replyMap.insert(m_accessManager->get(albumArtRequest),
-                      NeteaseSingleAlbumArt);
     //Most of the information is already in the song object.
     emit requireSetSingleSong(SingleMetadata, songMetadata);
+    //Reset the network access manager.
+    resetManager();
+    //Fetch the album art.
+    insertRequest(albumObject.value("picUrl").toString(),
+                  NeteaseGet, NeteaseSingleAlbumArt, false);
     //Get the lyrics of the song.
-    QNetworkRequest singleLyrics=generateRequest();
-    singleLyrics.setUrl(QUrl("http://music.163.com/api/song/lyric?os=osx&id="+
-                             QString::number(
-                                 qint64(songObject.value("id").toDouble()))+
-                             "&lv=-1&kv=-1&tv=-1"));
-    m_replyMap.insert(m_accessManager->get(singleLyrics),
-                      NeteaseSingleLyricsText);
+    insertRequest("http://music.163.com/api/song/lyric?os=osx&id="+
+                  QString::number(qint64(songObject.value("id").toDouble()))+
+                  "&lv=-1&kv=-1&tv=-1",
+                  NeteaseGet, NeteaseSingleLyricsText);
     //Increase Internet counter.
-    knMusicStoreGlobal->addConnectionCounter(2);
+    emit requireAddConnectionCount(2);
+}
+
+void KNMusicStoreNeteaseBackend::setTimeout(int seconds)
+{
+    //Save the timeout settings.
+    m_timeoutLimit=seconds;
 }
 
 void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
 {
     //Reduce reply counter.
-    knMusicStoreGlobal->reduceConnectionCounter(1);
+    emit requireReduceConnectionCount(1);
     //Check the reply in the hash list.
     int replyOperation=m_replyMap.value(reply, -1);
     //Check the operation.
@@ -142,6 +191,15 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
     //Check the operation.
     switch(replyOperation)
     {
+    case NeteaseHomeListNewAlbum:
+    case NeteaseHomeListNewSongs:
+    case NeteaseHomeListBillboard:
+    case NeteaseHomeListOricon:
+    case NeteaseHomeListItunes:
+    case NeteaseHomeListTopSongs:
+        //Call the home page processing slots.
+        onHomeListReply(replyOperation, reply);
+        break;
     case NeteaseAlbumDetails:
         //Album detail information reply.
         onAlbumDetailReply(reply);
@@ -179,6 +237,42 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
     }
     //Delete the reply.
     reply->deleteLater();
+}
+
+void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
+                                                 QNetworkReply *reply)
+{
+    //Translate the reply data as a json object.
+    QJsonObject homeListData=QJsonDocument::fromJson(reply->readAll()).object();
+    //Check the list type.
+    switch(listType)
+    {
+    case NeteaseHomeListNewAlbum:
+    {
+        //Get the album information.
+        QJsonArray albumList=homeListData.value("albums").toArray(),
+                   albumDataList;
+        //Loop and construct the album data.
+        for(auto i : albumList)
+        {
+            //Translate the value to object, prepare the value object.
+            QJsonObject albumObject=i.toObject(), albumData;
+            //Insert the data to album data.
+            albumData.insert("name", albumObject.value("name"));
+            albumData.insert("custom", QString::number(
+                                 quint64(albumObject.value("id").toDouble())));
+            albumData.insert("artist", albumObject.value(
+                                 "artist").toObject().value("name").toString());
+            //Insert the album data to album data list.
+            albumDataList.append(albumData);
+            //Fetch the album object value.
+//            qDebug()<<albumObject.value("picUrl").toString();
+        }
+        //Emit the set data function.
+        emit requireSetHome(HomeNewAlbumData, albumDataList);
+        break;
+    }
+    }
 }
 
 void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
@@ -234,14 +328,10 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
     //Set the meta data.
     emit requireSetAlbum(AlbumMetadata, metadata);
     //Fetch the album art.
-    QString albumArtUrl=albumObject.value("picUrl").toString();
-    QNetworkRequest albumArtRequest(QUrl::fromEncoded(
-                                        albumArtUrl.toLocal8Bit()));
-    //Get the request, insert the request in the map.
-    m_replyMap.insert(m_accessManager->get(albumArtRequest),
-                      NeteaseAlbumArt);
+    insertRequest(albumObject.value("picUrl").toString(),
+                  NeteaseGet, NeteaseAlbumArt, false);
     //Increase Internet counter.
-    knMusicStoreGlobal->addConnectionCounter(1);
+    emit requireAddConnectionCount(1);
 }
 
 void KNMusicStoreNeteaseBackend::onSingleLyricsReply(QNetworkReply *reply)
@@ -281,25 +371,95 @@ void KNMusicStoreNeteaseBackend::onSingleLyricsReply(QNetworkReply *reply)
     emit requireSetSingleSong(SingleLyrics, textList.join('\n'));
 }
 
+void KNMusicStoreNeteaseBackend::onTimeoutTick()
+{
+    //Get all the keys of time out.
+    QList<QNetworkReply *> replyList=m_replyTimeout.keys();
+    //Check the list number.
+    if(replyList.isEmpty())
+    {
+        //Stop the tick.
+        stopTimeoutTick();
+        //Mission complete.
+        return;
+    }
+    //Check all the reply in the waiting list.
+    for(auto i : replyList)
+    {
+        //Get the reply timeout.
+        if(m_replyTimeout.value(i) > m_timeoutLimit)
+        {
+            //Timeout, abort the reply.
+            //Notice: do not need to delete later. In the implementation, it
+            //will emit finish signal, all the data will be processed there.
+            i->abort();
+            //Remove the item from the map.
+            m_replyTimeout.remove(i);
+            //Go to next.
+            continue;
+        }
+        //Increase the counter.
+        m_replyMap.insert(i, m_replyMap.value(i)+1);
+    }
+}
+
+inline void KNMusicStoreNeteaseBackend::insertRequest(const QString &url,
+                                                      int requestType,
+                                                      int replyType,
+                                                      bool useHeader)
+{
+    //Prepare an empty request.
+    QNetworkRequest neteaseRequest;
+    //Check the use header.
+    if(useHeader)
+    {
+        //Use the generate request.
+        neteaseRequest=generateRequest();
+        //Set the url.
+        neteaseRequest.setUrl(QUrl(url));
+    }
+    else
+    {
+        //Normally, for no use header request is to download files.
+        neteaseRequest=QNetworkRequest(QUrl::fromEncoded(url.toLocal8Bit()));
+    }
+    //Create the reply pointer.
+    QNetworkReply *reply=nullptr;
+    //Check the request type.
+    switch(requestType)
+    {
+    case NeteaseGet:
+        //Get the reply pointer.
+        reply=m_accessManager->get(neteaseRequest);
+        //Get the request, insert the request in the map.
+        m_replyMap.insert(reply, replyType);
+        break;
+    }
+    //Insert the timeout counter.
+    m_replyTimeout.insert(reply, 0);
+    //Start timeout checking.
+    startTimeoutTick();
+}
+
 inline QNetworkRequest KNMusicStoreNeteaseBackend::generateRequest()
 {
     //Build the request.
-    QNetworkRequest candidateRequest;
-    candidateRequest.setRawHeader("Accept", "*/*");
-    candidateRequest.setRawHeader("Accept-Language",
-                                  "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4");
-    candidateRequest.setRawHeader("Connection", "keep-alive");
-    candidateRequest.setRawHeader("Content-Type",
-                                  "application/x-www-form-urlencoded");
-    candidateRequest.setRawHeader("Host", "music.163.com");
-    candidateRequest.setRawHeader("Referer", "http://music.163.com/search/");
-    //UA change to Safari.
-    candidateRequest.setRawHeader(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 "
-                "Safari/537.36");
-    return candidateRequest;
+    QNetworkRequest request;
+    request.setRawHeader("Accept", "*/*");
+    request.setRawHeader("Accept-Language",
+                         "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4");
+    request.setRawHeader("Connection", "keep-alive");
+    request.setRawHeader("Content-Type",
+                         "application/x-www-form-urlencoded");
+    request.setRawHeader("Host", "music.163.com");
+    request.setRawHeader("Referer", "http://music.163.com/search/");
+    //Fake User-Agent hack to Safari.
+    request.setRawHeader("User-Agent",
+                         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) "
+                         "AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/33.0.1750.152 "
+                         "Safari/537.36");
+    return request;
 }
 
 inline void KNMusicStoreNeteaseBackend::resetManager()
@@ -315,12 +475,15 @@ inline void KNMusicStoreNeteaseBackend::resetManager()
     m_accessManagerHandler.disconnectAll();
     //Reset the manager pointer.
     m_accessManager.reset(new QNetworkAccessManager());
-    //Clear the reply map.
-    QList<QNetworkReply *> replyList=m_replyMap.keys();
-    //Recover the reply list memory.
-    qDeleteAll(replyList);
-    //Clear the map.
-    m_replyMap.clear();
+    //Check reply map size.
+    if(!m_replyMap.isEmpty())
+    {
+        //Reduce the counter.
+        emit requireReduceConnectionCount(m_replyMap.size());
+        //Clear the map.
+        m_replyMap.clear();
+        m_replyTimeout.clear();
+    }
     //Link the access manager.
     m_accessManagerHandler.append(
                 connect(m_accessManager.data(),
@@ -328,4 +491,16 @@ inline void KNMusicStoreNeteaseBackend::resetManager()
                         this, &KNMusicStoreNeteaseBackend::onReplyFinished,
                         //Use queue connection for using event loop.
                         Qt::QueuedConnection));
+}
+
+inline void KNMusicStoreNeteaseBackend::startTimeoutTick()
+{
+    //Start the timeout ticking.
+    m_timeout->start();
+}
+
+inline void KNMusicStoreNeteaseBackend::stopTimeoutTick()
+{
+    //Stop the time out ticking.
+    m_timeout->stop();
 }

@@ -17,34 +17,25 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREPAGEHOME_H
-#define KNMUSICSTOREPAGEHOME_H
-
-#include "knmusicstoreutil.h"
+#ifndef KNMUSICSTOREPAGESEARCHRESULT_H
+#define KNMUSICSTOREPAGESEARCHRESULT_H
 
 #include "knmusicstorepage.h"
 
-using namespace MusicStoreUtil;
-
-class QLabel;
-class KNMusicStoreHomeListModel;
-class KNMusicStoreHomeAlbumView;
 /*!
- * \brief The KNMusicStorePageHome class provides the default page for the music
- * store. These information include:
- *  1. The banner slides.
- *  2. Some ranking list.
- *  3. Some other links.
+ * \brief The KNMusicStorePageSearchResult class provides the search result page
+ * for the music store. It will ask for all the backend to do the search, and
+ * rank the result by the string length.
  */
-class KNMusicStorePageHome : public KNMusicStorePage
+class KNMusicStorePageSearchResult : public KNMusicStorePage
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct the KNMusicStorePageHome widget.
+     * \brief Construct a KNMusicStorePageSearchResult widget.
      * \param parent The parent widget.
      */
-    explicit KNMusicStorePageHome(QWidget *parent = 0);
+    explicit KNMusicStorePageSearchResult(QWidget *parent = 0);
 
 signals:
 
@@ -64,14 +55,8 @@ public slots:
      */
     void setBackend(KNMusicStoreBackend *backend) Q_DECL_OVERRIDE;
 
-private slots:
-    void retranslate();
-
 private:
-    KNMusicStoreHomeListModel *m_homeListModel[HomeSongListCount];
-    QLabel *m_titleLabel[HomeSongListCount];
-    KNConnectionHandler m_backendConnection;
-    KNMusicStoreHomeAlbumView *m_newAlbumView;
+
 };
 
-#endif // KNMUSICSTOREPAGEHOME_H
+#endif // KNMUSICSTOREPAGESEARCHRESULT_H

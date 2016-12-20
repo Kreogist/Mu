@@ -22,6 +22,7 @@ Foundation,
 
 #include <QWidget>
 
+class QTimeLine;
 /*!
  * \brief The KNMusicStoreErrorDimmer class is designed to be used as two ways.
  * First, it will be used as the shadow widget for the content, second, it will
@@ -43,8 +44,32 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Start to show the dimmer. This dimmer won't show any text or the
+     * control widgets at the end.
+     */
+    void showDimmer();
+
+    /*!
+     * \brief Show the error dimmer, but display the set text.
+     */
+    void showErrorDimmer();
+
+    /*!
+     * \brief Hide the dimmer. All the text will be hidden first, and the dimmer
+     * will fade out and hide the widget.
+     */
+    void hideDimmer();
+
+private slots:
+    void onThemeChanged();
+    void onTimeLineFinish();
+    void onBackgroundAlphaChange(int frame);
 
 private:
+    inline void startAnime(int endFrame);
+    QTimeLine *m_background;
+    bool m_showLabel;
 };
 
 #endif // KNMUSICSTOREERRORDIMMER_H

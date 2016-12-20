@@ -17,15 +17,10 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knmusicstorebackend.h"
+#include "knmusicstoredownloadlist.h"
 
-KNMusicStoreBackend::KNMusicStoreBackend(QObject *parent) :
-    QObject(parent)
+KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
+    QWidget(parent)
 {
-}
 
-void KNMusicStoreBackend::setWorkingThread(QThread *thread)
-{
-    //The default operation is to move to working thread.
-    moveToThread(thread);
 }
