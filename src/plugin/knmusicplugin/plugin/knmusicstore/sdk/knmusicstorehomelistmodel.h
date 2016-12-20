@@ -59,11 +59,11 @@ public:
     QPixmap albumArt(int row) const;
 
     /*!
-     * \brief Get the album title text from the list.
-     * \param row The item row.
-     * \return The title text.
+     * \brief Get the album item at specific row.
+     * \param row The row of the item.
+     * \return The item content.
      */
-    QString albumTitle(int row) const;
+    KNMusicStoreHomeItem albumItem(int row) const;
 
     /*!
      * \brief Append one music item to the model.
@@ -78,6 +78,13 @@ public slots:
      * \brief Clear all the data of the model.
      */
     void reset();
+
+    /*!
+     * \brief Update the album artwork data.
+     * \param row The album item row.
+     * \param albumArt The new album art pixmap data.
+     */
+    void setAlbumArt(int row, const QPixmap &albumArt);
 
 private:
     QList<KNMusicStoreHomeItem> m_itemList;

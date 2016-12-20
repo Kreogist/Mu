@@ -104,6 +104,11 @@ protected:
     QRegion visualRegionForSelection(const QItemSelection &selection) const
     Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from QAbstractItemView::wheelEvent().
+     */
+    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
+
 protected slots:
     /*!
      * \brief Reimplemented from QAbstractItemView::updateGeometries().

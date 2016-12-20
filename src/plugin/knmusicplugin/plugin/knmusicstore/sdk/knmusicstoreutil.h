@@ -53,7 +53,8 @@ namespace MusicStoreUtil
 
     enum MusicStoreHomeLabel
     {
-        HomeNewAlbumData
+        HomeNewAlbumData,
+        HomeNewAlbumArt
     };
 
     enum MusicStoreAlbumLabel
@@ -85,6 +86,17 @@ namespace MusicStoreUtil
         }
     };
 
+    struct KNMusicStoreHomeUpdateArtwork
+    {
+        QPixmap artwork;
+        int index;
+        KNMusicStoreHomeUpdateArtwork() :
+            artwork(QPixmap()),
+            index(-1)
+        {
+        }
+    };
+
     struct KNMusicStoreSongInfo
     {
         QString index;
@@ -104,6 +116,7 @@ namespace MusicStoreUtil
         }
     };
 }
+Q_DECLARE_METATYPE(MusicStoreUtil::KNMusicStoreHomeUpdateArtwork)
 
 /*!
  * \brief The KNMusicStoreUtil class provides several data and static functions.

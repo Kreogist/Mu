@@ -24,11 +24,14 @@ Foundation,
 
 #include "knlocalemanager.h"
 
+#include "knmusicstoreutil.h"
 #include "knmusicstorebackend.h"
 #include "knmusicstorehomealbumview.h"
 #include "knmusicstorehomelistmodel.h"
 
 #include "knmusicstorepagehome.h"
+
+using namespace MusicStoreUtil;
 
 KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     KNMusicStorePage(parent),
@@ -119,6 +122,17 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
             //Insert the album to model.
             m_homeListModel[ListNewAlbum]->appendRow(albumItem);
         }
+        break;
+    }
+    case HomeNewAlbumArt:
+    {
+        //Translate the data to structure.
+        KNMusicStoreHomeUpdateArtwork homeArtworkData=
+                value.value<KNMusicStoreHomeUpdateArtwork>();
+        //Get update the model.
+        m_homeListModel[ListNewAlbum]->setAlbumArt(homeArtworkData.index,
+                                                   homeArtworkData.artwork);
+        //Update complete.
         break;
     }
     }

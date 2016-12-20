@@ -36,7 +36,7 @@
 KNMusicStoreNeteaseBackend::KNMusicStoreNeteaseBackend(QObject *parent) :
     KNMusicStoreBackend(parent),
     m_timeout(new QTimer(this)),
-    m_timeoutLimit(5) //Default 5 seconds timeout.
+    m_timeoutLimit(30) //Default 30 seconds timeout.
 {
     setObjectName("MusicStoreNeteaseBackend");
     //Initial the list urls.
@@ -186,8 +186,10 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
         //Ignore the operation.
         return;
     }
-    //Find the reply operation removed the pointer from the replay map.
+    //Find the reply operation removed the pointer from the reply map and
+    //timeout ticking map.
     m_replyMap.remove(reply);
+    m_replyTimeout.remove(reply);
     //Check the operation.
     switch(replyOperation)
     {
@@ -199,6 +201,10 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
     case NeteaseHomeListTopSongs:
         //Call the home page processing slots.
         onHomeListReply(replyOperation, reply);
+        break;
+    case NeteaseHomeListNewAlbumArt:
+        //Call the home page new album art list processing.
+        onHomeNewAlbumArtReply(reply);
         break;
     case NeteaseAlbumDetails:
         //Album detail information reply.
@@ -252,11 +258,21 @@ void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
         //Get the album information.
         QJsonArray albumList=homeListData.value("albums").toArray(),
                    albumDataList;
+        //Reset the album art list.
+        m_newAlbumArtList=QList<QNetworkReply *>();
+        m_newAlbumArtList.reserve(32);
+        for(int i=0; i<32; ++i)
+        {
+            //Append nullptr.
+            m_newAlbumArtList.append(nullptr);
+        }
+        //Increase the counter.
+        emit requireAddConnectionCount(albumList.size());
         //Loop and construct the album data.
-        for(auto i : albumList)
+        for(int i=0; i<albumList.size(); ++i)
         {
             //Translate the value to object, prepare the value object.
-            QJsonObject albumObject=i.toObject(), albumData;
+            QJsonObject albumObject=albumList.at(i).toObject(), albumData;
             //Insert the data to album data.
             albumData.insert("name", albumObject.value("name"));
             albumData.insert("custom", QString::number(
@@ -266,13 +282,47 @@ void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
             //Insert the album data to album data list.
             albumDataList.append(albumData);
             //Fetch the album object value.
-//            qDebug()<<albumObject.value("picUrl").toString();
+            m_newAlbumArtList.replace(
+                        i,
+                        insertRequest(albumObject.value("picUrl").toString(),
+                                      NeteaseGet, NeteaseHomeListNewAlbumArt,
+                                      false));
         }
         //Emit the set data function.
         emit requireSetHome(HomeNewAlbumData, albumDataList);
         break;
     }
     }
+}
+
+void KNMusicStoreNeteaseBackend::onHomeNewAlbumArtReply(QNetworkReply *reply)
+{
+    //Load QPixmap from the reply.
+    QPixmap homeAlbumArtPixmap;
+    //Get the reply data.
+    homeAlbumArtPixmap.loadFromData(reply->readAll());
+    //Check the pixmap.
+    if(homeAlbumArtPixmap.isNull())
+    {
+        //Ignore the invalid album art data.
+        return;
+    }
+    //Construct the album structure.
+    KNMusicStoreHomeUpdateArtwork homeArtworkData;
+    //Set the index.
+    homeArtworkData.index=m_newAlbumArtList.indexOf(reply);
+    //Check index is valid or not.
+    if(homeArtworkData.index==-1)
+    {
+        //Ignore the invalid reply data.
+        return;
+    }
+    //Set the pixmap.
+    homeArtworkData.artwork=homeAlbumArtPixmap;
+    //Replace the list data.
+    m_newAlbumArtList.replace(homeArtworkData.index, nullptr);
+    //Change the album art data.
+    emit requireSetHome(HomeNewAlbumArt, QVariant::fromValue(homeArtworkData));
 }
 
 void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
@@ -399,14 +449,15 @@ void KNMusicStoreNeteaseBackend::onTimeoutTick()
             continue;
         }
         //Increase the counter.
-        m_replyMap.insert(i, m_replyMap.value(i)+1);
+        m_replyTimeout.insert(i, m_replyTimeout.value(i)+1);
     }
 }
 
-inline void KNMusicStoreNeteaseBackend::insertRequest(const QString &url,
-                                                      int requestType,
-                                                      int replyType,
-                                                      bool useHeader)
+inline QNetworkReply *KNMusicStoreNeteaseBackend::insertRequest(
+        const QString &url,
+        int requestType,
+        int replyType,
+        bool useHeader)
 {
     //Prepare an empty request.
     QNetworkRequest neteaseRequest;
@@ -439,6 +490,8 @@ inline void KNMusicStoreNeteaseBackend::insertRequest(const QString &url,
     m_replyTimeout.insert(reply, 0);
     //Start timeout checking.
     startTimeoutTick();
+    //Give back the reply.
+    return reply;
 }
 
 inline QNetworkRequest KNMusicStoreNeteaseBackend::generateRequest()

@@ -81,6 +81,7 @@ public slots:
 private slots:
     void onReplyFinished(QNetworkReply *reply);
     void onHomeListReply(int listType, QNetworkReply *reply);
+    void onHomeNewAlbumArtReply(QNetworkReply *reply);
     void onAlbumDetailReply(QNetworkReply *reply);
     void onSingleLyricsReply(QNetworkReply *reply);
     void onTimeoutTick();
@@ -106,16 +107,17 @@ private:
         NeteaseGet
     };
 
-    inline void insertRequest(const QString &url,
-                              int requestType,
-                              int replyType,
-                              bool useHeader=true);
+    inline QNetworkReply *insertRequest(const QString &url,
+                                        int requestType,
+                                        int replyType,
+                                        bool useHeader=true);
     inline QByteArray getRawData(QNetworkReply *reply);
     inline QNetworkRequest generateRequest();
     inline void resetManager();
     inline void startTimeoutTick();
     inline void stopTimeoutTick();
     QString m_listUrls[HomeSongListCount];
+    QList<QNetworkReply *> m_newAlbumArtList, m_newSongArtList;
     KNConnectionHandler m_accessManagerHandler;
     QScopedPointer<QNetworkAccessManager> m_accessManager;
     QMap<QNetworkReply *, int> m_replyMap;

@@ -18,10 +18,13 @@ Foundation,
  */
 #include <QScrollBar>
 #include <QPainter>
+#include <QWheelEvent>
 
 #include "knmusicstorehomelistmodel.h"
 
 #include "knmusicstorehomealbumview.h"
+
+#include <QDebug>
 
 #define AlbumArtSize            125
 #define AlbumHorizontalSpacing  20
@@ -30,7 +33,8 @@ Foundation,
 #define AlbumViewHeight         390
 #define AlbumAreaHeight         172
 #define AlbumAreaWidth          125
-#define AlbumTitleSpacing       10
+#define AlbumTitleSpacing       9
+#define AlbumTextAreaHeight     44
 
 KNMusicStoreHomeAlbumView::KNMusicStoreHomeAlbumView(QWidget *parent) :
     QAbstractItemView(parent),
@@ -39,8 +43,12 @@ KNMusicStoreHomeAlbumView::KNMusicStoreHomeAlbumView(QWidget *parent) :
 {
     //Set properties.
     setFixedHeight(AlbumViewHeight);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFrameStyle(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //Configure the scroll bar.
+    horizontalScrollBar()->setSingleStep(AlbumHorizontalSize>>2);
+    horizontalScrollBar()->setPageStep(AlbumHorizontalSize>>1);
     //Initial the cache.
     m_noAlbumArtCache=m_noAlbumArtCache.scaled(AlbumArtSize, AlbumArtSize,
                                                Qt::KeepAspectRatio,
@@ -150,23 +158,55 @@ void KNMusicStoreHomeAlbumView::paintEvent(QPaintEvent *event)
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
     //Calculate the start index.
-    int currentRow=horizontalScrollBar()->value()/AlbumHorizontalSize,
+    int currentRow=(horizontalScrollBar()->value()/AlbumHorizontalSize)<<1,
         //Calculate the start x.
-        currentX=currentRow*AlbumHorizontalSize-horizontalScrollBar()->value(),
+        currentX=(currentRow>>1)*AlbumHorizontalSize-
+            horizontalScrollBar()->value(),
         currentY=0;
     //Start to paint the album item.
     while(currentRow<m_listModel->rowCount())
     {
         //Draw the pixmap first.
-        QPixmap albumArt=m_listModel->albumArt(currentRow);
+        const KNMusicStoreHomeItem &albumItem=
+                m_listModel->albumItem(currentRow);
         //Check the album art is null or not.
         //Draw the no album pixmap.
         painter.drawPixmap(currentX, currentY,
-                           albumArt.isNull()?m_noAlbumArtCache:albumArt);
+                           albumItem.artwork.isNull()?
+                               m_noAlbumArtCache:
+                               albumItem.artwork);
+        //Get the title text.
+        QString titleText=fontMetrics().elidedText(albumItem.title,
+                                                   Qt::ElideRight,
+                                                   AlbumAreaWidth<<1);
+        //Prepare the title area.
+        QRect titleArea=QRect(currentX, currentY+AlbumArtSize+AlbumTitleSpacing,
+                              AlbumAreaWidth, AlbumTextAreaHeight);
+        //Calculate the real title area.
+        titleArea=fontMetrics().boundingRect(titleArea,
+                                             Qt::AlignLeft | Qt::AlignTop |
+                                             Qt::TextWordWrap,
+                                             titleText);
         //Draw the album data.
-//        painter.drawText(QRect(currentX, currentY+AlbumTitleSpacing,
-//                               AlbumAreaWidth, fontMetrics().height()<<1),
-//                         m_listModel);
+        painter.drawText(titleArea,
+                         Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap,
+                         titleText);
+        //Change to subtitle opacity.
+        painter.setOpacity(0.5);
+        //Draw the album text.
+        int subtitleHeight=AlbumTextAreaHeight-titleArea.height();
+        painter.drawText(QRect(currentX,
+                               titleArea.y()+titleArea.height(),
+                               AlbumAreaWidth,
+                               subtitleHeight),
+                         Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap,
+                         fontMetrics().elidedText(
+                             albumItem.subheading,
+                             Qt::ElideRight,
+                             subtitleHeight/fontMetrics().height()*
+                             AlbumAreaWidth));
+        //Reset the opacity.
+        painter.setOpacity(1.0);
         //Change the position.
         if(currentY==0)
         {
@@ -209,6 +249,20 @@ QRegion KNMusicStoreHomeAlbumView::visualRegionForSelection(
 {
     Q_UNUSED(selection)
     return QRegion();
+}
+
+void KNMusicStoreHomeAlbumView::wheelEvent(QWheelEvent *event)
+{
+    //Check the scroll direction.
+    if(event->orientation()==Qt::Vertical)
+    {
+        //Ignore the event.
+        event->ignore();
+        //Wheel complete.
+        return;
+    }
+    //Continue for the horizontal movement.
+    QAbstractItemView::wheelEvent(event);
 }
 
 void KNMusicStoreHomeAlbumView::updateGeometries()
