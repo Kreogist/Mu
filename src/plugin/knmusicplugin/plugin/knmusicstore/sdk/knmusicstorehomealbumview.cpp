@@ -17,8 +17,12 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QScrollBar>
+#include <QTimeLine>
 #include <QPainter>
 #include <QWheelEvent>
+
+#include "sao/knsaostyle.h"
+#include "knthememanager.h"
 
 #include "knmusicstorehomelistmodel.h"
 
@@ -35,12 +39,21 @@ Foundation,
 #define AlbumAreaWidth          125
 #define AlbumTitleSpacing       9
 #define AlbumTextAreaHeight     44
+#define ScrollBarWidth          10
+#define ShadowSize              151
+#define ShadowIncrease          12
+#define PaintTopMargin          7
+#define MaxOpacity              0x80
 
 KNMusicStoreHomeAlbumView::KNMusicStoreHomeAlbumView(QWidget *parent) :
     QAbstractItemView(parent),
     m_noAlbumArtCache(QPixmap(":/plugin/music/public/noalbum.png")),
-    m_listModel(nullptr)
+    m_albumShadow(QPixmap(ShadowSize, ShadowSize)),
+    m_mouseAnime(new QTimeLine(200, this)),
+    m_listModel(nullptr),
+    m_scrollBar(new QScrollBar(Qt::Horizontal, this))
 {
+    setObjectName("MusicStoreHomeNewAlbum");
     //Set properties.
     setFixedHeight(AlbumViewHeight);
     setFrameStyle(QFrame::NoFrame);
@@ -49,10 +62,105 @@ KNMusicStoreHomeAlbumView::KNMusicStoreHomeAlbumView(QWidget *parent) :
     //Configure the scroll bar.
     horizontalScrollBar()->setSingleStep(AlbumHorizontalSize>>2);
     horizontalScrollBar()->setPageStep(AlbumHorizontalSize>>1);
+    //Configure the scroll bar.
+    m_scrollBar->setObjectName("MusicStoreScrollBar");
+    m_scrollBar->setStyle(KNSaoStyle::instance());
+    m_scrollBar->setSingleStep(100);
+    m_scrollBar->setPageStep(AlbumHorizontalSize<<3);
+    m_scrollBar->setFixedHeight(ScrollBarWidth);
+    m_scrollBar->hide();
+    knTheme->registerWidget(m_scrollBar);
+    connect(horizontalScrollBar(), &QScrollBar::rangeChanged,
+            [=](int min, int max)
+            {
+                //Update the range first.
+                m_scrollBar->setRange(min, max);
+                //Check whether the scroll bar is still valid.
+                m_scrollBar->setVisible(min!=max);
+            });
+    connect(horizontalScrollBar(), &QScrollBar::valueChanged,
+            [=](int value)
+            {
+                //Block the signal.
+                m_scrollBar->blockSignals(true);
+                //Reset the value.
+                m_scrollBar->setValue(value);
+                //Release the block
+                m_scrollBar->blockSignals(false);
+            });
+    connect(m_scrollBar, &QScrollBar::valueChanged,
+            horizontalScrollBar(), &QScrollBar::setValue);
     //Initial the cache.
     m_noAlbumArtCache=m_noAlbumArtCache.scaled(AlbumArtSize, AlbumArtSize,
                                                Qt::KeepAspectRatio,
                                                Qt::SmoothTransformation);
+    //Initial the album shadow.
+    QPixmap shadowSource("://public/shadow.png");
+    //Initial the shadow pixmap.
+    m_albumShadow.fill(QColor(255, 255, 255, 0));
+    //Configure the timeline.
+    //Configure the timeline.
+    m_mouseAnime->setUpdateInterval(33);
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNMusicStoreHomeAlbumView::onMouseInOut);
+    //Prepare the parameters.
+    int sourceSize=shadowSource.width(),
+        blockSize=sourceSize/3,
+        blockSize2x=blockSize<<1,
+        destinationWidth=ShadowSize-blockSize2x,
+        destinationHeight=ShadowSize-blockSize2x;
+    //Initial the antialiasing painter.
+    QPainter painter(&m_albumShadow);
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::SmoothPixmapTransform,
+                           true);
+    painter.setOpacity(0.8);
+    //Draw Top-left shadow.
+    painter.drawPixmap(QRect(0,0,blockSize,blockSize),
+                       shadowSource,
+                       QRect(0,0,blockSize,blockSize));
+    //Draw Top-Middle shadow.
+    painter.drawPixmap(QRect(blockSize,0,destinationWidth-blockSize,blockSize),
+                       shadowSource,
+                       QRect(blockSize,0,blockSize,blockSize));
+    //Draw Top-Right shadow.
+    painter.drawPixmap(QRect(destinationWidth,0,blockSize2x, blockSize),
+                       shadowSource,
+                       QRect(blockSize,0,blockSize2x,blockSize));
+    //Draw Middle-Left shadow.
+    painter.drawPixmap(QRect(0,blockSize,blockSize,destinationHeight-blockSize),
+                       shadowSource,
+                       QRect(0,blockSize,blockSize,blockSize));
+    //Draw Middle-Right shadow.
+    painter.drawPixmap(QRect(destinationWidth+blockSize,
+                             blockSize,
+                             blockSize,
+                             destinationHeight),
+                       shadowSource,
+                       QRect(blockSize2x,blockSize,blockSize,blockSize));
+    //Draw Left-Bottom shadow.
+    painter.drawPixmap(QRect(0,destinationHeight,blockSize, blockSize2x),
+                       shadowSource,
+                       QRect(0,blockSize,blockSize,blockSize2x));
+    //Draw Middle-Bottom shadow.
+    painter.drawPixmap(QRect(blockSize,
+                             destinationHeight+blockSize,
+                             destinationWidth,
+                             blockSize),
+                       shadowSource,
+                       QRect(blockSize,blockSize2x,blockSize,blockSize));
+    //Draw Right-Buttom shadow.
+    painter.drawPixmap(QRect(destinationWidth+blockSize,
+                             destinationHeight+blockSize,
+                             blockSize,
+                             blockSize),
+                       shadowSource,
+                       QRect(blockSize2x,blockSize2x,blockSize,blockSize));
+    painter.end();
+
+    //Link theme manager.
+    knTheme->registerWidget(this);
 }
 
 QModelIndex KNMusicStoreHomeAlbumView::indexAt(const QPoint &point) const
@@ -157,12 +265,13 @@ void KNMusicStoreHomeAlbumView::paintEvent(QPaintEvent *event)
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
+    painter.setPen(palette().color(QPalette::WindowText));
     //Calculate the start index.
     int currentRow=(horizontalScrollBar()->value()/AlbumHorizontalSize)<<1,
         //Calculate the start x.
         currentX=(currentRow>>1)*AlbumHorizontalSize-
             horizontalScrollBar()->value(),
-        currentY=0;
+        currentY=PaintTopMargin;
     //Start to paint the album item.
     while(currentRow<m_listModel->rowCount())
     {
@@ -170,7 +279,10 @@ void KNMusicStoreHomeAlbumView::paintEvent(QPaintEvent *event)
         const KNMusicStoreHomeItem &albumItem=
                 m_listModel->albumItem(currentRow);
         //Check the album art is null or not.
-        //Draw the no album pixmap.
+        //Draw the pixmap shadow first.
+        painter.drawPixmap(currentX-ShadowIncrease, currentY-ShadowIncrease,
+                           m_albumShadow);
+        //Draw the album art pixmap.
         painter.drawPixmap(currentX, currentY,
                            albumItem.artwork.isNull()?
                                m_noAlbumArtCache:
@@ -208,21 +320,30 @@ void KNMusicStoreHomeAlbumView::paintEvent(QPaintEvent *event)
         //Reset the opacity.
         painter.setOpacity(1.0);
         //Change the position.
-        if(currentY==0)
+        if(currentY==PaintTopMargin)
         {
             //Increase the Y position only.
-            currentY=AlbumVerticalSize;
+            currentY+=AlbumVerticalSize;
         }
         else
         {
             //Reset Y position.
-            currentY=0;
+            currentY=PaintTopMargin;
             //Increase X position.
             currentX+=AlbumHorizontalSize;
         }
         //Increase the row.
         ++currentRow;
     }
+}
+
+void KNMusicStoreHomeAlbumView::resizeEvent(QResizeEvent *event)
+{
+    //Do resize.
+    QAbstractItemView::resizeEvent(event);
+    //Update the scroll bar position.
+    m_scrollBar->setGeometry(0, height()-ScrollBarWidth,
+                             width(), ScrollBarWidth);
 }
 
 int KNMusicStoreHomeAlbumView::horizontalOffset() const
@@ -248,7 +369,24 @@ QRegion KNMusicStoreHomeAlbumView::visualRegionForSelection(
         const QItemSelection &selection) const
 {
     Q_UNUSED(selection)
+    //No selection for the view.
     return QRegion();
+}
+
+void KNMusicStoreHomeAlbumView::enterEvent(QEvent *event)
+{
+    //Enter the list view.
+    QAbstractItemView::enterEvent(event);
+    //Start mouse in anime.
+    startAnime(MaxOpacity);
+}
+
+void KNMusicStoreHomeAlbumView::leaveEvent(QEvent *event)
+{
+    //Leave the list view.
+    QAbstractItemView::leaveEvent(event);
+    //Start mouse leave anime.
+    startAnime(0);
 }
 
 void KNMusicStoreHomeAlbumView::wheelEvent(QWheelEvent *event)
@@ -271,4 +409,30 @@ void KNMusicStoreHomeAlbumView::updateGeometries()
     horizontalScrollBar()->setRange(0,
                                     (AlbumHorizontalSize<<4)-
                                     AlbumHorizontalSpacing-width());
+}
+
+void KNMusicStoreHomeAlbumView::onMouseInOut(int frame)
+{
+    //Update the scroll bar color.
+    QPalette pal=m_scrollBar->palette();
+    QColor color=pal.color(QPalette::Base);
+    color.setAlpha(frame>>2);
+    pal.setColor(QPalette::Base, color);
+    color=pal.color(QPalette::Button);
+    color.setAlpha(frame);
+    pal.setColor(QPalette::Button, color);
+    //Set the palette to scroll bar.
+    m_scrollBar->setPalette(pal);
+}
+
+inline void KNMusicStoreHomeAlbumView::startAnime(int endFrame)
+{
+    //Stop the mouse animations.
+    m_mouseAnime->stop();
+    //Set the parameter of the time line.
+    m_mouseAnime->setFrameRange(
+                m_scrollBar->palette().color(QPalette::Button).alpha(),
+                endFrame);
+    //Start the time line.
+    m_mouseAnime->start();
 }

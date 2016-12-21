@@ -22,6 +22,7 @@ Foundation,
 
 #include <QAbstractItemView>
 
+class QTimeLine;
 class KNMusicStoreHomeListModel;
 /*!
  * \brief The KNMusicStoreHomeAlbumView class provides the view to display the
@@ -83,6 +84,11 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QAbstractItemView::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QAbstractItemView::horizontalOffset().
      */
     int horizontalOffset() const Q_DECL_OVERRIDE;
@@ -105,6 +111,16 @@ protected:
     Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QAbstractItemView::enterEvent().
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractItemView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QAbstractItemView::wheelEvent().
      */
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
@@ -115,9 +131,15 @@ protected slots:
      */
     void updateGeometries() Q_DECL_OVERRIDE;
 
+private slots:
+    void onMouseInOut(int frame);
+
 private:
-    QPixmap m_noAlbumArtCache;
+    inline void startAnime(int endFrame);
+    QPixmap m_noAlbumArtCache, m_albumShadow;
+    QTimeLine *m_mouseAnime;
     KNMusicStoreHomeListModel *m_listModel;
+    QScrollBar *m_scrollBar;
 };
 
 #endif // KNMUSICSTOREHOMEALBUMVIEW_H

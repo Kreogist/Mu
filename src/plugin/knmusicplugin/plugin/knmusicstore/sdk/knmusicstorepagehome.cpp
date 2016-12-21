@@ -40,7 +40,7 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     updateObjectName("MusicStorePage");
     //Initial title label fonts.
     QFont titleFont=font();
-    titleFont.setPixelSize(12);
+    titleFont.setPixelSize(16);
     //Initial title labels and models.
     for(int i=0; i<HomeSongListCount; ++i)
     {
@@ -53,6 +53,8 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     }
     //Set the view.
     m_newAlbumView->setModel(m_homeListModel[ListNewAlbum]);
+    //Configure the label.
+    m_titleLabel[ListTopSongs]->setFixedWidth(220);
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -61,8 +63,8 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     setLayout(mainLayout);
     //Initial the rank list layout.
     QBoxLayout *listLayout=new QBoxLayout(QBoxLayout::LeftToRight);
-    listLayout->setContentsMargins(0, 0, 0, 0);
-    listLayout->setSpacing(0);
+    listLayout->setContentsMargins(30, 0, 30, 0);
+    listLayout->setSpacing(40);
     mainLayout->addLayout(listLayout);
     //Initial the content layout.
     QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom);
@@ -71,7 +73,9 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     listLayout->addLayout(contentLayout, 1);
     //Add widgets.
     contentLayout->addWidget(m_titleLabel[ListNewAlbum]);
+    contentLayout->addSpacing(4);
     contentLayout->addWidget(m_newAlbumView);
+    contentLayout->addSpacing(13);
     contentLayout->addWidget(m_titleLabel[ListNewSongs]);
     //Initial the ranking layout.
     QGridLayout *rankLayout=new QGridLayout();
