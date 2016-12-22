@@ -27,6 +27,7 @@ Foundation,
 #include "knmusicstoreutil.h"
 #include "knmusicstorebackend.h"
 #include "knmusicstorehomealbumview.h"
+#include "knmusicstorehomesongview.h"
 #include "knmusicstorehomelistmodel.h"
 
 #include "knmusicstorepagehome.h"
@@ -35,7 +36,8 @@ using namespace MusicStoreUtil;
 
 KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     KNMusicStorePage(parent),
-    m_newAlbumView(new KNMusicStoreHomeAlbumView(this))
+    m_newAlbumView(new KNMusicStoreHomeAlbumView(this)),
+    m_newSongView(new KNMusicStoreHomeSongView(this))
 {
     updateObjectName("MusicStorePage");
     //Initial title label fonts.
@@ -53,6 +55,7 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     }
     //Set the view.
     m_newAlbumView->setModel(m_homeListModel[ListNewAlbum]);
+    m_newSongView->setModel(m_homeListModel[ListNewSongs]);
     //Configure the label.
     m_titleLabel[ListTopSongs]->setFixedWidth(220);
 
@@ -77,6 +80,8 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     contentLayout->addWidget(m_newAlbumView);
     contentLayout->addSpacing(13);
     contentLayout->addWidget(m_titleLabel[ListNewSongs]);
+    contentLayout->addSpacing(2);
+    contentLayout->addWidget(m_newSongView);
     //Initial the ranking layout.
     QGridLayout *rankLayout=new QGridLayout();
     contentLayout->addLayout(rankLayout);
@@ -106,7 +111,7 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
 {
     switch(labelIndex)
     {
-    case ListNewAlbum:
+    case HomeNewAlbumData:
     {
         //Reset the model.
         m_homeListModel[ListNewAlbum]->reset();
@@ -129,14 +134,40 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
         break;
     }
     case HomeNewAlbumArt:
+    case HomeNewSongArt:
     {
         //Translate the data to structure.
         KNMusicStoreHomeUpdateArtwork homeArtworkData=
                 value.value<KNMusicStoreHomeUpdateArtwork>();
         //Get update the model.
-        m_homeListModel[ListNewAlbum]->setAlbumArt(homeArtworkData.index,
-                                                   homeArtworkData.artwork);
+        m_homeListModel[labelIndex==HomeNewAlbumArt?
+                                ListNewAlbum:
+                                ListNewSongs]->setAlbumArt(
+                        homeArtworkData.index,
+                        homeArtworkData.artwork);
         //Update complete.
+        break;
+    }
+    case HomeNewSongData:
+    {
+        //Reset the model.
+        m_homeListModel[ListNewSongs]->reset();
+        //Translate the value to json array.
+        QJsonArray songDataList=value.toJsonArray();
+        //Start to insert data.
+        for(auto i : songDataList)
+        {
+            //Cast i as object.
+            QJsonObject songData=i.toObject();
+            //Construct the item.
+            KNMusicStoreHomeItem songItem;
+            //Set the album data.
+            songItem.title=songData.value("name").toString();
+            songItem.subheading=songData.value("artist-album").toString();
+            songItem.customData=songData.value("custom").toString();
+            //Insert the album to model.
+            m_homeListModel[ListNewSongs]->appendRow(songItem);
+        }
         break;
     }
     }

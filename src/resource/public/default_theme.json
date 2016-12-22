@@ -26,6 +26,9 @@
         "WindowText" : "#FFFFFF",
         "Text" : "#FFFFFF"
     },
+    "MusicStoreHomeNewSong" : {
+        "Parent" : "MusicStoreHomeNewAlbum"
+    },
     "MusicStoreErrorDimmer" : {
         "Parent" : "MusicStoreWidget",
         "Window" : "#00000000"

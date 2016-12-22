@@ -21,8 +21,11 @@ Foundation,
 #define KNMUSICSTORENETEASEBACKEND_H
 
 #include <QNetworkAccessManager>
+#include <QNetworkRequest>
 #include <QScopedPointer>
 #include <QMap>
+#include <QDomElement>
+#include <QLinkedList>
 
 #include "knconnectionhandler.h"
 
@@ -81,7 +84,9 @@ public slots:
 private slots:
     void onReplyFinished(QNetworkReply *reply);
     void onHomeListReply(int listType, QNetworkReply *reply);
-    void onHomeNewAlbumArtReply(QNetworkReply *reply);
+    void onHomeNewArtworkReply(QNetworkReply *reply,
+                               QList<uint> &urlMap,
+                               int albumArtRequestType);
     void onAlbumDetailReply(QNetworkReply *reply);
     void onSingleLyricsReply(QNetworkReply *reply);
     void onTimeoutTick();
@@ -96,6 +101,7 @@ private:
         NeteaseHomeListItunes,
         NeteaseHomeListTopSongs,
         NeteaseHomeListNewAlbumArt,
+        NeteaseHomeListNewSongArt,
         NeteaseAlbumDetails,
         NeteaseAlbumArt,
         NeteaseSingleLyricsText,
@@ -107,23 +113,33 @@ private:
         NeteaseGet
     };
 
-    inline QNetworkReply *insertRequest(const QString &url,
-                                        int requestType,
-                                        int replyType,
-                                        bool useHeader=true);
-    inline QByteArray getRawData(QNetworkReply *reply);
+    struct NetworkRequestItem
+    {
+        QNetworkRequest request;
+        int requestType;
+        int replyType;
+    };
+
+    inline void insertRequest(const QString &url,
+                              int requestType,
+                              int replyType,
+                              bool useHeader=true);
+    inline void launchRequest(const QNetworkRequest &request,
+                              int requestType,
+                              int replyType);
     inline QNetworkRequest generateRequest();
     inline void resetManager();
     inline void startTimeoutTick();
     inline void stopTimeoutTick();
     QString m_listUrls[HomeSongListCount];
-    QList<QNetworkReply *> m_newAlbumArtList, m_newSongArtList;
+    QLinkedList<NetworkRequestItem> m_queueRequest;
+    QList<uint> m_albumArtworkList, m_songArtworkList;
     KNConnectionHandler m_accessManagerHandler;
     QScopedPointer<QNetworkAccessManager> m_accessManager;
     QMap<QNetworkReply *, int> m_replyMap;
     QMap<QNetworkReply *, int> m_replyTimeout;
     QTimer *m_timeout;
-    int m_timeoutLimit;
+    int m_timeoutLimit, m_pipelineLimit;
 };
 
 #endif // KNMUSICSTORENETEASEBACKEND_H

@@ -17,35 +17,41 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTOREHOMEALBUMVIEW_H
-#define KNMUSICSTOREHOMEALBUMVIEW_H
+#ifndef KNMUSICSTOREHOMESONGVIEW_H
+#define KNMUSICSTOREHOMESONGVIEW_H
 
 #include "knmusicstorehomeitemview.h"
 
 /*!
- * \brief The KNMusicStoreHomeAlbumView class provides the view to display the
- * album view at the home page. It will render the item only in horizontal way.
- * Each column will contains two items.
+ * \brief The KNMusicStoreHomeSongView class provides the widge to display the
+ * home item as song item.\n
+ * This view is implemented as a music store view. It will manage only the music
+ * store model.
  */
-class KNMusicStoreHomeAlbumView : public KNMusicStoreHomeItemView
+class KNMusicStoreHomeSongView : public KNMusicStoreHomeItemView
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStoreHomeAlbumView widget.
+     * \brief Construct a KNMusicStoreHomeSongView widget.
      * \param parent The parent widget.
      */
-    explicit KNMusicStoreHomeAlbumView(QWidget *parent = 0);
+    explicit KNMusicStoreHomeSongView(QWidget *parent = 0);
 
     /*!
-     * \brief Reimplemented from QAbstractItemView::indexAt().
+     * \brief Reimplemented from KNMusicStoreHomeItemView::indexAt().
      */
     QModelIndex indexAt(const QPoint &point) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from QAbstractItemView::visualRect().
+     * \brief Reimplemented from KNMusicStoreHomeItemView::visualRect().
      */
     QRect visualRect(const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStoreHomeItemView::setModel().
+     */
+    void setModel(QAbstractItemModel *model) Q_DECL_OVERRIDE;
 
 signals:
 
@@ -53,18 +59,18 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from QAbstractItemView::paintEvent().
+     * \brief Reimplemented from KNMusicStoreHomeItemView::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 protected slots:
     /*!
-     * \brief Reimplemented from QAbstractItemView::updateGeometries().
+     * \brief Reimplemented from KNMusicStoreHomeItemView::updateGeometries().
      */
     void updateGeometries() Q_DECL_OVERRIDE;
 
 private:
-    QPixmap m_noAlbumArtCache, m_albumShadow;
+    QPixmap m_noAlbumArtCache;
 };
 
-#endif // KNMUSICSTOREHOMEALBUMVIEW_H
+#endif // KNMUSICSTOREHOMESONGVIEW_H

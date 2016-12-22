@@ -63,7 +63,7 @@ public:
      * \param row The row of the item.
      * \return The item content.
      */
-    KNMusicStoreHomeItem albumItem(int row) const;
+    KNMusicStoreHomeItem homeItem(int row) const;
 
     /*!
      * \brief Append one music item to the model.
@@ -71,9 +71,22 @@ public:
      */
     void appendRow(const KNMusicStoreHomeItem &homeItem);
 
+    /*!
+     * \brief Get the album art pixmap size.
+     * \return The size of the album art. Unit is pixel.
+     */
+    int albumArtSize() const;
+
 signals:
 
 public slots:
+    /*!
+     * \brief Set the size of the album art.
+     * \param albumArtSize The new size of the album art. The default value is
+     * 125. Unit is pixel.
+     */
+    void setAlbumArtSize(int albumArtSize);
+
     /*!
      * \brief Clear all the data of the model.
      */
@@ -88,6 +101,7 @@ public slots:
 
 private:
     QList<KNMusicStoreHomeItem> m_itemList;
+    int m_albumArtSize;
 };
 
 #endif // KNMUSICSTOREHOMELISTMODEL_H

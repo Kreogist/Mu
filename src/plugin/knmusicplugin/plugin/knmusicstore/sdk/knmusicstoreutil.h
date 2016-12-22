@@ -54,7 +54,9 @@ namespace MusicStoreUtil
     enum MusicStoreHomeLabel
     {
         HomeNewAlbumData,
-        HomeNewAlbumArt
+        HomeNewAlbumArt,
+        HomeNewSongData,
+        HomeNewSongArt
     };
 
     enum MusicStoreAlbumLabel

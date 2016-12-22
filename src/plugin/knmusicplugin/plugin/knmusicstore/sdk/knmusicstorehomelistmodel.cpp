@@ -19,10 +19,9 @@ Foundation,
 
 #include "knmusicstorehomelistmodel.h"
 
-#define AlbumArtSize 125
-
 KNMusicStoreHomeListModel::KNMusicStoreHomeListModel(QObject *parent) :
-    QAbstractListModel(parent)
+    QAbstractListModel(parent),
+    m_albumArtSize(125)
 {
 }
 
@@ -64,7 +63,7 @@ QPixmap KNMusicStoreHomeListModel::albumArt(int row) const
     return m_itemList.at(row).artwork;
 }
 
-KNMusicStoreHomeItem KNMusicStoreHomeListModel::albumItem(int row) const
+KNMusicStoreHomeItem KNMusicStoreHomeListModel::homeItem(int row) const
 {
     //Directly return the item.
     return m_itemList.at(row);
@@ -103,11 +102,21 @@ void KNMusicStoreHomeListModel::setAlbumArt(int row, const QPixmap &albumArt)
     //Get the item.
     KNMusicStoreHomeItem updatedItem=m_itemList.at(row);
     //Save the new album art.
-    updatedItem.artwork=albumArt.scaled(AlbumArtSize, AlbumArtSize,
+    updatedItem.artwork=albumArt.scaled(m_albumArtSize, m_albumArtSize,
                                         Qt::KeepAspectRatio,
                                         Qt::SmoothTransformation);
     //Update the list.
     m_itemList.replace(row, updatedItem);
     //Emit the data changed signal.
     emit dataChanged(index(row), index(row));
+}
+
+int KNMusicStoreHomeListModel::albumArtSize() const
+{
+    return m_albumArtSize;
+}
+
+void KNMusicStoreHomeListModel::setAlbumArtSize(int albumArtSize)
+{
+    m_albumArtSize = albumArtSize;
 }

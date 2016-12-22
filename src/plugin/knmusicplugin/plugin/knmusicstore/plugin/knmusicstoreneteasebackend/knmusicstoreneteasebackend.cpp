@@ -15,10 +15,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QDomDocument>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QPixmap>
 #include <QTimerEvent>
@@ -33,10 +33,14 @@
 
 #include <QDebug>
 
+#define DefaultTimeoutLimit     15 //Default seconds for timeout.
+#define DefaultPipelineLimit    100 //Default links for pipeline.
+
 KNMusicStoreNeteaseBackend::KNMusicStoreNeteaseBackend(QObject *parent) :
     KNMusicStoreBackend(parent),
     m_timeout(new QTimer(this)),
-    m_timeoutLimit(30) //Default 30 seconds timeout.
+    m_timeoutLimit(DefaultTimeoutLimit),
+    m_pipelineLimit(DefaultPipelineLimit)
 {
     setObjectName("MusicStoreNeteaseBackend");
     //Initial the list urls.
@@ -79,19 +83,19 @@ void KNMusicStoreNeteaseBackend::showHome()
     //Insert the GET request.
     //Because the data could be changed, this part we won't use loop to do this.
     insertRequest(m_listUrls[ListNewAlbum].arg("0", "32"),
-                  NeteaseHomeListNewAlbum, NeteaseGet);
-//    insertRequest(m_listUrls[ListNewSongs],
-//                  NeteaseHomeListNewSongs, NeteaseGet);
+                  NeteaseGet, NeteaseHomeListNewAlbum);
+    insertRequest(m_listUrls[ListNewSongs],
+                  NeteaseGet, NeteaseHomeListNewSongs);
 //    insertRequest(m_listUrls[ListBillboard],
-//                  NeteaseHomeListBillboard, NeteaseGet);
+//                  NeteaseGet, NeteaseHomeListBillboard);
 //    insertRequest(m_listUrls[ListOricon],
-//                  NeteaseHomeListOricon, NeteaseGet);
+//                  NeteaseGet, NeteaseHomeListOricon);
 //    insertRequest(m_listUrls[ListItunes],
-//                  NeteaseHomeListItunes, NeteaseGet);
+//                  NeteaseGet, NeteaseHomeListItunes);
 //    insertRequest(m_listUrls[ListTopSongs],
-//                  NeteaseHomeListTopSongs, NeteaseGet);
+//                  NeteaseGet, NeteaseHomeListTopSongs);
     //Increase Internet counter.
-    emit requireAddConnectionCount(1);
+    emit requireAddConnectionCount(2);
 }
 
 void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
@@ -176,6 +180,24 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
 {
     //Reduce reply counter.
     emit requireReduceConnectionCount(1);
+    //Check the caching request list.
+    if(!m_queueRequest.isEmpty())
+    {
+        //Take the first cache request.
+        NetworkRequestItem requestItem=m_queueRequest.takeFirst();
+        //Launch the first cache request.
+        launchRequest(requestItem.request,
+                      requestItem.requestType,
+                      requestItem.replyType);
+    }
+    //Check reply state.
+    if(!m_replyTimeout.contains(reply))
+    {
+        //The reply is timeout, error.
+        //!FIXME: show error.
+        reply->deleteLater();
+        return;
+    }
     //Check the reply in the hash list.
     int replyOperation=m_replyMap.value(reply, -1);
     //Check the operation.
@@ -204,7 +226,11 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
         break;
     case NeteaseHomeListNewAlbumArt:
         //Call the home page new album art list processing.
-        onHomeNewAlbumArtReply(reply);
+        onHomeNewArtworkReply(reply, m_albumArtworkList, HomeNewAlbumArt);
+        break;
+    case NeteaseHomeListNewSongArt:
+        //Call the home page new song art list processing.
+        onHomeNewArtworkReply(reply, m_songArtworkList, HomeNewSongArt);
         break;
     case NeteaseAlbumDetails:
         //Album detail information reply.
@@ -248,23 +274,24 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
 void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
                                                  QNetworkReply *reply)
 {
-    //Translate the reply data as a json object.
-    QJsonObject homeListData=QJsonDocument::fromJson(reply->readAll()).object();
     //Check the list type.
     switch(listType)
     {
     case NeteaseHomeListNewAlbum:
     {
+        //Translate the reply data as a json object.
+        QJsonObject homeListData=
+                QJsonDocument::fromJson(reply->readAll()).object();
         //Get the album information.
         QJsonArray albumList=homeListData.value("albums").toArray(),
                    albumDataList;
         //Reset the album art list.
-        m_newAlbumArtList=QList<QNetworkReply *>();
-        m_newAlbumArtList.reserve(32);
+        m_albumArtworkList=QList<uint>();
+        m_albumArtworkList.reserve(32);
         for(int i=0; i<32; ++i)
         {
-            //Append nullptr.
-            m_newAlbumArtList.append(nullptr);
+            //Append null value: 0.
+            m_albumArtworkList.append(0);
         }
         //Increase the counter.
         emit requireAddConnectionCount(albumList.size());
@@ -281,21 +308,157 @@ void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
                                  "artist").toObject().value("name").toString());
             //Insert the album data to album data list.
             albumDataList.append(albumData);
+            //Get the album art url.
+            QString albumArtworkUrl=albumObject.value("picUrl").toString();
+            //Save the url in the list.
+            m_albumArtworkList.replace(i, qHash(albumArtworkUrl));
             //Fetch the album object value.
-            m_newAlbumArtList.replace(
-                        i,
-                        insertRequest(albumObject.value("picUrl").toString(),
-                                      NeteaseGet, NeteaseHomeListNewAlbumArt,
-                                      false));
+            insertRequest(albumArtworkUrl,
+                          NeteaseGet, NeteaseHomeListNewAlbumArt,
+                          false);
         }
         //Emit the set data function.
         emit requireSetHome(HomeNewAlbumData, albumDataList);
         break;
     }
+    case NeteaseHomeListNewSongs:
+    {
+        //Prepare the song object list.
+        QJsonArray songList;
+        {
+            //Read the html content.
+            QByteArray htmlRawContent=reply->readAll();
+            //Search the song-list-pre-cache id inside the raw content.
+            int divStart=
+                    htmlRawContent.indexOf("<div id=\"song-list-pre-cache\"");
+            //Check the position.
+            if(divStart==-1)
+            {
+                //Cannot find the data.
+                //! FIXME: data error.
+                break;
+            }
+            //Search the end div from the position.
+            int divEnd=
+                    htmlRawContent.indexOf("</div>", divStart);
+            //Check the position of div end.
+            if(divEnd==-1)
+            {
+                //Kidding me?
+                //!FIXME: Unknown error, data cannot be paired.
+                break;
+            }
+            //Do the search again, this time, it should be what we want.
+            divEnd=htmlRawContent.indexOf("</div>", divEnd+6);
+            //Check the div end position.
+            if(divEnd==-1)
+            {
+                //Kidding me?
+                //!FIXME: Unknown error, data cannot be paired.
+                break;
+            }
+            //Parse the div part only.
+            htmlRawContent=htmlRawContent.mid(divStart, divEnd-divStart+6);
+            //Inside the div part, there is a textarea tag, it stores the JSON
+            //format song list.
+            int textAreaStart=htmlRawContent.indexOf("<textarea");
+            if(textAreaStart==-1)
+            {
+                //! FIXME: No textarea.
+                break;
+            }
+            //Find the first > of the tag.
+            int textAreaEnd=htmlRawContent.indexOf(">", textAreaStart);
+            if(textAreaEnd==-1)
+            {
+                //! FIXME: No textarea tag end.
+                break;
+            }
+            //Remove the previous data.
+            htmlRawContent=htmlRawContent.mid(textAreaEnd+1);
+            //Search the end tag.
+            textAreaStart=htmlRawContent.indexOf("</textarea>");
+            if(textAreaStart==-1)
+            {
+                //! FIXME: No textarea.
+                break;
+            }
+            //Remove the end tag data.
+            htmlRawContent=htmlRawContent.left(textAreaStart);
+            //Parse the json format data.
+            songList=QJsonDocument::fromJson(htmlRawContent).array();
+        }
+        //Prepare the custom data.
+        QJsonArray songDataList;
+        //Check the song list size.
+        int songDataSize=qMin(32, songList.size());
+        //Increase the counter.
+        emit requireAddConnectionCount(songDataSize);
+        //Reset the album art list.
+        m_songArtworkList=QList<uint>();
+        m_songArtworkList.reserve(songDataSize);
+        for(int i=0; i<songDataSize; ++i)
+        {
+            //Append null value: 0.
+            m_songArtworkList.append(0);
+        }
+        //Loop and construct the album data.
+        for(int i=0; i<songDataSize; ++i)
+        {
+            //Translate the value to object, prepare the value object.
+            QJsonObject songObject=songList.at(i).toObject(), songData;
+            //Insert the data to album data.
+            songData.insert("name", songObject.value("name"));
+            songData.insert("custom", QString::number(
+                                 quint64(songObject.value("id").toDouble())));
+            //Combine the artist name
+            QJsonArray artistList=songObject.value("artists").toArray();
+            QString artistName;
+            for(auto j : artistList)
+            {
+                //Each j is an object.
+                QJsonObject artistObject=j.toObject();
+                //Check whether we need to add sperator or not.
+                if(!artistName.isEmpty())
+                {
+                    //Append comma.
+                    artistName.append(", ");
+                }
+                //Append artist name.
+                artistName.append(artistObject.value("name").toString());
+            }
+            //Translate the album object.
+            QJsonObject albumObject=songObject.value("album").toObject();
+            //Append artist and album data.
+            songData.insert("artist-album", artistName+ " - " +
+                            albumObject.value("name").toString());
+            //Insert the album data to album data list.
+            songDataList.append(songData);
+            //Get the song artwork url.
+            QString songArtworkUrl=albumObject.value("picUrl").toString();
+            //Save the url in the list.
+            m_songArtworkList.replace(i, qHash(songArtworkUrl));
+            //Fetch the album object value.
+            insertRequest(songArtworkUrl,
+                          NeteaseGet, NeteaseHomeListNewSongArt,
+                          false);
+            //Fetch the album object value.
+//            m_newAlbumArtList.replace(
+//                        i,
+//                        insertRequest(albumObject.value("picUrl").toString(),
+//                                      NeteaseGet, NeteaseHomeListNewSongArt,
+//                                      false));
+        }
+        //Update the home page information.
+        emit requireSetHome(HomeNewSongData, songDataList);
+        break;
+    }
     }
 }
 
-void KNMusicStoreNeteaseBackend::onHomeNewAlbumArtReply(QNetworkReply *reply)
+void KNMusicStoreNeteaseBackend::onHomeNewArtworkReply(QNetworkReply *reply,
+        QList<uint> &urlMap,
+        int albumArtRequestType)
 {
     //Load QPixmap from the reply.
     QPixmap homeAlbumArtPixmap;
@@ -310,7 +473,7 @@ void KNMusicStoreNeteaseBackend::onHomeNewAlbumArtReply(QNetworkReply *reply)
     //Construct the album structure.
     KNMusicStoreHomeUpdateArtwork homeArtworkData;
     //Set the index.
-    homeArtworkData.index=m_newAlbumArtList.indexOf(reply);
+    homeArtworkData.index=urlMap.indexOf(qHash(reply->url().toString()));
     //Check index is valid or not.
     if(homeArtworkData.index==-1)
     {
@@ -320,9 +483,10 @@ void KNMusicStoreNeteaseBackend::onHomeNewAlbumArtReply(QNetworkReply *reply)
     //Set the pixmap.
     homeArtworkData.artwork=homeAlbumArtPixmap;
     //Replace the list data.
-    m_newAlbumArtList.replace(homeArtworkData.index, nullptr);
+    urlMap.replace(homeArtworkData.index, 0);
     //Change the album art data.
-    emit requireSetHome(HomeNewAlbumArt, QVariant::fromValue(homeArtworkData));
+    emit requireSetHome(albumArtRequestType,
+                        QVariant::fromValue(homeArtworkData));
 }
 
 void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
@@ -436,15 +600,23 @@ void KNMusicStoreNeteaseBackend::onTimeoutTick()
     //Check all the reply in the waiting list.
     for(auto i : replyList)
     {
+        //Check the i is null or not.
+        if(i==nullptr)
+        {
+            //Remove the current item.
+            m_replyTimeout.remove(i);
+            //Continue.
+            continue;
+        }
         //Get the reply timeout.
         if(m_replyTimeout.value(i) > m_timeoutLimit)
         {
             //Timeout, abort the reply.
+            //Remove the item from the map.
+            m_replyTimeout.remove(i);
             //Notice: do not need to delete later. In the implementation, it
             //will emit finish signal, all the data will be processed there.
             i->abort();
-            //Remove the item from the map.
-            m_replyTimeout.remove(i);
             //Go to next.
             continue;
         }
@@ -453,11 +625,10 @@ void KNMusicStoreNeteaseBackend::onTimeoutTick()
     }
 }
 
-inline QNetworkReply *KNMusicStoreNeteaseBackend::insertRequest(
-        const QString &url,
-        int requestType,
-        int replyType,
-        bool useHeader)
+inline void KNMusicStoreNeteaseBackend::insertRequest(const QString &url,
+                                                      int requestType,
+                                                      int replyType,
+                                                      bool useHeader)
 {
     //Prepare an empty request.
     QNetworkRequest neteaseRequest;
@@ -474,6 +645,29 @@ inline QNetworkReply *KNMusicStoreNeteaseBackend::insertRequest(
         //Normally, for no use header request is to download files.
         neteaseRequest=QNetworkRequest(QUrl::fromEncoded(url.toLocal8Bit()));
     }
+    //Check the reply running list.
+    if(m_replyMap.size()>=m_pipelineLimit)
+    {
+        //Throw the reply in the cache list.
+        NetworkRequestItem requestItem;
+        //Construct the item.
+        requestItem.request=neteaseRequest;
+        requestItem.requestType=requestType;
+        requestItem.replyType=replyType;
+        //Insert the item.
+        m_queueRequest.append(requestItem);
+        //Complete.
+        return;
+    }
+    //Launch the request.
+    launchRequest(neteaseRequest, requestType, replyType);
+}
+
+inline void KNMusicStoreNeteaseBackend::launchRequest(
+        const QNetworkRequest &request,
+        int requestType,
+        int replyType)
+{
     //Create the reply pointer.
     QNetworkReply *reply=nullptr;
     //Check the request type.
@@ -481,7 +675,7 @@ inline QNetworkReply *KNMusicStoreNeteaseBackend::insertRequest(
     {
     case NeteaseGet:
         //Get the reply pointer.
-        reply=m_accessManager->get(neteaseRequest);
+        reply=m_accessManager->get(request);
         //Get the request, insert the request in the map.
         m_replyMap.insert(reply, replyType);
         break;
@@ -490,8 +684,6 @@ inline QNetworkReply *KNMusicStoreNeteaseBackend::insertRequest(
     m_replyTimeout.insert(reply, 0);
     //Start timeout checking.
     startTimeoutTick();
-    //Give back the reply.
-    return reply;
 }
 
 inline QNetworkRequest KNMusicStoreNeteaseBackend::generateRequest()
@@ -508,10 +700,9 @@ inline QNetworkRequest KNMusicStoreNeteaseBackend::generateRequest()
     request.setRawHeader("Referer", "http://music.163.com/search/");
     //Fake User-Agent hack to Safari.
     request.setRawHeader("User-Agent",
-                         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) "
-                         "AppleWebKit/537.36 (KHTML, like Gecko) "
-                         "Chrome/33.0.1750.152 "
-                         "Safari/537.36");
+                         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) "
+                         "AppleWebKit/601.7.8 (KHTML, like Gecko) "
+                         "Version/9.1.3 Safari/537.86.7");
     return request;
 }
 

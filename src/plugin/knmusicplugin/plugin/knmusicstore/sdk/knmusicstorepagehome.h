@@ -29,6 +29,7 @@ using namespace MusicStoreUtil;
 class QLabel;
 class KNMusicStoreHomeListModel;
 class KNMusicStoreHomeAlbumView;
+class KNMusicStoreHomeSongView;
 /*!
  * \brief The KNMusicStorePageHome class provides the default page for the music
  * store. These information include:
@@ -72,6 +73,7 @@ private:
     QLabel *m_titleLabel[HomeSongListCount];
     KNConnectionHandler m_backendConnection;
     KNMusicStoreHomeAlbumView *m_newAlbumView;
+    KNMusicStoreHomeSongView *m_newSongView;
 };
 
 #endif // KNMUSICSTOREPAGEHOME_H
