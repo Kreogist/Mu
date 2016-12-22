@@ -82,6 +82,7 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     contentLayout->addWidget(m_titleLabel[ListNewSongs]);
     contentLayout->addSpacing(2);
     contentLayout->addWidget(m_newSongView);
+    contentLayout->addSpacing(13);
     //Initial the ranking layout.
     QGridLayout *rankLayout=new QGridLayout();
     contentLayout->addLayout(rankLayout);
