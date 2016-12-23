@@ -22,6 +22,7 @@ Foundation,
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include "knthememanager.h"
 #include "knlocalemanager.h"
 
 #include "knmusicstoreutil.h"
@@ -54,6 +55,8 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
         m_titleLabel[i]=new QLabel(this);
         //Set properties.
         m_titleLabel[i]->setFont(titleFont);
+        m_titleLabel[i]->setObjectName("MusicStorePage");
+        knTheme->registerWidget(m_titleLabel[i]);
         //Initial the model.
         m_homeListModel[i]=new KNMusicStoreHomeListModel(this);
     }

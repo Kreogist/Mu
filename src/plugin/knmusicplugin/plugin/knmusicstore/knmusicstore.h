@@ -22,6 +22,7 @@ Foundation,
 
 #include "knmusicstorebase.h"
 
+class QTimeLine;
 class KNCategoryTab;
 class KNMusicStoreLoadingDimmer;
 class KNMusicStoreErrorDimmer;
@@ -97,12 +98,15 @@ protected:
 private slots:
     void retranslate();
     void showPageContainer();
+    void onAnimeShowContainer(int frame);
 
 private:
+    QTimeLine *m_showContainer;
     KNCategoryTab *m_tab;
     KNMusicStoreContainer *m_container;
     KNMusicStoreErrorDimmer *m_errorDimmer;
     KNMusicStoreLoadingDimmer *m_loadingDimmer;
+    QWidget *m_headerContainer;
     bool m_initialLoad;
 };
 

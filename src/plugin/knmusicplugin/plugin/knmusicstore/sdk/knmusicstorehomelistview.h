@@ -17,47 +17,33 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICSTORELOADINGDIMMER_H
-#define KNMUSICSTORELOADINGDIMMER_H
+#ifndef KNMUSICSTOREHOMELISTVIEW_H
+#define KNMUSICSTOREHOMELISTVIEW_H
 
-#include <QWidget>
+#include "knmusicstorehomeitemview.h"
 
-class QLabel;
 /*!
- * \brief The KNMusicStoreLoadingDimmer class provides the initial loading page
- * for the music store loading page.
+ * \brief The KNMusicStoreHomeListView class is used for providing view widget
+ * for the normal ranking lists. It could only be used in the music main page,
+ * and its model must be the music store list model.\n
+ * The size of the list view will be changed according to the model size.
+ * However, this model DOES NOT provide the automatic height changing function.
+ * But a tweakHeight() function instead. Which means that the view will tweak
+ * the height according to the item count set by this function.
  */
-class KNMusicStoreLoadingDimmer : public QWidget
+class KNMusicStoreHomeListView : public KNMusicStoreHomeItemView
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicStoreLoadingDimmer widget.
+     * \brief Construct a KNMusicStoreHomeListView widget.
      * \param parent The parent widget.
      */
-    explicit KNMusicStoreLoadingDimmer(QWidget *parent = 0);
+    explicit KNMusicStoreHomeListView(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    /*!
-     * \brief Set darkness of the dimmer.
-     * \param darkness The level of darkness, the value should between 0-1.
-     */
-    void setDarkness(const qreal &darkness);
-
-protected:
-    /*!
-     * \brief Reimplemented from QWidget::paintEvent().
-     */
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-
-private slots:
-    void retranslate();
-
-private:
-    QLabel *m_title;
-    int m_blackAlpha;
 };
 
-#endif // KNMUSICSTORELOADINGDIMMER_H
+#endif // KNMUSICSTOREHOMELISTVIEW_H

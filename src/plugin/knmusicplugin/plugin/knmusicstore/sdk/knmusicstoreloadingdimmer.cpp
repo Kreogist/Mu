@@ -18,6 +18,7 @@ Foundation,
  */
 #include <QBoxLayout>
 #include <QLabel>
+#include <QPainter>
 
 #include "knthememanager.h"
 #include "knlocalemanager.h"
@@ -26,7 +27,8 @@ Foundation,
 
 KNMusicStoreLoadingDimmer::KNMusicStoreLoadingDimmer(QWidget *parent) :
     QWidget(parent),
-    m_title(new QLabel(this))
+    m_title(new QLabel(this)),
+    m_blackAlpha(0)
 {
     setObjectName("MusicStoreLoadingDimmer");
     //Set properties.
@@ -52,6 +54,23 @@ KNMusicStoreLoadingDimmer::KNMusicStoreLoadingDimmer(QWidget *parent) :
     //Link translator.
     knI18n->link(this, &KNMusicStoreLoadingDimmer::retranslate);
     retranslate();
+}
+
+void KNMusicStoreLoadingDimmer::setDarkness(const qreal &darkness)
+{
+    //Calculate the darkness value.
+    m_blackAlpha=darkness*255.0;
+    //Update the widget.
+    update();
+}
+
+void KNMusicStoreLoadingDimmer::paintEvent(QPaintEvent *event)
+{
+    //Do original paint event.
+    QWidget::paintEvent(event);
+    //Do orignal painting.
+    QPainter painter(this);
+    painter.fillRect(rect(), QColor(0, 0, 0, m_blackAlpha));
 }
 
 void KNMusicStoreLoadingDimmer::retranslate()

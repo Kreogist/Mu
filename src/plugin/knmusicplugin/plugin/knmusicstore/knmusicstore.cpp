@@ -17,6 +17,7 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QModelIndex>
+#include <QTimeLine>
 
 #include "knlocalemanager.h"
 #include "kncategorytab.h"
@@ -37,6 +38,7 @@ Foundation,
 
 KNMusicStore::KNMusicStore(QWidget *parent) :
     KNMusicStoreBase(parent),
+    m_showContainer(new QTimeLine(400, this)),
     m_tab(new KNCategoryTab(this)),
     m_container(nullptr),
     m_errorDimmer(new KNMusicStoreErrorDimmer(this)),
@@ -88,6 +90,12 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_errorDimmer->hide();
     //Configure the loading dimmer.
     ;
+    //Configure the time line.
+    m_showContainer->setEasingCurve(QEasingCurve::OutCubic);
+    m_showContainer->setUpdateInterval(33);
+    m_showContainer->setStartFrame(0);
+    connect(m_showContainer, &QTimeLine::frameChanged,
+            this, &KNMusicStore::onAnimeShowContainer);
 
     //Add to theme manager.
     knTheme->registerWidget(this);
@@ -126,6 +134,8 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
     m_errorDimmer->resize(size());
     // Loading dimmer.
     m_loadingDimmer->resize(size());
+    //Update the time line parameter.
+    m_showContainer->setEndFrame(height());
 }
 
 void KNMusicStore::showEvent(QShowEvent *event)
@@ -153,6 +163,18 @@ void KNMusicStore::showPageContainer()
     //Disconnet the signal.
     disconnect(m_container, &KNMusicStoreContainer::currentPageChanged,
                this, &KNMusicStore::showPageContainer);
+    //Reset container position.
+    m_container->move(0, -height());
     //Make the container visible.
     m_container->show();
+    //Start the anime.
+    m_showContainer->start();
+}
+
+void KNMusicStore::onAnimeShowContainer(int frame)
+{
+    //Move the container.
+    m_container->move(0, frame-height());
+    //Set the value to loading dimmer.
+    m_loadingDimmer->setDarkness(m_showContainer->currentValue());
 }
