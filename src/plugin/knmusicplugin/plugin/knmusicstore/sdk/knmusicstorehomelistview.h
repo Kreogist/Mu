@@ -41,9 +41,34 @@ public:
      */
     explicit KNMusicStoreHomeListView(QWidget *parent = 0);
 
+    /*!
+     * \brief Reimplemented from QAbstractItemView::indexAt().
+     */
+    QModelIndex indexAt(const QPoint &point) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractItemView::visualRect().
+     */
+    QRect visualRect(const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Tweak the view height for specific rendering counts.
+     * \param maxRenderingCount The maximum items of the view will display.
+     */
+    void tweakHeight(int maxRenderingCount);
+
 signals:
 
 public slots:
+
+protected:
+    /*!
+     * \brief Reimplemented from QAbstractItemView::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    int m_maxRenderingCount;
 };
 
 #endif // KNMUSICSTOREHOMELISTVIEW_H

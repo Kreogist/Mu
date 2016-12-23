@@ -114,60 +114,17 @@ void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
 
 void KNMusicStoreNeteaseBackend::showSingleSong(const QString &songInfo)
 {
-    //The song info is an json object of the song.
-    QJsonObject songObject=QJsonDocument::fromJson(songInfo.toUtf8()).object(),
-                songMetadata;
-    //Construct the song metadata.
-    songMetadata.insert("name", songObject.value("name"));
-    emit requireSetNavigatorItem(PageSingleSong,
-                                 songObject.value("name").toString());
-    //Alias.
-    QJsonArray alias=songObject.value("alias").toArray();
-    QString subheading;
-    //Join all the data in alias.
-    for(auto i : alias)
-    {
-        //Append data to subheading.
-        subheading.append(i.toString());
-        subheading.append(" ");
-    }
-    songMetadata.insert("subheading", subheading);
-    //Artist information.
-    QJsonArray artists=songObject.value("artists").toArray(),
-            artistName, artistList;
-    //Go through the artist list.
-    for(auto i : artists)
-    {
-        //Get the artist object.
-        QJsonObject artistObject=i.toObject();
-        //Insert the artist name.
-        artistName.append(artistObject.value("name").toString());
-        //Insert the artist list.
-        artistList.append(QString(QJsonDocument(artistObject).toJson()));
-    }
-    //Set the artist info.
-    songMetadata.insert("artist", artistName);
-    songMetadata.insert("artist_meta", artistList);
-    //Album information.
-    QJsonObject albumObject=songObject.value("album").toObject();
-    songMetadata.insert("album", albumObject.value("name").toString());
-    songMetadata.insert("album_meta",
-                        QString::number(
-                            qint64(albumObject.value("id").toDouble())));
-    //Most of the information is already in the song object.
-    emit requireSetSingleSong(SingleMetadata, songMetadata);
+    //The song information should be one string which is the song id.
+    //The access url is:
+    //  http://music.163.com/api/song/detail/?id=(song id)&ids=[(song id)]
     //Reset the network access manager.
     resetManager();
-    //Fetch the album art.
-    insertRequest(albumObject.value("picUrl").toString(),
-                  NeteaseGet, NeteaseSingleAlbumArt, false);
-    //Get the lyrics of the song.
-    insertRequest("http://music.163.com/api/song/lyric?os=osx&id="+
-                  QString::number(qint64(songObject.value("id").toDouble()))+
-                  "&lv=-1&kv=-1&tv=-1",
-                  NeteaseGet, NeteaseSingleLyricsText);
+    //Get the data.
+    insertRequest("http://music.163.com/api/song/detail/?id="+songInfo+
+                  "&ids=["+songInfo+"]",
+                  NeteaseGet, NeteaseSingleDetails);
     //Increase Internet counter.
-    emit requireAddConnectionCount(2);
+    emit requireAddConnectionCount(1);
 }
 
 void KNMusicStoreNeteaseBackend::setTimeout(int seconds)
@@ -248,6 +205,9 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
         emit requireSetAlbum(AlbumArt, QVariant(albumArtPixmap));
         break;
     }
+    case NeteaseSingleDetails:
+        onSingleDetailReply(reply);
+        break;
     case NeteaseSingleLyricsText:
         //Single song lyrics reply.
         onSingleLyricsReply(reply);
@@ -505,8 +465,8 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
         //Translate each i to object.
         QJsonObject songItem, songRawItem=i.toObject();
         //Backup the raw item.
-        songItem.insert("custom", QString(QJsonDocument(songRawItem).toJson(
-                            QJsonDocument::Compact)));
+        songItem.insert("custom", QString::number(
+                            (quint64)songRawItem.value("id").toDouble()));
         //Insert song item data to song list.
         songItem.insert("index", QString::number(
                             songRawItem.value("no").toInt()) + ".");
@@ -540,6 +500,75 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
                   NeteaseGet, NeteaseAlbumArt, false);
     //Increase Internet counter.
     emit requireAddConnectionCount(1);
+}
+
+void KNMusicStoreNeteaseBackend::onSingleDetailReply(QNetworkReply *reply)
+{
+    //The song info is an json object of the song.
+    QJsonObject songObject=QJsonDocument::fromJson(reply->readAll()).object(),
+                songMetadata;
+    {
+        //Translate the raw data to json array.
+        QJsonArray songInfoList=songObject.value("songs").toArray();
+        //Check the song info list.
+        if(songInfoList.isEmpty())
+        {
+            //Error occurs.
+            //! FIXME: display error.
+            return;
+        }
+        //Pick out the song object from the raw data.
+        songObject=songInfoList.at(0).toObject();
+    }
+    //Construct the song metadata.
+    songMetadata.insert("name", songObject.value("name"));
+    emit requireSetNavigatorItem(PageSingleSong,
+                                 songObject.value("name").toString());
+    //Alias.
+    QJsonArray alias=songObject.value("alias").toArray();
+    QString subheading;
+    //Join all the data in alias.
+    for(auto i : alias)
+    {
+        //Append data to subheading.
+        subheading.append(i.toString());
+        subheading.append(" ");
+    }
+    songMetadata.insert("subheading", subheading);
+    //Artist information.
+    QJsonArray artists=songObject.value("artists").toArray(),
+            artistName, artistList;
+    //Go through the artist list.
+    for(auto i : artists)
+    {
+        //Get the artist object.
+        QJsonObject artistObject=i.toObject();
+        //Insert the artist name.
+        artistName.append(artistObject.value("name").toString());
+        //Insert the artist list.
+        artistList.append(QString(QJsonDocument(artistObject).toJson()));
+    }
+    //Set the artist info.
+    songMetadata.insert("artist", artistName);
+    songMetadata.insert("artist_meta", artistList);
+    //Album information.
+    QJsonObject albumObject=songObject.value("album").toObject();
+    songMetadata.insert("album", albumObject.value("name").toString());
+    songMetadata.insert("album_meta",
+                        QString::number(
+                            qint64(albumObject.value("id").toDouble())));
+    //Most of the information is already in the song object.
+    emit requireSetSingleSong(SingleMetadata, songMetadata);
+    //Increase Internet counter.
+    emit requireAddConnectionCount(2);
+    //Fetch the album art.
+    insertRequest(albumObject.value("picUrl").toString(),
+                  NeteaseGet, NeteaseSingleAlbumArt, false);
+    //Get the lyrics of the song.
+    insertRequest("http://music.163.com/api/song/lyric?os=osx&id="+
+                  QString::number(qint64(songObject.value("id").toDouble()))+
+                  "&lv=-1&kv=-1&tv=-1",
+                  NeteaseGet, NeteaseSingleLyricsText);
 }
 
 void KNMusicStoreNeteaseBackend::onSingleLyricsReply(QNetworkReply *reply)

@@ -17,6 +17,7 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
+#include <QMouseEvent>
 #include <QScrollBar>
 
 #include "knthememanager.h"
@@ -138,15 +139,14 @@ QModelIndex KNMusicStoreHomeAlbumView::indexAt(const QPoint &point) const
         targetRow=point.y()>AlbumVerticalSize;
     //For a single item, check the target width and column position, make sure
     //that it is in the position.
-    if((!model()) ||
-            (viewX-(targetColumn-1)*AlbumAreaWidth) > AlbumAreaWidth ||
-            point.y() > AlbumAreaHeight)
+    if((viewX-targetColumn*AlbumHorizontalSize)>AlbumAreaWidth ||
+            point.y()-targetRow*AlbumVerticalSize>AlbumAreaHeight)
     {
         //Outside the part, an invalid index is set.
         return QModelIndex();
     }
     //The item is listed from left to right, from top to bottom.
-    return listModel()->index(targetColumn * 2 + targetRow, 0);
+    return listModel()->index((targetColumn<<1)+targetRow, 0);
 }
 
 QRect KNMusicStoreHomeAlbumView::visualRect(const QModelIndex &index) const

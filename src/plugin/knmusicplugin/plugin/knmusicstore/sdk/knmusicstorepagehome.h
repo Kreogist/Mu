@@ -30,6 +30,7 @@ class QLabel;
 class KNMusicStoreHomeListModel;
 class KNMusicStoreHomeAlbumView;
 class KNMusicStoreHomeSongView;
+class KNMusicStoreHomeListView;
 /*!
  * \brief The KNMusicStorePageHome class provides the default page for the music
  * store. These information include:
@@ -67,13 +68,24 @@ public slots:
 
 private slots:
     void retranslate();
+    void onNewAlbumViewClicked(const QModelIndex &albumIndex);
 
 private:
+    enum RankingListView
+    {
+        ViewBillboard,
+        ViewOricon,
+        ViewItunes,
+        ViewTopSongs,
+        RankingListViewCount
+    };
+
     KNMusicStoreHomeListModel *m_homeListModel[HomeSongListCount];
     QLabel *m_titleLabel[HomeSongListCount];
     KNConnectionHandler m_backendConnection;
     KNMusicStoreHomeAlbumView *m_newAlbumView;
     KNMusicStoreHomeSongView *m_newSongView;
+    KNMusicStoreHomeListView *m_rankingList[RankingListViewCount];
     int m_homeContentCounter;
     bool m_homeCounterClear;
 };

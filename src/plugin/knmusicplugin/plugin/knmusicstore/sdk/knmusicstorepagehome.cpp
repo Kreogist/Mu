@@ -29,6 +29,7 @@ Foundation,
 #include "knmusicstorebackend.h"
 #include "knmusicstorehomealbumview.h"
 #include "knmusicstorehomesongview.h"
+#include "knmusicstorehomelistview.h"
 #include "knmusicstorehomelistmodel.h"
 
 #include "knmusicstorepagehome.h"
@@ -60,9 +61,20 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
         //Initial the model.
         m_homeListModel[i]=new KNMusicStoreHomeListModel(this);
     }
-    //Set the view.
+    //Inital views.
+    for(int i=0; i<RankingListViewCount; ++i)
+    {
+        //Initial the view.
+        m_rankingList[i]=new KNMusicStoreHomeListView(this);
+        //Configure the list view size.
+        m_rankingList[i]->tweakHeight(10);  //Max 10 items.
+    }
+    //Set the model to view.
     m_newAlbumView->setModel(m_homeListModel[ListNewAlbum]);
     m_newSongView->setModel(m_homeListModel[ListNewSongs]);
+    //Configure the view.
+    connect(m_newAlbumView, &KNMusicStoreHomeAlbumView::clicked,
+            this, &KNMusicStorePageHome::onNewAlbumViewClicked);
     //Configure the label.
     m_titleLabel[ListTopSongs]->setFixedWidth(220);
 
@@ -95,13 +107,17 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     contentLayout->addLayout(rankLayout);
     //Add ranks.
     rankLayout->addWidget(m_titleLabel[ListBillboard], 0, 0, 1, 1);
+    rankLayout->addWidget(m_rankingList[ViewBillboard], 1, 0, 1, 1);
     rankLayout->addWidget(m_titleLabel[ListOricon], 0, 1, 1, 1);
+    rankLayout->addWidget(m_rankingList[ViewOricon], 1, 1, 1, 1);
     rankLayout->addWidget(m_titleLabel[ListItunes], 0, 2, 1, 1);
+    rankLayout->addWidget(m_rankingList[ViewItunes], 1, 2, 1, 1);
     //Add free stretch.
     contentLayout->addStretch();
     //Add sidebar layout.
     QBoxLayout *sidebarLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     sidebarLayout->addWidget(m_titleLabel[ListTopSongs]);
+    sidebarLayout->addWidget(m_rankingList[ViewTopSongs]);
     sidebarLayout->addStretch();
     listLayout->addLayout(sidebarLayout);
 
@@ -220,4 +236,16 @@ void KNMusicStorePageHome::retranslate()
     m_titleLabel[ListOricon]->setText(tr("Oricon Rank"));
     m_titleLabel[ListItunes]->setText(tr("iTunes Rank"));
     m_titleLabel[ListTopSongs]->setText(tr("Top Songs"));
+}
+
+void KNMusicStorePageHome::onNewAlbumViewClicked(const QModelIndex &albumIndex)
+{
+    //Check album index is valid or not.
+    if(!albumIndex.isValid())
+    {
+        //Ignore the request.
+        return;
+    }
+    //Ask to display the album.
+    emit requireShowAlbum(albumIndex.data(Qt::UserRole+2).toString());
 }

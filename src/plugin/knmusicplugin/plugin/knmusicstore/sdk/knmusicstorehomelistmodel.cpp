@@ -52,6 +52,8 @@ QVariant KNMusicStoreHomeListModel::data(const QModelIndex &index,
         return item.artwork;
     case Qt::UserRole + 1:
         return item.subheading;
+    case Qt::UserRole + 2:
+        return item.customData;
     default:
         return QVariant();
     }

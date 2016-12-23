@@ -166,6 +166,7 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
         {
             //Clear the cache list.
             m_artistLabels.clear();
+            m_artistSplitLabels.clear();
             //Update the artist list size.
             m_artistList.reserve(artistList.size());
             //Get the artist metadata.

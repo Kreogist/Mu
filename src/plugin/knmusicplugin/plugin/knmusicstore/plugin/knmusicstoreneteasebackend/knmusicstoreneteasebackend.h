@@ -88,6 +88,7 @@ private slots:
                                QList<uint> &urlMap,
                                int albumArtRequestType);
     void onAlbumDetailReply(QNetworkReply *reply);
+    void onSingleDetailReply(QNetworkReply *reply);
     void onSingleLyricsReply(QNetworkReply *reply);
     void onTimeoutTick();
 
@@ -104,6 +105,7 @@ private:
         NeteaseHomeListNewSongArt,
         NeteaseAlbumDetails,
         NeteaseAlbumArt,
+        NeteaseSingleDetails,
         NeteaseSingleLyricsText,
         NeteaseSingleAlbumArt
     };
