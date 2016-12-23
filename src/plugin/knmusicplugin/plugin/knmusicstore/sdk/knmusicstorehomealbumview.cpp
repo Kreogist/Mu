@@ -43,7 +43,9 @@ Foundation,
 KNMusicStoreHomeAlbumView::KNMusicStoreHomeAlbumView(QWidget *parent) :
     KNMusicStoreHomeItemView(parent),
     m_noAlbumArtCache(QPixmap(":/plugin/music/public/noalbum.png")),
-    m_albumShadow(QPixmap(ShadowSize, ShadowSize))
+    m_albumShadow(QPixmap(ShadowSize, ShadowSize)),
+    m_leftShadowCache(QPixmap(":/plugin/music/store/store_view_left.png")),
+    m_rightShadowCache(QPixmap(":/plugin/music/store/store_view_right.png"))
 {
     setObjectName("MusicStoreHomeNewAlbum");
     //Set properties.
@@ -252,6 +254,34 @@ void KNMusicStoreHomeAlbumView::paintEvent(QPaintEvent *event)
         }
         //Increase the row.
         ++currentRow;
+    }
+    //Get the horizontal scroll bar value.
+    int horizontalValue=horizontalScrollBar()->value();
+    //Check the value.
+    if(horizontalValue!=0)
+    {
+        //Draw the left part.
+        qreal opacityLeft=(qreal)horizontalValue/(qreal)AlbumHorizontalSize;
+        //Check the maximum
+        painter.setOpacity(opacityLeft>1.0000?1.0:opacityLeft);
+        //Draw left shadow.
+        painter.drawPixmap(QRect(0, 0, m_leftShadowCache.width(), height()),
+                           m_leftShadowCache,
+                           QRect(QPoint(0, 0), m_leftShadowCache.size()));
+    }
+    if(horizontalValue!=horizontalScrollBar()->maximum())
+    {
+        //Draw right part.
+        qreal opacityRight=(qreal)(horizontalScrollBar()->maximum() -
+                                   horizontalValue) /
+                            (qreal)AlbumHorizontalSize;
+        //Check the maximum, set opacity.
+        painter.setOpacity(opacityRight>1.0000?1.0:opacityRight);
+        //Draw right shadow.
+        painter.drawPixmap(QRect(width()-m_rightShadowCache.width(), 0,
+                                 m_rightShadowCache.width(), height()),
+                           m_rightShadowCache,
+                           QRect(QPoint(0, 0), m_rightShadowCache.size()));
     }
 }
 

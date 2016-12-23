@@ -74,6 +74,8 @@ private:
     KNConnectionHandler m_backendConnection;
     KNMusicStoreHomeAlbumView *m_newAlbumView;
     KNMusicStoreHomeSongView *m_newSongView;
+    int m_homeContentCounter;
+    bool m_homeCounterClear;
 };
 
 #endif // KNMUSICSTOREPAGEHOME_H

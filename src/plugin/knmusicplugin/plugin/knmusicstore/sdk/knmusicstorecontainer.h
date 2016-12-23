@@ -53,6 +53,11 @@ public:
 
 signals:
     /*!
+     * \brief When the displaying page changed, this signal will be emitted.
+     */
+    void currentPageChanged();
+
+    /*!
      * \brief Ask the backend to fetch information about one album.
      * \param backendId The backend name which will process the metadata.
      * \param metadata The album's metadata.

@@ -70,7 +70,7 @@ protected slots:
     void updateGeometries() Q_DECL_OVERRIDE;
 
 private:
-    QPixmap m_noAlbumArtCache;
+    QPixmap m_noAlbumArtCache, m_leftShadowCache, m_rightShadowCache;
 };
 
 #endif // KNMUSICSTOREHOMESONGVIEW_H

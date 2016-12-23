@@ -88,9 +88,6 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
 
     //Register the widget.
     knTheme->registerWidget(this);
-
-    //Debug.
-    showPage(m_pages[PageHome]);
 }
 
 KNMusicStorePage *KNMusicStoreContainer::page(int pageIndex)
@@ -146,6 +143,8 @@ void KNMusicStoreContainer::showPage(KNMusicStorePage *pageWidget)
     }
     //Set the container to manage page widget.
     m_pageContainer->setWidget(pageWidget);
+    //Emit the page change signal.
+    emit currentPageChanged();
     //Update the page widget size.
     updatePageWidth(pageWidget);
 }

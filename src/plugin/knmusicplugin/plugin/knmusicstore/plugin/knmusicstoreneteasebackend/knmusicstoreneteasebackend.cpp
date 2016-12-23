@@ -442,12 +442,6 @@ void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
             insertRequest(songArtworkUrl,
                           NeteaseGet, NeteaseHomeListNewSongArt,
                           false);
-            //Fetch the album object value.
-//            m_newAlbumArtList.replace(
-//                        i,
-//                        insertRequest(albumObject.value("picUrl").toString(),
-//                                      NeteaseGet, NeteaseHomeListNewSongArt,
-//                                      false));
         }
         //Update the home page information.
         emit requireSetHome(HomeNewSongData, songDataList);

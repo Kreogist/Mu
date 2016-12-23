@@ -40,7 +40,8 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_tab(new KNCategoryTab(this)),
     m_container(nullptr),
     m_errorDimmer(new KNMusicStoreErrorDimmer(this)),
-    m_loadingDimmer(new KNMusicStoreLoadingDimmer(this))
+    m_loadingDimmer(new KNMusicStoreLoadingDimmer(this)),
+    m_initialLoad(true)
 {
     setObjectName("MusicStore");
     //Initial the global object.
@@ -52,6 +53,11 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_container=new KNMusicStoreContainer(this);
     //Configure container.
     m_container->hide();
+    //Raise the container to top.
+    m_container->raise();
+    //For the first time page changed, we need to show the page container.
+    connect(m_container, &KNMusicStoreContainer::currentPageChanged,
+            this, &KNMusicStore::showPageContainer);
     //Give the page container to the backend manager.
     knMusicStoreBackendManager->setPageContainer(m_container);
     //Link the backend set value signals.
@@ -79,8 +85,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Configure the error dimmer.
     m_errorDimmer->setObjectName("MusicStoreErrorDimmer");
     m_errorDimmer->raise();
-    //Raise the container to top.
-    m_container->raise();
+    m_errorDimmer->hide();
     //Configure the loading dimmer.
     ;
 
@@ -90,9 +95,6 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     //Link retranslate.
     knI18n->link(this, &KNMusicStore::retranslate);
     retranslate();
-
-    //Debug
-    m_container->show();
 }
 
 QAbstractButton *KNMusicStore::tab()
@@ -130,12 +132,27 @@ void KNMusicStore::showEvent(QShowEvent *event)
 {
     //Show the page.
     KNMusicStoreBase::showEvent(event);
-    //Emit the feteching signal.
-    emit requireShowHome();
+    //Check initial load flag.
+    if(m_initialLoad)
+    {
+        //Reset the flag to false.
+        m_initialLoad=false;
+        //Emit the feteching signal.
+        emit requireShowHome();
+    }
 }
 
 void KNMusicStore::retranslate()
 {
     //Update the tab title.
     m_tab->setText(tr("Store"));
+}
+
+void KNMusicStore::showPageContainer()
+{
+    //Disconnet the signal.
+    disconnect(m_container, &KNMusicStoreContainer::currentPageChanged,
+               this, &KNMusicStore::showPageContainer);
+    //Make the container visible.
+    m_container->show();
 }

@@ -32,12 +32,16 @@ Foundation,
 
 #include "knmusicstorepagehome.h"
 
+#include <QDebug>
+
 using namespace MusicStoreUtil;
 
 KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     KNMusicStorePage(parent),
     m_newAlbumView(new KNMusicStoreHomeAlbumView(this)),
-    m_newSongView(new KNMusicStoreHomeSongView(this))
+    m_newSongView(new KNMusicStoreHomeSongView(this)),
+    m_homeContentCounter(0),
+    m_homeCounterClear(true)
 {
     updateObjectName("MusicStorePage");
     //Initial title label fonts.
@@ -106,6 +110,11 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
 void KNMusicStorePageHome::reset()
 {
     //Home page special reset.
+    m_homeContentCounter=2;
+    //Reset the counter flag.
+    m_homeCounterClear=true;
+    //Clear the home model.
+    m_homeListModel[ListNewAlbum]->reset();
 }
 
 void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
@@ -132,6 +141,8 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
             //Insert the album to model.
             m_homeListModel[ListNewAlbum]->appendRow(albumItem);
         }
+        //Decrease the counter.
+        --m_homeContentCounter;
         break;
     }
     case HomeNewAlbumArt:
@@ -169,8 +180,18 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
             //Insert the album to model.
             m_homeListModel[ListNewSongs]->appendRow(songItem);
         }
+        //Decrease the counter.
+        --m_homeContentCounter;
         break;
     }
+    }
+    //Check the home content counter.
+    if(m_homeCounterClear && (m_homeContentCounter==0))
+    {
+        //Emit require show signal.
+        emit requireShowPage();
+        //Clear the flag.
+        m_homeCounterClear=false;
     }
 }
 

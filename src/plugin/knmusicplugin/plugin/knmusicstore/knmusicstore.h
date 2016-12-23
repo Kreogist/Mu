@@ -96,12 +96,14 @@ protected:
 
 private slots:
     void retranslate();
+    void showPageContainer();
 
 private:
     KNCategoryTab *m_tab;
     KNMusicStoreContainer *m_container;
     KNMusicStoreErrorDimmer *m_errorDimmer;
     KNMusicStoreLoadingDimmer *m_loadingDimmer;
+    bool m_initialLoad;
 };
 
 #endif // KNMUSICSTORE_H

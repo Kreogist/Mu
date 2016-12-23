@@ -64,7 +64,8 @@ protected slots:
     void updateGeometries() Q_DECL_OVERRIDE;
 
 private:
-    QPixmap m_noAlbumArtCache, m_albumShadow;
+    QPixmap m_noAlbumArtCache, m_albumShadow, m_leftShadowCache,
+            m_rightShadowCache;
 };
 
 #endif // KNMUSICSTOREHOMEALBUMVIEW_H
