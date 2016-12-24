@@ -21,6 +21,7 @@ Foundation,
 #include <QLabel>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QScrollBar>
 
 #include "knthememanager.h"
 #include "knlocalemanager.h"
@@ -155,7 +156,14 @@ void KNMusicStorePageHome::reset()
     //Reset the counter flag.
     m_homeCounterClear=true;
     //Clear the home model.
-    m_homeListModel[ListNewAlbum]->reset();
+    for(int i=0; i<HomeSongListCount; ++i)
+    {
+        //Reset the model.
+        m_homeListModel[i]->reset();
+    }
+    //Reset the view position.
+    m_newAlbumView->horizontalScrollBar()->setValue(0);
+    m_newSongView->horizontalScrollBar()->setValue(0);
 }
 
 void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)

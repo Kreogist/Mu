@@ -48,6 +48,12 @@ public:
 
 signals:
     /*!
+     * \brief Require the backend manager to reset operation flag to null. When
+     * the operation is done, this signal will be emitted.
+     */
+    void requireResetOperation();
+
+    /*!
      * \brief Add Internet connection count to the GUI connection status.
      * \param count The number of the connections.
      */
@@ -58,6 +64,11 @@ signals:
      * \param count The number of the connections.
      */
     void requireReduceConnectionCount(int count);
+
+    /*!
+     * \brief Reset Internet connection counter to the GUI connection status.
+     */
+    void requireResetConnectionCount();
 
     /*!
      * \brief Ask to set the home page data.

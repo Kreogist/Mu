@@ -36,7 +36,9 @@ KNMusicStoreBackendManager *KNMusicStoreBackendManager::m_instance=nullptr;
 
 KNMusicStoreBackendManager::KNMusicStoreBackendManager(QThread *workingThread) :
     QObject(nullptr),
-    m_pageContainer(nullptr)
+    m_currentMetadata(QString()),
+    m_pageContainer(nullptr),
+    m_currentOperation(-1)
 {
     //Move to the thread.
     moveToThread(workingThread);
@@ -58,6 +60,14 @@ void KNMusicStoreBackendManager::loadPlugins()
 void KNMusicStoreBackendManager::showHomePage()
 {
     Q_ASSERT(m_pageContainer);
+    //Check the operation.
+    if(OperationShowHome==m_currentOperation)
+    {
+        //Ignore the operation.
+        return;
+    }
+    //Save the operation.
+    m_currentOperation=OperationShowHome;
     //Get the backend. The home page data is provided by Netease. This could be
     //changed later in the settings.
     //! FIXME: Home backend could be changed in the settings.
@@ -79,6 +89,17 @@ void KNMusicStoreBackendManager::showAlbum(const QString &backendId,
                                            const QString &albumInfo)
 {
     Q_ASSERT(m_pageContainer);
+    //Check the operation.
+    if(OperationShowAlbum==m_currentOperation &&
+            //Check the metadata and backend name.
+            albumInfo==m_currentMetadata && backendId==m_backendName)
+    {
+        //Ignore the same request.
+        return;
+    }
+    //Save the operation and metadata.
+    m_currentOperation=OperationShowAlbum;
+    m_currentMetadata=albumInfo;
     //Get the backend.
     KNMusicStoreBackend *backend=m_backendMap.value(backendId, nullptr);
     //Check backend pointer.
@@ -100,6 +121,17 @@ void KNMusicStoreBackendManager::showSingleSong(const QString &backendId,
                                                 const QString &songInfo)
 {
     Q_ASSERT(m_pageContainer);
+    //Check the operation.
+    if(OperationShowSingleSong==m_currentOperation &&
+            //Check the metadata and backend name.
+            songInfo==m_currentMetadata && backendId==m_backendName)
+    {
+        //Ignore the same request.
+        return;
+    }
+    //Save the operation and metadata.
+    m_currentOperation=OperationShowSingleSong;
+    m_currentMetadata=songInfo;
     //Get the backend.
     KNMusicStoreBackend *backend=m_backendMap.value(backendId, nullptr);
     //Check backend pointer.
@@ -115,6 +147,15 @@ void KNMusicStoreBackendManager::showSingleSong(const QString &backendId,
     page->setMetadata(songInfo);
     //Ask the backend to show the information.
     backend->showSingleSong(songInfo);
+}
+
+void KNMusicStoreBackendManager::resetOperationFlag()
+{
+    //Clear the operation type.
+    m_currentOperation=-1;
+    //Clear the metadata and backend name.
+    m_currentMetadata=QString();
+    m_backendName=QString();
 }
 
 KNMusicStoreBackendManager *KNMusicStoreBackendManager::instance()
@@ -143,4 +184,8 @@ void KNMusicStoreBackendManager::addBackend(KNMusicStoreBackend *backend)
             this, &KNMusicStoreBackendManager::requireAddConnectionCount);
     connect(backend, &KNMusicStoreBackend::requireReduceConnectionCount,
             this, &KNMusicStoreBackendManager::requireReduceConnectionCount);
+    connect(backend, &KNMusicStoreBackend::requireResetConnectionCount,
+            this, &KNMusicStoreBackendManager::requireResetConnectionCount);
+    connect(backend, &KNMusicStoreBackend::requireResetOperation,
+            this, &KNMusicStoreBackendManager::resetOperationFlag);
 }

@@ -74,6 +74,11 @@ public:
     void addConnectionCounter(int counter);
 
     /*!
+     * \brief Clear the current connection counter.
+     */
+    void resetConnectionCounter();
+
+    /*!
      * \brief Reduce several connection counter to the state counter.
      * \param counter The finished request number.
      */

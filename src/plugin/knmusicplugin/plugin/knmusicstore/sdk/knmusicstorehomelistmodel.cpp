@@ -101,6 +101,7 @@ void KNMusicStoreHomeListModel::reset()
 
 void KNMusicStoreHomeListModel::setAlbumArt(int row, const QPixmap &albumArt)
 {
+    Q_ASSERT(row>-1 && row<m_itemList.size());
     //Get the item.
     KNMusicStoreHomeItem updatedItem=m_itemList.at(row);
     //Save the new album art.

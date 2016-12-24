@@ -77,6 +77,11 @@ signals:
      */
     void requireReduceConnectionCount(int count);
 
+    /*!
+     * \brief Reset Internet connection counter to the GUI connection status.
+     */
+    void requireResetConnectionCount();
+
 public slots:
     /*!
      * \brief Load all the backend to the manager. Because all the timer must be
@@ -105,14 +110,25 @@ public slots:
      */
     void showSingleSong(const QString &backendId, const QString &songInfo);
 
+private slots:
+    void resetOperationFlag();
+
 private:
+    enum OperationTypes
+    {
+        OperationShowHome,
+        OperationShowAlbum,
+        OperationShowSingleSong
+    };
     static KNMusicStoreBackendManager *m_instance;
     explicit KNMusicStoreBackendManager(QThread *workingThread);
     KNMusicStoreBackendManager(const KNMusicStoreBackendManager &);
     KNMusicStoreBackendManager(KNMusicStoreBackendManager &&);
 
     QHash<QString, KNMusicStoreBackend *> m_backendMap;
+    QString m_currentMetadata, m_backendName;
     KNMusicStoreContainer *m_pageContainer;
+    int m_currentOperation;
 };
 
 #endif // KNMUSICSTOREBACKENDMANAGER_H

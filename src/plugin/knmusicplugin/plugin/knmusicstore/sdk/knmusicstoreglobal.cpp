@@ -83,6 +83,10 @@ KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
             &KNMusicStoreBackendManager::requireReduceConnectionCount,
             this, &KNMusicStoreGlobal::reduceConnectionCounter,
             Qt::QueuedConnection);
+    connect(knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::requireResetConnectionCount,
+            this, &KNMusicStoreGlobal::resetConnectionCounter,
+            Qt::QueuedConnection);
     //Start the working thread.
     m_backendThread.start();
 
@@ -125,6 +129,12 @@ void KNMusicStoreGlobal::addConnectionCounter(int counter)
     m_connectSemaphore+=counter;
     //Unlock.
     m_connectLock.unlock();
+}
+
+void KNMusicStoreGlobal::resetConnectionCounter()
+{
+    //Reduce the data of itself.
+    reduceConnectionCounter(m_connectSemaphore);
 }
 
 void KNMusicStoreGlobal::reduceConnectionCounter(int counter)

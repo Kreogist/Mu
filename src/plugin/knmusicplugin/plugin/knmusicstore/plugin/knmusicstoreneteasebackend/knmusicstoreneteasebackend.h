@@ -133,6 +133,7 @@ private:
                                       bool fetchAlbum=false,
                                       QList<uint> *artworkList=nullptr);
     inline QNetworkRequest generateRequest();
+    inline void decreaseHomeCounter();
     inline void resetManager();
     inline void startTimeoutTick();
     inline void stopTimeoutTick();
@@ -144,7 +145,7 @@ private:
     QMap<QNetworkReply *, int> m_replyMap;
     QMap<QNetworkReply *, int> m_replyTimeout;
     QTimer *m_timeout;
-    int m_timeoutLimit, m_pipelineLimit;
+    int m_timeoutLimit, m_pipelineLimit, m_homeListCounter;
 };
 
 #endif // KNMUSICSTORENETEASEBACKEND_H

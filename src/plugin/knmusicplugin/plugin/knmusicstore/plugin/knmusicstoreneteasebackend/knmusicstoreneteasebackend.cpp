@@ -40,7 +40,8 @@ KNMusicStoreNeteaseBackend::KNMusicStoreNeteaseBackend(QObject *parent) :
     KNMusicStoreBackend(parent),
     m_timeout(new QTimer(this)),
     m_timeoutLimit(DefaultTimeoutLimit),
-    m_pipelineLimit(DefaultPipelineLimit)
+    m_pipelineLimit(DefaultPipelineLimit),
+    m_homeListCounter(0)
 {
     setObjectName("MusicStoreNeteaseBackend");
     //Initial the list urls.
@@ -79,6 +80,9 @@ void KNMusicStoreNeteaseBackend::showHome()
 {
     //Reset the network access manager.
     resetManager();
+    //Increase Internet counter.
+    m_homeListCounter=6;
+    emit requireAddConnectionCount(6);
     //Fetch the list before HomeSongListCount.
     //Insert the GET request.
     //Because the data could be changed, this part we won't use loop to do this.
@@ -94,8 +98,6 @@ void KNMusicStoreNeteaseBackend::showHome()
                   NeteaseGet, NeteaseHomeListItunes);
     insertRequest(m_listUrls[ListTopSongs],
                   NeteaseGet, NeteaseHomeListTopSongs);
-    //Increase Internet counter.
-    emit requireAddConnectionCount(6);
 }
 
 void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
@@ -214,6 +216,8 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
         }
         //Emit the set data function.
         emit requireSetHome(HomeNewAlbumData, albumDataList);
+        //Decrease and check home data.
+        decreaseHomeCounter();
         break;
     }
     case NeteaseHomeListNewSongs:
@@ -221,26 +225,36 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
         emit requireSetHome(
                     HomeNewSongData,
                     getSongDataList(reply, 32, true, &m_songArtworkList));
+        //Decrease and check home data.
+        decreaseHomeCounter();
         break;
     case NeteaseHomeListBillboard:
         //Update the home page information.
         emit requireSetHome(HomeBillboardList,
                             getSongDataList(reply, 10, false, nullptr));
+        //Decrease and check home data.
+        decreaseHomeCounter();
         break;
     case NeteaseHomeListOricon:
         //Update the home page information.
         emit requireSetHome(HomeOriconList,
                             getSongDataList(reply, 10, false, nullptr));
+        //Decrease and check home data.
+        decreaseHomeCounter();
         break;
     case NeteaseHomeListItunes:
         //Update the home page information.
         emit requireSetHome(HomeItunesList,
                             getSongDataList(reply, 10, false, nullptr));
+        //Decrease and check home data.
+        decreaseHomeCounter();
         break;
     case NeteaseHomeListTopSongs:
         //Update the home page information.
         emit requireSetHome(HomeTopSongsList,
                             getSongDataList(reply, 20, false, nullptr));
+        //Decrease and check home data.
+        decreaseHomeCounter();
         break;
     case NeteaseHomeListNewAlbumArt:
         //Call the home page new album art list processing.
@@ -334,9 +348,6 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
     albumObject=albumObject.value("album").toObject();
     //Change the album tab name.
     QString albumName=albumObject.value("name").toString();
-//    emit requireSetNavigatorItem(
-//                PageAlbum, albumName,
-//                QString::number((quint64)albumObject.value("id").toDouble()));
     //Construct the metadata object.
     metadata.insert("name", albumName);
     metadata.insert("artist", albumObject.value("artist"
@@ -379,6 +390,8 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
     metadata.insert("songs", songList);
     //Set the meta data.
     emit requireSetAlbum(AlbumMetadata, metadata);
+    //Operation complete, reset the operation flag.
+    emit requireResetOperation();
     //Fetch the album art.
     insertRequest(albumObject.value("picUrl").toString(),
                   NeteaseGet, NeteaseAlbumArt, false);
@@ -406,10 +419,6 @@ void KNMusicStoreNeteaseBackend::onSingleDetailReply(QNetworkReply *reply)
     }
     //Construct the song metadata.
     songMetadata.insert("name", songObject.value("name"));
-//    emit requireSetNavigatorItem(
-//                PageSingleSong,
-//                songObject.value("name").toString(),
-//                QString::number((qint64)songObject.value("id").toDouble()));
     //Alias.
     QJsonArray alias=songObject.value("alias").toArray();
     QString subheading;
@@ -445,6 +454,8 @@ void KNMusicStoreNeteaseBackend::onSingleDetailReply(QNetworkReply *reply)
                             qint64(albumObject.value("id").toDouble())));
     //Most of the information is already in the song object.
     emit requireSetSingleSong(SingleMetadata, songMetadata);
+    //Operation complete, reset the operation flag.
+    emit requireResetOperation();
     //Increase Internet counter.
     emit requireAddConnectionCount(2);
     //Fetch the album art.
@@ -753,6 +764,18 @@ inline QNetworkRequest KNMusicStoreNeteaseBackend::generateRequest()
     return request;
 }
 
+inline void KNMusicStoreNeteaseBackend::decreaseHomeCounter()
+{
+    //Decrease the counter.
+    --m_homeListCounter;
+    //Check counter.
+    if(m_homeListCounter==0)
+    {
+        //Reset the operation.
+        emit requireResetOperation();
+    }
+}
+
 inline void KNMusicStoreNeteaseBackend::resetManager()
 {
     //Check the reply map and access manager.
@@ -770,10 +793,15 @@ inline void KNMusicStoreNeteaseBackend::resetManager()
     if(!m_replyMap.isEmpty())
     {
         //Reduce the counter.
-        emit requireReduceConnectionCount(m_replyMap.size());
+        emit requireResetConnectionCount();
         //Clear the map.
         m_replyMap.clear();
         m_replyTimeout.clear();
+        //Clear the artwork list.
+        m_albumArtworkList.clear();
+        m_songArtworkList.clear();
+        //Clear the queue map.
+        m_queueRequest.clear();
     }
     //Link the access manager.
     m_accessManagerHandler.append(
