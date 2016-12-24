@@ -68,10 +68,13 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
         m_rankingList[i]=new KNMusicStoreHomeListView(this);
         //Configure the list view size.
         m_rankingList[i]->tweakHeight(10);  //Max 10 items.
+        m_rankingList[i]->setObjectName("MusicStoreHomeListView");
+        knTheme->registerWidget(m_rankingList[i]);
     }
     //Set the model to view.
     m_newAlbumView->setModel(m_homeListModel[ListNewAlbum]);
     m_newSongView->setModel(m_homeListModel[ListNewSongs]);
+    m_rankingList[ViewBillboard]->setModel(m_homeListModel[ListBillboard]);
     //Configure the view.
     connect(m_newAlbumView, &KNMusicStoreHomeAlbumView::clicked,
             this, &KNMusicStorePageHome::onNewAlbumViewClicked);
@@ -180,29 +183,11 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
         break;
     }
     case HomeNewSongData:
-    {
-        //Reset the model.
-        m_homeListModel[ListNewSongs]->reset();
-        //Translate the value to json array.
-        QJsonArray songDataList=value.toJsonArray();
-        //Start to insert data.
-        for(auto i : songDataList)
-        {
-            //Cast i as object.
-            QJsonObject songData=i.toObject();
-            //Construct the item.
-            KNMusicStoreHomeItem songItem;
-            //Set the album data.
-            songItem.title=songData.value("name").toString();
-            songItem.subheading=songData.value("artist-album").toString();
-            songItem.customData=songData.value("custom").toString();
-            //Insert the album to model.
-            m_homeListModel[ListNewSongs]->appendRow(songItem);
-        }
-        //Decrease the counter.
-        --m_homeContentCounter;
+        setListModelData(value, m_homeListModel[ListNewSongs]);
         break;
-    }
+    case HomeBillboardList:
+        setListModelData(value, m_homeListModel[ListBillboard]);
+        break;
     }
     //Check the home content counter.
     if(m_homeCounterClear && (m_homeContentCounter==0))
@@ -248,4 +233,30 @@ void KNMusicStorePageHome::onNewAlbumViewClicked(const QModelIndex &albumIndex)
     }
     //Ask to display the album.
     emit requireShowAlbum(albumIndex.data(Qt::UserRole+2).toString());
+}
+
+inline void KNMusicStorePageHome::setListModelData(
+        const QVariant &value,
+        KNMusicStoreHomeListModel *model)
+{
+    //Reset the model.
+    model->reset();
+    //Translate the value to json array.
+    QJsonArray songDataList=value.toJsonArray();
+    //Start to insert data.
+    for(auto i : songDataList)
+    {
+        //Cast i as object.
+        QJsonObject songData=i.toObject();
+        //Construct the item.
+        KNMusicStoreHomeItem songItem;
+        //Set the album data.
+        songItem.title=songData.value("name").toString();
+        songItem.subheading=songData.value("artist-album").toString();
+        songItem.customData=songData.value("custom").toString();
+        //Insert the album to model.
+        model->appendRow(songItem);
+    }
+    //Decrease the counter.
+    --m_homeContentCounter;
 }

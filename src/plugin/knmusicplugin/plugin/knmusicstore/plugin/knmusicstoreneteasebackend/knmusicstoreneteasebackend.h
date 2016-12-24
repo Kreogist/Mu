@@ -129,6 +129,10 @@ private:
     inline void launchRequest(const QNetworkRequest &request,
                               int requestType,
                               int replyType);
+    inline QJsonArray getSongDataList(QNetworkReply *reply,
+                                      int maximumItem=10,
+                                      bool fetchAlbum=false,
+                                      QList<uint> *artworkList=nullptr);
     inline QNetworkRequest generateRequest();
     inline void resetManager();
     inline void startTimeoutTick();

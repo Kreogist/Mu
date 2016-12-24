@@ -86,8 +86,8 @@ void KNMusicStoreNeteaseBackend::showHome()
                   NeteaseGet, NeteaseHomeListNewAlbum);
     insertRequest(m_listUrls[ListNewSongs],
                   NeteaseGet, NeteaseHomeListNewSongs);
-//    insertRequest(m_listUrls[ListBillboard],
-//                  NeteaseGet, NeteaseHomeListBillboard);
+    insertRequest(m_listUrls[ListBillboard],
+                  NeteaseGet, NeteaseHomeListBillboard);
 //    insertRequest(m_listUrls[ListOricon],
 //                  NeteaseGet, NeteaseHomeListOricon);
 //    insertRequest(m_listUrls[ListItunes],
@@ -95,7 +95,7 @@ void KNMusicStoreNeteaseBackend::showHome()
 //    insertRequest(m_listUrls[ListTopSongs],
 //                  NeteaseGet, NeteaseHomeListTopSongs);
     //Increase Internet counter.
-    emit requireAddConnectionCount(2);
+    emit requireAddConnectionCount(3);
 }
 
 void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
@@ -282,131 +282,16 @@ void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
         break;
     }
     case NeteaseHomeListNewSongs:
-    {
-        //Prepare the song object list.
-        QJsonArray songList;
-        {
-            //Read the html content.
-            QByteArray htmlRawContent=reply->readAll();
-            //Search the song-list-pre-cache id inside the raw content.
-            int divStart=
-                    htmlRawContent.indexOf("<div id=\"song-list-pre-cache\"");
-            //Check the position.
-            if(divStart==-1)
-            {
-                //Cannot find the data.
-                //! FIXME: data error.
-                break;
-            }
-            //Search the end div from the position.
-            int divEnd=
-                    htmlRawContent.indexOf("</div>", divStart);
-            //Check the position of div end.
-            if(divEnd==-1)
-            {
-                //Kidding me?
-                //!FIXME: Unknown error, data cannot be paired.
-                break;
-            }
-            //Do the search again, this time, it should be what we want.
-            divEnd=htmlRawContent.indexOf("</div>", divEnd+6);
-            //Check the div end position.
-            if(divEnd==-1)
-            {
-                //Kidding me?
-                //!FIXME: Unknown error, data cannot be paired.
-                break;
-            }
-            //Parse the div part only.
-            htmlRawContent=htmlRawContent.mid(divStart, divEnd-divStart+6);
-            //Inside the div part, there is a textarea tag, it stores the JSON
-            //format song list.
-            int textAreaStart=htmlRawContent.indexOf("<textarea");
-            if(textAreaStart==-1)
-            {
-                //! FIXME: No textarea.
-                break;
-            }
-            //Find the first > of the tag.
-            int textAreaEnd=htmlRawContent.indexOf(">", textAreaStart);
-            if(textAreaEnd==-1)
-            {
-                //! FIXME: No textarea tag end.
-                break;
-            }
-            //Remove the previous data.
-            htmlRawContent=htmlRawContent.mid(textAreaEnd+1);
-            //Search the end tag.
-            textAreaStart=htmlRawContent.indexOf("</textarea>");
-            if(textAreaStart==-1)
-            {
-                //! FIXME: No textarea.
-                break;
-            }
-            //Remove the end tag data.
-            htmlRawContent=htmlRawContent.left(textAreaStart);
-            //Parse the json format data.
-            songList=QJsonDocument::fromJson(htmlRawContent).array();
-        }
-        //Prepare the custom data.
-        QJsonArray songDataList;
-        //Check the song list size.
-        int songDataSize=qMin(32, songList.size());
-        //Increase the counter.
-        emit requireAddConnectionCount(songDataSize);
-        //Reset the album art list.
-        m_songArtworkList=QList<uint>();
-        m_songArtworkList.reserve(songDataSize);
-        for(int i=0; i<songDataSize; ++i)
-        {
-            //Append null value: 0.
-            m_songArtworkList.append(0);
-        }
-        //Loop and construct the album data.
-        for(int i=0; i<songDataSize; ++i)
-        {
-            //Translate the value to object, prepare the value object.
-            QJsonObject songObject=songList.at(i).toObject(), songData;
-            //Insert the data to album data.
-            songData.insert("name", songObject.value("name"));
-            songData.insert("custom", QString::number(
-                                 quint64(songObject.value("id").toDouble())));
-            //Combine the artist name
-            QJsonArray artistList=songObject.value("artists").toArray();
-            QString artistName;
-            for(auto j : artistList)
-            {
-                //Each j is an object.
-                QJsonObject artistObject=j.toObject();
-                //Check whether we need to add sperator or not.
-                if(!artistName.isEmpty())
-                {
-                    //Append comma.
-                    artistName.append(", ");
-                }
-                //Append artist name.
-                artistName.append(artistObject.value("name").toString());
-            }
-            //Translate the album object.
-            QJsonObject albumObject=songObject.value("album").toObject();
-            //Append artist and album data.
-            songData.insert("artist-album", artistName+ " - " +
-                            albumObject.value("name").toString());
-            //Insert the album data to album data list.
-            songDataList.append(songData);
-            //Get the song artwork url.
-            QString songArtworkUrl=albumObject.value("picUrl").toString();
-            //Save the url in the list.
-            m_songArtworkList.replace(i, qHash(songArtworkUrl));
-            //Fetch the album object value.
-            insertRequest(songArtworkUrl,
-                          NeteaseGet, NeteaseHomeListNewSongArt,
-                          false);
-        }
         //Update the home page information.
-        emit requireSetHome(HomeNewSongData, songDataList);
+        emit requireSetHome(
+                    HomeNewSongData,
+                    getSongDataList(reply, 32, true, &m_songArtworkList));
         break;
-    }
+    case NeteaseHomeListBillboard:
+        //Update the home page information.
+        emit requireSetHome(HomeBillboardList,
+                            getSongDataList(reply, 10, false, nullptr));
+        break;
     }
 }
 
@@ -707,6 +592,144 @@ inline void KNMusicStoreNeteaseBackend::launchRequest(
     m_replyTimeout.insert(reply, 0);
     //Start timeout checking.
     startTimeoutTick();
+}
+
+inline QJsonArray KNMusicStoreNeteaseBackend::getSongDataList(
+        QNetworkReply *reply,
+        int maximumItem,
+        bool fetchAlbum,
+        QList<uint> *artworkList)
+{
+    //Prepare the song object list.
+    QJsonArray songList;
+    {
+        //Read the html content.
+        QByteArray htmlRawContent=reply->readAll();
+        //Search the song-list-pre-cache id inside the raw content.
+        int divStart=
+                htmlRawContent.indexOf("<div id=\"song-list-pre-cache\"");
+        //Check the position.
+        if(divStart==-1)
+        {
+            //Cannot find the data.
+            //! FIXME: data error.
+            return songList;
+        }
+        //Search the end div from the position.
+        int divEnd=
+                htmlRawContent.indexOf("</div>", divStart);
+        //Check the position of div end.
+        if(divEnd==-1)
+        {
+            //Kidding me?
+            //!FIXME: Unknown error, data cannot be paired.
+            return songList;
+        }
+        //Do the search again, this time, it should be what we want.
+        divEnd=htmlRawContent.indexOf("</div>", divEnd+6);
+        //Check the div end position.
+        if(divEnd==-1)
+        {
+            //Kidding me?
+            //!FIXME: Unknown error, data cannot be paired.
+            return songList;
+        }
+        //Parse the div part only.
+        htmlRawContent=htmlRawContent.mid(divStart, divEnd-divStart+6);
+        //Inside the div part, there is a textarea tag, it stores the JSON
+        //format song list.
+        int textAreaStart=htmlRawContent.indexOf("<textarea");
+        if(textAreaStart==-1)
+        {
+            //! FIXME: No textarea.
+            return songList;
+        }
+        //Find the first > of the tag.
+        int textAreaEnd=htmlRawContent.indexOf(">", textAreaStart);
+        if(textAreaEnd==-1)
+        {
+            //! FIXME: No textarea tag end.
+            return songList;
+        }
+        //Remove the previous data.
+        htmlRawContent=htmlRawContent.mid(textAreaEnd+1);
+        //Search the end tag.
+        textAreaStart=htmlRawContent.indexOf("</textarea>");
+        if(textAreaStart==-1)
+        {
+            //! FIXME: No textarea.
+            return songList;
+        }
+        //Remove the end tag data.
+        htmlRawContent=htmlRawContent.left(textAreaStart);
+        //Parse the json format data.
+        songList=QJsonDocument::fromJson(htmlRawContent).array();
+    }
+    //Prepare the custom data.
+    QJsonArray songDataList;
+    //Check the song list size.
+    int songDataSize=qMin(maximumItem, songList.size());
+    //Check the fetch album switch.
+    if(fetchAlbum)
+    {
+        //Increase the counter.
+        emit requireAddConnectionCount(songDataSize);
+        //Reset the album art list.
+        artworkList->clear();
+        artworkList->reserve(songDataSize);
+        for(int i=0; i<songDataSize; ++i)
+        {
+            //Append null value: 0.
+            artworkList->append(0);
+        }
+    }
+    //Loop and construct the album data.
+    for(int i=0; i<songDataSize; ++i)
+    {
+        //Translate the value to object, prepare the value object.
+        QJsonObject songObject=songList.at(i).toObject(), songData;
+        //Insert the data to album data.
+        songData.insert("name", songObject.value("name"));
+        songData.insert("custom", QString::number(
+                             quint64(songObject.value("id").toDouble())));
+        //Combine the artist name
+        QJsonArray artistList=songObject.value("artists").toArray();
+        QString artistName;
+        for(auto j : artistList)
+        {
+            //Each j is an object.
+            QJsonObject artistObject=j.toObject();
+            //Check whether we need to add sperator or not.
+            if(!artistName.isEmpty())
+            {
+                //Append comma.
+                artistName.append(", ");
+            }
+            //Append artist name.
+            artistName.append(artistObject.value("name").toString());
+        }
+        //Translate the album object.
+        QJsonObject albumObject=songObject.value("album").toObject();
+        //Append artist and album data.
+        songData.insert("artist-album", artistName+ " - " +
+                        albumObject.value("name").toString());
+        //Insert the album data to album data list.
+        songDataList.append(songData);
+        //Check the switch.
+        if(fetchAlbum)
+        {
+            //Get the song artwork url.
+            QString songArtworkUrl=albumObject.value("picUrl").toString();
+            //Save the url in the list.
+            artworkList->replace(i, qHash(songArtworkUrl));
+            //Fetch the album object value.
+            insertRequest(songArtworkUrl,
+                          NeteaseGet, NeteaseHomeListNewSongArt,
+                          false);
+        }
+    }
+    //Complete the song data list.
+    return songDataList;
 }
 
 inline QNetworkRequest KNMusicStoreNeteaseBackend::generateRequest()

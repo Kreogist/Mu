@@ -22,7 +22,11 @@ Foundation,
 
 #include "knmusicstorehomelistview.h"
 
-#define ListItemHeight  37
+#define ListItemHeight          37
+#define ListTitleSpacing        7
+#define ListVerticalSpacing     6
+#define ListTextLeft            20
+#define ListTextSpacing         2
 
 KNMusicStoreHomeListView::KNMusicStoreHomeListView(QWidget *parent) :
     KNMusicStoreHomeItemView(parent),
@@ -59,14 +63,62 @@ void KNMusicStoreHomeListView::tweakHeight(int maxRenderingCount)
 void KNMusicStoreHomeListView::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
+    //Check the model.
+    if(listModel()==nullptr)
+    {
+        //Ignore the rendering hints.
+        return;
+    }
     //Initial the painter.
     QPainter painter(viewport());
     painter.setRenderHints(QPainter::Antialiasing |
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
+    //Get the model.
+    KNMusicStoreHomeListModel *itemModel=listModel();
+    //Calcualte the render boundary.
+    int maxRenderCount=qMin(m_maxRenderingCount, itemModel->rowCount()),
+            currentY=0;
+    //Get the fonts.
+    QFont titleFont=font();
+    titleFont.setBold(true);
     //Render each item in the list.
-    for(int i=0; i<m_maxRenderingCount; ++i)
+    for(int i=0; i<maxRenderCount; ++i)
     {
-        //Start rendering items.
+        //Draw item index.
+        painter.drawText(0, currentY+ListTitleSpacing, width(),
+                         fontMetrics().height(),
+                         Qt::AlignTop | Qt::AlignLeft,
+                         QString::number(i+1)+".");
+        //Get the item data.
+        const KNMusicStoreHomeItem &item=itemModel->homeItem(i);
+        //Calculate the text top.
+        int textTop=currentY+ListVerticalSpacing,
+                textWidth=width()-ListTextLeft;
+        //Set the title font.
+        painter.setFont(titleFont);
+        //Draw the title.
+        painter.drawText(ListTextLeft, textTop,
+                         textWidth, fontMetrics().height(),
+                         Qt::AlignTop | Qt::AlignLeft,
+                         fontMetrics().elidedText(item.title,
+                                                  Qt::ElideRight,
+                                                  textWidth));
+        //Reset the font.
+        painter.setFont(font());
+        //Change the painter opacity.
+        painter.setOpacity(0.5);
+        //Draw the subtitle text.
+        painter.drawText(ListTextLeft,
+                         textTop+ListTextSpacing+fontMetrics().height(),
+                         textWidth, fontMetrics().height(),
+                         Qt::AlignTop | Qt::AlignLeft,
+                         fontMetrics().elidedText(item.subheading,
+                                                  Qt::ElideRight,
+                                                  textWidth));
+        //Reset the opacity.
+        painter.setOpacity(1.0);
+        //Increase current Y.
+        currentY+=ListItemHeight;
     }
 }

@@ -79,7 +79,8 @@ private:
         ViewTopSongs,
         RankingListViewCount
     };
-
+    inline void setListModelData(const QVariant &value,
+                                 KNMusicStoreHomeListModel *model);
     KNMusicStoreHomeListModel *m_homeListModel[HomeSongListCount];
     QLabel *m_titleLabel[HomeSongListCount];
     KNConnectionHandler m_backendConnection;
