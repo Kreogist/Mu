@@ -83,6 +83,16 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     //Configure the view.
     connect(m_newAlbumView, &KNMusicStoreHomeAlbumView::clicked,
             this, &KNMusicStorePageHome::onNewAlbumViewClicked);
+    connect(m_newSongView, &KNMusicStoreHomeSongView::clicked,
+            this, &KNMusicStorePageHome::onSongViewClicked);
+    connect(m_rankingList[ViewBillboard], &KNMusicStoreHomeListView::clicked,
+            this, &KNMusicStorePageHome::onSongViewClicked);
+    connect(m_rankingList[ViewOricon], &KNMusicStoreHomeListView::clicked,
+            this, &KNMusicStorePageHome::onSongViewClicked);
+    connect(m_rankingList[ViewItunes], &KNMusicStoreHomeListView::clicked,
+            this, &KNMusicStorePageHome::onSongViewClicked);
+    connect(m_rankingList[ViewTopSongs], &KNMusicStoreHomeListView::clicked,
+            this, &KNMusicStorePageHome::onSongViewClicked);
     //Configure the label.
     m_titleLabel[ListTopSongs]->setFixedWidth(220);
 
@@ -252,6 +262,18 @@ void KNMusicStorePageHome::onNewAlbumViewClicked(const QModelIndex &albumIndex)
     }
     //Ask to display the album.
     emit requireShowAlbum(albumIndex.data(Qt::UserRole+2).toString());
+}
+
+void KNMusicStorePageHome::onSongViewClicked(const QModelIndex &songIndex)
+{
+    //Check the index is valid or not.
+    if(!songIndex.isValid())
+    {
+        //Ignore the request.
+        return;
+    }
+    //Ask to display the song.
+    emit requireShowSingleSong(songIndex.data(Qt::UserRole+2).toString());
 }
 
 inline void KNMusicStorePageHome::setListModelData(

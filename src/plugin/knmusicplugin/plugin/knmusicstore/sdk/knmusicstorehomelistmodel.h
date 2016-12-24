@@ -28,7 +28,11 @@ using namespace MusicStoreUtil;
 
 /*!
  * \brief The KNMusicStoreHomeListModel class provides the item list used in
- * music store home page.
+ * music store home page.\n
+ * Customized role data are listed following:
+ *   1. Qt::UserRole + 1: Subheading text.
+ *   2. Qt::UserRole + 2: Customized data, which stores the index of the item
+ * that allows the backend to get the information.
  */
 class KNMusicStoreHomeListModel : public QAbstractListModel
 {

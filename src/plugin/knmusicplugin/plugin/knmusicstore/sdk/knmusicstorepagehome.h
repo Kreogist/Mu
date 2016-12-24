@@ -69,6 +69,7 @@ public slots:
 private slots:
     void retranslate();
     void onNewAlbumViewClicked(const QModelIndex &albumIndex);
+    void onSongViewClicked(const QModelIndex &songIndex);
 
 private:
     enum RankingListView
