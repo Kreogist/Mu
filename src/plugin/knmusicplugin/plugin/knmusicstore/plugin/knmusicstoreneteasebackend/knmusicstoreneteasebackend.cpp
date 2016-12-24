@@ -88,14 +88,14 @@ void KNMusicStoreNeteaseBackend::showHome()
                   NeteaseGet, NeteaseHomeListNewSongs);
     insertRequest(m_listUrls[ListBillboard],
                   NeteaseGet, NeteaseHomeListBillboard);
-//    insertRequest(m_listUrls[ListOricon],
-//                  NeteaseGet, NeteaseHomeListOricon);
-//    insertRequest(m_listUrls[ListItunes],
-//                  NeteaseGet, NeteaseHomeListItunes);
+    insertRequest(m_listUrls[ListOricon],
+                  NeteaseGet, NeteaseHomeListOricon);
+    insertRequest(m_listUrls[ListItunes],
+                  NeteaseGet, NeteaseHomeListItunes);
 //    insertRequest(m_listUrls[ListTopSongs],
 //                  NeteaseGet, NeteaseHomeListTopSongs);
     //Increase Internet counter.
-    emit requireAddConnectionCount(3);
+    emit requireAddConnectionCount(5);
 }
 
 void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
@@ -290,6 +290,16 @@ void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
     case NeteaseHomeListBillboard:
         //Update the home page information.
         emit requireSetHome(HomeBillboardList,
+                            getSongDataList(reply, 10, false, nullptr));
+        break;
+    case NeteaseHomeListOricon:
+        //Update the home page information.
+        emit requireSetHome(HomeOriconList,
+                            getSongDataList(reply, 10, false, nullptr));
+        break;
+    case NeteaseHomeListItunes:
+        //Update the home page information.
+        emit requireSetHome(HomeItunesList,
                             getSongDataList(reply, 10, false, nullptr));
         break;
     }

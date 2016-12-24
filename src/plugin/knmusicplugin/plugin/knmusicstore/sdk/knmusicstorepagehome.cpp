@@ -75,6 +75,8 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     m_newAlbumView->setModel(m_homeListModel[ListNewAlbum]);
     m_newSongView->setModel(m_homeListModel[ListNewSongs]);
     m_rankingList[ViewBillboard]->setModel(m_homeListModel[ListBillboard]);
+    m_rankingList[ViewOricon]->setModel(m_homeListModel[ListOricon]);
+    m_rankingList[ViewItunes]->setModel(m_homeListModel[ListItunes]);
     //Configure the view.
     connect(m_newAlbumView, &KNMusicStoreHomeAlbumView::clicked,
             this, &KNMusicStorePageHome::onNewAlbumViewClicked);
@@ -107,6 +109,8 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     contentLayout->addSpacing(13);
     //Initial the ranking layout.
     QGridLayout *rankLayout=new QGridLayout();
+    rankLayout->setHorizontalSpacing(20);
+    rankLayout->setVerticalSpacing(2);
     contentLayout->addLayout(rankLayout);
     //Add ranks.
     rankLayout->addWidget(m_titleLabel[ListBillboard], 0, 0, 1, 1);
@@ -187,6 +191,12 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
         break;
     case HomeBillboardList:
         setListModelData(value, m_homeListModel[ListBillboard]);
+        break;
+    case HomeOriconList:
+        setListModelData(value, m_homeListModel[ListOricon]);
+        break;
+    case HomeItunesList:
+        setListModelData(value, m_homeListModel[ListItunes]);
         break;
     }
     //Check the home content counter.
