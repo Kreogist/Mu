@@ -150,7 +150,7 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
                       requestItem.replyType);
     }
     //Check reply state.
-    if(!m_replyTimeout.contains(reply))
+    if(reply->error()==QNetworkReply::OperationCanceledError)
     {
         //The reply is timeout, error.
         //!FIXME: show error.
@@ -778,12 +778,13 @@ inline void KNMusicStoreNeteaseBackend::decreaseHomeCounter()
 
 inline void KNMusicStoreNeteaseBackend::resetManager()
 {
-    //Check the reply map and access manager.
-    if(m_replyMap.isEmpty() && (!m_accessManager.isNull()))
+    //Stop the timeout counter timer.
+    m_timeout->stop();
+    //Check the access manager.
+    if(!m_accessManager.isNull())
     {
-        //When the map is empty, it means there is no pending request.
-        //And the access manager is allocated, it won't need to reset.
-        return;
+        //Block all the access manager signal.
+        m_accessManager->blockSignals(true);
     }
     //Break down the original link.
     m_accessManagerHandler.disconnectAll();
@@ -804,12 +805,19 @@ inline void KNMusicStoreNeteaseBackend::resetManager()
         m_queueRequest.clear();
     }
     //Link the access manager.
+    /*
+     * Thanks for fzyz999, reminds me that here it shouldn't use the queue type
+     * connection.
+     * The reason is that if we used the queue connection, it cannot block the
+     * signal if it is already send to the event loop. However, the blocked
+     * queue connection is useless under this situation. Thus why here, we are
+     * using the direct connection.
+     */
     m_accessManagerHandler.append(
                 connect(m_accessManager.data(),
                         &QNetworkAccessManager::finished,
                         this, &KNMusicStoreNeteaseBackend::onReplyFinished,
-                        //Use queue connection for using event loop.
-                        Qt::QueuedConnection));
+                        Qt::DirectConnection));
 }
 
 inline void KNMusicStoreNeteaseBackend::startTimeoutTick()
