@@ -34,7 +34,7 @@
 #include <QDebug>
 
 #define DefaultTimeoutLimit     30 //Default seconds for timeout.
-#define DefaultPipelineLimit    32 //Default links for pipeline.
+#define DefaultPipelineLimit    80 //Default links for pipeline.
 
 KNMusicStoreNeteaseBackend::KNMusicStoreNeteaseBackend(QObject *parent) :
     KNMusicStoreBackend(parent),

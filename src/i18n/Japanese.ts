@@ -382,12 +382,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="258"/>
+        <location filename="../sdk/knmainwindow.cpp" line="267"/>
         <source>Cannot quit now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="259"/>
+        <location filename="../sdk/knmainwindow.cpp" line="268"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1292,7 +1292,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="205"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="198"/>
         <source>Music</source>
         <translation>音楽</translation>
     </message>
@@ -1412,151 +1412,135 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicStore</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="183"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="157"/>
         <source>Store</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>KNMusicStoreDownloadList</name>
+    <name>KNMusicStoreAlbumModel</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp" line="120"/>
-        <source>Download</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicStoreHomeWidget</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.cpp" line="175"/>
-        <source>New Albums</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomewidget.cpp" line="176"/>
-        <source>Hot Tracks</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicStoreListWidget</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp" line="163"/>
-        <source>Artist: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp" line="164"/>
-        <source>Released: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorelistwidget.cpp" line="165"/>
-        <source>Published: </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicStoreNetease</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp" line="134"/>
-        <source>Billboard Week List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp" line="136"/>
-        <source>iTunes Hot List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/plugin/knmusicstorenetease/knmusicstorenetease.cpp" line="138"/>
-        <source>Oricon Week List</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicStoreSearchResult</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="52"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="156"/>
         <source>Name</source>
         <translation type="unfinished">名前</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="53"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="157"/>
         <source>Artist</source>
         <translation type="unfinished">アーティスト</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="54"/>
-        <source>Album</source>
-        <translation type="unfinished">アルバム</translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresult.cpp" line="55"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="158"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
+    <name>KNMusicStoreHeader</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="229"/>
+        <source>Search Result for &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="231"/>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStorePageHome</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="257"/>
+        <source>New Album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="258"/>
+        <source>New Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="259"/>
+        <source>Billboard Rank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="260"/>
+        <source>Oricon Rank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="261"/>
+        <source>iTunes Rank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="262"/>
+        <source>Top Songs</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStorePageSingleSong</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="263"/>
+        <source>Artist</source>
+        <translation type="unfinished">アーティスト</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="264"/>
+        <source>Artists</source>
+        <translation type="unfinished">アーティスト</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="265"/>
+        <source>Album</source>
+        <translation type="unfinished">アルバム</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreSearchResult</name>
+    <message>
+        <source>Name</source>
+        <translation type="obsolete">名前</translation>
+    </message>
+    <message>
+        <source>Artist</source>
+        <translation type="obsolete">アーティスト</translation>
+    </message>
+    <message>
+        <source>Album</source>
+        <translation type="obsolete">アルバム</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicStoreSearchResultWidget</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresearchresultwidget.cpp" line="72"/>
         <source>Search %1</source>
-        <translation type="unfinished">%1を検索</translation>
+        <translation type="obsolete">%1を検索</translation>
     </message>
 </context>
 <context>
     <name>KNMusicStoreSingleSongWidget</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="184"/>
-        <source>Artist: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="185"/>
-        <source>Album: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="187"/>
-        <source>Play</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="188"/>
-        <source>Download</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresinglesongwidget.cpp" line="221"/>
         <source>, </source>
-        <translation type="unfinished">、</translation>
+        <translation type="obsolete">、</translation>
     </message>
 </context>
 <context>
     <name>KNMusicStoreSongListModel</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp" line="146"/>
         <source>Name</source>
-        <translation type="unfinished">名前</translation>
+        <translation type="obsolete">名前</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp" line="147"/>
         <source>Time</source>
-        <translation type="unfinished">時間</translation>
+        <translation type="obsolete">時間</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoresonglistmodel.cpp" line="148"/>
         <source>Artist</source>
-        <translation type="unfinished">アーティスト</translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicStoreTitleBar</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoretitlebar.cpp" line="121"/>
-        <source>Store</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">アーティスト</translation>
     </message>
 </context>
 <context>

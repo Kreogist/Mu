@@ -206,9 +206,9 @@ _?i\^(;;_`´ *3c"^   ~\:1GtGbwwgkkkk>DmL´´({$NRRmFL     /wXZZZZggdRQ0
 */
 
 //Change the version here.
-#define MAJOR_VERSION 0
-#define MINOR_VERSION 9
-#define PATCH_VERSION 9
+#define MAJOR_VERSION 1
+#define MINOR_VERSION 0
+#define PATCH_VERSION 0
 
 //----DON'T TOUCH BELOW---
 //Generate string for version.
