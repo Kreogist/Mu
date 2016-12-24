@@ -71,12 +71,15 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
         m_rankingList[i]->setObjectName("MusicStoreHomeListView");
         knTheme->registerWidget(m_rankingList[i]);
     }
+    //Tweak the top song to be 20.
+    m_rankingList[ViewTopSongs]->tweakHeight(20);
     //Set the model to view.
     m_newAlbumView->setModel(m_homeListModel[ListNewAlbum]);
     m_newSongView->setModel(m_homeListModel[ListNewSongs]);
     m_rankingList[ViewBillboard]->setModel(m_homeListModel[ListBillboard]);
     m_rankingList[ViewOricon]->setModel(m_homeListModel[ListOricon]);
     m_rankingList[ViewItunes]->setModel(m_homeListModel[ListItunes]);
+    m_rankingList[ViewTopSongs]->setModel(m_homeListModel[ListTopSongs]);
     //Configure the view.
     connect(m_newAlbumView, &KNMusicStoreHomeAlbumView::clicked,
             this, &KNMusicStorePageHome::onNewAlbumViewClicked);
@@ -123,7 +126,9 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
     contentLayout->addStretch();
     //Add sidebar layout.
     QBoxLayout *sidebarLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    sidebarLayout->setSpacing(0);
     sidebarLayout->addWidget(m_titleLabel[ListTopSongs]);
+    sidebarLayout->addSpacing(7);
     sidebarLayout->addWidget(m_rankingList[ViewTopSongs]);
     sidebarLayout->addStretch();
     listLayout->addLayout(sidebarLayout);
@@ -136,7 +141,7 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
 void KNMusicStorePageHome::reset()
 {
     //Home page special reset.
-    m_homeContentCounter=2;
+    m_homeContentCounter=6;
     //Reset the counter flag.
     m_homeCounterClear=true;
     //Clear the home model.
@@ -187,6 +192,7 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
         break;
     }
     case HomeNewSongData:
+        //Set the song data to the list model.
         setListModelData(value, m_homeListModel[ListNewSongs]);
         break;
     case HomeBillboardList:
@@ -197,6 +203,9 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
         break;
     case HomeItunesList:
         setListModelData(value, m_homeListModel[ListItunes]);
+        break;
+    case HomeTopSongsList:
+        setListModelData(value, m_homeListModel[ListTopSongs]);
         break;
     }
     //Check the home content counter.

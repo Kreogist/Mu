@@ -59,7 +59,8 @@ namespace MusicStoreUtil
         HomeNewSongArt,
         HomeBillboardList,
         HomeOriconList,
-        HomeItunesList
+        HomeItunesList,
+        HomeTopSongsList
     };
 
     enum MusicStoreAlbumLabel

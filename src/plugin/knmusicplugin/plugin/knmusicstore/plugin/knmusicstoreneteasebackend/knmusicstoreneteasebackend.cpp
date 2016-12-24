@@ -92,10 +92,10 @@ void KNMusicStoreNeteaseBackend::showHome()
                   NeteaseGet, NeteaseHomeListOricon);
     insertRequest(m_listUrls[ListItunes],
                   NeteaseGet, NeteaseHomeListItunes);
-//    insertRequest(m_listUrls[ListTopSongs],
-//                  NeteaseGet, NeteaseHomeListTopSongs);
+    insertRequest(m_listUrls[ListTopSongs],
+                  NeteaseGet, NeteaseHomeListTopSongs);
     //Increase Internet counter.
-    emit requireAddConnectionCount(5);
+    emit requireAddConnectionCount(6);
 }
 
 void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
@@ -173,71 +173,6 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
     switch(replyOperation)
     {
     case NeteaseHomeListNewAlbum:
-    case NeteaseHomeListNewSongs:
-    case NeteaseHomeListBillboard:
-    case NeteaseHomeListOricon:
-    case NeteaseHomeListItunes:
-    case NeteaseHomeListTopSongs:
-        //Call the home page processing slots.
-        onHomeListReply(replyOperation, reply);
-        break;
-    case NeteaseHomeListNewAlbumArt:
-        //Call the home page new album art list processing.
-        onHomeNewArtworkReply(reply, m_albumArtworkList, HomeNewAlbumArt);
-        break;
-    case NeteaseHomeListNewSongArt:
-        //Call the home page new song art list processing.
-        onHomeNewArtworkReply(reply, m_songArtworkList, HomeNewSongArt);
-        break;
-    case NeteaseAlbumDetails:
-        //Album detail information reply.
-        onAlbumDetailReply(reply);
-        break;
-    case NeteaseAlbumArt:
-    {
-        //Album art fetched.
-        //Load QPixmap from the result.
-        QPixmap albumArtPixmap;
-        //Load the data to a pixmap.
-        QByteArray replyData=reply->readAll();
-        albumArtPixmap.loadFromData(replyData);
-        //Emit the album set data.
-        emit requireSetAlbum(AlbumArt, QVariant(albumArtPixmap));
-        break;
-    }
-    case NeteaseSingleDetails:
-        onSingleDetailReply(reply);
-        break;
-    case NeteaseSingleLyricsText:
-        //Single song lyrics reply.
-        onSingleLyricsReply(reply);
-        break;
-    case NeteaseSingleAlbumArt:
-    {
-        //Album art fetched.
-        //Load QPixmap from the result.
-        QPixmap albumArtPixmap;
-        //Load the data to a pixmap.
-        QByteArray replyData=reply->readAll();
-        albumArtPixmap.loadFromData(replyData);
-        //Emit the album set data.
-        emit requireSetSingleSong(SingleAlbumArt, QVariant(albumArtPixmap));
-        break;
-    }
-    default:
-        break;
-    }
-    //Delete the reply.
-    reply->deleteLater();
-}
-
-void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
-                                                 QNetworkReply *reply)
-{
-    //Check the list type.
-    switch(listType)
-    {
-    case NeteaseHomeListNewAlbum:
     {
         //Translate the reply data as a json object.
         QJsonObject homeListData=
@@ -302,7 +237,59 @@ void KNMusicStoreNeteaseBackend::onHomeListReply(int listType,
         emit requireSetHome(HomeItunesList,
                             getSongDataList(reply, 10, false, nullptr));
         break;
+    case NeteaseHomeListTopSongs:
+        //Update the home page information.
+        emit requireSetHome(HomeTopSongsList,
+                            getSongDataList(reply, 20, false, nullptr));
+        break;
+    case NeteaseHomeListNewAlbumArt:
+        //Call the home page new album art list processing.
+        onHomeNewArtworkReply(reply, m_albumArtworkList, HomeNewAlbumArt);
+        break;
+    case NeteaseHomeListNewSongArt:
+        //Call the home page new song art list processing.
+        onHomeNewArtworkReply(reply, m_songArtworkList, HomeNewSongArt);
+        break;
+    case NeteaseAlbumDetails:
+        //Album detail information reply.
+        onAlbumDetailReply(reply);
+        break;
+    case NeteaseAlbumArt:
+    {
+        //Album art fetched.
+        //Load QPixmap from the result.
+        QPixmap albumArtPixmap;
+        //Load the data to a pixmap.
+        QByteArray replyData=reply->readAll();
+        albumArtPixmap.loadFromData(replyData);
+        //Emit the album set data.
+        emit requireSetAlbum(AlbumArt, QVariant(albumArtPixmap));
+        break;
     }
+    case NeteaseSingleDetails:
+        onSingleDetailReply(reply);
+        break;
+    case NeteaseSingleLyricsText:
+        //Single song lyrics reply.
+        onSingleLyricsReply(reply);
+        break;
+    case NeteaseSingleAlbumArt:
+    {
+        //Album art fetched.
+        //Load QPixmap from the result.
+        QPixmap albumArtPixmap;
+        //Load the data to a pixmap.
+        QByteArray replyData=reply->readAll();
+        albumArtPixmap.loadFromData(replyData);
+        //Emit the album set data.
+        emit requireSetSingleSong(SingleAlbumArt, QVariant(albumArtPixmap));
+        break;
+    }
+    default:
+        break;
+    }
+    //Delete the reply.
+    reply->deleteLater();
 }
 
 void KNMusicStoreNeteaseBackend::onHomeNewArtworkReply(QNetworkReply *reply,

@@ -83,7 +83,6 @@ public slots:
 
 private slots:
     void onReplyFinished(QNetworkReply *reply);
-    void onHomeListReply(int listType, QNetworkReply *reply);
     void onHomeNewArtworkReply(QNetworkReply *reply,
                                QList<uint> &urlMap,
                                int albumArtRequestType);
