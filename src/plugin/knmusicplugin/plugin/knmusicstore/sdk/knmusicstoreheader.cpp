@@ -130,7 +130,8 @@ void KNMusicStoreHeader::addStateWidget(QWidget *widget)
     m_pluginTray->addWidget(widget);
 }
 
-void KNMusicStoreHeader::setNavigatorText(int itemIndex, const QString &text)
+void KNMusicStoreHeader::setNavigatorText(int itemIndex,
+                                          const QString &text)
 {
     bool elided=false;
     //Show the changed text.
@@ -234,14 +235,6 @@ void KNMusicStoreHeader::retranslate()
 
 void KNMusicStoreHeader::onNavigatorClick(int index)
 {
-    //Hide the indicator and label after index.
-    for(int i=index+1; i<PagesCount; ++i)
-    {
-        //Hide the label.
-        m_navigatorItem[i]->hide();
-        //Hide the indicator.
-        m_indicator[i-1]->hide();
-    }
     //Emit the page display requirement.
     emit requireShowPage(index);
 }

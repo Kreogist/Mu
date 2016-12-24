@@ -58,6 +58,11 @@ signals:
     void currentPageChanged();
 
     /*!
+     * \brief Ask the backend to fetch the home information.
+     */
+    void requireShowHome();
+
+    /*!
      * \brief Ask the backend to fetch information about one album.
      * \param backendId The backend name which will process the metadata.
      * \param metadata The album's metadata.

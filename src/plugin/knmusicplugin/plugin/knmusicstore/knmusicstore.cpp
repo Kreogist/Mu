@@ -62,11 +62,6 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
             this, &KNMusicStore::showPageContainer);
     //Give the page container to the backend manager.
     knMusicStoreBackendManager->setPageContainer(m_container);
-    //Link the backend set value signals.
-    connect(knMusicStoreBackendManager,
-            &KNMusicStoreBackendManager::requireSetNavigatorItem,
-            m_container, &KNMusicStoreContainer::setNavigatorText,
-            Qt::QueuedConnection);
     //Link the container fetch data signals.
     connect(this, &KNMusicStore::requireShowHome,
             knMusicStoreBackendManager,
@@ -75,6 +70,10 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     connect(this, &KNMusicStore::requireLoadPlugin,
             knMusicStoreBackendManager,
             &KNMusicStoreBackendManager::loadPlugins,
+            Qt::QueuedConnection);
+    connect(m_container, &KNMusicStoreContainer::requireShowHome,
+            knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::showHomePage,
             Qt::QueuedConnection);
     connect(m_container, &KNMusicStoreContainer::requireShowAlbum,
             knMusicStoreBackendManager,

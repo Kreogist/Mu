@@ -50,7 +50,21 @@ public:
      */
     QString backendName() const;
 
+    /*!
+     * \brief Save the metadata of the current page.
+     * \return The current page metadata string.
+     */
+    QString metadata() const;
+
 signals:
+    /*!
+     * \brief Set the navigator item text in the header text.
+     * \param navigatorIndex The navigator item index.
+     * \param caption The text of the navigator item.
+     */
+    void requireSetNavigatorItem(int navigatorIndex,
+                                 const QString &caption);
+
     /*!
      * \brief When the page data is ready, this signal should be emit to show
      * the page.
@@ -94,8 +108,14 @@ public slots:
      */
     virtual void setPageLabel(int labelIndex, const QVariant &value)=0;
 
+    /*!
+     * \brief Set the metadata of current page.
+     * \param metadata The metadata of the backend.
+     */
+    void setMetadata(const QString &metadata);
+
 private:
-    QString m_backendName;
+    QString m_backendName, m_metadata;
 };
 
 #endif // KNMUSICSTOREPAGE_H

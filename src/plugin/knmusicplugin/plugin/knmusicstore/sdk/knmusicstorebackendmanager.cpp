@@ -87,8 +87,11 @@ void KNMusicStoreBackendManager::showAlbum(const QString &backendId,
         //Failed to operate the backend.
         return;
     }
+    //Get the page.
+    KNMusicStorePage *page=m_pageContainer->page(PageAlbum);
     //Set the backend to the page.
-    m_pageContainer->page(PageAlbum)->setBackend(backend);
+    page->setBackend(backend);
+    page->setMetadata(albumInfo);
     //Ask the backend to show the information.
     backend->showAlbum(albumInfo);
 }
@@ -105,8 +108,11 @@ void KNMusicStoreBackendManager::showSingleSong(const QString &backendId,
         //Failed to operate the backend.
         return;
     }
+    //Get the page.
+    KNMusicStorePage *page=m_pageContainer->page(PageSingleSong);
     //Set the backend to the page.
-    m_pageContainer->page(PageSingleSong)->setBackend(backend);
+    page->setBackend(backend);
+    page->setMetadata(songInfo);
     //Ask the backend to show the information.
     backend->showSingleSong(songInfo);
 }
@@ -133,8 +139,6 @@ void KNMusicStoreBackendManager::addBackend(KNMusicStoreBackend *backend)
     //Add backend to the map.
     m_backendMap.insert(backend->objectName(), backend);
     //Link the backend request to the manager.
-    connect(backend, &KNMusicStoreBackend::requireSetNavigatorItem,
-            this, &KNMusicStoreBackendManager::requireSetNavigatorItem);
     connect(backend, &KNMusicStoreBackend::requireAddConnectionCount,
             this, &KNMusicStoreBackendManager::requireAddConnectionCount);
     connect(backend, &KNMusicStoreBackend::requireReduceConnectionCount,

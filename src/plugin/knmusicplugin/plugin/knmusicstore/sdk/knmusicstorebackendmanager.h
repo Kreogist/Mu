@@ -66,13 +66,6 @@ public:
 
 signals:
     /*!
-     * \brief Set the navigator item text in the header text.
-     * \param navigatorIndex The navigator item index.
-     * \param caption The text of the navigator item.
-     */
-    void requireSetNavigatorItem(int navigatorIndex, const QString &caption);
-
-    /*!
      * \brief Add Internet connection count to the GUI connection status.
      * \param count The number of the connections.
      */

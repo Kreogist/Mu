@@ -95,7 +95,9 @@ KNMusicStorePage *KNMusicStoreContainer::page(int pageIndex)
     return m_pages[pageIndex];
 }
 
-void KNMusicStoreContainer::setNavigatorText(int itemIndex, const QString &text)
+void KNMusicStoreContainer::setNavigatorText(
+        int itemIndex,
+        const QString &text)
 {
     //Update the header navigator text.
     m_header->setNavigatorText(itemIndex, text);
@@ -157,8 +159,26 @@ void KNMusicStoreContainer::onShowPage()
 
 void KNMusicStoreContainer::onShowPageIndex(int index)
 {
-    //Show the specific page via index.
-    showPage(m_pages[index]);
+    //Get the page.
+    KNMusicStorePage *page=m_pages[index];
+    //Check the index.
+    switch (index)
+    {
+    case PageHome:
+        //Fetch home information.
+        emit requireShowHome();
+        break;
+    case PageAlbum:
+        //Fetch the album information.
+        emit requireShowAlbum(page->backendName(), page->metadata());
+        break;
+    case PageSingleSong:
+        //Fetch the single song information.
+        emit requireShowSingleSong(page->backendName(), page->metadata());
+        break;
+    default:
+        break;
+    }
 }
 
 void KNMusicStoreContainer::onShowAlbum(const QString &metadata)
@@ -209,6 +229,8 @@ inline void KNMusicStoreContainer::configurePage(KNMusicStorePage *pageWidget)
             this, &KNMusicStoreContainer::onShowAlbum);
     connect(pageWidget, &KNMusicStorePage::requireShowSingleSong,
             this, &KNMusicStoreContainer::onShowSingleSong);
+    connect(pageWidget, &KNMusicStorePage::requireSetNavigatorItem,
+            this, &KNMusicStoreContainer::setNavigatorText);
     //Link the resize signals.
     connect(pageWidget, &KNMusicStorePage::requireUpdateHeight,
             this, &KNMusicStoreContainer::onUpdatePageWidth);

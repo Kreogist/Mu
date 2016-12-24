@@ -41,7 +41,7 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     m_artistHintText(QString()),
     m_artistsHintText(QString()),
     m_albumMetadata(QString()),
-    m_headerLabel(new QLabel(this)),
+    m_titleLabel(new QLabel(this)),
     m_subheadingLabel(new QLabel(this)),
     m_lyrics(new QLabel(this)),
     m_artistLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
@@ -53,7 +53,7 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     QFont headerFont=font();
     headerFont.setPixelSize(21);
     headerFont.setBold(true);
-    m_headerLabel->setFont(headerFont);
+    m_titleLabel->setFont(headerFont);
     //Configure the subheading.
     m_subheadingLabel->setContentsMargins(0, 0, 0, 10);
     m_subheadingLabel->setObjectName("MusicStorePageLabel");
@@ -111,7 +111,7 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     albumLayout->addLayout(metadataLayout, 1);
     //Add widgets.
     // Name of the song.
-    metadataLayout->addWidget(m_headerLabel, 0, 0, 1, 2);
+    metadataLayout->addWidget(m_titleLabel, 0, 0, 1, 2);
     // Subheading of the song.
     metadataLayout->addWidget(m_subheadingLabel, 1, 0, 1, 2);
     // Artist of the song.
@@ -143,7 +143,7 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
         QJsonObject metadata=value.toJsonObject();
         //The metadata contains the following value:
         // Song name, the value should be a string type value.
-        m_headerLabel->setText(metadata.value("name").toString());
+        m_titleLabel->setText(metadata.value("name").toString());
         // Song subheading, the value should be a string type value.
         m_subheadingLabel->setText(metadata.value("subheading").toString());
         // Song album, the value should be a string type value.
@@ -204,6 +204,7 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
         m_lyrics->setText(value.toString());
         //Show the page.
         emit requireShowPage();
+        emit requireSetNavigatorItem(PageSingleSong, m_titleLabel->text());
         //Update the page size.
         emit requireUpdateHeight();
         break;
@@ -217,7 +218,7 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
 void KNMusicStorePageSingleSong::reset()
 {
     //Clear the data in the label.
-    m_headerLabel->clear();
+    m_titleLabel->clear();
     m_subheadingLabel->clear();
     m_albumLabel->clear();
     m_albumArt->setPixmap(QPixmap(":/plugin/music/public/noalbum.png"));

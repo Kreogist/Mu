@@ -103,7 +103,7 @@ private:
     QList<QLabel *> m_artistSplitLabels;
     QStringList m_artistList;
     QString m_artistHintText, m_artistsHintText, m_albumMetadata;
-    QLabel *m_labelHints[LabelHintsCount], *m_headerLabel, *m_subheadingLabel,
+    QLabel *m_labelHints[LabelHintsCount], *m_titleLabel, *m_subheadingLabel,
            *m_lyrics;
     QBoxLayout *m_artistLayout;
     KNAnimeLabelButton *m_albumLabel;

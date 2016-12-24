@@ -60,13 +60,6 @@ signals:
     void requireReduceConnectionCount(int count);
 
     /*!
-     * \brief Set the navigator item text in the header text.
-     * \param navigatorIndex The navigator item index.
-     * \param caption The text of the navigator item.
-     */
-    void requireSetNavigatorItem(int navigatorIndex, const QString &caption);
-
-    /*!
      * \brief Ask to set the home page data.
      * \param dataIndex The home page information data.
      * \param value Specific home page data.

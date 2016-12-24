@@ -334,7 +334,9 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
     albumObject=albumObject.value("album").toObject();
     //Change the album tab name.
     QString albumName=albumObject.value("name").toString();
-    emit requireSetNavigatorItem(PageAlbum, albumName);
+//    emit requireSetNavigatorItem(
+//                PageAlbum, albumName,
+//                QString::number((quint64)albumObject.value("id").toDouble()));
     //Construct the metadata object.
     metadata.insert("name", albumName);
     metadata.insert("artist", albumObject.value("artist"
@@ -404,8 +406,10 @@ void KNMusicStoreNeteaseBackend::onSingleDetailReply(QNetworkReply *reply)
     }
     //Construct the song metadata.
     songMetadata.insert("name", songObject.value("name"));
-    emit requireSetNavigatorItem(PageSingleSong,
-                                 songObject.value("name").toString());
+//    emit requireSetNavigatorItem(
+//                PageSingleSong,
+//                songObject.value("name").toString(),
+//                QString::number((qint64)songObject.value("id").toDouble()));
     //Alias.
     QJsonArray alias=songObject.value("alias").toArray();
     QString subheading;

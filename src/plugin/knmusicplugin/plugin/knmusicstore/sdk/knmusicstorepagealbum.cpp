@@ -153,6 +153,7 @@ void KNMusicStorePageAlbum::setPageLabel(int labelIndex, const QVariant &value)
         }
         //Ask for show the page.
         emit requireShowPage();
+        emit requireSetNavigatorItem(PageAlbum, m_albumTitle->text());
         //When this part is down.
         break;
     }

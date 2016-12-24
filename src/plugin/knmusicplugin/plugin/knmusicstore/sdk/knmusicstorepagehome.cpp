@@ -223,6 +223,8 @@ void KNMusicStorePageHome::setPageLabel(int labelIndex, const QVariant &value)
     {
         //Emit require show signal.
         emit requireShowPage();
+        //Emit to change the navigator.
+        emit requireSetNavigatorItem(PageHome, QString());
         //Clear the flag.
         m_homeCounterClear=false;
     }

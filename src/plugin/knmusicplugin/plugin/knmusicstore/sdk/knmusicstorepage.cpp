@@ -35,6 +35,16 @@ void KNMusicStorePage::setBackend(KNMusicStoreBackend *backend)
     m_backendName=backend->objectName();
 }
 
+QString KNMusicStorePage::metadata() const
+{
+    return m_metadata;
+}
+
+void KNMusicStorePage::setMetadata(const QString &metadata)
+{
+    m_metadata = metadata;
+}
+
 QString KNMusicStorePage::backendName() const
 {
     //Give the backend name.
