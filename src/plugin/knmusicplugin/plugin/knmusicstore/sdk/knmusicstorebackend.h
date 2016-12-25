@@ -48,6 +48,18 @@ public:
 
 signals:
     /*!
+     * \brief Require to show error dimmer with the specific information
+     * provided by the error index.
+     * \param errorType The type of the error. 0 for connection error, which is
+     * provided by Qt's QNetworkReply itself. 1 for customized error, which is
+     * related to the content of the information.
+     * \param errorId The error index. For connection error, it is defined in
+     * the QNetworkReply. For cutomized error, it is defined in
+     * KNMusicStoreGlobal.
+     */
+    void requireShowError(int errorType, int errorId);
+
+    /*!
      * \brief Require the backend manager to reset operation flag to null. When
      * the operation is done, this signal will be emitted.
      */

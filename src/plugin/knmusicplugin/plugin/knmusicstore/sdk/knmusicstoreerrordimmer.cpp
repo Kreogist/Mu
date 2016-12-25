@@ -16,62 +16,99 @@
 Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
+#include <QLabel>
 #include <QTimeLine>
+#include <QNetworkReply>
 
+#include "knglobal.h"
 #include "knthememanager.h"
+#include "knlocalemanager.h"
+
+#include "knmusicstoreglobal.h"
 
 #include "knmusicstoreerrordimmer.h"
 
 #define MinBackgroundAlpha 0
 #define ErrorBackgroundAlpha 100
-#define MaxBackgroundAlpha 255
 
 KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     QWidget(parent),
     m_background(new QTimeLine(200, this)),
-    m_showLabel(false)
+    m_title(new QLabel(this)),
+    m_description(new QLabel(this)),
+    m_errorType(-1),
+    m_errorId(-1)
 {
     setObjectName("MusicStoreErrorDimmer");
     //Set properties.
     setAutoFillBackground(true);
     //Configure the time line.
-    m_background->setStartFrame(0);
+    m_background->setStartFrame(MinBackgroundAlpha);
     m_background->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_background, &QTimeLine::frameChanged,
             this, &KNMusicStoreErrorDimmer::onBackgroundAlphaChange);
     connect(m_background, &QTimeLine::finished,
             this, &KNMusicStoreErrorDimmer::onTimeLineFinish);
 
+    //Initial the layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->addStretch();
+    mainLayout->addWidget(m_title);
+    mainLayout->addWidget(m_description);
+    mainLayout->addStretch();
+    setLayout(mainLayout);
+
     //Link the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNMusicStoreErrorDimmer::onThemeChanged);
     onThemeChanged();
-}
 
-void KNMusicStoreErrorDimmer::showDimmer()
-{
-    //Show the widget.
-    show();
-    //Set the show label text to false.
-    m_showLabel=false;
-    //Update the show dimmer.
-    startAnime(MaxBackgroundAlpha);
-}
-
-void KNMusicStoreErrorDimmer::showErrorDimmer()
-{
-    //Show the widget.
-    show();
-    //Set the show label text to false.
-    m_showLabel=true;
-    //Update the show dimmer.
-    startAnime(ErrorBackgroundAlpha);
+    //Link the retranslator.
+    knI18n->link(this, &KNMusicStoreErrorDimmer::retranslate);
+    retranslate();
 }
 
 void KNMusicStoreErrorDimmer::hideDimmer()
 {
+    //Hide the title and description.
+    setLabelVisible(false);
     //Start to hide the dimmer.
     startAnime(MinBackgroundAlpha);
+}
+
+void KNMusicStoreErrorDimmer::showDimmer(int errorType, int errorId)
+{
+    //Save the type and id.
+    m_errorType=errorType;
+    m_errorId=errorId;
+    //Update the label text.
+    updateLabelText();
+    //Set the initial background.
+    onBackgroundAlphaChange(MinBackgroundAlpha);
+    //Show the error dimmer.
+    show();
+    //Update the show dimmer.
+    startAnime(ErrorBackgroundAlpha);
+}
+
+void KNMusicStoreErrorDimmer::reset()
+{
+    //Reset the error id and type.
+    m_errorType=-1;
+    m_errorId=-1;
+    //Clear the label.
+    m_title->clear();
+    m_description->clear();
+}
+
+void KNMusicStoreErrorDimmer::retranslate()
+{
+    //Update the error text.
+    m_connectionError=tr("Internet Error");
+    m_contentError=tr("Reply Content Error");
+    //Update the label text.
+    updateLabelText();
 }
 
 void KNMusicStoreErrorDimmer::onThemeChanged()
@@ -85,14 +122,10 @@ void KNMusicStoreErrorDimmer::onThemeChanged()
 void KNMusicStoreErrorDimmer::onTimeLineFinish()
 {
     //Check show label flag for show the dimmer.
-    if((m_background->endFrame()==MaxBackgroundAlpha))
+    if((m_background->endFrame()==ErrorBackgroundAlpha))
     {
-        //Check the label.
-        if(m_showLabel)
-        {
-            //Show the label.
-            //! FIXME: Add show label codes here.
-        }
+        //Show the label.
+        setLabelVisible(true);
     }
     else
     {
@@ -115,6 +148,27 @@ void KNMusicStoreErrorDimmer::onBackgroundAlphaChange(int frame)
     setPalette(pal);
 }
 
+inline void KNMusicStoreErrorDimmer::updateLabelText()
+{
+    //Check the invalid data.
+    if(m_errorType==-1)
+    {
+        //Ignore the update label requirement.
+        return;
+    }
+    //Check the type of the error.
+    if(m_errorType)
+    {
+        //Customized error.
+        m_title->setText(m_contentError);
+        m_description->setText(knMusicStoreGlobal->contentErrorText(m_errorId));
+        return;
+    }
+    //System error.
+    m_title->setText(m_connectionError);
+    m_description->setText(knGlobal->connectionErrorText(m_errorId));
+}
+
 inline void KNMusicStoreErrorDimmer::startAnime(int endFrame)
 {
     //Stop the background.
@@ -123,4 +177,11 @@ inline void KNMusicStoreErrorDimmer::startAnime(int endFrame)
     m_background->setEndFrame(endFrame);
     //Start the background.
     m_background->start();
+}
+
+inline void KNMusicStoreErrorDimmer::setLabelVisible(bool visible)
+{
+    //Configure the labels.
+    m_title->setVisible(visible);
+    m_description->setVisible(visible);
 }

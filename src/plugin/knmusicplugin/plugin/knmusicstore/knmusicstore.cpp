@@ -87,6 +87,10 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_errorDimmer->setObjectName("MusicStoreErrorDimmer");
     m_errorDimmer->raise();
     m_errorDimmer->hide();
+    connect(knMusicStoreBackendManager,
+            &KNMusicStoreBackendManager::requireShowError,
+            m_errorDimmer, &KNMusicStoreErrorDimmer::showDimmer,
+            Qt::QueuedConnection);
     //Configure the loading dimmer.
     ;
     //Configure the time line.

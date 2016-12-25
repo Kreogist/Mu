@@ -66,6 +66,44 @@ public:
         TextureBrushCount
     };
 
+    enum SystemConnectionError
+    {
+        ConnectionRefusedError,
+        RemoteHostClosedError,
+        HostNotFoundError,
+        TimeoutError,
+        OperationCanceledError,
+        SslHandshakeFailedError,
+        TemporaryNetworkFailureError,
+        NetworkSessionFailedError,
+        BackgroundRequestNotAllowedError,
+        TooManyRedirectsError,
+        InsecureRedirectError,
+        UnknownNetworkError,
+        ProxyConnectionRefusedError,
+        ProxyConnectionClosedError,
+        ProxyNotFoundError,
+        ProxyTimeoutError,
+        ProxyAuthenticationRequiredError,
+        UnknownProxyError,
+        ContentAccessDenied,
+        ContentOperationNotPermittedError,
+        ContentNotFoundError,
+        AuthenticationRequiredError,
+        ContentReSendError,
+        ContentConflictError,
+        ContentGoneError,
+        UnknownContentError,
+        ProtocolUnknownError,
+        ProtocolInvalidOperationError,
+        ProtocolFailure,
+        InternalServerError,
+        OperationNotImplementedError,
+        ServiceUnavailableError,
+        UnknownServerError,
+        SystemConnectionErrorCount
+    };
+
     ~KNGlobal();
 
     /*!
@@ -121,6 +159,13 @@ public:
      * \return The text of the higher unit.
      */
     QString byteToString(qreal fileSize);
+
+    /*!
+     * \brief Get the connection error text.
+     * \param errorId The error index defines in QNetworkReply.
+     * \return The translated error text.
+     */
+    QString connectionErrorText(int errorId);
 
     /*!
      * \brief Get the global texture brush resource.
@@ -256,6 +301,7 @@ private:
 
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];
+    QString m_connectionError[SystemConnectionErrorCount];
     QBrush m_brushes[TextureBrushCount];
 #ifdef Q_OS_UNIX
     int m_desktopEnviroment;

@@ -20,8 +20,11 @@ Foundation,
 #ifndef KNMUSICSTOREERRORDIMMER_H
 #define KNMUSICSTOREERRORDIMMER_H
 
+#include <QHash>
+
 #include <QWidget>
 
+class QLabel;
 class QTimeLine;
 /*!
  * \brief The KNMusicStoreErrorDimmer class is designed to be used as two ways.
@@ -45,15 +48,12 @@ signals:
 
 public slots:
     /*!
-     * \brief Start to show the dimmer. This dimmer won't show any text or the
-     * control widgets at the end.
+     * \brief Set the error and display the error.
+     * \param errorType The type of the error ID. 0 for Qt error index. 1 for
+     * customized error id.
+     * \param errorId The error ID of the error.
      */
-    void showDimmer();
-
-    /*!
-     * \brief Show the error dimmer, but display the set text.
-     */
-    void showErrorDimmer();
+    void showDimmer(int errorType, int errorId);
 
     /*!
      * \brief Hide the dimmer. All the text will be hidden first, and the dimmer
@@ -61,15 +61,25 @@ public slots:
      */
     void hideDimmer();
 
+    /*!
+     * \brief Clear the error id and code stores in the error dimmer.
+     */
+    void reset();
+
 private slots:
+    void retranslate();
     void onThemeChanged();
     void onTimeLineFinish();
     void onBackgroundAlphaChange(int frame);
 
 private:
+    inline void updateLabelText();
     inline void startAnime(int endFrame);
+    inline void setLabelVisible(bool visible);
+    QString m_connectionError, m_contentError;
     QTimeLine *m_background;
-    bool m_showLabel;
+    QLabel *m_title, *m_description;
+    int m_errorType, m_errorId;
 };
 
 #endif // KNMUSICSTOREERRORDIMMER_H

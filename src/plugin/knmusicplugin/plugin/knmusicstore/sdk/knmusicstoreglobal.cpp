@@ -32,12 +32,6 @@ KNMusicStoreGlobal *KNMusicStoreGlobal::m_instance=nullptr;
 
 KNMusicStoreGlobal::~KNMusicStoreGlobal()
 {
-    //Check the widget parent.
-    if(m_connectStateWheel->parent()==nullptr)
-    {
-        //Remove the widget when no one manage it.
-        m_connectStateWheel->deleteLater();
-    }
     //Quit the working thread.
     m_backendThread.quit();
     m_backendThread.wait();
@@ -62,7 +56,12 @@ void KNMusicStoreGlobal::initial(QObject *parent)
 
 void KNMusicStoreGlobal::retranslate()
 {
-    ;
+    //Update the text.
+    m_errorText[EmptyContent]=tr("Content data is empty.");
+    m_errorText[ContentFormatError]=
+            tr("Content data is not in the correct format.");
+    m_errorText[CannotFindContent]=
+            tr("Cannot find the correct data from the content");
 }
 
 KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
@@ -101,6 +100,13 @@ KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :
 KNMusicLrcParser *KNMusicStoreGlobal::lrcParser() const
 {
     return m_lrcParser;
+}
+
+QString KNMusicStoreGlobal::contentErrorText(int errorId)
+{
+    Q_ASSERT(errorId>-1 && errorId<MusicStoreContentErrorCount);
+    //Give back the error description.
+    return m_errorText[errorId];
 }
 
 KNMusicStoreAlbumModel *KNMusicStoreGlobal::albumModel() const

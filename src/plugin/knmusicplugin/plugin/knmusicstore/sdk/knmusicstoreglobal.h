@@ -97,6 +97,13 @@ public:
      */
     KNMusicLrcParser *lrcParser() const;
 
+    /*!
+     * \brief Get the content error text.
+     * \param errorId The error index defines in the MusicStoreUtil namespace.
+     * \return The translated description of the error.
+     */
+    QString contentErrorText(int errorId);
+
 signals:
 
 public slots:
@@ -110,7 +117,7 @@ private:
     KNMusicStoreGlobal(const KNMusicStoreGlobal &);
     KNMusicStoreGlobal(KNMusicStoreGlobal &&);
 
-//    QString m_errorText[MusicStoreErrorCount];
+    QString m_errorText[MusicStoreContentErrorCount];
     QThread m_backendThread;
     QMutex m_connectLock;
     int m_connectSemaphore;

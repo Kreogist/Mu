@@ -70,7 +70,7 @@ void KNMusicStoreBackendManager::showHomePage()
     m_currentOperation=OperationShowHome;
     //Get the backend. The home page data is provided by Netease. This could be
     //changed later in the settings.
-    //! FIXME: Home backend could be changed in the settings.
+    //! TODO: Home backend could be changed in the settings.
     KNMusicStoreBackend *backend=m_backendMap.value("MusicStoreNeteaseBackend",
                                                     nullptr);
     //Check backend pointer.
@@ -188,4 +188,6 @@ void KNMusicStoreBackendManager::addBackend(KNMusicStoreBackend *backend)
             this, &KNMusicStoreBackendManager::requireResetConnectionCount);
     connect(backend, &KNMusicStoreBackend::requireResetOperation,
             this, &KNMusicStoreBackendManager::resetOperationFlag);
+    connect(backend, &KNMusicStoreBackend::requireShowError,
+            this, &KNMusicStoreBackendManager::requireShowError);
 }

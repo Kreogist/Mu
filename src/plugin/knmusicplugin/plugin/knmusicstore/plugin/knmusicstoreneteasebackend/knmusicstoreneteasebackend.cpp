@@ -34,7 +34,7 @@
 #include <QDebug>
 
 #define DefaultTimeoutLimit     30 //Default seconds for timeout.
-#define DefaultPipelineLimit    80 //Default links for pipeline.
+#define DefaultPipelineLimit    32 //Default links for pipeline.
 
 KNMusicStoreNeteaseBackend::KNMusicStoreNeteaseBackend(QObject *parent) :
     KNMusicStoreBackend(parent),
@@ -150,10 +150,11 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
                       requestItem.replyType);
     }
     //Check reply state.
-    if(reply->error()==QNetworkReply::OperationCanceledError)
+    if(reply->error()!=QNetworkReply::NoError)
     {
-        //The reply is timeout, error.
-        //!FIXME: show error.
+        //Display the error, show the error dimmer.
+        emit requireShowError(ErrorTypeConnection, reply->error());
+        //Remove the reply, recover the memory.
         reply->deleteLater();
         return;
     }
@@ -411,7 +412,8 @@ void KNMusicStoreNeteaseBackend::onSingleDetailReply(QNetworkReply *reply)
         if(songInfoList.isEmpty())
         {
             //Error occurs.
-            //! FIXME: display error.
+            emit requireShowError(ErrorTypeContent, EmptyContent);
+            //Mission complete.
             return;
         }
         //Pick out the song object from the raw data.
@@ -624,7 +626,7 @@ inline QJsonArray KNMusicStoreNeteaseBackend::getSongDataList(
         if(divStart==-1)
         {
             //Cannot find the data.
-            //! FIXME: data error.
+            emit requireShowError(ErrorTypeContent, ContentFormatError);
             return songList;
         }
         //Search the end div from the position.
@@ -634,7 +636,7 @@ inline QJsonArray KNMusicStoreNeteaseBackend::getSongDataList(
         if(divEnd==-1)
         {
             //Kidding me?
-            //!FIXME: Unknown error, data cannot be paired.
+            emit requireShowError(ErrorTypeContent, ContentFormatError);
             return songList;
         }
         //Do the search again, this time, it should be what we want.
@@ -643,7 +645,7 @@ inline QJsonArray KNMusicStoreNeteaseBackend::getSongDataList(
         if(divEnd==-1)
         {
             //Kidding me?
-            //!FIXME: Unknown error, data cannot be paired.
+            emit requireShowError(ErrorTypeContent, ContentFormatError);
             return songList;
         }
         //Parse the div part only.
@@ -653,14 +655,16 @@ inline QJsonArray KNMusicStoreNeteaseBackend::getSongDataList(
         int textAreaStart=htmlRawContent.indexOf("<textarea");
         if(textAreaStart==-1)
         {
-            //! FIXME: No textarea.
+            //Cannot find the text area.
+            emit requireShowError(ErrorTypeContent, CannotFindContent);
             return songList;
         }
         //Find the first > of the tag.
         int textAreaEnd=htmlRawContent.indexOf(">", textAreaStart);
         if(textAreaEnd==-1)
         {
-            //! FIXME: No textarea tag end.
+            //The format of the text area is not correct.
+            emit requireShowError(ErrorTypeContent, ContentFormatError);
             return songList;
         }
         //Remove the previous data.
@@ -669,7 +673,8 @@ inline QJsonArray KNMusicStoreNeteaseBackend::getSongDataList(
         textAreaStart=htmlRawContent.indexOf("</textarea>");
         if(textAreaStart==-1)
         {
-            //! FIXME: No textarea.
+            //The format of the text area is not correct.
+            emit requireShowError(ErrorTypeContent, ContentFormatError);
             return songList;
         }
         //Remove the end tag data.

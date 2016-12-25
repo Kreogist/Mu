@@ -25,9 +25,18 @@ Foundation,
 
 namespace MusicStoreUtil
 {
-    enum MusicStoreError
+    enum MusicStoreErrorType
     {
-        MusicStoreErrorCount
+        ErrorTypeConnection,
+        ErrorTypeContent
+    };
+
+    enum MusicStoreContentError
+    {
+        EmptyContent,
+        ContentFormatError,
+        CannotFindContent,
+        MusicStoreContentErrorCount
     };
 
     enum MusicStorePages
