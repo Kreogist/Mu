@@ -30,7 +30,7 @@ Foundation,
 #include "knmusicstoreerrordimmer.h"
 
 #define MinBackgroundAlpha 0
-#define ErrorBackgroundAlpha 100
+#define ErrorBackgroundAlpha 220
 
 KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     QWidget(parent),
@@ -43,6 +43,17 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     setObjectName("MusicStoreErrorDimmer");
     //Set properties.
     setAutoFillBackground(true);
+    //Configure the title font.
+    m_title->setAlignment(Qt::AlignHCenter);
+    QFont labelFont=m_title->font();
+    labelFont.setBold(true);
+    labelFont.setPixelSize(24);
+    m_title->setFont(labelFont);
+    //Configure the description label.
+    m_description->setAlignment(Qt::AlignHCenter);
+    labelFont=m_description->font();
+    labelFont.setPixelSize(15);
+    m_description->setFont(labelFont);
     //Configure the time line.
     m_background->setStartFrame(MinBackgroundAlpha);
     m_background->setEasingCurve(QEasingCurve::OutCubic);
@@ -53,8 +64,11 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setSpacing(0);
+    //Add widget to layout.
     mainLayout->addStretch();
     mainLayout->addWidget(m_title);
+    mainLayout->addSpacing(15);
     mainLayout->addWidget(m_description);
     mainLayout->addStretch();
     setLayout(mainLayout);
@@ -105,8 +119,13 @@ void KNMusicStoreErrorDimmer::reset()
 void KNMusicStoreErrorDimmer::retranslate()
 {
     //Update the error text.
-    m_connectionError=tr("Internet Error");
+    m_connectionError=tr("Connection Error");
     m_contentError=tr("Reply Content Error");
+    //Update the solution text.
+    m_checkAndRetrySolution=tr("Please check your Internet connection, and then"
+                               " click refresh.");
+    m_contactSolution=tr("Please send an E-mail to kreogistdevteam@126.com to "
+                         "report this bug.");
     //Update the label text.
     updateLabelText();
 }
@@ -161,12 +180,16 @@ inline void KNMusicStoreErrorDimmer::updateLabelText()
     {
         //Customized error.
         m_title->setText(m_contentError);
-        m_description->setText(knMusicStoreGlobal->contentErrorText(m_errorId));
+        m_description->setText(knMusicStoreGlobal->contentErrorText(m_errorId)
+                               + " #" + QString::number(m_errorId) + "\n" +
+                               m_contactSolution);
         return;
     }
     //System error.
     m_title->setText(m_connectionError);
-    m_description->setText(knGlobal->connectionErrorText(m_errorId));
+    m_description->setText(knGlobal->connectionErrorText(m_errorId)
+                           + " #" + QString::number(m_errorId) + "\n" +
+                           m_checkAndRetrySolution);
 }
 
 inline void KNMusicStoreErrorDimmer::startAnime(int endFrame)

@@ -66,44 +66,6 @@ public:
         TextureBrushCount
     };
 
-    enum SystemConnectionError
-    {
-        ConnectionRefusedError,
-        RemoteHostClosedError,
-        HostNotFoundError,
-        TimeoutError,
-        OperationCanceledError,
-        SslHandshakeFailedError,
-        TemporaryNetworkFailureError,
-        NetworkSessionFailedError,
-        BackgroundRequestNotAllowedError,
-        TooManyRedirectsError,
-        InsecureRedirectError,
-        UnknownNetworkError,
-        ProxyConnectionRefusedError,
-        ProxyConnectionClosedError,
-        ProxyNotFoundError,
-        ProxyTimeoutError,
-        ProxyAuthenticationRequiredError,
-        UnknownProxyError,
-        ContentAccessDenied,
-        ContentOperationNotPermittedError,
-        ContentNotFoundError,
-        AuthenticationRequiredError,
-        ContentReSendError,
-        ContentConflictError,
-        ContentGoneError,
-        UnknownContentError,
-        ProtocolUnknownError,
-        ProtocolInvalidOperationError,
-        ProtocolFailure,
-        InternalServerError,
-        OperationNotImplementedError,
-        ServiceUnavailableError,
-        UnknownServerError,
-        SystemConnectionErrorCount
-    };
-
     ~KNGlobal();
 
     /*!
@@ -301,7 +263,6 @@ private:
 
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];
-    QString m_connectionError[SystemConnectionErrorCount];
     QBrush m_brushes[TextureBrushCount];
 #ifdef Q_OS_UNIX
     int m_desktopEnviroment;

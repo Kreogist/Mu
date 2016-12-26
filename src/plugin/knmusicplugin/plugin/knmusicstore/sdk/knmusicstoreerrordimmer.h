@@ -76,7 +76,8 @@ private:
     inline void updateLabelText();
     inline void startAnime(int endFrame);
     inline void setLabelVisible(bool visible);
-    QString m_connectionError, m_contentError;
+    QString m_connectionError, m_contentError,
+            m_checkAndRetrySolution, m_contactSolution;
     QTimeLine *m_background;
     QLabel *m_title, *m_description;
     int m_errorType, m_errorId;

@@ -154,6 +154,8 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
     {
         //Display the error, show the error dimmer.
         emit requireShowError(ErrorTypeConnection, reply->error());
+        //Remove the reply from the timeout map.
+        m_replyTimeout.remove(reply);
         //Remove the reply, recover the memory.
         reply->deleteLater();
         return;

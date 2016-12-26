@@ -99,73 +99,89 @@ QString KNGlobal::connectionErrorText(int errorId)
     switch(errorId)
     {
     case QNetworkReply::ConnectionRefusedError:
-        return m_connectionError[ConnectionRefusedError];
+        return tr("The remote server refused the connection, it is not "
+                  "accepting requests.");
     case QNetworkReply::RemoteHostClosedError:
-        return m_connectionError[RemoteHostClosedError];
+        return tr("The remote server closed the connection prematurely, before "
+                  "the entire reply was received and processed.");
     case QNetworkReply::HostNotFoundError:
-        return m_connectionError[HostNotFoundError];
+        return tr("The remote host name was not found.");
     case QNetworkReply::TimeoutError:
-        return m_connectionError[TimeoutError];
+        return tr("The connection timed out.");
     case QNetworkReply::OperationCanceledError:
-        return m_connectionError[OperationCanceledError];
+        return tr("The operation was canceled before it was finished.");
     case QNetworkReply::SslHandshakeFailedError:
-        return m_connectionError[SslHandshakeFailedError];
+        return tr("The SSL/TLS handshake failed and the encrypted channel "
+                  "could not be established.");
     case QNetworkReply::TemporaryNetworkFailureError:
-        return m_connectionError[TemporaryNetworkFailureError];
+        return tr("The connection was broken due to disconnection from the "
+                  "network, however the system has initiated roaming to "
+                  "another access point.");
     case QNetworkReply::NetworkSessionFailedError:
-        return m_connectionError[NetworkSessionFailedError];
+        return tr("The connection was broken due to disconnection from the "
+                  "network or failure to start the network.");
     case QNetworkReply::BackgroundRequestNotAllowedError:
-        return m_connectionError[BackgroundRequestNotAllowedError];
-    case QNetworkReply::TooManyRedirectsError:
-        return m_connectionError[TooManyRedirectsError];
-    case QNetworkReply::InsecureRedirectError:
-        return m_connectionError[InsecureRedirectError];
-    case QNetworkReply::UnknownNetworkError:
-        return m_connectionError[UnknownNetworkError];
+        return tr("The background request is not currently allowed due to "
+                  "platform policy.");
     case QNetworkReply::ProxyConnectionRefusedError:
-        return m_connectionError[ProxyConnectionRefusedError];
+        return tr("The connection to the proxy server was refused, it is not "
+                  "accepting requests.");
     case QNetworkReply::ProxyConnectionClosedError:
-        return m_connectionError[ProxyConnectionClosedError];
+        return tr("The proxy server closed the connection prematurely, before "
+                  "the entire reply was received and processed.");
     case QNetworkReply::ProxyNotFoundError:
-        return m_connectionError[ProxyNotFoundError];
+        return tr("The proxy host name was not found, The proxy hostname is "
+                  "invalid.");
     case QNetworkReply::ProxyTimeoutError:
-        return m_connectionError[ProxyTimeoutError];
+        return tr("The connection to the proxy timed out or the proxy did not "
+                  "reply in time to the request sent.");
     case QNetworkReply::ProxyAuthenticationRequiredError:
-        return m_connectionError[ProxyAuthenticationRequiredError];
+        return tr("The proxy requires authentication in order to honour the "
+                  "request but did not accept any credentials offered.");
     case QNetworkReply::UnknownProxyError:
-        return m_connectionError[UnknownProxyError];
+        return tr("An unknown proxy-related error was detected.");;
     case QNetworkReply::ContentAccessDenied:
-        return m_connectionError[ContentAccessDenied];
+        return tr("The access to the remote content was denied "
+                  "(HTTP error 401).");
     case QNetworkReply::ContentOperationNotPermittedError:
-        return m_connectionError[ContentOperationNotPermittedError];
+        return tr("The operation requested on the remote content is not "
+                  "permitted.");
     case QNetworkReply::ContentNotFoundError:
-        return m_connectionError[ContentNotFoundError];
+        return tr("The remote content was not found at the server "
+                  "(HTTP error 404).");
     case QNetworkReply::AuthenticationRequiredError:
-        return m_connectionError[AuthenticationRequiredError];
-    case QNetworkReply::ContentReSendError:
-        return m_connectionError[ContentReSendError];
+        return tr("The remote server requires authentication to serve the "
+                  "content but the credentials provided were not accepted (if "
+                  "any).");
     case QNetworkReply::ContentConflictError:
-        return m_connectionError[ContentConflictError];
+        return tr("The request could not be completed due to a conflict with "
+                  "the current state of the resource.");;
     case QNetworkReply::ContentGoneError:
-        return m_connectionError[ContentGoneError];
+        return tr("The requested resource is no longer available at the "
+                  "server.");
     case QNetworkReply::UnknownContentError:
-        return m_connectionError[UnknownContentError];
+        return tr("An unknown error related to the remote content was "
+                  "detected.");
     case QNetworkReply::ProtocolUnknownError:
-        return m_connectionError[ProtocolUnknownError];
+        return tr("The Network Access API cannot honor the request because the "
+                  "protocol is not known.");
     case QNetworkReply::ProtocolInvalidOperationError:
-        return m_connectionError[ProtocolInvalidOperationError];
+        return tr("The requested operation is invalid for this protocol.");
     case QNetworkReply::ProtocolFailure:
-        return m_connectionError[ProtocolFailure];
+        return tr("A breakdown in protocol was detected (parsing error, "
+                  "invalid or unexpected responses, etc.).");
     case QNetworkReply::InternalServerError:
-        return m_connectionError[InternalServerError];
-    case QNetworkReply::OperationNotImplementedError:
-        return m_connectionError[OperationNotImplementedError];
+        return tr("The server encountered an unexpected condition which "
+                  "prevented it from fulfilling the request. (HTTP error 500)");
     case QNetworkReply::ServiceUnavailableError:
-        return m_connectionError[ServiceUnavailableError];
+        return tr("The server is unable to handle the request at this time. "
+                  "(HTTP error 503)");
     case QNetworkReply::UnknownServerError:
-        return m_connectionError[UnknownServerError];
+        return tr("An unknown error related to the server response was "
+                  "detected.");
     default:
-        return m_connectionError[UnknownNetworkError];
+        //Treat all the other error as unknown error.
+        return tr("An unknown network-related error was detected.");
     }
 }
 
@@ -234,87 +250,6 @@ void KNGlobal::retranslate()
     m_readImageFilter.append(" (*.pbm);;");
     m_readImageFilter.append(tr("Portable Graymap"));
     m_readImageFilter.append(" (*.pgm)");
-
-    //Translate the error text.
-    m_connectionError[ConnectionRefusedError]=
-            tr("The remote server refused the connection, it is not accepting "
-               "requests.");
-    m_connectionError[RemoteHostClosedError]=
-            tr("The remote server closed the connection prematurely, before the"
-               " entire reply was received and processed.");
-    m_connectionError[HostNotFoundError]=
-            tr("The remote host name was not found.");
-    m_connectionError[TimeoutError]=
-            tr("The connection to the remote server timed out.");
-    m_connectionError[OperationCanceledError]=
-            tr("The operation was canceled before it was finished.");
-    m_connectionError[SslHandshakeFailedError]=
-            tr("The SSL/TLS handshake failed and the encrypted channel could "
-               "not be established.");
-    m_connectionError[TemporaryNetworkFailureError]=
-            tr("The connection was broken due to disconnection from the "
-               "network, however the system has initiated roaming to another "
-               "access point.");
-    m_connectionError[NetworkSessionFailedError]=
-            tr("The connection was broken due to disconnection from the network"
-               " or failure to start the network.");
-    m_connectionError[BackgroundRequestNotAllowedError]=
-            tr("The background request is not currently allowed due to platform"
-               " policy.");
-    m_connectionError[UnknownNetworkError]=
-            tr("An unknown network-related error was detected.");
-    m_connectionError[ProxyConnectionRefusedError]=
-            tr("The connection to the proxy server was refused, it is not "
-               "accepting requests.");
-    m_connectionError[ProxyConnectionClosedError]=
-            tr("The proxy server closed the connection prematurely, before the "
-               "entire reply was received and processed.");
-    m_connectionError[ProxyNotFoundError]=
-            tr("The proxy host name was not found, The proxy hostname is "
-               "invalid.");
-    m_connectionError[ProxyTimeoutError]=
-            tr("The connection to the proxy timed out or the proxy did not "
-               "reply in time to the request sent.");
-    m_connectionError[ProxyAuthenticationRequiredError]=
-            tr("The proxy requires authentication in order to honour the "
-               "request but did not accept any credentials offered (if any).");
-    m_connectionError[UnknownProxyError]=
-            tr("An unknown proxy-related error was detected.");
-    m_connectionError[ContentAccessDenied]=
-            tr("The access to the remote content was denied (similar to HTTP "
-               "error 401).");
-    m_connectionError[ContentOperationNotPermittedError]=
-            tr("The operation requested on the remote content is not "
-               "permitted.");
-    m_connectionError[ContentNotFoundError]=
-            tr("The remote content was not found at the server (similar to HTTP"
-               " error 404).");
-    m_connectionError[AuthenticationRequiredError]=
-            tr("The remote server requires authentication to serve the content"
-               " but the credentials provided were not accepted (if any).");
-    m_connectionError[ContentConflictError]=
-            tr("The request could not be completed due to a conflict with the"
-               " current state of the resource.");
-    m_connectionError[ContentGoneError]=
-            tr("The requested resource is no longer available at the server.");
-    m_connectionError[UnknownContentError]=
-            tr("An unknown error related to the remote content was detected.");
-    m_connectionError[ProtocolUnknownError]=
-            tr("The Network Access API cannot honor the request because the "
-               "protocol is not known.");
-    m_connectionError[ProtocolInvalidOperationError]=
-            tr("The requested operation is invalid for this protocol.");
-    m_connectionError[ProtocolFailure]=
-            tr("A breakdown in protocol was detected (parsing error, invalid or"
-               " unexpected responses, etc.).");
-    m_connectionError[InternalServerError]=
-            tr("The server encountered an unexpected condition which prevented"
-               " it from fulfilling the request. (HTTP code 500)");
-    m_connectionError[ServiceUnavailableError]=
-            tr("The server is unable to handle the request at this time. (HTTP"
-               "code 503)");
-    m_connectionError[UnknownServerError]=
-            tr("An unknown error related to the server response was detected.");
 }
 
 KNGlobal::KNGlobal(QObject *parent) :
