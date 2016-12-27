@@ -103,6 +103,28 @@ void KNMusicStoreContainer::setNavigatorText(
     m_header->setNavigatorText(itemIndex, text);
 }
 
+void KNMusicStoreContainer::refresh()
+{
+    //Check the current index.
+    if(m_pageContainer->widget())
+    {
+        //Find the widget in the array.
+        for(int i=0; i<PagesCount; ++i)
+        {
+            //Check the page in the array.
+            if(m_pageContainer->widget()==m_pages[i])
+            {
+                //Get the pages.
+                onShowPageIndex(i);
+                //Mission complete.
+                return;
+            }
+        }
+    }
+    //No widget, require to show the home page.
+    emit requireShowHome();
+}
+
 void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
 {
     //Resize the widget.

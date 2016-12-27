@@ -111,9 +111,6 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
     //Link the retranslator.
     knI18n->link(this, &KNMusicStoreHeader::retranslate);
     retranslate();
-
-    //Debug
-//    knMusicStoreGlobal->addConnectionCounter(1);
 }
 
 void KNMusicStoreHeader::addHeaderWidget(QWidget *widget,

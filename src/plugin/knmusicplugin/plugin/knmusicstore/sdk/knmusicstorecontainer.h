@@ -84,6 +84,12 @@ public slots:
      */
     void setNavigatorText(int itemIndex, const QString &text);
 
+    /*!
+     * \brief Refresh the current page, if there is no page at the moment, it
+     * will require to show the home page.
+     */
+    void refresh();
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
