@@ -57,7 +57,7 @@ KNMusicKgmusicLyrics::KNMusicKgmusicLyrics(QObject *parent) :
 
 QString KNMusicKgmusicLyrics::downloaderName()
 {
-    return tr("KGMusic");
+    return "KGMusic";
 }
 
 void KNMusicKgmusicLyrics::downloadLyrics(

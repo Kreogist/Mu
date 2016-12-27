@@ -36,7 +36,7 @@ KNMusicTtplayerLyrics::~KNMusicTtplayerLyrics()
 
 QString KNMusicTtplayerLyrics::downloaderName()
 {
-    return tr("TTPlayer");
+    return "TTPlayer";
 }
 
 void KNMusicTtplayerLyrics::downloadLyrics(

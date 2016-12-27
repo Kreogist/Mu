@@ -994,14 +994,6 @@
     </message>
 </context>
 <context>
-    <name>KNMusicKgmusicLyrics</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp" line="60"/>
-        <source>KGMusic</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="199"/>
@@ -1181,14 +1173,6 @@ To add songs to library, drag your songs here.</source>
         <location filename="../plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="90"/>
         <source>Delete %1 items</source>
         <translation>移除 %1 首歌曲</translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicNeteaseLyrics</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp" line="34"/>
-        <source>Netease Cloud Music</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1601,37 +1585,37 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="162"/>
         <source>Connection Error</source>
-        <translation type="unfinished"></translation>
+        <translation>网络连接错误</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="163"/>
         <source>Reply Content Error</source>
-        <translation type="unfinished"></translation>
+        <translation>返回内容错误</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="165"/>
         <source>Please check your Internet connection, and then click &apos;Refresh&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>请检查您的网络连接，然后单击“刷新”重试。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="167"/>
         <source>Please send an E-mail to kreogistdevteam@126.com to report this bug.</source>
-        <translation type="unfinished"></translation>
+        <translation>请发送邮件到kreogistdevteam@126.com反馈这个bug。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="170"/>
         <source>Okay</source>
-        <translation type="unfinished"></translation>
+        <translation>确认</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="171"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>刷新</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="172"/>
         <source>Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>发送邮件</translation>
     </message>
 </context>
 <context>
@@ -1790,17 +1774,15 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicTtplayerLyrics</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp" line="39"/>
         <source>TTPlayer</source>
-        <translation type="unfinished">千千静听</translation>
+        <translation type="obsolete">千千静听</translation>
     </message>
 </context>
 <context>
     <name>KNMusicTtpodLyrics</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp" line="38"/>
         <source>TTPod</source>
-        <translation type="unfinished">天天动听</translation>
+        <translation type="obsolete">天天动听</translation>
     </message>
 </context>
 <context>

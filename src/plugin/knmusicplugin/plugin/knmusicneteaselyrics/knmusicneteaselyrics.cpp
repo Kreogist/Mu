@@ -31,7 +31,7 @@ KNMusicNeteaseLyrics::KNMusicNeteaseLyrics(QObject *parent) :
 
 QString KNMusicNeteaseLyrics::downloaderName()
 {
-    return tr("Netease Cloud Music");
+    return "NeteaseCloudMusic";
 }
 
 void KNMusicNeteaseLyrics::downloadLyrics(

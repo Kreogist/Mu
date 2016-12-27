@@ -35,7 +35,7 @@ KNMusicTtpodLyrics::~KNMusicTtpodLyrics()
 
 QString KNMusicTtpodLyrics::downloaderName()
 {
-    return tr("TTPod");
+    return "TTPod";
 }
 
 void KNMusicTtpodLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,

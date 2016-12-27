@@ -994,14 +994,6 @@
     </message>
 </context>
 <context>
-    <name>KNMusicKgmusicLyrics</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp" line="60"/>
-        <source>KGMusic</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="199"/>
@@ -1181,14 +1173,6 @@ To add songs to library, drag your songs here.</source>
         <location filename="../plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="90"/>
         <source>Delete %1 items</source>
         <translation>移除 %1 首歌曲</translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicNeteaseLyrics</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp" line="34"/>
-        <source>Netease Cloud Music</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1790,17 +1774,15 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicTtplayerLyrics</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp" line="39"/>
         <source>TTPlayer</source>
-        <translation type="unfinished">千千靜聽</translation>
+        <translation type="obsolete">千千靜聽</translation>
     </message>
 </context>
 <context>
     <name>KNMusicTtpodLyrics</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp" line="38"/>
         <source>TTPod</source>
-        <translation type="unfinished">天天動聽</translation>
+        <translation type="obsolete">天天動聽</translation>
     </message>
 </context>
 <context>
