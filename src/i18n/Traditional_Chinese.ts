@@ -304,147 +304,147 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="102"/>
         <source>The remote server refused the connection, it is not accepting requests.</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器拒絕連接，沒有接受請求。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="105"/>
         <source>The remote server closed the connection prematurely, before the entire reply was received and processed.</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器在回復被完全接收和處理前，過早的結束了連接。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="108"/>
         <source>The remote host name was not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>主機名稱沒有找到。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="110"/>
         <source>The connection timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>連接逾時。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="112"/>
         <source>The operation was canceled before it was finished.</source>
-        <translation type="unfinished"></translation>
+        <translation>操作在完成之前被取消或中斷。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="114"/>
         <source>The SSL/TLS handshake failed and the encrypted channel could not be established.</source>
-        <translation type="unfinished"></translation>
+        <translation>SSL/TLS握手失敗，加密通信沒有建立。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="117"/>
         <source>The connection was broken due to disconnection from the network, however the system has initiated roaming to another access point.</source>
-        <translation type="unfinished"></translation>
+        <translation>連接因為網路斷開而無法繼續，然而系統在另一個接入點建立了通信。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="121"/>
         <source>The connection was broken due to disconnection from the network or failure to start the network.</source>
-        <translation type="unfinished"></translation>
+        <translation>連接因為網路斷開而無法繼續，或者無法啟動網路。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="124"/>
         <source>The background request is not currently allowed due to platform policy.</source>
-        <translation type="unfinished"></translation>
+        <translation>受限於平臺的許可權設置，不能使用後臺請求。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="127"/>
         <source>The connection to the proxy server was refused, it is not accepting requests.</source>
-        <translation type="unfinished"></translation>
+        <translation>代理伺服器拒絕建立連接。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="130"/>
         <source>The proxy server closed the connection prematurely, before the entire reply was received and processed.</source>
-        <translation type="unfinished"></translation>
+        <translation>代理伺服器在回復被完全接收和處理前，過早的結束了連接。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="133"/>
         <source>The proxy host name was not found, The proxy hostname is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>沒有找到代理伺服器的主機名稱，其主機名稱無效。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="136"/>
         <source>The connection to the proxy timed out or the proxy did not reply in time to the request sent.</source>
-        <translation type="unfinished"></translation>
+        <translation>到代理伺服器的連接逾時，或者代理伺服器沒有及時回應請求。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="139"/>
         <source>The proxy requires authentication in order to honour the request but did not accept any credentials offered.</source>
-        <translation type="unfinished"></translation>
+        <translation>代理伺服器需要認證資訊來信任請求，但是並沒有接受任何認證資訊。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="142"/>
         <source>An unknown proxy-related error was detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>檢測到一個未知的代理伺服器錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="144"/>
         <source>The access to the remote content was denied (HTTP error 401).</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器拒絕提供請求的內容（HTTP 401錯誤）。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="147"/>
         <source>The operation requested on the remote content is not permitted.</source>
-        <translation type="unfinished"></translation>
+        <translation>不允許對該遠端資源進行操作。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="150"/>
         <source>The remote content was not found at the server (HTTP error 404).</source>
-        <translation type="unfinished"></translation>
+        <translation>在伺服器上找不到請求的資源（HTTP 404錯誤）。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="153"/>
         <source>The remote server requires authentication to serve the content but the credentials provided were not accepted (if any).</source>
-        <translation type="unfinished"></translation>
+        <translation>遠端伺服器在提供資源時需要驗證身份，但是沒有接受任何身份認證資訊。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="157"/>
         <source>The request could not be completed due to a conflict with the current state of the resource.</source>
-        <translation type="unfinished"></translation>
+        <translation>由於該資源的狀態發生了衝突，請求未能完成。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="160"/>
         <source>The requested resource is no longer available at the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>請求的資源在伺服器上已不再可用。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="163"/>
         <source>An unknown error related to the remote content was detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>檢測到一個遠端內容相關的未知錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="166"/>
         <source>The Network Access API cannot honor the request because the protocol is not known.</source>
-        <translation type="unfinished"></translation>
+        <translation>網路接入介面無法信任該請求，因為使用的協定未知。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="169"/>
         <source>The requested operation is invalid for this protocol.</source>
-        <translation type="unfinished"></translation>
+        <translation>該協議不能夠發起這類請求。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="171"/>
         <source>A breakdown in protocol was detected (parsing error, invalid or unexpected responses, etc.).</source>
-        <translation type="unfinished"></translation>
+        <translation>檢測到協議崩潰（包括，但不限於是由於解析錯誤、協定不可用或返回了錯誤的回復）。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="174"/>
         <source>The server encountered an unexpected condition which prevented it from fulfilling the request. (HTTP error 500)</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器遇到了意外的狀況，導致了請求不能回應。（HTTP 500 錯誤）</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="177"/>
         <source>The server is unable to handle the request at this time. (HTTP error 503)</source>
-        <translation type="unfinished"></translation>
+        <translation>伺服器現在不能處理這個請求。（HTTP 503錯誤）</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="180"/>
         <source>An unknown error related to the server response was detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>檢測到一個未知的伺服器端相關的錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="184"/>
         <source>An unknown network-related error was detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>檢測到一個未知的網路連接相關的錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="217"/>
@@ -1559,7 +1559,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="208"/>
         <source>Store</source>
-        <translation type="unfinished"></translation>
+        <translation>商店</translation>
     </message>
 </context>
 <context>
@@ -1567,17 +1567,17 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="156"/>
         <source>Name</source>
-        <translation type="unfinished">名稱</translation>
+        <translation>歌曲標題</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="157"/>
         <source>Artist</source>
-        <translation type="unfinished">藝術家</translation>
+        <translation>藝術家</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="158"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>時長</translation>
     </message>
 </context>
 <context>
@@ -1585,37 +1585,37 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="162"/>
         <source>Connection Error</source>
-        <translation type="unfinished"></translation>
+        <translation>網路連接錯誤</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="163"/>
         <source>Reply Content Error</source>
-        <translation type="unfinished"></translation>
+        <translation>返回內容錯誤</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="165"/>
         <source>Please check your Internet connection, and then click &apos;Refresh&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>請檢查您的網路連接，然後按一下“刷新”重試。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="167"/>
         <source>Please send an E-mail to kreogistdevteam@126.com to report this bug.</source>
-        <translation type="unfinished"></translation>
+        <translation>請發送郵件到kreogistdevteam@126.com回饋這個bug。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="170"/>
         <source>Okay</source>
-        <translation type="unfinished"></translation>
+        <translation>確認</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="171"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>刷新</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="172"/>
         <source>Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>發送郵件</translation>
     </message>
 </context>
 <context>
@@ -1623,17 +1623,17 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="60"/>
         <source>Content data is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>內容資料是空的。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="62"/>
         <source>Content data is not in the correct format.</source>
-        <translation type="unfinished"></translation>
+        <translation>資料內容的格式不正確。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="64"/>
         <source>Cannot find the correct data from the content.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法在資料中找到正確的資訊。</translation>
     </message>
 </context>
 <context>
@@ -1646,7 +1646,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="228"/>
         <source>Store</source>
-        <translation type="unfinished"></translation>
+        <translation>商店</translation>
     </message>
 </context>
 <context>
@@ -1654,32 +1654,32 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="257"/>
         <source>New Album</source>
-        <translation type="unfinished"></translation>
+        <translation>新上架專輯</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="258"/>
         <source>New Music</source>
-        <translation type="unfinished"></translation>
+        <translation>新上架音樂</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="259"/>
         <source>Billboard Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>Billboard 榜單</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="260"/>
         <source>Oricon Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>Oricon 榜單</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="261"/>
         <source>iTunes Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>iTunes 榜單</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="262"/>
         <source>Top Songs</source>
-        <translation type="unfinished"></translation>
+        <translation>單曲排行榜</translation>
     </message>
 </context>
 <context>
@@ -1687,17 +1687,17 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="263"/>
         <source>Artist</source>
-        <translation type="unfinished">藝術家</translation>
+        <translation>藝術家</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="264"/>
         <source>Artists</source>
-        <translation type="unfinished">藝術家</translation>
+        <translation>藝術家</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="265"/>
         <source>Album</source>
-        <translation type="unfinished">專輯</translation>
+        <translation>專輯</translation>
     </message>
 </context>
 <context>
