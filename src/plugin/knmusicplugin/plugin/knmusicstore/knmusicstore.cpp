@@ -124,6 +124,8 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
             &KNMusicStoreBackendManager::requireShowError,
             m_errorDimmer, &KNMusicStoreErrorDimmer::showDimmer,
             Qt::QueuedConnection);
+    connect(m_errorDimmer, &KNMusicStoreErrorDimmer::requireRefresh,
+            m_container, &KNMusicStoreContainer::refresh);
     //Configure the loading dimmer.
     ;
     //Configure the time line.

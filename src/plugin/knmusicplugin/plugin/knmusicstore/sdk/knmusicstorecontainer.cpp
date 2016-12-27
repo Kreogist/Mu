@@ -30,6 +30,8 @@ Foundation,
 
 #include "knmusicstorecontainer.h"
 
+#include <QDebug>
+
 #define MaxContentWidth 1108
 
 KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :

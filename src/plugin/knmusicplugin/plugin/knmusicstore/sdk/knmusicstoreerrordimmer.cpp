@@ -65,6 +65,14 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     connect(m_okay, &KNOpacityAnimeTextButton::clicked,
             this, &KNMusicStoreErrorDimmer::hideDimmer);
     m_retry->setMinimumWidth(MinimumButtonWidth);
+    connect(m_retry, &KNOpacityAnimeTextButton::clicked,
+            [=]
+            {
+                //Send refresh signal.
+                emit requireRefresh();
+                //Hide the dimmer.
+                hideDimmer();
+            });
     m_contact->setMinimumWidth(MinimumButtonWidth);
     //Configure the time line.
     m_background->setStartFrame(MinBackgroundAlpha);
@@ -250,7 +258,8 @@ inline void KNMusicStoreErrorDimmer::setContentVisible(bool visible)
         //Check the control button.
         m_okay->setVisible(m_enabledOkay); //Controlled by value.
         m_retry->setVisible(!m_errorType); //Retry show for Internet err.
-        m_contact->setVisible(m_errorType); //Contact show for customized err.
+        //Ignore the contact for the future expanding.
+        //m_contact->setVisible(m_errorType); //Contact show for customized err.
     }
     else
     {

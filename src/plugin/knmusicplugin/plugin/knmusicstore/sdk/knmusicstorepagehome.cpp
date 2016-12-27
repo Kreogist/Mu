@@ -99,8 +99,8 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    mainLayout->setContentsMargins(0, KNMusicStoreUtil::headerHeight() + 76,
-                                   0, KNMusicStoreUtil::headerHeight() + 36);
+    mainLayout->setContentsMargins(0, KNMusicStoreUtil::headerHeight() + 36,
+                                   0, 36);
     setLayout(mainLayout);
     //Initial the rank list layout.
     QBoxLayout *listLayout=new QBoxLayout(QBoxLayout::LeftToRight);

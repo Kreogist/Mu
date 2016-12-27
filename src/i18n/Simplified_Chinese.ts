@@ -302,57 +302,202 @@
 <context>
     <name>KNGlobal</name>
     <message>
+        <location filename="../sdk/knglobal.cpp" line="102"/>
+        <source>The remote server refused the connection, it is not accepting requests.</source>
+        <translation>服务器拒绝连接，没有接受请求。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="105"/>
+        <source>The remote server closed the connection prematurely, before the entire reply was received and processed.</source>
+        <translation>服务器在回复被完全接收和处理前，过早的结束了连接。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="108"/>
+        <source>The remote host name was not found.</source>
+        <translation>主机名没有找到。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="110"/>
+        <source>The connection timed out.</source>
+        <translation>连接超时。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="112"/>
+        <source>The operation was canceled before it was finished.</source>
+        <translation>操作在完成之前被取消或中断。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="114"/>
+        <source>The SSL/TLS handshake failed and the encrypted channel could not be established.</source>
+        <translation>SSL/TLS握手失败，加密通信没有建立。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="117"/>
+        <source>The connection was broken due to disconnection from the network, however the system has initiated roaming to another access point.</source>
+        <translation>连接因为网络断开而无法继续，然而系统在另一个接入点建立了通信。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="121"/>
+        <source>The connection was broken due to disconnection from the network or failure to start the network.</source>
+        <translation>连接因为网络断开而无法继续，或者无法启动网络。</translation>
+    </message>
+    <message>
         <location filename="../sdk/knglobal.cpp" line="124"/>
+        <source>The background request is not currently allowed due to platform policy.</source>
+        <translation>受限于平台的权限设置，不能使用后台请求。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="127"/>
+        <source>The connection to the proxy server was refused, it is not accepting requests.</source>
+        <translation>代理服务器拒绝建立连接。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="130"/>
+        <source>The proxy server closed the connection prematurely, before the entire reply was received and processed.</source>
+        <translation>代理服务器在回复被完全接收和处理前，过早的结束了连接。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="133"/>
+        <source>The proxy host name was not found, The proxy hostname is invalid.</source>
+        <translation>没有找到代理服务器的主机名，其主机名无效。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="136"/>
+        <source>The connection to the proxy timed out or the proxy did not reply in time to the request sent.</source>
+        <translation>到代理服务器的连接超时，或者代理服务器没有及时响应请求。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="139"/>
+        <source>The proxy requires authentication in order to honour the request but did not accept any credentials offered.</source>
+        <translation>代理服务器需要认证信息来信任请求，但是并没有接受任何认证信息。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="142"/>
+        <source>An unknown proxy-related error was detected.</source>
+        <translation>检测到一个未知的代理服务器错误。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="144"/>
+        <source>The access to the remote content was denied (HTTP error 401).</source>
+        <translation>服务器拒绝提供请求的内容（HTTP 401错误）。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="147"/>
+        <source>The operation requested on the remote content is not permitted.</source>
+        <translation>不允许对该远程资源进行操作。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="150"/>
+        <source>The remote content was not found at the server (HTTP error 404).</source>
+        <translation>在服务器上找不到请求的资源（HTTP 404错误）。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="153"/>
+        <source>The remote server requires authentication to serve the content but the credentials provided were not accepted (if any).</source>
+        <translation>远程服务器在提供资源时需要验证身份，但是没有接受任何身份认证信息。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="157"/>
+        <source>The request could not be completed due to a conflict with the current state of the resource.</source>
+        <translation>由于该资源的状态发生了冲突，请求未能完成。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="160"/>
+        <source>The requested resource is no longer available at the server.</source>
+        <translation>请求的资源在服务器上已不再可用。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="163"/>
+        <source>An unknown error related to the remote content was detected.</source>
+        <translation>检测到一个远程内容相关的未知错误。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="166"/>
+        <source>The Network Access API cannot honor the request because the protocol is not known.</source>
+        <translation>网络接入接口无法信任该请求，因为使用的协议未知。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="169"/>
+        <source>The requested operation is invalid for this protocol.</source>
+        <translation>该协议不能够发起这类请求。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="171"/>
+        <source>A breakdown in protocol was detected (parsing error, invalid or unexpected responses, etc.).</source>
+        <translation>检测到协议崩溃（包括，但不限于是由于解析错误、协议不可用或返回了错误的回复）。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="174"/>
+        <source>The server encountered an unexpected condition which prevented it from fulfilling the request. (HTTP error 500)</source>
+        <translation>服务器遇到了意外的状况，导致了请求不能响应。（HTTP 500 错误）</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="177"/>
+        <source>The server is unable to handle the request at this time. (HTTP error 503)</source>
+        <translation>服务器现在不能处理这个请求。（HTTP 503错误）</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="180"/>
+        <source>An unknown error related to the server response was detected.</source>
+        <translation>检测到一个未知的服务器端相关的错误。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="184"/>
+        <source>An unknown network-related error was detected.</source>
+        <translation>检测到一个未知的网络连接相关的错误。</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knglobal.cpp" line="217"/>
         <source>Byte</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="128"/>
+        <location filename="../sdk/knglobal.cpp" line="221"/>
         <source>Portable Network Graphics</source>
         <translation>便携式网络图形</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="130"/>
+        <location filename="../sdk/knglobal.cpp" line="223"/>
         <source>Joint Photographic Experts Group</source>
         <translation>JPEG 格式图像</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="132"/>
+        <location filename="../sdk/knglobal.cpp" line="225"/>
         <source>Windows Bitmap</source>
         <translation>Windows 位图图像</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="134"/>
+        <location filename="../sdk/knglobal.cpp" line="227"/>
         <source>Portable Pixmap</source>
         <translation>可移植像素图格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="136"/>
+        <location filename="../sdk/knglobal.cpp" line="229"/>
         <source>X11 Bitmap</source>
         <translation>X11 位图</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="138"/>
+        <location filename="../sdk/knglobal.cpp" line="231"/>
         <source>X11 Pixmap</source>
         <translation>X11 像素图</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="141"/>
+        <location filename="../sdk/knglobal.cpp" line="234"/>
         <source>All supported files</source>
         <translation>所有支持的文件</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="154"/>
+        <location filename="../sdk/knglobal.cpp" line="247"/>
         <source>Graphic Interchange Format</source>
         <translation>图像互换格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="156"/>
+        <location filename="../sdk/knglobal.cpp" line="249"/>
         <source>Portable Bitmap</source>
         <translation>可移植位图格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="158"/>
+        <location filename="../sdk/knglobal.cpp" line="251"/>
         <source>Portable Graymap</source>
         <translation>可移植灰度图格式</translation>
     </message>
@@ -1428,7 +1573,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicStore</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="157"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="208"/>
         <source>Store</source>
         <translation>商店</translation>
     </message>
@@ -1452,14 +1597,70 @@ To create a playlist, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicStoreErrorDimmer</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="162"/>
+        <source>Connection Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="163"/>
+        <source>Reply Content Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="165"/>
+        <source>Please check your Internet connection, and then click &apos;Refresh&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="167"/>
+        <source>Please send an E-mail to kreogistdevteam@126.com to report this bug.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="170"/>
+        <source>Okay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="171"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="172"/>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreGlobal</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="60"/>
+        <source>Content data is empty.</source>
+        <translation>内容数据是空的。</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="62"/>
+        <source>Content data is not in the correct format.</source>
+        <translation>数据内容的格式不正确。</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="64"/>
+        <source>Cannot find the correct data from the content.</source>
+        <translation>无法在数据中找到正确的信息。</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicStoreHeader</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="229"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="226"/>
         <source>Search Result for &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="231"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="228"/>
         <source>Store</source>
         <translation>商店</translation>
     </message>

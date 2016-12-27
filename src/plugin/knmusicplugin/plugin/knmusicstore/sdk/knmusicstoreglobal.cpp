@@ -61,7 +61,7 @@ void KNMusicStoreGlobal::retranslate()
     m_errorText[ContentFormatError]=
             tr("Content data is not in the correct format.");
     m_errorText[CannotFindContent]=
-            tr("Cannot find the correct data from the content");
+            tr("Cannot find the correct data from the content.");
 }
 
 KNMusicStoreGlobal::KNMusicStoreGlobal(QObject *parent) :

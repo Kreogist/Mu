@@ -46,6 +46,10 @@ public:
     explicit KNMusicStoreErrorDimmer(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief Require to refresh the current page.
+     */
+    void requireRefresh();
 
 public slots:
     /*!

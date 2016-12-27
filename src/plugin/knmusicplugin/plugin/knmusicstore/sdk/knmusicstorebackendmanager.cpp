@@ -189,5 +189,11 @@ void KNMusicStoreBackendManager::addBackend(KNMusicStoreBackend *backend)
     connect(backend, &KNMusicStoreBackend::requireResetOperation,
             this, &KNMusicStoreBackendManager::resetOperationFlag);
     connect(backend, &KNMusicStoreBackend::requireShowError,
-            this, &KNMusicStoreBackendManager::requireShowError);
+            [=](int errorType, int errorId)
+            {
+                //Reset the error flag.
+                resetOperationFlag();
+                //Recast the error information.
+                emit requireShowError(errorType, errorId);
+            });
 }
