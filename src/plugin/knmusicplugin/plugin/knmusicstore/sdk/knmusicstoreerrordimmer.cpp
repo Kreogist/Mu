@@ -24,21 +24,27 @@ Foundation,
 #include "knglobal.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
+#include "knopacityanimetextbutton.h"
 
 #include "knmusicstoreglobal.h"
 
 #include "knmusicstoreerrordimmer.h"
 
-#define MinBackgroundAlpha 0
-#define ErrorBackgroundAlpha 220
+#define MinBackgroundAlpha      0
+#define ErrorBackgroundAlpha    220
+#define MinimumButtonWidth      84
 
 KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     QWidget(parent),
-    m_background(new QTimeLine(200, this)),
+    m_background(new QTimeLine(500, this)),
     m_title(new QLabel(this)),
     m_description(new QLabel(this)),
+    m_okay(new KNOpacityAnimeTextButton(this)),
+    m_retry(new KNOpacityAnimeTextButton(this)),
+    m_contact(new KNOpacityAnimeTextButton(this)),
     m_errorType(-1),
-    m_errorId(-1)
+    m_errorId(-1),
+    m_enabledOkay(false)
 {
     setObjectName("MusicStoreErrorDimmer");
     //Set properties.
@@ -54,6 +60,12 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     labelFont=m_description->font();
     labelFont.setPixelSize(15);
     m_description->setFont(labelFont);
+    //Configure buttons.
+    m_okay->setMinimumWidth(MinimumButtonWidth);
+    connect(m_okay, &KNOpacityAnimeTextButton::clicked,
+            this, &KNMusicStoreErrorDimmer::hideDimmer);
+    m_retry->setMinimumWidth(MinimumButtonWidth);
+    m_contact->setMinimumWidth(MinimumButtonWidth);
     //Configure the time line.
     m_background->setStartFrame(MinBackgroundAlpha);
     m_background->setEasingCurve(QEasingCurve::OutCubic);
@@ -65,13 +77,25 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     mainLayout->setSpacing(0);
+    setLayout(mainLayout);
     //Add widget to layout.
     mainLayout->addStretch();
     mainLayout->addWidget(m_title);
     mainLayout->addSpacing(15);
     mainLayout->addWidget(m_description);
+    //Add button layout.
+    QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight);
+    buttonLayout->setSpacing(9);
+    //Add button layout to main layout.
+    mainLayout->addSpacing(24);
+    mainLayout->addLayout(buttonLayout);
+    //Add buttons to layout.
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(m_retry);
+    buttonLayout->addWidget(m_okay);
+    buttonLayout->addWidget(m_contact);
+    buttonLayout->addStretch();
     mainLayout->addStretch();
-    setLayout(mainLayout);
 
     //Link the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
@@ -86,7 +110,7 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
 void KNMusicStoreErrorDimmer::hideDimmer()
 {
     //Hide the title and description.
-    setLabelVisible(false);
+    setContentVisible(false);
     //Start to hide the dimmer.
     startAnime(MinBackgroundAlpha);
 }
@@ -98,6 +122,8 @@ void KNMusicStoreErrorDimmer::showDimmer(int errorType, int errorId)
     m_errorId=errorId;
     //Update the label text.
     updateLabelText();
+    //Hide the label and buttons.
+    setContentVisible(false);
     //Set the initial background.
     onBackgroundAlphaChange(MinBackgroundAlpha);
     //Show the error dimmer.
@@ -116,6 +142,12 @@ void KNMusicStoreErrorDimmer::reset()
     m_description->clear();
 }
 
+void KNMusicStoreErrorDimmer::setOkayEnabled(bool isEnabled)
+{
+    //Save the value.
+    m_enabledOkay=isEnabled;
+}
+
 void KNMusicStoreErrorDimmer::retranslate()
 {
     //Update the error text.
@@ -123,9 +155,13 @@ void KNMusicStoreErrorDimmer::retranslate()
     m_contentError=tr("Reply Content Error");
     //Update the solution text.
     m_checkAndRetrySolution=tr("Please check your Internet connection, and then"
-                               " click refresh.");
+                               " click 'Refresh'.");
     m_contactSolution=tr("Please send an E-mail to kreogistdevteam@126.com to "
                          "report this bug.");
+    //Update the button text.
+    m_okay->setText(tr("Okay"));
+    m_retry->setText(tr("Refresh"));
+    m_contact->setText(tr("Contact"));
     //Update the label text.
     updateLabelText();
 }
@@ -144,7 +180,7 @@ void KNMusicStoreErrorDimmer::onTimeLineFinish()
     if((m_background->endFrame()==ErrorBackgroundAlpha))
     {
         //Show the label.
-        setLabelVisible(true);
+        setContentVisible(true);
     }
     else
     {
@@ -197,14 +233,30 @@ inline void KNMusicStoreErrorDimmer::startAnime(int endFrame)
     //Stop the background.
     m_background->stop();
     //Update stop the current time line.
-    m_background->setEndFrame(endFrame);
+    m_background->setFrameRange(palette().color(QPalette::Window).alpha(),
+                                endFrame);
     //Start the background.
     m_background->start();
 }
 
-inline void KNMusicStoreErrorDimmer::setLabelVisible(bool visible)
+inline void KNMusicStoreErrorDimmer::setContentVisible(bool visible)
 {
     //Configure the labels.
     m_title->setVisible(visible);
     m_description->setVisible(visible);
+    //Check visible.
+    if(visible)
+    {
+        //Check the control button.
+        m_okay->setVisible(m_enabledOkay); //Controlled by value.
+        m_retry->setVisible(!m_errorType); //Retry show for Internet err.
+        m_contact->setVisible(m_errorType); //Contact show for customized err.
+    }
+    else
+    {
+        //Hide all buttons.
+        m_okay->hide();
+        m_retry->hide();
+        m_contact->hide();
+    }
 }

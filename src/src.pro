@@ -489,7 +489,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomelistmodel.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomesongview.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomeitemview.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomelistview.cpp
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomelistview.cpp \
+    sdk/knopacityanimetextbutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -750,7 +751,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomelistmodel.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomesongview.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomeitemview.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomelistview.h
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorehomelistview.h \
+    sdk/knopacityanimetextbutton.h
 
 RESOURCES += \
     resource/res.qrc

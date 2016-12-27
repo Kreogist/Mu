@@ -26,6 +26,7 @@ Foundation,
 
 class QLabel;
 class QTimeLine;
+class KNOpacityAnimeTextButton;
 /*!
  * \brief The KNMusicStoreErrorDimmer class is designed to be used as two ways.
  * First, it will be used as the shadow widget for the content, second, it will
@@ -66,6 +67,12 @@ public slots:
      */
     void reset();
 
+    /*!
+     * \brief Set whether the okay button should be shown.
+     * \param isEnabled The enabled boolean.
+     */
+    void setOkayEnabled(bool isEnabled);
+
 private slots:
     void retranslate();
     void onThemeChanged();
@@ -75,12 +82,14 @@ private slots:
 private:
     inline void updateLabelText();
     inline void startAnime(int endFrame);
-    inline void setLabelVisible(bool visible);
+    inline void setContentVisible(bool visible);
     QString m_connectionError, m_contentError,
             m_checkAndRetrySolution, m_contactSolution;
     QTimeLine *m_background;
     QLabel *m_title, *m_description;
+    KNOpacityAnimeTextButton *m_okay, *m_retry, *m_contact;
     int m_errorType, m_errorId;
+    bool m_enabledOkay;
 };
 
 #endif // KNMUSICSTOREERRORDIMMER_H

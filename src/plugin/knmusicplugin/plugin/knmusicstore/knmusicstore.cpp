@@ -172,6 +172,8 @@ void KNMusicStore::showPageContainer()
     m_container->show();
     //Start the anime.
     m_showContainer->start();
+    //Enabled the okay button.
+    m_errorDimmer->setOkayEnabled(true);
 }
 
 void KNMusicStore::onAnimeShowContainer(int frame)
