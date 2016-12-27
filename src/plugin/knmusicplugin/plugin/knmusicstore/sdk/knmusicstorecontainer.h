@@ -27,8 +27,6 @@ Foundation,
 using namespace MusicStoreUtil;
 
 class KNScrollArea;
-class KNSideShadowWidget;
-class KNMusicStoreHeader;
 class KNMusicStorePage;
 /*!
  * \brief The KNMusicStoreContainer class provides the container of all the
@@ -43,6 +41,12 @@ public:
      * \param parent The parent widget.
      */
     explicit KNMusicStoreContainer(QWidget *parent = 0);
+
+    /*!
+     * \brief Get the maximum content width size, unit is pixel.
+     * \return The content width.
+     */
+    static int maximumContentWidth();
 
     /*!
      * \brief Get the music store page widget.
@@ -76,19 +80,26 @@ signals:
      */
     void requireShowSingleSong(QString backendId, QString metadata);
 
-public slots:
     /*!
-     * \brief Set the header navigator label text.
-     * \param itemIndex The item index.
-     * \param text The navigator text.
+     * \brief Set the navigator item text in the header text.
+     * \param navigatorIndex The navigator item index.
+     * \param caption The text of the navigator item.
      */
-    void setNavigatorText(int itemIndex, const QString &text);
+    void requireSetNavigatorItem(int navigatorIndex,
+                                 const QString &caption);
 
+public slots:
     /*!
      * \brief Refresh the current page, if there is no page at the moment, it
      * will require to show the home page.
      */
     void refresh();
+
+    /*!
+     * \brief Require to show a specific page via index.
+     * \param index
+     */
+    void showPageIndex(int index);
 
 protected:
     /*!
@@ -99,7 +110,6 @@ protected:
 private slots:
     void showPage(KNMusicStorePage *pageWidget);
     void onShowPage();
-    void onShowPageIndex(int index);
     void onShowAlbum(const QString &metadata);
     void onShowSingleSong(const QString &metadata);
     void onUpdatePageWidth();
@@ -109,9 +119,7 @@ private:
     inline void configurePage(KNMusicStorePage *pageWidget);
     KNMusicStorePage *m_pages[PagesCount];
     KNScrollArea *m_pageContainer;
-    QWidget *m_headerContainer;
-    KNMusicStoreHeader *m_header;
-    KNSideShadowWidget *m_topShadow;
+    int m_contentWidth;
 };
 
 #endif // KNMUSICSTORECONTAINER_H

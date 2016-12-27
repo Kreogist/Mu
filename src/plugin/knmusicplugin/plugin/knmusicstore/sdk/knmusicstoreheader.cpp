@@ -104,7 +104,7 @@ KNMusicStoreHeader::KNMusicStoreHeader(QWidget *parent) :
     //Add stretch.
     m_mainLayout->addStretch();
     //Add the connection state widget.
-    m_mainLayout->addWidget(knMusicStoreGlobal->connectStateWheel());
+//    m_mainLayout->addWidget(knMusicStoreGlobal->connectStateWheel());
     //Add tray layout.
     m_mainLayout->addLayout(m_pluginTray);
 

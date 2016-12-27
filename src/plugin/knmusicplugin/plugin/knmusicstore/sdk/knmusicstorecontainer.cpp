@@ -21,7 +21,6 @@ Foundation,
 
 #include "knthememanager.h"
 #include "knscrollarea.h"
-#include "knsideshadowwidget.h"
 
 #include "knmusicstorepagehome.h"
 #include "knmusicstorepagealbum.h"
@@ -32,39 +31,16 @@ Foundation,
 #include "knmusicstorecontainer.h"
 
 #define MaxContentWidth 1108
-#define ShadowHeight    15
 
 KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     QWidget(parent),
     m_pageContainer(new KNScrollArea(this)),
-    m_headerContainer(new QWidget(this)),
-    m_header(new KNMusicStoreHeader(this)),
-    m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow, this))
+    m_contentWidth(MaxContentWidth)
 {
     setObjectName("MusicStoreContainer");
     //Set the properties.
     setAutoFillBackground(true);
     setContentsMargins(0, 0, 0, 0);
-    //Configure the header container.
-    m_headerContainer->setAutoFillBackground(true);
-    m_headerContainer->setObjectName("MusicStoreHeaderContainer");
-    knTheme->registerWidget(m_headerContainer);
-    //Configure the side shadow.
-    m_topShadow->move(0, KNMusicStoreUtil::headerHeight());
-    //Initial the header container layout.
-    QBoxLayout *headerLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
-    headerLayout->setContentsMargins(0, 0, 0, 0);
-    headerLayout->setSpacing(0);
-    m_headerContainer->setLayout(headerLayout);
-    headerLayout->addStretch();
-    headerLayout->addWidget(m_header);
-    headerLayout->addStretch();
-    //Configure the header.
-    m_header->setChangeOpacity(true);
-    m_header->setSenseRange(0x00, 0x15);
-    m_header->updateObjectName("MusicStoreHeader");
-    connect(m_header, &KNMusicStoreHeader::requireShowPage,
-            this, &KNMusicStoreContainer::onShowPageIndex);
     //Configure the page container.
     m_pageContainer->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     m_pageContainer->setVScrollBarTopMargin(KNMusicStoreUtil::headerHeight());
@@ -90,17 +66,14 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     knTheme->registerWidget(this);
 }
 
+int KNMusicStoreContainer::maximumContentWidth()
+{
+    return MaxContentWidth;
+}
+
 KNMusicStorePage *KNMusicStoreContainer::page(int pageIndex)
 {
     return m_pages[pageIndex];
-}
-
-void KNMusicStoreContainer::setNavigatorText(
-        int itemIndex,
-        const QString &text)
-{
-    //Update the header navigator text.
-    m_header->setNavigatorText(itemIndex, text);
 }
 
 void KNMusicStoreContainer::refresh()
@@ -115,7 +88,7 @@ void KNMusicStoreContainer::refresh()
             if(m_pageContainer->widget()==m_pages[i])
             {
                 //Get the pages.
-                onShowPageIndex(i);
+                showPageIndex(i);
                 //Mission complete.
                 return;
             }
@@ -132,15 +105,9 @@ void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
     //Get current width.
     int contentWidth=width();
     //Calculate the content width.
-    contentWidth=(contentWidth>MaxContentWidth)?MaxContentWidth:contentWidth;
-    //Set the content width to widgets.
-    m_header->setFixedWidth(contentWidth);
-    //Update the header container width.
-    m_headerContainer->resize(width(), KNMusicStoreUtil::headerHeight());
+    m_contentWidth=(contentWidth>MaxContentWidth)?MaxContentWidth:contentWidth;
     //Update the page container width.
     m_pageContainer->resize(size());
-    //Update the shadow size.
-    m_topShadow->resize(width(), ShadowHeight);
     //Update the page widget size.
     updatePageWidth(static_cast<KNMusicStorePage *>(m_pageContainer->widget()));
 }
@@ -179,7 +146,7 @@ void KNMusicStoreContainer::onShowPage()
     showPage(static_cast<KNMusicStorePage *>(sender()));
 }
 
-void KNMusicStoreContainer::onShowPageIndex(int index)
+void KNMusicStoreContainer::showPageIndex(int index)
 {
     //Get the page.
     KNMusicStorePage *page=m_pages[index];
@@ -236,7 +203,7 @@ inline void KNMusicStoreContainer::updatePageWidth(KNMusicStorePage *pageWidget)
         return;
     }
     //Resize the page widget.
-    pageWidget->setFixedWidth(m_header->width());
+    pageWidget->setFixedWidth(m_contentWidth);
     //Check the size hint.
     pageWidget->setFixedHeight(qMax(height(),
                                     pageWidget->sizeHint().height()));
@@ -252,7 +219,7 @@ inline void KNMusicStoreContainer::configurePage(KNMusicStorePage *pageWidget)
     connect(pageWidget, &KNMusicStorePage::requireShowSingleSong,
             this, &KNMusicStoreContainer::onShowSingleSong);
     connect(pageWidget, &KNMusicStorePage::requireSetNavigatorItem,
-            this, &KNMusicStoreContainer::setNavigatorText);
+            this, &KNMusicStoreContainer::requireSetNavigatorItem);
     //Link the resize signals.
     connect(pageWidget, &KNMusicStorePage::requireUpdateHeight,
             this, &KNMusicStoreContainer::onUpdatePageWidth);

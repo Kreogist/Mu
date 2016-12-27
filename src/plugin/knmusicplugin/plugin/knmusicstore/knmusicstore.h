@@ -24,6 +24,8 @@ Foundation,
 
 class QTimeLine;
 class KNCategoryTab;
+class KNSideShadowWidget;
+class KNMusicStoreHeader;
 class KNMusicStoreLoadingDimmer;
 class KNMusicStoreErrorDimmer;
 class KNMusicStoreContainer;
@@ -104,9 +106,11 @@ private:
     QTimeLine *m_showContainer;
     KNCategoryTab *m_tab;
     KNMusicStoreContainer *m_container;
+    QWidget *m_headerContainer;
+    KNMusicStoreHeader *m_header;
     KNMusicStoreErrorDimmer *m_errorDimmer;
     KNMusicStoreLoadingDimmer *m_loadingDimmer;
-    QWidget *m_headerContainer;
+    KNSideShadowWidget *m_topShadow;
     bool m_initialLoad;
 };
 

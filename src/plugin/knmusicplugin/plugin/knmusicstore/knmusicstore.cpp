@@ -16,15 +16,18 @@
 Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
 #include <QModelIndex>
 #include <QTimeLine>
 
-#include "knlocalemanager.h"
 #include "kncategorytab.h"
+#include "knlocalemanager.h"
+#include "knsideshadowwidget.h"
 #include "knthememanager.h"
 
 #include "sdk/knmusicstoreglobal.h"
 #include "sdk/knmusicstorecontainer.h"
+#include "sdk/knmusicstoreheader.h"
 #include "sdk/knmusicstoreerrordimmer.h"
 #include "sdk/knmusicstoreloadingdimmer.h"
 #include "sdk/knmusicstorebackendmanager.h"
@@ -34,6 +37,8 @@ Foundation,
 
 #include "knmusicstore.h"
 
+#define ShadowHeight    15
+
 #include <QDebug>
 
 KNMusicStore::KNMusicStore(QWidget *parent) :
@@ -41,8 +46,11 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_showContainer(new QTimeLine(400, this)),
     m_tab(new KNCategoryTab(this)),
     m_container(nullptr),
+    m_headerContainer(new QWidget(this)),
+    m_header(new KNMusicStoreHeader(this)),
     m_errorDimmer(new KNMusicStoreErrorDimmer(this)),
     m_loadingDimmer(new KNMusicStoreLoadingDimmer(this)),
+    m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow, this)),
     m_initialLoad(true)
 {
     setObjectName("MusicStore");
@@ -50,13 +58,38 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     KNMusicStoreGlobal::initial(this);
     //Configure the tab.
     m_tab->setIcon(QIcon(":/plugin/music/category/store.png"));
-    //Initial and configure the container.
-    //The container must be initialized after initial the global object.
-    m_container=new KNMusicStoreContainer(this);
     //Configure container.
+    m_container=new KNMusicStoreContainer(this);
     m_container->hide();
-    //Raise the container to top.
-    m_container->raise();
+    m_container->raise(); //Raise the container to top.
+    connect(m_container, &KNMusicStoreContainer::requireSetNavigatorItem,
+            m_header, &KNMusicStoreHeader::setNavigatorText);
+    //Configure the header container.
+    m_headerContainer->setAutoFillBackground(true);
+    m_headerContainer->setObjectName("MusicStoreHeaderContainer");
+    m_headerContainer->hide();
+    m_headerContainer->raise();
+    knTheme->registerWidget(m_headerContainer);
+    //Configure the side shadow.
+    m_topShadow->hide();
+    m_topShadow->raise();
+    //Initial the header container layout.
+    QBoxLayout *headerLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    headerLayout->setContentsMargins(0, 0, 0, 0);
+    headerLayout->setSpacing(0);
+    m_headerContainer->setLayout(headerLayout);
+    //Add widget to layout.
+    headerLayout->addStretch();
+    headerLayout->addWidget(m_header);
+    headerLayout->addStretch();
+    //Configure the header.
+    m_header->setChangeOpacity(true);
+    m_header->setSenseRange(0x00, 0x15);
+    m_header->updateObjectName("MusicStoreHeader");
+    connect(m_header, &KNMusicStoreHeader::requireShowPage,
+            m_container, &KNMusicStoreContainer::showPageIndex);
+    //Add widget to header.
+    m_header->addStateWidget(knMusicStoreGlobal->connectStateWheel());
     //For the first time page changed, we need to show the page container.
     connect(m_container, &KNMusicStoreContainer::currentPageChanged,
             this, &KNMusicStore::showPageContainer);
@@ -129,6 +162,18 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
 {
     //Resize the base widget.
     KNMusicStoreBase::resizeEvent(event);
+    //Calculate the content size.
+    //Get current width.
+    int contentWidth=width();
+    contentWidth=(contentWidth>KNMusicStoreContainer::maximumContentWidth())?
+                        KNMusicStoreContainer::maximumContentWidth():
+                        contentWidth;
+    //Set the content width to widgets.
+    m_header->setFixedWidth(contentWidth);
+    //Update the header container width.
+    m_headerContainer->resize(width(), KNMusicStoreUtil::headerHeight());
+    //Update the shadow size.
+    m_topShadow->resize(width(), ShadowHeight);
     //Resize the content widgets.
     //Check the container is shown or not.
     // Widgets container.
@@ -168,8 +213,12 @@ void KNMusicStore::showPageContainer()
                this, &KNMusicStore::showPageContainer);
     //Reset container position.
     m_container->move(0, -height());
+    m_headerContainer->move(0, -KNMusicStoreUtil::headerHeight());
+    m_topShadow->move(0, -ShadowHeight);
     //Make the container visible.
     m_container->show();
+    m_headerContainer->show();
+    m_topShadow->show();
     //Start the anime.
     m_showContainer->start();
     //Enabled the okay button.
@@ -180,6 +229,16 @@ void KNMusicStore::onAnimeShowContainer(int frame)
 {
     //Move the container.
     m_container->move(0, frame-height());
+    //Move the header container.
+    int headerContainerTop=m_showContainer->currentValue()*
+                            (qreal)(m_headerContainer->height())-
+                            m_headerContainer->height();
+    m_headerContainer->move(0, headerContainerTop);
+    //Move the top shadow.
+    m_topShadow->move(0, m_showContainer->currentValue()*
+                            (qreal)ShadowHeight-
+                            ShadowHeight
+                         +headerContainerTop+KNMusicStoreUtil::headerHeight());
     //Set the value to loading dimmer.
     m_loadingDimmer->setDarkness(m_showContainer->currentValue());
 }
