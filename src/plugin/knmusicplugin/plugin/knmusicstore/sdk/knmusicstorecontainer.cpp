@@ -32,12 +32,10 @@ Foundation,
 
 #include <QDebug>
 
-#define MaxContentWidth 1108
-
 KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
     QWidget(parent),
     m_pageContainer(new KNScrollArea(this)),
-    m_contentWidth(MaxContentWidth)
+    m_contentWidth(KNMusicStoreUtil::maximumContentWidth())
 {
     setObjectName("MusicStoreContainer");
     //Set the properties.
@@ -66,11 +64,6 @@ KNMusicStoreContainer::KNMusicStoreContainer(QWidget *parent) :
 
     //Register the widget.
     knTheme->registerWidget(this);
-}
-
-int KNMusicStoreContainer::maximumContentWidth()
-{
-    return MaxContentWidth;
 }
 
 KNMusicStorePage *KNMusicStoreContainer::page(int pageIndex)
@@ -107,7 +100,9 @@ void KNMusicStoreContainer::resizeEvent(QResizeEvent *event)
     //Get current width.
     int contentWidth=width();
     //Calculate the content width.
-    m_contentWidth=(contentWidth>MaxContentWidth)?MaxContentWidth:contentWidth;
+    m_contentWidth=(contentWidth>KNMusicStoreUtil::maximumContentWidth())?
+                        KNMusicStoreUtil::maximumContentWidth():
+                        contentWidth;
     //Update the page container width.
     m_pageContainer->resize(size());
     //Update the page widget size.

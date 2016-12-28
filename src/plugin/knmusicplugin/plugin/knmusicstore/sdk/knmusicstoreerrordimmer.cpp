@@ -39,9 +39,9 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     m_background(new QTimeLine(500, this)),
     m_title(new QLabel(this)),
     m_description(new QLabel(this)),
-    m_okay(new KNOpacityAnimeTextButton(this)),
-    m_retry(new KNOpacityAnimeTextButton(this)),
-    m_contact(new KNOpacityAnimeTextButton(this)),
+    m_okay(generateButton()),
+    m_retry(generateButton()),
+    m_contact(generateButton()),
     m_errorType(-1),
     m_errorId(-1),
     m_enabledOkay(false)
@@ -61,10 +61,8 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
     labelFont.setPixelSize(15);
     m_description->setFont(labelFont);
     //Configure buttons.
-    m_okay->setMinimumWidth(MinimumButtonWidth);
     connect(m_okay, &KNOpacityAnimeTextButton::clicked,
             this, &KNMusicStoreErrorDimmer::hideDimmer);
-    m_retry->setMinimumWidth(MinimumButtonWidth);
     connect(m_retry, &KNOpacityAnimeTextButton::clicked,
             [=]
             {
@@ -73,7 +71,6 @@ KNMusicStoreErrorDimmer::KNMusicStoreErrorDimmer(QWidget *parent) :
                 //Hide the dimmer.
                 hideDimmer();
             });
-    m_contact->setMinimumWidth(MinimumButtonWidth);
     //Configure the time line.
     m_background->setStartFrame(MinBackgroundAlpha);
     m_background->setEasingCurve(QEasingCurve::OutCubic);
@@ -209,6 +206,17 @@ void KNMusicStoreErrorDimmer::onBackgroundAlphaChange(int frame)
     pal.setColor(QPalette::Window, backgroundColor);
     //Set the palette.
     setPalette(pal);
+}
+
+inline KNOpacityAnimeTextButton *KNMusicStoreErrorDimmer::generateButton()
+{
+    //Generate the anime button.
+    KNOpacityAnimeTextButton *button=new KNOpacityAnimeTextButton(this);
+    //Configure the button.
+    button->setMinimumWidth(MinimumButtonWidth);
+    ;
+    //Give back the button.
+    return button;
 }
 
 inline void KNMusicStoreErrorDimmer::updateLabelText()

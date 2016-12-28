@@ -149,6 +149,15 @@ public:
         return 48;
     }
 
+    /*!
+     * \brief Get the maximum content width size, unit is pixel.
+     * \return The content width.
+     */
+    static int maximumContentWidth()
+    {
+        return 1108;
+    }
+
 private:
     KNMusicStoreUtil();
     KNMusicStoreUtil(const KNMusicStoreUtil &);

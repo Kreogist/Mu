@@ -36,6 +36,11 @@
         "Parent" : "MusicStoreWidget",
         "Window" : "#00000000"
     },
+    "MusicStoreErrorDimmerButton" : {
+        "Parent" : "MusicStoreErrorDimmer",
+        "Button" : "#FFFFFF",
+        "ButtonText" : "#FFFFFF"
+    },
     "MusicStoreActionButton" : {
         "Parent" : "MusicStoreWidget",
         "Button" : "#202020",
@@ -51,7 +56,7 @@
     },
     "MusicStoreDownloadList" : {
         "Parent" : "MusicStoreWidget",
-        "Window" : "#202020"
+        "Window" : "#252525"
     },
     "MusicStoreTitle" : {
         "Parent" : "MusicStoreWidget",

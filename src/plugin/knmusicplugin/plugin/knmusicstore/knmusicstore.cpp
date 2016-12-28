@@ -25,6 +25,7 @@ Foundation,
 #include "knsideshadowwidget.h"
 #include "knthememanager.h"
 
+#include "sdk/knmusicstoredownloadlist.h"
 #include "sdk/knmusicstoreglobal.h"
 #include "sdk/knmusicstorecontainer.h"
 #include "sdk/knmusicstoreheader.h"
@@ -48,6 +49,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_container(nullptr),
     m_headerContainer(new QWidget(this)),
     m_header(new KNMusicStoreHeader(this)),
+    m_downloadList(new KNMusicStoreDownloadList(this)),
     m_errorDimmer(new KNMusicStoreErrorDimmer(this)),
     m_loadingDimmer(new KNMusicStoreLoadingDimmer(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadowWidget::TopShadow, this)),
@@ -89,6 +91,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     connect(m_header, &KNMusicStoreHeader::requireShowPage,
             m_container, &KNMusicStoreContainer::showPageIndex);
     //Add widget to header.
+    m_header->addStateWidget(m_downloadList->stateButton());
     m_header->addStateWidget(knMusicStoreGlobal->connectStateWheel());
     //For the first time page changed, we need to show the page container.
     connect(m_container, &KNMusicStoreContainer::currentPageChanged,
@@ -116,6 +119,9 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
             knMusicStoreBackendManager,
             &KNMusicStoreBackendManager::showSingleSong,
             Qt::QueuedConnection);
+    //Configrue the download list.
+    m_downloadList->raise();
+    m_downloadList->hide();
     //Configure the error dimmer.
     m_errorDimmer->setObjectName("MusicStoreErrorDimmer");
     m_errorDimmer->raise();
@@ -167,8 +173,8 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
     //Calculate the content size.
     //Get current width.
     int contentWidth=width();
-    contentWidth=(contentWidth>KNMusicStoreContainer::maximumContentWidth())?
-                        KNMusicStoreContainer::maximumContentWidth():
+    contentWidth=(contentWidth>KNMusicStoreUtil::maximumContentWidth())?
+                        KNMusicStoreUtil::maximumContentWidth():
                         contentWidth;
     //Set the content width to widgets.
     m_header->setFixedWidth(contentWidth);
@@ -177,13 +183,14 @@ void KNMusicStore::resizeEvent(QResizeEvent *event)
     //Update the shadow size.
     m_topShadow->resize(width(), ShadowHeight);
     //Resize the content widgets.
-    //Check the container is shown or not.
     // Widgets container.
     m_container->resize(size());
     // Error dimmer.
     m_errorDimmer->resize(size());
     // Loading dimmer.
     m_loadingDimmer->resize(size());
+    // Download list.
+    m_downloadList->resize(size());
     //Update the time line parameter.
     m_showContainer->setEndFrame(height());
 }

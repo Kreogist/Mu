@@ -84,6 +84,7 @@ private slots:
     void onBackgroundAlphaChange(int frame);
 
 private:
+    inline KNOpacityAnimeTextButton *generateButton();
     inline void updateLabelText();
     inline void startAnime(int endFrame);
     inline void setContentVisible(bool visible);

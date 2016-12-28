@@ -43,12 +43,6 @@ public:
     explicit KNMusicStoreContainer(QWidget *parent = 0);
 
     /*!
-     * \brief Get the maximum content width size, unit is pixel.
-     * \return The content width.
-     */
-    static int maximumContentWidth();
-
-    /*!
      * \brief Get the music store page widget.
      * \param pageIndex The page index.
      * \return The specific page index widget pointer.
