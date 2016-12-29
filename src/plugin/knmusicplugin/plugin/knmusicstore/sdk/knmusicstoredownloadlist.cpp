@@ -23,12 +23,15 @@ Foundation,
 #include <QStandardPaths>
 
 #include "knopacityanimebutton.h"
+#include "knopacityanimetextbutton.h"
 #include "knthememanager.h"
 
 #include "knmusicstoreutil.h"
 #include "knmusicstoredownloadmanager.h"
 
 #include "knmusicstoredownloadlist.h"
+
+#define OperationButtonSize 30
 
 #include <QDebug>
 
@@ -39,6 +42,10 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
                        QStandardPaths::MusicLocation)),
     m_downloadModel(new KNMusicStoreDownloadManager(this)),
     m_stateButton(new KNOpacityAnimeButton(this)),
+    m_missionStart(generateButton(":/plugin/music/store/download_start.png")),
+    m_missionPause(generateButton(":/plugin/music/store/download_pause.png")),
+    m_missionRemove(generateButton(":/plugin/music/store/download_remove.png")),
+    m_closeList(generateButton(":/plugin/music/store/download_close.png")),
     m_container(new QWidget(this)),
     m_containerAnime(new QPropertyAnimation(m_container, "pos", this)),
     m_downloadView(new QTreeView(this))
@@ -54,6 +61,9 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     knTheme->registerWidget(m_container);
     //Configure the view
     m_downloadView->setModel(m_downloadModel);
+    //Configure close list button.
+    connect(m_closeList, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicStoreDownloadList::hideDownloadList);
 
     //Initial the container layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, m_container);
@@ -62,8 +72,16 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_container->setLayout(mainLayout);
     //Initial the button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight);
+    buttonLayout->setContentsMargins(11, 11, 11, 11);
+    buttonLayout->setSpacing(10);
     mainLayout->addLayout(buttonLayout);
     //Add buttons to layout.
+    buttonLayout->addWidget(m_missionStart);
+    buttonLayout->addWidget(m_missionPause);
+    buttonLayout->addWidget(m_missionRemove);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(m_closeList);
+    //Add download view.
     mainLayout->addWidget(m_downloadView, 1);
 
     //Configure the animation.
@@ -193,4 +211,16 @@ void KNMusicStoreDownloadList::onBackgroundClicked()
     }
     //Or else hide the widget.
     hideDownloadList();
+}
+
+inline KNOpacityAnimeButton *KNMusicStoreDownloadList::generateButton(
+        const QString &iconPath)
+{
+    //Construct the item.
+    KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
+    //Configure the button.
+    button->setFixedSize(OperationButtonSize, OperationButtonSize);
+    button->setIcon(QIcon(iconPath));
+    //Give back the button.
+    return button;
 }

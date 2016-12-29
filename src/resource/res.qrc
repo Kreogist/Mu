@@ -170,6 +170,10 @@
         <file>music/playlist/playlist_control_remote.png</file>
         <file>music/store/store_view_left.png</file>
         <file>music/store/store_view_right.png</file>
+        <file>music/store/download_close.png</file>
+        <file>music/store/download_pause.png</file>
+        <file>music/store/download_remove.png</file>
+        <file>music/store/download_start.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>platforms/windows/loopmode_norepeat.png</file>

@@ -89,10 +89,12 @@ private slots:
     void onBackgroundClicked();
 
 private:
+    inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
     QColor m_backgroundColor;
     QString m_downloadPath;
     KNMusicStoreDownloadManager *m_downloadModel;
-    KNOpacityAnimeButton *m_stateButton;
+    KNOpacityAnimeButton *m_stateButton, *m_missionStart, *m_missionPause,
+                         *m_missionRemove, *m_closeList;
     QWidget *m_container;
     QPropertyAnimation *m_containerAnime;
     QTreeView *m_downloadView;
