@@ -22,8 +22,10 @@ Foundation,
 
 #include <QWidget>
 
+class QTreeView;
 class QPropertyAnimation;
 class KNOpacityAnimeButton;
+class KNMusicStoreDownloadManager;
 /*!
  * \brief The KNMusicStoreDownloadList class provides a download list widget to
  * show the information. It will provide buttons to control the download mission
@@ -57,6 +59,18 @@ public slots:
      */
     void showDownloadList();
 
+    /*!
+     * \brief Append one item in the download manager, start to download the
+     * song.
+     * \param url The url of the song.
+     * \param directoryPath The target directory path.
+     * \param fileName The target file name.
+     * \param songTitle The title of the song, used as the display information.
+     */
+    void downloadSong(const QString &url,
+                      const QString &fileName,
+                      const QString &songTitle);
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::paintEvent().
@@ -76,9 +90,12 @@ private slots:
 
 private:
     QColor m_backgroundColor;
+    QString m_downloadPath;
+    KNMusicStoreDownloadManager *m_downloadModel;
     KNOpacityAnimeButton *m_stateButton;
     QWidget *m_container;
     QPropertyAnimation *m_containerAnime;
+    QTreeView *m_downloadView;
 };
 
 #endif // KNMUSICSTOREDOWNLOADLIST_H

@@ -19,11 +19,14 @@ Foundation,
 #include <QBoxLayout>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QTreeView>
+#include <QStandardPaths>
 
 #include "knopacityanimebutton.h"
 #include "knthememanager.h"
 
 #include "knmusicstoreutil.h"
+#include "knmusicstoredownloadmanager.h"
 
 #include "knmusicstoredownloadlist.h"
 
@@ -32,9 +35,13 @@ Foundation,
 KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     QWidget(parent),
     m_backgroundColor(QColor(0, 0, 0, 0)),
+    m_downloadPath(QStandardPaths::writableLocation(
+                       QStandardPaths::MusicLocation)),
+    m_downloadModel(new KNMusicStoreDownloadManager(this)),
     m_stateButton(new KNOpacityAnimeButton(this)),
     m_container(new QWidget(this)),
-    m_containerAnime(new QPropertyAnimation(m_container, "pos", this))
+    m_containerAnime(new QPropertyAnimation(m_container, "pos", this)),
+    m_downloadView(new QTreeView(this))
 {
     //Configure the state button.
     m_stateButton->setFixedSize(16, 16);
@@ -45,6 +52,9 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_container->setAutoFillBackground(true);
     m_container->setObjectName("MusicStoreDownloadList");
     knTheme->registerWidget(m_container);
+    //Configure the view
+    m_downloadView->setModel(m_downloadModel);
+
     //Initial the container layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, m_container);
     mainLayout->setContentsMargins(0, 0, 0, 0);
@@ -54,7 +64,7 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     mainLayout->addLayout(buttonLayout);
     //Add buttons to layout.
-    mainLayout->addStretch();
+    mainLayout->addWidget(m_downloadView, 1);
 
     //Configure the animation.
     m_containerAnime->setEasingCurve(QEasingCurve::OutCubic);
@@ -80,6 +90,17 @@ void KNMusicStoreDownloadList::showDownloadList()
     m_containerAnime->start();
     //Show the widget first.
     show();
+}
+
+void KNMusicStoreDownloadList::downloadSong(const QString &url,
+                                            const QString &fileName,
+                                            const QString &songTitle)
+{
+    //Start the download mission.
+    m_downloadModel->appendItem(url,
+                                m_downloadPath,
+                                fileName,
+                                songTitle);
 }
 
 void KNMusicStoreDownloadList::paintEvent(QPaintEvent *event)
