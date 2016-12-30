@@ -72,6 +72,16 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const
     Q_DECL_OVERRIDE;
 
+signals:
+    /*!
+     * \brief Require to download specific file, this signal is used internal.
+     * \param url The file url.
+     * \param targetFolder The file saving directory path.
+     * \param rename The new name of the file.
+     */
+    void requireDownloadFile(const QString &url, const QString &targetFolder,
+                             const QString &rename);
+
 public slots:
 
 private:

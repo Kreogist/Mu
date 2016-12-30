@@ -24,6 +24,8 @@ Foundation,
 #include <QNetworkAccessManager>
 #include <QScopedPointer>
 
+#include "knconnectionhandler.h"
+
 #include <QObject>
 
 /*!
@@ -41,14 +43,26 @@ public:
     explicit KNFileDownloadManager(QObject *parent = 0);
 
 signals:
+    /*!
+     * \brief This signal is emitted to indicate the progress of the download
+     * part of this network request, if there's any. If there's no download
+     * associated with this request, this signal will be emitted once with 0 as
+     * the value of both bytesReceived and bytesTotal.
+     * \param bytesReceived The count of the bytes downloaded.
+     * \param bytesTotal The total bytes of the content.
+     */
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 public slots:
     /*!
      * \brief Download one file from its target url.
      * \param url The file url.
      * \param targetFolder The file saving directory path.
+     * \param rename The new name of the file, if you don't want to change the
+     * file name, set it to QString().
      */
-    void downloadFile(const QString &url, const QString &targetFolder);
+    void downloadFile(const QString &url, const QString &targetFolder,
+                      const QString &rename);
 
     /*!
      * \brief Reset the downloader.
@@ -62,8 +76,9 @@ private slots:
 
 private:
     QScopedPointer<QNetworkAccessManager> m_downloader;
-    QList<QNetworkReply *> m_fileList;
-    QStringList m_savePathList;
+    KNConnectionHandler m_replyHandler;
+    QString m_savePath, m_rename;
+    QNetworkReply *m_fileReply;
 };
 
 #endif // KNFILEDOWNLOADMANAGER_H

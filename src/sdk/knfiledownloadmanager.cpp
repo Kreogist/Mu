@@ -26,12 +26,16 @@ Foundation,
 #include <QDebug>
 
 KNFileDownloadManager::KNFileDownloadManager(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_savePath(QString()),
+    m_rename(QString()),
+    m_fileReply(nullptr)
 {
 }
 
 void KNFileDownloadManager::downloadFile(const QString &url,
-                                         const QString &targetFolder)
+                                         const QString &targetFolder,
+                                         const QString &rename)
 {
     //Check pointer.
     if(m_downloader.isNull())
@@ -44,26 +48,29 @@ void KNFileDownloadManager::downloadFile(const QString &url,
         connect(m_downloader.data(), &QNetworkAccessManager::finished,
                 this, &KNFileDownloadManager::onDownloaderFinished);
     }
+    //Save the new file name.
+    m_rename=rename;
     //Save the path.
-    m_savePathList.append(targetFolder);
+    m_savePath=targetFolder;
     //Generate the request.
     QNetworkRequest headerRequest(QUrl::fromEncoded(url.toLocal8Bit()));
     //Start to get the url header data.
-    QNetworkReply *fileReply=m_downloader->get(headerRequest);
+    m_fileReply=m_downloader->get(headerRequest);
     //Link the file download reply signal.
-    connect(fileReply, &QNetworkReply::downloadProgress,
-            this, &KNFileDownloadManager::replyDownloadProgress);
-    //Add reply to list.
-    m_fileList.append(fileReply);
+    m_replyHandler.append(
+                connect(m_fileReply, &QNetworkReply::downloadProgress,
+                        this, &KNFileDownloadManager::replyDownloadProgress));
 }
 
 void KNFileDownloadManager::reset()
 {
+    //Disconnect all.
+    m_replyHandler.disconnectAll();
     //Reset the downloader maanger.
     m_downloader.reset();
     //Clear the queue list.
-    m_fileList.clear();
-    m_savePathList.clear();
+    m_fileReply=nullptr;
+    m_savePath=QString();
 }
 
 void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
@@ -71,12 +78,12 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
     //Check reply data.
     if(QNetworkReply::NoError==reply->error())
     {
-        //Get the index of the item.
-        int itemIndex=m_fileList.indexOf(reply);
+        //Cut down all the reply connections.
+        m_replyHandler.disconnectAll();
         //Check the directory.
-        QDir targetDir(m_savePathList.at(itemIndex));
+        QDir targetDir(m_savePath);
         //Write the content to file.
-        if(!targetDir.mkpath(m_savePathList.at(itemIndex)))
+        if(!targetDir.mkpath(m_savePath))
         {
             //Failed to construct the directory.
             //! FIXME: Add error signal here.
@@ -84,8 +91,23 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
             reply->deleteLater();
             return;
         }
+        //Get the new file name
+        QString savedFileName;
+        //Check the rename flag.
+        if(m_rename.isEmpty())
+        {
+            //Use original name.
+            savedFileName=reply->url().fileName();
+        }
+        else
+        {
+            //Get the suffix of the url path.
+            QFileInfo urlInfo(reply->url().toString());
+            //Get the suffix.
+            savedFileName=m_rename+"."+urlInfo.suffix();
+        }
         //Open the file, write the data.
-        QFile targetFile(targetDir.filePath(reply->url().fileName()));
+        QFile targetFile(targetDir.filePath(savedFileName));
         //Open the target file.
         if(!targetFile.open(QIODevice::WriteOnly))
         {
@@ -103,14 +125,20 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
         //! FIXME: Emit complete signal.
         //Clear reply.
         reply->deleteLater();
+        //Clear the pointer.
+        m_fileReply=nullptr;
+        qDebug()<<"Download finished.";
         //Mission complete.
         return;
     }
+    //! FIXME: Add error operations.
     ;
 }
 
 void KNFileDownloadManager::replyDownloadProgress(const qint64 &bytesReceived,
                                                   const qint64 &bytesTotal)
 {
-    qDebug()<<bytesReceived<<"/"<<bytesTotal;
+    qDebug()<<bytesReceived<<bytesTotal;
+    //Emit signal.
+    emit downloadProgress(bytesReceived, bytesTotal);
 }

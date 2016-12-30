@@ -19,6 +19,7 @@ Foundation,
 #include "knfiledownloadmanager.h"
 
 #include "knmusicstoreutil.h"
+#include "knmusicstoreglobal.h"
 
 #include "knmusicstoredownloadmanager.h"
 
@@ -30,6 +31,10 @@ KNMusicStoreDownloadManager::KNMusicStoreDownloadManager(QObject *parent):
 {
     //Configure the downloader.
     m_downloader->moveToThread(&m_downloaderThread);
+    connect(this, &KNMusicStoreDownloadManager::requireDownloadFile,
+            m_downloader, &KNFileDownloadManager::downloadFile,
+            Qt::QueuedConnection);
+    //Start the thread.
     m_downloaderThread.start();
 }
 
@@ -59,8 +64,10 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     m_downloadItemList.append(itemData);
     //End insert rows.
     endInsertRows();
+    //Increase one internet connection.
+    knMusicStoreGlobal->addConnectionCounter(1);
     //Start download mission.
-    //! FIXME: add download mission.
+    emit requireDownloadFile(url, directoryPath, fileName);
 }
 
 QVariant KNMusicStoreDownloadManager::data(const QModelIndex &index,
