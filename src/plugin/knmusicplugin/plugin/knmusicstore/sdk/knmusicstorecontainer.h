@@ -82,6 +82,16 @@ signals:
     void requireSetNavigatorItem(int navigatorIndex,
                                  const QString &caption);
 
+    /*!
+     * \brief Require to download one song file.
+     * \param url The song url.
+     * \param filename The saving file name of the song.
+     * \param title The title of the song, this will display at the song list.
+     */
+    void requireDownload(const QString &url,
+                         const QString &filename,
+                         const QString &title);
+
 public slots:
     /*!
      * \brief Refresh the current page, if there is no page at the moment, it

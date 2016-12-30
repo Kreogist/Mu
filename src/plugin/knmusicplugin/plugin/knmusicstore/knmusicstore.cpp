@@ -66,6 +66,8 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     m_container->raise(); //Raise the container to top.
     connect(m_container, &KNMusicStoreContainer::requireSetNavigatorItem,
             m_header, &KNMusicStoreHeader::setNavigatorText);
+    connect(m_container, &KNMusicStoreContainer::requireDownload,
+            m_downloadList, &KNMusicStoreDownloadList::downloadSong);
     //Configure the header container.
     m_headerContainer->setAutoFillBackground(true);
     m_headerContainer->setObjectName("MusicStoreHeaderContainer");

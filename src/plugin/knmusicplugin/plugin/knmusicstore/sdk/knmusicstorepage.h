@@ -91,12 +91,12 @@ signals:
     /*!
      * \brief Require to download one song file.
      * \param url The song url.
-     * \param title The title of the song, this will display at the song list.
      * \param filename The saving file name of the song.
+     * \param title The title of the song, this will display at the song list.
      */
     void requireDownload(const QString &url,
-                         const QString &title,
-                         const QString &filename);
+                         const QString &filename,
+                         const QString &title);
 
 public slots:
     /*!

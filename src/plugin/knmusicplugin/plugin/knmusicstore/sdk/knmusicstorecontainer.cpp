@@ -217,6 +217,8 @@ inline void KNMusicStoreContainer::configurePage(KNMusicStorePage *pageWidget)
             this, &KNMusicStoreContainer::onShowSingleSong);
     connect(pageWidget, &KNMusicStorePage::requireSetNavigatorItem,
             this, &KNMusicStoreContainer::requireSetNavigatorItem);
+    connect(pageWidget, &KNMusicStorePage::requireDownload,
+            this, &KNMusicStoreContainer::requireDownload);
     //Link the resize signals.
     connect(pageWidget, &KNMusicStorePage::requireUpdateHeight,
             this, &KNMusicStoreContainer::onUpdatePageWidth);

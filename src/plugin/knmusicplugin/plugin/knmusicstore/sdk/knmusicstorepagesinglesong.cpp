@@ -308,8 +308,8 @@ void KNMusicStorePageSingleSong::onActionDownloadSong()
     }
     //Download the song.
     emit requireDownload(m_highUrl,
-                         m_titleLabel->text(),
-                         artists+" - "+m_titleLabel->text());
+                         artists+" - "+m_titleLabel->text(),
+                         m_titleLabel->text());
 }
 
 inline void KNMusicStorePageSingleSong::clearArtistList()
