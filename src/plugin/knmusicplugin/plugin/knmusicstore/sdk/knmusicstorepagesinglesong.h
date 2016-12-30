@@ -28,6 +28,7 @@ using namespace MusicStoreUtil;
 
 class QLabel;
 class QBoxLayout;
+class KNOpacityAnimeTextButton;
 class KNAnimeLabelButton;
 class KNMusicAlbumLabel;
 /*!
@@ -85,6 +86,7 @@ protected slots:
 private slots:
     void retranslate();
     void onAlbumClicked();
+    void onActionDownloadSong();
 
 private:
     enum LabelHints
@@ -102,11 +104,13 @@ private:
     QList<KNAnimeLabelButton *> m_artistLabels;
     QList<QLabel *> m_artistSplitLabels;
     QStringList m_artistList;
-    QString m_artistHintText, m_artistsHintText, m_albumMetadata;
+    QString m_artistHintText, m_artistsHintText, m_albumMetadata, m_songUrl,
+            m_highUrl;
     QLabel *m_labelHints[LabelHintsCount], *m_titleLabel, *m_subheadingLabel,
            *m_lyrics;
     QBoxLayout *m_artistLayout;
     KNAnimeLabelButton *m_albumLabel;
+    KNOpacityAnimeTextButton *m_download;
     KNMusicAlbumLabel *m_albumArt;
 };
 

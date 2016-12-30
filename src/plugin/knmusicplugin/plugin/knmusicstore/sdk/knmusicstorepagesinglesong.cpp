@@ -25,6 +25,7 @@ Foundation,
 #include "knlocalemanager.h"
 #include "knthememanager.h"
 #include "knanimelabelbutton.h"
+#include "knopacityanimetextbutton.h"
 
 #include "knmusicstorebackend.h"
 #include "knmusicalbumlabel.h"
@@ -41,11 +42,14 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     m_artistHintText(QString()),
     m_artistsHintText(QString()),
     m_albumMetadata(QString()),
+    m_songUrl(QString()),
+    m_highUrl(QString()),
     m_titleLabel(new QLabel(this)),
     m_subheadingLabel(new QLabel(this)),
     m_lyrics(new QLabel(this)),
     m_artistLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
     m_albumLabel(new KNAnimeLabelButton(this)),
+    m_download(new KNOpacityAnimeTextButton(this)),
     m_albumArt(new KNMusicAlbumLabel(this))
 {
     updateObjectName("MusicStorePage");
@@ -69,6 +73,9 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     m_artistLayout->setContentsMargins(0, 0, 0, 0);
     m_artistLayout->setSpacing(0);
     m_artistLayout->addStretch();
+    //Configure the download button.
+    connect(m_download, &KNOpacityAnimeTextButton::clicked,
+            this, &KNMusicStorePageSingleSong::onActionDownloadSong);
     //Configure the lyrics display widget.
     m_lyrics->setContentsMargins(0, 20, 0, 0);
     m_lyrics->setObjectName("MusicStorePageText");
@@ -120,8 +127,14 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     // Album of the song.
     metadataLayout->addWidget(m_labelHints[HintAlbum], 3, 0, 1, 1);
     metadataLayout->addWidget(m_albumLabel, 3, 1, 1, 1);
+    //Initial the operation button layout.
+    QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight);
+    metadataLayout->addLayout(buttonLayout, 4, 0, 1, 2);
+    // Operation buttons.
+    buttonLayout->addWidget(m_download);
+    buttonLayout->addStretch();
     // Lyrics of the song.
-    metadataLayout->addWidget(m_lyrics, 4, 0, 1, 2);
+    metadataLayout->addWidget(m_lyrics, 5, 0, 1, 2);
     //Add the other widgets.
     mainLayout->addStretch();
 
@@ -142,6 +155,9 @@ void KNMusicStorePageSingleSong::setPageLabel(int labelIndex,
         //data.
         QJsonObject metadata=value.toJsonObject();
         //The metadata contains the following value:
+        // Song url, the lossless quality and the normal url.
+        m_highUrl=metadata.value("lossless_url").toString();
+        m_songUrl=metadata.value("normal_url").toString();
         // Song name, the value should be a string type value.
         m_titleLabel->setText(metadata.value("name").toString());
         // Song subheading, the value should be a string type value.
@@ -263,6 +279,8 @@ void KNMusicStorePageSingleSong::retranslate()
     m_artistHintText=tr("Artist");
     m_artistsHintText=tr("Artists");
     m_labelHints[HintAlbum]->setText(tr("Album"));
+    //Update button.
+    m_download->setText("  "+tr("Download")+"  ");
     //Update the artist hint label.
     updateArtistHintLabel();
 }
@@ -271,6 +289,27 @@ void KNMusicStorePageSingleSong::onAlbumClicked()
 {
     //Ask to show the album.
     emit requireShowAlbum(m_albumMetadata);
+}
+
+void KNMusicStorePageSingleSong::onActionDownloadSong()
+{
+    //Construct the artist list.
+    QString artists;
+    for(auto i : m_artistLabels)
+    {
+        //Update the item.
+        if(!artists.isEmpty())
+        {
+            //Append the comma.
+            artists.append(", ");
+        }
+        //Append the artist name.
+        artists.append(i->text());
+    }
+    //Download the song.
+    emit requireDownload(m_highUrl,
+                         m_titleLabel->text(),
+                         artists+" - "+m_titleLabel->text());
 }
 
 inline void KNMusicStorePageSingleSong::clearArtistList()

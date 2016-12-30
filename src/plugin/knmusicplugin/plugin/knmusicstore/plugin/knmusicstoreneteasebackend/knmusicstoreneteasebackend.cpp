@@ -423,6 +423,10 @@ void KNMusicStoreNeteaseBackend::onSingleDetailReply(QNetworkReply *reply)
     }
     //Construct the song metadata.
     songMetadata.insert("name", songObject.value("name"));
+    //URLs.
+    songMetadata.insert("normal_url", songObject.value("mp3Url"));
+    //! FIXME: change to high quality url.
+    songMetadata.insert("lossless_url", songObject.value("mp3Url"));
     //Alias.
     QJsonArray alias=songObject.value("alias").toArray();
     QString subheading;

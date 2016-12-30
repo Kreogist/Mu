@@ -117,9 +117,6 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     //Link locale.
     knI18n->link(this, &KNMusicStoreDownloadList::retranslate);
     retranslate();
-
-    //Debug
-    downloadSong("a", "a", "Start DASH!");
 }
 
 QWidget *KNMusicStoreDownloadList::stateButton()

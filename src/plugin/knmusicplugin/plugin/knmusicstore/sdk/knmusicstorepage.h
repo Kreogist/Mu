@@ -88,6 +88,16 @@ signals:
      */
     void requireUpdateHeight();
 
+    /*!
+     * \brief Require to download one song file.
+     * \param url The song url.
+     * \param title The title of the song, this will display at the song list.
+     * \param filename The saving file name of the song.
+     */
+    void requireDownload(const QString &url,
+                         const QString &title,
+                         const QString &filename);
+
 public slots:
     /*!
      * \brief Clear all the data on the current page, reset the page to the very

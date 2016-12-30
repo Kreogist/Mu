@@ -202,7 +202,9 @@
     },
     "MusicStorePage" : {
         "Parent" : "MusicStoreHeader",
-        "WindowText" : "#FFFFFF"
+        "WindowText" : "#FFFFFF",
+        "Button" : "#707070",
+        "ButtonText" : "#F0F0F0"
     },
     "MusicStorePageLabel" : {
         "Parent" : "MusicStorePage",
