@@ -20,12 +20,15 @@ Foundation,
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTreeView>
+#include <QHeaderView>
 #include <QStandardPaths>
 
 #include "knopacityanimebutton.h"
 #include "knopacityanimetextbutton.h"
 #include "knthememanager.h"
+#include "knlocalemanager.h"
 
+#include "knmusicstoredownloadlistdelegate.h"
 #include "knmusicstoreutil.h"
 #include "knmusicstoredownloadmanager.h"
 
@@ -45,7 +48,7 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_missionStart(generateButton(":/plugin/music/store/download_start.png")),
     m_missionPause(generateButton(":/plugin/music/store/download_pause.png")),
     m_missionRemove(generateButton(":/plugin/music/store/download_remove.png")),
-    m_closeList(generateButton(":/plugin/music/store/download_close.png")),
+    m_closeList(generateButton(":/plugin/music/player/hide_mainplayer.png")),
     m_container(new QWidget(this)),
     m_containerAnime(new QPropertyAnimation(m_container, "pos", this)),
     m_downloadView(new QTreeView(this))
@@ -60,8 +63,28 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_container->setObjectName("MusicStoreDownloadList");
     knTheme->registerWidget(m_container);
     //Configure the view
+    m_downloadView->setFrameStyle(QFrame::NoFrame);
+    m_downloadView->setItemDelegateForColumn(
+                1,
+                new KNMusicStoreDownloadListDelegate(this));
+    m_downloadView->setIndentation(0);
+    m_downloadView->setAllColumnsShowFocus(true);
+    m_downloadView->setObjectName("MusicStoreDownloadView");
+    knTheme->registerWidget(m_downloadView);
+    //Configure the model.
     m_downloadView->setModel(m_downloadModel);
+    m_downloadView->setColumnWidth(0, 50);
+    m_downloadView->setColumnWidth(
+                1,
+                KNMusicStoreDownloadListDelegate::columnWidth());
+    // Configure the header and column.
+    QHeaderView *headerView=m_downloadView->header();
+    headerView->hide();
+    headerView->setSectionResizeMode(0, QHeaderView::Fixed);
+    headerView->setSectionResizeMode(1, QHeaderView::Fixed);
+    headerView->setSectionResizeMode(2, QHeaderView::Stretch);
     //Configure close list button.
+    m_closeList->setFixedSize(25, 25);
     connect(m_closeList, &KNOpacityAnimeButton::clicked,
             this, &KNMusicStoreDownloadList::hideDownloadList);
 
@@ -72,7 +95,7 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_container->setLayout(mainLayout);
     //Initial the button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight);
-    buttonLayout->setContentsMargins(11, 11, 11, 11);
+    buttonLayout->setContentsMargins(15, 11, 15, 11);
     buttonLayout->setSpacing(10);
     mainLayout->addLayout(buttonLayout);
     //Add buttons to layout.
@@ -90,6 +113,13 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
             this, &KNMusicStoreDownloadList::onContainerMove);
     connect(m_containerAnime, &QPropertyAnimation::finished,
             this, &KNMusicStoreDownloadList::onContainerMoveFinish);
+
+    //Link locale.
+    knI18n->link(this, &KNMusicStoreDownloadList::retranslate);
+    retranslate();
+
+    //Debug
+    downloadSong("a", "a", "Start DASH!");
 }
 
 QWidget *KNMusicStoreDownloadList::stateButton()
@@ -167,6 +197,14 @@ void KNMusicStoreDownloadList::resizeEvent(QResizeEvent *event)
         m_container->move((width()-contentWidth)>>1,
                           (m_container->y()==0)?0:(-height()));
     }
+}
+
+void KNMusicStoreDownloadList::retranslate()
+{
+    //Update the button tooltips.
+    m_missionStart->setToolTip(tr("Start"));
+    m_missionPause->setToolTip(tr("Pause"));
+    m_missionRemove->setToolTip(tr("Remove"));
 }
 
 void KNMusicStoreDownloadList::hideDownloadList()

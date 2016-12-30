@@ -79,7 +79,18 @@ private:
     {
         QString songTitle;
         quint64 totalSize;
-        quint64 completeSize;
+        quint64 downSize;
+        qreal totalMegaSize;
+        qreal downMegaSize;
+        bool isDownloading;
+        DownloadItemMetadata() :
+            totalSize(0),
+            downSize(0),
+            totalMegaSize(0.0),
+            downMegaSize(0.0),
+            isDownloading(false)
+        {
+        }
     };
 
     enum DownloadItemColumns

@@ -83,6 +83,7 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void retranslate();
     void hideDownloadList();
     void onContainerMove(const QVariant &value);
     void onContainerMoveFinish();

@@ -362,7 +362,6 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
     {
         //Translate each i to object.
         QJsonObject songItem, songRawItem=i.toObject();
-        qDebug()<<songRawItem;
         //Backup the raw item.
         songItem.insert("custom", QString::number(
                             (quint64)songRawItem.value("id").toDouble()));

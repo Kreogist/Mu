@@ -16,10 +16,13 @@
 Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "knfiledownloadmanager.h"
 
+#include "knmusicstoreutil.h"
+
 #include "knmusicstoredownloadmanager.h"
+
+using namespace MusicStoreUtil;
 
 KNMusicStoreDownloadManager::KNMusicStoreDownloadManager(QObject *parent):
     QAbstractTableModel(parent),
@@ -48,8 +51,6 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     DownloadItemMetadata itemData;
     //Save the item info.
     itemData.songTitle=songTitle;
-    itemData.completeSize=0;
-    itemData.totalSize=0;
     //Add begin item.
     beginInsertRows(QModelIndex(),
                     m_downloadItemList.size(),
@@ -58,6 +59,8 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     m_downloadItemList.append(itemData);
     //End insert rows.
     endInsertRows();
+    //Start download mission.
+    //! FIXME: add download mission.
 }
 
 QVariant KNMusicStoreDownloadManager::data(const QModelIndex &index,
@@ -81,8 +84,6 @@ QVariant KNMusicStoreDownloadManager::data(const QModelIndex &index,
         {
         case ColumnIndex:
             return QString::number(index.row()+1);
-        case ColumnProgress:
-            return item.completeSize;
         case ColumnFilename:
             return item.songTitle;
         default:
@@ -96,6 +97,16 @@ QVariant KNMusicStoreDownloadManager::data(const QModelIndex &index,
         default:
             return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
         }
+    case DownBytesRole:
+        return item.downSize;
+    case TotalBytesRole:
+        return item.totalSize;
+    case DownMegabytesRole:
+        return item.downMegaSize;
+    case TotalMegabytesRole:
+        return item.totalMegaSize;
+    case StateRole:
+        return item.isDownloading;
     default:
         return QVariant();
     }

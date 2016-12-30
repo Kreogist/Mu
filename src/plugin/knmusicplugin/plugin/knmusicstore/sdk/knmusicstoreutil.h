@@ -39,6 +39,15 @@ namespace MusicStoreUtil
         MusicStoreContentErrorCount
     };
 
+    enum MusicStoreDownloadRole
+    {
+        DownBytesRole = Qt::UserRole + 1,
+        TotalBytesRole,
+        DownMegabytesRole,
+        TotalMegabytesRole,
+        StateRole
+    };
+
     enum MusicStorePages
     {
         PageHome,
