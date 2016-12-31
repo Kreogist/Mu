@@ -84,9 +84,19 @@ signals:
 
 public slots:
 
+private slots:
+    void onDownloadProgress(const qint64 &bytesReceived,
+                            const qint64 &bytesTotal);
+    void onDownloadFinished();
+
 private:
     struct DownloadItemMetadata
     {
+        //Download mission info.
+        QString url;
+        QString directoryPath;
+        QString fileName;
+        //Download metadata.
         QString songTitle;
         quint64 totalSize;
         quint64 downSize;
@@ -111,6 +121,9 @@ private:
         DownloadItemColumnCount
     };
 
+    inline void startMission(const QString &url, const QString &directoryPath,
+                             const QString &fileName);
+    inline void updateFirstItem(const DownloadItemMetadata &updatedItem);
     QList<DownloadItemMetadata> m_downloadItemList;
     QThread m_downloaderThread;
     KNFileDownloadManager *m_downloader;

@@ -34,6 +34,12 @@ KNMusicStoreDownloadManager::KNMusicStoreDownloadManager(QObject *parent):
     connect(this, &KNMusicStoreDownloadManager::requireDownloadFile,
             m_downloader, &KNFileDownloadManager::downloadFile,
             Qt::QueuedConnection);
+    connect(m_downloader, &KNFileDownloadManager::downloadProgress,
+            this, &KNMusicStoreDownloadManager::onDownloadProgress,
+            Qt::QueuedConnection);
+    connect(m_downloader, &KNFileDownloadManager::finished,
+            this, &KNMusicStoreDownloadManager::onDownloadFinished,
+            Qt::QueuedConnection);
     //Start the thread.
     m_downloaderThread.start();
 }
@@ -54,8 +60,18 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
 {
     //Construct the item.
     DownloadItemMetadata itemData;
-    //Save the item info.
+    //Save the metadata.
     itemData.songTitle=songTitle;
+    //Save the mission info.
+    itemData.url=url;
+    itemData.directoryPath=directoryPath;
+    itemData.fileName=fileName;
+    //Check the list size.
+    if(m_downloadItemList.isEmpty())
+    {
+        //The mission will be start later.
+        itemData.isDownloading=true;
+    }
     //Add begin item.
     beginInsertRows(QModelIndex(),
                     m_downloadItemList.size(),
@@ -64,10 +80,12 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     m_downloadItemList.append(itemData);
     //End insert rows.
     endInsertRows();
-    //Increase one internet connection.
-    knMusicStoreGlobal->addConnectionCounter(1);
-    //Start download mission.
-    emit requireDownloadFile(url, directoryPath, fileName);
+    //Check the mission list.
+    if(m_downloadItemList.size()==1)
+    {
+        //Start the mission
+        startMission(url, directoryPath, fileName);
+    }
 }
 
 QVariant KNMusicStoreDownloadManager::data(const QModelIndex &index,
@@ -131,4 +149,64 @@ int KNMusicStoreDownloadManager::columnCount(const QModelIndex &parent) const
     Q_UNUSED(parent)
     //Fixed column count.
     return DownloadItemColumnCount;
+}
+
+void KNMusicStoreDownloadManager::onDownloadProgress(
+        const qint64 &bytesReceived,
+        const qint64 &bytesTotal)
+{
+    //Update the downloaded item data, it should be the first item in the list.
+    DownloadItemMetadata updatedItem=m_downloadItemList.first();
+    //Change the bytes received.
+    updatedItem.downSize=bytesReceived;
+    updatedItem.totalSize=bytesTotal;
+    //Update the mega bytes.
+    updatedItem.downMegaSize=(qreal)bytesReceived/1048576.0;
+    updatedItem.totalMegaSize=(qreal)bytesTotal/1048576.0;
+    //Update the item.
+    updateFirstItem(updatedItem);
+}
+
+void KNMusicStoreDownloadManager::onDownloadFinished()
+{
+    //Reduce one internet connection.
+    knMusicStoreGlobal->reduceConnectionCounter(1);
+    //Remove the first item in the model.
+    beginRemoveRows(QModelIndex(), 0, 0);
+    //Remove the first item.
+    m_downloadItemList.removeFirst();
+    //Mission complete.
+    endRemoveRows();
+    //Check the item list size.
+    if(!m_downloadItemList.isEmpty())
+    {
+        //Get the item from list.
+        DownloadItemMetadata itemData=m_downloadItemList.first();
+        //Change the mission state.
+        itemData.isDownloading=true;
+        //Update the item.
+        updateFirstItem(itemData);
+        //Start next mission.
+        startMission(itemData.url, itemData.directoryPath, itemData.fileName);
+    }
+}
+
+inline void KNMusicStoreDownloadManager::startMission(
+        const QString &url,
+        const QString &directoryPath,
+        const QString &fileName)
+{
+    //Increase one internet connection.
+    knMusicStoreGlobal->addConnectionCounter(1);
+    //Start download mission.
+    emit requireDownloadFile(url, directoryPath, fileName);
+}
+
+inline void KNMusicStoreDownloadManager::updateFirstItem(
+        const DownloadItemMetadata &updatedItem)
+{
+    //Update the item.
+    m_downloadItemList.replace(0, updatedItem);
+    //Emit data chagned signal.
+    emit dataChanged(index(0, 0), index(0, DownloadItemColumnCount-1));
 }

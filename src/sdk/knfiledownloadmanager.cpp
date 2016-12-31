@@ -122,7 +122,7 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
         //Close target file.
         targetFile.close();
         //Emit download finished signal.
-        //! FIXME: Emit complete signal.
+        emit finished();
         //Clear reply.
         reply->deleteLater();
         //Clear the pointer.
@@ -138,7 +138,6 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
 void KNFileDownloadManager::replyDownloadProgress(const qint64 &bytesReceived,
                                                   const qint64 &bytesTotal)
 {
-    qDebug()<<bytesReceived<<bytesTotal;
     //Emit signal.
     emit downloadProgress(bytesReceived, bytesTotal);
 }

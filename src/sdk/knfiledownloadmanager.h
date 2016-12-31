@@ -29,8 +29,10 @@ Foundation,
 #include <QObject>
 
 /*!
- * \brief The KNFileDownloadManager class provides a pipeline file download
- * object which could download a file in an async way.
+ * \brief The KNFileDownloadManager class provides a file download object which
+ * could download a file using standard http GET operation.\n
+ * This is a highly QNetworkAccessManager packaging. Supports for error handling
+ * via signal.
  */
 class KNFileDownloadManager : public QObject
 {
@@ -52,6 +54,11 @@ signals:
      * \param bytesTotal The total bytes of the content.
      */
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+
+    /*!
+     * \brief When the file downloaded complete, this signal will be emitted.
+     */
+    void finished();
 
 public slots:
     /*!
