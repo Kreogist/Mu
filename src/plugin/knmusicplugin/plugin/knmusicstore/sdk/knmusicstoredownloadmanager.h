@@ -78,16 +78,32 @@ signals:
      * \param url The file url.
      * \param targetFolder The file saving directory path.
      * \param rename The new name of the file.
+     * \param fromStart Download the file from the first byte.
      */
     void requireDownloadFile(const QString &url, const QString &targetFolder,
-                             const QString &rename);
+                             const QString &rename, bool fromStart);
+
+    /*!
+     * \brief Require to pause the working backend.
+     */
+    void requirePause();
 
 public slots:
+    /*!
+     * \brief This slot is used to start all the mission in the queueing list.
+     */
+    void startAll();
+
+    /*!
+     * \brief This slot is used to pause all the mission in the queueing list.
+     */
+    void pauseAll();
 
 private slots:
     void onDownloadProgress(const qint64 &bytesReceived,
                             const qint64 &bytesTotal);
     void onDownloadFinished();
+    void onDownloadPaused(const qint64 &pausedSize);
 
 private:
     struct DownloadItemMetadata
@@ -102,13 +118,13 @@ private:
         quint64 downSize;
         qreal totalMegaSize;
         qreal downMegaSize;
-        bool isDownloading;
+        int state;
         DownloadItemMetadata() :
             totalSize(0),
             downSize(0),
             totalMegaSize(0.0),
             downMegaSize(0.0),
-            isDownloading(false)
+            state(0)
         {
         }
     };
@@ -122,8 +138,8 @@ private:
     };
 
     inline void startMission(const QString &url, const QString &directoryPath,
-                             const QString &fileName);
-    inline void updateFirstItem(const DownloadItemMetadata &updatedItem);
+                             const QString &fileName, bool fromStart);
+    inline void updateItem(int row, const DownloadItemMetadata &updatedItem);
     QList<DownloadItemMetadata> m_downloadItemList;
     QThread m_downloaderThread;
     KNFileDownloadManager *m_downloader;

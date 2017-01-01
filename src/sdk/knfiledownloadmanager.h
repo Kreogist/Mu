@@ -23,6 +23,7 @@ Foundation,
 #include <QUrl>
 #include <QNetworkAccessManager>
 #include <QScopedPointer>
+#include <QFile>
 
 #include "knconnectionhandler.h"
 
@@ -60,6 +61,11 @@ signals:
      */
     void finished();
 
+    /*!
+     * \brief When the file is paused, this signal will be emitted.
+     */
+    void paused(const qint64 &pausedSize);
+
 public slots:
     /*!
      * \brief Download one file from its target url.
@@ -69,7 +75,12 @@ public slots:
      * file name, set it to QString().
      */
     void downloadFile(const QString &url, const QString &targetFolder,
-                      const QString &rename);
+                      const QString &rename, bool fromStart);
+
+    /*!
+     * \brief Pause the current download mission.
+     */
+    void pause();
 
     /*!
      * \brief Reset the downloader.
@@ -82,10 +93,17 @@ private slots:
                                const qint64 &bytesTotal);
 
 private:
+    inline void flushToCache();
+    inline void flushToFile();
     QScopedPointer<QNetworkAccessManager> m_downloader;
     KNConnectionHandler m_replyHandler;
-    QString m_savePath, m_rename;
+    QScopedPointer<QFile> m_file;
+    QString m_savePath, m_targetName;
+    QByteArray m_fileCache;
+    qint64 m_basedPosition;
     QNetworkReply *m_fileReply;
+    int m_fileCacheSize, m_fileCachePos;
+    bool m_pausedFlag;
 };
 
 #endif // KNFILEDOWNLOADMANAGER_H

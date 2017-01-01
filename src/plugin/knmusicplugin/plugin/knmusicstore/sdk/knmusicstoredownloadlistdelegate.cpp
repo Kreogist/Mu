@@ -104,13 +104,15 @@ void KNMusicStoreDownloadListDelegate::paint(QPainter *painter,
                                    ProgressHeight),
                              ProgressRadius, ProgressRadius);
     //Get running state.
-    bool isDownloading=index.data(StateRole).toBool();
+    int isDownloading=index.data(StateRole).toInt();
     //Set the pen.
     painter->setPen((option.state&QStyle::State_Selected)?
                         option.palette.color(QPalette::HighlightedText):
                         option.palette.color(QPalette::Text));
     //Check state.
-    if(isDownloading)
+    switch(isDownloading)
+    {
+    case MissionRunning:
     {
         //Draw the state button.
         painter->drawPixmap(option.rect.x()+IconX, option.rect.y()+IconY,
@@ -125,8 +127,10 @@ void KNMusicStoreDownloadListDelegate::paint(QPainter *painter,
                           option.rect.width()-TextX, option.rect.height(),
                           Qt::AlignVCenter | Qt::AlignLeft,
                           stateText);
+        //Complete.
+        break;
     }
-    else
+    case MissionPaused:
     {
         //Draw the state button.
         painter->drawPixmap(option.rect.x()+IconX, option.rect.y()+IconY,
@@ -136,6 +140,20 @@ void KNMusicStoreDownloadListDelegate::paint(QPainter *painter,
                           option.rect.width(), option.rect.height(),
                           Qt::AlignVCenter | Qt::AlignLeft,
                           m_pauseText);
+        //Complete
+        break;
+    }
+    case MissionWaiting:
+    {
+        //Draw the waiting text only.
+        painter->drawText(option.rect.x()+TextX, option.rect.y(),
+                          option.rect.width(), option.rect.height(),
+                          Qt::AlignVCenter | Qt::AlignLeft,
+                          m_waitingText);
+        break;
+    }
+    default:
+        break;
     }
     //Restore the painter.
     painter->restore();
@@ -145,4 +163,5 @@ void KNMusicStoreDownloadListDelegate::retranslate()
 {
     //Update pause text.
     m_pauseText=tr("Paused");
+    m_waitingText=tr("Waiting");
 }

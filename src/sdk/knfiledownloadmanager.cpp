@@ -20,6 +20,7 @@ Foundation,
 #include <QFile>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QBuffer>
 
 #include "knfiledownloadmanager.h"
 
@@ -28,14 +29,20 @@ Foundation,
 KNFileDownloadManager::KNFileDownloadManager(QObject *parent) :
     QObject(parent),
     m_savePath(QString()),
-    m_rename(QString()),
-    m_fileReply(nullptr)
+    m_targetName(QString()),
+    m_fileCache(QByteArray()),
+    m_basedPosition(0),
+    m_fileReply(nullptr),
+    m_fileCacheSize(8), //Default cache size, unit MB.
+    m_fileCachePos(0),
+    m_pausedFlag(false)
 {
 }
 
 void KNFileDownloadManager::downloadFile(const QString &url,
                                          const QString &targetFolder,
-                                         const QString &rename)
+                                         const QString &rename,
+                                         bool fromStart)
 {
     //Check pointer.
     if(m_downloader.isNull())
@@ -48,12 +55,73 @@ void KNFileDownloadManager::downloadFile(const QString &url,
         connect(m_downloader.data(), &QNetworkAccessManager::finished,
                 this, &KNFileDownloadManager::onDownloaderFinished);
     }
+    //Clear the paused flag.
+    m_pausedFlag=false;
     //Save the new file name.
-    m_rename=rename;
-    //Save the path.
+    m_targetName=rename;
     m_savePath=targetFolder;
+    //Check the directory.
+    QDir targetDir(m_savePath);
+    //Write the content to file.
+    if(!targetDir.mkpath(m_savePath))
+    {
+        //Failed to construct the directory.
+        //! FIXME: Add error signal here.
+        return;
+    }
+    //Create the request url.
+    QUrl requestUrl(QUrl::fromEncoded(url.toLocal8Bit()));
+    //Check the rename flag.
+    if(m_targetName.isEmpty())
+    {
+        //Use original name.
+        m_targetName=requestUrl.fileName();
+    }
+    else
+    {
+        //Get the suffix of the url path.
+        QFileInfo urlInfo(url);
+        //Get the suffix.
+        m_targetName+=("."+urlInfo.suffix());
+    }
+    //Create disk cache.
+    m_fileCache=QByteArray(m_fileCacheSize*1048576, '\0');
+    //Reset the buffer.
+    m_fileCachePos=0;
+    //Open the file, write the data.
+    m_file.reset(new QFile(targetDir.filePath(m_targetName+".kmt")));
+    //Check from start flag.
+    if(fromStart)
+    {
+        //The position of download should be 0.
+        m_basedPosition=0;
+        //Open the target file, clear the previous data.
+        if(!m_file->open(QIODevice::WriteOnly))
+        {
+            //Failed to write data to file.
+            //!FIXME: Add cannot open file error signal here.
+            return;
+        }
+    }
+    else
+    {
+        //Download from the end of the file.
+        m_basedPosition=m_file->size();
+        //Open the target file.
+        if(!m_file->open(QIODevice::ReadWrite))
+        {
+            //Failed to write data to file.
+            //!FIXME: Add cannot open file error signal here.
+            return;
+        }
+        //Seek to the end of the file.
+        m_file->seek(m_basedPosition);
+    }
     //Generate the request.
-    QNetworkRequest headerRequest(QUrl::fromEncoded(url.toLocal8Bit()));
+    QNetworkRequest headerRequest(requestUrl);
+    //Set the request header.
+    QString rangeField="bytes="+QString::number(m_basedPosition)+"-";
+    headerRequest.setRawHeader("Range", rangeField.toLatin1());
     //Start to get the url header data.
     m_fileReply=m_downloader->get(headerRequest);
     //Link the file download reply signal.
@@ -62,15 +130,39 @@ void KNFileDownloadManager::downloadFile(const QString &url,
                         this, &KNFileDownloadManager::replyDownloadProgress));
 }
 
+void KNFileDownloadManager::pause()
+{
+    //Check the current mission state.
+    // First, the downloader is not initialized.
+    if(m_downloader.isNull() ||
+            //No reply operation is currently running.
+            m_fileReply==nullptr ||
+            //Already paused.
+            m_pausedFlag)
+    {
+        //WTF, why you called this function?
+        return;
+    }
+    //Set the cancel flag.
+    m_pausedFlag=true;
+    //Abort the reply to pause.
+    m_fileReply->abort();
+}
+
 void KNFileDownloadManager::reset()
 {
     //Disconnect all.
     m_replyHandler.disconnectAll();
+    //Clear cache system.
+    m_fileCachePos=0;
+    m_fileCache=QByteArray();
     //Reset the downloader maanger.
     m_downloader.reset();
     //Clear the queue list.
     m_fileReply=nullptr;
     m_savePath=QString();
+    //Clear all the flags.
+    m_pausedFlag=false;
 }
 
 void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
@@ -80,64 +172,94 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
     {
         //Cut down all the reply connections.
         m_replyHandler.disconnectAll();
-        //Check the directory.
-        QDir targetDir(m_savePath);
-        //Write the content to file.
-        if(!targetDir.mkpath(m_savePath))
-        {
-            //Failed to construct the directory.
-            //! FIXME: Add error signal here.
-            //Remove the reply.
-            reply->deleteLater();
-            return;
-        }
-        //Get the new file name
-        QString savedFileName;
-        //Check the rename flag.
-        if(m_rename.isEmpty())
-        {
-            //Use original name.
-            savedFileName=reply->url().fileName();
-        }
-        else
-        {
-            //Get the suffix of the url path.
-            QFileInfo urlInfo(reply->url().toString());
-            //Get the suffix.
-            savedFileName=m_rename+"."+urlInfo.suffix();
-        }
-        //Open the file, write the data.
-        QFile targetFile(targetDir.filePath(savedFileName));
-        //Open the target file.
-        if(!targetFile.open(QIODevice::WriteOnly))
-        {
-            //Failed to write data to file.
-            //!FIXME: Add cannot open file error signal here.
-            //Remove reply.
-            reply->deleteLater();
-            return;
-        }
-        //Write content to file.
-        targetFile.write(reply->readAll());
-        //Close target file.
-        targetFile.close();
+        //Write the left data in the socket to cache.
+        flushToCache();
+        //Write the left cache to disk.
+        flushToFile();
+        //Close target file, and rename the file.
+        m_file->close();
+        m_file->rename(QFileInfo((*m_file.data())).absoluteDir(
+                           ).filePath(m_targetName));
+        //Reset the file to null.
+        m_file.reset();
+        //Clear the byte data.
+        m_fileCache=QByteArray();
         //Emit download finished signal.
         emit finished();
         //Clear reply.
         reply->deleteLater();
         //Clear the pointer.
         m_fileReply=nullptr;
-        qDebug()<<"Download finished.";
         //Mission complete.
         return;
     }
+    //Check the error type.
+    if(QNetworkReply::OperationCanceledError==reply->error() &&
+            //Check the paused flag.
+            m_pausedFlag)
+    {
+        //At the moment, the socket has been closed, we cannot read and data
+        //from the socket.
+        //However, we could still write the data in the cache to the file.
+        flushToFile();
+        //Emit the paused signal.
+        emit paused(m_file->pos());
+        return;
+    }
+    qDebug()<<reply->error()<<reply->errorString();
     //! FIXME: Add error operations.
-    ;
 }
 
 void KNFileDownloadManager::replyDownloadProgress(const qint64 &bytesReceived,
                                                   const qint64 &bytesTotal)
 {
+    //Flush data first.
+    flushToCache();
     //Emit signal.
-    emit downloadProgress(bytesReceived, bytesTotal);
+    emit downloadProgress(bytesReceived+m_basedPosition,
+                          bytesTotal+m_basedPosition);
+}
+
+inline void KNFileDownloadManager::flushToCache()
+{
+    //Check socket is still open or not.
+    if(!m_fileReply->isOpen())
+    {
+        //Failed to read from socket.
+        return;
+    }
+    //Read data from the reply buffer.
+    QByteArray replyData=m_fileReply->readAll();
+    //Check the reply data size is longer than the cache.
+    while(m_fileCachePos+replyData.size()>=m_fileCache.size())
+    {
+        //Calculate the left data.
+        int writeLength=m_fileCache.size()-m_fileCachePos;
+        //Save data to buffer.
+        //Write the left content to the cache.
+        m_fileCache.replace(m_fileCachePos,
+                            writeLength,
+                            replyData.left(writeLength));
+        //Write data to the file, the file must be open.
+        m_file->write(m_fileCache);
+        //Reset the buffer.
+        m_fileCachePos=0;
+        //Remove data from the reply data.
+        replyData.remove(0, writeLength);
+    }
+    //The size of cache is enough for the cache.
+    m_fileCache.replace(m_fileCachePos, replyData.size(), replyData);
+    m_fileCachePos+=replyData.size();
+}
+
+inline void KNFileDownloadManager::flushToFile()
+{
+    //Check whether there is data left in the cache.
+    if(m_fileCachePos>0)
+    {
+        //Resize the buffer.
+        m_fileCache.resize(m_fileCachePos);
+        //Flush cache to file.
+        m_file->write(m_fileCache);
+    }
 }

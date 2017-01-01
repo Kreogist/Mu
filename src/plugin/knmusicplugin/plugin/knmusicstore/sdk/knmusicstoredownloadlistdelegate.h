@@ -64,7 +64,7 @@ private slots:
 
 private:
     QPixmap m_pauseIcon, m_downloadingIcon;
-    QString m_pauseText;
+    QString m_pauseText, m_waitingText;
 };
 
 #endif // KNMUSICSTOREDOWNLOADLISTDELEGATE_H

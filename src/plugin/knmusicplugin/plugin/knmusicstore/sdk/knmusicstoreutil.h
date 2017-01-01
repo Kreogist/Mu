@@ -48,6 +48,13 @@ namespace MusicStoreUtil
         StateRole
     };
 
+    enum MusicStoreDownloadMissionState
+    {
+        MissionWaiting,
+        MissionRunning,
+        MissionPaused
+    };
+
     enum MusicStorePages
     {
         PageHome,

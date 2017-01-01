@@ -87,6 +87,19 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_closeList->setFixedSize(25, 25);
     connect(m_closeList, &KNOpacityAnimeButton::clicked,
             this, &KNMusicStoreDownloadList::hideDownloadList);
+    //Configure the operation button.
+    connect(m_missionStart, &KNOpacityAnimeButton::clicked,
+            [=]
+            {
+                //Download all the mission.
+                m_downloadModel->startAll();
+            });
+    connect(m_missionPause, &KNOpacityAnimeButton::clicked,
+            [=]
+            {
+                //Emit the signal for pause mission.
+                m_downloadModel->pauseAll();
+            });
 
     //Initial the container layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, m_container);
