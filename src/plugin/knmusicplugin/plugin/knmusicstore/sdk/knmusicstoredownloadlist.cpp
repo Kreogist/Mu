@@ -71,6 +71,8 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_downloadView->setAllColumnsShowFocus(true);
     m_downloadView->setObjectName("MusicStoreDownloadView");
     knTheme->registerWidget(m_downloadView);
+    connect(m_downloadView, &QTreeView::doubleClicked,
+            this, &KNMusicStoreDownloadList::onDoubleClickIndex);
     //Configure the model.
     m_downloadView->setModel(m_downloadModel);
     m_downloadView->setColumnWidth(0, 50);
@@ -226,6 +228,19 @@ void KNMusicStoreDownloadList::hideDownloadList()
     m_containerAnime->setEndValue(QPoint(m_container->x(), -height()));
     //Start the anime.
     m_containerAnime->start();
+}
+
+void KNMusicStoreDownloadList::onDoubleClickIndex(const QModelIndex &index)
+{
+    //Check the index state.
+    if(m_downloadModel->isPaused(index.row()))
+    {
+        //Start the mission.
+        m_downloadModel->startMission(index.row());
+        return;
+    }
+    //Paused the downloading mission.
+    m_downloadModel->pauseMission(index.row());
 }
 
 void KNMusicStoreDownloadList::onContainerMove(const QVariant &value)

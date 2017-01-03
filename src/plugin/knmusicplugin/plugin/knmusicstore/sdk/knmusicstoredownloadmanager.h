@@ -72,6 +72,14 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const
     Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Check whether the item is paused or not. When the item is
+     * downloading or the item is waiting, it means that the item is not paused.
+     * \param row The specific row of the item.
+     * \return The item is in the paused state or not.
+     */
+    bool isPaused(int row) const;
+
 signals:
     /*!
      * \brief Require to download specific file, this signal is used internal.
@@ -89,6 +97,18 @@ signals:
     void requirePause();
 
 public slots:
+    /*!
+     * \brief Start a single mission.
+     * \param missionRow The mission row.
+     */
+    void startMission(int missionRow);
+
+    /*!
+     * \brief Pause a single mission.
+     * \param missionRow The mission row.
+     */
+    void pauseMission(int missionRow);
+
     /*!
      * \brief This slot is used to start all the mission in the queueing list.
      */
@@ -137,7 +157,7 @@ private:
         DownloadItemColumnCount
     };
     inline void startNextAvailableMission();
-    inline void startMission(int missionIndex);
+    inline void launchMission(int missionIndex);
     inline void updateItem(int row, const DownloadItemMetadata &updatedItem);
     QList<DownloadItemMetadata> m_downloadItemList;
     QThread m_downloaderThread;

@@ -85,6 +85,7 @@ protected:
 private slots:
     void retranslate();
     void hideDownloadList();
+    void onDoubleClickIndex(const QModelIndex &index);
     void onContainerMove(const QVariant &value);
     void onContainerMoveFinish();
     void onBackgroundClicked();

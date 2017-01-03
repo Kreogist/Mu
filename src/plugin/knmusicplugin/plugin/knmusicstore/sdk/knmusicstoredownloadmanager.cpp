@@ -86,7 +86,7 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     if(!m_isRunning)
     {
         //Start the mission
-        startMission(m_downloadItemList.size()-1);
+        launchMission(m_downloadItemList.size()-1);
     }
 }
 
@@ -153,6 +153,60 @@ int KNMusicStoreDownloadManager::columnCount(const QModelIndex &parent) const
     return DownloadItemColumnCount;
 }
 
+bool KNMusicStoreDownloadManager::isPaused(int row) const
+{
+    //Check whether the item is in paused state.
+    return MissionPaused==m_downloadItemList.at(row).state;
+}
+
+void KNMusicStoreDownloadManager::startMission(int missionRow)
+{
+    //Check the mission state.
+    DownloadItemMetadata item=m_downloadItemList.at(missionRow);
+    //Check the item state.
+    if(MissionPaused==item.state)
+    {
+        //We only processed the paused item.
+        if(m_isRunning)
+        {
+            //Set the item state to waiting, make the item in the waiting list.
+            item.state=MissionWaiting;
+            //Replace the item.
+            updateItem(missionRow, item);
+        }
+        else
+        {
+            //Start downloading mission.
+            launchMission(missionRow);
+        }
+    }
+}
+
+void KNMusicStoreDownloadManager::pauseMission(int missionRow)
+{
+    //Check the mission state.
+    DownloadItemMetadata item=m_downloadItemList.at(missionRow);
+    //Check the state.
+    switch(item.state)
+    {
+    case MissionWaiting:
+        //The mission is now in the waiting list.
+        //Change state, save it.
+        item.state=MissionPaused;
+        //Update the item.
+        updateItem(missionRow, item);
+        break;
+    case MissionRunning:
+        //Quite simple, because we only download one item per time, so we only
+        //need to emit the pause signal.
+        emit requirePause();
+        break;
+    case MissionPaused:
+        //Already paused.
+        break;
+    }
+}
+
 void KNMusicStoreDownloadManager::startAll()
 {
     //Check the download item list.
@@ -181,7 +235,7 @@ void KNMusicStoreDownloadManager::startAll()
     if(!m_isRunning)
     {
         //Start to download the first item.
-        startMission(0);
+        launchMission(0);
     }
 }
 
@@ -271,14 +325,14 @@ inline void KNMusicStoreDownloadManager::startNextAvailableMission()
         {
             //Start the mission, if the total size is not 0, then it could be
             //paused in the previous session.
-            startMission(i);
+            launchMission(i);
             //Mission complete.
             return;
         }
     }
 }
 
-inline void KNMusicStoreDownloadManager::startMission(
+inline void KNMusicStoreDownloadManager::launchMission(
         int missionIndex)
 {
     //Update the running state.
