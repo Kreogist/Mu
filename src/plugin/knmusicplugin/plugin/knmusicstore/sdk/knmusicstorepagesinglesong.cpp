@@ -49,7 +49,7 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     m_lyrics(new QLabel(this)),
     m_artistLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
     m_albumLabel(new KNAnimeLabelButton(this)),
-    m_download(new KNOpacityAnimeTextButton(this)),
+    m_download(generateButton()),
     m_albumArt(new KNMusicAlbumLabel(this))
 {
     updateObjectName("MusicStorePage");
@@ -114,7 +114,7 @@ KNMusicStorePageSingleSong::KNMusicStorePageSingleSong(QWidget *parent) :
     metadataLayout->setContentsMargins(0, 0, 0, 0);
     metadataLayout->setSpacing(7);
     metadataLayout->setColumnStretch(1, 1);
-    metadataLayout->setRowStretch(4, 1);
+    metadataLayout->setRowStretch(5, 1);
     albumLayout->addLayout(metadataLayout, 1);
     //Add widgets.
     // Name of the song.
@@ -347,6 +347,16 @@ inline void KNMusicStorePageSingleSong::insertArtistLabel(
     m_artistLayout->insertWidget(0, artistLabel);
     //Append the artist label.
     m_artistLabels.append(artistLabel);
+}
+
+inline KNOpacityAnimeTextButton *KNMusicStorePageSingleSong::generateButton()
+{
+    //Create the button.
+    KNOpacityAnimeTextButton *button=new KNOpacityAnimeTextButton(this);
+    //Update the button properties.
+    button->setFixedHeight(21);
+    //Return the button.
+    return button;
 }
 
 inline void KNMusicStorePageSingleSong::updateArtistHintLabel()

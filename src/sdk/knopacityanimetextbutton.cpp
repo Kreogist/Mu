@@ -26,11 +26,14 @@ Foundation,
 #define HoverOpacity    800
 #define RoundedRadius   4
 #define SizeIncrease    8
+#define DefaultIconSize 16
+#define IconTextSpacing 5
 
 KNOpacityAnimeTextButton::KNOpacityAnimeTextButton(QWidget *parent) :
     QAbstractButton(parent),
     m_mouseAnime(new QTimeLine(200, this)),
-    m_textOpacity(BaseOpacity)
+    m_textOpacity(BaseOpacity),
+    m_iconSize(DefaultIconSize)
 {
     //Set properties.
     setFocusPolicy(Qt::StrongFocus);
@@ -47,8 +50,9 @@ KNOpacityAnimeTextButton::KNOpacityAnimeTextButton(QWidget *parent) :
 QSize KNOpacityAnimeTextButton::sizeHint() const
 {
     //Calculate the size and plus the size.
-    return fontMetrics().boundingRect(text()).size() + QSize(SizeIncrease,
-                                                             SizeIncrease);
+    return fontMetrics().boundingRect(text()).size() +
+            QSize(SizeIncrease+(icon().isNull()?0:(m_iconSize+IconTextSpacing)),
+                  SizeIncrease);
 }
 
 void KNOpacityAnimeTextButton::paintEvent(QPaintEvent *event)
@@ -69,10 +73,29 @@ void KNOpacityAnimeTextButton::paintEvent(QPaintEvent *event)
                            DisabledOpacity);
     //Draw the background.
     painter.drawRoundedRect(rect(), RoundedRadius, RoundedRadius);
-    //Update pen.
-    painter.setPen(palette().color(QPalette::ButtonText));
-    //Draw the icon.
-    painter.drawText(rect(), Qt::AlignCenter, text());
+    //Check the icon.
+    if(icon().isNull())
+    {
+        //Update pen.
+        painter.setPen(palette().color(QPalette::ButtonText));
+        //Draw the text.
+        painter.drawText(rect(), Qt::AlignCenter, text());
+    }
+    else
+    {
+        //Calculate the position.
+        int iconY=(height()-m_iconSize)>>1,
+                contentX=(width()-(m_iconSize+IconTextSpacing+
+                                  fontMetrics().width(text())))>>1;
+        //Draw the icon first.
+        painter.drawPixmap(contentX, iconY, icon().pixmap(m_iconSize,
+                                                          m_iconSize));
+        //Draw the text.
+        contentX+=m_iconSize+IconTextSpacing;
+        painter.drawText(contentX, 0, width()-contentX, height(),
+                         Qt::AlignVCenter | Qt::AlignLeft,
+                         text());
+    }
 }
 
 qreal KNOpacityAnimeTextButton::imageOpacity()

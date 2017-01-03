@@ -69,6 +69,7 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
                 new KNMusicStoreDownloadListDelegate(this));
     m_downloadView->setIndentation(0);
     m_downloadView->setAllColumnsShowFocus(true);
+    m_downloadView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_downloadView->setObjectName("MusicStoreDownloadView");
     knTheme->registerWidget(m_downloadView);
     connect(m_downloadView, &QTreeView::doubleClicked,
@@ -79,6 +80,9 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_downloadView->setColumnWidth(
                 1,
                 KNMusicStoreDownloadListDelegate::columnWidth());
+    connect(m_downloadView->selectionModel(),
+            &QItemSelectionModel::selectionChanged,
+            this, &KNMusicStoreDownloadList::onSelectionChanged);
     // Configure the header and column.
     QHeaderView *headerView=m_downloadView->header();
     headerView->hide();
@@ -214,8 +218,8 @@ void KNMusicStoreDownloadList::resizeEvent(QResizeEvent *event)
 void KNMusicStoreDownloadList::retranslate()
 {
     //Update the button tooltips.
-    m_missionStart->setToolTip(tr("Start"));
-    m_missionPause->setToolTip(tr("Pause"));
+    m_missionStart->setToolTip(tr("Start All"));
+    m_missionPause->setToolTip(tr("Pause All"));
     m_missionRemove->setToolTip(tr("Remove"));
 }
 
@@ -274,6 +278,12 @@ void KNMusicStoreDownloadList::onBackgroundClicked()
     }
     //Or else hide the widget.
     hideDownloadList();
+}
+
+void KNMusicStoreDownloadList::onSelectionChanged(
+        const QItemSelection &selected, const QItemSelection &deselected)
+{
+    ;
 }
 
 inline KNOpacityAnimeButton *KNMusicStoreDownloadList::generateButton(

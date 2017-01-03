@@ -98,6 +98,7 @@ private:
     inline void clearArtistList();
     inline void insertArtistLabel(const QString &artistName,
                                   const QString &artistMetadata);
+    inline KNOpacityAnimeTextButton *generateButton();
     inline void updateArtistHintLabel();
     inline void updateArtistLabelPalette();
     KNConnectionHandler m_backendConnection;

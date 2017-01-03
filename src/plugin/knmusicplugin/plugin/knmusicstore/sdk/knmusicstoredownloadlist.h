@@ -20,6 +20,8 @@ Foundation,
 #ifndef KNMUSICSTOREDOWNLOADLIST_H
 #define KNMUSICSTOREDOWNLOADLIST_H
 
+#include <QItemSelection>
+
 #include <QWidget>
 
 class QTreeView;
@@ -89,6 +91,8 @@ private slots:
     void onContainerMove(const QVariant &value);
     void onContainerMoveFinish();
     void onBackgroundClicked();
+    void onSelectionChanged(const QItemSelection &selected,
+                            const QItemSelection &deselected);
 
 private:
     inline KNOpacityAnimeButton *generateButton(const QString &iconPath);

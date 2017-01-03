@@ -99,6 +99,7 @@ private:
     inline void startAnime(const int &endFrame);
     QTimeLine *m_mouseAnime;
     qreal m_textOpacity;
+    int m_iconSize;
 };
 
 #endif // KNOPACITYANIMETEXTBUTTON_H
