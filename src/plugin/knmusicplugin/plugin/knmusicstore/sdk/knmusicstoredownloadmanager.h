@@ -136,13 +136,14 @@ private:
         ColumnFilename,
         DownloadItemColumnCount
     };
-
-    inline void startMission(const QString &url, const QString &directoryPath,
-                             const QString &fileName, bool fromStart);
+    inline void startNextAvailableMission();
+    inline void startMission(int missionIndex);
     inline void updateItem(int row, const DownloadItemMetadata &updatedItem);
     QList<DownloadItemMetadata> m_downloadItemList;
     QThread m_downloaderThread;
+    QPersistentModelIndex m_currentIndex;
     KNFileDownloadManager *m_downloader;
+    bool m_isRunning;
 };
 
 #endif // KNMUSICSTOREDOWNLOADMANAGER_H

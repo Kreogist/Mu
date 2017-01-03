@@ -27,7 +27,8 @@ using namespace MusicStoreUtil;
 
 KNMusicStoreDownloadManager::KNMusicStoreDownloadManager(QObject *parent):
     QAbstractTableModel(parent),
-    m_downloader(new KNFileDownloadManager())
+    m_downloader(new KNFileDownloadManager()),
+    m_isRunning(false)
 {
     //Configure the downloader.
     m_downloader->moveToThread(&m_downloaderThread);
@@ -73,12 +74,6 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     itemData.directoryPath=directoryPath;
     itemData.fileName=fileName;
     itemData.state=MissionWaiting;
-    //Check the list size.
-    if(m_downloadItemList.isEmpty())
-    {
-        //The mission will be start later.
-        itemData.state=MissionRunning;
-    }
     //Add begin item.
     beginInsertRows(QModelIndex(),
                     m_downloadItemList.size(),
@@ -88,10 +83,10 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     //End insert rows.
     endInsertRows();
     //Check the mission list.
-    if(m_downloadItemList.size()==1)
+    if(!m_isRunning)
     {
         //Start the mission
-        startMission(url, directoryPath, fileName, true);
+        startMission(m_downloadItemList.size()-1);
     }
 }
 
@@ -167,25 +162,27 @@ void KNMusicStoreDownloadManager::startAll()
         return;
     }
     //Loop from top to the end, set all the data to waiting.
-    for(int i=1; i<m_downloadItemList.size(); ++i)
+    for(int i=0; i<m_downloadItemList.size(); ++i)
     {
         //Get the item from the list.
         DownloadItemMetadata item=m_downloadItemList.at(i);
-        //Change the state.
-        item.state=MissionWaiting;
-        //Replace the item.
-        m_downloadItemList.replace(i, item);
+        //Check the running state.
+        if(MissionPaused==item.state)
+        {
+            //Change the state.
+            item.state=MissionWaiting;
+            //Replace the item.
+            m_downloadItemList.replace(i, item);
+        }
     }
     //Emit data changed signal.
     emit dataChanged(index(0, 1), index(m_downloadItemList.size()-1, 1));
-    //Get the first item.
-    DownloadItemMetadata item=m_downloadItemList.first();
-    //Change the state to download.
-    item.state=MissionRunning;
-    //Replace the item.
-    m_downloadItemList.replace(0, item);
-    //Start to download the item.
-    startMission(item.url, item.directoryPath, item.fileName, false);
+    //Check the running state.
+    if(!m_isRunning)
+    {
+        //Start to download the first item.
+        startMission(0);
+    }
 }
 
 void KNMusicStoreDownloadManager::pauseAll()
@@ -210,8 +207,9 @@ void KNMusicStoreDownloadManager::onDownloadProgress(
         const qint64 &bytesReceived,
         const qint64 &bytesTotal)
 {
-    //Update the downloaded item data, it should be the first item in the list.
-    DownloadItemMetadata updatedItem=m_downloadItemList.first();
+    //Update the downloaded item data.
+    DownloadItemMetadata updatedItem=
+            m_downloadItemList.at(m_currentIndex.row());
     //Change the bytes received.
     updatedItem.downSize=bytesReceived;
     updatedItem.totalSize=bytesTotal;
@@ -219,64 +217,87 @@ void KNMusicStoreDownloadManager::onDownloadProgress(
     updatedItem.downMegaSize=(qreal)bytesReceived/1048576.0;
     updatedItem.totalMegaSize=(qreal)bytesTotal/1048576.0;
     //Update the item.
-    updateItem(0, updatedItem);
+    updateItem(m_currentIndex.row(), updatedItem);
 }
 
 void KNMusicStoreDownloadManager::onDownloadFinished()
 {
+    //Change the working state.
+    m_isRunning=false;
     //Reduce one internet connection.
     knMusicStoreGlobal->reduceConnectionCounter(1);
+    //Get the current item row.
+    int currentRow=m_currentIndex.row();
     //Remove the first item in the model.
-    beginRemoveRows(QModelIndex(), 0, 0);
+    beginRemoveRows(QModelIndex(), currentRow, currentRow);
     //Remove the first item.
-    m_downloadItemList.removeFirst();
+    m_downloadItemList.removeAt(currentRow);
     //Mission complete.
     endRemoveRows();
+    //Reset the index.
+    m_currentIndex=QModelIndex();
     //Check the item list size.
-    if(!m_downloadItemList.isEmpty())
-    {
-        //Get the item from list.
-        DownloadItemMetadata itemData=m_downloadItemList.first();
-        //Change the mission state.
-        itemData.state=MissionRunning;
-        //Update the item.
-        updateItem(0, itemData);
-        //Start next mission.
-        startMission(itemData.url,
-                     itemData.directoryPath,
-                     itemData.fileName,
-                     true);
-    }
+    startNextAvailableMission();
 }
 
 void KNMusicStoreDownloadManager::onDownloadPaused(const qint64 &pausedSize)
 {
+    //Change the working state.
+    m_isRunning=false;
     //Reduce one internet connection.
     knMusicStoreGlobal->reduceConnectionCounter(1);
     //Get the item from list.
-    //! FIXME: change this to find the item.
-    DownloadItemMetadata itemData=m_downloadItemList.first();
+    DownloadItemMetadata itemData=m_downloadItemList.at(m_currentIndex.row());
     //Change the mission state.
     itemData.state=MissionPaused;
     //Update the paused size.
     itemData.downSize=pausedSize;
     itemData.downMegaSize=pausedSize/1048576.0;
     //Update the item.
-    updateItem(0, itemData);
+    updateItem(m_currentIndex.row(), itemData);
+    //Clear the current index.
+    m_currentIndex=QModelIndex();
     //Find next item which is not paused.
-    //! FIXME: Add codes here.
+    startNextAvailableMission();
+}
+
+inline void KNMusicStoreDownloadManager::startNextAvailableMission()
+{
+    //Search from the top of the list.
+    for(int i=0; i<m_downloadItemList.size(); ++i)
+    {
+        //Check the state of the mission.
+        if(MissionWaiting==m_downloadItemList.at(i).state)
+        {
+            //Start the mission, if the total size is not 0, then it could be
+            //paused in the previous session.
+            startMission(i);
+            //Mission complete.
+            return;
+        }
+    }
 }
 
 inline void KNMusicStoreDownloadManager::startMission(
-        const QString &url,
-        const QString &directoryPath,
-        const QString &fileName,
-        bool fromStart)
+        int missionIndex)
 {
+    //Update the running state.
+    m_isRunning=true;
+    //Get the item from list.
+    DownloadItemMetadata item=m_downloadItemList.at(missionIndex);
+    //Change the mission state.
+    item.state=MissionRunning;
+    //Update the item.
+    updateItem(missionIndex, item);
+    //Save the index.
+    m_currentIndex=index(missionIndex, 0);
     //Increase one internet connection.
     knMusicStoreGlobal->addConnectionCounter(1);
     //Start download mission.
-    emit requireDownloadFile(url, directoryPath, fileName, fromStart);
+    emit requireDownloadFile(item.url,
+                             item.directoryPath,
+                             item.fileName,
+                             0==item.totalSize);
 }
 
 inline void KNMusicStoreDownloadManager::updateItem(
