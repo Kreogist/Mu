@@ -51,7 +51,8 @@ QSize KNOpacityAnimeTextButton::sizeHint() const
 {
     //Calculate the size and plus the size.
     return fontMetrics().boundingRect(text()).size() +
-            QSize(SizeIncrease+(icon().isNull()?0:(m_iconSize+IconTextSpacing)),
+            QSize((SizeIncrease<<1) +
+                  (icon().isNull()?0:(m_iconSize+IconTextSpacing)),
                   SizeIncrease);
 }
 
@@ -92,6 +93,7 @@ void KNOpacityAnimeTextButton::paintEvent(QPaintEvent *event)
                                                           m_iconSize));
         //Draw the text.
         contentX+=m_iconSize+IconTextSpacing;
+        painter.setPen(palette().color(QPalette::ButtonText));
         painter.drawText(contentX, 0, width()-contentX, height(),
                          Qt::AlignVCenter | Qt::AlignLeft,
                          text());

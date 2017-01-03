@@ -27,6 +27,7 @@ Foundation,
 class QTreeView;
 class QPropertyAnimation;
 class KNOpacityAnimeButton;
+class KNOpacityAnimeTextButton;
 class KNMusicStoreDownloadManager;
 /*!
  * \brief The KNMusicStoreDownloadList class provides a download list widget to
@@ -95,12 +96,13 @@ private slots:
                             const QItemSelection &deselected);
 
 private:
-    inline KNOpacityAnimeButton *generateButton(const QString &iconPath);
+    inline KNOpacityAnimeTextButton *generateButton(const QString &iconPath);
     QColor m_backgroundColor;
     QString m_downloadPath;
     KNMusicStoreDownloadManager *m_downloadModel;
-    KNOpacityAnimeButton *m_stateButton, *m_missionStart, *m_missionPause,
-                         *m_missionRemove, *m_closeList;
+    KNOpacityAnimeButton *m_stateButton, *m_closeList;
+    KNOpacityAnimeTextButton *m_missionStart, *m_missionPause, *m_missionRemove,
+                             *m_missionClear;
     QWidget *m_container;
     QPropertyAnimation *m_containerAnime;
     QTreeView *m_downloadView;

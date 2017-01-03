@@ -56,7 +56,9 @@
     },
     "MusicStoreDownloadList" : {
         "Parent" : "MusicStoreWidget",
-        "Window" : "#252525"
+        "Window" : "#252525",
+        "Button" : "#808080",
+        "ButtonText" : "#F0F0F0"
     },
     "MusicStoreDownloadView" : {
         "Parent" : "MusicStoreDownloadList",

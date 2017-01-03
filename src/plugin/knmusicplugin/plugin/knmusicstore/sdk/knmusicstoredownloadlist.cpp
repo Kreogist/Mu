@@ -34,8 +34,6 @@ Foundation,
 
 #include "knmusicstoredownloadlist.h"
 
-#define OperationButtonSize 30
-
 #include <QDebug>
 
 KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
@@ -45,10 +43,11 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
                        QStandardPaths::MusicLocation)),
     m_downloadModel(new KNMusicStoreDownloadManager(this)),
     m_stateButton(new KNOpacityAnimeButton(this)),
+    m_closeList(new KNOpacityAnimeButton(this)),
     m_missionStart(generateButton(":/plugin/music/store/download_start.png")),
     m_missionPause(generateButton(":/plugin/music/store/download_pause.png")),
-    m_missionRemove(generateButton(":/plugin/music/store/download_remove.png")),
-    m_closeList(generateButton(":/plugin/music/player/hide_mainplayer.png")),
+    m_missionRemove(generateButton(":/plugin/music/store/download_close.png")),
+    m_missionClear(generateButton(":/plugin/music/store/download_remove.png")),
     m_container(new QWidget(this)),
     m_containerAnime(new QPropertyAnimation(m_container, "pos", this)),
     m_downloadView(new QTreeView(this))
@@ -90,6 +89,7 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     headerView->setSectionResizeMode(1, QHeaderView::Fixed);
     headerView->setSectionResizeMode(2, QHeaderView::Stretch);
     //Configure close list button.
+    m_closeList->setIcon(QIcon(":/plugin/music/player/hide_mainplayer.png"));
     m_closeList->setFixedSize(25, 25);
     connect(m_closeList, &KNOpacityAnimeButton::clicked,
             this, &KNMusicStoreDownloadList::hideDownloadList);
@@ -121,6 +121,7 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     buttonLayout->addWidget(m_missionStart);
     buttonLayout->addWidget(m_missionPause);
     buttonLayout->addWidget(m_missionRemove);
+    buttonLayout->addWidget(m_missionClear);
     buttonLayout->addStretch();
     buttonLayout->addWidget(m_closeList);
     //Add download view.
@@ -218,9 +219,10 @@ void KNMusicStoreDownloadList::resizeEvent(QResizeEvent *event)
 void KNMusicStoreDownloadList::retranslate()
 {
     //Update the button tooltips.
-    m_missionStart->setToolTip(tr("Start All"));
-    m_missionPause->setToolTip(tr("Pause All"));
-    m_missionRemove->setToolTip(tr("Remove"));
+    m_missionStart->setText(tr("Start All"));
+    m_missionPause->setText(tr("Pause All"));
+    m_missionRemove->setText(tr("Remove"));
+    m_missionClear->setText(tr("Clear"));
 }
 
 void KNMusicStoreDownloadList::hideDownloadList()
@@ -286,14 +288,15 @@ void KNMusicStoreDownloadList::onSelectionChanged(
     ;
 }
 
-inline KNOpacityAnimeButton *KNMusicStoreDownloadList::generateButton(
+inline KNOpacityAnimeTextButton *KNMusicStoreDownloadList::generateButton(
         const QString &iconPath)
 {
     //Construct the item.
-    KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
+    KNOpacityAnimeTextButton *button=new KNOpacityAnimeTextButton(this);
     //Configure the button.
-    button->setFixedSize(OperationButtonSize, OperationButtonSize);
+    button->setObjectName("MusicStoreDownloadList");
     button->setIcon(QIcon(iconPath));
+    knTheme->registerWidget(button);
     //Give back the button.
     return button;
 }
