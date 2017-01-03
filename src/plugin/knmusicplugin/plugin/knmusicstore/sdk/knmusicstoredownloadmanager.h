@@ -147,7 +147,6 @@ private:
     struct DownloadItemMetadata
     {
         //Download mission info.
-        QString url;
         QString directoryPath;
         QString fileName;
         //Download metadata.
@@ -178,6 +177,7 @@ private:
     inline void startNextAvailableMission();
     inline void launchMission(int missionIndex);
     inline void updateItem(int row, const DownloadItemMetadata &updatedItem);
+    QStringList m_downloadUrlList;
     QList<DownloadItemMetadata> m_downloadItemList;
     QThread m_downloaderThread;
     QPersistentModelIndex m_currentIndex;

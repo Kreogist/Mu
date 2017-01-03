@@ -71,19 +71,16 @@ void KNFileDownloadManager::downloadFile(const QString &url,
     }
     //Create the request url.
     QUrl requestUrl(QUrl::fromEncoded(url.toLocal8Bit()));
+    //Get the suffix of the url path.
+    QFileInfo urlInfo(url);
     //Check the rename flag.
     if(m_targetName.isEmpty())
     {
         //Use original name.
         m_targetName=requestUrl.fileName();
     }
-    else
-    {
-        //Get the suffix of the url path.
-        QFileInfo urlInfo(url);
-        //Get the suffix.
-        m_targetName+=("."+urlInfo.suffix());
-    }
+    //Save the suffix.
+    m_targetSuffix="."+urlInfo.suffix();
     //Create disk IO cache, reset the buffer.
     m_fileCache=QByteArray(m_fileCacheSize*1048576, '\0');
     m_fileCachePos=0;
@@ -181,9 +178,8 @@ void KNFileDownloadManager::abort()
 void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
 {
     //Check reply data.
-    switch(m_fileReply->error())
+    if(QNetworkReply::NoError==m_fileReply->error())
     {
-    case QNetworkReply::NoError:
         //Cut down all the reply connections.
         m_replyHandler.disconnectAll();
         //Write the left data in the socket to cache.
@@ -192,8 +188,20 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
         flushToFile();
         //Close target file, and rename the file.
         m_file->close();
-        m_file->rename(QFileInfo((*m_file.data())).absoluteDir(
-                           ).filePath(m_targetName));
+        //Get the target directory.
+        QString targetDir=QFileInfo((*m_file.data())).absolutePath()+"/";
+        if(!m_file->rename(targetDir+m_targetName+m_targetSuffix))
+        {
+            //Tried to find another name.
+            int triedTime=2;
+            //While the tried time is true.
+            while(!m_file->rename(targetDir+m_targetName+
+                                  QString::number(triedTime)+m_targetSuffix))
+            {
+                //Increase the tried time.
+                ++triedTime;
+            }
+        }
         //Reset the file to null.
         m_file.reset();
         //Clear the disk cache.
@@ -205,7 +213,9 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
         m_fileReply=nullptr;
         //Mission complete.
         return;
-    case QNetworkReply::OperationCanceledError:
+    }
+    else if(QNetworkReply::OperationCanceledError==m_fileReply->error())
+    {
         //Check the paused flag.
         if(m_pausedFlag)
         {
@@ -233,7 +243,9 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
         m_fileReply->deleteLater();
         m_fileReply=nullptr;
         return;
-    default:
+    }
+    else
+    {
         //! FIXME: Add error operations.
         qDebug()<<reply->error()<<reply->errorString();
     }

@@ -68,12 +68,18 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
                                              const QString &fileName,
                                              const QString &songTitle)
 {
+    //Check the url list, if the url list contain the same url, then ignore the
+    //operation.
+    if(m_downloadUrlList.contains(url))
+    {
+        //Ignore the same operation.
+        return;
+    }
     //Construct the item.
     DownloadItemMetadata itemData;
     //Save the metadata.
     itemData.songTitle=songTitle;
     //Save the mission info.
-    itemData.url=url;
     itemData.directoryPath=directoryPath;
     itemData.fileName=fileName;
     itemData.state=MissionWaiting;
@@ -89,6 +95,7 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
                     m_downloadItemList.size());
     //Append to the list.
     m_downloadItemList.append(itemData);
+    m_downloadUrlList.append(url);
     //End insert rows.
     endInsertRows();
     //Check the mission list.
@@ -237,6 +244,7 @@ void KNMusicStoreDownloadManager::removeMissions(QList<int> missionRows)
         beginRemoveRows(QModelIndex(), currentRow, currentRow);
         //Remove the item from the rows.
         m_downloadItemList.removeAt(currentRow);
+        m_downloadUrlList.removeAt(currentRow);
         //Remove complete.
         endRemoveRows();
     }
@@ -323,6 +331,7 @@ void KNMusicStoreDownloadManager::onDownloadFinished()
     beginRemoveRows(QModelIndex(), currentRow, currentRow);
     //Remove the first item.
     m_downloadItemList.removeAt(currentRow);
+    m_downloadUrlList.removeAt(currentRow);
     //Mission complete.
     endRemoveRows();
     //Reset the index.
@@ -403,7 +412,7 @@ inline void KNMusicStoreDownloadManager::launchMission(
     //Increase one internet connection.
     knMusicStoreGlobal->addConnectionCounter(1);
     //Start download mission.
-    emit requireDownloadFile(item.url,
+    emit requireDownloadFile(m_downloadUrlList.at(missionIndex),
                              item.directoryPath,
                              item.fileName,
                              0==item.totalSize);

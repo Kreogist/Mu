@@ -308,7 +308,7 @@ void KNMusicStoreDownloadList::onBackgroundClicked()
 void KNMusicStoreDownloadList::onEmptyStateChanged(bool isEmpty)
 {
     //Change the data to the inverse one, because that is the real button state.
-    isEmpty=~isEmpty;
+    isEmpty=!isEmpty;
     //When the model is empty, no button should be available.
     m_missionStart->setEnabled(isEmpty);
     m_missionPause->setEnabled(isEmpty);

@@ -109,7 +109,7 @@ private:
     QScopedPointer<QNetworkAccessManager> m_downloader;
     KNConnectionHandler m_replyHandler;
     QScopedPointer<QFile> m_file;
-    QString m_savePath, m_targetName;
+    QString m_savePath, m_targetName, m_targetSuffix;
     QByteArray m_fileCache;
     qint64 m_basedPosition;
     QNetworkReply *m_fileReply;
