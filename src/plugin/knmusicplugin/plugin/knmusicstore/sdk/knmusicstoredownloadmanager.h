@@ -96,6 +96,17 @@ signals:
      */
     void requirePause();
 
+    /*!
+     * \brief Require to abort the working mission.
+     */
+    void requireAbort();
+
+    /*!
+     * \brief When all the model is empty, or it is no more empty, this signal
+     * will be emitted.
+     */
+    void modelEmptyStateChange(bool isEmpty);
+
 public slots:
     /*!
      * \brief Start a single mission.
@@ -108,6 +119,13 @@ public slots:
      * \param missionRow The mission row.
      */
     void pauseMission(int missionRow);
+
+    /*!
+     * \brief Remove the missions in the list.
+     * \param missionRows The selected missions. The list must be sorted from
+     * the smaller number to the bigger number.
+     */
+    void removeMissions(QList<int> missionRows);
 
     /*!
      * \brief This slot is used to start all the mission in the queueing list.
@@ -156,6 +174,7 @@ private:
         ColumnFilename,
         DownloadItemColumnCount
     };
+    inline bool checkModelEmpty();
     inline void startNextAvailableMission();
     inline void launchMission(int missionIndex);
     inline void updateItem(int row, const DownloadItemMetadata &updatedItem);

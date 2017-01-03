@@ -38,6 +38,9 @@ KNMusicStoreDownloadManager::KNMusicStoreDownloadManager(QObject *parent):
     connect(this, &KNMusicStoreDownloadManager::requirePause,
             m_downloader, &KNFileDownloadManager::pause,
             Qt::QueuedConnection);
+    connect(this, &KNMusicStoreDownloadManager::requireAbort,
+            m_downloader, &KNFileDownloadManager::abort,
+            Qt::QueuedConnection);
     connect(m_downloader, &KNFileDownloadManager::downloadProgress,
             this, &KNMusicStoreDownloadManager::onDownloadProgress,
             Qt::QueuedConnection);
@@ -74,6 +77,12 @@ void KNMusicStoreDownloadManager::appendItem(const QString &url,
     itemData.directoryPath=directoryPath;
     itemData.fileName=fileName;
     itemData.state=MissionWaiting;
+    //Check the item list.
+    if(m_downloadItemList.isEmpty())
+    {
+        //Emit the not empty signal.
+        emit modelEmptyStateChange(false);
+    }
     //Add begin item.
     beginInsertRows(QModelIndex(),
                     m_downloadItemList.size(),
@@ -207,6 +216,34 @@ void KNMusicStoreDownloadManager::pauseMission(int missionRow)
     }
 }
 
+void KNMusicStoreDownloadManager::removeMissions(QList<int> missionRows)
+{
+    //Check the working mission is in the rows.
+    if(missionRows.contains(m_currentIndex.row()))
+    {
+        //Cancel the mission.
+        emit requireAbort();
+        //Clear the current index.
+        m_currentIndex=QModelIndex();
+        //Reset the running state.
+        m_isRunning=false;
+    }
+    //Get the number from the end of the list.
+    while(!missionRows.isEmpty())
+    {
+        //Get the row index.
+        int currentRow=missionRows.takeLast();
+        //Begin to remove the row.
+        beginRemoveRows(QModelIndex(), currentRow, currentRow);
+        //Remove the item from the rows.
+        m_downloadItemList.removeAt(currentRow);
+        //Remove complete.
+        endRemoveRows();
+    }
+    //Check the model is empty or not, if empty, emit the signal.
+    checkModelEmpty();
+}
+
 void KNMusicStoreDownloadManager::startAll()
 {
     //Check the download item list.
@@ -290,8 +327,12 @@ void KNMusicStoreDownloadManager::onDownloadFinished()
     endRemoveRows();
     //Reset the index.
     m_currentIndex=QModelIndex();
-    //Check the item list size.
-    startNextAvailableMission();
+    //Check the model is empty or not, if empty, emit the signal.
+    if(!checkModelEmpty())
+    {
+        //Check the item list size.
+        startNextAvailableMission();
+    }
 }
 
 void KNMusicStoreDownloadManager::onDownloadPaused(const qint64 &pausedSize)
@@ -313,6 +354,20 @@ void KNMusicStoreDownloadManager::onDownloadPaused(const qint64 &pausedSize)
     m_currentIndex=QModelIndex();
     //Find next item which is not paused.
     startNextAvailableMission();
+}
+
+inline bool KNMusicStoreDownloadManager::checkModelEmpty()
+{
+    //Get the result.
+    bool emptyState=m_downloadItemList.isEmpty();
+    //Check the empty state.
+    if(emptyState)
+    {
+        //Emit the signal.
+        emit modelEmptyStateChange(emptyState);
+    }
+    //And it return the true as well.
+    return emptyState;
 }
 
 inline void KNMusicStoreDownloadManager::startNextAvailableMission()

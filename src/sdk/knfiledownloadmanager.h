@@ -66,6 +66,11 @@ signals:
      */
     void paused(const qint64 &pausedSize);
 
+    /*!
+     * \brief When the file download is abort, this signal will be emitted.
+     */
+    void cancelled();
+
 public slots:
     /*!
      * \brief Download one file from its target url.
@@ -87,6 +92,11 @@ public slots:
      */
     void reset();
 
+    /*!
+     * \brief Cancel the current working mission.
+     */
+    void abort();
+
 private slots:
     void onDownloaderFinished(QNetworkReply *reply);
     void replyDownloadProgress(const qint64 &bytesReceived,
@@ -95,6 +105,7 @@ private slots:
 private:
     inline void flushToCache();
     inline void flushToFile();
+    inline void clearDiskCache();
     QScopedPointer<QNetworkAccessManager> m_downloader;
     KNConnectionHandler m_replyHandler;
     QScopedPointer<QFile> m_file;

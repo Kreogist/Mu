@@ -93,6 +93,10 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
     m_closeList->setFixedSize(25, 25);
     connect(m_closeList, &KNOpacityAnimeButton::clicked,
             this, &KNMusicStoreDownloadList::hideDownloadList);
+    //Configure the model signal.
+    connect(m_downloadModel,
+            &KNMusicStoreDownloadManager::modelEmptyStateChange,
+            this, &KNMusicStoreDownloadList::onEmptyStateChanged);
     //Configure the operation button.
     connect(m_missionStart, &KNOpacityAnimeButton::clicked,
             [=]
@@ -105,6 +109,25 @@ KNMusicStoreDownloadList::KNMusicStoreDownloadList(QWidget *parent) :
             {
                 //Emit the signal for pause mission.
                 m_downloadModel->pauseAll();
+            });
+    connect(m_missionRemove, &KNOpacityAnimeTextButton::clicked,
+            [=]
+            {
+                //Create the mission list.
+                QList<int> selectedMission;
+                //Get the current selected index.
+                QModelIndexList selectedList=
+                        m_downloadView->selectionModel()->selectedRows();
+                //Translate the list to mission list.
+                for(auto i : selectedList)
+                {
+                    //Add i to the list.
+                    selectedMission.append(i.row());
+                }
+                //Sort index row list.
+                std::sort(selectedMission.begin(), selectedMission.end());
+                //Remove the selected index.
+                m_downloadModel->removeMissions(selectedMission);
             });
 
     //Initial the container layout.
@@ -282,10 +305,24 @@ void KNMusicStoreDownloadList::onBackgroundClicked()
     hideDownloadList();
 }
 
+void KNMusicStoreDownloadList::onEmptyStateChanged(bool isEmpty)
+{
+    //Change the data to the inverse one, because that is the real button state.
+    isEmpty=~isEmpty;
+    //When the model is empty, no button should be available.
+    m_missionStart->setEnabled(isEmpty);
+    m_missionPause->setEnabled(isEmpty);
+    m_missionClear->setEnabled(isEmpty);
+}
+
 void KNMusicStoreDownloadList::onSelectionChanged(
         const QItemSelection &selected, const QItemSelection &deselected)
 {
-    ;
+    Q_UNUSED(selected)
+    Q_UNUSED(deselected)
+    //Check the current selection list.
+    m_missionRemove->setEnabled(!m_downloadView->selectionModel(
+                                    )->selection().isEmpty());
 }
 
 inline KNOpacityAnimeTextButton *KNMusicStoreDownloadList::generateButton(
@@ -295,6 +332,7 @@ inline KNOpacityAnimeTextButton *KNMusicStoreDownloadList::generateButton(
     KNOpacityAnimeTextButton *button=new KNOpacityAnimeTextButton(this);
     //Configure the button.
     button->setObjectName("MusicStoreDownloadList");
+    button->setEnabled(false);
     button->setIcon(QIcon(iconPath));
     knTheme->registerWidget(button);
     //Give back the button.

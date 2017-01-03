@@ -84,9 +84,8 @@ void KNFileDownloadManager::downloadFile(const QString &url,
         //Get the suffix.
         m_targetName+=("."+urlInfo.suffix());
     }
-    //Create disk cache.
+    //Create disk IO cache, reset the buffer.
     m_fileCache=QByteArray(m_fileCacheSize*1048576, '\0');
-    //Reset the buffer.
     m_fileCachePos=0;
     //Open the file, write the data.
     m_file.reset(new QFile(targetDir.filePath(m_targetName+".kmt")));
@@ -165,11 +164,26 @@ void KNFileDownloadManager::reset()
     m_pausedFlag=false;
 }
 
+void KNFileDownloadManager::abort()
+{
+    //Check the pointer.
+    if(!m_fileReply)
+    {
+        //No need to abort.
+        return;
+    }
+    //Disconnect all from the reply.
+    m_replyHandler.disconnectAll();
+    //Abort the reply.
+    m_fileReply->abort();
+}
+
 void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
 {
     //Check reply data.
-    if(QNetworkReply::NoError==reply->error())
+    switch(m_fileReply->error())
     {
+    case QNetworkReply::NoError:
         //Cut down all the reply connections.
         m_replyHandler.disconnectAll();
         //Write the left data in the socket to cache.
@@ -182,32 +196,47 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
                            ).filePath(m_targetName));
         //Reset the file to null.
         m_file.reset();
-        //Clear the byte data.
-        m_fileCache=QByteArray();
+        //Clear the disk cache.
+        clearDiskCache();
         //Emit download finished signal.
         emit finished();
-        //Clear reply.
-        reply->deleteLater();
-        //Clear the pointer.
+        //Clear the reply pointer.
+        m_fileReply->deleteLater();
         m_fileReply=nullptr;
         //Mission complete.
         return;
-    }
-    //Check the error type.
-    if(QNetworkReply::OperationCanceledError==reply->error() &&
-            //Check the paused flag.
-            m_pausedFlag)
-    {
-        //At the moment, the socket has been closed, we cannot read and data
-        //from the socket.
-        //However, we could still write the data in the cache to the file.
-        flushToFile();
-        //Emit the paused signal.
-        emit paused(m_file->pos());
+    case QNetworkReply::OperationCanceledError:
+        //Check the paused flag.
+        if(m_pausedFlag)
+        {
+            //At the moment, the socket has been closed, we cannot read and data
+            //from the socket.
+            //However, we could still write the data in the cache to the file.
+            flushToFile();
+            //Emit the paused signal.
+            emit paused(m_file->pos());
+        }
+        else
+        {
+            //Manually abort, which means it is abort.
+            //We need to remove the template file.
+            m_file->close();
+            m_file->remove();
+            //Reset the file pointer.
+            m_file.reset();
+            //Emit the paused signal.
+            emit cancelled();
+        }
+        //Abandon the disk cache.
+        clearDiskCache();
+        //Clear the pointer.
+        m_fileReply->deleteLater();
+        m_fileReply=nullptr;
         return;
+    default:
+        //! FIXME: Add error operations.
+        qDebug()<<reply->error()<<reply->errorString();
     }
-    qDebug()<<reply->error()<<reply->errorString();
-    //! FIXME: Add error operations.
 }
 
 void KNFileDownloadManager::replyDownloadProgress(const qint64 &bytesReceived,
@@ -262,4 +291,11 @@ inline void KNFileDownloadManager::flushToFile()
         //Flush cache to file.
         m_file->write(m_fileCache);
     }
+}
+
+inline void KNFileDownloadManager::clearDiskCache()
+{
+    //Clear the byte data.
+    m_fileCache=QByteArray();
+    m_fileCachePos=0;
 }

@@ -92,6 +92,7 @@ private slots:
     void onContainerMove(const QVariant &value);
     void onContainerMoveFinish();
     void onBackgroundClicked();
+    void onEmptyStateChanged(bool isEmpty);
     void onSelectionChanged(const QItemSelection &selected,
                             const QItemSelection &deselected);
 
