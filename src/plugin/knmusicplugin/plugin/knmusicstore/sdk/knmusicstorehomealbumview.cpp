@@ -190,13 +190,22 @@ void KNMusicStoreHomeAlbumView::paintEvent(QPaintEvent *event)
         //Calculate the start x.
         currentX=(currentRow>>1)*AlbumHorizontalSize-
             horizontalScrollBar()->value(),
-        currentY=PaintTopMargin;
+        currentY=PaintTopMargin,
+        hoverRow=hoverIndex().row();
     //Start to paint the album item.
     while(currentRow<homeListModel->rowCount())
     {
         //Draw the pixmap first.
         const KNMusicStoreHomeItem &albumItem=
                 homeListModel->homeItem(currentRow);
+        //Check if the item is current item.
+        if(currentRow==hoverRow)
+        {
+            //Update the paint font.
+            QFont lineFont=painter.font();
+            lineFont.setUnderline(true);
+            painter.setFont(lineFont);
+        }
         //Check the album art is null or not.
         //Draw the pixmap shadow first.
         painter.drawPixmap(currentX-ShadowIncrease, currentY-ShadowIncrease,
@@ -239,6 +248,12 @@ void KNMusicStoreHomeAlbumView::paintEvent(QPaintEvent *event)
                              AlbumAreaWidth));
         //Reset the opacity.
         painter.setOpacity(1.0);
+        //Check if the item is current item, reset font.
+        if(currentRow==hoverRow)
+        {
+            //Update the paint font.
+            painter.setFont(font());
+        }
         //Change the position.
         if(currentY==PaintTopMargin)
         {

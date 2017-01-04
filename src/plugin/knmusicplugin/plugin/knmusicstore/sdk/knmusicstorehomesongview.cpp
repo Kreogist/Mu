@@ -144,7 +144,8 @@ void KNMusicStoreHomeSongView::paintEvent(QPaintEvent *event)
             currentX=(currentRow>>2)*SongAreaWidth-
                 horizontalScrollBar()->value(),
             currentY=PaintTopMargin,
-            columnCounter=0;
+            columnCounter=0,
+            hoverRow=hoverIndex().row();
     //Start to paint the album item.
     while(currentRow<homeListModel->rowCount())
     {
@@ -159,6 +160,14 @@ void KNMusicStoreHomeSongView::paintEvent(QPaintEvent *event)
         //Calculate the text position.
         int textXPos=currentX+SongArtworkSize+SongTextHSpacing,
             textYPos=currentY+10;
+        //Check if the item is current item.
+        if(currentRow==hoverRow)
+        {
+            //Update the paint font.
+            QFont lineFont=painter.font();
+            lineFont.setUnderline(true);
+            painter.setFont(lineFont);
+        }
         //Draw the song album title.
         painter.drawText(QRect(textXPos, textYPos,
                                SongTextWidth, fontMetrics().height()),
@@ -179,6 +188,12 @@ void KNMusicStoreHomeSongView::paintEvent(QPaintEvent *event)
                                                   SongTextWidth));
         //Reset the opacity.
         painter.setOpacity(1.0);
+        //Check if the item is current item, reset font.
+        if(currentRow==hoverRow)
+        {
+            //Update the paint font.
+            painter.setFont(font());
+        }
         //Increase counter.
         ++columnCounter;
         //Check counter.

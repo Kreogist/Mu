@@ -112,6 +112,11 @@ protected:
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNMusicStoreHomeItemView::mouseMoveEvent().
+     */
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Get the casted list model.
      * \return The music store list model pointer, when there is no model, it
      * will be nullptr.
@@ -124,11 +129,18 @@ protected:
      */
     QScrollBar *scrollBar();
 
+    /*!
+     * \brief Get the current hover index.
+     * \return The hover index. This should be used in the paint event.
+     */
+    QModelIndex hoverIndex() const;
+
 private slots:
     void onMouseInOut(int frame);
 
 private:
     inline void startAnime(int endFrame);
+    QModelIndex m_hoverIndex;
     QTimeLine *m_mouseAnime;
     QScrollBar *m_scrollBar;
     KNMusicStoreHomeListModel *m_listModel;

@@ -27,11 +27,14 @@ Foundation,
 
 #include "knmusicstorehomeitemview.h"
 
+#include <QDebug>
+
 #define ScrollBarWidth          10
 #define MaxOpacity              0x80
 
 KNMusicStoreHomeItemView::KNMusicStoreHomeItemView(QWidget *parent) :
     QAbstractItemView(parent),
+    m_hoverIndex(QModelIndex()),
     m_mouseAnime(new QTimeLine(200, this)),
     m_scrollBar(new QScrollBar(Qt::Horizontal, this)),
     m_listModel(nullptr)
@@ -39,6 +42,7 @@ KNMusicStoreHomeItemView::KNMusicStoreHomeItemView(QWidget *parent) :
     //Set properties.
     setFrameStyle(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setMouseTracking(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //Configure the scroll bar.
     m_scrollBar->setObjectName("MusicStoreScrollBar");
@@ -61,6 +65,9 @@ KNMusicStoreHomeItemView::KNMusicStoreHomeItemView(QWidget *parent) :
                 m_scrollBar->blockSignals(true);
                 //Reset the value.
                 m_scrollBar->setValue(value);
+                //Reset the hover index and mouse pointer.
+                m_hoverIndex=QModelIndex();
+                setCursor(Qt::ArrowCursor);
                 //Release the block
                 m_scrollBar->blockSignals(false);
             });
@@ -155,6 +162,11 @@ void KNMusicStoreHomeItemView::enterEvent(QEvent *event)
 
 void KNMusicStoreHomeItemView::leaveEvent(QEvent *event)
 {
+    //Reset the hover index and cursor.
+    m_hoverIndex=QModelIndex();
+    setCursor(Qt::ArrowCursor);
+    //Update the view.
+    update();
     //Leave the list view.
     QAbstractItemView::leaveEvent(event);
     //Start mouse leave anime.
@@ -173,6 +185,18 @@ void KNMusicStoreHomeItemView::wheelEvent(QWheelEvent *event)
     }
     //Continue for the horizontal movement.
     QAbstractItemView::wheelEvent(event);
+}
+
+void KNMusicStoreHomeItemView::mouseMoveEvent(QMouseEvent *event)
+{
+    //Get the hover index.
+    m_hoverIndex=indexAt(event->pos());
+    //Update the view.
+    update();
+    //Check the hover index.
+    setCursor(m_hoverIndex.isValid()?Qt::PointingHandCursor:Qt::ArrowCursor);
+    //Do original event.
+    QAbstractItemView::mouseMoveEvent(event);
 }
 
 void KNMusicStoreHomeItemView::onMouseInOut(int frame)
@@ -199,6 +223,11 @@ inline void KNMusicStoreHomeItemView::startAnime(int endFrame)
                 endFrame);
     //Start the time line.
     m_mouseAnime->start();
+}
+
+QModelIndex KNMusicStoreHomeItemView::hoverIndex() const
+{
+    return m_hoverIndex;
 }
 
 QScrollBar *KNMusicStoreHomeItemView::scrollBar()

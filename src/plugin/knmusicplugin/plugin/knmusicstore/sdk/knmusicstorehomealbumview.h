@@ -53,13 +53,13 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from QAbstractItemView::paintEvent().
+     * \brief Reimplemented from KNMusicStoreHomeItemView::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 protected slots:
     /*!
-     * \brief Reimplemented from QAbstractItemView::updateGeometries().
+     * \brief Reimplemented from KNMusicStoreHomeItemView::updateGeometries().
      */
     void updateGeometries() Q_DECL_OVERRIDE;
 

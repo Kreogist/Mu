@@ -78,13 +78,19 @@ void KNMusicStoreHomeListView::paintEvent(QPaintEvent *event)
     KNMusicStoreHomeListModel *itemModel=listModel();
     //Calcualte the render boundary.
     int maxRenderCount=qMin(m_maxRenderingCount, itemModel->rowCount()),
-            currentY=0;
+            currentY=0, hoverRow=hoverIndex().row();
     //Get the fonts.
     QFont titleFont=font();
     titleFont.setBold(true);
+    QFont titleUnderLine=titleFont;
+    titleUnderLine.setUnderline(true);
+    QFont normalUnderLineFont=font();
+    normalUnderLineFont.setUnderline(true);
     //Render each item in the list.
     for(int i=0; i<maxRenderCount; ++i)
     {
+        //Reset the font.
+        painter.setFont(i==hoverRow?normalUnderLineFont:font());
         //Draw item index.
         painter.drawText(0, currentY+ListTitleSpacing, width(),
                          fontMetrics().height(),
@@ -95,17 +101,6 @@ void KNMusicStoreHomeListView::paintEvent(QPaintEvent *event)
         //Calculate the text top.
         int textTop=currentY+ListVerticalSpacing,
                 textWidth=width()-ListTextLeft;
-        //Set the title font.
-        painter.setFont(titleFont);
-        //Draw the title.
-        painter.drawText(ListTextLeft, textTop,
-                         textWidth, fontMetrics().height(),
-                         Qt::AlignTop | Qt::AlignLeft,
-                         fontMetrics().elidedText(item.title,
-                                                  Qt::ElideRight,
-                                                  textWidth));
-        //Reset the font.
-        painter.setFont(font());
         //Change the painter opacity.
         painter.setOpacity(0.5);
         //Draw the subtitle text.
@@ -118,6 +113,15 @@ void KNMusicStoreHomeListView::paintEvent(QPaintEvent *event)
                                                   textWidth));
         //Reset the opacity.
         painter.setOpacity(1.0);
+        //Set the title font.
+        painter.setFont(i==hoverRow?titleUnderLine:titleFont);
+        //Draw the title.
+        painter.drawText(ListTextLeft, textTop,
+                         textWidth, fontMetrics().height(),
+                         Qt::AlignTop | Qt::AlignLeft,
+                         fontMetrics().elidedText(item.title,
+                                                  Qt::ElideRight,
+                                                  textWidth));
         //Increase current Y.
         currentY+=ListItemHeight;
     }
