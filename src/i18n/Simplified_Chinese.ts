@@ -1557,7 +1557,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicStore</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="208"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp" line="217"/>
         <source>Store</source>
         <translation>商店</translation>
     </message>
@@ -1581,39 +1581,75 @@ To create a playlist, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicStoreDownloadList</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp" line="245"/>
+        <source>Start All</source>
+        <translation>全部开始</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp" line="246"/>
+        <source>Pause All</source>
+        <translation>全部暂停</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp" line="247"/>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlist.cpp" line="248"/>
+        <source>Clear</source>
+        <translation>清空</translation>
+    </message>
+</context>
+<context>
+    <name>KNMusicStoreDownloadListDelegate</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.cpp" line="165"/>
+        <source>Paused</source>
+        <translation>暂停</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.cpp" line="166"/>
+        <source>Waiting</source>
+        <translation>等待中</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicStoreErrorDimmer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="162"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="159"/>
         <source>Connection Error</source>
         <translation>网络连接错误</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="163"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="160"/>
         <source>Reply Content Error</source>
         <translation>返回内容错误</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="165"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="162"/>
         <source>Please check your Internet connection, and then click &apos;Refresh&apos;.</source>
         <translation>请检查您的网络连接，然后单击“刷新”重试。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="167"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="164"/>
         <source>Please send an E-mail to kreogistdevteam@126.com to report this bug.</source>
         <translation>请发送邮件到kreogistdevteam@126.com反馈这个bug。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="170"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="167"/>
         <source>Okay</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="171"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="168"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="172"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="169"/>
         <source>Contact</source>
         <translation>发送邮件</translation>
     </message>
@@ -1685,19 +1721,24 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicStorePageSingleSong</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="263"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="279"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="264"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="280"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="265"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="281"/>
         <source>Album</source>
         <translation>专辑</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="283"/>
+        <source>Download</source>
+        <translation>下载</translation>
     </message>
 </context>
 <context>
