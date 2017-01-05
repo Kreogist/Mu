@@ -125,6 +125,11 @@ win32: {
     HEADERS += plugin/knwindowsextras/knwindowsextras.h
 }
 
+unix: {
+    # Add UNIX series specific platform sources.
+    SOURCES += sdk/knlockedfile_unix.cpp
+}
+
 macx: {
     # Application icon.
     RC_FILE += resource/icon/mu.icns
@@ -493,7 +498,9 @@ SOURCES += \
     sdk/knopacityanimetextbutton.cpp \
     sdk/knfiledownloadmanager.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadmanager.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.cpp
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.cpp \
+    sdk/knlockedfile.cpp \
+    sdk/knlocalpeer.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -758,7 +765,9 @@ HEADERS += \
     sdk/knopacityanimetextbutton.h \
     sdk/knfiledownloadmanager.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadmanager.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.h
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.h \
+    sdk/knlockedfile.h \
+    sdk/knlocalpeer.h
 
 RESOURCES += \
     resource/res.qrc
