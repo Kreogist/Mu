@@ -20,8 +20,7 @@
 
 #include <QApplication>
 
-class QLocalServer;
-class QSharedMemory;
+class KNLocalPeer;
 /*!
  * \brief The KNSingletonApplication class manages a singleton GUI application's
  * control flow and main settings.\n
@@ -32,7 +31,10 @@ class QSharedMemory;
  * It will send the arguments from operating system to the existed instance if
  * there is already a KNSingletonApplication existed. KNSingletonApplication
  * will emit messageAvailble() signal when it gets any new arguments from the
- * other instance.
+ * other instance.\n
+ * This is the second version of singleton application. The previous version is
+ * used the shared memory. However, it works not quite good, so we changed our
+ * policy to use the QtSingleApplication and modified it for our usage.
  */
 class KNSingletonApplication : public QApplication
 {
@@ -71,16 +73,8 @@ protected:
      */
     bool event(QEvent *e) Q_DECL_OVERRIDE;
 
-private slots:
-    void onMessageReceive();
-
 private:
-    inline bool sendMessages(const QString &uniqueKey,
-                             const QStringList &messages);
-
-    QLocalServer *m_messageServer;
-    QSharedMemory *m_uniqueKeyMemeory;
-    bool m_isInstanceRunning;
+    KNLocalPeer *m_peer;
 };
 
 #endif // KNSINGLETONAPPLICATION_H
