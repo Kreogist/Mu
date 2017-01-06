@@ -121,7 +121,8 @@ win32: {
     CONFIG += backend-bass analysiser-ffmpeg
     # Add Windows platform special extras.
     QT += winextras
-    SOURCES += plugin/knwindowsextras/knwindowsextras.cpp
+    SOURCES += plugin/knwindowsextras/knwindowsextras.cpp \
+               sdk/knlockedfile_win.cpp
     HEADERS += plugin/knwindowsextras/knwindowsextras.h
 }
 

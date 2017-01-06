@@ -49,12 +49,12 @@ bool KNLockedFile::open(QIODevice::OpenMode mode)
 bool KNLockedFile::isLocked() const
 {
     //Simply check the lock mode.
-    return m_lock_mode != NoLock;
+    return m_lockMode != NoLock;
 }
 
 KNLockedFile::LockMode KNLockedFile::lockMode() const
 {
-    return m_lock_mode;
+    return m_lockMode;
 }
 
 inline void KNLockedFile::initialParameters()
@@ -63,8 +63,8 @@ inline void KNLockedFile::initialParameters()
     //so we put the code here, only do the QFile initial in the contruction
     //function.
 #ifdef Q_OS_WIN
-    wmutex = 0;
-    rmutex = 0;
+    m_writeMutex = 0;
+    m_readMutex = 0;
 #endif
-    m_lock_mode = NoLock;
+    m_lockMode = NoLock;
 }

@@ -115,15 +115,14 @@ public slots:
 private:
     inline void initialParameters();
 #ifdef Q_OS_WIN
-    Qt::HANDLE wmutex;
-    Qt::HANDLE rmutex;
-    QVector<Qt::HANDLE> rmutexes;
-    QString mutexname;
-
     Qt::HANDLE getMutexHandle(int idx, bool doCreate);
     bool waitMutex(Qt::HANDLE mutex, bool doBlock);
+    Qt::HANDLE m_writeMutex;
+    Qt::HANDLE m_readMutex;
+    QVector<Qt::HANDLE> m_readMutexes;
+    QString m_mutexName;
 #endif
-    LockMode m_lock_mode;
+    LockMode m_lockMode;
 };
 
 #endif // KNLOCKEDFILE_H

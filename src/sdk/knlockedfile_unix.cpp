@@ -27,52 +27,52 @@ Foundation,
 bool KNLockedFile::lock(LockMode mode, bool block)
 {
     //Check the file open state first.
-    if (!isOpen())
+    if(!isOpen())
     {
         //When the file is not open, it cannot be locked.
         qWarning("KNLockedFile::lock(): file is not opened");
         return false;
     }
     //Check the operation type.
-    if (mode == NoLock)
+    if(mode==NoLock)
     {
         //For no lock, we have to unlock the file.
         return unlock();
     }
     //Check whether the current mode is the same.
-    if (mode == m_lock_mode)
+    if(mode==m_lockMode)
     {
         //Already lock the file at the mode, complete.
         return true;
     }
     //If the file is locked, then we need to unlock the file first, and relock
     //the file at the specific mode.
-    if (m_lock_mode != NoLock)
+    if(NoLock!=m_lockMode)
     {
         //Unlock the file.
         unlock();
     }
     //Construct the flock structure.
     struct flock fl;
-    fl.l_whence = SEEK_SET;
-    fl.l_start = 0;
-    fl.l_len = 0;
-    fl.l_type = (mode == ReadLock) ? F_RDLCK : F_WRLCK;
-    int cmd = block ? F_SETLKW : F_SETLK;
+    fl.l_whence=SEEK_SET;
+    fl.l_start=0;
+    fl.l_len=0;
+    fl.l_type=(mode == ReadLock) ? F_RDLCK : F_WRLCK;
+    int cmd=block ? F_SETLKW : F_SETLK;
     //Launch the lock operation.
-    int ret = fcntl(handle(), cmd, &fl);
+    int ret=fcntl(handle(), cmd, &fl);
     //Check the result.
-    if (ret == -1)
+    if(ret==-1)
     {
         //Error occurs.
-        if (errno != EINTR && errno != EAGAIN)
+        if (errno!=EINTR && errno!=EAGAIN)
         {
             qWarning("KNLockedFile::lock(): fcntl: %s", strerror(errno));
         }
         return false;
     }
     //Save the lock mode.
-    m_lock_mode = mode;
+    m_lockMode=mode;
     return true;
 }
 
@@ -98,16 +98,16 @@ bool KNLockedFile::unlock()
     fl.l_len = 0;
     fl.l_type = F_UNLCK;
     //Launch the operation.
-    int ret = fcntl(handle(), F_SETLKW, &fl);
+    int ret=fcntl(handle(), F_SETLKW, &fl);
     //Check error.
-    if (ret == -1)
+    if(ret==-1)
     {
         //Display the error.
         qWarning("KNLockedFile::lock(): fcntl: %s", strerror(errno));
         return false;
     }
     //Set the lock mode to no lock.
-    m_lock_mode = NoLock;
+    m_lockMode = NoLock;
     return true;
 }
 
