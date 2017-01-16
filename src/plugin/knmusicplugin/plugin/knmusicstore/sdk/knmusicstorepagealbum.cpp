@@ -24,6 +24,7 @@ Foundation,
 
 #include "knhighlightlabel.h"
 #include "knscrolllabel.h"
+#include "knlocalemanager.h"
 
 #include "knmusicstoreutil.h"
 #include "knmusicstoreglobal.h"
@@ -40,7 +41,9 @@ using namespace MusicStoreUtil;
 KNMusicStorePageAlbum::KNMusicStorePageAlbum(QWidget *parent) :
     KNMusicStorePage(parent),
     m_albumTitle(new KNScrollLabel(this)),
-    m_albumArtist(new QLabel(this)),
+    m_albumArtistLabel(new QLabel(this)),
+    m_releaseDateLabel(new QLabel(this)),
+    m_publishByLabel(new QLabel(this)),
     m_albumArt(new KNHighLightLabel(this)),
     m_albumView(new KNMusicStoreListView(this))
 {
@@ -53,7 +56,14 @@ KNMusicStorePageAlbum::KNMusicStorePageAlbum(QWidget *parent) :
     titleFont.setBold(true);
     m_albumTitle->setFont(titleFont);
     //Configure the content margin.
-    m_albumArtist->setContentsMargins(0, 10, 0, 0);
+    m_albumArtistLabel->setContentsMargins(0, 10, 0, 0);
+    //Configure the publish text.
+    QByteArray publishText;
+    publishText.append(0xE2);
+    publishText.append(0x84);
+    publishText.append(0x97);
+    m_publishByText.append(publishText);
+    m_publishByText.append(" %1");
     //Configure the album model.
     KNMusicStoreAlbumModel *albumModel=knMusicStoreGlobal->albumModel();
     connect(albumModel, &KNMusicStoreAlbumModel::rowCountChanged,
@@ -67,8 +77,9 @@ KNMusicStorePageAlbum::KNMusicStorePageAlbum(QWidget *parent) :
                                       QHeaderView::Stretch);
     albumHeader->setSectionResizeMode(KNMusicStoreAlbumModel::AlbumModelArtist,
                                       QHeaderView::Stretch);
-    albumHeader->setSectionResizeMode(KNMusicStoreAlbumModel::AlbumModelDuration,
-                                      QHeaderView::Fixed);
+    albumHeader->setSectionResizeMode(
+                KNMusicStoreAlbumModel::AlbumModelDuration,
+                QHeaderView::Fixed);
     albumHeader->setStretchLastSection(false);
     m_albumView->setColumnWidth(KNMusicStoreAlbumModel::AlbumModelIndex,
                                 30);
@@ -92,7 +103,13 @@ KNMusicStorePageAlbum::KNMusicStorePageAlbum(QWidget *parent) :
     albumLayout->setSpacing(0);
     mainLayout->addLayout(albumLayout, 1);
     //Add widget to the layout.
-    albumLayout->addWidget(m_albumArt, 0, Qt::AlignTop);
+    QBoxLayout *metadataLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    metadataLayout->addWidget(m_albumArt);
+    metadataLayout->addSpacing(10);
+    metadataLayout->addWidget(m_releaseDateLabel);
+    metadataLayout->addWidget(m_publishByLabel);
+    metadataLayout->addStretch();
+    albumLayout->addLayout(metadataLayout);
     //Initial the song list layout.
     QBoxLayout *songListLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     songListLayout->setContentsMargins(20, 0, 0, 0);
@@ -100,10 +117,14 @@ KNMusicStorePageAlbum::KNMusicStorePageAlbum(QWidget *parent) :
     albumLayout->addLayout(songListLayout, 1);
     //Add widget to layout.
     songListLayout->addWidget(m_albumTitle);
-    songListLayout->addWidget(m_albumArtist);
-    songListLayout->addSpacing(60);
+    songListLayout->addWidget(m_albumArtistLabel);
+    songListLayout->addSpacing(30);
     songListLayout->addWidget(m_albumView);
     songListLayout->addStretch();
+
+    //Link retranslator.
+    knI18n->link(this, &KNMusicStorePageAlbum::retranslate);
+    retranslate();
 }
 
 void KNMusicStorePageAlbum::reset()
@@ -125,7 +146,13 @@ void KNMusicStorePageAlbum::setPageLabel(int labelIndex, const QVariant &value)
         // Album name, it should be a string type value.
         m_albumTitle->setText(metadata.value("name").toString());
         // Album artist, it should be a string type value.
-        m_albumArtist->setText(metadata.value("artist").toString());
+        m_albumArtistLabel->setText(metadata.value("artist").toString());
+        // Release date, it should be a long long type. UNIX timestamp.
+        quint64 releaseTime=(quint64)metadata.value("release").toDouble();
+        m_releaseTime=QDateTime::fromMSecsSinceEpoch(releaseTime).date();
+        // Publish by, it should be a string type value.
+        m_publishByLabel->setText(m_publishByText.arg(
+                                      metadata.value("publish").toString()));
         // Song list, it is a JSON array.
         //Get the album model
         KNMusicStoreAlbumModel *albumModel=knMusicStoreGlobal->albumModel();
@@ -151,6 +178,8 @@ void KNMusicStorePageAlbum::setPageLabel(int labelIndex, const QVariant &value)
             //Set the song info to model.
             albumModel->replace(i, songInfo);
         }
+        //Update the metadata.
+        updateMetadata();
         //Ask for show the page.
         emit requireShowPage();
         emit requireSetNavigatorItem(PageAlbum, m_albumTitle->text());
@@ -184,6 +213,14 @@ void KNMusicStorePageAlbum::showEvent(QShowEvent *event)
     KNMusicStorePage::showEvent(event);
 }
 
+void KNMusicStorePageAlbum::retranslate()
+{
+    //Update release text.
+    m_releaseText=tr("Release: %1");
+    //Update metadata.
+    updateMetadata();
+}
+
 void KNMusicStorePageAlbum::onAlbumRowCountChanged(int row)
 {
     //Resize the album tree view.
@@ -210,4 +247,12 @@ void KNMusicStorePageAlbum::onViewIndexClicked(const QModelIndex &index)
     default:
         return;
     }
+}
+
+inline void KNMusicStorePageAlbum::updateMetadata()
+{
+    //Update the release text.
+    m_releaseDateLabel->setText(m_releaseText.arg(
+                                    m_releaseTime.toString(
+                                        Qt::SystemLocaleLongDate)));
 }

@@ -100,11 +100,25 @@ void KNMusicStoreNeteaseBackend::showHome()
                   NeteaseGet, NeteaseHomeListTopSongs);
 }
 
+void KNMusicStoreNeteaseBackend::showArtist(const QString &artistInfo)
+{
+    //The artist information should be one string which is the artist id.
+    //The access url is:
+    //  http://music.163.com/api/artist/(artist id)
+    //Reset the network access manager.
+    resetManager();
+    //Get the data.
+    insertRequest("http://music.163.com/api/artist/"+artistInfo,
+                  NeteaseGet, NeteaseArtistDetails);
+    //Increase the Internet counter.
+    emit requireAddConnectionCount(1);
+}
+
 void KNMusicStoreNeteaseBackend::showAlbum(const QString &albumInfo)
 {
     //The album info should be one string which is the album id.
     //The access url is:
-    //  http://music.163.com/api/artist/(album id)
+    //  http://music.163.com/api/album/(album id)
     //Reset the network access manager.
     resetManager();
     //Get the data.
@@ -267,6 +281,10 @@ void KNMusicStoreNeteaseBackend::onReplyFinished(QNetworkReply *reply)
         //Call the home page new song art list processing.
         onHomeNewArtworkReply(reply, m_songArtworkList, HomeNewSongArt);
         break;
+    case NeteaseArtistDetails:
+        //Artist detail information reply.
+        onArtistDetailReply(reply);
+        break;
     case NeteaseAlbumDetails:
         //Album detail information reply.
         onAlbumDetailReply(reply);
@@ -342,6 +360,11 @@ void KNMusicStoreNeteaseBackend::onHomeNewArtworkReply(QNetworkReply *reply,
                         QVariant::fromValue(homeArtworkData));
 }
 
+void KNMusicStoreNeteaseBackend::onArtistDetailReply(QNetworkReply *reply)
+{
+    qDebug()<<reply->readAll();
+}
+
 void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
 {
     //Get the raw data from the reply.
@@ -355,6 +378,8 @@ void KNMusicStoreNeteaseBackend::onAlbumDetailReply(QNetworkReply *reply)
     metadata.insert("name", albumName);
     metadata.insert("artist", albumObject.value("artist"
                                                 ).toObject().value("name"));
+    metadata.insert("release", albumObject.value("publishTime"));
+    metadata.insert("publish", albumObject.value("company"));
     //Set the album data.
     QJsonArray songList, rawSongList=albumObject.value("songs").toArray();
     //Construct the song object.

@@ -211,6 +211,7 @@ inline void KNMusicStoreContainer::configurePage(KNMusicStorePage *pageWidget)
     //Link the page signals.
     connect(pageWidget, &KNMusicStorePage::requireShowPage,
             this, &KNMusicStoreContainer::onShowPage);
+    ;
     connect(pageWidget, &KNMusicStorePage::requireShowAlbum,
             this, &KNMusicStoreContainer::onShowAlbum);
     connect(pageWidget, &KNMusicStorePage::requireShowSingleSong,

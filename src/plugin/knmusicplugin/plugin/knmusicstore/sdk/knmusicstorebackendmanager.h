@@ -107,6 +107,14 @@ public slots:
     void showHomePage();
 
     /*!
+     * \brief Fetch the artist information according to the information it
+     * provides to a specific backend.
+     * \param backendId The ID of the backend, i.e. its object name.
+     * \param artistInfo The artist identical information.
+     */
+    void showArtist(const QString &backendId, const QString &artistInfo);
+
+    /*!
      * \brief Fetch the album information according to the information it
      * provides to a specific backend.
      * \param backendId The ID of the backend, i.e. its object name.
@@ -129,6 +137,7 @@ private:
     enum OperationTypes
     {
         OperationShowHome,
+        OperationShowArtist,
         OperationShowAlbum,
         OperationShowSingleSong
     };

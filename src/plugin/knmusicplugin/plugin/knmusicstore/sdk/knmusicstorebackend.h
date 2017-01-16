@@ -119,6 +119,13 @@ public slots:
     virtual void showHome()=0;
 
     /*!
+     * \brief Fetch the artist information according to the information it
+     * provides to the backend.
+     * \param artistInfo The artist identical information.
+     */
+    virtual void showArtist(const QString &artistInfo)=0;
+
+    /*!
      * \brief Fetch the album information according to the information it
      * provides to the backend.
      * \param albumInfo The album identical information.

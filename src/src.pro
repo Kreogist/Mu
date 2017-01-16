@@ -501,7 +501,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadmanager.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.cpp \
     sdk/knlockedfile.cpp \
-    sdk/knlocalpeer.cpp
+    sdk/knlocalpeer.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.cpp \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -768,7 +770,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadmanager.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloadlistdelegate.h \
     sdk/knlockedfile.h \
-    sdk/knlocalpeer.h
+    sdk/knlocalpeer.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.h \
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.h
 
 RESOURCES += \
     resource/res.qrc

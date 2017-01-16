@@ -72,6 +72,12 @@ signals:
     void requireShowPage();
 
     /*!
+     * \brief Ask the backend to fetch information about one artist.
+     * \param metadata The song's metadata.
+     */
+    void requireShowArtist(QString metadata);
+
+    /*!
      * \brief Ask the backend to fetch information about one album.
      * \param metadata The song's metadata.
      */

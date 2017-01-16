@@ -61,6 +61,13 @@ signals:
     void requireShowHome();
 
     /*!
+     * \brief Ask the backend to fetch information about one artist.
+     * \param backendId The backend name which will process the metadata.
+     * \param metadata The artist's metadata.
+     */
+    void requireShowArtist(QString backendId, QString metadata);
+
+    /*!
      * \brief Ask the backend to fetch information about one album.
      * \param backendId The backend name which will process the metadata.
      * \param metadata The album's metadata.

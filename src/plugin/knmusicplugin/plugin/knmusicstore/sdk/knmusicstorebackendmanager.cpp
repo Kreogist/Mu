@@ -85,6 +85,38 @@ void KNMusicStoreBackendManager::showHomePage()
     backend->showHome();
 }
 
+void KNMusicStoreBackendManager::showArtist(const QString &backendId,
+                                            const QString &artistInfo)
+{
+    Q_ASSERT(m_pageContainer);
+    //Check the operation.
+    if(OperationShowArtist==m_currentOperation &&
+            //Check the metadata and backend name.
+            artistInfo==m_currentMetadata && backendId==m_backendName)
+    {
+        //Ignore the same request.
+        return;
+    }
+    //Save the operation and metadata.
+    m_currentOperation=OperationShowArtist;
+    m_currentMetadata=artistInfo;
+    //Get the backend.
+    KNMusicStoreBackend *backend=m_backendMap.value(backendId, nullptr);
+    //Check backend pointer.
+    if(!backend)
+    {
+        //Failed to operate the backend.
+        return;
+    }
+    //Get the page.
+    KNMusicStorePage *page=m_pageContainer->page(PageArtist);
+    //Set the backend to the page.
+    page->setBackend(backend);
+    page->setMetadata(artistInfo);
+    //Ask the backend to show the information.
+    backend->showArtist(artistInfo);
+}
+
 void KNMusicStoreBackendManager::showAlbum(const QString &backendId,
                                            const QString &albumInfo)
 {

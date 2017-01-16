@@ -67,6 +67,11 @@ public slots:
     void showHome() Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplmented from KNMusicStoreBackend::showArtist().
+     */
+    void showArtist(const QString &artistInfo) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplmented from KNMusicStoreBackend::showAlbum().
      */
     void showAlbum(const QString &albumInfo) Q_DECL_OVERRIDE;
@@ -86,6 +91,7 @@ private slots:
     void onHomeNewArtworkReply(QNetworkReply *reply,
                                QList<uint> &urlMap,
                                int albumArtRequestType);
+    void onArtistDetailReply(QNetworkReply *reply);
     void onAlbumDetailReply(QNetworkReply *reply);
     void onSingleDetailReply(QNetworkReply *reply);
     void onSingleLyricsReply(QNetworkReply *reply);
@@ -102,6 +108,7 @@ private:
         NeteaseHomeListTopSongs,
         NeteaseHomeListNewAlbumArt,
         NeteaseHomeListNewSongArt,
+        NeteaseArtistDetails,
         NeteaseAlbumDetails,
         NeteaseAlbumArt,
         NeteaseSingleDetails,

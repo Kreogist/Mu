@@ -20,6 +20,8 @@ Foundation,
 #ifndef KNMUSICSTOREPAGEALBUM_H
 #define KNMUSICSTOREPAGEALBUM_H
 
+#include <QDate>
+
 #include "knmusicstorepage.h"
 
 class QLabel;
@@ -70,13 +72,17 @@ protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void retranslate();
     void onAlbumRowCountChanged(int row);
     void onViewIndexClicked(const QModelIndex &index);
 
 private:
+    inline void updateMetadata();
     KNConnectionHandler m_backendConnection;
+    QDate m_releaseTime;
+    QString m_releaseText, m_publishByText;
     KNScrollLabel *m_albumTitle;
-    QLabel *m_albumArtist;
+    QLabel *m_albumArtistLabel, *m_releaseDateLabel, *m_publishByLabel;
     KNHighLightLabel *m_albumArt;
     KNMusicStoreListView *m_albumView;
 };

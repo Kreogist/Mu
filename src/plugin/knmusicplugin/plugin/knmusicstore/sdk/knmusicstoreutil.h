@@ -60,6 +60,7 @@ namespace MusicStoreUtil
         PageHome,
         PageSearchResult,
         PageList,
+        PageArtist,
         PageAlbum,
         PageSingleSong,
         PagesCount
