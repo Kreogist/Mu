@@ -15,9 +15,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include <QStandardPaths>
 #include <QApplication>
+#include <QDir>
 #include <QProcess>
+#include <QStandardPaths>
 #include <QThread>
 #include <QNetworkReply>
 
@@ -533,8 +534,20 @@ void KNGlobal::updateInfrastructure()
     QString oldLibraryPath=m_dirPath[LibraryDir];
     //Get the directory path from the configure, use the old library path as the
     //default value.
-    m_dirPath[LibraryDir]=
+    QString savedLibraryDir=
             systemConfigure()->data("LibraryPath", oldLibraryPath).toString();
+    //Construct the saved library directory path.
+    QDir savedDirectory(savedLibraryDir);
+    //Check the library directory is exist or not.
+    if((!savedDirectory.exists()) &&
+            //Try to build the directory.
+            KNUtil::ensurePathValid(savedLibraryDir).isEmpty())
+    {
+        //! FIXME: report the update error.
+        return;
+    }
+    //Save the new library directory path.
+    m_dirPath[LibraryDir]=savedDirectory.absolutePath();
     //Check if the previous directory is just the same as the current one.
     //If they are different, emit the library moved signal to update.
     if(oldLibraryPath!=m_dirPath[LibraryDir])

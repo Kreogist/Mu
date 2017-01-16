@@ -133,6 +133,12 @@ void KNMusicGenreModel::onActionImageRecoverComplete()
 
 inline void KNMusicGenreModel::loadGenreIcons(const QString &folderPath)
 {
+    //Check the folder path is empty or not.
+    if(folderPath.isEmpty())
+    {
+        //Ignore the load operation.
+        return;
+    }
     //Initial the genre directory.
     QDir genreIconDir(folderPath);
     //Initial the icon file info list.
@@ -155,8 +161,6 @@ inline void KNMusicGenreModel::loadGenreIcons(const QString &folderPath)
                 continue;
             }
         }
-        //Remove the no use file.
-        QFile::remove(i.absoluteFilePath());
     }
 }
 
