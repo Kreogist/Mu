@@ -68,11 +68,19 @@ public slots:
      */
     void addFile(const QFileInfo &fileInfo);
 
+    /*!
+     * \brief Add new files to the analysis queue. This slot should be connected
+     * from the signal which the searcher give out several new files.
+     * \param fileInfos The files information list which were recognized by a
+     * searcher.
+     */
+    void addFiles(const QFileInfoList &fileInfos);
+
 private slots:
     void onActionAnalysisNext();
 
 private:
-    QLinkedList<QFileInfo> m_filePathQueue;
+    QFileInfoList m_filePathQueue;
     bool m_isWorking;
 };
 

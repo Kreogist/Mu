@@ -92,7 +92,8 @@ void KNFileSearcher::analysisNext()
 void KNFileSearcher::analysisFolder(QFileInfo folderInfo)
 {
     //Get the entry file info under the folder.
-    QFileInfoList contents=QDir(folderInfo.absoluteFilePath()).entryInfoList();
+    QFileInfoList contents=QDir(folderInfo.absoluteFilePath()).entryInfoList(),
+            validFileList;
     //Check all the items of the folder.
     for(auto i=contents.constBegin(); i!=contents.constEnd(); ++i)
     {
@@ -106,13 +107,26 @@ void KNFileSearcher::analysisFolder(QFileInfo folderInfo)
         //Check the current item.
         if((*i).isFile())
         {
-            analysisFile(*i);
+            //Check whether file is valid.
+            if(isFileValid(*i))
+            {
+                //Append the file in the list.
+                validFileList.append(*i);
+                //Increase the counter.
+                ++m_counter;
+            }
         }
         else if((*i).isDir())
         {
             //If it's a directory, prepend it to the analysis queue.
             m_queue.prepend((*i).absoluteFilePath());
         }
+    }
+    //Check the valid file list.
+    if(!validFileList.isEmpty())
+    {
+        //Process the file in batch.
+        emit findFiles(validFileList);
     }
 }
 
@@ -126,6 +140,12 @@ inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo)
         //If we can find the suffix, emit the find out signal.
         emit findFile(fileInfo);
     }
+}
+
+inline bool KNFileSearcher::isFileValid(const QFileInfo &fileInfo)
+{
+    //Check whether the suffix is in the suffix list.
+    return m_suffixList.contains(fileInfo.suffix().toLower());
 }
 
 QStringList KNFileSearcher::suffixList()

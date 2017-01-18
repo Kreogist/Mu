@@ -48,6 +48,20 @@ void KNMusicAnalysisQueue::addFile(const QFileInfo &fileInfo)
     emit analysisNext();
 }
 
+void KNMusicAnalysisQueue::addFiles(const QFileInfoList &fileInfos)
+{
+    //Check file path queue first.
+    if(m_filePathQueue.isEmpty())
+    {
+        //Set working flag.
+        m_isWorking=true;
+    }
+    //Add the file path to the analysis item list.
+    m_filePathQueue.append(fileInfos);
+    //Start analysis queue.
+    emit analysisNext();
+}
+
 void KNMusicAnalysisQueue::onActionAnalysisNext()
 {
     //Check the analysis queue first.

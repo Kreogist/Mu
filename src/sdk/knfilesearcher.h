@@ -66,6 +66,14 @@ signals:
     void findFile(QFileInfo fileInfo);
 
     /*!
+     * \brief When the searcher find out there're files meet the requirements
+     * of the suffix list, this will be emitted.
+     * \param fileInfos The list of the files information whose suffix is in the
+     * list.
+     */
+    void findFiles(QFileInfoList fileInfos);
+
+    /*!
      * \brief Start to do the search.
      */
     void searchStart();
@@ -97,6 +105,7 @@ private slots:
 
 private:
     inline void analysisFile(const QFileInfo &fileInfo);
+    inline bool isFileValid(const QFileInfo &fileInfo);
     static QStringList m_suffixList;
     QStringList m_queue;
     qint64 m_counter;

@@ -59,6 +59,9 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QThread *workingThread,
     connect(m_searcher, &KNMusicSearcher::findFile,
             m_analysisQueue, &KNMusicAnalysisQueue::addFile,
             Qt::QueuedConnection);
+    connect(m_searcher, &KNMusicSearcher::findFiles,
+            m_analysisQueue, &KNMusicAnalysisQueue::addFiles,
+            Qt::QueuedConnection);
     connect(m_analysisQueue, &KNMusicAnalysisQueue::analysisComplete,
             this, &KNMusicPlaylistModel::onActionAnalysisComplete,
             Qt::QueuedConnection);
