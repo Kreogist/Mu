@@ -620,7 +620,11 @@ inline void KNMusicLibraryModel::writeDatabase()
     //Initial the file info.
     QFileInfo fileInfo(m_databasePath);
     //Check the database file environment.
-    KNUtil::ensurePathValid(fileInfo.absolutePath());
+    if(KNUtil::ensurePathValid(fileInfo.absolutePath()).isEmpty())
+    {
+        //Failed to create the folder path.
+        return;
+    }
     //Open the database file.
     QFile databaseFile(m_databasePath);
     //Open the database file.

@@ -455,6 +455,39 @@ inline void KNGlobal::initialBrushes()
     }
 }
 
+inline QString KNGlobal::getMonthString(int month)
+{
+    switch(month)
+    {
+    case 1:
+        return tr("Jan.");
+    case 2:
+        return tr("Feb.");
+    case 3:
+        return tr("Mar.");
+    case 4:
+        return tr("Apr.");
+    case 5:
+        return tr("May");
+    case 6:
+        return tr("Jun.");
+    case 7:
+        return tr("Jul.");
+    case 8:
+        return tr("Aug.");
+    case 9:
+        return tr("Sept.");
+    case 10:
+        return tr("Oct.");
+    case 11:
+        return tr("Nov.");
+    case 12:
+        return tr("Dec.");
+    default:
+        return QString();
+    }
+}
+
 QString KNGlobal::readImageFilter() const
 {
     return m_readImageFilter;
@@ -508,6 +541,14 @@ QWidget *KNGlobal::mainWindow() const
 void KNGlobal::setMainWindow(QWidget *mainWindow)
 {
     m_mainWindow = mainWindow;
+}
+
+QString KNGlobal::localeDateString(const QDate &date)
+{
+    //Check the date.
+    return tr("%2 %3, %1").arg(QString::number(date.year()),
+                               getMonthString(date.month()),
+                               QString::number(date.day()));
 }
 
 #ifdef Q_OS_UNIX

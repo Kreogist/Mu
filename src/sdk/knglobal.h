@@ -180,6 +180,13 @@ public:
      */
     void setMainWindow(QWidget *mainWindow);
 
+    /*!
+     * \brief Get the locale date string.
+     * \param date The date which need to be translate to string.
+     * \return The locale date string.
+     */
+    QString localeDateString(const QDate &date);
+
 #ifdef Q_OS_UNIX
     enum DesktopEnvironments
     {
@@ -260,7 +267,7 @@ private:
 #ifdef Q_OS_UNIX
     inline void initialDesktopEnvironment();
 #endif
-
+    inline QString getMonthString(int month);
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];
     QBrush m_brushes[TextureBrushCount];

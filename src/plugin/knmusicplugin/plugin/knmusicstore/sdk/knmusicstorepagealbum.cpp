@@ -22,6 +22,7 @@ Foundation,
 #include <QJsonArray>
 #include <QLabel>
 
+#include "knglobal.h"
 #include "knhighlightlabel.h"
 #include "knscrolllabel.h"
 #include "knlocalemanager.h"
@@ -216,7 +217,7 @@ void KNMusicStorePageAlbum::showEvent(QShowEvent *event)
 void KNMusicStorePageAlbum::retranslate()
 {
     //Update release text.
-    m_releaseText=tr("Release: %1");
+    m_releaseText=tr("Release: ");
     //Update metadata.
     updateMetadata();
 }
@@ -252,7 +253,6 @@ void KNMusicStorePageAlbum::onViewIndexClicked(const QModelIndex &index)
 inline void KNMusicStorePageAlbum::updateMetadata()
 {
     //Update the release text.
-    m_releaseDateLabel->setText(m_releaseText.arg(
-                                    m_releaseTime.toString(
-                                        Qt::SystemLocaleLongDate)));
+    m_releaseDateLabel->setText(m_releaseText+
+                                knGlobal->localeDateString(m_releaseTime));
 }
