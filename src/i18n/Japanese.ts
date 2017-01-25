@@ -1616,17 +1616,17 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="156"/>
         <source>Name</source>
-        <translation type="unfinished">名前</translation>
+        <translation>名前</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="157"/>
         <source>Artist</source>
-        <translation type="unfinished">アーティスト</translation>
+        <translation>アーティスト</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorealbummodel.cpp" line="158"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>時間</translation>
     </message>
 </context>
 <context>
@@ -1739,7 +1739,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagealbum.cpp" line="220"/>
         <source>Release: </source>
-        <translation type="unfinished"></translation>
+        <translation>リリース：</translation>
     </message>
 </context>
 <context>
@@ -1747,12 +1747,12 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="257"/>
         <source>New Album</source>
-        <translation type="unfinished"></translation>
+        <translation>新着アルバム</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="258"/>
         <source>New Music</source>
-        <translation type="unfinished"></translation>
+        <translation>新着音楽</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="259"/>
@@ -1780,17 +1780,17 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="279"/>
         <source>Artist</source>
-        <translation type="unfinished">アーティスト</translation>
+        <translation>アーティスト</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="280"/>
         <source>Artists</source>
-        <translation type="unfinished">アーティスト</translation>
+        <translation>アーティスト</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="281"/>
         <source>Album</source>
-        <translation type="unfinished">アルバム</translation>
+        <translation>アルバム</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="283"/>
