@@ -1772,7 +1772,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="262"/>
         <source>Top Songs</source>
-        <translation type="unfinished"></translation>
+        <translation>トップ音楽</translation>
     </message>
 </context>
 <context>
@@ -1795,7 +1795,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagesinglesong.cpp" line="283"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>ダウンロード</translation>
     </message>
 </context>
 <context>

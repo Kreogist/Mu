@@ -36,9 +36,9 @@
 	<key>CFBundleName</key>
 	<string>µ</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9</string>
+	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.9</string>
+	<string>1.0.0</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIconFile</key>
@@ -46,7 +46,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleGetInfoString</key>
-	<string>µ 0.9, © 2013–2015 Kreogist Dev Team. All rights reserved.</string>
+	<string>µ 1.0, © 2013–2015 Kreogist Dev Team. All rights reserved.</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
