@@ -1757,17 +1757,17 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="259"/>
         <source>Billboard Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>Billboardランキング</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="260"/>
         <source>Oricon Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>オリコンランキング</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="261"/>
         <source>iTunes Rank</source>
-        <translation type="unfinished"></translation>
+        <translation>iTunesランキング</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagehome.cpp" line="262"/>
