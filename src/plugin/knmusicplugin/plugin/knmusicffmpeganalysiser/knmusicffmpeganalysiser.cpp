@@ -19,8 +19,6 @@
 
 extern "C"
 {
-#include <libavcodec/avcodec.h>
-#include <libavutil/avutil.h>
 #include <libavformat/avformat.h>
 }
 
@@ -68,7 +66,7 @@ bool KNMusicFfmpegAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
         return false;
     }
     //Initial the audio stream context.
-    AVCodecContext *codecContext=NULL;
+    AVCodecParameters *codecParameters=NULL;
     //Find the audio stream.
     for(unsigned int i=0; i<formatContext->nb_streams; ++i)
     {
@@ -78,19 +76,19 @@ bool KNMusicFfmpegAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
         if(stream)
         {
             //Get the codec context of the stream.
-            AVCodecContext *context=stream->codec;
+            AVCodecParameters *parameters=stream->codecpar;
             //Check the context of the stream.
-            if(context && context->codec_type==AVMEDIA_TYPE_AUDIO)
+            if(parameters && parameters->codec_type==AVMEDIA_TYPE_AUDIO)
             {
                 //Save the context.
-                codecContext=context;
+                codecParameters=parameters;
                 //Break.
                 break;
             }
         }
     }
     //Check the audio stream index.
-    if(!codecContext)
+    if(!codecParameters)
     {
         //We can't find any audio stream in the file.
         //Close the format context.
@@ -98,28 +96,14 @@ bool KNMusicFfmpegAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
         //Failed to analysis the file.
         return false;
     }
-    //Find the decoder.
-    AVCodec *codec=avcodec_find_decoder(codecContext->codec_id);
-    //Check the codec, and then open the codec context using the codec.
-    if((!codec) || (avcodec_open2(codecContext, codec, NULL)<0))
-    {
-        //Close the format context.
-        avformat_close_input(&formatContext);
-        //Failed to decode the file.
-        return false;
-    }
-
     //Now, everything is ready.
     //The duration which AVFormatContext providec is the duration of the stream,
     //in AV_TIME_BASE fractional seconds. We need to change it to ms.
     detailInfo.duration=formatContext->duration/(AV_TIME_BASE/1000);
     //Get the sample rate.
-    detailInfo.samplingRate=codecContext->sample_rate;
+    detailInfo.samplingRate=codecParameters->sample_rate;
     //Calculate the bit rate.
     detailInfo.bitRate=(double)detailInfo.size/detailInfo.duration*8+0.5;
-
-    //Close the the codec.
-    avcodec_close(codecContext);
     //Close the format context.
     avformat_close_input(&formatContext);
     //Analysis complete.
