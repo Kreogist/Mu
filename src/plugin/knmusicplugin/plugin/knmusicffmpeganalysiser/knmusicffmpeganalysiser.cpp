@@ -20,6 +20,7 @@
 extern "C"
 {
 #include <libavformat/avformat.h>
+#include <libavformat/version.h>
 }
 
 #include "knmusicffmpeganalysiser.h"
@@ -65,6 +66,11 @@ bool KNMusicFfmpegAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
         //Failed to analysis the file.
         return false;
     }
+    //Check whether the codec parameter is defined, if so, then it will use the
+    //latest version code of FFMpeg.
+    //Here we use the FF_API_CODER_TYPE as the tester, the version later should
+    //contains AVCodecParameters.
+#ifdef FF_API_CODER_TYPE
     //Initial the audio stream context.
     AVCodecParameters *codecParameters=NULL;
     //Find the audio stream.
@@ -82,11 +88,39 @@ bool KNMusicFfmpegAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
             {
                 //Save the context.
                 codecParameters=parameters;
+                //Get the sample rate.
+                detailInfo.samplingRate=codecParameters->sample_rate;
                 //Break.
                 break;
             }
         }
     }
+#else
+    //Use the old codec parameter of the stream. It is not recommend in the
+    //latest ffmpeg.
+    //Initial the audio stream context.
+    AVCodecContext *codecParameters=NULL;
+    //Find the audio stream.
+    for(unsigned int i=0; i<formatContext->nb_streams; ++i)
+    {
+        //Get the stream;
+        AVStream *stream=formatContext->streams[i];
+        //Check the validation of the stream.
+        if(stream)
+        {
+            //Get the codec context of the stream.
+            AVCodecContext *context=stream->codec;
+            //Check the context of the stream.
+            if(context && context->codec_type==AVMEDIA_TYPE_AUDIO)
+            {
+                //Save the context.
+                codecParameters=context;
+                //Break.
+                break;
+            }
+        }
+    }
+#endif
     //Check the audio stream index.
     if(!codecParameters)
     {
@@ -100,8 +134,6 @@ bool KNMusicFfmpegAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
     //The duration which AVFormatContext providec is the duration of the stream,
     //in AV_TIME_BASE fractional seconds. We need to change it to ms.
     detailInfo.duration=formatContext->duration/(AV_TIME_BASE/1000);
-    //Get the sample rate.
-    detailInfo.samplingRate=codecParameters->sample_rate;
     //Calculate the bit rate.
     detailInfo.bitRate=(double)detailInfo.size/detailInfo.duration*8+0.5;
     //Close the format context.

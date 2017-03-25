@@ -153,7 +153,7 @@ macx: {
 
 linux: {
     # Enable the backend and analysiser.
-    CONFIG += backend-gstreamer analysiser-ffmpeg # i18n
+    CONFIG += backend-gstreamer analysiser-ffmpeg i18n
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
