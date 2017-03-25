@@ -24,8 +24,10 @@ Makefile
 
 # debian build dir
 /debian/files
+/debian/mu
 /debian/*.debhelper.log
 /debian/*.substvars
+/bin
 
 #gedit temp file
 *~

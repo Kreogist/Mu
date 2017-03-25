@@ -1,3 +1,13 @@
+mu (1.0.0-beta) unstable; urgency=medium
+
+  * Use the new singleton application class instead of using shared memory.
+  * Update the bass to the latest version.
+  * Reduce the file find signal number. Using the patch list to compress the signal.
+  * Fixed the error which might delete all the files under the running directory bug.
+  * Fixed the genre images folder get from root bug.
+
+ -- Kreogist Dev Team <kreogistdevteam@126.com>  Sat, 25 Mar 2017 00:00:00 +1100
+
 mu (0.9.9.3) unstable; urgency=medium
 
   * Support Netease online lyrics module.
@@ -13,7 +23,7 @@ mu (0.9.9.3) unstable; urgency=medium
   * Fixed the application cannot be launched after a crash.
   * Fixed the scroll bar initial wrong position bug.
 
- -- Kreogist Dev Team <kreogistdevteam@126.com>  Fri, 09 Apr 2016 00:00:00 +1100  
+ -- Kreogist Dev Team <kreogistdevteam@126.com>  Fri, 09 Apr 2016 00:00:00 +1100
 
 mu (0.9.9.2) unstable; urgency=medium
 
