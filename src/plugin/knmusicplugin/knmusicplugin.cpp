@@ -244,7 +244,7 @@ void KNMusicPlugin::loadPlugins()
     //Initial the playlist tab.
     initialPlaylist(new KNMusicPlaylist);
     //Initial the store tab.
-    initialStore(new KNMusicStore);
+    //initialStore(new KNMusicStore);
 
     //Start working threads.
     knMusicGlobal->startThreads();

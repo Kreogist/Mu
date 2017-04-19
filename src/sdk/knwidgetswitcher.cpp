@@ -40,7 +40,7 @@ KNWidgetSwitcher::KNWidgetSwitcher(QWidget *parent) :
     //Add the animation to animation group.
     m_movingAnimationGroup->addAnimation(m_inAnimation);
     m_movingAnimationGroup->addAnimation(m_outAnimation);
-    //Configure the moving animation gourp.
+    //Configure the moving animation group.
     connect(m_movingAnimationGroup, &QParallelAnimationGroup::finished,
             this, &KNWidgetSwitcher::onActionMovingFinished);
 

@@ -23,6 +23,9 @@ Foundation,
 #include <QBuffer>
 
 #include "knfiledownloadmanager.h"
+#include "knutil.h"
+
+using namespace Util;
 
 #include <QDebug>
 
@@ -66,7 +69,7 @@ void KNFileDownloadManager::downloadFile(const QString &url,
     if(!targetDir.mkpath(m_savePath))
     {
         //Failed to construct the directory.
-        //! FIXME: Add error signal here.
+        emit error(false, DownloadDirNotExist);
         return;
     }
     //Create the request url.
@@ -94,8 +97,8 @@ void KNFileDownloadManager::downloadFile(const QString &url,
         //Open the target file, clear the previous data.
         if(!m_file->open(QIODevice::WriteOnly))
         {
-            //Failed to write data to file.
-            //!FIXME: Add cannot open file error signal here.
+            //Failed to write data to the new file.
+            emit error(false, DownloadFailedToCreate);
             return;
         }
     }
@@ -107,7 +110,7 @@ void KNFileDownloadManager::downloadFile(const QString &url,
         if(!m_file->open(QIODevice::ReadWrite))
         {
             //Failed to write data to file.
-            //!FIXME: Add cannot open file error signal here.
+            emit error(false, DownloadFailedToWrite);
             return;
         }
         //Seek to the end of the file.
@@ -124,6 +127,7 @@ void KNFileDownloadManager::downloadFile(const QString &url,
     m_replyHandler.append(
                 connect(m_fileReply, &QNetworkReply::downloadProgress,
                         this, &KNFileDownloadManager::replyDownloadProgress));
+
 }
 
 void KNFileDownloadManager::pause()
@@ -246,8 +250,8 @@ void KNFileDownloadManager::onDownloaderFinished(QNetworkReply *reply)
     }
     else
     {
-        //! FIXME: Add error operations.
-        qDebug()<<reply->error()<<reply->errorString();
+        //Emit the network error.
+        emit error(true, reply->error());
     }
 }
 

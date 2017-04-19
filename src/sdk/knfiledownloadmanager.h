@@ -71,6 +71,17 @@ signals:
      */
     void cancelled();
 
+    /*!
+     * \brief When an error is occured, this singal will be emitted and shows
+     * the error index.
+     * \param isNetworkError Is the error is an network connection error or
+     * other type error.
+     * \param errorId The error index. When the error is an network connection
+     * error, it should be one of the QNetworkReply::NetworkError. If it is not,
+     * it should be one error occurs in the Util::MusicStoreDownloadError.
+     */
+    void error(bool isNetworkError, int errorId);
+
 public slots:
     /*!
      * \brief Download one file from its target url.

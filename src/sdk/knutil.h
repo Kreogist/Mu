@@ -25,6 +25,17 @@
 #include <QStringList>
 #include <QUrl>
 
+namespace Util
+{
+    enum DownloadError
+    {
+        DownloadDirNotExist,
+        DownloadFailedToCreate,
+        DownloadFailedToWrite,
+        DownloadErrorCount
+    };
+}
+
 /*!
  * \brief The KNUtil class cannot be construct. It will only used to provides
  * you several public static functions.
