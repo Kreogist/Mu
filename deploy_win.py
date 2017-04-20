@@ -117,10 +117,7 @@ for qt_app in qt_versions:
             # Check the Qt bit version:
             print("Checking system version...", end='')
             bit_version = qt_app['compiler'][-2:]
-            if bit_version == "32":
-                # 32-bit version
-                print("OK")
-            elif bit_version == "64":
+            if bit_version == "64":
                 # 64-bit version
                 print("OK")
                 print("Setting for 64-bit...", end='')
@@ -130,8 +127,14 @@ for qt_app in qt_versions:
                 shared_file_name = "ffmpeg-latest-win64-shared"
                 print("OK")
             else:
-                print("Unknown OS version")
-                exit()
+                # 32-bit version
+                print("OK")
+                print("Setting for 32-bit...", end='')
+                dev_file_url = "/builds/win32/dev/ffmpeg-latest-win32-dev.zip"
+                dev_file_name = "ffmpeg-latest-win32-dev"
+                shared_file_url = "/builds/win32/shared/ffmpeg-latest-win32-shared.zip"
+                shared_file_name = "ffmpeg-latest-win32-shared"
+                print("OK")
             # Prepare the temp directory.
             work_dir = tempfile.TemporaryDirectory()
             print("Temp working directory: ", work_dir.name)
@@ -208,18 +211,18 @@ for qt_app in qt_versions:
             # Check the Qt bit version:
             print("Checking system version...", end='')
             bit_version = qt_app['compiler'][-2:]
-            if bit_version == "32":
-                # 32-bit version
-                print("OK")
-            elif bit_version == "64":
+            if bit_version == "64":
                 # 64-bit version
                 print("OK")
                 print("Setting for 64-bit...", end='')
                 bass_prefix = "x64/"
                 print("OK")
             else:
-                print("Unknown OS version")
-                exit()
+                # 32-bit version
+                print("OK")
+                print("Setting for 32-bit...", end='')
+                bass_prefix = ""
+                print("OK")
             print("Downloading Bass file...", end='')
             conn = http.client.HTTPConnection('www.un4seen.com')
             conn.request("GET", "/files/bass24.zip")
@@ -262,5 +265,5 @@ for qt_app in qt_versions:
         print('Done')
 
     except:
-        print("Error happened when check ing dependencies")
+        print("Error happened when checking dependencies")
         exit()
