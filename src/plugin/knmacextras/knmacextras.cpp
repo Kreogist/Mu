@@ -29,19 +29,21 @@ extern void qt_mac_set_dock_menu(QMenu *);
 
 KNMacExtras::KNMacExtras(QObject *parent) :
     KNPlatformExtras(parent),
-    m_isStatePlay(false)
+    m_dockMenu(new QMenu()),
+    m_statusBeforeAction(nullptr),
+    m_isStatePlay(false),
+    m_isNowPlayingShown(false)
 {
-    //Construct a dock menu.
-    QMenu *dockMenu=new QMenu();
     //Construct actions.
     for(int i=0; i<MacDockMenuActionCount; ++i)
     {
         //Construct action.
         m_menuAction[i]=new QAction(this);
     }
+    //Set the status before action.
+    m_statusBeforeAction=m_menuAction[PlayNPause];
     //Configure the actions.
     m_menuAction[NowPlaying]->setEnabled(false);
-    m_menuAction[NowPlaying]->setVisible(false);
     m_menuAction[SongName]->setEnabled(false);
     m_menuAction[ArtistAndAlbumName]->setEnabled(false);
     connect(m_menuAction[NextSong], &QAction::triggered,
@@ -49,15 +51,11 @@ KNMacExtras::KNMacExtras(QObject *parent) :
     connect(m_menuAction[PreviousSong], &QAction::triggered,
             this, &KNMacExtras::requirePlayPrev);
     //Add actions.
-    dockMenu->addAction(m_menuAction[NowPlaying]);
-    dockMenu->addAction(m_menuAction[SongName]);
-    dockMenu->addAction(m_menuAction[ArtistAndAlbumName]);
-    dockMenu->addSeparator();
-    dockMenu->addAction(m_menuAction[PlayNPause]);
-    dockMenu->addAction(m_menuAction[NextSong]);
-    dockMenu->addAction(m_menuAction[PreviousSong]);
+    m_dockMenu->addAction(m_menuAction[PlayNPause]);
+    m_dockMenu->addAction(m_menuAction[NextSong]);
+    m_dockMenu->addAction(m_menuAction[PreviousSong]);
     //Set the dock menu.
-    qt_mac_set_dock_menu(dockMenu);
+    m_dockMenu->setAsDockMenu();
 
     //Link the retranslator.
     knI18n->link(this, &KNMacExtras::retranslate);
@@ -128,21 +126,38 @@ inline void KNMacExtras::updatePlayingInfo()
     if(m_nowPlaying.isNull)
     {
         //Hide the action.
-        m_menuAction[NowPlaying]->setVisible(false);
-        m_menuAction[SongName]->setVisible(false);
-        m_menuAction[SongName]->setText("");
-        m_menuAction[ArtistAndAlbumName]->setVisible(false);
-        m_menuAction[ArtistAndAlbumName]->setText("");
+        //Check teh shown flag.
+        if(m_isNowPlayingShown)
+        {
+            //Mark the playing shown flag to false.
+            m_isNowPlayingShown=false;
+            //Remove the action from the menu.
+            m_dockMenu->removeAction(m_menuAction[NowPlaying]);
+            m_dockMenu->removeAction(m_menuAction[SongName]);
+            m_dockMenu->removeAction(m_menuAction[ArtistAndAlbumName]);
+            //Clear its text.
+            m_menuAction[SongName]->setText("");
+            m_menuAction[ArtistAndAlbumName]->setText("");
+        }
         //Mission complete.
         return;
     }
     //Show the action.
-    m_menuAction[NowPlaying]->setVisible(true);
-    m_menuAction[SongName]->setVisible(true);
-    m_menuAction[ArtistAndAlbumName]->setVisible(true);
-    //Update the song name.
+    if(!m_isNowPlayingShown)
+    {
+        //Update the shown flag.
+        m_isNowPlayingShown=true;
+        //Insert the action widget to the menu.
+        m_dockMenu->insertAction(m_statusBeforeAction,
+                                 m_menuAction[NowPlaying]);
+        m_dockMenu->insertAction(m_statusBeforeAction,
+                                 m_menuAction[SongName]);
+        m_dockMenu->insertAction(m_statusBeforeAction,
+                                 m_menuAction[ArtistAndAlbumName]);
+    }
+    //Update the song name action text.
     m_menuAction[SongName]->setText("  " + m_nowPlaying.name);
-    //Update the artist and album information.
+    //Update the artist and album action text.
     m_menuAction[ArtistAndAlbumName]->setText("  " +
                 (m_nowPlaying.artist.isEmpty()?
                     m_noArtistText:

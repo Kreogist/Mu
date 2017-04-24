@@ -43,7 +43,7 @@ QPixmap KNPreferenceItemList::itemHeaderIcon(const int &index)
     return getPreferenceItem(index)->headerIcon();
 }
 
-QString KNPreferenceItemList::itemText(const int &index)
+QString KNPreferenceItemList::itemText(int index)
 {
     //Return the item text.
     return tabAt(index)->text();
@@ -53,6 +53,12 @@ int KNPreferenceItemList::itemCount() const
 {
     //The main layout widget counter is the item count.
     return m_mainLayout->count();
+}
+
+void KNPreferenceItemList::setItemText(int index, const QString &text)
+{
+    //Return the item text.
+    tabAt(index)->setText(text);
 }
 
 bool KNPreferenceItemList::isEmpty()

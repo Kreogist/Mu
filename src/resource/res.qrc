@@ -87,6 +87,7 @@
         <file>public/down_arrow.png</file>
         <file>public/top_arrow.png</file>
         <file>preference/header/setting.png</file>
+        <file>preference/general.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

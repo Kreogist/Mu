@@ -69,14 +69,6 @@ KNPreference::KNPreference(QWidget *parent) :
     connect(m_sidebar, &KNPreferenceSidebar::requireChangeContent,
             this, &KNPreference::onActionIndexChange);
 
-    //Register the widget to theme manager.
-    knTheme->registerWidget(this);
-    knTheme->registerWidget(m_content);
-
-    //Link retranslate.
-    knI18n->link(this, &KNPreference::retranslate);
-    retranslate();
-
     //Add fixed tabs.
     // Add about item and content to preference.
     m_content->addWidget(m_about);
@@ -88,12 +80,24 @@ KNPreference::KNPreference(QWidget *parent) :
     m_content->addWidget(m_settingPanel);
     //Generate all the items.
     generateSettingItems();
+
+    //Register the widget to theme manager.
+    knTheme->registerWidget(this);
+    knTheme->registerWidget(m_content);
+
+    //Link retranslate.
+    knI18n->link(this, &KNPreference::retranslate);
+    retranslate();
 }
 
 void KNPreference::retranslate()
 {
     //Update the item data.
     m_aboutItem->setText(tr("About"));
+    //Update the item title.
+    updateItemTitle();
+    //Update the sidebar title.
+    m_sidebar->updateTitleBarText();
 }
 
 void KNPreference::onActionIndexChange(const int &index)
@@ -127,14 +131,29 @@ inline KNPreferenceItem *KNPreference::generateItem(const QString &iconPath,
     return item;
 }
 
+inline void KNPreference::updateItemTitle()
+{
+    //Update all the item title.
+    m_sidebar->setItemTitle(PanelGeneral,
+                            tr("General"));
+}
+
 inline void KNPreference::generateSettingItems()
 {
     //Get the setting icon for all the button.
-    QPixmap settingIcon("://preference/header/setting.png");
+    QPixmap headerSettingIcon("://preference/header/setting.png");
+    //Prepare for the icon of all the setting item.
+    QString buttonIcon[PreferencePanelCount];
+    buttonIcon[PanelGeneral]="://preference/general.png";
     //Generate all the items.
-    for(int i=0; i<20; ++i)
+    for(int i=0; i<PreferencePanelCount; ++i)
     {
-        m_sidebar->addItemWidget(generateItem(":/plugin/preference/about.png",
-                                              settingIcon));
+        //Generate the item.
+        KNPreferenceItem *item=generateItem(buttonIcon[i],
+                                            headerSettingIcon);
+        //Add item to the sidebar.
+        m_sidebar->addItemWidget(item);
     }
+    //Update the item title.
+    updateItemTitle();
 }

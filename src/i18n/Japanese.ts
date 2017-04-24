@@ -286,267 +286,267 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="103"/>
+        <location filename="../sdk/knglobal.cpp" line="94"/>
         <source>The remote server refused the connection, it is not accepting requests.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="106"/>
+        <location filename="../sdk/knglobal.cpp" line="97"/>
         <source>The remote server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="109"/>
+        <location filename="../sdk/knglobal.cpp" line="100"/>
         <source>The remote host name was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="111"/>
+        <location filename="../sdk/knglobal.cpp" line="102"/>
         <source>The connection timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="113"/>
+        <location filename="../sdk/knglobal.cpp" line="104"/>
         <source>The operation was canceled before it was finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="115"/>
+        <location filename="../sdk/knglobal.cpp" line="106"/>
         <source>The SSL/TLS handshake failed and the encrypted channel could not be established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="118"/>
+        <location filename="../sdk/knglobal.cpp" line="109"/>
         <source>The connection was broken due to disconnection from the network, however the system has initiated roaming to another access point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="122"/>
+        <location filename="../sdk/knglobal.cpp" line="113"/>
         <source>The connection was broken due to disconnection from the network or failure to start the network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="125"/>
+        <location filename="../sdk/knglobal.cpp" line="116"/>
         <source>The background request is not currently allowed due to platform policy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="128"/>
+        <location filename="../sdk/knglobal.cpp" line="119"/>
         <source>The connection to the proxy server was refused, it is not accepting requests.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="131"/>
+        <location filename="../sdk/knglobal.cpp" line="122"/>
         <source>The proxy server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="134"/>
+        <location filename="../sdk/knglobal.cpp" line="125"/>
         <source>The proxy host name was not found, The proxy hostname is invalid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="137"/>
+        <location filename="../sdk/knglobal.cpp" line="128"/>
         <source>The connection to the proxy timed out or the proxy did not reply in time to the request sent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="140"/>
+        <location filename="../sdk/knglobal.cpp" line="131"/>
         <source>The proxy requires authentication in order to honour the request but did not accept any credentials offered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="143"/>
+        <location filename="../sdk/knglobal.cpp" line="134"/>
         <source>An unknown proxy-related error was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="145"/>
+        <location filename="../sdk/knglobal.cpp" line="136"/>
         <source>The access to the remote content was denied (HTTP error 401).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="148"/>
+        <location filename="../sdk/knglobal.cpp" line="139"/>
         <source>The operation requested on the remote content is not permitted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="151"/>
+        <location filename="../sdk/knglobal.cpp" line="142"/>
         <source>The remote content was not found at the server (HTTP error 404).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="154"/>
+        <location filename="../sdk/knglobal.cpp" line="145"/>
         <source>The remote server requires authentication to serve the content but the credentials provided were not accepted (if any).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="158"/>
+        <location filename="../sdk/knglobal.cpp" line="149"/>
         <source>The request could not be completed due to a conflict with the current state of the resource.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="161"/>
+        <location filename="../sdk/knglobal.cpp" line="152"/>
         <source>The requested resource is no longer available at the server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="164"/>
+        <location filename="../sdk/knglobal.cpp" line="155"/>
         <source>An unknown error related to the remote content was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="167"/>
+        <location filename="../sdk/knglobal.cpp" line="158"/>
         <source>The Network Access API cannot honor the request because the protocol is not known.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="170"/>
+        <location filename="../sdk/knglobal.cpp" line="161"/>
         <source>The requested operation is invalid for this protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="172"/>
+        <location filename="../sdk/knglobal.cpp" line="163"/>
         <source>A breakdown in protocol was detected (parsing error, invalid or unexpected responses, etc.).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="175"/>
+        <location filename="../sdk/knglobal.cpp" line="166"/>
         <source>The server encountered an unexpected condition which prevented it from fulfilling the request. (HTTP error 500)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="178"/>
+        <location filename="../sdk/knglobal.cpp" line="169"/>
         <source>The server is unable to handle the request at this time. (HTTP error 503)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="181"/>
+        <location filename="../sdk/knglobal.cpp" line="172"/>
         <source>An unknown error related to the server response was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="185"/>
+        <location filename="../sdk/knglobal.cpp" line="176"/>
         <source>An unknown network-related error was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="218"/>
+        <location filename="../sdk/knglobal.cpp" line="209"/>
         <source>Byte</source>
         <translation>バイト</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="222"/>
+        <location filename="../sdk/knglobal.cpp" line="213"/>
         <source>Portable Network Graphics</source>
         <translation>ポータブル・ネットワーク・グラフィックス</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="224"/>
+        <location filename="../sdk/knglobal.cpp" line="215"/>
         <source>Joint Photographic Experts Group</source>
         <translation>Joint Photographic Experts Group</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="226"/>
+        <location filename="../sdk/knglobal.cpp" line="217"/>
         <source>Windows Bitmap</source>
         <translation>Windows Bitmap</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="228"/>
+        <location filename="../sdk/knglobal.cpp" line="219"/>
         <source>Portable Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="230"/>
+        <location filename="../sdk/knglobal.cpp" line="221"/>
         <source>X11 Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="232"/>
+        <location filename="../sdk/knglobal.cpp" line="223"/>
         <source>X11 Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="235"/>
+        <location filename="../sdk/knglobal.cpp" line="226"/>
         <source>All supported files</source>
         <translation>全てのフォーマット</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="248"/>
+        <location filename="../sdk/knglobal.cpp" line="239"/>
         <source>Graphic Interchange Format</source>
         <translation>グラフィックス・インターチェンジ・フォーマット</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="250"/>
+        <location filename="../sdk/knglobal.cpp" line="241"/>
         <source>Portable Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="252"/>
+        <location filename="../sdk/knglobal.cpp" line="243"/>
         <source>Portable Graymap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="463"/>
+        <location filename="../sdk/knglobal.cpp" line="454"/>
         <source>Jan.</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="465"/>
+        <location filename="../sdk/knglobal.cpp" line="456"/>
         <source>Feb.</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="467"/>
+        <location filename="../sdk/knglobal.cpp" line="458"/>
         <source>Mar.</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="469"/>
+        <location filename="../sdk/knglobal.cpp" line="460"/>
         <source>Apr.</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="471"/>
+        <location filename="../sdk/knglobal.cpp" line="462"/>
         <source>May</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="473"/>
+        <location filename="../sdk/knglobal.cpp" line="464"/>
         <source>Jun.</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="475"/>
+        <location filename="../sdk/knglobal.cpp" line="466"/>
         <source>Jul.</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="477"/>
+        <location filename="../sdk/knglobal.cpp" line="468"/>
         <source>Aug.</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="479"/>
+        <location filename="../sdk/knglobal.cpp" line="470"/>
         <source>Sept.</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="481"/>
+        <location filename="../sdk/knglobal.cpp" line="472"/>
         <source>Oct.</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="483"/>
+        <location filename="../sdk/knglobal.cpp" line="474"/>
         <source>Nov.</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="485"/>
+        <location filename="../sdk/knglobal.cpp" line="476"/>
         <source>Dec.</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="549"/>
+        <location filename="../sdk/knglobal.cpp" line="540"/>
         <source>%2 %3, %1</source>
         <translation>%1年%2月%3日</translation>
     </message>
@@ -1878,6 +1878,11 @@ To create a playlist, drag your songs here.</source>
         <source>About</source>
         <translation>プロパティ</translation>
     </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="136"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KNPreferenceAbout</name>
@@ -1962,7 +1967,7 @@ Qt においてオープンソースプロジェクトとして開発されて�
         <translation type="vanished">言語設定</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferencelanguagepanel.cpp" line="114"/>
+        <location filename="../plugin/knpreference/knpreferencelanguagepanel.cpp" line="112"/>
         <source>Languages</source>
         <translation>言語設定</translation>
     </message>

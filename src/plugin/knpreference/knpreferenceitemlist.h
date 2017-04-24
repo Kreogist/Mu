@@ -49,13 +49,21 @@ public:
      * \param index The item index.
      * \return The item caption text.
      */
-    QString itemText(const int &index);
+    QString itemText(int index);
 
     /*!
      * \brief Get the count of items which has been added to the item list.
      * \return The items number.
      */
     int itemCount() const;
+
+public slots:
+    /*!
+     * \brief Set the text of the specific item.
+     * \param index The index of the preference item.
+     * \param text THe item caption text.
+     */
+    void setItemText(int index, const QString &text);
 
 protected:
     /*!

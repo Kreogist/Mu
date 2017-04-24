@@ -49,10 +49,17 @@ private slots:
     void onActionIndexChange(const int &index);
 
 private:
+    enum PreferencePanels
+    {
+        PanelGeneral,
+        PreferencePanelCount
+    };
+
     inline KNPreferenceItem *generateItem(const QString &iconPath,
                                           const QString &headerIconPath);
     inline KNPreferenceItem *generateItem(const QString &iconPath,
                                           const QPixmap &headerIcon);
+    inline void updateItemTitle();
     inline void generateSettingItems();
     KNPreferenceSidebar *m_sidebar;
     KNVWidgetSwitcher *m_content;

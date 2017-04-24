@@ -97,11 +97,12 @@ private:
     };
     inline void updatePlayingInfo();
     inline void updatePlayState();
-    QMenu *m_subMenus[MacDockSubMenuCount];
-    QAction *m_menuAction[MacDockMenuActionCount];
+    QMenu *m_dockMenu, *m_subMenus[MacDockSubMenuCount];
+    QAction *m_menuAction[MacDockMenuActionCount],
+            *m_statusBeforeAction;
     QString m_playText, m_pauseText, m_noArtistText, m_noAlbumText;
     PlatformPlayingInfo m_nowPlaying;
-    bool m_isStatePlay;
+    bool m_isStatePlay, m_isNowPlayingShown;
 };
 
 #endif // KNMACEXTRAS_H

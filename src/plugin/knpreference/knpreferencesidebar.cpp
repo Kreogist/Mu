@@ -24,7 +24,6 @@
 #include "knpreferenceitemlist.h"
 #include "knlinearsensewidget.h"
 #include "knsideshadowwidget.h"
-#include "knlocalemanager.h"
 #include "knpreferenceitem.h"
 
 #include "knpreferencesidebar.h"
@@ -76,10 +75,6 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     mainLayout->addWidget(scrollArea, 1);
     //Add the bottom bar.
     mainLayout->addWidget(m_bottomBar);
-
-    //Link retranslate.
-    knI18n->link(this, &KNPreferenceSidebar::retranslate);
-    retranslate();
 }
 
 void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
@@ -100,6 +95,12 @@ void KNPreferenceSidebar::setHeaderText(const QString &text)
     m_titleBar->setText(text);
 }
 
+void KNPreferenceSidebar::setItemTitle(int index, const QString &title)
+{
+    //Change the item list text.
+    m_itemList->setItemText(index, title);
+}
+
 void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)
 {
     //Do the original resize.
@@ -111,12 +112,20 @@ void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)
                                height());
 }
 
-void KNPreferenceSidebar::retranslate()
+void KNPreferenceSidebar::updateTitleBarText()
 {
     //Check the current index. Update the title if the current index is not -1.
     if(m_itemList->currentIndex()!=-1)
     {
+        //Update the title bar text.
         m_titleBar->setText(m_itemList->itemText(m_itemList->currentIndex()));
+    }
+    //Check the fixed title bar.
+    else if(m_fixedItemList->currentIndex()!=-1)
+    {
+        //Update the title bar text.
+        m_titleBar->setText(m_fixedItemList->itemText(
+                                m_fixedItemList->currentIndex()));
     }
 }
 

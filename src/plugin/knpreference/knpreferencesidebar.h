@@ -88,6 +88,19 @@ public slots:
      */
     void setHeaderText(const QString &text);
 
+    /*!
+     * \brief Set the item button title of a specific item.
+     * \param index The item index.
+     * \param title The title of the item button.
+     */
+    void setItemTitle(int index, const QString &title);
+
+    /*!
+     * \brief Update the sidebar title text. When the current language changed,
+     * this function should be called.
+     */
+    void updateTitleBarText();
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
@@ -95,7 +108,6 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private slots:
-    void retranslate();
     void onActionIndexChanged(int index);
     void onActionFixedIndexChanged(int index);
 
