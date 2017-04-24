@@ -59,7 +59,6 @@ KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
         m_initial=true;
     }
     //Set properties.
-    setAutoExclusive(true);
     setCheckable(true);
     setContentsMargins(0,0,0,0);
     setFixedHeight(ItemHeight);
@@ -173,7 +172,7 @@ void KNPreferenceItem::paintContent(QPainter *painter)
                       text());
 }
 
-void KNPreferenceItem::onActionMouseInOut(const int &frame)
+void KNPreferenceItem::onActionMouseInOut(int frame)
 {
     //Save the progress, progress is a number between 1-100.
     m_progress=frame;
@@ -190,7 +189,7 @@ void KNPreferenceItem::onActionToggled(bool checked)
     startAnime(checked?m_mouseIn:m_mouseOut);
 }
 
-inline QTimeLine *KNPreferenceItem::generateTimeLine(const int &endFrame)
+inline QTimeLine *KNPreferenceItem::generateTimeLine(int endFrame)
 {
     QTimeLine *timeline=new QTimeLine(200, this);
     timeline->setEndFrame(endFrame);

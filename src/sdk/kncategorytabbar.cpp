@@ -63,7 +63,7 @@ int KNCategoryTabBar::addTabToWidget(QAbstractButton *tab)
     return m_mainLayout->count()-1;
 }
 
-QAbstractButton *KNCategoryTabBar::tabAt(const int &index)
+QAbstractButton *KNCategoryTabBar::tabAt(int index)
 {
     Q_ASSERT(index>-1 && index<m_mainLayout->count());
     //Get the index from the main layout.

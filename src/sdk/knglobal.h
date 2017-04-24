@@ -105,15 +105,6 @@ public:
     QString dirPath(int index);
 
     /*!
-     * \brief Add a pair of preference tab and content to preference panel.
-     * Before calling this function, the preference plugin must be set by using
-     * setPreference() function;.
-     * \param tabWidget The preference item tab.
-     * \param content The content widget.
-     */
-    void addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content);
-
-    /*!
      * \brief Translate a number from unit byte to higher unit. Until the number
      * is less than 1024 or the unit is up to DB.\n
      * The float number will have 2 number after the point.

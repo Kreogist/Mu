@@ -22,6 +22,7 @@
 #include "knabstracttabgroup.h"
 
 class QBoxLayout;
+class KNPreferenceItem;
 /*!
  * \brief The KNPreferenceItemList class provides a widget which will contains
  * all the prefercen items.
@@ -50,6 +51,12 @@ public:
      */
     QString itemText(const int &index);
 
+    /*!
+     * \brief Get the count of items which has been added to the item list.
+     * \return The items number.
+     */
+    int itemCount() const;
+
 protected:
     /*!
      * \brief Reimplemented from KNAbstractTabGroup::isEmpty().
@@ -64,9 +71,10 @@ protected:
     /*!
      * \brief Reimplemented from KNAbstractTabGroup::tabAt().
      */
-    QAbstractButton *tabAt(const int &index) Q_DECL_OVERRIDE;
+    QAbstractButton *tabAt(int index) Q_DECL_OVERRIDE;
 
 private:
+    inline KNPreferenceItem *getPreferenceItem(int index);
     QBoxLayout *m_mainLayout;
 };
 

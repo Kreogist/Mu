@@ -25,6 +25,7 @@
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "knpreferencelanguagepanel.h"
+#include "knpreferencesettingpanel.h"
 
 #include "knpreference.h"
 
@@ -32,9 +33,11 @@ KNPreference::KNPreference(QWidget *parent) :
     KNPreferencePlugin(parent),
     m_sidebar(new KNPreferenceSidebar(this)),
     m_content(new KNVWidgetSwitcher(this)),
-    m_aboutItem(new KNPreferenceItem(this)),
+    m_aboutItem(generateItem(":/plugin/preference/about.png",
+                             ":/plugin/preference/header/about.png")),
     m_about(new KNPreferenceAbout(this)),
-    m_languagePanel(new KNPreferenceLanguagePanel(this))
+    m_languagePanel(new KNPreferenceLanguagePanel(this)),
+    m_settingPanel(new KNPreferenceSettingPanel(this))
 {
     setObjectName("Preference");
     //Set properties.
@@ -43,9 +46,6 @@ KNPreference::KNPreference(QWidget *parent) :
     //Configure preference content.
     m_content->setObjectName("PreferenceContent");
     m_content->setAutoFillBackground(true);
-    //Configure the about item.
-    m_aboutItem->setIcon(QPixmap(":/plugin/preference/about.png"));
-    m_aboutItem->setHeaderIcon(QPixmap(":/plugin/preference/header/about.png"));
     //Configure the language panel.
     m_languagePanel->generateLanguageList();
     connect(m_languagePanel, &KNPreferenceLanguagePanel::requireUpdateTitle,
@@ -77,17 +77,17 @@ KNPreference::KNPreference(QWidget *parent) :
     knI18n->link(this, &KNPreference::retranslate);
     retranslate();
 
-    //Add about item and content to preference.
-    addPreferenceTab(m_aboutItem, m_about);
-    //Add language item and content to preference.
-    addPreferenceTab(m_languagePanel->languageListItem(),
-                     m_languagePanel);
-}
-
-void KNPreference::addTab(KNPreferenceItem *tabWidget, QWidget *content)
-{
-    //Add the tab to sidebar, add the content to content.
-    addPreferenceTab(tabWidget, content);
+    //Add fixed tabs.
+    // Add about item and content to preference.
+    m_content->addWidget(m_about);
+    m_sidebar->addFixedItemWidget(m_aboutItem);
+    // Add language item and content to preference.
+    m_content->addWidget(m_languagePanel);
+    m_sidebar->addFixedItemWidget(m_languagePanel->languageListItem());
+    //Add setting panel to content.
+    m_content->addWidget(m_settingPanel);
+    //Generate all the items.
+    generateSettingItems();
 }
 
 void KNPreference::retranslate()
@@ -102,11 +102,39 @@ void KNPreference::onActionIndexChange(const int &index)
     m_content->setCurrentIndex(index);
 }
 
-inline void KNPreference::addPreferenceTab(KNPreferenceItem *tabWidget,
-                                           QWidget *content)
+inline KNPreferenceItem *KNPreference::generateItem(
+        const QString &iconPath,
+        const QString &headerIconPath)
 {
-    //Add content widget to content container.
-    m_content->addWidget(content);
-    //Add tab widget to sidebar.
-    m_sidebar->addItemWidget(tabWidget);
+    //Generate a new item.
+    KNPreferenceItem *item=new KNPreferenceItem(this);
+    //Set the icon path and header icon path.
+    item->setIcon(QPixmap(iconPath));
+    item->setHeaderIcon(QPixmap(headerIconPath));
+    //Return the item.
+    return item;
+}
+
+inline KNPreferenceItem *KNPreference::generateItem(const QString &iconPath,
+                                                    const QPixmap &headerIcon)
+{
+    //Generate a new item.
+    KNPreferenceItem *item=new KNPreferenceItem(this);
+    //Set the icon path and header icon path.
+    item->setIcon(QPixmap(iconPath));
+    item->setHeaderIcon(headerIcon);
+    //Return the item.
+    return item;
+}
+
+inline void KNPreference::generateSettingItems()
+{
+    //Get the setting icon for all the button.
+    QPixmap settingIcon("://preference/header/setting.png");
+    //Generate all the items.
+    for(int i=0; i<20; ++i)
+    {
+        m_sidebar->addItemWidget(generateItem(":/plugin/preference/about.png",
+                                              settingIcon));
+    }
 }

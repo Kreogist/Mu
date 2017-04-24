@@ -48,11 +48,10 @@ int KNHTabGroup::addTabToWidget(QAbstractButton *tab)
     return m_mainLayout->count()-2;
 }
 
-QAbstractButton *KNHTabGroup::tabAt(const int &index)
+QAbstractButton *KNHTabGroup::tabAt(int index)
 {
     Q_ASSERT(index>-1 && index<m_mainLayout->count());
     //Get the index from the main layout.
     return static_cast<QAbstractButton *>
             (m_mainLayout->itemAt(index+1)->widget());
 }
-

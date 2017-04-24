@@ -71,15 +71,6 @@ QString KNGlobal::dirPath(int index)
     return m_dirPath[index];
 }
 
-void KNGlobal::addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content)
-{
-    //Check the preference plugin has been set or not.
-    if(m_preference!=nullptr)
-    {
-        m_preference->addTab(tabWidget, content);
-    }
-}
-
 QString KNGlobal::byteToString(qreal fileSize)
 {
     //Set the unit pointer to Byte.

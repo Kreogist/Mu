@@ -81,11 +81,11 @@ protected:
     virtual void paintContent(QPainter *painter);
 
 private slots:
-    void onActionMouseInOut(const int &frame);
+    void onActionMouseInOut(int frame);
     void onActionToggled(bool checked);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
+    inline QTimeLine *generateTimeLine(int endFrame);
     inline void startAnime(QTimeLine *timeLine);
     static QLinearGradient m_upShadowGradient, m_downShadowGradient;
     static bool m_initial;

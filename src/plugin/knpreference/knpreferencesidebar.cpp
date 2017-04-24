@@ -34,6 +34,7 @@
 KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     QWidget(parent),
     m_titleBar(new KNPreferenceTitleBar(this)),
+    m_fixedItemList(new KNPreferenceItemList(this)),
     m_itemList(new KNPreferenceItemList(this)),
     m_bottomBar(new KNLinearSenseWidget(this)),
     m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
@@ -43,6 +44,8 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     //Set properties.
     setContentsMargins(0,0,0,0);
     setFixedWidth(250);
+    //Configure the item list.
+    m_itemList->setAutoSelect(false);
     //Link title bar requests.
     connect(m_titleBar, &KNPreferenceTitleBar::requireClosePreference,
             this, &KNPreferenceSidebar::requireClosePreference);
@@ -52,6 +55,8 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(m_itemList);
     //Link the item list.
+    connect(m_fixedItemList, &KNPreferenceItemList::currentIndexChange,
+            this, &KNPreferenceSidebar::onActionFixedIndexChanged);
     connect(m_itemList, &KNPreferenceItemList::currentIndexChange,
             this, &KNPreferenceSidebar::onActionIndexChanged);
     //Initial bottom bar.
@@ -65,6 +70,8 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
 
     //Add the title bar widget.
     mainLayout->addWidget(m_titleBar);
+    //Add the fixed button layout.
+    mainLayout->addWidget(m_fixedItemList);
     //Add the shadow scroll area widget.
     mainLayout->addWidget(scrollArea, 1);
     //Add the bottom bar.
@@ -79,6 +86,12 @@ void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
 {
     //Add the item to item list.
     m_itemList->addTab(item);
+}
+
+void KNPreferenceSidebar::addFixedItemWidget(KNPreferenceItem *item)
+{
+    //Add the item to the fixed layout.
+    m_fixedItemList->addTab(item);
 }
 
 void KNPreferenceSidebar::setHeaderText(const QString &text)
@@ -107,14 +120,46 @@ void KNPreferenceSidebar::retranslate()
     }
 }
 
-void KNPreferenceSidebar::onActionIndexChanged(const int &index)
+void KNPreferenceSidebar::onActionIndexChanged(int index)
 {
-    //Change the title icon.
-    m_titleBar->setIcon(m_itemList->itemHeaderIcon(index));
-    //Change the title text.
-    m_titleBar->setText(m_itemList->itemText(index));
+    //Check the index first.
+    if(index==-1)
+    {
+        //This signal is send to reset the list, ignore.
+        return;
+    }
+    //Check the fixed item is clicked.
+    if(m_fixedItemList->isButtonSelected())
+    {
+        //A new item is clicked, reset fixed item list.
+        m_fixedItemList->reset();
+        //Emit content change requirement to the panel widget.
+        emit requireChangeContent(m_fixedItemList->itemCount());
+    }
+    //Update title bar content.
+    setTitleBarContent(m_itemList, index);
+    //Emit the change panel requirement.
+    emit requireChangePanel(index);
+}
+
+void KNPreferenceSidebar::onActionFixedIndexChanged(int index)
+{
+    //Check the index first.
+    if(index==-1)
+    {
+        //This signal is send to reset the list, ignore.
+        return;
+    }
+    //Update title bar content.
+    setTitleBarContent(m_fixedItemList, index);
     //Emit content change requirement.
     emit requireChangeContent(index);
+    //Check the item panel is selected.
+    if(m_itemList->isButtonSelected())
+    {
+        //A new fixed item is clicked, reset the item list.
+        m_itemList->reset();
+    }
 }
 
 void KNPreferenceSidebar::initialBottomBar()
@@ -124,5 +169,14 @@ void KNPreferenceSidebar::initialBottomBar()
     m_bottomBar->setContentsMargins(0,0,0,0);
     m_bottomBar->setFixedHeight(34);
     knTheme->registerWidget(m_bottomBar);
+}
+
+inline void KNPreferenceSidebar::setTitleBarContent(KNPreferenceItemList *list,
+                                                    int index)
+{
+    //Change the title icon.
+    m_titleBar->setIcon(list->itemHeaderIcon(index));
+    //Change the title text.
+    m_titleBar->setText(list->itemText(index));
 }
 

@@ -32,7 +32,7 @@
 KNPreferenceLanguagePanel::KNPreferenceLanguagePanel(QWidget *parent) :
     QScrollArea(parent),
     m_languageListItem(new KNPreferenceLanguageItem(this)),
-    m_mainLayout(nullptr),
+    m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this)),
     m_languageRequests(new QSignalMapper(this)),
     m_userConfigure(knGlobal->userConfigure())
 {
@@ -52,8 +52,6 @@ KNPreferenceLanguagePanel::KNPreferenceLanguagePanel(QWidget *parent) :
     setWidget(container);
 
     //Initial the layout.
-    m_mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
-                                this);
     m_mainLayout->setContentsMargins(0,0,0,0);
     m_mainLayout->setSpacing(0);
     container->setLayout(m_mainLayout);
