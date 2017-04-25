@@ -21,12 +21,22 @@
 
 #include <QListView>
 
+class QTimeLine;
 class KNMusicModel;
 class KNMusicProxyModel;
+/*!
+ * \brief The KNMusicNowPlayingListView class provides the playing playlist view
+ * widget for the main player. It will only show the name of song and the
+ * duration of each music.
+ */
 class KNMusicNowPlayingListView : public QListView
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicNowPlayingListView widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicNowPlayingListView(QWidget *parent = 0);
 
     /*!
@@ -48,16 +58,36 @@ public slots:
 
 protected:
     /*!
-     * \brief showEvent
-     * \param event
+     * \brief Reimplemented from QListView::showEvent().
      */
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QListView::enterEvent().
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QListView::leaveEvent().
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QListView::resizeEvent().
+     */
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void onActionActivate(const QModelIndex &index);
+    void onActionMouseInOut(int frame);
 
 private:
     inline void playIndex(const QModelIndex &index);
+    inline void updateVerticalScrollBarGeometry();
+    inline void startAnime(int endFrame);
+    QTimeLine *m_mouseAnime;
+    QScrollBar *m_vScrollBar;
+    int m_currentFrame;
 };
 
 #endif // KNMUSICNOWPLAYINGLISTVIEW_H
