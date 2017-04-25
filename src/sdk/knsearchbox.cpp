@@ -232,7 +232,7 @@ inline QTimeLine *KNSearchBox::generateTimeLine()
     //Generate the time line.
     QTimeLine *timeLine=new QTimeLine(200, this);
     //Configure the time line.
-    timeLine->setUpdateInterval(10);
+    timeLine->setUpdateInterval(16);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     //Give back the time line.
     return timeLine;

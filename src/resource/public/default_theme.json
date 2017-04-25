@@ -458,6 +458,11 @@
     {
         "Parent" : "Preference"
     },
+    "PreferenceSidebarLabel" :
+    {
+        "Parent" : "PreferenceSidebar",
+        "WindowText" : "#A0A0A0"
+    },
     "PreferenceItem" :
     {
         "Parent" : "PreferenceSidebar",

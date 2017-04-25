@@ -22,8 +22,10 @@
 #include <QWidget>
 
 class QBoxLayout;
+class QLabel;
 class QSignalMapper;
 class KNPreferenceItem;
+class KNRoundSwitchButton;
 class KNPreferenceTitleBar;
 class KNPreferenceItemList;
 class KNLinearSenseWidget;
@@ -81,6 +83,13 @@ signals:
      */
     void requireChangePanel(int panelIndex);
 
+    /*!
+     * \brief When advanced setting switch is toggled, this signal will be
+     * emitted.
+     * \param toggle The toggle state of the advanced switch button.
+     */
+    void advancedToggle(bool toggle);
+
 public slots:
     /*!
      * \brief Set the header text of the title bar.
@@ -101,6 +110,12 @@ public slots:
      */
     void updateTitleBarText();
 
+    /*!
+     * \brief Set the advanced option is enabled or not.
+     * \param shown To enabled the advanced option, set it to true.
+     */
+    void setAdvancedShown(bool shown);
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
@@ -108,6 +123,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private slots:
+    void retranslate();
     void onActionIndexChanged(int index);
     void onActionFixedIndexChanged(int index);
 
@@ -118,7 +134,9 @@ private:
     KNPreferenceTitleBar *m_titleBar;
     KNPreferenceItemList *m_fixedItemList, *m_itemList;
     KNLinearSenseWidget *m_bottomBar;
+    KNRoundSwitchButton *m_advancedButton;
     KNSideShadowWidget *m_rightShadow;
+    QLabel *m_advancedLabel;
     const int m_shadowWidth;
 };
 

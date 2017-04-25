@@ -51,6 +51,13 @@ KNMacExtras::KNMacExtras(QObject *parent) :
     connect(m_menuAction[PreviousSong], &QAction::triggered,
             this, &KNMacExtras::requirePlayPrev);
     //Add actions.
+    //We didn't add now playing information actions here. Because all the hidden
+    //setting for the dock menu is invalid. It is a bug from Qt 4.x.
+    //For more information about the bug is shown here:
+    //      https://bugreports.qt.io/browse/QTBUG-4003
+    //So I change the way to realize this, when we want to hide the action, I
+    //simply remove the action from the menu, when we want to display the data,
+    //insert it back to its position.
     m_dockMenu->addAction(m_menuAction[PlayNPause]);
     m_dockMenu->addAction(m_menuAction[NextSong]);
     m_dockMenu->addAction(m_menuAction[PreviousSong]);
@@ -131,7 +138,7 @@ inline void KNMacExtras::updatePlayingInfo()
         {
             //Mark the playing shown flag to false.
             m_isNowPlayingShown=false;
-            //Remove the action from the menu.
+            //Remove the action from the menu to hide the actions.
             m_dockMenu->removeAction(m_menuAction[NowPlaying]);
             m_dockMenu->removeAction(m_menuAction[SongName]);
             m_dockMenu->removeAction(m_menuAction[ArtistAndAlbumName]);
@@ -145,9 +152,9 @@ inline void KNMacExtras::updatePlayingInfo()
     //Show the action.
     if(!m_isNowPlayingShown)
     {
-        //Update the shown flag.
+        //Update the shown flag to true.
         m_isNowPlayingShown=true;
-        //Insert the action widget to the menu.
+        //Insert the action widget to the menu to show the action.
         m_dockMenu->insertAction(m_statusBeforeAction,
                                  m_menuAction[NowPlaying]);
         m_dockMenu->insertAction(m_statusBeforeAction,

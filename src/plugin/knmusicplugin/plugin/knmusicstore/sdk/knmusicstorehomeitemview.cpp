@@ -75,7 +75,7 @@ KNMusicStoreHomeItemView::KNMusicStoreHomeItemView(QWidget *parent) :
             horizontalScrollBar(), &QScrollBar::setValue);
 
     //Configure the timeline.
-    m_mouseAnime->setUpdateInterval(33);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNMusicStoreHomeItemView::onMouseInOut);

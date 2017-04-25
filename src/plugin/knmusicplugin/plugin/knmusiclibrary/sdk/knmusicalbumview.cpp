@@ -81,12 +81,12 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     knTheme->registerWidget(this);
 
     //Configure the timeline.
-    m_scrollAnime->setUpdateInterval(33);
+    m_scrollAnime->setUpdateInterval(16);
     m_scrollAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_scrollAnime, &QTimeLine::frameChanged,
             verticalScrollBar(), &QScrollBar::setValue);
     //Configure the timeline.
-    m_mouseAnime->setUpdateInterval(33);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNMusicAlbumView::onActionMouseInOut);

@@ -89,14 +89,14 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
             verticalScrollBar(), &QScrollBar::setValue);
 
     //Configure the mouse anime time line.
-    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     //Link the time line.
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNMusicCategoryListViewBase::onActionMouseInOut);
 
     //Configure the search anime time line.
-    m_searchAnime->setUpdateInterval(10);
+    m_searchAnime->setUpdateInterval(16);
     m_searchAnime->setEasingCurve(QEasingCurve::OutCubic);
     //Link time line.
     connect(m_searchAnime, &QTimeLine::frameChanged,

@@ -37,7 +37,7 @@ KNMusicScrollLyrics::KNMusicScrollLyrics(QWidget *parent) :
     m_alignment(Qt::AlignLeft)
 {
     //Configure the moving time line.
-    m_moveToCurrentLine->setUpdateInterval(10);
+    m_moveToCurrentLine->setUpdateInterval(16);
     m_moveToCurrentLine->setEasingCurve(QEasingCurve::OutCubic);
     m_moveToCurrentLine->setEndFrame(0);
     connect(m_moveToCurrentLine, &QTimeLine::frameChanged,

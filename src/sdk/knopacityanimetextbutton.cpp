@@ -41,7 +41,7 @@ KNOpacityAnimeTextButton::KNOpacityAnimeTextButton(QWidget *parent) :
                               QSizePolicy::PushButton));
 
     //Configure the time line.
-    m_mouseAnime->setUpdateInterval(33);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNOpacityAnimeTextButton::onActionOpacityChanged);

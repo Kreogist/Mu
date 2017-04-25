@@ -21,6 +21,7 @@
 
 #include "knpreferenceplugin.h"
 
+class KNConfigure;
 class KNPreferenceSidebar;
 class KNVWidgetSwitcher;
 class KNPreferenceAbout;
@@ -46,7 +47,8 @@ public slots:
 
 private slots:
     void retranslate();
-    void onActionIndexChange(const int &index);
+    void onActionIndexChange(int index);
+    void onActionAdvancedToggle(bool toggle);
 
 private:
     enum PreferencePanels
@@ -61,6 +63,7 @@ private:
                                           const QPixmap &headerIcon);
     inline void updateItemTitle();
     inline void generateSettingItems();
+    KNConfigure *m_preferenceConfigure;
     KNPreferenceSidebar *m_sidebar;
     KNVWidgetSwitcher *m_content;
     KNPreferenceItem *m_aboutItem;

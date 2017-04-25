@@ -45,7 +45,7 @@ KNScrollArea::KNScrollArea(QWidget *parent) :
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //Configure the time line.
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
-    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setUpdateInterval(16);
     //Link the time line.
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNScrollArea::onActionMouseInOut);

@@ -341,7 +341,7 @@ inline QTimeLine *KNMusicDetailTooltip::generateTimeLine(const int &endFrame)
     //Configure the time line.
     timeLine->setEndFrame(endFrame);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(10);
+    timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNMusicDetailTooltip::onActionMouseInOut);
     //Give back the time line.

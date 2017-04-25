@@ -16,15 +16,17 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QLabel>
 
-#include "knthememanager.h"
-
-#include "knpreferencetitlebar.h"
-#include "knshadowscrollarea.h"
-#include "knpreferenceitemlist.h"
 #include "knlinearsensewidget.h"
-#include "knsideshadowwidget.h"
+#include "knlocalemanager.h"
+#include "knpreferencetitlebar.h"
 #include "knpreferenceitem.h"
+#include "knpreferenceitemlist.h"
+#include "knroundswitchbutton.h"
+#include "knshadowscrollarea.h"
+#include "knsideshadowwidget.h"
+#include "knthememanager.h"
 
 #include "knpreferencesidebar.h"
 
@@ -36,8 +38,10 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     m_fixedItemList(new KNPreferenceItemList(this)),
     m_itemList(new KNPreferenceItemList(this)),
     m_bottomBar(new KNLinearSenseWidget(this)),
+    m_advancedButton(new KNRoundSwitchButton(this)),
     m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
                                          this)),
+    m_advancedLabel(new QLabel(this)),
     m_shadowWidth(15)
 {
     //Set properties.
@@ -45,6 +49,9 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     setFixedWidth(250);
     //Configure the item list.
     m_itemList->setAutoSelect(false);
+    //Configure the label.
+    m_advancedLabel->setObjectName("PreferenceSidebarLabel");
+    knTheme->registerWidget(m_advancedLabel);
     //Link title bar requests.
     connect(m_titleBar, &KNPreferenceTitleBar::requireClosePreference,
             this, &KNPreferenceSidebar::requireClosePreference);
@@ -75,6 +82,10 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     mainLayout->addWidget(scrollArea, 1);
     //Add the bottom bar.
     mainLayout->addWidget(m_bottomBar);
+
+    //Link retranslate.
+    knI18n->link(this, &KNPreferenceSidebar::retranslate);
+    retranslate();
 }
 
 void KNPreferenceSidebar::addItemWidget(KNPreferenceItem *item)
@@ -112,6 +123,12 @@ void KNPreferenceSidebar::resizeEvent(QResizeEvent *event)
                                height());
 }
 
+void KNPreferenceSidebar::retranslate()
+{
+    //Update advanced label.
+    m_advancedLabel->setText(tr("Advanced Mode"));
+}
+
 void KNPreferenceSidebar::updateTitleBarText()
 {
     //Check the current index. Update the title if the current index is not -1.
@@ -127,6 +144,12 @@ void KNPreferenceSidebar::updateTitleBarText()
         m_titleBar->setText(m_fixedItemList->itemText(
                                 m_fixedItemList->currentIndex()));
     }
+}
+
+void KNPreferenceSidebar::setAdvancedShown(bool shown)
+{
+    //Set the shown to the advanced button.
+    m_advancedButton->setChecked(shown);
 }
 
 void KNPreferenceSidebar::onActionIndexChanged(int index)
@@ -178,6 +201,17 @@ void KNPreferenceSidebar::initialBottomBar()
     m_bottomBar->setContentsMargins(0,0,0,0);
     m_bottomBar->setFixedHeight(34);
     knTheme->registerWidget(m_bottomBar);
+    //Set the sidebar layout.
+    QBoxLayout *sideBarLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                             m_bottomBar);
+    sideBarLayout->setContentsMargins(10, 0, 10, 0);
+    m_bottomBar->setLayout(sideBarLayout);
+    //Add the advanced button.
+    connect(m_advancedButton, &KNRoundSwitchButton::toggled,
+            this, &KNPreferenceSidebar::advancedToggle);
+    sideBarLayout->addWidget(m_advancedButton, 0, Qt::AlignVCenter);
+    sideBarLayout->addWidget(m_advancedLabel, 0, Qt::AlignVCenter);
+    sideBarLayout->addStretch();
 }
 
 inline void KNPreferenceSidebar::setTitleBarContent(KNPreferenceItemList *list,

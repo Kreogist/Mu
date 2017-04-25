@@ -213,7 +213,7 @@ inline QTimeLine *KNCategoryTab::generateTimeLine(const int &endFrame)
 {
     QTimeLine *timeLine=new QTimeLine(200, this);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(10);
+    timeLine->setUpdateInterval(16);
     timeLine->setEndFrame(endFrame);
     return timeLine;
 }

@@ -108,7 +108,7 @@ inline QTimeLine *KNCategoryTabBar::generateTimeLine(const int &endFrame)
     QTimeLine *timeLine=new QTimeLine(200, this);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setEndFrame(endFrame);
-    timeLine->setUpdateInterval(10);
+    timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
             this, &KNCategoryTabBar::onActionMouseInOut);
     return timeLine;

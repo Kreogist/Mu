@@ -26,11 +26,15 @@
 #include "knlocalemanager.h"
 #include "knpreferencelanguagepanel.h"
 #include "knpreferencesettingpanel.h"
+#include "knconfigure.h"
+#include "knglobal.h"
 
 #include "knpreference.h"
 
 KNPreference::KNPreference(QWidget *parent) :
     KNPreferencePlugin(parent),
+    m_preferenceConfigure(knGlobal->userConfigure()->getConfigure(
+                              "Preference")),
     m_sidebar(new KNPreferenceSidebar(this)),
     m_content(new KNVWidgetSwitcher(this)),
     m_aboutItem(generateItem(":/plugin/preference/about.png",
@@ -42,7 +46,6 @@ KNPreference::KNPreference(QWidget *parent) :
     setObjectName("Preference");
     //Set properties.
     setAutoFillBackground(true);
-
     //Configure preference content.
     m_content->setObjectName("PreferenceContent");
     m_content->setAutoFillBackground(true);
@@ -68,7 +71,8 @@ KNPreference::KNPreference(QWidget *parent) :
             this, &KNPreference::requireClosePreference);
     connect(m_sidebar, &KNPreferenceSidebar::requireChangeContent,
             this, &KNPreference::onActionIndexChange);
-
+    connect(m_sidebar, &KNPreferenceSidebar::advancedToggle,
+            this, &KNPreference::onActionAdvancedToggle);
     //Add fixed tabs.
     // Add about item and content to preference.
     m_content->addWidget(m_about);
@@ -88,6 +92,10 @@ KNPreference::KNPreference(QWidget *parent) :
     //Link retranslate.
     knI18n->link(this, &KNPreference::retranslate);
     retranslate();
+
+    //Load the configure.
+    m_sidebar->setAdvancedShown(m_preferenceConfigure->data("Advanced",
+                                                            false).toBool());
 }
 
 void KNPreference::retranslate()
@@ -100,10 +108,18 @@ void KNPreference::retranslate()
     m_sidebar->updateTitleBarText();
 }
 
-void KNPreference::onActionIndexChange(const int &index)
+void KNPreference::onActionIndexChange(int index)
 {
     //Change the content index.
     m_content->setCurrentIndex(index);
+}
+
+void KNPreference::onActionAdvancedToggle(bool toggle)
+{
+    //Save the toggle state.
+    m_preferenceConfigure->setData("Advanced", toggle);
+    //Process advanced state.
+    //!FIXME: Process the advanced toggle event.
 }
 
 inline KNPreferenceItem *KNPreference::generateItem(
@@ -142,17 +158,15 @@ inline void KNPreference::generateSettingItems()
 {
     //Get the setting icon for all the button.
     QPixmap headerSettingIcon("://preference/header/setting.png");
-    //Prepare for the icon of all the setting item.
-    QString buttonIcon[PreferencePanelCount];
-    buttonIcon[PanelGeneral]="://preference/general.png";
+    //Generate all the panel items.
+    KNPreferenceItem *items[PreferencePanelCount];
+    items[PanelGeneral]=generateItem("://preference/general.png",
+                                     headerSettingIcon);
     //Generate all the items.
     for(int i=0; i<PreferencePanelCount; ++i)
     {
-        //Generate the item.
-        KNPreferenceItem *item=generateItem(buttonIcon[i],
-                                            headerSettingIcon);
         //Add item to the sidebar.
-        m_sidebar->addItemWidget(item);
+        m_sidebar->addItemWidget(items[i]);
     }
     //Update the item title.
     updateItemTitle();

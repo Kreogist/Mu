@@ -29,7 +29,7 @@ KNSaoButton::KNSaoButton(QWidget *parent) :
     m_mouseAnime(new QTimeLine(200, this))
 {
     //Configure the time line.
-    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNSaoButton::onActionMouseAnime);

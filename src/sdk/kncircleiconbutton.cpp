@@ -90,7 +90,7 @@ void KNCircleIconButton::onActionToggled(bool checked)
 QTimeLine *KNCircleIconButton::generateTimeLine(const int &endFrame)
 {
     QTimeLine *timeLine=new QTimeLine(200, this);
-    timeLine->setUpdateInterval(10);
+    timeLine->setUpdateInterval(16);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setEndFrame(endFrame);
     connect(timeLine, &QTimeLine::frameChanged,

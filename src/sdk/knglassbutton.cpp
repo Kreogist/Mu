@@ -42,7 +42,7 @@ KNGlassButton::KNGlassButton(QWidget *parent) :
     //Set properties.
     setContentsMargins(20, 5, 20, 5);
     //Configure the time line.
-    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNGlassButton::onActionOpacityChanged);

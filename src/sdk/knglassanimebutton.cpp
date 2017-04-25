@@ -47,7 +47,7 @@ KNGlassAnimeButton::KNGlassAnimeButton(QWidget *parent) :
     m_backGradient.setColorAt(1, QColor(255,255,255,0));
 
     //Configure the time line.
-    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNGlassAnimeButton::onActionMouseAnime);

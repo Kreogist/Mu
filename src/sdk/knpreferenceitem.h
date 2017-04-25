@@ -43,6 +43,14 @@ public:
      */
     QPixmap headerIcon() const;
 
+    /*!
+     * \brief Get whether the item is an advanced item. Advanced item would be
+     * shown only when the advanced switch is turned on.
+     * \return If the tab is advanced tab, return true. The default value is
+     * false.
+     */
+    bool isAdvanced() const;
+
 signals:
 
 public slots:
@@ -52,6 +60,12 @@ public slots:
      * \param headerIcon The header icon pixmap.
      */
     void setHeaderIcon(const QPixmap &headerIcon);
+
+    /*!
+     * \brief Set whether the tab item is advanced item.
+     * \param isAdvanced To set the tab as an advanced item, set it to true.
+     */
+    void setIsAdvanced(bool isAdvanced);
 
 protected:
     /*!
@@ -93,6 +107,7 @@ private:
     qreal m_backgroundOpacity;
     QTimeLine *m_mouseIn, *m_mouseOut;
     int m_progress, m_textX;
+    bool m_isAdvanced;
 };
 
 #endif // KNPREFERENCEITEM_H

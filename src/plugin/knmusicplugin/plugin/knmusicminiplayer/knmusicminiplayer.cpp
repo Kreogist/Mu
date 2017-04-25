@@ -145,7 +145,7 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
             this, &KNMusicMiniPlayer::urlsDropped);
     //Configure the time line.
     m_moving->setEasingCurve(QEasingCurve::OutCubic);
-    m_moving->setUpdateInterval(10);
+    m_moving->setUpdateInterval(16);
     connect(m_moving, &QTimeLine::frameChanged,
             this, &KNMusicMiniPlayer::onActionMouseInOut);
     //Configure the container.

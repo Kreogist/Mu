@@ -92,7 +92,7 @@ KNMusicListViewBase::KNMusicListViewBase(QWidget *parent, KNMusicTab *tab) :
             verticalScrollBar(), &QScrollBar::setValue);
 
     //Configure the mouse anime time line.
-    m_mouseAnime->setUpdateInterval(10);
+    m_mouseAnime->setUpdateInterval(16);
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     //Link the time line.
     connect(m_mouseAnime, &QTimeLine::frameChanged,

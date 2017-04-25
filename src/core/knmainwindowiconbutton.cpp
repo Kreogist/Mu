@@ -289,8 +289,11 @@ inline void KNMainWindowIconButton::updateTitleLabel()
 
 inline QTimeLine *KNMainWindowIconButton::generateTimeLine()
 {
+    //Generate the time line.
     QTimeLine *timeLine=new QTimeLine(200, this);
+    //Configure the time line.
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(10);
+    timeLine->setUpdateInterval(16);
+    //Return the time line.
     return timeLine;
 }

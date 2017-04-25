@@ -43,7 +43,8 @@ KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     m_mouseIn(generateTimeLine(100)),
     m_mouseOut(generateTimeLine(0)),
     m_progress(0),
-    m_textX(TextBaseX)
+    m_textX(TextBaseX),
+    m_isAdvanced(false)
 {
     setObjectName("PreferenceItem");
     //Check static variables initial.
@@ -193,7 +194,7 @@ inline QTimeLine *KNPreferenceItem::generateTimeLine(int endFrame)
 {
     QTimeLine *timeline=new QTimeLine(200, this);
     timeline->setEndFrame(endFrame);
-    timeline->setUpdateInterval(10);
+    timeline->setUpdateInterval(16);
     timeline->setEasingCurve(QEasingCurve::OutCubic);
     connect(timeline, &QTimeLine::frameChanged,
             this, &KNPreferenceItem::onActionMouseInOut);
@@ -208,6 +209,16 @@ inline void KNPreferenceItem::startAnime(QTimeLine *timeLine)
     //Change the start frame of the time line and start the anime.
     timeLine->setStartFrame(m_progress);
     timeLine->start();
+}
+
+bool KNPreferenceItem::isAdvanced() const
+{
+    return m_isAdvanced;
+}
+
+void KNPreferenceItem::setIsAdvanced(bool isAdvanced)
+{
+    m_isAdvanced = isAdvanced;
 }
 
 QPixmap KNPreferenceItem::headerIcon() const

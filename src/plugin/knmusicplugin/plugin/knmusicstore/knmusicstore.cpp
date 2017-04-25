@@ -138,7 +138,7 @@ KNMusicStore::KNMusicStore(QWidget *parent) :
     ;
     //Configure the time line.
     m_showContainer->setEasingCurve(QEasingCurve::OutCubic);
-    m_showContainer->setUpdateInterval(33);
+    m_showContainer->setUpdateInterval(16);
     m_showContainer->setStartFrame(0);
     connect(m_showContainer, &QTimeLine::frameChanged,
             this, &KNMusicStore::onAnimeShowContainer);
