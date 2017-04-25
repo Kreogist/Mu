@@ -40,13 +40,19 @@ KNPreferenceItemList::KNPreferenceItemList(QWidget *parent) :
 QPixmap KNPreferenceItemList::itemHeaderIcon(const int &index)
 {
     //Give back the header icon.
-    return static_cast<KNPreferenceItem *>(tabAt(index))->headerIcon();
+    return getPreferenceItem(index)->headerIcon();
 }
 
 QString KNPreferenceItemList::itemText(const int &index)
 {
     //Return the item text.
     return tabAt(index)->text();
+}
+
+int KNPreferenceItemList::itemCount() const
+{
+    //The main layout widget counter is the item count.
+    return m_mainLayout->count();
 }
 
 bool KNPreferenceItemList::isEmpty()
@@ -65,10 +71,15 @@ int KNPreferenceItemList::addTabToWidget(QAbstractButton *tab)
     return m_mainLayout->count()-1;
 }
 
-QAbstractButton *KNPreferenceItemList::tabAt(const int &index)
+QAbstractButton *KNPreferenceItemList::tabAt(int index)
 {
     Q_ASSERT(index>-1 && index<m_mainLayout->count());
     //Get the index from the main layout.
     return static_cast<QAbstractButton *>
             (m_mainLayout->itemAt(index)->widget());
+}
+
+inline KNPreferenceItem *KNPreferenceItemList::getPreferenceItem(int index)
+{
+    return static_cast<KNPreferenceItem *>(tabAt(index));
 }

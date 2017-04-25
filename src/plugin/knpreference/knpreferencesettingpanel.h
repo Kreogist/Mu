@@ -12,38 +12,33 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
+ * along with this program; if not, write to the Free Software
+Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNPREFERENCEPLUGIN_H
-#define KNPREFERENCEPLUGIN_H
+#ifndef KNPREFERENCESETTINGPANEL_H
+#define KNPREFERENCESETTINGPANEL_H
 
 #include <QWidget>
 
-class KNPreferenceItem;
 /*!
- * \brief The KNPreferencePlugin class is the main preference panel. It's only a
- * port widget. You should reimplement it and fill those pure virtual methods.\n
+ * \brief The KNPreferenceSettingPanel class provides a panel which could load a
+ * setting panel file and genearte the panel for it.
  */
-class KNPreferencePlugin : public QWidget
+class KNPreferenceSettingPanel : public QWidget
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct KNPreferencePlugin class.
+     * \brief Construct a KNPreferenceSettingPanel widget.
      * \param parent The parent widget.
      */
-    KNPreferencePlugin(QWidget *parent = 0):QWidget(parent){}
+    explicit KNPreferenceSettingPanel(QWidget *parent = 0);
 
 signals:
-    /*!
-     * \brief When the header button clicked, this signal will be emitted to ask
-     * to close the preference.
-     */
-    void requireClosePreference();
 
 public slots:
 };
 
-#endif // KNPREFERENCEPLUGIN_H
+#endif // KNPREFERENCESETTINGPANEL_H

@@ -55,7 +55,7 @@ protected:
     /*!
      * \brief Reimplemented from KNAbstractTabGroup::tabAt().
      */
-    QAbstractButton *tabAt(const int &index) Q_DECL_OVERRIDE;
+    QAbstractButton *tabAt(int index) Q_DECL_OVERRIDE;
 
 private:
     QBoxLayout *m_mainLayout;

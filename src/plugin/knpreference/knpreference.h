@@ -25,6 +25,7 @@ class KNPreferenceSidebar;
 class KNVWidgetSwitcher;
 class KNPreferenceAbout;
 class KNPreferenceLanguagePanel;
+class KNPreferenceSettingPanel;
 /*!
  * \brief The KNPreference class is a official preference panel. It provides the
  * standard item panels.
@@ -39,11 +40,6 @@ public:
      */
     explicit KNPreference(QWidget *parent = 0);
 
-    /*!
-     * \brief Reimplemented from KNPreferencePlugin::addTab().
-     */
-    void addTab(KNPreferenceItem *tabWidget, QWidget *content) Q_DECL_OVERRIDE;
-
 signals:
 
 public slots:
@@ -53,12 +49,17 @@ private slots:
     void onActionIndexChange(const int &index);
 
 private:
-    inline void addPreferenceTab(KNPreferenceItem *tabWidget, QWidget *content);
+    inline KNPreferenceItem *generateItem(const QString &iconPath,
+                                          const QString &headerIconPath);
+    inline KNPreferenceItem *generateItem(const QString &iconPath,
+                                          const QPixmap &headerIcon);
+    inline void generateSettingItems();
     KNPreferenceSidebar *m_sidebar;
     KNVWidgetSwitcher *m_content;
     KNPreferenceItem *m_aboutItem;
     KNPreferenceAbout *m_about;
     KNPreferenceLanguagePanel *m_languagePanel;
+    KNPreferenceSettingPanel *m_settingPanel;
 };
 
 #endif // KNPREFERENCE_H

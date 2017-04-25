@@ -52,6 +52,21 @@ public:
      */
     int currentIndex() const;
 
+    /*!
+     * \brief Get whether any item of the tab group is selected.
+     * \return If one of the item is selected, return true. If not or there is
+     * no button, return false.
+     */
+    bool isButtonSelected() const;
+
+    /*!
+     * \brief Whether the group should automatically set the first adding button
+     * to checked state.
+     * \return True if the group automatically set it to checked. Default value
+     * is true.
+     */
+    bool autoSelect() const;
+
 signals:
     /*!
      * \brief When there's a new item clicked, this signal will be emitted.
@@ -64,7 +79,20 @@ public slots:
      * \brief Set the current item via index.
      * \param currentIndex The index of the item.
      */
-    void setCurrentIndex(const int &currentIndex);
+    void setCurrentIndex(int currentIndex);
+
+    /*!
+     * \brief Set whether the group should auto select the first item when
+     * adding the button.
+     * \param autoSelect Set it to true for enabling this feature.
+     */
+    void setAutoSelect(bool autoSelect);
+
+    /*!
+     * \brief Reset the current selected item. Make none of the button is
+     * selected.
+     */
+    void reset();
 
 protected:
     /*!
@@ -87,14 +115,15 @@ protected:
      * \param index The tab index.
      * \return The tab widget pointer.
      */
-    virtual QAbstractButton *tabAt(const int &index)=0;
+    virtual QAbstractButton *tabAt(int index)=0;
 
 private slots:
-    void onActionMapped(const int &index);
+    void onActionMapped(int index);
 
 private:
     QSignalMapper *m_itemMapper;
     int m_currentIndex;
+    bool m_autoSelect;
 };
 
 #endif // KNABSTRACTTABGROUP_H

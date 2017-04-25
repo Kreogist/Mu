@@ -27,7 +27,7 @@ QT += \
     network
 
 # Enabled C++ 11 configures.
-CONFIG += c++11 intel64
+CONFIG += c++11
 
 # Add translation paths for Qt Linguist to generate translation files.
 TRANSLATIONS += \
@@ -503,7 +503,8 @@ SOURCES += \
     sdk/knlockedfile.cpp \
     sdk/knlocalpeer.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.cpp \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.cpp
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.cpp \
+    plugin/knpreference/knpreferencesettingpanel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -772,7 +773,8 @@ HEADERS += \
     sdk/knlockedfile.h \
     sdk/knlocalpeer.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.h \
-    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.h
+    plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.h \
+    plugin/knpreference/knpreferencesettingpanel.h
 
 RESOURCES += \
     resource/res.qrc

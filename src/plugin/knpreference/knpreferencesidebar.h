@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class QBoxLayout;
+class QSignalMapper;
 class KNPreferenceItem;
 class KNPreferenceTitleBar;
 class KNPreferenceItemList;
@@ -48,6 +50,13 @@ public:
      */
     void addItemWidget(KNPreferenceItem *item);
 
+    /*!
+     * \brief Add an item widget to sidebar at the fixed layout area. The item
+     * at fixed area won't be shown at scroll bar area.
+     * \param item The preference item widget poitner.
+     */
+    void addFixedItemWidget(KNPreferenceItem *item);
+
 signals:
     /*!
      * \brief When the header button clicked, this signal will be emitted to ask
@@ -58,9 +67,19 @@ signals:
     /*!
      * \brief When the current tab index is changed, this signal will be emitted
      * to ask to change the content to specific index.
-     * \param tabIndex The tab index.
+     * \param tabIndex The content tab index.
      */
     void requireChangeContent(int tabIndex);
+
+    /*!
+     * \brief When the current panel index is changed, this signal will be
+     * emitted to ask to change the panel data to specific index.\n
+     * The different of content and panel is that the panel is a specific
+     * setting panel which would be dynamicly loaded. The content is a fixed
+     * widget panel.
+     * \param panelIndex The panel index.
+     */
+    void requireChangePanel(int panelIndex);
 
 public slots:
     /*!
@@ -77,12 +96,15 @@ protected:
 
 private slots:
     void retranslate();
-    void onActionIndexChanged(const int &index);
+    void onActionIndexChanged(int index);
+    void onActionFixedIndexChanged(int index);
 
 private:
     inline void initialBottomBar();
+    inline void setTitleBarContent(KNPreferenceItemList *list,
+                                   int index);
     KNPreferenceTitleBar *m_titleBar;
-    KNPreferenceItemList *m_itemList;
+    KNPreferenceItemList *m_fixedItemList, *m_itemList;
     KNLinearSenseWidget *m_bottomBar;
     KNSideShadowWidget *m_rightShadow;
     const int m_shadowWidth;
