@@ -38,8 +38,7 @@ public:
     explicit KNMusicScrollLyrics(QWidget *parent = 0);
 
     /*!
-     * \brief backend
-     * \return
+     * \brief Reimplemented from KNMusicLyricsBase::backend().
      */
     KNMusicLyricsBackend *backend() Q_DECL_OVERRIDE;
 
@@ -66,13 +65,12 @@ public slots:
     void setSpacing(int spacing);
 
     /*!
-     * \brief setBackend
-     * \param backend
+     * \brief Reimplemented from KNMusicLyricsBase::setBackend().
      */
     void setBackend(KNMusicLyricsBackend *backend) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief reset
+     * \brief Reset the animation and display state of the lyrics display.
      */
     void reset();
 

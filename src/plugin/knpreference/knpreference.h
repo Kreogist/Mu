@@ -54,6 +54,7 @@ private:
     enum PreferencePanels
     {
         PanelGeneral,
+        PanelLyrics,
         PreferencePanelCount
     };
 

@@ -152,6 +152,8 @@ inline void KNPreference::updateItemTitle()
     //Update all the item title.
     m_sidebar->setItemTitle(PanelGeneral,
                             tr("General"));
+    m_sidebar->setItemTitle(PanelLyrics,
+                            tr("Lyrics"));
 }
 
 inline void KNPreference::generateSettingItems()
@@ -162,6 +164,8 @@ inline void KNPreference::generateSettingItems()
     KNPreferenceItem *items[PreferencePanelCount];
     items[PanelGeneral]=generateItem("://preference/general.png",
                                      headerSettingIcon);
+    items[PanelLyrics]=generateItem("://preference/lyrics.png",
+                                    headerSettingIcon);
     //Generate all the items.
     for(int i=0; i<PreferencePanelCount; ++i)
     {

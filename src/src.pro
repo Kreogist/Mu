@@ -505,7 +505,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.cpp \
     plugin/knpreference/knpreferencesettingpanel.cpp \
-    sdk/knroundswitchbutton.cpp
+    sdk/knroundswitchbutton.cpp \
+    sdk/knfontdialog.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -776,7 +777,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.h \
     plugin/knpreference/knpreferencesettingpanel.h \
-    sdk/knroundswitchbutton.h
+    sdk/knroundswitchbutton.h \
+    sdk/knfontdialog.h
 
 RESOURCES += \
     resource/res.qrc
