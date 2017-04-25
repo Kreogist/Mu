@@ -70,7 +70,7 @@ bool KNMusicFfmpegAnalysiser::analysis(KNMusicDetailInfo &detailInfo)
     //latest version code of FFMpeg.
     //Here we use the FF_API_CODER_TYPE as the tester, the version later should
     //contains AVCodecParameters.
-#ifdef FF_API_CODER_TYPE
+#ifdef FF_API_COPY_CONTENT
     //Initial the audio stream context.
     AVCodecParameters *codecParameters=NULL;
     //Find the audio stream.
