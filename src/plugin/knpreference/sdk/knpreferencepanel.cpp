@@ -35,7 +35,7 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 {
     //Set properties.
     setAutoFillBackground(true);
-    setFixedWidth(400);
+    setFixedWidth(404);
     //Set layout.
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(0);

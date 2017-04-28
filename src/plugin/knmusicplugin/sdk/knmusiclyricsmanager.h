@@ -25,6 +25,7 @@
 
 using namespace MusicUtil;
 
+class KNConfigure;
 class KNMusicLyricsDownloader;
 class KNMusicLyricsBackend;
 class KNMusicLrcParser;
@@ -42,7 +43,8 @@ public:
      * \brief Construct a KNMusicLyricsManager class.
      * \param parent The parent object.
      */
-    explicit KNMusicLyricsManager(QObject *parent = 0);
+    explicit KNMusicLyricsManager(KNConfigure *lyricsConfigure,
+                                  QObject *parent = 0);
     ~KNMusicLyricsManager();
 
     /*!
@@ -158,6 +160,8 @@ private:
     KNMusicLrcParser *m_parser;
     //Working thread for the downloader.
     QThread *m_onlineThread;
+    //Configrue setting.
+    KNConfigure *m_lyricsConfigure;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H

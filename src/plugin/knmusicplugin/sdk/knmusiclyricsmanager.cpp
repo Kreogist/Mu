@@ -19,6 +19,7 @@
 #include <QThread>
 
 #include "knutil.h"
+#include "knconfigure.h"
 
 #include "knmusiclyricsbackend.h"
 #include "knmusiclrcparser.h"
@@ -30,7 +31,8 @@
 
 #include <QDebug>
 
-KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
+KNMusicLyricsManager::KNMusicLyricsManager(KNConfigure *lyricsConfigure,
+                                           QObject *parent) :
     QObject(parent),
     m_detailInfo(KNMusicDetailInfo()),
     m_lyricsDir(QString()),
@@ -38,7 +40,8 @@ KNMusicLyricsManager::KNMusicLyricsManager(QObject *parent) :
     m_onlineLyricsDownloader(new KNMusicOnlineLyricsDownloader),
     m_backend(new KNMusicLyricsBackend(this)),
     m_parser(new KNMusicLrcParser(this)),
-    m_onlineThread(new QThread(this))
+    m_onlineThread(new QThread(this)),
+    m_lyricsConfigure(lyricsConfigure)
 {
     //Set the default loading policy.
     m_policyList << SameNameInLyricsDir << RelateNameInLyricsDir
@@ -89,8 +92,13 @@ void KNMusicLyricsManager::loadLyrics(const KNMusicAnalysisItem &analysisItem)
         //Lyrics load complete.
         return;
     }
-    //Or else we need to download the lyrics.
-    emit requireDownloadLyrics(m_detailInfo);
+    //When the download setting, if allows to download online, emit the download
+    //signal.
+    if(m_lyricsConfigure->data("Online", true).toBool())
+    {
+        //Or else we need to download the lyrics.
+        emit requireDownloadLyrics(m_detailInfo);
+    }
 }
 
 bool KNMusicLyricsManager::loadLyricsFile(const QString &lyricsPath)

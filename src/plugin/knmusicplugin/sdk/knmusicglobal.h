@@ -313,6 +313,7 @@ private:
                 m_listSuffixDescription, m_indexedGenres;
     QPixmap m_noAlbumArt;
     QString m_musicLibPath;
+    KNConfigure *m_musicConfigure;
 
     QWidget *m_parentWidget;
     KNMusicDetailDialog *m_detailDialog;
@@ -327,7 +328,6 @@ private:
     KNMusicLyricsDownloadDialogBase *m_lyricsDownloadDialog;
 
     QThread *m_searcherThread, *m_analysisThread;
-    KNConfigure *m_musicConfigure;
 };
 
 #endif // KNMUSICGLOBAL_H

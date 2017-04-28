@@ -145,9 +145,12 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_indexedGenres(QStringList()),
     m_noAlbumArt(QPixmap(":/plugin/music/public/noalbum.png")),
     m_musicLibPath(QString()),
+    m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music")),
     m_parentWidget(static_cast<QWidget *>(parent)),
     m_detailDialog(new KNMusicDetailDialog(knGlobal->mainWindow())),
-    m_lyricsManager(new KNMusicLyricsManager(this)),
+    m_lyricsManager(new KNMusicLyricsManager(
+                        m_musicConfigure->getConfigure("Lyrics"),
+                        this)),
     m_parser(new KNMusicParser),
     m_soloMenu(nullptr),
     m_multiMenu(nullptr),
@@ -157,8 +160,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_detailTooltip(nullptr),
     m_lyricsDownloadDialog(nullptr),
     m_searcherThread(new QThread(this)),
-    m_analysisThread(new QThread(this)),
-    m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music"))
+    m_analysisThread(new QThread(this))
 {
     //Initial the file type.
     initialFileType();

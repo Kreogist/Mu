@@ -300,6 +300,69 @@
     </message>
 </context>
 <context>
+    <name>KNFontDialog</name>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="43"/>
+        <source>Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="45"/>
+        <source>Size</source>
+        <translation type="unfinished">大小</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="47"/>
+        <source>Styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="121"/>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="122"/>
+        <source>Italic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="123"/>
+        <source>Underline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="124"/>
+        <source>Strike Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="125"/>
+        <source>Kerning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="132"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="135"/>
+        <source>Cancel</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="141"/>
+        <source>Sample</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sdk/knfontdialog.cpp" line="147"/>
+        <source>AaBbYyZz</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNGlobal</name>
     <message>
         <location filename="../sdk/knglobal.cpp" line="94"/>
@@ -570,37 +633,37 @@
 <context>
     <name>KNMacExtras</name>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="111"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="116"/>
         <source>Now Playing</source>
         <translation>正在播放</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="112"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="117"/>
         <source>Next</source>
         <translation>下一個</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="113"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="118"/>
         <source>Previous</source>
         <translation>上一個</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="115"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="120"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="116"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="121"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="117"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="122"/>
         <source>No Artist</source>
         <translation>沒有藝術家</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="118"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="123"/>
         <source>No Album</source>
         <translation>沒有專輯</translation>
     </message>
@@ -1926,27 +1989,32 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreference</name>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="96"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="114"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="136"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="172"/>
         <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="174"/>
+        <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>KNPreferenceAbout</name>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="138"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="138"/>
         <source> 2013-2015 Kreogist Dev Team
 All rights reserved.</source>
         <translation> 2013-2015 Kreogist Dev Team
 保留一切權利。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="153"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="153"/>
         <source>Special Thanks</source>
         <translation>特別鳴謝</translation>
     </message>
@@ -1956,7 +2024,7 @@ All rights reserved.</source>
         <translation type="vanished">特別鳴謝</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="163"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="163"/>
         <source>This program uses Qt Version </source>
         <translation>這個程式使用 Qt </translation>
     </message>
@@ -2029,7 +2097,7 @@ darkblackswords
 這個程式使用 Qt  </translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferenceabout.cpp" line="165"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="165"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
@@ -2049,9 +2117,40 @@ Qt 是 The Qt Company Ltd 開發的開源專案。請訪問 qt.io 獲取更多�
         <translation type="vanished">語言</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreferencelanguagepanel.cpp" line="112"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencelanguagepanel.cpp" line="112"/>
         <source>Languages</source>
         <translation>語言</translation>
+    </message>
+</context>
+<context>
+    <name>KNPreferencePanelData</name>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="43"/>
+        <source>Online Lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="44"/>
+        <source>Allow downloading lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download Lyrics</source>
+        <translation type="obsolete">下載歌詞</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="46"/>
+        <source>If there is no lyrics existed in the lyrics search folder,
+allows Mu to download lyrics from the Internet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNPreferenceSidebar</name>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencesidebar.cpp" line="129"/>
+        <source>Advanced Mode</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

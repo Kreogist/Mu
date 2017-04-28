@@ -41,9 +41,10 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     {
         //Online lyrics.
         block=generateBlock(tr("Online Lyrics"));
-        addItem(block, "Enable", tr("Download Lyrics"),
+        addItem(block, "Enable", tr("Allow downloading lyrics"),
                 "User/Music/Lyrics/Online", true, TypeBoolean,
-                tr("Allows Mu to download lyrics from Internet"));
+                tr("If there is no lyrics existed in the lyrics search folder,"
+                   "\nallows Mu to download lyrics from the Internet."));
         panelData.append(block);
         break;
     }
