@@ -30,7 +30,6 @@
 
 class KNConfigure;
 class KNPreferencePlugin;
-class KNPreferenceItem;
 /*!
  * \brief The KNGlobal class is a global instance which contains several public
  * function. \n

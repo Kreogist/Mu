@@ -29,34 +29,48 @@ void KNLabelButton::mousePressEvent(QMouseEvent *event)
 {
     //Do the press event.
     QLabel::mousePressEvent(event);
-    //Set the pressed flag.
-    m_pressed=true;
-    //Emit pressed signal.
-    emit pressed();
+    //Check the enabled state.
+    if(isEnabled())
+    {
+        //Set the pressed flag.
+        m_pressed=true;
+        //Emit pressed signal.
+        emit pressed();
+    }
 }
 
 void KNLabelButton::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    //Do orignal label.
     QLabel::mouseDoubleClickEvent(event);
-    //Emit the double clicked signal.
-    emit doubleClicked();
+    //Check the enabled state.
+    if(isEnabled())
+    {
+        //Emit the double clicked signal.
+        emit doubleClicked();
+    }
 }
 
 void KNLabelButton::mouseReleaseEvent(QMouseEvent *event)
 {
+    //Do original label.
     QLabel::mouseReleaseEvent(event);
-    //Emit the release signal.
-    emit released();
-    //Check the pressed flag.
-    if(m_pressed)
+    //Check the enabled state.
+    if(isEnabled())
     {
-        //Reset the pressed flag.
-        m_pressed=false;
-        //Check whether the position of the event is valid.
-        if(rect().contains(event->pos()))
+        //Emit the release signal.
+        emit released();
+        //Check the pressed flag.
+        if(m_pressed)
         {
-            //Emit clicked signal.
-            emit clicked();
+            //Reset the pressed flag.
+            m_pressed=false;
+            //Check whether the position of the event is valid.
+            if(rect().contains(event->pos()))
+            {
+                //Emit clicked signal.
+                emit clicked();
+            }
         }
     }
 }

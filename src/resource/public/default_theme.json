@@ -430,10 +430,21 @@
         "Parent" : "MainWindow",
         "Window" : "#1e1e1e"
     },
+    "PreferencePanelContainer" :
+    {
+        "Parent" : "Preference",
+        "Window" : "#1A1A1A"
+    },
     "PreferenceContent" :
     {
         "Parent" : "Preference",
         "Window" : "#2A2A2A"
+    },
+    "PreferencePanelItem" :
+    {
+        "Parent" : "PreferenceContent",
+        "Base" : "#797979",
+        "Window" : "#4A4A4A"
     },
     "PreferenceAboutLabel" :
     {
@@ -454,9 +465,28 @@
         "Highlight" : "#606060",
         "HighlightedText" : "#F7CF3D"
     },
+    "PreferencePanel" :
+    {
+        "Parent" : "PreferenceContent",
+        "WindowText" : "#969696"
+    },
     "PreferenceSidebar" :
     {
         "Parent" : "Preference"
+    },
+    "PreferenceAdvancedButton" :
+    {
+        "Parent" : "PreferenceSidebar",
+        "Base" : "#2A2A2A",
+        "Text" : "#F7CF3D",
+        "Window" : "#676767",
+        "WindowText" : "#00000064",
+        "Button" : "#E8E8E8",
+        "ButtonText" : "#CDCDCD"
+    },
+    "PreferenceItemSwitcher" :
+    {
+        "Parent" : "PreferenceAdvancedButton"
     },
     "PreferenceSidebarLabel" :
     {

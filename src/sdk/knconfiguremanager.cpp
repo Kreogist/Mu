@@ -64,6 +64,23 @@ KNConfigure *KNConfigureManager::configure(int index)
     return m_configures[index];
 }
 
+QVariant KNConfigureManager::configureValue(QStringList path,
+                                            const QVariant &defaultValue)
+{
+    //Check the data of the path.
+    QString topPath=path.takeFirst();
+    //Prepare the configure data.
+    KNConfigure *targetConfigure=getTopLevelConfigure(topPath);
+    //Check whether the pointer is nullptr.
+    if(!targetConfigure)
+    {
+        //No configure found, return a null variant.
+        return QVariant();
+    }
+    //Get the value from the configure.
+    return targetConfigure->getPathData(path, defaultValue);
+}
+
 void KNConfigureManager::setFolderPath(const QString &folderPath,
                                        const QString &accountFolderPath)
 {
@@ -84,6 +101,21 @@ void KNConfigureManager::setFolderPath(const QString &folderPath,
     m_accountFolderPath=accountFolderPath;
     //Reload the configure.
     reloadConfigure();
+}
+
+void KNConfigureManager::setConfigureValue(QStringList path,
+                                           const QVariant &value)
+{
+    //Check the data of the path.
+    QString topPath=path.takeFirst();
+    //Prepare the configure data.
+    KNConfigure *targetConfigure=getTopLevelConfigure(topPath);
+    //Check whether the pointer is nullptr.
+    if(targetConfigure)
+    {
+        //Save the value to the configure.
+        targetConfigure->setPathData(path, value);
+    }
 }
 
 void KNConfigureManager::reloadConfigure()
@@ -165,4 +197,32 @@ void KNConfigureManager::saveConfigureFile(const QString &filePath, int type)
             configureFile.close();
         }
     }
+}
+
+inline KNConfigure *KNConfigureManager::getTopLevelConfigure(
+        const QString &topPath)
+{
+    //Check the path.
+    if(topPath=="Cache")
+    {
+        //Cache configure.
+        return configure(Cache);
+    }
+    else if(topPath=="System")
+    {
+        //System configure.
+        return configure(System);
+    }
+    else if(topPath=="User")
+    {
+        //User configure
+        return configure(User);
+    }
+    else if(topPath=="Account")
+    {
+        //Account configure
+        return configure(Account);
+    }
+    //Undefined data.
+    return nullptr;
 }

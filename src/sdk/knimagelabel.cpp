@@ -24,7 +24,8 @@ KNImageLabel::KNImageLabel(QWidget *parent) :
     m_pixmap(QPixmap()),
     m_scaledPixmap(QPixmap()),
     m_pixmapX(0),
-    m_pixmapY(0)
+    m_pixmapY(0),
+    m_imageDisplay(true)
 {
 }
 
@@ -41,12 +42,20 @@ void KNImageLabel::setPixmap(const QPixmap &pixmap)
     updateScaledPixmap();
 }
 
+void KNImageLabel::setDisplayContent(bool imageDisplay)
+{
+    //Save the image display.
+    m_imageDisplay=imageDisplay;
+    //Update the state.
+    update();
+}
+
 void KNImageLabel::paintEvent(QPaintEvent *event)
 {
     //Paint the widget.
     QWidget::paintEvent(event);
     //Check scaled pixmap first.
-    if(!m_scaledPixmap.isNull())
+    if(m_imageDisplay && !m_scaledPixmap.isNull())
     {
         //Initial the painter.
         QPainter painter(this);

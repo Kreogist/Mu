@@ -40,9 +40,20 @@ public:
      */
     explicit KNRoundSwitchButton(QWidget *parent = 0);
 
+    /*!
+     * \brief Set the button is checked or not without the animation.
+     * \param checked The checked state.
+     */
+    void setForceChecked(bool checked);
+
 signals:
 
 public slots:
+    /*!
+     * \brief Update the painting palette.
+     * \param pal The palette of the round switch button.
+     */
+    void updatePalette(const QPalette &pal);
 
 protected:
     /*!

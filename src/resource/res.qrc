@@ -89,6 +89,8 @@
         <file>preference/header/setting.png</file>
         <file>preference/general.png</file>
         <file>preference/lyrics.png</file>
+        <file>preference/PreferenceHint.png</file>
+        <file>preference/PreferenceUndo.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

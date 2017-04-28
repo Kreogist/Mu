@@ -288,17 +288,17 @@ SOURCES += \
     plugin/knpreference/knpreference.cpp \
     plugin/knmusicplugin/knmusicplugin.cpp \
     plugin/knmusicplugin/sdk/knmusicglobal.cpp \
-    plugin/knpreference/knpreferencesidebar.cpp \
-    plugin/knpreference/knpreferencetitlebar.cpp \
-    plugin/knpreference/knpreferenceheaderbutton.cpp \
+    plugin/knpreference/sdk/knpreferencesidebar.cpp \
+    plugin/knpreference/sdk/knpreferencetitlebar.cpp \
+    plugin/knpreference/sdk/knpreferenceheaderbutton.cpp \
     sdk/knsideshadowwidget.cpp \
     sdk/knlinearsensewidget.cpp \
     sdk/knvwidgetswitcher.cpp \
     sdk/knpreferenceitem.cpp \
     sdk/knshadowscrollarea.cpp \
-    plugin/knpreference/knpreferenceitemlist.cpp \
+    plugin/knpreference/sdk/knpreferenceitemlist.cpp \
     sdk/sao/knsaostyle.cpp \
-    plugin/knpreference/knpreferenceabout.cpp \
+    plugin/knpreference/sdk/knpreferenceabout.cpp \
     sdk/kncategorytab.cpp \
     sdk/kncategorytabbar.cpp \
     sdk/knabstracttabgroup.cpp \
@@ -433,11 +433,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.cpp \
     sdk/knlabelbutton.cpp \
     plugin/knmusicplugin/sdk/knmusiccategorysearch.cpp \
-    plugin/knpreference/knpreferencelanguagepanel.cpp \
-    plugin/knpreference/knpreferencelanguagepanelitem.cpp \
-    plugin/knpreference/knpreferencelanguageitem.cpp \
-    sdk/knpreferencepanel.cpp \
-    sdk/knpreferencepanelitem.cpp \
+    plugin/knpreference/sdk/knpreferencelanguagepanel.cpp \
+    plugin/knpreference/sdk/knpreferencelanguagepanelitem.cpp \
+    plugin/knpreference/sdk/knpreferencelanguageitem.cpp \
     sdk/knselectanyfiledialog.cpp \
     sdk/knfiledialog.cpp \
     sdk/knimagelabel.cpp \
@@ -504,9 +502,13 @@ SOURCES += \
     sdk/knlocalpeer.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.cpp \
-    plugin/knpreference/knpreferencesettingpanel.cpp \
     sdk/knroundswitchbutton.cpp \
-    sdk/knfontdialog.cpp
+    sdk/knfontdialog.cpp \
+    plugin/knpreference/sdk/knpreferencepanel.cpp \
+    plugin/knpreference/sdk/knpreferencepaneldata.cpp \
+    plugin/knpreference/sdk/knpreferencepanelcontainer.cpp \
+    plugin/knpreference/sdk/items/knpreferencepanelitem.cpp \
+    plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -532,17 +534,17 @@ HEADERS += \
     sdk/knabstractmusicplugin.h \
     plugin/knmusicplugin/knmusicplugin.h \
     plugin/knmusicplugin/sdk/knmusicglobal.h \
-    plugin/knpreference/knpreferencesidebar.h \
-    plugin/knpreference/knpreferencetitlebar.h \
-    plugin/knpreference/knpreferenceheaderbutton.h \
+    plugin/knpreference/sdk/knpreferencesidebar.h \
+    plugin/knpreference/sdk/knpreferencetitlebar.h \
+    plugin/knpreference/sdk/knpreferenceheaderbutton.h \
     sdk/knsideshadowwidget.h \
     sdk/knlinearsensewidget.h \
     sdk/knvwidgetswitcher.h \
     sdk/knpreferenceitem.h \
     sdk/knshadowscrollarea.h \
-    plugin/knpreference/knpreferenceitemlist.h \
+    plugin/knpreference/sdk/knpreferenceitemlist.h \
     sdk/sao/knsaostyle.h \
-    plugin/knpreference/knpreferenceabout.h \
+    plugin/knpreference/sdk/knpreferenceabout.h \
     sdk/kncategorytab.h \
     sdk/kncategorytabbar.h \
     sdk/knabstracttabgroup.h \
@@ -700,11 +702,9 @@ HEADERS += \
     sdk/knlabelbutton.h \
     sdk/knplatformextras.h \
     plugin/knmusicplugin/sdk/knmusiccategorysearch.h \
-    plugin/knpreference/knpreferencelanguagepanel.h \
-    plugin/knpreference/knpreferencelanguagepanelitem.h \
-    plugin/knpreference/knpreferencelanguageitem.h \
-    sdk/knpreferencepanel.h \
-    sdk/knpreferencepanelitem.h \
+    plugin/knpreference/sdk/knpreferencelanguagepanel.h \
+    plugin/knpreference/sdk/knpreferencelanguagepanelitem.h \
+    plugin/knpreference/sdk/knpreferencelanguageitem.h \
     sdk/knselectanyfiledialog.h \
     sdk/knfiledialog.h \
     sdk/knimagelabel.h \
@@ -776,9 +776,14 @@ HEADERS += \
     sdk/knlocalpeer.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepagelist.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstorepageartist.h \
-    plugin/knpreference/knpreferencesettingpanel.h \
     sdk/knroundswitchbutton.h \
-    sdk/knfontdialog.h
+    sdk/knfontdialog.h \
+    plugin/knpreference/sdk/knpreferenceutil.h \
+    plugin/knpreference/sdk/knpreferencepanel.h \
+    plugin/knpreference/sdk/knpreferencepaneldata.h \
+    plugin/knpreference/sdk/knpreferencepanelcontainer.h \
+    plugin/knpreference/sdk/items/knpreferencepanelitem.h \
+    plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.h
 
 RESOURCES += \
     resource/res.qrc

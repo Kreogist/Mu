@@ -77,6 +77,18 @@ public:
     QVariant data(const QString &key,
                   const QVariant &defaultValue=QVariant());
 
+    /*!
+     * \brief Get a data which could be quite deep level in the configure. If it
+     * is not in this level, it will call the deeper level in the configure. If
+     * it is right in the level, it will find and return the value the same as
+     * calling the data() function.
+     * \param path Configure setting path.
+     * \param defaultValue The default value of the specific data.
+     * \return The data in QVariant.
+     */
+    QVariant getPathData(const QStringList &path,
+                         const QVariant &defaultValue=QVariant());
+
 signals:
 
 public slots:
@@ -86,6 +98,13 @@ public slots:
      * \param value The data.
      */
     void setData(const QString &key, const QVariant &value);
+
+    /*!
+     * \brief Set the data in a specific path.
+     * \param path The path of the data.
+     * \param value The data.
+     */
+    void setPathData(const QStringList &path, const QVariant &value);
 
     /*!
      * \brief Set the data object from a configure file.

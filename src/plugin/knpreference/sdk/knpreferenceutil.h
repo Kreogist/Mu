@@ -17,10 +17,45 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "knpreferencesettingpanel.h"
+#ifndef KNPREFERENCEUTIL_H
+#define KNPREFERENCEUTIL_H
 
-KNPreferenceSettingPanel::KNPreferenceSettingPanel(QWidget *parent) :
-    QWidget(parent)
+#include <QString>
+#include <QVariant>
+#include <QStringList>
+#include <QList>
+
+namespace PreferenceUtil
 {
+enum PreferencePanels
+{
+    PanelGeneral,
+    PanelLyrics,
+    PreferencePanelCount
+};
 
+enum PreferencePanelOptionType
+{
+    TypeBoolean,
+    TypeInt,
+    TypeFont
+};
+
+struct PreferencePanelOption
+{
+    QStringList path;
+    QVariant defaultValue;
+    QString name;
+    QString title;
+    QString explain;
+    PreferencePanelOptionType type;
+};
+
+struct PreferencePanelBlock
+{
+    QString blockName;
+    QList<PreferencePanelOption> options;
+};
 }
+
+#endif // KNPREFERENCEUTIL_H

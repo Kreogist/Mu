@@ -149,6 +149,19 @@ QVariant KNConfigure::data(const QString &key,
     return defaultValue;
 }
 
+QVariant KNConfigure::getPathData(const QStringList &path,
+                                  const QVariant &defaultValue)
+{
+    //Check the path size.
+    if(path.size()==1)
+    {
+        //Which is the current level.
+        return data(path.first(), defaultValue);
+    }
+    //Or else get the sub configure value.
+    return getConfigure(path.first())->getPathData(path.mid(1), defaultValue);
+}
+
 void KNConfigure::setData(const QString &key, const QVariant &value)
 {
     //Because the QJsonObject can only insert QJsonValue, and the construct
@@ -192,6 +205,20 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
     default:
         break;
     }
+}
+
+void KNConfigure::setPathData(const QStringList &path, const QVariant &value)
+{
+    //Check the path depth.
+    if(path.size()==1)
+    {
+        //Set the data.
+        setData(path.first(), value);
+        //Mission complete.
+        return;
+    }
+    //Or else, call the deeper value.
+    getConfigure(path.first())->setPathData(path.mid(1), value);
 }
 
 void KNConfigure::setDataObject(const QJsonObject &dataObject)

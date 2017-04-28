@@ -51,6 +51,12 @@ public slots:
      */
     void setPixmap(const QPixmap &pixmap);
 
+    /*!
+     * \brief Set whether the image is display.
+     * \param imageDisplay The image display state, the default value is true.
+     */
+    void setDisplayContent(bool imageDisplay);
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::paintEvent().
@@ -66,6 +72,7 @@ private:
     inline void updateScaledPixmap();
     QPixmap m_pixmap, m_scaledPixmap;
     int m_pixmapX, m_pixmapY;
+    bool m_imageDisplay;
 };
 
 #endif // KNIMAGELABEL_H

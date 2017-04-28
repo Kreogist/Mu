@@ -124,6 +124,7 @@ protected:
 
 private slots:
     void retranslate();
+    void updateRoundedButtonPalette();
     void onActionIndexChanged(int index);
     void onActionFixedIndexChanged(int index);
 

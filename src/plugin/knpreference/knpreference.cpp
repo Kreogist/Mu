@@ -17,19 +17,26 @@
  */
 #include <QBoxLayout>
 
-#include "knpreferenceitem.h"
-#include "knpreferencelanguageitem.h"
 #include "knvwidgetswitcher.h"
-#include "knpreferencesidebar.h"
-#include "knpreferenceabout.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
-#include "knpreferencelanguagepanel.h"
-#include "knpreferencesettingpanel.h"
 #include "knconfigure.h"
 #include "knglobal.h"
 
+#include "sdk/knpreferenceitem.h"
+#include "sdk/knpreferencelanguageitem.h"
+#include "sdk/knpreferencesidebar.h"
+#include "sdk/knpreferenceabout.h"
+#include "sdk/knpreferencelanguagepanel.h"
+#include "sdk/knpreferencepanelcontainer.h"
+#include "sdk/knpreferenceutil.h"
+#include "sdk/knpreferencepaneldata.h"
+
 #include "knpreference.h"
+
+#include <QDebug>
+
+using namespace PreferenceUtil;
 
 KNPreference::KNPreference(QWidget *parent) :
     KNPreferencePlugin(parent),
@@ -41,7 +48,8 @@ KNPreference::KNPreference(QWidget *parent) :
                              ":/plugin/preference/header/about.png")),
     m_about(new KNPreferenceAbout(this)),
     m_languagePanel(new KNPreferenceLanguagePanel(this)),
-    m_settingPanel(new KNPreferenceSettingPanel(this))
+    m_settingContainer(new KNPreferencePanelContainer(this)),
+    m_settingPanelData(new KNPreferencePanelData(this))
 {
     setObjectName("Preference");
     //Set properties.
@@ -71,6 +79,8 @@ KNPreference::KNPreference(QWidget *parent) :
             this, &KNPreference::requireClosePreference);
     connect(m_sidebar, &KNPreferenceSidebar::requireChangeContent,
             this, &KNPreference::onActionIndexChange);
+    connect(m_sidebar, &KNPreferenceSidebar::requireChangePanel,
+            this, &KNPreference::onActionPanelChange);
     connect(m_sidebar, &KNPreferenceSidebar::advancedToggle,
             this, &KNPreference::onActionAdvancedToggle);
     //Add fixed tabs.
@@ -81,7 +91,7 @@ KNPreference::KNPreference(QWidget *parent) :
     m_content->addWidget(m_languagePanel);
     m_sidebar->addFixedItemWidget(m_languagePanel->languageListItem());
     //Add setting panel to content.
-    m_content->addWidget(m_settingPanel);
+    m_content->addWidget(m_settingContainer);
     //Generate all the items.
     generateSettingItems();
 
@@ -112,6 +122,14 @@ void KNPreference::onActionIndexChange(int index)
 {
     //Change the content index.
     m_content->setCurrentIndex(index);
+}
+
+void KNPreference::onActionPanelChange(int index)
+{
+    //Get the blocks of the panel.
+    QList<PreferencePanelBlock> blocks=m_settingPanelData->getPanelData(index);
+    //Set the blocks to the setting panel.
+    m_settingContainer->setPanelBlocks(blocks);
 }
 
 void KNPreference::onActionAdvancedToggle(bool toggle)

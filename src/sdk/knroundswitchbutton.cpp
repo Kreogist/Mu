@@ -24,6 +24,8 @@ Foundation,
 #define SwitcherHeight  20
 #define SwitcherWidth   42
 #define SwitcherSmall   1
+#define SwitcherTrueX   (SwitcherWidth-SwitcherHeight)
+#define SwitcherFalseX  0
 
 KNRoundSwitchButton::KNRoundSwitchButton(QWidget *parent) :
     QAbstractButton(parent),
@@ -51,22 +53,44 @@ KNRoundSwitchButton::KNRoundSwitchButton(QWidget *parent) :
     //Initial the backgroud brush.
     m_backgroundBrush.setStart(0,0);
     m_backgroundBrush.setFinalStop(0, SwitcherHeight);
-    m_backgroundBrush.setColorAt(0, QColor(0x2a, 0x2a, 0x2a));
-    m_backgroundBrush.setColorAt(1, QColor(0x67, 0x67, 0x67));
     //Initial the button border.
-    m_buttonBorder.setColor(QColor(0,0,0,100));
     m_buttonBorder.setWidth(2);
     //Initial the button brush.
     m_buttonBrush.setStart(0,0);
     m_buttonBrush.setFinalStop(0, SwitcherHeight);
-    m_buttonBrush.setColorAt(0, QColor(0xe8,0xe8,0xe8));
-    m_buttonBrush.setColorAt(1, QColor(0xcd,0xcd,0xcd));
-    //Initial the button filled color.
-    m_buttonFillColor.setRgb(0xF7, 0xCF, 0x3D, 0);
     //Configure the timeline.
     m_movingAnime->setUpdateInterval(16);
     connect(m_movingAnime, &QTimeLine::frameChanged,
             this, &KNRoundSwitchButton::onActionMove);
+}
+
+void KNRoundSwitchButton::setForceChecked(bool checked)
+{
+    //Block the state.
+    blockSignals(true);
+    //Set the check state.
+    setChecked(checked);
+    //Update the state.
+    onActionMove(isChecked()?SwitcherTrueX:SwitcherFalseX);
+    //Release the block.
+    blockSignals(false);
+}
+
+void KNRoundSwitchButton::updatePalette(const QPalette &pal)
+{
+    //Update the color.
+    m_buttonBorder.setColor(pal.color(QPalette::WindowText));
+    //Update the background brush.
+    m_backgroundBrush.setColorAt(0, pal.color(QPalette::Base));
+    m_backgroundBrush.setColorAt(1, pal.color(QPalette::Window));
+    //Update the button brush.
+    m_buttonBrush.setColorAt(0, pal.color(QPalette::Button));
+    m_buttonBrush.setColorAt(1, pal.color(QPalette::ButtonText));
+    //Initial the button filled color.
+    m_buttonFillColor=pal.color(QPalette::Text);
+    m_buttonFillColor.setAlpha(0);
+    //Update the widget.
+    update();
 }
 
 void KNRoundSwitchButton::paintEvent(QPaintEvent *event)
@@ -97,7 +121,7 @@ void KNRoundSwitchButton::onActionMove(int frame)
     //Update the button x.
     m_buttonX=frame;
     //Update the filled color data.
-    m_buttonFillColor.setAlpha(m_buttonX*100.0/(SwitcherWidth-SwitcherHeight));
+    m_buttonFillColor.setAlpha(m_buttonX*100.0/SwitcherTrueX);
     //Update the widget.
     update();
 }
@@ -112,9 +136,9 @@ void KNRoundSwitchButton::startAnime()
     m_movingAnime->setEndFrame(isChecked()?
                                    //When the button is at right, which is means
                                    //checked. Set the end frame to right.
-                                   (SwitcherWidth-SwitcherHeight):
+                                   SwitcherTrueX:
                                    //Set end frame to 0 for not checked.
-                                   0);
+                                   SwitcherFalseX);
     //Start the animation.
     m_movingAnime->start();
 }

@@ -129,6 +129,13 @@ void KNPreferenceSidebar::retranslate()
     m_advancedLabel->setText(tr("Advanced Mode"));
 }
 
+void KNPreferenceSidebar::updateRoundedButtonPalette()
+{
+    //Update the advanced button.
+    m_advancedButton->updatePalette(
+                knTheme->getPalette("PreferenceAdvancedButton"));
+}
+
 void KNPreferenceSidebar::updateTitleBarText()
 {
     //Check the current index. Update the title if the current index is not -1.
@@ -206,6 +213,10 @@ void KNPreferenceSidebar::initialBottomBar()
                                              m_bottomBar);
     sideBarLayout->setContentsMargins(10, 0, 10, 0);
     m_bottomBar->setLayout(sideBarLayout);
+    //Update the advanced button item.
+    connect(knTheme, &KNThemeManager::themeChange,
+            this, &KNPreferenceSidebar::updateRoundedButtonPalette);
+    updateRoundedButtonPalette();
     //Add the advanced button.
     connect(m_advancedButton, &KNRoundSwitchButton::toggled,
             this, &KNPreferenceSidebar::advancedToggle);

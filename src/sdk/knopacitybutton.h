@@ -44,6 +44,10 @@ public:
 signals:
 
 public slots:
+    /*!
+     * \brief Set the button display opacity value.
+     * \param opacity The opacity display parameter of the button.
+     */
     void setOpacity(const qreal &opacity);
 
 protected:

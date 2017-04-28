@@ -80,6 +80,15 @@ public:
      */
     KNConfigure *configure(int index);
 
+    /*!
+     * \brief Get a configure value from the configures.
+     * \param path The path of the configure.
+     * \param defaultValue The default value when the value is not existed.
+     * \return The configure value data.
+     */
+    QVariant configureValue(QStringList path,
+                            const QVariant &defaultValue);
+
 public slots:
     /*!
      * \brief Set the folder path which contains the configure files. \n
@@ -91,6 +100,14 @@ public slots:
      */
     void setFolderPath(const QString &folderPath,
                        const QString &accountFolderPath);
+
+    /*!
+     * \brief Set the configure value.
+     * \param path The value saved path.
+     * \param value The specific value.
+     */
+    void setConfigureValue(QStringList path,
+                           const QVariant &value);
 
     /*!
      * \brief Reload the configure from the folder path.
@@ -109,6 +126,7 @@ private:
     KNConfigureManager(KNConfigureManager &&);
     inline void loadConfigureFile(const QString &filePath, int type);
     inline void saveConfigureFile(const QString &filePath, int type);
+    inline KNConfigure *getTopLevelConfigure(const QString &topPath);
 
     static KNConfigureManager *m_instance;
 

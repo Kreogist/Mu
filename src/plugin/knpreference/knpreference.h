@@ -26,7 +26,8 @@ class KNPreferenceSidebar;
 class KNVWidgetSwitcher;
 class KNPreferenceAbout;
 class KNPreferenceLanguagePanel;
-class KNPreferenceSettingPanel;
+class KNPreferencePanelContainer;
+class KNPreferencePanelData;
 /*!
  * \brief The KNPreference class is a official preference panel. It provides the
  * standard item panels.
@@ -48,16 +49,10 @@ public slots:
 private slots:
     void retranslate();
     void onActionIndexChange(int index);
+    void onActionPanelChange(int index);
     void onActionAdvancedToggle(bool toggle);
 
 private:
-    enum PreferencePanels
-    {
-        PanelGeneral,
-        PanelLyrics,
-        PreferencePanelCount
-    };
-
     inline KNPreferenceItem *generateItem(const QString &iconPath,
                                           const QString &headerIconPath);
     inline KNPreferenceItem *generateItem(const QString &iconPath,
@@ -70,7 +65,8 @@ private:
     KNPreferenceItem *m_aboutItem;
     KNPreferenceAbout *m_about;
     KNPreferenceLanguagePanel *m_languagePanel;
-    KNPreferenceSettingPanel *m_settingPanel;
+    KNPreferencePanelContainer *m_settingContainer;
+    KNPreferencePanelData *m_settingPanelData;
 };
 
 #endif // KNPREFERENCE_H
