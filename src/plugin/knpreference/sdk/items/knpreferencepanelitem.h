@@ -118,6 +118,12 @@ protected:
     virtual bool isEqual(const QVariant &currentValue,
                          const QVariant &originalValue)=0;
 
+    /*!
+     * \brief Get the title text of the label.
+     * \return The title label text.
+     */
+    QString titleText() const;
+
 private slots:
     void onActionChangeHighlight(int frame);
     void onValueChanged();

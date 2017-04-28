@@ -60,11 +60,6 @@
 #define PlayerVolume QString("PlayerVolume")
 #define PlayerMute QString("Mute")
 #define PlayerLoopState QString("LoopState")
-#define PlayerProxyEnabled QString("PlayerProxyEnabled")
-#define PlayerProxyAddress QString("PlayerProxyAddress")
-#define PlayerProxyPort QString("PlayerProxyPort")
-#define PlayerProxyUser QString("PlayerProxyUser")
-#define PlayerProxyPassword QString("PlayerProxyPassword")
 
 KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent),
@@ -110,9 +105,9 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
         knGlobal->cacheConfigure()->getConfigure("MusicHeaderPlayer")),
     m_musicConfigure(
         knMusicGlobal->configure()->getConfigure("MusicHeaderPlayer")),
+    m_lyricsConfigure(m_musicConfigure->getConfigure("Lyrics")),
     m_appendMenuShown(false),
-    m_progressPressed(false),
-    m_useProxy(false)
+    m_progressPressed(false)
 {
     //Set properties.
     setContentsMargins(0, 0, 0, 0);
@@ -375,6 +370,9 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_headerLyrics->setObjectName("HeaderLyrics");
     knTheme->registerWidget(m_headerLyrics);
     m_headerLyrics->setBackend(knMusicGlobal->lyricsManager()->backend());
+    connect(m_lyricsConfigure, &KNConfigure::valueChanged,
+            this, &KNMusicHeaderPlayer::onLyricsConfigureChanged);
+    onLyricsConfigureChanged();
 
     //Configure the animations.
     //Link the value changed signals.
@@ -557,15 +555,6 @@ void KNMusicHeaderPlayer::loadConfigure()
         m_nowPlaying->setLoopState(
                     m_cacheConfigure->data(PlayerLoopState, NoRepeat).toInt());
     }
-    //--From music configure--
-    //Load the proxy settings.
-    QNetworkProxy proxy(QNetworkProxy::DefaultProxy,
-                        m_musicConfigure->data(PlayerProxyAddress).toString(),
-                        m_musicConfigure->data(PlayerProxyPort).toInt(),
-                        m_musicConfigure->data(PlayerProxyUser).toString(),
-                        m_musicConfigure->data(PlayerProxyPassword).toString());
-    //Set the proxy.
-    knMusicGlobal->setPlayerProxy(proxy);
 }
 
 void KNMusicHeaderPlayer::saveConfigure()
@@ -583,14 +572,6 @@ void KNMusicHeaderPlayer::saveConfigure()
     {
         m_cacheConfigure->setData(PlayerLoopState, m_nowPlaying->loopState());
     }
-    //--Write to music configure--
-    //Get the proxy from global settings.
-    QNetworkProxy proxy=knMusicGlobal->playerProxy();
-    //Write the online playing proxy settings.
-    m_musicConfigure->setData(PlayerProxyAddress, proxy.hostName());
-    m_musicConfigure->setData(PlayerProxyPort, proxy.port());
-    m_musicConfigure->setData(PlayerProxyUser, proxy.user());
-    m_musicConfigure->setData(PlayerProxyPassword, proxy.password());
 }
 
 void KNMusicHeaderPlayer::reset()
@@ -763,6 +744,14 @@ void KNMusicHeaderPlayer::onActionNowPlayingChanged(
     m_showAppendMenu->setVisible(detailInfo.url.isEmpty());
     //Configure the loop button.
     m_loopState->setVisible(detailInfo.url.isEmpty());
+}
+
+void KNMusicHeaderPlayer::onLyricsConfigureChanged()
+{
+    //Get the lyrics font.
+    QFont lyricsFont=m_lyricsConfigure->data("Font").value<QFont>();
+    //Update the header lyrics font.
+    m_headerLyrics->setFont(lyricsFont);
 }
 
 void KNMusicHeaderPlayer::showAppendMenu()

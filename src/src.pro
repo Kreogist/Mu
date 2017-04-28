@@ -508,7 +508,9 @@ SOURCES += \
     plugin/knpreference/sdk/knpreferencepaneldata.cpp \
     plugin/knpreference/sdk/knpreferencepanelcontainer.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelitem.cpp \
-    plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.cpp
+    plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.cpp \
+    plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp \
+    sdk/knmousedetectlabel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -783,7 +785,9 @@ HEADERS += \
     plugin/knpreference/sdk/knpreferencepaneldata.h \
     plugin/knpreference/sdk/knpreferencepanelcontainer.h \
     plugin/knpreference/sdk/items/knpreferencepanelitem.h \
-    plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.h
+    plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.h \
+    plugin/knpreference/sdk/items/knpreferencepanelfontitem.h \
+    sdk/knmousedetectlabel.h
 
 RESOURCES += \
     resource/res.qrc

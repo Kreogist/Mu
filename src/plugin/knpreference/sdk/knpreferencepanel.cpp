@@ -25,6 +25,7 @@ Foundation,
 //Items
 #include "items/knpreferencepanelitem.h"
 #include "items/knpreferencepanelbooleanitem.h"
+#include "items/knpreferencepanelfontitem.h"
 
 #include <QDebug>
 
@@ -35,7 +36,7 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 {
     //Set properties.
     setAutoFillBackground(true);
-    setFixedWidth(404);
+    setFixedWidth(522);
     //Set layout.
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(0);
@@ -90,6 +91,10 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
     {
     case TypeBoolean:
         item=new KNPreferencePanelBooleanItem(this);
+        break;
+    case TypeFont:
+        item=new KNPreferencePanelFontItem(this);
+        break;
     default:
         break;
     }

@@ -443,8 +443,10 @@
     "PreferencePanelItem" :
     {
         "Parent" : "PreferenceContent",
-        "Base" : "#797979",
-        "Window" : "#4A4A4A"
+        "AlternateBase" : "#797979",
+        "Window" : "#4A4A4A",
+        "Button" : "#202020",
+        "ButtonText" : "#606060"
     },
     "PreferenceAboutLabel" :
     {

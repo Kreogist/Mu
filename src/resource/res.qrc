@@ -91,6 +91,7 @@
         <file>preference/lyrics.png</file>
         <file>preference/PreferenceHint.png</file>
         <file>preference/PreferenceUndo.png</file>
+        <file>preference/preview_font.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

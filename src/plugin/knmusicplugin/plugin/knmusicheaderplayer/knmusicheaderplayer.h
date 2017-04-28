@@ -107,6 +107,7 @@ private slots:
     void onActionPositionEdited();
     void onActionVolumeChanged(const qint64 &value);
     void onActionNowPlayingChanged(const KNMusicAnalysisItem &analysisItem);
+    void onLyricsConfigureChanged();
     void showAppendMenu();
     void appendActionTriggered(const int &actionIndex);
     void updateDuration(const qint64 &duration);
@@ -190,10 +191,11 @@ private:
     KNMusicNowPlayingBase *m_nowPlaying;
 
     //Configures.
-    KNConfigure *m_cacheConfigure, *m_musicConfigure;
+    KNConfigure *m_cacheConfigure, *m_musicConfigure,
+                *m_lyricsConfigure;
 
     //Status.
-    bool m_appendMenuShown, m_progressPressed, m_useProxy;
+    bool m_appendMenuShown, m_progressPressed;
 };
 
 #endif // KNMUSICHEADERPLAYER_H

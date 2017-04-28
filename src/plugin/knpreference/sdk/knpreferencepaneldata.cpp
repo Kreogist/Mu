@@ -16,6 +16,8 @@
 Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QApplication>
+#include <QFont>
 
 #include "knpreferencepaneldata.h"
 
@@ -39,6 +41,15 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     }
     case PanelLyrics:
     {
+        //Get the default font.
+        QVariant font=QApplication::font();
+        //Header lyrics.
+        block=generateBlock(tr("Header Lyrics"));
+        addItem(block, "Font", tr("Header lyrics font"),
+                "User/Music/MusicHeaderPlayer/Lyrics/Font", font, TypeFont,
+                tr("This option will change the font used on the header player "
+                   "lyrics."));
+        panelData.append(block);
         //Online lyrics.
         block=generateBlock(tr("Online Lyrics"));
         addItem(block, "Enable", tr("Allow downloading lyrics"),

@@ -90,6 +90,11 @@ public:
                          const QVariant &defaultValue=QVariant());
 
 signals:
+    /*!
+     * \brief When any value of the configure changed, this signal will be
+     * emitted.
+     */
+    void valueChanged();
 
 public slots:
     /*!

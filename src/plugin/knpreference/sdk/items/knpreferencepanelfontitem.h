@@ -17,25 +17,27 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNPREFERENCEPANELBOOLEANITEM_H
-#define KNPREFERENCEPANELBOOLEANITEM_H
+#ifndef KNPREFERENCEPANELFONTITEM_H
+#define KNPREFERENCEPANELFONTITEM_H
 
 #include "knpreferencepanelitem.h"
 
-class KNRoundSwitchButton;
+class QPushButton;
+class QLabel;
+class KNMouseDetectLabel;
 /*!
- * \brief The KNPreferencePanelBooleanItem class provides a widget which allows
- * to display a widget for changing the boolean type value.
+ * \brief The KNPreferencePanelFontItem class provides a widget which allows to
+ * display a widget for changing the font type value.
  */
-class KNPreferencePanelBooleanItem : public KNPreferencePanelItem
+class KNPreferencePanelFontItem : public KNPreferencePanelItem
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNPreferencePanelBooleanItem widget.
+     * \brief Construct a KNPreferencePanelFontItem widget.
      * \param parent The parent widget.
      */
-    explicit KNPreferencePanelBooleanItem(QWidget *parent = 0);
+    explicit KNPreferencePanelFontItem(QWidget *parent = 0);
 
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::value().
@@ -54,8 +56,14 @@ protected:
     bool isEqual(const QVariant &currentValue,
                  const QVariant &originalValue) Q_DECL_OVERRIDE;
 
+private slots:
+    void onActionShowTooltip();
+
 private:
-    KNRoundSwitchButton *m_button;
+    QFont m_font;
+    KNMouseDetectLabel *m_previewLabel;
+    QPushButton *m_selectFont;
+    QLabel *m_informationLabel, *m_previewTooltip;
 };
 
-#endif // KNPREFERENCEPANELBOOLEANITEM_H
+#endif // KNPREFERENCEPANELFONTITEM_H

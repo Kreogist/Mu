@@ -65,9 +65,11 @@ KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
                 m_undoButton->setEnabled(false);
                 //Get the configure value.
                 setWidgetValue(m_defaultValue);
+                //Update the signal.
+                emit valueChanged();
             });
     //Initial the highlight.
-    m_highlight.setColorAt(0, pal.color(QPalette::Base));
+    m_highlight.setColorAt(0, pal.color(QPalette::AlternateBase));
     m_highlight.setColorAt(1, pal.color(QPalette::Window));
 
     //Link the value changed.
@@ -163,6 +165,11 @@ void KNPreferencePanelItem::buildWidgetLayout(QLayout *layout)
     mainLayout->addLayout(layout, 1);
     //Add the helper widgets.
     mainLayout->addWidget(m_hintLabel, 0, Qt::AlignVCenter);
+}
+
+QString KNPreferencePanelItem::titleText() const
+{
+    return m_titleLabel->text();
 }
 
 void KNPreferencePanelItem::onActionChangeHighlight(int frame)

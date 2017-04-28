@@ -125,11 +125,14 @@ QVariant KNConfigure::data(const QString &key,
                 {
                     QFont valueFont=QApplication::font();
                     valueFont.setFamily(valueObject.value("Family").toString());
-                    valueFont.setPixelSize(valueObject.value("Size").toDouble());
+                    valueFont.setPixelSize(valueObject.value(
+                                               "Size").toDouble());
                     valueFont.setBold(valueObject.value("Bold").toBool());
                     valueFont.setItalic(valueObject.value("Italic").toBool());
-                    valueFont.setUnderline(valueObject.value("Underline").toBool());
-                    valueFont.setStrikeOut(valueObject.value("Strikeout").toBool());
+                    valueFont.setUnderline(valueObject.value(
+                                               "Underline").toBool());
+                    valueFont.setStrikeOut(valueObject.value(
+                                               "Strikeout").toBool());
                     valueFont.setKerning(valueObject.value("Kerning").toBool());
                     return QVariant::fromValue(valueFont);
                 }
@@ -203,8 +206,10 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         break;
     }
     default:
-        break;
+        return;
     }
+    //Emit the signal.
+    emit valueChanged();
 }
 
 void KNConfigure::setPathData(const QStringList &path, const QVariant &value)
