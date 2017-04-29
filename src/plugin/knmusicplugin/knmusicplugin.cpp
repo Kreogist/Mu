@@ -42,6 +42,7 @@
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
+#include "knmusictranscoderbase.h"
 #include "knmusicbackend.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicdetailtooltipbase.h"
@@ -66,6 +67,8 @@
 #include "plugin/knmusictagflac/knmusictagflac.h"
 #include "plugin/knmusictagm4a/knmusictagm4a.h"
 #include "plugin/knmusictagwma/knmusictagwma.h"
+// Transcoder.
+#include "plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.h"
 // List Parsers.
 #include "plugin/knmusiccuelistparser/knmusiccuelistparser.h"
 // Lyrics Downloader.

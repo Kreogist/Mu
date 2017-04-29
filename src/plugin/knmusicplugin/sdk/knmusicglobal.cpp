@@ -218,7 +218,8 @@ inline void KNMusicGlobal::initialFileType()
              <<"au"
              <<"ac3"
              <<"xm"
-             <<"umx";
+             <<"umx"
+             <<"wv";
     m_suffixDescription<<"MPEG Audio Layer III (mp3)"
                        <<"MPEG-4 Part 14 (m4a)"
                        <<"Waveform Audio File Format (wav)"
@@ -252,7 +253,8 @@ inline void KNMusicGlobal::initialFileType()
                        <<"Au File Format (au)"
                        <<"Dolby Surround Audio Coding-3 (ac3)"
                        <<"Fast Tracker Module (xm)"
-                       <<"Unreal Engine 1 Music Format (umx)";
+                       <<"Unreal Engine 1 Music Format (umx)"
+                       <<"WavPack compression (wv)";
 
     m_listSuffixs<<"cue"
                  <<"cda";

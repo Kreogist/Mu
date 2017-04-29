@@ -510,7 +510,8 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelitem.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp \
-    sdk/knmousedetectlabel.cpp
+    sdk/knmousedetectlabel.cpp \
+    plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -787,7 +788,9 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelitem.h \
     plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.h \
     plugin/knpreference/sdk/items/knpreferencepanelfontitem.h \
-    sdk/knmousedetectlabel.h
+    sdk/knmousedetectlabel.h \
+    plugin/knmusicplugin/sdk/knmusictranscoderbase.h \
+    plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.h
 
 RESOURCES += \
     resource/res.qrc
