@@ -33,7 +33,15 @@ CONFIG += c++11
 TRANSLATIONS += \
     i18n/Simplified_Chinese.ts \
     i18n/Traditional_Chinese.ts \
-    i18n/Japanese.ts
+    i18n/Japanese.ts \
+    i18n/French.ts \
+    i18n/German.ts \
+    i18n/Italian.ts \
+    i18n/Korean.ts \
+    i18n/Russian.ts \
+    i18n/Spanish.ts \
+    i18n/Turkish.ts \
+    i18n/Dutch.ts
 
 intel64: {
     msvc: {
