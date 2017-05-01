@@ -16,12 +16,6 @@ Copyright © 2013-2016 Kreogist Dev Team. All rights reserved.
 
 ![Screenshot](https://raw.githubusercontent.com/Kreogist/kreogist.github.com/master/Mu/images/screenshot.png)
 
-## Dependencies
-* Qt (>=5.5)
-* FFMpeg (>=2.5)
-* bass (Windows and Mac OS X, >=2.4)
-* phonon4qt5 (Linux)
-
 ## Special Thanks
 * [WangBin](https://github.com/wang-bin)
 * [Sou Bunnbu](https://github.com/iyzsong)
@@ -30,6 +24,16 @@ Copyright © 2013-2016 Kreogist Dev Team. All rights reserved.
 * [1dot75cm](https://github.com/1dot75cm)
 * [Lin Yuan](https://github.com/SphericalHarnomics)
 * [miaolapd](https://github.com/miaolapd)
+
+## Translation
+
+You're encouraged to translate µ into your native language or update the translation file. Please visit the [Improving Projects Home](https://github.com/Kreogist/Mu/wiki/Improving-Projects-Home#translate-%C2%B5-to-your-own-language) page at wiki.
+
+## Dependencies
+* Qt (>=5.5)
+* FFMpeg (>=2.5)
+* bass (Windows and Mac OS X, >=2.4)
+* phonon4qt5 (Linux)
 
 ## Compile and Build
 
