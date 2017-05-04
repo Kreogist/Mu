@@ -59,7 +59,7 @@ KNLabelLineEdit::KNLabelLineEdit(QWidget *parent) :
     //Link with the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNLabelLineEdit::onActionThemeChanged);
-    //Intial the palette.
+    //Initial the palette.
     onActionThemeChanged();
     //Update the palette.
     onActionFocusInOut(m_minimumLightness);

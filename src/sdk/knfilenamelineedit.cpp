@@ -37,7 +37,7 @@ void KNFileNameLineEdit::setFilePath(const QString &filePath)
 {
     //Generate the file info.
     QFileInfo targetFile(filePath);
-    //Check the existance of the file path.
+    //Check the existence of the file path.
     if(!targetFile.exists())
     {
         //Ignore the value which doesn't exist.

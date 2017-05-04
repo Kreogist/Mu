@@ -74,7 +74,7 @@ void KNAbstractSlider::setMinimal(qint64 minimal)
 
 void KNAbstractSlider::setRange(qint64 min, qint64 max)
 {
-    //Check is the value avaliable and if all of them are the same as current.
+    //Check is the value available and if all of them are the same as current.
     if(min>max || (min==m_minimal && max==m_maximum))
     {
         return;

@@ -317,7 +317,7 @@ void KNMainWindow::onActionShowNotificationCenter()
                 QPoint(geometry().x() + width() - m_notificationCenter->width(),
                        geometry().y() + headerButton->geometry().bottom() +
                        NotificationPatch));
-    //Move tyhe notification indicator.
+    //Move the notification indicator.
     m_notificationCenter->indicator()->move(
                 headerButton->mapTo(this, QPoint(0,0)) +
                 QPoint((headerButton->width()>>1) -
