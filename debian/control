@@ -7,6 +7,7 @@ Build-Depends:
  libavcodec-dev,
  libavformat-dev,
  libavutil-dev,
+ libswresample-dev,
  libgstreamer1.0-dev,
  qtbase5-dev,
  qttools5-dev-tools,
