@@ -178,7 +178,7 @@ bool KNFontDialog::getFont(QFont &selectedFont,
     }
     //Set the font as default font.
     selectedFont=defaultFont;
-    //Return false for cancel or error happend.
+    //Return false for cancel or error happened.
     return false;
 }
 

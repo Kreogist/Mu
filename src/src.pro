@@ -256,7 +256,7 @@ backend-bass: {
 # Analysiser Specific Configuration
 analysiser-ffmpeg: {
     # Add libraries.
-    LIBS += -lavformat -lavcodec -lavutil
+    LIBS += -lavformat -lavcodec -lavutil -lswresample
     # For Mac OS X, we have to enabled swresample and swscale.
     macx: {
         LIBS += -lswresample -lswscale
