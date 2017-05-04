@@ -1,20 +1,28 @@
-Source: mu
+Source: kreogist-mu
 Section: sound
 Priority: optional
 Maintainer: Tojo Saki <tomguts@126.com>
-Build-Depends: debhelper (>= 9),
-               qt5-default, qttools5-dev-tools, libgstreamer1.0-dev,
-               libavformat-dev,
-               libavcodec-dev,
-               libavutil-dev
-Standards-Version: 3.9.5
-Homepage: http://kreogist.github.io/Mu/
+Build-Depends:
+ debhelper (>= 9),
+ libavcodec-dev,
+ libavformat-dev,
+ libavutil-dev,
+ libgstreamer1.0-dev,
+ qtbase5-dev,
+ qttools5-dev-tools,
+Standards-Version: 3.9.8
+Homepage: https://kreogist.github.io/Mu/
 
-Package: mu
+Package: kreogist-mu
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: gstreamer1.0-plugins-bad,
-            gstreamer1.0-plugins-ugly,
-            gstreamer1.0-plugins-libav
-Description: Incredible music manager.
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Recommends:
+ gstreamer1.0-plugins-bad,
+ gstreamer1.0-plugins-libav,
+ gstreamer1.0-plugins-ugly,
+Replaces: mu (<= 1.0.0-beta1)
+Provides: mu
+Description: Incredible music manager
  Kreogist Mu is a cross-platform incredible music manager/player based on Qt.

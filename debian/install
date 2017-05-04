@@ -1,9 +1,9 @@
-bin/mu /usr/bin
-src/resource/icon/mu.png /usr/share/icons/hicolor/256x256/apps
-debian/mu.desktop /usr/share/applications
 bin/Japanese.qm /usr/share/Kreogist/mu/Language/Japanese
-src/i18n/Japanese.png /usr/share/Kreogist/mu/Language/Japanese
 bin/Simplified_Chinese.qm /usr/share/Kreogist/mu/Language/Simplified_Chinese
-src/i18n/Simplified_Chinese.png /usr/share/Kreogist/mu/Language/Simplified_Chinese
 bin/Traditional_Chinese.qm /usr/share/Kreogist/mu/Language/Traditional_Chinese
+bin/mu /usr/bin
+debian/mu.desktop /usr/share/applications
+src/i18n/Japanese.png /usr/share/Kreogist/mu/Language/Japanese
+src/i18n/Simplified_Chinese.png /usr/share/Kreogist/mu/Language/Simplified_Chinese
 src/i18n/Traditional_Chinese.png /usr/share/Kreogist/mu/Language/Traditional_Chinese
+src/resource/icon/mu.png /usr/share/icons/hicolor/256x256/apps
