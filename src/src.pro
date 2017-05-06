@@ -256,11 +256,7 @@ backend-bass: {
 # Analysiser Specific Configuration
 analysiser-ffmpeg: {
     # Add libraries.
-    LIBS += -lavformat -lavcodec -lavutil
-    # For Mac OS X, we have to enabled swresample and swscale.
-    macx: {
-        LIBS += -lswresample -lswscale
-    }
+    LIBS += -lavformat -lavcodec -lavutil -lswresample -lswscale
     # Define the ffmpeg enabled flag.
     DEFINES += ENABLED_FFMPEG_ANALYSISER
     # Add analysiser files to the project.

@@ -45,3 +45,5 @@ Thumbs.db
 #doxygen
 doc/html
 
+# Python cache file
+/tools/__pycache__
