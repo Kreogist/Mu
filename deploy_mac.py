@@ -15,7 +15,7 @@ def command_exist(command):
 # Command dependency check and install
 def check_dependency(name, command, install):
     print "Checking", name, "...",
-    # If command exists, nothing happend
+    # If command exists, nothing happens
     if command_exist(command):
         print "Done"
         return True
