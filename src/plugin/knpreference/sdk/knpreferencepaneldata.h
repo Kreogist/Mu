@@ -53,7 +53,6 @@ public:
 private:
     inline PreferencePanelBlock generateBlock(const QString &title);
     inline void addItem(PreferencePanelBlock &block,
-                        const QString &name,
                         const QString &title,
                         const QString &path,
                         const QVariant &defaultValue,

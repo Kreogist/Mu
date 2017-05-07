@@ -102,6 +102,12 @@ public slots:
      */
     void hideMainPlayer();
 
+    /*!
+     * \brief This slot is called when the system tray called to close the
+     * window.
+     */
+    void forceClose();
+
 protected:
     /*!
      * \brief Reimplemented from QMainWindow::showEvent().
@@ -130,11 +136,11 @@ private:
     inline QPropertyAnimation *generateAnime();
     inline void updateAnimeStartAndEnd();
     inline int getCacheValue(const QString &valueName);
-    inline void setCacheValue(const QString &valueName, const int &value);
+    inline void setCacheValue(const QString &valueName, int value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
 
     KNAbstractMusicPlugin *m_musicPlugin;
-    KNConfigure *m_cacheConfigure;
+    KNConfigure *m_cacheConfigure, *m_globalConfigure, *m_trayConfigure;
     KNMainWindowContainer *m_container;
     KNCategoryPlugin *m_categoryPlugin;
     KNNotificationCenter *m_notificationCenter;
@@ -142,6 +148,7 @@ private:
     QSequentialAnimationGroup *m_outAndInAnime;
     QTimer *m_notificationWaiter;
     Qt::WindowStates m_originalWindowState;
+    bool m_ignoreTrayClose;
 };
 
 #endif // KNMAINWINDOW_H

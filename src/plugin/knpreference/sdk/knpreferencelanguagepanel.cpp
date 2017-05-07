@@ -34,7 +34,7 @@ KNPreferenceLanguagePanel::KNPreferenceLanguagePanel(QWidget *parent) :
     m_languageListItem(new KNPreferenceLanguageItem(this)),
     m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this)),
     m_languageRequests(new QSignalMapper(this)),
-    m_userConfigure(knGlobal->userConfigure())
+    m_globalConfigure(knGlobal->userConfigure()->getConfigure("Global"))
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -76,7 +76,11 @@ void KNPreferenceLanguagePanel::generateLanguageList()
         item->setLanguageIcon(knI18n->languageIcon(i));
         item->setLanguageName(knI18n->languageName(i));
         //Link the item to the set language maps.
-        connect(item, SIGNAL(clicked(bool)), m_languageRequests, SLOT(map()));
+        connect(item,
+                static_cast<void (KNPreferenceLanguagePanelItem::*)(bool)>(
+                    &KNPreferenceLanguagePanelItem::clicked),
+                m_languageRequests,
+                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
         //Set mapping in the language request.
         m_languageRequests->setMapping(item, i);
         //Add the item to main layout.
@@ -91,7 +95,7 @@ void KNPreferenceLanguagePanel::generateLanguageList()
                         ))->widget())->setChecked(true);
 }
 
-void KNPreferenceLanguagePanel::setCurrentLanguage(const int &index)
+void KNPreferenceLanguagePanel::setCurrentLanguage(int index)
 {
     //Remove the previous index checked state.
     static_cast<KNPreferenceLanguagePanelItem *>(
@@ -101,12 +105,12 @@ void KNPreferenceLanguagePanel::setCurrentLanguage(const int &index)
     //Ask the locale manager to change the language.
     knI18n->setLanguage(index);
     //Save the language in the user configure.
-    m_userConfigure->setData("Language", knI18n->languageKey(index));
+    m_globalConfigure->setData("Language", knI18n->languageKey(index));
     //Update the language panel item.
     syncLanguageItem(index);
 }
 
-inline void KNPreferenceLanguagePanel::syncLanguageItem(const int &index)
+inline void KNPreferenceLanguagePanel::syncLanguageItem(int index)
 {
     //Get the international translate in current language.
     QString headerTitle=tr("Languages");

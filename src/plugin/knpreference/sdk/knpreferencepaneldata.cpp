@@ -37,6 +37,17 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     {
     case PanelGeneral:
     {
+#ifdef Q_OS_WIN
+        //System Tray Settings.
+        block=generateBlock(tr("System Tray Icon"));
+        addItem(block, tr("Close to system tray"),
+                "User/Global/SystemTray/CloseToTray", false, TypeBoolean,
+                tr("When click the close button of the window, Mu won't quit "
+                   "but minimize to the system tray.\n"
+                   "When click the icon in the system tray, Mu will pop up "
+                   "back."));
+        panelData.append(block);
+#endif
         break;
     }
     case PanelLyrics:
@@ -45,15 +56,15 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         QVariant font=QApplication::font();
         //Header lyrics.
         block=generateBlock(tr("Header Lyrics"));
-        addItem(block, "Font", tr("Header lyrics font"),
+        addItem(block, tr("Header lyrics font"),
                 "User/Music/MusicHeaderPlayer/Lyrics/Font", font, TypeFont,
                 tr("This option will change the font used on the header player "
                    "lyrics."));
         panelData.append(block);
         //Online lyrics.
         block=generateBlock(tr("Online Lyrics"));
-        addItem(block, "Enable", tr("Allow downloading lyrics"),
-                "User/Music/Lyrics/Online", true, TypeBoolean,
+        addItem(block, tr("Allow downloading lyrics"),
+                "User/Music/Lyrics/Online/Enable", true, TypeBoolean,
                 tr("If there is no lyrics existed in the lyrics search folder,"
                    "\nallows Mu to download lyrics from the Internet."));
         panelData.append(block);
@@ -78,7 +89,6 @@ inline PreferencePanelBlock KNPreferencePanelData::generateBlock(
 }
 
 inline void KNPreferencePanelData::addItem(PreferencePanelBlock &block,
-                                           const QString &name,
                                            const QString &title,
                                            const QString &path,
                                            const QVariant &defaultValue,
@@ -90,7 +100,6 @@ inline void KNPreferencePanelData::addItem(PreferencePanelBlock &block,
     //Save the data.
     option.path=path.split('/');
     option.defaultValue=defaultValue;
-    option.name=name;
     option.title=title;
     option.explain=explain;
     option.type=type;

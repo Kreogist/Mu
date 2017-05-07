@@ -35,6 +35,8 @@ Foundation,
 
 KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
     QWidget(parent),
+    m_path(QStringList()),
+    m_defaultValue(QVariant()),
     m_highlight(QLinearGradient(0, 0, 0, PreferenceSingleItemHeight)),
     m_highLightOpacity(0.0),
     m_titleLabel(new QLabel(this)),
@@ -102,8 +104,6 @@ void KNPreferencePanelItem::setPreferenceOption(
     m_hintLabel->setToolTip(option.explain);
     //Save the path.
     m_path=option.path;
-    //Save the name.
-    m_name=option.name;
     //Save the default value.
     m_defaultValue=knConf->configureValue(m_path, option.defaultValue);
     //Get the configure value.

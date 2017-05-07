@@ -22,6 +22,11 @@
 #include <QAbstractButton>
 
 class QTimeLine;
+/*!
+ * \brief The KNPreferenceLanguagePanelItem class provides a preference sidebar
+ * language item. It will update according to the language. This item is not the
+ * same as the normal panel item. It need to be updated.
+ */
 class KNPreferenceLanguagePanelItem : public QAbstractButton
 {
     Q_OBJECT
@@ -33,14 +38,14 @@ public:
     explicit KNPreferenceLanguagePanelItem(QWidget *parent = 0);
 
     /*!
-     * \brief languageIcon
-     * \return
+     * \brief Get the language icon image.
+     * \return The language icon pixmap.
      */
     QPixmap languageIcon() const;
 
     /*!
-     * \brief languageName
-     * \return
+     * \brief Get the current setting language name.
+     * \return The name of the language.
      */
     QString languageName() const;
 
@@ -48,14 +53,14 @@ signals:
 
 public slots:
     /*!
-     * \brief setLanguageName
-     * \param languageName
+     * \brief Set the language name.
+     * \param languageName The new language name.
      */
     void setLanguageName(const QString &languageName);
 
     /*!
-     * \brief setLanguageIcon
-     * \param languageIcon
+     * \brief Set the language icon.
+     * \param languageIcon The new language icon pixmap.
      */
     void setLanguageIcon(const QPixmap &languageIcon);
 
@@ -86,10 +91,10 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionChangeHighlight(const int &frame);
+    void onActionChangeHighlight(int frame);
 
 private:
-    inline void startAnime(const int &endFrame);
+    inline void startAnime(int endFrame);
     QLinearGradient m_highlight;
     QPixmap m_languageIcon;
     QString m_languageName;
