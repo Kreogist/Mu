@@ -1,9 +1,11 @@
-mu (1.0.0-beta) unstable; urgency=medium
+kreogist-mu (1.0.0~beta1) unstable; urgency=medium
 
   * Use the new singleton application class instead of using shared memory.
   * Update the bass to the latest version.
-  * Reduce the file find signal number. Using the patch list to compress the signal.
-  * Fixed the error which might delete all the files under the running directory bug.
+  * Reduce the file find signal number. Using the patch list to compress the
+    signal.
+  * Fixed the error which might delete all the files under the running
+    directory bug.
   * Fixed the genre images folder get from root bug.
 
  -- Kreogist Dev Team <kreogistdevteam@126.com>  Sat, 25 Mar 2017 00:00:00 +1100

@@ -88,9 +88,8 @@ public slots:
 private slots:
     void retranslate();
     void onActionPlayAndPause();
-    void onActionTrayIconActivate(
-            const QSystemTrayIcon::ActivationReason &reason);
-    void onActionTrayMenuActionTriggered(const int &index);
+    void onActionTrayIconActivate(QSystemTrayIcon::ActivationReason reason);
+    void onActionTrayMenuActionTriggered(int index);
 
 private:
     inline void setButtonIcon(const int &index, const QPixmap &icon);

@@ -273,7 +273,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     initialInfrastrcture();
     //Update the infrastructure.
     // Load the language.
-    knI18n->setLanguage(userConfigure()->data("Language").toString());
+    knI18n->setLanguage(m_globalConfigure->data("Language").toString());
 
     //Link the retranslate.
     knI18n->link(this, &KNGlobal::retranslate);

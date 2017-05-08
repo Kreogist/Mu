@@ -25,29 +25,50 @@ class QBoxLayout;
 class QSignalMapper;
 class KNConfigure;
 class KNPreferenceLanguageItem;
+/*!
+ * \brief The KNPreferenceLanguagePanel class provides the preference item and
+ * the language item panel.\n
+ * When the language changed, it will emit the signal for updating the title of
+ * preference header, and update the language in the language panel.
+ */
 class KNPreferenceLanguagePanel : public QScrollArea
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNPreferenceLanguagePanel widget.
+     * \param parent The parent widget.
+     */
     explicit KNPreferenceLanguagePanel(QWidget *parent = 0);
 
+    /*!
+     * \brief Get the language list item widegt of the panel.
+     * \return The panel widget pointer.
+     */
     KNPreferenceLanguageItem *languageListItem() const;
 
 signals:
+    /*!
+     * \brief Require to update the header title bar text.
+     * \param headerText The new title bar text.
+     */
     void requireUpdateTitle(const QString &headerText);
 
 public slots:
+    /*!
+     * \brief Generate the language list from language manager.
+     */
     void generateLanguageList();
 
 private slots:
-    void setCurrentLanguage(const int &index);
+    void setCurrentLanguage(int index);
 
 private:
-    inline void syncLanguageItem(const int &index);
+    inline void syncLanguageItem(int index);
     KNPreferenceLanguageItem *m_languageListItem;
     QBoxLayout *m_mainLayout;
     QSignalMapper *m_languageRequests;
-    KNConfigure *m_userConfigure;
+    KNConfigure *m_globalConfigure;
 };
 
 #endif // KNPREFERENCELANGUAGEPANEL_H

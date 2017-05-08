@@ -98,7 +98,7 @@ void KNPreferenceLanguagePanelItem::paintEvent(QPaintEvent *event)
                      m_languageName);
 }
 
-void KNPreferenceLanguagePanelItem::onActionChangeHighlight(const int &frame)
+void KNPreferenceLanguagePanelItem::onActionChangeHighlight(int frame)
 {
     //Update the high light opacity.
     m_highLightOpacity=(qreal)frame/100.0;
@@ -106,7 +106,7 @@ void KNPreferenceLanguagePanelItem::onActionChangeHighlight(const int &frame)
     update();
 }
 
-inline void KNPreferenceLanguagePanelItem::startAnime(const int &endFrame)
+inline void KNPreferenceLanguagePanelItem::startAnime(int endFrame)
 {
     //Stop the animation time line.
     m_mouseAnime->stop();

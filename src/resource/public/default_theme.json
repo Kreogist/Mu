@@ -445,8 +445,8 @@
         "Parent" : "PreferenceContent",
         "AlternateBase" : "#797979",
         "Window" : "#4A4A4A",
-        "Button" : "#202020",
-        "ButtonText" : "#606060"
+        "Button" : "#404040",
+        "ButtonText" : "#808080"
     },
     "PreferenceAboutLabel" :
     {

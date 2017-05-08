@@ -184,11 +184,13 @@ void KNWindowsExtras::onActionPlayAndPause()
 }
 
 void KNWindowsExtras::onActionTrayIconActivate(
-        const QSystemTrayIcon::ActivationReason &reason)
+        QSystemTrayIcon::ActivationReason reason)
 {
     switch(reason)
     {
+    //When double click the tray icon,
     case QSystemTrayIcon::DoubleClick:
+        //Show the main window.
         m_mainWindow->show();
         break;
     default:
@@ -196,13 +198,13 @@ void KNWindowsExtras::onActionTrayIconActivate(
     }
 }
 
-void KNWindowsExtras::onActionTrayMenuActionTriggered(const int &index)
+void KNWindowsExtras::onActionTrayMenuActionTriggered(int index)
 {
     switch(index)
     {
     case Exit:
-        //Then close the main window.
-        m_mainWindow->close();
+        //Then close the main window from the tray instance.
+        m_mainWindow->forceClose();
         break;
     default:
         break;

@@ -53,6 +53,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_musicPlugin(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
+    m_globalConfigure(knGlobal->userConfigure()->getConfigure("Global")),
+    m_trayConfigure(m_globalConfigure->getConfigure("SystemTray")),
     m_container(new KNMainWindowContainer(this)),
     m_categoryPlugin(nullptr),
     m_notificationCenter(new KNNotificationCenter(this)),
@@ -60,7 +62,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_outAnime(generateAnime()),
     m_outAndInAnime(new QSequentialAnimationGroup(this)),
     m_notificationWaiter(new QTimer(this)),
-    m_originalWindowState(Qt::WindowNoState)
+    m_originalWindowState(Qt::WindowNoState),
+    m_ignoreTrayClose(false)
 {
     setObjectName("MainWindow");
     //Set properties.
@@ -224,6 +227,14 @@ void KNMainWindow::hideMainPlayer()
     m_container->hideMainPlayer();
 }
 
+void KNMainWindow::forceClose()
+{
+    //Set the tray close to true.
+    m_ignoreTrayClose=true;
+    //Close the window.
+    close();
+}
+
 void KNMainWindow::showEvent(QShowEvent *event)
 {
     //Emit the main window show signal.
@@ -257,6 +268,17 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
 
 void KNMainWindow::closeEvent(QCloseEvent *event)
 {
+    //Check whether the close to system tray is enabled.
+    if(!m_ignoreTrayClose &&
+            m_trayConfigure->data("CloseToTray", false).toBool())
+    {
+        //Ignore the close event.
+        event->ignore();
+        //Hide the main window.
+        hide();
+        //Close event handle complete.
+        return;
+    }
     //Check music plugin working state.
     if(m_musicPlugin && m_musicPlugin->isWorking())
     {
@@ -317,7 +339,7 @@ void KNMainWindow::onActionShowNotificationCenter()
                 QPoint(geometry().x() + width() - m_notificationCenter->width(),
                        geometry().y() + headerButton->geometry().bottom() +
                        NotificationPatch));
-    //Move tyhe notification indicator.
+    //Move the notification indicator.
     m_notificationCenter->indicator()->move(
                 headerButton->mapTo(this, QPoint(0,0)) +
                 QPoint((headerButton->width()>>1) -
@@ -474,8 +496,9 @@ inline int KNMainWindow::getCacheValue(const QString &valueName)
 }
 
 inline void KNMainWindow::setCacheValue(const QString &valueName,
-                                        const int &value)
+                                        int value)
 {
+    //Save the data to cache configure.
     m_cacheConfigure->setData(valueName, value);
 }
 

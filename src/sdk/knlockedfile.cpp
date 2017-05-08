@@ -60,7 +60,7 @@ KNLockedFile::LockMode KNLockedFile::lockMode() const
 inline void KNLockedFile::initialParameters()
 {
     //According to the original code, all the initialized codes are the same,
-    //so we put the code here, only do the QFile initial in the contruction
+    //so we put the code here, only do the QFile initial in the construction
     //function.
 #ifdef Q_OS_WIN
     m_writeMutex = 0;

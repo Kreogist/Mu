@@ -132,7 +132,6 @@ private:
     inline void startAnime(int endFrame);
     QStringList m_path;
     QVariant m_defaultValue;
-    QString m_name;
     QLinearGradient m_highlight;
     qreal m_highLightOpacity;
     QLabel *m_titleLabel;

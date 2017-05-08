@@ -45,7 +45,6 @@ struct PreferencePanelOption
 {
     QStringList path;
     QVariant defaultValue;
-    QString name;
     QString title;
     QString explain;
     PreferencePanelOptionType type;

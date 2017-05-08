@@ -1041,82 +1041,82 @@
 <context>
     <name>KNMusicHeaderPlayer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="601"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="596"/>
         <source>Show main player</source>
         <translation>顯示主播放機</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="602"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="597"/>
         <source>Show mini player</source>
         <translation>顯示迷你播放機</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="603"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="598"/>
         <source>More</source>
         <translation>更多選項</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="605"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="600"/>
         <source>Rating</source>
         <translation>評分</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="606"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="601"/>
         <source>Locate</source>
         <translation>定位歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="608"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="603"/>
         <source>(No star)</source>
         <translation>（無星級）</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="610"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="605"/>
         <source>Get Info</source>
         <translation>查看信息</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="612"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="607"/>
         <source>Download Lyrics</source>
         <translation>下載歌詞</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="615"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="610"/>
         <source>Show in Explorer</source>
         <translation>打開文件位置</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="618"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="613"/>
         <source>Show in Finder</source>
         <translation>在 Finder 中顯示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="622"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="617"/>
         <source>Show the contains folder</source>
         <translation>打開文件所在資料夾</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="624"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="619"/>
         <source>Locate the playing song</source>
         <translation>定位正在播放歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="626"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="621"/>
         <source>Show in songs</source>
         <translation>在歌曲標籤中顯示歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="627"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="622"/>
         <source>Show in artists</source>
         <translation>在藝術家標籤中顯示歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="628"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="623"/>
         <source>Show in albums</source>
         <translation>在專輯標籤中顯示歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="629"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="624"/>
         <source>Show in genres</source>
         <translation>在流派中顯示歌曲</translation>
     </message>
@@ -1565,7 +1565,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="198"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="201"/>
         <source>Music</source>
         <translation>音樂</translation>
     </message>
@@ -2163,37 +2163,37 @@ allows Mu to download lyrics from the Internet.</source>
 <context>
     <name>KNPreferencePanelFontItem</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="47"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="49"/>
         <source>Select font for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="95"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="97"/>
         <source>%1, %2px%3%4%5%6%7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="98"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="100"/>
         <source>, Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="99"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="101"/>
         <source>, Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="100"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="102"/>
         <source>, Underline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="101"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="103"/>
         <source>, Strike Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="102"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="104"/>
         <source>, Kerning</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1,9 +1,16 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Mu(μ)
 Source: https://github.com/Kreogist/Mu
 
 Files: *
-Copyright: 2014-2015 Kreogist Dev Team.
+Copyright: 2014-2017 Kreogist Dev Team.
+License: GPL-2+
+
+Files: debian/*
+Copyright: 2014-2017 Kreogist Dev Team.
+           2017, Boyuan Yang <073plan@gmail.com>
+License: GPL-2+
+
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -16,7 +23,7 @@ License: GPL-2+
  GNU General Public License for more details.
  .
  You should have received a copy of the GNU General Public License
- along with this program. If not, see <http://www.gnu.org/licenses/>
+ along with this program. If not, see <https://www.gnu.org/licenses/>
  .
  On Debian systems, the complete text of the GNU General
  Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
