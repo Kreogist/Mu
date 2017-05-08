@@ -60,6 +60,12 @@ public:
      */
     void saveConfigure();
 
+    /*!
+     * \brief Set the name of the configure table name.
+     * \param tableName The name of the configure table.
+     */
+    void setConfigureTableName(const QString &tableName);
+
 signals:
     /*!
      * \brief When auto login failed, this signal will be emitted and show the
@@ -221,6 +227,14 @@ public slots:
     void setCacheConfigure(KNConfigure *cacheConfigure);
 
     /*!
+     * \brief Update the configure data. If the local configure is later than
+     * the online version, we will replace the online setting. If the online
+     * setting is later than the local setting, we will replace the local
+     * setting.
+     */
+    void updateConfigure();
+
+    /*!
      * \brief This is the initial online working slots for global instance to
      * start up.
      */
@@ -245,6 +259,7 @@ private:
     KNAccount(const KNAccount &);
     KNAccount(KNAccount &&);
 
+    QString m_cloudConfigureTableName;
     KNConfigure *m_cacheConfigure;
     KNAccountDetails *m_accountDetails;
 };

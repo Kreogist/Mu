@@ -43,9 +43,15 @@ KNAccount *KNAccount::m_instance=nullptr;
 
 KNAccount::KNAccount(QObject *parent) :
     KNRestApiBase(parent),
+    m_configureTable(QString()),
     m_cacheConfigure(nullptr),
     m_accountDetails(new KNAccountDetails)
 {
+}
+
+void KNAccount::setConfigureTableName(const QString &tableName)
+{
+    m_cloudConfigureTableName = tableName;
 }
 
 void KNAccount::setCacheConfigure(KNConfigure *cacheConfigure)
@@ -72,6 +78,11 @@ void KNAccount::setCacheConfigure(KNConfigure *cacheConfigure)
                 m_cacheConfigure->data(CachePasswordField).toString());
     m_accountDetails->setDisplayName(
                 m_cacheConfigure->data(CacheNicknameField).toString());
+}
+
+void KNAccount::updateConfigure()
+{
+    return;
 }
 
 void KNAccount::startToWork()
