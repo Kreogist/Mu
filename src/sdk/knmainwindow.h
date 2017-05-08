@@ -115,6 +115,11 @@ protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from QMainWindow::moveEvent().
+     */
+    void moveEvent(QMoveEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from QMainWindow::resizeEvent().
      */
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;

@@ -19,6 +19,7 @@
 #include <QAction>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <QScreen>
 #include <QPropertyAnimation>
 #include <QTimer>
 #include <QSequentialAnimationGroup>
@@ -241,6 +242,24 @@ void KNMainWindow::showEvent(QShowEvent *event)
     emit mainWindowShown();
     //Show the main window.
     QMainWindow::showEvent(event);
+}
+
+void KNMainWindow::moveEvent(QMoveEvent *event)
+{
+    //Move the main window.
+    QMainWindow::moveEvent(event);
+    //Update the current screen.
+    for(auto screen : qApp->screens())
+    {
+        //Check whether the current position is in the pos.
+        if(screen->availableGeometry().contains(event->pos()))
+        {
+            //Save the screen.
+            //!FIXME: Add codes here.
+            //Mission complete.
+            break;
+        }
+    }
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
