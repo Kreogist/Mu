@@ -25,11 +25,7 @@ KNNotificationModel::KNNotificationModel(QObject *parent) :
     m_notifications(QList<NotificationData>())
 {
     //Initial the icon image.
-    m_icon[KNNotificationUtil::Message]=
-            QPixmap("://public/notification_default.png").scaled(
-                ImageSize, ImageSize,
-                Qt::KeepAspectRatio,
-                Qt::SmoothTransformation);
+    m_icon[Message]=generateIcon("://public/notification_default.png");
 }
 
 QModelIndex KNNotificationModel::prependRow(const QString &title,
@@ -37,8 +33,8 @@ QModelIndex KNNotificationModel::prependRow(const QString &title,
                                             int type,
                                             int iconType)
 {
-    Q_ASSERT(type>-1 && type<KNNotificationUtil::NotificationIconCount);
-    Q_ASSERT(iconType>-1 && iconType<KNNotificationUtil::NotificationIconCount);
+    Q_ASSERT(type>-1 && type<NotificationIconCount);
+    Q_ASSERT(iconType>-1 && iconType<NotificationIconCount);
     //Generate the notification.
     NotificationData notification;
     //Set the data.
@@ -81,7 +77,7 @@ QVariant KNNotificationModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole:
         //Give back the icon.
         return m_icon[targetData.iconType];
-    case KNNotificationUtil::ContentRole:
+    case ContentRole:
         //Give back the content data.
         return targetData.content;
     default:
@@ -118,4 +114,12 @@ bool KNNotificationModel::removeNotification(const QModelIndex &index)
     }
     //Remove the specific row.
     return removeRow(index.row());
+}
+
+inline QPixmap KNNotificationModel::generateIcon(const QString &iconPath)
+{
+    //Return the scaled icon.
+    return QPixmap(iconPath).scaled(ImageSize, ImageSize,
+                                    Qt::KeepAspectRatio,
+                                    Qt::SmoothTransformation);
 }

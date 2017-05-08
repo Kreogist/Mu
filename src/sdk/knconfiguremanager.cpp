@@ -127,7 +127,11 @@ void KNConfigureManager::reloadConfigure()
     //Load the configure file.
     loadConfigureFile(configureDir.filePath("cache.json"), Cache);
     loadConfigureFile(configureDir.filePath("system.json"), System);
-    loadConfigureFile(configureDir.filePath("user.json"), User);
+    //Load the user configure file, save its access time.
+    QString userConfigurePath=configureDir.filePath("user.json");
+    loadConfigureFile(userConfigurePath, User);
+    //Get the user configure file update time.
+    m_userConfigureUpdateTime=QFileInfo(userConfigurePath).lastModified();
     //If the account folder is empty, then set the folder path to application
     //dir.
     QDir accountDir(m_accountFolderPath.isEmpty()?

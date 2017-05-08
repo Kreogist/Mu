@@ -131,6 +131,7 @@ private:
     static KNConfigureManager *m_instance;
 
     QString m_folderPath, m_accountFolderPath;
+    QDateTime m_userConfigureUpdateTime;
     KNConfigure *m_configures[ConfigureTypeCount];
 };
 

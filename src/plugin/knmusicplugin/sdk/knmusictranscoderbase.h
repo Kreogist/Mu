@@ -51,7 +51,21 @@ public:
         OutputFailToInitStreamParameter,
         ResampleFailToAlloc,
         ResampleFailToOpen,
-        FifoFailToAlloc
+        FifoFailToAlloc,
+        TranscodeFailToWriteHeader,
+        TranscodeFailToDecReadFrame,
+        TranscodeFailToAllocSampleArray,
+        TranscodeFailToAllocSample,
+        TranscodeFailToCovertSample,
+        TranscodeFailToReallocFifo,
+        TranscodeFailToWriteFifo,
+        TranscodeFailToAllocReadFrame,
+        TranscodeFailToAllocWriteFrame,
+        TranscodeFailToReadFrame,
+        TranscodeFailToGetWriteBuf,
+        TranscodeFailToEncodeAudio,
+        TranscodeFailToWriteFrame,
+        TranscodeFailToWriteTailer
     };
 
     enum TranscoderEncoder
@@ -125,7 +139,7 @@ signals:
      * \param errorId The error index.
      * \param errorText The error text.
      */
-    void transcodingError(int errorId, QString errorText);
+    void transcodingError(TransCoderError errorId, QString errorText);
 
 public slots:
     /*!

@@ -26,6 +26,8 @@
 
 #include <QAbstractListModel>
 
+using namespace NotificationUtil;
+
 /*!
  * \brief The KNNotificationModel class provides a model to store all the
  * notification which could be visible from a list view.
@@ -50,8 +52,8 @@ public:
      */
     QModelIndex prependRow(const QString &title,
                            const QString &content,
-                           int type=KNNotificationUtil::Information,
-                           int iconType=KNNotificationUtil::Message);
+                           int type=Information,
+                           int iconType=Message);
 
     /*!
      * \brief Reimplemented from QAbstractListModel::rowCount().
@@ -82,20 +84,8 @@ signals:
 public slots:
 
 private:
-    struct NotificationData
-    {
-        QString title;
-        QString content;
-        int type;
-        int iconType;
-        NotificationData() :
-            type(KNNotificationUtil::Information),
-            iconType(KNNotificationUtil::Message)
-        {
-        }
-    };
-
-    QPixmap m_icon[KNNotificationUtil::NotificationIconCount];
+    inline QPixmap generateIcon(const QString &iconPath)
+;    QPixmap m_icon[NotificationIconCount];
     QList<NotificationData> m_notifications;
 };
 

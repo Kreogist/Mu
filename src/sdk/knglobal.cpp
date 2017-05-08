@@ -362,6 +362,8 @@ inline void KNGlobal::initialInfrastrcture()
     //Check out the desktop environment.
     initialDesktopEnvironment();
 #endif
+    //Initial the cloud configuration.
+    initialCloudAccount();
 
     //Initial the configure manager.
     //Set the configure folder path.
@@ -522,7 +524,12 @@ inline void KNGlobal::initialDesktopEnvironment()
     }
 #endif
 }
-#endif
+
+inline void KNGlobal::initialCloudAccount()
+{
+    //Set the basic information of the cloud data.
+    knAccount->setConfigureTableName("MuConfig");
+}
 
 QWidget *KNGlobal::mainWindow() const
 {

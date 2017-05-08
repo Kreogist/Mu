@@ -69,6 +69,8 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
     //Get the basic parameter.
     AVCodec *inputCodec;
     int error=NoError;
+    //Clear the input cache first.
+    clearInputCache();
     //Open the input file to read from it.
     if((error=avformat_open_input(&m_inputFormatContext,
                                   filePath.toLocal8Bit().data(),
@@ -167,6 +169,8 @@ int KNMusicFfmpegTranscoder::setOutputFile(const QString &filePath,
     AVStream *stream=nullptr;
     AVCodec *outputCodec=nullptr;
     int error=NoError;
+    //Clear output cache.
+    clearOutputCache();
     //Open the output file to write to it.
     if((error=avio_open(&outputIoContext, localeFileName.data(),
                         AVIO_FLAG_WRITE))<0)
@@ -178,6 +182,8 @@ int KNMusicFfmpegTranscoder::setOutputFile(const QString &filePath,
     //Create a new format context for the output container format.
     if (!(m_outputFormatContext=avformat_alloc_context()))
     {
+        //Close the avio context.
+        avio_close(outputIoContext);
         //Could not allocate output format context.
         return OutputFailToAllocFormatContext;
     }
@@ -229,14 +235,12 @@ int KNMusicFfmpegTranscoder::setOutputFile(const QString &filePath,
     m_outputCodecContext->sample_fmt = outputCodec->sample_fmts[0];
     m_outputCodecContext->bit_rate = m_outputBitRate;
     //Allow the use of the experimental encoder.
-    m_outputCodecContext->strict_std_compliance= FF_COMPLIANCE_EXPERIMENTAL;
+    m_outputCodecContext->strict_std_compliance=FF_COMPLIANCE_EXPERIMENTAL;
     //Set the sample rate for the container.
     stream->time_base.den = m_inputCodecContext->sample_rate;
     stream->time_base.num = 1;
-    /*
-     * Some container formats (like MP4) require global headers to be present
-     * Mark the encoder so that it behaves accordingly.
-     */
+    // Some container formats (like MP4) require global headers to be present
+    // Mark the encoder so that it behaves accordingly.
     if(m_outputFormatContext->oformat->flags & AVFMT_GLOBALHEADER)
     {
         //Set the flag.
@@ -254,6 +258,7 @@ int KNMusicFfmpegTranscoder::setOutputFile(const QString &filePath,
     //Initial the parameters.
     error=avcodec_parameters_from_context(stream->codecpar,
                                           m_outputCodecContext);
+    //Check error.
     if(error < 0)
     {
         //Clear the cache.
@@ -261,6 +266,8 @@ int KNMusicFfmpegTranscoder::setOutputFile(const QString &filePath,
         //Could not initialize stream parameters.
         return OutputFailToInitStreamParameter;
     }
+//    //PCM patches.
+//    if(m_outputCodecId)
     return NoError;
 }
 
@@ -498,24 +505,23 @@ void KNMusicFfmpegTranscoder::execute()
     //Initial the resampler.
     if(initResampler()!=NoError)
     {
-        //!FIXME: Emit error.
+        //Failed.
         return;
     }
     //Initial the FIFO queue.
     if(initFifoBuffer()!=NoError)
     {
-        //!FIXME: Emit error.
+        //Failed.
         return;
     }
     //Reset the time stamp.
     m_timestamp=0;
     //Write the header of the output file container.
     int error;
-    if((error = avformat_write_header(m_outputFormatContext, NULL)) < 0)
+    if((error=avformat_write_header(m_outputFormatContext, NULL)) < 0)
     {
         //Could not write output file header.
-        //!FIXME: Emit error.
-        getErrorText(error);
+        emit transcodingError(TranscodeFailToWriteHeader, getErrorText(error));
         return;
     }
     // Loop as long as we have input samples to read or output samples
@@ -524,7 +530,7 @@ void KNMusicFfmpegTranscoder::execute()
     while(!finished)
     {
         //Use the encoder's desired frame size for processing.
-        const int outputFrameSize=m_outputCodecContext->frame_size;
+        int outputFrameSize=m_outputCodecContext->frame_size;
         //Reset the finish hint.
         finished=0;
         //Make sure that there is one frame worth of samples in the FIFO
@@ -532,7 +538,8 @@ void KNMusicFfmpegTranscoder::execute()
         //Since the decoder's and the encoder's frame size may differ, we
         //need to FIFO buffer to store as many frames worth of input samples
         //that they make up at least one frame worth of output samples.
-        while(av_audio_fifo_size(m_fifo) < outputFrameSize)
+        while(outputFrameSize==0 ||
+              av_audio_fifo_size(m_fifo) < outputFrameSize)
         {
             // Decode one frame worth of audio samples, convert it to the
             // output sample format and put it into the FIFO buffer.
@@ -541,7 +548,6 @@ void KNMusicFfmpegTranscoder::execute()
                 //Error happend.
                 clearFifoCache();
                 clearResamplerCache();
-                //!FIXME: Emit error happend signal.
                 //Mission complete.
                 return;
             }
@@ -593,12 +599,12 @@ void KNMusicFfmpegTranscoder::execute()
             finished=1;
         }
     }
+    qDebug()<<"write tailer.";
     //Write the trailer of the output file container.
     if((error = av_write_trailer(m_outputFormatContext)) < 0)
     {
         //Could not write output file trailer.
-        //!FIXME: Emit error.
-        getErrorText(error);
+        emit transcodingError(TranscodeFailToWriteTailer, getErrorText(error));
     }
     //Clear the fifo and resampler.
     clearFifoCache();
@@ -721,6 +727,9 @@ inline int KNMusicFfmpegTranscoder::initResampler()
     //Check the resample state.
     if (!m_resampleContext)
     {
+        //Emit the error.
+        emit transcodingError(ResampleFailToAlloc,
+                              "Fail to allocate resample context memory.");
         //Could not allocate resample context.
         return ResampleFailToAlloc;
     }
@@ -732,10 +741,12 @@ inline int KNMusicFfmpegTranscoder::initResampler()
     av_assert0(m_outputCodecContext->sample_rate==
                m_inputCodecContext->sample_rate);
     //Open the resampler with the specified parameters.
-    if((error = swr_init(m_resampleContext)) < 0)
+    if((error=swr_init(m_resampleContext)) < 0)
     {
         //Free the resample context.
         clearResamplerCache();
+        //Emit the error.
+        emit transcodingError(ResampleFailToOpen, getErrorText(error));
         //Could not open resample context.
         return ResampleFailToOpen;
     }
@@ -749,6 +760,9 @@ int KNMusicFfmpegTranscoder::initFifoBuffer()
     if (!(m_fifo=av_audio_fifo_alloc(m_outputCodecContext->sample_fmt,
                                      m_outputCodecContext->channels, 1)))
     {
+        //Emit error.
+        emit transcodingError(FifoFailToAlloc,
+                              "Failed to allocate memory for output context.");
         //Could not allocate FIFO.
         return FifoFailToAlloc;
     }
@@ -759,15 +773,18 @@ int KNMusicFfmpegTranscoder::initFifoBuffer()
 inline AVOutputFormat *KNMusicFfmpegTranscoder::getOutputFormat(
         const QString &formatName)
 {
-    //Generate the format.
+    //This function is basicly copy the original guess function. However it
+    //seems that the original guess function is not as good as what I expected.
+    //Why not use QString to compare?
+    //Generate the format pointer.
     AVOutputFormat *format=NULL;
-    //Find the proper file type.
+    //Find the proper file type, loop until the last one.
     while((format=av_oformat_next(format))!=NULL)
     {
         //Check the format name is the same as the format name.
         if(formatName==QString(format->name))
         {
-            //Give back the format.
+            //Give back the format pointer.
             return format;
         }
     }
@@ -805,7 +822,7 @@ int KNMusicFfmpegTranscoder::readDecodeConvertAndStore(int *finished)
     {
         //Clean up the cache.
         clearDecodeCache(convertedInputSamples, inputFrame);
-        //Finished.
+        //Mission complete.
         return 0;
     }
     //If there is decoded data, convert and store it.
@@ -857,24 +874,35 @@ inline void KNMusicFfmpegTranscoder::clearDecodeCache(
 inline int KNMusicFfmpegTranscoder::loadEncodeAndWrite()
 {
     //Temporary storage of the output samples of the frame written to the file.
-    AVFrame *outputFrame;
+    AVFrame *outputFrame=nullptr;
     // Use the maximum number of possible samples per frame.
     // If there is less than the maximum possible frame size in the FIFO
     // buffer use this number. Otherwise, use the maximum possible frame size
-    const int frameSize = FFMIN(av_audio_fifo_size(m_fifo),
-                                 m_outputCodecContext->frame_size);
-    int dataWritten;
+    int frameSize=FFMIN(av_audio_fifo_size(m_fifo),
+                        m_outputCodecContext->frame_size),
+            dataWritten;
+    //Check the frame size validation.
+    if(frameSize==0)
+    {
+        //Becuase the frame_size could be 0 because some codecs set the flag
+        //with AV_CODEC_CAP_VARIABLE_FRAME_SIZE.
+        //When the codec set the flag with this, it will ask the user to provide
+        //the frame size instead of the codec provides. e.g. all the PCM
+        //implementation from FFMpeg.
+        frameSize=av_audio_fifo_size(m_fifo);
+    }
+    qDebug()<<"Frame size is="<<frameSize;
     //Initialize temporary storage for one output frame.
     if(initOutputFrame(&outputFrame, frameSize))
     {
         //Error happend when allocating the frame.
-        //!FIXME.
         return AVERROR_EXIT;
     }
     // Read as many samples from the FIFO buffer as required to fill the frame.
     // The samples are stored in the frame temporarily.
     if (av_audio_fifo_read(m_fifo,
-                           (void **)outputFrame->data, frameSize) < frameSize)
+                           (void **)outputFrame->data,
+                           frameSize) < frameSize)
     {
         //Could not read data from FIFO.
         //!FIXME.
@@ -885,7 +913,6 @@ inline int KNMusicFfmpegTranscoder::loadEncodeAndWrite()
     if (encodeAudioFrame(outputFrame, &dataWritten))
     {
         //Error when encoding.
-        //!FIXME.
         av_frame_free(&outputFrame);
         return AVERROR_EXIT;
     }
@@ -902,14 +929,16 @@ inline int KNMusicFfmpegTranscoder::initOutputFrame(AVFrame **frame,
     //Create a new frame to store the audio samples.
     if (!(*frame=av_frame_alloc()))
     {
+        emit transcodingError(TranscodeFailToAllocWriteFrame,
+                              "Fail to allocate write frame memory.");
         //Could not allocate output frame.
         return AVERROR_EXIT;
     }
-    // Set the frame's parameters, especially its size and format.
-    // av_frame_get_buffer needs this to allocate memory for the
-    // audio samples of the frame.
-    // Default channel layouts based on the number of channels
-    // are assumed for simplicity.
+    //Set the frame's parameters, especially its size and format.
+    //av_frame_get_buffer needs this to allocate memory for the audio samples
+    //of the frame.
+    //Default channel layouts based on the number of channels are assumed for
+    //simplicity.
     (*frame)->nb_samples     = frameSize;
     (*frame)->channel_layout = m_outputCodecContext->channel_layout;
     (*frame)->format         = m_outputCodecContext->sample_fmt;
@@ -919,7 +948,7 @@ inline int KNMusicFfmpegTranscoder::initOutputFrame(AVFrame **frame,
     if((error = av_frame_get_buffer(*frame, 0)) < 0)
     {
         //Could allocate output frame samples.
-        getErrorText(error);
+        emit transcodingError(TranscodeFailToGetWriteBuf, getErrorText(error));
         av_frame_free(frame);
         return error;
     }
@@ -947,7 +976,7 @@ int KNMusicFfmpegTranscoder::encodeAudioFrame(AVFrame *frame, int *dataPresent)
                                        frame, dataPresent)) < 0)
     {
         //Could not encode frame.
-        //! Show error: getErrorText(error);
+        emit transcodingError(TranscodeFailToEncodeAudio, getErrorText(error));
         av_packet_unref(&outputPacket);
         return error;
     }
@@ -958,7 +987,8 @@ int KNMusicFfmpegTranscoder::encodeAudioFrame(AVFrame *frame, int *dataPresent)
         if ((error = av_write_frame(m_outputFormatContext, &outputPacket)) < 0)
         {
             //Could not write frame.
-            //!FIXME: getErrorText(error);
+            emit transcodingError(TranscodeFailToWriteFrame,
+                                  getErrorText(error));
             av_packet_unref(&outputPacket);
             return error;
         }
@@ -975,8 +1005,11 @@ inline int KNMusicFfmpegTranscoder::initInputFrame(AVFrame **frame)
     if(!(*frame = av_frame_alloc()))
     {
         //Could not allocate input frame.
+        emit transcodingError(TranscodeFailToAllocReadFrame,
+                              "Could not allocate input frame.");
         return AVERROR(ENOMEM);
     }
+    //For else failed to allocate the frame.
     return 0;
 }
 
@@ -1004,34 +1037,51 @@ inline int KNMusicFfmpegTranscoder::decodeAudioFrame(AVFrame *frame,
         //If we are at the end of the file, flush the decoder below.
         if (error == AVERROR_EOF)
         {
+            qDebug()<<"Reach the EOF!";
             //Set the finished to be done.
             *finished = 1;
         }
         else
         {
-            //Error happend.
             //Could not read frame.
-            getErrorText(error);
+            emit transcodingError(TranscodeFailToReadFrame,
+                                  getErrorText(error));
             return error;
         }
     }
+    qDebug()<<inputPacket.pts;
     // Decode the audio frame stored in the temporary packet.
     // The input audio stream decoder is used to do this.
     // If we are at the end of the file, pass an empty packet to the decoder
     // to flush it.
+    // Reset the error code to 0.
+    error = 0;
+    // It is originally using avcodec_decode_audio4, however, it is deprecated.
+//    if((error = avcodec_send_packet(m_inputCodecContext, &inputPacket)) < 0 ||
+//            (error = avcodec_receive_frame(m_inputCodecContext, frame)) != 0)
     if ((error = avcodec_decode_audio4(m_inputCodecContext, frame,
                                        dataPresent, &inputPacket)) < 0)
     {
-        //Could not decode frame.
-        getErrorText(error);
-        av_packet_unref(&inputPacket);
-        return error;
+//        //Check the error code first.
+//        if(error==AVERROR_EOF)
+//        {
+//            //Which means the codec reaches the end of the file.
+//            //This should not be processed as an error.
+//            (*dataPresent)=1;
+//        }
+//        else
+//        {
+            //Could not decode frame.
+            emit transcodingError(TranscodeFailToDecReadFrame, getErrorText(error));
+            av_packet_unref(&inputPacket);
+            return error;
+//        }
     }
     // If the decoder has not been flushed completely, we are not finished,
     // so that this function has to be called again.
     if (*finished && *dataPresent)
     {
-        //Set finished to none complete.
+        //Set finished to not complete.
         *finished = 0;
     }
     //Clear the input packet reference.
@@ -1052,6 +1102,9 @@ inline int KNMusicFfmpegTranscoder::initConvertedSamples(
           (uint8_t **)calloc(m_outputCodecContext->channels,
                              sizeof(**convertedInputSamples))))
     {
+        //Emit the error signal.
+        emit transcodingError(TranscodeFailToAllocSampleArray,
+                              "Fail to allocate converted sample input array.");
         //Could not allocate converted input sample pointers.
         return AVERROR(ENOMEM);
     }
@@ -1062,6 +1115,9 @@ inline int KNMusicFfmpegTranscoder::initConvertedSamples(
                                 frameSize,
                                 m_outputCodecContext->sample_fmt, 0)) < 0)
     {
+        //Emit the error signal.
+        emit transcodingError(TranscodeFailToAllocSample,
+                              "Fail to allocate converted sample inputs.");
         //Could not allocate converted input samples.
         getErrorText(error);
         av_freep(&(*convertedInputSamples)[0]);
@@ -1083,7 +1139,7 @@ inline int KNMusicFfmpegTranscoder::convertSamples(const uint8_t **inputData,
                            inputData, frameSize)) < 0)
     {
         //Could not convert input samples.
-        getErrorText(error);
+        emit transcodingError(TranscodeFailToCovertSample, getErrorText(error));
         return error;
     }
     //Complete.
@@ -1100,6 +1156,8 @@ inline int KNMusicFfmpegTranscoder::addSamplesToFifo(
                                     av_audio_fifo_size(m_fifo) + frameSize))<0)
     {
         //Could not reallocate FIFO.
+        emit transcodingError(TranscodeFailToReallocFifo,
+                              "Fail to add to expand fifo memory.");
         return error;
     }
     //Store the new samples in the FIFO buffer.
@@ -1108,6 +1166,8 @@ inline int KNMusicFfmpegTranscoder::addSamplesToFifo(
                            frameSize) < frameSize)
     {
         //Could not write data to FIFO.
+        emit transcodingError(TranscodeFailToWriteFifo,
+                              "Fail to add to sample to fifo.");
         return AVERROR_EXIT;
     }
     return 0;

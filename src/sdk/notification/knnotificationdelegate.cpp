@@ -21,6 +21,8 @@
 
 #include "knnotificationdelegate.h"
 
+using namespace NotificationUtil;
+
 #define ImageSize 35
 #define Spacing 5
 #define ContentY 22
@@ -77,8 +79,7 @@ void KNNotificationDelegate::paint(QPainter *painter,
                             textWidth,
                             option.fontMetrics.height()<<1),
                       option.fontMetrics.elidedText(
-                          index.data(
-                              KNNotificationUtil::ContentRole).toString(),
+                          index.data(ContentRole).toString(),
                           Qt::ElideRight,
                           textWidth<<1));
     //Draw the border line except the last one.

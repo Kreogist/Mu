@@ -23,6 +23,8 @@
 
 #include <QObject>
 
+using namespace NotificationUtil;
+
 #define knNotification (KNNotification::instance())
 
 class KNNotificationModel;
@@ -65,8 +67,8 @@ public:
      */
     QModelIndex push(const QString &title,
                      const QString &content,
-                     int type=KNNotificationUtil::Information,
-                     int iconType=KNNotificationUtil::Message);
+                     int type=Information,
+                     int iconType=Message);
 
     /*!
      * \brief Push an notification, but not add this notification to stack.
@@ -86,8 +88,8 @@ public:
      */
     QModelIndex addToStack(const QString &title,
                            const QString &content,
-                           int type=KNNotificationUtil::Information,
-                           int iconType=KNNotificationUtil::Message);
+                           int type=Information,
+                           int iconType=Message);
 
     /*!
      * \brief Remove one notification via its index.

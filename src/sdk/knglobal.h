@@ -257,6 +257,7 @@ private:
 #ifdef Q_OS_UNIX
     inline void initialDesktopEnvironment();
 #endif
+    inline void initialCloudAccount();
     inline QString getMonthString(int month);
     QString m_dirPath[DefaultDirCount];
     QString m_storageUnit[StorageUnitCount];
