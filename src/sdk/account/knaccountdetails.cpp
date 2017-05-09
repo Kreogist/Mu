@@ -182,6 +182,16 @@ void KNAccountDetails::setAccountInfo(const QJsonObject &accountInfo)
     m_accountInfo = accountInfo;
 }
 
+QString KNAccountDetails::configureId() const
+{
+    return m_configureId;
+}
+
+void KNAccountDetails::setConfigureId(const QString &configureId)
+{
+    m_configureId = configureId;
+}
+
 QJsonObject KNAccountDetails::avatarData() const
 {
     return m_avatarData;

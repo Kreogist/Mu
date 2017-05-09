@@ -187,10 +187,9 @@ void KNAccountPasswordBox::onActionPassword1Change(const QString &password)
         return;
     }
     //Check password validation.
-    bool passwordValidation[PasswordHintTypeCount];
+    bool validation[PasswordHintTypeCount];
     //Get the validation result, save the result.
-    m_validPassword=
-            KNAccountUtil::isPasswordValid(password, passwordValidation);
+    m_validPassword=KNAccountUtil::isPasswordValid(password, validation);
     //Get the palette.
     QPalette pal=m_passwordHint[0]->palette();
     //Set the result to label.
@@ -198,7 +197,7 @@ void KNAccountPasswordBox::onActionPassword1Change(const QString &password)
     {
         //Configure the pal.
         pal.setColor(QPalette::WindowText,
-                     passwordValidation[i] ? m_validColor : m_invalidColor);
+                     validation[i] ? m_validColor : m_invalidColor);
         //Set the palette.
         m_passwordHint[i]->setPalette(pal);
     }

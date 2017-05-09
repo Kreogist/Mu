@@ -21,6 +21,7 @@
 
 #include <QRegExp>
 #include <QString>
+#include <QDebug>
 
 namespace AccountUtil
 {
@@ -65,13 +66,13 @@ class KNAccountUtil
 {
 public:
     /*!
-     * \brief isPasswordValid
-     * \param password
-     * \param passwordValidResult
-     * \return
+     * \brief Check whether the password is valid or not.
+     * \param password The original password.
+     * \param validResult Get the condition is valid or not result.
+     * \return If the password is valid, return true.
      */
     static bool isPasswordValid(const QString &password,
-                                bool *passwordValidResult=nullptr)
+                                bool *validResult=nullptr)
     {
         //Check whether the password is empty.
         if(password.isEmpty())
@@ -80,33 +81,33 @@ public:
             return false;
         }
         //Check password validation.
-        bool passwordValidation[AccountUtil::PasswordHintTypeCount],
-                validResult=true;
-        passwordValidation[AccountUtil::LengthRequest]=
-                (password.length()>5),
-        passwordValidation[AccountUtil::NumberRequest]=
-                password.contains(QRegExp("[0-9]")),
-        passwordValidation[AccountUtil::LetterRequest]=
+        bool validation[AccountUtil::PasswordHintTypeCount],
+                result=true;
+        validation[AccountUtil::LengthRequest]=
+                (password.length()>5);
+        validation[AccountUtil::NumberRequest]=
+                password.contains(QRegExp("[0-9]"));
+        validation[AccountUtil::LetterRequest]=
                 (password.contains(QRegExp("[A-Z]")) &&
                  password.contains(QRegExp("[a-z]")));
         //Check the result pointer.
-        if(!passwordValidResult)
+        if(validResult)
         {
             //If the result is not null, output the result.
             for(int i=0; i<AccountUtil::PasswordHintTypeCount; ++i)
             {
                 //Save the result to the pointer.
-                passwordValidResult[i]=passwordValidation[i];
+                validResult[i]=validation[i];
             }
         }
         //Calculate the final result by combine all the sub parts together.
         for(int i=0; i<AccountUtil::PasswordHintTypeCount; ++i)
         {
             //Calcualte the result.
-            validResult = validResult && passwordValidation[i];
+            result = result && validation[i];
         }
         //Give the result back.
-        return validResult;
+        return result;
     }
 
 private:

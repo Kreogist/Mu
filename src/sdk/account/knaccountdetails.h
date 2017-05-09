@@ -102,6 +102,12 @@ public:
      */
     QJsonObject avatarData() const;
 
+    /*!
+     * \brief Get the configure saving ID.
+     * \return The configure object ID data.
+     */
+    QString configureId() const;
+
 signals:
     /*!
      * \brief When the account information is reseted, this signal will be
@@ -181,13 +187,19 @@ public slots:
      */
     void setAccountInfo(const QJsonObject &accountInfo);
 
+    /*!
+     * \brief Set the configure cloud backup object ID.
+     * \param configureId The object ID.
+     */
+    void setConfigureId(const QString &configureId);
+
 private:
     //Account information.
     QJsonObject m_accountInfo, m_avatarData;
     //Account IDs.
     QString m_objectId, m_sessionToken, m_cacheUserName, m_cachePassword;
     //Account details.
-    QString m_displayName, m_avatarPath;
+    QString m_displayName, m_avatarPath, m_configureId;
     QPixmap m_accountAvatar;
     bool m_isLogin;
 };

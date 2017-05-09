@@ -43,8 +43,9 @@ KNAccount *KNAccount::m_instance=nullptr;
 
 KNAccount::KNAccount(QObject *parent) :
     KNRestApiBase(parent),
-    m_configureTable(QString()),
-    m_cacheConfigure(nullptr),
+    m_cloudConfigureTableName(QString()),
+    m_accountConfigure(nullptr),
+    m_userConfigure(nullptr),
     m_accountDetails(new KNAccountDetails)
 {
 }
@@ -54,18 +55,19 @@ void KNAccount::setConfigureTableName(const QString &tableName)
     m_cloudConfigureTableName = tableName;
 }
 
-void KNAccount::setCacheConfigure(KNConfigure *cacheConfigure)
+void KNAccount::setAccountConfigure(KNConfigure *accountConfigure)
 {
     //Save the cache configure.
-    m_cacheConfigure = cacheConfigure;
+    m_accountConfigure = accountConfigure;
     //Set the data from cache configure.
-    if(m_cacheConfigure==nullptr)
+    if(m_accountConfigure==nullptr)
     {
         //Mission complete, still cannot use.
         return;
     }
     //Set data to user detail.
-    QString cacheUsername=m_cacheConfigure->data(CacheUsernameField).toString();
+    QString cacheUsername=
+            m_accountConfigure->data(CacheUsernameField).toString();
     //Check whether the cache username is valid.
     if(cacheUsername.isEmpty())
     {
@@ -75,13 +77,44 @@ void KNAccount::setCacheConfigure(KNConfigure *cacheConfigure)
     //Save the user name information to data.
     m_accountDetails->setCacheUserName(cacheUsername);
     m_accountDetails->setCachePassword(
-                m_cacheConfigure->data(CachePasswordField).toString());
+                m_accountConfigure->data(CachePasswordField).toString());
     m_accountDetails->setDisplayName(
-                m_cacheConfigure->data(CacheNicknameField).toString());
+                m_accountConfigure->data(CacheNicknameField).toString());
 }
 
-void KNAccount::updateConfigure()
+void KNAccount::setUserConfigure(KNConfigure *userConfigure)
 {
+    //Save the user configure.
+    m_userConfigure=userConfigure;
+}
+
+void KNAccount::syncCloudConfigure()
+{
+    qDebug()<<"Original configure ID"<<m_accountDetails->configureId();
+    //Check the configure ID.
+    if(m_accountDetails->configureId().isEmpty())
+    {
+        //There is no configure ID here. Create a new table for it.
+        createSyncTable();
+        //Mission complete.
+        return;
+    }
+    //Fetch the configuration data.
+    //Generate the update request.
+    QNetworkRequest syncRequest=generateKreogistRequest(
+                + "classes/" + m_cloudConfigureTableName + "/"
+                + m_accountDetails->configureId());
+    //Get the data.
+    QByteArray responseCache;
+    int result=get(syncRequest, responseCache, false);
+    qDebug()<<"Result is"<<result;
+    if(result!=200)
+    {
+        qDebug()<<"Error for 200";
+        //!FIXME: Error to sync the configure file.
+        return;
+    }
+    qDebug()<<"Response cache"<<responseCache;
     return;
 }
 
@@ -104,6 +137,38 @@ void KNAccount::startToWork()
     }
     //Do auto login
     autoLogin();
+}
+
+inline bool KNAccount::createSyncTable()
+{
+    //Check the user configureation.
+    if(!m_userConfigure)
+    {
+        //Cannot create with null user configure.
+        return false;
+    }
+    //Generate the response cache.
+    QByteArray responseCache;
+    //Do the post operation to create the item.
+    if(post(generateKreogistRequest("classes/" + m_cloudConfigureTableName),
+            QJsonDocument(m_userConfigure->dataObject()).toJson(
+                QJsonDocument::Compact),
+            responseCache,
+            false)!=201)
+    {
+        //!FIXME: Failed to create the backup table.
+        return false;
+    }
+    //Check the response data.
+    QJsonObject createResult=QJsonDocument::fromJson(responseCache).object();
+    //Get the object ID of the create result.
+    QString configureId=createResult.value("objectId").toString();
+    m_accountDetails->setConfigureId(configureId);
+    //Upload the cloud data.
+    QJsonObject configureIdUpdate;
+    configureIdUpdate.insert("MuConfig", configureId);
+    //Update the account.
+    return updateOnlineAccount(configureIdUpdate, false);
 }
 
 inline int KNAccount::loginWith(const QString &username,
@@ -298,10 +363,15 @@ bool KNAccount::login(const QString &userName,
     m_accountDetails->setObjectId(loginData.value("objectId").toString());
     m_accountDetails->setSessionToken(
                 loginData.value("sessionToken").toString());
+    //Save the update configure data.
+    m_accountDetails->setConfigureId(
+                loginData.value(m_cloudConfigureTableName).toString());
     //Set the login.
     m_accountDetails->setIsLogin(true);
     //Update the user information.
     updateDetails(loginData);
+    //Download the online configuration file.
+    syncCloudConfigure();
     //Emit success signal.
     emit loginSuccess();
     //Successfully login.
@@ -342,6 +412,8 @@ void KNAccount::autoLogin()
             m_accountDetails->setIsLogin(true);
             //Update account detail information.
             updateDetails(loginData);
+            //Download the online configuration file.
+            syncCloudConfigure();
             //Emit success signal.
             emit loginSuccess();
         }
@@ -464,9 +536,9 @@ void KNAccount::logout()
     //Reset the account details.
     m_accountDetails->resetAccountDetail();
     //Clear the caching data.
-    m_cacheConfigure->setData(CacheUsernameField, "");
-    m_cacheConfigure->setData(CachePasswordField, "");
-    m_cacheConfigure->setData(CacheNicknameField, "");
+    m_accountConfigure->setData(CacheUsernameField, "");
+    m_accountConfigure->setData(CachePasswordField, "");
+    m_accountConfigure->setData(CacheNicknameField, "");
     //Clear the cached image.
     QFile::remove(knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png");
 }
@@ -816,7 +888,7 @@ KNAccountDetails *KNAccount::accountDetails()
 void KNAccount::saveConfigure()
 {
     //Check cache configure.
-    if(m_cacheConfigure==nullptr)
+    if(m_accountConfigure==nullptr)
     {
         //Ignore the cache configure.
         return;
@@ -828,20 +900,20 @@ void KNAccount::saveConfigure()
     if(m_accountDetails->cacheUserName().isEmpty())
     {
         //Clear the cache configure.
-        m_cacheConfigure->setData(CacheUsernameField, "");
-        m_cacheConfigure->setData(CachePasswordField, "");
-        m_cacheConfigure->setData(CacheNicknameField, "");
+        m_accountConfigure->setData(CacheUsernameField, "");
+        m_accountConfigure->setData(CachePasswordField, "");
+        m_accountConfigure->setData(CacheNicknameField, "");
         //Remove the avatar.
         QFile::remove(avatarPath);
         //Misson complete.
         return;
     }
     //Save the detail info into cache configure.
-    m_cacheConfigure->setData(CacheUsernameField,
+    m_accountConfigure->setData(CacheUsernameField,
                               m_accountDetails->cacheUserName());
-    m_cacheConfigure->setData(CachePasswordField,
+    m_accountConfigure->setData(CachePasswordField,
                               m_accountDetails->cachePassword());
-    m_cacheConfigure->setData(CacheNicknameField,
+    m_accountConfigure->setData(CacheNicknameField,
                               m_accountDetails->displayName());
     //Check the header pixmap.
     if(m_accountDetails->accountAvatar().isNull())

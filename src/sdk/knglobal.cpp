@@ -362,8 +362,6 @@ inline void KNGlobal::initialInfrastrcture()
     //Check out the desktop environment.
     initialDesktopEnvironment();
 #endif
-    //Initial the cloud configuration.
-    initialCloudAccount();
 
     //Initial the configure manager.
     //Set the configure folder path.
@@ -418,8 +416,11 @@ inline void KNGlobal::initialInfrastrcture()
     //Load the theme in the configure file.
     knTheme->setTheme(m_globalConfigure->data("Theme").toString());
 
+    //Set the basic information of the cloud data.
+    knAccount->setConfigureTableName("MuConfig");
     //Set the configure.
-    knAccount->setCacheConfigure(accountConfigure());
+    knAccount->setAccountConfigure(accountConfigure());
+    knAccount->setUserConfigure(userConfigure());
     //Initial the account system.
     knAccount->setWorkingThread(m_accountThread);
     //Link the account.
@@ -524,12 +525,7 @@ inline void KNGlobal::initialDesktopEnvironment()
     }
 #endif
 }
-
-inline void KNGlobal::initialCloudAccount()
-{
-    //Set the basic information of the cloud data.
-    knAccount->setConfigureTableName("MuConfig");
-}
+#endif
 
 QWidget *KNGlobal::mainWindow() const
 {

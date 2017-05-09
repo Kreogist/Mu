@@ -221,10 +221,16 @@ public slots:
     static QString bytesToHex(const QByteArray &bytes);
 
     /*!
-     * \brief Set the account cache configure to the account manager.
-     * \param cacheConfigure Account cache configure.
+     * \brief Set the account configure to the account manager.
+     * \param accountConfigure Account cache configure.
      */
-    void setCacheConfigure(KNConfigure *cacheConfigure);
+    void setAccountConfigure(KNConfigure *accountConfigure);
+
+    /*!
+     * \brief Set the user configure to the account manager.
+     * \param userConfigure The user configure data pointer.
+     */
+    void setUserConfigure(KNConfigure *userConfigure);
 
     /*!
      * \brief Update the configure data. If the local configure is later than
@@ -232,7 +238,7 @@ public slots:
      * setting is later than the local setting, we will replace the local
      * setting.
      */
-    void updateConfigure();
+    void syncCloudConfigure();
 
     /*!
      * \brief This is the initial online working slots for global instance to
@@ -241,6 +247,7 @@ public slots:
     void startToWork();
 
 private:
+    inline bool createSyncTable();
     inline int loginWith(const QString &username,
                          const QString &password, QByteArray &responseCache);
     inline bool updateOnlineAccount(const QJsonObject &userInfo,
@@ -260,7 +267,7 @@ private:
     KNAccount(KNAccount &&);
 
     QString m_cloudConfigureTableName;
-    KNConfigure *m_cacheConfigure;
+    KNConfigure *m_accountConfigure, *m_userConfigure;
     KNAccountDetails *m_accountDetails;
 };
 

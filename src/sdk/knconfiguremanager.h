@@ -19,6 +19,8 @@
 #ifndef KNCONFIGUREMANAGER_H
 #define KNCONFIGUREMANAGER_H
 
+#include <QDateTime>
+
 #include <QObject>
 
 #define knConf (KNConfigureManager::instance())
