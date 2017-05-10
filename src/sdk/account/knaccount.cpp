@@ -587,13 +587,11 @@ bool KNAccount::syncUserConfigure()
         //Mission complete.
         return true;
     }
-    qDebug()<<"Start to download data.";
     //Create the configure data.
     QJsonObject configureData;
     //Download the user configure data.
     if(!downloadUserConfigure(configureData))
     {
-        qDebug()<<"Faield to download";
         //Failed to download the configure data.
         return false;
     }
@@ -617,9 +615,8 @@ bool KNAccount::syncUserConfigure()
         //Complete.
         return true;
     }
-    //Or else.
-    //!TODO:
-    return true;
+    //Upload the latest version configure to the cloud.
+    return uploadUserConfigure();
 }
 
 void KNAccount::startToWork()
@@ -847,15 +844,33 @@ inline bool KNAccount::createCloudUserConfigure(int &errorCode)
                            setConfigureId, false);
 }
 
-bool KNAccount::uploadUserConfigure()
+inline bool KNAccount::uploadUserConfigure()
 {
-    ;
+    //Check the login state.
+    if(!m_accountDetails->isLogin())
+    {
+        //Failed to download user configure.
+        return false;
+    }
+    //Prepare the cache and error code.
+    QByteArray responseCache;
+    int errorCode;
+    //Update the information.
+    if(!updateRow("classes/" + m_cloudConfigureTableName + "/" +
+                  m_accountDetails->configureId(),
+                  jsonToString(m_userConfigure->dataObject()), responseCache,
+                  errorCode, m_accountDetails->sessionToken()))
+    {
+        //Failed.
+        return false;
+    }
+    qDebug()<<responseCache;
+    return true;
 }
 
 inline bool KNAccount::downloadUserConfigure(QJsonObject &configureData)
 {
     //Check the login state.
-    //Check login first.
     if(!m_accountDetails->isLogin())
     {
         //Failed to download user configure.
