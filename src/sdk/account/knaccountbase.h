@@ -67,7 +67,7 @@ protected:
      * \param responseData The response data from the cloud server.
      * \param errorCode The error code when there is an error occur.
      * \param sessionToken The session token text. If the token is provided, it
-     * will be set as a part of the row.
+     * will be set as a part of the request.
      * \return If the row could updated successfully, return true.
      */
     bool updateRow(const QString &tableClassName,
@@ -82,13 +82,16 @@ protected:
      * \param responseData The response data from the cloud server.
      * \param errorCode The error code when there is an error occur.
      * \param queryMap If the fetch need some query, fill this area.
+     * \param sessionToken The session token text. If the token is provided, it
+     * will be set as a part of the request.
      * \return If the row content fetched successfully, return true.
      */
     bool fetchRow(const QString &tableClassName,
                   QByteArray &responseData,
                   int &errorCode,
                   const QMap<QString, QString> &queryMap=
-            QMap<QString, QString>());
+            QMap<QString, QString>(),
+                  const QString &sessionToken=QString());
 
     /*!
      * \brief Upload a file to the cloud.

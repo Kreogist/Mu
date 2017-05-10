@@ -586,11 +586,13 @@ bool KNAccount::syncUserConfigure()
         //Mission complete.
         return true;
     }
+    qDebug()<<"Start to download data.";
     //Create the configure data.
     QJsonObject configureData;
     //Download the user configure data.
     if(!downloadUserConfigure(configureData))
     {
+        qDebug()<<"Faield to download";
         //Failed to download the configure data.
         return false;
     }
@@ -598,10 +600,12 @@ bool KNAccount::syncUserConfigure()
     QDateTime cloudUpdatedTime=
             QDateTime::fromString(configureData.value("updatedAt").toString(),
                                   "yyyy-MM-dd HH:mm:ss");
+    qDebug()<<cloudUpdatedTime;
     //Remove the object Id, createdAt and updatedAt keys.
     configureData.remove("objectId");
     configureData.remove("createdAt");
     configureData.remove("updatedAt");
+    qDebug()<<"Local time:"<<knConf->userConfigureUpdateTime();
     //Check the local configure file updated time.
     if(knConf->userConfigureUpdateTime() < cloudUpdatedTime)
     {
@@ -858,9 +862,10 @@ inline bool KNAccount::downloadUserConfigure(QJsonObject &configureData)
     QByteArray responseCache;
     int errorCode;
     //Fetch the information.
-    if(!fetchRow("classes/" + m_cloudConfigureTableName +
+    if(!fetchRow("classes/" + m_cloudConfigureTableName + "/" +
                  m_accountDetails->configureId(),
-                 responseCache, errorCode))
+                 responseCache, errorCode, QMap<QString, QString>(),
+                 m_accountDetails->sessionToken()))
     {
         //Failed.
         return false;

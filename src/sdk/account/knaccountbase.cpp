@@ -96,12 +96,20 @@ bool KNAccountBase::updateRow(const QString &tableClassName,
 bool KNAccountBase::fetchRow(const QString &tableClassName,
                              QByteArray &responseData,
                              int &errorCode,
-                             const QMap<QString, QString> &queryMap)
+                             const QMap<QString, QString> &queryMap,
+                             const QString &sessionToken)
 {
     //Reset the error code.
     errorCode=0;
     //Generate the request.
     QNetworkRequest fetchRequest=generateCloudRequest("1/"+tableClassName);
+    //Check the session token.
+    if(!sessionToken.isEmpty())
+    {
+        //Set the session token.
+        fetchRequest.setRawHeader("X-Bmob-Session-Token",
+                                  sessionToken.toUtf8());
+    }
     //Check the query map.
     if(!queryMap.isEmpty())
     {
@@ -121,13 +129,7 @@ bool KNAccountBase::fetchRow(const QString &tableClassName,
     }
     //Get the error code data.
     // HTTP 200 = Ok.
-    if((errorCode=get(fetchRequest, responseData, false))!=200)
-    {
-        //Failed to update the information
-        return false;
-    }
-    //Success.
-    return true;
+    return (errorCode=get(fetchRequest, responseData, false))==200;
 }
 
 bool KNAccountBase::uploadFile(const QString &url,
