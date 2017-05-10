@@ -456,7 +456,6 @@ SOURCES += \
     sdk/notification/knnotificationdelegate.cpp \
     sdk/notification/knnotificationwidget.cpp \
     sdk/knrestapibase.cpp \
-    sdk/account/knaccount.cpp \
     sdk/account/knaccountdetails.cpp \
     sdk/account/knaccountloginpanel.cpp \
     sdk/account/knaccountpanel.cpp \
@@ -516,7 +515,8 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp \
     sdk/knmousedetectlabel.cpp \
     plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.cpp \
-    sdk/account/knaccountbase.cpp
+    sdk/account/knaccountbase.cpp \
+    sdk/account/knaccount.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -731,7 +731,6 @@ HEADERS += \
     sdk/notification/knnotificationwidget.h \
     sdk/notification/knnotificationutil.h \
     sdk/knrestapibase.h \
-    sdk/account/knaccount.h \
     sdk/account/knaccountdetails.h \
     sdk/account/knaccountloginpanel.h \
     sdk/account/knaccountpanel.h \
@@ -796,7 +795,8 @@ HEADERS += \
     sdk/knmousedetectlabel.h \
     plugin/knmusicplugin/sdk/knmusictranscoderbase.h \
     plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.h \
-    sdk/account/knaccountbase.h
+    sdk/account/knaccountbase.h \
+    sdk/account/knaccount.h
 
 RESOURCES += \
     resource/res.qrc

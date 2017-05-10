@@ -13,15 +13,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #ifndef KNACCOUNT_H
 #define KNACCOUNT_H
 
-#include <QImage>
 #include <QJsonObject>
 
-#include "knrestapibase.h"
+#include "knaccountbase.h"
 
 #define knAccount (KNAccount::instance())
 
@@ -31,7 +32,7 @@ class KNConfigure;
  * \brief The KNAccount class provides the backend for Kreogist Account. It
  * supports all the operations user will do for Kreogist Account.
  */
-class KNAccount : public KNRestApiBase
+class KNAccount : public KNAccountBase
 {
     Q_OBJECT
 public:
@@ -56,15 +57,9 @@ public:
     KNAccountDetails *accountDetails();
 
     /*!
-     * \brief Save configure to cache configure.
+     * \brief Save configure to account configure.
      */
     void saveConfigure();
-
-    /*!
-     * \brief Set the name of the configure table name.
-     * \param tableName The name of the configure table.
-     */
-    void setConfigureTableName(const QString &tableName);
 
 signals:
     /*!
@@ -143,6 +138,12 @@ signals:
 
 public slots:
     /*!
+     * \brief Set the name of the configure table in the cloud.
+     * \param cloudConfigureTableName The name of the table.
+     */
+    void setConfigureTableName(const QString &tableName);
+
+    /*!
      * \brief Generate a Kreogist Account with the basic information.
      * \param userName User name of the account.
      * \param password Password of the account.
@@ -183,7 +184,13 @@ public slots:
     void logout();
 
     /*!
-     * \brief Update the account information.
+     * \brief Get the account information from server, update the detail info.
+     * \return If we could update the account info successfully, return true.
+     */
+    bool fetchAccountInfo();
+
+    /*!
+     * \brief Change the account information stores online.
      * \param userInfo All the new information about the account stored in JSON
      * format.
      * \return If we could update the account data successfully, then return
@@ -198,27 +205,6 @@ public slots:
      * true.
      */
     bool resetPassword(const QString &emailAddress);
-
-    /*!
-     * \brief Get the account information from server, update the detail info.
-     * \return If we could update the account info successfully, return true.
-     */
-    bool refreshAccountInfo();
-
-    /*!
-     * \brief Get the access password by input the raw password.
-     * \param rawPassword The raw password.
-     * \return Give back the raw password.
-     */
-    static QString accessPassword(const QString &rawPassword);
-
-    /*!
-     * \brief Change a byte array into a string which is the hex text of the
-     * bytes.
-     * \param bytes The byte array.
-     * \return The Hex string.
-     */
-    static QString bytesToHex(const QByteArray &bytes);
 
     /*!
      * \brief Set the account configure to the account manager.
@@ -237,8 +223,9 @@ public slots:
      * the online version, we will replace the online setting. If the online
      * setting is later than the local setting, we will replace the local
      * setting.
+     * \return If the configure sync successfully, return true.
      */
-    void syncCloudConfigure();
+    bool syncUserConfigure();
 
     /*!
      * \brief This is the initial online working slots for global instance to
@@ -247,24 +234,26 @@ public slots:
     void startToWork();
 
 private:
-    inline bool createSyncTable();
-    inline int loginWith(const QString &username,
-                         const QString &password, QByteArray &responseCache);
-    inline bool updateOnlineAccount(const QJsonObject &userInfo,
-                                    bool withSignal=true);
-    inline bool updateTokenSession();
-    inline int accountPut(QNetworkRequest &request,
-                          const QByteArray &parameter,
-                          QByteArray &responseData);
-
-    inline QNetworkRequest generateKreogistRequest(const QString &url);
-    inline void updateDetails(const QJsonObject &userInfo);
-
-    static KNAccount *m_instance;
-
     explicit KNAccount(QObject *parent = 0);
     KNAccount(const KNAccount &);
     KNAccount(KNAccount &&);
+
+    inline QByteArray jsonToString(const QJsonObject &data);
+    inline QJsonObject stringToJson(const QByteArray &json);
+    inline bool loginWith(const QString &username,
+                          const QString &password,
+                          QJsonObject &loginData,
+                          int &errorCode);
+    inline bool updateTokenSession();
+    inline void updateLocalDetails(const QJsonObject &userInfo);
+    inline bool updateRemoteRow(const QString &url,
+                                const QJsonObject &userInfo,
+                                bool withSignal);
+    inline bool createCloudUserConfigure(int &errorCode);
+    inline bool uploadUserConfigure();
+    inline bool downloadUserConfigure(QJsonObject &configureData);
+
+    static KNAccount *m_instance;
 
     QString m_cloudConfigureTableName;
     KNConfigure *m_accountConfigure, *m_userConfigure;

@@ -25,7 +25,7 @@ class KNAccountDetails;
  * \brief The KNAccountBase class provides the basic operations of the cloud
  * service. The basic operations contain the following:
  *  * Upload a file.
- *  * Update a file content.
+ *  * Remove a file.
  *  * Download file to a byte array.
  *  * Create row in a table.
  *  * Update row in a table.
@@ -81,27 +81,53 @@ protected:
      * \param tableClassName The table name at the cloud.
      * \param responseData The response data from the cloud server.
      * \param errorCode The error code when there is an error occur.
+     * \param queryMap If the fetch need some query, fill this area.
      * \return If the row content fetched successfully, return true.
      */
     bool fetchRow(const QString &tableClassName,
                   QByteArray &responseData,
-                  int &errorCode);
+                  int &errorCode,
+                  const QMap<QString, QString> &queryMap=
+            QMap<QString, QString>());
 
     /*!
      * \brief Upload a file to the cloud.
      * \param url The file upload path.
      * \param fileContent The content of the file.
      * \param responseData The response data from the cloud.
+     * \param errorCode The error code when there is an error occurs.
      * \param fileType The file type.
      * \return If the file could upload to the server, return true.
      */
     bool uploadFile(const QString &url,
                     const QByteArray &fileContent,
                     QByteArray &responseData,
+                    int &errorCode,
                     const QString &fileType=QString());
 
+    /*!
+     * \brief Download a file from the cloud.
+     * \param url The file url on the cloud.
+     * \param responseData The response data from the cloud. It should be the
+     * file binary content.
+     * \param errorCode The error code when there is an error occurs.
+     * \return If the file could download to the server, return true.
+     */
+    bool downloadFile(const QString &url,
+                      QByteArray &responseData,
+                      int &errorCode);
+
+    /*!
+     * \brief Remove a file from the cloud.
+     * \param url The file url on the cloud.
+     * \param errorCode The error code when there is an error occurs.
+     * \return If the file could download to the server, return true.
+     */
+    bool removeFile(const QString &url,
+                    int &errorCode);
+
 private:
-    inline QNetworkRequest generateRequest(const QString &url);
+    inline QNetworkRequest generateCloudRequest(const QString &url);
     KNAccountDetails *m_accountDetails;
 };
 

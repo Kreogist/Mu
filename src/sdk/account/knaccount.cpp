@@ -13,7 +13,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBuffer>
 #include <QCryptographicHash>
@@ -27,10 +28,9 @@
 #include "knaccountdetails.h"
 #include "knaccountutil.h"
 #include "knconfigure.h"
+#include "knconfiguremanager.h"
 
 #include "knaccount.h"
-
-#include <QDebug>
 
 #define CacheUsernameField "Username"
 #define CachePasswordField "Password"
@@ -42,821 +42,12 @@ using namespace AccountUtil;
 KNAccount *KNAccount::m_instance=nullptr;
 
 KNAccount::KNAccount(QObject *parent) :
-    KNRestApiBase(parent),
+    KNAccountBase(parent),
     m_cloudConfigureTableName(QString()),
     m_accountConfigure(nullptr),
     m_userConfigure(nullptr),
     m_accountDetails(new KNAccountDetails)
 {
-}
-
-void KNAccount::setConfigureTableName(const QString &tableName)
-{
-    m_cloudConfigureTableName = tableName;
-}
-
-void KNAccount::setAccountConfigure(KNConfigure *accountConfigure)
-{
-    //Save the cache configure.
-    m_accountConfigure = accountConfigure;
-    //Set the data from cache configure.
-    if(m_accountConfigure==nullptr)
-    {
-        //Mission complete, still cannot use.
-        return;
-    }
-    //Set data to user detail.
-    QString cacheUsername=
-            m_accountConfigure->data(CacheUsernameField).toString();
-    //Check whether the cache username is valid.
-    if(cacheUsername.isEmpty())
-    {
-        //Mission complete.
-        return;
-    }
-    //Save the user name information to data.
-    m_accountDetails->setCacheUserName(cacheUsername);
-    m_accountDetails->setCachePassword(
-                m_accountConfigure->data(CachePasswordField).toString());
-    m_accountDetails->setDisplayName(
-                m_accountConfigure->data(CacheNicknameField).toString());
-}
-
-void KNAccount::setUserConfigure(KNConfigure *userConfigure)
-{
-    //Save the user configure.
-    m_userConfigure=userConfigure;
-}
-
-void KNAccount::syncCloudConfigure()
-{
-    qDebug()<<"Original configure ID"<<m_accountDetails->configureId();
-    //Check the configure ID.
-    if(m_accountDetails->configureId().isEmpty())
-    {
-        //There is no configure ID here. Create a new table for it.
-        createSyncTable();
-        //Mission complete.
-        return;
-    }
-    //Fetch the configuration data.
-    //Generate the update request.
-    QNetworkRequest syncRequest=generateKreogistRequest(
-                + "classes/" + m_cloudConfigureTableName + "/"
-                + m_accountDetails->configureId());
-    //Get the data.
-    QByteArray responseCache;
-    int result=get(syncRequest, responseCache, false);
-    qDebug()<<"Result is"<<result;
-    if(result!=200)
-    {
-        qDebug()<<"Error for 200";
-        //!FIXME: Error to sync the configure file.
-        return;
-    }
-    qDebug()<<"Response cache"<<responseCache;
-    return;
-}
-
-void KNAccount::startToWork()
-{
-    //Load the cache image.
-    QString cachedAvatarPath=
-            knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png";
-    //Check whether the image is exist and valid.
-    if(QFileInfo::exists(cachedAvatarPath))
-    {
-        //Load the image.
-        QPixmap cachedImage(cachedAvatarPath, "PNG");
-        //If the cached image is not null, load it to account details.
-        if(!cachedImage.isNull())
-        {
-            //Set the avatar.
-            m_accountDetails->setAccountAvatar(cachedImage);
-        }
-    }
-    //Do auto login
-    autoLogin();
-}
-
-inline bool KNAccount::createSyncTable()
-{
-    //Check the user configureation.
-    if(!m_userConfigure)
-    {
-        //Cannot create with null user configure.
-        return false;
-    }
-    //Generate the response cache.
-    QByteArray responseCache;
-    //Do the post operation to create the item.
-    if(post(generateKreogistRequest("classes/" + m_cloudConfigureTableName),
-            QJsonDocument(m_userConfigure->dataObject()).toJson(
-                QJsonDocument::Compact),
-            responseCache,
-            false)!=201)
-    {
-        //!FIXME: Failed to create the backup table.
-        return false;
-    }
-    //Check the response data.
-    QJsonObject createResult=QJsonDocument::fromJson(responseCache).object();
-    //Get the object ID of the create result.
-    QString configureId=createResult.value("objectId").toString();
-    m_accountDetails->setConfigureId(configureId);
-    //Upload the cloud data.
-    QJsonObject configureIdUpdate;
-    configureIdUpdate.insert("MuConfig", configureId);
-    //Update the account.
-    return updateOnlineAccount(configureIdUpdate, false);
-}
-
-inline int KNAccount::loginWith(const QString &username,
-                                const QString &password,
-                                QByteArray &responseCache)
-{
-    //Generate the login request.
-    QNetworkRequest loginRequest=generateKreogistRequest("login");
-    //Construct the json struct.
-    //Try to login with encrypted password first.
-    QUrlQuery loginQuery;
-    //Insert user name.
-    loginQuery.addQueryItem("username", username);
-    loginQuery.addQueryItem("password", password);
-    //Insert login query to login url.
-    QUrl loginUrl=loginRequest.url();
-    loginUrl.setQuery(loginQuery);
-    loginRequest.setUrl(loginUrl);
-    //Get the login result.
-    return get(loginRequest, responseCache, false);
-}
-
-bool KNAccount::generateAccount(const QString &userName,
-                                QString password,
-                                const QString &mail)
-{
-    //Check whether we have already register a user.
-    if(m_accountDetails->isLogin())
-    {
-        //You cannot register a user when login.
-        return false;
-    }
-    //Encrypt the password.
-    password=accessPassword(password);
-    //Construct the json struct.
-    QJsonObject registerData;
-    //Save the data.
-    registerData.insert("username", userName);
-    registerData.insert("password", password);
-    registerData.insert("email", mail);
-    //Generate the response cache.
-    {
-        QByteArray responseCache;
-        //Send the JSON document to Kreogist cloud.
-        if(post(generateKreogistRequest("users"),
-                QJsonDocument(registerData).toJson(QJsonDocument::Compact),
-                responseCache,
-                false)!=201 || responseCache.isEmpty())
-        {
-            //Emit the register error.
-            switch(QJsonDocument::fromJson(responseCache).object().value(
-                       "code").toInt())
-            {
-            case 202:
-                emit generateFailed(UserNameAlreadyTaken);
-                break;
-            case 203:
-                emit generateFailed(EmailAlreadyTaken);
-                break;
-            default:
-                emit generateFailed(UnknownRegisterError);
-                break;
-            }
-            //Failed to post then failed.
-            return false;
-        }
-        //Check the response data.
-        registerData=QJsonDocument::fromJson(responseCache).object();
-    }
-    //Check register response data.
-    if(registerData.contains("objectId"))
-    {
-        //Save the user name and password for auto login.
-        m_accountDetails->setCacheUserName(userName);
-        m_accountDetails->setCachePassword(password);
-        //Save the contact information.
-        m_accountDetails->setObjectId(
-                    registerData.value("objectId").toString());
-        m_accountDetails->setSessionToken(
-                    registerData.value("sessionToken").toString());
-        //Set the login.
-        m_accountDetails->setIsLogin(true);
-        //Update the account information.
-        refreshAccountInfo();
-        //Emit register success signal.
-        emit generateSuccess();
-        //Mission complete.
-        return true;
-    }
-    //Emit failed for unknown reason.
-    emit generateFailed(UnknownRegisterError);
-    //Or else failed to login.
-    return false;
-}
-
-bool KNAccount::login(const QString &userName,
-                      QString password)
-{
-    //Check out whether user is already login.
-    if(m_accountDetails->isLogin() ||
-            //To avoid user copy and paste the hash result of the account
-            //directly to the password to login, we will check out the length of
-            //the password.
-            password.length()>MaximumPasswordLength)
-    {
-        //Emit failed signal.
-        emit loginFailed(InfoIncorrect);
-        //You cannot login two account at the same time.
-        return false;
-    }
-
-    //Encrypt the password.
-    QString encryptedPassword=accessPassword(password);
-    //Generate the response cache.
-    QByteArray responseCache;
-    //Send the JSON data to Kreogist Cloud.
-    int result=loginWith(userName, encryptedPassword, responseCache);
-    //When result is 0, then the Internet connection is a kind of bug.
-    switch(result)
-    {
-    case 0:
-        //Ask user to check Internet connection.
-        emit loginFailed(LoginConnectionError);
-        //Failed to login.
-        return false;
-    case 200:
-        //Save the password as encrypt password.
-        password=encryptedPassword;
-        break;
-    default:
-    {
-        //Treat all the other error as info incorrect.
-        //Tried to use the original password.
-        //Because when they are tring to reset the password, it will use
-        //their original password.
-        //Retry the get data from Kreogist Cloud.
-        int originalResult=loginWith(userName, password, responseCache);
-        //Check Internet connection signal.
-        if(originalResult<1)
-        {
-            //Ask user to check Internet connection.
-            emit loginFailed(LoginConnectionError);
-            //Failed to login.
-            return false;
-        }
-        //Check whether we login successful.
-        if(originalResult!=200)
-        {
-            //Emit failed signal.
-            emit loginFailed(InfoIncorrect);
-            //Failed to login, password is wrong.
-            return false;
-        }
-        //Parse the response cache.
-        QJsonObject passwordSetter=
-                QJsonDocument::fromJson(responseCache).object();
-        //Then we need to update the password into encrypted password.
-        QString sessionToken=passwordSetter.value("sessionToken").toString(),
-                objectId=passwordSetter.value("objectId").toString();
-        //Set the password setter.
-        passwordSetter=QJsonObject();
-        passwordSetter.insert("password", encryptedPassword);
-        //Generate the udpate response.
-        QByteArray passwordUpdateResponse;
-        //Generate the update request.
-        QNetworkRequest updateRequest=
-                generateKreogistRequest("users/"+objectId);
-        //Update the password.
-        updateRequest.setRawHeader("X-Bmob-Session-Token",
-                                  sessionToken.toUtf8());
-        //Put the new information.
-        if(put(updateRequest,
-               QJsonDocument(passwordSetter).toJson(QJsonDocument::Compact),
-               passwordUpdateResponse,
-               false)!=200)
-        {
-            //Emit failed signal.
-            emit loginFailed(LoginConnectionError);
-            //Failed to change the password, failed to login.
-            return false;
-        }
-        //Change the password.
-        password=encryptedPassword;
-    }
-    }
-    //Check the response data.
-    QJsonObject loginData=QJsonDocument::fromJson(responseCache).object();
-    //Save the user name and password for auto login.
-    m_accountDetails->setCacheUserName(userName);
-    m_accountDetails->setCachePassword(password);
-    //Save the contact information.
-    m_accountDetails->setObjectId(loginData.value("objectId").toString());
-    m_accountDetails->setSessionToken(
-                loginData.value("sessionToken").toString());
-    //Save the update configure data.
-    m_accountDetails->setConfigureId(
-                loginData.value(m_cloudConfigureTableName).toString());
-    //Set the login.
-    m_accountDetails->setIsLogin(true);
-    //Update the user information.
-    updateDetails(loginData);
-    //Download the online configuration file.
-    syncCloudConfigure();
-    //Emit success signal.
-    emit loginSuccess();
-    //Successfully login.
-    return true;
-}
-
-void KNAccount::autoLogin()
-{
-    //Check whether the account details contains user name and password.
-    if((!m_accountDetails->cacheUserName().isEmpty()) &&
-            (!m_accountDetails->cachePassword().isEmpty()))
-    {
-        //Emit start auto login signal.
-        emit startAutoLogin();
-        //Prepare the response cache.
-        QByteArray responseData;
-        //Tried to login with cache username and password.
-        int loginResult=loginWith(m_accountDetails->cacheUserName(),
-                                  m_accountDetails->cachePassword(),
-                                  responseData);
-        //Check the login result.
-        if(loginResult<1)
-        {
-            //For auto login failed.
-            emit autoLoginFailed(LoginConnectionError);
-        }
-        else if(loginResult==200)
-        {
-            //Check the response data.
-            QJsonObject loginData=
-                    QJsonDocument::fromJson(responseData).object();
-            //Save the contact information.
-            m_accountDetails->setObjectId(
-                        loginData.value("objectId").toString());
-            m_accountDetails->setSessionToken(
-                        loginData.value("sessionToken").toString());
-            //Set the login.
-            m_accountDetails->setIsLogin(true);
-            //Update account detail information.
-            updateDetails(loginData);
-            //Download the online configuration file.
-            syncCloudConfigure();
-            //Emit success signal.
-            emit loginSuccess();
-        }
-        else
-        {
-            //Emit failed signal.
-            emit autoLoginFailed(InfoIncorrect);
-            //Clear the cache user name and cache password.
-            m_accountDetails->resetAccountDetail();
-        }
-    }
-}
-
-bool KNAccount::setAvatar(const QPixmap &avatarImage)
-{
-    //Check out the avatar image size.
-    if(avatarImage.width()>100 || avatarImage.height()>100 ||
-            (!m_accountDetails->isLogin()))
-    {
-        //Failed to update the avatar.
-        emit avatarUpdatedFailed();
-        //Rescaled the image before uploading.
-        return false;
-    }
-    //Check whether it contains image before.
-    if(!m_accountDetails->avatarPath().isEmpty())
-    {
-        //Generate the result.
-        QNetworkRequest request=generateKreogistRequest(
-                                    "files/"+m_accountDetails->avatarPath());
-        //Check the avatar path, if it's starts with http, then we will use the
-        //new API to remove the previous image.
-        if(m_accountDetails->avatarPath().startsWith("http"))
-        {
-            //Save the avatar data.
-            const QJsonObject &avatarData=m_accountDetails->avatarData();
-            //Combine the remove URL.
-            QString fileUrl=avatarData.value("url").toString();
-            //Reset the url.
-            request.setUrl("https://api.bmob.cn/2/files/" +
-                           avatarData.value("cdn").toString() +
-                           fileUrl.mid(fileUrl.indexOf('/', 8)));
-        }
-        //Delete the resource.
-        int removeResult=deleteResource(request, false);
-        //If the avatar is already deleted(404), nor remove it successfully
-        //(200) there should be an Ineternet connection error.
-        if(removeResult!=200 && removeResult!=404)
-        {
-            //Emit the failed connection signal.
-            emit updateInternetError();
-            //Failed to upload the image.
-            return false;
-        }
-    }
-    //Generate image cache.
-    QByteArray imageBytes, responseBytes;
-    {
-        //Generate the buffer.
-        QBuffer imageBuffer(&imageBytes);
-        //Open the buffer.
-        if(!imageBuffer.open(QIODevice::WriteOnly))
-        {
-            //Failed to update the avatar.
-            emit avatarUpdatedFailed();
-            //Failed to save image.
-            return false;
-        }
-        //Save the pixamp.
-        avatarImage.save(&imageBuffer, "JPG");
-        //Close buffer.
-        imageBuffer.close();
-    }
-    //Upload the account data.
-    QNetworkRequest avatarRequest=generateKreogistRequest("");
-    //Set the url.
-    avatarRequest.setUrl("https://api.bmob.cn/2/files/" +
-                         m_accountDetails->objectId() + "/avatar.jpg");
-    //Configure the image.
-    avatarRequest.setHeader(QNetworkRequest::ContentTypeHeader, "image/jpeg");
-    //Post the request.
-    int postResult=post(avatarRequest, imageBytes, responseBytes, false);
-    //Check Internet connection first.
-    if(postResult<0)
-    {
-        //Emit the failed connection signal.
-        emit updateInternetError();
-        //Failed to upload the image.
-        return false;
-    }
-    //Check post result.
-    else if(postResult!=200)
-    {
-        //Failed to update the avatar.
-        emit avatarUpdatedFailed();
-        //Failed to upload the image.
-        return false;
-    }
-    //Check the response data.
-    QJsonObject updateObject;
-    //Update account details.
-    updateObject.insert("avatarPath", QString(responseBytes));
-    //Send update request.
-    if(updateOnlineAccount(updateObject, false))
-    {
-        //Update the avatar successfully.
-        emit avatarUpdatedSuccess();
-        //Set the data to detail info.
-        m_accountDetails->setAvatarPath(responseBytes);
-        return true;
-    }
-    //Else is failed.
-    emit avatarUpdatedFailed();
-    //Mission failed.
-    return false;
-}
-
-void KNAccount::logout()
-{
-    //Reset the account details.
-    m_accountDetails->resetAccountDetail();
-    //Clear the caching data.
-    m_accountConfigure->setData(CacheUsernameField, "");
-    m_accountConfigure->setData(CachePasswordField, "");
-    m_accountConfigure->setData(CacheNicknameField, "");
-    //Clear the cached image.
-    QFile::remove(knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png");
-}
-
-bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
-{
-    //Call the update function.
-    return updateOnlineAccount(userInfo, true);
-}
-
-bool KNAccount::resetPassword(const QString &emailAddress)
-{
-    //Generate the reset password request data and response cache.
-    QByteArray resetRequestData, responseCache;
-    {
-        //Generate the post data.
-        QJsonObject resetBody;
-        //Insert the email data.
-        resetBody.insert("email", emailAddress);
-        //Translate the reset body to reset data.
-        resetRequestData=QJsonDocument(resetBody).toJson(
-                    QJsonDocument::Compact);
-    }
-    //Post the data, get the result.
-    int postResult=post(generateKreogistRequest("requestPasswordReset"),
-                        resetRequestData,
-                        responseCache,
-                        false);
-    //Check the post result.
-    if(postResult==200)
-    {
-        //Then success, the reset E-mail has been sent.
-        emit resetEmailSendSuccess();
-        //Mission complete.
-        return true;
-    }
-    //Check all the possibility errors.
-    if(postResult<0)
-    {
-        //Internet error.
-        emit resetEmailError(ResetConnectionError);
-        //Mission Failed.
-        return false;
-    }
-    //Check the response of the code.
-    QJsonObject errorMessage=QJsonDocument::fromJson(responseCache).object();
-    //If the error message code is 205, it means no user found with E-mail.
-    if(errorMessage.contains("code") &&
-            errorMessage.value("code").toInt()==205)
-    {
-        //Emit the no E-mail error.
-        emit resetEmailError(ResetCannotFindEmail);
-        //Mission Failed.
-        return false;
-    }
-    //Unknown Internet error, ask user to try to send the email again.
-    emit resetEmailError(ResetUnknownError);
-    //Failed to send the reset password E-mail.
-    return false;
-}
-
-bool KNAccount::refreshAccountInfo()
-{
-    //Check login state.
-    if(!m_accountDetails->isLogin())
-    {
-        //Login first.
-        return false;
-    }
-    //Prepare the response data cache.
-    QByteArray responseData;
-    //Get the account information.
-    if(get(generateKreogistRequest("classes/_User/" +
-                                   m_accountDetails->objectId()),
-           responseData,
-           false)!=200)
-    {
-        //Failed to fetch account information.
-        return false;
-    }
-    //Update account detail information.
-    updateDetails(QJsonDocument::fromJson(responseData).object());
-    //Mission complete.
-    return true;
-}
-
-inline bool KNAccount::updateTokenSession()
-{
-    //Generate the login request.
-    QNetworkRequest loginRequest=generateKreogistRequest("login");
-    //Construct the json struct.
-    //Try to login with encrypted password first.
-    QUrlQuery loginQuery;
-    //Insert user name.
-    loginQuery.addQueryItem("username", m_accountDetails->cacheUserName());
-    loginQuery.addQueryItem("password", m_accountDetails->cachePassword());
-    //Insert login query to login url.
-    QUrl loginUrl=loginRequest.url();
-    loginUrl.setQuery(loginQuery);
-    loginRequest.setUrl(loginUrl);
-    //Get the login result.
-    //Generate the response cache.
-    QByteArray responseCache;
-    //Send the JSON data to Kreogist Cloud.
-    if(get(loginRequest, responseCache, false)!=200)
-    {
-        //Failed to fetch the new token session.
-        return false;
-    }
-    //Check the response data.
-    QJsonObject loginData=QJsonDocument::fromJson(responseCache).object();
-    //Save the session token data.
-    m_accountDetails->setSessionToken(
-                loginData.value("sessionToken").toString());
-    //Update the account details.
-    updateDetails(loginData);
-    //Update success.
-    return true;
-}
-
-inline int KNAccount::accountPut(QNetworkRequest &request,
-                                 const QByteArray &parameter,
-                                 QByteArray &responseData)
-{
-    //Set the session token.
-    request.setRawHeader("X-Bmob-Session-Token",
-                         m_accountDetails->sessionToken().toUtf8());
-    //Do original put.
-    int result=put(request, parameter, responseData, false);
-    //Check whether the result is failed.
-    if(result==404)
-    {
-        //Check the response data code.
-        //Code 206 means: User cannot be altered without sessionToken Error.
-        //We have to relogin with the cache data.
-        if(QJsonDocument::fromJson(responseData).object().value("code").toInt()
-                ==206 && updateTokenSession())
-        {
-            //Update request session token.
-            request.setRawHeader("X-Bmob-Session-Token",
-                                 m_accountDetails->sessionToken().toUtf8());
-            //Give back the new data.
-            return put(request, parameter, responseData, false);
-        }
-        //Give the original.
-        return result;
-    }
-    //Or else we will simply give back the result.
-    return result;
-}
-
-inline QNetworkRequest KNAccount::generateKreogistRequest(const QString &url)
-{
-    //Generate a request.
-    QNetworkRequest request;
-    //Set the url.
-    request.setUrl(QUrl("https://api.bmob.cn/1/"+url));
-    //Configure the request.
-    request.setRawHeader("X-Bmob-Application-Id",
-                         "71a30357da3ec74b3ee3bf8fa969075f");
-    request.setRawHeader("X-Bmob-REST-API-Key",
-                         "d2d522da26665024157835d22a42b42c");
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    //Give back the request.
-    return request;
-}
-
-QString KNAccount::accessPassword(const QString &rawPassword)
-{
-    //Use MD5 and SHA-3 to combine the access password.
-    return bytesToHex(QCryptographicHash::hash(
-                          rawPassword.toUtf8(),
-                          QCryptographicHash::Sha3_512).append
-                      (QCryptographicHash::hash(
-                           rawPassword.toUtf8(),
-                           QCryptographicHash::Md5)));
-}
-
-QString KNAccount::bytesToHex(const QByteArray &bytes)
-{
-    //Create the cache string.
-    QString hexCache;
-    //For all the bytes.
-    for(int i=0; i<bytes.size(); ++i)
-    {
-        //Get the text string of the current number.
-        QString currentByte=QString::number((quint8)bytes.at(i), 16);
-        //Add all bytes to hex cache.
-        hexCache.append(bytes.at(i)<16?"0"+currentByte:currentByte);
-    }
-    //Give back the hex cache.
-    return hexCache;
-}
-
-bool KNAccount::updateOnlineAccount(const QJsonObject &userInfo,
-                                    bool withSignal)
-{
-    //Check login first.
-    if(!m_accountDetails->isLogin())
-    {
-        //Check signal flags.
-        if(withSignal)
-        {
-            //Failed to update user info.
-            emit userInfoUpdateFailed();
-        }
-        //Failed to update account info.
-        return false;
-    }
-    //Tring to update account info.
-    QNetworkRequest updateRequest=generateKreogistRequest(
-                "users/"+m_accountDetails->objectId());
-    //Generate response data.
-    QByteArray responseData;
-    //PUT the json data.
-    int putResult=
-            accountPut(updateRequest,
-                       QJsonDocument(userInfo).toJson(QJsonDocument::Compact),
-                       responseData);
-    //Check the Internet connection error.
-    if(putResult<1)
-    {
-        //It caused an Internet error.
-        emit updateInternetError();
-        //Failed to get the result.
-        return false;
-    }
-    //Check if update failed.
-    if(putResult!=200)
-    {
-        //Check signal flags.
-        if(withSignal)
-        {
-            //Failed to update user info.
-            emit userInfoUpdateFailed();
-        }
-        //Failed to update info.
-        return false;
-    }
-    //Successfully update user data.
-    //Check whether the data contains password field.
-    if(userInfo.contains("password"))
-    {
-        //Update the cache password.
-        m_accountDetails->setCachePassword(
-                    userInfo.value("password").toString());
-    }
-    //Get current user latest data.
-    int getResult=
-            get(generateKreogistRequest("users/"+m_accountDetails->objectId()),
-                responseData,
-                false);
-    //Check Internet connection error.
-    if(getResult<1)
-    {
-        //There's an connection error.
-        emit updateInternetError();
-        //Failed to get latest info.
-        return false;
-    }
-    //Check if get the data from server.
-    if(getResult!=200)
-    {
-        //Check signal flags.
-        if(withSignal)
-        {
-            //Failed to update user info.
-            emit userInfoUpdateFailed();
-        }
-        //Failed to update info.
-        return false;
-    }
-    //Update user info.
-    updateDetails(QJsonDocument::fromJson(responseData).object());
-    //Check signal flags.
-    if(withSignal)
-    {
-        //Emit success signal.
-        emit userInfoUpdateSuccess();
-    }
-    //Mission complete.
-    return true;
-}
-
-inline void KNAccount::updateDetails(const QJsonObject &userInfo)
-{
-    //Sace the user info.
-    m_accountDetails->setAccountInfo(userInfo);
-    //Save the important data.
-    m_accountDetails->setDisplayName(userInfo.value("displayName").toString());
-    m_accountDetails->setAvatarPath(userInfo.value("avatarPath").toString());
-    //Check avatar path.
-    if(!m_accountDetails->avatarPath().isEmpty())
-    {
-        //Tring to get avatar from the paths.
-        QNetworkRequest avatarRequest;
-        //Check the avatar path.
-        //Set the url.
-        avatarRequest.setUrl(m_accountDetails->avatarPath().startsWith("http")?
-                                 m_accountDetails->avatarPath():
-                                 ("http://file.bmob.cn/" +
-                                 m_accountDetails->avatarPath()));
-        QByteArray imageResponse;
-        //Get the account avatar file.
-        if(get(avatarRequest, imageResponse, false)==200)
-        {
-            //Set the image image resource.
-            m_accountDetails->setAccountAvatar(
-                        QPixmap::fromImage(QImage::fromData(imageResponse)));
-        }
-        else
-        {
-            //Reset the account details avatar.
-            m_accountDetails->setAccountAvatar(QPixmap());
-        }
-    }
-    //We have to notify the account is update.
-    emit m_accountDetails->accountUpdate();
 }
 
 KNAccount::~KNAccount()
@@ -910,11 +101,11 @@ void KNAccount::saveConfigure()
     }
     //Save the detail info into cache configure.
     m_accountConfigure->setData(CacheUsernameField,
-                              m_accountDetails->cacheUserName());
+                                m_accountDetails->cacheUserName());
     m_accountConfigure->setData(CachePasswordField,
-                              m_accountDetails->cachePassword());
+                                m_accountDetails->cachePassword());
     m_accountConfigure->setData(CacheNicknameField,
-                              m_accountDetails->displayName());
+                                m_accountDetails->displayName());
     //Check the header pixmap.
     if(m_accountDetails->accountAvatar().isNull())
     {
@@ -939,4 +130,743 @@ void KNAccount::saveConfigure()
                         "png");
         }
     }
+}
+
+void KNAccount::setConfigureTableName(const QString &tableName)
+{
+    //Save the configure table.
+    m_cloudConfigureTableName = tableName;
+}
+
+bool KNAccount::generateAccount(const QString &userName,
+                                 QString password,
+                                 const QString &mail)
+{
+    //Check whether we have already register a user.
+    if(m_accountDetails->isLogin())
+    {
+        //You cannot register a user when login.
+        return false;
+    }
+    //Encrypt the password.
+    password=KNAccountUtil::accessPassword(password);
+    //Construct the register json struct.
+    QJsonObject registerData;
+    registerData.insert("username", userName);
+    registerData.insert("password", password);
+    registerData.insert("email", mail);
+    registerData.insert(m_cloudConfigureTableName, "");
+    //Generate the response cache and error code.
+    QByteArray responseCache;
+    int errorCode;
+    //Execute the register action.
+    if(!createRow("users",
+                  jsonToString(registerData),
+                  responseCache,
+                  errorCode))
+    {
+        //Check the error code.
+        switch(errorCode)
+        {
+        case 202:
+            emit generateFailed(UserNameAlreadyTaken);
+            break;
+        case 203:
+            emit generateFailed(EmailAlreadyTaken);
+            break;
+        default:
+            emit generateFailed(UnknownRegisterError);
+            break;
+        }
+        //Failed to post then failed.
+        return false;
+    }
+    //Check the response data.
+    registerData=QJsonDocument::fromJson(responseCache).object();
+    //Check register response data.
+    if(!registerData.contains("objectId"))
+    {
+        //Emit failed for unknown reason.
+        emit generateFailed(UnknownRegisterError);
+        //Or else failed to login.
+        return false;
+    }
+    //Update the account information.
+    fetchAccountInfo();
+    //Emit register success signal.
+    emit generateSuccess();
+    //Upload the user configuration file.
+    syncUserConfigure();
+    //Mission complete.
+    return true;
+}
+
+bool KNAccount::login(const QString &userName, QString password)
+{
+    //Check out whether user is already login.
+    if(m_accountDetails->isLogin() ||
+            //To avoid user copy and paste the hash result of the account
+            //directly to the password to login, we will check out the length of
+            //the password.
+            password.length()>MaximumPasswordLength)
+    {
+        //Emit failed signal.
+        emit loginFailed(InfoIncorrect);
+        //You cannot login two account at the same time.
+        return false;
+    }
+    //Encrypt the password.
+    QString encryptedPassword=KNAccountUtil::accessPassword(password);
+    //Generate the response cache.
+    QJsonObject loginData;
+    //Generate the error code cache.
+    int errorCode;
+    //Try to login.
+    if(!loginWith(userName, encryptedPassword, loginData, errorCode))
+    {
+        //Check for the error code.
+        switch(errorCode)
+        {
+        case 0:
+            //Ask user to check Internet connection.
+            emit loginFailed(LoginConnectionError);
+            //Failed to login.
+            return false;
+        case 200:
+            //Shouldn't go here.
+            break;
+        default:
+        {
+            //Treat all the other error as info incorrect.
+            //Tried to use the original password.
+            //Because when user reset the password, it will use the original
+            //password.
+            if(!loginWith(userName, password, loginData, errorCode))
+            {
+                //Check Internet connection error code.
+                if(errorCode<1)
+                {
+                    //Ask user to check Internet connection.
+                    emit loginFailed(LoginConnectionError);
+                    //Failed to login.
+                    return false;
+                }
+                //Emit failed signal.
+                emit loginFailed(InfoIncorrect);
+                //Failed to login, password is wrong.
+                return false;
+            }
+            //Now login success, but we need to change the password to the
+            //encrypted version.
+            //Get the necessary information.
+            QString sessionToken=loginData.value("sessionToken").toString(),
+                    objectId=loginData.value("objectId").toString();
+            //Set the password updater.
+            loginData=QJsonObject();
+            loginData.insert("password", encryptedPassword);
+            //Generate the udpate response.
+            QByteArray resetPassResponse;
+            int errorCode;
+            //Update the password.
+            if(!updateRow("users/"+objectId,
+                          jsonToString(loginData),
+                          resetPassResponse,
+                          errorCode,
+                          sessionToken))
+            {
+                //Clear the password.
+                m_accountDetails->resetAccountDetail();
+                //Emit failed signal.
+                emit loginFailed(LoginConnectionError);
+                //Failed to change the password, failed to login.
+                return false;
+            }
+            //Save the encrypted password as the cached password.
+            m_accountDetails->setCachePassword(encryptedPassword);
+        }
+        }
+    }
+    //Update the user information.
+    updateLocalDetails(loginData);
+    //Emit success signal.
+    emit loginSuccess();
+    //Once we could login, we need to sync the configuration file.
+    syncUserConfigure();
+    //Successfully login.
+    return true;
+}
+
+void KNAccount::autoLogin()
+{
+    //Check whether the account details contains user name and password.
+    if(m_accountDetails->cacheUserName().isEmpty() ||
+            m_accountDetails->cachePassword().isEmpty())
+    {
+        //Failed to auto login.
+        return;
+    }
+    //Emit start auto login signal.
+    emit startAutoLogin();
+    //Prepare the response cache.
+    QJsonObject loginData;
+    int errorCode;
+    //Tried to login with cache username and password.
+    if(!loginWith(m_accountDetails->cacheUserName(),
+                  m_accountDetails->cachePassword(),
+                  loginData, errorCode))
+    {
+        //Check the login result.
+        if(errorCode<1)
+        {
+            //For auto login failed.
+            emit autoLoginFailed(LoginConnectionError);
+        }
+        else
+        {
+            //Emit failed signal.
+            emit autoLoginFailed(InfoIncorrect);
+            //Clear the cache user name and cache password.
+            m_accountDetails->resetAccountDetail();
+        }
+        //Failed to login.
+        return;
+    }
+    //Update the user information.
+    updateLocalDetails(loginData);
+    //Emit success signal.
+    emit loginSuccess();
+    //Once we could login, we need to sync the configuration file.
+    syncUserConfigure();
+}
+
+bool KNAccount::setAvatar(const QPixmap &avatarImage)
+{
+    //Check out the avatar image size.
+    if(avatarImage.width()>100 || avatarImage.height()>100 ||
+            (!m_accountDetails->isLogin()))
+    {
+        //Failed to update the avatar.
+        emit avatarUpdatedFailed();
+        //Rescaled the image before uploading.
+        return false;
+    }
+    //Check whether it contains image before.
+    if(!m_accountDetails->avatarPath().isEmpty())
+    {
+        //Remove the previous avatar first.
+        //Set the original path.
+        QString avatarUrl="https://api.bmob.cn/1/files/" +
+                            m_accountDetails->avatarPath();
+        //Check the avatar path, if it's starts with http, then we will use the
+        //new API to remove the previous image.
+        if(m_accountDetails->avatarPath().startsWith("http"))
+        {
+            //Save the avatar data.
+            const QJsonObject &avatarData=m_accountDetails->avatarData();
+            //Get the file Url.
+            QString fileUrl=avatarData.value("url").toString();
+            //Combine the remove URL.
+            avatarUrl="https://api.bmob.cn/2/files/" +
+                    avatarData.value("cdn").toString() +
+                    fileUrl.mid(fileUrl.indexOf('/', 8));
+        }
+        //Prepare the error code.
+        int errorCode;
+        //Remove the file.
+        if(!removeFile(avatarUrl, errorCode))
+        {
+            //Emit the failed connection signal.
+            emit updateInternetError();
+            //Failed to remove the previous one, which is failed to update.
+            return false;
+        }
+    }
+    //Generate image cache.
+    QByteArray imageBytes;
+    {
+        //Generate the buffer.
+        QBuffer imageBuffer(&imageBytes);
+        //Open the buffer.
+        if(!imageBuffer.open(QIODevice::WriteOnly))
+        {
+            //Failed to update the avatar.
+            emit avatarUpdatedFailed();
+            //Failed to save image.
+            return false;
+        }
+        //Save the pixamp.
+        avatarImage.save(&imageBuffer, "JPG");
+        //Close buffer.
+        imageBuffer.close();
+    }
+    //Prepare the response cache and error code.
+    QByteArray responseCache;
+    int errorCode;
+    //Upload a file.
+    if(!uploadFile(m_accountDetails->objectId() + "/avatar.jpg",
+                   imageBytes, responseCache, errorCode, "image/jpeg"))
+    {
+        //Check the error code.
+        if(errorCode<0)
+        {
+            //Emit the failed connection signal.
+            emit updateInternetError();
+            //Failed to upload the image.
+            return false;
+        }
+        //Failed to upload the avatar.
+        emit avatarUpdatedFailed();
+        //Failed to upload the image.
+        return false;
+    }
+    //Check the response data.
+    QJsonObject updateAvatarRequest;
+    //Update account details.
+    updateAvatarRequest.insert("avatarPath", QString(responseCache));
+    //Send update request.
+    if(updateRemoteRow("users/"+m_accountDetails->objectId(),
+                       updateAvatarRequest, false))
+    {
+        //Update the avatar successfully.
+        emit avatarUpdatedSuccess();
+        //Set the data to detail info.
+        m_accountDetails->setAvatarPath(responseCache);
+        return true;
+    }
+    //Else is failed.
+    emit avatarUpdatedFailed();
+    //Mission failed.
+    return false;
+}
+
+void KNAccount::logout()
+{
+    //Reset the account details.
+    m_accountDetails->resetAccountDetail();
+    //Clear the caching data.
+    m_accountConfigure->setData(CacheUsernameField, "");
+    m_accountConfigure->setData(CachePasswordField, "");
+    m_accountConfigure->setData(CacheNicknameField, "");
+    //Clear the cached image.
+    //Do the check for the path.
+    if(!knGlobal->dirPath(KNGlobal::AccountDir).isEmpty())
+    {
+        //Remove the avatar file.
+        QFile::remove(knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png");
+    }
+}
+
+bool KNAccount::fetchAccountInfo()
+{
+    //Check login state.
+    if(!m_accountDetails->isLogin())
+    {
+        //Login first.
+        return false;
+    }
+    //Prepare the response data cache.
+    QByteArray responseData;
+    int errorCode;
+    //Get the account information.
+    if(!fetchRow("classes/_User/"+m_accountDetails->objectId(),
+                 responseData,
+                 errorCode))
+    {
+        //Failed to fetch account information.
+        return false;
+    }
+    //Update account detail information.
+    updateLocalDetails(stringToJson(responseData));
+    //Mission complete.
+    return true;
+}
+
+bool KNAccount::updateAccountInfo(const QJsonObject &userInfo)
+{
+    //Call the update function.
+    return updateRemoteRow("users/"+m_accountDetails->objectId(),
+                           userInfo, true);
+}
+
+bool KNAccount::resetPassword(const QString &emailAddress)
+{
+    //Generate the reset password request data and response cache.
+    QByteArray resetRequestData;
+    {
+        //Generate the post data.
+        QJsonObject resetBody;
+        //Insert the email data.
+        resetBody.insert("email", emailAddress);
+        //Translate the reset body to reset data.
+        resetRequestData=jsonToString(resetBody);
+    }
+    //Prepare the response cache and error code.
+    QByteArray responseCache;
+    int errorCode;
+    //Create a new row for the reqest queue.
+    if(createRow("requestPasswordReset", resetRequestData,
+                 responseCache, errorCode))
+    {
+        //Then success, the reset E-mail has been sent.
+        emit resetEmailSendSuccess();
+        //Mission complete.
+        return true;
+    }
+    //Handling the error code.
+    if(errorCode<0)
+    {
+        //Internet error.
+        emit resetEmailError(ResetConnectionError);
+        //Mission Failed.
+        return false;
+    }
+    //Check the response of the code.
+    QJsonObject errorMessage=stringToJson(responseCache);
+    //If the error message code is 205, it means no user found with E-mail.
+    if(errorMessage.contains("code") &&
+            errorMessage.value("code").toInt()==205)
+    {
+        //Emit the no E-mail error.
+        emit resetEmailError(ResetCannotFindEmail);
+        //Mission Failed.
+        return false;
+    }
+    //Unknown Internet error, ask user to try to send the email again.
+    emit resetEmailError(ResetUnknownError);
+    //Failed to send the reset password E-mail.
+    return false;
+}
+
+void KNAccount::setAccountConfigure(KNConfigure *accountConfigure)
+{
+    //Save the cache configure.
+    m_accountConfigure = accountConfigure;
+    //Set the data from cache configure.
+    if(m_accountConfigure==nullptr)
+    {
+        //Mission complete, still cannot use.
+        return;
+    }
+    //Set data to user detail.
+    QString cacheUsername=
+            m_accountConfigure->data(CacheUsernameField).toString();
+    //Check whether the cache username is valid.
+    if(cacheUsername.isEmpty())
+    {
+        //Mission complete.
+        return;
+    }
+    //Save the user name information to data.
+    m_accountDetails->setCacheUserName(cacheUsername);
+    m_accountDetails->setCachePassword(
+                m_accountConfigure->data(CachePasswordField).toString());
+    m_accountDetails->setDisplayName(
+                m_accountConfigure->data(CacheNicknameField).toString());
+}
+
+void KNAccount::setUserConfigure(KNConfigure *userConfigure)
+{
+    //Save the user configure.
+    m_userConfigure=userConfigure;
+}
+
+bool KNAccount::syncUserConfigure()
+{
+    //Check the configure ID.
+    if(m_accountDetails->configureId().isEmpty())
+    {
+        int errorCode;
+        //There is no configure ID here. Create a new table for it.
+        if(!createCloudUserConfigure(errorCode))
+        {
+            //!FIXME: Process the error here.
+            //Failed.
+            return false;
+        }
+        //Mission complete.
+        return true;
+    }
+    //Create the configure data.
+    QJsonObject configureData;
+    //Download the user configure data.
+    if(!downloadUserConfigure(configureData))
+    {
+        //Failed to download the configure data.
+        return false;
+    }
+    //Check the configure updated date and time.
+    QDateTime cloudUpdatedTime=
+            QDateTime::fromString(configureData.value("updatedAt").toString(),
+                                  "yyyy-MM-dd HH:mm:ss");
+    //Remove the object Id, createdAt and updatedAt keys.
+    configureData.remove("objectId");
+    configureData.remove("createdAt");
+    configureData.remove("updatedAt");
+    //Check the local configure file updated time.
+    if(knConf->userConfigureUpdateTime() < cloudUpdatedTime)
+    {
+        //Replace the local configure definitely.
+        m_userConfigure->setDataObject(configureData);
+        //Complete.
+        return true;
+    }
+    //Or else.
+    //!TODO:
+    return true;
+}
+
+void KNAccount::startToWork()
+{
+    //Load the cache image.
+    QString cachedAvatarPath=
+            knGlobal->dirPath(KNGlobal::AccountDir)+"/avatar.png";
+    //Check whether the image is exist and valid.
+    if(QFileInfo::exists(cachedAvatarPath))
+    {
+        //Load the image.
+        QPixmap cachedImage(cachedAvatarPath, "PNG");
+        //If the cached image is not null, load it to account details.
+        if(!cachedImage.isNull())
+        {
+            //Set the avatar.
+            m_accountDetails->setAccountAvatar(cachedImage);
+        }
+    }
+    //Do auto login
+    autoLogin();
+}
+
+inline QByteArray KNAccount::jsonToString(const QJsonObject &data)
+{
+    //Use json document to translate a json object to byte array.
+    return QJsonDocument(data).toJson(QJsonDocument::Compact);
+}
+
+QJsonObject KNAccount::stringToJson(const QByteArray &json)
+{
+    //Use josn document to parse the text.
+    return QJsonDocument::fromJson(json).object();
+}
+
+inline bool KNAccount::loginWith(const QString &username,
+                                  const QString &password,
+                                  QJsonObject &loginData,
+                                  int &errorCode)
+{
+    //Generate the login query.
+    QMap<QString, QString> loginQuery;
+    //Set the username and password.
+    loginQuery.insert("username", username);
+    loginQuery.insert("password", password);
+    //Prepare the response cache.
+    QByteArray responseCache;
+    //Get the result of the data.
+    if(fetchRow("login", responseCache, errorCode, loginQuery))
+    {
+        //Parse the login info.
+        loginData=stringToJson(responseCache);
+        //Set the login flag to true.
+        m_accountDetails->setIsLogin(true);
+        //Save the user name and password for auto login.
+        m_accountDetails->setCacheUserName(username);
+        m_accountDetails->setCachePassword(password);
+        //Save the contact information.
+        m_accountDetails->setObjectId(loginData.value("objectId").toString());
+        m_accountDetails->setSessionToken(
+                    loginData.value("sessionToken").toString());
+        //Finished.
+        return true;
+    }
+    //Failed, simply return false.
+    return false;
+}
+
+inline bool KNAccount::updateTokenSession()
+{
+    //Generate the response cache.
+    QJsonObject loginData;
+    int errorCode;
+    //Login with the cached username and password.
+    if(!loginWith(m_accountDetails->cacheUserName(),
+                  m_accountDetails->cachePassword(),
+                  loginData, errorCode))
+    {
+        //Failed to fetch the new token session.
+        return false;
+    }
+    //Update the account details.
+    updateLocalDetails(loginData);
+    //Update success.
+    return true;
+}
+
+inline void KNAccount::updateLocalDetails(const QJsonObject &userInfo)
+{
+    //Sace the user info.
+    m_accountDetails->setAccountInfo(userInfo);
+    //Save the important data.
+    m_accountDetails->setDisplayName(userInfo.value("displayName").toString());
+    //Save the update configure id.
+    m_accountDetails->setConfigureId(
+                userInfo.value(m_cloudConfigureTableName).toString());
+    //Check the avatar path.
+    QString onlineAvatarPath=userInfo.value("avatarPath").toString();
+    if(m_accountDetails->avatarPath()==onlineAvatarPath)
+    {
+        //Update complete.
+        return;
+    }
+    //Update the avatar path.
+    m_accountDetails->setAvatarPath(userInfo.value("avatarPath").toString());
+    //Check avatar path.
+    if(!m_accountDetails->avatarPath().isEmpty())
+    {
+        //Generate the avatar response cache.
+        QByteArray avatarResponse;
+        int errorCode;
+        //Download the file,
+        if(downloadFile(m_accountDetails->avatarPath().startsWith("http")?
+                        m_accountDetails->avatarPath():
+                        ("http://file.bmob.cn/" +
+                         m_accountDetails->avatarPath()),
+                        avatarResponse,
+                        errorCode))
+        {
+            //Set the image image resource.
+            m_accountDetails->setAccountAvatar(
+                        QPixmap::fromImage(QImage::fromData(avatarResponse)));
+        }
+        else
+        {
+            //Error happens here.
+            //Reset the account details avatar.
+            m_accountDetails->setAccountAvatar(QPixmap());
+        }
+    }
+    //Notify the account is update.
+    emit m_accountDetails->accountUpdate();
+}
+
+inline bool KNAccount::updateRemoteRow(const QString &url,
+                                        const QJsonObject &userInfo,
+                                        bool withSignal)
+{
+    //Check login first.
+    if(!m_accountDetails->isLogin())
+    {
+        //Check signal flag.
+        if(withSignal)
+        {
+            //Failed to update user info.
+            emit userInfoUpdateFailed();
+        }
+        //Failed to update account info.
+        return false;
+    }
+    //Generate response data.
+    QByteArray responseCache, requestData=jsonToString(userInfo);
+    int errorCode;
+    //Update the user row data.
+    if(updateRow(url, requestData, responseCache, errorCode,
+                 m_accountDetails->sessionToken()))
+    {
+        //Success.
+        return true;
+    }
+    //Check the error code.
+    if(errorCode==404 &&
+            //One possibility of returning a 404 HTTP status code is the
+            //token session id is expired.
+            //Although it seems to be impossible, because from the official
+            //document it says that the expired date is 1 year.
+            stringToJson(responseCache).value("code").toInt()==206)
+    {
+        //Update the token session.
+        if(!updateTokenSession())
+        {
+            //Failed to update the token session.
+            return false;
+        }
+        //Retry with the new token session.
+        return updateRow(url, requestData, responseCache, errorCode,
+                         m_accountDetails->sessionToken());
+    }
+    //Failed to update the token session.
+    return false;
+}
+
+inline bool KNAccount::createCloudUserConfigure(int &errorCode)
+{
+    //Check the user configureation.
+    if(!m_userConfigure || !m_accountDetails->isLogin())
+    {
+        //Cannot create with null user configure.
+        return false;
+    }
+    //Get the json data of the user configure.
+    QJsonObject requestData=m_userConfigure->dataObject(),
+                accessControlList, userAccessControl;
+    //Set the user access.
+    userAccessControl.insert("read", true);
+    userAccessControl.insert("write", true);
+    accessControlList.insert(m_accountDetails->objectId(), userAccessControl);
+    //Insert the ACL to request data.
+    QString aclData=QString(jsonToString(accessControlList));
+    //Replace the acl data from " to \"
+    aclData.replace("\"", "\\\"");
+    requestData.insert("ACL", accessControlList);
+    //Generate the response cache.
+    QByteArray responseCache;
+    //Create the row.
+    if(!createRow("classes/" + m_cloudConfigureTableName,
+                  jsonToString(requestData),
+                  responseCache, errorCode))
+    {
+        //!FIXME: Failed to create the user configure row.
+        return false;
+    }
+    //Check the response data.
+    QJsonObject createResult=stringToJson(responseCache);
+    //Get the object ID of the create result.
+    QString configureObjectId=createResult.value("objectId").toString();
+    m_accountDetails->setConfigureId(configureObjectId);
+    //Update the account details.
+    QJsonObject setConfigureId;
+    setConfigureId.insert("MuConfig", configureObjectId);
+    //Reset the error code.
+    errorCode=0;
+    //Update the user information.
+    return updateRemoteRow("users/"+m_accountDetails->objectId(),
+                           setConfigureId, false);
+}
+
+bool KNAccount::uploadUserConfigure()
+{
+    ;
+}
+
+inline bool KNAccount::downloadUserConfigure(QJsonObject &configureData)
+{
+    //Check the login state.
+    //Check login first.
+    if(!m_accountDetails->isLogin())
+    {
+        //Failed to download user configure.
+        return false;
+    }
+    //Prepare the cache and error code.
+    QByteArray responseCache;
+    int errorCode;
+    //Fetch the information.
+    if(!fetchRow("classes/" + m_cloudConfigureTableName +
+                 m_accountDetails->configureId(),
+                 responseCache, errorCode))
+    {
+        //Failed.
+        return false;
+    }
+    //Parse the response cache.
+    configureData=stringToJson(responseCache);
+    //Mission complete.
+    return true;
 }

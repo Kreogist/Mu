@@ -156,6 +156,10 @@ void KNConfigureManager::saveConfigure()
                         qApp->applicationDirPath():
                         m_accountFolderPath);
     saveConfigureFile(accountDir.filePath("account.json"), Account);
+    //Update the user configure updated time.
+    m_userConfigureUpdateTime=QDateTime::currentDateTime();
+    //Emit the signal.
+    emit userConfigureUpdateTimeChanged();
 }
 
 void KNConfigureManager::loadConfigureFile(const QString &filePath, int type)
@@ -229,4 +233,9 @@ inline KNConfigure *KNConfigureManager::getTopLevelConfigure(
     }
     //Undefined data.
     return nullptr;
+}
+
+QDateTime KNConfigureManager::userConfigureUpdateTime() const
+{
+    return m_userConfigureUpdateTime;
 }

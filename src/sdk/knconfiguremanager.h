@@ -91,6 +91,18 @@ public:
     QVariant configureValue(QStringList path,
                             const QVariant &defaultValue);
 
+    /*!
+     * \brief Get the user configure update time.
+     * \return The time of user configure updated.
+     */
+    QDateTime userConfigureUpdateTime() const;
+
+signals:
+    /*!
+     * \brief Emit when user configure update time is changed.
+     */
+    void userConfigureUpdateTimeChanged();
+
 public slots:
     /*!
      * \brief Set the folder path which contains the configure files. \n

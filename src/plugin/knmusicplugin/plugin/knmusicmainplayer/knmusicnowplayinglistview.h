@@ -85,8 +85,8 @@ private:
     inline void playIndex(const QModelIndex &index);
     inline void updateVerticalScrollBarGeometry();
     inline void startAnime(int endFrame);
-    QTimeLine *m_mouseAnime;
     QScrollBar *m_vScrollBar;
+    QTimeLine *m_mouseAnime;
     int m_currentFrame;
 };
 

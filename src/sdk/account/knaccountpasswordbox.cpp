@@ -136,7 +136,8 @@ void KNAccountPasswordBox::showEvent(QShowEvent *event)
 bool KNAccountPasswordBox::okayPressed()
 {
     //Emit the change signal.
-    emit requireUpdatePassword(KNAccount::accessPassword(m_password1->text()));
+    emit requireUpdatePassword(
+                KNAccountUtil::accessPassword(m_password1->text()));
     //Complete.
     return true;
 }

@@ -19,8 +19,10 @@
 #ifndef KNACCOUNTUTIL_H
 #define KNACCOUNTUTIL_H
 
+#include <QCryptographicHash>
 #include <QRegExp>
 #include <QString>
+
 #include <QDebug>
 
 namespace AccountUtil
@@ -108,6 +110,52 @@ public:
         }
         //Give the result back.
         return result;
+    }
+
+    /*!
+     * \brief Change a byte array into a string which is the hex text of the
+     * bytes.
+     * \param bytes The byte array.
+     * \return The Hex string.
+     */
+    static QString bytesToHex(const QByteArray &bytes)
+    {
+        //Create the cache string.
+        QString hexCache;
+        //For all the bytes.
+        for(int i=0; i<bytes.size(); ++i)
+        {
+            //Check the unsigned number of the bytes.
+            quint8 byte=(quint8)bytes.at(i);
+            //Get the text string of the current number.
+            QString currentByte=QString::number(byte, 16);
+            //If the byte is smaller than 16.
+            if(byte<16)
+            {
+                //Add a 0 to fit the pos.
+                hexCache.append("0");
+            }
+            //Add all byte to hex cache.
+            hexCache.append(currentByte);
+        }
+        //Give back the hex cache.
+        return hexCache;
+    }
+
+    /*!
+     * \brief Get the access password by input the raw password.
+     * \param rawPassword The raw password.
+     * \return Give back the encrypted password using to log in or registered.
+     */
+    static QString accessPassword(const QString &rawPassword)
+    {
+        //Use MD5 and SHA-3 to combine the access password.
+        return bytesToHex(QCryptographicHash::hash(
+                              rawPassword.toUtf8(),
+                              QCryptographicHash::Sha3_512).append
+                          (QCryptographicHash::hash(
+                               rawPassword.toUtf8(),
+                               QCryptographicHash::Md5)));
     }
 
 private:

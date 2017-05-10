@@ -25,6 +25,7 @@
 #include "knlocalemanager.h"
 
 #include "knaccount.h"
+#include "knaccountutil.h"
 #include "knaccountdetails.h"
 
 #include "knaccountpasswordverification.h"
@@ -148,7 +149,7 @@ void KNAccountPasswordVerification::onActionCheckPassword()
     //Reset the alpha.
     onActionUpdateAlpha(0);
     //Check password.
-    if(KNAccount::accessPassword(m_passwordEdit->text())
+    if(KNAccountUtil::accessPassword(m_passwordEdit->text())
             ==knAccount->accountDetails()->cachePassword())
     {
         //Emit password is correct signal.
