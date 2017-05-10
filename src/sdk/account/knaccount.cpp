@@ -20,6 +20,7 @@ Foundation,
 #include <QCryptographicHash>
 #include <QDir>
 #include <QFileInfo>
+#include <QTimeZone>
 #include <QJsonDocument>
 #include <QUrlQuery>
 
@@ -600,12 +601,14 @@ bool KNAccount::syncUserConfigure()
     QDateTime cloudUpdatedTime=
             QDateTime::fromString(configureData.value("updatedAt").toString(),
                                   "yyyy-MM-dd HH:mm:ss");
-    qDebug()<<cloudUpdatedTime;
+    //The cloud updated time is stored for UTC/GMT+08:00
+    cloudUpdatedTime.setTimeZone(QTimeZone(28800));
     //Remove the object Id, createdAt and updatedAt keys.
     configureData.remove("objectId");
     configureData.remove("createdAt");
     configureData.remove("updatedAt");
-    qDebug()<<"Local time:"<<knConf->userConfigureUpdateTime();
+    //Change the cloud time to local time.
+    cloudUpdatedTime=cloudUpdatedTime.toLocalTime();
     //Check the local configure file updated time.
     if(knConf->userConfigureUpdateTime() < cloudUpdatedTime)
     {
