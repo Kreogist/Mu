@@ -154,7 +154,7 @@ private:
     inline void insertImage(const QString &hashKey, const QPixmap &pixmap);
     QLinkedList<AnalysisQueueItem> m_analysisQueue;
     QString m_imageFolderPath;
-    QHash<QString, QVariant> *m_hashAlbumArt, *m_scaledHashAlbumArt;
+    QHash<QString, QVariant> *m_scaledHashAlbumArt;
     bool m_isWorking;
 };
 

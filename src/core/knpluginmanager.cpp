@@ -78,7 +78,9 @@ inline void KNPluginManager::setApplicationInformation()
     //Set static application information.
     QApplication::setApplicationName(applicationName);
     QApplication::setApplicationVersion(APP_VERSION_STR);
+#ifndef Q_OS_WIN
     QApplication::setApplicationDisplayName(applicationName);
+#endif
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("http://kreogist.github.io/");
     //Configure application attributes.

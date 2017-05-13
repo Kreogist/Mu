@@ -31,7 +31,6 @@ KNMusicLibraryImageManager::KNMusicLibraryImageManager(QObject *parent) :
     QObject(parent),
     m_analysisQueue(QLinkedList<AnalysisQueueItem>()),
     m_imageFolderPath(QString()),
-    m_hashAlbumArt(nullptr),
     m_scaledHashAlbumArt(nullptr),
     m_isWorking(false)
 {

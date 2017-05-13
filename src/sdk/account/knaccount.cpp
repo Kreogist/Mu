@@ -864,7 +864,6 @@ inline bool KNAccount::uploadUserConfigure()
         //Failed.
         return false;
     }
-    qDebug()<<responseCache;
     return true;
 }
 

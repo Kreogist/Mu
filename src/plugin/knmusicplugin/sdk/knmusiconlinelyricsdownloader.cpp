@@ -68,7 +68,6 @@ void KNMusicOnlineLyricsDownloader::downloadLyrics(
         }
         //Emit the server changed signal.
         emit serverChanged(i+1, m_downloaders.size());
-        qDebug()<<m_downloaders.at(i)->downloaderName();
         //Try to download the lyrics from all the remote server.
         m_downloaders.at(i)->downloadLyrics(detailInfo, lyricsList);
         //Check out the cancel flag.
