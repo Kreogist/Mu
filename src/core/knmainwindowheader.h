@@ -68,7 +68,7 @@ private slots:
 
 private:
     QWidget *m_widgetContainer;
-    QBoxLayout *m_notificationLayout, *m_widgetLayout;
+    QBoxLayout *m_mainLayout, *m_notificationLayout;
     KNCategoryPlugin *m_categoryPlugin;
     KNMainWindowIconButton *m_iconButton;
 };

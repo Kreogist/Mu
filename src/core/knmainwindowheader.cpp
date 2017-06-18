@@ -29,10 +29,10 @@
 KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     KNMainWindowHeaderBase(parent),
     m_widgetContainer(new QWidget(this)),
+    m_mainLayout(new QBoxLayout(QBoxLayout::LeftToRight,
+                                  m_widgetContainer)),
     m_notificationLayout(new QBoxLayout(QBoxLayout::LeftToRight,
-                                        m_widgetContainer)),
-    m_widgetLayout(new QBoxLayout(QBoxLayout::LeftToRight,
-                                  m_notificationLayout->widget())),
+                                        m_mainLayout->widget())),
     m_categoryPlugin(nullptr),
     m_iconButton(new KNMainWindowIconButton(this))
 {
@@ -42,16 +42,22 @@ KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     //Initial the button position.
     m_iconButton->move(0, 0);
 
+    //Configure the main layout.
+    m_mainLayout->setContentsMargins(0,0,0,0);
+    m_mainLayout->setSpacing(0);
+    //Set main layout to the widget container.
+    m_widgetContainer->setLayout(m_mainLayout);
+    //Add the status layout.
+    QBoxLayout *statusLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                            m_mainLayout->widget());
+    statusLayout->setContentsMargins(0, 0, 0, 0);
+    statusLayout->setSpacing(0);
+    m_mainLayout->addLayout(statusLayout);
     //Configure the notification layout.
     m_notificationLayout->setContentsMargins(0,0,0,0);
     m_notificationLayout->setSpacing(0);
-    //Add the notification layout to container.
-    m_widgetContainer->setLayout(m_notificationLayout);
-    //Configure the widget layout.
-    m_widgetLayout->setContentsMargins(0,0,0,0);
-    m_widgetLayout->setSpacing(0);
     //Add widget layout to notification layout.
-    m_notificationLayout->addLayout(m_widgetLayout, 1);
+    statusLayout->addLayout(m_notificationLayout, 1);
 
     //Link the icon button.
     connect(m_iconButton, &KNMainWindowIconButton::clicked,
@@ -71,7 +77,8 @@ void KNMainWindowHeader::addHeaderWidget(QWidget *widget,
                                          Qt::Alignment alignment)
 {
     //Add the widget to widget layout.
-    m_widgetLayout->addWidget(widget, stretch, alignment);
+    m_mainLayout->insertWidget(m_mainLayout->count()-1,
+                               widget, stretch, alignment);
 }
 
 void KNMainWindowHeader::addNotificationButton(QWidget *widget)
