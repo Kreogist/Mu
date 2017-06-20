@@ -23,6 +23,7 @@
 
 class QBoxLayout;
 class QSpacerItem;
+class KNMainWindowStatusBar;
 class KNMainWindowIconButton;
 /*!
  * \brief The KNMainWindowHeader class is a default realize of the main window
@@ -47,14 +48,19 @@ public:
 
     /*!
      * \brief Reimplemented from
-     * KNMainWindowHeaderBase::addNotificationButton().
+     * KNMainWindowHeaderBase::addNotificationWidget().
      */
-    void addNotificationButton(QWidget *widget) Q_DECL_OVERRIDE;
+    void addNotificationWidget(QWidget *widget) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMainWindowHeaderBase::setCategoryPlugin().
      */
     void setCategoryPlugin(KNCategoryPlugin *categoryPlugin) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMainWindowHeaderBase::addStatusWidget().
+     */
+    void addStatusWidget(QWidget *widget) Q_DECL_OVERRIDE;
 
 protected:
     /*!
@@ -68,9 +74,10 @@ private slots:
 
 private:
     QWidget *m_widgetContainer;
-    QBoxLayout *m_notificationLayout, *m_widgetLayout;
+    QBoxLayout *m_mainLayout, *m_notificationLayout;
     KNCategoryPlugin *m_categoryPlugin;
     KNMainWindowIconButton *m_iconButton;
+    KNMainWindowStatusBar *m_statusBar;
 };
 
 #endif // KNMAINWINDOWHEADER_H

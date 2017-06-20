@@ -141,6 +141,7 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
                                        this)),
     m_showInMapper(new QSignalMapper(this)),
     m_floatPlaylistList(nullptr),
+    m_searchBox(nullptr),
     m_flowPlaylistListAnime(new QPropertyAnimation(this)),
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr),
@@ -260,6 +261,11 @@ void KNMusicPlugin::loadPlugins()
 QWidget *KNMusicPlugin::mainPlayer()
 {
     return m_mainPlayer;
+}
+
+QWidget *KNMusicPlugin::searchWidget()
+{
+    return m_searchBox;
 }
 
 bool KNMusicPlugin::isWorking()
@@ -694,8 +700,8 @@ void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
 {
     //Set the parent of the search.
     search->setParent(this);
-    //Add the widget to the header widget.
-    m_headerRightLayout->addWidget(search->widget());
+    //Save the search widget.
+    m_searchBox=search->widget();
     //Set the search to music global.
     knMusicGlobal->setSearch(search);
 }

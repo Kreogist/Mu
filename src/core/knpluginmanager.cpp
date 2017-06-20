@@ -101,6 +101,10 @@ void KNPluginManager::loadHeader(KNMainWindowHeaderBase *header)
     }
     //Give the header to main window.
     m_mainWindow->setHeader(m_header);
+#ifndef Q_OS_MACX
+    //Add the main window full screen icon to header.
+    m_header->addStatusWidget(m_mainWindow->fullScreenButton());
+#endif
 }
 
 void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
@@ -135,6 +139,8 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
     m_musicPlugin=plugin;
     //Load the music categroy plugin first.
     loadCategoryPlugin(m_musicPlugin);
+    //Add the search box widget to the header.
+    m_header->addNotificationWidget(plugin->searchWidget());
     //Check the main window pointer.
     if(m_mainWindow!=nullptr)
     {
@@ -205,7 +211,7 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
     if(m_mainWindow==nullptr)
     {
         //Save the main window object.
-        m_mainWindow = mainWindow;
+        m_mainWindow=mainWindow;
         //Set the main window to global.
         knGlobal->setMainWindow(m_mainWindow);
     }

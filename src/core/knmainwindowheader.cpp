@@ -18,6 +18,7 @@
 #include <QBoxLayout>
 #include <QSpacerItem>
 
+#include "knmainwindowstatusbar.h"
 #include "knmainwindowiconbutton.h"
 #include "kncategoryplugin.h"
 #include "knlocalemanager.h"
@@ -29,12 +30,13 @@
 KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     KNMainWindowHeaderBase(parent),
     m_widgetContainer(new QWidget(this)),
+    m_mainLayout(new QBoxLayout(QBoxLayout::LeftToRight,
+                                  m_widgetContainer)),
     m_notificationLayout(new QBoxLayout(QBoxLayout::LeftToRight,
-                                        m_widgetContainer)),
-    m_widgetLayout(new QBoxLayout(QBoxLayout::LeftToRight,
-                                  m_notificationLayout->widget())),
+                                        m_mainLayout->widget())),
     m_categoryPlugin(nullptr),
-    m_iconButton(new KNMainWindowIconButton(this))
+    m_iconButton(new KNMainWindowIconButton(this)),
+    m_statusBar(new KNMainWindowStatusBar(this))
 {
     updateObjectName("MainWindowHeader");
     //Set properties.
@@ -42,16 +44,24 @@ KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     //Initial the button position.
     m_iconButton->move(0, 0);
 
+    //Configure the main layout.
+    m_mainLayout->setContentsMargins(0,0,0,0);
+    m_mainLayout->setSpacing(0);
+    //Set main layout to the widget container.
+    m_widgetContainer->setLayout(m_mainLayout);
+    //Add the status layout.
+    QBoxLayout *statusLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                            m_mainLayout->widget());
+    statusLayout->setContentsMargins(0, 0, 0, 0);
+    statusLayout->setSpacing(0);
+    m_mainLayout->addLayout(statusLayout);
+    //Add status bar to layout.
+    statusLayout->addWidget(m_statusBar, 0, Qt::AlignRight);
     //Configure the notification layout.
-    m_notificationLayout->setContentsMargins(0,0,0,0);
+    m_notificationLayout->setContentsMargins(0, 0, 0, 0);
     m_notificationLayout->setSpacing(0);
-    //Add the notification layout to container.
-    m_widgetContainer->setLayout(m_notificationLayout);
-    //Configure the widget layout.
-    m_widgetLayout->setContentsMargins(0,0,0,0);
-    m_widgetLayout->setSpacing(0);
     //Add widget layout to notification layout.
-    m_notificationLayout->addLayout(m_widgetLayout, 1);
+    statusLayout->addLayout(m_notificationLayout, 1);
 
     //Link the icon button.
     connect(m_iconButton, &KNMainWindowIconButton::clicked,
@@ -71,17 +81,31 @@ void KNMainWindowHeader::addHeaderWidget(QWidget *widget,
                                          Qt::Alignment alignment)
 {
     //Add the widget to widget layout.
-    m_widgetLayout->addWidget(widget, stretch, alignment);
+    m_mainLayout->insertWidget(m_mainLayout->count()-1,
+                               widget, stretch, alignment);
 }
 
-void KNMainWindowHeader::addNotificationButton(QWidget *widget)
+void KNMainWindowHeader::addNotificationWidget(QWidget *widget)
 {
-    //Then add spacing to layout.
-    m_notificationLayout->addSpacing(4);
-    //Add widget to notification layout.
-    m_notificationLayout->addWidget(widget, 0, Qt::AlignCenter);
-    //Then add spacing to layout.
-    m_notificationLayout->addSpacing(14);
+    //Check the layout count first.
+    if(m_notificationLayout->count()==0)
+    {
+        //Add spacing.
+        m_notificationLayout->addSpacing(4);
+        //Add widget to notification layout.
+        m_notificationLayout->addWidget(widget, 0, Qt::AlignCenter);
+        //Insert spacing to layout.
+        m_notificationLayout->addSpacing(14);
+    }
+    else
+    {
+        //Insert spacing to layout.
+        m_notificationLayout->insertSpacing(0, 14);
+        //Insert to the one widget before.
+        m_notificationLayout->insertWidget(0, widget, 0, Qt::AlignCenter);
+        //Insert head spacing.
+        m_notificationLayout->insertSpacing(0, 4);
+    }
 }
 
 void KNMainWindowHeader::retranslate()
@@ -130,4 +154,10 @@ void KNMainWindowHeader::setCategoryPlugin(KNCategoryPlugin *categoryPlugin)
     m_iconButton->setButtonIcon(m_categoryPlugin->icon());
     //Set the text of the plugin.
     m_iconButton->setButtonText(m_categoryPlugin->title());
+}
+
+void KNMainWindowHeader::addStatusWidget(QWidget *widget)
+{
+    //Add the widget to the status bar.
+    m_statusBar->addWidget(widget);
 }

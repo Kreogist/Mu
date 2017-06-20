@@ -60,13 +60,21 @@ protected:
      */
     void leaveEvent(QEvent *event);
 
-private slots:
-    void onActionPaletteChanged();
-    void changeBackgroundColor(const int &frame);
+protected slots:
+    /*!
+     * \brief When the palette changed, this slot will be called.
+     */
+    virtual void onPaletteChanged();
+
+    /*!
+     * \brief When the background color need to be changed according to the.
+     * \param frame
+     */
+    virtual void changeBackgroundColor(int frame);
 
 private:
     inline QTimeLine *generateTimeline();
-    inline void startAnime(const int &endFrame);
+    inline void startAnime(int endFrame);
     QTimeLine *m_mouseInOut;
     int m_rangeStart, m_rangeEnd;
 };

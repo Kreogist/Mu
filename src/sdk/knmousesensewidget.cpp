@@ -31,7 +31,7 @@ KNMouseSenseWidget::KNMouseSenseWidget(QWidget *parent) :
     setAutoFillBackground(true);
     //Add header to theme list.
     connect(knTheme, &KNThemeManager::themeChange,
-            this, &KNMouseSenseWidget::onActionPaletteChanged);
+            this, &KNMouseSenseWidget::onPaletteChanged);
 }
 
 void KNMouseSenseWidget::updateObjectName(const QString &name)
@@ -39,7 +39,7 @@ void KNMouseSenseWidget::updateObjectName(const QString &name)
     //Set the object name.
     setObjectName(name);
     //Update the palette.
-    onActionPaletteChanged();
+    onPaletteChanged();
 }
 
 void KNMouseSenseWidget::enterEvent(QEvent *event)
@@ -58,7 +58,7 @@ void KNMouseSenseWidget::leaveEvent(QEvent *event)
     QWidget::leaveEvent(event);
 }
 
-void KNMouseSenseWidget::changeBackgroundColor(const int &frame)
+void KNMouseSenseWidget::changeBackgroundColor(int frame)
 {
     //Get the palette.
     QPalette pal=palette();
@@ -72,7 +72,7 @@ void KNMouseSenseWidget::changeBackgroundColor(const int &frame)
     setPalette(pal);
 }
 
-void KNMouseSenseWidget::onActionPaletteChanged()
+void KNMouseSenseWidget::onPaletteChanged()
 {
     //Set the palette.
     setPalette(knTheme->getPalette(objectName()));
@@ -98,7 +98,7 @@ inline QTimeLine *KNMouseSenseWidget::generateTimeline()
     return timeline;
 }
 
-inline void KNMouseSenseWidget::startAnime(const int &endFrame)
+inline void KNMouseSenseWidget::startAnime(int endFrame)
 {
     //Stop the time line.
     m_mouseInOut->stop();

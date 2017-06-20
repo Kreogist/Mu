@@ -43,6 +43,12 @@ public:
     virtual QWidget *mainPlayer()=0;
 
     /*!
+     * \brief Provide the search widget of the music plugin.
+     * \return The search widget pointer.
+     */
+    virtual QWidget *searchWidget()=0;
+
+    /*!
      * \brief Provides whether current music pluign is working.
      * \return Whether the music plugin is still working.
      */

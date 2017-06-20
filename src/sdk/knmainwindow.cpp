@@ -34,6 +34,7 @@
 #include "knmainwindowcontainer.h"
 #include "knnotification.h"
 #include "knaccountavatarbutton.h"
+#include "knopacityanimebutton.h"
 
 //Notifications
 #include "notification/knnotificationcenter.h"
@@ -51,6 +52,8 @@
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
+    m_fullScreenIcon(QIcon("://public/fullscreen.png")),
+    m_fullScreenOffIcon(QIcon("://public/fullscreen_off.png")),
     m_musicPlugin(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
     m_container(new KNMainWindowContainer(this)),
@@ -60,6 +63,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_outAnime(generateAnime()),
     m_outAndInAnime(new QSequentialAnimationGroup(this)),
     m_notificationWaiter(new QTimer(this)),
+    m_fullScreen(new KNOpacityAnimeButton(this)),
     m_originalWindowState(Qt::WindowNoState)
 {
     setObjectName("MainWindow");
@@ -141,6 +145,13 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     connect(fullScreen, &QAction::triggered,
             this, &KNMainWindow::onActionFullScreen);
     addAction(fullScreen);
+    //Configure the full screen stuff.
+    m_fullScreen->setIcon(m_fullScreenIcon);
+#ifdef Q_OS_MACX
+    m_fullScreen->hide();
+#endif
+    connect(m_fullScreen, &KNOpacityAnimeButton::clicked,
+            fullScreen, &QAction::trigger);
     //Recover the geometry.
     recoverGeometry();
     //Update the animation positions.
@@ -158,7 +169,7 @@ void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
     //Set the header widget.
     m_container->setHeader(header);
     //Add notification center button to header.
-    header->addNotificationButton(m_notificationCenter->headerButton());
+    header->addNotificationWidget(m_notificationCenter->headerButton());
     //Link the header show preference signal to container.
     connect(header, &KNMainWindowHeaderBase::requireShowPreference,
             m_container, &KNMainWindowContainer::showPreference);
@@ -213,6 +224,20 @@ void KNMainWindow::hideMainPlayer()
 {
     //Hide the main player.
     m_container->hideMainPlayer();
+}
+
+bool KNMainWindow::event(QEvent *event)
+{
+    //Check the event type.
+    if(event->type()==QEvent::WindowStateChange)
+    {
+        //Check out the full screen state.
+        m_fullScreen->setIcon(isFullScreen()?
+                                  m_fullScreenOffIcon:
+                                  m_fullScreenIcon);
+    }
+    //Do original event.
+    return QMainWindow::event(event);
 }
 
 void KNMainWindow::showEvent(QShowEvent *event)
@@ -473,4 +498,9 @@ inline void KNMainWindow::setCacheValue(const QString &valueName,
 inline void KNMainWindow::zoomParameter(int &parameter, const qreal &ratio)
 {
     parameter=(qreal)parameter*ratio;
+}
+
+QWidget *KNMainWindow::fullScreenButton() const
+{
+    return m_fullScreen;
 }

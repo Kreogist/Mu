@@ -86,6 +86,8 @@
         <file>public/reset-password.png</file>
         <file>public/down_arrow.png</file>
         <file>public/top_arrow.png</file>
+        <file>public/fullscreen_off.png</file>
+        <file>public/fullscreen.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

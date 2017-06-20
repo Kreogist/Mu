@@ -29,6 +29,7 @@ class KNCategoryPlugin;
 class KNMainWindowContainer;
 class KNMainWindowHeaderBase;
 class KNNotificationCenter;
+class KNOpacityAnimeButton;
 class KNPreferencePlugin;
 /*!
  * \brief The KNMainWindow class provides a main application window for mu.\n
@@ -79,6 +80,12 @@ public:
      */
     void setMusicPlugin(KNAbstractMusicPlugin *musicPlugin);
 
+    /*!
+     * \brief Get the full screen button widget pointer.
+     * \return The full screen button pointer.
+     */
+    QWidget *fullScreenButton() const;
+
 signals:
     /*!
      * \brief When the main window is showing, this signal will be emitted.
@@ -103,6 +110,11 @@ public slots:
     void hideMainPlayer();
 
 protected:
+    /*!
+     * \brief Reimplemented from QMainWindow::event().
+     */
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
+
     /*!
      * \brief Reimplemented from QMainWindow::showEvent().
      */
@@ -133,6 +145,7 @@ private:
     inline void setCacheValue(const QString &valueName, const int &value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
 
+    QIcon m_fullScreenIcon, m_fullScreenOffIcon;
     KNAbstractMusicPlugin *m_musicPlugin;
     KNConfigure *m_cacheConfigure;
     KNMainWindowContainer *m_container;
@@ -141,6 +154,7 @@ private:
     QPropertyAnimation *m_inAnime, *m_outAnime;
     QSequentialAnimationGroup *m_outAndInAnime;
     QTimer *m_notificationWaiter;
+    KNOpacityAnimeButton *m_fullScreen;
     Qt::WindowStates m_originalWindowState;
 };
 

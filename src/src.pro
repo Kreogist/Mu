@@ -485,7 +485,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.cpp \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.cpp \
     sdk/account/knaccountresetpanel.cpp \
-    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
+    core/knmainwindowstatusbar.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -743,7 +744,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoredownloaddelegate.h \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.h \
     sdk/account/knaccountresetpanel.h \
-    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
+    core/knmainwindowstatusbar.h
 
 RESOURCES += \
     resource/res.qrc
