@@ -29,16 +29,18 @@ extern void qt_mac_set_dock_menu(QMenu *);
 
 KNMacExtras::KNMacExtras(QObject *parent) :
     KNPlatformExtras(parent),
+    m_dockMenu(new QMenu()),
+    m_infoSeparator(new QAction()),
     m_isStatePlay(false)
 {
-    //Construct a dock menu.
-    QMenu *dockMenu=new QMenu();
     //Construct actions.
     for(int i=0; i<MacDockMenuActionCount; ++i)
     {
         //Construct action.
         m_menuAction[i]=new QAction(this);
     }
+    //Configure the info separator.
+    m_infoSeparator->setSeparator(true);
     //Configure the actions.
     m_menuAction[NowPlaying]->setEnabled(false);
     m_menuAction[NowPlaying]->setVisible(false);
@@ -49,19 +51,35 @@ KNMacExtras::KNMacExtras(QObject *parent) :
     connect(m_menuAction[PreviousSong], &QAction::triggered,
             this, &KNMacExtras::requirePlayPrev);
     //Add actions.
-    dockMenu->addAction(m_menuAction[NowPlaying]);
-    dockMenu->addAction(m_menuAction[SongName]);
-    dockMenu->addAction(m_menuAction[ArtistAndAlbumName]);
-    dockMenu->addSeparator();
-    dockMenu->addAction(m_menuAction[PlayNPause]);
-    dockMenu->addAction(m_menuAction[NextSong]);
-    dockMenu->addAction(m_menuAction[PreviousSong]);
+    m_dockMenu->addAction(m_menuAction[PlayNPause]);
+    m_dockMenu->addAction(m_menuAction[NextSong]);
+    m_dockMenu->addAction(m_menuAction[PreviousSong]);
     //Set the dock menu.
-    qt_mac_set_dock_menu(dockMenu);
+    qt_mac_set_dock_menu(m_dockMenu);
 
     //Link the retranslator.
     knI18n->link(this, &KNMacExtras::retranslate);
     retranslate();
+}
+
+KNMacExtras::~KNMacExtras()
+{
+    //Check the separator.
+    if(m_infoSeparator->parent()==nullptr)
+    {
+        //Recover the memory.
+        m_infoSeparator->deleteLater();
+    }
+    //Check the menu actions.
+    for(int i=NowPlaying; i<PlayNPause; ++i)
+    {
+        //Check the items.
+        if(m_menuAction[i]->parent()==nullptr)
+        {
+            //Recover the item memory.
+            m_menuAction[i]->deleteLater();
+        }
+    }
 }
 
 void KNMacExtras::setMainWindow(QMainWindow *mainWindow)
@@ -97,12 +115,10 @@ void KNMacExtras::onActionNowPlayingChanged(const PlatformPlayingInfo &info)
 
 void KNMacExtras::loadPreference()
 {
-    ;
 }
 
 void KNMacExtras::savePreference()
 {
-    ;
 }
 
 void KNMacExtras::retranslate()
@@ -128,18 +144,29 @@ inline void KNMacExtras::updatePlayingInfo()
     if(m_nowPlaying.isNull)
     {
         //Hide the action.
-        m_menuAction[NowPlaying]->setVisible(false);
-        m_menuAction[SongName]->setVisible(false);
         m_menuAction[SongName]->setText("");
-        m_menuAction[ArtistAndAlbumName]->setVisible(false);
         m_menuAction[ArtistAndAlbumName]->setText("");
+        //This is a bug of the QMenu under Mac OS X.
+        //For all the actions on the dock menu, the setVisible is actually
+        //useless, this is a hacked way to achieved the hide way: Remove the
+        //actions from the menu to hide them, add them back to show them.
+        //Remove the actions from the menu.
+        m_dockMenu->removeAction(m_menuAction[NowPlaying]);
+        m_dockMenu->removeAction(m_menuAction[SongName]);
+        m_dockMenu->removeAction(m_menuAction[ArtistAndAlbumName]);
+        m_dockMenu->removeAction(m_infoSeparator);
         //Mission complete.
         return;
     }
-    //Show the action.
-    m_menuAction[NowPlaying]->setVisible(true);
-    m_menuAction[SongName]->setVisible(true);
-    m_menuAction[ArtistAndAlbumName]->setVisible(true);
+    //Show the actions.
+    m_dockMenu->insertAction(m_menuAction[PlayNPause],
+                             m_menuAction[NowPlaying]);
+    m_dockMenu->insertAction(m_menuAction[PlayNPause],
+                             m_menuAction[SongName]);
+    m_dockMenu->insertAction(m_menuAction[PlayNPause],
+                             m_menuAction[ArtistAndAlbumName]);
+    m_dockMenu->insertAction(m_menuAction[PlayNPause],
+                             m_infoSeparator);
     //Update the song name.
     m_menuAction[SongName]->setText("  " + m_nowPlaying.name);
     //Update the artist and album information.
