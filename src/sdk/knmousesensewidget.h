@@ -88,14 +88,14 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from KNMainWindowHeaderBase::enterEvent().
+     * \brief Reimplemented from QWidget::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMainWindowHeaderBase::leaveEvent().
+     * \brief Reimplemented from QWidget::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 protected slots:
     /*!
@@ -109,7 +109,7 @@ private slots:
 
 private:
     inline QTimeLine *generateTimeline();
-    inline void startAnime(const int &endFrame);
+    inline void startAnime(int endFrame);
     QTimeLine *m_mouseInOut;
     int m_rangeStart, m_rangeEnd, m_rangeAlpha;
     bool m_changeAlpha, m_manualRange;

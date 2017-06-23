@@ -89,7 +89,6 @@ private:
     void loadCategoryPlugin(KNCategoryPlugin *plugin);
     void loadPlatformExtras(KNPlatformExtras *plugin);
     KNMainWindow *m_mainWindow;
-    KNMainWindowHeaderBase *m_header;
     KNAbstractMusicPlugin *m_musicPlugin;
     KNPlatformExtras *m_platformExtra;
 };

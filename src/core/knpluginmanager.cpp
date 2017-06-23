@@ -51,7 +51,6 @@
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
-    m_header(nullptr),
     m_musicPlugin(nullptr),
     m_platformExtra(nullptr)
 {
@@ -90,30 +89,19 @@ inline void KNPluginManager::setApplicationInformation()
 void KNPluginManager::loadHeader(KNMainWindowHeaderBase *header)
 {
     //You should load the main window first.
-    if(m_mainWindow==nullptr)
+    if(m_mainWindow!=nullptr && header!=nullptr)
     {
-        return;
+        //Set the header to main window.
+        m_mainWindow->setHeader(header);
     }
-    //Save the header pointer.
-    m_header=header;
-    //Check the header pointer is valid or not.
-    if(m_header==nullptr)
-    {
-        return;
-    }
-    //Give the header to main window.
-    m_mainWindow->setHeader(m_header);
 }
 
 void KNPluginManager::loadPreference(KNPreferencePlugin *plugin)
 {
     //You should load the main window first.
-    if(m_mainWindow==nullptr)
-    {
-        return;
-    }
-    //Check the preference pointer.
-    if(plugin==nullptr)
+    if(m_mainWindow==nullptr ||
+            //Check the preference pointer.
+            plugin==nullptr)
     {
         return;
     }
@@ -142,6 +130,8 @@ void KNPluginManager::loadMusicPlugin(KNAbstractMusicPlugin *plugin)
     {
         //Set the main player provided by the music plugin.
         m_mainWindow->setMusicPlugin(m_musicPlugin);
+        //Add the search widget to the header.
+        m_mainWindow->addNotificationWidget(plugin->searchWidget());
     }
     //Check the platform extra pointer.
     if(m_platformExtra!=nullptr)
@@ -160,12 +150,6 @@ void KNPluginManager::loadCategoryPlugin(KNCategoryPlugin *plugin)
     }
     //Load the plugins of the plugin.
     plugin->loadPlugins();
-    //Check the header.
-    if(m_header!=nullptr)
-    {
-        //Set the category plugin.
-        m_header->setCategoryPlugin(plugin);
-    }
     //Check the main window pointer.
     if(m_mainWindow!=nullptr)
     {
@@ -207,7 +191,7 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
     if(m_mainWindow==nullptr)
     {
         //Save the main window object.
-        m_mainWindow = mainWindow;
+        m_mainWindow=mainWindow;
         //Set the main window to global.
         knGlobal->setMainWindow(m_mainWindow);
     }

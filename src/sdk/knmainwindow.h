@@ -29,6 +29,7 @@ class KNCategoryPlugin;
 class KNMainWindowContainer;
 class KNMainWindowHeaderBase;
 class KNNotificationCenter;
+class KNOpacityAnimeButton;
 class KNPreferencePlugin;
 /*!
  * \brief The KNMainWindow class provides a main application window for mu.\n
@@ -79,6 +80,18 @@ public:
      */
     void setMusicPlugin(KNAbstractMusicPlugin *musicPlugin);
 
+    /*!
+     * \brief Add one widget to the header status bar.
+     * \param widget The widget pointer.
+     */
+    void addStatusWidget(QWidget *widget);
+
+    /*!
+     * \brief Add the notification widget to the header.
+     * \param widget The widget pointer.
+     */
+    void addNotificationWidget(QWidget *widget);
+
 signals:
     /*!
      * \brief When the main window is showing, this signal will be emitted.
@@ -109,6 +122,11 @@ public slots:
     void forceClose();
 
 protected:
+    /*!
+     * \brief Reimplemented from QMainWindow::event().
+     */
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
+
     /*!
      * \brief Reimplemented from QMainWindow::showEvent().
      */
@@ -144,6 +162,8 @@ private:
     inline void setCacheValue(const QString &valueName, int value);
     inline void zoomParameter(int &parameter, const qreal &ratio);
 
+    QIcon m_fullScreenIcon, m_fullScreenOffIcon;
+    KNMainWindowHeaderBase *m_header;
     KNAbstractMusicPlugin *m_musicPlugin;
     KNConfigure *m_cacheConfigure, *m_globalConfigure, *m_trayConfigure;
     KNMainWindowContainer *m_container;
@@ -152,6 +172,7 @@ private:
     QPropertyAnimation *m_inAnime, *m_outAnime;
     QSequentialAnimationGroup *m_outAndInAnime;
     QTimer *m_notificationWaiter;
+    KNOpacityAnimeButton *m_fullScreen;
     Qt::WindowStates m_originalWindowState;
     bool m_ignoreTrayClose;
 };

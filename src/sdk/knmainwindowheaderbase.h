@@ -49,16 +49,23 @@ public:
                                  Qt::Alignment alignment=0)=0;
 
     /*!
-     * \brief Add notification button widget to header widget.
+     * \brief Add a notification widget to header widget.
      * \param widget The button widget pointer.
      */
-    virtual void addNotificationButton(QWidget *widget)=0;
+    virtual void addNotificationWidget(QWidget *widget)=0;
 
     /*!
      * \brief Set the category plugin. It is used to update the button caption.
      * \param plugin The category plugin.
      */
     virtual void setCategoryPlugin(KNCategoryPlugin *plugin)=0;
+
+    /*!
+     * \brief Add a widget to status bar. The widget will be resize to fixed
+     * 16px by 16px.
+     * \param widget The widget pointer.
+     */
+    virtual void addStatusWidget(QWidget *widget)=0;
 
 signals:
     /*!

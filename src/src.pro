@@ -516,7 +516,8 @@ SOURCES += \
     sdk/knmousedetectlabel.cpp \
     plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.cpp \
     sdk/account/knaccountbase.cpp \
-    sdk/account/knaccount.cpp
+    sdk/account/knaccount.cpp \
+    core/knmainwindowstatusbar.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -796,7 +797,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusictranscoderbase.h \
     plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.h \
     sdk/account/knaccountbase.h \
-    sdk/account/knaccount.h
+    sdk/account/knaccount.h \
+    core/knmainwindowstatusbar.h
 
 RESOURCES += \
     resource/res.qrc

@@ -36,6 +36,7 @@ public:
      * \param parent The parent object.
      */
     explicit KNMacExtras(QObject *parent = 0);
+    ~KNMacExtras();
 
     /*!
      * \brief Reimplemented from KNPlatformExtras::setMainWindow().
@@ -98,8 +99,7 @@ private:
     inline void updatePlayingInfo();
     inline void updatePlayState();
     QMenu *m_dockMenu, *m_subMenus[MacDockSubMenuCount];
-    QAction *m_menuAction[MacDockMenuActionCount],
-            *m_statusBeforeAction;
+    QAction *m_menuAction[MacDockMenuActionCount], *m_infoSeparator;
     QString m_playText, m_pauseText, m_noArtistText, m_noAlbumText;
     PlatformPlayingInfo m_nowPlaying;
     bool m_isStatePlay, m_isNowPlayingShown;

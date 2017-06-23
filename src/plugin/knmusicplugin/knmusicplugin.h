@@ -89,6 +89,11 @@ public:
     QWidget *mainPlayer() Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::searchWidget().
+     */
+    QWidget *searchWidget() Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::isWorking().
      */
     bool isWorking() Q_DECL_OVERRIDE;
@@ -175,7 +180,7 @@ private:
 
     //UI Element Assistants.
     QSignalMapper *m_showInMapper;
-    QWidget *m_floatPlaylistList;
+    QWidget *m_floatPlaylistList, *m_searchBox;
     QPropertyAnimation *m_flowPlaylistListAnime;
 
     //Plugins.

@@ -31,6 +31,7 @@
 #include "knpreferenceplugin.h"
 #include "knthememanager.h"
 #include "knnotification.h"
+#include "knmainwindow.h"
 
 #include "knglobal.h"
 
@@ -532,7 +533,7 @@ QWidget *KNGlobal::mainWindow() const
     return m_mainWindow;
 }
 
-void KNGlobal::setMainWindow(QWidget *mainWindow)
+void KNGlobal::setMainWindow(KNMainWindow *mainWindow)
 {
     m_mainWindow = mainWindow;
 }
@@ -543,6 +544,16 @@ QString KNGlobal::localeDateString(const QDate &date)
     return tr("%2 %3, %1").arg(QString::number(date.year()),
                                getMonthString(date.month()),
                                QString::number(date.day()));
+}
+
+void KNGlobal::addStatusWidget(QWidget *widget)
+{
+    //Check main window pointer.
+    if(m_mainWindow)
+    {
+        //Add the widget to status bar.
+        m_mainWindow->addStatusWidget(widget);
+    }
 }
 
 #ifdef Q_OS_UNIX

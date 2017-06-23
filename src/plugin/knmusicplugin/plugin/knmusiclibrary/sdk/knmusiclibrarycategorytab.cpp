@@ -32,6 +32,9 @@ KNMusicLibraryCategoryTab::KNMusicLibraryCategoryTab(QWidget *parent) :
 {
     //Set the empty hint as the empty widget.
     m_emptyStateWidget->setEmptyWidget(m_emptyHint);
+    //Link the empty hint to current signals.
+    connect(m_emptyHint, &KNMusicLibraryEmptyHint::requireAddToLibrary,
+            this, &KNMusicLibraryCategoryTab::requireAddToLibrary);
 }
 
 void KNMusicLibraryCategoryTab::setLibraryModel(KNMusicLibraryModel *model)

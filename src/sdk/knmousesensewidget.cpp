@@ -125,7 +125,7 @@ inline QTimeLine *KNMouseSenseWidget::generateTimeline()
     return timeline;
 }
 
-inline void KNMouseSenseWidget::startAnime(const int &endFrame)
+inline void KNMouseSenseWidget::startAnime(int endFrame)
 {
     //Stop the time line.
     m_mouseInOut->stop();

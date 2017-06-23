@@ -25,6 +25,7 @@
 
 #include "knmusiclibrarybase.h"
 
+class KNOpacityAnimeButton;
 class KNMusicLibraryModel;
 class KNMusicLibraryTab;
 class KNMusicCategoryModelBase;
@@ -98,7 +99,9 @@ public slots:
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionLoadLibrary();
+    void retranslate();
+    void onLoadLibrary();
+    void onAddToLibrary();
 
 private:
     enum CategoryTabs
@@ -114,6 +117,7 @@ private:
 
     KNConnectionHandler m_loadHandler;
     QString m_libraryPath;
+    KNOpacityAnimeButton *m_addToLibraryButton;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_songTab;
     KNMusicNowPlayingBase *m_nowPlaying;

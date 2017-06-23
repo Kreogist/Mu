@@ -35,6 +35,7 @@
 #include "knmainwindowcontainer.h"
 #include "knnotification.h"
 #include "knaccountavatarbutton.h"
+#include "knopacityanimebutton.h"
 
 //Notifications
 #include "notification/knnotificationcenter.h"
@@ -52,6 +53,9 @@
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
+    m_fullScreenIcon(QIcon("://public/status_fullscreen.png")),
+    m_fullScreenOffIcon(QIcon("://public/status_fullscreen_off.png")),
+    m_header(nullptr),
     m_musicPlugin(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
     m_globalConfigure(knGlobal->userConfigure()->getConfigure("Global")),
@@ -63,6 +67,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_outAnime(generateAnime()),
     m_outAndInAnime(new QSequentialAnimationGroup(this)),
     m_notificationWaiter(new QTimer(this)),
+    m_fullScreen(new KNOpacityAnimeButton(this)),
     m_originalWindowState(Qt::WindowNoState),
     m_ignoreTrayClose(false)
 {
@@ -154,6 +159,13 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
             this, &KNMainWindow::onActionFullScreen);
     addAction(fullScreen);
 #endif
+    //Configure the full screen stuff.
+    m_fullScreen->setIcon(m_fullScreenIcon);
+#ifdef Q_OS_MACX
+    m_fullScreen->hide();
+#endif
+    connect(m_fullScreen, &KNOpacityAnimeButton::clicked,
+            fullScreen, &QAction::trigger);
     //Recover the geometry.
     recoverGeometry();
     //Update the animation positions.
@@ -163,22 +175,34 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
 {
     //Check header pointer.
-    if(header==nullptr)
+    if(header==nullptr || m_header!=nullptr)
     {
         //If the header pointer is null, then failed to load the header.
         return;
     }
     //Set the header widget.
     m_container->setHeader(header);
+    //Save the header pointer.
+    m_header=header;
     //Add notification center button to header.
-    header->addNotificationButton(m_notificationCenter->headerButton());
+    m_header->addNotificationWidget(m_notificationCenter->headerButton());
+#ifndef Q_OS_MACX
+    //Add the main window full screen icon to header.
+    addStatusWidget(m_fullScreen);
+#endif
     //Link the header show preference signal to container.
-    connect(header, &KNMainWindowHeaderBase::requireShowPreference,
+    connect(m_header, &KNMainWindowHeaderBase::requireShowPreference,
             m_container, &KNMainWindowContainer::showPreference);
 }
 
 void KNMainWindow::setMainWidget(KNCategoryPlugin *mainWidget)
 {
+    //Check the header pointer.
+    if(m_header!=nullptr)
+    {
+        //Set the main widget to the header.
+        m_header->setCategoryPlugin(mainWidget);
+    }
     //Save the main widget.
     m_categoryPlugin=mainWidget;
     //Set the new category plugin.
@@ -234,6 +258,20 @@ void KNMainWindow::forceClose()
     m_ignoreTrayClose=true;
     //Close the window.
     close();
+}
+
+bool KNMainWindow::event(QEvent *event)
+{
+    //Check the event type.
+    if(event->type()==QEvent::WindowStateChange)
+    {
+        //Check out the full screen state.
+        m_fullScreen->setIcon(isFullScreen()?
+                                  m_fullScreenOffIcon:
+                                  m_fullScreenIcon);
+    }
+    //Do original event.
+    return QMainWindow::event(event);
 }
 
 void KNMainWindow::showEvent(QShowEvent *event)
@@ -524,4 +562,28 @@ inline void KNMainWindow::setCacheValue(const QString &valueName,
 inline void KNMainWindow::zoomParameter(int &parameter, const qreal &ratio)
 {
     parameter=(qreal)parameter*ratio;
+}
+
+void KNMainWindow::addStatusWidget(QWidget *widget)
+{
+    //Check the header pointer.
+    if(m_header==nullptr)
+    {
+        //Ignore the request.
+        return;
+    }
+    //Add the widget.
+    m_header->addStatusWidget(widget);
+}
+
+void KNMainWindow::addNotificationWidget(QWidget *widget)
+{
+    //Check the header pointer.
+    if(m_header==nullptr)
+    {
+        //Ignore the request.
+        return;
+    }
+    //Add the widget.
+    m_header->addNotificationWidget(widget);
 }

@@ -92,6 +92,9 @@
         <file>preference/PreferenceHint.png</file>
         <file>preference/PreferenceUndo.png</file>
         <file>preference/preview_font.png</file>
+        <file>public/status_fullscreen_off.png</file>
+        <file>public/status_fullscreen.png</file>
+        <file>public/status_add_music.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

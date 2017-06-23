@@ -6,6 +6,10 @@
         "Window" : "#000000",
         "WindowText" : "#FFFFFF"
     },
+    "MainWindowStatusBar" : {
+        "Parent" : "MainWindow",
+        "Window" : "#FFFFFF20"
+    },
     "MusicScrollBar" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",

@@ -29,6 +29,7 @@
 #define knGlobal (KNGlobal::instance())
 
 class KNConfigure;
+class KNMainWindow;
 class KNPreferencePlugin;
 /*!
  * \brief The KNGlobal class is a global instance which contains several public
@@ -166,9 +167,15 @@ public:
     /*!
      * \brief Set the main window widget. Many homeless widget will use this as
      * parent widget.
-     * \param mainWindow The main window widget pointer.
+     * \param mainWindow The main window pointer.
      */
-    void setMainWindow(QWidget *mainWindow);
+    void setMainWindow(KNMainWindow *mainWindow);
+
+    /*!
+     * \brief Add one widget to the main window header status bar.
+     * \param widget The widget pointer.
+     */
+    void addStatusWidget(QWidget *widget);
 
     /*!
      * \brief Get the locale date string.
@@ -265,7 +272,7 @@ private:
     int m_desktopEnviroment;
 #endif
     QString m_writeImageFilter, m_readImageFilter;
-    QWidget *m_mainWindow;
+    KNMainWindow *m_mainWindow;
     KNPreferencePlugin *m_preference;
 
     KNConfigure *m_globalConfigure;

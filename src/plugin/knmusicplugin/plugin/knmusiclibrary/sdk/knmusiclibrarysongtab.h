@@ -26,6 +26,10 @@ class KNEmptyStateWidget;
 class KNDropProxyContainer;
 class KNMusicLibraryTreeView;
 class KNMusicLibraryEmptyHint;
+/*!
+ * \brief The KNMusicLibrarySongTab class provides the library tab for the all
+ * song view of the library.
+ */
 class KNMusicLibrarySongTab : public KNMusicLibraryTab
 {
     Q_OBJECT
@@ -77,7 +81,7 @@ private slots:
     void onActionSearch();
 
 private:
-    inline void showAndSelectRow(const int &musicRow);
+    inline void showAndSelectRow(int musicRow);
     KNCategoryTab *m_tab;
     KNEmptyStateWidget *m_emptyStateWidget;
     KNDropProxyContainer *m_dropProxy;
