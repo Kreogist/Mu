@@ -98,7 +98,8 @@ public slots:
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionLoadLibrary();
+    void onLoadLibrary();
+    void onAddToLibrary();
 
 private:
     enum CategoryTabs

@@ -15,6 +15,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QFileDialog>
+
+//Global port.
+#include "knglobal.h"
+
 //Dependences.
 #include "knmusicnowplayingbase.h"
 #include "knmusicsolomenubase.h"
@@ -168,7 +173,7 @@ void KNMusicLibrary::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     m_nowPlaying=nowPlaying;
 }
 
-void KNMusicLibrary::onActionLoadLibrary()
+void KNMusicLibrary::onLoadLibrary()
 {
     //Disconnect all links.
     m_loadHandler.disconnectAll();
@@ -178,15 +183,34 @@ void KNMusicLibrary::onActionLoadLibrary()
     ;
 }
 
+void KNMusicLibrary::onAddToLibrary()
+{
+    //Generate the file dialog.
+    QFileDialog fileDialog(knGlobal->mainWindow(),
+                           tr("Add To Library"),
+                           QString("."));
+    //Configure the file dialog.
+    fileDialog.setFileMode(QFileDialog::ExistingFiles);
+    //Launch the file dialog.
+    if(fileDialog.exec()==QDialog::Accepted &&
+            !fileDialog.selectedUrls().isEmpty())
+    {
+        //Add all the selected urls to the library model.
+        m_libraryModel->appendUrls(fileDialog.selectedUrls());
+    }
+}
+
 void KNMusicLibrary::linkLoadRequest(KNMusicLibraryTab *libraryTab)
 {
     //Link the library tab, add to load request handler.
     m_loadHandler.append(
                 connect(libraryTab, &KNMusicLibraryTab::requireLoadLibrary,
-                        this, &KNMusicLibrary::onActionLoadLibrary));
+                        this, &KNMusicLibrary::onLoadLibrary));
     //Simply link the show playlist list to require signal.
     connect(libraryTab, &KNMusicLibraryTab::requireShowPlaylistList,
             this, &KNMusicLibrary::requireShowPlaylistList);
     connect(libraryTab, &KNMusicLibraryTab::requireHidePlaylistList,
             this, &KNMusicLibrary::requireHidePlaylistList);
+    connect(libraryTab, &KNMusicLibraryTab::requireAddToLibrary,
+            this, &KNMusicLibrary::onAddToLibrary);
 }

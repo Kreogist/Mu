@@ -23,19 +23,32 @@
 
 class QLabel;
 class KNGlassButton;
+/*!
+ * \brief The KNMusicLibraryEmptyHint class provide a widget to show the empty
+ * hint text of the library tabs. The widget will also be responsed for
+ * activating the adding file dialog to library dialog.
+ */
 class KNMusicLibraryEmptyHint : public KNDropProxyContainer
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryEmptyHint widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLibraryEmptyHint(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When the add to library button is clicked, this signal will be
+     * emitted.
+     */
+    void requireAddToLibrary();
 
 public slots:
 
 private slots:
     void retranslate();
-    void onActionAddToLibrary();
 
 private:
     inline KNGlassButton *generateButton(const QString &iconPath);

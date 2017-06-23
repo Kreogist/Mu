@@ -62,6 +62,12 @@ signals:
     void requireLoadLibrary();
 
     /*!
+     * \brief When the add to library button is clicked, this signal will be
+     * emitted.
+     */
+    void requireAddToLibrary();
+
+    /*!
      * \brief When treeview is draging the song out, this signal should be emit
      * to ask the music plugin to show the playlist list.
      */

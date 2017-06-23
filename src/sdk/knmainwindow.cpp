@@ -159,13 +159,13 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     updateAnimeStartAndEnd();
 }
 
-bool KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
+void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
 {
     //Check header pointer.
     if(header==nullptr || m_header!=nullptr)
     {
         //If the header pointer is null, then failed to load the header.
-        return false;
+        return;
     }
     //Set the header widget.
     m_container->setHeader(header);
@@ -184,12 +184,16 @@ bool KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
 
 void KNMainWindow::setMainWidget(KNCategoryPlugin *mainWidget)
 {
+    //Check the header pointer.
+    if(m_header!=nullptr)
+    {
+        //Set the main widget to the header.
+        m_header->setCategoryPlugin(mainWidget);
+    }
     //Save the main widget.
     m_categoryPlugin=mainWidget;
     //Set the new category plugin.
     m_container->setMainWidget(m_categoryPlugin);
-    //Set the main widget to the header.
-    m_header->setCategoryPlugin(mainWidget);
 }
 
 void KNMainWindow::setPreferencePanel(KNPreferencePlugin *preferencePanel)

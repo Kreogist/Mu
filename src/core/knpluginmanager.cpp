@@ -87,7 +87,7 @@ inline void KNPluginManager::setApplicationInformation()
 void KNPluginManager::loadHeader(KNMainWindowHeaderBase *header)
 {
     //You should load the main window first.
-    if(m_mainWindow==nullptr || header==nullptr)
+    if(m_mainWindow!=nullptr && header!=nullptr)
     {
         //Set the header to main window.
         m_mainWindow->setHeader(header);

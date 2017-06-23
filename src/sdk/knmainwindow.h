@@ -56,10 +56,8 @@ public:
      * \brief Set the header widget.
      * \param header The header widget pointer. It will only save the first
      * widget you set.
-     * \return If the header is not null, and the header is set, return true. Or
-     * else return false.
      */
-    bool setHeader(KNMainWindowHeaderBase *header);
+    void setHeader(KNMainWindowHeaderBase *header);
 
     /*!
      * \brief Set the main widget.

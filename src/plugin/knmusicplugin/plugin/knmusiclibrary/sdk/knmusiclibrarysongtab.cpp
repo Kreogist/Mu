@@ -68,6 +68,9 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     m_dropProxy->setLayout(mainLayout);
     //Add tree view to drop proxy.
     mainLayout->addWidget(m_treeView);
+    //Link the empty hint connections.
+    connect(m_emptyHint, &KNMusicLibraryEmptyHint::requireAddToLibrary,
+            this, &KNMusicLibrarySongTab::requireAddToLibrary);
     //Configure the empty state widget.
     m_emptyStateWidget->setEmptyWidget(m_emptyHint);
     m_emptyStateWidget->setContentWidget(m_dropProxy);
@@ -209,7 +212,7 @@ void KNMusicLibrarySongTab::onActionSearch()
     m_treeView->proxyModel()->setSearchBlocks(knMusicGlobal->search()->rules());
 }
 
-inline void KNMusicLibrarySongTab::showAndSelectRow(const int &musicRow)
+inline void KNMusicLibrarySongTab::showAndSelectRow(int musicRow)
 {
     //Simply scroll to the special position.
     m_treeView->scrollToSourceRow(musicRow);

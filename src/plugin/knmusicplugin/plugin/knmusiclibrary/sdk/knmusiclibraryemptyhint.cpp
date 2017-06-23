@@ -17,7 +17,6 @@
  */
 #include <QBoxLayout>
 #include <QLabel>
-#include <QFileDialog>
 
 #include "knglassbutton.h"
 #include "knthememanager.h"
@@ -45,7 +44,7 @@ KNMusicLibraryEmptyHint::KNMusicLibraryEmptyHint(QWidget *parent) :
     knTheme->registerWidget(m_hintText);
     //Link the command buttons.
     connect(m_addMusic, &KNGlassButton::clicked,
-            this, &KNMusicLibraryEmptyHint::onActionAddToLibrary);
+            this, &KNMusicLibraryEmptyHint::requireAddToLibrary);
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
@@ -98,23 +97,6 @@ void KNMusicLibraryEmptyHint::retranslate()
 
     //Update the operate button text.
     m_addMusic->setText(tr("Add songs"));
-}
-
-void KNMusicLibraryEmptyHint::onActionAddToLibrary()
-{
-    //Generate the file dialog.
-    QFileDialog fileDialog(this,
-                           tr("Add To Library"),
-                           QString("."));
-    //Configure the file dialog.
-    fileDialog.setFileMode(QFileDialog::ExistingFiles);
-    //Launch the file dialog.
-    if(fileDialog.exec()==QDialog::Accepted &&
-            !fileDialog.selectedUrls().isEmpty())
-    {
-        //Emit the dropped signal for all the saved files.
-        emit urlsDropped(fileDialog.selectedUrls());
-    }
 }
 
 inline KNGlassButton *KNMusicLibraryEmptyHint::generateButton(
