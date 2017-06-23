@@ -69,7 +69,7 @@ private:
     QColor m_backgroundColor;
     QLinearGradient m_background;
     QBoxLayout *m_mainLayout;
-    int m_opacity;
+    int m_opacity, m_buttonCount;
 };
 
 #endif // KNMAINWINDOWSTATUSBAR_H

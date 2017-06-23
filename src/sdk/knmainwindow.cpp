@@ -52,8 +52,8 @@
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
-    m_fullScreenIcon(QIcon("://public/fullscreen.png")),
-    m_fullScreenOffIcon(QIcon("://public/fullscreen_off.png")),
+    m_fullScreenIcon(QIcon("://public/status_fullscreen.png")),
+    m_fullScreenOffIcon(QIcon("://public/status_fullscreen_off.png")),
     m_header(nullptr),
     m_musicPlugin(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
@@ -149,7 +149,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     //Configure the full screen stuff.
     m_fullScreen->setIcon(m_fullScreenIcon);
 #ifdef Q_OS_MACX
-    m_fullScreen->hide();
+//    m_fullScreen->hide();
 #endif
     connect(m_fullScreen, &KNOpacityAnimeButton::clicked,
             fullScreen, &QAction::trigger);
@@ -173,10 +173,11 @@ void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
     m_header=header;
     //Add notification center button to header.
     m_header->addNotificationWidget(m_notificationCenter->headerButton());
-#ifndef Q_OS_MACX
+//#ifndef Q_OS_MACX
+    qDebug()<<"Add full screen button to status widget.";
     //Add the main window full screen icon to header.
     addStatusWidget(m_fullScreen);
-#endif
+//#endif
     //Link the header show preference signal to container.
     connect(m_header, &KNMainWindowHeaderBase::requireShowPreference,
             m_container, &KNMainWindowContainer::showPreference);

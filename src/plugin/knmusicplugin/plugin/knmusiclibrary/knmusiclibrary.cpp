@@ -17,8 +17,10 @@
  */
 #include <QFileDialog>
 
-//Global port.
+//Global Dependences.
 #include "knglobal.h"
+#include "knlocalemanager.h"
+#include "knopacityanimebutton.h"
 
 //Dependences.
 #include "knmusicnowplayingbase.h"
@@ -46,6 +48,7 @@ using namespace MusicUtil;
 
 KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent),
+    m_addToLibraryButton(new KNOpacityAnimeButton()),
     m_libraryPath(knMusicGlobal->musicLibraryPath()+"/Library"),
     m_libraryModel(new KNMusicLibraryModel(this)),
     m_songTab(new KNMusicLibrarySongTab),
@@ -96,6 +99,16 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     }
     //Add the actions to solo menu.
     knMusicGlobal->soloMenu()->appendMusicActions(showInActionList);
+
+    //Add to library status button.
+    m_addToLibraryButton->setIcon(QIcon("://public/status_add_music.png"));
+    connect(m_addToLibraryButton, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicLibrary::onAddToLibrary);
+    knGlobal->addStatusWidget(m_addToLibraryButton);
+
+    //Link the retranslate slot.
+    knI18n->link(this, &KNMusicLibrary::retranslate);
+    retranslate();
 }
 
 KNMusicTab *KNMusicLibrary::songTab()
@@ -171,6 +184,12 @@ void KNMusicLibrary::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
     //Save the now playing pointer.
     m_nowPlaying=nowPlaying;
+}
+
+void KNMusicLibrary::retranslate()
+{
+    //Translate the add to library button.
+    m_addToLibraryButton->setToolTip(tr("Add music to Library"));
 }
 
 void KNMusicLibrary::onLoadLibrary()

@@ -26,24 +26,29 @@ Foundation,
 #include <QDebug>
 
 #define GradientWidth 50
+#define ButtonSize 14
+#define ButtonSpacing 2
+#define RightSpacing 2
 
 KNMainWindowStatusBar::KNMainWindowStatusBar(QWidget *parent) :
     KNMouseSenseWidget(parent),
     m_backgroundColor(QColor(255, 255, 255)),
     m_background(QLinearGradient(0, 0, GradientWidth, 0)),
     m_mainLayout(new QBoxLayout(QBoxLayout::RightToLeft, this)),
-    m_opacity(20)
+    m_opacity(20),
+    m_buttonCount(0)
 {
     //Set properties.
+    setContentsMargins(0, 0, 0, 0);
     setFixedWidth(GradientWidth);
-    setFixedHeight(18);
+    setFixedHeight(20);
     //Initial the background.
     m_background.setColorAt(0, QColor(0, 0, 0, 0));
     //Update the gradient.
     updateGradient();
 
     //Configure the main layout.
-    m_mainLayout->setContentsMargins(GradientWidth, 0, 0, 0);
+    m_mainLayout->setContentsMargins(GradientWidth, 0, RightSpacing, 0);
     m_mainLayout->setSpacing(0);
     setLayout(m_mainLayout);
 }
@@ -51,11 +56,14 @@ KNMainWindowStatusBar::KNMainWindowStatusBar(QWidget *parent) :
 void KNMainWindowStatusBar::addWidget(QWidget *widget)
 {
     //Update the size of the widget.
-    widget->setFixedSize(16, 16);
+    widget->setFixedSize(ButtonSize, ButtonSize);
     //Set the widget size.
     m_mainLayout->addWidget(widget);
+    m_mainLayout->addSpacing(ButtonSpacing);
+    //Increase the count.
+    ++m_buttonCount;
     //Update the widget size.
-    setFixedWidth(GradientWidth+m_mainLayout->count()*16);
+    setFixedWidth(GradientWidth+RightSpacing+m_buttonCount*(16+ButtonSpacing));
 }
 
 void KNMainWindowStatusBar::paintEvent(QPaintEvent *event)
