@@ -20,15 +20,16 @@ Foundation,
 #ifndef KNMAINWINDOWSTATUSBAR_H
 #define KNMAINWINDOWSTATUSBAR_H
 
-#include "knmousesensewidget.h"
+#include <QWidget>
 
 class QBoxLayout;
+class QTimeLine;
 /*!
  * \brief The KNMainWindowStatusBar class provides the status button bar.
  * It will show the button at the top right corner. All the size of the button
  * will be fixed to 16px.
  */
-class KNMainWindowStatusBar : public KNMouseSenseWidget
+class KNMainWindowStatusBar : public QWidget
 {
     Q_OBJECT
 public:
@@ -49,26 +50,32 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from KNMouseSenseWidget::paintEvent().
+     * \brief Reimplemented from QWidget::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
-protected slots:
     /*!
-     * \brief Reimplemented from KNMouseSenseWidget::onPaletteChanged().
+     * \brief Reimplemented from QWidget::enterEvent().
      */
-    void onPaletteChanged() Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMouseSenseWidget::changeBackgroundColor().
+     * \brief Reimplemented from QWidget::leaveEvent().
      */
-    void changeBackgroundColor(int frame) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+private slots:
+    void onPaletteChanged();
+    void changeBackgroundColor(int frame);
 
 private:
     inline void updateGradient();
+    inline QTimeLine *generateTimeline();
+    inline void startAnime(int endFrame);
     QColor m_backgroundColor;
     QLinearGradient m_background;
     QBoxLayout *m_mainLayout;
+    QTimeLine *m_mouseInOut;
     int m_opacity, m_buttonCount;
 };
 

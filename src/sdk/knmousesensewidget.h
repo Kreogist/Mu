@@ -51,26 +51,18 @@ public slots:
 
 protected:
     /*!
-     * \brief Reimplemented from KNMainWindowHeaderBase::enterEvent().
+     * \brief Reimplemented from QWidget::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
-     * \brief Reimplemented from KNMainWindowHeaderBase::leaveEvent().
+     * \brief Reimplemented from QWidget::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
-protected slots:
-    /*!
-     * \brief When the palette changed, this slot will be called.
-     */
-    virtual void onPaletteChanged();
-
-    /*!
-     * \brief When the background color need to be changed according to the.
-     * \param frame
-     */
-    virtual void changeBackgroundColor(int frame);
+private slots:
+    void onPaletteChanged();
+    void changeBackgroundColor(int frame);
 
 private:
     inline QTimeLine *generateTimeline();

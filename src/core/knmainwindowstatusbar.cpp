@@ -18,6 +18,7 @@ Foundation,
  */
 #include <QBoxLayout>
 #include <QPainter>
+#include <QTimeLine>
 
 #include "knthememanager.h"
 
@@ -29,13 +30,16 @@ Foundation,
 #define ButtonSize 14
 #define ButtonSpacing 2
 #define RightSpacing 2
+#define MinimumOpacity 37
+#define MaximumOpacity 97
 
 KNMainWindowStatusBar::KNMainWindowStatusBar(QWidget *parent) :
-    KNMouseSenseWidget(parent),
+    QWidget(parent),
     m_backgroundColor(QColor(255, 255, 255)),
     m_background(QLinearGradient(0, 0, GradientWidth, 0)),
     m_mainLayout(new QBoxLayout(QBoxLayout::RightToLeft, this)),
-    m_opacity(20),
+    m_mouseInOut(generateTimeline()),
+    m_opacity(MinimumOpacity),
     m_buttonCount(0)
 {
     //Set properties.
@@ -69,7 +73,7 @@ void KNMainWindowStatusBar::addWidget(QWidget *widget)
 void KNMainWindowStatusBar::paintEvent(QPaintEvent *event)
 {
     //Initial the widget.
-    KNMouseSenseWidget::paintEvent(event);
+    QWidget::paintEvent(event);
     //Draw the background.
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing |
@@ -77,6 +81,22 @@ void KNMainWindowStatusBar::paintEvent(QPaintEvent *event)
                            QPainter::SmoothPixmapTransform, true);
     //Draw the background.
     painter.fillRect(rect(), m_background);
+}
+
+void KNMainWindowStatusBar::enterEvent(QEvent *event)
+{
+    //Start the animation to range end.
+    startAnime(MaximumOpacity);
+    //Do the original enter event.
+    QWidget::enterEvent(event);
+}
+
+void KNMainWindowStatusBar::leaveEvent(QEvent *event)
+{
+    //Start the animation to range start.
+    startAnime(MinimumOpacity);
+    //Do the original leave event.
+    QWidget::leaveEvent(event);
 }
 
 void KNMainWindowStatusBar::onPaletteChanged()
@@ -104,4 +124,29 @@ inline void KNMainWindowStatusBar::updateGradient()
     m_background.setColorAt(1.0, m_backgroundColor);
     //Update the widget.
     update();
+}
+
+inline QTimeLine *KNMainWindowStatusBar::generateTimeline()
+{
+    //Generate the time line.
+    QTimeLine *timeline=new QTimeLine(200, this);
+    timeline->setEasingCurve(QEasingCurve::OutCubic);
+    timeline->setUpdateInterval(10);
+    //This animation is going to change to background color, so the each frame
+    //will be the parameter of a color. When frame changed, change the color.
+    connect(timeline, &QTimeLine::frameChanged,
+            this, &KNMainWindowStatusBar::changeBackgroundColor);
+    //Return the time line.
+    return timeline;
+}
+
+inline void KNMainWindowStatusBar::startAnime(int endFrame)
+{
+    //Stop the time line.
+    m_mouseInOut->stop();
+    //Set the range of the color from current to range start.
+    m_mouseInOut->setFrameRange(m_mouseInOut->currentFrame(),
+                                endFrame);
+    //Start the time line.
+    m_mouseInOut->start();
 }
