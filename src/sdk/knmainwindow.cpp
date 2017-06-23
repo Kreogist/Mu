@@ -54,6 +54,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_fullScreenIcon(QIcon("://public/fullscreen.png")),
     m_fullScreenOffIcon(QIcon("://public/fullscreen_off.png")),
+    m_header(nullptr),
     m_musicPlugin(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
     m_container(new KNMainWindowContainer(this)),
@@ -158,20 +159,26 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     updateAnimeStartAndEnd();
 }
 
-void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
+bool KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
 {
     //Check header pointer.
-    if(header==nullptr)
+    if(header==nullptr || m_header!=nullptr)
     {
         //If the header pointer is null, then failed to load the header.
-        return;
+        return false;
     }
     //Set the header widget.
     m_container->setHeader(header);
+    //Save the header pointer.
+    m_header=header;
     //Add notification center button to header.
-    header->addNotificationWidget(m_notificationCenter->headerButton());
+    m_header->addNotificationWidget(m_notificationCenter->headerButton());
+#ifndef Q_OS_MACX
+    //Add the main window full screen icon to header.
+    addStatusWidget(m_fullScreen);
+#endif
     //Link the header show preference signal to container.
-    connect(header, &KNMainWindowHeaderBase::requireShowPreference,
+    connect(m_header, &KNMainWindowHeaderBase::requireShowPreference,
             m_container, &KNMainWindowContainer::showPreference);
 }
 
@@ -181,6 +188,8 @@ void KNMainWindow::setMainWidget(KNCategoryPlugin *mainWidget)
     m_categoryPlugin=mainWidget;
     //Set the new category plugin.
     m_container->setMainWidget(m_categoryPlugin);
+    //Set the main widget to the header.
+    m_header->setCategoryPlugin(mainWidget);
 }
 
 void KNMainWindow::setPreferencePanel(KNPreferencePlugin *preferencePanel)
@@ -500,7 +509,26 @@ inline void KNMainWindow::zoomParameter(int &parameter, const qreal &ratio)
     parameter=(qreal)parameter*ratio;
 }
 
-QWidget *KNMainWindow::fullScreenButton() const
+void KNMainWindow::addStatusWidget(QWidget *widget)
 {
-    return m_fullScreen;
+    //Check the header pointer.
+    if(m_header==nullptr)
+    {
+        //Ignore the request.
+        return;
+    }
+    //Add the widget.
+    m_header->addStatusWidget(widget);
+}
+
+void KNMainWindow::addNotificationWidget(QWidget *widget)
+{
+    //Check the header pointer.
+    if(m_header==nullptr)
+    {
+        //Ignore the request.
+        return;
+    }
+    //Add the widget.
+    m_header->addNotificationWidget(widget);
 }

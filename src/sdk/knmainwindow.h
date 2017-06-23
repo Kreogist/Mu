@@ -56,8 +56,10 @@ public:
      * \brief Set the header widget.
      * \param header The header widget pointer. It will only save the first
      * widget you set.
+     * \return If the header is not null, and the header is set, return true. Or
+     * else return false.
      */
-    void setHeader(KNMainWindowHeaderBase *header);
+    bool setHeader(KNMainWindowHeaderBase *header);
 
     /*!
      * \brief Set the main widget.
@@ -81,10 +83,16 @@ public:
     void setMusicPlugin(KNAbstractMusicPlugin *musicPlugin);
 
     /*!
-     * \brief Get the full screen button widget pointer.
-     * \return The full screen button pointer.
+     * \brief Add one widget to the header status bar.
+     * \param widget The widget pointer.
      */
-    QWidget *fullScreenButton() const;
+    void addStatusWidget(QWidget *widget);
+
+    /*!
+     * \brief Add the notification widget to the header.
+     * \param widget The widget pointer.
+     */
+    void addNotificationWidget(QWidget *widget);
 
 signals:
     /*!
@@ -146,6 +154,7 @@ private:
     inline void zoomParameter(int &parameter, const qreal &ratio);
 
     QIcon m_fullScreenIcon, m_fullScreenOffIcon;
+    KNMainWindowHeaderBase *m_header;
     KNAbstractMusicPlugin *m_musicPlugin;
     KNConfigure *m_cacheConfigure;
     KNMainWindowContainer *m_container;

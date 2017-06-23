@@ -112,6 +112,7 @@ void KNMusicLibraryEmptyHint::onActionAddToLibrary()
     if(fileDialog.exec()==QDialog::Accepted &&
             !fileDialog.selectedUrls().isEmpty())
     {
+        //Emit the dropped signal for all the saved files.
         emit urlsDropped(fileDialog.selectedUrls());
     }
 }
