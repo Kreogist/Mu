@@ -96,6 +96,11 @@ public:
     Q_DECL_OVERRIDE;
 
 signals:
+    /*!
+     * \brief When an album item is removed from the model, this signal will be
+     * emitted.
+     * \param removedIndex The removed album item index.
+     */
     void albumRemoved(QModelIndex removedIndex);
 
 public slots:

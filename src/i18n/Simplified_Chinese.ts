@@ -134,37 +134,37 @@
 <context>
     <name>KNAccountPasswordBox</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="147"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="148"/>
         <source>Set new password</source>
         <translation>设置新的密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="148"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="149"/>
         <source>Input your new password for %1.</source>
         <translation>为 %1 设置新的密码。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="152"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="153"/>
         <source>New Password</source>
         <translation>新密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="153"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="154"/>
         <source>Input New Password Again</source>
         <translation>再次输入新的密码</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="157"/>
         <source>Password must be at least 6 characters.</source>
         <translation>密码长度至少6位。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="159"/>
         <source>Password must include a number.</source>
         <translation>密码必须包含一个数字。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="160"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="161"/>
         <source>Password must include an upper and lower case letter.</source>
         <translation>密码必须包含一个大写以及一个小写字母。</translation>
     </message>
@@ -172,17 +172,17 @@
 <context>
     <name>KNAccountPasswordVerification</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="115"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="116"/>
         <source>Enter your password to perform administrative tasks</source>
         <translation>输入您的密码以验证身份</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="118"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="119"/>
         <source>An action is attempting to perform an action that requires privileges. Authentication is required to perform this action.</source>
         <translation>您的请求需要进行验证才可以继续。请输入密码以验证您的身份。</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="122"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="123"/>
         <source>Password is not correct, try again.</source>
         <translation>密码不正确，请重新输入。</translation>
     </message>
@@ -365,267 +365,267 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="94"/>
+        <location filename="../sdk/knglobal.cpp" line="95"/>
         <source>The remote server refused the connection, it is not accepting requests.</source>
         <translation>服务器拒绝连接，没有接受请求。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="97"/>
+        <location filename="../sdk/knglobal.cpp" line="98"/>
         <source>The remote server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation>服务器在回复被完全接收和处理前，过早的结束了连接。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="100"/>
+        <location filename="../sdk/knglobal.cpp" line="101"/>
         <source>The remote host name was not found.</source>
         <translation>主机名没有找到。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="102"/>
+        <location filename="../sdk/knglobal.cpp" line="103"/>
         <source>The connection timed out.</source>
         <translation>连接超时。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="104"/>
+        <location filename="../sdk/knglobal.cpp" line="105"/>
         <source>The operation was canceled before it was finished.</source>
         <translation>操作在完成之前被取消或中断。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="106"/>
+        <location filename="../sdk/knglobal.cpp" line="107"/>
         <source>The SSL/TLS handshake failed and the encrypted channel could not be established.</source>
         <translation>SSL/TLS握手失败，加密通信没有建立。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="109"/>
+        <location filename="../sdk/knglobal.cpp" line="110"/>
         <source>The connection was broken due to disconnection from the network, however the system has initiated roaming to another access point.</source>
         <translation>连接因为网络断开而无法继续，然而系统在另一个接入点建立了通信。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="113"/>
+        <location filename="../sdk/knglobal.cpp" line="114"/>
         <source>The connection was broken due to disconnection from the network or failure to start the network.</source>
         <translation>连接因为网络断开而无法继续，或者无法启动网络。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="116"/>
+        <location filename="../sdk/knglobal.cpp" line="117"/>
         <source>The background request is not currently allowed due to platform policy.</source>
         <translation>受限于平台的权限设置，不能使用后台请求。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="119"/>
+        <location filename="../sdk/knglobal.cpp" line="120"/>
         <source>The connection to the proxy server was refused, it is not accepting requests.</source>
         <translation>代理服务器拒绝建立连接。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="122"/>
+        <location filename="../sdk/knglobal.cpp" line="123"/>
         <source>The proxy server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation>代理服务器在回复被完全接收和处理前，过早的结束了连接。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="125"/>
+        <location filename="../sdk/knglobal.cpp" line="126"/>
         <source>The proxy host name was not found, The proxy hostname is invalid.</source>
         <translation>没有找到代理服务器的主机名，其主机名无效。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="128"/>
+        <location filename="../sdk/knglobal.cpp" line="129"/>
         <source>The connection to the proxy timed out or the proxy did not reply in time to the request sent.</source>
         <translation>到代理服务器的连接超时，或者代理服务器没有及时响应请求。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="131"/>
+        <location filename="../sdk/knglobal.cpp" line="132"/>
         <source>The proxy requires authentication in order to honour the request but did not accept any credentials offered.</source>
         <translation>代理服务器需要认证信息来信任请求，但是并没有接受任何认证信息。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="134"/>
+        <location filename="../sdk/knglobal.cpp" line="135"/>
         <source>An unknown proxy-related error was detected.</source>
         <translation>检测到一个未知的代理服务器错误。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="136"/>
+        <location filename="../sdk/knglobal.cpp" line="137"/>
         <source>The access to the remote content was denied (HTTP error 401).</source>
         <translation>服务器拒绝提供请求的内容（HTTP 401错误）。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="139"/>
+        <location filename="../sdk/knglobal.cpp" line="140"/>
         <source>The operation requested on the remote content is not permitted.</source>
         <translation>不允许对该远程资源进行操作。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="142"/>
+        <location filename="../sdk/knglobal.cpp" line="143"/>
         <source>The remote content was not found at the server (HTTP error 404).</source>
         <translation>在服务器上找不到请求的资源（HTTP 404错误）。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="145"/>
+        <location filename="../sdk/knglobal.cpp" line="146"/>
         <source>The remote server requires authentication to serve the content but the credentials provided were not accepted (if any).</source>
         <translation>远程服务器在提供资源时需要验证身份，但是没有接受任何身份认证信息。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="149"/>
+        <location filename="../sdk/knglobal.cpp" line="150"/>
         <source>The request could not be completed due to a conflict with the current state of the resource.</source>
         <translation>由于该资源的状态发生了冲突，请求未能完成。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="152"/>
+        <location filename="../sdk/knglobal.cpp" line="153"/>
         <source>The requested resource is no longer available at the server.</source>
         <translation>请求的资源在服务器上已不再可用。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="155"/>
+        <location filename="../sdk/knglobal.cpp" line="156"/>
         <source>An unknown error related to the remote content was detected.</source>
         <translation>检测到一个远程内容相关的未知错误。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="158"/>
+        <location filename="../sdk/knglobal.cpp" line="159"/>
         <source>The Network Access API cannot honor the request because the protocol is not known.</source>
         <translation>网络接入接口无法信任该请求，因为使用的协议未知。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="161"/>
+        <location filename="../sdk/knglobal.cpp" line="162"/>
         <source>The requested operation is invalid for this protocol.</source>
         <translation>该协议不能够发起这类请求。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="163"/>
+        <location filename="../sdk/knglobal.cpp" line="164"/>
         <source>A breakdown in protocol was detected (parsing error, invalid or unexpected responses, etc.).</source>
         <translation>检测到协议崩溃（包括，但不限于是由于解析错误、协议不可用或返回了错误的回复）。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="166"/>
+        <location filename="../sdk/knglobal.cpp" line="167"/>
         <source>The server encountered an unexpected condition which prevented it from fulfilling the request. (HTTP error 500)</source>
         <translation>服务器遇到了意外的状况，导致了请求不能响应。（HTTP 500 错误）</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="169"/>
+        <location filename="../sdk/knglobal.cpp" line="170"/>
         <source>The server is unable to handle the request at this time. (HTTP error 503)</source>
         <translation>服务器现在不能处理这个请求。（HTTP 503错误）</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="172"/>
+        <location filename="../sdk/knglobal.cpp" line="173"/>
         <source>An unknown error related to the server response was detected.</source>
         <translation>检测到一个未知的服务器端相关的错误。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="176"/>
+        <location filename="../sdk/knglobal.cpp" line="177"/>
         <source>An unknown network-related error was detected.</source>
         <translation>检测到一个未知的网络连接相关的错误。</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="209"/>
+        <location filename="../sdk/knglobal.cpp" line="210"/>
         <source>Byte</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="213"/>
+        <location filename="../sdk/knglobal.cpp" line="214"/>
         <source>Portable Network Graphics</source>
         <translation>便携式网络图形</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="215"/>
+        <location filename="../sdk/knglobal.cpp" line="216"/>
         <source>Joint Photographic Experts Group</source>
         <translation>JPEG 格式图像</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="217"/>
+        <location filename="../sdk/knglobal.cpp" line="218"/>
         <source>Windows Bitmap</source>
         <translation>Windows 位图图像</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="219"/>
+        <location filename="../sdk/knglobal.cpp" line="220"/>
         <source>Portable Pixmap</source>
         <translation>可移植像素图格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="221"/>
+        <location filename="../sdk/knglobal.cpp" line="222"/>
         <source>X11 Bitmap</source>
         <translation>X11 位图</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="223"/>
+        <location filename="../sdk/knglobal.cpp" line="224"/>
         <source>X11 Pixmap</source>
         <translation>X11 像素图</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="226"/>
+        <location filename="../sdk/knglobal.cpp" line="227"/>
         <source>All supported files</source>
         <translation>所有支持的文件</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="239"/>
+        <location filename="../sdk/knglobal.cpp" line="240"/>
         <source>Graphic Interchange Format</source>
         <translation>图像互换格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="241"/>
+        <location filename="../sdk/knglobal.cpp" line="242"/>
         <source>Portable Bitmap</source>
         <translation>可移植位图格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="243"/>
+        <location filename="../sdk/knglobal.cpp" line="244"/>
         <source>Portable Graymap</source>
         <translation>可移植灰度图格式</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="454"/>
+        <location filename="../sdk/knglobal.cpp" line="458"/>
         <source>Jan.</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="456"/>
+        <location filename="../sdk/knglobal.cpp" line="460"/>
         <source>Feb.</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="458"/>
+        <location filename="../sdk/knglobal.cpp" line="462"/>
         <source>Mar.</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="460"/>
+        <location filename="../sdk/knglobal.cpp" line="464"/>
         <source>Apr.</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="462"/>
+        <location filename="../sdk/knglobal.cpp" line="466"/>
         <source>May</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="464"/>
+        <location filename="../sdk/knglobal.cpp" line="468"/>
         <source>Jun.</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="466"/>
+        <location filename="../sdk/knglobal.cpp" line="470"/>
         <source>Jul.</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="468"/>
+        <location filename="../sdk/knglobal.cpp" line="472"/>
         <source>Aug.</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="470"/>
+        <location filename="../sdk/knglobal.cpp" line="474"/>
         <source>Sept.</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="472"/>
+        <location filename="../sdk/knglobal.cpp" line="476"/>
         <source>Oct.</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="474"/>
+        <location filename="../sdk/knglobal.cpp" line="478"/>
         <source>Nov.</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="476"/>
+        <location filename="../sdk/knglobal.cpp" line="480"/>
         <source>Dec.</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="540"/>
+        <location filename="../sdk/knglobal.cpp" line="544"/>
         <source>%2 %3, %1</source>
         <translation>%1年%2月%3日</translation>
     </message>
@@ -633,37 +633,37 @@
 <context>
     <name>KNMacExtras</name>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="116"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="133"/>
         <source>Now Playing</source>
         <translation>正在播放</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="117"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="134"/>
         <source>Next</source>
         <translation>下一个</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="118"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="135"/>
         <source>Previous</source>
         <translation>上一个</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="120"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="137"/>
         <source>Play</source>
         <translation>播放</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="121"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="138"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="122"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="139"/>
         <source>No Artist</source>
         <translation>没有艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="123"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="140"/>
         <source>No Album</source>
         <translation>没有专辑</translation>
     </message>
@@ -671,12 +671,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="267"/>
+        <location filename="../sdk/knmainwindow.cpp" line="346"/>
         <source>Cannot quit now</source>
         <translation>当前无法退出</translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="268"/>
+        <location filename="../sdk/knmainwindow.cpp" line="347"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation>仍有文件正在添加到音乐库中，请等待其添加完毕。</translation>
     </message>
@@ -1122,6 +1122,19 @@
     </message>
 </context>
 <context>
+    <name>KNMusicLibrary</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="192"/>
+        <source>Add music to Library</source>
+        <translation>添加音乐到音乐库</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="209"/>
+        <source>Add To Library</source>
+        <translation>添加歌曲到音乐库</translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="199"/>
@@ -1165,21 +1178,20 @@
 <context>
     <name>KNMusicLibraryEmptyHint</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="95"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="94"/>
         <source>Songs and music you add to Mu appear in your music library.
 To add songs to library, drag your songs here.</source>
         <translation>您添加到 Mu 的歌曲和音乐都将在您的音乐库中显示。
 如需添加歌曲到音乐库，请将歌曲拖拽至此。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="100"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="99"/>
         <source>Add songs</source>
         <translation>添加歌曲到音乐库</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="107"/>
         <source>Add To Library</source>
-        <translation>添加歌曲到音乐库</translation>
+        <translation type="vanished">添加歌曲到音乐库</translation>
     </message>
 </context>
 <context>
@@ -1221,12 +1233,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibrarySongTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="180"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="183"/>
         <source>Songs</source>
         <translation>歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="182"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="185"/>
         <source>Go to Songs</source>
         <translation>在歌曲中显示</translation>
     </message>
@@ -1565,7 +1577,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="201"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="202"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -2117,7 +2129,7 @@ Qt 是 The Qt Company Ltd 开发的开源项目。请访问 qt.io 获取更多�
         <translation type="vanished">语言</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencelanguagepanel.cpp" line="112"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencelanguagepanel.cpp" line="116"/>
         <source>Languages</source>
         <translation>语言</translation>
     </message>
@@ -2125,27 +2137,44 @@ Qt 是 The Qt Company Ltd 开发的开源项目。请访问 qt.io 获取更多�
 <context>
     <name>KNPreferencePanelData</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="47"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="42"/>
+        <source>System Tray Icon</source>
+        <translation>系统托盘图标</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="43"/>
+        <source>Close to system tray</source>
+        <translation>关闭到系统托盘</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="45"/>
+        <source>When click the close button of the window, Mu won&apos;t quit but minimize to the system tray.
+When click the icon in the system tray, Mu will pop up back.</source>
+        <translation>当单击窗口的关闭按钮时，µ将不会退出而是最小化到托盘图标。
+当单击托盘图标时，µ将会重新显示。</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="58"/>
         <source>Header Lyrics</source>
         <translation>顶部歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="48"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="59"/>
         <source>Header lyrics font</source>
         <translation>顶部歌词字体</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="50"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation>这个选项将用于改变顶部歌词的字体。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="54"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
         <source>Online Lyrics</source>
         <translation>在线歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="55"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="66"/>
         <source>Allow downloading lyrics</source>
         <translation>允许下载歌词</translation>
     </message>
@@ -2154,7 +2183,7 @@ Qt 是 The Qt Company Ltd 开发的开源项目。请访问 qt.io 获取更多�
         <translation type="obsolete">下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="57"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="68"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation>如果在歌词文件夹中没有找到歌词，

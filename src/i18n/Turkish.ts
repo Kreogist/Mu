@@ -126,37 +126,37 @@
 <context>
     <name>KNAccountPasswordBox</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="147"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="148"/>
         <source>Set new password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="148"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="149"/>
         <source>Input your new password for %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="152"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="153"/>
         <source>New Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="153"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="154"/>
         <source>Input New Password Again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="156"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="157"/>
         <source>Password must be at least 6 characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="159"/>
         <source>Password must include a number.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="160"/>
+        <location filename="../sdk/account/knaccountpasswordbox.cpp" line="161"/>
         <source>Password must include an upper and lower case letter.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,17 +164,17 @@
 <context>
     <name>KNAccountPasswordVerification</name>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="115"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="116"/>
         <source>Enter your password to perform administrative tasks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="118"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="119"/>
         <source>An action is attempting to perform an action that requires privileges. Authentication is required to perform this action.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="122"/>
+        <location filename="../sdk/account/knaccountpasswordverification.cpp" line="123"/>
         <source>Password is not correct, try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -349,267 +349,267 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="94"/>
+        <location filename="../sdk/knglobal.cpp" line="95"/>
         <source>The remote server refused the connection, it is not accepting requests.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="97"/>
+        <location filename="../sdk/knglobal.cpp" line="98"/>
         <source>The remote server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="100"/>
+        <location filename="../sdk/knglobal.cpp" line="101"/>
         <source>The remote host name was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="102"/>
+        <location filename="../sdk/knglobal.cpp" line="103"/>
         <source>The connection timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="104"/>
+        <location filename="../sdk/knglobal.cpp" line="105"/>
         <source>The operation was canceled before it was finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="106"/>
+        <location filename="../sdk/knglobal.cpp" line="107"/>
         <source>The SSL/TLS handshake failed and the encrypted channel could not be established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="109"/>
+        <location filename="../sdk/knglobal.cpp" line="110"/>
         <source>The connection was broken due to disconnection from the network, however the system has initiated roaming to another access point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="113"/>
+        <location filename="../sdk/knglobal.cpp" line="114"/>
         <source>The connection was broken due to disconnection from the network or failure to start the network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="116"/>
+        <location filename="../sdk/knglobal.cpp" line="117"/>
         <source>The background request is not currently allowed due to platform policy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="119"/>
+        <location filename="../sdk/knglobal.cpp" line="120"/>
         <source>The connection to the proxy server was refused, it is not accepting requests.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="122"/>
+        <location filename="../sdk/knglobal.cpp" line="123"/>
         <source>The proxy server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="125"/>
+        <location filename="../sdk/knglobal.cpp" line="126"/>
         <source>The proxy host name was not found, The proxy hostname is invalid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="128"/>
+        <location filename="../sdk/knglobal.cpp" line="129"/>
         <source>The connection to the proxy timed out or the proxy did not reply in time to the request sent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="131"/>
+        <location filename="../sdk/knglobal.cpp" line="132"/>
         <source>The proxy requires authentication in order to honour the request but did not accept any credentials offered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="134"/>
+        <location filename="../sdk/knglobal.cpp" line="135"/>
         <source>An unknown proxy-related error was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="136"/>
+        <location filename="../sdk/knglobal.cpp" line="137"/>
         <source>The access to the remote content was denied (HTTP error 401).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="139"/>
+        <location filename="../sdk/knglobal.cpp" line="140"/>
         <source>The operation requested on the remote content is not permitted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="142"/>
+        <location filename="../sdk/knglobal.cpp" line="143"/>
         <source>The remote content was not found at the server (HTTP error 404).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="145"/>
+        <location filename="../sdk/knglobal.cpp" line="146"/>
         <source>The remote server requires authentication to serve the content but the credentials provided were not accepted (if any).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="149"/>
+        <location filename="../sdk/knglobal.cpp" line="150"/>
         <source>The request could not be completed due to a conflict with the current state of the resource.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="152"/>
+        <location filename="../sdk/knglobal.cpp" line="153"/>
         <source>The requested resource is no longer available at the server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="155"/>
+        <location filename="../sdk/knglobal.cpp" line="156"/>
         <source>An unknown error related to the remote content was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="158"/>
+        <location filename="../sdk/knglobal.cpp" line="159"/>
         <source>The Network Access API cannot honor the request because the protocol is not known.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="161"/>
+        <location filename="../sdk/knglobal.cpp" line="162"/>
         <source>The requested operation is invalid for this protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="163"/>
+        <location filename="../sdk/knglobal.cpp" line="164"/>
         <source>A breakdown in protocol was detected (parsing error, invalid or unexpected responses, etc.).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="166"/>
+        <location filename="../sdk/knglobal.cpp" line="167"/>
         <source>The server encountered an unexpected condition which prevented it from fulfilling the request. (HTTP error 500)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="169"/>
+        <location filename="../sdk/knglobal.cpp" line="170"/>
         <source>The server is unable to handle the request at this time. (HTTP error 503)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="172"/>
+        <location filename="../sdk/knglobal.cpp" line="173"/>
         <source>An unknown error related to the server response was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="176"/>
+        <location filename="../sdk/knglobal.cpp" line="177"/>
         <source>An unknown network-related error was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="209"/>
+        <location filename="../sdk/knglobal.cpp" line="210"/>
         <source>Byte</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="213"/>
+        <location filename="../sdk/knglobal.cpp" line="214"/>
         <source>Portable Network Graphics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="215"/>
+        <location filename="../sdk/knglobal.cpp" line="216"/>
         <source>Joint Photographic Experts Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="217"/>
+        <location filename="../sdk/knglobal.cpp" line="218"/>
         <source>Windows Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="219"/>
+        <location filename="../sdk/knglobal.cpp" line="220"/>
         <source>Portable Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="221"/>
+        <location filename="../sdk/knglobal.cpp" line="222"/>
         <source>X11 Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="223"/>
+        <location filename="../sdk/knglobal.cpp" line="224"/>
         <source>X11 Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="226"/>
+        <location filename="../sdk/knglobal.cpp" line="227"/>
         <source>All supported files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="239"/>
+        <location filename="../sdk/knglobal.cpp" line="240"/>
         <source>Graphic Interchange Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="241"/>
+        <location filename="../sdk/knglobal.cpp" line="242"/>
         <source>Portable Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="243"/>
+        <location filename="../sdk/knglobal.cpp" line="244"/>
         <source>Portable Graymap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="454"/>
+        <location filename="../sdk/knglobal.cpp" line="458"/>
         <source>Jan.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="456"/>
+        <location filename="../sdk/knglobal.cpp" line="460"/>
         <source>Feb.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="458"/>
+        <location filename="../sdk/knglobal.cpp" line="462"/>
         <source>Mar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="460"/>
+        <location filename="../sdk/knglobal.cpp" line="464"/>
         <source>Apr.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="462"/>
+        <location filename="../sdk/knglobal.cpp" line="466"/>
         <source>May</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="464"/>
+        <location filename="../sdk/knglobal.cpp" line="468"/>
         <source>Jun.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="466"/>
+        <location filename="../sdk/knglobal.cpp" line="470"/>
         <source>Jul.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="468"/>
+        <location filename="../sdk/knglobal.cpp" line="472"/>
         <source>Aug.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="470"/>
+        <location filename="../sdk/knglobal.cpp" line="474"/>
         <source>Sept.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="472"/>
+        <location filename="../sdk/knglobal.cpp" line="476"/>
         <source>Oct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="474"/>
+        <location filename="../sdk/knglobal.cpp" line="478"/>
         <source>Nov.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="476"/>
+        <location filename="../sdk/knglobal.cpp" line="480"/>
         <source>Dec.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="540"/>
+        <location filename="../sdk/knglobal.cpp" line="544"/>
         <source>%2 %3, %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -617,37 +617,37 @@
 <context>
     <name>KNMacExtras</name>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="116"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="133"/>
         <source>Now Playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="117"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="134"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="118"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="135"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="120"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="137"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="121"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="138"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="122"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="139"/>
         <source>No Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmacextras/knmacextras.cpp" line="123"/>
+        <location filename="../plugin/knmacextras/knmacextras.cpp" line="140"/>
         <source>No Album</source>
         <translation type="unfinished"></translation>
     </message>
@@ -655,12 +655,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="267"/>
+        <location filename="../sdk/knmainwindow.cpp" line="346"/>
         <source>Cannot quit now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="268"/>
+        <location filename="../sdk/knmainwindow.cpp" line="347"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1094,6 +1094,19 @@
     </message>
 </context>
 <context>
+    <name>KNMusicLibrary</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="192"/>
+        <source>Add music to Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="209"/>
+        <source>Add To Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="199"/>
@@ -1137,19 +1150,14 @@
 <context>
     <name>KNMusicLibraryEmptyHint</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="95"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="94"/>
         <source>Songs and music you add to Mu appear in your music library.
 To add songs to library, drag your songs here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="100"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="99"/>
         <source>Add songs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryemptyhint.cpp" line="107"/>
-        <source>Add To Library</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1192,12 +1200,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibrarySongTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="180"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="183"/>
         <source>Songs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="182"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="185"/>
         <source>Go to Songs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1521,7 +1529,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="201"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="202"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1911,7 +1919,7 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
 <context>
     <name>KNPreferenceLanguagePanel</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencelanguagepanel.cpp" line="112"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencelanguagepanel.cpp" line="116"/>
         <source>Languages</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1919,32 +1927,48 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
 <context>
     <name>KNPreferencePanelData</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="47"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="42"/>
+        <source>System Tray Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="43"/>
+        <source>Close to system tray</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="45"/>
+        <source>When click the close button of the window, Mu won&apos;t quit but minimize to the system tray.
+When click the icon in the system tray, Mu will pop up back.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="58"/>
         <source>Header Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="48"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="59"/>
         <source>Header lyrics font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="50"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="54"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
         <source>Online Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="55"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="66"/>
         <source>Allow downloading lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="57"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="68"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation type="unfinished"></translation>
