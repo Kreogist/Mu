@@ -430,19 +430,28 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     //Reset the header player.
     reset();
     //Connect request to the backend.
+    QAction *muteAction=new QAction(this);
+    QList<QKeySequence> shortcuts;
+    shortcuts.append(QKeySequence(Qt::Key_F10));
+    shortcuts.append(QKeySequence(Qt::Key_VolumeMute));
+    muteAction->setShortcuts(shortcuts);
+    muteAction->setShortcutContext(Qt::ApplicationShortcut);
+    connect(muteAction, &QAction::triggered,
+            m_backend, &KNMusicBackend::changeMuteState);
+    knGlobal->mainWindow()->addAction(muteAction);
     connect(m_volumeIndicator, &KNOpacityButton::clicked,
             m_backend, &KNMusicBackend::changeMuteState);
-    connect(m_playNPause, &KNOpacityAnimeButton::clicked,
-            this, &KNMusicHeaderPlayer::onActionPlayNPauseClicked);
     //Create the play and pause aciton.
+    connect(m_playNPause, &KNOpacityAnimeButton::clicked,
+            m_backend, &KNMusicBackend::playNPause);
     QAction *playNPauseAction=new QAction(this);
-    QList<QKeySequence> shortcuts;
+    shortcuts=QList<QKeySequence>();
     shortcuts.append(QKeySequence(Qt::Key_F8));
     shortcuts.append(QKeySequence(Qt::Key_MediaTogglePlayPause));
     playNPauseAction->setShortcuts(shortcuts);
     playNPauseAction->setShortcutContext(Qt::ApplicationShortcut);
     connect(playNPauseAction, &QAction::triggered,
-            this, &KNMusicHeaderPlayer::onActionPlayNPauseClicked);
+            m_backend, &KNMusicBackend::playNPause);
     knGlobal->mainWindow()->addAction(playNPauseAction);
     //Connect the response.
     connect(m_backend, &KNMusicBackend::positionChanged,
@@ -460,13 +469,13 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     connect(m_backend, &KNMusicBackend::durationChanged,
             this, &KNMusicHeaderPlayer::updateDuration);
     connect(m_backend, &KNMusicBackend::playingStateChanged,
-            [=](const int &state)
+            [=](int state)
             {
                 //If it's playing, then should display pause icon.
                 m_playNPause->setIcon((state==Playing)?m_iconPause:m_iconPlay);
             });
     connect(m_backend, &KNMusicBackend::volumeChanged,
-            [=](const int &volumeSize)
+            [=](int volumeSize)
             {
                 //Block the volume slider.
                 m_volumeSlider->blockSignals(true);
@@ -479,7 +488,7 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
                 m_volumeSlider->blockSignals(false);
             });
     connect(m_backend, &KNMusicBackend::muteStateChanged,
-                [=](const bool &mute)
+                [=](bool mute)
                 {
                     //Update the icon of volume indicator.
                     m_volumeIndicator->setIcon(m_iconMute[mute]);
@@ -651,19 +660,6 @@ void KNMusicHeaderPlayer::updatePositionText(const qint64 &position)
         //Update the position data to new time position
         m_position->setText(KNMusicUtil::msecondToString(position));
     }
-}
-
-void KNMusicHeaderPlayer::onActionPlayNPauseClicked()
-{
-    //Check the state of the backend.
-    //If the backend is now at the playing state, pause the backend.
-    if(m_backend->state()==Playing)
-    {
-        m_backend->pause();
-        return;
-    }
-    //Start to play the main thread.
-    m_backend->play();
 }
 
 inline void KNMusicHeaderPlayer::updateDurationPalette(const int &opacity)

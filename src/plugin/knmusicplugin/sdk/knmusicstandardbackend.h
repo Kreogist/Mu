@@ -161,6 +161,11 @@ public slots:
     void setPreviewPosition(const qint64 &position) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNMusicBackend::playNPause().
+     */
+    void playNPause() Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicBackend::setVolume().
      */
     void setVolume(int volumeSize) Q_DECL_OVERRIDE;

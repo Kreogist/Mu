@@ -336,6 +336,14 @@ public slots:
     virtual void volumeDown()=0;
 
     /*!
+     * \brief This is slot is designed for the button which combines the play
+     * and pause button together. When a music file is played, it will be set to
+     * execute pause. When a music is paused, this slot will be set to execute
+     * play.
+     */
+    virtual void playNPause()=0;
+
+    /*!
      * \brief Set the current position of the main thread. If there's no file
      * loaded in the main thread or the position is not positive and less than
      * the duration, nothing will happened.

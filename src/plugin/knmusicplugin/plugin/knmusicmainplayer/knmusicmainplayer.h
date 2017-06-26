@@ -78,7 +78,6 @@ protected:
 
 private slots:
     void onActionAnalysisItemChanged(const KNMusicAnalysisItem &item);
-    void onActionPlayNPauseClicked();
     void onActionVolumeChanged(const int &volumeSize);
     void onActionLoopStateChanged(const int &state);
     void updatePositionText(const qint64 &position);

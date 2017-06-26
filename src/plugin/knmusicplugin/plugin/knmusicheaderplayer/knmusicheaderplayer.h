@@ -102,7 +102,6 @@ public slots:
 private slots:
     void retranslate();
     void updatePositionText(const qint64 &position);
-    void onActionPlayNPauseClicked();
     void onActionLoopStateChange(const int &state);
     void onActionMouseInOut(const QVariant &value);
     void onActionPositionEdited();

@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knmusicutil.h"
 #include "knmusicstandardbackendthread.h"
 
 #include "knmusicstandardbackend.h"
@@ -266,6 +267,19 @@ void KNMusicStandardBackend::setPreviewPosition(const qint64 &position)
 {
     //Set the preview thread position to a specific value.
     threadSetPosition(m_preview, position);
+}
+
+void KNMusicStandardBackend::playNPause()
+{
+    //Check the state of the backend.
+    //If the backend is now at the playing state, pause the backend.
+    if(state()==MusicUtil::Playing)
+    {
+        pause();
+        return;
+    }
+    //Start to play the main thread.
+    play();
 }
 
 void KNMusicStandardBackend::setVolume(int volumeSize)

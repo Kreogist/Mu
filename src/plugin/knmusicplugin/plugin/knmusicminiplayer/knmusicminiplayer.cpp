@@ -191,18 +191,7 @@ void KNMusicMiniPlayer::setBackend(KNMusicBackend *backend)
     }
     //Link controls.
     connect(m_playNPause, &KNOpacityAnimeButton::clicked,
-            [=]
-            {
-                //Check the state of the backend.
-                //If the backend is now at the playing state, pause the backend.
-                if(m_backend->state()==Playing)
-                {
-                    m_backend->pause();
-                    return;
-                }
-                //Start to play the main thread.
-                m_backend->play();
-            });
+            m_backend, &KNMusicBackend::playNPause);
     connect(m_mute, &KNOpacityAnimeButton::clicked,
             [=]
             {

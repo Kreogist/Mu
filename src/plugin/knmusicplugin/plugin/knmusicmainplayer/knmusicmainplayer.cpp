@@ -152,9 +152,6 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
                 m_playIcon);
     m_controlButtons[ButtonNext]->setIcon(
                 QPixmap(":/plugin/music/player/next_dark.png"));
-    //Link the play and pause button.
-    connect(m_controlButtons[ButtonPlayNPause], &KNGlassAnimeButton::clicked,
-            this, &KNMusicMainPlayer::onActionPlayNPauseClicked);
     //Configure the button.
     m_controlButtons[0]->setShowLeftLine(true);
     // Configure time labels.
@@ -262,6 +259,8 @@ void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
     //Link to the backend.
     connect(m_volumeSlider, &KNVolumeSlider::valueChanged,
             m_backend, &KNMusicBackend::setVolume);
+    connect(m_controlButtons[ButtonPlayNPause], &KNGlassAnimeButton::clicked,
+            m_backend, &KNMusicBackend::playNPause);
     //Connect the response.
     connect(m_backend, &KNMusicBackend::volumeChanged,
             this, &KNMusicMainPlayer::onActionVolumeChanged);
@@ -385,26 +384,6 @@ void KNMusicMainPlayer::onActionAnalysisItemChanged(
     m_detailInfoPanel->setAnalysisItem(item);
     //Give the suffix to the codec label.
     m_codecLabel->setSuffix(QFileInfo(item.detailInfo.filePath).suffix());
-}
-
-void KNMusicMainPlayer::onActionPlayNPauseClicked()
-{
-    //Check the backend pointer.
-    if(!m_backend)
-    {
-        //Give back.
-        return;
-    }
-    //Check out the backend status.
-    if(m_backend->state()==Playing)
-    {
-        //Pause the backend.
-        m_backend->pause();
-        //Mission complete.
-        return;
-    }
-    //Or else we have to play the backend.
-    m_backend->play();
 }
 
 void KNMusicMainPlayer::onActionVolumeChanged(const int &volumeSize)
