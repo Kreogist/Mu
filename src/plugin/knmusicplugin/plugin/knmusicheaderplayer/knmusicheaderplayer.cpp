@@ -430,29 +430,11 @@ void KNMusicHeaderPlayer::setBackend(KNMusicBackend *backend)
     //Reset the header player.
     reset();
     //Connect request to the backend.
-    QAction *muteAction=new QAction(this);
-    QList<QKeySequence> shortcuts;
-    shortcuts.append(QKeySequence(Qt::Key_F10));
-    shortcuts.append(QKeySequence(Qt::Key_VolumeMute));
-    muteAction->setShortcuts(shortcuts);
-    muteAction->setShortcutContext(Qt::ApplicationShortcut);
-    connect(muteAction, &QAction::triggered,
-            m_backend, &KNMusicBackend::changeMuteState);
-    knGlobal->mainWindow()->addAction(muteAction);
     connect(m_volumeIndicator, &KNOpacityButton::clicked,
             m_backend, &KNMusicBackend::changeMuteState);
     //Create the play and pause aciton.
     connect(m_playNPause, &KNOpacityAnimeButton::clicked,
             m_backend, &KNMusicBackend::playNPause);
-    QAction *playNPauseAction=new QAction(this);
-    shortcuts=QList<QKeySequence>();
-    shortcuts.append(QKeySequence(Qt::Key_F8));
-    shortcuts.append(QKeySequence(Qt::Key_MediaTogglePlayPause));
-    playNPauseAction->setShortcuts(shortcuts);
-    playNPauseAction->setShortcutContext(Qt::ApplicationShortcut);
-    connect(playNPauseAction, &QAction::triggered,
-            m_backend, &KNMusicBackend::playNPause);
-    knGlobal->mainWindow()->addAction(playNPauseAction);
     //Connect the response.
     connect(m_backend, &KNMusicBackend::positionChanged,
             [=](const qint64 &position)
@@ -507,28 +489,8 @@ void KNMusicHeaderPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     //Link the header player's control signal to now playing model.
     connect(m_loopState, &KNOpacityButton::clicked,
             m_nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
-    //The next button and next action.
     connect(m_next, &KNOpacityAnimeButton::clicked,
             m_nowPlaying, &KNMusicNowPlayingBase::playNext);
-    QAction *nextAction=new QAction(this);
-    QList<QKeySequence> shortcuts;
-    shortcuts.append(QKeySequence(Qt::Key_F9));
-    shortcuts.append(QKeySequence(Qt::Key_MediaNext));
-    nextAction->setShortcuts(shortcuts);
-    nextAction->setShortcutContext(Qt::ApplicationShortcut);
-    knGlobal->mainWindow()->addAction(nextAction);
-    connect(nextAction, &QAction::triggered,
-            m_nowPlaying, &KNMusicNowPlayingBase::playNext);
-    //The previous button and previous action.
-    QAction *previousAction=new QAction(this);
-    shortcuts=QList<QKeySequence>();
-    shortcuts.append(QKeySequence(Qt::Key_F7));
-    shortcuts.append(QKeySequence(Qt::Key_MediaPrevious));
-    previousAction->setShortcuts(shortcuts);
-    previousAction->setShortcutContext(Qt::ApplicationShortcut);
-    knGlobal->mainWindow()->addAction(previousAction);
-    connect(previousAction, &QAction::triggered,
-            m_nowPlaying, &KNMusicNowPlayingBase::playPrevious);
     connect(m_previous, &KNOpacityAnimeButton::clicked,
             m_nowPlaying, &KNMusicNowPlayingBase::playPrevious);
     //Link the now playing model's response to header player.
