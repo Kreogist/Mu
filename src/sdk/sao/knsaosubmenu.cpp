@@ -37,6 +37,7 @@
 KNSaoSubMenu::KNSaoSubMenu(QWidget *parent) :
     QMenu(parent),
     m_rawIndicator(QPixmap("://public/indicator.png")),
+    m_rawInverseIndicator(QPixmap("://public/indicator_inverse.png")),
     #ifndef Q_OS_MACX
     m_start(new QPropertyAnimation(this, "geometry", this)),
     #endif
@@ -90,12 +91,12 @@ void KNSaoSubMenu::showEvent(QShowEvent *event)
     //Stop the animation.
     m_start->stop();
 #endif
-    //Repaint the indicator.
-    renderingIndicator();
     //Move and show the indicator.
-    int menuX=QCursor::pos().x()+m_indicator->width(),
-        centerPosition=QCursor::pos().y();
-    //Chechk the parent widget.
+    int indicatorWidth=m_rawIndicator.width(),
+        menuX=QCursor::pos().x()+indicatorWidth,
+        centerPosition=QCursor::pos().y(),
+        indicatorX=0;
+    //Check the parent widget.
     if(parentWidget()!=nullptr)
     {
         //Check the parent object.
@@ -110,10 +111,10 @@ void KNSaoSubMenu::showEvent(QShowEvent *event)
             menuX=parentMenu->x()+
                     menuActionGeometry.x()+
                     menuActionGeometry.width()+
-                    m_indicator->width()/2;
+                    (indicatorWidth>>1);
             centerPosition=parentMenu->y()+
                     menuActionGeometry.y()+
-                    menuActionGeometry.height()/2;
+                    (menuActionGeometry.height()>>1);
         }
         else
         {
@@ -121,13 +122,33 @@ void KNSaoSubMenu::showEvent(QShowEvent *event)
             QPoint globalParentPos=
                     parentWidget()->mapToGlobal(QPoint(0,0));
             menuX=globalParentPos.x() + parentWidget()->width() +
-                    m_indicator->width()/2;
-            centerPosition=globalParentPos.y()+parentWidget()->height()/2;
+                    (indicatorWidth>>1);
+            centerPosition=globalParentPos.y()+(parentWidget()->height()>>1);
+            //Check the position of the menu width.
+            //Only the top level sao sub menu will consider this part.
+            if(menuX+width()>QApplication::desktop()->width())
+            {
+                //Repaint the indicator.
+                renderingIndicator(m_rawInverseIndicator);
+                //Update the indicator X.
+                indicatorX=menuX-(indicatorWidth<<1);
+                //Recalculate the menu X.
+                menuX-=(indicatorWidth<<1)+width();
+            }
         }
     }
+    //Check the indicator X position.
+    if(indicatorX==0)
+    {
+        //Repaint the indicator.
+        renderingIndicator(m_rawIndicator);
+        //Update the indicator X.
+        indicatorX=menuX-indicatorWidth;
+    }
     //Move the indicator.
-    m_indicator->move(menuX-m_indicator->width(),
-                      centerPosition-m_indicator->height()/2);
+    m_indicator->move(indicatorX,
+                      centerPosition-(m_indicator->height()>>1));
+    //Show the indicator
     m_indicator->show();
     //Generate the prefer geometry.
     int preferTopPosition=centerPosition-height()/2;
@@ -135,7 +156,7 @@ void KNSaoSubMenu::showEvent(QShowEvent *event)
     {
         preferTopPosition=0;
     }
-    if(preferTopPosition+height()>QApplication::desktop()->height())
+    else if(preferTopPosition+height()>QApplication::desktop()->height())
     {
         preferTopPosition=QApplication::desktop()->height()-height();
     }
@@ -170,19 +191,19 @@ void KNSaoSubMenu::hideEvent(QHideEvent *event)
     QMenu::hideEvent(event);
 }
 
-inline void KNSaoSubMenu::renderingIndicator()
+inline void KNSaoSubMenu::renderingIndicator(const QPixmap &indicator)
 {
     //Get the indicator width.
-    int indicatorWidth=m_rawIndicator.width();
+    int indicatorWidth=indicator.width();
     //Rendering the indicator pixmap.
     QPixmap indicatorPixmap(indicatorWidth,
-                            qMax(qMin(m_rawIndicator.height(),
+                            qMax(qMin(indicator.height(),
                                       height()),
                                  63));
     //Check indicator pixmap height.
-    if(indicatorPixmap.height()==m_rawIndicator.height())
+    if(indicatorPixmap.height()==indicator.height())
     {
-        indicatorPixmap=m_rawIndicator;
+        indicatorPixmap=indicator;
     }
     else
     {
@@ -192,13 +213,13 @@ inline void KNSaoSubMenu::renderingIndicator()
         QPainter painter(&indicatorPixmap);
         //Paint the top to the indicator.
         painter.drawPixmap(QRect(0, 0, indicatorWidth, TopHeight),
-                           m_rawIndicator,
+                           indicator,
                            QRect(0, 0, indicatorWidth, TopHeight));
         //Calculate the indicator filler height.
         int fillerHeight=(indicatorPixmap.height()-63)>>1;
         //Paint the filler.
         painter.drawPixmap(QRect(0, TopHeight, indicatorWidth, fillerHeight),
-                           m_rawIndicator,
+                           indicator,
                            QRect(0,
                                  TopHeight,
                                  indicatorWidth,
@@ -208,7 +229,7 @@ inline void KNSaoSubMenu::renderingIndicator()
                                  TopHeight+fillerHeight,
                                  indicatorWidth,
                                  CenterEnd - CenterStart),
-                           m_rawIndicator,
+                           indicator,
                            QRect(0,
                                  CenterStart,
                                  indicatorWidth,
@@ -218,7 +239,7 @@ inline void KNSaoSubMenu::renderingIndicator()
                                  TopHeight+fillerHeight+(CenterEnd-CenterStart),
                                  indicatorWidth,
                                  fillerHeight),
-                           m_rawIndicator,
+                           indicator,
                            QRect(0,
                                  CenterEnd,
                                  indicatorWidth,
@@ -229,7 +250,7 @@ inline void KNSaoSubMenu::renderingIndicator()
                                  (CenterEnd-CenterStart),
                                  indicatorWidth,
                                  indicatorPixmap.height()-BottomHeight),
-                           m_rawIndicator,
+                           indicator,
                            QRect(0,
                                  BottomHeight,
                                  indicatorWidth,

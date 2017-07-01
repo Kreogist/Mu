@@ -95,6 +95,7 @@
         <file>public/status_fullscreen_off.png</file>
         <file>public/status_fullscreen.png</file>
         <file>public/status_add_music.png</file>
+        <file>public/indicator_inverse.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

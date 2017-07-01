@@ -197,7 +197,7 @@ bool KNAccount::generateAccount(const QString &userName,
     //Emit register success signal.
     emit generateSuccess();
     //Upload the user configuration file.
-    syncUserConfigure();
+//    syncUserConfigure();
     //Mission complete.
     return true;
 }
@@ -292,7 +292,7 @@ bool KNAccount::login(const QString &userName, QString password)
     //Emit success signal.
     emit loginSuccess();
     //Once we could login, we need to sync the configuration file.
-    syncUserConfigure();
+//    syncUserConfigure();
     //Successfully login.
     return true;
 }
@@ -337,7 +337,7 @@ void KNAccount::autoLogin()
     //Emit success signal.
     emit loginSuccess();
     //Once we could login, we need to sync the configuration file.
-    syncUserConfigure();
+//    syncUserConfigure();
 }
 
 bool KNAccount::setAvatar(const QPixmap &avatarImage)

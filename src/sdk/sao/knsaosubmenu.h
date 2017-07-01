@@ -53,8 +53,8 @@ protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    inline void renderingIndicator();
-    QPixmap m_rawIndicator;
+    inline void renderingIndicator(const QPixmap &indicator);
+    QPixmap m_rawIndicator, m_rawInverseIndicator;
 #ifndef Q_OS_MACX
     QPropertyAnimation *m_start;
 #endif
