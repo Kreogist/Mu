@@ -59,6 +59,12 @@ public:
      */
     void addFixedItemWidget(KNPreferenceItem *item);
 
+    /*!
+     * \brief Get whether the advanced shown switch is toggled.
+     * \return If the advanced button is toggled, this result is true.
+     */
+    bool isAdvancedShown() const;
+
 signals:
     /*!
      * \brief When the header button clicked, this signal will be emitted to ask

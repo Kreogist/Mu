@@ -130,6 +130,8 @@ void KNPreference::onActionPanelChange(int index)
     QList<PreferencePanelBlock> blocks=m_settingPanelData->getPanelData(index);
     //Set the blocks to the setting panel.
     m_settingContainer->setPanelBlocks(blocks);
+    //Update the advanced state.
+    m_settingContainer->setAdvancedShown(m_sidebar->isAdvancedShown());
 }
 
 void KNPreference::onActionAdvancedToggle(bool toggle)

@@ -100,6 +100,12 @@ void KNPreferenceSidebar::addFixedItemWidget(KNPreferenceItem *item)
     m_fixedItemList->addTab(item);
 }
 
+bool KNPreferenceSidebar::isAdvancedShown() const
+{
+    //Return the button is checked.
+    return m_advancedButton->isChecked();
+}
+
 void KNPreferenceSidebar::setHeaderText(const QString &text)
 {
     //Set the header text to header label.
