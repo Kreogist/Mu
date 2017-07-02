@@ -19,10 +19,10 @@
 #include <QBoxLayout>
 #include <QSplitter>
 
-#include "kndropproxycontainer.h"
 #include "kncategorytab.h"
 #include "knlocalemanager.h"
 
+#include "knmusiclibrarydropproxy.h"
 #include "knmusicsolomenubase.h"
 #include "knmusiclibrarycategorydelegate.h"
 #include "knmusicsearchbase.h"
@@ -43,7 +43,7 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
     m_currentSourceIndex(QModelIndex()),
     m_tab(new KNCategoryTab(this)),
     m_showInArtistTab(new QAction(this)),
-    m_dropProxy(new KNDropProxyContainer(this)),
+    m_dropProxy(new KNMusicLibraryDropProxy(this)),
     m_artistList(new KNMusicCategoryListViewBase(m_dropProxy)),
     m_artistDisplay(new KNMusicCategoryDisplay(this, this)),
     m_categoryModel(nullptr),
@@ -220,8 +220,10 @@ void KNMusicLibraryArtistTab::setLibraryModel(KNMusicLibraryModel *model)
     }
     //Do original set library model.
     KNMusicLibraryCategoryTab::setLibraryModel(m_libraryModel);
+    //Set the library model.
+    m_dropProxy->setLibraryModelPointer((qint64)m_libraryModel);
     //Link analysis request connections.
-    connect(m_dropProxy, &KNDropProxyContainer::urlsDropped,
+    connect(m_dropProxy, &KNMusicLibraryDropProxy::urlsDropped,
             m_libraryModel, &KNMusicLibraryModel::appendUrls);
     //Set the model to display.
     m_artistDisplay->setLibraryModel(m_libraryModel);

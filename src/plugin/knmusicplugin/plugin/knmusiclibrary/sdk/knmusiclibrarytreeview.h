@@ -59,7 +59,6 @@ protected:
      * \brief Reimplemented from KNMusicTreeViewBase::resetHeaderState().
      */
     void resetHeaderState() Q_DECL_OVERRIDE;
-
 };
 
 #endif // KNMUSICLIBRARYTREEVIEW_H

@@ -20,12 +20,12 @@
 
 #include "knemptystatewidget.h"
 #include "kncategorytab.h"
-#include "kndropproxycontainer.h"
 #include "knlocalemanager.h"
 
 #include "knmusicsearchbase.h"
 #include "knmusicproxymodel.h"
 #include "knmusicglobal.h"
+#include "knmusiclibrarydropproxy.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusiclibraryemptyhint.h"
 #include "knmusiclibrarytreeview.h"
@@ -40,7 +40,7 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     KNMusicLibraryTab(parent),
     m_tab(new KNCategoryTab(this)),
     m_emptyStateWidget(new KNEmptyStateWidget(this)),
-    m_dropProxy(new KNDropProxyContainer(this)),
+    m_dropProxy(new KNMusicLibraryDropProxy(this)),
     m_emptyHint(new KNMusicLibraryEmptyHint(this)),
     m_libraryModel(nullptr),
     m_treeView(new KNMusicLibraryTreeView(this, this)),
@@ -153,10 +153,12 @@ void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
         //We will do nothing if the library model is null.
         return;
     }
+    //Set the library model.
+    m_dropProxy->setLibraryModelPointer((qint64)m_libraryModel);
     //Give the library model to the tree view.
     m_treeView->setMusicModel(m_libraryModel);
     //Link the analysis requirement to the library model.
-    connect(m_dropProxy, &KNDropProxyContainer::urlsDropped,
+    connect(m_dropProxy, &KNMusicLibraryDropProxy::urlsDropped,
             m_libraryModel, &KNMusicLibraryModel::appendUrls);
     connect(m_emptyHint, &KNMusicLibraryEmptyHint::urlsDropped,
             m_libraryModel, &KNMusicLibraryModel::appendUrls);

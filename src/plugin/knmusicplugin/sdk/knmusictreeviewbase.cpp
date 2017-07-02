@@ -261,6 +261,7 @@ void KNMusicTreeViewBase::dropEvent(QDropEvent *event)
                                            Name,
                                            QModelIndex()))
         {
+            //Accept the event.
             event->accept();
         }
     }

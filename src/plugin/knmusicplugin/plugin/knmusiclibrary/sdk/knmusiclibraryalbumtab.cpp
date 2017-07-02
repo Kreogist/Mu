@@ -19,9 +19,9 @@
 #include <QBoxLayout>
 
 #include "knlocalemanager.h"
-#include "kndropproxycontainer.h"
 #include "kncategorytab.h"
 
+#include "knmusiclibrarydropproxy.h"
 #include "knmusicsearchbase.h"
 #include "knmusicsolomenubase.h"
 #include "knmusicproxymodel.h"
@@ -40,7 +40,7 @@ KNMusicLibraryAlbumTab::KNMusicLibraryAlbumTab(QWidget *parent) :
     KNMusicLibraryCategoryTab(parent),
     m_tab(new KNCategoryTab(this)),
     m_showInAlbumTab(new QAction(this)),
-    m_dropProxy(new KNDropProxyContainer(this)),
+    m_dropProxy(new KNMusicLibraryDropProxy(this)),
     m_albumDetail(new KNMusicAlbumDetail(m_dropProxy, this)),
     m_albumView(new KNMusicAlbumView(m_dropProxy)),
     m_albumModel(nullptr),
@@ -176,11 +176,12 @@ void KNMusicLibraryAlbumTab::setLibraryModel(KNMusicLibraryModel *model)
         //We will do nothing if the library model is null.
         return;
     }
-
+    //Set the model.
+    m_dropProxy->setLibraryModelPointer((qint64)m_libraryModel);
     //Do original set library model.
     KNMusicLibraryCategoryTab::setLibraryModel(m_libraryModel);
     //Link analysis request connections.
-    connect(m_dropProxy, &KNDropProxyContainer::urlsDropped,
+    connect(m_dropProxy, &KNMusicLibraryDropProxy::urlsDropped,
             m_libraryModel, &KNMusicLibraryModel::appendUrls);
     //Set the model to display.
     m_albumDetail->setLibraryModel(m_libraryModel);

@@ -23,7 +23,7 @@
 
 class KNCategoryTab;
 class KNEmptyStateWidget;
-class KNDropProxyContainer;
+class KNMusicLibraryDropProxy;
 class KNMusicLibraryTreeView;
 class KNMusicLibraryEmptyHint;
 /*!
@@ -84,7 +84,7 @@ private:
     inline void showAndSelectRow(int musicRow);
     KNCategoryTab *m_tab;
     KNEmptyStateWidget *m_emptyStateWidget;
-    KNDropProxyContainer *m_dropProxy;
+    KNMusicLibraryDropProxy *m_dropProxy;
     KNMusicLibraryEmptyHint *m_emptyHint;
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTreeView *m_treeView;

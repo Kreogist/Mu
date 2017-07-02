@@ -22,7 +22,7 @@
 #include "knmusiclibrarycategorytab.h"
 
 class KNCategoryTab;
-class KNDropProxyContainer;
+class KNMusicLibraryDropProxy;
 class KNMusicAlbumView;
 class KNMusicAlbumModel;
 class KNMusicAlbumDetail;
@@ -93,7 +93,7 @@ private:
     inline void showAndSelectRow(const int &musicRow);
     KNCategoryTab *m_tab;
     QAction *m_showInAlbumTab;
-    KNDropProxyContainer *m_dropProxy;
+    KNMusicLibraryDropProxy *m_dropProxy;
     KNMusicAlbumDetail *m_albumDetail;
     KNMusicAlbumView *m_albumView;
     KNMusicAlbumModel *m_albumModel;

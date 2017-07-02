@@ -94,7 +94,7 @@ protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
      */
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QWidget *m_emptyWidget, *m_contentWidget;

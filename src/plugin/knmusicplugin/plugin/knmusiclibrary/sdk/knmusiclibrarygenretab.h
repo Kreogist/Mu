@@ -23,14 +23,18 @@
 
 #include "knmusiclibrarycategorytab.h"
 
-class KNDropProxyContainer;
 class KNCategoryTab;
 class KNMusicCategoryDisplay;
 class KNMusicCategoryListViewBase;
+class KNMusicLibraryDropProxy;
 class KNMusicLibraryGenreTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryGenreTab widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLibraryGenreTab(QWidget *parent = 0);
 
     /*!
@@ -92,7 +96,7 @@ private:
     QModelIndex m_currentSourceIndex;
     KNCategoryTab *m_tab;
     QAction *m_showInGenreTab;
-    KNDropProxyContainer *m_dropProxy;
+    KNMusicLibraryDropProxy *m_dropProxy;
     KNMusicCategoryListViewBase *m_genreList;
     KNMusicCategoryDisplay *m_genreDisplay;
     KNMusicCategoryModelBase *m_categoryModel;

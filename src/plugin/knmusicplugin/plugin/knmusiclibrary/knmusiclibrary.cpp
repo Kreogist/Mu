@@ -48,8 +48,8 @@ using namespace MusicUtil;
 
 KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     KNMusicLibraryBase(parent),
-    m_addToLibraryButton(new KNOpacityAnimeButton()),
     m_libraryPath(knMusicGlobal->musicLibraryPath()+"/Library"),
+    m_addToLibraryButton(new KNOpacityAnimeButton()),
     m_libraryModel(new KNMusicLibraryModel(this)),
     m_songTab(new KNMusicLibrarySongTab),
     m_nowPlaying(nullptr)

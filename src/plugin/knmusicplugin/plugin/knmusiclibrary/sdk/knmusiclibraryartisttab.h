@@ -23,8 +23,8 @@
 
 #include "knmusiclibrarycategorytab.h"
 
-class KNDropProxyContainer;
 class KNCategoryTab;
+class KNMusicLibraryDropProxy;
 class KNMusicCategoryDisplay;
 class KNMusicCategoryListViewBase;
 /*!
@@ -104,7 +104,7 @@ private:
     QModelIndex m_currentSourceIndex;
     KNCategoryTab *m_tab;
     QAction *m_showInArtistTab;
-    KNDropProxyContainer *m_dropProxy;
+    KNMusicLibraryDropProxy *m_dropProxy;
     KNMusicCategoryListViewBase *m_artistList;
     KNMusicCategoryDisplay *m_artistDisplay;
     KNMusicCategoryModelBase *m_categoryModel;

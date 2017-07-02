@@ -15,6 +15,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QDropEvent>
+#include <QMimeData>
+
+#include "knmusicmodel.h"
 #include "knmusicutil.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicglobal.h"
@@ -89,4 +93,3 @@ void KNMusicLibraryTreeView::resetHeaderState()
         header()->setSectionHidden(proxyModel()->categoryColumn(), true);
     }
 }
-

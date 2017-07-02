@@ -31,6 +31,10 @@ class KNMusicPlayerBase : public KNDropProxyContainer
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlayerBase widget.
+     * \param parent The parent widget.
+     */
     KNMusicPlayerBase(QWidget *parent = 0):KNDropProxyContainer(parent){}
 
     /*!
