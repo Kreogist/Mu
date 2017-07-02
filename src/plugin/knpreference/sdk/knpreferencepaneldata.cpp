@@ -18,6 +18,7 @@ Foundation,
  */
 #include <QApplication>
 #include <QFont>
+#include <QJsonObject>
 
 #include "knpreferencepaneldata.h"
 
@@ -45,7 +46,8 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 tr("When click the close button of the window, Mu won't quit "
                    "but minimize to the system tray.\n"
                    "When click the icon in the system tray, Mu will pop up "
-                   "back."));
+                   "back."),
+                false);
         panelData.append(block);
 #endif
         break;
@@ -59,14 +61,18 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         addItem(block, tr("Header lyrics font"),
                 "User/Music/MusicHeaderPlayer/Lyrics/Font", font, TypeFont,
                 tr("This option will change the font used on the header player "
-                   "lyrics."));
+                   "lyrics."), false);
+        addIntItem(block, tr("Header lyrics spacing"),
+                   "User/Music/MusicHeaderPlayer/Lyrics/Spacing", 2,
+                   tr("This option will change the spacing of the text line on "
+                      "the header player lyrics."), 1, 20, true);
         panelData.append(block);
         //Online lyrics.
         block=generateBlock(tr("Online Lyrics"));
         addItem(block, tr("Allow downloading lyrics"),
                 "User/Music/Lyrics/Online/Enable", true, TypeBoolean,
                 tr("If there is no lyrics existed in the lyrics search folder,"
-                   "\nallows Mu to download lyrics from the Internet."));
+                   "\nallows Mu to download lyrics from the Internet."), false);
         panelData.append(block);
         break;
     }
@@ -93,16 +99,53 @@ inline void KNPreferencePanelData::addItem(PreferencePanelBlock &block,
                                            const QString &path,
                                            const QVariant &defaultValue,
                                            PreferencePanelOptionType type,
-                                           const QString &explain)
+                                           const QString &explain,
+                                           bool isAdvanced)
 {
     //Generate an item.
     PreferencePanelOption option;
-    //Save the data.
-    option.path=path.split('/');
-    option.defaultValue=defaultValue;
-    option.title=title;
-    option.explain=explain;
-    option.type=type;
+    //Update the item data.
+    setItemData(option, title, path, defaultValue, explain, type, isAdvanced);
+    //No preference will be added.
     //Add data to item.
     block.options.append(option);
+}
+
+void KNPreferencePanelData::addIntItem(PreferencePanelBlock &block,
+                                       const QString &title,
+                                       const QString &path,
+                                       const QVariant &defaultValue,
+                                       const QString &explain,
+                                       int min, int max, bool isAdvanced)
+{
+    //Generate an item.
+    PreferencePanelOption option;
+    //Update the item data.
+    setItemData(option, title, path, defaultValue, explain, TypeInt,
+                isAdvanced);
+    //Set the preference.
+    QJsonObject config;
+    config.insert("min", min);
+    config.insert("max", max);
+    option.configure=config;
+    //Add data to item.
+    block.options.append(option);
+}
+
+inline void KNPreferencePanelData::setItemData(PreferencePanelOption &option,
+                                               const QString &title,
+                                               const QString &path,
+                                               const QVariant &defaultValue,
+                                               const QString &explain,
+                                               PreferencePanelOptionType type,
+                                               bool isAdvanced)
+{
+    //Save the data.
+    option.title=title;
+    option.path=path.split('/');
+    option.defaultValue=defaultValue;
+    option.explain=explain;
+    option.advanced=isAdvanced;
+    //Set the type of the item.
+    option.type=type;
 }

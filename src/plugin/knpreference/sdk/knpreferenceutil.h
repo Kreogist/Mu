@@ -27,34 +27,40 @@ Foundation,
 
 namespace PreferenceUtil
 {
-enum PreferencePanels
-{
-    PanelGeneral,
-    PanelLyrics,
-    PreferencePanelCount
-};
+    enum PreferencePanels
+    {
+        PanelGeneral,
+        PanelLyrics,
+        PreferencePanelCount
+    };
 
-enum PreferencePanelOptionType
-{
-    TypeBoolean,
-    TypeInt,
-    TypeFont
-};
+    enum PreferencePanelOptionType
+    {
+        TypeBoolean,
+        TypeInt,
+        TypeFont
+    };
 
-struct PreferencePanelOption
-{
-    QStringList path;
-    QVariant defaultValue;
-    QString title;
-    QString explain;
-    PreferencePanelOptionType type;
-};
+    struct PreferencePanelOption
+    {
+        QStringList path;
+        QVariant configure;
+        QVariant defaultValue;
+        QString title;
+        QString explain;
+        PreferencePanelOptionType type;
+        bool advanced;
+        PreferencePanelOption() :
+            advanced(false)
+        {
+        }
+    };
 
-struct PreferencePanelBlock
-{
-    QString blockName;
-    QList<PreferencePanelOption> options;
-};
+    struct PreferencePanelBlock
+    {
+        QString blockName;
+        QList<PreferencePanelOption> options;
+    };
 }
 
 #endif // KNPREFERENCEUTIL_H

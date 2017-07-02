@@ -137,7 +137,7 @@ void KNPreference::onActionAdvancedToggle(bool toggle)
     //Save the toggle state.
     m_preferenceConfigure->setData("Advanced", toggle);
     //Process advanced state.
-    //!FIXME: Process the advanced toggle event.
+    m_settingContainer->setAdvancedShown(toggle);
 }
 
 inline KNPreferenceItem *KNPreference::generateItem(

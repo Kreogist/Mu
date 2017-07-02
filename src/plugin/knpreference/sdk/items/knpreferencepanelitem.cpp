@@ -85,6 +85,12 @@ KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
     onActionChangeHighlight(0);
 }
 
+void KNPreferencePanelItem::setConfig(const QVariant &config)
+{
+    //Default, the preference item doesn't need any configure.
+    Q_UNUSED(config)
+}
+
 void KNPreferencePanelItem::setValue(const QVariant &value)
 {
     //Check the value data.
@@ -108,6 +114,8 @@ void KNPreferencePanelItem::setPreferenceOption(
     m_defaultValue=knConf->configureValue(m_path, option.defaultValue);
     //Get the configure value.
     setWidgetValue(m_defaultValue);
+    //Set the configure data.
+    setConfig(option.configure);
     //Disable the value.
     m_undoButton->setEnabled(false);
 }

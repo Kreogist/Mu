@@ -57,7 +57,21 @@ private:
                         const QString &path,
                         const QVariant &defaultValue,
                         PreferencePanelOptionType type,
-                        const QString &explain);
+                        const QString &explain,
+                        bool isAdvanced);
+    inline void addIntItem(PreferencePanelBlock &block,
+                           const QString &title,
+                           const QString &path,
+                           const QVariant &defaultValue,
+                           const QString &explain,
+                           int min, int max, bool isAdvanced);
+    inline void setItemData(PreferencePanelOption &option,
+                            const QString &title,
+                            const QString &path,
+                            const QVariant &defaultValue,
+                            const QString &explain,
+                            PreferencePanelOptionType type,
+                            bool isAdvanced);
 };
 
 #endif // KNPREFERENCEPANELDATA_H

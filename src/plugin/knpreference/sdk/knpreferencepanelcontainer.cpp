@@ -67,6 +67,16 @@ void KNPreferencePanelContainer::setPanelBlocks(
     shadow->show();
 }
 
+void KNPreferencePanelContainer::setAdvancedShown(bool showAdvanced)
+{
+    //Update the item in the panel list.
+    for(auto panel : m_panelList)
+    {
+        //Update the advanced state.
+        panel->setAdvancedItemShown(showAdvanced);
+    }
+}
+
 void KNPreferencePanelContainer::resizeEvent(QResizeEvent *event)
 {
     //Resize the widget.

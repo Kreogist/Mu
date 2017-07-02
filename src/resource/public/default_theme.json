@@ -1,6 +1,17 @@
 {
     "Application" : {
     },
+    "FontDialog" : {
+        "Parent" : "Application",
+        "Base" : "#202020",
+        "Window" : "#303030",
+        "WindowText" : "#9D9D9D",
+        "Button" : "#404040",
+        "ButtonText" : "#A0A0A0",
+        "Text" : "#9D9D9D",
+        "Highlight" : "#505050",
+        "HighlightedText" : "#F7CF3D"
+    },
     "MainWindow" : {
         "Parent" : "Application",
         "Window" : "#000000",
@@ -493,6 +504,17 @@
     "PreferenceItemSwitcher" :
     {
         "Parent" : "PreferenceAdvancedButton"
+    },
+    "PreferenceItemSpinBox" :
+    {
+        "Parent" : "FontDialog",
+        "Base" : "#404040"
+    },
+    "PreferenceItemSlider" :
+    {
+        "Parent" : "FontDialog",
+        "Base" : "#404040",
+        "Highlight" : "#F7CF3D"
     },
     "PreferenceSidebarLabel" :
     {

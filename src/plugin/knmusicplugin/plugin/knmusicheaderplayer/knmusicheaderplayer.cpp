@@ -742,6 +742,8 @@ void KNMusicHeaderPlayer::onLyricsConfigureChanged()
     QFont lyricsFont=m_lyricsConfigure->data("Font").value<QFont>();
     //Update the header lyrics font.
     m_headerLyrics->setFont(lyricsFont);
+    //Update the lyrics spacing.
+    m_headerLyrics->setSpacing(m_lyricsConfigure->data("Spacing", 2).toInt());
 }
 
 void KNMusicHeaderPlayer::showAppendMenu()

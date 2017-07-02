@@ -53,6 +53,12 @@ public:
     virtual QVariant value() const=0;
 
     /*!
+     * \brief Set the config of the item.
+     * \param config The config data of the preference item panel.
+     */
+    virtual void setConfig(const QVariant &config);
+
+    /*!
      * \brief Set the value of the widget.
      * \param value The value data.
      */
@@ -61,7 +67,6 @@ public:
 signals:
     /*!
      * \brief When the item value changed, this signal will be emitted.
-     * \param value The new value.
      */
     void valueChanged();
 

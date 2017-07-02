@@ -49,8 +49,8 @@ public:
     int spacing() const;
 
     /*!
-     * \brief alignment
-     * \return
+     * \brief Get the text alignment of the lyrics.
+     * \return The lyrics alignment.
      */
     Qt::Alignment alignment() const;
 

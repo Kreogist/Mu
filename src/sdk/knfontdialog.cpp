@@ -15,8 +15,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "knfontdialog.h"
-
 #include <QScopedPointer>
 #include <QFontComboBox>
 #include <QPushButton>
@@ -29,26 +27,42 @@
 #include <QSlider>
 #include <QCheckBox>
 
+#include "knthememanager.h"
+
 #include "knfontdialog.h"
 
 #include <QDebug>
 
 KNFontDialog::KNFontDialog(QWidget *parent) :
-    QDialog(parent)
+    QDialog(parent),
+    m_fontFamily(new QFontComboBox(this)),
+    m_fontSizeList(new QListWidget(this)),
+    m_sizeSpin(new QSpinBox(this)),
+    m_sizeSlider(new QSlider(Qt::Vertical, this)),
+    m_previewEdit(new QLineEdit(this)),
+    m_fontList(new QListView(this)),
+    m_okayButton(new QPushButton(tr("OK"), this)),
+    m_cancelButton(new QPushButton(tr("Cancel"), this))
 {
+    //Get the dialog palette.
+    QPalette pal=knTheme->getPalette("FontDialog");
+    setPalette(pal);
     //Initial the layout.
     QGridLayout *mainLayout=new QGridLayout(this);
     setLayout(mainLayout);
     //Generate the caption.
     m_caption[0]=new QLabel(tr("Font"), this);
+    m_caption[0]->setPalette(pal);
     mainLayout->addWidget(m_caption[0], 0, 0, 1, 1);
     m_caption[1]=new QLabel(tr("Size"), this);
+    m_caption[1]->setPalette(pal);
     mainLayout->addWidget(m_caption[1], 0, 1, 1, 1);
     m_caption[2]=new QLabel(tr("Styles"), this);
+    m_caption[2]->setPalette(pal);
     mainLayout->addWidget(m_caption[2], 4, 1, 1, 1);
 
     //Initial the font family combo box and list view.
-    m_fontFamily=new QFontComboBox(this);
+    m_fontFamily->setPalette(pal);
     m_fontFamily->setMaximumWidth(204);
     m_fontModel=m_fontFamily->model();
     connect(m_fontFamily,
@@ -56,12 +70,13 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
                 &QFontComboBox::currentIndexChanged),
             this, &KNFontDialog::onFontChanged);
     mainLayout->addWidget(m_fontFamily, 1, 0, 1, 1);
-    m_fontList=new QListView(this);
+    m_fontList->setPalette(pal);
     m_fontList->setMaximumWidth(204);
     m_fontList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_fontList->setModel(m_fontModel);
     m_fontList->setItemDelegate(m_fontFamily->itemDelegate());
-    connect(m_fontList->selectionModel(), &QItemSelectionModel::currentRowChanged,
+    connect(m_fontList->selectionModel(),
+            &QItemSelectionModel::currentRowChanged,
             [=](const QModelIndex &current, const QModelIndex &previous)
             {
                 Q_UNUSED(previous)
@@ -70,7 +85,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     mainLayout->addWidget(m_fontList, 2, 0, 4, 1);
 
     //Initial the size spin.
-    m_sizeSpin=new QSpinBox(this);
+    m_sizeSpin->setPalette(pal);
     m_sizeSpin->setRange(1, 1296);
     connect(m_sizeSpin,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -81,8 +96,8 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
                                        mainLayout->widget());
     sizeBox->setContentsMargins(0,0,0,0);
     sizeBox->setSpacing(0);
-
-    m_fontSizeList=new QListWidget(this);
+    //Initial the size list.
+    m_fontSizeList->setPalette(pal);
     m_fontSizeList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_fontSizeList->setMaximumWidth(70);
     m_standardSize<<6<<8<<9<<10<<11<<12<<13<<14<<18<<24<<36<<48<<64<<72<<96
@@ -99,10 +114,14 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
                    onSizeChanged(m_standardSize.at(currentRow));
                });
     sizeBox->addWidget(m_fontSizeList, 1);
-
-    m_sizeSlider=new QSlider(Qt::Vertical, this);
+    //Initial the size slider.
+    QPalette sliderPal=pal;
+    sliderPal.setColor(QPalette::Highlight,
+                       pal.color(QPalette::HighlightedText));
+    m_sizeSlider->setPalette(sliderPal);
     m_sizeSlider->setRange(1, 288);
-    connect(m_sizeSlider, &QSlider::valueChanged, this, &KNFontDialog::onSizeChanged);
+    connect(m_sizeSlider, &QSlider::valueChanged,
+            this, &KNFontDialog::onSizeChanged);
     sizeBox->addWidget(m_sizeSlider);
     mainLayout->addLayout(sizeBox, 3, 1, 1, 1);
 
@@ -113,7 +132,9 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     stylesBox->setSpacing(0);
     for(int i=0; i<FontStylesCount; i++)
     {
+        //Initial the font check box.
         m_fontStyles[i]=new QCheckBox(this);
+        m_fontStyles[i]->setPalette(pal);
         stylesBox->addWidget(m_fontStyles[i]);
         connect(m_fontStyles[i], SIGNAL(stateChanged(int)),
                 this, SLOT(synchronizeFont()));
@@ -129,20 +150,20 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     QBoxLayout *finalLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                            mainLayout->widget());
     //Initial the okay, cancel and preview.
-    m_okayButton=new QPushButton(tr("OK"), this);
+    m_okayButton->setPalette(pal);
     connect(m_okayButton, SIGNAL(clicked()), this, SLOT(accept()));
     finalLayout->addWidget(m_okayButton);
-    m_cancelButton=new QPushButton(tr("Cancel"), this);
+    m_cancelButton->setPalette(pal);
     connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
     finalLayout->addWidget(m_cancelButton);
 
     finalLayout->addStretch();
-
+    //Initial the preview label.
     m_caption[3]=new QLabel(tr("Sample"), this);
+    m_caption[3]->setPalette(pal);
     finalLayout->addWidget(m_caption[3]);
-
     //Initial the preview edit.
-    m_previewEdit=new QLineEdit(this);
+    m_previewEdit->setPalette(pal);
     m_previewEdit->setAlignment(Qt::AlignCenter);
     m_previewEdit->setText(tr("AaBbYyZz"));
     m_previewEdit->setMinimumSize(205, 85);

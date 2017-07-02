@@ -26,6 +26,7 @@ Foundation,
 #include "items/knpreferencepanelitem.h"
 #include "items/knpreferencepanelbooleanitem.h"
 #include "items/knpreferencepanelfontitem.h"
+#include "items/knpreferencepanelintitem.h"
 
 #include <QDebug>
 
@@ -36,7 +37,7 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 {
     //Set properties.
     setAutoFillBackground(true);
-    setFixedWidth(522);
+    setFixedWidth(542);
     //Set layout.
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(0);
@@ -73,12 +74,28 @@ void KNPreferencePanel::setPanelBlocks(
                 //Go on to next item.
                 continue;
             }
+            //Check the item widget is advanced item.
+            if(item.advanced)
+            {
+                //Add the widget to the advanced item list.
+                m_advancedItems.append(itemWidget);
+            }
             //Add item to the layout.
             m_mainLayout->addWidget(itemWidget);
         }
     }
     //Add stretch.
     m_mainLayout->addStretch();
+}
+
+void KNPreferencePanel::setAdvancedItemShown(bool isShow)
+{
+    //Loop in the advanced item list.
+    for(auto item : m_advancedItems)
+    {
+        //Set the visible item to the item.
+        item->setVisible(isShow);
+    }
 }
 
 inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
@@ -91,6 +108,9 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
     {
     case TypeBoolean:
         item=new KNPreferencePanelBooleanItem(this);
+        break;
+    case TypeInt:
+        item=new KNPreferencePanelIntItem(this);
         break;
     case TypeFont:
         item=new KNPreferencePanelFontItem(this);

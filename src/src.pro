@@ -518,7 +518,8 @@ SOURCES += \
     sdk/account/knaccountbase.cpp \
     sdk/account/knaccount.cpp \
     core/knmainwindowstatusbar.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydropproxy.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydropproxy.cpp \
+    plugin/knpreference/sdk/items/knpreferencepanelintitem.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -800,7 +801,8 @@ HEADERS += \
     sdk/account/knaccountbase.h \
     sdk/account/knaccount.h \
     core/knmainwindowstatusbar.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydropproxy.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydropproxy.h \
+    plugin/knpreference/sdk/items/knpreferencepanelintitem.h
 
 RESOURCES += \
     resource/res.qrc

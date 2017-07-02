@@ -53,6 +53,13 @@ public slots:
      */
     void setPanelBlocks(const QList<PreferencePanelBlock> &blocks);
 
+    /*!
+     * \brief When the advanced option is toggled, this slot should be called to
+     * show to hide the advanced options.
+     * \param showAdvanced To show the advanced items, set to true.
+     */
+    void setAdvancedShown(bool showAdvanced);
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().

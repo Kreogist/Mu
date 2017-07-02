@@ -106,12 +106,12 @@ private:
     inline void releaseFontSizeWidget();
     inline void blockFontStyleWidget();
     inline void releaseFontStyleWidget();
-    QFont m_currentFont;
-    QFontComboBox *m_fontFamily;
     QList<int> m_standardSize;
-    QListWidget *m_fontSizeList;
+    QFont m_currentFont;
     QLabel *m_caption[4];
     QCheckBox *m_fontStyles[FontStylesCount];
+    QFontComboBox *m_fontFamily;
+    QListWidget *m_fontSizeList;
     QAbstractItemModel *m_fontModel;
     QSpinBox *m_sizeSpin;
     QSlider *m_sizeSlider;

@@ -52,10 +52,17 @@ public slots:
      */
     void setPanelBlocks(const QList<PreferencePanelBlock> &blocks);
 
+    /*!
+     * \brief Set whether the advanced items should be shown or not.
+     * \param isShow To show the items, set the value to true.
+     */
+    void setAdvancedItemShown(bool isShow);
+
 private:
     inline KNPreferencePanelItem *generateItem(
             const PreferencePanelOption &option);
     QFont m_titleFont;
+    QList<KNPreferencePanelItem *> m_advancedItems;
     QBoxLayout *m_mainLayout;
 };
 
