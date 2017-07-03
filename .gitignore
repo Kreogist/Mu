@@ -36,7 +36,6 @@ Makefile
 *~
 
 #Mac Spotlight Search
-
 .DS_Store
 
 #astyle temp files
@@ -47,3 +46,4 @@ doc/html
 
 # Python cache file
 /tools/__pycache__
+*.py.user

@@ -1,7 +1,7 @@
 import subprocess
 import os
 import sys
-import httplib
+import http
 import zipfile
 import shutil
 import tempfile
@@ -14,22 +14,22 @@ def command_exist(command):
 
 # Command dependency check and install
 def check_dependency(name, command, install):
-    print "Checking", name, "...",
+    print("Checking " + name + " installation...", end='')
     # If command exists, nothing happens
     if command_exist(command):
-        print "Done"
+        print("Done")
         return True
-    print "Failed"
+    print("Failed")
     # Command not exist, install the command.
-    print "Installing " + name + "..."
+    print("Installing " + name + "...")
     sys.stdout.flush()
     os.system(install)
     # Check the comand after install.
     if not command_exist(command):
-        print "Failed to install ", name, "."
+        print("Failed to install ", name, ".")
         return False
     # Success.
-    print name, " has been installed."
+    print(name, " has been installed.")
     return True
     
 # Check batch dependencies.
@@ -52,7 +52,7 @@ def find_qt():
             # The path should be app_path with version in it.
             qt_bin_path=app_path+'/'+qt_version+'/clang_64/bin'
             # Check directory
-            if os.path.exists(qt_bin_path) and os.path.isfile(qt_bin_path+'qmake'):
+            if os.path.exists(qt_bin_path) and os.path.isfile(qt_bin_path+'/qmake'):
                 # Save installation data.
                 installation_list.append((qt_version, qt_bin_path))
     # Give back the list.
@@ -60,28 +60,28 @@ def find_qt():
 
 # Check bass.
 def check_bass_lib():
-    print 'Checking bass library...',
+    print('Checking bass library...', end="")
     # Check the bass library.
     if os.path.isfile('/usr/local/include/bass.h') and os.path.isfile('/usr/local/lib/libbass.dylib'):
-        print 'Done'
+        print('Done')
         return True
     # Download bass.zip from un4seen
     conn = http.client.HTTPConnection('www.un4seen.com')
     conn.request("GET", "/files/bass24-osx.zip")
     response = conn.getresponse()
     if response.status != 200:
-        print "Failed to download bass library file."
+        print("Failed to download bass library file.")
         return False
     bass_zip_data = response.read()
     conn.close()
-    print "Done, ", len(bass_zip_data), " bytes downloaded."
+    print("Done, "+str(len(bass_zip_data))+" bytes downloaded.")
     bass_zip_file=tempfile.TemporaryFile()
     bass_zip_file.write(bass_zip_data)
-    print "Extracting file..."
+    print("Extracting file...")
     with zipfile.ZipFile(bass_zip_file, 'r') as bass_zip:
         bass_zip_infolist = bass_zip.infolist()
         for bass_zip_item in bass_zip_infolist:
-            print bass_zip_item.filename
+            print(bass_zip_item.filename)
 
 # Main function.
 def main():
@@ -98,8 +98,12 @@ def main():
     qt_installation=find_qt()
     # Check the installation list.
     if len(qt_installation)==0:
-        print "Cannot find any Qt installation."
-        # Add customized Qt installation path.
+        print("Cannot find any Qt installation.")
+        return False
+    else:
+        print("Qt existsed.");
+    # Mission complete.
+    print("Configure complete.")
 
 if __name__ == "__main__":
     # execute only if run as a script
