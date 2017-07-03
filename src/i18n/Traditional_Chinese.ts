@@ -2171,12 +2171,12 @@ When click the icon in the system tray, Mu will pop up back.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
         <source>Header lyrics spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>頂部歌詞行間距</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個選項將用來調整頂部歌詞每行間的距離。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="71"/>
