@@ -98,10 +98,16 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
     unsigned int streamCount=m_inputFormatContext->nb_streams;
     for(unsigned int i=0; i<streamCount; ++i)
     {
+#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
         //Check the stream type.
         AVCodecParameters *streamCodecParameter=
                 m_inputFormatContext->streams[i]->codecpar;
         if(AVMEDIA_TYPE_AUDIO==streamCodecParameter->codec_type)
+#else
+        //Check the stream type.
+        AVCodecContext *streamCodec=m_inputFormatContext->streams[i]->codec;
+        if(AVMEDIA_TYPE_AUDIO==streamCodec->codec_type)
+#endif
         {
             //If we have the audio stream.
             if(audioStream)
@@ -125,7 +131,12 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
         return InputFailToFindAudioStream;
     }
     //Find a decoder for the audio stream.
-    if(!(inputCodec=avcodec_find_decoder(audioStream->codecpar->codec_id)))
+#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
+    AVCodecID codecID=audioStream->codecpar->codec_id;
+#else
+    AVCodecID codecID=audioStream->codec->codec_id;
+#endif
+    if(!(inputCodec=avcodec_find_decoder(codecID)))
     {
         //Wape all the input cache data.
         clearInputCache();
@@ -142,7 +153,12 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
         return InputFailToAllocDecContext;
     }
     //Initialize the stream parameters with demuxer information.
-    error=avcodec_parameters_to_context(m_inputCodecContext, audioStream->codecpar);
+#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
+    error=avcodec_parameters_to_context(m_inputCodecContext,
+                                        audioStream->codecpar);
+#else
+    error=avcodec_copy_context(m_inputCodecContext, audioStream->codec);
+#endif
     if(error < 0)
     {
         //Wape all the input cache data.
@@ -256,8 +272,12 @@ int KNMusicFfmpegTranscoder::setOutputFile(const QString &filePath,
         return OutputFailToOpenCodec;
     }
     //Initial the parameters.
+#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
     error=avcodec_parameters_from_context(stream->codecpar,
                                           m_outputCodecContext);
+#else
+    error=avcodec_copy_context(m_outputCodecContext, stream->codec);
+#endif
     //Check error.
     if(error < 0)
     {

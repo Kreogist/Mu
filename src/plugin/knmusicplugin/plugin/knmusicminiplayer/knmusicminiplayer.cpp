@@ -356,7 +356,7 @@ void KNMusicMiniPlayer::loadConfigure()
         lastX=getCacheValue("miniPlayerX"),
         lastY=getCacheValue("miniPlayerY"),
         targetScreenX=0,
-        targetScreenY=0, targetScreenWidth, targetScreenHeight,
+        targetScreenY=0, targetScreenWidth=1, targetScreenHeight=1,
         playerWidth=width(),
         playerHeight=height();
     //Check whether we have this screen anymore or not.
@@ -548,7 +548,7 @@ void KNMusicMiniPlayer::mouseMoveEvent(QMouseEvent *event)
         QPoint globalClickPos(event->globalPos()),
                targetPosition(globalClickPos-m_pressedPoint);
         //Get the desktop widget.
-        int desktopRight, desktopHeight, desktopLeft=0;
+        int desktopRight=1, desktopHeight=1, desktopLeft=0;
         {
             //FIXED 8th Apr, 2016
             //On OS X 10.11, desktop size will be fixed 640x480. It should be a
