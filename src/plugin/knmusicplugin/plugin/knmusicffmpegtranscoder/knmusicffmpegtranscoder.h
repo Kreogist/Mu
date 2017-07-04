@@ -20,6 +20,8 @@ Foundation,
 #ifndef KNMUSICFFMPEGTRANSCODER_H
 #define KNMUSICFFMPEGTRANSCODER_H
 
+#include <stdint.h>
+
 #include "knmusictranscoderbase.h"
 
 struct AVFormatContext;
