@@ -1,3 +1,18 @@
+kreogist-mu (1.0.0~beta2) unstable; urgency=medium
+
+  * Support preference control panel for configuration.
+  * Support status bar for some quick actions.
+  * Support application level play key controls.
+  * Support changing the header lyrics font and spacing.
+  * Support add music to library from the status bar.
+  * Support full screen button from the status bar.
+  * Support minimized to tray icon on Windows.
+  * Fixed the Mac OS X dock menu now playing labels cannot hide bug.
+  * Fixed the SAO menu might get out of the display area.
+  * Fixed the library drag and drop on itself will also popup the add to library hint.
+
+ -- Kreogist Dev Team <kreogistdevteam@126.com>  Sat, 5 Jul 2017 12:00:00 +1100
+
 kreogist-mu (1.0.0~beta1) unstable; urgency=medium
 
   * Use the new singleton application class instead of using shared memory.

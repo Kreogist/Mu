@@ -619,7 +619,6 @@ void KNMusicFfmpegTranscoder::execute()
             finished=1;
         }
     }
-    qDebug()<<"write tailer.";
     //Write the trailer of the output file container.
     if((error = av_write_trailer(m_outputFormatContext)) < 0)
     {
