@@ -102,15 +102,15 @@ for ubuntu_version in ubuntu_release:
 	os.system("debuild -S -sa -k" + gpg_key)
 	# Execute the dput to upload the data.
 	print("Launching dput...")
-	print("$ dput -f ppa:kreogistdevteam/mu ../mu_"+current_mu_version+"-"+ ubuntu_version + "_source.changes")
-	os.system("dput -f ppa:kreogistdevteam/mu ../mu_"+current_mu_version+"-"+ ubuntu_version + "_source.changes")
+	print("$ dput -f ppa:kreogistdevteam/mu ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version + "_source.changes")
+	os.system("dput -f ppa:kreogistdevteam/mu ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version + "_source.changes")
 	# Clean up.
 	print("Cleaning up...")
-	os.system("rm -f ../mu_"+current_mu_version+"-"+ ubuntu_version +".dsc")
-	os.system("rm -f ../mu_"+current_mu_version+"-"+ ubuntu_version +"_source.build")
-	os.system("rm -f ../mu_"+current_mu_version+"-"+ ubuntu_version +"_source.changes")
-	os.system("rm -f ../mu_"+current_mu_version+"-"+ ubuntu_version +".tar.xz")
-	os.system("rm -f ../mu_"+current_mu_version+"-"+ ubuntu_version +"_source.ppa.upload")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +".dsc")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +"_source.build")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +"_source.changes")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +".tar.xz")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +"_source.ppa.upload")
 	# Done.
 	print("Upload " + ubuntu_version + " done.")
 	# Back to script root.
