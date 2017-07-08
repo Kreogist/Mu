@@ -1,6 +1,6 @@
 # Kreogist μ
 
-Copyright © 2013-2016 Kreogist Dev Team. All rights reserved.
+Copyright © 2013-2017 Kreogist Dev Team. All rights reserved.
 
 ## Overview
 
@@ -33,7 +33,7 @@ You're encouraged to translate µ into your native language or update the transl
 * Qt (>=5.5)
 * FFMpeg (>=2.5)
 * bass (Windows and Mac OS X, >=2.4)
-* phonon4qt5 (Linux)
+* GStreamer (>=1.0) (Linux)
 
 ## Compile and Build
 
