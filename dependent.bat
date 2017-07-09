@@ -1,2 +1,2 @@
 @echo off
-python tools/configure_win.py %*
+python tools/dependent_win.py %*
