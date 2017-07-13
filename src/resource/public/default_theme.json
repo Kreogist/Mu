@@ -505,6 +505,16 @@
     {
         "Parent" : "PreferenceAdvancedButton"
     },
+    "PreferenceItemCombo" :
+    {
+        "Parent" : "PreferenceAdvancedButton",
+        "Base" : "#202020",
+        "Button" : "#202020",
+        "ButtonText" : "#9D9D9D",
+        "Text" : "#CDCDCD",
+        "Highlight" : "#F7CF3D",
+        "HighlighedText" : "#FFFFFF"
+    },
     "PreferenceItemSpinBox" :
     {
         "Parent" : "FontDialog",

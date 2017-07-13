@@ -28,8 +28,7 @@
 
 KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     KNAbstractTabGroup(parent),
-    m_mouseIn(generateTimeLine(InBrightness)),
-    m_mouseOut(generateTimeLine(OutBrightness)),
+    m_mouseAnime(new QTimeLine(200, this)),
     m_mainLayout(new QBoxLayout(QBoxLayout::LeftToRight, this))
 {
     setObjectName("CategoryTabBar");
@@ -37,7 +36,11 @@ KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
     setFixedHeight(KNCategoryTab::tabHeight());
-
+    //Configure the animation.
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    m_mouseAnime->setUpdateInterval(16);
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNCategoryTabBar::onActionMouseInOut);
     //Set layout.
     m_mainLayout->setContentsMargins(0,0,0,0);
     m_mainLayout->setSpacing(0);
@@ -74,7 +77,7 @@ QAbstractButton *KNCategoryTabBar::tabAt(int index)
 void KNCategoryTabBar::enterEvent(QEvent *event)
 {
     //Start mouse in anime.
-    startAnime(m_mouseIn);
+    startAnime(InBrightness);
     //Do original enter event.
     KNAbstractTabGroup::enterEvent(event);
 }
@@ -82,12 +85,12 @@ void KNCategoryTabBar::enterEvent(QEvent *event)
 void KNCategoryTabBar::leaveEvent(QEvent *event)
 {
     //Start mouse out anime.
-    startAnime(m_mouseOut);
+    startAnime(OutBrightness);
     //Do original leave event.
     KNAbstractTabGroup::enterEvent(event);
 }
 
-void KNCategoryTabBar::onActionMouseInOut(const int &frame)
+void KNCategoryTabBar::onActionMouseInOut(int frame)
 {
     //Get the palette and background color.
     QPalette pal=palette();
@@ -103,7 +106,7 @@ void KNCategoryTabBar::onActionMouseInOut(const int &frame)
     setPalette(pal);
 }
 
-inline QTimeLine *KNCategoryTabBar::generateTimeLine(const int &endFrame)
+inline QTimeLine *KNCategoryTabBar::generateTimeLine(int endFrame)
 {
     QTimeLine *timeLine=new QTimeLine(200, this);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
@@ -114,13 +117,13 @@ inline QTimeLine *KNCategoryTabBar::generateTimeLine(const int &endFrame)
     return timeLine;
 }
 
-inline void KNCategoryTabBar::startAnime(QTimeLine *timeLine)
+inline void KNCategoryTabBar::startAnime(int endFrame)
 {
     //Stop all animation.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    //Configrue the start frame of the time line.
-    timeLine->setStartFrame(palette().color(QPalette::Window).value());
+    m_mouseAnime->stop();
+    //Configrue the start and end frame of the time line.
+    m_mouseAnime->setFrameRange(palette().color(QPalette::Window).value(),
+                                endFrame);
     //Start the time line.
-    timeLine->start();
+    m_mouseAnime->start();
 }

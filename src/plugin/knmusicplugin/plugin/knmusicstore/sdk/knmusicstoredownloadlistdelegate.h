@@ -53,7 +53,7 @@ public:
      */
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
+               const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 signals:
 

@@ -65,6 +65,13 @@ private:
                            const QVariant &defaultValue,
                            const QString &explain,
                            int min, int max, bool isAdvanced);
+    inline void addComboItem(PreferencePanelBlock &block,
+                             const QString &title,
+                             const QString &path,
+                             const QVariant &defaultValue,
+                             const QString &explain,
+                             const QStringList &candidates,
+                             bool allowEdit, bool isAdvanced);
     inline void setItemData(PreferencePanelOption &option,
                             const QString &title,
                             const QString &path,

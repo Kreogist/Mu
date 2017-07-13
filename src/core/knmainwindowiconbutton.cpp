@@ -223,7 +223,7 @@ void KNMainWindowIconButton::initialLabels()
 inline void KNMainWindowIconButton::configureTimeLines()
 {
     //Update the mouse in/out parameter.
-    m_mouseInOutParameter=(IconX<<1)-34;
+    m_mouseInOutParameter=IconX*2-34;
     //Set the end frame of the mouse in/out time line.
     m_mouseIn->setEndFrame(-IconSize);
     m_mouseOut->setEndFrame(IconX);

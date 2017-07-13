@@ -65,7 +65,7 @@ public:
      * \brief Reimplemented from KNMusicStoreBase::showIndex().
      */
     void showIndex(KNMusicModel *musicModel,
-                   const QModelIndex &index);
+                   const QModelIndex &index) Q_DECL_OVERRIDE;
 
 signals:
     /*!

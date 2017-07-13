@@ -19,8 +19,11 @@ Foundation,
 #include <QApplication>
 #include <QFont>
 #include <QJsonObject>
+#include <QJsonArray>
 
 #include "knpreferencepaneldata.h"
+
+#include <QDebug>
 
 KNPreferencePanelData::KNPreferencePanelData(QObject *parent) :
     QObject(parent)
@@ -50,6 +53,23 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 false);
         panelData.append(block);
 #endif
+        break;
+    }
+    case PanelPlayback:
+    {
+        //Header lyrics.
+        block=generateBlock(tr("Output Parameter"));
+        QStringList sampleRates;
+        sampleRates << "8000" << "11025" << "22050" << "32000" << "44100"
+                    << "47250" << "48000" << "50000" << "50400" << "96000"
+                    << "192000";
+        addComboItem(block, tr("Sample Rate (Hz)"),
+                     "System/Backend/SampleRate", "44100",
+                     tr("This option will change the output sample rate of the "
+                        "playback backend.\nThis option will be applied after "
+                        "the application restarted."),
+                     sampleRates, false, false);
+        panelData.append(block);
         break;
     }
     case PanelLyrics:
@@ -127,6 +147,36 @@ void KNPreferencePanelData::addIntItem(PreferencePanelBlock &block,
     QJsonObject config;
     config.insert("min", min);
     config.insert("max", max);
+    option.configure=config;
+    //Add data to item.
+    block.options.append(option);
+}
+
+inline void KNPreferencePanelData::addComboItem(PreferencePanelBlock &block,
+                                                const QString &title,
+                                                const QString &path,
+                                                const QVariant &defaultValue,
+                                                const QString &explain,
+                                                const QStringList &candidates,
+                                                bool allowEdit,
+                                                bool isAdvanced)
+{
+    //Generate an item.
+    PreferencePanelOption option;
+    //Update the item data.
+    setItemData(option, title, path, defaultValue, explain, TypeCombo,
+                isAdvanced);
+    //Set the preference.
+    QJsonObject config;
+    config.insert("edit", allowEdit);
+    //Translate the string list to json array.
+    QJsonArray candidateList;
+    for(auto i : candidates)
+    {
+        //Add the item to the candidate json array.
+        candidateList.append(i);
+    }
+    config.insert("candidates", candidateList);
     option.configure=config;
     //Add data to item.
     block.options.append(option);

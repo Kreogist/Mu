@@ -112,10 +112,10 @@ void KNPreferencePanelItem::setPreferenceOption(
     m_path=option.path;
     //Save the default value.
     m_defaultValue=knConf->configureValue(m_path, option.defaultValue);
-    //Get the configure value.
-    setWidgetValue(m_defaultValue);
     //Set the configure data.
     setConfig(option.configure);
+    //Get the configure value.
+    setWidgetValue(m_defaultValue);
     //Disable the value.
     m_undoButton->setEnabled(false);
 }

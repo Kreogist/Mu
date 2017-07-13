@@ -30,12 +30,14 @@ namespace PreferenceUtil
     enum PreferencePanels
     {
         PanelGeneral,
+        PanelPlayback,
         PanelLyrics,
         PreferencePanelCount
     };
 
     enum PreferencePanelOptionType
     {
+        TypeCombo,
         TypeBoolean,
         TypeInt,
         TypeFont

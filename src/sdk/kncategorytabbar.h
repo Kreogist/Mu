@@ -57,20 +57,20 @@ protected:
     /*!
      * \brief Reimplemented from KNAbstractTabGroup::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNAbstractTabGroup::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionMouseInOut(const int &frame);
+    void onActionMouseInOut(int frame);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    inline QTimeLine *generateTimeLine(int endFrame);
+    inline void startAnime(int endFrame);
+    QTimeLine *m_mouseAnime;
     QBoxLayout *m_mainLayout;
 };
 

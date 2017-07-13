@@ -27,6 +27,7 @@ Foundation,
 #include "items/knpreferencepanelbooleanitem.h"
 #include "items/knpreferencepanelfontitem.h"
 #include "items/knpreferencepanelintitem.h"
+#include "items/knpreferencepanelcomboitem.h"
 
 #include <QDebug>
 
@@ -108,6 +109,9 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
     {
     case TypeBoolean:
         item=new KNPreferencePanelBooleanItem(this);
+        break;
+    case TypeCombo:
+        item=new KNPreferencePanelComboItem(this);
         break;
     case TypeInt:
         item=new KNPreferencePanelIntItem(this);
