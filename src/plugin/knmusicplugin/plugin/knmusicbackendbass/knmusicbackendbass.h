@@ -40,6 +40,7 @@
 
 #include "knmusicstandardbackend.h"
 
+class KNConfigure;
 class KNMusicBackendBassThread;
 /*!
  * \brief The KNMusicBackendBass class provides you a backend interface of the
@@ -97,6 +98,7 @@ private:
     inline KNMusicBackendBassThread *generateThread(const DWORD &channelFlags);
 
     QList<HPLUGIN> m_pluginList;
+    KNConfigure *m_playbackConfigure;
 };
 
 #endif // KNMUSICBACKENDBASS_H

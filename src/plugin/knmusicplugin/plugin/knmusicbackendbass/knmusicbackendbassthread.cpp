@@ -398,3 +398,47 @@ inline void KNMusicBackendBassThread::removeChannelSyncs()
     //Clear the hanlder list.
     m_syncHandlers.clear();
 }
+
+inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
+{
+    //Clear the file path.
+    m_filePath.clear();
+    //Try to load the file.
+#ifdef Q_OS_WIN
+    std::wstring uniPath=filePath.toStdWString();
+#endif
+#ifdef Q_OS_UNIX
+    std::string uniPath=filePath.toStdString();
+#endif
+    //Create the file using the stream.
+    m_channel=BASS_StreamCreateFile(FALSE,
+                                    uniPath.data(),
+                                    0,
+                                    0,
+                                    m_channelFlags);
+    //Check if the stream create successful.
+    if(!m_channel)
+    {
+        //Create the file using the fixed music load.
+        m_channel=BASS_MusicLoad(FALSE,
+                                 uniPath.data(),
+                                 0,
+                                 0,
+                                 BASS_MUSIC_RAMPS | m_channelFlags,
+                                 1);
+        //Check if the music create successful.
+        if(!m_channel)
+        {
+            //Emit load failed signal.
+            emit loadFailed();
+            //Bass is failed to load the music file.
+            return false;
+        }
+    }
+    //Save the new file path.
+    m_filePath=filePath;
+    //Set the sync handler.
+    setChannelSyncs();
+    //Load success.
+    return true;
+}

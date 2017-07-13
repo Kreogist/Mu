@@ -18,6 +18,7 @@
 #include <QApplication>
 #include <QDir>
 
+#include "knconfigure.h"
 #include "knglobal.h"
 
 #include "knmusicbackendbassthread.h"
@@ -28,7 +29,8 @@
 
 KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
     KNMusicStandardBackend(parent),
-    m_pluginList(QList<HPLUGIN>())
+    m_pluginList(QList<HPLUGIN>()),
+    m_playbackConfigure(knGlobal->systemConfigure()->getConfigure("Backend"))
 {
     //Initial a empty thread flags.
     DWORD threadFlag=0;
@@ -108,8 +110,10 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     //Enabled float digital signal processing.
     //DON'T MOVE THIS, this should config before bass init.
     BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
+    //Get the setting sample rate.
+    int userSampleRate=m_playbackConfigure->data("SampleRate", 44100).toInt();
     //Initial bass library.
-    if(!BASS_Init(-1, 44100, 0, NULL, NULL))
+    if(!BASS_Init(-1, userSampleRate, BASS_DEVICE_FREQ, NULL, NULL))
     {
         //Failed to initial the library bass.
         return false;
@@ -117,7 +121,8 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     //Clear the channel flags.
     channelFlags=0;
     //Check float dsp supporting.
-    DWORD fdpsCheck=BASS_StreamCreate(44100,2,BASS_SAMPLE_FLOAT,NULL,0);
+    DWORD fdpsCheck=BASS_StreamCreate(userSampleRate,
+                                      2, BASS_SAMPLE_FLOAT, NULL, 0);
     //If support the float dsp,
     if(fdpsCheck)
     {
