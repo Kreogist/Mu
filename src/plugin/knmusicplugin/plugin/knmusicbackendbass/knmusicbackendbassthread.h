@@ -94,6 +94,11 @@ public:
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
+#ifdef Q_OS_WIN64
+
+    HSTREAM getMixerHandle() const;
+#endif
+
 signals:
     /*!
      * \brief This signal is used only for threadReachesEnd(). It's used for
@@ -129,6 +134,10 @@ public slots:
      */
     void setCreateFlags(const DWORD &channelFlags);
 
+#ifdef Q_OS_WIN64
+    void setWasapiData(int outputDevice);
+#endif
+
 private slots:
     void checkPosition();
 
@@ -137,6 +146,10 @@ private:
                                           DWORD channel,
                                           DWORD data,
                                           void *user);
+#ifdef Q_OS_WIN64
+    // WASAPI function
+    static DWORD CALLBACK WasapiProc(void *buffer, DWORD length, void *user);
+#endif
     inline void finishPlaying();
     inline void resetChannelDuration()
     {
@@ -185,21 +198,11 @@ private:
         //Give back the channel volume.
         return channelVolume;
     }
-    inline void freeChannel()
-    {
-        //Check if the channel is not null.
-        if(m_channel)
-        {
-            //Free the streams or the music.
-            if(!BASS_StreamFree(m_channel))
-            {
-                BASS_MusicFree(m_channel);
-            }
-            //Reset the channel.
-            m_channel=0;
-        }
-    }
+    inline void freeChannel();
     inline bool loadBassThread(const QString &filePath);
+#ifdef Q_OS_WIN64
+    inline bool initialWasapi();
+#endif
 
     //Channel data.
     QString m_filePath;
@@ -214,6 +217,10 @@ private:
     qint64 m_savedPosition;
     qreal m_volume;
     int m_state;
+#ifdef Q_OS_WIN64
+    HSTREAM m_mixer;
+    int m_wasapiOutputDevice;
+#endif
 
     //Updater.
     QTimer *m_positionUpdater;

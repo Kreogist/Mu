@@ -18,6 +18,11 @@
 #include <QTimer>
 #include <QUrl>
 
+#ifdef Q_OS_WIN64
+#include "basswasapi.h"
+#include "bassmix.h"
+#endif
+
 #include "knmusicglobal.h"
 
 #include "knmusicbackendbassthread.h"
@@ -36,6 +41,10 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_savedPosition(-1),
     m_volume(1.0),
     m_state(Stopped),
+    #ifdef Q_OS_WIN64
+    m_mixer(0),
+    m_wasapiOutputDevice(-1),
+    #endif
     m_positionUpdater(new QTimer(this)),
     m_syncHandlers(QList<HSYNC>())
 {
@@ -89,6 +98,10 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
                                       BASS_ChannelGetLength(m_channel,
                                                             BASS_POS_BYTE))
             *1000.0;
+#ifdef Q_OS_WIN64
+    // For 64-bit Windows platform, the WASAPI need to be initialized here.
+    initialWasapi();
+#endif
     //Emit the duration changed signal.
     emit durationChanged(m_totalDuration);
     //Reset the thread information.
@@ -332,6 +345,11 @@ void KNMusicBackendBassThread::setCreateFlags(const DWORD &channelFlags)
 {
     //Save the channel flags.
     m_channelFlags=channelFlags;
+#ifdef Q_OS_WIN64
+    //For 64-bit Windows, we will use WASAPI as output, the stream will only be
+    //used as decode stream.
+    m_channelFlags |= BASS_STREAM_DECODE;
+#endif
 }
 
 void KNMusicBackendBassThread::checkPosition()
@@ -367,6 +385,26 @@ void KNMusicBackendBassThread::threadReachesEnd(HSYNC handle,
     static_cast<KNMusicBackendBassThread *>(user)->reachesFinished();
 }
 
+#ifdef Q_OS_WIN64
+DWORD KNMusicBackendBassThread::WasapiProc(void *buffer, DWORD length,
+                                           void *user)
+{
+    //Get the immediate sample data of the mixer sample stream.
+    DWORD mixerChannelData=
+            BASS_ChannelGetData(
+                static_cast<KNMusicBackendBassThread *>(user)->getMixerHandle(),
+                buffer, length);
+    //Check the channel info data.
+    if (mixerChannelData==-1)
+    {
+        //An error happened, set to no data.
+        mixerChannelData=0;
+    }
+    //Give back the mixer data.
+    return mixerChannelData;
+}
+#endif
+
 inline void KNMusicBackendBassThread::finishPlaying()
 {
     //Stop playing.
@@ -399,6 +437,33 @@ inline void KNMusicBackendBassThread::removeChannelSyncs()
     m_syncHandlers.clear();
 }
 
+inline void KNMusicBackendBassThread::freeChannel()
+{
+#ifdef Q_OS_WIN64
+    //Check the mixer stream is not null.
+    if(m_mixer)
+    {
+        //Free the Mix stream.
+        BASS_StreamFree(m_mixer);
+        //Reset the mixer channel.
+        m_mixer=0;
+    }
+    //Free the WASAPI first.
+    BASS_WASAPI_Free();
+#endif
+    //Check if the channel is not null.
+    if(m_channel)
+    {
+        //Free the streams or the music.
+        if(!BASS_StreamFree(m_channel))
+        {
+            BASS_MusicFree(m_channel);
+        }
+        //Reset the channel.
+        m_channel=0;
+    }
+}
+
 inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
 {
     //Clear the file path.
@@ -419,12 +484,17 @@ inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
     //Check if the stream create successful.
     if(!m_channel)
     {
+        //Set the MOD loading flag.
+        DWORD modLoadFlag=BASS_MUSIC_RAMPS;
+#ifdef Q_OS_WIN64
+        modLoadFlag |= BASS_MUSIC_PRESCAN;
+#endif
         //Create the file using the fixed music load.
         m_channel=BASS_MusicLoad(FALSE,
                                  uniPath.data(),
                                  0,
                                  0,
-                                 BASS_MUSIC_RAMPS | m_channelFlags,
+                                 modLoadFlag | m_channelFlags,
                                  1);
         //Check if the music create successful.
         if(!m_channel)
@@ -442,3 +512,62 @@ inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
     //Load success.
     return true;
 }
+
+#ifdef Q_OS_WIN64
+void KNMusicBackendBassThread::setWasapiData(int outputDevice)
+{
+    //Save the output device.
+    m_wasapiOutputDevice=outputDevice;
+}
+
+inline bool KNMusicBackendBassThread::initialWasapi()
+{
+    // Setup output
+    //Default initialization flags
+    DWORD flags=BASS_WASAPI_AUTOFORMAT|BASS_WASAPI_BUFFER|BASS_WASAPI_EXCLUSIVE;
+    // Using a smaller buffer with event-driven system (only affects exclusive
+    //mode)
+    float bufferLength=(flags&BASS_WASAPI_EVENT ? 0.1 : 0.4);
+    BASS_WASAPI_INFO wasapiInfo;
+    //Get the channel information.
+    BASS_CHANNELINFO channelInfo;
+    BASS_ChannelGetInfo(m_channel,&channelInfo);
+    //Initialize the WASAPI device.
+    if (!BASS_WASAPI_Init(m_wasapiOutputDevice,
+                          channelInfo.freq, channelInfo.chans,
+                          flags, bufferLength,
+                          0.05, WasapiProc, this)) {
+        // Failed, try falling back to shared mode
+        if (!(flags&BASS_WASAPI_EXCLUSIVE) ||
+                !BASS_WASAPI_Init(m_wasapiOutputDevice,
+                                  channelInfo.freq, channelInfo.chans,
+                                  flags&~BASS_WASAPI_EXCLUSIVE,
+                                  bufferLength, 0.05, WasapiProc, this))
+        {
+            //Can't initialize device.
+            return false;
+        }
+    }
+    //Get the output details.
+    BASS_WASAPI_GetInfo(&wasapiInfo);
+    //Create a mixer with the same sample format (and enable GetPositionEx)
+    m_mixer=BASS_Mixer_StreamCreate(wasapiInfo.freq, wasapiInfo.chans,
+                                    BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE |
+                                    BASS_MIXER_POSEX);
+    // add the source to the mixer (downmix if necessary)
+    BASS_Mixer_StreamAddChannel(m_mixer, m_channel,BASS_MIXER_DOWNMIX);
+    //Start it.
+    if (!BASS_WASAPI_Start())
+    {
+        //Failed to start the WASAPI.
+        return false;
+    }
+    //Complete the WASAPI initialize.
+    return true;
+}
+
+HSTREAM KNMusicBackendBassThread::getMixerHandle() const
+{
+    return m_mixer;
+}
+#endif

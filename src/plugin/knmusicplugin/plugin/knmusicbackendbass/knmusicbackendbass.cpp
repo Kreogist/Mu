@@ -18,6 +18,8 @@
 #include <QApplication>
 #include <QDir>
 
+#include "basswasapi.h"
+
 #include "knconfigure.h"
 #include "knglobal.h"
 
@@ -31,6 +33,10 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
     KNMusicStandardBackend(parent),
     m_pluginList(QList<HPLUGIN>()),
     m_playbackConfigure(knGlobal->systemConfigure()->getConfigure("Backend"))
+  #ifdef Q_OS_WIN64
+  ,
+    m_wasapiOutputDevice(-1)
+  #endif
 {
     //Initial a empty thread flags.
     DWORD threadFlag=0;
@@ -112,12 +118,41 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
     //Get the setting sample rate.
     int userSampleRate=m_playbackConfigure->data("SampleRate", 44100).toInt();
+#ifdef Q_OS_WIN64
+    //For 64-bit Windows, we will enable WASAPI as the playing API instead of
+    //using DirectX.
+    //Find the output device.
+    BASS_WASAPI_DEVICEINFO deviceInfo;
+    for(int device=0; BASS_WASAPI_GetDeviceInfo(device, &deviceInfo); ++device)
+    {
+        //Check the device flag.
+        if((deviceInfo.flags & (BASS_DEVICE_DEFAULT |
+                                BASS_DEVICE_LOOPBACK |
+                                BASS_DEVICE_INPUT))==BASS_DEVICE_DEFAULT)
+        {
+            //Save the default device index.
+            m_wasapiOutputDevice=device;
+            break;
+        }
+    }
+    //Check the device index.
+    if (m_wasapiOutputDevice==-1)
+    {
+        //Failed to find the output device.
+        return false;
+    }
+    // not playing anything via BASS, so don't need an update thread
+    BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 0);
+    // setup BASS - "no sound" device with the "mix" sample rate (default for MOD music)
+    BASS_Init(0, deviceInfo.mixfreq, 0, 0, NULL);
+#else
     //Initial bass library.
     if(!BASS_Init(-1, userSampleRate, BASS_DEVICE_FREQ, NULL, NULL))
     {
         //Failed to initial the library bass.
         return false;
     }
+#endif
     //Clear the channel flags.
     channelFlags=0;
     //Check float dsp supporting.
@@ -192,6 +227,10 @@ KNMusicBackendBassThread *KNMusicBackendBass::generateThread(
     KNMusicBackendBassThread *thread=new KNMusicBackendBassThread(this);
     //Set the channel create flag to the thread.
     thread->setCreateFlags(channelFlags);
+#ifdef Q_OS_WIN64
+    //Set the WASAPI parameters to the thread.
+    thread->setWasapiData(m_wasapiOutputDevice);
+#endif
     //Give back the thread.
     return thread;
 }

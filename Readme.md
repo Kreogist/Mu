@@ -24,6 +24,7 @@ Copyright © 2013-2017 Kreogist Dev Team. All rights reserved.
 * [1dot75cm](https://github.com/1dot75cm)
 * [Lin Yuan](https://github.com/SphericalHarnomics)
 * [miaolapd](https://github.com/miaolapd)
+* [Haoting Xu]()
 
 ## Translation
 

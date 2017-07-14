@@ -99,6 +99,9 @@ private:
 
     QList<HPLUGIN> m_pluginList;
     KNConfigure *m_playbackConfigure;
+#ifdef Q_OS_WIN64
+    int m_wasapiOutputDevice;
+#endif
 };
 
 #endif // KNMUSICBACKENDBASS_H

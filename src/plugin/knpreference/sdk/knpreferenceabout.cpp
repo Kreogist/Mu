@@ -159,6 +159,7 @@ void KNPreferenceAbout::retranslate()
                 "1dot75cm\n"
                 "Lin Yuan\n"
                 "miaolapd\n"
+                "Haoting Xu\n"
                 "\n"+
                 tr("This program uses Qt Version ")+
                 QT_VERSION_STR+

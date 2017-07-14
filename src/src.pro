@@ -242,6 +242,10 @@ backend-bass: {
     DEFINES += ENABLE_BACKEND_BASS BACKEND_ENABLED
     # Add backend library to the project.
     LIBS += -lbass
+    # When Using MSVC compiled under Win32 platform (i.e. 64-bit Windows platform), enable WASAPI.
+    msvc: {
+        LIBS += -lbasswasapi -lbassmix
+    }
     # Add backend files to the project.
     SOURCES += \
         plugin/knmusicplugin/plugin/knmusicbackendbass/knmusicbackendbass.cpp \
