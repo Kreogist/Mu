@@ -135,7 +135,12 @@ public slots:
     void setCreateFlags(const DWORD &channelFlags);
 
 #ifdef Q_OS_WIN64
-    void setWasapiData(int outputDevice);
+    /*!
+     * \brief Set the WASAPI playing data.
+     * \param outputDevice The output device index.
+     * \param wasapiFlag The stream build flag.
+     */
+    void setWasapiData(int outputDevice, DWORD wasapiFlag);
 #endif
 
 private slots:
@@ -148,7 +153,7 @@ private:
                                           void *user);
 #ifdef Q_OS_WIN64
     // WASAPI function
-    static DWORD CALLBACK WasapiProc(void *buffer, DWORD length, void *user);
+    static DWORD CALLBACK wasapiProcess(void *buffer, DWORD length, void *user);
 #endif
     inline void finishPlaying();
     inline void resetChannelDuration()
@@ -220,6 +225,7 @@ private:
 #ifdef Q_OS_WIN64
     HSTREAM m_mixer;
     int m_wasapiOutputDevice;
+    DWORD m_wasapiFlag;
 #endif
 
     //Updater.

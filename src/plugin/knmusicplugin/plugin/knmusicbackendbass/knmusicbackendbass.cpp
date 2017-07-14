@@ -35,7 +35,9 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
     m_playbackConfigure(knGlobal->systemConfigure()->getConfigure("Backend"))
   #ifdef Q_OS_WIN64
   ,
-    m_wasapiOutputDevice(-1)
+    m_wasapiOutputDevice(-1),
+    m_wasapiFlag(BASS_WASAPI_AUTOFORMAT | BASS_WASAPI_BUFFER /*|
+                 BASS_WASAPI_EXCLUSIVE*/)
   #endif
 {
     //Initial a empty thread flags.
@@ -85,6 +87,98 @@ int KNMusicBackendBass::minimalVolume() const
 int KNMusicBackendBass::maximumVolume() const
 {
     return 10000;
+}
+
+qint64 KNMusicBackendBass::previewDuration() const
+{
+    //When exclusive, only main thread would working.
+    //Disable the preview thread duration fetch.
+    return (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE) ?
+                -1 : KNMusicStandardBackend::previewDuration();
+}
+
+qint64 KNMusicBackendBass::previewPosition() const
+{
+    //When exclusive, only main thread would working.
+    //Disable the preview thread position.
+    return (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE) ?
+                -1 : KNMusicStandardBackend::previewPosition();
+}
+
+bool KNMusicBackendBass::previewLoadMusic(const QString &filePath,
+                                          const qint64 &start,
+                                          const qint64 &duration)
+{
+    //When exclusive, only main thread would working.
+    //Check the WASAPI flag.
+    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    {
+        //Failed to load music for exclusive mode.
+        return false;
+    }
+    //Do original event.
+    return KNMusicStandardBackend::previewLoadMusic(filePath, start, duration);
+}
+
+int KNMusicBackendBass::previewState() const
+{
+    //When exclusive, only main thread would working.
+    //Check the WASAPI flag.
+    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    {
+        //Failed to fetch the playing state when enabled exclusive mode.
+        return Stopped;
+    }
+    //Do orignal event.
+    return KNMusicStandardBackend::previewState();
+}
+
+void KNMusicBackendBass::previewPlay()
+{
+    //When exclusive, only main thread would working.
+    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    {
+        //Do nothing.
+        return;
+    }
+    //Do orignal event.
+    KNMusicStandardBackend::previewPlay();
+}
+
+void KNMusicBackendBass::previewPause()
+{
+    //When exclusive, only main thread would working.
+    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    {
+        //Do nothing.
+        return;
+    }
+    //Do orignal event.
+    KNMusicStandardBackend::previewPause();
+}
+
+void KNMusicBackendBass::previewStop()
+{
+    //When exclusive, only main thread would working.
+    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    {
+        //Do nothing.
+        return;
+    }
+    //Do orignal event.
+    KNMusicStandardBackend::previewStop();
+}
+
+void KNMusicBackendBass::previewReset()
+{
+    //When exclusive, only main thread would working.
+    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    {
+        //Do nothing.
+        return;
+    }
+    //Do orignal event.
+    KNMusicStandardBackend::previewReset();
 }
 
 void KNMusicBackendBass::setGlobalVolume(const int &volume)
@@ -229,7 +323,7 @@ KNMusicBackendBassThread *KNMusicBackendBass::generateThread(
     thread->setCreateFlags(channelFlags);
 #ifdef Q_OS_WIN64
     //Set the WASAPI parameters to the thread.
-    thread->setWasapiData(m_wasapiOutputDevice);
+    thread->setWasapiData(m_wasapiOutputDevice, m_wasapiFlag);
 #endif
     //Give back the thread.
     return thread;

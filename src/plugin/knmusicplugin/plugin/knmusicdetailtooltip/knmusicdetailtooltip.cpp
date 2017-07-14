@@ -164,6 +164,9 @@ void KNMusicDetailTooltip::setPreviewIndex(KNMusicModel *musicModel,
     KNMusicAnalysisItem item;
     //Set the detail info to item.
     item.detailInfo=musicModel->rowDetailInfo(index.row());
+    //Hide the playing widget.
+    m_playNPause->setEnabled(true);
+    m_progress->setEnabled(true);
     //Reanalysis the item.
     if(knMusicGlobal->parser()->reanalysisItem(item))
     {
@@ -404,8 +407,13 @@ void KNMusicDetailTooltip::loadPreview()
           connect(m_progress, &KNProgressSlider::sliderMoved,
                   backend, &KNMusicBackend::setPreviewPosition));
         //Load the music to preview thread.
-        backend->previewLoadMusic(m_detailInfo.filePath,
-                                  m_detailInfo.startPosition,
-                                  m_detailInfo.duration);
+        if(!backend->previewLoadMusic(m_detailInfo.filePath,
+                                      m_detailInfo.startPosition,
+                                      m_detailInfo.duration))
+        {
+            //Show the play control widgets.
+            m_playNPause->setEnabled(false);
+            m_progress->setEnabled(false);
+        }
     }
 }

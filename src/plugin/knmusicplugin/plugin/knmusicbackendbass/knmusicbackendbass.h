@@ -72,6 +72,48 @@ public:
      */
     int maximumVolume() const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewDuration().
+     */
+    qint64 previewDuration() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewPosition().
+     */
+    qint64 previewPosition() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewLoadMusic().
+     */
+    bool previewLoadMusic(const QString &filePath,
+                          const qint64 &start=-1,
+                          const qint64 &duration=-1) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewState().
+     */
+    int previewState() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewPlay().
+     */
+    void previewPlay() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewPause().
+     */
+    void previewPause() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewStop().
+     */
+    void previewStop() Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewReset().
+     */
+    void previewReset() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -101,6 +143,7 @@ private:
     KNConfigure *m_playbackConfigure;
 #ifdef Q_OS_WIN64
     int m_wasapiOutputDevice;
+    int m_wasapiFlag;
 #endif
 };
 

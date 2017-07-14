@@ -44,6 +44,7 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     #ifdef Q_OS_WIN64
     m_mixer(0),
     m_wasapiOutputDevice(-1),
+    m_wasapiFlag(0),
     #endif
     m_positionUpdater(new QTimer(this)),
     m_syncHandlers(QList<HSYNC>())
@@ -177,8 +178,13 @@ void KNMusicBackendBassThread::play()
     }
     //Start the position updater.
     m_positionUpdater->start();
+#ifdef Q_OS_WIN64
+    //Start the WASAPI playing.
+    BASS_WASAPI_Start();
+#else
     //Play the thread.
     BASS_ChannelPlay(m_channel, FALSE);
+#endif
     //Update the state.
     setPlayingState(Playing);
 }
@@ -192,8 +198,13 @@ void KNMusicBackendBassThread::pause()
     {
         return;
     }
-    //Pause the thread.
+#ifdef Q_OS_WIN64
+    //Stop the WASAPI playing.
+    BASS_WASAPI_Stop(false);
+#else
+    //Pause the thread first.
     BASS_ChannelPause(m_channel);
+#endif
     //Stop the updater.
     m_positionUpdater->stop();
     //Reset the state.
@@ -304,6 +315,9 @@ void KNMusicBackendBassThread::setVolume(const int &volume)
     {
         return;
     }
+#ifdef Q_OS_WIN64
+    ;
+#endif
     //Set the volume to channel.
     BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, ((float)volume)/100.0);
     //Save the latest volume size.
@@ -386,8 +400,8 @@ void KNMusicBackendBassThread::threadReachesEnd(HSYNC handle,
 }
 
 #ifdef Q_OS_WIN64
-DWORD KNMusicBackendBassThread::WasapiProc(void *buffer, DWORD length,
-                                           void *user)
+DWORD KNMusicBackendBassThread::wasapiProcess(void *buffer, DWORD length,
+                                              void *user)
 {
     //Get the immediate sample data of the mixer sample stream.
     DWORD mixerChannelData=
@@ -514,35 +528,36 @@ inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
 }
 
 #ifdef Q_OS_WIN64
-void KNMusicBackendBassThread::setWasapiData(int outputDevice)
+void KNMusicBackendBassThread::setWasapiData(int outputDevice,
+                                             DWORD wasapiFlag)
 {
     //Save the output device.
     m_wasapiOutputDevice=outputDevice;
+    //Save the WASAPI initial flag.
+    m_wasapiFlag=wasapiFlag;
 }
 
 inline bool KNMusicBackendBassThread::initialWasapi()
 {
     // Setup output
-    //Default initialization flags
-    DWORD flags=BASS_WASAPI_AUTOFORMAT|BASS_WASAPI_BUFFER|BASS_WASAPI_EXCLUSIVE;
     // Using a smaller buffer with event-driven system (only affects exclusive
     //mode)
-    float bufferLength=(flags&BASS_WASAPI_EVENT ? 0.1 : 0.4);
+    float bufferLength=(m_wasapiFlag&BASS_WASAPI_EVENT ? 0.1 : 0.4);
     BASS_WASAPI_INFO wasapiInfo;
     //Get the channel information.
     BASS_CHANNELINFO channelInfo;
-    BASS_ChannelGetInfo(m_channel,&channelInfo);
+    BASS_ChannelGetInfo(m_channel, &channelInfo);
     //Initialize the WASAPI device.
     if (!BASS_WASAPI_Init(m_wasapiOutputDevice,
                           channelInfo.freq, channelInfo.chans,
-                          flags, bufferLength,
-                          0.05, WasapiProc, this)) {
+                          m_wasapiFlag, bufferLength,
+                          0.05, wasapiProcess, this)) {
         // Failed, try falling back to shared mode
-        if (!(flags&BASS_WASAPI_EXCLUSIVE) ||
+        if (!(m_wasapiFlag&BASS_WASAPI_EXCLUSIVE) ||
                 !BASS_WASAPI_Init(m_wasapiOutputDevice,
                                   channelInfo.freq, channelInfo.chans,
-                                  flags&~BASS_WASAPI_EXCLUSIVE,
-                                  bufferLength, 0.05, WasapiProc, this))
+                                  m_wasapiFlag&~BASS_WASAPI_EXCLUSIVE,
+                                  bufferLength, 0.05, wasapiProcess, this))
         {
             //Can't initialize device.
             return false;
@@ -555,13 +570,7 @@ inline bool KNMusicBackendBassThread::initialWasapi()
                                     BASS_SAMPLE_FLOAT | BASS_STREAM_DECODE |
                                     BASS_MIXER_POSEX);
     // add the source to the mixer (downmix if necessary)
-    BASS_Mixer_StreamAddChannel(m_mixer, m_channel,BASS_MIXER_DOWNMIX);
-    //Start it.
-    if (!BASS_WASAPI_Start())
-    {
-        //Failed to start the WASAPI.
-        return false;
-    }
+    BASS_Mixer_StreamAddChannel(m_mixer, m_channel, BASS_MIXER_DOWNMIX);
     //Complete the WASAPI initialize.
     return true;
 }
