@@ -69,6 +69,11 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                         "playback backend.\nThis option will be applied after "
                         "the application restarted."),
                      sampleRates, false, false);
+        addItem(block, tr("Stereo Output"),
+                "System/Backend/Stero", false, TypeBoolean,
+                tr("Limit the output to stereo, saving some CPU if the device "
+                   "has more speakers available.\nThis option will be applied "
+                   "after the application restarted."), true);
         panelData.append(block);
         break;
     }
