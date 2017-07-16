@@ -212,7 +212,8 @@ void KNMusicLyricsDownloader::setReplyCount(uint identifier, int replyCount)
     m_sourceMap.insert(identifier, source);
 }
 
-void KNMusicLyricsDownloader::get(uint identifier, const QString &url,
+void KNMusicLyricsDownloader::get(uint identifier,
+                                  const QNetworkRequest &request,
                                   const QVariant &user)
 {
     //Check identifier existance.
@@ -225,14 +226,49 @@ void KNMusicLyricsDownloader::get(uint identifier, const QString &url,
     KNMusicLyricsRequestSource source=m_sourceMap.value(identifier);
     //Get the current step.
     KNMusicLyricsStep &currentStep=source.currentStep;
+    //Start to get the data.
+    QNetworkReply *reply=m_accessManager->get(request);
+    //Append the reply to the reply map.
+    KNMusicRequestData replyData;
+    replyData.identifier=identifier;
+    replyData.user=user;
+    m_replyMap.insert(reply, replyData);
+    //Append the reply to the reply list.
+    currentStep.replies.append(reply);
+    //Update the map.
+    m_sourceMap.insert(identifier, source);
+    //Star the timeout timer.
+    m_timeoutCounter->start();
+}
+
+void KNMusicLyricsDownloader::get(uint identifier, const QString &url,
+                                  const QVariant &user)
+{
     //Construct the request.
     QNetworkRequest request;
     request.setUrl(QUrl(url));
-    qDebug()<<"GET"<<url;
+    //Do the HTTP GET operation.
+    get(identifier, request, user);
+}
+
+void KNMusicLyricsDownloader::post(uint identifier,
+                                   const QNetworkRequest &request,
+                                   const QByteArray &content,
+                                   const QVariant &user)
+{
+    //Check identifier existance.
+    if(!m_sourceMap.contains(identifier))
+    {
+        //Ignore the invalid request.
+        return;
+    }
+    //Pick out the request source from the map.
+    KNMusicLyricsRequestSource source=m_sourceMap.value(identifier);
+    //Get the current step.
+    KNMusicLyricsStep &currentStep=source.currentStep;
+    //Construct the request.
     //Start to get the data.
-    QNetworkReply *reply=m_accessManager->get(request);
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(replyError(QNetworkReply::NetworkError)));
+    QNetworkReply *reply=m_accessManager->post(request, content);
     //Append the reply to the reply map.
     KNMusicRequestData replyData;
     replyData.identifier=identifier;
@@ -327,9 +363,4 @@ void KNMusicLyricsDownloader::onReplyFinished(QNetworkReply *reply)
         //Simply update the request source.
         m_sourceMap.insert(identifier, requestSource);
     }
-}
-
-void KNMusicLyricsDownloader::replyError(QNetworkReply::NetworkError error)
-{
-    qDebug()<<"Error"<<error;
 }

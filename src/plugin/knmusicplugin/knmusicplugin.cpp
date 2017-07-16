@@ -72,12 +72,12 @@
 // List Parsers.
 #include "plugin/knmusiccuelistparser/knmusiccuelistparser.h"
 // Lyrics Downloader.
-//#include "plugin/knmusicneteaselyrics/knmusicneteaselyrics.h"
-//#include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
-//#include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
-//#include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
+#include "plugin/knmusicneteaselyrics/knmusicneteaselyrics.h"
+#include "plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h"
+#include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
-//#include "plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h"
+#include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
+#include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
 // Lyrics Download Dialog.
 #include "plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h"
 // Solo Music Menu.
@@ -677,12 +677,12 @@ void KNMusicPlugin::initialLyricsPlugin()
     KNMusicLyricsManager *lyricsManager=knMusicGlobal->lyricsManager();
 
     //Add the downloader to lyrics manager.
-//    lyricsManager->appendDownloader(new KNMusicNeteaseLyrics);
-//    lyricsManager->appendDownloader(new KNMusicQQLyrics);
-//    lyricsManager->appendDownloader(new KNMusicTtplayerLyrics);
-//    lyricsManager->appendDownloader(new KNMusicTtpodLyrics);
+    lyricsManager->appendDownloader(new KNMusicNeteaseLyrics);
+    lyricsManager->appendDownloader(new KNMusicKgmusicLyrics);
+    lyricsManager->appendDownloader(new KNMusicTtplayerLyrics);
     lyricsManager->appendDownloader(new KNMusicXiamiLyrics);
-//    lyricsManager->appendDownloader(new KNMusicKgmusicLyrics);
+    lyricsManager->appendDownloader(new KNMusicTtpodLyrics);
+    lyricsManager->appendDownloader(new KNMusicQQLyrics);
 }
 
 void KNMusicPlugin::initialSoloMenu(KNMusicSoloMenuBase *soloMenu)
