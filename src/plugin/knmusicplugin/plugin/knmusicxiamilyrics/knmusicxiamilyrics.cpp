@@ -44,8 +44,7 @@ void KNMusicXiamiLyrics::initialStep(uint identifier,
     //Get the data from the url.
     get(identifier,
         "http://www.xiami.com/search/song-lyric?key=" +
-        processKeywords(detailInfo.textLists[Name].toString()),
-        QVariant());
+        processKeywords(detailInfo.textLists[Name].toString()));
 }
 
 void KNMusicXiamiLyrics::processStep(uint identifier,

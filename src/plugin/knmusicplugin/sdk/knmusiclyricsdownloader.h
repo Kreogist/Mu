@@ -201,12 +201,35 @@ protected:
      * \param url The url of the GET request.
      * \param user Any data that need to be provided when giving the reply.
      */
-    void get(uint identifier, const QString &url, const QVariant &user);
+    void get(uint identifier,
+             const QNetworkRequest &request,
+             const QVariant &user=QVariant());
+
+    /*!
+     * \brief This is an override function. Do a HTTP GET request, and save the
+     * data. This will use the default request, so only need to provide a URL.
+     * \param identifier The source identifier.
+     * \param url The url of the GET request.
+     * \param user Any data that need to be provided when giving the reply.
+     */
+    void get(uint identifier, const QString &url,
+             const QVariant &user=QVariant());
+
+    /*!
+     * \brief Do a HTTP POST request, and save the data.
+     * \param identifier The source identifier.
+     * \param request The post request object.
+     * \param content The content need to be posted.
+     * \param user Any data that need to be provided when giving the reply.
+     */
+    void post(uint identifier,
+              const QNetworkRequest &request,
+              const QByteArray &content,
+              const QVariant &user=QVariant());
 
 private slots:
     void onTimeoutCount();
     void onReplyFinished(QNetworkReply *reply);
-    void replyError(QNetworkReply::NetworkError error);
 
 private:
     struct KNMusicLyricsStep
