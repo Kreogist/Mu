@@ -28,11 +28,6 @@ KNMusicTtpodLyrics::KNMusicTtpodLyrics(QObject *parent) :
 {
 }
 
-KNMusicTtpodLyrics::~KNMusicTtpodLyrics()
-{
-    ;
-}
-
 QString KNMusicTtpodLyrics::downloaderName()
 {
     return "TTPod";

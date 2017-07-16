@@ -33,7 +33,6 @@ public:
      * \param parent The parent object.
      */
     explicit KNMusicTtpodLyrics(QObject *parent = 0);
-    ~KNMusicTtpodLyrics();
 
     /*!
      * \brief Reimplemented from KNMusicLyricsDownloader::downloaderName().
