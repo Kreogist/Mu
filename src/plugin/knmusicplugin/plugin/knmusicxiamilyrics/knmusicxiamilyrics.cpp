@@ -19,6 +19,8 @@
 #include <QDomDocument>
 #include <QRegularExpression>
 
+#include <QNetworkAccessManager>
+
 #include "knmusicxiamilyrics.h"
 
 #include <QDebug>
@@ -33,89 +35,168 @@ QString KNMusicXiamiLyrics::downloaderName()
     return "XiaMi Music";
 }
 
-void KNMusicXiamiLyrics::downloadLyrics(const KNMusicDetailInfo &detailInfo,
-                                        QList<KNMusicLyricsDetails> &lyricsList)
+void KNMusicXiamiLyrics::initialStep(uint identifier,
+                                     const KNMusicDetailInfo &detailInfo)
 {
-    //Generate the url.
-    QString url="http://www.xiami.com/search/song-lyric?key=" +
-                processKeywords(detailInfo.textLists[Name].toString());
-    //Get the data from url.
-    QByteArray responseData;
-    get(url, responseData);
-    if(responseData.isEmpty())
+    // Step 0 - Start to search on the server.
+    //Update the reply count.
+    setReplyCount(identifier, 1);
+    //Get the data from the url.
+    get(identifier,
+        "http://www.xiami.com/search/song-lyric?key=" +
+        processKeywords(detailInfo.textLists[Name].toString()),
+        QVariant());
+}
+
+void KNMusicXiamiLyrics::processStep(uint identifier,
+                                     int currentStep,
+                                     const QList<KNMusicReplyData> &replyCaches)
+{
+    //Check the current step index.
+    switch(currentStep)
     {
-        return;
-    }
-    QString xmlhttpText=responseData;
-    //Parse the data.
-    QStringList songid;
-    QRegularExpression rex("<a.*?href=\".*?/song/(\\d+).*?><b.*?key_red");
-    QRegularExpressionMatchIterator i=rex.globalMatch(xmlhttpText);
-    while(i.hasNext())
+    // Step 1 - Parse the result, and fetch all the result back.
+    case 1:
     {
-        QRegularExpressionMatch match=i.next();
-        songid.append(match.captured(1));
-    }
-    for(QStringList::iterator i=songid.begin();
-        i!=songid.end();
-        ++i)
-    {
-        url="http://www.xiami.com/song/playlist/id/"+(*i);
-        get(url, responseData);
-        if(!responseData.isEmpty())
+        //Check the reply caches.
+        if(replyCaches.size()!=1)
         {
-            QLinkedList<KNMusicLyricsDetails> rawLyricsDetail;
-            QStringList lyricsUrlList;
-            //Parse the document.
-            QDomDocument lyricsDocument;
-            lyricsDocument.setContent(responseData);
-            //Get the tracklist.
-            QDomElement root=lyricsDocument.documentElement();
-            QDomNodeList trackList=root.elementsByTagName("trackList");
-            //Get the information from the tracklist.
-            for(int j=0; j<trackList.size(); j++)
+            //Mission failed.
+            completeRequest(identifier);
+            return;
+        }
+        //Get the data from the reply caches.
+        const QByteArray &responseData=replyCaches.at(0).result;
+        //Check the response data.
+        if(responseData.isEmpty())
+        {
+            //Mission failed.
+            completeRequest(identifier);
+            return;
+        }
+        QString xmlhttpText=responseData;
+        //Parse the data.
+        QStringList songIdList;
+        QRegularExpression rex("<a.*?href=\".*?/song/(\\d+).*?><b.*?key_red");
+        QRegularExpressionMatchIterator i=rex.globalMatch(xmlhttpText);
+        while(i.hasNext())
+        {
+            QRegularExpressionMatch match=i.next();
+            songIdList.append(match.captured(1));
+        }
+        //Check the song id list size.
+        if(songIdList.isEmpty())
+        {
+            //Failed to find any song.
+            completeRequest(identifier);
+            return;
+        }
+        //Update the reply count.
+        setReplyCount(identifier, songIdList.size());
+        for(QStringList::iterator i=songIdList.begin();
+            i!=songIdList.end();
+            ++i)
+        {
+            get(identifier, "http://www.xiami.com/song/playlist/id/"+(*i),
+                QVariant());
+        }
+        //Complete.
+        break;
+    }
+    case 2:
+    {
+        //Prepare the url cache and lyrics data caches.
+        QLinkedList<QMap<QString, QString>> lyricsDataList;
+        QStringList lyricsUrlList;
+        //Loop and check the response data.
+        for(auto replyData : replyCaches)
+        {
+            //Check the response data.
+            const QByteArray &responseData=replyData.result;
+            if(!responseData.isEmpty())
             {
-                QDomElement currentTrack=trackList.at(j).toElement();
-                //Find lyrics url.
-                QDomNodeList lyricUrlList=
-                        currentTrack.elementsByTagName("lyric");
-                if(!lyricUrlList.isEmpty())
+                //Parse the document.
+                QDomDocument lyricsDocument;
+                lyricsDocument.setContent(responseData);
+                //Get the tracklist.
+                QDomElement root=lyricsDocument.documentElement();
+                QDomNodeList trackList=root.elementsByTagName("trackList");
+                //Get the information from the tracklist.
+                for(int j=0; j<trackList.size(); j++)
                 {
-                    QDomNodeList lyricsUrl=
-                            lyricUrlList.at(0).toElement().childNodes();
-                    if(!lyricsUrl.isEmpty())
+                    QDomElement currentTrack=trackList.at(j).toElement();
+                    //Find lyrics url.
+                    QDomNodeList lyricUrlList=
+                            currentTrack.elementsByTagName("lyric");
+                    if(!lyricUrlList.isEmpty())
                     {
-                        //Save the lyrics information.
-                        KNMusicLyricsDetails currentDetail;
-                        currentDetail.title=getContentText(&currentTrack,
-                                                           "title");
-                        currentDetail.artist=getContentText(&currentTrack,
-                                                            "artist");
-                        //Add the lyrics information and url to the list.
-                        rawLyricsDetail.append(currentDetail);
-                        lyricsUrlList.append(lyricsUrl.at(0).nodeValue());
+                        QDomNodeList lyricsUrl=
+                                lyricUrlList.at(0).toElement().childNodes();
+                        if(!lyricsUrl.isEmpty())
+                        {
+                            //Save the lyrics information.
+                            QMap<QString, QString> lyricsData;
+                            lyricsData.insert("title",
+                                              getContentText(&currentTrack,
+                                                             "title"));
+                            lyricsData.insert("artist",
+                                              getContentText(&currentTrack,
+                                                             "artist"));
+                            //Add the lyrics information and url to the list.
+                            lyricsDataList.append(lyricsData);
+                            lyricsUrlList.append(lyricsUrl.at(0).nodeValue());
+                        }
                     }
                 }
             }
-
-            //Try to download the lyrics.
-            for(QStringList::iterator i=lyricsUrlList.begin();
-                i!=lyricsUrlList.end();
-                ++i)
-            {
-                KNMusicLyricsDetails currentDetail=rawLyricsDetail.takeFirst();
-                //Get the data from the url.
-                get((*i), responseData);
-                //This is the lyrics file! Add to the lyrics list.
-                if(!responseData.isEmpty())
-                {
-                    saveLyrics(detailInfo,
-                               responseData,
-                               currentDetail,
-                               lyricsList);
-                }
-            }
         }
+        //Check the lyrics url list.
+        if(lyricsUrlList.isEmpty())
+        {
+            //Theoretically, if it comes here, the list shouldn't be 0.
+            //Failed to find any song.
+            completeRequest(identifier);
+            return;
+        }
+        //Set the total count.
+        setReplyCount(identifier, lyricsUrlList.size());
+        //Try to download the lyrics.
+        for(QStringList::iterator i=lyricsUrlList.begin();
+            i!=lyricsUrlList.end();
+            ++i)
+        {
+            //Prepare the user data.
+            QVariant lyricsUser;
+            lyricsUser.setValue(lyricsDataList.takeFirst());
+            //Get the data from the url.
+            get(identifier, (*i), lyricsUser);
+        }
+        //Complete.
+        break;
+    }
+    case 3:
+    {
+        //Loop and check the response data.
+        for(auto i : replyCaches)
+        {
+            //Get the response data.
+            const QByteArray &responseData=i.result;
+            //Get the lyrics data.
+            QMap<QString, QString> lyricsData=
+                    i.user.value<QMap<QString, QString>>();
+            //This is the lyrics file! Add to the lyrics list.
+            saveLyrics(identifier,
+                       lyricsData.value("title"),
+                       lyricsData.value("artist"),
+                       responseData);
+        }
+        //All the mission is complete.
+        completeRequest(identifier);
+        break;
+    }
+    default:
+        //Shouldn't come here.
+        break;
     }
 }
 

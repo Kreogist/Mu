@@ -24,6 +24,8 @@
 KNMusicOnlineLyrics::KNMusicOnlineLyrics(QObject *parent) :
     QObject(parent),
     m_lrcParser(new KNMusicLrcParser(this)),
+    m_identifier(qHash("OnlineLyrics")),
+    m_finishedDownloader(0),
     m_isWorking(false)
 {
     //Link the download signal and slot.
@@ -42,6 +44,9 @@ void KNMusicOnlineLyrics::appendDownloader(KNMusicLyricsDownloader *downloader)
 {
     //Move the downloader to the current thread.
     downloader->setWorkingThread(thread());
+    //Link the downloader to current function.
+    connect(downloader, &KNMusicLyricsDownloader::missionComplete,
+            this, &KNMusicOnlineLyrics::onActionDownloadFinished);
     //Add downloader to list.
     m_downloaders.append(downloader);
 }
@@ -59,28 +64,6 @@ void KNMusicOnlineLyrics::addToDownloadList(const KNMusicDetailInfo &detailInfo)
     {
         //Execute the download list.
         emit downloadNext();
-    }
-}
-
-void KNMusicOnlineLyrics::downloadLyrics(
-        const KNMusicDetailInfo &detailInfo,
-        QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> &lyricsList)
-{
-    //Clear the lyrics list.
-    lyricsList.clear();
-    //Download the lyrics data via all the plugins.
-    for(auto i=m_downloaders.begin(); i!=m_downloaders.end(); ++i)
-    {
-        //Try to download the lyrics from all the remote server.
-        (*i)->downloadLyrics(detailInfo, lyricsList);
-    }
-    //Sort the list according to the similarity of the lyrics, if the list is
-    //not empty.
-    if(!lyricsList.isEmpty())
-    {
-        std::sort(lyricsList.begin(),
-                  lyricsList.end(),
-                  KNMusicLyricsDownloader::lyricsDetailLessThan);
     }
 }
 
@@ -108,15 +91,35 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
         m_workingLock.unlock();
     }
     //Get the last item in the download queue.
-    int itemIndex=m_downloadQueue.size()-1;
-    const KNMusicDetailInfo &detailInfo=m_downloadQueue.at(itemIndex);
-    //Generate the lyrics list.
-    QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList;
-    //Download the lyrics.
-    downloadLyrics(detailInfo, lyricsList);
+    KNMusicDetailInfo detailInfo=m_downloadQueue.takeLast();
+    //Reset the download counter.
+    m_finishedDownloader=0;
+    //Download the lyrics data via all the plugins.
+    for(auto i=m_downloaders.begin(); i!=m_downloaders.end(); ++i)
+    {
+        //Try to download the lyrics from all the remote server.
+        (*i)->downloadLyrics(m_identifier, detailInfo);
+    }
+}
+
+void KNMusicOnlineLyrics::onActionDownloadFinished(uint identifier,
+        const KNMusicDetailInfo &detailInfo,
+        QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList)
+{
+    //Check the identifier.
+    if(identifier!=m_identifier)
+    {
+        //This signal is not for me.
+        return;
+    }
     //Check the lyrics list.
     if(!lyricsList.isEmpty())
     {
+        //Sort the list according to the similarity of the lyrics, if the list
+        //is not empty.
+        std::sort(lyricsList.begin(),
+                  lyricsList.end(),
+                  KNMusicLyricsDownloader::lyricsDetailLessThan);
         //Generate the position and text list of the lyrics.
         QList<qint64> positionList;
         QStringList textList;
@@ -134,8 +137,6 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
             }
         }
     }
-    //Remove last.
-    m_downloadQueue.removeAt(itemIndex);
     //Parse the next item.
     emit downloadNext();
 }

@@ -19,6 +19,8 @@
 #ifndef KNMUSICLYRICSDOWNLOADER_H
 #define KNMUSICLYRICSDOWNLOADER_H
 
+#include <QNetworkReply>
+
 #include "knutil.h"
 #include "knmusicutil.h"
 
@@ -26,11 +28,12 @@
 
 using namespace MusicUtil;
 
+class QNetworkAccessManager;
 /*!
  * \brief The KNMusicLyricsDownloader class provides the interface function of a
  * lyrics download plugin and some handy function to download the lyrics.
  */
-class KNMusicLyricsDownloader : public KNRestApiBase
+class KNMusicLyricsDownloader : public QObject
 {
     Q_OBJECT
 public:
@@ -57,7 +60,8 @@ public:
      * downloaders plugins.
      * \param parent The parent object.
      */
-    KNMusicLyricsDownloader(QObject *parent = 0) : KNRestApiBase(parent){}
+    explicit KNMusicLyricsDownloader(QObject *parent = 0);
+    ~KNMusicLyricsDownloader();
 
     /*!
      * \brief Provide the name of the lyrics downloader.
@@ -85,18 +89,48 @@ public:
                             lyricsDetailRight.titleSimilarity;
     }
 
+    /*!
+     * \brief Chagne the working thread of the downloader. Do NOT use
+     * moveToThread() function, use this function instead.
+     * \param thread The working thread of the downloader.
+     */
+    void setWorkingThread(QThread *thread);
+
 signals:
+    /*!
+     * \brief When one lyrics search mission is completed, this signal will be
+     * emitted.
+     * \param identifier The request object identifier.
+     * \param detailInfo The detail info of the music.
+     * \param lyricsList The lyrics data search result list.
+     */
+    void missionComplete(int identifier,
+                         KNMusicDetailInfo detailInfo,
+                         QList<KNMusicLyricsDetails> lyricsList);
 
 public slots:
     /*!
      * \brief Download lyrics from the specific site according to the detail
      * info of a song.
+     * \param identifier The request source identifier
      * \param detailInfo The detail info of a song.
      */
-    virtual void downloadLyrics(const KNMusicDetailInfo &detailInfo,
-                                QList<KNMusicLyricsDetails> &lyricsList)=0;
+    void downloadLyrics(uint identifier,
+                        const KNMusicDetailInfo &detailInfo);
+
+    /*!
+     * \brief Clear the download cache of one request source.
+     * \param identifier The identifier of the request source.
+     */
+    void cancel(uint identifier);
 
 protected:
+    struct KNMusicReplyData
+    {
+        QByteArray result;
+        QVariant user;
+    };
+
     /*!
      * \brief Process the original key words and remove the data which cannot be
      * appear in the URL.
@@ -118,71 +152,104 @@ protected:
     }
 
     /*!
-     * \brief Save a lyrics with the title, artist and content data to the
-     * lyrics list. It will automatically generate a lyrics detail structure and
-     * calcualte the similarity of the title and artist.
-     * \param title The title of lyrics.
-     * \param artist The artist of lyrics.
+     * \brief Save a lyrics into the current request source.
+     * \param identifier The request identifier.
+     * \param title The title of the lyrics file.
+     * \param artist The artist of the lyrics file.
      * \param content The content of the lyrics.
-     * \param targetTitle The target title which will be used to calculate the
-     * similarity.
-     * \param targetArtist The target artist which will be used to calculate the
-     * similarity.
-     * \param lyricsList The lyrics detail list which the detail will be added
-     * to.
      */
-    inline void saveLyrics(const QString &title,
-                           const QString &artist,
-                           const QString &content,
-                           const QString &targetTitle,
-                           const QString &targetArtist,
-                           QList<KNMusicLyricsDetails> &lyricsList)
-    {
-        //Generate the lyrics details.
-        KNMusicLyricsDetails lyricsDetails;
-        //Save the title and artist name.
-        lyricsDetails.title=title;
-        lyricsDetails.artist=artist;
-        //Save the content data of the lyrics.
-        lyricsDetails.lyricsData=content;
-        //Calculate the similarity of the title and artist.
-        lyricsDetails.titleSimilarity=
-                KNUtil::similarity(lyricsDetails.title, targetTitle);
-        lyricsDetails.artistSimilarity=
-                KNUtil::similarity(lyricsDetails.artist, targetArtist);
-        //Add to list.
-        lyricsList.append(lyricsDetails);
-    }
+    void saveLyrics(uint identifier,
+                    const QString &title,
+                    const QString &artist,
+                    const QString &content);
 
     /*!
-     * \brief This is a override function.\n
-     * Save a lyrics to the lyrics list. Calculate the similarity with a music
-     * detail info.
-     * \param detailInfo Provide the target title and artist which will be used
-     * to calculate the similarity.
-     * \param content The content of the lyrics.
-     * \param lyricsDetails The lyrics detail struct. The title and artist
-     * should be stored.
-     * \param lyricsList The lyrics detail list which the detail will be added
-     * to.
+     * \brief When one mission is complete, this function should be called.
+     * \param identifier The source identifier.
      */
-    inline void saveLyrics(const KNMusicDetailInfo &detailInfo,
-                           const QString &content,
-                           KNMusicLyricsDetails &lyricsDetails,
-                           QList<KNMusicLyricsDetails> &lyricsList)
+    void completeRequest(uint identifier);
+
+    /*!
+     * \brief This is the initial step of the whole download session.
+     * \param identifier The identifier.
+     * \param detailInfo The music information.
+     */
+    virtual void initialStep(uint identifier,
+                             const KNMusicDetailInfo &detailInfo)=0;
+
+    /*!
+     * \brief Process the next step. The current step is an integer which is
+     * guaranteed larger than 0.
+     * \param identifier The identifier of the source.
+     * \param currentStep The current step index.
+     * \param replyCaches The data of the reply caches.
+     */
+    virtual void processStep(uint identifier,
+                             int currentStep,
+                             const QList<KNMusicReplyData> &replyCaches)=0;
+
+    /*!
+     * \brief Set the reply total count of the current step.
+     * \param identifier The request source identifier.
+     * \param replyCount The count of the replies.
+     */
+    void setReplyCount(uint identifier, int replyCount);
+
+    /*!
+     * \brief Do a HTTP GET request, and save the data.
+     * \param identifier The source identifier.
+     * \param url The url of the GET request.
+     * \param user Any data that need to be provided when giving the reply.
+     */
+    void get(uint identifier, const QString &url, const QVariant &user);
+
+private slots:
+    void onTimeoutCount();
+    void onReplyFinished(QNetworkReply *reply);
+    void replyError(QNetworkReply::NetworkError error);
+
+private:
+    struct KNMusicLyricsStep
     {
-        //Save the content data of the lyrics.
-        lyricsDetails.lyricsData=content;
-        //Calculate the similarity of the title and artist.
-        lyricsDetails.titleSimilarity=
-                KNUtil::similarity(lyricsDetails.title,
-                                   detailInfo.textLists[Name].toString());
-        lyricsDetails.artistSimilarity=
-                KNUtil::similarity(lyricsDetails.artist,
-                                   detailInfo.textLists[Artist].toString());
-        //Add to list.
-        lyricsList.append(lyricsDetails);
-    }
+        QList<KNMusicLyricsDetails> lyricsList;
+        QList<QNetworkReply *> replies;
+        QList<KNMusicReplyData> replyCaches;
+        QList<QVariant> replyUserCaches;
+        KNMusicDetailInfo detailInfo;
+        int currentStep, replyCount;
+        KNMusicLyricsStep() :
+            currentStep(0),
+            replyCount(0)
+        {
+        }
+    };
+
+    struct KNMusicLyricsRequestSource
+    {
+        KNMusicLyricsStep currentStep;
+        bool isWorking;
+        KNMusicLyricsRequestSource() :
+            isWorking(false)
+        {
+        }
+    };
+
+    struct KNMusicRequestData
+    {
+        QVariant user;
+        uint identifier;
+        int timeout;
+        KNMusicRequestData() :
+            identifier(0),
+            timeout(0)
+        {
+        }
+    };
+
+    QNetworkAccessManager *m_accessManager;
+    QMap<QNetworkReply *, KNMusicRequestData> m_replyMap;
+    QMap<uint, KNMusicLyricsRequestSource> m_sourceMap;
+    QTimer *m_timeoutCounter;
 };
 
 #endif // KNMUSICLYRICSDOWNLOADER_H

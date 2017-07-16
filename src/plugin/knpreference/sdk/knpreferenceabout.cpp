@@ -135,10 +135,23 @@ void KNPreferenceAbout::retranslate()
 {
     //Update the content data.
     m_textContent[Copyright]->setText(QString(QChar(169)) +
-                                      tr(" 2013-2017 Kreogist Dev Team\n"
-                                      "All rights reserved."));
+                                      tr(" 2013-2017 Kreogist Dev Team")+"\n");
     //Update the thank list.
     m_otherText->setPlainText(
+                tr("This program is free software; you can redistribute it "
+                   "and/or modify it under the terms of the GNU General Public "
+                   "License as published by the Free Software Foundation; "
+                   "either version 2 of the License, or (at your option) any "
+                   "later version.\n\n"
+                   "This program is distributed in the hope that it will be "
+                   "useful, but WITHOUT ANY WARRANTY; without even the implied "
+                   "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR "
+                   "PURPOSE.  See the GNU General Public License for more "
+                   "details.\n\n"
+                   "You should have received a copy of the GNU General Public "
+                   "License along with this program; if not, see <http://www.gn"
+                   "u.org/licenses/>.")+"\n\n"+
+                tr("Author")+"\n"
                 "Tojo Saki <tomguts@126.com>\n"
                 "Luming Wang <wlm199558@126.com>\n"
                 "Dayou Zhang <1079286704@qq.com>\n"

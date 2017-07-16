@@ -23,6 +23,8 @@
 KNMusicOnlineLyricsDownloader::KNMusicOnlineLyricsDownloader(QObject *parent) :
     QObject(parent),
     m_downloaders(QList<KNMusicLyricsDownloader *>()),
+    m_identifier(qHash("OnlineLyricsDownloader")),
+    m_completeDownloader(0),
     m_cancelFlag(false),
     m_running(false)
 {
@@ -33,6 +35,9 @@ void KNMusicOnlineLyricsDownloader::appendDownloader(
 {
     //Simply add downloader to list.
     m_downloaders.append(downloader);
+    //Link the downloader data to this.
+    connect(downloader, &KNMusicLyricsDownloader::missionComplete,
+            this, &KNMusicOnlineLyricsDownloader::onActionDownloadFinished);
 }
 
 bool KNMusicOnlineLyricsDownloader::isRunning()
@@ -43,18 +48,27 @@ bool KNMusicOnlineLyricsDownloader::isRunning()
 void KNMusicOnlineLyricsDownloader::downloadLyrics(
         const KNMusicDetailInfo &detailInfo)
 {
+    //Check the running flag.
+    if(m_running)
+    {
+        //Cancel the current running mission first.
+        cancelDownload();
+    }
     //Reset the cancel flag.
     m_cancelFlag=false;
     //Set up the running flag.
     m_running=true;
-    //Generate the lyrics list.
-    QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList;
+    //Save the new detail info.
+    m_workingDetailInfo=detailInfo;
+    //Clear the lyrics list.
+    m_lyricsList=QList<KNMusicLyricsDownloader::KNMusicLyricsDetails>();
+    m_completeDownloader=0;
     //Emit the empty list data right now.
-    emit listContentChanged(lyricsList);
-    //Get the lyrics size.
-    int lyricsListSize=0;
+    emit listContentChanged(m_lyricsList);
+    //Emit the server changed signal.
+    emit serverChanged(0, m_downloaders.size());
     //Download the lyrics data via all the plugins.
-    for(int i=0; i<m_downloaders.size(); ++i)
+    for(auto i : m_downloaders)
     {
         //Before doing downloading, checking the cancel flag first.
         if(m_cancelFlag)
@@ -66,52 +80,86 @@ void KNMusicOnlineLyricsDownloader::downloadLyrics(
             //Won't download before calling the download.
             return;
         }
-        //Emit the server changed signal.
-        emit serverChanged(i+1, m_downloaders.size());
         //Try to download the lyrics from all the remote server.
-        m_downloaders.at(i)->downloadLyrics(detailInfo, lyricsList);
-        //Check out the cancel flag.
-        if(m_cancelFlag)
-        {
-            //Reset the running flag.
-            m_running=false;
-            //Emit signal.
-            emit downloadCancel();
-            //Won't download more.
-            return;
-        }
-        //Check the lyrics list size and emit signal.
-        if(lyricsList.size() > lyricsListSize)
-        {
-            //Save the new lyrics list size.
-            lyricsListSize=lyricsList.size();
-            //Sort the lyrics list right now.
-            std::sort(lyricsList.begin(),
-                      lyricsList.end(),
-                      KNMusicLyricsDownloader::lyricsDetailLessThan);
-            //Emit the have content signal.
-            emit listContentChanged(lyricsList);
-        }
-        //Check out the cancel flag.
-        if(m_cancelFlag)
-        {
-            //Reset the running flag.
-            m_running=false;
-            //Emit signal.
-            emit downloadCancel();
-            //Won't download more.
-            return;
-        }
+        i->downloadLyrics(m_identifier, detailInfo);
     }
-    //After download all the data, emit the signal.
-    emit downloadComplete();
-    //Reset the running flag.
-    m_running=false;
 }
 
 void KNMusicOnlineLyricsDownloader::cancelDownload()
 {
+    //Check the running state.
+    if(!m_running)
+    {
+        //The downloader is currently not running.
+        return;
+    }
+    //Cancel all the mission of the downloader.
+    for(auto i : m_downloaders)
+    {
+        //Cancel the downloader mission.
+        i->cancel(m_identifier);
+    }
     //Set the cancel flag to true.
     m_cancelFlag=true;
+}
+
+void KNMusicOnlineLyricsDownloader::onActionDownloadFinished(
+        uint identifier,
+        const KNMusicDetailInfo &detailInfo,
+        QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList)
+{
+    //Check the identifier first.
+    if(identifier!=m_identifier ||
+            detailInfo.textLists[Name]!=m_workingDetailInfo.textLists[Name] ||
+            detailInfo.textLists[Artist]!=m_workingDetailInfo.textLists[Artist])
+    {
+        //This signal is not for me.
+        return;
+    }
+    //Increase the counter of the completed downloader.
+    ++m_completeDownloader;
+    //Emit the server changed signal.
+    emit serverChanged(m_completeDownloader, m_downloaders.size());
+    //Check out the cancel flag.
+    if(m_cancelFlag)
+    {
+        //Reset the running flag.
+        m_running=false;
+        //Emit signal.
+        emit downloadCancel();
+        //Won't download more.
+        return;
+    }
+    //Check the lyrics list size and emit signal.
+    if(!lyricsList.isEmpty())
+    {
+        //Increase the new lyrics list to the cached list.
+        m_lyricsList.append(lyricsList);
+        //Sort the lyrics list right now.
+        std::sort(m_lyricsList.begin(),
+                  m_lyricsList.end(),
+                  KNMusicLyricsDownloader::lyricsDetailLessThan);
+        //Emit the have content signal.
+        emit listContentChanged(m_lyricsList);
+    }
+    //Check out the cancel flag.
+    if(m_cancelFlag)
+    {
+        //Reset the running flag.
+        m_running=false;
+        //Emit signal.
+        emit downloadCancel();
+        //Won't download more.
+        return;
+    }
+    //Check whether the completed downloader count is the same as the size of
+    //the downloaders.
+    if(m_completeDownloader==m_downloaders.size())
+    {
+        //After download all the data, emit the signal.
+        emit downloadComplete();
+        //Reset the running flag.
+        m_running=false;
+    }
 }
 

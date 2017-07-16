@@ -77,24 +77,19 @@ public slots:
      */
     void addToDownloadList(const KNMusicDetailInfo &detailInfo);
 
-    /*!
-     * \brief Download lyrics by given a detail info of a song, and write all
-     * the information into lyrics list. This function works in stucked way.
-     * \param detailInfo The detail info of a song.
-     * \param lyricsList The lyrics list.
-     */
-    void downloadLyrics(
-            const KNMusicDetailInfo &detailInfo,
-            QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> &lyricsList);
-
 private slots:
     void onActionDownloadLyrics();
+    void onActionDownloadFinished(uint identifier,
+            const KNMusicDetailInfo &detailInfo,
+            QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList);
 
 private:
     QList<KNMusicDetailInfo> m_downloadQueue;
     QList<KNMusicLyricsDownloader *> m_downloaders;
     QMutex m_workingLock;
     KNMusicLrcParser *m_lrcParser;
+    uint m_identifier;
+    int m_finishedDownloader;
     bool m_isWorking;
 };
 

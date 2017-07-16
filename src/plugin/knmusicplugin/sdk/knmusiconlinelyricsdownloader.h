@@ -60,8 +60,18 @@ public slots:
 
     void cancelDownload();
 
+private slots:
+    void onActionDownloadFinished(
+            uint identifier,
+            const KNMusicDetailInfo &detailInfo,
+            QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList);
+
 private:
     QList<KNMusicLyricsDownloader *> m_downloaders;
+    QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> m_lyricsList;
+    KNMusicDetailInfo m_workingDetailInfo;
+    uint m_identifier;
+    int m_completeDownloader;
     bool m_cancelFlag, m_running;
 };
 
