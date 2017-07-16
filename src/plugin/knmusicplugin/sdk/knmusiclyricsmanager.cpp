@@ -41,7 +41,8 @@ KNMusicLyricsManager::KNMusicLyricsManager(KNConfigure *lyricsConfigure,
     m_backend(new KNMusicLyricsBackend(this)),
     m_parser(new KNMusicLrcParser(this)),
     m_onlineThread(new QThread(this)),
-    m_lyricsConfigure(lyricsConfigure)
+    m_lyricsConfigure(lyricsConfigure),
+    m_onlineConfigure(m_lyricsConfigure->getConfigure("Online"))
 {
     //Set the default loading policy.
     m_policyList << SameNameInLyricsDir << RelateNameInLyricsDir
@@ -94,7 +95,7 @@ void KNMusicLyricsManager::loadLyrics(const KNMusicAnalysisItem &analysisItem)
     }
     //When the download setting, if allows to download online, emit the download
     //signal.
-    if(m_lyricsConfigure->data("Online", true).toBool())
+    if(m_onlineConfigure->data("Enable", true).toBool())
     {
         //Or else we need to download the lyrics.
         emit requireDownloadLyrics(m_detailInfo);

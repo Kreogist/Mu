@@ -44,19 +44,23 @@ public:
      */
     QString downloaderName() Q_DECL_OVERRIDE;
 
+protected:
     /*!
-     * \brief Reimplemented from KNMusicLyricsDownloader::downloadLyrics().
+     * \brief Reimplemented from KNMusicLyricsDownloader::initialStep().
      */
-    void downloadLyrics(
-            const KNMusicDetailInfo &detailInfo,
-            QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
+    void initialStep(uint identifier,
+                     const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
 
-signals:
-
-public slots:
-
+    /*!
+     * \brief Reimplemented from KNMusicLyricsDownloader::processStep().
+     */
+    void processStep(
+            uint identifier,
+            int currentStep,
+            const QList<KNMusicReplyData> &replyCaches) Q_DECL_OVERRIDE;
 private:
-    QString parseKRC(const QByteArray &krcData);
+    QString parseKrc(const QByteArray &krcData);
+    QString krcToLrc(QString rawKRCContent);
     unsigned char m_magicBytes[4], m_encKey[16];
     QStringList m_lyricsAttributeHeader;
 };

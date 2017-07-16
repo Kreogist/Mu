@@ -1585,9 +1585,8 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicQQLyrics</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp" line="36"/>
         <source>QQMusic</source>
-        <translation>QQ音樂</translation>
+        <translation type="vanished">QQ音樂</translation>
     </message>
 </context>
 <context>
@@ -2006,12 +2005,17 @@ To create a playlist, drag your songs here.</source>
         <translation>關於</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="172"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="174"/>
         <source>General</source>
         <translation>通用</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="174"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="176"/>
+        <source>Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="178"/>
         <source>Lyrics</source>
         <translation>歌詞</translation>
     </message>
@@ -2019,14 +2023,32 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceAbout</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="138"/>
         <source> 2013-2015 Kreogist Dev Team
 All rights reserved.</source>
-        <translation> 2013-2015 Kreogist Dev Team
+        <translation type="vanished"> 2013-2015 Kreogist Dev Team
 保留一切權利。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="153"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="138"/>
+        <source> 2013-2017 Kreogist Dev Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="141"/>
+        <source>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="154"/>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="166"/>
         <source>Special Thanks</source>
         <translation>特別鳴謝</translation>
     </message>
@@ -2036,7 +2058,7 @@ All rights reserved.</source>
         <translation type="vanished">特別鳴謝</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="163"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="177"/>
         <source>This program uses Qt Version </source>
         <translation>這個程式使用 Qt </translation>
     </message>
@@ -2109,7 +2131,7 @@ darkblackswords
 這個程式使用 Qt  </translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="165"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="179"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
@@ -2137,54 +2159,81 @@ Qt 是 The Qt Company Ltd 開發的開源專案。請訪問 qt.io 獲取更多�
 <context>
     <name>KNPreferencePanelData</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="43"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="46"/>
         <source>System Tray Icon</source>
         <translation>系統託盤圖示</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="44"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="47"/>
         <source>Close to system tray</source>
         <translation>關閉到系統託盤</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="46"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="49"/>
         <source>When click the close button of the window, Mu won&apos;t quit but minimize to the system tray.
 When click the icon in the system tray, Mu will pop up back.</source>
         <translation>當按一下視窗的關閉按鈕時，µ將不會退出而是最小化到託盤圖示。
 當按一下託盤圖示時，µ將會重新顯示。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="60"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
+        <source>Output Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="66"/>
+        <source>Sample Rate (Hz)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="68"/>
+        <source>This option will change the output sample rate of the playback backend.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
+        <source>Stereo Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="74"/>
+        <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="85"/>
         <source>Header Lyrics</source>
         <translation>頂部歌詞</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
         <source>Header lyrics font</source>
         <translation>頂部歌詞字體</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="63"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation>這個選項將用於改變頂部歌詞的字體。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="90"/>
         <source>Header lyrics spacing</source>
         <translation>頂部歌詞行間距</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="92"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
         <translation>這個選項將用來調整頂部歌詞每行間的距離。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="71"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="96"/>
         <source>Online Lyrics</source>
         <translation>線上歌詞</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
         <source>Allow downloading lyrics</source>
         <translation>允許下載歌詞</translation>
     </message>
@@ -2193,7 +2242,7 @@ When click the icon in the system tray, Mu will pop up back.</source>
         <translation type="obsolete">下載歌詞</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="74"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="99"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation>如果在歌詞資料夾中沒有找到歌詞，
@@ -2241,7 +2290,7 @@ allows Mu to download lyrics from the Internet.</source>
 <context>
     <name>KNPreferenceSidebar</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencesidebar.cpp" line="129"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencesidebar.cpp" line="135"/>
         <source>Advanced Mode</source>
         <translation>高級模式</translation>
     </message>

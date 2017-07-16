@@ -1535,14 +1535,6 @@ To create a playlist, drag your songs here.</source>
     </message>
 </context>
 <context>
-    <name>KNMusicQQLyrics</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp" line="36"/>
-        <source>QQMusic</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>KNMusicSearch</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp" line="112"/>
@@ -1878,12 +1870,17 @@ To create a playlist, drag your songs here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="172"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="174"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="174"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="176"/>
+        <source>Playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="178"/>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1892,22 +1889,35 @@ To create a playlist, drag your songs here.</source>
     <name>KNPreferenceAbout</name>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="138"/>
-        <source> 2013-2015 Kreogist Dev Team
-All rights reserved.</source>
+        <source> 2013-2017 Kreogist Dev Team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="153"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="141"/>
+        <source>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="154"/>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="166"/>
         <source>Special Thanks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="163"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="177"/>
         <source>This program uses Qt Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="165"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="179"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
@@ -1927,58 +1937,85 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
 <context>
     <name>KNPreferencePanelData</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="43"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="46"/>
         <source>System Tray Icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="44"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="47"/>
         <source>Close to system tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="46"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="49"/>
         <source>When click the close button of the window, Mu won&apos;t quit but minimize to the system tray.
 When click the icon in the system tray, Mu will pop up back.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="60"/>
-        <source>Header Lyrics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
-        <source>Header lyrics font</source>
+        <source>Output Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="63"/>
-        <source>This option will change the font used on the header player lyrics.</source>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="66"/>
+        <source>Sample Rate (Hz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
-        <source>Header lyrics spacing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
-        <source>This option will change the spacing of the text line on the header player lyrics.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="71"/>
-        <source>Online Lyrics</source>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="68"/>
+        <source>This option will change the output sample rate of the playback backend.
+This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
-        <source>Allow downloading lyrics</source>
+        <source>Stereo Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="74"/>
+        <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="85"/>
+        <source>Header Lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
+        <source>Header lyrics font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
+        <source>This option will change the font used on the header player lyrics.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="90"/>
+        <source>Header lyrics spacing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="92"/>
+        <source>This option will change the spacing of the text line on the header player lyrics.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="96"/>
+        <source>Online Lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
+        <source>Allow downloading lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="99"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation type="unfinished"></translation>
@@ -2025,7 +2062,7 @@ allows Mu to download lyrics from the Internet.</source>
 <context>
     <name>KNPreferenceSidebar</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencesidebar.cpp" line="129"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencesidebar.cpp" line="135"/>
         <source>Advanced Mode</source>
         <translation type="unfinished"></translation>
     </message>

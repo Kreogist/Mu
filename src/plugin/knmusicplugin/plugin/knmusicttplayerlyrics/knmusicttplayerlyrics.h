@@ -34,18 +34,27 @@ public:
      * \param parent The parent object.
      */
     explicit KNMusicTtplayerLyrics(QObject *parent=0);
-    ~KNMusicTtplayerLyrics();
+
     /*!
      * \brief Reimplemented from KNMusicLyricsDownloader::downloaderName().
      */
     QString downloaderName() Q_DECL_OVERRIDE;
 
+protected:
     /*!
-     * \brief Reimplemented from KNMusicLyricsDownloader::downloadLyrics().
+     * \brief Reimplemented from KNMusicLyricsDownloader::initialStep().
      */
-    void downloadLyrics(
-            const KNMusicDetailInfo &detailInfo,
-            QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
+    void initialStep(uint identifier,
+                     const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLyricsDownloader::processStep().
+     */
+    void processStep(
+            uint identifier,
+            int currentStep,
+            const QList<KNMusicReplyData> &replyCaches) Q_DECL_OVERRIDE;
+
 
 private:
     struct lrcInfo
@@ -54,10 +63,9 @@ private:
         QString artist;
         QString title;
     };
-    void downloadLyricsFromUrl(const QString &url,
-                               const KNMusicDetailInfo &detailInfo,
-                               QList<KNMusicLyricsDetails> &lyricsList);
-    inline QString generateCode(const QHash<QString, QString> &info);
+    inline QString generateInitialUrl(const KNMusicDetailInfo &detailInfo,
+                                          const QString &host);
+    inline QString generateCode(const QMap<QString, QString> &info);
     inline QString utf8HexText(const QString &original);
     inline QString utf16LEHex(const QString &original);
     inline qint64 conv(qint64 i);

@@ -18,7 +18,9 @@
 #include <QApplication>
 #include <QDir>
 
+#ifdef Q_OS_WIN64
 #include "basswasapi.h"
+#endif
 
 #include "knconfigure.h"
 #include "knglobal.h"
@@ -240,8 +242,16 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     // setup BASS - "no sound" device with the "mix" sample rate (default for MOD music)
     BASS_Init(0, deviceInfo.mixfreq, 0, 0, NULL);
 #else
+    //Prepare the bass initial flag.
+    DWORD initFlag=BASS_DEVICE_FREQ;
+    //Check the preference setting.
+    if(m_playbackConfigure->data("Stero", false).toBool())
+    {
+        //Add stereo flag.
+        initFlag |= BASS_DEVICE_STEREO;
+    }
     //Initial bass library.
-    if(!BASS_Init(-1, userSampleRate, BASS_DEVICE_FREQ, NULL, NULL))
+    if(!BASS_Init(-1, userSampleRate, initFlag, NULL, NULL))
     {
         //Failed to initial the library bass.
         return false;

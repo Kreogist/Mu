@@ -39,25 +39,29 @@ public:
      */
     QString downloaderName() Q_DECL_OVERRIDE;
 
+protected:
     /*!
-     * \brief Reimplemented from KNMusicLyricsDownloader::downloadLyrics().
+     * \brief Reimplemented from KNMusicLyricsDownloader::initialStep().
      */
-    void downloadLyrics(
-            const KNMusicDetailInfo &detailInfo,
-            QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
+    void initialStep(uint identifier,
+                     const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
 
-signals:
-
-public slots:
+    /*!
+     * \brief Reimplemented from KNMusicLyricsDownloader::processStep().
+     */
+    void processStep(
+            uint identifier,
+            int currentStep,
+            const QList<KNMusicReplyData> &replyCaches) Q_DECL_OVERRIDE;
 
 private:
     inline QNetworkRequest generateNeteaseRequest(const QString &url);
     inline QString getArtistNames(const QJsonObject &songData);
-    inline void saveLyricsToList(const QJsonObject &lyricsObject,
+    inline void saveLyricsToList(uint identifier,
+                                 const QJsonObject &lyricsObject,
                                  const QString &lyricsName,
-                                 const KNMusicDetailInfo &detailInfo,
-                                 KNMusicLyricsDetails &lyricsDetails,
-                                 QList<KNMusicLyricsDetails> &lyricsList);
+                                 const QString &title,
+                                 const QString &artist);
 };
 
 #endif // KNMUSICNETEASELYRICS_H

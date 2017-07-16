@@ -34,29 +34,46 @@ QString KNMusicNeteaseLyrics::downloaderName()
     return "NeteaseCloudMusic";
 }
 
-void KNMusicNeteaseLyrics::downloadLyrics(
-        const KNMusicDetailInfo &detailInfo,
-        QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> &lyricsList)
+void KNMusicNeteaseLyrics::initialStep(uint identifier,
+                                       const KNMusicDetailInfo &detailInfo)
 {
     //Generate the search text.
     QString &&artist=detailInfo.textLists[Artist].toString(),
             &&title=detailInfo.textLists[Name].toString();
-    //Generate the response cache.
-    QByteArray responseData;
     //Do the search post request.
-    if(post(generateNeteaseRequest("http://music.163.com/api/search/get/"
-                                   "?s="+artist+"-"+title+"&"
-                                   "limit=20&" +
-                                   "type=1&offset=0"),
-            QByteArray(),
-            responseData)==200)
+    setReplyCount(identifier, 1);
+    post(identifier,
+         generateNeteaseRequest("http://music.163.com/api/search/get/?s="
+                                +artist+"-"+title+"&limit=20&type=1&offset=0"),
+         QByteArray());
+}
+
+void KNMusicNeteaseLyrics::processStep(
+        uint identifier,
+        int currentStep,
+        const QList<KNMusicReplyData> &replyCaches)
+{
+    //Check the current step index.
+    switch(currentStep)
     {
+    // Step 1 - Parse the result, and fetch all the result back.
+    case 1:
+    {
+        //Check the cache list.
+        if(replyCaches.size()!=1)
+        {
+            //Mission failed.
+            completeRequest(identifier);
+            return;
+        }
         //Parse the data.
-        QJsonObject dataObject=QJsonDocument::fromJson(responseData).object();
+        QJsonObject dataObject=
+                QJsonDocument::fromJson(replyCaches.at(0).result).object();
         //Get the result.
         if(!dataObject.contains("result"))
         {
-            //The data object is failed.
+            //Mission failed.
+            completeRequest(identifier);
             return;
         }
         //Get the result object.
@@ -106,65 +123,80 @@ void KNMusicNeteaseLyrics::downloadLyrics(
          *]
          */
         //Get the lyrics data for all the objects in the list.
-        for(auto i=searchItemList.begin(); i!=searchItemList.end(); ++i)
+        setReplyCount(identifier, searchItemList.size());
+        for(auto i : searchItemList)
         {
             //Translate the first object.
-            dataObject=(*i).toObject();
-            //Prepare a lyrics detail object.
-            KNMusicLyricsDetails currentDetails;
-            //Set data to current details.
-            currentDetails.title=dataObject.value("name").toString();
-            currentDetails.artist=getArtistNames(dataObject);
-            //Get the lyrics for the data object.
-            if(get(generateNeteaseRequest(
-                       "http://music.163.com/api/song/lyric?os=osx&id="+
-                       QString::number(
-                           qint64(dataObject.value("id").toDouble()))+
-                       "&lv=-1&kv=-1&tv=-1"),
-                   responseData)==200)
-            {
-                //Translate the response data to JSON object.
-                dataObject=QJsonDocument::fromJson(responseData).object();
-                //The lyrics data should be the following format.
-                /* {
-                 *     "code":200,
-                 *     "klyric":
-                 *     {
-                 *         "lyric":null,
-                 *         "version":10
-                 *     },
-                 *     "lrc":
-                 *     {
-                 *         "lyric":"(UTF-8 LRC Original language)",
-                 *         "version":29
-                 *     },
-                 *     "lyricUser":
-                 *     {
-                 *         "demand":0,
-                 *         "id":xxxxx,
-                 *         "nickname":"xxxxx",
-                 *         "status":0,
-                 *         "uptime":xxxxx,
-                 *         "userid":xxxxx
-                 *     },
-                 *     "qfy":false,
-                 *     "sfy":true,
-                 *     "sgc":true,
-                 *     "tlyric":
-                 *     {
-                 *         "lyric":"(UTF-8 LRC Translate)",
-                 *         "version":2
-                 *     }
-                 * }
-                 */
-                //Save the original lyrics, lrc.
-                saveLyricsToList(dataObject, "lrc", detailInfo,
-                                 currentDetails, lyricsList);
-                //Save the translate lyrics when it contains "tlyric".
-                saveLyricsToList(dataObject, "tlyric", detailInfo,
-                                 currentDetails, lyricsList);
-            }
+            dataObject=i.toObject();
+            //Get the lyrics object.
+            get(identifier,
+                generateNeteaseRequest(
+                    "http://music.163.com/api/song/lyric?os=osx&id="+
+                    QString::number(
+                        qint64(dataObject.value("id").toDouble()))+
+                    "&lv=-1&kv=-1&tv=-1"),
+                dataObject);
         }
+        break;
+    }
+    // Step 2 - Parse the final data.
+    case 2:
+    {
+        //Loop and check all the result data.
+        for(auto i : replyCaches)
+        {
+            //Translate the response data to JSON object.
+            QJsonObject lyricsObject=QJsonDocument::fromJson(i.result).object(),
+                    dataObject=i.user.toJsonObject();
+            //The lyrics object should be the following format.
+            /* {
+             *     "code":200,
+             *     "klyric":
+             *     {
+             *         "lyric":null,
+             *         "version":10
+             *     },
+             *     "lrc":
+             *     {
+             *         "lyric":"(UTF-8 LRC Original language)",
+             *         "version":29
+             *     },
+             *     "lyricUser":
+             *     {
+             *         "demand":0,
+             *         "id":xxxxx,
+             *         "nickname":"xxxxx",
+             *         "status":0,
+             *         "uptime":xxxxx,
+             *         "userid":xxxxx
+             *     },
+             *     "qfy":false,
+             *     "sfy":true,
+             *     "sgc":true,
+             *     "tlyric":
+             *     {
+             *         "lyric":"(UTF-8 LRC Translate)",
+             *         "version":2
+             *     }
+             * }
+             */
+            //Get the title and artist。
+            QString lyricsTitle=dataObject.value("name").toString(),
+                    lyricsArtist=getArtistNames(dataObject);
+            //Save the original lyrics, lrc.
+            saveLyricsToList(identifier, lyricsObject, "lrc",
+                             lyricsTitle, lyricsArtist);
+            //Save the translate lyrics when it contains "tlyric".
+            saveLyricsToList(identifier, lyricsObject, "tlyric",
+                             lyricsTitle, lyricsArtist);
+        }
+        //Mission complete.
+        completeRequest(identifier);
+        break;
+    }
+    default:
+        //Shouldn't arrive here.
+        break;
     }
 }
 
@@ -213,11 +245,10 @@ inline QString KNMusicNeteaseLyrics::getArtistNames(const QJsonObject &songData)
 }
 
 inline void KNMusicNeteaseLyrics::saveLyricsToList(
+        uint identifier,
         const QJsonObject &lyricsObject,
         const QString &lyricsName,
-        const KNMusicDetailInfo &detailInfo,
-        KNMusicLyricsDownloader::KNMusicLyricsDetails &lyricsDetails,
-        QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> &lyricsList)
+        const QString &title, const QString &artist)
 {
     //Save the lyrics when it contains name of the lyrics.
     if(!lyricsObject.contains(lyricsName))
@@ -226,8 +257,8 @@ inline void KNMusicNeteaseLyrics::saveLyricsToList(
         return;
     }
     //Get the lyrics data.
-    QString lyricsData=
-            lyricsObject.value(lyricsName).toObject().value("lyric").toString();
     //Save the lyrics data from lrc object.
-    saveLyrics(detailInfo, lyricsData, lyricsDetails, lyricsList);
+    saveLyrics(identifier, title, artist,
+               lyricsObject.value(lyricsName).toObject().value(
+                   "lyric").toString());
 }

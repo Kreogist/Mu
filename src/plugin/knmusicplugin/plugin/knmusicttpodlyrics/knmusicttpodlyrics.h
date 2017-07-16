@@ -33,19 +33,26 @@ public:
      * \param parent The parent object.
      */
     explicit KNMusicTtpodLyrics(QObject *parent = 0);
-    ~KNMusicTtpodLyrics();
 
     /*!
      * \brief Reimplemented from KNMusicLyricsDownloader::downloaderName().
      */
     QString downloaderName() Q_DECL_OVERRIDE;
 
+protected:
     /*!
-     * \brief Reimplemented from KNMusicLyricsDownloader::downloadLyrics().
+     * \brief Reimplemented from KNMusicLyricsDownloader::initialStep().
      */
-    void downloadLyrics(
-            const KNMusicDetailInfo &detailInfo,
-            QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
+    void initialStep(uint identifier,
+                     const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLyricsDownloader::processStep().
+     */
+    void processStep(
+            uint identifier,
+            int currentStep,
+            const QList<KNMusicReplyData> &replyCaches) Q_DECL_OVERRIDE;
 };
 
 #endif // KNMUSICTTPODLYRICS_H

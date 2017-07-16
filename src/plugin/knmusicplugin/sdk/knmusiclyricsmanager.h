@@ -161,7 +161,7 @@ private:
     //Working thread for the downloader.
     QThread *m_onlineThread;
     //Configrue setting.
-    KNConfigure *m_lyricsConfigure;
+    KNConfigure *m_lyricsConfigure, *m_onlineConfigure;
 };
 
 #endif // KNMUSICLYRICSMANAGER_H

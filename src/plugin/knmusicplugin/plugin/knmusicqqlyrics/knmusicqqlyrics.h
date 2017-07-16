@@ -39,16 +39,24 @@ public:
      */
     QString downloaderName() Q_DECL_OVERRIDE;
 
-    /*!
-     * \brief Reimplemented from KNMusicLyricsDownloader::downloadLyrics().
-     */
-    void downloadLyrics(
-            const KNMusicDetailInfo &detailInfo,
-            QList<KNMusicLyricsDetails> &lyricsList) Q_DECL_OVERRIDE;
-
 signals:
 
 public slots:
+
+protected:
+    /*!
+     * \brief Reimplemented from KNMusicLyricsDownloader::initialStep().
+     */
+    void initialStep(uint identifier,
+                     const KNMusicDetailInfo &detailInfo) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLyricsDownloader::processStep().
+     */
+    void processStep(
+            uint identifier,
+            int currentStep,
+            const QList<KNMusicReplyData> &replyCaches) Q_DECL_OVERRIDE;
 
 private:
     inline QString processKeywordsToGBK(const QString &keywords);

@@ -389,9 +389,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusictagflac/knmusictagflac.cpp \
     plugin/knmusicplugin/sdk/knmusiclrcparser.cpp \
     plugin/knmusicplugin/sdk/knmusiconlinelyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
     sdk/sao/knsaosubmenu.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
@@ -450,7 +447,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusictagm4a/knmusictagm4a.cpp \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.cpp \
     plugin/knmusicplugin/sdk/knmusichscrolllyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp \
     sdk/knfilenamelineedit.cpp \
     sdk/knfilenamemessagebox.cpp \
     sdk/notification/knnotificationmodel.cpp \
@@ -475,7 +471,6 @@ SOURCES += \
     sdk/kndarkwaitingwheel.cpp \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.cpp \
     sdk/account/knaccountresetpanel.cpp \
-    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreloadingdimmer.cpp \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp \
@@ -524,7 +519,13 @@ SOURCES += \
     core/knmainwindowstatusbar.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydropproxy.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelintitem.cpp \
-    plugin/knpreference/sdk/items/knpreferencepanelcomboitem.cpp
+    plugin/knpreference/sdk/items/knpreferencepanelcomboitem.cpp \
+    plugin/knmusicplugin/sdk/knmusiclyricsdownloader.cpp \
+    plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
+    plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
+    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp \
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
+    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -662,9 +663,6 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusiclrcparser.h \
     plugin/knmusicplugin/sdk/knmusiconlinelyrics.h \
     plugin/knmusicplugin/sdk/knmusiclyricsdownloader.h \
-    plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
-    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
-    plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h \
     plugin/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
     sdk/sao/knsaosubmenu.h \
     plugin/knmusicplugin/sdk/knmusicmainplayerbase.h \
@@ -728,7 +726,6 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicminiplayerbase.h \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayer.h \
     plugin/knmusicplugin/sdk/knmusichscrolllyrics.h \
-    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h \
     sdk/knfilenamelineedit.h \
     sdk/knfilenamemessagebox.h \
     sdk/notification/knnotificationmodel.h \
@@ -755,7 +752,6 @@ HEADERS += \
     sdk/kndarkwaitingwheel.h \
     plugin/knmusicplugin/plugin/knmusicminiplayer/knmusicminiplayerlyrics.h \
     sdk/account/knaccountresetpanel.h \
-    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
     plugin/knmusicplugin/sdk/knmusicstorebase.h \
     plugin/knmusicplugin/plugin/knmusicstore/knmusicstore.h \
     plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreloadingdimmer.h \
@@ -808,7 +804,12 @@ HEADERS += \
     core/knmainwindowstatusbar.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydropproxy.h \
     plugin/knpreference/sdk/items/knpreferencepanelintitem.h \
-    plugin/knpreference/sdk/items/knpreferencepanelcomboitem.h
+    plugin/knpreference/sdk/items/knpreferencepanelcomboitem.h \
+    plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
+    plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h \
+    plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h \
+    plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
+    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h
 
 RESOURCES += \
     resource/res.qrc

@@ -29,101 +29,142 @@ KNMusicTtplayerLyrics::KNMusicTtplayerLyrics(QObject *parent) :
     m_utf16LE=QTextCodec::codecForName("UTF-16LE");
 }
 
-KNMusicTtplayerLyrics::~KNMusicTtplayerLyrics()
-{
-
-}
-
 QString KNMusicTtplayerLyrics::downloaderName()
 {
     return "TTPlayer";
 }
 
-void KNMusicTtplayerLyrics::downloadLyrics(
-        const KNMusicDetailInfo &detailInfo,
-        QList<KNMusicLyricsDetails> &lyricsList)
+void KNMusicTtplayerLyrics::initialStep(uint identifier,
+                                        const KNMusicDetailInfo &detailInfo)
 {
-    //Download from both CNC and CT server of qianqian.com.
-    downloadLyricsFromUrl("http://ttlrccnc.qianqian.com",
-                          detailInfo,
-                          lyricsList);
-    downloadLyricsFromUrl("http://ttlrcct.qianqian.com",
-                          detailInfo,
-                          lyricsList);
+    //Two server for the TTPlayer.
+    setReplyCount(identifier, 2);
+    //Generate the initial request.
+    get(identifier,
+        generateInitialUrl(detailInfo, "http://ttlrccnc.qianqian.com"),
+        "http://ttlrccnc.qianqian.com");
+    get(identifier,
+        generateInitialUrl(detailInfo, "http://ttlrcct.qianqian.com"),
+        "http://ttlrcct.qianqian.com");
 }
 
-void KNMusicTtplayerLyrics::downloadLyricsFromUrl(
-        const QString &url,
-        const KNMusicDetailInfo &detailInfo,
-        QList<KNMusicLyricsDetails> &lyricsList)
+void KNMusicTtplayerLyrics::processStep(
+        uint identifier,
+        int currentStep,
+        const QList<KNMusicReplyData> &replyCaches)
 {
-    //Generate the query url.
-    QString queryUrl=url+
-                     "/dll/lyricsvr.dll?sh?Artist="+
-                     utf16LEHex(
-                       processKeywords(detailInfo.textLists[Artist].toString()))
-                     + "&Title="+
-                     utf16LEHex(
-                        processKeywords(detailInfo.textLists[Name].toString()))
-                     + "&Flags=0";
-    //Get the xml data from the url.
-    QByteArray responseData;
-    get(queryUrl, responseData);
-    //Found song lyrics info.
-    QDomDocument songInfoDocument;
-    songInfoDocument.setContent(responseData);
-    //Get the lrc element.
-    QDomNodeList lyrics=
-            songInfoDocument.documentElement().elementsByTagName("lrc");
-    //Check out the lrc dom content.
-    if(lyrics.isEmpty())
+    //Check the current step index.
+    switch(currentStep)
     {
-        return;
-    }
-    //Save the ids.
-    QList<QHash<QString, QString>> lyricsInfoList;
-    for(int i=0; i<lyrics.size(); i++)
+    // Step 1 - Parse the result, and fetch all the result back.
+    case 1:
     {
-        //Get on element.
-        QDomElement currentLyrics=lyrics.at(i).toElement();
-        //Generate the lyrics info.
-        QHash<QString, QString> lyricsInfo;
-        lyricsInfo.insert("title", currentLyrics.attribute("title"));
-        lyricsInfo.insert("artist", currentLyrics.attribute("artist"));
-        lyricsInfo.insert("id", currentLyrics.attribute("id"));
-        //Add to lyrics info.
-        lyricsInfoList.append(lyricsInfo);
-    }
-    //Download lyrics.
-    for(QList<QHash<QString, QString>>::iterator i=lyricsInfoList.begin();
-        i!=lyricsInfoList.end();
-        ++i)
-    {
-        //Generate the url.
-        QString downloadUrl=url+
-                            "/dll/lyricsvr.dll?dl?Id=" +
-                            (*i).value("id") +
-                            "&Code="+
-                            generateCode(*i);
-        //Download data.
-        get(downloadUrl, responseData);
-        //Check out the response data.
-        if(!responseData.isEmpty() &&
-                !responseData.contains("errmsg"))
+        //Check the reply size.
+        if(replyCaches.size()!=2)
         {
-            //Generate the lyrics details data.
-            KNMusicLyricsDetails currentDetails;
-            //Set the title and artist.
-            currentDetails.title=(*i).value("title");
-            currentDetails.artist=(*i).value("artist");
-            //Save the lyrics.
-            saveLyrics(detailInfo, responseData, currentDetails, lyricsList);
+            //Mission failed.
+            completeRequest(identifier);
+            return;
         }
+        //Pick out all the lyrics info.
+        QList<QMap<QString, QString>> lyricsInfoList;
+        for(auto i : replyCaches)
+        {
+            //Get the response data.
+            const QByteArray &responseData=i.result;
+            QString &&hostUrl=i.user.toString();
+            //Found song lyrics info.
+            QDomDocument songInfoDocument;
+            songInfoDocument.setContent(responseData);
+            //Get the lrc element.
+            QDomNodeList lyrics=
+                    songInfoDocument.documentElement().elementsByTagName("lrc");
+            //Check out the lrc dom content.
+            if(lyrics.isEmpty())
+            {
+                //Check next item.
+                continue;
+            }
+            //Save the ids.
+            for(int i=0; i<lyrics.size(); i++)
+            {
+                //Get on element.
+                QDomElement currentLyrics=lyrics.at(i).toElement();
+                //Generate the lyrics info.
+                QMap<QString, QString> lyricsInfo;
+                lyricsInfo.insert("title", currentLyrics.attribute("title"));
+                lyricsInfo.insert("artist", currentLyrics.attribute("artist"));
+                lyricsInfo.insert("id", currentLyrics.attribute("id"));
+                lyricsInfo.insert("host", hostUrl);
+                //Add to lyrics info.
+                lyricsInfoList.append(lyricsInfo);
+            }
+        }
+        //Check the lyrics info list size.
+        if(lyricsInfoList.isEmpty())
+        {
+            //Mission failed.
+            completeRequest(identifier);
+            return;
+        }
+        //Update the reply count.
+        setReplyCount(identifier, lyricsInfoList.size());
+        for(auto i : lyricsInfoList)
+        {
+            //Prepare the user data.
+            QVariant lyricsData;
+            lyricsData.setValue(i);
+            //Download the lyrics data.
+            get(identifier,
+                i.value("host")+"/dll/lyricsvr.dll?dl?Id="+i.value("id")+
+                "&Code="+generateCode(i),
+                lyricsData);
+        }
+        break;
     }
+    // Step 2 - Read and save the lyrics data.
+    case 2:
+    {
+        //Loop and check all the response data.
+        for(auto i : replyCaches)
+        {
+            //Check the reply data.
+            if(i.result.isEmpty() || i.result.contains("errmsg"))
+            {
+                //Ignore the error lyrics data.
+                continue;
+            }
+            //Get the lyrics data.
+            QMap<QString, QString> lyricsInfo=
+                    i.user.value<QMap<QString, QString>>();
+            //Save the lyrics data.
+            saveLyrics(identifier,
+                       lyricsInfo.value("title"),
+                       lyricsInfo.value("artist"),
+                       i.result);
+        }
+        //After all the lyrics has been saved, mission complete.
+        completeRequest(identifier);
+        break;
+    }
+    default:
+        //Should never arrive here.
+        break;
+    }
+}
+
+inline QString KNMusicTtplayerLyrics::generateInitialUrl(
+        const KNMusicDetailInfo &detailInfo, const QString &host)
+{
+    return host+"/dll/lyricsvr.dll?sh?Artist="+
+            utf16LEHex(processKeywords(detailInfo.textLists[Artist].toString()))
+            +"&Title="+
+            utf16LEHex(processKeywords(detailInfo.textLists[Name].toString()))
+            +"&Flags=0";
 }
 
 inline QString KNMusicTtplayerLyrics::generateCode(
-        const QHash<QString, QString> &info)
+        const QMap<QString, QString> &info)
 {
     //Actually, I don't know what the following fuck of the following codes.
     //I just simply translate them from js to C++.
