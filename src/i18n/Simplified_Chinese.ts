@@ -1585,8 +1585,9 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicQQLyrics</name>
     <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp" line="36"/>
         <source>QQMusic</source>
-        <translation type="vanished">QQ音乐</translation>
+        <translation>QQ音乐</translation>
     </message>
 </context>
 <context>
@@ -2197,61 +2198,86 @@ When click the icon in the system tray, Mu will pop up back.</source>
         <translation>输出参数</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="66"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
+        <source>Using WASAPI with exclusive mode instead of DirectX for sound output.
+When this feature is enabled, the output sample rate will be changed to the sample rate of the real device.
+When this feature is enabled, all the music preview feature will be disabled.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
         <source>Sample Rate (Hz)</source>
         <translation>采样率（Hz）</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="68"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
         <source>This option will change the output sample rate of the playback backend.
 This option will be applied after the application restarted.</source>
         <translation>本设置将会改变播放设备的输出采样率。
 这个设置的更改将在重新启动才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="77"/>
         <source>Stereo Output</source>
         <translation>立体声输出</translation>
     </message>
     <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="63"/>
+        <source>Use WASAPI</source>
+        <translation>启用WASAPI</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
+        <source>Use 32-bit float point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="74"/>
+        <source>Produce 32-bit floating-point output.
+WDM drivers are required to use this feature in Windows.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
         <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
 This option will be applied after the application restarted.</source>
         <translation>将输出限制为立体声，可以当具有多通道设备时节省CPU资源。
 这个设置的更改将在重新启动才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="85"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="100"/>
         <source>Header Lyrics</source>
         <translation>顶部歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="101"/>
         <source>Header lyrics font</source>
         <translation>顶部歌词字体</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="103"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation>这个选项将用于改变顶部歌词的字体。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="90"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="105"/>
         <source>Header lyrics spacing</source>
         <translation>顶部歌词行间距</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="92"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="107"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
         <translation>这个选项将用来调整顶部歌词每行间的距离。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="96"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="111"/>
         <source>Online Lyrics</source>
         <translation>在线歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="112"/>
         <source>Allow downloading lyrics</source>
         <translation>允许下载歌词</translation>
     </message>
@@ -2260,7 +2286,7 @@ This option will be applied after the application restarted.</source>
         <translation type="obsolete">下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="99"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="114"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation>如果在歌词文件夹中没有找到歌词，

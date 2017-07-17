@@ -38,8 +38,9 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
   #ifdef Q_OS_WIN64
   ,
     m_wasapiOutputDevice(-1),
-    m_wasapiFlag(BASS_WASAPI_AUTOFORMAT | BASS_WASAPI_BUFFER /*|
-                 BASS_WASAPI_EXCLUSIVE*/)
+    m_wasapiFlag(BASS_WASAPI_AUTOFORMAT | BASS_WASAPI_BUFFER |
+                 BASS_WASAPI_EXCLUSIVE),
+    m_wasapiEnabled(false)
   #endif
 {
     //Initial a empty thread flags.
@@ -93,100 +94,137 @@ int KNMusicBackendBass::maximumVolume() const
 
 qint64 KNMusicBackendBass::previewDuration() const
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
     //Disable the preview thread duration fetch.
-    return (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE) ?
-                -1 : KNMusicStandardBackend::previewDuration();
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
+    {
+        //Return an invalid value.
+        return -1;
+    }
+#endif
+    return KNMusicStandardBackend::previewDuration();
 }
 
 qint64 KNMusicBackendBass::previewPosition() const
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
     //Disable the preview thread position.
-    return (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE) ?
-                -1 : KNMusicStandardBackend::previewPosition();
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
+    {
+        //Return an invalid value.
+        return -1;
+    }
+#endif
+    return KNMusicStandardBackend::previewPosition();
 }
 
 bool KNMusicBackendBass::previewLoadMusic(const QString &filePath,
                                           const qint64 &start,
                                           const qint64 &duration)
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
     //Check the WASAPI flag.
-    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
     {
         //Failed to load music for exclusive mode.
         return false;
     }
+#endif
     //Do original event.
     return KNMusicStandardBackend::previewLoadMusic(filePath, start, duration);
 }
 
 int KNMusicBackendBass::previewState() const
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
     //Check the WASAPI flag.
-    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
     {
         //Failed to fetch the playing state when enabled exclusive mode.
         return Stopped;
     }
+#endif
     //Do orignal event.
     return KNMusicStandardBackend::previewState();
 }
 
 void KNMusicBackendBass::previewPlay()
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
-    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
     {
         //Do nothing.
         return;
     }
+#endif
     //Do orignal event.
     KNMusicStandardBackend::previewPlay();
 }
 
 void KNMusicBackendBass::previewPause()
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
-    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
     {
         //Do nothing.
         return;
     }
+#endif
     //Do orignal event.
     KNMusicStandardBackend::previewPause();
 }
 
 void KNMusicBackendBass::previewStop()
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
-    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
     {
         //Do nothing.
         return;
     }
+#endif
     //Do orignal event.
     KNMusicStandardBackend::previewStop();
 }
 
 void KNMusicBackendBass::previewReset()
 {
+#ifdef Q_OS_WIN64
     //When exclusive, only main thread would working.
-    if(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE)
+    if(m_wasapiEnabled && (m_wasapiFlag & BASS_WASAPI_EXCLUSIVE))
     {
         //Do nothing.
         return;
     }
+#endif
     //Do orignal event.
     KNMusicStandardBackend::previewReset();
 }
 
 void KNMusicBackendBass::setGlobalVolume(const int &volume)
 {
-    //Change the global volume size of the bass.
-    BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, volume);
+#ifdef Q_OS_WIN64
+    if(m_wasapiEnabled)
+    {
+        //Use the WASAPI function to change the volume.
+        BASS_WASAPI_SetVolume(BASS_WASAPI_CURVE_WINDOWS,
+                              ((float)volume)/10000.0);
+    }
+    else
+    {
+#endif
+        //Change the global volume size of the bass.
+        BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, volume);
+#ifdef Q_OS_WIN64
+    }
+#endif
     //Emit the volume changed signal.
     emit volumeChanged(volume);
 }
@@ -203,6 +241,12 @@ qreal KNMusicBackendBass::smartVolumeScale() const
 
 inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 {
+    //Detect operating system version and enable option for using WASAPI.
+#ifndef Q_OS_WIN64
+    m_wasapiEnabled=false;
+#else
+    m_wasapiEnabled=m_playbackConfigure->data("WASAPI", false).toBool();
+#endif
     //Check the bass library version first.
     if(HIWORD(BASS_GetVersion()) > BASSVERSION)
     {
@@ -214,49 +258,58 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
     //Get the setting sample rate.
     int userSampleRate=m_playbackConfigure->data("SampleRate", 44100).toInt();
-#ifdef Q_OS_WIN64
-    //For 64-bit Windows, we will enable WASAPI as the playing API instead of
-    //using DirectX.
-    //Find the output device.
-    BASS_WASAPI_DEVICEINFO deviceInfo;
-    for(int device=0; BASS_WASAPI_GetDeviceInfo(device, &deviceInfo); ++device)
+    if(m_wasapiEnabled)
     {
-        //Check the device flag.
-        if((deviceInfo.flags & (BASS_DEVICE_DEFAULT |
-                                BASS_DEVICE_LOOPBACK |
-                                BASS_DEVICE_INPUT))==BASS_DEVICE_DEFAULT)
+        //For 64-bit Windows, we will enable WASAPI as the playing API instead
+        //of using DirectX.
+        //Find the output device.
+        BASS_WASAPI_DEVICEINFO deviceInfo;
+        for(int device=0;
+            BASS_WASAPI_GetDeviceInfo(device, &deviceInfo);
+            ++device)
         {
-            //Save the default device index.
-            m_wasapiOutputDevice=device;
-            break;
+            //Check the device flag.
+            if((deviceInfo.flags & (BASS_DEVICE_DEFAULT |
+                                    BASS_DEVICE_LOOPBACK |
+                                    BASS_DEVICE_INPUT))==BASS_DEVICE_DEFAULT)
+            {
+                //Save the default device index.
+                m_wasapiOutputDevice=device;
+                break;
+            }
+        }
+        // Check the device index.
+        if (m_wasapiOutputDevice==-1)
+        {
+            //Failed to find the output device.
+            return false;
+        }
+        //Because we won't playing anything via BASS, so don't need an update
+        //thread.
+        BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 0);
+        //Setup BASS - "no sound" device with the "mix" sample rate (default for
+        //MOD music)
+        BASS_Init(0, deviceInfo.mixfreq, 0, 0, NULL);
+
+    }
+    else
+    {
+        //Normal bass initialize.
+        //Prepare the bass initial flag.
+        DWORD initFlag=BASS_DEVICE_FREQ;
+        //Check the preference setting.
+        if(m_playbackConfigure->data("Stero", false).toBool())
+        {
+            //Add stereo flag.
+            initFlag |= BASS_DEVICE_STEREO;
+        }
+        //Initial bass library.
+        if(!BASS_Init(-1, userSampleRate, initFlag, NULL, NULL))
+        {
+            //Failed to initial the library bass.
+            return false;
         }
     }
-    //Check the device index.
-    if (m_wasapiOutputDevice==-1)
-    {
-        //Failed to find the output device.
-        return false;
-    }
-    // not playing anything via BASS, so don't need an update thread
-    BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 0);
-    // setup BASS - "no sound" device with the "mix" sample rate (default for MOD music)
-    BASS_Init(0, deviceInfo.mixfreq, 0, 0, NULL);
-#else
-    //Prepare the bass initial flag.
-    DWORD initFlag=BASS_DEVICE_FREQ;
-    //Check the preference setting.
-    if(m_playbackConfigure->data("Stero", false).toBool())
-    {
-        //Add stereo flag.
-        initFlag |= BASS_DEVICE_STEREO;
-    }
-    //Initial bass library.
-    if(!BASS_Init(-1, userSampleRate, initFlag, NULL, NULL))
-    {
-        //Failed to initial the library bass.
-        return false;
-    }
-#endif
     //Clear the channel flags.
     channelFlags=0;
     //Check float dsp supporting.
@@ -333,7 +386,7 @@ KNMusicBackendBassThread *KNMusicBackendBass::generateThread(
     thread->setCreateFlags(channelFlags);
 #ifdef Q_OS_WIN64
     //Set the WASAPI parameters to the thread.
-    thread->setWasapiData(m_wasapiOutputDevice, m_wasapiFlag);
+    thread->setWasapiData(m_wasapiEnabled, m_wasapiOutputDevice, m_wasapiFlag);
 #endif
     //Give back the thread.
     return thread;

@@ -59,6 +59,26 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     {
         //Header lyrics.
         block=generateBlock(tr("Output Parameter"));
+#ifdef Q_OS_WIN64
+        addItem(block, tr("Use WASAPI"),
+                "System/Backend/WASAPI", false, TypeBoolean,
+                tr("Using WASAPI with exclusive mode instead of DirectX for "
+                   "sound output.\nWhen this feature is enabled, the output "
+                   "sample rate will be changed to the sample rate of the real "
+                   "device.\nWhen this feature is enabled, all the music "
+                   "preview feature will be disabled.\nThis option will be "
+                   "applied after the application restarted."), false);
+#endif
+        addItem(block, tr("Use 32-bit float point"),
+                "System/Backend/Float", true, TypeBoolean,
+                tr("Produce 32-bit floating-point output.\nWDM drivers are "
+                   "required to use this feature in Windows.\nThis option will"
+                   " be applied after the application restarted."), false);
+        addItem(block, tr("Stereo Output"),
+                "System/Backend/Stero", false, TypeBoolean,
+                tr("Limit the output to stereo, saving some CPU if the device "
+                   "has more speakers available.\nThis option will be applied "
+                   "after the application restarted."), true);
         QStringList sampleRates;
         sampleRates << "8000" << "11025" << "22050" << "32000" << "44100"
                     << "47250" << "48000" << "50000" << "50400" << "96000"
@@ -69,11 +89,6 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                         "playback backend.\nThis option will be applied after "
                         "the application restarted."),
                      sampleRates, false, false);
-        addItem(block, tr("Stereo Output"),
-                "System/Backend/Stero", false, TypeBoolean,
-                tr("Limit the output to stereo, saving some CPU if the device "
-                   "has more speakers available.\nThis option will be applied "
-                   "after the application restarted."), true);
         panelData.append(block);
         break;
     }
