@@ -137,10 +137,11 @@ public slots:
 #ifdef Q_OS_WIN64
     /*!
      * \brief Set the WASAPI playing data.
+     * \param enabled Whether the WASAPI is enabled.
      * \param outputDevice The output device index.
      * \param wasapiFlag The stream build flag.
      */
-    void setWasapiData(int outputDevice, DWORD wasapiFlag);
+    void setWasapiData(bool enabled, int outputDevice, DWORD wasapiFlag);
 #endif
 
 private slots:
@@ -188,21 +189,7 @@ private:
                  //position msecond.
                  *1000)-m_startPosition;
     }
-    inline qreal getChannelVolume()
-    {
-        //Check if the thread is loaded.
-        if(!m_channel)
-        {
-            //For a unloaded volume it will be 0.
-            return 0.0;
-        }
-        //Initial a cache.
-        float channelVolume;
-        //Get the volume to the cache.
-        BASS_ChannelGetAttribute(m_channel, BASS_ATTRIB_VOL, &channelVolume);
-        //Give back the channel volume.
-        return channelVolume;
-    }
+    inline qreal getChannelVolume();
     inline void freeChannel();
     inline bool loadBassThread(const QString &filePath);
 #ifdef Q_OS_WIN64
@@ -226,6 +213,7 @@ private:
     HSTREAM m_mixer;
     int m_wasapiOutputDevice;
     DWORD m_wasapiFlag;
+    bool m_wasapiEnabled;
 #endif
 
     //Updater.

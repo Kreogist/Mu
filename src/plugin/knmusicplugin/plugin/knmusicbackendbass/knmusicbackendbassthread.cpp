@@ -45,6 +45,7 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_mixer(0),
     m_wasapiOutputDevice(-1),
     m_wasapiFlag(0),
+    m_wasapiEnabled(false),
     #endif
     m_positionUpdater(new QTimer(this)),
     m_syncHandlers(QList<HSYNC>())
@@ -100,8 +101,11 @@ bool KNMusicBackendBassThread::loadFile(const QString &filePath)
                                                             BASS_POS_BYTE))
             *1000.0;
 #ifdef Q_OS_WIN64
-    // For 64-bit Windows platform, the WASAPI need to be initialized here.
-    initialWasapi();
+    if(m_wasapiEnabled)
+    {
+        // For 64-bit Windows platform, the WASAPI need to be initialized here.
+        initialWasapi();
+    }
 #endif
     //Emit the duration changed signal.
     emit durationChanged(m_totalDuration);
@@ -179,11 +183,18 @@ void KNMusicBackendBassThread::play()
     //Start the position updater.
     m_positionUpdater->start();
 #ifdef Q_OS_WIN64
-    //Start the WASAPI playing.
-    BASS_WASAPI_Start();
-#else
-    //Play the thread.
-    BASS_ChannelPlay(m_channel, FALSE);
+    if(m_wasapiEnabled)
+    {
+        //Start the WASAPI playing.
+        BASS_WASAPI_Start();
+    }
+    else
+    {
+#endif
+        //Play the thread.
+        BASS_ChannelPlay(m_channel, FALSE);
+#ifdef Q_OS_WIN64
+    }
 #endif
     //Update the state.
     setPlayingState(Playing);
@@ -199,11 +210,18 @@ void KNMusicBackendBassThread::pause()
         return;
     }
 #ifdef Q_OS_WIN64
-    //Stop the WASAPI playing.
-    BASS_WASAPI_Stop(false);
-#else
-    //Pause the thread first.
-    BASS_ChannelPause(m_channel);
+    if(m_wasapiEnabled)
+    {
+        //Stop the WASAPI playing.
+        BASS_WASAPI_Stop(false);
+    }
+    else
+    {
+#endif
+        //Pause the thread first.
+        BASS_ChannelPause(m_channel);
+#ifdef Q_OS_WIN64
+    }
 #endif
     //Stop the updater.
     m_positionUpdater->stop();
@@ -265,8 +283,20 @@ void KNMusicBackendBassThread::setPlaySection(const qint64 &start,
 
 void KNMusicBackendBassThread::save()
 {
-    //Pause the thread first.
-    BASS_ChannelPause(m_channel);
+#ifdef Q_OS_WIN64
+    if(m_wasapiEnabled)
+    {
+        //Stop the WASAPI playing.
+        BASS_WASAPI_Stop(false);
+    }
+    else
+    {
+#endif
+        //Pause the thread first.
+        BASS_ChannelPause(m_channel);
+#ifdef Q_OS_WIN64
+    }
+#endif
     //Stop the updater.
     m_positionUpdater->stop();
     //Save the position of the current thread.
@@ -315,11 +345,11 @@ void KNMusicBackendBassThread::setVolume(const int &volume)
     {
         return;
     }
-#ifdef Q_OS_WIN64
-    ;
-#endif
+    //The reason why no WASAPI operation here is because that WASAPI will never
+    //comes here for setting the preview thread volume.
     //Set the volume to channel.
-    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL, ((float)volume)/100.0);
+    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_VOL,
+                             ((float)volume)/100.0);
     //Save the latest volume size.
     m_volume=getChannelVolume();
 }
@@ -359,11 +389,6 @@ void KNMusicBackendBassThread::setCreateFlags(const DWORD &channelFlags)
 {
     //Save the channel flags.
     m_channelFlags=channelFlags;
-#ifdef Q_OS_WIN64
-    //For 64-bit Windows, we will use WASAPI as output, the stream will only be
-    //used as decode stream.
-    m_channelFlags |= BASS_STREAM_DECODE;
-#endif
 }
 
 void KNMusicBackendBassThread::checkPosition()
@@ -451,19 +476,51 @@ inline void KNMusicBackendBassThread::removeChannelSyncs()
     m_syncHandlers.clear();
 }
 
+qreal KNMusicBackendBassThread::getChannelVolume()
+{
+    //Check if the thread is loaded.
+    if(!m_channel)
+    {
+        //For a unloaded volume it will be 0.
+        return 0.0;
+    }
+    //Initial a cache.
+    float channelVolume;
+#ifdef Q_OS_WIN64
+    if(m_wasapiEnabled)
+    {
+        channelVolume=BASS_WASAPI_GetVolume(BASS_WASAPI_VOL_SESSION |
+                                            BASS_WASAPI_CURVE_LINEAR);
+    }
+    else
+    {
+#endif
+        //Get the volume to the cache.
+        BASS_ChannelGetAttribute(m_channel, BASS_ATTRIB_VOL, &channelVolume);
+#ifdef Q_OS_WIN64
+    }
+#endif
+    //Give back the channel volume.
+    return channelVolume;
+}
+
 inline void KNMusicBackendBassThread::freeChannel()
 {
 #ifdef Q_OS_WIN64
-    //Check the mixer stream is not null.
-    if(m_mixer)
+    //When using WASAPI.
+    if(m_wasapiEnabled)
     {
-        //Free the Mix stream.
-        BASS_StreamFree(m_mixer);
-        //Reset the mixer channel.
-        m_mixer=0;
+        //Check the mixer stream is not null.
+        if(m_mixer)
+        {
+            //Free the Mix stream.
+            BASS_StreamFree(m_mixer);
+            //Reset the mixer channel.
+            m_mixer=0;
+        }
+        //Free the WASAPI first.
+        BASS_WASAPI_Free();
     }
-    //Free the WASAPI first.
-    BASS_WASAPI_Free();
 #endif
     //Check if the channel is not null.
     if(m_channel)
@@ -501,7 +558,11 @@ inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
         //Set the MOD loading flag.
         DWORD modLoadFlag=BASS_MUSIC_RAMPS;
 #ifdef Q_OS_WIN64
-        modLoadFlag |= BASS_MUSIC_PRESCAN;
+        if(m_wasapiEnabled)
+        {
+            //When using WASAPI, it will only use for decoding.
+            modLoadFlag |= BASS_MUSIC_PRESCAN;
+        }
 #endif
         //Create the file using the fixed music load.
         m_channel=BASS_MusicLoad(FALSE,
@@ -528,13 +589,23 @@ inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
 }
 
 #ifdef Q_OS_WIN64
-void KNMusicBackendBassThread::setWasapiData(int outputDevice,
+void KNMusicBackendBassThread::setWasapiData(bool enabled,
+                                             int outputDevice,
                                              DWORD wasapiFlag)
 {
+    //Save the enable setting.
+    m_wasapiEnabled=enabled;
     //Save the output device.
     m_wasapiOutputDevice=outputDevice;
     //Save the WASAPI initial flag.
     m_wasapiFlag=wasapiFlag;
+    //Check the enable flag.
+    if(m_wasapiEnabled)
+    {
+        //For 64-bit Windows, when use WASAPI as output, the stream will only be
+        //used as decode stream.
+        m_channelFlags |= BASS_STREAM_DECODE;
+    }
 }
 
 inline bool KNMusicBackendBassThread::initialWasapi()
@@ -553,10 +624,10 @@ inline bool KNMusicBackendBassThread::initialWasapi()
                           m_wasapiFlag, bufferLength,
                           0.05, wasapiProcess, this)) {
         // Failed, try falling back to shared mode
-        if (!(m_wasapiFlag&BASS_WASAPI_EXCLUSIVE) ||
+        if (!(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE) ||
                 !BASS_WASAPI_Init(m_wasapiOutputDevice,
                                   channelInfo.freq, channelInfo.chans,
-                                  m_wasapiFlag&~BASS_WASAPI_EXCLUSIVE,
+                                  m_wasapiFlag & ~BASS_WASAPI_EXCLUSIVE,
                                   bufferLength, 0.05, wasapiProcess, this))
         {
             //Can't initialize device.

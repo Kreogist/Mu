@@ -1567,6 +1567,14 @@ To create a playlist, drag your songs here.</source>
     </message>
 </context>
 <context>
+    <name>KNMusicQQLyrics</name>
+    <message>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp" line="36"/>
+        <source>QQMusic</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KNMusicSearch</name>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsearch/knmusicsearch.cpp" line="112"/>
@@ -2091,59 +2099,84 @@ When click the icon in the system tray, Mu will pop up back.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="66"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
+        <source>Using WASAPI with exclusive mode instead of DirectX for sound output.
+When this feature is enabled, the output sample rate will be changed to the sample rate of the real device.
+When this feature is enabled, all the music preview feature will be disabled.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
         <source>Sample Rate (Hz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="68"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
         <source>This option will change the output sample rate of the playback backend.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="77"/>
         <source>Stereo Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="63"/>
+        <source>Use WASAPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
+        <source>Use 32-bit float point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="74"/>
+        <source>Produce 32-bit floating-point output.
+WDM drivers are required to use this feature in Windows.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
         <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="85"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="100"/>
         <source>Header Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="101"/>
         <source>Header lyrics font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="103"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="90"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="105"/>
         <source>Header lyrics spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="92"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="107"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="96"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="111"/>
         <source>Online Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="112"/>
         <source>Allow downloading lyrics</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2152,7 +2185,7 @@ This option will be applied after the application restarted.</source>
         <translation type="obsolete">歌詞をダウンロード</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="99"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="114"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation type="unfinished"></translation>
