@@ -104,6 +104,9 @@ def downloadPackage(qtInst, packageInfo):
     else:
         conn = http.client.HTTPConnection(packageInfo['url'])
     packageUrl, _ =packageInfo['path'][str(qtInst['width'])]
+    # Check package URL.
+    if len(packageUrl)==0:
+        return None
     # Get the url data.
     conn.request("GET", packageUrl)
     response = conn.getresponse()
@@ -287,6 +290,51 @@ def configureQt(qtInst):
         print("Bass has been installed.")
     else:
         print("Done")
+    # Check windows version.
+    if qtInst["width"]==64:
+        print("64-bit compiler version detected. Checking 64-bit dependence.")
+        # Install the Bass WASAPI library.
+        print("Checking Bass WASAPI installation...", end='')
+        if not checkFileExist(qtInst, [('bin', 'basswasapi.dll'), ('include', 'basswasapi.h'), ('lib', 'basswasapi.lib')]):
+            print("\nFailed to find Bass WASAPI library, start to install.")
+            basswasapiInfo = {'name' : 'Bass WASAPI developing files and library',
+                              'https' : False,
+                              'url' : 'us.un4seen.com',
+                              'path' : {
+                                        '32': ('', ''),
+                                        '64': ('/files/basswasapi24.zip', 'x64/')},
+                              'extract' : {
+                              'dirs':[],
+                              'files':[
+                                       ('c/basswasapi.h', '\\include\\'),
+                                       ('($pre)basswasapi.dll', '\\bin\\'),
+                                       ('c/($pre)basswasapi.lib', '\\lib\\')]}
+                             }
+            installPackage(qtInst, basswasapiInfo)
+            print("Bass WASAPI has been installed.")
+        else:
+            print("Done")
+        # Install the Bass Mix library.
+        print("Checking Bass Mix installation...", end='')
+        if not checkFileExist(qtInst, [('bin', 'bassmix.dll'), ('include', 'bassmix.h'), ('lib', 'bassmix.lib')]):
+            print("\nFailed to find Bass WASAPI library, start to install.")
+            bassmixInfo = {'name' : 'Bass Mix developing files and library',
+                           'https' : False,
+                           'url' : 'www.un4seen.com',
+                           'path' : {
+                                     '32': ('', ''),
+                                     '64': ('/files/bassmix24.zip', 'x64/')},
+                           'extract' : {
+                           'dirs':[],
+                           'files':[
+                                    ('c/bassmix.h', '\\include\\'),
+                                    ('($pre)bassmix.dll', '\\bin\\'),
+                                    ('c/($pre)bassmix.lib', '\\lib\\')]}
+                          }
+            installPackage(qtInst, bassmixInfo)
+            print("Bass Mix has been installed.")
+        else:
+            print("Done")
     # Complete.
     print("Qt", qtInst["version"], "with", qtInst["compiler"], "is ready.\n")
 
