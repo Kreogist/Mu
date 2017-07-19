@@ -144,8 +144,8 @@ private:
 #ifdef Q_OS_WIN64
     int m_wasapiOutputDevice;
     int m_wasapiFlag;
-    bool m_wasapiEnabled;
 #endif
+    bool m_wasapiEnabled;
 };
 
 #endif // KNMUSICBACKENDBASS_H

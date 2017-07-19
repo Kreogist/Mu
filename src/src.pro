@@ -146,7 +146,7 @@ macx: {
     # Set the info plist.
     QMAKE_INFO_PLIST = resource/platforms/mac/Info.plist
     # Enable the backend and analysiser.
-    CONFIG += backend-bass analysiser-ffmpeg
+    CONFIG += backend-mpv analysiser-ffmpeg
     # Nearly all the audio library will use CoreAudio on Mac OS X, so import
     # CoreAudio library to LFLAGS and LIBS.
     QMAKE_LFLAGS += -framework CoreFoundation
@@ -181,6 +181,24 @@ i18n: {
 }
 
 # Backend Specific Configuration
+backend-mpv: {
+    # Check whether there's a backend enabled already
+    contains(DEFINES, BACKEND_ENABLED){
+        error("You can't enable more than one backend at the same time.")
+    }
+    # Define the backend enabled flag.
+    DEFINES += ENABLE_BACKEND_MPV BACKEND_ENABLED
+    # Add backend library to the project.
+    LIBS += -lmpv
+    # Add backend files to the project.
+    SOURCES += \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpv.cpp \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpvthread.cpp
+    HEADERS += \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpv.h \
+        plugin/knmusicplugin/plugin/knmusicbackendmpv/knmusicbackendmpvthread.h
+}
+
 backend-gstreamer: {
     # Check whether there's a backend enabled already
     contains(DEFINES, BACKEND_ENABLED){

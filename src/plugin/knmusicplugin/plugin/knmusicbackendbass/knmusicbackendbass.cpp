@@ -242,9 +242,7 @@ qreal KNMusicBackendBass::smartVolumeScale() const
 inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 {
     //Detect operating system version and enable option for using WASAPI.
-#ifndef Q_OS_WIN64
-    m_wasapiEnabled=false;
-#else
+#ifdef Q_OS_WIN64
     m_wasapiEnabled=m_playbackConfigure->data("WASAPI", false).toBool();
 #endif
     //Check the bass library version first.
@@ -258,6 +256,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
     //Get the setting sample rate.
     int userSampleRate=m_playbackConfigure->data("SampleRate", 44100).toInt();
+#ifdef Q_OS_WIN64
     if(m_wasapiEnabled)
     {
         //For 64-bit Windows, we will enable WASAPI as the playing API instead
@@ -290,10 +289,10 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
         //Setup BASS - "no sound" device with the "mix" sample rate (default for
         //MOD music)
         BASS_Init(0, deviceInfo.mixfreq, 0, 0, NULL);
-
     }
     else
     {
+#endif
         //Normal bass initialize.
         //Prepare the bass initial flag.
         DWORD initFlag=BASS_DEVICE_FREQ;
@@ -309,7 +308,9 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
             //Failed to initial the library bass.
             return false;
         }
+#ifdef Q_OS_WIN64
     }
+#endif
     //Clear the channel flags.
     channelFlags=0;
     //Check float dsp supporting.

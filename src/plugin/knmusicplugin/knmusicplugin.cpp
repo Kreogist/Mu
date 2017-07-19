@@ -97,6 +97,9 @@
 #ifdef ENABLE_BACKEND_GSTREAMER
 #include "plugin/knmusicbackendgstreamer/knmusicbackendgstreamer.h"
 #endif
+#ifdef ENABLE_BACKEND_MPV
+#include "plugin/knmusicbackendmpv/knmusicbackendmpv.h"
+#endif
 // Analysiser
 #ifdef ENABLED_FFMPEG_ANALYSISER
 #include "plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h"
