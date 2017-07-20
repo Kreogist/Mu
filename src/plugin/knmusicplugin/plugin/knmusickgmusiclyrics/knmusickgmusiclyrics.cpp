@@ -147,6 +147,13 @@ void KNMusicKgmusicLyrics::processStep(
             return;
         }
         QJsonArray resultList=resultObject.value("candidates").toArray();
+        //Check the result list size.
+        if(resultList.isEmpty())
+        {
+            //Failed if it doesn't has any result.
+            completeRequest(identifier);
+            return;
+        }
         //Translate the item of reuslt list to result object.
         setReplyCount(identifier, resultList.size());
         for(auto i : resultList)

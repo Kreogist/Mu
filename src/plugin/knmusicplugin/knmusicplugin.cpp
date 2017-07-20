@@ -677,11 +677,11 @@ void KNMusicPlugin::initialLyricsPlugin()
     KNMusicLyricsManager *lyricsManager=knMusicGlobal->lyricsManager();
 
     //Add the downloader to lyrics manager.
-    lyricsManager->appendDownloader(new KNMusicNeteaseLyrics);
-    lyricsManager->appendDownloader(new KNMusicKgmusicLyrics);
-    lyricsManager->appendDownloader(new KNMusicTtplayerLyrics);
-    lyricsManager->appendDownloader(new KNMusicXiamiLyrics);
-    lyricsManager->appendDownloader(new KNMusicTtpodLyrics);
+//    lyricsManager->appendDownloader(new KNMusicNeteaseLyrics);
+//    lyricsManager->appendDownloader(new KNMusicKgmusicLyrics);
+//    lyricsManager->appendDownloader(new KNMusicTtplayerLyrics);
+//    lyricsManager->appendDownloader(new KNMusicXiamiLyrics);
+//    lyricsManager->appendDownloader(new KNMusicTtpodLyrics);
     lyricsManager->appendDownloader(new KNMusicQQLyrics);
 }
 
