@@ -198,6 +198,7 @@ void KNMusicQQLyrics::processStep(uint identifier,
              */
             //Translate the result into DomDocument, the codec should be GB2312.
             QDomDocument lyricsDocument;
+            //!FIXME: the codec here should be read from the XML file.
             if(!lyricsDocument.setContent(m_gbkCodec->toUnicode(i.result)))
             {
                 //Wrong XML format document.
@@ -245,20 +246,4 @@ void KNMusicQQLyrics::processStep(uint identifier,
         //It should never goes here.
         break;
     }
-}
-
-inline QString KNMusicQQLyrics::processKeywordsToGBK(const QString &keywords)
-{
-    //Use GBK codec to parse the encoded data.
-    return m_gbkCodec->fromUnicode(
-                processKeywords(keywords)).toPercentEncoding();
-}
-
-inline QString KNMusicQQLyrics::generateRequestString(const QString &id)
-{
-    return "http://music.qq.com/miniportal/static/lyric/" +
-            QString::number(id.toLongLong()%100) +
-            "/" +
-            id +
-            ".xml";
 }

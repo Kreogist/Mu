@@ -20,6 +20,7 @@
 
 #include "knmusiclyricsdownloader.h"
 
+class KNConfigure;
 /*!
  * \brief The KNMusicNeteaseLyrics class provides the policy to download lyrics
  * from Netease Cloud server.
@@ -62,6 +63,9 @@ private:
                                  const QString &lyricsName,
                                  const QString &title,
                                  const QString &artist);
+    inline QString getLyrics(const QJsonObject &lyricsObject,
+                             const QString &lyricsName);
+    KNConfigure *m_lyricsConfigure;
 };
 
 #endif // KNMUSICNETEASELYRICS_H

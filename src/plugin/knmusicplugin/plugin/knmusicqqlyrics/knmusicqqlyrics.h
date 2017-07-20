@@ -59,8 +59,6 @@ protected:
             const QList<KNMusicReplyData> &replyCaches) Q_DECL_OVERRIDE;
 
 private:
-    inline QString processKeywordsToGBK(const QString &keywords);
-    inline QString generateRequestString(const QString &id);
     QTextCodec *m_gbkCodec;
 };
 
