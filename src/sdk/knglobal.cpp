@@ -30,6 +30,7 @@
 #include "knlocalemanager.h"
 #include "knpreferenceplugin.h"
 #include "knthememanager.h"
+#include "knshortcutmanager.h"
 #include "knnotification.h"
 #include "knmainwindow.h"
 
@@ -267,6 +268,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     KNThemeManager::initial(this);
     //Generate the notification manager.
     KNNotification::initial(this);
+    //Generate the shortcut manager.
+    KNShortcutManager::initial(this);
     //Generate the account system.
     KNAccount::initial();
 
@@ -416,6 +419,9 @@ inline void KNGlobal::initialInfrastrcture()
     knTheme->setTheme(0);
     //Load the theme in the configure file.
     knTheme->setTheme(m_globalConfigure->data("Theme").toString());
+
+    //Initial the shortcut manager.
+    knShortcut->setShortcutConfigure(userConfigure()->getConfigure("Shortcut"));
 
     //Set the basic information of the cloud data.
     knAccount->setConfigureTableName("MuConfig");

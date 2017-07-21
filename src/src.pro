@@ -524,7 +524,8 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp
+    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
+    sdk/knshortcutmanager.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -807,7 +808,8 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h \
     plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
-    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h
+    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
+    sdk/knshortcutmanager.h
 
 RESOURCES += \
     resource/res.qrc
