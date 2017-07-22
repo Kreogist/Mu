@@ -130,6 +130,7 @@ private:
     inline bool loadMusicFile(const QString &filePath);
     inline bool buildMpvHandle();
     inline void clearMpvHandle();
+    inline void finishPlaying();
     QString m_filePath;
     QWidget *m_container;
     mpv_handle *m_mpvHandle;
