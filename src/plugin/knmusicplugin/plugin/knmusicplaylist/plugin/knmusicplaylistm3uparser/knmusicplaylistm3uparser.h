@@ -24,7 +24,7 @@
 /*!
  * \brief The KNMusicPlaylistM3uParser class provides a m3u playlist parser. M3U
  * is a computer file format that contains multimedia playlists. It has some
- * other branch verison: like m3u8, extm3u.
+ * other branch version: like m3u8, extm3u.
  */
 class KNMusicPlaylistM3uParser : public KNMusicPlaylistParser
 {

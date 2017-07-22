@@ -131,7 +131,7 @@ void KNMusicQQLyrics::processStep(uint identifier,
             //Check the group item.
             for(auto item : songItemGroup)
             {
-                //Tranfer the item into the group.
+                //Transfer the item into the group.
                 QJsonObject groupItem=item.toObject();
                 //It should contain an value named "f".
                 if(!groupItem.contains("f"))

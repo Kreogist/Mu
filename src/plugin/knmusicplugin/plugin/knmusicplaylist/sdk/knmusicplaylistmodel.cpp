@@ -53,7 +53,7 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QThread *workingThread,
             m_searcher, &KNMusicSearcher::analysisPaths,
             Qt::QueuedConnection);
 
-    //Move the analysis queue to wokring thread.
+    //Move the analysis queue to working thread.
     m_analysisQueue->moveToThread(workingThread);
     //Link the searcher with the analysis queue.
     connect(m_searcher, &KNMusicSearcher::findFile,
@@ -192,7 +192,7 @@ QString KNMusicPlaylistModel::generateFilePath()
     //Use the current time as the base name.
     QString baseName=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"),
             filePath=m_playlistDirPath+"/"+baseName;
-    //Check the existance of the file path.
+    //Check the existence of the file path.
     if(QFileInfo::exists(filePath))
     {
         //If the file exist, change the file name by adding counter, until it
@@ -246,7 +246,7 @@ bool KNMusicPlaylistModel::dropMimeData(const QMimeData *data,
                 QJsonArray rawRowData=
                         QJsonDocument::fromBinaryData(
                             data->data(ModelRowList)).array();
-                //Translate all the row into persistant list.
+                //Translate all the row into persistent list.
                 for(auto i=rawRowData.begin(); i!=rawRowData.end(); ++i)
                 {
                     //Add the target index to source row indexes.
@@ -257,7 +257,7 @@ bool KNMusicPlaylistModel::dropMimeData(const QMimeData *data,
                 std::sort(sourceRowIndexes.begin(), sourceRowIndexes.end(),
                           [](const QModelIndex &left, const QModelIndex &right)
                           {return left.row()>right.row();});
-                //Translate the target position to persistant index.
+                //Translate the target position to persistent index.
                 int targetRow=(row==-1)?parent.row():row;
                 QPersistentModelIndex targetIndex=
                         index((targetRow==-1)?rowCount()-1:targetRow, Name);

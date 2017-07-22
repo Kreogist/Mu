@@ -93,7 +93,7 @@ void KNPreferencePanelFontItem::setWidgetValue(const QVariant &value)
     //Set the font to the preview data.
     m_previewTooltip->setFont(m_font);
     m_previewTooltip->setText(titleText());
-    //Seperate the data.
+    //Separate the data.
     QString fontText=tr("%1, %2px%3%4%5%6%7").arg(
                 m_font.family(),
                 QString::number(m_font.pixelSize()),

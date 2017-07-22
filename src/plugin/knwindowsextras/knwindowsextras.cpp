@@ -124,7 +124,7 @@ void KNWindowsExtras::setMainWindow(QMainWindow *mainWindow)
         return;
     }
     //Native window hack.
-    //We need to do this becuase windowHandle() only returns an available value
+    //We need to do this because windowHandle() only returns an available value
     //when the QWidget is a native widget. Using this hack to make the main
     //window to a native widget and the windowHandle() will return the handle.
     m_mainWindow->setAttribute(Qt::WA_NativeWindow);

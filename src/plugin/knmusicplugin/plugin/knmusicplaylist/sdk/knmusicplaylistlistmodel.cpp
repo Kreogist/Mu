@@ -207,7 +207,7 @@ QVariant KNMusicPlaylistListModel::data(const QModelIndex &index,
     {
         return QVariant();
     }
-    //Get the specfic model.
+    //Get the specific model.
     KNMusicPlaylistModel *model=m_playlistList.at(index.row());
     //Get the data of the role.
     switch(role)
@@ -233,7 +233,7 @@ bool KNMusicPlaylistListModel::setData(const QModelIndex &index,
     {
         return false;
     }
-    //Get the specfic model.
+    //Get the specific model.
     KNMusicPlaylistModel *model=m_playlistList.at(index.row());
     //For different role, we have different ways to set data.
     //Actually, you can only change the data of the display role.

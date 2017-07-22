@@ -195,13 +195,13 @@ public:
     void setSoloMenu(KNMusicSoloMenuBase *soloMenu);
 
     /*!
-     * \brief Get all the avaliable music file suffixs.
+     * \brief Get all the available music file suffixs.
      * \return The suffix list.
      */
     QStringList suffixList() const;
 
     /*!
-     * \brief Get all the avaliable music list file suffixes.
+     * \brief Get all the available music list file suffixes.
      * \return The suffix list.
      */
     QStringList listSuffixList() const;

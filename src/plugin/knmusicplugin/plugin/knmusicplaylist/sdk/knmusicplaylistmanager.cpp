@@ -227,7 +227,7 @@ bool KNMusicPlaylistManager::writeModelToFile(KNMusicPlaylistModel *model,
 
 void KNMusicPlaylistManager::savePlaylistList()
 {
-    //Check out the directory existance.
+    //Check out the directory existence.
     if(KNUtil::ensurePathValid(m_playlistDirPath).isEmpty())
     {
         //We cannot save it to a invalid path.
@@ -235,7 +235,7 @@ void KNMusicPlaylistManager::savePlaylistList()
     }
     //Get the playlist list file.
     QFile playlistListFile(m_playlistDirPath + PlaylistListFileName);
-    //Check the existance and try to open the file in write only mode.
+    //Check the existence and try to open the file in write only mode.
     if(!playlistListFile.open(QIODevice::WriteOnly))
     {
         //Return back.
@@ -362,7 +362,7 @@ void KNMusicPlaylistManager::loadPlaylistList()
     m_isPlaylistListLoaded = true;
     //Get the playlist list file.
     QFile playlistListFile(m_playlistDirPath + PlaylistListFileName);
-    //Check the existance and try to open the file in read only mode.
+    //Check the existence and try to open the file in read only mode.
     if(!playlistListFile.exists() ||
             !playlistListFile.open(QIODevice::ReadOnly))
     {

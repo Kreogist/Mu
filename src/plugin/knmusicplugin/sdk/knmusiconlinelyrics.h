@@ -36,7 +36,7 @@ class KNMusicLyricsDownloader;
  * The online lyrics holds all the online downloader. When there's a download
  * request in, we will called all the downloaders to download the lyrics.\n
  * When they we finished, we will sort the all the download lyrics items
- * according to their similiarity.
+ * according to their similarity.
  */
 class KNMusicOnlineLyrics : public QObject
 {

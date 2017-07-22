@@ -57,7 +57,7 @@ signals:
     void requireCancel();
 
     /*!
-     * \brief When the reset E-mail has aready sent success.
+     * \brief When the reset E-mail has already sent success.
      */
     void resetMailSentSuccess();
 

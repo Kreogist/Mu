@@ -295,7 +295,7 @@ void KNMusicPlaylist::onActionRemovePlaylist()
         knMusicGlobal->nowPlaying()->onActionModelRemoved(model);
     }
     //Remove the playlist file.
-    //Check the existance of the file.
+    //Check the existence of the file.
     if(QFile::exists(model->filePath()))
     {
         //Remove the file.

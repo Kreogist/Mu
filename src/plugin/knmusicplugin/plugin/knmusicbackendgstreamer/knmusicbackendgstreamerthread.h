@@ -31,7 +31,7 @@
  * 1. Find a good example written in pure C.
  *         https://github.com/felipec/gst-player/blob/master/gst-backend.c
  *    This example helps me a lot on understanding GStreamer.
- * 2. The offical tutorial has some error.
+ * 2. The official tutorial has some error.
  *    The parameter of function gst_element_query_duration has been changed. In
  * the official tutorial, it's
  *         gst_element_query_duration (data.playbin2, &fmt, &data.duration)

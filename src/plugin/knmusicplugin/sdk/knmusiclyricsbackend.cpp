@@ -32,14 +32,14 @@ int KNMusicLyricsBackend::lyricsDuration(const int &index)
     {
         return 0;
     }
-    //There're three kinds of index: invaild, normal and the last.
-    //--Invaild lines--
+    //There're three kinds of index: invalid, normal and the last.
+    //--invalid lines--
     //If the index is smaller than 0, treat it as 0.
     if(index<0)
     {
         return m_positions.at(1)-m_positions.at(0);
     }
-    //--The last line and other invaild lines--
+    //--The last line and other invalid lines--
     if(index>=m_lastLine)
     {
         return 0;

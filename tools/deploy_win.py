@@ -44,7 +44,7 @@ def parseParameter():
     return True
 
 def checkSetting(qtVersions):
-    # Get teh global compiler
+    # Get the global compiler
     global compilerName
     global targetQt
     # Check the configure data.
@@ -85,7 +85,7 @@ def buildProject():
     # Set the QTDIR data.
     os.environ['QTDIR']=targetQt["root"]
     # os.environ['QMAKESPEC']=targetQt["root"]+"\\mkspecs\\"+compilerSpec[targetQt["compiler"]]
-    # Execute the qmake for the specfic target.
+    # Execute the qmake for the specific target.
     os.chdir(qtBinPath)
     os.system("qmake.exe "+projectPath+" -spec "+compilerSpec[targetQt["compiler"]])
     print("Finish")

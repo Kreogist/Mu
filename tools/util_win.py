@@ -18,7 +18,7 @@ def isQtExist(qtRegInfo):
     # Get the compiler version of the Qt installation.
     qtRootSubDirs=listdir(qtRootPath)
     if len(qtRootSubDirs) != 1:
-        # Error happend.
+        # Error happened.
         return False
     # Save the compiler information.
     qtRegInfo["compiler"]=qtRootSubDirs[0]

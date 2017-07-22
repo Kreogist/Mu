@@ -53,7 +53,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 false);
         panelData.append(block);
 #endif
-        //Apperance settings.
+        //Appearance settings.
         block=generateBlock(tr("Appearance"));
         addItem(block, tr("Show status bar"),
                 "User/Global/Appearance/ShowStatusBar", true, TypeBoolean,

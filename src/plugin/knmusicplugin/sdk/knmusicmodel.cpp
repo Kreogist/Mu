@@ -284,7 +284,7 @@ void KNMusicModel::clear()
 
 int KNMusicModel::rowCount(const QModelIndex &parent) const
 {
-    //No sub rows for every avaliable parent.
+    //No sub rows for every available parent.
     if(parent.isValid())
     {
         return 0;
@@ -557,7 +557,7 @@ void KNMusicModel::addPlayingTimes(const QPersistentModelIndex &playedRow)
     }
     //Get the play times data index.
     QModelIndex playedIndex=index(playedRow.row(), Plays);
-    //It's a text format data, translate it to string first, then to numberous.
+    //It's a text format data, translate it to string first, then to number.
     setData(playedIndex,
             data(playedIndex, Qt::DisplayRole).toString().toLongLong() + 1,
             Qt::DisplayRole);

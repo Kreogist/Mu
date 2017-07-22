@@ -45,7 +45,7 @@ KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
 {
     //Initial a empty thread flags.
     DWORD threadFlag=0;
-    //Initial the bass libary.
+    //Initial the bass library.
     if(!initialBass(threadFlag))
     {
         return;
@@ -349,7 +349,7 @@ inline void KNMusicBackendBass::loadPlugin(const QString &dirPath)
     }
     //Get the plugin directory.
     QDir pluginDir(dirPath);
-    //Check the diretory existance.
+    //Check the diretory existence.
     if(!pluginDir.exists())
     {
         return;

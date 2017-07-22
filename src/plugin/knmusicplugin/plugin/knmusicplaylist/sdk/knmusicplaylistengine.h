@@ -47,7 +47,7 @@ public:
     /*!
      * \brief Tried to read a file and parse it to KNMusicPlaylistModel.
      * \param filePath The file path.
-     * \return If any of the parser parse the file sucessfully, return the
+     * \return If any of the parser parse the file successfully, return the
      * playlist model. Or else nullptr.
      */
     KNMusicPlaylistModel *read(const QString &filePath);
@@ -65,7 +65,7 @@ public:
                const QString &suffix);
 
     /*!
-     * \brief A overload funciton of write().\n
+     * \brief A overload function of write().\n
      * Tried to write the playlist using the specific parser according to the
      * parser index.
      * \param playlist The playlist model pointer.

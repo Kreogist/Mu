@@ -185,7 +185,7 @@ def main():
     # Check the bin path.
     if len(qt_bin_path)==0:
         qt_bin_path=cached_bin_path
-    # Check the path existance.
+    # Check the path existence.
     if not os.path.exists(qt_bin_path):
         print("The Qt bin path is not exist.")
         return False
@@ -200,7 +200,7 @@ def main():
         output_path=input()
     else:
         print("Output path is: "+output_path)
-    # Check the output path existance.
+    # Check the output path existence.
     if not os.path.exists(output_path):
         # Build the output path.
         distutils.dir_util.mkpath(output_path)
@@ -215,7 +215,7 @@ def main():
         return False
     # Executing the copy path.
     print("Done")
-    # Check the existance of the mu.app at the target position.
+    # Check the existence of the mu.app at the target position.
     target_folder_position=os.path.join(output_path, "mu.app")
     print("The output path is: "+target_folder_position)
     if os.path.exists(target_folder_position):
@@ -264,7 +264,7 @@ def release_translation(lrelease_path, source_dir, language_name, target_path):
     print("Processing " + language_name + " ...", end='')
     # Build the target language path.
     language_path=os.path.join(target_path, language_name)
-    # Check path existance.
+    # Check path existence.
     if not os.path.exists(language_path):
         distutils.dir_util.mkpath(language_path)
     # Get the language source path.
@@ -320,7 +320,7 @@ def save_cache_data():
 def load_cache_data():
     global deploy_cache
     global cache_file_path
-    # Check the cache file existance.
+    # Check the cache file existence.
     if not os.path.exists(cache_file_path):
         return
     # Read the file to cache string.

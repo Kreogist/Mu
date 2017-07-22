@@ -321,7 +321,7 @@ void KNMusicBackendBassThread::restore(const QString &updatedFilePath)
             updatedFilePath.isEmpty()?m_filePath:updatedFilePath;
     //Reload the bass thread.
     loadBassThread(restoreFilePath);
-    //Reset the postion.
+    //Reset the position.
     setPosition(m_savedPosition);
     //Set the volume to the last volume, because of the reset, the
     //volume is back to 1.0.

@@ -168,7 +168,7 @@ linux: {
     INSTALLS += target
 }
 
-# International Configureations.
+# International Configurations.
 i18n: {
     # MAKE_QM_FILES is a extra execution to called the lrelease to update the
     # qm file according to the original ts file real-time.

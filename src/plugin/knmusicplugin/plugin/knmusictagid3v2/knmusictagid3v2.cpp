@@ -627,7 +627,7 @@ bool KNMusicTagId3v2::parseID3v2RawData(char *rawTagData,
     //Backup the tag size, use it as a counter, if there's no more data we can
     //get, stop parsing process.
     quint32 rawTagDataSurplus=header.size;
-    //Parse untill there's no content to read.
+    //Parse until there's no content to read.
     while(rawTagDataSurplus>0)
     {
         //If the first byte is 0, means behind of these datas are all '\0'.

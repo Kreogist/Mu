@@ -85,7 +85,7 @@ void KNFileNameMessageBox::setFilePath(const QString &filePath)
 {
     //Set the file path to line edit.
     m_lineEdit->setFilePath(filePath);
-    //Set foucs on line edit.
+    //Set focus on line edit.
     m_lineEdit->setFocus();
     //Hide the okay button.
     setOkayButtonVisible(false);

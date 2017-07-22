@@ -148,7 +148,7 @@ bool KNAccountBase::uploadFile(const QString &url,
         //Configure the content type.
         uploadRequest.setHeader(QNetworkRequest::ContentTypeHeader, fileType);
     }
-    //Do the POST request, transfering the file content.
+    //Do the POST request, transferring the file content.
     return (errorCode=post(uploadRequest, fileContent,
                            responseData, false))==200;
 }

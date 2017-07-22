@@ -107,7 +107,7 @@ public:
     /*!
      * \brief Write album art in the analysis item into the file path.
      * \param analysisItem The analysis item.
-     * \return If we could write the analysis item sucessfully, return true.
+     * \return If we could write the analysis item successfully, return true.
      */
     bool writeAlbumArt(const KNMusicAnalysisItem &analysisItem);
 

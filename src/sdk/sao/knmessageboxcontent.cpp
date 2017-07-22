@@ -130,7 +130,7 @@ void KNMessageBoxContent::paintEvent(QPaintEvent *event)
                      m_upShadowGradient);
     //Draw down bound shadow.
     //--Why using translate?
-    //Because you need to change the start and stop postion of the gradient
+    //Because you need to change the start and stop position of the gradient
     //if you don't want to use translate.
     painter.translate(0, height()-ShadowHeight);
     painter.fillRect(QRect(0, 0, width(), ShadowHeight),

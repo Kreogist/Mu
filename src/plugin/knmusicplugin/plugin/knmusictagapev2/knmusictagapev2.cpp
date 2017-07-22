@@ -392,7 +392,7 @@ bool KNMusicTagApev2::writeTag(const KNMusicAnalysisItem &analysisItem)
     QByteArray contentData;
     //Prepare the cache size.
     char numberCache[4];
-    //Simply transfered the APETagItem to content data.
+    //Simply transferred the APETagItem to content data.
     for(auto i=itemList.constBegin(); i!=itemList.constEnd(); ++i)
     {
         //Get the item size.

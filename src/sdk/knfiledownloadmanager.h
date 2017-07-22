@@ -72,7 +72,7 @@ signals:
     void cancelled();
 
     /*!
-     * \brief When an error is occured, this singal will be emitted and shows
+     * \brief When an error is occurred, this singal will be emitted and shows
      * the error index.
      * \param isNetworkError Is the error is an network connection error or
      * other type error.

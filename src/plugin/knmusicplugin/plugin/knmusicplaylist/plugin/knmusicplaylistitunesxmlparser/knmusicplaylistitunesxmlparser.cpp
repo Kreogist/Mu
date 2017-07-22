@@ -270,7 +270,7 @@ bool KNMusicPlaylistiTunesXMLParser::write(KNMusicPlaylistModel *playlist,
     //Generate database and song index list.
     QHash<QString, int> filePathIndex;
     QLinkedList<int> playlistIndexList;
-    //Add pathes to hash keys.
+    //Add paths to hash keys.
     for(int i=0; i<playlist->rowCount(); i++)
     {
         //Get current path.
