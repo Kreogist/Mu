@@ -22,6 +22,7 @@
 #include "knmainwindowiconbutton.h"
 #include "kncategoryplugin.h"
 #include "knlocalemanager.h"
+#include "knconfigure.h"
 
 #include "knmainwindowheader.h"
 
@@ -35,6 +36,7 @@ KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
     m_notificationLayout(new QBoxLayout(QBoxLayout::LeftToRight,
                                         m_mainLayout->widget())),
     m_categoryPlugin(nullptr),
+    m_appearanceConfigure(nullptr),
     m_iconButton(new KNMainWindowIconButton(this)),
     m_statusBar(new KNMainWindowStatusBar(this))
 {
@@ -137,6 +139,30 @@ void KNMainWindowHeader::updateContainerSize()
                                    0,
                                    containerWidth,
                                    height());
+}
+
+void KNMainWindowHeader::onConfigureChanged()
+{
+    //Check the configure pointer.
+    if(!m_appearanceConfigure)
+    {
+        //Ignore the invalid call.
+        return;
+    }
+    //Update the status bar visibility.
+    m_statusBar->setVisible(
+                m_appearanceConfigure->data("ShowStatusBar", true).toBool());
+}
+
+void KNMainWindowHeader::setAppearanceConfigure(KNConfigure *configure)
+{
+    //Save the configure object pointer.
+    m_appearanceConfigure = configure;
+    //Change the configure object.
+    connect(m_appearanceConfigure, &KNConfigure::valueChanged,
+            this, &KNMainWindowHeader::onConfigureChanged);
+    //Apply the configure to the header.
+    onConfigureChanged();
 }
 
 void KNMainWindowHeader::setCategoryPlugin(KNCategoryPlugin *categoryPlugin)

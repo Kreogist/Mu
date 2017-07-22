@@ -23,6 +23,7 @@
 
 class QBoxLayout;
 class QSpacerItem;
+class KNConfigure;
 class KNMainWindowStatusBar;
 class KNMainWindowIconButton;
 /*!
@@ -62,6 +63,12 @@ public:
      */
     void addStatusWidget(QWidget *widget) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from
+     * KNMainWindowHeaderBase::setAppearanceConfigure().
+     */
+    void setAppearanceConfigure(KNConfigure *configure) Q_DECL_OVERRIDE;
+
 protected:
     /*!
      * \brief Reimplemented from KNMainWindowHeaderBase::resizeEvent().
@@ -71,11 +78,13 @@ protected:
 private slots:
     void retranslate();
     void updateContainerSize();
+    void onConfigureChanged();
 
 private:
     QWidget *m_widgetContainer;
     QBoxLayout *m_mainLayout, *m_notificationLayout;
     KNCategoryPlugin *m_categoryPlugin;
+    KNConfigure *m_appearanceConfigure;
     KNMainWindowIconButton *m_iconButton;
     KNMainWindowStatusBar *m_statusBar;
 };

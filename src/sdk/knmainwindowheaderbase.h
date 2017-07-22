@@ -21,6 +21,7 @@
 
 #include "knmousesensewidget.h"
 
+class KNConfigure;
 class KNCategoryPlugin;
 /*!
  * \brief The KNMainWindowHeaderBase class is a port class of the main window
@@ -66,6 +67,12 @@ public:
      * \param widget The widget pointer.
      */
     virtual void addStatusWidget(QWidget *widget)=0;
+
+    /*!
+     * \brief Set the header configure class to the header widget.
+     * \param configure The configure object.
+     */
+    virtual void setAppearanceConfigure(KNConfigure *configure)=0;
 
 signals:
     /*!
