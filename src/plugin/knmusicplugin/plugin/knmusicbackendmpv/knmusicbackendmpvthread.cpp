@@ -15,7 +15,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QApplication>
+#include <QEasingCurve>
+#include <QWidget>
+
 #include <mpv/qthelper.hpp>
+
+#include "knglobal.h"
 
 #include "knmusicbackendmpvthread.h"
 
@@ -32,6 +38,7 @@ static void mpvWakeUp(void *context)
 
 KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     KNMusicStandardBackendThread(parent),
+    m_container(new QWidget(knGlobal->mainWindow())),
     m_mpvHandle(nullptr),
     m_startPosition(-1),
     m_endPosition(-1),
@@ -43,6 +50,16 @@ KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     m_fileLoaded(false),
     m_restoreFlag(false)
 {
+    //Configure the container.
+    m_container->hide();
+    m_container->setAttribute(Qt::WA_DontCreateNativeAncestors);
+    m_container->setAttribute(Qt::WA_NativeWindow);
+    // From this point on, the wakeup function will be called. The callback
+    // can come from any thread, so we use the QueuedConnection mechanism to
+    // relay the wakeup in a thread-safe way.
+    connect(this, &KNMusicBackendMpvThread::mpvEvent,
+            this, &KNMusicBackendMpvThread::onMpvEvent,
+            Qt::QueuedConnection);
 }
 
 KNMusicBackendMpvThread::~KNMusicBackendMpvThread()
@@ -102,9 +119,9 @@ void KNMusicBackendMpvThread::stop()
     //Use async command.
     mpv_command(m_mpvHandle, arguments);
     //Reset the current position.
-    setPosition(0);
-    //Pause and reset to the beginning.
-    pause();
+    m_position=m_startPosition;
+    //Manually emitted position changed.
+    emit positionChanged(0);
     //Update the state.
     setPlayingState(Stopped);
     //Emit stopped signal.
@@ -246,9 +263,31 @@ void KNMusicBackendMpvThread::setVolume(const int &volume)
     if(m_mpvHandle)
     {
         //Update the volume data.
-        double mpvVolume=(double)volume / 100.0;
-        //Set the ao-volume property.
-        mpv_set_property(m_mpvHandle, "ao-volume", MPV_FORMAT_DOUBLE,
+        double mpvVolume=(double)volume/100.0;
+        /*
+         * Using the scaler to scale the volume. It seems that the volume here
+         * is more like the db unit sound. The sound under 50% doesn't change
+         * much, but over 50% is to too sensitive. So I need to short the part
+         * 0-50% and expand the 50%-100%, which is the Out series curves.
+         */
+        //
+        QEasingCurve volumeCurve=QEasingCurve(QEasingCurve::OutQuad);
+        mpvVolume=volumeCurve.valueForProgress(mpvVolume/100.0)*100.0;
+        //Set the volume property.
+        /*
+         * From the source code of the BakaMPlayer, and nearly all the
+         * documentation says that here should be ao-volume.
+         * But it doesn't works on Ubuntu 16.04 with mpv 0.16. After I read
+         * through all these codes, I find a property in /player/command.c at
+         * line 3560.
+         *
+         *      {"volume", mp_property_volume},
+         *
+         * Then, I change the property name from ao-volume to volume. It fucky
+         * works. I check through the version from 0.16 to 0.26. All these
+         * versions contain the volume property.
+         */
+        mpv_set_property(m_mpvHandle, "volume", MPV_FORMAT_DOUBLE,
                          &mpvVolume);
     }
 }
@@ -270,8 +309,13 @@ void KNMusicBackendMpvThread::setPosition(const qint64 &position)
 
 void KNMusicBackendMpvThread::onMpvEvent()
 {
-    //Process all the events.
-    mpv_event *event=mpv_wait_event(m_mpvHandle, 0);
+    mpv_event *event=nullptr;
+    //Check the handle first.
+    if(m_mpvHandle)
+    {
+        //Get the event.
+        event=mpv_wait_event(m_mpvHandle, 0);
+    }
     //Check the event_id.
     while(event && event->event_id != MPV_EVENT_NONE)
     {
@@ -346,11 +390,6 @@ void KNMusicBackendMpvThread::onMpvEvent()
             setPlayingState(MusicUtil::Playing);
             //Update the volume state.
             setVolume(m_volume);
-            //Update the
-            break;
-        }
-        case MPV_EVENT_PAUSE:
-        {
             break;
         }
         case MPV_EVENT_END_FILE:
@@ -375,7 +414,14 @@ void KNMusicBackendMpvThread::onMpvEvent()
             break;
         };
         //Fetch next event.
-        event=mpv_wait_event(m_mpvHandle, 0);
+        //Check the handle first.
+        if(m_mpvHandle)
+        {
+            //Get the event.
+            event=mpv_wait_event(m_mpvHandle, 0);
+        }
+        //Process system event.
+        qApp->processEvents();
     }
 }
 
@@ -454,19 +500,19 @@ inline bool KNMusicBackendMpvThread::buildMpvHandle()
         //Failed to create the mpv instance.
         return false;
     }
+    // If you have a HWND, use: int64_t wid = (intptr_t)hwnd;
+    int64_t wid=m_container->winId();
+    mpv_set_option(m_mpvHandle, "wid", MPV_FORMAT_INT64, &wid);
     //Initial the properties.
     // Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
     // this property changes.
     mpv_observe_property(m_mpvHandle, 0, "playback-time", MPV_FORMAT_DOUBLE);
-    // From this point on, the wakeup function will be called. The callback
-    // can come from any thread, so we use the QueuedConnection mechanism to
-    // relay the wakeup in a thread-safe way.
-    connect(this, &KNMusicBackendMpvThread::mpvEvent,
-            this, &KNMusicBackendMpvThread::onMpvEvent,
-            Qt::QueuedConnection);
+    //Set the wake up callback for the specific handle.
     mpv_set_wakeup_callback(m_mpvHandle, mpvWakeUp, this);
     //Initialized the mpv handle.
     mpv_initialize(m_mpvHandle);
+    //Build the MPV handle successfully.
+    return true;
 }
 
 inline void KNMusicBackendMpvThread::clearMpvHandle()

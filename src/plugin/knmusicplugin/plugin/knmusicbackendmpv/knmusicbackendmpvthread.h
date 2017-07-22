@@ -131,6 +131,7 @@ private:
     inline bool buildMpvHandle();
     inline void clearMpvHandle();
     QString m_filePath;
+    QWidget *m_container;
     mpv_handle *m_mpvHandle;
     qint64 m_startPosition,
            m_endPosition,

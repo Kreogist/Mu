@@ -181,6 +181,12 @@ KNMusicPlugin::~KNMusicPlugin()
     {
         knMusicGlobal->detailTooltip()->deleteLater();
     }
+    //Recover the backend.
+    if(knMusicGlobal->backend() &&
+            knMusicGlobal->backend()->parent()==nullptr)
+    {
+        knMusicGlobal->backend()->deleteLater();
+    }
     //Recover the mini player.
     if(m_miniPlayer &&
             m_miniPlayer->parent()==nullptr)
@@ -717,8 +723,6 @@ void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
 
 void KNMusicPlugin::initialBackend(KNMusicBackend *backend)
 {
-    //Set the parent of the backend.
-    backend->setParent(this);
     //Link the backend to lyrics manager's backend.
     connect(backend, &KNMusicBackend::positionChanged,
             knMusicGlobal->lyricsManager()->backend(),

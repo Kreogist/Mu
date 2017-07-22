@@ -9,7 +9,7 @@ Build-Depends:
  libavutil-dev,
  libswresample-dev,
  libswscale-dev,
- libgstreamer1.0-dev,
+ libmpv-dev,
  qtbase5-dev,
  qttools5-dev-tools,
 Standards-Version: 3.9.8
@@ -20,10 +20,6 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
-Recommends:
- gstreamer1.0-plugins-bad,
- gstreamer1.0-plugins-libav,
- gstreamer1.0-plugins-ugly,
 Replaces: mu (<= 1.0.0-beta1)
 Provides: mu
 Description: Incredible music manager

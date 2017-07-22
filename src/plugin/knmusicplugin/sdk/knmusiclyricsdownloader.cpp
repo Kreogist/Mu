@@ -191,7 +191,6 @@ void KNMusicLyricsDownloader::completeRequest(uint identifier)
 
 void KNMusicLyricsDownloader::setReplyCount(uint identifier, int replyCount)
 {
-    qDebug()<<downloaderName()<<"set count to"<<replyCount;
     //Check identifier existance.
     if(!m_sourceMap.contains(identifier))
     {
@@ -217,7 +216,6 @@ void KNMusicLyricsDownloader::get(uint identifier,
                                   const QNetworkRequest &request,
                                   const QVariant &user)
 {
-    qDebug()<<"GET"<<request.url().toString();
     //Check identifier existance.
     if(!m_sourceMap.contains(identifier))
     {
@@ -258,7 +256,6 @@ void KNMusicLyricsDownloader::post(uint identifier,
                                    const QByteArray &content,
                                    const QVariant &user)
 {
-    qDebug()<<"POST"<<request.url().toString();
     //Check identifier existance.
     if(!m_sourceMap.contains(identifier))
     {
