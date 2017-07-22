@@ -135,7 +135,7 @@ void KNPreferenceAbout::retranslate()
 {
     //Update the content data.
     m_textContent[Copyright]->setText(QString(QChar(169)) +
-                                      tr(" 2013-2017 Kreogist Dev Team")+"\n");
+                                      " 2013-2017 Kreogist Dev Team\n");
     //Update the thank list.
     m_otherText->setPlainText(
                 tr("This program is free software; you can redistribute it "

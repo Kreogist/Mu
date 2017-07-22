@@ -349,267 +349,267 @@
 <context>
     <name>KNGlobal</name>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="95"/>
+        <location filename="../sdk/knglobal.cpp" line="96"/>
         <source>The remote server refused the connection, it is not accepting requests.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="98"/>
+        <location filename="../sdk/knglobal.cpp" line="99"/>
         <source>The remote server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="101"/>
+        <location filename="../sdk/knglobal.cpp" line="102"/>
         <source>The remote host name was not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="103"/>
+        <location filename="../sdk/knglobal.cpp" line="104"/>
         <source>The connection timed out.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="105"/>
+        <location filename="../sdk/knglobal.cpp" line="106"/>
         <source>The operation was canceled before it was finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="107"/>
+        <location filename="../sdk/knglobal.cpp" line="108"/>
         <source>The SSL/TLS handshake failed and the encrypted channel could not be established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="110"/>
+        <location filename="../sdk/knglobal.cpp" line="111"/>
         <source>The connection was broken due to disconnection from the network, however the system has initiated roaming to another access point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="114"/>
+        <location filename="../sdk/knglobal.cpp" line="115"/>
         <source>The connection was broken due to disconnection from the network or failure to start the network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="117"/>
+        <location filename="../sdk/knglobal.cpp" line="118"/>
         <source>The background request is not currently allowed due to platform policy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="120"/>
+        <location filename="../sdk/knglobal.cpp" line="121"/>
         <source>The connection to the proxy server was refused, it is not accepting requests.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="123"/>
+        <location filename="../sdk/knglobal.cpp" line="124"/>
         <source>The proxy server closed the connection prematurely, before the entire reply was received and processed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="126"/>
+        <location filename="../sdk/knglobal.cpp" line="127"/>
         <source>The proxy host name was not found, The proxy hostname is invalid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="129"/>
+        <location filename="../sdk/knglobal.cpp" line="130"/>
         <source>The connection to the proxy timed out or the proxy did not reply in time to the request sent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="132"/>
+        <location filename="../sdk/knglobal.cpp" line="133"/>
         <source>The proxy requires authentication in order to honour the request but did not accept any credentials offered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="135"/>
+        <location filename="../sdk/knglobal.cpp" line="136"/>
         <source>An unknown proxy-related error was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="137"/>
+        <location filename="../sdk/knglobal.cpp" line="138"/>
         <source>The access to the remote content was denied (HTTP error 401).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="140"/>
+        <location filename="../sdk/knglobal.cpp" line="141"/>
         <source>The operation requested on the remote content is not permitted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="143"/>
+        <location filename="../sdk/knglobal.cpp" line="144"/>
         <source>The remote content was not found at the server (HTTP error 404).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="146"/>
+        <location filename="../sdk/knglobal.cpp" line="147"/>
         <source>The remote server requires authentication to serve the content but the credentials provided were not accepted (if any).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="150"/>
+        <location filename="../sdk/knglobal.cpp" line="151"/>
         <source>The request could not be completed due to a conflict with the current state of the resource.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="153"/>
+        <location filename="../sdk/knglobal.cpp" line="154"/>
         <source>The requested resource is no longer available at the server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="156"/>
+        <location filename="../sdk/knglobal.cpp" line="157"/>
         <source>An unknown error related to the remote content was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="159"/>
+        <location filename="../sdk/knglobal.cpp" line="160"/>
         <source>The Network Access API cannot honor the request because the protocol is not known.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="162"/>
+        <location filename="../sdk/knglobal.cpp" line="163"/>
         <source>The requested operation is invalid for this protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="164"/>
+        <location filename="../sdk/knglobal.cpp" line="165"/>
         <source>A breakdown in protocol was detected (parsing error, invalid or unexpected responses, etc.).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="167"/>
+        <location filename="../sdk/knglobal.cpp" line="168"/>
         <source>The server encountered an unexpected condition which prevented it from fulfilling the request. (HTTP error 500)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="170"/>
+        <location filename="../sdk/knglobal.cpp" line="171"/>
         <source>The server is unable to handle the request at this time. (HTTP error 503)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="173"/>
+        <location filename="../sdk/knglobal.cpp" line="174"/>
         <source>An unknown error related to the server response was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="177"/>
+        <location filename="../sdk/knglobal.cpp" line="178"/>
         <source>An unknown network-related error was detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="210"/>
+        <location filename="../sdk/knglobal.cpp" line="211"/>
         <source>Byte</source>
         <translation>バイト</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="214"/>
+        <location filename="../sdk/knglobal.cpp" line="215"/>
         <source>Portable Network Graphics</source>
         <translation>ポータブル・ネットワーク・グラフィックス</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="216"/>
+        <location filename="../sdk/knglobal.cpp" line="217"/>
         <source>Joint Photographic Experts Group</source>
         <translation>Joint Photographic Experts Group</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="218"/>
+        <location filename="../sdk/knglobal.cpp" line="219"/>
         <source>Windows Bitmap</source>
         <translation>Windows Bitmap</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="220"/>
+        <location filename="../sdk/knglobal.cpp" line="221"/>
         <source>Portable Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="222"/>
+        <location filename="../sdk/knglobal.cpp" line="223"/>
         <source>X11 Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="224"/>
+        <location filename="../sdk/knglobal.cpp" line="225"/>
         <source>X11 Pixmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="227"/>
+        <location filename="../sdk/knglobal.cpp" line="228"/>
         <source>All supported files</source>
         <translation>全てのフォーマット</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="240"/>
+        <location filename="../sdk/knglobal.cpp" line="241"/>
         <source>Graphic Interchange Format</source>
         <translation>グラフィックス・インターチェンジ・フォーマット</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="242"/>
+        <location filename="../sdk/knglobal.cpp" line="243"/>
         <source>Portable Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="244"/>
+        <location filename="../sdk/knglobal.cpp" line="245"/>
         <source>Portable Graymap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="458"/>
+        <location filename="../sdk/knglobal.cpp" line="464"/>
         <source>Jan.</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="460"/>
+        <location filename="../sdk/knglobal.cpp" line="466"/>
         <source>Feb.</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="462"/>
+        <location filename="../sdk/knglobal.cpp" line="468"/>
         <source>Mar.</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="464"/>
+        <location filename="../sdk/knglobal.cpp" line="470"/>
         <source>Apr.</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="466"/>
+        <location filename="../sdk/knglobal.cpp" line="472"/>
         <source>May</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="468"/>
+        <location filename="../sdk/knglobal.cpp" line="474"/>
         <source>Jun.</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="470"/>
+        <location filename="../sdk/knglobal.cpp" line="476"/>
         <source>Jul.</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="472"/>
+        <location filename="../sdk/knglobal.cpp" line="478"/>
         <source>Aug.</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="474"/>
+        <location filename="../sdk/knglobal.cpp" line="480"/>
         <source>Sept.</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="476"/>
+        <location filename="../sdk/knglobal.cpp" line="482"/>
         <source>Oct.</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="478"/>
+        <location filename="../sdk/knglobal.cpp" line="484"/>
         <source>Nov.</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="480"/>
+        <location filename="../sdk/knglobal.cpp" line="486"/>
         <source>Dec.</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="544"/>
+        <location filename="../sdk/knglobal.cpp" line="550"/>
         <source>%2 %3, %1</source>
         <translation>%1年%2月%3日</translation>
     </message>
@@ -655,12 +655,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="346"/>
+        <location filename="../sdk/knmainwindow.cpp" line="349"/>
         <source>Cannot quit now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="347"/>
+        <location filename="../sdk/knmainwindow.cpp" line="350"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1561,7 +1561,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="202"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="210"/>
         <source>Music</source>
         <translation>音楽</translation>
     </message>
@@ -1569,7 +1569,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicQQLyrics</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp" line="36"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp" line="39"/>
         <source>QQMusic</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1978,11 +1978,6 @@ All rights reserved.</source>
 全著作権所有。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="138"/>
-        <source> 2013-2017 Kreogist Dev Team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="141"/>
         <source>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
@@ -2094,12 +2089,12 @@ When click the icon in the system tray, Mu will pop up back.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
         <source>Output Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="71"/>
         <source>Using WASAPI with exclusive mode instead of DirectX for sound output.
 When this feature is enabled, the output sample rate will be changed to the sample rate of the real device.
 When this feature is enabled, all the music preview feature will be disabled.
@@ -2107,77 +2102,103 @@ This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="92"/>
         <source>Sample Rate (Hz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="94"/>
         <source>This option will change the output sample rate of the playback backend.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="77"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="83"/>
         <source>Stereo Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="63"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="57"/>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="58"/>
+        <source>Show status bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="60"/>
+        <source>Show the status bar at the top right corner.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="69"/>
         <source>Use WASAPI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="78"/>
         <source>Use 32-bit float point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="74"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="80"/>
         <source>Produce 32-bit floating-point output.
 WDM drivers are required to use this feature in Windows.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="85"/>
         <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="100"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="106"/>
         <source>Header Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="101"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="107"/>
         <source>Header lyrics font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="103"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="109"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="105"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="111"/>
         <source>Header lyrics spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="107"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="113"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="111"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="117"/>
         <source>Online Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="112"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="118"/>
         <source>Allow downloading lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="122"/>
+        <source>Combine translation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="125"/>
+        <source>Some lyrics downloader will provide translated version. 
+This option will allow Mu to combine the translated version and the raw lyrics into a single file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2185,7 +2206,7 @@ This option will be applied after the application restarted.</source>
         <translation type="obsolete">歌詞をダウンロード</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="114"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="120"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation type="unfinished"></translation>

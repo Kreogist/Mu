@@ -733,17 +733,6 @@ void KNMusicPlugin::initialBackend(KNMusicBackend *backend)
                                   Qt::Key_MediaTogglePlayPause);
     connect(playNPauseAction, &QAction::triggered,
             backend, &KNMusicBackend::playNPause);
-    QAction *muteAction=generateControlAction(Qt::Key_F10, Qt::Key_VolumeMute);
-    connect(muteAction, &QAction::triggered,
-            backend, &KNMusicBackend::changeMuteState);
-    QAction *volumeDownAction=
-            generateControlAction(Qt::Key_F11, Qt::Key_VolumeDown);
-    connect(volumeDownAction, &QAction::triggered,
-            backend, &KNMusicBackend::volumeDown);
-    QAction *volumeUpAction=
-            generateControlAction(Qt::Key_F12, Qt::Key_VolumeUp);
-    connect(volumeUpAction, &QAction::triggered,
-            backend, &KNMusicBackend::volumeUp);
     //Set the backend to music global.
     knMusicGlobal->setBackend(backend);
 }

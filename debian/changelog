@@ -1,3 +1,14 @@
+kreogist-mu (1.0.0~beta3) unstable; urgency=medium
+
+  * Support WASAPI on 64-bit Windows Vista or later.
+  * Support MPV playing backend, it will be used default on Linux.
+  * Support changing output parameters for Windows and OS X.
+  * Support async lyrics downloading.
+  * Support for hiding the status bar.
+  * Update the lyrics download methods.
+
+ -- Kreogist Dev Team <kreogistdevteam@126.com>  Sat, 23 Jul 2017 1:55:00 +1100
+
 kreogist-mu (1.0.0~beta2) unstable; urgency=medium
 
   * Support preference control panel for configuration.
