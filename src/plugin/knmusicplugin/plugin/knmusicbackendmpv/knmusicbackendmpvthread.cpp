@@ -32,21 +32,35 @@ static void mpvWakeUp(void *context)
 
 KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     KNMusicStandardBackendThread(parent),
-    m_mpvHandle(mpv_create()),
+    m_mpvHandle(nullptr),
     m_startPosition(-1),
     m_endPosition(-1),
     m_duration(-1),
     m_totalDuration(-1),
     m_position(-1),
     m_state(MusicUtil::Stopped),
-    m_mpvState(Idle),
-    m_sectionSet(false)
+    m_sectionSet(false),
+    m_fileLoaded(false)
 {
+}
+
+KNMusicBackendMpvThread::~KNMusicBackendMpvThread()
+{
+    //Reset the current thread.
+    reset();
+}
+
+bool KNMusicBackendMpvThread::loadFile(const QString &filePath)
+{
+    //Reset the player.
+    reset();
+    //Create an mpv handle.
+    m_mpvHandle=mpv_create();
     //Check the mpv handle.
     if(!m_mpvHandle)
     {
         //Failed to create the mpv instance.
-        return;
+        return false;
     }
     //Initial the properties.
     // Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
@@ -61,44 +75,8 @@ KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     mpv_set_wakeup_callback(m_mpvHandle, mpvWakeUp, this);
     //Initialized the mpv handle.
     mpv_initialize(m_mpvHandle);
-}
-
-KNMusicBackendMpvThread::~KNMusicBackendMpvThread()
-{
-    //Reset the current thread.
-    reset();
-    //Check the handle is null or not.
-    if(m_mpvHandle)
-    {
-        //Destory the handle.
-        mpv_terminate_destroy(m_mpvHandle);
-        //Clear the handle.
-        m_mpvHandle=nullptr;
-    }
-}
-
-bool KNMusicBackendMpvThread::loadFile(const QString &filePath)
-{
-    //Check the mpv handle.
-    if(!m_mpvHandle)
-    {
-        //The mpv handle is null.
-        return false;
-    }
-    //Reset the player.
-    reset();
-    //Change the file path to UTF-8 array.
-    const QByteArray utfFilePath=filePath.toUtf8();
-    //Construct the arguments.
-    const char *arguments[]={"loadfile", utfFilePath.data(), NULL};
-    //Execute the command.
-    if(mpv_command(m_mpvHandle, arguments)!=0)
-    {
-        //Return false.
-        return false;
-    }
-    //Load complete.
-    return true;
+    //Load the music file.
+    return loadMusicFile(filePath);
 }
 
 void KNMusicBackendMpvThread::reset()
@@ -114,11 +92,24 @@ void KNMusicBackendMpvThread::reset()
     const char *arguments[]={"stop"};
     //Use async command.
     mpv_command(m_mpvHandle, arguments);
-    //Reset all the parameters.
-    m_totalDuration=-1;
-    m_position=-1;
     //Check the current state is stopped or not.
     setPlayingState(Stopped);
+    //Clear the file path.
+    m_filePath=QString();
+    //Reset all the parameters.
+    m_startPosition=-1;
+    m_endPosition=-1;
+    m_duration=-1;
+    m_totalDuration=-1;
+    m_position=-1;
+    //Check the handle is null or not.
+    if(m_mpvHandle)
+    {
+        //Destory the handle.
+        mpv_terminate_destroy(m_mpvHandle);
+        //Clear the handle.
+        m_mpvHandle=nullptr;
+    }
 }
 
 void KNMusicBackendMpvThread::stop()
@@ -130,12 +121,15 @@ void KNMusicBackendMpvThread::stop()
     {
         return;
     }
-    //Reset the position to the start position.
-    /********Debug*********/
-    setPosition(5000);
-    qDebug()<<"Fuck?!";
-//    //Pause and reset to the beginning.
-//    pause();
+    //Actually stop the handle.
+    //Construct the arguments.
+    const char *arguments[]={"stop"};
+    //Use async command.
+    mpv_command(m_mpvHandle, arguments);
+    //Reset the current position.
+    setPosition(0);
+    //Pause and reset to the beginning.
+    pause();
     //Update the state.
     setPlayingState(Stopped);
     //Emit stopped signal.
@@ -153,18 +147,30 @@ void KNMusicBackendMpvThread::play()
     //Check the playing state before.
     if(Stopped==m_state)
     {
+        /*
+         * MPV when play to the end of the file, it will clear the current
+         * playing file. So the file loaded flag is needed here.
+         */
+        //Check the file loaded state.
+        if(!m_fileLoaded && !m_filePath.isEmpty())
+        {
+            //Need to reload the music file.
+            loadMusicFile(m_filePath);
+        }
         //Reset the position to fit track playing.
         setPosition(0);
     }
     //Use async command.
     int flag=0;
     mpv_set_property(m_mpvHandle, "pause", MPV_FORMAT_FLAG, &flag);
+    //Update the playing state.
+    setPlayingState(Playing);
 }
 
 void KNMusicBackendMpvThread::pause()
 {
     //Check the mpv handle.
-    if(!m_mpvHandle)
+    if(!m_mpvHandle || m_state!=Playing)
     {
         //The mpv handle is null.
         return;
@@ -189,7 +195,7 @@ qint64 KNMusicBackendMpvThread::duration()
 qint64 KNMusicBackendMpvThread::position()
 {
     //Get the time pos of the mpv handle.
-    return m_position;
+    return m_position-m_startPosition;
 }
 
 int KNMusicBackendMpvThread::state() const
@@ -235,17 +241,21 @@ void KNMusicBackendMpvThread::setVolume(const int &volume)
 {
     //Save the volume data.
     m_volume=volume;
-    //Update the volume data.
-    double mpvVolume=(double)volume / 100.0;
-    //Set the volume, check the playing state.
-    //Set the ao-volume property.
-    mpv_set_property(m_mpvHandle, "ao-volume", MPV_FORMAT_DOUBLE, &mpvVolume);
+    //Check the mpv handle.
+    if(m_mpvHandle)
+    {
+        //Update the volume data.
+        double mpvVolume=(double)volume / 100.0;
+        //Set the ao-volume property.
+        mpv_set_property(m_mpvHandle, "ao-volume", MPV_FORMAT_DOUBLE,
+                         &mpvVolume);
+    }
 }
 
 void KNMusicBackendMpvThread::setPosition(const qint64 &position)
 {
     //Recalculate the position data.
-    double mpvPosition=(double)position/1000.0;
+    double mpvPosition=(double)(m_startPosition+position)/1000.0;
     //Set the time pos, using the seek command.
     const QByteArray positionData = QString::number(mpvPosition).toUtf8();
     //Prepare the arguments.
@@ -271,18 +281,22 @@ void KNMusicBackendMpvThread::onMpvEvent()
         {
             //Pause the playing.
             pause();
+            //Set file loaded flag.
+            m_fileLoaded=true;
             //Get the duration value, unit second.
             double duration;
             mpv_get_property(m_mpvHandle, "duration", MPV_FORMAT_DOUBLE,
                              &duration);
             //Save the total duration.
             m_totalDuration=(qint64)(duration*1000.0);
+            qDebug()<<m_totalDuration;
             //Check if section has been set then update the position.
             if(m_sectionSet)
             {
                 //Check out the start and end position.
                 updateStartAndEndPosition();
             }
+            qDebug()<<m_duration<<m_startPosition<<m_endPosition;
             //If we comes to here, that means the file is loaded.
             emit loadSuccess();
             break;
@@ -303,7 +317,7 @@ void KNMusicBackendMpvThread::onMpvEvent()
                     //Save the position.
                     m_position=(qint64)(time*1000.0);
                     //Emit the time changed function.
-                    emit positionChanged(m_position);
+                    emit positionChanged(m_position-m_startPosition);
                     //Check the position.
                     if(m_endPosition>0 && m_position>=m_endPosition)
                     {
@@ -330,10 +344,22 @@ void KNMusicBackendMpvThread::onMpvEvent()
             break;
         }
         case MPV_EVENT_END_FILE:
-            //Stop the mpv handle.
-            stop();
-            //Emit finished signal.
-            emit finished();
+            //Check the file loaded flag.
+            if(m_fileLoaded)
+            {
+                //Set the file loaded flag to false.
+                m_fileLoaded=false;
+                //File has play to the last frame.
+                //Stop the mpv handle.
+                stop();
+                //Emit finished signal.
+                emit finished();
+            }
+            else
+            {
+                //Failed to load the music file.
+                emit loadFailed();
+            }
             break;
         default:
             break;
@@ -388,4 +414,16 @@ inline void KNMusicBackendMpvThread::updateStartAndEndPosition()
     emit durationChanged(m_duration);
     //We need to move the playing position to the start position.
     setPosition(0);
+}
+
+inline bool KNMusicBackendMpvThread::loadMusicFile(const QString &filePath)
+{
+    //Save the file path.
+    m_filePath=filePath;
+    //Change the file path to UTF-8 array.
+    const QByteArray utfFilePath=filePath.toUtf8();
+    //Construct the arguments.
+    const char *arguments[]={"loadfile", utfFilePath.data(), NULL};
+    //Execute the command.
+    return mpv_command(m_mpvHandle, arguments)==0;
 }
