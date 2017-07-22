@@ -120,7 +120,8 @@ public slots:
 private:
     enum ObjectValueType
     {
-        Font
+        Font,
+        Shortcut
     };
     inline void buildTypeList();
 

@@ -18,6 +18,7 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QApplication>
+#include <QKeySequence>
 #include <QFont>
 
 #include "knconfigure.h"
@@ -136,6 +137,14 @@ QVariant KNConfigure::data(const QString &key,
                     valueFont.setKerning(valueObject.value("Kerning").toBool());
                     return QVariant::fromValue(valueFont);
                 }
+                case Shortcut:
+                {
+                    //Parse the value from the object.
+                    QKeySequence valueShortcut(
+                                valueObject.value("Key").toString());
+                    //Give back the value data.
+                    return QVariant::fromValue(valueShortcut);
+                }
                 }
             }
             return valueObject;
@@ -205,6 +214,22 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         m_dataObject.insert(key, fontObject);
         break;
     }
+    //For other types, we have to check.
+    case QVariant::UserType:
+    {
+        //Check the type of the value.
+        if(value.canConvert<QKeySequence>())
+        {
+            //Generate a key sequence object.
+            QKeySequence keySequence=value.value<QKeySequence>();
+            //A shortcut object.
+            QJsonObject shortcutObject;
+            shortcutObject.insert("Key", keySequence.toString());
+            //Insert the key sequence object.
+            m_dataObject.insert(key, shortcutObject);
+        }
+        break;
+    }
     default:
         return;
     }
@@ -246,5 +271,6 @@ inline void KNConfigure::buildTypeList()
     if(m_typeList.isEmpty())
     {
         m_typeList.insert("Font", Font);
+        m_typeList.insert("Shortcut", Shortcut);
     }
 }

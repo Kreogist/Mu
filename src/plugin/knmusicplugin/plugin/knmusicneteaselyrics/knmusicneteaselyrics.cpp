@@ -19,14 +19,21 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include "knconfigure.h"
+#include "knconfiguremanager.h"
+#include "knmusicglobal.h"
+
 #include "knmusicneteaselyrics.h"
 
 #include <QDebug>
 
 KNMusicNeteaseLyrics::KNMusicNeteaseLyrics(QObject *parent) :
-    KNMusicLyricsDownloader(parent)
+    KNMusicLyricsDownloader(parent),
+    m_lyricsConfigure(nullptr)
 {
-
+    //Get the sub configure.
+    m_lyricsConfigure=knMusicGlobal->configure()->getConfigure(
+                "Lyrics")->getConfigure("Online");
 }
 
 QString KNMusicNeteaseLyrics::downloaderName()
@@ -183,12 +190,25 @@ void KNMusicNeteaseLyrics::processStep(
             //Get the title and artist。
             QString lyricsTitle=dataObject.value("name").toString(),
                     lyricsArtist=getArtistNames(dataObject);
-            //Save the original lyrics, lrc.
-            saveLyricsToList(identifier, lyricsObject, "lrc",
-                             lyricsTitle, lyricsArtist);
-            //Save the translate lyrics when it contains "tlyric".
-            saveLyricsToList(identifier, lyricsObject, "tlyric",
-                             lyricsTitle, lyricsArtist);
+            //Check the combine option.
+            if(m_lyricsConfigure->data("CombineTranslation").toBool())
+            {
+                //Pick out the lrc and tlyric.
+                QString lrcContent=getLyrics(lyricsObject, "lrc"),
+                        tlyricsContent=getLyrics(lyricsObject, "tlyric");
+                //Link the content, save as a single file.
+                saveLyrics(identifier, lyricsTitle, lyricsArtist,
+                           lrcContent+tlyricsContent);
+            }
+            else
+            {
+                //Save the original lyrics, lrc.
+                saveLyricsToList(identifier, lyricsObject, "lrc",
+                                 lyricsTitle, lyricsArtist);
+                //Save the translate lyrics when it contains "tlyric".
+                saveLyricsToList(identifier, lyricsObject, "tlyric",
+                                 lyricsTitle, lyricsArtist);
+            }
         }
         //Mission complete.
         completeRequest(identifier);
@@ -251,14 +271,23 @@ inline void KNMusicNeteaseLyrics::saveLyricsToList(
         const QString &title, const QString &artist)
 {
     //Save the lyrics when it contains name of the lyrics.
-    if(!lyricsObject.contains(lyricsName))
+    QString lyricsContent=getLyrics(lyricsObject, lyricsName);
+    if(!lyricsContent.isEmpty())
     {
         //When the lyrics
         return;
     }
     //Get the lyrics data.
     //Save the lyrics data from lrc object.
-    saveLyrics(identifier, title, artist,
-               lyricsObject.value(lyricsName).toObject().value(
-                   "lyric").toString());
+    saveLyrics(identifier, title, artist, lyricsContent);
+}
+
+inline QString KNMusicNeteaseLyrics::getLyrics(const QJsonObject &lyricsObject,
+                                               const QString &lyricsName)
+{
+    //Get the lyrics when the object has the lyrics name.
+    return lyricsObject.contains(lyricsName) ?
+                lyricsObject.value(lyricsName).toObject().value(
+                                "lyric").toString() :
+                QString();
 }

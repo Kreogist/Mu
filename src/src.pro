@@ -540,10 +540,10 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelcomboitem.cpp \
     plugin/knmusicplugin/sdk/knmusiclyricsdownloader.cpp \
     plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.cpp \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.cpp \
-    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp
+    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.cpp \
+    sdk/knshortcutmanager.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -824,10 +824,10 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelintitem.h \
     plugin/knpreference/sdk/items/knpreferencepanelcomboitem.h \
     plugin/knmusicplugin/plugin/knmusicqqlyrics/knmusicqqlyrics.h \
-    plugin/knmusicplugin/plugin/knmusicttpodlyrics/knmusicttpodlyrics.h \
     plugin/knmusicplugin/plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h \
     plugin/knmusicplugin/plugin/knmusicneteaselyrics/knmusicneteaselyrics.h \
-    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h
+    plugin/knmusicplugin/plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h \
+    sdk/knshortcutmanager.h
 
 RESOURCES += \
     resource/res.qrc

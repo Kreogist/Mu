@@ -76,7 +76,6 @@
 #include "plugin/knmusickgmusiclyrics/knmusickgmusiclyrics.h"
 #include "plugin/knmusicttplayerlyrics/knmusicttplayerlyrics.h"
 #include "plugin/knmusicxiamilyrics/knmusicxiamilyrics.h"
-#include "plugin/knmusicttpodlyrics/knmusicttpodlyrics.h"
 #include "plugin/knmusicqqlyrics/knmusicqqlyrics.h"
 // Lyrics Download Dialog.
 #include "plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloaddialog.h"
@@ -251,7 +250,7 @@ void KNMusicPlugin::loadPlugins()
     //Initial the playlist tab.
     initialPlaylist(new KNMusicPlaylist);
     //Initial the store tab.
-    //initialStore(new KNMusicStore);
+    initialStore(new KNMusicStore);
 
     //Start working threads.
     knMusicGlobal->startThreads();
@@ -684,7 +683,6 @@ void KNMusicPlugin::initialLyricsPlugin()
     lyricsManager->appendDownloader(new KNMusicKgmusicLyrics);
     lyricsManager->appendDownloader(new KNMusicTtplayerLyrics);
     lyricsManager->appendDownloader(new KNMusicXiamiLyrics);
-    lyricsManager->appendDownloader(new KNMusicTtpodLyrics);
     lyricsManager->appendDownloader(new KNMusicQQLyrics);
 }
 

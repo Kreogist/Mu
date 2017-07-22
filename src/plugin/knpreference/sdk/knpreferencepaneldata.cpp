@@ -113,6 +113,12 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 "User/Music/Lyrics/Online/Enable", true, TypeBoolean,
                 tr("If there is no lyrics existed in the lyrics search folder,"
                    "\nallows Mu to download lyrics from the Internet."), false);
+        addItem(block, tr("Combine translation"),
+                "User/Music/Lyrics/Online/CombineTranslation", false,
+                TypeBoolean,
+                tr("Some lyrics downloader will provide translated version. \n"
+                   "This option will allow Mu to combine the translated version"
+                   " and the raw lyrics into a single file."), false);
         panelData.append(block);
         break;
     }
