@@ -53,6 +53,13 @@ public:
                    const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Reimplemented from KNMusicStandardBackend::previewLoadMusic().
+     */
+    bool previewLoadMusic(const QString &filePath,
+                          const qint64 &start=-1,
+                          const qint64 &duration=-1) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicStandardBackend::volume().
      */
     int volume() const Q_DECL_OVERRIDE;

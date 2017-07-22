@@ -59,6 +59,23 @@ bool KNMusicBackendMpv::loadMusic(const QString &filePath,
     return true;
 }
 
+bool KNMusicBackendMpv::previewLoadMusic(const QString &filePath,
+                                         const qint64 &start,
+                                         const qint64 &duration)
+{
+    //Check thread first, if thread exist, load the music.
+    if(!m_preview || !m_preview->loadFile(filePath))
+    {
+        //If there's no thread or failed to load, load music will always be
+        //false.
+        return false;
+    }
+    //Set the section for thread.
+    m_preview->setPlaySection(start, duration);
+    //Load the music compelte.
+    return true;
+}
+
 int KNMusicBackendMpv::volume() const
 {
     return m_main->volume();

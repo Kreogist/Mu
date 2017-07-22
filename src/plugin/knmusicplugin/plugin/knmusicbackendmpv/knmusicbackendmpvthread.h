@@ -128,6 +128,8 @@ private:
     inline void setPlayingState(int state);
     inline void updateStartAndEndPosition();
     inline bool loadMusicFile(const QString &filePath);
+    inline bool buildMpvHandle();
+    inline void clearMpvHandle();
     QString m_filePath;
     mpv_handle *m_mpvHandle;
     qint64 m_startPosition,
@@ -136,7 +138,7 @@ private:
            m_totalDuration,
            m_position;
     int m_state, m_volume;
-    bool m_sectionSet, m_fileLoaded;
+    bool m_sectionSet, m_fileLoaded, m_restoreFlag;
 };
 
 #endif // KNMUSICBACKENDGSTREAMERTHREAD_H

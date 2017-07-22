@@ -40,7 +40,8 @@ KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     m_position(-1),
     m_state(MusicUtil::Stopped),
     m_sectionSet(false),
-    m_fileLoaded(false)
+    m_fileLoaded(false),
+    m_restoreFlag(false)
 {
 }
 
@@ -54,29 +55,9 @@ bool KNMusicBackendMpvThread::loadFile(const QString &filePath)
 {
     //Reset the player.
     reset();
-    //Create an mpv handle.
-    m_mpvHandle=mpv_create();
-    //Check the mpv handle.
-    if(!m_mpvHandle)
-    {
-        //Failed to create the mpv instance.
-        return false;
-    }
-    //Initial the properties.
-    // Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
-    // this property changes.
-    mpv_observe_property(m_mpvHandle, 0, "playback-time", MPV_FORMAT_DOUBLE);
-    // From this point on, the wakeup function will be called. The callback
-    // can come from any thread, so we use the QueuedConnection mechanism to
-    // relay the wakeup in a thread-safe way.
-    connect(this, &KNMusicBackendMpvThread::mpvEvent,
-            this, &KNMusicBackendMpvThread::onMpvEvent,
-            Qt::QueuedConnection);
-    mpv_set_wakeup_callback(m_mpvHandle, mpvWakeUp, this);
-    //Initialized the mpv handle.
-    mpv_initialize(m_mpvHandle);
+    //Build the MPV player handle.
     //Load the music file.
-    return loadMusicFile(filePath);
+    return buildMpvHandle() && loadMusicFile(filePath);
 }
 
 void KNMusicBackendMpvThread::reset()
@@ -102,14 +83,8 @@ void KNMusicBackendMpvThread::reset()
     m_duration=-1;
     m_totalDuration=-1;
     m_position=-1;
-    //Check the handle is null or not.
-    if(m_mpvHandle)
-    {
-        //Destory the handle.
-        mpv_terminate_destroy(m_mpvHandle);
-        //Clear the handle.
-        m_mpvHandle=nullptr;
-    }
+    //Clear the MPV handle.
+    clearMpvHandle();
 }
 
 void KNMusicBackendMpvThread::stop()
@@ -160,7 +135,7 @@ void KNMusicBackendMpvThread::play()
         //Reset the position to fit track playing.
         setPosition(0);
     }
-    //Use async command.
+    //Change the pause property for playing.
     int flag=0;
     mpv_set_property(m_mpvHandle, "pause", MPV_FORMAT_FLAG, &flag);
     //Update the playing state.
@@ -229,12 +204,38 @@ void KNMusicBackendMpvThread::setPlaySection(const qint64 &start,
 
 void KNMusicBackendMpvThread::save()
 {
-    ;
+    //Stop the current playing state.
+    //Construct the arguments.
+    const char *arguments[]={"stop"};
+    //Use async command.
+    mpv_command(m_mpvHandle, arguments);
+    //Release the MPV handle.
+    clearMpvHandle();
 }
 
 void KNMusicBackendMpvThread::restore(const QString &updatedFilePath)
 {
-    ;
+    //Set the restore flag.
+    m_restoreFlag=true;
+    //Save the new file path name.
+    m_filePath=updatedFilePath;
+    //Build the MPV handle.
+    //Load the music.
+    if(!buildMpvHandle() || !loadMusicFile(m_filePath))
+    {
+        //Failed to restore the state.
+        return;
+    }
+    //Reset the position.
+    setPosition(m_position-m_startPosition);
+    //Check the playing state.
+    if(m_state==Playing)
+    {
+        //Start to play the music.
+        //Change the pause property for playing.
+        int flag=0;
+        mpv_set_property(m_mpvHandle, "pause", MPV_FORMAT_FLAG, &flag);
+    }
 }
 
 void KNMusicBackendMpvThread::setVolume(const int &volume)
@@ -279,24 +280,33 @@ void KNMusicBackendMpvThread::onMpvEvent()
         {
         case MPV_EVENT_FILE_LOADED:
         {
-            //Pause the playing.
-            pause();
+            //Check the restore flag.
+            if(m_restoreFlag)
+            {
+                //Cancel the restore flag.
+                m_restoreFlag=false;
+                //Do nothing when restoring the state.
+                return;
+            }
             //Set file loaded flag.
             m_fileLoaded=true;
+            //MPV will start playing right after loaded the file. It need to be
+            //paused after loaded. The playing state.
+            setPlayingState(Playing);
+            //Pause the playing.
+            pause();
             //Get the duration value, unit second.
             double duration;
             mpv_get_property(m_mpvHandle, "duration", MPV_FORMAT_DOUBLE,
                              &duration);
             //Save the total duration.
             m_totalDuration=(qint64)(duration*1000.0);
-            qDebug()<<m_totalDuration;
             //Check if section has been set then update the position.
             if(m_sectionSet)
             {
                 //Check out the start and end position.
                 updateStartAndEndPosition();
             }
-            qDebug()<<m_duration<<m_startPosition<<m_endPosition;
             //If we comes to here, that means the file is loaded.
             emit loadSuccess();
             break;
@@ -426,4 +436,47 @@ inline bool KNMusicBackendMpvThread::loadMusicFile(const QString &filePath)
     const char *arguments[]={"loadfile", utfFilePath.data(), NULL};
     //Execute the command.
     return mpv_command(m_mpvHandle, arguments)==0;
+}
+
+inline bool KNMusicBackendMpvThread::buildMpvHandle()
+{
+    //Check the mpv handle is built before.
+    if(m_mpvHandle)
+    {
+        //An existing handle is created.
+        return false;
+    }
+    //Create an mpv handle.
+    m_mpvHandle=mpv_create();
+    //Check the mpv handle.
+    if(!m_mpvHandle)
+    {
+        //Failed to create the mpv instance.
+        return false;
+    }
+    //Initial the properties.
+    // Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
+    // this property changes.
+    mpv_observe_property(m_mpvHandle, 0, "playback-time", MPV_FORMAT_DOUBLE);
+    // From this point on, the wakeup function will be called. The callback
+    // can come from any thread, so we use the QueuedConnection mechanism to
+    // relay the wakeup in a thread-safe way.
+    connect(this, &KNMusicBackendMpvThread::mpvEvent,
+            this, &KNMusicBackendMpvThread::onMpvEvent,
+            Qt::QueuedConnection);
+    mpv_set_wakeup_callback(m_mpvHandle, mpvWakeUp, this);
+    //Initialized the mpv handle.
+    mpv_initialize(m_mpvHandle);
+}
+
+inline void KNMusicBackendMpvThread::clearMpvHandle()
+{
+    //Check the handle is null or not.
+    if(m_mpvHandle)
+    {
+        //Destory the handle.
+        mpv_terminate_destroy(m_mpvHandle);
+        //Clear the handle.
+        m_mpvHandle=nullptr;
+    }
 }
