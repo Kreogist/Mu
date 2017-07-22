@@ -30,12 +30,33 @@ KNMusicBackendMpv::KNMusicBackendMpv(QObject *parent) :
     //Set the main and preview threads.
     setMainThread(m_main);
     setPreviewThread(m_preview);
+    //Link the main thread success signal to backend signal.
+    connect(m_main, &KNMusicBackendMpvThread::loadSuccess,
+            this, &KNMusicBackendMpv::loadSuccess);
 }
 
 KNMusicBackendMpv::~KNMusicBackendMpv()
 {
     m_main->deleteLater();
     m_preview->deleteLater();
+}
+
+
+bool KNMusicBackendMpv::loadMusic(const QString &filePath,
+                                  const qint64 &start,
+                                  const qint64 &duration)
+{
+    //Check thread first, if thread exist, load the music.
+    if(!m_main || !m_main->loadFile(filePath))
+    {
+        //If there's no thread or failed to load, load music will always be
+        //false.
+        return false;
+    }
+    //Set the section for thread.
+    m_main->setPlaySection(start, duration);
+    //Load the music compelte.
+    return true;
 }
 
 int KNMusicBackendMpv::volume() const

@@ -410,7 +410,7 @@ void KNMusicStandardBackend::threadSetPosition(
     }
 }
 
-inline void KNMusicStandardBackend::synchronizeThreadVolume(const int &volume)
+inline void KNMusicStandardBackend::synchronizeThreadVolume(int volume)
 {
     //Check whether the preview smart volume is enabled.
     bool smartVolumeEnabled=(m_originalVolume!=-1);

@@ -390,6 +390,7 @@ void KNMusicNowPlaying::onActionModelRemoved(KNMusicModel *model)
 
 void KNMusicNowPlaying::onActionBackendFinished()
 {
+    qDebug()<<"Finished.";
     //Add play times on current row.
     if(playingMusicModel() && m_playingIndex.isValid())
     {
@@ -408,6 +409,7 @@ void KNMusicNowPlaying::onActionBackendFinished()
             //Check it's URL.
             if(m_playingAnalysisItem.detailInfo.url.isEmpty())
             {
+                qDebug()<<"One more time!";
                 //Replay the backend.
                 m_backend->play();
             }

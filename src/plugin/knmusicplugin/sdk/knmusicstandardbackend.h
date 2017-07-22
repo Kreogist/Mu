@@ -226,7 +226,7 @@ private:
     inline void threadReset(KNMusicStandardBackendThread *thread);
     inline void threadSetPosition(KNMusicStandardBackendThread *thread,
                                   const qint64 &position);
-    inline void synchronizeThreadVolume(const int &volume);
+    inline void synchronizeThreadVolume(int volume);
     inline void smartVolumeOn();
     inline void smartVolumeOff();
 

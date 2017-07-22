@@ -46,6 +46,13 @@ public:
     ~KNMusicBackendMpv();
 
     /*!
+     * \brief Reimplemented from KNMusicStandardBackend::loadMusic().
+     */
+    bool loadMusic(const QString &filePath,
+                   const qint64 &start=-1,
+                   const qint64 &duration=-1) Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicStandardBackend::volume().
      */
     int volume() const Q_DECL_OVERRIDE;

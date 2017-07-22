@@ -125,10 +125,26 @@ private slots:
     void onMpvEvent();
 
 private:
+    enum MpvPlayingState
+    {
+        Idle,
+        Loaded,
+        Started,
+        Playing,
+        Paused,
+        Stopped
+    };
+
     inline void setPlayingState(int state);
+    inline void updateStartAndEndPosition();
     mpv_handle *m_mpvHandle;
-    qint64 m_totalDuration, m_position;
-    int m_state, m_volume;
+    qint64 m_startPosition,
+           m_endPosition,
+           m_duration,
+           m_totalDuration,
+           m_position;
+    int m_state, m_volume, m_mpvState;
+    bool m_sectionSet;
 };
 
 #endif // KNMUSICBACKENDGSTREAMERTHREAD_H
