@@ -79,7 +79,6 @@ void KNPreferencePanelComboItem::setWidgetValue(const QVariant &value)
     {
         //Need to search in the model.
         //Match the index in the model.
-        QAbstractItemModel *candidateModel=m_candidates->model();
         int matchResult=m_candidates->findText(value.toString());
         //Check the match list.
         if(-1!=matchResult)

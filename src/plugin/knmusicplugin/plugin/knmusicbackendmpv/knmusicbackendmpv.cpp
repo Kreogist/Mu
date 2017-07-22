@@ -19,11 +19,22 @@
 
 #include "knmusicbackendmpv.h"
 
+#include <QDebug>
+
 KNMusicBackendMpv::KNMusicBackendMpv(QObject *parent) :
     KNMusicStandardBackend(parent),
     m_main(nullptr),
     m_preview(nullptr)
 {
+#ifdef Q_OS_LINUX
+    //When using Mac OS X to do the test, it doesn't need to change the locale.
+    //Under Linux, it pops up the following message.
+    /*
+     * Non-C locale detected. This is not supported.
+     * Call 'setlocale(LC_NUMERIC, "C");' in your code.
+     */
+    setlocale(LC_NUMERIC, "C");
+#endif
     //Initial the main and preview of the threads.
     m_main=new KNMusicBackendMpvThread;
     m_preview=new KNMusicBackendMpvThread;
