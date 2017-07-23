@@ -20,6 +20,7 @@ function check_package()
 
 # Check devscripts
 check_package "devscripts"
+check_package "debhelper"
 # Launch debuild
 cd ..
 debuild -us -uc
