@@ -21,6 +21,7 @@
 
 #include <mpv/qthelper.hpp>
 
+#include "knconfigure.h"
 #include "knglobal.h"
 
 #include "knmusicbackendmpvthread.h"
@@ -38,6 +39,7 @@ static void mpvWakeUp(void *context)
 
 KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     KNMusicStandardBackendThread(parent),
+    m_playbackConfigure(knGlobal->systemConfigure()->getConfigure("Backend")),
     m_container(new QWidget(knGlobal->mainWindow())),
     m_mpvHandle(nullptr),
     m_startPosition(-1),
@@ -512,10 +514,10 @@ inline bool KNMusicBackendMpvThread::buildMpvHandle()
         //Failed to create the mpv instance.
         return false;
     }
+    //Initial the properties.
     // If you have a HWND, use: int64_t wid = (intptr_t)hwnd;
     int64_t wid=m_container->winId();
     mpv_set_option(m_mpvHandle, "wid", MPV_FORMAT_INT64, &wid);
-    //Initial the properties.
     // Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
     // this property changes.
     mpv_observe_property(m_mpvHandle, 0, "playback-time", MPV_FORMAT_DOUBLE);

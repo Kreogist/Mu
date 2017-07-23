@@ -132,6 +132,7 @@ private:
     inline void clearMpvHandle();
     inline void finishPlaying();
     QString m_filePath;
+    KNConfigure *m_playbackConfigure;
     QWidget *m_container;
     mpv_handle *m_mpvHandle;
     qint64 m_startPosition,

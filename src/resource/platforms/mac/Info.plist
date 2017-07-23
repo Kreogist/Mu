@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>NSHumanReadableCopyright</key>
-	<string>µ 1.0.0 Beta 2, © 2013–2015 Kreogist Dev Team. All rights reserved.</string>
+	<string>µ 1.0.0 Beta 3, © 2013–2017 Kreogist Dev Team. All rights reserved.</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
 	<key>CFBundleName</key>
@@ -46,7 +46,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleGetInfoString</key>
-	<string>µ 1.0.0 Beta 2, © 2013–2015 Kreogist Dev Team. All rights reserved.</string>
+	<string>µ 1.0.0 Beta 3, © 2013–2017 Kreogist Dev Team. All rights reserved.</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
