@@ -34,7 +34,7 @@ using namespace MusicUtil;
  * The syntax of the module is:\n
  * Column(Property)|Keyword, Column(Property)|Keyword, ...\n
  * The parse process is split the string with the Split Text(e.g. in English it
- * will be ', ') in the specfic languange into several syntax block. And then
+ * will be ', ') in the specific languange into several syntax block. And then
  * match the column or property. And then get the key word.\n
  * To match the column, first find the char '|', if we cannot find '|', then
  * this cannot be a syntax block. And tried to find the previous part in a hash

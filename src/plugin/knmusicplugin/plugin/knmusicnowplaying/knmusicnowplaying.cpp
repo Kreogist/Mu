@@ -231,7 +231,7 @@ void KNMusicNowPlaying::playNext()
 
 void KNMusicNowPlaying::playPrevious()
 {
-    //Check the current playing index is avaliable or not.
+    //Check the current playing index is available or not.
     if(m_playingProxyModel==nullptr ||
             m_playingProxyModel->rowCount()==0)
     {
@@ -246,7 +246,7 @@ void KNMusicNowPlaying::playPrevious()
         //Finished.
         return;
     }
-    //Check the loop state, if it's shuffle mode, use a specfic way to get the
+    //Check the loop state, if it's shuffle mode, use a specific way to get the
     //index.
     if(Shuffle==m_loopState)
     {
@@ -602,7 +602,7 @@ void KNMusicNowPlaying::resetCurrentPlayingModelData()
 
 inline void KNMusicNowPlaying::playNextRow(bool noLoopMode)
 {
-    //Check the current playing index is avaliable or not.
+    //Check the current playing index is available or not.
     if(m_playingProxyModel==nullptr ||
             m_playingProxyModel->rowCount()==0)
     {
@@ -622,7 +622,7 @@ inline void KNMusicNowPlaying::playNextRow(bool noLoopMode)
         //Finished.
         return;
     }
-    //Check the loop state, if it's shuffle mode, use a specfic way to get the
+    //Check the loop state, if it's shuffle mode, use a specific way to get the
     //index.
     if(Shuffle==m_loopState)
     {

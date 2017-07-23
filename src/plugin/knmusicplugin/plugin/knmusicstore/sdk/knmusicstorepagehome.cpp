@@ -62,7 +62,7 @@ KNMusicStorePageHome::KNMusicStorePageHome(QWidget *parent) :
         //Initial the model.
         m_homeListModel[i]=new KNMusicStoreHomeListModel(this);
     }
-    //Inital views.
+    //Initial views.
     for(int i=0; i<RankingListViewCount; ++i)
     {
         //Initial the view.

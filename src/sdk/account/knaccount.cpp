@@ -111,7 +111,7 @@ void KNAccount::saveConfigure()
     if(m_accountDetails->accountAvatar().isNull())
     {
         //Remove the cached header icon.
-        //Check existance.
+        //Check existence.
         if(QFileInfo::exists(avatarPath))
         {
             //Remove the file.
@@ -504,7 +504,7 @@ bool KNAccount::resetPassword(const QString &emailAddress)
     //Prepare the response cache and error code.
     QByteArray responseCache;
     int errorCode;
-    //Create a new row for the reqest queue.
+    //Create a new row for the request queue.
     if(createRow("requestPasswordReset", resetRequestData,
                  responseCache, errorCode))
     {

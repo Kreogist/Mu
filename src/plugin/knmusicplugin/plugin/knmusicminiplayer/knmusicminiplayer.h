@@ -35,7 +35,7 @@ class KNOpacityButton;
 class KNLoopScrollLabel;
 class KNMusicMiniPlayerLyrics;
 /*!
- * \brief The KNMusicMiniPlayer class provide the offical mini desktop player.
+ * \brief The KNMusicMiniPlayer class provide the official mini desktop player.
  * It will use all the default widget provided via SDK.
  */
 class KNMusicMiniPlayer : public KNMusicMiniPlayerBase

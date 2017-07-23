@@ -37,7 +37,7 @@ public:
     KNMusicSoloMenuBase(QWidget *parent = 0):KNAnimationMenu(parent){}
 
     /*!
-     * \brief Set the music proxy model and the specfic row to the solo menu in
+     * \brief Set the music proxy model and the specific row to the solo menu in
      * order to locate the file.
      * \param model The proxy music model.
      * \param itemIndex The item index. This can help you to get the speicfic

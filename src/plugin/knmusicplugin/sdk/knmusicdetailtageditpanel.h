@@ -32,7 +32,7 @@ class KNMusicRatingEditor;
  * widget.\n
  * It will have two modes: Basic and Advanced. In the basic mode, you can simply
  * edit all kinds of tags without worry about which kind of tag you are editing.
- * In the advanced mode, you can edit definitly one type of the tag.
+ * In the advanced mode, you can edit definitely one type of the tag.
  */
 class KNMusicDetailTagEditPanel : public KNMusicDetailDialogPanel
 {

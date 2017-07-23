@@ -143,7 +143,7 @@ inline void KNMusicGenreModel::loadGenreIcons(const QString &folderPath)
     QDir genreIconDir(folderPath);
     //Initial the icon file info list.
     QFileInfoList iconInfoList=genreIconDir.entryInfoList(QDir::Files);
-    //Read throught the info list.
+    //Read through the info list.
     for(auto i : iconInfoList)
     {
         //Check if the file is a png file, and it's readable.

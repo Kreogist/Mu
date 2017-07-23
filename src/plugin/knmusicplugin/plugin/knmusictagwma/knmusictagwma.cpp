@@ -300,7 +300,7 @@ inline void KNMusicTagWma::parseExtendFrame(char *frameStart,
         //Get the name from the raw data.
         currentFrame.name=m_utf16LECodec->toUnicode(QByteArray(dataPointer+2,
                                                                nameLength-2));
-        //Move the pointer, skip the name length, name and 2 unkown bytes.
+        //Move the pointer, skip the name length, name and 2 unknown bytes.
         dataPointer+=(nameLength+4);
         //Get the value.
         quint16 valueLength=(((quint16)dataPointer[1]<<8) & 0xFF00)+

@@ -40,7 +40,7 @@ KNPreferencePanelContainer::KNPreferencePanelContainer(QWidget *parent) :
 void KNPreferencePanelContainer::setPanelBlocks(
         const QList<PreferencePanelBlock> &blocks)
 {
-    //Destory all the current setting panels and shadows.
+    //Destroy all the current setting panels and shadows.
     while(!m_panelList.isEmpty())
     {
         //Remove the panel from the stack.

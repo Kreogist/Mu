@@ -150,12 +150,12 @@ protected:
      * It will be called after user clicked okay button. Only when this function
      * return true the dialog will be closed and set the value to accept.\n
      * It will return true as default.
-     * \return True if it's okay to accept the data user prefered.
+     * \return True if it's okay to accept the data user preferred.
      */
     virtual bool okayPressed();
 
     /*!
-     * \brief This funciton will be called after user clicked cancel button. But
+     * \brief This function will be called after user clicked cancel button. But
      * this function cannot stop the close event.
      */
     virtual void cancelPressed();

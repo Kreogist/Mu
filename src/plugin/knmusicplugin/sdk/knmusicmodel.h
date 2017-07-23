@@ -326,8 +326,8 @@ public slots:
 protected:
     /*!
      * \brief This will append a KNMusicDetailInfo structure in the model data
-     * list without the beginInsertRows funtion. The performance will be the
-     * best. When you called this funciton, you have to handle it manually.
+     * list without the beginInsertRows function. The performance will be the
+     * best. When you called this function, you have to handle it manually.
      * \param detailInfo The detail info data.
      */
     void appendDetailInfo(const KNMusicDetailInfo &detailInfo);

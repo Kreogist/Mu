@@ -124,7 +124,7 @@ bool KNMusicCueListParser::parseList(QFile &listFile,
                 //Because the cue file is in the same directory of the music
                 //file, so we need to combine the music file path.
                 filePath=listFileInfo.absoluteDir().filePath(filePath);
-                //Check existance.
+                //Check existence.
                 if(QFileInfo::exists(filePath))
                 {
                     currentFilePath=filePath;
@@ -136,7 +136,7 @@ bool KNMusicCueListParser::parseList(QFile &listFile,
                     filePath=listFileInfo.absoluteDir().filePath(
                                 listFileInfo.completeBaseName()+"."+
                                 QFileInfo(filePath).suffix());
-                    //Check existance.
+                    //Check existence.
                     if(!QFileInfo::exists(filePath))
                     {
                         //If we still cannot find the file, then failed to parse

@@ -92,7 +92,7 @@ void KNMusicLibraryImageManager::recoverAlbumArt(const QStringList &hashList)
         //Do nothing, return. Because the folder is just created.
         return;
     }
-    //Check the existance again, if the path is still not exist, then failed.
+    //Check the existence again, if the path is still not exist, then failed.
     if(!pathChecker.isDir() || !pathChecker.exists())
     {
         return;

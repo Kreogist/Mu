@@ -77,7 +77,7 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     //Link with the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
             this, &KNSearchBox::onActionThemeChanged);
-    //Intial the palette.
+    //Initial the palette.
     onActionThemeChanged();
     //Update the palette.
     onActionFocusInOut(MinimumLightness);

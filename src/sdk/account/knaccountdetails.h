@@ -96,7 +96,7 @@ public:
     QVariant data(const QString &key);
 
     /*!
-     * \brief Get avatar data object, this is only for the second verison of
+     * \brief Get avatar data object, this is only for the second version of
      * bmob backend.
      * \return The avatar data object.
      */

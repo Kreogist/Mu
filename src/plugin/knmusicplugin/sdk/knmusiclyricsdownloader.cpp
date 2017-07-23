@@ -140,7 +140,7 @@ void KNMusicLyricsDownloader::saveLyrics(uint identifier,
                                          const QString &content)
 {
     //Get the source request.
-    //Check identifier existance.
+    //Check identifier existence.
     if(!m_sourceMap.contains(identifier))
     {
         //Ignore the invalid request.
@@ -172,7 +172,7 @@ void KNMusicLyricsDownloader::saveLyrics(uint identifier,
 
 void KNMusicLyricsDownloader::completeRequest(uint identifier)
 {
-    //Check identifier existance.
+    //Check identifier existence.
     if(!m_sourceMap.contains(identifier))
     {
         //Ignore the invalid request.
@@ -191,7 +191,7 @@ void KNMusicLyricsDownloader::completeRequest(uint identifier)
 
 void KNMusicLyricsDownloader::setReplyCount(uint identifier, int replyCount)
 {
-    //Check identifier existance.
+    //Check identifier existence.
     if(!m_sourceMap.contains(identifier))
     {
         //Ignore the invalid request.
@@ -216,7 +216,7 @@ void KNMusicLyricsDownloader::get(uint identifier,
                                   const QNetworkRequest &request,
                                   const QVariant &user)
 {
-    //Check identifier existance.
+    //Check identifier existence.
     if(!m_sourceMap.contains(identifier))
     {
         //Ignore the invalid request.
@@ -256,7 +256,7 @@ void KNMusicLyricsDownloader::post(uint identifier,
                                    const QByteArray &content,
                                    const QVariant &user)
 {
-    //Check identifier existance.
+    //Check identifier existence.
     if(!m_sourceMap.contains(identifier))
     {
         //Ignore the invalid request.

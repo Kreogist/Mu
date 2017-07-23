@@ -361,7 +361,7 @@ void KNMusicLibraryModel::recoverModel()
     }
     //Get the database file.
     QFile databaseFile(m_databasePath);
-    //Check out the file existance.
+    //Check out the file existence.
     if(!databaseFile.exists())
     {
         //Database file doesn't exist, ignore it.

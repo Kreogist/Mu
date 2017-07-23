@@ -60,7 +60,7 @@ public:
      * \brief Load a music file from local hard disk. All the file will be treat
      * at local. You can ask the main thread only played a part of the music.
      * This is designed for those huge music file with a cue sheet file to
-     * seperate them.
+     * separate them.
      * \param filePath The music file path.
      * \param start The start position of the music. If you want to play from
      * the start of the whole file, leave it there to the default -1.
@@ -319,7 +319,7 @@ public slots:
     virtual void setMute(bool mute)=0;
 
     /*!
-     * \brief Set the volume to a specfic size. The size should be between
+     * \brief Set the volume to a specific size. The size should be between
      * minimalVolume() and maximumVolume(). Or else it won't change anything.
      * \param volumeSize The prefer volume size.
      */

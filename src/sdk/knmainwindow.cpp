@@ -186,7 +186,7 @@ void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
     m_header=header;
     //Add notification center button to header.
     m_header->addNotificationWidget(m_notificationCenter->headerButton());
-    //Give the apperance configure to the header.
+    //Give the appearance configure to the header.
     m_header->setAppearanceConfigure(
                 m_globalConfigure->getConfigure("Appearance"));
 #ifndef Q_OS_MACX

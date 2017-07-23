@@ -134,7 +134,7 @@ public:
 
 signals:
     /*!
-     * \brief When a error is happend when transcoding the file, this signal
+     * \brief When a error is happened when transcoding the file, this signal
      * will be emit with the error information detail.
      * \param errorId The error index.
      * \param errorText The error text.
@@ -146,7 +146,7 @@ public slots:
      * \brief Set the input file path. If the transcoder could not open the
      * input file, return the error code.
      * \param filePath The input file path.
-     * \param errorInfo The error information when error happend.
+     * \param errorInfo The error information when error happened.
      * \return If the transcoder could open the file, return no error. Or else
      * the error code.
      */
@@ -157,7 +157,7 @@ public slots:
      * \brief Set the output file path. If the transcoder could not open the
      * output file, return the error code.
      * \param filePath The output file path.
-     * \param errorInfo The error information when error happend.
+     * \param errorInfo The error information when error happened.
      * \return If the transcoder could open the file, return no error. Or else
      * the error code.
      */

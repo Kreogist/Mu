@@ -172,7 +172,7 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
         clearInputCache();
         return InputFailToOpenCodec;
     }
-    //No error happend here.
+    //No error happened here.
     return 0;
 }
 
@@ -565,7 +565,7 @@ void KNMusicFfmpegTranscoder::execute()
             // output sample format and put it into the FIFO buffer.
             if (readDecodeConvertAndStore(&finished))
             {
-                //Error happend.
+                //Error happened.
                 clearFifoCache();
                 clearResamplerCache();
                 //Mission complete.
@@ -588,7 +588,7 @@ void KNMusicFfmpegTranscoder::execute()
             // encode it and write it to the output file.
             if(loadEncodeAndWrite())
             {
-                //Error happend.
+                //Error happened.
                 clearFifoCache();
                 clearResamplerCache();
                 //Mission complete.
@@ -607,7 +607,7 @@ void KNMusicFfmpegTranscoder::execute()
                 //Encode the audio frame.
                 if (encodeAudioFrame(NULL, &dataWritten))
                 {
-                    //Error happend.
+                    //Error happened.
                     clearFifoCache();
                     clearResamplerCache();
                     //Mission complete.
@@ -792,7 +792,7 @@ int KNMusicFfmpegTranscoder::initFifoBuffer()
 inline AVOutputFormat *KNMusicFfmpegTranscoder::getOutputFormat(
         const QString &formatName)
 {
-    //This function is basicly copy the original guess function. However it
+    //This function is basically copy the original guess function. However it
     //seems that the original guess function is not as good as what I expected.
     //Why not use QString to compare?
     //Generate the format pointer.
@@ -903,7 +903,7 @@ inline int KNMusicFfmpegTranscoder::loadEncodeAndWrite()
     //Check the frame size validation.
     if(frameSize==0)
     {
-        //Becuase the frame_size could be 0 because some codecs set the flag
+        //Because the frame_size could be 0 because some codecs set the flag
         //with AV_CODEC_CAP_VARIABLE_FRAME_SIZE.
         //When the codec set the flag with this, it will ask the user to provide
         //the frame size instead of the codec provides. e.g. all the PCM
@@ -914,7 +914,7 @@ inline int KNMusicFfmpegTranscoder::loadEncodeAndWrite()
     //Initialize temporary storage for one output frame.
     if(initOutputFrame(&outputFrame, frameSize))
     {
-        //Error happend when allocating the frame.
+        //Error happened when allocating the frame.
         return AVERROR_EXIT;
     }
     // Read as many samples from the FIFO buffer as required to fill the frame.

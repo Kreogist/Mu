@@ -355,7 +355,7 @@ inline void KNMusicSoloMenu::renameFile(const QString &newName)
     QFileInfo fileInfo(m_filePath),
               //Get the new name file.
               newNameFile(fileInfo.absoluteDir().filePath(newName));
-    //Check the existance of the new name file.
+    //Check the existence of the new name file.
     if(newNameFile.exists())
     {
         //Show up the message.
@@ -391,7 +391,7 @@ inline void KNMusicSoloMenu::renameFile(const QString &newName)
     QFile::rename(m_filePath, currentPath);
     //Get the file info.
     QFileInfo currentFileInfo(currentPath);
-    //Check existance.
+    //Check existence.
     if(currentFileInfo.exists())
     {
         //Get the current detail info.

@@ -113,7 +113,7 @@ KNMusicPlaylistModel *KNMusicPlaylistWplParser::read(const QString &filePath)
             {
                 //Add the playlist file folder in front of the file path.
                 srcInformation=nativeSeparatorPlaylistPath+"\\"+srcInformation;
-                //Check the existance once more.
+                //Check the existence once more.
                 if(!QFileInfo::exists(srcInformation))
                 {
                     continue;

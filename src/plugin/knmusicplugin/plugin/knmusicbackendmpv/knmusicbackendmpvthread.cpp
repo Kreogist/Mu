@@ -534,7 +534,7 @@ inline void KNMusicBackendMpvThread::clearMpvHandle()
     //Check the handle is null or not.
     if(m_mpvHandle)
     {
-        //Destory the handle.
+        //Destroy the handle.
         mpv_terminate_destroy(m_mpvHandle);
         //Clear the handle.
         m_mpvHandle=nullptr;

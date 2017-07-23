@@ -94,7 +94,7 @@ KNMusicPlaylistModel *KNMusicPlaylistM3uParser::readPlaylist(
         }
         //Save the current record.
         QString recordFilePath=(*i);
-        //Check the existance of the curren file path.
+        //Check the existence of the curren file path.
         if(!QFileInfo::exists(recordFilePath))
         {
             //It might be relative path.
