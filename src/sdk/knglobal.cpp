@@ -31,6 +31,7 @@
 #include "knpreferenceplugin.h"
 #include "knthememanager.h"
 #include "knshortcutmanager.h"
+#include "kndpimanager.h"
 #include "knnotification.h"
 #include "knmainwindow.h"
 
@@ -270,6 +271,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     KNNotification::initial(this);
     //Generate the shortcut manager.
     KNShortcutManager::initial(this);
+    //Generate the DPI manager.
+    KNDpiManager::initial(this);
     //Generate the account system.
     KNAccount::initial();
 
@@ -541,6 +544,7 @@ QWidget *KNGlobal::mainWindow() const
 
 void KNGlobal::setMainWindow(KNMainWindow *mainWindow)
 {
+    //Save the main window pointer.
     m_mainWindow = mainWindow;
 }
 

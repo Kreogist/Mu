@@ -84,22 +84,21 @@ protected:
 
 private slots:
     void retranslate();
-    void onActionMouseInOut(const int &frame);
+    void onMouseInOut(int frame);
     void onActionPaletteChanged();
+    void onMouseAnimeValueChange(qreal progress);
 
 private:
     inline void initialLabels();
-    inline void configureTimeLines();
-    inline void startInOutAnime(QTimeLine *timeLine);
+    inline void startAnime(int endFrame);
     inline void updateTitleLabel();
-    inline QTimeLine *generateTimeLine();
 
     QPixmap m_iconImage[2];
     QString m_titleText[2];
     QFont m_titleTextFont[2];
     QPalette m_titleTextPalette;
     QLabel *m_title[2];
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseAnime;
     int m_mouseInOutParameter, m_iconX, m_preferenceIconX, m_preferenceIconY,
         m_preferenceTextY, m_normalWidth, m_widthExpand;
     QGraphicsOpacityEffect *m_textEffect;

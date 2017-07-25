@@ -23,6 +23,7 @@
 #include "kncategoryplugin.h"
 #include "knlocalemanager.h"
 #include "knconfigure.h"
+#include "kndpimanager.h"
 
 #include "knmainwindowheader.h"
 
@@ -42,7 +43,7 @@ KNMainWindowHeader::KNMainWindowHeader(QWidget *parent) :
 {
     updateObjectName("MainWindowHeader");
     //Set properties.
-    setFixedHeight(70);
+    setFixedHeight(knDpi->height(70));
     //Initial the button position.
     m_iconButton->move(0, 0);
 

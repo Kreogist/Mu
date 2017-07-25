@@ -31,6 +31,7 @@
 #include "kncategoryplugin.h"
 #include "knpreferenceplugin.h"
 #include "knnotification.h"
+#include "kndpimanager.h"
 #include "knthememanager.h"
 #include "knmainwindowcontainer.h"
 #include "knnotification.h"
@@ -75,9 +76,11 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     //Set properties.
     setAutoFillBackground(true);
     setCentralWidget(m_container);
-    setContentsMargins(0,0,0,0);
-    setMinimumSize(792, 477);
+    setContentsMargins(0, 0, 0, 0);
     setWindowIcon(QIcon("://icon/mu.png"));
+    //Set the DPI of the main window to the DPI manager.
+    knDpi->setDpi(logicalDpiX(), logicalDpiY());
+    setMinimumSize(knDpi->size(792, 477));
     //Mac OS X title hack.
 #ifdef Q_OS_MACX
     setWindowTitle(qApp->applicationDisplayName());
@@ -98,9 +101,9 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     notificationWidget->setParent(this);
     notificationWidget->raise();
     //Move the notification center.
-    notificationWidget->move(0,
-                             -notificationWidget->height() -
-                             NotificationWidgetPatch);
+    notificationWidget->move(knDpi->pos(0,
+                                        -notificationWidget->height() -
+                                        NotificationWidgetPatch));
 
     //Configure the in and out animation.
     connect(m_outAnime, &QPropertyAnimation::finished,
@@ -321,9 +324,10 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
     KNNotificationWidget *notificationWidget=
             m_notificationCenter->notificationWidget();
     //Move the notification widget to target position.
-    notificationWidget->move(width() - notificationWidget->width() -
-                             NotificationWidgetPatch,
-                             notificationWidget->y());
+    notificationWidget->move(
+                knDpi->pos(width() - notificationWidget->width() -
+                            NotificationWidgetPatch,
+                            notificationWidget->y()));
 }
 
 void KNMainWindow::closeEvent(QCloseEvent *event)
