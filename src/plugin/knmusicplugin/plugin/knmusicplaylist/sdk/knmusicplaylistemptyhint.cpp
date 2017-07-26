@@ -18,6 +18,7 @@
 #include <QLabel>
 #include <QBoxLayout>
 
+#include "kndpimanager.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "knglassbutton.h"
@@ -37,16 +38,19 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     setAutoFillBackground(true);
 
     //Configure the hint text.
-    m_hintText->setMaximumWidth(600);
+    m_hintText->setMaximumWidth(knDpi->width(600));
     m_hintText->setWordWrap(true);
     m_hintText->setObjectName("PlaylistEmptyHintLabel");
     QFont labelFont=m_hintText->font();
-    labelFont.setPixelSize(15);
+    labelFont.setPixelSize(knDpi->height(15));
     m_hintText->setFont(labelFont);
     knTheme->registerWidget(m_hintText);
     //Initial the icon.
     QLabel *icon=new QLabel(this);
-    icon->setPixmap(QPixmap(":/plugin/music/playlist/empty.png"));
+    icon->setPixmap(QPixmap(":/plugin/music/playlist/empty.png").scaled(
+                        knDpi->size(200, 200),
+                        Qt::KeepAspectRatio,
+                        Qt::SmoothTransformation));
     //Configure the button.
     connect(m_addPlaylist, &KNGlassButton::released,
             this, &KNMusicPlaylistEmptyHint::requireAddPlaylist);
@@ -60,7 +64,7 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                              mainLayout->widget());
     contentLayout->setContentsMargins(0,0,0,0);
-    contentLayout->setSpacing(20);
+    contentLayout->setSpacing(knDpi->width(20));
     //Add content layout to main layout.
     mainLayout->addStretch();
     mainLayout->addLayout(contentLayout);
@@ -70,12 +74,12 @@ KNMusicPlaylistEmptyHint::KNMusicPlaylistEmptyHint(QWidget *parent) :
     //Initial the hint text and button layout.
     QBoxLayout *textButtonLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                                 mainLayout->widget());
-    textButtonLayout->setSpacing(3);
+    textButtonLayout->setSpacing(knDpi->width(3));
     contentLayout->addLayout(textButtonLayout);
     //Add hint label to content layout.
     textButtonLayout->addStretch();
     textButtonLayout->addWidget(m_hintText);
-    textButtonLayout->addSpacing(20);
+    textButtonLayout->addSpacing(knDpi->width(20));
     textButtonLayout->addWidget(m_addPlaylist);
     textButtonLayout->addWidget(m_importPlaylist);
     textButtonLayout->addStretch();
@@ -105,13 +109,13 @@ KNGlassButton *KNMusicPlaylistEmptyHint::generateButton(
     //Generate a button.
     KNGlassButton *button=new KNGlassButton(this);
     //Change the size of the button
-    button->setFixedSize(300,33);
+    button->setFixedSize(knDpi->size(300, 33));
     //Set the pixmap.
     button->setIcon(QIcon(iconPath));
     //Get the button font.
     QFont buttonFont=button->font();
     //Tweak the font.
-    buttonFont.setPixelSize(15);
+    buttonFont.setPixelSize(knDpi->height(15));
     //Set the font back.
     button->setFont(buttonFont);
     //Send the button.

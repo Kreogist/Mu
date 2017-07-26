@@ -149,15 +149,25 @@ QWidget *KNMusicPlaylistListDelegate::createEditor(
      * QListView resize the editor to the maximum size.
      */
     //To reduce 2 px more is only UI tweaks to make the border inside the view.
-    captionEditor->setFixedSize(
-                parent->size().width()-IconSize-(Spacing<<1)-2,
-                option.rect.height());
+    int editorWidth=option.rect.width()-knDpi->width(ItemHeight);
+    captionEditor->setFixedSize(editorWidth, option.rect.height());
     //Link the caption editor editing finished signal.
     //Sorry, but you cannot use lambda here.
     connect(captionEditor, &KNCancelLineEdit::editingEnsure,
             this, &KNMusicPlaylistListDelegate::commitAndCloseEditor);
     //Give back the caption line edit.
     return captionEditor;
+}
+
+void KNMusicPlaylistListDelegate::updateEditorGeometry(
+        QWidget *editor,
+        const QStyleOptionViewItem &option,
+        const QModelIndex &index) const
+{
+    Q_UNUSED(index)
+    //Move the editor.
+    editor->move(option.rect.x()+option.rect.width()-editor->width(),
+                 option.rect.y());
 }
 
 void KNMusicPlaylistListDelegate::setEditorData(QWidget *editor,
@@ -193,7 +203,8 @@ void KNMusicPlaylistListDelegate::commitAndCloseEditor()
     emit closeEditor(editor, NoHint);
 }
 
-void KNMusicPlaylistListDelegate::setIndicator(const IndicatorPosition &indicator)
+void KNMusicPlaylistListDelegate::setIndicator(
+        const IndicatorPosition &indicator)
 {
     m_indicator = indicator;
 }

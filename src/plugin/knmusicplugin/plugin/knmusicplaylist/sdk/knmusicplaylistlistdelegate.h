@@ -58,11 +58,18 @@ public:
                    const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief  Reimplemented from QStyledItemDelegate::createEditor().
+     * \brief Reimplemented from QStyledItemDelegate::createEditor().
      */
     QWidget *createEditor(QWidget *parent,
                           const QStyleOptionViewItem &option,
                           const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QStyledItemDelegate::updateEditorGeometry().
+     */
+    void updateEditorGeometry(QWidget *editor,
+                              const QStyleOptionViewItem &option,
+                              const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
      * \brief  Reimplemented from QStyledItemDelegate::setEditorData().
@@ -78,11 +85,15 @@ public:
                       const QModelIndex &index) const Q_DECL_OVERRIDE;
 
     /*!
-     * \brief setHoverRow
-     * \param hoverRow
+     * \brief Set the current hovering row.
+     * \param hoverRow The row which is currently marked as hover.
      */
     static void setHoverRow(int hoverRow);
 
+    /*!
+     * \brief Set the indicator position information of the hover item
+     * \param indicator The indicator position data.
+     */
     static void setIndicator(const IndicatorPosition &indicator);
 
 signals:

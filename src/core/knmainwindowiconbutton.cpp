@@ -60,7 +60,7 @@ KNMainWindowIconButton::KNMainWindowIconButton(QWidget *parent) :
     setFixedHeight(knDpi->height(70));
     setMinimumWidth(knDpi->width(182));
     //Update the preference icon Y.
-    m_preferenceIconY=(height()-(IconSize>>1))>>1;
+    m_preferenceIconY=(height()-knDpi->height(IconSize>>1))>>1;
 
     //Initial the labels of the main button.
     initialLabels();
