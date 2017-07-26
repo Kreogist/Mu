@@ -21,6 +21,7 @@
 #include "knhwidgetswitcher.h"
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
+#include "kndpimanager.h"
 
 #include "knaccount.h"
 #include "knaccountdetails.h"
@@ -48,9 +49,9 @@ KNAccountPasswordBox::KNAccountPasswordBox(QWidget *parent) :
     setOkayButtonVisible(false);
     setTitleText("Password");
     //Configure the password container.
-    m_passwordContainer->setFixedSize(342, 200);
+    m_passwordContainer->setFixedSize(knDpi->size(342, 200));
     //Configure the verification widget.
-    m_passwordVerification->setContentsMargins(5, 0, 5, 0);
+    m_passwordVerification->setContentsMargins(knDpi->margins(5, 0, 5, 0));
     connect(m_passwordVerification,
             &KNAccountPasswordVerification::passwordCorrect,
             this, &KNAccountPasswordBox::onActionAcceptPassword);
@@ -89,7 +90,7 @@ KNAccountPasswordBox::KNAccountPasswordBox(QWidget *parent) :
     QBoxLayout *changeLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                             changeContainer);
     //Configure and set layout.
-    changeLayout->setContentsMargins(20, 10, 20, 0);
+    changeLayout->setContentsMargins(knDpi->margins(20, 10, 20, 0));
     changeLayout->setSpacing(0);
     changeContainer->setLayout(changeLayout);
     //Add widget to main layout.
@@ -97,16 +98,16 @@ KNAccountPasswordBox::KNAccountPasswordBox(QWidget *parent) :
     changeLayout->addWidget(m_resetHint);
     changeLayout->addStretch();
     changeLayout->addWidget(m_password1);
-    changeLayout->addSpacing(6);
+    changeLayout->addSpacing(knDpi->height(6));
     changeLayout->addWidget(m_password2);
-    changeLayout->addSpacing(12);
+    changeLayout->addSpacing(knDpi->height(12));
     //Initial the label.
     for(int i=0; i<PasswordHintTypeCount; ++i)
     {
         //Add widget to main layout.
         changeLayout->addWidget(m_passwordHint[i]);
         //Add spacing between hints.
-        changeLayout->addSpacing(2);
+        changeLayout->addSpacing(knDpi->height(2));
     }
     changeLayout->addStretch();
     //Set the content widget.

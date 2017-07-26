@@ -22,6 +22,7 @@
 #include "knlocalemanager.h"
 #include "knlabelbutton.h"
 #include "kncircleiconbutton.h"
+#include "kndpimanager.h"
 
 #include "knmusicdetailpaneloverview.h"
 
@@ -36,7 +37,7 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
 
     //Initial the layout.
     QFormLayout *mainLayout=new QFormLayout(this);
-    mainLayout->setVerticalSpacing(9);
+    mainLayout->setVerticalSpacing(knDpi->height(9));
     mainLayout->setLabelAlignment(Qt::AlignRight);
     mainLayout->setRowWrapPolicy(QFormLayout::DontWrapRows);
     mainLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
@@ -56,7 +57,7 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
             this, &KNMusicDetailPanelOverview::onActionPathClicked);
     //Configure the path caption.
     m_pathCaption->setAlignment(Qt::AlignRight | Qt::AlignTop);
-    m_pathCaption->setMinimumWidth(100);
+    m_pathCaption->setMinimumWidth(knDpi->width(100));
     m_pathCaption->setPalette(captionPal);
     //Initial the labels.
     for(int i=0; i<DetailInformationCount; i++)
@@ -65,7 +66,7 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
         m_caption[i]=new QLabel(this);
         //Configure caption.
         m_caption[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        m_caption[i]->setMinimumWidth(100);
+        m_caption[i]->setMinimumWidth(knDpi->width(100));
         m_caption[i]->setPalette(captionPal);
         //Construct detail label.
         m_information[i]=new QLabel(this);

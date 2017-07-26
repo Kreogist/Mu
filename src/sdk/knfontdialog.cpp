@@ -27,6 +27,7 @@
 #include <QSlider>
 #include <QCheckBox>
 
+#include "kndpimanager.h"
 #include "knthememanager.h"
 
 #include "knfontdialog.h"
@@ -63,7 +64,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
 
     //Initial the font family combo box and list view.
     m_fontFamily->setPalette(pal);
-    m_fontFamily->setMaximumWidth(204);
+    m_fontFamily->setMaximumWidth(knDpi->width(204));
     m_fontModel=m_fontFamily->model();
     connect(m_fontFamily,
             static_cast<void (QFontComboBox::*)(int)>(
@@ -71,7 +72,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
             this, &KNFontDialog::onFontChanged);
     mainLayout->addWidget(m_fontFamily, 1, 0, 1, 1);
     m_fontList->setPalette(pal);
-    m_fontList->setMaximumWidth(204);
+    m_fontList->setMaximumWidth(knDpi->width(204));
     m_fontList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_fontList->setModel(m_fontModel);
     m_fontList->setItemDelegate(m_fontFamily->itemDelegate());
@@ -99,7 +100,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     //Initial the size list.
     m_fontSizeList->setPalette(pal);
     m_fontSizeList->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_fontSizeList->setMaximumWidth(70);
+    m_fontSizeList->setMaximumWidth(knDpi->width(70));
     m_standardSize<<6<<8<<9<<10<<11<<12<<13<<14<<18<<24<<36<<48<<64<<72<<96
                   <<144<<288;
     QStringList fontSizes;
@@ -166,7 +167,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     m_previewEdit->setPalette(pal);
     m_previewEdit->setAlignment(Qt::AlignCenter);
     m_previewEdit->setText(tr("AaBbYyZz"));
-    m_previewEdit->setMinimumSize(205, 85);
+    m_previewEdit->setMinimumSize(knDpi->size(205, 85));
     finalLayout->addWidget(m_previewEdit);
     mainLayout->addLayout(finalLayout, 0, 3, 6, 1);
 }

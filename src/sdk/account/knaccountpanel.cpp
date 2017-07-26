@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kndpimanager.h"
+
 //The notification stuffs.
 #include "knnotification.h"
 
@@ -43,7 +45,7 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     m_detailPanel(new KNAccountDetailPanel(this))
 {
     //Set property.
-    setFixedHeight(270);
+    setFixedHeight(knDpi->height(270));
     //Configure the panel.
     m_loginPanel->setAccountDetails(knAccount->accountDetails());
     m_detailPanel->setAccountDetails(knAccount->accountDetails());
@@ -165,7 +167,7 @@ void KNAccountPanel::onActionRegisterSuccess()
     //Clear the register panel.
     m_generatePanel->clearInputData();
     //Resize the account panel.
-    setFixedHeight(120);
+    setFixedHeight(knDpi->height(120));
     //Emit resize signal.
     emit requireResize();
 }
@@ -199,7 +201,7 @@ void KNAccountPanel::onActionLoginSuccess()
     //Clear the login panel.
     m_loginPanel->clearInputData();
     //Resize the account panel.
-    setFixedHeight(140);
+    setFixedHeight(knDpi->height(140));
     //Emit resize signal.
     emit requireResize();
 }
@@ -233,7 +235,7 @@ void KNAccountPanel::onActionLogout()
     //Emit logout signal.
     emit requireLogout();
     //Resize the account panel.
-    setFixedHeight(270);
+    setFixedHeight(knDpi->height(270));
     //Emit resize signal.
     emit requireResize();
 }

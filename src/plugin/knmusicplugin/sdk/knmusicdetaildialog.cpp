@@ -20,6 +20,7 @@
 
 #include "knhtabgroup.h"
 #include "knhwidgetswitcher.h"
+#include "kndpimanager.h"
 
 #include "knmusicparser.h"
 #include "knmusicproxymodel.h"
@@ -47,7 +48,7 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     //Set properties.
     setTitleText("Information");
     //Configure the panel switcher.
-    m_panelSwitcher->setFixedHeight(25);
+    m_panelSwitcher->setFixedHeight(knDpi->height(25));
 
     //Link the switcher and container.
     connect(m_panelSwitcher, &KNHTabGroup::currentIndexChange,
@@ -64,28 +65,29 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
         //Set properties.
         m_basicInfoLabel[i]->setTextInteractionFlags(
                     Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
-        m_basicInfoLabel[i]->setFixedWidth(256);
+        m_basicInfoLabel[i]->setFixedWidth(knDpi->width(256));
         //Set the palette.
         m_basicInfoLabel[i]->setPalette(labelPal);
     }
     //Configure the basic information labels.
-    m_basicInfoLabel[LabelAlbumArt]->setFixedSize(AlbumArtSize, AlbumArtSize);
+    m_basicInfoLabel[LabelAlbumArt]->setFixedSize(
+                knDpi->size(AlbumArtSize, AlbumArtSize));
     m_basicInfoLabel[LabelAlbumArt]->setAlignment(Qt::AlignCenter);
 
     //Initial the widget container.
     QWidget *widgetContainer=new QWidget(this);
-    widgetContainer->setFixedSize(400, 465);
+    widgetContainer->setFixedSize(knDpi->size(400, 465));
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           widgetContainer);
-    mainLayout->setContentsMargins(17,12,17,0);
-    mainLayout->setSpacing(9);
+    mainLayout->setContentsMargins(knDpi->margins(17,12,17,0));
+    mainLayout->setSpacing(knDpi->height(9));
     widgetContainer->setLayout(mainLayout);
     //Initial the basic information layout.
     QBoxLayout *basicInfoLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                                mainLayout->widget());
     basicInfoLayout->setContentsMargins(0,0,0,0);
-    basicInfoLayout->setSpacing(6);
+    basicInfoLayout->setSpacing(knDpi->width(6));
     mainLayout->addLayout(basicInfoLayout);
     //Add widget to basic information layout.
     basicInfoLayout->addWidget(m_basicInfoLabel[LabelAlbumArt]);
@@ -93,7 +95,7 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     QBoxLayout *basicTextInfoLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                                    basicInfoLayout->widget());
     basicTextInfoLayout->setContentsMargins(0,0,0,0);
-    basicTextInfoLayout->setSpacing(6);
+    basicTextInfoLayout->setSpacing(knDpi->width(6));
     basicInfoLayout->addLayout(basicTextInfoLayout);
     //Add widgets to basic text information layout.
     basicTextInfoLayout->addWidget(m_basicInfoLabel[LabelName]);
@@ -188,8 +190,7 @@ inline void KNMusicDetailDialog::updateAnalysisItem(
                 ((analysisItem.coverImage.isNull())?
                     knMusicGlobal->noAlbumArt():
                     QPixmap::fromImage(analysisItem.coverImage)).scaled(
-                    AlbumArtSize,
-                    AlbumArtSize,
+                    knDpi->size(AlbumArtSize, AlbumArtSize),
                     Qt::KeepAspectRatio,
                     Qt::SmoothTransformation));
     //Get the detail information.

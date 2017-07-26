@@ -20,6 +20,8 @@
 #include <QIcon>
 
 #include "knutil.h"
+#include "kndpimanager.h"
+
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
 
@@ -170,8 +172,7 @@ inline void KNMusicLibraryImageManager::insertImage(const QString &hashKey,
     //We will only saved the scaled album art.
     m_scaledHashAlbumArt->insert(hashKey,
                                  QVariant(pixmap.scaled(
-                                     138,
-                                     138,
+                                     knDpi->size(138, 138),
                                      Qt::KeepAspectRatio,
                                      Qt::SmoothTransformation)));
 }

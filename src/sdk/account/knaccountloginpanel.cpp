@@ -19,6 +19,7 @@
 #include <QLabel>
 
 #include "sao/knsaosubmenu.h"
+#include "kndpimanager.h"
 #include "knnotification.h"
 #include "knimagelabel.h"
 #include "knlabellineedit.h"
@@ -53,7 +54,7 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     m_actionMenu(new KNSaoSubMenu(m_others))
 {
     //Set properties.
-    setFixedHeight(270);
+    setFixedHeight(knDpi->height(270));
     //Configure the avatar logo.
     m_kreogistLogo=m_kreogistLogo.scaled(AvatarSize, AvatarSize,
                                          Qt::KeepAspectRatio,
@@ -64,7 +65,7 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     //Configure the title label.
     m_title->setAlignment(Qt::AlignCenter);
     QFont titleFont=m_title->font();
-    titleFont.setPixelSize(18);
+    titleFont.setPixelSize(knDpi->height(18));
     m_title->setFont(titleFont);
     m_subTitle->setAlignment(Qt::AlignCenter);
     //Configure palettes.
@@ -133,25 +134,25 @@ KNAccountLoginPanel::KNAccountLoginPanel(QWidget *parent) :
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     setLayout(mainLayout);
     //Initial the label.
-    m_avatarLabel->setFixedSize(AvatarSize, AvatarSize);
+    m_avatarLabel->setFixedSize(knDpi->size(AvatarSize, AvatarSize));
     m_avatarLabel->setPixmap(m_kreogistLogo);
     //Add widget to layout
-    mainLayout->addSpacing(5);
+    mainLayout->addSpacing(knDpi->height(5));
     mainLayout->addWidget(m_title);
-    mainLayout->addSpacing(2);
+    mainLayout->addSpacing(knDpi->height(2));
     mainLayout->addWidget(m_subTitle);
-    mainLayout->addSpacing(7);
+    mainLayout->addSpacing(knDpi->height(7));
     mainLayout->addStretch();
     mainLayout->addWidget(m_avatarLabel, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_accountDisplayName, 0, Qt::AlignCenter);
     mainLayout->addStretch();
-    mainLayout->addSpacing(7);
+    mainLayout->addSpacing(knDpi->height(7));
     mainLayout->addWidget(m_username);
     mainLayout->addWidget(m_password);
     //Initial button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
-    mainLayout->addSpacing(8);
+    mainLayout->addSpacing(knDpi->height(8));
     mainLayout->addLayout(buttonLayout);
     mainLayout->addStretch();
     //Add all buttons.
@@ -339,7 +340,7 @@ inline KNOpacityAnimeButton *KNAccountLoginPanel::generateButton(
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Configure the button.
     button->setIcon(QIcon(iconPath));
-    button->setFixedSize(ButtonSize, ButtonSize);
+    button->setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     //Give back the button.
     return button;
 }

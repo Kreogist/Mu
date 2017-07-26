@@ -19,6 +19,7 @@
 #include <QLabel>
 
 #include "knclockwheel.h"
+#include "kndpimanager.h"
 #include "knlocalemanager.h"
 
 #include "knaccountwaitingpanel.h"
@@ -29,9 +30,9 @@ KNAccountWaitingPanel::KNAccountWaitingPanel(QWidget *parent) :
     m_waitingHint(new QLabel(this))
 {
     //Set property.
-    setFixedHeight(270);
+    setFixedHeight(knDpi->height(270));
     //Configure the wheel.
-    m_waitingWheel->setFixedSize(80, 80);
+    m_waitingWheel->setFixedSize(knDpi->size(80, 80));
     //Configure the hint text.
     QPalette pal=m_waitingHint->palette();
     pal.setColor(QPalette::WindowText, QColor(157, 157, 157));
@@ -43,7 +44,7 @@ KNAccountWaitingPanel::KNAccountWaitingPanel(QWidget *parent) :
     //Add widget to layout.
     mainLayout->addStretch();
     mainLayout->addWidget(m_waitingWheel, 0, Qt::AlignHCenter);
-    mainLayout->addSpacing(8);
+    mainLayout->addSpacing(knDpi->height(8));
     mainLayout->addWidget(m_waitingHint, 0, Qt::AlignHCenter);
     mainLayout->addStretch();
 

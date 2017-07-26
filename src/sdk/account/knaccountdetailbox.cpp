@@ -21,6 +21,7 @@
 #include "knaccountdetails.h"
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
+#include "kndpimanager.h"
 
 #include "knaccountdetailbox.h"
 
@@ -53,8 +54,8 @@ KNAccountDetailBox::KNAccountDetailBox(QWidget *parent) :
     //Initial the layout.
     QFormLayout *containerLayout=new QFormLayout(container);
     //Configure layout.
-    containerLayout->setVerticalSpacing(10);
-    containerLayout->setContentsMargins(20, 15, 20, 10);
+    containerLayout->setContentsMargins(knDpi->margins(20, 15, 20, 10));
+    containerLayout->setVerticalSpacing(knDpi->height(10));
     containerLayout->setLabelAlignment(Qt::AlignRight | Qt::AlignTop);
     //Set the container.
     container->setLayout(containerLayout);

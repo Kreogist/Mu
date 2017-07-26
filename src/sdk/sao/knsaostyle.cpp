@@ -21,6 +21,8 @@
 #include <QPainter>
 #include <QStyleOptionMenuItem>
 
+#include "kndpimanager.h"
+
 #include "knsaostyle.h"
 
 #include <QDebug>
@@ -177,6 +179,7 @@ inline void KNSaoStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
         QStyleOptionMenuItem tmp=*opt;
         //Clear the original icon.
         tmp.icon=QIcon();
+        tmp.maxIconWidth=knDpi->width(43);
         //Force the highlight color.
         tmp.palette.setColor(QPalette::Highlight, QColor(0xf7, 0xcf, 0x3d));
         //Use fusion style to draw the control.
@@ -188,11 +191,14 @@ inline void KNSaoStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
         if(!opt->icon.isNull())
         {
             //We have to force the image size to be 30x30.
-            p->drawPixmap(11,
-                          rectY + ((rectH-30)>>1),
-                          30,
-                          30,
-                          opt->icon.pixmap(30, 30));
+            p->drawPixmap(knDpi->width(11),
+                          rectY + ((rectH-knDpi->height(30))>>1),
+                          knDpi->width(30),
+                          knDpi->height(30),
+                          opt->icon.pixmap(30, 30).scaled(
+                              knDpi->size(30, 30),
+                              Qt::KeepAspectRatio,
+                              Qt::SmoothTransformation));
         }
         //Check out whether is the item is the last one, if the item is not the
         //last one, we have to draw the split line.
@@ -322,12 +328,14 @@ QSize KNSaoStyle::sizeFromContents(ContentsType ct,
                                                            widget);
         //Check out the menu item size.
         //The minimum size of the SAO style menu, it should be 210.
-        return QSize(menuItemSize.width()<210 ? 210 : menuItemSize.width(),
+        static int menuMinimumWidth=knDpi->width(210);
+        return QSize(menuItemSize.width()<menuMinimumWidth ?
+                         menuMinimumWidth : menuItemSize.width(),
                      //If the item is a separator, then the height will be 0.
                      qstyleoption_cast<const QStyleOptionMenuItem *>(opt)->
                                 menuItemType==QStyleOptionMenuItem::Separator?
                          0:
-                         46);
+                         knDpi->height(46));
     }
     default:
         //For all the other widget, it should be the original one.

@@ -20,10 +20,9 @@
 #include <QTimeLine>
 
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knlabellineedit.h"
-
-//#include <QDebug>
 
 #define LabelBoxHeight 20
 #define LabelBoxIconX 3
@@ -44,25 +43,25 @@ KNLabelLineEdit::KNLabelLineEdit(QWidget *parent) :
     setObjectName("LabelLineEdit");
     //Set properties.
     setFrame(false);
-    setContentsMargins(LabelBoxIconX,
-                       0,
-                       LabelBoxHeight>>1,
-                       0);
-    setFixedHeight(LabelBoxHeight);
+    setContentsMargins(knDpi->margins(LabelBoxIconX,
+                                      0,
+                                      LabelBoxHeight>>1,
+                                      0));
+    setFixedHeight(knDpi->height(LabelBoxHeight));
 
     //Configure the time line, link the frame change with the slot.
     connect(m_mouseInOut, &QTimeLine::frameChanged,
             this, &KNLabelLineEdit::onActionMouseInOut);
     connect(m_focusInOut, &QTimeLine::frameChanged,
-            this, &KNLabelLineEdit::onActionFocusInOut);
+            this, &KNLabelLineEdit::onFocusInOut);
 
     //Link with the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
-            this, &KNLabelLineEdit::onActionThemeChanged);
+            this, &KNLabelLineEdit::onThemeChanged);
     //Initial the palette.
-    onActionThemeChanged();
+    onThemeChanged();
     //Update the palette.
-    onActionFocusInOut(m_minimumLightness);
+    onFocusInOut(m_minimumLightness);
 }
 
 QPixmap KNLabelLineEdit::labelIcon() const
@@ -78,23 +77,23 @@ void KNLabelLineEdit::setLabelIcon(const QPixmap &labelIcon)
         //Reset the label icon.
         m_labelIcon=QPixmap();
         //Reset the content margin.
-        setContentsMargins(LabelBoxIconX,
-                           0,
-                           LabelBoxHeight>>1,
-                           0);
+        setContentsMargins(knDpi->margins(LabelBoxIconX,
+                                          0,
+                                          LabelBoxHeight>>1,
+                                          0));
         //Mission complete.
         return;
     }
     //Save the scaled icon.
-    m_labelIcon = labelIcon.scaled(LabelBoxHeight,
-                                   LabelBoxHeight,
+    m_labelIcon = labelIcon.scaled(knDpi->size(LabelBoxHeight,
+                                               LabelBoxHeight),
                                    Qt::KeepAspectRatio,
                                    Qt::SmoothTransformation);
     //Update the content margin.
-    setContentsMargins(LabelBoxHeight+LabelBoxIconX,
-                       0,
-                       LabelBoxHeight>>1,
-                       0);
+    setContentsMargins(knDpi->margins(LabelBoxHeight+LabelBoxIconX,
+                                      0,
+                                      LabelBoxHeight>>1,
+                                      0));
 }
 
 QWidget *KNLabelLineEdit::focusSource() const
@@ -112,9 +111,9 @@ void KNLabelLineEdit::updateObjectName(const QString &itemName)
     //Change the object name.
     setObjectName(itemName);
     //Update the palette.
-    onActionThemeChanged();
+    onThemeChanged();
     //Update the lightness.
-    onActionFocusInOut(m_baseColor.value());
+    onFocusInOut(m_baseColor.value());
 }
 
 void KNLabelLineEdit::setMinimumLightness(int minimumLightness)
@@ -129,7 +128,7 @@ void KNLabelLineEdit::setMinimumLightness(int minimumLightness)
                            m_baseColor.saturation(),
                            m_minimumLightness);
         //Update the lightness.
-        onActionFocusInOut(m_minimumLightness);
+        onFocusInOut(m_minimumLightness);
     }
 }
 
@@ -195,16 +194,13 @@ void KNLabelLineEdit::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(0,0,0,m_baseColor.value()>>1));
     painter.setBrush(m_baseColor);
     //Draw the back content first.
-    painter.drawRoundedRect(rect(),
-                            LabelBoxRoundedRect,
-                            LabelBoxRoundedRect);
+    int roundedRect=knDpi->width(LabelBoxRoundedRect);
+    painter.drawRoundedRect(rect(), roundedRect, roundedRect);
     //Draw the search icon.
     if(!m_labelIcon.isNull())
     {
-        painter.drawPixmap(LabelBoxIconX,
-                           0,
-                           LabelBoxHeight,
-                           LabelBoxHeight,
+        painter.drawPixmap(QRect(knDpi->pos(LabelBoxIconX, 0),
+                                 knDpi->size(LabelBoxHeight, LabelBoxHeight)),
                            m_labelIcon);
     }
     //Do the original paint event.
@@ -236,7 +232,7 @@ void KNLabelLineEdit::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KNLabelLineEdit::onActionThemeChanged()
+void KNLabelLineEdit::onThemeChanged()
 {
     //Get the palette from the theme manager.
     QPalette pal=knTheme->getPalette(objectName());
@@ -258,7 +254,7 @@ void KNLabelLineEdit::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNLabelLineEdit::onActionFocusInOut(const int &frame)
+void KNLabelLineEdit::onFocusInOut(const int &frame)
 {
     //Use the frame as the new lightness of the base color.
     m_baseColor.setHsv(m_baseColor.hue(),

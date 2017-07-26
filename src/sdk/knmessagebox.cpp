@@ -26,6 +26,7 @@
 
 #include "sao/knmessageboxblock.h"
 #include "sao/knmessageboxcontent.h"
+#include "kndpimanager.h"
 #include "knopacityanimebutton.h"
 #include "knlabellineedit.h"
 #include "knglobal.h"
@@ -34,9 +35,9 @@
 
 #include <QDebug>
 
-#define HeaderHeight 61
-#define BottomHeight 66
-#define ButtonSize 40
+#define HeaderHeight    61
+#define BottomHeight    66
+#define ButtonSize      40
 
 KNMessageBox::KNMessageBox(QWidget *parent) :
     QDialog(parent),
@@ -122,7 +123,7 @@ void KNMessageBox::showEvent(QShowEvent *event)
         yBase=parentWidget()->y()+(parentWidget()->height()>>1);
     }
     //Calculate the final width, final height and middle rect.
-    const int middleHeight=HeaderHeight+BottomHeight;
+    const int middleHeight=knDpi->height(HeaderHeight+BottomHeight);
     const QSize preferSize=m_content->targetSize();
     int finalWidth=qMax(m_topBlock->widthHint(), preferSize.width()),
         finalHeight=middleHeight+preferSize.height();
@@ -252,17 +253,17 @@ inline void KNMessageBox::initialBlocks()
     //Configure the top block.
     QFont titleFont=m_topBlock->font();
     titleFont.setFamily("SAO UI");
-    titleFont.setPixelSize(15);
+    titleFont.setPixelSize(knDpi->height(15));
     m_topBlock->setFont(titleFont);
     m_topBlock->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     m_topBlock->setGradientColor(QColor(240,240,240), QColor(255,255,255));
     m_topBlock->setMinimumHeight(0);
-    m_topBlock->setMaximumHeight(HeaderHeight);
+    m_topBlock->setMaximumHeight(knDpi->height(HeaderHeight));
 
     //Configure the bottom block.
     m_bottomBlock->setGradientColor(QColor(244,244,244), QColor(255,255,255));
     m_bottomBlock->setMinimumHeight(0);
-    m_bottomBlock->setMaximumHeight(HeaderHeight);
+    m_bottomBlock->setMaximumHeight(knDpi->height(HeaderHeight));
 
     //Link ok and cancel button.
     connect(m_okayButton, SIGNAL(clicked(bool)),
@@ -342,7 +343,7 @@ inline KNOpacityAnimeButton *KNMessageBox::generateButton(
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(m_bottomBlock);
     //Configure the button.
     button->setIcon(QIcon(iconPath));
-    button->setFixedSize(ButtonSize, ButtonSize);
+    button->setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     //Give back the button.
     return button;
 }
@@ -392,9 +393,9 @@ void KNMessageBox::information(const QString &text,
     //Generate the text holder label.
     QLabel *textHolder=new QLabel(text, messageBox.data());
     //Configure the text holder.
-    textHolder->setContentsMargins(17,12,17,12);
+    textHolder->setContentsMargins(knDpi->margins(17,12,17,12));
     textHolder->setAlignment(alignment);
-    textHolder->setMinimumHeight(78);
+    textHolder->setMinimumHeight(knDpi->height(78));
     //Set palette, the color of SAO style window cannot be changed.
     QPalette pal=textHolder->palette();
     pal.setColor(QPalette::WindowText, QColor(72,72,72));

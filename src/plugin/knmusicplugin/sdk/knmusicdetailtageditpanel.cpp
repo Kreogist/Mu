@@ -25,6 +25,7 @@
 #include "knlabellineedit.h"
 #include "kncircleiconbutton.h"
 #include "knlocalemanager.h"
+#include "kndpimanager.h"
 
 #include "knmusicparser.h"
 #include "knmusicratingeditor.h"
@@ -59,7 +60,7 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     //Configure the button.
     m_button->setIcon(QIcon(":/plugin/music/detaildialog/tab_icon/tag.png"));
     //Configure the rating editor.
-    m_ratingEditor->setStarSizeHint(20);
+    m_ratingEditor->setStarSizeHint(knDpi->height(20));
     m_ratingEditor->setDetectOnMove(false);
     connect(m_ratingEditor, &KNMusicRatingEditor::editingFinished,
             this, &KNMusicDetailTagEditPanel::onActionItemChanged);
@@ -73,12 +74,12 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(8);
+    mainLayout->setSpacing(knDpi->width(8));
     setLayout(mainLayout);
     //Initial the basic information layout.
     QFormLayout *basicLayout=new QFormLayout(mainLayout->widget());
     basicLayout->setContentsMargins(0,0,0,0);
-    basicLayout->setSpacing(8);
+    basicLayout->setSpacing(knDpi->width(8));
     basicLayout->setLabelAlignment(Qt::AlignVCenter | Qt::AlignRight);
     //Set the layout.
     mainLayout->addLayout(basicLayout);
@@ -103,12 +104,12 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     QBoxLayout *doubleLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
     doubleLayout->setContentsMargins(0,0,0,0);
-    doubleLayout->setSpacing(8);
+    doubleLayout->setSpacing(knDpi->width(8));
     mainLayout->addLayout(doubleLayout);
     //Initial the left column layout.
     QFormLayout *leftLayout=new QFormLayout(mainLayout->widget());
     leftLayout->setContentsMargins(0,0,0,0);
-    leftLayout->setSpacing(8);
+    leftLayout->setSpacing(knDpi->width(8));
     leftLayout->setLabelAlignment(Qt::AlignVCenter | Qt::AlignRight);
     doubleLayout->addLayout(leftLayout, 1);
     //Add editor to left column.
@@ -128,7 +129,7 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
     //Initial the right column layout.
     QFormLayout *rightLayout=new QFormLayout(mainLayout->widget());
     rightLayout->setContentsMargins(0,0,0,0);
-    rightLayout->setSpacing(8);
+    rightLayout->setSpacing(knDpi->width(8));
     rightLayout->setLabelAlignment(Qt::AlignVCenter | Qt::AlignRight);
     doubleLayout->addLayout(rightLayout);
     //Add editor to right column.
@@ -147,14 +148,14 @@ KNMusicDetailTagEditPanel::KNMusicDetailTagEditPanel(QWidget *parent) :
         m_trackEditor[i]=generateLineEdit();
         m_discEditor[i]=generateLineEdit();
         //Configure editor.
-        m_trackEditor[i]->setMaximumWidth(25);
-        m_discEditor[i]->setMaximumWidth(25);
+        m_trackEditor[i]->setMaximumWidth(knDpi->width(25));
+        m_discEditor[i]->setMaximumWidth(knDpi->width(25));
     }
     // Generate layouts.
     QBoxLayout *trackLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                            mainLayout->widget());
     trackLayout->setContentsMargins(0,0,0,0);
-    trackLayout->setSpacing(8);
+    trackLayout->setSpacing(knDpi->width(8));
     trackLayout->addWidget(m_trackEditor[0]);
     trackLayout->addWidget(m_trackEditorOf);
     trackLayout->addWidget(m_trackEditor[1]);

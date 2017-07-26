@@ -22,6 +22,7 @@
 #include <QTimeLine>
 
 #include "knthememanager.h"
+#include "kndpimanager.h"
 #include "knlocalemanager.h"
 #include "sao/knsaostyle.h"
 
@@ -57,13 +58,13 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     m_model(nullptr),
     m_albumDetail(nullptr),
     m_scrollBar(new QScrollBar(this)),
-    m_itemWidth(135),
-    m_itemMinimalSpacing(30),
+    m_itemWidth(knDpi->width(135)),
+    m_itemMinimalSpacing(knDpi->width(30)),
     m_minimalWidth(m_itemMinimalSpacing+m_itemWidth),
     m_lineCount(0),
-    m_textSpacing(5),
-    m_itemHeight(154),
-    m_spacing(30),
+    m_textSpacing(knDpi->height(5)),
+    m_itemHeight(knDpi->height(154)),
+    m_spacing(knDpi->height(30)),
     m_itemSpacingHeight(m_spacing+m_itemHeight),
     m_itemSpacingWidth(m_spacing+m_itemWidth),
     m_maxColumnCount(0)
@@ -414,10 +415,11 @@ void KNMusicAlbumView::resizeEvent(QResizeEvent *event)
     //Do resize.
     QAbstractItemView::resizeEvent(event);
     //Update the scroll bar position.
-    m_scrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
-                             0,
-                             ScrollBarWidth,
-                             height());
+    m_scrollBar->setGeometry(
+                width()-knDpi->width(ScrollBarWidth+ScrollBarSpacing),
+                0,
+                knDpi->width(ScrollBarWidth),
+                height());
     //Update the parameters of the view first.
     updateUIElements();
     //Resize the album detail.
@@ -809,7 +811,7 @@ inline void KNMusicAlbumView::updateUIElements()
         //Force set the max column count to 1.
         m_maxColumnCount=1;
         //Reset the spacing.
-        m_spacing=30;
+        m_spacing=knDpi->width(30);
     }
     else
     {

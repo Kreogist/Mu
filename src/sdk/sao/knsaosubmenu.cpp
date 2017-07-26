@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QPainter>
 
+#include "kndpimanager.h"
 #include "knsaostyle.h"
 
 #include "knsaosubmenu.h"
@@ -92,7 +93,7 @@ void KNSaoSubMenu::showEvent(QShowEvent *event)
     m_start->stop();
 #endif
     //Move and show the indicator.
-    int indicatorWidth=m_rawIndicator.width(),
+    int indicatorWidth=knDpi->width(m_rawIndicator.width()),
         menuX=QCursor::pos().x()+indicatorWidth,
         centerPosition=QCursor::pos().y(),
         indicatorX=0;
@@ -196,10 +197,16 @@ inline void KNSaoSubMenu::renderingIndicator(const QPixmap &indicator)
     //Get the indicator width.
     int indicatorWidth=indicator.width();
     //Rendering the indicator pixmap.
-    QPixmap indicatorPixmap(indicatorWidth,
-                            qMax(qMin(indicator.height(),
+    QPixmap indicatorPixmap(knDpi->width(indicatorWidth),
+                            qMax(qMin(knDpi->height(indicator.height()),
                                       height()),
-                                 63));
+                                 knDpi->height(63)));
+    //Get the scaled width.
+    int scaledWidth=indicatorPixmap.width(),
+        scaledTopHeight=knDpi->height(TopHeight),
+        scaledCenterStart=knDpi->height(CenterStart),
+        scaledCenterEnd=knDpi->height(CenterEnd),
+        scaledBottomHeight=knDpi->height(BottomHeight);
     //Check indicator pixmap height.
     if(indicatorPixmap.height()==indicator.height())
     {
@@ -212,13 +219,14 @@ inline void KNSaoSubMenu::renderingIndicator(const QPixmap &indicator)
         //Rerendering the indicator pixmap.
         QPainter painter(&indicatorPixmap);
         //Paint the top to the indicator.
-        painter.drawPixmap(QRect(0, 0, indicatorWidth, TopHeight),
+        painter.drawPixmap(QRect(0, 0, scaledWidth, scaledTopHeight),
                            indicator,
-                           QRect(0, 0, indicatorWidth, TopHeight));
+                           QRect(QPoint(0, 0),
+                                 QSize(indicatorWidth, TopHeight)));
         //Calculate the indicator filler height.
-        int fillerHeight=(indicatorPixmap.height()-63)>>1;
+        int fillerHeight=(indicatorPixmap.height()-knDpi->height(63))>>1;
         //Paint the filler.
-        painter.drawPixmap(QRect(0, TopHeight, indicatorWidth, fillerHeight),
+        painter.drawPixmap(QRect(0, scaledTopHeight, scaledWidth, fillerHeight),
                            indicator,
                            QRect(0,
                                  TopHeight,
@@ -226,9 +234,9 @@ inline void KNSaoSubMenu::renderingIndicator(const QPixmap &indicator)
                                  CenterStart-TopHeight));
         //Paint the center.
         painter.drawPixmap(QRect(0,
-                                 TopHeight+fillerHeight,
-                                 indicatorWidth,
-                                 CenterEnd - CenterStart),
+                                 scaledTopHeight+fillerHeight,
+                                 scaledWidth,
+                                 scaledCenterEnd - scaledCenterStart),
                            indicator,
                            QRect(0,
                                  CenterStart,
@@ -236,8 +244,9 @@ inline void KNSaoSubMenu::renderingIndicator(const QPixmap &indicator)
                                  CenterEnd - CenterStart));
         //Paint the filler II.
         painter.drawPixmap(QRect(0,
-                                 TopHeight+fillerHeight+(CenterEnd-CenterStart),
-                                 indicatorWidth,
+                                 scaledTopHeight+fillerHeight+
+                                 (scaledCenterEnd-scaledCenterStart),
+                                 scaledWidth,
                                  fillerHeight),
                            indicator,
                            QRect(0,
@@ -246,10 +255,10 @@ inline void KNSaoSubMenu::renderingIndicator(const QPixmap &indicator)
                                  BottomHeight-CenterEnd));
         //Paint the bottom.
         painter.drawPixmap(QRect(0,
-                                 TopHeight+(fillerHeight<<1)+
-                                 (CenterEnd-CenterStart),
-                                 indicatorWidth,
-                                 indicatorPixmap.height()-BottomHeight),
+                                 scaledTopHeight+(fillerHeight<<1)+
+                                 (scaledCenterEnd-scaledCenterStart),
+                                 scaledWidth,
+                                 indicatorPixmap.height()-scaledBottomHeight),
                            indicator,
                            QRect(0,
                                  BottomHeight,

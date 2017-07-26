@@ -24,6 +24,7 @@
 #include "knlocalemanager.h"
 #include "knopacityanimebutton.h"
 #include "knglobal.h"
+#include "kndpimanager.h"
 
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
@@ -45,7 +46,7 @@ KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
                 QIcon(":/plugin/music/detaildialog/tab_icon/albumart.png"));
 
     //Configure the label.
-    m_albumArt->setMaximumSize(ArtworkSize, ArtworkSize);
+    m_albumArt->setMaximumSize(knDpi->size(ArtworkSize, ArtworkSize));
 
     //Initial the box layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -66,7 +67,7 @@ KNMusicDetailPanelArtwork::KNMusicDetailPanelArtwork(QWidget *parent) :
         //Generate operation button.
         m_operations[i]=new KNOpacityAnimeButton(this);
         //Set the fixed size of the button.
-        m_operations[i]->setFixedSize(26, 26);
+        m_operations[i]->setFixedSize(knDpi->size(26, 26));
         //Add operation button to the layout.
         buttonLayout->addWidget(m_operations[i]);
     }
@@ -112,8 +113,7 @@ void KNMusicDetailPanelArtwork::setAnalysisItem(const KNMusicAnalysisItem &item,
             ((m_currentItem.coverImage.isNull())?
                  knMusicGlobal->noAlbumArt():
                  QPixmap::fromImage(m_currentItem.coverImage)).scaled(
-                ArtworkSize,
-                ArtworkSize,
+                knDpi->size(ArtworkSize, ArtworkSize),
                 Qt::KeepAspectRatio,
                 Qt::SmoothTransformation);
     m_albumArt->setPixmap(scaledPixmap);

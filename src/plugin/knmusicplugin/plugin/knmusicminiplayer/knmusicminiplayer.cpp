@@ -30,6 +30,7 @@
 #include "kneditablelabel.h"
 #include "knloopscrolllabel.h"
 #include "knglobal.h"
+#include "kndpimanager.h"
 #include "knconfigure.h"
 
 #include "knmusicbackend.h"
@@ -105,14 +106,14 @@ KNMusicMiniPlayer::KNMusicMiniPlayer(QWidget *parent) :
             this, &KNMusicMiniPlayer::thawAnime);
     //Configure the icon label.
     m_icon->setPixmap(QPixmap(":/plugin/preference/about.png"));
-    m_icon->setFixedSize(16, 16);
+    m_icon->setFixedSize(knDpi->size(16, 16));
     m_icon->setCursor(Qt::SizeAllCursor);
     //Configure default icons.
     m_playNPause->setIcon(m_iconPlay);
     m_mute->setIcon(m_muteIcon[false]);
     //Configure progress bar.
     m_progressSlider->setWheelStep(1000);
-    m_progressSlider->setFixedWidth(100);
+    m_progressSlider->setFixedWidth(knDpi->width(100));
     connect(m_progressSlider, &KNProgressSlider::sliderPressed,
             [=]{m_progressPressed=true;});
     connect(m_progressSlider, &KNProgressSlider::sliderReleased,
@@ -346,7 +347,6 @@ void KNMusicMiniPlayer::loadConfigure()
     {
         return;
     }
-
     //Read the screen information.
     int screenIndex=getCacheValue("miniPlayerScreenIndex"),
         lastScreenX=getCacheValue("miniPlayerScreenX"),
@@ -667,7 +667,7 @@ inline KNOpacityAnimeButton *KNMusicMiniPlayer::generateControlButton(
         button->setIcon(QIcon(iconPath));
     }
     //Resize the button.
-    button->setFixedSize(16, 16);
+    button->setFixedSize(knDpi->size(16, 16));
     //Give back the button.
     return button;
 }

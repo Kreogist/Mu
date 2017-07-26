@@ -19,6 +19,7 @@
 #include <QLabel>
 #include <QCheckBox>
 
+#include "kndpimanager.h"
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
 #include "knopacityanimebutton.h"
@@ -45,11 +46,11 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     m_errorCode(-1)
 {
     //Set properties.
-    setFixedHeight(270);
+    setFixedHeight(knDpi->height(270));
     //Configure the title label.
     m_title->setAlignment(Qt::AlignCenter);
     QFont titleFont=m_title->font();
-    titleFont.setPixelSize(18);
+    titleFont.setPixelSize(knDpi->height(18));
     m_title->setFont(titleFont);
     //Configure the user name line edit.
     m_username->setMinimumLightness(0xC0);
@@ -78,7 +79,7 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     hintPal.setColor(QPalette::WindowText, QColor(157, 157, 157));
     // E-mail Hint.
     m_emailHint->setPalette(hintPal);
-    m_emailHint->setContentsMargins(5, 0, 0, 0);
+    m_emailHint->setContentsMargins(knDpi->margins(5, 0, 0, 0));
     // Error Hint.
     m_errorHint->setAlignment(Qt::AlignCenter);
     // Error Hint.
@@ -96,15 +97,15 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
     //Add widget to layout
-    mainLayout->addSpacing(7);
+    mainLayout->addSpacing(knDpi->height(7));
     mainLayout->addWidget(m_title);
-    mainLayout->addSpacing(3);
+    mainLayout->addSpacing(knDpi->height(3));
     mainLayout->addWidget(m_errorHint);
-    mainLayout->addSpacing(3);
+    mainLayout->addSpacing(knDpi->height(3));
     mainLayout->addWidget(m_username);
-    mainLayout->addSpacing(3);
+    mainLayout->addSpacing(knDpi->height(3));
     mainLayout->addWidget(m_password);
-    mainLayout->addSpacing(2);
+    mainLayout->addSpacing(knDpi->height(2));
     //Generate the label palette.
     QPalette labelPalette=palette();
     labelPalette.setColor(QPalette::WindowText, m_emptyColor);
@@ -121,18 +122,18 @@ KNAccountRegisterPanel::KNAccountRegisterPanel(QWidget *parent) :
         //Add hint to main layout.
         mainLayout->addWidget(m_passwordHint[i]);
     }
-    mainLayout->addSpacing(5);
+    mainLayout->addSpacing(knDpi->height(5));
     mainLayout->addWidget(m_email);
-    mainLayout->addSpacing(2);
+    mainLayout->addSpacing(knDpi->height(2));
     mainLayout->addWidget(m_emailHint);
-    mainLayout->addSpacing(3);
+    mainLayout->addSpacing(knDpi->height(3));
     mainLayout->addWidget(m_agreeLicense, 0, Qt::AlignHCenter);
-    mainLayout->addSpacing(1);
+    mainLayout->addSpacing(knDpi->height(1));
 
     //Initial button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
-    buttonLayout->setContentsMargins(1,3,1,3);
+    buttonLayout->setContentsMargins(knDpi->margins(1,3,1,3));
     mainLayout->addLayout(buttonLayout);
     mainLayout->addStretch();
     //Add all buttons.
@@ -326,7 +327,7 @@ inline KNOpacityAnimeButton *KNAccountRegisterPanel::generateButton(
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Configure the button.
     button->setIcon(QIcon(iconPath));
-    button->setFixedSize(ButtonSize, ButtonSize);
+    button->setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     //Give back the button.
     return button;
 }

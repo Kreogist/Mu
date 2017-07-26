@@ -122,9 +122,9 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
 private slots:
-    void onActionThemeChanged();
+    void onThemeChanged();
     void onActionMouseInOut(const int &frame);
-    void onActionFocusInOut(const int &frame);
+    void onFocusInOut(const int &frame);
 
 private:
     inline QTimeLine *generateTimeLine();

@@ -23,6 +23,7 @@
 #include "knopacityanimebutton.h"
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
+#include "kndpimanager.h"
 
 #include "knaccount.h"
 #include "knaccountutil.h"
@@ -59,7 +60,7 @@ KNAccountPasswordVerification::KNAccountPasswordVerification(QWidget *parent) :
     m_errorHint->setPalette(pal);
     //Configure the check button.
     m_checkButton->setIcon(QIcon("://public/next.png"));
-    m_checkButton->setFixedSize(32, 32);
+    m_checkButton->setFixedSize(knDpi->size(32, 32));
     //Set password edit properties.
     m_passwordEdit->setEchoMode(QLineEdit::Password);
     m_passwordEdit->setLabelIcon(QPixmap("://public/generate_password.png"));
@@ -81,7 +82,7 @@ KNAccountPasswordVerification::KNAccountPasswordVerification(QWidget *parent) :
 
     //Construct layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    mainLayout->setContentsMargins(15, 15, 15, 0);
+    mainLayout->setContentsMargins(knDpi->margins(15, 15, 15, 0));
     //Set the layout to widget.
     setLayout(mainLayout);
     //Add widget to layout.
@@ -91,7 +92,7 @@ KNAccountPasswordVerification::KNAccountPasswordVerification(QWidget *parent) :
     //Add password box.
     mainLayout->addWidget(m_passwordEdit);
     //Add check button.
-    mainLayout->addSpacing(2);
+    mainLayout->addSpacing(knDpi->height(2));
     mainLayout->addWidget(m_checkButton, 0, Qt::AlignCenter);
     mainLayout->addSpacing(fontMetrics().height());
 

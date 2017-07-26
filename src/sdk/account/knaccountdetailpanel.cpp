@@ -58,8 +58,10 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_stateFadeTimer(new QTimer(this))
 {
     //Configure the avatar image.
-    m_avatarImage->setGraphicsMargin(knDpi->height(5));
-    m_avatarImage->setButtonSize(knDpi->height(110));
+    int graphicsSize=knDpi->height(110), marginSize=knDpi->height(5);
+    m_avatarImage->setGraphicsMargin(marginSize);
+    m_avatarImage->setButtonSize(graphicsSize);
+    setMinimumHeight(graphicsSize+(marginSize<<1)+(knDpi->width(10)<<1));
     KNGraphicsGlowEffect *shadowEffect=new KNGraphicsGlowEffect(m_avatarImage);
     shadowEffect->setColor(QColor(0,0,0));
     shadowEffect->setRadius(knDpi->width(10));
@@ -114,7 +116,7 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                           this);
-    mainLayout->setSpacing(11);
+    mainLayout->setSpacing(knDpi->height(11));
     //Set layout to panel.
     setLayout(mainLayout);
     //Initial the avatar layout.
@@ -127,8 +129,8 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Initial the detail layout.
     QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                             mainLayout->widget());
-    detailLayout->setSpacing(5);
-    detailLayout->setContentsMargins(2, 4, 2, 2);
+    detailLayout->setContentsMargins(knDpi->margins(2, 4, 2, 2));
+    detailLayout->setSpacing(knDpi->height(5));
     mainLayout->addLayout(detailLayout, 1);
     //Initial the layout for state.
     QBoxLayout *titleLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -144,7 +146,7 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     //Initial the control layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
-    buttonLayout->setSpacing(5);
+    buttonLayout->setSpacing(knDpi->width(5));
     detailLayout->addLayout(buttonLayout);
     //Add controls to button layout.
     for(int i=0; i<ControlButtonCount; ++i)
@@ -362,7 +364,7 @@ inline KNOpacityAnimeButton *KNAccountDetailPanel::generateButton()
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Configure the button.
     button->setCursor(Qt::PointingHandCursor);
-    button->setFixedSize(26, 26);
+    button->setFixedSize(knDpi->size(26, 26));
     //Give back the button.
     return button;
 }

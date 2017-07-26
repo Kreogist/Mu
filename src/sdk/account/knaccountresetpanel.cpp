@@ -19,6 +19,7 @@
 #include <QBoxLayout>
 #include <QRegExp>
 
+#include "kndpimanager.h"
 #include "knimagelabel.h"
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
@@ -40,15 +41,15 @@ KNAccountResetPanel::KNAccountResetPanel(QWidget *parent) :
     m_cancel(generateButton("://public/cancel.png"))
 {
     //Set properties.
-    setFixedHeight(270);
+    setFixedHeight(knDpi->height(270));
 
     //Configure the hint and title lable.
     m_title->setAlignment(Qt::AlignCenter);
     QFont titleFont=m_title->font();
-    titleFont.setPixelSize(18);
+    titleFont.setPixelSize(knDpi->height(18));
     m_title->setFont(titleFont);
     //Configure the logo label.
-    m_resetLogo->setFixedSize(LogoSize, LogoSize);
+    m_resetLogo->setFixedSize(knDpi->size(LogoSize, LogoSize));
     m_resetLogo->setPixmap(QPixmap("://public/reset-password.png"));
     //Configure the hint label.
     m_hintLabel->setWordWrap(true);
@@ -74,15 +75,15 @@ KNAccountResetPanel::KNAccountResetPanel(QWidget *parent) :
     //Add widget to layout
     mainLayout->addStretch();
     mainLayout->addWidget(m_resetLogo, 0, Qt::AlignHCenter);
-    mainLayout->addSpacing(7);
+    mainLayout->addSpacing(knDpi->height(7));
     mainLayout->addWidget(m_title);
     mainLayout->addWidget(m_hintLabel);
-    mainLayout->addSpacing(14);
+    mainLayout->addSpacing(knDpi->height(14));
     mainLayout->addWidget(m_emailAddress);
     //Initial button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
-    mainLayout->addSpacing(14);
+    mainLayout->addSpacing(knDpi->height(14));
     mainLayout->addLayout(buttonLayout);
     mainLayout->addStretch();
     //Add all buttons.
@@ -179,7 +180,7 @@ inline KNOpacityAnimeButton *KNAccountResetPanel::generateButton(
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Configure the button.
     button->setIcon(QIcon(iconPath));
-    button->setFixedSize(ButtonSize, ButtonSize);
+    button->setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     //Give back the button.
     return button;
 }

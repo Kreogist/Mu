@@ -24,6 +24,7 @@
 #include <QEvent>
 
 //Dependencies.
+#include "kndpimanager.h"
 #include "knlocalemanager.h"
 #include "knimagelabel.h"
 #include "knaccountavatarbutton.h"
@@ -57,7 +58,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     setObjectName("NotificationCenter");
     //Set properties.
     setAutoFillBackground(true);
-    setFixedWidth(324);
+    setFixedWidth(knDpi->width(324));
     setWindowFlags(Qt::WindowSystemMenuHint | Qt::Tool |
                    Qt::FramelessWindowHint);
 
@@ -77,7 +78,10 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     pal.setColor(QPalette::ButtonText, QColor(255,255,255,0));
     m_notificationIndicator->setPalette(pal);
     //Set the pixmap.
-    QPixmap indicatorPixmap=QPixmap("://public/notification_indicator.png");
+    QPixmap indicatorPixmap=
+            QPixmap("://public/notification_indicator.png").scaled(
+                knDpi->size(22, 20),
+                Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_notificationIndicator->setPixmap(indicatorPixmap);
     //Configure the indicator.
     m_notificationIndicator->setFixedSize(indicatorPixmap.size());
@@ -90,7 +94,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
 #endif
     //Configure the button.
     m_button->setCursor(Qt::PointingHandCursor);
-    m_button->setButtonSize(32);
+    m_button->setButtonSize(knDpi->width(32));
     //Configure the view.
     m_notificationView->setModel(knNotification->model());
     //Get account details.
@@ -109,7 +113,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    mainLayout->setContentsMargins(5, 5, 5, 5);
+    mainLayout->setContentsMargins(knDpi->margins(5, 5, 5, 5));
     setLayout(mainLayout);
     //Add widget to layout.
     mainLayout->addWidget(m_accountPanel);
@@ -132,7 +136,8 @@ QWidget *KNNotificationCenter::indicator()
 
 int KNNotificationCenter::heightHint()
 {
-    return m_notificationView->heightHint()+10 + m_accountPanel->height();
+    return m_notificationView->heightHint()+ knDpi->height(10) +
+            m_accountPanel->height();
 }
 
 void KNNotificationCenter::showEvent(QShowEvent *event)
@@ -166,7 +171,8 @@ void KNNotificationCenter::resizeEvent(QResizeEvent *event)
                            QPainter::SmoothPixmapTransform, true);
     painter.fillRect(objBitmap.rect(),Qt::white);
     painter.setBrush(QColor(0,0,0));
-    painter.drawRoundedRect(objBitmap.rect(),10,10);
+    painter.drawRoundedRect(objBitmap.rect(),
+                            knDpi->width(10), knDpi->height(10));
     setMask(objBitmap);
 }
 

@@ -44,8 +44,8 @@ void KNDpiManager::setDpi(int dpiX, int dpiY)
     //Use the 1.0 as the default scaler. Nothing need to be changed.
     //****Debug****
     //Change the scaler to 1.5.
-    m_xScaler=1.2;
-    m_yScaler=1.2;
+    m_xScaler=1.5;
+    m_yScaler=1.5;
     qDebug()<<"Scaler is "<<m_xScaler<<m_yScaler;
     //*************
     return;
