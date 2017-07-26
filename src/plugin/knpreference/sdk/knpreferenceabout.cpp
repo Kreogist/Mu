@@ -125,8 +125,9 @@ void KNPreferenceAbout::resizeEvent(QResizeEvent *event)
     //Set the maximum height of the title.
     m_otherText->setMaximumHeight(iconSize<<2);
     //Calculate the caption size.
+    int minimumSize=knDpi->height(13);
     iconSize=iconSize>>2;
-    captionFont.setPixelSize(iconSize<13?13:iconSize);
+    captionFont.setPixelSize(iconSize<minimumSize?minimumSize:iconSize);
     //Set font to those captions.
     m_checkUpdate->setFont(captionFont);
     m_textContent[Copyright]->setFont(captionFont);

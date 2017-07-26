@@ -12,24 +12,30 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software Foundation,
+ * along with this program; if not, write to the Free Software
+Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMUSICPLAYLISTINDEXDELEGATE_H
-#define KNMUSICPLAYLISTINDEXDELEGATE_H
+#ifndef KNMUSICGENERALDELEGATE_H
+#define KNMUSICGENERALDELEGATE_H
 
 #include <QStyledItemDelegate>
 
-class KNMusicPlaylistIndexDelegate : public QStyledItemDelegate
+/*!
+ * \brief The KNMusicGeneralDelegate class is a simple delegate object. It is
+ * used to change the height of each row. It is also modified to fit the high
+ * DPI display.
+ */
+class KNMusicGeneralDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNMusicPlaylistIndexDelegate
+     * \brief Construct a KNMusicGeneralDelegate widget.
      * \param parent The parent widget.
      */
-    explicit KNMusicPlaylistIndexDelegate(QWidget *parent = 0);
+    explicit KNMusicGeneralDelegate(QWidget *parent = 0);
 
     /*!
      * \brief Reimplemented from QStyledItemDelegate::paint().
@@ -45,4 +51,4 @@ public:
                    const QModelIndex &index) const Q_DECL_OVERRIDE;
 };
 
-#endif // KNMUSICPLAYLISTINDEXDELEGATE_H
+#endif // KNMUSICGENERALDELEGATE_H

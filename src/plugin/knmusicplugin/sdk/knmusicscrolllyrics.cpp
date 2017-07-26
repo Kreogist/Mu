@@ -18,6 +18,8 @@
 #include <QTimeLine>
 #include <QPainter>
 
+#include "kndpimanager.h"
+
 #include "knmusiclyricsbackend.h"
 
 #include "knmusicscrolllyrics.h"
@@ -165,7 +167,7 @@ int KNMusicScrollLyrics::spacing() const
 void KNMusicScrollLyrics::setSpacing(int spacing)
 {
     //Only save the configure when spacing is greater than 0.
-    m_spacing=spacing>0?spacing:0;
+    m_spacing=knDpi->height(spacing>0?spacing:0);
 }
 
 KNMusicLyricsBackend *KNMusicScrollLyrics::backend()

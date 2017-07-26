@@ -21,10 +21,18 @@
 
 #include <QStyledItemDelegate>
 
+/*!
+ * \brief The KNMusicNowPlayingDelegate class provides the list view delegate
+ * for the main player's playlist.
+ */
 class KNMusicNowPlayingDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicNowPlayingDelegate widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicNowPlayingDelegate(QWidget *parent = 0);
 
     /*!

@@ -77,13 +77,13 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionAnalysisItemChanged(const KNMusicAnalysisItem &item);
-    void onActionVolumeChanged(const int &volumeSize);
-    void onActionLoopStateChanged(const int &state);
+    void onAnalysisItemChanged(const KNMusicAnalysisItem &item);
+    void onVolumeChanged(int volumeSize);
+    void onLoopStateChanged(int state);
     void updatePositionText(const qint64 &position);
     void updateDuration(const qint64 &duration);
-    void onActionPlayingModelChanged(KNMusicProxyModel *proxyModel);
-    void onActionColumnCountChanged(const int &columnCount);
+    void onPlayingModelChanged(KNMusicProxyModel *proxyModel);
+    void onColumnCountChanged(int columnCount);
     void onActionPositionEdited();
 
 private:

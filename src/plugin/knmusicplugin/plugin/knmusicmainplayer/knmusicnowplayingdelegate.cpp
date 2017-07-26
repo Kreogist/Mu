@@ -17,6 +17,8 @@
  */
 #include <QPainter>
 
+#include "kndpimanager.h"
+
 #include "knmusicutil.h"
 
 #include "knmusicnowplayingdelegate.h"
@@ -72,12 +74,19 @@ void KNMusicNowPlayingDelegate::paint(QPainter *painter,
     //Check the valid of the decorate data.
     if(!icon.isNull())
     {
+        //Calculate the size.
+        QSize itemIconSize=knDpi->size(IconSize, IconSize);
         //Calculate the offset.
-        int positionOffset=((option.rect.height()-IconSize)>>1);
+        int positionOffset=((option.rect.height()-itemIconSize.width())>>1);
+        //Get the icon.
+        QPixmap &&itemIcon=icon.pixmap(itemIconSize).scaled(
+                    itemIconSize,
+                    Qt::KeepAspectRatio,
+                    Qt::SmoothTransformation);
         //Draw the indicator icon.
         painter->drawPixmap(option.rect.x()+positionOffset,
                             option.rect.y()+positionOffset,
-                            icon.pixmap(IconSize));
+                            itemIcon);
     }
     //Draw the music duraiton.
     QString &&timeText=textData(proxyModel, index, Time);
@@ -113,7 +122,7 @@ QSize KNMusicNowPlayingDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     return QSize(option.fontMetrics.width(textData(index.model(),
                                                    index,
-                                                   Name))+20,
+                                                   Name))+knDpi->width(20),
                  option.fontMetrics.height()*1.618);
 }
 

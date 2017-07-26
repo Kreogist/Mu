@@ -18,6 +18,8 @@
 #include <QPainter>
 #include <QTimeLine>
 
+#include "kndpimanager.h"
+
 #include "kncircleiconbutton.h"
 
 #define MinimumLightness 80
@@ -33,7 +35,7 @@ KNCircleIconButton::KNCircleIconButton(QWidget *parent) :
     m_lightness(MinimumLightness)
 {
     //Set properties.
-    setFixedSize(ButtonSize, ButtonSize);
+    setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     setCheckable(true);
 
     //Link the toggle.
@@ -65,11 +67,11 @@ void KNCircleIconButton::paintEvent(QPaintEvent *event)
     //Paint the icon if the icon is not null.
     if(!icon().isNull())
     {
-        painter.drawPixmap(m_iconPosition,
-                           m_iconPosition,
-                           IconSize,
-                           IconSize,
-                           icon().pixmap(IconSize, IconSize));
+        painter.drawPixmap(QRect(knDpi->pos(m_iconPosition,
+                                            m_iconPosition),
+                                 knDpi->size(IconSize,
+                                             IconSize)),
+                           icon().pixmap(knDpi->size(IconSize, IconSize)));
     }
 }
 

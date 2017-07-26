@@ -60,13 +60,18 @@ void KNMusicPlaylistListDelegate::paint(QPainter *painter,
         textColor=option.palette.color(QPalette::HighlightedText);
     }
     //Draw the icon.
-    index.data(Qt::DecorationRole).value<QIcon>().paint(
-                painter,
-                QRect(
-                    QPoint(option.rect.x()+knDpi->width(Spacing),
-                           option.rect.y()+
-                           ((option.rect.height()-knDpi->height(IconSize))>>1)),
-                    knDpi->size(IconSize, IconSize)));
+    QSize itemIconSize=knDpi->size(IconSize, IconSize);
+    QPixmap itemIcon=index.data(Qt::DecorationRole).value<QIcon>().pixmap(
+                itemIconSize);
+    painter->drawPixmap(
+                QRect(QPoint(option.rect.x()+knDpi->width(Spacing),
+                             option.rect.y()+
+                             ((option.rect.height()-
+                               knDpi->height(IconSize))>>1)),
+                      itemIconSize),
+                itemIcon.scaled(itemIconSize,
+                                Qt::KeepAspectRatio,
+                                Qt::SmoothTransformation));
     //Draw the text.
     painter->setPen(textColor);
     painter->setFont(option.font);

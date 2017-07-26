@@ -81,8 +81,8 @@ protected:
 
 private slots:
     void onActionHide();
-    void onActionMouseInOut(int frame);
-    void onActionThemeChanged();
+    void onMouseInOut(int frame);
+    void onThemeChanged();
     void onActionPlayNPauseClicked();
 
     void onActionPreviewPositionChanged(const qint64 &position);

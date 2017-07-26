@@ -18,6 +18,7 @@
 #include <QPainter>
 
 #include "knmusicutil.h"
+#include "kndpimanager.h"
 
 #include "knmusicalbumlistdelegate.h"
 
@@ -59,12 +60,19 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
     //Check out the validation of icon.
     if(!icon.isNull())
     {
+        //Calculate the scaled size.
+        QSize scaledSize=knDpi->size(IconSize, IconSize);
+        //Scale the icon.
+        QPixmap &&itemIcon=icon.pixmap(scaledSize).scaled(
+                    scaledSize,
+                    Qt::KeepAspectRatio,
+                    Qt::SmoothTransformation);
         //Calculate the offset.
-        int positionOffset=((option.rect.height()-IconSize)>>1);
+        int positionOffset=((option.rect.height()-itemIcon.height())>>1);
         //Draw the scaled icon.
         painter->drawPixmap(option.rect.x()+positionOffset,
                             option.rect.y()+positionOffset,
-                            icon.pixmap(IconSize));
+                            itemIcon);
     }
     //Get text color.
     QColor textColor=option.palette.color(QPalette::Text);
@@ -72,8 +80,8 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
     textColor.setAlpha(0x9A);
     painter->setPen(textColor);
     //Calculate the text x.
-    int textX=option.rect.x()+TextMarginX+Spacing,
-        textWidth=option.rect.width()-TextMarginX-(Spacing<<2);
+    int textX=option.rect.x()+knDpi->width(TextMarginX+Spacing),
+        textWidth=option.rect.width()-knDpi->width(TextMarginX+(Spacing<<2));
     //Get the duration text.
     QString &&durationText=proxyModel->data(proxyModel->index(index.row(),
                                                               Time),
@@ -86,10 +94,10 @@ void KNMusicAlbumListDelegate::paint(QPainter *painter,
                       Qt::AlignRight | Qt::AlignVCenter,
                       durationText);
     //Draw the track index.
-    painter->drawText(option.rect.x(),
-                      option.rect.y(),
-                      TextMarginX,
-                      ItemHeight,
+    painter->drawText(QRect(QPoint(option.rect.x(),
+                                   option.rect.y()),
+                            knDpi->size(TextMarginX,
+                                        ItemHeight)),
                       Qt::AlignRight | Qt::AlignVCenter,
                       proxyModel->data(proxyModel->index(index.row(),
                                                          TrackNumber),
@@ -117,6 +125,6 @@ QSize KNMusicAlbumListDelegate::sizeHint(const QStyleOptionViewItem &option,
     //Calculate the size hint.
     return QSize(option.fontMetrics.width(
                      index.data(Qt::DisplayRole).toString())+38,
-                 25);
+                 knDpi->height(25));
 }
 

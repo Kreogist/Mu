@@ -26,6 +26,7 @@
 #include "knglassanimebutton.h"
 #include "knvolumeslider.h"
 #include "knopacitybutton.h"
+#include "kndpimanager.h"
 
 #include "knmusiclyricsmanager.h"
 #include "knmusiccodeclabel.h"
@@ -84,7 +85,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_volumeSizeIcon[Volume3] =QPixmap(":/plugin/music/player/volume_3.png");
 
     //Configure the hide main player button.
-    m_hideMainPlayer->setFixedSize(32, 32);
+    m_hideMainPlayer->setFixedSize(knDpi->size(32, 32));
     m_hideMainPlayer->setIcon(
                 QPixmap(":/plugin/music/player/hide_mainplayer.png"));
     connect(m_hideMainPlayer, &KNOpacityAnimeButton::clicked,
@@ -133,17 +134,17 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     // Configure loop mode button.
     m_loopMode->setIcon(m_loopStateIcon[NoRepeat]);
     // Configure the volume indicator and slider.
-    m_volumeIcon->setFixedSize(32, 32);
+    m_volumeIcon->setFixedSize(knDpi->size(32, 32));
     m_volumeIcon->setIcon(m_volumeSizeIcon[NoVolume]);
-    m_volumeSlider->setMinimumWidth(100);
-    m_volumeSlider->setMaximumWidth(150);
+    m_volumeSlider->setMinimumWidth(knDpi->width(100));
+    m_volumeSlider->setMaximumWidth(knDpi->width(150));
     // Initial and configure the buttons.
     for(int i=0; i<ControlButtonsCount; i++)
     {
         //Generate the button.
         m_controlButtons[i]=new KNGlassAnimeButton(this);
         //Resize the button, don't worry of this size, give any number is okay.
-        m_controlButtons[i]->setFixedSize(46, 46);
+        m_controlButtons[i]->setFixedSize(knDpi->size(46, 46));
     }
     //Set the buttons icon.
     m_controlButtons[ButtonPrev]->setIcon(
@@ -176,7 +177,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     mainLayout->setContentsMargins(0,0,0,0);
     QBoxLayout *headerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             mainLayout->widget());
-    headerLayout->setContentsMargins(16,16,16,16);
+    headerLayout->setContentsMargins(knDpi->margins(16,16,16,16));
     //Add widget to header layout.
     headerLayout->addWidget(m_hideMainPlayer);
     headerLayout->addStretch();
@@ -194,7 +195,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_contentContainer->setColumnCount(1);
     //Link the content container to main player.
     connect(m_contentContainer, &KNMusicMainPlayerContent::columnCountChanged,
-            this, &KNMusicMainPlayer::onActionColumnCountChanged);
+            this, &KNMusicMainPlayer::onColumnCountChanged);
     //Configure the control panel.
     //Generate the layout.
     QBoxLayout *controlLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -209,7 +210,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     //Generate the button layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             controlLayout->widget());
-    buttonLayout->setContentsMargins(5,0,5,0);
+    buttonLayout->setContentsMargins(knDpi->margins(5,0,5,0));
     buttonLayout->setSpacing(0);
     controlLayout->addLayout(buttonLayout, 1);
     //Add widgets to button layout.
@@ -237,7 +238,7 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     QBoxLayout *volumeLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             buttonLayout->widget());
     volumeLayout->setContentsMargins(0,0,0,0);
-    volumeLayout->setSpacing(2);
+    volumeLayout->setSpacing(knDpi->width(2));
     volumeLayout->addWidget(m_volumeIcon);
     volumeLayout->addWidget(m_volumeSlider, 1);
     //Add volume layout to right layout.
@@ -263,7 +264,7 @@ void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
             m_backend, &KNMusicBackend::playNPause);
     //Connect the response.
     connect(m_backend, &KNMusicBackend::volumeChanged,
-            this, &KNMusicMainPlayer::onActionVolumeChanged);
+            this, &KNMusicMainPlayer::onVolumeChanged);
     connect(m_backend, &KNMusicBackend::durationChanged,
             this, &KNMusicMainPlayer::updateDuration);
     connect(m_backend, &KNMusicBackend::positionChanged,
@@ -295,26 +296,26 @@ void KNMusicMainPlayer::setBackend(KNMusicBackend *backend)
     int preferStep=(m_volumeSlider->maximum()-m_volumeSlider->minimal())/100;
     m_volumeSlider->setWheelStep(preferStep<1?1:preferStep);
     //Sync the volume data via called the slot.
-    onActionVolumeChanged(m_backend->volume());
+    onVolumeChanged(m_backend->volume());
 }
 
 void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
 {
     //Link the now playing with the widget.
     connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
-            this, &KNMusicMainPlayer::onActionAnalysisItemChanged);
+            this, &KNMusicMainPlayer::onAnalysisItemChanged);
     connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingReset,
             [=]
             {
                 //Generate a empty analysis item.
                 KNMusicAnalysisItem item;
                 //Set the analysis item to be the empty one.
-                onActionAnalysisItemChanged(item);
+                onAnalysisItemChanged(item);
             });
     connect(nowPlaying, &KNMusicNowPlayingBase::loopStateChanged,
-            this, &KNMusicMainPlayer::onActionLoopStateChanged);
+            this, &KNMusicMainPlayer::onLoopStateChanged);
     connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingModelChanged,
-            this, &KNMusicMainPlayer::onActionPlayingModelChanged);
+            this, &KNMusicMainPlayer::onPlayingModelChanged);
     //Link the button controls to the now playing
     connect(m_controlButtons[ButtonPrev], &KNGlassAnimeButton::clicked,
             nowPlaying, &KNMusicNowPlayingBase::playPrevious);
@@ -323,7 +324,7 @@ void KNMusicMainPlayer::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     connect(m_loopMode, &KNOpacityAnimeButton::clicked,
             nowPlaying, &KNMusicNowPlayingBase::changeLoopState);
     //Sync the states from the now playing.
-    onActionLoopStateChanged(nowPlaying->loopState());
+    onLoopStateChanged(nowPlaying->loopState());
 }
 
 void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
@@ -334,11 +335,11 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     //Get the smaller one of the width and height.
     int parameterSize=qMin(width(), height());
     //Calculate the font size.
-    int fontSize=parameterSize/30;
+    int fontSize=parameterSize/30, minimalSize=knDpi->height(15);
     //Set the minimum size of the font to 15.
-    if(fontSize<15)
+    if(fontSize<minimalSize)
     {
-        fontSize=15;
+        fontSize=minimalSize;
     }
     //Resize the font.
     QFont textFont=font();
@@ -348,11 +349,11 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_lyricsPanel->setSpacing(fontSize>>1);
     m_detailInfoPanel->updatePanelFont(textFont);
     //Check out the font size.
-    textFont.setPixelSize(15);
+    textFont.setPixelSize(minimalSize);
     m_playlistPanel->setFont(textFont);
     //Resize the time font.
     textFont=m_position->font();
-    textFont.setPixelSize(fontSize-5);
+    textFont.setPixelSize(fontSize-knDpi->height(5));
     m_position->setFont(textFont);
     m_duration->setFont(textFont);
     //Calculate the button size.
@@ -377,7 +378,7 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_buttonRightLayout->setSpacing(controlLayoutSpacing);
 }
 
-void KNMusicMainPlayer::onActionAnalysisItemChanged(
+void KNMusicMainPlayer::onAnalysisItemChanged(
         const KNMusicAnalysisItem &item)
 {
     //Update the panel data.
@@ -386,7 +387,7 @@ void KNMusicMainPlayer::onActionAnalysisItemChanged(
     m_codecLabel->setSuffix(QFileInfo(item.detailInfo.filePath).suffix());
 }
 
-void KNMusicMainPlayer::onActionVolumeChanged(const int &volumeSize)
+void KNMusicMainPlayer::onVolumeChanged(int volumeSize)
 {
     //Check out the backend first.
     if(!m_backend)
@@ -426,7 +427,7 @@ void KNMusicMainPlayer::onActionVolumeChanged(const int &volumeSize)
     }
 }
 
-void KNMusicMainPlayer::onActionLoopStateChanged(const int &state)
+void KNMusicMainPlayer::onLoopStateChanged(int state)
 {
     //Change the icon.
     m_loopMode->setIcon(m_loopStateIcon[state]);
@@ -450,14 +451,13 @@ void KNMusicMainPlayer::updateDuration(const qint64 &duration)
     m_duration->setText(KNMusicUtil::msecondToString(duration));
 }
 
-void KNMusicMainPlayer::onActionPlayingModelChanged(
-        KNMusicProxyModel *proxyModel)
+void KNMusicMainPlayer::onPlayingModelChanged(KNMusicProxyModel *proxyModel)
 {
     //Set the new proxy model to the list view.
     m_playlistPanel->setModel(proxyModel);
 }
 
-void KNMusicMainPlayer::onActionColumnCountChanged(const int &columnCount)
+void KNMusicMainPlayer::onColumnCountChanged(int columnCount)
 {
     //Update the scroll alignment of the column count.
     m_lyricsPanel->setAlignment(columnCount==1?Qt::AlignHCenter:Qt::AlignLeft);

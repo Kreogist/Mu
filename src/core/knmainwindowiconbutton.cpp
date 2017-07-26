@@ -53,7 +53,7 @@ KNMainWindowIconButton::KNMainWindowIconButton(QWidget *parent) :
     m_normalWidth(0),
     m_widthExpand(0),
     m_textEffect(new QGraphicsOpacityEffect(this)),
-    m_effectGradient(QLinearGradient(QPointF(0,0), QPointF(0,50)))
+    m_effectGradient(QLinearGradient(QPointF(0,0), knDpi->posF(0,50)))
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -171,8 +171,7 @@ void KNMainWindowIconButton::onMouseInOut(int frame)
     //Get the base number.
     int baseNumber=frame-IconX;
     //Move the app text label.
-    m_title[IndexApp]->move(knDpi->pos(TextLeft,
-                                       TextY+(baseNumber>>3)));
+    m_title[IndexApp]->move(knDpi->pos(TextLeft, TextY+(baseNumber>>3)));
     QFont appFont=m_title[IndexApp]->font();
     appFont.setPixelSize(knDpi->height(TextSize+(baseNumber>>3)));
     m_title[IndexApp]->setFont(appFont);
@@ -219,7 +218,7 @@ void KNMainWindowIconButton::initialLabels()
         m_title[i]->setObjectName("MainWindowButtonText");
         knTheme->registerWidget(m_title[i]);
         m_title[i]->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-        m_title[i]->move(TextLeft, TextY);
+        m_title[i]->move(knDpi->pos(TextLeft, TextY));
         m_title[i]->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     }
     //Configure the mask gradient.
@@ -231,8 +230,7 @@ void KNMainWindowIconButton::initialLabels()
     //Configure the icon label of preference.
     m_iconImage[IndexPreference]=
             QPixmap(":/plugin/preference/icon.png").scaled(
-                knDpi->size(IconSize>>1,
-                            IconSize>>1),
+                knDpi->size(IconSize>>1, IconSize>>1),
                 Qt::KeepAspectRatio,
                 Qt::SmoothTransformation);
     //Configure the text label of application.

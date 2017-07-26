@@ -26,6 +26,7 @@
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
 #include "knglobal.h"
+#include "kndpimanager.h"
 
 #include "knmusicbackend.h"
 #include "knmusicalbumlabel.h"
@@ -61,16 +62,16 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Set properties.
     setAutoFillBackground(true);
     setWindowFlags(Qt::ToolTip);
-    setFixedSize(TooltipWidth, TooltipHeight);
+    setFixedSize(knDpi->size(TooltipWidth, TooltipHeight));
 
     //Initial the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                           this);
-    mainLayout->setContentsMargins(11,11,11,11);
-    mainLayout->setSpacing(6);
+    mainLayout->setContentsMargins(knDpi->margins(11,11,11,11));
+    mainLayout->setSpacing(knDpi->width(6));
     setLayout(mainLayout);
     //Initial the album art.
-    m_albumArt->setFixedSize(154, 154);
+    m_albumArt->setFixedSize(knDpi->size(154, 154));
     mainLayout->addWidget(m_albumArt);
     //Generate the label container.
     QWidget *labelContainer=new QWidget(this);
@@ -79,7 +80,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Initial the label layout.
     QBoxLayout *labelLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                            mainLayout->widget());
-    labelLayout->setContentsMargins(0,5,0,5);
+    labelLayout->setContentsMargins(knDpi->margins(0,5,0,5));
     labelLayout->setSpacing(0);
     labelLayout->setSizeConstraint(QLayout::SetMaximumSize);
     labelContainer->setLayout(labelLayout);
@@ -91,7 +92,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
         //Configure the label.
         m_labels[i]->setContentsMargins(0,0,0,0);
         //Resize the labels.
-        m_labels[i]->setFixedWidth(LabelWidth);
+        m_labels[i]->setFixedWidth(knDpi->width(LabelWidth));
         //Add the label to the layout.
         labelLayout->addWidget(m_labels[i]);
     }
@@ -99,7 +100,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     //Configure the font of title.
     QFont nameFont=m_labels[ItemTitle]->font();
     nameFont.setBold(true);
-    nameFont.setPixelSize(18);
+    nameFont.setPixelSize(knDpi->height(18));
     m_labels[ItemTitle]->setFont(nameFont);
     //Initial the preview player.
     QBoxLayout *previewPlayer=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -109,7 +110,7 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
     labelLayout->addLayout(previewPlayer);
     //Configure preview player control button.
     m_playNPause->setFocusProxy(this);
-    m_playNPause->setFixedSize(20, 20);
+    m_playNPause->setFixedSize(knDpi->size(20, 20));
     m_playNPause->setIcon(m_playIcon);
     //Link clicked request.
     connect(m_playNPause, &KNOpacityButton::clicked,
@@ -134,11 +135,11 @@ KNMusicDetailTooltip::KNMusicDetailTooltip(QWidget *parent) :
 
     //Link the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
-            this, &KNMusicDetailTooltip::onActionThemeChanged);
+            this, &KNMusicDetailTooltip::onThemeChanged);
     //Initial the palette.
-    onActionMouseInOut(0x20);
+    onMouseInOut(0x20);
     //Update the theme.
-    onActionThemeChanged();
+    onThemeChanged();
 }
 
 void KNMusicDetailTooltip::showTooltip(const QPoint &position)
@@ -262,7 +263,7 @@ void KNMusicDetailTooltip::onActionHide()
     hide();
 }
 
-void KNMusicDetailTooltip::onActionMouseInOut(int frame)
+void KNMusicDetailTooltip::onMouseInOut(int frame)
 {
     //Get the palette.
     QPalette pal=palette();
@@ -282,14 +283,14 @@ void KNMusicDetailTooltip::onActionMouseInOut(int frame)
     }
 }
 
-void KNMusicDetailTooltip::onActionThemeChanged()
+void KNMusicDetailTooltip::onThemeChanged()
 {
     //Backup the current brightness.
     int brightness=palette().color(QPalette::Window).value();
     //Set the latest palette.
     setPalette(knTheme->getPalette(objectName()));
     //Update the brightness.
-    onActionMouseInOut(brightness);
+    onMouseInOut(brightness);
 }
 
 void KNMusicDetailTooltip::onActionPlayNPauseClicked()
@@ -346,7 +347,7 @@ inline QTimeLine *KNMusicDetailTooltip::generateTimeLine(const int &endFrame)
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setUpdateInterval(16);
     connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNMusicDetailTooltip::onActionMouseInOut);
+            this, &KNMusicDetailTooltip::onMouseInOut);
     //Give back the time line.
     return timeLine;
 }

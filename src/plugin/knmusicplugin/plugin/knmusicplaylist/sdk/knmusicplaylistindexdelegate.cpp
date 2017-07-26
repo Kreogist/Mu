@@ -17,7 +17,12 @@
  */
 #include <QPainter>
 
+#include "kndpimanager.h"
+
 #include "knmusicplaylistindexdelegate.h"
+
+#define RowHeight   20
+#define IconSize    14
 
 KNMusicPlaylistIndexDelegate::KNMusicPlaylistIndexDelegate(QWidget *parent) :
     QStyledItemDelegate(parent)
@@ -29,20 +34,48 @@ void KNMusicPlaylistIndexDelegate::paint(QPainter *painter,
                                          const QStyleOptionViewItem &option,
                                          const QModelIndex &index) const
 {
+    //Save the painter
+    painter->save();
     //Enabled text antialiasing.
     painter->setRenderHint(QPainter::TextAntialiasing, true);
-    //Hack the option, change the text to the index row.
-    QStyleOptionViewItem indexOption=option;
-    indexOption.text=QString::number(index.row()+1);
-    indexOption.displayAlignment=Qt::AlignRight | Qt::AlignVCenter;
+    //Draw the background.
+    if(option.state & QStyle::State_Selected)
+    {
+        //Draw the selection background.
+        painter->fillRect(option.rect,
+                          option.palette.brush(QPalette::Highlight));
+        //Set the color to hightlighted text.
+        painter->setPen(option.palette.color(QPalette::HighlightedText));
+    }
     //Using the original painting to paint delegate.
-    QStyledItemDelegate::paint(painter, indexOption, index);
+    //Draw the text.
+    painter->drawText(option.rect,
+                      Qt::AlignRight | Qt::AlignVCenter,
+                      QString::number(index.row()+1));
+    //Check the icon.
+    QVariant itemIcon=index.data(Qt::DecorationRole);
+    if(itemIcon.isValid())
+    {
+        //Get the item icon size.
+        QSize itemIconSize=knDpi->size(IconSize, IconSize);
+        //Draw the icon.
+        painter->drawPixmap(
+                    option.rect.topLeft() +
+                    QPoint((knDpi->width(RowHeight)-itemIconSize.width())>>1,
+                           (knDpi->height(RowHeight)-itemIconSize.height())>>1),
+                    itemIcon.value<QIcon>().pixmap(itemIconSize).scaled(
+                        itemIconSize,
+                        Qt::KeepAspectRatio,
+                        Qt::SmoothTransformation));
+    }
+    painter->restore();
 }
 
 QSize KNMusicPlaylistIndexDelegate::sizeHint(const QStyleOptionViewItem &option,
                                              const QModelIndex &index) const
 {
-    return QSize(option.fontMetrics.width(QString::number(index.row()+1))+20,
-                 20);
+    return QSize(option.fontMetrics.width(QString::number(index.row()+1))+
+                 knDpi->width(RowHeight),
+                 knDpi->height(RowHeight));
 }
 

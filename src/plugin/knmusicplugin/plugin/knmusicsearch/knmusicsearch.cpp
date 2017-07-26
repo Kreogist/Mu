@@ -22,6 +22,7 @@
 #include "knsearchbox.h"
 #include "knlocalemanager.h"
 #include "knmusicglobal.h"
+#include "kndpimanager.h"
 
 #include "knmusicsearchsyntaxengine.h"
 
@@ -35,7 +36,7 @@ KNMusicSearch::KNMusicSearch(QObject *parent) :
     m_engine(new KNMusicSearchSyntaxEngine(this))
 {
     //Configure the search box.
-    m_searchBox->setMinimumWidth(220);
+    m_searchBox->setMinimumWidth(knDpi->width(220));
 
     //Link the search box to the search actions.
     connect(m_searchBox, &KNSearchBox::textChanged,

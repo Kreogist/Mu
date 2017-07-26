@@ -23,6 +23,7 @@
 #include <QScrollBar>
 
 #include "knconnectionhandler.h"
+#include "kndpimanager.h"
 
 #include "knmusicsearchbase.h"
 #include "knmusicproxymodel.h"
@@ -31,6 +32,7 @@
 #include "knmusicsolomenubase.h"
 #include "knmusicmultimenubase.h"
 #include "knmusictreeviewheader.h"
+#include "knmusicgeneraldelegate.h"
 #include "knmusicratingdelegate.h"
 #include "knmusicdetailtooltipbase.h"
 
@@ -66,6 +68,7 @@ KNMusicTreeViewBase::KNMusicTreeViewBase(QWidget *parent, KNMusicTab *tab) :
     setHeader(header);
 
     //Set the rating delegate for Rating and AlbumRating row.
+    setItemDelegate(new KNMusicGeneralDelegate(this));
     setItemDelegateForColumn(Rating,
                              new KNMusicRatingDelegate(this));
     setItemDelegateForColumn(AlbumRating,
@@ -109,11 +112,11 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                               QRect(options.rect.x(),
                                     options.rect.y(),
                                     width(),
-                                    2):
+                                    knDpi->height(2)):
                               QRect(options.rect.x(),
-                                    options.rect.bottom()+1,
+                                    options.rect.bottom()+knDpi->height(1),
                                     width(),
-                                    2),
+                                    knDpi->height(2)),
                           palette().color(QPalette::HighlightedText));
     }
 }
@@ -462,11 +465,12 @@ void KNMusicTreeViewBase::resetHeaderState()
     moveToFirst(Time);
     moveToFirst(Name);
     //Set the default width.
-    setColumnWidth(Genre, 81);
-    setColumnWidth(Album, 126);
-    setColumnWidth(Artist, 126);
-    setColumnWidth(Time, 60);
-    setColumnWidth(Name, 200);
+    setColumnWidth(Rating, knDpi->width(100));
+    setColumnWidth(Genre, knDpi->width(81));
+    setColumnWidth(Album, knDpi->width(126));
+    setColumnWidth(Artist, knDpi->width(126));
+    setColumnWidth(Time, knDpi->width(60));
+    setColumnWidth(Name, knDpi->width(200));
 }
 
 void KNMusicTreeViewBase::playIndex(const QModelIndex &index)

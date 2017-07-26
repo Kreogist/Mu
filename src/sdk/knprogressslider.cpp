@@ -21,13 +21,13 @@
 
 #include "knprogressslider.h"
 
-#define OutOpacity 0.65
-#define m_glowWidth 5
-#define m_sliderHeight 4
-#define m_spacing 2
-#define m_rectColor QColor(255,255,255,70)
-#define m_backgroundColor QColor(255,255,255,80)
-#define m_buttonColor QColor(255,255,255,110)
+#define OutOpacity          0.65
+#define m_glowWidth         5
+#define m_sliderHeight      4
+#define m_spacing           2
+#define m_rectColor         QColor(255,255,255,70)
+#define m_backgroundColor   QColor(255,255,255,80)
+#define m_buttonColor       QColor(255,255,255,110)
 
 KNProgressSlider::KNProgressSlider(QWidget *parent) :
     KNAbstractSlider(parent),

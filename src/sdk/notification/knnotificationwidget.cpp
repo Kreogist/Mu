@@ -22,11 +22,11 @@
 
 #include "knnotificationwidget.h"
 
-#define ImageSize 45
-#define Spacing 5
-#define ContentY 22
-#define TitleY 7
-#define TextLeft (ImageSize + (Spacing<<1))
+#define ImageSize   45
+#define Spacing     5
+#define ContentY    22
+#define TitleY      7
+#define TextLeft    (ImageSize + (Spacing<<1))
 
 KNNotificationWidget::KNNotificationWidget(QWidget *parent) :
     QWidget(parent),
@@ -56,30 +56,29 @@ void KNNotificationWidget::paintEvent(QPaintEvent *event)
     painter.setOpacity(0.8);
     painter.setBrush(Qt::white);
     //Draw the background.
-    painter.drawRoundedRect(rect(), 10, 10);
+    int roundedSize=knDpi->width(10);
+    painter.drawRoundedRect(rect(), roundedSize, roundedSize);
     //Calculate content width.
-    int contentWidth=width()-TextLeft-Spacing;
+    int contentWidth=width()-knDpi->width(TextLeft+Spacing);
     //Draw the icon.
     painter.setOpacity(1.0);
-    painter.drawPixmap(Spacing,
-                       Spacing+1,
+    painter.drawPixmap(knDpi->pos(Spacing, Spacing+1),
                        m_currentIcon.isNull()?m_defaultIcon:m_currentIcon);
     //Draw the content.
     painter.setPen(QColor(0x8a, 0x8a, 0x8a));
-    painter.drawText(QRect(TextLeft,
-                           ContentY,
-                           contentWidth,
-                           height() - ContentY - Spacing),
+    painter.drawText(QRect(knDpi->pos(TextLeft, ContentY),
+                           QSize(contentWidth,
+                                 height()-knDpi->height(ContentY+Spacing))),
                      Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap,
                      fontMetrics().elidedText(m_content,
                                               Qt::ElideRight,
                                               contentWidth<<1));
     //Draw the title.
     painter.setPen(QColor(0x61, 0x61, 0x61));
-    painter.drawText(QRect(TextLeft,
-                           TitleY,
-                           contentWidth,
-                           ContentY - TitleY),
+    painter.drawText(QRect(knDpi->pos(TextLeft,
+                                      TitleY),
+                           QSize(contentWidth,
+                                 knDpi->height(ContentY - TitleY))),
                      Qt::AlignLeft | Qt::AlignTop,
                      fontMetrics().elidedText(m_title,
                                               Qt::ElideRight,

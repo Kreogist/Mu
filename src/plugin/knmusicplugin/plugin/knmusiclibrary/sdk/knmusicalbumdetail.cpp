@@ -25,6 +25,7 @@
 #include "knsideshadowwidget.h"
 #include "knscrolllabel.h"
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knmusiclibrarymodel.h"
 #include "knmusicalbumlistview.h"
@@ -100,7 +101,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     // Set the font.
     QFont captionFont=m_albumTitle->font();
     captionFont.setBold(true);
-    captionFont.setPixelSize(21);
+    captionFont.setPixelSize(knDpi->height(21));
     m_albumTitle->setFont(captionFont);
     //Configure the album artist label.
     m_albumDetails->setObjectName("MusicAlbumDetailLabel");
@@ -158,7 +159,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     //Initial the caption layout for the title and detail label.
     QBoxLayout *captionLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              contentLayout->widget());
-    captionLayout->setContentsMargins(21,21,21,14);
+    captionLayout->setContentsMargins(knDpi->margins(21,21,21,14));
     captionLayout->setSpacing(0);
     contentLayout->addLayout(captionLayout);
     //Add widget to caption layout.
@@ -722,14 +723,15 @@ inline void KNMusicAlbumDetail::updateWidgetGeometries()
 inline void KNMusicAlbumDetail::updateShadowGeometries(
         const QRect &contentPosition)
 {
+    static int scaledShadowWidth=knDpi->width(ShadowWidth);
     //Update the shadow widget.
-    m_rightShadow->setGeometry(contentPosition.left()-ShadowWidth,
+    m_rightShadow->setGeometry(contentPosition.left()-scaledShadowWidth,
                                contentPosition.y(),
-                               ShadowWidth,
+                               scaledShadowWidth,
                                contentPosition.height());
     m_leftShadow->setGeometry(m_albumArt->geometry().right(),
                               contentPosition.y(),
-                              ShadowWidth,
+                              scaledShadowWidth,
                               contentPosition.height());
 }
 

@@ -18,6 +18,8 @@
 #include <QDropEvent>
 #include <QMimeData>
 
+#include "kndpimanager.h"
+
 #include "knmusicmodel.h"
 #include "knmusicutil.h"
 #include "knmusicnowplayingbase.h"
@@ -85,7 +87,7 @@ void KNMusicLibraryTreeView::resetHeaderState()
     //No more hack here, move the display data index one by one.
     moveToFirst(MusicRowState);
     //Set enough width for the music row state data.
-    setColumnWidth(MusicRowState, fontMetrics().width('6')*4+30);
+    setColumnWidth(MusicRowState, fontMetrics().width('6')*4+knDpi->width(30));
     //Check out the category column.
     if(proxyModel()->categoryColumn()!=-1)
     {

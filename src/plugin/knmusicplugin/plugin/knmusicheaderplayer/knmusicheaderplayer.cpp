@@ -741,6 +741,7 @@ void KNMusicHeaderPlayer::onLyricsConfigureChanged()
     //Get the lyrics font.
     QFont lyricsFont=m_lyricsConfigure->data("Font").value<QFont>();
     //Update the header lyrics font.
+    lyricsFont.setPixelSize(knDpi->height(lyricsFont.pixelSize()));
     m_headerLyrics->setFont(lyricsFont);
     //Update the lyrics spacing.
     m_headerLyrics->setSpacing(m_lyricsConfigure->data("Spacing", 2).toInt());
