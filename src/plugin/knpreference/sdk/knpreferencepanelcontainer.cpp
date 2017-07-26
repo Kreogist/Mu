@@ -18,6 +18,7 @@ Foundation,
  */
 #include "knsideshadowwidget.h"
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knpreferencepanel.h"
 
@@ -98,6 +99,6 @@ inline void KNPreferencePanelContainer::updatePanelSize(
     //Update the shadow geometry.
     shadow->setGeometry(panel->width() + panel->x(),
                         panel->y(),
-                        ShadowWidth,
+                        knDpi->width(ShadowWidth),
                         height());
 }

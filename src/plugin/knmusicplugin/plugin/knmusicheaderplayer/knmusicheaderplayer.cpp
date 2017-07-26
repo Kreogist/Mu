@@ -36,6 +36,7 @@
 #include "knprogressslider.h"
 #include "kngraphicsgloweffect.h"
 #include "knconfigure.h"
+#include "kndpimanager.h"
 
 #include "knmusictab.h"
 #include "knmusicproxymodel.h"
@@ -52,10 +53,10 @@
 
 #include <QDebug>
 
-#define AlbumArtSize 61
-#define GlowRadius 9.0
-#define panelY 11
-#define m_buttonSize 38
+#define AlbumArtSize    61
+#define GlowRadius      9.0
+#define panelY          11
+#define ButtonSize      38
 
 #define PlayerVolume QString("PlayerVolume")
 #define PlayerMute QString("Mute")
@@ -111,7 +112,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
 {
     //Set properties.
     setContentsMargins(0, 0, 0, 0);
-    setFixedSize(302, 66);
+    setFixedSize(knDpi->size(302, 66));
 
     //Initial the image sources.
     //--Loop State--
@@ -128,17 +129,19 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //Configure opacity effect.
     m_informationEffect->setOpacity(1.0);
     // Album Art Label;
-    m_albumArt->setFixedSize(AlbumArtSize, AlbumArtSize);
-    m_albumArt->move(13, 4);
+    m_albumArt->setFixedSize(knDpi->size(AlbumArtSize, AlbumArtSize));
+    m_albumArt->move(knDpi->pos(13, 4));
     m_albumArt->setGraphicsEffect(m_informationEffect);
 
     //--Title Label--
     QFont labelFont=m_title->font();
-    labelFont.setPixelSize(13);
+    labelFont.setPixelSize(knDpi->height(13));
     m_title->setObjectName("HeaderPlayerLabel");
     knTheme->registerWidget(m_title);
     m_title->setFont(labelFont);
-    m_title->setGeometry(80, 5, 215, m_title->sizeHint().height());
+    m_title->setGeometry(QRect(knDpi->pos(80, 5),
+                               QSize(knDpi->width(215),
+                                     m_title->sizeHint().height())));
     //Generate the glow effect for title text.
     KNGraphicsGlowEffect *glowEffect=new KNGraphicsGlowEffect(this);
     glowEffect->setColor(QColor(0,0,0));
@@ -149,7 +152,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_artistAlbum->setObjectName("HeaderPlayerLabel");
     knTheme->registerWidget(m_artistAlbum);
     m_artistAlbum->setFont(labelFont);
-    m_artistAlbum->setGeometry(80, 25, 215, m_artistAlbum->sizeHint().height());
+    m_artistAlbum->setGeometry(
+                QRect(knDpi->pos(80, 25),
+                      QSize(knDpi->width(215),
+                            m_artistAlbum->sizeHint().height())));
     //Generate the glow effect for artist and album text.
     glowEffect=new KNGraphicsGlowEffect(this);
     glowEffect->setColor(QColor(0,0,0));
@@ -161,7 +167,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     QBoxLayout *appendLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             m_appendPanel);
     appendLayout->setContentsMargins(0,0,0,0);
-    appendLayout->setSpacing(9);
+    appendLayout->setSpacing(knDpi->width(9));
     m_appendPanel->setLayout(appendLayout);
     appendLayout->addStretch();
     //Configure the main player button.
@@ -180,7 +186,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     appendLayout->addStretch();
     //Reset the append panel geometry.
     m_appendPanel->setGeometry(QRect(-m_appendPanel->width(),
-                                     panelY,
+                                     knDpi->height(panelY),
                                      m_appendPanel->width(),
                                      m_appendPanel->height()));
 
@@ -202,8 +208,8 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     panelLayout->addStretch();
 
     //Volume Panel.
-    m_volumePanel->setFixedWidth(85);
-    m_volumePanel->move(width(), 10);
+    m_volumePanel->setFixedWidth(knDpi->width(85));
+    m_volumePanel->move(width(), knDpi->height(10));
     //Initial layout of the volume panel.
     QBoxLayout *volumeLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             m_volumePanel);
@@ -212,7 +218,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_volumePanel->setLayout(volumeLayout);
     //Configure the volume indicator.
     m_volumeIndicator->setIcon(m_iconMute[false]);
-    m_volumeIndicator->setFixedSize(13,13);
+    m_volumeIndicator->setFixedSize(knDpi->size(13,13));
     volumeLayout->addWidget(m_volumeIndicator);
     //Configure the volume slider.
     connect(m_volumeSlider, &KNVolumeSlider::valueChanged,
@@ -221,8 +227,8 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
 
     //Generate a progress panel.
     QWidget *progressPanel=new QWidget(this);
-    progressPanel->move(0, 45);
-    progressPanel->setFixedWidth(302);
+    progressPanel->move(knDpi->pos(0, 45));
+    progressPanel->setFixedWidth(knDpi->width(302));
     //Initial layout of the progress panel.
     QBoxLayout *progressLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                               progressPanel);
@@ -235,7 +241,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //--Duration Label--
     m_duration->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_duration->setContentsMargins(0,0,0,0);
-    m_duration->setFixedWidth(71);
+    m_duration->setFixedWidth(knDpi->width(71));
     m_duration->setFont(timeFont);
     m_duration->setObjectName("HeaderPlayerLabel");
     //Link the theme manager.
@@ -258,7 +264,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     //Initial the alpha.
     updateDurationPalette(0);
     progressLayout->addWidget(m_duration);
-    progressLayout->addSpacing(5);
+    progressLayout->addSpacing(knDpi->width(5));
     //--Progress Bar--
     m_progressSlider->setWheelStep(1000);
     m_progressSlider->setMaximum(0);
@@ -286,10 +292,10 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     updatePositionText(0);
     progressLayout->addWidget(m_position);
     //--Loop State--
-    m_loopState->setFixedSize(16, 16);
+    m_loopState->setFixedSize(knDpi->size(16, 16));
     //Set the default state of the loop state.
     onActionLoopStateChange(NoRepeat);
-    progressLayout->addSpacing(5);
+    progressLayout->addSpacing(knDpi->width(5));
     progressLayout->addWidget(m_loopState);
 
     //Configure the append menu.
@@ -381,24 +387,18 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     connect(m_hideControl, &QPropertyAnimation::valueChanged,
             this, &KNMusicHeaderPlayer::onActionMouseInOut);
     //Set the end values.
-    m_showControl->setEndValue(generateInPosition());
+    m_showControl->setEndValue(QRect(knDpi->pos(0, 5),
+                                     QSize(width(), knDpi->height(40))));
     m_hideControl->setEndValue(generateOutPosition());
-    m_showVolume->setEndValue(QRect(212,
-                                    10,
-                                    m_volumePanel->width(),
-                                    m_volumePanel->height()));
-    m_hideVolume->setEndValue(QRect(width(),
-                                    10,
-                                    m_volumePanel->width(),
-                                    m_volumePanel->height()));
-    m_showAppend->setEndValue(QRect(8,
-                                    panelY,
-                                    m_appendPanel->width(),
-                                    m_appendPanel->height()));
-    m_hideAppend->setEndValue(QRect(-m_appendPanel->width(),
-                                    panelY,
-                                    m_appendPanel->width(),
-                                    m_appendPanel->height()));
+    m_showVolume->setEndValue(QRect(knDpi->pos(212, 10),
+                                    m_volumePanel->size()));
+    m_hideVolume->setEndValue(QRect(QPoint(width(), knDpi->width(10)),
+                                    m_volumePanel->size()));
+    m_showAppend->setEndValue(QRect(knDpi->pos(8, panelY),
+                                    m_appendPanel->size()));
+    m_hideAppend->setEndValue(QRect(QPoint(-m_appendPanel->width(),
+                                           knDpi->width(panelY)),
+                                    m_appendPanel->size()));
     //Configure the animation group.
     m_mouseIn->addAnimation(m_showVolume);
     m_mouseIn->addAnimation(m_showControl);
@@ -624,7 +624,7 @@ void KNMusicHeaderPlayer::updatePositionText(const qint64 &position)
     }
 }
 
-inline void KNMusicHeaderPlayer::updateDurationPalette(const int &opacity)
+inline void KNMusicHeaderPlayer::updateDurationPalette(int opacity)
 {
     //Get the palette from the theme manager..
     QPalette pal=m_duration->palette();
@@ -871,6 +871,11 @@ inline void KNMusicHeaderPlayer::setPosition(const qint64 &position)
     }
 }
 
+inline QRect KNMusicHeaderPlayer::generateOutPosition()
+{
+    return QRect(knDpi->pos(0, -45), QSize(width(), knDpi->height(40)));
+}
+
 inline QPropertyAnimation *KNMusicHeaderPlayer::generateAnime(QObject *target)
 {
     //Generate a property animation.
@@ -889,7 +894,7 @@ inline KNOpacityAnimeButton *KNMusicHeaderPlayer::generateControlButton(
     //Generate a opacity anime button.
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Configure the button.
-    button->setFixedSize(m_buttonSize, m_buttonSize);
+    button->setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     //Set the icon of the button.
     button->setIcon(QIcon(iconPath));
     //Give back the button.
@@ -902,7 +907,7 @@ inline KNOpacityAnimeButton *KNMusicHeaderPlayer::generateAppendButton(
     //Generate a opacity button.
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Configure the button.
-    button->setFixedSize(14, 14);
+    button->setFixedSize(knDpi->size(14, 14));
     button->setIcon(QIcon(iconPath));
     //Give back the button.
     return button;

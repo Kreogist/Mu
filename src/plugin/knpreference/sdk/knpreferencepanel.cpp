@@ -21,6 +21,7 @@ Foundation,
 
 #include "knthememanager.h"
 #include "knpreferencepanel.h"
+#include "kndpimanager.h"
 
 //Items
 #include "items/knpreferencepanelitem.h"
@@ -31,6 +32,9 @@ Foundation,
 
 #include <QDebug>
 
+#define TitleTopMargin 20
+#define TitleBottomMargin 5
+
 KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
     QWidget(parent),
     m_titleFont(font()),
@@ -38,7 +42,7 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
 {
     //Set properties.
     setAutoFillBackground(true);
-    setFixedWidth(542);
+    setFixedWidth(knDpi->width(542));
     //Set layout.
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(0);
@@ -46,7 +50,7 @@ KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
     //Get the palette.
     setPalette(knTheme->getPalette("PreferencePanel"));
     //Set the title font.
-    m_titleFont.setPixelSize(14);
+    m_titleFont.setPixelSize(knDpi->height(14));
 }
 
 void KNPreferencePanel::setPanelBlocks(
@@ -58,7 +62,11 @@ void KNPreferencePanel::setPanelBlocks(
         //Generate the label.
         QLabel *titleLabel=new QLabel(this);
         //Configure the label.
-        titleLabel->setContentsMargins(20, 20, 20, 5);
+        titleLabel->setFixedHeight(m_titleFont.pixelSize()+
+                                   knDpi->height(TitleTopMargin+
+                                                 TitleBottomMargin));
+        titleLabel->setContentsMargins(knDpi->margins(20, TitleTopMargin,
+                                                      20, TitleBottomMargin));
         titleLabel->setText(block.blockName);
         titleLabel->setPalette(palette());
         titleLabel->setFont(m_titleFont);

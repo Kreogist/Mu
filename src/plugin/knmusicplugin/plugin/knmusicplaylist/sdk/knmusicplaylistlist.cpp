@@ -22,6 +22,7 @@
 #include "knopacityanimebutton.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
+#include "kndpimanager.h"
 
 #include "knmusicplaylistlistview.h"
 #include "knmusicplaylistlistmodel.h"
@@ -116,7 +117,7 @@ inline void KNMusicPlaylistList::configureEditor()
 {
     //Set the basic properties.
     m_playlistListEditor->setContentsMargins(0, 0, 0, 0);
-    m_playlistListEditor->setMinimumHeight(34);
+    m_playlistListEditor->setMinimumHeight(knDpi->height(34));
 
     //Initial the editor buttons.
     for(int i=0; i<EditorButtonCount; i++)
@@ -124,7 +125,7 @@ inline void KNMusicPlaylistList::configureEditor()
         //Initial the button.
         m_buttons[i]=new KNOpacityAnimeButton(this);
         //Set the fixed size of the button.
-        m_buttons[i]->setFixedSize(15,15);
+        m_buttons[i]->setFixedSize(knDpi->size(15, 15));
     }
     m_buttons[Add]->setIcon(
                 QIcon(":/plugin/music/playlist/editor_add.png"));
@@ -191,8 +192,8 @@ inline void KNMusicPlaylistList::configureEditor()
     //Initial the layout of the editor.
     QBoxLayout *editorLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             m_playlistListEditor);
-    editorLayout->setContentsMargins(8, 8, 8, 8);
-    editorLayout->setSpacing(8);
+    editorLayout->setContentsMargins(knDpi->margins(8, 8, 8, 8));
+    editorLayout->setSpacing(knDpi->width(8));
     m_playlistListEditor->setLayout(editorLayout);
     //Add button to layout.
     editorLayout->addWidget(m_buttons[Add], 0, Qt::AlignCenter);

@@ -109,14 +109,14 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionThemeChanged();
+    void onThemeChanged();
     void onActionTextChanged(const QString &text);
-    void onActionMouseInOut(const int &frame);
-    void onActionFocusInOut(const int &frame);
+    void onActionMouseInOut(int frame);
+    void onFocusInOut(int frame);
 
 private:
     inline QTimeLine *generateTimeLine();
-    inline void startAnime(QTimeLine *timeLine, const int &end);
+    inline void startAnime(QTimeLine *timeLine, int end);
     QPixmap m_searchIcon;
     QColor m_baseColor;
     KNOpacityButton *m_closeButton;

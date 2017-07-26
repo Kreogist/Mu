@@ -17,7 +17,11 @@
  */
 #include <QPainter>
 
+#include "kndpimanager.h"
+
 #include "knmusiclibrarycategorydelegate.h"
+
+#include <QDebug>
 
 #define IconSize 40
 #define Spacing 2
@@ -46,28 +50,37 @@ void KNMusicLibraryCategoryDelegate::paint(QPainter *painter,
     //Draw the decoration icon.
     QPixmap &&categoryIcon=
             (index.data(Qt::DecorationRole).value<QPixmap>()).scaled(
-                IconSize,
-                IconSize,
+                knDpi->size(IconSize, IconSize),
                 Qt::KeepAspectRatio,
                 Qt::SmoothTransformation);
+    //Calculate the icon size with spacing.
+    int dpiIconSpacingSize=knDpi->width(IconSizeWithSpacing);
     //Draw the pixmap data.
-    painter->drawPixmap(option.rect.x()+Spacing+
-                        ((IconSize-categoryIcon.width())>>1),
-                        option.rect.y()+Spacing+
-                        ((IconSize-categoryIcon.height())>>1),
-                        categoryIcon.width(),
-                        categoryIcon.height(),
+    painter->drawPixmap(QRect(QPoint(option.rect.x(), option.rect.y()) +
+                              QPoint((dpiIconSpacingSize-
+                                      categoryIcon.width())>>1,
+                                     (dpiIconSpacingSize-
+                                      categoryIcon.height())>>1),
+                              QSize(categoryIcon.width(),
+                                    categoryIcon.height())),
                         categoryIcon);
     //Draw the text.
     painter->setPen(textColor);
-    int textWidth=option.rect.width()-IconSizeWithSpacing;
-    painter->drawText(QRect(option.rect.x()+IconSizeWithSpacing,
-                            option.rect.y()+2,
+    int textWidth=option.rect.width()-dpiIconSpacingSize;
+    painter->drawText(QRect(option.rect.x()+dpiIconSpacingSize,
+                            option.rect.y(),
                             textWidth,
-                            IconSize),
+                            dpiIconSpacingSize),
                       Qt::AlignLeft | Qt::AlignVCenter,
                       option.fontMetrics.elidedText(
                           index.data(Qt::DisplayRole).toString(),
                           Qt::ElideRight,
                           textWidth));
+}
+
+QSize KNMusicLibraryCategoryDelegate::sizeHint(
+        const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    return QSize(QStyledItemDelegate::sizeHint(option, index).width(),
+                 knDpi->height(IconSizeWithSpacing));
 }

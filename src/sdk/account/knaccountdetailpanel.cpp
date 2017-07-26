@@ -23,6 +23,7 @@
 #include <QTimer>
 
 #include "knglobal.h"
+#include "kndpimanager.h"
 #include "kngraphicsgloweffect.h"
 #include "knlocalemanager.h"
 #include "knlabelbutton.h"
@@ -57,15 +58,15 @@ KNAccountDetailPanel::KNAccountDetailPanel(QWidget *parent) :
     m_stateFadeTimer(new QTimer(this))
 {
     //Configure the avatar image.
-    m_avatarImage->setGraphicsMargin(5);
-    m_avatarImage->setButtonSize(110);
+    m_avatarImage->setGraphicsMargin(knDpi->height(5));
+    m_avatarImage->setButtonSize(knDpi->height(110));
     KNGraphicsGlowEffect *shadowEffect=new KNGraphicsGlowEffect(m_avatarImage);
     shadowEffect->setColor(QColor(0,0,0));
-    shadowEffect->setRadius(10.0);
+    shadowEffect->setRadius(knDpi->width(10));
     m_avatarImage->setGraphicsEffect(shadowEffect);
     //Configure the nick name label.
     QFont titleFont=font();
-    titleFont.setPixelSize(18);
+    titleFont.setPixelSize(knDpi->height(18));
     titleFont.setBold(true);
     m_nickName->setFont(titleFont);
     //Initial the controls.

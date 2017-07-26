@@ -25,6 +25,7 @@
 #include "knlocalemanager.h"
 #include "knthememanager.h"
 #include "knlabelbutton.h"
+#include "kndpimanager.h"
 #include "sao/knsaostyle.h"
 
 #include "knpreferenceabout.h"
@@ -39,7 +40,7 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
 {
     //Configure the label fonts.
     QFont labelFonts=font();
-    labelFonts.setPixelSize(15);
+    labelFonts.setPixelSize(knDpi->height(15));
     //Initial the labels.
     for(int i=0; i<ContentIndexCount; ++i)
     {
@@ -70,7 +71,7 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(15);
+    mainLayout->setSpacing(knDpi->height(15));
     setLayout(mainLayout);
     //Add the stretch.
     mainLayout->addStretch();
@@ -81,13 +82,13 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              mainLayout->widget());
     contentLayout->setContentsMargins(0,0,0,0);
-    contentLayout->setSpacing(8);
+    contentLayout->setSpacing(knDpi->height(8));
     mainLayout->addLayout(contentLayout);
     //Add the stretch to bottom.
     mainLayout->addStretch();
     //Add version and copyright labels to content layout.
     contentLayout->addWidget(m_textContent[Title], 0, Qt::AlignHCenter);
-    contentLayout->addSpacing(8);
+    contentLayout->addSpacing(knDpi->height(8));
     contentLayout->addWidget(m_checkUpdate, 0, Qt::AlignHCenter);
     contentLayout->addWidget(m_textContent[Copyright], 0, Qt::AlignHCenter);
     contentLayout->addWidget(m_otherText, 0, Qt::AlignHCenter);

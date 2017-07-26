@@ -23,11 +23,11 @@
 
 #include "knpreferenceitem.h"
 
-#define ItemHeight 40
-#define ShadowHeight 5
-#define TextBaseX 15
-#define ShadowOpacity 65
-#define IconSize 30
+#define ItemHeight      40
+#define ShadowHeight    5
+#define TextBaseX       15
+#define ShadowOpacity   65
+#define IconSize        30
 #define InEndFrame      100
 #define OutEndFrame     0
 

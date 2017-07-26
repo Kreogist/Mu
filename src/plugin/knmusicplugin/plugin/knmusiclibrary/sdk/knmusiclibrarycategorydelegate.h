@@ -21,10 +21,17 @@
 
 #include <QStyledItemDelegate>
 
+/*!
+ * \brief The KNMusicLibraryCategoryDelegate class
+ */
 class KNMusicLibraryCategoryDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicLibraryCategoryDelegate widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicLibraryCategoryDelegate(QWidget *parent = 0);
 
     /*!
@@ -33,6 +40,12 @@ public:
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
                const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QStyledItemDelegate::sizeHint().
+     */
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 signals:
 

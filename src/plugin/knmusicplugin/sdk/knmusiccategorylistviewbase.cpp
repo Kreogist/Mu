@@ -171,7 +171,7 @@ void KNMusicCategoryListViewBase::resizeEvent(QResizeEvent *event)
                                    width());
     //Resize the scroll bar position.
     m_scrollBar->setGeometry(width()-
-                             knDpi->width(ScrollBarWidth-ScrollBarSpacing),
+                             knDpi->width(ScrollBarWidth+ScrollBarSpacing),
                              m_searchBox->geometry().bottom(),
                              knDpi->width(ScrollBarWidth),
                              height()-m_searchBox->geometry().bottom());

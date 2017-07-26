@@ -18,6 +18,8 @@
 #include <QGraphicsDropShadowEffect>
 #include <QPainter>
 
+#include "kndpimanager.h"
+
 #include "knnotificationwidget.h"
 
 #define ImageSize 45
@@ -32,7 +34,7 @@ KNNotificationWidget::KNNotificationWidget(QWidget *parent) :
     m_pressed(false)
 {
     //Set properties.
-    setFixedSize(270, 57);
+    setFixedSize(knDpi->size(270, 57));
 
     //Initial graphics effect.
     QGraphicsDropShadowEffect *effect=new QGraphicsDropShadowEffect(this);

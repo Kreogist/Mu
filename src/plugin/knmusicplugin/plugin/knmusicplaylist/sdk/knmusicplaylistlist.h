@@ -27,26 +27,75 @@ class KNOpacityAnimeButton;
 class KNMusicPlaylistListView;
 class KNMusicPlaylistListModel;
 /*!
- * \brief The KNMusicPlaylistList class
+ * \brief The KNMusicPlaylistList class provides the a list of all the playlists
+ * that in a model. The widget has a list view for displaying all the playlists
+ * and a embedded editor for adding, removing and editing the playlists.
  */
 class KNMusicPlaylistList : public QWidget
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistList widget.
+     * \param parent The parent widget.
+     */
     explicit KNMusicPlaylistList(QWidget *parent = 0);
+
+    /*!
+     * \brief Set the playlist list model to the list.
+     * \param model The model pointer.
+     */
     void setPlaylistList(KNMusicPlaylistListModel *model);
+
+    /*!
+     * \brief Start to rename one of the playlist item in the list.
+     * \param index The playlist index.
+     */
     void renamePlaylist(const QModelIndex &index);
+
+    /*!
+     * \brief Get the current selected index.
+     * \return The selected playlist index in the model.
+     */
     QModelIndex currentIndex() const;
 
 signals:
+    /*!
+     * \brief Require for create a new playlist.
+     */
     void requireCreatePlaylist();
+
+    /*!
+     * \brief Require to show the import playlists dialog.
+     */
     void requireImportPlaylists();
+
+    /*!
+     * \brief Require to export the current selected playlist.
+     */
     void requireExportPlaylist();
+
+    /*!
+     * \brief Require to copy the current playlist.
+     */
     void requireCopyPlaylist();
+
+    /*!
+     * \brief Require to remove the current playlist.
+     */
     void requireRemovePlaylist();
+
+    /*!
+     * \brief Require to show a specific playlist in the model.
+     * \param index The index of the playlist.
+     */
     void requireShowPlaylist(const QModelIndex &index);
 
 public slots:
+    /*!
+     * \brief Show the specific playlist.
+     * \param index The index of the playlist.
+     */
     void showPlaylist(const QModelIndex &index);
 
 private slots:

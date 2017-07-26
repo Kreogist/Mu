@@ -22,6 +22,7 @@ Foundation,
 #include <QTimeLine>
 
 #include "knthememanager.h"
+#include "kndpimanager.h"
 #include "sao/knsaostyle.h"
 
 #include "knmousesensetreeview.h"
@@ -56,7 +57,7 @@ KNMouseSenseTreeView::KNMouseSenseTreeView(QWidget *parent) :
     m_hScrollBar->setObjectName("MusicScrollBar");
     m_hScrollBar->setStyle(KNSaoStyle::instance());
     m_hScrollBar->hide();
-    m_hScrollBar->setFixedHeight(ScrollBarWidth);
+    m_hScrollBar->setFixedHeight(knDpi->height(ScrollBarWidth));
     knTheme->registerWidget(m_hScrollBar);
     setHorizontalScrollBar(m_hScrollBar);
     //Configure the vertical scroll bar.
@@ -233,19 +234,21 @@ inline void KNMouseSenseTreeView::updateVerticalScrollBarGeometry()
         if(m_hScrollBar->isVisible())
         {
             //Both of the scroll bar is visible.
-            m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
-                                      header()->height(),
-                                      ScrollBarWidth,
-                                      height()-ScrollBarWidth-ScrollBarSpacing-
-                                      header()->height());
+            m_vScrollBar->setGeometry(
+                        width()-knDpi->width(ScrollBarWidth+ScrollBarSpacing),
+                        header()->height(),
+                        knDpi->width(ScrollBarWidth),
+                        height()-knDpi->width(ScrollBarWidth+ScrollBarSpacing)-
+                        header()->height());
         }
         else
         {
             //Only vertical scroll bar is visible.
-            m_vScrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
-                                      header()->height(),
-                                      ScrollBarWidth,
-                                      height()-header()->height());
+            m_vScrollBar->setGeometry(
+                        width()-knDpi->width(ScrollBarWidth+ScrollBarSpacing),
+                        header()->height(),
+                        knDpi->width(ScrollBarWidth),
+                        height()-header()->height());
         }
     }
 }

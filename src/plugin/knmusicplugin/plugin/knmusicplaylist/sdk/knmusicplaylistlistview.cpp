@@ -21,6 +21,7 @@
 
 #include "knmusicplaylistlistdelegate.h"
 #include "knmusicmodel.h"
+#include "kndpimanager.h"
 
 #include "knmusicplaylistlistview.h"
 
@@ -29,12 +30,13 @@
 #define DropSideMargin 5
 
 KNMusicPlaylistListView::KNMusicPlaylistListView(QWidget *parent) :
-    KNMusicCategoryListViewBase(parent)
+    KNMusicCategoryListViewBase(parent),
+    m_dropSideMargin(knDpi->width(DropSideMargin))
 {
     //Enabled the drag and drop function.
     enabledDragDrop();
     //Set properties.
-    setIconSize(QSize(40, 40));
+    setIconSize(knDpi->size(40, 40));
     setDragDropMode(QAbstractItemView::DropOnly);
     //Initial the delegate.
     setItemDelegate(new KNMusicPlaylistListDelegate(this));
@@ -154,12 +156,12 @@ QAbstractItemView::DropIndicatorPosition KNMusicPlaylistListView::dropPosition(
         const QRect &rect) const
 {
     //Check the pos to the rect.
-    if(pos.y() - rect.top() < DropSideMargin)
+    if(pos.y() - rect.top() < m_dropSideMargin)
     {
         //At the above part.
         return QAbstractItemView::AboveItem;
     }
-    if(rect.bottom() - pos.y() < DropSideMargin)
+    if(rect.bottom() - pos.y() < m_dropSideMargin)
     {
         //At the bottom part.
         return QAbstractItemView::BelowItem;

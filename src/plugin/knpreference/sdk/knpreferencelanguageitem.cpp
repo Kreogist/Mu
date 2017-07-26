@@ -16,13 +16,14 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QPainter>
+#include "kndpimanager.h"
 
 #include "knpreferencelanguageitem.h"
 
-#define ItemHeight 40
-#define IconSize 30
-#define IconX 17
-#define TextX 55 //IconSize+IconX+Spacing(8)
+#define ItemHeight  40
+#define IconSize    30
+#define IconX       17
+#define TextX       55 //IconSize+IconX+Spacing(8)
 
 KNPreferenceLanguageItem::KNPreferenceLanguageItem(QWidget *parent) :
     KNPreferenceItem(parent)
@@ -44,10 +45,9 @@ void KNPreferenceLanguageItem::paintContent(QPainter *painter)
     if(!icon().isNull())
     {
         //Draw the icon.
-        painter->drawPixmap(17,
-                            (ItemHeight-IconSize)>>1,
+        painter->drawPixmap(knDpi->rect(17, (ItemHeight-IconSize)>>1,
                             IconSize,
-                            IconSize,
+                            IconSize),
                             icon().pixmap(IconSize, IconSize));
     }
 
@@ -56,10 +56,9 @@ void KNPreferenceLanguageItem::paintContent(QPainter *painter)
                         palette().color(QPalette::ButtonText):
                         palette().color(QPalette::WindowText));
     painter->setFont(font());
-    painter->drawText(TextX,
-                      0,
-                      width()-TextX,
-                      ItemHeight,
+    painter->drawText(QRect(knDpi->pos(TextX, 0),
+                            QSize(width()-knDpi->width(TextX),
+                                  knDpi->height(ItemHeight))),
                       Qt::AlignLeft | Qt::AlignVCenter,
                       m_languageName);
 }

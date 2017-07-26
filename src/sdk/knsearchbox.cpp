@@ -20,6 +20,7 @@
 #include <QTimeLine>
 
 #include "knopacitybutton.h"
+#include "kndpimanager.h"
 #include "knthememanager.h"
 
 #include "knsearchbox.h"
@@ -47,16 +48,17 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     setObjectName("SearchBox");
     //Set properties.
     setFrame(false);
-    setContentsMargins(SearchBoxHeight+SearchBoxIconX,
-                       0,
-                       (SearchBoxHeight>>1)+SearchBoxClearButtonSize,
-                       0);
-    setFixedHeight(SearchBoxHeight);
+    setContentsMargins(
+                knDpi->margins(SearchBoxHeight+SearchBoxIconX,
+                               0,
+                               (SearchBoxHeight>>1)+SearchBoxClearButtonSize,
+                               0));
+    setFixedHeight(knDpi->height(SearchBoxHeight));
 
     //Configure the button.
     m_closeButton->setIcon(QIcon("://public/search_close.png"));
-    m_closeButton->setFixedSize(SearchBoxClearButtonSize,
-                                SearchBoxClearButtonSize);
+    m_closeButton->setFixedSize(knDpi->size(SearchBoxClearButtonSize,
+                                            SearchBoxClearButtonSize));
     m_closeButton->setFocusProxy(this);
     m_closeButton->setCursor(Qt::ArrowCursor);
     m_closeButton->hide();
@@ -69,18 +71,18 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     connect(m_mouseInOut, &QTimeLine::frameChanged,
             this, &KNSearchBox::onActionMouseInOut);
     connect(m_focusInOut, &QTimeLine::frameChanged,
-            this, &KNSearchBox::onActionFocusInOut);
+            this, &KNSearchBox::onFocusInOut);
     //Connect the text checker.
     connect(this, &KNSearchBox::textChanged,
             this, &KNSearchBox::onActionTextChanged);
 
     //Link with the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
-            this, &KNSearchBox::onActionThemeChanged);
+            this, &KNSearchBox::onThemeChanged);
     //Initial the palette.
-    onActionThemeChanged();
+    onThemeChanged();
     //Update the palette.
-    onActionFocusInOut(MinimumLightness);
+    onFocusInOut(MinimumLightness);
 }
 
 void KNSearchBox::enterEvent(QEvent *event)
@@ -141,8 +143,7 @@ void KNSearchBox::paintEvent(QPaintEvent *event)
                             height()>>1,
                             height()>>1);
     //Draw the search icon.
-    painter.drawPixmap(SearchBoxIconX,
-                       0,
+    painter.drawPixmap(knDpi->pos(SearchBoxIconX, 0),
                        m_searchIcon);
     //Do the original paint event.
     QLineEdit::paintEvent(event);
@@ -180,7 +181,7 @@ void KNSearchBox::resizeEvent(QResizeEvent *event)
                 SearchBoxClearButtonTop);
 }
 
-void KNSearchBox::onActionThemeChanged()
+void KNSearchBox::onThemeChanged()
 {
     //Get the palette from the theme manager.
     QPalette pal=knTheme->getPalette(objectName());
@@ -198,7 +199,7 @@ void KNSearchBox::onActionTextChanged(const QString &text)
     m_closeButton->setVisible(!text.isEmpty());
 }
 
-void KNSearchBox::onActionMouseInOut(const int &frame)
+void KNSearchBox::onActionMouseInOut(int frame)
 {
     //Use the frame as the new lightness of the base color.
     m_baseColor.setHsv(m_baseColor.hue(),
@@ -208,7 +209,7 @@ void KNSearchBox::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNSearchBox::onActionFocusInOut(const int &frame)
+void KNSearchBox::onFocusInOut(int frame)
 {
     //Use the frame as the new lightness of the base color.
     m_baseColor.setHsv(m_baseColor.hue(),
@@ -238,7 +239,7 @@ inline QTimeLine *KNSearchBox::generateTimeLine()
     return timeLine;
 }
 
-inline void KNSearchBox::startAnime(QTimeLine *timeLine, const int &end)
+inline void KNSearchBox::startAnime(QTimeLine *timeLine, int end)
 {
     //Stop all the animations.
     m_mouseInOut->stop();
@@ -267,8 +268,8 @@ QPixmap KNSearchBox::searchIcon() const
 void KNSearchBox::setSearchIcon(const QPixmap &searchIcon)
 {
     //Update the search icon.
-    m_searchIcon = searchIcon.scaled(SearchBoxHeight,
-                                     SearchBoxHeight,
+    m_searchIcon = searchIcon.scaled(knDpi->size(SearchBoxHeight,
+                                                 SearchBoxHeight),
                                      Qt::KeepAspectRatio,
                                      Qt::SmoothTransformation);
     //Update the widget.

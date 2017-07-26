@@ -82,6 +82,7 @@ private:
     inline bool dropOn(QDropEvent *event,
                        int &dropRow,
                        QModelIndex &dropIndex);
+    int m_dropSideMargin;
 };
 
 #endif // KNMUSICPLAYLISTLISTVIEW_H

@@ -25,19 +25,22 @@ Foundation,
 #include "knimagelabel.h"
 #include "knthememanager.h"
 #include "knconfiguremanager.h"
+#include "kndpimanager.h"
 
 #include "knpreferencepanelitem.h"
 
 #include <QDebug>
 
-#define PreferenceSingleItemHeight 34
-#define PreferenceCaptionWidth 185
+#define PreferenceSingleItemHeight  34
+#define PreferenceCaptionWidth      185
 
 KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
     QWidget(parent),
     m_path(QStringList()),
     m_defaultValue(QVariant()),
-    m_highlight(QLinearGradient(0, 0, 0, PreferenceSingleItemHeight)),
+    m_highlight(QLinearGradient(
+                    QPointF(0, 0),
+                    QPointF(0, knDpi->height(PreferenceSingleItemHeight)))),
     m_highLightOpacity(0.0),
     m_titleLabel(new QLabel(this)),
     m_hintLabel(new KNImageLabel(this)),
@@ -50,15 +53,15 @@ KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
     QPalette pal=knTheme->getPalette("PreferencePanelItem");
     setPalette(pal);
     //Configure the label.
-    m_titleLabel->setFixedWidth(PreferenceCaptionWidth);
+    m_titleLabel->setFixedWidth(knDpi->width(PreferenceCaptionWidth));
     m_titleLabel->setContentsMargins(10, 0, 10, 0);
     //Configure the hint label.
-    m_hintLabel->setFixedSize(PreferenceSingleItemHeight,
-                              PreferenceSingleItemHeight);
+    m_hintLabel->setFixedSize(knDpi->size(PreferenceSingleItemHeight,
+                                          PreferenceSingleItemHeight));
     m_hintLabel->setPixmap(QPixmap("://preference/PreferenceHint.png"));
     //Configure the hint label.
-    m_undoButton->setFixedSize(PreferenceSingleItemHeight,
-                               PreferenceSingleItemHeight);
+    m_undoButton->setFixedSize(knDpi->size(PreferenceSingleItemHeight,
+                                           PreferenceSingleItemHeight));
     m_undoButton->setIcon(QIcon("://preference/PreferenceUndo.png"));
     connect(m_undoButton, &KNOpacityButton::clicked,
             [=]
@@ -101,8 +104,8 @@ void KNPreferencePanelItem::setPreferenceOption(
         const PreferencePanelOption &option)
 {
     //Update the height.
-    int itemHeight=itemHeightMultiple() * PreferenceSingleItemHeight;
-    setFixedHeight(itemHeight);
+    setFixedHeight(knDpi->height(itemHeightMultiple() *
+                                 PreferenceSingleItemHeight));
     //Update the title.
     m_titleLabel->setText(option.title);
     //Set the hint.

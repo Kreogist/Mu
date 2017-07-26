@@ -26,6 +26,7 @@
 #include "knlocalemanager.h"
 #include "knscrolllabel.h"
 #include "knopacityanimebutton.h"
+#include "kndpimanager.h"
 
 #include "knmusicsearchbase.h"
 #include "knmusicnowplayingbase.h"
@@ -65,7 +66,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     m_title->setContentsMargins(0,0,0,0);
     QFont labelFont=m_title->font();
     labelFont.setBold(true);
-    labelFont.setPixelSize(17);
+    labelFont.setPixelSize(knDpi->height(17));
     m_title->setFont(labelFont);
     //Configure the buttons.
     connect(m_playPlaylist, &KNOpacityAnimeButton::clicked,
@@ -92,7 +93,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     //Initial the information container.
     KNMouseSenseWidget *infoContainer=new KNMouseSenseWidget(this);
     infoContainer->updateObjectName("PlaylistInformationContainer");
-    infoContainer->setContentsMargins(20, 12, 20, 8);
+    infoContainer->setContentsMargins(knDpi->margins(20, 12, 20, 8));
     //Add widget to layout.
     mainLayout->addWidget(infoContainer);
     mainLayout->addWidget(m_treeView, 1);
@@ -108,7 +109,7 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     QBoxLayout *detailLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             informationLayout->widget());
     detailLayout->setContentsMargins(0,0,0,0);
-    detailLayout->setSpacing(5);
+    detailLayout->setSpacing(knDpi->width(5));
     informationLayout->addLayout(detailLayout);
     //Add widget to detail layout.
     detailLayout->addWidget(m_detail);
@@ -482,7 +483,7 @@ inline KNOpacityAnimeButton *KNMusicPlaylistViewer::generateButton(
     //Generate the button.
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Set the button size.
-    button->setFixedSize(16, 16);
+    button->setFixedSize(knDpi->size(16, 16));
     //Configure the icon.
     button->setIcon(QIcon(iconPath));
     //Give back the button.

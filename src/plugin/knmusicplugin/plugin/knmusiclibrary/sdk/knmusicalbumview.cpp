@@ -35,10 +35,10 @@
 
 #include <QDebug>
 
-#define MaxOpacity 0x80
-#define ShadowIncrease 15
-#define ScrollBarWidth 10
-#define ScrollBarSpacing 1
+#define MaxOpacity          0x80
+#define ShadowIncrease      15
+#define ScrollBarWidth      10
+#define ScrollBarSpacing    1
 
 KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
     QAbstractItemView(parent),

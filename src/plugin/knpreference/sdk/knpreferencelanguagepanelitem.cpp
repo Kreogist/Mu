@@ -20,18 +20,19 @@
 #include <QMouseEvent>
 
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knpreferencelanguagepanelitem.h"
 
-#define m_itemHeight 40
-#define m_iconX 10
-#define m_iconSize 34
-#define m_iconY 3
-#define m_textX 60 //Default: IconX+IconSize+Spacing(10)
+#define ItemHeight 40
+#define IconX 10
+#define IconSize 34
+#define IconY 3
+#define TextX 60 //Default: IconX+IconSize+Spacing(10)
 
 KNPreferenceLanguagePanelItem::KNPreferenceLanguagePanelItem(QWidget *parent) :
     QAbstractButton(parent),
-    m_highlight(QLinearGradient(0, 0, 0, m_itemHeight)),
+    m_highlight(QLinearGradient(0, 0, 0, knDpi->height(ItemHeight))),
     m_languageIcon(QPixmap()),
     m_languageName(QString()),
     m_mouseAnime(new QTimeLine(100, this)),
@@ -43,7 +44,7 @@ KNPreferenceLanguagePanelItem::KNPreferenceLanguagePanelItem(QWidget *parent) :
     setAutoFillBackground(true);
     setCheckable(true);
     setContentsMargins(0,0,0,0);
-    setFixedHeight(m_itemHeight);
+    setFixedHeight(knDpi->height(ItemHeight));
     knTheme->registerWidget(this);
 
     //Configure the high light.
@@ -91,9 +92,10 @@ void KNPreferenceLanguagePanelItem::paintEvent(QPaintEvent *event)
     if(!m_languageIcon.isNull())
     {
         //Update the language icon.
-        painter.drawPixmap(m_iconX, m_iconY, m_languageIcon);
+        painter.drawPixmap(knDpi->pos(IconX, IconY), m_languageIcon);
     }
-    painter.drawText(m_textX, 0, width()-m_textX, m_itemHeight,
+    painter.drawText(knDpi->width(TextX), 0,
+                     width()-knDpi->width(TextX), knDpi->height(ItemHeight),
                      Qt::AlignLeft | Qt::AlignVCenter,
                      m_languageName);
 }
@@ -137,8 +139,7 @@ QPixmap KNPreferenceLanguagePanelItem::languageIcon() const
 void KNPreferenceLanguagePanelItem::setLanguageIcon(const QPixmap &languageIcon)
 {
     //Scaled the language icon.
-    m_languageIcon = languageIcon.scaled(m_iconSize,
-                                         m_iconSize,
+    m_languageIcon = languageIcon.scaled(knDpi->size(IconSize, IconSize),
                                          Qt::KeepAspectRatio,
                                          Qt::SmoothTransformation);
     //Update the preference item.

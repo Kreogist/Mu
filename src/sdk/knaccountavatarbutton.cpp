@@ -18,6 +18,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+#include "kndpimanager.h"
+
 #include "knaccountavatarbutton.h"
 
 KNAccountAvatarButton::KNAccountAvatarButton(QWidget *parent) :

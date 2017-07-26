@@ -137,16 +137,9 @@ private:
         AppendShowInGenres,
         MenuActionsCount
     };
-    inline void updateDurationPalette(const int &opacity);
+    inline void updateDurationPalette(int opacity);
     inline void setPosition(const qint64 &position);
-    inline QRect generateOutPosition()
-    {
-        return QRect(0, -45, width(), 40);
-    }
-    inline QRect generateInPosition()
-    {
-        return QRect(0, 5, width(), 40);
-    }
+    inline QRect generateOutPosition();
     inline QPropertyAnimation *generateAnime(QObject *target);
     inline KNOpacityAnimeButton *generateControlButton(const QString &iconPath);
     inline KNOpacityAnimeButton *generateAppendButton(const QString &iconPath);

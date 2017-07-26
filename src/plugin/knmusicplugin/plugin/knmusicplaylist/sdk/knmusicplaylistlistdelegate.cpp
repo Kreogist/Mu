@@ -19,15 +19,16 @@
 #include <QPainter>
 
 #include "kncancellineedit.h"
+#include "kndpimanager.h"
 #include "knthememanager.h"
 
 #include "knmusicplaylistlistdelegate.h"
 
 #include <QDebug>
 
-#define ItemHeight 30
-#define IconSize 24
-#define Spacing 3
+#define ItemHeight  30
+#define IconSize    24
+#define Spacing     3
 
 int KNMusicPlaylistListDelegate::m_hoverRow=-1;
 KNMusicPlaylistListDelegate::IndicatorPosition
@@ -61,16 +62,18 @@ void KNMusicPlaylistListDelegate::paint(QPainter *painter,
     //Draw the icon.
     index.data(Qt::DecorationRole).value<QIcon>().paint(
                 painter,
-                option.rect.x()+Spacing,
-                option.rect.y()+((option.rect.height()-IconSize)>>1),
-                IconSize,
-                IconSize);
+                QRect(
+                    QPoint(option.rect.x()+knDpi->width(Spacing),
+                           option.rect.y()+
+                           ((option.rect.height()-knDpi->height(IconSize))>>1)),
+                    knDpi->size(IconSize, IconSize)));
     //Draw the text.
     painter->setPen(textColor);
     painter->setFont(option.font);
-    painter->drawText(QRect(option.rect.x()+IconSize+(Spacing<<1),
+    painter->drawText(QRect(option.rect.x()+knDpi->width(IconSize+(Spacing<<1)),
                             option.rect.y(),
-                            option.rect.width()-IconSize-(Spacing<<1),
+                            option.rect.width()-
+                            knDpi->width(IconSize-(Spacing<<1)),
                             option.rect.height()),
                       Qt::AlignLeft | Qt::AlignVCenter,
                       index.data(Qt::DisplayRole).toString());
@@ -81,7 +84,7 @@ void KNMusicPlaylistListDelegate::paint(QPainter *painter,
         //Initial the pen.
         QPen indicatorPen(option.palette.color(QPalette::HighlightedText));
         //Configure the pen.
-        indicatorPen.setWidth(2);
+        indicatorPen.setWidth(knDpi->width(2));
         //Set the pen.
         painter->setPen(indicatorPen);
         //Clear the brush.
@@ -116,7 +119,7 @@ QSize KNMusicPlaylistListDelegate::sizeHint(const QStyleOptionViewItem &option,
 {
     //Set the item size as the fixed item height.
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(),
-                 ItemHeight);
+                 knDpi->height(ItemHeight));
 }
 
 QWidget *KNMusicPlaylistListDelegate::createEditor(
