@@ -20,8 +20,9 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 
-#include "knthememanager.h"
 #include "sao/knsaostyle.h"
+#include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knmusiccategorysearch.h"
 
@@ -47,10 +48,10 @@ KNMusicCategoryListViewBase::KNMusicCategoryListViewBase(QWidget *parent) :
     setContentsMargins(0, 0, 0, 0);
     setFrameShape(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setIconSize(QSize(40, 40));
+    setIconSize(knDpi->size(40, 40));
     setLineWidth(0);
     setLayoutMode(QListView::Batched); //For speed up.
-    setMinimumWidth(200);
+    setMinimumWidth(knDpi->width(200));
     setSelectionMode(QAbstractItemView::SingleSelection);
     setSpacing(0);
     setUniformItemSizes(true);
@@ -169,9 +170,10 @@ void KNMusicCategoryListViewBase::resizeEvent(QResizeEvent *event)
                                    width()-verticalScrollBar()->width():
                                    width());
     //Resize the scroll bar position.
-    m_scrollBar->setGeometry(width()-ScrollBarWidth-ScrollBarSpacing,
+    m_scrollBar->setGeometry(width()-
+                             knDpi->width(ScrollBarWidth-ScrollBarSpacing),
                              m_searchBox->geometry().bottom(),
-                             ScrollBarWidth,
+                             knDpi->width(ScrollBarWidth),
                              height()-m_searchBox->geometry().bottom());
 }
 

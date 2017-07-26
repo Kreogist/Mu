@@ -18,6 +18,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+#include "kndpimanager.h"
 #include "knlinearsensewidget.h"
 #include "knlocalemanager.h"
 #include "knpreferencetitlebar.h"
@@ -42,11 +43,11 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     m_rightShadow(new KNSideShadowWidget(KNSideShadowWidget::RightShadow,
                                          this)),
     m_advancedLabel(new QLabel(this)),
-    m_shadowWidth(15)
+    m_shadowWidth(knDpi->width(15))
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
-    setFixedWidth(250);
+    setFixedWidth(knDpi->width(250));
     //Configure the item list.
     m_itemList->setAutoSelect(false);
     //Configure the label.
@@ -211,13 +212,14 @@ void KNPreferenceSidebar::initialBottomBar()
 {
     //Configure bottom bar.
     m_bottomBar->setObjectName("PreferenceSidebarBottom");
-    m_bottomBar->setContentsMargins(0,0,0,0);
-    m_bottomBar->setFixedHeight(34);
+    m_bottomBar->setContentsMargins(0, 0, 0, 0);
+    m_bottomBar->setFixedHeight(knDpi->height(34));
     knTheme->registerWidget(m_bottomBar);
     //Set the sidebar layout.
     QBoxLayout *sideBarLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                              m_bottomBar);
-    sideBarLayout->setContentsMargins(10, 0, 10, 0);
+    sideBarLayout->setContentsMargins(knDpi->margins(10, 0, 10, 0));
+    sideBarLayout->setSpacing(knDpi->width(6));
     m_bottomBar->setLayout(sideBarLayout);
     //Update the advanced button item.
     connect(knTheme, &KNThemeManager::themeChange,

@@ -19,6 +19,8 @@ Foundation,
 #include <QTimeLine>
 #include <QPainter>
 
+#include "kndpimanager.h"
+
 #include "knroundswitchbutton.h"
 
 #define SwitcherHeight  20
@@ -29,35 +31,33 @@ Foundation,
 
 KNRoundSwitchButton::KNRoundSwitchButton(QWidget *parent) :
     QAbstractButton(parent),
+    m_backgroundBrush(QLinearGradient(QPointF(0, 0),
+                                      knDpi->posF(0, SwitcherHeight))),
+    m_buttonBrush(QLinearGradient(QPointF(0, 0),
+                                  knDpi->posF(0, SwitcherHeight))),
     m_movingAnime(new QTimeLine(100, this)),
     m_buttonX(0)
 {
     //Set properties.
     setCheckable(true);
     setChecked(false);
-    setFixedSize(SwitcherWidth, SwitcherHeight);
+    setFixedSize(knDpi->size(SwitcherWidth, SwitcherHeight));
     //Connect toggle signal to animation start slot.
     connect(this, &KNRoundSwitchButton::toggled,
             this, &KNRoundSwitchButton::startAnime);
     //Initial the paint rect.
-    m_backgroundRect.moveTo(SwitcherHeight>>1, 0);
-    m_backgroundRect.arcTo(0, 0,
-                           SwitcherHeight, SwitcherHeight,
+    m_backgroundRect.moveTo(knDpi->posF(SwitcherHeight>>1, 0));
+    m_backgroundRect.arcTo(knDpi->rectF(0, 0,
+                                        SwitcherHeight, SwitcherHeight),
                            90, 180);
-    m_backgroundRect.lineTo(SwitcherWidth-SwitcherHeight,
-                            SwitcherHeight);
-    m_backgroundRect.arcTo(SwitcherWidth-SwitcherHeight, 0,
-                           SwitcherHeight, SwitcherHeight,
+    m_backgroundRect.lineTo(knDpi->posF(SwitcherWidth-SwitcherHeight,
+                                        SwitcherHeight));
+    m_backgroundRect.arcTo(knDpi->rectF(SwitcherWidth-SwitcherHeight, 0,
+                                        SwitcherHeight, SwitcherHeight),
                            270, 180);
     m_backgroundRect.closeSubpath();
-    //Initial the backgroud brush.
-    m_backgroundBrush.setStart(0,0);
-    m_backgroundBrush.setFinalStop(0, SwitcherHeight);
     //Initial the button border.
     m_buttonBorder.setWidth(2);
-    //Initial the button brush.
-    m_buttonBrush.setStart(0,0);
-    m_buttonBrush.setFinalStop(0, SwitcherHeight);
     //Configure the timeline.
     m_movingAnime->setUpdateInterval(16);
     connect(m_movingAnime, &QTimeLine::frameChanged,
@@ -111,9 +111,9 @@ void KNRoundSwitchButton::paintEvent(QPaintEvent *event)
     //Paint the button.
     painter.setPen(m_buttonBorder);
     painter.setBrush(m_buttonBrush);
-    painter.drawEllipse(m_buttonX + SwitcherSmall, SwitcherSmall,
-                        SwitcherHeight-(SwitcherSmall<<1),
-                        SwitcherHeight-(SwitcherSmall<<1));
+    painter.drawEllipse(knDpi->rectF(m_buttonX + SwitcherSmall, SwitcherSmall,
+                                     SwitcherHeight-(SwitcherSmall<<1),
+                                     SwitcherHeight-(SwitcherSmall<<1)));
 }
 
 void KNRoundSwitchButton::onActionMove(int frame)

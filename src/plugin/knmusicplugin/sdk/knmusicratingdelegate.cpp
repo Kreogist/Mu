@@ -22,6 +22,7 @@
 #include <QDebug>
 
 #include "knmusicratingeditor.h"
+#include "kndpimanager.h"
 
 #include "knmusicratingdelegate.h"
 
@@ -31,8 +32,8 @@
 KNMusicRatingDelegate::KNMusicRatingDelegate(QWidget *parent) :
     QStyledItemDelegate(parent),
     m_star(QPixmap(":/plugin/music/public/star.png").scaled(
-               StarSizeHint,
-               StarSizeHint,
+               knDpi->size(StarSizeHint,
+                           StarSizeHint),
                Qt::KeepAspectRatio,
                Qt::SmoothTransformation))
 {
@@ -68,7 +69,7 @@ QSize KNMusicRatingDelegate::sizeHint(const QStyleOptionViewItem &option,
     Q_UNUSED(option);
     Q_UNUSED(index);
     //Size is five stars' size.
-    return QSize(FiveStarSizeHint, StarSizeHint);
+    return knDpi->size(FiveStarSizeHint, StarSizeHint);
 }
 
 QWidget *KNMusicRatingDelegate::createEditor(QWidget *parent,

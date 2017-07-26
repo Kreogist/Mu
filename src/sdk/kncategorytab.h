@@ -60,38 +60,38 @@ protected:
     /*!
      * \brief Reimplment from QAbstractButton::enterEvent().
      */
-    void enterEvent(QEvent *event);
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplment from QAbstractButton::leaveEvent().
      */
-    void leaveEvent(QEvent *event);
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplment from QAbstractButton::mousePressEvent().
      */
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplment from QAbstractButton::mouseReleaseEvent().
      */
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplment from QAbstractButton::paintEvent().
      */
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionMouseInOut(const int &frame);
-    void onActionMouseUpDown(const int &frame);
+    void onMouseInOut(int frame);
+    void onActionMouseUpDown(int frame);
     void onActionToggled(bool checked);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
+    inline QTimeLine *generateTimeLine();
+    inline void startAnime(QTimeLine *timeLine, int endFrame);
 
-    QTimeLine *m_mouseIn, *m_mouseOut, *m_mouseDown, *m_mouseUp;
+    QTimeLine *m_mouseInOut, *m_mouseUpDown;
 
     int m_textWidth, m_textFullWidth, m_animeParameter;
     QLinearGradient m_highLight;

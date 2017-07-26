@@ -18,6 +18,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+#include "kndpimanager.h"
+
 #include "knmusicratingeditor.h"
 
 KNMusicRatingEditor::KNMusicRatingEditor(QWidget *parent) :
@@ -158,7 +160,7 @@ int KNMusicRatingEditor::starSizeHint() const
 void KNMusicRatingEditor::setStarSizeHint(int starSizeHint)
 {
     //Get the star size.
-    m_starSizeHint=starSizeHint;
+    m_starSizeHint=knDpi->height(starSizeHint);
     //Width of editor should be five stars.
     m_editorWidth=m_starSizeHint*5;
     //Half size of star.

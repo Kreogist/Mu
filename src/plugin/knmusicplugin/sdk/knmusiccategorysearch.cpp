@@ -21,6 +21,7 @@
 #include "knsearchbox.h"
 #include "knlocalemanager.h"
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knmusiccategorysearch.h"
 
@@ -32,7 +33,7 @@ KNMusicCategorySearch::KNMusicCategorySearch(QWidget *parent) :
     setObjectName("MusicCategorySearch");
     //Set properties.
     setAutoFillBackground(true);
-    setFixedHeight(30);
+    setFixedHeight(knDpi->height(30));
     setFocusProxy(m_searchBox);
 
     //Link the search box.
@@ -46,8 +47,8 @@ KNMusicCategorySearch::KNMusicCategorySearch(QWidget *parent) :
 
     //Initial the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
-    mainLayout->setContentsMargins(5,0,5,0);
-    mainLayout->setSpacing(5);
+    mainLayout->setContentsMargins(knDpi->margins(5,0,5,0));
+    mainLayout->setSpacing(knDpi->width(5));
     setLayout(mainLayout);
     //Add widget the layout.
     mainLayout->addWidget(m_searchBox, 1);
@@ -79,7 +80,7 @@ void KNMusicCategorySearch::retranslate()
     m_cancelButton->setText(tr("Cancel"));
     //Update the size of cancel button.
     m_cancelButton->setMaximumWidth(
-                fontMetrics().width(m_cancelButton->text())+10);
+                fontMetrics().width(m_cancelButton->text())+knDpi->width(10));
 }
 
 void KNMusicCategorySearch::onActionCancel()

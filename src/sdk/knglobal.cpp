@@ -261,6 +261,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     //Initial the managers.
     //Gerenate the configure manager.
     KNConfigureManager::initial(this);
+    //Generate the DPI manager.
+    KNDpiManager::initial(this);
     //Generate the font manager.
     KNFontManager::initial(this);
     //Generate the locale manager.
@@ -271,8 +273,6 @@ KNGlobal::KNGlobal(QObject *parent) :
     KNNotification::initial(this);
     //Generate the shortcut manager.
     KNShortcutManager::initial(this);
-    //Generate the DPI manager.
-    KNDpiManager::initial(this);
     //Generate the account system.
     KNAccount::initial();
 

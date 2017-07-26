@@ -33,6 +33,7 @@
 #include "knnotification.h"
 #include "kndpimanager.h"
 #include "knthememanager.h"
+#include "knfontmanager.h"
 #include "knmainwindowcontainer.h"
 #include "knnotification.h"
 #include "knaccountavatarbutton.h"
@@ -63,9 +64,9 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_trayConfigure(m_globalConfigure->getConfigure("SystemTray")),
     m_container(new KNMainWindowContainer(this)),
     m_categoryPlugin(nullptr),
-    m_notificationCenter(new KNNotificationCenter(this)),
-    m_inAnime(generateAnime()),
-    m_outAnime(generateAnime()),
+    m_notificationCenter(nullptr),
+    m_inAnime(nullptr),
+    m_outAnime(nullptr),
     m_outAndInAnime(new QSequentialAnimationGroup(this)),
     m_notificationWaiter(new QTimer(this)),
     m_fullScreen(new KNOpacityAnimeButton(this)),
@@ -81,11 +82,15 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     //Set the DPI of the main window to the DPI manager.
     knDpi->setDpi(logicalDpiX(), logicalDpiY());
     setMinimumSize(knDpi->size(792, 477));
+    //Update the default font.
+    knFont->setGlobalFont("", knDpi->height(12));
     //Mac OS X title hack.
 #ifdef Q_OS_MACX
     setWindowTitle(qApp->applicationDisplayName());
 #endif
 
+    //Initial the notification center.
+    m_notificationCenter=new KNNotificationCenter(this);
     //Reset the parent relationship of indicator.
     m_notificationCenter->indicator()->setParent(this);
     //Hide the notification center.
@@ -105,6 +110,9 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
                                         -notificationWidget->height() -
                                         NotificationWidgetPatch));
 
+    //Initial the animation.
+    m_inAnime=generateAnime();
+    m_outAnime=generateAnime();
     //Configure the in and out animation.
     connect(m_outAnime, &QPropertyAnimation::finished,
             this, &KNMainWindow::onActionHideComplete);

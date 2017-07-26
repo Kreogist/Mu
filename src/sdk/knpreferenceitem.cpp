@@ -19,29 +19,27 @@
 #include <QPainter>
 
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knpreferenceitem.h"
-
-#include <QDebug>
 
 #define ItemHeight 40
 #define ShadowHeight 5
 #define TextBaseX 15
 #define ShadowOpacity 65
 #define IconSize 30
+#define InEndFrame      100
+#define OutEndFrame     0
 
-QLinearGradient KNPreferenceItem::m_upShadowGradient=
-        QLinearGradient(QPointF(0,0), QPointF(0, ShadowHeight));
-QLinearGradient KNPreferenceItem::m_downShadowGradient=
-        QLinearGradient(QPointF(0,0), QPointF(0, ShadowHeight));
+QLinearGradient KNPreferenceItem::m_upShadowGradient=QLinearGradient();
+QLinearGradient KNPreferenceItem::m_downShadowGradient=QLinearGradient();
 bool KNPreferenceItem::m_initial=false;
 
 KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     QAbstractButton(parent),
     m_headerIcon(QPixmap()),
     m_backgroundOpacity(0.0),
-    m_mouseIn(generateTimeLine(100)),
-    m_mouseOut(generateTimeLine(0)),
+    m_mouseAnime(new QTimeLine(200, this)),
     m_progress(0),
     m_textX(TextBaseX),
     m_isAdvanced(false)
@@ -51,9 +49,13 @@ KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     if(!m_initial)
     {
         //Configure the up shadow.
+        m_upShadowGradient.setStart(QPointF(0, 0));
+        m_upShadowGradient.setFinalStop(knDpi->posF(0, ShadowHeight));
         m_upShadowGradient.setColorAt(0, QColor(0,0,0,ShadowOpacity));
         m_upShadowGradient.setColorAt(1, QColor(0,0,0,0));
         //Configure the down shadow.
+        m_downShadowGradient.setStart(QPointF(0, 0));
+        m_downShadowGradient.setFinalStop(knDpi->posF(0, ShadowHeight));
         m_downShadowGradient.setColorAt(0, QColor(0,0,0,0));
         m_downShadowGradient.setColorAt(1, QColor(0,0,0,ShadowOpacity));
         //Set the flag.
@@ -62,16 +64,21 @@ KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
     //Set properties.
     setCheckable(true);
     setContentsMargins(0,0,0,0);
-    setFixedHeight(ItemHeight);
+    setFixedHeight(knDpi->height(ItemHeight));
+    //Configure the mouse anime.
+    m_mouseAnime->setUpdateInterval(16);
+    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
+    connect(m_mouseAnime, &QTimeLine::frameChanged,
+            this, &KNPreferenceItem::onActionMouseInOut);
 
     //Set the font.
     QFont itemFont=font();
-    itemFont.setPixelSize(15);
+    itemFont.setPixelSize(knDpi->height(15));
     setFont(itemFont);
 
     //Link toggled signal.
     connect(this, &KNPreferenceItem::toggled,
-            this, &KNPreferenceItem::onActionToggled);
+            this, &KNPreferenceItem::onToggled);
 
     //Add widget to theme manager.
     knTheme->registerWidget(this);
@@ -80,7 +87,7 @@ KNPreferenceItem::KNPreferenceItem(QWidget *parent) :
 void KNPreferenceItem::enterEvent(QEvent *event)
 {
     //Start enter anime.
-    startAnime(m_mouseIn);
+    startAnime(InEndFrame);
     //Do original enter event.
     QAbstractButton::enterEvent(event);
 }
@@ -90,7 +97,7 @@ void KNPreferenceItem::leaveEvent(QEvent *event)
     if(!isChecked())
     {
         //Start leave anime.
-        startAnime(m_mouseOut);
+        startAnime(OutEndFrame);
     }
     //Do original leave event.
     QAbstractButton::leaveEvent(event);
@@ -122,17 +129,13 @@ void KNPreferenceItem::paintEvent(QPaintEvent *event)
         //Configure the painter.
         painter.setPen(Qt::NoPen);
         //Draw the shadow.
-        painter.fillRect(QRect(0,
-                               0,
-                               width(),
-                               ShadowHeight), m_upShadowGradient);
+        painter.fillRect(QRect(0, 0, width(), knDpi->height(ShadowHeight)),
+                         m_upShadowGradient);
         //Change the coordinate.
-        painter.translate(0, ItemHeight-ShadowHeight);
+        painter.translate(knDpi->posF(0, ItemHeight-ShadowHeight));
         //Draw the shadow.
-        painter.fillRect(QRect(0,
-                               0,
-                               width(),
-                               ShadowHeight), m_downShadowGradient);
+        painter.fillRect(QRect(0, 0, width(), knDpi->height(ShadowHeight)),
+                         m_downShadowGradient);
     }
 }
 
@@ -152,11 +155,11 @@ void KNPreferenceItem::paintContent(QPainter *painter)
         //Change the opacity.
         painter->setOpacity(m_backgroundOpacity*2);
         //Draw the icon.
-        painter->drawPixmap(width()-(m_textX<<1),
-                            (ItemHeight-IconSize)>>1,
-                            IconSize,
-                            IconSize,
-                            icon().pixmap(IconSize, IconSize));
+        painter->drawPixmap(width()-knDpi->width(m_textX<<1),
+                            knDpi->height((ItemHeight-IconSize)>>1),
+                            knDpi->width(IconSize),
+                            knDpi->height(IconSize),
+                            icon().pixmap(knDpi->size(IconSize, IconSize)));
     }
 
     //Draw the text.
@@ -165,10 +168,9 @@ void KNPreferenceItem::paintContent(QPainter *painter)
                         palette().color(QPalette::ButtonText):
                         palette().color(QPalette::WindowText));
     painter->setFont(font());
-    painter->drawText(m_textX,
-                      0,
-                      width()-m_textX,
-                      ItemHeight,
+    painter->drawText(knDpi->width(m_textX), 0,
+                      width()-knDpi->width(m_textX),
+                      knDpi->height(ItemHeight),
                       Qt::AlignLeft | Qt::AlignVCenter,
                       text());
 }
@@ -184,31 +186,20 @@ void KNPreferenceItem::onActionMouseInOut(int frame)
     update();
 }
 
-void KNPreferenceItem::onActionToggled(bool checked)
+void KNPreferenceItem::onToggled(bool checked)
 {
     //Start the anime according to checked state.
-    startAnime(checked?m_mouseIn:m_mouseOut);
+    startAnime(checked?InEndFrame:OutEndFrame);
 }
 
-inline QTimeLine *KNPreferenceItem::generateTimeLine(int endFrame)
-{
-    QTimeLine *timeline=new QTimeLine(200, this);
-    timeline->setEndFrame(endFrame);
-    timeline->setUpdateInterval(16);
-    timeline->setEasingCurve(QEasingCurve::OutCubic);
-    connect(timeline, &QTimeLine::frameChanged,
-            this, &KNPreferenceItem::onActionMouseInOut);
-    return timeline;
-}
-
-inline void KNPreferenceItem::startAnime(QTimeLine *timeLine)
+inline void KNPreferenceItem::startAnime(int endFrame)
 {
     //Stop all the animation time line.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
+    m_mouseAnime->stop();
     //Change the start frame of the time line and start the anime.
-    timeLine->setStartFrame(m_progress);
-    timeLine->start();
+    m_mouseAnime->setFrameRange(m_progress, endFrame);
+    //Start the mouse anime.
+    m_mouseAnime->start();
 }
 
 bool KNPreferenceItem::isAdvanced() const

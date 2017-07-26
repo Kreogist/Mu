@@ -22,6 +22,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "kndpimanager.h"
+
 #include "knfontmanager.h"
 
 #include <QDebug>
@@ -105,16 +107,16 @@ void KNFontManager::loadDefaultFont()
 }
 
 void KNFontManager::setGlobalFont(const QString &fontName,
-                                  const qreal &pixelSize)
+                                  int pixelSize)
 {
-    //Ignore the invalid request.
-    if(fontName.isEmpty())
-    {
-        return;
-    }
     //Generate the font from the application font.
     QFont globalFont=QApplication::font();
-    globalFont.setFamily(fontName);
+    if(!fontName.isEmpty())
+    {
+        //Set the font name.
+        globalFont.setFamily(fontName);
+    }
+    //Update the pixel size.
     globalFont.setPixelSize(pixelSize);
     //Set the font.
     QApplication::setFont(globalFont);

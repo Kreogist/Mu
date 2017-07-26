@@ -70,10 +70,26 @@ QPoint KNDpiManager::pos(int x, int y)
     return QPoint(scaleX(x), scaleY(y));
 }
 
+QMargins KNDpiManager::margins(int left, int top, int right, int bottom)
+{
+    //Scale the margins.
+    return QMargins(scaleX(left), scaleY(top), scaleX(right), scaleY(bottom));
+}
+
 QPointF KNDpiManager::posF(qreal x, qreal y)
 {
     //Scale the position.
     return QPointF(scaleXF(x), scaleYF(y));
+}
+
+QRect KNDpiManager::rect(int x, int y, int width, int height)
+{
+    return QRect(scaleX(x), scaleY(y), scaleX(width), scaleY(height));
+}
+
+QRectF KNDpiManager::rectF(qreal x, qreal y, qreal width, qreal height)
+{
+    return QRectF(scaleXF(x), scaleYF(y), scaleXF(width), scaleYF(height));
 }
 
 int KNDpiManager::height(int rawHeight)

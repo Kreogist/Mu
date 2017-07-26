@@ -25,6 +25,7 @@
 #include "knsideshadowwidget.h"
 #include "knlocalemanager.h"
 #include "knscrolllabel.h"
+#include "kndpimanager.h"
 
 #include "knmusicproxymodel.h"
 #include "knmusicsearchbase.h"
@@ -59,16 +60,16 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent,
     m_categoryTitle->setObjectName("CategoryViewerLabel");
     knTheme->registerWidget(m_categoryTitle);
     QFont titleFont=m_categoryTitle->font();
-    titleFont.setPixelSize(21);
+    titleFont.setPixelSize(knDpi->height(21));
     titleFont.setBold(true);
     m_categoryTitle->setFont(titleFont);
     //Configure the information label.
     m_categoryInfo->setObjectName("CategoryDetailLabel");
     knTheme->registerWidget(m_categoryInfo);
     QFont infoFont=m_categoryInfo->font();
-    infoFont.setPixelSize(14);
+    infoFont.setPixelSize(knDpi->height(14));
     m_categoryInfo->setFont(infoFont);
-    m_categoryInfo->setContentsMargins(4,0,0,0);
+    m_categoryInfo->setContentsMargins(knDpi->margins(4,0,0,0));
     //Configure the tree view.
     setFocusProxy(m_categoryTreeView);
     m_categoryTreeView->updateObjectName("CategoryDisplayTreeView");
@@ -86,7 +87,7 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent,
     //Initial information container.
     KNMouseSenseWidget *infoContainer=new KNMouseSenseWidget(this);
     infoContainer->updateObjectName("CategoryInformationContainer");
-    infoContainer->setContentsMargins(15,12,15,8);
+    infoContainer->setContentsMargins(knDpi->margins(15,12,15,8));
     //Add container to display layout.
     mainLayout->addWidget(infoContainer);
     //Initial the information container layout.

@@ -96,16 +96,15 @@ protected:
 
 private slots:
     void onActionMouseInOut(int frame);
-    void onActionToggled(bool checked);
+    void onToggled(bool checked);
 
 private:
-    inline QTimeLine *generateTimeLine(int endFrame);
-    inline void startAnime(QTimeLine *timeLine);
+    inline void startAnime(int endFrame);
     static QLinearGradient m_upShadowGradient, m_downShadowGradient;
     static bool m_initial;
     QPixmap m_headerIcon;
     qreal m_backgroundOpacity;
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    QTimeLine *m_mouseAnime;
     int m_progress, m_textX;
     bool m_isAdvanced;
 };

@@ -19,27 +19,34 @@
 #include <QTimeLine>
 
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "knpreferenceheaderbutton.h"
+
+#define IconSize 48
 
 KNPreferenceHeaderButton::KNPreferenceHeaderButton(QWidget *parent) :
     QAbstractButton(parent),
     m_border(QPainterPath(QPoint(0,0))),
     m_icon(QPixmap()),
-    m_closeIcon(QPixmap("://public/close.png")),
+    m_closeIcon(QPixmap("://public/close.png").scaled(
+                    knDpi->size(IconSize, IconSize),
+                    Qt::KeepAspectRatio, Qt::SmoothTransformation)),
     m_closeIconOpacity(0.0),
-    m_iconPosition(QPointF(11,7)),
+    m_iconPosition(knDpi->posF(11,7)),
     m_mouseIn(generateTimeLine(100)),
     m_mouseOut(generateTimeLine(0))
 {
     setObjectName("PreferenceHeaderButton");
     //Set properties.
-    setFixedSize(106, 64);
+    setFixedSize(knDpi->size(106, 64));
     //Initial the border.
-    m_border.lineTo(0,64);
-    m_border.lineTo(47,64);
-    m_border.cubicTo(75,64,75,0,106,0);
-    m_border.lineTo(0,0);
+    m_border.lineTo(knDpi->pos(0, 64));
+    m_border.lineTo(knDpi->pos(47, 64));
+    m_border.cubicTo(knDpi->posF(75, 64),
+                     knDpi->posF(75, 0),
+                     knDpi->posF(106, 0));
+    m_border.lineTo(0, 0);
 
     //Register the widget to theme manager.
     knTheme->registerWidget(this);
@@ -134,7 +141,8 @@ QPixmap KNPreferenceHeaderButton::icon() const
 void KNPreferenceHeaderButton::setIcon(const QPixmap &icon)
 {
     //Save the icon.
-    m_icon=icon;
+    m_icon=icon.scaled(knDpi->size(IconSize, IconSize),
+                       Qt::KeepAspectRatio, Qt::SmoothTransformation);
     //Update the painting.
     update();
 }

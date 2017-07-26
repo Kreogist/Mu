@@ -82,8 +82,8 @@ public:
      * \param pixelSize The pixel size of the global font. The default value of
      * this parameter is 12.
      */
-    void setGlobalFont(const QString &fontName,
-                       const qreal &pixelSize=12.00);
+    void setGlobalFont(const QString &fontName=QString(),
+                       int pixelSize=12);
 
 signals:
 

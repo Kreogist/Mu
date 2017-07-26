@@ -22,6 +22,8 @@ Foundation,
 
 #include <QSize>
 #include <QPoint>
+#include <QRectF>
+#include <QMargins>
 
 #include <QObject>
 
@@ -74,12 +76,53 @@ public:
     QPoint pos(int x, int y);
 
     /*!
+     * \brief Get the scaled margins.
+     * \param left The left margin.
+     * \param top The top margin.
+     * \param right The right margin.
+     * \param bottom The bottom margin.
+     * \return The scaled margin.
+     */
+    QMargins margins(int left, int top, int right, int bottom);
+
+    /*!
      * \brief Get the scaled position of the floating point.
      * \param x The X position.
      * \param y The Y position.
      * \return The scaled position.
      */
     QPointF posF(qreal x, qreal y);
+
+    /*!
+     * \brief Get the scaled rect.
+     * \param x The X pos of the rect.
+     * \param y The Y pos of the rect.
+     * \param width The width of the rect.
+     * \param height The height of the rect.
+     * \return The result of the scaled rectangle.
+     */
+    QRect rect(int x, int y, int width, int height);
+
+    /*!
+     * \brief Get the scaled float rect.
+     * \param x The X pos of the rect.
+     * \param y The Y pos of the rect.
+     * \param width The width of the rect.
+     * \param height The height of the rect.
+     * \return The result of the scaled rectangle.
+     */
+    QRectF rectF(qreal x, qreal y, qreal width, qreal height);
+
+    /*!
+     * \brief This is an override function.\n
+     * Get the scaled position of the floating point.
+     * \param rawPos The original point.
+     * \return The scaled position.
+     */
+    QPointF posF(const QPointF rawPos)
+    {
+        return posF(rawPos.x(), rawPos.y());
+    }
 
     /*!
      * \brief Get the scaled height.

@@ -19,11 +19,17 @@
 #include <QPainter>
 
 #include "knthememanager.h"
+#include "kndpimanager.h"
 
 #include "kncategorytab.h"
 
 #define MaxMouseInAlpha 100
 #define MaxMouseDownAlpha 150
+
+#define MouseInAlpha    100
+#define MouseOutAlpha   0
+#define MouseDownAlpha  200
+#define MouseUpAlpha    150
 #define IconSize 20
 #define TextSpacing 5
 #define TextY 5
@@ -31,10 +37,8 @@
 
 KNCategoryTab::KNCategoryTab(QWidget *parent) :
     QAbstractButton(parent),
-    m_mouseIn(generateTimeLine(MaxMouseInAlpha)),
-    m_mouseOut(generateTimeLine(0)),
-    m_mouseDown(generateTimeLine(200)),
-    m_mouseUp(generateTimeLine(MaxMouseDownAlpha)),
+    m_mouseInOut(generateTimeLine()),
+    m_mouseUpDown(generateTimeLine()),
     m_textWidth(0),
     m_textFullWidth(0),
     m_animeParameter(0),
@@ -55,13 +59,9 @@ KNCategoryTab::KNCategoryTab(QWidget *parent) :
     m_highLight.setColorAt(1, QColor(255,255,255,92));
 
     //Link time line and animation slot.
-    connect(m_mouseIn, &QTimeLine::frameChanged,
-            this, &KNCategoryTab::onActionMouseInOut);
-    connect(m_mouseOut, &QTimeLine::frameChanged,
-            this, &KNCategoryTab::onActionMouseInOut);
-    connect(m_mouseDown, &QTimeLine::frameChanged,
-            this, &KNCategoryTab::onActionMouseUpDown);
-    connect(m_mouseUp, &QTimeLine::frameChanged,
+    connect(m_mouseInOut, &QTimeLine::frameChanged,
+            this, &KNCategoryTab::onMouseInOut);
+    connect(m_mouseUpDown, &QTimeLine::frameChanged,
             this, &KNCategoryTab::onActionMouseUpDown);
 
     //Link the toggled signal.
@@ -74,7 +74,7 @@ KNCategoryTab::KNCategoryTab(QWidget *parent) :
 
 int KNCategoryTab::tabHeight()
 {
-    return 30;
+    return knDpi->height(30);
 }
 
 void KNCategoryTab::setText(const QString &text)
@@ -96,7 +96,7 @@ void KNCategoryTab::enterEvent(QEvent *event)
     //If the button is not checked, start mouse enter anime.
     if(!isChecked())
     {
-        startAnime(m_mouseIn);
+        startAnime(m_mouseInOut, MouseInAlpha);
     }
     //Do original enter event.
     QAbstractButton::enterEvent(event);
@@ -107,7 +107,7 @@ void KNCategoryTab::leaveEvent(QEvent *event)
     //If the button is not checked, start mouse leave anime.
     if(!isChecked())
     {
-        startAnime(m_mouseOut);
+        startAnime(m_mouseInOut, MouseOutAlpha);
     }
     //Do original leave event.
     QAbstractButton::leaveEvent(event);
@@ -118,7 +118,7 @@ void KNCategoryTab::mousePressEvent(QMouseEvent *event)
     //If the button is not checked, start mouse press event.
     if(!isChecked())
     {
-        startAnime(m_mouseDown);
+        startAnime(m_mouseUpDown, MouseDownAlpha);
     }
     //Do original press event.
     QAbstractButton::mousePressEvent(event);
@@ -137,7 +137,7 @@ void KNCategoryTab::mouseReleaseEvent(QMouseEvent *event)
     //Set the checked state, lock the checked state to true.
     setChecked(true);
     //Launch the mouse up anime.
-    startAnime(m_mouseUp);
+    startAnime(m_mouseUpDown, MouseUpAlpha);
 }
 
 void KNCategoryTab::paintEvent(QPaintEvent *event)
@@ -157,16 +157,16 @@ void KNCategoryTab::paintEvent(QPaintEvent *event)
     //Draw the top line.
     QColor topLineColor(palette().color(QPalette::ButtonText));
     topLineColor.setAlpha(m_animeParameter);
-    painter.fillRect(QRect(0, 0, width(), 1), topLineColor);
+    painter.fillRect(QRect(0, 0, width(), knDpi->height(1)), topLineColor);
 
     //Initial the icon position.
-    int iconX=(width()-IconSize-m_textWidth)/2;
+    int iconX=(width()-knDpi->width(IconSize)-m_textWidth)/2;
     //Draw text.
     painter.setPen(palette().color(QPalette::ButtonText));
-    painter.drawText(iconX+IconSize+TextSpacing,
-                     TextY,
+    painter.drawText(iconX+knDpi->width(IconSize+TextSpacing),
+                     knDpi->height(TextY),
                      m_textWidth,
-                     IconSize,
+                     knDpi->height(IconSize),
                      Qt::AlignLeft | Qt::AlignVCenter,
                      text());
 
@@ -174,15 +174,14 @@ void KNCategoryTab::paintEvent(QPaintEvent *event)
     if(!icon().isNull())
     {
         painter.setOpacity(1.0);
-        painter.drawPixmap(iconX,
-                           IconY,
-                           IconSize,
-                           IconSize,
-                           icon().pixmap(IconSize, IconSize));
+        painter.drawPixmap(iconX, knDpi->height(IconY),
+                           knDpi->width(IconSize),
+                           knDpi->height(IconSize),
+                           icon().pixmap(knDpi->size(IconSize, IconSize)));
     }
 }
 
-void KNCategoryTab::onActionMouseInOut(const int &frame)
+void KNCategoryTab::onMouseInOut(int frame)
 {
     //Backup the frame data.
     m_animeParameter=frame;
@@ -195,7 +194,7 @@ void KNCategoryTab::onActionMouseInOut(const int &frame)
     update();
 }
 
-void KNCategoryTab::onActionMouseUpDown(const int &frame)
+void KNCategoryTab::onActionMouseUpDown(int frame)
 {
     //Backup the frame data.
     m_animeParameter=frame;
@@ -206,27 +205,24 @@ void KNCategoryTab::onActionMouseUpDown(const int &frame)
 void KNCategoryTab::onActionToggled(bool checked)
 {
     //Start the anime according to checked state.
-    startAnime(checked?m_mouseIn:m_mouseOut);
+    startAnime(m_mouseInOut, checked?MouseInAlpha:MouseOutAlpha);
 }
 
-inline QTimeLine *KNCategoryTab::generateTimeLine(const int &endFrame)
+inline QTimeLine *KNCategoryTab::generateTimeLine()
 {
     QTimeLine *timeLine=new QTimeLine(200, this);
     timeLine->setEasingCurve(QEasingCurve::OutCubic);
     timeLine->setUpdateInterval(16);
-    timeLine->setEndFrame(endFrame);
     return timeLine;
 }
 
-inline void KNCategoryTab::startAnime(QTimeLine *timeLine)
+inline void KNCategoryTab::startAnime(QTimeLine *timeLine, int endFrame)
 {
     //Stop all animation.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
-    m_mouseDown->stop();
-    m_mouseUp->stop();
+    m_mouseInOut->stop();
+    m_mouseUpDown->stop();
     //Set time line parameter.
-    timeLine->setStartFrame(m_animeParameter);
+    timeLine->setFrameRange(m_animeParameter, endFrame);
     timeLine->start();
 }
 

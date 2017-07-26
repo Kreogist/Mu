@@ -19,6 +19,7 @@
 #include <QLabel>
 
 #include "knglobal.h"
+#include "kndpimanager.h"
 #include "knthememanager.h"
 #include "knpreferenceheaderbutton.h"
 
@@ -38,18 +39,18 @@ KNPreferenceTitleBar::KNPreferenceTitleBar(QWidget *parent) :
     setObjectName("PreferenceTitleBar");
     //Set properties.
     setAutoFillBackground(true);
-    setFixedHeight(TitleBarHeight);
+    setFixedHeight(knDpi->height(TitleBarHeight));
     //Configure the highlight gradient.
     m_highlightGradient.setColorAt(0, QColor(255,255,255,40));
     m_highlightGradient.setColorAt(1, QColor(255,255,255,0));
 
     //Configure the title label.
     m_title->setObjectName("PreferenceTitleBarLabel");
-    m_title->setFixedHeight(TitleBarHeight);
+    m_title->setFixedHeight(height());
     m_title->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_title->move(93, 0);
+    m_title->move(knDpi->pos(93, 0));
     QFont titleFont=m_title->font();
-    titleFont.setPixelSize(20);
+    titleFont.setPixelSize(knDpi->height(20));
     m_title->setFont(titleFont);
 
     //Register the widget to theme manager.
@@ -89,7 +90,7 @@ void KNPreferenceTitleBar::paintEvent(QPaintEvent *event)
     painter.drawRect(rect());
     //Draw the high light.
     painter.setBrush(m_highlightGradient);
-    painter.drawRect(QRect(0,0,width(),64));
+    painter.drawRect(QRect(0,0,width(),knDpi->height(64)));
     //Draw the bottom border.
     int lineY=height();
     painter.setPen(QColor(0x2b, 0x2b, 0x2b));
@@ -107,5 +108,5 @@ void KNPreferenceTitleBar::resizeEvent(QResizeEvent *event)
     //Resize the widget.
     QWidget::resizeEvent(event);
     //Resize the title label.
-    m_title->resize(width()-93, m_title->height());
+    m_title->resize(width()-knDpi->width(93), m_title->height());
 }
