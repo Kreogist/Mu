@@ -20,6 +20,7 @@ Foundation,
 #include <QPushButton>
 #include <QLabel>
 
+#include "kndpimanager.h"
 #include "knmousedetectlabel.h"
 #include "knfontdialog.h"
 
@@ -35,7 +36,7 @@ KNPreferencePanelFontItem::KNPreferencePanelFontItem(QWidget *parent) :
     m_previewTooltip(new QLabel)
 {
     //Configure the select button.
-    m_selectFont->setFixedSize(25, 20);
+    m_selectFont->setFixedSize(knDpi->size(25, 20));
     m_selectFont->setText("...");
     m_selectFont->setPalette(palette());
     connect(m_selectFont, &QPushButton::clicked,
@@ -58,7 +59,7 @@ KNPreferencePanelFontItem::KNPreferencePanelFontItem(QWidget *parent) :
                 }
             });
     //Configure preview label.
-    m_previewLabel->setFixedSize(16, 16);
+    m_previewLabel->setFixedSize(knDpi->size(16, 16));
     m_previewLabel->setScaledContents(true);
     m_previewLabel->setPixmap(QPixmap("://preference/preview_font.png"));
     connect(m_previewLabel, &KNMouseDetectLabel::mouseEntered,
@@ -66,14 +67,14 @@ KNPreferencePanelFontItem::KNPreferencePanelFontItem(QWidget *parent) :
     connect(m_previewLabel, &KNMouseDetectLabel::mouseLeaved,
             m_previewTooltip, &QLabel::hide);
     //Configure the preview tooltip widget.
-    m_previewTooltip->setContentsMargins(10,10,10,10);
+    m_previewTooltip->setContentsMargins(knDpi->margins(10,10,10,10));
     m_previewTooltip->setWindowFlags(Qt::ToolTip);
     m_previewTooltip->hide();
     //Configure the information data label.
     m_informationLabel->setPalette(palette());
     //Construct the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight);
-    mainLayout->setSpacing(5);
+    mainLayout->setSpacing(knDpi->width(5));
     mainLayout->addWidget(m_selectFont);
     mainLayout->addWidget(m_previewLabel);
     mainLayout->addWidget(m_informationLabel, 2);

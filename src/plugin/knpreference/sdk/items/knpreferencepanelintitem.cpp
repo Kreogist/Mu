@@ -21,6 +21,8 @@ Foundation,
 #include <QSpinBox>
 #include <QSlider>
 
+#include "kndpimanager.h"
+
 #include "knthememanager.h"
 
 #include "knpreferencepanelintitem.h"
@@ -41,7 +43,7 @@ KNPreferencePanelIntItem::KNPreferencePanelIntItem(QWidget *parent) :
 
     //Construct the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight);
-    mainLayout->setSpacing(5);
+    mainLayout->setSpacing(knDpi->width(5));
     mainLayout->addWidget(m_integerViewer);
     mainLayout->addWidget(m_integerSlider, 1);
     //Build the widget.
