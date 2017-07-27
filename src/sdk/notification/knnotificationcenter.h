@@ -21,6 +21,8 @@
 
 #include <QFrame>
 
+#define NotificationButtonSize 32
+
 class QLabel;
 class QPropertyAnimation;
 class KNAccountPanel;

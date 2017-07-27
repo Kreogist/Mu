@@ -94,20 +94,22 @@ void KNMainWindowHeader::addNotificationWidget(QWidget *widget)
     if(m_notificationLayout->count()==0)
     {
         //Add spacing.
-        m_notificationLayout->addSpacing(4);
+        m_notificationLayout->addSpacing(knDpi->width(NotificationHeadSpacing));
         //Add widget to notification layout.
         m_notificationLayout->addWidget(widget, 0, Qt::AlignCenter);
         //Insert spacing to layout.
-        m_notificationLayout->addSpacing(14);
+        m_notificationLayout->addSpacing(knDpi->width(NotificationTailSpacing));
     }
     else
     {
         //Insert spacing to layout.
-        m_notificationLayout->insertSpacing(0, 14);
+        m_notificationLayout->insertSpacing(
+                    0, knDpi->width(NotificationTailSpacing));
         //Insert to the one widget before.
         m_notificationLayout->insertWidget(0, widget, 0, Qt::AlignCenter);
         //Insert head spacing.
-        m_notificationLayout->insertSpacing(0, 4);
+        m_notificationLayout->insertSpacing(
+                    0, knDpi->width(NotificationHeadSpacing));
     }
 }
 

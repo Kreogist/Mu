@@ -292,7 +292,7 @@ int KNMusicPlugin::minimumWidthHint()
     if(m_searchBox)
     {
         //Plus the search box width.
-        suggestionWidth+=m_headerPlayer->width();
+        suggestionWidth+=m_searchBox->minimumWidth();
     }
     //This is the full width of the music plugin suggested width.
     return suggestionWidth;

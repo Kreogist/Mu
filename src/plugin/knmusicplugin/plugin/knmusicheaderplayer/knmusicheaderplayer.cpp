@@ -390,7 +390,6 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
             this, &KNMusicHeaderPlayer::onActionMouseInOut);
     //Set the end values.
     int panelAreaHeight=knDpi->height(40);
-    qDebug()<<panelAreaHeight<<m_progressPanel->y();
     m_showControl->setEndValue(QRect(knDpi->pos(0, ControlTargetY),
                                      QSize(width(), panelAreaHeight)));
     m_hideControl->setEndValue(generateOutPosition());

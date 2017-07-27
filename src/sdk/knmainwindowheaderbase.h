@@ -21,6 +21,9 @@
 
 #include "knmousesensewidget.h"
 
+#define NotificationHeadSpacing 4
+#define NotificationTailSpacing 14
+
 class KNConfigure;
 class KNCategoryPlugin;
 /*!

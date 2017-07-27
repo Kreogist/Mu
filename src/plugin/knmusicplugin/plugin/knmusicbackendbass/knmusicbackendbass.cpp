@@ -307,7 +307,6 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
             //Add the initial flag.
             initFlag |= BASS_DEVICE_FREQ;
         }
-        qDebug()<<initFlag<<initialSampleRate;
         //Check the preference setting.
         if(m_playbackConfigure->data("Stero", false).toBool())
         {

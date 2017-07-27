@@ -81,7 +81,6 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     setWindowIcon(QIcon("://icon/mu.png"));
     //Set the DPI of the main window to the DPI manager.
     knDpi->setDpi(logicalDpiX(), logicalDpiY());
-    qDebug()<<logicalDpiX()<<logicalDpiY();
     setMinimumHeight(knDpi->height(477));
     //Update the default font.
     knFont->setGlobalFont("", knDpi->height(12));
@@ -238,10 +237,11 @@ void KNMainWindow::setMusicPlugin(KNAbstractMusicPlugin *musicPlugin)
     //Save the music player plugin.
     m_musicPlugin=musicPlugin;
     //Update the minimum width according to the suggestion.
-    qDebug()<<m_musicPlugin->minimumWidthHint()+
-              m_header->minimumWidthHint();
     setMinimumWidth(m_musicPlugin->minimumWidthHint()+
-                    m_header->minimumWidthHint());
+                    m_header->minimumWidthHint()+
+                    knDpi->width(NotificationButtonSize +
+                                 (NotificationHeadSpacing*3) +
+                                 (NotificationTailSpacing*3)));
     //Set the main player widget.
     m_container->setMainPlayer(m_musicPlugin->mainPlayer());
     //Link the plugin and the main window.

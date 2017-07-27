@@ -94,7 +94,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
 #endif
     //Configure the button.
     m_button->setCursor(Qt::PointingHandCursor);
-    m_button->setButtonSize(knDpi->width(32));
+    m_button->setButtonSize(knDpi->width(NotificationButtonSize));
     //Configure the view.
     m_notificationView->setModel(knNotification->model());
     //Get account details.
