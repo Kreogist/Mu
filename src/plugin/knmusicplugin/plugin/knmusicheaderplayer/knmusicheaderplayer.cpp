@@ -53,14 +53,16 @@
 
 #include <QDebug>
 
-#define AlbumArtSize    61
-#define GlowRadius      9.0
-#define panelY          11
-#define ButtonSize      38
+#define AlbumArtSize        61
+#define GlowRadius          9.0
+#define panelY              11
+#define ControlTargetY      5
+#define ButtonSize          38
+#define AppendButtonSize    14
 
-#define PlayerVolume QString("PlayerVolume")
-#define PlayerMute QString("Mute")
-#define PlayerLoopState QString("LoopState")
+#define PlayerVolume        QString("PlayerVolume")
+#define PlayerMute          QString("Mute")
+#define PlayerLoopState     QString("LoopState")
 
 KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     KNMusicHeaderPlayerBase(parent),
@@ -87,6 +89,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_controlPanel(new QWidget(this)),
     m_volumePanel(new QWidget(this)),
     m_appendPanel(new QWidget(this)),
+    m_progressPanel(new QWidget(this)),
     m_appendMenu(new KNSaoSubMenu(m_showAppendMenu)),
     m_actionTrigger(new QSignalMapper(this)),
     m_informationEffect(new QGraphicsOpacityEffect(this)),
@@ -186,7 +189,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     appendLayout->addStretch();
     //Reset the append panel geometry.
     m_appendPanel->setGeometry(QRect(-m_appendPanel->width(),
-                                     knDpi->height(panelY),
+                                     panelYPosition(),
                                      m_appendPanel->width(),
                                      m_appendPanel->height()));
 
@@ -225,16 +228,15 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
             this, &KNMusicHeaderPlayer::onActionVolumeChanged);
     volumeLayout->addWidget(m_volumeSlider, 1);
 
-    //Generate a progress panel.
-    QWidget *progressPanel=new QWidget(this);
-    progressPanel->move(knDpi->pos(0, 45));
-    progressPanel->setFixedWidth(knDpi->width(302));
+    //Configure the progress panel.
+    m_progressPanel->move(knDpi->pos(0, 45));
+    m_progressPanel->setFixedWidth(knDpi->width(302));
     //Initial layout of the progress panel.
     QBoxLayout *progressLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                              progressPanel);
+                                              m_progressPanel);
     progressLayout->setContentsMargins(0,0,0,0);
     progressLayout->setSpacing(0);
-    progressPanel->setLayout(progressLayout);
+    m_progressPanel->setLayout(progressLayout);
     //Configure a font class.
     QFont timeFont=font();
     timeFont.setFamily("096MKSD");
@@ -387,17 +389,22 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     connect(m_hideControl, &QPropertyAnimation::valueChanged,
             this, &KNMusicHeaderPlayer::onActionMouseInOut);
     //Set the end values.
-    m_showControl->setEndValue(QRect(knDpi->pos(0, 5),
-                                     QSize(width(), knDpi->height(40))));
+    int panelAreaHeight=knDpi->height(40);
+    qDebug()<<panelAreaHeight<<m_progressPanel->y();
+    m_showControl->setEndValue(QRect(knDpi->pos(0, ControlTargetY),
+                                     QSize(width(), panelAreaHeight)));
     m_hideControl->setEndValue(generateOutPosition());
-    m_showVolume->setEndValue(QRect(knDpi->pos(212, 10),
+    m_showVolume->setEndValue(QRect(QPoint(knDpi->width(212),
+                                           panelYPosition()),
                                     m_volumePanel->size()));
-    m_hideVolume->setEndValue(QRect(QPoint(width(), knDpi->width(10)),
+    m_hideVolume->setEndValue(QRect(QPoint(width(),
+                                           panelYPosition()),
                                     m_volumePanel->size()));
-    m_showAppend->setEndValue(QRect(knDpi->pos(8, panelY),
+    m_showAppend->setEndValue(QRect(QPoint(m_albumArt->x(),
+                                           panelYPosition()),
                                     m_appendPanel->size()));
     m_hideAppend->setEndValue(QRect(QPoint(-m_appendPanel->width(),
-                                           knDpi->width(panelY)),
+                                           panelYPosition()),
                                     m_appendPanel->size()));
     //Configure the animation group.
     m_mouseIn->addAnimation(m_showVolume);
@@ -908,7 +915,7 @@ inline KNOpacityAnimeButton *KNMusicHeaderPlayer::generateAppendButton(
     //Generate a opacity button.
     KNOpacityAnimeButton *button=new KNOpacityAnimeButton(this);
     //Configure the button.
-    button->setFixedSize(knDpi->size(14, 14));
+    button->setFixedSize(knDpi->size(AppendButtonSize, AppendButtonSize));
     button->setIcon(QIcon(iconPath));
     //Give back the button.
     return button;
@@ -963,4 +970,10 @@ void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)
     m_progressSlider->setMaximum(duration);
     //Set duration display text.
     m_duration->setText(KNMusicUtil::msecondToString(duration));
+}
+
+inline int KNMusicHeaderPlayer::panelYPosition()
+{
+    //Use the current hight to calculate the position.
+    return knDpi->height(ControlTargetY+ButtonSize-AppendButtonSize)>>1;
 }

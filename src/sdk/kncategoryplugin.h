@@ -62,6 +62,12 @@ public:
      */
     virtual void loadPlugins()=0;
 
+    /*!
+     * \brief Get the minimum width hint of the specific category item.
+     * \return The suggested minimum width.
+     */
+    virtual int minimumWidthHint()=0;
+
 signals:
 
 public slots:

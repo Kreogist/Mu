@@ -98,6 +98,12 @@ public:
      */
     bool isWorking() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from
+     * KNAbstractMusicCategoryPlugin::minimumWidthHint().
+     */
+    int minimumWidthHint() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

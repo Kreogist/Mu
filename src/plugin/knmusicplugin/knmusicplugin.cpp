@@ -278,6 +278,26 @@ bool KNMusicPlugin::isWorking()
     return m_library->isWorking();
 }
 
+int KNMusicPlugin::minimumWidthHint()
+{
+    //Initial the suggestion width.
+    int suggestionWidth=0;
+    //Check whether the header player is loaded.
+    if(m_headerPlayer)
+    {
+        //Plus the header player.
+        suggestionWidth+=m_headerPlayer->width();
+    }
+    //Check whether the search widget is loaded.
+    if(m_searchBox)
+    {
+        //Plus the search box width.
+        suggestionWidth+=m_headerPlayer->width();
+    }
+    //This is the full width of the music plugin suggested width.
+    return suggestionWidth;
+}
+
 void KNMusicPlugin::saveConfigure()
 {
     //--Header Player--

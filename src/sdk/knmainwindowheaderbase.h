@@ -74,6 +74,16 @@ public:
      */
     virtual void setAppearanceConfigure(KNConfigure *configure)=0;
 
+    /*!
+     * \brief Get the suggest minimum width of the header. This could also be
+     * used as the minimum width of the main window.\n
+     * This function should only return the width of the widget controlled by
+     * the header, which means that for those widgets which is added by the
+     * other plugins shouldn't be count here.
+     * \return The suggest minimum width.
+     */
+    virtual int minimumWidthHint()=0;
+
 signals:
     /*!
      * \brief This signal will be used, when the user ask to show the preference

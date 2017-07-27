@@ -255,7 +255,10 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     //DON'T MOVE THIS, this should config before bass init.
     BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
     //Get the setting sample rate.
-    int userSampleRate=m_playbackConfigure->data("SampleRate", 44100).toInt();
+    QString userSampleRate=
+            m_playbackConfigure->data("SampleRate", "None").toString();
+    //Set a default initial sample rate.
+    int initialSampleRate=44100;
 #ifdef Q_OS_WIN64
     if(m_wasapiEnabled)
     {
@@ -295,7 +298,16 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 #endif
         //Normal bass initialize.
         //Prepare the bass initial flag.
-        DWORD initFlag=BASS_DEVICE_FREQ;
+        DWORD initFlag=0;
+        //Check the user sample rate.
+        if(QString::number(userSampleRate.toInt())==userSampleRate)
+        {
+            //Update the initial sample rate.
+            initialSampleRate=userSampleRate.toInt();
+            //Add the initial flag.
+            initFlag |= BASS_DEVICE_FREQ;
+        }
+        qDebug()<<initFlag<<initialSampleRate;
         //Check the preference setting.
         if(m_playbackConfigure->data("Stero", false).toBool())
         {
@@ -303,7 +315,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
             initFlag |= BASS_DEVICE_STEREO;
         }
         //Initial bass library.
-        if(!BASS_Init(-1, userSampleRate, initFlag, NULL, NULL))
+        if(!BASS_Init(-1, initialSampleRate, initFlag, NULL, NULL))
         {
             //Failed to initial the library bass.
             return false;
@@ -314,7 +326,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     //Clear the channel flags.
     channelFlags=0;
     //Check float dsp supporting.
-    DWORD fdpsCheck=BASS_StreamCreate(userSampleRate,
+    DWORD fdpsCheck=BASS_StreamCreate(initialSampleRate,
                                       2, BASS_SAMPLE_FLOAT, NULL, 0);
     //If support the float dsp,
     if(fdpsCheck)

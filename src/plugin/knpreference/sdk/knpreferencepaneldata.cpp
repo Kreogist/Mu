@@ -86,15 +86,16 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                    "has more speakers available.\nThis option will be applied "
                    "after the application restarted."), true);
         QStringList sampleRates;
-        sampleRates << "8000" << "11025" << "22050" << "32000" << "44100"
-                    << "47250" << "48000" << "50000" << "50400" << "96000"
-                    << "192000";
+        QString defaultSampleRate=tr("Use Device Default Sample Rate");
+        sampleRates << defaultSampleRate << "8000" << "11025" << "22050"
+                    << "32000" << "44100" << "47250" << "48000" << "50000"
+                    << "50400" << "96000" << "192000";
         addComboItem(block, tr("Sample Rate (Hz)"),
-                     "System/Backend/SampleRate", "44100",
+                     "System/Backend/SampleRate", defaultSampleRate,
                      tr("This option will change the output sample rate of the "
                         "playback backend.\nThis option will be applied after "
                         "the application restarted."),
-                     sampleRates, false, false);
+                     sampleRates, false, true);
         panelData.append(block);
         break;
     }

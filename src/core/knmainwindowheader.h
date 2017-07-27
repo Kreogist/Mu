@@ -69,6 +69,11 @@ public:
      */
     void setAppearanceConfigure(KNConfigure *configure) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMainWindowHeaderBase::minimumWidthHint().
+     */
+    int minimumWidthHint() Q_DECL_OVERRIDE;
+
 protected:
     /*!
      * \brief Reimplemented from KNMainWindowHeaderBase::resizeEvent().

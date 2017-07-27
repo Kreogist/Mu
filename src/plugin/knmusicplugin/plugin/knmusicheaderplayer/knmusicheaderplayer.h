@@ -137,6 +137,7 @@ private:
         AppendShowInGenres,
         MenuActionsCount
     };
+    inline int panelYPosition();
     inline void updateDurationPalette(int opacity);
     inline void setPosition(const qint64 &position);
     inline QRect generateOutPosition();
@@ -160,7 +161,7 @@ private:
     QLabel *m_duration;
     KNEditableLabel *m_position;
     KNOpacityButton *m_loopState, *m_volumeIndicator;
-    QWidget *m_controlPanel, *m_volumePanel, *m_appendPanel;
+    QWidget *m_controlPanel, *m_volumePanel, *m_appendPanel, *m_progressPanel;
     //Append menu.
     KNSaoSubMenu *m_appendMenu;
     QSignalMapper *m_actionTrigger;

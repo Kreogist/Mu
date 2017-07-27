@@ -166,6 +166,12 @@ void KNMainWindowHeader::setAppearanceConfigure(KNConfigure *configure)
     onConfigureChanged();
 }
 
+int KNMainWindowHeader::minimumWidthHint()
+{
+    //This will simply return the widget of the header.
+    return m_iconButton->width();
+}
+
 void KNMainWindowHeader::setCategoryPlugin(KNCategoryPlugin *categoryPlugin)
 {
     //Save the category plugin.
