@@ -50,6 +50,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     setPalette(pal);
     //Initial the layout.
     QGridLayout *mainLayout=new QGridLayout(this);
+    mainLayout->setSpacing(knDpi->width(7));
     setLayout(mainLayout);
     //Generate the caption.
     m_caption[0]=new QLabel(tr("Font"), this);

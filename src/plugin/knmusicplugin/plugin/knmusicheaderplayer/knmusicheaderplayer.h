@@ -141,7 +141,8 @@ private:
     inline void updateDurationPalette(int opacity);
     inline void setPosition(const qint64 &position);
     inline QRect generateOutPosition();
-    inline QPropertyAnimation *generateAnime(QObject *target);
+    inline QPropertyAnimation *generateAnime(QObject *target,
+                                             const QByteArray &propertyName);
     inline KNOpacityAnimeButton *generateControlButton(const QString &iconPath);
     inline KNOpacityAnimeButton *generateAppendButton(const QString &iconPath);
     inline void startAnime(QParallelAnimationGroup *group,

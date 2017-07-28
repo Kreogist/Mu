@@ -125,6 +125,20 @@ public:
     }
 
     /*!
+     * \brief Get the scaled height, this is the float point version.
+     * \param rawHeight The original height.
+     * \return The scaled height.
+     */
+    qreal heightF(qreal rawHeight);
+
+    /*!
+     * \brief Get the scaled width, this is the float point version.
+     * \param rawWidth The original width.
+     * \return The scaled width.
+     */
+    qreal widthF(qreal rawWidth);
+
+    /*!
      * \brief Get the scaled height.
      * \param rawHeight The original height.
      * \return The scaled height.

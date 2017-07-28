@@ -97,12 +97,12 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_iconPause(QIcon(":/plugin/music/player/pause_light.png")),
     m_mouseIn(new QParallelAnimationGroup(this)),
     m_mouseOut(new QParallelAnimationGroup(this)),
-    m_showControl(generateAnime(m_controlPanel)),
-    m_hideControl(generateAnime(m_controlPanel)),
-    m_showVolume(generateAnime(m_volumePanel)),
-    m_hideVolume(generateAnime(m_volumePanel)),
-    m_showAppend(generateAnime(m_appendPanel)),
-    m_hideAppend(generateAnime(m_appendPanel)),
+    m_showControl(generateAnime(m_controlPanel, "geometry")),
+    m_hideControl(generateAnime(m_controlPanel, "geometry")),
+    m_showVolume(generateAnime(m_volumePanel, "pos")),
+    m_hideVolume(generateAnime(m_volumePanel, "pos")),
+    m_showAppend(generateAnime(m_appendPanel, "pos")),
+    m_hideAppend(generateAnime(m_appendPanel, "pos")),
     m_backend(nullptr),
     m_nowPlaying(nullptr),
     m_cacheConfigure(
@@ -167,12 +167,12 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
 
     //Append panel.
     //Initial layout of the append panel.
+    int scaledSpacing=knDpi->width(9);
     QBoxLayout *appendLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             m_appendPanel);
     appendLayout->setContentsMargins(0,0,0,0);
-    appendLayout->setSpacing(knDpi->width(9));
+    appendLayout->setSpacing(scaledSpacing);
     m_appendPanel->setLayout(appendLayout);
-    appendLayout->addStretch();
     //Configure the main player button.
     connect(m_showMainPlayer, &KNOpacityButton::clicked,
             this, &KNMusicHeaderPlayer::requireShowMainPlayer);
@@ -186,12 +186,13 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     connect(m_showAppendMenu, &KNOpacityAnimeButton::clicked,
             this, &KNMusicHeaderPlayer::showAppendMenu);
     appendLayout->addWidget(m_showAppendMenu);
-    appendLayout->addStretch();
     //Reset the append panel geometry.
-    m_appendPanel->setGeometry(QRect(-m_appendPanel->width(),
-                                     panelYPosition(),
-                                     m_appendPanel->width(),
-                                     m_appendPanel->height()));
+    int appendPanelWidth=scaledSpacing*2+knDpi->width(AppendButtonSize)*3;
+    m_appendPanel->setGeometry(
+                QRect(-appendPanelWidth,
+                      panelYPosition(),
+                      appendPanelWidth,
+                      m_appendPanel->height()));
 
     //Control panel.
     m_controlPanel->setGeometry(generateOutPosition());
@@ -212,7 +213,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
 
     //Volume Panel.
     m_volumePanel->setFixedWidth(knDpi->width(85));
-    m_volumePanel->move(width(), knDpi->height(10));
+    m_volumePanel->move(width(), panelYPosition());
     //Initial layout of the volume panel.
     QBoxLayout *volumeLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             m_volumePanel);
@@ -221,7 +222,8 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_volumePanel->setLayout(volumeLayout);
     //Configure the volume indicator.
     m_volumeIndicator->setIcon(m_iconMute[false]);
-    m_volumeIndicator->setFixedSize(knDpi->size(13,13));
+    m_volumeIndicator->setFixedSize(knDpi->size(AppendButtonSize,
+                                                AppendButtonSize));
     volumeLayout->addWidget(m_volumeIndicator);
     //Configure the volume slider.
     connect(m_volumeSlider, &KNVolumeSlider::valueChanged,
@@ -278,7 +280,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
             this, &KNMusicHeaderPlayer::setPosition);
     connect(m_progressSlider, &KNProgressSlider::valueChanged,
             this, &KNMusicHeaderPlayer::updatePositionText);
-    progressLayout->addWidget(m_progressSlider);
+    progressLayout->addWidget(m_progressSlider, 0, Qt::AlignVCenter);
     //--Position Label--
     m_position->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_position->setFont(timeFont);
@@ -393,18 +395,14 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     m_showControl->setEndValue(QRect(knDpi->pos(0, ControlTargetY),
                                      QSize(width(), panelAreaHeight)));
     m_hideControl->setEndValue(generateOutPosition());
-    m_showVolume->setEndValue(QRect(QPoint(knDpi->width(212),
-                                           panelYPosition()),
-                                    m_volumePanel->size()));
-    m_hideVolume->setEndValue(QRect(QPoint(width(),
-                                           panelYPosition()),
-                                    m_volumePanel->size()));
-    m_showAppend->setEndValue(QRect(QPoint(m_albumArt->x(),
-                                           panelYPosition()),
-                                    m_appendPanel->size()));
-    m_hideAppend->setEndValue(QRect(QPoint(-m_appendPanel->width(),
-                                           panelYPosition()),
-                                    m_appendPanel->size()));
+    m_showVolume->setEndValue(QPoint(knDpi->width(212),
+                                     panelYPosition()));
+    m_hideVolume->setEndValue(QPoint(width(),
+                                     panelYPosition()));
+    m_showAppend->setEndValue(QPoint(m_albumArt->x(),
+                                     panelYPosition()));
+    m_hideAppend->setEndValue(QPoint(-appendPanelWidth,
+                                     panelYPosition()));
     //Configure the animation group.
     m_mouseIn->addAnimation(m_showVolume);
     m_mouseIn->addAnimation(m_showControl);
@@ -883,11 +881,13 @@ inline QRect KNMusicHeaderPlayer::generateOutPosition()
     return QRect(knDpi->pos(0, -45), QSize(width(), knDpi->height(40)));
 }
 
-inline QPropertyAnimation *KNMusicHeaderPlayer::generateAnime(QObject *target)
+inline QPropertyAnimation *KNMusicHeaderPlayer::generateAnime(
+        QObject *target,
+        const QByteArray &propertyName)
 {
     //Generate a property animation.
     QPropertyAnimation *animation=new QPropertyAnimation(target,
-                                                         "geometry",
+                                                         propertyName,
                                                          this);
     //Configure the animation.
     animation->setEasingCurve(QEasingCurve::OutCubic);
@@ -929,9 +929,9 @@ inline void KNMusicHeaderPlayer::startAnime(QParallelAnimationGroup *group,
     m_mouseIn->stop();
     m_mouseOut->stop();
     //Set parameters.
-    volume->setStartValue(m_volumePanel->geometry());
+    volume->setStartValue(m_volumePanel->pos());
     control->setStartValue(m_controlPanel->geometry());
-    append->setStartValue(m_appendPanel->geometry());
+    append->setStartValue(m_appendPanel->pos());
     //Start animations.
     group->start();
 }
@@ -974,5 +974,5 @@ void KNMusicHeaderPlayer::updateDuration(const qint64 &duration)
 inline int KNMusicHeaderPlayer::panelYPosition()
 {
     //Use the current hight to calculate the position.
-    return knDpi->height(ControlTargetY+ButtonSize-AppendButtonSize)>>1;
+    return knDpi->height(ControlTargetY+((ButtonSize-AppendButtonSize)>>1));
 }

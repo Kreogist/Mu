@@ -31,8 +31,7 @@
 
 KNProgressSlider::KNProgressSlider(QWidget *parent) :
     KNAbstractSlider(parent),
-    m_mouseIn(generateTimeLine(100)),
-    m_mouseOut(generateTimeLine(OutOpacity*100.0)),
+    m_mouseInOut(new QTimeLine(200, this)),
     m_buttonGradient(QRadialGradient()),
     m_backOpacity(OutOpacity),
     m_buttonSize(0),
@@ -43,6 +42,11 @@ KNProgressSlider::KNProgressSlider(QWidget *parent) :
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,
                               QSizePolicy::MinimumExpanding,
                               QSizePolicy::Slider));
+    //Configure the time line.
+    m_mouseInOut->setEasingCurve(QEasingCurve::OutCubic);
+    m_mouseInOut->setUpdateInterval(16);
+    connect(m_mouseInOut, &QTimeLine::frameChanged,
+            this, &KNProgressSlider::onMouseInOut);
     //Initial the button radius.
     m_buttonGradient.setColorAt(0, QColor(255,255,255,200));
     m_buttonGradient.setColorAt(1, QColor(255,255,255,0));
@@ -53,7 +57,7 @@ KNProgressSlider::KNProgressSlider(QWidget *parent) :
 void KNProgressSlider::enterEvent(QEvent *event)
 {
     //Start mouse in animation.
-    startAnime(m_mouseIn);
+    startAnime(100);
     //Do orignal enter event.
     QWidget::enterEvent(event);
 }
@@ -61,7 +65,7 @@ void KNProgressSlider::enterEvent(QEvent *event)
 void KNProgressSlider::leaveEvent(QEvent *event)
 {
     //Start mouse in animation.
-    startAnime(m_mouseOut);
+    startAnime(OutOpacity*100.0);
     //Do orignal enter event.
     QWidget::leaveEvent(event);
 }
@@ -173,7 +177,7 @@ void KNProgressSlider::mouseReleaseEvent(QMouseEvent *event)
     KNAbstractSlider::mouseReleaseEvent(event);
 }
 
-void KNProgressSlider::onActionMouseInOut(const int &frame)
+void KNProgressSlider::onMouseInOut(int frame)
 {
     //Update the opacity.
     m_backOpacity=(qreal)frame/100;
@@ -181,29 +185,14 @@ void KNProgressSlider::onActionMouseInOut(const int &frame)
     update();
 }
 
-inline QTimeLine *KNProgressSlider::generateTimeLine(const int &endFrame)
-{
-    //Generate the time line.
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    //Configure the time line.
-    timeLine->setEndFrame(endFrame);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(16);
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNProgressSlider::onActionMouseInOut);
-    //Give back the time line.
-    return timeLine;
-}
-
-inline void KNProgressSlider::startAnime(QTimeLine *timeLine)
+inline void KNProgressSlider::startAnime(int endFrame)
 {
     //Stop all the animation.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
+    m_mouseInOut->stop();
     //Set the start frame of the time line.
-    timeLine->setStartFrame(m_backOpacity*100);
+    m_mouseInOut->setFrameRange(m_backOpacity*100, endFrame);
     //Start animation.
-    timeLine->start();
+    m_mouseInOut->start();
 }
 
 inline void KNProgressSlider::updateButtonSize()
@@ -231,4 +220,3 @@ inline qint64 KNProgressSlider::posToValue(int position)
     return minimal()+
             (qreal)range()/(qreal)(width()-(m_glowWidth<<1))*(qreal)position;
 }
-

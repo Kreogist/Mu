@@ -72,14 +72,13 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionMouseInOut(const int &frame);
+    void onMouseInOut(int frame);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
+    inline void startAnime(int endFrame);
     inline void updateButtonSize();
     inline qint64 posToValue(int position);
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    QTimeLine *m_mouseInOut;
     QRadialGradient m_buttonGradient;
     qreal m_backOpacity;
     int m_buttonSize;

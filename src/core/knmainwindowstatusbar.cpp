@@ -20,6 +20,7 @@ Foundation,
 #include <QPainter>
 #include <QTimeLine>
 
+#include "kndpimanager.h"
 #include "knthememanager.h"
 
 #include "knmainwindowstatusbar.h"
@@ -36,7 +37,7 @@ Foundation,
 KNMainWindowStatusBar::KNMainWindowStatusBar(QWidget *parent) :
     QWidget(parent),
     m_backgroundColor(QColor(255, 255, 255)),
-    m_background(QLinearGradient(0, 0, GradientWidth, 0)),
+    m_background(QLinearGradient(QPointF(0, 0), knDpi->posF(GradientWidth, 0))),
     m_mainLayout(new QBoxLayout(QBoxLayout::RightToLeft, this)),
     m_mouseInOut(generateTimeline()),
     m_opacity(MinimumOpacity),
@@ -44,15 +45,16 @@ KNMainWindowStatusBar::KNMainWindowStatusBar(QWidget *parent) :
 {
     //Set properties.
     setContentsMargins(0, 0, 0, 0);
-    setFixedWidth(GradientWidth);
-    setFixedHeight(20);
+    setFixedWidth(knDpi->width(GradientWidth));
+    setFixedHeight(knDpi->height(20));
     //Initial the background.
     m_background.setColorAt(0, QColor(0, 0, 0, 0));
     //Update the gradient.
     updateGradient();
 
     //Configure the main layout.
-    m_mainLayout->setContentsMargins(GradientWidth, 0, RightSpacing, 0);
+    m_mainLayout->setContentsMargins(
+                knDpi->margins(GradientWidth, 0, RightSpacing, 0));
     m_mainLayout->setSpacing(0);
     setLayout(m_mainLayout);
 }
@@ -60,14 +62,15 @@ KNMainWindowStatusBar::KNMainWindowStatusBar(QWidget *parent) :
 void KNMainWindowStatusBar::addWidget(QWidget *widget)
 {
     //Update the size of the widget.
-    widget->setFixedSize(ButtonSize, ButtonSize);
+    widget->setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     //Set the widget size.
     m_mainLayout->addWidget(widget);
-    m_mainLayout->addSpacing(ButtonSpacing);
+    m_mainLayout->addSpacing(knDpi->width(ButtonSpacing));
     //Increase the count.
     ++m_buttonCount;
     //Update the widget size.
-    setFixedWidth(GradientWidth+RightSpacing+m_buttonCount*(16+ButtonSpacing));
+    setFixedWidth(knDpi->width(GradientWidth+RightSpacing+
+                               m_buttonCount*(16+ButtonSpacing)));
 }
 
 void KNMainWindowStatusBar::paintEvent(QPaintEvent *event)

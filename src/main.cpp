@@ -22,7 +22,9 @@
 
 int main(int argc, char *argv[])
 {
+#if QT_VERSION_MINOR >= 6
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+#endif
     //Create a singleton pattern application.
     KNSingletonApplication app(argc, argv, "org.kreogist.mu");
     //Check the running status of the instance.
