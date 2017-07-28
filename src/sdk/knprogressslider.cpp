@@ -19,13 +19,15 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+#include "kndpimanager.h"
+
 #include "knprogressslider.h"
 
 #define OutOpacity          0.65
-#define m_glowWidth         5
-#define m_sliderHeight      4
-#define m_spacing           2
-#define m_rectColor         QColor(255,255,255,70)
+#define GlowWidth         5
+#define SliderHeight      4
+#define Spacing           2
+#define RectColor         QColor(255,255,255,70)
 #define m_backgroundColor   QColor(255,255,255,80)
 #define m_buttonColor       QColor(255,255,255,110)
 
@@ -85,14 +87,15 @@ void KNProgressSlider::paintEvent(QPaintEvent *event)
     painter.setOpacity(m_backOpacity);
     //Configure the painter.
     painter.setPen(Qt::NoPen);
-    painter.setBrush(m_rectColor);
+    painter.setBrush(RectColor);
     //Draw central rects.
-    painter.drawRoundedRect(QRect(m_glowWidth,
-                                  m_glowWidth+m_spacing,
-                                  width()-(m_glowWidth<<1),
-                                  m_sliderHeight),
-                            m_glowWidth/2.0,
-                            m_glowWidth/2.0);
+    QPoint sliderTopLeft=knDpi->pos(GlowWidth,
+                                    GlowWidth+Spacing);
+    painter.drawRoundedRect(QRect(sliderTopLeft,
+                                  QSize(width()-knDpi->width(GlowWidth<<1),
+                                        knDpi->height(SliderHeight))),
+                            knDpi->widthF(GlowWidth/2.0),
+                            knDpi->heightF(GlowWidth/2.0));
 
     //Check the range, if the range is 0, ignore the following painting.
     if(range()==0)
@@ -121,17 +124,16 @@ void KNProgressSlider::paintEvent(QPaintEvent *event)
     //Change the brush color to button color.
     painter.setBrush(m_buttonColor);
     //Draw the value parts of the slider.
-    painter.drawRoundedRect(QRect(m_glowWidth,
-                                  m_glowWidth+m_spacing,
-                                  positionLeft+2,
-                                  m_sliderHeight),
-                            m_glowWidth/2.0,
-                            m_glowWidth/2.0);
+    painter.drawRoundedRect(QRect(sliderTopLeft,
+                                  QSize(positionLeft+knDpi->width(Spacing),
+                                        knDpi->height(SliderHeight))),
+                            knDpi->widthF(GlowWidth/2.0),
+                            knDpi->heightF(GlowWidth/2.0));
 
     //Translate the painter's coordinate position.
-    painter.translate(positionLeft, m_spacing);
+    painter.translate(positionLeft, knDpi->width(Spacing));
     //Calculate the gradient focal center.
-    int buttonCenter=m_glowWidth+(m_sliderHeight>>1);
+    int buttonCenter=knDpi->width(GlowWidth+(SliderHeight>>1));
     QPointF centerFocalPoint=QPointF(buttonCenter, buttonCenter);
     //Configure the gradient.
     m_buttonGradient.setCenter(centerFocalPoint);
@@ -198,9 +200,9 @@ inline void KNProgressSlider::startAnime(int endFrame)
 inline void KNProgressSlider::updateButtonSize()
 {
     //Calculate the button size: two light glow width and the slider height.
-    m_buttonSize=(m_glowWidth<<1)+m_sliderHeight;
+    m_buttonSize=knDpi->height((GlowWidth<<1)+SliderHeight);
     //Reset the widget height.
-    setFixedHeight(m_buttonSize+(m_spacing<<1));
+    setFixedHeight(m_buttonSize+knDpi->height(Spacing<<1));
     //Redraw the widget.
     update();
 }
@@ -208,15 +210,16 @@ inline void KNProgressSlider::updateButtonSize()
 inline qint64 KNProgressSlider::posToValue(int position)
 {
     //Check whether is the current position is out of range.
-    if(position<m_glowWidth)
+    int scaledGlowWidth=knDpi->width(GlowWidth);
+    if(position<scaledGlowWidth)
     {
         return minimal();
     }
-    if(position>width()-m_glowWidth)
+    if(position>width()-scaledGlowWidth)
     {
         return maximum();
     }
     //Calculate the value according to the range percentage.
-    return minimal()+
-            (qreal)range()/(qreal)(width()-(m_glowWidth<<1))*(qreal)position;
+    return minimal()+(qreal)range()/
+            (qreal)(width()-(scaledGlowWidth<<1))*(qreal)position;
 }

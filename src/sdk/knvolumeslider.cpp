@@ -21,10 +21,10 @@
 
 #include "knvolumeslider.h"
 
-#define MinimalAlpha 80.0
-#define MaximumAlpha 240.0
-#define GapAlpha 175.0
-#define SliderHeight 5
+#define MinimalAlpha    80.0
+#define MaximumAlpha    240.0
+#define GapAlpha        175.0
+#define SliderHeight    5
 
 KNVolumeSlider::KNVolumeSlider(QWidget *parent) :
     KNAbstractSlider(parent),
