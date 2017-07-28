@@ -19,6 +19,8 @@
 #include <QTimeLine>
 #include <QMouseEvent>
 
+#include "kndpimanager.h"
+
 #include "knvolumeslider.h"
 
 #define MinimalAlpha    80.0
@@ -28,8 +30,7 @@
 
 KNVolumeSlider::KNVolumeSlider(QWidget *parent) :
     KNAbstractSlider(parent),
-    m_mouseIn(generateTimeLine(MaximumAlpha)),
-    m_mouseOut(generateTimeLine(MinimalAlpha)),
+    m_mouseInOut(new QTimeLine(200, this)),
     m_rectColor(QColor(255, 255, 255, MinimalAlpha)),
     m_pressed(false)
 {
@@ -37,6 +38,12 @@ KNVolumeSlider::KNVolumeSlider(QWidget *parent) :
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding,
                               QSizePolicy::MinimumExpanding,
                               QSizePolicy::Slider));
+    //Configure the time line.
+    m_mouseInOut->setUpdateInterval(16);
+    m_mouseInOut->setEasingCurve(QEasingCurve::OutCubic);
+    //Link the time line and the mouse in out slot.
+    connect(m_mouseInOut, &QTimeLine::frameChanged,
+                this, &KNVolumeSlider::onMouseInOut);
 }
 
 void KNVolumeSlider::paintEvent(QPaintEvent *event)
@@ -50,30 +57,32 @@ void KNVolumeSlider::paintEvent(QPaintEvent *event)
                            QPainter::SmoothPixmapTransform, true);
     //Set pen and draw central rects.
     painter.setPen(m_rectColor);
-    painter.drawRoundedRect(QRect(SliderHeight,
-                                  (height()-SliderHeight)>>1,
-                                  width()-(SliderHeight<<1),
-                                  SliderHeight),
-                            SliderHeight>>1,
-                            SliderHeight>>1,
+    int scaledSliderHeight=knDpi->width(SliderHeight);
+    painter.drawRoundedRect(QRect(scaledSliderHeight,
+                                  (height()-scaledSliderHeight)>>1,
+                                  width()-(scaledSliderHeight<<1),
+                                  scaledSliderHeight),
+                            scaledSliderHeight>>1,
+                            scaledSliderHeight>>1,
                             Qt::AbsoluteSize);
     //Set no pen, and set brush to the filling color.
     painter.setPen(Qt::NoPen);
     painter.setBrush(QColor(255, 255, 255, percentage()*GapAlpha+MinimalAlpha));
     //Get the current position, paint the content rect.
-    painter.drawRoundedRect(SliderHeight,
-                            (height()-SliderHeight)>>1,
-                            percentage()*(qreal)(width()-(SliderHeight<<1)),
-                            SliderHeight,
-                            SliderHeight>>1,
-                            SliderHeight>>1,
-                            Qt::AbsoluteSize);
+    painter.drawRoundedRect(
+                scaledSliderHeight,
+                (height()-scaledSliderHeight)>>1,
+                percentage()*(qreal)(width()-(scaledSliderHeight<<1)),
+                scaledSliderHeight,
+                scaledSliderHeight>>1,
+                scaledSliderHeight>>1,
+                Qt::AbsoluteSize);
 }
 
 void KNVolumeSlider::enterEvent(QEvent *event)
 {
     //Start the enter anime.
-    startAnime(m_mouseIn);
+    startAnime(MaximumAlpha);
     //Do original enter event.
     KNAbstractSlider::enterEvent(event);
 }
@@ -81,7 +90,7 @@ void KNVolumeSlider::enterEvent(QEvent *event)
 void KNVolumeSlider::leaveEvent(QEvent *event)
 {
     //Start the leave anime.
-    startAnime(m_mouseOut);
+    startAnime(MinimalAlpha);
     //Do original leave event.
     KNAbstractSlider::leaveEvent(event);
 }
@@ -121,27 +130,12 @@ void KNVolumeSlider::mouseReleaseEvent(QMouseEvent *event)
     KNAbstractSlider::mouseReleaseEvent(event);
 }
 
-void KNVolumeSlider::onActionMouseInOut(const int &frame)
+void KNVolumeSlider::onMouseInOut(int frame)
 {
     //Update the rect color.
     m_rectColor.setAlpha(frame);
     //Update the slider.
     update();
-}
-
-inline QTimeLine *KNVolumeSlider::generateTimeLine(const int &endFrame)
-{
-    //Generate a time line.
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    //Configure the time line.
-    timeLine->setEndFrame(endFrame);
-    timeLine->setUpdateInterval(16);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    //Link the time line and the mouse in out slot.
-    connect(timeLine, &QTimeLine::frameChanged,
-                this, &KNVolumeSlider::onActionMouseInOut);
-    //Give back the time line.
-    return timeLine;
 }
 
 qint64 KNVolumeSlider::posToValue(int position)
@@ -160,13 +154,12 @@ qint64 KNVolumeSlider::posToValue(int position)
                 (qreal)range()/(qreal)(width()-SliderHeight)*(qreal)position;
 }
 
-inline void KNVolumeSlider::startAnime(QTimeLine *timeLine)
+inline void KNVolumeSlider::startAnime(int endFrame)
 {
     //Stop all the time line.
-    m_mouseOut->stop();
-    m_mouseIn->stop();
+    m_mouseInOut->stop();
     //Set parameter to the time line.
-    timeLine->setStartFrame(m_rectColor.alpha());
+    m_mouseInOut->setFrameRange(m_rectColor.alpha(), endFrame);
     //Start animation.
-    timeLine->start();
+    m_mouseInOut->start();
 }

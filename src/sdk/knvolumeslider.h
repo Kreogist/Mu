@@ -22,10 +22,19 @@
 #include "knabstractslider.h"
 
 class QTimeLine;
+/*!
+ * \brief The KNVolumeSlider class provides a slider set for the volume. This
+ * slider does not have a button like indicator. But the content of the
+ * selecting value is changed according to the user's selection.
+ */
 class KNVolumeSlider : public KNAbstractSlider
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNVolumeSlider widget.
+     * \param parent The parent widget.
+     */
     explicit KNVolumeSlider(QWidget *parent = 0);
 
 signals:
@@ -64,13 +73,12 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionMouseInOut(const int &frame);
+    void onMouseInOut(int frame);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
     inline qint64 posToValue(int position);
-    inline void startAnime(QTimeLine *timeLine);
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    inline void startAnime(int endFrame);
+    QTimeLine *m_mouseInOut;
     QColor m_rectColor;
     bool m_pressed;
 };
