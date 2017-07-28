@@ -192,7 +192,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
                 QRect(-appendPanelWidth,
                       panelYPosition(),
                       appendPanelWidth,
-                      m_appendPanel->height()));
+                      knDpi->height(AppendButtonSize)));
 
     //Control panel.
     m_controlPanel->setGeometry(generateOutPosition());

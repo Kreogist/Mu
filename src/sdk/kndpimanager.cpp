@@ -51,11 +51,8 @@ void KNDpiManager::setDpi(int dpiX, int dpiY)
     //For other OS, it needs scaling. The DPI should be several times of 72.
     //When you changing the scaling on Windows, like 150%, 200%, you actually
     //change this settings.
-//    m_xScaler=(qreal)dpiX/96.0;
-//    m_yScaler=(qreal)dpiY/96.0;
-    m_xScaler=2.0;
-    m_yScaler=2.0;
-    qDebug()<<"X Scaler"<<m_xScaler<<"Y Scaler"<<m_yScaler;
+    m_xScaler=(qreal)dpiX/96.0;
+    m_yScaler=(qreal)dpiY/96.0;
 #endif
 }
 
