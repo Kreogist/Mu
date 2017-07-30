@@ -12,32 +12,50 @@ uninstRegPath=r'Software\Microsoft\Windows\CurrentVersion\Uninstall'
 # Function name: isQtExist
 # Find the Qt data on the hard drive with the information we find in the 
 # registry.
-def isQtExist(qtRegInfo):
+def isQtExist(qtRegRawInfo):
     # Get the root path of binary installation.
-    qtRootPath=qtRegInfo["location"]+"\\"+qtRegInfo["version"][0:3]
+    qtRootPath=qtRegRawInfo["location"]+"\\"
+    # Check Qt version.
+    if qtRegRawInfo["version"][2:3]=="9":
+        # Then send all the content at the end.
+        qtRootPath=qtRootPath+qtRegRawInfo["version"]
+    else:
+        # Only add first three chars.
+        qtRootPath=qtRootPath+qtRegRawInfo["version"][0:3]
     # Get the compiler version of the Qt installation.
     qtRootSubDirs=listdir(qtRootPath)
-    if len(qtRootSubDirs) != 1:
+    # Check the sub dir size.
+    if len(qtRootSubDirs) < 1:
         # Error happened.
-        return False
-    # Save the compiler information.
-    qtRegInfo["compiler"]=qtRootSubDirs[0]
-    # Check the compiler information.
-    if qtRegInfo["compiler"].startswith("msvc"):
-        # Check whether the type is 64-bit or not.
-        if "_64" in qtRegInfo["compiler"]:
-            qtRegInfo["width"]=64
+        return False, []
+    # Loop and check all the sub directories.
+    print(qtRootSubDirs)
+    qtRegList=[]
+    for qtCompiler in qtRootSubDirs:
+        # Copy the raw data
+        qtRegInfo=qtRegRawInfo.copy()
+        # Save the compiler information.
+        qtRegInfo["compiler"]=qtCompiler
+        # Check the compiler information.
+        if qtRegInfo["compiler"].startswith("msvc"):
+            # Check whether the type is 64-bit or not.
+            if "_64" in qtRegInfo["compiler"]:
+                qtRegInfo["width"]=64
+            else:
+                qtRegInfo["width"]=32
+        elif qtRegInfo["compiler"].startswith("mingw"):
+            if "_32" in qtRegInfo["compiler"]:
+                qtRegInfo["width"]=32
+            else:
+                qtRegInfo["width"]=64
         else:
-            qtRegInfo["width"]=32
-    elif qtRegInfo["compiler"].startswith("mingw"):
-        if "_32" in qtRegInfo["compiler"]:
-            qtRegInfo["width"]=32
-        else:
-            qtRegInfo["width"]=64
-    # Combine the compiler with the path to generate root.
-    qtRegInfo["root"]=qtRootPath+"\\"+qtRegInfo["compiler"]
+                qtRegInfo["width"]="Unknown"
+        # Combine the compiler with the path to generate root.
+        qtRegInfo["root"]=qtRootPath+"\\"+qtRegInfo["compiler"]
+        # Append the data to the list.
+        qtRegList.append(qtRegInfo)
     # Probably we need to check whether it has bin and other dirs, ignore.
-    return True
+    return True, qtRegList
 
 # Function name: isQtInstallItem
 # Check whether the item is a Qt installation, if the item is a Qt installation,
@@ -86,8 +104,12 @@ def findQtInstallation():
                                                            uninstItemIndex))
         # Now, the qt info is only find in the registry.
         # Check whether it is exist in the folder.
-        if isQt and isQtExist(qtInfo):
-            qtVersions.append(qtInfo)
+        if isQt:
+            # Check the Qt is actually exist.
+            exist, qtVersionList = isQtExist(qtInfo)
+            if exist:
+                for qtVersionItem in qtVersionList:
+                    qtVersions.append(qtVersionItem)
     # Give back the qt version.
     return qtVersions
 
@@ -96,11 +118,11 @@ def findQtInstallation():
 def displayAllCompiler(qtVersions):
     # List the data.
     itemIndex=0
-    print(" # Version  Compiler     Type    Location")
+    print(" # Version  Compiler       Type    Location")
     for itemIndex in range(0, len(qtVersions)):
         # Print the data.
         print(repr(itemIndex+1).rjust(2), \
                 qtVersions[itemIndex]["version"].ljust(8), \
-                qtVersions[itemIndex]["compiler"].ljust(12), \
+                qtVersions[itemIndex]["compiler"].ljust(14), \
                 str(qtVersions[itemIndex]["width"])+"-bits", \
                 qtVersions[itemIndex]["location"])

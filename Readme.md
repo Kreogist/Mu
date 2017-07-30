@@ -35,7 +35,7 @@ You're encouraged to translate µ into your native language or update the transl
 * Qt (>=5.5)
 * FFMpeg (>=2.5)
 * bass (Windows and Mac OS X, >=2.4)
-* GStreamer (>=1.0) (Linux)
+* libmpb (Linux, >=0.16)
 
 ## Compile and Build
 

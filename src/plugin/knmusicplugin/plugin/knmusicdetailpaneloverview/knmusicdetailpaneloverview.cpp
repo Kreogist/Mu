@@ -47,7 +47,11 @@ KNMusicDetailPanelOverview::KNMusicDetailPanelOverview(QWidget *parent) :
     QPalette captionPal=palette(), contentPal=palette();
     captionPal.setColor(QPalette::WindowText, QColor(0xa0, 0xa0, 0xa0));
     contentPal.setColor(QPalette::WindowText, QColor(72, 72, 72));
+    contentPal.setColor(QPalette::Highlight, QColor(0xa0, 0xa0, 0xa0));
+    contentPal.setColor(QPalette::HighlightedText, QColor(72, 72, 72));
     //Configure the path information.
+    m_pathInformation->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,
+                                                 QSizePolicy::Expanding));
     m_pathInformation->setWordWrap(true);
     m_pathInformation->setCursor(Qt::PointingHandCursor);
     m_pathInformation->setAlignment(Qt::AlignTop | Qt::AlignLeft);
