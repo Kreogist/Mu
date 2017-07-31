@@ -57,6 +57,8 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     //Generate basic label palette.
     QPalette labelPal=palette();
     labelPal.setColor(QPalette::WindowText, QColor(72, 72, 72));
+    labelPal.setColor(QPalette::Highlight, QColor(0xa0, 0xa0, 0xa0));
+    labelPal.setColor(QPalette::HighlightedText, QColor(72, 72, 72));
     //Initial the basic information labels
     for(int i=0; i<BasicInformationCount; i++)
     {
