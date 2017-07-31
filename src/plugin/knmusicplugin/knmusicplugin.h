@@ -157,7 +157,8 @@ private:
     inline void initialInfrastructure();
     inline void initialPlayer(KNMusicPlayerBase *player);
     inline void addMusicTab(KNMusicTab *musicTab);
-    inline QAction *generateControlAction(int k1, int k2);
+    inline QAction *generateControlAction(const QString &actionName,
+                                          int k1=0, int k2=0);
     void initialDetailDialogPanel();
     void initialParserPlugin();
     void initialLyricsPlugin();

@@ -27,6 +27,7 @@
 #include "knsideshadowwidget.h"
 #include "knvwidgetswitcher.h"
 #include "knglobal.h"
+#include "knshortcutmanager.h"
 #include "knplatformextras.h"
 
 //SDK Dependence.
@@ -650,7 +651,8 @@ inline void KNMusicPlugin::addMusicTab(KNMusicTab *musicTab)
     m_tabBar->addTab(musicTab->tab());
 }
 
-inline QAction *KNMusicPlugin::generateControlAction(int k1, int k2)
+inline QAction *KNMusicPlugin::generateControlAction(const QString &actionName,
+                                                     int k1, int k2)
 {
     QAction *controlAction=new QAction(this);
     QList<QKeySequence> shortcuts;
@@ -659,6 +661,8 @@ inline QAction *KNMusicPlugin::generateControlAction(int k1, int k2)
     controlAction->setShortcuts(shortcuts);
     controlAction->setShortcutContext(Qt::ApplicationShortcut);
     knGlobal->mainWindow()->addAction(controlAction);
+    //Add the action to the shortcut manager.
+    knShortcut->append(actionName, controlAction);
     return controlAction;
 }
 
@@ -749,10 +753,20 @@ void KNMusicPlugin::initialBackend(KNMusicBackend *backend)
             &KNMusicLyricsBackend::setPosition);
     //Load all the operating actions to main window.
     QAction *playNPauseAction=
-            generateControlAction(Qt::Key_F8,
+            generateControlAction("PlayNPause",
+                                  Qt::Key_F8,
                                   Qt::Key_MediaTogglePlayPause);
     connect(playNPauseAction, &QAction::triggered,
             backend, &KNMusicBackend::playNPause);
+    QAction *muteAction=generateControlAction("Mute");
+    connect(muteAction, &QAction::triggered,
+            [=]{backend->setMute(!backend->mute());});
+    QAction *volumeUpAction=generateControlAction("VolumeUp");
+    connect(volumeUpAction, &QAction::triggered,
+            [=]{backend->volumeUp();});
+    QAction *volumeDownAction=generateControlAction("VolumeDown");
+    connect(volumeDownAction, &QAction::triggered,
+            [=]{backend->volumeDown();});
     //Set the backend to music global.
     knMusicGlobal->setBackend(backend);
 }
@@ -772,11 +786,13 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
             knMusicGlobal->lyricsManager(),
             &KNMusicLyricsManager::resetBackend);
     //Load opearting actions to main window.
-    QAction *nextAction=generateControlAction(Qt::Key_F9, Qt::Key_MediaNext);
+    QAction *nextAction=generateControlAction("Next",
+                                              Qt::Key_F9, Qt::Key_MediaNext);
     connect(nextAction, &QAction::triggered,
             nowPlaying, &KNMusicNowPlayingBase::playNext);
     QAction *previousAction=
-            generateControlAction(Qt::Key_F7, Qt::Key_MediaPrevious);
+            generateControlAction("Previous",
+                                  Qt::Key_F7, Qt::Key_MediaPrevious);
     connect(previousAction, &QAction::triggered,
             nowPlaying, &KNMusicNowPlayingBase::playPrevious);
     //Set the now playing to music global.

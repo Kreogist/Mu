@@ -20,6 +20,7 @@ Foundation,
 #include <QFont>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QKeySequence>
 
 #include "knpreferencepaneldata.h"
 
@@ -126,6 +127,57 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 tr("Some lyrics downloader will provide translated version. \n"
                    "This option will allow Mu to combine the translated version"
                    " and the raw lyrics into a single file."), false);
+        panelData.append(block);
+        break;
+    }
+    case PanelShortcuts:
+    {
+        //Playback controls.
+        block=generateBlock(tr("Playing Controls"));
+        addItem(block, tr("Play and Pause"),
+                "User/Shortcut/PlayNPause",
+                QVariant::fromValue(QKeySequence(Qt::Key_F8,
+                                                 Qt::Key_MediaTogglePlayPause)),
+                TypeShortcut,
+                tr("This shortcut will be used in the whole application to "
+                   "play or pause the current playing music."), false);
+        addItem(block, tr("Previous Song"),
+                "User/Shortcut/Previous",
+                QVariant::fromValue(QKeySequence(Qt::Key_F7,
+                                                 Qt::Key_MediaPrevious)),
+                TypeShortcut,
+                tr("This shortcut will be used in the whole application to "
+                   "switch the current playing music to the previous song."),
+                false);
+        addItem(block, tr("Next Song"),
+                "User/Shortcut/Next",
+                QVariant::fromValue(QKeySequence(Qt::Key_F9,
+                                                 Qt::Key_MediaNext)),
+                TypeShortcut,
+                tr("This shortcut will be used in the whole application to "
+                   "switch the current playing music to the next song."),
+                false);
+        panelData.append(block);
+        //Volume controls.
+        block=generateBlock(tr("Volume Controls"));
+        addItem(block, tr("Mute"),
+                "User/Shortcut/Mute",
+                QVariant::fromValue(QKeySequence()),
+                TypeShortcut,
+                tr("This shortcut will be used in the whole application to "
+                   "enter and exit the mute state."), false);
+        addItem(block, tr("Volume Up"),
+                "User/Shortcut/VolumeUp",
+                QVariant::fromValue(QKeySequence()),
+                TypeShortcut,
+                tr("This shortcut will be used in the whole application to "
+                   "increase 10% volume."), false);
+        addItem(block, tr("Volume Down"),
+                "User/Shortcut/VolumeDown",
+                QVariant::fromValue(QKeySequence()),
+                TypeShortcut,
+                tr("This shortcut will be used in the whole application to "
+                   "decrease 10% volume."), false);
         panelData.append(block);
         break;
     }

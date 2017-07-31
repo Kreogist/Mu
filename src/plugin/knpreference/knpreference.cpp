@@ -176,6 +176,8 @@ inline void KNPreference::updateItemTitle()
                             tr("Playback"));
     m_sidebar->setItemTitle(PanelLyrics,
                             tr("Lyrics"));
+    m_sidebar->setItemTitle(PanelShortcuts,
+                            tr("Shortcuts"));
 }
 
 inline void KNPreference::generateSettingItems()
@@ -190,6 +192,8 @@ inline void KNPreference::generateSettingItems()
                                       headerSettingIcon);
     items[PanelLyrics]=generateItem("://preference/lyrics.png",
                                     headerSettingIcon);
+    items[PanelShortcuts]=generateItem("://preference/shortcuts.png",
+                                       headerSettingIcon);
     //Generate all the items.
     for(int i=0; i<PreferencePanelCount; ++i)
     {

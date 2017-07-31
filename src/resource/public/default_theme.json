@@ -526,6 +526,11 @@
         "Base" : "#404040",
         "Highlight" : "#F7CF3D"
     },
+    "PreferenceShortcutLabel" :
+    {
+        "Parent" : "PreferenceItemSpinBox",
+        "Text" : "#AA0000"
+    },
     "PreferenceSidebarLabel" :
     {
         "Parent" : "PreferenceSidebar",

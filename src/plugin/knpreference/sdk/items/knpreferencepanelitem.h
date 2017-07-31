@@ -129,6 +129,12 @@ protected:
      */
     QString titleText() const;
 
+    /*!
+     * \brief Get the name of the value.
+     * \return The value name string.
+     */
+    QString valueName() const;
+
 private slots:
     void onActionChangeHighlight(int frame);
     void onValueChanged();

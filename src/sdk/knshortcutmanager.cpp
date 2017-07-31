@@ -21,6 +21,8 @@
 
 #include "knshortcutmanager.h"
 
+#include <QDebug>
+
 KNShortcutManager *KNShortcutManager::m_instance=nullptr;
 
 KNShortcutManager *KNShortcutManager::instance()
@@ -39,17 +41,14 @@ void KNShortcutManager::initial(QObject *parent)
 
 void KNShortcutManager::append(const QString &identifier, QAction *action)
 {
-    //Save the action to the action map.
-    m_actionMapper.insert(qHash(identifier), action);
-    //Find the identifier in the shortcut configure.
-    QVariant shortcut=m_shortcutConfigure->data(identifier);
-    if(shortcut.isNull())
-    {
-        //No user configure shortcut from the identifier.
-        return;
-    }
-    //Set the shortcut to the action.
-    action->setShortcut(shortcut.value<QKeySequence>());
+    //Set the identifier as the action object name.
+    action->setObjectName(identifier);
+    //Prepare the shortcut action structure.
+    ShortcutAction currentAction;
+    //Save the action pointer.
+    currentAction.action=action;
+    //Insert the current action.
+    insertAction(currentAction);
 }
 
 KNShortcutManager::KNShortcutManager(QObject *parent) :
@@ -61,7 +60,7 @@ KNShortcutManager::KNShortcutManager(QObject *parent) :
 void KNShortcutManager::setShortcutConfigure(KNConfigure *shortcutConfigure)
 {
     //Check the configure pointer first.
-    if(m_shortcutConfigure==nullptr)
+    if(m_shortcutConfigure)
     {
         //Igonre the incorrect request.
         return;
@@ -70,11 +69,77 @@ void KNShortcutManager::setShortcutConfigure(KNConfigure *shortcutConfigure)
     m_shortcutConfigure = shortcutConfigure;
     //Link the configure.
     connect(m_shortcutConfigure, &KNConfigure::valueChanged,
-            this, &KNShortcutManager::onConfigureChanged);
+            this, &KNShortcutManager::updateFromConfigure);
 }
 
-void KNShortcutManager::onConfigureChanged()
+QList<int> KNShortcutManager::conflictShortcut(const QString &actionName)
 {
-    //Check the shortcut configure object.
-    ;
+    return m_actionMapper.value(actionName).conflictKeys;
+}
+
+void KNShortcutManager::updateFromConfigure()
+{
+    //Pick all the shortcut actions out.
+    QList<ShortcutAction> actionList=m_actionMapper.values();
+    //Clear all the mapper and binding list.
+    m_keyBindings.clear();
+    m_actionMapper.clear();
+    //Loop and set all the new actions.
+    while(!actionList.isEmpty())
+    {
+        //Insert the current action.
+        insertAction(actionList.takeFirst());
+    }
+    //When the configure is updated, the shortcut info updated signal will be
+    //emitted.
+    emit shortcutUpdate();
+}
+
+inline void KNShortcutManager::insertAction(ShortcutAction currentAction)
+{
+    //Get the action.
+    QAction *action=currentAction.action;
+    //Clear the conflict keys.
+    currentAction.conflictKeys=QList<int>();
+    //Find the identifier in the shortcut configure.
+    QVariant shortcut=m_shortcutConfigure->data(action->objectName());
+    if(!shortcut.isNull())
+    {
+        //Get the key sequence.
+        QKeySequence sequence=shortcut.value<QKeySequence>();
+        //Prepare the sequence list.
+        QList<QKeySequence> sequenceList;
+        //This is the cheat part. Change the one sequence into four sperate
+        //sequence.
+        for(int i=0; i<sequence.count(); ++i)
+        {
+            //Check the list has the key or not.
+            if(m_keyBindings.contains(sequence[i]))
+            {
+                //Add the sequence to the conflict action.
+                currentAction.conflictKeys.append(sequence[i]);
+                //Pick out the original action structure.
+                const QString &conflictIdentifier=
+                        m_keyBindings.value(sequence[i])->objectName();
+                //Get the shortcut structure.
+                ShortcutAction conflictAction=
+                        m_actionMapper.value(conflictIdentifier);
+                conflictAction.conflictKeys.append(sequence[i]);
+                //Update the mapper.
+                m_actionMapper.insert(conflictIdentifier,
+                                      conflictAction);
+            }
+            else
+            {
+                //No conflict happens, add to the mapper.
+                m_keyBindings.insert(sequence[i], action);
+            }
+            //Add the key sequence to the list.
+            sequenceList.append(QKeySequence(sequence[i]));
+        }
+        //Set the shortcut to the action.
+        action->setShortcuts(sequenceList);
+    }
+    //Save the action to the action map.
+    m_actionMapper.insert(action->objectName(), currentAction);
 }

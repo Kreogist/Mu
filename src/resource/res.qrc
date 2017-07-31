@@ -97,6 +97,7 @@
         <file>public/status_add_music.png</file>
         <file>public/indicator_inverse.png</file>
         <file>preference/playback.png</file>
+        <file>preference/shortcuts.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

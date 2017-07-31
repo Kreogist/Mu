@@ -29,6 +29,7 @@ Foundation,
 #include "items/knpreferencepanelfontitem.h"
 #include "items/knpreferencepanelintitem.h"
 #include "items/knpreferencepanelcomboitem.h"
+#include "items/knpreferencepanelshortcutitem.h"
 
 #include <QDebug>
 
@@ -126,6 +127,9 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
         break;
     case TypeFont:
         item=new KNPreferencePanelFontItem(this);
+        break;
+    case TypeShortcut:
+        item=new KNPreferencePanelShortcutItem(this);
         break;
     default:
         break;

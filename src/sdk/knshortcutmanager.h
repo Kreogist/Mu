@@ -65,21 +65,45 @@ public:
      */
     void setShortcutConfigure(KNConfigure *shortcutConfigure);
 
+    /*!
+     * \brief Get the conflict shortcut combines of a specific action.
+     * \param actionName The name of the action.
+     * \return The conflict shortcut value.
+     */
+    QList<int> conflictShortcut(const QString &actionName);
+
 signals:
+    /*!
+     * \brief The shortcut information updated.
+     */
+    void shortcutUpdate();
 
 public slots:
-
-private slots:
-    void onConfigureChanged();
+    /*!
+     * \brief Update the shortcut information from the configure.
+     */
+    void updateFromConfigure();
 
 private:
+    struct ShortcutAction
+    {
+        QAction *action;
+        QList<int> conflictKeys;
+        ShortcutAction() :
+            action(nullptr),
+            conflictKeys(QList<int>())
+        {
+        }
+    };
+    inline void insertAction(ShortcutAction currentAction);
     static KNShortcutManager *m_instance;
     explicit KNShortcutManager(QObject *parent = 0);
     //Disable the copy of the instance.
     KNShortcutManager(const KNShortcutManager &);
     KNShortcutManager(KNShortcutManager &&);
 
-    QHash<uint, QAction *> m_actionMapper;
+    QHash<int, QAction *> m_keyBindings;
+    QHash<QString, ShortcutAction> m_actionMapper;
     KNConfigure *m_shortcutConfigure;
 };
 

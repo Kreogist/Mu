@@ -32,6 +32,7 @@ namespace PreferenceUtil
         PanelGeneral,
         PanelPlayback,
         PanelLyrics,
+        PanelShortcuts,
         PreferencePanelCount
     };
 
@@ -40,7 +41,8 @@ namespace PreferenceUtil
         TypeCombo,
         TypeBoolean,
         TypeInt,
-        TypeFont
+        TypeFont,
+        TypeShortcut
     };
 
     struct PreferencePanelOption

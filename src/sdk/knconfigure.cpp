@@ -23,6 +23,8 @@
 
 #include "knconfigure.h"
 
+#include <QDebug>
+
 QHash<QString, int> KNConfigure::m_typeList=QHash<QString, int>();
 
 KNConfigure::KNConfigure(QObject *parent) :
@@ -141,7 +143,8 @@ QVariant KNConfigure::data(const QString &key,
                 {
                     //Parse the value from the object.
                     QKeySequence valueShortcut(
-                                valueObject.value("Key").toString());
+                                valueObject.value("Key").toString(),
+                                QKeySequence::PortableText);
                     //Give back the value data.
                     return QVariant::fromValue(valueShortcut);
                 }
@@ -215,19 +218,17 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         break;
     }
     //For other types, we have to check.
-    case QVariant::UserType:
+    case QVariant::KeySequence:
     {
-        //Check the type of the value.
-        if(value.canConvert<QKeySequence>())
-        {
-            //Generate a key sequence object.
-            QKeySequence keySequence=value.value<QKeySequence>();
-            //A shortcut object.
-            QJsonObject shortcutObject;
-            shortcutObject.insert("Key", keySequence.toString());
-            //Insert the key sequence object.
-            m_dataObject.insert(key, shortcutObject);
-        }
+        //Generate a key sequence object.
+        QKeySequence keySequence=value.value<QKeySequence>();
+        //A shortcut object.
+        QJsonObject shortcutObject;
+        shortcutObject.insert("Type", QString("Shortcut"));
+        shortcutObject.insert("Key", keySequence.toString(
+                                  QKeySequence::PortableText));
+        //Insert the key sequence object.
+        m_dataObject.insert(key, shortcutObject);
         break;
     }
     default:

@@ -183,6 +183,11 @@ QString KNPreferencePanelItem::titleText() const
     return m_titleLabel->text();
 }
 
+QString KNPreferencePanelItem::valueName() const
+{
+    return m_path.last();
+}
+
 void KNPreferencePanelItem::onActionChangeHighlight(int frame)
 {
     //Change the highlight opacity.
