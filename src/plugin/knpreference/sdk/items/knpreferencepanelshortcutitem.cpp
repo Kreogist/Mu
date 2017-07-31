@@ -117,7 +117,7 @@ void KNPreferencePanelShortcutItem::onShortcutUpdate()
     if(actionSequenceText.isEmpty())
     {
         //Set the None text.
-        m_shortcutText->setText(tr("<None>"));
+        m_shortcutText->setText(tr("<No shortcut>"));
         return;
     }
     //Check the conflict key information from the shortcut manager.
