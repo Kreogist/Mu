@@ -55,6 +55,12 @@ signals:
     void analysisComplete(KNMusicAnalysisItem analysisItem);
 
     /*!
+     * \brief When a track list is complete, this signal will be emitted.
+     * \param analysisItems The parsed result list.
+     */
+    void analysisTrackComplete(QList<KNMusicAnalysisItem> analysisItems);
+
+    /*!
      * \brief This is signal is only used to avoid the depth recursion.
      */
     void analysisNext();

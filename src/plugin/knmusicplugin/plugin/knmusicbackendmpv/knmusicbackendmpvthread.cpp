@@ -518,6 +518,12 @@ inline bool KNMusicBackendMpvThread::buildMpvHandle()
     // If you have a HWND, use: int64_t wid = (intptr_t)hwnd;
     int64_t wid=m_container->winId();
     mpv_set_option(m_mpvHandle, "wid", MPV_FORMAT_INT64, &wid);
+    // *** Patches from Roberto Canteri<roberto.canteri@gmail.com> ***
+    //Do not show image for audio tracks.
+    mpv_set_option_string(m_mpvHandle, "audio-display", "no");
+    //Disable video.
+    mpv_set_option_string(m_mpvHandle, "vo", "null");
+    // *** Patches End ***
     // Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
     // this property changes.
     mpv_observe_property(m_mpvHandle, 0, "playback-time", MPV_FORMAT_DOUBLE);

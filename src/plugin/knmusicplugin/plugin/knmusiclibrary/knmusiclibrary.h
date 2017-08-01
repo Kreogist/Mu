@@ -121,6 +121,7 @@ private:
     KNMusicLibraryModel *m_libraryModel;
     KNMusicLibraryTab *m_songTab;
     KNMusicNowPlayingBase *m_nowPlaying;
+    KNConfigure *m_libraryConfigure;
 };
 
 #endif // KNMUSICLIBRARY_H

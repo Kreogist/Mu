@@ -157,8 +157,9 @@ signals:
 public slots:
 
 private slots:
-    void onActionModelChanged();
-    void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
+    void onModelChanged();
+    void onAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
+    void onAnalysisListComplete(const QList<KNMusicAnalysisItem> &analysisItem);
 
 private:
     static QString generateFilePath();

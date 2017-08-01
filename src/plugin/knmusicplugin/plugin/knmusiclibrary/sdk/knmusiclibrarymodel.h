@@ -182,15 +182,22 @@ public slots:
     void setLibraryPath(const QString &libraryPath);
 
     /*!
+     * \brief Set the library configure to the library.
+     * \param configure The configure object.
+     */
+    void setLibraryConfigure(KNConfigure *configure);
+
+    /*!
      * \brief Recover the library model from the json database.
      */
     void recoverModel();
 
 private slots:
-    void onActionAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
-    void onActionImageUpdateRow(const int &row,
-                                const KNMusicDetailInfo &detailInfo);
-    void onActionImageRecoverComplete();
+    void onAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
+    void onImageUpdateRow(int row,
+                          const KNMusicDetailInfo &detailInfo);
+    void onImageRecoverComplete();
+    void onConfigureUpdate();
 
 private:
     inline void addCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
@@ -211,7 +218,8 @@ private:
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     KNMusicLibraryImageManager *m_imageManager;
-    bool m_databaseLoaded;
+    KNConfigure *m_configure;
+    bool m_databaseLoaded, m_ignoreCueData;
 };
 
 #endif // KNMUSICLIBRARYMODEL_H

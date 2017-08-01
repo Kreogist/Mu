@@ -60,6 +60,13 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 "User/Global/Appearance/ShowStatusBar", true, TypeBoolean,
                 tr("Show the status bar at the top right corner."), false);
         panelData.append(block);
+        //Library settings.
+        block=generateBlock(tr("Library"));
+        addItem(block, tr("Ignore CUE Data File"),
+                "User/Music/MusicLibrary/IgnoreCueData", true, TypeBoolean,
+                tr("When adding the data file of one CUE file, "
+                   "ignore the data file."), false);
+        panelData.append(block);
         break;
     }
     case PanelPlayback:

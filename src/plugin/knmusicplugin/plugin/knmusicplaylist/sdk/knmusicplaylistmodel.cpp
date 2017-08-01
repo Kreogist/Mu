@@ -40,11 +40,11 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QThread *workingThread,
 {
     //When the row count changed, this model should be marked to be changed.
     connect(this, &KNMusicPlaylistModel::rowCountChanged,
-            this, &KNMusicPlaylistModel::onActionModelChanged);
+            this, &KNMusicPlaylistModel::onModelChanged);
     //When there's a data changed, this model should be marked to be changed
     //as well.
     connect(this, &KNMusicPlaylistModel::dataChanged,
-            this, &KNMusicPlaylistModel::onActionModelChanged);
+            this, &KNMusicPlaylistModel::onModelChanged);
 
     //Move the searcher to working thread.
     m_searcher->moveToThread(workingThread);
@@ -63,7 +63,10 @@ KNMusicPlaylistModel::KNMusicPlaylistModel(QThread *workingThread,
             m_analysisQueue, &KNMusicAnalysisQueue::addFiles,
             Qt::QueuedConnection);
     connect(m_analysisQueue, &KNMusicAnalysisQueue::analysisComplete,
-            this, &KNMusicPlaylistModel::onActionAnalysisComplete,
+            this, &KNMusicPlaylistModel::onAnalysisComplete,
+            Qt::QueuedConnection);
+    connect(m_analysisQueue, &KNMusicAnalysisQueue::analysisTrackComplete,
+            this, &KNMusicPlaylistModel::onAnalysisListComplete,
             Qt::QueuedConnection);
 }
 
@@ -174,17 +177,31 @@ QVariant KNMusicPlaylistModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void KNMusicPlaylistModel::onActionModelChanged()
+void KNMusicPlaylistModel::onModelChanged()
 {
     //Set the changed flag to true.
     m_changed=true;
 }
 
-void KNMusicPlaylistModel::onActionAnalysisComplete(
+void KNMusicPlaylistModel::onAnalysisComplete(
         const KNMusicAnalysisItem &analysisItem)
 {
     //Add the detail info to the playlist model.
     appendRow(analysisItem.detailInfo);
+}
+
+void KNMusicPlaylistModel::onAnalysisListComplete(
+        const QList<KNMusicAnalysisItem> &analysisItem)
+{
+    //Translate the item list into detail info list.
+    QList<KNMusicDetailInfo> detailInfoList;
+    for(auto i : analysisItem)
+    {
+        //Add the detail info to the list.
+        detailInfoList.append(i.detailInfo);
+    }
+    //Append the detail info list.
+    appendRows(detailInfoList);
 }
 
 QString KNMusicPlaylistModel::generateFilePath()

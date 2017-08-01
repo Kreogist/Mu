@@ -19,6 +19,7 @@
 
 #include "knutil.h"
 #include "knnotification.h"
+#include "knconfigure.h"
 
 #include "knmusiccategorymodelbase.h"
 #include "knmusicsearcher.h"
@@ -41,7 +42,9 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     m_searcher(new KNMusicSearcher),
     m_analysisQueue(new KNMusicAnalysisQueue),
     m_imageManager(new KNMusicLibraryImageManager),
-    m_databaseLoaded(false)
+    m_configure(nullptr),
+    m_databaseLoaded(false),
+    m_ignoreCueData(true)
 {
     //Move the searcher to working thread.
     m_searcher->moveToThread(&m_searchThread);
@@ -68,7 +71,7 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
             m_analysisQueue, &KNMusicAnalysisQueue::addFiles,
             Qt::QueuedConnection);
     connect(m_analysisQueue, &KNMusicAnalysisQueue::analysisComplete,
-            this, &KNMusicLibraryModel::onActionAnalysisComplete,
+            this, &KNMusicLibraryModel::onAnalysisComplete,
             Qt::QueuedConnection);
 
     //Move the image manager to working thread.
@@ -79,10 +82,10 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
             m_imageManager, &KNMusicLibraryImageManager::recoverAlbumArt,
             Qt::QueuedConnection);
     connect(m_imageManager, &KNMusicLibraryImageManager::recoverImageComplete,
-            this, &KNMusicLibraryModel::onActionImageRecoverComplete,
+            this, &KNMusicLibraryModel::onImageRecoverComplete,
             Qt::QueuedConnection);
     connect(m_imageManager, &KNMusicLibraryImageManager::requireUpdateRow,
-            this, &KNMusicLibraryModel::onActionImageUpdateRow,
+            this, &KNMusicLibraryModel::onImageUpdateRow,
             Qt::QueuedConnection);
 
     //Start working threads.
@@ -473,30 +476,87 @@ void KNMusicLibraryModel::setLibraryPath(const QString &libraryPath)
     m_imageManager->setImageFolderPath(artworkFolder);
 }
 
-void KNMusicLibraryModel::onActionAnalysisComplete(
+void KNMusicLibraryModel::setLibraryConfigure(KNConfigure *configure)
+{
+    //Save the object pointer.
+    m_configure=configure;
+    //Link the configure change signal.
+    connect(m_configure, &KNConfigure::valueChanged,
+            this, &KNMusicLibraryModel::onConfigureUpdate);
+    //Update the configure.
+    onConfigureUpdate();
+}
+
+void KNMusicLibraryModel::onAnalysisComplete(
         const KNMusicAnalysisItem &analysisItem)
 {
+    //Prepare the detail info.
+    const KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Check out whether the detail info is existed in the model, find the detail
     //info in the model.
-    int detailInfoIndex=detailInfoRow(analysisItem.detailInfo);
+    int detailInfoIndex=detailInfoPathRow(detailInfo);
     //Check out the index.
     if(detailInfoIndex!=-1)
     {
-        //Update the detail info.
-        updateModelRow(detailInfoIndex, analysisItem);
-        //Mission complete.
-        return;
+        //Get the row detail info.
+        const KNMusicDetailInfo &rawDetailInfo=rowDetailInfo(detailInfoIndex);
+        //Check the track information is empty or not.
+        if(rawDetailInfo.trackFilePath.isEmpty())
+        {
+            //Check the current analysis item detail info track file path.
+            if(detailInfo.filePath.isEmpty())
+            {
+                //Simply update the detail info.
+                updateModelRow(detailInfoIndex, analysisItem);
+                //Mission complete.
+                return;
+            }
+            //Here we are facing the state that in the library, it saves the
+            //total content of the tracks, and now we are adding the single
+            //track of the file to the library.
+            if(m_ignoreCueData)
+            {
+                //Remove the original detail info.
+                removeRow(detailInfoIndex);
+            }
+        }
+        else
+        {
+            //Or else, check whether the current adding item is empty.
+            if(detailInfo.trackFilePath.isEmpty())
+            {
+                //Check the CUE data file ignore flag.
+                if(m_ignoreCueData)
+                {
+                    //Trying to add the CUE data file to the library.
+                    return;
+                }
+            }
+            else
+            {
+                //The track path of the library is not empty, check current item
+                //track path and track index.
+                //Check the track info is the same or not.
+                if(detailInfo.trackIndex==rawDetailInfo.trackIndex &&
+                        detailInfo.trackFilePath==rawDetailInfo.trackFilePath)
+                {
+                    //Exactly the same item, update the row.
+                    updateModelRow(detailInfoIndex, analysisItem);
+                    //Mission complete.
+                    return;
+                }
+            }
+        }
     }
     //Add the detail info to the model.
-    appendRow(analysisItem.detailInfo);
+    appendRow(detailInfo);
     //Emit the analysis signal.
     m_imageManager->analysisAlbumArt(index(rowCount()-1, 0),
                                      analysisItem);
 }
 
-void KNMusicLibraryModel::onActionImageUpdateRow(
-        const int &row,
-        const KNMusicDetailInfo &detailInfo)
+void KNMusicLibraryModel::onImageUpdateRow(int row,
+                                           const KNMusicDetailInfo &detailInfo)
 {
     //Generate a useless analysis item.
     KNMusicAnalysisItem item;
@@ -512,7 +572,7 @@ void KNMusicLibraryModel::onActionImageUpdateRow(
     }
 }
 
-void KNMusicLibraryModel::onActionImageRecoverComplete()
+void KNMusicLibraryModel::onImageRecoverComplete()
 {
     //Called all the category model to udpate their data.
     for(auto i=m_categoryModels.begin(); i!=m_categoryModels.end(); ++i)
@@ -520,6 +580,12 @@ void KNMusicLibraryModel::onActionImageRecoverComplete()
         //Called onActionImageRecoverComplete() slot.
         (*i)->onActionImageRecoverComplete();
     }
+}
+
+void KNMusicLibraryModel::onConfigureUpdate()
+{
+    //Update the cue data duplicate flag.
+    m_ignoreCueData=m_configure->data("IgnoreCueData", false).toBool();
 }
 
 inline void KNMusicLibraryModel::addCategoryDetailInfo(

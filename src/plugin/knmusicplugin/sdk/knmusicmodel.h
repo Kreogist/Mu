@@ -219,6 +219,16 @@ public:
     int detailInfoRow(const KNMusicDetailInfo &detailInfo);
 
     /*!
+     * \brief Get the row of one detail info, it will only check the path of the
+     * row is the same as the given one, but not check the track index and track
+     * path.
+     * \param detailInfo The detail info.
+     * \return The row of the detail info first appear. If we cannot find the
+     * detail info, it will return -1.
+     */
+    int detailInfoPathRow(const KNMusicDetailInfo &detailInfo);
+
+    /*!
      * \brief Reimplemented from QAbstractTableModel::supportedDropActions().
      */
     Qt::DropActions supportedDropActions() const Q_DECL_OVERRIDE;

@@ -578,6 +578,22 @@ int KNMusicModel::detailInfoRow(const KNMusicDetailInfo &detailInfo)
     return m_detailInfos.indexOf(detailInfo);
 }
 
+int KNMusicModel::detailInfoPathRow(const KNMusicDetailInfo &detailInfo)
+{
+    //Loop and find all the information.
+    for(int i=0, detailInfoSize=m_detailInfos.size(); i<detailInfoSize; ++i)
+    {
+        //Check the file path.
+        if(m_detailInfos.at(i).filePath==detailInfo.filePath)
+        {
+            //Hit the target.
+            return i;
+        }
+    }
+    //Else return -1.
+    return -1;
+}
+
 Qt::DropActions KNMusicModel::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;

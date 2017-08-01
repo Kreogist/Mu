@@ -94,6 +94,7 @@ void KNMusicAnalysisQueue::onActionAnalysisNext()
         //Parse the file as a list.
         parser->parseTrackList(fileInfo.absoluteFilePath(), trackItems);
         //Treat each the analysis item as one analysis complete.
+//        emit analysisTrackComplete(trackItems);
         while(!trackItems.isEmpty())
         {
             emit analysisComplete(trackItems.takeFirst());

@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class KNConfigure;
 class KNMusicTab;
 class KNMusicNowPlayingBase;
 /*!

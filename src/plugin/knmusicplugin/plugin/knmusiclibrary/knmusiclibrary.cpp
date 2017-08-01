@@ -19,6 +19,7 @@
 
 //Global Dependences.
 #include "knglobal.h"
+#include "knconfigure.h"
 #include "knlocalemanager.h"
 #include "knopacityanimebutton.h"
 
@@ -52,10 +53,12 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     m_addToLibraryButton(new KNOpacityAnimeButton()),
     m_libraryModel(new KNMusicLibraryModel(this)),
     m_songTab(new KNMusicLibrarySongTab),
-    m_nowPlaying(nullptr)
+    m_nowPlaying(nullptr),
+    m_libraryConfigure(knMusicGlobal->configure()->getConfigure("MusicLibrary"))
 {
     //Configure the library tabs.
     m_libraryModel->setDatabase(m_libraryPath+"/Music.db");
+    m_libraryModel->setLibraryConfigure(m_libraryConfigure);
     m_libraryModel->setLibraryPath(m_libraryPath);
 
     //Configure the tabs.
