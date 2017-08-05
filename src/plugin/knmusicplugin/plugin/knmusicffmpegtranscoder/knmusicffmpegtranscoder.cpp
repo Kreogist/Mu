@@ -22,6 +22,7 @@ extern "C"
 #include "libavformat/avio.h"
 
 #include "libavcodec/avcodec.h"
+#include "libavcodec/version.h"
 
 #include "libavutil/audio_fifo.h"
 #include "libavutil/avassert.h"
@@ -37,6 +38,14 @@ extern "C"
 #include "knmusicffmpegtranscoder.h"
 
 #include <QDebug>
+
+//From the commit f9b1cf15c233dde29f3659c903e32f74be4fdb95 of FFMpeg library.
+//LibAV introduce the copy context API from 57.12, but FFMpeg introduce from
+//57.33
+#if LIBAVCODEC_VERSION_MAJOR > 57 || (LIBAVCODEC_VERSION_MAJOR==57 && \
+    LIBAVCODEC_VERSION_MINOR>32)
+#define FFMPEG_ENABLE_COPY_CONTEXT
+#endif
 
 /*
  * Most of these file is copy from the official example, transcode_aac.c
@@ -98,7 +107,7 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
     unsigned int streamCount=m_inputFormatContext->nb_streams;
     for(unsigned int i=0; i<streamCount; ++i)
     {
-#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
+#ifdef FFMPEG_ENABLE_COPY_CONTEXT
         //Check the stream type.
         AVCodecParameters *streamCodecParameter=
                 m_inputFormatContext->streams[i]->codecpar;
@@ -131,7 +140,7 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
         return InputFailToFindAudioStream;
     }
     //Find a decoder for the audio stream.
-#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
+#ifdef FFMPEG_ENABLE_COPY_CONTEXT
     AVCodecID codecID=audioStream->codecpar->codec_id;
 #else
     AVCodecID codecID=audioStream->codec->codec_id;
@@ -153,7 +162,7 @@ int KNMusicFfmpegTranscoder::setInputFile(const QString &filePath,
         return InputFailToAllocDecContext;
     }
     //Initialize the stream parameters with demuxer information.
-#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
+#ifdef FFMPEG_ENABLE_COPY_CONTEXT
     error=avcodec_parameters_to_context(m_inputCodecContext,
                                         audioStream->codecpar);
 #else
@@ -272,7 +281,7 @@ int KNMusicFfmpegTranscoder::setOutputFile(const QString &filePath,
         return OutputFailToOpenCodec;
     }
     //Initial the parameters.
-#if (defined FF_API_COPY_CONTENT) || (defined Q_OS_MACX)
+#ifdef FFMPEG_ENABLE_COPY_CONTEXT
     error=avcodec_parameters_from_context(stream->codecpar,
                                           m_outputCodecContext);
 #else
