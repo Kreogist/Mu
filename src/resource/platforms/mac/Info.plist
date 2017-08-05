@@ -19,6 +19,8 @@
 			<string>Viewer</string>
 		</dict>
 		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>file.icns</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -28,17 +30,72 @@
 				<string>com.microsoft.waveform-audio</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>file.icns</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<string>Yes</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.mp3</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>file.icns</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSIsAppleDefaultForType</key>
+			<string>Yes</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.apple.iTunes.mp2</string>
+				<string>public.mp2</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>file.icns</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<string>Yes</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aiff-audio</string>
+				<string>public.aifc-audio</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>iTunes-mpeg4.icns</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>ICBaseRule</key>
+			<string>iconcompiler.generic</string>
+			<key>ICExtension</key>
+			<string>MPEG 4</string>
+			<key>LSIsAppleDefaultForType</key>
+			<string>Yes</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.mpeg-4-audio</string>
+				<string>com.apple.m4a-audio</string>
+			</array>
+		</dict>
 	</array>
 	<key>NSHumanReadableCopyright</key>
-	<string>µ 1.0.0 Beta 3, © 2013–2017 Kreogist Dev Team. All rights reserved.</string>
+	<string>µ 1.0.0 Beta 4, © 2013–2017 Kreogist Dev Team. All rights reserved.</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.music</string>
 	<key>CFBundleName</key>
 	<string>µ</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0b2</string>
+	<string>1.0b4</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0 Beta 2</string>
+	<string>1.0.0 Beta 4</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIconFile</key>
@@ -46,7 +103,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleGetInfoString</key>
-	<string>µ 1.0.0 Beta 3, © 2013–2017 Kreogist Dev Team. All rights reserved.</string>
+	<string>µ 1.0.0 Beta 4, © 2013–2017 Kreogist Dev Team. All rights reserved.</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>

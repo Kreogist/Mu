@@ -68,6 +68,7 @@
 #include "plugin/knmusictagflac/knmusictagflac.h"
 #include "plugin/knmusictagm4a/knmusictagm4a.h"
 #include "plugin/knmusictagwma/knmusictagwma.h"
+#include "plugin/knmusictagffmpeg/knmusictagffmpeg.h"
 // Transcoder.
 #include "plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.h"
 // List Parsers.
@@ -683,6 +684,7 @@ void KNMusicPlugin::initialParserPlugin()
     KNMusicParser *parser=knMusicGlobal->parser();
 
     //Add tag parsers.
+    parser->installTagParser(new KNMusicTagFfmpeg);
     parser->installTagParser(new KNMusicTagId3v1);
     parser->installTagParser(new KNMusicTagWma);
     parser->installTagParser(new KNMusicTagWav);

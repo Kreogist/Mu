@@ -672,7 +672,7 @@ inline void KNMusicFfmpegTranscoder::clearInputCache()
     if(m_inputFormatContext)
     {
         //Close the input context.
-        avformat_close_input(&m_inputFormatContext);
+        avformat_free_context(m_inputFormatContext);
         //Reset the pointer.
         m_inputFormatContext=nullptr;
     }

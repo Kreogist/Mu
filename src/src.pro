@@ -547,7 +547,8 @@ SOURCES += \
     sdk/kndpimanager.cpp \
     plugin/knmusicplugin/sdk/knmusicgeneraldelegate.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.cpp \
-    sdk/knshortcuteditor.cpp
+    sdk/knshortcuteditor.cpp \
+    plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -835,7 +836,8 @@ HEADERS += \
     sdk/kndpimanager.h \
     plugin/knmusicplugin/sdk/knmusicgeneraldelegate.h \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.h \
-    sdk/knshortcuteditor.h
+    sdk/knshortcuteditor.h \
+    plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.h
 
 RESOURCES += \
     resource/res.qrc

@@ -30,4 +30,3 @@ KNMusicSearcher::KNMusicSearcher(QObject *parent) :
                       knMusicGlobal->listSuffixList());
     }
 }
-

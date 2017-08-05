@@ -338,10 +338,9 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
     KNNotificationWidget *notificationWidget=
             m_notificationCenter->notificationWidget();
     //Move the notification widget to target position.
-    notificationWidget->move(
-                knDpi->pos(width() - notificationWidget->width() -
-                            NotificationWidgetPatch,
-                            notificationWidget->y()));
+    notificationWidget->move(width() - notificationWidget->width() -
+                             knDpi->width(NotificationWidgetPatch),
+                             notificationWidget->y());
 }
 
 void KNMainWindow::closeEvent(QCloseEvent *event)

@@ -97,7 +97,7 @@ KNPreferenceAbout::KNPreferenceAbout(QWidget *parent) :
     //Set the default label.
     m_iconContent->setPixmap(QPixmap("://icon/mu.png"));
     //Configure the label.
-    m_iconContent->setFixedSize(16, 16);
+    m_iconContent->setFixedSize(knDpi->size(16, 16));
     m_textContent[Title]->setText(QApplication::applicationDisplayName());
 
     //Link the retranslate.

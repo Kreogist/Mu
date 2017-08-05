@@ -209,6 +209,7 @@ _?i\^(;;_`´ *3c"^   ~\:1GtGbwwgkkkk>DmL´´({$NRRmFL     /wXZZZZggdRQ0
 #define MAJOR_VERSION 1
 #define MINOR_VERSION 0
 #define PATCH_VERSION 0
+#define APPEND_VERSION "Beta 4"
 
 //----DON'T TOUCH BELOW---
 //Generate string for version.
@@ -221,7 +222,8 @@ _?i\^(;;_`´ *3c"^   ~\:1GtGbwwgkkkk>DmL´´({$NRRmFL     /wXZZZZggdRQ0
 /* the following are compile time version */
 /* C++11 requires a space between literal and identifier */
 #define APP_VERSION_STR \
-    TOSTR(MAJOR_VERSION) "." TOSTR(MINOR_VERSION) "." TOSTR(PATCH_VERSION)
+    TOSTR(MAJOR_VERSION) "." TOSTR(MINOR_VERSION) "." TOSTR(PATCH_VERSION) \
+    " " APPEND_VERSION
 //----DON'T TOUCH ABOVE---
 
 #endif // KNVERSION
