@@ -77,11 +77,13 @@ bool KNMusicTagFfmpeg::parseTag(QFile &musicFile,
 bool KNMusicTagFfmpeg::writeTag(const KNMusicAnalysisItem &analysisItem)
 {
     Q_UNUSED(analysisItem);
+    return false;
 }
 
 bool KNMusicTagFfmpeg::parseAlbumArt(KNMusicAnalysisItem &analysisItem)
 {
     Q_UNUSED(analysisItem);
+    return false;
 }
 
 bool KNMusicTagFfmpeg::writable() const

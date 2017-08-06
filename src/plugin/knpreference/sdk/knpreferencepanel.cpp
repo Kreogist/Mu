@@ -34,6 +34,7 @@ Foundation,
 #include <QDebug>
 
 #define TitleTopMargin 20
+#define TitleHeightFixed 3
 #define TitleBottomMargin 5
 
 KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
@@ -65,6 +66,7 @@ void KNPreferencePanel::setPanelBlocks(
         //Configure the label.
         titleLabel->setFixedHeight(m_titleFont.pixelSize()+
                                    knDpi->height(TitleTopMargin+
+                                                 TitleHeightFixed+
                                                  TitleBottomMargin));
         titleLabel->setContentsMargins(knDpi->margins(20, TitleTopMargin,
                                                       20, TitleBottomMargin));

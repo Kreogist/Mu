@@ -24,7 +24,7 @@
     <message>
         <location filename="../sdk/account/knaccountdetailpanel.cpp" line="221"/>
         <source>Account Update Failed.</source>
-        <translation>賬戶資訊更新失敗。</translation>
+        <translation>帳戶資訊更新失敗。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountdetailpanel.cpp" line="232"/>
@@ -34,12 +34,12 @@
     <message>
         <location filename="../sdk/account/knaccountdetailpanel.cpp" line="234"/>
         <source>Cannot connect to server. Please check your Internet connection.</source>
-        <translation>無法連接到服務器。請檢查您的網絡連接。</translation>
+        <translation>無法連接到伺服器。請檢查您的網路連接。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountdetailpanel.cpp" line="237"/>
         <source>Failed to update account info. Try again.</source>
-        <translation>更新用戶資訊失敗，請重試。</translation>
+        <translation>更新使用者資訊失敗，請重試。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountdetailpanel.cpp" line="239"/>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="279"/>
         <source>Check your email for a link to reset your password.</source>
-        <translation>重置密碼的鏈接已發送到您的郵箱。</translation>
+        <translation>重置密碼的連結已發送到您的郵箱。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="283"/>
         <source>with Your Kreogist Account</source>
-        <translation>以同步您的用戶資訊及設置</translation>
+        <translation>以同步您的使用者資訊及設置</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="282"/>
@@ -82,11 +82,11 @@
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="278"/>
         <source>Kreogist Account login failed.</source>
-        <translation>Kreogist 賬戶登錄失敗。</translation>
+        <translation>Kreogist 帳戶登錄失敗。</translation>
     </message>
     <message>
         <source>Cannot connect to server. Please check your Internet connection.</source>
-        <translation type="vanished">無法連接到服務器。請檢查您的網絡連接。</translation>
+        <translation type="vanished">無法連接到伺服器。請檢查您的網路連接。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="287"/>
@@ -111,11 +111,11 @@
     <message>
         <location filename="../sdk/account/knaccountloginpanel.cpp" line="293"/>
         <source>Login with another account</source>
-        <translation>使用其它的賬戶登錄</translation>
+        <translation>使用其它的帳戶登錄</translation>
     </message>
     <message>
         <source>Login with another account.</source>
-        <translation type="obsolete">使用其它的賬戶登錄</translation>
+        <translation type="obsolete">使用其它的帳戶登錄</translation>
     </message>
 </context>
 <context>
@@ -123,12 +123,12 @@
     <message>
         <location filename="../sdk/account/knaccountpanel.cpp" line="262"/>
         <source>Account Update Success</source>
-        <translation>賬戶更新成功</translation>
+        <translation>帳戶更新成功</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountpanel.cpp" line="263"/>
         <source>The user data of %1 has been updated successfully.</source>
-        <translation>%1 的用戶資訊已經被成功更新。</translation>
+        <translation>%1 的使用者資訊已經被成功更新。</translation>
     </message>
 </context>
 <context>
@@ -156,12 +156,12 @@
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="158"/>
         <source>Password must be at least 6 characters.</source>
-        <translation>密碼長度至少6位。</translation>
+        <translation>密碼長度至少6位元。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="160"/>
         <source>Password must include a number.</source>
-        <translation>密碼必須包含一個數字。</translation>
+        <translation>密碼必須包含一個數位。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountpasswordbox.cpp" line="162"/>
@@ -192,14 +192,14 @@
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="166"/>
         <source>Create Kreogist Account</source>
-        <translation>創建 Kreogist 賬戶</translation>
+        <translation>創建 Kreogist 帳戶</translation>
     </message>
     <message>
         <source>1. Passwords must be at least 6 characters.
 2. Passwords must include a number.
 3. Passwords must include an upper and lower case letter.</source>
-        <translation type="vanished">1、密碼長度至少6位。
-2、密碼必須包含一個數字。
+        <translation type="vanished">1、密碼長度至少6位元。
+2、密碼必須包含一個數位。
 3、密碼必須包含一個大寫以及一個小寫字母。</translation>
     </message>
     <message>
@@ -210,12 +210,12 @@
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="170"/>
         <source>Password must be at least 6 characters.</source>
-        <translation>密碼長度至少6位。</translation>
+        <translation>密碼長度至少6位元。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="172"/>
         <source>Password must include a number.</source>
-        <translation>密碼必須包含一個數字。</translation>
+        <translation>密碼必須包含一個數位。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="174"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../sdk/account/knaccountregisterpanel.cpp" line="187"/>
         <source>E-mail is already taken, use another E-mail address.</source>
-        <translation>電子郵件已經被使用，請使用其它電子郵件位址。</translation>
+        <translation>電子郵件已經被使用，請使用其它電子郵寄地址。</translation>
     </message>
 </context>
 <context>
@@ -268,17 +268,17 @@
     <message>
         <location filename="../sdk/account/knaccountresetpanel.cpp" line="127"/>
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <translation>輸入您的電子郵件地址，我們將給您發送一個重設密碼鏈接。</translation>
+        <translation>輸入您的電子郵寄地址，我們將給您發送一個重設密碼連結。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountresetpanel.cpp" line="130"/>
         <source>Can&apos;t connect to Internet, please check your Internet connections.</source>
-        <translation>無法連接到互聯網，請檢查您的互聯網鏈接。</translation>
+        <translation>無法連接到互聯網，請檢查您的互聯網連結。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountresetpanel.cpp" line="132"/>
         <source>Can&apos;t find that email, please check the E-mail address again.</source>
-        <translation>無法找到電子郵件地址，請檢查您的電子郵件地址。</translation>
+        <translation>無法找到電子郵寄地址，請檢查您的電子郵寄地址。</translation>
     </message>
     <message>
         <location filename="../sdk/account/knaccountresetpanel.cpp" line="134"/>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../sdk/account/knaccountresetpanel.cpp" line="139"/>
         <source>Enter your E-mail address</source>
-        <translation>輸入您的電子郵件地址</translation>
+        <translation>輸入您的電子郵寄地址</translation>
     </message>
 </context>
 <context>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../sdk/knfontdialog.cpp" line="146"/>
         <source>Underline</source>
-        <translation>下劃線</translation>
+        <translation>底線</translation>
     </message>
     <message>
         <location filename="../sdk/knfontdialog.cpp" line="147"/>
@@ -367,22 +367,22 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="97"/>
         <source>The remote server refused the connection, it is not accepting requests.</source>
-        <translation>服務器拒絕連接，沒有接受請求。</translation>
+        <translation>伺服器拒絕連接，沒有接受請求。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="100"/>
         <source>The remote server closed the connection prematurely, before the entire reply was received and processed.</source>
-        <translation>服務器在回復被完全接收和處理前，過早的結束了連接。</translation>
+        <translation>伺服器在回復被完全接收和處理前，過早的結束了連接。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="103"/>
         <source>The remote host name was not found.</source>
-        <translation>主機名沒有找到。</translation>
+        <translation>主機名稱沒有找到。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="105"/>
         <source>The connection timed out.</source>
-        <translation>連接超時。</translation>
+        <translation>連接逾時。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="107"/>
@@ -397,67 +397,67 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="112"/>
         <source>The connection was broken due to disconnection from the network, however the system has initiated roaming to another access point.</source>
-        <translation>連接因為網絡斷開而無法繼續，然而系統在另一個接入點建立了通信。</translation>
+        <translation>連接因為網路斷開而無法繼續，然而系統在另一個接入點建立了通信。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="116"/>
         <source>The connection was broken due to disconnection from the network or failure to start the network.</source>
-        <translation>連接因為網絡斷開而無法繼續，或者無法啟動網絡。</translation>
+        <translation>連接因為網路斷開而無法繼續，或者無法啟動網路。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="119"/>
         <source>The background request is not currently allowed due to platform policy.</source>
-        <translation>受限於平臺的權限設置，不能使用後台請求。</translation>
+        <translation>受限於平臺的許可權設置，不能使用後臺請求。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="122"/>
         <source>The connection to the proxy server was refused, it is not accepting requests.</source>
-        <translation>代理服務器拒絕建立連接。</translation>
+        <translation>代理伺服器拒絕建立連接。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="125"/>
         <source>The proxy server closed the connection prematurely, before the entire reply was received and processed.</source>
-        <translation>代理服務器在回復被完全接收和處理前，過早的結束了連接。</translation>
+        <translation>代理伺服器在回復被完全接收和處理前，過早的結束了連接。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="128"/>
         <source>The proxy host name was not found, The proxy hostname is invalid.</source>
-        <translation>沒有找到代理服務器的主機名，其主機名無效。</translation>
+        <translation>沒有找到代理伺服器的主機名稱，其主機名稱無效。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="131"/>
         <source>The connection to the proxy timed out or the proxy did not reply in time to the request sent.</source>
-        <translation>到代理服務器的連接超時，或者代理服務器沒有及時響應請求。</translation>
+        <translation>到代理伺服器的連接逾時，或者代理伺服器沒有及時回應請求。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="134"/>
         <source>The proxy requires authentication in order to honour the request but did not accept any credentials offered.</source>
-        <translation>代理服務器需要認證資訊來信任請求，但是並沒有接受任何認證資訊。</translation>
+        <translation>代理伺服器需要認證資訊來信任請求，但是並沒有接受任何認證資訊。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="137"/>
         <source>An unknown proxy-related error was detected.</source>
-        <translation>檢測到一個未知的代理服務器錯誤。</translation>
+        <translation>檢測到一個未知的代理伺服器錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="139"/>
         <source>The access to the remote content was denied (HTTP error 401).</source>
-        <translation>服務器拒絕提供請求的內容（HTTP 401錯誤）。</translation>
+        <translation>伺服器拒絕提供請求的內容（HTTP 401錯誤）。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="142"/>
         <source>The operation requested on the remote content is not permitted.</source>
-        <translation>不允許對該遠程資源進行操作。</translation>
+        <translation>不允許對該遠端資源進行操作。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="145"/>
         <source>The remote content was not found at the server (HTTP error 404).</source>
-        <translation>在服務器上找不到請求的資源（HTTP 404錯誤）。</translation>
+        <translation>在伺服器上找不到請求的資源（HTTP 404錯誤）。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="148"/>
         <source>The remote server requires authentication to serve the content but the credentials provided were not accepted (if any).</source>
-        <translation>遠程服務器在提供資源時需要驗證身份，但是沒有接受任何身份認證資訊。</translation>
+        <translation>遠端伺服器在提供資源時需要驗證身份，但是沒有接受任何身份認證資訊。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="152"/>
@@ -467,17 +467,17 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="155"/>
         <source>The requested resource is no longer available at the server.</source>
-        <translation>請求的資源在服務器上已不再可用。</translation>
+        <translation>請求的資源在伺服器上已不再可用。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="158"/>
         <source>An unknown error related to the remote content was detected.</source>
-        <translation>檢測到一個遠程內容相關的未知錯誤。</translation>
+        <translation>檢測到一個遠端內容相關的未知錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="161"/>
         <source>The Network Access API cannot honor the request because the protocol is not known.</source>
-        <translation>網絡接入介面無法信任該請求，因為使用的協議未知。</translation>
+        <translation>網路接入介面無法信任該請求，因為使用的協定未知。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="164"/>
@@ -487,27 +487,27 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="166"/>
         <source>A breakdown in protocol was detected (parsing error, invalid or unexpected responses, etc.).</source>
-        <translation>檢測到協議崩潰（包括，但不限於是由於解析錯誤、協議不可用或返回了錯誤的回復）。</translation>
+        <translation>檢測到協議崩潰（包括，但不限於是由於解析錯誤、協定不可用或返回了錯誤的回復）。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="169"/>
         <source>The server encountered an unexpected condition which prevented it from fulfilling the request. (HTTP error 500)</source>
-        <translation>服務器遇到了意外的狀況，導致了請求不能響應。（HTTP 500 錯誤）</translation>
+        <translation>伺服器遇到了意外的狀況，導致了請求不能回應。（HTTP 500 錯誤）</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="172"/>
         <source>The server is unable to handle the request at this time. (HTTP error 503)</source>
-        <translation>服務器現在不能處理這個請求。（HTTP 503錯誤）</translation>
+        <translation>伺服器現在不能處理這個請求。（HTTP 503錯誤）</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="175"/>
         <source>An unknown error related to the server response was detected.</source>
-        <translation>檢測到一個未知的服務器端相關的錯誤。</translation>
+        <translation>檢測到一個未知的伺服器端相關的錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="179"/>
         <source>An unknown network-related error was detected.</source>
-        <translation>檢測到一個未知的網絡連接相關的錯誤。</translation>
+        <translation>檢測到一個未知的網路連接相關的錯誤。</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="212"/>
@@ -517,7 +517,7 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="216"/>
         <source>Portable Network Graphics</source>
-        <translation>便攜式網絡圖形</translation>
+        <translation>可擕式網路圖形</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="218"/>
@@ -527,7 +527,7 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="220"/>
         <source>Windows Bitmap</source>
-        <translation>Windows 位圖圖像</translation>
+        <translation>Windows 點陣圖圖像</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="222"/>
@@ -537,7 +537,7 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="224"/>
         <source>X11 Bitmap</source>
-        <translation>X11 位圖</translation>
+        <translation>X11 點陣圖</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="226"/>
@@ -557,7 +557,7 @@
     <message>
         <location filename="../sdk/knglobal.cpp" line="244"/>
         <source>Portable Bitmap</source>
-        <translation>可移植位圖格式</translation>
+        <translation>可移植點陣圖格式</translation>
     </message>
     <message>
         <location filename="../sdk/knglobal.cpp" line="246"/>
@@ -686,7 +686,7 @@
     <message>
         <location filename="../core/knmainwindowiconbutton.cpp" line="158"/>
         <source>Preference</source>
-        <translation>自定義選項</translation>
+        <translation>自訂選項</translation>
     </message>
 </context>
 <context>
@@ -757,7 +757,7 @@
     </message>
     <message>
         <source>Portable Network Graphics</source>
-        <translation type="vanished">便攜式網絡圖形</translation>
+        <translation type="vanished">可擕式網路圖形</translation>
     </message>
     <message>
         <source>JPEG</source>
@@ -766,7 +766,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpanelartwork/knmusicdetailpanelartwork.cpp" line="135"/>
         <source>Select the new album cover image</source>
-        <translation>選擇新的封面圖像檔</translation>
+        <translation>選擇新的封面影像檔</translation>
     </message>
     <message>
         <source>All supported files</source>
@@ -798,7 +798,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="130"/>
         <source>Kind</source>
-        <translation>文件類型</translation>
+        <translation>檔案類型</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="131"/>
@@ -823,7 +823,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicdetailpaneloverview/knmusicdetailpaneloverview.cpp" line="135"/>
         <source>Path</source>
-        <translation>文件路徑</translation>
+        <translation>檔路徑</translation>
     </message>
 </context>
 <context>
@@ -886,7 +886,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.cpp" line="249"/>
         <source>Disc Number</source>
-        <translation>光盤</translation>
+        <translation>光碟</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.cpp" line="275"/>
@@ -970,12 +970,12 @@
     <message>
         <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="123"/>
         <source>Disc Count</source>
-        <translation>光盤總數</translation>
+        <translation>光碟總數</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="124"/>
         <source>Disc Number</source>
-        <translation>光盤編號</translation>
+        <translation>光碟編號</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="125"/>
@@ -990,7 +990,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="127"/>
         <source>Kind</source>
-        <translation>文件類型</translation>
+        <translation>檔案類型</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/sdk/knmusicglobal.cpp" line="128"/>
@@ -1083,7 +1083,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="604"/>
         <source>Show in Explorer</source>
-        <translation>打開檔位置</translation>
+        <translation>打開文件位置</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="607"/>
@@ -1093,7 +1093,7 @@
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="611"/>
         <source>Show the contains folder</source>
-        <translation>打開文件所在文件夾</translation>
+        <translation>打開文件所在資料夾</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicheaderplayer/knmusicheaderplayer.cpp" line="613"/>
@@ -1227,7 +1227,7 @@ To add songs to library, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="60"/>
         <source>%1 files have been to music library.</source>
-        <translation>檢索到 %1 個音樂文件，已被添加到數據庫。</translation>
+        <translation>檢索到 %1 個音樂檔，已被添加到資料庫。</translation>
     </message>
 </context>
 <context>
@@ -1302,7 +1302,7 @@ To add songs to library, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="88"/>
         <source>Copy locations</source>
-        <translation>複製所選文件路徑</translation>
+        <translation>複製所選檔路徑</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicmultimenu/knmusicmultimenu.cpp" line="89"/>
@@ -1380,7 +1380,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="95"/>
         <source>Export</source>
-        <translation>導出播放清單</translation>
+        <translation>匯出播放清單</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="96"/>
@@ -1424,7 +1424,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="415"/>
         <source>%1 playlists cannot be loaded.</source>
-        <translation>%1 個播放清單無法加載。</translation>
+        <translation>%1 個播放清單無法載入。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="417"/>
@@ -1636,7 +1636,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="220"/>
         <source>Show in Explorer</source>
-        <translation>打開檔位置</translation>
+        <translation>打開文件位置</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="223"/>
@@ -1646,7 +1646,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="226"/>
         <source>Show the contains folder</source>
-        <translation>打開文件所在文件夾</translation>
+        <translation>打開文件所在資料夾</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="228"/>
@@ -1666,7 +1666,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="231"/>
         <source>Copy location</source>
-        <translation>複製文件路徑</translation>
+        <translation>複製檔路徑</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="232"/>
@@ -1691,7 +1691,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicsolomenu/knmusicsolomenu.cpp" line="363"/>
         <source>File %1 already exists.</source>
-        <translation>文件 %1 已經存在。</translation>
+        <translation>檔 %1 已經存在。</translation>
     </message>
 </context>
 <context>
@@ -1761,7 +1761,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="159"/>
         <source>Connection Error</source>
-        <translation>網絡連接錯誤</translation>
+        <translation>網路連接錯誤</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="160"/>
@@ -1771,12 +1771,12 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="162"/>
         <source>Please check your Internet connection, and then click &apos;Refresh&apos;.</source>
-        <translation>請檢查您的網絡連接，然後單擊「刷新」重試。</translation>
+        <translation>請檢查您的網路連接，然後按一下“刷新”重試。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="164"/>
         <source>Please send an E-mail to kreogistdevteam@126.com to report this bug.</source>
-        <translation>請發送郵件到kreogistdevteam@126.com反饋這個bug。</translation>
+        <translation>請發送郵件到kreogistdevteam@126.com回饋這個bug。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreerrordimmer.cpp" line="167"/>
@@ -1799,17 +1799,17 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="60"/>
         <source>Content data is empty.</source>
-        <translation>內容數據是空的。</translation>
+        <translation>內容資料是空的。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="62"/>
         <source>Content data is not in the correct format.</source>
-        <translation>數據內容的格式不正確。</translation>
+        <translation>資料內容的格式不正確。</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreglobal.cpp" line="64"/>
         <source>Cannot find the correct data from the content.</source>
-        <translation>無法在數據中找到正確的資訊。</translation>
+        <translation>無法在資料中找到正確的資訊。</translation>
     </message>
 </context>
 <context>
@@ -1978,7 +1978,7 @@ To create a playlist, drag your songs here.</source>
     <name>KNNotificationCenter</name>
     <message>
         <source>Show Kreogist Account details</source>
-        <translation type="vanished">顯示 Kreogist 賬戶信息</translation>
+        <translation type="vanished">顯示 Kreogist 帳戶資訊</translation>
     </message>
     <message>
         <source>Login</source>
@@ -1987,7 +1987,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../sdk/notification/knnotificationcenter.cpp" line="182"/>
         <source>Show Notification Center and Kreogist Account</source>
-        <translation>顯示通知中心和 Kreogist 賬戶</translation>
+        <translation>顯示通知中心和 Kreogist 帳戶</translation>
     </message>
 </context>
 <context>
@@ -2023,7 +2023,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knpreference/knpreference.cpp" line="180"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>快速鍵</translation>
     </message>
 </context>
 <context>
@@ -2040,7 +2040,7 @@ All rights reserved.</source>
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</source>
-        <translation type="obsolete">本程式為自由軟件；您可依據自由軟件基金會所發表的GNU 通用公共授權條款，對本程式再次發佈和/ 或修改；無論您依據的是本授權的第二版，或（您可選的）任一日後發行的版本。
+        <translation type="obsolete">本程式為自由軟體；您可依據自由軟體基金會所發表的GNU 通用公共授權條款，對本程式再次發佈和/ 或修改；無論您依據的是本授權的第二版，或（您可選的）任一日後發行的版本。
 
 本程式是基於使用目的而加以發佈，然而不負任何擔保責任；亦無對適售性或特定目的適用性所為的默示性擔保。詳情請參照GNU 通用公共授權。
 
@@ -2057,7 +2057,7 @@ You should have received a copy of the GNU General Public License along with thi
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program; if not, see &lt;http://www.gnu.org/licenses/&gt;.</source>
-        <translation>本程式為自由軟件；您可依據自由軟件基金會所發表的GNU 通用公共授權條款，對本程式再次發佈和/ 或修改；無論您依據的是本授權的第二版，或（您可選的）任一日後發行的版本。
+        <translation>本程式為自由軟體；您可依據自由軟體基金會所發表的GNU 通用公共授權條款，對本程式再次發佈和/ 或修改；無論您依據的是本授權的第二版，或（您可選的）任一日後發行的版本。
 
 本程式是基於使用目的而加以發佈，然而不負任何擔保責任；亦無對適售性或特定目的適用性所為的默示性擔保。詳情請參照GNU 通用公共授權。
 
@@ -2161,8 +2161,8 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
         <translation> 。
 Qt 是一個跨平臺的 C++ 應用開發工具集。
 版權所有 (C) 2015 The Qt Company Ltd 和其他貢獻者。
-Qt 和 Qt 的徽標是 The Qt Company Ltd 的註冊商標。
-Qt 是 The Qt Company Ltd 開發的開源項目。請訪問 qt.io 獲取更多資訊。</translation>
+Qt 和 Qt 的徽標是 The Qt Company Ltd 的注冊商標。
+Qt 是 The Qt Company Ltd 開發的開源專案。請訪問 qt.io 獲取更多資訊。</translation>
     </message>
 </context>
 <context>
@@ -2182,19 +2182,19 @@ Qt 是 The Qt Company Ltd 開發的開源項目。請訪問 qt.io 獲取更多�
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="47"/>
         <source>System Tray Icon</source>
-        <translation>系統托盤圖標</translation>
+        <translation>系統託盤圖示</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="48"/>
         <source>Close to system tray</source>
-        <translation>關閉到系統托盤</translation>
+        <translation>關閉到系統託盤</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="50"/>
         <source>When click the close button of the window, Mu won&apos;t quit but minimize to the system tray.
 When click the icon in the system tray, Mu will pop up back.</source>
-        <translation>當單擊窗口的關閉按鈕時，µ將不會退出而是最小化到托盤圖標。
-當單擊托盤圖標時，µ將會重新顯示。</translation>
+        <translation>當按一下視窗的關閉按鈕時，µ將不會退出而是最小化到託盤圖示。
+當按一下託盤圖示時，µ將會重新顯示。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="75"/>
@@ -2208,26 +2208,26 @@ When this feature is enabled, the output sample rate will be changed to the samp
 When this feature is enabled, all the music preview feature will be disabled.
 This option will be applied after the application restarted.</source>
         <translation>啟用獨佔式WASAPI代替默認的DirectX進行播放。
-當這個功能啟用的時候，採樣率將會被強制設置為設備本身的採樣率。
+當這個功能啟用的時候，取樣速率將會被強制設置為設備本身的取樣速率。
 當這個功能啟用的時候，所有的音樂預覽功能將被禁用。
-這個設置的更改將在軟件重新啟動後才會生效。</translation>
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="101"/>
         <source>Sample Rate (Hz)</source>
-        <translation>採樣率（Hz）</translation>
+        <translation>取樣速率（Hz）</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="103"/>
         <source>This option will change the output sample rate of the playback backend.
 This option will be applied after the application restarted.</source>
-        <translation>本設置將會改變播放設備的輸出採樣率。
-這個設置的更改將在軟件重新啟動後才會生效。</translation>
+        <translation>本設置將會改變播放設備的輸出取樣速率。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="91"/>
         <source>Stereo Output</source>
-        <translation>立體聲輸出</translation>
+        <translation>身歷聲輸出</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="58"/>
@@ -2237,27 +2237,27 @@ This option will be applied after the application restarted.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="59"/>
         <source>Show status bar</source>
-        <translation>顯示狀態欄</translation>
+        <translation>顯示狀態列</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
         <source>Show the status bar at the top right corner.</source>
-        <translation>顯示位於右上角的狀態欄。</translation>
+        <translation>顯示位於右上角的狀態列。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="64"/>
         <source>Library</source>
-        <translation type="unfinished"></translation>
+        <translation>音樂庫</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
         <source>Ignore CUE Data File</source>
-        <translation type="unfinished"></translation>
+        <translation>忽略CUE資料檔案</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
         <source>When adding the data file of one CUE file, ignore the data file.</source>
-        <translation type="unfinished"></translation>
+        <translation>忽略向音樂庫添加的CUE的資料檔案。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="77"/>
@@ -2276,19 +2276,19 @@ WDM drivers are required to use this feature in Windows.
 This option will be applied after the application restarted.</source>
         <translation>使用32位浮點數進行輸出。
 在Windows中，啟用這個功能需要您安裝WDM驅動。
-這個設置的更改將在軟件重新啟動後才會生效。</translation>
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="93"/>
         <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
 This option will be applied after the application restarted.</source>
-        <translation>將輸出限制為立體聲，可以當具有多通道設備時節省CPU資源。
-這個設置的更改將在軟件重新啟動後才會生效。</translation>
+        <translation>將輸出限制為身歷聲，可以當具有多通道設備時節省CPU資源。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
         <source>Use Device Default Sample Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>使用設備預設取樣速率</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="115"/>
@@ -2318,7 +2318,7 @@ This option will be applied after the application restarted.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="126"/>
         <source>Online Lyrics</source>
-        <translation>在線歌詞</translation>
+        <translation>線上歌詞</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="127"/>
@@ -2335,77 +2335,77 @@ This option will be applied after the application restarted.</source>
         <source>Some lyrics downloader will provide translated version. 
 This option will allow Mu to combine the translated version and the raw lyrics into a single file.</source>
         <translation>一些歌詞下載器可以提供歌詞的翻譯版。
-這個選項將允許Mu把歌詞原文與翻譯版的歌詞合併為一個文件。</translation>
+這個選項將允許Mu把歌詞原文與翻譯版的歌詞合併為一個檔。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="143"/>
         <source>Playing Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>播放控制</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="144"/>
         <source>Play and Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>播放/暫停</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="149"/>
         <source>This shortcut will be used in the whole application to play or pause the current playing music.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個快速鍵將用於播放或暫停正在播放的音樂。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="151"/>
         <source>Previous Song</source>
-        <translation type="unfinished"></translation>
+        <translation>上一首</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="156"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the previous song.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個快速鍵將從當前播放的歌曲切換到上一首歌曲。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="159"/>
         <source>Next Song</source>
-        <translation type="unfinished"></translation>
+        <translation>下一首</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="164"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the next song.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個快速鍵將從當前播放的歌曲切換到下一首歌曲。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="169"/>
         <source>Volume Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>音量控制</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="170"/>
         <source>Mute</source>
-        <translation type="unfinished"></translation>
+        <translation>靜音</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="174"/>
         <source>This shortcut will be used in the whole application to enter and exit the mute state.</source>
-        <translation type="unfinished"></translation>
+        <translation>設個快速鍵將用於進入或退出靜音狀態。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="176"/>
         <source>Volume Up</source>
-        <translation type="unfinished"></translation>
+        <translation>增加音量</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="180"/>
         <source>This shortcut will be used in the whole application to increase 10% volume.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個快速鍵將增加10%的音量。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="182"/>
         <source>Volume Down</source>
-        <translation type="unfinished"></translation>
+        <translation>減小音量</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="186"/>
         <source>This shortcut will be used in the whole application to decrease 10% volume.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個快速鍵將減小10%的音量。</translation>
     </message>
     <message>
         <source>Download Lyrics</source>
@@ -2415,7 +2415,7 @@ This option will allow Mu to combine the translated version and the raw lyrics i
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="129"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
-        <translation>如果在歌詞檔夾中沒有找到歌詞，
+        <translation>如果在歌詞資料夾中沒有找到歌詞，
 允許Mu從互聯網上下載歌詞。</translation>
     </message>
 </context>
@@ -2444,7 +2444,7 @@ allows Mu to download lyrics from the Internet.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="105"/>
         <source>, Underline</source>
-        <translation>，下劃線</translation>
+        <translation>，底線</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="106"/>
@@ -2462,13 +2462,13 @@ allows Mu to download lyrics from the Internet.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.cpp" line="43"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>編輯</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.cpp" line="120"/>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.cpp" line="190"/>
         <source>&lt;No shortcut&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;沒有快速鍵&gt;</translation>
     </message>
 </context>
 <context>
@@ -2484,7 +2484,7 @@ allows Mu to download lyrics from the Internet.</source>
     <message>
         <location filename="../sdk/knshortcuteditor.cpp" line="43"/>
         <source>Press your shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>請按下您想設定的快速鍵</translation>
     </message>
 </context>
 <context>
