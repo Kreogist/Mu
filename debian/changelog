@@ -1,3 +1,16 @@
+kreogist-mu (1.0.0~beta4) unstable; urgency=medium
+
+  * Support high DPI scaling accrossing Windows, Mac OS X and Linux platforms.
+  * Support set the default sampling rate for the bass backend.
+  * Support customized shortcuts.
+  * Support ignoring the CUE data file.
+  * Support reading tags using FFMpeg library.
+  * Support display the beta number of the current version.
+  * Using the new FFMpeg API detect methods.
+  * Fixed the detail dialog sometimes cannot display the full file path bug.
+
+ -- Kreogist Dev Team <kreogistdevteam@126.com>  Sat, 6 Aug 2017 22:00:00 +1100
+
 kreogist-mu (1.0.0~beta3) unstable; urgency=medium
 
   * Support WASAPI on 64-bit Windows Vista or later.

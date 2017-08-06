@@ -21,7 +21,6 @@ function check_package()
 # Check the dependencies
 check_package "qtbase5-dev"
 check_package "qttools5-dev-tools"
-check_package "libgstreamer1.0-dev"
 check_package "ffmpeg"
 check_package "libavformat-dev"
 check_package "libavcodec-dev"
