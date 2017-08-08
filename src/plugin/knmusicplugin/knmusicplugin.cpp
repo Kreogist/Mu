@@ -20,6 +20,7 @@
 #include <QSignalMapper>
 
 //Dependence
+#include "knconfigure.h"
 #include "kncategorytab.h"
 #include "kncategorytabbar.h"
 #include "knhwidgetswitcher.h"
@@ -257,8 +258,12 @@ void KNMusicPlugin::loadPlugins()
     initialLibrary(new KNMusicLibrary);
     //Initial the playlist tab.
     initialPlaylist(new KNMusicPlaylist);
-    //Initial the store tab.
-//    initialStore(new KNMusicStore);
+    //Check the magic settings.
+    if(knMusicGlobal->configure()->data("Eriri", false).toBool())
+    {
+        //Initial the store tab.
+        initialStore(new KNMusicStore);
+    }
 
     //Start working threads.
     knMusicGlobal->startThreads();

@@ -52,36 +52,46 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
 
     //Link current panel to account backend.
     connect(this, &KNAccountPanel::requireLogin,
-            knAccount, &KNAccount::login);
+            knAccount, &KNAccount::login, Qt::QueuedConnection);
     connect(this, &KNAccountPanel::requireGenerate,
-            knAccount, &KNAccount::generateAccount);
+            knAccount, &KNAccount::generateAccount, Qt::QueuedConnection);
     connect(this, &KNAccountPanel::requireLogout,
-            knAccount, &KNAccount::logout);
+            knAccount, &KNAccount::logout, Qt::QueuedConnection);
     connect(knAccount, &KNAccount::generateFailed,
-            this, &KNAccountPanel::onActionRegisterFailed);
+            this, &KNAccountPanel::onActionRegisterFailed,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::generateSuccess,
-            this, &KNAccountPanel::onActionRegisterSuccess);
+            this, &KNAccountPanel::onActionRegisterSuccess,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::loginFailed,
-            this, &KNAccountPanel::onActionLoginFailed);
+            this, &KNAccountPanel::onActionLoginFailed, Qt::QueuedConnection);
     connect(knAccount, &KNAccount::autoLoginFailed,
-            this, &KNAccountPanel::onActionAutoLoginFailed);
+            this, &KNAccountPanel::onActionAutoLoginFailed,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::loginSuccess,
-            this, &KNAccountPanel::onActionLoginSuccess);
+            this, &KNAccountPanel::onActionLoginSuccess, Qt::QueuedConnection);
     connect(knAccount, &KNAccount::startAutoLogin,
-            this, &KNAccountPanel::onActionStartAutoLogin);
+            this, &KNAccountPanel::onActionStartAutoLogin,
+            Qt::QueuedConnection);
 
     connect(knAccount, &KNAccount::userInfoUpdateSuccess,
-            this, &KNAccountPanel::onActionOperateSuccess);
+            this, &KNAccountPanel::onActionOperateSuccess,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::avatarUpdatedSuccess,
-            this, &KNAccountPanel::onActionOperateSuccess);
+            this, &KNAccountPanel::onActionOperateSuccess,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::avatarUpdatedFailed,
-            this, &KNAccountPanel::onActionAvatarUpdatedFailed);
+            this, &KNAccountPanel::onActionAvatarUpdatedFailed,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::userInfoUpdateFailed,
-            this, &KNAccountPanel::onActionUserInfoUpdateFailed);
+            this, &KNAccountPanel::onActionUserInfoUpdateFailed,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::updateInternetError,
-            this, &KNAccountPanel::onActionUpdateInternetError);
+            this, &KNAccountPanel::onActionUpdateInternetError,
+            Qt::QueuedConnection);
     connect(knAccount, &KNAccount::resetEmailSendSuccess,
-            this, &KNAccountPanel::onActionResetSentFinished);
+            this, &KNAccountPanel::onActionResetSentFinished,
+            Qt::QueuedConnection);
     //Link panel signal.
     connect(m_loginPanel, &KNAccountLoginPanel::requireRegister,
             this, &KNAccountPanel::onActionShowRegister);
@@ -90,7 +100,7 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     connect(m_loginPanel, &KNAccountLoginPanel::requireLogin,
             this, &KNAccountPanel::onActionLogin);
     connect(m_loginPanel, &KNAccountLoginPanel::requireRelogin,
-            knAccount, &KNAccount::autoLogin);
+            knAccount, &KNAccount::autoLogin, Qt::QueuedConnection);
 
     connect(m_generatePanel, &KNAccountRegisterPanel::requireRegister,
             this, &KNAccountPanel::onActionRegister);
@@ -102,7 +112,7 @@ KNAccountPanel::KNAccountPanel(QWidget *parent) :
     connect(m_resetPanel, &KNAccountResetPanel::resetMailSentSuccess,
             this, &KNAccountPanel::onActionResetSentFinished);
     connect(m_resetPanel, &KNAccountResetPanel::requireSendEmail,
-            knAccount, &KNAccount::resetPassword);
+            knAccount, &KNAccount::resetPassword, Qt::QueuedConnection);
     connect(knAccount, &KNAccount::resetEmailError,
             m_resetPanel, &KNAccountResetPanel::onActionSentFailed);
 

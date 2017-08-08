@@ -34,12 +34,9 @@ KNRestApiBase::KNRestApiBase(QObject *parent) :
     m_downloadedSize(-1),
     m_lastDownloadedSize(-1),
     m_currentReply(nullptr),
-    m_timeout(new QTimer),
-    m_networkManager(new QNetworkAccessManager)
+    m_timeout(nullptr),
+    m_networkManager(nullptr)
 {
-    //Configure timeout timer.
-    m_timeout->setInterval(30000);
-    m_timeout->setSingleShot(true);
 }
 
 KNRestApiBase::~KNRestApiBase()
@@ -64,6 +61,12 @@ void KNRestApiBase::setWorkingThread(QThread *thread)
 {
     //Move the downloader to the thread.
     moveToThread(thread);
+    //Generate the network manager.
+    m_networkManager=new QNetworkAccessManager;
+    //Configure timeout timer.
+    m_timeout=new QTimer;
+    m_timeout->setInterval(30000);
+    m_timeout->setSingleShot(true);
     //Move the children to the thread.
     m_networkManager->moveToThread(thread);
     m_timeout->moveToThread(thread);
