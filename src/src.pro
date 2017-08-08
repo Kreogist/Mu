@@ -41,7 +41,8 @@ TRANSLATIONS += \
     i18n/Russian.ts \
     i18n/Spanish.ts \
     i18n/Turkish.ts \
-    i18n/Dutch.ts
+    i18n/Dutch.ts \
+    i18n/Urdu.ts
 
 intel64: {
     msvc: {
