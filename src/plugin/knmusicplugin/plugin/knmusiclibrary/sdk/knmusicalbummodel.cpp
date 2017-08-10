@@ -119,11 +119,13 @@ QVariant KNMusicAlbumModel::data(const QModelIndex &index, int role) const
     case CategoryArtworkKeyRole:
         return item.albumArtHash.isEmpty()?QString():item.albumArtHash.first();
     case AlbumArtistRole:
-        return item.artists.isEmpty()?
-                    m_nullData:
-                    (item.artists.size()==1?
-                         item.artists.keys().first():
-                         m_variousArtists);
+        return item.albumArtistCount==0 ?
+                    (item.artists.isEmpty()?
+                         m_nullData:
+                         (item.artists.size()==1?
+                              item.artists.keys().first():
+                              m_variousArtists)) :
+                    item.albumArtist;
     default:
         return m_nullData;
     }
@@ -238,7 +240,8 @@ void KNMusicAlbumModel::onCategoryAdd(const KNMusicDetailInfo &detailInfo)
 {
     //Get the category text.
     QVariant titleText=detailInfo.textLists[Album];
-    QString artistText=detailInfo.textLists[Artist].toString();
+    QString artistText=detailInfo.textLists[Artist].toString(),
+            albumArtistText=detailInfo.textLists[AlbumArtist].toString();
     //Check if the category is blank.
     if(titleText.toString().isEmpty())
     {
@@ -259,6 +262,32 @@ void KNMusicAlbumModel::onCategoryAdd(const KNMusicDetailInfo &detailInfo)
         {
             //Get the category list data.
             AlbumItem item=m_categoryList.at(i);
+            //Check the album artist text is empty or not.
+            if(!albumArtistText.isEmpty())
+            {
+                //Okay, the album artist text is not empty.
+                //Check the album artist row of the item.
+                if(item.albumArtistCount==0)
+                {
+                    //This song would set the album artist data.
+                    item.albumArtist=albumArtistText;
+                    item.albumArtistCount=1;
+                }
+                else
+                {
+                    //Check the album artist is the same or not.
+                    if(item.albumArtist==albumArtistText)
+                    {
+                        //Increase the album artist count.
+                        ++item.albumArtistCount;
+                    }
+                    else
+                    {
+                        //Go to the next album item.
+                        continue;
+                    }
+                }
+            }
             //Increase the count.
             ++(item.count);
             //Check out the cover image hash.
@@ -280,6 +309,13 @@ void KNMusicAlbumModel::onCategoryAdd(const KNMusicDetailInfo &detailInfo)
     AlbumItem item;
     item.title=titleText;
     item.count=1;
+    //Check the song album artist.
+    if(!albumArtistText.isEmpty())
+    {
+        //Save the song album artist as the album artist.
+        item.albumArtist=albumArtistText;
+        item.albumArtistCount=1;
+    }
     //Check out the hash key.
     if(!detailInfo.coverImageHash.isEmpty())
     {
@@ -296,7 +332,8 @@ void KNMusicAlbumModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
 {
     //Get the category text.
     QVariant titleText=detailInfo.textLists[Album];
-    QString artistText=detailInfo.textLists[Artist].toString();
+    QString artistText=detailInfo.textLists[Artist].toString(),
+            albumArtistText=detailInfo.textLists[AlbumArtist].toString();
     //Check if the category is blank.
     if(titleText.toString().isEmpty())
     {
@@ -324,6 +361,17 @@ void KNMusicAlbumModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
         //If we could find the item.
         if(m_categoryList.at(i).title==titleText)
         {
+            //Check the album artist text.
+            if(!albumArtistText.isEmpty())
+            {
+                //For the song which contains the artist text data, check the
+                //album item is exactly the same item.
+                if(m_categoryList.at(i).albumArtist!=albumArtistText)
+                {
+                    //This is not the one we want.
+                    continue;
+                }
+            }
             //Check out the counter.
             if(m_categoryList.at(i).count==1)
             {
@@ -336,7 +384,14 @@ void KNMusicAlbumModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
             }
             //Get the category list data.
             AlbumItem item=m_categoryList.at(i);
-            //Decrease the count.
+            //This item should have the same album artist as the album, or it is
+            //empty, when the album artist is not empty, reduce the counter.
+            if(!albumArtistText.isEmpty())
+            {
+                //Reduce the item count.
+                --item.albumArtistCount;
+            }
+            //Decrease the count for the song.
             --(item.count);
             //Remove the artist from the list.
             //Check the song count.

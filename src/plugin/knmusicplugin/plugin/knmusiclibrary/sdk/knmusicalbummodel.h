@@ -157,11 +157,14 @@ private:
         QVariant title;
         QStringList albumArtHash;
         QHash<QString, int> artists;
-        int count;
+        QString albumArtist;
+        int albumArtistCount, count;
         AlbumItem() :
             title(QVariant()),
             albumArtHash(QStringList()),
             artists(QHash<QString, int>()),
+            albumArtist(QString()),
+            albumArtistCount(0),
             count(0)
         {
         }

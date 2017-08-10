@@ -32,7 +32,7 @@ public:
     enum CategoryRole
     {
         CategorySizeRole=Qt::UserRole,
-        CategoryArtworkKeyRole
+        CategoryArtworkKeyRole,
     };
     /*!
      * \brief Construct a KNMusicCategoryModelBase object.

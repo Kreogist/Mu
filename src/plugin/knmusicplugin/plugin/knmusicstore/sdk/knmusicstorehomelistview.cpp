@@ -82,15 +82,17 @@ void KNMusicStoreHomeListView::paintEvent(QPaintEvent *event)
     //Get the fonts.
     QFont titleFont=font();
     titleFont.setBold(true);
-    QFont titleUnderLine=titleFont;
-    titleUnderLine.setUnderline(true);
-    QFont normalUnderLineFont=font();
-    normalUnderLineFont.setUnderline(true);
     //Render each item in the list.
     for(int i=0; i<maxRenderCount; ++i)
     {
-        //Reset the font.
-        painter.setFont(i==hoverRow?normalUnderLineFont:font());
+        //Check the index.
+        if(i==hoverRow)
+        {
+            //Draw the hover row.
+            painter.fillRect(QRect(0, currentY+ListTitleSpacing,
+                                   width(), fontMetrics().height()<<1),
+                             palette().brush(QPalette::Highlight));
+        }
         //Draw item index.
         painter.drawText(0, currentY+ListTitleSpacing, width(),
                          fontMetrics().height(),
@@ -113,8 +115,6 @@ void KNMusicStoreHomeListView::paintEvent(QPaintEvent *event)
                                                   textWidth));
         //Reset the opacity.
         painter.setOpacity(1.0);
-        //Set the title font.
-        painter.setFont(i==hoverRow?titleUnderLine:titleFont);
         //Draw the title.
         painter.drawText(ListTextLeft, textTop,
                          textWidth, fontMetrics().height(),

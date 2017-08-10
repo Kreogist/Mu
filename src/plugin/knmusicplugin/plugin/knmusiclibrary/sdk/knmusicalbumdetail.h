@@ -219,7 +219,7 @@ private:
     QRect m_animeStartRect;
     KNMouseUnclickableWidget *m_albumContent;
     KNMusicAlbumTitle *m_albumArt;
-    KNSideShadowWidget *m_rightShadow, *m_leftShadow;
+    KNSideShadowWidget *m_leftShadow, *m_rightShadow;
     KNScrollLabel *m_albumTitle, *m_albumDetails;
     KNMusicAlbumListView *m_albumListView;
     KNMusicLibraryModel *m_libraryModel;

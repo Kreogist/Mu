@@ -66,6 +66,11 @@ signals:
     void requireResetOperation();
 
     /*!
+     * \brief When a loading operation is started, this signal will be shown.
+     */
+    void loadOperationStart();
+
+    /*!
      * \brief Add Internet connection count to the GUI connection status.
      * \param count The number of the connections.
      */
