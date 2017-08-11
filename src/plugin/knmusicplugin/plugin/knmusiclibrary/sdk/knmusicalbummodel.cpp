@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knlocalemanager.h"
+#include "knconfigure.h"
 
 #include "knmusicglobal.h"
 
@@ -29,8 +30,11 @@ KNMusicAlbumModel::KNMusicAlbumModel(QObject *parent) :
     m_nullData(QVariant()),
     m_noCategoryText(QString()),
     m_variousArtists(QString()),
-    m_hashAlbumArt(nullptr)
+    m_hashAlbumArt(nullptr),
+    m_configure(knMusicGlobal->configure()->getConfigure("MusicLibrary"))
 {
+    //Update the using album artist configure switch.
+    m_albumArtistCategory=m_configure->data("UseAlbumArt", true).toBool();
     //Link retranslate signal.
     knI18n->link(this, &KNMusicAlbumModel::retranslate);
     retranslate();
@@ -262,8 +266,7 @@ void KNMusicAlbumModel::onCategoryAdd(const KNMusicDetailInfo &detailInfo)
         {
             //Get the category list data.
             AlbumItem item=m_categoryList.at(i);
-            //Check the album artist text is empty or not.
-            if(!albumArtistText.isEmpty())
+            if(m_albumArtistCategory && !albumArtistText.isEmpty())
             {
                 //Okay, the album artist text is not empty.
                 //Check the album artist row of the item.
@@ -310,7 +313,7 @@ void KNMusicAlbumModel::onCategoryAdd(const KNMusicDetailInfo &detailInfo)
     item.title=titleText;
     item.count=1;
     //Check the song album artist.
-    if(!albumArtistText.isEmpty())
+    if(m_albumArtistCategory && !albumArtistText.isEmpty())
     {
         //Save the song album artist as the album artist.
         item.albumArtist=albumArtistText;
@@ -362,7 +365,7 @@ void KNMusicAlbumModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
         if(m_categoryList.at(i).title==titleText)
         {
             //Check the album artist text.
-            if(!albumArtistText.isEmpty())
+            if(m_albumArtistCategory && !albumArtistText.isEmpty())
             {
                 //For the song which contains the artist text data, check the
                 //album item is exactly the same item.
@@ -386,7 +389,7 @@ void KNMusicAlbumModel::onCategoryRemove(const KNMusicDetailInfo &detailInfo)
             AlbumItem item=m_categoryList.at(i);
             //This item should have the same album artist as the album, or it is
             //empty, when the album artist is not empty, reduce the counter.
-            if(!albumArtistText.isEmpty())
+            if(m_albumArtistCategory && !albumArtistText.isEmpty())
             {
                 //Reduce the item count.
                 --item.albumArtistCount;
@@ -421,7 +424,11 @@ void KNMusicAlbumModel::onCategoryUpdate(const KNMusicDetailInfo &before,
                                          const KNMusicDetailInfo &after)
 {
     //Check out the category item have ever changed.
-    if(before.textLists[Album]==after.textLists[Album])
+    if(before.textLists[Album]==after.textLists[Album] &&
+            //When enabled album artist category, consider the album artist is
+            //updated or not.
+            (!m_albumArtistCategory ||
+             after.textLists[AlbumArtist]==before.textLists[AlbumArtist]))
     {
         //We won't need to add or reduce count, but we have to check two things:
         // 1. Whether the cover image needs to be updated.

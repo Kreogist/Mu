@@ -21,6 +21,7 @@
 
 #include "knmusiccategorymodelbase.h"
 
+class KNConfigure;
 /*!
  * \brief The KNMusicAlbumModel class is the specific category model for albums.
  * It could store all the basic information of an album.
@@ -182,6 +183,8 @@ private:
     const QVariant m_nullData;
     QString m_noCategoryText, m_variousArtists;
     QHash<QString, QVariant> *m_hashAlbumArt;
+    KNConfigure *m_configure;
+    bool m_albumArtistCategory;
 };
 
 #endif // KNMUSICALBUMMODEL_H

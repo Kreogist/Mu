@@ -66,6 +66,12 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 "User/Music/MusicLibrary/IgnoreCueData", true, TypeBoolean,
                 tr("When adding the data file of one CUE file, "
                    "ignore the data file."), false);
+        addItem(block, tr("Category by Album Artist"),
+                "User/Music/MusicLibrary/UseAlbumArt", true, TypeBoolean,
+                tr("When category the album, use the album artist metadata "
+                   "field instead of statistic all the artists.\n"
+                   "This option will be applied after the application "
+                   "restarted."), true);
         panelData.append(block);
         break;
     }

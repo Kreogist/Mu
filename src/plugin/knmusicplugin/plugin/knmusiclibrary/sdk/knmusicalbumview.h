@@ -190,8 +190,8 @@ private:
                                    ScrollHint hint = EnsureVisible);
     inline QRect itemContentRect(const QModelIndex &index) const;
     inline void paintAlbum(QPainter &painter,
-                           const int &x,
-                           const int &y,
+                           int x,
+                           int y,
                            const QModelIndex &index);
     inline void updateUIElements();
     inline QPixmap generateShadow(int shadowWidth, int shadowHeight);

@@ -733,8 +733,8 @@ inline QRect KNMusicAlbumView::itemContentRect(const QModelIndex &index) const
 }
 
 inline void KNMusicAlbumView::paintAlbum(QPainter &painter,
-                                         const int &x,
-                                         const int &y,
+                                         int x,
+                                         int y,
                                          const QModelIndex &index)
 {
     //Ensure the index is vaild.
