@@ -1,4 +1,5 @@
 IDI_ICON1 ICON DISCARDABLE "mu.ico"
+IDI_ICON2 ICON DISCARDABLE "audio_file.ico"
 #include <winver.h>
 #include "../../sdk/knversion.h"
 
