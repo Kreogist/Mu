@@ -63,9 +63,9 @@ KNPreferenceSidebar::KNPreferenceSidebar(QWidget *parent) :
     scrollArea->setWidget(m_itemList);
     //Link the item list.
     connect(m_fixedItemList, &KNPreferenceItemList::currentIndexChange,
-            this, &KNPreferenceSidebar::onActionFixedIndexChanged);
+            this, &KNPreferenceSidebar::onFixedIndexChanged);
     connect(m_itemList, &KNPreferenceItemList::currentIndexChange,
-            this, &KNPreferenceSidebar::onActionIndexChanged);
+            this, &KNPreferenceSidebar::onIndexChanged);
     //Initial bottom bar.
     initialBottomBar();
 
@@ -166,7 +166,14 @@ void KNPreferenceSidebar::setAdvancedShown(bool shown)
     m_advancedButton->setChecked(shown);
 }
 
-void KNPreferenceSidebar::onActionIndexChanged(int index)
+void KNPreferenceSidebar::enableItemList()
+{
+    //Enable the fixed item list.
+    m_fixedItemList->setEnabled(true);
+    m_itemList->setEnabled(true);
+}
+
+void KNPreferenceSidebar::onIndexChanged(int index)
 {
     //Check the index first.
     if(index==-1)
@@ -188,7 +195,7 @@ void KNPreferenceSidebar::onActionIndexChanged(int index)
     emit requireChangePanel(index);
 }
 
-void KNPreferenceSidebar::onActionFixedIndexChanged(int index)
+void KNPreferenceSidebar::onFixedIndexChanged(int index)
 {
     //Check the index first.
     if(index==-1)

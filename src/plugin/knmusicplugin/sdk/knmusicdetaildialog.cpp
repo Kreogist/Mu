@@ -53,6 +53,8 @@ KNMusicDetailDialog::KNMusicDetailDialog(QWidget *parent) :
     //Link the switcher and container.
     connect(m_panelSwitcher, &KNHTabGroup::currentIndexChange,
             m_panelContainer, &KNHWidgetSwitcher::setCurrentIndex);
+    connect(m_panelContainer, &KNHWidgetSwitcher::moveEnd,
+            [=]{m_panelSwitcher->setEnabled(true);});
 
     //Generate basic label palette.
     QPalette labelPal=palette();

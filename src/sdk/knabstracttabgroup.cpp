@@ -31,7 +31,7 @@ KNAbstractTabGroup::KNAbstractTabGroup(QWidget *parent) :
     //Link the signal mapper.
     connect(m_itemMapper,
             static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
-            this, &KNAbstractTabGroup::onActionMapped);
+            this, &KNAbstractTabGroup::onMapped);
 }
 
 void KNAbstractTabGroup::addTab(QAbstractButton *tab)
@@ -75,6 +75,12 @@ bool KNAbstractTabGroup::isButtonSelected() const
 
 void KNAbstractTabGroup::setCurrentIndex(int currentIndex)
 {
+    //Check the enabled first.
+    if(!isEnabled())
+    {
+        //Ignore the request for a disable widget.
+        return;
+    }
     //Check if the current index is the same as the current one. Ignore this
     //kind of request.
     if(currentIndex==m_currentIndex)
@@ -91,6 +97,8 @@ void KNAbstractTabGroup::setCurrentIndex(int currentIndex)
     m_currentIndex=currentIndex;
     //Check the current index.
     tabAt(m_currentIndex)->setChecked(true);
+    //Disable the tab bar first.
+    setEnabled(false);
     //Emit the current changed signal.
     emit currentIndexChange(m_currentIndex);
 }
@@ -111,7 +119,7 @@ void KNAbstractTabGroup::reset()
     emit currentIndexChange(-1);
 }
 
-void KNAbstractTabGroup::onActionMapped(int index)
+void KNAbstractTabGroup::onMapped(int index)
 {
     //If the mapped index is the current index, ignore this index changed
     //mapping.

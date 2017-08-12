@@ -118,7 +118,7 @@ protected:
     virtual QAbstractButton *tabAt(int index)=0;
 
 private slots:
-    void onActionMapped(int index);
+    void onMapped(int index);
 
 private:
     QSignalMapper *m_itemMapper;

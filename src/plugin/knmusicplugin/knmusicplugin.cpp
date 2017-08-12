@@ -603,6 +603,8 @@ inline void KNMusicPlugin::initialInfrastructure()
     //Link the tab bar and switcher.
     connect(m_tabBar, &KNCategoryTabBar::currentIndexChange,
             m_switcher, &KNHWidgetSwitcher::setCurrentIndex);
+    connect(m_switcher, &KNHWidgetSwitcher::moveEnd,
+            [=]{m_tabBar->setEnabled(true);});
 
     //Configure the top shadow position.
     m_topShadow->move(0, m_tabBar->height());

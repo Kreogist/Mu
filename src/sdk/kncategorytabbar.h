@@ -65,10 +65,9 @@ protected:
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionMouseInOut(int frame);
+    void onMouseInOut(int frame);
 
 private:
-    inline QTimeLine *generateTimeLine(int endFrame);
     inline void startAnime(int endFrame);
     QTimeLine *m_mouseAnime;
     QBoxLayout *m_mainLayout;

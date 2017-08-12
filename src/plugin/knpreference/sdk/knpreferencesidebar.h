@@ -122,6 +122,11 @@ public slots:
      */
     void setAdvancedShown(bool shown);
 
+    /*!
+     * \brief Simply enable all the fixed item list.
+     */
+    void enableItemList();
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().
@@ -131,8 +136,8 @@ protected:
 private slots:
     void retranslate();
     void updateRoundedButtonPalette();
-    void onActionIndexChanged(int index);
-    void onActionFixedIndexChanged(int index);
+    void onIndexChanged(int index);
+    void onFixedIndexChanged(int index);
 
 private:
     inline void initialBottomBar();

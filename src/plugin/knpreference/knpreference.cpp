@@ -83,6 +83,9 @@ KNPreference::KNPreference(QWidget *parent) :
             this, &KNPreference::onActionPanelChange);
     connect(m_sidebar, &KNPreferenceSidebar::advancedToggle,
             this, &KNPreference::onActionAdvancedToggle);
+    //Link the finish signal back to sidebar.
+    connect(m_content, &KNVWidgetSwitcher::moveEnd,
+            m_sidebar, &KNPreferenceSidebar::enableItemList);
     //Add fixed tabs.
     // Add about item and content to preference.
     m_content->addWidget(m_about);
@@ -132,6 +135,8 @@ void KNPreference::onActionPanelChange(int index)
     m_settingContainer->setPanelBlocks(blocks);
     //Update the advanced state.
     m_settingContainer->setAdvancedShown(m_sidebar->isAdvancedShown());
+    //Enable the sidebar item list.
+    m_sidebar->enableItemList();
 }
 
 void KNPreference::onActionAdvancedToggle(bool toggle)
@@ -174,7 +179,7 @@ inline void KNPreference::updateItemTitle()
     m_sidebar->setItemTitle(PanelPlayback, tr("Playback"));
     m_sidebar->setItemTitle(PanelLyrics, tr("Lyrics"));
     m_sidebar->setItemTitle(PanelShortcuts, tr("Shortcuts"));
-    m_sidebar->setItemTitle(PanelFileAsso, tr("File Types"));
+    m_sidebar->setItemTitle(PanelFileAsso, tr("Association"));
 }
 
 inline void KNPreference::generateSettingItems()

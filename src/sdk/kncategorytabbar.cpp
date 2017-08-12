@@ -40,7 +40,7 @@ KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
     m_mouseAnime->setUpdateInterval(16);
     connect(m_mouseAnime, &QTimeLine::frameChanged,
-            this, &KNCategoryTabBar::onActionMouseInOut);
+            this, &KNCategoryTabBar::onMouseInOut);
     //Set layout.
     m_mainLayout->setContentsMargins(0,0,0,0);
     m_mainLayout->setSpacing(0);
@@ -49,7 +49,7 @@ KNCategoryTabBar::KNCategoryTabBar(QWidget *parent) :
     //Register the widget to theme manager.
     knTheme->registerWidget(this);
     //Update the palette using the frame function.
-    onActionMouseInOut(OutBrightness);
+    onMouseInOut(OutBrightness);
 }
 
 bool KNCategoryTabBar::isEmpty()
@@ -90,7 +90,7 @@ void KNCategoryTabBar::leaveEvent(QEvent *event)
     KNAbstractTabGroup::enterEvent(event);
 }
 
-void KNCategoryTabBar::onActionMouseInOut(int frame)
+void KNCategoryTabBar::onMouseInOut(int frame)
 {
     //Get the palette and background color.
     QPalette pal=palette();
@@ -104,17 +104,6 @@ void KNCategoryTabBar::onActionMouseInOut(int frame)
     pal.setColor(QPalette::Window, backgroundColor);
     //Set the palette.
     setPalette(pal);
-}
-
-inline QTimeLine *KNCategoryTabBar::generateTimeLine(int endFrame)
-{
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setEndFrame(endFrame);
-    timeLine->setUpdateInterval(16);
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNCategoryTabBar::onActionMouseInOut);
-    return timeLine;
 }
 
 inline void KNCategoryTabBar::startAnime(int endFrame)

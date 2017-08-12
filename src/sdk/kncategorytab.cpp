@@ -17,6 +17,7 @@
  */
 #include <QTimeLine>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include "knthememanager.h"
 #include "kndpimanager.h"
@@ -115,6 +116,14 @@ void KNCategoryTab::leaveEvent(QEvent *event)
 
 void KNCategoryTab::mousePressEvent(QMouseEvent *event)
 {
+    //Check the event is mouse button.
+    if(event->button()!=Qt::LeftButton)
+    {
+        //Ignore the event.
+        event->ignore();
+        //Complete the event.
+        return;
+    }
     //If the button is not checked, start mouse press event.
     if(!isChecked())
     {
@@ -126,8 +135,14 @@ void KNCategoryTab::mousePressEvent(QMouseEvent *event)
 
 void KNCategoryTab::mouseReleaseEvent(QMouseEvent *event)
 {
-    //Ignore the original event
-    Q_UNUSED(event);
+    //Check the event is mouse button.
+    if(event->button()!=Qt::LeftButton)
+    {
+        //Ignore the event.
+        event->ignore();
+        //Complete the event.
+        return;
+    }
     //Check the checked state. If the button has been checked, ignore the mouse
     //release.
     if(isChecked())
