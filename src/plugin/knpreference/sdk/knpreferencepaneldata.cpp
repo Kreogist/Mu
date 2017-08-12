@@ -194,6 +194,13 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         panelData.append(block);
         break;
     }
+    case PanelFileAsso:
+    {
+        //For some quick controls.
+        block=generateBlock(tr("Auto Set File Association"));
+        panelData.append(block);
+        break;
+    }
     default:
         break;
     }

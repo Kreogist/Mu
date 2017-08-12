@@ -170,14 +170,11 @@ inline KNPreferenceItem *KNPreference::generateItem(const QString &iconPath,
 inline void KNPreference::updateItemTitle()
 {
     //Update all the item title.
-    m_sidebar->setItemTitle(PanelGeneral,
-                            tr("General"));
-    m_sidebar->setItemTitle(PanelPlayback,
-                            tr("Playback"));
-    m_sidebar->setItemTitle(PanelLyrics,
-                            tr("Lyrics"));
-    m_sidebar->setItemTitle(PanelShortcuts,
-                            tr("Shortcuts"));
+    m_sidebar->setItemTitle(PanelGeneral, tr("General"));
+    m_sidebar->setItemTitle(PanelPlayback, tr("Playback"));
+    m_sidebar->setItemTitle(PanelLyrics, tr("Lyrics"));
+    m_sidebar->setItemTitle(PanelShortcuts, tr("Shortcuts"));
+    m_sidebar->setItemTitle(PanelFileAsso, tr("File Types"));
 }
 
 inline void KNPreference::generateSettingItems()
@@ -194,6 +191,8 @@ inline void KNPreference::generateSettingItems()
                                     headerSettingIcon);
     items[PanelShortcuts]=generateItem("://preference/shortcuts.png",
                                        headerSettingIcon);
+    items[PanelFileAsso]=generateItem("://preference/fileasso.png",
+                                      headerSettingIcon);
     //Generate all the items.
     for(int i=0; i<PreferencePanelCount; ++i)
     {

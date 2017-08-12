@@ -51,7 +51,9 @@ void KNOpacityButton::paintEvent(QPaintEvent *event)
     //Set opacity.
     painter.setOpacity(m_opacity);
     //Draw the pixmap.
-    painter.drawPixmap(0,0,width(),height(),icon().pixmap(size()));
+    painter.drawPixmap(0,0,width(),height(),icon().pixmap(size()).scaled(
+                           size(), Qt::KeepAspectRatio,
+                           Qt::SmoothTransformation));
 }
 
 void KNOpacityButton::mousePressEvent(QMouseEvent *event)

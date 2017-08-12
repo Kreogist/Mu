@@ -549,7 +549,8 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusicgeneraldelegate.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.cpp \
     sdk/knshortcuteditor.cpp \
-    plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.cpp
+    plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.cpp \
+    plugin/knpreference/sdk/items/knpreferencepanelpathitem.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -838,7 +839,8 @@ HEADERS += \
     plugin/knmusicplugin/sdk/knmusicgeneraldelegate.h \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.h \
     sdk/knshortcuteditor.h \
-    plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.h
+    plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.h \
+    plugin/knpreference/sdk/items/knpreferencepanelpathitem.h
 
 RESOURCES += \
     resource/res.qrc
