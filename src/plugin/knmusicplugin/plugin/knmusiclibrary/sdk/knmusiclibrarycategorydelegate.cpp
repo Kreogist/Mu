@@ -23,7 +23,7 @@
 
 #include <QDebug>
 
-#define IconSize 40
+#define IconSize 43
 #define Spacing 2
 #define IconSizeWithSpacing 49
 
@@ -67,7 +67,8 @@ void KNMusicLibraryCategoryDelegate::paint(QPainter *painter,
     //Draw the text.
     painter->setPen(textColor);
     int textWidth=option.rect.width()-dpiIconSpacingSize;
-    painter->drawText(QRect(option.rect.x()+dpiIconSpacingSize,
+    painter->drawText(QRect(option.rect.x()+dpiIconSpacingSize+
+                            knDpi->width(Spacing),
                             option.rect.y(),
                             textWidth,
                             dpiIconSpacingSize),
