@@ -27,10 +27,17 @@ extern "C"
 #include "libavutil/audio_fifo.h"
 #include "libavutil/avassert.h"
 #include "libavutil/avstring.h"
+#ifdef ENABLED_FFMPEG_SWRESAMPLE
 #include "libavutil/frame.h"
+#endif
 #include "libavutil/opt.h"
 
+#ifdef ENABLED_FFMPEG_SWRESAMPLE
 #include "libswresample/swresample.h"
+#endif
+#ifdef ENABLED_FFMPEG_AVRESAMPLE
+#include "libavresample/avresample.h"
+#endif
 }
 
 #include <QFileInfo>

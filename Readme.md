@@ -32,10 +32,13 @@ Copyright © 2013-2017 Kreogist Dev Team.
 You're encouraged to translate µ into your native language or update the translation file. Please visit the [Improving Projects Home](https://github.com/Kreogist/Mu/wiki/Improving-Projects-Home#translate-%C2%B5-to-your-own-language) page at wiki.
 
 ## Dependencies
-* Qt (>=5.5)
-* FFMpeg (>=2.5)
+* Qt (>=5.2.1)
+* FFMpeg (>=2.5) / LibAV (>=6:9.20)
 * bass (Windows and Mac OS X, >=2.4)
 * libmpv (Linux, >=0.16)
+* Windows (32-bit >= XP SP3, 64-bit >= Vista SP2)
+* Mac OS X (>=10.10)
+* Mordern Linux Distribution, Ubuntu (>=12.04, strongly recommend >=16.04)
 
 ## Compile and Build
 

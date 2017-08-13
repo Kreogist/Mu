@@ -22,6 +22,7 @@ Foundation,
 #include <QFileInfo>
 #include <QTimeZone>
 #include <QJsonDocument>
+#include <QJsonValue>
 #include <QUrlQuery>
 
 #include "knutil.h"
@@ -156,7 +157,7 @@ bool KNAccount::generateAccount(const QString &userName,
     registerData.insert("username", userName);
     registerData.insert("password", password);
     registerData.insert("email", mail);
-    registerData.insert(m_cloudConfigureTableName, "");
+    registerData.insert(m_cloudConfigureTableName, QString(""));
     //Generate the response cache and error code.
     QByteArray responseCache;
     int errorCode;

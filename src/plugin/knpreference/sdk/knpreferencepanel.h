@@ -62,7 +62,7 @@ private:
     inline KNPreferencePanelItem *generateItem(
             const PreferencePanelOption &option);
     QFont m_titleFont;
-    QList<KNPreferencePanelItem *> m_advancedItems;
+    QList<QWidget *> m_advancedItems;
     QBoxLayout *m_mainLayout;
 };
 
