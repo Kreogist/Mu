@@ -117,8 +117,8 @@ protected:
     /*!
      * \brief Get whether the current value is equal to the original value.
      * \param currentValue The current value state.
-     * \param originalValue
-     * \return
+     * \param originalValue The original value state.
+     * \return If the value is the same, return true. Or else, return false.
      */
     virtual bool isEqual(const QVariant &currentValue,
                          const QVariant &originalValue)=0;

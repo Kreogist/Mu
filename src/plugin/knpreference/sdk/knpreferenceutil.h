@@ -63,8 +63,13 @@ namespace PreferenceUtil
 
     struct PreferencePanelBlock
     {
-        QString blockName;
         QList<PreferencePanelOption> options;
+        QString blockName;
+        bool advanced;
+        PreferencePanelBlock() :
+            advanced(false)
+        {
+        }
     };
 }
 

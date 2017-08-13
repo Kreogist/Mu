@@ -25,6 +25,7 @@
 
 #define knFont (KNFontManager::instance())
 
+class KNConfigure;
 /*!
  * \brief The KNFontManager class is a custom font file manager. It will load
  * all the font file under a folder. And it also provides you function for easy
@@ -72,6 +73,12 @@ public:
     void loadCustomFont(const QString &filePath);
 
     /*!
+     * \brief Set the configure of the font manager.
+     * \param configure The configure object pointer.
+     */
+    void setConfigure(KNConfigure *configure);
+
+    /*!
      * \brief Load default font from inner configuration file for global font.
      */
     void loadDefaultFont();
@@ -95,6 +102,8 @@ private:
     KNFontManager(const KNFontManager &);
     KNFontManager(KNFontManager &&);
     static KNFontManager *m_instance;
+
+    KNConfigure *m_configure;
 };
 
 #endif // KNFONTMANAGER_H

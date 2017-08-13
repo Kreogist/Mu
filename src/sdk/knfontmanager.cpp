@@ -22,6 +22,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "knconfigure.h"
 #include "kndpimanager.h"
 
 #include "knfontmanager.h"
@@ -44,9 +45,9 @@ void KNFontManager::initial(QObject *parent)
 }
 
 KNFontManager::KNFontManager(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_configure(nullptr)
 {
-    ;
 }
 
 void KNFontManager::loadCustomFontFolder(const QString &folderPath)
@@ -85,11 +86,19 @@ void KNFontManager::loadCustomFont(const QString &filePath)
     QFontDatabase::addApplicationFont(filePath);
 }
 
+void KNFontManager::setConfigure(KNConfigure *configure)
+{
+    //Save the configure pointer.
+    m_configure=configure;
+}
+
 void KNFontManager::loadDefaultFont()
 {
     //Get the font configuration.
-    QJsonObject fontConfig;
+    QString defaultName;
     {
+        //Prepare the font config.
+        QJsonObject fontConfig;
         //Get the default font configuration file.
         QFile defaultFontFile(":/public/default_font.json");
         //Open the file in readonly mode.
@@ -101,9 +110,23 @@ void KNFontManager::loadDefaultFont()
             //Close the file.
             defaultFontFile.close();
         }
+        //Save the default family name of the font.
+        defaultName=fontConfig.value("FamilyName").toString();
+    }
+    //Check the configure.
+    if(m_configure && m_configure->contains("ApplicationFont"))
+    {
+        //Get the configure data.
+        QFont globalFont=m_configure->data("ApplicationFont").value<QFont>();
+        //Check the family setting.
+        if(!globalFont.family().isEmpty())
+        {
+            //Get the font family name.
+            defaultName=globalFont.family();
+        }
     }
     //Set the global font.
-    setGlobalFont(fontConfig.value("FamilyName").toString());
+    setGlobalFont(defaultName);
 }
 
 void KNFontManager::setGlobalFont(const QString &fontName,
@@ -120,4 +143,6 @@ void KNFontManager::setGlobalFont(const QString &fontName,
     globalFont.setPixelSize(pixelSize);
     //Set the font.
     QApplication::setFont(globalFont);
+    //Save the font data.
+    m_configure->setData("ApplicationFont", globalFont);
 }

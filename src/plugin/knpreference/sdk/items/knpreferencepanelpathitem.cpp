@@ -39,7 +39,7 @@ KNPreferencePanelPathItem::KNPreferencePanelPathItem(QWidget *parent) :
 
 QVariant KNPreferencePanelPathItem::value() const
 {
-    ;
+    return QVariant();
 }
 
 int KNPreferencePanelPathItem::itemHeightMultiple() const

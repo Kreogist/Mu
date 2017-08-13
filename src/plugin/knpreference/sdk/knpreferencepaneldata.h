@@ -51,7 +51,8 @@ public:
     QList<PreferencePanelBlock> getPanelData(int panelIndex);
 
 private:
-    inline PreferencePanelBlock generateBlock(const QString &title);
+    inline PreferencePanelBlock generateBlock(const QString &title,
+                                              bool isAdvanced=false);
     inline void addItem(PreferencePanelBlock &block,
                         const QString &title,
                         const QString &path,
@@ -59,6 +60,12 @@ private:
                         PreferencePanelOptionType type,
                         const QString &explain,
                         bool isAdvanced);
+    inline void addFontItem(PreferencePanelBlock &block,
+                            const QString &title,
+                            const QString &path,
+                            const QVariant &defaultValue,
+                            const QString &explain,
+                            bool showSize, bool showAttribute, bool isAdvanced);
     inline void addIntItem(PreferencePanelBlock &block,
                            const QString &title,
                            const QString &path,

@@ -78,6 +78,13 @@ public:
                   const QVariant &defaultValue=QVariant());
 
     /*!
+     * \brief Check whether the current configure contains one data.
+     * \param key The data key.
+     * \return If the configure has the data key, return true.
+     */
+    bool contains(const QString &key) const;
+
+    /*!
      * \brief Get a data which could be quite deep level in the configure. If it
      * is not in this level, it will call the deeper level in the configure. If
      * it is right in the level, it will find and return the value the same as

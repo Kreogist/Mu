@@ -164,6 +164,12 @@ QVariant KNConfigure::data(const QString &key,
     return defaultValue;
 }
 
+bool KNConfigure::contains(const QString &key) const
+{
+    //Simply check the key in the data object.
+    return m_dataObject.contains(key);
+}
+
 QVariant KNConfigure::getPathData(const QStringList &path,
                                   const QVariant &defaultValue)
 {

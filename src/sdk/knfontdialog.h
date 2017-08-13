@@ -18,6 +18,7 @@
 #ifndef KNFONTDIALOG_H
 #define KNFONTDIALOG_H
 
+#include <QMap>
 #include <QList>
 #include <QDialog>
 
@@ -42,22 +43,33 @@ class KNFontDialog : public QDialog
 public:
     /*!
      * \brief Construct a KNFontDialog widget.
+     * \param config The configure of the font dialog. Valid config keys are:
+     *  - size: boolean, display the font size change setings or not.
+     *  - attribute: boolean, display the font attruibte settings (e.g. bold) or
+     * not.
+     *  All these attributes should be lower cases.
      * \param parent The parent widget.
      */
-    explicit KNFontDialog(QWidget *parent = 0);
+    explicit KNFontDialog(
+            const QMap<QString, bool> &config=QMap<QString, bool>(),
+            QWidget *parent = 0);
     ~KNFontDialog();
 
     /*!
      * \brief This static font will quickly get font without initializing a font
      * dialog panel.
-     * \param selectedFont
-     * \param title
-     * \param defaultFont
-     * \return
+     * \param selectedFont The result of the selected font.
+     * \param title The title of the font dialog.
+     * \param defaultFont The default set font when display dialog, the
+     * attribute of the font will be set to the dialog.
+     * \return If the okay button is clicked, return true. The selected font
+     * data is valid.
      */
-    static bool getFont(QFont &selectedFont,
-                        const QString &title=QString(),
-                        const QFont &defaultFont=QFont());
+    static bool getFont(
+            QFont &selectedFont,
+            const QString &title=QString(),
+            const QFont &defaultFont=QFont(),
+            const QMap<QString, bool> &config=QMap<QString, bool>());
 
     /*!
      * \brief Set the font to the dialog, and let the dialog to display its

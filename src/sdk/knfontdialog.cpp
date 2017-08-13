@@ -34,7 +34,7 @@
 
 #include <QDebug>
 
-KNFontDialog::KNFontDialog(QWidget *parent) :
+KNFontDialog::KNFontDialog(const QMap<QString, bool> &config, QWidget *parent) :
     QDialog(parent),
     m_fontFamily(new QFontComboBox(this)),
     m_fontSizeList(new QListWidget(this)),
@@ -48,6 +48,9 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     //Get the dialog palette.
     QPalette pal=knTheme->getPalette("FontDialog");
     setPalette(pal);
+    //Check the config for the size box.
+    bool sizeVisible=config.value("size", true),
+            attributeVisible=config.value("attribute", true);
     //Initial the layout.
     QGridLayout *mainLayout=new QGridLayout(this);
     mainLayout->setSpacing(knDpi->width(7));
@@ -57,9 +60,11 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     m_caption[0]->setPalette(pal);
     mainLayout->addWidget(m_caption[0], 0, 0, 1, 1);
     m_caption[1]=new QLabel(tr("Size"), this);
+    m_caption[1]->setVisible(sizeVisible);
     m_caption[1]->setPalette(pal);
     mainLayout->addWidget(m_caption[1], 0, 1, 1, 1);
     m_caption[2]=new QLabel(tr("Styles"), this);
+    m_caption[2]->setVisible(attributeVisible);
     m_caption[2]->setPalette(pal);
     mainLayout->addWidget(m_caption[2], 4, 1, 1, 1);
 
@@ -92,6 +97,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
     connect(m_sizeSpin,
             static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &KNFontDialog::onSizeChanged);
+    m_sizeSpin->setVisible(sizeVisible);
     mainLayout->addWidget(m_sizeSpin, 1, 1, 1, 1);
     //Initial the slider box and standard font size list.
     QBoxLayout *sizeBox=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -110,6 +116,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
         fontSizes << QString::number(*i);
     }
     m_fontSizeList->addItems(fontSizes);
+    m_fontSizeList->setVisible(sizeVisible);
     connect(m_fontSizeList, &QListWidget::currentRowChanged,
             [=](int currentRow)
                {
@@ -122,6 +129,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
                        pal.color(QPalette::HighlightedText));
     m_sizeSlider->setPalette(sliderPal);
     m_sizeSlider->setRange(1, 288);
+    m_sizeSlider->setVisible(sizeVisible);
     connect(m_sizeSlider, &QSlider::valueChanged,
             this, &KNFontDialog::onSizeChanged);
     sizeBox->addWidget(m_sizeSlider);
@@ -137,6 +145,7 @@ KNFontDialog::KNFontDialog(QWidget *parent) :
         //Initial the font check box.
         m_fontStyles[i]=new QCheckBox(this);
         m_fontStyles[i]->setPalette(pal);
+        m_fontStyles[i]->setVisible(attributeVisible);
         stylesBox->addWidget(m_fontStyles[i]);
         connect(m_fontStyles[i], SIGNAL(stateChanged(int)),
                 this, SLOT(synchronizeFont()));
@@ -180,10 +189,11 @@ KNFontDialog::~KNFontDialog()
 
 bool KNFontDialog::getFont(QFont &selectedFont,
                            const QString &title,
-                           const QFont &defaultFont)
+                           const QFont &defaultFont,
+                           const QMap<QString, bool> &config)
 {
     //Initial the font dialog.
-    QScopedPointer<KNFontDialog> fontDialog(new KNFontDialog);
+    QScopedPointer<KNFontDialog> fontDialog(new KNFontDialog(config));
     //Configure the dialog.
     if(!title.isEmpty())
     {

@@ -17,6 +17,7 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QJsonObject>
 #include <QPushButton>
 #include <QLabel>
 
@@ -26,10 +27,13 @@ Foundation,
 
 #include "knpreferencepanelfontitem.h"
 
-#define LabelWidth 218
+#define LabelWidth          218
+#define FontSizeOption      "size"
+#define FontAttributeOption "attribute"
 
 KNPreferencePanelFontItem::KNPreferencePanelFontItem(QWidget *parent) :
     KNPreferencePanelItem(parent),
+    m_dialogOption(QMap<QString, bool>()),
     m_previewLabel(new KNMouseDetectLabel(this)),
     m_selectFont(new QPushButton(this)),
     m_informationLabel(new QLabel(this)),
@@ -48,7 +52,8 @@ KNPreferencePanelFontItem::KNPreferencePanelFontItem(QWidget *parent) :
                 if(KNFontDialog::getFont(
                             selectedFont,
                             tr("Select font for %1").arg(titleText()),
-                            m_font))
+                            m_font,
+                            m_dialogOption))
                 {
                     //Generate a variable for the font.
                     QFont fontVariable=selectedFont;
@@ -87,6 +92,17 @@ QVariant KNPreferencePanelFontItem::value() const
     return m_font;
 }
 
+void KNPreferencePanelFontItem::setConfig(const QVariant &config)
+{
+    //Parse the config to JSON object.
+    QJsonObject dialogConfig=config.toJsonObject();
+    //Construct the dialog configure.
+    m_dialogOption.insert(FontSizeOption,
+                          dialogConfig.value(FontSizeOption).toBool(true));
+    m_dialogOption.insert(FontAttributeOption,
+                          dialogConfig.value(FontAttributeOption).toBool(true));
+}
+
 void KNPreferencePanelFontItem::setWidgetValue(const QVariant &value)
 {
     //Save the font.
@@ -97,16 +113,26 @@ void KNPreferencePanelFontItem::setWidgetValue(const QVariant &value)
     m_previewTooltip->setFont(dpiScaledFont);
     m_previewTooltip->setText(titleText());
     //Separate the data.
-    QString fontText=tr("%1, %2px%3%4%5%6%7").arg(
-                m_font.family(),
-                QString::number(m_font.pixelSize()),
-                m_font.bold()?tr(", Bold"):"",
-                m_font.italic()?tr(", Italic"):"",
-                m_font.underline()?tr(", Underline"):"",
-                m_font.strikeOut()?tr(", Strike Out"):"",
-                m_font.kerning()?tr(", Kerning"):""),
-            elidedFontText=m_informationLabel->fontMetrics().elidedText(
-                fontText, Qt::ElideRight, LabelWidth);
+    QString fontText=tr("%1").arg(m_font.family());
+    //Check the configure.
+    if(m_dialogOption.value(FontSizeOption))
+    {
+        //Append the size data.
+        fontText.append(tr(", %1px").arg(QString::number(m_font.pixelSize())));
+    }
+    if(m_dialogOption.value(FontAttributeOption))
+    {
+        //Append the size data.
+        fontText.append(tr("%1%2%3%4%5").arg(
+                            m_font.bold()?tr(", Bold"):"",
+                            m_font.italic()?tr(", Italic"):"",
+                            m_font.underline()?tr(", Underline"):"",
+                            m_font.strikeOut()?tr(", Strike Out"):"",
+                            m_font.kerning()?tr(", Kerning"):""));
+    }
+    //Get the elied text of the font.
+    QString elidedFontText=m_informationLabel->fontMetrics().elidedText(
+        fontText, Qt::ElideRight, LabelWidth);
     //Check the font text is the same as elided.
     if(elidedFontText==fontText)
     {
@@ -129,13 +155,27 @@ bool KNPreferencePanelFontItem::isEqual(const QVariant &currentValue,
     QFont currentFont=currentValue.value<QFont>(),
             originalFont=originalValue.value<QFont>();
     //Check the font data.
-    return currentFont.family()==originalFont.family() &&
-            currentFont.pixelSize()==originalFont.pixelSize() &&
-            currentFont.bold()==originalFont.bold() &&
-            currentFont.italic()==originalFont.italic() &&
-            currentFont.underline()==originalFont.underline() &&
-            currentFont.strikeOut()==originalFont.strikeOut() &&
-            currentFont.kerning()==originalFont.kerning();
+    if(currentFont.family()!=originalFont.family())
+    {
+        return false;
+    }
+    //Check the setings.
+    if(m_dialogOption.value(FontSizeOption) &&
+            currentFont.pixelSize()!=originalFont.pixelSize())
+    {
+        return false;
+    }
+    if(m_dialogOption.value(FontSizeOption) &&
+            (currentFont.bold()!=originalFont.bold() ||
+             currentFont.italic()!=originalFont.italic() ||
+             currentFont.underline()!=originalFont.underline() ||
+             currentFont.strikeOut()!=originalFont.strikeOut() ||
+             currentFont.kerning()!=originalFont.kerning()))
+    {
+        return false;
+    }
+    //All the same for the other cases.
+    return true;
 }
 
 void KNPreferencePanelFontItem::onActionShowTooltip()

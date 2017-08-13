@@ -75,6 +75,12 @@ void KNPreferencePanel::setPanelBlocks(
         titleLabel->setFont(m_titleFont);
         //Add the block title to layout.
         m_mainLayout->addWidget(titleLabel);
+        //Check the block advanced settings.
+        if(block.advanced)
+        {
+            //Add item to advanced item list.
+            m_advancedItems.append(titleLabel);
+        }
         //Loop and generate all the item.
         for(auto item : block.options)
         {
@@ -87,7 +93,7 @@ void KNPreferencePanel::setPanelBlocks(
                 continue;
             }
             //Check the item widget is advanced item.
-            if(item.advanced)
+            if(block.advanced || item.advanced)
             {
                 //Add the widget to the advanced item list.
                 m_advancedItems.append(itemWidget);

@@ -113,12 +113,12 @@
 <context>
     <name>KNAccountPanel</name>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="262"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="272"/>
         <source>Account Update Success</source>
         <translation>アカウントは正常に更新されました</translation>
     </message>
     <message>
-        <location filename="../sdk/account/knaccountpanel.cpp" line="263"/>
+        <location filename="../sdk/account/knaccountpanel.cpp" line="273"/>
         <source>The user data of %1 has been updated successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,42 +286,42 @@
 <context>
     <name>KNFontDialog</name>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="56"/>
+        <location filename="../sdk/knfontdialog.cpp" line="59"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="59"/>
+        <location filename="../sdk/knfontdialog.cpp" line="62"/>
         <source>Size</source>
         <translation type="unfinished">サイズ</translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="62"/>
+        <location filename="../sdk/knfontdialog.cpp" line="66"/>
         <source>Styles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="144"/>
+        <location filename="../sdk/knfontdialog.cpp" line="153"/>
         <source>Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="145"/>
+        <location filename="../sdk/knfontdialog.cpp" line="154"/>
         <source>Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="146"/>
+        <location filename="../sdk/knfontdialog.cpp" line="155"/>
         <source>Underline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="147"/>
+        <location filename="../sdk/knfontdialog.cpp" line="156"/>
         <source>Strike Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="148"/>
+        <location filename="../sdk/knfontdialog.cpp" line="157"/>
         <source>Kerning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -336,12 +336,12 @@
         <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="164"/>
+        <location filename="../sdk/knfontdialog.cpp" line="173"/>
         <source>Sample</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knfontdialog.cpp" line="170"/>
+        <location filename="../sdk/knfontdialog.cpp" line="179"/>
         <source>AaBbYyZz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -549,67 +549,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="467"/>
+        <location filename="../sdk/knglobal.cpp" line="469"/>
         <source>Jan.</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="469"/>
+        <location filename="../sdk/knglobal.cpp" line="471"/>
         <source>Feb.</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="471"/>
+        <location filename="../sdk/knglobal.cpp" line="473"/>
         <source>Mar.</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="473"/>
+        <location filename="../sdk/knglobal.cpp" line="475"/>
         <source>Apr.</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="475"/>
+        <location filename="../sdk/knglobal.cpp" line="477"/>
         <source>May</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="477"/>
+        <location filename="../sdk/knglobal.cpp" line="479"/>
         <source>Jun.</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="479"/>
+        <location filename="../sdk/knglobal.cpp" line="481"/>
         <source>Jul.</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="481"/>
+        <location filename="../sdk/knglobal.cpp" line="483"/>
         <source>Aug.</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="483"/>
+        <location filename="../sdk/knglobal.cpp" line="485"/>
         <source>Sept.</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="485"/>
+        <location filename="../sdk/knglobal.cpp" line="487"/>
         <source>Oct.</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="487"/>
+        <location filename="../sdk/knglobal.cpp" line="489"/>
         <source>Nov.</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="489"/>
+        <location filename="../sdk/knglobal.cpp" line="491"/>
         <source>Dec.</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../sdk/knglobal.cpp" line="554"/>
+        <location filename="../sdk/knglobal.cpp" line="556"/>
         <source>%2 %3, %1</source>
         <translation>%1年%2月%3日</translation>
     </message>
@@ -676,7 +676,7 @@
 <context>
     <name>KNMusicAlbumModel</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp" line="491"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbummodel.cpp" line="553"/>
         <source>Various Artists</source>
         <translation>様々なアーティスト</translation>
     </message>
@@ -1561,7 +1561,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="212"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="213"/>
         <source>Music</source>
         <translation>音楽</translation>
     </message>
@@ -1949,28 +1949,33 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreference</name>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="114"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="117"/>
         <source>About</source>
         <translation>プロパティ</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="174"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="178"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="176"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="179"/>
         <source>Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="178"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="180"/>
         <source>Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="180"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="181"/>
         <source>Shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="182"/>
+        <source>Association</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2094,12 +2099,28 @@ When click the icon in the system tray, Mu will pop up back.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="75"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="59"/>
+        <source>Application font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
+        <source>This option will change the font used for the whole application.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="71"/>
+        <source>Ignore CUE data file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="87"/>
         <source>Output Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="91"/>
         <source>Using WASAPI with exclusive mode instead of DirectX for sound output.
 When this feature is enabled, the output sample rate will be changed to the sample rate of the real device.
 When this feature is enabled, all the music preview feature will be disabled.
@@ -2107,18 +2128,18 @@ This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="101"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="113"/>
         <source>Sample Rate (Hz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="103"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="115"/>
         <source>This option will change the output sample rate of the playback backend.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="91"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="103"/>
         <source>Stereo Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2128,172 +2149,183 @@ This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="59"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
         <source>Show status bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
         <source>Show the status bar at the top right corner.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="64"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="70"/>
         <source>Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="65"/>
-        <source>Ignore CUE Data File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="73"/>
         <source>When adding the data file of one CUE file, ignore the data file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="75"/>
+        <source>Category by album artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="77"/>
+        <source>When category the album, use the album artist metadata field instead of statistic all the artists.
+This option will be applied after the application restarted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="89"/>
         <source>Use WASAPI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="98"/>
         <source>Use 32-bit float point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="100"/>
         <source>Produce 32-bit floating-point output.
 WDM drivers are required to use this feature in Windows.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="93"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="105"/>
         <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="109"/>
         <source>Use Device Default Sample Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="115"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="125"/>
         <source>Header Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="116"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="126"/>
         <source>Header lyrics font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="118"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="129"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="120"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="131"/>
         <source>Header lyrics spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="122"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="133"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="126"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="137"/>
         <source>Online Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="127"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="138"/>
         <source>Allow downloading lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="131"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="142"/>
         <source>Combine translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="134"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="145"/>
         <source>Some lyrics downloader will provide translated version. 
 This option will allow Mu to combine the translated version and the raw lyrics into a single file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="143"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="154"/>
         <source>Playing Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="144"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="155"/>
         <source>Play and Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="149"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="160"/>
         <source>This shortcut will be used in the whole application to play or pause the current playing music.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="151"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="162"/>
         <source>Previous Song</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="156"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="167"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the previous song.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="159"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="170"/>
         <source>Next Song</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="164"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="175"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the next song.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="169"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="180"/>
         <source>Volume Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="170"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="181"/>
         <source>Mute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="174"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="185"/>
         <source>This shortcut will be used in the whole application to enter and exit the mute state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="176"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="187"/>
         <source>Volume Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="180"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="191"/>
         <source>This shortcut will be used in the whole application to increase 10% volume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="182"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="193"/>
         <source>Volume Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="186"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="197"/>
         <source>This shortcut will be used in the whole application to decrease 10% volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="205"/>
+        <source>Auto Set File Association</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2301,7 +2333,7 @@ This option will allow Mu to combine the translated version and the raw lyrics i
         <translation type="obsolete">歌詞をダウンロード</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="129"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="140"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation type="unfinished"></translation>
@@ -2310,37 +2342,47 @@ allows Mu to download lyrics from the Internet.</source>
 <context>
     <name>KNPreferencePanelFontItem</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="50"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="54"/>
         <source>Select font for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="100"/>
-        <source>%1, %2px%3%4%5%6%7</source>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="116"/>
+        <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="103"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="121"/>
+        <source>, %1px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="126"/>
+        <source>%1%2%3%4%5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="127"/>
         <source>, Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="104"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="128"/>
         <source>, Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="105"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="129"/>
         <source>, Underline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="106"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="130"/>
         <source>, Strike Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="107"/>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="131"/>
         <source>, Kerning</source>
         <translation type="unfinished"></translation>
     </message>

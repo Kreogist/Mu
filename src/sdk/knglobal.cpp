@@ -384,6 +384,8 @@ inline void KNGlobal::initialInfrastrcture()
     //Initial the font manager.
     //Set the font resource folder.
     knFont->loadCustomFontFolder(m_dirPath[ResourceDir]+"/Fonts");
+    //Set the font configure to the font manager.
+    knFont->setConfigure(m_globalConfigure);
     //Set the default font.
     knFont->loadDefaultFont();
 

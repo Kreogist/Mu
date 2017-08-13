@@ -128,6 +128,10 @@ win32: {
     ICON = resource/icon/mu.ico
     # Enable the backend and analysiser.
     CONFIG += backend-bass analysiser-ffmpeg
+    # For 64-bit MSVC compiler, add the dwm lib.
+    msvc: {
+        LIBS += -ldwmapi -luser32
+    }
     # Add Windows platform special extras.
     QT += winextras
     SOURCES += plugin/knwindowsextras/knwindowsextras.cpp \

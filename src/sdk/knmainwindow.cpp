@@ -77,7 +77,6 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     //Set properties.
     setAutoFillBackground(true);
     setCentralWidget(m_container);
-    setContentsMargins(0, 0, 0, 0);
     setWindowIcon(QIcon("://icon/mu.png"));
     //Set the DPI of the main window to the DPI manager.
     knDpi->setDpi(logicalDpiX(), logicalDpiY());

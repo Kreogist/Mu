@@ -56,17 +56,23 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
 #endif
         //Appearance settings.
         block=generateBlock(tr("Appearance"));
+        addFontItem(block, tr("Application font"),
+                    "User/Global/ApplicationFont", QApplication::font(),
+                    tr("This option will change the font used for the whole "
+                       "application.\n"
+                       "This option will be applied after the application "
+                       "restarted."), false, false, false);
         addItem(block, tr("Show status bar"),
                 "User/Global/Appearance/ShowStatusBar", true, TypeBoolean,
-                tr("Show the status bar at the top right corner."), false);
+                tr("Show the status bar at the top right corner."), true);
         panelData.append(block);
         //Library settings.
         block=generateBlock(tr("Library"));
-        addItem(block, tr("Ignore CUE Data File"),
+        addItem(block, tr("Ignore CUE data file"),
                 "User/Music/MusicLibrary/IgnoreCueData", true, TypeBoolean,
                 tr("When adding the data file of one CUE file, "
                    "ignore the data file."), false);
-        addItem(block, tr("Category by Album Artist"),
+        addItem(block, tr("Category by album artist"),
                 "User/Music/MusicLibrary/UseAlbumArt", true, TypeBoolean,
                 tr("When category the album, use the album artist metadata "
                    "field instead of statistic all the artists.\n"
@@ -115,14 +121,13 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     }
     case PanelLyrics:
     {
-        //Get the default font.
-        QVariant font=QApplication::font();
         //Header lyrics.
         block=generateBlock(tr("Header Lyrics"));
-        addItem(block, tr("Header lyrics font"),
-                "User/Music/MusicHeaderPlayer/Lyrics/Font", font, TypeFont,
-                tr("This option will change the font used on the header player "
-                   "lyrics."), false);
+        addFontItem(block, tr("Header lyrics font"),
+                    "User/Music/MusicHeaderPlayer/Lyrics/Font",
+                    QApplication::font(),
+                    tr("This option will change the font used on the header "
+                       "player lyrics."), true, true, false);
         addIntItem(block, tr("Header lyrics spacing"),
                    "User/Music/MusicHeaderPlayer/Lyrics/Spacing", 2,
                    tr("This option will change the spacing of the text line on "
@@ -209,12 +214,13 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
 }
 
 inline PreferencePanelBlock KNPreferencePanelData::generateBlock(
-        const QString &title)
+        const QString &title, bool isAdvanced)
 {
     //Generate the block.
     PreferencePanelBlock block;
     //Set the name.
     block.blockName=title;
+    block.advanced=isAdvanced;
     //Give back the block.
     return block;
 }
@@ -236,12 +242,35 @@ inline void KNPreferencePanelData::addItem(PreferencePanelBlock &block,
     block.options.append(option);
 }
 
-void KNPreferencePanelData::addIntItem(PreferencePanelBlock &block,
-                                       const QString &title,
-                                       const QString &path,
-                                       const QVariant &defaultValue,
-                                       const QString &explain,
-                                       int min, int max, bool isAdvanced)
+inline void KNPreferencePanelData::addFontItem(PreferencePanelBlock &block,
+                                               const QString &title,
+                                               const QString &path,
+                                               const QVariant &defaultValue,
+                                               const QString &explain,
+                                               bool showSize,
+                                               bool showAttribute,
+                                               bool isAdvanced)
+{
+    //Generate an item.
+    PreferencePanelOption option;
+    //Update the item data.
+    setItemData(option, title, path, defaultValue, explain, TypeFont,
+                isAdvanced);
+    //Set the preference.
+    QJsonObject config;
+    config.insert("size", showSize);
+    config.insert("attribute", showAttribute);
+    option.configure=config;
+    //Add data to item.
+    block.options.append(option);
+}
+
+inline void KNPreferencePanelData::addIntItem(PreferencePanelBlock &block,
+                                              const QString &title,
+                                              const QString &path,
+                                              const QVariant &defaultValue,
+                                              const QString &explain,
+                                              int min, int max, bool isAdvanced)
 {
     //Generate an item.
     PreferencePanelOption option;

@@ -44,6 +44,11 @@ public:
      */
     QVariant value() const Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNPreferencePanelItem::setConfig().
+     */
+    void setConfig(const QVariant &config);
+
 protected:
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::setWidgetValue().
@@ -60,6 +65,7 @@ private slots:
     void onActionShowTooltip();
 
 private:
+    QMap<QString, bool> m_dialogOption;
     QFont m_font;
     KNMouseDetectLabel *m_previewLabel;
     QPushButton *m_selectFont;
