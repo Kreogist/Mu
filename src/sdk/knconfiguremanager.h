@@ -20,6 +20,7 @@
 #define KNCONFIGUREMANAGER_H
 
 #include <QDateTime>
+#include <QStringList>
 
 #include <QObject>
 

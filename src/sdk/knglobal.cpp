@@ -148,12 +148,14 @@ QString KNGlobal::connectionErrorText(int errorId)
         return tr("The remote server requires authentication to serve the "
                   "content but the credentials provided were not accepted (if "
                   "any).");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
     case QNetworkReply::ContentConflictError:
         return tr("The request could not be completed due to a conflict with "
                   "the current state of the resource.");;
     case QNetworkReply::ContentGoneError:
         return tr("The requested resource is no longer available at the "
                   "server.");
+#endif
     case QNetworkReply::UnknownContentError:
         return tr("An unknown error related to the remote content was "
                   "detected.");
@@ -165,6 +167,7 @@ QString KNGlobal::connectionErrorText(int errorId)
     case QNetworkReply::ProtocolFailure:
         return tr("A breakdown in protocol was detected (parsing error, "
                   "invalid or unexpected responses, etc.).");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
     case QNetworkReply::InternalServerError:
         return tr("The server encountered an unexpected condition which "
                   "prevented it from fulfilling the request. (HTTP error 500)");
@@ -174,6 +177,7 @@ QString KNGlobal::connectionErrorText(int errorId)
     case QNetworkReply::UnknownServerError:
         return tr("An unknown error related to the server response was "
                   "detected.");
+#endif
     default:
         //Treat all the other error as unknown error.
         return tr("An unknown network-related error was detected.");
