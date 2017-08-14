@@ -124,6 +124,20 @@ protected:
                          const QVariant &originalValue)=0;
 
     /*!
+     * \brief Get the default value. This default value means the original value
+     * set in the configure.
+     * \param defaultValue The applciation default set value.
+     * \return The default value.
+     */
+    virtual QVariant getValue(const QVariant &defaultValue);
+
+    /*!
+     * \brief Initialize the preference item with the specific value.
+     * \param defaultValue The default value.
+     */
+    virtual void initialValue(const QVariant &defaultValue);
+
+    /*!
      * \brief Get the title text of the label.
      * \return The title label text.
      */

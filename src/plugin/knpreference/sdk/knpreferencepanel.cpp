@@ -30,6 +30,7 @@ Foundation,
 #include "items/knpreferencepanelintitem.h"
 #include "items/knpreferencepanelcomboitem.h"
 #include "items/knpreferencepanelshortcutitem.h"
+#include "items/knpreferencepanelfiletypeitem.h"
 
 #include <QDebug>
 
@@ -138,6 +139,9 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
         break;
     case TypeShortcut:
         item=new KNPreferencePanelShortcutItem(this);
+        break;
+    case TypeFileType:
+        item=new KNPreferencePanelFileTypeItem(this);
         break;
     default:
         break;

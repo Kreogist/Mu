@@ -114,11 +114,11 @@ void KNPreferencePanelItem::setPreferenceOption(
     //Save the path.
     m_path=option.path;
     //Save the default value.
-    m_defaultValue=knConf->configureValue(m_path, option.defaultValue);
+    m_defaultValue=getValue(option.defaultValue);
     //Set the configure data.
     setConfig(option.configure);
     //Get the configure value.
-    setWidgetValue(m_defaultValue);
+    initialValue(m_defaultValue);
     //Disable the value.
     m_undoButton->setEnabled(false);
 }
@@ -176,6 +176,18 @@ void KNPreferencePanelItem::buildWidgetLayout(QLayout *layout)
     mainLayout->addLayout(layout, 1);
     //Add the helper widgets.
     mainLayout->addWidget(m_hintLabel, 0, Qt::AlignVCenter);
+}
+
+QVariant KNPreferencePanelItem::getValue(const QVariant &defaultValue)
+{
+    //Get the default value from the configure.
+    return knConf->configureValue(m_path, defaultValue);
+}
+
+void KNPreferencePanelItem::initialValue(const QVariant &defaultValue)
+{
+    //For the default item, it is simply set the value.
+    setWidgetValue(defaultValue);
 }
 
 QString KNPreferencePanelItem::titleText() const

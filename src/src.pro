@@ -150,13 +150,14 @@ macx: {
     CONFIG += backend-bass ffmpeg-common ffmpeg-swresample analysiser-ffmpeg transcoder-ffmpeg
     # Nearly all the audio library will use CoreAudio on Mac OS X, so import
     # CoreAudio library to LFLAGS and LIBS.
-    QMAKE_LFLAGS += -framework CoreFoundation
-    LIBS += -framework CoreFoundation
+    QMAKE_LFLAGS += -framework ApplicationServices -framework CoreFoundation
+    LIBS += -framework ApplicationServices -framework CoreFoundation
     # Brew configure. Use brew to install all your libs, e.g. FFMpeg.
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
     # Add Mac OS X platform special extras.
-    SOURCES += plugin/knmacextras/knmacextras.cpp
+    SOURCES += plugin/knmacextras/knmacextras.cpp \
+               sdk/knfileassociationmanager_mac.cpp
     HEADERS += plugin/knmacextras/knmacextras.h
 }
 
@@ -584,7 +585,9 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.cpp \
     sdk/knshortcuteditor.cpp \
     plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.cpp \
-    plugin/knpreference/sdk/items/knpreferencepanelpathitem.cpp
+    plugin/knpreference/sdk/items/knpreferencepanelpathitem.cpp \
+    sdk/knfileassociationmanager.cpp \
+    plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -873,7 +876,9 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.h \
     sdk/knshortcuteditor.h \
     plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.h \
-    plugin/knpreference/sdk/items/knpreferencepanelpathitem.h
+    plugin/knpreference/sdk/items/knpreferencepanelpathitem.h \
+    sdk/knfileassociationmanager.h \
+    plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.h
 
 RESOURCES += \
     resource/res.qrc

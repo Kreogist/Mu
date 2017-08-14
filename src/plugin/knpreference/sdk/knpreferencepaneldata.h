@@ -60,6 +60,14 @@ private:
                         PreferencePanelOptionType type,
                         const QString &explain,
                         bool isAdvanced);
+    inline void addFileTypeItem(PreferencePanelBlock &block,
+                                const QString &title,
+                                const QString &path,
+                                const QVariant &defaultValue,
+                                const QString &explain,
+                                const QString &suffix,
+                                const QString &typeHandler,
+                                bool isAdvanced);
     inline void addFontItem(PreferencePanelBlock &block,
                             const QString &title,
                             const QString &path,

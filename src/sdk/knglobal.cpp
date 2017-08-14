@@ -31,6 +31,7 @@
 #include "knpreferenceplugin.h"
 #include "knthememanager.h"
 #include "knshortcutmanager.h"
+#include "knfileassociationmanager.h"
 #include "kndpimanager.h"
 #include "knnotification.h"
 #include "knmainwindow.h"
@@ -277,6 +278,8 @@ KNGlobal::KNGlobal(QObject *parent) :
     KNNotification::initial(this);
     //Generate the shortcut manager.
     KNShortcutManager::initial(this);
+    //Generate the file association manager.
+    KNFileAssociationManager::initial(this);
     //Generate the account system.
     KNAccount::initial();
 

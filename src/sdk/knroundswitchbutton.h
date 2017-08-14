@@ -47,6 +47,11 @@ public:
     void setForceChecked(bool checked);
 
 signals:
+    /*!
+     * \brief When the moving animation is complete, this signal will be
+     * emitted.
+     */
+    void animeComplete();
 
 public slots:
     /*!
@@ -62,7 +67,7 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionMove(int frame);
+    void onFrameChangeMove(int frame);
     void startAnime();
 
 private:

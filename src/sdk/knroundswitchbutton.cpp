@@ -60,8 +60,10 @@ KNRoundSwitchButton::KNRoundSwitchButton(QWidget *parent) :
     m_buttonBorder.setWidth(2);
     //Configure the timeline.
     m_movingAnime->setUpdateInterval(16);
+    connect(m_movingAnime, &QTimeLine::finished,
+            this, &KNRoundSwitchButton::animeComplete);
     connect(m_movingAnime, &QTimeLine::frameChanged,
-            this, &KNRoundSwitchButton::onActionMove);
+            this, &KNRoundSwitchButton::onFrameChangeMove);
 }
 
 void KNRoundSwitchButton::setForceChecked(bool checked)
@@ -71,7 +73,7 @@ void KNRoundSwitchButton::setForceChecked(bool checked)
     //Set the check state.
     setChecked(checked);
     //Update the state.
-    onActionMove(isChecked()?SwitcherTrueX:SwitcherFalseX);
+    onFrameChangeMove(isChecked()?SwitcherTrueX:SwitcherFalseX);
     //Release the block.
     blockSignals(false);
 }
@@ -116,7 +118,7 @@ void KNRoundSwitchButton::paintEvent(QPaintEvent *event)
                                      SwitcherHeight-(SwitcherSmall<<1)));
 }
 
-void KNRoundSwitchButton::onActionMove(int frame)
+void KNRoundSwitchButton::onFrameChangeMove(int frame)
 {
     //Update the button x.
     m_buttonX=frame;

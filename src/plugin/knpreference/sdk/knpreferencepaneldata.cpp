@@ -102,7 +102,13 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                    " be applied after the application restarted."), false);
         addItem(block, tr("Use Buffer"),
                 "System/Backend/Buffer", true, TypeBoolean,
-                tr("Enable the playback buffering.\nThis option will"
+                tr("Enable the playback buffering.\nA playing music is "
+                   "normally asked to render data to its playback buffer in "
+                   "advance to produce the final signal that is given to the "
+                   "output device.\nWhen this option is off, buffering is "
+                   "skipped and the playing thread will only be asked to "
+                   "produce data as it is needed during the generation of the "
+                   "output data.\nThis option will"
                    " be applied after the application restarted."), false);
         addIntItem(block, tr("Buffer Length"),
                    "System/Backend/BufferLength", 500,
@@ -112,7 +118,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                       "also increases the latency for DSP/FX.\nThis option "
                       "will be applied after the application restarted."),
                    10, 5000, false);
-        addItem(block, tr("Stereo Output"),
+        addItem(block, tr("Force Stereo Output"),
                 "System/Backend/Stero", false, TypeBoolean,
                 tr("Limit the output to stereo, saving some CPU if the device "
                    "has more speakers available.\nThis option will be applied "
@@ -214,7 +220,25 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     case PanelFileAsso:
     {
         //For some quick controls.
-        block=generateBlock(tr("Auto Set File Association"));
+        block=generateBlock(tr("Auto Set File Types Association"));
+        panelData.append(block);
+        block=generateBlock(tr("Lossless Compressed File Types"));
+        addFileTypeItem(block, "wav", "", QVariant(), "",
+                        ".wav", "com.microsoft.waveform-audio", false);
+        panelData.append(block);
+        block=generateBlock(tr("Lossy Compressed File Types"));
+        addFileTypeItem(block, "aac", "", QVariant(), "",
+                        ".aac", "public.aac-audio", false);
+        addFileTypeItem(block, "ac3", "", QVariant(), "",
+                        ".ac3", "public.ac3-audio", false);
+        addFileTypeItem(block, "aiff", "", QVariant(), "",
+                        ".aiff", "public.aiff-audio", false);
+        addFileTypeItem(block, "m4a", "", QVariant(), "",
+                        ".m4a", "com.apple.m4a-audio", false);
+        addFileTypeItem(block, "mp2", "", QVariant(), "",
+                        ".mp2", "public.mp2", false);
+        addFileTypeItem(block, "mp3", "", QVariant(), "",
+                        ".mp3", "public.mp3", false);
         panelData.append(block);
         break;
     }
@@ -250,6 +274,29 @@ inline void KNPreferencePanelData::addItem(PreferencePanelBlock &block,
     //Update the item data.
     setItemData(option, title, path, defaultValue, explain, type, isAdvanced);
     //No preference will be added.
+    //Add data to item.
+    block.options.append(option);
+}
+
+inline void KNPreferencePanelData::addFileTypeItem(PreferencePanelBlock &block,
+                                                   const QString &title,
+                                                   const QString &path,
+                                                   const QVariant &defaultValue,
+                                                   const QString &explain,
+                                                   const QString &suffix,
+                                                   const QString &typeHandler,
+                                                   bool isAdvanced)
+{
+    //Generate an item.
+    PreferencePanelOption option;
+    //Update the item data.
+    setItemData(option, title, path, defaultValue, explain, TypeFileType,
+                isAdvanced);
+    //Set the preference.
+    QJsonObject config;
+    config.insert("suffix", suffix);
+    config.insert("handler", typeHandler);
+    option.configure=config;
     //Add data to item.
     block.options.append(option);
 }

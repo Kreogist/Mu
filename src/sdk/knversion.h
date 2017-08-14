@@ -205,6 +205,9 @@ _?i\^(;;_`´ *3c"^   ~\:1GtGbwwgkkkk>DmL´´({$NRRmFL     /wXZZZZggdRQ0
                               JbXg+
 */
 
+//Applicaiton handler.
+#define APP_HANDLER "org.kreogist.mu"
+
 //Change the version here.
 #define MAJOR_VERSION 1
 #define MINOR_VERSION 0

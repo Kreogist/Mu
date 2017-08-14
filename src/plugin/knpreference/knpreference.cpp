@@ -179,7 +179,7 @@ inline void KNPreference::updateItemTitle()
     m_sidebar->setItemTitle(PanelPlayback, tr("Playback"));
     m_sidebar->setItemTitle(PanelLyrics, tr("Lyrics"));
     m_sidebar->setItemTitle(PanelShortcuts, tr("Shortcuts"));
-    m_sidebar->setItemTitle(PanelFileAsso, tr("Association"));
+    m_sidebar->setItemTitle(PanelFileAsso, tr("File Types"));
 }
 
 inline void KNPreference::generateSettingItems()

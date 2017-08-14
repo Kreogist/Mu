@@ -17,6 +17,7 @@
  */
 #include "knmainwindow.h" //Main window.
 #include "knsingletonapplication.h" //Singleton application
+#include "knversion.h"  // For public settings.
 
 #include "core/knpluginmanager.h" //Plugin Manager.
 
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
 #endif
     //Create a singleton pattern application.
-    KNSingletonApplication app(argc, argv, "org.kreogist.mu");
+    KNSingletonApplication app(argc, argv, APP_HANDLER);
     //Check the running status of the instance.
     if(!app.isInstanceRunning())
     {

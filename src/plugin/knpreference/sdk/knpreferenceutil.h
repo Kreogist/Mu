@@ -43,7 +43,8 @@ namespace PreferenceUtil
         TypeBoolean,
         TypeInt,
         TypeFont,
-        TypeShortcut
+        TypeShortcut,
+        TypeFileType
     };
 
     struct PreferencePanelOption
