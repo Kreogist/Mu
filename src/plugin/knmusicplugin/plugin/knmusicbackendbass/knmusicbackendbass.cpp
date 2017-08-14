@@ -245,6 +245,8 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 #ifdef Q_OS_WIN64
     m_wasapiEnabled=m_playbackConfigure->data("WASAPI", false).toBool();
 #endif
+    //Get the buffer length.
+    int bufferLength=m_playbackConfigure->data("BufferLength", 500).toInt();
     //Check the bass library version first.
     if(HIWORD(BASS_GetVersion()) > BASSVERSION)
     {
@@ -254,6 +256,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     //Enabled float digital signal processing.
     //DON'T MOVE THIS, this should config before bass init.
     BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
+    BASS_SetConfig(BASS_CONFIG_BUFFER, static_cast<DWORD>(bufferLength));
     //Get the setting sample rate.
     QString userSampleRate=
             m_playbackConfigure->data("SampleRate", "None").toString();
@@ -392,10 +395,13 @@ inline void KNMusicBackendBass::loadPlugin(const QString &dirPath)
 KNMusicBackendBassThread *KNMusicBackendBass::generateThread(
         const DWORD &channelFlags)
 {
+    //Check the buffer using settings.
+    float useBufferSetting=m_playbackConfigure->data("Buffer", true).toBool()
+            ?(1.0):(0.0);
     //Generate a thread.
     KNMusicBackendBassThread *thread=new KNMusicBackendBassThread(this);
     //Set the channel create flag to the thread.
-    thread->setCreateFlags(channelFlags);
+    thread->setCreateFlags(channelFlags, useBufferSetting);
 #ifdef Q_OS_WIN64
     //Set the WASAPI parameters to the thread.
     thread->setWasapiData(m_wasapiEnabled, m_wasapiOutputDevice, m_wasapiFlag);

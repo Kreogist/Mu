@@ -132,7 +132,8 @@ public slots:
      * \brief Set the flags when using at creating a stream.
      * \param channelFlags The new channel flags.
      */
-    void setCreateFlags(const DWORD &channelFlags);
+    void setCreateFlags(const DWORD &channelFlags,
+                        const float &useBuffer);
 
 #ifdef Q_OS_WIN64
     /*!
@@ -208,6 +209,7 @@ private:
            m_endPosition;
     qint64 m_savedPosition;
     qreal m_volume;
+    float m_useBuffer;
     int m_state;
 #ifdef Q_OS_WIN64
     HSTREAM m_mixer;

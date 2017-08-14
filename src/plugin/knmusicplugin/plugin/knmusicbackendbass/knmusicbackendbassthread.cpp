@@ -40,6 +40,7 @@ KNMusicBackendBassThread::KNMusicBackendBassThread(QObject *parent) :
     m_endPosition(-1),
     m_savedPosition(-1),
     m_volume(1.0),
+    m_useBuffer(1.0),
     m_state(Stopped),
     #ifdef Q_OS_WIN64
     m_mixer(0),
@@ -385,10 +386,13 @@ void KNMusicBackendBassThread::setPosition(const qint64 &position)
     checkPosition();
 }
 
-void KNMusicBackendBassThread::setCreateFlags(const DWORD &channelFlags)
+void KNMusicBackendBassThread::setCreateFlags(const DWORD &channelFlags,
+                                              const float &useBuffer)
 {
     //Save the channel flags.
     m_channelFlags=channelFlags;
+    //Buffer options.
+    m_useBuffer=useBuffer;
 }
 
 void KNMusicBackendBassThread::checkPosition()
@@ -580,6 +584,8 @@ inline bool KNMusicBackendBassThread::loadBassThread(const QString &filePath)
             return false;
         }
     }
+    //Set settings to the music stream.
+    BASS_ChannelSetAttribute(m_channel, BASS_ATTRIB_NOBUFFER, m_useBuffer);
     //Save the new file path.
     m_filePath=filePath;
     //Set the sync handler.

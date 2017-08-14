@@ -100,6 +100,18 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 tr("Produce 32-bit floating-point output.\nWDM drivers are "
                    "required to use this feature in Windows.\nThis option will"
                    " be applied after the application restarted."), false);
+        addItem(block, tr("Use Buffer"),
+                "System/Backend/Buffer", true, TypeBoolean,
+                tr("Enable the playback buffering.\nThis option will"
+                   " be applied after the application restarted."), false);
+        addIntItem(block, tr("Buffer Length"),
+                   "System/Backend/BufferLength", 500,
+                   tr("The buffer length in milliseconds.\n"
+                      "Increasing the length, decreases the chance of the "
+                      "sound possibly breaking-up on slower computers, \nbut "
+                      "also increases the latency for DSP/FX.\nThis option "
+                      "will be applied after the application restarted."),
+                   10, 5000, false);
         addItem(block, tr("Stereo Output"),
                 "System/Backend/Stero", false, TypeBoolean,
                 tr("Limit the output to stereo, saving some CPU if the device "
@@ -189,13 +201,13 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 QVariant::fromValue(QKeySequence()),
                 TypeShortcut,
                 tr("This shortcut will be used in the whole application to "
-                   "increase 10% volume."), false);
+                   "increase amount of volume."), false);
         addItem(block, tr("Volume Down"),
                 "User/Shortcut/VolumeDown",
                 QVariant::fromValue(QKeySequence()),
                 TypeShortcut,
                 tr("This shortcut will be used in the whole application to "
-                   "decrease 10% volume."), false);
+                   "decrease amount of volume."), false);
         panelData.append(block);
         break;
     }
