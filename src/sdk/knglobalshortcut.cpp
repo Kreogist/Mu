@@ -20,6 +20,9 @@ Foundation,
 
 #include "knglobalshortcut.h"
 
+#ifndef Q_OS_MACX
+int KNGlobalShortcut::reference=0;
+#endif
 QHash<QPair<quint32, quint32>, KNGlobalShortcut*> KNGlobalShortcut::shortcuts;
 
 KNGlobalShortcut::KNGlobalShortcut(QObject *parent) :
@@ -28,10 +31,37 @@ KNGlobalShortcut::KNGlobalShortcut(QObject *parent) :
     m_key(Qt::Key(0)),
     m_enable(true)
 {
+#ifndef Q_OS_MAC
+    //Check the current reference count.
+    if(reference==0)
+    {
+        //Install the global shortcut to the event dispatcher.
+        QAbstractEventDispatcher::instance()->installNativeEventFilter(this);
+    }
+    //Increase the reference count.
+    ++reference;
+#endif
 }
 
 KNGlobalShortcut::~KNGlobalShortcut()
 {
+#ifndef Q_OS_MACX
+    //Decrease the reference.
+    --reference;
+    //Check the reference count.
+    if(reference==0)
+    {
+        //Get the dispatcher.
+        QAbstractEventDispatcher *eventDispatcher=
+                QAbstractEventDispatcher::instance();
+        //Check the result.
+        if(!eventDispatcher)
+        {
+            //Remove the native event filter.
+            eventDispatcher->removeNativeEventFilter(this);
+        }
+    }
+#endif
 }
 
 QKeySequence KNGlobalShortcut::shortcut() const

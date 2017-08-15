@@ -128,10 +128,14 @@ win32: {
     ICON = resource/icon/mu.ico
     # Enable the backend and analysiser.
     CONFIG += backend-bass ffmpeg-common ffmpeg-swresample analysiser-ffmpeg transcoder-ffmpeg
+    # Add windows specific libs.
+    LIBS += -luser32
     # Add Windows platform special extras.
     QT += winextras
     SOURCES += plugin/knwindowsextras/knwindowsextras.cpp \
-               sdk/knlockedfile_win.cpp
+               sdk/knlockedfile_win.cpp \
+               sdk/knglobalshortcut_win.cpp \
+               sdk/knfileassociationmanager_win.cpp
     HEADERS += plugin/knwindowsextras/knwindowsextras.h
 }
 

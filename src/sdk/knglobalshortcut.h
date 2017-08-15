@@ -24,6 +24,7 @@ Foundation,
 #include <QKeySequence>
 
 #include <QObject>
+#include <QAbstractNativeEventFilter>
 
 /*!
  * \brief The KNGlobalShortcut class provides the ability to trigger an action
@@ -31,6 +32,9 @@ Foundation,
  * Mac OS X and Linux.
  */
 class KNGlobalShortcut : public QObject
+        #ifndef Q_OS_MACX
+        , QAbstractNativeEventFilter
+        #endif
 {
     Q_OBJECT
 public:
@@ -87,6 +91,11 @@ public slots:
     void setDisabled(bool disabled = true);
 
 private:
+#ifndef Q_OS_MACX
+    virtual bool nativeEventFilter(const QByteArray &eventType,
+                                   void *message, long *result);
+    static int reference;
+#endif
     static quint32 getNativeKeycode(Qt::Key keycode);
     static quint32 getNativeModifiers(Qt::KeyboardModifiers modifiers);
 
