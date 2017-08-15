@@ -154,6 +154,7 @@ void KNPreferencePanelShortcutItem::onStartEdit()
     //Show the editor and hide the label.
     m_shortcutText->hide();
     m_startEdit->hide();
+    m_shortcutEditor->clear();
     m_shortcutEditor->show();
     //Set the focus on the shortcut editor.
     m_shortcutEditor->setFocus(Qt::MouseFocusReason);

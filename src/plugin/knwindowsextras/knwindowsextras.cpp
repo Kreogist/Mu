@@ -192,6 +192,12 @@ void KNWindowsExtras::onActionTrayIconActivate(
     case QSystemTrayIcon::DoubleClick:
         //Show the main window.
         m_mainWindow->show();
+        //Check the main window state.
+        if(Qt::WindowMinimized==m_mainWindow->windowState())
+        {
+            //Set the minimized window back to normal state (no state).
+            m_mainWindow->setWindowState(Qt::WindowNoState);
+        }
         break;
     default:
         break;

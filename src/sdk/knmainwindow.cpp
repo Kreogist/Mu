@@ -288,6 +288,17 @@ bool KNMainWindow::event(QEvent *event)
         m_fullScreen->setIcon(isFullScreen()?
                                   m_fullScreenOffIcon:
                                   m_fullScreenIcon);
+        //Check the window state, and the configure.
+        if(Qt::WindowMinimized==windowState() &&
+                m_trayConfigure->data("MinimizeToTray", false).toBool())
+        {
+            //Ignore the close event.
+            event->ignore();
+            //Hide the main window.
+            hide();
+            //Close event handle complete.
+            return false;
+        }
     }
     //Do original event.
     return QMainWindow::event(event);

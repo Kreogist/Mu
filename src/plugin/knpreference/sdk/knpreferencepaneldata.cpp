@@ -45,6 +45,14 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
 #ifdef Q_OS_WIN
         //System Tray Settings.
         block=generateBlock(tr("System Tray Icon"));
+        addItem(block, tr("Minimize to system tray"),
+                "User/Global/SystemTray/MinimizeToTray", false, TypeBoolean,
+                tr("When click the minimize button of the window, Mu won't "
+                   "simply minimize the main window to task bar but minimize "
+                   "to the system tray.\n"
+                   "When click the icon in the system tray, Mu will pop up "
+                   "back."),
+                false);
         addItem(block, tr("Close to system tray"),
                 "User/Global/SystemTray/CloseToTray", false, TypeBoolean,
                 tr("When click the close button of the window, Mu won't quit "

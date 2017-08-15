@@ -70,6 +70,7 @@ void KNShortcutManager::setShortcutConfigure(KNConfigure *shortcutConfigure)
     //Link the configure.
     connect(m_shortcutConfigure, &KNConfigure::valueChanged,
             this, &KNShortcutManager::updateFromConfigure);
+    updateFromConfigure();
 }
 
 QList<int> KNShortcutManager::conflictShortcut(const QString &actionName)
@@ -81,6 +82,12 @@ void KNShortcutManager::updateFromConfigure()
 {
     //Pick all the shortcut actions out.
     QList<ShortcutAction> actionList=m_actionMapper.values();
+    //Ignore the request when action list is empty.
+    if(actionList.isEmpty())
+    {
+        //Nothing need to update.
+        return;
+    }
     //Clear all the mapper and binding list.
     m_keyBindings.clear();
     m_actionMapper.clear();
