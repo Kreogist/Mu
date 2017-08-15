@@ -129,6 +129,15 @@ public:
     QBrush textureBursh(const int &index) const;
 
     /*!
+     * \brief Get the behaviour parameter from the behaviour configure.
+     * \param key The key of the behaviour.
+     * \param defaultValue When the key is not exist, this value will returned.
+     * \return The behaviour parameter value.
+     */
+    QVariant behaviourParameter(const QString &key,
+                                const QVariant &defaultValue) const;
+
+    /*!
      * \brief Get the cache configure class.
      * \return The cache KNConfigure class.
      */
@@ -275,7 +284,7 @@ private:
     KNMainWindow *m_mainWindow;
     KNPreferencePlugin *m_preference;
 
-    KNConfigure *m_globalConfigure;
+    KNConfigure *m_globalConfigure, *m_behaviourConfigure;
     QThread *m_accountThread;
 };
 

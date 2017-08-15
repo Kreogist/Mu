@@ -191,6 +191,12 @@ QBrush KNGlobal::textureBursh(const int &index) const
     return m_brushes[index];
 }
 
+QVariant KNGlobal::behaviourParameter(const QString &key,
+                                      const QVariant &defaultValue) const
+{
+    return m_behaviourConfigure->data(key, defaultValue);
+}
+
 KNConfigure *KNGlobal::cacheConfigure()
 {
     return knConf->configure(KNConfigureManager::Cache);
@@ -261,6 +267,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     m_mainWindow(nullptr),
     m_preference(nullptr),
     m_globalConfigure(nullptr),
+    m_behaviourConfigure(nullptr),
     m_accountThread(new QThread(this))
 {
     //Initial the managers.
@@ -387,6 +394,7 @@ inline void KNGlobal::initialInfrastrcture()
                           m_dirPath[AccountDir]);
     //Get the global configure.
     m_globalConfigure=userConfigure()->getConfigure("Global");
+    m_behaviourConfigure=m_globalConfigure->getConfigure("Behaviour");
 
     //Initial the font manager.
     //Set the font resource folder.

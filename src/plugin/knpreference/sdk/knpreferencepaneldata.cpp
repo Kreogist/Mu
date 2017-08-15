@@ -64,7 +64,17 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                        "restarted."), false, false, false);
         addItem(block, tr("Show status bar"),
                 "User/Global/Appearance/ShowStatusBar", true, TypeBoolean,
-                tr("Show the status bar at the top right corner."), true);
+                tr("Show the status bar at the top right corner."), false);
+        panelData.append(block);
+        //Behaviour settings.
+        block=generateBlock(tr("Behaviour"), true);
+        addIntItem(block, tr("Search delay (ms)"),
+                   "User/Global/Behaviour/SearchDelay", 150,
+                   tr("Mu will start to search once user change the content of "
+                      "the search box.\nWhen set the delay larger than 0ms, Mu "
+                      "will not start to search if user change the text less "
+                      "than the delay duration."),
+                   0, 500, false);
         panelData.append(block);
         //Library settings.
         block=generateBlock(tr("Library"));

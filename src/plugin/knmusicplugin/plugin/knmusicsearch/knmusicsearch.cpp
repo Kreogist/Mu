@@ -39,7 +39,7 @@ KNMusicSearch::KNMusicSearch(QObject *parent) :
     m_searchBox->setMinimumWidth(knDpi->width(220));
 
     //Link the search box to the search actions.
-    connect(m_searchBox, &KNSearchBox::textChanged,
+    connect(m_searchBox, &KNSearchBox::requireSearch,
             this, &KNMusicSearch::onActionSearch);
 
     //Link the music search with the locale manager.

@@ -17,11 +17,13 @@
  */
 #include <QPainter>
 #include <QKeyEvent>
+#include <QTimer>
 #include <QTimeLine>
 
 #include "knopacitybutton.h"
 #include "kndpimanager.h"
 #include "knthememanager.h"
+#include "knglobal.h"
 
 #include "knsearchbox.h"
 
@@ -43,7 +45,8 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     m_closeButton(new KNOpacityButton(this)),
     m_mouseInOut(generateTimeLine()),
     m_focusInOut(generateTimeLine()),
-    m_focusSource(nullptr)
+    m_focusSource(nullptr),
+    m_delayTimer(new QTimer(this))
 {
     setObjectName("SearchBox");
     //Set properties.
@@ -62,6 +65,9 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     m_closeButton->setFocusProxy(this);
     m_closeButton->setCursor(Qt::ArrowCursor);
     m_closeButton->hide();
+    //Configure the delay timer.
+    m_delayTimer->setSingleShot(true);
+    connect(m_delayTimer, &QTimer::timeout, [=]{emit requireSearch(text());});
     //Link the close button to clear slot.
     connect(m_closeButton, &KNOpacityButton::clicked,
             this, &KNSearchBox::clear);
@@ -69,12 +75,12 @@ KNSearchBox::KNSearchBox(QWidget *parent) :
     setSearchIcon(QPixmap("://public/search.png"));
     //Configure the time line, link the frame change with the slot.
     connect(m_mouseInOut, &QTimeLine::frameChanged,
-            this, &KNSearchBox::onActionMouseInOut);
+            this, &KNSearchBox::onMouseInOut);
     connect(m_focusInOut, &QTimeLine::frameChanged,
             this, &KNSearchBox::onFocusInOut);
     //Connect the text checker.
     connect(this, &KNSearchBox::textChanged,
-            this, &KNSearchBox::onActionTextChanged);
+            this, &KNSearchBox::onTextChanged);
 
     //Link with the theme manager.
     connect(knTheme, &KNThemeManager::themeChange,
@@ -193,13 +199,17 @@ void KNSearchBox::onThemeChanged()
     setPalette(pal);
 }
 
-void KNSearchBox::onActionTextChanged(const QString &text)
+void KNSearchBox::onTextChanged(const QString &text)
 {
     //When the text is empty, hide the close button.
     m_closeButton->setVisible(!text.isEmpty());
+    //Restart the timer.
+    m_delayTimer->stop();
+    m_delayTimer->start(knGlobal->behaviourParameter("SearchDelay",
+                                                     150).toInt());
 }
 
-void KNSearchBox::onActionMouseInOut(int frame)
+void KNSearchBox::onMouseInOut(int frame)
 {
     //Use the frame as the new lightness of the base color.
     m_baseColor.setHsv(m_baseColor.hue(),

@@ -37,7 +37,7 @@ KNMusicCategorySearch::KNMusicCategorySearch(QWidget *parent) :
     setFocusProxy(m_searchBox);
 
     //Link the search box.
-    connect(m_searchBox, &KNSearchBox::textChanged,
+    connect(m_searchBox, &KNSearchBox::requireSearch,
             this, &KNMusicCategorySearch::requireSearch);
     connect(m_searchBox, &KNSearchBox::escapePressed,
             this, &KNMusicCategorySearch::onActionCancel);

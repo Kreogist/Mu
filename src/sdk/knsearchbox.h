@@ -70,6 +70,13 @@ signals:
      */
     void escapePressed();
 
+    /*!
+     * \brief When this signal is emitted, that means the search box is required
+     * to launch the search.
+     * \param text The current search text.
+     */
+    void requireSearch(const QString &text);
+
 public slots:
 
 protected:
@@ -110,8 +117,8 @@ protected:
 
 private slots:
     void onThemeChanged();
-    void onActionTextChanged(const QString &text);
-    void onActionMouseInOut(int frame);
+    void onTextChanged(const QString &text);
+    void onMouseInOut(int frame);
     void onFocusInOut(int frame);
 
 private:
@@ -122,6 +129,7 @@ private:
     KNOpacityButton *m_closeButton;
     QTimeLine *m_mouseInOut, *m_focusInOut;
     QWidget *m_focusSource;
+    QTimer *m_delayTimer;
 };
 
 #endif // KNSEARCHBOX_H
