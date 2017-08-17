@@ -26,6 +26,7 @@
 
 class QAction;
 class KNConfigure;
+class KNGlobalShortcut;
 /*!
  * \brief The KNShortcutManager class is a manager of the application level
  * shortcut keys, aka hotkeys.\n
@@ -104,6 +105,7 @@ private:
 
     QHash<int, QAction *> m_keyBindings;
     QHash<QString, ShortcutAction> m_actionMapper;
+    QHash<QString, KNGlobalShortcut *> m_globalActionMap;
     KNConfigure *m_shortcutConfigure;
 };
 

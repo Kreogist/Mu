@@ -20,6 +20,8 @@ Foundation,
 
 #include "knglobalshortcut.h"
 
+#include <QDebug>
+
 #ifndef Q_OS_MACX
 int KNGlobalShortcut::reference=0;
 #endif
@@ -27,10 +29,15 @@ QHash<QPair<quint32, quint32>, KNGlobalShortcut*> KNGlobalShortcut::shortcuts;
 
 KNGlobalShortcut::KNGlobalShortcut(QObject *parent) :
     QObject(parent),
-    m_modifiers(Qt::NoModifier),
-    m_key(Qt::Key(0)),
+    m_count(0),
     m_enable(true)
 {
+    //Clear the keys and modifiers.
+    for(int i=0; i<4; ++i)
+    {
+        m_key[i]=Qt::Key(0);
+        m_modifiers[i]=Qt::NoModifier;
+    }
 #ifndef Q_OS_MAC
     //Check the current reference count.
     if(reference==0)
@@ -46,6 +53,8 @@ KNGlobalShortcut::KNGlobalShortcut(QObject *parent) :
 KNGlobalShortcut::~KNGlobalShortcut()
 {
 #ifndef Q_OS_MACX
+    //Remove the key bindings from the shortcuts.
+    clearAll();
     //Decrease the reference.
     --reference;
     //Check the reference count.
@@ -66,34 +75,43 @@ KNGlobalShortcut::~KNGlobalShortcut()
 
 QKeySequence KNGlobalShortcut::shortcut() const
 {
-    return QKeySequence(m_key | m_modifiers);
+    //Give back the key sequence data.
+    return QKeySequence(m_key[0] | m_modifiers[0],
+                        m_key[1] | m_modifiers[1],
+                        m_key[2] | m_modifiers[2],
+                        m_key[3] | m_modifiers[3]);
 }
 
 bool KNGlobalShortcut::setShortcut(const QKeySequence &shortcut)
 {
-    Qt::KeyboardModifiers allMods=Qt::ShiftModifier | Qt::ControlModifier |
-                                  Qt::AltModifier | Qt::MetaModifier;
+    //Check the current count size.
+    if(m_count>0 && !clearAll())
+    {
+        //Failed to clear the bindings.
+        return false;
+    }
+    //Get the all poosible modifiers.
+    Qt::KeyboardModifiers allModifiers=
+            Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier |
+            Qt::MetaModifier;
+    //Save the count.
+    m_count=shortcut.count();
     //Save the key information.
-    m_key=shortcut.isEmpty() ? (Qt::Key(0)) :
-                               (Qt::Key((shortcut[0] ^ allMods) & shortcut[0]));
-    m_modifiers=shortcut.isEmpty() ?
-                Qt::KeyboardModifiers(0) :
-                Qt::KeyboardModifiers(shortcut[0] & allMods);
-    //Get the native key and modifiers.
-    const quint32 nativeKey = getNativeKeycode(m_key);
-    const quint32 nativeModifiers = getNativeModifiers(m_modifiers);
-    //Register the shortcut data.
-    const bool result = registerShortcut(nativeKey, nativeModifiers);
-    if (result)
+    for(int i=0; i<m_count; ++i)
     {
-        //Insert this object to the list.
-        shortcuts.insert(qMakePair(nativeKey, nativeModifiers), this);
+        //Save the key and modifiers.
+        m_key[i]=Qt::Key((shortcut[i] ^ allModifiers) & shortcut[i]);
+        m_modifiers[i]=Qt::KeyboardModifiers(shortcut[i] & allModifiers);
     }
-    else
+    //Let all the other keys and modifiers to be 0.
+    for(int i=m_count; i<4; ++i)
     {
-        qWarning("KNGlobalShortcut failed to register.");
+        //Clear the key and modifiers.
+        m_key[i]=Qt::Key(0);
+        m_modifiers[i]=Qt::KeyboardModifiers(0);
     }
-    return result;
+    //Mission complete.
+    return m_enable ? bindAll() : true;
 }
 
 bool KNGlobalShortcut::isEnabled() const
@@ -118,12 +136,108 @@ void KNGlobalShortcut::activateShortcut(quint32 nativeKey, quint32 nativeMods)
 
 void KNGlobalShortcut::setEnabled(bool enabled)
 {
+    //Check the enabled state.
+    if(enabled==m_enable)
+    {
+        //Already the same.
+        return;
+    }
     //Save the enabled state.
     m_enable=enabled;
+    //Update the state.
+    updateEnableState();
 }
 
 void KNGlobalShortcut::setDisabled(bool disabled)
 {
+    //Check the enabled state.
+    if(!disabled==m_enable)
+    {
+        //Already the same.
+        return;
+    }
     //Simply reverse the setting.
     m_enable=!disabled;
+    //Update the state.
+    updateEnableState();
+}
+
+inline void KNGlobalShortcut::updateEnableState()
+{
+    //Check the enable state.
+    if(m_enable)
+    {
+        //Bind all the keys.
+        bindAll();
+    }
+    else
+    {
+        //Unbind all the keys.
+        unbindAll();
+    }
+}
+
+inline bool KNGlobalShortcut::bindAll()
+{
+    //Register all the sequence.
+    for(int i=0; i<m_count; ++i)
+    {
+        //Get the native key and modifiers of the current sequence.
+        const quint32 nativeKey = getNativeKeycode(m_key[i]);
+        const quint32 nativeModifiers = getNativeModifiers(m_modifiers[i]);
+        //Register the shortcut data.
+        if(!registerShortcut(nativeKey, nativeModifiers))
+        {
+            qWarning("KNGlobalShortcut failed to register.");
+            return false;
+        }
+        //Insert this object to the list.
+        shortcuts.insert(qMakePair(nativeKey, nativeModifiers), this);
+    }
+    //Mission complete.
+    return true;
+}
+
+bool KNGlobalShortcut::unbindAll()
+{
+    //Familiar with the clear all, but do not clear all the data.
+    for(int i=0; i<m_count; ++i)
+    {
+        //Get the native key and modifiers.
+        const quint32 nativeKey = getNativeKeycode(m_key[i]);
+        const quint32 nativeModifiers = getNativeModifiers(m_modifiers[i]);
+        //Unbind the shortcut.
+        if(!unregisterShortcut(nativeKey, nativeModifiers))
+        {
+            //Failed to unbind the sequence.
+            qWarning("KNGlobalShortcut failed to unregister.");
+            return false;
+        }
+        //If the result success, remove the key pair from the list.
+        shortcuts.remove(qMakePair(nativeKey, nativeModifiers));
+    }
+    //Complete.
+    return true;
+}
+
+inline bool KNGlobalShortcut::clearAll()
+{
+    //Unbind all.
+    if(m_enable && !unbindAll())
+    {
+        //Failed to unbind, cannot clear.
+        return false;
+    }
+    //Which means that currently, there're key sequence bind to the action,
+    //we need to remove these first.
+    for(int i=0; i<m_count; ++i)
+    {
+        //Clear the key and modifers.
+        m_key[i]=Qt::Key(0);
+        m_modifiers[i]=Qt::NoModifier;
+    }
+    //Reset the counter.
+    m_count=0;
+    //Complete.
+    return true;
 }

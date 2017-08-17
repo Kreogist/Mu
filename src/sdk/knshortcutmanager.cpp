@@ -18,6 +18,7 @@
 #include <QAction>
 
 #include "knconfigure.h"
+#include "knglobalshortcut.h"
 
 #include "knshortcutmanager.h"
 
@@ -47,6 +48,16 @@ void KNShortcutManager::append(const QString &identifier, QAction *action)
     ShortcutAction currentAction;
     //Save the action pointer.
     currentAction.action=action;
+    //Create a global action instance.
+    KNGlobalShortcut *globalShortcut=new KNGlobalShortcut(this);
+    //Update the enable state.
+    globalShortcut->setEnabled(
+                m_shortcutConfigure->data("Global", false).toBool());
+    //Link the global shortcut actions.
+    connect(globalShortcut, &KNGlobalShortcut::activated,
+            action, &QAction::trigger);
+    //Insert the global shortcut to the list.
+    m_globalActionMap.insert(identifier, globalShortcut);
     //Insert the current action.
     insertAction(currentAction);
 }
@@ -114,6 +125,12 @@ inline void KNShortcutManager::insertAction(ShortcutAction currentAction)
     {
         //Get the key sequence.
         QKeySequence sequence=shortcut.value<QKeySequence>();
+        //Initial te global sequence.
+        int globalSequence[4], globalSequenceSize=0;
+        globalSequence[0]=Qt::Key(0) | Qt::NoModifier;
+        globalSequence[1]=globalSequence[0];
+        globalSequence[2]=globalSequence[0];
+        globalSequence[3]=globalSequence[0];
         //Prepare the sequence list.
         QList<QKeySequence> sequenceList;
         //This is the cheat part. Change the one sequence into four sperate
@@ -140,12 +157,25 @@ inline void KNShortcutManager::insertAction(ShortcutAction currentAction)
             {
                 //No conflict happens, add to the mapper.
                 m_keyBindings.insert(sequence[i], action);
+                //Set the global sequence.
+                globalSequence[globalSequenceSize++]=sequence[i];
             }
             //Add the key sequence to the list.
             sequenceList.append(QKeySequence(sequence[i]));
         }
         //Set the shortcut to the action.
         action->setShortcuts(sequenceList);
+        //Construct the global sequence.
+        QKeySequence globalActionShortcut(globalSequence[0], globalSequence[1],
+                                          globalSequence[2], globalSequence[3]);
+        //Set to the global action.
+        KNGlobalShortcut *globalShortcut=
+                m_globalActionMap.value(action->objectName());
+        //Set the shortcut.
+        qDebug()<<"Set global shortcut.";
+        globalShortcut->setShortcut(globalActionShortcut);
+        globalShortcut->setEnabled(
+                    m_shortcutConfigure->data("Global", false).toBool());
     }
     //Save the action to the action map.
     m_actionMapper.insert(action->objectName(), currentAction);

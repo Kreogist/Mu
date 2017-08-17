@@ -186,6 +186,13 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     }
     case PanelShortcuts:
     {
+        //Global shortcut settings.
+        block=generateBlock(tr("Global Shortcut"));
+        addItem(block, tr("Use global shortcut"),
+                "User/Shortcut/Global", false, TypeBoolean,
+                tr("Allow the shortcut key bindings to be triggered system "
+                   "wide."), false);
+        panelData.append(block);
         //Playback controls.
         block=generateBlock(tr("Playing Controls"));
         addItem(block, tr("Play and Pause"),

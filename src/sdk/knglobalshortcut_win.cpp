@@ -159,12 +159,12 @@ quint32 KNGlobalShortcut::getNativeKeycode(Qt::Key key)
         return VK_SUBTRACT;
     case Qt::Key_Slash:
         return VK_DIVIDE;
+    case Qt::Key_MediaTogglePlayPause:
+        return VK_MEDIA_PLAY_PAUSE;
     case Qt::Key_MediaNext:
         return VK_MEDIA_NEXT_TRACK;
     case Qt::Key_MediaPrevious:
         return VK_MEDIA_PREV_TRACK;
-    case Qt::Key_MediaPlay:
-        return VK_MEDIA_PLAY_PAUSE;
     case Qt::Key_MediaStop:
         return VK_MEDIA_STOP;
     case Qt::Key_VolumeDown:
@@ -221,11 +221,12 @@ quint32 KNGlobalShortcut::getNativeKeycode(Qt::Key key)
 bool KNGlobalShortcut::registerShortcut(quint32 nativeKey, quint32 nativeMods)
 {
     //We got windows hot key support.
-    return RegisterHotKey(0, nativeMods ^ nativeKey, nativeMods, nativeKey);
+    return RegisterHotKey(0, qHash(qMakePair(nativeMods, nativeKey)),
+                          nativeMods, nativeKey);
 }
 
 bool KNGlobalShortcut::unregisterShortcut(quint32 nativeKey, quint32 nativeMods)
 {
     //We got windows hot key support.
-    return UnregisterHotKey(0, nativeMods ^ nativeKey);
+    return UnregisterHotKey(0, qHash(qMakePair(nativeMods, nativeKey)));
 }

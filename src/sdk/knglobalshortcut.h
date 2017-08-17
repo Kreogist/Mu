@@ -56,7 +56,7 @@ public:
      * \param shortcut The key sequence.
      * \return If the shortcut set successful, return true.
      */
-    bool setShortcut(const QKeySequence& shortcut);
+    bool setShortcut(const QKeySequence &shortcut);
 
     /*!
      * \brief Whether the action is enabled or not.
@@ -103,8 +103,15 @@ private:
     static bool unregisterShortcut(quint32 nativeKey, quint32 nativeMods);
 
     static QHash<QPair<quint32, quint32>, KNGlobalShortcut*> shortcuts;
-    Qt::KeyboardModifiers m_modifiers;
-    Qt::Key m_key;
+
+    inline void updateEnableState();
+    inline bool bindAll();
+    inline bool unbindAll();
+    inline bool clearAll();
+
+    Qt::KeyboardModifiers m_modifiers[4];
+    Qt::Key m_key[4];
+    int m_count;
     bool m_enable;
 };
 
