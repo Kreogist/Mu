@@ -34,6 +34,7 @@
 #include "kndpimanager.h"
 #include "knthememanager.h"
 #include "knfontmanager.h"
+#include "knshortcutmanager.h"
 #include "knmainwindowcontainer.h"
 #include "knnotification.h"
 #include "knaccountavatarbutton.h"

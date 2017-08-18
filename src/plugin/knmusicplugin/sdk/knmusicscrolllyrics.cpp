@@ -68,7 +68,8 @@ void KNMusicScrollLyrics::paintEvent(QPaintEvent *event)
     //Initial the painter.
     QPainter painter(this);
     //Set the painter's hints.
-    painter.setRenderHints(QPainter::TextAntialiasing |
+    painter.setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform, true);
     //Initial parameters.
     int currentLineTop=(height()>>1)+m_centerOffset, paintingLine=m_currentLine;

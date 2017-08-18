@@ -141,6 +141,8 @@ void KNFontManager::setGlobalFont(const QString &fontName,
     }
     //Update the pixel size.
     globalFont.setPixelSize(pixelSize);
+    //Update the font flag.
+    globalFont.setStyleHint(QFont::System, QFont::PreferDevice);
     //Set the font.
     QApplication::setFont(globalFont);
     //Save the font data.

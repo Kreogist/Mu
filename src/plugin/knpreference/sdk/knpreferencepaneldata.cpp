@@ -193,6 +193,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 tr("Allow the shortcut key bindings to be triggered system "
                    "wide."), false);
         panelData.append(block);
+        //Main window controls.
         //Playback controls.
         block=generateBlock(tr("Playing Controls"));
         addItem(block, tr("Play and Pause"),

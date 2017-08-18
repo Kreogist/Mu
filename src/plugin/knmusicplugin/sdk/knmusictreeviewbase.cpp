@@ -102,6 +102,9 @@ void KNMusicTreeViewBase::drawRow(QPainter *painter,
                                   const QStyleOptionViewItem &options,
                                   const QModelIndex &index) const
 {
+    //Update the painter.
+    painter->setRenderHints(QPainter::Antialiasing |
+                            QPainter::TextAntialiasing, true);
     //Do original draw row.
     KNMouseSenseTreeView::drawRow(painter, options, index);
     //Check whether we need to draw the drop indicator.
