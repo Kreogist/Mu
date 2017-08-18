@@ -166,6 +166,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 #else
     QAction *fullScreen=new QAction(this);
     fullScreen->setShortcut(QKeySequence(QKeySequence::FullScreen));
+    knShortcut->append("FullScreen", fullScreen);
     connect(fullScreen, &QAction::triggered,
             this, &KNMainWindow::onActionFullScreen);
     addAction(fullScreen);

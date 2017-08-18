@@ -194,6 +194,15 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                    "wide."), false);
         panelData.append(block);
         //Main window controls.
+        block=generateBlock(tr("Window"));
+        //!FIXME!!
+        addItem(block, tr("Full Screen"),
+                "User/Shortcut/FullScreen",
+                QVariant::fromValue(QKeySequence(QKeySequence::FullScreen)),
+                TypeShortcut,
+                tr("This shortcut will be used in the whole application to "
+                   "enter and exit the mute state."), false);
+        panelData.append(block);
         //Playback controls.
         block=generateBlock(tr("Playing Controls"));
         addItem(block, tr("Play and Pause"),
