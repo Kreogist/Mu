@@ -57,8 +57,11 @@ public:
      * be processed by the manager.
      * \param identifier The identifier of the action.
      * \param action The action pointer.
+     * \param supportGlobal If this action could be triggered by a global
+     * shortcut, set this to true. Default setting for this option is true.
      */
-    void append(const QString &identifier, QAction *action);
+    void append(const QString &identifier, QAction *action,
+                bool supportGlobal=true);
 
     /*!
      * \brief Set the shortcut manager configure.

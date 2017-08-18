@@ -273,7 +273,7 @@ bool KNGlobalShortcut::registerShortcut(quint32 nativeKey, quint32 nativeMods)
     }
     //Prepare the hot key id.
     EventHotKeyID keyID;
-    keyID.signature = 'cute';
+    keyID.signature = 'krmu';
     keyID.id = ++hotKeySerial;
     //Register the event hot key.
     EventHotKeyRef ref = 0;

@@ -40,7 +40,8 @@ void KNShortcutManager::initial(QObject *parent)
     }
 }
 
-void KNShortcutManager::append(const QString &identifier, QAction *action)
+void KNShortcutManager::append(const QString &identifier,
+                               QAction *action, bool supportGlobal)
 {
     //Set the identifier as the action object name.
     action->setObjectName(identifier);
@@ -48,16 +49,20 @@ void KNShortcutManager::append(const QString &identifier, QAction *action)
     ShortcutAction currentAction;
     //Save the action pointer.
     currentAction.action=action;
-    //Create a global action instance.
-    KNGlobalShortcut *globalShortcut=new KNGlobalShortcut(this);
-    //Update the enable state.
-    globalShortcut->setEnabled(
-                m_shortcutConfigure->data("Global", false).toBool());
-    //Link the global shortcut actions.
-    connect(globalShortcut, &KNGlobalShortcut::activated,
-            action, &QAction::trigger);
-    //Insert the global shortcut to the list.
-    m_globalActionMap.insert(identifier, globalShortcut);
+    //Check the settings.
+    if(supportGlobal)
+    {
+        //Create a global action instance.
+        KNGlobalShortcut *globalShortcut=new KNGlobalShortcut(this);
+        //Update the enable state.
+        globalShortcut->setEnabled(
+                    m_shortcutConfigure->data("Global", false).toBool());
+        //Link the global shortcut actions.
+        connect(globalShortcut, &KNGlobalShortcut::activated,
+                action, &QAction::trigger);
+        //Insert the global shortcut to the list.
+        m_globalActionMap.insert(identifier, globalShortcut);
+    }
     //Insert the current action.
     insertAction(currentAction);
 }
@@ -170,12 +175,15 @@ inline void KNShortcutManager::insertAction(ShortcutAction currentAction)
                                           globalSequence[2], globalSequence[3]);
         //Set to the global action.
         KNGlobalShortcut *globalShortcut=
-                m_globalActionMap.value(action->objectName());
+                m_globalActionMap.value(action->objectName(), nullptr);
         //Set the shortcut.
-        qDebug()<<"Set global shortcut.";
-        globalShortcut->setShortcut(globalActionShortcut);
-        globalShortcut->setEnabled(
-                    m_shortcutConfigure->data("Global", false).toBool());
+        if(globalShortcut)
+        {
+            //Set the shortcut.
+            globalShortcut->setShortcut(globalActionShortcut);
+            globalShortcut->setEnabled(
+                        m_shortcutConfigure->data("Global", false).toBool());
+        }
     }
     //Save the action to the action map.
     m_actionMapper.insert(action->objectName(), currentAction);

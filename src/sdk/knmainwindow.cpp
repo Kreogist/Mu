@@ -156,21 +156,16 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     //Add main window to theme list.
     knTheme->registerWidget(this);
     //Add full screen short cut actions.
+    QAction *fullScreen=new QAction(this);
 #ifdef Q_OS_LINUX
-    QAction *fullScreen=new QAction(this);
     fullScreen->setShortcut(QKeySequence(Qt::Key_F11));
-    fullScreen->setShortcutContext(Qt::WindowShortcut);
-    connect(fullScreen, &QAction::triggered,
-            this, &KNMainWindow::onActionFullScreen);
-    addAction(fullScreen);
 #else
-    QAction *fullScreen=new QAction(this);
     fullScreen->setShortcut(QKeySequence(QKeySequence::FullScreen));
-    knShortcut->append("FullScreen", fullScreen);
+#endif
+    knShortcut->append("FullScreen", fullScreen, false);
     connect(fullScreen, &QAction::triggered,
             this, &KNMainWindow::onActionFullScreen);
     addAction(fullScreen);
-#endif
     //Configure the full screen stuff.
     m_fullScreen->setIcon(m_fullScreenIcon);
 #ifdef Q_OS_MACX

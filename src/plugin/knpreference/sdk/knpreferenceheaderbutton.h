@@ -53,22 +53,36 @@ signals:
 public slots:
 
 protected:
-    bool hitButton(const QPoint &pos) const;
-    void paintEvent(QPaintEvent *event);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
+    /*!
+     * \brief Reimplemented from QAbstractButton::hitButton().
+     */
+    bool hitButton(const QPoint &pos) const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractButton::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractButton::enterEvent().
+     */
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from QAbstractButton::leaveEvent().
+     */
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionMouseInOut(const int &frame);
+    void onMouseInOut(int frame);
 
 private:
-    inline QTimeLine *generateTimeLine(const int &endFrame);
-    inline void startAnime(QTimeLine *timeLine);
+    inline void startAnime(int endFrame);
     QPainterPath m_border;
     QPixmap m_icon, m_closeIcon;
     qreal m_closeIconOpacity;
     QPointF m_iconPosition;
-    QTimeLine *m_mouseIn, *m_mouseOut;
+    QTimeLine *m_mouseInOut;
 };
 
 #endif // KNPREFERENCEHEADERBUTTON_H

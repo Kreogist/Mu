@@ -34,8 +34,7 @@ KNPreferenceHeaderButton::KNPreferenceHeaderButton(QWidget *parent) :
                     Qt::KeepAspectRatio, Qt::SmoothTransformation)),
     m_closeIconOpacity(0.0),
     m_iconPosition(knDpi->posF(11,7)),
-    m_mouseIn(generateTimeLine(100)),
-    m_mouseOut(generateTimeLine(0))
+    m_mouseInOut(new QTimeLine(200, this))
 {
     setObjectName("PreferenceHeaderButton");
     //Set properties.
@@ -47,6 +46,12 @@ KNPreferenceHeaderButton::KNPreferenceHeaderButton(QWidget *parent) :
                      knDpi->posF(75, 0),
                      knDpi->posF(106, 0));
     m_border.lineTo(0, 0);
+    //Initialized the mouse time line.
+    m_mouseInOut->setEasingCurve(QEasingCurve::OutCubic);
+    m_mouseInOut->setUpdateInterval(16);
+    //Link the time line.
+    connect(m_mouseInOut, &QTimeLine::frameChanged,
+            this, &KNPreferenceHeaderButton::onMouseInOut);
 
     //Register the widget to theme manager.
     knTheme->registerWidget(this);
@@ -86,7 +91,7 @@ void KNPreferenceHeaderButton::paintEvent(QPaintEvent *event)
 void KNPreferenceHeaderButton::enterEvent(QEvent *event)
 {
     //Start mouse in animation.
-    startAnime(m_mouseIn);
+    startAnime(100);
     //Do the default enterEvent.
     QAbstractButton::enterEvent(event);
 }
@@ -94,12 +99,12 @@ void KNPreferenceHeaderButton::enterEvent(QEvent *event)
 void KNPreferenceHeaderButton::leaveEvent(QEvent *event)
 {
     //Start mouse out animation.
-    startAnime(m_mouseOut);
+    startAnime(0);
     //Do the default leaveEvent.
     QAbstractButton::leaveEvent(event);
 }
 
-void KNPreferenceHeaderButton::onActionMouseInOut(const int &frame)
+void KNPreferenceHeaderButton::onMouseInOut(int frame)
 {
     //Update the close icon opacity.
     m_closeIconOpacity=(qreal)frame/100;
@@ -107,30 +112,14 @@ void KNPreferenceHeaderButton::onActionMouseInOut(const int &frame)
     update();
 }
 
-inline QTimeLine *KNPreferenceHeaderButton::generateTimeLine(
-        const int &endFrame)
-{
-    //Generate the time line.
-    QTimeLine *timeLine=new QTimeLine(200, this);
-    //Configure the time line.
-    timeLine->setEndFrame(endFrame);
-    timeLine->setEasingCurve(QEasingCurve::OutCubic);
-    timeLine->setUpdateInterval(16);
-    //Link the time line.
-    connect(timeLine, &QTimeLine::frameChanged,
-            this, &KNPreferenceHeaderButton::onActionMouseInOut);
-    return timeLine;
-}
-
-inline void KNPreferenceHeaderButton::startAnime(QTimeLine *timeLine)
+inline void KNPreferenceHeaderButton::startAnime(int endFrame)
 {
     //Stop all the animations.
-    m_mouseIn->stop();
-    m_mouseOut->stop();
+    m_mouseInOut->stop();
     //Set the initial frame of the time line.
-    timeLine->setStartFrame(m_closeIconOpacity*100);
+    m_mouseInOut->setFrameRange(m_closeIconOpacity*100, endFrame);
     //Start animation.
-    timeLine->start();
+    m_mouseInOut->start();
 }
 
 QPixmap KNPreferenceHeaderButton::icon() const

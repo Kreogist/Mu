@@ -52,9 +52,9 @@ KNGlobalShortcut::KNGlobalShortcut(QObject *parent) :
 
 KNGlobalShortcut::~KNGlobalShortcut()
 {
-#ifndef Q_OS_MACX
     //Remove the key bindings from the shortcuts.
     clearAll();
+#ifndef Q_OS_MACX
     //Decrease the reference.
     --reference;
     //Check the reference count.
@@ -185,6 +185,12 @@ inline bool KNGlobalShortcut::bindAll()
         //Get the native key and modifiers of the current sequence.
         const quint32 nativeKey = getNativeKeycode(m_key[i]);
         const quint32 nativeModifiers = getNativeModifiers(m_modifiers[i]);
+        //Check the native key and modifiers result.
+        if(0==nativeKey)
+        {
+            //Ignore for the failure key bindings.
+            continue;
+        }
         //Register the shortcut data.
         if(!registerShortcut(nativeKey, nativeModifiers))
         {
@@ -206,6 +212,12 @@ bool KNGlobalShortcut::unbindAll()
         //Get the native key and modifiers.
         const quint32 nativeKey = getNativeKeycode(m_key[i]);
         const quint32 nativeModifiers = getNativeModifiers(m_modifiers[i]);
+        //Check the native key and modifiers result.
+        if(0==nativeKey)
+        {
+            //Ignore for the failure key bindings.
+            continue;
+        }
         //Unbind the shortcut.
         if(!unregisterShortcut(nativeKey, nativeModifiers))
         {
