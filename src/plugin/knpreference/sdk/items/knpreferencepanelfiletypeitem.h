@@ -62,7 +62,7 @@ protected:
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::getValue().
      */
-    QVariant getValue(const QVariant &defaultValue) Q_DECL_OVERRIDE;
+    QVariant getValueFromConfig(const QVariant &defaultValue) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::initialValue().

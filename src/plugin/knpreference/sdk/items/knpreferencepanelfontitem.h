@@ -47,7 +47,7 @@ public:
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::setConfig().
      */
-    void setConfig(const QVariant &config);
+    void setConfig(const QVariant &config) Q_DECL_OVERRIDE;
 
 protected:
     /*!

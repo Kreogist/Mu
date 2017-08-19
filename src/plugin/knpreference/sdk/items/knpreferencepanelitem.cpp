@@ -113,10 +113,10 @@ void KNPreferencePanelItem::setPreferenceOption(
     m_hintLabel->setToolTip(option.explain);
     //Save the path.
     m_path=option.path;
-    //Save the default value.
-    m_defaultValue=getValue(option.defaultValue);
     //Set the configure data.
     setConfig(option.configure);
+    //Save the default value.
+    m_defaultValue=getValueFromConfig(option.defaultValue);
     //Get the configure value.
     initialValue(m_defaultValue);
     //Disable the value.
@@ -178,7 +178,7 @@ void KNPreferencePanelItem::buildWidgetLayout(QLayout *layout)
     mainLayout->addWidget(m_hintLabel, 0, Qt::AlignVCenter);
 }
 
-QVariant KNPreferencePanelItem::getValue(const QVariant &defaultValue)
+QVariant KNPreferencePanelItem::getValueFromConfig(const QVariant &defaultValue)
 {
     //Get the default value from the configure.
     return knConf->configureValue(m_path, defaultValue);

@@ -85,7 +85,8 @@ bool KNPreferencePanelFileTypeItem::isEqual(const QVariant &currentValue,
     return currentValue.toBool()==originalValue.toBool();
 }
 
-QVariant KNPreferencePanelFileTypeItem::getValue(const QVariant &defaultValue)
+QVariant KNPreferencePanelFileTypeItem::getValueFromConfig(
+        const QVariant &defaultValue)
 {
     //Ignore the application setting for the default value.
     Q_UNUSED(defaultValue);
@@ -94,9 +95,8 @@ QVariant KNPreferencePanelFileTypeItem::getValue(const QVariant &defaultValue)
 
 void KNPreferencePanelFileTypeItem::initialValue(const QVariant &defaultValue)
 {
-    Q_UNUSED(defaultValue)
     //Update the switch with the value.
-    m_button->setChecked(isTypeBind());
+    m_button->setChecked(defaultValue.toBool());
 }
 
 void KNPreferencePanelFileTypeItem::onClicked()
@@ -113,6 +113,14 @@ void KNPreferencePanelFileTypeItem::onClicked()
 
 inline bool KNPreferencePanelFileTypeItem::isTypeBind() const
 {
+#ifdef Q_OS_WIN
+    if(m_suffix.isEmpty())
+#else
+    if(m_typeHandler.isEmpty())
+#endif
+    {
+        return false;
+    }
     //Check using the file association manager.
     return knFileType->isFileTypeBinded(m_suffix, m_typeHandler);
 }

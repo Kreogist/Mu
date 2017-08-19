@@ -129,7 +129,7 @@ protected:
      * \param defaultValue The applciation default set value.
      * \return The default value.
      */
-    virtual QVariant getValue(const QVariant &defaultValue);
+    virtual QVariant getValueFromConfig(const QVariant &defaultValue);
 
     /*!
      * \brief Initialize the preference item with the specific value.

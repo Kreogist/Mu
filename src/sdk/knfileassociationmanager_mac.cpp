@@ -78,11 +78,18 @@ bool KNFileAssociationManager::bindFileTypes(const QString &suffix,
                                              const QString &handler)
 {
     Q_UNUSED(suffix)
-    //Use the Application Services to set the default open type.
-    OSStatus status=LSSetDefaultRoleHandlerForContentType(
-                cfStringRefFromString(handler),
-                kLSRolesViewer,
-                cfStringRefFromString(APP_HANDLER));
+    //Save the result of default role.
+    OSStatus status=-1;
+    //Try three times.
+    int tries=3;
+    while(--tries && (status!=0))
+    {
+        //Use the Application Services to set the default open type.
+        status=LSSetDefaultRoleHandlerForContentType(
+                    cfStringRefFromString(handler),
+                    kLSRolesViewer,
+                    cfStringRefFromString(APP_HANDLER));
+    }
     //Check the set result.
     return status==0;
 }
@@ -91,11 +98,18 @@ bool KNFileAssociationManager::unbindFileTypes(const QString &suffix,
                                                const QString &handler)
 {
     Q_UNUSED(suffix)
-    //Use the Application Services to iTunes.
-    OSStatus status=LSSetDefaultRoleHandlerForContentType(
-                cfStringRefFromString(handler),
-                kLSRolesViewer,
-                cfStringRefFromString("com.apple.itunes"));
+    //Save the result of default role.
+    OSStatus status=-1;
+    //Try three times.
+    int tries=3;
+    while(--tries && (status!=0))
+    {
+        //Use the Application Services to iTunes.
+        status=LSSetDefaultRoleHandlerForContentType(
+                    cfStringRefFromString(handler),
+                    kLSRolesViewer,
+                    cfStringRefFromString("com.apple.itunes"));
+    }
     //Check the set result.
     return status==0;
 }
@@ -110,6 +124,7 @@ bool KNFileAssociationManager::isFileTypeBinded(const QString &suffix,
                                                                 kLSRolesViewer);
     //Check the result is the same or not.
     QString resultString=stringfromCFString(cfResult);
+    qDebug()<<contentType<<resultString;
     //Compare the result string.
     return APP_HANDLER==resultString;
 }
