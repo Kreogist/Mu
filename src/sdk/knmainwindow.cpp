@@ -408,6 +408,8 @@ void KNMainWindow::onActionFullScreen()
         m_originalWindowState=windowState();
         //Full screen the window.
         setWindowState(Qt::WindowFullScreen);
+        //Active the main window.
+        activateWindow();
     }
 }
 
