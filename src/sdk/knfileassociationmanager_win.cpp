@@ -16,6 +16,8 @@
 Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QSettings>
+
 #include "knfileassociationmanager.h"
 
 bool KNFileAssociationManager::bindFileTypes(const QString &suffix,
@@ -33,5 +35,7 @@ bool KNFileAssociationManager::unbindFileTypes(const QString &suffix,
 bool KNFileAssociationManager::isFileTypeBinded(const QString &suffix,
                                                 const QString &contentType)
 {
+    //Prepare the settings to read the register.
+//    QSettings ;
     return false;
 }
