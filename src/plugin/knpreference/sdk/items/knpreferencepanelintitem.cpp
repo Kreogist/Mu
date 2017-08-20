@@ -27,6 +27,8 @@ Foundation,
 
 #include "knpreferencepanelintitem.h"
 
+#include <QDebug>
+
 KNPreferencePanelIntItem::KNPreferencePanelIntItem(QWidget *parent) :
     KNPreferencePanelItem(parent),
     m_integerViewer(new QSpinBox(this)),
@@ -64,8 +66,10 @@ void KNPreferencePanelIntItem::setConfig(const QVariant &config)
     int min=configList.value("min").toInt(0),
             max=configList.value("max").toInt(100);
     //Set the range value.
+    setSignalBlock(true);
     m_integerSlider->setRange(min, max);
     m_integerViewer->setRange(min, max);
+    setSignalBlock(false);
 }
 
 void KNPreferencePanelIntItem::setWidgetValue(const QVariant &value)
@@ -85,6 +89,8 @@ void KNPreferencePanelIntItem::onValueChanged(int value)
 {
     //Sync the value.
     syncValue(value);
+    //Emit the value changed signal.
+    emit valueChanged();
 }
 
 inline void KNPreferencePanelIntItem::syncValue(int value)
@@ -96,8 +102,6 @@ inline void KNPreferencePanelIntItem::syncValue(int value)
     m_integerSlider->setValue(value);
     //Release the block of the signal.
     setSignalBlock(false);
-    //Emit the value changed signal.
-    emit valueChanged();
 }
 
 inline void KNPreferencePanelIntItem::setSignalBlock(bool block)

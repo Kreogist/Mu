@@ -113,7 +113,7 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
-    void onActionLyricsMoved(const int &frame);
+    void onActionLyricsMoved(int frame);
 
 private:
     //Backend.
@@ -124,7 +124,7 @@ private:
     //Lyrics status.
     int m_currentLine, m_centerOffset;
     //UI parameters.
-    int m_spacing;
+    int m_spacing, m_minimumDuration;
     //Alignment flags.
     Qt::Alignment m_alignment;
 };

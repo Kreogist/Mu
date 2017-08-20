@@ -117,6 +117,7 @@ void KNPreferencePanelItem::setPreferenceOption(
     setConfig(option.configure);
     //Save the default value.
     m_defaultValue=getValueFromConfig(option.defaultValue);
+    qDebug()<<m_defaultValue;
     //Get the configure value.
     initialValue(m_defaultValue);
     //Disable the value.

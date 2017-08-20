@@ -104,7 +104,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         //Header lyrics.
         block=generateBlock(tr("Output Parameter"));
 #ifdef Q_OS_WIN64
-        addItem(block, tr("Use WASAPI"),
+        addItem(block, tr("Use exclusive mode WASAPI"),
                 "System/Backend/WASAPI", false, TypeBoolean,
                 tr("Using WASAPI with exclusive mode instead of DirectX for "
                    "sound output.\nWhen this feature is enabled, the output "
