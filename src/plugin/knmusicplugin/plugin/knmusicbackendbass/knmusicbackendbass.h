@@ -145,7 +145,7 @@ private:
     inline KNMusicBackendBassThread *generateThread(const DWORD &channelFlags);
 
     QList<HPLUGIN> m_pluginList;
-    KNConfigure *m_playbackConfigure;
+    KNConfigure *m_systemConfigure, *m_userConfigure;
 #ifdef Q_OS_WIN64
     int m_wasapiOutputDevice;
     int m_wasapiFlag;

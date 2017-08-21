@@ -126,8 +126,16 @@ void KNPreferencePanelAudioDeviceItem::setWidgetValue(const QVariant &value)
 }
 
 bool KNPreferencePanelAudioDeviceItem::isEqual(const QVariant &currentValue,
-                                         const QVariant &originalValue)
+                                               const QVariant &originalValue)
 {
-    //Directly compares the value as the string.
-    return currentValue.toString()==originalValue.toString();
+    //Check the value type.
+    if(!currentValue.canConvert<QJsonObject>() ||
+            !originalValue.canConvert<QJsonObject>())
+    {
+        //Failed to match the type..
+        return false;
+    }
+    //Compare the value.
+    return currentValue.toJsonObject().value("Id").toInt()==
+            originalValue.toJsonObject().value("Id").toInt();
 }

@@ -34,7 +34,8 @@
 KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
     KNMusicStandardBackend(parent),
     m_pluginList(QList<HPLUGIN>()),
-    m_playbackConfigure(knGlobal->systemConfigure()->getConfigure("Backend"))
+    m_systemConfigure(knGlobal->systemConfigure()->getConfigure("Backend")),
+    m_userConfigure(knGlobal->userConfigure()->getConfigure("Backend"))
   #ifdef Q_OS_WIN64
   ,
     m_wasapiOutputDevice(-1),
@@ -267,6 +268,14 @@ void KNMusicBackendBass::setGlobalVolume(const int &volume)
 
 int KNMusicBackendBass::volumeLevel() const
 {
+    //Get the volume level setting.
+    int percentageLevel=m_userConfigure->data("VolumeLevel", 0).toInt();
+    if(percentageLevel>0 && percentageLevel<21)
+    {
+        //Give back the value.
+        return (int)(100.0*(qreal)percentageLevel);
+    }
+    //Or else, simple return the default value.
     return 1000;
 }
 
@@ -282,7 +291,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     m_wasapiEnabled=m_playbackConfigure->data("WASAPI", false).toBool();
 #endif
     //Get the buffer length.
-    int bufferLength=m_playbackConfigure->data("BufferLength", 500).toInt();
+    int bufferLength=m_systemConfigure->data("BufferLength", 500).toInt();
     //Check buffer length is valid.
     if(bufferLength<10)
     {
@@ -298,11 +307,11 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     DWORD outputDevice=-1;
     {
         //Check whether the configure has output device.
-        if(m_playbackConfigure->contains("OutputDevice"))
+        if(m_systemConfigure->contains("OutputDevice"))
         {
             //Get the json object.
             QJsonObject deviceInfo=
-                    m_playbackConfigure->data("OutputDevice").toJsonObject();
+                    m_systemConfigure->data("OutputDevice").toJsonObject();
             //Get the device info Id.
             int rawOutputDevice=(DWORD)(deviceInfo.value("Id").toInt());
             //Check whether the output device is valid.
@@ -327,7 +336,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     BASS_SetConfig(BASS_CONFIG_BUFFER, static_cast<DWORD>(bufferLength));
     //Get the setting sample rate.
     QString userSampleRate=
-            m_playbackConfigure->data("SampleRate", "None").toString();
+            m_systemConfigure->data("SampleRate", "None").toString();
     //Set a default initial sample rate.
     int initialSampleRate=44100;
 #ifdef Q_OS_WIN64
@@ -379,7 +388,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
             initFlag |= BASS_DEVICE_FREQ;
         }
         //Check the preference setting.
-        if(m_playbackConfigure->data("Stero", false).toBool())
+        if(m_systemConfigure->data("Stero", false).toBool())
         {
             //Add stereo flag.
             initFlag |= BASS_DEVICE_STEREO;
@@ -464,7 +473,7 @@ KNMusicBackendBassThread *KNMusicBackendBass::generateThread(
         const DWORD &channelFlags)
 {
     //Check the buffer using settings.
-    float useBufferSetting=m_playbackConfigure->data("Buffer", true).toBool()
+    float useBufferSetting=m_systemConfigure->data("Buffer", true).toBool()
             ?(1.0):(0.0);
     //Generate a thread.
     KNMusicBackendBassThread *thread=new KNMusicBackendBassThread(this);

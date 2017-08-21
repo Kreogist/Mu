@@ -101,7 +101,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     }
     case PanelPlayback:
     {
-        //Header lyrics.
+        //Playing parameters.
         block=generateBlock(tr("Output Parameter"));
 #ifdef Q_OS_WIN64
         addItem(block, tr("Use exclusive mode WASAPI"),
@@ -157,6 +157,17 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                         "playback backend.\nThis option will be applied after "
                         "the application restarted."),
                      sampleRates, false, true);
+        panelData.append(block);
+        //Playing parameters.
+        block=generateBlock(tr("Player Parameters"));
+        addIntItem(block, tr("Volume Level (%)"),
+                   "User/Backend/VolumeLevel", 10,
+                   tr("Mu supports changing volume via shortcut key or mouse "
+                      "scroll wheel.\nThis option could change the volume size "
+                      "increase or decrease for each shortcut pressing and "
+                      "wheel scrolling.\nThe minimum size is 1%, the maximum "
+                      "size is 20%."),
+                   1, 20, false);
         panelData.append(block);
         break;
     }
