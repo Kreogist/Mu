@@ -44,6 +44,7 @@ namespace PreferenceUtil
         TypeInt,
         TypeFont,
         TypeShortcut,
+        TypeAudioDevice,
         TypeFileType
     };
 

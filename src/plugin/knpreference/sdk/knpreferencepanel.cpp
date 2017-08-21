@@ -31,6 +31,7 @@ Foundation,
 #include "items/knpreferencepanelcomboitem.h"
 #include "items/knpreferencepanelshortcutitem.h"
 #include "items/knpreferencepanelfiletypeitem.h"
+#include "items/knpreferencepanelaudiodeviceitem.h"
 
 #include <QDebug>
 
@@ -142,6 +143,9 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
         break;
     case TypeFileType:
         item=new KNPreferencePanelFileTypeItem(this);
+        break;
+    case TypeAudioDevice:
+        item=new KNPreferencePanelAudioDeviceItem(this);
         break;
     default:
         break;

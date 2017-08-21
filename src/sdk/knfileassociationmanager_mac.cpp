@@ -124,7 +124,6 @@ bool KNFileAssociationManager::isFileTypeBinded(const QString &suffix,
                                                                 kLSRolesViewer);
     //Check the result is the same or not.
     QString resultString=stringfromCFString(cfResult);
-    qDebug()<<contentType<<resultString;
     //Compare the result string.
     return APP_HANDLER==resultString;
 }

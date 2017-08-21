@@ -208,6 +208,45 @@ void KNMusicBackendBass::previewReset()
     KNMusicStandardBackend::previewReset();
 }
 
+QJsonArray KNMusicBackendBass::deviceList()
+{
+    //Prepare the json array.
+    QJsonArray deviceInfoList;
+    {
+        //Append the default device.
+        QJsonObject defaultDeviceObject;
+        //Set the value.
+        defaultDeviceObject.insert("name", "");
+        defaultDeviceObject.insert("id", -1);
+        //Append the default value data.
+        deviceInfoList.append(defaultDeviceObject);
+    }
+    //Loop and fetch the device info.
+    BASS_DEVICEINFO deviceInfo;
+    for(DWORD deviceIndex=0;
+        BASS_GetDeviceInfo(deviceIndex, &deviceInfo);
+        ++deviceIndex)
+    {
+        //Prepare the device object.
+        QJsonObject deviceObject;
+        //Insert the data.
+        deviceObject.insert("id", (int)deviceIndex);
+        //Get the device name and driver name.
+        QString deviceName=deviceInfo.name, driverName=deviceInfo.driver;
+        if(!driverName.isEmpty())
+        {
+            //Append the driver name at the end of the device name.
+            deviceName.append(" (" + driverName + ")");
+        }
+        //Save the device name.
+        deviceObject.insert("name", deviceName);
+        //Append the object to list.
+        deviceInfoList.append(deviceObject);
+    }
+    //Give back the device list.
+    return deviceInfoList;
+}
+
 void KNMusicBackendBass::setGlobalVolume(const int &volume)
 {
 #ifdef Q_OS_WIN64

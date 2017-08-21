@@ -114,6 +114,11 @@ public:
      */
     void previewReset() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::deviceList().
+     */
+    QJsonArray deviceList() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

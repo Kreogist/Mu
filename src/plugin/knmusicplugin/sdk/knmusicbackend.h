@@ -19,6 +19,8 @@
 #ifndef KNMUSICBACKEND_H
 #define KNMUSICBACKEND_H
 
+#include <QJsonArray>
+
 #include <QObject>
 
 /*!
@@ -183,6 +185,16 @@ public:
      * \return If the backend has been muted, it will be true.
      */
     virtual bool mute()=0;
+
+    /*!
+     * \brief Get the output device list. This JSON array should return a set of
+     * JSON object. For each object, you have to provide at least the following
+     * information.
+     *      - id: The index of the device.
+     *      - name: The display name of the device.
+     * \return The list information of the output device.
+     */
+    virtual QJsonArray deviceList()=0;
 
 signals:
     /*!

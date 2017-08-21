@@ -593,7 +593,8 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelpathitem.cpp \
     sdk/knfileassociationmanager.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.cpp \
-    sdk/knglobalshortcut.cpp
+    sdk/knglobalshortcut.cpp \
+    plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -885,7 +886,8 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelpathitem.h \
     sdk/knfileassociationmanager.h \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.h \
-    sdk/knglobalshortcut.h
+    sdk/knglobalshortcut.h \
+    plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.h
 
 RESOURCES += \
     resource/res.qrc

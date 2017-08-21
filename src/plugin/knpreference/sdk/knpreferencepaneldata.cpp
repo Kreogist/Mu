@@ -141,6 +141,11 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 tr("Limit the output to stereo, saving some CPU if the device "
                    "has more speakers available.\nThis option will be applied "
                    "after the application restarted."), true);
+        addItem(block, tr("Output Device"),
+                "System/Backend/OutputDevice", QVariant(), TypeAudioDevice,
+                tr("Select the audio output device for music playing.\nThis "
+                   "option will be applied after the application restarted."),
+                false);
         QStringList sampleRates;
         QString defaultSampleRate=tr("Use Device Default Sample Rate");
         sampleRates << defaultSampleRate << "8000" << "11025" << "22050"
