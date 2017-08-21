@@ -107,6 +107,8 @@ KNMusicAlbumView::KNMusicAlbumView(QWidget *parent) :
                 m_scrollBar->setVisible(min!=max);
                 //Update scrollbar state parameters.
                 m_scrollBar->setPageStep(verticalScrollBar()->pageStep());
+                //Locate to the visible current index.
+                locateTo(currentIndex());
             });
     connect(verticalScrollBar(), &QScrollBar::valueChanged,
             [=](int value)

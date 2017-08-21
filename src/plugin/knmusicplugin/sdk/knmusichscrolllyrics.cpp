@@ -141,7 +141,7 @@ void KNMusicHScrollLyrics::paintEvent(QPaintEvent *event)
     }
 }
 
-void KNMusicHScrollLyrics::onActionLyricsMoved(const int &frame)
+void KNMusicHScrollLyrics::onActionLyricsMoved(int frame)
 {
     //Update the current line offset.
     m_centerOffset=frame;

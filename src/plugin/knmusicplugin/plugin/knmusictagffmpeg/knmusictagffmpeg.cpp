@@ -122,7 +122,8 @@ inline void KNMusicTagFfmpeg::setMetadata(AVDictionary *dictionary,
         break;
     default:
         //Simply set the value as the data of the text.
-        detailInfo.textLists[tagIndex]=tag->value;
+        setTextData(detailInfo.textLists[tagIndex],
+                    QString(tag->value).simplified());
         break;
     }
 }

@@ -619,7 +619,7 @@ inline bool KNMusicBackendBassThread::initialWasapi()
     // Setup output
     // Using a smaller buffer with event-driven system (only affects exclusive
     //mode)
-    float bufferLength=(m_wasapiFlag&BASS_WASAPI_EVENT ? 0.1 : 0.4);
+    float bufferLength=((m_wasapiFlag&BASS_WASAPI_EVENT) ? 0.1 : 0.4);
     BASS_WASAPI_INFO wasapiInfo;
     //Get the channel information.
     BASS_CHANNELINFO channelInfo;

@@ -70,6 +70,8 @@ void KNRoundSwitchButton::setForceChecked(bool checked)
 {
     //Block the state.
     blockSignals(true);
+    //Stop the moving animation.
+    m_movingAnime->stop();
     //Set the check state.
     setChecked(checked);
     //Update the state.

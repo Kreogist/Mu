@@ -221,16 +221,27 @@ bool KNMusicModel::removeRows(int position, int rows, const QModelIndex &index)
     //Check whether the playing index row is in the the position.
     if(m_playingIndex.isValid() &&
             (m_playingIndex.row() >= position &&
-             m_playingIndex.row() <= rows+position))
+             m_playingIndex.row() < rows+position))
     {
         //We have to tell the now playing to reset the current playing.
         emit playingItemRemoved();
     }
-    //Remove those datas from the list.
-    while(rows--)
+    //Check whether it is removing all the items.
+    if(rows==m_detailInfos.size())
     {
-        //Take away the detail info, and remove the duration.
-        m_totalDuration-=m_detailInfos.takeAt(position).duration;
+        //Clear all the detail infos.
+        m_detailInfos=QList<KNMusicDetailInfo>();
+        //Reset the total duration.
+        m_totalDuration=0;
+    }
+    else
+    {
+        //Remove those datas from the list.
+        while(rows--)
+        {
+            //Take away the detail info, and remove the duration.
+            m_totalDuration-=m_detailInfos.takeAt(position).duration;
+        }
     }
     //As the documentation said, called this after remove rows.
     endRemoveRows();
