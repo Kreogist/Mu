@@ -128,7 +128,8 @@ private:
     enum ObjectValueType
     {
         Font,
-        Shortcut
+        Shortcut,
+        CustomObject
     };
     inline void buildTypeList();
 

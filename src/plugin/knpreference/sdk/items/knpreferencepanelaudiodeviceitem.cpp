@@ -41,9 +41,6 @@ KNPreferencePanelAudioDeviceItem::KNPreferencePanelAudioDeviceItem(
     m_candidates->setPalette(comboPalette);
     m_candidates->setEditable(false);
     m_candidates->view()->setPalette(comboPalette);
-    //Link the combo box signal.
-    connect(m_candidates, &QComboBox::currentTextChanged,
-            this, &KNPreferencePanelAudioDeviceItem::valueChanged);
     //Build the content layout.
     QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     contentLayout->addWidget(m_candidates, 1);
@@ -54,7 +51,7 @@ KNPreferencePanelAudioDeviceItem::KNPreferencePanelAudioDeviceItem(
 QVariant KNPreferencePanelAudioDeviceItem::value() const
 {
     //The current text of the candidate combo is the value.
-    return m_candidates->currentText();
+    return m_candidates->currentData(Qt::UserRole);
 }
 
 void KNPreferencePanelAudioDeviceItem::setConfig(const QVariant &config)
@@ -76,9 +73,9 @@ void KNPreferencePanelAudioDeviceItem::setConfig(const QVariant &config)
         //Loop and set the text.
         QJsonObject deviceInfo=device.toObject();
         //Get the device name.
-        QString deviceName=deviceInfo.value("name").toString();
-        //Add the data to the configure list.
-        if(deviceName.isEmpty())
+        QString deviceName=deviceInfo.value("Name").toString();
+        //Check the device Id is the default value or not.
+        if(deviceInfo.value("Id").toInt()==-1)
         {
             //Set the device name as the default value.
             deviceName=tr("Use Default Output Device");
@@ -86,19 +83,46 @@ void KNPreferencePanelAudioDeviceItem::setConfig(const QVariant &config)
         //Append the device name to the combo widget.
         m_candidates->addItem(deviceName, deviceInfo);
     }
+    //Link the combo box signal.
+    connect(m_candidates,
+            static_cast<void (QComboBox::*)(int)>(
+                &QComboBox::currentIndexChanged),
+            this, &KNPreferencePanelAudioDeviceItem::valueChanged);
 }
 
 void KNPreferencePanelAudioDeviceItem::setWidgetValue(const QVariant &value)
 {
-    //Need to search in the model.
-    //Match the index in the model.
-    int matchResult=m_candidates->findText(value.toString());
-    //Check the match list.
-    if(-1!=matchResult)
+    //If the value can be cast to json object and device Id is existed, we could
+    //move on.
+    if(!value.canConvert<QJsonObject>())
     {
-        //Set the current index.
-        m_candidates->setCurrentIndex(matchResult);
+        //Failed to recast.
+        return;
     }
+    //Check the Id.
+    QJsonObject userDevice=value.toJsonObject();
+    if(!userDevice.contains("Id"))
+    {
+        //No need to move on.
+        return;
+    }
+    //Get the user device Id.
+    int deviceId=userDevice.value("Id").toInt();
+    //Need to search in the candidate combo data.
+    for(int i=0, deviceCount=m_candidates->count(); i<deviceCount; ++i)
+    {
+        //Get the user data from the model.
+        QJsonObject deviceInfo=
+                m_candidates->itemData(i, Qt::UserRole).toJsonObject();
+        if(deviceInfo.value("Id").toInt()==deviceId)
+        {
+            //This is what we want.
+            m_candidates->setCurrentIndex(i);
+            //Mission complete.
+            return;
+        }
+    }
+    //Or else, leave it as what it is.
 }
 
 bool KNPreferencePanelAudioDeviceItem::isEqual(const QVariant &currentValue,

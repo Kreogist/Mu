@@ -148,6 +148,11 @@ QVariant KNConfigure::data(const QString &key,
                     //Give back the value data.
                     return QVariant::fromValue(valueShortcut);
                 }
+                case CustomObject:
+                {
+                    //Simply get the object data back.
+                    return valueObject;
+                }
                 }
             }
             return valueObject;
@@ -223,7 +228,6 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         m_dataObject.insert(key, fontObject);
         break;
     }
-    //For other types, we have to check.
     case QVariant::KeySequence:
     {
         //Generate a key sequence object.
@@ -235,6 +239,20 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
                                   QKeySequence::PortableText));
         //Insert the key sequence object.
         m_dataObject.insert(key, shortcutObject);
+        break;
+    }
+    //For the JSON object, it is quite wired that QVariant doesn't enumerate the
+    //JSON type here, but it will use the meta type json object here.
+    case QMetaType::QJsonObject:
+    {
+        //Check with the value contains the custom type.
+        QJsonObject customObject=value.toJsonObject();
+        //Check the custom object type is matched.
+        if("CustomObject"==customObject.value("Type").toString())
+        {
+            //Simply insert the json object to the data.
+            m_dataObject.insert(key, customObject);
+        }
         break;
     }
     default:
@@ -279,5 +297,6 @@ inline void KNConfigure::buildTypeList()
     {
         m_typeList.insert("Font", Font);
         m_typeList.insert("Shortcut", Shortcut);
+        m_typeList.insert("CustomObject", CustomObject);
     }
 }

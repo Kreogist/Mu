@@ -212,25 +212,22 @@ QJsonArray KNMusicBackendBass::deviceList()
 {
     //Prepare the json array.
     QJsonArray deviceInfoList;
-    {
-        //Append the default device.
-        QJsonObject defaultDeviceObject;
-        //Set the value.
-        defaultDeviceObject.insert("name", "");
-        defaultDeviceObject.insert("id", -1);
-        //Append the default value data.
-        deviceInfoList.append(defaultDeviceObject);
-    }
+    //Prepare the device object.
+    QJsonObject deviceObject;
+    //Set the type of device object.
+    deviceObject.insert("Type", "CustomObject");
+    //Set Add the default output device.
+    deviceObject.insert("Name", "");
+    deviceObject.insert("Id", -1);
+    deviceInfoList.append(deviceObject);
     //Loop and fetch the device info.
     BASS_DEVICEINFO deviceInfo;
     for(DWORD deviceIndex=0;
         BASS_GetDeviceInfo(deviceIndex, &deviceInfo);
         ++deviceIndex)
     {
-        //Prepare the device object.
-        QJsonObject deviceObject;
         //Insert the data.
-        deviceObject.insert("id", (int)deviceIndex);
+        deviceObject.insert("Id", (int)deviceIndex);
         //Get the device name and driver name.
         QString deviceName=deviceInfo.name, driverName=deviceInfo.driver;
         if(!driverName.isEmpty())
@@ -239,7 +236,7 @@ QJsonArray KNMusicBackendBass::deviceList()
             deviceName.append(" (" + driverName + ")");
         }
         //Save the device name.
-        deviceObject.insert("name", deviceName);
+        deviceObject.insert("Name", deviceName);
         //Append the object to list.
         deviceInfoList.append(deviceObject);
     }
@@ -286,6 +283,38 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 #endif
     //Get the buffer length.
     int bufferLength=m_playbackConfigure->data("BufferLength", 500).toInt();
+    //Check buffer length is valid.
+    if(bufferLength<10)
+    {
+        //For minimum, buffer should be 10ms.
+        bufferLength=10;
+    }
+    else if(bufferLength>5000)
+    {
+        //For maximum, buffer should be 5000ms.
+        bufferLength=5000;
+    }
+    //Get the output device index.
+    DWORD outputDevice=-1;
+    {
+        //Check whether the configure has output device.
+        if(m_playbackConfigure->contains("OutputDevice"))
+        {
+            //Get the json object.
+            QJsonObject deviceInfo=
+                    m_playbackConfigure->data("OutputDevice").toJsonObject();
+            //Get the device info Id.
+            int rawOutputDevice=(DWORD)(deviceInfo.value("Id").toInt());
+            //Check whether the output device is valid.
+            QJsonArray allDevices=deviceList();
+            //Check whether the output device is existed.
+            if(rawOutputDevice>=-1 && (rawOutputDevice<allDevices.size()-1))
+            {
+                //Set the device back to default.
+                outputDevice=rawOutputDevice;
+            }
+        }
+    }
     //Check the bass library version first.
     if(HIWORD(BASS_GetVersion()) > BASSVERSION)
     {
@@ -356,7 +385,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
             initFlag |= BASS_DEVICE_STEREO;
         }
         //Initial bass library.
-        if(!BASS_Init(-1, initialSampleRate, initFlag, NULL, NULL))
+        if(!BASS_Init(outputDevice, initialSampleRate, initFlag, NULL, NULL))
         {
             //Failed to initial the library bass.
             return false;
