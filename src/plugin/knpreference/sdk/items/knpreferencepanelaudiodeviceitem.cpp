@@ -107,8 +107,8 @@ bool KNPreferencePanelAudioDeviceItem::isEqual(const QVariant &currentValue,
         return false;
     }
     //Compare the value.
-    return currentValue.toJsonObject().value("Id").toInt()==
-            originalValue.toJsonObject().value("Id").toInt();
+    return currentValue.toJsonObject().value("Id").toString()==
+            originalValue.toJsonObject().value("Id").toString();
 }
 
 void KNPreferencePanelAudioDeviceItem::initialValue(QVariant &defaultValue)
@@ -142,14 +142,14 @@ inline bool KNPreferencePanelAudioDeviceItem::selectAudioDevice(
         return false;
     }
     //Get the user device Id.
-    int deviceId=userDevice.value("Id").toInt();
+    QString deviceId=userDevice.value("Id").toString();
     //Need to search in the candidate combo data.
     for(int i=0, deviceCount=m_candidates->count(); i<deviceCount; ++i)
     {
         //Get the user data from the model.
         QJsonObject deviceInfo=
                 m_candidates->itemData(i, Qt::UserRole).toJsonObject();
-        if(deviceInfo.value("Id").toInt()==deviceId)
+        if(deviceInfo.value("Id").toString()==deviceId)
         {
             //This is what we want.
             m_candidates->setCurrentIndex(i);

@@ -219,8 +219,36 @@ QJsonArray KNMusicBackendBass::deviceList()
     deviceObject.insert("Type", "CustomObject");
     //Set Add the default output device.
     deviceObject.insert("Name", "");
-    deviceObject.insert("Id", -1);
+    deviceObject.insert("Id", "-1");
     deviceInfoList.append(deviceObject);
+#ifdef Q_OS_WIN64
+    //For 64-bit Windows, we will enable WASAPI as the playing API instead
+    //of using DirectX.
+    //Find the output device.
+    BASS_WASAPI_DEVICEINFO wasapiDeviceInfo;
+    for(int deviceIndex=0;
+        BASS_WASAPI_GetDeviceInfo(deviceIndex, &wasapiDeviceInfo);
+        ++deviceIndex)
+    {
+        //Check the device flag.
+        if(wasapiDeviceInfo.flags & BASS_DEVICE_INPUT)
+        {
+            //Ignore all the input flags.
+            continue;
+        }
+        //Check the device exclusive mode.
+        if(wasapiDeviceInfo.flags & BASS_WASAPI_EXCLUSIVE)
+        {
+            //Add the device to list.
+            deviceObject.insert("Id", "w"+QString::number(deviceIndex));
+            //Set the name of the device.
+            QString deviceName=wasapiDeviceInfo.name;
+            deviceObject.insert("Name", "WASAPI: "+deviceName);
+            //Add the device to the list.
+            deviceInfoList.append(deviceObject);
+        }
+    }
+#endif
     //Loop and fetch the device info.
     BASS_DEVICEINFO deviceInfo;
     for(DWORD deviceIndex=0;
@@ -228,7 +256,7 @@ QJsonArray KNMusicBackendBass::deviceList()
         ++deviceIndex)
     {
         //Insert the data.
-        deviceObject.insert("Id", (int)deviceIndex);
+        deviceObject.insert("Id", QString::number((int)deviceIndex));
         //Get the device name and driver name.
         QString deviceName=deviceInfo.name, driverName=deviceInfo.driver;
         if(!driverName.isEmpty())
@@ -248,11 +276,12 @@ QJsonArray KNMusicBackendBass::deviceList()
 void KNMusicBackendBass::setGlobalVolume(const int &volume)
 {
 #ifdef Q_OS_WIN64
+    float outputVolume=((float)volume)/10000.0;
     if(m_wasapiEnabled)
     {
         //Use the WASAPI function to change the volume.
         BASS_WASAPI_SetVolume(BASS_WASAPI_CURVE_WINDOWS,
-                              ((float)volume)/10000.0);
+                              outputVolume);
     }
     else
     {
@@ -288,7 +317,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 {
     //Detect operating system version and enable option for using WASAPI.
 #ifdef Q_OS_WIN64
-    m_wasapiEnabled=m_playbackConfigure->data("WASAPI", false).toBool();
+    m_wasapiEnabled=m_systemConfigure->data("WASAPI", false).toBool();
 #endif
     //Get the buffer length.
     int bufferLength=m_systemConfigure->data("BufferLength", 500).toInt();
@@ -304,7 +333,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
         bufferLength=5000;
     }
     //Get the output device index.
-    DWORD outputDevice=-1;
+    QString outputDeviceId="-1";
     {
         //Check whether the configure has output device.
         if(m_systemConfigure->contains("OutputDevice"))
@@ -313,15 +342,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
             QJsonObject deviceInfo=
                     m_systemConfigure->data("OutputDevice").toJsonObject();
             //Get the device info Id.
-            int rawOutputDevice=(DWORD)(deviceInfo.value("Id").toInt());
-            //Check whether the output device is valid.
-            QJsonArray allDevices=deviceList();
-            //Check whether the output device is existed.
-            if(rawOutputDevice>=-1 && (rawOutputDevice<allDevices.size()-1))
-            {
-                //Set the device back to default.
-                outputDevice=rawOutputDevice;
-            }
+            outputDeviceId=deviceInfo.value("Id").toString();
         }
     }
     //Check the bass library version first.
@@ -347,29 +368,50 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 #ifdef Q_OS_WIN64
     if(m_wasapiEnabled)
     {
+        //Prepare the user output device info.
+        int userOutputDevice=-1;
+        //Check the user output device selection.
+        if(outputDeviceId.startsWith("w"))
+        {
+            //Get the possible output device.
+            userOutputDevice=outputDeviceId.mid(1).toInt();
+        }
         //For 64-bit Windows, we will enable WASAPI as the playing API instead
         //of using DirectX.
         //Find the output device.
         BASS_WASAPI_DEVICEINFO deviceInfo;
-        for(int device=0;
-            BASS_WASAPI_GetDeviceInfo(device, &deviceInfo);
-            ++device)
+        int deviceCount=0;
+        QList<int> validDeviceIndex;
+        for(deviceCount=0;
+            BASS_WASAPI_GetDeviceInfo(deviceCount, &deviceInfo);
+            ++deviceCount)
         {
             //Check the device flag.
-            if((deviceInfo.flags & (BASS_DEVICE_DEFAULT |
-                                    BASS_DEVICE_LOOPBACK |
-                                    BASS_DEVICE_INPUT))==BASS_DEVICE_DEFAULT)
+            if((deviceInfo.flags & (BASS_DEVICE_LOOPBACK |
+                                    BASS_DEVICE_INPUT))==0)
             {
-                //Save the default device index.
-                m_wasapiOutputDevice=device;
-                break;
+                //Check the valid device list.
+                if((deviceInfo.flags & BASS_DEVICE_DEFAULT)
+                        ==BASS_DEVICE_DEFAULT)
+                {
+                    //Save the default device index.
+                    m_wasapiOutputDevice=deviceCount;
+                }
+                //Add the device to the list.
+                validDeviceIndex.append(deviceCount);
             }
         }
         // Check the device index.
-        if (m_wasapiOutputDevice==-1)
+        if(validDeviceIndex.isEmpty())
         {
             //Failed to find the output device.
             return false;
+        }
+        //Check the user selection is still valid.
+        if(validDeviceIndex.contains(userOutputDevice))
+        {
+            //Set the user selected device as the output device.
+            m_wasapiOutputDevice=userOutputDevice;
         }
         //Because we won't playing anything via BASS, so don't need an update
         //thread.
@@ -381,6 +423,21 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     else
     {
 #endif
+        //Check the start data.
+        DWORD outputDevice=-1;
+        if(!outputDeviceId.startsWith("w"))
+        {
+            //Get the raw output device
+            int rawOutputDevice=outputDeviceId.toInt();
+            //Check whether the output device is valid.
+            QJsonArray allDevices=deviceList();
+            //Check whether the output device is existed.
+            if(rawOutputDevice>=-1 && (rawOutputDevice<allDevices.size()-1))
+            {
+                //Set the device back to default.
+                outputDevice=rawOutputDevice;
+            }
+        }
         //Normal bass initialize.
         //Prepare the bass initial flag.
         DWORD initFlag=0;
