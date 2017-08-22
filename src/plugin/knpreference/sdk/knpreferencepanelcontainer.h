@@ -26,6 +26,7 @@ Foundation,
 
 using namespace PreferenceUtil;
 
+class QScrollBar;
 class KNSideShadowWidget;
 class KNPreferencePanel;
 /*!
@@ -67,10 +68,14 @@ protected:
     void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    inline void updateContainerSize();
     inline void updatePanelSize(KNPreferencePanel *panel,
-                                KNSideShadowWidget *shadow);
+                                KNSideShadowWidget *shadow,
+                                QScrollBar *scrollBar);
     QList<KNPreferencePanel *> m_panelList;
+    QList<QScrollBar *> m_scrollList;
     QList<KNSideShadowWidget *> m_shadowList;
+    QWidget *m_panelContainer;
 };
 
 #endif // KNPREFERENCEPANELCONTAINER_H

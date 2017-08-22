@@ -97,7 +97,7 @@ protected slots:
     void onActionThemeUpdate();
 
 private slots:
-    void onActionMouseInOut(int frame);
+    void onMouseInOut(int frame);
 
 private:
     inline void updateVerticalScrollBarGeometry();
