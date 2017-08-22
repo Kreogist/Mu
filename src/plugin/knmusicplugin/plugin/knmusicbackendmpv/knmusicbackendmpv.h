@@ -28,6 +28,7 @@
 
 #include "knmusicstandardbackend.h"
 
+class KNConfigure;
 class KNMusicBackendMpvThread;
 /*!
  * \brief The KNMusicBackendGStreamer class provides you a backend interface of
@@ -101,6 +102,7 @@ protected:
     qreal smartVolumeScale() const Q_DECL_OVERRIDE;
 
 private:
+    KNConfigure *m_systemConfigure, *m_userConfigure;
     KNMusicBackendMpvThread *m_main, *m_preview;
 };
 

@@ -135,7 +135,7 @@ protected:
      * \brief Initialize the preference item with the specific value.
      * \param defaultValue The default value.
      */
-    virtual void initialValue(const QVariant &defaultValue);
+    virtual void initialValue(QVariant &defaultValue);
 
     /*!
      * \brief Get the title text of the label.
@@ -149,9 +149,15 @@ protected:
      */
     QString valueName() const;
 
+protected slots:
+    /*!
+     * \brief Update the data in the configure. Normally you don't need to call
+     * this function.
+     */
+    void updateConfigureData();
+
 private slots:
     void onActionChangeHighlight(int frame);
-    void onValueChanged();
 
 private:
     inline void startAnime(int endFrame);

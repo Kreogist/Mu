@@ -93,7 +93,7 @@ QVariant KNPreferencePanelFileTypeItem::getValueFromConfig(
     return isTypeBind();
 }
 
-void KNPreferencePanelFileTypeItem::initialValue(const QVariant &defaultValue)
+void KNPreferencePanelFileTypeItem::initialValue(QVariant &defaultValue)
 {
     //Update the switch with the value.
     m_button->setChecked(defaultValue.toBool());

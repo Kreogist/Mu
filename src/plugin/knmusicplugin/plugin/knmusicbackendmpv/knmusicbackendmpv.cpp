@@ -15,6 +15,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knconfigure.h"
+
+#include "knglobal.h"
+
 #include "knmusicbackendmpvthread.h"
 
 #include "knmusicbackendmpv.h"
@@ -23,6 +27,8 @@
 
 KNMusicBackendMpv::KNMusicBackendMpv(QObject *parent) :
     KNMusicStandardBackend(parent),
+    m_systemConfigure(knGlobal->systemConfigure()->getConfigure("Backend")),
+    m_userConfigure(knGlobal->userConfigure()->getConfigure("Backend")),
     m_main(nullptr),
     m_preview(nullptr)
 {
@@ -35,9 +41,57 @@ KNMusicBackendMpv::KNMusicBackendMpv(QObject *parent) :
      */
     setlocale(LC_NUMERIC, "C");
 #endif
+    //Initial the device name.
+    QString deviceName;
+    {
+        //Get the initial flags from the configure.
+        QJsonObject outputDevice=
+                m_systemConfigure->data("OutputDevice").toJsonObject();
+        if(outputDevice.contains("DeviceName"))
+        {
+            //Save the device name.
+            deviceName=outputDevice.value("DeviceName").toString();
+        }
+    }
+    //Get the buffer length.
+    int bufferLength=m_systemConfigure->data("BufferLength", 500).toInt();
+    //Check buffer length is valid.
+    if(bufferLength<10)
+    {
+        //For minimum, buffer should be 10ms.
+        bufferLength=10;
+    }
+    else if(bufferLength>5000)
+    {
+        //For maximum, buffer should be 5000ms.
+        bufferLength=5000;
+    }
+    //Check the no buffer setting.
+    if(!m_systemConfigure->data("Buffer", true).toBool())
+    {
+        //No buffer seting is enabled.
+        bufferLength=0;
+    }
+    //Check the force to stero output setting.
+    bool forceStereo=m_systemConfigure->data("Stereo", false).toBool();
+    //Get the output device sample rate settings.
+    int initialSampleRate=-1;
+    QString userSampleRate=
+            m_systemConfigure->data("SampleRate", "None").toString();
+    //Check the user sample rate.
+    if(QString::number(userSampleRate.toInt())==userSampleRate)
+    {
+        //Update the initial sample rate.
+        initialSampleRate=userSampleRate.toInt();
+    }
     //Initial the main and preview of the threads.
     m_main=new KNMusicBackendMpvThread;
     m_preview=new KNMusicBackendMpvThread;
+    //Set the flag to both thread.
+    m_main->setCreateFlags(deviceName, bufferLength, initialSampleRate,
+                           forceStereo);
+    m_preview->setCreateFlags(deviceName, bufferLength, initialSampleRate,
+                              forceStereo);
     //Set the main and preview threads.
     setMainThread(m_main);
     setPreviewThread(m_preview);
@@ -143,6 +197,7 @@ QJsonArray KNMusicBackendMpv::deviceList()
         //Prepare the device data list.
         QJsonObject deviceData;
         //Set the device Id.
+        deviceData.insert("Type", "CustomObject");
         deviceData.insert("Id", i);
         //Get the data from the list.
         for(int j=0; j<deviceInfoMap->num; ++j)
@@ -189,6 +244,14 @@ void KNMusicBackendMpv::setGlobalVolume(const int &volume)
 
 int KNMusicBackendMpv::volumeLevel() const
 {
+    //Get the volume level setting.
+    int percentageLevel=m_userConfigure->data("VolumeLevel", 0).toInt();
+    if(percentageLevel>0 && percentageLevel<21)
+    {
+        //Give back the value.
+        return (int)(100.0*(qreal)percentageLevel);
+    }
+    //Or else, simple return the default value.
     return 1000;
 }
 

@@ -137,7 +137,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                       "will be applied after the application restarted."),
                    10, 5000, false);
         addItem(block, tr("Force Stereo Output"),
-                "System/Backend/Stero", false, TypeBoolean,
+                "System/Backend/Stereo", false, TypeBoolean,
                 tr("Limit the output to stereo, saving some CPU if the device "
                    "has more speakers available.\nThis option will be applied "
                    "after the application restarted."), true);

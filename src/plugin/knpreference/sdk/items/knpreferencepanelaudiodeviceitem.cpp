@@ -92,37 +92,8 @@ void KNPreferencePanelAudioDeviceItem::setConfig(const QVariant &config)
 
 void KNPreferencePanelAudioDeviceItem::setWidgetValue(const QVariant &value)
 {
-    //If the value can be cast to json object and device Id is existed, we could
-    //move on.
-    if(!value.canConvert<QJsonObject>())
-    {
-        //Failed to recast.
-        return;
-    }
-    //Check the Id.
-    QJsonObject userDevice=value.toJsonObject();
-    if(!userDevice.contains("Id"))
-    {
-        //No need to move on.
-        return;
-    }
-    //Get the user device Id.
-    int deviceId=userDevice.value("Id").toInt();
-    //Need to search in the candidate combo data.
-    for(int i=0, deviceCount=m_candidates->count(); i<deviceCount; ++i)
-    {
-        //Get the user data from the model.
-        QJsonObject deviceInfo=
-                m_candidates->itemData(i, Qt::UserRole).toJsonObject();
-        if(deviceInfo.value("Id").toInt()==deviceId)
-        {
-            //This is what we want.
-            m_candidates->setCurrentIndex(i);
-            //Mission complete.
-            return;
-        }
-    }
-    //Or else, leave it as what it is.
+    //Simply set the audio device.
+    selectAudioDevice(value);
 }
 
 bool KNPreferencePanelAudioDeviceItem::isEqual(const QVariant &currentValue,
@@ -138,4 +109,54 @@ bool KNPreferencePanelAudioDeviceItem::isEqual(const QVariant &currentValue,
     //Compare the value.
     return currentValue.toJsonObject().value("Id").toInt()==
             originalValue.toJsonObject().value("Id").toInt();
+}
+
+void KNPreferencePanelAudioDeviceItem::initialValue(QVariant &defaultValue)
+{
+    //Check the result of set the default value.
+    if(!selectAudioDevice(defaultValue) &&
+            m_candidates->count()>0)
+    {
+        //Set the default value to be the first device, which should be auto.
+        defaultValue=m_candidates->itemData(0, Qt::UserRole);
+        //Update the default value.
+        updateConfigureData();
+    }
+}
+
+inline bool KNPreferencePanelAudioDeviceItem::selectAudioDevice(
+        const QVariant &value)
+{
+    //If the value can be cast to json object and device Id is existed, we could
+    //move on.
+    if(!value.canConvert<QJsonObject>())
+    {
+        //Failed to recast.
+        return false;
+    }
+    //Check the Id.
+    QJsonObject userDevice=value.toJsonObject();
+    if(!userDevice.contains("Id"))
+    {
+        //No need to move on.
+        return false;
+    }
+    //Get the user device Id.
+    int deviceId=userDevice.value("Id").toInt();
+    //Need to search in the candidate combo data.
+    for(int i=0, deviceCount=m_candidates->count(); i<deviceCount; ++i)
+    {
+        //Get the user data from the model.
+        QJsonObject deviceInfo=
+                m_candidates->itemData(i, Qt::UserRole).toJsonObject();
+        if(deviceInfo.value("Id").toInt()==deviceId)
+        {
+            //This is what we want.
+            m_candidates->setCurrentIndex(i);
+            //Mission complete.
+            return true;
+        }
+    }
+    //Or else, leave it as what it is.
+    return false;
 }

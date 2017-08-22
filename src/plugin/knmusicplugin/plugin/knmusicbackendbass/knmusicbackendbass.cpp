@@ -388,7 +388,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
             initFlag |= BASS_DEVICE_FREQ;
         }
         //Check the preference setting.
-        if(m_systemConfigure->data("Stero", false).toBool())
+        if(m_systemConfigure->data("Stereo", false).toBool())
         {
             //Add stereo flag.
             initFlag |= BASS_DEVICE_STEREO;

@@ -79,7 +79,7 @@ KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
 
     //Link the value changed.
     connect(this, &KNPreferencePanelItem::valueChanged,
-            this, &KNPreferencePanelItem::onValueChanged);
+            this, &KNPreferencePanelItem::updateConfigureData);
 
     //Update the panel.
     m_backgroundAnime->setUpdateInterval(16);
@@ -184,7 +184,7 @@ QVariant KNPreferencePanelItem::getValueFromConfig(const QVariant &defaultValue)
     return knConf->configureValue(m_path, defaultValue);
 }
 
-void KNPreferencePanelItem::initialValue(const QVariant &defaultValue)
+void KNPreferencePanelItem::initialValue(QVariant &defaultValue)
 {
     //For the default item, it is simply set the value.
     setWidgetValue(defaultValue);
@@ -200,15 +200,7 @@ QString KNPreferencePanelItem::valueName() const
     return m_path.last();
 }
 
-void KNPreferencePanelItem::onActionChangeHighlight(int frame)
-{
-    //Change the highlight opacity.
-    m_highLightOpacity=(qreal)frame/100.0;
-    //Update the background.
-    update();
-}
-
-void KNPreferencePanelItem::onValueChanged()
+void KNPreferencePanelItem::updateConfigureData()
 {
     //Get the current value.
     QVariant currentValue=value();
@@ -216,6 +208,14 @@ void KNPreferencePanelItem::onValueChanged()
     m_undoButton->setEnabled(!isEqual(currentValue, m_defaultValue));
     //Save the value.
     knConf->setConfigureValue(m_path, currentValue);
+}
+
+void KNPreferencePanelItem::onActionChangeHighlight(int frame)
+{
+    //Change the highlight opacity.
+    m_highLightOpacity=(qreal)frame/100.0;
+    //Update the background.
+    update();
 }
 
 inline void KNPreferencePanelItem::startAnime(int endFrame)
