@@ -75,9 +75,11 @@ QString stringfromCFString(CFStringRef cfStringReference)
 }
 
 bool KNFileAssociationManager::bindFileTypes(const QString &suffix,
-                                             const QString &handler)
+                                             const QString &handler,
+                                             const QString &description)
 {
     Q_UNUSED(suffix)
+    Q_UNUSED(description)
     //Save the result of default role.
     OSStatus status=-1;
     //Try three times.
@@ -115,11 +117,11 @@ bool KNFileAssociationManager::unbindFileTypes(const QString &suffix,
 }
 
 bool KNFileAssociationManager::isFileTypeBinded(const QString &suffix,
-                                                const QString &contentType)
+                                                const QString &handler)
 {
     Q_UNUSED(suffix)
     //Recast the content type.
-    CFStringRef cfContentType=cfStringRefFromString(contentType),
+    CFStringRef cfContentType=cfStringRefFromString(handler),
                 cfResult=LSCopyDefaultRoleHandlerForContentType(cfContentType,
                                                                 kLSRolesViewer);
     //Check the result is the same or not.

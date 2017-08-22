@@ -288,7 +288,7 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 {
     //Detect operating system version and enable option for using WASAPI.
 #ifdef Q_OS_WIN64
-    m_wasapiEnabled=m_playbackConfigure->data("WASAPI", false).toBool();
+    m_wasapiEnabled=m_systemConfigure->data("WASAPI", false).toBool();
 #endif
     //Get the buffer length.
     int bufferLength=m_systemConfigure->data("BufferLength", 500).toInt();
