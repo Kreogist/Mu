@@ -67,7 +67,7 @@ protected:
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::initialValue().
      */
-    void initialValue(const QVariant &defaultValue) Q_DECL_OVERRIDE;
+    void initialValue(QVariant &defaultValue) Q_DECL_OVERRIDE;
 
 private slots:
     void onClicked();

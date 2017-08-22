@@ -21,7 +21,6 @@
 
 #include <mpv/qthelper.hpp>
 
-#include "knconfigure.h"
 #include "knglobal.h"
 
 #include "knmusicbackendmpvthread.h"
@@ -39,7 +38,8 @@ static void mpvWakeUp(void *context)
 
 KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     KNMusicStandardBackendThread(parent),
-    m_playbackConfigure(knGlobal->systemConfigure()->getConfigure("Backend")),
+    m_filePath(QString()),
+    m_audioDevice(QString()),
     m_container(new QWidget(knGlobal->mainWindow())),
     m_mpvHandle(nullptr),
     m_startPosition(-1),
@@ -50,7 +50,8 @@ KNMusicBackendMpvThread::KNMusicBackendMpvThread(QObject *parent) :
     m_state(MusicUtil::Stopped),
     m_sectionSet(false),
     m_fileLoaded(false),
-    m_restoreFlag(false)
+    m_restoreFlag(false),
+    m_forceStereo(false)
 {
     //Configure the container.
     m_container->hide();
@@ -224,6 +225,23 @@ void KNMusicBackendMpvThread::setPlaySection(const qint64 &start,
         //Check and update the positions.
         updateStartAndEndPosition();
     }
+}
+
+void KNMusicBackendMpvThread::setCreateFlags(const QString &deviceName,
+                                             int bufferLength,
+                                             int sampleRate,
+                                             bool forceStero)
+{
+    //Save the audio device name.
+    m_audioDevice=deviceName;
+    //Get the buffer length.
+    qreal mpvBufferLength=(qreal)bufferLength/1000.0;
+    //Translate the float to string.
+    m_bufferLength=QString::number(mpvBufferLength, 'g', 3);
+    //Save the device sample rate.
+    m_sampleRate=sampleRate;
+    //Save the stero settings.
+    m_forceStereo=forceStero;
 }
 
 void KNMusicBackendMpvThread::save()
@@ -524,6 +542,30 @@ inline bool KNMusicBackendMpvThread::buildMpvHandle()
     //Disable video.
     mpv_set_option_string(m_mpvHandle, "vo", "null");
     // *** Patches End ***
+    //Check the audio settings.
+    if(!m_audioDevice.isEmpty())
+    {
+        //A specific audio device is set.
+        mpv_set_option_string(m_mpvHandle, "audio-device",
+                              m_audioDevice.toLatin1().data());
+    }
+    if(!m_bufferLength.isEmpty())
+    {
+        //A specific audio buffer length is set.
+        mpv_set_option_string(m_mpvHandle, "audio-buffer",
+                              m_bufferLength.toLatin1().data());
+    }
+    if(m_forceStereo)
+    {
+        //The audio channels force to stereo.
+        mpv_set_option_string(m_mpvHandle, "audio-channels", "stereo");
+    }
+    if(m_sampleRate!=-1)
+    {
+        //Update the audio device sample rate.
+        mpv_set_option_string(m_mpvHandle, "audio-samplerate",
+                              QString::number(m_sampleRate).toLatin1().data());
+    }
     // Let us receive property change events with MPV_EVENT_PROPERTY_CHANGE if
     // this property changes.
     mpv_observe_property(m_mpvHandle, 0, "playback-time", MPV_FORMAT_DOUBLE);

@@ -60,7 +60,13 @@ protected:
     bool isEqual(const QVariant &currentValue,
                  const QVariant &originalValue) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNPreferencePanelItem::initialValue().
+     */
+    void initialValue(QVariant &defaultValue) Q_DECL_OVERRIDE;
+
 private:
+    inline bool selectAudioDevice(const QVariant &value);
     QStringList m_candidateList;
     QComboBox *m_candidates;
 };

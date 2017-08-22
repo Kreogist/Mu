@@ -113,13 +113,11 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                    "preview feature will be disabled.\nThis option will be "
                    "applied after the application restarted."), false);
 #endif
-#ifdef ENABLE_BACKEND_BASS
         addItem(block, tr("Use 32-bit float point"),
                 "System/Backend/Float", true, TypeBoolean,
                 tr("Produce 32-bit floating-point output.\nWDM drivers are "
                    "required to use this feature in Windows.\nThis option will"
                    " be applied after the application restarted."), false);
-#endif
         addItem(block, tr("Use Buffer"),
                 "System/Backend/Buffer", true, TypeBoolean,
                 tr("Enable the playback buffering.\nA playing music is "
@@ -139,7 +137,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                       "will be applied after the application restarted."),
                    10, 5000, false);
         addItem(block, tr("Force Stereo Output"),
-                "System/Backend/Stereo", false, TypeBoolean,
+                "System/Backend/Stero", false, TypeBoolean,
                 tr("Limit the output to stereo, saving some CPU if the device "
                    "has more speakers available.\nThis option will be applied "
                    "after the application restarted."), true);

@@ -93,6 +93,9 @@ public:
     void setPlaySection(const qint64 &start=-1,
                         const qint64 &duration=-1) Q_DECL_OVERRIDE;
 
+    void setCreateFlags(const QString &deviceName, int bufferLength,
+                        int sampleRate, bool forceStero);
+
 signals:
     /*!
      * \brief When MPV needs to wake up for event, this signal need to be
@@ -131,8 +134,7 @@ private:
     inline bool buildMpvHandle();
     inline void clearMpvHandle();
     inline void finishPlaying();
-    QString m_filePath;
-    KNConfigure *m_playbackConfigure;
+    QString m_filePath, m_audioDevice, m_bufferLength;
     QWidget *m_container;
     mpv_handle *m_mpvHandle;
     qint64 m_startPosition,
@@ -140,8 +142,8 @@ private:
            m_duration,
            m_totalDuration,
            m_position;
-    int m_state, m_volume;
-    bool m_sectionSet, m_fileLoaded, m_restoreFlag;
+    int m_state, m_volume, m_sampleRate;
+    bool m_sectionSet, m_fileLoaded, m_restoreFlag, m_forceStereo;
 };
 
 #endif // KNMUSICBACKENDGSTREAMERTHREAD_H

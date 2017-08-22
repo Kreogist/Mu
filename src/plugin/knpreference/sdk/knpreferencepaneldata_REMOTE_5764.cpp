@@ -275,20 +275,8 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         block=generateBlock(tr("Auto Set File Types Association"));
         panelData.append(block);
         block=generateBlock(tr("Lossless Compressed File Types"));
-        addFileTypeItem(block, "ape", "", QVariant(), "",
-                        ".ape", "org.kreogist.monkeysaudio-format", false);
-        addFileTypeItem(block, "caf", "", QVariant(), "",
-                        ".caf", "com.apple.coreaudio-format", false);
-        addFileTypeItem(block, "dsd", "", QVariant(), "",
-                        ".dsd", "org.kreogist.dsd-format", false);
-        addFileTypeItem(block, "flac", "", QVariant(), "",
-                        ".flac", "org.kreogist.flac-format", false);
-        addFileTypeItem(block, "tta", "", QVariant(), "",
-                        ".tta", "org.kreogist.trueaudio-format", false);
         addFileTypeItem(block, "wav", "", QVariant(), "",
                         ".wav", "com.microsoft.waveform-audio", false);
-        addFileTypeItem(block, "wv", "", QVariant(), "",
-                        ".wv", "org.kreogist.wavpack-audio", false);
         panelData.append(block);
         block=generateBlock(tr("Lossy Compressed File Types"));
         addFileTypeItem(block, "aac", "", QVariant(), "",
@@ -297,34 +285,14 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                         ".ac3", "public.ac3-audio", false);
         addFileTypeItem(block, "aiff", "", QVariant(), "",
                         ".aiff", "public.aiff-audio", false);
+        addFileTypeItem(block, "m4a", "", QVariant(), "",
+                        ".m4a", "com.apple.m4a-audio", false);
         addFileTypeItem(block, "mp1", "", QVariant(), "",
                         ".mp1", "public.mp1", false);
         addFileTypeItem(block, "mp2", "", QVariant(), "",
                         ".mp2", "public.mp2", false);
         addFileTypeItem(block, "mp3", "", QVariant(), "",
                         ".mp3", "public.mp3", false);
-        addFileTypeItem(block, "mpc", "", QVariant(), "",
-                        ".mpc", "org.kreogist.musepack-format", false);
-        addFileTypeItem(block, "ofr", "", QVariant(), "",
-                        ".ofr", "org.kreogist.optimfrog-format", false);
-        addFileTypeItem(block, "opus", "", QVariant(), "",
-                        ".opus", "org.kreogist.opus-format", false);
-        addFileTypeItem(block, "spx", "", QVariant(), "",
-                        ".spx", "org.kreogist.speex-format", false);
-        panelData.append(block);
-        block=generateBlock(tr("Other File Types Association"));
-        addFileTypeItem(block, "m4a", "", QVariant(), "",
-                        ".m4a", "com.apple.m4a-audio", false);
-        addFileTypeItem(block, "mid", "", QVariant(), "",
-                        ".mid", "public.midi-audio", false);
-        addFileTypeItem(block, "midi", "", QVariant(), "",
-                        ".midi", "public.midi-audio", false);
-        addFileTypeItem(block, "ogg", "", QVariant(), "",
-                        ".ogg", "org.kreogist.ogg-format", false);
-#ifdef Q_OS_WIN
-        addFileTypeItem(block, "wma", "", QVariant(), "",
-                        ".wma", "com.microsoft.windows-media-wma", false);
-#endif
         panelData.append(block);
         break;
     }
