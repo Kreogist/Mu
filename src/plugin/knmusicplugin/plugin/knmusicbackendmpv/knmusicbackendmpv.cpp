@@ -102,6 +102,83 @@ int KNMusicBackendMpv::maximumVolume() const
     return 10000;
 }
 
+QJsonArray KNMusicBackendMpv::deviceList()
+{
+    //Create the tempoary handle for device detecting.
+    mpv_handle *deviceHandler=mpv_create();
+    //Check the pointer.
+    if(!deviceHandler)
+    {
+        //No valid device is detect if you have no more memory.
+        return QJsonArray();
+    }
+    //Initialized the mpv handle.
+    mpv_initialize(deviceHandler);
+    //Get the device list.
+    mpv_node deviceListNode;
+    if(mpv_get_property(deviceHandler,
+                        "audio-device-list",
+                        MPV_FORMAT_NODE,
+                        &deviceListNode)!=0 ||
+            deviceListNode.format!=MPV_FORMAT_NODE_ARRAY)
+    {
+        //Failed to get the device list.
+        return QJsonArray();
+    }
+    //Extract the node array from the node.
+    mpv_node_list *deviceNodeList=deviceListNode.u.list;
+    //Prepare the json array list.
+    QJsonArray deviceList;
+    //Construct the device information.
+    for(int i=0; i<deviceNodeList->num; ++i)
+    {
+        //Get the format of the format.
+        if(MPV_FORMAT_NODE_MAP!=deviceNodeList->values[i].format)
+        {
+            //Move to the next map.
+            continue;
+        }
+        //Check the result.
+        mpv_node_list *deviceInfoMap=deviceNodeList->values[i].u.list;
+        //Prepare the device data list.
+        QJsonObject deviceData;
+        //Set the device Id.
+        deviceData.insert("Id", i);
+        //Get the data from the list.
+        for(int j=0; j<deviceInfoMap->num; ++j)
+        {
+            //Check the key data.
+            if(strncmp("name", deviceInfoMap->keys[j], 4)==0)
+            {
+                //Simply save the device name as the customer data.
+                deviceData.insert("DeviceName",
+                                  deviceInfoMap->values[j].u.string);
+            }
+            else if(strncmp("description", deviceInfoMap->keys[j], 11)==0)
+            {
+                //Save the description data as the display name.
+                QString deviceName=deviceInfoMap->values[j].u.string;
+                //Check the device name.
+                if(deviceName=="Autoselect device")
+                {
+                    //Clear the auto select device.
+                    deviceName=QString();
+                }
+                //Insert the data.
+                deviceData.insert("Name", deviceName);
+            }
+        }
+        //Append the device data.
+        deviceList.append(deviceData);
+    }
+    //Free the node contents.
+    mpv_free_node_contents(&deviceListNode);
+    //Free the mpv handler.
+    mpv_terminate_destroy(deviceHandler);
+    //Give back the device list data.
+    return deviceList;
+}
+
 void KNMusicBackendMpv::setGlobalVolume(const int &volume)
 {
     //Set to the main thread.

@@ -31,8 +31,9 @@
 class KNMusicBackendMpvThread;
 /*!
  * \brief The KNMusicBackendGStreamer class provides you a backend interface of
- * the famous multimedia framework - GStreamer.\n
- * All the codes based on GStreamer 1.0.
+ * MPV player.\n
+ * Basically, this module would keep tracking of the latest version of MPV. It
+ * will still be compatible with the version of the Ubuntu LTS version.
  */
 class KNMusicBackendMpv : public KNMusicStandardBackend
 {
@@ -73,6 +74,11 @@ public:
      * \brief Reimplemented from KNMusicStandardBackend::maximumVolume().
      */
     int maximumVolume() const Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicStandardBackend::deviceList().
+     */
+    QJsonArray deviceList() Q_DECL_OVERRIDE;
 
 signals:
 

@@ -75,7 +75,7 @@ void KNPreferencePanelAudioDeviceItem::setConfig(const QVariant &config)
         //Get the device name.
         QString deviceName=deviceInfo.value("Name").toString();
         //Check the device Id is the default value or not.
-        if(deviceInfo.value("Id").toInt()==-1)
+        if(deviceName.isEmpty())
         {
             //Set the device name as the default value.
             deviceName=tr("Use Default Output Device");

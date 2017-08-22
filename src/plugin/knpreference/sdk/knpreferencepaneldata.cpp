@@ -285,6 +285,8 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                         ".aiff", "public.aiff-audio", false);
         addFileTypeItem(block, "m4a", "", QVariant(), "",
                         ".m4a", "com.apple.m4a-audio", false);
+        addFileTypeItem(block, "mp1", "", QVariant(), "",
+                        ".mp1", "public.mp1", false);
         addFileTypeItem(block, "mp2", "", QVariant(), "",
                         ".mp2", "public.mp2", false);
         addFileTypeItem(block, "mp3", "", QVariant(), "",

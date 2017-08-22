@@ -756,6 +756,7 @@ void KNMusicPlugin::initialSearch(KNMusicSearchBase *search)
 
 void KNMusicPlugin::initialBackend(KNMusicBackend *backend)
 {
+    backend->deviceList();
     //Link the backend to lyrics manager's backend.
     connect(backend, &KNMusicBackend::positionChanged,
             knMusicGlobal->lyricsManager()->backend(),
