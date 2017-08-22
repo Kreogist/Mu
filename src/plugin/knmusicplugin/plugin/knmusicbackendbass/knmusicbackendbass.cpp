@@ -332,7 +332,12 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
     }
     //Enabled float digital signal processing.
     //DON'T MOVE THIS, this should config before bass init.
-    BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
+    if(m_systemConfigure->data("Float", false).toBool())
+    {
+        //Enable 32-bit floating-point sample data converting.
+        BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
+    }
+    //Set the buffer length.
     BASS_SetConfig(BASS_CONFIG_BUFFER, static_cast<DWORD>(bufferLength));
     //Get the setting sample rate.
     QString userSampleRate=
@@ -404,16 +409,20 @@ inline bool KNMusicBackendBass::initialBass(DWORD &channelFlags)
 #endif
     //Clear the channel flags.
     channelFlags=0;
-    //Check float dsp supporting.
-    DWORD fdpsCheck=BASS_StreamCreate(initialSampleRate,
-                                      2, BASS_SAMPLE_FLOAT, NULL, 0);
-    //If support the float dsp,
-    if(fdpsCheck)
+    //When enabling 32-bit floating converting, check the float support.
+    if(m_systemConfigure->data("Float", false).toBool())
     {
-        //Free the check channel, recover the memory.
-        BASS_StreamFree(fdpsCheck);
-        //Set fdps support flag.
-        channelFlags |= BASS_SAMPLE_FLOAT;
+        //Check float dsp supporting.
+        DWORD fdpsCheck=BASS_StreamCreate(initialSampleRate,
+                                          2, BASS_SAMPLE_FLOAT, NULL, 0);
+        //If support the float dsp,
+        if(fdpsCheck)
+        {
+            //Free the check channel, recover the memory.
+            BASS_StreamFree(fdpsCheck);
+            //Set fdps support flag.
+            channelFlags |= BASS_SAMPLE_FLOAT;
+        }
     }
     //Load complete.
     return true;
