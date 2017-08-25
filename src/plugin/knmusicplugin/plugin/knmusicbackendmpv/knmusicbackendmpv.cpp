@@ -196,7 +196,7 @@ QJsonArray KNMusicBackendMpv::deviceList()
         QJsonObject deviceData;
         //Set the device Id.
         deviceData.insert("Type", "CustomObject");
-        deviceData.insert("Id", i);
+        deviceData.insert("Id", QString::number(i));
         //Get the data from the list.
         for(int j=0; j<deviceInfoMap->num; ++j)
         {

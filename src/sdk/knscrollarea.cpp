@@ -48,7 +48,7 @@ KNScrollArea::KNScrollArea(QWidget *parent) :
     m_mouseAnime->setUpdateInterval(16);
     //Link the time line.
     connect(m_mouseAnime, &QTimeLine::frameChanged,
-            this, &KNScrollArea::onActionMouseInOut);
+            this, &KNScrollArea::onMouseInOut);
 
     //Configure the horizontal scroll bar.
     m_hScrollBar->setStyle(KNSaoStyle::instance());
@@ -131,10 +131,10 @@ void KNScrollArea::onActionThemeUpdate()
     //Get the new palette from theme manager, and set it.
     setPalette(knTheme->getPalette(objectName()));
     //Update the palette.
-    onActionMouseInOut(0);
+    onMouseInOut(0);
 }
 
-void KNScrollArea::onActionMouseInOut(int frame)
+void KNScrollArea::onMouseInOut(int frame)
 {
     //Save the frame.
     m_currentFrame=frame;

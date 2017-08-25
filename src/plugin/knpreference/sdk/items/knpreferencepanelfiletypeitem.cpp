@@ -131,7 +131,9 @@ bool KNPreferencePanelFileTypeItem::setAssociations(bool bind)
     if(bind)
     {
         //Bind the file type.
-        return knFileType->bindFileTypes(m_suffix, m_typeHandler);
+        return knFileType->bindFileTypes(
+                    m_suffix, m_typeHandler,
+                    knMusicGlobal->typeDescription(m_suffix.mid(1)));
     }
     else
     {

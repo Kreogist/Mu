@@ -54,7 +54,8 @@ public:
      * \return If the operation success, return true. Or else return false.
      */
     bool bindFileTypes(const QString &suffix,
-                       const QString &handler="");
+                       const QString &handler="",
+                       const QString &description="");
 
     /*!
      * \brief Unbind on file association to the current application. Notice,
@@ -72,12 +73,12 @@ public:
      * \brief Check whether one type of files has already associated with the
      * current application.
      * \param suffix The suffix of the file type.
-     * \param contentType The file content type handler.
+     * \param handler The file type handler.
      * \return If the file type has already associated with the application,
      * return true.
      */
     bool isFileTypeBinded(const QString &suffix,
-                          const QString &contentType="");
+                          const QString &handler="");
 
 signals:
 
