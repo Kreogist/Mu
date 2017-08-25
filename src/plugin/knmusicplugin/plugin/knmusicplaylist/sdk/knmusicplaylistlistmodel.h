@@ -51,6 +51,12 @@ public:
     KNMusicPlaylistModel *playlist(const QModelIndex &index);
 
     /*!
+     * \brief Get all the playlists model list.
+     * \return
+     */
+    QList<KNMusicPlaylistModel *> allPlaylists() const;
+
+    /*!
      * \brief This is an override function. Get a playlist model according to
      * the row.
      * \param row The row of the playlist.

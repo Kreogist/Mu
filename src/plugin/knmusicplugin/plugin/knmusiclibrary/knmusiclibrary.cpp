@@ -195,14 +195,18 @@ void KNMusicLibrary::retranslate()
     m_addToLibraryButton->setToolTip(tr("Add music to Library"));
 }
 
-void KNMusicLibrary::onLoadLibrary()
+void KNMusicLibrary::loadLibrary()
 {
+    //Check the connection handler size.
+    if(m_loadHandler.isEmpty())
+    {
+        //No need to load it again.
+        return;
+    }
     //Disconnect all links.
     m_loadHandler.disconnectAll();
     //Recover the library model.
     m_libraryModel->recoverModel();
-    //Emit the load signal.
-    ;
 }
 
 void KNMusicLibrary::onAddToLibrary()
@@ -227,7 +231,7 @@ void KNMusicLibrary::linkLoadRequest(KNMusicLibraryTab *libraryTab)
     //Link the library tab, add to load request handler.
     m_loadHandler.append(
                 connect(libraryTab, &KNMusicLibraryTab::requireLoadLibrary,
-                        this, &KNMusicLibrary::onLoadLibrary));
+                        this, &KNMusicLibrary::loadLibrary));
     //Simply link the show playlist list to require signal.
     connect(libraryTab, &KNMusicLibraryTab::requireShowPlaylistList,
             this, &KNMusicLibrary::requireShowPlaylistList);

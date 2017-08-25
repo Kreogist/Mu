@@ -72,6 +72,12 @@ signals:
 
 public slots:
     /*!
+     * \brief Load the configure. This including the cached data and user sets
+     * data.
+     */
+    virtual void loadConfigure()=0;
+
+    /*!
      * \brief Save the category configure. All the data should be finally saved
      * to the KNConfigure class provided by KNConfigureManager.
      */

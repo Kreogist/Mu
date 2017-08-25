@@ -51,6 +51,8 @@ KNMusicLibrarySongTab::KNMusicLibrarySongTab(QWidget *parent) :
     //Configure the tab button.
     m_tab->setIcon(QIcon(":/plugin/music/category/song.png"));
     //Configure the tree view.
+    m_treeView->proxyModel()->setIdentifier("ProxyModel/Library/Song");
+    //Configure the tree view.
     connect(m_treeView, &KNMusicLibraryTreeView::startDraggingSong,
             this, &KNMusicLibrarySongTab::requireShowPlaylistList);
     connect(m_treeView, &KNMusicLibraryTreeView::endDraggingSong,

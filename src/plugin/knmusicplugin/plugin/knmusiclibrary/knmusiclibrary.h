@@ -98,9 +98,13 @@ public slots:
      */
     void setNowPlaying(KNMusicNowPlayingBase *nowPlaying) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::loadLibrary().
+     */
+    void loadLibrary() Q_DECL_OVERRIDE;
+
 private slots:
     void retranslate();
-    void onLoadLibrary();
     void onAddToLibrary();
 
 private:

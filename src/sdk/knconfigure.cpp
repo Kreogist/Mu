@@ -198,6 +198,9 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
     {
     //For the basic types(double, float, int, bool, QString), we will save them
     //directly.
+    case QVariant::LongLong:
+        m_dataObject.insert(key, value.toLongLong());
+        break;
     case QVariant::Double:
         m_dataObject.insert(key, value.toDouble());
         break;

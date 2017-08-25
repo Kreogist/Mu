@@ -181,6 +181,12 @@ private:
     inline void removeChannelSyncs();
     inline qint64 getChannelPosition()
     {
+        //Check the running state.
+        if(!m_channel)
+        {
+            //No channel is loaded.
+            return -1;
+        }
         //Get the current position
         return (qint64)
                 (BASS_ChannelBytes2Seconds(

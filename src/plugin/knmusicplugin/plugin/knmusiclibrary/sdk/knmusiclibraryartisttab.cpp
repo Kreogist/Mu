@@ -55,6 +55,7 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
     connect(m_showInArtistTab, &QAction::triggered,
             this, &KNMusicLibraryArtistTab::onActionShowInArtist);
     //Configure the artist display.
+    m_artistDisplay->setProxyModelIdentifier("ProxyModel/Library/Artist");
     m_artistDisplay->setCategoryColumn(Artist);
     connect(m_artistDisplay, &KNMusicCategoryDisplay::requireShowPlaylistList,
             this, &KNMusicLibraryArtistTab::requireShowPlaylistList);

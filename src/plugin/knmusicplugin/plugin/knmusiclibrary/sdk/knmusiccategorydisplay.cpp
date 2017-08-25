@@ -199,6 +199,12 @@ void KNMusicCategoryDisplay::hideAllStuffs()
     m_categoryTreeView->hide();
 }
 
+void KNMusicCategoryDisplay::setProxyModelIdentifier(const QString &identifier)
+{
+    //Set the identifier to the category tree view.
+    m_categoryTreeView->proxyModel()->setIdentifier(identifier);
+}
+
 void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)
 {
     //Do the original resize.

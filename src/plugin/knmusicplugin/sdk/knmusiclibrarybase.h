@@ -110,6 +110,11 @@ public slots:
      */
     virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
 
+    /*!
+     * \brief Load the library data from the disk.
+     */
+    virtual void loadLibrary()=0;
+
 private:
 };
 

@@ -27,6 +27,7 @@
 #include "knthememanager.h"
 #include "kndpimanager.h"
 
+#include "knmusicproxymodel.h"
 #include "knmusiclibrarymodel.h"
 #include "knmusicalbumlistview.h"
 #include "knmusicalbumtitle.h"
@@ -145,6 +146,7 @@ KNMusicAlbumDetail::KNMusicAlbumDetail(QWidget *parent, KNMusicTab *tab) :
     m_hideAlbumArt->addAnimation(m_hideAlbumContent);
 
     //Initial the album list view.
+    m_albumListView->proxyModel()->setIdentifier("ProxyModel/Library/Album");
     connect(m_albumListView, &KNMusicAlbumListView::startDraggingSong,
             this, &KNMusicAlbumDetail::requireShowPlaylistList);
     connect(m_albumListView, &KNMusicAlbumListView::endDraggingSong,

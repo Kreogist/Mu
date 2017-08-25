@@ -49,7 +49,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 "User/Global/SystemTray/MinimizeToTray", false, TypeBoolean,
                 tr("When click the minimize button of the window, Mu won't "
                    "simply minimize the main window to task bar but minimize "
-                   "to the system tray.\n"
+                   "to the system tray if this option is enabled.\n"
                    "When click the icon in the system tray, Mu will pop up "
                    "back."),
                 false);
@@ -75,14 +75,18 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                 tr("Show the status bar at the top right corner."), false);
         panelData.append(block);
         //Behaviour settings.
-        block=generateBlock(tr("Behaviour"), true);
+        block=generateBlock(tr("Behaviour"));
+        addItem(block, tr("Last Played"),
+                "User/Music/SaveLastPlayed", true, TypeBoolean,
+                tr("When next time launch Mu, Mu will restore the last playing "
+                   "song state."), false);
         addIntItem(block, tr("Search delay (ms)"),
                    "User/Global/Behaviour/SearchDelay", 150,
                    tr("Mu will start to search once user change the content of "
                       "the search box.\nWhen set the delay larger than 0ms, Mu "
                       "will not start to search if user change the text less "
                       "than the delay duration."),
-                   0, 500, false);
+                   0, 500, true);
         panelData.append(block);
         //Library settings.
         block=generateBlock(tr("Library"));
@@ -114,11 +118,12 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                    "applied after the application restarted."), false);
 #endif
 #ifdef ENABLE_BACKEND_BASS
-        addItem(block, tr("Use 32-bit float point"),
+        addItem(block, tr("Use 32-bit floating-point"),
                 "System/Backend/Float", true, TypeBoolean,
-                tr("Produce 32-bit floating-point output.\nWDM drivers are "
-                   "required to use this feature in Windows.\nThis option will"
-                   " be applied after the application restarted."), false);
+                tr("Using 32-bit floating-point instead of 8/16 bit for the "
+                   "sample data.\nWDM drivers are required to use this feature "
+                   "in Windows.\nThis option will be applied after the "
+                   "application restarted."), false);
 #endif
         addItem(block, tr("Use Buffer"),
                 "System/Backend/Buffer", true, TypeBoolean,
@@ -153,11 +158,11 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         sampleRates << defaultSampleRate << "8000" << "11025" << "22050"
                     << "32000" << "44100" << "47250" << "48000" << "50000"
                     << "50400" << "96000" << "192000";
-        addComboItem(block, tr("Sample Rate (Hz)"),
+        addComboItem(block, tr("Device Sample Rate (Hz)"),
                      "System/Backend/SampleRate", defaultSampleRate,
                      tr("This option will change the output sample rate of the "
-                        "playback backend.\nThis option will be applied after "
-                        "the application restarted."),
+                        "audio device.\nThis option will be applied after the "
+                        "application restarted."),
                      sampleRates, false, true);
         panelData.append(block);
         //Playing parameters.

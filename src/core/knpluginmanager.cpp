@@ -52,7 +52,8 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
     m_musicPlugin(nullptr),
-    m_platformExtra(nullptr)
+    m_platformExtra(nullptr),
+    m_applicationStart(false)
 {
     //Set the application information.
     setApplicationInformation();

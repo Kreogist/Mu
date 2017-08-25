@@ -151,7 +151,7 @@ macx: {
     # Set the info plist.
     QMAKE_INFO_PLIST = resource/platforms/mac/Info.plist
     # Enable the backend and analysiser.
-    CONFIG += backend-mpv ffmpeg-common ffmpeg-swresample analysiser-ffmpeg transcoder-ffmpeg
+    CONFIG += backend-bass ffmpeg-common ffmpeg-swresample analysiser-ffmpeg transcoder-ffmpeg
     # Nearly all the audio library will use CoreAudio on Mac OS X, so import
     # CoreAudio library to LFLAGS and LIBS.
     QMAKE_LFLAGS += -framework ApplicationServices -framework CoreFoundation -framework Carbon

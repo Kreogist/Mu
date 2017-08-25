@@ -101,6 +101,12 @@ public slots:
      */
     void hideAllStuffs();
 
+    /*!
+     * \brief Set the identifier of the proxy model.
+     * \param identifier The proxy model identifier text.
+     */
+    void setProxyModelIdentifier(const QString &identifier);
+
 protected:
     /*!
      * \brief Reimplemented from QWidget::resizeEvent().

@@ -295,6 +295,12 @@ public:
      */
     virtual bool isWorking();
 
+    /*!
+     * \brief Get the identifier of the music model.
+     * \return The music model identifier.
+     */
+    QString identifier() const;
+
 signals:
     /*!
      * \brief When the playing item is begin removed, this signal will be
@@ -354,15 +360,23 @@ protected:
      */
     QList<KNMusicDetailInfo> detailInfos() const;
 
+    /*!
+     * \brief Set the music identifier, it should be set when the model is
+     * initialized.
+     * \param identifier The music model identifier string.
+     */
+    void setIdentifier(const QString &identifier);
+
 private:
+    static QVariant m_alignLeft, m_alignCenter, m_alignRight;
+    static QStringList m_dropMimeTypes;
+
     QList<KNMusicDetailInfo> m_detailInfos;
     quint64 m_totalDuration;
     QPersistentModelIndex m_playingIndex;
     QVariant m_playingIcon, m_cannotPlayIcon;
     const QVariant m_nullValue;
-    static QVariant m_alignLeft, m_alignCenter, m_alignRight;
-
-    static QStringList m_dropMimeTypes;
+    QString m_identifier;
 };
 
 #endif // KNMUSICMODEL_H

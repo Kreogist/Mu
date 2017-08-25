@@ -39,7 +39,8 @@ KNMusicModel::KNMusicModel(QObject *parent) :
     m_playingIndex(QPersistentModelIndex()),
     m_playingIcon(QVariant(QIcon(":/plugin/music/public/playingicon.png"))),
     m_cannotPlayIcon(QVariant(QIcon(":/plugin/music/public/cannotplay.png"))),
-    m_nullValue(QVariant())
+    m_nullValue(QVariant()),
+    m_identifier(QString())
 {
     //Build drop mime types for the first time.
     if(m_dropMimeTypes.isEmpty())
@@ -764,5 +765,15 @@ void KNMusicModel::initialTotalDuration(const quint64 &totalDuration)
 QList<KNMusicDetailInfo> KNMusicModel::detailInfos() const
 {
     return m_detailInfos;
+}
+
+QString KNMusicModel::identifier() const
+{
+    return m_identifier;
+}
+
+void KNMusicModel::setIdentifier(const QString &identifier)
+{
+    m_identifier = identifier;
 }
 

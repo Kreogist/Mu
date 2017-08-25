@@ -19,9 +19,12 @@
 #include <QMimeData>
 #include <QPainter>
 
-#include "knmusicplaylistlistdelegate.h"
-#include "knmusicmodel.h"
 #include "kndpimanager.h"
+
+#include "knmusicmodel.h"
+
+#include "knmusicplaylistlistdelegate.h"
+#include "knmusicplaylistlistmodel.h"
 
 #include "knmusicplaylistlistview.h"
 

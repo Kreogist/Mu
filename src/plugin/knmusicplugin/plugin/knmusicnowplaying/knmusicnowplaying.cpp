@@ -15,6 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knglobal.h"
+#include "knconfigure.h"
+
 #include "knmusicproxymodel.h"
 #include "knmusicmodel.h"
 #include "knmusicbackend.h"
@@ -39,6 +42,8 @@ KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     m_playingAnalysisItem(KNMusicAnalysisItem()),
     m_manualPlayed(false)
 {
+    //Configure the shadow proxy model.
+    m_shadowPlayingModel->setIdentifier("ProxyModel/NowPlaying/Shadow");
     //Set the temporary playlist to the proxy model.
     m_temporaryProxyPlaylist->setSourceModel(m_temporaryPlaylist);
     //Initial the random device and random generator.
@@ -132,12 +137,46 @@ void KNMusicNowPlaying::reset()
 
 void KNMusicNowPlaying::loadConfigure()
 {
-    //Get the loop state from the cache data.
 }
 
 void KNMusicNowPlaying::saveConfigure()
 {
-    ;
+    //Get the cache configure.
+    KNConfigure *lastPlayedConfigure=
+            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
+    //Check the data of the saving state.
+    if(knMusicGlobal->configure()->data("SaveLastPlayed", true).toBool())
+    {
+        //Check the proxy model pointer.
+        KNMusicProxyModel *currentProxyModel=playingModel();
+        //Check proxy model data.
+        if(currentProxyModel)
+        {
+            //Save the proxy model data.
+            lastPlayedConfigure->setData("ProxyModel", "");
+        }
+        else
+        {
+            //Set the proxy model to empty.
+            lastPlayedConfigure->setData("ProxyModel", "");
+        }
+        //Check the playing music model.
+        KNMusicModel *currentPlayingModel=playingMusicModel();
+        //Save the model identifier.
+        lastPlayedConfigure->setData("Model",
+                                     (currentPlayingModel)?
+                                         currentPlayingModel->identifier():
+                                         "");
+        //Check the current playing index.
+        lastPlayedConfigure->setData("Index",
+                                     (m_playingIndex.isValid())?
+                                         m_playingProxyModel->mapFromSource(
+                                             m_playingIndex).row():
+                                         -1);
+        //Save the current playing progress.
+        lastPlayedConfigure->setData("Position",
+                                     (m_backend)?(m_backend->position()):-1);
+    }
 }
 
 void KNMusicNowPlaying::shadowPlayingModel()

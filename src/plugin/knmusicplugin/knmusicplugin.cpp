@@ -305,9 +305,24 @@ int KNMusicPlugin::minimumWidthHint()
     return suggestionWidth;
 }
 
+void KNMusicPlugin::loadConfigure()
+{
+    //Check the last played settings.
+    if(lastPlayedConfigure->data("SaveLastPlayed", true).toBool())
+    {
+        //Restore the last played state.
+        restoreLastPlayed();
+    }
+}
+
 void KNMusicPlugin::saveConfigure()
 {
-    //--Header Player--
+    //Save the now playing information.
+    if(knMusicGlobal->nowPlaying())
+    {
+        knMusicGlobal->nowPlaying()->saveConfigure();
+    }
+    //Save the header player information.
     if(m_headerPlayer)
     {
         m_headerPlayer->saveConfigure();
@@ -961,4 +976,32 @@ void KNMusicPlugin::initialStore(KNMusicStoreBase *store)
     m_store->loadPlugins();
     //Add tabs to the switcher.
     addMusicTab(store);
+}
+
+void KNMusicPlugin::restoreLastPlayed()
+{
+    //Get the cache configure.
+    KNConfigure *lastPlayedConfigure=
+            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
+    //Get the model identifier.
+    QString modelIdentifier=
+            lastPlayedConfigure->data("Model", "").toString();
+    //Start to restore the last time played state.
+    if(modelIdentifier.isEmpty())
+    {
+        //No playing model need to set.
+        return;
+    }
+    //Check the identifier.
+    if(modelIdentifier=="MusicModel/Library")
+    {
+        //Load the library model.
+        ;
+    }
+    else if(modelIdentifier.startsWith("MusicModel/Playlist-"))
+    {
+        //Load the playlist model.
+        ;
+    }
+    ;
 }

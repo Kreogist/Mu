@@ -27,7 +27,8 @@
 KNMusicTemporaryPlaylistModel::KNMusicTemporaryPlaylistModel(QObject *parent) :
     KNMusicModel(parent)
 {
-
+    //Set identifier.
+    setIdentifier("MusicModel/TemporaryModel");
 }
 
 void KNMusicTemporaryPlaylistModel::appendTemporaryFiles(QStringList filePaths)

@@ -174,7 +174,7 @@ private:
     QTimer *m_notificationWaiter;
     KNOpacityAnimeButton *m_fullScreen;
     Qt::WindowStates m_originalWindowState;
-    bool m_ignoreTrayClose;
+    bool m_ignoreTrayClose, m_initialShown;
 };
 
 #endif // KNMAINWINDOW_H

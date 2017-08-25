@@ -15,6 +15,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QJsonArray>
+
+#include "knconfigure.h"
+
 #include "knmusicmodel.h"
 
 #include "knmusicproxymodel.h"
@@ -215,7 +219,7 @@ bool KNMusicProxyModel::filterAcceptsRow(int source_row,
 }
 
 inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
-                                         const int &row,
+                                         int row,
                                          const KNMusicSearchBlock &block) const
 {
     //Check if this block a common search block,
@@ -259,6 +263,49 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
         return propertyData.toString().contains(block.value.toString(),
                                                 Qt::CaseInsensitive);
     }
+}
+
+QString KNMusicProxyModel::identifier() const
+{
+    return m_identifier;
+}
+
+void KNMusicProxyModel::setIdentifier(const QString &identifier)
+{
+    m_identifier = identifier;
+}
+
+void KNMusicProxyModel::saveState(KNConfigure *configure)
+{
+    //Save all the configure data.
+    configure->setData("ProxyModel", m_identifier);
+    //Then save the proxy model data.
+    QJsonObject proxyParameters;
+    proxyParameters.insert("Type", "CustomObject");
+    // Categroy column.
+    proxyParameters.insert("ProxyCategoryColumn", m_categoryColumn);
+    // Categroy column content.
+    proxyParameters.insert("ProxyCategoryContent", m_categoryContent);
+    // Search content.
+    QJsonArray searchBlocks;
+    for(auto i : m_searchBlocks)
+    {
+        //Construct the block data.
+        QJsonObject blockData;
+        //Save the block data.
+        blockData.insert("Index", i.index);
+        blockData.insert("Column", i.isColumn);
+        blockData.insert("Value", i.value.toString());
+        //Append the block data.
+        searchBlocks.append(blockData);
+    }
+    proxyParameters.insert("ProxySearchBlocks", searchBlocks);
+    configure->setData("ProxyModelData", proxyParameters);
+}
+
+void KNMusicProxyModel::loadState(KNConfigure *configure)
+{
+    ;
 }
 
 QString KNMusicProxyModel::categoryContent() const
