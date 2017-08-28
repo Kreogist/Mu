@@ -87,7 +87,7 @@ public slots:
     /*!
      * \brief Reimplemented from KNMusicNowPlayingBase::loadConfigure().
      */
-    void loadConfigure() Q_DECL_OVERRIDE;
+    void loadConfigure(KNMusicModel *musicModel) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNMusicNowPlayingBase::saveConfigure().

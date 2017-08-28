@@ -26,6 +26,7 @@ class QLabel;
 class KNScrollLabel;
 class KNSideShadowWidget;
 class KNMusicTab;
+class KNMusicProxyModel;
 class KNMusicLibraryTreeView;
 class KNMusicLibraryModel;
 /*!
@@ -42,6 +43,12 @@ public:
      * \param tab The music tab of the tree view.
      */
     explicit KNMusicCategoryDisplay(QWidget *parent = 0, KNMusicTab *tab = 0);
+
+    /*!
+     * \brief Get the proxy music model of the category.
+     * \return The proxy model pointer.
+     */
+    KNMusicProxyModel *proxyMusicModel() const;
 
 signals:
     /*!

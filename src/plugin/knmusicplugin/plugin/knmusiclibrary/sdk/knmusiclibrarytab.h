@@ -26,6 +26,7 @@
 using namespace MusicUtil;
 
 class KNMusicLibraryModel;
+class KNMusicProxyModel;
 /*!
  * \brief The KNMusicLibraryTab class provides the basic interface of a music
  * library tab should be realized.\n
@@ -53,6 +54,12 @@ public:
      * \param detailInfo The detail info of the music.
      */
     virtual void showInTab(const KNMusicDetailInfo &detailInfo)=0;
+
+    /*!
+     * \brief Get the proxy music model of the tab.
+     * \return The proxy model pointer.
+     */
+    virtual KNMusicProxyModel *proxyMusicModel()=0;
 
 signals:
     /*!

@@ -72,10 +72,9 @@ signals:
 
 public slots:
     /*!
-     * \brief Load the configure. This including the cached data and user sets
-     * data.
+     * \brief Load the cached configure of the category plugin.
      */
-    virtual void loadConfigure()=0;
+    virtual void loadCacheConfigure()=0;
 
     /*!
      * \brief Save the category configure. All the data should be finally saved

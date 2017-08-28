@@ -140,6 +140,49 @@ bool KNMusicLibrary::isWorking()
     return m_libraryModel->isWorking();
 }
 
+KNMusicModel *KNMusicLibrary::musicModel(const QString &identifier)
+{
+    //Load the music library first.
+    loadLibrary();
+    //Check the identifier.
+    return ("MusicModel/Library"==identifier)?m_libraryModel:nullptr;
+}
+
+KNMusicProxyModel *KNMusicLibrary::proxyMusicModel(const QString &identifier)
+{
+    //Check the identifier.
+    if(!identifier.startsWith("ProxyModel/Library"))
+    {
+        //Failed to get the proxy model.
+        return nullptr;
+    }
+    //Get the proxy model according to its identifier.
+    QString tabName=identifier.mid(19);
+    //Check the tab name.
+    if("Song"==tabName)
+    {
+        //Song tab.
+        return m_songTab->proxyMusicModel();
+    }
+    else if("Artist"==tabName)
+    {
+        //Artist tab.
+        return m_libraryTabs[TabArtists]->proxyMusicModel();
+    }
+    else if("Album"==tabName)
+    {
+        //Album tab.
+        return m_libraryTabs[TabAlbums]->proxyMusicModel();
+    }
+    else if("Genre"==tabName)
+    {
+        //Genre tab.
+        return m_libraryTabs[TabGenres]->proxyMusicModel();
+    }
+    //For other case, return nullptr.
+    return nullptr;
+}
+
 void KNMusicLibrary::showInSongTab()
 {
     //Check out now playing pointer.

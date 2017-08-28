@@ -75,6 +75,13 @@ KNMusicPlaylistModel *KNMusicPlaylistManager::playlist(const QModelIndex &index)
     return m_playlistList->playlist(index);
 }
 
+KNMusicPlaylistModel *KNMusicPlaylistManager::playlist(
+        const QString &identifier)
+{
+    //Give back the playlist.
+    return m_playlistList->playlist(identifier);
+}
+
 QModelIndex KNMusicPlaylistManager::createPlaylist(int playlistPosition)
 {
     //Generate the playlist.

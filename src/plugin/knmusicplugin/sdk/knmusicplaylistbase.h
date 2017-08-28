@@ -21,6 +21,7 @@
 
 #include "knmusictab.h"
 
+class KNMusicProxyModel;
 /*!
  * \brief The KNMusicPlaylistBase class is the port class of the playlist
  * modules. It provides all the ports of a playlist tab should contains. This
@@ -41,6 +42,20 @@ public:
      * \return The float playlist list widget pointer.
      */
     virtual QWidget *playlistFloatList()=0;
+
+    /*!
+     * \brief Get music model according to the identifier.
+     * \param identifier The identifier string of the music model.
+     * \return The music model pointer.
+     */
+    virtual KNMusicModel *musicModel(const QString &identifier)=0;
+
+    /*!
+     * \brief Get music proxy model according to the identifier.
+     * \param identifier The identifier string of the music proxy model.
+     * \return The music proxy model pointer.
+     */
+    virtual KNMusicProxyModel *proxyMusicModel(const QString &identifier)=0;
 
 signals:
 

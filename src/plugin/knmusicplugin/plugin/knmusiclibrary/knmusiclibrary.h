@@ -70,6 +70,17 @@ public:
      */
     bool isWorking() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::musicModel().
+     */
+    KNMusicModel *musicModel(const QString &identifier) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from KNMusicLibraryBase::proxyMusicModel().
+     */
+    KNMusicProxyModel *proxyMusicModel(
+            const QString &identifier) Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

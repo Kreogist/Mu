@@ -61,6 +61,11 @@ public:
     void showIndex(KNMusicModel *musicModel,
                    const QModelIndex &index) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from the KNMusicLibraryTab::proxyMusicModel().
+     */
+    KNMusicProxyModel *proxyMusicModel() Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:

@@ -115,6 +115,12 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent,
     retranslate();
 }
 
+KNMusicProxyModel *KNMusicCategoryDisplay::proxyMusicModel() const
+{
+    //Get the tree view proxy model.
+    return m_categoryTreeView->proxyModel();
+}
+
 void KNMusicCategoryDisplay::setLibraryModel(KNMusicLibraryModel *model)
 {
     //Set the library model to the tree view.

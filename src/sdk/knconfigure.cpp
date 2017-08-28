@@ -190,6 +190,14 @@ QVariant KNConfigure::getPathData(const QStringList &path,
 
 void KNConfigure::setData(const QString &key, const QVariant &value)
 {
+    //Check whether the value is null.
+    if(value.isNull())
+    {
+        //Remove the key from the configure data.
+        m_dataObject.remove(key);
+        //Complete.
+        return;
+    }
     //Because the QJsonObject can only insert QJsonValue, and the construct
     //function of QJsonValue only have the following types:
     //   bool, QString, array, double, object.

@@ -177,6 +177,25 @@ QWidget *KNMusicPlaylist::playlistFloatList()
     return m_floatPlaylistList;
 }
 
+KNMusicModel *KNMusicPlaylist::musicModel(const QString &identifier)
+{
+    //Check the initial flag.
+    if(!m_playlistManager->isPlaylistListLoaded())
+    {
+        //Initial the playlist list.
+        initialPlaylistList();
+    }
+    //Check the identifier through the list.
+    return m_playlistManager->playlist(identifier);
+}
+
+KNMusicProxyModel *KNMusicPlaylist::proxyMusicModel(const QString &identifier)
+{
+    //Check the identifier.
+    return ("ProxyModel/Playlist"==identifier)?m_playlistViewer->proxyModel():
+                                               nullptr;
+}
+
 void KNMusicPlaylist::showEvent(QShowEvent *event)
 {
     //Initial the playlist list when the widget is shown.

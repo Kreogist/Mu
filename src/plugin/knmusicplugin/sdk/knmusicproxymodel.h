@@ -147,16 +147,15 @@ public:
     void setIdentifier(const QString &identifier);
 
     /*!
-     * \brief Save the state of the model to configure.
-     * \param configure The configure pointer.
+     * \brief Get the proxy state data of the model to JSON object.
      */
-    void saveState(KNConfigure *configure);
+    QJsonObject proxyState();
 
     /*!
-     * \brief Load the state of the model from the configure.
-     * \param configure The configure pointer.
+     * \brief Load the state of the model from JSON object.
+     * \param proxyParameters The proxy data JSON object.
      */
-    void loadState(KNConfigure *configure);
+    void loadProxyState(const QJsonObject &proxyParameters);
 
 signals:
 
@@ -197,8 +196,8 @@ private:
                                 int row,
                                 const KNMusicSearchBlock &block) const;
     QList<KNMusicSearchBlock> m_searchBlocks;
-    int m_categoryColumn;
     QString m_categoryContent, m_identifier;
+    int m_categoryColumn;
 };
 
 #endif // KNMUSICPROXYMODEL_H

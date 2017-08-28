@@ -17,8 +17,6 @@
  */
 #include <QJsonArray>
 
-#include "knconfigure.h"
-
 #include "knmusicmodel.h"
 
 #include "knmusicproxymodel.h"
@@ -27,6 +25,8 @@
 
 KNMusicProxyModel::KNMusicProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent),
+    m_categoryContent(QString()),
+    m_identifier(QString()),
     m_categoryColumn(-1)
 {
     //Set properties.
@@ -275,10 +275,8 @@ void KNMusicProxyModel::setIdentifier(const QString &identifier)
     m_identifier = identifier;
 }
 
-void KNMusicProxyModel::saveState(KNConfigure *configure)
+QJsonObject KNMusicProxyModel::proxyState()
 {
-    //Save all the configure data.
-    configure->setData("ProxyModel", m_identifier);
     //Then save the proxy model data.
     QJsonObject proxyParameters;
     proxyParameters.insert("Type", "CustomObject");
@@ -286,26 +284,31 @@ void KNMusicProxyModel::saveState(KNConfigure *configure)
     proxyParameters.insert("ProxyCategoryColumn", m_categoryColumn);
     // Categroy column content.
     proxyParameters.insert("ProxyCategoryContent", m_categoryContent);
-    // Search content.
-    QJsonArray searchBlocks;
-    for(auto i : m_searchBlocks)
-    {
-        //Construct the block data.
-        QJsonObject blockData;
-        //Save the block data.
-        blockData.insert("Index", i.index);
-        blockData.insert("Column", i.isColumn);
-        blockData.insert("Value", i.value.toString());
-        //Append the block data.
-        searchBlocks.append(blockData);
-    }
-    proxyParameters.insert("ProxySearchBlocks", searchBlocks);
-    configure->setData("ProxyModelData", proxyParameters);
+    // Sort parameters.
+    proxyParameters.insert("ProxySortColumn", sortColumn());
+    proxyParameters.insert("ProxySortCaseSensitivity",
+                           (int)sortCaseSensitivity());
+    proxyParameters.insert("ProxySortRole", sortRole());
+    proxyParameters.insert("ProxySortOrder", (int)sortOrder());
+    //Give back the parameters.
+    return proxyParameters;
 }
 
-void KNMusicProxyModel::loadState(KNConfigure *configure)
+void KNMusicProxyModel::loadProxyState(const QJsonObject &proxyParameters)
 {
-    ;
+    //Save the column and content data.
+    m_categoryContent=proxyParameters.value(
+                "ProxyCategoryContent").toString("");
+    m_categoryColumn=proxyParameters.value(
+                "ProxyCategoryColumn").toInt(-1);
+    //Set the sort parameters.
+    setSortCaseSensitivity(
+                (Qt::CaseSensitivity)proxyParameters.value(
+                    "ProxySortCaseSensitivity").toInt());
+    setSortRole(proxyParameters.value("ProxySortRole").toInt());
+    //Execute the sort.
+    sort(proxyParameters.value("ProxySortColumn").toInt(),
+         (Qt::SortOrder)proxyParameters.value("ProxySortOrder").toInt());
 }
 
 QString KNMusicProxyModel::categoryContent() const

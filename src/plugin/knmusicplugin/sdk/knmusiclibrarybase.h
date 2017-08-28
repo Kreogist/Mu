@@ -22,6 +22,8 @@
 #include <QObject>
 
 class KNConfigure;
+class KNMusicModel;
+class KNMusicProxyModel;
 class KNMusicTab;
 class KNMusicNowPlayingBase;
 /*!
@@ -71,6 +73,20 @@ public:
      * \return If the music plugin is working, return true.
      */
     virtual bool isWorking()=0;
+
+    /*!
+     * \brief Get music model according to the identifier.
+     * \param identifier The identifier string of the music model.
+     * \return The music model pointer.
+     */
+    virtual KNMusicModel *musicModel(const QString &identifier)=0;
+
+    /*!
+     * \brief Get music proxy model according to the identifier.
+     * \param identifier The identifier string of the music proxy model.
+     * \return The music proxy model pointer.
+     */
+    virtual KNMusicProxyModel *proxyMusicModel(const QString &identifier)=0;
 
 signals:
     /*!

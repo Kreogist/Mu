@@ -135,8 +135,43 @@ void KNMusicNowPlaying::reset()
     emit nowPlayingModelChanged(m_playingProxyModel);
 }
 
-void KNMusicNowPlaying::loadConfigure()
+void KNMusicNowPlaying::loadConfigure(KNMusicModel *musicModel)
 {
+    //Check source model pointer.
+    if(musicModel==nullptr)
+    {
+        //No need to load this.
+        return;
+    }
+    //Get the cache configure.
+    KNConfigure *lastPlayedConfigure=
+            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
+    //Set the source model as the music model passing.
+    m_shadowPlayingModel->setSourceModel(musicModel);
+    //If this function is called, which means that it needs to restore the
+    //state.
+    //It is hacked way to do this without using the original proxy model, we
+    //have the shadow proxy model, and we could as the shadow proxy model to
+    //load the info from the stored proxy model.
+    m_shadowPlayingModel->loadProxyState(
+                lastPlayedConfigure->data("ProxyModelData").toJsonObject());
+    //Set the playing proxy model to the shadow playing model.
+    m_playingProxyModel=m_shadowPlayingModel;
+    //Emit the proxy model changed signal.
+    emit nowPlayingModelChanged(m_playingProxyModel);
+    //Get the last playing index.
+    int playingRow=lastPlayedConfigure->data("Index", -1).toInt();
+    QModelIndex playingIndex=musicModel->index(playingRow, 0);
+    //Set the playing index to the music model.
+    musicModel->setPlayingIndex(playingIndex);
+    //Save the playing index.
+    m_playingIndex=playingIndex;
+    //Ask the backend to play the index.
+    playRow(m_shadowPlayingModel->mapFromSource(m_playingIndex).row());
+    //Pause the playing right after loaded.
+    m_backend->pause();
+    //Move the position to the stored position.
+    m_backend->setPosition(lastPlayedConfigure->data("Position").toLongLong());
 }
 
 void KNMusicNowPlaying::saveConfigure()
@@ -147,18 +182,20 @@ void KNMusicNowPlaying::saveConfigure()
     //Check the data of the saving state.
     if(knMusicGlobal->configure()->data("SaveLastPlayed", true).toBool())
     {
-        //Check the proxy model pointer.
-        KNMusicProxyModel *currentProxyModel=playingModel();
         //Check proxy model data.
-        if(currentProxyModel)
+        if(m_playingProxyModel)
         {
             //Save the proxy model data.
-            lastPlayedConfigure->setData("ProxyModel", "");
+            lastPlayedConfigure->setData("ProxyModel",
+                                         m_playingProxyModel->identifier());
+            lastPlayedConfigure->setData("ProxyModelData",
+                                         m_playingProxyModel->proxyState());
         }
         else
         {
             //Set the proxy model to empty.
             lastPlayedConfigure->setData("ProxyModel", "");
+            lastPlayedConfigure->setData("ProxyModelData", QVariant());
         }
         //Check the playing music model.
         KNMusicModel *currentPlayingModel=playingMusicModel();
@@ -170,8 +207,7 @@ void KNMusicNowPlaying::saveConfigure()
         //Check the current playing index.
         lastPlayedConfigure->setData("Index",
                                      (m_playingIndex.isValid())?
-                                         m_playingProxyModel->mapFromSource(
-                                             m_playingIndex).row():
+                                         m_playingIndex.row():
                                          -1);
         //Save the current playing progress.
         lastPlayedConfigure->setData("Position",

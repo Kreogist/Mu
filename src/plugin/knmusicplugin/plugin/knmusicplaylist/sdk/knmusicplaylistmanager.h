@@ -60,6 +60,15 @@ public:
     KNMusicPlaylistModel *playlist(const QModelIndex &index);
 
     /*!
+     * \brief This is a override function. Get a playlist model according to the
+     * identifier of the playlist.
+     * \param identifer The identifier of the playlist.
+     * \return If the identifer is not exist in the list, return nullptr. Or
+     * the pointer to the playlist model.
+     */
+    KNMusicPlaylistModel *playlist(const QString &identifier);
+
+    /*!
      * \brief Get the playlist directory path. If you haven't set this path
      * before, it will be empty.\n
      * You MUST set the directory path after you initialize the playlist

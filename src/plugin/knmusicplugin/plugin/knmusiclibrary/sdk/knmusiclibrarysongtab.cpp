@@ -139,6 +139,12 @@ void KNMusicLibrarySongTab::showIndex(KNMusicModel *musicModel,
     showInTab(musicModel->rowDetailInfo(index.row()));
 }
 
+KNMusicProxyModel *KNMusicLibrarySongTab::proxyMusicModel()
+{
+    //Get the proxy model of the tree view.
+    return m_treeView->proxyModel();
+}
+
 void KNMusicLibrarySongTab::setLibraryModel(KNMusicLibraryModel *model)
 {
     //Check whether the library model has been set before.

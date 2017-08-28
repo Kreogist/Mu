@@ -127,8 +127,9 @@ public slots:
 
     /*!
      * \brief Load configure from the music configure object.
+     * \param musicModel The music model from load from other modules.
      */
-    virtual void loadConfigure()=0;
+    virtual void loadConfigure(KNMusicModel *musicModel)=0;
 
     /*!
      * \brief Save the configure to the music configure object.

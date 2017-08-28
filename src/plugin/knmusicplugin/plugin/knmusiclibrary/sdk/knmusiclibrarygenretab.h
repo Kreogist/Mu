@@ -27,6 +27,12 @@ class KNCategoryTab;
 class KNMusicCategoryDisplay;
 class KNMusicCategoryListViewBase;
 class KNMusicLibraryDropProxy;
+/*!
+ * \brief The KNMusicLibraryGenreTab class provides the tab for the genre
+ * category view. This use the standard category display widget in SDKs and it
+ * is a standard tab.\n
+ * It is familiar with artist tab, but modified working for genre only.
+ */
 class KNMusicLibraryGenreTab : public KNMusicLibraryCategoryTab
 {
     Q_OBJECT
@@ -57,6 +63,12 @@ public:
      */
     void showIndex(KNMusicModel *musicModel,
                    const QModelIndex &index) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from the
+     * KNMusicLibraryCategoryTab::proxyMusicModel().
+     */
+    KNMusicProxyModel *proxyMusicModel() Q_DECL_OVERRIDE;
 
 signals:
 

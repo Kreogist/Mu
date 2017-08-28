@@ -110,7 +110,7 @@ public slots:
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::loadConfigure().
      */
-    void loadConfigure() Q_DECL_OVERRIDE;
+    void loadCacheConfigure() Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::saveConfigure().
@@ -203,6 +203,7 @@ private:
     KNMusicMainPlayerBase *m_mainPlayer;
     KNMusicMiniPlayerBase *m_miniPlayer;
     KNMusicLibraryBase *m_library;
+    KNMusicPlaylistBase *m_playlist;
     KNMusicStoreBase *m_store;
 };
 

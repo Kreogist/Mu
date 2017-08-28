@@ -21,10 +21,19 @@
 
 #include "knmusictreeviewbase.h"
 
+/*!
+ * \brief The KNMusicPlaylistTreeView class provides a tree view widget to
+ * display the content of a playlist.
+ */
 class KNMusicPlaylistTreeView : public KNMusicTreeViewBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicPlaylistTreeView widget.
+     * \param parent The parent widget of the tree view.
+     * \param tab The music tab of the tree view belongs to.
+     */
     explicit KNMusicPlaylistTreeView(QWidget *parent = 0,
                                      KNMusicTab *tab = 0);
 
@@ -39,7 +48,10 @@ public slots:
     bool playCurrentPlaylist();
 
 protected:
-    void resetHeaderState();
+    /*!
+     * \brief Reimplemented from KNMusicTreeViewBase::resetHeaderState().
+     */
+    void resetHeaderState() Q_DECL_OVERRIDE;
 };
 
 #endif // KNMUSICPLAYLISTTREEVIEW_H

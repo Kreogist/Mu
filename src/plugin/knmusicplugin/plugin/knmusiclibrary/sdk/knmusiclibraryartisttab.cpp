@@ -146,6 +146,12 @@ void KNMusicLibraryArtistTab::showIndex(KNMusicModel *musicModel,
     showInTab(musicModel->rowDetailInfo(index.row()));
 }
 
+KNMusicProxyModel *KNMusicLibraryArtistTab::proxyMusicModel()
+{
+    //Get the proxy music model of the artist display.
+    return m_artistDisplay->proxyMusicModel();
+}
+
 void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModelBase *model)
 {
     //Check whether the category model has been set before.

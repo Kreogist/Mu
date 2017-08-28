@@ -619,6 +619,12 @@ void KNMusicAlbumDetail::updateAlbumCaptions()
                     KNMusicAlbumModel::AlbumArtistRole).toString());
 }
 
+KNMusicProxyModel *KNMusicAlbumDetail::proxyMusicModel()
+{
+    //Get the proxy model.
+    return m_albumListView->proxyModel();
+}
+
 inline void KNMusicAlbumDetail::generateStep1FinalPosition(
         QRect &albumArtGeometry,
         QRect &contentGeometry)
