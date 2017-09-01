@@ -76,7 +76,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         panelData.append(block);
         //Behaviour settings.
         block=generateBlock(tr("Behaviour"));
-        addItem(block, tr("Last Played"),
+        addItem(block, tr("Save last played"),
                 "User/Music/SaveLastPlayed", true, TypeBoolean,
                 tr("When next time launch Mu, Mu will restore the last playing "
                    "song state."), false);

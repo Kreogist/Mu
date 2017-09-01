@@ -266,11 +266,24 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         }
         break;
     }
+    //For the JSON array, directly save the original data.
+    case QMetaType::QJsonArray:
+    {
+        //Simply insert the json array to the data.
+        m_dataObject.insert(key, value.toJsonArray());
+        break;
+    }
     default:
         return;
     }
     //Emit the signal.
     emit valueChanged();
+}
+
+void KNConfigure::remove(const QString &key)
+{
+    //Remove the key from the object.
+    m_dataObject.remove(key);
 }
 
 void KNConfigure::setPathData(const QStringList &path, const QVariant &value)

@@ -137,15 +137,24 @@ void KNMusicNowPlaying::reset()
 
 void KNMusicNowPlaying::loadConfigure(KNMusicModel *musicModel)
 {
+    //Get the cache configure.
+    KNConfigure *lastPlayedConfigure=
+            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
+    //Check the configure has the model data or not.
+    if("MusicModel/TemporaryModel"==
+            lastPlayedConfigure->data("Model").toString())
+    {
+        //Restore the temporary model.
+        m_temporaryPlaylist->loadModelData(lastPlayedConfigure);
+        //Set the music model to be temporary playlist.
+        musicModel=m_temporaryPlaylist;
+    }
     //Check source model pointer.
     if(musicModel==nullptr)
     {
         //No need to load this.
         return;
     }
-    //Get the cache configure.
-    KNConfigure *lastPlayedConfigure=
-            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
     //Set the source model as the music model passing.
     m_shadowPlayingModel->setSourceModel(musicModel);
     //If this function is called, which means that it needs to restore the
@@ -200,10 +209,20 @@ void KNMusicNowPlaying::saveConfigure()
         //Check the playing music model.
         KNMusicModel *currentPlayingModel=playingMusicModel();
         //Save the model identifier.
-        lastPlayedConfigure->setData("Model",
-                                     (currentPlayingModel)?
-                                         currentPlayingModel->identifier():
-                                         "");
+        QString modelIdentifier=(currentPlayingModel)?
+                    currentPlayingModel->identifier():
+                    "";
+        lastPlayedConfigure->setData("Model", modelIdentifier);
+        if("MusicModel/TemporaryModel"==modelIdentifier)
+        {
+            //Save the temporary model.
+            m_temporaryPlaylist->saveModelData(lastPlayedConfigure);
+        }
+        else
+        {
+            //Remove the temporary model data from the cache information.
+            lastPlayedConfigure->remove("ModelData");
+        }
         //Check the current playing index.
         lastPlayedConfigure->setData("Index",
                                      (m_playingIndex.isValid())?

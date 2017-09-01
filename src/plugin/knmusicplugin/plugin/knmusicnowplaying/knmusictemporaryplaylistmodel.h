@@ -19,8 +19,11 @@
 #ifndef KNMUSICTEMPORARYPLAYLISTMODEL_H
 #define KNMUSICTEMPORARYPLAYLISTMODEL_H
 
+#include <QJsonArray>
+
 #include "knmusicmodel.h"
 
+class KNConfigure;
 /*!
  * \brief The KNMusicTemporaryPlaylistModel class provides a simple playlist for
  * temporary playing.\n
@@ -40,7 +43,7 @@ public:
      * \brief Append local music files to the model.
      * \param filePaths The file paths.
      */
-    void appendTemporaryFiles(QStringList filePaths);
+    void appendTemporaryFiles(QStringList filePathList);
 
     /*!
      * \brief Append an online URL item to the temporary model.
@@ -73,6 +76,18 @@ public slots:
      * \param urlList The url lists.
      */
     void setOnlineUrls(QList<KNMusicAnalysisItem> urlList);
+
+    /*!
+     * \brief Save the current model data to the configure.
+     * \param configure The configure pointer.
+     */
+    void saveModelData(KNConfigure *configure);
+
+    /*!
+     * \brief Load the current model data from the configure.
+     * \param configure The configure pointer.
+     */
+    void loadModelData(KNConfigure *configure);
 
 private:
     QList<QPixmap> m_artworkLists;

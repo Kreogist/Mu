@@ -580,7 +580,7 @@ QPersistentModelIndex KNMusicModel::playingIndex() const
     return m_playingIndex;
 }
 
-KNMusicDetailInfo KNMusicModel::rowDetailInfo(const int &row)
+KNMusicDetailInfo KNMusicModel::rowDetailInfo(int row)
 {
     return m_detailInfos.at(row);
 }
@@ -640,7 +640,7 @@ QStringList KNMusicModel::mimeTypes() const
     return m_dropMimeTypes;
 }
 
-QString KNMusicModel::textData(const int &row, const int &column) const
+QString KNMusicModel::textData(int row, int column) const
 {
     return m_detailInfos.at(row).textLists[column].toString();
 }
@@ -770,6 +770,20 @@ QList<KNMusicDetailInfo> KNMusicModel::detailInfos() const
 QString KNMusicModel::identifier() const
 {
     return m_identifier;
+}
+
+QStringList KNMusicModel::filePathList()
+{
+    //Prepare the list.
+    QStringList pathList;
+    //Add all the file paths to the list.
+    for(auto i : m_detailInfos)
+    {
+        //Save the file paths.
+        pathList.append(i.filePath);
+    }
+    //Give back the path list.
+    return pathList;
 }
 
 void KNMusicModel::setIdentifier(const QString &identifier)

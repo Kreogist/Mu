@@ -207,7 +207,7 @@ public:
      * \param row The row index.
      * \return The detail info structure of the song.
      */
-    KNMusicDetailInfo rowDetailInfo(const int &row);
+    KNMusicDetailInfo rowDetailInfo(int row);
 
     /*!
      * \brief Get the row of one detail info, it will return the first row where
@@ -253,7 +253,7 @@ public:
      * \param role The role of the property.
      * \return The property value.
      */
-    QVariant rowProperty(const int &i, const int &role) const
+    QVariant rowProperty(int i, int role) const
     {
         return data(index(i, 0), role);
     }
@@ -264,7 +264,7 @@ public:
      * \param column The specific column.
      * \return The QString transfer data from the data(index(row, column)).
      */
-    QString textData(const int &row, const int &column) const;
+    QString textData(int row, int column) const;
 
     /*!
      * \brief Set the text data of a specific row and column.
@@ -301,6 +301,12 @@ public:
      */
     QString identifier() const;
 
+    /*!
+     * \brief Get the file path list of all the music detail items.
+     * \return The file path list.
+     */
+    QStringList filePathList();
+
 signals:
     /*!
      * \brief When the playing item is begin removed, this signal will be
@@ -331,7 +337,7 @@ public slots:
      * \brief Append several files to the music model.
      * \param filePaths The file path list.
      */
-    void appendFiles(const QStringList &filePaths);
+    void appendFiles(const QStringList &filePathList);
 
     /*!
      * \brief Append several urls to the music model.
