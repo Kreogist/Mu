@@ -92,8 +92,9 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
     }
     //Get the last item in the download queue.
     KNMusicDetailInfo detailInfo=m_downloadQueue.takeLast();
-    //Reset the download counter.
+    //Reset the download counter and download list.
     m_finishedDownloader=0;
+    m_downloadLyricsList=QList<KNMusicLyricsDownloader::KNMusicLyricsDetails>();
     //Download the lyrics data via all the plugins.
     for(auto i=m_downloaders.begin(); i!=m_downloaders.end(); ++i)
     {
@@ -115,26 +116,36 @@ void KNMusicOnlineLyrics::onActionDownloadFinished(uint identifier,
     //Check the lyrics list.
     if(!lyricsList.isEmpty())
     {
-        //Sort the list according to the similarity of the lyrics, if the list
-        //is not empty.
-        std::sort(lyricsList.begin(),
-                  lyricsList.end(),
-                  KNMusicLyricsDownloader::lyricsDetailLessThan);
-        //Generate the position and text list of the lyrics.
-        QList<qint64> positionList;
-        QStringList textList;
-        //Parse all the data from the top to the bottom, save the first lyrics
-        //which can be parsed.
-        for(auto i=lyricsList.begin(); i!=lyricsList.end(); ++i)
+        //Add list to download lyrics list.
+        m_downloadLyricsList.append(lyricsList);
+    }
+    //Increase the counter.
+    ++m_finishedDownloader;
+    //Check the count.
+    if(m_downloaders.size() > m_finishedDownloader)
+    {
+        //Not completed.
+        return;
+    }
+    //Sort the list according to the similarity of the lyrics, if the list
+    //is not empty.
+    std::sort(lyricsList.begin(),
+              lyricsList.end(),
+              KNMusicLyricsDownloader::lyricsDetailLessThan);
+    //Generate the position and text list of the lyrics.
+    QList<qint64> positionList;
+    QStringList textList;
+    //Parse all the data from the top to the bottom, save the first lyrics
+    //which can be parsed.
+    for(auto i=lyricsList.begin(); i!=lyricsList.end(); ++i)
+    {
+        //Parse the lyrics data.
+        if(m_lrcParser->parseText((*i).lyricsData, positionList, textList))
         {
-            //Parse the lyrics data.
-            if(m_lrcParser->parseText((*i).lyricsData, positionList, textList))
-            {
-                //Emit the download success information.
-                emit lyricsDownload(detailInfo, (*i).lyricsData);
-                //Mission complete.
-                break;
-            }
+            //Emit the download success information.
+            emit lyricsDownload(detailInfo, (*i).lyricsData);
+            //Mission complete.
+            break;
         }
     }
     //Parse the next item.

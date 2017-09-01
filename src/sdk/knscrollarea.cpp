@@ -49,6 +49,7 @@ KNScrollArea::KNScrollArea(QWidget *parent) :
     //Link the time line.
     connect(m_mouseAnime, &QTimeLine::frameChanged,
             this, &KNScrollArea::onMouseInOut);
+    onMouseInOut(0);
 
     //Configure the horizontal scroll bar.
     m_hScrollBar->setStyle(KNSaoStyle::instance());

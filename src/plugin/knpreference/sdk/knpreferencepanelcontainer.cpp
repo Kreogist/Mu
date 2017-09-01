@@ -54,8 +54,6 @@ void KNPreferencePanelContainer::setPanelBlocks(
         m_panelList.takeLast()->deleteLater();
         //Remove its shadow.
         m_shadowList.takeLast()->deleteLater();
-        //Remove its scroll bar.
-        m_scrollList.takeLast()->deleteLater();
     }
     //Construct a new panel for the block.
     KNPreferencePanel *panel=new KNPreferencePanel(m_panelContainer);
@@ -63,15 +61,6 @@ void KNPreferencePanelContainer::setPanelBlocks(
     panel->setPanelBlocks(blocks);
     //Add the panel to the list.
     m_panelList.append(panel);
-    //Generatel the scroll bar for the panel.
-    QScrollBar *panelScrollBar=new QScrollBar(Qt::Vertical, this);
-    //Configure the scroll bar.
-    panelScrollBar->setFixedWidth(knDpi->width(ScrollBarWidth));
-    panelScrollBar->setStyle(KNSaoStyle::instance());
-    //Set the scroll bar to panel.
-    panel->setScrollBar(panelScrollBar);
-    //Add the scroll bar to list.
-    m_scrollList.append(panelScrollBar);
     //Construct a shadow widget for the panel.
     KNSideShadowWidget *shadow=
             new KNSideShadowWidget(KNSideShadowWidget::LeftShadow,
@@ -116,8 +105,7 @@ void KNPreferencePanelContainer::updateContainerSize()
     for(int i=0; i<m_panelList.size(); ++i)
     {
         //Update the panel and shadow widget.
-        updatePanelSize(m_panelList.at(i), m_shadowList.at(i),
-                        m_scrollList.at(i));
+        updatePanelSize(m_panelList.at(i), m_shadowList.at(i));
     }
     //Resize the container.
     m_panelContainer->resize(m_panelList.size()*m_panelList.at(0)->width()+
@@ -126,31 +114,10 @@ void KNPreferencePanelContainer::updateContainerSize()
 }
 
 inline void KNPreferencePanelContainer::updatePanelSize(
-        KNPreferencePanel *panel, KNSideShadowWidget *shadow,
-        QScrollBar *scrollBar)
+        KNPreferencePanel *panel, KNSideShadowWidget *shadow)
 {
-    //Get the panel height hint.
-    int panelHeight=panel->sizeHint().height();
-    //Check the panel size.
-    if(panelHeight<height())
-    {
-        //Hide the scroll bar.
-        scrollBar->hide();
-        //Update the panel size.
-        panel->resize(panel->width(), height());
-    }
-    else
-    {
-        //Show the scroll bar.
-        scrollBar->show();
-        //Update the geometry of the scroll bar.
-        scrollBar->setGeometry(panel->width()-scrollBar->width(),
-                               0,
-                               scrollBar->width(),
-                               height());
-        //Update the scroll bar value.
-        scrollBar->setRange(0, panelHeight-height());
-    }
+    //Update the panel size.
+    panel->resize(panel->width(), height());
     //Update the shadow geometry.
     shadow->setGeometry(panel->width() + panel->x(),
                         panel->y(),
