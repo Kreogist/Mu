@@ -207,7 +207,7 @@ public:
      * \param row The row index.
      * \return The detail info structure of the song.
      */
-    KNMusicDetailInfo rowDetailInfo(const int &row);
+    KNMusicDetailInfo rowDetailInfo(int row);
 
     /*!
      * \brief Get the row of one detail info, it will return the first row where
@@ -253,7 +253,7 @@ public:
      * \param role The role of the property.
      * \return The property value.
      */
-    QVariant rowProperty(const int &i, const int &role) const
+    QVariant rowProperty(int i, int role) const
     {
         return data(index(i, 0), role);
     }
@@ -264,7 +264,7 @@ public:
      * \param column The specific column.
      * \return The QString transfer data from the data(index(row, column)).
      */
-    QString textData(const int &row, const int &column) const;
+    QString textData(int row, int column) const;
 
     /*!
      * \brief Set the text data of a specific row and column.
@@ -294,6 +294,18 @@ public:
      * \return If the current model is working, then it should return true.
      */
     virtual bool isWorking();
+
+    /*!
+     * \brief Get the identifier of the music model.
+     * \return The music model identifier.
+     */
+    QString identifier() const;
+
+    /*!
+     * \brief Get the file path list of all the music detail items.
+     * \return The file path list.
+     */
+    QStringList filePathList();
 
 signals:
     /*!
@@ -325,7 +337,7 @@ public slots:
      * \brief Append several files to the music model.
      * \param filePaths The file path list.
      */
-    void appendFiles(const QStringList &filePaths);
+    void appendFiles(const QStringList &filePathList);
 
     /*!
      * \brief Append several urls to the music model.
@@ -354,15 +366,23 @@ protected:
      */
     QList<KNMusicDetailInfo> detailInfos() const;
 
+    /*!
+     * \brief Set the music identifier, it should be set when the model is
+     * initialized.
+     * \param identifier The music model identifier string.
+     */
+    void setIdentifier(const QString &identifier);
+
 private:
+    static QVariant m_alignLeft, m_alignCenter, m_alignRight;
+    static QStringList m_dropMimeTypes;
+
     QList<KNMusicDetailInfo> m_detailInfos;
     quint64 m_totalDuration;
     QPersistentModelIndex m_playingIndex;
     QVariant m_playingIcon, m_cannotPlayIcon;
     const QVariant m_nullValue;
-    static QVariant m_alignLeft, m_alignCenter, m_alignRight;
-
-    static QStringList m_dropMimeTypes;
+    QString m_identifier;
 };
 
 #endif // KNMUSICMODEL_H

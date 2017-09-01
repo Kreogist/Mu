@@ -29,11 +29,12 @@
 class QPropertyAnimation;
 class QParallelAnimationGroup;
 class QSequentialAnimationGroup;
+class KNScrollLabel;
+class KNSideShadowWidget;
 class KNMusicTab;
+class KNMusicProxyModel;
 class KNMouseUnclickableWidget;
 class KNMusicAlbumTitle;
-class KNSideShadowWidget;
-class KNScrollLabel;
 class KNMusicAlbumListView;
 class KNMusicLibraryModel;
 class KNMusicLibraryImageManager;
@@ -60,6 +61,12 @@ public:
      * \brief Update the album captions if any of it is changed.
      */
     void updateAlbumCaptions();
+
+    /*!
+     * \brief Get the proxy of the model.
+     * \return The proxy music model pointer.
+     */
+    KNMusicProxyModel *proxyMusicModel();
 
 signals:
     /*!

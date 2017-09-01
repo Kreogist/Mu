@@ -270,6 +270,14 @@ void KNSearchBox::setFocusSource(QWidget *focusSource)
     m_focusSource = focusSource;
 }
 
+void KNSearchBox::clear()
+{
+    //Clear the content.
+    QLineEdit::clear();
+    //Hide the close button.
+    m_closeButton->hide();
+}
+
 QPixmap KNSearchBox::searchIcon() const
 {
     return m_searchIcon;

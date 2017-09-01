@@ -68,6 +68,8 @@ KNMusicPlaylistViewer::KNMusicPlaylistViewer(QWidget *parent, KNMusicTab *tab) :
     labelFont.setBold(true);
     labelFont.setPixelSize(knDpi->height(17));
     m_title->setFont(labelFont);
+    //Configure the tree view.
+    m_treeView->proxyModel()->setIdentifier("ProxyModel/Playlist");
     //Configure the buttons.
     connect(m_playPlaylist, &KNOpacityAnimeButton::clicked,
             this, &KNMusicPlaylistViewer::onActionPlayCurrent);
@@ -193,6 +195,12 @@ void KNMusicPlaylistViewer::selectSong(const QModelIndex &sourceIndex)
 {
     //Select the index.
     m_treeView->selectSourceSong(sourceIndex.row());
+}
+
+KNMusicProxyModel *KNMusicPlaylistViewer::proxyModel()
+{
+    //Get the proxy model.
+    return m_treeView->proxyModel();
 }
 
 void KNMusicPlaylistViewer::resizeEvent(QResizeEvent *event)

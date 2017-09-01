@@ -140,7 +140,7 @@ void KNMusicTreeViewBase::startDrag(Qt::DropActions supportedActions)
     //Generate the mime data.
     QScopedPointer<QDrag> drag(new QDrag(this));
     //Set the mime data to the drag action.
-    drag->setMimeData(m_proxyModel->mimeData(indexes));
+    drag->setMimeData(proxyModel()->mimeData(indexes));
     //Do the drag.
     drag->exec();
     //Emit the end dragging signal.
@@ -579,7 +579,7 @@ void KNMusicTreeViewBase::showSoloMenu(const QPoint &position,
                    connect(soloMenu, &KNMusicSoloMenuBase::requireRemoveCurrent,
                            this, &KNMusicTreeViewBase::removeCurrent));
         //Set the information to the solo menu.
-        soloMenu->setMusicRow(m_proxyModel, pressedIndex);
+        soloMenu->setMusicRow(proxyModel(), pressedIndex);
         //Get the menu position, fixed the bug which ignore the header's height.
         QPoint menuPosition=mapToGlobal(position);
         menuPosition.setY(menuPosition.y()+header()->height());
@@ -626,7 +626,7 @@ void KNMusicTreeViewBase::showMultiMenu(const QPoint &position)
         //Link the menu require signal to this slot.
         ;
         //Set information to menu.
-        multiMenu->setMusicRows(m_proxyModel, rowList, pressedIndex);
+        multiMenu->setMusicRows(proxyModel(), rowList, pressedIndex);
         //Get the menu position, fixed the bug which ignore the header's height.
         QPoint menuPosition=mapToGlobal(position);
         menuPosition.setY(menuPosition.y()+header()->height());
@@ -753,7 +753,7 @@ void KNMusicTreeViewBase::setMusicModel(KNMusicModel *musicModel)
     }
 }
 
-void KNMusicTreeViewBase::selectSourceSong(const int &sourceRow)
+void KNMusicTreeViewBase::selectSourceSong(int sourceRow)
 {
     //Ignore the request when there's no music model.
     if(musicModel()==nullptr)
@@ -766,7 +766,7 @@ void KNMusicTreeViewBase::selectSourceSong(const int &sourceRow)
                     musicModel()->index(sourceRow, Name)));
 }
 
-void KNMusicTreeViewBase::scrollToSourceRow(const int &sourceRow)
+void KNMusicTreeViewBase::scrollToSourceRow(int sourceRow)
 {
     //Check the music model first.
     if(musicModel()!=nullptr)
@@ -777,7 +777,7 @@ void KNMusicTreeViewBase::scrollToSourceRow(const int &sourceRow)
     }
 }
 
-void KNMusicTreeViewBase::scrollToRow(const int &row)
+void KNMusicTreeViewBase::scrollToRow(int row)
 {
     //Get the name item of the song row.
     scrollToIndex(m_proxyModel->index(row, Name));

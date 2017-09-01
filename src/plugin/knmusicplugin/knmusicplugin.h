@@ -108,6 +108,11 @@ signals:
 
 public slots:
     /*!
+     * \brief Reimplemented from KNAbstractMusicCategoryPlugin::loadConfigure().
+     */
+    void loadCacheConfigure() Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNAbstractMusicCategoryPlugin::saveConfigure().
      */
     void saveConfigure() Q_DECL_OVERRIDE;
@@ -178,6 +183,8 @@ private:
     void initialLibrary(KNMusicLibraryBase *library);
     void initialStore(KNMusicStoreBase *store);
 
+    void restoreLastPlayed();
+
     //UI infrastructure elements.
     KNMouseDetectHeader *m_headerWidget;
     KNVWidgetSwitcher *m_headerWidgetContainer;
@@ -196,6 +203,7 @@ private:
     KNMusicMainPlayerBase *m_mainPlayer;
     KNMusicMiniPlayerBase *m_miniPlayer;
     KNMusicLibraryBase *m_library;
+    KNMusicPlaylistBase *m_playlist;
     KNMusicStoreBase *m_store;
 };
 

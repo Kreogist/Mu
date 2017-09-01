@@ -72,7 +72,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_notificationWaiter(new QTimer(this)),
     m_fullScreen(new KNOpacityAnimeButton(this)),
     m_originalWindowState(Qt::WindowNoState),
-    m_ignoreTrayClose(false)
+    m_ignoreTrayClose(false),
+    m_initialShown(true)
 {
     setObjectName("MainWindow");
     //Set properties.
@@ -173,8 +174,6 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 #endif
     connect(m_fullScreen, &KNOpacityAnimeButton::clicked,
             fullScreen, &QAction::trigger);
-    //Recover the geometry.
-    recoverGeometry();
     //Update the animation positions.
     updateAnimeStartAndEnd();
 }
@@ -303,6 +302,14 @@ bool KNMainWindow::event(QEvent *event)
 
 void KNMainWindow::showEvent(QShowEvent *event)
 {
+    //Check the initial shown flag.
+    if(m_initialShown)
+    {
+        //Recover the geometry.
+        recoverGeometry();
+        //Set the flag to false.
+        m_initialShown=false;
+    }
     //Emit the main window show signal.
     emit mainWindowShown();
     //Show the main window.

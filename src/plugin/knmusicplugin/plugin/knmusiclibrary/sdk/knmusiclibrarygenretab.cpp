@@ -53,6 +53,7 @@ KNMusicLibraryGenreTab::KNMusicLibraryGenreTab(QWidget *parent) :
     connect(m_showInGenreTab, &QAction::triggered,
             this, &KNMusicLibraryGenreTab::onActionShowInGenre);
     //Configure the genre display.
+    m_genreDisplay->setProxyModelIdentifier("ProxyModel/Library/Genre");
     m_genreDisplay->setCategoryColumn(Genre);
     connect(m_genreDisplay, &KNMusicCategoryDisplay::requireShowPlaylistList,
             this, &KNMusicLibraryGenreTab::requireShowPlaylistList);
@@ -141,6 +142,12 @@ void KNMusicLibraryGenreTab::showIndex(KNMusicModel *musicModel,
     }
     //Or else we have to find the detail info in the model.
     showInTab(musicModel->rowDetailInfo(index.row()));
+}
+
+KNMusicProxyModel *KNMusicLibraryGenreTab::proxyMusicModel()
+{
+    //Get the genre display proxy model.
+    return m_genreDisplay->proxyMusicModel();
 }
 
 void KNMusicLibraryGenreTab::setCategoryModel(KNMusicCategoryModelBase *model)

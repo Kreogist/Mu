@@ -58,6 +58,17 @@ public:
      */
     QWidget *playlistFloatList() Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from the KNMusicPlaylistBase::musicModel().
+     */
+    KNMusicModel *musicModel(const QString &identifier) Q_DECL_OVERRIDE;
+
+    /*!
+     * \brief Reimplemented from the KNMusicPlaylistBase::proxyMusicModel().
+     */
+    KNMusicProxyModel *proxyMusicModel(const QString &identifier)
+    Q_DECL_OVERRIDE;
+
 signals:
 
 public slots:
@@ -85,14 +96,13 @@ private slots:
     void onActionCopyPlaylist();
 
 private:
+    QString m_cannotDeleteMessage;
     KNCategoryTab *m_tab;
     KNEmptyStateWidget *m_container;
     KNMusicPlaylistList *m_playlistList;
     KNMusicPlaylistListView *m_floatPlaylistList;
     KNMusicPlaylistViewer *m_playlistViewer;
     KNMusicPlaylistManager *m_playlistManager;
-
-    QString m_cannotDeleteMessage;
 };
 
 #endif // KNMUSICPLAYLIST_H

@@ -112,6 +112,12 @@ public slots:
     void setData(const QString &key, const QVariant &value);
 
     /*!
+     * \brief Remove a data set from the configure.
+     * \param key The key of the data.
+     */
+    void remove(const QString &key);
+
+    /*!
      * \brief Set the data in a specific path.
      * \param path The path of the data.
      * \param value The data.

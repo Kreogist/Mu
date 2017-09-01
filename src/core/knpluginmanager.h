@@ -91,6 +91,7 @@ private:
     KNMainWindow *m_mainWindow;
     KNAbstractMusicPlugin *m_musicPlugin;
     KNPlatformExtras *m_platformExtra;
+    bool m_applicationStart;
 };
 
 #endif // KNPLUGINMANAGER_H

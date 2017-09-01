@@ -29,6 +29,7 @@ class KNSideShadowWidget;
 class KNMusicPlaylistModel;
 class KNMusicTab;
 class KNMusicPlaylistTreeView;
+class KNMusicProxyModel;
 /*!
  * \brief The KNMusicPlaylistViewer class provides a widget which could display
  * the detail information of a playlist. Set the playlist model to this widget
@@ -64,6 +65,12 @@ public:
      * \param sourceIndex The index of the song in the source music model.
      */
     void selectSong(const QModelIndex &sourceIndex);
+
+    /*!
+     * \brief Get the proxy of the playlist viewer.
+     * \return The proxy music model pointer.
+     */
+    KNMusicProxyModel *proxyModel();
 
 signals:
 

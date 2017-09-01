@@ -72,6 +72,11 @@ signals:
 
 public slots:
     /*!
+     * \brief Load the cached configure of the category plugin.
+     */
+    virtual void loadCacheConfigure()=0;
+
+    /*!
      * \brief Save the category configure. All the data should be finally saved
      * to the KNConfigure class provided by KNConfigureManager.
      */

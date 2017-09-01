@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QJsonArray>
+
 #include "knmusicmodel.h"
 
 #include "knmusicproxymodel.h"
@@ -23,6 +25,8 @@
 
 KNMusicProxyModel::KNMusicProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent),
+    m_categoryContent(QString()),
+    m_identifier(QString()),
     m_categoryColumn(-1)
 {
     //Set properties.
@@ -215,7 +219,7 @@ bool KNMusicProxyModel::filterAcceptsRow(int source_row,
 }
 
 inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
-                                         const int &row,
+                                         int row,
                                          const KNMusicSearchBlock &block) const
 {
     //Check if this block a common search block,
@@ -259,6 +263,52 @@ inline bool KNMusicProxyModel::checkRule(QAbstractItemModel *model,
         return propertyData.toString().contains(block.value.toString(),
                                                 Qt::CaseInsensitive);
     }
+}
+
+QString KNMusicProxyModel::identifier() const
+{
+    return m_identifier;
+}
+
+void KNMusicProxyModel::setIdentifier(const QString &identifier)
+{
+    m_identifier = identifier;
+}
+
+QJsonObject KNMusicProxyModel::proxyState()
+{
+    //Then save the proxy model data.
+    QJsonObject proxyParameters;
+    proxyParameters.insert("Type", "CustomObject");
+    // Categroy column.
+    proxyParameters.insert("ProxyCategoryColumn", m_categoryColumn);
+    // Categroy column content.
+    proxyParameters.insert("ProxyCategoryContent", m_categoryContent);
+    // Sort parameters.
+    proxyParameters.insert("ProxySortColumn", sortColumn());
+    proxyParameters.insert("ProxySortCaseSensitivity",
+                           (int)sortCaseSensitivity());
+    proxyParameters.insert("ProxySortRole", sortRole());
+    proxyParameters.insert("ProxySortOrder", (int)sortOrder());
+    //Give back the parameters.
+    return proxyParameters;
+}
+
+void KNMusicProxyModel::loadProxyState(const QJsonObject &proxyParameters)
+{
+    //Save the column and content data.
+    m_categoryContent=proxyParameters.value(
+                "ProxyCategoryContent").toString("");
+    m_categoryColumn=proxyParameters.value(
+                "ProxyCategoryColumn").toInt(-1);
+    //Set the sort parameters.
+    setSortCaseSensitivity(
+                (Qt::CaseSensitivity)proxyParameters.value(
+                    "ProxySortCaseSensitivity").toInt());
+    setSortRole(proxyParameters.value("ProxySortRole").toInt());
+    //Execute the sort.
+    sort(proxyParameters.value("ProxySortColumn").toInt(),
+         (Qt::SortOrder)proxyParameters.value("ProxySortOrder").toInt());
 }
 
 QString KNMusicProxyModel::categoryContent() const

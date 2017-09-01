@@ -148,7 +148,9 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
     m_headerPlayer(nullptr),
     m_mainPlayer(nullptr),
     m_miniPlayer(nullptr),
-    m_library(nullptr)
+    m_library(nullptr),
+    m_playlist(nullptr),
+    m_store(nullptr)
 {
     //Initial the basic infrastructure.
     initialInfrastructure();
@@ -305,9 +307,27 @@ int KNMusicPlugin::minimumWidthHint()
     return suggestionWidth;
 }
 
+void KNMusicPlugin::loadCacheConfigure()
+{
+    //Get the cache configure.
+    KNConfigure *lastPlayedConfigure=
+            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
+    //Check the last played settings.
+    if(lastPlayedConfigure->data("SaveLastPlayed", true).toBool())
+    {
+        //Restore the last played state.
+        restoreLastPlayed();
+    }
+}
+
 void KNMusicPlugin::saveConfigure()
 {
-    //--Header Player--
+    //Save the now playing information.
+    if(knMusicGlobal->nowPlaying())
+    {
+        knMusicGlobal->nowPlaying()->saveConfigure();
+    }
+    //Save the header player information.
     if(m_headerPlayer)
     {
         m_headerPlayer->saveConfigure();
@@ -786,8 +806,6 @@ void KNMusicPlugin::initialNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     nowPlaying->setParent(this);
     //Set the backend to now playing first.
     nowPlaying->setBackend(knMusicGlobal->backend());
-    //Load configure.
-    nowPlaying->loadConfigure();
     //Link the now playing with the lyrics manager.
     connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
             knMusicGlobal->lyricsManager(), &KNMusicLyricsManager::loadLyrics);
@@ -909,10 +927,12 @@ void KNMusicPlugin::initialMiniPlayer(KNMusicMiniPlayerBase *miniPlayer)
 
 void KNMusicPlugin::initialPlaylist(KNMusicPlaylistBase *playlist)
 {
+    //Save the playlist pointer.
+    m_playlist=playlist;
     //Add playlist content to music plugin.
-    addMusicTab(playlist);
+    addMusicTab(m_playlist);
     //Save the playlist list display widget.
-    m_floatPlaylistList=playlist->playlistFloatList();
+    m_floatPlaylistList=m_playlist->playlistFloatList();
     //Configure the playlist list.
     if(m_floatPlaylistList)
     {
@@ -961,4 +981,48 @@ void KNMusicPlugin::initialStore(KNMusicStoreBase *store)
     m_store->loadPlugins();
     //Add tabs to the switcher.
     addMusicTab(store);
+}
+
+void KNMusicPlugin::restoreLastPlayed()
+{
+    //Get the cache configure.
+    KNConfigure *lastPlayedConfigure=
+            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
+    //Get the model identifier.
+    QString modelIdentifier=
+            lastPlayedConfigure->data("Model", "").toString();
+    //Start to restore the last time played state.
+    if(modelIdentifier.isEmpty())
+    {
+        //No playing model need to set.
+        return;
+    }
+    //Prepare the music model and the proxy model.
+    KNMusicModel *musicModel=nullptr;
+    KNMusicProxyModel *proxyMusicModel=nullptr;
+    //Check the music model identifier.
+    if("MusicModel/Library"==modelIdentifier)
+    {
+        //Load the library model.
+        musicModel=m_library->musicModel(modelIdentifier);
+    }
+    else if(modelIdentifier.startsWith("MusicModel/Playlist-"))
+    {
+        //Load the playlist model.
+        musicModel=m_playlist->musicModel(modelIdentifier);
+    }
+    //Check the proxy music model identifier.
+    modelIdentifier=lastPlayedConfigure->data("ProxyModel", "").toString();
+    if("ProxyModel/Playlist"==modelIdentifier)
+    {
+        //Load the proxy model from playlist.
+        proxyMusicModel=m_playlist->proxyMusicModel(modelIdentifier);
+    }
+    else if(modelIdentifier.startsWith("ProxyModel/Library"))
+    {
+        //Load the proxy model from library.
+        proxyMusicModel=m_library->proxyMusicModel(modelIdentifier);
+    }
+    //Ask the now playing to restore the state.
+    knMusicGlobal->nowPlaying()->loadConfigure(musicModel);
 }

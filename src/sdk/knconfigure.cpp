@@ -190,6 +190,14 @@ QVariant KNConfigure::getPathData(const QStringList &path,
 
 void KNConfigure::setData(const QString &key, const QVariant &value)
 {
+    //Check whether the value is null.
+    if(value.isNull())
+    {
+        //Remove the key from the configure data.
+        m_dataObject.remove(key);
+        //Complete.
+        return;
+    }
     //Because the QJsonObject can only insert QJsonValue, and the construct
     //function of QJsonValue only have the following types:
     //   bool, QString, array, double, object.
@@ -198,6 +206,9 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
     {
     //For the basic types(double, float, int, bool, QString), we will save them
     //directly.
+    case QVariant::LongLong:
+        m_dataObject.insert(key, value.toLongLong());
+        break;
     case QVariant::Double:
         m_dataObject.insert(key, value.toDouble());
         break;
@@ -255,11 +266,24 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
         }
         break;
     }
+    //For the JSON array, directly save the original data.
+    case QMetaType::QJsonArray:
+    {
+        //Simply insert the json array to the data.
+        m_dataObject.insert(key, value.toJsonArray());
+        break;
+    }
     default:
         return;
     }
     //Emit the signal.
     emit valueChanged();
+}
+
+void KNConfigure::remove(const QString &key)
+{
+    //Remove the key from the object.
+    m_dataObject.remove(key);
 }
 
 void KNConfigure::setPathData(const QStringList &path, const QVariant &value)

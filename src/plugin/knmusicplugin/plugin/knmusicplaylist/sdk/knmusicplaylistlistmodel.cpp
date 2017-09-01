@@ -72,6 +72,29 @@ KNMusicPlaylistModel *KNMusicPlaylistListModel::playlist(
     return m_playlistList.at(index.row());
 }
 
+KNMusicPlaylistModel *KNMusicPlaylistListModel::playlist(
+        const QString &identifier)
+{
+    //Check through the list.
+    for(auto i : m_playlistList)
+    {
+        //Check the identifer.
+        if(identifier==i->identifier())
+        {
+            //Give back the model.
+            return i;
+        }
+    }
+    //Return nullptr.
+    return nullptr;
+}
+
+QList<KNMusicPlaylistModel *> KNMusicPlaylistListModel::allPlaylists() const
+{
+    //Return all the playlists.
+    return m_playlistList;
+}
+
 QModelIndex KNMusicPlaylistListModel::playlistIndex(
         KNMusicPlaylistModel *playlist)
 {

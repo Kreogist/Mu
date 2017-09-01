@@ -99,7 +99,10 @@ QString KNMusicPlaylistModel::filePath() const
 
 void KNMusicPlaylistModel::setFilePath(const QString &filePath)
 {
+    //Save the file path.
     m_filePath = filePath;
+    //Update the identifier.
+    setIdentifier("MusicModel/Playlist-"+QString::number(qHash(filePath)));
 }
 
 bool KNMusicPlaylistModel::isBuilt() const

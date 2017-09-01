@@ -18,16 +18,22 @@
 #include <QApplication>
 #include <QFileInfo>
 
-#include "knmusicparser.h"
+#include "knconfigure.h"
 
+#include "knmusicparser.h"
 #include "knmusicglobal.h"
 
 #include "knmusictemporaryplaylistmodel.h"
 
+#include <QDebug>
+
+#define ModelDataKey "ModelData"
+
 KNMusicTemporaryPlaylistModel::KNMusicTemporaryPlaylistModel(QObject *parent) :
     KNMusicModel(parent)
 {
-
+    //Set identifier.
+    setIdentifier("MusicModel/TemporaryModel");
 }
 
 void KNMusicTemporaryPlaylistModel::appendTemporaryFiles(QStringList filePaths)
@@ -126,4 +132,44 @@ void KNMusicTemporaryPlaylistModel::setOnlineUrls(
     m_artworkLists.clear();
     //Append the url list.
     appendOnlineUrls(urlList);
+}
+
+void KNMusicTemporaryPlaylistModel::saveModelData(KNConfigure *configure)
+{
+    //Get the string list.
+    QJsonArray filePathArray;
+    QStringList filePaths=filePathList();
+    //Construct the json array.
+    for(auto i:filePaths)
+    {
+        //Prepare the file path array.
+        filePathArray.append(i);
+    }
+    //Set the data to configure.
+    configure->setData(ModelDataKey, filePathArray);
+}
+
+void KNMusicTemporaryPlaylistModel::loadModelData(KNConfigure *configure)
+{
+    //Check the configure.
+    if(!configure->contains(ModelDataKey))
+    {
+        //No need to move on.
+        return;
+    }
+    //Get the file path strings.
+    QJsonArray filePathArray=configure->data(ModelDataKey).toJsonArray();
+    //Construct the file path list.
+    QStringList filePaths;
+    for(auto i : filePathArray)
+    {
+        //Add the string the file paths.
+        filePaths.append(i.toString());
+    }
+    //Check the file path size.
+    if(!filePaths.isEmpty())
+    {
+        //Append all the data to the model.
+        appendTemporaryFiles(filePaths);
+    }
 }

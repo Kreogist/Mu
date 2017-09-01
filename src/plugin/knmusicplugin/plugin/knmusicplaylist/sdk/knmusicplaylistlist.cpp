@@ -23,6 +23,10 @@
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "kndpimanager.h"
+#include "knconfigure.h"
+
+#include "knmusicnowplayingbase.h"
+#include "knmusicglobal.h"
 
 #include "knmusicplaylistlistview.h"
 #include "knmusicplaylistlistmodel.h"

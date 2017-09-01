@@ -23,8 +23,6 @@
 
 #include "knmusicbackendmpv.h"
 
-#include <QDebug>
-
 KNMusicBackendMpv::KNMusicBackendMpv(QObject *parent) :
     KNMusicStandardBackend(parent),
     m_systemConfigure(knGlobal->systemConfigure()->getConfigure("Backend")),

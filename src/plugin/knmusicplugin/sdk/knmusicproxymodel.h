@@ -25,7 +25,16 @@
 
 using namespace MusicUtil;
 
+class KNConfigure;
 class KNMusicModel;
+/*!
+ * \brief The KNMusicProxyModel class provides the filter and sort proxy model
+ * for music models.\n
+ * This model provides the filter and sort function for a music model. It is
+ * used in all the music treeview widget for data sorting and filtering. It also
+ * provides the ability to use one colume as category colume. This would allow
+ * to use this proxy model as the model part of artist view or genre view.
+ */
 class KNMusicProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -42,26 +51,66 @@ public:
      * model, it will be nullptr.
      */
     KNMusicModel *musicModel();
+
+    /*!
+     * \brief Get whether the proxy model is displaying the search result.
+     * \return If the proxy model has the search filter, return true.
+     */
     bool isSearchMode() const;
 
+    /*!
+     * \brief Get a music detail info of a specific row.
+     * \param row The row of the index.
+     * \return The detail info structure of the row.
+     */
     KNMusicDetailInfo rowDetailInfo(int row);
 
+    /*!
+     * \brief Get a music detail info of a specific row from its model index.
+     * \param row The model index of the row.
+     * \return The detail info structure of the row.
+     */
     KNMusicDetailInfo rowDetailInfo(const QModelIndex &row);
 
+    /*!
+     * \brief Get the current set search blocks.
+     * \return The set search blocks data.
+     */
     QList<KNMusicSearchBlock> searchBlocks() const;
 
+    /*!
+     * \brief Remove the search blocks of the current proxy model.
+     */
     void clearSearchBlock();
 
+    /*!
+     * \brief This is a function which allows you to get data much eariler. Get
+     * the display text data from a specific position of the model.
+     * \param row The proxy row of the position.
+     * \param column The proxy column of the position.
+     * \return The text data at that position.
+     */
     inline QString textData(int row, int column) const
     {
         return data(index(row, column), Qt::DisplayRole).toString();
     }
 
+    /*!
+     * \brief This is a function which allows you to get data much eariler. Get
+     * the data at a role from a specific row of the model.
+     * \param row The row of the proxy model.
+     * \param role The role of the data.
+     * \return The role data of the row.
+     */
     inline QVariant propertyData(int row, int role) const
     {
         return data(index(row, 0), role);
     }
 
+    /*!
+     * \brief Map a list of proxy model rows to the source model.
+     * \param rowList The proxy model row list.
+     */
     inline void mapRowListToSource(QList<int> &rowList)
     {
         //Translate all the items in the row list.
@@ -72,9 +121,41 @@ public:
         }
     }
 
+    /*!
+     * \brief Get the column of the category.
+     * \return The category column index of the model.
+     */
     int categoryColumn() const;
 
+    /*!
+     * \brief Get the category filter content. This will ask the proxy model to
+     * filter the category data.
+     * \return The cateogry content data of the value.
+     */
     QString categoryContent() const;
+
+    /*!
+     * \brief Get the identifier of the proxy model.
+     * \return The proxy model identifier text.
+     */
+    QString identifier() const;
+
+    /*!
+     * \brief Set the identifier text data.
+     * \param identifier The identifier text.
+     */
+    void setIdentifier(const QString &identifier);
+
+    /*!
+     * \brief Get the proxy state data of the model to JSON object.
+     */
+    QJsonObject proxyState();
+
+    /*!
+     * \brief Load the state of the model from JSON object.
+     * \param proxyParameters The proxy data JSON object.
+     */
+    void loadProxyState(const QJsonObject &proxyParameters);
 
 signals:
 
@@ -112,11 +193,11 @@ protected:
 
 private:
     inline bool checkRule(QAbstractItemModel *model,
-                                const int &row,
+                                int row,
                                 const KNMusicSearchBlock &block) const;
     QList<KNMusicSearchBlock> m_searchBlocks;
+    QString m_categoryContent, m_identifier;
     int m_categoryColumn;
-    QString m_categoryContent;
 };
 
 #endif // KNMUSICPROXYMODEL_H

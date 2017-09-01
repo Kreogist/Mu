@@ -25,11 +25,10 @@
 #include "knconfigure.h"
 #include "knglobal.h"
 
+#include "knmusicglobal.h"
 #include "knmusicbackendbassthread.h"
 
 #include "knmusicbackendbass.h"
-
-#include <QDebug>
 
 KNMusicBackendBass::KNMusicBackendBass(QObject *parent) :
     KNMusicStandardBackend(parent),

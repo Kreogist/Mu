@@ -51,6 +51,21 @@ public:
     KNMusicPlaylistModel *playlist(const QModelIndex &index);
 
     /*!
+     * \brief This is a override function. Get a playlist model according to the
+     * identifier of the playlist.
+     * \param identifer The identifier of the playlist.
+     * \return If the identifer is not exist in the list, return nullptr. Or
+     * the pointer to the playlist model.
+     */
+    KNMusicPlaylistModel *playlist(const QString &identifier);
+
+    /*!
+     * \brief Get all the playlists model list.
+     * \return
+     */
+    QList<KNMusicPlaylistModel *> allPlaylists() const;
+
+    /*!
      * \brief This is an override function. Get a playlist model according to
      * the row.
      * \param row The row of the playlist.

@@ -22,6 +22,8 @@
 #include <QObject>
 
 class KNConfigure;
+class KNMusicModel;
+class KNMusicProxyModel;
 class KNMusicTab;
 class KNMusicNowPlayingBase;
 /*!
@@ -72,6 +74,20 @@ public:
      */
     virtual bool isWorking()=0;
 
+    /*!
+     * \brief Get music model according to the identifier.
+     * \param identifier The identifier string of the music model.
+     * \return The music model pointer.
+     */
+    virtual KNMusicModel *musicModel(const QString &identifier)=0;
+
+    /*!
+     * \brief Get music proxy model according to the identifier.
+     * \param identifier The identifier string of the music proxy model.
+     * \return The music proxy model pointer.
+     */
+    virtual KNMusicProxyModel *proxyMusicModel(const QString &identifier)=0;
+
 signals:
     /*!
      * \brief Ask music plugin to show the playlist float list widget.
@@ -109,6 +125,11 @@ public slots:
      * \param nowPlaying Now playing class pointer.
      */
     virtual void setNowPlaying(KNMusicNowPlayingBase *nowPlaying)=0;
+
+    /*!
+     * \brief Load the library data from the disk.
+     */
+    virtual void loadLibrary()=0;
 
 private:
 };

@@ -140,6 +140,49 @@ bool KNMusicLibrary::isWorking()
     return m_libraryModel->isWorking();
 }
 
+KNMusicModel *KNMusicLibrary::musicModel(const QString &identifier)
+{
+    //Load the music library first.
+    loadLibrary();
+    //Check the identifier.
+    return ("MusicModel/Library"==identifier)?m_libraryModel:nullptr;
+}
+
+KNMusicProxyModel *KNMusicLibrary::proxyMusicModel(const QString &identifier)
+{
+    //Check the identifier.
+    if(!identifier.startsWith("ProxyModel/Library"))
+    {
+        //Failed to get the proxy model.
+        return nullptr;
+    }
+    //Get the proxy model according to its identifier.
+    QString tabName=identifier.mid(19);
+    //Check the tab name.
+    if("Song"==tabName)
+    {
+        //Song tab.
+        return m_songTab->proxyMusicModel();
+    }
+    else if("Artist"==tabName)
+    {
+        //Artist tab.
+        return m_libraryTabs[TabArtists]->proxyMusicModel();
+    }
+    else if("Album"==tabName)
+    {
+        //Album tab.
+        return m_libraryTabs[TabAlbums]->proxyMusicModel();
+    }
+    else if("Genre"==tabName)
+    {
+        //Genre tab.
+        return m_libraryTabs[TabGenres]->proxyMusicModel();
+    }
+    //For other case, return nullptr.
+    return nullptr;
+}
+
 void KNMusicLibrary::showInSongTab()
 {
     //Check out now playing pointer.
@@ -195,14 +238,18 @@ void KNMusicLibrary::retranslate()
     m_addToLibraryButton->setToolTip(tr("Add music to Library"));
 }
 
-void KNMusicLibrary::onLoadLibrary()
+void KNMusicLibrary::loadLibrary()
 {
+    //Check the connection handler size.
+    if(m_loadHandler.isEmpty())
+    {
+        //No need to load it again.
+        return;
+    }
     //Disconnect all links.
     m_loadHandler.disconnectAll();
     //Recover the library model.
     m_libraryModel->recoverModel();
-    //Emit the load signal.
-    ;
 }
 
 void KNMusicLibrary::onAddToLibrary()
@@ -227,7 +274,7 @@ void KNMusicLibrary::linkLoadRequest(KNMusicLibraryTab *libraryTab)
     //Link the library tab, add to load request handler.
     m_loadHandler.append(
                 connect(libraryTab, &KNMusicLibraryTab::requireLoadLibrary,
-                        this, &KNMusicLibrary::onLoadLibrary));
+                        this, &KNMusicLibrary::loadLibrary));
     //Simply link the show playlist list to require signal.
     connect(libraryTab, &KNMusicLibraryTab::requireShowPlaylistList,
             this, &KNMusicLibrary::requireShowPlaylistList);

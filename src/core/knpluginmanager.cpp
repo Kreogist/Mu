@@ -52,7 +52,8 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
     m_mainWindow(nullptr),
     m_musicPlugin(nullptr),
-    m_platformExtra(nullptr)
+    m_platformExtra(nullptr),
+    m_applicationStart(false)
 {
     //Set the application information.
     setApplicationInformation();
@@ -227,6 +228,8 @@ void KNPluginManager::launchApplication()
         //Don't need to show the main window, it will start for mini player.
         return;
     }
+    //Load the configure of the music plugin.
+    m_musicPlugin->loadCacheConfigure();
     //Show the main window.
     m_mainWindow->show();
     //Start the global manager to work.

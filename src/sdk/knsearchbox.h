@@ -78,6 +78,10 @@ signals:
     void requireSearch(const QString &text);
 
 public slots:
+    /*!
+     * \brief Reimplemented from QLineEdit::clear().
+     */
+    void clear();
 
 protected:
     /*!

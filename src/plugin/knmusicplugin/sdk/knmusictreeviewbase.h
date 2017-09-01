@@ -68,7 +68,7 @@ public:
      * \param sourceRow The source row of the song. If the row is invalid or
      * there's no valid model, it will do nothing.
      */
-    void selectSourceSong(const int &sourceRow);
+    void selectSourceSong(int sourceRow);
 
     /*!
      * \brief This is a override function.\n
@@ -86,13 +86,13 @@ public:
      * the source model.
      * \param sourceRow The index row in source model.
      */
-    void scrollToSourceRow(const int &sourceRow);
+    void scrollToSourceRow(int sourceRow);
 
     /*!
      * \brief Scroll the tree view to the position of a specific row.
      * \param row The row of the index.
      */
-    void scrollToRow(const int &row);
+    void scrollToRow(int row);
 
 signals:
     /*!

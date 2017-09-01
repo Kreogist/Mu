@@ -55,6 +55,7 @@ KNMusicLibraryArtistTab::KNMusicLibraryArtistTab(QWidget *parent) :
     connect(m_showInArtistTab, &QAction::triggered,
             this, &KNMusicLibraryArtistTab::onActionShowInArtist);
     //Configure the artist display.
+    m_artistDisplay->setProxyModelIdentifier("ProxyModel/Library/Artist");
     m_artistDisplay->setCategoryColumn(Artist);
     connect(m_artistDisplay, &KNMusicCategoryDisplay::requireShowPlaylistList,
             this, &KNMusicLibraryArtistTab::requireShowPlaylistList);
@@ -143,6 +144,12 @@ void KNMusicLibraryArtistTab::showIndex(KNMusicModel *musicModel,
     }
     //Or else we have to find the detail info in the model.
     showInTab(musicModel->rowDetailInfo(index.row()));
+}
+
+KNMusicProxyModel *KNMusicLibraryArtistTab::proxyMusicModel()
+{
+    //Get the proxy music model of the artist display.
+    return m_artistDisplay->proxyMusicModel();
 }
 
 void KNMusicLibraryArtistTab::setCategoryModel(KNMusicCategoryModelBase *model)

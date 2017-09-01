@@ -115,6 +115,12 @@ KNMusicCategoryDisplay::KNMusicCategoryDisplay(QWidget *parent,
     retranslate();
 }
 
+KNMusicProxyModel *KNMusicCategoryDisplay::proxyMusicModel() const
+{
+    //Get the tree view proxy model.
+    return m_categoryTreeView->proxyModel();
+}
+
 void KNMusicCategoryDisplay::setLibraryModel(KNMusicLibraryModel *model)
 {
     //Set the library model to the tree view.
@@ -197,6 +203,12 @@ void KNMusicCategoryDisplay::hideAllStuffs()
     m_categoryInfo->hide();
     //Hide treeview.
     m_categoryTreeView->hide();
+}
+
+void KNMusicCategoryDisplay::setProxyModelIdentifier(const QString &identifier)
+{
+    //Set the identifier to the category tree view.
+    m_categoryTreeView->proxyModel()->setIdentifier(identifier);
 }
 
 void KNMusicCategoryDisplay::resizeEvent(QResizeEvent *event)

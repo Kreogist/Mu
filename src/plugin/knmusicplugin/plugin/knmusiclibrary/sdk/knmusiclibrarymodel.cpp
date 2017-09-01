@@ -46,6 +46,8 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     m_databaseLoaded(false),
     m_ignoreCueData(true)
 {
+    //Set properties.
+    setIdentifier("MusicModel/Library");
     //Move the searcher to working thread.
     m_searcher->moveToThread(&m_searchThread);
     //Link the require add signal to searcher.
