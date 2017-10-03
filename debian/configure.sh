@@ -11,7 +11,7 @@ function check_package()
 	then
 		echo ""
 		echo "[S] Installing $1..."
-		sudo apt-get install "$1"
+		sudo apt-get -y install "$1"
 		echo "[I] Done: $1 has been installed."
 	else
 		echo "Done"
