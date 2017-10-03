@@ -125,7 +125,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                    "in Windows.\nThis option will be applied after the "
                    "application restarted."), false);
 #endif
-        addItem(block, tr("Use Buffer"),
+        addItem(block, tr("Use buffering"),
                 "System/Backend/Buffer", true, TypeBoolean,
                 tr("Enable the playback buffering.\nA playing music is "
                    "normally asked to render data to its playback buffer in "
@@ -135,7 +135,7 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                    "produce data as it is needed during the generation of the "
                    "output data.\nThis option will"
                    " be applied after the application restarted."), false);
-        addIntItem(block, tr("Buffer Length"),
+        addIntItem(block, tr("Buffer length"),
                    "System/Backend/BufferLength", 500,
                    tr("The buffer length in milliseconds.\n"
                       "Increasing the length, decreases the chance of the "
@@ -143,22 +143,22 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
                       "also increases the latency for DSP/FX.\nThis option "
                       "will be applied after the application restarted."),
                    10, 5000, false);
-        addItem(block, tr("Force Stereo Output"),
+        addItem(block, tr("Force stereo output"),
                 "System/Backend/Stereo", false, TypeBoolean,
                 tr("Limit the output to stereo, saving some CPU if the device "
                    "has more speakers available.\nThis option will be applied "
                    "after the application restarted."), true);
-        addItem(block, tr("Output Device"),
+        addItem(block, tr("Output audio device"),
                 "System/Backend/OutputDevice", QVariant(), TypeAudioDevice,
                 tr("Select the audio output device for music playing.\nThis "
                    "option will be applied after the application restarted."),
                 false);
         QStringList sampleRates;
-        QString defaultSampleRate=tr("Use Device Default Sample Rate");
+        QString defaultSampleRate=tr("Use device default sample rate");
         sampleRates << defaultSampleRate << "8000" << "11025" << "22050"
                     << "32000" << "44100" << "47250" << "48000" << "50000"
                     << "50400" << "96000" << "192000";
-        addComboItem(block, tr("Device Sample Rate (Hz)"),
+        addComboItem(block, tr("Device sample rate (Hz)"),
                      "System/Backend/SampleRate", defaultSampleRate,
                      tr("This option will change the output sample rate of the "
                         "audio device.\nThis option will be applied after the "
@@ -167,7 +167,11 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         panelData.append(block);
         //Playing parameters.
         block=generateBlock(tr("Player Parameters"));
-        addIntItem(block, tr("Volume Level (%)"),
+        addItem(block, tr("Auto play next song"),
+                "User/Music/NowPlaying/NormalAutoNext", false, TypeBoolean,
+                tr("Automatically play the next song on normal no repeat "
+                   "mode."), true);
+        addIntItem(block, tr("Volume level (%)"),
                    "User/Backend/VolumeLevel", 10,
                    tr("Mu supports changing volume via shortcut key or mouse "
                       "scroll wheel.\nThis option could change the volume size "

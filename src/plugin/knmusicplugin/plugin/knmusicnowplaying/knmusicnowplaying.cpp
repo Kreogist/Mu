@@ -33,6 +33,8 @@
 
 KNMusicNowPlaying::KNMusicNowPlaying(QObject *parent) :
     KNMusicNowPlayingBase(parent),
+    m_nowPlayingConfigure(knMusicGlobal->configure()->getConfigure(
+                              "NowPlaying")),
     m_backend(nullptr),
     m_playingProxyModel(nullptr),
     m_shadowPlayingModel(new KNMusicProxyModel(this)),
@@ -527,6 +529,16 @@ void KNMusicNowPlaying::onActionBackendFinished()
             }
         }
         //Action finished.
+        return;
+    }
+    //If we are in the normal mode.
+    if(NoRepeat==m_loopState &&
+            //And the user disable the auto playing next on normal mode.
+            !m_nowPlayingConfigure->data("NormalAutoNext", false).toBool())
+    {
+        //Simply reset the model.
+        reset();
+        //Do nothing.
         return;
     }
     //Or else, play next.

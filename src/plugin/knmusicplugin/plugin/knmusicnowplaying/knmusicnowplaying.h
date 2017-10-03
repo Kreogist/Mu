@@ -25,6 +25,7 @@
 
 #include "knmusicnowplayingbase.h"
 
+class KNConfigure;
 class KNMusicTemporaryPlaylistModel;
 /*!
  * \brief The KNMusicNowPlaying class provides a default now playing. Though the
@@ -161,6 +162,7 @@ private:
     inline void resetCurrentPlayingModelData();
     inline void playNextRow(bool noLoopMode=false);
 
+    KNConfigure *m_nowPlayingConfigure;
     KNMusicBackend *m_backend;
     KNMusicProxyModel *m_playingProxyModel,
                       *m_shadowPlayingModel,
