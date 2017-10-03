@@ -86,6 +86,7 @@ private slots:
 private:
     QList<KNMusicDetailInfo> m_downloadQueue;
     QList<KNMusicLyricsDownloader *> m_downloaders;
+    QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> m_downloadLyricsList;
     QMutex m_workingLock;
     KNMusicLrcParser *m_lrcParser;
     uint m_identifier;

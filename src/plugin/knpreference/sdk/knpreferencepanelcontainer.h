@@ -70,10 +70,8 @@ protected:
 private:
     inline void updateContainerSize();
     inline void updatePanelSize(KNPreferencePanel *panel,
-                                KNSideShadowWidget *shadow,
-                                QScrollBar *scrollBar);
+                                KNSideShadowWidget *shadow);
     QList<KNPreferencePanel *> m_panelList;
-    QList<QScrollBar *> m_scrollList;
     QList<KNSideShadowWidget *> m_shadowList;
     QWidget *m_panelContainer;
 };

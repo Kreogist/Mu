@@ -43,30 +43,26 @@ Foundation,
 #define MaxOpacity 0x20
 
 KNPreferencePanel::KNPreferencePanel(QWidget *parent) :
-    QWidget(parent),
+    KNScrollArea(parent),
     m_titleFont(font()),
-    m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this)),
-    m_mouseAnime(new QTimeLine(200, this)),
-    m_scrollBar(nullptr),
+    m_container(new QWidget(this)),
+    m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, m_container)),
     m_currentFrame(0)
 {
     //Set properties.
     setAutoFillBackground(true);
+    setWidget(m_container);
     setFixedWidth(knDpi->width(540));
+    //Configure the container.
+    m_container->setFixedWidth(width());
     //Set layout.
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
     m_mainLayout->setSpacing(0);
-    setLayout(m_mainLayout);
+    m_container->setLayout(m_mainLayout);
     //Get the palette.
     setPalette(knTheme->getPalette("PreferencePanel"));
     //Set the title font.
     m_titleFont.setPixelSize(knDpi->height(14));
-    //Configure the time line.
-    m_mouseAnime->setEasingCurve(QEasingCurve::OutCubic);
-    m_mouseAnime->setUpdateInterval(16);
-    //Link the time line.
-    connect(m_mouseAnime, &QTimeLine::frameChanged,
-            this, &KNPreferencePanel::onMouseInOut);
 }
 
 void KNPreferencePanel::setPanelBlocks(
@@ -118,6 +114,8 @@ void KNPreferencePanel::setPanelBlocks(
     }
     //Add stretch.
     m_mainLayout->addStretch();
+    //Resize the container.
+    m_container->setFixedHeight(m_mainLayout->sizeHint().height());
 }
 
 void KNPreferencePanel::setAdvancedItemShown(bool isShow)
@@ -128,6 +126,8 @@ void KNPreferencePanel::setAdvancedItemShown(bool isShow)
         //Set the visible item to the item.
         item->setVisible(isShow);
     }
+    //Resize the container.
+    m_container->setFixedHeight(m_mainLayout->sizeHint().height());
 }
 
 inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
@@ -166,71 +166,4 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
     item->setPreferenceOption(option);
     //Give back the item.
     return item;
-}
-
-void KNPreferencePanel::setScrollBar(QScrollBar *scrollBar)
-{
-    //Save the scroll bar pointer.
-    m_scrollBar = scrollBar;
-    //Connect the scroll bar signals.
-    connect(m_scrollBar, &QScrollBar::rangeChanged,
-            [=](int min, int max)
-            {
-                Q_UNUSED(min)
-                //Check the maximum data, if panel y() is smaller than its
-                //negative, update pos.
-                if(y()<-max)
-                {
-                    //Move to new position.
-                    move(x(), -max);
-                }
-            });
-    connect(m_scrollBar, &QScrollBar::valueChanged,
-            [=](int value)
-            {
-                //Move the widget.
-                move(x(), -value);
-            });
-}
-
-void KNPreferencePanel::enterEvent(QEvent *event)
-{
-    //Do original enter event.
-    QWidget::enterEvent(event);
-    //Start mouse in anime.
-    startAnime(MaxOpacity);
-}
-
-void KNPreferencePanel::leaveEvent(QEvent *event)
-{
-    //Do original enter event.
-    QWidget::leaveEvent(event);
-    //Start mouse in anime.
-    startAnime(0);
-}
-
-void KNPreferencePanel::onMouseInOut(int frame)
-{
-    //Save the frame.
-    m_currentFrame=frame;
-    //Update the horizontal scroll bar palette.
-    QPalette pal=m_scrollBar->palette();
-    QColor color=pal.color(QPalette::Base);
-    color.setAlpha(m_currentFrame*3);
-    pal.setColor(QPalette::Base, color);
-    color=pal.color(QPalette::Button);
-    color.setAlpha(m_currentFrame<<2);
-    pal.setColor(QPalette::Button, color);
-    //Set the palette to vertical scroll bar.
-    m_scrollBar->setPalette(pal);
-}
-
-void KNPreferencePanel::startAnime(int endFrame)
-{
-    //Stop the mouse animations.
-    m_mouseAnime->stop();
-    //Set the parameter of the time line.
-    m_mouseAnime->setFrameRange(m_currentFrame, endFrame);
-    //Start the time line.
-    m_mouseAnime->start();
 }

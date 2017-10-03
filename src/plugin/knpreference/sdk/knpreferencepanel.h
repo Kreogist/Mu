@@ -22,7 +22,7 @@ Foundation,
 
 #include "knpreferenceutil.h"
 
-#include <QWidget>
+#include "knscrollarea.h"
 
 using namespace PreferenceUtil;
 
@@ -34,7 +34,7 @@ class KNPreferencePanelItem;
  * \brief The KNPreferencePanel class provides a panel which could load a
  * setting panel item list and generate the widget for the top level widgets.
  */
-class KNPreferencePanel : public QWidget
+class KNPreferencePanel : public KNScrollArea
 {
     Q_OBJECT
 public:
@@ -43,7 +43,6 @@ public:
      * \param parent The parent widget.
      */
     explicit KNPreferencePanel(QWidget *parent = 0);
-
 
 signals:
 
@@ -61,36 +60,14 @@ public slots:
      */
     void setAdvancedItemShown(bool isShow);
 
-    /*!
-     * \brief Set the scroll of the preference panel.
-     * \param scrollBar The scroll bar widget pointer.
-     */
-    void setScrollBar(QScrollBar *scrollBar);
-
-protected:
-    /*!
-     * \brief Reimplemented from QWidget::enterEvent().
-     */
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QWidget::leaveEvent().
-     */
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
-
-
-private slots:
-    void onMouseInOut(int frame);
-
 private:
-    inline void startAnime(int endFrame);
     inline KNPreferencePanelItem *generateItem(
             const PreferencePanelOption &option);
     QFont m_titleFont;
     QList<QWidget *> m_advancedItems;
+    QWidget *m_container;
     QBoxLayout *m_mainLayout;
     QTimeLine *m_mouseAnime;
-    QScrollBar *m_scrollBar;
     int m_currentFrame;
 };
 

@@ -57,11 +57,12 @@ bool KNFileAssociationManager::bindFileTypes(const QString &suffix,
     userClass.endGroup(); //--command
     userClass.endGroup(); //--open
     userClass.endGroup(); //--shell
-    userClass.endGroup();
+    userClass.endGroup(); //--File Type
     //Okay, now, update the user group file association to Kreogist file type.
     QSettings extUserClass(UserClassPath"\\"+suffix, QSettings::NativeFormat);
     //Set the default value to Kreogist file type.
     extUserClass.setValue("Default", fileType);
+    extUserClass.setValue("PerceivedType", "Audio");
     //Set the OpenWithProgIds values.
     extUserClass.beginGroup("OpenWithProgIds");
     extUserClass.setValue(fileType, "");
@@ -97,7 +98,28 @@ bool KNFileAssociationManager::bindFileTypes(const QString &suffix,
 bool KNFileAssociationManager::unbindFileTypes(const QString &suffix,
                                                const QString &handler)
 {
-    return false;
+    Q_UNUSED(handler)
+    //Generate the file type.
+    QString fileType=KreogistHeader+suffix;
+    //Remove the user group file association to Kreogist file type.
+    QSettings extUserClass(UserClassPath"\\"+suffix, QSettings::NativeFormat);
+    //Set the default value to Kreogist file type.
+    extUserClass.setValue("Default", "");
+    //Set the OpenWithProgIds values.
+    extUserClass.beginGroup("OpenWithProgIds");
+    extUserClass.remove(fileType);
+    extUserClass.endGroup();
+    //First, we need to write Kreogist file type to user class registry.
+    QSettings userClass(UserClassPath, QSettings::NativeFormat);
+    //Remove the file type group.
+    userClass.beginGroup(fileType);
+    userClass.remove("");
+    userClass.endGroup();
+    //Notify Windows for the file association changed.
+    SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_DWORD | SHCNF_FLUSH,
+                   nullptr, nullptr);
+    //Mission complete.
+    return true;
 }
 
 bool KNFileAssociationManager::isFileTypeBinded(const QString &suffix,
