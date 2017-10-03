@@ -1561,7 +1561,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="211"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="212"/>
         <source>Music</source>
         <translation>音楽</translation>
     </message>

@@ -41,7 +41,8 @@ TRANSLATIONS += \
     i18n/Russian.ts \
     i18n/Spanish.ts \
     i18n/Turkish.ts \
-    i18n/Dutch.ts
+    i18n/Dutch.ts \
+    i18n/Urdu.ts
 
 intel64: {
     msvc: {
@@ -126,7 +127,7 @@ win32: {
                resource/icon/mu.ico
     ICON = resource/icon/mu.ico
     # Enable the backend and analysiser.
-    CONFIG += backend-bass analysiser-ffmpeg
+    CONFIG += backend-bass ffmpeg-common ffmpeg-swresample analysiser-ffmpeg
     # Add Windows platform special extras.
     QT += winextras
     SOURCES += plugin/knwindowsextras/knwindowsextras.cpp \
@@ -146,7 +147,7 @@ macx: {
     # Set the info plist.
     QMAKE_INFO_PLIST = resource/platforms/mac/Info.plist
     # Enable the backend and analysiser.
-    CONFIG += backend-bass analysiser-ffmpeg
+    CONFIG += backend-bass ffmpeg-common ffmpeg-swresample analysiser-ffmpeg
     # Nearly all the audio library will use CoreAudio on Mac OS X, so import
     # CoreAudio library to LFLAGS and LIBS.
     QMAKE_LFLAGS += -framework CoreFoundation
@@ -160,8 +161,17 @@ macx: {
 }
 
 linux: {
-    # Enable the backend and analysiser.
-    CONFIG += backend-mpv analysiser-ffmpeg i18n
+    # Enable the analysiser.
+    CONFIG += ffmpeg-common analysiser-ffmpeg i18n
+    # Check for the avresample library.
+    avresample_detect=$$system(pkg-config --cflags libavresample)
+    contains(avresample_detect, not found)  {
+        # Use swresample, and it will support for the latest mpv backend.
+        CONFIG += backend-mpv ffmpeg-swresample
+    } else {
+        # Use avresample, this would only support for the gstreamer backend.
+        CONFIG += backend-gstreamer ffmpeg-avresample
+    }
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
@@ -276,16 +286,42 @@ backend-bass: {
 }
 
 # Analysiser Specific Configuration
-analysiser-ffmpeg: {
+ffmpeg-common: {
     # Add libraries.
-    LIBS += -lavformat -lavcodec -lavutil -lswresample -lswscale
-    # Define the ffmpeg enabled flag.
+    LIBS += -lavformat -lavcodec -lavutil -lswscale
+}
+
+ffmpeg-avresample: {
+    # For the LibAV, it uses avresample instead of swresample.
+    DEFINES += ENABLED_FFMPEG_AVRESAMPLE
+    LIBS += -lavresample
+}
+
+ffmpeg-swresample: {
+    # For normal FFMpeg, it uses swresample.
+            DEFINES += ENABLED_FFMPEG_SWRESAMPLE
+            LIBS += -lswresample
+}
+
+analysiser-ffmpeg: {
+    # Define the ffmpeg analysiser enabled flag.
     DEFINES += ENABLED_FFMPEG_ANALYSISER
     # Add analysiser files to the project.
     SOURCES += \
         plugin/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.cpp
     HEADERS += \
         plugin/knmusicplugin/plugin/knmusicffmpeganalysiser/knmusicffmpeganalysiser.h
+}
+
+# Transcoder Specific Configuration
+transcoder-ffmpeg: {
+    # Define the ffmpeg transcoder enabled flag.
+    DEFINES += ENABLED_FFMPEG_TRANSCODER
+    # Add transcoder files to the project.
+    SOURCES += \
+        plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.cpp
+    HEADERS += \
+        plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.h
 }
 
 # Add sdk directory to include path.
@@ -531,7 +567,6 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelbooleanitem.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp \
     sdk/knmousedetectlabel.cpp \
-    plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.cpp \
     sdk/account/knaccountbase.cpp \
     sdk/account/knaccount.cpp \
     core/knmainwindowstatusbar.cpp \
@@ -821,7 +856,6 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelfontitem.h \
     sdk/knmousedetectlabel.h \
     plugin/knmusicplugin/sdk/knmusictranscoderbase.h \
-    plugin/knmusicplugin/plugin/knmusicffmpegtranscoder/knmusicffmpegtranscoder.h \
     sdk/account/knaccountbase.h \
     sdk/account/knaccount.h \
     core/knmainwindowstatusbar.h \
