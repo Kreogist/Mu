@@ -23,6 +23,8 @@
 #include "knmusicbackend.h"
 #include "knmusicglobal.h"
 #include "knmusicparser.h"
+#include "knmusiclyricsmanager.h"
+#include "knmusiclyricsbackend.h"
 #include "knmusictemporaryplaylistmodel.h"
 
 #include "knmusicnowplaying.h"
@@ -175,12 +177,25 @@ void KNMusicNowPlaying::loadConfigure(KNMusicModel *musicModel)
     musicModel->setPlayingIndex(playingIndex);
     //Save the playing index.
     m_playingIndex=playingIndex;
+    //Get the playing row.
+    int sourcePlayingRow=
+            m_shadowPlayingModel->mapFromSource(m_playingIndex).row();
+    //Check the playing row is valid or not.
+    if(sourcePlayingRow==-1)
+    {
+        //Complete.
+        return;
+    }
     //Ask the backend to play the index.
-    playRow(m_shadowPlayingModel->mapFromSource(m_playingIndex).row());
+    playRow(sourcePlayingRow);
     //Pause the playing right after loaded.
     m_backend->pause();
+    //Get the backend position.
+    qint64 songPosition=lastPlayedConfigure->data("Position").toLongLong();
     //Move the position to the stored position.
-    m_backend->setPosition(lastPlayedConfigure->data("Position").toLongLong());
+    m_backend->setPosition(songPosition);
+    //Sync the lyrics.
+    knMusicGlobal->lyricsManager()->backend()->setPosition(songPosition);
 }
 
 void KNMusicNowPlaying::saveConfigure()

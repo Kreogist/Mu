@@ -33,7 +33,7 @@ namespace PreferenceUtil
         PanelPlayback,
         PanelLyrics,
         PanelShortcuts,
-        PanelFileAsso,
+//        PanelFileAsso,
         PreferencePanelCount
     };
 
