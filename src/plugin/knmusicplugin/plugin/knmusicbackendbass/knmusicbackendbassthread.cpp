@@ -628,13 +628,14 @@ inline bool KNMusicBackendBassThread::initialWasapi()
     if (!BASS_WASAPI_Init(m_wasapiOutputDevice,
                           channelInfo.freq, channelInfo.chans,
                           m_wasapiFlag, bufferLength,
-                          0.05, wasapiProcess, this)) {
+                          (float)0.05, wasapiProcess, this)) {
         // Failed, try falling back to shared mode
         if (!(m_wasapiFlag & BASS_WASAPI_EXCLUSIVE) ||
                 !BASS_WASAPI_Init(m_wasapiOutputDevice,
                                   channelInfo.freq, channelInfo.chans,
                                   m_wasapiFlag & ~BASS_WASAPI_EXCLUSIVE,
-                                  bufferLength, 0.05, wasapiProcess, this))
+                                  bufferLength, (float)0.05,
+                                  wasapiProcess, this))
         {
             //Can't initialize device.
             return false;

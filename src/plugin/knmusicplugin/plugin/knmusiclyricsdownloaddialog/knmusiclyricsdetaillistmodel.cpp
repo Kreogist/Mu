@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <kndpimanager.h>
 
 #include "knmusiclyricsdetaillistmodel.h"
 
@@ -59,7 +60,7 @@ QVariant KNMusicLyricsDetailListModel::data(const QModelIndex &index,
     case Qt::DisplayRole:
         return QVariant(detail.title + "\n" + detail.artist);
     case Qt::SizeHintRole:
-        return QSize(12, 34);
+        return knDpi->size(12, 34);
     case Qt::UserRole:
         return detail.lyricsData;
     default:

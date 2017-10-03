@@ -671,12 +671,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="373"/>
+        <location filename="../sdk/knmainwindow.cpp" line="380"/>
         <source>Cannot quit now</source>
         <translation>当前无法退出</translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="374"/>
+        <location filename="../sdk/knmainwindow.cpp" line="381"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation>仍有文件正在添加到音乐库中，请等待其添加完毕。</translation>
     </message>
@@ -700,37 +700,37 @@
 <context>
     <name>KNMusicCategoryDisplay</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="235"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="247"/>
         <source>No song.</source>
         <translation>没有歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="236"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="248"/>
         <source>1 song.</source>
         <translation>1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="237"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="249"/>
         <source>%1 songs.</source>
         <translation>%1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="239"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="251"/>
         <source>No result.</source>
         <translation>找不到符合条件的歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="240"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="252"/>
         <source>1 result.</source>
         <translation>找到 1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="241"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="253"/>
         <source>%1 results.</source>
         <translation>找到 %1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="243"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiccategorydisplay.cpp" line="255"/>
         <source>Search result in %1</source>
         <translation>%1 中的搜索结果</translation>
     </message>
@@ -1124,12 +1124,12 @@
 <context>
     <name>KNMusicLibrary</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="195"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="238"/>
         <source>Add music to Library</source>
         <translation>添加音乐到音乐库</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="212"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="259"/>
         <source>Add To Library</source>
         <translation>添加歌曲到音乐库</translation>
     </message>
@@ -1137,17 +1137,17 @@
 <context>
     <name>KNMusicLibraryAlbumTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="200"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="206"/>
         <source>Albums</source>
         <translation>专辑</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="202"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="208"/>
         <source>Go to Albums</source>
         <translation>在专辑中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="207"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryalbumtab.cpp" line="213"/>
         <source>No Album</source>
         <translation>没有专辑</translation>
     </message>
@@ -1155,22 +1155,22 @@
 <context>
     <name>KNMusicLibraryArtistTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="257"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="264"/>
         <source>Artists</source>
         <translation>艺术家</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="259"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="266"/>
         <source>Search in artist</source>
         <translation>在艺术家中搜索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="261"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="268"/>
         <source>Go to Artist</source>
         <translation>在艺术家中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="266"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryartisttab.cpp" line="273"/>
         <source>No Artist</source>
         <translation>没有艺术家</translation>
     </message>
@@ -1197,22 +1197,22 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibraryGenreTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="234"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="241"/>
         <source>Genres</source>
         <translation>流派</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="236"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="243"/>
         <source>Search in genre</source>
         <translation>在流派中搜索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="238"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="245"/>
         <source>Go to Genre</source>
         <translation>在流派中显示</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="243"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="250"/>
         <source>No Genre</source>
         <translation>没有流派</translation>
     </message>
@@ -1220,12 +1220,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibraryModel</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="59"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="61"/>
         <source>Search complete</source>
         <translation>音乐检索完成</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="60"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="62"/>
         <source>%1 files have been to music library.</source>
         <translation>检索到 %1 个音乐文件，已被添加到数据库。</translation>
     </message>
@@ -1233,12 +1233,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLibrarySongTab</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="185"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="193"/>
         <source>Songs</source>
         <translation>歌曲</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="187"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarysongtab.cpp" line="195"/>
         <source>Go to Songs</source>
         <translation>在歌曲中显示</translation>
     </message>
@@ -1318,12 +1318,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylist</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="199"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="218"/>
         <source>Playlist</source>
         <translation>播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="202"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="221"/>
         <source>Failed to delete the playlist file: 
 
 %1</source>
@@ -1332,7 +1332,7 @@ To add songs to library, drag your songs here.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="306"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/knmusicplaylist.cpp" line="325"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
@@ -1368,22 +1368,22 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistList</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="92"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="96"/>
         <source>New Playlist</source>
         <translation>创建新的播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="93"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="97"/>
         <source>Import Playlist</source>
         <translation>导入播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="95"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="99"/>
         <source>Export</source>
         <translation>导出播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="96"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistlist.cpp" line="100"/>
         <source>Copy</source>
         <translation>复制播放列表</translation>
     </message>
@@ -1407,27 +1407,27 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistManager</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="133"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="140"/>
         <source>All Support Playlist</source>
         <translation>所有支持的播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="135"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="142"/>
         <source>Mu playlist</source>
         <translation>Mu 播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="294"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="301"/>
         <source>New Playlist</source>
         <translation>新播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="415"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="422"/>
         <source>%1 playlists cannot be loaded.</source>
         <translation>%1 个播放列表无法加载。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="417"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistmanager.cpp" line="424"/>
         <source>Those playlists may be moved, deleted or renamed.</source>
         <translation>这些播放列表可能被移动、删除或者重命名。</translation>
     </message>
@@ -1443,17 +1443,17 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlaylistViewer</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="209"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="217"/>
         <source>No song.</source>
         <translation>没有歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="210"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="218"/>
         <source>1 song, </source>
         <translation>1 首歌曲，</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="211"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="219"/>
         <source>%1 songs, </source>
         <translation>%1 首歌曲，</translation>
     </message>
@@ -1470,82 +1470,82 @@ To create a playlist, drag your songs here.</source>
         <translation type="vanished">%1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="213"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="221"/>
         <source>0 minute.</source>
         <translation>0 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="214"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="222"/>
         <source>1 minute.</source>
         <translation>0 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="215"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="223"/>
         <source>%1 minutes.</source>
         <translation>%1 分钟。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="217"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="225"/>
         <source>1 hour and </source>
         <translation>1 小时 </translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="218"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="226"/>
         <source>%1 hours and </source>
         <translation>%1 小时 </translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="220"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="228"/>
         <source>1 hour.</source>
         <translation>1 小时。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="221"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="229"/>
         <source>%1 hours.</source>
         <translation>%1 小时。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="223"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="231"/>
         <source>No result.</source>
         <translation>找不到符合条件的歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="224"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="232"/>
         <source>1 result.</source>
         <translation>找到 1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="225"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="233"/>
         <source>%1 results.</source>
         <translation>找到 %1 首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="227"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="235"/>
         <source>Search result in %1</source>
         <translation>%1 中的搜索结果</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="229"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="237"/>
         <source>Play the playlist</source>
         <translation>播放当前播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="230"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="238"/>
         <source>Shuffle the playlist</source>
         <translation>乱序播放当前播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="231"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="239"/>
         <source>Add songs to playlist</source>
         <translation>添加歌曲到播放列表</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="232"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="240"/>
         <source>Remove from the playlist</source>
         <translation>从播放列表中移除</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="307"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistviewer.cpp" line="315"/>
         <source>Add to playlist %1</source>
         <translation>添加歌曲到播放列表 %1</translation>
     </message>
@@ -1577,7 +1577,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="213"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="215"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -2026,9 +2026,8 @@ To create a playlist, drag your songs here.</source>
         <translation>快捷键</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="182"/>
         <source>File Types</source>
-        <translation>文件关联</translation>
+        <translation type="vanished">文件关联</translation>
     </message>
 </context>
 <context>
@@ -2233,33 +2232,43 @@ This option will be applied after the application restarted.</source>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
+        <source>Save last played</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="81"/>
+        <source>When next time launch Mu, Mu will restore the last playing song state.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="83"/>
         <source>Search delay (ms)</source>
         <translation>搜索延迟（毫秒）</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="81"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="85"/>
         <source>Mu will start to search once user change the content of the search box.
 When set the delay larger than 0ms, Mu will not start to search if user change the text less than the delay duration.</source>
         <translation>µ将在用户改变搜索框内容时开始即时搜索。
 当延迟时间大于0毫秒时，用户再延时期间内将不会开始搜索。当用户在延迟时间内没有更改搜索内容，才会开始搜索。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="89"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="93"/>
         <source>Ignore CUE data file</source>
         <translation>忽略CUE数据文件</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="105"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="109"/>
         <source>Output Parameter</source>
         <translation>输出参数</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="107"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="111"/>
         <source>Use exclusive mode WASAPI</source>
         <translation>使用独占模式的WASAPI</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="109"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="113"/>
         <source>Using WASAPI with exclusive mode instead of DirectX for sound output.
 When this feature is enabled, the output sample rate will be changed to the sample rate of the real device.
 When this feature is enabled, all the music preview feature will be disabled.
@@ -2299,7 +2308,7 @@ This option will be applied after the application restarted.</source>
         <translation>显示位于右上角的状态栏。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="92"/>
         <source>Library</source>
         <translation>音乐库</translation>
     </message>
@@ -2308,17 +2317,17 @@ This option will be applied after the application restarted.</source>
         <translation type="vanished">忽略CUE数据文件</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="91"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="95"/>
         <source>When adding the data file of one CUE file, ignore the data file.</source>
         <translation>忽略向音乐库添加的CUE的数据文件。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="93"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
         <source>Category by album artist</source>
         <translation>使用专辑艺术家分类</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="95"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="99"/>
         <source>When category the album, use the album artist metadata field instead of statistic all the artists.
 This option will be applied after the application restarted.</source>
         <translation>分类专辑时，使用专辑艺术家信息而不是统计每一首歌曲的艺术家来对专辑进行分类。
@@ -2348,12 +2357,12 @@ When click the icon in the system tray, Mu will pop up back.</source>
 当单击托盘图标时，µ将会重新显示。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="117"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="121"/>
         <source>Use 32-bit floating-point</source>
         <translation>使用32位浮点数</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="119"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="123"/>
         <source>Using 32-bit floating-point instead of 8/16 bit for the sample data.
 WDM drivers are required to use this feature in Windows.
 This option will be applied after the application restarted.</source>
@@ -2362,12 +2371,11 @@ This option will be applied after the application restarted.</source>
 这个设置的更改将在软件重新启动后才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="124"/>
         <source>Use Buffer</source>
-        <translation>使用缓冲</translation>
+        <translation type="vanished">使用缓冲</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="126"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="130"/>
         <source>Enable the playback buffering.
 A playing music is normally asked to render data to its playback buffer in advance to produce the final signal that is given to the output device.
 When this option is off, buffering is skipped and the playing thread will only be asked to produce data as it is needed during the generation of the output data.
@@ -2378,12 +2386,11 @@ This option will be applied after the application restarted.</source>
 这个设置的更改将在软件重新启动后才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="134"/>
         <source>Buffer Length</source>
-        <translation>缓冲区长度</translation>
+        <translation type="vanished">缓冲区长度</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="136"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="140"/>
         <source>The buffer length in milliseconds.
 Increasing the length, decreases the chance of the sound possibly breaking-up on slower computers, 
 but also increases the latency for DSP/FX.
@@ -2394,58 +2401,98 @@ This option will be applied after the application restarted.</source>
 这个设置的更改将在软件重新启动后才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="142"/>
         <source>Force Stereo Output</source>
-        <translation>强制立体声输出</translation>
+        <translation type="vanished">强制立体声输出</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="144"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="148"/>
         <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
 This option will be applied after the application restarted.</source>
         <translation>将输出限制为立体声，可以当具有多通道设备时节省CPU资源。
 这个设置的更改将在软件重新启动后才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="147"/>
         <source>Output Device</source>
-        <translation>输出设备</translation>
+        <translation type="vanished">输出设备</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="149"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="153"/>
         <source>Select the audio output device for music playing.
 This option will be applied after the application restarted.</source>
         <translation>选择用于播放音乐的音频输出设备。
 这个设置的更改将在软件重新启动后才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="153"/>
         <source>Use Device Default Sample Rate</source>
-        <translation>使用设备默认采样率</translation>
+        <translation type="vanished">使用设备默认采样率</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="157"/>
         <source>Device Sample Rate (Hz)</source>
-        <translation>设备采样率（Hz）</translation>
+        <translation type="vanished">设备采样率（Hz）</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="159"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="163"/>
         <source>This option will change the output sample rate of the audio device.
 This option will be applied after the application restarted.</source>
         <translation>本设置将会改变输出音频设备的采样率。
 这个设置的更改将在软件重新启动后才会生效。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="165"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="169"/>
         <source>Player Parameters</source>
         <translation>播放器参数</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="166"/>
         <source>Volume Level (%)</source>
-        <translation>音量等级（%）</translation>
+        <translation type="vanished">音量等级（%）</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="168"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="128"/>
+        <source>Use buffering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="138"/>
+        <source>Buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="146"/>
+        <source>Force stereo output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="151"/>
+        <source>Output audio device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="157"/>
+        <source>Use device default sample rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="161"/>
+        <source>Device sample rate (Hz)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="170"/>
+        <source>Auto play next song</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="172"/>
+        <source>Automatically play the next song on normal no repeat mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="174"/>
+        <source>Volume level (%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="176"/>
         <source>Mu supports changing volume via shortcut key or mouse scroll wheel.
 This option could change the volume size increase or decrease for each shortcut pressing and wheel scrolling.
 The minimum size is 1%, the maximum size is 20%.</source>
@@ -2454,168 +2501,161 @@ The minimum size is 1%, the maximum size is 20%.</source>
 最小大小为1%，最大大小为20%。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="180"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="188"/>
         <source>Header Lyrics</source>
         <translation>顶部歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="181"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="189"/>
         <source>Header lyrics font</source>
         <translation>顶部歌词字体</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="184"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="192"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation>这个选项将用于改变顶部歌词的字体。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="186"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="194"/>
         <source>Header lyrics spacing</source>
         <translation>顶部歌词行间距</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="188"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="196"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
         <translation>这个选项将用来调整顶部歌词每行间的距离。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="192"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="200"/>
         <source>Online Lyrics</source>
         <translation>在线歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="193"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="201"/>
         <source>Allow downloading lyrics</source>
         <translation>允许下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="197"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="205"/>
         <source>Combine translation</source>
         <translation>合并翻译</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="200"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="208"/>
         <source>Some lyrics downloader will provide translated version. 
 This option will allow Mu to combine the translated version and the raw lyrics into a single file.</source>
         <translation>一些歌词下载器可以提供歌词的翻译版。
 这个选项将允许Mu把歌词原文与翻译版的歌词合并为一个文件。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="209"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="217"/>
         <source>Global Shortcut</source>
         <translation>全局快捷键</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="210"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="218"/>
         <source>Use global shortcut</source>
         <translation>使用全局快捷键</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="212"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="220"/>
         <source>Allow the shortcut key bindings to be triggered system wide.</source>
         <translation>允许用户在系统任何位置使用快捷键控制µ。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="216"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="224"/>
         <source>Window Controls</source>
         <translation>窗口控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="217"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="225"/>
         <source>Full Screen</source>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="221"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="229"/>
         <source>This shortcut will be used to control the shortcut for entering or exiting the full screen state.</source>
         <translation>这个快捷键将控制进入及退出全屏状态。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="225"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="233"/>
         <source>Playing Controls</source>
         <translation>播放控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="226"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="234"/>
         <source>Play and Pause</source>
         <translation>播放/暂停</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="231"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="239"/>
         <source>This shortcut will be used in the whole application to play or pause the current playing music.</source>
         <translation>这个快捷键将用于播放或暂停正在播放的音乐。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="233"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="241"/>
         <source>Previous Song</source>
         <translation>上一首</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="238"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="246"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the previous song.</source>
         <translation>这个快捷键将从当前播放的歌曲切换到上一首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="241"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="249"/>
         <source>Next Song</source>
         <translation>下一首</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="246"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="254"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the next song.</source>
         <translation>这个快捷键将从当前播放的歌曲切换到下一首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="251"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="259"/>
         <source>Volume Controls</source>
         <translation>音量控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="252"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="260"/>
         <source>Mute</source>
         <translation>静音</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="256"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="264"/>
         <source>This shortcut will be used in the whole application to enter and exit the mute state.</source>
         <translation>设个快捷键将用于进入或退出静音状态。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="258"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="266"/>
         <source>Volume Up</source>
         <translation>增加音量</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="262"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="270"/>
         <source>This shortcut will be used in the whole application to increase amount of volume.</source>
         <translation>这个快捷键将控制增加部分音量。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="268"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="276"/>
         <source>This shortcut will be used in the whole application to decrease amount of volume.</source>
         <translation>这个快捷键将控制减少部分音量。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="276"/>
-        <source>Auto Set File Types Association</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="278"/>
         <source>Lossless Compressed File Types</source>
-        <translation>无损压缩文件格式</translation>
+        <translation type="vanished">无损压缩文件格式</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="282"/>
         <source>Lossy Compressed File Types</source>
-        <translation>有损压缩文件格式</translation>
+        <translation type="vanished">有损压缩文件格式</translation>
     </message>
     <message>
         <source>This shortcut will be used in the whole application to increase 10% volume.</source>
         <translation type="vanished">这个快捷键将增加10%的音量。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="264"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="272"/>
         <source>Volume Down</source>
         <translation>减小音量</translation>
     </message>
@@ -2628,7 +2668,7 @@ This option will allow Mu to combine the translated version and the raw lyrics i
         <translation type="obsolete">下载歌词</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="195"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="203"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation>如果在歌词文件夹中没有找到歌词，

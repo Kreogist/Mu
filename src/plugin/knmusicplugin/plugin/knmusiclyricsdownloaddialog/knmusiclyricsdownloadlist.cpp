@@ -26,6 +26,7 @@
 #include "knthememanager.h"
 #include "knopacitybutton.h"
 #include "knprogressslider.h"
+#include "kndpimanager.h"
 
 #include "knmusicglobal.h"
 #include "knmusicbackend.h"
@@ -57,7 +58,7 @@ KNMusicLyricsDownloadList::KNMusicLyricsDownloadList(QWidget *parent) :
     m_progressPressed(false)
 {
     //Configure the clock wheel.
-    m_clockWheel->setFixedSize(36, 36);
+    m_clockWheel->setFixedSize(knDpi->size(36, 36));
     m_clockWheel->hide();
     //Configure the label.
     m_downloadServer->hide();
@@ -95,7 +96,7 @@ KNMusicLyricsDownloadList::KNMusicLyricsDownloadList(QWidget *parent) :
     pal.setBrush(QPalette::Window, previewPlayerBase);
     m_previewPlayer->setPalette(pal);
     m_playNPause->setIcon(m_playIcon);
-    m_playNPause->setFixedSize(16, 16);
+    m_playNPause->setFixedSize(knDpi->size(16, 16));
     m_progress->setWheelStep(1000);
     connect(m_progress, &KNProgressSlider::sliderPressed,
             [=]{m_progressPressed=true;});

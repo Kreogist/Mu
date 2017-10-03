@@ -20,6 +20,7 @@
 
 #include "knlabellineedit.h"
 #include "knlocalemanager.h"
+#include "kndpimanager.h"
 
 #include "knmusicbackend.h"
 #include "knmusiclyricsdownloadlist.h"
@@ -42,7 +43,7 @@ KNMusicLyricsDownloadWidget::KNMusicLyricsDownloadWidget(QWidget *parent) :
     m_onlineDownloader(knMusicGlobal->lyricsManager()->onlineLyricsDownloader())
 {
     //Set properties.
-    setContentsMargins(15, 15, 15, 15);
+    setContentsMargins(knDpi->margins(15, 15, 15, 15));
 
     //Configure the title line edit.
     setTabOrder(m_title, m_artist);

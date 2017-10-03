@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "knglobal.h"
+#include "kndpimanager.h"
 
 #include "knmusicglobal.h"
 #include "knmusicbackend.h"
@@ -57,7 +58,7 @@ void KNMusicLyricsDownloadDialog::setDetailInfo(
 void KNMusicLyricsDownloadDialog::onActionExpand()
 {
     //Resize the dialog.
-    resizeDialog(QSize(400, 400));
+    resizeDialog(knDpi->size(400, 400));
 }
 
 bool KNMusicLyricsDownloadDialog::okayPressed()
