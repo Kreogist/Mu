@@ -72,24 +72,13 @@ void KNMusicOnlineLyrics::onActionDownloadLyrics()
     //Check the download queue.
     if(m_downloadQueue.isEmpty())
     {
-        //Lock the state.
-        m_workingLock.lock();
         //Reset the working state to be false.
         m_isWorking=false;
-        //Release the lock.
-        m_workingLock.unlock();
         //We won't process anything for empty queue.
         return;
     }
-    else
-    {
-        //Update working state, lock the working state.
-        m_workingLock.lock();
-        //Reset the working state to be false.
-        m_isWorking=true;
-        //Release the lock.
-        m_workingLock.unlock();
-    }
+    //Reset the working state to be false.
+    m_isWorking=true;
     //Get the last item in the download queue.
     KNMusicDetailInfo detailInfo=m_downloadQueue.takeLast();
     //Reset the download counter and download list.
