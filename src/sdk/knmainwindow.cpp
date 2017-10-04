@@ -58,6 +58,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_fullScreenIcon(QIcon("://public/status_fullscreen.png")),
     m_fullScreenOffIcon(QIcon("://public/status_fullscreen_off.png")),
+    m_geometryBeforeMinimize(QRect()),
     m_header(nullptr),
     m_musicPlugin(nullptr),
     m_cacheConfigure(knGlobal->cacheConfigure()->getConfigure("MainWindow")),
@@ -284,16 +285,21 @@ bool KNMainWindow::event(QEvent *event)
         m_fullScreen->setIcon(isFullScreen()?
                                   m_fullScreenOffIcon:
                                   m_fullScreenIcon);
-        //Check the window state, and the configure.
-        if(Qt::WindowMinimized==windowState() &&
-                m_trayConfigure->data("MinimizeToTray", false).toBool())
+        //When minimized the window.
+        if(Qt::WindowMinimized==windowState())
         {
-            //Ignore the close event.
-            event->ignore();
-            //Hide the main window.
-            hide();
-            //Close event handle complete.
-            return false;
+            //Save the geometry.
+            m_geometryBeforeMinimize=geometry();
+            //If the minimized to tray switch is on.
+            if(m_trayConfigure->data("MinimizeToTray", false).toBool())
+            {
+                //Ignore the close event.
+                event->ignore();
+                //Hide the main window.
+                hide();
+                //Close event handle complete.
+                return false;
+            }
         }
     }
     //Do original event.

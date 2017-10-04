@@ -163,6 +163,7 @@ private:
     inline void zoomParameter(int &parameter, const qreal &ratio);
 
     QIcon m_fullScreenIcon, m_fullScreenOffIcon;
+    QRect m_geometryBeforeMinimize;
     KNMainWindowHeaderBase *m_header;
     KNAbstractMusicPlugin *m_musicPlugin;
     KNConfigure *m_cacheConfigure, *m_globalConfigure, *m_trayConfigure;

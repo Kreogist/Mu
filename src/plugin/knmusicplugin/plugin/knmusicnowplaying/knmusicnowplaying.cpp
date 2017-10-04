@@ -715,8 +715,14 @@ void KNMusicNowPlaying::resetCurrentPlayingModelData()
         //Reset the backend.
         m_backend->reset();
     }
-    //Clear previous the now playing icon.
-    playingMusicModel()->setPlayingIndex(QModelIndex());
+    //Get the playing music model.
+    KNMusicModel *musicModel=playingMusicModel();
+    //Check whether the model is valid or not.
+    if(musicModel)
+    {
+        //Clear previous the now playing icon.
+        musicModel->setPlayingIndex(QModelIndex());
+    }
     //Emit now playing reset signal.
     emit nowPlayingReset();
 }
