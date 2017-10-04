@@ -162,6 +162,12 @@ KNMusicPlugin::KNMusicPlugin(QWidget *parent) :
 
 KNMusicPlugin::~KNMusicPlugin()
 {
+    //Check playing state.
+    if(knMusicGlobal->backend()->state()==Playing)
+    {
+        //Pause the playing.
+        knMusicGlobal->backend()->pause();
+    }
     //Recover the solo menu.
     if(knMusicGlobal->soloMenu() &&
             knMusicGlobal->soloMenu()->parent()==nullptr)

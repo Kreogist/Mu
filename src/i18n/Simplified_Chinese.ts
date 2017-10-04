@@ -2233,12 +2233,12 @@ This option will be applied after the application restarted.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
         <source>Save last played</source>
-        <translation type="unfinished"></translation>
+        <translation>保存上次播放状态</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="81"/>
         <source>When next time launch Mu, Mu will restore the last playing song state.</source>
-        <translation type="unfinished"></translation>
+        <translation>当下一次启动µ的时候，µ将还原到上一次关闭前的播放状态。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="83"/>
@@ -2449,47 +2449,47 @@ This option will be applied after the application restarted.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="128"/>
         <source>Use buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>使用缓冲</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="138"/>
         <source>Buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>缓冲区长度</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="146"/>
         <source>Force stereo output</source>
-        <translation type="unfinished"></translation>
+        <translation>强制立体声输出</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="151"/>
         <source>Output audio device</source>
-        <translation type="unfinished"></translation>
+        <translation>输出设备</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="157"/>
         <source>Use device default sample rate</source>
-        <translation type="unfinished"></translation>
+        <translation>使用设备默认采样率</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="161"/>
         <source>Device sample rate (Hz)</source>
-        <translation type="unfinished"></translation>
+        <translation>设备采样率（Hz）</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="170"/>
         <source>Auto play next song</source>
-        <translation type="unfinished"></translation>
+        <translation>自动播放下一首</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="172"/>
         <source>Automatically play the next song on normal no repeat mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>在普通不循环模式下，自动播放下一首歌曲。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="174"/>
         <source>Volume level (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>音量等级（%）</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="176"/>
