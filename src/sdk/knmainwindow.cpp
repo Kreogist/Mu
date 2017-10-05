@@ -544,13 +544,22 @@ inline void KNMainWindow::recoverGeometry()
 
 inline void KNMainWindow::backupGeometry()
 {
+    //Check the initial show flag.
+    if(m_initialShown)
+    {
+        //Which means that the window is not even shown, do not save the state.
+        return;
+    }
     //Set the window state.
     setCacheValue("windowState", static_cast<int>(windowState()));
     //Set the window position.
-    setCacheValue("windowX", geometry().x());
-    setCacheValue("windowY", geometry().y());
-    setCacheValue("windowWidth", geometry().width());
-    setCacheValue("windowHeight", geometry().height());
+    QRect windowPosition=(Qt::WindowMinimized==windowState())?
+                //For minimized case, use the geometry before minimized.
+                m_geometryBeforeMinimize : geometry();
+    setCacheValue("windowX", windowPosition.x());
+    setCacheValue("windowY", windowPosition.y());
+    setCacheValue("windowWidth", windowPosition.width());
+    setCacheValue("windowHeight", windowPosition.height());
     //Set the current desktop size.
     setCacheValue("desktopWidth", qApp->desktop()->width());
     setCacheValue("desktopHeight", qApp->desktop()->height());

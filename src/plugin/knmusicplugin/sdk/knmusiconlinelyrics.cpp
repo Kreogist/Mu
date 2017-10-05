@@ -53,7 +53,6 @@ void KNMusicOnlineLyrics::appendDownloader(KNMusicLyricsDownloader *downloader)
 
 void KNMusicOnlineLyrics::addToDownloadList(const KNMusicDetailInfo &detailInfo)
 {
-    qDebug()<<detailInfo.textLists[Name]<<detailInfo.textLists[Artist];
     //Check whether the item is the working on item.
     if(isDetailInfoEqual(detailInfo, m_workingDetailInfo))
     {
@@ -75,7 +74,6 @@ void KNMusicOnlineLyrics::addToDownloadList(const KNMusicDetailInfo &detailInfo)
     //If we didn't find the item, add the item to the list.
     //Add the detail info to the download queue.
     m_downloadQueue.append(detailInfo);
-    qDebug()<<"Queue size:"<<m_downloadQueue.size();
     //Check the working state.
     if(!m_isWorking)
     {
@@ -86,7 +84,6 @@ void KNMusicOnlineLyrics::addToDownloadList(const KNMusicDetailInfo &detailInfo)
 
 void KNMusicOnlineLyrics::onActionDownloadLyrics()
 {
-    qDebug()<<"Start queue size:"<<m_downloadQueue.size();
     //Check the download queue.
     if(m_downloadQueue.isEmpty())
     {
