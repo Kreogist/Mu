@@ -129,6 +129,13 @@ void KNMusicNeteaseLyrics::processStep(
          *    ...
          *]
          */
+        //Check search item list size.
+        if(searchItemList.size()==0)
+        {
+            //Mission failed.
+            completeRequest(identifier);
+            return;
+        }
         //Get the lyrics data for all the objects in the list.
         setReplyCount(identifier, searchItemList.size());
         for(auto i : searchItemList)

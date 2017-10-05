@@ -344,6 +344,14 @@ public:
     static QJsonObject detailInfoToObject(
             const MusicUtil::KNMusicDetailInfo &detailInfo);
 
+    /*!
+     * \brief Check one detail info structure is null or not.
+     * \param detailInfo The detail info structure.
+     * \return If the detail info structure is null, return true.
+     */
+    static bool isDetailInfoNull(
+            const MusicUtil::KNMusicDetailInfo &detailInfo);
+
 private:
     KNMusicUtil();
     KNMusicUtil(const KNMusicUtil &);

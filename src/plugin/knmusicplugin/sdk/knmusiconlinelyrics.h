@@ -82,9 +82,18 @@ private slots:
             QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> lyricsList);
 
 private:
+    inline bool isDetailInfoEqual(const KNMusicDetailInfo &detailInfo,
+                                  const KNMusicDetailInfo &i)
+    {
+        return detailInfo.filePath==i.filePath &&
+                detailInfo.trackFilePath==i.trackFilePath &&
+                detailInfo.trackIndex==i.trackIndex;
+    }
+
     QList<KNMusicDetailInfo> m_downloadQueue;
     QList<KNMusicLyricsDownloader *> m_downloaders;
     QList<KNMusicLyricsDownloader::KNMusicLyricsDetails> m_downloadLyricsList;
+    KNMusicDetailInfo m_workingDetailInfo;
     KNMusicLrcParser *m_lrcParser;
     uint m_identifier;
     int m_finishedDownloader;

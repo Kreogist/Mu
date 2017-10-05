@@ -97,3 +97,9 @@ QJsonObject KNMusicUtil::detailInfoToObject(const KNMusicDetailInfo &detailInfo)
     //Object translated complete.
     return object;
 }
+
+bool KNMusicUtil::isDetailInfoNull(const KNMusicDetailInfo &detailInfo)
+{
+    //When file path is empty, it will be treat as a null detail info.
+    return detailInfo.filePath.isEmpty();
+}
