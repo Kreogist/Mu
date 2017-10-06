@@ -166,7 +166,7 @@ macx: {
 
 linux: {
     # Enable the analysiser.
-    CONFIG += ffmpeg-common analysiser-ffmpeg i18n
+    CONFIG += ffmpeg-common analysiser-ffmpeg linux-global-null #i18n
     # Check for the avresample library.
     avresample_detect=$$system(pkg-config --cflags libavresample)
     contains(avresample_detect, not found)  {
@@ -180,6 +180,15 @@ linux: {
     DESTDIR = ../bin
     # This options is added for Linux specially.
     INSTALLS += target
+}
+
+# Linux global shortcut supports.
+linux-global-null: {
+    # The NULL backend is simply just disable this feature.
+    # Set the global disable flag.
+    DEFINES += ENABLE_GLOBAL_NULL
+    # Add the empty backend for the unsupport backend.
+    SOURCES += sdk/knglobalaction_null.cpp
 }
 
 # International Configurations.

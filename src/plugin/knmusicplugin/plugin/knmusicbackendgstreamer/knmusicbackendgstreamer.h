@@ -46,6 +46,11 @@ public:
     ~KNMusicBackendGStreamer();
 
     /*!
+     * \brief Reimplemented from KNMusicStandardBackend::deviceList().
+     */
+    QJsonArray deviceList() Q_DECL_OVERRIDE;
+
+    /*!
      * \brief Reimplemented from KNMusicStandardBackend::volume().
      */
     int volume() const Q_DECL_OVERRIDE;

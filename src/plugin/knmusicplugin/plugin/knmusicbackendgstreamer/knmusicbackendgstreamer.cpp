@@ -74,3 +74,20 @@ qreal KNMusicBackendGStreamer::smartVolumeScale() const
 {
     return 0.1;
 }
+
+QJsonArray KNMusicBackendGStreamer::deviceList()
+{
+    //This setting is not supported for gstreamer.
+    //Prepare the json array.
+    QJsonArray deviceInfoList;
+    //Prepare the device object.
+    QJsonObject deviceObject;
+    //Set the type of device object.
+    deviceObject.insert("Type", "CustomObject");
+    //Set Add the default output device.
+    deviceObject.insert("Name", "");
+    deviceObject.insert("Id", "-1");
+    deviceInfoList.append(deviceObject);
+    //Give back the list.
+    return deviceInfoList;
+}

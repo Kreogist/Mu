@@ -214,12 +214,21 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     case PanelShortcuts:
     {
         //Global shortcut settings.
-        block=generateBlock(tr("Global Shortcut"));
-        addItem(block, tr("Use global shortcut"),
-                "User/Shortcut/Global", false, TypeBoolean,
-                tr("Allow the shortcut key bindings to be triggered system "
-                   "wide."), false);
-        panelData.append(block);
+        bool useGlobalShortcut=true;
+#ifdef ENABLE_GLOBAL_NULL
+        //For using the null backend, disable this feature.
+        useGlobalShortcut=false;
+#endif
+        if(useGlobalShortcut)
+        {
+            //Construct the global shortcut block.
+            block=generateBlock(tr("Global Shortcut"));
+            addItem(block, tr("Use global shortcut"),
+                    "User/Shortcut/Global", false, TypeBoolean,
+                    tr("Allow the shortcut key bindings to be triggered system "
+                       "wide."), false);
+            panelData.append(block);
+        }
         //Main window controls.
         block=generateBlock(tr("Window Controls"));
         addItem(block, tr("Full Screen"),
