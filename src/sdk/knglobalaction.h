@@ -22,8 +22,11 @@ Foundation,
 
 #include <QAbstractNativeEventFilter>
 #include <QKeySequence>
-#if defined(Q_OS_WIN)
+
+#if defined(Q_OS_MACX)
 #include <QSet>
+
+typedef QPair<uint, uint> Identifier;
 #endif
 
 #include <QObject>
@@ -34,7 +37,7 @@ Foundation,
  * Mac OS X and Linux.
  */
 class KNGlobalAction : public QObject
-        #ifndef Q_OS_LINUX
+        #ifdef Q_OS_WIN
         , QAbstractNativeEventFilter
         #endif
 {
@@ -77,15 +80,18 @@ protected:
 
 private:
     void updateEnableState();
+    void registerCurrent();
+    void unregisterCurrent();
 #ifdef  Q_OS_WIN
     virtual bool nativeEventFilter(const QByteArray &eventType,
                                    void *message, long *result) Q_DECL_OVERRIDE;
-    void registerCurrent();
-    void unregisterCurrent();
 
     static QHash<uint, KNGlobalAction *> m_registeredKeys;
     static int m_reference;
     QHash<uint, QPair<quint32, quint32>> m_sequenceIds;
+#endif
+#ifdef Q_OS_MAC
+    QSet<Identifier> m_sequences;
 #endif
     bool m_enabled;
 };

@@ -159,7 +159,8 @@ macx: {
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
     # Add Mac OS X platform special extras.
-    SOURCES += plugin/knmacextras/knmacextras.cpp
+    SOURCES += plugin/knmacextras/knmacextras.cpp \
+               sdk/knglobalaction_mac.cpp
     HEADERS += plugin/knmacextras/knmacextras.h
 }
 

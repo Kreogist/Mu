@@ -27,6 +27,9 @@ KNGlobalAction::KNGlobalAction(QObject *parent) :
     #ifdef Q_OS_WIN
     m_sequenceIds(QHash<uint, QPair<quint32, quint32>>()),
     #endif
+    #ifdef Q_OS_MAC
+    m_sequences(QSet<Identifier>()),
+    #endif
     m_enabled(true)
 {
 #ifdef Q_OS_WIN
@@ -60,3 +63,20 @@ void KNGlobalAction::setEnabled(bool enabled)
     //Update the state.
     updateEnableState();
 }
+
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
+void KNGlobalAction::updateEnableState()
+{
+    //Check the enable state.
+    if(m_enabled)
+    {
+        //Register all the current state.
+        registerCurrent();
+    }
+    else
+    {
+        //Unregister all the current state.
+        unregisterCurrent();
+    }
+}
+#endif

@@ -347,18 +347,3 @@ void KNGlobalAction::setKeySequence(const QKeySequence &keySequence)
         registerCurrent();
     }
 }
-
-void KNGlobalAction::updateEnableState()
-{
-    //Check the enable state.
-    if(m_enabled)
-    {
-        //Register all the current state.
-        registerCurrent();
-    }
-    else
-    {
-        //Unregister all the current state.
-        unregisterCurrent();
-    }
-}
