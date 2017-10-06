@@ -1,3 +1,25 @@
+kreogist-mu (1.0.0~beta5) unstable; urgency=medium
+
+  * Support for saving the last played state.
+  * Support to change the application fonts.
+  * Support to change the backend buffer length.
+  * Support to delay the search operation for less searching.
+  * Support the global short cut for Windows and macOS.
+  * Support to minimized to tray icon.
+  * Support to select the output audio device.
+  * Support to change the volume up and down button level.
+  * Support for MPV backend changing the audio settings.
+  * Support for disabling the automatically playing the next song at the normal mode.
+  * Improved the close event on low performance machine.
+  * Fixed the FFMpeg analysiser might set empty string bug.
+  * Fixed the potential bug when switching the music tab too fast.
+  * Fixed the automatically online lyrics is not correct bug.
+  * Fixed the lyrics download dialog scaling bug.
+  * Fixed the main window position restore when minimized might be incorrect bug.
+  * Fixed the Netease backend might stucked the queue bug.
+
+ -- Kreogist Dev Team <kreogistdevteam@126.com>  Sat, 6 Oct 2017 20:00:00 +1100
+
 kreogist-mu (1.0.0~beta4) unstable; urgency=medium
 
   * Support high DPI scaling accrossing Windows, Mac OS X and Linux platforms.
