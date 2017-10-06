@@ -46,39 +46,39 @@ public:
      */
     static void initial(QObject *parent = 0);
 
-    /*!
-     * \brief Bind one type file association to the current application.
-     * \param suffix The suffix of the file type.
-     * \param handler The file type handler. For example, the handler of
-     * MPEG-4 Audio (.m4a) is com.apple.m4a-audio.
-     * \return If the operation success, return true. Or else return false.
-     */
-    bool bindFileTypes(const QString &suffix,
-                       const QString &handler="",
-                       const QString &description="");
+//    /*!
+//     * \brief Bind one type file association to the current application.
+//     * \param suffix The suffix of the file type.
+//     * \param handler The file type handler. For example, the handler of
+//     * MPEG-4 Audio (.m4a) is com.apple.m4a-audio.
+//     * \return If the operation success, return true. Or else return false.
+//     */
+//    bool bindFileTypes(const QString &suffix,
+//                       const QString &handler="",
+//                       const QString &description="");
 
-    /*!
-     * \brief Unbind on file association to the current application. Notice,
-     * that this operation will simply remove the file assocation from the user
-     * settings.
-     * \param suffix The suffix of the file type.
-     * \param handler The file type handler.
-     * \return If the file type association binding has been removed from the
-     * operating systems, return true.
-     */
-    bool unbindFileTypes(const QString &suffix,
-                         const QString &handler="");
+//    /*!
+//     * \brief Unbind on file association to the current application. Notice,
+//     * that this operation will simply remove the file assocation from the user
+//     * settings.
+//     * \param suffix The suffix of the file type.
+//     * \param handler The file type handler.
+//     * \return If the file type association binding has been removed from the
+//     * operating systems, return true.
+//     */
+//    bool unbindFileTypes(const QString &suffix,
+//                         const QString &handler="");
 
-    /*!
-     * \brief Check whether one type of files has already associated with the
-     * current application.
-     * \param suffix The suffix of the file type.
-     * \param handler The file type handler.
-     * \return If the file type has already associated with the application,
-     * return true.
-     */
-    bool isFileTypeBinded(const QString &suffix,
-                          const QString &handler="");
+//    /*!
+//     * \brief Check whether one type of files has already associated with the
+//     * current application.
+//     * \param suffix The suffix of the file type.
+//     * \param handler The file type handler.
+//     * \return If the file type has already associated with the application,
+//     * return true.
+//     */
+//    bool isFileTypeBinded(const QString &suffix,
+//                          const QString &handler="");
 
 signals:
 

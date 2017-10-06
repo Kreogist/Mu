@@ -122,22 +122,24 @@ inline bool KNPreferencePanelFileTypeItem::isTypeBind() const
         return false;
     }
     //Check using the file association manager.
-    return knFileType->isFileTypeBinded(m_suffix, m_typeHandler);
+//    return knFileType->isFileTypeBinded(m_suffix, m_typeHandler);
+    return true;
 }
 
 bool KNPreferencePanelFileTypeItem::setAssociations(bool bind)
 {
-    //The value is a boolean type value.
-    if(bind)
-    {
-        //Bind the file type.
-        return knFileType->bindFileTypes(
-                    m_suffix, m_typeHandler,
-                    knMusicGlobal->typeDescription(m_suffix.mid(1)));
-    }
-    else
-    {
-        //Unbind the file type.
-        return !knFileType->unbindFileTypes(m_suffix, m_typeHandler);
-    }
+//    //The value is a boolean type value.
+//    if(bind)
+//    {
+//        //Bind the file type.
+//        return knFileType->bindFileTypes(
+//                    m_suffix, m_typeHandler,
+//                    knMusicGlobal->typeDescription(m_suffix.mid(1)));
+//    }
+//    else
+//    {
+//        //Unbind the file type.
+//        return !knFileType->unbindFileTypes(m_suffix, m_typeHandler);
+//    }
+    return true;
 }

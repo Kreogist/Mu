@@ -18,7 +18,7 @@
 #include <QAction>
 
 #include "knconfigure.h"
-#include "knglobalshortcut.h"
+#include "knglobalaction.h"
 
 #include "knshortcutmanager.h"
 
@@ -53,12 +53,12 @@ void KNShortcutManager::append(const QString &identifier,
     if(supportGlobal)
     {
         //Create a global action instance.
-        KNGlobalShortcut *globalShortcut=new KNGlobalShortcut(this);
+        KNGlobalAction *globalShortcut=new KNGlobalAction(this);
         //Update the enable state.
         globalShortcut->setEnabled(
                     m_shortcutConfigure->data("Global", false).toBool());
         //Link the global shortcut actions.
-        connect(globalShortcut, &KNGlobalShortcut::activated,
+        connect(globalShortcut, &KNGlobalAction::activated,
                 action, &QAction::trigger);
         //Insert the global shortcut to the list.
         m_globalActionMap.insert(identifier, globalShortcut);
@@ -174,13 +174,13 @@ inline void KNShortcutManager::insertAction(ShortcutAction currentAction)
         QKeySequence globalActionShortcut(globalSequence[0], globalSequence[1],
                                           globalSequence[2], globalSequence[3]);
         //Set to the global action.
-        KNGlobalShortcut *globalShortcut=
+        KNGlobalAction *globalShortcut=
                 m_globalActionMap.value(action->objectName(), nullptr);
         //Set the shortcut.
         if(globalShortcut)
         {
             //Set the shortcut.
-            globalShortcut->setShortcut(globalActionShortcut);
+            globalShortcut->setKeySequence(globalActionShortcut);
             globalShortcut->setEnabled(
                         m_shortcutConfigure->data("Global", false).toBool());
         }

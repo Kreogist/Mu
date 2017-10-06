@@ -134,8 +134,7 @@ win32: {
     QT += winextras
     SOURCES += plugin/knwindowsextras/knwindowsextras.cpp \
                sdk/knlockedfile_win.cpp \
-               sdk/knglobalshortcut_win.cpp \
-               sdk/knfileassociationmanager_win.cpp
+               sdk/knglobalaction_win.cpp
     HEADERS += plugin/knwindowsextras/knwindowsextras.h
 }
 
@@ -160,9 +159,7 @@ macx: {
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib/
     # Add Mac OS X platform special extras.
-    SOURCES += plugin/knmacextras/knmacextras.cpp \
-               sdk/knfileassociationmanager_mac.cpp \
-               sdk/knglobalshortcut_mac.cpp
+    SOURCES += plugin/knmacextras/knmacextras.cpp
     HEADERS += plugin/knmacextras/knmacextras.h
 }
 
@@ -593,8 +590,8 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelpathitem.cpp \
     sdk/knfileassociationmanager.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.cpp \
-    sdk/knglobalshortcut.cpp \
-    plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.cpp
+    plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.cpp \
+    sdk/knglobalaction.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -886,8 +883,8 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelpathitem.h \
     sdk/knfileassociationmanager.h \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.h \
-    sdk/knglobalshortcut.h \
-    plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.h
+    plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.h \
+    sdk/knglobalaction.h
 
 RESOURCES += \
     resource/res.qrc
