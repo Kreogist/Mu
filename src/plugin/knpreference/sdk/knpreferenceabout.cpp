@@ -158,7 +158,7 @@ void KNPreferenceAbout::retranslate()
                 "Luming Wang <wlm199558@126.com>\n"
                 "Dayou Zhang <1079286704@qq.com>\n"
                 "Jiayi Zhang <bf109g2@126.com>\n"
-                "Youraku <1497667718@qq.com>\n"
+                "Youraku KAMI SAMA <1497667718@qq.com>\n"
                 "Joe Johnson <liquanquan123@vip.qq.com>\n"
                 "Freddie <freddie.wanah@gmail.com>\n"
                 "Nick Tang <1953547787@qq.com>\n"

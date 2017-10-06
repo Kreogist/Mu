@@ -22,6 +22,8 @@ Foundation,
 
 #include <QAbstractNativeEventFilter>
 #include <QKeySequence>
+#include <QHash>
+#include <QPair>
 
 #if defined(Q_OS_MACX)
 #include <QSet>
