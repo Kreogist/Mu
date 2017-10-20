@@ -27,7 +27,7 @@ QT += \
     network
 
 # Enabled C++ 11 configures.
-CONFIG += c++11
+CONFIG += c++11 intel64
 
 # Add translation paths for Qt Linguist to generate translation files.
 TRANSLATIONS += \
@@ -166,7 +166,7 @@ macx: {
 
 linux: {
     # Enable the analysiser.
-    CONFIG += ffmpeg-common analysiser-ffmpeg linux-global-null #i18n
+    CONFIG += ffmpeg-common analysiser-ffmpeg linux-global-null i18n
     # Check for the avresample library.
     avresample_detect=$$system(pkg-config --cflags libavresample)
     contains(avresample_detect, not found)  {

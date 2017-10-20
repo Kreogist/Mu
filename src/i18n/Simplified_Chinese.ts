@@ -671,12 +671,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="380"/>
+        <location filename="../sdk/knmainwindow.cpp" line="386"/>
         <source>Cannot quit now</source>
         <translation>当前无法退出</translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="381"/>
+        <location filename="../sdk/knmainwindow.cpp" line="387"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation>仍有文件正在添加到音乐库中，请等待其添加完毕。</translation>
     </message>
@@ -1246,12 +1246,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLyricsDownloadList</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="238"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="239"/>
         <source>Searching lyrics on server (%1/%2)</source>
         <translation>正在搜索歌词（%1/%2）</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="239"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="240"/>
         <source>No lyrics</source>
         <translation>没有找到歌词</translation>
     </message>
@@ -1259,17 +1259,17 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLyricsDownloadWidget</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="146"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="147"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="148"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="149"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="149"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="150"/>
         <source>Artist</source>
         <translation>艺术家</translation>
     </message>
@@ -1577,7 +1577,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="215"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="221"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -2548,97 +2548,97 @@ This option will allow Mu to combine the translated version and the raw lyrics i
 这个选项将允许Mu把歌词原文与翻译版的歌词合并为一个文件。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="217"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="225"/>
         <source>Global Shortcut</source>
         <translation>全局快捷键</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="218"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="226"/>
         <source>Use global shortcut</source>
         <translation>使用全局快捷键</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="220"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="228"/>
         <source>Allow the shortcut key bindings to be triggered system wide.</source>
         <translation>允许用户在系统任何位置使用快捷键控制µ。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="224"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="233"/>
         <source>Window Controls</source>
         <translation>窗口控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="225"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="234"/>
         <source>Full Screen</source>
         <translation>全屏</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="229"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="238"/>
         <source>This shortcut will be used to control the shortcut for entering or exiting the full screen state.</source>
         <translation>这个快捷键将控制进入及退出全屏状态。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="233"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="242"/>
         <source>Playing Controls</source>
         <translation>播放控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="234"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="243"/>
         <source>Play and Pause</source>
         <translation>播放/暂停</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="239"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="248"/>
         <source>This shortcut will be used in the whole application to play or pause the current playing music.</source>
         <translation>这个快捷键将用于播放或暂停正在播放的音乐。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="241"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="250"/>
         <source>Previous Song</source>
         <translation>上一首</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="246"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="255"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the previous song.</source>
         <translation>这个快捷键将从当前播放的歌曲切换到上一首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="249"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="258"/>
         <source>Next Song</source>
         <translation>下一首</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="254"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="263"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the next song.</source>
         <translation>这个快捷键将从当前播放的歌曲切换到下一首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="259"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="268"/>
         <source>Volume Controls</source>
         <translation>音量控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="260"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="269"/>
         <source>Mute</source>
         <translation>静音</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="264"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="273"/>
         <source>This shortcut will be used in the whole application to enter and exit the mute state.</source>
         <translation>设个快捷键将用于进入或退出静音状态。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="266"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="275"/>
         <source>Volume Up</source>
         <translation>增加音量</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="270"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="279"/>
         <source>This shortcut will be used in the whole application to increase amount of volume.</source>
         <translation>这个快捷键将控制增加部分音量。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="276"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="285"/>
         <source>This shortcut will be used in the whole application to decrease amount of volume.</source>
         <translation>这个快捷键将控制减少部分音量。</translation>
     </message>
@@ -2655,7 +2655,7 @@ This option will allow Mu to combine the translated version and the raw lyrics i
         <translation type="vanished">这个快捷键将增加10%的音量。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="272"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="281"/>
         <source>Volume Down</source>
         <translation>减小音量</translation>
     </message>

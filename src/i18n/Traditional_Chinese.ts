@@ -671,12 +671,12 @@
 <context>
     <name>KNMainWindow</name>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="380"/>
+        <location filename="../sdk/knmainwindow.cpp" line="386"/>
         <source>Cannot quit now</source>
         <translation>當前無法退出</translation>
     </message>
     <message>
-        <location filename="../sdk/knmainwindow.cpp" line="381"/>
+        <location filename="../sdk/knmainwindow.cpp" line="387"/>
         <source>Music library is still adding music to your music library, please wait until it complete.</source>
         <translation>仍有檔正在添加到音樂庫中，請等待其添加完畢。</translation>
     </message>
@@ -1246,12 +1246,12 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLyricsDownloadList</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="238"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="239"/>
         <source>Searching lyrics on server (%1/%2)</source>
         <translation>正在搜索歌詞（%1/%2）</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="239"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadlist.cpp" line="240"/>
         <source>No lyrics</source>
         <translation>沒有找到歌詞</translation>
     </message>
@@ -1259,17 +1259,17 @@ To add songs to library, drag your songs here.</source>
 <context>
     <name>KNMusicLyricsDownloadWidget</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="146"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="147"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="148"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="149"/>
         <source>Name</source>
         <translation>名稱</translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="149"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdownloadwidget.cpp" line="150"/>
         <source>Artist</source>
         <translation>藝術家</translation>
     </message>
@@ -1577,7 +1577,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNMusicPlugin</name>
     <message>
-        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="215"/>
+        <location filename="../plugin/knmusicplugin/knmusicplugin.cpp" line="221"/>
         <source>Music</source>
         <translation>音樂</translation>
     </message>
@@ -2025,6 +2025,10 @@ To create a playlist, drag your songs here.</source>
         <source>Shortcuts</source>
         <translation>快速鍵</translation>
     </message>
+    <message>
+        <source>File Types</source>
+        <translation type="vanished">文件關聯</translation>
+    </message>
 </context>
 <context>
     <name>KNPreferenceAbout</name>
@@ -2182,7 +2186,7 @@ Qt 是 The Qt Company Ltd 開發的開源專案。請訪問 qt.io 獲取更多�
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.cpp" line="81"/>
         <source>Use Default Output Device</source>
-        <translation type="unfinished"></translation>
+        <translation>使用預設輸出設備</translation>
     </message>
 </context>
 <context>
@@ -2195,7 +2199,7 @@ Qt 是 The Qt Company Ltd 開發的開源專案。請訪問 qt.io 獲取更多�
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="48"/>
         <source>Minimize to system tray</source>
-        <translation type="unfinished"></translation>
+        <translation>最小化到系統託盤</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="56"/>
@@ -2212,44 +2216,46 @@ When click the icon in the system tray, Mu will pop up back.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
         <source>Application font</source>
-        <translation type="unfinished"></translation>
+        <translation>應用程式字體</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="69"/>
         <source>This option will change the font used for the whole application.
 This option will be applied after the application restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個設置將改變整個應用介面的字體。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="78"/>
         <source>Behaviour</source>
-        <translation type="unfinished"></translation>
+        <translation>行為</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
         <source>Save last played</source>
-        <translation type="unfinished"></translation>
+        <translation>保存上次播放狀態</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="81"/>
         <source>When next time launch Mu, Mu will restore the last playing song state.</source>
-        <translation type="unfinished"></translation>
+        <translation>當下一次啟動µ的時候，µ將還原到上一次關閉前的播放狀態。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="83"/>
         <source>Search delay (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索延遲（毫秒）</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="85"/>
         <source>Mu will start to search once user change the content of the search box.
 When set the delay larger than 0ms, Mu will not start to search if user change the text less than the delay duration.</source>
-        <translation type="unfinished"></translation>
+        <translation>µ將在使用者改變搜索框內容時開始即時搜索。
+當延遲時間大於0毫秒時，用戶再延時期間內將不會開始搜索。當使用者在延遲時間內沒有更改搜索內容，才會開始搜索。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="93"/>
         <source>Ignore CUE data file</source>
-        <translation type="unfinished"></translation>
+        <translation>忽略CUE資料檔案</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="109"/>
@@ -2259,7 +2265,7 @@ When set the delay larger than 0ms, Mu will not start to search if user change t
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="111"/>
         <source>Use exclusive mode WASAPI</source>
-        <translation type="unfinished"></translation>
+        <translation>使用獨佔模式的WASAPI</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="113"/>
@@ -2318,13 +2324,14 @@ This option will be applied after the application restarted.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
         <source>Category by album artist</source>
-        <translation type="unfinished"></translation>
+        <translation>使用專輯藝術家分類</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="99"/>
         <source>When category the album, use the album artist metadata field instead of statistic all the artists.
 This option will be applied after the application restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>分類專輯時，使用專輯藝術家資訊而不是統計每一首歌曲的藝術家來對專輯進行分類。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <source>Use WASAPI</source>
@@ -2346,19 +2353,26 @@ This option will be applied after the application restarted.</source>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="50"/>
         <source>When click the minimize button of the window, Mu won&apos;t simply minimize the main window to task bar but minimize to the system tray if this option is enabled.
 When click the icon in the system tray, Mu will pop up back.</source>
-        <translation type="unfinished"></translation>
+        <translation>此選項啟用時，當使用者按一下最小化按鈕，µ將最小化到託盤圖示而不是最小化到工作列。
+當按一下託盤圖示時，µ將會重新顯示。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="121"/>
         <source>Use 32-bit floating-point</source>
-        <translation type="unfinished"></translation>
+        <translation>使用32位浮點數</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="123"/>
         <source>Using 32-bit floating-point instead of 8/16 bit for the sample data.
 WDM drivers are required to use this feature in Windows.
 This option will be applied after the application restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>如果採樣資料是8/16位元整數，使用32位元浮點數代替。
+在Windows中，啟用這個功能需要您安裝WDM驅動。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
+    </message>
+    <message>
+        <source>Use Buffer</source>
+        <translation type="vanished">使用緩衝</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="130"/>
@@ -2366,7 +2380,14 @@ This option will be applied after the application restarted.</source>
 A playing music is normally asked to render data to its playback buffer in advance to produce the final signal that is given to the output device.
 When this option is off, buffering is skipped and the playing thread will only be asked to produce data as it is needed during the generation of the output data.
 This option will be applied after the application restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>啟用重播緩衝功能。
+在播放音樂時，音樂的資料在向設輸出備之前會將資料渲染到緩衝區。
+當這個選項被關閉時，緩衝區將會被跳過，播放執行緒將會在需要的時候向輸出設備輸出資料。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
+    </message>
+    <message>
+        <source>Buffer Length</source>
+        <translation type="vanished">緩衝區長度</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="140"/>
@@ -2374,7 +2395,14 @@ This option will be applied after the application restarted.</source>
 Increasing the length, decreases the chance of the sound possibly breaking-up on slower computers, 
 but also increases the latency for DSP/FX.
 This option will be applied after the application restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>緩衝區長度，單位毫秒。
+增加緩衝區長度，將減少在低性能設備上爆音的現象。
+但是也將增加DSP/FX的延遲。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
+    </message>
+    <message>
+        <source>Force Stereo Output</source>
+        <translation type="vanished">強制身歷聲輸出</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="148"/>
@@ -2384,77 +2412,93 @@ This option will be applied after the application restarted.</source>
 這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
+        <source>Output Device</source>
+        <translation type="vanished">輸出設備</translation>
+    </message>
+    <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="153"/>
         <source>Select the audio output device for music playing.
 This option will be applied after the application restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>選擇用於播放音樂的音訊輸出設備。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <source>Use Device Default Sample Rate</source>
         <translation type="vanished">使用設備預設取樣速率</translation>
     </message>
     <message>
+        <source>Device Sample Rate (Hz)</source>
+        <translation type="vanished">設備取樣速率（Hz）</translation>
+    </message>
+    <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="163"/>
         <source>This option will change the output sample rate of the audio device.
 This option will be applied after the application restarted.</source>
-        <translation type="unfinished"></translation>
+        <translation>本設置將會改變輸出音訊設備的取樣速率。
+這個設置的更改將在軟體重新開機後才會生效。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="169"/>
         <source>Player Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>播放機參數</translation>
+    </message>
+    <message>
+        <source>Volume Level (%)</source>
+        <translation type="vanished">音量等級（%）</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="128"/>
         <source>Use buffering</source>
-        <translation type="unfinished"></translation>
+        <translation>使用緩衝</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="138"/>
         <source>Buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>緩衝區長度</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="146"/>
         <source>Force stereo output</source>
-        <translation type="unfinished"></translation>
+        <translation>強制身歷聲輸出</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="151"/>
         <source>Output audio device</source>
-        <translation type="unfinished"></translation>
+        <translation>輸出設備</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="157"/>
         <source>Use device default sample rate</source>
-        <translation type="unfinished"></translation>
+        <translation>使用設備預設取樣速率</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="161"/>
         <source>Device sample rate (Hz)</source>
-        <translation type="unfinished"></translation>
+        <translation>設備取樣速率（Hz）</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="170"/>
         <source>Auto play next song</source>
-        <translation type="unfinished"></translation>
+        <translation>自動播放下一首</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="172"/>
         <source>Automatically play the next song on normal no repeat mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>在普通不迴圈模式下，自動播放下一首歌曲。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="174"/>
         <source>Volume level (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>音量等級（%）</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="176"/>
         <source>Mu supports changing volume via shortcut key or mouse scroll wheel.
 This option could change the volume size increase or decrease for each shortcut pressing and wheel scrolling.
 The minimum size is 1%, the maximum size is 20%.</source>
-        <translation type="unfinished"></translation>
+        <translation>µ支援通過快速鍵或滑鼠滾輪改變音量大小。
+這個選項將改變每次按下增大或減少音量快速鍵以及滾動滑鼠滾輪的音量大小。
+最小大小為1%，最大大小為20%。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="188"/>
@@ -2504,106 +2548,114 @@ This option will allow Mu to combine the translated version and the raw lyrics i
 這個選項將允許Mu把歌詞原文與翻譯版的歌詞合併為一個檔。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="217"/>
-        <source>Global Shortcut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="218"/>
-        <source>Use global shortcut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="220"/>
-        <source>Allow the shortcut key bindings to be triggered system wide.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="224"/>
-        <source>Window Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="225"/>
-        <source>Full Screen</source>
-        <translation type="unfinished"></translation>
+        <source>Global Shortcut</source>
+        <translation>全域快速鍵</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="229"/>
-        <source>This shortcut will be used to control the shortcut for entering or exiting the full screen state.</source>
-        <translation type="unfinished"></translation>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="226"/>
+        <source>Use global shortcut</source>
+        <translation>使用全域快速鍵</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="228"/>
+        <source>Allow the shortcut key bindings to be triggered system wide.</source>
+        <translation>允許使用者在系統任何位置使用快速鍵控制µ。</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="233"/>
+        <source>Window Controls</source>
+        <translation>視窗控制</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="234"/>
+        <source>Full Screen</source>
+        <translation>全屏</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="238"/>
+        <source>This shortcut will be used to control the shortcut for entering or exiting the full screen state.</source>
+        <translation>這個快速鍵將控制進入及退出全屏狀態。</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="242"/>
         <source>Playing Controls</source>
         <translation>播放控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="234"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="243"/>
         <source>Play and Pause</source>
         <translation>播放/暫停</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="239"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="248"/>
         <source>This shortcut will be used in the whole application to play or pause the current playing music.</source>
         <translation>這個快速鍵將用於播放或暫停正在播放的音樂。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="241"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="250"/>
         <source>Previous Song</source>
         <translation>上一首</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="246"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="255"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the previous song.</source>
         <translation>這個快速鍵將從當前播放的歌曲切換到上一首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="249"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="258"/>
         <source>Next Song</source>
         <translation>下一首</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="254"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="263"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the next song.</source>
         <translation>這個快速鍵將從當前播放的歌曲切換到下一首歌曲。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="259"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="268"/>
         <source>Volume Controls</source>
         <translation>音量控制</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="260"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="269"/>
         <source>Mute</source>
         <translation>靜音</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="264"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="273"/>
         <source>This shortcut will be used in the whole application to enter and exit the mute state.</source>
         <translation>設個快速鍵將用於進入或退出靜音狀態。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="266"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="275"/>
         <source>Volume Up</source>
         <translation>增加音量</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="270"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="279"/>
         <source>This shortcut will be used in the whole application to increase amount of volume.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個快速鍵將控制增加部分音量。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="276"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="285"/>
         <source>This shortcut will be used in the whole application to decrease amount of volume.</source>
-        <translation type="unfinished"></translation>
+        <translation>這個快速鍵將控制減少部分音量。</translation>
+    </message>
+    <message>
+        <source>Lossless Compressed File Types</source>
+        <translation type="vanished">無失真壓縮檔案格式</translation>
+    </message>
+    <message>
+        <source>Lossy Compressed File Types</source>
+        <translation type="vanished">失真壓縮檔案格式</translation>
     </message>
     <message>
         <source>This shortcut will be used in the whole application to increase 10% volume.</source>
         <translation type="vanished">這個快速鍵將增加10%的音量。</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="272"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="281"/>
         <source>Volume Down</source>
         <translation>減小音量</translation>
     </message>
@@ -2637,17 +2689,17 @@ allows Mu to download lyrics from the Internet.</source>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="116"/>
         <source>%1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="121"/>
         <source>, %1px</source>
-        <translation type="unfinished"></translation>
+        <translation>，大小：%1</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="126"/>
         <source>%1%2%3%4%5</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2%3%4%5</translation>
     </message>
     <message>
         <location filename="../plugin/knpreference/sdk/items/knpreferencepanelfontitem.cpp" line="127"/>
