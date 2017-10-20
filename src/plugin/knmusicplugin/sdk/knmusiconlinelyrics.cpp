@@ -60,14 +60,12 @@ void KNMusicOnlineLyrics::addToDownloadList(const KNMusicDetailInfo &detailInfo)
         return;
     }
     //Check whether the detail info is in the list.
-    bool itemAlreadyExisted=false;
     for(auto i : m_downloadQueue)
     {
         //Check the file path, track file path and track file index.
         if(isDetailInfoEqual(detailInfo, i))
         {
             //Find the existed request.
-            itemAlreadyExisted=true;
             return;
         }
     }
