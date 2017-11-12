@@ -29,7 +29,7 @@ Copyright © 2013-2017 Kreogist Dev Team.
 
 ## Translation
 
-You're encouraged to translate µ into your native language or update the translation file. Please visit the [Improving Projects Home](https://github.com/Kreogist/Mu/wiki/Improving-Projects-Home#translate-%C2%B5-to-your-own-language) page at wiki.
+You're encouraged to translate µ into your native language or update the translation file. Please visit the [Improving Projects Home](https://github.com/Kreogist/Mu/wiki/Improving-Projects-Home#translate-%C2%B5-to-your-own-language) page at the wiki.
 
 ## Dependencies
 * Qt (>=5.2.1)
@@ -38,11 +38,11 @@ You're encouraged to translate µ into your native language or update the transl
 * libmpv (Linux, >=0.16)
 * Windows (32-bit >= XP SP3, 64-bit >= Vista SP2)
 * Mac OS X (>=10.10)
-* Mordern Linux Distribution, Ubuntu (>=12.04, strongly recommend >=16.04)
+* Modern Linux Distribution, Ubuntu (>=12.04, strongly recommend >=16.04)
 
 ## Compile and Build
 
-To compile and build μ from the source code, we suggest you to visit the [Compile](https://github.com/Kreogist/Mu/wiki/Compile) and [Build](https://github.com/Kreogist/Mu/wiki/Build) page at wiki.
+To compile and build μ from the source code, we suggest you visit the [Compile](https://github.com/Kreogist/Mu/wiki/Compile) and [Build](https://github.com/Kreogist/Mu/wiki/Build) page at wiki.
 
 ## License
 
