@@ -6,6 +6,16 @@ import http.client
 from html.parser import HTMLParser
 
 gpg_key = ""
+src_pro_path = "../src/src.pro"
+prj_lines = []
+target_line = -1
+prefix = ""
+
+configure_map = {
+	"": ["backend-mpv", "ffmpeg-swresample", "transcoder-ffmpeg"],
+	"14": ["backend-mpv", "ffmpeg-avresample"],
+	"12": ["backend-gstreamer", "ffmpeg-avresample"]
+}
 
 class UbuntuListPatcher(HTMLParser):
 	def __init__(self):
@@ -24,6 +34,43 @@ class UbuntuListPatcher(HTMLParser):
 
 	def parsed_data(self):
 		return self.tags;
+
+
+def getUbuntuVersion(versionString):
+	if "." in versionString:
+		dotPos = versionString.index(".")
+		return versionString[:dotPos], versionString[dotPos+1:]
+	return versionString, ""
+
+def getConfigure(versionString):
+	major_v, minor_v = getUbuntuVersion(versionString)
+	if major_v in configure_map:
+		return " ".join(configure_map[major_v])
+	return " ".join(configure_map[""])
+
+def cachePrjFile():
+	global prj_lines
+	global target_line
+	global prefix
+	global src_pro_path
+	prj_file = open(src_pro_path)
+	try:
+		prj_content = prj_file.read()
+	finally:
+		prj_file.close()
+	prj_lines = prj_content.split('\n')
+	target_line = -1
+	config_comment = "# Backend and ffmpeg configuration for linux."
+	for i in range(0, len(prj_lines)):
+		strip_line = prj_lines[i].strip()
+		if strip_line == config_comment:
+			target_line = i+1
+			break
+	if "+=" in prj_lines[target_line]:
+		prefix = prj_lines[target_line][:prj_lines[target_line].index("+=")] + "+= "
+
+# Cache the project file.
+cachePrjFile()
 
 # Get the PGP key.
 if len(sys.argv) != 2:
@@ -48,12 +95,18 @@ parser.feed(pre_element)
 element_list = parser.parsed_data()[4:]
 element_list.reverse()
 ubuntu_release = []
+ubuntu_version = []
 for element in element_list:
 	# Get the attrs.
 	element_attrs = list(element["attrs"][0])
 	# Check the elements.
 	if element_attrs[0] != "href":
 		continue
+    # Find the Ubuntu version.
+	ubuntu_pos=element["data"].find("Ubuntu")
+	if ubuntu_pos == -1:
+		continue
+	element_version=element["data"][ubuntu_pos+7:ubuntu_pos+12]
 	# The second data should be the version data.
 	element_href = element_attrs[1][:-1]
 	# Check the data.
@@ -65,6 +118,7 @@ for element in element_list:
 		break
 	# Get all the codes here.
 	ubuntu_release.append(element_href)
+	ubuntu_version.append(element_version)
 # Read the changelog
 change_log_file = open('changelog', 'r')
 change_log_data = change_log_file.read();
@@ -82,12 +136,23 @@ print("Upload information:")
 print("Version   : " + current_mu_version)
 print("Releases  : " + ', '.join(ubuntu_release))
 # We would insert some data into first line.
-for ubuntu_version in ubuntu_release:
-	print("Uploading " + ubuntu_version + "...")
+for i in range(0, len(ubuntu_release)):
+	upload_version = ubuntu_release[i]
+	print("Uploading " + upload_version + "...")
+	print("Configuring the project file...")
+	major_v, minor_v = getUbuntuVersion(ubuntu_version[i])
+	# Generate the project file for the version.
+	prj_lines[target_line] = prefix + getConfigure(major_v)
+	prj_content = "\n".join(prj_lines)
+	prj_file = open(src_pro_path, "w", encoding = "utf-8")
+	try:
+		prj_file.write(prj_content)
+	finally:
+		prj_file.close()
 	print("Working on changelong...")	
 	change_log_file = open('changelog', 'w')
 	change_log_file.write(change_log_first_line[:end_bracket] + '-' + \
-	 					  ubuntu_version + ") " + ubuntu_version + \
+	 					  upload_version + ") " + upload_version + \
 						  change_log_first_line[end_series:] + \
 						  '\n' + change_log_body)
 	change_log_file.close()
@@ -102,20 +167,28 @@ for ubuntu_version in ubuntu_release:
 	os.system("debuild -S -sa -k" + gpg_key)
 	# Execute the dput to upload the data.
 	print("Launching dput...")
-	print("$ dput -f ppa:kreogistdevteam/mu ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version + "_source.changes")
-	os.system("dput -f ppa:kreogistdevteam/mu ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version + "_source.changes")
+	print("$ dput -f ppa:kreogistdevteam/mu ../kreogist-mu_"+current_mu_version+"-"+ upload_version + "_source.changes")
+	os.system("dput -f ppa:kreogistdevteam/mu ../kreogist-mu_"+current_mu_version+"-"+ upload_version + "_source.changes")
 	# Clean up.
 	print("Cleaning up...")
-	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +".dsc")
-	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +"_source.build")
-	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +"_source.changes")
-	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +".tar.xz")
-	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ ubuntu_version +"_source.ppa.upload")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ upload_version +".dsc")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ upload_version +"_source.build")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ upload_version +"_source.changes")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ upload_version +".tar.xz")
+	os.system("rm -f ../kreogist-mu_"+current_mu_version+"-"+ upload_version +"_source.ppa.upload")
 	# Done.
-	print("Upload " + ubuntu_version + " done.")
+	print("Upload " + upload_version + " done.")
 	# Back to script root.
 	os.chdir(os.path.dirname(script_path))
 	
+# Write back the project file
+prj_lines[target_line] = prefix + getConfigure("")
+prj_content = "\n".join(prj_lines)
+prj_file = open(src_pro_path, "w", encoding = "utf-8")
+try:
+	prj_file.write(prj_content)
+finally:
+	prj_file.close()
 # Write back the changelog
 change_log_file = open('changelog', 'w')
 change_log_file.write(change_log_first_line + '\n' + change_log_body)
