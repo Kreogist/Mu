@@ -167,19 +167,25 @@ macx: {
 linux: {
     # Enable the analysiser.
     CONFIG += ffmpeg-common analysiser-ffmpeg linux-global-null i18n
-    # Check for the avresample library.
-    avresample_detect=$$system(pkg-config --cflags libavresample)
-    contains(avresample_detect, not found)  {
-        # Use swresample, and it will support for the latest mpv backend.
-        CONFIG += backend-mpv ffmpeg-swresample transcoder-ffmpeg
-    } else {
-        # Use avresample, this would only support for the gstreamer backend.
-        CONFIG += backend-gstreamer ffmpeg-avresample
-    }
+    # Backend and ffmpeg configuration for linux.
+    CONFIG += backend-mpv ffmpeg-swresample transcoder-ffmpeg
     # Set the destination directory for the Linux special.
     DESTDIR = ../bin
     # This options is added for Linux specially.
     INSTALLS += target
+}
+
+# Linux common settings
+linux-common: {
+    # Check for the avresample library.
+    swresample_detect=$$system(pkg-config --cflags libswresample)
+    contains(swresample_detect, not found)  {
+        # Use avresample, this would only support for the gstreamer backend.
+        CONFIG += backend-gstreamer ffmpeg-avresample
+    } else {
+        # Use swresample, and it will support for the latest mpv backend.
+        CONFIG += backend-mpv ffmpeg-swresample transcoder-ffmpeg
+    }
 }
 
 # Linux global shortcut supports.

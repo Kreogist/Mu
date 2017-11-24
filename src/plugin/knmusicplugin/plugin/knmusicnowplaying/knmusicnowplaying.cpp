@@ -190,12 +190,12 @@ void KNMusicNowPlaying::loadConfigure(KNMusicModel *musicModel)
     }
     //Ask the backend to play the index.
     playRow(sourcePlayingRow);
-    //Pause the playing right after loaded.
-    m_backend->pause();
     //Get the backend position.
     qint64 songPosition=lastPlayedConfigure->data("Position").toLongLong();
     //Move the position to the stored position.
     m_backend->setPosition(songPosition);
+    //Pause the playing right after loaded.
+    m_backend->pause();
     //Sync the lyrics.
     knMusicGlobal->lyricsManager()->backend()->setPosition(songPosition);
 }
