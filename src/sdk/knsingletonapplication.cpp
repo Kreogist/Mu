@@ -23,8 +23,8 @@
 #define TimeoutLimit 1000
 
 KNSingletonApplication::KNSingletonApplication(int &argc,
-                                               char **argv,
-                                               const QString uniqueKey) :
+                                                  char **argv,
+                                                  const QString uniqueKey) :
     QApplication(argc, argv),
     m_peer(new KNLocalPeer(this, uniqueKey))
 {

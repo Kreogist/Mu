@@ -16,12 +16,23 @@ def isQtExist(qtRegRawInfo):
     # Get the root path of binary installation.
     qtRootPath=qtRegRawInfo["location"]+"\\"
     # Check Qt version.
-    if qtRegRawInfo["version"][2:3]=="9":
+    qtVersionDot1=qtRegRawInfo["version"].find('.')
+    qtVersionDot2=qtRegRawInfo["version"].find('.', qtVersionDot1+1)
+    qtSubVersion=0
+    if qtVersionDot2 == -1:
+        qtSubVersion=int(qtRegRawInfo["version"][qtVersionDot1+1:])
+    else:
+        qtSubVersion=int(qtRegRawInfo["version"][qtVersionDot1+1:qtVersionDot2])
+    # For Qt 5.9 and later
+    if qtSubVersion >= 9:
         # Then send all the content at the end.
         qtRootPath=qtRootPath+qtRegRawInfo["version"]
     else:
         # Only add first three chars.
-        qtRootPath=qtRootPath+qtRegRawInfo["version"][0:3]
+        if qtVersionDot2==-1:
+            qtRootPath=qtRootPath+qtRegRawInfo["version"]
+        else:
+            qtRootPath=qtRootPath+qtRegRawInfo["version"][0:qtVersionDot2]
     # Get the compiler version of the Qt installation.
     qtRootSubDirs=listdir(qtRootPath)
     # Check the sub dir size.
