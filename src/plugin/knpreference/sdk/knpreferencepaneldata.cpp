@@ -76,6 +76,11 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         panelData.append(block);
         //Behaviour settings.
         block=generateBlock(tr("Behaviour"));
+        addItem(block, tr("Enable tooltip preview"),
+                "User/Music/TooltipPreview", true, TypeBoolean,
+                tr("When enable this feature and moving mouse on a song, Mu "
+                   "will popup a tooltip allows to preview this song without "
+                   "pausing the current song."), false);
         addItem(block, tr("Save last played"),
                 "User/Music/SaveLastPlayed", true, TypeBoolean,
                 tr("When next time launch Mu, Mu will restore the last playing "

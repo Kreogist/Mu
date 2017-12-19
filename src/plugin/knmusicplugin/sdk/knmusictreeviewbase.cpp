@@ -23,6 +23,7 @@
 #include <QScrollBar>
 
 #include "knconnectionhandler.h"
+#include "knconfigure.h"
 #include "kndpimanager.h"
 
 #include "knmusicsearchbase.h"
@@ -372,13 +373,17 @@ bool KNMusicTreeViewBase::event(QEvent *event)
     case QEvent::ToolTip:
     case QEvent::ToolTipChange:
     {
-        //Cast the event as a help event.
-        QHelpEvent *helpEvent=static_cast<QHelpEvent *>(event);
-        //Get the position of the tooltip index.
-        QPoint indexPosition=QPoint(helpEvent->pos().x(),
-                                    helpEvent->pos().y()-header()->height());
-        //Show the detail tooltip at the index position
-        return showDetailTooltip(indexPosition);
+        //Check for the function enable.
+        if(knMusicGlobal->configure()->data("TooltipPreview", true).toBool())
+        {
+            //Cast the event as a help event.
+            QHelpEvent *helpEvent=static_cast<QHelpEvent *>(event);
+            //Get the position of the tooltip index.
+            QPoint indexPosition(helpEvent->pos().x(),
+                                 helpEvent->pos().y()-header()->height());
+            //Show the detail tooltip at the index position
+            return showDetailTooltip(indexPosition);
+        }
     }
     default:
         //Process other kinds of events.
