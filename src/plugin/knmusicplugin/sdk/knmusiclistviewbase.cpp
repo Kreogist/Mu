@@ -110,10 +110,8 @@ KNMusicProxyModel *KNMusicListViewBase::proxyModel()
     {
         //Initial the proxy model.
         m_proxyModel=new KNMusicProxyModel(this);
-        //Set the search text.
-        m_proxyModel->setSearchBlocks(knMusicGlobal->search()->rules());
-        //Set the proxy model.
-        setModel(m_proxyModel);
+        //Apply the proxy model.
+        applyProxyModel();
     }
     //Give back the proxy model.
     return m_proxyModel;
@@ -186,6 +184,20 @@ void KNMusicListViewBase::sortByColumn(int column, Qt::SortOrder order)
 {
     //Set the sort action to the proxy model.
     proxyModel()->sort(column, order);
+}
+
+void KNMusicListViewBase::setProxyModel(KNMusicProxyModel *proxyModel)
+{
+    //Check the current proxy model.
+    if(m_proxyModel)
+    {
+        //Delete the proxy model later.
+        m_proxyModel->deleteLater();
+    }
+    //Save the new proxy model.
+    m_proxyModel=proxyModel;
+    //Apply the proxy model to the view.
+    applyProxyModel();
 }
 
 void KNMusicListViewBase::startDrag(Qt::DropActions supportedActions)
@@ -391,6 +403,14 @@ void KNMusicListViewBase::removeCurrent()
         //Remove the current index.
         proxyModel()->removeRow(currentIndex().row());
     }
+}
+
+inline void KNMusicListViewBase::applyProxyModel()
+{
+    //Set the search text.
+    m_proxyModel->setSearchBlocks(knMusicGlobal->search()->rules());
+    //Set the proxy model.
+    setModel(m_proxyModel);
 }
 
 inline void KNMusicListViewBase::scrollToIndex(const QModelIndex &proxyIndex)

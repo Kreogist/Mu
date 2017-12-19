@@ -24,6 +24,7 @@
 #include "knmusicnowplayingbase.h"
 #include "knmusicproxymodel.h"
 #include "knmusicalbumlistdelegate.h"
+#include "knmusicalbumlistproxymodel.h"
 
 #include "knmusicalbumlistview.h"
 
@@ -34,6 +35,7 @@ KNMusicAlbumListView::KNMusicAlbumListView(QWidget *parent, KNMusicTab *tab) :
 {
     setObjectName("AlbumListView");
     //Set properties.
+    setProxyModel(new KNMusicAlbumListProxyModel(this));
     setItemDelegate(new KNMusicAlbumListDelegate(this));
     knTheme->registerWidget(this);
     //Set the proxy model category column.

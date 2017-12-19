@@ -49,7 +49,6 @@ public slots:
      * \param text The album title.
      */
     void setCategoryText(const QVariant &text);
-
 };
 
 #endif // KNMUSICALBUMLISTVIEW_H

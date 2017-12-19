@@ -25,14 +25,31 @@
 
 using namespace MusicUtil;
 
+/*!
+ * \brief The KNMusicCategoryProxyModel class provides the sort, filter and
+ * search function to a category model.
+ */
 class KNMusicCategoryProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construxt a KNMusicCategoryProxyModel object.
+     * \param parent The parent object.
+     */
     explicit KNMusicCategoryProxyModel(QObject *parent = 0);
 
+    /*!
+     * \brief Get the proxy category index from the text.
+     * \param categoryText The category text.
+     * \return The proxy category item index.
+     */
     QModelIndex categoryIndex(const QVariant &categoryText);
 
+    /*!
+     * \brief Get the search item blocks.
+     * \return The search item block list.
+     */
     QList<KNMusicSearchBlock> searchBlocks() const;
 
 signals:

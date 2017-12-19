@@ -462,6 +462,10 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
         return detailInfo.dateModified;
     case DateLastPlayedRole:
         return detailInfo.dateLastPlayed;
+    case AlbumDiscRole:
+        return detailInfo.textLists[DiscNumber].toString().toInt();
+    case AlbumTrackRole:
+        return detailInfo.textLists[TrackNumber].toString().toInt();
     default:
         return m_nullValue;
     }

@@ -112,6 +112,13 @@ signals:
     void endDraggingSong();
 
 public slots:
+    /*!
+     * \brief Set the proxy model to the list view, using the custom proxy model
+     * instead of the default model. If there is a proxy model used before, it
+     * will use the current model instead.
+     * \param proxyModel The proxy model pointer.
+     */
+    void setProxyModel(KNMusicProxyModel *proxyModel);
 
 protected:
     /*!
@@ -173,6 +180,7 @@ private slots:
     void removeCurrent();
 
 private:
+    inline void applyProxyModel();
     inline void scrollToIndex(const QModelIndex &proxyIndex);
     inline void playIndex(const QModelIndex &index);
     inline void startAnime(int endFrame);

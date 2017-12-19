@@ -607,7 +607,8 @@ SOURCES += \
     sdk/knfileassociationmanager.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.cpp \
-    sdk/knglobalaction.cpp
+    sdk/knglobalaction.cpp \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -900,7 +901,8 @@ HEADERS += \
     sdk/knfileassociationmanager.h \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.h \
     plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.h \
-    sdk/knglobalaction.h
+    sdk/knglobalaction.h \
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.h
 
 RESOURCES += \
     resource/res.qrc
