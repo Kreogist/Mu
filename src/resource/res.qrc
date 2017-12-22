@@ -157,12 +157,6 @@
         <file>music/public/base.png</file>
         <file>music/lyrics/artist.png</file>
         <file>music/lyrics/title.png</file>
-        <file>music/formats/format_aac.png</file>
-        <file>music/formats/format_flac.png</file>
-        <file>music/formats/format_lame.png</file>
-        <file>music/formats/format_vorbis.png</file>
-        <file>music/formats/format_wav.png</file>
-        <file>music/formats/format_wma.png</file>
         <file>music/player/next_tab.png</file>
         <file>music/player/previous_tab.png</file>
         <file>preference/about.png</file>

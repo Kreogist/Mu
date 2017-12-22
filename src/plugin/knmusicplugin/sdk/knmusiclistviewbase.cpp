@@ -22,6 +22,7 @@
 #include <QTimeLine>
 
 #include "knconnectionhandler.h"
+#include "knconfigure.h"
 #include "sao/knsaostyle.h"
 
 #include "knmusicglobal.h"
@@ -337,10 +338,14 @@ bool KNMusicListViewBase::event(QEvent *event)
     case QEvent::ToolTip:
     case QEvent::ToolTipChange:
     {
-        //Cast the event as a help event.
-        QHelpEvent *helpEvent=static_cast<QHelpEvent *>(event);
-        //Show the detail tooltip at the index position
-        return showDetailTooltip(helpEvent->pos());
+        //Check for the function enable.
+        if(knMusicGlobal->configure()->data("TooltipPreview", true).toBool())
+        {
+            //Cast the event as a help event.
+            QHelpEvent *helpEvent=static_cast<QHelpEvent *>(event);
+            //Show the detail tooltip at the index position
+            return showDetailTooltip(helpEvent->pos());
+        }
     }
     default:
         //Process other kinds of events.

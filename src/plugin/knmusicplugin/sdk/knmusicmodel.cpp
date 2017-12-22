@@ -466,6 +466,8 @@ QVariant KNMusicModel::data(const QModelIndex &index, int role) const
         return detailInfo.textLists[DiscNumber].toString().toInt();
     case AlbumTrackRole:
         return detailInfo.textLists[TrackNumber].toString().toInt();
+    case AlbumDiscTotalRole:
+        return detailInfo.textLists[DiscCount].toString().toInt();
     default:
         return m_nullValue;
     }

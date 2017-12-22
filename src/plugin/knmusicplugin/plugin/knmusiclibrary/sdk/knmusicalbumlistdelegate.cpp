@@ -131,14 +131,14 @@ QSize KNMusicAlbumListDelegate::sizeHint(const QStyleOptionViewItem &option,
                                         const QModelIndex &index) const
 {
     //Check for the first line.
-    if(index.row()==0 ||
+    if(index.data(AlbumDiscTotalRole).toInt()>1 && (index.row()==0 ||
             (index.data(AlbumDiscRole).toInt()!=
             index.model()->index(index.row()-1,
-                                 index.column()).data(AlbumDiscRole).toInt()))
+                                 index.column()).data(AlbumDiscRole).toInt())))
     {
         return QSize(option.fontMetrics.width(
                          index.data(Qt::DisplayRole).toString())+38,
-                     knDpi->height(ItemHeight<<1));
+                     knDpi->height(TitleHeight));
     }
     //Calculate the size hint for normal line.
     return QSize(option.fontMetrics.width(

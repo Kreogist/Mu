@@ -113,7 +113,7 @@
 // Header Player.
 #include "plugin/knmusicheaderplayer/knmusicheaderplayer.h"
 // Main Player.
-#include "plugin/knmusicmainplayer/knmusicmainplayer.h"
+#include "plugin/knmusicmainplayer2/knmusicmainplayer2.h"
 // Mini Player.
 #include "plugin/knmusicminiplayer/knmusicminiplayer.h"
 // Library.
@@ -259,7 +259,7 @@ void KNMusicPlugin::loadPlugins()
     //Iniital the header player.
     initialHeaderPlayer(new KNMusicHeaderPlayer);
     //Initial the main player.
-    initialMainPlayer(new KNMusicMainPlayer);
+    initialMainPlayer(new KNMusicMainPlayer2);
     //Initial the mini player.
     initialMiniPlayer(new KNMusicMiniPlayer);
     //Initial the library tab.

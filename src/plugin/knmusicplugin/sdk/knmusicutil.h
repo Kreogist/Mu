@@ -83,7 +83,8 @@ namespace MusicUtil
         DateModifiedRole,
         DateLastPlayedRole,
         AlbumTrackRole,
-        AlbumDiscRole
+        AlbumDiscRole,
+        AlbumDiscTotalRole
     };
     enum PropertyListIndex
     {

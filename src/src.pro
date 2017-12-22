@@ -507,7 +507,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.cpp \
     sdk/knlabelbutton.cpp \
     plugin/knmusicplugin/sdk/knmusiccategorysearch.cpp \
@@ -608,7 +607,9 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.cpp \
     sdk/knglobalaction.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.cpp \
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayer2.cpp \
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontrol.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -794,7 +795,6 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.h \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusiccodeclabel.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.h \
     sdk/knlabelbutton.h \
     sdk/knplatformextras.h \
@@ -902,7 +902,9 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.h \
     plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.h \
     sdk/knglobalaction.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.h \
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayer2.h \
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontrol.h
 
 RESOURCES += \
     resource/res.qrc

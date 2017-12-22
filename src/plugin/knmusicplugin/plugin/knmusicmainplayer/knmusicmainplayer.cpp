@@ -29,7 +29,6 @@
 #include "kndpimanager.h"
 
 #include "knmusiclyricsmanager.h"
-#include "knmusiccodeclabel.h"
 #include "knmusicbackend.h"
 #include "knmusicproxymodel.h"
 #include "knmusicscrolllyrics.h"
@@ -58,7 +57,6 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
     m_progressSlider(new KNProgressSlider(this)),
     m_duration(new QLabel(this)),
     m_position(new KNEditableLabel(this)),
-    m_codecLabel(new KNMusicCodecLabel(this)),
     m_loopMode(new KNOpacityAnimeButton(this)),
     m_volumeIcon(new KNOpacityButton(this)),
     m_volumeSlider(new KNVolumeSlider(this)),
@@ -220,8 +218,8 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
                                       controlLayout->widget());
     m_buttonLeftLayout->setSpacing(0);
     m_buttonLeftLayout->addStretch();
-    //Add codec label to left layout.
-    m_buttonLeftLayout->addWidget(m_codecLabel);
+    //Add widget to left layout.
+    m_buttonLeftLayout->addWidget(m_loopMode);
     buttonLayout->addLayout(m_buttonLeftLayout, 1);
     //Add widgets to left layout.
     //Add control buttons.
@@ -234,7 +232,6 @@ KNMusicMainPlayer::KNMusicMainPlayer(QWidget *parent) :
                                        controlLayout->widget());
     m_buttonRightLayout->setSpacing(0);
     //Add widgets to right layout.
-    m_buttonRightLayout->addWidget(m_loopMode);
     QBoxLayout *volumeLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             buttonLayout->widget());
     volumeLayout->setContentsMargins(0,0,0,0);
@@ -332,15 +329,8 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     //Do the resize.
     KNMusicMainPlayerBase::resizeEvent(event);
 
-    //Get the smaller one of the width and height.
-    int parameterSize=qMin(width(), height());
     //Calculate the font size.
-    int fontSize=parameterSize/30, minimalSize=knDpi->height(15);
-    //Set the minimum size of the font to 15.
-    if(fontSize<minimalSize)
-    {
-        fontSize=minimalSize;
-    }
+    int fontSize=knDpi->height(25);
     //Resize the font.
     QFont textFont=font();
     textFont.setPixelSize(fontSize);
@@ -349,7 +339,7 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_lyricsPanel->setSpacing(fontSize>>1);
     m_detailInfoPanel->updatePanelFont(textFont);
     //Check out the font size.
-    textFont.setPixelSize(minimalSize);
+    textFont.setPixelSize(fontSize>>1);
     m_playlistPanel->setFont(textFont);
     //Resize the time font.
     textFont=m_position->font();
@@ -357,17 +347,15 @@ void KNMusicMainPlayer::resizeEvent(QResizeEvent *event)
     m_position->setFont(textFont);
     m_duration->setFont(textFont);
     //Calculate the button size.
-    int buttonSize=(fontSize<<1)+(fontSize>>2)*3;
+    int buttonSize=(fontSize<<1);
     //Resize the control buttons.
     for(int i=0; i<ControlButtonsCount; ++i)
     {
         m_controlButtons[i]->setFixedSize(buttonSize, buttonSize);
     }
-    //Resize the codec label.
-    m_codecLabel->setFixedSize(buttonSize>>1, buttonSize>>1);
     //Resize the loop mode button.
     //Small button size.
-    int smallButtonSize=fontSize;
+    int smallButtonSize=knDpi->width(20);
     m_loopMode->setFixedSize(smallButtonSize, smallButtonSize);
     m_volumeIcon->setFixedSize(smallButtonSize, smallButtonSize);
     //Change the spacing of the layouts.
@@ -383,8 +371,6 @@ void KNMusicMainPlayer::onAnalysisItemChanged(
 {
     //Update the panel data.
     m_detailInfoPanel->setAnalysisItem(item);
-    //Give the suffix to the codec label.
-    m_codecLabel->setSuffix(QFileInfo(item.detailInfo.filePath).suffix());
 }
 
 void KNMusicMainPlayer::onVolumeChanged(int volumeSize)
