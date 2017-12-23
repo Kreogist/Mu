@@ -18,13 +18,22 @@
 #ifndef KNMUSICMAINPLAYERCONTROL_H
 #define KNMUSICMAINPLAYERCONTROL_H
 
+#include "knmusicutil.h"
+
 #include <QWidget>
+
+using namespace MusicUtil;
 
 class QLabel;
 class QGraphicsOpacityEffect;
 class QTimeLine;
+class KNOpacityButton;
+class KNVolumeSlider;
+class KNProgressSlider;
 class KNEditableLabel;
 class KNOpacityAnimeButton;
+class KNMusicBackend;
+class KNMusicNowPlayingBase;
 /*!
  * \brief The KNMusicMainPlayerControl class provides the widget for control the
  * current playing song and playing sequence.
@@ -38,6 +47,24 @@ public:
      * \param parent The parent widget.
      */
     explicit KNMusicMainPlayerControl(QWidget *parent = nullptr);
+
+    /*!
+     * \brief Set the playing backend to the main player control.
+     * \param backend The music player backend.
+     */
+    void setBackend(KNMusicBackend *backend);
+
+    /*!
+     * \brief Set the now playing to the main player control.
+     * \param nowPlaying The now playing object.
+     */
+    void setNowPlaying(KNMusicNowPlayingBase *nowPlaying);
+
+    /*!
+     * \brief Get the hide main player button.
+     * \return The button pointer.
+     */
+    KNOpacityAnimeButton *hideMainPlayer() const;
 
 signals:
 
@@ -54,17 +81,42 @@ protected:
      */
     void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
+private slots:
+    void onVolumeChanged(int volumeSize);
+    void updateDuration(const qint64 &duration);
+    void updatePositionText(const qint64 &position);
+
+    void onLoopStateChanged(int state);
+
 private:
+    enum VolumeSizes
+    {
+        NoVolume,
+        Volume1,
+        Volume2,
+        Volume3,
+        VolumeSizeCount
+    };
+    inline void opacityMoveIn();
+    inline void opacityMoveOut();
+    inline void setPosition(const qint64 &position);
     inline KNOpacityAnimeButton *generateButton(
             const QString &imagePath=QString());
     inline void changeOpacity(int endFrame);
-    QPixmap m_playIcon, m_pauseIcon;
+    QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
+            m_volumeSizeIcon[VolumeSizeCount];
+    KNMusicBackend *m_backend;
     QTimeLine *m_changeOpacity;
-    QGraphicsOpacityEffect *m_opacity;
+    QGraphicsOpacityEffect *m_opacity, *m_buttonOpacity;
     KNEditableLabel *m_position;
     QLabel *m_duration;
-    KNOpacityAnimeButton *m_previous, *m_playNPause, *m_next;
-    int m_currentOpacity;
+    KNProgressSlider *m_progressSlider;
+    KNOpacityAnimeButton *m_loopMode, *m_previous, *m_playNPause, *m_next,
+                         *m_panelSwitch, *m_hideMainPlayer;
+    KNOpacityButton *m_volumeIcon;
+    KNVolumeSlider *m_volumeSlider;
+    int m_currentOpacity, m_firstStageVolume, m_secondStageVolume;
+    bool m_progressPressed;
 };
 
 #endif // KNMUSICMAINPLAYERCONTROL_H

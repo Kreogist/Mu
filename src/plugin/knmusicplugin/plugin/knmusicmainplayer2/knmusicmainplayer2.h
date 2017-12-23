@@ -24,7 +24,9 @@
 
 using namespace MusicUtil;
 
+class KNOpacityAnimeButton;
 class KNMusicMainPlayerControl;
+class KNMusicMainPlayerContent;
 /*!
  * \brief The KNMusicMainPlayer class is a default realize of the main music
  * player. It will use all the standard SDK file to build the main music player.
@@ -72,6 +74,7 @@ private:
     inline void scaleBackground();
     QPixmap m_background, m_originalBackground;
     KNMusicMainPlayerControl *m_controlPanel;
+    KNMusicMainPlayerContent *m_contentContainer;
     bool m_isHorizontal;
 };
 
