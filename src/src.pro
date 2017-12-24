@@ -464,16 +464,11 @@ SOURCES += \
     plugin/knmusicplugin/sdk/knmusiconlinelyrics.cpp \
     plugin/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.cpp \
     sdk/sao/knsaosubmenu.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.cpp \
     plugin/knmusicplugin/sdk/knmusicutil.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.cpp \
     sdk/knglassanimebutton.cpp \
     sdk/knloopscrolllabel.cpp \
     plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.cpp \
     sdk/sao/knsaobutton.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp \
@@ -507,7 +502,6 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.cpp \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.cpp \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.cpp \
     sdk/knlabelbutton.cpp \
     plugin/knmusicplugin/sdk/knmusiccategorysearch.cpp \
     plugin/knpreference/sdk/knpreferencelanguagepanel.cpp \
@@ -609,7 +603,8 @@ SOURCES += \
     sdk/knglobalaction.cpp \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayer2.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontrol.cpp
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontrol.cpp \
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontent.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -750,15 +745,10 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicxiamilyrics/knmusicxiamilyrics.h \
     sdk/sao/knsaosubmenu.h \
     plugin/knmusicplugin/sdk/knmusicmainplayerbase.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayer.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayerpanel.h \
     sdk/knglassanimebutton.h \
     sdk/knloopscrolllabel.h \
     plugin/knmusicplugin/sdk/knmusicdetailtageditpanel.h \
     sdk/sao/knsaobutton.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayinglistview.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicnowplayingdelegate.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontent.h \
     plugin/knmusicplugin/sdk/knmusiclibrarybase.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibraryimagemanager.h \
@@ -795,7 +785,6 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusictagid3v2/knmusictagwav.h \
     plugin/knmusicplugin/plugin/knmusiclyricsdownloaddialog/knmusiclyricsdetaillistmodel.h \
     plugin/knmusicplugin/sdk/knmusiconlinelyricsdownloader.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer/knmusicmainplayercontentswitcher.h \
     sdk/knlabelbutton.h \
     sdk/knplatformextras.h \
     plugin/knmusicplugin/sdk/knmusiccategorysearch.h \
@@ -904,7 +893,8 @@ HEADERS += \
     sdk/knglobalaction.h \
     plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusicalbumlistproxymodel.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayer2.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontrol.h
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontrol.h \
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontent.h
 
 RESOURCES += \
     resource/res.qrc

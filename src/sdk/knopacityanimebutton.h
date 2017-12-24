@@ -39,6 +39,17 @@ public:
     explicit KNOpacityAnimeButton(QWidget *parent = 0);
 
 signals:
+    /*!
+     * \brief When mouse pointer enters this button, this signal will be
+     * emitted.
+     */
+    void mouseEnter();
+
+    /*!
+     * \brief When mouse pointer leaved from this button, this signal will be
+     * emitted.
+     */
+    void mouseLeave();
 
 public slots:
 

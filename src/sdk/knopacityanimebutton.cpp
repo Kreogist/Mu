@@ -78,6 +78,8 @@ void KNOpacityAnimeButton::enterEvent(QEvent *event)
     QAbstractButton::enterEvent(event);
     //Start the mouse in animation.
     startAnime(HoverOpacity);
+    //Emit the signal.
+    emit mouseEnter();
 }
 
 void KNOpacityAnimeButton::leaveEvent(QEvent *event)
@@ -86,6 +88,8 @@ void KNOpacityAnimeButton::leaveEvent(QEvent *event)
     QAbstractButton::leaveEvent(event);
     //Start the mouse out animation.
     startAnime(BaseOpacity);
+    //Emit the signal.
+    emit mouseLeave();
 }
 
 void KNOpacityAnimeButton::focusInEvent(QFocusEvent *event)

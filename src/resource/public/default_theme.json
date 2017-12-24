@@ -308,6 +308,10 @@
         "Highlight" : "#606060",
         "HighlightedText" : "#f7cf3d"
     },
+    "MainPlayerDurationLabel" : {
+        "Parent" : "MainPlayerLabel",
+        "WindowText" : "#f7cf3d"
+    },
     "MainPlayerInfoPanel" :{
         "Parent" : "MainPlayerLabel",
         "WindowText" : "#A0A0A0",

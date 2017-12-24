@@ -184,6 +184,10 @@
         <file>music/store/download_start.png</file>
         <file>music/store/download_state_down.png</file>
         <file>music/store/download_state_pause.png</file>
+        <file>music/player/NoRepeat_main.png</file>
+        <file>music/player/Random_main.png</file>
+        <file>music/player/Repeat_main.png</file>
+        <file>music/player/RepeatSingle_main.png</file>
     </qresource>
     <qresource prefix="/platform">
         <file>platforms/windows/loopmode_norepeat.png</file>

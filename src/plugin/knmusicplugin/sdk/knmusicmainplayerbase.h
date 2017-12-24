@@ -21,13 +21,24 @@
 
 #include "knmusicplayerbase.h"
 
+/*!
+ * \brief The KNMusicMainPlayerBase class provides the interface to implement a
+ * main player.
+ */
 class KNMusicMainPlayerBase : public KNMusicPlayerBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicMainPlayerBase widget.
+     * \param parent The parent widget.
+     */
     KNMusicMainPlayerBase(QWidget *parent = 0):KNMusicPlayerBase(parent){}
 
 signals:
+    /*!
+     * \brief Emit the request to hide the main player.
+     */
     void requireHide();
 
 public slots:
