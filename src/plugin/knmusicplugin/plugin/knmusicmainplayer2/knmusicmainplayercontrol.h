@@ -67,8 +67,19 @@ public:
     KNOpacityAnimeButton *hideMainPlayer() const;
 
 signals:
+    /*!
+     * \brief Ask the main player content to change the panel.
+     * \param panel The panel index.
+     */
+    void requireSwitchPanel(int panel);
 
 public slots:
+    /*!
+     * \brief When the main player panel content changed, this signal should be
+     * called.
+     * \param panelState The panel state.
+     */
+    void onPanelStateChange(int panelState);
 
 protected:
     /*!
@@ -88,6 +99,8 @@ private slots:
 
     void onLoopStateChanged(int state);
 
+    void onSwitchButtonPressed();
+
 private:
     enum VolumeSizes
     {
@@ -104,7 +117,8 @@ private:
             const QString &imagePath=QString());
     inline void changeOpacity(int endFrame);
     QPixmap m_playIcon, m_pauseIcon, m_loopStateIcon[LoopCount],
-            m_volumeSizeIcon[VolumeSizeCount];
+            m_volumeSizeIcon[VolumeSizeCount],
+            m_mainPlayerStates[MainPlayerStateCount];
     KNMusicBackend *m_backend;
     QTimeLine *m_changeOpacity;
     QGraphicsOpacityEffect *m_opacity, *m_buttonOpacity;
@@ -115,7 +129,7 @@ private:
                          *m_panelSwitch, *m_hideMainPlayer;
     KNOpacityButton *m_volumeIcon;
     KNVolumeSlider *m_volumeSlider;
-    int m_currentOpacity, m_firstStageVolume, m_secondStageVolume;
+    int m_currentOpacity, m_firstStageVolume, m_secondStageVolume, m_panelState;
     bool m_progressPressed;
 };
 

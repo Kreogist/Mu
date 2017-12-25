@@ -59,6 +59,7 @@ KNMusicMainPlayerControl::KNMusicMainPlayerControl(QWidget *parent) :
     m_currentOpacity(0),
     m_firstStageVolume(-1),
     m_secondStageVolume(-1),
+    m_panelState(StateSongInfo),
     m_progressPressed(false)
 {
     //Set properties.
@@ -77,11 +78,20 @@ KNMusicMainPlayerControl::KNMusicMainPlayerControl(QWidget *parent) :
     m_volumeSizeIcon[Volume1] =QPixmap(":/plugin/music/player/volume_1.png");
     m_volumeSizeIcon[Volume2] =QPixmap(":/plugin/music/player/volume_2.png");
     m_volumeSizeIcon[Volume3] =QPixmap(":/plugin/music/player/volume_3.png");
+    m_mainPlayerStates[StateSongInfo]=
+            QPixmap(":/plugin/music/player/main_song.png");
+    m_mainPlayerStates[StateLyrics]=
+            QPixmap(":/plugin/music/player/main_lyrics.png");
+    m_mainPlayerStates[StatePlayList]=
+            QPixmap(":/plugin/music/player/main_playlist.png");
     //Configure buttons.
     m_playNPause->setIcon(m_playIcon);
     m_loopMode->setIcon(m_loopStateIcon[NoRepeat]);
     m_volumeIcon->setFixedSize(knDpi->size(ButtonSize, ButtonSize));
     m_volumeIcon->setIcon(m_volumeSizeIcon[NoVolume]);
+    m_panelSwitch->setIcon(m_mainPlayerStates[StateSongInfo]);
+    connect(m_panelSwitch, &KNOpacityAnimeButton::clicked,
+            this, &KNMusicMainPlayerControl::onSwitchButtonPressed);
     //Configure the hide main player button.
     m_hideMainPlayer->setFixedSize(knDpi->size(32, 32));
     m_hideMainPlayer->setIcon(
@@ -318,6 +328,19 @@ void KNMusicMainPlayerControl::onLoopStateChanged(int state)
     m_loopMode->setIcon(m_loopStateIcon[state]);
 }
 
+void KNMusicMainPlayerControl::onSwitchButtonPressed()
+{
+    //Move to the next state.
+    ++m_panelState;
+    if(m_panelState>=MainPlayerStateCount)
+    {
+        //Reset to the first state.
+        m_panelState=0;
+    }
+    //Emit the switch signal.
+    emit requireSwitchPanel(m_panelState);
+}
+
 inline void KNMusicMainPlayerControl::opacityMoveIn()
 {
     //Change the opacity to 1.0.
@@ -368,4 +391,12 @@ inline void KNMusicMainPlayerControl::changeOpacity(int endFrame)
 KNOpacityAnimeButton *KNMusicMainPlayerControl::hideMainPlayer() const
 {
     return m_hideMainPlayer;
+}
+
+void KNMusicMainPlayerControl::onPanelStateChange(int panelState)
+{
+    //Update the state value.
+    m_panelState=panelState;
+    //Update the button icon.
+    m_panelSwitch->setIcon(m_mainPlayerStates[m_panelState]);
 }

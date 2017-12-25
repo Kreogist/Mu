@@ -39,23 +39,18 @@ KNMusicMainPlayer2::KNMusicMainPlayer2(QWidget *parent) :
     setObjectName("MainPlayer");
     //Link the hide main player request.
     KNOpacityAnimeButton *hideMainPlayer=m_controlPanel->hideMainPlayer();
+    hideMainPlayer->setParent(this);
+    hideMainPlayer->move(knDpi->pos(16, 16));
     connect(hideMainPlayer, &KNOpacityAnimeButton::clicked,
             this, &KNMusicMainPlayer2::requireHide);
+    //Link the container and panel.
+    connect(m_controlPanel, &KNMusicMainPlayerControl::requireSwitchPanel,
+            m_contentContainer, &KNMusicMainPlayerContent::setPanelState);
+    connect(m_contentContainer, &KNMusicMainPlayerContent::stateChanged,
+            m_controlPanel, &KNMusicMainPlayerControl::onPanelStateChange);
+    //Make the content container to the bottom.
+    m_contentContainer->lower();
 
-    //Set the main player layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
-    setLayout(mainLayout);
-    //Add widgets.
-    QBoxLayout *topLayout=new QBoxLayout(QBoxLayout::LeftToRight);
-    topLayout->setContentsMargins(knDpi->margins(16, 16, 16, 16));
-    topLayout->setSpacing(0);
-    topLayout->addWidget(hideMainPlayer);
-    topLayout->addStretch();
-    mainLayout->addLayout(topLayout);
-    mainLayout->addWidget(m_contentContainer, 1);
-    mainLayout->addWidget(m_controlPanel);
     //Configure the detail info panel.
     // Link the require show signals.
     connect(m_contentContainer, &KNMusicMainPlayerContent::requireShowInSongs,
@@ -90,6 +85,8 @@ void KNMusicMainPlayer2::setNowPlaying(KNMusicNowPlayingBase *nowPlaying)
     //When the playing item changed, main player need to update the data.
     connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingChanged,
             this, &KNMusicMainPlayer2::onNowPlayingChanged);
+    connect(nowPlaying, &KNMusicNowPlayingBase::nowPlayingModelChanged,
+            m_contentContainer, &KNMusicMainPlayerContent::setPlayingModel);
     //Set the now playing to control panel.
     m_controlPanel->setNowPlaying(nowPlaying);
 }
@@ -104,6 +101,11 @@ void KNMusicMainPlayer2::resizeEvent(QResizeEvent *event)
     scaleBackground();
     //Set the horizontal setting to content.
     m_contentContainer->setHorizontal(m_isHorizontal);
+    //Place all the widget.
+
+    m_contentContainer->setGeometry(rect());
+    m_controlPanel->setGeometry(0, height()-m_controlPanel->height(),
+                                width(), m_controlPanel->height());
 }
 
 void KNMusicMainPlayer2::paintEvent(QPaintEvent *event)

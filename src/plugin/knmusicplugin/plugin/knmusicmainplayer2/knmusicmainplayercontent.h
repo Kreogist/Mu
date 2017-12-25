@@ -20,6 +20,7 @@
 
 #include <QHash>
 
+#include "knmusicproxymodel.h"
 #include "knmusicutil.h"
 
 #include <QWidget>
@@ -30,9 +31,10 @@ class QBoxLayout;
 class QParallelAnimationGroup;
 class QPropertyAnimation;
 class KNHighLightLabel;
-class KNMusicScrollLyrics;
 class KNLoopScrollLabel;
 class KNOpacityAnimeButton;
+class KNMusicScrollLyrics;
+class KNMusicNowPlayingListView;
 /*!
  * \brief The KNMusicMainPlayerContent class provides the container for all the
  * widgets. It manages the animation for all the moving widgets.\n
@@ -74,6 +76,13 @@ signals:
      */
     void requireShowInGenres();
 
+    /*!
+     * \brief When the content panel state changed, this signal would be
+     * emitted.
+     * \param panelState The new panel state.
+     */
+    void stateChanged(int panelState);
+
 public slots:
     /*!
      * \brief Enable the horizontal layout or not.
@@ -82,10 +91,23 @@ public slots:
     void setHorizontal(bool isHorizontal);
 
     /*!
+     * \brief Set the display panel state.
+     * \param panelState The panel state index.
+     */
+    void setPanelState(int panelState);
+
+    /*!
      * \brief Set the analysis item to display.
      * \param item The analysis item of the display song.
      */
     void setAnalysisItem(const KNMusicAnalysisItem &item);
+
+    /*!
+     * \brief Set the current playing music proxy model to the playlist display
+     * panel.
+     * \param proxyModel The playing proxy model pointer.
+     */
+    void setPlayingModel(KNMusicProxyModel *proxyModel);
 
 protected:
     /*!
@@ -105,22 +127,32 @@ private:
         GotoGenre,
         GotoButtonCount
     };
-    enum PanelState
+    enum AnimationItem
     {
-        StateSongInfo,
-        StateLyrics,
-        StatePlayList
+        AnimeAlbumArt,
+        AnimeInfoContainer,
+        AnimeLyricsPanel,
+        AnimePlaylistPanel
+    };
+    struct WidgetAnimeState
+    {
+        QPropertyAnimation *animation;
+        bool isShown;
     };
     inline void addAnimation(QWidget *widget);
     inline void showWidget(QWidget *widget, QPoint pos,
                            bool force=true, bool fromLeft=false);
+    inline void hideWidget(QWidget *widget,
+                           bool force=true, bool fromLeft=false);
     inline void applyPosition(bool force=true, bool fromLeft=false);
+    inline void applySize();
     KNOpacityAnimeButton *m_gotoIcons[GotoButtonCount];
-    QHash<QWidget *, QPropertyAnimation *> m_animeMap;
+    QHash<QWidget *, WidgetAnimeState> m_animeMap;
     KNHighLightLabel *m_albumArt;
     KNLoopScrollLabel *m_titleLabel, *m_artistLabel, *m_albumLabel;
     KNMusicScrollLyrics *m_lyricsPanel;
-    QWidget *m_playlistPanel, *m_infoContainer;
+    KNMusicNowPlayingListView *m_playlistPanel;
+    QWidget *m_infoContainer;
     QBoxLayout *m_gotoLayout;
     QParallelAnimationGroup *m_animationGroup;
     int m_state;

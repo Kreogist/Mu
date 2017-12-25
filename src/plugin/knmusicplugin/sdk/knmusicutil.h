@@ -121,6 +121,13 @@ namespace MusicUtil
         Shuffle,
         LoopCount
     };
+    enum MainPlayerState
+    {
+        StateSongInfo,
+        StateLyrics,
+        StatePlayList,
+        MainPlayerStateCount
+    };
     struct KNMusicDetailInfo
     {
         //Tag datas.
