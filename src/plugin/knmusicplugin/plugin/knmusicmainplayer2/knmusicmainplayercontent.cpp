@@ -358,8 +358,7 @@ inline void KNMusicMainPlayerContent::applyPosition(bool force, bool fromLeft)
         //Resize the album art.
         m_albumArt->resize(albumArtSize, albumArtSize);
         int albumArtX=knDpi->width(120),
-                albumArtY=qMin((qreal)knDpi->height(120),
-                           (qreal)albumArtSize*0.382);
+                albumArtY=(qreal)knDpi->height(93);
         showWidget(m_albumArt, QPoint(albumArtX, albumArtY),
                    force, fromLeft);
         //Resize the font.
@@ -367,7 +366,6 @@ inline void KNMusicMainPlayerContent::applyPosition(bool force, bool fromLeft)
         //Update the sub label font.
         int fontHeight=knDpi->height(18);
         textFont.setPixelSize(fontHeight);
-        m_titleLabel->setFont(textFont);
         m_artistLabel->setFont(textFont);
         m_albumLabel->setFont(textFont);
         //Update the icon size.
@@ -383,23 +381,50 @@ inline void KNMusicMainPlayerContent::applyPosition(bool force, bool fromLeft)
         m_infoContainer->setContentsMargins(0, 0, 0, 0);
         int rightPartX=albumArtX+albumArtSize+knDpi->width(25),
             rightPartWidth=width()-rightPartX-albumArtX;
-        m_infoContainer->resize(rightPartWidth,
-                                m_infoContainer->sizeHint().height());
-        showWidget(m_infoContainer, QPoint(rightPartX, albumArtY),
-                   force, fromLeft);
         //Check for the state.
         if(m_state==StateLyrics)
         {
+            int titleHeight=fontHeight+(fontHeight>>1);
+            textFont.setPixelSize(titleHeight);
+            m_titleLabel->setFont(textFont);
+            //Update the panel fonts.
+            textFont.setPixelSize(titleHeight-(titleHeight>>2));
+            m_lyricsPanel->setFont(textFont);
+            //Update info container size.
+            m_infoContainer->resize(rightPartWidth,
+                                    m_infoContainer->sizeHint().height());
+            showWidget(m_infoContainer, QPoint(rightPartX, albumArtY),
+                       force, fromLeft);
+            //Update the lyrics panel and playlist.
+            int rightPartY=albumArtY+m_infoContainer->height()+
+                            knDpi->height(10);
+            m_lyricsPanel->resize(rightPartWidth,
+                                  height()-rightPartY-albumArtY);
             //Lyrics.
-            showWidget(m_lyricsPanel, QPoint(rightPartX,
-                                             albumArtY+m_infoContainer->height()),
+            showWidget(m_lyricsPanel, QPoint(rightPartX-knDpi->width(15),
+                                             rightPartY),
                        force, fromLeft);
             hideWidget(m_playlistPanel, force, fromLeft);
         }
         else
         {
+            //Update title label size.
+            m_titleLabel->setFont(textFont);
+            //Update the info container size.
+            m_infoContainer->resize(albumArtSize,
+                                    m_infoContainer->sizeHint().height());
+            showWidget(m_infoContainer,
+                       QPoint(albumArtX,
+                              albumArtY+albumArtSize+knDpi->height(5)),
+                       force, fromLeft);
+            //Update playlist panel font size.
+            m_playlistPanel->setFont(textFont);
+            //Update playlist panel.
+            m_playlistPanel->resize(rightPartWidth, height()-(albumArtY<<1));
             //Playlist.
-            ;
+            showWidget(m_playlistPanel, QPoint(rightPartX,
+                                               albumArtY),
+                       force, fromLeft);
             hideWidget(m_lyricsPanel, force, fromLeft);
         }
         return;
@@ -494,20 +519,21 @@ inline void KNMusicMainPlayerContent::applySize()
         }
         m_gotoLayout->setSpacing(iconSize/3);
         m_gotoLayout->setContentsMargins(0, iconSize>>1, 0, 0);
+        //Update lyrics and playlist size.
+        m_lyricsPanel->resize(size());
+        m_playlistPanel->resize(width(), height()-knDpi->height(157));
     }
     //Resize the font.
     QFont textFont=font();
     textFont.setPixelSize(fontSize);
     //Update the title font.
     m_titleLabel->setFont(textFont);
+    //Update the panel fonts.
+    m_lyricsPanel->setFont(textFont);
     //Update the sub label font.
     fontSize=(fontSize>>2)*3;
     textFont.setPixelSize(fontSize);
+    m_playlistPanel->setFont(textFont);
     m_artistLabel->setFont(textFont);
     m_albumLabel->setFont(textFont);
-    //Update the panel fonts.
-    m_lyricsPanel->setFont(textFont);
-    //Update the lyrics panel and playlist.
-    m_lyricsPanel->resize(size());
-    m_playlistPanel->resize(width(), height()-knDpi->height(157));
 }

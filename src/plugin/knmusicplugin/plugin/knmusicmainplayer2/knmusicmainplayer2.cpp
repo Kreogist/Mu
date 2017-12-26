@@ -22,6 +22,7 @@
 #include "knthememanager.h"
 #include "knopacityanimebutton.h"
 
+#include "knmusicglobal.h"
 #include "knmusicnowplayingbase.h"
 #include "knmusicmainplayercontrol.h"
 #include "knmusicmainplayercontent.h"
@@ -37,6 +38,8 @@ KNMusicMainPlayer2::KNMusicMainPlayer2(QWidget *parent) :
     m_isHorizontal(false)
 {
     setObjectName("MainPlayer");
+    //Set properties.
+    setAutoFillBackground(true);
     //Link the hide main player request.
     KNOpacityAnimeButton *hideMainPlayer=m_controlPanel->hideMainPlayer();
     hideMainPlayer->setParent(this);
@@ -129,11 +132,15 @@ void KNMusicMainPlayer2::onNowPlayingChanged(
         const KNMusicAnalysisItem &analysisItem)
 {
     //Get the image picture, cast as pixmap.
-    m_originalBackground=QPixmap::fromImage(analysisItem.coverImage);
+    m_originalBackground=analysisItem.coverImage.isNull()?
+                knMusicGlobal->noAlbumArt():
+                QPixmap::fromImage(analysisItem.coverImage);
     //Scale the background.
     scaleBackground();
     //Set the data to player content.
     m_contentContainer->setAnalysisItem(analysisItem);
+    //Update the window.
+    update();
 }
 
 inline void KNMusicMainPlayer2::scaleBackground()

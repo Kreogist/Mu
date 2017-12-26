@@ -44,7 +44,7 @@ void KNMusicNowPlayingDelegate::paint(QPainter *painter,
         return;
     }
     //Calculate the spacing.
-    int spacing=(option.rect.height()-(option.fontMetrics.height()<<1))>>2;
+    int spacing=(option.rect.height()-(option.fontMetrics.height()*5/3))/3;
     //Check selection.
     if(option.state & QStyle::State_Selected)
     {
@@ -115,18 +115,23 @@ void KNMusicNowPlayingDelegate::paint(QPainter *painter,
                                                              Name),
                                                     Qt::ElideRight,
                                                     nameTextWidth));
-    textY+=(spacing<<1)+option.fontMetrics.height();
+    textY+=(spacing)+option.fontMetrics.height();
     //Check selection.
     if(!(option.state & QStyle::State_Selected))
     {
         //Use the half opacity color.
         painter->setPen(QColor(0xd1, 0xd1, 0xd1, 0x7F));
     }
+    //Construct artist font.
+    QFont artistFont=option.font;
+    artistFont.setPixelSize((artistFont.pixelSize()<<1)/3);
+    painter->setFont(artistFont);
+    //Draw artist.
     painter->drawText(QRect(textX,
                             textY,
                             nameTextWidth,
                             textHeight),
-                      Qt::AlignLeft | Qt::AlignVCenter,
+                      Qt::AlignLeft | Qt::AlignTop,
                       option.fontMetrics.elidedText(textData(proxyModel,
                                                              index,
                                                              Artist),
@@ -140,7 +145,7 @@ QSize KNMusicNowPlayingDelegate::sizeHint(const QStyleOptionViewItem &option,
     return QSize(option.fontMetrics.width(textData(index.model(),
                                                    index,
                                                    Name))+knDpi->width(20),
-                 (option.fontMetrics.height()*1.618)*2);
+                 (option.fontMetrics.height()*2.382));
 }
 
 inline QString KNMusicNowPlayingDelegate::textData(
