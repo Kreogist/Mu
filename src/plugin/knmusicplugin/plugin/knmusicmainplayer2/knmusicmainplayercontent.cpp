@@ -250,7 +250,7 @@ inline void KNMusicMainPlayerContent::showWidget(QWidget *widget, QPoint pos,
         return;
     }
     //Else set the animation.
-    bool shownButNotCorrect=widget->pos()!=pos;
+    bool shownButNotCorrect=animeState.isShown && (widget->pos()!=pos);
     if(!animeState.isShown || shownButNotCorrect)
     {
         //Else set the animation.

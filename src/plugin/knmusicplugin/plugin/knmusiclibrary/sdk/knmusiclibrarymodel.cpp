@@ -30,8 +30,8 @@
 
 #include <QDebug>
 
-#define MajorVersion 4
-#define MinorVersion 0
+#define MajorVersion    4
+#define MinorVersion    0
 #define MaxOperateCount 900
 
 KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
@@ -43,6 +43,7 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     m_analysisQueue(new KNMusicAnalysisQueue),
     m_imageManager(new KNMusicLibraryImageManager),
     m_configure(nullptr),
+    m_systemConfigure(nullptr),
     m_databaseLoaded(false),
     m_ignoreCueData(true)
 {
@@ -393,7 +394,7 @@ void KNMusicLibraryModel::recoverModel()
     //Read the version data.
     databaseStream >> major >> minor;
     //Check the major and minor version.
-    if(major!=MajorVersion && minor!=MinorVersion)
+    if(major!=MajorVersion && minor<MinorVersion)
     {
         //Close the file, the database file version is not correct.
         databaseFile.close();
@@ -487,6 +488,12 @@ void KNMusicLibraryModel::setLibraryConfigure(KNConfigure *configure)
             this, &KNMusicLibraryModel::onConfigureUpdate);
     //Update the configure.
     onConfigureUpdate();
+}
+
+void KNMusicLibraryModel::setLibrarySystemConfigure(KNConfigure *configure)
+{
+    //Save the object pointer.
+    m_systemConfigure=configure;
 }
 
 void KNMusicLibraryModel::onAnalysisComplete(

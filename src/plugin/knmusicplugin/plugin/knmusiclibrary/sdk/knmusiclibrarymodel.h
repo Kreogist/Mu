@@ -27,8 +27,9 @@
 
 /*
  * Code name:
- * 4.0 - BNR32.
+ * 4.1 - BNR34.
  * Previous version code name (KNJsonDatabase):
+ * 4.0 - BNR32.
  * 3.0 - Trueno.
  * 2.0 - Cheater.
  * 1.0 - Beast.
@@ -188,6 +189,13 @@ public slots:
     void setLibraryConfigure(KNConfigure *configure);
 
     /*!
+     * \brief Set the system configuration to the library. This configure
+     * contains the settings related to the locale system.
+     * \param configure The system configure object.
+     */
+    void setLibrarySystemConfigure(KNConfigure *configure);
+
+    /*!
      * \brief Recover the library model from the json database.
      */
     void recoverModel();
@@ -218,7 +226,7 @@ private:
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     KNMusicLibraryImageManager *m_imageManager;
-    KNConfigure *m_configure;
+    KNConfigure *m_configure, *m_systemConfigure;
     bool m_databaseLoaded, m_ignoreCueData;
 };
 
