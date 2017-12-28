@@ -276,6 +276,18 @@ void KNMainWindow::forceClose()
     close();
 }
 
+void KNMainWindow::saveConfigure()
+{
+    //Save the configure of the category plugin, if the category is valid.
+    if(m_categoryPlugin)
+    {
+        //Save the configure.
+        m_categoryPlugin->saveConfigure();
+    }
+    //Save the geometry.
+    backupGeometry();
+}
+
 bool KNMainWindow::event(QEvent *event)
 {
     //Check the event type.
@@ -320,24 +332,6 @@ void KNMainWindow::showEvent(QShowEvent *event)
     emit mainWindowShown();
     //Show the main window.
     QMainWindow::showEvent(event);
-}
-
-void KNMainWindow::moveEvent(QMoveEvent *event)
-{
-    //Move the main window.
-    QMainWindow::moveEvent(event);
-    //Update the current screen.
-    for(auto screen : qApp->screens())
-    {
-        //Check whether the current position is in the pos.
-        if(screen->availableGeometry().contains(event->pos()))
-        {
-            //Save the screen.
-            //!FIXME: Add codes here.
-            //Mission complete.
-            break;
-        }
-    }
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
@@ -389,14 +383,6 @@ void KNMainWindow::closeEvent(QCloseEvent *event)
         //Finished.
         return;
     }
-    //Save the configure of the category plugin, if the category is valid.
-    if(m_categoryPlugin)
-    {
-        //Save the configure.
-        m_categoryPlugin->saveConfigure();
-    }
-    //Save the geometry.
-    backupGeometry();
     //Do the mainwindow close event.
     QMainWindow::closeEvent(event);
 }
@@ -561,8 +547,18 @@ inline void KNMainWindow::backupGeometry()
     setCacheValue("windowWidth", windowPosition.width());
     setCacheValue("windowHeight", windowPosition.height());
     //Set the current desktop size.
-    setCacheValue("desktopWidth", qApp->desktop()->width());
-    setCacheValue("desktopHeight", qApp->desktop()->height());
+    for(auto screen: qApp->screens())
+    {
+        //Check whether the current position is in the pos.
+        if(screen->availableGeometry().contains(pos()))
+        {
+            //Save the screen.
+            setCacheValue("desktopWidth", screen->size().width());
+            setCacheValue("desktopHeight", screen->size().height());
+            //Mission complete.
+            break;
+        }
+    }
 }
 
 inline QPropertyAnimation *KNMainWindow::generateAnime()

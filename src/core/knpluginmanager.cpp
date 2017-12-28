@@ -245,6 +245,8 @@ void KNPluginManager::onActionArgumentsAvaliable(QStringList arguments)
 
 void KNPluginManager::saveConfigure()
 {
+    //Save the main window configuration.
+    m_mainWindow->saveConfigure();
     //Save account preference.
     knAccount->saveConfigure();
     //Save the configure, this must be done at last.

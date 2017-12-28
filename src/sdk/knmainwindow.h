@@ -121,6 +121,12 @@ public slots:
      */
     void forceClose();
 
+    /*!
+     * \brief Save the main window configuration, it will also ask the category
+     * plugin to save the configure.
+     */
+    void saveConfigure();
+
 protected:
     /*!
      * \brief Reimplemented from QMainWindow::event().
@@ -131,11 +137,6 @@ protected:
      * \brief Reimplemented from QMainWindow::showEvent().
      */
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
-
-    /*!
-     * \brief Reimplemented from QMainWindow::moveEvent().
-     */
-    void moveEvent(QMoveEvent *event) Q_DECL_OVERRIDE;
 
     /*!
      * \brief Reimplemented from QMainWindow::resizeEvent().
