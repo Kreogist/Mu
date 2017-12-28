@@ -104,6 +104,11 @@ signals:
      */
     void notificationComplete();
 
+    /*!
+     * \brief Ask to save the configurations to the hard drive.
+     */
+    void requireSaveConfigure();
+
 public slots:
     /*!
      * \brief Show up the main player widget.

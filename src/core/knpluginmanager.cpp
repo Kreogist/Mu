@@ -187,6 +187,9 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
         m_mainWindow=mainWindow;
         //Set the main window to global.
         knGlobal->setMainWindow(m_mainWindow);
+        //Link the main window to the plugin manager.
+        connect(m_mainWindow, &KNMainWindow::requireSaveConfigure,
+                this, &KNPluginManager::saveConfigure);
     }
 }
 

@@ -250,7 +250,13 @@ void KNMainWindow::setMusicPlugin(KNAbstractMusicPlugin *musicPlugin)
     connect(m_musicPlugin, &KNAbstractMusicPlugin::requireShowMainWindow,
             this, &KNMainWindow::show);
     connect(m_musicPlugin, &KNAbstractMusicPlugin::requireCloseMainWindow,
-            this, &KNMainWindow::close);
+            [=]
+            {
+                //Save the configuration.
+                emit requireSaveConfigure();
+                //Close the main window.
+                close();
+            });
 
     connect(this, &KNMainWindow::mainWindowShown,
             m_musicPlugin, &KNAbstractMusicPlugin::hideMiniPlayer);
@@ -536,6 +542,18 @@ inline void KNMainWindow::backupGeometry()
         //Which means that the window is not even shown, do not save the state.
         return;
     }
+    //Set the current desktop size.
+    int screenIndex=qApp->desktop()->screenNumber(this);
+    if(screenIndex==-1)
+    {
+        //Cannot find the screen index, ignore the request.
+        return;
+    }
+    //Get the screen widget, update the desktop widget.
+    QScreen *screen=qApp->screens().at(screenIndex);
+    //Save the screen.
+    setCacheValue("desktopWidth", screen->size().width());
+    setCacheValue("desktopHeight", screen->size().height());
     //Set the window state.
     setCacheValue("windowState", static_cast<int>(windowState()));
     //Set the window position.
@@ -546,19 +564,6 @@ inline void KNMainWindow::backupGeometry()
     setCacheValue("windowY", windowPosition.y());
     setCacheValue("windowWidth", windowPosition.width());
     setCacheValue("windowHeight", windowPosition.height());
-    //Set the current desktop size.
-    for(auto screen: qApp->screens())
-    {
-        //Check whether the current position is in the pos.
-        if(screen->availableGeometry().contains(pos()))
-        {
-            //Save the screen.
-            setCacheValue("desktopWidth", screen->size().width());
-            setCacheValue("desktopHeight", screen->size().height());
-            //Mission complete.
-            break;
-        }
-    }
 }
 
 inline QPropertyAnimation *KNMainWindow::generateAnime()

@@ -20,6 +20,7 @@
 #include <QTimeLine>
 #include <QMouseEvent>
 #include <QDesktopWidget>
+#include <QScreen>
 #include <QCursor>
 
 #include "knimagelabel.h"
@@ -324,18 +325,24 @@ void KNMusicMiniPlayer::saveConfigure()
     QDesktopWidget *desktopWidget=qApp->desktop();
     //Get the screen index.
     int screenIndex=desktopWidget->screenNumber(this);
+    if(screenIndex==-1)
+    {
+        //Cannot find the screen, something wrong happened.
+        return;
+    }
     //Save the index.
     setCacheValue("miniPlayerScreenIndex", screenIndex);
     //Get the screen.
-    QRect screenRect=desktopWidget->screenGeometry(screenIndex);
+    QScreen *screen=qApp->screens().at(screenIndex);
+    QRect screenRect=screen->geometry();
     //Save the screen size.
     setCacheValue("miniPlayerScreenX", screenRect.x());
     setCacheValue("miniPlayerScreenY", screenRect.y());
     setCacheValue("miniPlayerScreenWidth", screenRect.width());
     setCacheValue("miniPlayerScreenHeight", screenRect.height());
     //Save the current player position.
-    setCacheValue("miniPlayerX", geometry().x());
-    setCacheValue("miniPlayerY", geometry().y());
+    setCacheValue("miniPlayerX", x());
+    setCacheValue("miniPlayerY", y());
 }
 
 void KNMusicMiniPlayer::loadConfigure()
@@ -360,14 +367,12 @@ void KNMusicMiniPlayer::loadConfigure()
         playerWidth=width(),
         playerHeight=height();
     //Check whether we have this screen anymore or not.
-    //Get the desktop widget.
-    QDesktopWidget *desktopWidget=qApp->desktop();
     //Check the desktop screen size.
-    if(screenIndex<desktopWidget->screenCount())
+    if(!qApp->screens().isEmpty() && screenIndex<qApp->screens().size())
     {
         //The screen is still exist.
         //Get the screen rect.
-        QRect screenRect=desktopWidget->screenGeometry(screenIndex);
+        QRect screenRect=qApp->screens().at(screenIndex)->geometry();
         //Check whether the screen is still valid.
         if(!screenRect.isEmpty())
         {
@@ -378,6 +383,7 @@ void KNMusicMiniPlayer::loadConfigure()
             targetScreenY=screenRect.y();
             targetScreenWidth=screenRect.width();
             targetScreenHeight=screenRect.height();
+            qDebug()<<lastX<<lastY;
             //Check the resolution of the screen.
             //Compare the resolution.
             if(targetScreenWidth==lastScreenWidth &&
@@ -416,7 +422,7 @@ void KNMusicMiniPlayer::loadConfigure()
     {
         //The screen is not exist anymore, set the target screen to be the
         //default screen.
-        QRect screenRect=desktopWidget->screenGeometry();
+        QRect screenRect=qApp->screens().at(0)->geometry();
         //Check default screen rect is empty or not.
         if(screenRect.isEmpty())
         {
