@@ -315,11 +315,8 @@ int KNMusicPlugin::minimumWidthHint()
 
 void KNMusicPlugin::loadCacheConfigure()
 {
-    //Get the cache configure.
-    KNConfigure *lastPlayedConfigure=
-            knGlobal->cacheConfigure()->getConfigure("LastPlayed");
     //Check the last played settings.
-    if(lastPlayedConfigure->data("SaveLastPlayed", true).toBool())
+    if(knMusicGlobal->configure()->data("SaveLastPlayed", true).toBool())
     {
         //Restore the last played state.
         restoreLastPlayed();

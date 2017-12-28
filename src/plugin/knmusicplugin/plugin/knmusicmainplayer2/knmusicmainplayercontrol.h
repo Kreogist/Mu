@@ -98,6 +98,7 @@ private slots:
     void updatePositionText(const qint64 &position);
 
     void onLoopStateChanged(int state);
+    void onActionPositionEdited();
 
     void onSwitchButtonPressed();
 

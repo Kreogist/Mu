@@ -65,6 +65,11 @@ signals:
      */
     void messageAvailable(QStringList messages);
 
+    /*!
+     * \brief Emit the application quit signal.
+     */
+    void applicationQuit();
+
 public slots:
 
 protected:

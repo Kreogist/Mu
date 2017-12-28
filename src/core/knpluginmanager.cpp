@@ -63,14 +63,6 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     KNGlobal::initial(this);
 }
 
-KNPluginManager::~KNPluginManager()
-{
-    //Save account preference.
-    knAccount->saveConfigure();
-    //Save the configure, this must be done at last.
-    knConf->saveConfigure();
-}
-
 inline void KNPluginManager::setApplicationInformation()
 {
     //Generate the application name.
@@ -249,4 +241,12 @@ void KNPluginManager::onActionArgumentsAvaliable(QStringList arguments)
     arguments.removeFirst();
     //Ask the music plugin to process the arguments.
     m_musicPlugin->onArgumentsAvailable(arguments);
+}
+
+void KNPluginManager::saveConfigure()
+{
+    //Save account preference.
+    knAccount->saveConfigure();
+    //Save the configure, this must be done at last.
+    knConf->saveConfigure();
 }

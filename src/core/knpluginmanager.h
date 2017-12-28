@@ -44,7 +44,6 @@ public:
      * empty. You should construct KNPluginManager in main() function.
      */
     explicit KNPluginManager(QObject *parent = 0);
-    ~KNPluginManager();
 
     /*!
      * \brief Get the application main window.
@@ -80,6 +79,11 @@ public slots:
      * \param arguments The arguments from system or from other instance.
      */
     void onActionArgumentsAvaliable(QStringList arguments);
+
+    /*!
+     * \brief Save all the configurations.
+     */
+    void saveConfigure();
 
 private:
     inline void setApplicationInformation();

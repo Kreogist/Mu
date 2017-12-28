@@ -72,6 +72,12 @@ bool KNSingletonApplication::event(QEvent *e)
         //Mission complete.
         return true;
     }
+    //When application is quit.
+    if(e->type()==QEvent::Close)
+    {
+        //Emit the application quit signal.
+        emit applicationQuit();
+    }
     //Do original event.
     return QApplication::event(e);
 }

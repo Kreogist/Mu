@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
                      &pluginManager,
                      &KNPluginManager::onActionArgumentsAvaliable,
                      Qt::QueuedConnection);
+    QObject::connect(&app, &KNSingletonApplication::applicationQuit,
+                     &pluginManager, &KNPluginManager::saveConfigure);
     //Launch the application.
     pluginManager.launchApplication();
     //Spread message loop.

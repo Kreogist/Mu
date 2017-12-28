@@ -111,6 +111,10 @@ KNMusicMainPlayerControl::KNMusicMainPlayerControl(QWidget *parent) :
     timeFont.setPixelSize(14);
     m_duration->setFont(timeFont);
     m_position->setFont(timeFont);
+    m_position->setMaximumHeight(QFontMetrics(timeFont).height());
+    //Configure position label.
+    connect(m_position, &KNEditableLabel::contentChanged,
+            this, &KNMusicMainPlayerControl::onActionPositionEdited);
     //Configure progress slider.
     m_progressSlider->setWheelStep(1000);
     m_progressSlider->setMaximum(0);
@@ -326,6 +330,36 @@ void KNMusicMainPlayerControl::onLoopStateChanged(int state)
 {
     //Change the icon.
     m_loopMode->setIcon(m_loopStateIcon[state]);
+}
+
+void KNMusicMainPlayerControl::onActionPositionEdited()
+{
+    //Get the latest text from the position.
+    QString positionText=m_position->text();
+    //Find the colon.
+    int colonPosition=positionText.indexOf(':');
+    //If we cannot find the colon, means it's not format as 'xx:xx'.
+    if(-1==colonPosition)
+    {
+        //This might be a number, we treat it as second time.
+        //Translate it to a number.
+        bool translateSuccess=false;
+        qint64 triedPositon=positionText.toLongLong(&translateSuccess);
+        //If we succeed, set the position to that second.
+        if(translateSuccess)
+        {
+            setPosition(triedPositon*1000);
+        }
+        return;
+    }
+    //Calculate the ms.
+    qint64 minutePart=positionText.left(colonPosition).toInt(),
+            secondPart=positionText.mid(colonPosition+1).toInt(),
+            preferPosition=(minutePart*60+secondPart)*1000;
+    if(preferPosition>0 && preferPosition<m_progressSlider->maximum())
+    {
+        setPosition(preferPosition);
+    }
 }
 
 void KNMusicMainPlayerControl::onSwitchButtonPressed()

@@ -22,11 +22,11 @@
 
 #include "knmusicalbumlistdelegate.h"
 
-#define IconSize 16
-#define ItemHeight 25
+#define IconSize    16
+#define ItemHeight  25
 #define TitleHeight 50
 #define TextMarginX 45
-#define Spacing 5
+#define Spacing     5
 
 using namespace MusicUtil;
 
