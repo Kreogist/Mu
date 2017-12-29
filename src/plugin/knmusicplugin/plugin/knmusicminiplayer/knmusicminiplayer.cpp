@@ -383,7 +383,6 @@ void KNMusicMiniPlayer::loadConfigure()
             targetScreenY=screenRect.y();
             targetScreenWidth=screenRect.width();
             targetScreenHeight=screenRect.height();
-            qDebug()<<lastX<<lastY;
             //Check the resolution of the screen.
             //Compare the resolution.
             if(targetScreenWidth==lastScreenWidth &&
