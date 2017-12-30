@@ -1,6 +1,6 @@
 # Kreogist μ
 
-Copyright © 2013-2017 Kreogist Dev Team.
+Copyright © 2013-2018 Kreogist Dev Team.
 
 ## Overview
 

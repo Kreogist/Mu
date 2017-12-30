@@ -36,7 +36,7 @@ Foundation,
 
 KNMainWindowStatusBar::KNMainWindowStatusBar(QWidget *parent) :
     QWidget(parent),
-    m_backgroundColor(QColor(255, 255, 255)),
+    m_backgroundColor(QColor(0, 0, 0)),
     m_background(QLinearGradient(QPointF(0, 0), knDpi->posF(GradientWidth, 0))),
     m_mainLayout(new QBoxLayout(QBoxLayout::RightToLeft, this)),
     m_mouseInOut(generateTimeline()),

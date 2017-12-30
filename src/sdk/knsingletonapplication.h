@@ -65,18 +65,22 @@ signals:
      */
     void messageAvailable(QStringList messages);
 
+#ifdef Q_OS_MACX
     /*!
      * \brief Emit the application quit signal.
      */
     void applicationQuit();
+#endif
 
 public slots:
 
 protected:
+#ifdef Q_OS_MACX
     /*!
      * \brief Reimplemented from QApplication::event().
      */
     bool event(QEvent *e) Q_DECL_OVERRIDE;
+#endif
 
 private:
     KNLocalPeer *m_peer;

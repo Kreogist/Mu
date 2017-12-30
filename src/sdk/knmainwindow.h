@@ -154,6 +154,7 @@ protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
+    void retranslate();
     void onActionFullScreen();
     void onActionShowNotificationCenter();
     void onActionHideComplete();

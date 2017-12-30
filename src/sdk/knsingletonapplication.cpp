@@ -56,6 +56,9 @@ bool KNSingletonApplication::isInstanceRunning() const
     return !m_peer->isClient();
 }
 
+//All these events are only used under Mac OS X.
+//Windows and Linux doesn't use these fucking events.
+#ifdef Q_OS_MACX
 bool KNSingletonApplication::event(QEvent *e)
 {
     //Under Mac OS X, we have to handle open file event as a new argument.
@@ -81,4 +84,4 @@ bool KNSingletonApplication::event(QEvent *e)
     //Do original event.
     return QApplication::event(e);
 }
-
+#endif

@@ -39,6 +39,7 @@
 #include "knnotification.h"
 #include "knaccountavatarbutton.h"
 #include "knopacityanimebutton.h"
+#include "knlocalemanager.h"
 
 //Notifications
 #include "notification/knnotificationcenter.h"
@@ -177,6 +178,9 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
             fullScreen, &QAction::trigger);
     //Update the animation positions.
     updateAnimeStartAndEnd();
+
+    knI18n->link(this, &KNMainWindow::retranslate);
+    retranslate();
 }
 
 void KNMainWindow::setHeader(KNMainWindowHeaderBase *header)
@@ -252,8 +256,10 @@ void KNMainWindow::setMusicPlugin(KNAbstractMusicPlugin *musicPlugin)
     connect(m_musicPlugin, &KNAbstractMusicPlugin::requireCloseMainWindow,
             [=]
             {
+#ifdef Q_OS_MACX
                 //Save the configuration.
                 emit requireSaveConfigure();
+#endif
                 //Close the main window.
                 close();
             });
@@ -389,8 +395,18 @@ void KNMainWindow::closeEvent(QCloseEvent *event)
         //Finished.
         return;
     }
+#ifndef Q_OS_MACX
+    //Save the configuration.
+    emit requireSaveConfigure();
+#endif
     //Do the mainwindow close event.
     QMainWindow::closeEvent(event);
+}
+
+void KNMainWindow::retranslate()
+{
+    //Set the full screen button
+    m_fullScreen->setToolTip(tr("Enter/Exit full screen mode"));
 }
 
 void KNMainWindow::onActionFullScreen()
