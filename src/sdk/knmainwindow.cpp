@@ -152,9 +152,9 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     knNotification->setNotificationWidget(notificationWidget);
     //Link the notification backend.
     connect(knNotification, &KNNotification::requirePushNotification,
-            this, &KNMainWindow::onActionPopupNotification);
+            this, &KNMainWindow::onPopupNotification);
     connect(this, &KNMainWindow::notificationComplete,
-            knNotification, &KNNotification::onActionPushNextNotification);
+            knNotification, &KNNotification::pushNext);
 
     //Add main window to theme list.
     knTheme->registerWidget(this);
@@ -468,7 +468,7 @@ void KNMainWindow::onActionHideComplete()
     emit notificationComplete();
 }
 
-void KNMainWindow::onActionPopupNotification()
+void KNMainWindow::onPopupNotification()
 {
     //Check whether the timer is running.
     if(m_notificationWaiter->isActive())

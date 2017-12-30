@@ -28,6 +28,7 @@
 
 using namespace NotificationUtil;
 
+class KNNotificationData;
 /*!
  * \brief The KNNotificationModel class provides a model to store all the
  * notification which could be visible from a list view.
@@ -41,19 +42,7 @@ public:
      * \param parent The parent object.
      */
     explicit KNNotificationModel(QObject *parent = 0);
-
-    /*!
-     * \brief Preppend a notification to model.
-     * \param title Notification title.
-     * \param content Notification content.
-     * \param type Notification type. It should be one of the NotificationType
-     * data.
-     * \return Notificaiton item index of the notification in the model.
-     */
-    QModelIndex prependRow(const QString &title,
-                           const QString &content,
-                           int type=Information,
-                           int iconType=Message);
+    ~KNNotificationModel();
 
     /*!
      * \brief Reimplemented from QAbstractListModel::rowCount().
@@ -73,6 +62,13 @@ public:
                     const QModelIndex &parent) Q_DECL_OVERRIDE;
 
     /*!
+     * \brief Append the notification to the end of the notification model.
+     * \param data The notification data pointer.
+     * \return If the data append successfully, return true.
+     */
+    bool appendNotification(KNNotificationData *data);
+
+    /*!
      * \brief Remove one notification from the model.
      * \param index The notification index.
      * \return If remove the notificaiton successfully, then return true;
@@ -84,9 +80,9 @@ signals:
 public slots:
 
 private:
-    inline QPixmap generateIcon(const QString &iconPath)
-;    QPixmap m_icon[NotificationIconCount];
-    QList<NotificationData> m_notifications;
+    inline QPixmap generateIcon(const QString &iconPath);
+    QPixmap m_icon[NotificationIconCount];
+    QList<KNNotificationData *> m_notifications;
 };
 
 #endif // KNNOTIFICATIONMODEL_H

@@ -27,6 +27,7 @@ class KNMusicPlaylistParser;
 class KNMusicPlaylistModel;
 class KNMusicPlaylistEngine;
 class KNMusicPlaylistListModel;
+class KNMusicPlaylistFailedLoaded;
 /*!
  * \brief The KNMusicPlaylistManager class will provides you a higher management
  * API for playlist model management. It can create, remove, save, load, import
@@ -213,6 +214,7 @@ private:
     bool m_isPlaylistListLoaded;
     KNMusicPlaylistEngine *m_playlistEngine;
     QThread *m_workingThread;
+    KNMusicPlaylistFailedLoaded *m_notificationFailedLoaded;
 };
 
 #endif // KNMUSICPLAYLISTMANAGER_H

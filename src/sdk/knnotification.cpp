@@ -18,10 +18,27 @@
 //Notification Dependences.
 #include "notification/knnotificationmodel.h"
 #include "notification/knnotificationwidget.h"
+#include "knnotificationdata.h"
 
 #include "knnotification.h"
 
 KNNotification *KNNotification::m_instance=nullptr;
+
+KNNotification::~KNNotification()
+{
+    //Loop and delete all the children.
+    while(!m_popupNotifications.isEmpty())
+    {
+        //Take the last item.
+        KNNotificationData *data=m_popupNotifications.takeLast();
+        //Check the data parent.
+        if(data->parent()==this)
+        {
+            //Remove the data item.
+            delete data;
+        }
+    }
+}
 
 KNNotification *KNNotification::instance()
 {
@@ -46,83 +63,44 @@ KNNotification::KNNotification(QObject *parent) :
 {
 }
 
-KNNotificationModel *KNNotification::model() const
-{
-    return m_model;
-}
-
-QModelIndex KNNotification::push(const QString &title,
-                                 const QString &content,
-                                 int type,
-                                 int iconType)
-{
-    //Push means we need to show the notification and add to notification center
-    //stack.
-    pushOnly(title, content);
-    //Add to stack.
-    return addToStack(title, content, type, iconType);
-}
-
 void KNNotification::pushOnly(const QString &title, const QString &content)
 {
-    //Construct the notification.
-    PopupNotification notification;
-    notification.title=title;
-    notification.content=content;
     //Append to notification list.
-    m_popupNotifications.append(notification);
-    //Ask to push notificaiton.
-    onActionPushNotification();
+    m_popupNotifications.append(new KNNotificationData(title, content,
+                                                       -1, this));
+    //Check the pushing notification flag.
+    if(!m_pushing)
+    {
+        //Set the pushing flag.
+        m_pushing=true;
+        //Set the notification information to widget.
+        pushNotification(m_popupNotifications.takeFirst());
+    }
 }
 
-QModelIndex KNNotification::addToStack(const QString &title,
-                                       const QString &content,
-                                       int type,
-                                       int iconType)
+void KNNotification::push(KNNotificationData *data)
 {
-    //Add notification to model.
-    return m_model->prependRow(title, content, type, iconType);
+    //Append the data to the model.
+    m_model->appendNotification(data);
+    //Append to notification list.
+    m_popupNotifications.append(data);
 }
 
-void KNNotification::removeNotification(const QModelIndex &index)
-{
-    //Remove the notification.
-    m_model->removeNotification(index);
-}
-
-void KNNotification::onActionPushNextNotification()
+void KNNotification::pushNext()
 {
     //Check the queue is empty or not.
     if(m_popupNotifications.isEmpty())
     {
-        //Set the pushing flag o false.
+        //Set the pushing flag to false.
         m_pushing=false;
         //Mission complete.
         return;
     }
     //Set the notification information to widget.
-    setNotification(m_popupNotifications.takeFirst());
-    //Ask main window to popup notification.
-    emit requirePushNotification();
+    pushNotification(m_popupNotifications.takeFirst());
 }
 
-void KNNotification::onActionPushNotification()
-{
-    //Check the flag.
-    if(m_pushing)
-    {
-        //The pushing loop is running
-        return;
-    }
-    //Set the pushing flag.
-    m_pushing=true;
-    //Set the notification information to widget.
-    setNotification(m_popupNotifications.takeFirst());
-    //Emit the requirement signal.
-    emit requirePushNotification();
-}
-
-void KNNotification::setNotification(const PopupNotification &item)
+inline void KNNotification::pushNotification(KNNotificationData *item)
 {
     //Check notification widget.
     if(!m_notificationWidget)
@@ -130,8 +108,18 @@ void KNNotification::setNotification(const PopupNotification &item)
         return;
     }
     //Set the title and content.
-    m_notificationWidget->setTitle(item.title);
-    m_notificationWidget->setContent(item.content);
+    m_notificationWidget->setTitle(item->title());
+    m_notificationWidget->setContent(item->content());
+    //Set the icon to the notification widget.
+    //!FIXME: Add codes here.
+    //Check the current item.
+    if(item->parent()==this)
+    {
+        //Recover the memory.
+        delete item;
+    }
+    //Ask main window to popup notification.
+    emit requirePushNotification();
 }
 
 void KNNotification::setNotificationWidget(

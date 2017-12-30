@@ -607,7 +607,9 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontent.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicnowplayinglistview.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicnowplayingdelegate.cpp \
-    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayerswitchbutton.cpp
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayerswitchbutton.cpp \
+    sdk/knnotificationdata.cpp \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistnotifications.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -900,7 +902,9 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayercontent.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicnowplayinglistview.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicnowplayingdelegate.h \
-    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayerswitchbutton.h
+    plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayerswitchbutton.h \
+    sdk/knnotificationdata.h \
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistnotifications.h
 
 RESOURCES += \
     resource/res.qrc

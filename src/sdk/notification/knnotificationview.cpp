@@ -74,8 +74,6 @@ void KNNotificationView::hideEvent(QHideEvent *event)
 {
     //Hide the widget.
     QListView::hideEvent(event);
-    //Clear selection.
-    selectionModel()->clear();
 }
 
 void KNNotificationView::retranslate()

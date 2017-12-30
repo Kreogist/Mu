@@ -158,7 +158,7 @@ private slots:
     void onActionFullScreen();
     void onActionShowNotificationCenter();
     void onActionHideComplete();
-    void onActionPopupNotification();
+    void onPopupNotification();
 
 private:
     inline void recoverGeometry();

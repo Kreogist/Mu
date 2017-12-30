@@ -227,7 +227,7 @@ KNMusicHeaderPlayer::KNMusicHeaderPlayer(QWidget *parent) :
     volumeLayout->addWidget(m_volumeIndicator);
     //Configure the volume slider.
     connect(m_volumeSlider, &KNVolumeSlider::valueChanged,
-            this, &KNMusicHeaderPlayer::onActionVolumeChanged);
+            this, &KNMusicHeaderPlayer::onVolumeChanged);
     volumeLayout->addWidget(m_volumeSlider, 1);
 
     //Configure the progress panel.
@@ -707,7 +707,7 @@ void KNMusicHeaderPlayer::onActionPositionEdited()
     }
 }
 
-void KNMusicHeaderPlayer::onActionVolumeChanged(const qint64 &value)
+void KNMusicHeaderPlayer::onVolumeChanged(const qint64 &value)
 {
     //Synchroism the opacity to the opacity button.
     m_volumeIndicator->setOpacity(0.5+m_volumeSlider->percentage()/2);

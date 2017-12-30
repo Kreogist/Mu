@@ -105,7 +105,7 @@ private slots:
     void onActionLoopStateChange(const int &state);
     void onActionMouseInOut(const QVariant &value);
     void onActionPositionEdited();
-    void onActionVolumeChanged(const qint64 &value);
+    void onVolumeChanged(const qint64 &value);
     void onActionNowPlayingChanged(const KNMusicAnalysisItem &analysisItem);
     void onLyricsConfigureChanged();
     void showAppendMenu();

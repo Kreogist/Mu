@@ -16,40 +16,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "knnotificationdata.h"
+
 #include "knnotificationmodel.h"
 
 #define ImageSize 35
 
 KNNotificationModel::KNNotificationModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_notifications(QList<NotificationData>())
+    m_notifications(QList<KNNotificationData *>())
 {
     //Initial the icon image.
     m_icon[Message]=generateIcon("://public/notification_default.png");
 }
 
-QModelIndex KNNotificationModel::prependRow(const QString &title,
-                                            const QString &content,
-                                            int type,
-                                            int iconType)
+KNNotificationModel::~KNNotificationModel()
 {
-    Q_ASSERT(type>-1 && type<NotificationIconCount);
-    Q_ASSERT(iconType>-1 && iconType<NotificationIconCount);
-    //Generate the notification.
-    NotificationData notification;
-    //Set the data.
-    notification.title=title;
-    notification.content=content;
-    notification.type=type;
-    notification.iconType=iconType;
-    //Begin to append row.
-    beginInsertRows(QModelIndex(), 0, 0);
-    //Insert data to list.
-    m_notifications.prepend(notification);
-    //End to append row.
-    endInsertRows();
-    //Give back the first index.
-    return index(0);
+    //Loop and check all the item.
+    while(!m_notifications.isEmpty())
+    {
+        //Take the item from the notifications.
+        KNNotificationData *data=m_notifications.takeLast();
+        //Check the item.
+        if(data->parent()==this)
+        {
+            //Delete the item.
+            delete data;
+        }
+    }
 }
 
 int KNNotificationModel::rowCount(const QModelIndex &parent) const
@@ -67,19 +61,19 @@ QVariant KNNotificationModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     //Get the target data.
-    const NotificationData &targetData=m_notifications.at(index.row());
+    const KNNotificationData *targetData=m_notifications.at(index.row());
     //Check out the role.
     switch(role)
     {
     case Qt::DisplayRole:
         //Give back the title as display role.
-        return targetData.title;
+        return targetData->title();
     case Qt::DecorationRole:
         //Give back the icon.
-        return m_icon[targetData.iconType];
+        return m_icon[Message];
     case ContentRole:
         //Give back the content data.
-        return targetData.content;
+        return targetData->content();
     default:
         return QVariant();
     }
@@ -90,18 +84,42 @@ bool KNNotificationModel::removeRows(int row,
                                      const QModelIndex &parent)
 {
     Q_UNUSED(parent)
+    //Check the data.
+    if(m_notifications.isEmpty())
+    {
+        //No need to remove data.
+        return true;
+    }
     //Start to remove the row.
     beginRemoveRows(QModelIndex(), row, row+count-1);
     //Remove those datas from the list.
     while(count--)
     {
         //Take away the detail info, and remove the duration.
-        m_notifications.removeAt(row);
+        KNNotificationData *data=m_notifications.takeAt(row);
+        //Check the data.
+        if(data->parent()==this)
+        {
+            //Delete the object to recover the memory.
+            delete data;
+        }
     }
     //As the documentation said, called this after remove rows.
     endRemoveRows();
     //Complete.
     return true;
+}
+
+bool KNNotificationModel::appendNotification(KNNotificationData *data)
+{
+    //Begin to append the data.
+    beginInsertRows(QModelIndex(),
+                    m_notifications.size(),
+                    m_notifications.size());
+    //Simply append the data to the end of the list.
+    m_notifications.append(data);
+    //End append the data.
+    endInsertRows();
 }
 
 bool KNNotificationModel::removeNotification(const QModelIndex &index)

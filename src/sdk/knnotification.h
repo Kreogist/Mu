@@ -19,6 +19,8 @@
 #ifndef KNNOTIFICATION_H
 #define KNNOTIFICATION_H
 
+#include <QLinkedList>
+
 #include "notification/knnotificationutil.h"
 
 #include <QObject>
@@ -27,6 +29,7 @@ using namespace NotificationUtil;
 
 #define knNotification (KNNotification::instance())
 
+class KNNotificationData;
 class KNNotificationModel;
 class KNNotificationWidget;
 /*!
@@ -38,6 +41,8 @@ class KNNotification : public QObject
 {
     Q_OBJECT
 public:
+    ~KNNotification();
+
     /*!
      * \brief Get the global instance of notification service object.
      * \return The global notification object pointer.
@@ -52,25 +57,6 @@ public:
     static void initial(QObject *parent = 0);
 
     /*!
-     * \brief Get the notification model pointer.
-     * \return The notification model pointer.
-     */
-    KNNotificationModel *model() const;
-
-    /*!
-     * \brief Push an notification here, and add the notification to the stack.
-     * \param title The title of notification.
-     * \param content The notification content.
-     * \param type The notification type.
-     * \param iconType The icon of the notification will be used.
-     * \return Notificaiton item index of the notification in the model.
-     */
-    QModelIndex push(const QString &title,
-                     const QString &content,
-                     int type=Information,
-                     int iconType=Message);
-
-    /*!
      * \brief Push an notification, but not add this notification to stack.
      * \param title The title of notification.
      * \param content The content of the notification.
@@ -79,22 +65,10 @@ public:
                   const QString &content);
 
     /*!
-     * \brief Add the notification to stack, but this notification won't pop up.
-     * \param title The title of notificaiton.
-     * \param content The notification content.
-     * \param type The notification type.
-     * \param iconType The icon of the notification will be used.
-     * \return Notificaiton item index of the notification in the model.
+     * \brief Push an notification, and add this notification to the stack.
+     * \param data The data pointer of the notification data.
      */
-    QModelIndex addToStack(const QString &title,
-                           const QString &content,
-                           int type=Information,
-                           int iconType=Message);
-
-    /*!
-     * \brief Remove one notification via its index.
-     */
-    void removeNotification(const QModelIndex &index);
+    void push(KNNotificationData *data);
 
 signals:
     /*!
@@ -106,7 +80,7 @@ public slots:
     /*!
      * \brief Main window will call this slot to push the queued notifications.
      */
-    void onActionPushNextNotification();
+    void pushNext();
 
     /*!
      * \brief Set the notification widget for notification backend to manage.
@@ -114,25 +88,16 @@ public slots:
      */
     void setNotificationWidget(KNNotificationWidget *notificationWidget);
 
-private slots:
-    void onActionPushNotification();
-
 private:
-    struct PopupNotification
-    {
-        QString title;
-        QString content;
-    };
-
     explicit KNNotification(QObject *parent = 0);
     //Disable the copy of the instance.
     KNNotification(const KNNotification &);
     KNNotification(KNNotification &&);
-    inline void setNotification(const PopupNotification &item);
+    inline void pushNotification(KNNotificationData *item);
 
     static KNNotification *m_instance;
 
-    QList<PopupNotification> m_popupNotifications;
+    QLinkedList<KNNotificationData *> m_popupNotifications;
     KNNotificationModel *m_model;
     KNNotificationWidget *m_notificationWidget;
     bool m_pushing;

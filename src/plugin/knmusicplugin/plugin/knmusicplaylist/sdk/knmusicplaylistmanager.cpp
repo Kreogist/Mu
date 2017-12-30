@@ -29,6 +29,7 @@
 #include "knmusicplaylistengine.h"
 #include "knmusicplaylistmodel.h"
 #include "knmusicplaylistlistmodel.h"
+#include "knmusicplaylistnotifications.h"
 
 #include "knmusicplaylistmanager.h"
 
@@ -43,7 +44,8 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_playlistDirPath(QString()),
     m_isPlaylistListLoaded(false),
     m_playlistEngine(new KNMusicPlaylistEngine()),
-    m_workingThread(new QThread())
+    m_workingThread(new QThread()),
+    m_notificationFailedLoaded(new KNMusicPlaylistFailedLoaded())
 {
     //Link the playlist list to the slot.
     connect(m_playlistList, &KNMusicPlaylistListModel::requireCreatePlaylist,
@@ -63,6 +65,8 @@ KNMusicPlaylistManager::~KNMusicPlaylistManager()
         //Save the playlist list data.
         savePlaylistList();
     }
+    //Delete the class.
+    delete m_notificationFailedLoaded;
 }
 
 KNMusicPlaylistListModel *KNMusicPlaylistManager::playlistList()
@@ -417,11 +421,10 @@ void KNMusicPlaylistManager::loadPlaylistList()
     //should be display to hint the user there's invalid playlist.
     if(failedCounter>0)
     {
+        //Update the notification data.
+        m_notificationFailedLoaded->setFailedCounter(failedCounter);
         //Push notifications for failed loaded playlist.
-        knNotification->push(
-                    tr("%1 playlists cannot be loaded.").arg(
-                        QString::number(failedCounter)),
-                    tr("Those playlists may be moved, deleted or renamed."));
+        knNotification->push(m_notificationFailedLoaded);
     }
 }
 

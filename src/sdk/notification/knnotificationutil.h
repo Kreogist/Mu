@@ -38,19 +38,6 @@ enum NotificationIcon
     Message,
     NotificationIconCount
 };
-
-struct NotificationData
-{
-    QString title;
-    QString content;
-    int type;
-    int iconType;
-    NotificationData() :
-        type(Information),
-        iconType(Message)
-    {
-    }
-};
 }
 
 class KNNotificationUtil
