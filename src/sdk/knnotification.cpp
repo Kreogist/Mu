@@ -55,6 +55,11 @@ void KNNotification::initial(QObject *parent)
     }
 }
 
+KNNotificationModel *KNNotification::model() const
+{
+    return m_model;
+}
+
 KNNotification::KNNotification(QObject *parent) :
     QObject(parent),
     m_model(new KNNotificationModel(this)),
@@ -63,11 +68,10 @@ KNNotification::KNNotification(QObject *parent) :
 {
 }
 
-void KNNotification::pushOnly(const QString &title, const QString &content)
+void KNNotification::pushOnly(KNNotificationData *data)
 {
     //Append to notification list.
-    m_popupNotifications.append(new KNNotificationData(title, content,
-                                                       -1, this));
+    m_popupNotifications.append(data);
     //Check the pushing notification flag.
     if(!m_pushing)
     {
@@ -78,12 +82,33 @@ void KNNotification::pushOnly(const QString &title, const QString &content)
     }
 }
 
-void KNNotification::push(KNNotificationData *data)
+void KNNotification::pushOnly(const QString &title, const QString &content)
+{
+    //Call the function original.
+    pushOnly(new KNNotificationData(title, content, -1, this));
+}
+
+QModelIndex KNNotification::push(KNNotificationData *data)
 {
     //Append the data to the model.
-    m_model->appendNotification(data);
-    //Append to notification list.
-    m_popupNotifications.append(data);
+    QModelIndex notificationIndex=m_model->appendNotification(data);
+    //Push the notification.
+    pushOnly(data);
+    //Give back the index.
+    return notificationIndex;
+}
+
+QModelIndex KNNotification::push(const QString &title, const QString &content)
+{
+    //Prepare the data.
+    KNNotificationData *data=nullptr;
+    //Append the data to the model.
+    QModelIndex notificationIndex=
+            m_model->appendNotification(title, content, &data);
+    //Push the notification.
+    pushOnly(data);
+    //Give back the index.
+    return notificationIndex;
 }
 
 void KNNotification::pushNext()

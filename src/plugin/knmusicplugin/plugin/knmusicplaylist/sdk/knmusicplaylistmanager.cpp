@@ -45,7 +45,7 @@ KNMusicPlaylistManager::KNMusicPlaylistManager(QObject *parent) :
     m_isPlaylistListLoaded(false),
     m_playlistEngine(new KNMusicPlaylistEngine()),
     m_workingThread(new QThread()),
-    m_notificationFailedLoaded(new KNMusicPlaylistFailedLoaded())
+    m_notificationFailedLoaded(new KNMusicPlaylistFailedLoaded(this))
 {
     //Link the playlist list to the slot.
     connect(m_playlistList, &KNMusicPlaylistListModel::requireCreatePlaylist,

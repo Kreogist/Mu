@@ -64,9 +64,21 @@ public:
     /*!
      * \brief Append the notification to the end of the notification model.
      * \param data The notification data pointer.
-     * \return If the data append successfully, return true.
+     * \return The notification item index.
      */
-    bool appendNotification(KNNotificationData *data);
+    QModelIndex appendNotification(KNNotificationData *data);
+
+    /*!
+     * \brief This is an reimplementation function. By providing the fixed
+     * content, the notification will be add to the stack.
+     * \param title The title of the notification.
+     * \param content The content of the notification.
+     * \param data The pointer of the notification object.
+     * \return The notification index in the model.
+     */
+    QModelIndex appendNotification(const QString &title,
+                                   const QString &content,
+                                   KNNotificationData **data=nullptr);
 
     /*!
      * \brief Remove one notification from the model.

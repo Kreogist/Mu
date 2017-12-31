@@ -17,17 +17,18 @@
  */
 #include <QPainter>
 
+#include "kndpimanager.h"
 #include "knnotificationutil.h"
 
 #include "knnotificationdelegate.h"
 
 using namespace NotificationUtil;
 
-#define ImageSize 35
-#define Spacing 5
-#define ContentY 22
-#define TitleY 7
-#define TextLeft (ImageSize + (Spacing<<1))
+#define ImageSize   35
+#define Spacing     5
+#define ContentY    22
+#define TitleY      7
+#define TextLeft    (ImageSize + (Spacing<<1))
 
 KNNotificationDelegate::KNNotificationDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
@@ -38,7 +39,7 @@ QSize KNNotificationDelegate::sizeHint(const QStyleOptionViewItem &option,
                                        const QModelIndex &index) const
 {
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(),
-                 NotificationItemHeight);
+                 knDpi->height(NotificationItemHeight));
 }
 
 void KNNotificationDelegate::paint(QPainter *painter,
@@ -67,15 +68,15 @@ void KNNotificationDelegate::paint(QPainter *painter,
     //Set the text color.
     painter->setPen(textColor);
     //Calculate the text width.
-    int textWidth=option.rect.width()-TextLeft;
+    int textWidth=option.rect.width()-knDpi->width(TextLeft);
     //Draw the pixmap.
-    painter->drawPixmap(Spacing,
-                        option.rect.top() + Spacing,
+    painter->drawPixmap(knDpi->width(Spacing),
+                        option.rect.top() + knDpi->height(Spacing),
                         index.data(Qt::DecorationRole).value<QPixmap>());
     painter->setOpacity(0.5);
     //Draw content.
-    painter->drawText(QRect(TextLeft,
-                            option.rect.top()+ContentY,
+    painter->drawText(QRect(knDpi->width(TextLeft),
+                            option.rect.top()+knDpi->height(ContentY),
                             textWidth,
                             option.fontMetrics.height()<<1),
                       option.fontMetrics.elidedText(
@@ -85,7 +86,8 @@ void KNNotificationDelegate::paint(QPainter *painter,
     //Draw the border line except the last one.
     if(index.model()->rowCount()!=index.row()+1)
     {
-        painter->drawLine(QPoint(TextLeft, option.rect.bottom()),
+        painter->drawLine(QPoint(knDpi->width(TextLeft),
+                                 option.rect.bottom()),
                           QPoint(option.rect.right()-1, option.rect.bottom()));
     }
     //Set the font bold.
@@ -94,8 +96,8 @@ void KNNotificationDelegate::paint(QPainter *painter,
     boldFont.setBold(true);
     painter->setFont(boldFont);
     //Draw title.
-    painter->drawText(QRect(TextLeft,
-                            option.rect.top()+TitleY,
+    painter->drawText(QRect(knDpi->width(TextLeft),
+                            option.rect.top()+knDpi->height(TitleY),
                             textWidth,
                             option.fontMetrics.height()),
                       option.fontMetrics.elidedText(

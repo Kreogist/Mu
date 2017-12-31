@@ -38,7 +38,7 @@ public:
      * \param parent The parent object pointer.
      */
     explicit KNNotificationData(QObject *parent=0);
-    ~KNNotificationData();
+    virtual ~KNNotificationData();
 
     /*!
      * \brief Construct a KNNotificationData with fixed content.

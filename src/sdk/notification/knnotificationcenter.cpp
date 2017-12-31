@@ -96,7 +96,7 @@ KNNotificationCenter::KNNotificationCenter(QWidget *parent) :
     m_button->setCursor(Qt::PointingHandCursor);
     m_button->setButtonSize(knDpi->width(NotificationButtonSize));
     //Configure the view.
-//    m_notificationView->setModel(knNotification->model());
+    m_notificationView->setModel(knNotification->model());
     //Get account details.
     KNAccountDetails *accountDetails=knAccount->accountDetails();
     //Link account avatar change signal with button updater.

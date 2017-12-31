@@ -57,7 +57,19 @@ public:
     static void initial(QObject *parent = 0);
 
     /*!
+     * \brief Get the notification model pointer.
+     * \return The pointer to the notification model.
+     */
+    KNNotificationModel *model() const;
+
+    /*!
      * \brief Push an notification, but not add this notification to stack.
+     * \param data The notificaiton data pointer.
+     */
+    void pushOnly(KNNotificationData *data);
+
+    /*!
+     * \brief This is an reimplementation function of pushOnly.
      * \param title The title of notification.
      * \param content The content of the notification.
      */
@@ -68,7 +80,15 @@ public:
      * \brief Push an notification, and add this notification to the stack.
      * \param data The data pointer of the notification data.
      */
-    void push(KNNotificationData *data);
+    QModelIndex push(KNNotificationData *data);
+
+    /*!
+     * \brief This is an reimplementation function of push.
+     * \param title The title of notification.
+     * \param content The content of the notification.
+     * \return The content of the notification.
+     */
+    QModelIndex push(const QString &title, const QString &content);
 
 signals:
     /*!

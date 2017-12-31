@@ -27,7 +27,7 @@ public:
     /*!
      * \brief Construct a KNMusicPlaylistFailedLoaded object.
      */
-    explicit KNMusicPlaylistFailedLoaded();
+    explicit KNMusicPlaylistFailedLoaded(QObject *parent = 0);
 
     /*!
      * \brief Reimplemented from KNNotificationData::title().
@@ -47,6 +47,6 @@ public:
 
 private:
     int m_failedCounter;
-}
+};
 
 #endif // KNMUSICPLAYLISTNOTIFICATIONS_H

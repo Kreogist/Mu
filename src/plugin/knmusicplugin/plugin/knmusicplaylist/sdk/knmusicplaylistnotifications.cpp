@@ -17,7 +17,7 @@
  */
 #include "knmusicplaylistnotifications.h"
 
-KNMusicPlaylistFailedLoaded::KNMusicPlaylistFailedLoaded() :
+KNMusicPlaylistFailedLoaded::KNMusicPlaylistFailedLoaded(QObject *parent) :
     KNNotificationData(parent),
     m_failedCounter(0)
 {
@@ -27,7 +27,7 @@ QString KNMusicPlaylistFailedLoaded::title() const
 {
     //Return the failed loaded data.
     return QObject::tr("%1 playlists cannot be loaded.").arg(
-                QString::number(failedCounter));
+                QString::number(m_failedCounter));
 }
 
 QString KNMusicPlaylistFailedLoaded::content() const

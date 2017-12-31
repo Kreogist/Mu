@@ -110,16 +110,35 @@ bool KNNotificationModel::removeRows(int row,
     return true;
 }
 
-bool KNNotificationModel::appendNotification(KNNotificationData *data)
+QModelIndex KNNotificationModel::appendNotification(KNNotificationData *data)
 {
+    //Calculate the insert position.
+    int insertPosition=m_notifications.size();
     //Begin to append the data.
-    beginInsertRows(QModelIndex(),
-                    m_notifications.size(),
-                    m_notifications.size());
+    beginInsertRows(QModelIndex(), insertPosition, insertPosition);
     //Simply append the data to the end of the list.
     m_notifications.append(data);
     //End append the data.
     endInsertRows();
+    //Calculate the model index.
+    return index(0, insertPosition);
+}
+
+QModelIndex KNNotificationModel::appendNotification(const QString &title,
+                                                    const QString &content,
+                                                    KNNotificationData **data)
+{
+    //Create the notificaiton data.
+    KNNotificationData *notification=
+            new KNNotificationData(title, content, -1, this);
+    //Check the output pointer.
+    if(data)
+    {
+        //Save the notification object to the pointer.
+        (*data)=notification;
+    }
+    //Construct and append the notificaiton.
+    return appendNotification(notification);
 }
 
 bool KNNotificationModel::removeNotification(const QModelIndex &index)

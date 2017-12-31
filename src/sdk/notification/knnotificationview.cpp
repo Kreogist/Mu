@@ -18,6 +18,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
+#include "kndpimanager.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
 #include "sao/knsaostyle.h"
@@ -49,7 +50,9 @@ KNNotificationView::KNNotificationView(QWidget *parent) :
 int KNNotificationView::heightHint() const
 {
     return (model()==nullptr || model()->rowCount()==0)?
-                45:model()->rowCount()*NotificationItemHeight;
+                knDpi->height(45):
+                (qMin(model()->rowCount(), 4) *
+                knDpi->height(NotificationItemHeight)+knDpi->height(6));
 }
 
 void KNNotificationView::paintEvent(QPaintEvent *event)
