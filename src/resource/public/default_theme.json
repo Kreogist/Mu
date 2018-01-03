@@ -519,6 +519,10 @@
         "Highlight" : "#F7CF3D",
         "HighlighedText" : "#FFFFFF"
     },
+    "PreferenceItemLineEdit" :
+    {
+        "Parent" : "PreferenceItemCombo"
+    },
     "PreferenceItemSpinBox" :
     {
         "Parent" : "FontDialog",

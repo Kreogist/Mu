@@ -45,7 +45,8 @@ namespace PreferenceUtil
         TypeFont,
         TypeShortcut,
         TypeAudioDevice,
-        TypeFileType
+        TypeFileType,
+        TypeDirectory
     };
 
     struct PreferencePanelOption

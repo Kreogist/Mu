@@ -24,6 +24,7 @@
 #include <QUrl>
 #include <QClipboard>
 #include <QApplication>
+#include <QLinkedList>
 #include <QProcess>
 
 #include "knutil.h"
@@ -231,7 +232,7 @@ QString KNUtil::legalFileName(QString fileName)
 
 int KNUtil::similarity(QString string1, QString string2)
 {
-    //Wagner¨CFischer algorithm Levenshtein distance.
+    //Wagnerâ€“Fischer algorithm Levenshtein distance.
     //Based on
     /* http://en.wikibooks.org/wiki/Algorithm_implementation/Strings/Levenshtein
 _distance#C.2B.2B*/
@@ -297,4 +298,106 @@ bool KNUtil::saveTextToFile(const QString &filePath, const QString &content)
 bool KNUtil::renameFile(const QString &filePath, const QString &newFileName)
 {
     return QFile::rename(filePath, newFileName);
+}
+
+bool KNUtil::copyDirectory(const QString &fromDir, const QString &toDir,
+                           bool overwrite)
+{
+    //Prepare the copy stack.
+    QLinkedList<QString> copyStack, destStack;
+    //Check directory existance.
+    if(!QDir(fromDir).exists())
+    {
+        //Failed to find the original dir.
+        return false;
+    }
+    //Insert the current directory to stack.
+    copyStack.append(fromDir);
+    destStack.append(toDir);
+    //Loop until copy stack is empty.
+    while(!copyStack.isEmpty())
+    {
+        //Pick out the string.
+        QString srcDirPath=copyStack.takeLast(),
+                destDirPath=destStack.takeLast();
+        //Get the directory.
+        QDir currentDir(srcDirPath), destDir(destDirPath);
+        //Check destdir state.
+        if(!destDir.exists() &&
+                KNUtil::ensurePathValid(destDir.absolutePath()).isEmpty())
+        {
+            //Build the directory failed.
+            return false;
+        }
+        //Loop and check all the file.
+        for(auto fileInfo : currentDir.entryInfoList())
+        {
+            //Ignore the . and ..
+            if(fileInfo.fileName()=="." || fileInfo.fileName()=="..")
+            {
+                //Do not operate these two directories.
+                continue;
+            }
+            //Check it is file or directory.
+            if(fileInfo.isDir())
+            {
+                //Push the file info to the stack.
+                copyStack.append(fileInfo.absolutePath());
+                destStack.append(destDir.absoluteFilePath(fileInfo.fileName()));
+                continue;
+            }
+            if(fileInfo.isFile())
+            {
+                //Get the destination path.
+                QString destFilePath(destDir.filePath(fileInfo.fileName()));
+                //Check existance.
+                if(QFile::exists(destFilePath))
+                {
+                    //If not overwrite the file, ignore this file.
+                    if(!overwrite)
+                    {
+                        continue;
+                    }
+                    //When overwrite enabled, remove and copy the file.
+                    if(!QFile::remove(destFilePath))
+                    {
+                        //Failed to remove the target file.
+                        return false;
+                    }
+                }
+                //Copy the file.
+                if(!QFile::copy(fileInfo.absoluteFilePath(), destFilePath))
+                {
+                    //Failed to copy the file.
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool KNUtil::removeDirectory(const QString &dirPath)
+{
+    QDir targetDir(dirPath);
+    //Check the orignal dir existance.
+    if(!targetDir.exists())
+    {
+        //No need to remove directory.
+        return true;
+    }
+    //Remove the content and directory.
+    return targetDir.removeRecursively() && targetDir.rmdir(dirPath);
+}
+
+bool KNUtil::moveDirectory(const QString &fromDir, const QString &toDir)
+{
+    //Copy the data from original directory to the new directory.
+    if(!copyDirectory(fromDir, toDir, true))
+    {
+        //Failed to copy the data.
+        return false;
+    }
+    //Delete the orignal directory.
+    return removeDirectory(fromDir);
 }

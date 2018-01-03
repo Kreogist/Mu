@@ -596,7 +596,6 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.cpp \
     sdk/knshortcuteditor.cpp \
     plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.cpp \
-    plugin/knpreference/sdk/items/knpreferencepanelpathitem.cpp \
     sdk/knfileassociationmanager.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.cpp \
     plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.cpp \
@@ -609,7 +608,10 @@ SOURCES += \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicnowplayingdelegate.cpp \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayerswitchbutton.cpp \
     sdk/knnotificationdata.cpp \
-    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistnotifications.cpp
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistnotifications.cpp \
+    plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp \
+    sdk/knselectionmessagebox.cpp \
+    sdk/sao/knsaooptionbutton.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -891,7 +893,6 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepanelshortcutitem.h \
     sdk/knshortcuteditor.h \
     plugin/knmusicplugin/plugin/knmusictagffmpeg/knmusictagffmpeg.h \
-    plugin/knpreference/sdk/items/knpreferencepanelpathitem.h \
     sdk/knfileassociationmanager.h \
     plugin/knpreference/sdk/items/knpreferencepanelfiletypeitem.h \
     plugin/knpreference/sdk/items/knpreferencepanelaudiodeviceitem.h \
@@ -904,7 +905,10 @@ HEADERS += \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicnowplayingdelegate.h \
     plugin/knmusicplugin/plugin/knmusicmainplayer2/knmusicmainplayerswitchbutton.h \
     sdk/knnotificationdata.h \
-    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistnotifications.h
+    plugin/knmusicplugin/plugin/knmusicplaylist/sdk/knmusicplaylistnotifications.h \
+    plugin/knpreference/sdk/items/knpreferencepaneldiritem.h \
+    sdk/knselectionmessagebox.h \
+    sdk/sao/knsaooptionbutton.h
 
 RESOURCES += \
     resource/res.qrc

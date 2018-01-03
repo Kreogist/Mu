@@ -68,7 +68,6 @@ private:
     QMap<QString, bool> m_dialogOption;
     QFont m_font;
     KNMouseDetectLabel *m_previewLabel;
-    QPushButton *m_selectFont;
     QLabel *m_informationLabel, *m_previewTooltip;
 };
 

@@ -30,6 +30,7 @@ Foundation,
 #include "items/knpreferencepanelbooleanitem.h"
 #include "items/knpreferencepanelfontitem.h"
 #include "items/knpreferencepanelintitem.h"
+#include "items/knpreferencepaneldiritem.h"
 #include "items/knpreferencepanelcomboitem.h"
 #include "items/knpreferencepanelshortcutitem.h"
 #include "items/knpreferencepanelfiletypeitem.h"
@@ -146,6 +147,9 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
         break;
     case TypeInt:
         item=new KNPreferencePanelIntItem(this);
+        break;
+    case TypeDirectory:
+        item=new KNPreferencePanelDirItem(this);
         break;
     case TypeFont:
         item=new KNPreferencePanelFontItem(this);

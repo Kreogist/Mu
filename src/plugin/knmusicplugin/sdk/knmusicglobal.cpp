@@ -136,6 +136,22 @@ void KNMusicGlobal::retranslate()
     m_treeViewHeaderText[Year]=tr("Year");
 }
 
+void KNMusicGlobal::updateSystemConfigure()
+{
+    //Set the library path.
+    setMusicLibPath(
+                m_musicSystemConfigure->data(
+                    "LibraryPath",
+                    knGlobal->dirPath(KNGlobal::LibraryDir)+
+                    "/Music").toString());
+
+    //Update the lyrics path.
+    m_lyricsManager->setLyricsDirectory(
+                m_musicSystemConfigure->data(
+                    "LyricsDirPath",
+                    musicLibraryPath() + "/Lyrics").toString());
+}
+
 KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     QObject(parent),
     m_suffixs(QStringList()),
@@ -145,6 +161,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_indexedGenres(QStringList()),
     m_noAlbumArt(QPixmap(":/plugin/music/public/noalbum.png")),
     m_musicLibPath(QString()),
+    m_musicSystemConfigure(knGlobal->systemConfigure()->getConfigure("Music")),
     m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music")),
     m_parentWidget(static_cast<QWidget *>(parent)),
     m_detailDialog(new KNMusicDetailDialog(knGlobal->mainWindow())),
@@ -172,12 +189,10 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     qRegisterMetaType<QList<KNMusicLyricsDownloader::KNMusicLyricsDetails>>(
                 "QList<KNMusicLyricsDownloader::KNMusicLyricsDetails>");
 
-    //Set the library path.
-    setMusicLibPath(knGlobal->dirPath(KNGlobal::LibraryDir) + "/Music");
-
-    //Update the lyrics path.
-    m_lyricsManager->setLyricsDirectory(musicLibraryPath() + "/Lyrics");
-
+    //Update the system configuration.
+    connect(m_musicSystemConfigure, &KNConfigure::valueChanged,
+            this, &KNMusicGlobal::updateSystemConfigure);
+    updateSystemConfigure();
     //Link to retranslate.
     knI18n->link(this, &KNMusicGlobal::retranslate);
     retranslate();

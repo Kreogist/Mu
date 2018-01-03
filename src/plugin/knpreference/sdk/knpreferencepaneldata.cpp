@@ -22,6 +22,9 @@ Foundation,
 #include <QJsonArray>
 #include <QKeySequence>
 
+#include "knglobal.h"
+#include "knconfiguremanager.h"
+
 #include "knpreferencepaneldata.h"
 
 #include <QDebug>
@@ -189,6 +192,15 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
     }
     case PanelLyrics:
     {
+        //Local lyrics.
+        block=generateBlock(tr("Local Lyrics"));
+        addItem(block, tr("Local lyrics directory"),
+                "System/Music/LyricsDirPath",
+                knGlobal->dirPath(KNGlobal::LibraryDir) + "/Music/Lyrics",
+                TypeDirectory,
+                tr("The directory that stores all the downloaded lyrics, or "
+                   "any other local lyrics."), false);
+        panelData.append(block);
         //Header lyrics.
         block=generateBlock(tr("Header Lyrics"));
         addFontItem(block, tr("Header lyrics font"),

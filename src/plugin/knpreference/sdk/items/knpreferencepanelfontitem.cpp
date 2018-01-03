@@ -35,15 +35,15 @@ KNPreferencePanelFontItem::KNPreferencePanelFontItem(QWidget *parent) :
     KNPreferencePanelItem(parent),
     m_dialogOption(QMap<QString, bool>()),
     m_previewLabel(new KNMouseDetectLabel(this)),
-    m_selectFont(new QPushButton(this)),
     m_informationLabel(new QLabel(this)),
     m_previewTooltip(new QLabel)
 {
-    //Configure the select button.
-    m_selectFont->setFixedSize(knDpi->size(25, 20));
-    m_selectFont->setText("...");
-    m_selectFont->setPalette(palette());
-    connect(m_selectFont, &QPushButton::clicked,
+    //Construct the select button.
+    QPushButton *selectFont=new QPushButton(this);
+    selectFont->setFixedSize(knDpi->size(25, 20));
+    selectFont->setText("...");
+    selectFont->setPalette(palette());
+    connect(selectFont, &QPushButton::clicked,
             [=]
             {
                 //Prepare the original font.
@@ -80,7 +80,7 @@ KNPreferencePanelFontItem::KNPreferencePanelFontItem(QWidget *parent) :
     //Construct the layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     mainLayout->setSpacing(knDpi->width(5));
-    mainLayout->addWidget(m_selectFont);
+    mainLayout->addWidget(selectFont);
     mainLayout->addWidget(m_previewLabel);
     mainLayout->addWidget(m_informationLabel, 2);
     //Build the widget.

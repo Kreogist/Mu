@@ -298,6 +298,7 @@ public slots:
 
 private slots:
     void retranslate();
+    void updateSystemConfigure();
 
 private:
     static KNMusicGlobal *m_instance;
@@ -313,7 +314,7 @@ private:
                 m_listSuffixDescription, m_indexedGenres;
     QPixmap m_noAlbumArt;
     QString m_musicLibPath;
-    KNConfigure *m_musicConfigure;
+    KNConfigure *m_musicSystemConfigure, *m_musicConfigure;
 
     QWidget *m_parentWidget;
     KNMusicDetailDialog *m_detailDialog;

@@ -169,6 +169,17 @@ bool KNMusicProxyModel::lessThan(const QModelIndex &source_left,
                     (source_left.row() < source_right.row()) :
                     (leftData < rightData);
     }
+    case Plays:
+    {
+        //Get the display role, translate it into int.
+        qlonglong &&leftData=source_left.data(Qt::DisplayRole).toLongLong(),
+                  &&rightData=source_right.data(Qt::DisplayRole).toLongLong();
+        //Compare the size, if they are the same, then the adding order is the
+        //right order.
+        return (leftData == rightData) ?
+                    (source_left.row() < source_right.row()) :
+                    (leftData < rightData);
+    }
     }
     //Get the display role, translate it into text.
     QString &&leftData=source_left.data(Qt::DisplayRole).toString(),

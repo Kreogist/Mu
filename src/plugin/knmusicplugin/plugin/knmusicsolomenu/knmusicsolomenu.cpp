@@ -216,7 +216,7 @@ void KNMusicSoloMenu::retranslate()
     m_actionTitles[PlayCurrent]=tr("Play %1");
     m_actionTitles[Open]=tr("Open %1");
     m_actionTitles[GetInfo]=tr("Get Info");
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     m_actionTitles[ShowInGraphicShell]=tr("Show in Explorer");
 #endif
 #ifdef Q_OS_MAC

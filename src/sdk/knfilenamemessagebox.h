@@ -23,32 +23,59 @@
 
 class QLabel;
 class KNFileNameLineEdit;
+/*!
+ * \brief The KNFileNameMessageBox class provides a message box for inputing the
+ * file name. This message box will check the file name validation.
+ */
 class KNFileNameMessageBox : public KNMessageBox
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNFileNameMessageBox widget.
+     * \param parent The parent widget.
+     */
     explicit KNFileNameMessageBox(QWidget *parent = 0);
 
+    /*!
+     * \brief Get a new file name.
+     * \param text The display text of the message dialog.
+     * \param title The title of the message dialog.
+     * \param filePath The path of the file.
+     * \return The file name content returns from the message box.
+     */
     static QString getFileName(const QString &text,
                                const QString &title,
                                const QString &filePath);
 
+    /*!
+     * \brief Get the user input file name.
+     * \return The file name text.
+     */
     QString fileName() const;
 
 public slots:
+    /*!
+     * \brief Set the whole file path, and display the file name at the line
+     * edit widget.
+     * \param filePath The file path.
+     */
     void setFilePath(const QString &filePath);
 
+    /*!
+     * \brief Set the hint display text.
+     * \param hintText The hint text string.
+     */
     void setHintText(const QString &hintText);
 
 protected:
     /*!
-     * \brief okayPressed
-     * \return
+     * \brief Reimplemented from KNMessageBox::okayPressed().
      */
     bool okayPressed() Q_DECL_OVERRIDE;
 
     /*!
-     * \brief cancelPressed
+     * \brief Reimplemented from KNMessageBox::cancelPressed().
      */
     void cancelPressed() Q_DECL_OVERRIDE;
 

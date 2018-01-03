@@ -135,6 +135,38 @@ public:
     static bool renameFile(const QString &filePath,
                            const QString &newFileName);
 
+    /*!
+     * \brief Copy the file from one directory to another directory.
+     * \param fromDir The source directory path.
+     * \param toDir The destination directory path.
+     * \param overwrite If the destination directory has the same name file, set
+     * this parameter to true to overwrite it. Or else it will not copy the
+     * file.
+     * \return If no error occured, return true.
+     */
+    static bool copyDirectory(const QString &fromDir,
+                              const QString &toDir,
+                              bool overwrite);
+
+    /*!
+     * \brief Delete the directory and its entire contents.
+     * \param dirPath The directory path.
+     * \return If all the files and directories in the folder have been removed,
+     * return true.
+     */
+    static bool removeDirectory(const QString &dirPath);
+
+    /*!
+     * \brief Move one directory to another directory. If the destination
+     * directory already exists, it will combine the data together.
+     * \param fromDir The source directory path.
+     * \param toDir The destination directory path.
+     * \return If all the files and directories in the source folder have been
+     * moved to the destination directory, return true.
+     */
+    static bool moveDirectory(const QString &fromDir,
+                              const QString &toDir);
+
 private:
     KNUtil();
     KNUtil(const KNUtil &);

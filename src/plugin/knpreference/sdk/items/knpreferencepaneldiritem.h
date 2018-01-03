@@ -17,25 +17,26 @@ Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNPREFERENCEPANELPATHITEM_H
-#define KNPREFERENCEPANELPATHITEM_H
+#ifndef KNPREFERENCEPANELDIRITEM_H
+#define KNPREFERENCEPANELDIRITEM_H
 
 #include "knpreferencepanelitem.h"
 
+class QLineEdit;
 class KNLabelButton;
 /*!
- * \brief The KNPreferencePanelPathItem class provides a widget which allows to
- * edit and move a folder path parameters.
+ * \brief The KNPreferencePanelDirItem class provides the item to select the
+ * directory path.
  */
-class KNPreferencePanelPathItem : public KNPreferencePanelItem
+class KNPreferencePanelDirItem : public KNPreferencePanelItem
 {
     Q_OBJECT
 public:
     /*!
-     * \brief Construct a KNPreferencePanelPathItem widget.
+     * \brief Construct a KNPreferencePanelDirItem widget.
      * \param parent The parent widget.
      */
-    explicit KNPreferencePanelPathItem(QWidget *parent = 0);
+    explicit KNPreferencePanelDirItem(QWidget *parent = 0);
 
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::value().
@@ -43,11 +44,6 @@ public:
     QVariant value() const Q_DECL_OVERRIDE;
 
 protected:
-    /*!
-     * \brief Reimplemented from KNPreferencePanelItem::itemHeightMultiple().
-     */
-    int itemHeightMultiple() const Q_DECL_OVERRIDE;
-
     /*!
      * \brief Reimplemented from KNPreferencePanelItem::setWidgetValue().
      */
@@ -60,7 +56,9 @@ protected:
                  const QVariant &originalValue) Q_DECL_OVERRIDE;
 
 private:
+    inline QString dirPath(const QString &rawPath);
     KNLabelButton *m_gotoFolder;
+    QLineEdit *m_pathEditor;
 };
 
-#endif // KNPREFERENCEPANELPATHITEM_H
+#endif // KNPREFERENCEPANELDIRITEM_H
