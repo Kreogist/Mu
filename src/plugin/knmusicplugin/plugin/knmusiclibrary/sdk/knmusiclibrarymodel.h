@@ -28,8 +28,8 @@
 /*
  * Code name:
  * 4.1 - BNR34.
- * Previous version code name (KNJsonDatabase):
  * 4.0 - BNR32.
+ * Previous version code name (KNJsonDatabase):
  * 3.0 - Trueno.
  * 2.0 - Cheater.
  * 1.0 - Beast.
@@ -39,6 +39,7 @@ class KNMusicSearcher;
 class KNMusicCategoryModelBase;
 class KNMusicAnalysisQueue;
 class KNMusicLibraryImageManager;
+class KNMusicLibraryDirMonitor;
 /*!
  * \brief The KNMusicLibraryModel class is the standard library model. It can
  * holds a image manager to read cached album art from the library folder, and
@@ -168,6 +169,20 @@ signals:
      */
     void requireRecoverImage(QStringList imageHashList);
 
+    /*!
+     * \brief When the monitor directories have been updated, this signal would
+     * be emitted.
+     * \param directories The directory list.
+     */
+    void requireUpdateMonitorDirs(QStringList directories);
+
+    /*!
+     * \brief When the model finished recover, this signal should be emitted to
+     * ask monitor to check the entire model.
+     * \param filePathList The entire model file paths.
+     */
+    void requireMonitorCheck(QStringList filePathList);
+
 public slots:
     /*!
      * \brief Set the database file path of the library model.
@@ -200,12 +215,20 @@ public slots:
      */
     void recoverModel();
 
+    /*!
+     * \brief Synchronize the library model by adding and removing the list.
+     * \param addList The files need to be added to the model.
+     * \param removeList The index of needed to be removed.
+     */
+    void syncModel(const QStringList &addList, const QList<int> &removeList);
+
 private slots:
     void onAnalysisComplete(const KNMusicAnalysisItem &analysisItem);
     void onImageUpdateRow(int row,
                           const KNMusicDetailInfo &detailInfo);
     void onImageRecoverComplete();
     void onConfigureUpdate();
+    void onSystemConfigureUpdate();
 
 private:
     inline void addCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
@@ -217,16 +240,18 @@ private:
     inline void reduceHashImage(const QString &imageKey);
     inline void count(int counts=1);
     inline void writeDatabase();
+    QStringList m_monitorDirs;
     QLinkedList<KNMusicCategoryModelBase *> m_categoryModels;
     QHash<QString, QVariant> m_scaledHashAlbumArt;
     QHash<QString, int> m_hashAlbumArtCounter;
-    QThread m_searchThread, m_analysisThread, m_imageThread;
+    QThread m_searchThread, m_analysisThread, m_imageThread, m_dirMonitorThread;
     QString m_databasePath;
     int m_operateCounter;
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     KNMusicLibraryImageManager *m_imageManager;
-    KNConfigure *m_configure, *m_systemConfigure;
+    KNMusicLibraryDirMonitor *m_dirMonitor;
+    KNConfigure *m_configure, *m_systemConfigure, *m_monitorSystemConfigure;
     bool m_databaseLoaded, m_ignoreCueData;
 };
 

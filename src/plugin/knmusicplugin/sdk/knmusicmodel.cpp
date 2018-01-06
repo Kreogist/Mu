@@ -62,13 +62,13 @@ KNMusicModel::KNMusicModel(QObject *parent) :
 void KNMusicModel::appendFiles(const QStringList &filePaths)
 {
     //Simply ask to analysis files.
-    emit requireAnalysisFiles(filePaths);
+    emit requireAnalysisFiles(filePaths, QList<uint>());
 }
 
 void KNMusicModel::appendUrls(const QList<QUrl> &urls)
 {
     //Simply ask to analysis the urls.
-    emit requireAnalysisFiles(KNUtil::urlListToPathList(urls));
+    emit requireAnalysisFiles(KNUtil::urlListToPathList(urls), QList<uint>());
 }
 
 void KNMusicModel::appendRow(const KNMusicDetailInfo &detailInfo)
@@ -586,7 +586,7 @@ QPersistentModelIndex KNMusicModel::playingIndex() const
     return m_playingIndex;
 }
 
-KNMusicDetailInfo KNMusicModel::rowDetailInfo(int row)
+const KNMusicDetailInfo &KNMusicModel::rowDetailInfo(int row) const
 {
     return m_detailInfos.at(row);
 }
@@ -632,7 +632,8 @@ bool KNMusicModel::dropMimeData(const QMimeData *data,
         if(data->hasUrls())
         {
             //Ask to add files to model.
-            emit requireAnalysisFiles(KNUtil::urlListToPathList(data->urls()));
+            emit requireAnalysisFiles(KNUtil::urlListToPathList(data->urls()),
+                                      QList<uint>());
             //Mission complete.
             return true;
         }
@@ -768,7 +769,7 @@ void KNMusicModel::initialTotalDuration(const quint64 &totalDuration)
     //Save the total duration.
     m_totalDuration=totalDuration;
 }
-QList<KNMusicDetailInfo> KNMusicModel::detailInfos() const
+const QList<KNMusicDetailInfo> &KNMusicModel::detailInfos() const
 {
     return m_detailInfos;
 }
@@ -778,7 +779,7 @@ QString KNMusicModel::identifier() const
     return m_identifier;
 }
 
-QStringList KNMusicModel::filePathList()
+QStringList KNMusicModel::filePathList() const
 {
     //Prepare the list.
     QStringList pathList;

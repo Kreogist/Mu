@@ -145,6 +145,7 @@ namespace MusicUtil
         qint64 duration;
         quint32 bitRate;
         quint32 samplingRate;
+        uint monitorDirHash;
         qint32 trackIndex;
         bool cannotPlay;            //The cannot playing flag.
         //Initial the values
@@ -384,7 +385,7 @@ inline QDataStream &operator <<(QDataStream &out,
         << KNMusicUtil::dateTimeToData(detailInfo.dateAdded)
         << detailInfo.size << detailInfo.startPosition << detailInfo.duration
         << detailInfo.bitRate << detailInfo.samplingRate
-        << detailInfo.trackIndex
+        << detailInfo.monitorDirHash << detailInfo.trackIndex
         << detailInfo.cannotPlay;
     //Give the stream back.
     return out;
@@ -410,7 +411,7 @@ inline QDataStream &operator >>(QDataStream &in,
        >> modifiedDate >> lastPlayedDate >> addedDate
        >> detailInfo.size >> detailInfo.startPosition >> detailInfo.duration
        >> detailInfo.bitRate >> detailInfo.samplingRate
-       >> detailInfo.trackIndex
+       >> detailInfo.monitorDirHash >> detailInfo.trackIndex
        >> detailInfo.cannotPlay;
     //Calculate the correct date.
     detailInfo.dateModified=KNMusicUtil::dataToDateTime(modifiedDate);

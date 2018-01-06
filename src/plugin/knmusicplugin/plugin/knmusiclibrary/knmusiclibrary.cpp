@@ -59,6 +59,8 @@ KNMusicLibrary::KNMusicLibrary(QObject *parent) :
     //Configure the library tabs.
     m_libraryModel->setDatabase(m_libraryPath+"/Music.db");
     m_libraryModel->setLibraryConfigure(m_libraryConfigure);
+    m_libraryModel->setLibrarySystemConfigure(
+                knMusicGlobal->systemConfigure()->getConfigure("MusicLibrary"));
     m_libraryModel->setLibraryPath(m_libraryPath);
 
     //Configure the tabs.

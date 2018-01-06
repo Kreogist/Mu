@@ -15,6 +15,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QDir>
+#include <QJsonArray>
 #include <QMimeData>
 
 #include "knutil.h"
@@ -25,14 +27,15 @@
 #include "knmusicsearcher.h"
 #include "knmusicanalysisqueue.h"
 #include "knmusiclibraryimagemanager.h"
+#include "knmusiclibrarydirmonitor.h"
 
 #include "knmusiclibrarymodel.h"
 
 #include <QDebug>
 
-#define MajorVersion    4
+#define MajorVersion    5
 #define MinorVersion    0
-#define MaxOperateCount 900
+#define MaxOperateCount 2048
 
 KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     KNMusicModel(parent),
@@ -42,6 +45,7 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     m_searcher(new KNMusicSearcher),
     m_analysisQueue(new KNMusicAnalysisQueue),
     m_imageManager(new KNMusicLibraryImageManager),
+    m_dirMonitor(new KNMusicLibraryDirMonitor),
     m_configure(nullptr),
     m_systemConfigure(nullptr),
     m_databaseLoaded(false),
@@ -55,14 +59,6 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     connect(this, &KNMusicLibraryModel::requireAnalysisFiles,
             m_searcher, &KNMusicSearcher::analysisPaths,
             Qt::QueuedConnection);
-    connect(m_searcher, &KNMusicSearcher::searchFinish,
-            [=](const qint64 &count)
-            {
-                knNotification->pushOnly(
-                            tr("Search complete"),
-                            tr("%1 files have been to music library.").arg(
-                                QString::number(count)));
-            });
 
     //Move the analysis queue to working thread.
     m_analysisQueue->moveToThread(&m_analysisThread);
@@ -91,10 +87,23 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
             this, &KNMusicLibraryModel::onImageUpdateRow,
             Qt::QueuedConnection);
 
+    //Move the monitor to working thread.
+    m_dirMonitor->moveToThread(&m_dirMonitorThread);
+    connect(this, &KNMusicLibraryModel::requireMonitorCheck,
+            m_dirMonitor, &KNMusicLibraryDirMonitor::checkTotal,
+            Qt::QueuedConnection);
+    connect(this, &KNMusicLibraryModel::requireUpdateMonitorDirs,
+            m_dirMonitor, &KNMusicLibraryDirMonitor::setMonitorDirs,
+            Qt::QueuedConnection);
+    connect(m_dirMonitor, &KNMusicLibraryDirMonitor::requireSync,
+            this, &KNMusicLibraryModel::syncModel,
+            Qt::QueuedConnection);
+
     //Start working threads.
     m_searchThread.start();
     m_analysisThread.start();
     m_imageThread.start();
+    m_dirMonitorThread.start();
 }
 
 KNMusicLibraryModel::~KNMusicLibraryModel()
@@ -103,10 +112,12 @@ KNMusicLibraryModel::~KNMusicLibraryModel()
     m_searchThread.quit();
     m_analysisThread.quit();
     m_imageThread.quit();
+    m_dirMonitorThread.quit();
     //Wait for thread quit.
     m_searchThread.wait();
     m_analysisThread.wait();
     m_imageThread.wait();
+    m_dirMonitorThread.wait();
 
     //Write all the database data to the hard disk.
     writeDatabase();
@@ -114,6 +125,7 @@ KNMusicLibraryModel::~KNMusicLibraryModel()
     m_searcher->deleteLater();
     m_analysisQueue->deleteLater();
     m_imageManager->deleteLater();
+    m_dirMonitor->deleteLater();
 }
 
 void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
@@ -238,9 +250,9 @@ bool KNMusicLibraryModel::updateRow(int row, KNMusicAnalysisItem analysisItem)
     //So, the only thing we have to do with the image hash key is to check the
     //size.
     //Get the detail info.
-    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo,
+    KNMusicDetailInfo &detailInfo=analysisItem.detailInfo;
     //Get the original detail info.
-                      &&originalDetailInfo=rowDetailInfo(row);
+    const KNMusicDetailInfo &originalDetailInfo=rowDetailInfo(row);
     //Check the current image.
     if(!analysisItem.coverImage.isNull())
     {
@@ -398,6 +410,8 @@ void KNMusicLibraryModel::recoverModel()
     {
         //Close the file, the database file version is not correct.
         databaseFile.close();
+        //Ask to check the entire library after recover.
+        emit requireMonitorCheck(QStringList());
         //Mission complete.
         return;
     }
@@ -409,6 +423,8 @@ void KNMusicLibraryModel::recoverModel()
     {
         //Close the file.
         databaseFile.close();
+        //Ask to check the entire library after recover.
+        emit requireMonitorCheck(QStringList());
         //Ask to recover image, clear out the no used art counter.
         emit requireRecoverImage(QStringList());
         //Mission complete.
@@ -454,8 +470,23 @@ void KNMusicLibraryModel::recoverModel()
         //Before this the row count cannot be 0.
         emit libraryNotEmpty();
     }
+    //Ask to check the entire library after recover.
+    emit requireMonitorCheck(filePathList());
     //Ask to recover image.
     emit requireRecoverImage(m_hashAlbumArtCounter.keys());
+}
+
+void KNMusicLibraryModel::syncModel(const QStringList &addList,
+                                    const QList<int> &removeList)
+{
+    //Check the remove list.
+    if(!removeList.isEmpty())
+    {
+        //Remove the item on the list first.
+        removeRowList(removeList);
+    }
+    //Add the new files to the library.
+    appendFiles(addList);
 }
 
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)
@@ -486,14 +517,17 @@ void KNMusicLibraryModel::setLibraryConfigure(KNConfigure *configure)
     //Link the configure change signal.
     connect(m_configure, &KNConfigure::valueChanged,
             this, &KNMusicLibraryModel::onConfigureUpdate);
-    //Update the configure.
-    onConfigureUpdate();
 }
 
 void KNMusicLibraryModel::setLibrarySystemConfigure(KNConfigure *configure)
 {
     //Save the object pointer.
     m_systemConfigure=configure;
+    //Link and load the dir list from the configure.
+    connect(m_systemConfigure, &KNConfigure::valueChanged,
+            this, &KNMusicLibraryModel::onSystemConfigureUpdate);
+    //Update the system configure.
+    onSystemConfigureUpdate();
 }
 
 void KNMusicLibraryModel::onAnalysisComplete(
@@ -595,6 +629,27 @@ void KNMusicLibraryModel::onConfigureUpdate()
 {
     //Update the cue data duplicate flag.
     m_ignoreCueData=m_configure->data("IgnoreCueData", false).toBool();
+}
+
+void KNMusicLibraryModel::onSystemConfigureUpdate()
+{
+    //Load the monitor dir list.
+    QJsonArray jsonDirList=m_systemConfigure->data("DirList").toJsonArray();
+    //Clear the string list.
+    QStringList monitorDirList;
+    //Translate the json array to the string list.
+    for(auto i : jsonDirList)
+    {
+        QDir currentDir(i.toString());
+        //Check directory existance.
+        if(currentDir.exists())
+        {
+            //Append the directory path to the list.
+            monitorDirList.append(currentDir.absolutePath());
+        }
+    }
+    //Emit the signal to change the monitor directory.
+    emit requireUpdateMonitorDirs(monitorDirList);
 }
 
 inline void KNMusicLibraryModel::addCategoryDetailInfo(

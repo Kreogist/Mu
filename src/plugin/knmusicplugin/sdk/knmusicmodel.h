@@ -207,7 +207,7 @@ public:
      * \param row The row index.
      * \return The detail info structure of the song.
      */
-    KNMusicDetailInfo rowDetailInfo(int row);
+    const KNMusicDetailInfo &rowDetailInfo(int row) const;
 
     /*!
      * \brief Get the row of one detail info, it will return the first row where
@@ -305,7 +305,7 @@ public:
      * \brief Get the file path list of all the music detail items.
      * \return The file path list.
      */
-    QStringList filePathList();
+    QStringList filePathList() const;
 
 signals:
     /*!
@@ -323,8 +323,10 @@ signals:
      * \brief When there's new file is trying to add to the music model, this
      * signal will be emitted.
      * \param fileList The file path list.
+     * \param monitorHash The monitor hash list, this list size should be the
+     * same as the file list.
      */
-    void requireAnalysisFiles(QStringList fileList);
+    void requireAnalysisFiles(QStringList fileList, QList<uint> monitorHash);
 
 public slots:
     /*!
@@ -364,7 +366,7 @@ protected:
      * \brief Get the detail info list from the model.
      * \return The total detail info list from the model.
      */
-    QList<KNMusicDetailInfo> detailInfos() const;
+    const QList<KNMusicDetailInfo> &detailInfos() const;
 
     /*!
      * \brief Set the music identifier, it should be set when the model is

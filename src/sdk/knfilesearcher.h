@@ -96,8 +96,9 @@ public slots:
      * file path will be analysis straightly. The folder will find all the file
      * inside recursive.
      * \param paths The path list.
+     * \param monitorHash The monitor directory path hash list.
      */
-    void analysisPaths(QStringList paths);
+    void analysisPaths(QStringList paths, QList<uint> monitorHash);
 
 private slots:
     void analysisNext();

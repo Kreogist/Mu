@@ -84,7 +84,7 @@ public:
      * \param genre The genre text.
      * \return The genre index. If the genre is not in the list, it will be -1.
      */
-    int genreIndex(const QString &genre);
+    int genreIndex(const QString &genre) const;
 
     /*!
      * \brief Get the music detail dialog pointer.
@@ -109,14 +109,14 @@ public:
      * \param suffix The file suffix.
      * \return The description of the suffix.
      */
-    QString typeDescription(const QString &suffix) const;
+    const QString &typeDescription(const QString &suffix) const;
 
     /*!
      * \brief Get the header text of the specific column of tree view.
      * \param index The index of the column.
      * \return The text of the column title.
      */
-    QString treeViewHeaderText(int index) const;
+    const QString &treeViewHeaderText(int index) const;
 
     /*!
      * \brief Move the parser and searcher to their own working threads. All the
@@ -170,6 +170,12 @@ public:
     KNConfigure *configure();
 
     /*!
+     * \brief Get the music system configure.
+     * \return The music system configure pointer.
+     */
+    KNConfigure *systemConfigure();
+
+    /*!
      * \brief Get the now playing object class.
      * \return The now playing object pointer.
      */
@@ -198,25 +204,25 @@ public:
      * \brief Get all the available music file suffixs.
      * \return The suffix list.
      */
-    QStringList suffixList() const;
+    const QStringList &suffixList() const;
 
     /*!
      * \brief Get all the available music list file suffixes.
      * \return The suffix list.
      */
-    QStringList listSuffixList() const;
+    const QStringList &listSuffixList() const;
 
     /*!
      * \brief Get the indexed genre list.
      * \return The index genre list.
      */
-    QStringList genreList() const;
+    const QStringList &genreList() const;
 
     /*!
      * \brief Get the default album art image when there's no album art.
      * \return The no album art image.
      */
-    QPixmap noAlbumArt() const;
+    const QPixmap &noAlbumArt() const;
 
     /*!
      * \brief Get the backend object class.
@@ -313,7 +319,7 @@ private:
     QStringList m_suffixs, m_listSuffixs, m_suffixDescription,
                 m_listSuffixDescription, m_indexedGenres;
     QPixmap m_noAlbumArt;
-    QString m_musicLibPath;
+    QString m_musicLibPath, m_emptyString;
     KNConfigure *m_musicSystemConfigure, *m_musicConfigure;
 
     QWidget *m_parentWidget;

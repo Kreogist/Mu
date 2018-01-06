@@ -71,27 +71,27 @@ QString KNMusicGlobal::indexedGenre(int index)
                 m_indexedGenres.at(index):"Unknown";
 }
 
-int KNMusicGlobal::genreIndex(const QString &genre)
+int KNMusicGlobal::genreIndex(const QString &genre) const
 {
     //Get the index of the genre.
     return m_indexedGenres.indexOf(genre);
 }
 
-QString KNMusicGlobal::typeDescription(const QString &suffix) const
+const QString &KNMusicGlobal::typeDescription(const QString &suffix) const
 {
     //Search the suffix if the suffix list.
     int suffixIndex=m_suffixs.indexOf(suffix.toLower());
     //If we cannot find the suffix, return a emtpy string.
-    return suffixIndex==-1?QString():m_suffixDescription.at(suffixIndex);
+    return suffixIndex==-1?m_emptyString:m_suffixDescription.at(suffixIndex);
 }
 
-QString KNMusicGlobal::treeViewHeaderText(int index) const
+const QString &KNMusicGlobal::treeViewHeaderText(int index) const
 {
     //Check out the index range.
     return index<MusicDataCount?
                 //Give back the header text.
                 m_treeViewHeaderText[index]:
-                QString();
+                m_emptyString;
 }
 
 void KNMusicGlobal::startThreads()
@@ -161,6 +161,7 @@ KNMusicGlobal::KNMusicGlobal(QObject *parent) :
     m_indexedGenres(QStringList()),
     m_noAlbumArt(QPixmap(":/plugin/music/public/noalbum.png")),
     m_musicLibPath(QString()),
+    m_emptyString(QString()),
     m_musicSystemConfigure(knGlobal->systemConfigure()->getConfigure("Music")),
     m_musicConfigure(knGlobal->userConfigure()->getConfigure("Music")),
     m_parentWidget(static_cast<QWidget *>(parent)),
@@ -498,7 +499,7 @@ void KNMusicGlobal::setBackend(KNMusicBackend *backend)
     m_backend = backend;
 }
 
-QPixmap KNMusicGlobal::noAlbumArt() const
+const QPixmap &KNMusicGlobal::noAlbumArt() const
 {
     return m_noAlbumArt;
 }
@@ -513,17 +514,17 @@ void KNMusicGlobal::setSoloMenu(KNMusicSoloMenuBase *soloMenu)
     m_soloMenu = soloMenu;
 }
 
-QStringList KNMusicGlobal::suffixList() const
+const QStringList &KNMusicGlobal::suffixList() const
 {
     return m_suffixs;
 }
 
-QStringList KNMusicGlobal::listSuffixList() const
+const QStringList &KNMusicGlobal::listSuffixList() const
 {
     return m_listSuffixs;
 }
 
-QStringList KNMusicGlobal::genreList() const
+const QStringList &KNMusicGlobal::genreList() const
 {
     return m_indexedGenres;
 }
@@ -551,6 +552,11 @@ void KNMusicGlobal::setSearch(KNMusicSearchBase *search)
 KNConfigure *KNMusicGlobal::configure()
 {
     return m_musicConfigure;
+}
+
+KNConfigure *KNMusicGlobal::systemConfigure()
+{
+    return m_musicSystemConfigure;
 }
 
 QString KNMusicGlobal::musicLibraryPath() const

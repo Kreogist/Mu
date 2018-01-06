@@ -21,33 +21,49 @@
 
 #include "knmusicplayerbase.h"
 
+/*!
+ * \brief The KNMusicMiniPlayerBase class provides the ports for a mini player
+ * widget that needs to implement.\n
+ * A mini player is a widget-mode player which sync with the data of main player
+ * but it would be float as a small widget window.
+ */
 class KNMusicMiniPlayerBase : public KNMusicPlayerBase
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Construct a KNMusicMiniPlayerBase widget.
+     * \param parent The parent widget.
+     */
     KNMusicMiniPlayerBase(QWidget *parent = 0) : KNMusicPlayerBase(parent){}
 
 signals:
     /*!
-     * \brief requireHidePlayer
+     * \brief When the player is required to close itself, this signal should be
+     * emitted. The music plugin will handle this signal.
      */
     void requireHidePlayer();
 
+    /*!
+     * \brief When the player is required to close the whole application, this
+     * signal should be emitted to close the main window and it will close the
+     * whole application.
+     */
     void requireCloseMainWindow();
 
 public slots:
     /*!
-     * \brief reset
+     * \brief When the playing state is reseted, this slot would be called.
      */
     virtual void reset()=0;
 
     /*!
-     * \brief saveConfigure
+     * \brief Save the configure to the specific object.
      */
     virtual void saveConfigure()=0;
 
     /*!
-     * \brief loadConfigure
+     * \brief Load the configure from the specific object.
      */
     virtual void loadConfigure()=0;
 };

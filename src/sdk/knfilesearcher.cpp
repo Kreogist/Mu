@@ -38,7 +38,7 @@ KNFileSearcher::KNFileSearcher(QObject *parent) :
             Qt::QueuedConnection);
 }
 
-void KNFileSearcher::analysisPaths(QStringList paths)
+void KNFileSearcher::analysisPaths(QStringList paths, QList<uint> monitorHash)
 {
     //Check the queue before.
     if(m_queue.isEmpty())
