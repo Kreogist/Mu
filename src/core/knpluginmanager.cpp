@@ -63,8 +63,6 @@ KNPluginManager::KNPluginManager(QObject *parent) :
     QApplication::setStyle(QStyleFactory::create("fusion"));
     //Initial the global.
     KNGlobal::initial(this);
-
-    qDebug()<<"Empty hash:"<<qHash(QString());
 }
 
 inline void KNPluginManager::setApplicationInformation()

@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QDir>
+#include <QLinkedList>
 
 #include "knfilesearcher.h"
 
@@ -52,6 +53,23 @@ void KNFileSearcher::analysisPaths(QStringList paths, QList<uint> monitorHash)
     }
     //Append the urls to the waiting list.
     m_queue.append(paths);
+    //Check the monitor hash list length.
+    if(monitorHash.isEmpty())
+    {
+        //Create the monitor hash with empty string hash result.
+        uint emptyHash=qHash(QString(""));
+        //Reallocate the monitor hash memory.
+        monitorHash.reserve(paths.size());
+        int pathsLength=paths.size();
+        //Append the data.
+        while(pathsLength--)
+        {
+            //Build the empty list.
+            monitorHash.append(emptyHash);
+        }
+    }
+    //Append the monitor hash list.
+    m_hashQueue.append(monitorHash);
     //Check the queue, if the queue is not empty then ask to analysis one.
     if(!m_queue.isEmpty())
     {
@@ -78,59 +96,78 @@ void KNFileSearcher::analysisNext()
     if(typeChecker.isDir())
     {
         //Analysis item as a folder.
-        analysisFolder(typeChecker);
+        analysisFolder(typeChecker, m_hashQueue.takeFirst());
     }
     else if(typeChecker.isFile())
     {
         //Analysis item as a file.
-        analysisFile(typeChecker);
+        analysisFile(typeChecker, m_hashQueue.takeFirst());
     }
     //Emit the parse next signal.
     emit requireAnalysisNext();
 }
 
-void KNFileSearcher::analysisFolder(QFileInfo folderInfo)
+inline void KNFileSearcher::analysisFolder(const QFileInfo &folderInfo,
+                                           uint folderDirHash)
 {
-    //Get the entry file info under the folder.
-    QFileInfoList contents=QDir(folderInfo.absoluteFilePath()).entryInfoList(),
-            validFileList;
-    //Check all the items of the folder.
-    for(auto i=contents.constBegin(); i!=contents.constEnd(); ++i)
+    //Construct the sub internal queue of the folder.
+    QLinkedList<QString> folderQueue;
+    folderQueue.append(folderInfo.absoluteFilePath());
+    //Prepare the file info list.
+    QFileInfoList validFileList;
+    //Loop until the folder queue is empty.
+    while(!folderQueue.isEmpty())
     {
-        //Get the file name.
-        QString fileName=(*i).fileName();
-        //Ignore the dot and dotdot.
-        if(fileName=="." || fileName=="..")
+        //Get the entry file info under the folder.
+        QFileInfoList contents=QDir(folderQueue.takeFirst()).entryInfoList();
+        //Check all the items of the folder.
+        for(auto i : contents)
         {
-            continue;
-        }
-        //Check the current item.
-        if((*i).isFile())
-        {
-            //Check whether file is valid.
-            if(isFileValid(*i))
+            //Get the file name.
+            QString fileName=i.fileName();
+            //Ignore the dot and dotdot.
+            if(fileName=="." || fileName=="..")
             {
-                //Append the file in the list.
-                validFileList.append(*i);
-                //Increase the counter.
-                ++m_counter;
+                continue;
             }
-        }
-        else if((*i).isDir())
-        {
-            //If it's a directory, prepend it to the analysis queue.
-            m_queue.prepend((*i).absoluteFilePath());
+            //Check the current item.
+            if(i.isFile())
+            {
+                //Check whether file is valid.
+                if(isFileValid(i))
+                {
+                    //Append the file in the list.
+                    validFileList.append(i);
+                    //Increase the counter.
+                    ++m_counter;
+                }
+            }
+            else if(i.isDir())
+            {
+                //If it's a directory, prepend it to the analysis queue.
+                folderQueue.append(i.absoluteFilePath());
+            }
         }
     }
     //Check the valid file list.
     if(!validFileList.isEmpty())
     {
+        //Build the directory hash list.
+        QList<uint> hashList;
+        //Construct the hash list.
+        hashList.reserve(folderDirHash);
+        int fileListSize=validFileList.size();
+        while(fileListSize--)
+        {
+            hashList.append(folderDirHash);
+        }
         //Process the file in batch.
-        emit findFiles(validFileList);
+        emit findFiles(validFileList, hashList);
     }
 }
 
-inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo)
+inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo,
+                                         uint fileDirHash)
 {
     //Check whether the suffix is in the suffix list.
     if(m_suffixList.contains(fileInfo.suffix().toLower()))
@@ -138,7 +175,7 @@ inline void KNFileSearcher::analysisFile(const QFileInfo &fileInfo)
         //Increase the counter.
         ++m_counter;
         //If we can find the suffix, emit the find out signal.
-        emit findFile(fileInfo);
+        emit findFile(fileInfo, fileDirHash);
     }
 }
 

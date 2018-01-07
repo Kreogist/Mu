@@ -20,6 +20,8 @@ Foundation,
 #ifndef KNMUSICLIBRARYDIRMONITOR_H
 #define KNMUSICLIBRARYDIRMONITOR_H
 
+#include <QHash>
+
 #include <QObject>
 
 class KNConfigure;
@@ -42,16 +44,20 @@ signals:
      * \brief When the monitor is asked to sync files with model, this signal
      * will be emitted.
      * \param addPaths The list of file path which is needed to be added.
+     * \param addPathDirHash The list of the monitor directory hash for each
+     * file path.
      * \param removedItems The indexes of the removed item.
      */
-    void requireSync(QStringList addPaths, QList<int> removedItems);
+    void requireSync(QStringList addPaths,
+                     QList<uint> addPathDirHash,
+                     QList<int> removedItems);
 
 public slots:
     /*!
      * \brief Check the entire library model.
-     * \param filePathList The file path list of the entire library model.
+     * \param watchFileList The monitoring item path to its raw index list.
      */
-    void checkTotal(const QStringList &filePathList);
+    void checkEntireLibrary(QHash<QString, int> watchFileList);
 
     /*!
      * \brief Set the monitor directories.
@@ -60,8 +66,12 @@ public slots:
     void setMonitorDirs(const QStringList &directories);
 
 private:
-    inline bool isFileInMonitorDir(const QString &filePath);
-    QStringList m_monitorDirList;
+    struct MonitorDirectory
+    {
+        uint hash;
+    };
+
+    QHash<QString, MonitorDirectory> m_monitorMap;
 };
 
 #endif // KNMUSICLIBRARYDIRMONITOR_H

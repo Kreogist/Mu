@@ -177,6 +177,7 @@ inline void KNPreference::updateItemTitle()
     //Update all the item title.
     m_sidebar->setItemTitle(PanelGeneral, tr("General"));
     m_sidebar->setItemTitle(PanelPlayback, tr("Playback"));
+    m_sidebar->setItemTitle(PanelLibrary, tr("Library"));
     m_sidebar->setItemTitle(PanelLyrics, tr("Lyrics"));
     m_sidebar->setItemTitle(PanelShortcuts, tr("Shortcuts"));
 //    m_sidebar->setItemTitle(PanelFileAsso, tr("File Types"));
@@ -192,6 +193,8 @@ inline void KNPreference::generateSettingItems()
                                      headerSettingIcon);
     items[PanelPlayback]=generateItem("://preference/playback.png",
                                       headerSettingIcon);
+    items[PanelLibrary]=generateItem("",
+                                     headerSettingIcon);
     items[PanelLyrics]=generateItem("://preference/lyrics.png",
                                     headerSettingIcon);
     items[PanelShortcuts]=generateItem("://preference/shortcuts.png",

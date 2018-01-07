@@ -90,7 +90,7 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     //Move the monitor to working thread.
     m_dirMonitor->moveToThread(&m_dirMonitorThread);
     connect(this, &KNMusicLibraryModel::requireMonitorCheck,
-            m_dirMonitor, &KNMusicLibraryDirMonitor::checkTotal,
+            m_dirMonitor, &KNMusicLibraryDirMonitor::checkEntireLibrary,
             Qt::QueuedConnection);
     connect(this, &KNMusicLibraryModel::requireUpdateMonitorDirs,
             m_dirMonitor, &KNMusicLibraryDirMonitor::setMonitorDirs,
@@ -119,8 +119,12 @@ KNMusicLibraryModel::~KNMusicLibraryModel()
     m_imageThread.wait();
     m_dirMonitorThread.wait();
 
-    //Write all the database data to the hard disk.
-    writeDatabase();
+    //Check the operation counter.
+    if(m_operateCounter > 0)
+    {
+        //Write all the database data to the hard disk.
+        writeDatabase();
+    }
     //Recover the memory.
     m_searcher->deleteLater();
     m_analysisQueue->deleteLater();
@@ -382,6 +386,8 @@ void KNMusicLibraryModel::recoverModel()
     //Check out the file existence.
     if(!databaseFile.exists())
     {
+        //Ask to check the entire library after recover.
+        emit requireMonitorCheck(QHash<QString, int>());
         //Database file doesn't exist, ignore it.
         return;
     }
@@ -406,12 +412,12 @@ void KNMusicLibraryModel::recoverModel()
     //Read the version data.
     databaseStream >> major >> minor;
     //Check the major and minor version.
-    if(major!=MajorVersion && minor<MinorVersion)
+    if(major!=MajorVersion || minor<MinorVersion)
     {
         //Close the file, the database file version is not correct.
         databaseFile.close();
         //Ask to check the entire library after recover.
-        emit requireMonitorCheck(QStringList());
+        emit requireMonitorCheck(QHash<QString, int>());
         //Mission complete.
         return;
     }
@@ -424,7 +430,7 @@ void KNMusicLibraryModel::recoverModel()
         //Close the file.
         databaseFile.close();
         //Ask to check the entire library after recover.
-        emit requireMonitorCheck(QStringList());
+        emit requireMonitorCheck(QHash<QString, int>());
         //Ask to recover image, clear out the no used art counter.
         emit requireRecoverImage(QStringList());
         //Mission complete.
@@ -432,6 +438,9 @@ void KNMusicLibraryModel::recoverModel()
     }
     //Initial the total duration.
     quint64 totalDuration=0;
+    //Prepare the monitor check list.
+    QHash<QString, int> monitorCheckList;
+    uint emptyHash=qHash(QString());
     //Start to insert data to the model.
     beginInsertRows(QModelIndex(),
                     0,
@@ -454,6 +463,19 @@ void KNMusicLibraryModel::recoverModel()
                     turboDetailInfo.coverImageHash,
                     m_hashAlbumArtCounter.value(turboDetailInfo.coverImageHash,
                                                 0)+1);
+        //Check the detail info is a monitoring item.
+        if(turboDetailInfo.monitorDirHash!=emptyHash)
+        {
+            //Insert to the monitor check list.
+            monitorCheckList.insertMulti(turboDetailInfo.filePath,
+                                         rowCount()-1);
+            //If it has cue file.
+            if(!turboDetailInfo.trackFilePath.isEmpty())
+            {
+                monitorCheckList.insertMulti(turboDetailInfo.trackFilePath,
+                                             rowCount()-1);
+            }
+        }
     }
     //Close the database file.
     databaseFile.close();
@@ -471,12 +493,13 @@ void KNMusicLibraryModel::recoverModel()
         emit libraryNotEmpty();
     }
     //Ask to check the entire library after recover.
-    emit requireMonitorCheck(filePathList());
+    emit requireMonitorCheck(monitorCheckList);
     //Ask to recover image.
     emit requireRecoverImage(m_hashAlbumArtCounter.keys());
 }
 
 void KNMusicLibraryModel::syncModel(const QStringList &addList,
+                                    const QList<uint> &addListDirHash,
                                     const QList<int> &removeList)
 {
     //Check the remove list.
@@ -486,7 +509,7 @@ void KNMusicLibraryModel::syncModel(const QStringList &addList,
         removeRowList(removeList);
     }
     //Add the new files to the library.
-    appendFiles(addList);
+    appendHashFiles(addList, addListDirHash);
 }
 
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)

@@ -347,6 +347,13 @@ public slots:
      */
     void appendUrls(const QList<QUrl> &urls);
 
+    /*!
+     * \brief Append several files to the music model, with the music library
+     * hash list.
+     */
+    void appendHashFiles(const QStringList &filePathList,
+                         const QList<uint> &fileDirHashList);
+
 protected:
     /*!
      * \brief This will append a KNMusicDetailInfo structure in the model data

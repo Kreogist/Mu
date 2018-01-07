@@ -34,7 +34,8 @@ bool KNMusicAnalysisQueue::isWorking() const
     return m_isWorking;
 }
 
-void KNMusicAnalysisQueue::addFile(const QFileInfo &fileInfo)
+void KNMusicAnalysisQueue::addFile(const QFileInfo &fileInfo,
+                                   uint fileMonitorHash)
 {
     //Check file path queue first.
     if(m_filePathQueue.isEmpty())
@@ -44,11 +45,13 @@ void KNMusicAnalysisQueue::addFile(const QFileInfo &fileInfo)
     }
     //Add the file path to the analysis item list.
     m_filePathQueue.append(fileInfo);
+    m_monitorHashQueue.append(fileMonitorHash);
     //Start analysis queue.
     emit analysisNext();
 }
 
-void KNMusicAnalysisQueue::addFiles(const QFileInfoList &fileInfos)
+void KNMusicAnalysisQueue::addFiles(const QFileInfoList &fileInfos,
+                                    const QList<uint> &fileMonitorHashList)
 {
     //Check file path queue first.
     if(m_filePathQueue.isEmpty())
@@ -57,7 +60,9 @@ void KNMusicAnalysisQueue::addFiles(const QFileInfoList &fileInfos)
         m_isWorking=true;
     }
     //Add the file path to the analysis item list.
+    qDebug()<<"File info size:"<<fileInfos.size()<<fileMonitorHashList.size();
     m_filePathQueue.append(fileInfos);
+    m_monitorHashQueue.append(fileMonitorHashList);
     //Start analysis queue.
     emit analysisNext();
 }
@@ -83,6 +88,8 @@ void KNMusicAnalysisQueue::onActionAnalysisNext()
         KNMusicAnalysisItem analysisItem;
         //Parse the file as a single music file.
         parser->parseFile(fileInfo, analysisItem);
+        //Update its monitor info.
+        analysisItem.detailInfo.monitorDirHash=m_monitorHashQueue.takeFirst();
         //Emit analysis complete signal.
         emit analysisComplete(analysisItem);
     }
@@ -93,6 +100,13 @@ void KNMusicAnalysisQueue::onActionAnalysisNext()
         QList<KNMusicAnalysisItem> trackItems;
         //Parse the file as a list.
         parser->parseTrackList(fileInfo.absoluteFilePath(), trackItems);
+        //Update the track items monitor hash info.
+        uint monitorDirHash=m_monitorHashQueue.takeFirst();
+        for(auto i : trackItems)
+        {
+            //Update each monitor hash.
+            i.detailInfo.monitorDirHash=monitorDirHash;
+        }
         //Treat each the analysis item as one analysis complete.
 //        emit analysisTrackComplete(trackItems);
         while(!trackItems.isEmpty())

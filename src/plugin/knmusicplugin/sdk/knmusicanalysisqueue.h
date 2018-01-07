@@ -71,8 +71,9 @@ public slots:
      * connected from the signal which the searcher give out a new file.
      * \param fileInfo The file info of the file which was recognized by a
      * searcher.
+     * \param fileMonitorHash The monitor directory hash.
      */
-    void addFile(const QFileInfo &fileInfo);
+    void addFile(const QFileInfo &fileInfo, uint fileMonitorHash);
 
     /*!
      * \brief Add new files to the analysis queue. This slot should be connected
@@ -80,13 +81,15 @@ public slots:
      * \param fileInfos The files information list which were recognized by a
      * searcher.
      */
-    void addFiles(const QFileInfoList &fileInfos);
+    void addFiles(const QFileInfoList &fileInfos,
+                  const QList<uint> &fileMonitorHashList);
 
 private slots:
     void onActionAnalysisNext();
 
 private:
     QFileInfoList m_filePathQueue;
+    QList<uint> m_monitorHashQueue;
     bool m_isWorking;
 };
 

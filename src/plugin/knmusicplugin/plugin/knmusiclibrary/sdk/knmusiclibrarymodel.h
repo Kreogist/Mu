@@ -179,9 +179,9 @@ signals:
     /*!
      * \brief When the model finished recover, this signal should be emitted to
      * ask monitor to check the entire model.
-     * \param filePathList The entire model file paths.
+     * \param monitorCheckList The monitoring item to its row map.
      */
-    void requireMonitorCheck(QStringList filePathList);
+    void requireMonitorCheck(QHash<QString, int> monitorCheckMap);
 
 public slots:
     /*!
@@ -218,9 +218,13 @@ public slots:
     /*!
      * \brief Synchronize the library model by adding and removing the list.
      * \param addList The files need to be added to the model.
+     * \param addListDirHash The list of the monitor directory hash for each
+     * file path.
      * \param removeList The index of needed to be removed.
      */
-    void syncModel(const QStringList &addList, const QList<int> &removeList);
+    void syncModel(const QStringList &addList,
+                   const QList<uint> &addListDirHash,
+                   const QList<int> &removeList);
 
 private slots:
     void onAnalysisComplete(const KNMusicAnalysisItem &analysisItem);

@@ -28,84 +28,108 @@ Foundation,
 
 KNMusicLibraryDirMonitor::KNMusicLibraryDirMonitor(QObject *parent) :
     QObject(parent),
-    m_monitorDirList(QStringList())
+    m_monitorMap(QHash<QString, MonitorDirectory>())
 {
 }
 
-void KNMusicLibraryDirMonitor::checkTotal(const QStringList &filePathList)
+void KNMusicLibraryDirMonitor::checkEntireLibrary(
+        QHash<QString, int> watchFileList)
 {
-    QHash<QString, int> watchFileList;
-    //Check the file path from the list is in the watching list.
-    for(int i=0; i<filePathList.size(); ++i)
-    {
-        //Check the file path at position.
-        if(isFileInMonitorDir(filePathList.at(i)))
-        {
-            //Append the file to the watch file list.
-            watchFileList.insertMulti(filePathList.at(i), i);
-        }
-    }
     //Create the adding file list.
-    QStringList directoryQueue=m_monitorDirList, addingList;
+    QStringList directoryQueue=m_monitorMap.keys(), addingList;
+    QList<uint> hashList;
     //Loop until all the directory in the queue list has been operated.
     while(!directoryQueue.isEmpty())
     {
-        //Get the file info list.
-        QFileInfoList entireInfoList=
-                QDir(directoryQueue.takeFirst()).entryInfoList();
-        //Loop and check the list.
-        for(auto j : entireInfoList)
+        //Prepare the directory.
+        QString currentMonitorDir=directoryQueue.takeFirst();
+        uint dirHash=m_monitorMap.value(currentMonitorDir).hash;
+        //Prepare the directory queue.
+        QStringList currentQueue;
+        currentQueue.append(currentMonitorDir);
+        while(!currentQueue.isEmpty())
         {
-            //Ignore the dot and dot dot.
-            if(j.fileName()=="." || j.fileName()=="..")
+            //Get the file info list.
+            QFileInfoList entireInfoList=
+                    QDir(currentQueue.takeFirst()).entryInfoList();
+            //Loop and check the list.
+            for(auto j : entireInfoList)
             {
-                continue;
-            }
-            //Get the file path of j.
-            QString &&itemPath=j.absoluteFilePath();
-            //Check whether j is a directory or a file.
-            if(j.isDir())
-            {
-                //Push the directory into the queue.
-                directoryQueue.append(itemPath);
-                continue;
-            }
-            //Now j should be a file.
-            //If the path j is in the watch file list.
-            if(j.isFile() && watchFileList.contains(itemPath))
-            {
-                //Remove the file from the list.
-                watchFileList.remove(itemPath);
-            }
-            else
-            {
-                //The file need to be added.
-                addingList.append(itemPath);
+                //Ignore the dot and dot dot.
+                if(j.fileName()=="." || j.fileName()=="..")
+                {
+                    continue;
+                }
+                //Get the file path of j.
+                QString &&itemPath=j.absoluteFilePath();
+                //Check whether j is a directory or a file.
+                if(j.isDir())
+                {
+                    //Push the directory into the queue.
+                    currentQueue.append(itemPath);
+                    continue;
+                }
+                //Now j should be a file.
+                //If the path j is in the watch file list.
+                if(j.isFile() && watchFileList.contains(itemPath))
+                {
+                    //Remove the file from the list.
+                    watchFileList.remove(itemPath);
+                }
+                else
+                {
+                    //The file need to be added.
+                    addingList.append(itemPath);
+                    hashList.append(dirHash);
+                }
             }
         }
     }
     //Add the file in the adding list to the library.
     //Emit the sync signal.
-    emit requireSync(addingList, watchFileList.values());
+    qDebug()<<"addingList"<<addingList<<"\nHashList"<<hashList;
+    qDebug()<<"watch file list"<<watchFileList.keys();
+    emit requireSync(addingList, hashList, watchFileList.values());
 }
 
 void KNMusicLibraryDirMonitor::setMonitorDirs(const QStringList &directories)
 {
-    //Update the monitor dir list.
-    m_monitorDirList=directories;
-}
-
-bool KNMusicLibraryDirMonitor::isFileInMonitorDir(const QString &filePath)
-{
-    //Check the path is the prefix or not.
-    for(auto i : m_monitorDirList)
+    //Prepare the dir list and reset the hash list.
+    QHash<QString, MonitorDirectory> newDirMap;
+    //Loop and check existance.
+    for(auto i : directories)
     {
-        //Loop and check the prefix.
-        if(filePath.startsWith(i))
+        //Get the directory i.
+        QDir currentDir(i);
+        //Check instance.
+        if(!currentDir.exists())
         {
-            return true;
+            //For non-existance directory, ignore.
+            return;
+        }
+        //Calculate the directory hash and build the queue.
+        QString currentDirPath=currentDir.absolutePath();
+        if(m_monitorMap.contains(currentDirPath))
+        {
+            //Take out and insert to the new hash map.
+            newDirMap.insert(currentDirPath, m_monitorMap.take(currentDirPath));
+        }
+        else
+        {
+            //Construct a new struct for the directory.
+            MonitorDirectory monitor;
+            monitor.hash=qHash(currentDirPath);
+            //Insert to the new dir map.
+            newDirMap.insert(currentDirPath, monitor);
         }
     }
-    //No file matches in the list.
-    return false;
+    qDebug()<<"Set monitor map:"<<m_monitorMap.keys();
+    //Remove all the directory in the old monitor map.
+    for(auto i : m_monitorMap.keys())
+    {
+        //Remove all the staff.
+        m_monitorMap.value(i);
+    }
+    //Update the monitor dir list.
+    m_monitorMap=newDirMap;
 }

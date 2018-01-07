@@ -190,6 +190,17 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         panelData.append(block);
         break;
     }
+    case PanelLibrary:
+    {
+        //Monitor settings.
+        block=generateBlock(tr("Folder Monitor Settings"));
+        ;
+        panelData.append(block);
+        block=generateBlock(tr("Monitored Folders"));
+        ;
+        panelData.append(block);
+        break;
+    }
     case PanelLyrics:
     {
         //Local lyrics.

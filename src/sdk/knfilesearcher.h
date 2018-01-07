@@ -62,16 +62,19 @@ signals:
      * \brief When the searcher find out there's a file meets the requirements
      * of the suffix list, this will be emitted.
      * \param fileInfo The information about the file.
+     * \param dirHash The hash info of the monitor directory.
      */
-    void findFile(QFileInfo fileInfo);
+    void findFile(QFileInfo fileInfo, uint dirHash);
 
     /*!
      * \brief When the searcher find out there're files meet the requirements
      * of the suffix list, this will be emitted.
      * \param fileInfos The list of the files information whose suffix is in the
      * list.
+     * \param directoryHash The hash list of the monitor directory, which
+     * matches the file info.
      */
-    void findFiles(QFileInfoList fileInfos);
+    void findFiles(QFileInfoList fileInfos, QList<uint> dirHash);
 
     /*!
      * \brief Start to do the search.
@@ -102,13 +105,14 @@ public slots:
 
 private slots:
     void analysisNext();
-    void analysisFolder(QFileInfo folderInfo);
 
 private:
-    inline void analysisFile(const QFileInfo &fileInfo);
+    inline void analysisFolder(const QFileInfo &folderInfo, uint folderDirHash);
+    inline void analysisFile(const QFileInfo &fileInfo, uint fileDirHash);
     inline bool isFileValid(const QFileInfo &fileInfo);
     static QStringList m_suffixList;
     QStringList m_queue;
+    QList<uint> m_hashQueue;
     qint64 m_counter;
     bool m_working;
 };

@@ -31,6 +31,7 @@ namespace PreferenceUtil
     {
         PanelGeneral,
         PanelPlayback,
+        PanelLibrary,
         PanelLyrics,
         PanelShortcuts,
 //        PanelFileAsso,

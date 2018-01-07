@@ -139,7 +139,9 @@ void KNPreferencePanelItem::paintEvent(QPaintEvent *event)
     //Draw the rect.
     painter.setOpacity(m_highLightOpacity);
     //Paint the background.
-    painter.fillRect(rect(), m_highlight);
+    painter.fillRect(QRect(0, 0,
+                           width(), knDpi->height(PreferenceSingleItemHeight)),
+                     m_highlight);
     //Paint other things.
     QWidget::paintEvent(event);
 }
