@@ -53,8 +53,10 @@ KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
     QPalette pal=knTheme->getPalette("PreferencePanelItem");
     setPalette(pal);
     //Configure the label.
-    m_titleLabel->setFixedWidth(knDpi->width(PreferenceCaptionWidth));
-    m_titleLabel->setContentsMargins(10, 0, 10, 0);
+    m_titleLabel->setFixedSize(knDpi->size(PreferenceCaptionWidth,
+                                           PreferenceSingleItemHeight));
+    m_titleLabel->setContentsMargins(knDpi->margins(10, 0, 10, 0));
+
     //Configure the hint label.
     m_hintLabel->setFixedSize(knDpi->size(PreferenceSingleItemHeight,
                                           PreferenceSingleItemHeight));
@@ -164,12 +166,16 @@ void KNPreferencePanelItem::leaveEvent(QEvent *event)
 
 void KNPreferencePanelItem::buildWidgetLayout(QLayout *layout)
 {
+    //Create the widget layout, and set the layout to the widget.
+    setLayout(createWidgetLayout(layout));
+}
+
+QLayout *KNPreferencePanelItem::createWidgetLayout(QLayout *layout)
+{
     //Construct the layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight,
-                                          this);
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
-    setLayout(mainLayout);
     //Add the basic widgets.
     mainLayout->addWidget(m_titleLabel, 0, Qt::AlignVCenter);
     //Add the undo button.
@@ -178,6 +184,8 @@ void KNPreferencePanelItem::buildWidgetLayout(QLayout *layout)
     mainLayout->addLayout(layout, 1);
     //Add the helper widgets.
     mainLayout->addWidget(m_hintLabel, 0, Qt::AlignVCenter);
+    //Give back the main layout.
+    return mainLayout;
 }
 
 QVariant KNPreferencePanelItem::getValueFromConfig(const QVariant &defaultValue)

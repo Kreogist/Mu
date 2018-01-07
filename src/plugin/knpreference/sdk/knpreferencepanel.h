@@ -61,6 +61,7 @@ public slots:
     void setAdvancedItemShown(bool isShow);
 
 private:
+    inline void updateContainerSize();
     inline KNPreferencePanelItem *generateItem(
             const PreferencePanelOption &option);
     QFont m_titleFont;

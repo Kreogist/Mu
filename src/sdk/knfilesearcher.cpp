@@ -41,6 +41,12 @@ KNFileSearcher::KNFileSearcher(QObject *parent) :
 
 void KNFileSearcher::analysisPaths(QStringList paths, QList<uint> monitorHash)
 {
+    //Check the paths is empty or not.
+    if(paths.isEmpty())
+    {
+        //If the adding path list is an empty list, ignore the request.
+        return;
+    }
     //Check the queue before.
     if(m_queue.isEmpty())
     {

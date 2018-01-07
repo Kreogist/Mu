@@ -70,6 +70,12 @@ signals:
      */
     void valueChanged();
 
+    /*!
+     * \brief When the item height changed, this signal will be emitted. But for
+     * most of items, this signal shouldn't be emitted.
+     */
+    void heightChanged();
+
 public slots:
     /*!
      * \brief Set the preference option which would set the data.
@@ -107,6 +113,13 @@ protected:
      * \param layout The content layout.
      */
     void buildWidgetLayout(QLayout *layout);
+
+    /*!
+     * \brief Create the default panel item layout.
+     * \param layout The content layout.
+     * \return The layout of the default panel item.
+     */
+    QLayout *createWidgetLayout(QLayout *layout);
 
     /*!
      * \brief Set the widget to display specific value.

@@ -28,13 +28,16 @@ Foundation,
 
 KNMusicLibraryDirMonitor::KNMusicLibraryDirMonitor(QObject *parent) :
     QObject(parent),
-    m_monitorMap(QHash<QString, MonitorDirectory>())
+    m_monitorMap(QHash<QString, MonitorDirectory>()),
+    m_isWorking(false)
 {
 }
 
 void KNMusicLibraryDirMonitor::checkEntireLibrary(
         QHash<QString, int> watchFileList)
 {
+    //Mark working state.
+    m_isWorking=true;
     //Create the adding file list.
     QStringList directoryQueue=m_monitorMap.keys(), addingList;
     QList<uint> hashList;
@@ -87,9 +90,9 @@ void KNMusicLibraryDirMonitor::checkEntireLibrary(
     }
     //Add the file in the adding list to the library.
     //Emit the sync signal.
-    qDebug()<<"addingList"<<addingList<<"\nHashList"<<hashList;
-    qDebug()<<"watch file list"<<watchFileList.keys();
     emit requireSync(addingList, hashList, watchFileList.values());
+    //Mark working state.
+    m_isWorking=false;
 }
 
 void KNMusicLibraryDirMonitor::setMonitorDirs(const QStringList &directories)
@@ -123,7 +126,6 @@ void KNMusicLibraryDirMonitor::setMonitorDirs(const QStringList &directories)
             newDirMap.insert(currentDirPath, monitor);
         }
     }
-    qDebug()<<"Set monitor map:"<<m_monitorMap.keys();
     //Remove all the directory in the old monitor map.
     for(auto i : m_monitorMap.keys())
     {

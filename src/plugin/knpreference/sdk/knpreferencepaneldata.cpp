@@ -197,7 +197,11 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         ;
         panelData.append(block);
         block=generateBlock(tr("Monitored Folders"));
-        ;
+        addItem(block, tr("Library directories"),
+                "System/Music/MusicLibrary/DirList",
+                QStringList(),
+                TypeDirectoryList,
+                tr("FIXME: Add explain text here!"), false);
         panelData.append(block);
         break;
     }

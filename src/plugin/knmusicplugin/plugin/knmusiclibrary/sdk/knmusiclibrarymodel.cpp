@@ -508,8 +508,12 @@ void KNMusicLibraryModel::syncModel(const QStringList &addList,
         //Remove the item on the list first.
         removeRowList(removeList);
     }
-    //Add the new files to the library.
-    appendHashFiles(addList, addListDirHash);
+    //Check the new addlist library.
+    if(!addList.isEmpty())
+    {
+        //Add the new files to the library.
+        appendHashFiles(addList, addListDirHash);
+    }
 }
 
 void KNMusicLibraryModel::installCategoryModel(KNMusicCategoryModelBase *model)
@@ -657,7 +661,8 @@ void KNMusicLibraryModel::onConfigureUpdate()
 void KNMusicLibraryModel::onSystemConfigureUpdate()
 {
     //Load the monitor dir list.
-    QJsonArray jsonDirList=m_systemConfigure->data("DirList").toJsonArray();
+    QJsonArray jsonDirList=m_systemConfigure->data("DirList",
+                                                   QJsonArray()).toJsonArray();
     //Clear the string list.
     QStringList monitorDirList;
     //Translate the json array to the string list.

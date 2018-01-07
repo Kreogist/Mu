@@ -31,6 +31,7 @@ Foundation,
 #include "items/knpreferencepanelfontitem.h"
 #include "items/knpreferencepanelintitem.h"
 #include "items/knpreferencepaneldiritem.h"
+#include "items/knpreferencepaneldirlistitem.h"
 #include "items/knpreferencepanelcomboitem.h"
 #include "items/knpreferencepanelshortcutitem.h"
 #include "items/knpreferencepanelfiletypeitem.h"
@@ -115,8 +116,8 @@ void KNPreferencePanel::setPanelBlocks(
     }
     //Add stretch.
     m_mainLayout->addStretch();
-    //Resize the container.
-    m_container->setFixedHeight(m_mainLayout->sizeHint().height());
+    //Update the container size.
+    updateContainerSize();
 }
 
 void KNPreferencePanel::setAdvancedItemShown(bool isShow)
@@ -127,6 +128,12 @@ void KNPreferencePanel::setAdvancedItemShown(bool isShow)
         //Set the visible item to the item.
         item->setVisible(isShow);
     }
+    //Resize the container.
+    m_container->setFixedHeight(m_mainLayout->sizeHint().height());
+}
+
+inline void KNPreferencePanel::updateContainerSize()
+{
     //Resize the container.
     m_container->setFixedHeight(m_mainLayout->sizeHint().height());
 }
@@ -162,6 +169,11 @@ inline KNPreferencePanelItem *KNPreferencePanel::generateItem(
         break;
     case TypeAudioDevice:
         item=new KNPreferencePanelAudioDeviceItem(this);
+        break;
+    case TypeDirectoryList:
+        item=new KNPreferencePanelDirListItem(this);
+        connect(item, &KNPreferencePanelItem::heightChanged,
+                this, &KNPreferencePanel::updateContainerSize);
         break;
     default:
         break;

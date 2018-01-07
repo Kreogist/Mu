@@ -612,7 +612,8 @@ SOURCES += \
     plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp \
     sdk/knselectionmessagebox.cpp \
     sdk/sao/knsaooptionbutton.cpp \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydirmonitor.cpp
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydirmonitor.cpp \
+    plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.cpp
 
 HEADERS += \
     sdk/knsingletonapplication.h \
@@ -910,7 +911,8 @@ HEADERS += \
     plugin/knpreference/sdk/items/knpreferencepaneldiritem.h \
     sdk/knselectionmessagebox.h \
     sdk/sao/knsaooptionbutton.h \
-    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydirmonitor.h
+    plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarydirmonitor.h \
+    plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.h
 
 RESOURCES += \
     resource/res.qrc

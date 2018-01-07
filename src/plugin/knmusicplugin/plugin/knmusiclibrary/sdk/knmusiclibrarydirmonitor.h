@@ -39,6 +39,12 @@ public:
      */
     explicit KNMusicLibraryDirMonitor(QObject *parent = 0);
 
+    /*!
+     * \brief Check whether the directory monitor is syncing files.
+     * \return When the directory monitor is working, return true.
+     */
+    bool isWorking() const;
+
 signals:
     /*!
      * \brief When the monitor is asked to sync files with model, this signal
@@ -72,6 +78,7 @@ private:
     };
 
     QHash<QString, MonitorDirectory> m_monitorMap;
+    bool m_isWorking;
 };
 
 #endif // KNMUSICLIBRARYDIRMONITOR_H

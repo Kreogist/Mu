@@ -193,7 +193,7 @@ inline void KNPreference::generateSettingItems()
                                      headerSettingIcon);
     items[PanelPlayback]=generateItem("://preference/playback.png",
                                       headerSettingIcon);
-    items[PanelLibrary]=generateItem("",
+    items[PanelLibrary]=generateItem("://preference/library.png",
                                      headerSettingIcon);
     items[PanelLyrics]=generateItem("://preference/lyrics.png",
                                     headerSettingIcon);

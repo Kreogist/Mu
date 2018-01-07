@@ -100,6 +100,9 @@
         <file>preference/shortcuts.png</file>
         <file>preference/fileasso.png</file>
         <file>preference/goto_folder.png</file>
+        <file>preference/library.png</file>
+        <file>preference/folder_add.png</file>
+        <file>preference/folder_delete.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>
