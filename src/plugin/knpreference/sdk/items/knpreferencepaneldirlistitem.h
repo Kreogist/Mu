@@ -22,6 +22,7 @@
 
 class QBoxLayout;
 class KNLabelButton;
+class KNPreferenceDirItem;
 /*!
  * \brief The KNPreferencePanelDirListItem class provides a widget to edit a
  * list of directory paths.
@@ -61,7 +62,8 @@ protected:
 private:
     inline KNLabelButton *generateButton(const QString &iconPath,
                                                 const QString &tooltip);
-    QBoxLayout *m_widgetLayout;
+    QBoxLayout *m_mainLayout;
+    KNLabelButton *m_remove;
 };
 
 #endif // KNPREFERENCEPANELDIRLISTITEM_H

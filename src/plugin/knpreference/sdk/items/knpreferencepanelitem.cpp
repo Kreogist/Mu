@@ -31,9 +31,6 @@ Foundation,
 
 #include <QDebug>
 
-#define PreferenceSingleItemHeight  34
-#define PreferenceCaptionWidth      185
-
 KNPreferencePanelItem::KNPreferencePanelItem(QWidget *parent) :
     QWidget(parent),
     m_path(QStringList()),

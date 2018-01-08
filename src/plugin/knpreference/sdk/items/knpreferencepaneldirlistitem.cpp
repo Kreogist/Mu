@@ -16,6 +16,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QFileDialog>
+#include <QAbstractButton>
+#include <QPainter>
 
 #include "knlabelbutton.h"
 #include "kndpimanager.h"
@@ -23,26 +26,44 @@
 #include "knpreferencepaneldirlistitem.h"
 
 KNPreferencePanelDirListItem::KNPreferencePanelDirListItem(QWidget *parent) :
-    KNPreferencePanelItem(parent)
+    KNPreferencePanelItem(parent),
+    m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this)),
+    m_remove(generateButton("://preference/folder_delete.png",
+                            tr("Remove the selected paths")))
 {
+    //Configure the add button.
+    KNLabelButton *add=generateButton("://preference/folder_add.png",
+                                      tr("Add a new path"));
+    connect(add, &KNLabelButton::clicked,
+            [=]
+            {
+                //Get the new directory path.
+                QString addedPath=QFileDialog::getExistingDirectory(
+                            this,
+                            tr("Add directory"));
+                //User cancel the selecion.
+                if(addedPath.isEmpty())
+                {
+                    //Ignore the cancel operation.
+                    return;
+                }
+            });
+    //Configure the remove button.
+    m_remove->hide();
+
     //Construct the main layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     buttonLayout->setSpacing(knDpi->width(5));
-    //Add the default layout to the button layout.
-    KNLabelButton *add=generateButton("://preference/folder_add.png",
-                                      tr("Add a new path")),
-                  *remove=generateButton("://preference/folder_delete.png",
-                                         tr("Remove the selected paths"));
     //Add the button to the layout.
     buttonLayout->addWidget(add);
-    buttonLayout->addWidget(remove);
+    buttonLayout->addWidget(m_remove);
     buttonLayout->addStretch();
     //Construct the main layout.
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
-    mainLayout->addLayout(createWidgetLayout(buttonLayout));
-    setLayout(mainLayout);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setSpacing(0);
+    //Add the button layout to the default layout.
+    m_mainLayout->addLayout(createWidgetLayout(buttonLayout));
+    setLayout(m_mainLayout);
 }
 
 QVariant KNPreferencePanelDirListItem::value() const

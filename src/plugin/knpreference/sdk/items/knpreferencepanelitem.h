@@ -26,6 +26,9 @@ Foundation,
 
 using namespace PreferenceUtil;
 
+#define PreferenceSingleItemHeight  34
+#define PreferenceCaptionWidth      185
+
 class QLabel;
 class QTimeLine;
 class KNImageLabel;
