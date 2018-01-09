@@ -23,6 +23,7 @@
 class QBoxLayout;
 class KNLabelButton;
 class KNPreferenceDirItem;
+class KNPreferencePanelSubItem;
 /*!
  * \brief The KNPreferencePanelDirListItem class provides a widget to edit a
  * list of directory paths.
@@ -59,11 +60,32 @@ protected:
     bool isEqual(const QVariant &currentValue,
                  const QVariant &originalValue) Q_DECL_OVERRIDE;
 
+    /*!
+     * \brief Reimplemented from KNPreferencePanelItem::paintEvent().
+     */
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+private slots:
+    void onAddPath();
+    void onRemovePath();
+    void onItemClicked(bool checked);
+
 private:
     inline KNLabelButton *generateButton(const QString &iconPath,
                                                 const QString &tooltip);
+    inline KNPreferencePanelSubItem *generateSubItem();
+    inline void addSubItem(KNPreferencePanelSubItem *item);
+    inline void removeSubItems(const QList<int> &checkedIndex);
+    inline void removeSubItem(int index);
+    inline bool coverPath(const QString &targetPath, QList<int> &prefixList);
+    inline void updateItemHeight();
+    static QLinearGradient m_shadow;
+    static bool m_notInitialed;
+    QList<KNPreferencePanelSubItem *> m_pathButtonList;
+    QStringList m_pathList;
     QBoxLayout *m_mainLayout;
     KNLabelButton *m_remove;
+    int m_checkedCounter;
 };
 
 #endif // KNPREFERENCEPANELDIRLISTITEM_H

@@ -138,8 +138,8 @@ void KNPreferencePanelItem::paintEvent(QPaintEvent *event)
     //Draw the rect.
     painter.setOpacity(m_highLightOpacity);
     //Paint the background.
-    painter.fillRect(QRect(0, 0,
-                           width(), knDpi->height(PreferenceSingleItemHeight)),
+    painter.fillRect(QRect(0, 0, width(),
+                           knDpi->height(PreferenceSingleItemHeight+1)),
                      m_highlight);
     //Paint other things.
     QWidget::paintEvent(event);
@@ -234,4 +234,9 @@ inline void KNPreferencePanelItem::startAnime(int endFrame)
                                      endFrame);
     //Start the anime.
     m_backgroundAnime->start();
+}
+
+qreal KNPreferencePanelItem::getHighLightOpacity() const
+{
+    return m_highLightOpacity;
 }

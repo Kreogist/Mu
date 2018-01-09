@@ -95,6 +95,12 @@ protected:
     virtual int itemHeightMultiple() const;
 
     /*!
+     * \brief Get the background hight light opacity parameter for paint event.
+     * \return The opacity from 0 to 1.
+     */
+    qreal getHighLightOpacity() const;
+
+    /*!
      * \brief Reimplemented from QWidget::paintEvent().
      */
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
