@@ -34,6 +34,12 @@ KNMusicLibraryDirMonitor::KNMusicLibraryDirMonitor(QObject *parent) :
 {
 }
 
+bool KNMusicLibraryDirMonitor::isWorking() const
+{
+    //Get the working state.
+    return m_isWorking;
+}
+
 void KNMusicLibraryDirMonitor::checkEntireLibrary(
         QHash<QString, int> watchFileList)
 {
