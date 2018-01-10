@@ -104,6 +104,9 @@
         <file>preference/folder_add.png</file>
         <file>preference/folder_delete.png</file>
         <file>public/tick.png</file>
+        <file>preference/folder_edit.png</file>
+        <file>preference/yes.png</file>
+        <file>preference/no.png</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>

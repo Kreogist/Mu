@@ -58,6 +58,13 @@ signals:
                      QList<uint> addPathDirHash,
                      QList<int> removedItems);
 
+    /*!
+     * \brief When several folder is no longer monitored, this signal will be
+     * emitted.
+     * \param removedHash The removed directory path hash list.
+     */
+    void monitorDirUpdated(QList<uint> removedHash);
+
 public slots:
     /*!
      * \brief Check the entire library model.
@@ -72,12 +79,7 @@ public slots:
     void setMonitorDirs(const QStringList &directories);
 
 private:
-    struct MonitorDirectory
-    {
-        uint hash;
-    };
-
-    QHash<QString, MonitorDirectory> m_monitorMap;
+    QHash<QString, uint> m_monitorMap;
     bool m_isWorking;
 };
 

@@ -233,8 +233,11 @@ private slots:
     void onImageRecoverComplete();
     void onConfigureUpdate();
     void onSystemConfigureUpdate();
+    void onMonitorDirUpdated(const QList<uint> &removedHash);
 
 private:
+    inline void applyConfigureUpdate();
+    inline void monitorCheckEntireLibrary();
     inline void addCategoryDetailInfo(const KNMusicDetailInfo &detailInfo);
     inline bool updateModelRow(int row,
                                const KNMusicAnalysisItem &analysisItem);

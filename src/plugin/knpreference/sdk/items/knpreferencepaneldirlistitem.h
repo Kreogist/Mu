@@ -21,6 +21,7 @@
 #include "knpreferencepanelitem.h"
 
 class QBoxLayout;
+class QFrame;
 class KNLabelButton;
 class KNPreferenceDirItem;
 class KNPreferencePanelSubItem;
@@ -74,6 +75,8 @@ private:
     inline KNLabelButton *generateButton(const QString &iconPath,
                                                 const QString &tooltip);
     inline KNPreferencePanelSubItem *generateSubItem();
+    inline void disableEditMode();
+    inline void setPathList(const QStringList &valueList);
     inline void addSubItem(KNPreferencePanelSubItem *item);
     inline void removeSubItems(const QList<int> &checkedIndex);
     inline void removeSubItem(int index);
@@ -82,10 +85,12 @@ private:
     static QLinearGradient m_shadow;
     static bool m_notInitialed;
     QList<KNPreferencePanelSubItem *> m_pathButtonList;
-    QStringList m_pathList;
+    QStringList m_pathList, m_originalPathList;
     QBoxLayout *m_mainLayout;
-    KNLabelButton *m_remove;
+    QFrame *m_seperator;
+    KNLabelButton *m_edit, *m_apply, *m_cancel, *m_add, *m_remove;
     int m_checkedCounter;
+    bool m_editMode;
 };
 
 #endif // KNPREFERENCEPANELDIRLISTITEM_H

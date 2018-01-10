@@ -511,6 +511,11 @@
     {
         "Parent" : "PreferenceAdvancedButton"
     },
+    "PreferenceItemSpliter" :
+    {
+        "Parent" : "PreferenceAdvancedButton",
+        "WindowText" : "#9D9D9D"
+    },
     "PreferenceItemCombo" :
     {
         "Parent" : "PreferenceAdvancedButton",

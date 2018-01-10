@@ -19,6 +19,7 @@ Foundation,
 #include <QDir>
 #include <QHash>
 #include <QJsonArray>
+#include <QFileSystemWatcher>
 
 #include "knmusicglobal.h"
 
@@ -28,7 +29,7 @@ Foundation,
 
 KNMusicLibraryDirMonitor::KNMusicLibraryDirMonitor(QObject *parent) :
     QObject(parent),
-    m_monitorMap(QHash<QString, MonitorDirectory>()),
+    m_monitorMap(QHash<QString, uint>()),
     m_isWorking(false)
 {
 }
@@ -46,7 +47,7 @@ void KNMusicLibraryDirMonitor::checkEntireLibrary(
     {
         //Prepare the directory.
         QString currentMonitorDir=directoryQueue.takeFirst();
-        uint dirHash=m_monitorMap.value(currentMonitorDir).hash;
+        uint dirHash=m_monitorMap.value(currentMonitorDir);
         //Prepare the directory queue.
         QStringList currentQueue;
         currentQueue.append(currentMonitorDir);
@@ -98,7 +99,7 @@ void KNMusicLibraryDirMonitor::checkEntireLibrary(
 void KNMusicLibraryDirMonitor::setMonitorDirs(const QStringList &directories)
 {
     //Prepare the dir list and reset the hash list.
-    QHash<QString, MonitorDirectory> newDirMap;
+    QHash<QString, uint> newDirMap;
     //Loop and check existance.
     for(auto i : directories)
     {
@@ -112,26 +113,18 @@ void KNMusicLibraryDirMonitor::setMonitorDirs(const QStringList &directories)
         }
         //Calculate the directory hash and build the queue.
         QString currentDirPath=currentDir.absolutePath();
+        //Insert to the new dir map.
+        newDirMap.insert(currentDirPath, qHash(currentDirPath));
         if(m_monitorMap.contains(currentDirPath))
         {
-            //Take out and insert to the new hash map.
-            newDirMap.insert(currentDirPath, m_monitorMap.take(currentDirPath));
-        }
-        else
-        {
-            //Construct a new struct for the directory.
-            MonitorDirectory monitor;
-            monitor.hash=qHash(currentDirPath);
-            //Insert to the new dir map.
-            newDirMap.insert(currentDirPath, monitor);
+            //Remove the path from the original map.
+            m_monitorMap.remove(currentDirPath);
         }
     }
     //Remove all the directory in the old monitor map.
-    for(auto i : m_monitorMap.keys())
-    {
-        //Remove all the staff.
-        m_monitorMap.value(i);
-    }
+    QList<uint> removedHash=m_monitorMap.values();
     //Update the monitor dir list.
     m_monitorMap=newDirMap;
+    //Emit the updated signal.
+    emit monitorDirUpdated(removedHash);
 }

@@ -32,7 +32,7 @@ KNPreferencePanelSubItem::KNPreferencePanelSubItem(QWidget *parent) :
     m_displayText(QString())
 {
     //Set the properties.
-    setCheckable(true);
+//    setCheckable(true);
 }
 
 void KNPreferencePanelSubItem::setText(const QString &text)
@@ -50,16 +50,19 @@ void KNPreferencePanelSubItem::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.drawText(textRect(), Qt::AlignLeft | Qt::AlignVCenter,
                      m_displayText);
-    //Check the button is checked.
-    int iconPos=(height()-knDpi->height(16))>>1,
-        iconX=contentsMargins().left()+iconPos;
-    painter.drawRect(QRect(QPoint(iconX, iconPos)+knDpi->pos(2, 2),
-                           knDpi->size(12, 12)));
-    if(isChecked())
+    if(isCheckable())
     {
-        //Draw the icon button.
-        painter.drawPixmap(iconX, iconPos,
-                           QPixmap("://public/tick.png"));
+        //Check the button is checked.
+        int iconPos=(height()-knDpi->height(16))>>1,
+                iconX=contentsMargins().left()+iconPos;
+        painter.drawRect(QRect(QPoint(iconX, iconPos)+knDpi->pos(2, 2),
+                               knDpi->size(12, 12)));
+        if(isChecked())
+        {
+            //Draw the icon button.
+            painter.drawPixmap(iconX, iconPos,
+                               QPixmap("://public/tick.png"));
+        }
     }
 }
 
@@ -112,8 +115,9 @@ void KNPreferencePanelSubItem::updateButtonText()
 
 inline QRect KNPreferencePanelSubItem::textRect() const
 {
-    return QRect(contentsRect().x()+height(),
+    int leftPatch=isCheckable()?height():0;
+    return QRect(contentsRect().x()+leftPatch,
                  contentsRect().y(),
-                 contentsRect().width()-height(),
+                 contentsRect().width()-leftPatch,
                  contentsRect().height());
 }

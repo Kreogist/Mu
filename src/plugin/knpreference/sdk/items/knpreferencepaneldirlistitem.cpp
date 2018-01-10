@@ -17,11 +17,13 @@
  */
 #include <QBoxLayout>
 #include <QFileDialog>
+#include <QFrame>
 #include <QAbstractButton>
 #include <QPainter>
 
 #include "knlabelbutton.h"
 #include "kndpimanager.h"
+#include "knthememanager.h"
 
 #include "knpreferencepanelsubitem.h"
 
@@ -34,9 +36,19 @@ bool KNPreferencePanelDirListItem::m_notInitialed=true;
 KNPreferencePanelDirListItem::KNPreferencePanelDirListItem(QWidget *parent) :
     KNPreferencePanelItem(parent),
     m_mainLayout(new QBoxLayout(QBoxLayout::TopToBottom, this)),
+    m_seperator(new QFrame(this)),
+    m_edit(generateButton("://preference/folder_edit.png",
+                          tr("Modify the folder list"))),
+    m_apply(generateButton("://preference/yes.png",
+                           tr("Apply and save"))),
+    m_cancel(generateButton("://preference/no.png",
+                            tr("Cancel"))),
+    m_add(generateButton("://preference/folder_add.png",
+                         tr("Add a new path"))),
     m_remove(generateButton("://preference/folder_delete.png",
                             tr("Remove the selected paths"))),
-    m_checkedCounter(0)
+    m_checkedCounter(0),
+    m_editMode(false)
 {
     //Check static initialized.
     if(m_notInitialed)
@@ -51,21 +63,72 @@ KNPreferencePanelDirListItem::KNPreferencePanelDirListItem(QWidget *parent) :
         m_shadow.setColorAt(0, QColor(0, 0, 0, 70));
         m_shadow.setColorAt(1, QColor(0, 0, 0, 0));
     }
+    //Configure the edit button.
+    connect(m_edit, &KNLabelButton::clicked,
+            [=]
+            {
+                //Backup the original path list.
+                m_originalPathList=m_pathList;
+                //Show the edit buttons and hide itself.
+                m_edit->hide();
+                m_apply->show();
+                m_cancel->show();
+                m_seperator->show();
+                m_add->show();
+                //Update the flag.
+                m_editMode=true;
+                //Enable checkable and clear the checked state.
+                for(auto i : m_pathButtonList)
+                {
+                    i->setCheckable(true);
+                    i->setChecked(false);
+                }
+                //Clear the selection number.
+                m_checkedCounter=0;
+            });
     //Configure the add button.
-    KNLabelButton *add=generateButton("://preference/folder_add.png",
-                                      tr("Add a new path"));
-    connect(add, &KNLabelButton::clicked,
+    m_add->hide();
+    connect(m_add, &KNLabelButton::clicked,
             this, &KNPreferencePanelDirListItem::onAddPath);
     //Configure the remove button.
     m_remove->hide();
     connect(m_remove, &KNLabelButton::clicked,
             this, &KNPreferencePanelDirListItem::onRemovePath);
+    //Configure the seperator.
+    m_seperator->setContentsMargins(knDpi->margins(0, 10, 0, 10));
+    m_seperator->setFrameShape(QFrame::VLine);
+    //Configure the apply and cancel button.
+    m_apply->hide();
+    connect(m_apply, &KNLabelButton::clicked,
+            [=]
+            {
+                //Disable the edit mode.
+                disableEditMode();
+                //Emit the data changed signal to apply the change.
+                emit valueChanged();
+            });
+    m_cancel->hide();
+    connect(m_cancel, &KNLabelButton::clicked,
+            [=]
+            {
+                //Reset the path list setting.
+                setPathList(m_originalPathList);
+                //Disable the edit mode.
+                disableEditMode();
+            });
+    //Configure the seperator.
+    m_seperator->hide();
+    m_seperator->setPalette(knTheme->getPalette("PreferenceItemSpliter"));
 
     //Construct the main layout.
     QBoxLayout *buttonLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     buttonLayout->setSpacing(knDpi->width(5));
     //Add the button to the layout.
-    buttonLayout->addWidget(add);
+    buttonLayout->addWidget(m_edit);
+    buttonLayout->addWidget(m_apply);
+    buttonLayout->addWidget(m_cancel);
+    buttonLayout->addWidget(m_seperator);
+    buttonLayout->addWidget(m_add);
     buttonLayout->addWidget(m_remove);
     buttonLayout->addStretch();
     //Construct the main layout.
@@ -92,37 +155,8 @@ void KNPreferencePanelDirListItem::setWidgetValue(const QVariant &value)
 {
     //Check the button size is the same or not.
     QStringList &&valueList=value.toStringList();
-    //Check if we need create more buttons.
-    if(valueList.size() > m_pathList.size())
-    {
-        //Generate more button.
-        int createCount=valueList.size()-m_pathList.size();
-        while(createCount--)
-        {
-            //Add the item to the layout.
-            addSubItem(generateSubItem());
-        }
-    }
-    else if(valueList.size() < m_pathList.size())
-    {
-        //Remove the last several items.
-        int removeIndex=valueList.size(),
-            removeCount=m_pathList.size()-valueList.size();
-        while(removeCount--)
-        {
-            //Remove the button.
-            removeSubItem(removeIndex);
-        }
-    }
-    //Now the button number is the same as the path list size.
-    //Update the list path.
-    m_pathList=valueList;
-    //Update all the buttons.
-    for(int i=0; i<m_pathList.size(); ++i)
-    {
-        //Get the i from the list.
-        m_pathButtonList.at(i)->setText(m_pathList.at(i));
-    }
+    //Update the display path list.
+    setPathList(valueList);
 }
 
 bool KNPreferencePanelDirListItem::isEqual(const QVariant &currentValue,
@@ -211,10 +245,16 @@ void KNPreferencePanelDirListItem::onRemovePath()
 
 void KNPreferencePanelDirListItem::onItemClicked(bool checked)
 {
+    //Check is in edit mode.
+    if(!m_editMode)
+    {
+        //Ignore the counting.
+        return;
+    }
     //Check the clicked counter.
     m_checkedCounter=(checked)?(m_checkedCounter+1):(m_checkedCounter-1);
     //Check the counter value, show or hide the button.
-    m_remove->setVisible(m_checkedCounter);
+    m_remove->setVisible(m_editMode && m_checkedCounter);
 }
 
 inline KNLabelButton *KNPreferencePanelDirListItem::generateButton(
@@ -236,8 +276,80 @@ inline KNPreferencePanelSubItem *KNPreferencePanelDirListItem::generateSubItem()
     //Configure the item.
     item->setContentsMargins(knDpi->margins(15, 0, 5, 0));
     item->setFixedHeight(knDpi->height(PreferenceSingleItemHeight));
-    item->setCheckable(true);
+    if(m_editMode)
+    {
+        item->setCheckable(true);
+    }
     return item;
+}
+
+inline void KNPreferencePanelDirListItem::disableEditMode()
+{
+    //Remove all the checkable properties of the list.
+    for(auto i:m_pathButtonList)
+    {
+        //Disable the checkable state.
+        i->setCheckable(false);
+        //Update the button.
+        i->update();
+    }
+    //Hide all the edit widget.
+    m_apply->hide();
+    m_cancel->hide();
+    m_seperator->hide();
+    m_add->hide();
+    m_remove->hide();
+    //Show the edit button.
+    m_edit->show();
+    //Update the widget.
+    update();
+}
+
+inline void KNPreferencePanelDirListItem::setPathList(
+        const QStringList &valueList)
+{
+    bool heightUpdate=false;
+    //Check if we need create more buttons.
+    if(valueList.size() > m_pathList.size())
+    {
+        //Generate more button.
+        int createCount=valueList.size()-m_pathList.size();
+        while(createCount--)
+        {
+            //Add the item to the layout.
+            addSubItem(generateSubItem());
+        }
+        //Set the mark.
+        heightUpdate=true;
+    }
+    else if(valueList.size() < m_pathList.size())
+    {
+        //Remove the last several items.
+        int removeIndex=valueList.size(),
+            removeCount=m_pathList.size()-valueList.size();
+        while(removeCount--)
+        {
+            //Remove the button.
+            removeSubItem(removeIndex);
+        }
+        //Set the mark.
+        heightUpdate=true;
+    }
+    //Now the button number is the same as the path list size.
+    //Update the list path.
+    m_pathList=valueList;
+    //Update all the buttons.
+    for(int i=0; i<m_pathList.size(); ++i)
+    {
+        //Get the i from the list.
+        m_pathButtonList.at(i)->setText(m_pathList.at(i));
+    }
+    //Check the height update mark.
+    if(heightUpdate)
+    {
+        //Update the item height.
+        updateItemHeight();
+    }
 }
 
 inline void KNPreferencePanelDirListItem::addSubItem(

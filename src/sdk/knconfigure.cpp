@@ -221,6 +221,18 @@ void KNConfigure::setData(const QString &key, const QVariant &value)
     case QVariant::Bool:
         m_dataObject.insert(key, value.toBool());
         break;
+    case QVariant::StringList:
+    {
+        QJsonArray jsonStringList;
+        //Loop and get all the string item from the variant.
+        for(auto i : value.toStringList())
+        {
+            //Add the item to the string list.
+            jsonStringList.append(i);
+        }
+        m_dataObject.insert(key, jsonStringList);
+        break;
+    }
     //For advanced types(like Font), we have to translate them to a object.
     case QVariant::Font:
     {

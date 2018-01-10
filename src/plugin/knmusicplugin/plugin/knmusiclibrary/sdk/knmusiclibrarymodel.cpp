@@ -98,6 +98,9 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     connect(m_dirMonitor, &KNMusicLibraryDirMonitor::requireSync,
             this, &KNMusicLibraryModel::syncModel,
             Qt::QueuedConnection);
+    connect(m_dirMonitor, &KNMusicLibraryDirMonitor::monitorDirUpdated,
+            this, &KNMusicLibraryModel::onMonitorDirUpdated,
+            Qt::QueuedConnection);
 
     //Start working threads.
     m_searchThread.start();
@@ -438,9 +441,6 @@ void KNMusicLibraryModel::recoverModel()
     }
     //Initial the total duration.
     quint64 totalDuration=0;
-    //Prepare the monitor check list.
-    QHash<QString, int> monitorCheckList;
-    uint emptyHash=qHash(QString());
     //Start to insert data to the model.
     beginInsertRows(QModelIndex(),
                     0,
@@ -463,19 +463,6 @@ void KNMusicLibraryModel::recoverModel()
                     turboDetailInfo.coverImageHash,
                     m_hashAlbumArtCounter.value(turboDetailInfo.coverImageHash,
                                                 0)+1);
-        //Check the detail info is a monitoring item.
-        if(turboDetailInfo.monitorDirHash!=emptyHash)
-        {
-            //Insert to the monitor check list.
-            monitorCheckList.insertMulti(turboDetailInfo.filePath,
-                                         rowCount()-1);
-            //If it has cue file.
-            if(!turboDetailInfo.trackFilePath.isEmpty())
-            {
-                monitorCheckList.insertMulti(turboDetailInfo.trackFilePath,
-                                             rowCount()-1);
-            }
-        }
     }
     //Close the database file.
     databaseFile.close();
@@ -493,7 +480,7 @@ void KNMusicLibraryModel::recoverModel()
         emit libraryNotEmpty();
     }
     //Ask to check the entire library after recover.
-    emit requireMonitorCheck(monitorCheckList);
+    monitorCheckEntireLibrary();
     //Ask to recover image.
     emit requireRecoverImage(m_hashAlbumArtCounter.keys());
 }
@@ -554,7 +541,7 @@ void KNMusicLibraryModel::setLibrarySystemConfigure(KNConfigure *configure)
     connect(m_systemConfigure, &KNConfigure::valueChanged,
             this, &KNMusicLibraryModel::onSystemConfigureUpdate);
     //Update the system configure.
-    onSystemConfigureUpdate();
+    applyConfigureUpdate();
 }
 
 void KNMusicLibraryModel::onAnalysisComplete(
@@ -660,6 +647,20 @@ void KNMusicLibraryModel::onConfigureUpdate()
 
 void KNMusicLibraryModel::onSystemConfigureUpdate()
 {
+    //Apply the configure update.
+    applyConfigureUpdate();
+}
+
+void KNMusicLibraryModel::onMonitorDirUpdated(const QList<uint> &removedHash)
+{
+    Q_UNUSED(removedHash)
+    //!FIXME: Removed the hash that no more exist.
+    //Check the entire list.
+    monitorCheckEntireLibrary();
+}
+
+inline void KNMusicLibraryModel::applyConfigureUpdate()
+{
     //Load the monitor dir list.
     QJsonArray jsonDirList=m_systemConfigure->data("DirList",
                                                    QJsonArray()).toJsonArray();
@@ -678,6 +679,33 @@ void KNMusicLibraryModel::onSystemConfigureUpdate()
     }
     //Emit the signal to change the monitor directory.
     emit requireUpdateMonitorDirs(monitorDirList);
+}
+
+inline void KNMusicLibraryModel::monitorCheckEntireLibrary()
+{
+    //Build the monitor check list.
+    QHash<QString, int> monitorCheckList;
+    const QList<KNMusicDetailInfo> &detailInfoList=detailInfos();
+    uint emptyHash=qHash(QString());
+    //Loop in the entire library model.
+    for(int i=0; i<detailInfoList.size(); ++i)
+    {
+        const KNMusicDetailInfo &detailInfo=detailInfoList.at(i);
+        //Append the i to the path hash if its hash is not empty.
+        if(detailInfo.monitorDirHash!=emptyHash)
+        {
+            //Add its file path to monitor check list.
+            monitorCheckList.insertMulti(detailInfo.filePath, i);
+            //If it has cue file.
+            if(!detailInfo.trackFilePath.isEmpty())
+            {
+                //Insert the cue file as well.
+                monitorCheckList.insertMulti(detailInfo.trackFilePath, i);
+            }
+        }
+    }
+    //Ask to sync the entire model.
+    emit requireMonitorCheck(monitorCheckList);
 }
 
 inline void KNMusicLibraryModel::addCategoryDetailInfo(
@@ -816,5 +844,5 @@ KNMusicLibraryImageManager *KNMusicLibraryModel::imageManager() const
 bool KNMusicLibraryModel::isWorking()
 {
     return m_searcher->isWorking() || m_analysisQueue->isWorking() ||
-            m_imageManager->isWorking();
+            m_imageManager->isWorking() || m_dirMonitor->isWorking();
 }
