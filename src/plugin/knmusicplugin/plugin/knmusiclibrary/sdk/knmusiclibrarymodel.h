@@ -251,13 +251,12 @@ private:
     QLinkedList<KNMusicCategoryModelBase *> m_categoryModels;
     QHash<QString, QVariant> m_scaledHashAlbumArt;
     QHash<QString, int> m_hashAlbumArtCounter;
-    QThread m_searchThread, m_analysisThread, m_imageThread, m_dirMonitorThread;
+    QThread m_searchThread, m_analysisThread, m_imageThread;
     QString m_databasePath;
     int m_operateCounter;
     KNMusicSearcher *m_searcher;
     KNMusicAnalysisQueue *m_analysisQueue;
     KNMusicLibraryImageManager *m_imageManager;
-    KNMusicLibraryDirMonitor *m_dirMonitor;
     KNConfigure *m_configure, *m_systemConfigure, *m_monitorSystemConfigure;
     bool m_databaseLoaded, m_ignoreCueData;
 };

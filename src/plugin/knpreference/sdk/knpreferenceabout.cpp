@@ -20,6 +20,9 @@
 #include <QLabel>
 #include <QScrollBar>
 #include <QTextEdit>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonArray>
 
 #include "knimagelabel.h"
 #include "knlocalemanager.h"
@@ -138,6 +141,20 @@ void KNPreferenceAbout::retranslate()
     //Update the content data.
     m_textContent[Copyright]->setText(QString(QChar(169)) +
                                       " 2013-2018 Kreogist Dev Team\n");
+    QString thankList;
+    {
+        QFile thankFile("://public/thanks.json");
+        if(thankFile.open(QIODevice::ReadOnly))
+        {
+            QJsonArray thankArray=
+                    QJsonDocument::fromJson(thankFile.readAll()).array();
+            for(int i=0; i<thankArray.size(); ++i)
+            {
+                thankList+=thankArray.at(i).toString() + "\n";
+            }
+        }
+    }
+
     //Update the thank list.
     m_otherText->setPlainText(
                 tr("This program is free software; you can redistribute it "
@@ -164,21 +181,8 @@ void KNPreferenceAbout::retranslate()
                 "Nick Tang <1953547787@qq.com>\n"
                 "Frantic1048 <archer@frantic1048.com>\n"
                 "Yayuan Yan <yy1119@nyu.edu>\n"
-                "\n"+
-                tr("Special Thanks") +
-                "\n"
-                "WangBin\n"
-                "Sou Bunnbu\n"
-                "darkblackswords\n"
-                "Yuri Ogawara\n"
-                "1dot75cm\n"
-                "Lin Yuan\n"
-                "miaolapd\n"
-                "Haoting Xu\n"
-                "hosiet\n"
-                "\n"+
-                tr("This program uses Qt Version ")+
-                QT_VERSION_STR+
+                "\n"+tr("Special Thanks")+"\n"+thankList+"\n"+
+                tr("This program uses Qt Version ")+QT_VERSION_STR+
                 tr("\n"
                    "Qt is a C++ toolkit for cross-platform application developm"
                    "ent.\n"

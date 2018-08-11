@@ -190,22 +190,22 @@ QList<PreferencePanelBlock> KNPreferencePanelData::getPanelData(
         panelData.append(block);
         break;
     }
-    case PanelLibrary:
-    {
+//    case PanelLibrary:
+//    {
         //Monitor settings.
 //        block=generateBlock(tr("Folder Monitor Settings"));
 //        ;
 //        panelData.append(block);
-        block=generateBlock(tr("Monitored Folders"));
-        addItem(block, tr("Library directories"),
-                "System/Music/MusicLibrary/DirList",
-                QStringList(),
-                TypeDirectoryList,
-                tr("The directories would be monitored.\nAll the folders in "
-                   "the list are tracked and updated."), false);
-        panelData.append(block);
-        break;
-    }
+//        block=generateBlock(tr("Monitored Folders"));
+//        addItem(block, tr("Library directories"),
+//                "System/Music/MusicLibrary/DirList",
+//                QStringList(),
+//                TypeDirectoryList,
+//                tr("The directories would be monitored.\nAll the folders in "
+//                   "the list are tracked and updated."), false);
+//        panelData.append(block);
+//        break;
+//    }
     case PanelLyrics:
     {
         //Local lyrics.

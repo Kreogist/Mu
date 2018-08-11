@@ -27,7 +27,6 @@
 #include "knmusicsearcher.h"
 #include "knmusicanalysisqueue.h"
 #include "knmusiclibraryimagemanager.h"
-#include "knmusiclibrarydirmonitor.h"
 
 #include "knmusiclibrarymodel.h"
 
@@ -45,7 +44,6 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
     m_searcher(new KNMusicSearcher),
     m_analysisQueue(new KNMusicAnalysisQueue),
     m_imageManager(new KNMusicLibraryImageManager),
-    m_dirMonitor(new KNMusicLibraryDirMonitor),
     m_configure(nullptr),
     m_systemConfigure(nullptr),
     m_databaseLoaded(false),
@@ -87,26 +85,10 @@ KNMusicLibraryModel::KNMusicLibraryModel(QObject *parent) :
             this, &KNMusicLibraryModel::onImageUpdateRow,
             Qt::QueuedConnection);
 
-    //Move the monitor to working thread.
-    m_dirMonitor->moveToThread(&m_dirMonitorThread);
-    connect(this, &KNMusicLibraryModel::requireMonitorCheck,
-            m_dirMonitor, &KNMusicLibraryDirMonitor::checkEntireLibrary,
-            Qt::QueuedConnection);
-    connect(this, &KNMusicLibraryModel::requireUpdateMonitorDirs,
-            m_dirMonitor, &KNMusicLibraryDirMonitor::setMonitorDirs,
-            Qt::QueuedConnection);
-    connect(m_dirMonitor, &KNMusicLibraryDirMonitor::requireSync,
-            this, &KNMusicLibraryModel::syncModel,
-            Qt::QueuedConnection);
-    connect(m_dirMonitor, &KNMusicLibraryDirMonitor::monitorDirUpdated,
-            this, &KNMusicLibraryModel::onMonitorDirUpdated,
-            Qt::QueuedConnection);
-
     //Start working threads.
     m_searchThread.start();
     m_analysisThread.start();
     m_imageThread.start();
-    m_dirMonitorThread.start();
 }
 
 KNMusicLibraryModel::~KNMusicLibraryModel()
@@ -115,12 +97,10 @@ KNMusicLibraryModel::~KNMusicLibraryModel()
     m_searchThread.quit();
     m_analysisThread.quit();
     m_imageThread.quit();
-    m_dirMonitorThread.quit();
     //Wait for thread quit.
     m_searchThread.wait();
     m_analysisThread.wait();
     m_imageThread.wait();
-    m_dirMonitorThread.wait();
 
     //Check the operation counter.
     if(m_operateCounter > 0)
@@ -132,7 +112,6 @@ KNMusicLibraryModel::~KNMusicLibraryModel()
     m_searcher->deleteLater();
     m_analysisQueue->deleteLater();
     m_imageManager->deleteLater();
-    m_dirMonitor->deleteLater();
 }
 
 void KNMusicLibraryModel::appendRow(const KNMusicDetailInfo &detailInfo)
@@ -661,6 +640,7 @@ void KNMusicLibraryModel::onMonitorDirUpdated(const QList<uint> &removedHash)
 
 inline void KNMusicLibraryModel::applyConfigureUpdate()
 {
+    /*
     //Load the monitor dir list.
     QJsonArray jsonDirList=m_systemConfigure->data("DirList",
                                                    QJsonArray()).toJsonArray();
@@ -679,6 +659,7 @@ inline void KNMusicLibraryModel::applyConfigureUpdate()
     }
     //Emit the signal to change the monitor directory.
     emit requireUpdateMonitorDirs(monitorDirList);
+    */
 }
 
 inline void KNMusicLibraryModel::monitorCheckEntireLibrary()
@@ -844,5 +825,5 @@ KNMusicLibraryImageManager *KNMusicLibraryModel::imageManager() const
 bool KNMusicLibraryModel::isWorking()
 {
     return m_searcher->isWorking() || m_analysisQueue->isWorking() ||
-            m_imageManager->isWorking() || m_dirMonitor->isWorking();
+            m_imageManager->isWorking();
 }

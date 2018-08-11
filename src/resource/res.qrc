@@ -107,6 +107,7 @@
         <file>preference/folder_edit.png</file>
         <file>preference/yes.png</file>
         <file>preference/no.png</file>
+        <file>public/thanks.json</file>
     </qresource>
     <qresource prefix="/plugin">
         <file>music/public/icon.png</file>
