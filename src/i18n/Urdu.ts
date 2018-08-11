@@ -1101,12 +1101,12 @@
 <context>
     <name>KNMusicLibrary</name>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="238"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="240"/>
         <source>Add music to Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="259"/>
+        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/knmusiclibrary.cpp" line="261"/>
         <source>Add To Library</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1186,19 +1186,6 @@ To add songs to library, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarygenretab.cpp" line="250"/>
         <source>No Genre</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>KNMusicLibraryModel</name>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="62"/>
-        <source>Search complete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../plugin/knmusicplugin/plugin/knmusiclibrary/sdk/knmusiclibrarymodel.cpp" line="63"/>
-        <source>%1 files have been to music library.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1860,12 +1847,12 @@ To create a playlist, drag your songs here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="180"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="181"/>
         <source>Lyrics</source>
         <translation>غزلیں</translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/knpreference.cpp" line="181"/>
+        <location filename="../plugin/knpreference/knpreference.cpp" line="182"/>
         <source>Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1873,7 +1860,7 @@ To create a playlist, drag your songs here.</source>
 <context>
     <name>KNPreferenceAbout</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="143"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="160"/>
         <source>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -1882,22 +1869,22 @@ You should have received a copy of the GNU General Public License along with thi
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="156"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="173"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="168"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="184"/>
         <source>Special Thanks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="180"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="185"/>
         <source>This program uses Qt Version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="182"/>
+        <location filename="../plugin/knpreference/sdk/knpreferenceabout.cpp" line="186"/>
         <source>
 Qt is a C++ toolkit for cross-platform application development.
 Copyright (C) 2015 The Qt Company Ltd and other contributors.
@@ -1925,111 +1912,111 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
 <context>
     <name>KNPreferencePanelData</name>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="47"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="50"/>
         <source>System Tray Icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="48"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="51"/>
         <source>Minimize to system tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="56"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="59"/>
         <source>Close to system tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="58"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="61"/>
         <source>When click the close button of the window, Mu won&apos;t quit but minimize to the system tray.
 When click the icon in the system tray, Mu will pop up back.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="66"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="69"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="67"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="70"/>
         <source>Application font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="69"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="72"/>
         <source>This option will change the font used for the whole application.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="73"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="76"/>
         <source>Show status bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="75"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="78"/>
         <source>Show the status bar at the top right corner.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="78"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="81"/>
         <source>Behaviour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="84"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="87"/>
         <source>Save last played</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="86"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="89"/>
         <source>When next time launch Mu, Mu will restore the last playing song state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="88"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="91"/>
         <source>Search delay (ms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="90"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="93"/>
         <source>Mu will start to search once user change the content of the search box.
 When set the delay larger than 0ms, Mu will not start to search if user change the text less than the delay duration.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="97"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="100"/>
         <source>Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="98"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="101"/>
         <source>Ignore CUE data file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="100"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="103"/>
         <source>When adding the data file of one CUE file, ignore the data file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="102"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="105"/>
         <source>Category by album artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="104"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="107"/>
         <source>When category the album, use the album artist metadata field instead of statistic all the artists.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="114"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="117"/>
         <source>Output Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="118"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="121"/>
         <source>Using WASAPI with exclusive mode instead of DirectX for sound output.
 When this feature is enabled, the output sample rate will be changed to the sample rate of the real device.
 When this feature is enabled, all the music preview feature will be disabled.
@@ -2037,51 +2024,51 @@ This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="133"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="136"/>
         <source>Use buffering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="143"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="146"/>
         <source>Buffer length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="151"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="154"/>
         <source>Force stereo output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="153"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="156"/>
         <source>Limit the output to stereo, saving some CPU if the device has more speakers available.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="116"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="119"/>
         <source>Use exclusive mode WASAPI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="50"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="53"/>
         <source>When click the minimize button of the window, Mu won&apos;t simply minimize the main window to task bar but minimize to the system tray if this option is enabled.
 When click the icon in the system tray, Mu will pop up back.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="126"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="129"/>
         <source>Use 32-bit floating-point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="128"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="131"/>
         <source>Using 32-bit floating-point instead of 8/16 bit for the sample data.
 WDM drivers are required to use this feature in Windows.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="135"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="138"/>
         <source>Enable the playback buffering.
 A playing music is normally asked to render data to its playback buffer in advance to produce the final signal that is given to the output device.
 When this option is off, buffering is skipped and the playing thread will only be asked to produce data as it is needed during the generation of the output data.
@@ -2089,7 +2076,7 @@ This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="145"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="148"/>
         <source>The buffer length in milliseconds.
 Increasing the length, decreases the chance of the sound possibly breaking-up on slower computers, 
 but also increases the latency for DSP/FX.
@@ -2097,219 +2084,312 @@ This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="158"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="161"/>
         <source>Select the audio output device for music playing.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="168"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="171"/>
         <source>This option will change the output sample rate of the audio device.
 This option will be applied after the application restarted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="174"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="177"/>
         <source>Player Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="156"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="159"/>
         <source>Output audio device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="79"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="82"/>
         <source>Enable tooltip preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="81"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="84"/>
         <source>When enable this feature and moving mouse on a song, Mu will popup a tooltip allows to preview this song without pausing the current song.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="162"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="165"/>
         <source>Use device default sample rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="166"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="169"/>
         <source>Device sample rate (Hz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="175"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="178"/>
         <source>Auto play next song</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="177"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="180"/>
         <source>Automatically play the next song on normal no repeat mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="179"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="182"/>
         <source>Volume level (%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="181"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="184"/>
         <source>Mu supports changing volume via shortcut key or mouse scroll wheel.
 This option could change the volume size increase or decrease for each shortcut pressing and wheel scrolling.
 The minimum size is 1%, the maximum size is 20%.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="193"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="212"/>
+        <source>Local Lyrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="213"/>
+        <source>Local lyrics directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="217"/>
+        <source>The directory that stores all the downloaded lyrics, or any other local lyrics.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="221"/>
         <source>Header Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="194"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="222"/>
         <source>Header lyrics font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="197"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="225"/>
         <source>This option will change the font used on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="199"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="227"/>
         <source>Header lyrics spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="201"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="229"/>
         <source>This option will change the spacing of the text line on the header player lyrics.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="205"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="233"/>
         <source>Online Lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="206"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="234"/>
         <source>Allow downloading lyrics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="208"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="236"/>
         <source>If there is no lyrics existed in the lyrics search folder,
 allows Mu to download lyrics from the Internet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="210"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="238"/>
         <source>Combine translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="213"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="241"/>
         <source>Some lyrics downloader will provide translated version. 
 This option will allow Mu to combine the translated version and the raw lyrics into a single file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="230"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="258"/>
         <source>Global Shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="231"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="259"/>
         <source>Use global shortcut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="233"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="261"/>
         <source>Allow the shortcut key bindings to be triggered system wide.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="238"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="266"/>
         <source>Window Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="239"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="267"/>
         <source>Full Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="243"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="271"/>
         <source>This shortcut will be used to control the shortcut for entering or exiting the full screen state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="247"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="275"/>
         <source>Playing Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="248"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="276"/>
         <source>Play and Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="253"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="281"/>
         <source>This shortcut will be used in the whole application to play or pause the current playing music.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="255"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="283"/>
         <source>Previous Song</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="260"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="288"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the previous song.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="263"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="291"/>
         <source>Next Song</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="268"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="296"/>
         <source>This shortcut will be used in the whole application to switch the current playing music to the next song.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="273"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="301"/>
         <source>Volume Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="274"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="302"/>
         <source>Mute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="278"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="306"/>
         <source>This shortcut will be used in the whole application to enter and exit the mute state.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="280"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="308"/>
         <source>Volume Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="284"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="312"/>
         <source>This shortcut will be used in the whole application to increase amount of volume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="290"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="318"/>
         <source>This shortcut will be used in the whole application to decrease amount of volume.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="286"/>
+        <location filename="../plugin/knpreference/sdk/knpreferencepaneldata.cpp" line="314"/>
         <source>Volume Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNPreferencePanelDirItem</name>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="44"/>
+        <source>Show in Explorer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="47"/>
+        <source>Show in Finder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="50"/>
+        <source>Show the contains folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="79"/>
+        <source>Please select a directory for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="97"/>
+        <source>Set the directory to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="99"/>
+        <source>Copy the files to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="101"/>
+        <source>Move the files to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldiritem.cpp" line="105"/>
+        <source>Do you want to set the path to the directory
+ copy all files to the directory or move all 
+files to the directory?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>KNPreferencePanelDirListItem</name>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.cpp" line="41"/>
+        <source>Modify the folder list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.cpp" line="43"/>
+        <source>Apply and save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.cpp" line="45"/>
+        <source>Cancel</source>
+        <translation type="unfinished">منسوخ کر دیا</translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.cpp" line="47"/>
+        <source>Add a new path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.cpp" line="49"/>
+        <source>Remove the selected paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugin/knpreference/sdk/items/knpreferencepaneldirlistitem.cpp" line="202"/>
+        <source>Add directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

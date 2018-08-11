@@ -26,6 +26,8 @@ Copyright © 2013-2018 Kreogist Dev Team.
 * [miaolapd](https://github.com/miaolapd)
 * [Haoting Xu]()
 * [hosiet](https://github.com/hosiet)
+* [safu9](https://github.com/safu9)
+* [Дековец Иван]()
 
 ## Translation
 
