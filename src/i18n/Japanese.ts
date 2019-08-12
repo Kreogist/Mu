@@ -1801,7 +1801,7 @@ To create a playlist, drag your songs here.</source>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="226"/>
         <source>Search Result for &apos;%1&apos;</source>
-        <translation>&apos;%1&apos の検索結果</translation>
+        <translation>&apos;%1&apos; の検索結果</translation>
     </message>
     <message>
         <location filename="../plugin/knmusicplugin/plugin/knmusicstore/sdk/knmusicstoreheader.cpp" line="228"/>
